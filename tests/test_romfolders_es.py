@@ -30,9 +30,6 @@ from scraper.romfolders.es import _module_valid
 
 FIXTURES = ROOT / "tests" / "fixtures" / "romfolders" / "es"
 ROMFOLDERS = ROOT / "platforms" / "romfolders"
-RECALBOX_PENDING = (
-    "Recalbox source not fetched yet: run python -m scripts.scraper.romfolders --setup recalbox"
-)
 ES_SETUPS = (
     "batocera", "knulli", "rocknix", "jelos", "kolos", "unofficialos", "archr",
     "amberelec", "chaos", "pan4elec", "emuelec", "recalbox", "retrobat", "arkos",
@@ -206,7 +203,7 @@ class EsdeFormat(unittest.TestCase):
 
 class RecalboxFormat(unittest.TestCase):
     def setUp(self) -> None:
-        self.rows = by_folder(scrape("recalbox", "recalbox", {"systems_dir": "systems"}))
+        self.rows = by_folder(scrape("recalbox", "recalbox", {"systems_dir": "systems", "configs_dir": "configs"}))
 
     def test_tie_goes_to_the_last_core(self) -> None:
         self.assertEqual(self.rows["psx"]["core"], "swanstation")
@@ -214,11 +211,48 @@ class RecalboxFormat(unittest.TestCase):
     def test_board_priority(self) -> None:
         self.assertEqual(self.rows["psx"]["board_defaults"]["rpi1"]["core"], "mednafen_psx")
 
+    def test_a_core_no_board_builds_is_never_a_default(self) -> None:
+        psx = self.rows["psx"]
+        self.assertNotIn("pcsx", [psx["core"], *(b["core"] for b in psx["board_defaults"].values())])
+        self.assertNotIn(".iso", psx["extensions"])
+
+    def test_the_default_most_boards_share_heads_the_row(self) -> None:
+        self.assertEqual(sorted(self.rows["psx"]["board_defaults"]), ["rpi1"])
+
+    def test_a_board_section_overrides_the_plain_one(self) -> None:
+        mame = self.rows["mame"]
+        self.assertEqual(mame["core"], "mame2003_plus")
+        self.assertEqual(mame["board_defaults"]["x86_64"]["core"], "mame")
+        self.assertIn("configs/recalbox-x86_64_defconfig:5", mame["board_defaults"]["x86_64"]["source_ref"])
+
+    def test_a_files_list_names_whole_files(self) -> None:
+        self.assertEqual(self.rows["ports/Caesar3"]["files"], ["c3.exe"])
+        self.assertNotIn("extensions", self.rows["ports/Caesar3"])
+        self.assertEqual(self.rows["ports/Prince of Persia"]["files"], ["prince of persia (1990).zip"])
+
+    def test_a_system_no_board_builds_has_no_folder(self) -> None:
+        self.assertNotIn("vectrex", self.rows)
+
     def test_unopened_archive_extension(self) -> None:
         mame = self.rows["mame"]
         self.assertEqual(mame["extensions"], [".zip"])
         self.assertTrue(mame["arcade"])
         self.assertIn("!", mame["note"])
+
+
+class CachedDirectory(unittest.TestCase):
+    """A directory read from one archive knows its absent files without asking."""
+
+    def test_file_missing_from_the_archive_is_absent(self) -> None:
+        from unittest import mock
+
+        import upstream
+
+        fetcher = Fetcher({"os": {"repo": "https://gitlab.com/g/p", "commit": "0" * 40}})
+        with mock.patch.object(upstream, "cache_gitlab_directory", return_value={"sys/a/system.ini"}):
+            fetcher.cache_directory("os", "sys/")
+        with mock.patch.object(upstream, "fetch_file", side_effect=AssertionError("network")):
+            self.assertIsNone(fetcher.optional_text("os", "sys/b/system.ini"))
 
 
 class RetroPieFormat(unittest.TestCase):
@@ -263,9 +297,7 @@ class CommittedSetups(unittest.TestCase):
         cls.paths = {p.stem: p for p in setup_paths(ROMFOLDERS)}
 
     def written(self, setup: str) -> Path:
-        """The setup file, or a skip for a source not fetched yet."""
-        if setup == "recalbox" and setup not in self.paths:
-            self.skipTest(RECALBOX_PENDING)
+        """The committed setup file."""
         return self.paths[setup]
 
     def test_every_es_setup_is_declared_and_written(self) -> None:

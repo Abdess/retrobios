@@ -394,6 +394,15 @@ class Identification(GamesTestCase):
         self.assertEqual([game.shown for game in plan.games], ["MD/game.md"])
         self.assertEqual(plan.not_games, 1)
 
+    def test_a_folder_of_whole_names_holds_only_those_files(self):
+        root = Path(tempfile.mkdtemp(dir=TMP_ROOT))
+        self.addCleanup(shutil.rmtree, root, True)
+        for name in ("C3.EXE", "c3.eng", "readme.txt"):
+            (root / name).write_bytes(b"x")
+        games, others = install.folder_games(install.GameFolder(root, {"files": ["c3.exe"]}), None, 50)
+        self.assertEqual([game.name for game in games], ["C3.EXE"])
+        self.assertEqual(others, 2)
+
     def test_a_folder_the_setup_does_not_list_holds_no_game(self):
         self.card.game("UNKNOWN", "game.md", MD_EU)
         self.card.game("PORTS", "game.sh", b"x")

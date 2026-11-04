@@ -64,6 +64,7 @@
               "name": { "type": "string" },
               "aliases": { "type": "array", "items": { "type": "string" } },
               "extensions": { "type": "array", "items": { "type": "string" } },
+              "files": { "type": "array", "items": { "type": "string" } },
               "core": { "type": "string" },
               "emulator": { "type": "string" },
               "profile": { "type": "string", "description": "Repository profile of the default core." },

@@ -17,7 +17,7 @@ import importlib
 import pkgutil
 import sys
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 _SCRIPTS_DIR = str(Path(__file__).resolve().parents[2])
@@ -35,7 +35,7 @@ SETUP_KEYS = (
     "case_ref", "skip", "hidden", "media", "notes", "folders",
 )
 ROW_KEYS = (
-    "folder", "name", "aliases", "extensions", "core", "emulator", "source_ref",
+    "folder", "name", "aliases", "extensions", "files", "core", "emulator", "source_ref",
     "board_defaults", "arcade", "note",
 )
 
@@ -51,6 +51,7 @@ class Fetcher:
     sources: dict[str, dict]
     cache_dir: str = CACHE_DIR
     offline: bool = False
+    _cached_dirs: dict[str, dict[str, set[str]]] = field(default_factory=dict, init=False, repr=False)
 
     def _repo(self, key: str) -> tuple[upstream.Repo, str]:
         if key not in self.sources:
@@ -71,6 +72,9 @@ class Fetcher:
 
     def optional_text(self, key: str, path: str) -> str | None:
         repo, sha = self._repo(key)
+        for directory, held in self._cached_dirs.get(key, {}).items():
+            if path.startswith(directory + "/") and path not in held:
+                return None
         lines = upstream.fetch_file(repo, sha, path, self.cache_dir, self.offline)
         return None if lines is None else "\n".join(lines) + "\n"
 
@@ -84,9 +88,21 @@ class Fetcher:
             raise SourceError(f"{repo.slug}@{sha[:8]}: the forge truncated the tree")
         return sorted(p for p in paths if p.startswith(prefix))
 
+    def cache_directory(self, key: str, directory: str) -> None:
+        """Fetch a whole GitLab directory in one archive request before its
+        files are read one by one. A no-op on other forges."""
+        repo, sha = self._repo(key)
+        held = upstream.cache_gitlab_directory(repo, sha, directory, self.cache_dir, self.offline)
+        if held is not None:
+            self._cached_dirs.setdefault(key, {})[directory.strip("/")] = held
+
     def entries(self, key: str, directory: str) -> list[str]:
         """Paths of the files and folders directly under one directory."""
         repo, sha = self._repo(key)
+        held = self._cached_dirs.get(key, {}).get(directory.strip("/"))
+        if held is not None:
+            prefix = directory.strip("/") + "/"
+            return sorted({prefix + p[len(prefix):].split("/", 1)[0] for p in held})
         if repo.family != "gitlab":
             prefix = directory.strip("/") + "/"
             return sorted({prefix + p[len(prefix):].split("/", 1)[0] for p in self.tree(key, prefix)})

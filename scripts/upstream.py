@@ -9,10 +9,13 @@ from __future__ import annotations
 
 import hashlib
 import http.client
+import io
 import json
 import os
+import shutil
 import socket
 import subprocess
+import tarfile
 import tempfile
 import time
 import urllib.error
@@ -246,7 +249,9 @@ def _http_failure(url: str, exc: urllib.error.HTTPError) -> UpstreamError:
     """
     host = urllib.parse.urlsplit(url).hostname or ""
     if exc.code == 429:
-        return RateLimitError(f"{url}: HTTP 429", host)
+        retry_after = (exc.headers.get("Retry-After") or "").strip() if exc.headers else ""
+        wait = f", retry after {retry_after} s" if retry_after.isdigit() else ""
+        return RateLimitError(f"{url}: HTTP 429{wait}", host)
     if exc.code in (410, 451):
         reason = "withdrawn for legal reasons" if exc.code == 451 else "gone"
         return GoneError(f"{url}: HTTP {exc.code}, {reason}")
@@ -952,6 +957,87 @@ def _gitlab_tree(
         if len(payload) < TREE_PAGE_SIZE:
             return paths, False
     return paths, True
+
+
+def cache_gitlab_directory(
+    repo: Repo, sha: str, directory: str, cache_dir: str, offline: bool = False
+) -> set[str] | None:
+    """Every file under one GitLab directory, cached from one request.
+
+    GitLab counts anonymous requests per IP: reading Recalbox's hundred
+    system.ini files one raw URL at a time ran into HTTP 429 before the
+    end. The archive endpoint serves the directory in one request, and when
+    the API itself is refused, a shallow sparse git fetch does, since GitLab
+    does not count git traffic against that quota. Each file goes to the
+    cache `fetch_file` reads, and the list of paths is kept so a later run,
+    offline included, knows what is absent. None when the list is not
+    known (offline, never fetched).
+    """
+    directory = directory.strip("/")
+    index = cache_path(cache_dir, repo, sha, f".archives/{directory}.json")
+    if index.is_file():
+        return set(json.loads(index.read_text(encoding="utf-8")))
+    if offline or repo.family != "gitlab":
+        return None
+    try:
+        files = _gitlab_archive_files(repo, sha, directory)
+    except RateLimitError:
+        files = _sparse_git_files(repo, sha, directory, cache_dir)
+    if not files:
+        raise UpstreamError(f"{repo.slug}@{sha[:8]}: nothing under {directory}")
+    for path, text in files.items():
+        write_cache(cache_path(cache_dir, repo, sha, path), text)
+    write_cache(index, json.dumps(sorted(files)))
+    return set(files)
+
+
+def _gitlab_archive_files(repo: Repo, sha: str, directory: str) -> dict[str, str]:
+    url = (
+        f"{repo.api_base}/projects/{_project(repo)}/repository/archive.tar.gz"
+        f"?sha={sha}&path={urllib.parse.quote(directory)}"
+    )
+    body = _fetch(url)
+    if body is None:
+        return {}
+    prefix = directory + "/"
+    files: dict[str, str] = {}
+    with tarfile.open(fileobj=io.BytesIO(body), mode="r:gz") as archive:
+        for member in archive:
+            if not member.isfile():
+                continue
+            # The archive wraps everything in one <project>-<sha>-<path> folder.
+            inner = member.name.split("/", 1)[-1]
+            handle = archive.extractfile(member) if inner.startswith(prefix) else None
+            if handle is not None:
+                files[inner] = handle.read().decode("utf-8", errors="replace")
+    return files
+
+
+def _sparse_git_files(repo: Repo, sha: str, directory: str, cache_dir: str) -> dict[str, str]:
+    """One directory at one commit through git: depth 1, blobs of that
+    directory only, in a scratch work tree removed afterwards."""
+    url = f"https://{repo.host}/{repo.slug}.git"
+    Path(cache_dir).mkdir(parents=True, exist_ok=True)
+    work = Path(tempfile.mkdtemp(dir=cache_dir, prefix=".sparse-"))
+    try:
+        steps = (
+            ["init", "--quiet"],
+            ["remote", "add", "origin", url],
+            ["sparse-checkout", "set", "--no-cone", f"/{directory}/"],
+            ["fetch", "--quiet", "--depth", "1", "--filter=blob:none", "origin", sha],
+            ["checkout", "--quiet", "FETCH_HEAD"],
+        )
+        for argv in steps:
+            result = _git(argv, work)
+            if result.returncode:
+                raise UpstreamError(f"{url}: git {argv[0]} failed: {result.stderr.strip()}")
+        root = work / directory
+        return {
+            f"{directory}/{p.relative_to(root).as_posix()}": p.read_text(encoding="utf-8", errors="replace")
+            for p in sorted(root.rglob("*")) if p.is_file()
+        }
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
 
 
 def list_tree(

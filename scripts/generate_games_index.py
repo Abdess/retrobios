@@ -256,18 +256,28 @@ def _arcade_profiles(directory: Path) -> set[str]:
 
 
 def resolve_folder(
-    row: dict, platform: str, profile: str | None, resolver: SystemResolver, profiles: Profiles
+    row: dict, platform: str, profile: str | None, resolver: SystemResolver, profiles: Profiles,
+    arcade: frozenset[str] | set[str] = frozenset(),
 ) -> Resolution:
-    """The systems a folder holds: its names first, else its core's one machine.
+    """The systems a folder holds: its names first, else its core's machines.
 
     A name nothing spells, run by a core of one machine, is that machine
-    (ECWolf's wolf3d folder, a port's own folder).
+    (ECWolf's wolf3d folder, a port's own folder). Run by a core of several,
+    its games are one of them (theodore's thomson folder), and every one
+    is kept: left empty, the folder had no fallback and its games got no file.
+    An arcade core is the exception: the arcade index names each set's
+    files, and its hundred machines would make any unknown file a fallback
+    for all of them.
     """
     resolution = resolver.resolve(folder_names(row), platform)
     own = [str(s) for s in profiles.profiles.get(profile or "", {}).get("systems") or []]
-    if not resolution.systems and len(own) == 1:
+    if resolution.systems or not own:
+        return resolution
+    if len(own) == 1:
         return Resolution([resolver.canonical(own[0])], f"only system of {profile}")
-    return resolution
+    if profile in arcade:
+        return resolution
+    return Resolution(sorted({resolver.canonical(s) for s in own}), f"systems of {profile}")
 
 
 def build_setups(
@@ -297,13 +307,13 @@ def build_setups(
         for row in doc.get("folders", []):
             counts["folders"] += 1
             profile = cores.resolve(row.get("core"))
-            resolution = resolve_folder(row, platform, profile, resolver, profiles)
+            resolution = resolve_folder(row, platform, profile, resolver, profiles, arcade)
             published: dict = {
                 "folder": row["folder"],
                 "systems": resolution.systems,
                 "basis": resolution.basis,
             }
-            for key in ("name", "aliases", "extensions", "core", "emulator", "note"):
+            for key in ("name", "aliases", "extensions", "files", "core", "emulator", "note"):
                 if row.get(key):
                     published[key] = row[key]
             if profile:

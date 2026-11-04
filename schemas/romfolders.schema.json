@@ -107,6 +107,12 @@
             "items": { "type": "string", "pattern": "^\\.[^A-Z\\s]+$" },
             "uniqueItems": true
           },
+          "files": {
+            "type": "array",
+            "description": "Whole file names the OS lists as games, as it writes them, in place of or beside extensions.",
+            "items": { "type": "string", "minLength": 1 },
+            "uniqueItems": true
+          },
           "core": { "type": "string", "minLength": 1, "description": "The core or emulator the OS starts by default, in its own spelling." },
           "emulator": { "type": "string", "minLength": 1 },
           "source_ref": { "$ref": "#/$defs/ref" },

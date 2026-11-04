@@ -27,6 +27,7 @@ from __future__ import annotations
 import json
 import re
 import shlex
+from collections import Counter
 from collections.abc import Iterator
 
 from safeparse import parse_untrusted_xml, yaml_load_upstream
@@ -607,15 +608,72 @@ def _ini_sections(text: str) -> tuple[dict[str, dict[str, str]], dict[str, int]]
     return sections, lines
 
 
+# romfs2 systemholder.py reads core.0 to core.19.
+_RECALBOX_CORE_SLOTS = 20
+_RECALBOX_TARGET = "BR2_PACKAGE_RECALBOX_TARGET_"
+_ENABLED = re.compile(r"^(BR2_\w+)=y\s*$")
+# FolderData.cpp IsMatching: a list opening with files: holds whole file
+# names, each bounded by a space or an end of the list.
+_FILES_PREFIX = "files:"
+
+
+def _recalbox_names(listed: str) -> list[str]:
+    """The whole names of a files: list. A name may hold spaces
+    ("prince of persia (1990).zip"): a list with a word that has no dot
+    is one name, not several."""
+    words = listed.split()
+    if words and all("." in word for word in words):
+        return words
+    return [listed.strip()] if listed.strip() else []
+
+
+def _recalbox_boards(fetcher: Fetcher, key: str, configs_dir: str) -> dict[str, tuple[str, dict[str, int]]]:
+    """Each board's tag and the packages its defconfig enables, with their
+    lines. The tag is the lowercased BR2_PACKAGE_RECALBOX_TARGET_<tag>
+    (romfs2 configin.py), the suffix a system.ini key or section takes."""
+    fetcher.cache_directory(key, configs_dir)
+    boards: dict[str, tuple[str, dict[str, int]]] = {}
+    for path in fetcher.entries(key, configs_dir):
+        if not path.endswith("_defconfig"):
+            continue
+        enabled: dict[str, int] = {}
+        for number, line in enumerate(fetcher.text(key, path).splitlines(), 1):
+            found = _ENABLED.match(line.strip())
+            if found:
+                enabled.setdefault(found.group(1), number)
+        tags = [name[len(_RECALBOX_TARGET):].lower() for name in enabled if name.startswith(_RECALBOX_TARGET)]
+        if tags:
+            boards[tags[0]] = (path, enabled)
+    if not boards:
+        raise SourceError(f"{configs_dir}: no defconfig names a Recalbox target")
+    return boards
+
+
+def _recalbox_get(
+    sections: dict[str, dict[str, str]], lines: dict[str, int], section: str, key: str, board: str
+) -> tuple[str | None, int | None]:
+    """systemholder.py __get: the board's section, then the board's key,
+    then the plain key."""
+    for where, name in ((f"{section}.{board}", key), (section, f"{key}.{board}"), (section, key)):
+        if name in sections.get(where, {}):
+            return sections[where][name], lines.get(f"{where}/{name}")
+    return None, None
+
+
 @register("recalbox")
 def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
-    """One system.ini per system. The default core is the lowest
-    `priority` (EmulatorManager), and `priority.<board>` changes it on that
-    board. A `.ext!` extension is an archive the frontend hands over
-    unopened."""
+    """One system.ini per system, built once per board. A core is kept on
+    a board whose defconfig enables its `package`, and a system left with
+    none is not built there (romfs2). The default core is the lowest
+    `priority` (EmulatorManager), the last listed on a tie. The row names the
+    default most boards share, and `board_defaults` every board that differs.
+    A `.ext!` extension is an archive the frontend hands over unopened, and
+    a `files:` list names whole files instead of extensions."""
     params = spec["params"]
     key = params.get("source", "os")
+    boards = _recalbox_boards(fetcher, key, params["configs_dir"])
     rows: list[dict] = []
+    fetcher.cache_directory(key, params["systems_dir"])
     for entry in fetcher.entries(key, params["systems_dir"]):
         path = f"{entry}/system.ini"
         text = fetcher.optional_text(key, path)
@@ -626,42 +684,53 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
         folder = _strip_prefix(system.get("roms.folder", ""), ["%ROOT%/"])
         if not folder:
             continue
-        cores = []
-        for section, values in sections.items():
-            parts = section.split(".")
-            if parts[0] != "core" or len(parts) != 2:
-                continue
-            cores.append({
-                "section": section, "emulator": values.get("emulator"), "core": values.get("core"),
-                "priority": int(values.get("priority", "255")),
-                "boards": {k.split(".", 1)[1]: int(v) for k, v in values.items() if k.startswith("priority.")},
-                "extensions": values.get("extensions", "").split(),
-            })
-        if not cores:
+        picks: dict[str, dict] = {}
+        extensions: set[str] = set()
+        names: set[str] = set()
+        for board, (config_path, enabled) in sorted(boards.items()):
+            cores = []
+            for slot in range(_RECALBOX_CORE_SLOTS):
+                section = f"core.{slot}"
+                if section not in sections and f"{section}.{board}" not in sections:
+                    continue
+                package, _ = _recalbox_get(sections, lines, section, "package", board)
+                if package not in enabled:
+                    continue
+                priority, priority_line = _recalbox_get(sections, lines, section, "priority", board)
+                core, core_line = _recalbox_get(sections, lines, section, "core", board)
+                emulator, _ = _recalbox_get(sections, lines, section, "emulator", board)
+                exts, _ = _recalbox_get(sections, lines, section, "extensions", board)
+                if (exts or "").startswith(_FILES_PREFIX):
+                    names.update(_recalbox_names(exts[len(_FILES_PREFIX):]))
+                else:
+                    extensions.update((exts or "").split())
+                cores.append({
+                    "core": core, "emulator": emulator, "priority": int(priority or "255"),
+                    "source_ref": "; ".join([
+                        _ref(key, path, priority_line, core_line),
+                        _ref(key, config_path, enabled[package]),
+                    ]),
+                })
+            if cores:
+                picks[board] = min(reversed(cores), key=lambda c: c["priority"])
+        if not picks:
             continue
-        # EmulatorManager walks the cores from the last and keeps a strictly
-        # lower priority: on a tie the last core listed wins.
-        pick = min(reversed(cores), key=lambda c: c["priority"])
-        board_defaults: dict[str, dict] = {}
-        for board in sorted({b for c in cores for b in c["boards"]}):
-            best = min(reversed(cores), key=lambda c: c["boards"].get(board, c["priority"]))
-            if best is not pick:
-                board_defaults[board] = _board(
-                    best["core"], best["emulator"],
-                    _ref(key, path, lines.get(f"{best['section']}/priority.{board}")))
-        extensions = sorted({e for c in cores for e in c["extensions"]})
+        shared = Counter((pick["core"], pick["emulator"]) for pick in picks.values())
+        core, emulator = max(shared, key=lambda pair: shared[pair])
+        first = next(pick for pick in picks.values() if (pick["core"], pick["emulator"]) == (core, emulator))
+        board_defaults = {
+            board: _board(pick["core"], pick["emulator"], pick["source_ref"])
+            for board, pick in picks.items() if (pick["core"], pick["emulator"]) != (core, emulator)
+        }
         archive = any(e.endswith("!") for e in extensions)
         rows.append({
             "folder": folder,
             "name": system.get("name"),
-            "extensions": [e.rstrip("!") for e in extensions],
-            "core": pick["core"],
-            "emulator": pick["emulator"],
-            "source_ref": "; ".join([
-                _ref(key, path, lines.get("system/roms.folder")),
-                _ref(key, path, lines.get(f"{pick['section']}/priority"),
-                     lines.get(f"{pick['section']}/core")),
-            ]),
+            "extensions": sorted({e.rstrip("!") for e in extensions}),
+            "files": sorted(names),
+            "core": core,
+            "emulator": emulator,
+            "source_ref": "; ".join([_ref(key, path, lines.get("system/roms.folder")), first["source_ref"]]),
             "board_defaults": board_defaults,
             "arcade": sections.get("properties", {}).get("type") == "arcade" or None,
             "note": "an extension ending in ! is an archive the frontend does not open" if archive else None,

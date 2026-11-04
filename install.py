@@ -9478,7 +9478,8 @@ def folder_games(folder: GameFolder, setup: dict | None,
     a .cue, .m3u or .gdi names is part of that game, not a game."""
     row = folder.row
     extensions = {str(ext).lower() for ext in row.get("extensions") or []}
-    if not extensions and row.get("arcade"):
+    whole_names = {str(name).casefold() for name in row.get("files") or []}
+    if not extensions and not whole_names and row.get("arcade"):
         extensions = set(ARCADE_SUFFIXES)
     skipped = {str(item.get("name", "")).casefold()
                for key in ("skip", "media") for item in (setup or {}).get(key) or []
@@ -9497,8 +9498,10 @@ def folder_games(folder: GameFolder, setup: dict | None,
                 if depth + 1 < GAME_FOLDER_DEPTH and lowered not in skipped:
                     pending.append((Path(entry.path), depth + 1))
                 continue
-            game = (any(lowered.endswith(ext) for ext in extensions) if extensions
-                    else _suffix(name) not in _NOT_GAME_SUFFIXES)
+            if extensions or whole_names:
+                game = lowered in whole_names or any(lowered.endswith(ext) for ext in extensions)
+            else:
+                game = _suffix(name) not in _NOT_GAME_SUFFIXES
             if game:
                 games.append(Path(entry.path))
             else:

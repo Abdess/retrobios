@@ -209,6 +209,17 @@ class CommittedData(unittest.TestCase):
                     unresolved += 1
         self.assertGreaterEqual((total - unresolved) / total, gi.FLOORS["folders_resolved_share"])
 
+    def test_a_folder_of_a_several_machine_core_holds_its_machines(self) -> None:
+        from common import load_emulator_profiles
+
+        resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
+        profiles = gi.Profiles(load_emulator_profiles(str(ROOT / "emulators")), resolver)
+        thomson = gi.resolve_folder({"folder": "thomson"}, "recalbox", "theodore", resolver, profiles)
+        self.assertIn("thomson-to8", thomson.systems)
+        self.assertEqual(thomson.basis, "systems of theodore")
+        lcd = gi.resolve_folder({"folder": "lcdgames"}, "batocera", "mame", resolver, profiles, {"mame"})
+        self.assertEqual(lcd.systems, [])
+
 
 if __name__ == "__main__":
     unittest.main()

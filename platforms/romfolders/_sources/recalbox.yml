@@ -3,6 +3,7 @@ platform: recalbox
 format: recalbox
 params:
   systems_dir: package/recalbox-romfs2/systems
+  configs_dir: configs
 sources:
   os:
     repo: https://gitlab.com/recalbox/recalbox
@@ -19,4 +20,6 @@ hidden:
 notes:
   - "%ROOT% in roms.folder is /recalbox/share/roms (os projects/frontend/es-app/src/systems/SystemManager.h:114-117)."
   - A folder holds games when a file's lowercased extension is in the system's list (os projects/frontend/es-app/src/systems/SystemManager.cpp:1790-1805).
+  - Each board builds a system.ini against its defconfig, keeping a core whose package it enables and dropping a system left with none (os package/recalbox-romfs2/scripts/systemholder.py:324-342,404; os package/recalbox-romfs2/scripts/systembuilder.py:50).
+  - "A files: list holds whole file names instead of extensions (os projects/frontend/es-app/src/games/FolderData.cpp:65-91)."
   - The default core is the lowest priority, the last listed on a tie, and priority.<board> applies on that board (os projects/frontend/es-app/src/emulators/EmulatorManager.cpp:94-111).

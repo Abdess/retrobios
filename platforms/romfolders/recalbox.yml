@@ -1,0 +1,2025 @@
+setup: recalbox
+name: Recalbox
+platform: recalbox
+sources:
+  os:
+    repo: "https://gitlab.com/recalbox/recalbox"
+    commit: a264d628ead7074b3c523c8b3311543fe2d3f972
+    tag: 10.1.1
+roms_root:
+  path: /recalbox/share/roms
+  from_bios: ../roms
+  source_ref: "os projects/frontend/es-app/src/systems/SystemManager.h:114-119"
+case_sensitive: null
+hidden:
+- pattern: .*
+  source_ref: "os projects/frontend/es-app/src/systems/SystemManager.cpp:1801-1803"
+notes:
+- "%ROOT% in roms.folder is /recalbox/share/roms (os projects/frontend/es-app/src/systems/SystemManager.h:114-117)."
+- "A folder holds games when a file's lowercased extension is in the system's list (os projects/frontend/es-app/src/systems/SystemManager.cpp:1790-1805)."
+- "Each board builds a system.ini against its defconfig, keeping a core whose package it enables and dropping\
+  \ a system left with none (os package/recalbox-romfs2/scripts/systemholder.py:324-342,404; os package/recalbox-romfs2/scripts/systembuilder.py:50)."
+- "A files: list holds whole file names instead of extensions (os projects/frontend/es-app/src/games/FolderData.cpp:65-91)."
+- "The default core is the lowest priority, the last listed on a tie, and priority.<board> applies on\
+  \ that board (os projects/frontend/es-app/src/emulators/EmulatorManager.cpp:94-111)."
+folders:
+- folder: 240ptestsuite
+  extensions:
+  - .bin
+  - .ccd
+  - .cdi
+  - .chd
+  - .cue
+  - .gb
+  - .gba
+  - .m3u
+  - .nes
+  - .pbp
+  - .pce
+  - .sfc
+  - .toc
+  core: nestopia
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/240ptestsuite/system.ini:21; os package/recalbox-romfs2/systems/240ptestsuite/system.ini:41,43;\
+    \ os configs/recalbox-odroidgo2_defconfig:263"
+- folder: 3do
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/3do/system.ini:21; os package/recalbox-romfs2/systems/3do/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:268"
+- folder: 64dd
+  extensions:
+  - .7z
+  - .bin
+  - .n64
+  - .ndd
+  - .v64
+  - .z64
+  - .zip
+  core: parallel_n64
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/64dd/system.ini:21; os package/recalbox-romfs2/systems/64dd/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:269"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: amiga1200
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .chd
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .info
+  - .ipf
+  - .lha
+  - .lhz
+  - .lzx
+  - .m3u
+  - .m3u8
+  - .rar
+  - .raw
+  - .rp9
+  - .scp
+  - .slave
+  - .uae
+  - .vhd
+  - .xz
+  - .zip
+  core: uae4arm
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/amiga1200/system.ini:21; os package/recalbox-romfs2/systems/amiga1200/system.ini:72,76;\
+    \ os configs/recalbox-odroidgo2_defconfig:304"
+  board_defaults:
+    rpi5_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amiga1200/system.ini:59,62; os configs/recalbox-rpi5_64_defconfig:338"
+    x86_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amiga1200/system.ini:60,62; os configs/recalbox-x86_64_defconfig:388"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: amiga600
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .chd
+  - .dms
+  - .fdi
+  - .gz
+  - .hdf
+  - .hdz
+  - .info
+  - .ipf
+  - .lha
+  - .lhz
+  - .lzx
+  - .m3u
+  - .m3u8
+  - .rar
+  - .raw
+  - .rp9
+  - .scp
+  - .slave
+  - .uae
+  - .vhd
+  - .xz
+  - .zip
+  core: uae4arm
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/amiga600/system.ini:21; os package/recalbox-romfs2/systems/amiga600/system.ini:72,76;\
+    \ os configs/recalbox-odroidgo2_defconfig:304"
+  board_defaults:
+    rpi5_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amiga600/system.ini:59,62; os configs/recalbox-rpi5_64_defconfig:338"
+    x86_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amiga600/system.ini:60,62; os configs/recalbox-x86_64_defconfig:388"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: amigacd32
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .ipf
+  - .iso
+  - .lha
+  - .lhz
+  - .lzx
+  - .m3u
+  - .mds
+  - .nrg
+  - .rar
+  - .scp
+  - .uae
+  - .vhd
+  - .xz
+  - .zip
+  core: puae2021
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/amigacd32/system.ini:21; os package/recalbox-romfs2/systems/amigacd32/system.ini:89,92;\
+    \ os configs/recalbox-rpi3_defconfig:344"
+  board_defaults:
+    odroidgo2:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amigacd32/system.ini:57,61; os configs/recalbox-odroidgo2_defconfig:304"
+    rg353x:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amigacd32/system.ini:57,61; os configs/recalbox-rg353x_defconfig:295"
+    rpi5_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amigacd32/system.ini:73,76; os configs/recalbox-rpi5_64_defconfig:338"
+    x86_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amigacd32/system.ini:74,76; os configs/recalbox-x86_64_defconfig:388"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: amigacdtv
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .info
+  - .ipf
+  - .iso
+  - .lha
+  - .lhz
+  - .lzx
+  - .m3u
+  - .m3u8
+  - .mds
+  - .nrg
+  - .raw
+  - .rp9
+  - .slave
+  - .uae
+  - .zip
+  core: uae4arm
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/amigacdtv/system.ini:21; os package/recalbox-romfs2/systems/amigacdtv/system.ini:56,60;\
+    \ os configs/recalbox-odroidgo2_defconfig:304"
+  board_defaults:
+    rpi5_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amigacdtv/system.ini:71,74; os configs/recalbox-rpi5_64_defconfig:338"
+    x86_64:
+      core: puae
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/amigacdtv/system.ini:72,74; os configs/recalbox-x86_64_defconfig:388"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .bin
+  - .cdt
+  - .cpr
+  - .csw
+  - .dsk
+  - .kcr
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .wav
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/amstradcpc/system.ini:21; os package/recalbox-romfs2/systems/amstradcpc/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:216"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: apple2
+  extensions:
+  - .2img
+  - .2mg
+  - .apl
+  - .bin
+  - .do
+  - .dsk
+  - .gz
+  - .hdv
+  - .iie
+  - .m3u
+  - .nib
+  - .po
+  - .woz
+  - .yaml
+  - .zip
+  core: applewin
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/apple2/system.ini:21; os package/recalbox-romfs2/systems/apple2/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:202"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: apple2gs
+  extensions:
+  - .2mg
+  - .gsplus
+  - .hdv
+  - .po
+  core: gsplus
+  emulator: gsplus
+  source_ref: "os package/recalbox-romfs2/systems/apple2gs/system.ini:21; os package/recalbox-romfs2/systems/apple2gs/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:188"
+- folder: arduboy
+  extensions:
+  - .7z
+  - .hex
+  - .zip
+  core: arduous
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/arduboy/system.ini:21; os package/recalbox-romfs2/systems/arduboy/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:204"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/atari2600/system.ini:21; os package/recalbox-romfs2/systems/atari2600/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:293"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .bin
+  - .zip
+  core: atari800
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/atari5200/system.ini:21; os package/recalbox-romfs2/systems/atari5200/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:203"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .cdf
+  - .zip
+  core: prosystem
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/atari7800/system.ini:21; os package/recalbox-romfs2/systems/atari7800/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:276"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: atari800
+  extensions:
+  - .7z
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .com
+  - .dcm
+  - .m3u
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/atari800/system.ini:21; os package/recalbox-romfs2/systems/atari800/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:203"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: atarist
+  extensions:
+  - .7z
+  - .ctr
+  - .dim
+  - .ipf
+  - .m3u
+  - .msa
+  - .raw
+  - .st
+  - .stx
+  - .zip
+  core: hatarib
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/atarist/system.ini:21; os package/recalbox-romfs2/systems/atarist/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:325"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/atomiswave/system.ini:21; os package/recalbox-romfs2/systems/atomiswave/system.ini:48,51;\
+    \ os configs/recalbox-odroidgo2_defconfig:229"
+  board_defaults:
+    rpi5_64:
+      core: flycast-next
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/atomiswave/system.ini:67,69; os configs/recalbox-rpi5_64_defconfig:264"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: bbcmicro
+  extensions:
+  - .adf
+  - .adl
+  - .csw
+  - .dsd
+  - .m3u
+  - .ssd
+  - .uef
+  - .zip
+  core: beebem
+  emulator: beebem
+  source_ref: "os package/recalbox-romfs2/systems/bbcmicro/system.ini:21; os package/recalbox-romfs2/systems/bbcmicro/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:172"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: bk
+  extensions:
+  - .7z
+  - .bin
+  - .bkd
+  - .dsk
+  - .img
+  - .zip
+  core: bk
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/bk/system.ini:22; os package/recalbox-romfs2/systems/bk/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:206"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: c64
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - .7z
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d1m
+  - .d2m
+  - .d4m
+  - .d64
+  - .d67
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .d90
+  - .dhd
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .p64
+  - .prg
+  - .rom
+  - .t64
+  - .tap
+  - .tcrt
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .z64
+  - .zip
+  core: vice_x64
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/c64/system.ini:21; os package/recalbox-romfs2/systems/c64/system.ini:240,242;\
+    \ os configs/recalbox-odroidgo2_defconfig:307"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: cassettevision
+  extensions:
+  - .bin777
+  - .zip
+  core: pd777
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/cassettevision/system.ini:21; os package/recalbox-romfs2/systems/cassettevision/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:271"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: cdi
+  extensions:
+  - .chd
+  - .cmd
+  - .cue
+  - .iso
+  - .zip
+  core: cdi2015
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/cdi/system.ini:21; os package/recalbox-romfs2/systems/cdi/system.ini:45,47;\
+    \ os configs/recalbox-rg353x_defconfig:206"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: channelf
+  extensions:
+  - .7z
+  - .bin
+  - .chf
+  - .rom
+  - .zip
+  core: freechaf
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/channelf/system.ini:21; os package/recalbox-romfs2/systems/channelf/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:231"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: colecovision
+  extensions:
+  - .7z
+  - .bin
+  - .col
+  - .cv
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/colecovision/system.ini:21; os package/recalbox-romfs2/systems/colecovision/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:214"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: daphne
+  extensions:
+  - .daphne
+  - .ogv
+  core: daphne
+  emulator: daphne
+  source_ref: "os package/recalbox-romfs2/systems/daphne/system.ini:21; os package/recalbox-romfs2/systems/daphne/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:189"
+  arcade: true
+- folder: dice
+  extensions:
+  - .1da
+  - .4c
+  - .4d
+  - .6c
+  - .a1
+  - .a4
+  - .c4
+  - .c6
+  - .d2
+  - .d4
+  - .d7
+  - .da1
+  - .dmy
+  - .f4
+  - .k1
+  - .s1
+  - .zip
+  core: dice
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/dice/system.ini:21; os package/recalbox-romfs2/systems/dice/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:218"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: dos
+  extensions:
+  - .7z
+  - .dos
+  - .dosz
+  - .pc
+  - .zip
+  core: dosbox_pure
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/dos/system.ini:21; os package/recalbox-romfs2/systems/dos/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:221"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: dragon
+  extensions:
+  - .asc
+  - .bas
+  - .cas
+  - .ccc
+  - .dmk
+  - .dsk
+  - .jvc
+  - .os9
+  - .rom
+  - .vdk
+  - .wav
+  core: xroar
+  emulator: xroar
+  source_ref: "os package/recalbox-romfs2/systems/dragon/system.ini:21; os package/recalbox-romfs2/systems/dragon/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:197"
+- folder: dreamcast
+  extensions:
+  - .bin
+  - .cdi
+  - .chd
+  - .cue
+  - .elf
+  - .gdi
+  - .iso
+  - .m3u
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/dreamcast/system.ini:21; os package/recalbox-romfs2/systems/dreamcast/system.ini:58,61;\
+    \ os configs/recalbox-odroidgo2_defconfig:229"
+  board_defaults:
+    rpi5_64:
+      core: flycast-next
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/dreamcast/system.ini:46,48; os configs/recalbox-rpi5_64_defconfig:264"
+- folder: easyrpg
+  files:
+  - RPG_RT.INI
+  core: easyrpg
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/easyrpg/system.ini:21; os package/recalbox-romfs2/systems/easyrpg/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:222"
+- folder: exl100
+  extensions:
+  - .7z
+  - .bas
+  - .bin
+  - .fd
+  - .k7
+  - .rom
+  - .td0
+  - .wav
+  - .zip
+  core: exel-hence
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/exl100/system.ini:10; os package/recalbox-romfs2/systems/exl100/system.ini:35,37;\
+    \ os configs/recalbox-odroidgo2_defconfig:282"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: fbneo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/fbneo/system.ini:21; os package/recalbox-romfs2/systems/fbneo/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:227"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .zip
+  core: nestopia
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/fds/system.ini:21; os package/recalbox-romfs2/systems/fds/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:263"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: gamecube
+  extensions:
+  - .ciso
+  - .dol
+  - .gc
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .tgc
+  - .wia
+  core: dolphin
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gamecube/system.ini:21; os package/recalbox-romfs2/systems/gamecube/system.ini:45,47;\
+    \ os configs/recalbox-rpi5_64_defconfig:351"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gamegear/system.ini:21; os package/recalbox-romfs2/systems/gamegear/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:236"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: gb
+  extensions:
+  - .7z
+  - .bin
+  - .dmg
+  - .gb
+  - .sgb
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gb/system.ini:21; os package/recalbox-romfs2/systems/gb/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:233"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: gba
+  extensions:
+  - .7z
+  - .agb
+  - .bin
+  - .gba
+  - .gbz
+  - .u1
+  - .zip
+  core: mgba
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gba/system.ini:21; os package/recalbox-romfs2/systems/gba/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:257"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: gbc
+  extensions:
+  - .7z
+  - .bin
+  - .cgb
+  - .gb
+  - .gbc
+  - .sgb
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gbc/system.ini:21; os package/recalbox-romfs2/systems/gbc/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:233"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: gw
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gw/system.ini:21; os package/recalbox-romfs2/systems/gw/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:242"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: gx4000
+  extensions:
+  - .7z
+  - .bin
+  - .cpr
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gx4000/system.ini:21; os package/recalbox-romfs2/systems/gx4000/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:216"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/intellivision/system.ini:21; os package/recalbox-romfs2/systems/intellivision/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:207"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: jaguar
+  extensions:
+  - .7z
+  - .bin
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  - .zip
+  core: virtualjaguar
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/jaguar/system.ini:21; os package/recalbox-romfs2/systems/jaguar/system.ini:45,47;\
+    \ os configs/recalbox-rg353x_defconfig:301"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: lowresnx
+  extensions:
+  - .7z
+  - .nx
+  - .zip
+  core: lowresnx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/lowresnx/system.ini:21; os package/recalbox-romfs2/systems/lowresnx/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:247"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: lutro
+  extensions:
+  - .7z
+  - .lua
+  - .lutro
+  - .zip
+  core: lutro
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/lutro/system.ini:21; os package/recalbox-romfs2/systems/lutro/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:248"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: lynx
+  extensions:
+  - .7z
+  - .lnx
+  - .lyx
+  - .o
+  - .zip
+  core: handy
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/lynx/system.ini:21; os package/recalbox-romfs2/systems/lynx/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:243"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: macintosh
+  extensions:
+  - .7z
+  - .cmd
+  - .dsk
+  - .hvf
+  - .img
+  - .zip
+  core: minivmac
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/macintosh/system.ini:21; os package/recalbox-romfs2/systems/macintosh/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:258"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: mame
+  extensions:
+  - .7z
+  - .cmd
+  - .zip
+  core: mame2003_plus
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/mame/system.ini:21; os package/recalbox-romfs2/systems/mame/system.ini:77,79;\
+    \ os configs/recalbox-odroidgo2_defconfig:250"
+  board_defaults:
+    rpi5_64:
+      core: mame0258
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/mame/system.ini:45,48; os configs/recalbox-rpi5_64_defconfig:389"
+    x86_64:
+      core: mame0258
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/mame/system.ini:45,48; os configs/recalbox-x86_64_defconfig:427"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: mastersystem
+  extensions:
+  - .7z
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/mastersystem/system.ini:21; os package/recalbox-romfs2/systems/mastersystem/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:272"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: megadrive
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .mdx
+  - .sgd
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/megadrive/system.ini:21; os package/recalbox-romfs2/systems/megadrive/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:272"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: megaduck
+  extensions:
+  - .bin
+  core: sameduck
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/megaduck/system.ini:21; os package/recalbox-romfs2/systems/megaduck/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:287"
+- folder: model3
+  extensions:
+  - .zip
+  core: supermodel
+  emulator: supermodel
+  source_ref: "os package/recalbox-romfs2/systems/model3/system.ini:21; os package/recalbox-romfs2/systems/model3/system.ini:45,47;\
+    \ os configs/recalbox-rpi5_64_defconfig:222"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: moonlight
+  extensions:
+  - .moonlight
+  core: moonlight
+  emulator: moonlight
+  source_ref: "os package/recalbox-romfs2/systems/moonlight/system.ini:21; os package/recalbox-romfs2/systems/moonlight/system.ini:55,57;\
+    \ os configs/recalbox-rpi3_defconfig:181"
+- folder: msx1
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .msx1
+  - .mx1
+  - .ri
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/msx1/system.ini:21; os package/recalbox-romfs2/systems/msx1/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:214"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: msx2
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .msx1
+  - .msx2
+  - .mx1
+  - .mx2
+  - .ri
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/msx2/system.ini:21; os package/recalbox-romfs2/systems/msx2/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:214"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: msxturbor
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/msxturbor/system.ini:21; os package/recalbox-romfs2/systems/msxturbor/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:214"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: multivision
+  extensions:
+  - .7z
+  - .bin
+  - .mv
+  - .omv
+  - .sg
+  - .zip
+  core: gearsystem
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/multivision/system.ini:21; os package/recalbox-romfs2/systems/multivision/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:235"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: n64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: glide64mk2
+  emulator: mupen64plus
+  source_ref: "os package/recalbox-romfs2/systems/n64/system.ini:21; os package/recalbox-romfs2/systems/n64/system.ini:68,72;\
+    \ os configs/recalbox-odroidgo2_defconfig:181"
+  board_defaults:
+    rpizero2:
+      core: gliden64
+      emulator: mupen64plus
+      source_ref: "os package/recalbox-romfs2/systems/n64/system.ini:45,48; os configs/recalbox-rpizero2_defconfig:210"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: naomi
+  extensions:
+  - .7z
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/naomi/system.ini:21; os package/recalbox-romfs2/systems/naomi/system.ini:45,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:229"
+  board_defaults:
+    rpi5_64:
+      core: flycast-next
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/naomi/system.ini:61,63; os configs/recalbox-rpi5_64_defconfig:264"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: naomi2
+  extensions:
+  - .7z
+  - .zip
+  core: flycast-next
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/naomi2/system.ini:21; os package/recalbox-romfs2/systems/naomi2/system.ini:54,56;\
+    \ os configs/recalbox-rpi5_64_defconfig:264"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: naomigd
+  extensions:
+  - .7z
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/naomigd/system.ini:21; os package/recalbox-romfs2/systems/naomigd/system.ini:45,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:229"
+  board_defaults:
+    rpi5_64:
+      core: flycast-next
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/naomigd/system.ini:61,63; os configs/recalbox-rpi5_64_defconfig:264"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: nds
+  extensions:
+  - .7z
+  - .bin
+  - .dsi
+  - .ids
+  - .nds
+  - .zip
+  core: melonds
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/nds/system.ini:21; os package/recalbox-romfs2/systems/nds/system.ini:56,58;\
+    \ os configs/recalbox-rpi4_64_defconfig:288"
+  board_defaults:
+    x86_64:
+      core: desmume
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/nds/system.ini:45,47; os configs/recalbox-x86_64_defconfig:292"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: neogeo
+  extensions:
+  - .7z
+  - .cmd
+  - .neo
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/neogeo/system.ini:21; os package/recalbox-romfs2/systems/neogeo/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:227"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: neogeocd
+  extensions:
+  - .bin
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  core: geolith
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/neogeocd/system.ini:21; os package/recalbox-romfs2/systems/neogeocd/system.ini:69,71;\
+    \ os configs/recalbox-odroidgo2_defconfig:239"
+- folder: nes
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/nes/system.ini:21; os package/recalbox-romfs2/systems/nes/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:263"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngp
+  - .npc
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/ngp/system.ini:21; os package/recalbox-romfs2/systems/ngp/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:209"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .ngpc
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/ngpc/system.ini:21; os package/recalbox-romfs2/systems/ngpc/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:209"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: o2em
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/o2em/system.ini:21; os package/recalbox-romfs2/systems/o2em/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:267"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: openbor
+  extensions:
+  - .pak
+  core: openbor
+  emulator: openbor
+  source_ref: "os package/recalbox-romfs2/systems/openbor/system.ini:21; os package/recalbox-romfs2/systems/openbor/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:190"
+- folder: oricatmos
+  extensions:
+  - .dsk
+  - .tap
+  core: oricutron
+  emulator: oricutron
+  source_ref: "os package/recalbox-romfs2/systems/oricatmos/system.ini:21; os package/recalbox-romfs2/systems/oricatmos/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:182"
+- folder: p2000t
+  extensions:
+  - .cas
+  - .game
+  core: m2000
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/p2000t/system.ini:21; os package/recalbox-romfs2/systems/p2000t/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:249"
+- folder: palm
+  extensions:
+  - .img
+  - .pdb
+  - .pqa
+  - .prc
+  - .zip
+  core: mu
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/palm/system.ini:21; os package/recalbox-romfs2/systems/palm/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:261"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: pc88
+  extensions:
+  - .7z
+  - .cmt
+  - .d88
+  - .m3u
+  - .t88
+  - .zip
+  core: quasi88
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pc88/system.ini:21; os package/recalbox-romfs2/systems/pc88/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:279"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: pc98
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .98d
+  - .bin
+  - .ccd
+  - .cdm
+  - .cmd
+  - .cue
+  - .d88
+  - .d98
+  - .dcp
+  - .dcu
+  - .dd6
+  - .dd9
+  - .ddb
+  - .dup
+  - .fdd
+  - .fdi
+  - .fim
+  - .flp
+  - .h01
+  - .hd4
+  - .hd5
+  - .hd9
+  - .hdb
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .hds
+  - .img
+  - .iso
+  - .m3u
+  - .mds
+  - .nfd
+  - .nhd
+  - .nrg
+  - .slh
+  - .tfd
+  - .thd
+  - .vhd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pc98/system.ini:21; os package/recalbox-romfs2/systems/pc98/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:265"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: pcengine
+  extensions:
+  - .7z
+  - .m3u
+  - .pce
+  - .zip
+  core: mednafen_supergrafx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pcengine/system.ini:21; os package/recalbox-romfs2/systems/pcengine/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:211"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: pcenginecd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: mednafen_supergrafx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pcenginecd/system.ini:21; os package/recalbox-romfs2/systems/pcenginecd/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:211"
+- folder: pcfx
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .toc
+  core: mednafen_pcfx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pcfx/system.ini:21; os package/recalbox-romfs2/systems/pcfx/system.ini:45,47;\
+    \ os configs/recalbox-rg353x_defconfig:196"
+- folder: pcv2
+  extensions:
+  - .7z
+  - .pc2
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pcv2/system.ini:21; os package/recalbox-romfs2/systems/pcv2/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:213"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: pico
+  extensions:
+  - .7z
+  - .gen
+  - .md
+  - .pco
+  - .zip
+  core: picodrive
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pico/system.ini:20; os package/recalbox-romfs2/systems/pico/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:272"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: pico8
+  extensions:
+  - .7z
+  - .p8
+  - .png
+  - .zip
+  core: retro8
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pico8/system.ini:21; os package/recalbox-romfs2/systems/pico8/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:285"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/pokemini/system.ini:21; os package/recalbox-romfs2/systems/pokemini/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:273"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/2048
+  name: "2048"
+  extensions:
+  - .game
+  core: "2048"
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/2048/system.ini:21; os package/recalbox-romfs2/systems/2048/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:200"
+- folder: ports/Caesar3
+  name: caesar3
+  files:
+  - c3.exe
+  core: julius
+  emulator: julius
+  source_ref: "os package/recalbox-romfs2/systems/caesar3/system.ini:21; os package/recalbox-romfs2/systems/caesar3/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:174"
+- folder: ports/Cave Story
+  name: cavestory
+  extensions:
+  - .exe
+  core: nxengine
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/cavestory/system.ini:21; os package/recalbox-romfs2/systems/cavestory/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:266"
+- folder: ports/Dinothawr
+  name: dinothawr
+  extensions:
+  - .7z
+  - .game
+  - .zip
+  core: dinothawr
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/dinothawr/system.ini:21; os package/recalbox-romfs2/systems/dinothawr/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:219"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Doom
+  name: doom
+  extensions:
+  - .7z
+  - .iwad
+  - .lmp
+  - .pwad
+  - .wad
+  - .zip
+  core: prboom
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/doom/system.ini:21; os package/recalbox-romfs2/systems/doom/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:275"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Doom 3
+  name: doom3
+  extensions:
+  - .7z
+  - .pk4
+  - .zip
+  core: boom3
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/doom3/system.ini:21; os package/recalbox-romfs2/systems/doom3/system.ini:45,47;\
+    \ os configs/recalbox-x86_64_defconfig:285"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Flashback
+  name: flashback
+  files:
+  - demo_uk.aba
+  - instru_e.map
+  - instru_f.map
+  core: reminiscence
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/flashback/system.ini:21; os package/recalbox-romfs2/systems/flashback/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:284"
+- folder: ports/Gong
+  name: gong
+  extensions:
+  - .game
+  core: gong
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/gong/system.ini:21; os package/recalbox-romfs2/systems/gong/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:240"
+- folder: ports/Minecraft
+  name: minecraft
+  extensions:
+  - .game
+  core: craft
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/minecraft/system.ini:21; os package/recalbox-romfs2/systems/minecraft/system.ini:45,47;\
+    \ os configs/recalbox-rpi5_64_defconfig:250"
+- folder: ports/Mr. Boom
+  name: mrboom
+  extensions:
+  - .game
+  core: mrboom
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/mrboom/system.ini:21; os package/recalbox-romfs2/systems/mrboom/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:260"
+- folder: ports/Out Run
+  name: outrun
+  files:
+  - outrun.88
+  - outrun.game
+  core: cannonball
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/outrun/system.ini:21; os package/recalbox-romfs2/systems/outrun/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:215"
+- folder: ports/Prince of Persia
+  name: princeofpersia
+  files:
+  - "prince of persia (1990).zip"
+  core: sdlpop
+  emulator: sdlpop
+  source_ref: "os package/recalbox-romfs2/systems/princeofpersia/system.ini:10; os package/recalbox-romfs2/systems/princeofpersia/system.ini:33,35;\
+    \ os configs/recalbox-odroidgo2_defconfig:194"
+- folder: ports/Quake
+  name: quake
+  extensions:
+  - .7z
+  - .pak
+  - .zip
+  core: tyrquake
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/quake/system.ini:21; os package/recalbox-romfs2/systems/quake/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:301"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Quake 2
+  name: quake2
+  extensions:
+  - .7z
+  - .pak
+  - .zip
+  core: vitaquake2
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/quake2/system.ini:21; os package/recalbox-romfs2/systems/quake2/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:309"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Quake 3
+  name: quake3
+  extensions:
+  - .pk3
+  core: vitaquake3
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/quake3/system.ini:21; os package/recalbox-romfs2/systems/quake3/system.ini:46,48;\
+    \ os configs/recalbox-x86_64_defconfig:395"
+- folder: ports/Rick Dangerous
+  name: rickdangerous
+  extensions:
+  - .7z
+  - .zip
+  core: xrick
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/rickdangerous/system.ini:21; os package/recalbox-romfs2/systems/rickdangerous/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:311"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Star Trek Voyager
+  name: startrekvoyager
+  extensions:
+  - .7z
+  - .pak
+  - .zip
+  core: vitavoyager
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/startrekvoyager/system.ini:21; os package/recalbox-romfs2/systems/startrekvoyager/system.ini:45,47;\
+    \ os configs/recalbox-x86_64_defconfig:396"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Tamagotchi
+  name: tamagotchi
+  extensions:
+  - .b
+  - .zip
+  core: tamalibretro
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/tamagotchi/system.ini:21; os package/recalbox-romfs2/systems/tamagotchi/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:324"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/The Powder Toy
+  name: thepowdertoy
+  extensions:
+  - .cps
+  - .game
+  core: thepowdertoy
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/thepowdertoy/system.ini:21; os package/recalbox-romfs2/systems/thepowdertoy/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:298"
+- folder: ports/Theme Hospital
+  name: themehospital
+  files:
+  - "Theme Hospital (1997).zip"
+  core: corsixth
+  emulator: corsixth
+  source_ref: "os package/recalbox-romfs2/systems/themehospital/system.ini:21; os package/recalbox-romfs2/systems/themehospital/system.ini:46,48;\
+    \ os configs/recalbox-rpi4_64_defconfig:206"
+- folder: ports/Tomb Raider
+  name: tombraider
+  files:
+  - "Tomb Raider Gold (1998).zip"
+  core: openlara
+  emulator: openlara
+  source_ref: "os package/recalbox-romfs2/systems/tombraider/system.ini:21; os package/recalbox-romfs2/systems/tombraider/system.ini:46,48;\
+    \ os configs/recalbox-rpi5_64_defconfig:208"
+- folder: ports/vvvvvv
+  name: vvvvvv
+  extensions:
+  - .zip
+  core: vvvvvv
+  emulator: vvvvvv
+  source_ref: "os package/recalbox-romfs2/systems/vvvvvv/system.ini:21; os package/recalbox-romfs2/systems/vvvvvv/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:326"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ports/Wolfenstein 3D
+  name: wolfenstein3d
+  extensions:
+  - .7z
+  - .exe
+  - .pk3
+  - .zip
+  core: ecwolf
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/wolfenstein3d/system.ini:21; os package/recalbox-romfs2/systems/wolfenstein3d/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:223"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ps2
+  extensions:
+  - .bin
+  - .chd
+  - .cso
+  - .gz
+  - .img
+  - .iso
+  - .mdf
+  - .nrg
+  core: pcsx2
+  emulator: pcsx2
+  source_ref: "os package/recalbox-romfs2/systems/ps2/system.ini:21; os package/recalbox-romfs2/systems/ps2/system.ini:45,47;\
+    \ os configs/recalbox-x86_64_defconfig:246"
+- folder: psp
+  extensions:
+  - .chd
+  - .cso
+  - .elf
+  - .iso
+  - .pbp
+  - .prx
+  core: ppsspp
+  emulator: ppsspp
+  source_ref: "os package/recalbox-romfs2/systems/psp/system.ini:21; os package/recalbox-romfs2/systems/psp/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:184"
+- folder: psx
+  extensions:
+  - .bin
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .ecm
+  - .exe
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .mds
+  - .pbp
+  - .psexe
+  - .psf
+  - .toc
+  core: pcsx_rearmed
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/psx/system.ini:21; os package/recalbox-romfs2/systems/psx/system.ini:56,58;\
+    \ os configs/recalbox-odroidgo2_defconfig:270"
+  board_defaults:
+    x86_64:
+      core: mednafen_psx_hw
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/psx/system.ini:80,82; os configs/recalbox-x86_64_defconfig:276"
+- folder: samcoupe
+  extensions:
+  - .dsk
+  - .mgt
+  - .sad
+  - .sbt
+  core: simcoupe
+  emulator: simcoupe
+  source_ref: "os package/recalbox-romfs2/systems/samcoupe/system.ini:21; os package/recalbox-romfs2/systems/samcoupe/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:185"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .bsx
+  - .fig
+  - .gd3
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/satellaview/system.ini:21; os package/recalbox-romfs2/systems/satellaview/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:289"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: saturn
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .toc
+  - .zip
+  core: mednafen_saturn
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/saturn/system.ini:21; os package/recalbox-romfs2/systems/saturn/system.ini:45,48;\
+    \ os configs/recalbox-rpi4_64_defconfig:239"
+  board_defaults:
+    odroidgo2:
+      core: yabasanshiro
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/saturn/system.ini:69,71; os configs/recalbox-odroidgo2_defconfig:312"
+    rg353x:
+      core: yabasanshiro
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/saturn/system.ini:69,71; os configs/recalbox-rg353x_defconfig:304"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: scummvm
+  extensions:
+  - .residualvm
+  - .scummvm
+  core: scummvm
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/scummvm/system.ini:21; os package/recalbox-romfs2/systems/scummvm/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:288"
+- folder: scv
+  extensions:
+  - '.0'
+  - .bin
+  - .cart
+  - .zip
+  core: emuscv
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/scv/system.ini:21; os package/recalbox-romfs2/systems/scv/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:225"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: sega32x
+  extensions:
+  - .32x
+  - .7z
+  - .bin
+  - .md
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/sega32x/system.ini:21; os package/recalbox-romfs2/systems/sega32x/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:272"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: segacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: picodrive
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/segacd/system.ini:21; os package/recalbox-romfs2/systems/segacd/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:272"
+- folder: sg1000
+  extensions:
+  - .7z
+  - .bin
+  - .sc
+  - .sf
+  - .sf7
+  - .sg
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/sg1000/system.ini:21; os package/recalbox-romfs2/systems/sg1000/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:236"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: snes
+  extensions:
+  - .7z
+  - .bml
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/snes/system.ini:21; os package/recalbox-romfs2/systems/snes/system.ini:56,58;\
+    \ os configs/recalbox-odroidgo2_defconfig:289"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: solarus
+  extensions:
+  - .solarus
+  - .zip
+  core: solarus
+  emulator: solarus
+  source_ref: "os package/recalbox-romfs2/systems/solarus/system.ini:21; os package/recalbox-romfs2/systems/solarus/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:195"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: spectravideo
+  extensions:
+  - .7z
+  - .bin
+  - .cas
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/spectravideo/system.ini:21; os package/recalbox-romfs2/systems/spectravideo/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:214"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: stv
+  extensions:
+  - .zip
+  core: mednafen_stv
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/stv/system.ini:21; os package/recalbox-romfs2/systems/stv/system.ini:59,61;\
+    \ os configs/recalbox-rpi5_64_defconfig:287"
+  board_defaults:
+    x86_64:
+      core: kronos
+      emulator: libretro
+      source_ref: "os package/recalbox-romfs2/systems/stv/system.ini:46,48; os configs/recalbox-x86_64_defconfig:324"
+  arcade: true
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: sufami
+  extensions:
+  - .7z
+  - .fig
+  - .gd3
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/sufami/system.ini:21; os package/recalbox-romfs2/systems/sufami/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:289"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: supergrafx
+  extensions:
+  - .7z
+  - .pce
+  - .sgx
+  - .zip
+  core: mednafen_supergrafx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/supergrafx/system.ini:21; os package/recalbox-romfs2/systems/supergrafx/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:211"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: supervision
+  extensions:
+  - .7z
+  - .bin
+  - .sv
+  - .zip
+  core: potator
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/supervision/system.ini:21; os package/recalbox-romfs2/systems/supervision/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:274"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: thomson
+  extensions:
+  - .7z
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  - .zip
+  core: theodore
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/thomson/system.ini:21; os package/recalbox-romfs2/systems/thomson/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:299"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: ti994a
+  extensions:
+  - .ctg
+  core: ti99sim
+  emulator: ti99sim
+  source_ref: "os package/recalbox-romfs2/systems/ti994a/system.ini:21; os package/recalbox-romfs2/systems/ti994a/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:196"
+- folder: tic80
+  extensions:
+  - .7z
+  - .tic
+  - .zip
+  core: tic80
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/tic80/system.ini:21; os package/recalbox-romfs2/systems/tic80/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:300"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: trs80coco
+  extensions:
+  - .asc
+  - .bas
+  - .c10
+  - .cas
+  - .ccc
+  - .dmk
+  - .dsk
+  - .jvc
+  - .os9
+  - .rom
+  - .vdk
+  - .wav
+  core: xroar
+  emulator: xroar
+  source_ref: "os package/recalbox-romfs2/systems/trs80coco/system.ini:21; os package/recalbox-romfs2/systems/trs80coco/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:197"
+- folder: uzebox
+  extensions:
+  - .7z
+  - .uze
+  - .zip
+  core: uzem
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/uzebox/system.ini:21; os package/recalbox-romfs2/systems/uzebox/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:305"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .vec
+  - .zip
+  core: vecx
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/vectrex/system.ini:21; os package/recalbox-romfs2/systems/vectrex/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:306"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: vg5000
+  extensions:
+  - .k7
+  core: rb5000
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/vg5000/system.ini:21; os package/recalbox-romfs2/systems/vg5000/system.ini:56,58;\
+    \ os configs/recalbox-odroidgo2_defconfig:283"
+- folder: vic20
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - '.70'
+  - .7z
+  - .a0
+  - .b0
+  - .bin
+  - .crt
+  - .d64
+  - .m3u
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_xvic
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/vic20/system.ini:21; os package/recalbox-romfs2/systems/vic20/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:307"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: videopacplus
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/videopacplus/system.ini:21; os package/recalbox-romfs2/systems/videopacplus/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:267"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: vircon32
+  extensions:
+  - .v32
+  core: vircon32
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/vircon32/system.ini:21; os package/recalbox-romfs2/systems/vircon32/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:308"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .bin
+  - .vb
+  - .vboy
+  - .zip
+  core: mednafen_vb
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/virtualboy/system.ini:21; os package/recalbox-romfs2/systems/virtualboy/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:212"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: vpinball
+  extensions:
+  - .vpx
+  core: vpinball
+  emulator: vpinball
+  source_ref: "os package/recalbox-romfs2/systems/vpinball/system.ini:21; os package/recalbox-romfs2/systems/vpinball/system.ini:46,48;\
+    \ os configs/recalbox-rpi5_64_defconfig:391"
+- folder: wasm4
+  extensions:
+  - .7z
+  - .wasm
+  - .zip
+  core: wasm4
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/wasm4/system.ini:21; os package/recalbox-romfs2/systems/wasm4/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:313"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: wii
+  extensions:
+  - .ciso
+  - .elf
+  - .gcz
+  - .iso
+  - .rvz
+  - .wad
+  - .wbfs
+  - .wia
+  core: dolphin-gui
+  emulator: dolphin-gui
+  source_ref: "os package/recalbox-romfs2/systems/wii/system.ini:21; os package/recalbox-romfs2/systems/wii/system.ini:45,47;\
+    \ os configs/recalbox-rpi5_64_defconfig:352"
+- folder: wswan
+  extensions:
+  - .7z
+  - .ws
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/wswan/system.ini:21; os package/recalbox-romfs2/systems/wswan/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:213"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: wswanc
+  extensions:
+  - .7z
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/wswanc/system.ini:21; os package/recalbox-romfs2/systems/wswanc/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:213"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .m3u
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/x1/system.ini:21; os package/recalbox-romfs2/systems/x1/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:310"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/x68000/system.ini:21; os package/recalbox-romfs2/systems/x68000/system.ini:46,48;\
+    \ os configs/recalbox-odroidgo2_defconfig:278"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: xbox
+  extensions:
+  - .iso
+  core: xemu
+  emulator: xemu
+  source_ref: "os package/recalbox-romfs2/systems/xbox/system.ini:21; os package/recalbox-romfs2/systems/xbox/system.ini:45,47;\
+    \ os configs/recalbox-x86_64_defconfig:261"
+- folder: zmachine
+  extensions:
+  - .7z
+  - .dat
+  - .z1
+  - .z2
+  - .z3
+  - .z4
+  - .z5
+  - .z6
+  - .z7
+  - .z8
+  - .zip
+  core: frotz
+  emulator: frotz
+  source_ref: "os package/recalbox-romfs2/systems/zmachine/system.ini:21; os package/recalbox-romfs2/systems/zmachine/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:173"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: zx81
+  extensions:
+  - .7z
+  - '.80'
+  - '.81'
+  - .a83
+  - .ace
+  - .b80
+  - .b81
+  - .b82
+  - .bas
+  - .csw
+  - .m
+  - .o
+  - .p
+  - .p81
+  - .t81
+  - .tap
+  - .tzx
+  - .wav
+  - .z81
+  - .zip
+  core: "81"
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/zx81/system.ini:21; os package/recalbox-romfs2/systems/zx81/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:199"
+  note: an extension ending in ! is an archive the frontend does not open
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .csw
+  - .d40
+  - .d80
+  - .dck
+  - .dsk
+  - .fdi
+  - .hdf
+  - .img
+  - .ipf
+  - .ltp
+  - .mdr
+  - .mdv
+  - .mgt
+  - .opd
+  - .opu
+  - .pzx
+  - .rom
+  - .rzx
+  - .sad
+  - .scl
+  - .slt
+  - .sna
+  - .sp
+  - .spc
+  - .sta
+  - .szx
+  - .tap
+  - .td0
+  - .trd
+  - .tzx
+  - .udi
+  - .vhd
+  - .wav
+  - .z80
+  - .zip
+  - .zxs
+  core: fuse
+  emulator: libretro
+  source_ref: "os package/recalbox-romfs2/systems/zxspectrum/system.ini:21; os package/recalbox-romfs2/systems/zxspectrum/system.ini:45,47;\
+    \ os configs/recalbox-odroidgo2_defconfig:232"
+  note: an extension ending in ! is an archive the frontend does not open

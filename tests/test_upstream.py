@@ -207,6 +207,10 @@ class TestHttpFailure(unittest.TestCase):
             upstream._http_failure("u", _http_error(429)), upstream.RateLimitError
         )
 
+    def test_429_names_the_wait_the_forge_asks_for(self):
+        failure = upstream._http_failure("u", _http_error(429, {"Retry-After": "1833"}))
+        self.assertIn("retry after 1833 s", str(failure))
+
     def test_403_with_exhausted_quota_is_a_rate_limit(self):
         exc = _http_error(403, {"X-RateLimit-Remaining": "0"})
         self.assertIsInstance(
@@ -983,6 +987,76 @@ class TestForkBase(unittest.TestCase):
         upstream._http_json = lambda url: None
         up, fork = make_repo("github.com", "o", "up"), make_repo("github.com", "f", "port")
         self.assertIsNone(upstream.fork_base(up, "tip", fork, "head", self.tmp.name))
+
+
+def _tarball(files: dict[str, str]) -> bytes:
+    import io
+    import tarfile
+
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w:gz") as archive:
+        for name, text in files.items():
+            data = text.encode()
+            info = tarfile.TarInfo(name)
+            info.size = len(data)
+            archive.addfile(info, io.BytesIO(data))
+    return buf.getvalue()
+
+
+class TestGitlabDirectoryArchive(unittest.TestCase):
+    """One archive request fills the per-file cache of a GitLab directory."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.repo = parse_repo("https://gitlab.com/g/p")
+        top = "p-abc-sys/"
+        self.body = _tarball({
+            top + "sys/a/system.ini": "[system]\n",
+            top + "sys/b/system.ini": "[core.x]\n",
+            top + "other/c.txt": "outside",
+        })
+
+    def test_files_land_in_the_cache_fetch_file_reads(self):
+        calls = []
+        with mock.patch.object(upstream, "_fetch", side_effect=lambda url: calls.append(url) or self.body):
+            held = upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
+        self.assertEqual(held, {"sys/a/system.ini", "sys/b/system.ini"})
+        self.assertEqual(len(calls), 1)
+        self.assertIn("archive.tar.gz?sha=abc&path=sys", calls[0])
+        with mock.patch.object(upstream, "_http_text", side_effect=_no_network):
+            lines = upstream.fetch_file(self.repo, "abc", "sys/b/system.ini", self.tmp.name, offline=True)
+        self.assertEqual(lines, ["[core.x]"])
+
+    def test_a_second_run_reads_the_index_offline(self):
+        with mock.patch.object(upstream, "_fetch", return_value=self.body):
+            upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
+        with mock.patch.object(upstream, "_fetch", side_effect=_no_network):
+            held = upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name, offline=True)
+        self.assertEqual(held, {"sys/a/system.ini", "sys/b/system.ini"})
+
+    def test_offline_without_index_knows_nothing(self):
+        with mock.patch.object(upstream, "_fetch", side_effect=_no_network):
+            self.assertIsNone(upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name, offline=True))
+
+    def test_other_forges_are_left_to_per_file_reads(self):
+        github = parse_repo("https://github.com/o/r")
+        with mock.patch.object(upstream, "_fetch", side_effect=_no_network):
+            self.assertIsNone(upstream.cache_gitlab_directory(github, "abc", "sys", self.tmp.name))
+
+    def test_a_refused_api_falls_back_to_git(self):
+        refused = upstream.RateLimitError("429", "gitlab.com")
+        with mock.patch.object(upstream, "_fetch", side_effect=refused), \
+                mock.patch.object(upstream, "_sparse_git_files", return_value={"sys/a/system.ini": "x"}) as git:
+            held = upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
+        self.assertEqual(held, {"sys/a/system.ini"})
+        git.assert_called_once()
+
+    def test_an_empty_archive_is_an_error_not_an_empty_directory(self):
+        with mock.patch.object(upstream, "_fetch", return_value=_tarball({"p/other/x": "y"})):
+            with self.assertRaises(upstream.UpstreamError):
+                upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
+
 
 if __name__ == "__main__":
     unittest.main()
