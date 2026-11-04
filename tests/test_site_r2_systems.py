@@ -128,7 +128,7 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
         self.assertEqual(gs._start_with([_file("a.bin", "a")], _consumers({})), [])
 
     def test_the_page_carries_the_line_under_the_console(self):
-        # Sega keeps its consoles as sections; Sony gives each a page.
+        # Sega keeps its consoles as sections. Sony gives each a page.
         page = gs.generate_system_page("Sega", {"Saturn": self.files}, self.required_only())
         heading = page.index("## Saturn")
         self.assertLess(heading, page.index("**Start with**"))
@@ -254,6 +254,8 @@ class TheSystemsIndexListsConsoles(unittest.TestCase):
     be known to be under Sony."""
 
     def test_one_row_per_console_by_its_name(self):
+        gs.reset_console_pages()
+        self.addCleanup(gs.reset_console_pages)
         groups = {
             "Sony": {"PlayStation": [_file("a.bin", "a")], "PlayStation 2": [_file("b.bin", "b")]},
             "Other": {"ScummVM": [_file("c.bin", "c")]},

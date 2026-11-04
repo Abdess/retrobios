@@ -165,6 +165,9 @@ class TheSummaryLineIsProse(unittest.TestCase):
 
 class TheIndexNamesEmulatorsAndSystems(unittest.TestCase):
     def test_columns_and_counts(self):
+        # Pages another test split off would send the console elsewhere.
+        siterender.reset_console_pages()
+        self.addCleanup(siterender.reset_console_pages)
         saved = dict(siterender._system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)
         siterender.set_system_page_map({"sony-playstation": ("sony", "PlayStation")})

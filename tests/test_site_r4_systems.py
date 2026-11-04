@@ -288,12 +288,13 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
         consumers = _consumers({})
         with gs.markup.using("mkdocs"):
             one = sum(len(line) + 1 for line in gs._system_file_card(big[0], consumers))
-        # Sega splits by size; every Sony console has a page whatever its size.
+        # Sega splits by size. Every Sony console has a page whatever its size.
         pages = gs.system_pages("Sega", {"Saturn": big, "Pico": small},
                                 consumers, budget=one * 12)
         self.assertIn("sega-saturn", pages)
         self.assertEqual(_consoles(pages["sega"][0]), ["Pico"])
         self.assertEqual(_consoles(pages["sega-saturn"][0]), ["Saturn"])
+        self.addCleanup(gs.reset_console_pages)
         sony = gs.system_pages("Sony", {"PlayStation": big, "PocketStation": small},
                                consumers, budget=one * 12)
         self.assertEqual(_consoles(sony["sony"][0]), [])
