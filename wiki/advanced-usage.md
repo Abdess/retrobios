@@ -10,8 +10,9 @@ list a platform would have if it were written from the emulators' code) and
 verification.
 
 The [latest release](https://github.com/Abdess/retrobios/releases/latest)
-carries one pack for each platform, and that pack holds everything the
-platform runs: the BIOS list it publishes, plus every file its emulator cores
+carries a pack for the setups most people download (`release_pack: true` in
+`platforms/_registry.yml`), and the installer serves the others. A pack holds
+everything its platform runs: the BIOS list it publishes, plus every file its emulator cores
 load, read from their source code. There is no lighter variant to choose,
 because a pack that leaves out a file a core needs means a game that does not
 boot, with no message saying why. It is not a guarantee either: source
@@ -169,10 +170,11 @@ A slot is a system **and** a declared region: the Japanese and American
 PlayStation BIOS are not alternatives to each other, so their ranks are never
 compared.
 
-Where no such list is declared, the group is left untouched and counted:
+Where no such list is declared, the group is left untouched and counted. The
+RetroArch build above, with `--region us`, printed:
 
 ```
-  63 slot(s) with no declared order: every candidate kept
+  104 slot(s) with no declared order: every candidate kept
 ```
 
 Two rules keep a declared order from overreaching:
@@ -196,7 +198,7 @@ though `scph5501.bin` would otherwise win at 5.
 `--one-per-slot` works with or without `--region`, requires `--platform` or
 `--all`, and is refused with `--manifest`, `--emulator`, `--system` and
 `--from-md5` rather than silently ignored. It tags the output name
-(`Recalbox_10.0.8_OnePerSlot_BIOS_Pack.zip`) so a narrowed build never
+(`Recalbox_10.1.1_OnePerSlot_BIOS_Pack.zip`) so a narrowed build never
 overwrites the full one, and the pack README says the pack was narrowed.
 
 
@@ -209,7 +211,7 @@ Every dimension that removes files appears in the output filename and in the
 pack README, because the five places that name an artefact (the pack, the
 `--split` parts, the `_Split` directory, the grouped-alias rename and the
 manifest) all build from one list (`_narrowings` in `generate_pack.py`). A pack narrowed three ways is called
-`Recalbox_10.0.8_NorthAmerica_OnePerSlot_Required_BIOS_Pack.zip` and opens with
+`Recalbox_10.1.1_NorthAmerica_OnePerSlot_Required_BIOS_Pack.zip` and opens with
 a `PACK TYPE: Narrowed` block listing the three. Adding a new way to narrow a
 pack means adding it to that list, so it cannot reach users nameless or
 unannounced.
@@ -531,7 +533,7 @@ python scripts/pipeline.py --offline --with-export
 
 ### Combining flags
 
-Flags compose freely:
+These flags compose (`--source` and `--all-variants` are refused with `--skip-packs`):
 
 ```bash
 python scripts/pipeline.py --offline --skip-packs --skip-docs --with-truth --target switch

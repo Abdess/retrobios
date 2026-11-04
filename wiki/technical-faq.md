@@ -88,9 +88,9 @@ that (`emulators/beetle_psx.yml`, notes). The real file still ships, because
 the stand-in is not perfect: some games glitch or do not start.
 
 A profile entry records it as `hle_fallback: true`. That flag does not decide
-`required`: 13 of the 778 entries that carry it are required, among them Beetle
-PSX's three region BIOS. Verification reports a missing `hle_fallback` file at
-INFO either way.
+`required`: some entries that carry it are required, such as Yabause's
+`saturn_bios.bin`. Verification reports a missing `hle_fallback` file at INFO
+either way.
 
 ## How often are packs updated?
 

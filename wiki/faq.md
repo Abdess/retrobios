@@ -9,7 +9,7 @@ terms: ios, iphone, ipad
 ## Do I need BIOS files?
 
 - **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.
-- **Better with it** for Dreamcast: some games need it.
+- **Better with it** for Dreamcast. Some games need it.
 - **Usually not** for NES or Super Nintendo.
 
 [What is a BIOS?](what-are-bios-files.md)
@@ -99,7 +99,7 @@ Fill it from a computer or point `--from-pack` at your ZIP: [Without a network](
 ## My setup is not in the list
 
 - Name your emulator's BIOS folder with `--dest`.
-- ES-DE, LaunchBox: the command fills their emulators' folders.
+- ES-DE or LaunchBox? It fills their emulators' folders.
 - iPhone, iPad (iOS): no terminal.
   [Pick your consoles and copy them to the app](../which-pack.md#iphone-and-ipad).
 

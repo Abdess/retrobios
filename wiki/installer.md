@@ -254,7 +254,9 @@ green, files missing or left out yellow, failures and a refused folder red, and
 secondary text dim. Only the 16 basic colours are used, the ones a handheld's
 console has. `NO_COLOR` set to any value but an empty one turns colour off, as do
 `TERM=dumb` or no `TERM`, a terminal whose description names fewer than 8 colours
-and an output that is not a terminal. The text stays the same. The line-by-line
+and an output that is not a terminal. The text stays the same. `TERM=dumb`, no
+`TERM` outside Windows, or a terminal that moves no cursor the ANSI way
+(`TERM=vt52`) also replace the live progress line with a line per file. The line-by-line
 questions paint the end of a run the same way.
 
 However the screen ends (Enter on the result, `q`, Ctrl+C, Ctrl+D, SIGTERM, a
@@ -321,12 +323,12 @@ file list is downloaded once and handed to each run.
 ## What the installer does
 
 1. Detects the host OS and the platforms installed on it.
-2. Fetches `install/<platform>.json` from the same revision the bootstrap
-   verified the installer against, so the file list and the code reading it
-   always come from one commit.
-3. Prints the file count and total size, then a safety notice counting the
-   entries the collection cannot serve, how many of those the platform marks
-   required, and why. At a terminal, the
+2. Fetches `install/<platform>.json` from `main`, the newest file list,
+   whatever commit the installer itself came from. `RETROBIOS_REF` reads it
+   from a tag or a commit instead (see [For packagers](#for-packagers)).
+3. Prints the file count and total size, then a `Not installable:` line
+   counting the files the collection does not hold and how many of them are
+   required. At a terminal, the
    [full-screen interface](#the-full-screen-interface) then offers **Install**
    for everything and **Choose systems** for fewer, and `--plain` asks the
    same as questions (see below).
@@ -472,9 +474,6 @@ Checking existing files...
   0 in place, 14723 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
-
-`Not installable` counts the files of the list that the collection does not
-hold. They are named at the end of the run.
 
 On a first install nothing is in place. On a later run the line counts what
 is already there, and only the rest is downloaded. A download of 1 GB or more
@@ -881,7 +880,7 @@ lists, a game engine's own data. The manifest marks each of these files
 and names what it left out with its category (ten names, `--verbose` for all):
 
 ```text
-  2436 game data files left out (--no-game-data): ports/doom/doom1.wad, ports/doom2/doom2.wad, ...
+  2912 game data files left out (--no-game-data), 150 of them not installable: ports/CaveStory/Doukutsu.exe, ports/dinothawr/dinothawr.game, ports/doom/doom1.wad, ...
 ```
 
 It is the cut `generate_pack.py --no-game-data` makes, and a test holds the
@@ -897,7 +896,7 @@ they need. The cores are the `<name>_libretro.so` (`.dll`, `.dylib`,
 way with `--dest` or without, `cores/` beside RetroArch when the setting is
 unset, a `retroarch.cfg` next to the system directory for a portable install,
 and the folders RetroPie (`/opt/retropie/libretrocores`)
-and Lakka (`/usr/lib/libretro`, `/storage/cores`) install into. A core file
+and Lakka (`/usr/lib/libretro`, `/storage/cores`, `/tmp/cores`) install into. A core file
 is named the buildbot's way (`mednafen_psx`), and the manifest maps each name to
 the profile its files are filed under (`beetle_psx`).
 
@@ -994,15 +993,11 @@ what the options name, everything by default.
 
 <!-- /generated: options -->
 
-`--check` reads the same file list, hashes the destination and exits, with
-code 1 when a file is missing or does not match and 0 when every one does. Wrong
-copies are listed first and in full, then the missing ones whose
-reason it found, then the first ten other missing ones (`--verbose` lists them
-all). See [Why a file is refused](#why-a-file-is-refused). `--dry-run` counts the data trees in its total. Without
-it, a file already present with the expected hash is left untouched, and one
-whose contents do not match is re-downloaded and replaced by the verified copy,
-the old one kept beside the BIOS folder.
-Files the list does not name are never read, moved or deleted.
+`--check` exits with code 1 when a file is missing or does not match, and 0
+when every one does. What it lists is under
+[Why a file is refused](#why-a-file-is-refused). An install leaves a file with
+the expected hash untouched and replaces any other, the old one kept beside
+the BIOS folder. Files the list does not name are never read, moved or deleted.
 
 ## Platform detection
 
@@ -1012,7 +1007,8 @@ system built on another one (KOLOS on JELOS, dArkOS on ArkOS, spruceOS on a
 TrimUI) matches both and is the one meant. Two unrelated systems matching
 are both named: at a terminal the run asks which one, otherwise it stops and
 asks for `--dest`. The run names the system as it names itself, with the file
-list it gets: `Found AmberELEC at /storage/roms/bios (RetroArch files)`.
+list it gets when that list is another system's:
+`Found JELOS at /storage/roms/bios (RetroArch files)`.
 `--list-platforms` lists every system below.
 
 Where a system's RetroArch config is named, its `system_directory` is the
@@ -1030,9 +1026,9 @@ rewrites both to `/roms2/bios`: a second card is followed through them.
 | `/recalbox/recalbox.version` or `/usr/bin/recalbox-settings` | Recalbox | Recalbox | `/recalbox/share/bios` |
 | `/opt/muos` | muOS | RetroArch | `system_directory` of `/opt/muos/share/info/config/retroarch.cfg`, else of the default it is copied from: `/run/muos/storage/bios`, which muOS binds to `MUOS/bios` on the second card when that card holds one, else the first. Cores are read from that config's `libretro_directory` (`/opt/muos/share/core`) |
 | `/mnt/mmc/MUOS/` | muOS | RetroArch | `/mnt/mmc/MUOS/bios` |
-| `/etc/os-release` `NAME=AmberELEC` (CHAos writes the same) | AmberELEC | AmberELEC | `/storage/roms` (its list names `bios/`, `ports/` and `neogeo/` there) |
+| `/etc/os-release` `NAME=AmberELEC` (CHAos writes the same) | AmberELEC | AmberELEC | `/storage/roms` (its list names `bios/` and `neogeo/` there) |
 | `/usr/bin/batocera-info` naming PAN4ELEC, on AmberELEC | PAN4ELEC | AmberELEC | as AmberELEC |
-| `/etc/os-release` `NAME=EmuELEC` | EmuELEC | EmuELEC | as AmberELEC |
+| `/etc/os-release` `NAME=EmuELEC` | EmuELEC | EmuELEC | `/storage/roms` (its list names `bios/`, `ports/` and `neogeo/` there) |
 | `/etc/os-release` `OS_NAME=JELOS` | JELOS | RetroArch | `/storage/.config/retroarch/retroarch.cfg`, else `/storage/roms/bios` |
 | `/usr/lib/systemd/system/jelos-ready.service`, on JELOS | KOLOS | RetroArch | as JELOS |
 | `/etc/os-release` `OS_NAME=UnofficialOS` | UnofficialOS | RetroArch | as JELOS |
@@ -1201,14 +1197,15 @@ DuckStation and PCSX2, for one), the installer fills their own BIOS folders:
 the folders of the [standalone copies](#standalone-copies) list that exist on
 the machine, with the files that list names, taken from the EmuDeck file list
 and then RetroArch's. At a terminal it asks first. `--check` and `--dry-run`
-work as for a platform. With `--system`, `--core`, `--emulator`, `--region` or
-`--target` the run asks for a platform as before, since those name a
-platform's lists.
+work as for a platform. With `--system`, `--core`, `--emulator`, `--region`,
+`--target`, `--installed-cores` or `--declared-only` the run asks for a
+platform as before, since those name a platform's lists.
 
 When a platform named with `--platform` is not found on the machine, the
 destination falls back to the directory its detection looks for:
-`/userdata/bios` for Batocera, `/recalbox/share/bios` for Recalbox,
-`/storage/system` for Lakka, `~/retrodeck` for RetroDECK, `~/Emulation/bios`
+`/userdata/bios` for Batocera and KNULLI, `/recalbox/share/bios` for Recalbox,
+`/storage/system` for Lakka, `/storage/roms/bios` for ROCKNIX,
+`/storage/roms` for AmberELEC and EmuELEC, `~/retrodeck` for RetroDECK, `~/Emulation/bios`
 for EmuDeck (`C:\Emulation\bios` on Windows), `/media/fat/games` for MiSTer,
 `~/RetroPie/BIOS` for RetroPie, `/romm/library/bios` for RomM,
 `C:\RetroBat\bios` for RetroBat, and RetroArch's own default system
@@ -1316,7 +1313,8 @@ declare them (Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK):
 
 | Files | Copied to |
 |-------|-----------|
-| `prod.keys`, `title.keys` | yuzu, eden, citron, suyu and Ryujinx key directories |
+| `prod.keys` | yuzu, eden, citron, suyu and Ryujinx key directories |
+| `title.keys` | yuzu, eden, citron and suyu key directories |
 | `Citra/sysdata/aes_keys.txt`, `Citra/sysdata/boot9.bin` | Azahar `sysdata` |
 | `scph*.bin` | DuckStation `bios` |
 | `ps2-*.bin` | PCSX2 `bios`, native and Flatpak |
@@ -1820,8 +1818,8 @@ RetroArch folder that holds only `scph5501.bin`, in the order written:
 | `RETROBIOS_INSTALL_URL` | Where the bootstrap fetches `install.py`. HTTPS only |
 | `RETROBIOS_INSTALL_SHA256` | The SHA-256 the bootstrap requires of that installer, 64 hex characters. When either of these two is set and the fingerprint does not match, the error names the variable instead of suggesting a retry |
 | `RETROBIOS_BOOTSTRAP` | Set by `install.sh` (`sh`) and `install.ps1` (`ps1`) for the temporary installer they run, so that its hints give back the one-line command rather than `python3 install.py` |
-| `NO_COLOR` | Plain text, no colour, even at a terminal, when set to any value but an empty one. `TERM=dumb`, or no `TERM` outside Windows, also turns the live progress line and the colour off, as does a terminal whose description moves no cursor the ANSI way (`TERM=vt52`). A description naming fewer than 8 colours keeps the live line and drops the colour. The full screen then draws the same text without colour: the row in focus is marked with `>` as well as reverse video, and every state is written in words |
-| `TERM`, `TERMINFO`, `TERMINFO_DIRS` | Decide whether the full screen opens. `TERM` unset or `dumb` (outside Windows) gives the questions line by line. Otherwise the terminal's description is read where ncurses reads it: `TERMINFO`, then `~/.terminfo`, then each folder of `TERMINFO_DIRS`, then the system's own. A description whose cursor moves are not the ANSI ones the screen writes (`TERM=vt52`) gives the questions too, and `--tui` there stops with the reason |
+| `NO_COLOR` | Set to any value but an empty one: no colour, even at a terminal. The full screen then marks the row in focus with `>` as well as reverse video. What else turns colour off is under [The full-screen interface](#the-full-screen-interface) |
+| `TERM`, `TERMINFO`, `TERMINFO_DIRS` | Decide whether the full screen opens, as [The full-screen interface](#the-full-screen-interface) says. The terminal's description is read where ncurses reads it: `TERMINFO`, then `~/.terminfo`, then each folder of `TERMINFO_DIRS`, then the system's own |
 | `FORCE_COLOR`, `CLICOLOR_FORCE` | Colour even when the output is a pipe or a file, set to any value but `0` or an empty one. `NO_COLOR` wins over both, and the progress line stays one line per file |
 | `SSL_CERT_FILE`, `SSL_CERT_DIR` | The trusted certificates to check servers with, for a Python that finds none of its own |
 | `RETROBIOS_PLAIN`, `ACCESSIBLE` | Set to anything but `0`: the questions come line by line, as with `--plain`, instead of the full-screen interface |
@@ -1910,10 +1908,10 @@ finds here. `--help` lists the options with examples.
 
 ### No file list
 
-The installer reads its manifests from the revision the bootstrap checked it
-against. A platform name is checked before anything is downloaded, so a
-"No file list" message comes from the revision: `RETROBIOS_REF` naming a tag
-that does not exist, or one older than the platform. Unset it, or pick a tag
+The installer reads its file lists from `main`, or from the ref
+`RETROBIOS_REF` names. A platform name is checked before anything is
+downloaded, so a "No file list" message comes from that ref: a tag that does
+not exist, or one older than the platform. Unset it, or pick a tag
 from the releases page ([Environment overrides](#environment-overrides)).
 
 ### Upper and lower case

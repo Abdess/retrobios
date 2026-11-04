@@ -55,9 +55,9 @@ from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
 from pathlib import Path, PurePosixPath
 from typing import Any, BinaryIO, ContextManager, NamedTuple, TextIO
 
-# Manifests are read from the same ref the bootstrap verified this installer
-# against, so a file list and the code reading it always come from one commit.
-# RETROBIOS_REF pins an installation to a tag when reproducibility matters.
+# File lists are read from main, the newest ones, whichever commit the
+# installer came from. RETROBIOS_REF pins them to a tag or a commit when
+# reproducibility matters.
 DEFAULT_RELEASE_REF = "main"
 RELEASE_REF = os.environ.get("RETROBIOS_REF", DEFAULT_RELEASE_REF)
 DEFAULT_BASE_URL = (
@@ -2672,7 +2672,7 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
         # default is <exe folder>\system (configuration.c, platform_win32.c).
         appdata = os.environ.get("APPDATA", "")
         appdata_cfg = Path(appdata) / "RetroArch" / "retroarch.cfg" if appdata else None
-        exe_dirs = _windows_retroarch_dirs() if os_type == "windows" else []
+        exe_dirs = _windows_retroarch_dirs()
         for exe_dir in exe_dirs:
             ra_dir = _parse_retroarch_system_dir(exe_dir / "retroarch.cfg", exe_dir)
             if ra_dir is None and appdata_cfg is not None:

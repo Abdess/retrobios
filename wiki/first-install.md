@@ -159,7 +159,7 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform retropie -
 
 ### Error: the downloaded installer does not match its expected fingerprint.
 
-Nothing ran: something changed the file. Try another network.
+Nothing ran, because something changed the file. Try another network.
 
 ### Cannot create ...
 
