@@ -6107,6 +6107,11 @@ def system_install_choices(coverages: dict) -> dict[str, dict[str, list[tuple[st
 # stays under 600 KB from 300 KB. game-engines was one 10.5 MB page that
 # took 21 s of main-thread work on a phone.
 SYSTEM_PAGE_BUDGET = 300_000
+# Manufacturers whose every console gets a page of its own, whatever its
+# size. A section shares its page's search fields with its neighbours, and
+# a digit is on too many pages to weigh: "playstation 3 bios" found the
+# PlayStation page before the Sony page that held the PlayStation 3.
+CONSOLE_PAGES = frozenset({"Sony"})
 # What the sections kept on a manufacturer's summary may weigh once
 # rendered, estimated from their Markdown. Fitted on the Nintendo, Sega and
 # Commodore summaries: highlighted install commands grow about eleven times
@@ -7281,7 +7286,7 @@ def system_pages(
         boxes = {console: _install_box_weight(install_block(console)) for console in consoles}
     rendered = {console: CARD_HTML_RATIO * weights[console] + INSTALL_HTML_RATIO * boxes[console]
                 for console in weights}
-    if (not boards and len(measured_text) <= budget
+    if (not boards and manufacturer not in CONSOLE_PAGES and len(measured_text) <= budget
             and sum(rendered.values()) <= SYSTEM_SUMMARY_HTML):
         text = whole_page(all_sections()) if markup.starlight() else measured_text
         return {slug: (text, consoles)}
@@ -7290,7 +7295,7 @@ def system_pages(
     # to pages of their own until what stays on the manufacturer's page is
     # half the budget: a section of one file keeps its place, and a reader
     # does not open 91 pages to browse Other.
-    moved: set[str] = set(boards)
+    moved: set[str] = set(boards) | (set(consoles) if manufacturer in CONSOLE_PAGES else set())
     for console in sorted(weights, key=lambda c: (-weights[c], c)):
         if sum(w for c, w in weights.items() if c not in moved) <= budget // 2:
             break

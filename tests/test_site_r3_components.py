@@ -404,5 +404,23 @@ class SearchConsoleOwnership(unittest.TestCase):
                       (DIST / "index.html").read_text(encoding="utf-8"))
 
 
+
+class EverySonyConsoleHasItsPage(unittest.TestCase):
+    """A section shares its page's search fields: "playstation 3 bios"
+    found the PlayStation page before the Sony page holding the PS3."""
+
+    def test_sony_is_split_by_console(self):
+        source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        self.assertIn('CONSOLE_PAGES = frozenset({"Sony"})', source)
+        self.assertIn("manufacturer in CONSOLE_PAGES", source)
+
+    @unittest.skipUnless((DIST / "index.html").is_file(), "site not built")
+    def test_each_console_page_is_built(self):
+        for slug in ("sony-playstation", "sony-playstation-2", "sony-playstation-3",
+                     "sony-playstation-4", "sony-playstation-portable", "sony-playstation-vita",
+                     "sony-pocketstation"):
+            with self.subTest(page=slug):
+                self.assertTrue((DIST / "systems" / slug / "index.html").is_file())
+
 if __name__ == "__main__":
     unittest.main()

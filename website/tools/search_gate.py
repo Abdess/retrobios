@@ -71,11 +71,16 @@ QUERIES: dict[str, tuple[tuple[str, ...], int]] = {
     "game boy bios": (("systems/nintendo-game-boy/",), 1),
     "3ds bios": (("systems/nintendo-3ds/",), 1),
     # A console another one's name begins with, both ways: the longer name's
-    # page holds every word of the shorter query. GBA, GBC and the
-    # PlayStation 3 are sections of their maker's page. Saturn.emu is an
-    # emulator named after its console.
+    # page holds every word of the shorter query. GBA and GBC are sections
+    # of their maker's page. Saturn.emu is an emulator named after its
+    # console.
     "playstation 2 bios": (("systems/sony-playstation-2/",), 1),
-    "playstation 3 bios": (("systems/sony/",), 1),
+    # Every Sony console has a page of its own (CONSOLE_PAGES). The search
+    # weighs words, not their order, and "3" is on too many pages to weigh:
+    # the PlayStation page, which names BIOS v3.0 and leads "playstation
+    # bios", stays just above. "ps3 bios" finds the page first.
+    "playstation 3 bios": (("systems/sony-playstation-3/",), 2),
+    "ps3 bios": (("systems/sony-playstation-3/",), 1),
     "game boy advance bios": (("systems/nintendo/",), 1),
     "game boy color bios": (("systems/nintendo/",), 1),
     "nintendo ds bios": (("systems/nintendo-nintendo-ds/",), 1),
