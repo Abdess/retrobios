@@ -723,6 +723,7 @@ This executes in sequence, numbered as the run prints them (`STEP_LABELS` in
 - 4b `generate_pack.py --manifest`, install manifests
 - 4c `generate_pack.py --manifest-targets`, target manifests
 - 4d `bundled_only.py --strict`, copies only an emulator install provides
+- 4e `generate_games_index.py`, what the games-on-card mode reads under `install/games/`
 - 5 Consistency check: verify and the pack agree on counts and on the paths each archive holds
 - 6 Pack integrity: extract the ZIPs and check hashes per platform mode
 - 7 `generate_readme.py`, regenerate README and CONTRIBUTING, then `generate_installer_doc.py` rewrites the tables and run samples of `wiki/installer.md`

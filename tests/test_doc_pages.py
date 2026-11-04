@@ -212,7 +212,7 @@ class InstallerSamplesSayWhatTheCodePrints(unittest.TestCase):
             "The tables of options, events, exit codes, keys and card markers", 1)[1][:600])
         self.assertIn("generate_installer_doc.py", next(
             line for line in _page("adding-a-platform.md").splitlines()
-            if line.startswith("7. ")))
+            if line.startswith("- 7 ")))
 
     def test_the_sandbox_looks_nothing_up(self):
         import socket
