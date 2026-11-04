@@ -289,7 +289,7 @@ class BuiltPagesReadInFewerWords(unittest.TestCase):
     def test_a_built_card_holds_its_hashes(self) -> None:
         if not (DIST / "systems").is_dir():
             self.skipTest("no built site")
-        main = _main("systems/sony")
+        main = _main("systems/sony-playstation-portable")
         card = main[main.index('id="sha1-30a33f3651f8"'):]
         card = card[:card.index('class="rb-sys-file"')]
         self.assertRegex(card, r'<dd class="rb-hash">30a33f3651f8</dd>')

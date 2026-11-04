@@ -282,17 +282,22 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
             self.assertEqual(_consoles(page[gs._slug(maker)][0]), [], maker)
 
     def test_a_console_with_its_own_page_is_left_to_it(self) -> None:
-        big = [_file(f"r{i:02}.bin", "0123456789"[i], f"bios/Sony/PlayStation/r{i:02}.bin")
+        big = [_file(f"r{i:02}.bin", "0123456789"[i], f"bios/Sega/Saturn/r{i:02}.bin")
                for i in range(10)]
-        small = [_file("pocket.bin", "p", "bios/Sony/PocketStation/pocket.bin")]
+        small = [_file("pico.bin", "p", "bios/Sega/Pico/pico.bin")]
         consumers = _consumers({})
         with gs.markup.using("mkdocs"):
             one = sum(len(line) + 1 for line in gs._system_file_card(big[0], consumers))
-        pages = gs.system_pages("Sony", {"PlayStation": big, "PocketStation": small},
+        # Sega splits by size; every Sony console has a page whatever its size.
+        pages = gs.system_pages("Sega", {"Saturn": big, "Pico": small},
                                 consumers, budget=one * 12)
-        self.assertIn("sony-playstation", pages)
-        self.assertEqual(_consoles(pages["sony"][0]), ["PocketStation"])
-        self.assertEqual(_consoles(pages["sony-playstation"][0]), ["PlayStation"])
+        self.assertIn("sega-saturn", pages)
+        self.assertEqual(_consoles(pages["sega"][0]), ["Pico"])
+        self.assertEqual(_consoles(pages["sega-saturn"][0]), ["Saturn"])
+        sony = gs.system_pages("Sony", {"PlayStation": big, "PocketStation": small},
+                               consumers, budget=one * 12)
+        self.assertEqual(_consoles(sony["sony"][0]), [])
+        self.assertEqual(_consoles(sony["sony-pocketstation"][0]), ["PocketStation"])
 
 
 class OneLineBeforeTheFirstConsole(unittest.TestCase):

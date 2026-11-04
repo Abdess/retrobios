@@ -128,8 +128,9 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
         self.assertEqual(gs._start_with([_file("a.bin", "a")], _consumers({})), [])
 
     def test_the_page_carries_the_line_under_the_console(self):
-        page = gs.generate_system_page("Sony", {"PlayStation": self.files}, self.required_only())
-        heading = page.index("## PlayStation")
+        # Sega keeps its consoles as sections; Sony gives each a page.
+        page = gs.generate_system_page("Sega", {"Saturn": self.files}, self.required_only())
+        heading = page.index("## Saturn")
         self.assertLess(heading, page.index("**Start with**"))
         self.assertLess(page.index("**Start with**"), page.index('class="rb-sys-file"'))
 
@@ -149,7 +150,7 @@ class ThePermalinkIsAnIcon(unittest.TestCase):
 
     def test_the_page_draws_the_icon_once(self):
         page = gs.generate_system_page(
-            "Sony", {"PlayStation": [_file("a.bin", "a"), _file("b.bin", "b")]},
+            "Sega", {"Saturn": [_file("a.bin", "a"), _file("b.bin", "b")]},
             FileConsumers({"files": {}}))
         self.assertEqual(page.count('<symbol id="rb-link-icon"'), 1)
         self.assertEqual(page.count('href="#rb-link-icon"'), 2)
@@ -192,7 +193,7 @@ class TheCardLinesSayWhatTheyMean(unittest.TestCase):
         self.assertEqual(folds, ["<details data-pagefind-ignore>"])
 
     def test_the_page_defines_both_lines(self):
-        page = gs.generate_system_page("Sony", {"PlayStation": [_file("scph5501.bin", "4")]},
+        page = gs.generate_system_page("Sega", {"Saturn": [_file("scph5501.bin", "4")]},
                                        self.consumers)
         key = page.index("**On the setup's list** names")
         self.assertLess(key, page.index('class="rb-sys-file"'))
@@ -294,7 +295,9 @@ class TheBuiltSonyPage(unittest.TestCase):
         self.text = (DIST / "systems" / "sony" / "index.html").read_text(encoding="utf-8")
 
     def test_no_card_title_says_permalink(self):
-        titles = re.findall(r'<h3[^>]*class="rb-file-title".*?</h3>', self.text, re.S)
+        # Every Sony console has a page of its own: the cards are there.
+        own = (DIST / "systems" / "sony-playstation" / "index.html").read_text(encoding="utf-8")
+        titles = re.findall(r'<h3[^>]*class="rb-file-title".*?</h3>', own, re.S)
         self.assertTrue(titles)
         for title in titles:
             self.assertNotIn("permalink", re.sub(r"<[^>]+>", "", title))
