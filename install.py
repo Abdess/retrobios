@@ -1468,6 +1468,7 @@ _BOARD_SOURCES: dict[str, tuple[str, str]] = {
     "rocknix": ("os_release", "HW_DEVICE"),
     "lakka": ("os_release", "LIBREELEC_DEVICE|LIBREELEC_PROJECT"),
     "knulli": ("file", "/usr/share/knulli/knulli.arch"),
+    "retropie": ("retropie", ""),
 }
 
 # The board a system's own name stands for, where the two differ: the
@@ -1520,6 +1521,8 @@ def detect_board(platform: str) -> str | None:
     elif kind == "os_release":
         release = _parse_os_release()
         value = next((release[key] for key in where.split("|") if release.get(key)), "")
+    elif kind == "retropie":
+        value = _retropie_board() or ""
     else:
         return None
     board = value.strip().lower()
@@ -1527,6 +1530,46 @@ def detect_board(platform: str) -> str | None:
     if board == "unknown":
         return None
     return _BOARD_NAMES.get(platform, {}).get(board, board) or None
+
+
+# RetroPie names its board as get_platform does (RetroPie-Setup f5ebfba6,
+# scriptmodules/system.sh:396-424 and 425-513): a Pi by the BCM Hardware
+# line of /proc/cpuinfo or raspberrypi in its device tree, its model by the
+# CPU field (bits 12-15) of a revision code with bit 23 set, rpi1 without
+# it. With neither a Hardware line nor a device tree, the machine: x86_64.
+# Read only where RetroPie is installed (rootdir /opt/retropie,
+# retropie_packages.sh:17): a computer preparing a Pi's card is no Pi.
+_RPI_MODELS = {0: "rpi1", 1: "rpi2", 2: "rpi3", 3: "rpi4", 4: "rpi5"}
+
+
+def _retropie_board() -> str | None:
+    """The target RetroPie's own reading of this machine names, or None."""
+    if not _is_dir(_on_device("/opt/retropie")):
+        return None
+    try:
+        cpuinfo = _on_device("/proc/cpuinfo").read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        cpuinfo = ""
+    fields = {key.strip(): value.strip() for key, sep, value in
+              (line.partition(":") for line in cpuinfo.splitlines()) if sep}
+    tree = _on_device("/proc/device-tree/compatible")
+    try:
+        compatible = tree.read_bytes().decode("ascii", errors="replace")
+    except OSError:
+        compatible = None
+    hardware = fields.get("Hardware", "")
+    if hardware.startswith("BCM") or (not hardware and compatible is not None
+                                      and "raspberrypi" in compatible):
+        try:
+            revision = int(fields.get("Revision", ""), 16)
+        except ValueError:
+            return None
+        if not (revision >> 23) & 1:
+            return "rpi1"
+        return _RPI_MODELS.get((revision >> 12) & 15)
+    if hardware or compatible is not None:
+        return None
+    return "x86_64" if platform.machine() == "x86_64" else None
 
 
 def _parse_json_path(path: Path, *keys: str) -> str | None:
@@ -12997,7 +13040,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--target",
         metavar="NAME",
         help="hardware target for core filtering (switch, rpi4, ...). "
-        "On Batocera, Recalbox, ROCKNIX, Lakka and KNULLI the board is read from the system",
+        "On Batocera, Recalbox, ROCKNIX, Lakka, KNULLI and RetroPie the board is read "
+        "from the system",
     )
     parser.add_argument(
         "--every-board",

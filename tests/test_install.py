@@ -3400,6 +3400,42 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
             self.assertEqual(install.detect_board("rocknix"), "rk3326")
         self.assertIsNone(install.detect_board("retroarch"))
 
+    def test_retropie_names_its_pi_as_get_platform_does(self):
+        """A RetroPie Pi 4 installed every target's files, 8.4 GiB where
+        rpi4 needs 4.0: nothing read the Pi model."""
+        root = Path(_tempdir(self))
+        (root / "proc" / "device-tree").mkdir(parents=True)
+        cpuinfo = root / "proc" / "cpuinfo"
+        tree = root / "proc" / "device-tree" / "compatible"
+        cases = (
+            ("Hardware\t: BCM2835\nRevision\t: c03114\n", None, "rpi4"),
+            ("Revision\t: d04170\n", b"raspberrypi,5-model-b\0brcm,bcm2712\0", "rpi5"),
+            ("Hardware\t: BCM2835\nRevision\t: a02082\n", None, "rpi3"),
+            ("Hardware\t: BCM2835\nRevision\t: 000e\n", None, "rpi1"),
+            ("Hardware\t: ODROIDC\n", None, None),
+        )
+        with unittest.mock.patch.object(install, "_SYSTEM_ROOT", root):
+            # Not installed here: a computer preparing a Pi's card.
+            cpuinfo.write_text(cases[0][0])
+            self.assertIsNone(install.detect_board("retropie"))
+            (root / "opt" / "retropie").mkdir(parents=True)
+            for text, compatible, board in cases:
+                with self.subTest(board=board, text=text):
+                    cpuinfo.write_text(text)
+                    if compatible is None:
+                        tree.unlink(missing_ok=True)
+                    else:
+                        tree.write_bytes(compatible)
+                    self.assertEqual(install.detect_board("retropie"), board)
+            tree.unlink(missing_ok=True)
+            cpuinfo.write_text("processor\t: 0\n")
+            with unittest.mock.patch.object(install.platform, "machine",
+                                            return_value="x86_64"):
+                self.assertEqual(install.detect_board("retropie"), "x86_64")
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "retropie.json")
+                             .read_text(encoding="utf-8"))
+        self.assertLessEqual({*install._RPI_MODELS.values(), "x86_64"}, set(targets))
+
     def test_lakka_names_its_device_or_its_project(self):
         # An RPi4 Lakka installed 5.7 GB of every board's files: its board
         # was in os-release and never read.
