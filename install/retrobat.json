@@ -6,7 +6,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "8.3.1",
-  "generated": "2026-11-03T13:36:34Z",
+  "generated": "2026-11-05T12:13:24Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -284,10 +284,10 @@
       }
     }
   ],
-  "total_files": 5559,
-  "total_size": 8544348347,
-  "pack_files": 5561,
-  "pack_size": 8544348347,
+  "total_files": 5560,
+  "total_size": 8544479419,
+  "pack_files": 5562,
+  "pack_size": 8544479419,
   "total_omitted": 204,
   "omitted_files": [
     {
@@ -44138,7 +44138,7 @@
       "category": "game_data"
     },
     {
-      "dest": "dc_bios.bin",
+      "dest": "dc/boot.bin",
       "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
       "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
       "size": 2097152,
@@ -44508,12 +44508,6 @@
       "repo_path": "bios/Dragon/Dragon/d200e_1.rom",
       "cores": [
         "xroar"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
-        "dragon64"
       ]
     },
     {
@@ -44524,12 +44518,6 @@
       "repo_path": "bios/Dragon/Dragon/d200e_2.rom",
       "cores": [
         "xroar"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
-        "dragon64"
       ]
     },
     {
@@ -44540,12 +44528,6 @@
       "repo_path": "bios/Dragon/Dragon/d200e_26.rom",
       "cores": [
         "xroar"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
-        "dragon64"
       ]
     },
     {
@@ -44694,12 +44676,6 @@
       "repo_path": "bios/Tandy/CoCo/alice.rom",
       "cores": [
         "xroar"
-      ],
-      "regions": [
-        "france"
-      ],
-      "region_groups": [
-        "mc10"
       ]
     },
     {
@@ -47028,11 +47004,21 @@
       "repo_path": "bios/Other/cxbx-reloaded/EmuDisk/Partition2/xboxdash.xbe",
       "cores": [
         "cxbx-reloaded",
-        "cxbx-reloaded-2023",
-        "chihiro-ds"
+        "cxbx-reloaded-2023"
       ],
       "systems": [
         "xbox"
+      ],
+      "alternatives": [
+        {
+          "sha1": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
+          "sha256": "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495",
+          "size": 1929216,
+          "repo_path": "bios/Microsoft/Xbox/C/xboxdash.xbe",
+          "cores": [
+            "chihiro-ds"
+          ]
+        }
       ]
     },
     {
@@ -70910,6 +70896,19 @@
       "category": "game_data"
     },
     {
+      "dest": "dc/flash.bin",
+      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
+      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
+      "size": 131072,
+      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+      "cores": [
+        "redream"
+      ],
+      "systems": [
+        "sega-dreamcast"
+      ]
+    },
+    {
       "dest": "64DD_IPL_JP.n64",
       "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
@@ -71692,12 +71691,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {
@@ -71708,12 +71701,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {
@@ -72916,8 +72903,7 @@
       "size": 131072,
       "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
       "cores": [
-        "demul",
-        "redream"
+        "demul"
       ],
       "systems": [
         "sega-dreamcast"

@@ -6,7 +6,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "10.1.1",
-  "generated": "2026-11-03T13:36:34Z",
+  "generated": "2026-11-05T12:13:24Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -37726,12 +37726,6 @@
       ],
       "systems": [
         "dragon64"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
-        "dragon64"
       ]
     },
     {
@@ -37745,12 +37739,6 @@
       ],
       "systems": [
         "dragon64"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
-        "dragon64"
       ]
     },
     {
@@ -37763,12 +37751,6 @@
         "xroar"
       ],
       "systems": [
-        "dragon64"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
         "dragon64"
       ]
     },
@@ -37819,12 +37801,6 @@
       "repo_path": "bios/Tandy/CoCo/alice.rom",
       "cores": [
         "xroar"
-      ],
-      "regions": [
-        "france"
-      ],
-      "region_groups": [
-        "mc10"
       ]
     },
     {
@@ -43884,12 +43860,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {
@@ -43900,12 +43870,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {

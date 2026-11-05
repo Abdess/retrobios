@@ -6,7 +6,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "43.1",
-  "generated": "2026-11-03T13:36:34Z",
+  "generated": "2026-11-05T12:13:24Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -273,10 +273,10 @@
     }
   ],
   "total_files": 14723,
-  "total_size": 9903271330,
+  "total_size": 9903369634,
   "pack_files": 14725,
-  "pack_size": 9903271330,
-  "total_omitted": 426,
+  "pack_size": 9903369634,
+  "total_omitted": 427,
   "omitted_files": [
     {
       "dest": "AUDIO.APC",
@@ -1842,6 +1842,17 @@
       "cores": [
         "ep128emu_core"
       ]
+    },
+    {
+      "dest": "et4000.bin",
+      "name": "et4000.bin",
+      "system": "ibm-pc",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "dosbox-x"
+      ],
+      "held": true
     },
     {
       "dest": "extras.wad",
@@ -55321,8 +55332,8 @@
         "clk"
       ],
       "regions": [
-        "brazil",
         "europe",
+        "latin-america",
         "north-america",
         "oceania"
       ],
@@ -60081,20 +60092,6 @@
         "corsixth"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "dc_flash.bin",
-      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
-      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
-      "cores": [
-        "redream",
-        "demul"
-      ],
-      "systems": [
-        "sega-dreamcast"
-      ]
     },
     {
       "dest": "CM32L_CONTROL.ROM",
@@ -141589,7 +141586,7 @@
       "category": "game_data"
     },
     {
-      "dest": "dc_bios.bin",
+      "dest": "dc/boot.bin",
       "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
       "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
       "size": 2097152,
@@ -178834,12 +178831,6 @@
       ],
       "systems": [
         "dragon64"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
-        "dragon64"
       ]
     },
     {
@@ -178853,12 +178844,6 @@
       ],
       "systems": [
         "dragon64"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
-        "dragon64"
       ]
     },
     {
@@ -178871,12 +178856,6 @@
         "xroar"
       ],
       "systems": [
-        "dragon64"
-      ],
-      "regions": [
-        "spain"
-      ],
-      "region_groups": [
         "dragon64"
       ]
     },
@@ -179040,12 +179019,6 @@
         "xroar"
       ],
       "systems": [
-        "mc10"
-      ],
-      "regions": [
-        "france"
-      ],
-      "region_groups": [
         "mc10"
       ]
     },
@@ -181246,6 +181219,19 @@
       "category": "game_data"
     },
     {
+      "dest": "dc_flash.bin",
+      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
+      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
+      "size": 131072,
+      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+      "cores": [
+        "demul"
+      ],
+      "systems": [
+        "sega-dreamcast"
+      ]
+    },
+    {
       "dest": "naomigd.zip",
       "sha1": "4b92936f396c8199f745d3ed0ff588a324b8dd70",
       "sha256": "793db2a859be2d814d334ab511811c42c6727a16841e7627fa7c33171c3de441",
@@ -182321,16 +182307,6 @@
       "sha256": "2b058a75ff9336c703e48b618ef759906dc9e37712e27698f74aa3ec0b949346",
       "size": 55400,
       "repo_path": "bios/Other/dosbox-x/FONTS/ocra.ttf",
-      "cores": [
-        "dosbox-x"
-      ]
-    },
-    {
-      "dest": "et4000.bin",
-      "sha1": "945d405b0fb4b8f26830d495881f8587d90e5ef9",
-      "sha256": "d8b09dd8dbd350524cfff8baf9a950dd442924c03362d8feed5d1f18bb0be4dd",
-      "size": 32768,
-      "repo_path": "bios/Other/pcem/roms/et4000.BIN",
       "cores": [
         "dosbox-x"
       ]
@@ -206415,6 +206391,19 @@
       "category": "game_data"
     },
     {
+      "dest": "dc/flash.bin",
+      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
+      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
+      "size": 131072,
+      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+      "cores": [
+        "redream"
+      ],
+      "systems": [
+        "sega-dreamcast"
+      ]
+    },
+    {
       "dest": "system/prod.keys",
       "sha1": "c146b651696d25287241f4bab18226e488bc45b3",
       "sha256": "039895c6e93a0c6208c3af27da8c3fc408083873a96f2320dc334a6fa252c112",
@@ -207564,12 +207553,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {
@@ -207580,12 +207563,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {

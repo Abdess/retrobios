@@ -6,7 +6,7 @@
   "platform": "emuelec",
   "display_name": "EmuELEC",
   "version": "4.8",
-  "generated": "2026-11-03T13:36:34Z",
+  "generated": "2026-11-05T12:13:24Z",
   "base_destination": "",
   "detect": [
     {
@@ -67527,12 +67527,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {
@@ -67543,12 +67537,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {

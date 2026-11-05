@@ -6,7 +6,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "v1.22.2",
-  "generated": "2026-11-05T11:59:40Z",
+  "generated": "2026-11-05T12:13:24Z",
   "base_destination": "system",
   "detect": [
     {
@@ -631,10 +631,10 @@
       }
     }
   ],
-  "total_files": 8348,
-  "total_size": 7134451729,
-  "pack_files": 10991,
-  "pack_size": 7176643583,
+  "total_files": 8349,
+  "total_size": 7132486161,
+  "pack_files": 10992,
+  "pack_size": 7174678015,
   "total_omitted": 38,
   "omitted_files": [
     {
@@ -10039,6 +10039,17 @@
       "cores": null,
       "systems": [
         "sega-dreamcast"
+      ],
+      "alternatives": [
+        {
+          "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
+          "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
+          "size": 2097152,
+          "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
+          "cores": [
+            "redream"
+          ]
+        }
       ]
     },
     {
@@ -10050,6 +10061,17 @@
       "cores": null,
       "systems": [
         "sega-dreamcast"
+      ],
+      "alternatives": [
+        {
+          "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
+          "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
+          "size": 131072,
+          "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+          "cores": [
+            "redream"
+          ]
+        }
       ]
     },
     {
@@ -32268,6 +32290,19 @@
       ],
       "systems": [
         "atari-st"
+      ]
+    },
+    {
+      "dest": "Super GameBoy.sfc/lr35902.boot.rom",
+      "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
+      "sha256": "0e4ddff32fc9d1eeaae812a157dd246459b00c9e14f2f61751f661f32361e360",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
+      "cores": [
+        "higan_sfc_balanced"
+      ],
+      "systems": [
+        "nintendo-sgb"
       ]
     },
     {
@@ -84060,32 +84095,6 @@
       ]
     },
     {
-      "dest": "dc_bios.bin",
-      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
-      "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
-      "size": 2097152,
-      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
-      "cores": [
-        "redream"
-      ],
-      "systems": [
-        "sega-dreamcast"
-      ]
-    },
-    {
-      "dest": "dc_flash.bin",
-      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
-      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
-      "cores": [
-        "redream"
-      ],
-      "systems": [
-        "sega-dreamcast"
-      ]
-    },
-    {
       "dest": "awe32.raw",
       "sha1": "6ac3c1317c1acb83902397d7767763cca4de357a",
       "sha256": "4e143b94f758734f594ded78f4e5115635975c16fa37fabeae0baa4938ca710e",
@@ -112914,12 +112923,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {
@@ -112930,12 +112933,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice_xvic"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-vic20"
       ]
     },
     {
@@ -113157,12 +113154,6 @@
       "repo_path": "bios/Commodore/C128/vice/C64/kernal-906145-02.bin",
       "cores": [
         "x64sdl"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-c64"
       ]
     },
     {
@@ -113173,12 +113164,6 @@
       "repo_path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
       "cores": [
         "x64sdl"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-c64"
       ]
     },
     {
@@ -114311,6 +114296,33 @@
       ],
       "systems": [
         "arcade"
+      ]
+    },
+    {
+      "dest": "Super GameBoy.sfc/program.rom",
+      "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
+      "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
+      "cores": [
+        "higan_sfc",
+        "higan_sfc_balanced"
+      ],
+      "systems": [
+        "nintendo-sgb"
+      ]
+    },
+    {
+      "dest": "Super GameBoy.sfc/sgb1.boot.rom",
+      "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
+      "sha256": "0e4ddff32fc9d1eeaae812a157dd246459b00c9e14f2f61751f661f32361e360",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
+      "cores": [
+        "higan_sfc"
+      ],
+      "systems": [
+        "nintendo-sgb"
       ]
     },
     {

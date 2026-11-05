@@ -6,7 +6,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "20261001",
-  "generated": "2026-11-03T13:36:34Z",
+  "generated": "2026-11-05T12:13:24Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -21,10 +21,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 7351,
-  "total_size": 8271065273,
-  "pack_files": 7353,
-  "pack_size": 8271065273,
+  "total_files": 7354,
+  "total_size": 8271327929,
+  "pack_files": 7356,
+  "pack_size": 8271327929,
   "total_omitted": 116,
   "omitted_files": [
     {
@@ -9157,6 +9157,16 @@
       "repo_path": "bios/Atari/ST/hatarib/etos192us.img",
       "cores": [
         "hatarib"
+      ]
+    },
+    {
+      "dest": "Super GameBoy.sfc/lr35902.boot.rom",
+      "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
+      "sha256": "0e4ddff32fc9d1eeaae812a157dd246459b00c9e14f2f61751f661f32361e360",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
+      "cores": [
+        "higan_sfc_balanced"
       ]
     },
     {
@@ -53038,7 +53048,7 @@
       ]
     },
     {
-      "dest": "dc_bios.bin",
+      "dest": "dc/boot.bin",
       "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
       "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
       "size": 2097152,
@@ -59036,6 +59046,27 @@
       "cores": [
         "hatari",
         "hatari2014"
+      ]
+    },
+    {
+      "dest": "Super GameBoy.sfc/program.rom",
+      "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
+      "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
+      "cores": [
+        "higan_sfc",
+        "higan_sfc_balanced"
+      ]
+    },
+    {
+      "dest": "Super GameBoy.sfc/sgb1.boot.rom",
+      "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
+      "sha256": "0e4ddff32fc9d1eeaae812a157dd246459b00c9e14f2f61751f661f32361e360",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
+      "cores": [
+        "higan_sfc"
       ]
     },
     {
@@ -79497,6 +79528,19 @@
       ]
     },
     {
+      "dest": "dc/flash.bin",
+      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
+      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
+      "size": 131072,
+      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+      "cores": [
+        "redream"
+      ],
+      "systems": [
+        "sega-dreamcast"
+      ]
+    },
+    {
       "dest": "flash.bin",
       "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
       "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
@@ -81085,12 +81129,6 @@
       "repo_path": "bios/Commodore/C128/vice/C64/kernal-906145-02.bin",
       "cores": [
         "x64sdl"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-c64"
       ]
     },
     {
@@ -81101,12 +81139,6 @@
       "repo_path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
       "cores": [
         "x64sdl"
-      ],
-      "regions": [
-        "japan"
-      ],
-      "region_groups": [
-        "commodore-c64"
       ]
     },
     {
@@ -82049,19 +82081,6 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
-    },
-    {
-      "dest": "dc_flash.bin",
-      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
-      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
-      "cores": [
-        "redream"
-      ],
-      "systems": [
-        "sega-dreamcast"
       ]
     },
     {
