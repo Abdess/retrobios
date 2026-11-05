@@ -18,7 +18,7 @@ from common import (
     resolve_platform_cores,
     standalone_set as platform_standalone_set,
 )
-from hashing import compute_hashes, parse_md5_list
+from hashing import compute_hashes
 from validation import (
     filter_files_by_mode,
     installed_with_emulator,
@@ -878,53 +878,30 @@ def generate_platform_truth(
 # Platform truth diffing
 
 
-def _hash_values(entry: dict, field: str) -> set[str]:
-    """The values a diffed entry declares for a hash field.
-
-    A profile writes a list, a platform YAML one comma-separated string
-    (Recalbox's multi-hash): both are read the way the exporter reads them.
-    A number is a hash YAML coerced and no longer spells: it is ignored.
-    """
-    raw = entry.get(field)
-    return set(parse_md5_list(raw)) if isinstance(raw, (str, list)) else set()
-
-
-def _hash_set(entry: dict) -> set[str]:
-    return {value for h in ("sha1", "md5", "crc32") for value in _hash_values(entry, h)}
-
-
 def _path_tail(value: object) -> str:
     return str(value or "").replace("\\", "/").casefold()
 
 
 def _hash_mismatch(t_entry: dict, s_entry: dict) -> dict | None:
-    """The first hash both sides declare without a value in common.
+    """The first hash field the export would correct, by the export's rule.
 
-    A value shared on any field settles it: the truth holds every revision a
-    core accepts, and a profile may give one revision's sha1 without its md5.
-    A hash the code does not check contradicts nothing (checked_hashes), and
-    a platform md5 that is a composite of a zip's members is no container
-    md5 (comparable), the rule pair_entries applies.
+    contradicted_hashes is the one decision: a hash the code does not check
+    contradicts nothing (checked_hashes), and a platform md5 that is a
+    composite of a zip's members is no container md5 (comparable).
     """
-    from exporter.baseline import checked_hashes, comparable
+    from exporter.baseline import contradicted_hashes
 
-    s_entry = comparable(s_entry)
-    if _hash_set(t_entry) & _hash_set(s_entry):
+    fields = contradicted_hashes(t_entry, s_entry)
+    if not fields:
         return None
-    t_entry = checked_hashes(t_entry) or {}
-    for h in ("sha1", "md5", "crc32"):
-        t_hash = t_entry.get(h, "")
-        s_hash = s_entry.get(h, "")
-        t_values, s_values = _hash_values(t_entry, h), _hash_values(s_entry, h)
-        if t_values and s_values and not t_values & s_values:
-            return {
-                "name": s_entry["name"],
-                "hash_type": h,
-                f"truth_{h}": t_hash,
-                f"scraped_{h}": s_hash,
-                "truth_cores": list(t_entry.get("_cores", [])),
-            }
-    return None
+    h = fields[0]
+    return {
+        "name": s_entry["name"],
+        "hash_type": h,
+        f"truth_{h}": t_entry.get(h, ""),
+        f"scraped_{h}": s_entry.get(h, ""),
+        "truth_cores": list(t_entry.get("_cores", [])),
+    }
 
 
 def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:

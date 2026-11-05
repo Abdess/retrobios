@@ -177,16 +177,53 @@ class EveryRevisionACoreAcceptsStays(unittest.TestCase):
 
     def test_a_revision_known_by_one_hash_is_no_mismatch(self):
         """1.04 carries md5 and sha1, 1.07 only its sha1: a platform entry
-        giving 1.07's sha1 and md5 is that revision, not a mismatch."""
+        giving 1.07's sha1 and md5 is that revision, not a mismatch. dosbox
+        checks the sha1 (validation), so its md5 describes one revision and
+        contradicts nothing, the rule the export applies too."""
         from truth import _hash_mismatch
 
-        truth = {"name": "MT32_CONTROL.ROM", "md5": "c" * 32, "sha1": ["a" * 40, "b" * 40]}
+        truth = {"name": "MT32_CONTROL.ROM", "md5": "c" * 32, "sha1": ["a" * 40, "b" * 40],
+                 "validation": ["sha1"]}
         scraped = {"name": "MT32_CONTROL.ROM", "md5": "d" * 32, "sha1": "b" * 40}
         self.assertIsNone(_hash_mismatch(truth, scraped))
         self.assertEqual(
             _hash_mismatch(truth, {**scraped, "sha1": "e" * 40})["hash_type"], "sha1"
         )
 
+
+
+class DiffAndExportShareOneMismatchRule(unittest.TestCase):
+    """diff_truth let one shared value settle every field and read no
+    sha256, while the export corrected each field on its own: the diff
+    stayed silent on hashes the export rewrote."""
+
+    CASES = (
+        ({"sha1": "a" * 40, "md5": "1" * 32}, {"sha1": "a" * 40, "md5": "2" * 32}),
+        ({"sha256": "a" * 64}, {"sha256": "b" * 64}),
+        ({"sha1": "a" * 40, "md5": "1" * 32}, {"sha1": "a" * 40, "md5": "1" * 32}),
+    )
+
+    def test_the_diff_names_what_the_export_corrects(self):
+        from exporter.baseline import build_native_model  # noqa: PLC0415
+        from truth import diff_platform_truth  # noqa: PLC0415
+
+        for t_hashes, p_hashes in self.CASES:
+            with self.subTest(truth=t_hashes, platform=p_hashes):
+                truth = {"systems": {"s": {"files": [
+                    {"name": "f.bin", "required": True, "_cores": ["c"], **t_hashes}]}}}
+                scraped = {"systems": {"s": {"files": [
+                    {"name": "f.bin", "destination": "f.bin", "required": True, **p_hashes}]}}}
+                diff = diff_platform_truth(truth, scraped)
+                reported = {
+                    m["hash_type"]
+                    for system in diff.get("divergences", {}).values()
+                    for m in system.get("hash_mismatch", [])
+                }
+                _, report = build_native_model(truth, scraped)
+                corrected = {item.split()[-1] for item in report.hashes_corrected}
+                # One record per entry, naming the first field the export corrects.
+                self.assertEqual(bool(reported), bool(corrected))
+                self.assertLessEqual(reported, corrected)
 
 
 def _filed(truth: dict, name: str) -> list[str]:
