@@ -138,8 +138,10 @@ OMISSION_REASONS = {
 # says, and as the installer words it. Firmware carries no category.
 GAME_DATA = "game_data"
 CATEGORY_LABELS = {GAME_DATA: "game data"}
-_SHA1_RE = re.compile(r"^[0-9a-fA-F]{40}$")
-_SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+# The manifest writes its digests in lowercase, as hashlib gives them, and
+# every comparison reads them as written.
+_SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 # The region vocabulary of scripts/region.py, which this file cannot import.
 # A test holds the two copies equal.
@@ -3592,9 +3594,6 @@ def _check_entry(
     return size, largest
 
 
-_SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
-
-
 def _check_data_directory(entry: object, where: str) -> None:
     """A data directory: its source archive, its mapping, its file list."""
     if not isinstance(entry, dict):
@@ -3631,7 +3630,7 @@ def _check_data_directory(entry: object, where: str) -> None:
         if (
             not isinstance(meta, dict)
             or not isinstance(meta.get("sha1"), str)
-            or not _SHA1_RE.match(meta["sha1"])
+            or not _SHA1_RE.fullmatch(meta["sha1"])
             or not isinstance(meta.get("size"), int)
             or not 0 <= meta["size"] <= MAX_DOWNLOAD_SIZE
         ):
