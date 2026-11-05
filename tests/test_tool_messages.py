@@ -130,6 +130,34 @@ class TheGapHeadingAddsUp(unittest.TestCase):
         )
 
 
+class AnOfflineRunWithNoCacheStopsFirst(unittest.TestCase):
+    """On a fresh clone, pipeline.py --offline built every pack before saying
+    the data directories had never been fetched."""
+
+    def _args(self, **flags):
+        import argparse
+
+        return argparse.Namespace(**{"offline": True, "skip_packs": False, **flags})
+
+    def test_refused_before_any_step(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            cache = Path(tmp) / "cache"
+            (Path(tmp) / "_data_dirs.yml").write_text(
+                f"data_directories:\n  a:\n    local_cache: {cache}\n"
+            )
+            parser = mock.Mock()
+            pipeline._refuse_offline_without_caches(parser, self._args(), tmp)
+            self.assertIn("refresh_data_dirs.py", parser.error.call_args.args[0])
+            for args in (self._args(offline=False), self._args(skip_packs=True)):
+                parser = mock.Mock()
+                pipeline._refuse_offline_without_caches(parser, args, tmp)
+                parser.error.assert_not_called()
+            cache.mkdir()
+            parser = mock.Mock()
+            pipeline._refuse_offline_without_caches(parser, self._args(), tmp)
+            parser.error.assert_not_called()
+
+
 class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
     """The markdown wrote `**Remove** hiscore.dat (phantom)` beside six
     `**Add** hiscore.dat`, none with a path, for files profiled cores read."""

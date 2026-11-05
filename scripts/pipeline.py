@@ -603,6 +603,26 @@ def _refuse_unapplied_flags(
         args.source = "full"
 
 
+def _refuse_offline_without_caches(
+    parser: argparse.ArgumentParser, args: argparse.Namespace, platforms_dir: str = "platforms",
+) -> None:
+    """An offline run that builds packs needs the data directories cached.
+
+    On a fresh clone none is: --offline skips the refresh, and the run went
+    through the database, verify and every pack before failing at the end
+    of the build. Only an empty cache is refused here: with some cached, the
+    packs decide which ones they need and the build names the rest.
+    """
+    if not args.offline or args.skip_packs:
+        return
+    registry = load_data_dir_registry(platforms_dir)
+    if registry and not any(os.path.isdir(e.get("local_cache") or "") for e in registry.values()):
+        parser.error(
+            "no data directory is cached and --offline skips their refresh: run "
+            "python scripts/refresh_data_dirs.py once, or drop --offline"
+        )
+
+
 def _truth_steps(args: argparse.Namespace, results: dict) -> bool:
     """Steps 2c to 2e: truth model, its diff, the native export."""
     all_ok = True
@@ -723,6 +743,7 @@ def main() -> None:
     )
     args = parser.parse_args()
     _refuse_unapplied_flags(parser, args)
+    _refuse_offline_without_caches(parser, args)
     if not args.offline:
         # Read once and put in the environment every step inherits: the
         # scrapers and refresh_data_dirs went anonymous unless the user had

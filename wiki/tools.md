@@ -24,6 +24,10 @@ python scripts/pipeline.py --offline --include-archived  # include archived plat
 python scripts/pipeline.py --check-buildbot        # online run + buildbot freshness check
 ```
 
+`--offline` skips the data directory refresh, so on a fresh clone run
+`python scripts/refresh_data_dirs.py` once first. A run that builds packs with no
+data directory cached is refused before step 0.
+
 Pipeline steps:
 
 | Step | Description | Skipped by |
