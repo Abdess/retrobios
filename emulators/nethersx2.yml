@@ -195,6 +195,7 @@ files:
     source_ref: "upstream aethersx2/pcsx2/CDVD/CDVD.cpp:120-144, nethersx2 v2.2n-4248 libemucore.so 0x79cbc0-0x79cdc4"
 
   - name: eeprom.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     size: 64
@@ -206,6 +207,7 @@ files:
     source_ref: "upstream aethersx2/pcsx2/DEV9/DEV9.cpp:146-161, nethersx2 v2.2n-4248 libemucore.so 0x7c5c40-0x7c5ca0"
 
   - name: flash.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     max_size: 8650752

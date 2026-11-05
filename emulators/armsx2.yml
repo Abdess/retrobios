@@ -287,6 +287,7 @@ files:
     source_ref: "source pcsx2/CDVD/CDVD.cpp:63-64, source pcsx2/CDVD/CDVD.cpp:207-220"
 
   - name: eeprom.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     size: 64
@@ -298,6 +299,7 @@ files:
     source_ref: "source pcsx2/DEV9/DEV9.cpp:78, source pcsx2/DEV9/DEV9.cpp:225-276"
 
   - name: flash.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     max_size: 8650752

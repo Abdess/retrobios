@@ -6904,5 +6904,25 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         self.assertEqual(named, [])
 
 
+class Dev9FilesAreReadFromTheWorkingDirectory(unittest.TestCase):
+    """DEV9 opens eeprom.dat and flash.dat by bare name (PCSX2
+    pcsx2/DEV9/DEV9.cpp:144, AetherSX2 DEV9/flash.cpp:89): the working
+    directory, never the BIOS folder. Eight profiles left load_from unset,
+    so the file was packed into the BIOS folder, where nothing reads it."""
+
+    def test_every_dev9_file_names_the_working_directory(self):
+        import yaml
+
+        unset = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            for entry in profile.get("files") or []:
+                if entry.get("name") in ("eeprom.dat", "flash.dat") and "DEV9" in str(
+                    entry.get("source_ref")
+                ) and entry.get("load_from") != "working_directory":
+                    unset.append(f"{path.stem}: {entry['name']}")
+        self.assertEqual(unset, [])
+
+
 if __name__ == "__main__":
     unittest.main()

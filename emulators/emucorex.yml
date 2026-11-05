@@ -257,6 +257,7 @@ files:
     source_ref: "source app/src/main/cpp/pcsx2/pcsx2/CDVD/CDVD.cpp:50-51, source app/src/main/cpp/pcsx2/pcsx2/CDVD/CDVD.cpp:195-208"
 
   - name: eeprom.dat
+    load_from: working_directory
     system: sony-playstation-2
     required: false
     hle_fallback: true
@@ -269,6 +270,7 @@ files:
     source_ref: "source app/src/main/cpp/pcsx2/pcsx2/DEV9/DEV9.cpp:104-167"
 
   - name: flash.dat
+    load_from: working_directory
     system: sony-playstation-2
     required: false
     hle_fallback: true

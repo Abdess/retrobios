@@ -231,6 +231,7 @@ files:
     source_ref: "upstream aethersx2/pcsx2/CDVD/CDVD.cpp:120-144, nethersx2-turnip-classic v0.7 libemucore.so 0x791700-0x7918f4"
 
   - name: eeprom.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     size: 64
@@ -242,6 +243,7 @@ files:
     source_ref: "upstream aethersx2/pcsx2/DEV9/DEV9.cpp:73, upstream aethersx2/pcsx2/DEV9/DEV9.cpp:145-160, nethersx2-turnip-classic v0.7 libemucore.so 0x7bb620-0x7bb680"
 
   - name: flash.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     max_size: 8650752

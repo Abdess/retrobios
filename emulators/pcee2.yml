@@ -160,6 +160,7 @@ files:
       failure to open is reported once on screen.
 
   - name: "eeprom.dat"
+    load_from: working_directory
     description: "DEV9 network adapter EEPROM"
     size: 64
     required: false

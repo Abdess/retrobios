@@ -142,6 +142,7 @@ files:
     source_ref: "source pcsx2/CDVD/CDVD.cpp:51-52, source pcsx2/CDVD/CDVD.cpp:196-209"
 
   - name: eeprom.dat
+    load_from: working_directory
     system: namco-system246
     required: false
     hle_fallback: true
@@ -151,6 +152,7 @@ files:
     source_ref: "source pcsx2/DEV9/DEV9.cpp:67-77, source pcsx2/DEV9/DEV9.cpp:116-167"
 
   - name: flash.dat
+    load_from: working_directory
     system: namco-system246
     required: false
     hle_fallback: true

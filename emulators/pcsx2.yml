@@ -67,6 +67,7 @@ files:
     source_ref: "pcsx2/CDVD/CDVD.cpp:190-204"
 
   - name: eeprom.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     size: 64

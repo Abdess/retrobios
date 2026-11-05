@@ -149,6 +149,7 @@ files:
     source_ref: "source aethersx2/pcsx2/CDVD/CDVD.cpp:120-144, aethersx2 v1.5-3606 usr/share/aethersx2 0x95e7fc"
 
   - name: eeprom.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     size: 64
@@ -157,6 +158,7 @@ files:
     source_ref: "source aethersx2/pcsx2/DEV9/DEV9.cpp:146-161, aethersx2 v1.5-3606 usr/share/aethersx2 0x97ac90"
 
   - name: flash.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     max_size: 8650752
