@@ -1657,7 +1657,13 @@ def resolve_local_file(
                 if ".zip" in os.path.basename(path):
                     try:
                         composite = md5_composite(path).lower()
-                        if composite in md5_set:
+                        # A zipped_file md5 is the member's: one member of
+                        # another name has the same composite, and Batocera
+                        # looks the member up by name.
+                        if composite in md5_set and (
+                            not zipped_file
+                            or check_inside_zip(path, zipped_file, composite) == "ok"
+                        ):
                             return path, "md5_composite_exact"
                     except (zipfile.BadZipFile, OSError) as exc:
                         _warn_unreadable_archive(path, exc)
