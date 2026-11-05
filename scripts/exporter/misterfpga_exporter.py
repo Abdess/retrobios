@@ -86,8 +86,14 @@ class Exporter(BaseExporter):
         return super().states(fe, field_name)
 
     def written(self, fe: NativeFile, field_name: str) -> str:
-        """An entry is checked against one md5, the first accepted."""
-        return fe.hash(field_name)
+        """An entry is one record: its md5, size and url describe one dump.
+
+        The first value the truth accepts replaced MiSTer's own accepted
+        md5 while the url still served MiSTer's dump, which the Downloader
+        then refused (fetch_file_worker.py:127), and the report said
+        nothing. record_hash keeps the platform's value when it is accepted.
+        """
+        return fe.record_hash(field_name)
 
     def _by_path(self, systems: dict[str, NativeSystem]) -> dict[str, object]:
         indexed: dict[str, object] = {}
@@ -119,7 +125,7 @@ class Exporter(BaseExporter):
             fe = indexed.get(path)
             if fe is None:
                 continue
-            md5 = fe.hash("md5")
+            md5 = self.written(fe, "md5")
             if not md5:
                 # The record is checked by its md5: where the truth takes the
                 # entry without one, a new size beside the old hash describes
@@ -185,7 +191,7 @@ class Exporter(BaseExporter):
         indexed = self._by_path(systems)
         for path, fe in indexed.items():
             declared = files.get(path)
-            md5 = fe.hash("md5")
+            md5 = self.written(fe, "md5")
             if (
                 declared is not None and md5 and declared.get("hash") != md5
                 and path not in getattr(self, "_unsized", [])
