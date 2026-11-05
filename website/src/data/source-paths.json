@@ -8954,7 +8954,6 @@
   "src/vid_tvga.c",
   "src/vid_vga.c"
  ],
- "github.com/sarah-walker-pcem/pcem@25b54e3ff1d51cbf2469b447e55bce7a589697e9": [],
  "github.com/sashkinbro/EmuCoreV@b71d8cf5397b1c6394e92eeb48427cd17e542971": [
   "app/build.gradle.kts",
   "app/src/main/AndroidManifest.xml",
