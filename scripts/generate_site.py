@@ -10296,6 +10296,22 @@ def _upload_folder(profile: dict) -> str:
     return ""
 
 
+def reading_platforms(emu_name: str, profile: dict, name: str,
+                      configs: dict[str, dict]) -> set[str]:
+    """Of the platforms running an emulator (name -> config), those whose
+    build of it reads the entry: BlastEm's cdbios.bin is read by the
+    standalone build only, and RetroBat hands that build other names."""
+    from common import platform_layouts, standalone_set  # noqa: PLC0415
+    from validation import filter_files_by_mode, unread_on  # noqa: PLC0415
+
+    return {
+        platform for platform, config in configs.items()
+        if any(f.get("name") == name and not unread_on(f, platform)
+               for view, standalone in platform_layouts(emu_name, profile, standalone_set(config))
+               for f in filter_files_by_mode(view.get("files") or [], standalone))
+    }
+
+
 def generate_gap_analysis(
     profiles: dict,
     coverages: dict,
@@ -10627,6 +10643,7 @@ def generate_gap_analysis(
             for emu_name in matched:
                 emu_to_platforms.setdefault(emu_name, set()).add(pname)
 
+
         # One row per file to find: a name two emulators share is one file
         # only when both declare the same hash. Keyed by name alone, Fallout
         # 2's master.dat vanished behind Fallout 1's, and the three Sonic
@@ -10685,7 +10702,9 @@ def generate_gap_analysis(
                 key=lambda x: (not x["required"], x["name"]),
             ):
                 plats = sorted(set().union(
-                    *(emu_to_platforms.get(key, set()) for key in m["emu_keys"])
+                    *(reading_platforms(key, profiles[key], m["name"], {
+                        p: coverages[p]["config"] for p in emu_to_platforms.get(key, set())
+                    }) for key in m["emu_keys"])
                 ))
                 plat_badges = (
                     " ".join(

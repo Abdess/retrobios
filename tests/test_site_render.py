@@ -8,6 +8,8 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+import yaml
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -99,6 +101,24 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertIn("| missing | 1 | Not available, needs sourcing |", page)
         self.assertIn("| [ZQuest Classic](emulators/zq.md) | 4 | 1 | 0 | 0 | 2 | "
                       '<span class="rb-badge rb-badge-danger">1</span> |', page)
+
+    def test_a_row_names_only_the_platforms_that_read_it(self):
+        """cdbios.bin, read by standalone BlastEm only and never on RetroBat,
+        was badged retroarch, lakka and retrobat."""
+        import generate_site
+        from common import load_platform_config, resolve_platform_cores
+
+        root = Path(__file__).resolve().parents[1]
+        profile = yaml.safe_load((root / "emulators" / "blastem.yml").read_text(encoding="utf-8"))
+        configs = {}
+        for name in ("retroarch", "lakka", "retrobat", "batocera"):
+            config = load_platform_config(name, str(root / "platforms"))
+            if "blastem" in resolve_platform_cores(config, {"blastem": profile}):
+                configs[name] = config
+        self.assertIn("retroarch", configs)
+        self.assertIn("retrobat", configs)
+        found = generate_site.reading_platforms("blastem", profile, "cdbios.bin", configs)
+        self.assertFalse(found & {"retroarch", "lakka", "retrobat"}, found)
 
 
 class StructuredBlocks(unittest.TestCase):
