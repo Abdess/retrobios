@@ -5748,6 +5748,22 @@ class AHashScanningCoreContradictsNoPlatform(unittest.TestCase):
         self.assertEqual(claimed, [])
 
 
+class FsUaeKickstartIsFoundByContent(unittest.TestCase):
+    """FS-UAE scans its Kickstarts directory and names a ROM by checksum
+    (src/fs-uae/config.c:121-140, main.c:431-470), and with no ROM loads the
+    AROS replacement (memory.cpp:2374-2379). kick13.rom and its required
+    flag came from the RetroPie launcher, which the platform layer records."""
+
+    def test_the_kickstart_is_an_optional_label(self):
+        from scripts.validation import opens_by_name
+
+        profile = yaml.safe_load((ROOT / "emulators" / "fs-uae.yml").read_text(encoding="utf-8"))
+        entry = next(f for f in profile["files"] if f.get("sha1") == "891e9a547772fe0c6c19b610baf8bc4ea7fcb785")
+        self.assertFalse(opens_by_name(entry, profile, standalone=True))
+        self.assertFalse(entry.get("required"))
+        self.assertNotIn("RetroPie launcher", entry.get("note", ""))
+
+
 class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
     """A core that finds its firmware by content names no file, so each
     entry name is a label. ares labelled its Famicom Disk System revision

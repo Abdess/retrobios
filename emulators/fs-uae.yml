@@ -17,10 +17,7 @@ notes: |
   FS-UAE 3.1.64 by Frode Solheim, the build published in the stable
   repository of the author's openSUSE Build Service project for Debian 11
   and 12 and Ubuntu 20.04 to 25.04 (BASEVERSION.FS:1). RetroPie installs
-  that package rather than building the source. Its launcher refuses to
-  start without kick13.rom in the BIOS directory and starts the emulator
-  with --kickstart_file pointing at it, an A500 configuration and the
-  floppies of the game.
+  that package rather than building the source.
 
   A kickstart_file other than "internal" is expanded, resolved against the
   ROM search paths and handed to UAE as kickstart_rom_file, and
@@ -47,17 +44,17 @@ notes: |
 files:
   - name: "kick13.rom"
     system: commodore-amiga
-    required: true
+    required: false
     hle_fallback: true
+    found_by: content
     size: 262144
     crc32: "c4f0f55f"
     sha1: "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-    source_ref: "src/rommgr.cpp:141-142, src/fs-uae/config.c:80-101"
+    source_ref: "src/rommgr.cpp:141-142, src/fs-uae/config.c:80-101, 121-140, src/fs-uae/main.c:431-470, src/memory.cpp:2374-2379"
     note: >-
       KS ROM v1.3 (A500, A1000, A2000), ROM id 6, the one the A500 quickstart
-      selects. The RetroPie launcher exits with a dialog when the file is
-      absent from the BIOS directory, so the game never starts. FS-UAE alone
-      loads the AROS replacement in its place.
+      selects, identified by its checksum whatever the file is called.
+      Without a Kickstart the AROS replacement is loaded.
 
   - name: "rom.key"
     system: commodore-amiga
