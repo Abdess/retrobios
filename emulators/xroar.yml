@@ -81,7 +81,6 @@ files:
   - name: "d200e_1.rom"
     system: dragon64
     description: "Dragon 200-E BASIC IC18 (Spanish)"
-    region: [spain]
     required: true
     size: 16384
     crc32: "95af0a0a"
@@ -93,7 +92,6 @@ files:
   - name: "d200e_2.rom"
     system: dragon64
     description: "Dragon 200-E BASIC IC17 (Spanish)"
-    region: [spain]
     required: false
     size: 16384
     crc32: "48b985df"
@@ -104,7 +102,6 @@ files:
   - name: "d200e_26.rom"
     system: dragon64
     description: "Dragon 200-E external character generator ROM"
-    region: [spain]
     required: false
     size: 4096
     crc32: "565724bc"
@@ -258,7 +255,6 @@ files:
   - name: "alice.rom"
     system: mc10
     description: "Matra & Hachette Alice Microcolour BASIC"
-    region: [france]
     required: true
     size: 8192
     crc32: "f876abe9"
