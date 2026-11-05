@@ -168,9 +168,6 @@ class HeldButNotPackedNamesEachReason(unittest.TestCase):
                 "in_pack": False, "omitted": reason, "category": category}
 
     def _printed(self, entries: list[dict]) -> str:
-        import contextlib  # noqa: PLC0415
-        import io  # noqa: PLC0415
-
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             verify._print_undeclared_section({"undeclared_files": entries}, False)
@@ -217,6 +214,25 @@ class HeldButNotPackedNamesEachReason(unittest.TestCase):
     def test_a_single_reason_reads_as_before(self):
         text = self._printed([self._entry("a.rom", "installed with its emulator")] * 2)
         self.assertIn("Core files held but not packed: 2 (installed with its emulator)", text)
+
+
+class APlatformWithoutTargetsSaysSo(unittest.TestCase):
+    """`--platform misterfpga --target switch` printed 'No target config for
+    platform 'misterfpga': platforms/targets/misterfpga.yml', which reads as
+    a file missing from the repository."""
+
+    def test_the_message_names_the_reason_and_the_platforms_with_targets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "targets").mkdir()
+            for name in ("retroarch", "batocera", "_overrides"):
+                (Path(tmp) / "targets" / f"{name}.yml").write_text("targets: {}\n")
+            with self.assertRaises(FileNotFoundError) as caught:
+                common.load_target_config("misterfpga", "switch", tmp)
+        self.assertEqual(
+            str(caught.exception),
+            "misterfpga has no hardware targets: drop --target "
+            "(platforms with targets: batocera, retroarch)",
+        )
 
 
 class OneSpellingPerOption(unittest.TestCase):

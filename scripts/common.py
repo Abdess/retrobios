@@ -664,8 +664,15 @@ def load_target_config(
     targets_dir = os.path.join(platforms_dir, "targets")
     target_file = os.path.join(targets_dir, f"{platform_name}.yml")
     if not os.path.exists(target_file):
+        # The expected state for a platform that ships one build, said as
+        # such: the file path read like a file missing from the repository.
+        with_targets = sorted(
+            Path(f).stem for f in os.listdir(targets_dir)
+            if f.endswith(".yml") and not f.startswith("_")
+        )
         raise FileNotFoundError(
-            f"No target config for platform '{platform_name}': {target_file}"
+            f"{platform_name} has no hardware targets: drop --target "
+            f"(platforms with targets: {', '.join(with_targets)})"
         )
     with open(target_file) as f:
         data = yaml_load(f) or {}
