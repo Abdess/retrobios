@@ -538,7 +538,7 @@ class ProfileFieldsRequired(unittest.TestCase):
         section = _section(_page("profiling.md"), "Profile fields")
         marked = {
             row[0].strip("`") for row in _table_rows(section)
-            if row[1].startswith(("yes", "for `type"))
+            if row[1].startswith(("yes", "for `type", "with `"))
         }
         self.assertEqual(marked, required)
 

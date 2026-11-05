@@ -12,6 +12,7 @@ import contextlib
 import json
 import os
 import tempfile
+import threading
 import re
 
 
@@ -62,12 +63,26 @@ def write_if_changed(
     return True
 
 
+_UMASK_LOCK = threading.Lock()
+
+
+def process_umask() -> int:
+    """The process umask, read without letting a second thread see it at 0.
+
+    Reading the umask sets it, so it is put back at once. Two threads doing
+    that unguarded interleave as A sets 0 and reads 022, B sets 0 and reads 0,
+    A restores 022, B restores 0: the process keeps umask 0 and every file it
+    creates afterwards is world-writable.
+    """
+    with _UMASK_LOCK:
+        umask = os.umask(0)
+        os.umask(umask)
+    return umask
+
+
 def plain_file_mode() -> int:
     """The mode open() gives a new file: 0o666 less the process umask."""
-    # Reading the umask sets it, so it is put back at once.
-    umask = os.umask(0)
-    os.umask(umask)
-    return 0o666 & ~umask
+    return 0o666 & ~process_umask()
 
 
 def set_plain_mode(path: str | os.PathLike) -> None:

@@ -6,6 +6,13 @@ upstream: "https://www.mamedev.org"
 profiled_date: "2026-10-20"
 source_commit: "237ca5c898e51e1b7a70ce52bccf008aa722e924"
 pin_frozen: "RetroPie builds the advancemame-1.4 release tarball, whose src/ tree is this tag. Later commits are not part of that build."
+pin_build:
+  - platform: retropie
+    repo: "https://github.com/RetroPie/RetroPie-Setup"
+    revision: "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+    path: "scriptmodules/emulators/advmame-1.4.sh"
+    variable: rp_module_repo
+    value: "file $__archive_url/advancemame-1.4.tar.gz"
 core_version: "advancemame-1.4"
 version_basis:
   kind: tag

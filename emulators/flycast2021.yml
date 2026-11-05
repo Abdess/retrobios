@@ -7,6 +7,13 @@ profiled_date: "2026-10-17"
 source_commit: "603814c9f73b773c455d9a497f389d2f93a257fd"
 upstream_commit: "4c293f306bc16a265c2d768af5d0cea138426054"
 pin_frozen: "ROCKNIX 20261001 builds this revision. No branch of metallic77/flycast holds it any more: master was put back on the libretro merge base 4c293f30, so HEAD is the code before the fork's own commits."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/libretro/flycast2021-lr/package.mk"
+    variable: PKG_VERSION
+    value: "603814c9f73b773c455d9a497f389d2f93a257fd"
 core_version: "0.1"
 version_basis:
   kind: file

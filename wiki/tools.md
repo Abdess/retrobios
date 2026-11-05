@@ -52,7 +52,7 @@ Pipeline steps:
 | 4c | Generate target manifests | `--skip-packs` |
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
 | 4e | Games index: what the installer reads for the games on a card (`generate_games_index.py`, fails under its coverage floor) | - (reads the committed install lists) |
-| 5 | Consistency check: counts, paths per archive, every emulator pack | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
+| 5 | Consistency check: counts, paths per archive, every emulator and system pack | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
 | 6 | Pack integrity (extract + hash) | `--skip-packs`, or no full pack built |
 | 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
@@ -91,8 +91,9 @@ alone, run `python scripts/check_buildbot_system.py`.
 - **verify.py and generate_pack.py read the same functions.** A count or a
   path that differs between the report and the pack is a defect, which is
   what step 5 checks: the counts, the paths each archive holds against the
-  ones verify credits (`--destinations`), and every emulator pack, each
-  profile in each build, built in memory against `verify --emulator`.
+  ones verify credits (`--destinations`), every emulator pack, each
+  profile in each build, built in memory against `verify --emulator`, and
+  every system pack that gathers several profiles against `verify --system`.
   Equal counts once hid four RetroArch paths credited and never written.
 - **Generators write through `write_if_changed()`.** A new timestamp alone
   rewrites nothing, so a diff on a generated file always means content.
@@ -694,7 +695,15 @@ NAME` reads the folders again.
 
 The `profiles` area always checks `website/src/data/source-paths.json`
 against the profiles, offline: a recorded tree that no profile pins any more
-is `STALE` until `sitesources.py --fetch` runs again.
+is `STALE` until `sitesources.py --fetch` runs again. It also reads each
+`pin_build` reference of a held pin: where the platform YAML was scraped at
+the reference's own revision the row is `OK` without network, otherwise the
+build file is fetched at the platform's new revision (or at the branch head
+of a platform this repository does not scrape) and its variable compared
+with the recorded value. A different value is `STALE`: the platform now
+builds another revision, and the pin, the refs and `pin_build` move with it.
+Profiles with `pin_frozen` and no `pin_build` are counted on one `SKIPPED`
+row, since no build file names their revision.
 
 ```bash
 python scripts/check_freshness.py

@@ -1060,5 +1060,41 @@ class ARemovedSizeIsReported(unittest.TestCase):
         self.assertEqual(changes.unsized, ["SNK - NeoGeo CD/neocdz.zip"])
 
 
+class AnExtendedListIsReported(unittest.TestCase):
+    """The truth adds an accepted md5 the platform lacks without
+    contradicting it: RetroDECK wrote [A, B] where the manifest had A and
+    Recalbox md5="A,B" where es_bios.xml had A, and the report listed
+    nothing. Only Batocera named the list it writes."""
+
+    def _records(self, exporter):
+        from export_native import landed_changes  # noqa: PLC0415
+
+        platform = {"name": "f.bin", "md5": A, "core": "libretro/mesen"}
+        fe = NativeFile("f.bin", "f.bin", "s", platform=platform,
+                        truth={"md5": [A, B], "validation": ["md5"]})
+        return landed_changes(exporter, {"s": NativeSystem("s", files=[fe])}).records, fe
+
+    def test_both_formats_report_the_list_they_write(self):
+        for exporter in (RetroDeck(), Recalbox()):
+            with self.subTest(exporter=exporter.platform_name()):
+                records, fe = self._records(exporter)
+                self.assertEqual(fe.hashes("md5"), [A, B])
+                self.assertEqual(
+                    [(r["kind"], r["field"], r["old"], r["new"]) for r in records],
+                    [("hash_corrected", "md5", A, [A, B])],
+                )
+
+    def test_an_unchanged_value_reports_nothing(self):
+        from export_native import landed_changes  # noqa: PLC0415
+
+        for exporter in (RetroDeck(), Recalbox()):
+            fe = NativeFile("f.bin", "f.bin", "s",
+                            platform={"name": "f.bin", "md5": A, "core": "libretro/mesen"},
+                            truth={"md5": A})
+            with self.subTest(exporter=exporter.platform_name()):
+                changes = landed_changes(exporter, {"s": NativeSystem("s", files=[fe])})
+                self.assertEqual(changes.records, [])
+
+
 if __name__ == "__main__":
     unittest.main()

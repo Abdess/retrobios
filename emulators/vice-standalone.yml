@@ -7,6 +7,13 @@ logo: "https://raw.githubusercontent.com/VICE-Team/svn-mirror/main/vice/data/com
 profiled_date: "2026-10-24"
 source_commit: "81546e60c222fe4aef750b890b0dbe3a5ac280d8"
 pin_frozen: "ROCKNIX, the only platform that ships it, builds this revision (ROCKNIX projects/ROCKNIX/packages/emulators/standalone/vice-sa/package.mk:5). Later commits are not part of that build."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/standalone/vice-sa/package.mk"
+    variable: PKG_VERSION
+    value: "3.8"
 core_version: "3.8"
 version_basis:
   kind: file

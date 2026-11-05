@@ -7,6 +7,13 @@ source: "https://github.com/digarok/gsplus-legacy-archive"
 profiled_date: "2026-10-20"
 source_commit: "480572054518112647c8fae5d7ea7046a6d6ecfb"
 pin_frozen: "Recalbox builds this commit (Recalbox package/gsplus/gsplus.mk:8-9 at tag 10.1.1). Batocera builds the applemu fork and RetroBat its release build, as the notes say."
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/gsplus/gsplus.mk"
+    variable: GSPLUS_VERSION
+    value: "480572054518112647c8fae5d7ea7046a6d6ecfb"
 core_version: "0.14"
 version_basis:
   kind: file

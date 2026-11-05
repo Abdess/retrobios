@@ -955,6 +955,23 @@ class SubjectsFollowTheRepositoryRules(unittest.TestCase):
                 self.assertTrue(ar.check_subject(subject))
         self.assertEqual(ar.check_subject("chore: tidy the cache"), [])
 
+    def test_review_numbers_are_refused(self):
+        """47 pushed subjects pointed at a numbered private review, which no
+        clone can follow. The subject says what the change does."""
+        import commit_rules  # noqa: PLC0415
+
+        for subject in ("chore: audit 24 and 17 cases, host kept out",
+                        "fix: polish the screens audit 11 named",
+                        "chore: merge audit batch, resolver and profiles",
+                        "fix: settle the review 3 notes"):
+            with self.subTest(subject=subject):
+                self.assertTrue(commit_rules.problems(subject))
+        for subject in ("fix: scroll long messages in the installer",
+                        "feat: read regions in region_audit.py",
+                        "chore: merge resolver and profile fixes"):
+            with self.subTest(subject=subject):
+                self.assertEqual(commit_rules.problems(subject), [])
+
     def test_the_rules_run_as_a_hook(self):
         with tempfile.TemporaryDirectory() as tmp:
             message = Path(tmp) / "MSG"

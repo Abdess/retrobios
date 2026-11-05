@@ -6,6 +6,13 @@ upstream: "https://github.com/lethal-guitar/RigelEngine"
 profiled_date: "2026-10-22"
 source_commit: "f05996f9b3ad3b3ea5bb818e49e7977636746343"
 pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/rigelengine/package.mk:5 at v4.8). Later commits are not part of that build."
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emuelec-ports/rigelengine/package.mk"
+    variable: PKG_VERSION
+    value: "f05996f9b3ad3b3ea5bb818e49e7977636746343"
 core_version: "0.9.1"
 version_basis:
   kind: file

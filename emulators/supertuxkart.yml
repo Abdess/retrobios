@@ -5,6 +5,13 @@ source: "https://github.com/supertuxkart/stk-code"
 profiled_date: "2026-10-22"
 source_commit: "fab79150111944c9e33396db68eb5de84f2efeaa"
 pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/supertuxkart/package.mk:5). Later commits are not part of that build."
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emuelec-ports/supertuxkart/package.mk"
+    variable: PKG_VERSION
+    value: "fab79150111944c9e33396db68eb5de84f2efeaa"
 core_version: "preview-582-gfab7915"
 version_basis:
   kind: tag

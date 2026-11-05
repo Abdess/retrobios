@@ -325,5 +325,55 @@ class AlternativesAreLookedUpBySlot(unittest.TestCase):
         self.assertEqual(built.call_count, 2)
 
 
+class AVersionTakenWithoutACheck(unittest.TestCase):
+    """The Batocera pack printed two DISCREPANCY lines for BLOOD.RFF that
+    verify never showed: Raze lists three sized versions and a fourth,
+    "Unknown Version", it takes without a check (the shareware RFF), and
+    the message named one accepted size of the three."""
+
+    RAZE = {"files": [
+        {"name": "BLOOD.RFF", "path": "BLOOD.RFF", "size": 8200353,
+         "crc32": "b291418f", "validation": ["size", "crc32"]},
+        {"name": "BLOOD.RFF", "path": "BLOOD.RFF", "size": 9570681,
+         "crc32": "a8fdda84", "validation": ["size", "crc32"]},
+        {"name": "BLOOD.RFF", "path": "BLOOD.RFF"},
+    ]}
+
+    def _file(self, tmp: str) -> str:
+        path = Path(tmp) / "BLOOD.RFF"
+        path.write_bytes(b"shareware")
+        return str(path)
+
+    def test_the_unchecked_version_accepts_the_copy(self):
+        from validation import check_file_validation  # noqa: PLC0415
+
+        index = _build_validation_index({"raze": self.RAZE})
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            self.assertIsNone(check_file_validation(
+                self._file(tmp), "BLOOD.RFF", index, emulators={"raze"}
+            ))
+
+    def test_the_pack_reads_it_as_an_alternative(self):
+        import generate_pack  # noqa: PLC0415
+
+        fe = {"name": "BLOOD.RFF", "source_profile": "raze", "source_path": "BLOOD.RFF"}
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            self.assertTrue(generate_pack._matches_an_alternative(
+                fe, self._file(tmp), {"raze": self.RAZE}
+            ))
+
+    def test_a_refusal_names_every_accepted_size(self):
+        from validation import check_file_validation  # noqa: PLC0415
+
+        checked = {"files": self.RAZE["files"][:2]}
+        index = _build_validation_index({"raze": checked})
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            reason, emulators = check_file_validation(
+                self._file(tmp), "BLOOD.RFF", index, emulators={"raze"}
+            )
+        self.assertEqual(emulators, ["raze"])
+        self.assertEqual(reason, "size mismatch: got 9, accepted [8200353,9570681]")
+
+
 if __name__ == "__main__":
     unittest.main()

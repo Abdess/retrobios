@@ -2725,6 +2725,34 @@ class DeclaredDependenciesMatchTheDocumentedWorkflows(unittest.TestCase):
         )
 
 
+class TheProjectInstallsWithPip(unittest.TestCase):
+    """pyproject declared a dev extra that pip could not install: without a
+    [build-system] and an explicit module list, setuptools' flat-layout
+    discovery found scripts/ and tests/ and refused to build."""
+
+    def test_setuptools_discovers_nothing_to_package(self):
+        import importlib.util  # noqa: PLC0415
+
+        if importlib.util.find_spec("setuptools") is None:
+            self.skipTest("setuptools is not installed")
+        program = (
+            "from setuptools.dist import Distribution\n"
+            "from setuptools.config.pyprojecttoml import apply_configuration\n"
+            "dist = apply_configuration(Distribution(), 'pyproject.toml')\n"
+            "dist.set_defaults()\n"
+            "print(sorted(dist.packages or []), sorted(dist.py_modules or []))\n"
+        )
+        done = subprocess.run([sys.executable, "-c", program], cwd=ROOT,
+                              capture_output=True, text=True, check=False)
+        self.assertEqual(done.returncode, 0, done.stderr[-2000:])
+        self.assertEqual(done.stdout.strip(), "[] []")
+        import tomllib  # noqa: PLC0415
+
+        with (ROOT / "pyproject.toml").open("rb") as handle:
+            build = tomllib.load(handle)["build-system"]
+        self.assertEqual(build["build-backend"], "setuptools.build_meta")
+
+
 class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
     """Exiting zero says the question was answered and the answer was yes.
 
@@ -4196,6 +4224,10 @@ class AutoFetchAsksVerifyWhatIsMissing(unittest.TestCase):
                  "system": "diablo", "emulator": "DevilutionX"},
                 {"name": "held.bin", "in_repo": True, "required": True},
                 {"name": "extra.bin", "in_repo": False, "required": False},
+                # zesarux installs 128s.rom with the emulator: not a target,
+                # and a copy placed in bios/ fails pipeline step 4d.
+                {"name": "128s.rom", "in_repo": False, "required": True,
+                 "bundled": True, "emulator": "ZEsarUX"},
             ],
         }
         with mock.patch.object(verify_mod, "verify_platform", lambda c, d: result):
@@ -5582,12 +5614,17 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
 
 
 
-class AnAliasNamesItsProfile(unittest.TestCase):
-    """"flycast_gles2 is an alias of flycast -use --emulator flycast": the
-    dash read as an option, and an alias without alias_of advised
-    "--emulator ?"."""
+class AnAliasSelectsItsProfile(unittest.TestCase):
+    """`--emulator mednafen_psx` refused with "use --emulator beetle_psx",
+    a step the tool could take itself: the name a user reads in RetroArch
+    now selects the profile it is an alias of, and says so on stderr. An
+    alias without alias_of is found through the profile whose cores: names
+    it."""
 
-    def test_the_message(self):
+    def test_the_alias_selects_its_profile(self):
+        import contextlib as _contextlib
+        import io as _io
+
         from scripts.common import ProfileSelectionError, select_emulator_profiles
 
         profiles = {
@@ -5595,12 +5632,28 @@ class AnAliasNamesItsProfile(unittest.TestCase):
             "flycast_gles2": {"type": "alias", "alias_of": "flycast"},
             "orphan": {"type": "alias"},
             "core": {"type": "libretro", "cores": ["orphan"]},
+            "lost": {"type": "alias"},
         }
-        for name, expected in (("flycast_gles2", "alias of flycast: use --emulator flycast"),
-                               ("orphan", "alias of core: use --emulator core")):
-            with self.subTest(name=name), self.assertRaises(ProfileSelectionError) as caught:
-                select_emulator_profiles([name], profiles)
-            self.assertIn(expected, str(caught.exception))
+        for name, expected in (("flycast_gles2", "flycast"), ("orphan", "core")):
+            err = _io.StringIO()
+            with self.subTest(name=name), _contextlib.redirect_stderr(err):
+                selected = select_emulator_profiles([name], profiles)
+            self.assertEqual([key for key, _ in selected], [expected])
+            self.assertIn(f"{name} is {expected}", err.getvalue())
+        with _contextlib.redirect_stderr(_io.StringIO()):
+            both = select_emulator_profiles(["flycast", "flycast_gles2"], profiles)
+        self.assertEqual([key for key, _ in both], ["flycast"])
+        with self.assertRaises(ProfileSelectionError):
+            select_emulator_profiles(["lost"], profiles)
+
+    def test_verify_runs_the_alias(self):
+        result = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--emulator", "mednafen_psx"],
+            cwd=ROOT, capture_output=True, text=True, timeout=300, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("beetle_psx", result.stdout)
+        self.assertIn("mednafen_psx is beetle_psx", result.stderr)
 
 
 

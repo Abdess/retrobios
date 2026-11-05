@@ -1827,7 +1827,11 @@ def _omission_reasons(entries: list[dict]) -> str:
 def _print_undeclared_section(result: dict, verbose: bool) -> None:
     """Print cross-reference section for undeclared files used by cores."""
     undeclared = result.get("undeclared_files", [])
-    if not undeclared:
+    # The pack's core copies can come from no gap entry: recalbox
+    # --system nec-pc-engine packs six root syscard copies for geargrafx
+    # with an empty gap report, and returning here hid them.
+    packed = result.get("packed_extras")
+    if not undeclared and not (packed and any(packed.values())):
         return
 
     game_data, bios_files, unplaced = _split_undeclared(undeclared)
@@ -1850,7 +1854,6 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     # The builder's count, one file per pack path, when the platform pass
     # replayed it. Counting entries said 1130 for RetroArch, 48 more than the
     # pack holds: rom.key alone was claimed by three Amiga cores.
-    packed = result.get("packed_extras")
     core_in_pack = (
         packed["bios"] if packed is not None else len(req_in_repo) + len(opt_in_repo)
     )
@@ -1880,7 +1883,7 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         print(f"  Core files held but not packed: {len(unplaced)} "
               f"({_omission_reasons(unplaced)})")
 
-    if game_data:
+    if game_data or (packed and packed.get("game_data")):
         gd_missing = [u for u in game_data if not u["in_repo"]]
         gd_packed = (
             packed["game_data"] if packed is not None
@@ -2113,6 +2116,30 @@ def verify_emulator(
             return
         placed[dest.lower()] = (path, owner, dest)
         _register_path(dest, placed_files, placed_parents)
+
+    def occupy_trees(emu_name: str, profile: dict) -> None:
+        """The profile's data trees follow its files in the pack, which
+        writes them even when the system filter leaves it no file:
+        bluemsx's Machines/ tree holds msx-emu's coleco.rom path in a
+        --system colecovision pack."""
+        for dd in deliverable(profile.get("data_directories", []), standalone):
+            cache = (data_registry or {}).get(dd.get("ref", ""), {}).get("local_cache", "")
+            if not cache or not os.path.isdir(cache):
+                continue
+            dd_dest = dd.get("destination", "")
+            structure = profile.get("pack_structure")
+            prefix = (
+                structure.get("standalone" if standalone else "libretro", "")
+                if structure else ""
+            )
+            if prefix:
+                dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
+            for root, _dirs, names in os.walk(cache):
+                for fname in names:
+                    src = os.path.join(root, fname)
+                    rel = os.path.relpath(src, cache).replace(os.sep, "/")
+                    occupy(f"{dd_dest}/{rel}" if dd_dest else rel, src, emu_name)
+
     for emu_name, profile in sorted(selected):
         files = expand_agnostic_entries(
             expand_directory_entries(
@@ -2159,6 +2186,7 @@ def verify_emulator(
                     "ground_truth": [],
                 }
             )
+            occupy_trees(emu_name, profile)
             continue
 
         # Verify archives as units (e.g., neogeo.zip, aes.zip)
@@ -2421,24 +2449,7 @@ def verify_emulator(
                 ) > _SEVERITY_ORDER.get(prev_sev, 0):
                     file_severity[dest] = sev
 
-        # The profile's data trees follow its files in the pack.
-        for dd in deliverable(profile.get("data_directories", []), standalone):
-            cache = (data_registry or {}).get(dd.get("ref", ""), {}).get("local_cache", "")
-            if not cache or not os.path.isdir(cache):
-                continue
-            dd_dest = dd.get("destination", "")
-            structure = profile.get("pack_structure")
-            prefix = (
-                structure.get("standalone" if standalone else "libretro", "")
-                if structure else ""
-            )
-            if prefix:
-                dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
-            for root, _dirs, names in os.walk(cache):
-                for fname in names:
-                    src = os.path.join(root, fname)
-                    rel = os.path.relpath(src, cache).replace(os.sep, "/")
-                    occupy(f"{dd_dest}/{rel}" if dd_dest else rel, src, emu_name)
+        occupy_trees(emu_name, profile)
 
     counts = {
         Severity.OK: 0,

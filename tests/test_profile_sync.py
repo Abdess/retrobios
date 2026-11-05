@@ -2670,6 +2670,19 @@ class TestWriteDryRun(unittest.TestCase):
             counts={"SHIFTED": 1},
         )
 
+    def test_a_prose_read_that_fails_leaves_the_profile_as_it_was(self):
+        """The bumped profile was promoted before the prose under its new pin
+        was read. Offline, an uncached cited file raised NotCachedError past
+        the restore and the profile kept a pin the guard would refuse."""
+        from unittest import mock  # noqa: PLC0415
+
+        before = self.path.read_bytes()
+        cold = profile_sync.upstream.NotCachedError("x.c not cached")
+        with mock.patch.object(profile_sync, "realign_prose", side_effect=[[], cold]), \
+                self.assertRaises(profile_sync.upstream.NotCachedError):
+            self._run(self._args(rebase_refs=True, dry_run=False), self._shifted())
+        self.assertEqual(self.path.read_bytes(), before)
+
     def test_rebase_states_the_move_and_leaves_the_file(self):
         before = self.path.read_text()
         output = self._run(self._args(rebase_refs=True), self._shifted())
@@ -3811,6 +3824,18 @@ class TestDriftScore(unittest.TestCase):
     def test_clean_profile_scores_zero(self):
         report = ProfileReport(name="a", entries=[], counts={"ANCHORED": 5})
         self.assertEqual(drift_score(report, None, 0), 0)
+
+    def test_a_pin_to_set_again_outranks_a_gone_ref(self):
+        """pcem ranked last at 0 with "1 to review, 1 orphaned pin": its
+        upstream_commit had left every branch of a force-pushed repository."""
+        gone = ProfileReport(name="a", entries=[], counts={"GONE": 1})
+        orphaned = ProfileReport(name="pcem", entries=[], counts={},
+                                 orphaned=["upstream_commit 25b54e3f"])
+        moved = ProfileReport(name="m", entries=[], counts={},
+                              moved_repos=["a/b answers as c/b"])
+        for report in (orphaned, moved):
+            with self.subTest(name=report.name):
+                self.assertGreater(drift_score(report, None, 0), drift_score(gone, None, 0))
 
 
 class TestCollectCitations(unittest.TestCase):
@@ -5303,6 +5328,24 @@ class TestEmulatorsDirStatus(unittest.TestCase):
             self.assertTrue(profile_sync.emulators_dir_is_dirty(root, ["a"]))
             self.assertFalse(profile_sync.emulators_dir_is_dirty(root, ["b"]))
 
+    def test_the_refusal_names_the_changed_profile(self):
+        """One profile changed by another session among ~375 refused the
+        whole run without saying which."""
+        with tempfile.TemporaryDirectory() as root:
+            self._git("init", "-q", cwd=root)
+            for name in "abc":
+                Path(root, f"{name}.yml").write_text(f"emulator: {name}\n")
+            self._git("add", "a.yml", "b.yml", "c.yml", cwd=root)
+            self._git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "p", cwd=root)
+            Path(root, "b.yml").write_text("emulator: b2\n")
+            self.assertEqual(profile_sync.emulators_dir_is_dirty(root, ["a", "b", "c"]),
+                             ["b.yml"])
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
+                profile_sync._refuse_dirty_tree(root, ["a", "b", "c"])
+        self.assertIn("b.yml has uncommitted changes", err.getvalue())
+        self.assertNotIn("a.yml", err.getvalue())
+
     def test_a_tree_outside_any_repository_is_not_clean(self):
         with tempfile.TemporaryDirectory() as root, mock.patch.dict(
             os.environ, {"GIT_CEILING_DIRECTORIES": str(Path(root).parent)}
@@ -5435,7 +5478,7 @@ class UpstreamForkedByThePort(unittest.TestCase):
     upstream with the fork. Compared to upstream's own HEAD, a bump moved it
     past anything the port carries."""
 
-    def _views(self, base):
+    def _views(self, base, ancestry=None):
         from unittest import mock  # noqa: PLC0415
 
         fork = profile_sync.upstream.make_repo("github.com", "f", "port")
@@ -5447,7 +5490,9 @@ class UpstreamForkedByThePort(unittest.TestCase):
         ]
         with mock.patch.object(
             profile_sync.upstream, "fork_base", return_value=base
-        ) as asked:
+        ) as asked, mock.patch.object(
+            profile_sync.upstream, "ancestry", return_value=ancestry
+        ):
             followed = profile_sync._follow_fork_base(views, "cache", True)
         return followed, asked
 
@@ -5461,6 +5506,17 @@ class UpstreamForkedByThePort(unittest.TestCase):
     def test_a_port_outside_the_network_keeps_the_tip(self):
         views, _ = self._views(None)
         self.assertEqual(views[1].head, "up-tip")
+
+    def test_a_pin_newer_than_the_base_keeps_the_tip(self):
+        """melonds documents the Qt standalone from melonDS-emu/melonDS: its
+        upstream_commit is 825 commits past the merge base with the libretro
+        fork, and reading its refs at the 2021 base reported them CHANGED."""
+        views, _ = self._views("old-merge", ancestry=(825, 0))
+        self.assertEqual(views[1].head, "up-tip")
+
+    def test_a_pin_behind_the_base_follows_it(self):
+        views, _ = self._views("new-base", ancestry=(0, 12))
+        self.assertEqual(views[1].head, "new-base")
 
 
 class ACachedTipOlderThanThePin(TestBuildReport):

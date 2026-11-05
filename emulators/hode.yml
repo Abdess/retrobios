@@ -5,6 +5,13 @@ source: "https://github.com/usineur/hode"
 profiled_date: "2026-10-22"
 source_commit: "59f3c466923c6b8d49e29176ff697a91165e7efc"
 pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/hodesdl/package.mk:6 at v4.8). Later commits are not part of that build."
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emuelec-ports/hodesdl/package.mk"
+    variable: PKG_VERSION
+    value: "59f3c466923c6b8d49e29176ff697a91165e7efc"
 core_version: "0.2.9f"
 version_basis:
   kind: file

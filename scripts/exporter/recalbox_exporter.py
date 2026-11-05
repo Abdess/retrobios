@@ -245,6 +245,13 @@ class Exporter(BaseExporter):
 
         return f"    <bios {' '.join(attrs)} />"
 
+    def written_list(self, fe: NativeFile, field_name: str) -> list[str] | None:
+        """md5 is the comma list Bios.cpp splits and compares one by one, so
+        a list the truth extended is a change the report names."""
+        if field_name == "md5" and len(fe.hashes("md5")) > 1:
+            return fe.hashes("md5")
+        return None
+
     def states(self, fe: NativeFile, field_name: str) -> bool:
         """An element it cannot rewrite is written back as Recalbox wrote it.
 

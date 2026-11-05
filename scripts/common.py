@@ -691,7 +691,7 @@ def load_target_config(
             # --target but have no --list-targets of their own.
             + suggest_names(
                 [target], sorted(alias_index),
-                f"verify.py --platform {platform_name} --list-targets", len(targets),
+                f"python scripts/verify.py --platform {platform_name} --list-targets", len(targets),
             )
         )
 
@@ -1870,12 +1870,12 @@ def select_emulator_profiles(
     all_profiles: dict,
     standalone: bool = False,
 ) -> list[tuple[str, dict]]:
-    """Resolve named profiles, refusing the ones that answer for others.
+    """Resolve named profiles, refusing the ones that answer for no core.
 
-    An alias is the same binary under another name and a launcher only
-    starts an emulator, so neither has requirements of its own: naming one
-    is a question about the wrong profile, and the error says which one to
-    ask instead. Raising rather than exiting lets the verifier stop and the
+    An alias is the same binary under another name, so naming one selects
+    the profile it is an alias of, said on stderr. A launcher only starts an
+    emulator and has no requirements of its own: naming one is a question
+    about the wrong profile, and the error says so. Raising rather than exiting lets the verifier stop and the
     builder return empty-handed from one rule.
     """
     selected: list[tuple[str, dict]] = []
@@ -1916,11 +1916,17 @@ def select_emulator_profiles(
                 ),
                 None,
             )
-            raise ProfileSelectionError(
-                f"{name} is an alias of {target}: use --emulator {target}"
-                if target
-                else f"{name} is an alias with no profile of its own to name"
-            )
+            if not target or target not in all_profiles:
+                raise ProfileSelectionError(
+                    f"{name} is an alias with no profile of its own to name"
+                )
+            # The name a user reads in RetroArch or on the buildbot: the tool
+            # knows the profile, so it says which and carries on.
+            print(f"{name} is {target}: using its profile", file=sys.stderr)
+            name, profile = target, all_profiles[target]
+            kind = profile.get("type", "libretro")
+            if any(key == name for key, _ in selected):
+                continue
         if kind == "launcher":
             raise ProfileSelectionError(
                 f"{name} is a launcher: use the emulator it launches"
@@ -3250,24 +3256,53 @@ def build_target_cores_cache(
     """
     cache: dict[str, set[str] | None] = {}
     skip: list[str] = []
+    notes: list[str] = []
     for p in platforms:
         try:
             cache[p] = load_target_config(p, target, platforms_dir)
         except FileNotFoundError:
             if not is_all:
                 raise
-            print(f"INFO: Skipping {p}: no hardware targets")
+            notes.append(f"INFO: Skipping {p}: no hardware targets")
             skip.append(p)
         except ValueError as e:
             if is_all:
-                print(f"INFO: Skipping {p}: {e}")
+                notes.append(f"INFO: Skipping {p}: {e}")
                 skip.append(p)
             else:
                 raise
     kept = [p for p in platforms if p not in skip]
     if is_all and platforms and not kept:
-        raise ValueError(f"unknown target '{target}': no platform has it")
+        # The seventeen per-platform lines buried the one suggestion that
+        # mattered: the refusal names the closest target across them all.
+        raise ValueError(_unknown_target_message(target, platforms, platforms_dir))
+    for note in notes:
+        print(note)
     return cache, kept
+
+
+def _unknown_target_message(target: str, platforms: list[str], platforms_dir: str) -> str:
+    """A target no platform has, with the closest names any of them knows."""
+    import difflib  # noqa: PLC0415
+
+    targets_dir = os.path.join(platforms_dir, "targets")
+    owners: dict[str, list[str]] = {}
+    for platform in platforms:
+        target_file = os.path.join(targets_dir, f"{platform}.yml")
+        if not os.path.exists(target_file):
+            continue
+        with open(target_file) as f:
+            targets = (yaml_load(f) or {}).get("targets", {})
+        overrides = _target_overrides(platform, targets_dir)
+        for name in _target_alias_index(targets, overrides):
+            owners.setdefault(name, []).append(platform)
+    message = f"unknown target '{target}': no platform has it."
+    close = difflib.get_close_matches(target, sorted(owners), n=3, cutoff=0.6)
+    if close:
+        named = ", ".join(f"{n} ({', '.join(sorted(owners[n]))})" for n in close)
+        return f"{message} Did you mean: {named}?"
+    return (f"{message} python scripts/verify.py --platform <name> --list-targets "
+            "lists the targets of one platform.")
 
 
 # Re-exported so the existing call sites keep working while the

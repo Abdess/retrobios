@@ -200,5 +200,35 @@ class EveryGapCountedIsNamed(unittest.TestCase):
         self.assertIn("MISSING (game data): engine needs level.dat", verbose.getvalue())
 
 
+class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):
+    """verify --platform recalbox --system nec-pc-engine printed no Core
+    files line while the pack held six geargrafx syscard copies: the gap
+    report was empty, and the section returned before reading the pack's
+    count."""
+
+    def test_the_packed_count_is_printed(self):
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        for packed, expected in (({"bios": 6, "game_data": 0}, "Core files: 6 in pack"),
+                                 ({"bios": 0, "game_data": 3}, "Game data: 3 in pack")):
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                verify._print_undeclared_section(
+                    {"undeclared_files": [], "packed_extras": packed}, verbose=False
+                )
+            with self.subTest(packed=packed):
+                self.assertIn(expected, out.getvalue())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            verify._print_undeclared_section(
+                {"undeclared_files": [], "packed_extras": {"bios": 0, "game_data": 0}}, False
+            )
+        self.assertEqual(out.getvalue(), "")
+
+
 if __name__ == "__main__":
     unittest.main()

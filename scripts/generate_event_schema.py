@@ -13,6 +13,8 @@ import json
 import sys
 from pathlib import Path
 
+from artifacts import write_text_atomic
+
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "schemas" / "install-events.schema.json"
 
@@ -105,7 +107,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{args.output} differs from EVENT_KEYS: run "
               "python scripts/generate_event_schema.py", file=sys.stderr)
         return 1
-    args.output.write_text(text, encoding="utf-8")
+    write_text_atomic(str(args.output), text)
     print(f"Wrote {args.output}")
     return 0
 

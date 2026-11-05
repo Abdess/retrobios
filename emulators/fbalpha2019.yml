@@ -7,6 +7,13 @@ profiled_date: "2026-10-17"
 source_commit: "0581797db6fdffd826086b053ced4b6b29bb6678"
 upstream_commit: "416948158d88ba17f87813419ddc3c1209ef68c0"
 pin_frozen: "ROCKNIX 20261001 builds this revision as fbalpha2019. Later commits on libretro/fbalpha are not part of that build."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/libretro/fbalpha2019-lr/package.mk"
+    variable: PKG_VERSION
+    value: "0581797db6fdffd826086b053ced4b6b29bb6678"
 core_version: "v0.2.97.44"
 version_basis:
   kind: file

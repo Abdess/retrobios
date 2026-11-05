@@ -83,6 +83,27 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
         ]
         self.assertEqual(offenders, [])
 
+    def test_generators_publish_whole_files(self):
+        """install/games/ (12 MB, read by install.py --for-games), the event
+        schema, the launcher index and wiki/installer.md were truncated at
+        their final name: an interrupted run left a committed-looking file
+        holding part of a JSON document. The installer doc's sandbox writes
+        throwaway fixtures under tmp/ and is not published."""
+        import ast
+
+        sandbox = {"write_small_list", "Sandbox"}
+        offenders = []
+        for path in sorted((REPO_ROOT / "scripts").glob("generate_*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for top in tree.body:
+                if path.name == "generate_installer_doc.py" and getattr(top, "name", "") in sandbox:
+                    continue
+                for node in ast.walk(top):
+                    if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                            and node.func.attr in ("write_text", "write_bytes")):
+                        offenders.append(f"{path.name}:{node.lineno}")
+        self.assertEqual(offenders, [])
+
     def test_the_text_is_utf8_whatever_the_locale(self):
         import tempfile
 
@@ -153,6 +174,38 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
         os.umask(0o002)
         artifacts.write_text_atomic(str(self.dir / "a.json"), "{}")
         self.assertEqual(self._mode(self.dir / "a.json"), 0o664)
+
+    def test_threads_reading_the_mode_leave_the_umask_alone(self):
+        """mame_devices fetches on eight threads and every cache write reads
+        the umask: unguarded, two readers interleaved and left it at 0."""
+        import threading  # noqa: PLC0415
+
+        interval = sys.getswitchinterval()
+        sys.setswitchinterval(1e-6)
+        self.addCleanup(sys.setswitchinterval, interval)
+        modes: set[int] = set()
+
+        def read() -> None:
+            seen = {artifacts.plain_file_mode() for _ in range(20000)}
+            modes.update(seen)
+
+        threads = [threading.Thread(target=read) for _ in range(8)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+        current = os.umask(0o022)
+        self.assertEqual(current, 0o022)
+        self.assertEqual(modes, {0o644})
+
+    def test_no_script_reads_the_umask_unguarded(self):
+        offenders = [
+            f"{path.name}:{number}"
+            for path in sorted((REPO_ROOT / "scripts").rglob("*.py"))
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1)
+            if "os.umask(" in line and path.name != "artifacts.py"
+        ]
+        self.assertEqual(offenders, [])
 
     def test_packs_and_their_manifest(self):
         import zipfile  # noqa: PLC0415

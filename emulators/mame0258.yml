@@ -7,6 +7,13 @@ profiled_date: '2026-10-22'
 source_commit: dc1a96537089d6d4ecd01d9886b21061471c70c0
 upstream_commit: 2e0aa823508663c4a27164be43467d1ef740cdcd
 pin_frozen: 'Recalbox, the only platform that ships it, builds this revision (Recalbox package/libretro-mame0258/libretro-mame0258.mk:8 at tag 10.1.1). Later commits are not part of that build.'
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/libretro-mame0258/libretro-mame0258.mk"
+    variable: LIBRETRO_MAME0258_VERSION
+    value: "dc1a96537089d6d4ecd01d9886b21061471c70c0"
 core_version: "0.258"
 version_basis:
   kind: file

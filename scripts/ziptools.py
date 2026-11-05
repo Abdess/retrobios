@@ -14,7 +14,7 @@ import sys
 import tempfile
 import zipfile
 
-from artifacts import set_plain_mode
+from artifacts import process_umask, set_plain_mode
 from hashing import md5sum
 
 
@@ -251,9 +251,7 @@ def safe_extract_zip(
     """
     dest = os.path.realpath(dest_dir)
     os.makedirs(dest, exist_ok=True)
-    # Reading the umask sets it, so it is put back at once.
-    umask = os.umask(0)
-    os.umask(umask)
+    umask = process_umask()
     with zipfile.ZipFile(zip_path, "r") as zf:
         members = zf.infolist()
         if len(members) > max_members:

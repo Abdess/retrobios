@@ -66,7 +66,8 @@ def profile_needs(profiles: dict, db: dict) -> dict:
 
     Keyed by every hash a profile accepts, and, for an entry that declares
     a size and no hash, by its names casefolded. An entry with neither
-    cannot be told apart from any same-named dump and is left out.
+    cannot be told apart from any same-named dump and is left out, as is a
+    file the emulator installs itself (`bundled:`) on every platform.
     """
     files = db.get("files", {})
     indexes = db.get("indexes", {})
@@ -91,6 +92,10 @@ def profile_needs(profiles: dict, db: dict) -> dict:
         for entry in profile.get("files", []) or []:
             name = str(entry.get("name", ""))
             if not name or name.endswith("/"):
+                continue
+            # Installed with the emulator, so not an acquisition target,
+            # unless a platform package leaves it out.
+            if entry.get("bundled") and not entry.get("not_bundled_on"):
                 continue
             need = {"emulator": emulator, "name": name,
                     "required": bool(entry.get("required"))}

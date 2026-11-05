@@ -189,6 +189,9 @@ class EveryEmulatorPackMatchesItsReport(unittest.TestCase):
         finally:
             os.chdir(previous)
         self.assertTrue(ok, out.getvalue())
+        # Packs of several profiles too: a placement rule that only goes
+        # wrong when two profiles share a path never meets in one profile.
+        self.assertIn("system packs compared, all equal", out.getvalue())
 
 
 if __name__ == "__main__":

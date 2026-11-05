@@ -98,6 +98,7 @@ from validation import (
     validated_choice,
     agnostic_substitute,
     _build_validation_index,
+    _parse_validation,
     deliverable,
     with_archive_members,
     extra_alternatives,
@@ -623,6 +624,10 @@ def _matches_an_alternative(fe: dict, local_path: str, profiles: dict) -> bool:
     siblings = extra_alternatives(fe, profiles)
     if len(siblings) < 2:
         return False
+    # A sibling the code takes without a check (Raze's "BLOOD: Unknown
+    # Version") accepts whatever copy fills the slot.
+    if any(not _parse_validation(entry.get("validation")) for entry in siblings):
+        return True
     actual = compute_hashes(local_path, frozenset({"sha1", "md5", "crc32"}))
     for entry in siblings:
         for algorithm in ("sha1", "md5", "crc32"):
@@ -2725,7 +2730,8 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
             if args.platform:
                 print(
                     f"  {platform_name}: FAIL (no pack in {args.output_dir}; build it with "
-                    f"generate_pack.py --platform {platform_name} --output-dir {args.output_dir})"
+                    f"python scripts/generate_pack.py --platform {platform_name} "
+                    f"--output-dir {args.output_dir})"
                 )
                 all_ok = False
                 failing.append(f"{platform_name} (no pack)")
@@ -5077,12 +5083,20 @@ def _pack_archives(output_dir: str) -> list[str]:
     A part of a split pack holds a share of a platform by design and was
     checked against the whole when it was cut: judged as a pack it would
     fail conformance, and injecting a manifest would change published bytes.
+    Every name the builder gives holds `_BIOS_Pack`, then the system tag of
+    a --system platform pack (`_BIOS_Pack_Playstation.zip`): build_port.py
+    writes its launcher archives (RetroBIOS.zip) to the same dist/, and
+    taking every ZIP rewrote them with a manifest after build_port had
+    printed their hashes.
     """
     return sorted(
         name
         for name in os.listdir(output_dir)
-        if name.endswith(".zip") and not split_pack.is_part(name)
+        if _PACK_NAME.search(name) and not split_pack.is_part(name)
     )
+
+
+_PACK_NAME = re.compile(r"_BIOS_Pack(?:_[^/]+)?\.zip$")
 
 
 def verify_and_finalize_packs(

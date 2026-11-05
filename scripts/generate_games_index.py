@@ -59,6 +59,7 @@ from romfolders import (  # noqa: E402
     folder_names,
     load_setups,
 )
+from artifacts import write_text_atomic  # noqa: E402
 from safeparse import yaml_load  # noqa: E402
 
 import install  # noqa: E402
@@ -609,16 +610,60 @@ def print_coverage(coverage: dict, files: dict[Path, str]) -> None:
     print(f"{len(files)} files, {raw:,} bytes, {packed:,} bytes gzip")
 
 
+def _sample(items: list[str], limit: int = 3) -> str:
+    shown = ", ".join(items[:limit])
+    return f"{shown}, +{len(items) - limit} more" if len(items) > limit else shown
+
+
+def describe_change(old: str | None, new: str) -> list[str]:
+    """What differs between a published document and the one render() makes.
+
+    The documents are single-line JSON of up to 550 KB: STALE alone left a
+    diff by hand to find that a manifest gained one file."""
+    if old is None:
+        return ["not written yet"]
+    try:
+        before, after = json.loads(old), json.loads(new)
+    except ValueError:
+        return ["the published file is not valid JSON"]
+    if not (isinstance(before, dict) and isinstance(after, dict)):
+        return ["document changed"]
+    parts = []
+    for key in sorted(set(before) | set(after)):
+        a, b = before.get(key), after.get(key)
+        if a == b:
+            continue
+        if isinstance(a, list) and isinstance(b, list):
+            olds = {json.dumps(x, sort_keys=True) for x in a}
+            news = {json.dumps(x, sort_keys=True) for x in b}
+            added = sorted(news - olds)
+            removed = sorted(olds - news)
+            change = []
+            if added:
+                change.append(f"{len(added)} added ({_sample(added)})")
+            if removed:
+                change.append(f"{len(removed)} removed ({_sample(removed)})")
+            parts.append(f"{key}: {', '.join(change) or 'reordered'}")
+        elif isinstance(a, dict) and isinstance(b, dict):
+            changed = sorted(k for k in set(a) | set(b) if a.get(k) != b.get(k))
+            parts.append(f"{key}: {len(changed)} changed ({_sample(changed)})")
+        else:
+            parts.append(f"{key} changed" if key in before and key in after
+                         else f"{key} {'added' if key in after else 'removed'}")
+    return parts or ["formatting changed"]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
     parser.add_argument("--output-dir", type=Path, default=OUTPUT,
                         help=f"where the index is written (default {OUTPUT})")
-    parser.add_argument("--check", action="store_true", help="exit 1 when a file would change")
+    parser.add_argument("--check", action="store_true",
+                        help="exit 1 when a file would change, naming what differs (implies --quiet)")
     parser.add_argument("--quiet", action="store_true", help="print only failures")
     args = parser.parse_args()
 
     files, coverage = render(args.output_dir)
-    if not args.quiet:
+    if not (args.quiet or args.check):
         print_coverage(coverage, files)
     failures = floor_failures(coverage)
     for failure in failures:
@@ -628,14 +673,22 @@ def main() -> int:
     ) if args.output_dir.is_dir() else []
     changed = [p for p, t in files.items() if not p.exists() or p.read_text(encoding="utf-8") != t]
     if args.check:
-        for path in changed + stale:
+        for path in changed:
             print(f"STALE {path}", file=sys.stderr)
+            current = path.read_text(encoding="utf-8") if path.exists() else None
+            for line in describe_change(current, files[path]):
+                print(f"  {line}", file=sys.stderr)
+        for path in stale:
+            print(f"STALE {path}", file=sys.stderr)
+            print("  no longer generated", file=sys.stderr)
+        if changed or stale:
+            print("Run python scripts/generate_games_index.py to write them.", file=sys.stderr)
         return 1 if changed or stale or failures else 0
     for path in stale:
         path.unlink()
     for path in changed:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(files[path], encoding="utf-8")
+        write_text_atomic(str(path), files[path])
     print(f"{len(changed)} written, {len(stale)} removed")
     return 1 if failures else 0
 

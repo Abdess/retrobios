@@ -107,7 +107,10 @@ def find_missing(config: dict, db: dict) -> list[dict]:
                 "destination": file_entry.get("destination", name),
             })
     for u in result["undeclared_files"]:
-        if u.get("in_repo") or not u.get("required"):
+        # A file installed with its emulator is not an acquisition target:
+        # verify leaves it out of the missing count, and bundled_only.py
+        # --strict refuses a copy that only bundled entries reach.
+        if u.get("in_repo") or not u.get("required") or u.get("bundled"):
             continue
         missing.append({
             "name": u["name"],

@@ -424,6 +424,67 @@ class ASystemPackHoldsThatSystem(unittest.TestCase):
         self.assertEqual(report["total_files"], 2)
 
 
+class ATreeHoldsAPathForAnotherProfile(unittest.TestCase):
+    """--system colecovision --standalone: bluemsx keeps no file of the
+    system but its Machines/ tree is packed, and holds msx-emu's coleco.rom
+    path. verify skipped the tree of a profile left without files and
+    credited msx-emu's copy the pack never wrote."""
+
+    def test_report_and_pack_agree(self):
+        import hashlib
+        import io
+        import shutil
+        from contextlib import redirect_stdout
+
+        import yaml
+        from verify import verify_emulator
+
+        common._emulator_profiles_cache.clear()
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        previous = os.getcwd()
+        os.chdir(root)
+        self.addCleanup(os.chdir, previous)
+        data = b"coleco" * 4
+        sha1 = hashlib.sha1(data).hexdigest()
+        rel = "bios/Coleco/ColecoVision/coleco.rom"
+        Path(rel).parent.mkdir(parents=True)
+        Path(rel).write_bytes(data)
+        tree = Path("data/tree/Machines/COL")
+        tree.mkdir(parents=True)
+        (tree / "coleco.rom").write_bytes(data)
+        db = {"files": {sha1: {"path": rel, "name": "coleco.rom", "size": len(data),
+                               "md5": hashlib.md5(data).hexdigest(), "crc32": ""}},
+              "indexes": {"by_md5": {}, "by_name": {"coleco.rom": [sha1]},
+                          "by_crc32": {}, "by_path_suffix": {}}}
+        Path("platforms").mkdir()
+        Path("platforms/_data_dirs.yml").write_text(yaml.safe_dump(
+            {"data_directories": {"tree": {"local_cache": "data/tree"}}}))
+        Path("emulators").mkdir()
+        Path("emulators/atree.yml").write_text(yaml.safe_dump({
+            "emulator": "ATree", "type": "libretro", "cores": ["atree"],
+            "systems": ["colecovision", "msx"],
+            "data_directories": [{"ref": "tree"}],
+            "files": [{"name": "msx.rom", "system": "msx"}],
+        }))
+        Path("emulators/msxemu.yml").write_text(yaml.safe_dump({
+            "emulator": "MsxEmu", "type": "libretro", "cores": ["msxemu"],
+            "systems": ["colecovision"],
+            "files": [{"name": "coleco.rom", "path": "Machines/COL/coleco.rom"}],
+        }))
+        names = ["atree", "msxemu"]
+        report = verify_emulator(names, "emulators", db, platforms_dir="platforms",
+                                 system_ids=["colecovision"])
+        record = builder.PackRecord()
+        with redirect_stdout(io.StringIO()):
+            builder.generate_emulator_pack(
+                names, "emulators", db, "bios", "", offline=True,
+                platforms_dir="platforms", record=record, system_ids=["colecovision"],
+            )
+        self.assertEqual(sorted(report["pack_destinations"]), sorted(record.files))
+
+
 class ListingsKeepTheirColumns(unittest.TestCase):
     """--list-systems and --list-emulators started their last column at a
     position that moved with the file count and the profile type."""

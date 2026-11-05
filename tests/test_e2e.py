@@ -17,7 +17,9 @@ Covers:
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
+import io
 import os
 import shutil
 import sys
@@ -1444,10 +1446,13 @@ class TestE2E(unittest.TestCase):
         with self.assertRaises(SystemExit):
             verify_emulator(["test_game"], self.emulators_dir, self.db, standalone=True)
 
-    def test_93_verify_emulator_alias_rejected(self):
-        """Alias profile produces error with redirect message."""
-        with self.assertRaises(SystemExit):
-            verify_emulator(["test_alias"], self.emulators_dir, self.db)
+    def test_93_verify_emulator_alias_selects_its_profile(self):
+        """An alias verifies the profile it is an alias of."""
+        with contextlib.redirect_stderr(io.StringIO()):
+            via_alias = verify_emulator(["test_alias"], self.emulators_dir, self.db)
+        direct = verify_emulator(["test_emu"], self.emulators_dir, self.db)
+        self.assertEqual(via_alias["emulators"], direct["emulators"])
+        self.assertEqual(via_alias["details"], direct["details"])
 
     def test_94_verify_emulator_launcher_rejected(self):
         """Launcher profile produces error."""

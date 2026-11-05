@@ -6,6 +6,13 @@ upstream: "https://github.com/snes9xgit/snes9x"
 profiled_date: "2026-10-17"
 source_commit: "691e47b40fb38fa522a5471462344a2f0206b7a8"
 pin_frozen: "ROCKNIX 20261001 builds this revision. Later commits on shanytc/snes9x rework the Super Famicom Box loader and are not part of that build."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/libretro/supersnes9x-lr/package.mk"
+    variable: PKG_VERSION
+    value: "691e47b40fb38fa522a5471462344a2f0206b7a8"
 core_version: "1.63.29"
 version_basis:
   kind: file

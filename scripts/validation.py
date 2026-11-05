@@ -8,6 +8,7 @@ truth data for reporting.
 from __future__ import annotations
 
 import os
+import re
 import zipfile
 from collections.abc import Callable, Iterator, Mapping, Sequence
 
@@ -161,6 +162,11 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
     Raises ValueError if two profiles declare conflicting values.
     """
     index: dict[str, dict] = {}
+    # A slot where one version is taken without any check (Raze's "BLOOD:
+    # Unknown Version", which holds the shareware RFF) accepts every copy for
+    # that core: its validated siblings are alternatives, not requirements.
+    unchecked: set[tuple[str, str, str]] = set()
+    checked: set[tuple[str, str, str]] = set()
     for emu_name, profile in profiles.items():
         if profile.get("type") in ("launcher", "alias"):
             continue
@@ -169,8 +175,11 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             if not fname:
                 continue
             checks = _parse_validation(f.get("validation"))
+            slot = (fname, emu_name, f.get("path") or fname)
             if not checks:
+                unchecked.add(slot)
                 continue
+            checked.add(slot)
             if fname not in index:
                 index[fname] = {
                     "checks": set(),
@@ -276,6 +285,8 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     existing["source_ref"] = pe_entry["source_ref"]
             else:
                 pe[emu_name] = pe_entry
+    for fname, emu_name, _path in sorted(checked & unchecked):
+        index[fname]["rules"].append(_entry_rule(emu_name, {}, set()))
     # Convert sets to sorted tuples/lists for determinism
     for v in index.values():
         v["checks"] = sorted(v["checks"])
@@ -324,6 +335,23 @@ def _emulators_for_check(
     return sorted(result)
 
 
+_REASON = re.compile(r"^(\w+ mismatch): got (\S+), accepted \[(.*)\]$")
+
+
+def _merged_reason(reasons: list[str]) -> str:
+    """One reason for every entry of a core that turned the copy away.
+
+    Raze lists three BLOOD.RFF sizes and the message named the first one
+    alone. Reasons of one kind are merged into a single accepted list.
+    """
+    parsed = [_REASON.match(reason) for reason in reasons]
+    if all(parsed) and len({(m.group(1), m.group(2)) for m in parsed}) == 1:
+        accepted = sorted({v for m in parsed for v in m.group(3).split(",") if v},
+                          key=lambda v: (len(v), v))
+        return f"{parsed[0].group(1)}: got {parsed[0].group(2)}, accepted [{','.join(accepted)}]"
+    return reasons[0]
+
+
 def check_file_validation(
     local_path: str,
     filename: str,
@@ -363,7 +391,7 @@ def check_file_validation(
                 for rule in rules
             ]
             if all(reasons):
-                failures[emu] = reasons[0]
+                failures[emu] = _merged_reason(reasons)
         if not failures:
             return None
         first = sorted(failures)[0]

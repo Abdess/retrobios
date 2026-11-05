@@ -5,6 +5,13 @@ source: "https://github.com/stenzek/duckstation"
 profiled_date: "2026-10-22"
 source_commit: "56ac3d6c324ec4520dac433b071ecab6227fb459"
 pin_frozen: "Batocera builds this revision of 4 August 2023 as duckstation-legacy, its package marked not to be bumped, and KNULLI ships the same package."
+pin_build:
+  - platform: batocera
+    repo: "https://github.com/batocera-linux/batocera.linux"
+    revision: "batocera-43.1"
+    path: "package/batocera/emulators/duckstation-legacy/duckstation-legacy.mk"
+    variable: DUCKSTATION_LEGACY_VERSION
+    value: "56ac3d6c324ec4520dac433b071ecab6227fb459"
 core_version: "0.1-5612-g56ac3d6"
 version_basis:
   kind: tag

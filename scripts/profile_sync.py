@@ -1257,6 +1257,14 @@ def _follow_fork_base(
         base = upstream.fork_base(
             view.repo, view.head, source.repo, source.head, cache_dir, offline
         )
+        if base and base != view.pin:
+            # A pin newer than the merge base names code the port does not
+            # carry: the upstream is a build of its own, the Qt melonDS or the
+            # EasyRPG Player a standalone + libretro profile documents, and
+            # its HEAD stays the reference. melonds read 825 commits back.
+            moved = upstream.ancestry(view.repo, base, view.pin, cache_dir, offline)
+            if moved and moved[0] > 0 and moved[1] == 0:
+                base = None
         followed.append(
             replace(view, head=base, origin=f"{view.origin}, fork base of {source.repo.slug}")
             if base else view
@@ -2627,6 +2635,7 @@ def tree_diff(result: CompareResult, ref_dirs: set[str]) -> list[str]:
 
 
 DRIFT_WEIGHTS = {"GONE": 40, "CHANGED": 30, "AMBIGUOUS": 15, "SHIFTED": 1}
+PIN_WEIGHT = 50
 
 
 def drift_score(
@@ -2644,6 +2653,10 @@ def drift_score(
     if version is not None and not version.tag_matches_declared:
         if version.latest_release and version.latest_release != version.declared:
             score += 10
+    # A pin off its branch or a repository answering under another name is
+    # set again before any ref can be read, so each outranks a GONE ref:
+    # pcem ranked last at 0 with an orphaned upstream_commit.
+    score += PIN_WEIGHT * (len(report.orphaned) + len(report.moved_repos))
     score += min(commits, 20) // 4
     return score
 
@@ -4154,16 +4167,22 @@ def _refuse_dirty_tree(emulators_dir: str, names: list[str]) -> None:
         print(f"{e}. Pass --force to write anyway.", file=sys.stderr)
         raise SystemExit(1) from e
     if dirty:
+        # Another session may own the change, so the refusal names the files:
+        # --force writes over them.
+        one = len(dirty) == 1
         print(
-            f"{emulators_dir} carries uncommitted changes to the selected "
-            "profiles. Commit them first or pass --force.",
+            f"{', '.join(dirty)} {'has' if one else 'have'} uncommitted changes: "
+            f"commit {'it' if one else 'them'} or pass --force, which writes over "
+            f"{'it' if one else 'them'}.",
             file=sys.stderr,
         )
         raise SystemExit(1)
 
 
-def emulators_dir_is_dirty(emulators_dir: str, names: list[str] | None = None) -> bool:
-    """True when the profile directory carries uncommitted changes.
+def emulators_dir_is_dirty(emulators_dir: str, names: list[str] | None = None) -> list[str]:
+    """The files of the profile directory that carry uncommitted changes.
+
+    Paths read as the status prints them, from the repository root.
 
     ``names`` narrows the question to those profiles. Git is asked from
     inside the directory, so a profile tree that lives in another
@@ -4181,7 +4200,11 @@ def emulators_dir_is_dirty(emulators_dir: str, names: list[str] | None = None) -
         raise RuntimeError(
             f"cannot read the git status of {emulators_dir}: {result.stderr.strip()}"
         )
-    return bool(result.stdout.strip())
+    return sorted(
+        line[3:].split(" -> ")[-1].strip('"')
+        for line in result.stdout.splitlines()
+        if line.strip()
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -4414,7 +4437,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
             )
             raise SystemExit(
                 f"ERROR: unknown profile {', '.join(unknown)}. "
-                + suggest_names(unknown, listed, "verify.py --list-emulators")
+                + suggest_names(unknown, listed, "python scripts/verify.py --list-emulators")
             )
         return {name: profiles[name] for name in dict.fromkeys(names)}
 
@@ -4451,7 +4474,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
         if args.system:
             # Suggested from the spellings the named listing prints.
             systems = sorted(spelling for spelling, _ in system_index(profiles).values())
-            hint = " " + suggest_names([args.system], systems, "verify.py --list-systems")
+            hint = " " + suggest_names([args.system], systems, "python scripts/verify.py --list-systems")
         elif args.type_:
             kinds = sorted({str(p.get("type")) for p in profiles.values() if p.get("type")})
             hint = f" Types: {', '.join(kinds)}."
@@ -4604,8 +4627,14 @@ def _apply_writes(
             # The guard above read the prose under the pins the profile held.
             # A bump that moves upstream_commit can leave prose the report
             # judged in the fork under the new upstream pin (dolphin-mmjr2,
-            # hatari, xenios): read it again on what was written.
-            left = realign_prose(path, args.cache_dir, args.offline, dry_run=True)
+            # hatari, xenios): read it again on what was written. It reads
+            # the profile's own history, so it runs on the real path, and a
+            # read that fails (offline, rate limit) puts the profile back.
+            try:
+                left = realign_prose(path, args.cache_dir, args.offline, dry_run=True)
+            except BaseException:
+                path.write_bytes(original)
+                raise
             if moved and left:
                 path.write_bytes(original)
                 print(

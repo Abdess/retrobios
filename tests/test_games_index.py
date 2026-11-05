@@ -176,6 +176,47 @@ class GamesIndexFixture(unittest.TestCase):
         self.assertTrue(any("catalog" in f for f in failures))
 
 
+class CheckSaysWhatDiffers(unittest.TestCase):
+    """--check printed STALE and a path after 120 lines of coverage: the
+    reader had to diff single-line JSON of 550 KB by hand to find that a
+    manifest had gained one file."""
+
+    def test_an_added_file_is_named(self) -> None:
+        old = json.dumps({"files": [["a.bin", 1, "bios"]], "version": 1})
+        new = json.dumps({"files": [["a.bin", 1, "bios"], ["ide12.rom", 16384, "bios"]],
+                          "version": 1})
+        lines = gi.describe_change(old, new)
+        self.assertEqual(len(lines), 1)
+        self.assertIn("1 added", lines[0])
+        self.assertIn("ide12.rom", lines[0])
+
+    def test_new_and_unreadable_documents(self) -> None:
+        self.assertEqual(gi.describe_change(None, "{}"), ["not written yet"])
+        self.assertIn("not valid JSON", gi.describe_change("{", "{}")[0])
+
+    def test_check_names_the_command_and_skips_coverage(self) -> None:
+        import contextlib
+        import io
+        from unittest import mock
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            target = out / "index.json"
+            target.write_text(json.dumps({"files": []}), encoding="utf-8")
+            files = {target: json.dumps({"files": [["x.rom", 2, "bios"]]})}
+            coverage = {"setups": {}, "systems": {}, "arcade": []}
+            stdout, stderr = io.StringIO(), io.StringIO()
+            argv = ["generate_games_index.py", "--check", "--output-dir", tmp]
+            with mock.patch.object(gi, "render", return_value=(files, coverage)), \
+                    mock.patch.object(sys, "argv", argv), \
+                    contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                code = gi.main()
+        self.assertEqual(code, 1)
+        self.assertEqual(stdout.getvalue(), "")
+        self.assertIn("files: 1 added", stderr.getvalue())
+        self.assertIn("python scripts/generate_games_index.py", stderr.getvalue())
+
+
 class CommittedData(unittest.TestCase):
     """The data the repository publishes."""
 

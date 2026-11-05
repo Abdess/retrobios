@@ -6,6 +6,13 @@ upstream: "https://github.com/skmp/reicast-emulator"
 profiled_date: "2026-10-17"
 source_commit: "ad61f95dd6b4c6218846a25de6194550311a5d28"
 pin_frozen: "Recalbox 10.1.1 builds this revision (package/reicast/reicast.mk REICAST_VERSION). Later commits on reicast-emulator are not part of that build."
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/reicast/reicast.mk"
+    variable: REICAST_VERSION
+    value: "ad61f95dd6b4c6218846a25de6194550311a5d28"
 core_version: "r8.1-243-gad61f95"
 version_basis:
   kind: tag

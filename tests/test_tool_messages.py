@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 import io
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -82,6 +83,22 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
         self.assertIn("lists all 31", message)
         self.assertNotIn("board-0", message)
 
+
+
+class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
+    """`verify --all --target swich` ended on "no platform has it" after 17
+    INFO lines, two of which held the suggestion."""
+
+    def test_the_refusal_suggests_and_names_the_platforms(self):
+        platforms = common.list_registered_platforms(str(REPO_ROOT / "platforms"))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), self.assertRaises(ValueError) as caught:
+            common.build_target_cores_cache(
+                platforms, "swich", str(REPO_ROOT / "platforms"), is_all=True
+            )
+        self.assertIn("Did you mean: switch (", str(caught.exception))
+        self.assertIn("retroarch", str(caught.exception))
+        self.assertEqual(out.getvalue(), "")
 
 
 class AMistypedDataKeyGetsTheClosestName(unittest.TestCase):
@@ -633,6 +650,46 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
             headers = upstream._headers("https://gitlab.com/api/v4/projects/1")
         self.assertNotIn("Authorization", headers)
         run.assert_not_called()
+
+
+class CitedCommandsRunWhenPasted(unittest.TestCase):
+    """check_freshness wrote "run python scripts/generate_truth.py" on one
+    line and "export_native.py --platform bizhawk writes it again" two lines
+    below: pasted from the repository root, the second is command not found.
+    A message that hands the reader a command spells the whole command."""
+
+    CITED = re.compile(r"(?:^|run |with |then |, )([a-z_]+\.py) --[a-z]")
+
+    def test_no_message_cites_a_bare_script(self):
+        import ast  # noqa: PLC0415
+
+        offenders = []
+        for path in sorted((REPO_ROOT / "scripts").rglob("*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            docs = {
+                id(node.body[0].value)
+                for node in ast.walk(tree)
+                if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef,
+                                     ast.AsyncFunctionDef))
+                and node.body and isinstance(node.body[0], ast.Expr)
+            }
+            offenders += [
+                f"{path.relative_to(REPO_ROOT)}:{node.lineno} {node.value.strip()[:60]}"
+                for node in ast.walk(tree)
+                if isinstance(node, ast.Constant) and isinstance(node.value, str)
+                and id(node) not in docs and self.CITED.search(node.value)
+            ]
+        self.assertEqual(offenders, [])
+
+    def test_the_target_hint_is_a_whole_command(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            targets = Path(tmp) / "targets"
+            targets.mkdir()
+            (targets / "p.yml").write_text("targets:\n  switch:\n    cores: [a]\n")
+            with self.assertRaises(ValueError) as caught:
+                common.load_target_config("p", "swich", tmp)
+        self.assertIn("python scripts/verify.py --platform p --list-targets",
+                      str(caught.exception))
 
 
 if __name__ == "__main__":

@@ -1,3 +1,14 @@
+# Installing the project installs its dependencies and nothing else:
+# `pip install -e ".[dev]"` gives a contributor every tool the tests use.
+# scripts/ and tests/ run from the checkout, so no package is built from them.
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = []
+py-modules = []
+
 [project]
 name = "retrobios"
 version = "1.0.0"

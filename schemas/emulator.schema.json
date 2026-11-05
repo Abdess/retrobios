@@ -11,6 +11,19 @@
   ],
   "allOf": [
     {
+      "comment": "A build reference documents why a pin is held: it never stands without the pin_frozen that says so.",
+      "if": {
+        "required": [
+          "pin_build"
+        ]
+      },
+      "then": {
+        "required": [
+          "pin_frozen"
+        ]
+      }
+    },
+    {
       "comment": "An alias profile points at another profile and carries no files of its own.",
       "if": {
         "properties": {
@@ -990,6 +1003,43 @@
     "pin_frozen": {
       "type": "string",
       "description": "Why source_commit is held on purpose rather than followed. The profile is then judged against its own revision, like one pinned to a superseded tag: comparing it to HEAD says nothing and recaling would repoint its refs at code the build it documents never had."
+    },
+    "pin_build": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The build file each platform that ships a pin_frozen build reads its revision from, so check_freshness can read it again where the platform's YAML now stands and say when the platform builds another revision.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["platform", "repo", "revision", "path", "variable", "value"],
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Registry slug of the platform (platforms/<platform>.yml)."
+          },
+          "repo": {
+            "type": "string",
+            "format": "uri",
+            "description": "The platform's own repository, the one its YAML is scraped from."
+          },
+          "revision": {
+            "type": "string",
+            "description": "Tag or commit of that repository the build file was read at."
+          },
+          "path": {
+            "type": "string",
+            "description": "The build file, from the repository root (package.mk, a Buildroot .mk, a RetroPie scriptmodule)."
+          },
+          "variable": {
+            "type": "string",
+            "description": "The variable the file sets to the revision it builds (PKG_VERSION, <PKG>_VERSION, rp_module_repo)."
+          },
+          "value": {
+            "type": "string",
+            "description": "What the variable held at revision, quotes and trailing comment removed."
+          }
+        }
+      }
     },
     "pin_follows": {
       "type": "string",

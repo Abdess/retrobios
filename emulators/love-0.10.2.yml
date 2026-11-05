@@ -6,6 +6,13 @@ upstream: "https://github.com/love2d/love"
 profiled_date: "2026-10-20"
 source_commit: "9e139779956ddba89333eece8104bd7b1b4ff2e7"
 pin_frozen: "RetroPie, the only platform that ships it, builds the 0.10.2 tag at this commit (RetroPie scriptmodules/ports/love-0.10.2.sh:16). Later releases are packaged separately as love."
+pin_build:
+  - platform: retropie
+    repo: "https://github.com/RetroPie/RetroPie-Setup"
+    revision: "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+    path: "scriptmodules/ports/love-0.10.2.sh"
+    variable: rp_module_repo
+    value: "git https://github.com/love2d/love 0.10.2"
 core_version: "0.10.2"
 version_basis:
   kind: tag

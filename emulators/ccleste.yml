@@ -5,6 +5,13 @@ source: "https://github.com/lemon32767/ccleste"
 profiled_date: "2026-10-22"
 source_commit: "261d96f15af430b8111abc7a5250229246654f52"
 pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/ccleste/package.mk:5 at v4.8). Later commits are not part of that build."
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emuelec-ports/ccleste/package.mk"
+    variable: PKG_VERSION
+    value: "261d96f15af430b8111abc7a5250229246654f52"
 core_version: "v1.4.0"
 version_basis:
   kind: tag

@@ -22,6 +22,7 @@ import json
 import sys
 from pathlib import Path
 
+from artifacts import write_text_atomic
 from build_port import (
     BATOCERA_ZIP,
     MUOS_APP,
@@ -121,7 +122,7 @@ def main(argv: list[str] | None = None) -> int:
               "python scripts/generate_launcher_index.py", file=sys.stderr)
         return 1
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(text, encoding="utf-8")
+    write_text_atomic(str(args.output), text)
     print(f"Wrote {args.output}")
     return 0
 
