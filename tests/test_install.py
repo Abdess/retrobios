@@ -4020,6 +4020,19 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         self.assertNotIn("Unknown platform", err.getvalue())
         self.assertIn("--platform retroarch --dest FOLDER", err.getvalue())
 
+    def test_a_frontend_without_a_bios_folder_says_what_to_do(self):
+        """ES-DE, LaunchBox and Android have no BIOS folder: each emulator
+        reads its own, and --platform es-de was "Unknown platform"."""
+        for typed, said in (("es-de", "ES-DE"), ("esde", "ES-DE"),
+                            ("launchbox", "LaunchBox"), ("android", "Android")):
+            err = io.StringIO()
+            with self.subTest(typed=typed), contextlib.redirect_stderr(err), \
+                    self.assertRaises(SystemExit) as raised:
+                install.normalize_platform(typed)
+            self.assertEqual(raised.exception.code, 2)
+            self.assertIn(f"{said} has no BIOS folder of its own: run again without "
+                          "--platform", err.getvalue())
+
     def test_a_system_name_is_suggested(self):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
@@ -4028,7 +4041,8 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         # The distinct names --list-platforms prints: Batocera is both a
         # platform and a system it recognises.
         names = [*install.AVAILABLE_PLATFORMS,
-                 *(line.split(":")[0] for line in install._system_lines())]
+                 *(line.split(":")[0] for line in install._system_lines()),
+                 *install._NO_BIOS_FOLDER]
         listed = len({install._name_key(name) for name in names})
         self.assertIn(f"lists all {listed}.", err.getvalue())
 

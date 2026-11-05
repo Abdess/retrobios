@@ -3079,6 +3079,12 @@ def refuse_name(platform: str, *lines: str) -> NoReturn:
     sys.exit(2)
 
 
+# Frontends and systems that keep no BIOS folder of their own: each
+# emulator they start reads its own, which a run without --platform finds.
+# --platform es-de was "Unknown platform", the answer left unsaid.
+_NO_BIOS_FOLDER = ("ES-DE", "LaunchBox", "Android")
+
+
 def normalize_platform(name: str, say: bool = True) -> str:
     """Return the canonical platform id for user-supplied input.
 
@@ -3098,6 +3104,11 @@ def normalize_platform(name: str, say: bool = True) -> str:
                 print(f"  {rule.name} gets the {display_name(rule.manifest)} file list: "
                       f"--platform {rule.manifest}.")
             return rule.manifest
+    for frontend in _NO_BIOS_FOLDER:
+        if key and key == _name_key(frontend):
+            refuse_name(name.strip(), f"{frontend} has no BIOS folder of its own: run again "
+                        "without --platform, and the installer fills the folder of each "
+                        "emulator it finds here.")
     # --list-platforms prints TrimUI with why it gets no folder, and naming
     # it answered "Unknown platform".
     for rule in _EMBEDDED_RULES:
@@ -3110,7 +3121,8 @@ def normalize_platform(name: str, say: bool = True) -> str:
     # and the count is the one the listing shows.
     known = list(AVAILABLE_PLATFORMS) + list(dict.fromkeys(
         rule.name for rule in _EMBEDDED_RULES
-        if _name_key(rule.name) not in {_name_key(plat) for plat in AVAILABLE_PLATFORMS}))
+        if _name_key(rule.name) not in {_name_key(plat) for plat in AVAILABLE_PLATFORMS}
+    )) + list(_NO_BIOS_FOLDER)
     refuse_name(name.strip(), f"Unknown platform '{name.strip()}'. "
                 + did_you_mean([name], known, "--list-platforms"))
 
@@ -14490,6 +14502,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
               "(--platform takes either name):")
         for line in _system_lines():
             print(f"  {line}")
+        print("\nNo BIOS folder of their own, each emulator reading its own (run without "
+              "--platform):")
+        print(f"  {', '.join(_NO_BIOS_FOLDER)}")
         detected = detect_platforms(os_type)
         if detected:
             print("\nDetected on this system:")
