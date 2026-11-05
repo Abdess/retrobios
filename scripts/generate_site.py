@@ -2191,9 +2191,11 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "when one is known, the `system_name` the site gives its system. "
         "[Find or check a file](files/index.md) reads it.",
         "",
-        "In a browser, the SHA1 of a file the reader picks finds its records. Web "
-        "Crypto has no MD5, and none is needed: a setup that lists a file by MD5 "
-        "or CRC32 is filed under the SHA1 of the collection file it names too.",
+        "In a browser, the SHA1 of a file the reader picks finds its records when "
+        "the collection holds that file. A list naming a file the collection lacks "
+        "is filed under its MD5 or CRC32 alone, and Web Crypto has no MD5: "
+        "that page computes MD5 and CRC32 in script and looks "
+        "up all four.",
         "",
         "```js",
         "// The records of the file a reader picked, by its SHA1.",

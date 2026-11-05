@@ -696,6 +696,23 @@ class ManifestsArePublished(unittest.TestCase):
         self.assertLess(page.index("## Stable JSON endpoints"), page.index("The DAT is Logiqx XML"))
 
 
+class TheLookupRecipeSaysWhatASha1Misses(unittest.TestCase):
+    """The page said a SHA1 lookup was enough, "a setup that lists a file
+    by MD5 or CRC32 is filed under the SHA1 of the collection file it names
+    too". A record whose value no collection file answers has no SHA1: 702
+    platform MD5s were out of the recipe's reach."""
+
+    def test_the_page_and_the_records_agree(self):
+        record = {"layer": "platform", "algorithm": "md5", "value": "0" * 32,
+                  "name": "dmg_boot.bin", "owner": "recalbox"}
+        self.assertEqual(generate_site._held_under_every_hash([record], {}, {}), [])
+        self.assertNotIn("sha1", record)
+        page = " ".join(generate_site.generate_data_page([]).split())
+        self.assertNotIn("none is needed", page)
+        self.assertIn("A list naming a file the collection lacks is filed under its MD5 "
+                      "or CRC32 alone", page)
+
+
 class AnIdLeadsToItsData(unittest.TestCase):
     """8.6: a system by its id, a core by the name the buildbot gives it."""
 
