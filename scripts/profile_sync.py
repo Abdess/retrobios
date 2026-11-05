@@ -2627,6 +2627,7 @@ def tree_diff(result: CompareResult, ref_dirs: set[str]) -> list[str]:
 
 
 DRIFT_WEIGHTS = {"GONE": 40, "CHANGED": 30, "AMBIGUOUS": 15, "SHIFTED": 1}
+PIN_WEIGHT = 50
 
 
 def drift_score(
@@ -2644,6 +2645,10 @@ def drift_score(
     if version is not None and not version.tag_matches_declared:
         if version.latest_release and version.latest_release != version.declared:
             score += 10
+    # A pin off its branch or a repository answering under another name is
+    # set again before any ref can be read, so each outranks a GONE ref:
+    # pcem ranked last at 0 with an orphaned upstream_commit.
+    score += PIN_WEIGHT * (len(report.orphaned) + len(report.moved_repos))
     score += min(commits, 20) // 4
     return score
 

@@ -3812,6 +3812,18 @@ class TestDriftScore(unittest.TestCase):
         report = ProfileReport(name="a", entries=[], counts={"ANCHORED": 5})
         self.assertEqual(drift_score(report, None, 0), 0)
 
+    def test_a_pin_to_set_again_outranks_a_gone_ref(self):
+        """pcem ranked last at 0 with "1 to review, 1 orphaned pin": its
+        upstream_commit had left every branch of a force-pushed repository."""
+        gone = ProfileReport(name="a", entries=[], counts={"GONE": 1})
+        orphaned = ProfileReport(name="pcem", entries=[], counts={},
+                                 orphaned=["upstream_commit 25b54e3f"])
+        moved = ProfileReport(name="m", entries=[], counts={},
+                              moved_repos=["a/b answers as c/b"])
+        for report in (orphaned, moved):
+            with self.subTest(name=report.name):
+                self.assertGreater(drift_score(report, None, 0), drift_score(gone, None, 0))
+
 
 class TestCollectCitations(unittest.TestCase):
     def test_files_refs_in_document_order(self):
