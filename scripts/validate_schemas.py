@@ -39,6 +39,22 @@ def _errors(validator: Draft202012Validator, data: object, label: str) -> list[s
     return out
 
 
+_SOURCES: dict[tuple[Path, int, int], object] = {}
+
+
+def _load_source(path: Path) -> object:
+    """A source YAML, parsed once per run whichever check reads it: the
+    schema pass, the data directory refs and the layout check each parsed
+    all 649 profiles again. Keyed by size and mtime too, so a file written
+    again in the same process is read again."""
+    stat = path.stat()
+    key = (path, stat.st_mtime_ns, stat.st_size)
+    if key not in _SOURCES:
+        with path.open(encoding="utf-8") as handle:
+            _SOURCES[key] = yaml_load(handle)
+    return _SOURCES[key]
+
+
 def _validate_yaml_directory(
     directory: Path,
     schema_name: str,
@@ -51,8 +67,7 @@ def _validate_yaml_directory(
         if skip_private and path.name.startswith("_"):
             continue
         try:
-            with path.open(encoding="utf-8") as handle:
-                data = yaml_load(handle)
+            data = _load_source(path)
         except (OSError, yaml.YAMLError) as exc:
             out.append(f"{path.relative_to(ROOT)}: {exc}")
             continue
@@ -273,8 +288,7 @@ def _unknown_data_dir_refs() -> list[str]:
         for path in source_yaml_paths(directory):
             if path.name.startswith("_"):
                 continue
-            with path.open(encoding="utf-8") as handle:
-                document = yaml_load(handle) or {}
+            document = _load_source(path) or {}
             systems = document.get("systems")
             holders = [document, *(systems.values() if isinstance(systems, dict) else [])]
             for holder in holders:
@@ -299,8 +313,7 @@ def _repository_layout_in_profiles() -> list[str]:
     """
     out: list[str] = []
     for path in source_yaml_paths(ROOT / "emulators"):
-        with path.open(encoding="utf-8") as handle:
-            document = yaml_load(handle) or {}
+        document = _load_source(path) or {}
         for entry in document.get("files") or []:
             if not isinstance(entry, dict):
                 continue
