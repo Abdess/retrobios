@@ -244,10 +244,21 @@ def _tooltip_line(line: str, pattern: re.Pattern, pending: dict[str, str]) -> st
     return "".join(out)
 
 
+_NAME_BEFORE = re.compile(r"(?:/|\b[A-Z][\w'-]*[ \t]+)$")
+
+
+def _in_proper_name(term: str, before: str) -> bool:
+    """A capitalised term after a capitalised word or a slash is part of a
+    name: Free Unix Spectrum Emulator, Windows Terminal, Documents/Dolphin
+    Emulator. An acronym (BIOS, ZIP) is the term wherever it stands."""
+    first = term.split()[0]
+    return first[:1].isupper() and not first.isupper() and bool(_NAME_BEFORE.search(before))
+
+
 def _tooltip_text(text: str, pattern: re.Pattern, pending: dict[str, str]) -> str:
     def swap(match: re.Match) -> str:
         term = match.group(1)
-        if term not in pending:
+        if term not in pending or _in_proper_name(term, text[:match.start()]):
             return term
         definition = pending.pop(term)
         return f'<abbr class="rb-term" title="{html.escape(definition)}">{term}</abbr>'

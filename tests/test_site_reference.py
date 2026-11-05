@@ -422,7 +422,11 @@ class BuiltBatoceraPage(unittest.TestCase):
         # PlayStation's list is long enough to sit on a page of its own.
         pages = [main] + [p.read_text(encoding="utf-8") for p in
                           (DIST / "platforms").glob("batocera-sony-playstation*/index.html")]
-        html = "".join(pages)
+        # Read as a browser shows it: a page with no tab bar is plain
+        # Markdown, which keeps the entity a name's underscore is written as.
+        import html as _html
+
+        html = _html.unescape("".join(pages))
         for text in ("Served by:", "scph1001_v20.bin", "https://github.com/stenzek/duckstation/blob/"):
             with self.subTest(text=text):
                 self.assertTrue(text in html)
@@ -694,6 +698,23 @@ class ManifestsArePublished(unittest.TestCase):
         self.assertIn("## Hosting, rate limits and caching", page)
         # The endpoints first, the DAT below them.
         self.assertLess(page.index("## Stable JSON endpoints"), page.index("The DAT is Logiqx XML"))
+
+
+class TheLookupRecipeSaysWhatASha1Misses(unittest.TestCase):
+    """The page said a SHA1 lookup was enough, "a setup that lists a file
+    by MD5 or CRC32 is filed under the SHA1 of the collection file it names
+    too". A record whose value no collection file answers has no SHA1: 702
+    platform MD5s were out of the recipe's reach."""
+
+    def test_the_page_and_the_records_agree(self):
+        record = {"layer": "platform", "algorithm": "md5", "value": "0" * 32,
+                  "name": "dmg_boot.bin", "owner": "recalbox"}
+        self.assertEqual(generate_site._held_under_every_hash([record], {}, {}), [])
+        self.assertNotIn("sha1", record)
+        page = " ".join(generate_site.generate_data_page([]).split())
+        self.assertNotIn("none is needed", page)
+        self.assertIn("A list naming a file the collection lacks is filed under its MD5 "
+                      "or CRC32 alone", page)
 
 
 class AnIdLeadsToItsData(unittest.TestCase):

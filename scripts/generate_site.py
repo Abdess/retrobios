@@ -63,7 +63,7 @@ from common import (
 )
 from artifacts import ArtifactLockBusy, artifact_lock
 from artifacts import json_text as _json_text
-from cross_reference import FileConsumers, held_copy
+from cross_reference import FileConsumers, entry_target, held_copy
 from nativemode import check_label, digest_algorithm, reads_file_contents
 
 
@@ -679,9 +679,13 @@ def release_line(platform_name: str, record: dict) -> list[str]:
     return lines
 
 
-# What a reader on another version of the setup does with the pack. Our data
-# says which list the pack was made from, not what an older list lacks.
-OTHER_VERSION = "Other version? Run `--check` after copying."
+def other_version(platform_name: str, prefix: str = "../") -> str:
+    """What a reader on another version of the setup does with the pack.
+    Our data says which list the pack was made from, not what an older list
+    lacks. A bare `--check` was no command to run for someone holding a ZIP:
+    the line links the setup page's commands that check."""
+    target = f"{prefix}platforms/{platform_name}.md#how-to-check"
+    return f"Other version? [Check the files]({target}) after copying."
 
 
 def setup_version(platform_name: str, record: dict | None = None) -> str:
@@ -700,13 +704,15 @@ def setup_version(platform_name: str, record: dict | None = None) -> str:
     return f"{config.get('platform', platform_name)} {version.removeprefix('v')}"
 
 
-def version_line(platform_name: str, record: dict, named: bool = False) -> str:
+def version_line(platform_name: str, record: dict, named: bool = False,
+                 prefix: str = "../") -> str:
     """The version the pack fits, and what to do on another. *named* when
     the release line already named the pack's version."""
     made_from = setup_version(platform_name, record)
+    other = other_version(platform_name, prefix)
     if named or not made_from:
-        return OTHER_VERSION
-    return f"Made for {made_from}. {OTHER_VERSION}"
+        return other
+    return f"Made for {made_from}. {other}"
 
 
 # Why a setup has no ZIP, answered once on the FAQ.
@@ -793,7 +799,8 @@ def _pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
     )
     released = release_line(platform_name, record)
     return "\n\n".join([buttons, *released,
-                        version_line(platform_name, record, named=len(released) > 1)])
+                        version_line(platform_name, record, named=len(released) > 1,
+                                     prefix=prefix)])
 
 
 def generate_get_page(platform_name: str) -> str:
@@ -2191,9 +2198,11 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "when one is known, the `system_name` the site gives its system. "
         "[Find or check a file](files/index.md) reads it.",
         "",
-        "In a browser, the SHA1 of a file the reader picks finds its records. Web "
-        "Crypto has no MD5, and none is needed: a setup that lists a file by MD5 "
-        "or CRC32 is filed under the SHA1 of the collection file it names too.",
+        "In a browser, the SHA1 of a file the reader picks finds its records when "
+        "the collection holds that file. A list naming a file the collection lacks "
+        "is filed under its MD5 or CRC32 alone, and Web Crypto has no MD5: "
+        "that page computes MD5 and CRC32 in script and looks "
+        "up all four.",
         "",
         "```js",
         "// The records of the file a reader picked, by its SHA1.",
@@ -2443,7 +2452,7 @@ def _browser_title(relative: Path, title: str) -> str:
     # The words a web search for a console or an emulator types: "dreamcast
     # bios", "duckstation bios". The h1 and the sidebar keep the name.
     if key.startswith("emulators/"):
-        has_files = PAGE_DATA.get(key, {}).get("hasPart")
+        has_files = PAGE_DATA.get(key, {}).get("hasPart") and key not in NOTHING_TO_FETCH
         # Lexaloffle, QEMU and ScummVM name a system page too.
         own = " emulator" if f"systems/{relative.name}" in PAGE_DATA else ""
         return f"{title}{own} BIOS files" if has_files else f"{title} emulator"
@@ -2514,6 +2523,12 @@ def _page_description(markdown: str, relative: Path, title: str) -> str:
         return _system_description(markdown, browser)
     if key.startswith("emulators/") and relative.stem != "index":
         return _emulator_description(markdown, key, title, _first_paragraph(lead))
+    if key.startswith("platforms/") and relative.stem != "index":
+        # The summary ends on a link to the platform's site, whose label
+        # alone was left: "A system for handhelds. ROCKNIX website."
+        summary = _first_paragraph(lead).removesuffix(f" {title} website.")
+        return _shorten(f"The BIOS files for {title}, the folder they go in and the "
+                        f"command that installs them. {summary}", 155)
     first = _first_paragraph(lead, minimum=35)
     questions = [_plain_markdown(re.sub(r"\s*\{[^}]*\}\s*$", "", heading))
                  for heading in re.findall(r"^## (.+\?)(?:[ \t]*\{[^}]*\})?[ \t]*$", markdown, re.M)]
@@ -2539,7 +2554,9 @@ def _emulator_description(markdown: str, key: str, title: str, intro: str) -> st
     its profile table when the profile names no system."""
     notes = re.search(r"<summary>Technical notes</summary>\s*\n\n(.+?)(?:\n\n|$)", markdown, re.S)
     if not intro and notes:
-        sentence = re.split(r"(?<=\.)\s", _plain_markdown(notes[1]), maxsplit=1)[0]
+        # An initial is no sentence end: hcl's read "open-source port of E."
+        sentence = re.split(r"(?<![\s(][A-Z]\.)(?<=\.)\s", _plain_markdown(notes[1]),
+                            maxsplit=1)[0]
         intro = f"{title}: {sentence[:1].lower()}{sentence[1:]}"
     if not intro:
         row = {name: _plain_markdown(value) for name, value in re.findall(
@@ -2553,6 +2570,8 @@ def _emulator_description(markdown: str, key: str, title: str, intro: str) -> st
     elif title not in intro:
         # "It reads 1 file": the profile names no system to open on.
         intro = f"{title}: {intro[:1].lower()}{intro[1:]}"
+    if key in NOTHING_TO_FETCH:
+        return _shorten(f"{intro} Every file it reads comes with the app.", 155)
     # An alias page sends the reader to the core whose files it shares.
     if PAGE_DATA.get(key, {}).get("hasPart") or "uses the same firmware as" in intro:
         return _shorten(intro, 155)
@@ -2623,6 +2642,9 @@ def _system_description(markdown: str, browser: str) -> str:
 # Structured data a page generator knows beyond its text, by page path
 # relative to docs/: read by decorate_markdown_pages.
 PAGE_DATA: dict[str, dict] = {}
+# Emulator pages whose every file comes with the app: no "BIOS files" in
+# their title, and their description says so (DaedalusX64, ZEsarUX).
+NOTHING_TO_FETCH: set[str] = set()
 # Pages that hold part of a page too long for one (a console of a split
 # manufacturer, a run of an emulator's cards), by path relative to docs/:
 # their H1 already says what they are.
@@ -2948,6 +2970,17 @@ def release_versions(profile: dict) -> dict[str, str]:
     versions = {str(mode): str(value or "").strip() for mode, value in pairs}
     return {mode: value for mode, value in versions.items()
             if re.search(r"[0-9]", value) and not names_a_commit(value)}
+
+
+def record_emulator_page(name: str, profile: dict) -> None:
+    """What the title and the description of an emulator page read."""
+    key = f"emulators/{name}.md"
+    PAGE_DATA[key] = emulator_structured_data(profile)
+    listed = [f for f in profile.get("files") or [] if isinstance(f, dict)]
+    if listed and all(comes_with_app(f) for f in listed):
+        NOTHING_TO_FETCH.add(key)
+    else:
+        NOTHING_TO_FETCH.discard(key)
 
 
 def emulator_structured_data(profile: dict) -> dict:
@@ -4176,7 +4209,7 @@ def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]
             # lines are on the get/ page, the one the command is shared from.
             tabs = ("windows",) if page_link else ("windows", "macos", "linux")
             computer += [
-                "Needs the device on your network. Run the command on the computer.",
+                "Needs the device on your network.",
                 "",
                 *terminal_tabs(tabs, args, how=how),
                 *([f"[Mac or Linux](../{get_page_link(name)}#from-your-computer)", ""]
@@ -6443,13 +6476,6 @@ def _region_order() -> dict[str, int]:
     return {region: index for index, region in enumerate(ordered)}
 
 
-_REGION_WORDS = {"uk": "UK", "asia-ntsc": "Asia (NTSC)", "asia-pal": "Asia (PAL)"}
-
-
-def _region_word(region: str) -> str:
-    return _REGION_WORDS.get(region) or region.replace("-", " ").title()
-
-
 def _reading_pairs(sha1: str, consumers: FileConsumers) -> list[tuple[str, dict]]:
     """The profile entries that read a file, each with its emulator."""
     files_of = getattr(consumers, "emulator_files", {})
@@ -6662,7 +6688,7 @@ def _start_groups(
     for f in primaries:
         sha1 = str(f.get("sha1", ""))
         for emulator, entry in _reading_pairs(sha1, consumers):
-            if entry.get("bundled"):
+            if comes_with_app(entry):
                 continue
             system = None
             systems = _entry_systems(emulator, entry)
@@ -6677,7 +6703,7 @@ def _start_groups(
         for sha1, emulator, entry, system in _entries_by_section(consumers).get(here, []):
             record = known.get(sha1)
             parts = str((record or {}).get("path", "")).split("/")
-            if (sha1 in held or not record or entry.get("bundled") or ".variants" in parts
+            if (sha1 in held or not record or comes_with_app(entry) or ".variants" in parts
                     or len(parts) < 3 or parts[1] != "Arcade"):
                 continue
             if sha1 not in kept:
@@ -7031,7 +7057,7 @@ def _group_start(group: _StartGroup, first_below: bool) -> list[tuple[str, str]]
         else:
             regional[(*same, region)] = regional.pop(same)
 
-    out = [(", ".join(_region_word(r) for r in regions), regional[regions])
+    out = [(", ".join(_region_words(r) for r in regions), regional[regions])
            for regions in sorted(regional, key=lambda rs: (order.get(rs[0], len(order)), rs))]
     # A name a region line gives already is no "also", and one only
     # emulators no region line answers reads is an "instead": armsx1 reads
@@ -7819,12 +7845,15 @@ def generate_emulators_index(profiles: dict) -> str:
 
 
 def comes_with_app(f: dict) -> bool:
-    """The emulator installs the file in every build the profile documents.
+    """The emulator installs the file in the build the entry describes.
 
-    ``bundled`` narrowed by ``mode`` is installed by one build only, and the
-    other build still reads it from the user's folder.
+    The rule verify and the pack read (``installed_with_emulator``). An entry
+    narrowed by ``mode`` is that build's alone: the other build reads its
+    own entry, or nothing.
     """
-    return f.get("bundled") is True and not f.get("mode")
+    from validation import installed_with_emulator  # noqa: PLC0415
+
+    return installed_with_emulator(f)
 
 
 def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
@@ -7841,7 +7870,6 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     category = f.get("category", "")
     region = f.get("region", "")
     storage = f.get("storage", "")
-    bundled = f.get("bundled", False)
     embedded = f.get("embedded", False)
     has_builtin = f.get("has_builtin", False)
     archive = f.get("archive", "")
@@ -7851,9 +7879,10 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     if shipped:
         # NetherSX2's three interface fonts sat beside the BIOS as
         # "required" and "missing": the app ships them, nobody fetches them.
-        badges.append(
-            '<span class="rb-badge rb-badge-info">comes with the app</span>'
-        )
+        # Narrowed to one build, the build is named.
+        build = f.get("mode") if f.get("mode") in ("standalone", "libretro") else ""
+        label = f"installed with the {build} emulator" if build else "comes with the app"
+        badges.append(f'<span class="rb-badge rb-badge-info">{label}</span>')
     elif required:
         needed = f"required for {html.escape(for_system)}" if for_system else "required"
         badges.append(
@@ -7879,7 +7908,7 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
         badges.append(
             '<span class="rb-badge rb-badge-info">HLE fallback</span>'
         )
-    if mode:
+    if mode and not (shipped and mode in ("standalone", "libretro")):
         badges.append(
             f'<span class="rb-badge rb-badge-muted">{mode}</span>'
         )
@@ -7895,13 +7924,6 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     if storage and storage != "embedded":
         badges.append(
             f'<span class="rb-badge rb-badge-muted">{storage}</span>'
-        )
-    if bundled and not shipped:
-        # Said in words: the pack leaves the file out because the emulator,
-        # in the build the entry names, already installs it.
-        build = f" {f['mode']}" if f.get("mode") in ("standalone", "libretro") else ""
-        badges.append(
-            f'<span class="rb-badge rb-badge-muted">installed with the{build} emulator</span>'
         )
     if embedded:
         badges.append(
@@ -7995,10 +8017,14 @@ def _build_rows(profile: dict) -> list[str]:
     found = _found_by_text(profile.get("found_by"))
     if found:
         rows.append(f"| Files found by | {found} |")
-    frozen = profile.get("pin_frozen")
-    if frozen:
-        held = _escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
-        rows.append(f"| Revision held | {held} |")
+    # Each pin says why it is held: a bare upstream revision read as a
+    # profile left behind HEAD (mupen64plus, aps3e).
+    for field, label in (("pin_frozen", "Revision held"),
+                         ("upstream_frozen", "Upstream revision held")):
+        frozen = profile.get(field)
+        if frozen:
+            held = _escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
+            rows.append(f"| {label} | {held} |")
     announced = profile.get("version_source")
     if isinstance(announced, dict) and announced.get("url"):
         url = str(announced["url"])
@@ -8193,10 +8219,13 @@ def _render_emulator_file(
     if consumers and f.get("type") == "directory":
         details.extend(_directory_copies(f, consumers))
     if consumers:
-        sha1 = consumers.sha1_of(f, f.get("path") or "", owner=owner)
+        sha1 = consumers.sha1_of(
+            *entry_target(f, profile.get("files") or []), owner=owner)
         held = consumers.path_of(sha1) if sha1 and in_repo else ""
         parts = held.split("/")
-        if len(parts) >= 3 and parts[0] == "bios":
+        if len(parts) >= 3 and parts[0] == "bios" and f.get("archive"):
+            details.append(_held_copy_line((held, f["name"]), consumers))
+        elif len(parts) >= 3 and parts[0] == "bios":
             # Which copy answers this entry, linked to its collection card
             # (provenance, every hash, download): an entry declaring no hash
             # said "in repo" without naming the file.
@@ -8473,8 +8502,9 @@ def emulator_romset(profile: dict) -> str:
     return ""
 
 
-def _version_said(value: object, basis: dict) -> str:
-    """One build's version and where the profile reads it."""
+def _version_said(value: object, basis: dict, profile: dict, mode: str = "") -> str:
+    """One build's version and where the profile reads it, linked to the
+    file or the tag where the source allows."""
     kind = basis.get("kind")
     if kind == "none":
         return "none stated in the source"
@@ -8483,13 +8513,18 @@ def _version_said(value: object, basis: dict) -> str:
             return f"unknown: {_UNVERIFIED.get(str(basis.get('why')), 'unread')}"
         return "none published"
     value = str(value)
+    url = version_basis_url(profile, basis, mode) if kind in ("file", "tag") else ""
+
+    def shown(text: object) -> str:
+        return f"[{_code(str(text))}]({url})" if url else _code(str(text))
+
     if kind == "file":
-        return f"{value}, stated in `{basis.get('path')}`"
+        return f"{value}, stated in {shown(basis.get('path'))}"
     if kind == "tag":
         distance = int(basis.get("distance") or 0)
         if not distance:
             return f"{value}, the tag at this revision"
-        return f"{value}, {distance} commit{'s' if distance != 1 else ''} after tag `{basis.get('tag')}`"
+        return f"{value}, {distance} commit{'s' if distance != 1 else ''} after tag {shown(basis.get('tag'))}"
     if kind == "package":
         return f"{value}, read from {basis.get('artifact')}"
     if kind == "unverified":
@@ -8524,10 +8559,10 @@ def version_markdown(profile: dict) -> str:
         values = value if isinstance(value, dict) else {}
         modes = list(dict.fromkeys([*values, *basis]))
         return ", ".join(
-            f"{_version_said(values.get(mode), basis.get(mode) or {})} ({mode})"
+            f"{_version_said(values.get(mode), basis.get(mode) or {}, profile, mode)} ({mode})"
             for mode in modes
         )
-    return _version_said(value, basis)
+    return _version_said(value, basis, profile)
 
 
 ROMSET_FAQ_PAGE = Path(WIKI_SRC_DIR) / "technical-faq.md"
@@ -8860,7 +8895,7 @@ def standalone_place(name: str, profile: dict, entry: dict, key: str = "") -> st
     if not isinstance(entry, dict) or not profile.get("data_root"):
         return ""
     mode = entry.get("mode")
-    if mode == "libretro" or (entry.get("bundled") is True and mode in (None, "standalone")):
+    if mode == "libretro" or comes_with_app(entry):
         return ""
     excluded = _folder_only(name, entry)
     if "*" in excluded or (key in excluded if key else excluded):
@@ -8898,7 +8933,7 @@ def _data_root_folder(name: str, profile: dict, key: str, entries: list[dict]) -
     folders = set()
     for f in entries:
         mode = f.get("mode")
-        if mode == "libretro" or (f.get("bundled") is True and mode in (None, "standalone")):
+        if mode == "libretro" or comes_with_app(f):
             continue
         place = standalone_place(name, profile, f, key)
         if not place:
@@ -12142,15 +12177,16 @@ def _generate(args: argparse.Namespace) -> None:
     # The test each emulator page builds for itself: the parts a page is
     # cut into weigh the status its rows show.
     file_held = _availability_check(db, suppl_names)
+    # The plan names systems: the sections must be this run's data first.
+    manufacturers = _group_by_manufacturer(db)
+    set_console_sections(manufacturers, program_names(profiles))
     plan_emulator_pages(profiles, file_held)
     # Build system_id -> manufacturer page map (needed by all generators)
     print("Building system cross-reference map...")
-    manufacturers = _group_by_manufacturer(db)
     set_system_page_map(
         _system_pages_from_data(manufacturers, coverages, db, profiles)
     )
     print(f"  {len(_system_page_map)} system IDs mapped to pages")
-    set_console_sections(manufacturers, program_names(profiles))
     from siterender import link_coverage, system_ids  # noqa: PLC0415
 
     print("Generating system pages...")
@@ -12300,7 +12336,7 @@ def _generate(args: argparse.Namespace) -> None:
             name, profile, db, consumers, suppl_names, data_registry,
             data_dirs=page_data_directories(name, profiles),
         )
-        PAGE_DATA[f"emulators/{name}.md"] = emulator_structured_data(profile)
+        record_emulator_page(name, profile)
         # A frozen copy answers after the emulator: a frozen_snapshot, and a
         # profile pinned to the revision one platform builds (pin_frozen).
         # Reicast and Flycast 2021 LE answered "dc bios missing" before Flycast.
@@ -12466,6 +12502,7 @@ from sitesources import (  # noqa: E402,F401
     _forge_sources,
     _source_permalink,
     _source_ref_markdown,
+    version_basis_url,
 )
 from siterender import (  # noqa: E402,F401
     _by_mode,

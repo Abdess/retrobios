@@ -130,7 +130,7 @@ class AForkPushedToItsOwnMain(unittest.TestCase):
             # A project that cannot be reached is an error, never "nothing".
             missing = self._changed(clone, str(Path(tmp, "absent")))
         self.assertNotEqual(missing.returncode, 0)
-        self.assertIn("fetching its main failed", missing.stderr)
+        self.assertIn("fetching its main from", missing.stderr)
 
 
 class RefreshFailuresAreFailures(unittest.TestCase):

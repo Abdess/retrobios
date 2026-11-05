@@ -427,5 +427,81 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         self.assertIn(short, text)
 
 
+class OneDefinitionPerName(unittest.TestCase):
+    """generate_site defined _REGION_WORDS twice: the second table replaced
+    the first at import, and _region_word, written beside the first, never
+    read it."""
+
+    def test_no_module_name_is_bound_twice(self):
+        import ast
+
+        for path in sorted((REPO_ROOT / "scripts").glob("*site*.py")):
+            seen: dict[str, int] = {}
+            for node in ast.parse(path.read_text(encoding="utf-8")).body:
+                if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
+                    names = [node.name]
+                elif isinstance(node, ast.Assign):
+                    names = [t.id for t in node.targets if isinstance(t, ast.Name)]
+                elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+                    names = [node.target.id]
+                else:
+                    continue
+                for name in names:
+                    self.assertNotIn(name, seen, f"{path.name}:{node.lineno} binds {name} "
+                                     f"again, first at line {seen.get(name)}")
+                    seen[name] = node.lineno
+
+
+@unittest.skipUnless((REPO_ROOT / "database.json").is_file(), "database.json is not built")
+class AMemberIsReadInItsArchive(unittest.TestCase):
+    """FBNeo reads sm1.sm1 inside neogeo.zip. Resolved by its crc32, the
+    entry credited a loose sm1.sm1 FBNeo never opens, and no neogeo.zip card
+    named FBNeo, while the pack ships it one."""
+
+    def test_the_archive_is_credited_and_named_on_the_card(self):
+        import json
+
+        import generate_site as gs
+        from common import archive_entry, resolve_local_file
+        from cross_reference import FileConsumers
+
+        db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "fbneo.yml").read_text(encoding="utf-8"))
+        files = profile["files"]
+        consumers = FileConsumers(db)
+        consumers.add_emulators({"fbneo": profile})
+        credited = {consumers.path_of(sha1) for sha1 in consumers.emulators}
+        shipped, _status = resolve_local_file(
+            {**archive_entry("neogeo.zip", files), "source_profile": "fbneo"}, db)
+        self.assertIn(shipped, credited)
+        self.assertFalse([p for p in credited if p.endswith("/sm1.sm1")])
+        sm1 = next(f for f in files if f["name"] == "sm1.sm1")
+        rows = "\n".join(gs._render_emulator_file(sm1, profile, consumers, files,
+                                                  lambda _f: True, owner="fbneo"))
+        self.assertIn("Collection copy: member `sm1.sm1` of", rows)
+        self.assertIn(shipped, rows)
+
+
+class NoTooltipInsideAName(unittest.TestCase):
+    """The glossary's capitalised terms matched almost only product names:
+    Free Unix Spectrum Emulator, Windows Terminal, Documents/Dolphin Emulator."""
+
+    def test_names_are_left_and_terms_are_marked(self):
+        import sitestarlight
+
+        terms = {"Emulator": "An app that acts like a console.",
+                 "Terminal": "A window where you type commands.",
+                 "BIOS": "The console's built-in software."}
+        for line in ("Fuse (Free Unix Spectrum Emulator) reads it.",
+                     "Open Windows Terminal (WSL).",
+                     "Copy it to Documents/Dolphin Emulator/Sys."):
+            with self.subTest(line=line):
+                self.assertNotIn("rb-term", sitestarlight.add_tooltips(line, terms))
+        marked = sitestarlight.add_tooltips(
+            "Emulator settings come first. The PlayStation BIOS goes there.", terms)
+        self.assertIn('title="An app that acts like a console.">Emulator</abbr>', marked)
+        self.assertIn('>BIOS</abbr>', marked)
+
+
 if __name__ == "__main__":
     unittest.main()

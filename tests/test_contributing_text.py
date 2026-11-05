@@ -78,6 +78,36 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
         self.assertIn("profile_sync.py --added --base upstream/main --strict", block)
         self.assertNotIn("--changed --strict", block)
 
+    def test_it_names_the_site_build_and_the_packages_ci_runs(self):
+        """A wiki-only change passed every listed check and failed CI on
+        validate_site.py, which the list did not name."""
+        text = generate_readme.generate_contributing()
+        section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        for command in ("npm ci --prefix website", "npm run build --prefix website",
+                        "validate_site.py --site-dir website/dist",
+                        "vermin --no-tips -t=3.8- --violations install.py"):
+            with self.subTest(command=command):
+                self.assertIn(command, workflow)
+                self.assertIn(command, section)
+        installed = re.search(r'^\s*run: pip install (pyyaml "jsonschema.*markdown.*)$',
+                              workflow, re.M).group(1)
+        pip_line = next(line for line in section.splitlines() if line.startswith("pip install"))
+        for package in (re.split(r"[\[=]", token.strip('"'))[0] for token in installed.split()):
+            with self.subTest(package=package):
+                self.assertRegex(pip_line, rf"\b{package}\b")
+
+    def test_a_file_too_large_for_git_has_a_route(self):
+        """The guide sent any file over 25 MB through a clone, which GitHub
+        refuses past 100 MB, and only a maintainer can write to the release."""
+        import validate_pr
+
+        text = generate_readme.generate_contributing()
+        section = text.split("## What happens next", 1)[1].split("\n## ", 1)[0]
+        self.assertEqual(validate_pr.MAX_FILE_SIZE, 100 * 1024 * 1024)
+        self.assertIn("100 MB", section)
+        self.assertIn(f"]({validate_pr.LARGE_FILE_ISSUE_URL})", section)
+
     def test_it_installs_what_the_checks_need_and_no_site_package(self):
         """The site is built by Node from website/package-lock.json: a pip
         line naming the old theme installed packages nothing reads."""

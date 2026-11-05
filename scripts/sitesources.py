@@ -240,8 +240,15 @@ def _walk(value: object) -> Iterator[tuple[str, object]]:
 
 def cited_paths(profile: dict) -> set[str]:
     """Every path a page of the profile could link: the parts of each
-    source_ref and the file:line citations of its prose."""
-    paths: set[str] = set()
+    source_ref, the file:line citations of its prose and the file its
+    version is read from."""
+    basis = profile.get("version_basis")
+    bases = ([basis] if isinstance(basis, dict) and "kind" in basis
+             else list(basis.values()) if isinstance(basis, dict) else [])
+    paths: set[str] = {
+        str(b["path"]) for b in bases
+        if isinstance(b, dict) and b.get("kind") == "file" and b.get("path")
+    }
     for key, value in _walk(profile):
         if key == "source_ref" and isinstance(value, (str, dict)):
             for _label, refs in source_ref_values(value):
@@ -353,6 +360,30 @@ def _commit_url(repo: upstream.Repo, pin: str) -> str:
     if repo.family == "swh":
         return f"https://{repo.host}/browse/revision/{pin}/"
     return f"{base}/commit/{pin}"
+
+
+def version_basis_url(profile: dict, basis: dict, mode: str = "") -> str:
+    """Where a reader checks a version: the file stating it at the pin, or
+    the tag it counts from. "" when neither can be linked.
+
+    The Version cell printed `libretro/handy.h` as bare text beside a
+    pinned Revision link, so the #define it reads was one search away.
+    """
+    field = "upstream" if basis.get("repo") == "upstream" else "source"
+    declared = next(iter(_repo_pins(profile, field, mode)), None)
+    repo = _browse_repo(declared[0]) if declared else None
+    if repo is None:
+        return ""
+    kind, path, tag = basis.get("kind"), str(basis.get("path") or ""), str(basis.get("tag") or "")
+    if kind == "file" and path:
+        pin = next((p for r, p in _forge_sources(profile, mode)
+                    if (r.host, r.slug) == (repo.host, repo.slug)), "")
+        return _source_permalink(repo, pin, path, None, None) if pin and tree_holds(
+            repo, pin, path) else ""
+    if kind == "tag" and tag and repo.family in ("github", "gitlab"):
+        tree = "/-/tree/" if repo.family == "gitlab" else "/tree/"
+        return f"https://{repo.host}/{repo.owner}/{repo.name}{tree}{urllib.parse.quote(tag)}"
+    return ""
 
 
 def revision_markdown(profile: dict) -> str:

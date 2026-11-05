@@ -139,9 +139,25 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         )
         self.assertIn(
             ("WARN", "File is not under bios/ yet. Its system's files are in "
-                     "`bios/Maker/Console/`"),
+                     "`bios/Maker/Console/`. --place copies it to `bios/Maker/Console/b.bin`"),
             result.checks,
         )
+        self.assertEqual(result.destination, "bios/Maker/Console/b.bin")
+        # A file of that name already there: the copy is a variant.
+        self._bios_file("bios/Maker/Console/b.bin", b"another")
+        self.assertEqual(
+            validate_pr.validate_file("Downloads/b.bin", db, EMPTY_HASHES, known).destination,
+            f"bios/Maker/Console/.variants/b.bin.{result.sha1[:8]}",
+        )
+        # Copied under the declared name, never over a file, and only once.
+        card = self._bios_file("card/B.BIN", missing)
+        named = validate_pr.validate_file(card, db, EMPTY_HASHES, known)
+        self.assertEqual(validate_pr.place([named]), [named.destination])
+        self.assertEqual((self.tmp / named.destination).read_bytes(), missing)
+        self.assertTrue((self.tmp / card).is_file())
+        self.assertEqual(validate_pr.place([named]), [])
+        unknown = validate_pr.validate_file(self._bios_file("card/x.bin"), db, EMPTY_HASHES, known)
+        self.assertEqual((unknown.outcome, unknown.destination), ("unknown", ""))
         placed = validate_pr.validate_file(
             self._bios_file("bios/Other/Place/b.bin", missing), db, EMPTY_HASHES, known,
         )
@@ -243,20 +259,38 @@ class HashRecognition(_Fixture):
         self.assertIn(".variants/known.bin.", markdown)
 
     def test_an_unreferenced_file_asks_for_review(self):
+        """Random bytes read "PASS" and "all checks passed", and the warning
+        named the platform configs alone though the profiles were searched."""
         rel = self._bios_file("bios/Sony/PS/mystery.bin")
-        markdown = validate_pr.validate_file(rel, None, EMPTY_HASHES).to_markdown()
-        self.assertIn("needs manual review", markdown)
+        result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        markdown = result.to_markdown()
+        self.assertEqual(result.outcome, "unknown")
+        self.assertIn("### REVIEW", markdown)
+        self.assertIn("no platform list or emulator profile declares this file", markdown)
+        self.assertIn("which emulator reads it", markdown)
 
     def test_a_duplicate_of_a_known_file_is_reported(self):
-        rel = self._bios_file("bios/Sony/PS/dupe.bin")
+        """A copy of a held file passed, and was sent to the folder that
+        already holds it."""
+        rel = self._bios_file("elsewhere/dupe.bin")
         probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
         db = {"files": {probe.sha1: {"path": "bios/Sony/PS/original.bin"}}}
-        markdown = validate_pr.validate_file(rel, db, EMPTY_HASHES).to_markdown()
-        self.assertIn("Duplicate", markdown)
-        self.assertIn("original.bin", markdown)
+        known = {**EMPTY_HASHES, "sha1": {probe.sha1},
+                 "folders": {probe.sha1: {"bios/Sony/PS/"}}}
+        result = validate_pr.validate_file(rel, db, known)
+        markdown = result.to_markdown()
+        self.assertEqual(result.outcome, "held")
+        self.assertIn("### REVIEW", markdown)
+        self.assertIn("Already held at `bios/Sony/PS/original.bin`: nothing to add", markdown)
+        self.assertNotIn("not under bios/", markdown)
         # A duplicate is worth saying out loud but must not block the PR.
-        self.assertTrue(validate_pr.validate_file(rel, db, EMPTY_HASHES).passed)
+        self.assertTrue(result.passed)
 
+    def test_a_copy_in_a_tree_read_by_path_is_kept(self):
+        rel = self._bios_file("bios/ScummVM/a/dupe.bin")
+        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        db = {"files": {probe.sha1: {"path": "bios/ScummVM/b/dupe.bin"}}}
+        self.assertNotEqual(validate_pr.validate_file(rel, db, EMPTY_HASHES).outcome, "held")
 
     def test_the_file_the_database_holds_is_not_its_own_duplicate(self):
         """The documented example on a tracked file warned "Duplicate:
@@ -334,7 +368,8 @@ class Placement(_Fixture):
 class Reporting(_Fixture):
     def test_markdown_carries_every_digest_and_the_verdict(self):
         rel = self._bios_file("bios/Sega/Saturn/sega.bin")
-        result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        result = validate_pr.validate_file(rel, None, {**EMPTY_HASHES, "sha1": {probe.sha1}})
         markdown = result.to_markdown()
         for value in (result.sha1, result.md5, result.crc32):
             self.assertIn(value, markdown)
@@ -344,12 +379,33 @@ class Reporting(_Fixture):
         rel = self._bios_file("bios/Sega/Saturn/bad.exe")
         self.assertIn("### FAIL", validate_pr.validate_file(rel, None, EMPTY_HASHES).to_markdown())
 
+    @unittest.skipUnless((REPO_ROOT / "database.json").is_file(), "database.json is not built")
+    def test_the_status_line_names_what_is_left_to_review(self):
+        import shutil
+        import subprocess
+
+        held = REPO_ROOT / "bios" / "Sony" / "PlayStation Portable" / "ppge_atlas.zim"
+        if not held.is_file():
+            self.skipTest(f"{held} is not here")
+        shutil.copy(held, self.tmp / "ppge_atlas.zim")
+        (self.tmp / "mystery.bin").write_bytes(os.urandom(4096))
+        proc = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "scripts" / "validate_pr.py"), "--markdown",
+             str(self.tmp / "mystery.bin"), str(self.tmp / "ppge_atlas.zim")],
+            capture_output=True, text=True, timeout=300, check=False,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn("**Status**: no check failed, to review: 1 already held, "
+                      "1 not recognised", proc.stdout)
+        self.assertNotIn("all checks passed", proc.stdout)
+
 
 class PlatformHashLoading(_Fixture):
     def test_missing_directory_yields_empty_sets(self):
         known = validate_pr.load_platform_hashes(str(self.tmp / "absent"))
         self.assertEqual(known, {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
-                                 "names": set(), "folders": {}, "sizes": {}, "entries": {}})
+                                 "names": set(), "folders": {}, "sizes": {}, "entries": {},
+                                 "named": {}})
 
     def test_declared_hashes_and_names_are_collected(self):
         platforms = self.tmp / "platforms"

@@ -68,6 +68,38 @@ class WhoShipsTheBuildAndWhy(unittest.TestCase):
                       "(https://example.org/news) (version 13.0 announced there, "
                       "found only as rebuilt copies) |", page)
 
+    def test_the_version_links_its_proof(self):
+        """`0.97, stated in libretro/handy.h` was bare text beside a pinned
+        Revision link: the #define it reads was one search away."""
+        import generate_site as gs
+        import sitesources
+        import yaml
+
+        handy = yaml.safe_load((REPO_ROOT / "emulators" / "handy.yml").read_text(encoding="utf-8"))
+        path = handy["version_basis"]["path"]
+        self.assertIn(path, sitesources.cited_paths(handy))
+        self.assertIn(f"stated in [`{path}`](https://github.com/libretro/libretro-handy/blob/"
+                      f"{handy['source_commit']}/{path})", gs.version_markdown(handy))
+        tagged = {"source": "https://github.com/owner/emu", "source_commit": "a" * 40,
+                  "core_version": "1.2-3-gaaaaaaa",
+                  "version_basis": {"kind": "tag", "tag": "1.2", "distance": 3}}
+        self.assertEqual(gs.version_markdown(tagged), "1.2-3-gaaaaaaa, 3 commits after tag "
+                         "[`1.2`](https://github.com/owner/emu/tree/1.2)")
+        # A file no recorded tree confirms stays plain: no link beats a 404.
+        unread = {**tagged, "version_basis": {"kind": "file", "path": "src/none.h"}}
+        self.assertEqual(gs.version_markdown(unread), "1.2-3-gaaaaaaa, stated in `src/none.h`")
+
+    def test_the_upstream_pin_says_why_it_is_held(self):
+        """mupen64plus showed its core revision and not that AmberELEC
+        builds that one: read as a profile behind HEAD."""
+        page = _page("mupen64plus", {
+            "type": "libretro",
+            "upstream_frozen": "AmberELEC builds the core at this revision.",
+            "files": [],
+        })
+        self.assertIn("| Upstream revision held | AmberELEC builds the core at this "
+                      "revision. |", page)
+
 
 class ACardKeepsItsAddress(unittest.TestCase):
     """emulators/raze/#file-duke3d-grp stopped pointing at its card once a

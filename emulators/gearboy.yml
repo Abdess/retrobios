@@ -19,8 +19,9 @@ systems:
 
 notes: |
   Gearboy is a Game Boy / Game Boy Color emulator by drhelius (Ignacio Sanchez).
-  The buildbot builds from drhelius/Gearboy (upstream), not from libretro/Gearboy
-  (abandoned fork frozen at v2.6.0 from 2018).
+  The buildbot builds from drhelius/Gearboy (upstream), not from libretro/Gearboy,
+  an archived fork (its description reads "NOTE: PUBLIC ARCHIVE") whose
+  src/definitions.h states version 2.6.0.
   Bootrom loading is gated behind core options (disabled by default).
   Without bootroms, the core HLE-skips the boot animation.
 
