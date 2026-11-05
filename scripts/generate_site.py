@@ -7984,10 +7984,14 @@ def _build_rows(profile: dict) -> list[str]:
     found = _found_by_text(profile.get("found_by"))
     if found:
         rows.append(f"| Files found by | {found} |")
-    frozen = profile.get("pin_frozen")
-    if frozen:
-        held = _escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
-        rows.append(f"| Revision held | {held} |")
+    # Each pin says why it is held: a bare upstream revision read as a
+    # profile left behind HEAD (mupen64plus, aps3e).
+    for field, label in (("pin_frozen", "Revision held"),
+                         ("upstream_frozen", "Upstream revision held")):
+        frozen = profile.get(field)
+        if frozen:
+            held = _escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
+            rows.append(f"| {label} | {held} |")
     announced = profile.get("version_source")
     if isinstance(announced, dict) and announced.get("url"):
         url = str(announced["url"])

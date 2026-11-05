@@ -68,6 +68,17 @@ class WhoShipsTheBuildAndWhy(unittest.TestCase):
                       "(https://example.org/news) (version 13.0 announced there, "
                       "found only as rebuilt copies) |", page)
 
+    def test_the_upstream_pin_says_why_it_is_held(self):
+        """mupen64plus showed its core revision and not that AmberELEC
+        builds that one: read as a profile behind HEAD."""
+        page = _page("mupen64plus", {
+            "type": "libretro",
+            "upstream_frozen": "AmberELEC builds the core at this revision.",
+            "files": [],
+        })
+        self.assertIn("| Upstream revision held | AmberELEC builds the core at this "
+                      "revision. |", page)
+
 
 class ACardKeepsItsAddress(unittest.TestCase):
     """emulators/raze/#file-duke3d-grp stopped pointing at its card once a
