@@ -4591,6 +4591,20 @@ def _installed_state(dest: Path, code: int = 0, failed: list | None = None) -> i
     return state
 
 
+class TheRomMResultNamesTheScan(unittest.TestCase):
+    """RomM's player sees firmware its scan recorded: the result said
+    "installed" and left the scan unsaid."""
+
+    def test_the_result_and_its_farewell_say_it(self):
+        state = _installed_state(SYSTEM_DIR)
+        state.platform = "romm"
+        _title, lines = install.tui_outcome(state)
+        self.assertIn(install.ROMM_SCAN_WORDS, lines)
+        self.assertIn(install.ROMM_SCAN_WORDS, install._farewell_lines(state))
+        state.platform = "retroarch"
+        self.assertNotIn(install.ROMM_SCAN_WORDS, install.tui_outcome(state)[1])
+
+
 class AppOnTheCard(unittest.TestCase):
     """The RetroBIOS app offered on the result screen and in the options."""
 

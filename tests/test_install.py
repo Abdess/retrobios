@@ -4048,6 +4048,20 @@ def _install_run(env: dict, *argv: str, **kwargs) -> subprocess.CompletedProcess
     )
 
 
+class RomMIsToldToScan(unittest.TestCase, _LoopbackRun):
+    """RomM serves the firmware its library scan records, and the run ended
+    on "installed" with no word of the scan the player waits on."""
+
+    def test_the_end_of_an_install_names_the_scan(self):
+        env = self.serve(self)
+        dest = self.home / "library" / "bios"
+        dest.mkdir(parents=True)
+        proc = _install_run(env, "--platform", "romm", "--dest", str(dest),
+                            "--system", "atari-lynx", "--no-input")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(install.ROMM_SCAN_WORDS, " ".join(proc.stdout.split()))
+
+
 class AnUnknownNameIsAnEvent(unittest.TestCase):
     """--events carried start then end with code 1 for an unknown platform,
     target or system: the reason was on stderr only, which readers ignore."""

@@ -1354,6 +1354,11 @@ folder, whose parent is the library. Run from the host of a container, where
 library laid out as `{platform}/roms` with no template found is refused
 rather than filled in the wrong place, and the message gives the command.
 
+RomM's player reads the firmware its library scan has recorded, and RomM
+watches the library folder only when `ENABLE_RESCAN_ON_FILESYSTEM_CHANGE` is
+set. An install that put files in place ends by saying so: start a scan in
+RomM so that the player finds them.
+
 ## Android
 
 Android reports itself as Linux, so the runtime is named from its own

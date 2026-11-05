@@ -15519,6 +15519,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                         print(f"  {shown_path(bios_path)} stays: {exc.strerror}",
                               file=sys.stderr)
             bulk_lines += hint
+            if plat_name == "romm" and progress.installed:
+                bulk_lines.append(ROMM_SCAN_WORDS)
             total_downloaded += progress.installed
             # The end line tells BIOS files from game data, as the menu
             # counted them, over the files that landed: matched by the end
@@ -21830,6 +21832,8 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         # Said again with the result, as line mode ends: the system's own
         # BIOS check may mark the files just put in place.
         lines.append(state.version)
+    if state.platform == "romm" and installed:
+        lines.append(ROMM_SCAN_WORDS)
     fallback = (state.games or {}).get("fallback") or [] if state.for_games else []
     if fallback:
         # Named with the result, as line mode ends: they got every BIOS of
@@ -23022,6 +23026,14 @@ def _closing_lines(state: TuiState) -> list[str]:
 
 
 TUI_QUIT_WORDS = "RetroBIOS: quit. Nothing was installed."
+
+# RomM serves the firmware rows its library scan records (rommapp/romm 5.4.0,
+# backend/endpoints/firmware.py:148,175 read db_firmware_handler.list_firmware),
+# and its folder watcher is off unless ENABLE_RESCAN_ON_FILESYSTEM_CHANGE is
+# set (backend/config/__init__.py:284, backend/watcher.py:106): files put in
+# place stay unseen by the player until a scan.
+ROMM_SCAN_WORDS = ("RomM lists the firmware its library scan has recorded: start a scan "
+                   "in RomM so that its player finds these files.")
 
 # The result's remedy for the save files left out, as the terminal says it
 # once the screen is gone: Options are not there to choose from
