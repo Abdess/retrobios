@@ -4397,6 +4397,37 @@ class AQuestionLeftWithCtrlDOrCtrlCIsAStop(unittest.TestCase):
         self.assertIn("Stopped", out)
 
 
+class APlanGroupFitsItsLine(unittest.TestCase):
+    """Batocera's group of systems sharing MAME's device ROMs was one plan
+    line of 732 characters: counted as one row, it wrapped to ten and the
+    total scrolled out of sight."""
+
+    def _plan(self, files: list[dict], size: tuple[int, int], verbose: bool = False) -> str:
+        out = io.StringIO()
+        with unittest.mock.patch.object(install.shutil, "get_terminal_size",
+                                        return_value=os.terminal_size(size)), \
+                contextlib.redirect_stdout(out):
+            install._print_plan(files, Path("dest"), install.Terminal(io.StringIO()),
+                                verbose=verbose)
+        return out.getvalue()
+
+    def test_a_wide_group_is_named_by_its_first_two(self):
+        shared = [f"system-number-{n:02d}" for n in range(40)]
+        text = self._plan([{"dest": "dev.rom", "size": 1, "systems": shared}], (80, 40))
+        self.assertIn("system-number-00, system-number-01 and 38 more systems", text)
+        self.assertLess(max(map(len, text.splitlines())), 80)
+        self.assertIn("system-number-39", self._plan(
+            [{"dest": "dev.rom", "size": 1, "systems": shared}], (80, 40), verbose=True))
+
+    def test_wrapped_rows_count_against_the_screen(self):
+        # Six lines that each wrap to three rows on a 20-column terminal of
+        # 20 rows: 18 rows of listing, past what the screen leaves it.
+        files = [{"dest": f"{'x' * 50}{n}.bin", "size": 1, "systems": [f"s{n}"]}
+                 for n in range(3)]
+        text = self._plan(files, (20, 20))
+        self.assertIn("the largest first", text)
+
+
 class ReadersAreThePlatformsCores(unittest.TestCase):
     """--check said bbcb.zip is "read by clk, mame, mame0258, mame0278" on
     Batocera: system_cores reaches every profile, Recalbox's builds too."""

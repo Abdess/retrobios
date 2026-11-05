@@ -6625,6 +6625,8 @@ def installer_id() -> str:
 PLAN_FILES_PER_SYSTEM = 8
 PLAN_LARGEST_SYSTEMS = 10
 PLAN_FRAME_LINES = 6
+# Past this many systems a group sharing files is named by its first two.
+PLAN_GROUP_TITLES = 3
 
 # Answers that stop: every menu before this one taught q as quit.
 _REFUSALS = ("n", "q", "quit", "exit", "stop", "abort")
@@ -6692,22 +6694,34 @@ def _print_plan(
     if not parts:
         print(f"\n  Nothing to {verb}.")
     by_system: dict[str, list[dict]] = {}
+    titles: dict[str, str] = {}
     for entry in to_download:
-        system = (", ".join(system_title(name, manifest) for name in entry_systems(entry))
-                  or OTHER_TITLE)
+        names = [system_title(name, manifest) for name in entry_systems(entry)]
+        system = ", ".join(names) or OTHER_TITLE
         by_system.setdefault(system, []).append(entry)
+        # Batocera's group of systems sharing MAME's device ROMs was one line
+        # of 732 characters, ten rows on an 80-column terminal.
+        titles[system] = (system if verbose or len(names) <= PLAN_GROUP_TITLES
+                          else f"{', '.join(names[:2])} and {len(names) - 2} more systems")
     shown = None if verbose else PLAN_FILES_PER_SYSTEM
-    listing: list[str] = []
+    # (line, its text without styles), the second measuring the rows it takes.
+    listing: list[tuple[str, str]] = []
     for system in sorted(by_system):
         entries = sorted(by_system[system], key=lambda e: e["dest"])
-        listing.append(f"  {term.bold(system)}  {_sized(entries)}")
-        listing += [f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}"
+        listing.append((f"  {term.bold(titles[system])}  {_sized(entries)}",
+                        f"  {titles[system]}  {_sized(entries)}"))
+        listing += [(f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}",
+                     f"    {entry['dest']}  {format_size(entry.get('size', 0))}")
                     for entry in entries[:shown]]
         if shown is not None and len(entries) > shown:
-            listing.append(f"    ... and {len(entries) - shown} more")
-    screen = terminal_size()[1]
-    if verbose or len(listing) + len(trees) + PLAN_FRAME_LINES <= screen:
-        for line in listing:
+            more = f"    ... and {len(entries) - shown} more"
+            listing.append((more, more))
+    columns, screen = terminal_size()
+    # A line wider than the terminal wraps: counted as one, the total the
+    # listing must leave in view scrolled out of sight.
+    rows = sum(-(-max(1, cell_width(plain)) // max(1, columns)) for _line, plain in listing)
+    if verbose or rows + len(trees) + PLAN_FRAME_LINES <= screen:
+        for line, _plain in listing:
             print(line)
     else:
         largest = sorted(by_system, key=lambda s: (-_bytes(by_system[s]), s))
@@ -6719,7 +6733,7 @@ def _print_plan(
                   else _plural(len(largest), 'system'))
         print(f"  {groups}, the largest first:")
         for system in largest[:PLAN_LARGEST_SYSTEMS]:
-            print(f"  {term.bold(system)}  {_sized(by_system[system])}")
+            print(f"  {term.bold(titles[system])}  {_sized(by_system[system])}")
         if len(largest) > PLAN_LARGEST_SYSTEMS:
             # Counted as the line above counts: the groups, when it names them.
             unit = "group" if "groups" in groups else "system"
