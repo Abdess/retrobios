@@ -96,6 +96,13 @@ class Exporter(BaseExporter):
             return fe.hash(field_name)
         return super().written(fe, field_name)
 
+    def written_list(self, fe: NativeFile, field_name: str) -> list[str] | None:
+        """Several md5 values are a JSON array in the manifest, as _entry
+        writes them: a list the truth extended is a change the report names."""
+        if field_name == "md5" and len(fe.hashes("md5")) > 1:
+            return fe.hashes("md5")
+        return None
+
     def states(self, fe: NativeFile, field_name: str) -> bool:
         if id(fe) in getattr(self, "_appended", ()):
             return False
