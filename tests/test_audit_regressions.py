@@ -6855,5 +6855,28 @@ class HiganSuperGameBoyFolderIsFree(unittest.TestCase):
                 )
 
 
+class ProfileNotesDescribeTheCoreAlone(unittest.TestCase):
+    """mednafen_pce_fast, sdlpop and x64sdl described the core by what
+    another profile of this directory does ("unlike beetle_pce", "unlike the
+    other engines in this directory"), which means nothing once the profile
+    is read on its own, and 21 lines shouted NOT, ALL or MUST."""
+
+    SHOUT = re.compile(r"\b(NOT|NEVER|ONLY|MUST|ALL|DIFFERENT)\b(?! FOUND)")
+
+    def test_no_profile_shouts_or_compares_with_another_profile(self):
+        names = {path.stem.casefold() for path in (ROOT / "emulators").glob("*.yml")}
+        names |= {name.replace("_", "-") for name in names}
+        found = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            text = path.read_text(encoding="utf-8")
+            for number, line in enumerate(text.splitlines(), 1):
+                if self.SHOUT.search(line):
+                    found.append(f"{path.stem}:{number}")
+                for match in re.finditer(r"\bunlike (?:the )?([\w+-]+)", line, re.I):
+                    if match.group(1).casefold() in names:
+                        found.append(f"{path.stem}:{number}")
+        self.assertEqual(found, [])
+
+
 if __name__ == "__main__":
     unittest.main()

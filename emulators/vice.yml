@@ -36,7 +36,7 @@ notes: |
   separate libretro core.
 
   All standard ROMs (kernal, basic, chargen, drive DOS, editor) are embedded
-  in the core binary via USE_EMBEDDED. External ROM files are NOT required
+  in the core binary via USE_EMBEDDED. External ROM files are not required
   for normal operation. The embedded ROMs are compiled from vice/data/<machine>/
   and ship with every build.
 

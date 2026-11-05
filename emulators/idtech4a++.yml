@@ -289,8 +289,7 @@ files:
       directory (Q3E/src/main/jni/ecwolf/src/wl_main.cpp:1294-1307). Failing
       to open it ends the process with "Could not open ecwolf.pk3!". It holds the IWADINFO rules that identify which Wolfenstein
       data set is present, the palettes and the actor definitions. This build
-      reads it from disk after extraction, unlike the libretro core which
-      compiles it in.
+      reads it from disk after extraction.
     source_ref: "Q3E/src/main/jni/ecwolf/src/version.h:12, Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:604, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:186-195"
 
   - name: glprogs.pk4

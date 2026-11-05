@@ -35,7 +35,7 @@ notes: |
   3. "Char ROM"   (4096 bytes, CHAR_ROM_SIZE 0x1000) -> TheC64->Char
   4. "1541 ROM"   (16384 bytes, DRIVE_ROM_SIZE 0x4000) -> TheC64->ROM1541
 
-  The core does NOT construct paths relative to retro_system_directory for
+  The core does not construct paths relative to retro_system_directory for
   ROM loading. The system directory variable is fetched in retro_init() but
   only used for the save directory fallback, not for ROM path construction.
   DATADIR defaults to "" (empty string) when not defined by the build

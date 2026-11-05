@@ -34,7 +34,7 @@ systems: [scummvm]
 #
 # MT-32/CM-32L ROM files go in scummvm/extra/ and are loaded by
 # audio/softsynth/mt32.cpp. The core tries CM-32L first, then MT-32.
-# These are NOT bundled (proprietary). Everything else is open-source
+# These are not bundled (proprietary). Everything else is open-source
 # data shipped with ScummVM releases.
 
 # ----- scummvm.ini (config, auto-created) -----
@@ -566,7 +566,7 @@ files:
   # Grim Fandango, Escape from Monkey Island, Myst III, The Longest
   # Journey (Stark), Wintermute 3D, Freescape, HPL1 (Penumbra),
   # Playground3D test engine. Listed in dists/scummvm.rc.
-  # Individual shader files are NOT listed here since they are
+  # Individual shader files are not listed here since they are
   # bundled in shaders.dat for the theme path and as individual
   # files in the extra/shaders/ directory. The build bundles them
   # automatically via backends/platform/libretro/scripts/bundle_datafiles.sh.

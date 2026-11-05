@@ -17,7 +17,7 @@ verification: existence
 notes: |
   OpenTyrian is a source port of the DOS vertical scrolling shooter Tyrian,
   ported to libretro. It loads the Tyrian 2.1 freeware game data directly.
-  Tyrian 1.x, 2.0, and Tyrian 2000 data files are NOT compatible.
+  Tyrian 1.x, 2.0, and Tyrian 2000 data files are not compatible.
 
   The core's .info file sets supports_no_game = true. The core locates the
   data directory by probing for tyrian1.lvl in several paths (file.c:33-58):
@@ -245,9 +245,9 @@ files:
   # which maps to shapes{char}.dat at tyrian2.c:3079.
   # The shipped set is ), W, X, Y, Z. lvlmast.c:128-131 writes } for the
   # Episode 4 tileset, which no distributed file matches.
-  # Note: shapeFile[34] in lvlmast.c is a DIFFERENT mechanism:
+  # Note: shapeFile[34] in lvlmast.c is a different mechanism:
   # it maps indices to characters for newsh?.shp (enemy sprites),
-  # NOT for shapes?.dat (level tilesets).
+  # not for shapes?.dat (level tilesets).
   # -----------------------------------------------------------
   - name: "shapes).dat"
     category: game_data
