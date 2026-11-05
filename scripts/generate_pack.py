@@ -98,6 +98,7 @@ from validation import (
     validated_choice,
     agnostic_substitute,
     _build_validation_index,
+    _parse_validation,
     deliverable,
     with_archive_members,
     extra_alternatives,
@@ -623,6 +624,10 @@ def _matches_an_alternative(fe: dict, local_path: str, profiles: dict) -> bool:
     siblings = extra_alternatives(fe, profiles)
     if len(siblings) < 2:
         return False
+    # A sibling the code takes without a check (Raze's "BLOOD: Unknown
+    # Version") accepts whatever copy fills the slot.
+    if any(not _parse_validation(entry.get("validation")) for entry in siblings):
+        return True
     actual = compute_hashes(local_path, frozenset({"sha1", "md5", "crc32"}))
     for entry in siblings:
         for algorithm in ("sha1", "md5", "crc32"):
