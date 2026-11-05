@@ -113,7 +113,6 @@ _FILLED_FIELDS = (
     "note",
     "aliases",
     "contents",
-    "region",
 )
 _COPIED_FIELDS = (
     "sha1",
@@ -290,6 +289,27 @@ def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
         if file_entry.get(field) is not None and existing.get(field) is None:
             existing[field] = file_entry[field]
     _merge_priority(existing, file_entry.get("priority"))
+    _merge_region(existing, file_entry.get("region"))
+
+
+def _merge_region(existing: dict, theirs: str | list | None) -> None:
+    """The regions every reader selects the file for, the pack's own rule.
+
+    region.build_region_index takes the union of the tags and keeps a file
+    untagged as soon as one reader declares it without a region. The first
+    tag used to win: psxonpsp660.bin came out japan from pcsx_rearmed while
+    SwanStation tags it world and beetle_psx not at all.
+    """
+    if existing.get("_region_void"):
+        return
+    if not theirs:
+        existing.pop("region", None)
+        existing["_region_void"] = True
+        return
+    ours = existing.get("region") or []
+    ours = ours if isinstance(ours, list) else [ours]
+    added = [r for r in (theirs if isinstance(theirs, list) else [theirs]) if r not in ours]
+    existing["region"] = [*ours, *added]
 
 
 def _merge_hashes(
@@ -373,6 +393,8 @@ def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
     crc = entry.get("crc32")
     if isinstance(crc, str):
         entry["crc32"] = crc.removeprefix("0x").lower()
+    if not file_entry.get("region"):
+        entry["_region_void"] = True
     entry["_cores"] = {emu_name}
     entry["_required_by"] = {emu_name} if file_entry.get("required") else set()
     entry["_named_by"] = {emu_name} if file_entry.get("_opens_by_name", True) else set()
@@ -814,6 +836,7 @@ def generate_platform_truth(
     for sys_id, sys_data in systems.items():
         for fe in sys_data.get("files", []):
             fe.pop("_hash_by", None)
+            fe.pop("_region_void", None)
             fe["_cores"] = sorted(fe.get("_cores", set()))
             fe["_required_by"] = sorted(fe.get("_required_by", set()))
             fe["_named_by"] = sorted(fe.get("_named_by", set()))

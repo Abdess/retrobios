@@ -454,5 +454,38 @@ class TheModelIsAFunctionOfItsInputs(unittest.TestCase):
         )
 
 
+class RegionFollowsEveryReader(unittest.TestCase):
+    """The first core to tag a file set its region in the truth: the ST-V
+    BIOS kept beetle_saturn's Americas and lost mednafen_stv's Korea, and
+    psxonpsp660.bin read japan although beetle_psx declares it untagged.
+    The pack's region index takes the union and voids it on an untagged
+    reader, and the truth now says the same."""
+
+    @staticmethod
+    def _profile(name: str, region: list[str] | None) -> dict:
+        entry = {"name": "bios.bin", "system": "sega-stv", "md5": "a" * 32}
+        if region is not None:
+            entry["region"] = region
+        return {"emulator": name, "type": "libretro", "systems": ["sega-stv"],
+                "files": [entry]}
+
+    def _region(self, profiles: dict) -> object:
+        config = {"cores": sorted(profiles), "systems": {"sega-stv": {"files": []}}}
+        truth = generate_platform_truth("p", config, {}, profiles)
+        (entry,) = truth["systems"]["sega-stv"]["files"]
+        self.assertNotIn("_region_void", entry)
+        return entry.get("region")
+
+    def test_tags_of_every_reader_are_kept(self):
+        region = self._region({"a": self._profile("a", ["north-america"]),
+                               "b": self._profile("b", ["south-korea", "north-america"])})
+        self.assertEqual(region, ["north-america", "south-korea"])
+
+    def test_an_untagged_reader_leaves_no_region(self):
+        for order in (("a", "b"), ("b", "a")):
+            profiles = {"a": self._profile("a", ["japan"]), "b": self._profile("b", None)}
+            self.assertIsNone(self._region({k: profiles[k] for k in order}))
+
+
 if __name__ == "__main__":
     unittest.main()
