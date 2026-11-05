@@ -83,6 +83,27 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
         ]
         self.assertEqual(offenders, [])
 
+    def test_generators_publish_whole_files(self):
+        """install/games/ (12 MB, read by install.py --for-games), the event
+        schema, the launcher index and wiki/installer.md were truncated at
+        their final name: an interrupted run left a committed-looking file
+        holding part of a JSON document. The installer doc's sandbox writes
+        throwaway fixtures under tmp/ and is not published."""
+        import ast
+
+        sandbox = {"write_small_list", "Sandbox"}
+        offenders = []
+        for path in sorted((REPO_ROOT / "scripts").glob("generate_*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for top in tree.body:
+                if path.name == "generate_installer_doc.py" and getattr(top, "name", "") in sandbox:
+                    continue
+                for node in ast.walk(top):
+                    if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                            and node.func.attr in ("write_text", "write_bytes")):
+                        offenders.append(f"{path.name}:{node.lineno}")
+        self.assertEqual(offenders, [])
+
     def test_the_text_is_utf8_whatever_the_locale(self):
         import tempfile
 

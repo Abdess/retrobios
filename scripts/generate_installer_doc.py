@@ -45,6 +45,8 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from typing import Callable
 
+from artifacts import write_text_atomic
+
 ROOT = Path(__file__).resolve().parent.parent
 PAGE = ROOT / "wiki" / "installer.md"
 INSTALLER = ROOT / "install.py"
@@ -643,7 +645,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{args.page} differs from install.py and install/*.json: run "
               "python scripts/generate_installer_doc.py", file=sys.stderr)
         return 1
-    args.page.write_text(text, encoding="utf-8")
+    write_text_atomic(str(args.page), text)
     print(f"Wrote {args.page}")
     return 0
 

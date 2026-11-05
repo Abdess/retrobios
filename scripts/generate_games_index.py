@@ -59,6 +59,7 @@ from romfolders import (  # noqa: E402
     folder_names,
     load_setups,
 )
+from artifacts import write_text_atomic  # noqa: E402
 from safeparse import yaml_load  # noqa: E402
 
 import install  # noqa: E402
@@ -635,7 +636,7 @@ def main() -> int:
         path.unlink()
     for path in changed:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(files[path], encoding="utf-8")
+        write_text_atomic(str(path), files[path])
     print(f"{len(changed)} written, {len(stale)} removed")
     return 1 if failures else 0
 
