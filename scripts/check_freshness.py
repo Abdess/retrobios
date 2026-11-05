@@ -1407,8 +1407,10 @@ def render(findings: list[Finding]) -> str:
             cols = f"  {f.status:7} {f.subject:{width}}"
             if f.remote:
                 cols += f"  {f.local:{local_width}} -> {f.remote}"
-            elif f.local:
-                # An arrow pointing at nothing read as a lost value.
+            elif f.local or (f.detail and local_width):
+                # An arrow pointing at nothing read as a lost value. An empty
+                # local value still takes its column, or the detail starts
+                # where the other rows show theirs.
                 cols += f"  {f.local:{local_width}}"
             if f.detail:
                 cols += f"  {f.detail}"

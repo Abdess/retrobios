@@ -621,6 +621,14 @@ class RowsSayAllTheyStandFor(unittest.TestCase):
         ])
         self.assertNotIn("->", text)
 
+    def test_a_detail_starts_in_one_column(self):
+        text = cf.render([
+            cf.Finding("native", "amberelec", cf.STALE, detail="no longer matches"),
+            cf.Finding("native", "bizhawk", cf.STALE, local="1 file(s)", detail="is not what"),
+        ])
+        rows = [line for line in text.splitlines() if line.startswith("  STALE")]
+        self.assertEqual(rows[0].index("no longer"), rows[1].index("is not what"))
+
     def test_json_carries_every_unresolved_name(self):
         missing = {f"core{i:02d}": [] for i in range(50)}
         (row,) = cf._unresolved_findings("retropie", missing)
