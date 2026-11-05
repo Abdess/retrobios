@@ -53,11 +53,10 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh
 </TabItem>
 <TabItem label="Android (Termux)">
 
-Install **Termux**, a terminal app, and run these lines.
+Install **Termux**, a terminal app, and run this line. It installs Python
+and asks Android for storage access: allow both.
 
 ```sh title="Terminal"
-pkg install python
-termux-setup-storage
 curl -fsSL https://abdess.github.io/retrobios/i | sh
 ```
 

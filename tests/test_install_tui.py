@@ -4591,6 +4591,20 @@ def _installed_state(dest: Path, code: int = 0, failed: list | None = None) -> i
     return state
 
 
+class TheRomMResultNamesTheScan(unittest.TestCase):
+    """RomM's player sees firmware its scan recorded: the result said
+    "installed" and left the scan unsaid."""
+
+    def test_the_result_and_its_farewell_say_it(self):
+        state = _installed_state(SYSTEM_DIR)
+        state.platform = "romm"
+        _title, lines = install.tui_outcome(state)
+        self.assertIn(install.ROMM_SCAN_WORDS, lines)
+        self.assertIn(install.ROMM_SCAN_WORDS, install._farewell_lines(state))
+        state.platform = "retroarch"
+        self.assertNotIn(install.ROMM_SCAN_WORDS, install.tui_outcome(state)[1])
+
+
 class AppOnTheCard(unittest.TestCase):
     """The RetroBIOS app offered on the result screen and in the options."""
 
@@ -7162,10 +7176,10 @@ class _LineModeFindings(_CardFixtures):
         by, and each remedy changes the outcome."""
         listing, pack, listed = self.minui()
         self.assertEqual(listed["list_records"], ["cores", "regions"])
-        code, text, _kept = self.narrowed("minui", from_pack=[pack], core=["mgba"])
-        self.assertEqual(code, 1)
-        self.assertIn("Add --manifest FILE, a copy of install/minui.json, which records them",
-                      text)
+        # The pack carries its install list since 2026-11: --core narrows it
+        # alone, as with the list named beside it.
+        code, text, kept = self.narrowed("minui", from_pack=[pack], core=["mgba"])
+        self.assertEqual((code, kept), (0, ["Bios/MGBA/gba_bios.bin"]), text)
         code, text, kept = self.narrowed("minui", from_pack=[pack], manifest=listing,
                                          core=["mgba"])
         self.assertEqual((code, kept), (0, ["Bios/MGBA/gba_bios.bin"]), text)
@@ -7174,8 +7188,9 @@ class _LineModeFindings(_CardFixtures):
         self.assertEqual(listed["list_records"], ["regions", "systems"])
         code, text, _kept = self.narrowed("misterfpga", from_pack=[mister], core=["x"])
         self.assertEqual(code, 1)
-        self.assertIn("MiSTer FPGA's own file list records no cores either. Run it without "
-                      "--core, or narrow with --system.", text)
+        # Its own list, which the pack carries, refuses it as --manifest would.
+        self.assertIn("the misterfpga file list records no cores, so --core cannot narrow it",
+                      text)
         self.assertNotIn("--manifest", text)
         code, text, kept = self.narrowed("misterfpga", from_pack=[mister],
                                          system=["nintendo-gba"])
@@ -10920,7 +10935,8 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         """code_audit_19 P2-1, tui_audit_12 P2-4: line mode said it, the
         screen dropped the version event."""
         said = ("This list was built for RetroBat 8.3.1, this machine runs 8.2.0.1. "
-                "RetroBat's own BIOS check may report some files as wrong though they work.")
+                "RetroBat's own BIOS check reads the list of the version it runs, and "
+                "may show some files as not matching it.")
         state = fresh_state()
         state.stack = ["setup"]
         with mock.patch.object(install.Path, "exists", return_value=True):

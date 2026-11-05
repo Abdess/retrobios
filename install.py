@@ -43,17 +43,25 @@ import textwrap
 import threading
 import time
 import traceback
-import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
 import weakref
 import xml.etree.ElementTree as ET
 import zipfile
-import zlib
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
 from pathlib import Path, PurePosixPath
-from typing import Any, BinaryIO, ContextManager, NamedTuple, TextIO
+from typing import Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
+
+# Built as C extensions that a Python compiled without their libraries
+# lacks: the run stopped on a ModuleNotFoundError traceback.
+try:
+    import unicodedata
+    import zlib
+except ImportError as _missing:
+    print(f"Error: this Python was built without its {_missing.name} module, which "
+          "the installer needs. Run it with another Python 3.8 or newer.", file=sys.stderr)
+    sys.exit(1)
 
 # File lists are read from main, the newest ones, whichever commit the
 # installer came from. RETROBIOS_REF pins them to a tag or a commit when
@@ -645,15 +653,18 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # platforms: [{"platform", "name", "bios_dir"}], empty when none is found.
     "detect": ("os", "os_name", "platforms"),
     # stage: manifest (reason: network, not_found, invalid, clock for a
-    # refused certificate under a clock set in the past, or no_ca for no
-    # trusted certificates on the machine) or detect (reason: conflict, two
+    # refused certificate under a clock set in the past, no_ca for no
+    # trusted certificates on the machine, or no_ssl for a Python built
+    # without ssl) or detect (reason: conflict, two
     # systems found on one machine, or not_found, the platform named with
     # --platform, or by a file list or a pack in a run without questions,
     # found nowhere and no folder to assume) or from (a folder named with --from,
     # reason: not_found, not_a_folder, unreadable, or system for the root
     # of the system and /proc, /sys, /dev) or dest (reason: unreadable, a
     # folder above it this user cannot open, or not_writable, the BIOS
-    # folder cannot be created, a summary following).
+    # folder cannot be created, a summary following) or option (reason:
+    # unknown, a platform, target, system, core or emulator the run cannot
+    # use, refused before any download).
     "error": ("stage", "reason", "platform", "message"),
     # A folder named with --from, once read: the files it holds (counted
     # up to MAX_SCANNED_FILES, truncated past them), and the folders below
@@ -665,6 +676,12 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # message says it and what it means. Not written when either version
     # is unknown, and never a refusal.
     "version": ("platform", "list_version", "installed_version", "message"),
+    # Before choices: the board the system or its card names, read with no
+    # --target given. applied is whether the run keeps its cores' files
+    # only, false for a board the platform's list does not name. message
+    # says it. A kind of its own: the full-screen interface always gives
+    # --dest, and the board was never applied there.
+    "board": ("platform", "board", "applied", "message"),
     # Before the file events of a check: the systems the run's list lets
     # one choose among, --system aside, in id order (other for the files
     # no system names). What Choose systems lists, and what the plan counts
@@ -1246,11 +1263,14 @@ def _retroarch_cfg_dir(
 
     A value left empty or at `default` is the directory RetroArch falls back
     on, `default` under app_dir. None when the config is unreadable or does
-    not set the key.
+    not set the key. A config this user cannot read is said once, like a
+    closed folder: a retroarch.cfg a `sudo retroarch` left to root hid the
+    setup without a word.
     """
     try:
         lines = cfg_path.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError:
+    except OSError as exc:
+        _note_refused(cfg_path, exc)
         return None
     for line in lines:
         line = line.strip()
@@ -1455,6 +1475,33 @@ def derivative_board(platform: str) -> tuple[str, str] | None:
     except OSError:
         return None
     return (name, board) if board else None
+
+
+# The board a card names on a partition a computer reads. Batocera writes
+# its image's board to boot/batocera.board on the BATOCERA boot partition,
+# the FAT one beside SHARE (batocera-43.1, board/batocera/scripts/
+# post-image-script.sh:60), and reads it there itself (package/batocera/
+# core/batocera-scripts/scripts/batocera-info). batocera.arch is inside the
+# image, out of a computer's reach.
+_CARD_BOARD_FILES: dict[str, str] = {"batocera": "boot/batocera.board"}
+
+
+def card_board(platform: str) -> str | None:
+    """The board the card mounted here names, None where no card or two
+    cards of different boards do: a card is most often prepared on a
+    computer, where the system's own board file does not exist."""
+    where = _CARD_BOARD_FILES.get(platform)
+    if where is None:
+        return None
+    boards: set[str] = set()
+    for mount in _mounted_cards():
+        try:
+            value = (mount / where).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if value.strip() and not _CONTROLS.search(value.strip()):
+            boards.add(value.strip().lower())
+    return boards.pop() if len(boards) == 1 else None
 
 
 def detect_board(platform: str) -> str | None:
@@ -1748,7 +1795,10 @@ _VERSION_TEXT = re.compile(r"[0-9A-Za-z][0-9A-Za-z._+-]{0,39}")
 # What generate_pack.py wrote as every list's version until it recorded the
 # platform's own: not a version, so a list holding it names none.
 _NO_LIST_VERSION = "1.0"
-_MD5_CHECK = "{name}'s own BIOS check may report some files as wrong though they work."
+# What the platform's own check does, not a verdict on it: it compares the
+# files with the list of its own version, and no run proved them working.
+_MD5_CHECK = ("{name}'s own BIOS check reads the list of the version it runs, and "
+              "may show some files as not matching it.")
 
 
 def _version_line(path: Path) -> str:
@@ -3046,6 +3096,31 @@ def did_you_mean(
     return f"{listing} lists all {len(known)}."
 
 
+def refuse_name(platform: str, *lines: str) -> NoReturn:
+    """End the run on a name it cannot use (a platform, target, system, core
+    or emulator), refused before any download.
+
+    The reason went to stderr only: a reader of --events got start, then
+    end with code 1, and could not tell a typo from a failed download. Code
+    2, as for an option argparse refuses: 1 also means --check found files
+    to fetch, and a script reading it reran the install on a typo forever.
+    """
+    message = " ".join(line.strip() for line in lines)
+    if message.startswith("Error: "):
+        message = message[len("Error: "):]
+    EVENTS.emit("error", stage="option", reason="unknown", platform=platform,
+                message=message)
+    for line in lines:
+        print(line, file=sys.stderr)
+    sys.exit(2)
+
+
+# Frontends and systems that keep no BIOS folder of their own: each
+# emulator they start reads its own, which a run without --platform finds.
+# --platform es-de was "Unknown platform", the answer left unsaid.
+_NO_BIOS_FOLDER = ("ES-DE", "LaunchBox", "Android")
+
+
 def normalize_platform(name: str, say: bool = True) -> str:
     """Return the canonical platform id for user-supplied input.
 
@@ -3065,10 +3140,27 @@ def normalize_platform(name: str, say: bool = True) -> str:
                 print(f"  {rule.name} gets the {display_name(rule.manifest)} file list: "
                       f"--platform {rule.manifest}.")
             return rule.manifest
-    print(f"Unknown platform '{name.strip()}'. "
-          + did_you_mean([name], list(AVAILABLE_PLATFORMS), "--list-platforms"),
-          file=sys.stderr)
-    sys.exit(1)
+    for frontend in _NO_BIOS_FOLDER:
+        if key and key == _name_key(frontend):
+            refuse_name(name.strip(), f"{frontend} has no BIOS folder of its own: run again "
+                        "without --platform, and the installer fills the folder of each "
+                        "emulator it finds here.")
+    # --list-platforms prints TrimUI with why it gets no folder, and naming
+    # it answered "Unknown platform".
+    for rule in _EMBEDDED_RULES:
+        if key and not rule.manifest and key == _name_key(rule.name):
+            refuse_name(name.strip(), f"{rule.name} is not installed to: "
+                        f"{_NO_FOLDER.get(rule.name, 'no source names its BIOS folder')}.",
+                        "  Name that folder: --platform retroarch "
+                        "--dest FOLDER")
+    # Every name --list-platforms prints, so that spruce suggests spruceOS
+    # and the count is the one the listing shows.
+    known = list(AVAILABLE_PLATFORMS) + list(dict.fromkeys(
+        rule.name for rule in _EMBEDDED_RULES
+        if _name_key(rule.name) not in {_name_key(plat) for plat in AVAILABLE_PLATFORMS}
+    )) + list(_NO_BIOS_FOLDER)
+    refuse_name(name.strip(), f"Unknown platform '{name.strip()}'. "
+                + did_you_mean([name], known, "--list-platforms"))
 
 
 def _read_limited_json(
@@ -3808,7 +3900,7 @@ def network_words(
 ) -> tuple[str, str]:
     """The reason a request failed, and the same in words a beginner reads.
 
-    The reason is clock, no_ca, network, or offline for a request the run
+    The reason is clock, no_ca, no_ssl, network, or offline for a request the run
     was told not to make. Offline, the run printed
     "[Errno -2] Name or service not known": the raw text now follows the
     words only under --verbose.
@@ -3820,7 +3912,14 @@ def network_words(
     raw = str(reason or exc)
     code, words = "network", ""
     cert_error = getattr(sys.modules.get("ssl"), "SSLCertVerificationError", None)
-    if cert_error is not None and isinstance(inner, cert_error):
+    if (isinstance(exc, urllib.error.URLError) and raw.startswith("unknown url type")
+            and not hasattr(urllib.request, "HTTPSHandler")):
+        # urllib defines no HTTPS handler in a Python built without ssl:
+        # three attempts and a word on the connection blamed the network.
+        code = "no_ssl"
+        words = ("This Python was built without its ssl module and cannot use HTTPS. "
+                 "Run the installer with another Python 3.8 or newer")
+    elif cert_error is not None and isinstance(inner, cert_error):
         today = today or datetime.date.today()
         if not _ca_bundle_found():
             code = "no_ca"
@@ -3993,9 +4092,20 @@ def fetch_manifest(plat: str) -> dict:
     try:
         return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list"), plat)
     except ValueError as exc:
+        words = f"the file list is not valid: {exc}"
+        if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
+            # The parser's "Expecting value: line 1 column 1" told no one
+            # anything, where the full screen names the usual cause.
+            words = ("what arrived is not a file list: a Wi-Fi sign-in page or a cut "
+                     "download looks like this")
         EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                    message=f"the file list is not valid: {exc}")
-        print(f"  The file list for {plat} is not valid: {exc}", file=sys.stderr)
+                    message=words)
+        print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
+        if words.startswith("what arrived"):
+            for line in _address_lines(url):
+                print(line, file=sys.stderr)
+            print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
+                  "same command again.", file=sys.stderr)
         sys.exit(1)
     except urllib.error.HTTPError as exc:
         EVENTS.emit(
@@ -4047,13 +4157,52 @@ def fetch_manifest(plat: str) -> dict:
         sys.exit(1)
 
 
+def _pack_alone(plat: str) -> bool:
+    """A pack read without a file list for plat: one built before packs
+    carried their install list records the systems of its files only."""
+    return (LOCAL.pack is not None and LOCAL.manifest is None
+            and (LOCAL.pack.install_list or {}).get("platform") != plat)
+
+
+def local_targets(plat: str) -> "dict | None":
+    """The cores per board this run has without the network: the list the
+    pack carries, else targets/<platform>.json beside --manifest, where the
+    repository keeps it (install/targets/). None when there is neither."""
+    if LOCAL.pack is not None and LOCAL.pack.targets is not None \
+            and plat in LOCAL.pack.platforms():
+        return LOCAL.pack.targets
+    if LOCAL.manifest is None:
+        return None
+    beside = LOCAL.manifest.parent / "targets" / f"{plat}.json"
+    raw = _read_capped(beside, MAX_TARGETS_BYTES)
+    if raw is None:
+        return None
+    try:
+        return _validate_targets(json.loads(raw.decode("utf-8")))
+    except (UnicodeDecodeError, ValueError) as exc:
+        print(f"  Error: the target list {beside} is not valid: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+
 def fetch_targets(plat: str) -> "dict | None":
-    """Download the target core list.
+    """The target core list: the one this run has at hand, else downloaded.
 
     Empty on 404, where the platform publishes no targets. None when the list
     could not be read: a timeout says nothing about the platform, and
-    answering "no targets" for it sent users to the full pack.
+    answering "no targets" for it sent users to the full pack. A run without
+    the network and with no list at hand is refused, code 2, before any
+    file is written.
     """
+    held = local_targets(plat)
+    if held is not None:
+        return held
+    if LOCAL.offline:
+        source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
+                  else f"{offline_named()} makes no request")
+        print(f"Error: --target reads the cores of each {display_name(plat)} board from a "
+              f"list, and {source}. Put install/targets/{plat}.json beside the file list "
+              "named with --manifest, or run with the network.", file=sys.stderr)
+        sys.exit(2)
     url = TARGETS_URL.format(platform=plat)
     try:
         return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list"))
@@ -6509,17 +6658,24 @@ def _needed_lines(entries: list[dict], heading: str, every: bool = False) -> lis
     count = sum(len(names) for names, _cores in by_system.values())
     lines = [f"  {heading} ({_plural(count, 'file')}):"]
     systems = sorted(by_system)
-    for system in systems if every else systems[:8]:
+    shown = systems if every else systems[:8]
+    for system in shown:
         names, cores = by_system[system]
         readers = f" ({', '.join(sorted(cores))})" if cores else ""
         lines.append(f"    {system}{readers}: {', '.join(sorted(names))}")
+        # Each emulator's own page, one click away: the index alone sent the
+        # user searching several hundred pages for theforceengine.
+        lines += [f"      {SITE_URL}emulators/{core}/" for core in sorted(cores)]
     if not every and len(systems) > 8:
         # A file several systems share is a group of its own, counted as one.
         unit = "groups" if any(", " in system for system in systems) else "systems"
         more = len(systems) - 8
         lines.append(f"    ... and {more} more {unit if more > 1 else unit[:-1]} "
                      "(--check --verbose lists them all)")
-    lines.append(f"  Each emulator's page says what these files are: {SITE_URL}emulators/")
+    if all(by_system[system][1] for system in shown):
+        lines.append("  Each emulator's page, linked above, says what these files are.")
+    else:
+        lines.append(f"  Each emulator's page says what these files are: {SITE_URL}emulators/")
     return lines
 
 
@@ -6541,6 +6697,8 @@ def installer_id() -> str:
 PLAN_FILES_PER_SYSTEM = 8
 PLAN_LARGEST_SYSTEMS = 10
 PLAN_FRAME_LINES = 6
+# Past this many systems a group sharing files is named by its first two.
+PLAN_GROUP_TITLES = 3
 
 # Answers that stop: every menu before this one taught q as quit.
 _REFUSALS = ("n", "q", "quit", "exit", "stop", "abort")
@@ -6608,22 +6766,34 @@ def _print_plan(
     if not parts:
         print(f"\n  Nothing to {verb}.")
     by_system: dict[str, list[dict]] = {}
+    titles: dict[str, str] = {}
     for entry in to_download:
-        system = (", ".join(system_title(name, manifest) for name in entry_systems(entry))
-                  or OTHER_TITLE)
+        names = [system_title(name, manifest) for name in entry_systems(entry)]
+        system = ", ".join(names) or OTHER_TITLE
         by_system.setdefault(system, []).append(entry)
+        # Batocera's group of systems sharing MAME's device ROMs was one line
+        # of 732 characters, ten rows on an 80-column terminal.
+        titles[system] = (system if verbose or len(names) <= PLAN_GROUP_TITLES
+                          else f"{', '.join(names[:2])} and {len(names) - 2} more systems")
     shown = None if verbose else PLAN_FILES_PER_SYSTEM
-    listing: list[str] = []
+    # (line, its text without styles), the second measuring the rows it takes.
+    listing: list[tuple[str, str]] = []
     for system in sorted(by_system):
         entries = sorted(by_system[system], key=lambda e: e["dest"])
-        listing.append(f"  {term.bold(system)}  {_sized(entries)}")
-        listing += [f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}"
+        listing.append((f"  {term.bold(titles[system])}  {_sized(entries)}",
+                        f"  {titles[system]}  {_sized(entries)}"))
+        listing += [(f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}",
+                     f"    {entry['dest']}  {format_size(entry.get('size', 0))}")
                     for entry in entries[:shown]]
         if shown is not None and len(entries) > shown:
-            listing.append(f"    ... and {len(entries) - shown} more")
-    screen = terminal_size()[1]
-    if verbose or len(listing) + len(trees) + PLAN_FRAME_LINES <= screen:
-        for line in listing:
+            more = f"    ... and {len(entries) - shown} more"
+            listing.append((more, more))
+    columns, screen = terminal_size()
+    # A line wider than the terminal wraps: counted as one, the total the
+    # listing must leave in view scrolled out of sight.
+    rows = sum(-(-max(1, cell_width(plain)) // max(1, columns)) for _line, plain in listing)
+    if verbose or rows + len(trees) + PLAN_FRAME_LINES <= screen:
+        for line, _plain in listing:
             print(line)
     else:
         largest = sorted(by_system, key=lambda s: (-_bytes(by_system[s]), s))
@@ -6635,7 +6805,7 @@ def _print_plan(
                   else _plural(len(largest), 'system'))
         print(f"  {groups}, the largest first:")
         for system in largest[:PLAN_LARGEST_SYSTEMS]:
-            print(f"  {term.bold(system)}  {_sized(by_system[system])}")
+            print(f"  {term.bold(titles[system])}  {_sized(by_system[system])}")
         if len(largest) > PLAN_LARGEST_SYSTEMS:
             # Counted as the line above counts: the groups, when it names them.
             unit = "group" if "groups" in groups else "system"
@@ -8991,7 +9161,7 @@ def _older_list_advice(plat: str = "") -> str:
     the pack's: the one-line installer does not change it, and a current
     pack was said to come from an older release.
     """
-    if LOCAL.pack is not None and LOCAL.manifest is None:
+    if _pack_alone(plat):
         return (f"  The list in {LOCAL.pack.name} does not record it: add --manifest FILE, "
                 f"a copy of install/{plat or '<platform>'}.json, or run without the option.")
     if RELEASE_REF != DEFAULT_RELEASE_REF:
@@ -9042,8 +9212,7 @@ def _narrow_to_emulators(
     try:
         chosen = resolve_choices(names, known, "emulator")
     except ValueError as exc:
-        print(f"Error: {plat}: {exc}", file=sys.stderr)
-        sys.exit(1)
+        refuse_name(plat, f"Error: {plat}: {exc}")
     before = len(files)
     files, omitted = narrow_to_cores(manifest, chosen, files, omitted)
     # A whole-platform install keeps the platform's files of a system no
@@ -9070,7 +9239,7 @@ def _requested_narrowing(
     """The systems, cores and regions named on the command line, checked."""
     if not (args.system or args.core or args.region):
         return None
-    pack_alone = LOCAL.pack is not None and LOCAL.manifest is None
+    pack_alone = _pack_alone(plat)
     recorded = recorded_axes(files, omitted)
     if pack_alone:
         # A pack records the systems of its files, not their cores or
@@ -9099,8 +9268,7 @@ def _requested_narrowing(
         cores = resolve_choices(args.core or [], choices["cores"], "core")
         regions = resolve_regions(args.region or [])
     except ValueError as exc:
-        print(f"Error: {plat}: {exc}", file=sys.stderr)
-        sys.exit(1)
+        refuse_name(plat, f"Error: {plat}: {exc}")
     return systems, cores, regions
 
 
@@ -9230,6 +9398,7 @@ class GamesData:
             raw = _read_capped(beside / "index.json", MAX_GAMES_INDEX_BYTES)
         cached = self.cached("index.json")
         reason = "offline"
+        failure = ""
         if raw is None and network:
             try:
                 raw = _fetch_json(GAMES_URL.format(path="index.json"), MAX_GAMES_INDEX_BYTES,
@@ -9239,8 +9408,7 @@ class GamesData:
             except (urllib.error.URLError, OSError, ValueError,
                     http.client.HTTPException) as exc:
                 reason = "network"
-                if os.environ.get("RETROBIOS_DEBUG"):
-                    print(f"  Games index: {exc}", file=sys.stderr)
+                failure = str(exc)
             else:
                 if cached is not None:
                     _cache_write(cached, raw)
@@ -9249,7 +9417,8 @@ class GamesData:
         if raw is None:
             raise GamesUnavailable(reason, (
                 f"the games index is not on this machine and {offline_words()}"
-                if reason == "offline" else "the games index could not be downloaded"))
+                if reason == "offline"
+                else f"the games index could not be downloaded ({failure})"))
         try:
             data = json.loads(raw.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
@@ -10765,6 +10934,11 @@ class PackSource:
         # The version of the platform's list the pack was built from, "" for
         # a pack that does not record it.
         self.list_version = ""
+        # The platform's install list and its cores per board, which a pack
+        # built since carries: with them a pack alone narrows to a board as
+        # the network list does. None for a pack that carries none.
+        self.install_list: dict | None = None
+        self.targets: dict | None = None
         try:
             for path in self.files:
                 archive = zipfile.ZipFile(path)
@@ -10791,7 +10965,15 @@ class PackSource:
             elif path.is_file():
                 given.append(path)
             else:
-                raise ValueError(f"{path} does not exist")
+                # "X does not exist" named neither the option nor the packs
+                # beside it, where a typo in the name is the usual cause.
+                near = sorted(p.name for p in path.parent.glob("*_BIOS_Pack*.zip")
+                              if p.is_file()) if path.parent.is_dir() else []
+                beside = (f" The packs in {path.parent}: {', '.join(near[:3])}"
+                          + (f" and {len(near) - 3} more" if len(near) > 3 else "") + "."
+                          if near else "")
+                raise ValueError(f"{path} does not exist: --from-pack names a pack ZIP, "
+                                 f"its parts or the folder holding them.{beside}")
         if not given:
             raise ValueError(f"no pack ZIP in {', '.join(map(str, paths))}")
         packs: dict[str, list[Path]] = {}
@@ -10858,6 +11040,15 @@ class PackSource:
         version = data.get("list_version")
         if isinstance(version, str) and _VERSION_TEXT.fullmatch(version):
             self.list_version = version
+        if isinstance(data.get("install_list"), dict):
+            self.install_list = data["install_list"]
+        if data.get("targets") is not None:
+            try:
+                self.targets = _validate_targets(data["targets"])
+            except ValueError:
+                # Read as a pack that carries none: --target is then refused
+                # with the reason, never applied from a broken list.
+                self.targets = None
         for key in ("system_titles", "system_names"):
             held = data.get(key)
             if isinstance(held, dict):
@@ -10894,9 +11085,11 @@ class PackSource:
                 if f"_{PLATFORM_NAMES[plat].replace(' ', '_')}_" in stem]
 
     def manifest(self, plat: str) -> dict:
-        """A file list for plat built from the pack's own: the same files at
-        the same places, as extracting the pack would leave them, with the
-        systems it records."""
+        """A file list for plat: the install list the pack carries, else one
+        built from the pack's own, the same files at the same places, as
+        extracting the pack would leave them, with the systems it records."""
+        if self.install_list is not None and self.install_list.get("platform") == plat:
+            return self.install_list
         return {
             "manifest_version": 2,
             "platform": plat,
@@ -11749,15 +11942,36 @@ def _copies(entry: dict) -> list[dict]:
             *entry.get("declared_choices", [])]
 
 
+# id(manifest) -> (manifest, the cores its entries name), read once per list.
+_LISTED_CORES: dict[int, tuple[dict, frozenset]] = {}
+
+
+def _listed_cores(manifest: dict) -> frozenset:
+    """Every core a copy of the list's entries names: the platform's own.
+
+    system_cores reaches every profile, the target rule needing the cores off
+    the platform too, and the "read by" line named Recalbox's mame0258 on
+    Batocera and BizHawk on RetroArch.
+    """
+    cached = _LISTED_CORES.get(id(manifest))
+    if cached is None or cached[0] is not manifest:
+        cores = frozenset(
+            core for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]
+            for copy in _copies(entry) for core in copy.get("cores") or [])
+        cached = _LISTED_CORES[id(manifest)] = (manifest, cores)
+    return cached[1]
+
+
 def readers(entry: dict, manifest: dict) -> list[str]:
-    """The cores that open an entry: as its copies name them, else every core
-    the platform runs for its systems."""
+    """The cores that open an entry: as its copies name them, else the cores
+    of its systems that the platform's own list names."""
     named = sorted({core for copy in _copies(entry) for core in copy.get("cores") or []})
     if named:
         return named
     system_cores = manifest.get("system_cores") or {}
+    listed = _listed_cores(manifest)
     return sorted({core for system in entry_systems(entry)
-                   for core in system_cores.get(system, [])})
+                   for core in system_cores.get(system, []) if core in listed})
 
 
 def opened_line(entry: dict, manifest: dict, bios_path: Path) -> str:
@@ -13112,13 +13326,14 @@ def main() -> None:
         # The runs the full-screen interface starts read it from here, and
         # the words name the option given.
         os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
-    if offline_requested() and (args.target or args.list_targets):
+    if (offline_requested() and (args.target or args.list_targets)
+            and not (args.manifest or args.from_pack)):
+        # No list can be at hand: a pack carries one, and so can the folder
+        # of a --manifest (targets/<platform>.json).
         parser.error("--target and --list-targets read a core list from the network, "
-                     f"which {offline_named()} does not use")
+                     f"which {offline_named()} does not use: name a pack with --from-pack, "
+                     "or a file list with --manifest and targets/<platform>.json beside it")
     install_bounded_opener()
-    if args.from_pack and args.target:
-        parser.error("--target reads a core list from the network, which --from-pack "
-                     "does not use")
     if getattr(args, "from") and (
         args.list_platforms or args.list_targets or args.list_systems
         or args.list_cores or args.list_emulators
@@ -14054,6 +14269,12 @@ def _list_card_choice(plat: str, dest: Path) -> CardChoice:
         return CardChoice(plat, dest, f"{screen_text(str(dest))} holds the files of "
                           f"{names}: installing into it as named. Name the card's BIOS "
                           "folder with --dest to write there.")
+    if plat == "retrodeck" and dest.name.lower() == "bios" and not _is_dir(dest / "bios"):
+        # RetroDECK's list writes bios/, roms/ and the rest below its own
+        # folder: its BIOS folder, which --help asks for, got bios/bios.
+        return CardChoice(plat, dest.parent, f"{shown_path(dest)} is RetroDECK's BIOS "
+                          f"folder: the files go below {shown_path(dest.parent)}, the "
+                          "RetroDECK folder holding it")
     return CardChoice(plat, dest)
 
 
@@ -14367,13 +14588,13 @@ def _several_found(platforms: list[tuple[str, Path]], setups: list) -> None:
     sys.exit(1)
 
 
-def _unknown_target(target: str, plat: str, targets: dict) -> None:
-    print(f"Error: unknown target '{target}' for {plat}.", file=sys.stderr)
-    if targets:
-        print("  " + did_you_mean([target], sorted(targets), "--list-targets"),
-              file=sys.stderr)
-    else:
-        print(f"  {plat} publishes no target list", file=sys.stderr)
+def _unknown_target(target: str, plat: str, targets: dict, *after: str) -> NoReturn:
+    if not targets:
+        # No value can work: "unknown target" read as a typo of the board.
+        refuse_name(plat, f"Error: {display_name(plat)} has no hardware targets: run again "
+                    "without --target.", *after)
+    refuse_name(plat, f"Error: unknown target '{target}' for {display_name(plat)}.",
+                "  " + did_you_mean([target], sorted(targets), "--list-targets"), *after)
 
 
 def _is_terminal(stream: TextIO) -> bool:
@@ -14434,6 +14655,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
               "(--platform takes either name):")
         for line in _system_lines():
             print(f"  {line}")
+        print("\nNo BIOS folder of their own, each emulator reading its own (run without "
+              "--platform):")
+        print(f"  {', '.join(_NO_BIOS_FOLDER)}")
         detected = detect_platforms(os_type)
         if detected:
             print("\nDetected on this system:")
@@ -14716,11 +14940,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 sys.exit(1)
             target_lists[plat_name] = targets
             if args.target not in targets:
-                _unknown_target(args.target, plat_name, targets)
-                if len(platforms) > 1:
-                    print("  Nothing was installed. Name one platform with "
-                          "--platform to install it alone.", file=sys.stderr)
-                sys.exit(1)
+                _unknown_target(args.target, plat_name, targets, *(
+                    ["  Nothing was installed. Name one platform with "
+                     "--platform to install it alone."] if len(platforms) > 1 else []))
 
     if args.romm_firmware is not None:
         # Applied or refused, never ignored.
@@ -14812,18 +15034,28 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
 
         # Target filtering. With no --target, a system that names its board
         # narrows to it: a Batocera RPi4 took 8.6 GiB where its board needs
-        # 5.5. Only on the device itself, where the board file exists.
+        # 5.5. Read from the device itself, else from the card mounted here:
+        # a card prepared on a computer took every board's files, and the
+        # full-screen interface, which always gives --dest, never applied one.
         target = args.target
-        if not target and not args.every_board and args.dest is None and not LOCAL.offline:
+        if (not target and not args.every_board
+                and (not LOCAL.offline or local_targets(plat_name) is not None)):
             board = detect_board(plat_name)
+            where = "detected"
+            if not board and args.dest is not None:
+                board, where = card_board(plat_name), "found on the card"
             if board:
                 known = fetch_targets(plat_name) or {}
                 if board in known:
                     target = board
-                    print(f"  Board {board} detected (--every-board installs all boards)")
+                    words = f"Board {board} {where} (--every-board installs all boards)"
                 else:
-                    print(f"  Board {board} has no {PLATFORM_NAMES.get(plat_name, plat_name)} "
-                          "core list: installing the files of every board")
+                    words = (f"Board {board} {where} has no "
+                             f"{PLATFORM_NAMES.get(plat_name, plat_name)} core list: "
+                             "installing the files of every board")
+                print(f"  {words}")
+                EVENTS.emit("board", platform=plat_name, board=board,
+                            applied=target == board, message=words)
             else:
                 derived = derivative_board(plat_name)
                 if derived:
@@ -14842,7 +15074,6 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # of what a filter was asked for: a 4 GB download instead of
                 # the subset the target needs. Refuse rather than ignore.
                 _unknown_target(target, plat_name, targets)
-                sys.exit(1)
             elif target_info.get("cores") is None:
                 print(
                     f"  Target '{target}' publishes no core list: "
@@ -15395,6 +15626,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                         print(f"  {shown_path(bios_path)} stays: {exc.strerror}",
                               file=sys.stderr)
             bulk_lines += hint
+            if plat_name == "romm" and progress.installed:
+                bulk_lines.append(ROMM_SCAN_WORDS)
             total_downloaded += progress.installed
             # The end line tells BIOS files from game data, as the menu
             # counted them, over the files that landed: matched by the end
@@ -16237,7 +16470,8 @@ def _folded(text: str) -> str:
 # --system plan: Back with the same ticks gives that plan back.
 _CHECK_FIELDS = ("check", "files", "systems", "choices", "set_aside", "found", "scanned",
                  "unreadable", "saves", "check_summary", "checked_flags", "cli_systems",
-                 "facts", "ticked", "version", "checked_dests", "games", "games_unavailable")
+                 "facts", "ticked", "version", "board", "checked_dests", "games",
+                 "games_unavailable")
 
 
 class TuiState:
@@ -16404,6 +16638,9 @@ class TuiState:
         self.version: str = ""
         # The note in one line, for a plan with no room for its sentences.
         self.version_short: str = ""
+        # The board event of the check: the board read from the system or
+        # its card, said on the plan.
+        self.board: str = ""
         # The same of the confirm or preview run, and of the install: a
         # choice of systems can leave the save file out, or keep it.
         self.dry_saves: dict | None = None
@@ -17929,7 +18166,7 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
         state.choices = state.set_aside = None
         state.found, state.scanned, state.unreadable = [], [], []
         state.check_summary = state.saves = None
-        state.version = state.version_short = ""
+        state.version = state.version_short = state.board = ""
         state.games = state.games_reading = state.games_unavailable = None
         state.checked_flags = tui_flags(state)
     elif run in ("confirm", "preview"):
@@ -19851,6 +20088,8 @@ def _take_event(state: TuiState, event: dict) -> None:
         state.choices = list(event["systems"])
     elif kind == "set_aside" and state.run == "check":
         state.set_aside = set(event["dests"])
+    elif kind == "board" and state.run == "check":
+        state.board = str(event["message"])
     elif kind == "version" and state.run == "check":
         state.version = str(event["message"])
         state.version_short = (f"List for {display_name(state.platform, state.manifest)} "
@@ -21065,6 +21304,10 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
         free = next((index for index, line in enumerate(lines)
                      if str(line).startswith("Free space:")), len(lines))
         lines.insert(free, state.version)
+    if state.board:
+        free = next((index for index, line in enumerate(lines)
+                     if str(line).startswith("Free space:")), len(lines))
+        lines.insert(free, state.board)
     if state.status:
         lines.append(state.status)
     if defined:
@@ -21706,6 +21949,8 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         # Said again with the result, as line mode ends: the system's own
         # BIOS check may mark the files just put in place.
         lines.append(state.version)
+    if state.platform == "romm" and installed:
+        lines.append(ROMM_SCAN_WORDS)
     fallback = (state.games or {}).get("fallback") or [] if state.for_games else []
     if fallback:
         # Named with the result, as line mode ends: they got every BIOS of
@@ -22584,7 +22829,8 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
                 f"(--from-pack PACK), or {offline_undo()}."], 1))
             return
         title = {"clock": "The clock is wrong",
-                 "no_ca": "No trusted certificates"}.get(code, "No connection")
+                 "no_ca": "No trusted certificates",
+                 "no_ssl": "This Python cannot use HTTPS"}.get(code, "No connection")
         # The screen's first row is Try again: "then run again" was a second way.
         lines = [words[0].upper() + words[1:].replace(", then run again",
                                                       ", then choose Try again") + "."]
@@ -22897,6 +23143,14 @@ def _closing_lines(state: TuiState) -> list[str]:
 
 
 TUI_QUIT_WORDS = "RetroBIOS: quit. Nothing was installed."
+
+# RomM serves the firmware rows its library scan records (rommapp/romm 5.4.0,
+# backend/endpoints/firmware.py:148,175 read db_firmware_handler.list_firmware),
+# and its folder watcher is off unless ENABLE_RESCAN_ON_FILESYSTEM_CHANGE is
+# set (backend/config/__init__.py:284, backend/watcher.py:106): files put in
+# place stay unseen by the player until a scan.
+ROMM_SCAN_WORDS = ("RomM lists the firmware its library scan has recorded: start a scan "
+                   "in RomM so that its player finds these files.")
 
 # The result's remedy for the save files left out, as the terminal says it
 # once the screen is gone: Options are not there to choose from

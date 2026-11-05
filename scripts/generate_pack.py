@@ -2256,72 +2256,79 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
     for yml_file in sorted(targets_path.glob("*.yml")):
         if yml_file.name.startswith("_"):
             continue
-        with open(yml_file) as f:
-            data = yaml_load(f) or {}
-        targets = data.get("targets", {})
-        if not isinstance(targets, dict):
-            raise ValueError(f"{yml_file}: targets must be a mapping")
-
-        # The pack builder accepts the aliases declared in _overrides.yml, so
-        # --target switch works there. Emitting only canonical names left the
-        # installer rejecting the same word and, worse, carrying on with every
-        # file instead: the user asked for a filter and got the full pack.
-        overrides_path = targets_path / "_overrides.yml"
-        alias_map: dict[str, list[str]] = {}
-        platform_overrides: dict = {}
-        if overrides_path.is_file():
-            with open(overrides_path) as f:
-                all_overrides = yaml_load(f) or {}
-            platform_overrides = (
-                all_overrides.get(yml_file.stem, {}).get("targets", {}) or {}
-            )
-            for tname, ovr in platform_overrides.items():
-                names = [a for a in (ovr or {}).get("aliases", []) if isinstance(a, str)]
-                if names:
-                    alias_map[tname] = names
-
-        result: dict[str, list[str] | None] = {}
-        for target_name, target_info in targets.items():
-            if not isinstance(target_name, str) or not target_name:
-                raise ValueError(f"{yml_file}: target names must be non-empty strings")
-            if not isinstance(target_info, dict):
-                raise ValueError(f"{yml_file}: target {target_name!r} must be a mapping")
-            cores = target_info.get("cores")
-            if cores is None:
-                result[target_name] = None
-                continue
-            if (
-                not isinstance(cores, list)
-                or any(not isinstance(core, str) or not core for core in cores)
-                or len(cores) != len(set(cores))
-            ):
-                raise ValueError(
-                    f"{yml_file}: target {target_name!r} cores must be unique "
-                    "non-empty strings"
-                )
-            # The builder's own reading, overrides included: a list published
-            # another way makes the installer serve what the pack does not.
-            # An empty list is a board with no core, not one with every core.
-            resolved = load_target_config(
-                yml_file.stem, target_name, str(targets_path.parent)
-            )
-            result[target_name] = None if resolved is None else sorted(resolved)
-
-        for target_name, names in alias_map.items():
-            if target_name not in result:
-                continue
-            for alias in names:
-                if alias in result:
-                    raise ValueError(
-                        f"{yml_file}: alias {alias!r} collides with a target name"
-                    )
-                result[alias] = result[target_name]
-
+        result = target_list(yml_file)
         out_path = Path(output_dir) / f"{yml_file.stem}.json"
         write_text_atomic(out_path, json.dumps(result, indent=2, sort_keys=True) + "\n")
         count += 1
         print(f"  {yml_file.stem}: {len(result)} targets")
     print(f"Generated {count} target manifest(s) in {output_dir}")
+
+
+def target_list(yml_file: Path) -> dict[str, list[str] | None]:
+    """A platform's cores per hardware target, as install/targets/ publishes
+    them and a pack carries them: aliases included, overrides applied."""
+    targets_path = yml_file.parent
+    with open(yml_file) as f:
+        data = yaml_load(f) or {}
+    targets = data.get("targets", {})
+    if not isinstance(targets, dict):
+        raise ValueError(f"{yml_file}: targets must be a mapping")
+
+    # The pack builder accepts the aliases declared in _overrides.yml, so
+    # --target switch works there. Emitting only canonical names left the
+    # installer rejecting the same word and, worse, carrying on with every
+    # file instead: the user asked for a filter and got the full pack.
+    overrides_path = targets_path / "_overrides.yml"
+    alias_map: dict[str, list[str]] = {}
+    platform_overrides: dict = {}
+    if overrides_path.is_file():
+        with open(overrides_path) as f:
+            all_overrides = yaml_load(f) or {}
+        platform_overrides = (
+            all_overrides.get(yml_file.stem, {}).get("targets", {}) or {}
+        )
+        for tname, ovr in platform_overrides.items():
+            names = [a for a in (ovr or {}).get("aliases", []) if isinstance(a, str)]
+            if names:
+                alias_map[tname] = names
+
+    result: dict[str, list[str] | None] = {}
+    for target_name, target_info in targets.items():
+        if not isinstance(target_name, str) or not target_name:
+            raise ValueError(f"{yml_file}: target names must be non-empty strings")
+        if not isinstance(target_info, dict):
+            raise ValueError(f"{yml_file}: target {target_name!r} must be a mapping")
+        cores = target_info.get("cores")
+        if cores is None:
+            result[target_name] = None
+            continue
+        if (
+            not isinstance(cores, list)
+            or any(not isinstance(core, str) or not core for core in cores)
+            or len(cores) != len(set(cores))
+        ):
+            raise ValueError(
+                f"{yml_file}: target {target_name!r} cores must be unique "
+                "non-empty strings"
+            )
+        # The builder's own reading, overrides included: a list published
+        # another way makes the installer serve what the pack does not.
+        # An empty list is a board with no core, not one with every core.
+        resolved = load_target_config(
+            yml_file.stem, target_name, str(targets_path.parent)
+        )
+        result[target_name] = None if resolved is None else sorted(resolved)
+
+    for target_name, names in alias_map.items():
+        if target_name not in result:
+            continue
+        for alias in names:
+            if alias in result:
+                raise ValueError(
+                    f"{yml_file}: alias {alias!r} collides with a target name"
+                )
+            result[alias] = result[target_name]
+    return result
 
 
 def _resolve_systems(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
@@ -2966,6 +2973,7 @@ def _run_platform_packs(
                     # The install list of the same choices names each file's
                     # systems: the pack records them, so a pack alone (a
                     # handheld without Wi-Fi) can be narrowed by system.
+                    board_list = Path(args.platforms_dir) / "targets" / f"{representative}.yml"
                     systems_for[os.path.basename(zip_path)] = pack_systems(generate_manifest(
                         representative, args.platforms_dir, db, args.bios_dir,
                         registry_path, emulators_dir=args.emulators_dir,
@@ -2975,7 +2983,7 @@ def _run_platform_packs(
                         offline=args.offline, required_only=required_only,
                         data_registry=data_registry,
                         no_game_data=getattr(args, "no_game_data", False),
-                    ))
+                    ), target_list(board_list) if board_list.is_file() else None)
 
     print("\nVerifying packs and generating manifests...")
     skip_conf = bool(system_filter or args.split)
@@ -4810,7 +4818,7 @@ def _manifest_core_index(
 
 
 
-def pack_systems(install_manifest: dict) -> dict:
+def pack_systems(install_manifest: dict, targets: dict | None = None) -> dict:
     """What a pack's manifest.json records of its systems, from the install
     list built with the same choices: each file's systems, by its path in
     the pack, and the names a person reads for them.
@@ -4818,6 +4826,11 @@ def pack_systems(install_manifest: dict) -> dict:
     A pack recorded none: the installer refused --system with a pack alone
     ("the file list comes from an older release") and offered no Choose
     systems, the route of a handheld without Wi-Fi.
+
+    The install list itself and the platform's cores per board (targets, as
+    install/targets/ publishes them) ride along: with the pack alone, a
+    board was never applied and --target was refused, and a Batocera RPi4
+    card took 8.9 GB where its board reads 5.8.
     """
     files = install_manifest.get("files", [])
     entries = [*files, *install_manifest.get("omitted_files", [])]
@@ -4843,6 +4856,9 @@ def pack_systems(install_manifest: dict) -> dict:
     # the one the machine runs when it has the pack alone.
     if install_manifest.get("version"):
         systems["list_version"] = install_manifest["version"]
+    systems["install_list"] = install_manifest
+    if targets is not None:
+        systems["targets"] = targets
     return systems
 
 
@@ -4858,7 +4874,7 @@ def annotate_pack_systems(manifest: dict, systems: dict | None) -> None:
     for key in ("system_titles", "system_names"):
         if systems.get(key):
             manifest[key] = systems[key]
-    for key in ("list_records", "list_version"):
+    for key in ("list_records", "list_version", "install_list", "targets"):
         if key in systems:
             manifest[key] = systems[key]
 

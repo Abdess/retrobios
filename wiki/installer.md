@@ -124,9 +124,12 @@ The platform is read from the pack's name when `--platform` is not given. The
 file list is the one the pack carries (`manifest.json`), with each file's
 SHA-1 and size, and every file is checked against it before it takes its
 place. A data tree (Dolphin's `Sys/`, PPSSPP's assets) comes from the pack
-too, not from its source archive. `--target` reads a core list from the
-network and is refused with `--from-pack`. A board found on the device is not
-applied either: every board's files are installed. At a terminal the run
+too, not from its source archive. A pack built since 2026-11 also carries
+its platform's install list and the cores of each board (the
+`install/targets/<platform>.json` list): `--target` applies with the pack
+alone, and so does a board found on the device. An older pack carries
+neither, and `--target` is then refused before anything is written. At a
+terminal the run
 finds a card mounted here, asks the folder when nothing is found, and names
 the BIOS folder on its menu before anything is copied.
 
@@ -355,8 +358,8 @@ The file list names the version of the platform it was built for (Batocera
 43.1, RetroBat 8.3.1). Where the system writes its own version in a file, the
 installer reads it, and when the two differ it says so before the install and
 again with the result: "This list was built for Batocera 43.1, this machine
-runs 41. Batocera's own BIOS check may report some files as wrong though they
-work." The install goes on. The files read are
+runs 41. Batocera's own BIOS check reads the list of the version it runs, and
+may show some files as not matching it." The install goes on. The files read are
 `/usr/share/batocera/batocera.version` on Batocera, `/recalbox/recalbox.version`
 on Recalbox (a release, not a branch build), `system\version.info` beside the
 `bios` folder of RetroBat, and `VERSION_ID` in `/etc/os-release` on Lakka and
@@ -507,7 +510,8 @@ BIOS folder: /userdata/bios
 427 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (1 file):
     capcom-cps3 (fbneo): sfiii2a.zip
-  Each emulator's page says what these files are: https://abdess.github.io/retrobios/emulators/
+      https://abdess.github.io/retrobios/emulators/fbneo/
+  Each emulator's page, linked above, says what these files are.
   Not available here: DARK.GOB, DARKWAR.RTL, DARKWAR.WAD and 76 more, game data their games read. Copy them from your own copy of the game into /userdata/bios/, /userdata/bios/Source/, /userdata/bios/base/ and 10 more folders.
   Game data: files a game or a game engine reads, of no use to the other cores.
 To check this later, run the same command with --check.
@@ -952,9 +956,9 @@ what the options name, everything by default.
 
 | Option | Effect |
 |--------|--------|
-| <span id="option-platform"></span>`--platform NAME` | Install for this platform instead of the detected one. A system `--list-platforms` names under its own files (`muos`, `arkos`) stands for the file list it gets, and the run says which. Unknown names are refused with the closest ones |
+| <span id="option-platform"></span>`--platform NAME` | Install for this platform instead of the detected one. A system `--list-platforms` names under its own files (`muos`, `arkos`) stands for the file list it gets, and the run says which. ES-DE, LaunchBox and Android, which keep no BIOS folder, are answered with the run that fills each emulator's folder. Unknown names are refused with the closest ones |
 | <span id="option-dest"></span>`--dest PATH` | Destination directory, overriding detection. Without `--platform`, the file list is the platform detected here: at a terminal the installer asks, Enter taking the one found, and otherwise it uses the one found, RetroArch's when nothing is found, and refuses when several are. The run prints whose list it is. A folder that does not exist is named with the nearest one that does, then created, except for a system that runs from its SD card, which refuses it. When more than its last level is missing (a mistyped path), a run at a terminal asks first, and the answer defaults to no |
-| <span id="option-target"></span>`--target NAME` | Keep only the files the cores of that hardware target need, and the systems they emulate. An unknown target is refused rather than ignored, since carrying on would install everything. On Batocera, Recalbox, ROCKNIX and Lakka the board is read from the system (`batocera.arch`, `recalbox.arch`, `HW_DEVICE`, `LIBREELEC_DEVICE` or `LIBREELEC_PROJECT`) and applied when no `--target` is given |
+| <span id="option-target"></span>`--target NAME` | Keep only the files the cores of that hardware target need, and the systems they emulate. An unknown target is refused rather than ignored, since carrying on would install everything. On Batocera, Recalbox, ROCKNIX and Lakka the board is read from the system (`batocera.arch`, `recalbox.arch`, `HW_DEVICE`, `LIBREELEC_DEVICE` or `LIBREELEC_PROJECT`) and applied when no `--target` is given, from a pack alone too when it carries the core list per board. On a computer, the board a Batocera card names on its BATOCERA partition (`boot/batocera.board`) is applied the same way, in line mode and on the full screen |
 | <span id="option-every-board"></span>`--every-board` | Install the files of every board instead of the one the system names, for a card that moves between devices |
 | <span id="option-installed-cores"></span>`--installed-cores` | Keep only what the cores already installed read (RetroArch, Lakka, RetroPie). See [Installed cores](#installed-cores) |
 | <span id="option-cores-dir"></span>`--cores-dir PATH` | The folder RetroArch loads its cores from, for `--installed-cores` when it is not found. Implies `--installed-cores` |
@@ -979,7 +983,7 @@ what the options name, everything by default.
 | <span id="option-events"></span>`--events` | Write the run as JSON events on standard output, one object per line, and the usual text on standard error. Implies `--no-input`. See [Machine-readable events](#machine-readable-events) |
 | <span id="option-from"></span>`--from FOLDER` | Copy the BIOS files a folder holds (an old SD card, a backup, a ZIP) instead of downloading them, each one recognised by its hash and copied, never moved. Repeat for several folders. See [Copy from an old card](#copy-from-an-old-card) |
 | <span id="option-from-pack"></span>`--from-pack PATH` | Install from a pack already downloaded: its ZIP, one of its parts (the others are found in the same folder), or the folder holding them. Makes no network request and checks every file's hash. See [Without a network](#without-a-network-offline-install) |
-| <span id="option-offline"></span>`--offline` | Make no network request. `--check`, `--from`, `--from-pack` and `--manifest` work without one, the file list stops the run at once when none of them gives it, and a file the run would download fails at once. `RETROBIOS_INSTALL_OFFLINE=1` does the same. Refused with `--target` and `--list-targets`, which read a core list from the network |
+| <span id="option-offline"></span>`--offline` | Make no network request. `--check`, `--from`, `--from-pack` and `--manifest` work without one, the file list stops the run at once when none of them gives it, and a file the run would download fails at once. `RETROBIOS_INSTALL_OFFLINE=1` does the same. `--target` and `--list-targets` read the core list per board a pack carries, or `targets/<platform>.json` beside `--manifest`, and are refused when neither gives one |
 | <span id="option-manifest"></span>`--manifest FILE` | Read the file list from FILE, a copy of `install/<platform>.json`, instead of downloading it. See [Without a network](#without-a-network-offline-install) |
 | <span id="option-restore"></span>`--restore FOLDER` | Put back the files a run replaced and kept in FOLDER, a dated folder inside `retrobios-backup`. Takes no other option but `--dry-run` and `--no-input`. See [Files you already had](#files-you-already-had) |
 | <span id="option-tui"></span>`--tui` | Open the full-screen interface, or stop with the reason it cannot open here (code 2) instead of falling back to the questions. Wins over `RETROBIOS_PLAIN` and `ACCESSIBLE`. See [The full-screen interface](#the-full-screen-interface) |
@@ -1355,6 +1359,11 @@ folder, whose parent is the library. Run from the host of a container, where
 library laid out as `{platform}/roms` with no template found is refused
 rather than filled in the wrong place, and the message gives the command.
 
+RomM's player reads the firmware its library scan has recorded, and RomM
+watches the library folder only when `ENABLE_RESCAN_ON_FILESYSTEM_CHANGE` is
+set. An install that put files in place ends by saying so: start a scan in
+RomM so that the player finds them.
+
 ## Android
 
 Android reports itself as Linux, so the runtime is named from its own
@@ -1398,11 +1407,12 @@ writable (Android 10 and earlier), it is a standalone copy target.
 
 Under scoped storage the two RetroArch config paths are unreadable from Termux on
 Android 11 and later, so on current devices the folders are what answers.
-Running `termux-setup-storage` once is what makes the shared one reachable:
+Running `termux-setup-storage` once is what makes the shared one reachable.
+The one-line command runs it when `~/storage` is missing, then waits up to a
+minute for the permission Android asks for, as it offers `pkg install python`
+when Python is missing:
 
 ```bash
-pkg install python
-termux-setup-storage
 curl -fsSL https://abdess.github.io/retrobios/i | sh
 ```
 
@@ -1716,8 +1726,8 @@ fields, the installer refuses to narrow rather than install everything.
 | Code | Meaning |
 |------|---------|
 | `0` | everything asked for is installed or already in place |
-| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 (nothing was run), an unusable base URL, an unknown platform or target, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, `--check` found files to fetch, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, or `--add-app` could not put every file of the app on the card |
-| `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board` or `--from-pack`, `--target` or `--list-targets` with `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set), which read a core list from the network, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore`, a folder that is not a dated folder inside `retrobios-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
+| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, `--check` found files to fetch, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, or `--add-app` could not put every file of the app on the card |
+| `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board`, `--target` with `--from-pack` or `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set) when no core list per board is at hand (the pack carries none and none is beside `--manifest` as `targets/<platform>.json`), `--list-targets` with `--offline` and neither, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also an unknown platform, target, system, core or emulator, said in an `Error:` or `Unknown platform` line and an `error` event whose `stage` is `option`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore`, a folder that is not a dated folder inside `retrobios-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
 | `130` | stopped with Ctrl+C, or with Ctrl+C or Ctrl+D at a question, the terminal keeping `RetroBIOS: stopped. Nothing was installed.` before an install. Run the same command again to carry on |
 | `141` | the output was piped to a reader that closed early (`--list-platforms \| head`) |
 
@@ -1763,9 +1773,10 @@ other schemas under `api/v1/schemas/`.
 | `start` | `schema`, `installer`, `mode` | First line. `schema` is 1, `installer` the identity `--version` prints, `mode` one of `install`, `check`, `dry-run`, `list` |
 | `unsearched` | `folder`, `reason`, `message` | Before `detect`, once for each folder the search for setups could not look in, this user being refused it. What it would hold counts as absent, and the other places are still searched: `detect` then lists what they hold, and an empty `platforms` after an `unsearched` line means nothing was found where the installer could look. `reason` says why in words (`Permission denied`), `message` says it in a sentence |
 | `detect` | `os`, `os_name`, `platforms` | Once the platforms are known. `os_name` comes from `/etc/os-release`. `platforms` lists `{platform, name, bios_dir}`, and is empty when nothing supported was found |
-| `error` | `stage`, `reason`, `platform`, `message` | The file list could not be read (`stage` is `manifest`): `reason` is `network`, `not_found` or `invalid`, `clock` when the server's certificate was refused and the system clock reads a date before the installer was written, `no_ca` when the machine holds no list of trusted certificates (`SSL_CERT_FILE` names one), or `offline` when `--offline` forbids the request. A folder named with `--from` cannot be read (`stage` is `from`, `reason` `not_found`, `not_a_folder` for a file that is no ZIP, `unreadable`, or `system` for the root of the system, `/proc`, `/sys` or `/dev`). The BIOS folder sits under a folder this user cannot open (`stage` is `dest`, `reason` `unreadable`), and the run ends with code 1 before anything is written. The BIOS folder cannot be created (`stage` is `dest`, `reason` `not_writable`): a `summary` follows with what the run installed before it. Two systems are detected on one machine and no `--dest` names the folder (`stage` is `detect`, `reason` `conflict`). The platform named with `--platform` is found nowhere and no folder can be assumed for it: a card system with no card named, a portable emulator, Batocera or Recalbox named on a computer (their folder is the `bios` folder of their SHARE drive), or no usual folder on this system or one set aside behind a folder this user cannot open (`stage` is `detect`, `reason` `not_found`). So is a platform named by a file list or a pack, in a run without questions where it is found nowhere here. A `--dest` refused as the card of the system named carries the same `stage` and `reason`: another system's card, a folder inside a card, a drive with none of the files its card always has, or a folder that does not exist. `message` says it in words, and is the only thing that tells these cases apart |
+| `error` | `stage`, `reason`, `platform`, `message` | The file list could not be read (`stage` is `manifest`): `reason` is `network`, `not_found` or `invalid`, `clock` when the server's certificate was refused and the system clock reads a date before the installer was written, `no_ca` when the machine holds no list of trusted certificates (`SSL_CERT_FILE` names one), `no_ssl` when this Python was built without its `ssl` module and cannot use HTTPS, or `offline` when `--offline` forbids the request. A folder named with `--from` cannot be read (`stage` is `from`, `reason` `not_found`, `not_a_folder` for a file that is no ZIP, `unreadable`, or `system` for the root of the system, `/proc`, `/sys` or `/dev`). The BIOS folder sits under a folder this user cannot open (`stage` is `dest`, `reason` `unreadable`), and the run ends with code 1 before anything is written. A platform, target, system, core or emulator named on the command line is unknown or cannot be used here (`stage` is `option`, `reason` `unknown`, `platform` the platform it was checked against or the name typed), refused before any download with code 2. The BIOS folder cannot be created (`stage` is `dest`, `reason` `not_writable`): a `summary` follows with what the run installed before it. Two systems are detected on one machine and no `--dest` names the folder (`stage` is `detect`, `reason` `conflict`). The platform named with `--platform` is found nowhere and no folder can be assumed for it: a card system with no card named, a portable emulator, Batocera or Recalbox named on a computer (their folder is the `bios` folder of their SHARE drive), or no usual folder on this system or one set aside behind a folder this user cannot open (`stage` is `detect`, `reason` `not_found`). So is a platform named by a file list or a pack, in a run without questions where it is found nowhere here. A `--dest` refused as the card of the system named carries the same `stage` and `reason`: another system's card, a folder inside a card, a drive with none of the files its card always has, or a folder that does not exist. `message` says it in words, and is the only thing that tells these cases apart |
 | `scanned` | `folder`, `files`, `truncated`, `other_drives` | Each folder named with `--from`, once read and before `detect`. `files` counts the files found, `truncated` is true when the search stopped at 200,000 of them, and `other_drives` lists the folders below it on another drive, which were not entered |
 | `version` | `platform`, `list_version`, `installed_version`, `message` | Before `choices`, when the system here runs another version than the one the list was built for: `list_version` is the list's, `installed_version` the one the system's version file states, and `message` says it and what it means. Not written when either version is unknown. The run goes on |
+| `board` | `platform`, `board`, `applied`, `message` | Before `choices`, with no `--target` and no `--every-board`, when the system names its board or a Batocera card mounted here does (`boot/batocera.board` on its BATOCERA partition): `applied` is true when the run keeps that board's files only, false for a board the platform's list does not name, which keeps every board's files. `message` says it |
 | `choices` | `platform`, `systems` | Before `checking`: the systems the run's list lets one choose among, sorted by id, `other` last for the files no system names. The run's other options apply (`--core`, `--region`, `--no-game-data`, the files left out for an unknown save directory), `--system` does not: these are the systems a screen lists to choose from, and the count a `--system` is out of |
 | `set_aside` | `platform`, `dests` | Right after `choices`: the files of the list the run sets aside before any choice, in list order, those read from a save directory whose place is not known among them. A screen chooses its cores among the rest, the cores `--core` accepts |
 | `file` | `platform`, `dest`, `systems`, `size`, `state` | Each file of the list after the check. `state` is `present` (hash verified), `wrong_hash` or `missing` |

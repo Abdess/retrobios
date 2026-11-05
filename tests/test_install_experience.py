@@ -823,6 +823,59 @@ class APartlyClosedHome(unittest.TestCase):
         self.assertEqual([entry["bios_dir"] for entry in detect["platforms"]], [str(system)])
 
 
+class RetroDeckBiosFolderNamedAsDest(unittest.TestCase):
+    """`--platform retrodeck --dest ~/retrodeck/bios`, as --help asks for a
+    BIOS folder, put every file under bios/bios, which RetroDECK never reads."""
+
+    def test_the_files_go_below_the_retrodeck_folder(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        (root / "bios").mkdir()
+        choice = install.card_choice("retrodeck", "retrodeck", root / "bios")
+        self.assertEqual(choice.folder, root)
+        self.assertIn("RetroDECK's BIOS folder", choice.note)
+        self.assertFalse(choice.refused)
+
+    def test_the_retrodeck_folder_itself_is_kept(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        (root / "bios").mkdir()
+        choice = install.card_choice("retrodeck", "retrodeck", root)
+        self.assertEqual((choice.folder, choice.note), (root, ""))
+
+
+class AnUnreadableRetroArchConfigIsSaid(unittest.TestCase):
+    """A retroarch.cfg a `sudo retroarch` left at 0600 for root was read as
+    no config at all: RetroArch was not found and nothing said why."""
+
+    @unittest.skipIf(os.name == "nt" or os.geteuid() == 0,
+                     "a file without read permission is POSIX")
+    def test_the_closed_config_is_named(self):
+        with FakeRepository() as repo:
+            home = repo.root / "home"
+            cfg = home / ".config" / "retroarch" / "retroarch.cfg"
+            cfg.parent.mkdir(parents=True)
+            cfg.write_text('system_directory = "/media/card/bios"\n')
+            env = {**repo.env(), "HOME": str(home), "RETROBIOS_OS": "linux"}
+            os.chmod(cfg, 0o000)
+            try:
+                proc = subprocess.run(
+                    [sys.executable, str(REPO_ROOT / "install.py"), "--check",
+                     "--no-input", "--events"],
+                    env=env, capture_output=True, text=True, timeout=60,
+                    stdin=subprocess.DEVNULL)
+            finally:
+                os.chmod(cfg, 0o644)
+        self.assertNotIn("Traceback", proc.stderr)
+        refusal = (f"Could not look for setups: this user cannot open {cfg} "
+                   "(Permission denied)")
+        self.assertEqual(" ".join(proc.stderr.split()).count(refusal), 1, proc.stderr)
+        events = [json.loads(line) for line in proc.stdout.splitlines()]
+        unsearched = [event for event in events if event["event"] == "unsearched"]
+        self.assertEqual([(event["folder"], event["reason"]) for event in unsearched],
+                         [(str(cfg), "Permission denied")])
+
+
 class OutputToAFileAsksNothing(unittest.TestCase):
     """`install.py > log.txt` at a terminal: the menu went into the file
     and the run waited on an answer to a prompt nobody could see."""

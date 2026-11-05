@@ -2404,6 +2404,22 @@ class FileListsAreRetried(unittest.TestCase):
         self.assertIs(result, missing)
         self.assertEqual(len(calls), 1)
 
+    def test_a_sign_in_page_is_named(self):
+        """A Wi-Fi sign-in page read as "invalid file list: Expecting value:
+        line 1 column 1 (char 0)", with no cause and no next step."""
+        page = io.BytesIO(b"<html>Sign in to Hotel WiFi</html>")
+        page.headers = {}
+        err = io.StringIO()
+        with unittest.mock.patch.object(
+                install.urllib.request, "urlopen",
+                lambda url, timeout=None: contextlib.nullcontext(page)), \
+                contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
+            install.fetch_manifest("retroarch")
+        said = err.getvalue()
+        self.assertIn("a Wi-Fi sign-in page or a cut download looks like this", said)
+        self.assertIn("run the same command again", said)
+        self.assertNotIn("Expecting value", said)
+
     def test_three_failures_end_with_advice(self):
         import urllib.error
 
@@ -2575,6 +2591,63 @@ class NoPythonNamesThisSystemsCommand(unittest.TestCase):
         self.assertNotIn("apt", proc.stderr)
 
 
+class ABootstrapPythonCanDoHttps(unittest.TestCase):
+    """find_python checked the version only: a python3 built without ssl
+    was chosen over a full python, and every download then failed."""
+
+    def _bin(self) -> tuple[Path, Path]:
+        root = Path(_tempdir(self))
+        fake_bin = root / "bin"
+        fake_bin.mkdir()
+        for tool in ("sed", "tr", "dirname", "cat", "awk", "uname"):
+            found = shutil.which(tool)
+            if found:
+                (fake_bin / tool).symlink_to(found)
+        shadow = root / "no-ssl"
+        shadow.mkdir()
+        (shadow / "ssl.py").write_text('raise ImportError("built without ssl")\n')
+        (fake_bin / "python3").write_text(
+            f'#!/bin/sh\nPYTHONPATH="{shadow}" exec {shlex.quote(sys.executable)} "$@"\n')
+        (fake_bin / "python3").chmod(0o755)
+        (root / "install.py").write_text("import ssl; print('installer ran')\n")
+        shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
+        return root, fake_bin
+
+    def _run(self, root: Path, fake_bin: Path) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            ["/bin/sh", str(root / "install.sh")], cwd=root,
+            env={"PATH": str(fake_bin), "HOME": str(root)},
+            capture_output=True, text=True, timeout=30, check=False,
+            stdin=subprocess.DEVNULL, start_new_session=True,
+        )
+
+    def test_a_full_python_is_preferred(self):
+        root, fake_bin = self._bin()
+        (fake_bin / "python").symlink_to(sys.executable)
+        proc = self._run(root, fake_bin)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn("installer ran", proc.stdout)
+
+    def test_an_old_python_is_named_with_its_version(self):
+        """Debian Buster's python3 3.7 got "Install it with: sudo apt install
+        python3", which apt answers with "already the newest version"."""
+        root, fake_bin = self._bin()
+        (fake_bin / "python3").write_text(
+            '#!/bin/sh\ncase "$2" in *print*) echo 3.7.3 ;; esac\nexit 1\n')
+        proc = self._run(root, fake_bin)
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("Python 3.8 or newer is required, and python3 here is 3.7.3.",
+                      proc.stderr)
+        self.assertNotIn("Install it with: sudo apt", proc.stderr)
+
+    def test_the_missing_module_is_named(self):
+        root, fake_bin = self._bin()
+        proc = self._run(root, fake_bin)
+        self.assertEqual(proc.returncode, 1)
+        self.assertNotIn("installer ran", proc.stdout)
+        self.assertIn("python3 is built without a module the installer needs", proc.stderr)
+
+
 @unittest.skipUnless(shutil.which("pwsh") and shutil.which("script"), "needs PowerShell and a terminal")
 class WindowsWithoutPythonIsOfferedWinget(unittest.TestCase):
     """A Windows machine without Python was told to install it, open a new
@@ -2619,6 +2692,74 @@ class WindowsWithoutPythonIsOfferedWinget(unittest.TestCase):
         self.assertNotIn("installer ran", proc.stdout)
         self.assertIn("winget install Python.Python.3.12", proc.stdout)
         self.assertFalse((fake_bin / "python3").exists())
+
+
+@unittest.skipUnless(shutil.which("script"), "needs a terminal")
+class TermuxStorageIsSetUpByTheBootstrap(unittest.TestCase):
+    """The installer told an Android user to run termux-setup-storage and
+    start the whole run over: the bootstrap runs it and waits for ~/storage."""
+
+    def _run(self, storage_exists: bool) -> tuple[subprocess.CompletedProcess, Path]:
+        root = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
+        (root / "install.py").write_text("print('installer ran')\n")
+        home = root / "home"
+        home.mkdir()
+        if storage_exists:
+            (home / "storage").mkdir()
+        fake_bin = root / "bin"
+        fake_bin.mkdir()
+        for tool in ("sed", "tr", "dirname", "cat", "awk", "uname", "sleep", "mkdir"):
+            found = shutil.which(tool)
+            if found:
+                (fake_bin / tool).symlink_to(found)
+        (fake_bin / "python3").symlink_to(sys.executable)
+        # The app creates ~/storage once Android's dialog is answered.
+        (fake_bin / "termux-setup-storage").write_text(
+            f'#!/bin/sh\necho ran >> "{root}/setup.log"\nmkdir "$HOME/storage"\n')
+        (fake_bin / "termux-setup-storage").chmod(0o755)
+        command = (f"PATH={shlex.quote(str(fake_bin))} HOME={shlex.quote(str(home))} "
+                   f"TERMUX_VERSION=0.118 /bin/sh {shlex.quote(str(root / 'install.sh'))}")
+        proc = subprocess.run(
+            [shutil.which("script"), "-qec", command, "/dev/null"],
+            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+        return proc, root
+
+    def test_it_runs_once_then_the_installer(self):
+        proc, root = self._run(storage_exists=False)
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertEqual((root / "setup.log").read_text(), "ran\n")
+        self.assertIn("allow it", proc.stdout)
+        self.assertIn("installer ran", proc.stdout)
+
+    def test_a_set_up_storage_is_left_alone(self):
+        proc, root = self._run(storage_exists=True)
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertFalse((root / "setup.log").exists())
+        self.assertIn("installer ran", proc.stdout)
+
+
+@unittest.skipUnless(shutil.which("pwsh"), "needs PowerShell")
+class APyLauncherWithoutARuntimeIsPassed(unittest.TestCase):
+    """findPython returned the py launcher as soon as it existed: one left
+    with no usable runtime hid a Python 3.12 on PATH, and the bootstrap
+    offered a second install or gave up."""
+
+    def test_python_on_path_runs_the_installer(self):
+        folder = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
+        (folder / "install.py").write_text("print('installer ran')\n")
+        fake_bin = folder / "bin"
+        fake_bin.mkdir()
+        (fake_bin / "py").write_text("#!/bin/sh\necho 'No installed Python found!' >&2\nexit 1\n")
+        (fake_bin / "py").chmod(0o755)
+        (fake_bin / "python3").symlink_to(sys.executable)
+        proc = subprocess.run(
+            [shutil.which("pwsh"), "-NoProfile", "-File", str(folder / "install.ps1")],
+            env={**os.environ, "PATH": f"{fake_bin}{os.pathsep}/usr/bin/nonexistent"},
+            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("installer ran", proc.stdout)
 
 
 class ThePowerShellWrapperPassesTheStatusOn(unittest.TestCase):
@@ -3047,6 +3188,81 @@ class AndroidEmulatorsOutOfReachAreSaid(unittest.TestCase):
                 contextlib.redirect_stderr(err):
             install.detect_platforms("android")
         self.assertIn("DraStic is installed", err.getvalue())
+
+
+class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
+    """A Batocera RPi4 card prepared on a PC took every board's files (8.9 GB
+    where bcm2711 reads 5.8): the board was read only on the device, and
+    only without --dest, which the full-screen interface always gives."""
+
+    def setUp(self):
+        self.root = Path(_tempdir(self))
+        self.boot = self.root / "BATOCERA"
+        (self.boot / "boot").mkdir(parents=True)
+        (self.boot / "boot" / "batocera.board").write_text("bcm2711\n")
+        self.share = self.root / "SHARE"
+        (self.share / "system").mkdir(parents=True)
+        (self.share / "system" / "batocera.conf").write_text("system.hostname=BATOCERA\n")
+        lists = self.root / "lists"
+        (lists / "targets").mkdir(parents=True)
+        one, two = b"pi core file", b"pc core file"
+        self.list = lists / "batocera.json"
+        self.list.write_text(json.dumps({
+            "manifest_version": 2, "platform": "batocera", "base_destination": "bios",
+            "files": [
+                {"dest": "pi.bin", "sha1": hashlib.sha1(one).hexdigest(), "size": len(one),
+                 "repo_path": "bios/pi.bin", "cores": ["picore"], "systems": ["pi"]},
+                {"dest": "pc.bin", "sha1": hashlib.sha1(two).hexdigest(), "size": len(two),
+                 "repo_path": "bios/pc.bin", "cores": ["pccore"], "systems": ["pc"]},
+            ],
+            "system_cores": {"pi": ["picore"], "pc": ["pccore"]},
+        }))
+        (lists / "targets" / "batocera.json").write_text(
+            json.dumps({"bcm2711": ["picore"], "x86_64": ["pccore"]}))
+
+    def run_main(self, *extra: str) -> tuple[str, list[dict]]:
+        # A child process: main() changes the run's globals (the file list,
+        # the event stream), which leaked into the next tests.
+        code = ("import sys; from pathlib import Path; sys.path.insert(0, sys.argv[1]); "
+                "import install; card = Path(sys.argv[2]); "
+                "install._mounted_cards = lambda: [card]; "
+                "sys.argv = ['install.py', *sys.argv[3:]]; install.main()")
+        env = {**os.environ, "RETROBIOS_OS": "linux", "HOME": str(self.root)}
+        proc = subprocess.run(
+            [sys.executable, "-c", code, str(REPO_ROOT), str(self.boot),
+             "--platform", "batocera", "--dest", str(self.share), "--manifest",
+             str(self.list), "--offline", "--check", "--events", *extra],
+            env=env, capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+        events = [json.loads(line) for line in proc.stdout.splitlines()
+                  if line.startswith("{")]
+        return proc.stdout + proc.stderr, events
+
+    def test_the_boot_partition_names_the_board(self):
+        with unittest.mock.patch.object(install, "_mounted_cards", return_value=[self.boot]):
+            self.assertEqual(install.card_board("batocera"), "bcm2711")
+            self.assertIsNone(install.card_board("retroarch"))
+
+    def test_the_run_keeps_that_boards_files(self):
+        _out, events = self.run_main()
+        [board] = [event for event in events if event["event"] == "board"]
+        self.assertEqual((board["board"], board["applied"]), ("bcm2711", True))
+        self.assertIn("found on the card", board["message"])
+        files = {event["dest"] for event in events if event["event"] == "file"}
+        self.assertEqual(files, {"pi.bin"})
+
+    def test_every_board_keeps_them_all(self):
+        _out, events = self.run_main("--every-board")
+        self.assertFalse([event for event in events if event["event"] == "board"])
+        files = {event["dest"] for event in events if event["event"] == "file"}
+        self.assertEqual(files, {"pi.bin", "pc.bin"})
+
+    def test_the_plan_says_it(self):
+        state = install.TuiState()
+        state.run = "check"
+        install._take_event(state, {"event": "board", "platform": "batocera",
+                                  "board": "bcm2711", "applied": True,
+                                  "message": "Board bcm2711 found on the card (x)"})
+        self.assertEqual(state.board, "Board bcm2711 found on the card (x)")
 
 
 class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
@@ -3907,6 +4123,72 @@ def _install_run(env: dict, *argv: str, **kwargs) -> subprocess.CompletedProcess
     )
 
 
+class AMissingPackNamesTheOptionAndThePacksBeside(unittest.TestCase):
+    """A typo in --from-pack said "Error: X does not exist": not the option,
+    not the pack sitting next to the name typed."""
+
+    def test_the_pack_beside_is_named(self):
+        folder = Path(_tempdir(self))
+        (folder / "RetroArch_BIOS_Pack.zip").write_bytes(b"")
+        with self.assertRaises(ValueError) as raised:
+            install.PackSource._resolve([folder / "RetroArch_BIOS_Pak.zip"])
+        said = str(raised.exception)
+        self.assertIn("--from-pack names a pack ZIP", said)
+        self.assertIn(f"The packs in {folder}: RetroArch_BIOS_Pack.zip.", said)
+
+
+class RomMIsToldToScan(unittest.TestCase, _LoopbackRun):
+    """RomM serves the firmware its library scan records, and the run ended
+    on "installed" with no word of the scan the player waits on."""
+
+    def test_the_end_of_an_install_names_the_scan(self):
+        env = self.serve(self)
+        dest = self.home / "library" / "bios"
+        dest.mkdir(parents=True)
+        proc = _install_run(env, "--platform", "romm", "--dest", str(dest),
+                            "--system", "atari-lynx", "--no-input")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(install.ROMM_SCAN_WORDS, " ".join(proc.stdout.split()))
+
+
+class AnUnknownNameIsAnEvent(unittest.TestCase):
+    """--events carried start then end with code 1 for an unknown platform,
+    target or system: the reason was on stderr only, which readers ignore."""
+
+    def _events(self, *argv: str) -> tuple[int, list[dict]]:
+        env = {key: value for key, value in os.environ.items()
+               if key != "RETROBIOS_BASE_URL"}
+        env[install.OFFLINE_VARIABLE] = "1"
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as dest:
+            proc = subprocess.run(
+                [sys.executable, str(REPO_ROOT / "install.py"), "--dest", dest,
+                 "--check", "--events", "--no-input", *argv],
+                env=env, capture_output=True, text=True, timeout=120,
+                stdin=subprocess.DEVNULL)
+        return proc.returncode, [json.loads(line) for line in proc.stdout.splitlines()]
+
+    def test_each_refusal_says_why(self):
+        manifest = str(REPO_ROOT / "install" / "retroarch.json")
+        for argv, words in (
+                (["--platform", "nope"], "Unknown platform 'nope'"),
+                (["--platform", "retroarch", "--manifest", manifest, "--system", "nope"],
+                 "unknown system: nope"),
+                (["--platform", "retroarch", "--manifest", manifest, "--core", "nope"],
+                 "unknown core: nope"),
+                (["--platform", "retroarch", "--manifest", manifest, "--emulator", "nope"],
+                 "unknown emulator: nope")):
+            with self.subTest(argv=argv):
+                code, events = self._events(*argv)
+                self.assertEqual(code, 2)
+                errors = [event for event in events if event["event"] == "error"]
+                self.assertEqual(len(errors), 1, events)
+                self.assertEqual((errors[0]["stage"], errors[0]["reason"]),
+                                 ("option", "unknown"))
+                self.assertIn(words, errors[0]["message"])
+                self.assertFalse(errors[0]["message"].startswith("Error"))
+                self.assertEqual(events[-1]["event"], "end")
+
+
 class ATypoGetsTheClosestName(unittest.TestCase):
     """--platform batocra, --system playstation or --core swanstaton were
     answered with every name the platform has, up to 400 on one line, and
@@ -3929,14 +4211,45 @@ class ATypoGetsTheClosestName(unittest.TestCase):
             self.assertIn(f"--platform {plat}", out.getvalue())
 
     def test_a_system_that_gets_no_list_is_still_refused(self):
-        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+        """TrimUI, which --list-platforms prints, was answered "Unknown
+        platform" with no way forward."""
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
             install.normalize_platform("TrimUI")
+        self.assertNotIn("Unknown platform", err.getvalue())
+        self.assertIn("--platform retroarch --dest FOLDER", err.getvalue())
+
+    def test_a_frontend_without_a_bios_folder_says_what_to_do(self):
+        """ES-DE, LaunchBox and Android have no BIOS folder: each emulator
+        reads its own, and --platform es-de was "Unknown platform"."""
+        for typed, said in (("es-de", "ES-DE"), ("esde", "ES-DE"),
+                            ("launchbox", "LaunchBox"), ("android", "Android")):
+            err = io.StringIO()
+            with self.subTest(typed=typed), contextlib.redirect_stderr(err), \
+                    self.assertRaises(SystemExit) as raised:
+                install.normalize_platform(typed)
+            self.assertEqual(raised.exception.code, 2)
+            self.assertIn(f"{said} has no BIOS folder of its own: run again without "
+                          "--platform", err.getvalue())
+
+    def test_a_system_name_is_suggested(self):
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
+            install.normalize_platform("spruce")
+        self.assertIn("Did you mean: spruceOS?", err.getvalue())
+        # The distinct names --list-platforms prints: Batocera is both a
+        # platform and a system it recognises.
+        names = [*install.AVAILABLE_PLATFORMS,
+                 *(line.split(":")[0] for line in install._system_lines()),
+                 *install._NO_BIOS_FOLDER]
+        listed = len({install._name_key(name) for name in names})
+        self.assertIn(f"lists all {listed}.", err.getvalue())
 
     def test_a_platform_typo_is_answered_with_one_name(self):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as raised:
             install.normalize_platform("batocra")
-        self.assertEqual(raised.exception.code, 1)
+        self.assertEqual(raised.exception.code, 2)
         self.assertIn("Did you mean: batocera?", err.getvalue())
         self.assertNotIn("recalbox", err.getvalue())
 
@@ -3968,7 +4281,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
 
     def test_a_target_typo(self):
         err = io.StringIO()
-        with contextlib.redirect_stderr(err):
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
             install._unknown_target("swich", "retroarch", {"switch": {}, "desktop": {}})
         self.assertIn("Did you mean: switch?", err.getvalue())
         self.assertIn("--list-targets", err.getvalue())
@@ -4232,6 +4545,59 @@ class AQuestionLeftWithCtrlDOrCtrlCIsAStop(unittest.TestCase):
         self.assertIn("Stopped", out)
 
 
+class APlanGroupFitsItsLine(unittest.TestCase):
+    """Batocera's group of systems sharing MAME's device ROMs was one plan
+    line of 732 characters: counted as one row, it wrapped to ten and the
+    total scrolled out of sight."""
+
+    def _plan(self, files: list[dict], size: tuple[int, int], verbose: bool = False) -> str:
+        out = io.StringIO()
+        with unittest.mock.patch.object(install.shutil, "get_terminal_size",
+                                        return_value=os.terminal_size(size)), \
+                contextlib.redirect_stdout(out):
+            install._print_plan(files, Path("dest"), install.Terminal(io.StringIO()),
+                                verbose=verbose)
+        return out.getvalue()
+
+    def test_a_wide_group_is_named_by_its_first_two(self):
+        shared = [f"system-number-{n:02d}" for n in range(40)]
+        text = self._plan([{"dest": "dev.rom", "size": 1, "systems": shared}], (80, 40))
+        self.assertIn("system-number-00, system-number-01 and 38 more systems", text)
+        self.assertLess(max(map(len, text.splitlines())), 80)
+        self.assertIn("system-number-39", self._plan(
+            [{"dest": "dev.rom", "size": 1, "systems": shared}], (80, 40), verbose=True))
+
+    def test_wrapped_rows_count_against_the_screen(self):
+        # Six lines that each wrap to three rows on a 20-column terminal of
+        # 20 rows: 18 rows of listing, past what the screen leaves it.
+        files = [{"dest": f"{'x' * 50}{n}.bin", "size": 1, "systems": [f"s{n}"]}
+                 for n in range(3)]
+        text = self._plan(files, (20, 20))
+        self.assertIn("the largest first", text)
+
+
+class ReadersAreThePlatformsCores(unittest.TestCase):
+    """--check said bbcb.zip is "read by clk, mame, mame0258, mame0278" on
+    Batocera: system_cores reaches every profile, Recalbox's builds too."""
+
+    def test_an_off_platform_core_is_not_named(self):
+        manifest = {
+            "system_cores": {"bbc": ["clk", "mame", "mame0258"]},
+            "files": [{"dest": "bbcb.zip", "systems": ["bbc"], "cores": None},
+                      {"dest": "other.rom", "systems": ["x"], "cores": ["clk", "mame"]}],
+        }
+        self.assertEqual(install.readers(manifest["files"][0], manifest), ["clk", "mame"])
+
+    def test_on_the_real_lists(self):
+        for plat, dest, absent in (("batocera", "bbcb.zip", "mame0258"),
+                                   ("retroarch", "prboom.wad", "bizhawk")):
+            manifest = json.loads((REPO_ROOT / "install" / f"{plat}.json").read_text())
+            [entry] = [e for e in manifest["files"] + manifest["omitted_files"]
+                       if e["dest"] == dest]
+            with self.subTest(platform=plat):
+                self.assertNotIn(absent, install.readers(entry, manifest))
+
+
 class WhatTheCollectionLacksSaysForWhom(unittest.TestCase):
     """Required files the installer cannot supply were listed by bare name:
     DARK.GOB, Data.rsdk, ... and 69 more, with no system and no emulator."""
@@ -4246,6 +4612,16 @@ class WhatTheCollectionLacksSaysForWhom(unittest.TestCase):
         self.assertIn("    dark-forces (theforceengine): DARK.GOB, SOUNDS.GOB", lines)
         self.assertIn("    sonic-mania (sonicmania): Data.rsdk", lines)
         self.assertIn("(3 files)", lines[0])
+        # The page of each emulator under its group: the index alone left a
+        # search over several hundred pages.
+        self.assertEqual(lines[lines.index("    dark-forces (theforceengine): DARK.GOB, "
+                                           "SOUNDS.GOB") + 1],
+                         f"      {install.SITE_URL}emulators/theforceengine/")
+        self.assertIn(f"      {install.SITE_URL}emulators/sonicmania/", lines)
+        self.assertNotIn(f"{install.SITE_URL}emulators/\n", "\n".join(lines) + "\n")
+
+    def test_a_group_with_no_emulator_keeps_the_index(self):
+        lines = install._needed_lines([{"dest": "x.bin", "system": "x"}], "Needed")
         self.assertIn(f"{install.SITE_URL}emulators/", lines[-1])
 
 
@@ -4521,7 +4897,7 @@ class TheEmulatorNamesHaveTheirOwnListing(unittest.TestCase, _LoopbackRun):
     def test_the_hint_counts_what_the_listing_prints(self):
         proc = _install_run(self.env, "--platform", "retroarch", "--no-input",
                             "--emulator", "nope")
-        self.assertEqual(proc.returncode, 1, proc.stdout)
+        self.assertEqual(proc.returncode, 2, proc.stdout)
         found = re.search(r"--list-emulators lists all (\d+)\.", proc.stderr)
         self.assertIsNotNone(found, proc.stderr)
         listing = _install_run(self.env, "--platform", "retroarch", "--no-input",
@@ -5513,6 +5889,39 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
         self.assertIn("route-keys", said)
 
 
+class AStrippedPythonIsNamed(unittest.TestCase):
+    """A Python built without ssl blamed the network three times, and one
+    without zlib or unicodedata stopped on a ModuleNotFoundError traceback."""
+
+    def _run(self, hidden: str, *argv: str) -> subprocess.CompletedProcess:
+        code = (f"import runpy, sys; sys.modules[{hidden!r}] = None; "
+                "sys.argv = sys.argv[1:]; "
+                "runpy.run_path(sys.argv[0], run_name='__main__')")
+        env = {key: value for key, value in os.environ.items()
+               if key not in ("RETROBIOS_BASE_URL", install.OFFLINE_VARIABLE)}
+        return subprocess.run(
+            [sys.executable, "-c", code, str(REPO_ROOT / "install.py"), *argv],
+            env=env, capture_output=True, text=True, timeout=60,
+            stdin=subprocess.DEVNULL)
+
+    def test_a_missing_c_module_is_named(self):
+        for hidden in ("zlib", "unicodedata"):
+            with self.subTest(module=hidden):
+                proc = self._run(hidden, "--help")
+                self.assertEqual(proc.returncode, 1)
+                self.assertNotIn("Traceback", proc.stderr)
+                self.assertIn(f"built without its {hidden} module", proc.stderr)
+
+    def test_no_ssl_is_said_once_not_retried(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as dest:
+            proc = self._run("ssl", "--platform", "retroarch", "--dest", dest,
+                             "--check", "--no-input")
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("built without its ssl module and cannot use HTTPS", proc.stderr)
+        self.assertNotIn("trying again", proc.stderr)
+        self.assertNotIn("HTTPS_PROXY", proc.stderr)
+
+
 class NetworkFailuresInPlainWords(unittest.TestCase):
     """Offline, the run printed "[Errno -2] Name or service not known". A
     beginner needs "no internet connection", and the raw text only under
@@ -5934,7 +6343,8 @@ class TheListVersionIsComparedWithTheSystems(unittest.TestCase):
         self.assertEqual((listed, installed), ("43.1", "41"))
         self.assertEqual(
             text, "This list was built for Batocera 43.1, this machine runs 41. "
-            "Batocera's own BIOS check may report some files as wrong though they work.")
+            "Batocera's own BIOS check reads the list of the version it runs, and "
+            "may show some files as not matching it.")
         self.assertIsNone(self.note("batocera", "41"))
 
     def test_recalbox_reads_only_a_release(self):
@@ -6045,7 +6455,8 @@ class TheListVersionIsSaidBeforeAndAfter(unittest.TestCase):
         )
 
     SAID = ("This list was built for RetroBat 8.3.1, this machine runs 8.2.0. "
-            "RetroBat's own BIOS check may report some files as wrong though they work.")
+            "RetroBat's own BIOS check reads the list of the version it runs, and "
+            "may show some files as not matching it.")
 
     def test_line_mode_says_it_before_the_install_and_with_the_result(self):
         proc = self.run_installer()

@@ -386,6 +386,75 @@ class SplitParts(Scratch):
         self.assertFalse(self.dest.exists())
 
 
+def _carrying(pack: Path, extra: dict) -> None:
+    """Add what a pack built since carries to its manifest.json."""
+    with zipfile.ZipFile(pack) as archive:
+        members = {info.filename: archive.read(info) for info in archive.infolist()}
+    listed = {**json.loads(members["manifest.json"]), **extra}
+    members["manifest.json"] = json.dumps(listed).encode()
+    with zipfile.ZipFile(pack, "w", zipfile.ZIP_DEFLATED) as archive:
+        for name, data in members.items():
+            archive.writestr(name, data)
+
+
+# A GBA board and a PlayStation board: PAYLOAD's files split between them.
+BOARDS = {"gba-board": ["mgba"], "psx-board": ["pcsx_rearmed"]}
+
+
+class ABoardWithoutTheNetwork(Scratch):
+    """A pack alone, or --offline, never applied a board: --target was
+    refused, and a board found on the device was ignored. A Batocera RPi4
+    card took 8.9 GB from its pack where its board reads 5.8."""
+
+    def setUp(self):
+        super().setUp()
+        self.downloads = self.root / "downloads"
+        self.downloads.mkdir()
+        self.pack = _pack(self.downloads, "RetroArch_v1_BIOS_Pack.zip", PAYLOAD)
+
+    def installed(self) -> set[str]:
+        return {p.relative_to(self.dest).as_posix() for p in self.dest.rglob("*")
+                if p.is_file()}
+
+    def test_the_builder_writes_both_into_the_pack_list(self):
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import generate_pack  # noqa: PLC0415
+
+        install_list = manifest()
+        board_file = REPO_ROOT / "platforms" / "targets" / "batocera.yml"
+        boards = generate_pack.target_list(board_file)
+        self.assertEqual(boards, json.loads(
+            (REPO_ROOT / "install" / "targets" / "batocera.json").read_text()))
+        pack_list = {"files": []}
+        generate_pack.annotate_pack_systems(
+            pack_list, generate_pack.pack_systems(install_list, boards))
+        self.assertEqual(pack_list["install_list"], install_list)
+        self.assertEqual(pack_list["targets"], boards)
+
+    def test_the_pack_applies_its_board_list(self):
+        _carrying(self.pack, {"install_list": manifest(), "targets": BOARDS})
+        proc = self.run_installer("--from-pack", str(self.pack), "--target", "gba-board",
+                                  "--no-input")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertEqual(self.installed(), {"gba_bios.bin"})
+
+    def test_a_list_beside_the_manifest_applies_offline(self):
+        (self.root / "targets").mkdir()
+        (self.root / "targets" / "retroarch.json").write_text(json.dumps(BOARDS))
+        self.complete()
+        proc = self.run_installer("--offline", "--check", "--manifest", str(self.list),
+                                  "--target", "psx-board", "--no-input")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("for target psx-board", proc.stdout)
+
+    def test_a_pack_without_a_list_says_why(self):
+        proc = self.run_installer("--from-pack", str(self.pack), "--target", "gba-board",
+                                  "--no-input")
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn(f"{self.pack.name} carries none", proc.stderr)
+        self.assertFalse(self.dest.exists())
+
+
 class FromPackInstallsOffline(Scratch):
     def setUp(self):
         super().setUp()

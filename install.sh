@@ -23,7 +23,7 @@ DEFAULT_INSTALL_URL="https://raw.githubusercontent.com/Abdess/retrobios/main/ins
 # curl or wget stop on a cut transfer before the hash is read: the site's
 # build rewrites this line there (scripts/sitebootstrap.py).
 MISMATCH_ADVICE="The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-DEFAULT_INSTALL_SHA256="6e625f7a8c9c3ba095c8240dc3e8482dddd514e438302a576a2f80807e79a547"
+DEFAULT_INSTALL_SHA256="993f6128d67d32a96bcacb83ca542ef745701a2f98eb348330a1e86728ba597a"
 MAX_INSTALLER_BYTES=2097152
 
 cleanup() {
@@ -121,14 +121,29 @@ if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   INSTALLER="$TEMP_INSTALLER"
 fi
 
+# A Python can be built without ssl, unicodedata or zlib, and the installer
+# needs all three: a python3 lacking ssl was chosen over a full python and
+# every download then failed as if the network were down.
 find_python() {
   PYTHON=""
+  PYTHON_LACKING=""
+  PYTHON_OLD=""
   for command_name in python3 python; do
-    if command -v "$command_name" >/dev/null 2>&1 \
-      && "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' 2>/dev/null; then
+    command -v "$command_name" >/dev/null 2>&1 || continue
+    if ! "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' \
+        2>/dev/null; then
+      found_version=$("$command_name" -c \
+        'import sys; print("%d.%d.%d" % tuple(sys.version_info[:3]))' 2>/dev/null)
+      if [ -n "$found_version" ]; then
+        PYTHON_OLD=${PYTHON_OLD:-"$command_name here is $found_version"}
+      fi
+      continue
+    fi
+    if "$command_name" -c 'import ssl, unicodedata, zlib' 2>/dev/null; then
       PYTHON=$command_name
       return 0
     fi
+    PYTHON_LACKING=${PYTHON_LACKING:-$command_name}
   done
   return 1
 }
@@ -172,6 +187,20 @@ if ! find_python; then
     esac
   fi
 fi
+if [ -z "$PYTHON" ] && [ -n "$PYTHON_LACKING" ]; then
+  echo "Error: $PYTHON_LACKING is built without a module the installer needs" >&2
+  echo "  (ssl, unicodedata or zlib). Run it with a full Python 3.8 or newer." >&2
+  exit 1
+fi
+if [ -z "$PYTHON" ] && [ -n "$PYTHON_OLD" ]; then
+  # Debian Buster ships 3.7: apt answers that python3 is already the newest
+  # version, and the same advice looped.
+  echo "Error: Python 3.8 or newer is required, and $PYTHON_OLD." >&2
+  echo "  Install a newer one: from this system's packages if they offer one, by" >&2
+  echo "  updating the system, or from https://www.python.org/downloads/." >&2
+  echo "  Then run this command again." >&2
+  exit 1
+fi
 if [ -z "$PYTHON" ]; then
   echo "Error: Python 3.8 or newer is required." >&2
   if [ -n "$install_command" ]; then
@@ -182,6 +211,27 @@ if [ -z "$PYTHON" ]; then
   fi
   exit 1
 fi
+
+# Termux reaches shared storage, where RetroArch keeps its system folder,
+# once termux-setup-storage has run: the installer told the user to run it
+# and start again. At a terminal the bootstrap runs it here. It only asks
+# the Termux app, which shows Android's permission dialog and creates
+# ~/storage once allowed: the wait gives the user time to answer.
+case "${TERMUX_VERSION:-}:${PREFIX:-}" in
+  ?*:*|*com.termux*)
+    if [ ! -d "$HOME/storage" ] && command -v termux-setup-storage >/dev/null 2>&1 \
+      && (: </dev/tty) 2>/dev/null; then
+      echo "Android asks for the storage permission: allow it, so that the files reach" >/dev/tty
+      echo "the RetroArch folder." >/dev/tty
+      termux-setup-storage </dev/tty >/dev/tty 2>&1 || true
+      waited=0
+      while [ ! -d "$HOME/storage" ] && [ "$waited" -lt 60 ]; do
+        sleep 1
+        waited=$((waited + 1))
+      done
+    fi
+    ;;
+esac
 
 # Piped from curl, standard input is this script, not the terminal: the
 # installer would skip every question it can ask. Hand it the terminal when

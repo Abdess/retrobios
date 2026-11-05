@@ -1080,6 +1080,44 @@ class ThePortMasterPort(unittest.TestCase):
         self.assertIn("--dest", screen)
         self.assertEqual(device.calls(), [])
 
+    def _python_without_ssl(self, device) -> None:
+        """A python3 3.8 or newer whose ssl import fails, as on a CFW image
+        built without OpenSSL."""
+        real = shutil.which("python3.8") or sys.executable
+        shadow = device.root / "no-ssl"
+        shadow.mkdir()
+        (shadow / "ssl.py").write_text('raise ImportError("built without ssl")\n')
+        device.tool("python3", f'#!/bin/sh\nPYTHONPATH="{shadow}" exec {real} "$@"\n')
+
+    def test_a_python_without_ssl_is_told_on_the_console(self):
+        """Only the version was probed: a python3 without ssl was chosen and
+        every download failed as if the network were down."""
+        device = self.device()
+        self._python_without_ssl(device)
+        device.tool("uname", "#!/bin/sh\necho armv7l\n")
+        proc = device.run(["bash", self.script])
+        self.assertEqual(proc.returncode, 1)
+        screen = " ".join(device.screen.split())
+        self.assertIn("built without a module install.py needs", screen)
+        self.assertEqual(device.calls(), [])
+
+    def test_a_python_without_ssl_gives_way_to_the_runtime(self):
+        device = self.device()
+        self._python_without_ssl(device)
+        real = shutil.which("python3.8") or sys.executable
+        device.tool("uname", "#!/bin/sh\necho aarch64\n")
+        device.tool("mount", '#!/bin/sh\nprintf "mount %s\\n" "$*" >> "$FAKE_STATE/tools.log"\n'
+                    'mkdir -p "$2/bin"\n'
+                    f'printf \'#!/bin/sh\\nunset PYTHONHOME\\nexec {real} "$@"\\n\' > "$2/bin/python3"\n'
+                    'chmod +x "$2/bin/python3"\n')
+        device.tool("umount", FAKE_RECORDER)
+        (self.control / "libs").mkdir()
+        (self.control / "libs" / "python_3.11.squashfs").write_bytes(b"")
+        proc = device.run(["bash", self.script])
+        self.assertEqual(proc.returncode, 0, proc.stderr.decode())
+        [call] = device.tui_calls()
+        self.assertTrue(any(t.startswith("mount") for t in device.tools()))
+
     def test_the_runtime_is_mounted_then_unmounted(self):
         """ArkOS's Python 3.7: PortMaster's python_3.11 runtime, mounted for
         the run and unmounted after it."""

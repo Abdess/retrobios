@@ -648,7 +648,7 @@ class TheOneLinerNarrows(unittest.TestCase):
     def test_an_unknown_system_is_refused_before_any_download(self):
         with FakeRepository() as repo:
             proc = repo.run("--system", "sega-saturn")
-            self.assertEqual(proc.returncode, 1)
+            self.assertEqual(proc.returncode, 2)
             self.assertIn("unknown system: sega-saturn", proc.stderr)
             self.assertIn("nintendo-gba", proc.stderr)
             self.assertEqual(repo.installed(), [])
@@ -1239,7 +1239,7 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
             listing = repo.run("--list-systems", "--no-input")
             self.assertIn("nintendo-gba (gba)", listing.stdout)
             typo = repo.run("--system", "psxx", "--no-input")
-            self.assertEqual(typo.returncode, 1)
+            self.assertEqual(typo.returncode, 2)
             self.assertIn("Did you mean: sony-playstation", typo.stderr)
 
 
@@ -1570,7 +1570,7 @@ class AnIdAnotherSetupUses(unittest.TestCase):
              "--dest", str(never), "--system", "snk-neogeo", "--dry-run", "--no-input"],
             capture_output=True, text=True, timeout=120, check=False,
             stdin=subprocess.DEVNULL)
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
         self.assertIn("Did you mean: arcade?", proc.stderr)
         self.assertNotIn("snk-neogeo-cd", proc.stderr)
         self.assertFalse(never.exists())

@@ -44,6 +44,22 @@ class GuidesPointAtTheReadPath(unittest.TestCase):
                 )
 
 
+class ACardOpenedOnAComputerShowsItsShareDrive(unittest.TestCase):
+    """The SD card steps said /userdata/bios/ and /recalbox/share/bios/,
+    paths of the running system. On a computer the SHARE drive opens at its
+    root, bios/ beside roms/ and system/, and no such folder exists."""
+
+    def test_the_card_steps_name_the_drive_folder(self):
+        for name in ("batocera", "recalbox"):
+            text = _build_readme(name, name, "", 1, 1)
+            card = text[text.index("Manual (SD card)"):]
+            card = card[:card.index("\n\n", card.index("1."))]
+            with self.subTest(platform=name):
+                self.assertIn("bios folder at the root of the SHARE drive", card)
+                self.assertNotIn("/userdata/bios/ on", card)
+                self.assertNotIn("Navigate to /recalbox", card)
+
+
 class GuidesNameShippedInstallers(unittest.TestCase):
     def test_every_installer_named_exists(self):
         """RetroBat's guide sent users to an install.bat no release carries."""

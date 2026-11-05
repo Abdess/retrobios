@@ -29,6 +29,15 @@ case "$API_BASE" in
 esac
 API="${API_BASE%/}/repos/${REPO}/releases/latest"
 
+# Global, not local to download_pack: the EXIT trap runs once that function's
+# scope is gone, and under set -u a local would be unbound there.
+STAGING=""
+cleanup_staging() {
+    if [ -n "$STAGING" ]; then
+        rm -rf "$STAGING"
+    fi
+}
+
 usage() {
     echo "Usage: $0 <platform> <destination>"
     echo "       $0 --list"
@@ -143,12 +152,14 @@ EOF
     fi
 
     # Staged inside the destination: a pack is gigabytes, and /tmp is a RAM
-    # disk on the appliances these packs target.
+    # disk on the appliances these packs target. The folder is this run's own:
+    # a fixed name let a second download into the same folder empty it while
+    # the first was still writing its parts.
     mkdir -p "$dest"
-    local staging="${dest%/}/.retrobios-download"
-    rm -rf "$staging"
-    mkdir -p "$staging"
-    trap 'rm -rf "$staging"' EXIT
+    local staging
+    staging=$(mktemp -d "${dest%/}/.retrobios-download-XXXXXX")
+    STAGING="$staging"
+    trap cleanup_staging EXIT
 
     local index=0
     local url name
@@ -180,11 +191,29 @@ EOF
     done
 
     echo "Extracting to ${dest}/..."
+    # unzip -o unlinks a file and writes its replacement under the final
+    # name, so a run stopped mid-file left a partial BIOS. Members land in
+    # the staging folder, on the same filesystem, and each is renamed into
+    # place: a file in the BIOS folder is the old one or the new one.
+    local extracted="${staging}/extracted"
     for file in "${staging}"/*.zip; do
-        unzip -o -q "$file" -d "$dest"
+        unzip -o -q "$file" -d "$extracted"
     done
+    local target
+    target=$(cd "$dest" && pwd)
+    (
+        cd "$extracted"
+        find . -type f -exec sh -c '
+            target="$1"
+            shift
+            for member; do
+                mkdir -p "$target/$(dirname "$member")"
+                mv -f "$member" "$target/$member"
+            done
+        ' sh "$target" {} +
+    )
 
-    rm -rf "$staging"
+    cleanup_staging
     trap - EXIT
     echo "Done! BIOS files extracted to ${dest}/"
 }
