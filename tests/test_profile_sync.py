@@ -333,6 +333,19 @@ class TestGoneUpstreamIsNotAnError(unittest.TestCase):
         self.assertIn("upstream gone", out)
         self.assertIn("upstream error", out)
 
+    def test_triage_names_an_orphaned_pin_and_a_moved_repository(self):
+        """pcem's only problem was an upstream_commit off its dev branch, and
+        the triage line read "1 to review" like any drift."""
+        report = ProfileReport(
+            name="pcem", entries=[], counts={"UNCHECKED": 2},
+            orphaned=["sarah-walker-pcem/pcem: pin 25b54e3f is no ancestor of 4606fb1e"],
+            moved_repos=["a/b answers as c/b (renamed or transferred)"],
+        )
+        self.assertEqual(
+            profile_sync.triage_state(report),
+            "2 to review, 1 orphaned pin, 1 repository moved, 2 unchecked",
+        )
+
 
 class TestWorstStatus(unittest.TestCase):
     def test_gone_beats_everything(self):

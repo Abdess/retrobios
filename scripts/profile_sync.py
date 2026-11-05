@@ -1065,6 +1065,29 @@ class ProfileReport:
         )
 
 
+def triage_state(report: ProfileReport) -> str:
+    """One triage line: what to review, the pin to set again named first.
+
+    A pin outside its branch's history or a repository answering under
+    another name is fixed before any ref is read: pcem showed as "1 to
+    review" for an upstream_commit off the dev branch.
+    """
+    if report.skipped:
+        return report.skipped
+    state = f"{report.needs_review()} to review"
+    if report.orphaned:
+        state += f", {len(report.orphaned)} orphaned pin"
+    if report.moved_repos:
+        state += f", {len(report.moved_repos)} repository moved"
+    stale = len(report.stale_prose or ())
+    if stale:
+        state += f", {stale} prose under an older pin"
+    unchecked = (report.counts or {}).get("UNCHECKED", 0)
+    if unchecked:
+        state += f", {unchecked} unchecked"
+    return state
+
+
 def select_repo(profile: dict) -> upstream.Repo | None:
     """Repository the profile was read from: source first, then upstream."""
     for field in ("source", "upstream"):
@@ -4909,13 +4932,7 @@ def _print_triage(
     print(f"{'score':>5s}  {'profile':30s}  state (worst first)")
     pending = 0
     for score, report, refused in sorted(ranked, key=lambda item: -item[0]):
-        state = report.skipped or f"{report.needs_review()} to review"
-        stale = len(report.stale_prose or ())
-        if stale and not report.skipped:
-            state += f", {stale} prose under an older pin"
-        unchecked = (report.counts or {}).get("UNCHECKED", 0)
-        if unchecked and not report.skipped:
-            state += f", {unchecked} unchecked"
+        state = triage_state(report)
         if refused:
             state += f", {refused}"
         pending += bool(report.needs_review())
