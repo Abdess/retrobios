@@ -128,5 +128,40 @@ class ASystemTheTargetDropsIsNamedAsSuch(unittest.TestCase):
                       proc.stderr)
 
 
+class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
+    """`--split --target switch` asked for a part per declared system, and
+    each one the target drops ended on 'retroarch has no system matching'."""
+
+    def test_no_part_is_asked_for_a_dropped_system(self):
+        from unittest import mock
+
+        import generate_pack
+        from common import load_emulator_profiles
+
+        platforms = str(REPO_ROOT / "platforms")
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        asked: list[list[str]] = []
+
+        def record(*_a, **kw):
+            if kw.get("system_filter"):
+                asked.append(kw["system_filter"])
+            return None
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
+                mock.patch.object(generate_pack, "generate_pack", record), \
+                mock.patch.object(generate_pack, "_collect_emulator_extras",
+                                  return_value=[]):
+            generate_pack.generate_split_packs(
+                "retroarch", platforms, {"files": {}}, "bios", out,
+                emu_profiles=profiles,
+                target_cores=_target_cores_for("retroarch", "switch", platforms),
+                target_name="nintendo-switch",
+            )
+        systems = {sid for ids in asked for sid in ids}
+        self.assertTrue(systems)
+        self.assertNotIn("sony-playstation-2", systems)
+        self.assertIn("sony-playstation", systems)
+
+
 if __name__ == "__main__":
     unittest.main()

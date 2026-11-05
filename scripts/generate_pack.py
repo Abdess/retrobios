@@ -1940,7 +1940,11 @@ def generate_split_packs(
     split_dir = os.path.join(output_dir, f"{part_prefix}{group_tag}_Split")
     os.makedirs(split_dir, exist_ok=True)
 
-    systems = config.get("systems", {})
+    if emu_profiles is None:
+        emu_profiles = load_emulator_profiles(emulators_dir)
+    # The systems a core of the target runs: a part per declared system sent
+    # each one the target drops to a refusal naming it as unknown.
+    systems = platform_scope_systems(config, emu_profiles, target_cores)
 
     if group_by == "manufacturer":
         groups = _group_systems_by_manufacturer(systems, db, bios_dir)
@@ -1949,8 +1953,6 @@ def generate_split_packs(
 
     # Pre-compute core extras once (expensive: scans 260+ emulator profiles)
     # then distribute per group based on emulator system overlap
-    if emu_profiles is None:
-        emu_profiles = load_emulator_profiles(emulators_dir)
     base_dest = config.get("base_destination", "")
     # Each part cuts the platform's own entries from the full profiles. The
     # extras are collected once here, already without the cores' game data.
