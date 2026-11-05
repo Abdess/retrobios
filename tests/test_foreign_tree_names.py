@@ -93,6 +93,16 @@ class ForeignTreeNames(unittest.TestCase):
         self.assertEqual(status, "data_dir")
         self.assertEqual(Path(path).read_bytes(), b"B" * 64)
 
+    def test_another_casing_in_another_tree_is_not_the_file(self):
+        """reminiscence's music module reunion took skyline's
+        zoneinfo/Indian/Reunion, a time-zone file, on the casefold step."""
+        self._hold("bios/Other/skyline/tzdata/zoneinfo/Indian/Reunion", b"T" * 64)
+        entry = {
+            "name": "reunion", "aliases": ["mod.flashback-reunion"],
+            "category": "game_data", "source_profile": "reminiscence",
+        }
+        self.assertEqual(resolve_local_file(entry, self.db), (None, "not_found"))
+
 
 if __name__ == "__main__":
     unittest.main()

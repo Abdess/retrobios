@@ -1564,11 +1564,16 @@ def resolve_local_file(
             # runs when no casing matches exactly, or when only another
             # emulator's tree does: xm6typeg got XM6 Utility's synthesized
             # SCSIINROM.DAT while the X68000 dump sat as scsiinrom.dat.
+            # Another casing in another emulator's tree proves nothing:
+            # reminiscence's music module reunion took skyline's
+            # zoneinfo/Indian/Reunion.
             folded = _casefold_name_index(by_name)
             for try_name in names_to_try:
                 for match_sha1 in folded.get(try_name.casefold(), []):
                     if match_sha1 in files_db and _size_ok(match_sha1):
                         path = files_db[match_sha1]["path"]
+                        if _foreign_tree(path, owners):
+                            continue
                         if os.path.exists(path) and path not in candidates:
                             candidates.append(path)
         if candidates:
