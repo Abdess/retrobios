@@ -156,6 +156,30 @@ class Exporter(BaseExporter):
 
     @classmethod
     def _enumeration(cls, help_text: str) -> tuple[int, int, list[str]] | None:
+        """The first BIOS clause's list of names to extend, or None."""
+        clauses = cls._clauses(help_text)
+        return clauses[0][2] if clauses else None
+
+    @classmethod
+    def _clauses(
+        cls, help_text: str
+    ) -> list[tuple[int, list[str], tuple[int, int, list[str]] | None]]:
+        """Each BIOS clause that names files: its start, its names, and the
+        list to extend or None when it cannot be extended.
+
+        flycast's help has a Dreamcast clause and a Naomi/Atomiswave one.
+        Only the first was read, and naomi2.zip and segasp.zip were added to
+        the Dreamcast list.
+        """
+        found = []
+        for clause in _BIOS_CLAUSE.finditer(help_text):
+            names = [m.group(0) for m in cls._names_in(clause.group(0))]
+            if names:
+                found.append((clause.start(), names, cls._extendable(clause)))
+        return found
+
+    @classmethod
+    def _extendable(cls, clause: re.Match[str]) -> tuple[int, int, list[str]] | None:
         """The list of names to extend: its span and its names, or None.
 
         A list of alternatives ("a or b", "a/b") is not an enumeration: an
@@ -164,9 +188,6 @@ class Exporter(BaseExporter):
         are a list of examples ("eg. a, b") and one with words between its
         names, which a rewrite would lose.
         """
-        clause = _BIOS_CLAUSE.search(help_text)
-        if clause is None:
-            return None
         text = clause.group(0)
         names = cls._names_in(text)
         if not names:
@@ -308,13 +329,12 @@ class Exporter(BaseExporter):
         by_core = self._files_by_core(systems)
         # Aliases count as names we know: RetroPie writes dc_flash.bin where
         # flycast's profile files it as an alias of another primary.
-        known: set[str] = set()
+        systems_of: dict[str, set[str]] = {}
         for system in systems.values():
             for fe in system.files:
-                known.add(fe.name.lower())
-                known.update(
-                    str(a).lower() for a in (fe.native("aliases", []) or [])
-                )
+                for name in [fe.name, *(fe.native("aliases", []) or [])]:
+                    systems_of.setdefault(str(name).lower(), set()).add(fe.native_system)
+        known = set(systems_of)
         self._skipped: dict[str, list[str]] = {}
         self._named: set[int] = set()
         produced: dict[str, str] = {}
@@ -362,30 +382,52 @@ class Exporter(BaseExporter):
                 and (slot := self._slot_of(fe)) is not None
             }
             proposed = self._one_per_slot(candidates, filled)
-            missing = self._in_search_order(proposed)
-            if not missing:
+            if not proposed:
                 continue
 
-            enumeration = self._enumeration(help_text)
-            if enumeration is None:
-                # No enumeration to extend, and a sentence we would have to
-                # write ourselves is a documentation change, not a correction.
-                skip("whose help text lists no files to add to", module_id)
+            # A file joins the list of its own system: the clause whose
+            # names the platform files under that system, and only one.
+            clauses = self._clauses(help_text)
+            homes: dict[int, list[NativeFile]] = {}
+            homeless = False
+            for fe in proposed:
+                owners = [
+                    i for i, (_, names, _) in enumerate(clauses)
+                    if fe.native_system in set().union(
+                        *(systems_of.get(n.lower(), set()) for n in names))
+                ]
+                if len(owners) == 1 and clauses[owners[0]][2] is not None:
+                    homes.setdefault(owners[0], []).append(fe)
+                else:
+                    homeless = True
+            if homeless:
+                # No enumeration of that system to extend, and a sentence we
+                # would have to write ourselves is a documentation change,
+                # not a correction.
+                skip("whose help text lists no files of that system to add to", module_id)
+            if not homes:
                 continue
 
-            if len(listed) + len(missing) > self._longest:
+            added = sum(len(self._in_search_order(fes)) for fes in homes.values())
+            if len(listed) + added > self._longest:
                 skip("whose help text would grow longer than any it has today", module_id)
                 continue
 
-            new_help = self._extended(help_text, enumeration, missing)
-            if len(listed) + len(missing) > 1:
-                new_help = _BIOS_NOUN.sub(r"\1 files", new_help, count=1)
+            new_help = help_text
+            for i in sorted(homes, reverse=True):
+                start, _, enumeration = clauses[i]
+                missing = self._in_search_order(homes[i])
+                new_help = self._extended(new_help, enumeration, missing)
+                if len(enumeration[2]) + len(missing) > 1:
+                    new_help = new_help[:start] + _BIOS_NOUN.sub(
+                        r"\1 files", new_help[start:enumeration[0]], count=1
+                    ) + new_help[enumeration[0]:]
+                self._named.update(id(fe) for fe in homes[i])
             produced[relative] = originals[relative].replace(
                 f'rp_module_help="{help_text}"',
                 f'rp_module_help="{new_help}"',
                 1,
             )
-            self._named.update(id(fe) for fe in proposed)
 
         return produced
 

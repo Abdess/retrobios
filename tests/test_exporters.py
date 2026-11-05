@@ -737,6 +737,40 @@ class SearchOrder(unittest.TestCase):
         self.assertNotIn("us_scd2_9306", produced)
         self.assertNotIn("jp_mcd1_9112", produced)
 
+    def test_a_file_joins_the_list_of_its_own_system(self):
+        """flycast's help names the Dreamcast BIOS, then the Naomi/Atomiswave
+        ones. naomi2.zip, an arcade archive, went into the Dreamcast list:
+        only the first BIOS clause was read."""
+        from exporter.baseline import NativeSystem  # noqa: PLC0415
+
+        def entry(name, system):
+            return NativeFile(name=name, destination=f"dc/{name}", native_system=system,
+                              truth={"name": name, "required": True, "md5": "0" * 32,
+                                     "_cores": ["flycast"], "_required_by": ["flycast"]})
+
+        dc, arcade = "Sega - Dreamcast", "Sega - Dreamcast-based Arcade"
+        systems = {
+            dc: NativeSystem(dc, files=[entry("dc_boot.bin", dc)]),
+            arcade: NativeSystem(arcade, files=[entry("naomi.zip", arcade),
+                                                entry("awbios.zip", arcade),
+                                                entry("naomi2.zip", arcade)]),
+            "other": NativeSystem("other", files=[entry("other.zip", "other")]),
+        }
+        script = ('rp_module_id="lr-flycast"\nrp_module_help="Copy the required Dreamcast '
+                  'BIOS file dc_boot.bin to $biosdir/dc\\n\\nCopy the required '
+                  'Naomi/Atomiswave BIOS files naomi.zip and awbios.zip to $biosdir/dc"\n')
+        longest = ('rp_module_id="xm7"\nrp_module_help="Copy bios files '
+                   + ", ".join(f"n{i}.rom" for i in range(12)) + ' and n12.rom to $biosdir"\n')
+        exporter = discover_exporters()["retropie"]()
+        produced = exporter.render(
+            systems, None,
+            {"scriptmodules/libretrocores/lr-flycast.sh": script,
+             "scriptmodules/emulators/xm7.sh": longest},
+        )["scriptmodules/libretrocores/lr-flycast.sh"]
+        self.assertIn("Dreamcast BIOS file dc_boot.bin to", produced)
+        self.assertIn("BIOS files naomi.zip, awbios.zip and naomi2.zip to", produced)
+        self.assertNotIn("other.zip", produced)
+
     def test_cores_that_disagree_keep_the_best_rank(self):
         """Nothing is dropped on the rank here, so the best one wins.
 
