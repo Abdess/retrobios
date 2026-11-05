@@ -5788,6 +5788,18 @@ class NoProfileHashFromASecondarySource(unittest.TestCase):
         self.assertEqual(found, [])
 
 
+class XeniosFollowsThePreviewBranch(unittest.TestCase):
+    """The xenios pin 87b176a0 and tag v2.0.1 are ancestors of `preview`
+    (compare: ahead 129, behind 0) and diverged from the default `xenios`
+    branch (ahead 1784, behind 24). Without source_branch, profile_sync read
+    the pin as orphaned and 19 refs as moved by the branch divergence."""
+
+    def test_the_profile_names_the_branch_its_pin_is_on(self):
+        profile = yaml.safe_load((ROOT / "emulators" / "xenios.yml").read_text(encoding="utf-8"))
+        self.assertEqual(profile.get("source_branch"), "preview")
+        self.assertNotIn("from the xenios branch", profile.get("notes", ""))
+
+
 class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
     """A core that finds its firmware by content names no file, so each
     entry name is a label. ares labelled its Famicom Disk System revision

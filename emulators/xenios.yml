@@ -3,6 +3,7 @@ type: standalone
 core_classification: community_fork
 source: "https://github.com/xenios-jp/XeniOS"
 upstream: "https://github.com/has207/xenia-edge"
+source_branch: preview
 source_commit: "87b176a078c316fde3adf67a217f0c44615b0e0d"
 upstream_commit: "07021f019cf55105bc26c0474e0b0835808353e2"
 profiled_date: "2026-08-23"
@@ -22,7 +23,7 @@ mode: standalone
 
 notes: |
   Apple-focused fork of Xenia, based on Xenia Edge at their merge base
-  07021f0 (upstream_commit), published from the xenios branch as
+  07021f0 (upstream_commit), published from the preview branch as
   xenios_macos_apple_silicon.dmg, xenios_macos_intel.dmg,
   xenios_macos_universal.dmg and xenios_ios_iphone_ipad.ipa. The macOS build
   names its bundle and executable Xenia-edge, the iOS build XeniOS
