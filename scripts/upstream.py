@@ -1115,6 +1115,58 @@ def list_gitlinks(
     }
 
 
+def submodule_urls(text: str, base: Repo) -> dict[str, Repo]:
+    """Submodule path -> repository, read from a .gitmodules text.
+
+    A relative url (`../xash3d-fwgs.git`) names a sibling of the repository
+    that declares it, on the same forge.
+    """
+    repos: dict[str, Repo] = {}
+    path = url = None
+    for line in [*text.splitlines(), "[end]"]:
+        stripped = line.strip()
+        if stripped.startswith("["):
+            if path and url:
+                if url.startswith(("../", "./")):
+                    segments = [base.owner, base.name]
+                    for part in url.split("/"):
+                        if part == "..":
+                            segments.pop()
+                        elif part not in (".", ""):
+                            segments.append(part)
+                    url = f"https://{base.host}/{'/'.join(segments)}"
+                repo = parse_repo(url)
+                if repo is not None:
+                    repos[path] = repo
+            path = url = None
+            continue
+        key, _, value = stripped.partition("=")
+        if key.strip() == "path":
+            path = value.strip()
+        elif key.strip() == "url":
+            url = value.strip()
+    return repos
+
+
+def through_gitlink(
+    repo: Repo, sha: str, path: str, cache_dir: str, offline: bool = False
+) -> tuple[Repo, str, str] | None:
+    """The submodule repository, commit and inner path a path falls under.
+
+    starship cites `Torch src/Companion.cpp`, a file of the Torch submodule:
+    the declared tree holds only the gitlink, which pins the revision.
+    """
+    links = list_gitlinks(repo, sha, cache_dir, offline)
+    link = next((p for p in links if path.startswith(p + "/")), None)
+    if link is None:
+        return None
+    modules = fetch_file(repo, sha, ".gitmodules", cache_dir, offline)
+    target = submodule_urls("\n".join(modules or ()), repo).get(link)
+    if target is None:
+        return None
+    return target, links[link], path[len(link) + 1:]
+
+
 def commit_date(repo: Repo, sha: str, cache_dir: str, offline: bool = False) -> str | None:
     """When a revision was committed, as the forge reports it (ISO 8601)."""
     if repo.family == "gitlab":

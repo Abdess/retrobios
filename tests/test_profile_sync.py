@@ -3950,6 +3950,50 @@ class TestCollectCitations(unittest.TestCase):
         self.assertIsNone(resolve("munt ROMInfo.cpp", [tree]))
         self.assertIsNone(resolve("mupen64plus Config.cpp", [tree]))
 
+    def test_project_word_resolves_inside_a_submodule(self):
+        """idtech4a++ and starship cite files of a submodule. The declared
+        tree holds only the gitlink, so the parts stayed external and moved
+        unchecked with every bump."""
+        links = ["Q3E/src/main/jni/xash3d/xash3d-fwgs", "tools/Torch", "libs/zlib"]
+        resolve = profile_sync.resolve_through_gitlinks
+        self.assertEqual(
+            resolve("xash3d-fwgs filesystem/filesystem.c", [links]),
+            "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c",
+        )
+        self.assertEqual(
+            resolve("Torch src/Companion.cpp", [links]), "tools/Torch/src/Companion.cpp"
+        )
+        self.assertIsNone(resolve("munt ROMInfo.cpp", [links]))
+        self.assertIsNone(resolve("lib x.c", [["a/lib1", "b/lib2"]]))
+
+    def test_a_submodule_file_is_read_at_its_pinned_commit(self):
+        port = upstream.make_repo("github.com", "glKarin", "com.n0n3m4.diii4a")
+        files = {
+            (port.slug, "p1", ".gitmodules"): [
+                '[submodule "Q3E/src/main/jni/xash3d/xash3d-fwgs"]',
+                "\tpath = Q3E/src/main/jni/xash3d/xash3d-fwgs",
+                "\turl = ../xash3d-fwgs.git",
+            ],
+            ("glKarin/xash3d-fwgs", "s1", "filesystem/filesystem.c"): ["getenv(x)"],
+        }
+
+        def fetch(repo, sha, path, *_):
+            return files.get((repo.slug, sha, path))
+
+        with mock.patch.object(upstream, "fetch_file", side_effect=fetch), \
+                mock.patch.object(
+                    upstream, "list_gitlinks",
+                    return_value={"Q3E/src/main/jni/xash3d/xash3d-fwgs": "s1"},
+                ):
+            target = upstream.through_gitlink(
+                port, "p1",
+                "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c", "c",
+            )
+        self.assertEqual(
+            (target[0].slug, target[1], target[2]),
+            ("glKarin/xash3d-fwgs", "s1", "filesystem/filesystem.c"),
+        )
+
     def test_run_is_rendered_with_its_written_path(self):
         parts = [RefPart("mupen64plus-video-rice/upstream/src/Config.cpp", 38, 38, "38")]
         self.assertEqual(

@@ -1463,14 +1463,40 @@ def tag_pinned_views(
     return tagged
 
 
+def resolve_through_gitlinks(path: str, links: Iterable[Iterable[str]]) -> str | None:
+    """Path of `project file` inside the one submodule named after the project.
+
+    idtech4a++ cites `xash3d-fwgs filesystem/filesystem.c` and starship
+    `Torch src/Companion.cpp`: the declared tree holds a gitlink there, not
+    the files, so no blob path answers and the part stayed external.
+    """
+    word, _, rest = path.partition(" ")
+    rest = rest.strip().lstrip("/")
+    if not rest:
+        return None
+    word = word.lower()
+    for paths in links:
+        matches = [
+            link for link in paths or ()
+            if word in link.rsplit("/", 1)[-1].lower()
+        ]
+        if len(matches) == 1:
+            return f"{matches[0]}/{rest}"
+        if matches:
+            return None
+    return None
+
+
 def _resolve_project_words(
-    refs: list, tree_order: Callable[[], Iterable[list[str] | None]]
+    refs: list, tree_order: Callable[[], Iterable[list[str] | None]],
+    link_order: Callable[[], Iterable[Iterable[str]]] = lambda: (),
 ) -> list:
     """Point `project file` parts at the declared tree that vendors them.
 
-    tree_order() yields the trees to search, pin before HEAD. It is only
-    called for a part that needs it, since reading a HEAD tree costs a
-    request. Parts no tree carries stay external.
+    tree_order() yields the trees to search, pin before HEAD, and
+    link_order() the submodule paths of the declared trees at their pins.
+    Each is only called for a part that needs it, since reading a tree costs
+    a request. Parts no tree carries stay external.
     """
     resolved: dict[str, str | None] = {}
     out = []
@@ -1479,7 +1505,9 @@ def _resolve_project_words(
         for part in parts:
             if is_external_citation(part.path):
                 if part.path not in resolved:
-                    resolved[part.path] = resolve_project_word(part.path, tree_order())
+                    resolved[part.path] = resolve_project_word(
+                        part.path, tree_order()
+                    ) or resolve_through_gitlinks(part.path, link_order())
                 if resolved[part.path]:
                     part = replace(part, path=resolved[part.path])
             rewritten.append(part)
@@ -1860,7 +1888,14 @@ def build_report(
         if key in mute:
             return None
         try:
-            return upstream.fetch_file(repo, sha, wanted, cache_dir, offline)
+            found = upstream.fetch_file(repo, sha, wanted, cache_dir, offline)
+            if found is None and "/" in wanted:
+                # A file of a submodule is read at the commit its gitlink
+                # pins in this revision, so a bump moves it with the port.
+                inner = upstream.through_gitlink(repo, sha, wanted, cache_dir, offline)
+                if inner is not None:
+                    found = upstream.fetch_file(*inner, cache_dir, offline)
+            return found
         except (upstream.RateLimitError, upstream.NotCachedError):
             raise
         except upstream.UpstreamError as exc:
@@ -1916,6 +1951,9 @@ def build_report(
         refs,
         lambda: itertools.chain(
             map(_pin_tree_for, views), map(lambda v: _context_for(v)[1], views)
+        ),
+        lambda: (
+            upstream.list_gitlinks(v.repo, v.pin, cache_dir, offline) for v in views
         ),
     )
 
