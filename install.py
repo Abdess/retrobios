@@ -4124,13 +4124,52 @@ def fetch_manifest(plat: str) -> dict:
         sys.exit(1)
 
 
+def _pack_alone(plat: str) -> bool:
+    """A pack read without a file list for plat: one built before packs
+    carried their install list records the systems of its files only."""
+    return (LOCAL.pack is not None and LOCAL.manifest is None
+            and (LOCAL.pack.install_list or {}).get("platform") != plat)
+
+
+def local_targets(plat: str) -> "dict | None":
+    """The cores per board this run has without the network: the list the
+    pack carries, else targets/<platform>.json beside --manifest, where the
+    repository keeps it (install/targets/). None when there is neither."""
+    if LOCAL.pack is not None and LOCAL.pack.targets is not None \
+            and plat in LOCAL.pack.platforms():
+        return LOCAL.pack.targets
+    if LOCAL.manifest is None:
+        return None
+    beside = LOCAL.manifest.parent / "targets" / f"{plat}.json"
+    raw = _read_capped(beside, MAX_TARGETS_BYTES)
+    if raw is None:
+        return None
+    try:
+        return _validate_targets(json.loads(raw.decode("utf-8")))
+    except (UnicodeDecodeError, ValueError) as exc:
+        print(f"  Error: the target list {beside} is not valid: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+
 def fetch_targets(plat: str) -> "dict | None":
-    """Download the target core list.
+    """The target core list: the one this run has at hand, else downloaded.
 
     Empty on 404, where the platform publishes no targets. None when the list
     could not be read: a timeout says nothing about the platform, and
-    answering "no targets" for it sent users to the full pack.
+    answering "no targets" for it sent users to the full pack. A run without
+    the network and with no list at hand is refused, code 2, before any
+    file is written.
     """
+    held = local_targets(plat)
+    if held is not None:
+        return held
+    if LOCAL.offline:
+        source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
+                  else f"{offline_named()} makes no request")
+        print(f"Error: --target reads the cores of each {display_name(plat)} board from a "
+              f"list, and {source}. Put install/targets/{plat}.json beside the file list "
+              "named with --manifest, or run with the network.", file=sys.stderr)
+        sys.exit(2)
     url = TARGETS_URL.format(platform=plat)
     try:
         return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list"))
@@ -9089,7 +9128,7 @@ def _older_list_advice(plat: str = "") -> str:
     the pack's: the one-line installer does not change it, and a current
     pack was said to come from an older release.
     """
-    if LOCAL.pack is not None and LOCAL.manifest is None:
+    if _pack_alone(plat):
         return (f"  The list in {LOCAL.pack.name} does not record it: add --manifest FILE, "
                 f"a copy of install/{plat or '<platform>'}.json, or run without the option.")
     if RELEASE_REF != DEFAULT_RELEASE_REF:
@@ -9167,7 +9206,7 @@ def _requested_narrowing(
     """The systems, cores and regions named on the command line, checked."""
     if not (args.system or args.core or args.region):
         return None
-    pack_alone = LOCAL.pack is not None and LOCAL.manifest is None
+    pack_alone = _pack_alone(plat)
     recorded = recorded_axes(files, omitted)
     if pack_alone:
         # A pack records the systems of its files, not their cores or
@@ -10862,6 +10901,11 @@ class PackSource:
         # The version of the platform's list the pack was built from, "" for
         # a pack that does not record it.
         self.list_version = ""
+        # The platform's install list and its cores per board, which a pack
+        # built since carries: with them a pack alone narrows to a board as
+        # the network list does. None for a pack that carries none.
+        self.install_list: dict | None = None
+        self.targets: dict | None = None
         try:
             for path in self.files:
                 archive = zipfile.ZipFile(path)
@@ -10963,6 +11007,15 @@ class PackSource:
         version = data.get("list_version")
         if isinstance(version, str) and _VERSION_TEXT.fullmatch(version):
             self.list_version = version
+        if isinstance(data.get("install_list"), dict):
+            self.install_list = data["install_list"]
+        if data.get("targets") is not None:
+            try:
+                self.targets = _validate_targets(data["targets"])
+            except ValueError:
+                # Read as a pack that carries none: --target is then refused
+                # with the reason, never applied from a broken list.
+                self.targets = None
         for key in ("system_titles", "system_names"):
             held = data.get(key)
             if isinstance(held, dict):
@@ -10999,9 +11052,11 @@ class PackSource:
                 if f"_{PLATFORM_NAMES[plat].replace(' ', '_')}_" in stem]
 
     def manifest(self, plat: str) -> dict:
-        """A file list for plat built from the pack's own: the same files at
-        the same places, as extracting the pack would leave them, with the
-        systems it records."""
+        """A file list for plat: the install list the pack carries, else one
+        built from the pack's own, the same files at the same places, as
+        extracting the pack would leave them, with the systems it records."""
+        if self.install_list is not None and self.install_list.get("platform") == plat:
+            return self.install_list
         return {
             "manifest_version": 2,
             "platform": plat,
@@ -13238,13 +13293,14 @@ def main() -> None:
         # The runs the full-screen interface starts read it from here, and
         # the words name the option given.
         os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
-    if offline_requested() and (args.target or args.list_targets):
+    if (offline_requested() and (args.target or args.list_targets)
+            and not (args.manifest or args.from_pack)):
+        # No list can be at hand: a pack carries one, and so can the folder
+        # of a --manifest (targets/<platform>.json).
         parser.error("--target and --list-targets read a core list from the network, "
-                     f"which {offline_named()} does not use")
+                     f"which {offline_named()} does not use: name a pack with --from-pack, "
+                     "or a file list with --manifest and targets/<platform>.json beside it")
     install_bounded_opener()
-    if args.from_pack and args.target:
-        parser.error("--target reads a core list from the network, which --from-pack "
-                     "does not use")
     if getattr(args, "from") and (
         args.list_platforms or args.list_targets or args.list_systems
         or args.list_cores or args.list_emulators
@@ -14947,7 +15003,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # narrows to it: a Batocera RPi4 took 8.6 GiB where its board needs
         # 5.5. Only on the device itself, where the board file exists.
         target = args.target
-        if not target and not args.every_board and args.dest is None and not LOCAL.offline:
+        if (not target and not args.every_board and args.dest is None
+                and (not LOCAL.offline or local_targets(plat_name) is not None)):
             board = detect_board(plat_name)
             if board:
                 known = fetch_targets(plat_name) or {}
