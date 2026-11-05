@@ -15584,8 +15584,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     print(line)
                 for line in unreadable_lines(unread, args.verbose):
                     print(line)
-                print(_check_fetch_line(len(to_download) - len(copies), "the BIOS folder",
-                                        len(lacking)))
+                # The data files need the internet too: offline, "8164 files
+                # need the internet" stood under "10805 files not in place".
+                trees_fetched = trees_missing if LOCAL.pack is None else 0
+                print(_check_fetch_line(len(to_download) - len(copies) + trees_fetched,
+                                        "the BIOS folder", len(lacking)))
                 check_pending += len(to_download)
             elif trees_missing:
                 # The screen's headline: "Everything is in place." stood

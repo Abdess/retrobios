@@ -4830,6 +4830,19 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         self.assertIsNotNone(found, proc.stdout)
         self.assertIn(f"\n  {found.group(2)} data files to fetch\n", proc.stdout)
 
+    def test_check_gives_one_total_offline(self):
+        """Offline on an empty folder: "10805 missing", then "8164 files not in
+        place" and "8164 files need the internet", the data files left out."""
+        dest = self.home / "empty"
+        dest.mkdir()
+        proc = _install_run({**self.env, "RETROBIOS_INSTALL_OFFLINE": "1"}, "--platform",
+                            "retroarch", "--dest", str(dest), "--check", "--no-input",
+                            "--manifest", str(REPO_ROOT / "install" / "retroarch.json"))
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        missing = re.search(r"0 in place, (\d+) missing", proc.stdout).group(1)
+        self.assertIn(f"\n  {missing} files not in place:\n", proc.stdout)
+        self.assertIn(f"  {missing} files need the internet", proc.stdout)
+
     def test_a_cores_folder_can_be_named(self):
         cores = self.home / "cores"
         cores.mkdir()
