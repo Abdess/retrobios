@@ -40,6 +40,11 @@ def index_cache(cache_dir: str) -> dict[str, str]:
     """Map SHA1 to cached file path for every asset in the cache."""
     index: dict[str, str] = {}
     for name in sorted(os.listdir(cache_dir)):
+        # A download in progress writes `<asset>.<random>.tmp` beside the
+        # cache and renames it when done: it is partial, and may be gone by
+        # the time it is opened.
+        if name.endswith(".tmp"):
+            continue
         path = os.path.join(cache_dir, name)
         if not os.path.isfile(path):
             continue
