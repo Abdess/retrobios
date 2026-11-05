@@ -335,7 +335,8 @@ guides:
       Option C: Manual (SD card)
       --------------------------
       1. Put the SD card in your PC
-      2. Navigate to /userdata/bios/ on the SHARE partition
+      2. Open the bios folder at the root of the SHARE drive
+         (Batocera itself names it /userdata/bios/)
       3. Extract all files from this archive directly into that folder
 
       NOTE: Dreamcast flash memory is named dc_nvmem.bin
@@ -368,7 +369,8 @@ guides:
       Option C: Manual (SD card)
       --------------------------
       1. Put the SD card in your PC
-      2. Navigate to /recalbox/share/bios/
+      2. Open the bios folder at the root of the SHARE drive
+         (Recalbox itself names it /recalbox/share/bios/)
       3. Extract all files from this archive directly into that folder
     logo_owner: Recalbox
     logo_licence: file from homarr-labs/dashboard-icons, Apache-2.0
