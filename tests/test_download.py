@@ -23,6 +23,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 import unittest
 import zipfile
 from pathlib import Path
@@ -573,6 +574,34 @@ class TestDownloadShell(DownloaderCase):
         proc = self.run_cli(self.platform, str(self.dest), expect_success=False)
         self.assertNotIn("unbound variable", proc.stderr)
         self.assertEqual(list(self.dest.iterdir()), [])
+
+    def test_two_runs_into_one_folder_both_finish(self):
+        """Both runs staged in `<dest>/.retrobios-download` and the second
+        emptied it while the first was still writing its parts."""
+        shim = Path(_tempdir(self))
+        real = shutil.which("curl")
+        (shim / "curl").write_text(
+            "#!/bin/sh\n"
+            'case "$*" in *-o*) sleep 1 ;; esac\n'
+            f'exec "{real}" "$@"\n'
+        )
+        (shim / "curl").chmod(0o755)
+        env = self.env()
+        env["PATH"] = f"{shim}{os.pathsep}{env['PATH']}"
+        command = ["bash", str(SHELL), self.platform, str(self.dest)]
+        first = subprocess.Popen(
+            command, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True,
+        )
+        time.sleep(0.5)
+        second = subprocess.run(
+            command, env=env, capture_output=True, text=True, timeout=120
+        )
+        out, err = first.communicate(timeout=120)
+        self.assertEqual(first.returncode, 0, out + err)
+        self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
+        self.assert_extracted()
+        self.assert_no_leftovers()
 
 
 class TestWholePackPython(WholePackCase, TestDownloadPython):

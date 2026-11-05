@@ -152,11 +152,12 @@ EOF
     fi
 
     # Staged inside the destination: a pack is gigabytes, and /tmp is a RAM
-    # disk on the appliances these packs target.
+    # disk on the appliances these packs target. The folder is this run's own:
+    # a fixed name let a second download into the same folder empty it while
+    # the first was still writing its parts.
     mkdir -p "$dest"
-    local staging="${dest%/}/.retrobios-download"
-    rm -rf "$staging"
-    mkdir -p "$staging"
+    local staging
+    staging=$(mktemp -d "${dest%/}/.retrobios-download-XXXXXX")
     STAGING="$staging"
     trap cleanup_staging EXIT
 
