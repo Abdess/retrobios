@@ -7176,10 +7176,10 @@ class _LineModeFindings(_CardFixtures):
         by, and each remedy changes the outcome."""
         listing, pack, listed = self.minui()
         self.assertEqual(listed["list_records"], ["cores", "regions"])
-        code, text, _kept = self.narrowed("minui", from_pack=[pack], core=["mgba"])
-        self.assertEqual(code, 1)
-        self.assertIn("Add --manifest FILE, a copy of install/minui.json, which records them",
-                      text)
+        # The pack carries its install list since 2026-11: --core narrows it
+        # alone, as with the list named beside it.
+        code, text, kept = self.narrowed("minui", from_pack=[pack], core=["mgba"])
+        self.assertEqual((code, kept), (0, ["Bios/MGBA/gba_bios.bin"]), text)
         code, text, kept = self.narrowed("minui", from_pack=[pack], manifest=listing,
                                          core=["mgba"])
         self.assertEqual((code, kept), (0, ["Bios/MGBA/gba_bios.bin"]), text)
@@ -7188,8 +7188,9 @@ class _LineModeFindings(_CardFixtures):
         self.assertEqual(listed["list_records"], ["regions", "systems"])
         code, text, _kept = self.narrowed("misterfpga", from_pack=[mister], core=["x"])
         self.assertEqual(code, 1)
-        self.assertIn("MiSTer FPGA's own file list records no cores either. Run it without "
-                      "--core, or narrow with --system.", text)
+        # Its own list, which the pack carries, refuses it as --manifest would.
+        self.assertIn("the misterfpga file list records no cores, so --core cannot narrow it",
+                      text)
         self.assertNotIn("--manifest", text)
         code, text, kept = self.narrowed("misterfpga", from_pack=[mister],
                                          system=["nintendo-gba"])
