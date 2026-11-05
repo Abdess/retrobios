@@ -5713,6 +5713,10 @@ class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
             "beetle_psx reads its first 512 KB under the same name",
         ("duckstation-legacy", "ps1_rom.bin"):
             "the same whole PS3 image, whose first 512 KB src/core/bios.cpp:89 hashes",
+        ("openmsx", "COLECO.ROM"):
+            "share/machines/ColecoVision_SGM.xml:56 names it, tried beside the machine XML",
+        ("openmsx", "fmpac.rom"):
+            "share/machines/Boosted_MSX2_EN.xml:83 names it, tried beside the machine XML",
     }
 
     @staticmethod
