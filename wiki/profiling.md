@@ -383,8 +383,9 @@ A few field conventions that protect the toolchain:
   string (like emuscv's `635a978...` in memory.cpp), that goes in. If
   the source embeds ROM data as byte arrays (like ep128emu's roms.hpp),
   the bytes can be extracted and hashed. If the source performs no hash
-  check at all, the hash is omitted from the profile. The .info or docs
-  may list an MD5, but source confirmation makes it more reliable.
+  check at all, the hash is omitted from the profile. An MD5 the .info or
+  the docs alone give is not written: pokketstation's `.info` names a
+  revision no copy in circulation has.
   A data file the build generates is rebuilt from the tree and compared
   byte for byte with the official release before its hash is recorded
   (PrBoom+ builds `prboom-plus.wad` with its own tool). A firmware URL that
@@ -493,9 +494,10 @@ and DSP firmware through different code paths. Checking the actual
 code for each core avoids assumptions based on a related profile.
 
 **Code over docs.** Wiki pages and README files sometimes reference
-files from older versions or a different fork. If the source code
-does not load a particular file, it can be left out of the profile
-even if documentation mentions it.
+files from older versions or a different fork. A file the source code
+does not load is left out of the profile, even when documentation or the
+`.info` mentions it (desmume2015's `.info` lists three firmware files its
+code never opens).
 
 ## YAML field reference
 

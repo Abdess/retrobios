@@ -1758,6 +1758,18 @@ class VersionBasisReferenceIsTheSchema(unittest.TestCase):
         self.assertIn("`unverified`", tools)
 
 
+class ProfilingStatesTheHashRuleOnce(unittest.TestCase):
+    """profiling.md let an .info MD5 in ('source confirmation makes it more
+    reliable') and a file the code never loads stay ('can be left out'),
+    beside the strict rule of the same paragraph."""
+
+    def test_no_permissive_form_remains(self):
+        page = (WIKI / "profiling.md").read_text(encoding="utf-8")
+        self.assertNotIn("source confirmation makes it more reliable", page)
+        self.assertNotIn("it can be left out of the profile", page)
+        self.assertIn("An MD5 the .info or\n  the docs alone give is not written", page)
+
+
 class ReportExcerptIsTheRun(unittest.TestCase):
     """reading-reports.md quoted 'From python scripts/verify.py --platform
     retrodeck' a run that said 0 required missing after the command had started
