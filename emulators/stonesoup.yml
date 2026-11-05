@@ -26,7 +26,7 @@ notes: |
   Game data loaded at runtime from dat/ tree via datafile_path().
   ref: crawl-ref/source/files.cc:375-458 (_get_base_dirs() + datafile_path())
   No DATA_DIR_PATH defined in Makefile.libretro, so it falls back to SysEnv.crawl_dir.
-  Data is NOT compiled into the binary.
+  Data is not compiled into the binary.
 
   dat/ tree contents (532 files, 16 MB):
   - dat/tiles/*.png (floor, wall, feat, player, main, gui, icons) (crawl-ref/source/tiletex.cc:89-97)

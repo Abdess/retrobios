@@ -26,7 +26,7 @@ systems: [macintosh-ii]
 #   5. app parent directory
 #   6. current directory
 
-# The libretro port does NOT call ROM_IsValid() (unlike upstream backends),
+# The libretro port does not call ROM_IsValid() (unlike upstream backends),
 # so no checksum validation occurs. ROM_Init() patches the Mac's own boot
 # ROM check (DisableRomCheck = 1, ROMEMDEV.c:279).
 

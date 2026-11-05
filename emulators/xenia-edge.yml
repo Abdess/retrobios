@@ -3,7 +3,7 @@ type: "standalone + libretro"
 core_classification: community_fork
 source:
   standalone: "https://github.com/has207/xenia-edge"
-  libretro: "https://git.libretro.com/libretro/xenia-libretro"
+  libretro: "https://git.libretro.com/libretro/xenia-edge-libretro"
 upstream: "https://github.com/has207/xenia-edge"
 source_commit:
   standalone: "71804222514022ce80b757ca79c4ddb2dcf4a06c"
@@ -51,7 +51,7 @@ notes: |
   XENIA-EDGE rule and runs `xenia_edge <rom>`. RetroDECK unpacks the AppImage
   into a xenia-edge component and executes bin/xenia_edge.
 
-  The libretro core xenia_edge_libretro is built from libretro/xenia-libretro
+  The libretro core xenia_edge_libretro is built from libretro/xenia-edge-libretro
   on git.libretro.com (branch libretro, CORENAME xenia_edge in .gitlab-ci.yml),
   mirrored as WizzardSK/xenia-libretro on GitHub. It carries the xenia-edge
   tree merged from edge at 8dc77b09, the release named in upstream.version and

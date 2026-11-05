@@ -15,9 +15,8 @@ cores: [x64sdl]
 systems: [commodore-c64]
 notes: >
   Old port of VICE 3.1 using an SDL-to-libretro shim (r-type/sdlvice-libretro).
-  Separate codebase from the newer vice-libretro port. Marked experimental and
-  superseded. Unlike the newer port, this core does NOT embed system ROMs: all ROMs
-  must be on disk in <system_dir>/data/C64/ and <system_dir>/data/DRIVES/.
+  Marked experimental and superseded. This core embeds no system ROMs: all ROMs
+  are read from <system_dir>/data/C64/ and <system_dir>/data/DRIVES/.
   The .info declares firmware_count=0, while the core reads the ROMs this profile lists. No JiffyDOS support.
   No save states, no netplay, no cheats.
 
@@ -55,7 +54,6 @@ files:
 
   - name: "jpkernal"
     description: "Japanese C64 Kernal ROM"
-    region: [japan]
     required: false
     size: 8192
     path: "data/C64/jpkernal"
@@ -64,7 +62,6 @@ files:
 
   - name: "jpchrgen"
     description: "Japanese C64 character generator ROM"
-    region: [japan]
     required: false
     size: 4096
     path: "data/C64/jpchrgen"

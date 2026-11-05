@@ -509,6 +509,11 @@ class OneCodeOneRegionAnswer(unittest.TestCase):
         profiles = common.load_emulator_profiles(self.PROFILES)
         bios_sms = next(e for e in profiles["clk"]["files"] if e["name"] == "bios.sms")
         self.assertIn("oceania", bios_sms["region"])
+        # A Mexican export cartridge is analysed as Europe or USA and boots the
+        # western BIOS: only Japan selects the other one.
+        self.assertEqual(
+            region.rank(region.normalize_declared(bios_sms["region"]), ["mexico"]), 0
+        )
         tagged = {
             e["name"]: e.get("region") for e in profiles["kronos"]["files"]
             if e.get("archive") == "stvbios.zip" and e["name"].startswith("epr-")
@@ -1377,6 +1382,33 @@ class YmirLibretroRegions(unittest.TestCase):
         )
         self.assertFalse(any(e.get("aliases") for e in profile["files"]
                              if e["name"] == "sega_101.bin"))
+
+
+class MachineModelRomsCarryNoTerritory(unittest.TestCase):
+    """XRoar reads d200e_1.rom for the dragon200e machine and alice.rom for
+    the alice machine (src/xroar.c:437-444, 552-558), and VICE the Japanese
+    kernal and chargen for the C64 JAP and VIC-1001 models, which a file name
+    tagged (Japan) never selects (libretro-core.c:2018-2034 sets NTSC). The
+    site told a Spanish Dragon 64 owner to start with d200e_1.rom."""
+
+    CASES = {
+        "xroar": ("d200e_1.rom", "d200e_2.rom", "d200e_26.rom", "alice.rom"),
+        "x64sdl": ("jpkernal", "jpchrgen"),
+        "vice_xvic": ("kernal.901486-02.bin", "chargen-901460-02.bin"),
+    }
+
+    def test_model_roms_are_unregioned(self):
+        profiles = common.load_emulator_profiles(
+            os.path.join(os.path.dirname(__file__), "..", "emulators")
+        )
+        for profile, names in self.CASES.items():
+            for entry in profiles[profile]["files"]:
+                if entry["name"] in names:
+                    with self.subTest(profile=profile, name=entry["name"]):
+                        self.assertNotIn("region", entry)
+        self.assertFalse(
+            [e["name"] for e in profiles["c64-emu"]["files"] if e.get("region")]
+        )
 
 
 if __name__ == "__main__":

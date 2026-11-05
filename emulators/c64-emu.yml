@@ -181,7 +181,6 @@ files:
     size: 8192
     sha1: "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d"
     validation: [size, sha1]
-    region: [japan]
     description: "Japanese C64 kernal"
     source_ref: "source C64.emu/src/vice/c64/c64rom.h:49, 90, source C64.emu/src/vice/c64/c64model.c:148-151, source C64.emu/src/vice/c64/c64-resources.c:246"
 
@@ -230,7 +229,6 @@ files:
     required: false
     size: 4096
     validation: [size]
-    region: [japan]
     description: "Japanese C64 character generator"
     source_ref: "source C64.emu/src/vice/c64/c64rom.h:61, source C64.emu/src/vice/c64/c64model.c:148-151, 323"
 
@@ -279,7 +277,6 @@ files:
     required: false
     size: 4096
     validation: [size]
-    region: [japan]
     description: "Japanese character generator, Japanese SuperCPU model"
     source_ref: "source C64.emu/src/vice/scpu64/scpu64model.c:303, source C64.emu/src/vice/c64/c64rom.h:61"
 
@@ -580,7 +577,6 @@ files:
     required: false
     size: 8192
     validation: [size]
-    region: [japan]
     description: "VIC-1001 kernal"
     source_ref: "source C64.emu/src/vice/vic20/vic20rom.h:51, source C64.emu/src/vice/vic20/vic20model.c:60, 140"
 
@@ -608,7 +604,6 @@ files:
     required: false
     size: 4096
     validation: [size]
-    region: [japan]
     description: "VIC-1001 character generator"
     source_ref: "source C64.emu/src/vice/vic20/vic20rom.h:57, source C64.emu/src/vice/vic20/vic20model.c:60, 139"
 

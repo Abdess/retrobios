@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T11:59:40Z",
+  "generated_at": "2026-11-05T12:13:24Z",
   "total_files": 19943,
   "total_size": 16892630154,
   "bios_dir": "bios",
@@ -131310,6 +131310,26 @@
       "crc32": "bb4b1c70",
       "adler32": "81802751"
     },
+    "f957c9aedd8ea478dafd98babe41faec7f339d8a": {
+      "path": "bios/Microsoft/Xbox/C/xbox.xtf",
+      "name": "xbox.xtf",
+      "size": 15613736,
+      "sha1": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "md5": "0466dd6c19ec9c1785e8aadfc8c5269e",
+      "sha256": "21c6207d02009a78767783679b6e74da3d4ca6e077c4808007f79dfe083d7489",
+      "crc32": "b12ee192",
+      "adler32": "ae7294e0"
+    },
+    "8b6e63f86dfd31821df210f5da73f8428b4fff15": {
+      "path": "bios/Microsoft/Xbox/C/xboxdash.xbe",
+      "name": "xboxdash.xbe",
+      "size": 1929216,
+      "sha1": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
+      "md5": "8da4d816604e9b9d5aa69d1fd395a48e",
+      "sha256": "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495",
+      "crc32": "4e78e0ae",
+      "adler32": "fed648f4"
+    },
     "358a20e61ec1a2387127b1fa92113034fb279f9b": {
       "path": "bios/Microsoft/Xbox/Complex.bin",
       "name": "Complex.bin",
@@ -141596,26 +141616,6 @@
       "sha256": "3b6b7288c186e4b8265cb1996af0e3620267ada9faf38f57d6f87b759ad804b7",
       "crc32": "4d47ad9b",
       "adler32": "991208da"
-    },
-    "f957c9aedd8ea478dafd98babe41faec7f339d8a": {
-      "path": "bios/Other/hakux/C/xbox.xtf",
-      "name": "xbox.xtf",
-      "size": 15613736,
-      "sha1": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
-      "md5": "0466dd6c19ec9c1785e8aadfc8c5269e",
-      "sha256": "21c6207d02009a78767783679b6e74da3d4ca6e077c4808007f79dfe083d7489",
-      "crc32": "b12ee192",
-      "adler32": "ae7294e0"
-    },
-    "8b6e63f86dfd31821df210f5da73f8428b4fff15": {
-      "path": "bios/Other/hakux/C/xboxdash.xbe",
-      "name": "xboxdash.xbe",
-      "size": 1929216,
-      "sha1": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
-      "md5": "8da4d816604e9b9d5aa69d1fd395a48e",
-      "sha256": "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495",
-      "crc32": "4e78e0ae",
-      "adler32": "fed648f4"
     },
     "231b29ef9d6314930eb18e57240e27ae81a6e88f": {
       "path": "bios/Other/hakux/controller_map.txt",
@@ -217650,6 +217650,8 @@
       "65a8ebf870420316a939ac44fd4c731d": "b15c6a834b7029e2dfed22127cf905b06857e6f5",
       "ec00e31e746de2473acfe7903c5a4cb7": "6639b6693784574d204c42703a74fd8b088a3a5e",
       "8cd18e1748114b3b019aed171cac2ee0": "c54a8e4f2fe01be6e85c9d210f432e4c82e0418c",
+      "0466dd6c19ec9c1785e8aadfc8c5269e": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "8da4d816604e9b9d5aa69d1fd395a48e": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "21445c6f28fca7285b0f167ea770d1e5": "358a20e61ec1a2387127b1fa92113034fb279f9b",
       "39cee882148a87f93cb440b99dde3ceb": "3944392c954cfb176d4210544e88353b3c5d36b1",
       "04e9565c5eb34c71c8f5f8b9f6524406": "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f",
@@ -218614,8 +218616,6 @@
       "a5518586f9c4c0bebc9fd6f322c6f501": "72ea5f869695d13dc8f3bf4806ee384aa766ab09",
       "2f355f03254e572dd32e6fe7232f5ccc": "8881159097cd92f67bfec5250bc061626d87cf04",
       "d87d6498c9e36a69907038e9198b7efb": "328b2ec7402df86add5c9cd68692c126b7e79707",
-      "0466dd6c19ec9c1785e8aadfc8c5269e": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
-      "8da4d816604e9b9d5aa69d1fd395a48e": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "41eed0bf6aad777e6583ecb2ff0907b8": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "3155df291027d253e2596db3fca1ac4a": "2651f1eff1785999918c08600f079e1ad4a206e7",
       "2f5c49dca4993da5911d632d3962c1f3": "0d4dee46085ced0fd117030a13533d903265301c",
@@ -258422,6 +258422,14 @@
         "c54a8e4f2fe01be6e85c9d210f432e4c82e0418c",
         "9da5f9ecfb1c9c32efa616f0300d02e8f702244d"
       ],
+      "xbox.xtf": [
+        "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+        "df0cadf1a4a080992ef0459c413a841bc3906cc7"
+      ],
+      "xboxdash.xbe": [
+        "8b6e63f86dfd31821df210f5da73f8428b4fff15",
+        "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
+      ],
       "Complex.bin": [
         "358a20e61ec1a2387127b1fa92113034fb279f9b"
       ],
@@ -258463,10 +258471,6 @@
       ],
       "Xbox Book.xtf": [
         "4cc817432b81b7bd3b9f782b678bd69e3d4d5715"
-      ],
-      "xbox.xtf": [
-        "df0cadf1a4a080992ef0459c413a841bc3906cc7",
-        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
       ],
       "xbox.xex": [
         "1c577b7495d3d119f5a584b328e837901c537a28"
@@ -260596,10 +260600,6 @@
       ],
       "EEPROM.bin": [
         "d70fd7c6dac8b4bba1640faa9e48acc45de59d15"
-      ],
-      "xboxdash.xbe": [
-        "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c",
-        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
       ],
       "chihiro_xbox_bios.bin": [
         "b700b0041af8f84835e45d1d1250247bf7077188"
@@ -295594,6 +295594,8 @@
       "32edb1d4": "b15c6a834b7029e2dfed22127cf905b06857e6f5",
       "ccb97a84": "6639b6693784574d204c42703a74fd8b088a3a5e",
       "bb4b1c70": "c54a8e4f2fe01be6e85c9d210f432e4c82e0418c",
+      "b12ee192": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "4e78e0ae": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "2c7a2191": "358a20e61ec1a2387127b1fa92113034fb279f9b",
       "1dbb7b59": "3944392c954cfb176d4210544e88353b3c5d36b1",
       "5ae5278a": "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f",
@@ -296558,8 +296560,6 @@
       "54fa92ab": "72ea5f869695d13dc8f3bf4806ee384aa766ab09",
       "b8f57432": "8881159097cd92f67bfec5250bc061626d87cf04",
       "4d47ad9b": "328b2ec7402df86add5c9cd68692c126b7e79707",
-      "b12ee192": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
-      "4e78e0ae": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "bef6e55c": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "5808049a": "2651f1eff1785999918c08600f079e1ad4a206e7",
       "89fa9730": "0d4dee46085ced0fd117030a13533d903265301c",
@@ -315538,6 +315538,8 @@
       "63c781b9e50bfd55f10700eb70b5c571a9bedfd8d35af29f6a22a77550df5e7b": "b15c6a834b7029e2dfed22127cf905b06857e6f5",
       "34f1c8ded59116436065783f8ad2ef0939df3cbfc76277ec9e5c41bf9ccb93cd": "6639b6693784574d204c42703a74fd8b088a3a5e",
       "eb35d069715dfc0d37cfac086a0b73a89a02e8f12519cd8eda82ad479d1a4eed": "c54a8e4f2fe01be6e85c9d210f432e4c82e0418c",
+      "21c6207d02009a78767783679b6e74da3d4ca6e077c4808007f79dfe083d7489": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
+      "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "1de4c87effe40d44f95581d204f9fa0600fbd5fe2171692316dcf97af0f4113f": "358a20e61ec1a2387127b1fa92113034fb279f9b",
       "3d5fae186cb31b5a6331155e532ef63e493afd85d7af8576fb52c95d0ce0362c": "3944392c954cfb176d4210544e88353b3c5d36b1",
       "b5c2cbdf297cd66ada8ef6fe4224c7c437cabc83d7c40c8e44af4941a72339c5": "4e1c2c2ee308ca4591542b3ca48653f65fae6e0f",
@@ -316502,8 +316504,6 @@
       "52fab6a73204dc9bbb09d5c8c85c283f4d6bf25220a3bae3573c268908751f2b": "72ea5f869695d13dc8f3bf4806ee384aa766ab09",
       "cd260d1c420dec2ad2d9511b522d88a72f820d2ca2ff63ded2cd95854d4748dd": "8881159097cd92f67bfec5250bc061626d87cf04",
       "3b6b7288c186e4b8265cb1996af0e3620267ada9faf38f57d6f87b759ad804b7": "328b2ec7402df86add5c9cd68692c126b7e79707",
-      "21c6207d02009a78767783679b6e74da3d4ca6e077c4808007f79dfe083d7489": "f957c9aedd8ea478dafd98babe41faec7f339d8a",
-      "3ae2f3eae3917e0130d1e1a5c8e1c5df207ea31703646a174d98f7be9a769495": "8b6e63f86dfd31821df210f5da73f8428b4fff15",
       "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "7cf66357beab4fa3ed48a63195e2c8ec7a7c59c053e6e20cdaa5163a32782fe6": "2651f1eff1785999918c08600f079e1ad4a206e7",
       "994886a47a7e4f542bc0824758f122004887e19ddbdf83909bca635748f50c64": "0d4dee46085ced0fd117030a13533d903265301c",
@@ -483940,6 +483940,24 @@
       ".variants/xbox_hdd.qcow2.8cd18e17": [
         "c54a8e4f2fe01be6e85c9d210f432e4c82e0418c"
       ],
+      "Microsoft/Xbox/C/xbox.xtf": [
+        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
+      ],
+      "Xbox/C/xbox.xtf": [
+        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
+      ],
+      "C/xbox.xtf": [
+        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
+      ],
+      "Microsoft/Xbox/C/xboxdash.xbe": [
+        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
+      ],
+      "Xbox/C/xboxdash.xbe": [
+        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
+      ],
+      "C/xboxdash.xbe": [
+        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
+      ],
       "Microsoft/Xbox/Complex.bin": [
         "358a20e61ec1a2387127b1fa92113034fb279f9b"
       ],
@@ -493829,24 +493847,6 @@
       ],
       "gsplus-legacy/letgothl.ttf": [
         "328b2ec7402df86add5c9cd68692c126b7e79707"
-      ],
-      "Other/hakux/C/xbox.xtf": [
-        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
-      ],
-      "hakux/C/xbox.xtf": [
-        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
-      ],
-      "C/xbox.xtf": [
-        "f957c9aedd8ea478dafd98babe41faec7f339d8a"
-      ],
-      "Other/hakux/C/xboxdash.xbe": [
-        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
-      ],
-      "hakux/C/xboxdash.xbe": [
-        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
-      ],
-      "C/xboxdash.xbe": [
-        "8b6e63f86dfd31821df210f5da73f8428b4fff15"
       ],
       "Other/hakux/controller_map.txt": [
         "231b29ef9d6314930eb18e57240e27ae81a6e88f"

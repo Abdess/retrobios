@@ -16,10 +16,10 @@ systems: [nec-pc-engine]
 verification: existence
 notes: >
   Fork of Mednafen's pce_fast module (speed-optimized, no SuperGrafx support).
-  Separate codebase from beetle_pce (mednafen/pce_fast/ vs mednafen/pce/).
+  Built from mednafen/pce_fast/.
   BIOS loaded via HuCLoadCD() at CD-ROM load time. Core option "pce_fast_cdbios"
   selects which card image to use (default: System Card 3).
-  No Games Express auto-detection (unlike beetle_pce), so the user must select manually.
+  Does not detect Games Express: the card is chosen by the pce_fast_cdbios option.
   No hash or size validation on BIOS load.
   Upstream pce_fast module only has a single pce_fast.cdbios string setting:
   the 6-option dropdown is a libretro addition.

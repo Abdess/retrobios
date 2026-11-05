@@ -28,7 +28,7 @@ notes: |
        paths (:1473-1491) looking for a folder that passes
        App:isThemeHospitalPath, which demands three subdirectories
        named data, levels and qdata (:1435-1447).
-    2. Once a candidate is accepted, three sentinel files MUST exist
+    2. Once a candidate is accepted, three sentinel files must exist
        (:1523-1525):
          DATA/VBlk-0.tab
          LEVELS/Level.L1

@@ -21,7 +21,7 @@ notes: >
   plus all drive ROMs (1540, 1541, 1541-II, 1551, 1570, 1571, 1571CR, 1581, 1001,
   2031, 2040, 3040, 4040, 9000) and VIC-II palettes. Embedded ROM check in
   sysfile_load takes priority over filesystem. Kernal Rev 1 (901227-01) and
-  Rev 2 (901227-02) are NOT embedded: selecting C64 OLD NTSC or C64 OLD PAL model
+  Rev 2 (901227-02) are not embedded: selecting C64 OLD NTSC or C64 OLD PAL model
   requires them on the filesystem in system/vice/C64/. JiffyDOS requires True Drive
   Emulation enabled and a 1541/1571/1581 drive type. SX-64 models use a separate
   JiffyDOS kernal (JiffyDOS_SX-64.bin) not declared in the .info.

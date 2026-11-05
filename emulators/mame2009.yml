@@ -52,8 +52,7 @@ notes: |
   Artwork in system_dir/mame2009/artwork/.
   INI config files in system_dir/mame2009/ini/.
 
-  No hiscore.dat, history.dat, or mameinfo.dat support (unlike
-  mame2000/mame2003). The hiscore path is disabled in the libretro
+  No hiscore.dat, history.dat, or mameinfo.dat support. The hiscore path is disabled in the libretro
   wrapper.
 
   48 BIOS root sets. ROM naming follows MAME 0.135 conventions.

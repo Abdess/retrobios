@@ -25,6 +25,7 @@ notes: |
 
 files:
   - name: ps2-0230a-20080220.bin
+    found_by: content
     aliases: [ps2-0250j-20100415.bin, SCPH-70004_BIOS_V12_EUR_200.BIN]
     required: true
     min_size: 4194304
@@ -66,6 +67,7 @@ files:
     source_ref: "pcsx2/CDVD/CDVD.cpp:190-204"
 
   - name: eeprom.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     size: 64

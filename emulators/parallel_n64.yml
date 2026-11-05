@@ -35,5 +35,4 @@ notes:
   divergence_note: >
     Fork of mupen64plus-core with significant divergence. Includes legacy
     GPU plugins (Glide64, glN64, Rice, angrylion) and ParaLLEl-RDP/RSP.
-    Uses flat path 64DD_IPL.bin unlike mupen64plus-next which uses
-    Mupen64plus/IPL.n64 subdirectory.
+    Reads 64DD_IPL.bin at the root of the system folder.

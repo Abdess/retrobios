@@ -149,6 +149,7 @@ notes: |
 
 files:
   - name: ps2-0230a-20080220.bin
+    found_by: content
     path: bios/ps2-0230a-20080220.bin
     required: true
     min_size: 4194304
@@ -211,6 +212,7 @@ files:
     source_ref: "upstream aethersx2/pcsx2/CDVD/CDVD.cpp:120-144, nethersx2-turnip v0.7 libemucore.so 0x79cbd0-0x79cc20"
 
   - name: eeprom.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     size: 64
@@ -222,6 +224,7 @@ files:
     source_ref: "upstream aethersx2/pcsx2/DEV9/DEV9.cpp:146-161, nethersx2-turnip v0.7 libemucore.so 0x7c5c44"
 
   - name: flash.dat
+    load_from: working_directory
     required: false
     hle_fallback: true
     max_size: 8650752

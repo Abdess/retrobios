@@ -24,7 +24,7 @@ notes: |
 
   Loaded paks are matched against hardcoded unsigned 32-bit checksums
   (code/qcommon/files.c:178-198: pak_checksums[], missionpak_checksums[]).
-  These are NOT MD5 / SHA1 / CRC32 of the file. They are id's own custom
+  These are not MD5 / SHA1 / CRC32 of the file. They are id's own custom
   pak checksum (sum of each lump CRC, see FS_LoadZipFile). A mismatch
   prints "WARNING: baseq3/pak0.pk3 is present but its checksum (%u) is
   not correct" (code/qcommon/files.c:3574) and keeps running: the loader

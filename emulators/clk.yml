@@ -712,12 +712,12 @@ files:
     path: MasterSystem/bios.sms
     system: sega-mastersystem
     description: "European/US Master System BIOS"
-    region: [north-america, europe, oceania, brazil]
+    region: [north-america, latin-america, europe, oceania]
     size: 8192
     crc32: "0072ed54"
     required: false
     note: "Optional. Boots cartridge directly if absent. Loaded for every region but Japan."
-    source_ref: "Machines/Utility/ROMCatalogue.cpp:764-771, Machines/MasterSystem/MasterSystem.cpp:137-140, Analyser/Static/Sega/Target.hpp:24-29"
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:764-771, Machines/MasterSystem/MasterSystem.cpp:137-140, Analyser/Static/Sega/Target.hpp:24-29, Analyser/Static/Sega/StaticAnalyser.cpp:49-66"
 
   - name: japanese-bios.sms
     path: MasterSystem/japanese-bios.sms

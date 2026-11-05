@@ -54,7 +54,7 @@ notes: |
   wrapper hardcodes it to 0 (always prefer real BIOS when available).
 
   FreeBIOS (freebios/freebios.min) is 4096 bytes, a clean-room
-  reimplementation. It is NOT the official Nintendo Pokemon Mini BIOS.
+  reimplementation.
 
 files:
   - name: "bios.min"

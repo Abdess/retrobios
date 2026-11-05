@@ -18,7 +18,7 @@ systems: [riscv]
 # loads a .rvvm plain-text config file specifying bootrom, kernel, nvme drives,
 # memory, CPU mode, cmdline, and framebuffer resolution.
 #
-# The core does NOT use the RetroArch system directory. All firmware paths are
+# The core does not use the RetroArch system directory. All firmware paths are
 # specified in the .rvvm config file and resolved relative to its directory.
 # The core chdir()s to the .rvvm file's parent before initializing the VM.
 #

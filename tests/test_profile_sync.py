@@ -333,6 +333,19 @@ class TestGoneUpstreamIsNotAnError(unittest.TestCase):
         self.assertIn("upstream gone", out)
         self.assertIn("upstream error", out)
 
+    def test_triage_names_an_orphaned_pin_and_a_moved_repository(self):
+        """pcem's only problem was an upstream_commit off its dev branch, and
+        the triage line read "1 to review" like any drift."""
+        report = ProfileReport(
+            name="pcem", entries=[], counts={"UNCHECKED": 2},
+            orphaned=["sarah-walker-pcem/pcem: pin 25b54e3f is no ancestor of 4606fb1e"],
+            moved_repos=["a/b answers as c/b (renamed or transferred)"],
+        )
+        self.assertEqual(
+            profile_sync.triage_state(report),
+            "2 to review, 1 orphaned pin, 1 repository moved, 2 unchecked",
+        )
+
 
 class TestWorstStatus(unittest.TestCase):
     def test_gone_beats_everything(self):
@@ -500,6 +513,46 @@ class TestVerifyAtPin(unittest.TestCase):
         self.assertEqual(profile_sync.cites_another_version(other, "0.16.0"), "0.0.11")
         self.assertIsNone(profile_sync.cites_another_version(same, "0.16.0"))
         self.assertIsNone(profile_sync.cites_another_version(same, {"libretro": "v0.16.0"}))
+
+    def test_a_profile_with_a_repository_names_a_revision(self):
+        """redream declared libretro/redream, a repository that never
+        existed, with no pin and no date: profile_sync skipped it and no
+        revision answered for the files Batocera, RetroBat and KNULLI ship."""
+        import yaml
+
+        root = Path(__file__).resolve().parents[1] / "emulators"
+        unpinned = [
+            path.stem
+            for path in sorted(root.glob("*.yml"))
+            if (profile := yaml.safe_load(path.read_text(encoding="utf-8")) or {})
+            and (profile.get("source") or profile.get("upstream"))
+            and not any(
+                profile.get(key)
+                for key in ("source_commit", "upstream_commit", "profiled_date")
+            )
+        ]
+        self.assertEqual(unpinned, [])
+
+    def test_a_profile_citing_versions_documents_its_own(self):
+        """ti99sim's core_version went null while doc/CHANGES.html at its pin
+        reads 0.16.0: every (v0.16.0) part then read as another version, and
+        the profile reported 0 to review with nothing checked."""
+        import yaml
+
+        root = Path(__file__).resolve().parents[1] / "emulators"
+        silent = []
+        for path in sorted(root.glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            refs = " ".join(
+                str(entry.get("source_ref") or "") for entry in profile.get("files") or []
+            )
+            if not profile_sync._VERSION_NOTE_RE.search(refs):
+                continue
+            declared = profile.get("core_version")
+            values = declared.values() if isinstance(declared, dict) else [declared]
+            if not any(values):
+                silent.append(path.stem)
+        self.assertEqual(silent, [])
 
     def test_a_name_stem_elsewhere_does_not_move_a_ref(self):
         """linapple cites the PRAVETS82 option, and the stem also names an install line."""
@@ -3203,6 +3256,35 @@ class TestBumpCommit(unittest.TestCase):
         # Nothing was compared upstream, so its pin is not written.
         self.assertNotIn("uphead", text)
 
+    def test_a_profile_one_platform_ships_waits_for_its_build(self):
+        """EmuELEC alone ships RigelEngine and builds its package.mk
+        PKG_VERSION. A bulk advance moved fheroes2 and supertux past that
+        build, and rigelengine is a commit ahead of it already."""
+        root = Path(__file__).resolve().parents[1]
+        path = Path(self.tmp.name) / "rigelengine.yml"
+        path.write_text(
+            SAMPLE.replace("\nnotes:", "\ntype: standalone\ncores: [rigelengine, RigelEngine]\n\nnotes:", 1),
+            encoding="utf-8",
+        )
+        report = ProfileReport(
+            name="rigelengine", repo="o/n", pin="pin", head="newhead", entries=[],
+            counts={}, skipped=profile_sync.NO_SOURCE_REF,
+        )
+        platforms = str(root / "platforms")
+        self.assertEqual(
+            profile_sync.shipping_platforms("rigelengine", self.tmp.name, platforms),
+            ["emuelec"],
+        )
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertFalse(bump_commit(path, report, platforms_dir=platforms))
+        self.assertIn("only emuelec ships it", err.getvalue())
+        path.write_text(
+            path.read_text(encoding="utf-8")
+            + 'pin_follows: "EmuELEC builds the branch tip"\n',
+            encoding="utf-8",
+        )
+        self.assertTrue(bump_commit(path, report, platforms_dir=platforms))
+
     def test_any_other_skip_still_holds_the_pin(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead", entries=[], counts={},
@@ -3928,6 +4010,50 @@ class TestCollectCitations(unittest.TestCase):
         )
         self.assertIsNone(resolve("munt ROMInfo.cpp", [tree]))
         self.assertIsNone(resolve("mupen64plus Config.cpp", [tree]))
+
+    def test_project_word_resolves_inside_a_submodule(self):
+        """idtech4a++ and starship cite files of a submodule. The declared
+        tree holds only the gitlink, so the parts stayed external and moved
+        unchecked with every bump."""
+        links = ["Q3E/src/main/jni/xash3d/xash3d-fwgs", "tools/Torch", "libs/zlib"]
+        resolve = profile_sync.resolve_through_gitlinks
+        self.assertEqual(
+            resolve("xash3d-fwgs filesystem/filesystem.c", [links]),
+            "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c",
+        )
+        self.assertEqual(
+            resolve("Torch src/Companion.cpp", [links]), "tools/Torch/src/Companion.cpp"
+        )
+        self.assertIsNone(resolve("munt ROMInfo.cpp", [links]))
+        self.assertIsNone(resolve("lib x.c", [["a/lib1", "b/lib2"]]))
+
+    def test_a_submodule_file_is_read_at_its_pinned_commit(self):
+        port = upstream.make_repo("github.com", "glKarin", "com.n0n3m4.diii4a")
+        files = {
+            (port.slug, "p1", ".gitmodules"): [
+                '[submodule "Q3E/src/main/jni/xash3d/xash3d-fwgs"]',
+                "\tpath = Q3E/src/main/jni/xash3d/xash3d-fwgs",
+                "\turl = ../xash3d-fwgs.git",
+            ],
+            ("glKarin/xash3d-fwgs", "s1", "filesystem/filesystem.c"): ["getenv(x)"],
+        }
+
+        def fetch(repo, sha, path, *_):
+            return files.get((repo.slug, sha, path))
+
+        with mock.patch.object(upstream, "fetch_file", side_effect=fetch), \
+                mock.patch.object(
+                    upstream, "list_gitlinks",
+                    return_value={"Q3E/src/main/jni/xash3d/xash3d-fwgs": "s1"},
+                ):
+            target = upstream.through_gitlink(
+                port, "p1",
+                "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c", "c",
+            )
+        self.assertEqual(
+            (target[0].slug, target[1], target[2]),
+            ("glKarin/xash3d-fwgs", "s1", "filesystem/filesystem.c"),
+        )
 
     def test_run_is_rendered_with_its_written_path(self):
         parts = [RefPart("mupen64plus-video-rice/upstream/src/Config.cpp", 38, 38, "38")]
@@ -5793,6 +5919,24 @@ class TestBranchProfiles(unittest.TestCase):
 
     def test_the_flag_selects_those_profiles(self):
         args = profile_sync.build_parser().parse_args(["--changed", "--base", "main"])
+        profiles = {"kept": {}, "edited": {}, "new": {}, "draft": {}}
+        self.assertEqual(
+            list(profile_sync.select_profiles(profiles, args)),
+            ["draft", "edited", "new"],
+        )
+
+    def test_a_fork_clone_compares_with_the_project(self):
+        """origin is the fork, pushed: origin/main is HEAD, and the default
+        base found nothing to check while the PR's CI failed."""
+        base = subprocess.run(
+            ["git", "rev-parse", "main"], cwd=self.root, capture_output=True,
+            text=True, check=True,
+        ).stdout.strip()
+        self._git("remote", "add", "origin", "https://github.com/someone/retrobios")
+        self._git("remote", "add", "upstream", "https://github.com/Abdess/retrobios")
+        self._git("update-ref", "refs/remotes/origin/main", "HEAD")
+        self._git("update-ref", "refs/remotes/upstream/main", base)
+        args = profile_sync.build_parser().parse_args(["--changed"])
         profiles = {"kept": {}, "edited": {}, "new": {}, "draft": {}}
         self.assertEqual(
             list(profile_sync.select_profiles(profiles, args)),

@@ -28,7 +28,7 @@ notes: |
   {system_dir}/fuse/{rom_filename} (src/compat/file.c:160-175).
 
   Embedded ROMs cover 48K-family, 128K, +2, +3, +3e, SE, TC2048, TC2068.
-  Pentagon, Scorpion, and peripheral ROMs are NOT embedded and must be
+  Pentagon, Scorpion, and peripheral ROMs are not embedded and must be
   placed in {system_dir}/fuse/ by the user.
 
   Default ROM filenames are set in fuse/settings.c:209-260. Each machine
@@ -244,7 +244,7 @@ files:
     note: "Timex TC2068 ROM 1 (EXROM). Also used for TS2068. Embedded in core."
     source_ref: "fuse/settings.c:262, fuse/settings.c:264, fuse/machines/tc2068.c:141"
 
-  # -- External ROMs (NOT embedded, must be in {system_dir}/fuse/) --
+  # -- External ROMs (not embedded, must be in {system_dir}/fuse/) --
 
   # Pentagon family
   - name: "fuse/128p-0.rom"
@@ -441,7 +441,7 @@ platform_details:
       plus3-0/1/2/3.rom, plus3e-0/1/2/3.rom, se-0.rom, se-1.rom,
       tc2048.rom, tc2068-0.rom, tc2068-1.rom.
       disciple.rom, plusd.rom, speccyboot-1.4.rom are present in the repo
-      fuse/roms/ directory but NOT in mem_entries[], so they are loaded
+      fuse/roms/ directory but not in mem_entries[], so they are loaded
       from the filesystem only.
 
   machine_rom_map:

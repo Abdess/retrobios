@@ -4,6 +4,7 @@ core_classification: game_engine
 source: "https://github.com/cyxx/bermuda"
 profiled_date: "2026-10-22"
 source_commit: "cf6bdb68d53a1618967da565a44c931b15daf791"
+pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/bermuda/package.mk:5 at v4.8). Later commits are not part of that build."
 core_version: "0.1.7"
 version_basis:
   kind: file

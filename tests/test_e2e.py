@@ -5541,6 +5541,40 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertEqual(local, path)
             self.assertEqual(status, "name_exact")
 
+    def test_217b_zipped_file_composite_needs_the_member(self):
+        """One member of another name has the zipped_file md5 as composite.
+
+        Batocera looks the member up by name, so the archive is not proof of
+        the entry: a MAME rename leaves exactly that archive behind.
+        """
+        import hashlib as hl
+        import tempfile
+
+        from common import resolve_local_file
+
+        rom = b"inner rom bytes"
+        rom_md5 = hl.md5(rom).hexdigest()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "foo.zip")
+            with zipfile.ZipFile(path, "w") as zf:
+                zf.writestr("renamed.bin", rom)
+            db = {
+                "files": {"sha1z": {"name": "foo.zip", "path": path, "md5": "f" * 32}},
+                "indexes": {
+                    "by_md5": {}, "by_name": {"foo.zip": ["sha1z"]},
+                    "by_crc32": {}, "by_path_suffix": {},
+                },
+            }
+            entry = {"name": "foo.zip", "zipped_file": "expected.bin", "md5": rom_md5}
+            self.assertNotEqual(
+                resolve_local_file(entry, db)[1], "md5_composite_exact"
+            )
+            with zipfile.ZipFile(path, "w") as zf:
+                zf.writestr("expected.bin", rom)
+            self.assertEqual(
+                resolve_local_file(entry, db), (path, "md5_composite_exact")
+            )
+
     def test_215_check_member_hash_inside_zip(self):
         """zipped_file entries verify the ROM inside the ZIP, not the ZIP."""
         import hashlib as hl

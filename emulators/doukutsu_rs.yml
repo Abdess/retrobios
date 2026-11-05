@@ -21,7 +21,7 @@ systems:
 # (Doukutsu Monogatari) engine in Rust, ported to libretro by Dr. Glaucous.
 # It plays the original freeware Cave Story and Cave Story+ (Steam/Switch).
 #
-# The core does NOT use RetroArch's system directory for any BIOS or firmware.
+# The core does not use RetroArch's system directory for any BIOS or firmware.
 # get_system_directory() is defined in libretro.rs:1255 but never called by
 # the core (the import is commented out in core.rs:28).
 #

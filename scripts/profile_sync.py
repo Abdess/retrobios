@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import bisect
 import difflib
+import functools
 import itertools
 import json
 import os
@@ -35,7 +36,10 @@ import version_basis
 from common import (
     _norm_system_id,
     github_token,
+    list_registered_platforms,
     load_emulator_profiles,
+    load_platform_config,
+    resolve_platform_cores,
     suggest_names,
     system_index,
 )
@@ -1065,6 +1069,29 @@ class ProfileReport:
         )
 
 
+def triage_state(report: ProfileReport) -> str:
+    """One triage line: what to review, the pin to set again named first.
+
+    A pin outside its branch's history or a repository answering under
+    another name is fixed before any ref is read: pcem showed as "1 to
+    review" for an upstream_commit off the dev branch.
+    """
+    if report.skipped:
+        return report.skipped
+    state = f"{report.needs_review()} to review"
+    if report.orphaned:
+        state += f", {len(report.orphaned)} orphaned pin"
+    if report.moved_repos:
+        state += f", {len(report.moved_repos)} repository moved"
+    stale = len(report.stale_prose or ())
+    if stale:
+        state += f", {stale} prose under an older pin"
+    unchecked = (report.counts or {}).get("UNCHECKED", 0)
+    if unchecked:
+        state += f", {unchecked} unchecked"
+    return state
+
+
 def select_repo(profile: dict) -> upstream.Repo | None:
     """Repository the profile was read from: source first, then upstream."""
     for field in ("source", "upstream"):
@@ -1463,14 +1490,40 @@ def tag_pinned_views(
     return tagged
 
 
+def resolve_through_gitlinks(path: str, links: Iterable[Iterable[str]]) -> str | None:
+    """Path of `project file` inside the one submodule named after the project.
+
+    idtech4a++ cites `xash3d-fwgs filesystem/filesystem.c` and starship
+    `Torch src/Companion.cpp`: the declared tree holds a gitlink there, not
+    the files, so no blob path answers and the part stayed external.
+    """
+    word, _, rest = path.partition(" ")
+    rest = rest.strip().lstrip("/")
+    if not rest:
+        return None
+    word = word.lower()
+    for paths in links:
+        matches = [
+            link for link in paths or ()
+            if word in link.rsplit("/", 1)[-1].lower()
+        ]
+        if len(matches) == 1:
+            return f"{matches[0]}/{rest}"
+        if matches:
+            return None
+    return None
+
+
 def _resolve_project_words(
-    refs: list, tree_order: Callable[[], Iterable[list[str] | None]]
+    refs: list, tree_order: Callable[[], Iterable[list[str] | None]],
+    link_order: Callable[[], Iterable[Iterable[str]]] = lambda: (),
 ) -> list:
     """Point `project file` parts at the declared tree that vendors them.
 
-    tree_order() yields the trees to search, pin before HEAD. It is only
-    called for a part that needs it, since reading a HEAD tree costs a
-    request. Parts no tree carries stay external.
+    tree_order() yields the trees to search, pin before HEAD, and
+    link_order() the submodule paths of the declared trees at their pins.
+    Each is only called for a part that needs it, since reading a tree costs
+    a request. Parts no tree carries stay external.
     """
     resolved: dict[str, str | None] = {}
     out = []
@@ -1479,7 +1532,9 @@ def _resolve_project_words(
         for part in parts:
             if is_external_citation(part.path):
                 if part.path not in resolved:
-                    resolved[part.path] = resolve_project_word(part.path, tree_order())
+                    resolved[part.path] = resolve_project_word(
+                        part.path, tree_order()
+                    ) or resolve_through_gitlinks(part.path, link_order())
                 if resolved[part.path]:
                     part = replace(part, path=resolved[part.path])
             rewritten.append(part)
@@ -1860,7 +1915,14 @@ def build_report(
         if key in mute:
             return None
         try:
-            return upstream.fetch_file(repo, sha, wanted, cache_dir, offline)
+            found = upstream.fetch_file(repo, sha, wanted, cache_dir, offline)
+            if found is None and "/" in wanted:
+                # A file of a submodule is read at the commit its gitlink
+                # pins in this revision, so a bump moves it with the port.
+                inner = upstream.through_gitlink(repo, sha, wanted, cache_dir, offline)
+                if inner is not None:
+                    found = upstream.fetch_file(*inner, cache_dir, offline)
+            return found
         except (upstream.RateLimitError, upstream.NotCachedError):
             raise
         except upstream.UpstreamError as exc:
@@ -1916,6 +1978,9 @@ def build_report(
         refs,
         lambda: itertools.chain(
             map(_pin_tree_for, views), map(lambda v: _context_for(v)[1], views)
+        ),
+        lambda: (
+            upstream.list_gitlinks(v.repo, v.pin, cache_dir, offline) for v in views
         ),
     )
 
@@ -3436,9 +3501,37 @@ def _needs_review(report: ProfileReport, accept_changed: bool) -> bool:
     return any((report.counts or {}).get(s) for s in blocking)
 
 
+@functools.lru_cache(maxsize=4)
+def _platform_cores(emulators_dir: str, platforms_dir: str) -> tuple[tuple[str, frozenset[str]], ...]:
+    profiles = load_emulator_profiles(emulators_dir)
+    return tuple(
+        (platform, frozenset(resolve_platform_cores(
+            load_platform_config(platform, platforms_dir), profiles
+        )))
+        for platform in list_registered_platforms(platforms_dir, include_archived=True)
+    )
+
+
+def shipping_platforms(
+    name: str, emulators_dir: str, platforms_dir: str = "platforms",
+) -> list[str]:
+    """The registered platforms whose cores resolve to this profile.
+
+    Archived platforms count: RetroPie still builds the packages it lists.
+    """
+    return [
+        platform
+        for platform, cores in _platform_cores(
+            os.path.realpath(emulators_dir), platforms_dir
+        )
+        if name in cores
+    ]
+
+
 def bump_commit(
     path: Path, report: ProfileReport, accept_changed: bool = False,
     cache_dir: str = DEFAULT_CACHE, offline: bool = False,
+    platforms_dir: str = "platforms",
 ) -> bool:
     """Advance source_commit to HEAD when nothing needs a read again.
 
@@ -3462,6 +3555,20 @@ def bump_commit(
             file=sys.stderr,
         )
         return False
+    if not (document.get("pin_frozen") or document.get("pin_follows")):
+        shipped = shipping_platforms(path.stem, str(path.parent), platforms_dir)
+        if len(shipped) == 1:
+            # One platform ships it, so the pin is the revision that platform
+            # builds: a bulk advance moved fheroes2, supertux and
+            # supermariowar past what EmuELEC compiles, and rigelengine is
+            # already one commit ahead of its package.mk.
+            print(
+                f"{path.stem}: only {shipped[0]} ships it. Read the revision its "
+                "build compiles and set pin_frozen, or pin_follows when it "
+                "builds the branch tip",
+                file=sys.stderr,
+            )
+            return False
     if any(isinstance(document.get(f), dict) for f in ("source_commit", "upstream_commit")):
         # A pin per build mode names one revision per repository, and the
         # report heads only the primary one: rewriting str(dict) was a
@@ -4097,9 +4204,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="the profiles the branch adds against --base, as CI checks them",
     )
     parser.add_argument(
-        "--base", default="origin/main",
+        "--base",
         help="revision --changed and --added compare with, through its merge "
-        "base with HEAD (default: %(default)s)",
+        "base with HEAD (default: the project's main line, upstream/main or "
+        "origin/main when that remote names the project, fetched otherwise)",
     )
     parser.add_argument(
         "--emulators-dir", default="emulators",
@@ -4266,14 +4374,33 @@ def branch_profiles(emulators_dir: str, base: str, added_only: bool) -> list[str
     })
 
 
+def project_base() -> str:
+    """The project's main line, the base --changed compares with by default.
+
+    In a fork's clone origin/main is the fork: once the branch is pushed it
+    is HEAD, and --changed --strict found nothing and passed while the PR's
+    CI then failed. validate_pr.py resolves the same line the same way.
+    """
+    from validate_pr import _git_lines as git_lines, _project_main_line
+
+    line = _project_main_line()
+    if line:
+        return line
+    for remote in ("upstream", "origin"):
+        if git_lines("rev-parse", "--verify", "--quiet", f"{remote}/main"):
+            return f"{remote}/main"
+    return "HEAD"
+
+
 def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
     """Profiles matching the selection flags."""
     if args.changed or args.added:
-        names = branch_profiles(args.emulators_dir, args.base, args.added)
+        base = args.base or project_base()
+        names = branch_profiles(args.emulators_dir, base, args.added)
         selected = {name: profiles[name] for name in names if name in profiles}
         if not selected:
             verb = "adds" if args.added else "adds or edits"
-            print(f"the branch {verb} no profile against {args.base}", file=sys.stderr)
+            print(f"the branch {verb} no profile against {base}", file=sys.stderr)
         return selected
     if args.emulator:
         names = [args.emulator] if isinstance(args.emulator, str) else args.emulator
@@ -4871,13 +4998,7 @@ def _print_triage(
     print(f"{'score':>5s}  {'profile':30s}  state (worst first)")
     pending = 0
     for score, report, refused in sorted(ranked, key=lambda item: -item[0]):
-        state = report.skipped or f"{report.needs_review()} to review"
-        stale = len(report.stale_prose or ())
-        if stale and not report.skipped:
-            state += f", {stale} prose under an older pin"
-        unchecked = (report.counts or {}).get("UNCHECKED", 0)
-        if unchecked and not report.skipped:
-            state += f", {unchecked} unchecked"
+        state = triage_state(report)
         if refused:
             state += f", {refused}"
         pending += bool(report.needs_review())

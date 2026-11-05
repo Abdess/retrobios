@@ -18,9 +18,8 @@ verification: existence
 notes: |
   SDLPoP is NagyD's open-source port of the DOS Prince of Persia (1989),
   rebuilt from the leaked Jordan Mechner source and refined through
-  years of community reverse engineering. Unlike the other engines in
-  this directory, SDLPoP ships with ALL game data in-tree, so no retail
-  data file is required or useful.
+  years of community reverse engineering. SDLPoP ships all game data in
+  its tree, so no retail data file is needed.
 
   open_dat() (src/seg009.c:438) reads an archive named FOO.DAT if
   present, otherwise falls back to a loose folder data/FOO/ containing

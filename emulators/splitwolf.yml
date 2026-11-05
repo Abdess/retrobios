@@ -31,7 +31,7 @@ notes: |
   the shareware build, wl6 then wl3 then wl1 for the full ones, sdm for
   the Spear demo, sod or sd1 after --mission 0 or 1 for Spear of Destiny,
   sd2 or sd3 after --mission 2 or 3 for the mission pack build
-  (wl_main.cpp:2015-2040). Unlike Wolf4SDL, every Spear build reads its
+  (wl_main.cpp:2015-2040). Every Spear build reads its
   graphics and audio files under the sod extension (wl_menu.cpp:5341-5342)
   and only vswap, maphead and gamemaps under the mission extension, so the
   mission packs need the original game beside them.

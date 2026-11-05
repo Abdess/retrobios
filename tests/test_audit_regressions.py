@@ -5713,6 +5713,10 @@ class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
             "beetle_psx reads its first 512 KB under the same name",
         ("duckstation-legacy", "ps1_rom.bin"):
             "the same whole PS3 image, whose first 512 KB src/core/bios.cpp:89 hashes",
+        ("openmsx", "COLECO.ROM"):
+            "share/machines/ColecoVision_SGM.xml:56 names it, tried beside the machine XML",
+        ("openmsx", "fmpac.rom"):
+            "share/machines/Boosted_MSX2_EN.xml:83 names it, tried beside the machine XML",
     }
 
     @staticmethod
@@ -6819,6 +6823,129 @@ class PipelineChildrenSkipNodeCompileCache(unittest.TestCase):
     def test_the_run_helper_sets_it(self):
         source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         self.assertIn('"NODE_DISABLE_COMPILE_CACHE": "1"', source)
+
+
+class HiganSuperGameBoyFolderIsFree(unittest.TestCase):
+    """higan reads program.rom in the option's folder, SGB.sfc/, then Super
+    GameBoy.sfc/. bsnes, Mesen-S and ares read SGB1.sfc and SGB2.sfc as files
+    in the same system directory, and SuperSnes9x sgb.sfc, so a pack that only
+    had the first two folders never gave the higan cores a Super Game Boy."""
+
+    def test_each_higan_core_has_a_folder_no_core_reads_as_a_file(self):
+        import yaml
+
+        file_names: set[str] = set()
+        for path in (ROOT / "emulators").glob("*.yml"):
+            document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            for entry in document.get("files") or []:
+                for name in [entry.get("name"), *(entry.get("aliases") or [])]:
+                    if name:
+                        file_names.add(str(name).casefold())
+                if entry.get("path"):
+                    file_names.add(str(entry["path"]).casefold())
+        for profile in ("higan_sfc", "higan_sfc_balanced"):
+            document = yaml.safe_load(
+                (ROOT / "emulators" / f"{profile}.yml").read_text(encoding="utf-8")
+            )
+            folders = {
+                str(entry["path"]).split("/", 1)[0]
+                for entry in document["files"]
+                if str(entry.get("path") or "").endswith("/program.rom")
+                and entry.get("system") == "nintendo-sgb"
+            }
+            with self.subTest(profile=profile):
+                self.assertTrue(
+                    [f for f in folders if f.casefold() not in file_names], folders
+                )
+
+
+class ProfileNotesDescribeTheCoreAlone(unittest.TestCase):
+    """mednafen_pce_fast, sdlpop and x64sdl described the core by what
+    another profile of this directory does ("unlike beetle_pce", "unlike the
+    other engines in this directory"), which means nothing once the profile
+    is read on its own, and 21 lines shouted NOT, ALL or MUST."""
+
+    SHOUT = re.compile(r"\b(NOT|NEVER|ONLY|MUST|ALL|DIFFERENT)\b(?! FOUND)")
+
+    def test_no_profile_shouts_or_compares_with_another_profile(self):
+        names = {path.stem.casefold() for path in (ROOT / "emulators").glob("*.yml")}
+        names |= {name.replace("_", "-") for name in names}
+        found = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            text = path.read_text(encoding="utf-8")
+            for number, line in enumerate(text.splitlines(), 1):
+                if self.SHOUT.search(line):
+                    found.append(f"{path.stem}:{number}")
+                for match in re.finditer(r"\bunlike (?:the )?([\w+-]+)", line, re.I):
+                    if match.group(1).casefold() in names:
+                        found.append(f"{path.stem}:{number}")
+        self.assertEqual(found, [])
+
+
+class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
+    """PCSX2 and its forks scan the BIOS folder and keep the first 4 to 8 MB
+    image with a romdir (pcsx2/ps2/BiosTools.cpp:258-282 at f0523f8a). With
+    no found_by the label ps2-0230a-20080220.bin read as a name the core
+    opens, and the RetroDECK export added it as a required file."""
+
+    def test_every_ps2_image_scan_is_marked(self):
+        import yaml
+
+        from validation import opens_by_name
+
+        named = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            if profile.get("bios_mode") != "agnostic":
+                continue
+            for entry in profile.get("files") or []:
+                if (
+                    entry.get("min_size") == 4194304
+                    and entry.get("max_size") == 8388608
+                    and opens_by_name(entry, profile)
+                ):
+                    named.append(f"{path.stem}: {entry['name']}")
+        self.assertEqual(named, [])
+
+
+class Dev9FilesAreReadFromTheWorkingDirectory(unittest.TestCase):
+    """DEV9 opens eeprom.dat and flash.dat by bare name (PCSX2
+    pcsx2/DEV9/DEV9.cpp:144, AetherSX2 DEV9/flash.cpp:89): the working
+    directory, never the BIOS folder. Eight profiles left load_from unset,
+    so the file was packed into the BIOS folder, where nothing reads it."""
+
+    def test_every_dev9_file_names_the_working_directory(self):
+        import yaml
+
+        unset = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            for entry in profile.get("files") or []:
+                if entry.get("name") in ("eeprom.dat", "flash.dat") and "DEV9" in str(
+                    entry.get("source_ref")
+                ) and entry.get("load_from") != "working_directory":
+                    unset.append(f"{path.stem}: {entry['name']}")
+        self.assertEqual(unset, [])
+
+
+class OpenMsxSystemRomsAreFoundBySha1(unittest.TestCase):
+    """openMSX reaches a ROM in share/systemroms through the file pool by
+    SHA1 alone, a filename being looked up only beside the machine's XML
+    (src/memory/Rom.cc:121-170). Read as names the core opens, the labels
+    were added to the KNULLI and Batocera exports."""
+
+    def test_no_systemrom_label_reads_as_a_name(self):
+        import yaml
+
+        from validation import opens_by_name
+
+        profile = yaml.safe_load((ROOT / "emulators" / "openmsx.yml").read_text())
+        named = [
+            entry["name"] for entry in profile["files"]
+            if "share/systemroms/" in str(entry.get("path"))
+            and opens_by_name(entry, profile)
+        ]
+        self.assertEqual(named, [])
 
 
 if __name__ == "__main__":

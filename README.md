@@ -84,14 +84,14 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 - **1,087 files** the platforms' emulators load are still to be found, and 138 more cannot be sourced at all (per-user keys, user-filled slots, dumps nobody has made). Both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **18 platforms** supported with platform-specific verification
 - **623 emulators** profiled from source (RetroArch cores + standalone)
-- **533 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **532 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **19,943 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,740 system files, 2,975 arcade ROM sets, 11,228 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
 - **566 of 5,740 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC). Arcade sets and engine data fall outside what those catalogs index
 - **15.7 GB** for the whole collection
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 499+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 498+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -100,22 +100,22 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | Platform | On its BIOS list | Files its emulators load | Checked by |
 |----------|-----------------:|-------------------------:|------------|
 | AmberELEC | 414/434 | 4,751/4,935 | MD5 hash |
-| Batocera | 353/353 | 14,171/15,291 | MD5 hash |
+| Batocera | 353/353 | 14,172/15,292 | MD5 hash |
 | BizHawk | 118/118 | - | SHA1 hash |
-| EmuDeck | 168/168 | 8,422/8,525 | MD5 hash |
+| EmuDeck | 168/168 | 8,426/8,529 | MD5 hash |
 | EmuELEC | 544/572 | 4,786/10,215 | MD5 hash |
-| KNULLI | 290/290 | 9,126/15,349 | MD5 hash |
-| Lakka | 532/532 | 7,910/7,996 | file presence |
+| KNULLI | 290/290 | 9,127/15,350 | MD5 hash |
+| Lakka | 532/532 | 7,909/7,995 | file presence |
 | MiSTer FPGA | 81/81 | - | MD5 hash |
 | MinUI | 0/0 | 78/79 | file presence |
 | MyMinUI | 0/0 | 356/367 | file presence |
 | NextUI | 0/0 | 343/350 | file presence |
-| ROCKNIX | 38/38 | 7,421/9,134 | MD5 hash |
+| ROCKNIX | 38/38 | 7,425/9,138 | MD5 hash |
 | Recalbox | 351/351 | 3,125/3,344 | MD5 hash |
-| RetroArch | 526/526 | 7,919/7,987 | file presence |
-| RetroBat | 348/348 | 5,133/9,658 | MD5 hash |
-| RetroDECK | 2,007/2,008 | 6,703/6,991 | MD5 hash |
-| RetroPie * | 532/532 | 8,120/12,775 | file presence |
+| RetroArch | 526/526 | 7,918/7,986 | file presence |
+| RetroBat | 348/348 | 5,134/9,659 | MD5 hash |
+| RetroDECK | 2,007/2,008 | 6,705/6,993 | MD5 hash |
+| RetroPie * | 532/532 | 8,119/12,774 | file presence |
 | RomM | 383/383 | 83/873 | MD5 hash |
 
 Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
@@ -203,4 +203,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-05T12:02:13Z*
+*Auto-generated on 2026-11-05T12:13:24Z*

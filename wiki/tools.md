@@ -448,8 +448,10 @@ to show one cited file and `--context N` lines around each hunk. `--strict`
 exits 1 when a profile has refs to review, and CI runs it on every profile a change
 adds. `--offline` answers from `--cache-dir` alone. `--changed` selects the
 profiles the branch adds or edits, uncommitted ones included, and `--added`
-the ones it adds, both against the merge base of `--base` (`origin/main` by
-default) and HEAD.
+the ones it adds, both against the merge base of `--base` and HEAD. By
+default `--base` is the project's main line: `upstream/main` or `origin/main`
+when that remote is the project, fetched from the project in a fork's clone,
+where `origin/main` is the fork.
 
 ```bash
 python scripts/profile_sync.py --all --system sega-saturn --changed-only
@@ -612,7 +614,9 @@ Writes are explicit and mechanical only. `--backfill-commits` fills a
 missing `source_commit`, `--rebase-refs` recales `SHIFTED` and `RENAMED`
 line ranges and moves `source_commit` to HEAD with them, all or nothing,
 `--bump-commit` advances `source_commit` to HEAD only when nothing needs a
-re-read. All three refuse to run on a dirty `emulators/` without `--force`,
+re-read. It leaves a profile a single registered platform ships until the
+profile says what that platform builds: `pin_frozen` for a fixed revision,
+`pin_follows` for the branch tip. All three refuse to run on a dirty `emulators/` without `--force`,
 and every write is verified by reparsing the document.
 
 Uses `GITHUB_TOKEN` when set, which `--all` requires. Responses are cached

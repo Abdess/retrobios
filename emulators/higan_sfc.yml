@@ -228,3 +228,18 @@ files:
     required: false
     note: "Falls back to sgb2.boot.rom at the system directory root."
     source_ref: "higan/gb/system/system.cpp:54-65, icarus/heuristics/super-famicom.cpp:243, icarus/heuristics/super-famicom.cpp:614"
+
+  - name: "program.rom"
+    path: "Super GameBoy.sfc/program.rom"
+    system: nintendo-sgb
+    required: false
+    note: "Last folder tried, after the option's folder and SGB.sfc/."
+    source_ref: "higan/target-libretro/libretro-sfc.cpp:209-225, higan/sfc/cartridge/load.cpp:77-80"
+
+  - name: "sgb1.boot.rom"
+    path: "Super GameBoy.sfc/sgb1.boot.rom"
+    system: nintendo-sgb
+    size: 256
+    required: false
+    note: "Read from the folder program.rom was found in, then from the system directory root. The name follows the Super GAMEBOY header of an SGB1 program.rom."
+    source_ref: "higan/target-libretro/libretro-sfc.cpp:229, higan/gb/system/system.cpp:54-65, icarus/heuristics/super-famicom.cpp:232, icarus/heuristics/super-famicom.cpp:618"

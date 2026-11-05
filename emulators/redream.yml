@@ -1,35 +1,48 @@
-# Redream: Sega Dreamcast (libretro)
-# ref: libretro/redream, docs.libretro.com/library/redream
-# Uses dc/boot.bin and dc/flash.bin (different names from Flycast)
-# Same BIOS data as Flycast's dc_boot.bin / dc_flash.bin
-#
-# doc vs source: docs list boot.bin md5 e10c53c2f8b90bab96ead2d368858623
-# which matches dc_bios.bin in the repo. Flycast uses dc_boot.bin (same
-# data, 2 MB) while Redream calls it boot.bin. The flash.bin is identical
-# across both cores.
 emulator: Redream
 type: libretro
-source: "https://github.com/libretro/redream"
-core_version: null
+source: "https://github.com/inolen/redream"
+profiled_date: "2026-11-05"
+source_commit: "ffb7302245ff40515cb9f0f0b0e233a4b39342d3"
+core_version: "v1.0.0-25-gffb7302"
 version_basis:
-  kind: unverified
-  why: no_pin
+  kind: tag
+  tag: "v1.0.0"
+  distance: 25
 cores:
   - redream
 systems:
   - sega-dreamcast
+
+notes: |
+  Last public tree of redream (2018-04-18). It builds the SDL program and
+  a libretro core that reports library_name redream
+  (src/host/retro_host.c:214-220). retro_init makes <system>/dc the
+  application directory (src/host/retro_host.c:192-199), where the boot ROM
+  and the flash ROM are read. Later releases, 1.5.0 included, are built from
+  a private tree and published as binaries only.
+
 files:
-  - name: dc_bios.bin
+  - name: boot.bin
+    path: dc/boot.bin
     system: sega-dreamcast
-    destination: dc/boot.bin
-    required: true
-    sha1: 8951d1bb219ab2ff8583033d2119c899cc81f18c
-    md5: e10c53c2f8b90bab96ead2d368858623
+    required: false
+    hle_fallback: true
     size: 2097152
-  - name: dc_flash.bin
+    md5:
+      - e10c53c2f8b90bab96ead2d368858623
+      - f2cd29d09f3e29984bcea22ab2e006fe
+      - 37c921eb47532cae8fb70e5d987ce91c
+      - a5c6a00818f97c5e3e91569ee22416dc
+    validation: [size, md5]
+    note: "Dreamcast boot ROM. An image of another size or with an md5 outside the list is refused, and the BIOS is then emulated at a high level."
+    source_ref: "src/guest/rom/boot.c:12-22, src/guest/rom/boot.c:24-46, src/guest/rom/boot.c:48-80, src/guest/rom/boot.c:82-89, src/guest/bios/bios.c:227-238, src/guest/bios/bios.c:326-336"
+
+  - name: flash.bin
+    path: dc/flash.bin
     system: sega-dreamcast
-    destination: dc/flash.bin
-    required: true
-    sha1: 94d44d7f9529ec1642ba3771ed3c5f756d5bc872
-    md5: 0a93f7940c455905bea6e392dfde92a4
+    required: false
+    hle_fallback: true
     size: 131072
+    validation: [size]
+    note: "Dreamcast flash ROM. An image of another size is ignored and the partitions are reset to factory settings, and the flash is written back on exit."
+    source_ref: "src/guest/rom/flash.c:26-36, src/guest/rom/flash.c:47-72, src/guest/rom/flash.c:100-107, src/guest/rom/flash.c:197-200, src/guest/bios/bios.c:137-198"
