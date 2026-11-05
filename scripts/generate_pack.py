@@ -2652,6 +2652,19 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
     else:
         raise ValueError("--verify-packs requires --platform or --all")
 
+    # The target is checked as the build checks it: a mistyped one, or one
+    # the platform does not publish, was dropped and the full pack verified
+    # under it, `all OK` for a pack no build had made.
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        try:
+            target_cores_cache, platforms = build_target_cores_cache(
+                platforms, args.target, args.platforms_dir, is_all=args.all
+            )
+        except (FileNotFoundError, ValueError) as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            sys.exit(1)
+
     all_ok = True
     verify_regions = getattr(args, "regions", None)
     verify_profiles = load_emulator_profiles(args.emulators_dir)
@@ -2689,7 +2702,7 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
             else:
                 print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
             continue
-        tc = _target_cores_for(platform_name, args.target, args.platforms_dir)
+        tc = target_cores_cache.get(platform_name)
         # A group pack and a pack built for the platform alone can both be
         # present, and each one is a pack of this platform.
         for pack_name in found:
@@ -4877,17 +4890,12 @@ def _target_cores_for(
 ) -> set[str] | None:
     """Cores a target leaves available, or None when no target was asked for.
 
-    None means no narrowing, which is what an unfiltered pack expects. Read
-    the way --all builds: a platform without a target file was packed
-    unnarrowed under the target's name, and checking that pack must not
-    raise where building it did not.
+    Called on a platform the build already packed under the target, so the
+    target is known to it: a platform without one is left out of the run.
     """
     if not target_name:
         return None
-    try:
-        return load_target_config(platform_name, target_name, platforms_dir)
-    except (FileNotFoundError, ValueError):
-        return None
+    return load_target_config(platform_name, target_name, platforms_dir)
 
 
 def _expected_pack_names(

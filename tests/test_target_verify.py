@@ -4,7 +4,8 @@
 under the target's name (Recalbox, Lakka, BizHawk, MiSTer, ROCKNIX). The
 conformance check read the same target without the --all tolerance, raised
 FileNotFoundError on the first of those packs and stopped the run in a
-traceback after every pack had been written.
+traceback after every pack had been written. Such a platform is now left
+out of a targeted --all run, and the check refuses it as the build does.
 """
 
 from __future__ import annotations
@@ -31,7 +32,10 @@ class CheckReadsTheTargetLikeTheBuild(unittest.TestCase):
                 contextlib.redirect_stdout(io.StringIO()):
             with self.assertRaises(ValueError):
                 build_target_cores_cache(["recalbox"], "x86_64", platforms, is_all=True)
-            self.assertIsNone(_target_cores_for("recalbox", "x86_64", platforms))
+        # The build never packs such a platform under the target, so the
+        # check refuses it too instead of reading the full pack.
+        with self.assertRaises(FileNotFoundError):
+            _target_cores_for("recalbox", "x86_64", platforms)
 
     def test_a_platform_with_a_target_file_is_narrowed(self):
         cores = _target_cores_for("retroarch", "switch", str(REPO_ROOT / "platforms"))
