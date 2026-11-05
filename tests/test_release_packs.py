@@ -167,9 +167,13 @@ class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
         import pipeline
 
         verify = self.VERIFY + "Batocera: 3/3 OK [md5]\n"
-        with contextlib.redirect_stdout(io.StringIO()):
+        with contextlib.redirect_stdout(io.StringIO()) as out:
             self.assertFalse(pipeline.check_consistency(
                 verify, self.PACK, pipeline.release_pack_keys(PLATFORMS)))
+        # The failing line says it fails: "(no separate pack)" read like
+        # the installer-only note above it.
+        self.assertIn("Batocera: MISSING pack: verify judged 3/3 but the build wrote no pack for it",
+                      out.getvalue())
 
     def test_the_pipeline_passes_the_release_platforms(self):
         source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")

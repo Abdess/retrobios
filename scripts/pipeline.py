@@ -405,7 +405,8 @@ def check_consistency(
         elif released is not None and not (v_names & released):
             print(f"  {v_label}: {v_ok}/{v_total} (no release pack, served by the installer)")
         else:
-            print(f"  {v_label}: {v_ok}/{v_total} (no separate pack)")
+            print(f"  {v_label}: MISSING pack: verify judged {v_ok}/{v_total} "
+                  "but the build wrote no pack for it")
             all_ok = False
 
     status = "OK" if all_ok else "FAILED"
