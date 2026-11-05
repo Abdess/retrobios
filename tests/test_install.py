@@ -2807,6 +2807,29 @@ class APyLauncherWithoutARuntimeIsPassed(unittest.TestCase):
         self.assertIn("installer ran", proc.stdout)
 
 
+@unittest.skipUnless(shutil.which("pwsh"), "needs PowerShell")
+class APowerShellDownloadThatNeverAnswersEnds(unittest.TestCase):
+    """Invoke-WebRequest had no timeout: behind a server that takes the
+    connection and never answers, the window waited forever with no line."""
+
+    def test_a_silent_server_ends_on_the_network_advice(self):
+        folder = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
+        with socket.socket() as listener:
+            listener.bind(("127.0.0.1", 0))
+            listener.listen(4)
+            port = listener.getsockname()[1]
+            started = time.monotonic()
+            proc = subprocess.run(
+                ["pwsh", "-NoProfile", "-File", str(folder / "install.ps1"), "--check"],
+                env={**os.environ,
+                     "RETROBIOS_INSTALL_URL": f"https://127.0.0.1:{port}/install.py"},
+                capture_output=True, text=True, timeout=150, stdin=subprocess.DEVNULL)
+        self.assertLess(time.monotonic() - started, 120)
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("could not be downloaded", " ".join((proc.stdout + proc.stderr).split()))
+
+
 class ThePowerShellWrapperPassesTheStatusOn(unittest.TestCase):
     """Every non-zero exit became a red "installer failed" exception and
     code 1: a --check that found work read as a crash, 2 and 130 were lost."""

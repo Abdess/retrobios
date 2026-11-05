@@ -42,7 +42,11 @@
             }
             $temporary = Join-Path ([IO.Path]::GetTempPath()) ("retrobios-install-{0}.py" -f [Guid]::NewGuid())
             try {
-                Invoke-WebRequest -Uri $uri -OutFile $temporary -UseBasicParsing
+                # A server that takes the connection and never answers (a
+                # captive portal, a proxy) held the window forever with no
+                # line: the wait for an answer stops after 30 s, as curl's
+                # --connect-timeout in install.sh.
+                Invoke-WebRequest -Uri $uri -OutFile $temporary -UseBasicParsing -TimeoutSec 30
             } catch {
                 # The raw WebException read as a crash and named no next step.
                 throw ("The installer could not be downloaded from {0}: {1} " +
