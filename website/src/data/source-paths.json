@@ -115,7 +115,7 @@
   "crates/wqxemu/src/keypad.rs",
   "crates/wqxemu/src/main.rs"
  ],
- "git.libretro.com/libretro/xenia-libretro@f23c14c717ef274516f29c9b5e97d6a9db28643d": [
+ "git.libretro.com/libretro/xenia-edge-libretro@f23c14c717ef274516f29c9b5e97d6a9db28643d": [
   ".ci/build-windows-cross.sh",
   "libretro/CMakeLists.txt",
   "libretro/libretro.cpp",
