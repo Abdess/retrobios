@@ -4012,8 +4012,25 @@ class ATypoGetsTheClosestName(unittest.TestCase):
             self.assertIn(f"--platform {plat}", out.getvalue())
 
     def test_a_system_that_gets_no_list_is_still_refused(self):
-        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+        """TrimUI, which --list-platforms prints, was answered "Unknown
+        platform" with no way forward."""
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
             install.normalize_platform("TrimUI")
+        self.assertNotIn("Unknown platform", err.getvalue())
+        self.assertIn("--platform retroarch --dest FOLDER", err.getvalue())
+
+    def test_a_system_name_is_suggested(self):
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
+            install.normalize_platform("spruce")
+        self.assertIn("Did you mean: spruceOS?", err.getvalue())
+        # The distinct names --list-platforms prints: Batocera is both a
+        # platform and a system it recognises.
+        names = [*install.AVAILABLE_PLATFORMS,
+                 *(line.split(":")[0] for line in install._system_lines())]
+        listed = len({install._name_key(name) for name in names})
+        self.assertIn(f"lists all {listed}.", err.getvalue())
 
     def test_a_platform_typo_is_answered_with_one_name(self):
         err = io.StringIO()

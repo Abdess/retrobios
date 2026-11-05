@@ -3098,8 +3098,21 @@ def normalize_platform(name: str, say: bool = True) -> str:
                 print(f"  {rule.name} gets the {display_name(rule.manifest)} file list: "
                       f"--platform {rule.manifest}.")
             return rule.manifest
+    # --list-platforms prints TrimUI with why it gets no folder, and naming
+    # it answered "Unknown platform".
+    for rule in _EMBEDDED_RULES:
+        if key and not rule.manifest and key == _name_key(rule.name):
+            refuse_name(name.strip(), f"{rule.name} is not installed to: "
+                        f"{_NO_FOLDER.get(rule.name, 'no source names its BIOS folder')}.",
+                        "  Name that folder: --platform retroarch "
+                        "--dest FOLDER")
+    # Every name --list-platforms prints, so that spruce suggests spruceOS
+    # and the count is the one the listing shows.
+    known = list(AVAILABLE_PLATFORMS) + list(dict.fromkeys(
+        rule.name for rule in _EMBEDDED_RULES
+        if _name_key(rule.name) not in {_name_key(plat) for plat in AVAILABLE_PLATFORMS}))
     refuse_name(name.strip(), f"Unknown platform '{name.strip()}'. "
-                + did_you_mean([name], list(AVAILABLE_PLATFORMS), "--list-platforms"))
+                + did_you_mean([name], known, "--list-platforms"))
 
 
 def _read_limited_json(
