@@ -4512,8 +4512,9 @@ def generate_files_page() -> str:
         "Tools such as clrmamepro and RomVault print one, and so do emulator logs "
         "and the BIOS lists of setups.",
         "",
-        "Paste it below. The page shows the file in the collection that has it, the "
-        "setups that list it and the emulators that check for it.",
+        "Paste it below, alone or in the line md5sum or certutil prints. The page "
+        "shows the file in the collection that has it, the setups that list it and "
+        "the emulators that check for it.",
         "",
         '<form class="rb-file-lookup" action="./" method="get">',
         '<label for="rb-hash">SHA1, MD5, CRC32 or SHA256</label> ',
