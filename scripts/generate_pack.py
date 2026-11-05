@@ -5083,7 +5083,8 @@ def _pack_archives(output_dir: str) -> list[str]:
     A part of a split pack holds a share of a platform by design and was
     checked against the whole when it was cut: judged as a pack it would
     fail conformance, and injecting a manifest would change published bytes.
-    Every name the builder gives ends in the pack suffix: build_port.py
+    Every name the builder gives holds `_BIOS_Pack`, then the system tag of
+    a --system platform pack (`_BIOS_Pack_Playstation.zip`): build_port.py
     writes its launcher archives (RetroBIOS.zip) to the same dist/, and
     taking every ZIP rewrote them with a manifest after build_port had
     printed their hashes.
@@ -5091,8 +5092,11 @@ def _pack_archives(output_dir: str) -> list[str]:
     return sorted(
         name
         for name in os.listdir(output_dir)
-        if name.endswith(split_pack.PACK_SUFFIX) and not split_pack.is_part(name)
+        if _PACK_NAME.search(name) and not split_pack.is_part(name)
     )
+
+
+_PACK_NAME = re.compile(r"_BIOS_Pack(?:_[^/]+)?\.zip$")
 
 
 def verify_and_finalize_packs(

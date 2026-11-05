@@ -240,6 +240,12 @@ class PartsAreNotTakenForPacks(SplitFixture):
             self._build(self.dist / name, {"RetroBIOS.sh": b"#!/bin/sh\n"})
         before = {p.name: p.read_bytes() for p in self.dist.glob("RetroBIOS*.zip")}
         self.assertEqual(builder._pack_archives(str(self.dist)), [self.pack.name])
+        # A --system platform pack carries its system after the suffix.
+        system = self.dist / "Demo_1.0_BIOS_Pack_Playstation.zip"
+        self._build(system, {"one.bin": b"1"})
+        self.assertEqual(builder._pack_archives(str(self.dist)),
+                         sorted([self.pack.name, system.name]))
+        system.unlink()
         with contextlib.redirect_stdout(io.StringIO()):
             builder.verify_and_finalize_packs(str(self.dist), {"files": {}, "indexes": {}},
                                               skip_conformance=True)
