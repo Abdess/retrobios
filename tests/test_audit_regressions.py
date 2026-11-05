@@ -4224,6 +4224,10 @@ class AutoFetchAsksVerifyWhatIsMissing(unittest.TestCase):
                  "system": "diablo", "emulator": "DevilutionX"},
                 {"name": "held.bin", "in_repo": True, "required": True},
                 {"name": "extra.bin", "in_repo": False, "required": False},
+                # zesarux installs 128s.rom with the emulator: not a target,
+                # and a copy placed in bios/ fails pipeline step 4d.
+                {"name": "128s.rom", "in_repo": False, "required": True,
+                 "bundled": True, "emulator": "ZEsarUX"},
             ],
         }
         with mock.patch.object(verify_mod, "verify_platform", lambda c, d: result):
