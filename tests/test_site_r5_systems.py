@@ -336,7 +336,7 @@ class EachFileDownloadsFromItsCard(unittest.TestCase):
             self.skipTest("site not generated")
         section = page.read_text(encoding="utf-8").split("## Apple II {", 1)[1]
         start = section.split("<section", 1)[0]
-        self.assertIn("[`apple2-asoft-auto.rom`](#sha1-33a24f5489ba)", start)
+        self.assertIn("[`apple2e.rom`](#sha1-d756eba578a6)", start)
 
 
 if __name__ == "__main__":
