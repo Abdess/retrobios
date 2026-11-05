@@ -354,6 +354,25 @@ class PinParsingTests(unittest.TestCase):
 
 
 class CatalogParsingTests(unittest.TestCase):
+    def test_game_catalogs_are_watched(self):
+        """The 38 game catalogs the games-on-card mode identifies discs by
+        had no row: only the BIOS snapshots of provenance/ were compared."""
+        versions = {code: "2026-01-01 00-00-00" for code in cf.game_dat_importer.REDUMP_DATS}
+        versions["PSX"] = "2099-01-01 00-00-00"
+        local = [{"system": system, "version": "2026-01-01 00-00-00"}
+                 for _n, system, _f in cf.game_dat_importer.REDUMP_DATS.values()]
+        with mock.patch.object(cf, "_game_catalogs", return_value=local), \
+                mock.patch.object(cf, "redump_datfile_version", side_effect=versions.get):
+            row = cf._check_redump_games(False)
+            self.assertEqual((row.status, row.items), (cf.STALE, ["sony-playstation"]))
+            self.assertEqual(cf._check_redump_games(True).status, cf.SKIPPED)
+        with mock.patch.object(cf, "_game_catalogs", return_value=[{"fetched": "2026-11-03"}]):
+            for rebuilt, status in (("2026-07-08", cf.OK), ("2026-11-04", cf.STALE)):
+                with mock.patch.object(cf, "_no_intro_asset_date", return_value=rebuilt):
+                    self.assertEqual(cf._check_nointro_games("", False).status, status)
+        self.assertIn("no-intro games",
+                      [f.subject for f in cf.check_catalogs("", True)])
+
     def test_tosec_newest_release_from_category_links(self):
         html = (
             '<a href="/downloads/category/58-2024-05-17">x</a>'

@@ -40,6 +40,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.request
 from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
@@ -62,6 +63,7 @@ from common import (  # noqa: E402
 )
 from exporter import discover_exporters  # noqa: E402
 from exporter.baseline import build_native_model  # noqa: E402
+from scripts.scraper import game_dat_importer  # noqa: E402
 from scripts.scraper.redump_dat_scraper import fetch_snapshot  # noqa: E402
 from scripts.scraper.targets import discover_target_scrapers  # noqa: E402
 
@@ -934,7 +936,85 @@ def check_catalogs(cache_dir: str, offline: bool) -> list[Finding]:
     findings.append(_check_tosec(offline))
     findings.append(_check_mame(cache_dir, offline))
     findings.append(_check_fbneo(cache_dir, offline))
+    findings.append(_check_nointro_games(cache_dir, offline))
+    findings.append(_check_redump_games(offline))
     return findings
+
+
+def _game_catalogs(source: str) -> list[dict]:
+    """The committed game catalogs of one source, games/catalogs/<source>/."""
+    return [_snapshot(path) for path in sorted((REPO_ROOT / "games" / "catalogs" / source).glob("*.json"))]
+
+
+def _no_intro_asset_date(cache_dir: str, offline: bool) -> str:
+    """The day the mirror last rebuilt its No-Intro pack, empty if unlisted."""
+    repo = upstream.parse_repo(NO_INTRO_MIRROR)
+    payload = upstream._api(  # noqa: SLF001
+        f"{repo.api_base}/repos/{repo.slug}/releases/tags/{NO_INTRO_RELEASE}",
+        cache_dir,
+        offline,
+        upstream.MOVING_TTL,
+    )
+    for asset in (payload.get("assets") if isinstance(payload, dict) else None) or []:
+        if isinstance(asset, dict) and asset.get("name") == NO_INTRO_ASSET:
+            return str(asset.get("updated_at", ""))[:10]
+    return ""
+
+
+def _check_nointro_games(cache_dir: str, offline: bool) -> Finding:
+    """games/catalogs/no-intro/ against the pack it was read from. The pack
+    holds every DAT: rebuilt after the catalogs were read, it may carry
+    games the games-on-card mode does not recognise."""
+    subject = "no-intro games"
+    fetched = min((str(doc.get("fetched", "")) for doc in _game_catalogs("no-intro")), default="")
+    if offline:
+        return Finding("catalogs", subject, SKIPPED, local=fetched, detail="offline")
+    updated = _no_intro_asset_date(cache_dir, offline)
+    if not updated:
+        return Finding("catalogs", subject, UNKNOWN, local=fetched, detail="asset not listed")
+    return Finding(
+        "catalogs", subject, STALE if updated > fetched else OK,
+        local=fetched, remote=updated, detail=f"{NO_INTRO_ASSET} rebuilt {updated}",
+    )
+
+
+def redump_datfile_version(code: str) -> str:
+    """The version redump.info serves for one datfile, read from the name it
+    gives the download: a HEAD request, nothing downloaded."""
+    url = game_dat_importer.REDUMP_DATFILE_URL.format(code=code)
+    request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "retrobios/1.0"})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        disposition = response.headers.get("Content-Disposition", "")
+    named = game_dat_importer._DISPOSITION.search(disposition)  # noqa: SLF001
+    match = game_dat_importer._REDUMP_FILE.match(named["file"]) if named else None  # noqa: SLF001
+    if not match:
+        raise ValueError(f"{url} names no datfile")
+    return f"{match['date']} {match['time']}"
+
+
+def _check_redump_games(offline: bool) -> Finding:
+    """games/catalogs/redump/ against the datfiles redump.info serves now.
+    A disc dumped since is not recognised by the games-on-card mode."""
+    subject = "redump games"
+    local = {doc.get("system"): str(doc.get("version", "")) for doc in _game_catalogs("redump")}
+    newest = max(local.values(), default="")
+    if offline:
+        return Finding("catalogs", subject, SKIPPED, local=newest, detail="offline")
+    changed = []
+    remote_newest = ""
+    for code, (_name, system, _floor) in sorted(game_dat_importer.REDUMP_DATS.items()):
+        try:
+            remote = redump_datfile_version(code)
+        except (OSError, ValueError) as exc:
+            return Finding("catalogs", subject, UNKNOWN, local=newest, detail=str(exc))
+        remote_newest = max(remote_newest, remote)
+        if local.get(system) != remote:
+            changed.append(system)
+    return Finding(
+        "catalogs", subject, STALE if changed else OK, local=newest, remote=remote_newest,
+        detail=(f"changed: {', '.join(changed)}" if changed else f"{len(local)} DATs"),
+        items=changed,
+    )
 
 
 def _check_redump(offline: bool) -> Finding:
@@ -966,18 +1046,7 @@ def _check_no_intro(cache_dir: str, offline: bool) -> Finding:
     imported = str(local.get("imported_at", ""))
     if offline:
         return Finding("catalogs", "no-intro", SKIPPED, local=imported, detail="offline")
-    repo = upstream.parse_repo(NO_INTRO_MIRROR)
-    payload = upstream._api(  # noqa: SLF001
-        f"{repo.api_base}/repos/{repo.slug}/releases/tags/{NO_INTRO_RELEASE}",
-        cache_dir,
-        offline,
-        upstream.MOVING_TTL,
-    )
-    assets = payload.get("assets") if isinstance(payload, dict) else None
-    updated = ""
-    for asset in assets or []:
-        if isinstance(asset, dict) and asset.get("name") == NO_INTRO_ASSET:
-            updated = str(asset.get("updated_at", ""))[:10]
+    updated = _no_intro_asset_date(cache_dir, offline)
     if not updated:
         return Finding("catalogs", "no-intro", UNKNOWN, local=imported, detail="asset not listed")
     return Finding(

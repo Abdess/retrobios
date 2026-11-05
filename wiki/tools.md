@@ -667,8 +667,9 @@ profile, `--record-coreinfo <core>` records its blob as reviewed. Data
 directories are checked against their upstream, dump catalogs and romset
 snapshots against the catalog they were read from (Redump DAT versions, the
 No-Intro daily rebuild, the newest TOSEC pack, the newest MAME release, the
-git blobs of the FBNeo DATs), and the CI toolchain against PyPI and the
-actions' latest releases.
+git blobs of the FBNeo DATs), the game catalogs of `games/catalogs/` against
+the No-Intro pack and the Redump datfiles they were read from, and the CI
+toolchain against PyPI and the actions' latest releases.
 
 The `native` area needs no network. It reads the cache `export_native.py`
 patches from and reports an original that is absent, that came from another
@@ -774,7 +775,7 @@ until a report without one. Exit codes: 0 for `ok`,
 
 | Job | Schedule | What it does |
 |-----|----------|--------------|
-| `nightly` | 02:00 | `check_freshness.py --json` saved to a file, `refresh_stale.py --findings` on its `data` and `catalogs` rows, the MAME and FBNeo hash scrapers, then `pipeline.py --offline` as the gate. `database.json` and `install/*.json` are computed a second time and compared. Commits the hash profiles, the recipes and the regenerated records |
+| `nightly` | 02:00 | `check_freshness.py --json` saved to a file, `refresh_stale.py --findings` on its `data` and `catalogs` rows, the MAME and FBNeo hash scrapers, then `pipeline.py --offline` as the gate. `database.json` and `install/*.json` are computed a second time and compared. Commits the hash profiles, the recipes, the game catalogs and the regenerated records |
 | `assets` | 04:30 | `sync_release_assets.py`, as a dry run |
 | `campaign` | 06:00 | `campaign.py run --budget 150m` once the host is idle (up to two hours of waiting), gated by `campaign.py gate`. Commits the records, findings and pass line, then the profile fields the runs proved |
 | `bios-integrity` | Sunday 08:30 | `bios_integrity.py --apply --json` in the main checkout, once the host is idle (up to four hours of waiting). Its report is kept in the job's status |

@@ -416,6 +416,18 @@ def _command_for(
                 "fbneo",
                 "--fetch",
             ]
+        if subject in ("no-intro games", "redump games"):
+            # The game DATs download without a browser, unlike the BIOS ones.
+            return [
+                sys.executable,
+                "-m",
+                "scripts.scraper.game_dat_importer",
+                "--source",
+                subject.split()[0],
+                "--fetch",
+                "--refresh",
+                "--floor",
+            ]
         # redump / no-intro / tosec need manual DAT download.
         return None
 
