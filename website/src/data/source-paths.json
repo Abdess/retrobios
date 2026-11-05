@@ -3499,6 +3499,7 @@
   "src/xenia/ui/imgui_drawer.cc",
   "src/xenia/ui/vulkan/vulkan_instance.cc"
  ],
+ "github.com/hatari/hatari@23bc3060ebf0da348cc842e358c102ba88002b56": [],
  "github.com/hatari/hatari@c1a5c88bc06e56778b6b7f8483becfd58a7da2b4": [
   "src/cart.c",
   "src/change.c",
