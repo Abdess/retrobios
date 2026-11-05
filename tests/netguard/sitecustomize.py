@@ -8,7 +8,7 @@ that is down) and written to RETROBIOS_TEST_NETLOG, and the cards and drives
 mounted under /media, /run/media, /mnt and /Volumes, which read as folders
 no drive is mounted on. A test module passed on a machine with no network
 and no card, and failed with an AmberELEC card in the reader, while 261
-connections to GitHub left the module in a run (code_audit_24 P3-13).
+connections to GitHub left the module in a run.
 """
 
 from __future__ import annotations

@@ -1,4 +1,4 @@
-"""Arcade boards and the ids that hold files (round 4, package P0).
+"""Arcade boards and the ids that hold files.
 
 The Arcade pages were cut by storage folder, so NAOMI, ZN-1, PGM and the
 other boards had no section and stayed plain on 987 emulator rows.
@@ -139,7 +139,7 @@ class Boards(unittest.TestCase):
                 self.assertTrue(slug)
                 self.assertEqual(slug, toc_slug(name))
                 # The board's page is its section: no heading repeats its
-                # title (round 5, 6.8).
+                # title.
                 self.assertEqual(
                     siterender.console_href(*siterender.system_section(board)),
                     f"systems/arcade-{slug}.md")

@@ -203,11 +203,11 @@ class DeepLinksCarryALabel(unittest.TestCase):
 
     A link right after the question it answers ("Have a file? [Check it]")
     says it too: there a label read as a broken crumb beside the Reference
-    tab (round 4)."""
+    tab."""
 
     # Answers a start page sends its reader to on purpose: the arcade
     # version table opens on one plain sentence, and "Reference:" before
-    # its link read as a broken crumb (round 4, C4 and C9).
+    # its link read as a broken crumb.
     ANSWERS = ("/retrobios/wiki/technical-faq/#which-mame-version-do-the-arcade-bios-sets-match",)
 
     def test_start_and_setup_pages(self):

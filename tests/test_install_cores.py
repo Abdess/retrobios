@@ -371,7 +371,7 @@ class RefusedBeforeAnyInstall(unittest.TestCase):
         (tmp / "cores").mkdir()
         (tmp / "cores" / "mgba_libretro.so").write_bytes(b"")
         # Two setups found stop a run without questions before either is
-        # read (code_audit_18 P2-3): the refusal is checked with Batocera
+        # read: the refusal is checked with Batocera
         # named, and with both found nothing is fetched either.
         for argv, said in (
                 (["--platform", "batocera", "--dest", str(tmp / "bios")],

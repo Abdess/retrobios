@@ -48,7 +48,7 @@ from test_install_selection import FakeRepository, _QuietHandler  # noqa: E402
 from netguard import module_guard  # noqa: E402
 
 # No connection off the loopback and no card of the host reaches a test, in
-# this process or one it starts (code_audit_24 P3-13): 261 connections to
+# this process or one it starts: 261 connections to
 # GitHub left this module in a run, and two tests failed with an AmberELEC
 # card in the reader. The module fails at its end when one is tried.
 setUpModule, tearDownModule = module_guard("test_install_tui")
@@ -503,7 +503,7 @@ class Flow(unittest.TestCase):
                      if row.value == "nintendo-gba")
         state.focus["systems"] = focus
         # A ticks the system in focus, B goes back to the plan, and Install
-        # there counts the choice first (tui_audit_17 P3-1).
+        # there counts the choice first.
         self.assertEqual(press(state, "enter", "esc"), [])
         self.assertEqual(state.ticked, {"nintendo-gba"})
         self.assertEqual(state.screen, "plan")
@@ -659,7 +659,7 @@ class Flow(unittest.TestCase):
         self.assertEqual(install.tui_rows(state)[state.focus["platforms"]].value, "retroarch")
         press(state, "/", "b", "a", "t", "o")
         self.assertEqual([row.value for row in install.tui_rows(state)][1:], ["batocera"])
-        # tui_audit_7 P3-9.2: the one match is chosen with the first Enter.
+        # the one match is chosen with the first Enter.
         press(state, "enter")
         self.assertEqual(state.screen, "folder")
         self.assertEqual(state.platform, "batocera")
@@ -858,7 +858,7 @@ class Widgets(unittest.TestCase):
         press(state, "up")
         self.assertEqual(state.focus["platforms"], 0)
         # A list of ticks wraps at any length: None and Done, at its end,
-        # are a few presses up from its first item (tui_audit_17 P3-1).
+        # are a few presses up from its first item.
         state = self.systems_state(20)
         state.focus["systems"] = 0
         press(state, "up")
@@ -1136,8 +1136,8 @@ class Views(unittest.TestCase):
                     state.cols, state.rows = cols, rows
                     lines = install.tui_view(state, cols, rows)
                     for line in lines:
-                        # The bar's key names faint, its actions not
-                        # (tui_audit_12 P3-3): the rest as before.
+                        # The bar's key names faint, its actions not:
+                        # the rest as before.
                         self.assertEqual(install.tui_paint(str(line), line.style, False),
                                          install.painted(line, install._bar_spans(
                                              line, "strong")) if line.style == "hint"
@@ -1178,7 +1178,7 @@ class Views(unittest.TestCase):
         for text in (" Writing to the card...", " Any key closes this help"):
             self.assertEqual(install.tui_paint(text, "hint", True), text)
         painted = install.tui_paint(" A/Enter Exit  B/Esc Back", "hint", True)
-        # The actions plain, the other keys faint (tui_audit_12 P3-3).
+        # The actions plain, the other keys faint.
         self.assertEqual(painted, " " + install._sgr("accent") + "A/Enter\x1b[0m Exit  "
                          + install._sgr("muted") + "B/Esc\x1b[0m Back")
 
@@ -1485,7 +1485,7 @@ class ControlCharacters(unittest.TestCase):
 
 class SmallFixes(unittest.TestCase):
     def test_a_system_name_is_said_once_with_a_pack(self):
-        """tui_audit_5 P3-8.1: "Onion gets the RetroArch file list" was
+        """"Onion gets the RetroArch file list" was
         printed by the pack check, then again where the platform is read."""
         pack = mock.Mock(files=[Path("RetroArch_BIOS_Pack.zip")])
         pack.name = "RetroArch_BIOS_Pack.zip"
@@ -1707,8 +1707,8 @@ class CleanupSurvivesABrokenTerminal(unittest.TestCase):
             self.assertEqual(signal.getsignal(number), handler)
 
 
-class AuditRoundTwo(unittest.TestCase):
-    """tui_audit_1.md, each finding held where it was found."""
+class TicksBarAndPaths(unittest.TestCase):
+    """Ticks, the key bar, the network clock and typed paths."""
 
     def systems(self) -> install.TuiState:
         state = checked_state()
@@ -1720,7 +1720,7 @@ class AuditRoundTwo(unittest.TestCase):
         rows = install.tui_rows(state)
         return rows[state.focus[state.screen]]
 
-    def test_p1_3_the_filter_never_changes_the_ticks(self):
+    def test_the_filter_never_changes_the_ticks(self):
         state = self.systems()
         press(state, "n")
         state.focus["systems"] = next(i for i, row in enumerate(install.tui_rows(state))
@@ -1747,7 +1747,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual(state.editing, "")
         self.assertEqual(state.ticked, {"nintendo-gba"})
 
-    def test_p2_2_the_bar_names_what_a_does_on_the_focused_row(self):
+    def test_the_bar_names_what_a_does_on_the_focused_row(self):
         state = checked_state()
         self.assertTrue(install.tui_view(state, 80, 24)[-1].strip().startswith("A/Enter Install"))
         press(state, "down")
@@ -1757,7 +1757,7 @@ class AuditRoundTwo(unittest.TestCase):
                                       if row.action == "all")
         self.assertIn("A/Enter Tick all", install.tui_view(state, 80, 24)[-1])
 
-    def test_p2_2_b_esc_and_q_stop_an_install(self):
+    def test_esc_and_q_stop_an_install(self):
         for key in ("esc", "backspace", "q"):
             with self.subTest(key=key):
                 state = checked_state()
@@ -1766,7 +1766,7 @@ class AuditRoundTwo(unittest.TestCase):
                 self.assertTrue(state.stopping)
                 self.assertEqual(press(state, key), [("kill",)])
 
-    def test_p2_3_options_read_the_plan_again(self):
+    def test_options_read_the_plan_again(self):
         state = self.systems()
         press(state, "n")
         state.focus["systems"] = 1
@@ -1789,11 +1789,11 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual(state.ticked, ticked)
         for cols, rows in ((80, 24), (40, 15)):
             text = "\n".join(install.tui_view(state, cols, rows))
-            # tui_audit_6 P3-4: the headline counts the ticked systems.
+            # the headline counts the ticked systems.
             self.assertIn("About 1 file, 16.0 KB, for 1 of 3 systems", " ".join(text.split()))
             self.assertNotIn("3 files to download", text)
 
-    def test_p2_4_no_network_is_said_at_once(self):
+    def test_no_network_is_said_at_once(self):
         import socket
 
         with socket.socket() as probe:
@@ -1809,7 +1809,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual((kind, title, code), ("manifest_failed", "No connection", 1))
         self.assertIn("could not be downloaded: the server refused the connection", lines[0])
         # The pack is the one option named: the way of a handheld with no
-        # Wi-Fi (tui_audit_11 P3-3).
+        # Wi-Fi.
         self.assertIn("Or copy a pack to the card and run the installer with --from-pack",
                       " ".join(lines))
         self.assertNotIn("--", " ".join(lines).replace("--from-pack", ""))
@@ -1820,7 +1820,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual([row.action for row in install.tui_rows(state)],
                          ["retry", "elsewhere", "quit"])
 
-    def test_p2_4_the_clock_says_so(self):
+    def test_the_clock_says_so(self):
         import ssl
 
         inbox = __import__("queue").Queue()
@@ -1833,7 +1833,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual(title, "The clock is wrong")
         self.assertIn("The clock reads 1980-01-01", lines[0])
 
-    def test_p2_5_one_line_per_cause(self):
+    def test_one_line_per_cause(self):
         state = checked_state()
         state.stack.append("result")
         state.code = 2
@@ -1844,7 +1844,7 @@ class AuditRoundTwo(unittest.TestCase):
                          ["Nothing was installed: 50 files failed.",
                           "  50 files failed, all for one reason: folder not writable."])
 
-    def test_p2_6_a_folder_inside_a_card_offers_its_root(self):
+    def test_folder_inside_a_card_offers_its_root(self):
         card = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, card, True)
         (card / ".system").mkdir()
@@ -1859,7 +1859,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual(press(state, "enter"), [("fetch", "minui")])
         self.assertEqual(state.dest, card)
 
-    def test_p2_6_the_banner_is_not_an_error_line(self):
+    def test_the_banner_is_not_an_error_line(self):
         state = fresh_state()
         state.platform, state.dest = "retroarch", SYSTEM_DIR
         state.manifest, state.manifest_for = MANIFEST, "retroarch"
@@ -1869,7 +1869,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual(state.error, ["Error: refused."])
         self.assertNotIn("retry", [row.action for row in install.tui_rows(state)])
 
-    def test_p2_7_a_typed_path_replaces_the_one_offered(self):
+    def test_typed_path_replaces_the_one_offered(self):
         state = fresh_state()
         state.platform, state.stack = "retroarch", ["folder"]
         state.folder_default = SYSTEM_DIR
@@ -1883,7 +1883,7 @@ class AuditRoundTwo(unittest.TestCase):
         install.tui_update(state, Key("paste", '/media/x"'))
         self.assertEqual(install.typed_path(state.path_text), Path("/media/x"))
 
-    def test_p2_7_a_path_from_the_root_is_not_created_on_a(self):
+    def test_path_from_the_root_is_not_created_on_a(self):
         state = fresh_state()
         state.stack = ["folder"]
         install._choose(state, "retroarch", Path("/no/such/deep/folder"))
@@ -1896,7 +1896,7 @@ class AuditRoundTwo(unittest.TestCase):
         install._choose(state, "retroarch", near / "bios")
         self.assertEqual(self.focused(state).action, "create")
 
-    def test_p2_9_two_setups_of_one_name(self):
+    def test_two_setups_of_one_name(self):
         flatpak = HOME / ".var/app/org.libretro.RetroArch/config/retroarch/system"
         setups = install.tell_apart([("retroarch", flatpak, "RetroArch"),
                                      ("retroarch", SYSTEM_DIR, "RetroArch"),
@@ -1919,7 +1919,7 @@ class AuditRoundTwo(unittest.TestCase):
                                          ("retroarch", SYSTEM_DIR, "RetroArch")])
         self.assertEqual(setups[0][2], "RetroArch (Flatpak)")
 
-    def test_p2_10_the_check_counts_while_it_reads(self):
+    def test_the_check_counts_while_it_reads(self):
         state = fresh_state()
         state.platform, state.dest = "retroarch", SYSTEM_DIR
         state.manifest, state.manifest_for = MANIFEST, "retroarch"
@@ -1929,19 +1929,19 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertIn("Reading the files already in the folder: 120 of 400",
                       "\n".join(install.tui_view(state, 80, 24)))
 
-    def test_p2_11_a_narrow_bar_keeps_the_keys_to_finish(self):
+    def test_narrow_bar_keeps_the_keys_to_finish(self):
         state = self.systems()
         self.assertEqual(install.tui_view(state, 40, 15)[-1].strip(),
                          "A Tick  B Done  ? Help")
 
-    def test_p2_12_a_device_name_finds_its_setup(self):
+    def test_device_name_finds_its_setup(self):
         state = fresh_state()
         state.stack = ["platforms"]
         press(state, "/", "m", "u", "o", "s")
         self.assertEqual([row.value for row in install.tui_rows(state)][1:],
                          [("retroarch", "muOS")])
 
-    def test_p2_13_a_long_preview_wraps_only_what_is_in_view(self):
+    def test_long_preview_wraps_only_what_is_in_view(self):
         state = checked_state()
         state.stack += ["options", "preview"]
         state.dry = dict(CHECK)
@@ -1960,7 +1960,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertLess(sum(calls), 40)
         self.assertIn("file07999.bin", "\n".join(lines))
 
-    def test_p2_1_titles_and_regions(self):
+    def test_titles_and_regions(self):
         state = checked_state()
         state.manifest = {**MANIFEST, "system_titles": {"nintendo-gba": "Game Boy Advance"}}
         state.stack.append("systems")
@@ -1969,7 +1969,7 @@ class AuditRoundTwo(unittest.TestCase):
         self.assertEqual(install.region_title("asia-ntsc"), "Asia (NTSC)")
         self.assertEqual(install.region_title("north-america"), "North America")
 
-    def test_p3_jobs_stop_at_the_ends_and_q_keeps_the_error_code(self):
+    def test_jobs_stop_at_the_ends_and_q_keeps_the_error_code(self):
         state = checked_state()
         state.jobs = 1
         install._option(state, "jobs", -1)
@@ -1982,10 +1982,10 @@ class AuditRoundTwo(unittest.TestCase):
         press(state, "q")
         self.assertEqual(state.exit_code, 2)
 
-    def test_p3_ascii_keeps_the_columns(self):
+    def test_ascii_keeps_the_columns(self):
         self.assertEqual(install.ascii_text("Édition ファミ"), "Edition ??????")
 
-    def test_p3_a_refused_tui_says_why_without_the_usage(self):
+    def test_refused_tui_says_why_without_the_usage(self):
         proc = install_run("--tui")
         self.assertEqual(proc.returncode, 2)
         self.assertEqual(proc.stderr.strip().splitlines(),
@@ -2219,7 +2219,7 @@ class CopyFromAnOldCard(unittest.TestCase):
         self.recheck(state, [found("scph5500.bin", str(SYSTEM_DIR),
                                    "nested folder: bios/scph5500.bin")])
         text = " ".join(line.strip() for line in install.tui_view(state, 120, 40))
-        # tui_audit_4 P3-10.13: a fix copies, and the screen says the user's
+        # a fix copies, and the screen says the user's
         # copy stays.
         self.assertIn("1 file is in the wrong place, it will be copied where the emulators "
                       "read it, your copy left as it is.", text)
@@ -2273,8 +2273,8 @@ class CopyFromAnOldCard(unittest.TestCase):
         self.assertIn("1.0 MB/s, 1:38 left", text)
 
 
-class AuditRoundThree(unittest.TestCase):
-    """tui_audit_2.md: its P1 and P2 findings, each held by a test."""
+class CardsSpaceAndConfirm(unittest.TestCase):
+    """Each card by its own files, Space on install, and a short card."""
 
     CARDS = {
         "muOS": ({"MUOS/": ""}, "retroarch", "MUOS/bios"),
@@ -2298,22 +2298,22 @@ class AuditRoundThree(unittest.TestCase):
                 path.write_text(text, encoding="utf-8")
         return root
 
-    # P1-1: a handheld's card mounted on a computer.
+    # a handheld's card mounted on a computer.
 
-    def test_p1_1_each_card_by_its_own_files(self):
+    def test_each_card_by_its_own_files(self):
         for name, (files, plat, folder) in self.CARDS.items():
             with self.subTest(card=name):
                 root = self.card(files)
                 self.assertEqual(install.card_system(root), (plat, root / folder, name))
 
-    def test_p1_1_a_card_nothing_names_is_left_alone(self):
+    def test_card_nothing_names_is_left_alone(self):
         self.assertIsNone(install.card_system(self.card({"roms/": "", "BIOS/": ""})))
-        # code_audit_17 P2-3: Batocera's own share is its SHARE drive, read
+        # Batocera's own share is its SHARE drive, read
         # by a batocera.conf that names no KNULLI.
         share = self.card({"system/batocera.conf": "system.hostname=BATOCERA\n"})
         self.assertEqual(install.card_system(share), ("batocera", share / "bios", "Batocera"))
 
-    def test_p1_1_the_card_rules_are_the_device_rules(self):
+    def test_the_card_rules_are_the_device_rules(self):
         # The folder and the marker come from the rule the device reads, so
         # they are never written twice.
         rules = {rule.name: rule for rule in install._card_rules()}
@@ -2329,7 +2329,7 @@ class AuditRoundThree(unittest.TestCase):
         self.assertEqual(install.DEFAULT_DESTS["knulli"], Path("/userdata") / "bios")
         self.assertEqual(install.DEFAULT_DESTS["rocknix"], Path("/storage") / "roms/bios")
 
-    def test_p1_1_the_first_screen_offers_the_card_folder(self):
+    def test_the_first_screen_offers_the_card_folder(self):
         root = self.card(self.CARDS["muOS"][0])
         with mock.patch.object(install, "_mounted_cards", return_value=[root]), \
                 mock.patch.object(install, "detect_platforms", return_value=[]), \
@@ -2344,16 +2344,16 @@ class AuditRoundThree(unittest.TestCase):
         self.assertEqual(press(state, "enter"), [("fetch", "retroarch")])
         self.assertEqual(state.dest, root / "MUOS" / "bios")
 
-    def test_p1_1_a_drive_letter_names_the_card(self):
+    def test_drive_letter_names_the_card(self):
         self.assertEqual(install._mount_name(PureWindowsPath("E:\\")), "E:\\")
         self.assertEqual(install._mount_name(Path("/media/me/MUOS")), "MUOS")
-        # tui_audit_5 P3-2: under WSL the card screen listed "d (card or drive)".
+        # under WSL the card screen listed "d (card or drive)".
         with mock.patch.dict(install._WSL, {"active": True}):
             self.assertEqual(install._mount_name(Path("/mnt/d")), "D:")
             self.assertEqual(install._mount_name(Path("/mnt/wslg")), "wslg")
         self.assertEqual(install._mount_name(Path("/mnt/d")), "d")
 
-    def test_p1_1_on_the_device_its_card_is_not_offered_twice(self):
+    def test_on_the_device_its_card_is_not_offered_twice(self):
         root = self.card(self.CARDS["muOS"][0])
         bound = Path("/run/muos/storage/bios")
         with mock.patch.object(install, "_mounted_cards", return_value=[root]), \
@@ -2364,7 +2364,7 @@ class AuditRoundThree(unittest.TestCase):
             state, _effects = install.tui_start(_args(), "linux")
         self.assertEqual([setup[1] for setup in state.setups], [bound])
 
-    def test_p1_1_browsing_to_the_card_root_uses_its_folder(self):
+    def test_browsing_to_the_card_root_uses_its_folder(self):
         root = self.card(self.CARDS["KNULLI"][0])
         with mock.patch.object(install, "_mounted_cards", return_value=[root]):
             rows, _error = install._browse_rows(REPO_ROOT / "tests")
@@ -2376,7 +2376,7 @@ class AuditRoundThree(unittest.TestCase):
         install._choose(state, "batocera", root)
         self.assertEqual(state.dest, root)
 
-    def test_p1_1_the_command_line_writes_where_muos_reads(self):
+    def test_the_command_line_writes_where_muos_reads(self):
         root = self.card(self.CARDS["muOS"][0])
         with FakeRepository() as repo:
             proc = install_run("--platform", "muos", "--dest", str(root), "--yes",
@@ -2386,14 +2386,14 @@ class AuditRoundThree(unittest.TestCase):
         self.assertEqual(sorted(path.name for path in root.iterdir()), ["MUOS"])
         self.assertTrue((root / "MUOS" / "bios" / "scph5501.bin").is_file())
 
-    def test_p1_1_a_folder_that_is_no_muos_card_is_refused(self):
+    def test_folder_that_is_no_muos_card_is_refused(self):
         root = self.card({"roms/": ""})
         proc = install_run("--platform", "muos", "--dest", str(root), "--yes")
         self.assertEqual(proc.returncode, 1)
         self.assertIn(f"{root} is not a muOS SD card: no muOS files on it. muOS keeps "
                       "MUOS at the root of its card.", proc.stderr)
         # muOS always names its card: <card>/MUOS/bios would be refused the
-        # same (code_audit_15 P3-4), the card's top folder is the remedy.
+        # same, the card's top folder is the remedy.
         self.assertIn("Name the top folder of the muOS card with --dest", proc.stderr)
         self.assertNotIn("<card>/", proc.stderr)
         self.assertEqual(list(root.iterdir()), [root / "roms"])
@@ -2411,7 +2411,7 @@ class AuditRoundThree(unittest.TestCase):
         self.assertEqual(install.card_dest("retroarch", "retroarch", root),
                          ("retroarch", root))
 
-    def test_p1_1_the_folder_named_is_compared_by_folders(self):
+    def test_the_folder_named_is_compared_by_folders(self):
         """NOTMUOS/bios ended with MUOS/bios as text and was taken for a
         muOS card's folder."""
         root = self.card({"roms/": ""})
@@ -2424,7 +2424,7 @@ class AuditRoundThree(unittest.TestCase):
         self.assertEqual(install.card_dest("muos", "retroarch", card / "muos" / "BIOS"),
                          ("retroarch", card / "muos" / "BIOS"))
 
-    def test_p1_1_a_card_two_systems_claim_says_so(self):
+    def test_card_two_systems_claim_says_so(self):
         root = self.card({"MUOS/": "", "spruce/": ""})
         self.assertIsNone(install.card_system(root))
         with contextlib.redirect_stdout(io.StringIO()) as out:
@@ -2439,9 +2439,9 @@ class AuditRoundThree(unittest.TestCase):
                              ("retroarch", root / "MUOS/bios"))
         self.assertIn("muOS card", out.getvalue())
 
-    # P1-2: Space is X on PortMaster and Y on muxterm.
+    # Space is X on PortMaster and Y on muxterm.
 
-    def test_p1_2_space_on_install_opens_the_confirm_screen(self):
+    def test_space_on_install_opens_the_confirm_screen(self):
         state = checked_state()
         self.assertEqual(install.tui_rows(state)[0].action, "install")
         self.assertEqual(press(state, " "), [("run", "confirm")])
@@ -2455,7 +2455,7 @@ class AuditRoundThree(unittest.TestCase):
         self.assertEqual(state.screen, "confirm")
         self.assertEqual(press(state, "enter"), [("run", "install")])
 
-    def test_p1_2_space_never_closes_or_quits(self):
+    def test_space_never_closes_or_quits(self):
         for action in ("quit", "close"):
             with self.subTest(row=action):
                 state = checked_state()
@@ -2471,12 +2471,12 @@ class AuditRoundThree(unittest.TestCase):
         press(state, " ")
         self.assertEqual(state.screen, "options")
 
-    def test_p1_2_enter_still_installs_in_three_presses(self):
+    def test_enter_still_installs_in_three_presses(self):
         state = checked_state()
         self.assertEqual(press(state, "enter"), [("run", "install")])
         self.assertEqual(state.screen, "installing")
 
-    # P2-1: a card too small for the download.
+    # a card too small for the download.
 
     def test_a_stop_asked_for_says_only_the_outcome(self):
         """Start+Select (SIGTERM) or SIGHUP stops the child before it writes
@@ -2505,7 +2505,7 @@ class AuditRoundThree(unittest.TestCase):
         self.assertNotIn("to download", plan)
         self.assertEqual(lines[0], "3 files installed from the pack.")
 
-    def test_p2_1_another_folder_comes_first_when_space_is_short(self):
+    def test_another_folder_comes_first_when_space_is_short(self):
         state = checked_state({"free": 1024, "writable": True, "cores": []})
         self.assertEqual([row.label for row in install.tui_rows(state)[:2]],
                          ["Choose another folder", "Install anyway"])
@@ -2533,7 +2533,7 @@ class AuditRoundThree(unittest.TestCase):
         "    python3 install.py --platform retroarch --dest '<folder on another drive>'",
     ]
 
-    def test_p2_1_a_full_card_is_said_in_words(self):
+    def test_full_card_is_said_in_words(self):
         root = self.card(self.CARDS["muOS"][0])
         state = checked_state()
         state.dest, state.log = root / "MUOS" / "bios", "/tmp/retrobios-tui-x/install.log"
@@ -2549,7 +2549,7 @@ class AuditRoundThree(unittest.TestCase):
             self.assertNotIn(raw, text)
         self.assertFalse(install.tui_keeps_log(state))
 
-    def test_p2_1_advice_never_names_the_interface_list(self):
+    def test_advice_never_names_the_interface_list(self):
         if hasattr(os, "geteuid") and os.geteuid() == 0:
             self.skipTest("root writes to a read-only folder")
         folder = self.card({})
@@ -2563,9 +2563,9 @@ class AuditRoundThree(unittest.TestCase):
         self.assertIn("sudo", proc.stdout + proc.stderr)
         self.assertNotIn("--manifest", proc.stdout + proc.stderr)
 
-    # P2-2: the BIOS folder line on a handheld screen.
+    # the BIOS folder line on a handheld screen.
 
-    def test_p2_2_the_plan_keeps_the_folder_at_handheld_sizes(self):
+    def test_the_plan_keeps_the_folder_at_handheld_sizes(self):
         zipped = "/home/me/a/long/path/to/the/Downloads/PSX BIOS.zip"
         for cols, rows in ((40, 12), (40, 15)):
             with self.subTest(size=f"{cols}x{rows}"):
@@ -2578,15 +2578,15 @@ class AuditRoundThree(unittest.TestCase):
                           if line.startswith("BIOS folder: "))
                 # Whole, broken after a separator: cut in its middle at 40
                 # columns, it was spelled one way on the plan and another on
-                # the result (tui_audit_13 P3-3).
+                # the result.
                 self.assertEqual(lines[at] + lines[at + 1], "BIOS folder: /home/someone/with/"
                                  "a/long/path/.config/retroarch/system")
                 self.assertIn("1 found in PSX BIOS.zip,", " ".join(lines))
                 self.assertNotIn("/home/me/a/long", " ".join(lines))
 
-    # P2-3: where the files came from.
+    # where the files came from.
 
-    def test_p2_3_the_result_says_what_came_from_the_card(self):
+    def test_the_result_says_what_came_from_the_card(self):
         state = checked_state()
         state.stack.append("result")
         state.code, state.download = 0, {"files": 5, "bytes": 10}
@@ -2599,18 +2599,18 @@ class AuditRoundThree(unittest.TestCase):
         state.summary = {"installed": 4, "up_to_date": 0, "failed": [
             {"dest": "fc/disksys.rom", "reason": "HTTP 404"}]}
         _title, lines = install.tui_outcome(state)
-        # One count, the failed file said as failed (tui_audit_16 P3-11).
+        # One count, the failed file said as failed.
         self.assertEqual(lines[0], "2 files copied from OLD, 1 copied from the wrong place "
                                    "in the BIOS folder, 1 downloaded, 1 failed.")
         # The line mode's own sentence, from the same counts.
         self.assertEqual(lines[0], install.sources_line([("OLD", 2)], 1, 1, 0, failed=1))
 
-    def test_p2_3_a_run_that_copied_nothing_adds_no_line(self):
+    def test_run_that_copied_nothing_adds_no_line(self):
         state = install.TuiState()
         state.summary, state.finished = {"installed": 2, "failed": []}, [("a", True, "")]
         self.assertEqual(install._tui_sources(state, 2, 0), "")
 
-    # P2-4 and P2-5: the systems list.
+    # the systems list.
 
     def systems_state(self) -> install.TuiState:
         state = checked_state()
@@ -2630,7 +2630,7 @@ class AuditRoundThree(unittest.TestCase):
         state.stack.append("systems")
         return state
 
-    def test_p2_4_the_other_row_is_named_and_explained(self):
+    def test_the_other_row_is_named_and_explained(self):
         state = self.systems_state()
         rows = install.tui_rows(state)
         other = next(i for i, row in enumerate(rows) if row.value == "other")
@@ -2640,7 +2640,7 @@ class AuditRoundThree(unittest.TestCase):
         self.assertIn("Other systems and game engines: what cores load for systems this "
                       "setup does not list", text)
 
-    def test_p2_5_shared_files_are_counted_apart(self):
+    def test_shared_files_are_counted_apart(self):
         state = self.systems_state()
         rows = install.tui_rows(state)
         three = next(i for i, row in enumerate(rows) if row.value == "3do")
@@ -2656,7 +2656,7 @@ class AuditRoundThree(unittest.TestCase):
         narrow = install.tui_view(state, 40, 15)
         self.assertTrue(any("100 B + 2 shared" in line for line in narrow), narrow)
 
-    # P2-6: a file that cannot be supplied, by name, where it matters.
+    # a file that cannot be supplied, by name, where it matters.
 
     def unavailable_state(self) -> install.TuiState:
         state = checked_state()
@@ -2671,14 +2671,14 @@ class AuditRoundThree(unittest.TestCase):
         state.summary = {"installed": 1, "up_to_date": 0, "failed": []}
         return state
 
-    def test_p2_6_the_missing_file_is_named_with_its_system(self):
+    def test_the_missing_file_is_named_with_its_system(self):
         state = self.unavailable_state()
         _title, lines = install.tui_outcome(state)
         self.assertIn("Not available here, and needed to start its emulator: gba_extra.bin "
                       "(Game Boy Advance). Your own copy goes in the BIOS folder.", lines)
         self.assertNotIn("collection", " ".join(lines))
 
-    def test_p2_6_it_is_left_out_when_it_does_not_concern_the_run(self):
+    def test_it_is_left_out_when_it_does_not_concern_the_run(self):
         state = self.unavailable_state()
         state.ticked = {"sony-playstation"}
         self.assertEqual(install._unavailable_lines(state), [])
@@ -2686,7 +2686,7 @@ class AuditRoundThree(unittest.TestCase):
         state.summary = {"installed": 1, "failed": [], "interrupted": True}
         self.assertFalse(any("Not available" in line for line in install.tui_outcome(state)[1]))
 
-    # P3: small fixes the audit listed.
+    # small fixes the audit listed.
 
     def fetch_failure(self, error: BaseException, env: dict | None = None) -> tuple:
         inbox = __import__("queue").Queue()
@@ -2699,7 +2699,7 @@ class AuditRoundThree(unittest.TestCase):
         _kind, _plat, title, lines, _code = inbox.get_nowait()
         return title, lines
 
-    def test_p3_the_clock_names_the_row_to_choose(self):
+    def test_the_clock_names_the_row_to_choose(self):
         import ssl
 
         error = urllib_error(ssl.SSLCertVerificationError("certificate is not yet valid"))
@@ -2708,7 +2708,7 @@ class AuditRoundThree(unittest.TestCase):
             _title, lines = self.fetch_failure(error)
         self.assertTrue(lines[0].endswith("then choose Try again."), lines[0])
 
-    def test_p3_a_proxy_in_the_way_is_named_not_shown(self):
+    def test_proxy_in_the_way_is_named_not_shown(self):
         error = urllib_error(ConnectionRefusedError(111, "Connection refused"))
         _title, lines = self.fetch_failure(
             error, {"HTTPS_PROXY": "http://me:secret@10.0.0.1:3128"})
@@ -2718,7 +2718,7 @@ class AuditRoundThree(unittest.TestCase):
         _title, lines = self.fetch_failure(error)
         self.assertFalse(any("PROXY" in line for line in lines))
 
-    def test_p3_a_list_that_is_no_json_is_said_in_words(self):
+    def test_list_that_is_no_json_is_said_in_words(self):
         try:
             install.json.loads("<html>")
         except install.json.JSONDecodeError as cause:
@@ -2729,7 +2729,7 @@ class AuditRoundThree(unittest.TestCase):
         self.assertNotIn("Expecting value", " ".join(lines))
         self.assertIn("a Wi-Fi sign-in page or a cut download looks like this.", lines[0])
 
-    def test_p3_the_preview_counts_its_files_only(self):
+    def test_the_preview_counts_its_files_only(self):
         state = checked_state()
         state.stack += ["options", "preview"]
         state.dry = dict(CHECK)
@@ -2738,7 +2738,7 @@ class AuditRoundThree(unittest.TestCase):
         lines = [line.strip() for line in install.tui_view(state, 80, 24)]
         self.assertIn("1-18 of 40", lines)
 
-    def test_p3_game_data_reads_without_a_double_negative(self):
+    def test_game_data_reads_without_a_double_negative(self):
         state = checked_state()
         label = next(row.label for row in install._option_rows(state)
                      if row.action == "game_data")
@@ -2748,7 +2748,7 @@ class AuditRoundThree(unittest.TestCase):
                      if row.action == "game_data")
         self.assertEqual(label, "Game data: left out")
 
-    def test_p3_the_plan_says_which_config_named_the_folder(self):
+    def test_the_plan_says_which_config_named_the_folder(self):
         config = HOME / ".config/retroarch/retroarch.cfg"
         with mock.patch.dict(install._RETROARCH_CONFIGS, {SYSTEM_DIR: (config, config.parent)}):
             text = "\n".join(install.tui_view(checked_state(), 80, 24))
@@ -2957,13 +2957,13 @@ class AReadErrorIsNotAClosedWindow(unittest.TestCase):
                 os.close(master)
 
 
-class AuditRoundFour(unittest.TestCase):
-    """tui_audit_3.md, each finding held where it was found."""
+class SaveDirectoryLeftOut(unittest.TestCase):
+    """Files left out of the save directory are said."""
 
     UNPLACED = {"reason": "no_save_directory", "label": "no save directory", "files": 2,
                 "required": 0}
 
-    def test_p1_1_files_left_out_of_the_save_directory_are_said(self):
+    def test_files_left_out_of_the_save_directory_are_said(self):
         state = fresh_state()
         state.stack = ["setup"]
         with mock.patch.object(install.Path, "exists", return_value=True):
@@ -3004,7 +3004,7 @@ class TheSaveFolderHasARow(unittest.TestCase):
         state = self.state()
         rows = install._option_rows(state)
         [row] = [row for row in rows if row.action == "savedir"]
-        # Named as line mode names it, from the same rules (tui_audit_12 P3-15).
+        # Named as line mode names it, from the same rules.
         place = install.save_directory_for(state.dest, state.manifest, None)
         self.assertEqual((row.label, row.right),
                          (f"Save folder: {install._short_path(place.directory, HOME)}",
@@ -3102,7 +3102,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         return mock.patch.object(install, "_ask", side_effect=answer), asked
 
     def test_a_typed_root_that_does_not_exist_is_asked_again(self):
-        """code_audit_12 P2-3: a typo four folders deep was created and
+        """A typo four folders deep was created and
         filled, and a menu answer (8) became the card."""
         onion = self.card(self.ONION)
         typo = REPO_ROOT / "tmp" / "no-such" / "media" / "NEXT"
@@ -3120,7 +3120,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         self.assertFalse((REPO_ROOT / "tmp" / "no-such").exists())
 
     def test_a_typed_root_that_is_no_card_of_that_system_is_asked_again(self):
-        """code_audit_12 P3-4: a folder that was no Onion card ended the run."""
+        """A folder that was no Onion card ended the run."""
         blank, onion = self.card({"roms/a": ""}), self.card(self.ONION)
         patcher, asked = self.ask(str(blank), str(onion))
         with mock.patch.object(install, "_mounted_cards", return_value=[]), patcher, \
@@ -3143,8 +3143,8 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
                       ".system/version.txt at the root of its card.", out.getvalue())
 
     def test_the_mounted_drives_are_listed_and_taken_by_number(self):
-        """tui_audit_5 P3-8.4: the screen lists the mounted cards, the
-        prompt did not. tui_audit_6 P3-8, code_audit_13 P3-6: it listed
+        """The screen lists the mounted cards, the
+        prompt did not: it listed
         every drive, a muOS card beside Onion's question, and the muOS card
         taken by number made the run a muOS install."""
         muos, blank = self.card({"MUOS/bios/x": ""}), self.card({"roms/a": ""})
@@ -3159,14 +3159,14 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         self.assertIn(f"1) {first.name} (KNULLI card, {first})", out.getvalue())
         self.assertIn(f"2) {second.name} (KNULLI card, {second})", out.getvalue())
         self.assertNotIn(str(muos), out.getvalue())
-        # tui_audit_10 P3-8: KNULLI fills its card when it first starts, and
+        # KNULLI fills its card when it first starts, and
         # a blank drive is listed after its own cards, as on the screen.
         self.assertIn(f"3) {blank.name} (card or drive, {blank})", out.getvalue())
         self.assertIn("Type a number from 1 to 3, a folder, Enter to look again, or q to "
                       "quit.", out.getvalue())
 
     def test_creating_several_folders_on_the_card_is_asked(self):
-        """tui_audit_6 P3-8: N to the question ended the whole run where it
+        """N to the question ended the whole run where it
         meant "not that card"."""
         root = self.card({"roms/a.txt": ""})
         rocknix = root / "R"
@@ -3184,7 +3184,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         self.assertFalse((rocknix / "roms").exists())
 
     def test_the_menu_asks_a_card_system_for_its_card(self):
-        """code_audit_12 P3-3: ROCKNIX picked from the menu on a PC was
+        """ROCKNIX picked from the menu on a PC was
         offered /storage/roms/bios."""
         card = self.card({"roms/a": ""})
         make_card(card, "ROCKNIX")
@@ -3197,7 +3197,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         self.assertEqual(asked, ["Card root, Enter to look again, q to quit: "])
 
     def test_a_card_of_another_system_is_not_offered(self):
-        """tui_audit_5 P1-1: A on the first mount wrote Onion's BIOS/ on a
+        """A on the first mount wrote Onion's BIOS/ on a
         muOS card, which reads MUOS/bios."""
         muos, blank = self.card({"MUOS/bios/x": ""}), self.card({"roms/a": ""})
         found = [("retroarch", SYSTEM_DIR)]
@@ -3229,7 +3229,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
                          [("card", first), ("card", second)])
         self.assertNotIn("rescan", [row.action for row in rows])
         self.assertEqual(state.dest, first / "BIOS")
-        # Titled as the card found by itself (tui_audit_5 P3-7).
+        # Titled as the card found by itself.
         self.assertEqual(install.detected_os("retroarch", first / "BIOS"), "Onion")
 
     def test_look_again_finds_the_card_inserted(self):
@@ -3262,11 +3262,11 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
             self.assertIn("Not an Onion SD card: no Onion files on it.", state.status)
             self.assertIn(f"{blank} is not an Onion SD card", state.status_more)
             self.assertIsNone(state.dest)
-            # tui_audit_6 P3-8: a muOS card made the run a muOS install
+            # a muOS card made the run a muOS install
             # without a word.
             install._browse_to(state, muos)
             press(state, "enter")
-            # tui_audit_7 P3-1: it is a card's top folder, of another card.
+            # it is a card's top folder, of another card.
             self.assertEqual(state.status, "That is a muOS card. Insert the Onion card, or "
                              "go back and choose muOS.")
         self.assertIsNone(state.dest)
@@ -3295,7 +3295,7 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
         self.assertIn("Not an Onion SD card", state.status)
 
     def test_change_folder_names_the_folder_it_reuses(self):
-        """code_audit_12 P3-1: Use this folder on the card screen named
+        """Use this folder on the card screen named
         nothing."""
         onion = self.card(self.ONION)
         state = checked_state()
@@ -3337,12 +3337,12 @@ class ACardSystemNamedOnAComputer(unittest.TestCase):
 
 
 class TheSetupFilterKnowsDevices(unittest.TestCase):
-    """tui_audit_4 P3-10.5: the filter found nothing for steam deck, r36s,
+    """The filter found nothing for steam deck, r36s,
     trimui or retroid, and miyoo found RetroArch with muOS, JELOS... beside it."""
 
     TYPED = {
         "steam deck": {"retroarch", "batocera", "emudeck", "retrodeck"},
-        # MinUI and MyMinUI list their devices (code_audit_15 P2-1), and on
+        # MinUI and MyMinUI list their devices, and on
         # a computer an Android device is no RetroArch of this machine's.
         "r36s": {"retroarch", "rocknix", "myminui"},
         "rg35xx": {"retroarch", "rocknix", "knulli", "minui", "myminui"},
@@ -3372,7 +3372,7 @@ class TheSetupFilterKnowsDevices(unittest.TestCase):
 
     def test_the_right_column_names_what_matched(self):
         rows = self.rows("miyoo")
-        # tui_audit_6 P1-1, code_audit_13 P2-3: MiyooCFW stayed on the
+        # MiyooCFW stayed on the
         # RetroArch row, which opened this computer's folder.
         self.assertNotIn("retroarch", [row.value for row in rows if row.action == "platform"])
         self.assertEqual([row.label for row in rows if row.action == "cardsystem"],
@@ -3404,7 +3404,7 @@ class TheSetupFilterKnowsDevices(unittest.TestCase):
 
 
 class ACardSetupIsOneDesign(unittest.TestCase):
-    """code_audit_12 P2-1 to P3-2, tui_audit_5 P1-2: a setup that runs from
+    """A setup that runs from
     its SD card, chosen on a computer, always asks for that card."""
 
     def platforms(self, needle: str = "") -> install.TuiState:
@@ -3475,7 +3475,7 @@ class ACardSetupIsOneDesign(unittest.TestCase):
 
 
 class OneSystemInFewPresses(unittest.TestCase):
-    """tui_audit_4 P3-10.11: one system with a controller took 15 presses on
+    """One system with a controller took 15 presses on
     the fixture list, about 60 on muxterm, which has no page key."""
 
     # The buttons each route sends, as the keys the interface reads.
@@ -3513,7 +3513,7 @@ class OneSystemInFewPresses(unittest.TestCase):
                          if target in (row.value, row.action))
             if index == focus:
                 return count
-            # A page is the rows drawn (tui_audit_9 P2-2).
+            # A page is the rows drawn.
             page = install._page_step(state)
             if index > focus:
                 button = "R1" if paging and index - focus >= page else "down"
@@ -3531,7 +3531,7 @@ class OneSystemInFewPresses(unittest.TestCase):
             self.press_button(state, pad, button)
             count += 1
         self.assertEqual(state.screen, "systems")
-        # On its first system (tui_audit_17 P3-1), None at the list's end.
+        # On its first system, None at the list's end.
         self.assertEqual(install.tui_rows(state)[state.focus["systems"]].action, "system")
         paging = pad != "muxterm" or fast
         # Up from the first item wraps to the list's end: Done, then None.
@@ -3555,9 +3555,9 @@ class OneSystemInFewPresses(unittest.TestCase):
         # The audit's path, A Down A Up Up A R1 x5 X Start A A. Before the
         # fast path it took 17 presses here, 57 on muxterm (None kept the
         # focus, and muxterm had no page key).
-        # A page is the rows drawn since tui_audit_9 P2-2, ten here where it
+        # A page is the rows drawn, ten here where it
         # was nine: sys-45 is four pages and five Downs away, not five pages.
-        # None now at the list's end (tui_audit_17 P3-1), three presses up
+        # None now at the list's end, three presses up
         # from the first system: the list wraps. fast pages down to sys-45.
         self.assertEqual(self.presses("gptokeyb", fast=True), 21)
         self.assertEqual(self.presses("muxterm", fast=False), 57)
@@ -3578,8 +3578,8 @@ class OneSystemInFewPresses(unittest.TestCase):
         state = self.long_list("keys")
         state.stack.append("systems")
         state.focus["systems"] = 5
-        # tui_audit_6 P2-1: nothing runs from the list. A unticks the system
-        # in focus (tui_audit_17 P3-1), B goes back to the plan.
+        # nothing runs from the list. A unticks the system
+        # in focus, B goes back to the plan.
         self.assertEqual(press(state, "enter"), [])
         self.assertEqual((state.screen, len(state.ticked)), ("systems", 65))
         press(state, "esc")
@@ -3608,7 +3608,7 @@ class OneSystemInFewPresses(unittest.TestCase):
 
 
 class DataFilesHaveASize(unittest.TestCase):
-    """tui_audit_4 P3-10.8: "8179 files to download, 6.6 GB, and 2636 data
+    """"8179 files to download, 6.6 GB, and 2636 data
     files", the data files with no size."""
 
     def test_the_plan_gives_the_data_files_size(self):
@@ -3630,7 +3630,7 @@ class DataFilesHaveASize(unittest.TestCase):
 
 
 class ThePagerCountsLines(unittest.TestCase):
-    """tui_audit_4 P3-9.4: at 40x12 the result read "1-2 of 5" over eight
+    """At 40x12 the result read "1-2 of 5" over eight
     lines, counting paragraphs, and its last paragraph was cut."""
 
     def result_state(self, cols: int, rows: int) -> install.TuiState:
@@ -3680,7 +3680,7 @@ class OfflineInTheInterface(unittest.TestCase):
         self.addCleanup(patcher.stop)
 
     def test_the_variable_is_named_when_it_made_the_run_offline(self):
-        """tui_audit_11 P3-12: "(--offline)" and "without --offline" with
+        """"(--offline)" and "without --offline" with
         RETROBIOS_INSTALL_OFFLINE=1 and no --offline: nothing to remove."""
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             inbox = queue.Queue()
@@ -3730,8 +3730,8 @@ class OfflineInTheInterface(unittest.TestCase):
         self.assertIn("--offline", install.tui_command(state))
 
 
-class AuditFive(unittest.TestCase):
-    """tui_audit_5 P2-1, P2-2 and its P3 points."""
+class BackTicksAndSaveFolder(unittest.TestCase):
+    """Going back keeps the ticks, and the save folder is said once."""
 
     def long_list(self) -> install.TuiState:
         state = OneSystemInFewPresses().long_list("keys")
@@ -3742,7 +3742,7 @@ class AuditFive(unittest.TestCase):
         state = self.long_list()
         everything = set(state.ticked)
         press(state, "down", "enter")
-        # The list opens on its first system, None at its end (tui_audit_17 P3-1).
+        # The list opens on its first system, None at its end.
         self.assertEqual(install.tui_rows(state)[state.focus["systems"]].action, "system")
         press(state, "n")
         self.assertEqual(state.ticked, set())
@@ -3791,7 +3791,7 @@ class AuditFive(unittest.TestCase):
                         "reason": "misplaced"}]
         with mock.patch.object(install.LOCAL, "pack", mock.Mock()):
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
-            # tui_audit_6 P3-3: one count, "4 files to install" above "3 from
+            # one count, "4 files to install" above "3 from
             # the pack", where "3 to install from the pack" sat over "4".
             self.assertIn("4 files to install, 1.0 MB", text)
             self.assertIn("3 from the pack, 1 copied from this machine", text)
@@ -3813,7 +3813,7 @@ class AuditFive(unittest.TestCase):
         saves = {"files": 1, "folder": str(HOME / ".config" / "retroarch" / "saves" / "<core>")}
         lines = install._saves_lines(state, saves)
         # In words: "saves/<core>" read as a folder named <core>.
-        # The folder at the BIOS folder's indent (tui_audit_14 P3-9).
+        # The folder at the BIOS folder's indent.
         self.assertEqual(lines, ["1 file read from RetroArch's save directory goes to a "
                                  "folder per core under:", "  ~/.config/retroarch/saves"])
 
@@ -3845,9 +3845,9 @@ class AuditFive(unittest.TestCase):
         state.ticked = set()
         state.focus["systems"] = install._first_item(state)
         bar = install.tui_view(state, 40, 15)[-1]
-        # A is Space on a Miyoo, and ticks as Start does (tui_audit_17 P3-1).
+        # A is Space on a Miyoo, and ticks as Start does.
         self.assertTrue(bar.strip().startswith("A Tick"))
-        # tui_audit_6 P3-9.1: the way out was the entry given up at 40 columns.
+        # the way out was the entry given up at 40 columns.
         self.assertIn("R2 Done", bar)
 
     def test_muxterm_help_names_no_home_key(self):
@@ -3861,7 +3861,7 @@ class AuditFive(unittest.TestCase):
 
 
 class LineModeOffline(unittest.TestCase):
-    """tui_audit_5 P2-3 and P3-8.4: the line mode under --offline asked to
+    """The line mode under --offline asked to
     download, and said nothing of the data files."""
 
     @unittest.skipUnless(pyte and pty and hasattr(pty, "fork"),
@@ -3878,13 +3878,13 @@ class LineModeOffline(unittest.TestCase):
             out = install.unpainted(term.raw.decode("utf-8", "replace"))
         self.assertIn("--offline: only the files found on this machine are installed, and no "
                       "--from names a folder to copy them from.", out)
-        # tui_audit_7 P3-4: nothing to copy from, nothing to install.
+        # nothing to copy from, nothing to install.
         self.assertIn("Enter) check the BIOS folder, nothing can be downloaded", out)
         self.assertIn("f) copy from a folder or an old card", out)
         self.assertIn("5 files need the internet, which --offline does not use.", out)
         self.assertNotIn("Downloading", out)
         self.assertNotIn("failed", out.lower())
-        # tui_audit_6 P2-3, code_audit_13 P1-1: nothing installed ended on
+        # nothing installed ended on
         # exit 0, where the screen's run gives 2.
         self.assertIn("Nothing installed: 5 files need the internet, which --offline does "
                       "not use.", out.replace("\r\n", " ").replace("\n", " "))
@@ -3897,7 +3897,7 @@ class LineModeOffline(unittest.TestCase):
         with mock.patch.object(install, "_ask", return_value=""), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             install._prompt_custom_selection("retroarch", files, [], data_trees=trees)
-        # One total, the kinds under it adding up to it (code_audit_21 P3-8).
+        # One total, the kinds under it adding up to it.
         self.assertIn("RetroArch: 3 files, 5.0 KB.\n  1 BIOS file (1.0 KB) and 2 data files "
                       "(4.0 KB).", out.getvalue())
 
@@ -3934,7 +3934,7 @@ class NarrowSystemNames(unittest.TestCase):
         for cols, rows in ((40, 15), (40, 12), (52, 15)):
             with self.subTest(size=f"{cols}x{rows}"):
                 text = "\n".join(install.tui_view(state, cols, rows))
-                # tui_audit_10 P3-14: the size stays as the total counts it,
+                # the size stays as the total counts it,
                 # 30.0 MB, and a name too long beside it is cut where the
                 # three still read apart.
                 lines = [line for line in text.splitlines() if "[x]" in line]
@@ -4039,7 +4039,7 @@ class TheSaveFolderLineFollowsTheChoice(unittest.TestCase):
              "folder": "/home/user/MySaves/<core>"}
     LINE = ("1 file read from RetroArch's save directory goes to a folder per core under: "
             "~/MySaves")
-    # The result spells every folder in full (tui_audit_12 P3-7).
+    # The result spells every folder in full.
     RESULT = ("1 file read from RetroArch's save directory goes to a folder per core under: "
               "/home/user/MySaves")
 
@@ -4225,7 +4225,7 @@ class AGoesIntoASubfolder(unittest.TestCase):
         self.assertEqual(self.state.status, "")
 
     def test_with_no_visible_subfolder_a_folder_below_takes_the_focus(self):
-        """tui_audit_10 P2-5: the focus stayed on Use this folder under the
+        """The focus stayed on Use this folder under the
         sentence that warns against it, and A, A, A installed BizHawk into
         the home folder."""
         (self.home / ".cache").mkdir()
@@ -4871,7 +4871,7 @@ class EndToEnd(unittest.TestCase):
         term.send(DOWN, "\r")
         term.wait("Choose systems")
         # D-pad and A only: the list opens on its first system, A unticks
-        # it, B goes back to the plan (tui_audit_17 P3-1).
+        # it, B goes back to the plan.
         term.send("\r")
         screen = term.wait("1 of 2 systems")
         self.assertIn("> [ ] nintendo-gba", screen)
@@ -5180,8 +5180,7 @@ class EndToEnd(unittest.TestCase):
                 term.wait("Enter for RetroArch")
                 term.send("\r")
                 if value is None:
-                    # In place since the first run: no menu, nothing asked
-                    # (tui_audit_16 P3-4).
+                    # In place since the first run: no menu, nothing asked.
                     term.wait("every one in place: nothing to install")
                 else:
                     term.wait("Enter) install everything")
@@ -5545,7 +5544,7 @@ class TheTerminalComesBack(unittest.TestCase):
         self.assertGivenBack(term)
 
     def test_ctrl_z_with_no_shell_to_resume_it_is_ignored(self):
-        """code_audit_18 P3-1: started straight on a terminal (a terminal
+        """Started straight on a terminal (a terminal
         app's -e, a desktop entry) or under a launcher's sh -c, nothing ever
         resumed the screen a Ctrl-Z stopped. It now goes on, and says why."""
         self.repo()
@@ -5599,14 +5598,14 @@ class TheTerminalComesBack(unittest.TestCase):
 
     @unittest.skipUnless(Path("/proc/self/stat").exists(), "reads process states in /proc")
     def test_ctrl_z_through_install_sh_stops_the_wrapper_and_the_install(self):
-        """code_audit_17 P2-1: Ctrl-Z stopped the installer alone. install.sh,
+        """Ctrl-Z stopped the installer alone. install.sh,
         which runs it as a child, kept waiting, the shell never got its prompt
         back, and the install run behind the screen kept writing."""
         repo = self.repo(GameDataRepository, slow=True)
         env = {**self.env, "PS1": "PROMPT$ ",
                "PATH": f"{Path(sys.executable).parent}{os.pathsep}{self.env['PATH']}"}
         # Typed at an interactive bash, as a person runs it: install.sh is a
-        # job of a shell that can resume it (code_audit_18 P3-1).
+        # job of a shell that can resume it.
         term = Pty(["--norc", "--noprofile", "-i"], env, program=["/bin/bash"])
         self.addCleanup(lambda: term.status is None and os.killpg(term.pid, 9))
         term.wait("PROMPT$")
@@ -5720,8 +5719,7 @@ class ThePlanNumbersAddUp(unittest.TestCase):
         state.found = [found("scph5500.bin", str(SYSTEM_DIR), "one folder too deep")]
         screen = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         self.assertIn("3 files to download", screen)
-        # The backup line under the count it explains, then the split
-        # (tui_audit_8 P3-5).
+        # The backup line under the count it explains, then the split.
         self.assertIn("1 in place, 3 missing, 1 wrong copy The 1 wrong copy is replaced, the "
                       "old one kept in a backup folder. 4 to install: 1 copied from this "
                       "machine, 3 downloaded", screen)
@@ -5745,7 +5743,7 @@ class GameDataIsNoFirmwareAlarm(unittest.TestCase):
         # The folder it goes in, and what game data is (the Android run of
         # 2026-10-27 said neither).
         # The names first, the kind in a word, the definition on its own
-        # line of the plan (tui_audit_13 P3-5).
+        # line of the plan.
         self.assertIn("Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game "
                       "data its game reads. Copy it", lines[1])
         self.assertNotIn("files a game or a game engine reads", lines[1])
@@ -5894,7 +5892,7 @@ def _setup_folder(setup: install.CardSetup, card: Path) -> Path:
 
 
 class EveryCardSetupGoesToItsCard(unittest.TestCase):
-    """code_audit_13 P2-3, tui_audit_6 P1-1: the card setups were fixed one
+    """The card setups were fixed one
     by one, and UnofficialOS, ArchR, ArkOS, MiyooCFW and the Anbernic
     firmware stayed on the RetroArch row, which listed them and opened this
     computer's folder. Each system that runs from its SD card, from every
@@ -6015,7 +6013,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
         for index, setup in enumerate(self.setups):
             with self.subTest(system=setup.name):
                 card = _card_from_rules(self.root / f"card{index}", setup)
-                # code_audit_14 P2-1: a card no file names gets its folder
+                # a card no file names gets its folder
                 # below the root with --dest too, as typed.
                 want = _setup_folder(setup, card)
                 with contextlib.redirect_stdout(io.StringIO()):
@@ -6028,7 +6026,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                         _args(platform=setup.name, dest=str(card)), "linux")
                     self.assertEqual(state.dest, want)
                     # --dest alone, then the setup's row: the folder of the
-                    # same --dest (code_audit_13 P2-2).
+                    # same --dest.
                     state, _effects = install.tui_start(_args(dest=str(card)), "linux")
                     if state.screen == "platforms":
                         rows = install.tui_rows(state)
@@ -6043,7 +6041,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                                      ("", _setup_folder(setup, card)))
 
     def test_another_systems_card_is_refused_for_each(self):
-        """code_audit_13 P2-1, tui_audit_6 P2-5: KNULLI and ROCKNIX took a
+        """KNULLI and ROCKNIX took a
         muOS or an Onion card, and wrote their layout into it."""
         cards = {}
         for name in ("muOS", "Onion", "MinUI"):
@@ -6079,8 +6077,8 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                     self.assertTrue(choice.note)
 
 
-class AuditSix(unittest.TestCase):
-    """tui_audit_6 and code_audit_13: what remains of each finding."""
+class ConfirmRefusalsAndCardRows(unittest.TestCase):
+    """Confirm before an install, refusals said in full, and card rows."""
 
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -6092,13 +6090,13 @@ class AuditSix(unittest.TestCase):
         return card
 
     def test_continue_never_installs_without_confirm(self):
-        """P2-1: A on a system, the ticks unchanged, installed at once,
+        """A on a system, the ticks unchanged, installed at once,
         offline too where the plan had no Install."""
         state = checked_state()
         press(state, "down", "enter")
         self.assertEqual(state.screen, "systems")
         # A ticks there, and Done goes back to the plan: nothing runs from
-        # the list (tui_audit_17 P3-1).
+        # the list.
         self.assertEqual(install._primary(state), "A/Enter Tick")
         self.assertEqual(press(state, "enter"), [])
         self.assertEqual(state.screen, "systems")
@@ -6112,7 +6110,7 @@ class AuditSix(unittest.TestCase):
             state.focus["plan"] = [row.action for row in install.tui_rows(state)].index(
                 "systems")
             press(state, "enter")
-            # A ticks: the list runs nothing (tui_audit_17 P3-1). The way to
+            # A ticks: the list runs nothing. The way to
             # Confirm is Space on the plan's Install.
             self.assertEqual(press(state, "enter", "esc"), [])
             state.focus["plan"] = 0
@@ -6127,7 +6125,7 @@ class AuditSix(unittest.TestCase):
             view = install.tui_view(state, 40, 12)
             text = " ".join(" ".join(view).split())
         self.assertEqual(state.screen, "confirm")
-        # code_audit_13 P3-3: Back alone, no word of an Install.
+        # Back alone, no word of an Install.
         self.assertNotIn("before Install", text)
         self.assertNotIn("backup folder", text)
         self.assertIn("Copy them from your old card", text)
@@ -6135,7 +6133,7 @@ class AuditSix(unittest.TestCase):
         self.assertEqual(view[-1].strip(), "A Back  ? Help")
 
     def test_a_refusal_shows_at_40x12_on_type_a_path(self):
-        """P2-2: Enter seemed to do nothing, the refusal drawn below the
+        """Enter seemed to do nothing, the refusal drawn below the
         last line."""
         blank = self.root / "USBSTICK"
         blank.mkdir()
@@ -6148,10 +6146,10 @@ class AuditSix(unittest.TestCase):
         text = " ".join(" ".join(install.tui_view(state, 40, 12)).split())
         self.assertIn("Not an Onion SD card: no Onion files on it.", text)
         self.assertNotIn("Ctrl-U clears", text)
-        # P3-1: no hidden folder named in the short form, the detail after.
+        # no hidden folder named in the short form, the detail after.
         self.assertNotIn(".tmp_update", state.status)
         self.assertIn(".tmp_update", state.status_more)
-        # code_audit_13 P3-5: the prompt asks for the card.
+        # the prompt asks for the card.
         self.assertIn("The top folder of the Onion SD card:", text)
 
     def test_the_help_says_the_refusal_in_full(self):
@@ -6168,7 +6166,7 @@ class AuditSix(unittest.TestCase):
                       ".tmp_update at the root of its card.", text)
 
     def test_wsl_drive_letters_are_taken_as_typed(self):
-        """P2-4: the screen says D:, and D: typed was refused."""
+        """The screen says D:, and D: typed was refused."""
         with mock.patch.dict(install._WSL, {"active": True}):
             for typed in ("D:", "D:\\", "d:\\", "\"D:\\\""):
                 with self.subTest(typed=typed):
@@ -6184,7 +6182,7 @@ class AuditSix(unittest.TestCase):
         self.assertEqual(install._typed_folder("D:"), Path("D:"))
 
     def test_a_dest_refused_on_the_setup_list_names_dest(self):
-        """code_audit_13 P3-2: "Choose the root of the Onion card", where
+        """"Choose the root of the Onion card", where
         --dest fixes the folder, and the refused system stayed chosen."""
         blank = self.root / "USBSTICK"
         blank.mkdir()
@@ -6198,13 +6196,13 @@ class AuditSix(unittest.TestCase):
             self.assertEqual(press(state, "enter"), [])
         self.assertEqual(state.screen, "platforms")
         # --dest is fixed: a stick that is no card is named again in the
-        # command, another setup would not help (code_audit_15 P3-3).
+        # command, another setup would not help.
         self.assertIn("Run it again with the card's top folder.", state.status)
         self.assertNotIn("choose another setup", state.status)
         self.assertEqual((state.platform, state.card_bound), ("", None))
 
     def test_on_the_device_a_folder_typed_is_taken_as_typed(self):
-        """code_audit_13 P3-1: a KNULLI got bios added to what was typed."""
+        """A KNULLI got bios added to what was typed."""
         share = self.root / "userdata" / "share"
         share.mkdir(parents=True)
         state = fresh_state()
@@ -6220,7 +6218,7 @@ class AuditSix(unittest.TestCase):
         self.assertEqual(state.dest, share)
 
     def test_a_card_in_a_reader_asks_for_its_card_once(self):
-        """code_audit_13 P3-9, tui_audit_6 P3-7: "Which folder? Onion reads
+        """"Which folder? Onion reads
         its BIOS files from" on a computer, the same card listed twice."""
         first, second = self.onion("D"), self.onion("E")
         with mock.patch.object(install, "_mounted_cards", return_value=[first, second]), \
@@ -6249,7 +6247,7 @@ class AuditSix(unittest.TestCase):
         self.assertEqual(state.folder_default, SYSTEM_DIR)
 
     def test_browsing_for_a_card_starts_on_the_drives(self):
-        """tui_audit_6 P3-2: the browser opened on the home folder, Use this
+        """The browser opened on the home folder, Use this
         folder focused, saying to go back, the cards listed under it."""
         card = self.onion()
         state = fresh_state()
@@ -6266,7 +6264,7 @@ class AuditSix(unittest.TestCase):
         self.assertEqual(state.status, "Choose the Onion card below.")
 
     def test_a_number_outside_the_list_is_said(self):
-        """tui_audit_6 P3-1: 9 was read as a folder."""
+        """9 was read as a folder."""
         card, other = self.onion(), self.onion("SECOND")
         answers = iter(["9", "0", "2"])
         with mock.patch.object(install, "_mounted_cards", return_value=[card, other]), \
@@ -6283,7 +6281,7 @@ class AuditSix(unittest.TestCase):
                          ["an Onion", "an Allium", "an ArkOS", "a muOS", "a KNULLI"])
 
     def test_every_card_row_reads_the_same(self):
-        """tui_audit_6 P3-6: KNULLI, ROCKNIX and the MinUI family asked for
+        """KNULLI, ROCKNIX and the MinUI family asked for
         their card without saying so."""
         state = fresh_state()
         state.stack = ["setup", "platforms"]
@@ -6301,8 +6299,8 @@ class AuditSix(unittest.TestCase):
         self.assertEqual(labels["knulli"], "KNULLI")
 
     def test_offline_plan_counts_agree(self):
-        """code_audit_13 P3-4: "3 downloaded" under "3 need the internet";
-        tui_audit_6 P3-9.2: the data files read as if on hand."""
+        """"3 downloaded" under "3 need the internet";
+        the data files read as if on hand."""
         state = checked_state()
         state.found = [{"event": "found", "platform": "retroarch", "dest": FILES[0]["dest"],
                         "folder": "/media/old", "path": "/media/old/x", "member": "",
@@ -6313,13 +6311,13 @@ class AuditSix(unittest.TestCase):
             state.found = []
             state.check = dict(state.check, data_missing=2636, data_bytes=40 * 1024 * 1024)
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
-        # One count of files, the kinds apart under the folder (tui_audit_13
-        # P3-6): "4 files and 2636 data files" read as two kinds of one.
+        # One count of files, the kinds apart under the folder: "4 files and
+        # 2636 data files" read as two kinds of one.
         self.assertIn("2640 files need the internet, which --offline does not use", text)
         self.assertIn("2636 data files (40.0 MB).", text)
 
     def test_the_error_row_and_the_bar_agree(self):
-        """tui_audit_6 P3-9.3: "Choose another setup or folder" over
+        """"Choose another setup or folder" over
         "A/Enter Back"."""
         state = checked_state()
         state.run = "check"
@@ -6331,8 +6329,8 @@ class AuditSix(unittest.TestCase):
         self.assertNotEqual(state.screen, "error")
 
     def test_a_long_name_keeps_a_size_at_40_columns(self):
-        """tui_audit_6 P3-5: Nintendo Game Boy Advance lost its size.
-        tui_audit_10 P3-14: and kept it rounded, 3 KB beside a total of
+        """Nintendo Game Boy Advance lost its size.
+        It also kept it rounded, 3 KB beside a total of
         2.7 KB. The size stays whole, the name is cut."""
         row = install.TuiRow("system", "[x] Nintendo Game Boy Advance", "1 file, 16.0 KB",
                              "nintendo-gba", narrow=("16.0 KB",), keep_right=True)
@@ -6341,7 +6339,7 @@ class AuditSix(unittest.TestCase):
         self.assertRegex(line, r"Nintendo Game Boy A?d?\.\.\.")
 
     def test_the_shared_note_keeps_its_line(self):
-        """tui_audit_6 P3-5: the page held 4, 3 and 5 systems as the note
+        """The page held 4, 3 and 5 systems as the note
         came and went, and "+19" read as 19 more."""
         state = OneSystemInFewPresses().long_list("keys")
         state.files = [{"event": "file", "dest": "mame.zip", "size": 10,
@@ -6359,8 +6357,8 @@ class AuditSix(unittest.TestCase):
         self.assertIn(" +2 shared: counted once", install.tui_view(state, 40, 12))
 
 
-class AuditSevenOneCardReading(unittest.TestCase):
-    """code_audit_14 P2-1 to P3-12 and tui_audit_7 P2-5, P3-1: one reading
+class OneCardReading(unittest.TestCase):
+    """One reading
     of a card's root, said the same on the screen and in line mode."""
 
     def setUp(self):
@@ -6383,7 +6381,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
         return state
 
     def test_a_blank_card_gets_one_folder_and_one_note_everywhere(self):
-        """code_audit_14 P2-1, tui_audit_7 P2-5: --dest kept the stick's
+        """--dest kept the stick's
         root, typed it got bios below it, and the screen said nothing."""
         stick = self.blank()
         for named, plat, below in (("knulli", "knulli", "bios"),
@@ -6399,7 +6397,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
                 state = self.start(platform=named, dest=str(stick))
                 self.assertEqual(state.dest, stick / below)
                 self.assertEqual(state.card_note, note)
-                # tui_audit_10 P3-8: one rule with line mode, whose question
+                # one rule with line mode, whose question
                 # creates one missing level and says it. Two are asked, and
                 # the note is kept on Create the folder? and on the plan.
                 one = (stick / below).parent.is_dir()
@@ -6411,7 +6409,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
                 self.assertEqual(state.card_note, note)
 
     def test_the_minui_family_refuses_a_blank_dest(self):
-        """code_audit_14 P2-2: taken with --dest, refused typed."""
+        """Taken with --dest, refused typed."""
         stick = self.blank()
         for plat in ("minui", "nextui", "myminui"):
             with self.subTest(platform=plat):
@@ -6422,7 +6420,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
                     install.card_dest(plat, plat, stick)
 
     def test_a_card_mounted_as_its_bios_folder_is_the_card(self):
-        """code_audit_14 P3-7: an Onion card mounted as BIOS was refused,
+        """An Onion card mounted as BIOS was refused,
         ROCKNIX's roms/bios was taken for KNULLI, a muOS card's folder
         too."""
         onion = self.root / "BIOS"
@@ -6459,7 +6457,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
                 install.card_setup("knulli", "knulli"), bios), (bios, False))
 
     def test_a_refused_dest_says_why_in_the_events(self):
-        """code_audit_14 P3-8: code 1 and no reason in the stream."""
+        """Code 1 and no reason in the stream."""
         stick = self.blank()
         proc = install_run("--events", "--platform", "onion", "--dest", str(stick),
                            "--manifest", str(REPO_ROOT / "install" / "retroarch.json"),
@@ -6474,13 +6472,13 @@ class AuditSevenOneCardReading(unittest.TestCase):
         self.assertIn("not the card of the system named", table)
 
     def test_a_card_no_file_names_is_titled_by_its_system(self):
-        """code_audit_14 P3-9: an ArkOS card chosen read as RetroArch."""
+        """An ArkOS card chosen read as RetroArch."""
         stick = self.blank()
         state = self.start(platform="ArkOS", dest=str(stick))
         self.assertEqual(install.detected_os("retroarch", state.dest), "ArkOS")
 
     def test_a_list_named_for_another_systems_card_says_so(self):
-        """code_audit_14 P3-10: --platform batocera on an Onion card."""
+        """--platform batocera on an Onion card."""
         onion = self.root / "ONION"
         make_card(onion, "Onion")
         choice = install.card_choice("batocera", "batocera", onion)
@@ -6491,7 +6489,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
         self.assertEqual(state.card_note, choice.note)
 
     def test_amberelec_and_emuelec_are_asked_for_their_card(self):
-        """code_audit_14 P3-11: "Use this folder" on /storage/roms of a PC."""
+        """"Use this folder" on /storage/roms of a PC."""
         for plat, name in (("amberelec", "AmberELEC"), ("emuelec", "EmuELEC")):
             with self.subTest(system=name):
                 setup = install.card_setup(plat, plat)
@@ -6506,12 +6504,12 @@ class AuditSevenOneCardReading(unittest.TestCase):
                 self.assertEqual(choice.folder, stick)
                 # Its card is told by what it writes at every boot: a stick
                 # holding none of it is one not started yet, never "cannot
-                # tell" (tui_audit_16 P2-1).
+                # tell".
                 self.assertIn(f"says it is {install._a(name)} card yet", choice.note)
                 self.assertNotIn("cannot tell", choice.note)
 
     def test_install_py_has_two_blank_lines_around_each_definition(self):
-        """code_audit_14 P3-12: E305 after _card_mount, and the same slip
+        """E305 after _card_mount, and the same slip
         before _Interrupted, TuiRow and _setup_label (pycodestyle E302,
         E303, E305 at top level)."""
         import ast
@@ -6545,7 +6543,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
                     self.assertEqual(count, 2)
 
     def test_a_refusal_is_said_once_and_another_card_names_its_remedy(self):
-        """tui_audit_7 P3-1: said twice, and "Choose the card's top folder"
+        """Said twice, and "Choose the card's top folder"
         for the top folder of another card."""
         stick = self.blank()
         state = self.start(platform="onion")
@@ -6572,7 +6570,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
         self.assertIn("Insert the Onion card, or choose muOS for that one.", out.getvalue())
 
     def test_line_mode_names_the_card_picked_and_its_folder(self):
-        """tui_audit_7 P2-3, P3-5: no echo of the card picked, "Mount the
+        """No echo of the card picked, "Mount the
         card" under two mounted, /mnt/d where the list says D:."""
         cards = [self.root / "ONION", self.root / "ONION2"]
         for card in cards:
@@ -6601,7 +6599,6 @@ class AuditSevenOneCardReading(unittest.TestCase):
         self.assertNotIn("gets the RetroArch file list", proc.stdout)
 
     def test_wsl_names_the_folder_by_its_drive_letter(self):
-        """tui_audit_7 P3-6, code_audit_14 P3-5."""
         with mock.patch.dict(install._WSL, {"active": True, "root": "/mnt"}):
             self.assertEqual(install._short_path(Path("/mnt/d/BIOS"), HOME), "D:\\BIOS")
             self.assertEqual(install.shown_path(Path("/mnt/d")), "D:\\")
@@ -6616,7 +6613,6 @@ class AuditSevenOneCardReading(unittest.TestCase):
             self.assertEqual(install._short_path(Path("/mnt/d/BIOS"), HOME), "/mnt/d/BIOS")
 
     def test_a_multi_word_system_example_can_be_pasted(self):
-        """code_audit_14 P3-6."""
         with mock.patch.object(install, "_mounted_cards", return_value=[]), \
                 contextlib.redirect_stderr(io.StringIO()) as err, \
                 self.assertRaises(SystemExit):
@@ -6624,8 +6620,8 @@ class AuditSevenOneCardReading(unittest.TestCase):
         self.assertIn("--platform anbernicstockfirmware --dest", err.getvalue())
 
 
-class AuditSevenScreens(unittest.TestCase):
-    """tui_audit_7 P2-1 to P3-9: what each screen offers and says."""
+class WhatEachScreenOffers(unittest.TestCase):
+    """What each screen offers and says."""
 
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -6639,7 +6635,7 @@ class AuditSevenScreens(unittest.TestCase):
         return state
 
     def test_a_handheld_is_found_by_its_device_in_few_presses(self):
-        """P2-1: Onion was row 30 of 34, its row said "RetroArch files"."""
+        """Onion was row 30 of 34, its row said "RetroArch files"."""
         state = self.setups("gptokeyb")
         rows = install.tui_rows(state)
         labels = [row.label for row in rows]
@@ -6666,7 +6662,7 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertEqual([row.label for row in install.tui_rows(found)][2], "Batocera")
 
     def test_line_mode_takes_a_device_name(self):
-        """P2-1: "miyoo" refused at the line menu."""
+        """"miyoo" refused at the line menu."""
         with mock.patch.object(install, "_ask", side_effect=["bittboy"]), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             self.assertEqual(install._choose_platform("Which?"), "MiyooCFW")
@@ -6680,7 +6676,6 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertIn(f"{onion}) Onion, SD card (Miyoo Mini, Miyoo Mini Plus)", out.getvalue())
 
     def test_one_spelling_per_device_and_one_press_for_one_match(self):
-        """P3-9.2, P3-9.3, P3-9.4."""
         for name, devices in install._SETUP_DEVICES.items():
             with self.subTest(system=name):
                 self.assertFalse(any("+" in device for device in devices))
@@ -6700,7 +6695,7 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertNotIn("PAN4ELEC", rows["amberelec"].right)
 
     def test_help_rows_keep_their_column_at_40(self):
-        """P3-9.1: "/ Filter (Esc clears)" ran back to the left edge."""
+        """"/ Filter (Esc clears)" ran back to the left edge."""
         for pad in ("gptokeyb", "gptokeyb_muxterm", "miyoo", "evmapy"):
             with self.subTest(pad=pad):
                 state = self.setups(pad)
@@ -6714,7 +6709,7 @@ class AuditSevenScreens(unittest.TestCase):
                                     == "  ", line)
 
     def test_copy_from_a_folder_with_none_says_so(self):
-        """P2-2: the plan came back the same."""
+        """The plan came back the same."""
         state = checked_state()
         old = self.root / "old"
         old.mkdir()
@@ -6734,21 +6729,19 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertEqual(rows[state.focus["browse"]].value, stick)
 
     def test_offline_plan_names_the_folder_already_copied_from(self):
-        """code_audit_14 P3-1."""
         state = checked_state()
         state.from_folders = [self.root / "from1"]
         state.found = [found("gba_bios.bin", str(self.root / "from1"))]
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             text = " ".join(" ".join(install.tui_view(state, 100, 40)).split())
-        # The rest named by kind as not in it, the remedy after
-        # (tui_audit_14 P3-7).
+        # The rest named by kind as not in it, the remedy after.
         self.assertIn("Not in from1: ", text)
         self.assertIn("Run the installer again with a pack (--from-pack)", text)
         self.assertNotIn("They are not in", text)
         self.assertNotIn("Copy them from your old card", text)
 
     def test_the_card_browser_focuses_the_card_asked_for(self):
-        """P3-2: the muOS card, listed first, was focused for Onion."""
+        """The muOS card, listed first, was focused for Onion."""
         muos, onion, second = self.root / "A_MUOS", self.root / "B_ONION", self.root / "C"
         make_card(muos, "muOS")
         make_card(onion, "Onion")
@@ -6769,7 +6762,6 @@ class AuditSevenScreens(unittest.TestCase):
                 self.assertNotIn("Go back", line)
 
     def test_confirm_offers_no_install_while_it_counts(self):
-        """P3-3."""
         state = checked_state()
         state.stack.append("confirm")
         state.running, state.dry = True, None
@@ -6778,7 +6770,6 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertNotIn("Install", [what for _key, what in install._help_lines(state)])
 
     def test_back_after_choosing_systems_lands_on_install(self):
-        """P3-8."""
         state = checked_state()
         state.focus["plan"] = [row.action for row in install.tui_rows(state)].index("systems")
         press(state, "enter")
@@ -6792,7 +6783,7 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertEqual(rows[state.focus["plan"]].action, "install")
 
     def test_a_lone_card_opens_the_first_screen_with_a_list(self):
-        """P3-7: with --manifest, the card's folder was the first screen."""
+        """With --manifest, the card's folder was the first screen."""
         onion = self.root / "ONIONB"
         make_card(onion, "Onion")
         shutil.rmtree(onion / "BIOS")
@@ -6807,7 +6798,7 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertEqual((state.screen, effects), ("setup", []))
 
     def test_a_file_left_for_its_save_directory_is_said_so(self):
-        """P2-4: the menu counted 23, 22 were checked, and the end blamed
+        """The menu counted 23, 22 were checked, and the end blamed
         the collection for the file whose save directory is unknown."""
         menus = []
 
@@ -6819,8 +6810,7 @@ class AuditSevenScreens(unittest.TestCase):
             argv = ["install.py", "--platform", "retroarch", "--dest", str(repo.dest),
                     "--manifest", str(repo.root / "install" / "retroarch.json")]
             # The files come from the repository on the loopback: the module
-            # read its base before the environment named it (code_audit_24
-            # P3-13).
+            # read its base before the environment named it.
             served = repo.env()["RETROBIOS_BASE_URL"] + "/{path}"
             with mock.patch.dict(os.environ, repo.env()), \
                     mock.patch.object(install, "RAW_FILE_URL", served), \
@@ -6847,7 +6837,6 @@ class AuditSevenScreens(unittest.TestCase):
         self.assertNotIn("the collection does not hold", text)
 
     def test_plural_game_data_and_the_backup_line_at_40x12(self):
-        """P3-9.5, P3-9.6."""
         state = checked_state()
         games = [{"dest": f"g{index}.dat", "system": "", "category": install.GAME_DATA}
                  for index in range(2)]
@@ -6977,8 +6966,8 @@ def screen_plan(args: argparse.Namespace, manifest: dict, events: list[dict],
 
 
 class _CardFixtures:
-    """Drives, lists and packs of code_audit_18 and tui_audit_11, for the
-    classes that test them on the screen and in line mode."""
+    """Drives, lists and packs for the classes that test them on the screen and
+    in line mode."""
 
     ABOUT = "system/configs/emulationstation/about.info"
 
@@ -6991,7 +6980,7 @@ class _CardFixtures:
         return root
 
     def renamed(self) -> dict:
-        """The drives code_audit_18 P1-1 names: KNULLI and Batocera each
+        """Renamed drives: KNULLI and Batocera each
         renamed in its own menu, with and without the file KNULLI alone
         writes, and Recalbox's share."""
         conf = "system/batocera.conf"
@@ -7076,14 +7065,14 @@ class _CardFixtures:
 
 
 class _LineModeFindings(_CardFixtures):
-    """The line-mode findings of code_audit_18 and tui_audit_11, run by
+    """The line-mode cases of the card fixtures, run by
     LineModeAndScreenDecideAlike."""
 
     def test_a_drive_two_systems_fit_is_taken_as_named_and_said(self):
-        """code_audit_18 P1-1: --platform knulli is never refused on a
+        """--platform knulli is never refused on a
         drive whose only evidence is a batocera.conf, --platform batocera
         takes its bios folder, and the doubt is said. Recalbox refuses it
-        with words for a SHARE drive (P3-4)."""
+        with words for a SHARE drive."""
         drives = self.renamed()
         for name in ("renamed, no about.info", "Batocera as shipped"):
             drive = drives[name]
@@ -7107,7 +7096,7 @@ class _LineModeFindings(_CardFixtures):
                       "--platform batocera", words)
 
     def test_the_first_screen_and_line_mode_say_the_doubt(self):
-        """code_audit_18 P1-1: the screen's first row was "Batocera SHARE
+        """The screen's first row was "Batocera SHARE
         drive (KNULLI2)". A renamed card with about.info is KNULLI's, one
         without is listed by neither and said."""
         drives = self.renamed()
@@ -7132,7 +7121,7 @@ class _LineModeFindings(_CardFixtures):
         self.assertEqual([setup[0] for setup in state.setups], ["knulli"])
 
     def test_a_list_without_systems_narrows_by_what_it_records(self):
-        """tui_audit_11 P2-1: install/minui.json records cores and regions,
+        """Install/minui.json records cores and regions,
         no system, and all three options were refused with a remedy that
         fetched the same list."""
         listing, _pack, _listed = self.minui()
@@ -7156,7 +7145,7 @@ class _LineModeFindings(_CardFixtures):
     @unittest.skipIf(sys.version_info < (3, 9),
                      "generate_pack.py's context managers need Python 3.9")
     def test_a_pack_names_its_list_only_when_that_list_records_it(self):
-        """tui_audit_11 P2-1: a MinUI pack sent --core to install/minui.json,
+        """A MinUI pack sent --core to install/minui.json,
         refused the same way, and a MiSTer pack to install/misterfpga.json,
         which records no core. The pack now records what its list narrows
         by, and each remedy changes the outcome."""
@@ -7183,7 +7172,7 @@ class _LineModeFindings(_CardFixtures):
         self.assertTrue(mister_list.exists())
 
     def test_line_mode_offers_what_can_be_chosen(self):
-        """tui_audit_11 P3-10: "c) choose systems, cores and regions" with a
+        """"c) choose systems, cores and regions" with a
         pack that records systems only, and "Cores: 1) azahar" asked with
         one answer."""
         mister, _pack, _listed = self.minui("misterfpga", systems=True, cores=False,
@@ -7201,7 +7190,7 @@ class _LineModeFindings(_CardFixtures):
         self.assertNotIn("Cores:", out.getvalue())
         self.assertEqual(asked.call_count, 0)
 
-    # code_audit_18 P3-2, P3-3, tui_audit_11 P3-1: the remedies of a card.
+    # the remedies of a card.
 
     def test_a_full_card_is_freed_never_left_for_another_drive(self):
         with mock.patch.object(install.shutil, "disk_usage",
@@ -7230,7 +7219,7 @@ class _LineModeFindings(_CardFixtures):
 
 
 class _OutsideTextFindings:
-    """code_audit_18 P2-1: a pack's member path, a --manifest dest, the
+    """A pack's member path, a --manifest dest, the
     names a list records, a card's label and a retroarch.cfg folder reached
     line mode, the events and the disk with their control characters. Each
     source is fed escape sequences, and none comes out raw."""
@@ -7345,7 +7334,7 @@ class _OutsideTextFindings:
 
 class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                                    unittest.TestCase):
-    """tui_audit_8 P1-1, P2-1 and code_audit_15 P2-2: line mode looked at
+    """Line mode looked at
     this machine alone, took this computer's default folder with a card in
     the reader or nothing found, and the screen put RetroArch under A for a
     KNULLI card named with --dest. The same inputs now give the same
@@ -7404,18 +7393,18 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         blank = self.root / "blank"
         blank.mkdir()
         scenarios = {
-            # code_audit_16 P1-1, P2-2, tui_audit_9 P1-1: the drive's root in
+            # the drive's root in
             # line mode, another system's card first on the screen.
             "a Batocera list, its SHARE drive": (
                 [share], [], {"manifest": batocera}, ("batocera", share / "bios")),
             "a Batocera list, a muOS card and its SHARE drive": (
                 [muos, share], [], {"manifest": batocera}, ("batocera", share / "bios")),
-            # tui_audit_9 P2-3, P3-11: the setups found asked as the screen
+            # the setups found asked as the screen
             # asks, Enter on the first.
             "nothing named, RetroArch here": ([], pc, {}, ("retroarch", self.here)),
             "a list, RetroArch here and an Onion card": (
                 [onion], pc, {"manifest": self.list}, ("retroarch", self.here)),
-            # code_audit_16 P3-1: --dest with a setup found.
+            # --dest with a setup found.
             "--dest a blank folder, RetroArch here": (
                 [onion], pc, {"dest": blank}, ("retroarch", blank)),
             "a list, an Onion card in the reader": (
@@ -7470,7 +7459,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         raise AssertionError(out.getvalue())
 
     def test_a_run_without_questions_sees_the_cards_the_screen_sees(self):
-        """tui_audit_11 P1-1: --yes and --no-input looked at this machine
+        """--yes and --no-input looked at this machine
         alone, beside the Onion card the screen and line mode open on: the
         files went to the home folder, or the run said nothing is here."""
         onion = self.card("ONION", "Onion")
@@ -7494,7 +7483,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                     self.assertEqual(chosen, [screen])
 
     def test_a_run_without_questions_stops_on_two_setups(self):
-        """code_audit_18 P2-3, tui_audit_11 P1-1: --yes beside two setups
+        """--yes beside two setups
         installed for both, where its help says it stops on what to name.
         It now stops with an error event naming each and its --dest."""
         onion, muos = self.card("ONION", "Onion"), self.card("MUOS", "muOS")
@@ -7523,7 +7512,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         return share
 
     def test_a_drive_is_offered_by_the_folder_its_system_reads(self):
-        """code_audit_18 P2-2, tui_audit_11 P1-2: RetroArch's folder question
+        """RetroArch's folder question
         numbered a Batocera SHARE drive and a KNULLI card, and one press put
         RetroArch's list at their root, beside roms/ and system/. A drive
         nothing names went to its root too. Now another system's drive is
@@ -7540,7 +7529,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                 self.assertRaises(SystemExit):
             install.ask_platform_folder("linux", "retroarch")
         text = out.getvalue()
-        # One parenthesis a row (tui_audit_16 P3-9).
+        # One parenthesis a row.
         self.assertIn(f"1) EASYROMS: bios (drive, {stick / 'bios'})", text)
         self.assertIn(f"2) ONION: BIOS (Onion SD card, {onion / 'BIOS'})", text)
         self.assertNotIn("3)", text)
@@ -7563,7 +7552,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual(state.dest, stick / "bios")
 
     def test_a_list_card_setups_read_offers_them_first(self):
-        """tui_audit_11 P1-2: with a RetroArch pack or list and nothing found,
+        """With a RetroArch pack or list and nothing found,
         the first screen was RetroArch's folder question: ArkOS, muOS and
         JELOS, which read the same list, were out of reach. Both modes now
         open on the setups that read it, RetroArch first."""
@@ -7669,8 +7658,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                 contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(io.StringIO()):
             install._install(args, real)
-        # Every file from one folder: one count, as the screen's result
-        # (tui_audit_15 P3-8).
+        # Every file from one folder: one count, as the screen's result.
         self.assertIn(f"Done. 2 files copied from {backup}.", real.getvalue())
         self.assertIn("Installed: 1 BIOS file and 1 game data file.", real.getvalue())
 
@@ -7699,8 +7687,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertIn("RetroArch: 4 files, 123 B.\n  1 BIOS file (3 B) and 3 game data files "
                       "(120 B).", text)
         self.assertIn("g) Game data: kept (3 files, 120 B): leave it out", text)
-        # Said once, by the menu: the run head repeated it right under it
-        # (tui_audit_15 P3-9).
+        # Said once, by the menu: the run head repeated it right under it.
         after = text[text.index("q) quit"):text.index("Checking existing files")]
         self.assertNotIn("4 files (123 B)", after)
         self.assertIn("0 in place, 4 missing, 0 wrong copies", text)
@@ -7718,7 +7705,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         after = text[text.index("Counted again"):]
         self.assertIn("g) Game data: kept (3 files, 120 B): leave it out", after)
         # doom holds only game data: Enter is refused, as the screen offers
-        # no Install for it (tui_audit_13 P3-11), and g puts it back.
+        # no Install for it, and g puts it back.
         self.assertIn("g) Game data: left out (3 files, 120 B): keep it", after)
         self.assertIn("doom holds only game data: nothing is left to install.", after)
         self.assertNotIn("All files up to date", text)
@@ -7775,7 +7762,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         row = next(row for row in install.tui_rows(state) if row.action == "gamedata")
         self.assertEqual((row.label, row.right), ("Game data: kept", "2 files, 8 B"))
 
-    # code_audit_18 P3-5, tui_audit_11 P3-10 and P3-21: line mode wording.
+    # line mode wording.
 
     def test_one_row_says_type_1(self):
         with mock.patch.object(install, "_ask", side_effect=["2", "q"]), \
@@ -7865,7 +7852,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertNotIn("No supported platform detected", text)
 
     def test_a_pack_gets_the_menu_and_its_folder_named(self):
-        """P1-1: no menu and no folder before the copy, the pack's list
+        """No menu and no folder before the copy, the pack's list
         recording no system."""
         from test_install_offline import _pack, PAYLOAD
 
@@ -7905,7 +7892,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertNotIn("c) choose systems", text)
         self.assertNotIn("Copying", text)
 
-    # code_audit_17 and tui_audit_10: every line-mode finding, each answered
+    # every line-mode finding, each answered
     # by line mode and the screen from one decision.
 
     def line_run(self, args: argparse.Namespace, answers: list, mounts: list = (),
@@ -7955,7 +7942,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                 "systems": systems, **extra}
 
     def test_o_then_the_setup_found_offers_the_folder_it_reads(self):
-        """code_audit_17 P2-2, tui_audit_10 P1-1: o then RetroArch offered
+        """O then RetroArch offered
         its built-in folder, and Enter filled it, where the screen keeps the
         folder retroarch.cfg names."""
         pc = [("retroarch", self.here)]
@@ -7976,7 +7963,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual((state.platform, state.dest), ("retroarch", self.here))
 
     def test_a_share_drive_typed_is_read_as_its_bios_folder(self):
-        """code_audit_17 P2-3, tui_audit_10 P3-11: the SHARE drive's root,
+        """The SHARE drive's root,
         typed for Batocera or Recalbox, was the BIOS folder, beside roms/
         and system/. Another system's drive is refused, in both modes."""
         shares = {}
@@ -8012,7 +7999,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                 self.assertEqual(refused.screen, "path")
 
     def test_the_setups_found_are_labelled_alike(self):
-        """code_audit_17 P3-1, tui_audit_10 P3-3, P3-13: "Onion SD card
+        """"Onion SD card
         (ONION) (/media/me/ONION/BIOS)", two pairs of brackets, and a MinUI
         card named by its root where its BIOS folder is Bios."""
         onion, minui = self.card("ONION", "Onion"), self.card("MINUI", "MinUI")
@@ -8037,7 +8024,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                     self.assertIn(f"BIOSfolder:{folder}", screen.replace(" ", ""))
 
     def test_both_count_the_systems_out_of_the_same_list(self):
-        """code_audit_17 P3-2: the plan said 1 of 12 systems where Choose
+        """The plan said 1 of 12 systems where Choose
         systems and line mode listed 11, a system whose only file is read
         from an unknown save directory counted."""
         payload = b"gba"
@@ -8063,7 +8050,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual(len(install.tui_systems(state)), 2)
 
     def test_after_o_the_list_offers_the_setups_its_file_list_serves(self):
-        """code_audit_17 P3-3: Batocera was offered for a RetroArch list,
+        """Batocera was offered for a RetroArch list,
         and refused once its folder had been asked."""
         install.LOCAL.reset()
         self.addCleanup(install.LOCAL.reset)
@@ -8080,7 +8067,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertNotIn("knulli", line)
 
     def test_a_choice_of_systems_is_confirmed_before_anything_is_written(self):
-        """tui_audit_10 P2-1, code_audit_17 P2-4: c installed as soon as the
+        """C installed as soon as the
         last list was answered, and its command left out --dest and
         --manifest. The menu comes back counted, as the screen's Confirm."""
         files = [self.entry("gba_bios.bin", b"gba", ["nintendo-gba"]),
@@ -8114,7 +8101,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                 "files": {f"f{n}.dat": {"sha1": "a" * 40, "size": 10} for n in range(count)}}
 
     def test_both_count_the_data_files_of_the_systems_kept(self):
-        """tui_audit_10 P2-2: line mode counted 2636 data files of other
+        """Line mode counted 2636 data files of other
         systems for every --system tried, where the screen counts none."""
         files = [self.entry("gba_bios.bin", b"gba", ["nintendo-gba"]),
                  self.entry("scph5501.bin", b"psx", ["sony-playstation"])]
@@ -8135,7 +8122,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
 
     @unittest.skipUnless(hasattr(os, "statvfs"), "statvfs reads mount flags")
     def test_a_read_only_card_gets_one_remedy_and_no_sudo(self):
-        """tui_audit_10 P2-3: the plan offered sudo for a read-only mount,
+        """The plan offered sudo for a read-only mount,
         with a command that dropped --from-pack and --manifest, and the
         result offered nothing. One advice, line mode before its menu, the
         plan and the result."""
@@ -8158,7 +8145,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
             self.assertNotIn("sudo", said)
 
     def test_the_sudo_command_keeps_every_option_of_the_run(self):
-        """tui_audit_10 P2-3: the plan's sudo line dropped --from-pack and
+        """The plan's sudo line dropped --from-pack and
         --manifest, and with --offline stopped at the file list."""
         state = checked_state({"free": 10 ** 9, "writable": False, "cores": []})
         state.manifest_path, state.manifest_given = Path("/l/retroarch.json"), True
@@ -8172,7 +8159,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
             self.assertIn(option, line)
 
     def test_the_save_files_are_counted_after_the_choice(self):
-        """tui_audit_10 P3-2: --system sony-playstation said 106 files went
+        """--system sony-playstation said 106 files went
         to the save directory, none of them PlayStation's."""
         here = self.root / "pc" / "system"
         files = [self.entry("gba_bios.bin", b"gba", ["nintendo-gba"]),
@@ -8194,7 +8181,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                     self.assertEqual(saves, [])
 
     def test_a_list_that_leaves_out_save_files_says_so_before_the_menu(self):
-        """tui_audit_10 P3-4: ROCKNIX's 44 files left out were said after
+        """ROCKNIX's 44 files left out were said after
         the install only, as the frontend's, where the plan says them."""
         omitted = [{"dest": f"saves/{n}.key", "name": f"{n}.key", "system": "",
                     "systems": [], "required": False, "reason": "no_save_directory",
@@ -8218,7 +8205,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertIn(said, out.getvalue())
 
     def test_the_drives_mounted_here_are_offered_in_both(self):
-        """tui_audit_10 P3-6: the copy question listed no drive and took q
+        """The copy question listed no drive and took q
         as a folder, and the screen's Which folder? listed none where line
         mode numbered them."""
         stick, onion = self.root / "media" / "USBSTICK", self.card("ONION", "Onion")
@@ -8242,7 +8229,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                 mock.patch.object(install, "_ask", side_effect=["1"]), \
                 mock.patch.object(install, "_missing_dest", return_value=True):
             folder = install.ask_platform_folder("linux", "retroarch")
-        # tui_audit_11 P1-2: a drive is offered by its bios folder, never its
+        # a drive is offered by its bios folder, never its
         # root, which no setup reads.
         self.assertEqual(folder, stick / "bios")
         state = install.TuiState(os_type="linux", home=HOME)
@@ -8254,7 +8241,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                          [stick / "bios"])
 
     def test_the_systems_are_listed_by_title_in_the_screen_order(self):
-        """tui_audit_10 P3-7: line mode listed ids, nintendo-3ds before
+        """Line mode listed ids, nintendo-3ds before
         nintendo-ds, where the screen lists titles."""
         titles = {"nintendo-ds": "Nintendo DS", "nintendo-gba": "Nintendo Game Boy Advance"}
         files = [self.entry("ds.bin", b"ds", ["nintendo-ds"]),
@@ -8278,7 +8265,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual(order, ["nintendo-ds", "nintendo-gba", "nintendo-3ds"])
 
     def test_the_card_question_looks_again_and_lists_blank_drives(self):
-        """tui_audit_10 P3-8: Enter at Card root never looked again, a
+        """Enter at Card root never looked again, a
         blank stick was listed for KNULLI on the screen alone, and the two
         modes differed on creating its bios."""
         onion = self.card("ONION", "Onion")
@@ -8321,7 +8308,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual((state.dest, state.screen), (stick / "bios", "checking"))
 
     def test_a_full_or_read_only_folder_is_said_before_enter(self):
-        """tui_audit_10 P3-9, P3-19: line mode showed Enter) install
+        """Line mode showed Enter) install
         everything over a full card and refused after it. On a card setup
         both say to free space on the card."""
         onion = self.card("ONION", "Onion")
@@ -8343,7 +8330,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertIn("Free some space on the card first.", plan)
 
     def test_a_device_typed_is_named_first(self):
-        """tui_audit_10 P3-12: "miyoo mini" listed MinUI with RG28XX, RG34XX
+        """"miyoo mini" listed MinUI with RG28XX, RG34XX
         and RG34XX SP, where the screen's row names the Miyoo Mini."""
         install.LOCAL.reset()
         choices = install._line_setups([], set(), "linux")
@@ -8359,15 +8346,15 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                 self.assertTrue(label.split("(", 1)[1].startswith(first), (label, first))
 
     def test_line_mode_says_setup_where_the_screen_does(self):
-        """tui_audit_10 P3-13: "Detecting platform..." and "No supported
+        """"Detecting platform..." and "No supported
         platform found here", where the screen says setup and "Nothing was
         found here.\""""
         # The standalone emulators' lists come from the network: none here
-        # (code_audit_24 P3-13), and none found.
+        #, and none found.
         with mock.patch.object(install, "_install_standalone_folders", return_value=False):
             text, _asked = self.line_run(_args(declared_only=False), [])
         self.assertIn("Looking for setups here...", text)
-        # Said once, the question alone after it (tui_audit_16 P3-2).
+        # Said once, the question alone after it.
         self.assertEqual(text.count("Nothing was found here."), 1)
         self.assertIn("\nWhich setup?\n", text)
         self.assertNotIn("Detecting platform", text)
@@ -8377,7 +8364,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertIn("Nothing was found here.", " ".join(install.tui_view(state, 80, 24)))
 
     def test_yes_at_a_terminal_asks_nothing(self):
-        """tui_audit_10 P3-20: --yes waited at Install for: and at the menu."""
+        """--yes waited at Install for: and at the menu."""
         seen = []
         with mock.patch.object(sys, "argv", ["install.py", "--yes", "--plain"]), \
                 mock.patch.object(install, "_run", side_effect=seen.append):
@@ -8392,7 +8379,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
             _text, asked = self.line_run(seen[0], [], found=pc)
         self.assertEqual(asked, [])
 
-    # code_audit_19 and tui_audit_12: line mode, and the screen beside it.
+    # line mode, and the screen beside it.
 
     def copy_folder(self) -> tuple[Path, Path]:
         listing, _files = self.game_list()
@@ -8403,7 +8390,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         return listing, old
 
     def test_the_copy_line_says_copying_once(self):
-        """code_audit_19 P3-4, tui_audit_12 P3-13: "Copying 22 files copied
+        """"Copying 22 files copied
         from ...", its size read as the folder's."""
         listing, old = self.copy_folder()
         args = _args(manifest=listing, dest=self.here, declared_only=False, no_input=True,
@@ -8414,7 +8401,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertNotIn("files copied from", text[text.index("\nCopying "):])
 
     def test_narrowed_is_said_only_when_the_list_shrank(self):
-        """tui_audit_12 P3-13: Enter for every system said "Narrowed 4 to 4"."""
+        """Enter for every system said "Narrowed 4 to 4"."""
         args = dict(manifest=self.counted_list(), dest=self.here, declared_only=False,
                     dry_run=True)
         text, _asked = self.line_run(_args(**args), ["c", "", ""])
@@ -8429,7 +8416,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertRegex(text, r"Narrowed 4 to \d files")
 
     def test_the_dry_run_names_systems_by_their_titles(self):
-        """tui_audit_12 P3-13: --dry-run listed microsoft-msx where the list
+        """--dry-run listed microsoft-msx where the list
         and the screen say Microsoft MSX."""
         files = [self.entry("msx/msx.rom", b"msx", ["microsoft-msx"]),
                  self.entry("gba_bios.bin", b"gba", ["nintendo-gba"])]
@@ -8448,7 +8435,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                          "Microsoft MSX")
 
     def test_the_largest_systems_tail_counts_groups(self):
-        """code_audit_19 P3-3: "... and 78 more systems" under a plan of 65."""
+        """"... and 78 more systems" under a plan of 65."""
         files = [{"dest": f"{n}.bin", "size": n + 1, "systems": [f"s{n}"]} for n in range(12)]
         files.append({"dest": "shared.bin", "size": 1, "systems": ["s0", "s1"]})
         out = io.StringIO()
@@ -8464,7 +8451,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertIn("    ... and 2 more groups (--check --verbose lists them all)", lines)
 
     def test_a_command_given_back_keeps_offline_in_both_modes(self):
-        """code_audit_19 P2-2, tui_audit_12 P3-13: with the variable alone,
+        """With the variable alone,
         line mode's Same choice ended with --offline and the screen's not."""
         args = dict(manifest=self.counted_list(), dest=self.here, declared_only=False,
                     dry_run=True)
@@ -8476,7 +8463,6 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
             self.assertIn(" --offline", install.tui_command(state))
 
     def test_q_quits_on_the_quit_code_in_both_modes(self):
-        """code_audit_19 P3-1."""
         args = dict(manifest=self.counted_list(), dest=self.here, declared_only=False)
         install.LOCAL.reset()
         with mock.patch.object(install, "_ask", return_value="q"), \
@@ -8491,7 +8477,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         del args
 
     def test_a_card_in_the_reader_is_offered_not_asked_for(self):
-        """code_audit_19 P3-7: line mode numbered the card and said to mount
+        """Line mode numbered the card and said to mount
         it, the screen said none was mounted."""
         card = self.root / "media" / "KNULLI2"
         (card / "system").mkdir(parents=True)
@@ -8518,7 +8504,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertNotIn("is mounted", text)
 
     def test_a_list_and_nothing_found_stops_a_run_without_questions(self):
-        """tui_audit_12 P3-12: --yes with a list filled this computer's
+        """--yes with a list filled this computer's
         default folder, where the page says a run that needs an answer stops."""
         for flag in ({"yes": True}, {}):
             with self.subTest(flag=flag):
@@ -8532,7 +8518,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual(chosen, [("retroarch", install._default_dest("linux", "retroarch"))])
 
     def test_a_terminal_the_screen_cannot_use_is_named(self):
-        """tui_audit_12 P3-14: TERM unset or dumb gave line questions without
+        """TERM unset or dumb gave line questions without
         a word, where a small window said why."""
         reason = install.line_mode_reason
         self.assertEqual(reason("TERM is dumb or not set", {}),
@@ -8549,7 +8535,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual(reason("the input is not a terminal", {}), "")
 
     def test_game_data_has_one_wording_and_one_decision(self):
-        """tui_audit_12 P3-4, P3-5: five wordings, "No game data" read as a
+        """Five wordings, "No game data" read as a
         list holding none, and --no-game-data given offered it back on the
         screen alone."""
         listing, _files = self.game_list()
@@ -8569,7 +8555,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertFalse(any(row.action == "gamedata" for row in install.tui_rows(state)))
 
     def test_three_kinds_are_named_in_both_modes(self):
-        """tui_audit_12 P2-3: "data files" beside game data files, never
+        """"data files" beside game data files, never
         said what they were."""
         listing, _files = self.game_list()
         manifest = json.loads(listing.read_text(encoding="utf-8"))
@@ -8586,7 +8572,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                       out.getvalue())
 
     def test_the_wsl_folder_question_offers_both_sides(self):
-        """tui_audit_12 P3-11, line mode's half."""
+        """Line mode's half."""
         with mock.patch.object(install, "_mounted_cards", return_value=[]), \
                 mock.patch.object(install, "_ask", side_effect=["q"]), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
@@ -8597,8 +8583,8 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual(out.getvalue().count(install.shown_path(folder)), 1)
 
 
-class AuditSeventeenAndTen(unittest.TestCase):
-    """code_audit_17 and tui_audit_10: what the screen, the packs, the
+class PacksWordingAndDocs(unittest.TestCase):
+    """What the screen, the packs, the
     wording and the docs answer, line mode's parity being in
     LineModeAndScreenDecideAlike."""
 
@@ -8611,7 +8597,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
     @unittest.skipUnless(pyte and pty and hasattr(pty, "fork") and shutil.which("script"),
                          "the line mode run needs a pty")
     def test_the_printed_command_makes_the_same_choice(self):
-        """code_audit_17 P2-4, tui_audit_10 P2-1: "Same choice without
+        """"Same choice without
         questions" left out the folder chosen at a question and the file
         list, and installed elsewhere or was refused. Run as printed, it
         finds every file of the choice in place and nothing else."""
@@ -8628,7 +8614,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
             proc = subprocess.run(
                 ["script", "-qec", command, "/dev/null"],
                 # Enter on RetroArch, first of the setups that read its list
-                # (tui_audit_11 P1-2), then its folder.
+                #, then its folder.
                 input=f"\n{repo.dest}\nc\n2\n2\n\n", env=env, capture_output=True,
                 text=True, timeout=120, check=False)
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
@@ -8648,7 +8634,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
             self.assertEqual(sorted(event["dest"] for event in files), installed)
             self.assertTrue(all(event["state"] == "present" for event in files))
 
-    # tui_audit_10 P2-4: a pack's own list records its systems.
+    # a pack's own list records its systems.
 
     @unittest.skipIf(sys.version_info < (3, 9),
                      "generate_pack.py's context managers need Python 3.9")
@@ -8719,7 +8705,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertNotIn("older release", err.getvalue())
 
     def test_a_pack_cannot_write_escapes_through_its_system_names(self):
-        """Security review of tui_audit_10 P2-4: the titles and ids a pack
+        """The titles and ids a pack
         records reached print() raw in the systems list."""
         from test_install_offline import GBA, US  # noqa: PLC0415
 
@@ -8757,7 +8743,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertNotIn("\x1b", out.getvalue())
 
     def test_the_home_folder_is_said_on_the_plan(self):
-        """tui_audit_10 P2-5: the plan named ~ and said nothing more."""
+        """The plan named ~ and said nothing more."""
         state = checked_state()
         state.dest = state.home
         lines = " ".join(str(line) for line in install._plan_lines(state.check, state.dest,
@@ -8765,7 +8751,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertIn("No setup reads BIOS files in your home folder.", lines)
 
     def test_systems_seen_and_left_unchanged_keep_the_exact_plan(self):
-        """tui_audit_10 P3-1: opening Choose systems on a --system plan and
+        """Opening Choose systems on a --system plan and
         going back turned the exact plan into an estimate."""
         state = checked_state()
         state.cli_systems = ["nintendo-gba"]
@@ -8803,7 +8789,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertNotIn(f"{CHECK['present']} in place,", text)
 
     def test_the_copy_browser_leaves_the_card_being_installed_to(self):
-        """tui_audit_10 P3-5: the card installed to was focused and taken,
+        """The card installed to was focused and taken,
         and WSL rows read /mnt/d where every other screen writes D:."""
         dest_card, old = self.root / "d", self.root / "e"
         make_card(dest_card, "Onion")
@@ -8816,8 +8802,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
             install._open_from_browser(state)
             rows = install.tui_rows(state)
             self.assertEqual(rows[state.focus["browse"]].value, old)
-            # Not offered at all, as line mode's Copy from leaves it out
-            # (tui_audit_12 P3-16).
+            # Not offered at all, as line mode's Copy from leaves it out.
             self.assertNotIn("D: (Onion card)", [row.label for row in rows])
             self.assertIn("E: (card or drive)", [row.label for row in rows])
             # Reached through its folders all the same, it is refused.
@@ -8829,7 +8814,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertEqual(state.from_folders, [])
 
     def test_typing_a_filter_names_the_keys_that_end_it(self):
-        """tui_audit_10 P3-10: while typing, the bar named Tick and Help,
+        """While typing, the bar named Tick and Help,
         the focus stayed on None, F1 ended the typing, and a filter that
         matched nothing said nothing."""
         state = checked_state()
@@ -8849,7 +8834,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertEqual((state.help, state.editing), (False, "systems"))
 
     def test_a_computer_finds_its_own_setups(self):
-        """tui_audit_10 P3-11: windows and mac matched nothing, RetroBat
+        """Windows and mac matched nothing, RetroBat
         came 27th on Windows, and a Batocera SHARE drive was not found."""
         names = {install._row_name(row) for row in install.setup_list([], set(), "windows",
                                                                       "windows")}
@@ -8871,7 +8856,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertEqual(mounted, {("batocera", share / "bios")})
 
     def test_a_pack_preview_installs_from_the_pack(self):
-        """tui_audit_10 P3-15: "23 files to download" on a --from-pack run."""
+        """"23 files to download" on a --from-pack run."""
         state = checked_state()
         state.stack.append("preview")
         state.dry = dict(CHECK)
@@ -8879,7 +8864,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertIn("to install from the pack", install._pager_items(state)[0])
 
     def test_scroll_is_named_only_where_the_text_scrolls(self):
-        """tui_audit_10 P3-16: "Up/Down Scroll" over nine lines that fit."""
+        """"Up/Down Scroll" over nine lines that fit."""
         state = checked_state()
         state.stack = ["result"]
         state.summary = {"installed": 1, "up_to_date": 0, "pending": 0, "failed": [],
@@ -8890,7 +8875,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertIn("Scroll", install.tui_view(state, 80, 12)[-1])
 
     def test_gptokeyb_names_select_then_start(self):
-        """tui_audit_10 P3-17: "Start+Select" on the bars, "Select, then
+        """"Start+Select" on the bars, "Select, then
         Start" in the help and the docs."""
         state = checked_state()
         state.pad = "gptokeyb"
@@ -8899,7 +8884,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertEqual(install.TUI_ROUTES["gptokeyb"].stop[1], "B or Select+Start")
 
     def test_nothing_to_confirm_is_titled_so(self):
-        """tui_audit_10 P3-18: Confirm over nothing to confirm, offline."""
+        """Confirm over nothing to confirm, offline."""
         state = checked_state()
         state.stack.append("confirm")
         state.dry = dict(CHECK)
@@ -8907,7 +8892,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
             self.assertIn("Nothing to install", install.tui_view(state, 80, 24)[0])
 
     def test_another_folder_for_a_card_setup_asks_for_its_card(self):
-        """tui_audit_10 P3-19: a full Onion card offered another folder for
+        """A full Onion card offered another folder for
         RetroArch, and the result said to choose another folder."""
         onion = self.root / "ONION"
         make_card(onion, "Onion")
@@ -8929,7 +8914,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertIn("Free some space on the card, then run again.", lines)
 
     def test_the_dest_example_is_this_systems(self):
-        """code_audit_17 P3-4: /media/$USER/SHARE/bios on macOS and Windows."""
+        """/media/$USER/SHARE/bios on macOS and Windows."""
         self.assertEqual(install.drive_example("darwin", "SHARE", "bios"), "/Volumes/SHARE/bios")
         self.assertEqual(install.drive_example("wsl", "SHARE", "bios"), "/mnt/e/bios")
         self.assertEqual(install.drive_example("windows", "SHARE", "bios", "batocera"),
@@ -8938,7 +8923,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertEqual(install.drive_example("linux", "<card>"), "/media/$USER/<card>")
 
     def test_the_copy_browser_opens_on_a_path_without_dot_dot(self):
-        """code_audit_17 P3-5: --from t/../packx opened the browser on t/.."""
+        """--from t/../packx opened the browser on t/.."""
         packx = self.root / "packx"
         packx.mkdir()
         state, _effects = install.tui_start(
@@ -8946,7 +8931,6 @@ class AuditSeventeenAndTen(unittest.TestCase):
         self.assertEqual(state.from_folders, [packx])
 
     def test_no_clause_semicolon_in_what_the_installer_prints(self):
-        """code_audit_17 P3-6."""
         self.assertNotIn("; ", " ".join(install.build_parser().format_help().split()))
         source = Path(install.__file__).read_text(encoding="utf-8")
         for said in ("to fetch them; a file", "every board; --target", "with the system; ",
@@ -8955,7 +8939,6 @@ class AuditSeventeenAndTen(unittest.TestCase):
             self.assertNotIn(said, source)
 
     def test_the_docs_say_what_the_installer_does(self):
-        """code_audit_17 P3-7."""
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         menu = page[re.search(r"RetroArch: \d+ files, [\d.]+ [KMG]B[.,]", page).start():]
         menu = menu[:menu.index("```")]
@@ -8974,7 +8957,7 @@ class AuditSeventeenAndTen(unittest.TestCase):
 
 
 class OneDeviceRegistry(unittest.TestCase):
-    """code_audit_15 P2-1, tui_audit_8 P3-2, P3-3, P3-4: one device spelled
+    """One device spelled
     several ways found one system, one press took it, MinUI listed brands."""
 
     def found(self, typed: str, os_type: str = "linux") -> set:
@@ -9047,13 +9030,14 @@ class OneDeviceRegistry(unittest.TestCase):
                 line = str(install._row_line(rows[label], False, 38))
                 self.assertIn(label, line)
                 self.assertTrue(line.rstrip() != ("  " + label).rstrip(), line)
-        # tui_audit_9 P3-3: its one device, cut, where "1 device" named none.
+        # its one device, cut, where "1 device" named none.
         self.assertTrue(str(install._row_line(rows["CrossMix-OS, SD card"], False, 38))
                         .rstrip().endswith("TrimUI Smar..."))
 
 
-class AuditFifteenAndEightScreens(unittest.TestCase):
-    """The P3 points of code_audit_15 and tui_audit_8 the screens show."""
+class CardFoldersAndNarrowBars(unittest.TestCase):
+    """Card folders, refusals and bars at 40 columns, as the screens show
+    them."""
 
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -9069,7 +9053,7 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
             return install.tui_start(_args(**given), "linux")
 
     def test_a_card_found_by_its_files_gets_its_folder_without_a_question(self):
-        """tui_audit_8 P3-12: Create the folder? for the Onion card's own
+        """Create the folder? for the Onion card's own
         BIOS, which line mode created."""
         onion = self.root / "ONIONB"
         make_card(onion, "Onion")
@@ -9080,7 +9064,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertIn("BIOS is created on ONIONB", state.card_note)
 
     def test_a_refused_dest_says_the_remedy_that_works(self):
-        """code_audit_15 P3-3, P3-4."""
         rocknix = self.root / "ROCKNIX"
         make_card(rocknix, "ROCKNIX")
         stick = self.root / "STICK"
@@ -9104,7 +9087,7 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertIn(f"Run it again with --dest {minui}.", state.status)
 
     def test_wsl_names_drives_in_line_mode_messages(self):
-        """code_audit_15 P3-7: /mnt/f in a refusal where D:\\ was typed."""
+        """/mnt/f in a refusal where D:\\ was typed."""
         mnt = self.root / "mnt"
         make_card(mnt / "f", "muOS")
         (mnt / "g" / "photos").mkdir(parents=True)
@@ -9121,7 +9104,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
             self.assertEqual(install._last_name(str(mnt / "g" / "old")), "old")
 
     def test_choose_the_card_below_only_when_one_is_mounted(self):
-        """tui_audit_8 P3-6."""
         muos = self.root / "MUOS"
         make_card(muos, "muOS")
         stick = self.root / "USBSTICK"
@@ -9138,7 +9120,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
             self.assertEqual(focused.value, stick)
 
     def test_type_a_path_says_f1_and_f1_says_more(self):
-        """tui_audit_8 P2-2."""
         muos = self.root / "MUOS"
         make_card(muos, "muOS")
         with mock.patch.object(install, "_mounted_cards", return_value=[]):
@@ -9156,7 +9137,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertIn("Onion keeps .tmp_update at the root of its card", help_text)
 
     def test_batocera_on_a_computer_offers_its_share(self):
-        """tui_audit_8 P2-4."""
         stick = self.root / "SHARE"
         stick.mkdir()
         state, _effects = self.start([stick])
@@ -9173,7 +9153,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertEqual(rows[0].value, stick / "bios")
 
     def test_the_first_screen_bar_says_quit(self):
-        """tui_audit_8 P3-10."""
         state, _effects = self.start()
         self.assertEqual(state.stack, ["platforms"])
         self.assertIn("B/Esc Quit", install._TUI_VIEWS["platforms"](state, 80, 24)[2])
@@ -9181,7 +9160,7 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertIn("B/Esc Back", install._TUI_VIEWS["platforms"](state, 80, 24)[2])
 
     def test_a_pad_result_prints_no_command(self):
-        """tui_audit_8 P3-9: a shell command on a controller-only screen."""
+        """A shell command on a controller-only screen."""
         state = _installed_state(self.root / "bios")
         state.summary["kept"] = [{"folder": str(self.root / "kept"), "files": 1}]
         state.pad = "muxterm"
@@ -9193,7 +9172,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertIn("Same choice without questions:", install.tui_outcome(state)[1])
 
     def test_the_checking_screen_is_titled_as_the_plan(self):
-        """code_audit_15 P3-9.1."""
         state = install.TuiState()
         state.platform, state.dest = "retroarch", self.root / "bios"
         install._DETECTED_OS[("retroarch", state.dest)] = "ArkOS"
@@ -9202,7 +9180,7 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertIn("ArkOS (RetroArch files):", text)
 
     def test_the_backup_line_survives_forty_columns(self):
-        """tui_audit_8 P3-5: under the pack and copy split it was cut."""
+        """Under the pack and copy split it was cut."""
         state = checked_state()
         state.found = [found("gba_bios.bin", "/media/old")]
         lines = [str(line) for line in install._plan_lines(state.check, state.dest, state)]
@@ -9211,7 +9189,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
         self.assertTrue(lines[counts + 1].startswith("The 1 wrong copy is replaced"), lines)
 
     def test_an_empty_folder_is_said_once(self):
-        """tui_audit_8 P3-7."""
         old = self.root / "USBSTICK"
         old.mkdir()
         state = checked_state()
@@ -9224,7 +9201,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
                                 "with a pack (--from-pack) or without --offline."])
 
     def test_amberelec_keeps_its_files_on_the_games_part(self):
-        """tui_audit_8 P3-13."""
         self.assertEqual(install.card_where("AmberELEC", ""),
                          "on the games part of its SD card")
         files = [{"dest": "bios/a.bin"}, {"dest": "bios/Machines/b.xml"}]
@@ -9233,7 +9209,6 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
                          self.root)
 
     def test_a_save_directory_left_out_has_one_wording(self):
-        """code_audit_15 P3-9.3, tui_audit_8 P3-8."""
         files = [{"dest": "keys.txt", "root": "save", "sha1": "0" * 40, "size": 1}]
         with contextlib.redirect_stdout(io.StringIO()) as out:
             install.place_save_entries(files, self.root / "BIOS",
@@ -9246,7 +9221,7 @@ class AuditFifteenAndEightScreens(unittest.TestCase):
 
 
 class CardBoundaries(unittest.TestCase):
-    """code_audit_15 P3-2, P3-9.5: three folders at most, a bind mount not
+    """Three folders at most, a bind mount not
     seen, a folder named MUOS taken for a card, ismount unprobed."""
 
     def setUp(self):
@@ -9298,8 +9273,8 @@ def _screen_text(state: install.TuiState, cols: int = 80, rows: int = 24) -> str
     return "\n".join(line.rstrip() for line in install.tui_view(state, cols, rows))
 
 
-class AuditSixteenAndNineLineMode(unittest.TestCase):
-    """code_audit_16 and tui_audit_9: line mode read other decisions than the
+class LineModeDecisions(unittest.TestCase):
+    """Line mode read other decisions than the
     screen (a drive's root for Batocera, no other setup once one was found,
     no Enter default, a folder question with no way out)."""
 
@@ -9329,7 +9304,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         return drive
 
     def test_a_numbered_share_drive_is_its_bios_folder(self):
-        """code_audit_16 P1-1, tui_audit_9 P1-1: 2) SHARE gave the drive's
+        """2) SHARE gave the drive's
         root, the screen its bios folder."""
         muos = self.root / "media" / "MUOS"
         make_card(muos, "muOS")
@@ -9345,7 +9320,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertNotIn("MUOS", text)
 
     def test_the_folder_question_quits_on_q_and_says_what_to_type(self):
-        """code_audit_16 P2-3: q became the folder ./q, filled, and Enter
+        """Q became the folder ./q, filled, and Enter
         with no default repeated the prompt with no word."""
         patcher, asked = self.ask("", "q")
         with mock.patch.object(install, "_mounted_cards", return_value=[]), patcher, \
@@ -9358,7 +9333,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertFalse((Path.cwd() / "q").exists())
 
     def test_a_relative_folder_is_named_in_full(self):
-        """code_audit_16 P2-3: BIOS folder: q, Created q, Location: q."""
+        """BIOS folder: q, Created q, Location: q."""
         here = self.root / "work"
         here.mkdir()
         patcher, _asked = self.ask("./q")
@@ -9381,7 +9356,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertEqual(asked, ["Card root, Enter to look again, q to quit: "])
 
     def test_install_for_takes_enter_and_offers_another_setup(self):
-        """tui_audit_9 P2-3, P3-11: no Enter default, an All the screen does
+        """No Enter default, an All the screen does
         not have, and no other setup once one was found."""
         here = self.root / "system"
         found = [("retroarch", here)]
@@ -9399,7 +9374,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
             self.assertEqual(install._prompt_platform_choice(found, other=lambda: other), other)
 
     def test_the_setups_for_a_dest_come_in_the_screens_order(self):
-        """code_audit_16 P3-1: with RetroArch found, --plain --dest put Onion
+        """With RetroArch found, --plain --dest put Onion
         at 19, the screen at 29."""
         dest = self.root / "blank"
         dest.mkdir()
@@ -9431,7 +9406,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertEqual(install._row_name(rows[state.focus["platforms"]]), listed["default"])
 
     def test_system_named_on_the_command_line_keeps_the_menu(self):
-        """tui_audit_9 P3-8: --system skipped the menu and its folder line."""
+        """--system skipped the menu and its folder line."""
         files = [{"dest": "a.bin", "size": 1, "systems": ["nintendo-gba"], "cores": None},
                  {"dest": "b.bin", "size": 1, "systems": ["sega-saturn"], "cores": None}]
         given = (["nintendo-gba"], [], [])
@@ -9450,7 +9425,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertNotIn("} -> {len(files)}", source)
 
     def test_android_typed_names_retroarch(self):
-        """tui_audit_9 P3-5: android matched nothing, and nothing more."""
+        """Android matched nothing, and nothing more."""
         patcher, _asked = self.ask("android", "q")
         with patcher, mock.patch.object(install, "detect_os", return_value="linux"), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
@@ -9459,11 +9434,14 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertIn("On Android, choose RetroArch", out.getvalue())
 
     def test_batocera_named_on_a_computer_without_questions_is_refused(self):
-        """code_audit_16 P3-3: /userdata/bios taken, Cannot create, end 2
+        """/userdata/bios taken, Cannot create, end 2
         with no error event."""
         listing = self.root / "batocera.json"
         listing.write_text(json.dumps({"manifest_version": 2, "platform": "batocera",
                                        "files": []}))
+        # --manifest sets the process-wide sources: a later test fetching
+        # the list must not find this one.
+        self.addCleanup(install.LOCAL.reset)
         events = io.StringIO()
         with mock.patch.object(install, "detect_platforms", return_value=[]), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
@@ -9480,8 +9458,8 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertEqual(kinds[-1], "error")
 
 
-class AuditSixteenAndNineScreens(unittest.TestCase):
-    """The screen points of code_audit_16 and tui_audit_9."""
+class ScreenRowsAndFilters(unittest.TestCase):
+    """Rows, filters and help as the screens draw them."""
 
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -9498,7 +9476,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
             return install.tui_start(_args(**given), "linux")
 
     def test_a_folder_holding_a_mounted_muos_card_is_no_muos_card(self):
-        """code_audit_16 P2-2: /media/me held the MUOS mount point and read as
+        """/media/me held the MUOS mount point and read as
         a muOS card, and _own_card_root walked above the mount."""
         parent = self.root / "media"
         muos = parent / "MUOS"
@@ -9512,7 +9490,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
             self.assertEqual(install._own_card_root(muos / "MUOS" / "bios"), muos)
 
     def test_batocera_share_rows_leave_out_another_systems_card(self):
-        """code_audit_16 P2-2: the muOS card was the first share row."""
+        """The muOS card was the first share row."""
         muos = self.root / "MUOS"
         make_card(muos, "muOS")
         share = self.root / "SHARE"
@@ -9525,7 +9503,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertNotIn(("share", "MUOS: bios"), rows)
 
     def test_a_proposed_folder_is_created_without_the_guard(self):
-        """tui_audit_9 P2-1: Use this folder, then Create the folder? focused
+        """Use this folder, then Create the folder? focused
         on Choose another folder, and Enter, Enter looped."""
         state = install.TuiState(os_type="linux", home=self.root)
         usual = self.root / ".config" / "retroarch" / "system"
@@ -9543,7 +9521,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertEqual(install.tui_rows(state)[state.focus["create"]].action, "other")
 
     def test_a_page_moves_by_the_rows_drawn(self):
-        """tui_audit_9 P2-2: at 40x12 PgDn moved six rows over four drawn,
+        """At 40x12 PgDn moved six rows over four drawn,
         and muOS and ROCKNIX were never shown."""
         for cols, rows in ((40, 12), (40, 15), (80, 24)):
             with self.subTest(size=f"{cols}x{rows}"):
@@ -9561,7 +9539,6 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
                                     name)
 
     def test_the_first_screen_says_quit_and_a_filter_says_clear(self):
-        """tui_audit_9 P3-1, P3-2."""
         state, _effects = self.start(platform="onion")
         self.assertEqual(state.stack, ["folder"])
         bar = install.tui_view(state, 80, 24)[-1]
@@ -9574,7 +9551,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertIn("Esc Clear", install.tui_view(state, 80, 24)[-1])
 
     def test_rows_at_40_columns_name_a_device(self):
-        """tui_audit_9 P3-3: "1 device" for CrossMix-OS."""
+        """"1 device" for CrossMix-OS."""
         state, _effects = self.start()
         text = _screen_text(state, 40, 60)
         self.assertNotIn("1 device", text)
@@ -9582,7 +9559,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertIn("TrimUI", crossmix)
 
     def test_a_model_finds_the_systems_that_list_its_family(self):
-        """code_audit_16 P2-1, tui_audit_9 P3-4: RG353V missed ROCKNIX, RG351P
+        """RG353V missed ROCKNIX, RG351P
         missed AmberELEC and ROCKNIX."""
         for system, devices in install._SETUP_DEVICES.items():
             for device in devices:
@@ -9593,7 +9570,6 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
                         self.assertIn(system, names)
 
     def test_the_filter_reads_system_names_as_line_mode_does(self):
-        """code_audit_16 P3-2."""
         for typed, system in (("spruce os", "spruceOS"), ("unofficial os", "UnofficialOS"),
                               ("cross mix", "CrossMix-OS")):
             with self.subTest(typed=typed):
@@ -9606,7 +9582,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertIn("On Android, choose RetroArch", " ".join(_screen_text(state).split()))
 
     def test_a_wrapped_path_has_no_space_inserted(self):
-        """tui_audit_9 P3-6: retroarch/ system."""
+        """Retroarch/ system."""
         path = "/home/moi/retroarch_system/tmp/tui_audit9/sb/nd/home/.config/retroarch/system"
         for width in range(30, 100):
             lines = install._wrap(f"{path} does not exist.", width)
@@ -9617,7 +9593,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
                 self.assertTrue(all("/ " not in line for line in lines), lines)
 
     def test_f1_names_what_the_card_lacks(self):
-        """tui_audit_9 P3-7: F1 said the refusal again."""
+        """F1 said the refusal again."""
         muos = self.root / "MUOS"
         make_card(muos, "muOS")
         setup = install.card_setup("Onion", "retroarch")
@@ -9625,7 +9601,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertIn(".tmp_update", choice.detail)
 
     def test_help_at_40x12_keeps_quit_and_this_help(self):
-        """tui_audit_9 P3-15, and Space for ticking on a keyboard."""
+        """And Space for ticking on a keyboard."""
         state = checked_state()
         press(state, "down", "down", "down", "down", "enter")
         state.stack.append("systems")
@@ -9636,7 +9612,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertIn("X, Space, Right/Left", " ".join(text.split()))
 
     def test_the_copy_hint_fits_at_40_columns(self):
-        """tui_audit_9 P3-16: cut after "copied,". On the CI runner /home
+        """Cut after "copied,". On the CI runner /home
         held three folders, and the list cut the hint: it is kept whole,
         the list scrolling, from a folder of this test's own."""
         home = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -9654,7 +9630,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertIn("> Use this folder", text)
 
     def test_the_miyoo_bar_says_what_a_does(self):
-        """tui_audit_9 P3-17: A Tick on All and None, where A unticks."""
+        """A Tick on All and None, where A unticks."""
         state = checked_state()
         state.pad = "miyoo"
         state.stack.append("systems")
@@ -9666,7 +9642,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertIn("A Tick", install.tui_view(state, 40, 12)[-1])
 
     def test_system_given_is_said_and_widened(self):
-        """tui_audit_9 P3-8: one system named, no word on the plan and no
+        """One system named, no word on the plan and no
         way to widen it."""
         state = checked_state()
         state.cli_systems = ["gba"]
@@ -9680,7 +9656,7 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertTrue(state.widen)
 
     def test_a_local_copy_draws_no_speed(self):
-        """tui_audit_9 P3-9: 0 B/s 0:00 left."""
+        """0 B/s 0:00 left."""
         out = io.StringIO()
         term = install.Terminal(out)
         term.live = True
@@ -9691,7 +9667,6 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertNotIn("left", out.getvalue())
 
     def test_the_offline_remedy_follows_the_files_it_is_about(self):
-        """tui_audit_9 P3-10."""
         unplaced = [{"reason": "no_save_directory", "frontend": "RetroArch"}]
         with mock.patch.object(install, "_offline_only", return_value=True), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
@@ -9708,13 +9683,12 @@ class AuditSixteenAndNineScreens(unittest.TestCase):
         self.assertLess(remedy, save)
 
     def test_first_install_says_where_to_type(self):
-        """code_audit_16 P3-4, tui_audit_9 P3-19."""
         page = (REPO_ROOT / "wiki" / "first-install.md").read_text(encoding="utf-8")
         self.assertNotIn("There, type its name", page)
         self.assertIn("Press / and type the device", page)
 
     def test_a_folder_that_cannot_be_created_ends_on_an_error_and_a_summary(self):
-        """code_audit_16 P3-3: Cannot create, then end 2 and nothing else."""
+        """Cannot create, then end 2 and nothing else."""
         import subprocess  # noqa: PLC0415
 
         from test_install_offline import PAYLOAD, _offline_env, _pack
@@ -9766,7 +9740,7 @@ class EdgesTheMutantsFound(unittest.TestCase):
         return root / "card"
 
     def test_a_card_is_looked_for_up_to_its_mount_point_and_no_further(self):
-        """code_audit_15 P3-2 reads every folder up to the mount point:
+        """Every folder up to the mount point is read:
         three at most took MUOS/a/b/c/d for a KNULLI card."""
         card = self.card("KNULLI")
         setup = install.card_setup("KNULLI", "knulli")
@@ -9802,8 +9776,8 @@ class EdgesTheMutantsFound(unittest.TestCase):
 
 
 
-class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
-    """code_audit_18 and tui_audit_11: what the cards, the screens and the
+class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
+    """What the cards, the screens and the
     docs answer, line mode's parity being in LineModeAndScreenDecideAlike."""
 
     def setUp(self):
@@ -9818,7 +9792,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
             self.addCleanup(patcher.stop)
 
     def test_a_renamed_card_is_named_by_the_file_no_menu_writes(self):
-        """code_audit_18 P1-1: a KNULLI card whose hostname was changed in
+        """A KNULLI card whose hostname was changed in
         its menu was a Batocera SHARE drive, Enter filled it with Batocera's
         list and --platform knulli was refused."""
         drives = self.renamed()
@@ -9844,7 +9818,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                          ("batocera", "recalbox"))
 
     def test_a_share_drive_is_never_called_a_card(self):
-        """code_audit_18 P3-4, tui_audit_11 P3-14: "is a Batocera card"
+        """"is a Batocera card"
         and "is a Recalbox card" for their SHARE drives."""
         drives = self.renamed()
         for name in ("Batocera as shipped", "Recalbox"):
@@ -9854,7 +9828,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                 self.assertNotIn(" card, which reads", choice.note)
 
     def test_two_cards_of_one_system_say_what_they_hold(self):
-        """tui_audit_11 P3-15: an old Onion card with 6 BIOS files and a new
+        """An old Onion card with 6 BIOS files and a new
         empty one looked the same, and Enter took the first by name."""
         old = self.root / "media" / "OLDONION"
         make_card(old, "Onion")
@@ -9871,7 +9845,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                          ["Onion SD card (ONION, no BIOS folder)",
                           "Onion SD card (OLDONION, 6 BIOS files)"])
 
-    # tui_audit_11 P2-1: a list or a pack that records some axes only.
+    # a list or a pack that records some axes only.
 
     def test_a_card_plan_offers_one_remedy_first(self):
         for facts, locked in (({"free": 50 * 1024 ** 3, "writable": False, "cores": []}, True),
@@ -9889,7 +9863,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                 self.assertEqual(effects, [("run", "check")])
 
     def test_options_offer_no_downloads_when_nothing_is_downloaded(self):
-        """P3-16: Parallel downloads offered for an install from a pack."""
+        """Parallel downloads offered for an install from a pack."""
         state = checked_state()
         state.stack.append("options")
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: ""}):
@@ -9898,17 +9872,17 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
             self.assertNotIn("jobs", [row.action for row in install.tui_rows(state)])
 
     def test_nothing_installable_focuses_the_copy(self):
-        """tui_audit_11 P3-8: offline with nothing to copy, the plan focused
+        """Offline with nothing to copy, the plan focused
         Choose systems, whose systems need the internet too."""
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
             state = checked_state()
             rows = install.tui_rows(state)
         self.assertEqual(rows[state.focus.get("plan", 0)].action, "fromcard")
 
-    # tui_audit_11 P3-2 to P3-20: the screens' polish.
+    # the screens' polish.
 
     def test_a_long_message_scrolls_with_its_position(self):
-        """P3-2: at 40x12 the offline screen dropped its remedy unsaid."""
+        """At 40x12 the offline screen dropped its remedy unsaid."""
         state = fresh_state()
         state.stack = ["error"]
         state.error_title = install.TUI_OFFLINE_TITLE
@@ -9926,7 +9900,6 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
         self.assertIn("--offline.", end)
 
     def test_a_small_window_says_why_the_questions_come_line_by_line(self):
-        """P3-4."""
         with mock.patch.object(install, "tui_blocker",
                                return_value="the terminal is 39x12, smaller than 40x12"), \
                 mock.patch.object(install, "_run", side_effect=SystemExit(0)), \
@@ -9940,7 +9913,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                       "screen).", out.getvalue())
 
     def test_one_bar_rule_per_width(self):
-        """P3-5: at 40 columns the plan read "A Install", Confirm "A/Enter"."""
+        """At 40 columns the plan read "A Install", Confirm "A/Enter"."""
         states = golden_states()
         for name in ("preview", "confirm", "result", "quit"):
             with self.subTest(screen=name):
@@ -9949,7 +9922,6 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                 self.assertNotIn("B/Esc", bar)
 
     def test_the_folder_its_config_named_is_said_under_it(self):
-        """P3-6, P3-7."""
         state = checked_state()
         long_dest = Path("/home/user/" + "a-long-folder-name/" * 5 + "system")
         state.dest = long_dest
@@ -9963,7 +9935,6 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
         self.assertLessEqual(tail - at, 3)
 
     def test_the_help_while_typing_lists_what_does_not_type(self):
-        """P3-9."""
         state = checked_state()
         state.stack.append("systems")
         state.editing = "systems"
@@ -9974,16 +9945,14 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
         self.assertNotIn("Tick, untick", help_text)
 
     def test_the_plan_names_core_and_region_as_line_mode(self):
-        """P3-11."""
         state = checked_state()
         state.cli_systems, state.cores, state.regions = ["sony-playstation"], ["x"], ["us"]
         state.cli_cores, state.cli_regions = ["x"], ["us"]
         text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
-        # The flag after the words, never alone (tui_audit_17 P3-4).
+        # The flag after the words, never alone.
         self.assertIn("(--system), 0 of 1 cores (--core), regions ranked (--region).", text)
 
     def test_pc_and_short_prefixes_find_the_computer_setups(self):
-        """P3-17."""
         for typed in ("pc", "wi", "win"):
             with self.subTest(typed=typed):
                 found = {row.value for row in install.setup_list([], set(), typed, "linux")
@@ -9991,7 +9960,6 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                 self.assertIn("retrobat", found)
 
     def test_a_partial_result_counts_once_then_says_the_remedy(self):
-        """P3-18."""
         state = _installed_state(Path("/x/system"))
         state.summary.update(installed=6, pending=16, failed=[])
         state.from_folders = [Path("/media/me/OLD")]
@@ -10003,7 +9971,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
         self.assertIn("They are not in", lines[1])
 
     def test_q_is_said_as_a_quit(self):
-        """P3-19: q reported "stopped", the word of an interrupted run."""
+        """Q reported "stopped", the word of an interrupted run."""
         state = checked_state()
         press(state, "q")
         self.assertEqual(state.exit_code, install.QUIT_CODE)
@@ -10015,13 +9983,11 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
                          ["RetroBIOS: stopped. Nothing was installed."])
 
     def test_wide_rows_keep_the_size_near_the_name(self):
-        """P3-20."""
         row = install.TuiRow("system", "[x] 3DO  3do", "2 files, 4.9 KB")
         line = str(install._row_line(row, False, 118))
         self.assertLessEqual(len(line.rstrip()), install.TUI_ROW_SPREAD)
 
     def test_the_wsl_browser_titles_a_drive_by_its_letter(self):
-        """P3-13."""
         state = fresh_state()
         state.stack = ["browse"]
         state.browse_dir = Path("/mnt/e")
@@ -10033,7 +9999,7 @@ class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
         self.assertNotIn("/mnt/e", title)
 
     def test_the_card_marker_table_is_written_from_the_rules(self):
-        """code_audit_18 P3-6, tui_audit_11 P2-2: the table left out the
+        """The table left out the
         SHARE drives. It is generated: every card rule and SHARE drive file
         is a row, about.info among them."""
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -10108,13 +10074,13 @@ class TheAndroidResultReadsWhole(unittest.TestCase):
                 words = [word for line in lines for word in line.split()]
                 self.assertIn("--restore", words)
                 # The command keeps it whole where its line holds it, cut to
-                # its last folders and said so where not (tui_audit_14 P3-8).
+                # its last folders and said so where not.
                 if cols >= 60:
                     self.assertIn(full, words)
                 else:
                     self.assertIn(install.TUI_SHORTENED, lines)
-                # Prose breaks it after a separator only, never inside a name
-                # (tui_audit_13 P3-3): glued again, it is whole.
+                # Prose breaks it after a separator only, never inside a name:
+                # glued again, it is whole.
                 self.assertIn(full, re.sub(r"/ ", "/", " ".join(lines)))
                 self.assertFalse(any(line.endswith(("retrobios-ba", "20261027-"))
                                      for line in lines), lines)
@@ -10149,7 +10115,7 @@ class TheAndroidResultReadsWhole(unittest.TestCase):
         said = " ".join(lines)
         self.assertIn(f"into {bios / 'jazz2' / 'Source'}{os.sep}", said)
         # Defined on its own line, never spliced into the sentence naming
-        # the file (tui_audit_13 P3-5).
+        # the file.
         self.assertIn("files a game or a game engine reads", said)
         self.assertEqual([line for line in lines if "game engine reads" in line],
                          ["  Game data: files a game or a game engine reads, of no use to "
@@ -10717,8 +10683,8 @@ def _game_state() -> install.TuiState:
     return state
 
 
-class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
-    """code_audit_19 and tui_audit_12: what the screens answer, line mode's
+class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
+    """What the screens answer, line mode's
     parity being in LineModeAndScreenDecideAlike."""
 
     def setUp(self):
@@ -10750,7 +10716,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
                     and (value is None or mark[2][1] == value))
 
     def test_a_tap_on_a_system_ticks_it_and_never_continues(self):
-        """tui_audit_12 P1-1: two taps on a system opened Confirm, and the
+        """Two taps on a system opened Confirm, and the
         next tap installed every file, the system meant to be left out with
         them."""
         for cols, rows in ((40, 12), (80, 24)):
@@ -10822,7 +10788,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertNotIn("Tap", " ".join(install.tui_view(plain, 80, 24)))
 
     def test_the_result_is_left_by_a_tap(self):
-        """tui_audit_12 P3-9: the result gave the mouse back, and on Termux
+        """The result gave the mouse back, and on Termux
         leaving it took the keyboard. A tap on its Exit closes it, and its
         commands are printed again in the terminal."""
         state = _installed_state(SYSTEM_DIR)
@@ -10838,7 +10804,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
     # Root cause 2: one narrowed list drives every count.
 
     def test_the_game_data_row_and_the_save_line_follow_the_choice(self):
-        """tui_audit_12 P2-1: with only the GBA ticked, the plan said 1 game
+        """With only the GBA ticked, the plan said 1 game
         data file and a save file of the PlayStation."""
         state = _game_state()
         text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
@@ -10861,7 +10827,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertNotIn("No game data", text)
 
     def test_the_game_data_row_keeps_its_state_at_40_columns(self):
-        """tui_audit_12 P2-2: "kept," then "left o" at 40x12."""
+        """"kept," then "left o" at 40x12."""
         state = _game_state()
         state.manifest["files"] += [
             {"dest": f"game/{index}.dat", "size": 50 * 1024 ** 2, "category": "game_data",
@@ -10875,7 +10841,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
             self.assertRegex(line, rf"^  Game data: {word} +51(, | files, )2\.4 GB$")
 
     def test_data_files_are_named_apart(self):
-        """tui_audit_12 P2-3: data files beside BIOS files and game data, the
+        """Data files beside BIOS files and game data, the
         parts adding up to the count above, each kind said once."""
         state = _game_state()
         state.check = {**state.check, "data_missing": 7, "data_bytes": 2048}
@@ -10887,7 +10853,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
                       "folder of its own, such as Dolphin's Sys and PPSSPP's assets.", text)
 
     def test_confirm_counts_the_kinds_apart(self):
-        """tui_audit_12, extra criteria: the plan split BIOS files and game
+        """Extra criteria: the plan split BIOS files and game
         data, Confirm did not."""
         state = _game_state()
         state.stack.append("confirm")
@@ -10897,7 +10863,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertIn("3 BIOS files (1.0 MB) and 1 game data file (4 B).", text)
 
     def test_no_game_data_given_has_no_row(self):
-        """tui_audit_12 P3-5: --no-game-data given, the screen offered the
+        """--no-game-data given, the screen offered the
         game data back, line mode did not."""
         state = _game_state()
         state.no_game_data = state.cli_no_game_data = True
@@ -10906,7 +10872,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertIn("Game data: left out", [row.label for row in options])
 
     def test_the_40_column_plan_keeps_its_folder(self):
-        """tui_audit_12 P3-10: at 40x12 and 40x15 the game data definition
+        """At 40x12 and 40x15 the game data definition
         pushed the BIOS folder off the plan."""
         state = _game_state()
         for rows in (12, 15):
@@ -10917,7 +10883,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
     # Root cause 3: the version note.
 
     def test_the_version_note_is_on_the_plan_the_result_and_the_farewell(self):
-        """code_audit_19 P2-1, tui_audit_12 P2-4: line mode said it, the
+        """Line mode said it, the
         screen dropped the version event."""
         said = ("This list was built for RetroBat 8.3.1, this machine runs 8.2.0.1. "
                 "RetroBat's own BIOS check may report some files as wrong though they work.")
@@ -10945,7 +10911,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
     # Root cause 4: the commands the screen prints.
 
     def test_a_command_shown_keeps_offline_from_the_variable(self):
-        """code_audit_19 P2-2: sudo resets the environment, and the root
+        """Sudo resets the environment, and the root
         command the screen gave fetched what the offline run left out."""
         state = checked_state({"free": 50 * 1024 ** 3, "writable": False, "cores": []})
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}), \
@@ -10961,7 +10927,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
     # Root cause 5: a chosen quit.
 
     def test_a_chosen_quit_exits_2_and_ctrl_c_130(self):
-        """code_audit_19 P3-1: q and Quit ended on 130, Ctrl-C's code."""
+        """Q and Quit ended on 130, Ctrl-C's code."""
         for keys, code in ((["q"], 2), (["esc", "enter"], 2), (["ctrl-c"], 130),
                            (["ctrl-d"], 130)):
             with self.subTest(keys=keys):
@@ -10983,7 +10949,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
     # Root cause 6: paths and commands kept whole.
 
     def test_a_wrapped_command_still_keeps_the_mouse_off(self):
-        """code_audit_19 P3-5: the one-liner's URL wrapped in its middle, the
+        """The one-liner's URL wrapped in its middle, the
         launcher was not found in the joined text and the mouse stayed on."""
         state = checked_state({"free": 50 * 1024 ** 3, "writable": False, "cores": []})
         for bootstrap in ("sh", ""):
@@ -10999,23 +10965,23 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
                         self.assertIn(url, words)
 
     def test_a_path_one_cell_too_wide_for_its_indent_loses_it(self):
-        """tui_audit_12 P3-7: "syste" / "m", folded by the terminal."""
+        """"syste" / "m", folded by the terminal."""
         path = "/home/moi/abcdefghijklmnopqrstuvw/.config/retroarch/system"
         width = len(path) + 1
         lines = install._wrap(f"BIOS folder: {path}", width, whole="text")
         # Broken after a separator, the rest at the one indent of every
-        # folder line (tui_audit_15 P3-12): never inside a name.
+        # folder line: never inside a name.
         self.assertEqual(lines, ["BIOS folder: /home/moi/abcdefghijklmnopqrstuvw/.config/",
                                  "  retroarch/system"])
         # A command keeps the option with its value, the path whole where
-        # the line holds them (tui_audit_14 P3-8).
+        # the line holds them.
         command = install._wrap(f"  python3 install.py --dest {path}", width + 10,
                                 whole="command")
         self.assertIn(f"    --dest {path}", command)
         self.assertTrue(all(len(line) <= width + 10 for line in command), command)
 
     def test_the_result_spells_each_folder_one_way(self):
-        """tui_audit_12 P3-7: the save folder as ~/ beside full paths."""
+        """The save folder as ~/ beside full paths."""
         state = _installed_state(SYSTEM_DIR)
         state.done_saves = {"event": "saves", "files": 2,
                             "folder": "/home/user/.config/retroarch/saves/<core>"}
@@ -11024,7 +10990,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertFalse(any(line.startswith("~") for line in lines))
 
     def test_minui_names_the_folder_of_its_plan(self):
-        """tui_audit_12 P3-6: plan Bios, result the card's root."""
+        """Plan Bios, result the card's root."""
         card = self.root / "MINUI"
         state = _installed_state(card)
         state.platform = "minui"
@@ -11067,7 +11033,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
                          "1;32")
 
     def test_nothing_a_beginner_looks_for_is_faint(self):
-        """tui_audit_12 P3-3: the filter row and Back, Quit on the bar."""
+        """The filter row and Back, Quit on the bar."""
         state = install.TuiState(os_type="linux", home=HOME)
         state.stack = ["platforms"]
         self.assertEqual(install._filter_row(state).style, "")
@@ -11081,7 +11047,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
     # Every other item.
 
     def test_a_legacy_report_past_column_161_is_read_from_the_bytes(self):
-        """code_audit_19 P3-2: column 163, row 137 typed [M#é, and a press
+        """Column 163, row 137 typed [M#é, and a press
         followed by q lost the q."""
         press = b"\x1b[M" + bytes([32, 32 + 163, 32 + 137])
         release = b"\x1b[M" + bytes([35, 32 + 163, 32 + 137])
@@ -11096,7 +11062,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
                     self.assertEqual(keys, want)
 
     def test_the_setup_list_aligns_its_devices(self):
-        """tui_audit_12 P3-1: three right edges at 120 columns, devices
+        """Three right edges at 120 columns, devices
         starting anywhere from column 20 to 70 at 80."""
         state = install.TuiState(os_type="linux", home=HOME)
         state.stack = ["platforms"]
@@ -11112,7 +11078,6 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
                     self.assertTrue(all(len(line.rstrip()) <= 80 for line in lines))
 
     def test_the_copy_browser_never_offers_the_card_installed_to(self):
-        """tui_audit_12 P3-16."""
         onion = self.root / "media" / "ONION"
         make_card(onion, "Onion")
         old = self.root / "media" / "OLD"
@@ -11126,7 +11091,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertNotIn(onion, values)
 
     def test_a_card_two_systems_fit_is_offered_as_either(self):
-        """tui_audit_12 P2-5: the first screen said nothing was found, and
+        """The first screen said nothing was found, and
         with a KNULLI list "No KNULLI card is mounted" beside it."""
         card = self.renamed()["renamed, no about.info"]
         with mock.patch.object(install, "_mounted_cards", return_value=[card]), \
@@ -11153,7 +11118,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertNotIn("Look again", text)
 
     def test_the_wsl_folder_question_offers_the_windows_side(self):
-        """tui_audit_12 P3-11: under WSL only the Linux home was offered."""
+        """Under WSL only the Linux home was offered."""
         sides = install.other_side("wsl", "retroarch")
         self.assertEqual(len(sides), 1)
         self.assertTrue(sides[0][0].startswith("Windows RetroArch: "))
@@ -11166,7 +11131,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertIn(sides[0][1], [row.value for row in rows if row.action == "drive"])
 
     def test_named_by_sits_under_its_folder(self):
-        """tui_audit_12 P3-15: the offline remedy and the narrowing came
+        """The offline remedy and the narrowing came
         between the folder and what named it."""
         cfg = self.root / "home" / ".config" / "retroarch"
         cfg.mkdir(parents=True)
@@ -11186,7 +11151,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
                                     if line.startswith(("For ", "Copy them"))))
 
     def test_options_name_a_save_folder_the_setup_knows(self):
-        """tui_audit_12 P3-15: Save folder: not known, beside a RetroArch
+        """Save folder: not known, beside a RetroArch
         whose save folder the same machine names."""
         state = checked_state()
         state.manifest = {**state.manifest, "save_directory": {"folder": "saves",
@@ -11199,7 +11164,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertEqual(label, "Save folder: ~/.config/retroarch/saves")
 
     def test_the_result_counts_what_it_replaced_and_its_kinds(self):
-        """tui_audit_12 P3-8: the plan said 2 wrong copies are replaced, the
+        """The plan said 2 wrong copies are replaced, the
         result counted none, and the old card's result split no kind."""
         state = _installed_state(SYSTEM_DIR)
         state.summary = {**state.summary, "kept": [{"folder": "/x", "files": 2, "bytes": 3}]}
@@ -11214,7 +11179,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         self.assertIn("Installed: 2 BIOS files.", lines)
 
     def test_the_wiki_says_where_clicks_are_off(self):
-        """code_audit_19 P3-6: the page promised the mouse on Windows."""
+        """The page promised the mouse on Windows."""
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         text = " ".join(page.split())
         self.assertIn("Clicks are off in the Windows console the PowerShell command runs in",
@@ -11241,7 +11206,7 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
 @unittest.skipUnless(pyte and pty and hasattr(pty, "fork"),
                      "the pty runs need pyte and a pty")
 class TapsOnAPty(unittest.TestCase):
-    """tui_audit_12 P1-1 and P3-9 on the real install.py --tui."""
+    """Taps on the real install.py --tui."""
 
     repo = EndToEnd.repo
     start = EndToEnd.start
@@ -11296,8 +11261,8 @@ class TapsOnAPty(unittest.TestCase):
         self.assertGreater(term.raw.rfind(b"\x1b[?1000l"), mark)
 
 
-class AuditTwentyAndThirteen(unittest.TestCase):
-    """code_audit_20 and tui_audit_13: one choice for the run, taps that
+class OneChoicePerRun(unittest.TestCase):
+    """One choice for the run, taps that
     never commit what was not seen, and the words that fit."""
 
     setUp = LineModeAndScreenDecideAlike.setUp
@@ -11368,7 +11333,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
     # Root cause 2: one choice for the whole run.
 
     def test_the_game_data_row_keeps_the_systems_ticked(self):
-        """tui_audit_13 P1-1: the plan's game data row set the ticks back to
+        """The plan's game data row set the ticks back to
         every system, and the install wrote all of them."""
         state = self.game_plan()
         state.ticked = {"nintendo-ds"}
@@ -11382,7 +11347,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn(("--no-game-data", None), install.tui_flags(state))
 
     def test_every_check_of_the_same_list_keeps_the_choice(self):
-        """Root cause of tui_audit_13 P1-1: a folder to copy from added, the
+        """A folder to copy from added, the
         save folder chosen or Check again set the ticks back to every system
         too, as the game data row did."""
         for how in ("from", "savedir", "recheck"):
@@ -11404,7 +11369,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
                 self.assertEqual(state.ticked, {"nintendo-ds"})
 
     def test_a_choice_the_toggle_empties_says_so_and_offers_choose_systems(self):
-        """tui_audit_13 P1-1: Dreamcast alone, game data left out: the plan
+        """Dreamcast alone, game data left out: the plan
         promised the whole list and Install refused."""
         state = self.game_plan()
         state.ticked = {"sega-dreamcast"}
@@ -11425,7 +11390,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertEqual(state.ticked, {"sega-dreamcast"})
 
     def test_the_row_counts_the_list_the_check_read(self):
-        """code_audit_20 P2-1: under --emulator the row counted the game
+        """Under --emulator the row counted the game
         data of every system, line mode's g the emulator's alone."""
         state = self.game_plan(only=("nintendo-ds",))
         row = next(row for row in install.tui_rows(state) if row.action == "gamedata")
@@ -11442,7 +11407,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("g) Game data: kept (1 file, 1000 B)", text)
 
     def test_line_mode_names_the_game_data_of_the_systems_chosen(self):
-        """tui_audit_13 P2-3: --system with --no-game-data named the game
+        """--system with --no-game-data named the game
         data of the whole list."""
         files = [self.entry("gba_bios.bin", b"gba", ["nintendo-gba"]),
                  self.entry("doom/doom1.wad", b"wad" * 10, ["doom"], category="game_data")]
@@ -11462,7 +11427,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertNotIn("unknown system", text)
 
     def test_the_run_head_counts_three_kinds_and_defines_them(self):
-        """code_audit_20 P3-5: a run without the menu split two kinds beside
+        """A run without the menu split two kinds beside
         the plan's three, from a second counting function."""
         self.assertFalse(hasattr(install, "split_words"))
         files = [self.entry("gba_bios.bin", b"gba", ["nintendo-gba"]),
@@ -11476,7 +11441,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("Game data: files a game or a game engine reads", head)
 
     def test_the_cores_of_the_systems_chosen_come_first(self):
-        """tui_audit_13 P3-12: with --system sony-playstation, Cores opened
+        """With --system sony-playstation, Cores opened
         on every core of the list."""
         state = checked_state()
         state.cli_systems = ["sony-playstation"]
@@ -11492,7 +11457,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
                           if row.action == "core"], ["mesen", "pcsx_rearmed"])
 
     def test_line_mode_counts_the_systems_that_hold_a_file(self):
-        """tui_audit_13 P3-11: "2 of 8" in line mode, "1 of 8" on the screen."""
+        """"2 of 8" in line mode, "1 of 8" on the screen."""
         files = [self.entry("ds.bin", b"ds", ["nintendo-ds"]),
                  self.entry("dc/game.dat", b"dc", ["sega-dreamcast"], category="game_data"),
                  self.entry("psx.bin", b"psx", ["sony-playstation"])]
@@ -11519,7 +11484,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
     # Root cause 3: copies and packs.
 
     def test_confirm_counts_the_copies_a_folder_holds(self):
-        """code_audit_20 P2-2: Confirm called the files packx holds
+        """Confirm called the files packx holds
         downloads, offline and online."""
         state = checked_state()
         state.found = [found(event["dest"], "/media/old") for event in FILES]
@@ -11533,7 +11498,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
                 self.assertNotIn("to download,", text)
 
     def test_an_old_card_holding_every_file_in_place_is_not_called_empty(self):
-        """tui_audit_13 P3-4: "packx holds none of these files" when all 22
+        """"packx holds none of these files" when all 22
         were in place."""
         state = checked_state()
         state.check = {**CHECK, "present": 5, "missing": 0, "wrong_hash": 0,
@@ -11545,7 +11510,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertNotIn("holds none of these files", text)
 
     def test_the_plan_says_what_the_pack_lacks_before_a_size(self):
-        """tui_audit_13 P3-8: "8358 files to install from the pack, 6.6 GB"
+        """"8358 files to install from the pack, 6.6 GB"
         from a pack that held none of them."""
         state = checked_state()
 
@@ -11566,7 +11531,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
             self.assertNotIn("install", [row.action for row in install.tui_rows(state)])
 
     def test_a_failed_pack_install_leaves_no_folder_behind(self):
-        """tui_audit_13 P3-8: 405 empty folders and a saves folder."""
+        """405 empty folders and a saves folder."""
         pack_dir = self.root / "downloads"
         pack_dir.mkdir()
         pack = pack_dir / "RetroArch_BIOS_Pack.zip"
@@ -11585,7 +11550,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
     # Root cause 4: Choose another folder.
 
     def test_choose_another_folder_opens_the_folder_screen(self):
-        """code_audit_20 P2-3: with --dest the create screen is alone on the
+        """With --dest the create screen is alone on the
         stack, and Choose another folder asked Quit?."""
         state = fresh_state()
         state.platform, state.dest = "retroarch", self.root / "missing" / "bios"
@@ -11600,7 +11565,6 @@ class AuditTwentyAndThirteen(unittest.TestCase):
     # Root cause 5: text that fits.
 
     def test_the_version_note_stays_on_the_40x12_plan_and_in_every_farewell(self):
-        """tui_audit_13 P3-1."""
         note = "This list was built for RetroBat 8.3.1, this machine runs 8.2.0.1."
         state = checked_state()
         state.version = note
@@ -11615,7 +11579,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn(note, install.tui_farewell(state))
 
     def test_the_help_defines_game_data_at_40_columns(self):
-        """tui_audit_13 P3-2: the row was a choice nothing explained on the
+        """The row was a choice nothing explained on the
         Miyoo's screen."""
         state = _game_state()
         state.mouse = True
@@ -11633,7 +11597,6 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("such as Dolphin's Sys and PPSSPP's assets.", text)
 
     def test_the_40_column_bar_keeps_help_and_the_help_its_tap_line(self):
-        """code_audit_20 P3-1."""
         state = checked_state()
         state.mouse = True
         state.stack.append("systems")
@@ -11645,7 +11608,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("Tap Tick or untick a row, as A", text)
 
     def test_one_spelling_of_a_folder_on_the_plan_and_the_result(self):
-        """tui_audit_13 P3-3: "/home...i_audit13/rb/bios" on the plan, the
+        """"/home...i_audit13/rb/bios" on the plan, the
         same folder whole and folded inside a name on the result."""
         dest = Path("/home/moi/retroarch_system/tmp/tui_audit13/rb/bios")
         for cols in (40, 80):
@@ -11672,7 +11635,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
                 self.assertEqual("".join(spelled[0]), f"BIOS folder: {dest}")
 
     def test_a_long_path_fits_without_its_indent(self):
-        """tui_audit_13 P3-3: a pack path of 75 cells folded at 80 columns
+        """A pack path of 75 cells folded at 80 columns
         under an indent of 6."""
         path = "/home/moi/retroarch_system/tmp/tui_audit13/pack/MinUI_2025-11_BIOS_Pack.zip"
         self.assertEqual(len(path), 75)
@@ -11681,7 +11644,6 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn(f"      --from-pack {path}", lines)
 
     def test_the_definition_is_said_once_and_never_spliced(self):
-        """tui_audit_13 P3-5."""
         state = checked_state()
         state.systems = []
         state.manifest = {**MANIFEST, "categorized": True, "omitted_files": [
@@ -11694,7 +11656,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
                       "data its game reads.", text)
 
     def test_the_headline_counts_every_file_once(self):
-        """tui_audit_13 P3-6: "8358 files and 2636 data files", and the
+        """"8358 files and 2636 data files", and the
         definition dropped at 80 columns."""
         state = _game_state()
         state.check = {**state.check, "data_missing": 7, "data_bytes": 2048}
@@ -11705,7 +11667,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("Data files: the files an emulator reads", text)
 
     def test_the_save_line_never_ends_on_its_colon(self):
-        """tui_audit_13 P3-7: "...goes to a folder per core under:" with no
+        """"...goes to a folder per core under:" with no
         folder at 60x20."""
         state = _game_state()
         state.saves = {"event": "saves", "files": 1,
@@ -11721,7 +11683,6 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertGreater(shown, 0)
 
     def test_the_result_says_how_to_copy_and_counts_one_kind_once(self):
-        """tui_audit_13 P3-10 and P3-14."""
         state = _installed_state(SYSTEM_DIR)
         state.manifest = {**MANIFEST, "categorized": True}
         state.mouse = True
@@ -11736,7 +11697,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("Shift+drag", " ".join(install.tui_view(state, 80, 24)))
 
     def test_the_old_card_result_splits_what_is_missing(self):
-        """tui_audit_13 P3-14: "16 still missing" where 6 were game data."""
+        """"16 still missing" where 6 were game data."""
         state = _game_state()
         state.from_folders = [Path("/media/OLD")]
         state.local_dests = {"gba_bios.bin": ("/media/OLD", "")}
@@ -11750,14 +11711,14 @@ class AuditTwentyAndThirteen(unittest.TestCase):
                                           install.OFFLINE_FLAG_VALUE}):
             _title, lines = install.tui_outcome(state)
         # The wrong copy the check found is left in place: named as one,
-        # never counted as missing (code_audit_23 P3-3).
+        # never counted as missing.
         self.assertIn("1 file copied from OLD, 2 still missing, 1 wrong copy left.", lines)
         self.assertIn("Still missing: 1 BIOS file and 1 game data file.", lines)
 
     # Root cause 6: every other word.
 
     def test_drives_are_named_once_under_wsl_and_windows(self):
-        """code_audit_20 P3-3: "D:: bios" and "D:\\: bios"."""
+        """"D:: bios" and "D:\\: bios"."""
         with mock.patch.dict(install._WSL, {"active": True}):
             mount = Path(install._WSL["root"]) / "d"
             self.assertEqual(install._drive_folder(mount, "bios"), "D:\\bios")
@@ -11769,7 +11730,6 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertEqual(install._drive_folder(stick, "bios"), "USBSTICK: bios")
 
     def test_the_linux_side_is_named_by_its_side(self):
-        """code_audit_20 P3-3, tui_audit_13 P3-9."""
         self.assertEqual(install.side_name("wsl", "retroarch"), "Linux RetroArch")
         self.assertEqual(install.side_name("linux", "retroarch"), "RetroArch")
         state = fresh_state()
@@ -11783,7 +11743,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("(does not exist yet)", text)
 
     def test_a_folder_created_where_no_setup_is_says_so(self):
-        """tui_audit_13 P3-9: "system is created in C:\\RetroArch-Win64, where
+        """"system is created in C:\\RetroArch-Win64, where
         RetroArch reads it" with no RetroArch there."""
         state = fresh_state()
         missing = self.root / "RetroArch-Win64" / "system"
@@ -11797,14 +11757,13 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("where RetroArch reads it", state.card_note)
 
     def test_the_needed_list_counts_one_more_system_in_words(self):
-        """tui_audit_13 P3-13, on the list of files an emulator needs too."""
+        """On the list of files an emulator needs too."""
         entries = [{"dest": f"s{n}.bin", "system": f"system-{n}", "required": True}
                    for n in range(9)]
         said = " ".join(install._needed_lines(entries, "Needed"))
         self.assertIn("... and 1 more system (--check --verbose lists them all)", said)
 
     def test_the_farewell_names_the_option_not_the_screen(self):
-        """code_audit_20 P3-4."""
         state = _installed_state(SYSTEM_DIR)
         state.summary = {**state.summary, "skipped": [
             {"reason": "no_save_directory", "label": "", "files": 1, "required": False}]}
@@ -11813,7 +11772,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertNotIn("Options", farewell)
 
     def test_more_systems_is_counted_in_words(self):
-        """tui_audit_13 P3-13: "... and 1 more systems"."""
+        """"... and 1 more systems"."""
         entries = [{"dest": f"s{n}.bin", "size": 10, "systems": [f"system-{n:02d}"]}
                    for n in range(install.PLAN_LARGEST_SYSTEMS + 1)]
         out = io.StringIO()
@@ -11822,7 +11781,6 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("... and 1 more system:", out.getvalue())
 
     def test_the_systems_question_aligns_and_explains_after_the_list(self):
-        """tui_audit_13 P3-13."""
         rows = [("mattel-intellivision", []), ("nec-pc-engine", []),
                 (install.OTHER_SYSTEMS, [])]
         labels = {"mattel-intellivision": "Mattel Intellivision  mattel-intellivision",
@@ -11839,7 +11797,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertGreater(lines.index("A note."), lines.index(listed[-1]))
 
     def test_the_yes_stop_says_one_thing_with_a_list_or_without(self):
-        """tui_audit_13 P3-13, code_audit_20 P3-6: "the file list" said of a
+        """"the file list" said of a
         pack, and two wordings for one stop."""
         pack = self.root / "RetroArch_BIOS_Pack.zip"
         with zipfile.ZipFile(pack, "w") as archive:
@@ -11851,7 +11809,7 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertIn("No supported platform detected: RetroArch was not found here, and "
                       "the pack does not say where it goes.", said.stderr)
         # The standalone emulators' lists come from the network: offline,
-        # no request leaves the machine (code_audit_24 P3-13).
+        # no request leaves the machine.
         alone = install_run("--yes", env={**env, install.OFFLINE_VARIABLE: "1"})
         self.assertIn("No supported platform detected", alone.stdout + alone.stderr)
         hint = install._manual_usage_hint("linux")
@@ -11886,7 +11844,7 @@ class TheUsageNamesTheInstaller(unittest.TestCase):
 
 
 class TapsSeenBeforeTheyAct(unittest.TestCase):
-    """code_audit_20 P3-2 and tui_audit_13 P2-1, P2-2: a tap acts on the
+    """A tap acts on the
     frame it was made on, and never commits on one tap."""
 
     def test_a_release_on_a_later_frame_does_nothing(self):
@@ -11956,7 +11914,7 @@ class TapsSeenBeforeTheyAct(unittest.TestCase):
 
 
 class DoubleTapsAcrossScreens(unittest.TestCase):
-    """tui_audit_14 P2-1: the second tap of a double tap acted on the screen
+    """The second tap of a double tap acted on the screen
     the first one opened, at every gap measured (0, 80, 150 and 250 ms).
     A press within TUI_TAP_SETTLE of a new screen is dropped, and a slow
     deliberate second tap still acts."""
@@ -12039,7 +11997,7 @@ class DoubleTapsAcrossScreens(unittest.TestCase):
         self.double_tap(slow, install.TUI_TAP_SETTLE + 0.2)
         self.assertEqual(once.screen, "systems")
         # On Choose systems the first entry ticks: the slow tap pressed it
-        # once more, and the box is back as it was (tui_audit_17 P3-1).
+        # once more, and the box is back as it was.
         self.assertEqual(slow.screen, "systems")
         self.assertEqual(slow.ticked, once.ticked ^ {
             install.tui_rows(once)[once.focus["systems"]].value})
@@ -12064,7 +12022,7 @@ class DoubleTapsAcrossScreens(unittest.TestCase):
 
 
 class TwoTapsOnlyWhereFilesAreWritten(unittest.TestCase):
-    """tui_audit_14 P3-2 and P3-4: with the settle time in place, a second
+    """With the settle time in place, a second
     tap is asked only of an entry that writes files with nothing to look at
     after it, drawn in the accent and said in the help at every size."""
 
@@ -12110,7 +12068,7 @@ class TwoTapsOnlyWhereFilesAreWritten(unittest.TestCase):
         install.tui_update(state, Key("enter"))
         self.assertEqual(state.screen, "systems")
         lines = drawn(state, 80, 24)
-        # A tap on the bar's first entry ticks (tui_audit_17 P3-1), B goes
+        # A tap on the bar's first entry ticks, B goes
         # back, and Install counts the choice on Confirm first.
         self.assertEqual(tap(state, 2, len(lines) - 1), [])
         self.assertEqual(state.screen, "systems")
@@ -12146,7 +12104,8 @@ class TwoTapsOnlyWhereFilesAreWritten(unittest.TestCase):
 @unittest.skipUnless(pyte and pty and hasattr(pty, "fork"),
                      "screen tests need pyte (pip install pyte==0.8.2) and a pty")
 class TapsOnAPtySeeFirst(unittest.TestCase):
-    """tui_audit_13 P1-1, P2-1, P2-2 on the real install.py --tui."""
+    """Taps that never commit a row not yet seen, on the real install.py
+    --tui."""
 
     repo = EndToEnd.repo
     start = EndToEnd.start
@@ -12191,7 +12150,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         self.assertIn(term.close(), (install.QUIT_CODE, 0))
 
     def test_a_double_tap_on_continue_stays_on_what_it_opened(self):
-        # tui_audit_14 P2-1: at 0, 80, 150 and 250 ms the second tap pressed
+        # at 0, 80, 150 and 250 ms the second tap pressed
         # B/Esc Back on the Checking screen, back to the first screen.
         for gap in (0.0, 0.08, 0.15, 0.25):
             with self.subTest(gap=gap):
@@ -12231,8 +12190,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         col, line = self.bar_entry(term, "Done")
         report = sgr(col + 1, line + 1) + sgr(col + 1, line + 1, release=True)
         # A double tap: the first goes back to the plan, the second lands on
-        # its Back inside the settle time and does nothing (tui_audit_14
-        # P2-1).
+        # its Back inside the settle time and does nothing.
         time.sleep(install.TUI_TAP_SETTLE)
         term.send(report + report)
         screen = term.wait("for 1 of 2 systems")
@@ -12321,18 +12279,18 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         term.close()
 
 
-class AuditTwentyOneAndFourteen(unittest.TestCase):
-    """code_audit_21 and tui_audit_14: one choice state in both modes, the
+class ChoiceStateInBothModes(unittest.TestCase):
+    """One choice state in both modes, the
     cards found first, packs that hold nothing, and words that fit."""
 
     setUp = LineModeAndScreenDecideAlike.setUp
     line_run = LineModeAndScreenDecideAlike.line_run
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    receive = staticmethod(AuditTwentyAndThirteen.receive)
-    game_manifest = AuditTwentyAndThirteen.game_manifest
-    game_events = AuditTwentyAndThirteen.game_events
-    game_plan = AuditTwentyAndThirteen.game_plan
+    receive = staticmethod(OneChoicePerRun.receive)
+    game_manifest = OneChoicePerRun.game_manifest
+    game_events = OneChoicePerRun.game_events
+    game_plan = OneChoicePerRun.game_plan
 
     @staticmethod
     def screen(state: install.TuiState, cols: int = 80, rows: int = 24) -> str:
@@ -12348,7 +12306,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
                                              left_out=state.no_game_data))
 
     def test_the_game_data_toggle_never_unticks_a_system_for_good(self):
-        """tui_audit_14 P2-2: DS and Dreamcast ticked, game data left out
+        """DS and Dreamcast ticked, game data left out
         then kept: Dreamcast was gone, and so was the row to turn it back."""
         state = self.game_plan()
         state.ticked = {"nintendo-ds", "sega-dreamcast"}
@@ -12380,7 +12338,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
             for entry in manifest["files"]], categorized=True)
 
     def test_line_mode_offers_no_enter_for_an_emptied_choice(self):
-        """code_audit_21 P3-6: Dreamcast alone, game data left out: line mode
+        """Dreamcast alone, game data left out: line mode
         said "0 files, 0 B, for 0 of 2 systems", offered Enter and a command
         that installs nothing, then refused the Enter."""
         text, asked = self.line_run(_args(manifest=self.game_listing(), dest=self.here,
@@ -12397,7 +12355,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertEqual(asked[-1], "> ")
 
     def test_a_kept_choice_in_place_offers_no_install(self):
-        """code_audit_21 P3-4: one system ticked, its files in place, the
+        """One system ticked, its files in place, the
         plan said "About 0 files" over Install, and Confirm "Everything is
         in place" over Install too."""
         state = checked_state()
@@ -12418,7 +12376,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertEqual(state.exit_code, 0)
 
     def test_offline_the_plan_counts_the_systems_ticked(self):
-        """code_audit_21 P3-5: offline, one system ticked, the plan counted
+        """Offline, one system ticked, the plan counted
         every file of the list beside "For your 1 of 3 systems"."""
         state = checked_state()
         folder = str(self.root / "from1")
@@ -12443,10 +12401,10 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         return games_part(self.root / "media" / name)
 
     def test_an_arkos_card_is_found_and_comes_first(self):
-        """tui_audit_14 P2-3: an EASYROMS partition mounted, "Nothing was
+        """An EASYROMS partition mounted, "Nothing was
         found here", and two presses of Enter filled this computer's
         ~/.config/retroarch/system for a RetroArch that was not there. An
-        AmberELEC GAMES is AmberELEC's own card (tui_audit_16 P2-1)."""
+        AmberELEC GAMES is AmberELEC's own card."""
         for name in ("EASYROMS",):
             with self.subTest(card=name):
                 card = self.easyroms(name)
@@ -12457,8 +12415,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
                         mock.patch.object(install.Path, "home", return_value=home):
                     state, _effects = install.tui_start(_args(), "linux")
                     text = self.screen(state)
-                    # Named on the first screen, its plan one Enter away
-                    # (tui_audit_17 P2-3).
+                    # Named on the first screen, its plan one Enter away.
                     self.assertIn(f"> ArkOS SD card ({name}", text)
                     self.assertNotIn("Nothing was found here", text)
                     install.tui_update(state, Key("enter"))
@@ -12479,7 +12436,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         return pack
 
     def test_line_mode_names_what_the_pack_lacks_before_its_plan(self):
-        """code_audit_21 P3-3: --dry-run promised 23 files, --check said to
+        """--dry-run promised 23 files, --check said to
         fetch them, the install counted 23 beside the size of 20 and advised
         retrying files that always fail."""
         files = [self.entry(f"bios{n}.bin", b"x" * (n + 1), ["nintendo-gba"])
@@ -12514,7 +12471,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertFalse(dest.exists())
 
     def test_a_pack_holding_none_offers_no_install_with_data_files(self):
-        """tui_audit_14 P3-1: data files left, the pack holding none of the
+        """Data files left, the pack holding none of the
         files nor the trees: Install was offered and failed every file, and
         the result never named the data files."""
         state = checked_state()
@@ -12550,7 +12507,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertIn("7 data files not installed: not in RetroArch_BIOS_Pack.zip.", lines)
 
     def test_a_command_at_40_columns_breaks_between_shell_words(self):
-        """tui_audit_14 P3-8: the terminal folded commands inside a word,
+        """The terminal folded commands inside a word,
         "--platform" ended a line with its value on the next."""
         words = ["--platform", "retroarch", "--dest", "/a/b/c/system", "--manifest",
                  "/home/moi/x.json", "--system", "nintendo-gba"]
@@ -12583,7 +12540,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertIn("/home/moi/retroarch_system/tmp/tui_audit14/sb/a/b/bios", farewell)
 
     def test_a_folder_on_its_own_line_has_one_indent(self):
-        """tui_audit_14 P3-9: the save folder at the label's indent, the
+        """The save folder at the label's indent, the
         BIOS folder under it, a path's last piece without its indent."""
         state = checked_state()
         state.dest = Path("/home/moi/retroarch_system/tmp/tui_audit14/sb/esmiyoo/home/"
@@ -12607,7 +12564,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
                         self.assertEqual(indents, {3}, pieces)
 
     def test_no_shift_where_there_is_no_shift_key(self):
-        """tui_audit_14 P3-3: "Shift and a drag" on Android."""
+        """"Shift and a drag" on Android."""
         for os_type, said in (("linux", True), ("android", False)):
             with self.subTest(os_type=os_type):
                 state = _installed_state(SYSTEM_DIR)
@@ -12620,7 +12577,6 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
                 self.assertEqual("Shift+drag" in text, said)
 
     def test_the_40x12_setup_never_ends_mid_sentence(self):
-        """tui_audit_14 P3-5."""
         state = fresh_state()
         state.notes = [install.TUI_ESDE_NOTE]
         text = [str(line).strip() for line in install.tui_view(state, 40, 12)]
@@ -12630,7 +12586,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertIn(install.TUI_ESDE_NOTE, text)
 
     def test_the_40x12_plan_keeps_its_folder_and_version_note(self):
-        """tui_audit_14 P3-6: the plan named ~/.var/app/ as the folder, and
+        """The plan named ~/.var/app/ as the folder, and
         the version note was absent."""
         state = checked_state()
         state.dest = HOME / ".var/app/org.libretro.RetroArch/config/retroarch/system"
@@ -12643,7 +12599,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertIn("> Install", lines)
 
     def test_one_count_said_once_in_both_modes(self):
-        """tui_audit_14 P3-10: "22 files installed." over "22 files copied
+        """"22 files installed." over "22 files copied
         from packx.", and line mode's Location, wrong hash and zero count."""
         state = _installed_state(SYSTEM_DIR)
         state.summary["installed"] = 5
@@ -12663,14 +12619,14 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertNotIn("already up to date.\")\n", source.split("\nDone.", 1)[-1][:300])
 
     def test_quit_names_stay_once(self):
-        """tui_audit_14 P3-11: "A/Enter Stay  B/Esc Stay"."""
+        """"A/Enter Stay  B/Esc Stay"."""
         state = fresh_state()
         state.stack.append("quit")
         state.focus["quit"] = 1
         self.assertEqual(str(install.tui_view(state, 80, 24)[-1]).count("Stay"), 1)
 
     def test_the_yes_stop_example_keeps_yes(self):
-        """tui_audit_14 P3-12: a script copying the example stopped at a
+        """A script copying the example stopped at a
         question."""
         files = [self.entry("gba_bios.bin", b"gba", ["nintendo-gba"])]
         listing = self.listing("retroarch", files)
@@ -12681,7 +12637,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertIn(" --yes", example)
 
     def test_the_systems_question_fits_the_terminal(self):
-        """code_audit_21 P3-9: 53 of 66 rows wider than 80 columns."""
+        """53 of 66 rows wider than 80 columns."""
         rows = [(f"system-{n}", [{"dest": f"{n}.bin", "size": 10 ** n}]) for n in range(6)]
         labels = {"system-0": "Sega Dreamcast-based arcade boards, each "
                               "them  sega-dreamcast-arcade",
@@ -12700,13 +12656,12 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         self.assertEqual(len(sizes), 1, printed)
 
     def test_the_save_dir_sentence_is_written_once(self):
-        """code_audit_21 P3-10."""
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         self.assertEqual(source.count('"Name it with --save-dir next time."'), 1)
         self.assertEqual(source.count("args.declared_only or len(files) + game_data_cut"), 1)
 
     def test_a_missing_folder_does_not_exist_yet_on_every_row(self):
-        """code_audit_21 P3-7: line mode said "(created)" of folders nobody
+        """Line mode said "(created)" of folders nobody
         created, and the screen said "does not exist yet" of the Windows row
         alone."""
         drives = [self.root / "media" / "D", self.root / "media" / "E"]
@@ -12735,7 +12690,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
         card = self.easyroms()
         text, asked = self.line_run(_args(manifest=self.game_listing(), dry_run=True,
                                           declared_only=False), [""], mounts=[card])
-        # Found as the screen finds it, under Enter (tui_audit_17 P2-3).
+        # Found as the screen finds it, under Enter.
         self.assertIn(f"Found ArkOS at {card / 'bios'} (RetroArch files)", text)
         self.assertNotIn("Nothing was found here", text)
         self.assertIn("Enter for ArkOS SD card (EASYROMS)", asked[0])
@@ -12743,8 +12698,8 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
 
 
 
-class AuditTwentyTwoAndFifteen(unittest.TestCase):
-    """code_audit_22 and tui_audit_15: a drive is a handheld's card only by
+class DriveIsACardByItsFiles(unittest.TestCase):
+    """A drive is a handheld's card only by
     the files its system writes, one settle from the frame shown, one
     vocabulary and one count per run, and the focus after an action."""
 
@@ -12752,12 +12707,12 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
     line_run = LineModeAndScreenDecideAlike.line_run
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    receive = staticmethod(AuditTwentyAndThirteen.receive)
-    game_manifest = AuditTwentyAndThirteen.game_manifest
-    game_events = AuditTwentyAndThirteen.game_events
-    game_plan = AuditTwentyAndThirteen.game_plan
-    game_listing = AuditTwentyOneAndFourteen.game_listing
-    screen = staticmethod(AuditTwentyOneAndFourteen.screen)
+    receive = staticmethod(OneChoicePerRun.receive)
+    game_manifest = OneChoicePerRun.game_manifest
+    game_events = OneChoicePerRun.game_events
+    game_plan = OneChoicePerRun.game_plan
+    game_listing = ChoiceStateInBothModes.game_listing
+    screen = staticmethod(ChoiceStateInBothModes.screen)
 
     def drive(self, name: str, folders: tuple) -> Path:
         root = self.root / "media" / name
@@ -12785,7 +12740,7 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
             return state, self.screen(state, 80, 40), install.tui_rows(state)
 
     def test_a_data_drive_or_a_stick_is_no_card(self):
-        """code_audit_22 P2-1: a data drive holding bios/, snes/ and Music/
+        """A data drive holding bios/, snes/ and Music/
         was "a card in the reader", and three presses of Enter put the list
         on it. A stick with bios/ alone is no card either: both are listed,
         never under Enter, and a plain line says why."""
@@ -12818,8 +12773,7 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
     def test_the_layouts_handhelds_write_are_cards(self):
         """ArkOS's EASYROMS, AmberELEC's GAMES and EmuELEC's EEROMS, each
         with the folders its own image writes there. ArkOS's reads
-        RetroArch's list, the two others are their systems' own cards
-        (tui_audit_16 P2-1)."""
+        RetroArch's list, the two others are their systems' own cards."""
         arkos = games_part(self.root / "media" / "EASYROMS")
         amber = games_part(self.root / "media" / "GAMES")
         emuelec = self.drive("EEROMS", ("bios", "nes", "bezels"))
@@ -12829,7 +12783,7 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
                 mock.patch.object(install, "_mount_points", return_value=frozenset()):
             self.assertEqual([install.games_part(mount).name for mount in mounts],
                              ["ArkOS", "AmberELEC", "EmuELEC"])
-            # The three are their systems' own cards (tui_audit_17 P2-3).
+            # The three are their systems' own cards.
             self.assertEqual([install.card_system(mount) for mount in mounts],
                              [("retroarch", arkos / "bios", "ArkOS"),
                               ("amberelec", amber, "AmberELEC"),
@@ -12840,14 +12794,14 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
                                  [None, None, None])
 
     def test_a_card_beside_a_data_drive_comes_first(self):
-        """code_audit_22 P2-1: the ArkOS card and the data drive mounted,
+        """The ArkOS card and the data drive mounted,
         the data drive sorted first and took Enter. The card comes first in
         both modes, the drive listed after it with its note."""
         data = self.drive("DATA", ("bios", "snes", "Music"))
         card = games_part(self.root / "media" / "EASYROMS")
         mounts = [data, card]
         state = self.first_screen(mounts)
-        # The card is the setup found, under Enter (tui_audit_17 P2-3).
+        # The card is the setup found, under Enter.
         text = self.screen(state)
         self.assertIn("> ArkOS SD card (EASYROMS", text)
         with mock.patch.object(install, "_mounted_cards", return_value=mounts), \
@@ -12860,14 +12814,13 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
         self.assertIn(f"BIOS folder: {card / 'bios'}", text)
 
     def test_two_cards_are_spoken_of_in_the_plural(self):
-        """code_audit_22 P3-2: "Cards are in the reader (DATA, EASYROMS):
+        """"Cards are in the reader (DATA, EASYROMS):
         choose its system", then "The card in the reader" of one of two."""
         arkos = games_part(self.root / "media" / "EASYROMS")
         second = games_part(self.root / "media" / "ROMS2")
         mounts = [arkos, second]
         state = self.first_screen(mounts)
-        # Each card its folders prove is a setup found, by its own name
-        # (tui_audit_17 P2-3).
+        # Each card its folders prove is a setup found, by its own name.
         text = self.screen(state)
         self.assertIn("ArkOS SD card (EASYROMS", text)
         self.assertIn("ArkOS SD card (ROMS2", text)
@@ -12878,7 +12831,7 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
         self.assertNotIn("in the reader", text)
 
     def test_a_fixed_partition_is_told_from_a_card(self):
-        """code_audit_22 P2-1: every mount under /media and /mnt, and on
+        """Every mount under /media and /mnt, and on
         Windows every drive letter, was a card. A whole partition of a disk
         sysfs calls fixed is not, a USB or MMC one is, a folder bound in
         place says nothing, and Windows answers by GetDriveTypeW."""
@@ -12921,7 +12874,7 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
 
 
 # install.py whose tui_view takes SLOW seconds on the first frame of each
-# screen, as a slower device takes to lay one out (code_audit_22 P3-1).
+# screen, as a slower device takes to lay one out.
 SLOW_VIEW = """
 import os, sys, time
 sys.argv[0] = {install!r}
@@ -12943,7 +12896,7 @@ sys.exit(install.main())
 @unittest.skipUnless(pyte and pty and hasattr(pty, "fork"),
                      "screen tests need pyte (pip install pyte==0.8.2) and a pty")
 class TheSettleRunsFromTheFrameShown(unittest.TestCase):
-    """code_audit_22 P3-1: the settle was stamped before the layout, so on
+    """The settle was stamped before the layout, so on
     a slow one the second click of a double click on Options' Back reached
     the plan's Quit."""
 
@@ -12983,7 +12936,7 @@ class TheSettleRunsFromTheFrameShown(unittest.TestCase):
 
 
 class OnePowerShellRule(unittest.TestCase):
-    """code_audit_22 P3-5: the words of a command asked RETROBIOS_BOOTSTRAP
+    """The words of a command asked RETROBIOS_BOOTSTRAP
     or the detected system, its line ends RETROBIOS_BOOTSTRAP or os.name:
     with RETROBIOS_OS=windows on Linux one command had PowerShell's quotes
     and sh's line ends, and pasted into either shell it broke."""
@@ -13017,7 +12970,7 @@ class OnePowerShellRule(unittest.TestCase):
 
 
 class EachDataTreeReadOnce(unittest.TestCase):
-    """code_audit_22 P3-3: the count line, the check, the events and the
+    """The count line, the check, the events and the
     install each read and hashed every data tree in place, twice per run
     on an SD card through a reader."""
 
@@ -13075,7 +13028,7 @@ class EachDataTreeReadOnce(unittest.TestCase):
 
 
 class OneVocabularyOneCount(unittest.TestCase):
-    """code_audit_22 P3-4, tui_audit_15 P3-6 to P3-10: line mode said "in
+    """Line mode said "in
     place" then "up to date", "wrong copies" then "wrong hash", counted
     twice, left the data files out of its last line, and the screen focused
     Install for a pack holding none of the files."""
@@ -13084,7 +13037,7 @@ class OneVocabularyOneCount(unittest.TestCase):
     line_run = LineModeAndScreenDecideAlike.line_run
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    screen = staticmethod(AuditTwentyOneAndFourteen.screen)
+    screen = staticmethod(ChoiceStateInBothModes.screen)
 
     def two_files(self) -> tuple[Path, Path, Path]:
         """A list of two files, the first in place, the second in an old
@@ -13164,7 +13117,7 @@ class OneVocabularyOneCount(unittest.TestCase):
         self.assertNotIn("A file with a", text)
 
     def test_line_mode_with_from_counts_once(self):
-        """tui_audit_15 P3-8 and P3-9: no found count before Enter, the
+        """No found count before Enter, the
         plan said again after it, Copying twice, the result's count twice,
         and no command on a Finished with files missing."""
         listing, dest, old = self.two_files()
@@ -13189,7 +13142,7 @@ class OneVocabularyOneCount(unittest.TestCase):
         self.assertNotIn("files installed", after)
 
     def test_the_last_offline_line_counts_the_data_files(self):
-        """tui_audit_15 P3-6: "0 in place, 10994 missing", then "Nothing
+        """"0 in place, 10994 missing", then "Nothing
         installed: 8358 files need the internet"."""
         listing, dest, _old = self.two_files()
         listed = json.loads(listing.read_text())
@@ -13204,7 +13157,7 @@ class OneVocabularyOneCount(unittest.TestCase):
         self.assertIn("Nothing installed: 3 files need the internet", text)
 
     def test_a_pack_holding_none_offers_no_install(self):
-        """tui_audit_15 P3-7: a data tree whose folder is the BIOS folder
+        """A data tree whose folder is the BIOS folder
         itself (blueMSX) made any pack hold a data file: Install focused,
         and the result counted 8252 failed beside 10888 missing."""
         pack = self.root / "RetroArch_BIOS_Pack.zip"
@@ -13229,7 +13182,7 @@ class OneVocabularyOneCount(unittest.TestCase):
 
 
 class FocusAfterAnAction(unittest.TestCase):
-    """tui_audit_15 P3-1, P3-3, P3-4 and P3-5: one tap on the focused
+    """One tap on the focused
     Install row armed nothing visible, the result's Put RetroBIOS on this
     card was cut at 40x12, the Game data row lost the focus once changed,
     and a choice already in place opened on Options."""
@@ -13315,7 +13268,7 @@ class FocusAfterAnAction(unittest.TestCase):
                     install.tui_update(state, Key("f1"))
 
     def test_the_game_data_row_keeps_the_focus_when_changed(self):
-        audit = AuditTwentyAndThirteen()
+        audit = OneChoicePerRun()
         state = audit.game_plan()
         rows = install.tui_rows(state)
         state.focus["plan"] = next(i for i, row in enumerate(rows) if row.action == "gamedata")
@@ -13341,7 +13294,7 @@ class FocusAfterAnAction(unittest.TestCase):
 
 
 class TextThatFits(unittest.TestCase):
-    """tui_audit_15 P3-2, P3-12, P3-13 and P3-11: a pack's name cut in a
+    """A pack's name cut in a
     command, folder lines at two indents, the 40x12 plan dropping the
     version note, and the --from plan without its kinds."""
 
@@ -13392,11 +13345,11 @@ class TextThatFits(unittest.TestCase):
 
 
 class TheFromPlanSaysItsKinds(unittest.TestCase):
-    """tui_audit_15 P3-11: every file found in the folder, the plan named
+    """Every file found in the folder, the plan named
     the Game data row and said neither the kinds nor what game data is."""
 
     def test_the_kinds_and_the_definition_stay(self):
-        audit = AuditTwentyAndThirteen()
+        audit = OneChoicePerRun()
         state = audit.game_plan()
         folder = "/media/moi/packx"
         state.from_folders = [Path(folder)]
@@ -13413,7 +13366,7 @@ class TheFromPlanSaysItsKinds(unittest.TestCase):
 
 
 class TheSystemsQuestionFits(unittest.TestCase):
-    """code_audit_22 P3-6, tui_audit_15 P3-14: the size column was placed
+    """The size column was placed
     for the longest size, so 60 of 66 systems took two lines and 26 still
     passed 80 columns."""
 
@@ -13449,7 +13402,7 @@ class TheSystemsQuestionFits(unittest.TestCase):
                 # 80-column question took 127 lines for 66 systems.
                 # At 40 columns a shared size takes a line more: its first
                 # part alone was printed beside a long name, the shared
-                # files unsaid (tui_audit_16 P3-5).
+                # files unsaid.
                 limit = (len(systems) + shared + 10 if cols == 80
                          else 2 * len(systems) + shared + 12)
                 self.assertLessEqual(len(lines), limit)
@@ -13465,8 +13418,8 @@ class TheSystemsQuestionFits(unittest.TestCase):
         self.assertTrue(re.match(r" +\d+\) ", lines[row + 1]))
 
 
-class AuditTwentyThreeAndSixteen(unittest.TestCase):
-    """code_audit_23 and tui_audit_16: a card its markers prove is that
+class ProvenCardsAndCounts(unittest.TestCase):
+    """A card its markers prove is that
     system's card everywhere, counts and states that tell the truth, one
     width for every layout, line mode's order and words as the screen's,
     and a tap that shows it was seen."""
@@ -13476,13 +13429,13 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
     both = LineModeAndScreenDecideAlike.both
-    drive = AuditTwentyTwoAndFifteen.drive
-    first_screen = AuditTwentyTwoAndFifteen.first_screen
-    folder_screen = AuditTwentyTwoAndFifteen.folder_screen
-    game_listing = AuditTwentyOneAndFourteen.game_listing
-    game_manifest = AuditTwentyAndThirteen.game_manifest
-    receive = staticmethod(AuditTwentyAndThirteen.receive)
-    screen = staticmethod(AuditTwentyOneAndFourteen.screen)
+    drive = DriveIsACardByItsFiles.drive
+    first_screen = DriveIsACardByItsFiles.first_screen
+    folder_screen = DriveIsACardByItsFiles.folder_screen
+    game_listing = ChoiceStateInBothModes.game_listing
+    game_manifest = OneChoicePerRun.game_manifest
+    receive = staticmethod(OneChoicePerRun.receive)
+    screen = staticmethod(ChoiceStateInBothModes.screen)
 
     def amberelec(self, name: str = "GAMES") -> Path:
         return games_part(self.root / "media" / name)
@@ -13531,7 +13484,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     # Root cause 1: a card its markers prove is that system's card.
 
     def test_a_games_part_is_its_systems_card_in_both_modes(self):
-        """tui_audit_16 P2-1: the GAMES card AmberELEC's folders prove, and
+        """The GAMES card AmberELEC's folders prove, and
         the EEROMS card EmuELEC's prove, read "A card is in the reader:
         choose its system" with RetroArch focused, and two presses of Enter
         put RetroArch's list on them."""
@@ -13551,7 +13504,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
                 shutil.rmtree(card)
 
     def test_their_own_routes_take_the_card_they_prove(self):
-        """tui_audit_16 P2-1: --platform amberelec said it "cannot tell an
+        """--platform amberelec said it "cannot tell an
         AmberELEC card by its files" of the card holding gamedata/ and
         homebrew/, and line mode offered no Enter for it."""
         for plat, name, make in (("amberelec", "AmberELEC", self.amberelec),
@@ -13587,7 +13540,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
                 shutil.rmtree(stick)
 
     def test_an_arkos_card_from_any_year_is_a_card(self):
-        """code_audit_23 P3-1: ArkOS's default trees of 2020 hold no themes/
+        """ArkOS's default trees of 2020 hold no themes/
         (9664c869 none of themes and launchimages, 495eb210 and c14afbe5
         launchimages only), and the 12262020 update skipped the themes of a
         card with under 1 GB free. Every tree holds bgmusic/. A data drive
@@ -13636,7 +13589,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         return text, asked, dest
 
     def test_the_head_never_calls_a_wrong_copy_in_place(self):
-        """code_audit_23 P3-2: a wrong copy of the right size was in place
+        """A wrong copy of the right size was in place
         for the head, which said "1 found in old, nothing to download" over
         a run that left it."""
         text, _asked, dest = self.wrong_copy_run([""])
@@ -13645,7 +13598,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertEqual((dest / "a.bin").read_bytes(), b"Z" * 64)
 
     def test_a_wrong_copy_left_is_said_as_one(self):
-        """code_audit_23 P3-3: the result said "1 still missing" of a file
+        """The result said "1 still missing" of a file
         --check counts as a wrong copy."""
         text, _asked, _dest = self.wrong_copy_run([""])
         self.assertIn("Finished with files missing.", text)
@@ -13654,7 +13607,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertNotIn("still missing", text.rsplit("Finished", 1)[1])
 
     def test_a_count_agrees_with_its_verb(self):
-        """code_audit_23 P3-4: "1 need the internet" on the plan, and on
+        """"1 need the internet" on the plan, and on
         line mode's data tree line."""
         self.assertEqual(install.agree(1, "needs", "need"), "1 needs")
         self.assertEqual(install.agree(2, "needs", "need"), "2 need")
@@ -13673,7 +13626,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertNotRegex(source, r"\} need the internet")
 
     def test_line_mode_says_what_is_still_missing_before_the_remedy(self):
-        """tui_audit_16 P3-3: "They are not in OLD" followed "Installed: 6
+        """"They are not in OLD" followed "Installed: 6
         BIOS files", where the screen puts "Still missing:" between them."""
         bios, game = b"B" * 32, b"G" * 32
         listing = self.listing("retroarch", [
@@ -13696,7 +13649,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertLess(end.index("Installed:"), end.index("Still missing:"))
 
     def test_a_rerun_with_everything_in_place_offers_nothing(self):
-        """tui_audit_16 P3-4: line mode offered "Enter) install what is
+        """Line mode offered "Enter) install what is
         found", then said "Everything is in place." twice."""
         data = b"A" * 64
         listing = self.listing("retroarch", [self.entry("a.bin", data, ["nintendo-gba"])])
@@ -13711,7 +13664,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertEqual(text.count(install.EVERYTHING_IN_PLACE), 1)
 
     def test_line_mode_names_the_files_it_cannot_supply(self):
-        """tui_audit_16 P3-6: "Not installable: 37 files (1 required, not
+        """"Not installable: 37 files (1 required, not
         found: 37)" read as a sum, and line mode never named the file the
         screen names, nor its folder."""
         listing = self.listing("retroarch", [
@@ -13739,7 +13692,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
                                                            "no_save_directory": 2}))
 
     def test_a_system_emptied_by_no_game_data_is_named(self):
-        """tui_audit_16 P3-7: --system nintendo-ds,sega-dreamcast with
+        """--system nintendo-ds,sega-dreamcast with
         --no-game-data: "For 1 of 8 systems (--system)", Dreamcast unsaid
         until after Enter."""
         manifest = self.game_manifest()
@@ -13766,7 +13719,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertIn(words, self.screen(state, 100, 40))
 
     def test_a_run_with_failures_counts_once(self):
-        """tui_audit_16 P3-11: "Done. 44 files installed." then "38 files
+        """"Done. 44 files installed." then "38 files
         copied from E:\\, 4 downloaded, 2 still missing." gave two counts,
         the two that failed as missing. Each mode says one, failures named."""
         out = io.StringIO()
@@ -13795,7 +13748,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertNotIn("1 installed, 1 failed.", lines)
 
     def test_check_never_says_a_missing_file_was_opened(self):
-        """tui_audit_16 P3-12: "missing: nintendo-ds_0.bin" then "opened at
+        """"missing: nintendo-ds_0.bin" then "opened at
         ..." read as a file that was opened."""
         entry = {"dest": "a.bin", "systems": ["nintendo-gba"], "cores": None}
         self.assertEqual(install.opened_line(entry, {}, self.here),
@@ -13807,7 +13760,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     # Root cause 3: one width with a floor.
 
     def test_a_terminal_of_no_size_has_the_fallback(self):
-        """code_audit_23 P3-5: Python 3.8 gives a pty of no size as 0 and 0.
+        """Python 3.8 gives a pty of no size as 0 and 0.
         The plan printed "0 systems, the largest first:" and the progress
         line lost every figure but its percentage."""
         with mock.patch.object(install.shutil, "get_terminal_size",
@@ -13843,7 +13796,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         return text[text.index("Systems:"):min(ends, default=len(text))].splitlines()
 
     def test_the_systems_question_stays_inside_the_terminal(self):
-        """tui_audit_16 P3-5: 6 lines of 81 cells at 80 columns, 16 of 41 at
+        """6 lines of 81 cells at 80 columns, 16 of 41 at
         40, "shared" and "platform" alone on a line."""
         for cols in (100, 80, 60, 40, 30):
             with self.subTest(cols=cols):
@@ -13858,7 +13811,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
                 self.assertIn("this platform does not list", note)
 
     def test_the_setup_list_never_folds_inside_a_word(self):
-        """tui_audit_16 P3-15: at 39 columns "Miy" / "oo Flip"."""
+        """At 39 columns "Miy" / "oo Flip"."""
         for cols in (80, 39, 30):
             with self.subTest(cols=cols):
                 with mock.patch.object(install.shutil, "get_terminal_size",
@@ -13876,10 +13829,10 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     # Root cause 4: line mode in the screen's order and words.
 
     def test_on_wsl_the_card_comes_first_in_both_modes(self):
-        """code_audit_23 P3-6: line mode numbered Windows RetroArch 1) and
+        """Line mode numbered Windows RetroArch 1) and
         the card 2), where the screen put the card first. One order for
         both: the other side first, then the drives (an ArkOS card is now a
-        setup found, tui_audit_17 P2-3)."""
+        setup found)."""
         data = self.drive("DATA", ("bios", "snes"))
         windows = Path("/mnt/c/RetroArch-Win64/system")
         side = [("Windows RetroArch: C:\\RetroArch-Win64\\system", windows)]
@@ -13902,7 +13855,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertEqual([row.value for row in rows], [windows, data / "bios"])
 
     def test_nothing_found_is_said_once(self):
-        """tui_audit_16 P3-2: "Nothing was found here." twice, and after "A
+        """"Nothing was found here." twice, and after "A
         card is in the reader"."""
         # The standalone emulators' lists come from the network: none here.
         with mock.patch.object(install, "_install_standalone_folders", return_value=False):
@@ -13910,12 +13863,12 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertEqual(text.count("Nothing was found here."), 1)
         card = games_part(self.root / "media" / "EASYROMS")
         text, _asked = self.line_run(_args(declared_only=False), [], mounts=[card])
-        # The card its folders prove is found (tui_audit_17 P2-3).
+        # The card its folders prove is found.
         self.assertIn("ArkOS SD card (EASYROMS)", text)
         self.assertNotIn("Nothing was found here", text)
 
     def test_the_bios_only_drive_note_is_one_plain_sentence(self):
-        """tui_audit_16 P3-9: "listed, not chosen", "(card or drive)" under
+        """"listed, not chosen", "(card or drive)" under
         a note saying no card, two parentheses side by side, and "keeps
         them" after a title."""
         data = self.drive("DATA", ("bios", "snes", "Music"))
@@ -13936,7 +13889,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
             self.assertNotIn("keeps them", said)
 
     def test_the_same_choice_is_one_command_in_both_modes(self):
-        """tui_audit_16 P3-14: the screen wrote --manifest before --from,
+        """The screen wrote --manifest before --from,
         line mode after it."""
         hint = install.Invocation()
         hint.os_type = "linux"
@@ -13961,7 +13914,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     # Root cause 5: interaction.
 
     def test_a_tap_on_a_focused_row_shows_it_was_seen(self):
-        """tui_audit_16 P3-8: one tap on the focused Onion row showed
+        """One tap on the focused Onion row showed
         nothing, a second continued."""
         state = fresh_state()
         state.stack = ["setup"]
@@ -13976,7 +13929,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertNotEqual(tap(state, 4, row), [])
 
     def test_a_phone_bar_names_the_enter_key(self):
-        """tui_audit_16 P3-13: Termux at 40 columns said "A Continue", and
+        """Termux at 40 columns said "A Continue", and
         the a key does nothing."""
         state = install.TuiState(os_type="android", home=HOME)
         state.pad = install.tui_pad_route("android", {})
@@ -13989,7 +13942,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertRegex(str(install.tui_view(state, 40, 12)[-1]), r"(^| )A ")
 
     def test_which_folder_keeps_its_folder_at_40_by_12(self):
-        """tui_audit_16 P3-1: with two drives holding bios, Which folder?
+        """With two drives holding bios, Which folder?
         at 40x12 dropped the folder "Use this folder" stands for."""
         data = self.drive("DATA", ("bios", "snes", "Music"))
         stick = self.drive("STICK", ("bios",))
@@ -14088,7 +14041,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     @unittest.skipIf(sys.version_info < (3, 9),
                      "the site generator needs Python 3.9")
     def test_which_pack_names_the_first_screen(self):
-        """tui_audit_16 P3-10: which-pack said the command opens a screen
+        """Which-pack said the command opens a screen
         where Install and Choose systems are, the second screen."""
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
         self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
@@ -14102,7 +14055,7 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertLess(words.index(install.TUI_FOUND_TITLE),
                         words.index(install.TUI_INSTALL_ROW))
         self.assertNotIn("opens a screen", words)
-        # Nothing found, Which folder? comes before the plan (tui_audit_17 P3-9).
+        # Nothing found, Which folder? comes before the plan.
         self.assertIn(f"**{install.TUI_FOLDER_TITLE}**", words)
         self.assertLess(words.index(install.TUI_FOLDER_TITLE),
                         words.index(install.TUI_INSTALL_ROW))
@@ -14116,17 +14069,17 @@ def core_list(path: Path, files: list) -> Path:
     return path
 
 
-class AuditTwentyFourAndSeventeen(unittest.TestCase):
-    """code_audit_24 and tui_audit_17: the cores the run accepts, one tick
+class CoresListAndFolderFailures(unittest.TestCase):
+    """The cores the run accepts, one tick
     list, a folder failure said as it happened, every proven card named,
     reads that show, and tests that leave the host alone."""
 
     setUp = LineModeAndScreenDecideAlike.setUp
     line_run = LineModeAndScreenDecideAlike.line_run
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    drive = AuditTwentyTwoAndFifteen.drive
-    first_screen = AuditTwentyTwoAndFifteen.first_screen
-    line_from = AuditTwentyThreeAndSixteen.line_from
+    drive = DriveIsACardByItsFiles.drive
+    first_screen = DriveIsACardByItsFiles.first_screen
+    line_from = ProvenCardsAndCounts.line_from
 
     # Root cause 1: the cores a choice is made among are the run's.
 
@@ -14164,7 +14117,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         return state
 
     def test_cores_lists_what_the_run_accepts_and_an_untick_runs(self):
-        """tui_audit_17 P1-1: Cores listed 189 cores where --core accepted 181,
+        """Cores listed 189 cores where --core accepted 181,
         and an untick sent the 8 save-folder-only cores: "unknown core"."""
         events = self.check_events()
         self.assertEqual(next(e for e in events if e["event"] == "set_aside")["dests"],
@@ -14185,7 +14138,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertNotIn("unknown core", done.stdout + done.stderr)
 
     def test_both_modes_count_out_of_the_cores_the_run_keeps(self):
-        """code_audit_24 P3-3: line mode said "1 of 181 cores", the screen
+        """Line mode said "1 of 181 cores", the screen
         "1 of 189", and 22 more under --no-game-data."""
         for no_game_data in (False, True):
             with self.subTest(no_game_data=no_game_data):
@@ -14217,7 +14170,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         return state
 
     def test_an_untick_keeps_the_other_systems_cores(self):
-        """code_audit_24 P3-1: with --system sony-playstation, one untick on
+        """With --system sony-playstation, one untick on
         pcsx_rearmed cleared mesen, drawn ticked under the other systems."""
         state = checked_state()
         state.ticked = {"sony-playstation"}
@@ -14233,7 +14186,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertEqual([v for f, v in install.tui_flags(state) if f == "--core"], ["mesen"])
 
     def test_a_core_of_another_system_is_not_all_cores(self):
-        """code_audit_24 P3-2: mesen ticked alone with the PlayStation chosen
+        """Mesen ticked alone with the PlayStation chosen
         read "Cores: all", the run keeping none of pcsx_rearmed's files."""
         state = checked_state()
         state.ticked = {"sony-playstation"}
@@ -14245,7 +14198,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertEqual(install.core_count_words(["mesen"], ["pcsx_rearmed"]), "0 of 1 cores")
 
     def test_none_then_done_says_why_on_a_long_list(self):
-        """tui_audit_17 P2-4: on 189 cores the status and the sentence were
+        """On 189 cores the status and the sentence were
         dropped, Done with nothing ticked did nothing visible."""
         state = checked_state()
         state.manifest = {**MANIFEST, "files": [
@@ -14267,7 +14220,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertEqual(state.screen, "cores")
 
     def test_core_rows_say_what_each_core_adds(self):
-        """tui_audit_17 P3-2: line mode counted each core's files, the
+        """Line mode counted each core's files, the
         screen named the cores alone."""
         state = checked_state()
         state.stack = ["setup", "plan", "options", "cores"]
@@ -14278,7 +14231,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertEqual(rows["mesen"], "1 file, 8.0 KB")
 
     def test_one_core_has_no_cores_row(self):
-        """tui_audit_17 P3-3: a list with one core offered Cores, where line
+        """A list with one core offered Cores, where line
         mode asks nothing."""
         state = checked_state()
         state.manifest = {**MANIFEST, "files": [
@@ -14288,7 +14241,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
     # Root cause 2: one tick list.
 
     def test_the_three_lists_open_and_answer_alike(self):
-        """tui_audit_17 P3-1: Choose systems opened on None, A unticking
+        """Choose systems opened on None, A unticking
         every system, Cores closed on A, regions ticked on A."""
         for route in ("both", "gptokeyb", "muxterm", "miyoo"):
             for screen, opener in (("systems", ("plan", "systems")),
@@ -14318,7 +14271,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
     # Root cause 3: a folder failure as it happened.
 
     def test_a_folder_that_cannot_be_created_ends_on_its_reason(self):
-        """tui_audit_17 P2-1: the result said "22 files not fetched
+        """The result said "22 files not fetched
         (RETROBIOS_INSTALL_OFFLINE=1)" and sent the user for a pack."""
         for os_type in ("linux", "android"):
             with self.subTest(os_type=os_type):
@@ -14343,7 +14296,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
                 self.assertNotIn("sudo", text if os_type == "android" else "")
 
     def test_android_never_offers_sudo_and_a_phone_plan_says_why(self):
-        """tui_audit_17 P2-2: Termux was offered sudo, and at 40x12 the plan
+        """Termux was offered sudo, and at 40x12 the plan
         offered Install anyway with no word of why."""
         hint = install.Invocation()
         hint.os_type = "android"
@@ -14360,7 +14313,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
     # Root cause 4: every proven card named, the real marker said.
 
     def test_an_arkos_card_is_found_beside_an_amberelec_card(self):
-        """tui_audit_17 P2-3, code_audit_24 P3-6: an ArkOS card its bgmusic
+        """An ArkOS card its bgmusic
         or launchimages prove was named nowhere, and its route said it
         could not tell it."""
         games = games_part(self.root / "media" / "GAMES")
@@ -14377,7 +14330,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
                 self.assertIn("AmberELEC SD card (GAMES)", text)
 
     def test_the_emuelec_refusal_names_its_file(self):
-        """code_audit_24 P3-7: the refusal named bezels, which AmberELEC's
+        """The refusal named bezels, which AmberELEC's
         card holds too."""
         games = games_part(self.root / "media" / "GAMES")
         (games / "bezels").mkdir()
@@ -14388,7 +14341,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
     # Root cause 5: the reads before the menu show.
 
     def test_the_reads_before_the_menu_show_a_count(self):
-        """code_audit_24 P3-4: a rerun read every file before the menu, one at
+        """A rerun read every file before the menu, one at
         a time and with nothing on screen."""
         payload = b"R" * 16
         (self.here / "a.bin").write_bytes(payload)
@@ -14403,7 +14356,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
     # Root cause 6: every other item.
 
     def test_offline_the_plan_promises_no_replacement_it_cannot_make(self):
-        """code_audit_24 P3-5: offline, the plan said a wrong copy no folder
+        """Offline, the plan said a wrong copy no folder
         holds "is replaced"."""
         state = checked_state()
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
@@ -14412,7 +14365,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertNotIn("wrong copy is replaced", text)
 
     def test_options_name_the_plans_bios_folder(self):
-        """tui_audit_17 P3-6: AmberELEC's Options read the games part, its
+        """AmberELEC's Options read the games part, its
         plan the bios folder below it."""
         state = checked_state()
         state.manifest = {**MANIFEST, "files": [
@@ -14422,7 +14375,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertEqual(row.label, "BIOS folder: /media/me/GAMES/bios")
 
     def test_finished_with_errors_says_a_rerun_retries(self):
-        """tui_audit_17 P3-7: the screen never said a rerun retries the files
+        """The screen never said a rerun retries the files
         that failed, and line mode named each failure twice."""
         state = checked_state()
         install.tui_update(state, Key("enter"))
@@ -14447,7 +14400,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertIn("Run the same command again to retry only those.", out.getvalue())
 
     def test_below_40_columns_no_word_is_broken(self):
-        """tui_audit_17 P3-8: the reason line, Found and Install for were
+        """The reason line, Found and Install for were
         left to the terminal, which broke "/media/moi/" and "ONION/BIOS"."""
         with mock.patch.object(install, "terminal_size", return_value=(39, 11)), \
                 mock.patch.object(install, "_is_terminal", return_value=True):
@@ -14459,7 +14412,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
                 self.assertEqual(" ".join(" ".join(lines).split()), " ".join(text.split()))
 
     def test_the_narrowing_line_is_a_sentence(self):
-        """tui_audit_17 P3-4: the plan read "--region." on a line alone."""
+        """The plan read "--region." on a line alone."""
         state = checked_state()
         state.regions = ["japan"]
         text = self.text(state, 100, 30)
@@ -14467,7 +14420,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertNotIn(" --region.", text)
 
     def test_offline_choice_of_systems_is_never_about_0_files(self):
-        """tui_audit_17 P3-5: "About 0 files, 0 B, for 10 of 11 systems"."""
+        """"About 0 files, 0 B, for 10 of 11 systems"."""
         state = checked_state()
         state.ticked = {"sony-playstation"}
         with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
@@ -14476,7 +14429,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertIn("need the internet", text)
 
     def test_a_phone_bar_after_a_tap_keeps_quit_and_one_wording(self):
-        """tui_audit_17 P3-11: at 40 columns on Android the armed bar dropped
+        """At 40 columns on Android the armed bar dropped
         Esc Quit and said "click", the row "tap again"."""
         state = fresh_state()
         state.os_type = "android"
@@ -14491,7 +14444,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
         self.assertIn("Esc Quit", str(frame[-1]))
 
     def test_the_offline_screen_names_the_setups_list(self):
-        """tui_audit_17 P3-12: the offline screen said install/<platform>.json
+        """The offline screen said install/<platform>.json
         for AmberELEC, chosen one screen before."""
         inbox: queue.Queue = queue.Queue()
         install.LOCAL.reset()
@@ -14503,7 +14456,7 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
     # Root cause 7: the tests leave the host alone.
 
     def test_no_connection_leaves_the_loopback_nor_a_card_comes_in(self):
-        """code_audit_24 P3-13: 261 connections to GitHub left this module,
+        """261 connections to GitHub left this module,
         and tests failed with an AmberELEC card in the reader."""
         import socket  # noqa: PLC0415
 

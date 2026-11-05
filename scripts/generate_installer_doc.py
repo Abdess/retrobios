@@ -223,8 +223,7 @@ def line_menu() -> str:
     """The line menu of a RetroArch run, g then Enter pressed, as install.py
     prints it for the RetroArch list (install/retroarch.json): the very
     function line mode runs, its questions answered here. The page carried
-    a copy typed by hand, whose keys and counts drifted from the installer
-    (code_audit_22, owner's note on which-pack)."""
+    a copy typed by hand, whose keys and counts drifted from the installer."""
     import io  # noqa: PLC0415
     from unittest import mock  # noqa: PLC0415
 
@@ -290,7 +289,7 @@ class _ListHandler(http.server.SimpleHTTPRequestHandler):
 class _LoopbackServer(http.server.ThreadingHTTPServer):
     """The list server, named by its number: HTTPServer.server_bind looks
     127.0.0.1 up with socket.getfqdn, a DNS query wherever /etc/hosts does
-    not name it (code_audit_24 P3-12)."""
+    not name it."""
 
     def server_bind(self) -> None:
         socketserver.TCPServer.server_bind(self)
