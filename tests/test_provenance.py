@@ -623,6 +623,21 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
         needs = provenance_report.profile_needs(self.PROFILES, db)
         self.assertNotIn("dicrom.rom", needs["by_name"])
 
+    def test_a_file_installed_with_the_emulator_is_not_a_need(self):
+        """43 of 50 needs were bundled entries (samcoupe.rom, zesarux's
+        tk90x.rom), burying the six xm7 ROMs a maintainer has to find."""
+        from scripts import provenance_report  # noqa: PLC0415
+
+        profiles = {
+            "samcoupe": {"files": [{"name": "samcoupe.rom", "required": True,
+                                    "bundled": True, "sha1": "f" * 40}]},
+            "hcl": {"files": [{"name": "kanji.rom", "required": True, "bundled": True,
+                               "not_bundled_on": ["batocera"], "sha1": "9" * 40}]},
+        }
+        needs = provenance_report.profile_needs(profiles, {"files": {}})
+        self.assertNotIn(("sha1", "f" * 40), needs["by_hash"])
+        self.assertIn(("sha1", "9" * 40), needs["by_hash"])
+
 
 class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
     """The site's Wanted page asked the public for 79 dumps the collection
