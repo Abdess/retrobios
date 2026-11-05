@@ -1246,11 +1246,14 @@ def _retroarch_cfg_dir(
 
     A value left empty or at `default` is the directory RetroArch falls back
     on, `default` under app_dir. None when the config is unreadable or does
-    not set the key.
+    not set the key. A config this user cannot read is said once, like a
+    closed folder: a retroarch.cfg a `sudo retroarch` left to root hid the
+    setup without a word.
     """
     try:
         lines = cfg_path.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError:
+    except OSError as exc:
+        _note_refused(cfg_path, exc)
         return None
     for line in lines:
         line = line.strip()
