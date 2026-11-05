@@ -5,6 +5,13 @@ source: "https://github.com/touchHLE/touchHLE"
 profiled_date: "2026-10-17"
 source_commit: "3c5850585ba55615b17a58c58331b6d6f52d4a9d"
 pin_frozen: "ROCKNIX 20261001 builds this revision. Later upstream commits are not part of that build."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/standalone/touchhle-sa/package.mk"
+    variable: PKG_VERSION
+    value: "3c5850585ba55615b17a58c58331b6d6f52d4a9d"
 core_version: "0.2.3"
 version_basis:
   kind: file

@@ -11,6 +11,13 @@ version_basis:
   tag: "v1.2"
   distance: 0
 pin_frozen: "Recalbox, the only platform that ships this core, builds its tag v1.2 (Recalbox package/libretro-eightyone/libretro-eightyone.mk:8 at tag 10.1.1)."
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/libretro-eightyone/libretro-eightyone.mk"
+    variable: LIBRETRO_EIGHTYONE_VERSION
+    value: "v1.2"
 display_name: "Sinclair - ZX81 / ZX Spectrum (EightyOne, Recalbox)"
 cores: ["eightyone"]
 built_by: [recalbox]

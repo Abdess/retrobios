@@ -1461,6 +1461,117 @@ def check_source_paths(profiles: dict) -> Finding:
     )
 
 
+def build_variable(lines: list[str], variable: str) -> str | None:
+    """The value the first assignment to ``variable`` gives in a build file.
+
+    Read as a Buildroot .mk (`X_VERSION = sha`), a LibreELEC package.mk
+    (`PKG_VERSION="sha"`) or a RetroPie scriptmodule (`rp_module_repo="git
+    URL tag"`, `local version="20250829"`): quotes and a trailing comment go,
+    the rest is compared as written.
+    """
+    assignment = re.compile(
+        rf"^\s*(?:local\s+|export\s+)?{re.escape(variable)}\s*[:?+]?=\s*(.*)$"
+    )
+    for line in lines:
+        match = assignment.match(line)
+        if not match:
+            continue
+        value = match.group(1).strip()
+        if value[:1] in "\"'":
+            end = value.find(value[0], 1)
+            return value[1:end] if end > 0 else value[1:]
+        return value.split(" #", 1)[0].strip()
+    return None
+
+
+def pin_build_revision(reference: dict, platforms_dir: Path) -> str:
+    """The revision of the platform repository its YAML was last scraped at,
+    '' when the platform is not registered or reads another repository."""
+    path = platforms_dir / f"{reference.get('platform', '')}.yml"
+    repo = upstream.parse_repo(str(reference.get("repo") or ""))
+    if repo is None or not path.is_file():
+        return ""
+    with path.open(encoding="utf-8") as fh:
+        source = str((yaml_load(fh) or {}).get("source") or "")
+    if f"/{repo.slug.lower()}/" not in source.lower() + "/":
+        return ""
+    return export_native.source_revision(source)
+
+
+def check_pin_builds(
+    profiles: dict, platforms_dir: Path, cache_dir: str, offline: bool,
+) -> list[Finding]:
+    """Each `pin_build:` read again where the platform now stands.
+
+    A pin_frozen pin is held because one platform builds that revision, and
+    nothing read the build file again: Recalbox moving mame0278 to another
+    commit left the profile describing a build no platform ships. The file
+    is read at the revision the platform's own YAML was scraped at, or at
+    the repository's branch head for a platform this repository does not
+    scrape, and its variable compared with the value the profile recorded.
+    """
+    findings: list[Finding] = []
+    unreferenced = sorted(
+        name for name, profile in profiles.items()
+        if profile.get("pin_frozen") and not profile.get("pin_build")
+    )
+    if unreferenced:
+        findings.append(Finding(
+            "profiles", "pin_frozen without pin_build", SKIPPED,
+            local=f"{len(unreferenced)} profiles",
+            detail="no platform build file names their revision: "
+                   + ", ".join(unreferenced[:SHOWN_NAMES])
+                   + (", ..." if len(unreferenced) > SHOWN_NAMES else ""),
+            items=unreferenced,
+        ))
+    for name, profile in sorted(profiles.items()):
+        for reference in profile.get("pin_build") or []:
+            subject = f"{name} ({reference['platform']})"
+            recorded = str(reference["value"])
+            revision = pin_build_revision(reference, platforms_dir)
+            if revision == str(reference["revision"]):
+                findings.append(Finding(
+                    "profiles", subject, OK, local=recorded[:12],
+                    detail=f"read where platforms/{reference['platform']}.yml is",
+                ))
+                continue
+            repo = upstream.parse_repo(str(reference["repo"]))
+            try:
+                at = revision or upstream.resolve_head(repo, cache_dir, offline)
+                lines = upstream.fetch_file(repo, at, reference["path"], cache_dir, offline) \
+                    if at else None
+            except upstream.NotCachedError:
+                findings.append(Finding("profiles", subject, SKIPPED, local=recorded[:12],
+                                        detail="offline, the build file is not cached"))
+                continue
+            except upstream.UpstreamError as exc:
+                findings.append(Finding("profiles", subject, UNKNOWN, local=recorded[:12],
+                                        detail=str(exc)))
+                continue
+            if not at:
+                findings.append(Finding("profiles", subject, UNKNOWN, local=recorded[:12],
+                                        detail=f"{repo.slug} answered no branch head"))
+                continue
+            current = None if lines is None else build_variable(lines, reference["variable"])
+            if current == recorded:
+                findings.append(Finding(
+                    "profiles", subject, OK, local=recorded[:12], remote=at[:12],
+                    detail=f"{reference['path']} still builds it",
+                ))
+                continue
+            findings.append(Finding(
+                "profiles", subject, STALE, local=recorded[:12],
+                remote=(current or "gone")[:12],
+                detail=(
+                    f"{reference['path']} is gone at {at[:12]}" if lines is None
+                    else f"{reference['variable']} is no longer set there" if current is None
+                    else f"{reference['platform']} now builds {current} "
+                         f"({reference['path']} at {at[:12]}): the pin follows the build"
+                ),
+            ))
+    return findings
+
+
 def check_profiles(run: bool, offline: bool) -> list[Finding]:
     if not run:
         return [
@@ -1708,6 +1819,7 @@ def main() -> int:
         findings.extend(check_ci(args.cache_dir, args.offline))
     if "profiles" in areas:
         findings.append(check_source_paths(profiles))
+        findings.extend(check_pin_builds(profiles, platforms_dir, args.cache_dir, args.offline))
         findings.extend(check_profiles(args.profiles, args.offline))
 
     if args.json:

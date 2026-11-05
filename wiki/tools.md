@@ -695,7 +695,15 @@ NAME` reads the folders again.
 
 The `profiles` area always checks `website/src/data/source-paths.json`
 against the profiles, offline: a recorded tree that no profile pins any more
-is `STALE` until `sitesources.py --fetch` runs again.
+is `STALE` until `sitesources.py --fetch` runs again. It also reads each
+`pin_build` reference of a held pin: where the platform YAML was scraped at
+the reference's own revision the row is `OK` without network, otherwise the
+build file is fetched at the platform's new revision (or at the branch head
+of a platform this repository does not scrape) and its variable compared
+with the recorded value. A different value is `STALE`: the platform now
+builds another revision, and the pin, the refs and `pin_build` move with it.
+Profiles with `pin_frozen` and no `pin_build` are counted on one `SKIPPED`
+row, since no build file names their revision.
 
 ```bash
 python scripts/check_freshness.py

@@ -6,6 +6,13 @@ upstream: "https://github.com/trzy/Supermodel"
 profiled_date: "2026-10-17"
 source_commit: "0eef09ba2b74e48fd5cfd388ee69a3743fd5f618"
 pin_frozen: "Batocera's supermodel-legacy package builds this revision, held before the renderer moved to OpenGL 4.1. Recaling would repoint these refs at code this build never had."
+pin_build:
+  - platform: batocera
+    repo: "https://github.com/batocera-linux/batocera.linux"
+    revision: "batocera-43.1"
+    path: "package/batocera/emulators/supermodel-legacy/supermodel-legacy.mk"
+    variable: SUPERMODEL_LEGACY_VERSION
+    value: "0eef09ba2b74e48fd5cfd388ee69a3743fd5f618"
 core_version: "0.3a-WIP"
 version_basis:
   kind: file

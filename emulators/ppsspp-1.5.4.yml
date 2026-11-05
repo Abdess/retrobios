@@ -5,6 +5,13 @@ source: "https://github.com/hrydgard/ppsspp"
 profiled_date: "2026-10-20"
 source_commit: "a1e74d0d4f89ba3fa2d4fe64bac7a0fa16fc146f"
 pin_frozen: "RetroPie, the only platform that ships it, builds the v1.5.4 tag at this commit (RetroPie scriptmodules/emulators/ppsspp-1.5.4.sh:16). Later releases are packaged separately as ppsspp."
+pin_build:
+  - platform: retropie
+    repo: "https://github.com/RetroPie/RetroPie-Setup"
+    revision: "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+    path: "scriptmodules/emulators/ppsspp-1.5.4.sh"
+    variable: rp_module_repo
+    value: "git https://github.com/hrydgard/ppsspp.git v1.5.4"
 core_version: "v1.5.4"
 version_basis:
   kind: tag

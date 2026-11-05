@@ -5,6 +5,19 @@ source: "https://github.com/drfrag666/lzdoom"
 profiled_date: "2026-10-20"
 source_commit: "4ce19a12164ebd6802b7fb2f94d700a6e736d0fb"
 pin_frozen: "The platforms that ship it run the 3.88 line: RetroPie builds tag 3.88b (RetroPie scriptmodules/ports/lzdoom.sh:15) and AmberELEC a fork of the g3.3mgw branch that still reports 3.88b (AmberELEC packages/games/emulators/lzdoom/package.mk:5). The l4.x releases are a GZDoom 4 based line that no platform ships."
+pin_build:
+  - platform: retropie
+    repo: "https://github.com/RetroPie/RetroPie-Setup"
+    revision: "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+    path: "scriptmodules/ports/lzdoom.sh"
+    variable: rp_module_repo
+    value: "git https://github.com/drfrag666/gzdoom 3.88b"
+  - platform: amberelec
+    repo: "https://github.com/AmberELEC/AmberELEC"
+    revision: "a21975bfb1a3af68f66e07a931b994b523e1e6e2"
+    path: "packages/games/emulators/lzdoom/package.mk"
+    variable: PKG_VERSION
+    value: "8e12e62164ea1ba52625c63bc0f1c9e0076bff4c"
 core_version: "3.88b"
 version_basis:
   kind: tag

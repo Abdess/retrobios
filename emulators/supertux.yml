@@ -5,6 +5,13 @@ source: "https://github.com/SuperTux/supertux"
 profiled_date: "2026-10-22"
 source_commit: "37cddf24a4abfdec7931a84afd9e87fb8ea18767"
 pin_frozen: "EmuELEC, the only platform that ships it, builds this revision, v0.6.3 (EmuELEC packages/sx05re/emuelec-ports/supertux/package.mk:5). Later commits are not part of that build."
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emuelec-ports/supertux/package.mk"
+    variable: PKG_VERSION
+    value: "37cddf24a4abfdec7931a84afd9e87fb8ea18767"
 core_version: "v0.6.3-1020-g37cddf2"
 version_basis:
   kind: tag

@@ -7,6 +7,13 @@ profiled_date: "2026-10-22"
 source_commit: "0785214f13746bdfd709b1909f007e213b470ba1"
 upstream_commit: "23208626e16e53b73fd21a2fbd0c429338625dc4"
 pin_frozen: "AmberELEC, the only platform that ships it, builds this revision (AmberELEC packages/games/emulators/piemu/package.mk:5). Later commits are not part of that build."
+pin_build:
+  - platform: amberelec
+    repo: "https://github.com/AmberELEC/AmberELEC"
+    revision: "a21975bfb1a3af68f66e07a931b994b523e1e6e2"
+    path: "packages/games/emulators/piemu/package.mk"
+    variable: PKG_VERSION
+    value: "0785214f13746bdfd709b1909f007e213b470ba1"
 core_version: "20030430"
 version_basis:
   kind: file

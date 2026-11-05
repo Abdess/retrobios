@@ -6,6 +6,13 @@ upstream: "https://github.com/Aleph-One-Marathon/alephone"
 profiled_date: "2026-10-20"
 source_commit: "07a9c36aff403d143a0608815f725631a01e382c"
 pin_frozen: "RetroPie, the only platform that ships it, builds the release-20250829 tag at this commit (scriptmodules/ports/alephone.sh, _get_branch_alephone). Debian 10 and older get release-20250302."
+pin_build:
+  - platform: retropie
+    repo: "https://github.com/RetroPie/RetroPie-Setup"
+    revision: "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+    path: "scriptmodules/ports/alephone.sh"
+    variable: version
+    value: "20250829"
 core_version: "release-20250829"
 version_basis:
   kind: tag

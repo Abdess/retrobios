@@ -5,6 +5,13 @@ source: "https://github.com/beebono/DSperate"
 profiled_date: "2026-10-17"
 source_commit: "81b73832c2e68e2b10cb5850f0a6d393ffc6fbb7"
 pin_frozen: "ROCKNIX 20261001 ships the v2.0.1 release binaries, built by CI from the v2.0.1 tag at this commit."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/package.mk"
+    variable: PKG_VERSION
+    value: "2.0.1"
 core_version: "v2.0.1"
 version_basis:
   kind: tag

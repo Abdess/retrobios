@@ -5,6 +5,13 @@ source: "https://github.com/nba-emu/NanoBoyAdvance"
 profiled_date: "2026-10-17"
 source_commit: "3bb6f478f977dbfd3106508536e5fbce90d1898b"
 pin_frozen: "ROCKNIX 20261001 builds this revision of the SDL2 frontend (v1.6 plus four commits). Later upstream work is not part of that build."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/standalone/nanoboyadvance-sa/package.mk"
+    variable: PKG_VERSION
+    value: "3bb6f478f977dbfd3106508536e5fbce90d1898b"
 core_version: "v1.6-4-g3bb6f47"
 version_basis:
   kind: tag

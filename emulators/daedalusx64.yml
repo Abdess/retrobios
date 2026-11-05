@@ -5,6 +5,13 @@ source: "https://github.com/DaedalusX64/daedalus"
 profiled_date: "2026-10-17"
 source_commit: "f17e9ed86f3806fadeb69abd29c9526ab2d4bd1b"
 pin_frozen: "ROCKNIX 20261001 builds this revision. Later upstream commits are not part of that build."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261001"
+    path: "projects/ROCKNIX/packages/emulators/standalone/daedalusx64-sa/package.mk"
+    variable: PKG_VERSION
+    value: "f17e9ed86f3806fadeb69abd29c9526ab2d4bd1b"
 core_version: "1.1.8-837-gf17e9ed"
 version_basis:
   kind: tag

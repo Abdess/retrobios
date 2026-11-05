@@ -7,6 +7,13 @@ profiled_date: "2026-10-22"
 source_commit: "bf93aece5db7050667075a1107ab380856b44a23"
 upstream_commit: "4c293f306bc16a265c2d768af5d0cea138426054"
 pin_frozen: "AmberELEC, the only platform that ships it, builds this revision (AmberELEC packages/games/libretro/flycast2021le/package.mk:5). Later commits are not part of that build."
+pin_build:
+  - platform: amberelec
+    repo: "https://github.com/AmberELEC/AmberELEC"
+    revision: "a21975bfb1a3af68f66e07a931b994b523e1e6e2"
+    path: "packages/games/libretro/flycast2021le/package.mk"
+    variable: PKG_VERSION
+    value: "bf93aece5db7050667075a1107ab380856b44a23"
 core_version: "0.1"
 version_basis:
   kind: file

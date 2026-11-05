@@ -10,6 +10,13 @@ source_commit:
   standalone: "8c75a4b48a5222b0332d0508600f8ddc7ac1191c"
   libretro: "7464996aa0cb1be77abf495dc901117e1af36e02"
 pin_frozen: "Recalbox, the only platform that ships the standalone build, builds its tag v1.1 at this standalone revision (Recalbox package/rb5000/rb5000.mk:7). Later commits are not part of that build. The libretro pin is the HEAD of libretro-rb5000."
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/rb5000/rb5000.mk"
+    variable: RB5000_VERSION
+    value: "v1.1"
 core_version:
   standalone: "v1.1"
   libretro: "v0.9"

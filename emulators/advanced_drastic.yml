@@ -7,6 +7,13 @@ author: "trngaje (hooks), Exophase (DraStic)"
 profiled_date: "2026-10-22"
 source_commit: "eaf41ab9bc8adcc15c010bf9517bc94c38e7bffd"
 pin_frozen: "KNULLI, the only platform that ships it, builds this revision (KNULLI package/emulators/advanced_drastic/advanced_drastic.mk:7 at tag 20260511). Later commits are not part of that build."
+pin_build:
+  - platform: knulli
+    repo: "https://github.com/knulli-cfw/knulli-linux"
+    revision: "20260511"
+    path: "package/emulators/advanced_drastic/advanced_drastic.mk"
+    variable: ADVANCED_DRASTIC_VERSION
+    value: "eaf41ab9bc8adcc15c010bf9517bc94c38e7bffd"
 core_version: "r2.5.2.0"
 version_basis:
   kind: file

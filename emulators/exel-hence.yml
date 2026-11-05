@@ -11,6 +11,13 @@ version_basis:
   tag: "v0.9"
   distance: 0
 pin_frozen: "Recalbox, the only platform that ships this core, builds its tag v0.9 (Recalbox package/libretro-exel-hence/libretro-exel-hence.mk:9 at tag 10.1.1)."
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/libretro-exel-hence/libretro-exel-hence.mk"
+    variable: LIBRETRO_EXEL_HENCE_VERSION
+    value: "v0.9"
 display_name: "Exelvision - EXL 100 (Exel-Hence)"
 cores:
   - "exel-hence"
