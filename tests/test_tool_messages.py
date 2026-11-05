@@ -190,6 +190,18 @@ class HeldButNotPackedNamesEachReason(unittest.TestCase):
             "Game data held but not packed: 3 (2 installed with its emulator, "
             "1 no platform slug for its system)", text)
 
+    def test_a_missing_file_follows_the_line_that_counts_it(self):
+        """Indented under 'held but not packed: 102 (installed with its
+        emulator)', Batocera's one missing sfiii2a.zip read as one of them."""
+        missing = {"name": "sfiii2a.zip", "emulator": "FinalBurn Neo", "required": True,
+                   "in_repo": False, "category": "bios"}
+        lines = self._printed(
+            [missing, self._entry("a.rom", "installed with its emulator")]
+        ).splitlines()
+        self.assertTrue(lines[0].startswith("  Core files: "), lines)
+        self.assertIn("MISSING (required): FinalBurn Neo needs sfiii2a.zip", lines[1])
+        self.assertTrue(lines[2].startswith("  Core files held but not packed: "), lines)
+
     def test_a_single_reason_reads_as_before(self):
         text = self._printed([self._entry("a.rom", "installed with its emulator")] * 2)
         self.assertIn("Core files held but not packed: 2 (installed with its emulator)", text)

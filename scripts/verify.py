@@ -1853,13 +1853,8 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         f"  Core files: {core_in_pack} in pack, {core_missing_req} required missing, "
         f"{core_missing_opt} optional missing{listed}"
     )
-    if bundled:
-        names = ", ".join(sorted({u["name"] for u in bundled}))
-        print(f"  Bundled with their emulator, not collected: {names}")
-    if unplaced:
-        print(f"  Core files held but not packed: {len(unplaced)} "
-              f"({_omission_reasons(unplaced)})")
-
+    # The missing files follow the line that counts them: printed after the
+    # held-but-not-packed line, they read as files installed with their emulator.
     for u in req_not_in_repo:
         _print_undeclared_entry(u, "MISSING (required)", verbose)
     for u in req_hle_not_in_repo:
@@ -1867,6 +1862,12 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     if verbose:
         for u in opt_not_in_repo:
             _print_undeclared_entry(u, "MISSING (optional)", verbose)
+    if bundled:
+        names = ", ".join(sorted({u["name"] for u in bundled}))
+        print(f"  Bundled with their emulator, not collected: {names}")
+    if unplaced:
+        print(f"  Core files held but not packed: {len(unplaced)} "
+              f"({_omission_reasons(unplaced)})")
 
     if game_data:
         gd_missing = [u for u in game_data if not u["in_repo"]]
