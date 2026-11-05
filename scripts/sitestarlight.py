@@ -819,12 +819,13 @@ def redirects(profiles: dict, present: set[str],
     that is already a page's address, is left out. Addresses are written
     under the site root, without its base. ``moved`` adds pages that moved
     by generation, old page to new page, the new one with an optional
-    #fragment."""
+    #fragment. A page MOVED_PAGES names keeps that target over the part
+    record: cross-reference-minui is answered on MinUI's own page."""
     def address(rel: str) -> str:
         page, _, fragment = rel.partition("#")
         return "/" + page_url(page)[len(BASE):] + (f"#{fragment}" if fragment else "")
 
-    out = {address(old): address(new) for old, new in {**MOVED_PAGES, **(moved or {})}.items()
+    out = {address(old): address(new) for old, new in {**(moved or {}), **MOVED_PAGES}.items()
            if old not in present and new.partition("#")[0] in present}
     pages = {rel.casefold() for rel in present}
     claims: dict[str, set[str]] = {}

@@ -291,6 +291,11 @@ class Redirects(unittest.TestCase):
             published = generate_site.record_parts(
                 docs, {"gaps-files-to-source-7.md", "gaps.md"}, kept)
         self.assertEqual(published, {"gaps-files-to-source-7.md": "gaps.md", **kept})
+        # An emulator part names its parent with the site's base.
+        self.assertEqual(generate_site._parent_page("/retrobios/emulators/amiberry/"),
+                         "emulators/amiberry.md")
+        self.assertEqual(generate_site._parent_page("/platforms/b/#atari-st"),
+                         "platforms/b.md#atari-st")
         # The next run made six parts.
         self.assertEqual(
             sitestarlight.redirects({}, {"gaps.md", "platforms/b.md"}, published),

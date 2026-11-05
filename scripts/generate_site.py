@@ -3357,6 +3357,8 @@ def _published_parts() -> dict[str, str]:
 def _parent_page(link: str) -> str:
     """The page a `parent:` link names (/platforms/batocera/), under docs/."""
     path, _, fragment = link.partition("#")
+    # Written with the site's base (/retrobios/emulators/x/) or without it.
+    path = path.removeprefix(sitestarlight.BASE.rstrip("/"))
     stem = path.strip("/") or "index"
     return f"{stem}.md" + (f"#{fragment}" if fragment else "")
 
@@ -3374,13 +3376,11 @@ def record_parts(docs: Path, present: set[str], published: dict[str, str]) -> di
         if not page.is_file():
             page = page.with_suffix(".mdx")
         try:
-            with page.open(encoding="utf-8") as handle:
-                head = handle.read(2048)
+            parent = _front_matter(page.read_text(encoding="utf-8")).get("parent")
         except OSError:
             continue
-        link = re.search(r"^parent:\n(?:  .*\n)*?  link: (\"[^\"\n]*\")", head, re.M)
-        if link and rel not in found:
-            found[rel] = _parent_page(json.loads(link[1]))
+        if isinstance(parent, dict) and parent.get("link") and rel not in found:
+            found[rel] = _parent_page(str(parent["link"]))
     return dict(sorted(found.items()))
 
 
