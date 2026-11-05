@@ -1847,6 +1847,15 @@ def _publish_manifests(api: Path) -> list[tuple]:
         _record(targets / source.name)
         assets.append((targets / source.name, f"Target list: {source.stem}",
                        "application/json", "schemas/target-manifest.schema.json"))
+    # Every change each updated platform file carries, for a maintainer who
+    # reviews them by script: the Exports page linked only the files.
+    exports = api / "exports"
+    exports.mkdir(parents=True, exist_ok=True)
+    for source in sorted((_REPO_ROOT / "exports").glob("*.json")):
+        shutil.copy2(source, exports / source.name)
+        _record(exports / source.name)
+        assets.append((exports / source.name, f"Updated platform file, its changes: {source.stem}",
+                       "application/json", None))
     release = _REPO_ROOT / "release.json"
     if release.is_file():
         shutil.copy2(release, api / "release.json")
@@ -5343,6 +5352,8 @@ def generate_provenance_page(
             "can check a personal collection against it. A contribution "
             "matching one of these hashes is welcome: see "
             "[Contributing](contributing.md).",
+            "",
+            markup.button("Download the list (CSV)", "downloads/provenance-wanted.csv"),
             "",
         ]
     )
