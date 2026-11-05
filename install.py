@@ -12168,16 +12168,35 @@ def _copy_reason(entry: dict, copy: LocalCopy, bios_path: Path, known: set[str])
     return _place_reason(entry, copy.path, copy.index, expected, known)[0]
 
 
+def _twin_in_place(entry: dict, files: list[dict], bios_path: Path) -> bool:
+    """Whether the name a case variant shares with another entry, but for
+    the case (bios.col and BIOS.col), is in place."""
+    folded = str(entry.get("dest", "")).casefold()
+    for twin in files:
+        if twin is entry or twin.get("case_variant") or \
+                str(twin.get("dest", "")).casefold() != folded:
+            continue
+        try:
+            if _is_file(_entry_path(bios_path, twin)):
+                return True
+        except ValueError:
+            continue
+    return False
+
+
 def _found_elsewhere(
     entry: dict, index: FolderIndex, bios_path: Path, files: list[dict],
     known: set[str], zipped: _ZippedLookup | None = None,
 ) -> tuple[str, str]:
     """(reason, folder too deep) for an entry missing at its place."""
     dest = str(entry.get("dest", ""))
-    if entry.get("case_variant"):
+    if entry.get("case_variant") and _twin_in_place(entry, files, bios_path):
         # A pack is read on Windows and macOS too, where two names that
         # differ only by case are one file: it carries one of the pair. Moving
         # the other copy here would take it from the core that opens it.
+        # Only its twin in place says a pack was used: on an empty folder the
+        # note named a pack never downloaded and pushed the BIOS files the
+        # user looked for into "... and N more".
         return ("a second name the pack leaves out: Windows and macOS see it "
                 "as the same file. Run the command without --check to add it"), ""
     name = dest.rsplit("/", 1)[-1]
