@@ -235,6 +235,31 @@ class APlatformWithoutTargetsSaysSo(unittest.TestCase):
         )
 
 
+class OneNameListsThePlatforms(unittest.TestCase):
+    """install.py --list-platforms, generate_pack.py --list, and no listing
+    at all in verify.py: three scripts, three answers to one question."""
+
+    def _run(self, script: str, flag: str) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [sys.executable, f"scripts/{script}", flag], capture_output=True, text=True,
+            cwd=str(REPO_ROOT), timeout=120, check=False,
+        )
+
+    def test_both_tools_take_it_and_agree(self):
+        verify_out = self._run("verify.py", "--list-platforms")
+        pack_out = self._run("generate_pack.py", "--list-platforms")
+        self.assertEqual(verify_out.returncode, 0, verify_out.stderr)
+        self.assertEqual(pack_out.returncode, 0, pack_out.stderr)
+        self.assertEqual(verify_out.stdout, pack_out.stdout)
+        self.assertIn("retroarch", verify_out.stdout.split())
+        self.assertIn("--list-platforms", (REPO_ROOT / "install.py").read_text())
+
+    def test_the_installer_name_is_the_one_documented(self):
+        tools = (REPO_ROOT / "wiki" / "tools.md").read_text()
+        self.assertIn("generate_pack.py --list-platforms", tools)
+        self.assertIn("verify.py --list-platforms", tools)
+
+
 class OneSpellingPerOption(unittest.TestCase):
     """verify.py -p batocera worked and slots.py -p batocera was refused."""
 

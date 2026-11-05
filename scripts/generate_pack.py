@@ -53,6 +53,7 @@ from common import (
     list_platform_system_ids,
     platform_system_names,
     resolve_system_arg,
+    print_platform_listing,
     select_systems,
     platform_scope_systems,
     system_scope_error,
@@ -1866,11 +1867,6 @@ def generate_system_pack(
         shutil.rmtree(scratch, ignore_errors=True)
 
 
-def list_platforms(platforms_dir: str) -> list[str]:
-    """List available platform names from registry."""
-    return list_registered_platforms(platforms_dir, include_archived=True)
-
-
 def _system_display_name(system_id: str) -> str:
     """Convert system ID to display name for ZIP naming."""
     s = system_id.lower().replace("_", "-")
@@ -3097,7 +3093,7 @@ def _refuse_unapplied_flags(args: argparse.Namespace, parser: argparse.ArgumentP
             name for name, on in (
                 ("--manifest-targets", args.manifest_targets),
                 ("--verify-packs", args.verify_packs and not args.all_variants),
-                ("--list", args.list),
+                ("--list-platforms", args.list),
                 ("--list-emulators", args.list_emulators),
                 ("--list-systems", args.list_systems),
                 ("--list-targets", args.list_targets),
@@ -3123,7 +3119,7 @@ QUICK_MODE_FLAGS: dict[str, set[str]] = {
     },
     # One manifest per hardware target, from the target files themselves.
     "--manifest-targets": set(),
-    "--list": set(),
+    "--list-platforms": set(),
     "--list-emulators": set(),
     "--list-systems": {"--platform"},
     "--list-targets": {"--platform"},
@@ -3152,7 +3148,7 @@ def _given_flags(args: argparse.Namespace) -> set[str]:
         "--target": args.target,
         "--region": args.region,
         "--one-per-slot": args.one_per_slot,
-        "--list": args.list,
+        "--list-platforms": args.list,
         "--list-emulators": args.list_emulators,
         "--list-systems": args.list_systems,
         "--list-targets": args.list_targets,
@@ -3249,7 +3245,11 @@ def _main(held: contextlib.ExitStack) -> None:
         action="store_true",
         help="Pack the data directories as cached, still fetching release assets",
     )
-    parser.add_argument("--list", action="store_true", help="List available platforms")
+    # install.py's name. --list stays for the scripts that already type it.
+    parser.add_argument(
+        "--list-platforms", "--list", dest="list", action="store_true",
+        help="List available platforms",
+    )
     parser.add_argument(
         "--required-only",
         action="store_true",
@@ -3351,14 +3351,7 @@ def _main(held: contextlib.ExitStack) -> None:
             )
         return
     if args.list:
-        # Every platform builds with --platform. --all builds the release
-        # packs only, the others are served by the installer.
-        active = set(list_registered_platforms(args.platforms_dir))
-        released = set(list_release_pack_platforms(args.platforms_dir, include_archived=True))
-        for p in list_platforms(args.platforms_dir):
-            marks = [m for m, on in (("archived", p not in active),
-                                     ("installer only", p not in released)) if on]
-            print(f"{p} ({', '.join(marks)})" if marks else p)
+        print_platform_listing(args.platforms_dir)
         return
     if args.list_emulators:
         list_emulator_profiles(args.emulators_dir)

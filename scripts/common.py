@@ -3192,6 +3192,22 @@ def list_system_ids(emulators_dir: str) -> None:
         print(f"  {spelling:35s} ({count} emulator{'s' if count > 1 else ''})")
 
 
+def print_platform_listing(platforms_dir: str) -> None:
+    """Every registered platform, one per line, marked when archived or
+    served by the installer only.
+
+    Every platform takes --platform. --all covers the active ones, and the
+    pack builder's --all the release packs. Printed by --list-platforms in
+    verify.py and generate_pack.py, the name install.py gives it.
+    """
+    active = set(list_registered_platforms(platforms_dir))
+    released = set(list_release_pack_platforms(platforms_dir, include_archived=True))
+    for name in list_registered_platforms(platforms_dir, include_archived=True):
+        marks = [m for m, on in (("archived", name not in active),
+                                 ("installer only", name not in released)) if on]
+        print(f"{name} ({', '.join(marks)})" if marks else name)
+
+
 def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:
     """Print system IDs from a platform's YAML config, with the platform's
     own names for them, which --system also accepts."""

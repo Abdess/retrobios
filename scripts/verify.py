@@ -63,6 +63,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     resolve_system_arg,
+    print_platform_listing,
     select_systems,
     platform_scope_systems,
     system_scope_error,
@@ -2620,6 +2621,7 @@ def _refuse_listing_narrowings(
     """
     listing = next(
         (flag for flag, on in (
+            ("--list-platforms", args.list_platforms),
             ("--list-emulators", args.list_emulators),
             ("--list-systems", args.list_systems),
             ("--list-targets", args.list_targets),
@@ -2628,7 +2630,7 @@ def _refuse_listing_narrowings(
     )
     if not listing:
         return
-    reads_platform = listing != "--list-emulators"
+    reads_platform = listing not in ("--list-emulators", "--list-platforms")
     for flag, on in (
         ("--platform", args.platform and not reads_platform),
         ("--all", args.all),
@@ -2678,7 +2680,9 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
 
 
 def _run_listing(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
-    if args.list_emulators:
+    if args.list_platforms:
+        print_platform_listing(args.platforms_dir)
+    elif args.list_emulators:
         list_emulator_profiles(args.emulators_dir)
     elif args.list_systems and args.platform:
         list_platform_system_ids(args.platform, args.platforms_dir)
@@ -2716,6 +2720,9 @@ def _main(held: contextlib.ExitStack) -> None:
     )
     parser.add_argument(
         "--list-systems", action="store_true", help="List available systems"
+    )
+    parser.add_argument(
+        "--list-platforms", action="store_true", help="List available platforms"
     )
     parser.add_argument(
         "--include-archived", action="store_true",
@@ -2790,7 +2797,7 @@ def _main(held: contextlib.ExitStack) -> None:
             parser.error(str(exc))
 
     _refuse_listing_narrowings(args, parser)
-    if args.list_emulators or args.list_systems or args.list_targets:
+    if args.list_platforms or args.list_emulators or args.list_systems or args.list_targets:
         _run_listing(args, parser)
         return
 
