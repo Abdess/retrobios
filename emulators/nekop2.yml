@@ -77,12 +77,22 @@ files:
     path: "np2/font.bmp"
     required: false
     hle_fallback: true
-    aliases: ["FONT.ROM"]
+    aliases: ["FONT.BMP"]
     note: >
-      PC-98 font bitmap (288 KB). Required for correct Japanese kanji display.
+      PC-98 font bitmap. Required for correct Japanese kanji display.
       Without this, only basic ASCII renders using built-in 8x8 data.
-      FONT.ROM (V98 format) is also accepted.
-    source_ref: "libretro/libretro.c:872, font/font.c:113, font/fontdata.c:12"
+    source_ref: "libretro/libretro.c:872, font/font.c:74-104, 180, font/fontdata.c:11"
+
+  - name: "FONT.ROM"
+    path: "np2/FONT.ROM"
+    required: false
+    hle_fallback: true
+    min_size: 288768
+    validation: [size]
+    note: >
+      V98 font, read after font.bmp and filling only the glyphs it left
+      out. fontv98_read refuses a file shorter than 0x46800 bytes.
+    source_ref: "libretro/libretro.c:196, 868, font/font.c:181, font/fontdata.c:12, font/fontv98.c:8, 45-51"
 
   # -- Sound BIOS ROM --
   # Loaded by soundrom_load() via loadsoundrom() in sound/soundrom.c:21-55.

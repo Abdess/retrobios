@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T14:56:18Z",
+  "generated_at": "2026-11-05T18:31:29Z",
   "total_files": 19944,
   "total_size": 16892646538,
   "bios_dir": "bios",
@@ -281984,11 +281984,11 @@
       "Parallel.rom": [
         "c75c751589cbcc1ad4ab4f63676af7abadd86f5b"
       ],
-      "POCKSTAT.ROM": [
-        "6ae880493ddde880827d1e9f08e9cb2c38f9f2ec"
-      ],
       "FONT.BMP": [
         "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5"
+      ],
+      "POCKSTAT.ROM": [
+        "6ae880493ddde880827d1e9f08e9cb2c38f9f2ec"
       ],
       "bank3.bin": [
         "0877ffb4b4d1c18283468be3579b72ed8c22e3ac"

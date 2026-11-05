@@ -6,7 +6,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "8.3.1",
-  "generated": "2026-11-05T14:56:18Z",
+  "generated": "2026-11-05T18:31:29Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -284,10 +284,10 @@
       }
     }
   ],
-  "total_files": 5561,
-  "total_size": 8544495803,
-  "pack_files": 5563,
-  "pack_size": 8544495803,
+  "total_files": 5562,
+  "total_size": 8544784571,
+  "pack_files": 5564,
+  "pack_size": 8544784571,
   "total_omitted": 203,
   "omitted_files": [
     {
@@ -8239,6 +8239,17 @@
       "cores": null,
       "systems": [
         "nec-pc-98"
+      ],
+      "alternatives": [
+        {
+          "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+          "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+          "size": 288768,
+          "repo_path": "bios/NEC/PC-98/font.rom",
+          "cores": [
+            "np2kai"
+          ]
+        }
       ]
     },
     {
@@ -73059,6 +73070,19 @@
       "sha256": "41535bd7242c07d69ec5427584d31f068ca4eb996ca95246caed4e3573a494e6",
       "size": 524350,
       "repo_path": "bios/NEC/PC-98/font.bmp",
+      "cores": [
+        "nekop2"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "np2/FONT.ROM",
+      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+      "size": 288768,
+      "repo_path": "bios/NEC/PC-98/font.rom",
       "cores": [
         "nekop2"
       ],

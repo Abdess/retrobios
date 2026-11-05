@@ -6,7 +6,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "43.1",
-  "generated": "2026-11-05T14:56:18Z",
+  "generated": "2026-11-05T18:31:29Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -10343,6 +10343,17 @@
       "cores": null,
       "systems": [
         "nec-pc-98"
+      ],
+      "alternatives": [
+        {
+          "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+          "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+          "size": 288768,
+          "repo_path": "bios/NEC/PC-98/font.rom",
+          "cores": [
+            "np2kai"
+          ]
+        }
       ]
     },
     {

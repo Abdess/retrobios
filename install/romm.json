@@ -6,7 +6,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.0",
-  "generated": "2026-11-05T14:56:18Z",
+  "generated": "2026-11-05T18:31:29Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -26,7 +26,7 @@
   "total_size": 872654387,
   "pack_files": 467,
   "pack_size": 872654387,
-  "total_omitted": 775,
+  "total_omitted": 777,
   "omitted_files": [
     {
       "dest": "32X_G_BIOS.BIN",
@@ -4073,6 +4073,16 @@
       ]
     },
     {
+      "dest": "np2/FONT.ROM",
+      "name": "FONT.ROM",
+      "system": "",
+      "required": false,
+      "reason": "below_platform_folder",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
       "dest": "np2/bios9821.rom",
       "name": "bios9821.rom",
       "system": "",
@@ -4155,6 +4165,16 @@
     {
       "dest": "np2kai/2608_TOP.WAV",
       "name": "2608_TOP.WAV",
+      "system": "",
+      "required": false,
+      "reason": "below_platform_folder",
+      "cores": [
+        "np2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/FONT.ROM",
+      "name": "FONT.ROM",
       "system": "",
       "required": false,
       "reason": "below_platform_folder",
