@@ -34,6 +34,7 @@ import argparse
 import gzip
 import hashlib
 import json
+import posixpath
 import sys
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -178,12 +179,25 @@ def _platform_required(platform: str, platforms_dir: str) -> dict[tuple[str, str
     return out
 
 
+def _narrowed(manifest: dict, cores: list[str], cache: dict) -> list[tuple[dict, str]]:
+    """The install list under some cores, each file with its lowercased
+    base name. The answer depends on the cores alone, and a platform asks
+    it once per system they run."""
+    key = (id(manifest), tuple(cores))
+    if key not in cache:
+        files, _omitted = install.narrow(
+            manifest["files"], manifest.get("omitted_files", []), [], cores, [])
+        cache[key] = [(entry, posixpath.basename(entry["dest"]).lower()) for entry in files]
+    return cache[key]
+
+
 def fallback_set(
     manifest: dict,
     platform_required: dict[tuple[str, str], bool],
     profiles: Profiles,
     system: str,
     profile: str | None,
+    narrowed: dict | None = None,
 ) -> dict:
     """The files an unrecognised game of one system keeps on one platform.
 
@@ -195,12 +209,10 @@ def fallback_set(
     """
     wanted = profiles.resolver.equivalents(system)
     cores = sorted(install.designated_cores(manifest, [profile])) if profile else []
-    files, _omitted = install.narrow(manifest["files"], manifest.get("omitted_files", []), [], cores, [])
     rows: list[list] = []
-    for entry in files:
+    for entry, base in _narrowed(manifest, cores, {} if narrowed is None else narrowed):
         systems = set(entry.get("systems") or [])
         dest = entry["dest"]
-        base = Path(dest).name.lower()
         if entry.get("cores") is None:
             if not systems & wanted:
                 continue
@@ -292,6 +304,7 @@ def build_setups(
     manifests: dict[str, dict] = {}
     required: dict[str, dict] = {}
     fallbacks: dict[str, dict[str, dict]] = {}
+    narrowed: dict = {}
     out: dict[str, dict] = {}
     coverage: dict[str, dict] = {}
     for setup, doc in sorted(setups.items()):
@@ -330,7 +343,8 @@ def build_setups(
                 for system in resolution.systems:
                     key = f"{system}|{chosen or ''}"
                     if key not in table:
-                        table[key] = fallback_set(manifest, required[platform], profiles, system, chosen)
+                        table[key] = fallback_set(manifest, required[platform], profiles, system,
+                                                  chosen, narrowed)
                     keys.append(key)
                 return keys
 

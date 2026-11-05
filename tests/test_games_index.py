@@ -221,5 +221,23 @@ class CommittedData(unittest.TestCase):
         self.assertEqual(lcd.systems, [])
 
 
+class OneNarrowingPerCoreList(unittest.TestCase):
+    """Each (platform, system, core) key narrowed the whole install list:
+    2,357 narrowings for 1,289 distinct core lists."""
+
+    def test_the_systems_of_one_core_share_it(self) -> None:
+        from unittest import mock
+
+        manifest = {"files": [{"dest": "dir/SCPH5501.BIN"}, {"dest": "b.rom"}]}
+        cache: dict = {}
+        with mock.patch.object(gi.install, "narrow",
+                               return_value=(manifest["files"], [])) as narrow:
+            for _system in ("sony-playstation", "sony-playstation-2"):
+                rows = gi._narrowed(manifest, ["core"], cache)
+            gi._narrowed(manifest, ["other"], cache)
+        self.assertEqual(narrow.call_count, 2)
+        self.assertEqual([base for _entry, base in rows], ["scph5501.bin", "b.rom"])
+
+
 if __name__ == "__main__":
     unittest.main()
