@@ -89,6 +89,17 @@ class CorrectedFilesPage(unittest.TestCase):
             self.page,
         )
 
+    def test_every_section_links_its_changes_as_json(self):
+        """exports/batocera.json listed 141 changes and no page or catalog
+        entry named it: a maintainer had to scrape the HTML."""
+        for platform in ("recalbox", "retropie"):
+            self.assertIn(f'href="api/v1/exports/{platform}.json"', self.page)
+        source = (ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        publish = source[source.index("def _publish_manifests("):]
+        publish = publish[:publish.index("\ndef ")]
+        self.assertIn('(_REPO_ROOT / "exports").glob("*.json")', publish)
+        self.assertIn('exports = api / "exports"', publish)
+
     def test_several_files_link_to_their_directory(self):
         self.assertIn("tree/main/exports/retropie", self.page)
         self.assertIn("<summary>The 2 original files it is based on</summary>", self.page)

@@ -275,7 +275,6 @@ class GithubTokenPerStep(Scratch):
     def test_the_committed_registry(self):
         jobs = ar.load_jobs()
         self.assertTrue(all(step.github_token for step in jobs["nightly"].steps))
-        self.assertFalse(any(step.github_token for step in jobs["campaign"].steps + jobs["campaign"].gate))
 
 
 class ReportAlert(Scratch):

@@ -1008,8 +1008,9 @@ def main() -> None:
             # Step 2 refreshed the trees once: refreshing again here let the
             # pack and the manifest describe two revisions of a moving tree.
             manifest_cmd.append("--no-refresh-data")
-        if args.target:
-            manifest_cmd.extend(["--target", args.target])
+        # No --target here: install/ holds the published lists, and every
+        # reader (site picker, release check, record) takes each file there
+        # as a whole platform. The per-target core lists are step 4c.
         ok, _ = run(manifest_cmd, STEP_LABELS["generate_manifests"])
         results["generate_manifests"] = ok
         all_ok = all_ok and ok

@@ -267,7 +267,7 @@ class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
             raise unittest.SkipTest("not a git checkout")
         lacking = [
             path.relative_to(API).as_posix() for path in sorted(API.rglob("*.json"))
-            if path.parent.name not in ("schemas", "manifests", "targets")
+            if path.parent.name not in ("schemas", "manifests", "targets", "exports")
             and path.name not in ("database.json", "stats.json", "release.json")
             and "commit" not in json.loads(path.read_text())
         ]

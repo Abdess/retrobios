@@ -279,6 +279,28 @@ class Redirects(unittest.TestCase):
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
         self.assertIn('generated / "redirects.json"', source)
 
+    def test_a_list_part_gone_with_its_rows_redirects_to_its_page(self):
+        """Only platform parts were recorded: gaps-files-to-source-7, gone
+        once 29 files were collected, ended on the 404 page."""
+        with tempfile.TemporaryDirectory() as tmp:
+            docs = Path(tmp)
+            part = '---\nlevel: reference\nparent:\n  label: "Gaps"\n  link: "/gaps/"\n---\n\n# P\n'
+            (docs / "gaps-files-to-source-7.md").write_text(part, encoding="utf-8")
+            (docs / "gaps.md").write_text("# Gaps\n", encoding="utf-8")
+            kept = {"platforms/b-atari-st.md": "platforms/b.md#atari-st"}
+            published = generate_site.record_parts(
+                docs, {"gaps-files-to-source-7.md", "gaps.md"}, kept)
+        self.assertEqual(published, {"gaps-files-to-source-7.md": "gaps.md", **kept})
+        # An emulator part names its parent with the site's base.
+        self.assertEqual(generate_site._parent_page("/retrobios/emulators/amiberry/"),
+                         "emulators/amiberry.md")
+        self.assertEqual(generate_site._parent_page("/platforms/b/#atari-st"),
+                         "platforms/b.md#atari-st")
+        # The next run made six parts.
+        self.assertEqual(
+            sitestarlight.redirects({}, {"gaps.md", "platforms/b.md"}, published),
+            {"/gaps-files-to-source-7/": "/gaps/", "/platforms/b-atari-st/": "/platforms/b/#atari-st"})
+
 
 class PlatformShareCards(unittest.TestCase):
     def test_every_platform_page_shares_its_own_card(self):

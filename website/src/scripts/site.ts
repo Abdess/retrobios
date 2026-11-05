@@ -24,7 +24,21 @@ type Item = {
 };
 
 const siteRoot = () => new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), location.origin);
-const normalizeHash = (raw: string) => raw.trim().toLowerCase().replace(/^0x/, '').replace(/\s+/g, '');
+// A pasted hash, or the line a checksum tool prints around it: md5sum
+// (`<hash>  <file>`), BSD and shasum --tag (`SHA1 (<file>) = <hash>`),
+// certutil (the bytes spaced on a line of their own), Get-FileHash's table.
+// The one word of an MD5, SHA1 or SHA256's length is taken: an 8-character
+// word in a file name searched for is no CRC32. None or two, and the text is
+// kept as typed, which isHash refuses.
+const normalizeHash = (raw: string) => {
+	const text = raw.trim().toLowerCase();
+	const bare = text.replace(/^0x/, '').replace(/\s+/g, '');
+	if (/^[0-9a-f]*$/.test(bare)) return bare;
+	const words = text.split('\n').flatMap((line) =>
+		/^[0-9a-f ]+$/.test(line.trim()) ? [line.replace(/\s+/g, '')] : (line.match(/\b[0-9a-f]+\b/g) ?? []));
+	const found = [...new Set(words.filter((word) => word.length > 8 && word.length in HASH_LENGTHS))];
+	return found.length === 1 ? found[0] : bare;
+};
 const isHash = (value: string) => /^[0-9a-f]+$/.test(value) && value.length in HASH_LENGTHS;
 
 // Tables
@@ -502,7 +516,13 @@ const distinct = (items: Item[], key: (item: Item) => string) => {
 // read under every hash of that file, so the MD5, the SHA1, the CRC32 and
 // the SHA256 of one dump give one answer. Setups and emulators are counted
 // per file, by its SHA1.
-const renderMatches = async (status: HTMLElement, result: HTMLElement, found: Item[]) => {
+const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: Item[]) => {
+	// A declaration that names the file holding the value: Batocera pins
+	// naomi2.zip by the MD5 of a ROM inside it, which no file of the
+	// collection has.
+	const searched = new Set(matched.map((item) => item.value));
+	const carried = [...new Set(matched.flatMap((item) => (item.sha1 && !searched.has(item.sha1) ? [item.sha1] : [])))];
+	const found = carried.length ? [...matched, ...(await lookupValues(carried).catch(() => [] as Item[]))] : matched;
 	const held = distinct(found.filter((item) => item.layer === 'collection'), (item) => item.sha1 ?? item.url);
 	const files = await Promise.all(held.map((item) => heldFile(item).catch(() => undefined)));
 	const looked = new Set(found.map((item) => item.value));

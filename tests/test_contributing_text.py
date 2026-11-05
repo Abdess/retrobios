@@ -72,6 +72,11 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
         self.assertNotIn("pipeline.py", block)
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         self.assertIn("validate_schemas.py --source-only", workflow)
+        # CI holds added profiles to their upstream, not edited ones: --changed
+        # failed a contributor on refs they never wrote.
+        self.assertIn("profile_sync.py --added --base", workflow)
+        self.assertIn("profile_sync.py --added --base upstream/main --strict", block)
+        self.assertNotIn("--changed --strict", block)
 
     def test_it_installs_what_the_checks_need_and_no_site_package(self):
         """The site is built by Node from website/package-lock.json: a pip

@@ -64,7 +64,7 @@ from common import (
 from artifacts import ArtifactLockBusy, artifact_lock
 from artifacts import json_text as _json_text
 from cross_reference import FileConsumers, held_copy
-from nativemode import digest_algorithm, reads_file_contents
+from nativemode import check_label, digest_algorithm, reads_file_contents
 
 
 
@@ -1664,6 +1664,7 @@ def generate_data_exports(
             ),
         })
     write_if_changed(str(downloads / "retrobios.dat"), collection_dat(db, generated_at))
+    platform_dats = _write_platform_dats(downloads / "dat", db, members, generated_at)
     write_if_changed(
         str(downloads / "files.csv"),
         _csv_document(
@@ -1741,6 +1742,7 @@ def generate_data_exports(
         (downloads / "files.csv", "File hashes CSV", "text/csv", None),
         (downloads / "retrobios.dat", "Collection DAT (Logiqx XML, for clrmamepro and RomVault)",
          "application/xml", None),
+        *((path, f"Setup DAT: {path.stem}", "application/xml", None) for path in platform_dats),
         (downloads / "platform-files.csv", "Platform declarations CSV", "text/csv", None),
         (downloads / "cross-reference.csv", "Cross-reference CSV", "text/csv", None),
         (downloads / "gaps.csv", "Verification and coverage gaps CSV", "text/csv", None),
@@ -1847,6 +1849,15 @@ def _publish_manifests(api: Path) -> list[tuple]:
         _record(targets / source.name)
         assets.append((targets / source.name, f"Target list: {source.stem}",
                        "application/json", "schemas/target-manifest.schema.json"))
+    # Every change each updated platform file carries, for a maintainer who
+    # reviews them by script: the Exports page linked only the files.
+    exports = api / "exports"
+    exports.mkdir(parents=True, exist_ok=True)
+    for source in sorted((_REPO_ROOT / "exports").glob("*.json")):
+        shutil.copy2(source, exports / source.name)
+        _record(exports / source.name)
+        assets.append((exports / source.name, f"Updated platform file, its changes: {source.stem}",
+                       "application/json", None))
     release = _REPO_ROOT / "release.json"
     if release.is_file():
         shutil.copy2(release, api / "release.json")
@@ -1977,6 +1988,14 @@ def _is_manifest(item: dict) -> bool:
 
 def _is_target_list(item: dict) -> bool:
     return item["url"].startswith("api/v1/targets/")
+
+
+def _is_setup_dat(item: dict) -> bool:
+    return item["url"].startswith("downloads/dat/")
+
+
+def _is_export_report(item: dict) -> bool:
+    return item["url"].startswith("api/v1/exports/")
 
 
 def _served_schemas() -> list[tuple[str, str]]:
@@ -2117,7 +2136,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
     ]
     for item in exports:
         if (item["media_type"] != "application/json" or _is_manifest(item)
-                or _is_target_list(item)):
+                or _is_target_list(item) or _is_export_report(item)):
             continue
         schema = (
             f"[JSON Schema](api/v1/{item['schema']})"
@@ -2224,6 +2243,10 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
             f"[{item['url'].rsplit('/', 1)[-1].removesuffix('.json')}]({item['url']})"
             for item in targets) + "." if targets else "",
         "",
+        "`api/v1/exports/<platform>.json` lists every change of a setup's "
+        "[updated file](exports.md), the report that page is written from, copied "
+        "byte for byte like the manifests.",
+        "",
         "| Field | Meaning |",
         "|-------|---------|",
         *_schema_field_rows(manifest_schema, MANIFEST_TOP_FIELDS),
@@ -2287,7 +2310,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "|--------|--------|-----:|--------|",
     ])
     for item in exports:
-        if item["media_type"] == "application/json":
+        if item["media_type"] == "application/json" or _is_setup_dat(item):
             continue
         lines.append(
             f"| [{item['title']}]({item['url']}) | `{item['media_type']}` | "
@@ -2302,8 +2325,14 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "per `bios/<Manufacturer>/<Console>/` folder of the collection, named "
         "`Manufacturer\\Console` so the tools look in that subfolder, each file a "
         "rom named by its path below that folder. It audits a copy of the "
-        "collection's `bios/` tree, or rebuilds that layout from your own dumps. A "
-        "platform pack has its own layout and is checked with `install.py --check`.",
+        "collection's `bios/` tree, or rebuilds that layout from your own dumps.",
+        "",
+        "A setup's DAT, `downloads/dat/<platform>.dat`, describes its BIOS folder "
+        "once installed: one game named after the folder (`bios`, `system`), each "
+        "file a rom named by its place below it, as its manifest lists it. It audits "
+        "that folder with the same tools. Setup DATs: " + ", ".join(
+            f"[{item['url'].rsplit('/', 1)[-1].removesuffix('.dat')}]({item['url']})"
+            for item in exports if _is_setup_dat(item)) + ".",
         "",
         "The SQLite file contains indexed tables for content hashes, provenance "
         "catalog matches, platform declarations, emulator profiles and current "
@@ -2611,8 +2640,6 @@ def collection_dat(db: dict, generated_at: str) -> str:
     folder, subfolders joined with a backslash as Logiqx DATs write them. An auditor checking a BIOS tree against the
     collection had JSON, CSV and SQLite, and a converter to write.
     """
-    import xml.etree.ElementTree as ET  # noqa: PLC0415
-
     games: dict[str, list[dict]] = {}
     files = db.get("files", {})
     # Every copy, not the one path the database keeps: an audit of bios/
@@ -2628,12 +2655,64 @@ def collection_dat(db: dict, generated_at: str) -> str:
             games.setdefault("\\".join(folder), []).append(
                 {**files[sha1], "_rom": "\\".join(parts[1 + len(folder):])}
             )
+    return _logiqx(SITE_NAME, f"{SITE_NAME} collection ({sum(map(len, games.values()))} files)",
+                   games, generated_at)
+
+
+def _write_platform_dats(folder: Path, db: dict, members: dict, generated_at: str) -> list[Path]:
+    """downloads/dat/<platform>.dat for each install manifest."""
+    folder.mkdir(parents=True, exist_ok=True)
+    digests = _data_member_digests(members)
+    written = []
+    for source in sorted((_REPO_ROOT / "install").glob("*.json")):
+        manifest = json.loads(source.read_text(encoding="utf-8"))
+        path = folder / f"{source.stem}.dat"
+        write_if_changed(str(path), platform_dat(manifest, db, digests, generated_at))
+        written.append(path)
+    return written
+
+
+def platform_dat(manifest: dict, db: dict, member_digests: dict[str, dict[str, str]],
+                 generated_at: str) -> str:
+    """What one setup's BIOS folder holds once installed, as a Logiqx DAT.
+
+    One game named after the folder (`bios`, `system`), each file a rom
+    named by its place below it, as the install manifest writes it: the
+    files of the setup's list and those its cores load, and the members of
+    its data directories. A Batocera user auditing share/bios against the
+    collection DAT met thousands of sets laid out by manufacturer.
+    """
+    files = db.get("files", {})
+    roms: list[dict] = []
+    for entry in manifest.get("files") or []:
+        if entry.get("root") == "save":
+            continue  # installed in the save directory, not this folder
+        sha1 = str(entry.get("sha1", ""))
+        roms.append({**files.get(sha1, {}), "sha1": sha1, "size": entry.get("size", 0),
+                     "_rom": str(entry["dest"]).replace("/", "\\")})
+    for tree in manifest.get("data_directories") or []:
+        dest = str(tree.get("dest") or "").strip("/")
+        for member, info in (tree.get("files") or {}).items():
+            sha1 = str(info.get("sha1", ""))
+            path = f"{dest}/{member}" if dest else member
+            roms.append({**member_digests.get(sha1, {}), "sha1": sha1,
+                         "size": info.get("size", 0), "_rom": path.replace("/", "\\")})
+    folder = str(manifest.get("base_destination") or "bios").strip("/").rsplit("/", 1)[-1]
+    name = f"{SITE_NAME} - {manifest.get('display_name') or manifest['platform']}"
+    unique = list({rom["_rom"]: rom for rom in reversed(roms)}.values())
+    return _logiqx(name, f"{name} ({len(unique)} files)", {folder: unique}, generated_at)
+
+
+def _logiqx(name: str, description: str, games: dict[str, list[dict]], generated_at: str) -> str:
+    """Games of roms as a Logiqx datafile, each rom's `_rom` its name."""
+    import xml.etree.ElementTree as ET  # noqa: PLC0415
+
     root = ET.Element("datafile")
     header = ET.SubElement(root, "header")
     version = generated_at[:10].replace("-", "")
     for tag, text in (
-        ("name", SITE_NAME),
-        ("description", f"{SITE_NAME} collection ({sum(map(len, games.values()))} files)"),
+        ("name", name),
+        ("description", description),
         ("version", version),
         ("date", generated_at[:10]),
         ("author", SITE_NAME),
@@ -3194,8 +3273,6 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
 SETUP_TABLE_PAGE = "wiki/verification-modes.md"
 SETUP_TABLE_ANCHOR = "every-setup-at-a-glance"
 SETUP_TABLE_LINK = f"{SETUP_TABLE_PAGE}#{SETUP_TABLE_ANCHOR}"
-# How a setup checks a file, in the words of a reader.
-_HOW_IT_CHECKS = {"existence": "name only", "md5": "MD5", "sha1": "SHA-1"}
 
 
 def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
@@ -3220,7 +3297,7 @@ def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
         lines.append(
             f"| [{cov['platform']}](../platforms/{name}.md)"
             f"{' (archived)' if status == 'archived' else ''} | {listed} | {zipped} | "
-            f"{_HOW_IT_CHECKS.get(cov['mode'], cov['mode'])} |"
+            f"{check_label(cov['mode'], cov['config'].get('hash_rule'))} |"
         )
     lines += [
         "",
@@ -3263,18 +3340,49 @@ PLATFORM_PART_BUDGET = 700
 PLATFORM_REFERENCE_BUDGET = 600
 
 
-# Every part page a platform list has had, with the system it held:
-# platforms/batocera-atari-st.md -> platforms/batocera.md#atari-st. When a
-# budget or a list changes, a part can fold back into its platform page,
-# and its address then redirects there instead of ending on the 404 page.
-PLATFORM_PARTS_FILE = (Path(__file__).resolve().parent.parent
-                       / "website" / "src" / "data" / "platform-parts.json")
+# Every part page the site has published, with the page it belongs to:
+# platforms/batocera-atari-st.md -> platforms/batocera.md#atari-st,
+# gaps-files-to-source-7.md -> gaps.md. When a budget or a list changes, a
+# part can fold back or the list shrink, and its address then redirects to
+# that page instead of ending on the 404 page.
+PUBLISHED_PARTS_FILE = (Path(__file__).resolve().parent.parent
+                        / "website" / "src" / "data" / "published-parts.json")
 
 
-def _published_platform_parts() -> dict[str, str]:
-    if not PLATFORM_PARTS_FILE.is_file():
+def _published_parts() -> dict[str, str]:
+    if not PUBLISHED_PARTS_FILE.is_file():
         return {}
-    return json.loads(PLATFORM_PARTS_FILE.read_text(encoding="utf-8"))
+    return json.loads(PUBLISHED_PARTS_FILE.read_text(encoding="utf-8"))
+
+
+def _parent_page(link: str) -> str:
+    """The page a `parent:` link names (/platforms/batocera/), under docs/."""
+    path, _, fragment = link.partition("#")
+    # Written with the site's base (/retrobios/emulators/x/) or without it.
+    path = path.removeprefix(sitestarlight.BASE.rstrip("/"))
+    stem = path.strip("/") or "index"
+    return f"{stem}.md" + (f"#{fragment}" if fragment else "")
+
+
+def record_parts(docs: Path, present: set[str], published: dict[str, str]) -> dict[str, str]:
+    """``published`` with every page of this run that names its parent.
+
+    Only platform parts were recorded: gaps-files-to-source-7 or
+    mame-files-10, gone once their list shrank, ended on the 404 page. A
+    part already recorded keeps its target, which may name a section.
+    """
+    found = dict(published)
+    for rel in sorted(present):
+        page = docs / rel
+        if not page.is_file():
+            page = page.with_suffix(".mdx")
+        try:
+            parent = _front_matter(page.read_text(encoding="utf-8")).get("parent")
+        except OSError:
+            continue
+        if isinstance(parent, dict) and parent.get("link") and rel not in found:
+            found[rel] = _parent_page(str(parent["link"]))
+    return dict(sorted(found.items()))
 
 
 # A list moved off a reference page (gaps, provenance) is cut in parts of
@@ -3406,20 +3514,14 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
     return link if sha1 in declared else f"{link} (sha1 `{sha1[:8]}`)"
 
 
-# Platforms whose launcher records are read from the repository and revision
-# of their BIOS list: batocera_scraper reads configgen at its tag,
-# retrobat_scraper reads emulatorLauncher at the list's commit
-# (launcher_revision). The others read another repository.
-_LAUNCHERS_IN_LIST_REPO = frozenset({"batocera", "retrobat"})
-
-
-def _launcher_refs(platform: str, config: dict) -> dict[str, list[str]]:
+def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
     from launchers import _names as launcher_names
     from sitesources import launcher_ref_markdown, list_source
 
-    source = (list_source(str(config.get("source") or ""))
-              if platform in _LAUNCHERS_IN_LIST_REPO else None)
+    # Every scraper reads its launchers in the repository and at the revision
+    # of the list it scrapes, so `source` pins each source_ref.
+    source = list_source(str(config.get("source") or ""))
     found: dict[str, list[str]] = {}
     for record in config.get("launchers") or []:
         if not isinstance(record, dict) or not record.get("source_ref"):
@@ -3436,21 +3538,23 @@ def _launcher_refs(platform: str, config: dict) -> dict[str, list[str]]:
 # The hash a row shows first, when the list does not say which it checks.
 _ROW_HASHES = ("sha1", "md5", "sha256", "crc32")
 # An untested entry whose reason is a hash the bytes do not match.
-_WRONG_HASH = re.compile(r"hash|mismatch|expected|must match", re.IGNORECASE)
+_OTHER_HASH = re.compile(r"hash|mismatch|expected|must match", re.IGNORECASE)
 # A list this long gets a filter box above it, as a table of RECORD_ROWS
 # rows does (website/src/plugins/rehype-stack-tables.mjs).
 FILTER_ROWS = 20
 
 
 def _status_chip(f: dict) -> str:
-    """The row's status as a chip, its word and its colour saying the same."""
+    """The row's status as a chip, its word and its colour saying the same. A
+    declared hash the held copy does not have is "Other hash": the two differ,
+    which says nothing of whose is right (a platform may pin its own bundle)."""
     status = f.get("status")
     if status == "ok":
         word, tone = "OK", "success"
     elif status == "missing":
         word, tone = "Missing", "danger"
     elif status == "untested":
-        word = "Wrong hash" if _WRONG_HASH.search(str(f.get("reason") or "")) else "Untested"
+        word = "Other hash" if _OTHER_HASH.search(str(f.get("reason") or "")) else "Untested"
         tone = "warning"
     else:
         word, tone = str(status), "muted"
@@ -3631,7 +3735,7 @@ def _render_platform_systems(
     # Per-system detail sections (collapsible for large platforms)
     use_collapsible = len(by_system) > 10
     by_system_declared = _declared_by_system(config_files)
-    launched = _launcher_refs(platform[0] if platform else "", config or {})
+    launched = _launcher_refs(config or {})
 
     sections: list[dict] = []
     for sys_id, files in sorted(by_system.items()):
@@ -3760,7 +3864,10 @@ def _platform_data_links(name: str) -> str:
         f"[JSON](../api/v1/platforms/{name}.json)",
     ]
     if (_REPO_ROOT / "install" / f"{name}.json").is_file():
-        links.append(f"[install manifest]({REPO_URL}/blob/main/install/{name}.json)")
+        # The site's own copy, byte for byte (_publish_manifests).
+        links.append(f"[install manifest](../api/v1/manifests/{name}.json)")
+        # The installed BIOS folder for clrmamepro and RomVault.
+        links.append(f"[DAT](../downloads/dat/{name}.dat)")
     return ", ".join(links)
 
 
@@ -3978,6 +4085,32 @@ def _network_share(name: str, guide: Guide) -> str:
     return ""
 
 
+def _share_tabs(name: str, share: str) -> tuple[dict[str, str], dict[str, str]]:
+    """The command per computer for a network folder (\\\\RECALBOX\\share\\bios),
+    and how a Mac or a Linux desktop opens that folder first. Only Windows
+    had a line: a Mac user fell back to SSH or to taking the card out.
+
+    macOS mounts smb://recalbox/share at /Volumes/share. A Linux desktop
+    mounts it where its file manager chooses, so that tab names the folder.
+    """
+    host, _, rest = share.lstrip("\\").partition("\\")
+    volume, _, below = rest.partition("\\")
+    url = f"smb://{host.lower()}/{volume}"
+    tail = "/" + below.replace("\\", "/") if below else ""
+    args = {
+        "windows": f"--platform {name} --dest {share}",
+        "macos": f"--platform {name} --dest /Volumes/{volume}{tail}",
+        "linux": f"--platform {name} --dest /path/to/{volume}{tail}",
+    }
+    how = {
+        "macos": (f"In Finder, Go > Connect to Server: `{url}`. Then paste the line in "
+                  "**Terminal**."),
+        "linux": (f"Open `{url}` in your file manager. Paste the line in a terminal, "
+                  f"with the folder it opened for `/path/to/{volume}`."),
+    }
+    return args, how
+
+
 def _offline_line(name: str) -> list[str]:
     """The offline line, on a setup whose ZIP a release publishes: the
     installer reads that ZIP with no network (`--from-pack`)."""
@@ -4038,10 +4171,16 @@ def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]
     if share or (card and guide.run == ("device",)):
         computer = ["## From your computer { #from-your-computer }", ""]
         if share:
+            args, how = _share_tabs(name, share)
+            # The setup page stays in its word budget: its Mac and Linux
+            # lines are on the get/ page, the one the command is shared from.
+            tabs = ("windows",) if page_link else ("windows", "macos", "linux")
             computer += [
                 "Needs the device on your network. Run the command on the computer.",
                 "",
-                *terminal_tabs(("windows",), {"windows": f"--platform {name} --dest {share}"}),
+                *terminal_tabs(tabs, args, how=how),
+                *([f"[Mac or Linux](../{get_page_link(name)}#from-your-computer)", ""]
+                  if page_link else []),
                 SAFE_LINK,
                 "",
             ]
@@ -4295,9 +4434,8 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     return lines
 
 
-# How a platform checks a file, in words.
-_CHECK_WORDS = {"existence": "name only", "md5": "MD5", "sha1": "SHA-1", "sha256": "SHA-256",
-                "crc32": "CRC32"}
+# A hash a platform's list writes, in words.
+_HASH_WORDS = {"md5": "MD5", "sha1": "SHA-1", "sha256": "SHA-256", "crc32": "CRC32"}
 
 
 def generate_platform_page(
@@ -4377,7 +4515,7 @@ def generate_platform_page(
             *_stat(f"{cov['present']}/{cov['total']}", f"Coverage ({pct})"),
             *_stat(str(cov["verified"]), "Verified"),
             *_stat(str(cov["missing"]), "Missing"),
-            *_stat(f'<span class="rb-badge {mode_badge}">{_CHECK_WORDS.get(mode, mode)}</span>',
+            *_stat(f'<span class="rb-badge {mode_badge}">{check_label(mode, config.get("hash_rule"))}</span>',
                    "Checked by"),
             "</div>",
             "",
@@ -4387,7 +4525,7 @@ def generate_platform_page(
     # The hash the list writes, when it is not the one the platform checks:
     # RetroArch checks presence and its System.dat writes sha1.
     if hash_type and hash_type != mode:
-        lines.append(f"| Hashes in the list | {_CHECK_WORDS.get(hash_type, hash_type)} |")
+        lines.append(f"| Hashes in the list | {_HASH_WORDS.get(hash_type, hash_type)} |")
     if version:
         lines.append(f"| Version | {version} |")
     # base_destination is only the root the platform's own list writes its
@@ -4524,13 +4662,15 @@ def generate_files_page() -> str:
         "Tools such as clrmamepro and RomVault print one, and so do emulator logs "
         "and the BIOS lists of setups.",
         "",
-        "Paste it below. The page shows the file in the collection that has it, the "
-        "setups that list it and the emulators that check for it.",
+        "Paste it below, alone or in the line md5sum or certutil prints. The page "
+        "shows the file in the collection that has it, the setups that list it and "
+        "the emulators that check for it.",
         "",
         '<form class="rb-file-lookup" action="./" method="get">',
         '<label for="rb-hash">SHA1, MD5, CRC32 or SHA256</label> ',
+        # No pattern: the line md5sum or certutil prints is taken whole, and
+        # the page reads the hash out of it.
         '<input id="rb-hash" name="hash" size="66" autocomplete="off" spellcheck="false" '
-        'pattern="\\s*(0x)?([0-9a-fA-F]{8}|[0-9a-fA-F]{32}|[0-9a-fA-F]{40}|[0-9a-fA-F]{64})\\s*" '
         'required> ',
         '<button type="submit">Find</button>',
         "</form>",
@@ -4681,6 +4821,34 @@ def _console_system_names(profiles: dict, coverages: dict) -> dict[tuple[str, st
     return {key: next(iter(names)) for key, names in found.items() if len(names) == 1}
 
 
+def _data_member_digests(
+    members: dict, data_registry: dict | None = None, root: Path = _REPO_ROOT,
+) -> dict[str, dict[str, str]]:
+    """sha1 -> every hash the lookup takes, for each data directory member
+    whose copy in the tree's local cache has the sha1 the manifest records.
+    The manifests carry sha1 alone: the MD5 of Dolphin's ApprovedInis.json
+    found nothing although the pack ships it."""
+    from common import load_data_dir_registry  # noqa: PLC0415
+    from hashing import compute_hashes  # noqa: PLC0415
+
+    if data_registry is None:
+        data_registry = load_data_dir_registry(str(root / "platforms"))
+    found: dict[str, dict[str, str]] = {}
+    for ref, tree in sorted(members.items()):
+        cache = (data_registry.get(ref) or {}).get("local_cache")
+        if not cache:
+            continue
+        for member, info in sorted(tree.items()):
+            sha1 = str(info.get("sha1", ""))
+            path = root / cache / member
+            if not sha1 or sha1 in found or not path.is_file():
+                continue
+            digests = compute_hashes(path, frozenset(HASH_ALGORITHMS))
+            if digests.get("sha1") == sha1:
+                found[sha1] = {algo: digests[algo].lower() for algo in HASH_ALGORITHMS}
+    return found
+
+
 def file_lookup_records(
     db: dict,
     coverages: dict,
@@ -4702,15 +4870,19 @@ def file_lookup_records(
         str(info.get("sha1", "")): member.rsplit("/", 1)[-1]
         for tree in (members or {}).values() for member, info in sorted(tree.items())
     }
+    member_digests = _data_member_digests(members or {})
     records: list[dict] = []
     for item in locations:
         sha1 = item["sha1"]
         entry = files.get(sha1)
         if entry is None:
-            # A data directory member: the manifests record its sha1 only.
-            records.append({"value": sha1, "algorithm": "sha1", "layer": "data-directory",
-                            "name": member_names.get(sha1, ""), "sha1": sha1,
-                            "url": item["url"]})
+            # A data directory member: the manifests record its sha1, the
+            # tree on disk the other three.
+            digests = member_digests.get(sha1) or {"sha1": sha1}
+            records.extend({"value": digests[algorithm], "algorithm": algorithm,
+                            "layer": "data-directory", "name": member_names.get(sha1, ""),
+                            "sha1": sha1, "url": item["url"]}
+                           for algorithm in HASH_ALGORITHMS if algorithm in digests)
             continue
         parts = str(entry.get("path", "")).split("/")
         held_by = named.get((_slug(parts[1]), parts[2])) if len(parts) > 3 else None
@@ -4726,12 +4898,17 @@ def file_lookup_records(
             url = _site_path(f"platforms/{key}.md#{system_id.replace(' ', '-')}")
             system_label = _lookup_system_name(system_id)
             for entry in system.get("files") or []:
+                # A hash of a ROM inside the archive (zipped_file) designates
+                # no collection file by itself: the archive holding it is the one.
+                archive = (consumers.sha1_of(entry)
+                           if consumers is not None and entry.get("zipped_file") else None)
                 for algorithm in HASH_ALGORITHMS:
                     for value in _hash_values(entry.get(algorithm)):
                         records.append({
                             "value": value, "algorithm": algorithm, "layer": "platform",
                             "owner": key, "name": str(entry.get("name", "")), "url": url,
                             **({"system_name": system_label} if system_label else {}),
+                            **({"sha1": archive} if archive else {}),
                         })
     for key, profile in sorted(profiles.items()):
         if profile.get("type") in ("alias", "test"):
@@ -4823,8 +5000,9 @@ def _held_under_every_hash(records: list[dict], files: dict, indexes: dict) -> l
     for record in records:
         if record["layer"] not in ("platform", "emulator"):
             continue
-        sha1 = _collection_sha1(files, indexes, record["algorithm"], record["value"])
-        if sha1 is None:
+        sha1 = record.get("sha1") or _collection_sha1(
+            files, indexes, record["algorithm"], record["value"])
+        if sha1 not in files:
             continue
         record["sha1"] = sha1
         for algorithm in HASH_ALGORITHMS:
@@ -5315,6 +5493,8 @@ def generate_provenance_page(
             "can check a personal collection against it. A contribution "
             "matching one of these hashes is welcome: see "
             "[Contributing](contributing.md).",
+            "",
+            markup.button("Download the list (CSV)", "downloads/provenance-wanted.csv"),
             "",
         ]
     )
@@ -10034,6 +10214,16 @@ def _declared_hashes(config: dict, detail: dict) -> dict[str, list[str]]:
     return {}
 
 
+def _declared_destination(config: dict, detail: dict) -> str:
+    """Where the platform's list puts a reported file, its name when the
+    entry names no folder."""
+    system = (config.get("systems") or {}).get(detail.get("system", "")) or {}
+    for entry in system.get("files") or []:
+        if isinstance(entry, dict) and entry.get("name") == detail.get("name"):
+            return str(entry.get("destination") or detail.get("name", ""))
+    return str(detail.get("name", ""))
+
+
 def short_hash(value: str) -> str:
     """A hash in a table cell: its first 12 characters, the whole value in
     the title. Full MD5 and SHA1 values pushed the gaps tables past the
@@ -10093,8 +10283,13 @@ def _render_problem_files(
             entry = missing_files.setdefault(fname, {
                 "name": fname, "required": p["required"],
                 "platforms": [], "reason": p["reason"], "categories": set(),
+                "where": {},
             })
             entry["platforms"].append(p["platform"])
+            # The platform's entry for the file, and the folder it expects.
+            entry["where"].setdefault(
+                (p["platform"], p.get("platform_key", ""), p.get("system", "")), set(),
+            ).add(p.get("destination") or fname)
             entry["categories"].add(p.get("category", "bios"))
             if p["required"]:
                 entry["required"] = True
@@ -10142,7 +10337,9 @@ def _render_problem_files(
                 "load, `game_data` comes from a copy of the game, `unread` is "
                 "opened by none of them. Only a missing `bios` entry stops a "
                 "console from starting. A name a list declares in several "
-                "folders is one row.",
+                "folders is one row. Each platform links to its entry, which "
+                "names the cores examined, and is followed by where its list "
+                "puts the file.",
                 "",
                 "| File | Category | Required | Platforms |",
                 "|------|----------|----------|-----------|",
@@ -10150,7 +10347,12 @@ def _render_problem_files(
             for fname in sorted(missing_files):
                 f = missing_files[fname]
                 req = "yes" if f["required"] else "no"
-                plats = ", ".join(sorted(set(f["platforms"])))
+                plats = "; ".join(
+                    (f"[{display}](platforms/{key}.md#{system.replace(' ', '-')})"
+                     if key and system else display)
+                    + " " + ", ".join(_code(dest) for dest in sorted(dests))
+                    for (display, key, system), dests in sorted(f["where"].items())
+                )
                 cats = f["categories"]
                 category = "bios" if "bios" in cats else ", ".join(sorted(cats))
                 lines.append(f"| `{fname}` | {category} | {req} | {plats} |")
@@ -10308,6 +10510,22 @@ def _upload_folder(profile: dict) -> str:
     return ""
 
 
+def reading_platforms(emu_name: str, profile: dict, name: str,
+                      configs: dict[str, dict]) -> set[str]:
+    """Of the platforms running an emulator (name -> config), those whose
+    build of it reads the entry: BlastEm's cdbios.bin is read by the
+    standalone build only, and RetroBat hands that build other names."""
+    from common import platform_layouts, standalone_set  # noqa: PLC0415
+    from validation import filter_files_by_mode, unread_on  # noqa: PLC0415
+
+    return {
+        platform for platform, config in configs.items()
+        if any(f.get("name") == name and not unread_on(f, platform)
+               for view, standalone in platform_layouts(emu_name, profile, standalone_set(config))
+               for f in filter_files_by_mode(view.get("files") or [], standalone))
+    }
+
+
 def generate_gap_analysis(
     profiles: dict,
     coverages: dict,
@@ -10373,6 +10591,7 @@ def generate_gap_analysis(
                     "discrepancy": d.get("discrepancy", ""),
                     "system": d.get("system", ""),
                     "declared": _declared_hashes(cov.get("config") or {}, d),
+                    "destination": _declared_destination(cov.get("config") or {}, d),
                     "path": d.get("path") or "",
                 })
 
@@ -10412,12 +10631,6 @@ def generate_gap_analysis(
         "|----------|-----------------:|-------------------------:|------------|",
     ])
 
-    mode_labels = {
-        "md5": "MD5 hash",
-        "sha1": "SHA1 hash",
-        "existence": "file presence",
-    }
-
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
         core_total = (
@@ -10427,7 +10640,7 @@ def generate_gap_analysis(
             f"| [{display}](platforms/{pname}.md) "
             f"| {_ratio_cell(cov['present'], cov['total'], _missing_required_firmware(cov))} "
             f"| {_ratio_cell(cov['core_present'], core_total)} "
-            f"| {mode_labels.get(cov['mode'], cov['mode'])} |"
+            f"| {check_label(cov['mode'], cov['config'].get('hash_rule'))} |"
         )
     lines.extend([
         "",
@@ -10645,6 +10858,7 @@ def generate_gap_analysis(
             for emu_name in matched:
                 emu_to_platforms.setdefault(emu_name, set()).add(pname)
 
+
         # One row per file to find: a name two emulators share is one file
         # only when both declare the same hash. Keyed by name alone, Fallout
         # 2's master.dat vanished behind Fallout 1's, and the three Sonic
@@ -10703,7 +10917,9 @@ def generate_gap_analysis(
                 key=lambda x: (not x["required"], x["name"]),
             ):
                 plats = sorted(set().union(
-                    *(emu_to_platforms.get(key, set()) for key in m["emu_keys"])
+                    *(reading_platforms(key, profiles[key], m["name"], {
+                        p: coverages[p]["config"] for p in emu_to_platforms.get(key, set())
+                    }) for key in m["emu_keys"])
                 ))
                 plat_badges = (
                     " ".join(
@@ -12010,7 +12226,7 @@ def _generate(args: argparse.Namespace) -> None:
     )
     if HANDHELD_GUIDE:
         write_if_changed(str(docs / HANDHELD_GUIDE.path), generate_handheld_guide(HANDHELD_GUIDE))
-    published_parts = _published_platform_parts()
+    published_parts = _published_parts()
     for name, cov in coverages.items():
         # The emulators this platform runs, not every one of the system.
         runs = resolve_platform_cores(cov["config"], profiles)
@@ -12199,8 +12415,6 @@ def _generate(args: argparse.Namespace) -> None:
     stale += _sweep_top_pages(docs)
 
     print("Adding page metadata and structured data...")
-    write_if_changed(str(PLATFORM_PARTS_FILE),
-                     json.dumps(dict(sorted(published_parts.items())), indent=1) + "\n")
     lastmod = decorate_markdown_pages(docs)
 
     nav = generate_nav(coverages, manufacturers, profiles, registry,
@@ -12211,6 +12425,8 @@ def _generate(args: argparse.Namespace) -> None:
         path.relative_to(docs).with_suffix(".md").as_posix()
         for path in docs.rglob("*.md*") if path.suffix in (".md", ".mdx")
     } - {"404.md"}
+    published_parts = record_parts(docs, present, published_parts)
+    write_if_changed(str(PUBLISHED_PARTS_FILE), json.dumps(published_parts, indent=1) + "\n")
     generated = site / "src" / "generated"
     generated.mkdir(parents=True, exist_ok=True)
     write_if_changed(str(generated / "sidebar.json"),

@@ -283,6 +283,13 @@ jobs:
         if: ${{ !cancelled() }}
         run: python scripts/generate_site.py
 
+      # website/dist is gitignored too. Built after the suite, the tests that
+      # read the rendered pages (page budgets, sidebar, search) found none and
+      # skipped on every run.
+      - name: Build the site
+        if: ${{ !cancelled() }}
+        run: npm run build --prefix website
+
       - name: Run test suite
         if: ${{ !cancelled() }}
         # No test downloads a release asset: 252 MB files fetched into the
@@ -302,11 +309,9 @@ jobs:
       # heading failed it there with nothing in front of it. Run whatever the
       # suite returned, so one red step does not hide the other. The release
       # assets are not restored: they change counts, not links or headings.
-      - name: Build the site
+      - name: Check the built site
         if: ${{ !cancelled() }}
-        run: |
-          npm run build --prefix website
-          python scripts/validate_site.py --site-dir website/dist
+        run: python scripts/validate_site.py --site-dir website/dist
 
   label-pr:
     runs-on: ubuntu-latest

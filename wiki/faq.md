@@ -34,7 +34,7 @@ option.
 
 ## Zip or unzip? { #zip-or-unzip }
 
-Unzip it into the folder your setup's page names. Keep
+Unzip into the folder your setup's page names. Keep
 inner ZIPs zipped, like `neogeo.zip`.
 
 ## Does a BIOS work on every setup?
@@ -57,7 +57,7 @@ Game sets must match the emulator's version:
 
 - It stops if the installer does not match its expected fingerprint, and
   checks each file.
-- It writes in your BIOS folder, and some emulators' save folder.
+- It fills the BIOS folder, some save folders and a games cache.
 - It never touches games or saves.
 - It keeps each file it replaces in `retrobios-backup`, for `--restore`.
 

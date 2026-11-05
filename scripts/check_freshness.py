@@ -1242,8 +1242,10 @@ def _check_installer_pins() -> Finding:
 
 def check_source_paths(profiles: dict) -> Finding:
     """The site links a cited path only where source-paths.json records it
-    in the tree the profile pins. A recorded tree no profile pins any more
-    means a pin moved and `sitesources.py --fetch` was not run after it."""
+    in the tree the profile pins. A recorded tree no profile pins any more,
+    or a pinned tree the record lacks, means a pin moved or a profile was
+    added and `sitesources.py --fetch` was not run after it. Every tree a run
+    tries is recorded, read or not, so a lacking one was never tried."""
     import sitesources  # noqa: PLC0415
 
     pinned = {
@@ -1256,14 +1258,18 @@ def check_source_paths(profiles: dict) -> Finding:
     except (OSError, ValueError) as exc:
         return Finding("profiles", "source-paths.json", ERROR, detail=str(exc))
     orphaned = sorted(recorded - pinned)
+    unrecorded = sorted(pinned - recorded)
+    problems = [f"{len(found)} {words}" for found, words in (
+        (orphaned, "recorded trees no profile pins"),
+        (unrecorded, "pinned trees not recorded"),
+    ) if found]
     return Finding(
         "profiles",
         "source-paths.json",
-        STALE if orphaned else OK,
+        STALE if problems else OK,
         local=f"{len(recorded)} trees",
-        detail=(f"{len(orphaned)} recorded trees no profile pins: run "
-                "scripts/sitesources.py --fetch") if orphaned
-        else "every recorded tree is a pinned one",
+        detail=(", ".join(problems) + ": run scripts/sitesources.py --fetch") if problems
+        else "every pinned tree is recorded, and only those",
     )
 
 

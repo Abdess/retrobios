@@ -34,6 +34,7 @@ from common import (
     unique_emulator_profiles,
     write_if_changed,
 )
+from nativemode import check_label
 import release_record
 from siteguides import install_command
 from verify import verify_platform
@@ -534,11 +535,10 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
     emulator_count = len(profiles)
     comp = compute_composition(db)
     missing_total = len(set().union(*(c["missing_names"] for c in coverages.values())))
-    # "Not in the collection yet" implies somebody could still put it there.
-    # Most of this figure cannot be: per-user registration keys, slots the
-    # emulator expects the user to fill, dumps nobody has made. Counting those
-    # beside genuinely acquirable files overstates what is actionable, so the
-    # two are reported apart.
+    # The entries marked `unsourceable:` are never served by name, so a
+    # homonym cannot take their place: retail game data, per-user keys, slots
+    # the user fills. Each stays an acquisition target with its reason, and
+    # is counted apart from the files still to be found.
     unsourceable_total = len(
         set().union(*(c["unsourceable_names"] for c in coverages.values()))
     )
@@ -667,9 +667,10 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
             "",
             (
                 f"- **{acquirable_total:,} files** the platforms' emulators load"
-                f" are still to be found, and {unsourceable_total:,} more cannot"
-                f" be sourced at all (per-user keys, user-filled slots, dumps"
-                f" nobody has made). Both are named in the"
+                f" are still to be found, and {unsourceable_total:,} more the"
+                f" collection does not hold and does not serve by name (retail"
+                f" data, per-user keys, user-filled slots), each with its reason."
+                f" Both are named in the"
                 f" [gap analysis]({SITE_URL}gaps/)"
                 if missing_total
                 else "- **Nothing missing**: every file the platforms'"
@@ -737,15 +738,9 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         ]
     )
 
-    mode_labels = {
-        "md5": "MD5 hash",
-        "sha1": "SHA1 hash",
-        "existence": "file presence",
-    }
-
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = f"{cov['platform']} *" if name in archived else cov["platform"]
-        checked = mode_labels.get(cov["mode"], cov["mode"])
+        checked = check_label(cov["mode"], cov["config"].get("hash_rule"))
         core_total = (
             cov["core_present"] + cov["core_missing"] + cov["core_unsourceable"]
         )
@@ -792,6 +787,9 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
             "",
             "# Firmware only: the game data a list or a core names is left out, each file named",
             "python scripts/generate_pack.py --platform emuelec --no-game-data",
+            "",
+            "# The bare minimum: only the files each core needs to start",
+            "python scripts/generate_pack.py --platform batocera --required-only",
             "",
             "# List available emulators and systems",
             "python scripts/generate_pack.py --list-emulators",
@@ -973,11 +971,15 @@ the checks CI runs on a pull request (Python 3.12 or newer):
 pip install pyyaml "jsonschema[format-nongpl]" markdown
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
-python scripts/profile_sync.py --changed --strict  # each profile the branch adds or edits
+python scripts/profile_sync.py --added --base upstream/main --strict  # each profile the branch adds
 python scripts/refresh_data_dirs.py  # data directories the pack-building tests read
 python scripts/generate_site.py       # the pages the site tests read
 python -m unittest discover -s tests -t .
 ```
+
+`upstream` is this repository as a remote of your fork
+(`git remote add upstream https://github.com/Abdess/retrobios`). A profile you
+only edit is not held to `--strict`: its older refs are reviewed by hand.
 
 The full pipeline is not needed for a contribution: it rebuilds every pack
 in `dist/`, which is why maintainers run it before a release.

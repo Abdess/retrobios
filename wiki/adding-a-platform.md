@@ -423,7 +423,7 @@ launchers:
 | `fails_scope` | `emulator` when the failure needs every record of the emulator to come up empty |
 | `depends_on_option` | Options or conditions that decide whether the record applies |
 | `device` | Devices whose shipped config the record reads, set only where a package ships configs that differ between devices |
-| `source_ref` | `path:lines` at the revision `source` pins |
+| `source_ref` | `path:lines` in the repository and at the revision `source` pins, which the site links |
 
 Batocera's generators are read with `ast`, RetroBat's C# generators as text.
 ROCKNIX and EmuDeck launch from shell scripts and configs shipped with each

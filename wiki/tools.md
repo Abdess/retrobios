@@ -528,7 +528,8 @@ prose that the same pass would have moved is not reported as blocked. Drop
 A moved pin also moves the links the site draws into the cited sources: a
 path is linked only where `website/src/data/source-paths.json` records it in
 the tree the profile pins. Refresh that record after a pin moves or a profile
-is added, and commit it with the profiles:
+is added, and commit it with the profiles. Every tree a run tries is recorded,
+read or not, so `check_freshness.py` reports a pinned tree the record lacks:
 
 ```bash
 python scripts/sitesources.py --fetch
@@ -593,9 +594,11 @@ shows added, removed and renamed files in the directories the refs point at.
 says where it is read: a pattern in one file (`file`), the nearest tag and
 the commits after it (`tag`, written in git describe's form), the profile an
 alias follows (`alias`), an artefact read outside any source tree
-(`package`), or `none` when the code states nothing, with `core_version`
-null. `--verify-version` reads it again at the pin and exits 1 on a
-difference or a missing basis. `--set-version` writes what the code states.
+(`package`), `none` when the code states nothing, with `core_version`
+null, or `unverified` when no reading can be made (a forge gone, a host the
+tools cannot read, no artefact to read): `core_version` stays as written,
+reported unconfirmed, and `why` names the reason. `--verify-version` reads
+it again at the pin and exits 1 on a difference or a missing basis. `--set-version` writes what the code states.
 A pin advance reads the version at the new pin in the same write and is
 refused when it cannot: a package version moves by hand.
 
@@ -777,7 +780,6 @@ until a report without one. Exit codes: 0 for `ok`,
 |-----|----------|--------------|
 | `nightly` | 02:00 | `check_freshness.py --json` saved to a file, `refresh_stale.py --findings` on its `data` and `catalogs` rows, the MAME and FBNeo hash scrapers, then `pipeline.py --offline` as the gate. `database.json` and `install/*.json` are computed a second time and compared. Commits the hash profiles, the recipes and the regenerated records |
 | `assets` | 04:30 | `sync_release_assets.py`, as a dry run |
-| `campaign` | 06:00 | `campaign.py run --budget 150m` once the host is idle (up to two hours of waiting), gated by `campaign.py gate`. Commits the records, findings and pass line, then the profile fields the runs proved |
 | `bios-integrity` | Sunday 08:30 | `bios_integrity.py --apply --json` in the main checkout, once the host is idle (up to four hours of waiting). Its report is kept in the job's status |
 | `cleanup` | 05:30 | `cleanup_disk.py --apply --hours 72` in the main checkout |
 | `disk-check` | hourly | `cleanup_disk.py --check`, without the lock |
@@ -1057,7 +1059,6 @@ python scripts/campaign.py findings          # what waits for review
 python scripts/campaign.py review beetle_psx/sony-playstation/scph5501.bin/validation \
   --status applied --set on_mismatch=warn --reason "logs the SHA1 and loads (libretro.c:853-860)"
 python scripts/campaign.py gate              # the checks behind a commit
-python scripts/campaign.py install-timer     # opt-in: writes the autorun units, enables nothing
 ```
 
 | Step | What happens |
@@ -1113,10 +1114,10 @@ checks. The campaign's own `evidence:` writes do not count as a profile change.
 
 | Guard | Rule |
 |-------|------|
-| Lock | The host-wide autorun lock. Under the `campaign` job, autorun holds it and says so with `RETROBIOS_AUTO_LOCK_HELD` |
+| Lock | The host-wide autorun lock. When a caller already holds it, `RETROBIOS_AUTO_LOCK_HELD` says so |
 | Probe lock | Not held by the pass: each core_probe it starts takes the host probe lock for its own run, so the pass and other measurements (pack_probe, a core_probe loop) interleave. Two campaign passes still exclude each other through the automation lock, since they share `.cache/campaign/state.json`. Do not wrap `campaign.py run` in `flock` |
 | Environment | `core_probe.py`, git and `make` get autorun's allowlist, romfetch the same plus its `ROMFETCH_*` settings. None sees a token or a password |
-| Sandbox | Fails closed: without a working bubblewrap the pass is `refused` (exit 3) and nothing third-party runs, every probe is started with `--require-sandbox`, and a build is refused. `--allow-unsandboxed` overrides. Under autorun the refusal raises the `job:campaign` alert |
+| Sandbox | Fails closed: without a working bubblewrap the pass is `refused` (exit 3) and nothing third-party runs, every probe is started with `--require-sandbox`, and a build is refused. `--allow-unsandboxed` overrides |
 | Load | Before each run, waits while the 1-minute load is above a quarter of the CPUs, up to `--max-load-wait` seconds, then the pass stops as `paused` |
 | Disk | Below `--min-free-gb` (default 30) the pass stops as `paused` |
 | Budget | No check starts after `--budget` |
@@ -1134,12 +1135,8 @@ and campaign tests, `validate_schemas.py --source-only`, then `verify.py
 --emulator` and `generate_pack.py --emulator` for each changed profile. A file
 that had uncommitted changes before the pass is left alone.
 
-A maintainer starts each pass. Scheduling is opt-in: a contributor who wants a
-schedule on their own machine installs the timer with `campaign.py
-install-timer`, which writes the autorun units and enables nothing unless
-`--enable` is passed. The `campaign` autorun job then runs a 150-minute pass
-in the automation worktree, gates it with `campaign.py gate` and commits with
-its own rules, pushing only with `--push`.
+A maintainer starts each pass, for a question that names its profiles. No
+autorun job runs it on a schedule.
 
 `review` closes an open finding once someone has read the core's code at the
 profile's pin. `--status applied` writes each `--set FIELD=YAML` into the

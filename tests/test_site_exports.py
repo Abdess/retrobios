@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sqlite3
 import sys
 import tempfile
@@ -670,6 +671,69 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
     downloaded. files/?hash= reads one shard instead, and it must answer at
     least what the search answered: the card, the platforms, the profiles."""
 
+    def test_an_archive_answers_for_the_rom_a_list_pins_inside_it(self):
+        """Batocera checks naomi2.zip by the md5 of 315-6146.bin inside it:
+        dropped on the lookup, the archive listed every setup but Batocera,
+        and 335 of its 337 zipped_file entries were unreachable that way."""
+        import json as _json
+
+        import generate_site  # noqa: PLC0415
+        from common import load_platform_config  # noqa: PLC0415
+        from cross_reference import FileConsumers  # noqa: PLC0415
+        from ziptools import build_zip_contents_index  # noqa: PLC0415
+
+        root = Path(__file__).resolve().parents[1]
+        db = _json.loads((root / "database.json").read_text(encoding="utf-8"))
+        config = load_platform_config("batocera", str(root / "platforms"))
+        entry = next(e for system in config["systems"].values() for e in system.get("files") or []
+                     if e.get("name") == "naomi2.zip" and e.get("zipped_file"))
+        cwd = Path.cwd()
+        try:
+            os.chdir(root)
+            consumers = FileConsumers(db, build_zip_contents_index(db))
+            archive = consumers.sha1_of(entry)
+        finally:
+            os.chdir(cwd)
+        if archive is None:
+            self.skipTest("no copy of naomi2.zip holding the pinned ROM")
+        coverages = {"batocera": {"config": {"systems": {"sega-naomi2": {"files": [entry]}}}}}
+        records = generate_site.file_lookup_records(db, coverages, {}, [], None, consumers)
+        found = {(r["owner"], r["value"]) for r in records if r["layer"] == "platform"}
+        self.assertIn(("batocera", archive), found)
+        pinned = next(r for r in records if r["layer"] == "platform" and r["algorithm"] == "md5")
+        self.assertEqual(pinned["sha1"], archive)
+
+    def test_a_data_directory_member_answers_every_hash(self):
+        """Dolphin's ApprovedInis.json was found by its SHA1 only: its MD5
+        and CRC32 answered no match although the pack ships it."""
+        import hashlib
+        import tempfile
+        import zlib
+
+        import generate_site  # noqa: PLC0415
+
+        body = b"approved inis\n"
+        sha1 = hashlib.sha1(body).hexdigest()
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
+            member = Path(tmp, "data", "dolphin-sys", "ApprovedInis.json")
+            member.parent.mkdir(parents=True)
+            member.write_bytes(body)
+            stale = Path(tmp, "data", "dolphin-sys", "Stale.json")
+            stale.write_bytes(b"other bytes")
+            members = {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1},
+                                       "Stale.json": {"sha1": "ef" * 20}}}
+            registry = {"dolphin-sys": {"local_cache": "data/dolphin-sys"}}
+            digests = generate_site._data_member_digests(members, registry, Path(tmp))
+        self.assertEqual(digests, {sha1: {
+            "sha1": sha1, "md5": hashlib.md5(body).hexdigest(),
+            "sha256": hashlib.sha256(body).hexdigest(),
+            "crc32": f"{zlib.crc32(body):08x}"}})
+        with mock.patch.object(generate_site, "_data_member_digests", return_value=digests):
+            records = generate_site.file_lookup_records(
+                {"files": {}}, {}, {}, [{"sha1": sha1, "url": "u"}],
+                {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1}}})
+        self.assertEqual({r["algorithm"]: r["value"] for r in records}, digests[sha1])
+
     def test_records_cover_every_layer_and_shard_by_prefix(self):
         import json as _json
         import tempfile
@@ -799,6 +863,28 @@ class ProseCitationsLinkToThePin(unittest.TestCase):
         self.assertEqual(link_prose_citations(self.PROFILE, "in `src/a.c:5`"), "in `src/a.c:5`")
         two = {**self.PROFILE, "upstream": "https://github.com/x/y", "upstream_commit": "a" * 40}
         self.assertEqual(link_prose_citations(two, "src/a.c:5"), "src/a.c:5")
+
+    def test_two_repositories_link_into_the_one_holding_the_path(self):
+        """1,044 citations in 86 profiles that read two repositories stayed
+        text, the swanstation note on FindBIOSImageInDirectory among them."""
+        from sitesources import link_prose_citations
+
+        two = {**self.PROFILE, "upstream": "https://github.com/x/y", "upstream_commit": "a" * 40}
+
+        def holds(repo, _pin, path):
+            return path == "src/both.c" or (path == "src/port.c") == (repo.owner == "libretro")
+
+        with mock.patch("sitesources.tree_holds", holds):
+            text = link_prose_citations(two, "src/port.c:5, src/emu.c:7 and src/both.c:9")
+            upstream_only = link_prose_citations(two, "upstream src/port.c:5")
+            named = link_prose_citations(two, "upstream src/both.c:9")
+        self.assertIn("[`src/both.c:9`](https://github.com/x/y/blob/", named)
+        self.assertIn("[`src/port.c:5`](https://github.com/libretro/FreeChaF/blob/", text)
+        self.assertIn("[`src/emu.c:7`](https://github.com/x/y/blob/" + "a" * 40, text)
+        # Held by both: the citation does not say which it means.
+        self.assertIn(" src/both.c:9", text)
+        # The role word names a repository that does not hold it.
+        self.assertNotIn("](", upstream_only)
 
 
 class ACitationSaysWhoseCodeItIs(unittest.TestCase):

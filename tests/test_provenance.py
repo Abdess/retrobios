@@ -470,6 +470,12 @@ class TestProvenancePage(unittest.TestCase):
         self.assertIn("14df4f6c1e367ce097c11deae21566b4fe5647a9", page)
         self.assertIn("### Redump", page)
 
+    def test_the_wanted_list_links_its_csv(self):
+        """provenance-wanted.csv was linked from the data page alone."""
+        page = self._page()
+        wanted = page[page.index("## Wanted: catalogued dumps"):]
+        self.assertIn('href="downloads/provenance-wanted.csv"', wanted[:wanted.index("###")])
+
     def test_page_has_anchor_targets_for_badges(self):
         """System-page badges link to ../provenance.md#<source>."""
         page = self._page()

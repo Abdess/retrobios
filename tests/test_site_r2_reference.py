@@ -129,12 +129,31 @@ class EvidenceLinksItsSource(unittest.TestCase):
         evidence = {"read_by": [{"emulator": "launcher", "proof": "launcher",
                                  "entries": [], "runs_system": True}]}
         config = load_platform_config("batocera", PLATFORMS)
-        launched = generate_site._launcher_refs("batocera", config)["scph1001.bin"]
+        launched = generate_site._launcher_refs(config)["scph1001.bin"]
         text = generate_site._category_evidence_md(evidence, launched)
         self.assertNotIn("(by launcher)", text)
         self.assertIn("https://github.com/batocera-linux/batocera.linux/blob/batocera-43.1/"
                       "package/batocera/core/batocera-configgen/", text)
         self.assertIn("duckstationGenerator.py:115-136", text)
+
+    def test_every_platform_links_its_launchers(self):
+        """Only Batocera and RetroBat were linked: Recalbox, ROCKNIX, EmuDeck,
+        RetroPie and RetroDECK read their launchers in the list's repository
+        too, and their citations came out as plain code."""
+        checked = 0
+        for path in sorted(Path(PLATFORMS).glob("*.yml")):
+            if not path.stem[0].isalpha():
+                continue
+            config = load_platform_config(path.stem, PLATFORMS)
+            if not config.get("launchers"):
+                continue
+            with self.subTest(platform=path.stem):
+                rendered = [text for texts in generate_site._launcher_refs(config).values()
+                            for text in texts]
+                self.assertTrue(rendered)
+                self.assertFalse([t for t in rendered if " at `" in t])
+            checked += 1
+        self.assertGreaterEqual(checked, 7)
 
     def test_a_launcher_in_another_repository_is_not_linked(self):
         source = list_source("https://gitlab.com/recalbox/recalbox/-/raw/10.1.1/x/es_bios.xml")
@@ -205,6 +224,22 @@ class PlatformReferenceInWords(unittest.TestCase):
         self.assertIn(">MD5</span>", self._page("md5", "md5"))
         self.assertIn("[r repository at commit aaaaaaaaaaaa](https://github.com/o/r/tree/"
                       + "a" * 40 + ")", page)
+
+    def test_every_check_label_reads_the_hash_rule(self):
+        """RomM's badge and table rows said MD5 beside a sentence saying it
+        accepts the size and any one hash."""
+        details = [{"name": "f.bin", "status": "ok", "system": "sony-playstation"}]
+        cov = {"platform": "RomM", "details": details, "total": 1, "verified": 1,
+               "present": 1, "missing": 0, "untested": 0, "mode": "md5",
+               "core_present": 0, "core_missing": 0, "core_unsourceable": 0,
+               "config": {"hash_type": "md5", "hash_rule": "size_and_any_hash",
+                          "systems": {"sony-playstation": {"files": [{"name": "f.bin"}]}},
+                          "source": "https://github.com/o/r/tree/" + "a" * 40}}
+        page = generate_site.generate_platform_page("romm", cov, {})
+        self.assertIn(">size, then any hash</span>", page)
+        self.assertNotIn(">MD5</span>", page)
+        table = "\n".join(generate_site.setup_table({"romm": cov}, {}))
+        self.assertIn("| size, then any hash |", table)
 
     def test_systems_by_name_with_the_id_in_small_text(self):
         systems = {"sony-playstation": {"files": [{"name": "f.bin"}]}}

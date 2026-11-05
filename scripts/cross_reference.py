@@ -49,6 +49,7 @@ from hashing import parse_hash_list
 from validation import (
     case_folded_slots,
     declaration_settles,
+    inner_rom_check,
     installed_with_emulator,
     outside_gap_scope,
     read_from_save_dir,
@@ -476,7 +477,14 @@ class FileConsumers:
             entry, self._db, self._zip_contents, dest_hint=dest,
             data_dir_registry=self._data_dir_registry,
         )
-        if not path or status in ("not_found", "hash_mismatch"):
+        if not path or status == "not_found":
+            return None
+        # Batocera pins naomi2.zip by the md5 of a ROM inside it: the resolver
+        # hands back the archive as a mismatch, and the member settles it as
+        # the builder does.
+        if status == "hash_mismatch" and not (
+            entry.get("zipped_file") and inner_rom_check(entry, path) == "ok"
+        ):
             return None
         return self._sha1_by_path.get(path)
 

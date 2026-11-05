@@ -5008,7 +5008,8 @@ class AnUnreadTreeKeepsItsRecord(unittest.TestCase):
         kept = sitesources.keep_unread(
             {"a@1": ["x.c"]}, ["b@2", "c@3"], {"b@2": ["y.c"], "a@1": ["old.c"]}
         )
-        self.assertEqual(kept, {"a@1": ["x.c"], "b@2": ["y.c"]})
+        # c@3 was never read: recorded empty, it confirms no path.
+        self.assertEqual(kept, {"a@1": ["x.c"], "b@2": ["y.c"], "c@3": []})
 
 
 class FreshRefusesOffline(unittest.TestCase):
@@ -5953,7 +5954,7 @@ class TestBranchCheckIsWired(unittest.TestCase):
         import generate_readme  # noqa: PLC0415
 
         text = generate_readme.generate_contributing()
-        self.assertIn("profile_sync.py --changed --strict", text)
+        self.assertIn("profile_sync.py --added --base upstream/main --strict", text)
         self.assertNotIn("--emulator NAME --strict", text)
         workflow = (root / ".github" / "workflows" / "validate.yml").read_text()
         self.assertIn("profile_sync.py --added --base", workflow)

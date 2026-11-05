@@ -5015,6 +5015,28 @@ class GapsPageCountsOneWay(unittest.TestCase):
         self.assertIn('rb-badge-danger">1 name</span>', text)
         self.assertNotIn("1 missing", text)
 
+    def test_a_missing_row_links_each_entry_and_names_its_folder(self):
+        """The row said `N88_KNJ1.ROM | unread | yes | AmberELEC` in plain text:
+        neither where the list puts it nor which cores were examined."""
+        from scripts.generate_site import _render_problem_files
+
+        problems = [{"platform": "AmberELEC", "platform_key": "amberelec", "name": "N88_KNJ1.ROM",
+                     "status": "missing", "required": True, "reason": "", "discrepancy": "",
+                     "category": "unread", "system": "nec-pc-88",
+                     "destination": "bios/quasi88/N88_KNJ1.ROM"}]
+        text = "\n".join(_render_problem_files(problems))
+        self.assertIn("| [AmberELEC](platforms/amberelec.md#nec-pc-88) "
+                      "`bios/quasi88/N88_KNJ1.ROM` |", text)
+
+    def test_the_destination_is_the_list_entrys(self):
+        from scripts.generate_site import _declared_destination
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from common import load_platform_config
+
+        config = load_platform_config("amberelec", str(ROOT / "platforms"))
+        detail = {"name": "N88_KNJ1.ROM", "system": "nec-pc-88"}
+        self.assertEqual(_declared_destination(config, detail), "bios/quasi88/N88_KNJ1.ROM")
+
     def test_verify_marks_the_settled_entry(self):
         sys.path.insert(0, str(ROOT / "scripts"))
         import verify
@@ -5273,6 +5295,32 @@ class TheCollectionShipsADat(unittest.TestCase):
         self.assertIn(("Sony\\PlayStation", "scph5501.bin"), roms)
         self.assertIn(("Nintendo\\GameCube", "GC\\USA\\IPL.bin"), roms)
         self.assertEqual(roms[("Sony\\PlayStation", "scph5501.bin")].crc32, "8d8cb7e4")
+
+    def test_each_setup_has_a_dat_of_its_installed_folder(self):
+        """A Batocera user auditing share/bios against the collection DAT met
+        thousands of sets laid out by manufacturer, and nothing of the folder
+        Batocera reads."""
+        sys.path.insert(0, str(ROOT / "scripts" / "scraper"))
+        from logiqx_parser import parse_logiqx
+        from scripts.generate_site import _platform_data_links, platform_dat
+
+        db = {"files": {"a" * 40: {"size": 4, "crc32": "8D8CB7E4", "md5": "1" * 32,
+                                   "sha1": "a" * 40}}}
+        manifest = {
+            "platform": "batocera", "display_name": "Batocera", "base_destination": "bios",
+            "files": [{"dest": "dc/naomi2.zip", "sha1": "a" * 40, "size": 4},
+                      {"dest": "saves/x.bin", "sha1": "a" * 40, "size": 4, "root": "save"}],
+            "data_directories": [{"dest": "dolphin-emu/Sys",
+                                  "files": {"GC/font.bin": {"sha1": "c" * 40, "size": 2}}}],
+        }
+        dat = parse_logiqx(platform_dat(manifest, db, {"c" * 40: {"md5": "3" * 32}},
+                                        "2026-11-05T00:00:00Z"))
+        roms = {(r.game, r.name): r for r in dat.roms}
+        self.assertEqual(set(roms), {("bios", "dc\\naomi2.zip"),
+                                     ("bios", "dolphin-emu\\Sys\\GC\\font.bin")})
+        self.assertEqual(roms[("bios", "dc\\naomi2.zip")].md5, "1" * 32)
+        self.assertEqual(roms[("bios", "dolphin-emu\\Sys\\GC\\font.bin")].md5, "3" * 32)
+        self.assertIn("[DAT](../downloads/dat/batocera.dat)", _platform_data_links("batocera"))
 
 
 

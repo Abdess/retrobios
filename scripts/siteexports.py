@@ -17,6 +17,8 @@ EXPORTS_DIR = "exports"
 REPO_BLOB = "https://github.com/Abdess/retrobios/blob/main"
 REPO_TREE = "https://github.com/Abdess/retrobios/tree/main"
 REPO_RAW = "https://raw.githubusercontent.com/Abdess/retrobios/main"
+# Where the site publishes each report, beside the API (generate_site).
+API_EXPORTS = "api/v1/exports"
 
 # Report key, then how a line of it reads on the page.
 CHANGE_KINDS = (
@@ -318,16 +320,20 @@ def generate_exports_page(reports: list[dict], names: dict[str, str]) -> str:
         originals = report.get("originals") or {}
         files = report["files"]
         raw = [f"{REPO_RAW}/{EXPORTS_DIR}/{platform}/{name}" for name in files]
+        # Every change as JSON, the report the page is written from.
+        changes = markup.button("Every change (JSON)", f"{API_EXPORTS}/{platform}.json")
         if len(files) == 1:
             lines.extend([
                 markup.button("Download the updated file", raw[0], primary=True) + " "
-                + markup.button("See it on GitHub", f"{REPO_BLOB}/{EXPORTS_DIR}/{platform}/{files[0]}"),
+                + markup.button("See it on GitHub", f"{REPO_BLOB}/{EXPORTS_DIR}/{platform}/{files[0]}")
+                + " " + changes,
                 "",
             ])
         else:
             lines.extend([
                 markup.button(f"Browse the {len(files)} updated files",
-                              f"{REPO_TREE}/{EXPORTS_DIR}/{platform}", primary=True),
+                              f"{REPO_TREE}/{EXPORTS_DIR}/{platform}", primary=True)
+                + " " + changes,
                 "",
             ])
         if len(originals) > 1:

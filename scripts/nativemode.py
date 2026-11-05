@@ -40,6 +40,18 @@ SIZE_AND_ANY_HASH = "size_and_any_hash"
 HASH_RULES = (SIZE_AND_ANY_HASH,)
 
 
+#: How a platform checks a file, in a reader's words. Every table and badge
+#: that says it reads this, so a page cannot call RomM's rule an MD5 check.
+_CHECK_LABELS = {"existence": "name only", "md5": "MD5", "sha1": "SHA-1"}
+
+
+def check_label(mode: str | None, hash_rule: str | None = None) -> str:
+    """The words for what a platform's own check compares."""
+    if hash_rule == SIZE_AND_ANY_HASH:
+        return "size, then any hash"
+    return _CHECK_LABELS[normalize(mode)]
+
+
 def normalize(mode: str | None) -> str:
     """Return a declared mode, falling back to the schema default."""
     return mode if mode in MODES else DEFAULT_MODE

@@ -1678,5 +1678,121 @@ class InstallerPagesFollowTheCode(unittest.TestCase):
         self.assertEqual(len(unserved_one_liners("installer.md", old)), 2)
 
 
+class InstallerVariablesAreDocumented(unittest.TestCase):
+    """RETROBIOS_CACHE moved a cache that --for-games writes, even under
+    --dry-run, and no page named it or the folder it defaults to."""
+
+    # Set by the full-screen interface for the runs it starts, never by a user.
+    INTERNAL = {"RETROBIOS_TUI_LIST"}
+
+    def test_every_variable_install_py_reads_is_in_the_table(self):
+        source = (ROOT / "install.py").read_text(encoding="utf-8")
+        page = (WIKI / "installer.md").read_text(encoding="utf-8")
+        table = page[page.index("## Environment overrides"):]
+        table = table[:table.index("\n## ", 1)]
+        for name in sorted(set(re.findall(r'"(RETROBIOS_[A-Z_]+)"', source)) - self.INTERNAL):
+            with self.subTest(variable=name):
+                self.assertIn(f"`{name}`", table)
+
+    def test_the_faq_names_the_cache(self):
+        faq = (WIKI / "faq.md").read_text(encoding="utf-8")
+        section = faq[faq.index("## Is the command safe?"):]
+        self.assertIn("cache", section[:section.index("\n## ", 1)])
+
+
+class ReadmeKeepsItsPointers(unittest.TestCase):
+    def test_the_bare_minimum_is_built_below(self):
+        """The README sent a reader to 'build your own pack below' for a bare
+        minimum, and the block below never named --required-only."""
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("For a bare minimum, build your own pack below.", readme)
+        block = readme[readme.index("## Build your own pack"):]
+        block = block[:block.index("\n## ", 1)]
+        self.assertIn("--required-only", block)
+
+    def test_unsourceable_files_are_not_said_to_exist_nowhere(self):
+        """The README said 138 files 'cannot be sourced at all (... dumps
+        nobody has made)', while most of their reasons read 'retail data the
+        collection does not hold'."""
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertNotIn("sourced at all", readme)
+        self.assertNotIn("nobody has made", readme)
+        self.assertRegex(readme, r"more the collection does not hold and does not serve by name")
+
+
+class ArchitectureStatesTheArbitration(unittest.TestCase):
+    """architecture.md said the profile takes precedence for pack generation,
+    while slots.arbitrate() keeps the platform's file where its frontend
+    checks the content: RetroBat's ATARIOSB.ROM."""
+
+    def test_the_page_says_what_arbitrate_decides(self):
+        import slots  # noqa: PLC0415
+
+        page = (WIKI / "architecture.md").read_text(encoding="utf-8")
+        self.assertNotIn("the profile takes precedence for pack generation", page)
+        section = page[page.index("### When both layers claim one destination"):]
+        section = section[:section.index("\n## ")]
+        self.assertIn("`slots.arbitrate()`", section)
+        source = inspect.getsource(slots.arbitrate)
+        # The three outcomes the section describes.
+        for outcome in ("ADDRESSEE", "SERVES_BOTH", "FRONTEND_CHECKS_CONTENT"):
+            self.assertIn(outcome, source)
+        for said in ("--emulator", "`existence`", "the platform's file stays"):
+            self.assertIn(said, section)
+
+
+class VersionBasisReferenceIsTheSchema(unittest.TestCase):
+    """profiling.md listed five kinds of version_basis: `unverified`, its
+    `why` and the `url`, `commit` and `match` keys 18 profiles use were in
+    the schema alone."""
+
+    def test_the_row_names_every_kind_reason_and_key(self):
+        schema = json.loads((ROOT / "schemas" / "emulator.schema.json").read_text(encoding="utf-8"))
+        basis = schema["$defs"]["version_basis"]["properties"]
+        page = (WIKI / "profiling.md").read_text(encoding="utf-8")
+        row = next(line for line in page.splitlines() if line.startswith("| `version_basis` |"))
+        for word in [*basis["kind"]["enum"], *basis["why"]["enum"], *basis]:
+            with self.subTest(word=word):
+                self.assertIn(f"`{word}`", row)
+        tools = (WIKI / "tools.md").read_text(encoding="utf-8")
+        self.assertIn("`unverified`", tools)
+
+
+class ProfilingStatesTheHashRuleOnce(unittest.TestCase):
+    """profiling.md let an .info MD5 in ('source confirmation makes it more
+    reliable') and a file the code never loads stay ('can be left out'),
+    beside the strict rule of the same paragraph."""
+
+    def test_no_permissive_form_remains(self):
+        page = (WIKI / "profiling.md").read_text(encoding="utf-8")
+        self.assertNotIn("source confirmation makes it more reliable", page)
+        self.assertNotIn("it can be left out of the profile", page)
+        self.assertIn("An MD5 the .info or\n  the docs alone give is not written", page)
+
+
+class ReportExcerptIsTheRun(unittest.TestCase):
+    """reading-reports.md quoted 'From python scripts/verify.py --platform
+    retrodeck' a run that said 0 required missing after the command had started
+    naming one, and never showed the line that names it."""
+
+    def test_every_quoted_line_is_printed(self):
+        import subprocess  # noqa: PLC0415
+
+        page = (WIKI / "reading-reports.md").read_text(encoding="utf-8")
+        intro = "From `python scripts/verify.py --platform retrodeck`:"
+        start = page.index("```\n", page.index(intro)) + 4
+        quoted = page[start:page.index("```", start)].splitlines()
+        run = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "verify.py"), "--platform", "retrodeck"],
+            capture_output=True, text=True, cwd=ROOT, check=False,
+        )
+        printed = run.stdout.splitlines()
+        if not any(line.startswith("RetroDECK:") for line in printed):
+            self.skipTest(f"verify did not run: {run.stderr[-200:]}")
+        for line in quoted:
+            with self.subTest(line=line):
+                self.assertIn(line, printed)
+
+
 if __name__ == "__main__":
     unittest.main()
