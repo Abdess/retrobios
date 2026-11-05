@@ -420,6 +420,24 @@ class TestArbitration(unittest.TestCase):
         served = slots.format_decision(slots.arbitrate(self._conflict(), "existence"))
         self.assertIn("both are satisfied", served)
 
+    def test_each_emulator_is_given_the_file_it_reads(self):
+        """Recalbox's neocdz.zip line said geolith reads the archive fbneo
+        reads, while geolith pins another one."""
+        conflict = self._conflict()
+        conflict.profile_claims = [
+            slots.Claim("profile", "neocdz.zip", "neocdz.zip", emulator="fbneo",
+                        local_path="a/neocdz.zip.ba20a7be", status="members_held"),
+            slots.Claim("profile", "neocdz.zip", "neocdz.zip", emulator="geolith",
+                        local_path="b/neocdz.zip.712816a3", status="md5_exact"),
+        ]
+        kept = slots.format_decision(slots.arbitrate(conflict, "md5"))
+        self.assertIn("a/neocdz.zip.ba20a7be, the file fbneo reads", kept)
+        self.assertIn("b/neocdz.zip.712816a3, the file geolith reads", kept)
+        self.assertEqual(conflict.files_read(), [
+            ("a/neocdz.zip.ba20a7be", ["fbneo"], "members_held"),
+            ("b/neocdz.zip.712816a3", ["geolith"], "md5_exact"),
+        ])
+
 
 class TheStrongestProofTakesAnUndeclaredPath(unittest.TestCase):
     """No platform declares RetroDECK's hiscore.dat. fbalpha2012 asks for it
