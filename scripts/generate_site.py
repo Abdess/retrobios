@@ -2445,7 +2445,7 @@ def _browser_title(relative: Path, title: str) -> str:
     # The words a web search for a console or an emulator types: "dreamcast
     # bios", "duckstation bios". The h1 and the sidebar keep the name.
     if key.startswith("emulators/"):
-        has_files = PAGE_DATA.get(key, {}).get("hasPart")
+        has_files = PAGE_DATA.get(key, {}).get("hasPart") and key not in NOTHING_TO_FETCH
         # Lexaloffle, QEMU and ScummVM name a system page too.
         own = " emulator" if f"systems/{relative.name}" in PAGE_DATA else ""
         return f"{title}{own} BIOS files" if has_files else f"{title} emulator"
@@ -2555,6 +2555,8 @@ def _emulator_description(markdown: str, key: str, title: str, intro: str) -> st
     elif title not in intro:
         # "It reads 1 file": the profile names no system to open on.
         intro = f"{title}: {intro[:1].lower()}{intro[1:]}"
+    if key in NOTHING_TO_FETCH:
+        return _shorten(f"{intro} Every file it reads comes with the app.", 155)
     # An alias page sends the reader to the core whose files it shares.
     if PAGE_DATA.get(key, {}).get("hasPart") or "uses the same firmware as" in intro:
         return _shorten(intro, 155)
@@ -2625,6 +2627,9 @@ def _system_description(markdown: str, browser: str) -> str:
 # Structured data a page generator knows beyond its text, by page path
 # relative to docs/: read by decorate_markdown_pages.
 PAGE_DATA: dict[str, dict] = {}
+# Emulator pages whose every file comes with the app: no "BIOS files" in
+# their title, and their description says so (DaedalusX64, ZEsarUX).
+NOTHING_TO_FETCH: set[str] = set()
 # Pages that hold part of a page too long for one (a console of a split
 # manufacturer, a run of an emulator's cards), by path relative to docs/:
 # their H1 already says what they are.
@@ -2950,6 +2955,17 @@ def release_versions(profile: dict) -> dict[str, str]:
     versions = {str(mode): str(value or "").strip() for mode, value in pairs}
     return {mode: value for mode, value in versions.items()
             if re.search(r"[0-9]", value) and not names_a_commit(value)}
+
+
+def record_emulator_page(name: str, profile: dict) -> None:
+    """What the title and the description of an emulator page read."""
+    key = f"emulators/{name}.md"
+    PAGE_DATA[key] = emulator_structured_data(profile)
+    listed = [f for f in profile.get("files") or [] if isinstance(f, dict)]
+    if listed and all(comes_with_app(f) for f in listed):
+        NOTHING_TO_FETCH.add(key)
+    else:
+        NOTHING_TO_FETCH.discard(key)
 
 
 def emulator_structured_data(profile: dict) -> dict:
@@ -12305,7 +12321,7 @@ def _generate(args: argparse.Namespace) -> None:
             name, profile, db, consumers, suppl_names, data_registry,
             data_dirs=page_data_directories(name, profiles),
         )
-        PAGE_DATA[f"emulators/{name}.md"] = emulator_structured_data(profile)
+        record_emulator_page(name, profile)
         # A frozen copy answers after the emulator: a frozen_snapshot, and a
         # profile pinned to the revision one platform builds (pin_frozen).
         # Reicast and Flycast 2021 LE answered "dc bios missing" before Flycast.
