@@ -591,9 +591,11 @@ shows added, removed and renamed files in the directories the refs point at.
 says where it is read: a pattern in one file (`file`), the nearest tag and
 the commits after it (`tag`, written in git describe's form), the profile an
 alias follows (`alias`), an artefact read outside any source tree
-(`package`), or `none` when the code states nothing, with `core_version`
-null. `--verify-version` reads it again at the pin and exits 1 on a
-difference or a missing basis. `--set-version` writes what the code states.
+(`package`), `none` when the code states nothing, with `core_version`
+null, or `unverified` when no reading can be made (a forge gone, a host the
+tools cannot read, no artefact to read): `core_version` stays as written,
+reported unconfirmed, and `why` names the reason. `--verify-version` reads
+it again at the pin and exits 1 on a difference or a missing basis. `--set-version` writes what the code states.
 A pin advance reads the version at the new pin in the same write and is
 refused when it cannot: a package version moves by hand.
 

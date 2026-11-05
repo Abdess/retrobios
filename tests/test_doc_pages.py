@@ -1741,6 +1741,23 @@ class ArchitectureStatesTheArbitration(unittest.TestCase):
             self.assertIn(said, section)
 
 
+class VersionBasisReferenceIsTheSchema(unittest.TestCase):
+    """profiling.md listed five kinds of version_basis: `unverified`, its
+    `why` and the `url`, `commit` and `match` keys 18 profiles use were in
+    the schema alone."""
+
+    def test_the_row_names_every_kind_reason_and_key(self):
+        schema = json.loads((ROOT / "schemas" / "emulator.schema.json").read_text(encoding="utf-8"))
+        basis = schema["$defs"]["version_basis"]["properties"]
+        page = (WIKI / "profiling.md").read_text(encoding="utf-8")
+        row = next(line for line in page.splitlines() if line.startswith("| `version_basis` |"))
+        for word in [*basis["kind"]["enum"], *basis["why"]["enum"], *basis]:
+            with self.subTest(word=word):
+                self.assertIn(f"`{word}`", row)
+        tools = (WIKI / "tools.md").read_text(encoding="utf-8")
+        self.assertIn("`unverified`", tools)
+
+
 class ReportExcerptIsTheRun(unittest.TestCase):
     """reading-reports.md quoted 'From python scripts/verify.py --platform
     retrodeck' a run that said 0 required missing after the command had started
