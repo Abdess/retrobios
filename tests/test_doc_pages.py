@@ -1720,6 +1720,27 @@ class ReadmeKeepsItsPointers(unittest.TestCase):
         self.assertRegex(readme, r"more the collection does not hold and does not serve by name")
 
 
+class ArchitectureStatesTheArbitration(unittest.TestCase):
+    """architecture.md said the profile takes precedence for pack generation,
+    while slots.arbitrate() keeps the platform's file where its frontend
+    checks the content: RetroBat's ATARIOSB.ROM."""
+
+    def test_the_page_says_what_arbitrate_decides(self):
+        import slots  # noqa: PLC0415
+
+        page = (WIKI / "architecture.md").read_text(encoding="utf-8")
+        self.assertNotIn("the profile takes precedence for pack generation", page)
+        section = page[page.index("### When both layers claim one destination"):]
+        section = section[:section.index("\n## ")]
+        self.assertIn("`slots.arbitrate()`", section)
+        source = inspect.getsource(slots.arbitrate)
+        # The three outcomes the section describes.
+        for outcome in ("ADDRESSEE", "SERVES_BOTH", "FRONTEND_CHECKS_CONTENT"):
+            self.assertIn(outcome, source)
+        for said in ("--emulator", "`existence`", "the platform's file stays"):
+            self.assertIn(said, section)
+
+
 class ReportExcerptIsTheRun(unittest.TestCase):
     """reading-reports.md quoted 'From python scripts/verify.py --platform
     retrodeck' a run that said 0 required missing after the command had started
