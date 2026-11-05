@@ -73,7 +73,7 @@ data_directories:
   # buildbot source: https://buildbot.libretro.com/assets/system/blueMSX.zip
   # ref: libretro.c:1196-1197: system_dir/Machines/ + system_dir/Databases/
   - ref: bluemsx
-    installed_on: [batocera, recalbox, retrobat, retrodeck]
+    installed_on: [batocera, knulli, recalbox, retrobat, retrodeck, retropie]
     source_ref: "libretro.c:1196-1197, 1447-1449, Src/Board/Machine.c:637-656"
 
 files:

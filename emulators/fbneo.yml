@@ -49,9 +49,11 @@ archive_prefix: fbneo
 
 data_directories:
   - ref: fbneo-cheats
+    unread_on: [romm]
     destination: fbneo/cheats
     source_ref: "source src/burner/conc.cpp:167"
   - ref: fbneo-samples
+    unread_on: [romm]
     destination: fbneo
     source_ref: "source src/burn/snd/samples.cpp:21-35"
 

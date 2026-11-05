@@ -9,6 +9,14 @@
 #   - for_platforms: restricts which platforms use this entry
 #     if absent, entry is available to all platforms
 #
+# A platform pack carries the trees its own systems declare and those of the
+# libretro cores it runs (a profile's data_directories). A platform whose
+# image installs the tree where its core reads it is left out of
+# for_platforms: the profile records it (installed_on), and the comment above
+# the entry cites the install step at the revision the platform YAML pins.
+# A platform that never opens the tree is recorded with unread_on.
+# tests/test_core_data_trees.py fails on a reader with neither.
+#
 # Each entry cites the original emulator source code that requires the directory.
 
 data_directories:
@@ -19,37 +27,73 @@ data_directories:
   # =========================================================================
 
   # ref: DolphinLibretro/Boot.cpp:72-73 (system/dolphin-emu/Sys/)
+  # Installed (emulators/dolphin.yml installed_on, the other readers follow):
+  #   batocera  batocera.linux@batocera-43.1 package/batocera/emulators/retroarch/libretro/libretro-dolphin/libretro-dolphin.mk:43-44
+  #   knulli    batocera.linux@487014d9 libretro-dolphin.mk:36-37, knulli-linux@20260511 board/scripts/post-build-script.sh:262
+  #   lakka     Lakka-LibreELEC@v6.1 packages/lakka/libretro_cores/dolphin/package.mk:35-36
+  #   retrobat  retrobat-bios@158add8d dolphin-emu/Sys/, retrobat@8.3.1 build.ini get_bios
+  #   retrodeck components@fcd0d729 retroarch/component_prepare.sh:61
+  # Never opened: recalbox (libretroRetroarch.py:452-453 hands the core bios/gamecube,
+  # package/libretro-dolphin/0003-recalbox-bios-paths.patch drops dolphin-emu/Sys),
+  # romm (EmulatorJS 4.2.3 ships no Dolphin core and RomM hands a core one file).
   dolphin-sys:
     source_url: "https://buildbot.libretro.com/assets/system/Dolphin.zip"
     source_type: zip
-    for_platforms: [retroarch, lakka, retropie]
+    for_platforms: [emudeck, retroarch, retropie, rocknix]
     local_cache: data/dolphin-sys
     strip_components: 2
     exclude: [Themes]
     description: "Dolphin system data (GameSettings, DSP, fonts, shaders)"
 
   # ref: ppsspp/ext/native/ui/ui_screen.cpp (system/PPSSPP/)
+  # Installed (emulators/ppsspp.yml installed_on):
+  #   amberelec AmberELEC@a21975bf packages/amberelec/sources/autostart.sh:152-154, core patched
+  #             to read /roms/gamedata/ppsspp (packages/games/libretro/ppsspp/patches/001-fix_savedir.patch)
+  #   batocera  libretro-ppsspp.mk:109-110, core patched to /usr/share/ppsspp/PPSSPP (000-batocera-path.patch:10)
+  #   emudeck   EmuDeck@dddb3022 functions/EmuScripts/emuDeckRetroArch.sh:27, 343
+  #   lakka     packages/lakka/libretro_cores/ppsspp/package.mk:72-73
+  #   recalbox  recalbox@10.1.1 package/libretro-ppsspp/libretro-ppsspp.mk:86, ppsspp-0000-fix-recalbox-path.patch
+  #   retrobat  retrobat-bios@158add8d PPSSPP/
+  #   retrodeck retroarch/component_prepare.sh:64
+  #   retropie  RetroPie-Setup@46128cd2 scriptmodules/libretrocores/lr-ppsspp.sh:55-56
+  #   romm      EmulatorJS@v4.2.3 emulator.js:922-923, GameManager.js:346-368
+  # knulli stays: the A133 and A527 boards overlay a prebuilt core that reads
+  # bios/PPSSPP (board/allwinner/a133/fsoverlay/usr/lib/libretro/ppsspp_libretro.so).
   ppsspp-assets:
     source_url: "https://buildbot.libretro.com/assets/system/PPSSPP.zip"
     source_type: zip
-    for_platforms: [retroarch, lakka, retropie]
+    for_platforms: [knulli, retroarch, rocknix]
     local_cache: data/ppsspp-assets
     strip_components: 1
     description: "PPSSPP fonts, backgrounds, shaders, lang files"
 
   # ref: bluemsx-libretro/system/ (system/Databases/ + system/Machines/)
+  # Installed (emulators/bluemsx.yml installed_on):
+  #   batocera  libretro-bluemsx/libretro-bluemsx.mk:38-39
+  #   knulli    batocera.linux@487014d9 libretro-bluemsx.mk:37-38, post-build-script.sh:262
+  #   recalbox  package/libretro-bluemsx/libretro-bluemsx.mk:27
+  #   retrobat  retrobat-bios@158add8d Databases/, Machines/
+  #   retrodeck retroarch/component_prepare.sh:122, 124
+  #   retropie  scriptmodules/libretrocores/lr-bluemsx.sh:33-34, 59
   bluemsx:
     source_url: "https://buildbot.libretro.com/assets/system/blueMSX.zip"
     source_type: zip
-    for_platforms: [retroarch, lakka, retropie]
+    for_platforms: [amberelec, emudeck, emuelec, lakka, nextui, retroarch, rocknix]
     local_cache: data/bluemsx
     description: "blueMSX Databases + Machines configs"
 
   # ref: pcsx2/libretro/main.cpp (system/pcsx2/)
+  # Installed (emulators/lrps2.yml installed_on):
+  #   batocera  libretro-ps2/libretro-ps2.mk:37-39
+  #   lakka     packages/lakka/libretro_cores/lrps2/package.mk:33-34
+  #   recalbox  package/libretro-ps2/libretro-ps2.mk:35-37 (bios/ps2/resources, where its patch reads)
+  #   retrobat  retrobat-bios@158add8d pcsx2/resources/GameIndex.yaml
+  #   retrodeck retroarch/component_prepare.sh:95
+  # Never opened: romm (EmulatorJS 4.2.3 ships no PS2 core).
   lrps2:
     source_url: "https://buildbot.libretro.com/assets/system/LRPS2.zip"
     source_type: zip
-    for_platforms: [retroarch, lakka, retropie]
+    for_platforms: [emudeck, knulli, retroarch, retropie, rocknix]
     local_cache: data/lrps2
     description: "LRPS2 GameIndex.yaml + resources"
 
@@ -132,10 +176,16 @@ data_directories:
     description: "XRick Rick Dangerous game data"
 
   # ref: dinothawr/libretro.cpp (system/dinothawr/)
+  # Installed (emulators/dinothawr.yml installed_on):
+  #   lakka     packages/lakka/libretro_cores/dinothawr/package.mk:17-18
+  #   recalbox  package/libretro-dinothawr/libretro-dinothawr.mk:32-33 (as content, roms/ports)
+  #   retrobat  retrobat-bios@158add8d dinothawr/
+  #   retrodeck retroarch/component_prepare.sh:59
+  #   retropie  scriptmodules/libretrocores/lr-dinothawr.sh:50 (as content, roms/ports)
   dinothawr:
     source_url: "https://buildbot.libretro.com/assets/system/Dinothawr.zip"
     source_type: zip
-    for_platforms: [retroarch, lakka, retropie]
+    for_platforms: [emudeck, emuelec, retroarch, rocknix]
     local_cache: data/dinothawr
     description: "Dinothawr game data"
 
@@ -217,6 +267,8 @@ data_directories:
   # freeintv overlays: Assets/Overlays.zip in repo (not a directory)
   # Already archived in bios/Mattel/Intellivision/freeintv_overlays/
   # No buildbot source, sourced manually from core repo
+  # Never opened: batocera, knulli and recalbox build FreeIntv 85bf25a3, which
+  # predates the overlays (libretro-freeintv.mk), and romm hands a core one file.
   freeintv-overlays:
     source_url: "https://github.com/libretro/FreeIntv/raw/{version}/Assets/Overlays.zip"
     source_type: zip
@@ -237,6 +289,7 @@ data_directories:
     description: "DCSS game data (tiles, fonts, databases, lua, level descriptions)"
 
   # ref: FBNeo src/burner/libretro/libretro.cpp (system/fbneo/cheats/)
+  # No platform installs it. Never opened: romm (one file per core).
   fbneo-cheats:
     source_url: "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/{version}.zip"
     source_type: zip
@@ -246,17 +299,26 @@ data_directories:
     description: "FinalBurn Neo per-game cheat definitions"
 
   # ref: FBNeo src/burn/snd/samples.cpp (system/fbneo/samples/)
+  # No platform installs it (batocera, knulli, recalbox, retrobat, retrodeck and
+  # retropie create an empty fbneo/samples). Never opened: romm (RomM hands
+  # EmulatorJS one file, views/Player/EmulatorJS/Player.vue:368-370).
   fbneo-samples:
     source_url: "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip"
     source_type: zip
-    for_platforms: [retroarch, lakka, retropie]
+    for_platforms: [amberelec, batocera, emudeck, emuelec, knulli, lakka, myminui, nextui, recalbox, retroarch, retrobat, retrodeck, retropie, rocknix]
     local_cache: data/fbneo-samples
     description: "FinalBurn Neo per-game audio samples (49 arcade games)"
 
   # ref: dirksimple (system/)
+  # Installed (emulators/dirksimple.yml installed_on):
+  #   recalbox  package/libretro-dirksimple/libretro-dirksimple.mk:21 (bios/daphne/DirkSimple, where its patch reads)
+  #   retrodeck retroarch/component_prepare.sh:60
+  #   retropie  scriptmodules/libretrocores/lr-dirksimple.sh:49
+  # lakka stays: packages/lakka/libretro_cores/dirksimple/package.mk:17-18 copies
+  # data/games to DirkSimple/games, one level above DirkSimple/data/games.
   dirksimple:
     source_url: "https://buildbot.libretro.com/assets/system/DirkSimple.zip"
     source_type: zip
-    for_platforms: [retroarch, lakka, retropie]
+    for_platforms: [emudeck, lakka, retroarch, rocknix]
     local_cache: data/dirksimple
     description: "DirkSimple Dragon's Lair engine data"
