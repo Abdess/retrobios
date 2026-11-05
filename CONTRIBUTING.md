@@ -24,11 +24,12 @@ the most useful contribution.
 
 From a clone, the file goes to `bios/Manufacturer/Console/filename`, and
 `python scripts/validate_pr.py path/to/file` names that folder for a file still
-outside `bios/`. Given a folder, such as an old card's BIOS folder, it checks
-every file under it. A file over the browser's 25 MB limit goes in that way,
-up to the 100 MB GitHub accepts in a push. A larger file stays out of the pull
-request: [open an issue](https://github.com/Abdess/retrobios/issues/new?template=missing-bios.yml) with the hashes
-`validate_pr.py` prints, and a maintainer adds it to the `large-files` release.
+outside `bios/`, and `--place` copies it there under its declared name. Given a
+folder, such as an old card's BIOS folder, it checks every file under it. A
+file over the browser's 25 MB limit goes in that way, up to the 100 MB GitHub
+accepts in a push. A larger file stays out of the pull request: [open an
+issue](https://github.com/Abdess/retrobios/issues/new?template=missing-bios.yml) with the hashes `validate_pr.py` prints, and a
+maintainer adds it to the `large-files` release.
 
 ## Add a platform
 

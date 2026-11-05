@@ -21,6 +21,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -84,6 +85,9 @@ class ValidationResult:
         # or profile declares it): no check fails, and neither is a file
         # the pull request adds to the collection.
         self.outcome = ""
+        # Where --place copies the file: one folder and one declared name, or
+        # the .variants/ slot of a name the collection already holds.
+        self.destination = ""
 
     def add_check(self, passed: bool, message: str) -> None:
         self.checks.append(("PASS" if passed else "FAIL", message))
@@ -156,7 +160,7 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
     under, read from the other files of that system it holds.
     """
     known = {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
-             "names": set(), "folders": {}, "sizes": {}, "entries": {}}
+             "names": set(), "folders": {}, "sizes": {}, "entries": {}, "named": {}}
     systems_of: dict[str, set[str]] = {}
     folders_of: dict[str, dict[str, int]] = {}
     files = (db or {}).get("files", {})
@@ -203,6 +207,9 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
                     )
                 for value in (*sha1s, *md5s):
                     systems_of.setdefault(value, set()).add(system_id)
+                for value in (*sha1s, *md5s, *sha256s):
+                    if "name" in file_entry:
+                        known["named"].setdefault(value, set()).add(file_entry["name"])
                 _note_folder(folders_of, system_id, files, by_md5, sha1s, md5s)
 
     known["folders"] = _system_homes(systems_of, folders_of)
@@ -260,6 +267,7 @@ def load_profile_hashes(
     """
     known: dict[str, dict] = {
         "sha1": {}, "sha256": {}, "md5": {}, "crc32": {}, "sizes": {}, "folders": {},
+        "named": {},
     }
     systems_of: dict[str, set[str]] = {}
     folders_of: dict[str, dict[str, int]] = {}
@@ -283,6 +291,8 @@ def load_profile_hashes(
             for algo, values in hashes.items():
                 for value in values:
                     known[algo].setdefault(value, set()).add(emulator)
+                    if isinstance(entry.get("name"), str):
+                        known["named"].setdefault(value, set()).add(entry["name"])
             # The entry's own system, or the profile's when it emulates one.
             system = entry.get("system") or (
                 declared_systems[0] if len(declared_systems) == 1 else None
@@ -474,9 +484,23 @@ def validate_file(
         pass
     elif expected_folders:
         # The contributor asks before forking: say where it goes.
+        names = {
+            name
+            for table in (platform_hashes, profile_hashes)
+            for value in (result.sha1, result.md5, hashes.get("sha256", ""))
+            for name in table.get("named", {}).get(value, ())
+        }
+        name = next(iter(names)) if len(names) == 1 else ""
+        if len(expected_folders) == 1 and name and "/" not in name:
+            folder = expected_folders[0]
+            result.destination = (
+                f"{folder}.variants/{name}.{result.sha1[:8]}"
+                if os.path.exists(folder + name) else folder + name
+            )
         result.add_warning(
             "File is not under bios/ yet. Its system's files are in "
             + " or ".join(f"`{f}`" for f in expected_folders)
+            + (f". --place copies it to `{result.destination}`" if result.destination else "")
         )
     elif _variant_home(db, result.filename, result.sha1):
         result.add_warning(
@@ -505,9 +529,11 @@ def validate_file(
     if (name_known and not (sha1_known or md5_known or other_known or accepted_by)
             and not by_profile and size_fits):
         home = _variant_home(db, result.filename)
+        slot = f"{home}.variants/{result.filename}.{result.sha1[:8]}"
+        if home and not normalized.startswith("bios" + os.sep):
+            result.destination = slot
         result.add_info(
-            "This may be a valid variant. If accepted, it will be placed in "
-            f"`{home}.variants/{result.filename}.{result.sha1[:8]}`"
+            f"This may be a valid variant. If accepted, it will be placed in `{slot}`"
         )
 
     return result
@@ -700,6 +726,28 @@ def _files_to_validate(
     return files
 
 
+def place(results: list[ValidationResult]) -> list[str]:
+    """Copy each placeable file to its destination, never over a file.
+
+    The report named the folder of each file and left 40 copies from a card
+    to be made by hand, each .variants/ name retyped. The source is copied,
+    not moved: it is often a card or another tree the contributor keeps.
+    """
+    placed = []
+    for r in results:
+        if not (r.passed and r.destination and not r.outcome):
+            continue
+        target = Path(r.destination)
+        if target.exists():
+            print(f"not placed: {target} exists", file=sys.stderr)
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(r.filepath, target)
+        placed.append(r.destination)
+        print(f"placed {r.filepath} at {r.destination}", file=sys.stderr)
+    return placed
+
+
 def _load_database_if_any(path: str) -> dict | None:
     """The database, optional only where the default is meant.
 
@@ -734,6 +782,11 @@ def main() -> None:
         "--markdown", action="store_true", help="Output as markdown (for PR comments)"
     )
     output.add_argument("--json", action="store_true", help="Output as JSON")
+    parser.add_argument(
+        "--place", action="store_true",
+        help="copy each recognised file from outside bios/ to the folder and name "
+        "the report gives, or to .variants/ beside the name it varies",
+    )
     args = parser.parse_args()
 
     # The database, platforms and profiles are read from the repository
@@ -771,6 +824,7 @@ def main() -> None:
                     "file": r.filepath,
                     "passed": r.passed,
                     "outcome": r.outcome or "new",
+                    "destination": r.destination,
                     "sha1": r.sha1,
                     "md5": r.md5,
                     "size": r.size,
@@ -815,6 +869,9 @@ def main() -> None:
                     else "info"
                 )
                 print(f"  [{marker}] {m}")
+
+    if args.place:
+        place(results)
 
     if not all_passed:
         sys.exit(1)

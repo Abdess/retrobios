@@ -139,9 +139,25 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         )
         self.assertIn(
             ("WARN", "File is not under bios/ yet. Its system's files are in "
-                     "`bios/Maker/Console/`"),
+                     "`bios/Maker/Console/`. --place copies it to `bios/Maker/Console/b.bin`"),
             result.checks,
         )
+        self.assertEqual(result.destination, "bios/Maker/Console/b.bin")
+        # A file of that name already there: the copy is a variant.
+        self._bios_file("bios/Maker/Console/b.bin", b"another")
+        self.assertEqual(
+            validate_pr.validate_file("Downloads/b.bin", db, EMPTY_HASHES, known).destination,
+            f"bios/Maker/Console/.variants/b.bin.{result.sha1[:8]}",
+        )
+        # Copied under the declared name, never over a file, and only once.
+        card = self._bios_file("card/B.BIN", missing)
+        named = validate_pr.validate_file(card, db, EMPTY_HASHES, known)
+        self.assertEqual(validate_pr.place([named]), [named.destination])
+        self.assertEqual((self.tmp / named.destination).read_bytes(), missing)
+        self.assertTrue((self.tmp / card).is_file())
+        self.assertEqual(validate_pr.place([named]), [])
+        unknown = validate_pr.validate_file(self._bios_file("card/x.bin"), db, EMPTY_HASHES, known)
+        self.assertEqual((unknown.outcome, unknown.destination), ("unknown", ""))
         placed = validate_pr.validate_file(
             self._bios_file("bios/Other/Place/b.bin", missing), db, EMPTY_HASHES, known,
         )
@@ -388,7 +404,8 @@ class PlatformHashLoading(_Fixture):
     def test_missing_directory_yields_empty_sets(self):
         known = validate_pr.load_platform_hashes(str(self.tmp / "absent"))
         self.assertEqual(known, {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
-                                 "names": set(), "folders": {}, "sizes": {}, "entries": {}})
+                                 "names": set(), "folders": {}, "sizes": {}, "entries": {},
+                                 "named": {}})
 
     def test_declared_hashes_and_names_are_collected(self):
         platforms = self.tmp / "platforms"
