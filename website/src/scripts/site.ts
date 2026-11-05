@@ -502,7 +502,13 @@ const distinct = (items: Item[], key: (item: Item) => string) => {
 // read under every hash of that file, so the MD5, the SHA1, the CRC32 and
 // the SHA256 of one dump give one answer. Setups and emulators are counted
 // per file, by its SHA1.
-const renderMatches = async (status: HTMLElement, result: HTMLElement, found: Item[]) => {
+const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: Item[]) => {
+	// A declaration that names the file holding the value: Batocera pins
+	// naomi2.zip by the MD5 of a ROM inside it, which no file of the
+	// collection has.
+	const searched = new Set(matched.map((item) => item.value));
+	const carried = [...new Set(matched.flatMap((item) => (item.sha1 && !searched.has(item.sha1) ? [item.sha1] : [])))];
+	const found = carried.length ? [...matched, ...(await lookupValues(carried).catch(() => [] as Item[]))] : matched;
 	const held = distinct(found.filter((item) => item.layer === 'collection'), (item) => item.sha1 ?? item.url);
 	const files = await Promise.all(held.map((item) => heldFile(item).catch(() => undefined)));
 	const looked = new Set(found.map((item) => item.value));

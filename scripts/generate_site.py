@@ -4746,12 +4746,17 @@ def file_lookup_records(
             url = _site_path(f"platforms/{key}.md#{system_id.replace(' ', '-')}")
             system_label = _lookup_system_name(system_id)
             for entry in system.get("files") or []:
+                # A hash of a ROM inside the archive (zipped_file) designates
+                # no collection file by itself: the archive holding it is the one.
+                archive = (consumers.sha1_of(entry)
+                           if consumers is not None and entry.get("zipped_file") else None)
                 for algorithm in HASH_ALGORITHMS:
                     for value in _hash_values(entry.get(algorithm)):
                         records.append({
                             "value": value, "algorithm": algorithm, "layer": "platform",
                             "owner": key, "name": str(entry.get("name", "")), "url": url,
                             **({"system_name": system_label} if system_label else {}),
+                            **({"sha1": archive} if archive else {}),
                         })
     for key, profile in sorted(profiles.items()):
         if profile.get("type") in ("alias", "test"):
@@ -4843,8 +4848,9 @@ def _held_under_every_hash(records: list[dict], files: dict, indexes: dict) -> l
     for record in records:
         if record["layer"] not in ("platform", "emulator"):
             continue
-        sha1 = _collection_sha1(files, indexes, record["algorithm"], record["value"])
-        if sha1 is None:
+        sha1 = record.get("sha1") or _collection_sha1(
+            files, indexes, record["algorithm"], record["value"])
+        if sha1 not in files:
             continue
         record["sha1"] = sha1
         for algorithm in HASH_ALGORITHMS:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sqlite3
 import sys
 import tempfile
@@ -669,6 +670,38 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
     """Hashes left the site search, 4 MB of the index every visitor
     downloaded. files/?hash= reads one shard instead, and it must answer at
     least what the search answered: the card, the platforms, the profiles."""
+
+    def test_an_archive_answers_for_the_rom_a_list_pins_inside_it(self):
+        """Batocera checks naomi2.zip by the md5 of 315-6146.bin inside it:
+        dropped on the lookup, the archive listed every setup but Batocera,
+        and 335 of its 337 zipped_file entries were unreachable that way."""
+        import json as _json
+
+        import generate_site  # noqa: PLC0415
+        from common import load_platform_config  # noqa: PLC0415
+        from cross_reference import FileConsumers  # noqa: PLC0415
+        from ziptools import build_zip_contents_index  # noqa: PLC0415
+
+        root = Path(__file__).resolve().parents[1]
+        db = _json.loads((root / "database.json").read_text(encoding="utf-8"))
+        config = load_platform_config("batocera", str(root / "platforms"))
+        entry = next(e for system in config["systems"].values() for e in system.get("files") or []
+                     if e.get("name") == "naomi2.zip" and e.get("zipped_file"))
+        cwd = Path.cwd()
+        try:
+            os.chdir(root)
+            consumers = FileConsumers(db, build_zip_contents_index(db))
+            archive = consumers.sha1_of(entry)
+        finally:
+            os.chdir(cwd)
+        if archive is None:
+            self.skipTest("no copy of naomi2.zip holding the pinned ROM")
+        coverages = {"batocera": {"config": {"systems": {"sega-naomi2": {"files": [entry]}}}}}
+        records = generate_site.file_lookup_records(db, coverages, {}, [], None, consumers)
+        found = {(r["owner"], r["value"]) for r in records if r["layer"] == "platform"}
+        self.assertIn(("batocera", archive), found)
+        pinned = next(r for r in records if r["layer"] == "platform" and r["algorithm"] == "md5")
+        self.assertEqual(pinned["sha1"], archive)
 
     def test_a_data_directory_member_answers_every_hash(self):
         """Dolphin's ApprovedInis.json was found by its SHA1 only: its MD5
