@@ -21,6 +21,14 @@ REFUSED_WORDS = re.compile(
     r"comprehensive|implement)",
     re.IGNORECASE,
 )
+# A numbered pointer at a private review ("audit 24", "review 3", "round 5")
+# names notes no clone holds. tests/test_prose_style.py refuses the same tags
+# in tracked files, and history cannot be rewritten once pushed.
+REVIEW_TAG = re.compile(
+    r"\b(audit|review|round|batch|finding)s? #?\d+|\baudit (batch|findings?)\b"
+    r"|[a-z]+_audit_\d+",
+    re.IGNORECASE,
+)
 CO_AUTHOR = re.compile(r"^co-authored-by", re.IGNORECASE | re.MULTILINE)
 
 
@@ -35,6 +43,8 @@ def problems(message: str) -> list[str]:
     text = "\n".join(line for line in message.splitlines() if not line.startswith("#"))
     if REFUSED_WORDS.search(text):
         found.append("the message uses a word this repository's history does not carry")
+    if REVIEW_TAG.search(text):
+        found.append("say what the change does, not which review asked for it")
     if CO_AUTHOR.search(message):
         found.append("no Co-Authored-By trailer here")
     return found
