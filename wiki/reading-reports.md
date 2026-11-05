@@ -107,9 +107,11 @@ RetroDECK: 2007/2008 OK, 1 untested [md5]
   UNTESTED (required): nintendo-ds/dsifirmware.bin: declared hash contradicted by the local file
   DISCREPANCY: nintendo-snes/sgb2.boot.rom: RetroDECK says OK but supersnes9x says size mismatch: got 524288, accepted [256]
     supersnes9x [size]
-  Core files: 1795 in pack, 0 required missing, 27 optional missing (--verbose lists them)
+  Core files: 1795 in pack, 1 required missing, 27 optional missing (--verbose lists them)
   Core files held but not packed: 154 (installed with its emulator)
+    MISSING (required): FinalBurn Neo needs sfiii2a.zip (1 file)
   Game data: 5099 in pack, 38 missing (--verbose lists them)
+  Game data held but not packed: 30 (installed with its emulator)
   No external files: 78 cores (--verbose lists them)
   Ground truth: 96/2008 files have emulator validation (5%)
     439 platform-only (no emulator profile)
@@ -117,7 +119,9 @@ RetroDECK: 2007/2008 OK, 1 untested [md5]
 
 The run prints more `DISCREPANCY` lines than this excerpt shows. The core
 and game data lines count what the emulator cores add beyond the platform's
-own list. A file held but not packed is left out for the reason in parentheses.
+own list. A required core file the collection lacks is named under them, with
+the emulator that needs it. A file held but not packed is left out for the
+reason in parentheses.
 
 `--verbose` also lists the passing entries that an emulator validates, with
 the check and the source lines behind it:

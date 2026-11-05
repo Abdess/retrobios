@@ -1711,5 +1711,29 @@ class ReadmeKeepsItsPointers(unittest.TestCase):
         self.assertIn("--required-only", block)
 
 
+class ReportExcerptIsTheRun(unittest.TestCase):
+    """reading-reports.md quoted 'From python scripts/verify.py --platform
+    retrodeck' a run that said 0 required missing after the command had started
+    naming one, and never showed the line that names it."""
+
+    def test_every_quoted_line_is_printed(self):
+        import subprocess  # noqa: PLC0415
+
+        page = (WIKI / "reading-reports.md").read_text(encoding="utf-8")
+        intro = "From `python scripts/verify.py --platform retrodeck`:"
+        start = page.index("```\n", page.index(intro)) + 4
+        quoted = page[start:page.index("```", start)].splitlines()
+        run = subprocess.run(
+            [sys.executable, str(ROOT / "scripts" / "verify.py"), "--platform", "retrodeck"],
+            capture_output=True, text=True, cwd=ROOT, check=False,
+        )
+        printed = run.stdout.splitlines()
+        if not any(line.startswith("RetroDECK:") for line in printed):
+            self.skipTest(f"verify did not run: {run.stderr[-200:]}")
+        for line in quoted:
+            with self.subTest(line=line):
+                self.assertIn(line, printed)
+
+
 if __name__ == "__main__":
     unittest.main()
