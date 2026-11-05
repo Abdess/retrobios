@@ -3534,21 +3534,23 @@ def _launcher_refs(config: dict) -> dict[str, list[str]]:
 # The hash a row shows first, when the list does not say which it checks.
 _ROW_HASHES = ("sha1", "md5", "sha256", "crc32")
 # An untested entry whose reason is a hash the bytes do not match.
-_WRONG_HASH = re.compile(r"hash|mismatch|expected|must match", re.IGNORECASE)
+_OTHER_HASH = re.compile(r"hash|mismatch|expected|must match", re.IGNORECASE)
 # A list this long gets a filter box above it, as a table of RECORD_ROWS
 # rows does (website/src/plugins/rehype-stack-tables.mjs).
 FILTER_ROWS = 20
 
 
 def _status_chip(f: dict) -> str:
-    """The row's status as a chip, its word and its colour saying the same."""
+    """The row's status as a chip, its word and its colour saying the same. A
+    declared hash the held copy does not have is "Other hash": the two differ,
+    which says nothing of whose is right (a platform may pin its own bundle)."""
     status = f.get("status")
     if status == "ok":
         word, tone = "OK", "success"
     elif status == "missing":
         word, tone = "Missing", "danger"
     elif status == "untested":
-        word = "Wrong hash" if _WRONG_HASH.search(str(f.get("reason") or "")) else "Untested"
+        word = "Other hash" if _OTHER_HASH.search(str(f.get("reason") or "")) else "Untested"
         tone = "warning"
     else:
         word, tone = str(status), "muted"

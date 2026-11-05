@@ -126,8 +126,8 @@ class ARowPerFile(unittest.TestCase):
     def test_status_words(self):
         cases = {
             ("missing", ""): ("Missing", "danger"),
-            ("untested", "declared hash contradicted by the local file"): ("Wrong hash", "warning"),
-            ("untested", "expected 1234... got 5678..."): ("Wrong hash", "warning"),
+            ("untested", "declared hash contradicted by the local file"): ("Other hash", "warning"),
+            ("untested", "expected 1234... got 5678..."): ("Other hash", "warning"),
             ("untested", "bios/x read error"): ("Untested", "warning"),
         }
         for (status, reason), (word, tone) in cases.items():
