@@ -4668,6 +4668,37 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("to the installed cores", proc.stdout)
 
+    def test_a_cores_folder_that_cannot_be_listed_says_why(self):
+        """A typo (core/ for cores/) or a closed folder read as an empty
+        one: the run said "none in" and asked for the --cores-dir given."""
+        missing = self.home / "core"
+        a_file = self.home / "cores.txt"
+        a_file.write_text("")
+        for folder, why in ((missing, "does not exist"), (a_file, "is not a folder")):
+            with self.subTest(why=why):
+                proc = _install_run(self.env, "--platform", "retroarch", "--dest",
+                                    str(self.home / "s"), "--cores-dir", str(folder),
+                                    "--dry-run", "--no-input")
+                self.assertEqual(proc.returncode, 1)
+                self.assertIn(f"--cores-dir {folder} {why}", proc.stderr)
+                self.assertNotIn("none in", proc.stderr)
+
+    @unittest.skipIf(os.name == "nt" or os.geteuid() == 0,
+                     "a folder without read permission is POSIX")
+    def test_a_closed_cores_folder_says_so(self):
+        cores = self.home / "closed"
+        cores.mkdir()
+        (cores / "handy_libretro.so").write_bytes(b"")
+        os.chmod(cores, 0o000)
+        try:
+            proc = _install_run(self.env, "--platform", "retroarch", "--dest",
+                                str(self.home / "s"), "--cores-dir", str(cores),
+                                "--dry-run", "--no-input")
+        finally:
+            os.chmod(cores, 0o755)
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn(f"--cores-dir {cores} cannot be opened by this user", proc.stderr)
+
     def test_no_core_found_says_how_to_go_on(self):
         proc = _install_run(self.env, "--platform", "retroarch", "--dest",
                             str(self.home / "s"), "--installed-cores", "--dry-run",

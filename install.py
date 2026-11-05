@@ -13636,6 +13636,30 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     return True
 
 
+def _check_cores_dir(folder: Path) -> None:
+    """Refuse a --cores-dir that cannot be listed, saying why: a typo
+    (core/ for cores/) or a closed folder read as an empty one, and the
+    run said "none in" and asked for the --cores-dir it was given."""
+    try:
+        with os.scandir(folder):
+            return
+    except FileNotFoundError:
+        why = "does not exist"
+    except NotADirectoryError:
+        why = "is not a folder"
+    except PermissionError as exc:
+        closed = closed_folder(folder)
+        why = (f"cannot be opened by this user ({exc.strerror or exc})"
+               if closed is None or closed[0] == folder
+               else f"cannot be opened: {closed_folder_words(folder, closed)}")
+    except OSError as exc:
+        why = f"could not be read ({exc.strerror or exc})"
+    print(f"Error: --cores-dir {screen_text(str(folder))} {why}.", file=sys.stderr)
+    print("  Name the folder RetroArch loads cores from (libretro_directory in "
+          "retroarch.cfg, cores/ beside RetroArch by default).", file=sys.stderr)
+    sys.exit(1)
+
+
 def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
     """Refuse --installed-cores with no core, and say how to point at them.
 
@@ -14967,6 +14991,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     cores_found: dict[tuple[str, Path], list[str]] = {}
     for plat_name, bios_path in platforms:
         if plat_name in CORE_PLATFORMS:
+            if args.cores_dir:
+                _check_cores_dir(args.cores_dir)
             searched = [args.cores_dir] if args.cores_dir else core_dirs(plat_name, bios_path)
             cores_found[(plat_name, bios_path)] = installed_cores(searched)
         elif args.installed_cores:
