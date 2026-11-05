@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-03T13:36:34Z",
-  "total_files": 19916,
-  "total_size": 16892318346,
+  "generated_at": "2026-11-05T11:59:40Z",
+  "total_files": 19943,
+  "total_size": 16892630154,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -1054,6 +1054,26 @@
       "crc32": "0a6b084b",
       "adler32": "99a8d407"
     },
+    "59c8e8c88bac5c31ada1306b412edfcf5912a720": {
+      "path": "bios/Apple/Apple II/341-0358-a.bin",
+      "name": "341-0358-a.bin",
+      "size": 65536,
+      "sha1": "59c8e8c88bac5c31ada1306b412edfcf5912a720",
+      "md5": "5e3aa2e0e5d70d762f1d92f11a4347ac",
+      "sha256": "ce785b913b9fcec6db0fab89b2d94f07fcd07664a822531dcbba3a5ca70ca3bf",
+      "crc32": "63819dcb",
+      "adler32": "6bd2343a"
+    },
+    "440c3f84176c7b9f542da0b6ddf4fb13ec326c46": {
+      "path": "bios/Apple/Apple II/341-0438-a.bin",
+      "name": "341-0438-a.bin",
+      "size": 32768,
+      "sha1": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
+      "md5": "309a21f2ed932d43e35f53edf3cddcc3",
+      "sha256": "084587835c1d2c92f5708a9745fdd43ba32136fcdb861a12ee7d690de22dc172",
+      "crc32": "c73ff25b",
+      "adler32": "f7b98f09"
+    },
     "141d18c36a617ab9dce668445440d34354be0672": {
       "path": "bios/Apple/Apple II/341s0632-2",
       "name": "341s0632-2",
@@ -1063,6 +1083,36 @@
       "sha256": "d7d2b0bbf3724b50afceba9434cab24e5f6cd3f9896db3af16a3a4d097a49f35",
       "crc32": "e1c11fb0",
       "adler32": "1061638b"
+    },
+    "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e": {
+      "path": "bios/Apple/Apple II/342-0274-a.e9",
+      "name": "342-0274-a.e9",
+      "size": 8192,
+      "sha1": "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e",
+      "md5": "a7d723b93d09f776a433fee4d31e1d0d",
+      "sha256": "d4d29771658372c6ab5d18ff3bdab6b3b2b02b8de30ed6b021efb8a415192432",
+      "crc32": "8f342081",
+      "adler32": "3b3a6cf2"
+    },
+    "806a602195c18ffec637c03b6bb3405188b0dc1e": {
+      "path": "bios/Apple/Apple II/342-0326-a.f12",
+      "name": "342-0326-a.f12",
+      "size": 2048,
+      "sha1": "806a602195c18ffec637c03b6bb3405188b0dc1e",
+      "md5": "439e1f651011f96838cb61b802362d29",
+      "sha256": "4ae7ff693a486b155a70a8833047b3d4363464dace6760ed64bfb68db233ed4b",
+      "crc32": "f04970a9",
+      "adler32": "4cb27563"
+    },
+    "10767e96cc17bad0970afda3a4146564e6272ba1": {
+      "path": "bios/Apple/Apple II/3420033a.256",
+      "name": "3420033a.256",
+      "size": 32768,
+      "sha1": "10767e96cc17bad0970afda3a4146564e6272ba1",
+      "md5": "e0d67bb1aabe2030547b4cbdf3905b60",
+      "sha256": "678d5c9d374664d2ee94ba9c9564d26a917b31116b07c46df30a3e82c640885b",
+      "crc32": "c8b979b3",
+      "adler32": "94cd2541"
     },
     "b8ea90abe135a0031065e01697c4a3a20d51198b": {
       "path": "bios/Apple/Apple II/AppleIIe.rom",
@@ -1114,6 +1164,16 @@
       "crc32": "b72a2c70",
       "adler32": "d77768f6"
     },
+    "447874fe0850c8add3fd5b13fa98f6648fe6f999": {
+      "path": "bios/Apple/Apple II/Videx Lower Case Chip ROM.bin",
+      "name": "Videx Lower Case Chip ROM.bin",
+      "size": 2048,
+      "sha1": "447874fe0850c8add3fd5b13fa98f6648fe6f999",
+      "md5": "6c00e492bb322dc6cb278f4ffdac8905",
+      "sha256": "6a516bcd96382597af7a498fb1da7547490c830db0f9d22d541fb065b9cd048b",
+      "crc32": "00f68076",
+      "adler32": "51a5aca0"
+    },
     "e8af33c0904b422841080a5ee25935f5ea1f3781": {
       "path": "bios/Apple/Apple II/a2cffa02.zip",
       "name": "a2cffa02.zip",
@@ -1133,6 +1193,16 @@
       "sha256": "e73eee381d01faecb0fa7f767b0d999f38692f023bcdbe1f9f8d57ad87941f6d",
       "crc32": "1dcd4719",
       "adler32": "abf487a6"
+    },
+    "7b75534e7895e04859a0b1337801c6eeb0cef52a": {
+      "path": "bios/Apple/Apple II/ae_transwarp_1.4.bin",
+      "name": "ae_transwarp_1.4.bin",
+      "size": 4096,
+      "sha1": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
+      "md5": "a0167b5db5a5a393c66af37142647106",
+      "sha256": "bcbb1a3bab083b0c2988b502f5e024ff4346fab5dbf09276b32724693bcbd0e9",
+      "crc32": "afe37f55",
+      "adler32": "8c4a92ad"
     },
     "33a24f5489ba9195b44be77d9afb2252594cb5c7": {
       "path": "bios/Apple/Apple II/apple2-asoft-auto.rom",
@@ -1184,6 +1254,36 @@
       "crc32": "e7dc5a90",
       "adler32": "2c6074a3"
     },
+    "1a9b8aca5e32bb702ddb7791daddd60a89655729": {
+      "path": "bios/Apple/Apple II/apple2c-16K.rom",
+      "name": "apple2c-16K.rom",
+      "size": 16384,
+      "sha1": "1a9b8aca5e32bb702ddb7791daddd60a89655729",
+      "md5": "6b2cf9588da87954de396ccb0286ecb4",
+      "sha256": "3ca1c8a27bf111aa0f4dc9372c5e6404457adb9a458ce32ae4b03a7e989e0c76",
+      "crc32": "f0edaa1b",
+      "adler32": "842ec204"
+    },
+    "fb0d644aafaff1352d0816bc8494f6c9913809d5": {
+      "path": "bios/Apple/Apple II/apple2c-32Kv0.rom",
+      "name": "apple2c-32Kv0.rom",
+      "size": 32768,
+      "sha1": "fb0d644aafaff1352d0816bc8494f6c9913809d5",
+      "md5": "88434c2f87c5c180ae06b83de51c3c0a",
+      "sha256": "d65bbf97058b9cdce8eaebf74124048e3b4e42dca1bd42be316747bbc27dc124",
+      "crc32": "323952d1",
+      "adler32": "86d9cfc7"
+    },
+    "1a27ae26966bbafd825d08ad1a24742d3e33557c": {
+      "path": "bios/Apple/Apple II/apple2cp.rom",
+      "name": "apple2cp.rom",
+      "size": 32768,
+      "sha1": "1a27ae26966bbafd825d08ad1a24742d3e33557c",
+      "md5": "c8c2c4009a4a059460ed7426a9d67705",
+      "sha256": "5a62070f6a0b07784681d4df4bf2ce88b2809bec0cbaa65fcb963e804ed60374",
+      "crc32": "0b996420",
+      "adler32": "f4ef32bd"
+    },
     "b2b5d87f52693817fc747df087a4aa1ddcdb1f10": {
       "path": "bios/Apple/Apple II/apple2e-character.rom",
       "name": "apple2e-character.rom",
@@ -1213,6 +1313,103 @@
       "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
       "crc32": "726b604c",
       "adler32": "19e62e15"
+    },
+    "a7fd75ae8611572b0b4d99ad54562014b879dbbf": {
+      "path": "bios/Apple/Apple II/apple2e_char_de.rom",
+      "name": "apple2e_char_de.rom",
+      "size": 4096,
+      "sha1": "a7fd75ae8611572b0b4d99ad54562014b879dbbf",
+      "md5": "18e59d094996d5ada1d35e7f9c15a383",
+      "sha256": "b92576b4fa994384501078ff99963b53cfa98eff4bb641eb61649d484a469315",
+      "crc32": "0d72f153",
+      "adler32": "3cd5f879"
+    },
+    "12ce44f02bd28c350e2b0723d94ab8d9066f8798": {
+      "path": "bios/Apple/Apple II/apple2e_char_de_improved.rom",
+      "name": "apple2e_char_de_improved.rom",
+      "size": 4096,
+      "sha1": "12ce44f02bd28c350e2b0723d94ab8d9066f8798",
+      "md5": "09523893e96d49ac7ba3f86a8b516176",
+      "sha256": "0e32ab131e3932fc61c0a5f0f5509b4c37ab8db6239027f5955d47feba56d39f",
+      "crc32": "d345d332",
+      "adler32": "a13eb5fb"
+    },
+    "42afb02aab4146f781ac52803a2733adc4da834e": {
+      "path": "bios/Apple/Apple II/apple2e_char_fr.rom",
+      "name": "apple2e_char_fr.rom",
+      "size": 4096,
+      "sha1": "42afb02aab4146f781ac52803a2733adc4da834e",
+      "md5": "d32405bbaf5829b0a67f3815c974d315",
+      "sha256": "52d8e46b487a617c288caaf12ab7ad6cb81030b6ab92419f9a2e19c43d765566",
+      "crc32": "ab0be706",
+      "adler32": "a430f879"
+    },
+    "4043e0808af8be096660827445e41149d16c5c85": {
+      "path": "bios/Apple/Apple II/apple2e_char_frca.rom",
+      "name": "apple2e_char_frca.rom",
+      "size": 4096,
+      "sha1": "4043e0808af8be096660827445e41149d16c5c85",
+      "md5": "fe30e74d503043aef963788d391a8d0f",
+      "sha256": "56479cbec4767651c62a4d0f61e6ed103395216f2b86eddba74d85495dd71cc4",
+      "crc32": "2c8fc403",
+      "adler32": "312eb6c7"
+    },
+    "f79815457437e50404f4f537d8aabe34bff3a220": {
+      "path": "bios/Apple/Apple II/apple2e_char_ft_blockascii.rom",
+      "name": "apple2e_char_ft_blockascii.rom",
+      "size": 8192,
+      "sha1": "f79815457437e50404f4f537d8aabe34bff3a220",
+      "md5": "c8cee6ce29c59af9038984650b3e3184",
+      "sha256": "c69c8e1eb26923c5df03d3507fdf86c5f768283a924a5fffdd80377cf2339321",
+      "crc32": "1eae3944",
+      "adler32": "1c42e658",
+      "provenance": {
+        "tosec": {
+          "dat": "Apple II - Firmware",
+          "name": "Custom Video ROM for Block ASCII Anthology (2014-06-05)(French Touch)[eprom2164].bin",
+          "description": "Custom Video ROM for Block ASCII Anthology (2014-06-05)(French Touch)[eprom2164]"
+        }
+      }
+    },
+    "02075efbfdb99af48360561323404a921b91a676": {
+      "path": "bios/Apple/Apple II/apple2e_char_reactive.rom",
+      "name": "apple2e_char_reactive.rom",
+      "size": 4096,
+      "sha1": "02075efbfdb99af48360561323404a921b91a676",
+      "md5": "55efa555965d02fb855284310d7d7fad",
+      "sha256": "49716e2804b119810c22ab668ae37cebadf0cd53bc8911b5f17c4a62a3acb514",
+      "crc32": "af19aff6",
+      "adler32": "022a7acd"
+    },
+    "d19c2e2cc12b27d77edc403d5d0701186a4ed988": {
+      "path": "bios/Apple/Apple II/apple2e_char_uk.rom",
+      "name": "apple2e_char_uk.rom",
+      "size": 4096,
+      "sha1": "d19c2e2cc12b27d77edc403d5d0701186a4ed988",
+      "md5": "adedf4e4c2791323470ab40503fd6ae2",
+      "sha256": "d55bd5391485cd78c68c71408f09bd088e82a73d179a0a25820067a0c1554acd",
+      "crc32": "dda11653",
+      "adler32": "bea9b61d"
+    },
+    "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb": {
+      "path": "bios/Apple/Apple II/apple2e_char_uk_unenh.rom",
+      "name": "apple2e_char_uk_unenh.rom",
+      "size": 4096,
+      "sha1": "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb",
+      "md5": "26e43521d6d4a40e2d41c87a2c70fadf",
+      "sha256": "f2199fbfb473e98a8c3fb7e7c3312faaf76b4b010b02c655b662e5f87dc997f3",
+      "crc32": "7a9a91ef",
+      "adler32": "dc6cf879"
+    },
+    "66eca035fd18024fceed4c30c32a4185792cb3ea": {
+      "path": "bios/Apple/Apple II/apple2e_char_us_mt_iigs.rom",
+      "name": "apple2e_char_us_mt_iigs.rom",
+      "size": 4096,
+      "sha1": "66eca035fd18024fceed4c30c32a4185792cb3ea",
+      "md5": "72448cc183c20551e6d76680c8053972",
+      "sha256": "097cd3500afe6c15d710d2e96af539a8e5065853986289294aac08ee7a1f070a",
+      "crc32": "a68a4f03",
+      "adler32": "3175ad0f"
     },
     "97d54fa68a7b30ff7a63334567be688663ad18b7": {
       "path": "bios/Apple/Apple II/apple2ee.zip",
@@ -1284,6 +1481,16 @@
       "crc32": "ba210588",
       "adler32": "8c397035"
     },
+    "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6": {
+      "path": "bios/Apple/Apple II/apple2p.rom",
+      "name": "apple2p.rom",
+      "size": 20480,
+      "sha1": "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6",
+      "md5": "383867e17204ed3e85afbb9086edaec5",
+      "sha256": "92c4bef609920842ea472d21b661a0d35dbda6cd90963b8b734a205e22d84108",
+      "crc32": "abebfa09",
+      "adler32": "7016e399"
+    },
     "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086": {
       "path": "bios/Apple/Apple II/apple2p.zip",
       "name": "apple2p.zip",
@@ -1293,6 +1500,36 @@
       "sha256": "f9df91af0aecb75edb7401a5cc47c87f57e82360f0acc1a8474b28aedaa60087",
       "crc32": "665cd50f",
       "adler32": "39cd4d98"
+    },
+    "d600692ed9626668233a22a48236af639410cb7b": {
+      "path": "bios/Apple/Apple II/cffa20ee02.bin",
+      "name": "cffa20ee02.bin",
+      "size": 4096,
+      "sha1": "d600692ed9626668233a22a48236af639410cb7b",
+      "md5": "80adbc2d79f347ec63f4b771ea32984d",
+      "sha256": "3d7f6918f9af3828f5a6299299a817df0d354ee62e547bc0238755de66162a88",
+      "crc32": "3ecafce5",
+      "adler32": "abb531dc"
+    },
+    "080ff88f19de22328e162954ee2b51ee65f9d5cd": {
+      "path": "bios/Apple/Apple II/cffa20eec02.bin",
+      "name": "cffa20eec02.bin",
+      "size": 4096,
+      "sha1": "080ff88f19de22328e162954ee2b51ee65f9d5cd",
+      "md5": "199fff7bd52216f5871a062c9c7744c7",
+      "sha256": "a08cb25ad80054649ee5fcb620e01ed56f025acb28c753bc28dd187a1d149cab",
+      "crc32": "fb3726f8",
+      "adler32": "58b23576"
+    },
+    "5e2737d233f5769df654d2d5aa96d24f2fd85671": {
+      "path": "bios/Apple/Apple II/dan2_eprom.bin",
+      "name": "dan2_eprom.bin",
+      "size": 512,
+      "sha1": "5e2737d233f5769df654d2d5aa96d24f2fd85671",
+      "md5": "d2cf1b181b1934f9533c6d8b9d02f44c",
+      "sha256": "c64413319243ecab3e2a93a9f5e93702d372b32dd265fa13d45c38298a3a2130",
+      "crc32": "b1c3860f",
+      "adler32": "9a8928b2"
     },
     "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9": {
       "path": "bios/Apple/Apple II/disk2-13seq.rom",
@@ -1313,6 +1550,46 @@
       "sha256": "4cce25c87ba4dd396919ce82f8567894225519c3d9db76c5667760f77054694f",
       "crc32": "862773cb",
       "adler32": "26398cae"
+    },
+    "829072cc19a58b24d36c2af972abaad6f9ba35d9": {
+      "path": "bios/Apple/Apple II/grappler_plus.bin",
+      "name": "grappler_plus.bin",
+      "size": 4096,
+      "sha1": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "md5": "266255809c2fca4ea9aac658197e6c38",
+      "sha256": "9be4dea7722ad8928aee64c2ae708f365a6d66c50a63bff8a3c1a4e7596d44c6",
+      "crc32": "c4781f97",
+      "adler32": "b05feb1a"
+    },
+    "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60": {
+      "path": "bios/Apple/Apple II/liron.rom",
+      "name": "liron.rom",
+      "size": 4096,
+      "sha1": "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60",
+      "md5": "6e3eb8c47b60948a2e069af0dbeb8224",
+      "sha256": "42c1ae66c6bec932669239599eb8989a5364752d56fa5c8997bb23d8dfc0b657",
+      "crc32": "974253fd",
+      "adler32": "0b0e8ab5"
+    },
+    "3a2baa6648efe4456d3ec3721216e57c64f7acfc": {
+      "path": "bios/Apple/Apple II/mouse_341-0269.bin",
+      "name": "mouse_341-0269.bin",
+      "size": 2048,
+      "sha1": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
+      "md5": "1518752ba8444b950b76f14163cbb6a1",
+      "sha256": "66480812edad5f6bd70349949cf8bd8fbafee2dc8bf396541d4e78bac2629ec0",
+      "crc32": "94067f16",
+      "adler32": "6c5a7684"
+    },
+    "60f434f5325899d7ea257a6e56e6f53eae65146a": {
+      "path": "bios/Apple/Apple II/thunderclock_u9_v1.3.bin",
+      "name": "thunderclock_u9_v1.3.bin",
+      "size": 2048,
+      "sha1": "60f434f5325899d7ea257a6e56e6f53eae65146a",
+      "md5": "138b1f7e30953fcaa58fcbf562c15001",
+      "sha256": "ecca793179427fdd193373080bf23e49a95743bd7b5e0b218c747663938b6c03",
+      "crc32": "1b99c4e3",
+      "adler32": "c938c5a9"
     },
     "50c3df528109c65491a001ec74e50351a652c1fd": {
       "path": "bios/Apple/Apple II/videx_videoterm_char_inverse.bin",
@@ -204534,22 +204811,41 @@
       "ca86796676d3de0607661677b86a3ac7": "69cff7f1ccbd3cddb7ae887c90ca00781fd42860",
       "e43302d686bafe6007a1175bc7d562ae": "af2fce0d7349c0afc15b4293e53d048fbd605b11",
       "fe7d1ac0d56f37d52dcd6057a960cb3f": "de8aa285dcac88b1cc80ec9128b092833f5174b6",
+      "5e3aa2e0e5d70d762f1d92f11a4347ac": "59c8e8c88bac5c31ada1306b412edfcf5912a720",
+      "309a21f2ed932d43e35f53edf3cddcc3": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
       "c9e0e059faec0393fc429131a3af4ee9": "141d18c36a617ab9dce668445440d34354be0672",
+      "a7d723b93d09f776a433fee4d31e1d0d": "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e",
+      "439e1f651011f96838cb61b802362d29": "806a602195c18ffec637c03b6bb3405188b0dc1e",
+      "e0d67bb1aabe2030547b4cbdf3905b60": "10767e96cc17bad0970afda3a4146564e6272ba1",
       "38063e08c778503fc03ecebb979769e9": "b8ea90abe135a0031065e01697c4a3a20d51198b",
       "2020aa1413ff77fe29353f3ee72dc295": "d4181c9f046aafc3fb326b381baac809d9e38d16",
       "4f80448507cf43ab40c17ac08d89e278": "afd060e6f35faf3bb0146fa889fc787adf56330a",
       "897b0edef70b440133c99f65a507ebb6": "e3d6d1c30653572b49ecc2dc54ce073978411a04",
       "5f1be0c1cdff26f5956eef9643911886": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
+      "6c00e492bb322dc6cb278f4ffdac8905": "447874fe0850c8add3fd5b13fa98f6648fe6f999",
       "c192973c9a3c06594f87908abaec0b66": "e8af33c0904b422841080a5ee25935f5ea1f3781",
       "e07ffce4500ffeac9750c427d8309d9b": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "a0167b5db5a5a393c66af37142647106": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
       "572b3005a4fa49bc54917b069b82c1ab": "33a24f5489ba9195b44be77d9afb2252594cb5c7",
       "9ac0dc8c4d0002eb45b0b84be0bde5ec": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
       "cde36c6b519a628509eb3dc4e4897845": "2dfaf376fc6a0b106320911c1ebfc1512601dc6c",
       "5be2fd85a99905d57785390b8b6c4ed6": "8c5ca0c39005dfb0898af2c0992f797cc77530c0",
       "af7001a6be1c77d08acf212e57c1e434": "e63ac5e5bd3443cb937916a78e7d4bb8d3c67c4b",
+      "6b2cf9588da87954de396ccb0286ecb4": "1a9b8aca5e32bb702ddb7791daddd60a89655729",
+      "88434c2f87c5c180ae06b83de51c3c0a": "fb0d644aafaff1352d0816bc8494f6c9913809d5",
+      "c8c2c4009a4a059460ed7426a9d67705": "1a27ae26966bbafd825d08ad1a24742d3e33557c",
       "9123fff3442c0e688cc6816be88dd4ab": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
       "003a780b461c96ae3e72861ed0f4d3d9": "d756eba578a6c5a4807510dfee30ee585c63755e",
       "d96a5b4370d665300802970c35cf1b7f": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "18e59d094996d5ada1d35e7f9c15a383": "a7fd75ae8611572b0b4d99ad54562014b879dbbf",
+      "09523893e96d49ac7ba3f86a8b516176": "12ce44f02bd28c350e2b0723d94ab8d9066f8798",
+      "d32405bbaf5829b0a67f3815c974d315": "42afb02aab4146f781ac52803a2733adc4da834e",
+      "fe30e74d503043aef963788d391a8d0f": "4043e0808af8be096660827445e41149d16c5c85",
+      "c8cee6ce29c59af9038984650b3e3184": "f79815457437e50404f4f537d8aabe34bff3a220",
+      "55efa555965d02fb855284310d7d7fad": "02075efbfdb99af48360561323404a921b91a676",
+      "adedf4e4c2791323470ab40503fd6ae2": "d19c2e2cc12b27d77edc403d5d0701186a4ed988",
+      "26e43521d6d4a40e2d41c87a2c70fadf": "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb",
+      "72448cc183c20551e6d76680c8053972": "66eca035fd18024fceed4c30c32a4185792cb3ea",
       "9f738381801944d792f4640ec46c7ed8": "97d54fa68a7b30ff7a63334567be688663ad18b7",
       "2fbc2be2a84ea742de37be9925c7d7cd": "58ad0008df72896a18601e090ee0d58155ffa5be",
       "e14eae591b3569f54802f99c0355c817": "9b041a861ae6ff99e466ad428700269db509ced6",
@@ -204557,9 +204853,17 @@
       "ba89edf2729a28a17cd9e0f7a0ac9a39": "bc32bc0e8902946663998f56aea52be597d9e361",
       "8f7ee14ccca8ae3dd8c759497af3f09b": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "2a68f049d44e326574b95c0ec638c1ca": "78008be557f643e956a106121bcc182c0fb9ea6d",
+      "383867e17204ed3e85afbb9086edaec5": "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6",
       "d3bef2755267a941f264fb5b288e3076": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "80adbc2d79f347ec63f4b771ea32984d": "d600692ed9626668233a22a48236af639410cb7b",
+      "199fff7bd52216f5871a062c9c7744c7": "080ff88f19de22328e162954ee2b51ee65f9d5cd",
+      "d2cf1b181b1934f9533c6d8b9d02f44c": "5e2737d233f5769df654d2d5aa96d24f2fd85671",
       "008568a8a28a79f795ad73a4b064de1e": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
       "ff7b3145bf41ae75a9cef33307ffee87": "791ebae64a7fad8f42bdfaec36b9e2d34f12ded8",
+      "266255809c2fca4ea9aac658197e6c38": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "6e3eb8c47b60948a2e069af0dbeb8224": "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60",
+      "1518752ba8444b950b76f14163cbb6a1": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
+      "138b1f7e30953fcaa58fcbf562c15001": "60f434f5325899d7ea257a6e56e6f53eae65146a",
       "b36b632aa1ee83433c00fae5bb3522f4": "50c3df528109c65491a001ec74e50351a652c1fd",
       "4a86ea38cfa898829f92fc0866e8305c": "410b54f33d13c82e3857f1be906d93a8c5b8d321",
       "acdb3732b38ddaee5ad357e08eea7676": "bb653836e84850ce3197f461d4e19355f738cfbf",
@@ -224636,8 +224940,23 @@
       "341-0057.bin": [
         "de8aa285dcac88b1cc80ec9128b092833f5174b6"
       ],
+      "341-0358-a.bin": [
+        "59c8e8c88bac5c31ada1306b412edfcf5912a720"
+      ],
+      "341-0438-a.bin": [
+        "440c3f84176c7b9f542da0b6ddf4fb13ec326c46"
+      ],
       "341s0632-2": [
         "141d18c36a617ab9dce668445440d34354be0672"
+      ],
+      "342-0274-a.e9": [
+        "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e"
+      ],
+      "342-0326-a.f12": [
+        "806a602195c18ffec637c03b6bb3405188b0dc1e"
+      ],
+      "3420033a.256": [
+        "10767e96cc17bad0970afda3a4146564e6272ba1"
       ],
       "AppleIIe.rom": [
         "b8ea90abe135a0031065e01697c4a3a20d51198b"
@@ -224654,11 +224973,17 @@
       "state-machine-16.rom": [
         "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4"
       ],
+      "Videx Lower Case Chip ROM.bin": [
+        "447874fe0850c8add3fd5b13fa98f6648fe6f999"
+      ],
       "a2cffa02.zip": [
         "e8af33c0904b422841080a5ee25935f5ea1f3781"
       ],
       "a2diskiing.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
+      ],
+      "ae_transwarp_1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
       ],
       "apple2-asoft-auto.rom": [
         "33a24f5489ba9195b44be77d9afb2252594cb5c7"
@@ -224675,11 +225000,47 @@
       "apple2.zip": [
         "e63ac5e5bd3443cb937916a78e7d4bb8d3c67c4b"
       ],
+      "apple2c-16K.rom": [
+        "1a9b8aca5e32bb702ddb7791daddd60a89655729"
+      ],
+      "apple2c-32Kv0.rom": [
+        "fb0d644aafaff1352d0816bc8494f6c9913809d5"
+      ],
+      "apple2cp.rom": [
+        "1a27ae26966bbafd825d08ad1a24742d3e33557c"
+      ],
       "apple2e-character.rom": [
         "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
       ],
       "apple2e.rom": [
         "d756eba578a6c5a4807510dfee30ee585c63755e"
+      ],
+      "apple2e_char_de.rom": [
+        "a7fd75ae8611572b0b4d99ad54562014b879dbbf"
+      ],
+      "apple2e_char_de_improved.rom": [
+        "12ce44f02bd28c350e2b0723d94ab8d9066f8798"
+      ],
+      "apple2e_char_fr.rom": [
+        "42afb02aab4146f781ac52803a2733adc4da834e"
+      ],
+      "apple2e_char_frca.rom": [
+        "4043e0808af8be096660827445e41149d16c5c85"
+      ],
+      "apple2e_char_ft_blockascii.rom": [
+        "f79815457437e50404f4f537d8aabe34bff3a220"
+      ],
+      "apple2e_char_reactive.rom": [
+        "02075efbfdb99af48360561323404a921b91a676"
+      ],
+      "apple2e_char_uk.rom": [
+        "d19c2e2cc12b27d77edc403d5d0701186a4ed988"
+      ],
+      "apple2e_char_uk_unenh.rom": [
+        "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb"
+      ],
+      "apple2e_char_us_mt_iigs.rom": [
+        "66eca035fd18024fceed4c30c32a4185792cb3ea"
       ],
       "apple2ee.zip": [
         "97d54fa68a7b30ff7a63334567be688663ad18b7"
@@ -224696,14 +225057,38 @@
       "apple2o.rom": [
         "78008be557f643e956a106121bcc182c0fb9ea6d"
       ],
+      "apple2p.rom": [
+        "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6"
+      ],
       "apple2p.zip": [
         "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086"
+      ],
+      "cffa20ee02.bin": [
+        "d600692ed9626668233a22a48236af639410cb7b"
+      ],
+      "cffa20eec02.bin": [
+        "080ff88f19de22328e162954ee2b51ee65f9d5cd"
+      ],
+      "dan2_eprom.bin": [
+        "5e2737d233f5769df654d2d5aa96d24f2fd85671"
       ],
       "disk2-13seq.rom": [
         "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9"
       ],
       "grappler_eps-1.bin": [
         "791ebae64a7fad8f42bdfaec36b9e2d34f12ded8"
+      ],
+      "grappler_plus.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "liron.rom": [
+        "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60"
+      ],
+      "mouse_341-0269.bin": [
+        "3a2baa6648efe4456d3ec3721216e57c64f7acfc"
+      ],
+      "thunderclock_u9_v1.3.bin": [
+        "60f434f5325899d7ea257a6e56e6f53eae65146a"
       ],
       "videx_videoterm_char_inverse.bin": [
         "50c3df528109c65491a001ec74e50351a652c1fd"
@@ -281606,14 +281991,41 @@
       "342-0135-b.64.rom": [
         "61fa9254628e5bb7236fb474006116d67684d747"
       ],
+      "apple2c-plus.rom": [
+        "1a27ae26966bbafd825d08ad1a24742d3e33557c"
+      ],
+      "apple2e_char_frca_unenh.rom": [
+        "42afb02aab4146f781ac52803a2733adc4da834e"
+      ],
       "diskii_p6_13.rom": [
         "e3d6d1c30653572b49ecc2dc54ce073978411a04"
+      ],
+      "grappler+.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "grappler.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "ae transwarp rom v1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
       ],
       "ssc_341-0065-a.bin": [
         "6dab633470c6bc4cb3e81d09fda46597caf8ee57"
       ],
       "341-0065-a.bin": [
         "6dab633470c6bc4cb3e81d09fda46597caf8ee57"
+      ],
+      "thunderclock_u9.bin": [
+        "60f434f5325899d7ea257a6e56e6f53eae65146a"
+      ],
+      "thunderclock.rom": [
+        "60f434f5325899d7ea257a6e56e6f53eae65146a"
+      ],
+      "Thunderware_REV_1.3_ROM_U9.bin": [
+        "60f434f5325899d7ea257a6e56e6f53eae65146a"
+      ],
+      "341-0358-A.bin": [
+        "59c8e8c88bac5c31ada1306b412edfcf5912a720"
       ],
       "Move arm.wav": [
         "3e03cfef6a327adf9e2c09dd329a4c5b8e0aac52"
@@ -282343,22 +282755,41 @@
       "f59a1325": "69cff7f1ccbd3cddb7ae887c90ca00781fd42860",
       "f6b267e3": "af2fce0d7349c0afc15b4293e53d048fbd605b11",
       "0a6b084b": "de8aa285dcac88b1cc80ec9128b092833f5174b6",
+      "63819dcb": "59c8e8c88bac5c31ada1306b412edfcf5912a720",
+      "c73ff25b": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
       "e1c11fb0": "141d18c36a617ab9dce668445440d34354be0672",
+      "8f342081": "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e",
+      "f04970a9": "806a602195c18ffec637c03b6bb3405188b0dc1e",
+      "c8b979b3": "10767e96cc17bad0970afda3a4146564e6272ba1",
       "1d70b193": "b8ea90abe135a0031065e01697c4a3a20d51198b",
       "ce7144f6": "d4181c9f046aafc3fb326b381baac809d9e38d16",
       "d34eb2ff": "afd060e6f35faf3bb0146fa889fc787adf56330a",
       "62e22620": "e3d6d1c30653572b49ecc2dc54ce073978411a04",
       "b72a2c70": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
+      "00f68076": "447874fe0850c8add3fd5b13fa98f6648fe6f999",
       "669f3e91": "e8af33c0904b422841080a5ee25935f5ea1f3781",
       "1dcd4719": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "afe37f55": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
       "1d05c1b1": "33a24f5489ba9195b44be77d9afb2252594cb5c7",
       "64f415c6": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
       "2dcec5cb": "2dfaf376fc6a0b106320911c1ebfc1512601dc6c",
       "f66f9c26": "8c5ca0c39005dfb0898af2c0992f797cc77530c0",
       "e7dc5a90": "e63ac5e5bd3443cb937916a78e7d4bb8d3c67c4b",
+      "f0edaa1b": "1a9b8aca5e32bb702ddb7791daddd60a89655729",
+      "323952d1": "fb0d644aafaff1352d0816bc8494f6c9913809d5",
+      "0b996420": "1a27ae26966bbafd825d08ad1a24742d3e33557c",
       "2651014d": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
       "65989942": "d756eba578a6c5a4807510dfee30ee585c63755e",
       "726b604c": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "0d72f153": "a7fd75ae8611572b0b4d99ad54562014b879dbbf",
+      "d345d332": "12ce44f02bd28c350e2b0723d94ab8d9066f8798",
+      "ab0be706": "42afb02aab4146f781ac52803a2733adc4da834e",
+      "2c8fc403": "4043e0808af8be096660827445e41149d16c5c85",
+      "1eae3944": "f79815457437e50404f4f537d8aabe34bff3a220",
+      "af19aff6": "02075efbfdb99af48360561323404a921b91a676",
+      "dda11653": "d19c2e2cc12b27d77edc403d5d0701186a4ed988",
+      "7a9a91ef": "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb",
+      "a68a4f03": "66eca035fd18024fceed4c30c32a4185792cb3ea",
       "862caa56": "97d54fa68a7b30ff7a63334567be688663ad18b7",
       "816a86f1": "58ad0008df72896a18601e090ee0d58155ffa5be",
       "e12be18d": "9b041a861ae6ff99e466ad428700269db509ced6",
@@ -282366,9 +282797,17 @@
       "de7ddf29": "bc32bc0e8902946663998f56aea52be597d9e361",
       "4f923a35": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "ba210588": "78008be557f643e956a106121bcc182c0fb9ea6d",
+      "abebfa09": "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6",
       "665cd50f": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "3ecafce5": "d600692ed9626668233a22a48236af639410cb7b",
+      "fb3726f8": "080ff88f19de22328e162954ee2b51ee65f9d5cd",
+      "b1c3860f": "5e2737d233f5769df654d2d5aa96d24f2fd85671",
       "5eabc7b9": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
       "862773cb": "791ebae64a7fad8f42bdfaec36b9e2d34f12ded8",
+      "c4781f97": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "974253fd": "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60",
+      "94067f16": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
+      "1b99c4e3": "60f434f5325899d7ea257a6e56e6f53eae65146a",
       "8a497a48": "50c3df528109c65491a001ec74e50351a652c1fd",
       "87f89f08": "410b54f33d13c82e3857f1be906d93a8c5b8d321",
       "bbe3bb28": "bb653836e84850ce3197f461d4e19355f738cfbf",
@@ -302260,22 +302699,41 @@
       "96f77c9fcf7285442dfbcddaa4fd1179820136bde65e8deecb4d41da3daa557f": "69cff7f1ccbd3cddb7ae887c90ca00781fd42860",
       "eddce4a9f9f6e73ffed06c5aede6fbcdaa01dda5568b81f90d865858a3d7d9bc": "af2fce0d7349c0afc15b4293e53d048fbd605b11",
       "634e91bae5938820da79183984c03aa06075cbd5701d480debcc4f6d70620001": "de8aa285dcac88b1cc80ec9128b092833f5174b6",
+      "ce785b913b9fcec6db0fab89b2d94f07fcd07664a822531dcbba3a5ca70ca3bf": "59c8e8c88bac5c31ada1306b412edfcf5912a720",
+      "084587835c1d2c92f5708a9745fdd43ba32136fcdb861a12ee7d690de22dc172": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
       "d7d2b0bbf3724b50afceba9434cab24e5f6cd3f9896db3af16a3a4d097a49f35": "141d18c36a617ab9dce668445440d34354be0672",
+      "d4d29771658372c6ab5d18ff3bdab6b3b2b02b8de30ed6b021efb8a415192432": "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e",
+      "4ae7ff693a486b155a70a8833047b3d4363464dace6760ed64bfb68db233ed4b": "806a602195c18ffec637c03b6bb3405188b0dc1e",
+      "678d5c9d374664d2ee94ba9c9564d26a917b31116b07c46df30a3e82c640885b": "10767e96cc17bad0970afda3a4146564e6272ba1",
       "aab38a03ca8deabbb2f868733148c2efd6f655a59cd9c5d058ef3e0b7aa86a1a": "b8ea90abe135a0031065e01697c4a3a20d51198b",
       "de1e3e035878bab43d0af8fe38f5839c527e9548647036598ee6fe7ec74d2a7d": "d4181c9f046aafc3fb326b381baac809d9e38d16",
       "2d2599521fc5763d4e8c308c2ee7c5c4d5c93785b8fb9a4f7d0381dfd5eb60b6": "afd060e6f35faf3bb0146fa889fc787adf56330a",
       "383c55f5333cbfde39dd41528186631e5aca2eddfec30716344f03b6a4d44655": "e3d6d1c30653572b49ecc2dc54ce073978411a04",
       "e5e30615040567c1e7a2d21599681f8dac820edbdcda177b816a64d74b3a12f2": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
+      "6a516bcd96382597af7a498fb1da7547490c830db0f9d22d541fb065b9cd048b": "447874fe0850c8add3fd5b13fa98f6648fe6f999",
       "94c0e830ca881760361cabdbb5f8b195a72a2ea98d5ef4d186eeeca54a1a738e": "e8af33c0904b422841080a5ee25935f5ea1f3781",
       "e73eee381d01faecb0fa7f767b0d999f38692f023bcdbe1f9f8d57ad87941f6d": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "bcbb1a3bab083b0c2988b502f5e024ff4346fab5dbf09276b32724693bcbd0e9": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
       "fc3e9d41e9428534a883df5aa10eb55b73ea53d2fcbb3ee4f39bed1b07a82905": "33a24f5489ba9195b44be77d9afb2252594cb5c7",
       "08f5d22230481019844492dde0a29a018cb193712a9e4a43770a3870608f28de": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
       "cb52b212a62f808c2f59600b2823491ee12bd91cab8e0260fe34b5f14c47552f": "2dfaf376fc6a0b106320911c1ebfc1512601dc6c",
       "378ba00c86a64cca49cedaca7de8d5d351983ebc295d9d11e0752febfc346249": "8c5ca0c39005dfb0898af2c0992f797cc77530c0",
       "95fd25a365bac1dbdb4fc47ef67db4db31990c30ee14d22af0c36f0f9e24a071": "e63ac5e5bd3443cb937916a78e7d4bb8d3c67c4b",
+      "3ca1c8a27bf111aa0f4dc9372c5e6404457adb9a458ce32ae4b03a7e989e0c76": "1a9b8aca5e32bb702ddb7791daddd60a89655729",
+      "d65bbf97058b9cdce8eaebf74124048e3b4e42dca1bd42be316747bbc27dc124": "fb0d644aafaff1352d0816bc8494f6c9913809d5",
+      "5a62070f6a0b07784681d4df4bf2ce88b2809bec0cbaa65fcb963e804ed60374": "1a27ae26966bbafd825d08ad1a24742d3e33557c",
       "52c3b87900ac939f6525402cab1ccfd8f8259290fc6df54da48fb4c98ae3ed0f": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
       "c17bc38c75ba96c33a30c688a1efd60144811073423533fe7f8453cdd9457aab": "d756eba578a6c5a4807510dfee30ee585c63755e",
       "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "b92576b4fa994384501078ff99963b53cfa98eff4bb641eb61649d484a469315": "a7fd75ae8611572b0b4d99ad54562014b879dbbf",
+      "0e32ab131e3932fc61c0a5f0f5509b4c37ab8db6239027f5955d47feba56d39f": "12ce44f02bd28c350e2b0723d94ab8d9066f8798",
+      "52d8e46b487a617c288caaf12ab7ad6cb81030b6ab92419f9a2e19c43d765566": "42afb02aab4146f781ac52803a2733adc4da834e",
+      "56479cbec4767651c62a4d0f61e6ed103395216f2b86eddba74d85495dd71cc4": "4043e0808af8be096660827445e41149d16c5c85",
+      "c69c8e1eb26923c5df03d3507fdf86c5f768283a924a5fffdd80377cf2339321": "f79815457437e50404f4f537d8aabe34bff3a220",
+      "49716e2804b119810c22ab668ae37cebadf0cd53bc8911b5f17c4a62a3acb514": "02075efbfdb99af48360561323404a921b91a676",
+      "d55bd5391485cd78c68c71408f09bd088e82a73d179a0a25820067a0c1554acd": "d19c2e2cc12b27d77edc403d5d0701186a4ed988",
+      "f2199fbfb473e98a8c3fb7e7c3312faaf76b4b010b02c655b662e5f87dc997f3": "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb",
+      "097cd3500afe6c15d710d2e96af539a8e5065853986289294aac08ee7a1f070a": "66eca035fd18024fceed4c30c32a4185792cb3ea",
       "aff74b8e7ffb77f5ce190f50f742dbe56484090ec79bfe26fb7b916371202664": "97d54fa68a7b30ff7a63334567be688663ad18b7",
       "ed5bdd4afa509134e85f1d020685af7ff50e279226eb869a17825b471cc1634c": "58ad0008df72896a18601e090ee0d58155ffa5be",
       "b10f553c50daf34aa305087179104f55111a5f6d2b425109ae95cb1d2dcd2ff9": "9b041a861ae6ff99e466ad428700269db509ced6",
@@ -302283,9 +302741,17 @@
       "01398a51b3aa16c40bb3d5df43494316cc12eebb87871712cecc396e1beb2df8": "bc32bc0e8902946663998f56aea52be597d9e361",
       "c2137ea284c104c44e01747888033bd79a1e5de136fef74d7f5b2f1e5b5bb6fc": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "68d9db6bb4c305d40c3fa89fa0f2d7b7f71516a9431e3138859f23bc5bddb2d1": "78008be557f643e956a106121bcc182c0fb9ea6d",
+      "92c4bef609920842ea472d21b661a0d35dbda6cd90963b8b734a205e22d84108": "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6",
       "f9df91af0aecb75edb7401a5cc47c87f57e82360f0acc1a8474b28aedaa60087": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "3d7f6918f9af3828f5a6299299a817df0d354ee62e547bc0238755de66162a88": "d600692ed9626668233a22a48236af639410cb7b",
+      "a08cb25ad80054649ee5fcb620e01ed56f025acb28c753bc28dd187a1d149cab": "080ff88f19de22328e162954ee2b51ee65f9d5cd",
+      "c64413319243ecab3e2a93a9f5e93702d372b32dd265fa13d45c38298a3a2130": "5e2737d233f5769df654d2d5aa96d24f2fd85671",
       "4234aed053c622b266014c4e06ab1ce9e0e085d94a28512aa4030462be0a3cb9": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
       "4cce25c87ba4dd396919ce82f8567894225519c3d9db76c5667760f77054694f": "791ebae64a7fad8f42bdfaec36b9e2d34f12ded8",
+      "9be4dea7722ad8928aee64c2ae708f365a6d66c50a63bff8a3c1a4e7596d44c6": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "42c1ae66c6bec932669239599eb8989a5364752d56fa5c8997bb23d8dfc0b657": "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60",
+      "66480812edad5f6bd70349949cf8bd8fbafee2dc8bf396541d4e78bac2629ec0": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
+      "ecca793179427fdd193373080bf23e49a95743bd7b5e0b218c747663938b6c03": "60f434f5325899d7ea257a6e56e6f53eae65146a",
       "4d03bd0934ab39cb18f22444e0361f91d1984131759c07010398ad5cf84397c0": "50c3df528109c65491a001ec74e50351a652c1fd",
       "ad873ca47e09def4c942177c84809d853231d4774e8d824e1b834d2033b8199c": "410b54f33d13c82e3857f1be906d93a8c5b8d321",
       "616f4d9f81a7a4ea0fa918842a05dfb3b503927776d2bfe97e6950b5431b562e": "bb653836e84850ce3197f461d4e19355f738cfbf",
@@ -322723,11 +323189,41 @@
       "Apple II/341-0057.bin": [
         "de8aa285dcac88b1cc80ec9128b092833f5174b6"
       ],
+      "Apple/Apple II/341-0358-a.bin": [
+        "59c8e8c88bac5c31ada1306b412edfcf5912a720"
+      ],
+      "Apple II/341-0358-a.bin": [
+        "59c8e8c88bac5c31ada1306b412edfcf5912a720"
+      ],
+      "Apple/Apple II/341-0438-a.bin": [
+        "440c3f84176c7b9f542da0b6ddf4fb13ec326c46"
+      ],
+      "Apple II/341-0438-a.bin": [
+        "440c3f84176c7b9f542da0b6ddf4fb13ec326c46"
+      ],
       "Apple/Apple II/341s0632-2": [
         "141d18c36a617ab9dce668445440d34354be0672"
       ],
       "Apple II/341s0632-2": [
         "141d18c36a617ab9dce668445440d34354be0672"
+      ],
+      "Apple/Apple II/342-0274-a.e9": [
+        "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e"
+      ],
+      "Apple II/342-0274-a.e9": [
+        "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e"
+      ],
+      "Apple/Apple II/342-0326-a.f12": [
+        "806a602195c18ffec637c03b6bb3405188b0dc1e"
+      ],
+      "Apple II/342-0326-a.f12": [
+        "806a602195c18ffec637c03b6bb3405188b0dc1e"
+      ],
+      "Apple/Apple II/3420033a.256": [
+        "10767e96cc17bad0970afda3a4146564e6272ba1"
+      ],
+      "Apple II/3420033a.256": [
+        "10767e96cc17bad0970afda3a4146564e6272ba1"
       ],
       "Apple/Apple II/AppleIIe.rom": [
         "b8ea90abe135a0031065e01697c4a3a20d51198b"
@@ -322768,6 +323264,12 @@
       "DiskII/state-machine-16.rom": [
         "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4"
       ],
+      "Apple/Apple II/Videx Lower Case Chip ROM.bin": [
+        "447874fe0850c8add3fd5b13fa98f6648fe6f999"
+      ],
+      "Apple II/Videx Lower Case Chip ROM.bin": [
+        "447874fe0850c8add3fd5b13fa98f6648fe6f999"
+      ],
       "Apple/Apple II/a2cffa02.zip": [
         "e8af33c0904b422841080a5ee25935f5ea1f3781"
       ],
@@ -322779,6 +323281,12 @@
       ],
       "Apple II/a2diskiing.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
+      ],
+      "Apple/Apple II/ae_transwarp_1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
+      ],
+      "Apple II/ae_transwarp_1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
       ],
       "Apple/Apple II/apple2-asoft-auto.rom": [
         "33a24f5489ba9195b44be77d9afb2252594cb5c7"
@@ -322810,6 +323318,24 @@
       "Apple II/apple2.zip": [
         "e63ac5e5bd3443cb937916a78e7d4bb8d3c67c4b"
       ],
+      "Apple/Apple II/apple2c-16K.rom": [
+        "1a9b8aca5e32bb702ddb7791daddd60a89655729"
+      ],
+      "Apple II/apple2c-16K.rom": [
+        "1a9b8aca5e32bb702ddb7791daddd60a89655729"
+      ],
+      "Apple/Apple II/apple2c-32Kv0.rom": [
+        "fb0d644aafaff1352d0816bc8494f6c9913809d5"
+      ],
+      "Apple II/apple2c-32Kv0.rom": [
+        "fb0d644aafaff1352d0816bc8494f6c9913809d5"
+      ],
+      "Apple/Apple II/apple2cp.rom": [
+        "1a27ae26966bbafd825d08ad1a24742d3e33557c"
+      ],
+      "Apple II/apple2cp.rom": [
+        "1a27ae26966bbafd825d08ad1a24742d3e33557c"
+      ],
       "Apple/Apple II/apple2e-character.rom": [
         "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
       ],
@@ -322827,6 +323353,60 @@
       ],
       "Apple II/apple2e.zip": [
         "891f44b09ab1a948d3d887f8a30b9c9265849ada"
+      ],
+      "Apple/Apple II/apple2e_char_de.rom": [
+        "a7fd75ae8611572b0b4d99ad54562014b879dbbf"
+      ],
+      "Apple II/apple2e_char_de.rom": [
+        "a7fd75ae8611572b0b4d99ad54562014b879dbbf"
+      ],
+      "Apple/Apple II/apple2e_char_de_improved.rom": [
+        "12ce44f02bd28c350e2b0723d94ab8d9066f8798"
+      ],
+      "Apple II/apple2e_char_de_improved.rom": [
+        "12ce44f02bd28c350e2b0723d94ab8d9066f8798"
+      ],
+      "Apple/Apple II/apple2e_char_fr.rom": [
+        "42afb02aab4146f781ac52803a2733adc4da834e"
+      ],
+      "Apple II/apple2e_char_fr.rom": [
+        "42afb02aab4146f781ac52803a2733adc4da834e"
+      ],
+      "Apple/Apple II/apple2e_char_frca.rom": [
+        "4043e0808af8be096660827445e41149d16c5c85"
+      ],
+      "Apple II/apple2e_char_frca.rom": [
+        "4043e0808af8be096660827445e41149d16c5c85"
+      ],
+      "Apple/Apple II/apple2e_char_ft_blockascii.rom": [
+        "f79815457437e50404f4f537d8aabe34bff3a220"
+      ],
+      "Apple II/apple2e_char_ft_blockascii.rom": [
+        "f79815457437e50404f4f537d8aabe34bff3a220"
+      ],
+      "Apple/Apple II/apple2e_char_reactive.rom": [
+        "02075efbfdb99af48360561323404a921b91a676"
+      ],
+      "Apple II/apple2e_char_reactive.rom": [
+        "02075efbfdb99af48360561323404a921b91a676"
+      ],
+      "Apple/Apple II/apple2e_char_uk.rom": [
+        "d19c2e2cc12b27d77edc403d5d0701186a4ed988"
+      ],
+      "Apple II/apple2e_char_uk.rom": [
+        "d19c2e2cc12b27d77edc403d5d0701186a4ed988"
+      ],
+      "Apple/Apple II/apple2e_char_uk_unenh.rom": [
+        "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb"
+      ],
+      "Apple II/apple2e_char_uk_unenh.rom": [
+        "6ca9767e0f47f642d1caab6ed41b8f58c58bb9eb"
+      ],
+      "Apple/Apple II/apple2e_char_us_mt_iigs.rom": [
+        "66eca035fd18024fceed4c30c32a4185792cb3ea"
+      ],
+      "Apple II/apple2e_char_us_mt_iigs.rom": [
+        "66eca035fd18024fceed4c30c32a4185792cb3ea"
       ],
       "Apple/Apple II/apple2ee.zip": [
         "97d54fa68a7b30ff7a63334567be688663ad18b7"
@@ -322870,11 +323450,35 @@
       "Apple II/apple2o.rom": [
         "78008be557f643e956a106121bcc182c0fb9ea6d"
       ],
+      "Apple/Apple II/apple2p.rom": [
+        "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6"
+      ],
+      "Apple II/apple2p.rom": [
+        "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6"
+      ],
       "Apple/Apple II/apple2p.zip": [
         "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086"
       ],
       "Apple II/apple2p.zip": [
         "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086"
+      ],
+      "Apple/Apple II/cffa20ee02.bin": [
+        "d600692ed9626668233a22a48236af639410cb7b"
+      ],
+      "Apple II/cffa20ee02.bin": [
+        "d600692ed9626668233a22a48236af639410cb7b"
+      ],
+      "Apple/Apple II/cffa20eec02.bin": [
+        "080ff88f19de22328e162954ee2b51ee65f9d5cd"
+      ],
+      "Apple II/cffa20eec02.bin": [
+        "080ff88f19de22328e162954ee2b51ee65f9d5cd"
+      ],
+      "Apple/Apple II/dan2_eprom.bin": [
+        "5e2737d233f5769df654d2d5aa96d24f2fd85671"
+      ],
+      "Apple II/dan2_eprom.bin": [
+        "5e2737d233f5769df654d2d5aa96d24f2fd85671"
       ],
       "Apple/Apple II/disk2-13seq.rom": [
         "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9"
@@ -322887,6 +323491,30 @@
       ],
       "Apple II/grappler_eps-1.bin": [
         "791ebae64a7fad8f42bdfaec36b9e2d34f12ded8"
+      ],
+      "Apple/Apple II/grappler_plus.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "Apple II/grappler_plus.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "Apple/Apple II/liron.rom": [
+        "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60"
+      ],
+      "Apple II/liron.rom": [
+        "fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60"
+      ],
+      "Apple/Apple II/mouse_341-0269.bin": [
+        "3a2baa6648efe4456d3ec3721216e57c64f7acfc"
+      ],
+      "Apple II/mouse_341-0269.bin": [
+        "3a2baa6648efe4456d3ec3721216e57c64f7acfc"
+      ],
+      "Apple/Apple II/thunderclock_u9_v1.3.bin": [
+        "60f434f5325899d7ea257a6e56e6f53eae65146a"
+      ],
+      "Apple II/thunderclock_u9_v1.3.bin": [
+        "60f434f5325899d7ea257a6e56e6f53eae65146a"
       ],
       "Apple/Apple II/videx_videoterm_char_inverse.bin": [
         "50c3df528109c65491a001ec74e50351a652c1fd"
