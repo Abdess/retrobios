@@ -398,18 +398,18 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-11-03, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-05, printed this:
 
 ```
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
-  10995 files (6.7 GB)
-    3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2637 data files (39.6 MB).
+  10999 files (6.7 GB)
+    3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2641 data files (40.2 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 38 files are not in the collection, 2 of them required.
 
 Checking existing files...
-  0 in place, 10995 missing, 0 wrong copies
+  0 in place, 10999 missing, 0 wrong copies
 ```
 <!-- /generated: dry-run -->
 
@@ -524,7 +524,7 @@ would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-11-03:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-05:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).
@@ -750,8 +750,8 @@ by `scripts/generate_installer_doc.py`):
 <!-- generated: line-menu -->
 
 ```
-RetroArch: 10995 files, 6.7 GB.
-  3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2637 data files (39.6 MB).
+RetroArch: 10999 files, 6.7 GB.
+  3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2641 data files (40.2 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
@@ -765,8 +765,8 @@ RetroArch: 10995 files, 6.7 GB.
 
   Counted again for your choices. Nothing is written before Enter.
 
-RetroArch: 5906 files, 4.2 GB.
-  3269 BIOS files (4.1 GB) and 2637 data files (39.6 MB). 5089 game data files left out.
+RetroArch: 5910 files, 4.2 GB.
+  3269 BIOS files (4.1 GB) and 2641 data files (40.2 MB). 5089 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
