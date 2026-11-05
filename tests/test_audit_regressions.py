@@ -6821,5 +6821,39 @@ class PipelineChildrenSkipNodeCompileCache(unittest.TestCase):
         self.assertIn('"NODE_DISABLE_COMPILE_CACHE": "1"', source)
 
 
+class HiganSuperGameBoyFolderIsFree(unittest.TestCase):
+    """higan reads program.rom in the option's folder, SGB.sfc/, then Super
+    GameBoy.sfc/. bsnes, Mesen-S and ares read SGB1.sfc and SGB2.sfc as files
+    in the same system directory, and SuperSnes9x sgb.sfc, so a pack that only
+    had the first two folders never gave the higan cores a Super Game Boy."""
+
+    def test_each_higan_core_has_a_folder_no_core_reads_as_a_file(self):
+        import yaml
+
+        file_names: set[str] = set()
+        for path in (ROOT / "emulators").glob("*.yml"):
+            document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            for entry in document.get("files") or []:
+                for name in [entry.get("name"), *(entry.get("aliases") or [])]:
+                    if name:
+                        file_names.add(str(name).casefold())
+                if entry.get("path"):
+                    file_names.add(str(entry["path"]).casefold())
+        for profile in ("higan_sfc", "higan_sfc_balanced"):
+            document = yaml.safe_load(
+                (ROOT / "emulators" / f"{profile}.yml").read_text(encoding="utf-8")
+            )
+            folders = {
+                str(entry["path"]).split("/", 1)[0]
+                for entry in document["files"]
+                if str(entry.get("path") or "").endswith("/program.rom")
+                and entry.get("system") == "nintendo-sgb"
+            }
+            with self.subTest(profile=profile):
+                self.assertTrue(
+                    [f for f in folders if f.casefold() not in file_names], folders
+                )
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -227,3 +227,19 @@ files:
     required: false
     note: "Falls back to lr35902.boot.rom at the system directory root."
     source_ref: "source nSide/gb/system/system.cpp:54-65, source nSide/emulator/game.hpp:101-104, source icarus/heuristics/super-famicom.cpp:103, source icarus/heuristics/super-famicom.cpp:523-527"
+
+  - name: "program.rom"
+    path: "Super GameBoy.sfc/program.rom"
+    system: nintendo-sgb
+    required: false
+    note: "Last folder tried, after the option's folder and SGB.sfc/."
+    source_ref: "source nSide/target-libretro/libretro-sfc.cpp:184-199, source nSide/sfc-balanced/cartridge/load.cpp:159-162"
+
+  - name: "lr35902.boot.rom"
+    path: "Super GameBoy.sfc/lr35902.boot.rom"
+    system: nintendo-sgb
+    size: 256
+    sha1: "aa2f50a77dfb4823da96ba99309085a3c6278515"
+    required: false
+    note: "Read from the folder program.rom was found in, then from the system directory root."
+    source_ref: "source nSide/target-libretro/libretro-sfc.cpp:201, source nSide/gb/system/system.cpp:54-65, source nSide/target-libretro/program.cpp:59-72, source icarus/heuristics/super-famicom.cpp:103"
