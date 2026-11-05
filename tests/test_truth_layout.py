@@ -454,6 +454,26 @@ class TheModelIsAFunctionOfItsInputs(unittest.TestCase):
         )
 
 
+class DatabaseSizeRefutesASameNamedDeclaration(unittest.TestCase):
+    """Batocera's BK system declares BASIC10.ROM by md5 alone. clk's Oric
+    basic10.rom, 16 KB with its own system:, was filed under the BK and
+    added to its list: the 24576 bytes the database holds for that md5
+    were never compared."""
+
+    def test_the_size_behind_a_declared_hash_counts(self):
+        bk_md5, oric_md5 = "3" * 32, "e" * 32
+        db = {"files": {"1" * 40: {"sha1": "1" * 40, "md5": bk_md5, "size": 24576}},
+              "indexes": {"by_md5": {bk_md5: "1" * 40}}}
+        profiles = {"clk": {"emulator": "clk", "type": "libretro", "systems": ["oric"],
+                            "files": [{"name": "basic10.rom", "path": "Oric/basic10.rom",
+                                       "system": "oric", "size": 16384, "md5": oric_md5}]}}
+        config = {"cores": ["clk"], "systems": {"elektronika-bk": {"files": [
+            {"name": "BASIC10.ROM", "md5": bk_md5}]}}}
+        truth = generate_platform_truth("p", config, {}, profiles, db=db)
+        self.assertNotIn("basic10.rom", {
+            f["name"] for f in truth["systems"].get("elektronika-bk", {}).get("files", [])})
+
+
 class RegionFollowsEveryReader(unittest.TestCase):
     """The first core to tag a file set its region in the truth: the ST-V
     BIOS kept beetle_saturn's Americas and lost mednafen_stv's Korea, and

@@ -508,14 +508,19 @@ def _sizes_clash(a: dict, b: dict) -> bool:
     return False
 
 
-def _identity_values(entry: dict, db: dict | None) -> set[str]:
-    """Every hash an entry declares, with the siblings the database knows."""
+def _identity(entry: dict, db: dict | None) -> dict:
+    """The entry with the hashes and size the database knows for its hash."""
     probe = {k: entry[k] for k in ("sha1", "md5", "crc32", "size") if entry.get(k)}
     if db and probe and not any(isinstance(v, list) for v in probe.values()):
         _enrich_hashes(probe, db)
+    return {**entry, **{k: v for k, v in probe.items() if not entry.get(k)}}
+
+
+def _identity_values(entry: dict) -> set[str]:
+    """Every hash an identity declares."""
     values: set[str] = set()
     for field in ("sha1", "md5", "sha256", "crc32"):
-        values |= _declared(entry, field) | _declared(probe, field)
+        values |= _declared(entry, field)
     return values
 
 
@@ -525,10 +530,14 @@ def _declaration_verdict(entry: dict, declaration: dict, db: dict | None) -> str
     A shared hash proves it. Sizes no value of which agrees refute it, as
     name_match_size_ok refutes a candidate. Two hashes at one size are two
     revisions of one slot, as slots.py reads them, so they refute nothing.
+    The size the database holds for a declared hash counts as declared:
+    Batocera's BK BASIC10.ROM names only an md5, of a 24576-byte file, and
+    clk's 16 KB Oric basic10.rom was filed under the BK beside it.
     """
-    if _identity_values(entry, db) & _identity_values(declaration, db):
+    ours, theirs = _identity(entry, db), _identity(declaration, db)
+    if _identity_values(ours) & _identity_values(theirs):
         return "same"
-    if _sizes_clash(entry, declaration):
+    if _sizes_clash(ours, theirs):
         return "other"
     return "undecided"
 
