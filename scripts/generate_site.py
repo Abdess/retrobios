@@ -4078,6 +4078,33 @@ def _network_share(name: str, guide: Guide) -> str:
     return ""
 
 
+def _share_tabs(name: str, share: str) -> tuple[dict[str, str], dict[str, str]]:
+    """The command per computer for a network folder (\\\\RECALBOX\\share\\bios),
+    and how a Mac or a Linux desktop opens that folder first. Only Windows
+    had a line: a Mac user fell back to SSH or to taking the card out.
+
+    macOS mounts smb://recalbox/share at /Volumes/share. A Linux desktop
+    mounts it where its file manager chooses, so that tab names the folder.
+    """
+    host, _, rest = share.lstrip("\\").partition("\\")
+    volume, _, below = rest.partition("\\")
+    url = f"smb://{host.lower()}/{volume}"
+    tail = "/" + below.replace("\\", "/") if below else ""
+    args = {
+        "windows": f"--platform {name} --dest {share}",
+        "macos": f"--platform {name} --dest /Volumes/{volume}{tail}",
+        "linux": f"--platform {name} --dest /path/to/{volume}{tail}",
+    }
+    how = {
+        "macos": (f"In Finder, choose Go, then Connect to Server, and enter `{url}`. "
+                  f"It opens as `/Volumes/{volume}`. Then open **Terminal**, in "
+                  "Applications, then Utilities. Paste the line. Press Return."),
+        "linux": (f"Open `{url}` in your file manager. Open a terminal, paste the line "
+                  f"and change `/path/to/{volume}` to the folder it opened. Press Enter."),
+    }
+    return args, how
+
+
 def _offline_line(name: str) -> list[str]:
     """The offline line, on a setup whose ZIP a release publishes: the
     installer reads that ZIP with no network (`--from-pack`)."""
@@ -4138,10 +4165,11 @@ def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]
     if share or (card and guide.run == ("device",)):
         computer = ["## From your computer { #from-your-computer }", ""]
         if share:
+            args, how = _share_tabs(name, share)
             computer += [
                 "Needs the device on your network. Run the command on the computer.",
                 "",
-                *terminal_tabs(("windows",), {"windows": f"--platform {name} --dest {share}"}),
+                *terminal_tabs(("windows", "macos", "linux"), args, how=how),
                 SAFE_LINK,
                 "",
             ]

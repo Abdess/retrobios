@@ -85,6 +85,20 @@ class NoZipNoUnzipText(unittest.TestCase):
                 self.assertIn("Needs the device on your network.", text)
                 self.assertIn(f"--platform {name} --dest {share}\n", text)
 
+    def test_a_mac_and_a_linux_desktop_reach_the_share_too(self):
+        """The share route was a PowerShell tab alone: a Mac user with Recalbox
+        on Wi-Fi fell back to SSH or to taking the card out."""
+        args, how = generate_site._share_tabs("recalbox", "\\\\RECALBOX\\share\\bios")
+        self.assertEqual(args["macos"], "--platform recalbox --dest /Volumes/share/bios")
+        self.assertIn("`smb://recalbox/share`", how["macos"])
+        self.assertIn("`/Volumes/share`", how["macos"])
+        self.assertEqual(args["linux"], "--platform recalbox --dest /path/to/share/bios")
+        self.assertIn("`smb://recalbox/share`", how["linux"])
+        lines = generate_site._setup_routes("recalbox", "Recalbox")
+        routes = "\n".join(lines[:lines.index("## On the device { #install }")])
+        for label in ("Windows", "macOS", "Linux"):
+            self.assertIn(f'label="{label}"', routes)
+
     def test_the_network_route_needs_a_share_and_no_zip(self):
         for name in SETUPS:
             share = generate_site._network_share(name, siteguides.GUIDES[name])
