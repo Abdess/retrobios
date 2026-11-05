@@ -10022,6 +10022,16 @@ def _declared_hashes(config: dict, detail: dict) -> dict[str, list[str]]:
     return {}
 
 
+def _declared_destination(config: dict, detail: dict) -> str:
+    """Where the platform's list puts a reported file, its name when the
+    entry names no folder."""
+    system = (config.get("systems") or {}).get(detail.get("system", "")) or {}
+    for entry in system.get("files") or []:
+        if isinstance(entry, dict) and entry.get("name") == detail.get("name"):
+            return str(entry.get("destination") or detail.get("name", ""))
+    return str(detail.get("name", ""))
+
+
 def short_hash(value: str) -> str:
     """A hash in a table cell: its first 12 characters, the whole value in
     the title. Full MD5 and SHA1 values pushed the gaps tables past the
@@ -10081,8 +10091,13 @@ def _render_problem_files(
             entry = missing_files.setdefault(fname, {
                 "name": fname, "required": p["required"],
                 "platforms": [], "reason": p["reason"], "categories": set(),
+                "where": {},
             })
             entry["platforms"].append(p["platform"])
+            # The platform's entry for the file, and the folder it expects.
+            entry["where"].setdefault(
+                (p["platform"], p.get("platform_key", ""), p.get("system", "")), set(),
+            ).add(p.get("destination") or fname)
             entry["categories"].add(p.get("category", "bios"))
             if p["required"]:
                 entry["required"] = True
@@ -10130,7 +10145,9 @@ def _render_problem_files(
                 "load, `game_data` comes from a copy of the game, `unread` is "
                 "opened by none of them. Only a missing `bios` entry stops a "
                 "console from starting. A name a list declares in several "
-                "folders is one row.",
+                "folders is one row. Each platform links to its entry, which "
+                "names the cores examined, and is followed by where its list "
+                "puts the file.",
                 "",
                 "| File | Category | Required | Platforms |",
                 "|------|----------|----------|-----------|",
@@ -10138,7 +10155,12 @@ def _render_problem_files(
             for fname in sorted(missing_files):
                 f = missing_files[fname]
                 req = "yes" if f["required"] else "no"
-                plats = ", ".join(sorted(set(f["platforms"])))
+                plats = "; ".join(
+                    (f"[{display}](platforms/{key}.md#{system.replace(' ', '-')})"
+                     if key and system else display)
+                    + " " + ", ".join(_code(dest) for dest in sorted(dests))
+                    for (display, key, system), dests in sorted(f["where"].items())
+                )
                 cats = f["categories"]
                 category = "bios" if "bios" in cats else ", ".join(sorted(cats))
                 lines.append(f"| `{fname}` | {category} | {req} | {plats} |")
@@ -10377,6 +10399,7 @@ def generate_gap_analysis(
                     "discrepancy": d.get("discrepancy", ""),
                     "system": d.get("system", ""),
                     "declared": _declared_hashes(cov.get("config") or {}, d),
+                    "destination": _declared_destination(cov.get("config") or {}, d),
                     "path": d.get("path") or "",
                 })
 

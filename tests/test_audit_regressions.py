@@ -5015,6 +5015,28 @@ class GapsPageCountsOneWay(unittest.TestCase):
         self.assertIn('rb-badge-danger">1 name</span>', text)
         self.assertNotIn("1 missing", text)
 
+    def test_a_missing_row_links_each_entry_and_names_its_folder(self):
+        """The row said `N88_KNJ1.ROM | unread | yes | AmberELEC` in plain text:
+        neither where the list puts it nor which cores were examined."""
+        from scripts.generate_site import _render_problem_files
+
+        problems = [{"platform": "AmberELEC", "platform_key": "amberelec", "name": "N88_KNJ1.ROM",
+                     "status": "missing", "required": True, "reason": "", "discrepancy": "",
+                     "category": "unread", "system": "nec-pc-88",
+                     "destination": "bios/quasi88/N88_KNJ1.ROM"}]
+        text = "\n".join(_render_problem_files(problems))
+        self.assertIn("| [AmberELEC](platforms/amberelec.md#nec-pc-88) "
+                      "`bios/quasi88/N88_KNJ1.ROM` |", text)
+
+    def test_the_destination_is_the_list_entrys(self):
+        from scripts.generate_site import _declared_destination
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from common import load_platform_config
+
+        config = load_platform_config("amberelec", str(ROOT / "platforms"))
+        detail = {"name": "N88_KNJ1.ROM", "system": "nec-pc-88"}
+        self.assertEqual(_declared_destination(config, detail), "bios/quasi88/N88_KNJ1.ROM")
+
     def test_verify_marks_the_settled_entry(self):
         sys.path.insert(0, str(ROOT / "scripts"))
         import verify
