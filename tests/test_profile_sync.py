@@ -2670,6 +2670,19 @@ class TestWriteDryRun(unittest.TestCase):
             counts={"SHIFTED": 1},
         )
 
+    def test_a_prose_read_that_fails_leaves_the_profile_as_it_was(self):
+        """The bumped profile was promoted before the prose under its new pin
+        was read. Offline, an uncached cited file raised NotCachedError past
+        the restore and the profile kept a pin the guard would refuse."""
+        from unittest import mock  # noqa: PLC0415
+
+        before = self.path.read_bytes()
+        cold = profile_sync.upstream.NotCachedError("x.c not cached")
+        with mock.patch.object(profile_sync, "realign_prose", side_effect=[[], cold]), \
+                self.assertRaises(profile_sync.upstream.NotCachedError):
+            self._run(self._args(rebase_refs=True, dry_run=False), self._shifted())
+        self.assertEqual(self.path.read_bytes(), before)
+
     def test_rebase_states_the_move_and_leaves_the_file(self):
         before = self.path.read_text()
         output = self._run(self._args(rebase_refs=True), self._shifted())

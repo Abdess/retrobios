@@ -4627,8 +4627,14 @@ def _apply_writes(
             # The guard above read the prose under the pins the profile held.
             # A bump that moves upstream_commit can leave prose the report
             # judged in the fork under the new upstream pin (dolphin-mmjr2,
-            # hatari, xenios): read it again on what was written.
-            left = realign_prose(path, args.cache_dir, args.offline, dry_run=True)
+            # hatari, xenios): read it again on what was written. It reads
+            # the profile's own history, so it runs on the real path, and a
+            # read that fails (offline, rate limit) puts the profile back.
+            try:
+                left = realign_prose(path, args.cache_dir, args.offline, dry_run=True)
+            except BaseException:
+                path.write_bytes(original)
+                raise
             if moved and left:
                 path.write_bytes(original)
                 print(
