@@ -104,5 +104,38 @@ class ForeignTreeNames(unittest.TestCase):
         self.assertEqual(resolve_local_file(entry, self.db), (None, "not_found"))
 
 
+class RetailDashboardTree(unittest.TestCase):
+    """x1-box asked for C/xbox.xtf: the only copy at that tail sat in hakuX's
+    tree and was set aside, and the name step served Xenia's Xbox 360 font.
+    The retail dashboard both emulators import lives with the console."""
+
+    def test_partition_c_resolves_by_path_for_both_importers(self):
+        import yaml
+
+        from common import load_database
+
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("database.json absent")
+        db = load_database(str(db_path))
+        for profile in ("x1-box", "hakux"):
+            document = yaml.safe_load(
+                (REPO_ROOT / "emulators" / f"{profile}.yml").read_text()
+            )
+            for entry in document["files"]:
+                dest = str(entry.get("path") or "")
+                if not dest.startswith("C/"):
+                    continue
+                with self.subTest(profile=profile, dest=dest):
+                    asked = {**entry, "source_profile": profile}
+                    cwd = os.getcwd()
+                    os.chdir(REPO_ROOT)
+                    try:
+                        path, status = resolve_local_file(asked, db, dest_hint=dest)
+                    finally:
+                        os.chdir(cwd)
+                    self.assertEqual(status, "path_exact", path)
+
+
 if __name__ == "__main__":
     unittest.main()
