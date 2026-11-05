@@ -968,11 +968,15 @@ the checks CI runs on a pull request (Python 3.12 or newer):
 pip install pyyaml "jsonschema[format-nongpl]" markdown
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
-python scripts/profile_sync.py --changed --strict  # each profile the branch adds or edits
+python scripts/profile_sync.py --added --base upstream/main --strict  # each profile the branch adds
 python scripts/refresh_data_dirs.py  # data directories the pack-building tests read
 python scripts/generate_site.py       # the pages the site tests read
 python -m unittest discover -s tests -t .
 ```
+
+`upstream` is this repository as a remote of your fork
+(`git remote add upstream https://github.com/Abdess/retrobios`). A profile you
+only edit is not held to `--strict`: its older refs are reviewed by hand.
 
 The full pipeline is not needed for a contribution: it rebuilds every pack
 in `dist/`, which is why maintainers run it before a release.
