@@ -87,6 +87,59 @@ class CoreFilesAsTheBuilderPlacesThem(unittest.TestCase):
         )
 
 
+class ARefusedPinLeavesItsPathToTheCore(unittest.TestCase):
+    """EmuELEC pins naomi.zip by an md5 the collection does not hold: the
+    builder refuses the held copy and ships the core's file at that path.
+    The check marked the path taken by the refused platform file, so the
+    core file the pack carries there was never compared."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.addCleanup(tmp.cleanup)
+        previous = os.getcwd()
+        os.chdir(tmp.name)
+        self.addCleanup(os.chdir, previous)
+        files: dict = {}
+        by_name: dict = {}
+        _held(files, by_name, "bios/dc/naomi.zip", b"the core's naomi")
+        self.db = {"files": files, "indexes": {
+            "by_name": by_name, "by_md5": {e["md5"]: s for s, e in files.items()},
+            "by_path_suffix": {}, "by_crc32": {}, "by_sha256": {}}}
+        Path("platforms").mkdir()
+        config = {"platform": "P", "verification_mode": "md5", "cores": ["flycast"],
+                  "systems": {"dc": {"files": [{
+                      "name": "naomi.zip", "destination": "dc/naomi.zip",
+                      "md5": hashlib.md5(b"a bundle nobody holds").hexdigest(),
+                  }]}}}
+        Path("platforms/p.yml").write_text(yaml.safe_dump(config), encoding="utf-8")
+        Path("emulators").mkdir()
+        self.profiles = {"flycast": {
+            "emulator": "flycast", "type": "libretro", "systems": ["dc"], "files": [
+                {"name": "naomi.zip", "path": "dc/naomi.zip"}]}}
+
+    def _check(self, member: bytes) -> tuple:
+        with zipfile.ZipFile("pack.zip", "w") as zf:
+            zf.writestr("dc/naomi.zip", member)
+        return packverify.verify_pack_against_platform(
+            "pack.zip", "p", "platforms", self.db, emulators_dir="emulators",
+            emu_profiles=self.profiles,
+        )
+
+    def test_the_core_file_at_the_refused_path_is_compared(self):
+        _ok, _c, _p, errors, *_mid, core_checked, _cp, _ex, _ab = self._check(b"other")
+        self.assertEqual(core_checked, 1)
+        self.assertTrue(
+            any(e.startswith("core file differs: dc/naomi.zip") for e in errors), errors
+        )
+
+    def test_the_right_core_file_passes(self):
+        _ok, _c, _p, errors, *_mid, core_checked, core_present, _ex, _ab = (
+            self._check(b"the core's naomi")
+        )
+        self.assertEqual((core_checked, core_present), (1, 1))
+        self.assertFalse([e for e in errors if e.startswith("core")], errors)
+
+
 class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
     """--verify-packs after --all-variants said "hashes checked during the
     build" for the five narrowed packs and compared none of them: a narrowed

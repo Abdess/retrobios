@@ -30,7 +30,7 @@ from packextras import platform_region_groups
 from packpaths import _flat
 from nativemode import reads_file_contents
 import region as region_mod
-from packresolve import resolve_file
+from packresolve import resolve_declaration, resolve_file
 from exporter.candidates import BIOS, EntryCategories
 from gamedata import without_game_data
 from common import resolve_platform_cores
@@ -544,6 +544,21 @@ def _structural_errors(zf: zipfile.ZipFile, zip_set: set) -> list[str]:
     return errors
 
 
+def _shipped_copy(
+    entry: dict, db: dict, data_registry: dict | None, mode: str, hash_rule: str,
+) -> str | None:
+    """The file the builder packs for a declaration, or None.
+
+    The verdict verify applies before it lets a declaration hold its path.
+    """
+    local, status = resolve_declaration(
+        entry, db, DEFAULT_BIOS_DIR, None, data_registry, None, offline=True,
+    )
+    if local and baseline_verdict(entry, local, status, mode, hash_rule)[1] is None:
+        return local
+    return None
+
+
 def _builder_extras(
     config: dict,
     emulators_dir: str,
@@ -563,15 +578,17 @@ def _builder_extras(
     """{full destination: local copy} of each core extra the builder writes.
 
     The platform's paths come first, as in the builder: a destination the
-    pack holds whose declarations resolve to a file, or that the platform
-    keeps for a user_provided or external entry. One whose declarations
-    resolve to nothing is left free, since the builder then places a core's
-    file there.
+    pack holds whose declarations resolve to a file it ships, or that the
+    platform keeps for a user_provided or external entry. One whose
+    declarations resolve to nothing, or to a file the frontend's hash
+    refuses, is left free, since the builder then places a core's file
+    there: taken by the refused file, that core file was never compared.
     """
     from packextras import ExtraResolver, hidden_extras
-    from packresolve import resolve_declaration
     from validation import _build_validation_index, destination_owners
 
+    mode = config.get("verification_mode", "existence")
+    hash_rule = config.get("hash_rule", "")
     shipped: dict[str, str | None] = {}
     for expected, declarations in baseline_groups.items():
         if expected not in zip_set and expected.lower() not in zip_lower:
@@ -587,9 +604,7 @@ def _builder_extras(
         local = next(
             (
                 found for fe in declarations
-                if (found := resolve_declaration(
-                    fe, db, DEFAULT_BIOS_DIR, None, data_registry, None, offline=True,
-                )[0])
+                if (found := _shipped_copy(fe, db, data_registry, mode, hash_rule))
             ),
             None,
         )
