@@ -4560,7 +4560,12 @@ class TargetListsReadThePinnedRelease(unittest.TestCase):
         for name in ("batocera", "rocknix", "recalbox"):
             source = (ROOT / "scripts" / "scraper" / "targets" / f"{name}_targets_scraper.py").read_text()
             with self.subTest(scraper=name):
-                self.assertIn("self.pinned_revision(PLATFORM_NAME)", source)
+                # The Batocera scraper reads the pin of the platform it is
+                # instantiated for (KNULLI subclasses it).
+                self.assertTrue(
+                    "self.pinned_revision(PLATFORM_NAME)" in source
+                    or "self.pinned_revision(self.PLATFORM)" in source
+                )
                 self.assertNotIn("fetch_stable_tag()", source)
                 self.assertNotIn("fetch_github_latest_version(", source)
 

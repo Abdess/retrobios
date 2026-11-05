@@ -29,27 +29,15 @@ from . import BaseTargetScraper
 
 PLATFORM_NAME = "batocera"
 
-GITHUB_API = "https://api.github.com/repos/batocera-linux/batocera.linux/contents"
 try:
     from ..base_scraper import github_headers
 except ImportError:
     from scraper.base_scraper import github_headers
 
-RAW_BASE = "https://raw.githubusercontent.com/batocera-linux/batocera.linux/{tag}"
-
-CONFIG_IN_PATH = "package/batocera/core/batocera-system/Config.in"
-ES_SYSTEMS_PATH = "package/batocera/emulationstation/batocera-es-system/es_systems.yml"
-
 _TARGET_FLAG_RE = re.compile(r"^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y", re.MULTILINE)
 
-# Meta-flag definition: "if COND\n\tconfig DERIVED_FLAG\n\t...\nendif"
-_META_BLOCK_RE = re.compile(
-    r"^if\s+((?:[^\n]|\\\n)+?)\n"  # condition (may span lines via \)
-    r"(?:.*?\n)*?"  # optional lines before the config
-    r"\s+config\s+(BR2_PACKAGE_\w+)"  # derived flag name
-    r".*?^endif",  # end of block
-    re.MULTILINE | re.DOTALL,
-)
+_IF_RE = re.compile(r"^if\s+(.*)$")
+_DEFAULT_Y_RE = re.compile(r"^\s*default\s+y\s*(?:#.*)?$")
 
 
 def _fetch(url: str, headers: dict | None = None) -> str:
@@ -156,13 +144,30 @@ def _parse_meta_flags(text: str) -> list[tuple[str, str]]:
     """Return [(derived_flag, condition_str)] from top-level if/endif blocks.
 
     These define derived flags like BR2_PACKAGE_BATOCERA_TARGET_X86_64_ANY,
-    BR2_PACKAGE_BATOCERA_GLES3, etc.
+    BR2_PACKAGE_BATOCERA_GLES3, etc.: a config inside `if COND` that
+    defaults to y is on exactly when COND holds. Read line by line: a
+    condition continued with a backslash keeps its later lines, and a block
+    whose config is not a package (KNULLI's BR2_KERNEL_LEGACY_3_10) cannot
+    reach into the next one.
     """
     results: list[tuple[str, str]] = []
-    for m in _META_BLOCK_RE.finditer(text):
-        cond = _normalise_condition(m.group(1))
-        flag = m.group(2)
-        results.append((flag, cond))
+    condition: str | None = None
+    config: str | None = None
+    for line in re.sub(r"\\\n", " ", text).splitlines():
+        start = _IF_RE.match(line)
+        if start:
+            condition, config = _normalise_condition(start.group(1)), None
+            continue
+        if condition is None:
+            continue
+        if line.startswith("endif"):
+            condition = config = None
+            continue
+        found = _CONFIG_LINE_RE.match(line)
+        if found:
+            config = found.group(1)
+        elif config and _DEFAULT_Y_RE.match(line):
+            results.append((config, condition))
     return results
 
 
@@ -174,8 +179,6 @@ BUILDROOT_KCONFIG = (
     "package/mesa3d/Config.in",
     "package/libglvnd/Config.in",
 )
-BUILDROOT_RAW = "https://raw.githubusercontent.com/batocera-linux/buildroot/{sha}"
-SYSTEM_SYMBOL = "BR2_PACKAGE_BATOCERA_SYSTEM"
 
 _CONFIG_LINE_RE = re.compile(r"^\s*(?:menu)?config\s+(BR2_\w+)")
 _OWNED_SELECT_RE = re.compile(r"^\s+select\s+(BR2_\w+)(?:\s+if\s+([^#]+))?")
@@ -217,22 +220,26 @@ def _active_symbols(
 
     Run to a fixed point, as Kconfig does: a select can turn on a config
     whose own selects then fire, and a derived flag can follow from either.
+    Each pass rebuilds the set from the board's own flags, so a select
+    guarded by a negation (`if !BR2_PACKAGE_BATOCERA_GLES3`) that fired
+    before GLES3 was derived is dropped once it is: accumulating kept
+    duckstation-legacy on every GLES3 board.
     """
-    active = set(board_flags)
-    while True:
-        before = len(active)
-        frozen = frozenset(active)
-        active |= {
+    base = frozenset(board_flags)
+    active = base
+    for _ in range(64):
+        following = base | {
             derived for derived, condition in meta_rules
-            if _condition_holds(condition, frozen)
-        }
-        active |= {
+            if _condition_holds(condition, active)
+        } | {
             selected
             for owner, selected, condition in rules
-            if owner in frozen and _condition_holds(condition, frozen)
+            if owner in active and _condition_holds(condition, active)
         }
-        if len(active) == before:
-            return frozenset(active)
+        if following == active:
+            return active
+        active = frozenset(following)
+    raise RuntimeError("Kconfig selects do not settle: a negated condition cycles")
 
 
 def _parse_es_systems(text: str) -> dict[str, list[str]]:
@@ -279,8 +286,25 @@ def _parse_es_systems(text: str) -> dict[str, list[str]]:
     return package_to_emulators
 
 
-def _arch_from_flag(flag: str) -> str:
-    """Guess architecture from board flag name."""
+# Buildroot's architecture choice, as a board sets it (arch/Config.in).
+_ARCH_SYMBOLS = {
+    "BR2_aarch64": "aarch64",
+    "BR2_arm": "arm",
+    "BR2_x86_64": "x86_64",
+    "BR2_i386": "x86",
+    "BR2_riscv": "riscv64",
+}
+
+
+def _arch_from_flag(flag: str, board_flags: set[str] | frozenset[str] = frozenset()) -> str:
+    """The board's Buildroot architecture, else a guess from its target flag.
+
+    KNULLI's R16, RK3128 and ATM7039 images are 32-bit ARM (BR2_arm=y):
+    the target flag alone does not say so.
+    """
+    for symbol, arch in _ARCH_SYMBOLS.items():
+        if symbol in board_flags:
+            return arch
     low = flag.lower()
     if "x86_64" in low or "zen3" in low:
         return "x86_64"
@@ -290,35 +314,51 @@ def _arch_from_flag(flag: str) -> str:
 
 
 class Scraper(BaseTargetScraper):
-    """Cross-references Batocera boards, Config.in, and es_systems to build target lists."""
+    """Cross-references Batocera boards, Config.in, and es_systems to build target lists.
 
-    def __init__(
-        self, url: str = "https://github.com/batocera-linux/batocera.linux"
-    ) -> None:
-        super().__init__(url=url)
+    A Buildroot tree built on Batocera's model (KNULLI) overrides the class
+    attributes: its repository, board prefix, system Config.in, es_systems
+    and the config every image turns on.
+    """
+
+    PLATFORM = PLATFORM_NAME
+    REPO = "batocera-linux/batocera.linux"
+    BOARD_PREFIX = "batocera-"
+    CONFIG_IN_PATH = "package/batocera/core/batocera-system/Config.in"
+    ES_SYSTEMS_PATH = "package/batocera/emulationstation/batocera-es-system/es_systems.yml"
+    SYSTEM_SYMBOL = "BR2_PACKAGE_BATOCERA_SYSTEM"
+    BUILDROOT_REPO = "batocera-linux/buildroot"
+
+    def __init__(self, url: str = "") -> None:
+        super().__init__(url=url or f"https://github.com/{self.REPO}")
         self.tag = ""
 
     def _raw(self, path: str) -> str:
-        return f"{RAW_BASE.format(tag=self.tag)}/{path}"
+        return f"https://raw.githubusercontent.com/{self.REPO}/{self.tag}/{path}"
+
+    def _api(self, path: str) -> str:
+        return f"https://api.github.com/repos/{self.REPO}/contents/{path}?ref={self.tag}"
 
     def _list_boards(self) -> list[str]:
-        """List batocera-*.board files from configs/ via GitHub API."""
-        data = _fetch_json(f"{GITHUB_API}/configs?ref={self.tag}")
+        """List <prefix>*.board files from configs/ via GitHub API."""
+        data = _fetch_json(self._api("configs"))
         boards = [
             item["name"]
             for item in data
             if isinstance(item, dict)
-            and item.get("name", "").startswith("batocera-")
+            and item.get("name", "").startswith(self.BOARD_PREFIX)
             and item.get("name", "").endswith(".board")
         ] if isinstance(data, list) else []
         if not boards:
-            raise RuntimeError(f"no batocera-*.board file in configs/ at {self.tag}")
+            raise RuntimeError(
+                f"no {self.BOARD_PREFIX}*.board file in configs/ at {self.tag}"
+            )
         return boards
 
     def _fetch_board(self, board_name: str) -> tuple[str | None, set[str]]:
         """A board's target flag and every flag it sets, includes followed.
 
-        batocera-board.common turns on BATOCERA_SYSTEM, the config whose
+        <prefix>board.common turns on the system symbol, the config whose
         selects bring in the display stack and every emulator group.
         """
         flags: set[str] = set()
@@ -343,24 +383,25 @@ class Scraper(BaseTargetScraper):
         return target, flags
 
     def _buildroot_rules(self) -> list[tuple[str, str, str]]:
-        """Buildroot's selects for the symbols Batocera tests, at its pin."""
-        pin = _fetch_json(f"{GITHUB_API}/buildroot?ref={self.tag}")
+        """Buildroot's selects for the symbols the tree tests, at its pin."""
+        pin = _fetch_json(self._api("buildroot"))
         sha = pin.get("sha") if isinstance(pin, dict) else None
         if not sha:
             raise RuntimeError(f"no buildroot submodule commit at {self.tag}")
+        raw = f"https://raw.githubusercontent.com/{self.BUILDROOT_REPO}/{sha}"
         rules: list[tuple[str, str, str]] = []
         for path in BUILDROOT_KCONFIG:
-            rules += _parse_owned_selects(_fetch(f"{BUILDROOT_RAW.format(sha=sha)}/{path}"))
+            rules += _parse_owned_selects(_fetch(f"{raw}/{path}"))
         return rules
 
     def fetch_targets(self) -> dict:
         """Build per-board emulator availability map."""
-        self.tag = self.pinned_revision(PLATFORM_NAME)
+        self.tag = self.pinned_revision(self.PLATFORM)
         print("  fetching board list...", file=sys.stderr)
         boards = self._list_boards()
 
         print("  fetching Config.in...", file=sys.stderr)
-        config_in_url = self._raw(CONFIG_IN_PATH)
+        config_in_url = self._raw(self.CONFIG_IN_PATH)
         config_in_text = _fetch(config_in_url)
         if not config_in_text:
             raise RuntimeError(f"empty Config.in from {config_in_url}")
@@ -376,7 +417,7 @@ class Scraper(BaseTargetScraper):
         rules += self._buildroot_rules()
 
         print("  fetching es_systems.yml...", file=sys.stderr)
-        es_systems_url = self._raw(ES_SYSTEMS_PATH)
+        es_systems_url = self._raw(self.ES_SYSTEMS_PATH)
         es_text = _fetch(es_systems_url)
         if not es_text:
             raise RuntimeError(f"empty es_systems.yml from {es_systems_url}")
@@ -390,7 +431,7 @@ class Scraper(BaseTargetScraper):
 
         targets: dict[str, dict] = {}
         for board_name in sorted(boards):
-            target_key = board_name.removeprefix("batocera-").removesuffix(".board")
+            target_key = board_name.removeprefix(self.BOARD_PREFIX).removesuffix(".board")
             print(f"  processing {target_key}...", file=sys.stderr)
             primary_flag, board_flags = self._fetch_board(board_name)
             if primary_flag is None:
@@ -400,8 +441,8 @@ class Scraper(BaseTargetScraper):
             selected_packages = _active_symbols(board_flags, meta_rules, rules)
             # x86_wow64 builds the 32-bit Wine package the x86_64 image
             # carries: no batocera-board.common, no system, no target.
-            if SYSTEM_SYMBOL not in selected_packages:
-                print(f"    {board_name} builds no Batocera image", file=sys.stderr)
+            if self.SYSTEM_SYMBOL not in selected_packages:
+                print(f"    {board_name} builds no system image", file=sys.stderr)
                 continue
 
             # Map selected packages to emulator names via es_systems.yml
@@ -410,7 +451,7 @@ class Scraper(BaseTargetScraper):
                 for emu in package_to_emulators.get(pkg, []):
                     emulators.add(emu)
 
-            arch = _arch_from_flag(primary_flag)
+            arch = _arch_from_flag(primary_flag, board_flags)
             targets[target_key] = {
                 "architecture": arch,
                 "cores": sorted(emulators),
@@ -421,23 +462,23 @@ class Scraper(BaseTargetScraper):
             )
 
         return {
-            "platform": "batocera",
+            "platform": self.PLATFORM,
             "source": f"{self.url}/tree/{self.tag}",
             "scraped_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "targets": targets,
         }
 
 
-def main() -> None:
+def main(scraper_class: type[Scraper] = Scraper) -> None:
     parser = argparse.ArgumentParser(
         allow_abbrev=False,
-        description="Scrape Batocera per-board emulator targets"
+        description=f"Scrape {scraper_class.PLATFORM} per-board emulator targets"
     )
     parser.add_argument("--dry-run", action="store_true", help="Show target summary")
     parser.add_argument("--output", "-o", help="Output YAML file")
     args = parser.parse_args()
 
-    scraper = Scraper()
+    scraper = scraper_class()
     data = scraper.fetch_targets()
 
     if args.dry_run:

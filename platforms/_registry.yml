@@ -925,7 +925,8 @@ platforms:
   # ApiSystem.cpp:764-774). Arch R (archr-linux/Arch-R dbd45d45) ships the
   # same dict as archr-systems: lines 1-870 are identical, only the prefix
   # (/storage/roms instead of /userdata) and the es_systems.cfg path differ.
-  # Many boards, no per-board core list: no target file.
+  # Boards follow Batocera's Kconfig model (configs/knulli-*.board set
+  # BR2_PACKAGE_BATOCERA_TARGET_*), read by knulli_targets_scraper.
   knulli:
     config: knulli.yml
     status: active
@@ -947,8 +948,8 @@ platforms:
       by_core: false
       by_system: true
     schedule: monthly
-    target_scraper: null
-    target_source: null
+    target_scraper: knulli_targets
+    target_source: https://github.com/knulli-cfw/knulli-linux/tree/knulli-main/configs
     install:
       detect:
       # knulli-linux 57afa662: OS_NAME in os-release
