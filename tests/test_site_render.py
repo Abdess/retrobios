@@ -484,3 +484,24 @@ class AMemberIsReadInItsArchive(unittest.TestCase):
                                                   lambda _f: True, owner="fbneo"))
         self.assertIn("Collection copy: member `sm1.sm1` of", rows)
         self.assertIn(shipped, rows)
+
+
+class NoTooltipInsideAName(unittest.TestCase):
+    """The glossary's capitalised terms matched almost only product names:
+    Free Unix Spectrum Emulator, Windows Terminal, Documents/Dolphin Emulator."""
+
+    def test_names_are_left_and_terms_are_marked(self):
+        import sitestarlight
+
+        terms = {"Emulator": "An app that acts like a console.",
+                 "Terminal": "A window where you type commands.",
+                 "BIOS": "The console's built-in software."}
+        for line in ("Fuse (Free Unix Spectrum Emulator) reads it.",
+                     "Open Windows Terminal (WSL).",
+                     "Copy it to Documents/Dolphin Emulator/Sys."):
+            with self.subTest(line=line):
+                self.assertNotIn("rb-term", sitestarlight.add_tooltips(line, terms))
+        marked = sitestarlight.add_tooltips(
+            "Emulator settings come first. The PlayStation BIOS goes there.", terms)
+        self.assertIn('title="An app that acts like a console.">Emulator</abbr>', marked)
+        self.assertIn('>BIOS</abbr>', marked)
