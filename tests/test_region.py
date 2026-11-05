@@ -1437,6 +1437,20 @@ class UsaRegionServesTheAmericas(unittest.TestCase):
                 regions = region.lookup_regions(index, destination, name)
                 self.assertEqual(region.rank(regions, requested), 0)
 
+    def test_brazil_ranks_the_usa_dsi_nand_before_the_japanese_one(self):
+        """BizHawk's DecideNAND knows JPN, USA, EUR, AUS, CHN and KOR region
+        bits (MelonDS.cs:684-706): a DSi title from the Americas carries USA."""
+        import yaml
+
+        bizhawk = self.PROFILE.with_name("bizhawk.yml")
+        profile = yaml.safe_load(bizhawk.read_text(encoding="utf-8"))
+        index = region.build_region_index({"bizhawk": profile})
+        requested = region.parse_requested("br,jp")
+        usa = region.lookup_regions(index, "", "DSi_Nand_USA.bin")
+        jpn = region.lookup_regions(index, "", "DSi_Nand_JPN.bin")
+        self.assertEqual(region.rank(usa, requested), 0)
+        self.assertEqual(region.rank(jpn, requested), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

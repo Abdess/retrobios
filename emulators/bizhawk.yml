@@ -178,7 +178,7 @@ files:
     size: 251658304
     storage: large_file
     description: "DSi NAND (USA)"
-    region: [north-america]
+    region: [north-america, latin-america]
     source_ref: "src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs:407, src/BizHawk.Emulation.Cores/Consoles/Nintendo/NDS/MelonDS.cs:484, 684-706"
     note: "Slot NDS+NAND_USA has a placeholder hash, so the scan never finds it. Only a user specification reaches it. Read in DSi mode. A title whose ID upper word is 0x000300xx (DSi) gets only the NAND of a region its header byte 0x1B0 allows, any other title the first held in the order JPN, USA, EUR, AUS, CHN, KOR. The size includes the 64-byte nocash footer."
 
