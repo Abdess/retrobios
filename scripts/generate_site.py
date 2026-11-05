@@ -4669,6 +4669,34 @@ def _console_system_names(profiles: dict, coverages: dict) -> dict[tuple[str, st
     return {key: next(iter(names)) for key, names in found.items() if len(names) == 1}
 
 
+def _data_member_digests(
+    members: dict, data_registry: dict | None = None, root: Path = _REPO_ROOT,
+) -> dict[str, dict[str, str]]:
+    """sha1 -> every hash the lookup takes, for each data directory member
+    whose copy in the tree's local cache has the sha1 the manifest records.
+    The manifests carry sha1 alone: the MD5 of Dolphin's ApprovedInis.json
+    found nothing although the pack ships it."""
+    from common import load_data_dir_registry  # noqa: PLC0415
+    from hashing import compute_hashes  # noqa: PLC0415
+
+    if data_registry is None:
+        data_registry = load_data_dir_registry(str(root / "platforms"))
+    found: dict[str, dict[str, str]] = {}
+    for ref, tree in sorted(members.items()):
+        cache = (data_registry.get(ref) or {}).get("local_cache")
+        if not cache:
+            continue
+        for member, info in sorted(tree.items()):
+            sha1 = str(info.get("sha1", ""))
+            path = root / cache / member
+            if not sha1 or sha1 in found or not path.is_file():
+                continue
+            digests = compute_hashes(path, frozenset(HASH_ALGORITHMS))
+            if digests.get("sha1") == sha1:
+                found[sha1] = {algo: digests[algo].lower() for algo in HASH_ALGORITHMS}
+    return found
+
+
 def file_lookup_records(
     db: dict,
     coverages: dict,
@@ -4690,15 +4718,19 @@ def file_lookup_records(
         str(info.get("sha1", "")): member.rsplit("/", 1)[-1]
         for tree in (members or {}).values() for member, info in sorted(tree.items())
     }
+    member_digests = _data_member_digests(members or {})
     records: list[dict] = []
     for item in locations:
         sha1 = item["sha1"]
         entry = files.get(sha1)
         if entry is None:
-            # A data directory member: the manifests record its sha1 only.
-            records.append({"value": sha1, "algorithm": "sha1", "layer": "data-directory",
-                            "name": member_names.get(sha1, ""), "sha1": sha1,
-                            "url": item["url"]})
+            # A data directory member: the manifests record its sha1, the
+            # tree on disk the other three.
+            digests = member_digests.get(sha1) or {"sha1": sha1}
+            records.extend({"value": digests[algorithm], "algorithm": algorithm,
+                            "layer": "data-directory", "name": member_names.get(sha1, ""),
+                            "sha1": sha1, "url": item["url"]}
+                           for algorithm in HASH_ALGORITHMS if algorithm in digests)
             continue
         parts = str(entry.get("path", "")).split("/")
         held_by = named.get((_slug(parts[1]), parts[2])) if len(parts) > 3 else None

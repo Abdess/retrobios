@@ -670,6 +670,37 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
     downloaded. files/?hash= reads one shard instead, and it must answer at
     least what the search answered: the card, the platforms, the profiles."""
 
+    def test_a_data_directory_member_answers_every_hash(self):
+        """Dolphin's ApprovedInis.json was found by its SHA1 only: its MD5
+        and CRC32 answered no match although the pack ships it."""
+        import hashlib
+        import tempfile
+        import zlib
+
+        import generate_site  # noqa: PLC0415
+
+        body = b"approved inis\n"
+        sha1 = hashlib.sha1(body).hexdigest()
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
+            member = Path(tmp, "data", "dolphin-sys", "ApprovedInis.json")
+            member.parent.mkdir(parents=True)
+            member.write_bytes(body)
+            stale = Path(tmp, "data", "dolphin-sys", "Stale.json")
+            stale.write_bytes(b"other bytes")
+            members = {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1},
+                                       "Stale.json": {"sha1": "ef" * 20}}}
+            registry = {"dolphin-sys": {"local_cache": "data/dolphin-sys"}}
+            digests = generate_site._data_member_digests(members, registry, Path(tmp))
+        self.assertEqual(digests, {sha1: {
+            "sha1": sha1, "md5": hashlib.md5(body).hexdigest(),
+            "sha256": hashlib.sha256(body).hexdigest(),
+            "crc32": f"{zlib.crc32(body):08x}"}})
+        with mock.patch.object(generate_site, "_data_member_digests", return_value=digests):
+            records = generate_site.file_lookup_records(
+                {"files": {}}, {}, {}, [{"sha1": sha1, "url": "u"}],
+                {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1}}})
+        self.assertEqual({r["algorithm"]: r["value"] for r in records}, digests[sha1])
+
     def test_records_cover_every_layer_and_shard_by_prefix(self):
         import json as _json
         import tempfile
