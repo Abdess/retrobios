@@ -1,6 +1,6 @@
 platform: batocera
 source: https://github.com/batocera-linux/batocera.linux/tree/batocera-43.1
-scraped_at: '2026-10-17T22:01:01Z'
+scraped_at: '2026-11-05T10:55:18Z'
 targets:
   a3gen2:
     architecture: aarch64
@@ -535,7 +535,7 @@ targets:
     - yquake2
     - zc210
   bcm2835:
-    architecture: aarch64
+    architecture: arm
     cores:
     - '81'
     - a5200
@@ -549,9 +549,7 @@ targets:
     - cap32
     - cdogs
     - dosbox_pure
-    - duckstation
     - easyrpg
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -564,7 +562,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -581,7 +578,6 @@ targets:
     - hurrican
     - hypseus-singe
     - imame4all
-    - jazz2-native
     - lowresnx
     - lutro
     - mame078plus
@@ -640,14 +636,12 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x16emu
-    - yabasanshiro
     - yquake2
     - zc210
   bcm2836:
-    architecture: aarch64
+    architecture: arm
     cores:
     - '81'
     - A1200
@@ -674,8 +668,8 @@ targets:
     - dosbox_pure
     - dosbox_staging
     - duckstation
+    - duckstation-legacy
     - easyrpg
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -687,7 +681,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -705,7 +698,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -748,7 +740,6 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - rice
     - samcoupe
     - sameduck
     - scummvm
@@ -780,7 +771,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -792,7 +782,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   bcm2837:
@@ -824,9 +813,9 @@ targets:
     - dosbox_pure
     - dosbox_staging
     - duckstation
+    - duckstation-legacy
     - easyrpg
     - ecwolf
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -838,7 +827,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -849,7 +837,6 @@ targets:
     - gliden64
     - gsplus
     - gw
-    - gzdoom
     - handy
     - hatari
     - hcl
@@ -857,8 +844,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - iortcw
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -868,7 +853,6 @@ targets:
     - mednafen_ngp
     - mednafen_supergrafx
     - mednafen_wswan
-    - melonds
     - mgba
     - minivmac
     - moonlight
@@ -901,9 +885,7 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - raze
     - reminiscence
-    - rice
     - samcoupe
     - same_cdi
     - sameduck
@@ -936,7 +918,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -948,11 +929,10 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   h3:
-    architecture: aarch64
+    architecture: arm
     cores:
     - '81'
     - A1200
@@ -977,9 +957,7 @@ targets:
     - devilutionx
     - dice
     - dosbox_pure
-    - duckstation
     - easyrpg
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -991,7 +969,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -1009,7 +986,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - jazz2-native
     - lightspark
     - lowresnx
     - mame078plus
@@ -1046,7 +1022,6 @@ targets:
     - prosystem
     - px68k
     - quasi88
-    - rice
     - samcoupe
     - sameduck
     - scummvm
@@ -1075,7 +1050,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -1087,7 +1061,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   h5:
@@ -1121,9 +1094,9 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - duckstation-legacy
     - easyrpg
     - ecwolf
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -1136,7 +1109,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -1147,7 +1119,6 @@ targets:
     - gliden64
     - gsplus
     - gw
-    - gzdoom
     - handy
     - hatari
     - hcl
@@ -1155,8 +1126,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - iortcw
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -1167,7 +1136,6 @@ targets:
     - mednafen_psx
     - mednafen_supergrafx
     - mednafen_wswan
-    - melonds
     - mgba
     - minivmac
     - moonlight
@@ -1200,9 +1168,7 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - raze
     - reminiscence
-    - rice
     - samcoupe
     - same_cdi
     - sameduck
@@ -1235,7 +1201,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -1247,7 +1212,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   h6:
@@ -1281,9 +1245,9 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - duckstation-legacy
     - easyrpg
     - ecwolf
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -1296,7 +1260,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -1307,15 +1270,12 @@ targets:
     - gliden64
     - gsplus
     - gw
-    - gzdoom
     - handy
     - hatari
     - hcl
     - holani
     - hurrican
     - hypseus-singe
-    - iortcw
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -1326,7 +1286,6 @@ targets:
     - mednafen_psx
     - mednafen_supergrafx
     - mednafen_wswan
-    - melonds
     - mgba
     - minivmac
     - moonlight
@@ -1359,9 +1318,7 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - raze
     - reminiscence
-    - rice
     - samcoupe
     - same_cdi
     - sameduck
@@ -1394,7 +1351,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -1406,7 +1362,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   h616:
@@ -1741,7 +1696,7 @@ targets:
     - yquake2
     - zc210
   jh7110:
-    architecture: aarch64
+    architecture: riscv64
     cores:
     - '81'
     - a5200
@@ -2040,7 +1995,7 @@ targets:
     - yquake2
     - zc210
   odroidxu4:
-    architecture: aarch64
+    architecture: arm
     cores:
     - '81'
     - A1200
@@ -2069,8 +2024,8 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - duckstation-legacy
     - easyrpg
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -2082,7 +2037,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -2100,7 +2054,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -2145,7 +2098,6 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - rice
     - samcoupe
     - sameduck
     - scummvm
@@ -2177,7 +2129,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -2189,7 +2140,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   qcs6490:
@@ -2379,7 +2329,7 @@ targets:
     - yquake2
     - zc210
   rk3128:
-    architecture: aarch64
+    architecture: arm
     cores:
     - '81'
     - A1200
@@ -2405,9 +2355,7 @@ targets:
     - dice
     - dosbox_pure
     - dosbox_staging
-    - duckstation
     - easyrpg
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -2419,7 +2367,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -2436,7 +2383,6 @@ targets:
     - holani
     - hurrican
     - hypseus-singe
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -2481,7 +2427,6 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - rice
     - samcoupe
     - sameduck
     - scummvm
@@ -2513,7 +2458,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -2525,11 +2469,10 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   rk3288:
-    architecture: aarch64
+    architecture: arm
     cores:
     - '81'
     - A1200
@@ -2868,9 +2811,9 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - duckstation-legacy
     - easyrpg
     - ecwolf
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -2882,7 +2825,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -2893,7 +2835,6 @@ targets:
     - gliden64
     - gsplus
     - gw
-    - gzdoom
     - handy
     - hatari
     - hcl
@@ -2901,8 +2842,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - iortcw
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -2913,7 +2852,6 @@ targets:
     - mednafen_psx
     - mednafen_supergrafx
     - mednafen_wswan
-    - melonds
     - mgba
     - minivmac
     - moonlight
@@ -2948,9 +2886,7 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - raze
     - reminiscence
-    - rice
     - samcoupe
     - same_cdi
     - sameduck
@@ -2983,7 +2919,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -2995,7 +2930,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   rk3399:
@@ -3709,7 +3643,7 @@ targets:
     - yquake2
     - zc210
   s812:
-    architecture: aarch64
+    architecture: arm
     cores:
     - '81'
     - A1200
@@ -3738,8 +3672,8 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - duckstation-legacy
     - easyrpg
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -3751,7 +3685,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -3769,7 +3702,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -3814,7 +3746,6 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - rice
     - samcoupe
     - sameduck
     - scummvm
@@ -3846,7 +3777,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -3858,7 +3788,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   s905:
@@ -3892,9 +3821,9 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - duckstation-legacy
     - easyrpg
     - ecwolf
-    - eduke32
     - emuscv
     - ep128emu-core
     - fake08
@@ -3906,7 +3835,6 @@ targets:
     - fmsx
     - freechaf
     - freeintv
-    - fury
     - fuse
     - gambatte
     - gearcoleco
@@ -3917,7 +3845,6 @@ targets:
     - gliden64
     - gsplus
     - gw
-    - gzdoom
     - handy
     - hatari
     - hcl
@@ -3925,8 +3852,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ioquake3
-    - iortcw
-    - jazz2-native
     - lightspark
     - lowresnx
     - lutro
@@ -3937,7 +3862,6 @@ targets:
     - mednafen_psx
     - mednafen_supergrafx
     - mednafen_wswan
-    - melonds
     - mgba
     - minivmac
     - moonlight
@@ -3970,9 +3894,7 @@ targets:
     - px68k
     - pygame
     - quasi88
-    - raze
     - reminiscence
-    - rice
     - samcoupe
     - same_cdi
     - sameduck
@@ -4005,7 +3927,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - vitaquake2
     - x1
     - x128
     - x16emu
@@ -4017,7 +3938,6 @@ targets:
     - xrick
     - xscpu64
     - xvic
-    - yabasanshiro
     - yquake2
     - zc210
   s905gen2:
@@ -5315,7 +5235,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ikemen
-    - ioquake3
     - iortcw
     - jazz2-native
     - kronos
@@ -5542,7 +5461,6 @@ targets:
     - hurrican
     - hypseus-singe
     - ikemen
-    - ioquake3
     - iortcw
     - jazz2-native
     - kronos

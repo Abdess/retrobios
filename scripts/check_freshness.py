@@ -40,6 +40,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.request
 from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
@@ -56,12 +57,14 @@ from common import (  # noqa: E402
     apply_target_overrides,
     list_registered_platforms,
     load_emulator_profiles,
+    load_platform_registry,
     upstream_profile_index,
     write_text_atomic,
     yaml_load,
 )
 from exporter import discover_exporters  # noqa: E402
 from exporter.baseline import build_native_model  # noqa: E402
+from scripts.scraper import game_dat_importer  # noqa: E402
 from scripts.scraper.redump_dat_scraper import fetch_snapshot  # noqa: E402
 from scripts.scraper.targets import discover_target_scrapers  # noqa: E402
 
@@ -80,7 +83,9 @@ INSTALLERS = ("install.sh", "install.ps1")
 
 SHOWN_ITEMS = 4  # items named in a diff summary before ", ..."
 SHOWN_NAMES = 12  # core names named in an unresolved row before ", ..."
-AREAS = ("platforms", "native", "targets", "coreinfo", "data", "catalogs", "ci", "profiles")
+AREAS = (
+    "platforms", "native", "targets", "romfolders", "coreinfo", "data", "catalogs", "ci", "profiles",
+)
 OK, STALE, UNKNOWN, ERROR, SKIPPED = "OK", "STALE", "UNKNOWN", "ERROR", "SKIPPED"
 # Every status a finding may carry, in the order the summary counts them.
 STATUSES = (STALE, UNKNOWN, ERROR, SKIPPED, OK)
@@ -723,6 +728,119 @@ def _age_days(stamp: str, now: datetime) -> int | None:
     return (now - then).days
 
 
+# --- rom folders ------------------------------------------------------------
+
+
+def romfolder_sources(platforms_dir: Path) -> dict[str, dict]:
+    """setup -> its platforms/romfolders/_sources/<setup>.yml."""
+    out = {}
+    for path in sorted((platforms_dir / "romfolders" / "_sources").glob("*.yml")):
+        with path.open(encoding="utf-8") as fh:
+            out[path.stem] = yaml_load(fh) or {}
+    return out
+
+
+def _os_source(doc: dict) -> dict:
+    """The source the setup is pinned on: `os`, else the first declared.
+    The others follow from it (an EmulationStation pinned by a package.mk)."""
+    sources = doc.get("sources") or {}
+    return sources.get("os") or next(iter(sources.values()), {})
+
+
+def platform_revision(setup: str, doc: dict, platforms_dir: Path) -> str:
+    """The revision the setup's own platform file was scraped at, when the
+    setup is a registered platform read from the same repository; '' else."""
+    path = platforms_dir / f"{setup}.yml"
+    if setup not in load_platform_registry(str(platforms_dir)) or not path.is_file():
+        return ""
+    with path.open(encoding="utf-8") as fh:
+        source = str((yaml_load(fh) or {}).get("source") or "")
+    repo = upstream.parse_repo(str(_os_source(doc).get("repo") or ""))
+    if repo is None or f"/{repo.slug.lower()}/" not in source.lower() + "/":
+        return ""
+    return export_native.source_revision(source)
+
+
+def romfolder_pin_drift(setup: str, doc: dict, platforms_dir: Path) -> str | None:
+    """Why the folders and the BIOS of one platform come from two revisions,
+    None when they do not or when only the forge can tell (a tag on one
+    side, a commit on the other)."""
+    revision = platform_revision(setup, doc, platforms_dir)
+    os_source = _os_source(doc)
+    tag, commit = os_source.get("tag"), str(os_source.get("commit") or "")
+    if not revision or revision in (tag, commit):
+        return None
+    if tag or len(revision) == len(commit):
+        return f"platforms/{setup}.yml was scraped at {revision[:12]}, the rom folders at {tag or commit[:12]}"
+    return None
+
+
+def check_romfolders(platforms_dir: Path, cache_dir: str, offline: bool) -> list[Finding]:
+    """The pins of platforms/romfolders/_sources/ against what they follow.
+
+    A setup that is a registered platform is read at the revision its
+    platform file was scraped at: the games-on-card mode otherwise installs
+    the BIOS of one release for the folders of another. Any other setup is
+    compared with its project's newest release, or with its branch head
+    when the project publishes none. A pin is moved by hand, then
+    `python -m scripts.scraper.romfolders --setup NAME` reads it again.
+    """
+    findings: list[Finding] = []
+    for setup, doc in romfolder_sources(platforms_dir).items():
+        os_source = _os_source(doc)
+        pin = str(os_source.get("tag") or str(os_source.get("commit") or "")[:12])
+        drift = romfolder_pin_drift(setup, doc, platforms_dir)
+        if drift:
+            findings.append(Finding("romfolders", setup, STALE, local=pin, detail=drift))
+            continue
+        revision = platform_revision(setup, doc, platforms_dir)
+        repo = upstream.parse_repo(str(os_source.get("repo") or ""))
+        commit = str(os_source.get("commit") or "")
+        if revision and revision in (os_source.get("tag"), commit):
+            findings.append(Finding("romfolders", setup, OK, local=pin,
+                                    detail=f"read where platforms/{setup}.yml is"))
+            continue
+        if offline:
+            findings.append(Finding("romfolders", setup, SKIPPED, local=pin, detail="offline"))
+            continue
+        if repo is None or not commit:
+            findings.append(Finding("romfolders", setup, UNKNOWN, local=pin, detail="no forge to ask"))
+            continue
+        findings.append(_romfolder_upstream(setup, repo, os_source, revision, cache_dir))
+    return findings
+
+
+def _romfolder_upstream(
+    setup: str, repo: upstream.Repo, os_source: dict, revision: str, cache_dir: str,
+) -> Finding:
+    commit, tag = str(os_source["commit"]), os_source.get("tag")
+    pin = str(tag or commit[:12])
+    if revision:
+        # The platform names a tag and the setup a commit: the tag's commit decides.
+        tagged = upstream.resolve_tag_commit(repo, revision, cache_dir)
+        if tagged is None:
+            return Finding("romfolders", setup, UNKNOWN, local=pin, detail=f"tag {revision} not listed")
+        if tagged == commit:
+            return Finding("romfolders", setup, OK, local=pin, detail=f"commit of {revision}")
+        return Finding("romfolders", setup, STALE, local=pin, remote=revision,
+                       detail=f"platforms/{setup}.yml was scraped at {revision} ({tagged[:12]})")
+    pinned_at = (upstream.commit_date(repo, commit, cache_dir) or "")[:10]
+    release = upstream.latest_release(repo, cache_dir)
+    if release is not None and release.date:
+        newer = release.tag != tag and release.date > pinned_at
+        return Finding("romfolders", setup, STALE if newer else OK, local=f"{pin} ({pinned_at})",
+                       remote=f"{release.tag} ({release.date})",
+                       detail="a release is newer than the pin" if newer else "newest release")
+    head = upstream.resolve_head(repo, cache_dir)
+    if head is None:
+        return Finding("romfolders", setup, UNKNOWN, local=pin, detail="branch head unavailable")
+    if head == commit:
+        return Finding("romfolders", setup, OK, local=pin, detail="branch head")
+    counts = upstream.ancestry(repo, commit, head, cache_dir)
+    behind = f"{counts[0]} commits behind the branch head" if counts else "the branch head moved"
+    return Finding("romfolders", setup, STALE, local=pin, remote=head[:12], detail=behind)
+
+
 # --- core-info --------------------------------------------------------------
 
 
@@ -822,6 +940,9 @@ def check_coreinfo(
     record_path: Path = CORE_INFO_RECORD,
 ) -> list[Finding]:
     blobs = core_info_blobs(cache_dir, offline)
+    if blobs is None and offline:
+        # Offline with no cached listing, nothing was asked of the upstream.
+        return [Finding("coreinfo", "libretro-core-info", SKIPPED, detail="offline")]
     if blobs is None:
         return [Finding("coreinfo", "libretro-core-info", UNKNOWN, detail="listing unavailable")]
     names = list(blobs)
@@ -931,7 +1052,85 @@ def check_catalogs(cache_dir: str, offline: bool) -> list[Finding]:
     findings.append(_check_tosec(offline))
     findings.append(_check_mame(cache_dir, offline))
     findings.append(_check_fbneo(cache_dir, offline))
+    findings.append(_check_nointro_games(cache_dir, offline))
+    findings.append(_check_redump_games(offline))
     return findings
+
+
+def _game_catalogs(source: str) -> list[dict]:
+    """The committed game catalogs of one source, games/catalogs/<source>/."""
+    return [_snapshot(path) for path in sorted((REPO_ROOT / "games" / "catalogs" / source).glob("*.json"))]
+
+
+def _no_intro_asset_date(cache_dir: str, offline: bool) -> str:
+    """The day the mirror last rebuilt its No-Intro pack, empty if unlisted."""
+    repo = upstream.parse_repo(NO_INTRO_MIRROR)
+    payload = upstream._api(  # noqa: SLF001
+        f"{repo.api_base}/repos/{repo.slug}/releases/tags/{NO_INTRO_RELEASE}",
+        cache_dir,
+        offline,
+        upstream.MOVING_TTL,
+    )
+    for asset in (payload.get("assets") if isinstance(payload, dict) else None) or []:
+        if isinstance(asset, dict) and asset.get("name") == NO_INTRO_ASSET:
+            return str(asset.get("updated_at", ""))[:10]
+    return ""
+
+
+def _check_nointro_games(cache_dir: str, offline: bool) -> Finding:
+    """games/catalogs/no-intro/ against the pack it was read from. The pack
+    holds every DAT: rebuilt after the catalogs were read, it may carry
+    games the games-on-card mode does not recognise."""
+    subject = "no-intro games"
+    fetched = min((str(doc.get("fetched", "")) for doc in _game_catalogs("no-intro")), default="")
+    if offline:
+        return Finding("catalogs", subject, SKIPPED, local=fetched, detail="offline")
+    updated = _no_intro_asset_date(cache_dir, offline)
+    if not updated:
+        return Finding("catalogs", subject, UNKNOWN, local=fetched, detail="asset not listed")
+    return Finding(
+        "catalogs", subject, STALE if updated > fetched else OK,
+        local=fetched, remote=updated, detail=f"{NO_INTRO_ASSET} rebuilt {updated}",
+    )
+
+
+def redump_datfile_version(code: str) -> str:
+    """The version redump.info serves for one datfile, read from the name it
+    gives the download: a HEAD request, nothing downloaded."""
+    url = game_dat_importer.REDUMP_DATFILE_URL.format(code=code)
+    request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "retrobios/1.0"})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        disposition = response.headers.get("Content-Disposition", "")
+    named = game_dat_importer._DISPOSITION.search(disposition)  # noqa: SLF001
+    match = game_dat_importer._REDUMP_FILE.match(named["file"]) if named else None  # noqa: SLF001
+    if not match:
+        raise ValueError(f"{url} names no datfile")
+    return f"{match['date']} {match['time']}"
+
+
+def _check_redump_games(offline: bool) -> Finding:
+    """games/catalogs/redump/ against the datfiles redump.info serves now.
+    A disc dumped since is not recognised by the games-on-card mode."""
+    subject = "redump games"
+    local = {doc.get("system"): str(doc.get("version", "")) for doc in _game_catalogs("redump")}
+    newest = max(local.values(), default="")
+    if offline:
+        return Finding("catalogs", subject, SKIPPED, local=newest, detail="offline")
+    changed = []
+    remote_newest = ""
+    for code, (_name, system, _floor) in sorted(game_dat_importer.REDUMP_DATS.items()):
+        try:
+            remote = redump_datfile_version(code)
+        except (OSError, ValueError) as exc:
+            return Finding("catalogs", subject, UNKNOWN, local=newest, detail=str(exc))
+        remote_newest = max(remote_newest, remote)
+        if local.get(system) != remote:
+            changed.append(system)
+    return Finding(
+        "catalogs", subject, STALE if changed else OK, local=newest, remote=remote_newest,
+        detail=(f"changed: {', '.join(changed)}" if changed else f"{len(local)} DATs"),
+        items=changed,
+    )
 
 
 def _check_redump(offline: bool) -> Finding:
@@ -963,18 +1162,7 @@ def _check_no_intro(cache_dir: str, offline: bool) -> Finding:
     imported = str(local.get("imported_at", ""))
     if offline:
         return Finding("catalogs", "no-intro", SKIPPED, local=imported, detail="offline")
-    repo = upstream.parse_repo(NO_INTRO_MIRROR)
-    payload = upstream._api(  # noqa: SLF001
-        f"{repo.api_base}/repos/{repo.slug}/releases/tags/{NO_INTRO_RELEASE}",
-        cache_dir,
-        offline,
-        upstream.MOVING_TTL,
-    )
-    assets = payload.get("assets") if isinstance(payload, dict) else None
-    updated = ""
-    for asset in assets or []:
-        if isinstance(asset, dict) and asset.get("name") == NO_INTRO_ASSET:
-            updated = str(asset.get("updated_at", ""))[:10]
+    updated = _no_intro_asset_date(cache_dir, offline)
     if not updated:
         return Finding("catalogs", "no-intro", UNKNOWN, local=imported, detail="asset not listed")
     return Finding(
@@ -1410,8 +1598,10 @@ def render(findings: list[Finding]) -> str:
             cols = f"  {f.status:7} {f.subject:{width}}"
             if f.remote:
                 cols += f"  {f.local:{local_width}} -> {f.remote}"
-            elif f.local:
-                # An arrow pointing at nothing read as a lost value.
+            elif f.local or (f.detail and local_width):
+                # An arrow pointing at nothing read as a lost value. An empty
+                # local value still takes its column, or the detail starts
+                # where the other rows show theirs.
                 cols += f"  {f.local:{local_width}}"
             if f.detail:
                 cols += f"  {f.detail}"
@@ -1506,6 +1696,8 @@ def main() -> int:
             )
         if "targets" in areas:
             findings.extend(check_targets(platforms_dir, workdir, profiles, args.jobs, args.offline))
+    if "romfolders" in areas:
+        findings.extend(check_romfolders(platforms_dir, args.cache_dir, args.offline))
     if "coreinfo" in areas:
         findings.extend(check_coreinfo(profiles, args.cache_dir, args.offline))
     if "data" in areas:

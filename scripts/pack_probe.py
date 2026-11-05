@@ -173,6 +173,14 @@ def manifest_entries(manifest: dict) -> dict[str, str]:
     return out
 
 
+def installer_summary(stdout: str, system_dir: Path, save_dir: Path) -> str:
+    """The end of the installer's output, as a record keeps it. The scratch
+    folders are written as the options that named them: a record read
+    elsewhere has no use for the path of the machine that ran the probe."""
+    text = stdout.replace(str(system_dir), "<dest>").replace(str(save_dir), "<save-dir>")
+    return " ".join(text.split())[-400:]
+
+
 def installer_layout(platform: str, pack: Path, identity: dict, manifest_path: Path,
                      root: Path, narrow: Sequence[str] = ()) -> Layout:
     """install.py --dest on a scratch root, from the pack, offline. The
@@ -197,7 +205,7 @@ def installer_layout(platform: str, pack: Path, identity: dict, manifest_path: P
                      "sha256": file_sha(manifest_path, "sha256"),
                      "generated": manifest.get("generated"), "pack_files": manifest.get("pack_files")},
         "save_dir_files": len(walk(save_dir)) if save_dir.is_dir() else 0,
-        "installer_summary": " ".join(proc.stdout.split())[-400:],
+        "installer_summary": installer_summary(proc.stdout, system_dir, save_dir),
     }
     return Layout("installer", system_dir, files, source)
 

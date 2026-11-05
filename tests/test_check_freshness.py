@@ -310,6 +310,15 @@ class CoreResolutionTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 cf.record_core_info({"a": "2"}, ["ghost"], record)
 
+    def test_offline_without_a_cached_listing_is_skipped(self):
+        """Offline, the row read UNKNOWN and failed the run as an upstream
+        that could not be read, though nothing was asked of it."""
+        with mock.patch.object(cf, "core_info_blobs", return_value=None):
+            (row,) = cf.check_coreinfo(self.PROFILES, "", True)
+            self.assertEqual((row.status, row.detail), (cf.SKIPPED, "offline"))
+            (row,) = cf.check_coreinfo(self.PROFILES, "", False)
+            self.assertEqual(row.status, cf.UNKNOWN)
+
     def test_the_committed_record_holds_git_blobs(self):
         recorded = cf.load_core_info_record()
         self.assertIsNotNone(recorded)
@@ -344,7 +353,74 @@ class PinParsingTests(unittest.TestCase):
         self.assertTrue(cf.specifier_allows(">=10.14", "12.0.1"))
 
 
+class RomFolderPins(unittest.TestCase):
+    """The rom folders of a setup were pinned by hand and nothing compared
+    the pins with the platform file or the project's releases."""
+
+    def _tree(self, tmp: str, platform_source: str, os_source: str) -> Path:
+        root = Path(tmp)
+        (root / "romfolders" / "_sources").mkdir(parents=True)
+        (root / "_registry.yml").write_text("platforms:\n  plat: {}\n")
+        (root / "plat.yml").write_text(f"source: {platform_source}\n")
+        (root / "romfolders" / "_sources" / "plat.yml").write_text(
+            f"sources:\n  os:\n    repo: https://github.com/o/r\n{os_source}")
+        (root / "romfolders" / "_sources" / "other.yml").write_text(
+            "sources:\n  os:\n    repo: https://github.com/x/y\n    commit: " + "c" * 40 + "\n")
+        return root
+
+    def test_a_platform_setup_follows_its_platform_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._tree(tmp, "https://raw.githubusercontent.com/o/r/v2/list.txt",
+                              "    tag: v1\n    commit: " + "a" * 40 + "\n")
+            rows = {f.subject: f for f in cf.check_romfolders(root, "", True)}
+        self.assertEqual(rows["plat"].status, cf.STALE)
+        self.assertIn("scraped at v2, the rom folders at v1", rows["plat"].detail)
+        self.assertEqual(rows["other"].status, cf.SKIPPED)
+
+    def test_the_same_revision_is_fresh(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._tree(tmp, "https://github.com/o/r/tree/" + "a" * 40,
+                              "    commit: " + "a" * 40 + "\n")
+            rows = {f.subject: f for f in cf.check_romfolders(root, "", True)}
+        self.assertEqual(rows["plat"].status, cf.OK)
+
+    def test_a_newer_release_makes_another_setup_stale(self):
+        release = cf.upstream.Release("v9", "2026-11-01", False)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._tree(tmp, "https://github.com/o/r/tree/" + "a" * 40,
+                              "    commit: " + "a" * 40 + "\n")
+            with mock.patch.object(cf.upstream, "commit_date", return_value="2026-10-01T00:00:00"), \
+                    mock.patch.object(cf.upstream, "latest_release", return_value=release):
+                rows = {f.subject: f for f in cf.check_romfolders(root, "", False)}
+        self.assertEqual((rows["other"].status, rows["other"].remote), (cf.STALE, "v9 (2026-11-01)"))
+
+    def test_the_committed_setups_agree_with_their_platform_files(self):
+        platforms = REPO_ROOT / "platforms"
+        drift = [d for setup, doc in cf.romfolder_sources(platforms).items()
+                 if (d := cf.romfolder_pin_drift(setup, doc, platforms))]
+        self.assertEqual(drift, [])
+
+
 class CatalogParsingTests(unittest.TestCase):
+    def test_game_catalogs_are_watched(self):
+        """The 38 game catalogs the games-on-card mode identifies discs by
+        had no row: only the BIOS snapshots of provenance/ were compared."""
+        versions = {code: "2026-01-01 00-00-00" for code in cf.game_dat_importer.REDUMP_DATS}
+        versions["PSX"] = "2099-01-01 00-00-00"
+        local = [{"system": system, "version": "2026-01-01 00-00-00"}
+                 for _n, system, _f in cf.game_dat_importer.REDUMP_DATS.values()]
+        with mock.patch.object(cf, "_game_catalogs", return_value=local), \
+                mock.patch.object(cf, "redump_datfile_version", side_effect=versions.get):
+            row = cf._check_redump_games(False)
+            self.assertEqual((row.status, row.items), (cf.STALE, ["sony-playstation"]))
+            self.assertEqual(cf._check_redump_games(True).status, cf.SKIPPED)
+        with mock.patch.object(cf, "_game_catalogs", return_value=[{"fetched": "2026-11-03"}]):
+            for rebuilt, status in (("2026-07-08", cf.OK), ("2026-11-04", cf.STALE)):
+                with mock.patch.object(cf, "_no_intro_asset_date", return_value=rebuilt):
+                    self.assertEqual(cf._check_nointro_games("", False).status, status)
+        self.assertIn("no-intro games",
+                      [f.subject for f in cf.check_catalogs("", True)])
+
     def test_tosec_newest_release_from_category_links(self):
         html = (
             '<a href="/downloads/category/58-2024-05-17">x</a>'
@@ -611,6 +687,14 @@ class RowsSayAllTheyStandFor(unittest.TestCase):
             cf.Finding("native", "emudeck", "OK", local="1 file(s)"),
         ])
         self.assertNotIn("->", text)
+
+    def test_a_detail_starts_in_one_column(self):
+        text = cf.render([
+            cf.Finding("native", "amberelec", cf.STALE, detail="no longer matches"),
+            cf.Finding("native", "bizhawk", cf.STALE, local="1 file(s)", detail="is not what"),
+        ])
+        rows = [line for line in text.splitlines() if line.startswith("  STALE")]
+        self.assertEqual(rows[0].index("no longer"), rows[1].index("is not what"))
 
     def test_json_carries_every_unresolved_name(self):
         missing = {f"core{i:02d}": [] for i in range(50)}

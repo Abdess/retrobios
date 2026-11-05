@@ -4427,7 +4427,7 @@ class EmulatorPagesStateTheirDataForMachines(unittest.TestCase):
                       {"name": "free.bin"}],
         })
         self.assertEqual(data["about"]["codeRepository"], "https://github.com/stenzek/duckstation")
-        # The release the profile describes, never the pin (round 5, 3.5).
+        # The release the profile describes, never the pin.
         self.assertEqual(data["about"]["version"], "v0.1-12070")
         self.assertNotIn("description", data["about"])
         self.assertEqual(data["dateModified"], "2026-03-23")
@@ -4560,7 +4560,12 @@ class TargetListsReadThePinnedRelease(unittest.TestCase):
         for name in ("batocera", "rocknix", "recalbox"):
             source = (ROOT / "scripts" / "scraper" / "targets" / f"{name}_targets_scraper.py").read_text()
             with self.subTest(scraper=name):
-                self.assertIn("self.pinned_revision(PLATFORM_NAME)", source)
+                # The Batocera scraper reads the pin of the platform it is
+                # instantiated for (KNULLI subclasses it).
+                self.assertTrue(
+                    "self.pinned_revision(PLATFORM_NAME)" in source
+                    or "self.pinned_revision(self.PLATFORM)" in source
+                )
                 self.assertNotIn("fetch_stable_tag()", source)
                 self.assertNotIn("fetch_github_latest_version(", source)
 
@@ -6334,6 +6339,20 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
                    "emulators": ["splitwolf"]}
             copies = bundled_only.other_copies([row], Path(tmp))
             self.assertEqual([c["path"] for c in copies], [Path(tmp, "dir2/a.bmp").as_posix()])
+
+    def test_the_collection_holds_no_copy_only_an_install_provides(self):
+        """The pull request checks run this suite, not the pipeline: without
+        this, a copy only a bundled entry reaches merges green."""
+        import bundled_only
+        from common import load_database, load_emulator_profiles
+
+        rows = bundled_only.bundled_only(
+            load_database(str(ROOT / "database.json")),
+            load_emulator_profiles(str(ROOT / "emulators")),
+            str(ROOT / "platforms"), ROOT / "install",
+        )
+        self.assertEqual([f"{r['path']} ({', '.join(r['emulators'])})" for r in rows], [],
+                         "remove the copy: the emulator's own install provides it")
 
 
 class TheApiSchemaHoldsTheFieldsItPromises(unittest.TestCase):

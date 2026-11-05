@@ -83,6 +83,81 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
         self.assertNotIn("board-0", message)
 
 
+
+class AMistypedDataKeyGetsTheClosestName(unittest.TestCase):
+    """`--key dolphin-sis` printed all 27 keys on one line."""
+
+    def test_did_you_mean(self):
+        proc = subprocess.run(
+            [sys.executable, "scripts/refresh_data_dirs.py", "--key", "dolphin-sis", "--dry-run"],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("unknown key: dolphin-sis. Did you mean: dolphin-sys? --dry-run lists all",
+                      proc.stderr)
+        self.assertNotIn("ppsspp-assets", proc.stderr)
+
+class TheGapHeadingAddsUp(unittest.TestCase):
+    """Amiberry read 261 files in profile, 7 declared and 238 undeclared:
+    16 entries were set aside without a word."""
+
+    def test_every_entry_is_counted_once(self):
+        import cross_reference as xref
+
+        files = [
+            {"name": "kick.rom", "required": True},
+            {"name": "game.grp", "size": 10},
+            {"name": "game.grp", "size": 20},
+            {"name": "a.bin", "archive": "set.zip"},
+            {"name": "b.bin", "archive": "set.zip"},
+            {"name": "picked.bin", "path": None},
+            {"name": "gone.bin", "unsourceable": "never distributed"},
+        ]
+        profiles = {"emu": {"emulator": "Emu", "type": "libretro", "systems": ["s"],
+                            "files": files}}
+        report = xref.cross_reference(profiles, {}, {"files": {}, "indexes": {}},
+                                      all_declared={"kick.rom": [(None, "kick.rom")]})
+        data = report["emu"]
+        self.assertEqual(
+            xref.profile_breakdown(data),
+            "1 declared by platforms, 3 undeclared, 1 unsourceable, "
+            "2 set aside (1 other versions of a slot, 1 outside the pack)",
+        )
+        self.assertEqual(
+            data["declared_files"] + data["undeclared_files"] + data["unsourceable_files"]
+            + sum(data["set_aside"].values()),
+            data["total_files"],
+        )
+
+
+class AnOfflineRunWithNoCacheStopsFirst(unittest.TestCase):
+    """On a fresh clone, pipeline.py --offline built every pack before saying
+    the data directories had never been fetched."""
+
+    def _args(self, **flags):
+        import argparse
+
+        return argparse.Namespace(**{"offline": True, "skip_packs": False, **flags})
+
+    def test_refused_before_any_step(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            cache = Path(tmp) / "cache"
+            (Path(tmp) / "_data_dirs.yml").write_text(
+                f"data_directories:\n  a:\n    local_cache: {cache}\n"
+            )
+            parser = mock.Mock()
+            pipeline._refuse_offline_without_caches(parser, self._args(), tmp)
+            self.assertIn("refresh_data_dirs.py", parser.error.call_args.args[0])
+            for args in (self._args(offline=False), self._args(skip_packs=True)):
+                parser = mock.Mock()
+                pipeline._refuse_offline_without_caches(parser, args, tmp)
+                parser.error.assert_not_called()
+            cache.mkdir()
+            parser = mock.Mock()
+            pipeline._refuse_offline_without_caches(parser, self._args(), tmp)
+            parser.error.assert_not_called()
+
+
 class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
     """The markdown wrote `**Remove** hiscore.dat (phantom)` beside six
     `**Add** hiscore.dat`, none with a path, for files profiled cores read."""

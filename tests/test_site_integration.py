@@ -1,4 +1,4 @@
-"""What the round 4 packages left between them once merged.
+"""What separate fixes left between them once merged.
 
 A data directory page printed its readers as a Python list, every board
 page's breadcrumb read "Arcade / Arcade", the fba2012 section was headed

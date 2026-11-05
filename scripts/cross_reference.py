@@ -19,6 +19,7 @@ import os
 import sys
 import zipfile
 import zlib
+from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -676,6 +677,35 @@ def slot_key(f: dict, standalone: bool = False) -> tuple:
     )
 
 
+# Why an entry is left out of the comparison, in the order they are printed.
+SET_ASIDE = {
+    "other_versions": "other versions of a slot",
+    "not_read": "not read on this platform",
+    "outside_scope": "outside the pack",
+}
+
+
+def profile_breakdown(data: dict) -> str:
+    """Where each entry of a profile went, adding up to its file count.
+
+    The heading said 261 files, 7 declared and 238 undeclared, and the 16
+    others were nowhere: the versions a slot accepts, the entries the
+    platform never opens and the ones no pack carries.
+    """
+    # A report built without the per-entry tally (a fixture, a saved --json
+    # of an earlier run) falls back to its row counts.
+    parts = [f"{data.get('declared_files', data['platform_covered'])} declared by platforms",
+             f"{data.get('undeclared_files', data['gaps'])} undeclared"]
+    unsourceable = data.get("unsourceable_files", len(data.get("unsourceable") or []))
+    if unsourceable:
+        parts.append(f"{unsourceable} unsourceable")
+    aside = data.get("set_aside") or {}
+    detail = [f"{aside[key]} {label}" for key, label in SET_ASIDE.items() if aside.get(key)]
+    if detail:
+        parts.append(f"{sum(aside.values())} set aside ({', '.join(detail)})")
+    return ", ".join(parts)
+
+
 def _cross_reference_profile(
     emu_name: str,
     profile: dict,
@@ -735,6 +765,19 @@ def _cross_reference_profile(
     for f, is_standalone in layout_files:
         versions.setdefault(slot_key(f, is_standalone), []).append(f)
 
+    # What became of each entry, so the heading adds up: a file a platform
+    # declares, one it does not, or one set aside and why. An entry read by
+    # two builds keeps the first answer that compares it. Each layout lists
+    # the profile's entries in their order, so a position names one entry.
+    position = {id(f): i for view, _ in layouts for i, f in enumerate(view.get("files", []))}
+    fates: dict[int, str] = {}
+
+    def fate(f: dict, what: str) -> None:
+        key = position[id(f)]
+        current = fates.get(key)
+        if current is None or (current in SET_ASIDE and what not in SET_ASIDE):
+            fates[key] = what
+
     for f, is_standalone in layout_files:
         fname = f.get("name", "")
         # The destination the running build reads, as find_undeclared_files
@@ -753,13 +796,21 @@ def _cross_reference_profile(
         if len(layouts) > 1:
             # One file read at one path by both builds counts once.
             seen_key = (effective_path.casefold(), seen_key)
-        if not fname or seen_key in seen_files or unread_on(f, platform):
+        if not fname:
+            fate(f, "outside_scope")
+            continue
+        if seen_key in seen_files:
+            fate(f, "other_versions")
+            continue
+        if unread_on(f, platform):
+            fate(f, "not_read")
             continue
 
         # Collect unsourceable files separately (documented, not a gap)
         unsourceable_reason = f.get("unsourceable", "")
         if unsourceable_reason:
             seen_files.add(seen_key)
+            fate(f, "unsourceable")
             unsourceable_list.append({
                 "name": fname,
                 "required": f.get("required", False),
@@ -769,6 +820,7 @@ def _cross_reference_profile(
             continue
 
         if outside_gap_scope(f, is_standalone):
+            fate(f, "outside_scope")
             continue
 
         archive = f.get("archive")
@@ -784,6 +836,7 @@ def _cross_reference_profile(
 
         if in_platform:
             seen_files.add(seen_key)
+            fate(f, "declared")
             covered.append({
                 "name": fname,
                 "path": effective_path,
@@ -793,6 +846,7 @@ def _cross_reference_profile(
             continue
 
         seen_files.add(seen_key)
+        fate(f, "undeclared")
 
         if archive:
             archive_key = (
@@ -864,6 +918,7 @@ def _cross_reference_profile(
     for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
         gaps.append(ag)
 
+    tally = Counter(fates.values())
     report[emu_name] = {
         "emulator": profile.get("emulator", emu_name),
         "systems": systems,
@@ -877,6 +932,11 @@ def _cross_reference_profile(
         "gap_large_file": sum(1 for g in gaps if g["source"] == "large_file"),
         "gap_details": gaps,
         "unsourceable": unsourceable_list,
+        # Entries, not rows: an archive's members are one gap row.
+        "declared_files": tally["declared"],
+        "undeclared_files": tally["undeclared"],
+        "unsourceable_files": tally["unsourceable"],
+        "set_aside": {key: tally[key] for key in SET_ASIDE},
     }
 
 
@@ -977,11 +1037,7 @@ def print_report(
 
         systems = ", ".join(data["systems"])
         print(f"\n{data['emulator']}" + (f" ({systems})" if systems else ""))
-        print(
-            f"  {data['total_files']} files in profile, "
-            f"{data['platform_covered']} declared by platforms, "
-            f"{gaps} undeclared"
-        )
+        print(f"  {data['total_files']} files in profile: {profile_breakdown(data)}")
         print(f"  Gaps: {status}")
 
         for g in data["gap_details"]:

@@ -366,7 +366,7 @@ class AVariantShowsWhoPinsIt(unittest.TestCase):
             platforms={"c" * 40: {"batocera", "retrobat"}}, emulators={"a" * 40: {"mame"}})
         page = generate_site.generate_system_page(
             "Entex", {"Adventure Vision": [primary, variant]}, consumers)
-        # Another revision of a set sits open beside it (round 5, 6.3).
+        # Another revision of a set sits open beside it.
         block = page[page.index('id="sha1-' + "c" * 12 + '"'):]
         self.assertIn("<dt>Collection path</dt><dd><code>bios/Entex/Adventure Vision/"
                       ".variants/advision.zip.1c086064</code>", block)

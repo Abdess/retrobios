@@ -55,11 +55,16 @@ def _same(declared: str, accepted: str) -> bool:
     )
 
 
-def _accepts(profile_entry: dict, declared: dict[str, set[str]]) -> bool:
-    """True when the profile entry, or a member of its archive, accepts a
-    hash the platform entry declares."""
-    accepted = _entry_hashes(profile_entry)
-    return any(_same(d, a) for values in declared.values() for d in values for a in accepted)
+def _accepts(accepted: set[str], declared: dict[str, set[str]]) -> bool:
+    """True when the hashes a profile entry accepts, the members of its
+    archive included, hold one the platform entry declares."""
+    for values in declared.values():
+        if values & accepted:
+            return True
+        cut = [d for d in values if _CUT_MD5 <= len(d) < _FULL_MD5]
+        if cut and any(a.startswith(d) for d in cut for a in accepted):
+            return True
+    return False
 
 
 def _contradicts(profile_entry: dict, declared: dict[str, set[str]]) -> bool:
@@ -366,6 +371,10 @@ class EntryCategories:
         self._guessed = not config.get("cores")
         self._romsets = sorted(key for key in examined if _loads_romsets(profiles[key]))
         self._profiles = profiles
+        # The hashes each profile entry accepts, read once: every platform
+        # entry with a proof walks its reader's whole profile, and a MAME
+        # profile's archive members were hashed again for each.
+        self._accepted: dict[int, set[str]] = {}
         # One index per core and per kind, so a proof names its reader.
         self._readers: list[tuple[str, str, ReadEvidence]] = []
         for key in sorted(examined):
@@ -403,6 +412,12 @@ class EntryCategories:
                     sorted(unresolved_platform_cores(own, profiles)),
                 )
 
+    def _accepted_by(self, profile_entry: dict) -> set[str]:
+        accepted = self._accepted.get(id(profile_entry))
+        if accepted is None:
+            accepted = self._accepted[id(profile_entry)] = _entry_hashes(profile_entry)
+        return accepted
+
     def _matching(self, key: str, kind: str, entry: dict) -> list[dict]:
         """The profile entries of `key` that read the platform entry.
 
@@ -425,7 +440,7 @@ class EntryCategories:
             if not isinstance(f, dict) or (f.get("category") == GAME_DATA) != (kind == GAME_DATA):
                 continue
             cited = {k: f[k] for k in ("name", "source_ref") if f.get(k)}
-            if declared and _accepts(f, declared):
+            if declared and _accepts(self._accepted_by(f), declared):
                 by_hash.append(cited)
                 continue
             own = {str(n).casefold() for n in (f.get("name"), *(f.get("aliases") or [])) if n}

@@ -172,12 +172,34 @@ rocknix:
     amd64:
       aliases: [x86_64, pc]
 
-# KNULLI reads Batocera's list above, plus its own: vaixterm is a terminal,
-# filed as the VaixTerm system's emulator (configgen-defaults.yml:669-671).
+# KNULLI's platform scraper reads Batocera's list above, plus this one. The
+# target list reads this one alone, so it repeats Batocera's names, all of
+# which KNULLI's es_systems.yml carries under the same nodes. vaixterm is a
+# terminal, filed as the VaixTerm system's emulator
+# (configgen-defaults.yml:669-671).
 knulli:
   targets:
     _default:
       remove_cores:
+        - A500
+        - "A500+"
+        - A600
+        - A1000
+        - A1200
+        - A3000
+        - A4000
+        - CD32
+        - CDTV
+        - flatpak
+        - odcommander
+        - sh
+        - steam
+        - wine-tkg
+        - wine
+        - mugen
+        - gliden64
+        - glide64mk2
+        - rice
         - vaixterm
 
 # EmuELEC and AmberELEC have no target file: the scrapers read these lists.

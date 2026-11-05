@@ -1263,7 +1263,7 @@ class ADetectedClosedFolderSaysWhereItCameFrom(unittest.TestCase):
         self.assertIn(f"than the one {self.cfg} names (name another with --dest)", said)
 
     def test_two_setups_stop_before_either_folder_is_read(self):
-        """code_audit_18 P2-3: a run without questions installs for one
+        """A run without questions installs for one
         setup, so two found stop on what to name before either folder is
         read, the closed one included."""
         proc = self.run_detected(True)

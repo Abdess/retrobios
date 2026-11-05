@@ -401,6 +401,30 @@ class CommittedIndex(unittest.TestCase):
                 errors = list(validator.iter_errors(json.loads(path.read_text(encoding="utf-8"))))
                 self.assertEqual(errors, [])
 
+    @unittest.skipIf(Draft202012Validator is None, "jsonschema not installed")
+    def test_each_file_is_read_at_its_profile_pin(self) -> None:
+        """A bumped profile kept the game-to-BIOS map of the old code."""
+        import sys
+        from unittest import mock
+
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import validate_schemas
+
+        self.assertEqual(validate_schemas._arcade_pin_errors(), [])
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
+            root = Path(tmp)
+            (root / "games" / "arcade").mkdir(parents=True)
+            (root / "emulators").mkdir()
+            (root / "emulators" / "core.yml").write_text(
+                f"source_commit: {'b' * 40}\ncore_version: '0.2'\n")
+            (root / "games" / "arcade" / "core.json").write_text(json.dumps(
+                {"profile": "core", "core_version": "0.1", "source": {"commit": COMMIT}}))
+            with mock.patch.object(validate_schemas, "ROOT", root):
+                (error,) = validate_schemas._arcade_pin_errors()
+        self.assertIn("read at aaaaaaaaaaaa", error)
+        self.assertIn("core_version '0.1'", error)
+        self.assertIn("arcade_parent_importer --profile core", error)
+
 
 if __name__ == "__main__":
     unittest.main()

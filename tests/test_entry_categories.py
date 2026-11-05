@@ -42,6 +42,29 @@ def _config(cores: list[str], files: list[dict], system: str = "s") -> dict:
             "systems": {system: {"files": files}}}
 
 
+
+class EachProfileEntryIsHashedOnce(unittest.TestCase):
+    """verify --all hashed 9,058 profile entries 2.9 million times: each
+    platform entry with a proof walked its reader's profile from scratch."""
+
+    def test_two_platform_entries_read_one_profile_entry_once(self):
+        from unittest import mock
+
+        import exporter.candidates as candidates
+
+        profiles = {"core": {"emulator": "Core", "type": "libretro", "cores": ["core"],
+                             "systems": ["s"],
+                             "files": [{"name": "a.bin", "md5": "a" * 32,
+                                        "contents": [{"name": "m", "crc32": "12345678"}]}]}}
+        cats = EntryCategories(_config(["core"], []), profiles)
+        real = candidates._entry_hashes
+        with mock.patch.object(candidates, "_entry_hashes", side_effect=real) as counted:
+            for md5 in ("a" * 32, "a" * 29):
+                self.assertEqual(cats.category({"name": "a.bin", "md5": md5}, "a.bin", "s"), BIOS)
+        self.assertEqual(counted.call_count, 1)
+        self.assertTrue(candidates._accepts({"a" * 32}, {"md5": {"a" * 29}}))
+        self.assertFalse(candidates._accepts({"a" * 32}, {"md5": {"b" * 32}}))
+
 class Category(unittest.TestCase):
     def test_each_category(self):
         cats = EntryCategories(_config(["bluemsx", "devilutionx"], []), PROFILES)

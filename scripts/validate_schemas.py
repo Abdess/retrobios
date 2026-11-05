@@ -39,6 +39,22 @@ def _errors(validator: Draft202012Validator, data: object, label: str) -> list[s
     return out
 
 
+_SOURCES: dict[tuple[Path, int, int], object] = {}
+
+
+def _load_source(path: Path) -> object:
+    """A source YAML, parsed once per run whichever check reads it: the
+    schema pass, the data directory refs and the layout check each parsed
+    all 649 profiles again. Keyed by size and mtime too, so a file written
+    again in the same process is read again."""
+    stat = path.stat()
+    key = (path, stat.st_mtime_ns, stat.st_size)
+    if key not in _SOURCES:
+        with path.open(encoding="utf-8") as handle:
+            _SOURCES[key] = yaml_load(handle)
+    return _SOURCES[key]
+
+
 def _validate_yaml_directory(
     directory: Path,
     schema_name: str,
@@ -51,8 +67,7 @@ def _validate_yaml_directory(
         if skip_private and path.name.startswith("_"):
             continue
         try:
-            with path.open(encoding="utf-8") as handle:
-                data = yaml_load(handle)
+            data = _load_source(path)
         except (OSError, yaml.YAMLError) as exc:
             out.append(f"{path.relative_to(ROOT)}: {exc}")
             continue
@@ -273,8 +288,7 @@ def _unknown_data_dir_refs() -> list[str]:
         for path in source_yaml_paths(directory):
             if path.name.startswith("_"):
                 continue
-            with path.open(encoding="utf-8") as handle:
-                document = yaml_load(handle) or {}
+            document = _load_source(path) or {}
             systems = document.get("systems")
             holders = [document, *(systems.values() if isinstance(systems, dict) else [])]
             for holder in holders:
@@ -299,8 +313,7 @@ def _repository_layout_in_profiles() -> list[str]:
     """
     out: list[str] = []
     for path in source_yaml_paths(ROOT / "emulators"):
-        with path.open(encoding="utf-8") as handle:
-            document = yaml_load(handle) or {}
+        document = _load_source(path) or {}
         for entry in document.get("files") or []:
             if not isinstance(entry, dict):
                 continue
@@ -688,6 +701,34 @@ def _games_source_errors() -> list[str]:
     return out
 
 
+def _arcade_pin_errors() -> list[str]:
+    """games/arcade/<profile>.json read at the revision and version its
+    profile pins. A bump of the profile left the game-to-BIOS map of the old
+    code in place, and the installer kept serving it."""
+    out: list[str] = []
+    for path in sorted((ROOT / "games" / "arcade").glob("*.json")):
+        doc = _load_json(path)
+        profile_path = ROOT / "emulators" / f"{doc.get('profile')}.yml"
+        label = str(path.relative_to(ROOT))
+        if not profile_path.is_file():
+            out.append(f"{label}: no profile emulators/{profile_path.name}")
+            continue
+        profile = _load_source(profile_path) or {}
+        pinned = profile.get("source_commit")
+        pins = set(pinned.values()) if isinstance(pinned, dict) else {pinned}
+        commit = (doc.get("source") or {}).get("commit")
+        drifted = []
+        if commit and commit not in pins:
+            drifted.append(f"read at {commit[:12]}, the profile pins {pinned}")
+        if doc.get("core_version") != profile.get("core_version"):
+            drifted.append(f"core_version {doc.get('core_version')!r}, "
+                           f"the profile says {profile.get('core_version')!r}")
+        if drifted:
+            out.append(f"{label}: {'; '.join(drifted)} "
+                       f"(python -m scripts.scraper.arcade_parent_importer --profile {doc.get('profile')})")
+    return out
+
+
 def _games_index_errors() -> list[str]:
     """install/games/: each document against its kind, and the index
     against the files it lists (size and sha256)."""
@@ -752,6 +793,7 @@ def main() -> int:
     errors.extend(_measurement_errors())
     errors.extend(_romfolder_errors())
     errors.extend(_games_source_errors())
+    errors.extend(_arcade_pin_errors())
 
     if not args.source_only:
         database_path = ROOT / "database.json"

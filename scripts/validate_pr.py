@@ -23,6 +23,7 @@ import os
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
@@ -97,10 +98,13 @@ class ValidationResult:
         lines = [f"### {status} `{self.filename}`"]
         lines.append("")
         lines.append(f"- **Path**: `{self.filepath}`")
-        lines.append(f"- **Size**: {self.size:,} bytes")
-        lines.append(f"- **SHA1**: `{self.sha1}`")
-        lines.append(f"- **MD5**: `{self.md5}`")
-        lines.append(f"- **CRC32**: `{self.crc32}`")
+        # A path refused before it was read has no size or digest to show:
+        # empty fields read as an empty file contributed.
+        if self.sha1:
+            lines.append(f"- **Size**: {self.size:,} bytes")
+            lines.append(f"- **SHA1**: `{self.sha1}`")
+            lines.append(f"- **MD5**: `{self.md5}`")
+            lines.append(f"- **CRC32**: `{self.crc32}`")
         lines.append("")
 
         for status_str, message in self.checks:
@@ -312,11 +316,17 @@ def validate_file(
         return result
 
     if not os.path.exists(filepath):
-        result.add_check(False, f"File not found: {filepath}")
+        result.add_check(False, f"File not found: {filepath}. A path is read from the folder "
+                                "the command runs in, or pass --changed to check the files "
+                                "changed under bios/")
+        return result
+
+    if os.path.isdir(filepath):
+        result.add_check(False, "Folder with no file in it")
         return result
 
     if not os.path.isfile(filepath):
-        result.add_check(False, "Not a regular file")
+        result.add_check(False, "Not a regular file: a device, a pipe or a socket")
         return result
 
     result.size = os.path.getsize(filepath)
@@ -623,6 +633,26 @@ def get_changed_files() -> list[str]:
     ]
 
 
+def expand_folders(paths: list[str]) -> list[str]:
+    """Each folder named replaced by the files under it, subfolders included.
+
+    A card's BIOS folder was refused as "Not a regular file", and the
+    contributor had to list its files by hand. A link inside the folder
+    stays listed, so it is refused like a named one, and an empty folder
+    stays as itself to be reported.
+    """
+    out: list[str] = []
+    for path in paths:
+        if not os.path.isdir(path) or os.path.islink(path):
+            out.append(path)
+            continue
+        found = sorted(
+            str(f) for f in Path(path).rglob("*") if f.is_symlink() or f.is_file()
+        )
+        out.extend(found or [path])
+    return out
+
+
 def _files_to_validate(
     args: argparse.Namespace, parser: argparse.ArgumentParser
 ) -> list:
@@ -634,7 +664,7 @@ def _files_to_validate(
     if not args.changed:
         if not args.files:
             parser.error("No files specified. Use --changed or provide file paths.")
-        return args.files
+        return expand_folders(args.files)
     try:
         files = get_changed_files()
     except (RuntimeError, OSError) as exc:
@@ -737,9 +767,10 @@ def main() -> None:
         for r in results:
             status = "PASS" if r.passed else "FAIL"
             print(f"\n[{status}] {r.filepath}")
-            print(f"  SHA1: {r.sha1}")
-            print(f"  MD5:  {r.md5}")
-            print(f"  Size: {r.size:,}")
+            if r.sha1:
+                print(f"  SHA1: {r.sha1}")
+                print(f"  MD5:  {r.md5}")
+                print(f"  Size: {r.size:,}")
             for s, m in r.checks:
                 marker = (
                     "ok"

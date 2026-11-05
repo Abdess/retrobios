@@ -1,4 +1,4 @@
-"""One display name per system id (round 2, package P0).
+"""One display name per system id.
 
 An emulator page listed the folders a system's files were voted onto:
 nintendo-gba read "Nintendo Game Boy", camplynx "Arcade", and MAME

@@ -385,7 +385,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         for label in ("MD5", "Emulators", "Packed for its emulators by", "On the setup's list"):
             self.assertIn(f"<dt>{label}</dt>", skipped)
             self.assertNotIn(f">{label}</dt>", searched)
-        # The card's title is what the search reads (round 4, V6): the setup
+        # The card's title is what the search reads: the setup
         # list made every excerpt a run of names and paths.
         self.assertNotIn('<dl class="rb-facts">', searched)
 

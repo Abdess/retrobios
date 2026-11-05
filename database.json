@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T12:13:24Z",
-  "total_files": 19943,
-  "total_size": 16892630154,
+  "generated_at": "2026-11-05T14:56:18Z",
+  "total_files": 19944,
+  "total_size": 16892646538,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -41981,6 +41981,16 @@
       "sha256": "0226f77f7ed03d01a5c606dc42249e740d7768909d0f1a32cf78f6c9e71f7452",
       "crc32": "596ab6d6",
       "adler32": "1c992583"
+    },
+    "ecb999ac1cc2fcca29bae71195741c451e747824": {
+      "path": "bios/Enterprise/64-128/ide12.rom",
+      "name": "ide12.rom",
+      "size": 16384,
+      "sha1": "ecb999ac1cc2fcca29bae71195741c451e747824",
+      "md5": "ba8854e55fa32e932645d57003e4632b",
+      "sha256": "31fce2d3927f40e4b33a729138f721ad45fe6051a366c19314bc6142a583f566",
+      "crc32": "157ab74c",
+      "adler32": "984dafb8"
     },
     "abf119cf947ea32defd08b29a8a25d75f6bd4987": {
       "path": "bios/Enterprise/64-128/tvc22_ext.rom",
@@ -208769,6 +208779,7 @@
       "80115adf36136f30b23c10ea2dd83bef": "c6241e1c248193108ce38b9a8e9dd33972cf47ba",
       "55af78f877a21ca45eb2df68a74fcc60": "cf12e971623a54bf8c4f891ca3a36d969f205c49",
       "22167938f142c222f40992839aa21a06": "325a5e28c2a0d896711f8829e7ff14fed5dd4103",
+      "ba8854e55fa32e932645d57003e4632b": "ecb999ac1cc2fcca29bae71195741c451e747824",
       "5ce95a26ceed5bec73995d83568da9cf": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
       "8c54285f541930cde766069942bad0f2": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
       "88dc7876d584f90e4106f91444ab23b7": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
@@ -236641,6 +236652,9 @@
       ],
       "hun.rom": [
         "325a5e28c2a0d896711f8829e7ff14fed5dd4103"
+      ],
+      "ide12.rom": [
+        "ecb999ac1cc2fcca29bae71195741c451e747824"
       ],
       "tvc22_ext.rom": [
         "abf119cf947ea32defd08b29a8a25d75f6bd4987"
@@ -286713,6 +286727,7 @@
       "24838410": "c6241e1c248193108ce38b9a8e9dd33972cf47ba",
       "c099a5e3": "cf12e971623a54bf8c4f891ca3a36d969f205c49",
       "596ab6d6": "325a5e28c2a0d896711f8829e7ff14fed5dd4103",
+      "157ab74c": "ecb999ac1cc2fcca29bae71195741c451e747824",
       "05e1c3a8": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
       "79fa818c": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
       "1466aed4": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
@@ -306657,6 +306672,7 @@
       "7d4be98066acc92ad87afac84b5c3165a1e336b77ce6e002cc031296769de18f": "c6241e1c248193108ce38b9a8e9dd33972cf47ba",
       "eb81a76dc76f7d026bc4a8c216ee9c5ee717d8b8bd210d3a0a5d48e4c90009a3": "cf12e971623a54bf8c4f891ca3a36d969f205c49",
       "0226f77f7ed03d01a5c606dc42249e740d7768909d0f1a32cf78f6c9e71f7452": "325a5e28c2a0d896711f8829e7ff14fed5dd4103",
+      "31fce2d3927f40e4b33a729138f721ad45fe6051a366c19314bc6142a583f566": "ecb999ac1cc2fcca29bae71195741c451e747824",
       "d35394333f2da0d5d597483d4c4af06b2492a74d0451b58ce3dad48bb5fdcfab": "abf119cf947ea32defd08b29a8a25d75f6bd4987",
       "72d17d1af7845a12e88985bb8f491a81b8657a659ecf1dc4d8028449f7318da6": "f2572ee83d09fc08f4de4a62f101c8bb301a9505",
       "eb61023d15285c9bf35f7aefe87affa9e04c11bc13be6a7ec88813a93d79a63a": "072c6160d4e7d406f5d8f5b1b66066c797d35561",
@@ -355191,6 +355207,12 @@
       ],
       "64-128/hun.rom": [
         "325a5e28c2a0d896711f8829e7ff14fed5dd4103"
+      ],
+      "Enterprise/64-128/ide12.rom": [
+        "ecb999ac1cc2fcca29bae71195741c451e747824"
+      ],
+      "64-128/ide12.rom": [
+        "ecb999ac1cc2fcca29bae71195741c451e747824"
       ],
       "Enterprise/64-128/tvc22_ext.rom": [
         "abf119cf947ea32defd08b29a8a25d75f6bd4987"

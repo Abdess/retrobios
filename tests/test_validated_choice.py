@@ -296,5 +296,34 @@ class AWarningRejectsNothing(unittest.TestCase):
             short, _good, _db, index = self._setup(tmp, held_good=False)
             self.assertIsNone(check_file_validation(str(short), "OS12.rom", index, tmp))
 
+
+class AlternativesAreLookedUpBySlot(unittest.TestCase):
+    """Each extra scanned its whole profile for the versions of its slot:
+    33 million entries visited in one verify --all."""
+
+    def test_same_answer_one_pass_per_profile(self):
+        from unittest import mock
+
+        import packextras
+        import validation
+
+        files = [{"name": "DUKE3D.GRP", "size": n} for n in (1, 2)] + [
+            {"name": "a.bin", "path": "dir/a.bin"}, {"name": "a.bin"}, "not an entry",
+        ]
+        profiles = {"raze": {"files": files}}
+        resolver = packextras.ExtraResolver({}, "bios", None, None, {}, None, profiles=profiles)
+        extras = [
+            {"source_profile": "raze", "name": "DUKE3D.GRP"},
+            {"source_profile": "raze", "name": "a.bin", "source_path": "dir/a.bin"},
+            {"source_profile": "raze", "source_name": "a.bin", "name": "renamed"},
+            {"source_profile": "other", "name": "a.bin"},
+        ]
+        with mock.patch.object(validation, "slot_index", side_effect=validation.slot_index) as built:
+            for fe in extras:
+                self.assertEqual(resolver.alternatives(fe),
+                                 validation.extra_alternatives(fe, profiles))
+        self.assertEqual(built.call_count, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

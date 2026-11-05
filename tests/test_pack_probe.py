@@ -14,6 +14,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import re
 import shutil
 import unittest
 import zipfile
@@ -284,6 +285,27 @@ class Lock(unittest.TestCase):
         self.assertFalse(try_lock())
 
 
+class RecordsNameNoLocalPath(unittest.TestCase):
+    """A record is read on other machines: the probe's scratch folders are
+    written as the options that named them."""
+
+    def test_the_summary_names_the_options(self) -> None:
+        root = Path("/srv/run/tmp/pack_probe/retroarch/installer")
+        out = (f"Copy it from your own copy of the game into {root / 'system'}/jazz2/Source/.\n"
+               f"Saves go to {root / 'saves'}.\n")
+        summary = pp.installer_summary(out, root / "system", root / "saves")
+        self.assertEqual(summary, "Copy it from your own copy of the game into <dest>/jazz2/Source/. "
+                                  "Saves go to <save-dir>.")
+
+    def test_no_committed_record_holds_an_absolute_path(self) -> None:
+        path = REPO_ROOT / "measurements" / "pack-probes.jsonl"
+        absolute = re.compile(r"(?<![\w.<>-])/(?:home|root|tmp|mnt|Users|srv)/")
+        records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+        found = [r["id"] for r in records
+                 if absolute.search((r.get("source") or {}).get("installer_summary", ""))]
+        self.assertEqual(found, [])
+
+
 def collection_on_disk() -> bool:
     return (REPO_ROOT / "bios" / "Sony" / "PlayStation" / "scph5501.bin").is_file()
 
@@ -321,6 +343,7 @@ class RealLayouts(unittest.TestCase):
         self.assertEqual(lay.files["scph5501.bin"], "files:scph5501.bin")
         self.assertEqual(lay.source["manifest"]["path"], "install/retroarch.json")
         self.assertTrue(all(entry for entry in lay.files.values()), lay.files)
+        self.assertNotIn(str(self.work), lay.source["installer_summary"])
 
 
 if __name__ == "__main__":

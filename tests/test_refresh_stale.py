@@ -120,6 +120,19 @@ class Planning(unittest.TestCase):
         )
         self.assertEqual([f["subject"] for f in surfaced], ["redump"])
 
+    def test_game_catalogs_are_imported_again(self):
+        jobs, _surfaced, _ = self._plan(
+            finding("catalogs", "no-intro games"), finding("catalogs", "redump games"))
+        self.assertEqual(
+            {j.subject: " ".join(j.command[1:]) for j in jobs},
+            {
+                "no-intro games": "-m scripts.scraper.game_dat_importer --source no-intro"
+                " --fetch --refresh --floor",
+                "redump games": "-m scripts.scraper.game_dat_importer --source redump"
+                " --fetch --refresh --floor",
+            },
+        )
+
     def test_a_data_row_outside_the_registry_needs_a_human(self):
         """refresh_data_dirs.py --key 'buildbot system' exits 1 on an unknown
         key: the row asks for a registry entry, not a refresh."""

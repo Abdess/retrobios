@@ -24,6 +24,10 @@ python scripts/pipeline.py --offline --include-archived  # include archived plat
 python scripts/pipeline.py --check-buildbot        # online run + buildbot freshness check
 ```
 
+`--offline` skips the data directory refresh, so on a fresh clone run
+`python scripts/refresh_data_dirs.py` once first. A run that builds packs with no
+data directory cached is refused before step 0.
+
 Pipeline steps:
 
 | Step | Description | Skipped by |
@@ -671,13 +675,22 @@ profile, `--record-coreinfo <core>` records its blob as reviewed. Data
 directories are checked against their upstream, dump catalogs and romset
 snapshots against the catalog they were read from (Redump DAT versions, the
 No-Intro daily rebuild, the newest TOSEC pack, the newest MAME release, the
-git blobs of the FBNeo DATs), and the CI toolchain against PyPI and the
-actions' latest releases.
+git blobs of the FBNeo DATs), the game catalogs of `games/catalogs/` against
+the No-Intro pack and the Redump datfiles they were read from, and the CI
+toolchain against PyPI and the actions' latest releases.
 
 The `native` area needs no network. It reads the cache `export_native.py`
 patches from and reports an original that is absent, that came from another
 URL than the one the platform YAML names, or that was fetched before the
 platform YAML was last rewritten.
+
+The `romfolders` area compares each pin of `platforms/romfolders/_sources/`.
+A setup that is a registered platform must be read at the revision its
+platform file was scraped at, which needs no network unless one side names a
+tag and the other a commit. Any other setup is compared with its project's
+newest release, or with its branch head when the project publishes none. A
+stale pin is moved by hand, then `python -m scripts.scraper.romfolders --setup
+NAME` reads the folders again.
 
 The `profiles` area always checks `website/src/data/source-paths.json`
 against the profiles, offline: a recorded tree that no profile pins any more
@@ -778,7 +791,7 @@ until a report without one. Exit codes: 0 for `ok`,
 
 | Job | Schedule | What it does |
 |-----|----------|--------------|
-| `nightly` | 02:00 | `check_freshness.py --json` saved to a file, `refresh_stale.py --findings` on its `data` and `catalogs` rows, the MAME and FBNeo hash scrapers, then `pipeline.py --offline` as the gate. `database.json` and `install/*.json` are computed a second time and compared. Commits the hash profiles, the recipes and the regenerated records |
+| `nightly` | 02:00 | `check_freshness.py --json` saved to a file, `refresh_stale.py --findings` on its `data` and `catalogs` rows, the MAME and FBNeo hash scrapers, then `pipeline.py --offline` as the gate. `database.json` and `install/*.json` are computed a second time and compared. Commits the hash profiles, the recipes, the game catalogs and the regenerated records |
 | `assets` | 04:30 | `sync_release_assets.py`, as a dry run |
 | `bios-integrity` | Sunday 08:30 | `bios_integrity.py --apply --json` in the main checkout, once the host is idle (up to four hours of waiting). Its report is kept in the job's status |
 | `cleanup` | 05:30 | `cleanup_disk.py --apply --hours 72` in the main checkout |
@@ -1351,7 +1364,7 @@ Further options, by script:
 | `romset_recipes.py` | `--dat-recipes PATH`, a snapshot or a directory of them (default `recipes/`) |
 | `split_pack.py` | `--max-size 1900M`, the ceiling per part (K, M, G, default 2G) |
 | `torrentzip.py` | `--check ZIP` reports conformance, `--rebuild ZIP -o OUT` normalizes an archive |
-| `validate_pr.py` | `--changed` takes the BIOS files the branch changes, `--markdown`, `--json` |
+| `validate_pr.py` | `--changed` takes the BIOS files the branch changes, a folder named checks every file under it, `--markdown`, `--json` |
 | `validate_site.py` | `--site-dir` (rendered site, default `website/dist`), `--base` (path the site is served under), `--max-errors N` |
 | `scraper/coreinfo_scraper.py` | `--compare-db database.json` lists the `.info` firmware the database lacks |
 | `scraper/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |
@@ -1642,6 +1655,10 @@ keeps, is computed from `install/<platform>.json` with the installer's own
 core narrowing. Every published file is listed in `install/games/index.json`
 with its size, its gzip size and its sha256.
 
+`validate_schemas.py` refuses a `games/arcade/<profile>.json` whose source
+commit or `core_version` is not the one its profile pins: after a profile's pin
+moves, rerun `arcade_parent_importer --profile NAME`.
+
 ## Target scrapers
 
 Located in `scripts/scraper/targets/`. Each inherits `BaseTargetScraper` and implements `fetch_targets()`.
@@ -1650,6 +1667,7 @@ Located in `scripts/scraper/targets/`. Each inherits `BaseTargetScraper` and imp
 |---------|--------|----------------|
 | `retroarch_targets_scraper` | libretro buildbot nightly listings | buildbot architecture |
 | `batocera_targets_scraper` | Config.in + es_systems.yml + Buildroot Kconfig | board |
+| `knulli_targets_scraper` | the same, read from KNULLI's tree and Buildroot fork | board |
 | `recalbox_targets_scraper` | board defconfigs + system.ini cores | board |
 | `rocknix_targets_scraper` | emulators package.mk + device options | device |
 | `lakka_targets_scraper` | libretro_cores package.mk + project and device options | device image |

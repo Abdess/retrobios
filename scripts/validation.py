@@ -1004,6 +1004,17 @@ def same_slot_entries(files: list, name: str, path: str) -> list[dict]:
     ]
 
 
+def slot_index(files: list) -> dict[tuple[str, str], list[dict]]:
+    """A profile's entries keyed by (name, path), as same_slot_entries
+    matches them: one pass, then one lookup per extra."""
+    index: dict[tuple[str, str], list[dict]] = {}
+    for entry in files or []:
+        if isinstance(entry, dict):
+            name = entry.get("name")
+            index.setdefault((name, entry.get("path") or name), []).append(entry)
+    return index
+
+
 def extra_alternatives(fe: dict, profiles: Mapping | None) -> list[dict]:
     """The versions the extra's own profile accepts at the extra's slot."""
     if not profiles:

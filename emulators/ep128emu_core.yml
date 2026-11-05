@@ -197,6 +197,7 @@ files:
     description: Enterprise IDE controller ROM v1.2
     path: ep128emu/roms/ide12.rom
     system: enterprise-128
+    size: 16384
     required: false
     note: "Loaded into segment 0x42 for hard disk content (.vhd, or a disk image whose header marks a hard disk). roms.hpp holds no built-in copy, so without the file the core throws \"ROM file not found!\" and that content does not start."
     source_ref: "source core/core.cpp:309-322, source core/core.cpp:537-546, source core/main.cpp:1055-1062, source core/main.cpp:1081-1084"
