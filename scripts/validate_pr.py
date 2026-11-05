@@ -95,10 +95,13 @@ class ValidationResult:
         lines = [f"### {status} `{self.filename}`"]
         lines.append("")
         lines.append(f"- **Path**: `{self.filepath}`")
-        lines.append(f"- **Size**: {self.size:,} bytes")
-        lines.append(f"- **SHA1**: `{self.sha1}`")
-        lines.append(f"- **MD5**: `{self.md5}`")
-        lines.append(f"- **CRC32**: `{self.crc32}`")
+        # A path refused before it was read has no size or digest to show:
+        # empty fields read as an empty file contributed.
+        if self.sha1:
+            lines.append(f"- **Size**: {self.size:,} bytes")
+            lines.append(f"- **SHA1**: `{self.sha1}`")
+            lines.append(f"- **MD5**: `{self.md5}`")
+            lines.append(f"- **CRC32**: `{self.crc32}`")
         lines.append("")
 
         for status_str, message in self.checks:
@@ -293,7 +296,9 @@ def validate_file(
         return result
 
     if not os.path.exists(filepath):
-        result.add_check(False, f"File not found: {filepath}")
+        result.add_check(False, f"File not found: {filepath}. A path is read from the folder "
+                                "the command runs in, or pass --changed to check the files "
+                                "changed under bios/")
         return result
 
     if not os.path.isfile(filepath):
@@ -670,9 +675,10 @@ def main() -> None:
         for r in results:
             status = "PASS" if r.passed else "FAIL"
             print(f"\n[{status}] {r.filepath}")
-            print(f"  SHA1: {r.sha1}")
-            print(f"  MD5:  {r.md5}")
-            print(f"  Size: {r.size:,}")
+            if r.sha1:
+                print(f"  SHA1: {r.sha1}")
+                print(f"  MD5:  {r.md5}")
+                print(f"  Size: {r.size:,}")
             for s, m in r.checks:
                 marker = (
                     "ok"

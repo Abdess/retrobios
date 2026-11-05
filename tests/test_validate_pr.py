@@ -46,6 +46,14 @@ class FileShapeChecks(_Fixture):
         self.assertFalse(result.passed)
         self.assertEqual(result.sha1, "")
 
+    def test_a_path_never_read_shows_no_digest(self):
+        """Empty Size, SHA1, MD5 and CRC32 lines read as an empty file contributed."""
+        result = validate_pr.validate_file("bios/nope.bin", None, EMPTY_HASHES)
+        markdown = result.to_markdown()
+        for label in ("**Size**", "**SHA1**", "**MD5**", "**CRC32**"):
+            self.assertNotIn(label, markdown)
+        self.assertIn("--changed", markdown)
+
     def test_empty_file_fails(self):
         rel = self._bios_file("bios/Sony/PS/empty.bin", b"")
         result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
