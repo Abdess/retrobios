@@ -36,6 +36,7 @@ from common import (
 )
 from hashing import parse_hash_list
 from nativemode import digest_algorithm
+from dedup import _in_nodedup_dir
 from validation import frontend_digest_matches, inner_rom_check
 
 try:
@@ -79,6 +80,10 @@ class ValidationResult:
         self.md5 = ""
         self.crc32 = ""
         self.size = 0
+        # "held" (a copy of a file the collection has) or "unknown" (no list
+        # or profile declares it): no check fails, and neither is a file
+        # the pull request adds to the collection.
+        self.outcome = ""
 
     def add_check(self, passed: bool, message: str) -> None:
         self.checks.append(("PASS" if passed else "FAIL", message))
@@ -93,8 +98,12 @@ class ValidationResult:
     def passed(self) -> bool:
         return all(s != "FAIL" for s, _ in self.checks)
 
+    @property
+    def status(self) -> str:
+        return "FAIL" if not self.passed else "REVIEW" if self.outcome else "PASS"
+
     def to_markdown(self) -> str:
-        status = "PASS" if self.passed else "FAIL"
+        status = self.status
         lines = [f"### {status} `{self.filename}`"]
         lines.append("")
         lines.append(f"- **Path**: `{self.filepath}`")
@@ -374,9 +383,15 @@ def validate_file(
                 # PR that regenerated database.json was told each new file
                 # duplicated itself.
                 result.add_check(True, "Already in the database at this path")
+            elif _in_nodedup_dir(relative):
+                result.add_info(
+                    f"Identical to `{existing['path']}`, kept: this tree is read by path"
+                )
             else:
+                result.outcome = "held"
                 result.add_warning(
-                    f"Duplicate: identical file already exists at `{existing['path']}`"
+                    f"Already held at `{existing['path']}`: nothing to add, "
+                    "leave this copy out of the pull request"
                 )
         else:
             result.add_check(True, "Not a duplicate in database")
@@ -421,8 +436,11 @@ def validate_file(
             "Filename matches a known requirement but hash differs - may be a variant"
         )
     else:
+        result.outcome = "unknown"
         result.add_warning(
-            "File not referenced in any platform config - needs manual review"
+            "Not recognised: no platform list or emulator profile declares this "
+            "file. Say in the pull request which emulator reads it, for which "
+            "system, and where the dump comes from"
         )
 
     normalized = os.path.normpath(relative)
@@ -452,6 +470,8 @@ def validate_file(
             result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
         else:
             result.add_warning("File should be in bios/Manufacturer/Console/ structure")
+    elif result.outcome == "held":
+        pass
     elif expected_folders:
         # The contributor asks before forking: say where it goes.
         result.add_warning(
@@ -750,6 +770,7 @@ def main() -> None:
                 {
                     "file": r.filepath,
                     "passed": r.passed,
+                    "outcome": r.outcome or "new",
                     "sha1": r.sha1,
                     "md5": r.md5,
                     "size": r.size,
@@ -759,7 +780,15 @@ def main() -> None:
         print(json.dumps(output, indent=2))
     elif args.markdown:
         lines = ["## BIOS Validation Report", ""]
-        status = "all checks passed" if all_passed else "some checks failed"
+        held = sum(r.outcome == "held" for r in results)
+        unknown = sum(r.outcome == "unknown" for r in results)
+        review = ", ".join(part for part in (
+            f"{held} already held" if held else "",
+            f"{unknown} not recognised" if unknown else "",
+        ) if part)
+        status = ("some checks failed" if not all_passed
+                  else f"no check failed, to review: {review}" if review
+                  else "all checks passed")
         lines.append(f"**Status**: {status}")
         lines.append("")
 
@@ -770,8 +799,7 @@ def main() -> None:
         print("\n".join(lines))
     else:
         for r in results:
-            status = "PASS" if r.passed else "FAIL"
-            print(f"\n[{status}] {r.filepath}")
+            print(f"\n[{r.status}] {r.filepath}")
             if r.sha1:
                 print(f"  SHA1: {r.sha1}")
                 print(f"  MD5:  {r.md5}")
