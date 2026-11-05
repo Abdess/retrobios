@@ -5800,6 +5800,19 @@ class XeniosFollowsThePreviewBranch(unittest.TestCase):
         self.assertNotIn("from the xenios branch", profile.get("notes", ""))
 
 
+class PcemUpstreamPinIsTheLastSync(unittest.TestCase):
+    """The pcem bump set upstream_commit to dev's HEAD 25b54e3f, and dev was
+    rewritten: the pin left every branch (compare: diverged 109/114). The
+    port shares no history with upstream and took mainline patches by hand
+    until 2016-04-13, whose last upstream commit is 10739b96. Held there, a
+    bump cannot move it to a HEAD the port never contained."""
+
+    def test_the_upstream_pin_is_held_at_the_last_sync(self):
+        profile = yaml.safe_load((ROOT / "emulators" / "pcem.yml").read_text(encoding="utf-8"))
+        self.assertEqual(profile["upstream_commit"], "10739b9618e388a5bf8c21e752f12b3952fa83e1")
+        self.assertTrue(profile.get("upstream_frozen"))
+
+
 class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
     """A core that finds its firmware by content names no file, so each
     entry name is a label. ares labelled its Famicom Disk System revision
