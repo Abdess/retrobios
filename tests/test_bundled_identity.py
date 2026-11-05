@@ -32,6 +32,10 @@ UNIDENTIFIED = {
     "cdogs": 16,
     "citra-mmj": 3,
     "drastic": 5,
+    # No pk3 shipped at the pin is the standalone entry's: the 1.3.x
+    # releases carry 13fe8057, cc10cb70, d312ebbe and 8f4f0387, the buildbot
+    # 653f7b37, the core embeds 1a3fd445. The .info md5 c011b428 was none.
+    "ecwolf": 1,
     "emucorex": 5,
     "hcl": 3,
     "hurrican": 1,
