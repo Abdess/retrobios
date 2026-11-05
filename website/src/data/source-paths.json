@@ -1,10 +1,16 @@
 {
  "archive.softwareheritage.org/softwareheritage/revision@dc20a615275f66bee20a4fd851ef0231daca4f14": [],
  "bitbucket.org/linuxwolf6/splitwolf@f6c00044cdef00a31c66307d8b7cb1fb4ddf8c67": [],
+ "codeberg.org/iyzsong/anarch-libretro@187050344ef440c4eaf3135304a020093564fa3f": [
+  "texts.h"
+ ],
  "codeberg.org/iyzsong/eternal-libretro@13adf143aea822ebc1ee23722a80e93a7979e4c9": [
   "libretro.c"
  ],
  "codeberg.org/iyzsong/gam4980@32c531d3e7159081afd8dee72e8266153821095d": [],
+ "codeberg.org/iyzsong/uxn-libretro@2037b34ee0bf5f3914c38e0aafd145ece170b0f6": [
+  "build.zig.zon"
+ ],
  "codeberg.org/schelling/dosbox-pure-unleashed@4a11412248ca4c862751a7d9e6818023795031e9": [
   "Makefile",
   "main.cpp"
@@ -21,6 +27,9 @@
   "src/gui/midi_mt32.h",
   "src/gui/midi_sc55.h",
   "src/gui/mt32emu.h"
+ ],
+ "codeberg.org/virtualxt/virtualxt@a400adb0abf242c2fecbe926618338a00dc557c5": [
+  "virtualxt_libretro.info"
  ],
  "git.eden-emu.dev/eden-emu/eden@26a03d2473787abf3223b2d0e65b291eee00c1e1": [
   "src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/DirectoryInitialization.kt",
@@ -52,7 +61,8 @@
   "Src/OSD/libretro/LibretroWrapper.cpp",
   "Src/OSD/libretro/libretro.cpp",
   "Src/OSD/libretro/libretroCrosshair.cpp",
-  "Src/Sound/MPEG/MpegAudio.cpp"
+  "Src/Sound/MPEG/MpegAudio.cpp",
+  "Src/Version.h"
  ],
  "git.libretro.com/libretro/cemu-libretro@14f56b569b3668db01a4972225993abd3e8f2096": [
   ".gitlab-ci.yml",
@@ -89,6 +99,7 @@
   "libretro-radio.c"
  ],
  "git.libretro.com/libretro/rust-dos@152d9bca7820f0d9a5d1ca820a2d20855698a211": [
+  "Cargo.toml",
   "crates/gus/build.rs",
   "crates/gus/src/builtin.rs",
   "crates/mt32/src/lib.rs",
@@ -105,6 +116,7 @@
   "src/verite/mod.rs"
  ],
  "git.libretro.com/libretro/wqxemu@caf0998989446e3d6659f67c1b8aabd708a0379d": [
+  "Cargo.toml",
   "crates/wqxemu-core/src/machine.rs",
   "crates/wqxemu-core/src/machines/cc800.rs",
   "crates/wqxemu-core/src/machines/mod.rs",
@@ -138,7 +150,8 @@
   "src/xenia/ui/audio_helper.cc",
   "src/xenia/ui/d3d12/d3d12_provider.cc",
   "src/xenia/ui/imgui_drawer.cc",
-  "src/xenia/ui/vulkan/vulkan_instance.cc"
+  "src/xenia/ui/vulkan/vulkan_instance.cc",
+  "upstream.version"
  ],
  "git.ngram.ca/mirrors/Ryujinx@7d158acc3b5826a08941d6e8d50d3a3897021bcd": [
   "src/Ryujinx.Common/Configuration/AppDataManager.cs",
@@ -190,6 +203,7 @@
  ],
  "github.com/7800-devtools/a7800@7a2afdc1ea08fc331b16b750d8c1f02d4ef62fc8": [
   "hash/a7800.xml",
+  "makefile",
   "src/devices/bus/a7800/hiscore.cpp",
   "src/devices/bus/a7800/xm.cpp",
   "src/emu/crsshair.cpp",
@@ -282,6 +296,7 @@
   "font/fontv98.c",
   "io/pcidev.c",
   "keystat.c",
+  "np2ver.h",
   "pccore.c",
   "sdl/libretro/libretro.c",
   "sound/fmgen/fmgen_opna.cpp",
@@ -322,6 +337,7 @@
   "src/util.cpp"
  ],
  "github.com/AloysHF/BBKEmu@6641863f6ec59a74635753766e3f9d34adf92b05": [
+  "Cargo.toml",
   "crates/bbkemu-core/src/emulator.rs",
   "crates/bbkemu-core/src/memory.rs",
   "crates/bbkemu-core/src/model.rs",
@@ -366,6 +382,7 @@
   "crates/dingooemu/src/main.rs"
  ],
  "github.com/AloysHF/Native32Emu@059fa33c658caa4dbbad140ebf2af1197f9dd778": [
+  "Cargo.toml",
   "crates/native32emu-core/src/archive_loader.rs",
   "crates/native32emu-core/src/content_loader.rs",
   "crates/native32emu-core/src/emulator.rs",
@@ -377,10 +394,12 @@
   "crates/native32emu-libretro/src/libretro/constants.rs"
  ],
  "github.com/AloysHF/PlaydiaEmu@b1b990e7f28d6baa58d5fcde9faa155990ee8f3f": [
+  "Cargo.toml",
   "crates/playdiaemu-core/src/content.rs",
   "crates/playdiaemu-libretro/playdiaemu_libretro.info"
  ],
  "github.com/AloysHF/SPMP8000Emu@65a93528ee33767bb9cf8faef516c8d1ad43fd13": [
+  "Cargo.toml",
   "crates/spmp8000emu-core/assets/README.md",
   "crates/spmp8000emu-core/src/api/emu_fs.rs",
   "crates/spmp8000emu-core/src/api/mod.rs",
@@ -391,6 +410,7 @@
   "crates/spmp8000emu-libretro/src/libretro/constants.rs"
  ],
  "github.com/AloysHF/WQXEmu@caf0998989446e3d6659f67c1b8aabd708a0379d": [
+  "Cargo.toml",
   "crates/wqxemu-core/src/machine.rs",
   "crates/wqxemu-core/src/machines/cc800.rs",
   "crates/wqxemu-core/src/machines/mod.rs",
@@ -413,7 +433,9 @@
   "plastic_tui/src/ui.rs",
   "plastic_ui/src/main.rs"
  ],
- "github.com/AppleWin/AppleWin@1f3cadb88d1158c139d2e3a7b864d91836856948": [],
+ "github.com/AppleWin/AppleWin@1f3cadb88d1158c139d2e3a7b864d91836856948": [
+  "resource/version.h"
+ ],
  "github.com/AppleWin/AppleWin@3e8054b4627624398e4589f7f27b3d40a6b9718e": [
   "resource/resource.h",
   "source/CardManager.cpp",
@@ -481,6 +503,7 @@
   "libretro/libretro.c"
  ],
  "github.com/BlitterStudio/amiberry@49dbd1f027ef2afc12862b30c0c31ac8efa66221": [
+  "CMakeLists.txt",
   "android/app/build.gradle",
   "libretro/libretro.cpp",
   "src/a2091.cpp",
@@ -521,7 +544,9 @@
   "source/bus-main-m68k.c",
   "source/bus-sub-m68k.c"
  ],
- "github.com/Clownacy/clownmdemu-libretro@d43c2708b0a31c285ce16724b6c4a2e92af07346": [],
+ "github.com/Clownacy/clownmdemu-libretro@d43c2708b0a31c285ce16724b6c4a2e92af07346": [
+  "source/libretro-interface.c"
+ ],
  "github.com/ColinPitrat/caprice32@8c778bf072a06fb7c23b9cccd179041db7f79a52": [
   "cap32.cfg",
   "rom/MF2.rom",
@@ -588,7 +613,8 @@
   "engine/source/gamelib/packfile.c",
   "engine/source/gamelib/packfile.h",
   "engine/source/gamelib/translation.c",
-  "engine/source/utils.c"
+  "engine/source/utils.c",
+  "engine/version.sh"
  ],
  "github.com/DaedalusX64/daedalus@f17e9ed86f3806fadeb69abd29c9526ab2d4bd1b": [
   "Source/CMakeLists.txt",
@@ -657,6 +683,7 @@
   "Src/Version.h"
  ],
  "github.com/DrGlaucous/doukutsu-rs-nm@51e64c2e9615bcd476034c69b58927877fe73494": [
+  "Cargo.toml",
   "drsretroarch/src/core.rs",
   "src/data/vanilla.rs",
   "src/game/shared_game_state.rs"
@@ -669,6 +696,7 @@
   "src/emu/CMakeLists.txt",
   "src/emu/android/app/src/main/cpp/src/native-lib.cpp",
   "src/emu/android/app/src/main/java/com/github/eka2l1/emu/Emulator.java",
+  "src/emu/common/include/common/configure.h.in",
   "src/emu/common/src/path.cpp",
   "src/emu/common/src/types.cpp",
   "src/emu/config/include/config/options.inl",
@@ -729,6 +757,7 @@
   "src/emu/CMakeLists.txt",
   "src/emu/android/app/src/main/cpp/src/native-lib.cpp",
   "src/emu/android/app/src/main/java/com/github/eka2l1/emu/Emulator.java",
+  "src/emu/common/include/common/configure.h.in",
   "src/emu/common/src/path.cpp",
   "src/emu/common/src/types.cpp",
   "src/emu/config/include/config/options.inl",
@@ -783,6 +812,7 @@
   "src/scripts/pottery_startup_fix.lua"
  ],
  "github.com/EasyRPG/Player@096c004def987f3545198304b1b7a8352f284a50": [
+  "CMakeLists.txt",
   "builds/android/app/src/main/java/org/easyrpg/player/player/EasyRpgPlayerActivity.java",
   "builds/android/app/src/main/java/org/easyrpg/player/settings/SettingsManager.java",
   "src/decoder_fluidsynth.cpp",
@@ -811,11 +841,13 @@
  ],
  "github.com/FCare/Kronos@d0384bc33aad06bfa9cf5cd308c4bd7ae6cfc814": [
   "yabause/src/ctrl/src/stv.c",
+  "yabause/src/libretro/Makefile.common",
   "yabause/src/libretro/libretro.c",
   "yabause/src/sys/memory/src/cs0.c",
   "yabause/src/utils/src/db.c"
  ],
  "github.com/FWGS/xash3d-fwgs@27092af50d912432887faa43a1cccddfae569b2d": [
+  "engine/common/com_strings.h",
   "filesystem/gameinfo.c",
   "filesystem/pak.c",
   "filesystem/searchpath.c"
@@ -829,6 +861,7 @@
  ],
  "github.com/FrodeSolheim/fs-uae@f362278ccd4c60991caac3b4d240d4a3f751bea2": [
   "cfgfile.cpp",
+  "configure.ac",
   "od-fs/fsuae/fsuae-init.c",
   "od-fs/fsuae/fsuae-messages.cpp",
   "od-fs/python/app/app_init.py",
@@ -871,8 +904,12 @@
   "codemp/qcommon/qcommon.h"
  ],
  "github.com/Jakz/retro8@ecee6594c5b953966ee0515f3edac4032c7ed40f": [
+  "src/libretro/libretro.cpp",
   "src/vm/gfx.cpp",
   "src/vm/lua_bridge.cpp"
+ ],
+ "github.com/JesseTG/McSoftServe@fbdd09c7dfc11e35d900e51086f63e7f853e6c01": [
+  "CMakeLists.txt"
  ],
  "github.com/JesseTG/melonds-ds@f394adbacb5722ee97c1b37c8064da9a25818310": [
   "src/libretro/config/config.cpp",
@@ -881,7 +918,11 @@
   "src/libretro/config/constants.cpp",
   "src/libretro/config/constants.hpp"
  ],
+ "github.com/JesseTG/rom-cleaner@f75e2b58733de180f28a73286c6a82505be7bbb2": [
+  "libretro.cpp"
+ ],
  "github.com/JetSetIlly/Gopher2600@295b9e1c08203453677ea4184e284c0664f5949a": [
+  "Makefile",
   "cartridgeloader/loader.go",
   "debugger/debugger.go",
   "gopher2600.go",
@@ -907,12 +948,14 @@
  ],
  "github.com/KaosOverride/CapriceRPI@7d86ebdc6a5e645220c6f30cf407ac57c3256054": [
   "src/cap32.cpp",
+  "src/cap32.h",
   "src/roms/builtin_roms.h"
  ],
  "github.com/LIJI32/SameBoy@9bf7e0b4dffc20941e4dfadffc6899ae19463844": [
   "Core/gb.c",
   "Core/gb.h",
-  "libretro/libretro.c"
+  "libretro/libretro.c",
+  "version.mk"
  ],
  "github.com/LLeny/holani-retro@d0d79b4928e3d32695294142784c033ce7aeda9b": [
   "src/lib.rs"
@@ -922,6 +965,7 @@
   "src/rom.rs"
  ],
  "github.com/LekKit/RVVM@343f6784c8922446083c5d5bd111d7c1eb8590eb": [
+  "CMakeLists.txt",
   "src/bindings/libretro/libretro.c",
   "src/core/rvvm.c",
   "src/main.c"
@@ -989,6 +1033,7 @@
   "tools/installer/TRX_Installer/InstallMappings.cs"
  ],
  "github.com/NagyD/SDLPoP@3c5add5fb7f83d4ceb542823ab66d00146c4271b": [
+  "src/config.h",
   "src/seg009.c"
  ],
  "github.com/Novum/vkQuake@a6cfba6904e0743dae4235f9dad9711bb5bd27f1": [
@@ -1217,15 +1262,18 @@
   "rpcs3/Emu/Cell/lv2/sys_prx.cpp",
   "rpcs3/Emu/System.cpp",
   "rpcs3/Loader/PUP.cpp",
+  "rpcs3/rpcs3_version.cpp",
   "rpcs3/rpcs3qt/main_window.cpp"
  ],
  "github.com/RSDKModding/RSDKv3-Decompilation@2a7fd8b70f1b33553e0d6c67491d07e8290b80c1": [
+  "CMakeLists.txt",
   "RSDKv3/Reader.cpp",
   "RSDKv3/RetroEngine.cpp",
   "RSDKv3/RetroEngine.hpp",
   "RSDKv3/Userdata.cpp"
  ],
  "github.com/RSDKModding/RSDKv4-Decompilation@a7f5195e21fdad7b75e4587e249013feeea9e6f3": [
+  "CMakeLists.txt",
   "RSDKv4/ModAPI.cpp",
   "RSDKv4/Reader.cpp",
   "RSDKv4/Reader.hpp",
@@ -1326,11 +1374,13 @@
   "C64.emu/src/vice/vicii/vicii-resources.c",
   "C64.emu/src/vice/viciisc/vicii-resources.c",
   "C64.emu/src/vice/video/video-resources.c",
+  "EmuFramework/CMakeLists.txt",
   "EmuFramework/include/emuframework/AppMeta.hh",
   "EmuFramework/include/emuframework/AssetManager.hh",
   "EmuFramework/include/emuframework/DataPathSelectView.hh",
   "EmuFramework/include/emuframework/EmuSystem.hh",
   "EmuFramework/include/shared/mednafen/mednafen-config.h",
+  "EmuFramework/metadata/conf.mk",
   "EmuFramework/src/AppMeta.cc",
   "EmuFramework/src/AssetManager.cc",
   "EmuFramework/src/EmuApp.cc",
@@ -1603,7 +1653,8 @@
   "Source/RMG-Input/main.cpp",
   "Source/RMG/UserInterface/Dialog/SettingsDialog.cpp",
   "Source/RMG/UserInterface/MainWindow.cpp",
-  "Source/RMG/main.cpp"
+  "Source/RMG/main.cpp",
+  "VERSION"
  ],
  "github.com/STJr/SRB2@639b58c6d718452ef343a0bc927d043bed9e40d6": [
   "src/CMakeLists.txt",
@@ -1611,10 +1662,12 @@
   "src/d_main.c",
   "src/doomdef.h",
   "src/sdl/i_system.c",
+  "src/version.h",
   "src/w_wad.c"
  ],
  "github.com/SourMesen/Mesen-S@89199f298a95345a893d814525b6668567a6d490": [
   "Core/BaseCartridge.cpp",
+  "Core/EmuSettings.cpp",
   "Core/FirmwareHelper.h",
   "Core/Gameboy.cpp",
   "Core/GbBootRom.h",
@@ -1649,6 +1702,7 @@
  ],
  "github.com/Spuds0588/mgba-splitscreen@f1d5975d77285f77affbfe64b7050ebd5c4b6a77": [
   "CMakeLists.txt",
+  "mgba-splitscreen/package.json",
   "src/gba/gba.c",
   "src/platform/libretro-splitscreen/instances.c",
   "src/platform/libretro-splitscreen/mgba_splitscreen_libretro.info"
@@ -1661,7 +1715,8 @@
   "src/emulator.c"
  ],
  "github.com/SquirrelJME/SquirrelJME@24d0e97d4297d0bce26a9651f5bce5d326ea690a": [
-  "nanocoat/src/boot.c"
+  "nanocoat/src/boot.c",
+  "squirreljme-version"
  ],
  "github.com/StillJC/ArcadeDuck@80cdb6da6b51d687192a6346efe4499b10fe4faf": [
   "data/resources/arcadedb.yaml",
@@ -1735,7 +1790,8 @@
  ],
  "github.com/TASEmulators/desmume@e06d11f6df8c2e35d570412c45f5a63e5e7c031d": [
   "desmume/src/NDSSystem.cpp",
-  "desmume/src/firmware.cpp"
+  "desmume/src/firmware.cpp",
+  "desmume/src/version.cpp"
  ],
  "github.com/TASEmulators/desmume@fc504ee0bc9ac3434cafcaae7b129c025499a609": [
   "desmume/src/NDSSystem.cpp",
@@ -1755,6 +1811,7 @@
  ],
  "github.com/TerryCavanagh/VVVVVV@40e1ec3bbf2a990a5c600564fe312c2121178a50": [
   "desktop_version/src/FileSystemUtils.cpp",
+  "desktop_version/src/ReleaseVersion.h",
   "desktop_version/src/main.cpp"
  ],
  "github.com/TheForceEngine/TheForceEngine@cc25205cc94c36a396f6f50295772f6ec83069a2": [
@@ -1777,7 +1834,8 @@
   "src/main/level_file.cpp",
   "src/main/menu_main.cpp",
   "src/main/translate.cpp",
-  "src/sound.cpp"
+  "src/sound.cpp",
+  "version.cmake"
  ],
  "github.com/ThisBoringWorld/gam4980@eeaa531b55e7127ab4b5e0bdc5ceba686df59c6a": [
   "src/libretro.c"
@@ -1851,6 +1909,7 @@
   "SDL/keyboard.c",
   "SDL/prop.c",
   "SDL/tool/create_cgrom.c",
+  "version.txt",
   "win32api/dosio.c",
   "x68k/ioc.c",
   "x68k/midi_fluid.c",
@@ -1877,6 +1936,7 @@
   "wadsrc_lights/CMakeLists.txt",
   "wadsrc_widepix/CMakeLists.txt"
  ],
+ "github.com/Uzebox/uzebox@eb02e5f69212983e778a2ca87b198f22071303b8": [],
  "github.com/VICE-Team/svn-mirror@46b1bc4393251f838ce3dadd241c1f567d9371d1": [],
  "github.com/VICE-Team/svn-mirror@81546e60c222fe4aef750b890b0dbe3a5ac280d8": [
   "vice/configure.ac",
@@ -1942,6 +2002,7 @@
   "vice/src/video/video-color.c"
  ],
  "github.com/Vita3K/Vita3K@6ec8e6ce31f3d6099b14eb9dd0320c09ef6386b6": [
+  "vita3k/CMakeLists.txt",
   "vita3k/app/src/app.cpp",
   "vita3k/module/src/load_module.cpp",
   "vita3k/packages/src/pup.cpp",
@@ -1961,6 +2022,7 @@
   "README.md",
   "cmake/Symbian.cmake",
   "src/emu/CMakeLists.txt",
+  "src/emu/common/include/common/configure.h.in",
   "src/emu/common/src/path.cpp",
   "src/emu/common/src/types.cpp",
   "src/emu/config/include/config/options.inl",
@@ -2137,6 +2199,9 @@
   "vm/vm.c",
   "vm/vm_console.c"
  ],
+ "github.com/aduros/wasm4@9d6c962785cfe3719d0245fd279ecbe98a4dbb63": [
+  "cli/package.json"
+ ],
  "github.com/adventuregamestudio/ags@6802bad8dc3189462003d4a169fc591f64cfb9b6": [
   "Common/ac/gamesetupstructbase.h",
   "Common/ac/spritefile.cpp",
@@ -2225,6 +2290,7 @@
   "src/game/gconfig.cc"
  ],
  "github.com/alexbatalov/fallout2-ce@e97087b9582f37075db347a89898887320753f8b": [
+  "CMakeLists.txt",
   "src/game.cc",
   "src/game_config.cc",
   "src/interface.cc",
@@ -2309,6 +2375,9 @@
   "src/sound/samples.c",
   "src/ui_text.c",
   "src/version.c"
+ ],
+ "github.com/amberwhitehead/pzretro@6d859b47092f585a7ec05804c1d51a1676a06531": [
+  "src/core.cpp"
  ],
  "github.com/andkrau/NuanceResurrection@daf3ca642756a559ecce91e10da0e73cbad180ff": [
   "CMakeLists.txt",
@@ -2488,6 +2557,7 @@
  ],
  "github.com/atari800/atari800@98cc2dc749867c9c7317a0271ba062a6c797f886": [],
  "github.com/audetto/AppleWin@0a89db3d593a74d04590b902fb7206723591f445": [
+  "resource/version.h",
   "source/frontends/common2/gnuframe.cpp"
  ],
  "github.com/aureyoboss/ArcadeFlashWeb@5de66e0cd69b48721a094887a28d042f71ddad08": [
@@ -2508,6 +2578,7 @@
   "src/tools/mkpfi.c"
  ],
  "github.com/autch/piemu@23208626e16e53b73fd21a2fbd0c429338625dc4": [
+  "app.h",
   "piemu.c",
   "tools/mkpfi.c"
  ],
@@ -2648,6 +2719,7 @@
   "bsnes/target-libretro/libretro.cpp"
  ],
  "github.com/bvschaik/julius@34d1ecd54befb845c0139b371fa8a0438210dac1": [
+  "CMakeLists.txt",
   "src/building/model.c",
   "src/core/image.c",
   "src/core/lang.c",
@@ -2659,10 +2731,12 @@
  ],
  "github.com/cebix/macemu@96e512bd6376e78a2869f16dcc8a9028bce5ee72": [
   "BasiliskII/src/Unix/main_unix.cpp",
+  "BasiliskII/src/include/version.h",
   "BasiliskII/src/main.cpp",
   "BasiliskII/src/rom_patches.cpp",
   "SheepShaver/src/Unix/main_unix.cpp",
   "SheepShaver/src/Windows/main_windows.cpp",
+  "SheepShaver/src/include/version.h",
   "SheepShaver/src/main.cpp",
   "SheepShaver/src/rom_patches.cpp"
  ],
@@ -2762,6 +2836,7 @@
   "src/video/screen.c"
  ],
  "github.com/chocolate-doom/chocolate-doom@72d9e9318c4ccc61dab29bb9cc30bc8a9a93266d": [
+  "configure.ac",
   "src/d_iwad.c",
   "src/d_iwad.h",
   "src/doom/d_main.c",
@@ -2775,9 +2850,11 @@
  ],
  "github.com/christianhaitian/bennugd-monolithic@60ee3389efcf9b402d66035e87f33d17d70cbd83": [
   "README.md",
-  "core/bgdi/src/main.c"
+  "core/bgdi/src/main.c",
+  "projects/cmake/include/common_defs.cmake"
  ],
  "github.com/christianhaitian/ti99sim@e3608541943b5258afe45b74e3f78e723df1fcbd": [
+  "doc/CHANGES.html",
   "src/core/device-support.cpp",
   "src/core/ti994a-gk.cpp",
   "src/core/ti994a.cpp",
@@ -2845,6 +2922,7 @@
   "fs.cpp",
   "game.cpp",
   "main.cpp",
+  "main_libretro.cpp",
   "resource.cpp"
  ],
  "github.com/deathkiller/jazz2-native@ff9ddb7be9c84bdcf71b22d9380da06135edeb62": [
@@ -2865,6 +2943,7 @@
   "cmake/ncine_options.cmake"
  ],
  "github.com/derik-dot-digital/D.Smile@d4bbc3be27537def21513991647f14ea9a9c2d15": [
+  "app/build.gradle.kts",
   "app/src/main/cpp/core/vsmile.cpp",
   "app/src/main/cpp/jni_bridge.cpp",
   "app/src/main/java/com/dsmile/emulator/ui/EmuActivity.kt",
@@ -2883,18 +2962,25 @@
   "Source/diablo.cpp",
   "Source/engine/assets.cpp",
   "Source/init.cpp",
-  "Source/options.cpp"
+  "Source/options.cpp",
+  "VERSION"
+ ],
+ "github.com/diekleinekuh/BennuGD_libretro@5fba764ac709545d4b0d3b28deff2ec0c7d1a91b": [
+  "core/common/bgd_version.c"
  ],
  "github.com/digarok/gsplus-legacy-archive@480572054518112647c8fae5d7ea7046a6d6ecfb": [
+  "CMakeLists.txt",
   "src/config.c",
   "src/imagewriter.cpp",
   "src/printer.cpp",
   "src/sim65816.c"
  ],
  "github.com/digarok/gsplus@41e71031debbde98e66ea5c5c67498e9b4726a6d": [
+  "gsplus/src/CMakeLists.txt",
   "gsplus/src/config.c"
  ],
  "github.com/dividebysandwich/rust-dos@152d9bca7820f0d9a5d1ca820a2d20855698a211": [
+  "Cargo.toml",
   "crates/gus/build.rs",
   "crates/gus/src/builtin.rs",
   "crates/mt32/src/lib.rs",
@@ -3020,6 +3106,7 @@
   "Source/Core/DolphinQt/MenuBar.cpp"
  ],
  "github.com/dosbox-staging/dosbox-staging@fa1856c057902be3e08856675d6cc1e7ffe43db6": [
+  "CMakeLists.txt",
   "src/audio/disk_noise.cpp",
   "src/dos/CMakeLists.txt",
   "src/dos/dos_code_page.cpp",
@@ -3043,6 +3130,7 @@
   "src/shell/autoexec.cpp"
  ],
  "github.com/doublegate/RustyNES@3d02b99dc84fb389c03fc6b1f986ffa658dda0dd": [
+  "Cargo.toml",
   "crates/rustynes-core/src/bus.rs",
   "crates/rustynes-core/src/nes.rs",
   "crates/rustynes-gamedb/src/lib.rs",
@@ -3050,6 +3138,7 @@
   "crates/rustynes-mappers/src/fds.rs"
  ],
  "github.com/doukutsu-rs/doukutsu-rs@d05995b2ce88e583491fcecfbd5883735d3527ea": [
+  "Cargo.toml",
   "src/data/vanilla.rs",
   "src/game/shared_game_state.rs"
  ],
@@ -3186,6 +3275,7 @@
  "github.com/emuplace/sudachi.emuplace.app@c7431bd420d66c54df277ba0a0b71de42cf0a5bf": [],
  "github.com/etlegacy/etlegacy@add16a92f4b10c2955136e3ab7868bfc9bff8fad": [
   "README.md",
+  "VERSION.txt",
   "cmake/ETLBuildMod.cmake",
   "cmake/ETLVersion.cmake",
   "src/qcommon/files.c",
@@ -3193,6 +3283,7 @@
   "src/sys/sys_main.c"
  ],
  "github.com/fabiangreffrath/taradino@2b4ea3c6c18caf60959efee1f2534c2122607716": [
+  "CMakeLists.txt",
   "rott/rt_datadir.c",
   "rott/rt_main.c",
   "rott/rt_main.h",
@@ -3201,7 +3292,8 @@
  "github.com/finalburnneo/FBNeo@697e385c8285bfc528343b96d948ee3a4f9e24c5": [
   "src/burn/burn.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
-  "src/burn/hiscore.cpp"
+  "src/burn/hiscore.cpp",
+  "src/burn/version.h"
  ],
  "github.com/finalburnneo/FBNeo@c110542721d8674b6ff48e691ac032c040fecbba": [
   "src/burn/burn.cpp",
@@ -3230,6 +3322,7 @@
   "src/burn/drv/taito/d_taitof2.cpp",
   "src/burn/hiscore.cpp",
   "src/burn/snd/samples.cpp",
+  "src/burn/version.h",
   "src/burner/conc.cpp"
  ],
  "github.com/flyinghead/flycast@e88b0ced2243de137bcccac0072f0c1dd00d41bd": [
@@ -3280,12 +3373,14 @@
   "app/src/main/java/paulscode/android/mupen64plusae/persistent/AppData.java",
   "app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java",
   "app/src/main/java/paulscode/android/mupen64plusae/util/RomHeader.java",
+  "build_common/version_common.gradle",
   "mupen64plus-core/upstream/src/main/main.c",
   "settings.gradle"
  ],
  "github.com/garglk/garglk@9e06211c20bee35026744424a57f50375cdc29db": [
   "CMakeLists.txt",
   "INSTALL.md",
+  "VERSION",
   "garglk/CMakeLists.txt",
   "garglk/config.cpp",
   "garglk/draw.cpp",
@@ -3357,6 +3452,7 @@
   "idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/SetupControlsThemeFunc.java"
  ],
  "github.com/gopher64/gopher64@87385e77432cd278ac8588c7ed3d5014fc0d6bab": [
+  "Cargo.toml",
   "build.rs",
   "parallel-rdp/interface.cpp",
   "src/cheats.rs",
@@ -3498,7 +3594,8 @@
   "src/xenia/ui/audio_helper.cc",
   "src/xenia/ui/d3d12/d3d12_provider.cc",
   "src/xenia/ui/imgui_drawer.cc",
-  "src/xenia/ui/vulkan/vulkan_instance.cc"
+  "src/xenia/ui/vulkan/vulkan_instance.cc",
+  "upstream.version"
  ],
  "github.com/hatari/hatari@23bc3060ebf0da348cc842e358c102ba88002b56": [],
  "github.com/hatari/hatari@c1a5c88bc06e56778b6b7f8483becfd58a7da2b4": [
@@ -3562,6 +3659,7 @@
   "src/org/recompile/mobile/PlatformFont.java"
  ],
  "github.com/hex007/freej2me@eb4ac87e9a0b212ba701691eb67ee4892b2b1173": [
+  "META-INF/freej2me-build.version",
   "src/libretro/freej2me_libretro.c"
  ],
  "github.com/hrydgard/ppsspp@43a69b1c84dfe29e82b46bd3797a1106cbd65c5b": [
@@ -3593,6 +3691,9 @@
  "github.com/icculus/DirkSimple@d5d75f97af34690010166a786ee41e15dd142c15": [
   "dirksimple_libretro.c",
   "dirksimple_sdl.c"
+ ],
+ "github.com/icculus/mojozork@ff7e00742a00acec8e175ddefb97520fb270df2d": [
+  "mojozork-libretro.c"
  ],
  "github.com/ihhub/fheroes2@35ca4c915be00098547d5050412a325dd55cfd7f": [
   "src/fheroes2/agg/agg.cpp",
@@ -3685,6 +3786,7 @@
   "ui/libretro.c"
  ],
  "github.com/ioquake/ioq3@87a99d18206e878a20289f05ac3c16005dcae5c3": [
+  "cmake/identity.cmake",
   "code/qcommon/files.c",
   "code/qcommon/q_shared.h",
   "code/qcommon/qcommon.h"
@@ -3692,6 +3794,7 @@
  "github.com/iortcw/iortcw@438e7d413b5f7277187c35b032eb0ef9093ae778": [
   "MP/code/qcommon/files.c",
   "MP/code/qcommon/q_shared.h",
+  "SP/Makefile",
   "SP/code/qcommon/files.c",
   "SP/code/qcommon/qcommon.h"
  ],
@@ -3705,6 +3808,7 @@
   "pico/pico_int.h",
   "pico/sms.c",
   "platform/common/emu.c",
+  "platform/common/version.h",
   "platform/libretro/libretro.c"
  ],
  "github.com/ivanizag/izapple2@4e773baf9f1f3fb692e3f3444eb5f42fddb205ef": [
@@ -3720,7 +3824,9 @@
  "github.com/iyzsong/onscripter-libretro@ec4ff1842d498faaa844d570becf561d088deea0": [
   "libretro.cpp"
  ],
- "github.com/iyzsong/syobonaction-libretro@792c40cb590bcc7286cf720b5fb85807082b534e": [],
+ "github.com/iyzsong/syobonaction-libretro@792c40cb590bcc7286cf720b5fb85807082b534e": [
+  "libretro.cpp"
+ ],
  "github.com/izzy2lost/Super3@c410f82f771b33094b8c1cdbf96ef7c74ec9cff1": [
   "Manual.txt",
   "README.md",
@@ -3775,6 +3881,7 @@
  "github.com/joamag/boytacean@4d806d0770f117cc8e6ac0fe75b95aa9dc39fc4f": [
   "frontends/libretro/src/core.rs",
   "frontends/sdl/src/main.rs",
+  "setup.py",
   "src/data.rs",
   "src/gb.rs"
  ],
@@ -3834,6 +3941,7 @@
   "src/spi.cpp"
  ],
  "github.com/jsgroth/jgenesis@0a00c47ba7a16bd6e77ef7e0b6c8fab2fc603cba": [
+  "Cargo.toml",
   "backend/gb-core/src/memory.rs",
   "backend/gba-core/src/memory.rs",
   "backend/genesis-components/src/cartridge.rs",
@@ -3861,6 +3969,7 @@
   "frontend/jgenesis-native-driver/src/mainloop/smsgg.rs"
  ],
  "github.com/jtothebell/fake-08@814991a2571ad3970e386cef48f3b148aa1c27b9": [
+  "Makefile",
   "platform/libretro/libretro.cpp",
   "source/p8GlobalLuaFunctions.h",
   "source/vm.h"
@@ -3869,7 +3978,8 @@
   "sc2/build/win32_install/packages.nsh",
   "sc2/build/win32_install/uqm-installer.nsi",
   "sc2/src/options.c",
-  "sc2/src/uqm/setup.c"
+  "sc2/src/uqm/setup.c",
+  "sc2/src/uqmversion.h"
  ],
  "github.com/kondrak/vkQuake2@6763f207229f97cffabb6fc2da72017a794b139b": [
   "client/snd_miniaudio.c",
@@ -3881,6 +3991,7 @@
  "github.com/kurtjd/jaxe@c767afd785e01a15bcd575a2d93b737add82b675": [
   "include/chip8.h",
   "src/chip8.c",
+  "src/libretro.c",
   "src/main.c"
  ],
  "github.com/lemon32767/ccleste@261d96f15af430b8111abc7a5250229246654f52": [
@@ -3888,6 +3999,7 @@
   "sdl12main.c"
  ],
  "github.com/lethal-guitar/RigelEngine@f05996f9b3ad3b3ea5bb818e49e7977636746343": [
+  "CMakeLists.txt",
   "README.md",
   "cmake/rigel_pack.cmake",
   "src/assets/cmp_file_package.cpp",
@@ -3916,6 +4028,7 @@
   "src/burn/burn.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
   "src/burn/hiscore.cpp",
+  "src/burn/version.h",
   "src/burner/libretro/libretro.cpp"
  ],
  "github.com/libretro/FBNeo@da14132bab6683980b1ad7e4d0d6fd47bf06dce7": [
@@ -3945,8 +4058,12 @@
   "src/burn/drv/taito/d_taitof2.cpp",
   "src/burn/hiscore.cpp",
   "src/burn/snd/samples.cpp",
+  "src/burn/version.h",
   "src/burner/conc.cpp",
   "src/burner/libretro/libretro.cpp"
+ ],
+ "github.com/libretro/FFmpeg@4920879d2f09a78cdf855403c349457cee1c31da": [
+  "RELEASE"
  ],
  "github.com/libretro/FreeChaF@76c7a84f1f7e80f3e6f2bba96fe100cb24e99124": [
   "src/channelf_hle.c",
@@ -3978,12 +4095,14 @@
  ],
  "github.com/libretro/Mesen-S@9e4fdeb9b336470bc96beb8765b2e79c86a2da1e": [
   "Core/BaseCartridge.cpp",
+  "Core/EmuSettings.cpp",
   "Core/FirmwareHelper.h",
   "Core/Gameboy.cpp",
   "Core/GbBootRom.h",
   "Core/NecDsp.cpp"
  ],
  "github.com/libretro/Mesen@0102910c39ad1a62bc3f784466f3f67ca9eae335": [
+  "Core/EmulationSettings.cpp",
   "Core/FdsLoader.cpp",
   "Core/StudyBoxLoader.cpp",
   "Libretro/libretro.cpp"
@@ -4030,6 +4149,7 @@
   "font/fontv98.c",
   "io/pcidev.c",
   "keystat.c",
+  "np2ver.h",
   "pccore.c",
   "sdl/libretro/libretro.c",
   "sound/fmgen/fmgen_opna.cpp",
@@ -4062,9 +4182,13 @@
   "source/PokeMini.c",
   "source/PokeMini.h"
  ],
+ "github.com/libretro/QuickNES_Core@26bb785c9deddb66a17717b21bb4e328f03ade32": [
+  "libretro/libretro.cpp"
+ ],
  "github.com/libretro/RACE@c7810dd7f172827bfa2004813bc000b13786636b": [
   "flash.c",
   "koyote_bin.h",
+  "libretro/libretro.c",
   "main.c",
   "ngpBios.c",
   "race-memory.c",
@@ -4081,10 +4205,14 @@
   "src/resource_aba.cpp",
   "src/staticres.cpp"
  ],
+ "github.com/libretro/RetroArch@5078a39b624e31b359e1527ea7fbfddfc7de96cb": [
+  "version.all"
+ ],
  "github.com/libretro/SameBoy@aa158a889a48b538a0302873704a34577c8eb67d": [
   "Core/gb.c",
   "Core/gb.h",
-  "libretro/libretro.c"
+  "libretro/libretro.c",
+  "version.mk"
  ],
  "github.com/libretro/TIC-80@14fd99edc29962778bc88d81773288ffc6e8aa53": [
   ".gitmodules"
@@ -4093,13 +4221,20 @@
   "libretro.c",
   "memory.c"
  ],
+ "github.com/libretro/ThePowderToy@bb2d9f6623d2ccf25a0021045af9591c8a0bbaff": [
+  "src/Config.h"
+ ],
  "github.com/libretro/a5200@40c6f2f1ad4a3145b328d5baaf010fae6c7e752b": [
   "emu/memory.c",
   "libretro/libretro.c"
  ],
  "github.com/libretro/arduous@831b83e67ad46e8c86b8165649ff81bc6fc6c157": [
+  "CMakeLists.txt",
   "include/arduous/arduous.h",
   "src/arduous/arduous.cpp"
+ ],
+ "github.com/libretro/beetle-bsnes-libretro@5f05e4c785e936c928ac468e129c55b6f08592cb": [
+  "libretro.cpp"
  ],
  "github.com/libretro/beetle-finalarcade2019@0581797db6fdffd826086b053ced4b6b29bb6678": [
   "src/burn/burn.cpp",
@@ -4130,6 +4265,9 @@
   "mednafen/lynx/cart.cpp",
   "mednafen/lynx/rom.cpp"
  ],
+ "github.com/libretro/beetle-ngp-libretro@a50d5ac288a81f2104ddf43195a4efdd15c72227": [
+  "libretro.c"
+ ],
  "github.com/libretro/beetle-pce-fast-libretro@4eee99c451f85ebe66d1591de88b892015b23059": [
   "libretro.c"
  ],
@@ -4143,7 +4281,8 @@
   "mednafen/settings.c"
  ],
  "github.com/libretro/beetle-psx-libretro@7fea57a541abb39b8c5035b6261c3e70962d221b": [
-  "libretro.c"
+  "libretro.c",
+  "libretro_options.h"
  ],
  "github.com/libretro/beetle-saturn-libretro@30f4c12072d265c9e553dcb29386059114945dea": [
   "disc.c",
@@ -4167,6 +4306,9 @@
  "github.com/libretro/beetle-vb-libretro@d5ae54c8e23b573a3b34e888b2d48a588027e92c": [
   "libretro.cpp"
  ],
+ "github.com/libretro/beetle-wswan-libretro@4b01295838ea89e3f1355bbe4cb5cf98aa6108cd": [
+  "libretro.c"
+ ],
  "github.com/libretro/bk-emulator@92042a753289cedf05e7e6bd8e75849f83e48966": [
   "boot.c",
   "libretro.c",
@@ -4185,10 +4327,12 @@
   "paths.c",
   "romdb.c",
   "segacd.c",
-  "systems.cfg"
+  "systems.cfg",
+  "version.inc"
  ],
  "github.com/libretro/blueMSX-libretro@e3086eb5d36d77fa11704cf53dc176686e70127d": [
   "Src/Board/Machine.c",
+  "Src/BuildInfo/version.h",
   "Src/Memory/MegaromCartridge.c",
   "libretro.c",
   "libretro_core_options.h",
@@ -4212,9 +4356,14 @@
  "github.com/libretro/bsnes-jg@4aef191fef72be539ccc07ada21c6e0a65360eb7": [
   "libretro/libretro.cpp",
   "src/cartridge.cpp",
-  "src/coprocessor/icd.cpp"
+  "src/coprocessor/icd.cpp",
+  "version.h"
+ ],
+ "github.com/libretro/bsnes-libretro-cplusplus98@baec09aa4796b7575aba1c1ae7335f493c2216af": [
+  "snes/libretro/libretro.cpp"
  ],
  "github.com/libretro/bsnes-libretro@05439f96121d2b9d7ad7a5fc1f29d7eebdcc8c43": [
+  "bsnes/emulator/emulator.hpp",
   "bsnes/heuristics/super-famicom.cpp",
   "bsnes/sfc/cartridge/load.cpp",
   "bsnes/sfc/coprocessor/armdsp/armdsp.hpp",
@@ -4224,16 +4373,19 @@
  ],
  "github.com/libretro/bsnes-mercury@79d7f9de218b6ffa65a80bbdc5828532bc239232": [
   "ananke/heuristics/super-famicom.hpp",
+  "emulator/emulator.hpp",
   "sfc/cartridge/markup.cpp",
   "target-libretro/libretro.cpp"
  ],
  "github.com/libretro/bsnes2014@3c1394e042ee444c8248e1b9210e14ea55e836e9": [
   "ananke/heuristics/super-famicom.hpp",
+  "emulator/emulator.hpp",
   "target-libretro/libretro.cpp"
  ],
  "github.com/libretro/cannonball@0d83575d920ea4c0a280847a19d7802f673e6a68": [
   "src/main/engine/omusic.c",
   "src/main/frontend/config.c",
+  "src/main/frontend/menu.c",
   "src/main/libretro/main.c",
   "src/main/romloader.c"
  ],
@@ -4269,6 +4421,7 @@
  ],
  "github.com/libretro/crawl-ref@cc2530f377a3a5d686d4b6a360d88b01de0fbc59": [
   "crawl-ref/libretro/libretro.cc",
+  "crawl-ref/source/build.h",
   "crawl-ref/source/database.cc",
   "crawl-ref/source/files.cc",
   "crawl-ref/source/fontwrapper-ft.cc",
@@ -4276,17 +4429,20 @@
   "crawl-ref/source/tiletex.cc"
  ],
  "github.com/libretro/daphne@6f1695dd1f376060666eec0a416ff56bb6c9cccc": [
+  "daphne/daphne-1.0-src/daphne.cpp",
   "daphne/daphne-1.0-src/game/game.cpp",
   "daphne/libretro/libretro.cpp"
  ],
  "github.com/libretro/desmume2015@422b688009ccb9f2917c086a8fe79c8cecb030ae": [
   "desmume/src/NDSSystem.cpp",
-  "desmume/src/NDSSystem.h"
+  "desmume/src/NDSSystem.h",
+  "desmume/src/version.c"
  ],
  "github.com/libretro/desmume@95b4d798731caa809125b6c3c11d17cc332ff6ef": [
   "desmume/src/NDSSystem.cpp",
   "desmume/src/firmware.cpp",
-  "desmume/src/frontend/libretro/libretro.cpp"
+  "desmume/src/frontend/libretro/libretro.cpp",
+  "desmume/src/version.cpp"
  ],
  "github.com/libretro/dolphin@3aac3f052f733f8df2f1616843a4d2e14002ed11": [
   "Source/Android/app/build.gradle.kts",
@@ -4320,6 +4476,7 @@
   "libretro/deps/munt/mt32emu/src/ROMInfo.cpp",
   "libretro/src/libretro.cpp",
   "libretro/src/midi_bassmidi.cpp",
+  "libretro/svn",
   "src/gui/midi_mt32.cpp"
  ],
  "github.com/libretro/dosbox-libretro@a563bb5e9753f207d74e9d8c417d793b784fa4be": [
@@ -4329,6 +4486,7 @@
   "libretro/src/libretro.cpp",
   "libretro/src/libretro_core_options.cpp",
   "libretro/src/midi_bassmidi.cpp",
+  "libretro/svn",
   "src/gui/midi.cpp",
   "src/gui/midi_mt32.cpp",
   "src/gui/midi_sc55.h"
@@ -4340,12 +4498,14 @@
   "src/gui/mt32emu.h"
  ],
  "github.com/libretro/dosbox-svn@46a3164fc0f1e808ae56143d81698b00fb6b4781": [
+  "include/config.h",
   "libretro/Makefile.common",
   "libretro/Makefile.libretro",
   "libretro/libretro.cpp",
   "src/misc/cross.cpp"
  ],
  "github.com/libretro/easyrpg-libretro@a3fbb7c24fd5a39fd95388d09135256a6b19f1e4": [
+  "CMakeLists.txt",
   "builds/android/app/src/main/java/org/easyrpg/player/player/EasyRpgPlayerActivity.java",
   "builds/android/app/src/main/java/org/easyrpg/player/settings/SettingsManager.java",
   "src/decoder_fluidsynth.cpp",
@@ -4354,11 +4514,13 @@
  ],
  "github.com/libretro/ecwolf@0cccd9a85d7ffa33fb695691a8a5db246606518c": [
   "src/libretro/libretro.cpp",
+  "src/libretro/versiondefs.h",
   "src/libretro/wl_main.cpp",
   "src/version.h",
   "src/wl_iwad.cpp"
  ],
  "github.com/libretro/emux@3e558cb15157fcb1944846a845547d369605c963": [
+  "configure.ac",
   "controllers/mapper/gb_mapper.c",
   "controllers/mapper/gb_mapper.h",
   "controllers/mapper/sms_mapper.c",
@@ -4376,16 +4538,20 @@
  "github.com/libretro/fbalpha2012@0ce31536bef3162fe7e69ff5f555334ec4913cef": [
   "svn-current/trunk/src/burn/burn.cpp",
   "svn-current/trunk/src/burn/hiscore.cpp",
-  "svn-current/trunk/src/burn/snd/samples.cpp"
+  "svn-current/trunk/src/burn/snd/samples.cpp",
+  "svn-current/trunk/src/burn/version.h"
  ],
  "github.com/libretro/fbalpha2012_cps1@5542c1848ef81e92db311193b01dc349bc29d7cc": [
-  "src/burn/hiscore.cpp"
+  "src/burn/hiscore.cpp",
+  "src/burner/libretro/libretro.cpp"
  ],
  "github.com/libretro/fbalpha2012_cps2@e3f3ae46f120228b74d41e2b2862f1fbf1d7eb5b": [
-  "src/burn/hiscore.c"
+  "src/burn/hiscore.c",
+  "src/burner/libretro/libretro.cpp"
  ],
  "github.com/libretro/fbalpha2012_cps3@57f8015c2e0cdebcf42d3add2c314bb7448f9421": [
-  "svn-current/trunk/src/burn/hiscore.cpp"
+  "svn-current/trunk/src/burn/hiscore.cpp",
+  "svn-current/trunk/src/burn/version.h"
  ],
  "github.com/libretro/fbalpha2012_neogeo@e092097037d494c50d17c5144a2758d68538061b": [
   "src/burn/drv/neogeo/d_neogeo.cpp",
@@ -4393,10 +4559,12 @@
  ],
  "github.com/libretro/fixGB@c7865087b8c8126b8bc60fddb75b20efad992458": [
   "libretro/libretro.c",
+  "main.c",
   "mem.c"
  ],
  "github.com/libretro/fixNES@72af6c6fd9d3b6c23d334ba7385b6a09225f2276": [
   "libretro/libretro.c",
+  "main.c",
   "mapper.c"
  ],
  "github.com/libretro/fmsx-libretro@4de11755ce4f196ac1c8a7bb20bb4eccbc87a7d4": [
@@ -4424,9 +4592,11 @@
  "github.com/libretro/frodo-libretro@891d20102a8894dd4fce73fb8bd2f623483fd05f": [
   "Src/C64.cpp",
   "Src/C64.h",
+  "Src/Version.h",
   "Src/main.cpp"
  ],
  "github.com/libretro/fuse-libretro@e997e2bc32c888348f862f69f2c53babfedf7791": [
+  "fuse/configure.ac",
   "fuse/machine.c",
   "fuse/machines/pentagon.c",
   "fuse/machines/pentagon512.c",
@@ -4467,15 +4637,20 @@
   "src/geo.c",
   "src/geo_cd.c"
  ],
+ "github.com/libretro/gong@69ef0b69dc542af4c1cf2efcc451dd6c378281b6": [
+  "gong.c"
+ ],
  "github.com/libretro/gpsp@5819380c2ffb0900219d700a382ee68c464ebb99": [
   "bios/source/core.s",
   "gba_memory.c",
+  "gpsp_config.h",
   "libretro/libretro.c",
   "main.h"
  ],
  "github.com/libretro/gw-libretro@91d599b951e7bfe7e040347f58667cba20074adc": [
   "gwrom/gwrom.h",
-  "src/libretro.c"
+  "src/libretro.c",
+  "src/libretro_version.c"
  ],
  "github.com/libretro/hatari@25f488b1667ed064a25c30eb3f06b40bc877c495": [
   ".gitlab-ci-libretro.yml",
@@ -4535,6 +4710,9 @@
   "src/tos.c",
   "src/vdi.c"
  ],
+ "github.com/libretro/hbmame-libretro@840eeef5ee0fd75dab62c90bf25789b898f3dba3": [
+  "makefile"
+ ],
  "github.com/libretro/ishiiruka@f228bde5fbf4861ba749a229803addcd6238663f": [
   "Source/Core/Common/CommonPaths.h",
   "Source/Core/Common/SysConf.cpp",
@@ -4557,11 +4735,22 @@
   "src/jcv_coleco.c",
   "src/jcv_crvision.c",
   "src/jcv_db.c",
-  "src/jollycv.c"
+  "src/jollycv.c",
+  "version.h"
+ ],
+ "github.com/libretro/jumpnbump-libretro@2cc840155ce4bf42b2e9e0ef3854b32d534e607e": [
+  "libretro.c"
+ ],
+ "github.com/libretro/libretro-2048@39333f7b13dc4daea7c151d9c38d22b961246343": [
+  "libretro.c"
+ ],
+ "github.com/libretro/libretro-3dengine@efa2bf6f32f930721fe9ae2361d7ec858077c483": [
+  "libretro.cpp"
  ],
  "github.com/libretro/libretro-atari800@4e7fbc73765c1a9670c7506616046ad1d4ccda51": [
   "atari800/src/atari.c",
-  "atari800/src/sysrom.c"
+  "atari800/src/sysrom.c",
+  "libretro/config.h"
  ],
  "github.com/libretro/libretro-cap32@8e61dd69d948cea16c3bad734f7b9d0c2a018cc8": [
   "cap32/cap32.c",
@@ -4572,10 +4761,15 @@
   "cap32/rom/amsdos.h",
   "cap32/rom/cpm.h",
   "cap32/slots.c",
-  "libretro/libretro-core.c"
+  "libretro/libretro-core.c",
+  "libretro/libretro-core.h"
+ ],
+ "github.com/libretro/libretro-chailove@524ef951abbd07464830ee12a3f6f5e2aba9efd3": [
+  "src/ChaiLove.h"
  ],
  "github.com/libretro/libretro-crocods@a9c63b29443715ae2add392010fca4eae7f93e67": [
   "crocods-core/cpc6128.bin.c",
+  "crocods-core/crocods.h",
   "crocods-core/multiface.c",
   "crocods-core/platform.c",
   "crocods-core/romdisc.bin.c",
@@ -4594,11 +4788,16 @@
  ],
  "github.com/libretro/libretro-fsuae@089bb69207fe8fa5eec0006d1d759fb6426f4027": [
   "Makefile.libretro",
+  "configure.ac",
   "libretro/libretro.c",
   "sources/src/fs-uae/config.c",
   "sources/src/fs-uae/paths.c"
  ],
+ "github.com/libretro/libretro-gme@1562f6207a066e9807243c89648d1cb44e411971": [
+  "deps/game-music-emu/gme/gme.h"
+ ],
  "github.com/libretro/libretro-handy@bc55d462f0b2d6b073ea93dc552ebd73cec60fd1": [
+  "libretro/handy.h",
   "libretro/libretro.cpp",
   "lynx/rom.cpp",
   "lynx/rom.h",
@@ -4606,7 +4805,8 @@
  ],
  "github.com/libretro/libretro-lutro@6224157a615b18507bc0b117a3398c7a324cd3e5": [
   "filesystem.c",
-  "libretro.c"
+  "libretro.c",
+  "lutro.h"
  ],
  "github.com/libretro/libretro-meowPC98@5fdbb2187f6b14ca7bf668dd52b36c820b989995": [
   "bios/bios.c",
@@ -4620,12 +4820,16 @@
   "libretro/libretro.c",
   "np2tool/GETBIOS.ASM",
   "sound/rhythmc.c",
-  "sound/soundrom.c"
+  "sound/soundrom.c",
+  "x11/configure.ac"
  ],
  "github.com/libretro/libretro-minivmac@babdf7b53d361a7225858b68a8a64efe8b06f5e5": [
   "libretro/libretro-core.c",
   "minivmac/cfg/CNFGRAPI.h",
   "minivmac/src/OSGLUERETRO.c"
+ ],
+ "github.com/libretro/libretro-mpv@99f7fe4fd43d68da45006301829eaf37c7edbcc2": [
+  "version.h"
  ],
  "github.com/libretro/libretro-o2em@679d6fec04963f6e70a7ec217e3d0ebb1fe472fc": [
   "libretro.c",
@@ -4633,6 +4837,7 @@
   "src/voice.c"
  ],
  "github.com/libretro/libretro-pcem@e07923e902dcedcf65a502fb3f14e75b9ded5271": [
+  "configure.ac",
   "src/mem.c",
   "src/ne2000.c",
   "src/nvr.c",
@@ -4665,23 +4870,45 @@
   "libretro/libretro.c",
   "src/d_main.c"
  ],
+ "github.com/libretro/libretro-remotejoy@745b97ca8d2d825d0bfde4bb321d1bf7b49fd91d": [
+  "libretro/libretro.c"
+ ],
  "github.com/libretro/libretro-samples@7c2ad112d7a5176de2191e473369668da8946b16": [
+  "audio/audio_callback/libretro-test.c",
+  "audio/audio_no_callback/libretro-test.c",
+  "audio/audio_playback_wav/libretro-test.c",
+  "input/button_test/libretro.c",
   "tests/cruzes/cruzes.c",
+  "video/opengl/libretro_test_gl_compute_shaders/app/boxes.cpp",
   "video/opengl/libretro_test_gl_fixedfunction/libretro_gl_ff_test.c",
   "video/software/rendering/libretro-test.c",
-  "video/software/rendering_direct_to_vram/libretro-test.c"
+  "video/software/rendering_direct_to_vram/libretro-test.c",
+  "video/vulkan/vk_async_compute/libretro-test.c"
+ ],
+ "github.com/libretro/libretro-samples@bce193bc1b8c9a3da43b2ead0158a69e28b37ed8": [
+  "tests/test/libretro-test.c",
+  "video/opengl/libretro_test_gl_shaders/libretro_gl_test.c",
+  "video/vulkan/vk_rendering/libretro-test.c"
+ ],
+ "github.com/libretro/libretro-simcoupe@c28046241ac6a4d79e55326b6e354dc02f92fa34": [
+  "SimCoupe/Base/GUIDlg.cpp"
  ],
  "github.com/libretro/libretro-uae@151828f14d43bb2b0651327ee19a23b36a7081b2": [
   "libretro/libretro-core.c",
   "libretro/libretro-core.h",
+  "retrodep/sysconfig.h",
   "sources/src/caps/caps.c",
   "sources/src/driveclick.c"
  ],
  "github.com/libretro/libretro-uae@7387937066b1b693816c3b4e2b7a0c601d41363d": [
   "libretro/libretro-core.c",
   "libretro/libretro-core.h",
+  "retrodep/sysconfig.h",
   "sources/src/caps/caps.c",
   "sources/src/driveclick.c"
+ ],
+ "github.com/libretro/libretro-uzem@d991ee94547c8294abc1c4cb73d63116aa58b5bc": [
+  "uzem.h"
  ],
  "github.com/libretro/libretro-vecx@dccff5402a16d1ea7c112095a8e42632bf149506": [
   "bios/system.h",
@@ -4719,7 +4946,8 @@
   "src/drivers/stv.c",
   "src/drivers/suprnova.c",
   "src/drivers/zn.c",
-  "src/hiscore.c"
+  "src/hiscore.c",
+  "src/mame2003/mame2003.c"
  ],
  "github.com/libretro/mame2003-plus-libretro@993403d0332946b8aa6abab56fbd9864498790a1": [
   "src/artwork.c",
@@ -4746,7 +4974,8 @@
   "src/cheat.c",
   "src/cpuexec.c",
   "src/datafile.c",
-  "src/hiscore.c"
+  "src/hiscore.c",
+  "src/libretro/libretro.c"
  ],
  "github.com/libretro/mame2010-libretro@dff8aadd1c3f38215af3955746d6e19abe0ddcea": [
   "src/emu/cheat.c",
@@ -4787,7 +5016,8 @@
   "src/mame/drivers/triforce.c",
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
-  "src/mame/drivers/zn.c"
+  "src/mame/drivers/zn.c",
+  "src/osd/retro/retroos.c"
  ],
  "github.com/libretro/mame2015-libretro@7adbf440d5f554097f58f8c6ebb673adc4320a31": [
   "src/emu/fileio.c",
@@ -4844,7 +5074,8 @@
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
   "src/mame/drivers/zn.c",
-  "src/osd/retro/retromain.c"
+  "src/osd/retro/retromain.c",
+  "src/version.c"
  ],
  "github.com/libretro/mame2015-libretro@c8fe6c7399f24466808b67933b2b96feea188e0b": [
   "src/emu/hiscore.c",
@@ -4899,7 +5130,8 @@
   "src/mame/drivers/triforce.c",
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
-  "src/mame/drivers/zn.c"
+  "src/mame/drivers/zn.c",
+  "src/version.c"
  ],
  "github.com/libretro/mame2016-libretro@ae07c2f88ff2482ba9f50ffc8c9e7e6fbfe97d0a": [
   "src/emu/romload.cpp",
@@ -4953,9 +5185,11 @@
   "src/mame/drivers/triforce.cpp",
   "src/mame/drivers/twinkle.cpp",
   "src/mame/drivers/viper.cpp",
-  "src/mame/drivers/zn.cpp"
+  "src/mame/drivers/zn.cpp",
+  "src/version.cpp"
  ],
  "github.com/libretro/mame@5f5a07748ce5c239c4118463ce8e6473743d4859": [
+  "makefile",
   "plugins/boot.lua",
   "src/devices/bus/a1bus/a1cassette.cpp",
   "src/devices/bus/a1bus/a1cffa.cpp",
@@ -5944,6 +6178,7 @@
   "src/osd/sdl3/sdlopts.cpp"
  ],
  "github.com/libretro/mame@dc1a96537089d6d4ecd01d9886b21061471c70c0": [
+  "makefile",
   "src/mame/acorn/aristmk5.cpp",
   "src/mame/amiga/alg.cpp",
   "src/mame/amiga/arsystems.cpp",
@@ -6004,6 +6239,7 @@
   "src/mame/taito/taitotz.cpp"
  ],
  "github.com/libretro/mame@fba50741006fa3e27e1897f589d2048a505b8fd6": [
+  "makefile",
   "src/mame/acorn/aristmk5.cpp",
   "src/mame/amiga/alg.cpp",
   "src/mame/amiga/arsystems.cpp",
@@ -6066,6 +6302,7 @@
   "src/mame/taito/taitotz.cpp"
  ],
  "github.com/libretro/melonDS@66b5d2634cd0a79030562811e6e05f5532f800ba": [
+  "Makefile.common",
   "src/DSi.cpp",
   "src/DSi.h",
   "src/DSi_NAND.cpp",
@@ -6079,18 +6316,24 @@
  ],
  "github.com/libretro/meteor-libretro@9ea6c358eae6acd1a346647d96b832ccaffad0aa": [
   "ameteor/source/bios.cpp",
-  "ameteor/source/cpu.cpp"
+  "ameteor/source/cpu.cpp",
+  "libretro/libretro.cpp"
  ],
  "github.com/libretro/mgba@7a12d6d4b9acb14c0ae62c9166b6a2f3d08007f6": [
   "src/gb/core.c",
   "src/gb/gb.c",
   "src/gba/gba.c",
   "src/gba/hle-bios.c",
-  "src/platform/libretro/libretro.c"
+  "src/platform/libretro/libretro.c",
+  "version.cmake"
+ ],
+ "github.com/libretro/mrboom-libretro@40ac32020b540c4bb418c7d798a990932a65da04": [
+  "common.hpp"
  ],
  "github.com/libretro/mupen64plus-libretro-nx@15bada85906593376e8fd697f1b0b3af3a20f512": [
   "GLideN64/src/TextDrawer.cpp",
-  "mupen64plus-core/src/main/main.c"
+  "mupen64plus-core/src/main/main.c",
+  "mupen64plus-core/src/main/version.h"
  ],
  "github.com/libretro/mupen64plus-libretro@ab8134ac90a567581df6de4fc427dd67bfad1b17": [
   "GLideN64/src/Config.cpp",
@@ -6123,6 +6366,7 @@
  "github.com/libretro/neocd_libretro@b1e04c738cb48a1dae0574b8877f6a116d270ca1": [
   "src/bios.cpp",
   "src/bios.h",
+  "src/libretro.cpp",
   "src/libretro_bios.cpp",
   "src/memory.cpp",
   "src/path.cpp"
@@ -6143,6 +6387,7 @@
  ],
  "github.com/libretro/opera-libretro@370d9a25c030bb9de4aade371b31045691c40a95": [
   "libopera/opera_bios.c",
+  "libretro.c",
   "libretro_core_options.c",
   "opera_boot.h",
   "opera_lr_opts.c"
@@ -6163,10 +6408,14 @@
   "mupen64plus-core/src/device/pif/bootrom_hle.c"
  ],
  "github.com/libretro/parallel-ps2@8c2b679622d602fe656ceba646b2f1f3a981c717": [
+  "libretro/main.cpp",
   "pcsx2/CDVD/CDVD.cpp",
   "pcsx2/GameDatabase.cpp",
   "pcsx2/VMManager.cpp",
   "pcsx2/ps2/BiosTools.cpp"
+ ],
+ "github.com/libretro/pascal-pong-libretro@2a0cfd44652c0b215862de3ef56916d1384ad8a0": [
+  "pong.pas"
  ],
  "github.com/libretro/pcsx1-libretro@35dabb85ff3af6825820f54090d344945f65d24e": [
   "frontend/libretro.c"
@@ -6185,6 +6434,10 @@
   "pico/pico_int.h",
   "pico/sms.c",
   "platform/common/emu.c",
+  "platform/common/version.h",
+  "platform/libretro/libretro.c"
+ ],
+ "github.com/libretro/potator@227c5f6f3ce74d32e9002ce24c1420288559a860": [
   "platform/libretro/libretro.c"
  ],
  "github.com/libretro/prosystem-libretro@8a88014287c7a01cd568067e5a557d0a2b2a051f": [
@@ -6196,20 +6449,31 @@
   "libretro.c"
  ],
  "github.com/libretro/quasi88-libretro@7884be5277776a5d8c4fdc4e574e9b5b589945c9": [
-  "src/LIBRETRO/libretro.c"
+  "src/LIBRETRO/libretro.c",
+  "src/version.h"
+ ],
+ "github.com/libretro/redbook@43544bb988f37a8f3df5af5d2c6f89dd255b8235": [
+  "libretro.c"
  ],
  "github.com/libretro/redream-next@d826ece7f987c6fed336246e7272e2ded6cefa69": [
   "src/guest/rom/boot.c",
-  "src/guest/rom/flash.c"
+  "src/guest/rom/flash.c",
+  "src/host/retro_host.c"
  ],
  "github.com/libretro/retro8@ddc06a142398ee9755894b3f0bb17c8dc428151d": [
+  "src/libretro/libretro.cpp",
   "src/vm/gfx.cpp",
   "src/vm/lua_bridge.cpp"
  ],
+ "github.com/libretro/retroluxury@fdcd94fe4099735edcbea638760da3f2297bc520": [
+  "test/libretro.c"
+ ],
  "github.com/libretro/rustation-libretro@3e328e3967e312e1f239aeeecd479a7b4bfda850": [
+  "Cargo.toml",
   "src/lib.rs"
  ],
  "github.com/libretro/same_cdi@ff9bb99a50d518aef6d2add1c49b7c44447e3e78": [
+  "gen/version.cpp",
   "src/mame/drivers/cdi.cpp",
   "src/osd/libretro/libretro-internal/retro_init.cpp"
  ],
@@ -6218,6 +6482,7 @@
   "backends/platform/libretro/include/libretro-defs.h",
   "backends/platform/libretro/scripts/bundle_datafiles.sh",
   "backends/platform/libretro/src/libretro-os-utils.cpp",
+  "base/internal_version.h",
   "dists/engine-data/engine_data.mk",
   "dists/engine-data/engine_data_big.mk",
   "dists/engine-data/engine_data_core.mk",
@@ -6225,49 +6490,65 @@
  ],
  "github.com/libretro/smsplus-gx@3844b46caa926b6494987b97da63092818c4ddef": [
   "source/ports/libretro/smsplus_libretro.c",
-  "source/ports/sdl/smsplus.c"
+  "source/ports/sdl/smsplus.c",
+  "source/system.h"
  ],
  "github.com/libretro/snes9x2002@6ffbf9ef4f0063e1f1b78a40d10c50fc52f2524c": [
+  "libretro/libretro.c",
   "src/globals.c"
  ],
  "github.com/libretro/snes9x2005@a79dfe9047e7fec58808aefe48ad2bf499c7af11": [
+  "libretro.c",
   "source/apu_blargg.c",
   "source/dsp1emu.c",
   "source/globals.c"
  ],
  "github.com/libretro/snes9x2010@fe690dd321fa5a46b5234a2bde089d2518c62b0e": [
+  "libretro/libretro.c",
   "src/apu.c",
   "src/bsx.c",
   "src/dsp.c"
  ],
  "github.com/libretro/snes9x@fae2fea08f74180759ef540ee94259213f503480": [
   "libretro/libretro.cpp",
-  "memmap.cpp"
+  "memmap.cpp",
+  "snes9x.h"
  ],
  "github.com/libretro/stella2014-libretro@7d1361e407e63f29e52892655069e5fb4096e691": [
+  "stella/src/common/Version.hxx",
   "stella/src/emucore/CartAR.cxx",
   "stella/src/emucore/KidVid.cxx",
   "stella/src/emucore/PropsSet.cxx"
  ],
  "github.com/libretro/stella2023@ba52c43b9eda950eb0c0eec69cda9b17dee8c39b": [
+  "src/common/Version.hxx",
   "src/emucore/CartAR.cxx",
   "src/emucore/KidVid.cxx"
  ],
  "github.com/libretro/supafaust@642d1d1b6684aa7e306a02a89885f3f5456a5157": [
   "libretro.cpp",
+  "mednafen/config.h",
   "mednafen/snes_faust/cart.cpp",
   "mednafen/snes_faust/cart/cx4.cpp",
   "mednafen/snes_faust/cart/dsp1.cpp",
   "mednafen/snes_faust/cart/dsp2.cpp"
+ ],
+ "github.com/libretro/superbroswar-libretro@7f94e03163e1641ecd2a5703eb9ca7e1312b5e8d": [
+  "libretro/libretro.cpp"
  ],
  "github.com/libretro/swanstation@631f0fb31b809e0f889d7c551fe695788e39c1d3": [
   "src/core/bios.cpp",
   "src/core/bios.h",
   "src/core/host_interface.cpp",
   "src/core/system.cpp",
-  "src/libretro/libretro_core_options.h"
+  "src/libretro/libretro_core_options.h",
+  "src/libretro/libretro_host_interface.cpp"
+ ],
+ "github.com/libretro/tgbdual-libretro@0392c9c469e653205e471114c7949c07c83bfce9": [
+  "libretro/libretro.cpp"
  ],
  "github.com/libretro/tyrquake@67db338ff4d27fdbcead61d4e54938d758ae62cb": [
+  "Makefile",
   "common/bgmusic.c",
   "common/common.c",
   "common/host.c",
@@ -6278,22 +6559,28 @@
   "libretro/core/libretro-core.cpp",
   "src/memory.cpp"
  ],
+ "github.com/libretro/uw8-libretro@1a64f4bde9662cb3dc04214d2b9f8ead19c85f0a": [
+  "uw8.c"
+ ],
  "github.com/libretro/vba-next@788192f215ad0a1413f1625b40ebba3423fa0ade": [
   "build/Makefile.common",
   "libretro/libretro.c",
   "src/gba.c"
  ],
  "github.com/libretro/vbam-libretro@115defb3a318258ab84746d45258a1aec19d0b4b": [
+  "CHANGELOG.md",
   "src/gb/GB.cpp",
   "src/gba/GBA.cpp",
   "src/libretro/libretro.cpp"
  ],
  "github.com/libretro/vemulator-libretro@27a062f6ae532e5028e4fb54f523cc689e78146a": [
+  "main.cpp",
   "vmu.cpp"
  ],
  "github.com/libretro/vice-libretro@6cbc44add8b0a03791b343712dc63dc1edad2675": [
   "libretro/libretro-core.c",
   "retrodep/ui.c",
+  "vice/configure",
   "vice/data/C64DTV/basic-901226-01.bin",
   "vice/data/C64DTV/chargen-901225-01.bin",
   "vice/data/C64DTV/kernal-901227-03.bin",
@@ -6323,19 +6610,29 @@
  ],
  "github.com/libretro/vitaquake2@4b333fe18e8816974f04432af01f87654ae16e21": [
   "libretro/libretro.c",
-  "qcommon/files.c"
+  "qcommon/files.c",
+  "qcommon/qcommon.h"
+ ],
+ "github.com/libretro/vitaquake3@61374f650f42c4f25c215ea1f8db992af162ada6": [
+  "Makefile"
+ ],
+ "github.com/libretro/vitavoyager@58b70dd7ea891c2e8ddc37d03a5d58116b0ea118": [
+  "Makefile"
  ],
  "github.com/libretro/xmil-libretro@3106aa54ffb244cca4019a6e95dacaa698781bc3": [
   "font/fontdata.c",
   "font/fontx1.c",
-  "io/memio.c"
+  "io/memio.c",
+  "xmilver.h"
  ],
  "github.com/libretro/xrick-libretro@fcfde3623a04b4e986548e06d46630fcd0bd1e18": [
+  "include/config.h",
   "libretro/core/libretro-core.c"
  ],
  "github.com/libretro/yabause@09ed8e5b2e97e7a848ea2514545c34c7b809e399": [
   "yabause/CMakeLists.txt",
   "yabause/src/config.h.in",
+  "yabause/src/libretro/Makefile.common",
   "yabause/src/libretro/libretro.c",
   "yabause/src/memory.c",
   "yabause/src/memory.h",
@@ -6344,6 +6641,7 @@
  ],
  "github.com/libretro/yabause@3791ffb2221fda61d70aec5cca376418caf05669": [
   "yabause/src/ctrl/src/stv.c",
+  "yabause/src/libretro/Makefile.common",
   "yabause/src/libretro/libretro.c",
   "yabause/src/sys/memory/src/cs0.c",
   "yabause/src/utils/src/db.c"
@@ -6355,6 +6653,7 @@
   "yabause/src/memory.h"
  ],
  "github.com/lightspark/lightspark@6f07fd65cb95b88ff73e905bf78a1a8b1ddf6049": [
+  "CMakeLists.txt",
   "README.md",
   "src/backends/cachedsurface.cpp",
   "src/backends/config.cpp",
@@ -6398,7 +6697,8 @@
   "src/lindbergh/hook.c",
   "src/lindbergh/lindbergh.c",
   "src/lindbergh/sdlInput.c",
-  "src/lindbergh/shaderPatches.c"
+  "src/lindbergh/shaderPatches.c",
+  "src/lindbergh/version.h"
  ],
  "github.com/lindbergh-loader/linuxloader@9aa6e3e45ccfbbc60eb0f975aa9d3d158a13706c": [
   "libs/win32/ll-deps/cg2.dll",
@@ -6491,7 +6791,8 @@
   "src/mame/drivers/triforce.c",
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
-  "src/mame/drivers/zn.c"
+  "src/mame/drivers/zn.c",
+  "src/version.c"
  ],
  "github.com/mamedev/mame@0fdce58484202265b0794a77652bb5e3da9c56af": [
   "src/emu/romload.c",
@@ -6501,6 +6802,7 @@
   "src/mame/drivers/zn.c"
  ],
  "github.com/mamedev/mame@2e0aa823508663c4a27164be43467d1ef740cdcd": [
+  "makefile",
   "src/mame/acorn/aristmk5.cpp",
   "src/mame/amiga/alg.cpp",
   "src/mame/amiga/arsystems.cpp",
@@ -6562,6 +6864,7 @@
  ],
  "github.com/mamedev/mame@39eb9e44c394df9aec8186f2d2ef7517ace232e1": [
   "hash/a7800.xml",
+  "makefile",
   "src/devices/bus/a7800/hiscore.cpp",
   "src/emu/crsshair.cpp",
   "src/emu/fileio.cpp",
@@ -6620,7 +6923,8 @@
   "src/mame/drivers/triforce.cpp",
   "src/mame/drivers/twinkle.cpp",
   "src/mame/drivers/viper.cpp",
-  "src/mame/drivers/zn.cpp"
+  "src/mame/drivers/zn.cpp",
+  "src/version.cpp"
  ],
  "github.com/mamedev/mame@6ae44e46f91aa2bd74d9895e6bfd345baebd3d22": [
   "src/emu/machine.c",
@@ -6674,7 +6978,8 @@
   "src/mame/drivers/triforce.c",
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
-  "src/mame/drivers/zn.c"
+  "src/mame/drivers/zn.c",
+  "src/version.c"
  ],
  "github.com/mamedev/mame@c285eb9bcd3505c14a338e29f251ba00776cc75c": [
   "src/emu/romload.c",
@@ -6709,9 +7014,11 @@
   "src/mame/drivers/triforce.c",
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
-  "src/mame/drivers/zn.c"
+  "src/mame/drivers/zn.c",
+  "src/version.c"
  ],
  "github.com/mamedev/mame@eb05584a2b8d98d5af5587244c9cb7dcccf660fd": [
+  "makefile",
   "src/mame/acorn/aristmk5.cpp",
   "src/mame/amiga/alg.cpp",
   "src/mame/amiga/arsystems.cpp",
@@ -7824,7 +8131,8 @@
   "src/mame/drivers/triforce.c",
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
-  "src/mame/drivers/zn.c"
+  "src/mame/drivers/zn.c",
+  "src/version.c"
  ],
  "github.com/melonDS-emu/melonDS@7d8dea42e221b13521270c423b61add41a741b97": [
   "src/DSi.cpp",
@@ -7867,7 +8175,8 @@
   "src/gb/gb.c",
   "src/gba/gba.c",
   "src/gba/hle-bios.c",
-  "src/platform/libretro/libretro.c"
+  "src/platform/libretro/libretro.c",
+  "version.cmake"
  ],
  "github.com/mgba-emu/mgba@afd6f14eaf8bd35214ed3fb9dc69a92bfc3877a9": [
   "CMakeLists.txt",
@@ -7882,6 +8191,9 @@
   "src/CONTROLM.h",
   "src/OSGLUSDL.c",
   "src/OSGLUXWN.c"
+ ],
+ "github.com/minkcv/vm@11f63848a592644722ea1240b4b96785db9b009f": [
+  "machine/libretro.c"
  ],
  "github.com/mirror/daphne-emu@cd214c6046365047704f8a0563928970b30444e6": [
   "src/game/astron.cpp",
@@ -7910,14 +8222,19 @@
   "src/video/video.cpp",
   "src/video/video.h"
  ],
+ "github.com/mittonk/PD777@331af5f53cc0ffbab90f915681c8dfe3a4cda0a2": [
+  "source/libretro/libretro.cpp"
+ ],
  "github.com/mittonk/dice-libretro@4b4596b8dd2252b9d08bd6aaa02afda4be834db3": [
   "chips/rom.cpp",
   "libretro.cpp"
  ],
  "github.com/mkxp-z/mkxp-z@37a04d14413454551a7b6aadbb4e93e67168accb": [
+  "meson.build",
   "src/display/font.cpp"
  ],
  "github.com/mmatyas/supermariowar@ed60ed45e296ff88a8883cbc51f5bf5aed880636": [
+  "CMakeLists.txt",
   "src/common/global.cpp",
   "src/common/path.cpp",
   "src/smw/GSSplashScreen.cpp",
@@ -7950,6 +8267,7 @@
   "app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java",
   "app/src/main/java/paulscode/android/mupen64plusae/task/ExtractAssetsOrCleanupTask.java",
   "app/src/main/java/paulscode/android/mupen64plusae/util/RomHeader.java",
+  "build_common/version_common.gradle",
   "mupen64plus-core/mupen64plus-core.mk",
   "mupen64plus-core/upstream/src/api/frontend.c",
   "mupen64plus-core/upstream/src/device/gb/gb_cart.c",
@@ -7979,7 +8297,8 @@
  "github.com/mupen64plus/mupen64plus-ui-console@c8ac4862a019d7885b24927d9b4db5dd3e42a528": [
   "projects/unix/Makefile",
   "src/cheat.c",
-  "src/main.c"
+  "src/main.c",
+  "src/version.h"
  ],
  "github.com/nachoverdon/Dolphin-MMJR2@4d0fdb8eea616320e967408cf5547c72a95196f3": [
   "CMakeLists.txt",
@@ -8073,6 +8392,7 @@
  ],
  "github.com/nesbox/TIC-80@ae1195a9d0fbda243bf0ebd861d6876d072a979e": [
   ".gitmodules",
+  "cmake/version.cmake",
   "include/tic80_config.h",
   "src/system/libretro/tic80_libretro.c"
  ],
@@ -8108,9 +8428,11 @@
  "github.com/netux79/zc210-libretro@b6426da40b074245fda097fd345fa7c9cdbf152a": [
   "libretro.cpp",
   "zc/zc_sys.cpp",
+  "zc/zdefs.h",
   "zc/zelda.cpp"
  ],
  "github.com/nikita36078/J2ME-Loader@76383ebf348b5d477256fc884dfc55f053b45a86": [
+  "app/build.gradle",
   "app/src/main/cpp/Android.mk",
   "app/src/main/cpp/m3g/Android.mk",
   "app/src/main/cpp/micro3d/Android.mk",
@@ -8191,6 +8513,7 @@
   "src/memory/Rom.cc"
  ],
  "github.com/openmoh/openmohaa@a2f340195975f4f042e28a60b62561dd9a0b2700": [
+  "cmake/identity.cmake",
   "code/qcommon/common.c",
   "code/qcommon/files.cpp",
   "code/qcommon/q_shared.h"
@@ -8214,7 +8537,8 @@
   "src/tyrian2.c"
  ],
  "github.com/p2000t/M2000@da0b8cbef2007c907f5db2166847c3209643865d": [
-  "src/P2000.c"
+  "src/P2000.c",
+  "src/P2000.h"
  ],
  "github.com/panda3ds-emu/panda3ds@3787358bdae41d5532ccd00c8998a527ae949949": [
   "src/core/crypto/aes_engine.cpp",
@@ -8235,6 +8559,7 @@
   "src/game/pak.c"
  ],
  "github.com/pete-gordon/oricutron@002279fce9fa756d1d63cdc40ae97939eb7de7ed": [
+  "Makefile",
   "ReadMe.txt",
   "gui.c",
   "gui.h",
@@ -8279,10 +8604,12 @@
   "Source/Project64-core/RomList/RomList.cpp",
   "Source/Project64-core/Settings.cpp",
   "Source/Project64-core/Settings/SettingType/SettingsType-RomDatabase.cpp",
+  "Source/Project64-core/Version.h.in",
   "Source/Project64/UserInterface/Settings/SettingsPage-DiskDrive.cpp",
   "Source/Script/package_zip.cmd"
  ],
  "github.com/proninyaroslav/nesoid@b2ff53fefa56a668aad4a579af85adc672d7a791": [
+  "app/build.gradle",
   "app/jni/common/emuengine.h",
   "app/jni/neslib/Android.mk",
   "app/jni/neslib/cart.c",
@@ -8349,6 +8676,7 @@
   "src/core/mappers/waveFile.cpp",
   "src/core/palette.c",
   "src/core/unif.c",
+  "src/core/version.h",
   "src/gui/dipswitch.cpp",
   "src/gui/nes20db.cpp",
   "src/gui/qt.cpp",
@@ -8437,7 +8765,8 @@
   "src/mame/drivers/triforce.c",
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
-  "src/mame/drivers/zn.c"
+  "src/mame/drivers/zn.c",
+  "src/version.c"
  ],
  "github.com/r-type/sdlvice-libretro@baaaeed97ce1c0a07ed78e3e155cfbd6f508b472": [
   "src/c64/c64-resources.c",
@@ -8448,7 +8777,8 @@
   "src/drive/ieee/ieee-resources.c",
   "src/drive/ieee/ieee.c",
   "src/printerdrv/drv-mps803.c",
-  "src/printerdrv/drv-nl10.c"
+  "src/printerdrv/drv-nl10.c",
+  "src/version.h"
  ],
  "github.com/rafaelvcaetano/melonDS-android-lib@431ab4bd0003c4356e25fce89640ae1004579b9b": [
   "CMakeLists.txt",
@@ -8473,7 +8803,8 @@
   "app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt",
   "app/src/main/java/me/magnum/melonds/impl/emulator/AndroidEmulatorManager.kt",
   "app/src/main/res/values/strings.xml",
-  "app/src/main/res/xml/pref_custom_firmware.xml"
+  "app/src/main/res/xml/pref_custom_firmware.xml",
+  "buildSrc/src/main/kotlin/AppConfig.kt"
  ],
  "github.com/raspberrypi/quake3@8d89a2a3c1707bf0f75b2ea26645b872e97c0b95": [
   "Makefile",
@@ -8492,6 +8823,7 @@
  "github.com/recalbox/pifba@419faa7c3967560f6fa149f2f78b5aedca5b123a": [
   "burn/neogeo/d_neogeo.cpp",
   "burn/pgm/d_pgm.cpp",
+  "burn/version.h",
   "rpi/bzip.cpp",
   "rpi/main.cpp"
  ],
@@ -8567,6 +8899,7 @@
   "thirdparty/SDL2/src/joystick/SDL_gamecontroller.c"
  ],
  "github.com/ruffle-rs/ruffle@fe6cfc545405b888ebb478ce1c211d63147ca49b": [
+  "Cargo.toml",
   "core/Cargo.toml",
   "core/src/avm1/globals.rs",
   "core/src/avm2/error_messages.rs",
@@ -8593,6 +8926,9 @@
   "video/external/src/decoder/openh264.rs",
   "web/Cargo.toml"
  ],
+ "github.com/rz5/nes@68dfadea5889da5da7c7e171823c9b3ab24fc892": [
+  "nes.c"
+ ],
  "github.com/sarah-walker-pcem/pcem@10739b9618e388a5bf8c21e752f12b3952fa83e1": [
   "src/mem.c",
   "src/nvr.c",
@@ -8618,6 +8954,7 @@
   "src/vid_tvga.c",
   "src/vid_vga.c"
  ],
+ "github.com/sarah-walker-pcem/pcem@25b54e3ff1d51cbf2469b447e55bce7a589697e9": [],
  "github.com/sashkinbro/EmuCoreV@b71d8cf5397b1c6394e92eeb48427cd17e542971": [
   "app/build.gradle.kts",
   "app/src/main/AndroidManifest.xml",
@@ -8700,6 +9037,9 @@
   "app/src/main/java/com/sbro/emucorex/ui/cheats/CheatManagerScreen.kt",
   "app/src/main/java/com/sbro/emucorex/ui/gamedb/GameDbCatalogRepository.kt"
  ],
+ "github.com/schellingb/vidtest_libretro@edfd32747e5eeb5ce82a5cee686ee1b32f1cc52e": [
+  "vidtest.c"
+ ],
  "github.com/scummvm/scummvm@21955df19b580dad2807ec55f573b5f348690a81": [
   "Makefile.common",
   "audio/softsynth/fluidsynth.cpp",
@@ -8714,6 +9054,7 @@
   "backends/platform/sdl/win32/win32.cpp",
   "backends/vkeybd/virtual-keyboard.cpp",
   "base/commandLine.cpp",
+  "base/internal_version.h",
   "base/main.cpp",
   "common/engine_data.cpp",
   "common/str-enc.cpp",
@@ -8774,6 +9115,7 @@
   "backends/platform/libretro/include/libretro-defs.h",
   "backends/platform/libretro/scripts/bundle_datafiles.sh",
   "backends/platform/libretro/src/libretro-os-utils.cpp",
+  "base/internal_version.h",
   "dists/engine-data/engine_data.mk",
   "dists/engine-data/engine_data_big.mk",
   "dists/engine-data/engine_data_core.mk",
@@ -8846,6 +9188,7 @@
   "ending.c",
   "font.c",
   "global.c",
+  "libretro/libretro.c",
   "main.c",
   "midi.c",
   "midi_timidity.c",
@@ -8917,7 +9260,8 @@
   "src/mame/drivers/viper.c",
   "src/mame/drivers/zn.c",
   "src/osd/droid-ios/osd-droid.c",
-  "src/osd/droid-ios/osdmain.c"
+  "src/osd/droid-ios/osdmain.c",
+  "src/version.c"
  ],
  "github.com/sh95014/AppleWin@51893cab7e8a3d1298734848f4fd616f2e1831fb": [
   "Mariani.xcodeproj/project.pbxproj",
@@ -8952,6 +9296,7 @@
   "source/linux/linuxframe.cpp"
  ],
  "github.com/shadps4-emu/shadPS4@3eecea94ddaca360b19f4b800523b609a8b2ffcc": [
+  "CMakeLists.txt",
   "src/core/libraries/sysmodule/sysmodule_internal.cpp",
   "src/core/linker.cpp"
  ],
@@ -9001,6 +9346,7 @@
   "x64/src/main/emulator/EmulatorPlatform.java"
  ],
  "github.com/shinyquagsire23/OpenJKDF2@798f930402525a23b94671d85b97b00390342fa0": [
+  "cmake_modules/version.cmake",
   "src/Dw/dwInits.cpp",
   "src/Main/InstallHelper.c",
   "src/Main/Main.c",
@@ -9010,6 +9356,7 @@
   "src/main.c"
  ],
  "github.com/simias/rustation@1daf4faaade3c0fd1e9deace8e309e91303f1b46": [
+  "Cargo.toml",
   "src/bios/db.rs",
   "src/cdrom/disc/mod.rs",
   "src/lib.rs"
@@ -9068,7 +9415,8 @@
  "github.com/snes9xgit/snes9x@85591435763dede7ef111aab8070cdf2d5a7da49": [
   "bsx.cpp",
   "libretro/libretro.cpp",
-  "memmap.cpp"
+  "memmap.cpp",
+  "snes9x.h"
  ],
  "github.com/snes9xgit/snes9x@b33f2afb33c61d675aaf0319bd3b8cc8d6924d49": [
   "bsx.cpp",
@@ -9104,6 +9452,7 @@
   "Src/SprowCoPro.cpp",
   "Src/SprowCoPro.h",
   "Src/Tube.cpp",
+  "Src/Version.h",
   "Src/Video.cpp",
   "Src/Z80Support.cpp",
   "UserData/Roms_Torch.cfg"
@@ -9125,6 +9474,7 @@
   "src/os/windows/OSystemWINDOWS.cxx"
  ],
  "github.com/stella-emu/stella@408dd6a30cc6fd91decc602403281c7dcfbc1b82": [
+  "src/common/Version.hxx",
   "src/emucore/CartAR.cxx",
   "src/emucore/KidVid.cxx"
  ],
@@ -9144,6 +9494,7 @@
   "src/core/system.cpp"
  ],
  "github.com/suijingfeng/vkQuake3@650bd625eb725446279c6176804b554e2e1c98f3": [
+  "Makefile",
   "code/qcommon/files.c",
   "code/qcommon/q_shared.h",
   "code/qcommon/qcommon.h",
@@ -9158,6 +9509,7 @@
  "github.com/sydarn/yabause@a40dace1ae0af3ebd45848549fdf396f40e3930f": [
   "yabause/CMakeLists.txt",
   "yabause/src/config.h.in",
+  "yabause/src/libretro/Makefile.common",
   "yabause/src/libretro/libretro.c",
   "yabause/src/memory.c",
   "yabause/src/memory.h",
@@ -9179,6 +9531,7 @@
  ],
  "github.com/timoinutilis/lowres-nx@63d5988f74e1eea2ecd6ea0445a8ce260b0a9822": [
   "core/boot_intro.c",
+  "core/core.h",
   "libretro/libretro_main.c"
  ],
  "github.com/tom-seddon/b2@e1c9b84a9460909d4dc2030ad1d4e050012b1910": [
@@ -9189,7 +9542,9 @@
   "src/b2/roms.cpp"
  ],
  "github.com/tonioni/WinUAE@15110cf6606d1188800ea7ad86bf1cbd9c688741": [
+  "CMakeLists.txt",
   "cfgfile.cpp",
+  "include/winuae_version.h",
   "memory.cpp",
   "od-win32/win32.cpp",
   "od-win32/win32gui.cpp",
@@ -9224,6 +9579,7 @@
  ],
  "github.com/trngaje/advanced_drastic@eaf41ab9bc8adcc15c010bf9517bc94c38e7bffd": [
   "README.md",
+  "drastic",
   "launch.sh"
  ],
  "github.com/trzy/Supermodel@0eef09ba2b74e48fd5cfd388ee69a3743fd5f618": [
@@ -9269,6 +9625,7 @@
   "Src/Version.h"
  ],
  "github.com/usineur/hode@59f3c466923c6b8d49e29176ff697a91165e7efc": [
+  "CMakeLists.txt",
   "README.txt",
   "fs_posix.cpp",
   "main.cpp",
@@ -9285,6 +9642,7 @@
   "libretro.cpp"
  ],
  "github.com/visualboyadvance-m/visualboyadvance-m@46cc9f6bda114737e99304a4bd8427c038e63084": [
+  "CHANGELOG.md",
   "src/core/gba/gba.cpp",
   "src/libretro/libretro.cpp"
  ],
@@ -9325,6 +9683,7 @@
   "src/core/VPApp.cpp",
   "src/core/player.cpp",
   "src/core/stdafx.h",
+  "src/core/vpversion.h",
   "src/parts/bumper.cpp",
   "src/parts/decal.cpp",
   "src/parts/kicker.cpp",
@@ -9344,6 +9703,7 @@
  ],
  "github.com/warmenhoven/Emir@8174cbbeea4070654841cdd4604361b3eee8fdd1": [
   ".github/workflows/build.yaml",
+  "CMakeLists.txt",
   "apps/ymir-libretro/src/libretro.cpp",
   "apps/ymir-sdl3/CMakeLists.txt",
   "apps/ymir-sdl3/src/app/app.cpp",
@@ -9357,6 +9717,9 @@
   "libs/ymir-core/include/ymir/media/media_defs.hpp",
   "libs/ymir-core/include/ymir/sys/memory_defs.hpp",
   "libs/ymir-core/src/ymir/db/ipl_db.cpp"
+ ],
+ "github.com/warmenhoven/amiarcadia@8ca27c925833fe0021475155512c7f467924f647": [
+  "DroidArcadia/app/src/main/cpp/da.h"
  ],
  "github.com/warmenhoven/tia@6ae5bf998fe7a7842294089db17fc86fd73db1f0": [
   "Makefile",
@@ -9421,6 +9784,7 @@
   "Source/Core/DolphinQt/MenuBar.cpp"
  ],
  "github.com/white-axe/mkxp-z@650cb0888a07d0b5044e131160ddfa53feaf595b": [
+  "meson.build",
   "src/core.cpp",
   "src/display/font.cpp"
  ],
@@ -9487,6 +9851,7 @@
   "code/sys/sys_win32.c"
  ],
  "github.com/wzcwzc/emuscv@6d6e4594d79862dd5c2ff7f725c109e4266f0b03": [
+  "Makefile.libretro",
   "src/vm/scv/memory.cpp",
   "src/vm/scv/memory.h"
  ],
@@ -9618,6 +9983,7 @@
  ],
  "github.com/ymir-emu/Ymir@8174cbbeea4070654841cdd4604361b3eee8fdd1": [
   ".github/workflows/build.yaml",
+  "CMakeLists.txt",
   "apps/ymir-libretro/src/libretro.cpp",
   "apps/ymir-sdl3/CMakeLists.txt",
   "apps/ymir-sdl3/src/app/app.cpp",
@@ -9634,6 +10000,7 @@
  ],
  "github.com/ymir-emu/Ymir@fe439e98abc555c243a8a197850c71777ff664f4": [
   ".github/workflows/build.yaml",
+  "CMakeLists.txt",
   "apps/ymir-sdl3/CMakeLists.txt",
   "apps/ymir-sdl3/src/app/app.cpp",
   "apps/ymir-sdl3/src/app/profile.cpp",
@@ -9648,6 +10015,7 @@
   "libs/ymir-core/src/ymir/db/ipl_db.cpp"
  ],
  "github.com/yonkuma/piemu@0785214f13746bdfd709b1909f007e213b470ba1": [
+  "app.h",
   "piemu.c",
   "tools/mkpfi.c"
  ],
@@ -9657,6 +10025,7 @@
  ],
  "github.com/yuzu-emu-mirror/yuzu@15e6e48bef0216480661444a8d8b348c1cca47bb": [],
  "github.com/zelurker/raine@8e25d5d8907ae459181610912b0030c955683015": [
+  "makefile",
   "source/emudx.c",
   "source/emumain.c",
   "source/files.c",
@@ -9683,6 +10052,7 @@
   "src/libretro/core.h"
  ],
  "gitlab.com/DavidGriffith/frotz@042d7bcadc1e2a8090cf737c841d8b7fc14b6eff": [
+  "Makefile",
   "src/sdl/sf_deffont.c",
   "src/sdl/sf_fonts.c",
   "src/sdl/sf_resource.c"
@@ -9723,9 +10093,11 @@
   "src/fileio/CExeFile.cpp",
   "src/fileio/CPatcher.cpp",
   "src/fileio/CTileLoader.cpp",
-  "src/fileio/KeenFiles.h"
+  "src/fileio/KeenFiles.h",
+  "version.h"
  ],
  "gitlab.com/MaaaX-EPOCH84/libretro-emucv@6a6e1b15c5d5afefbc3fefdd8b52f3f2c8c0a0eb": [
+  "CMakeLists.txt",
   "src/common.cpp",
   "src/core.cpp",
   "src/emu.cpp",
@@ -9755,6 +10127,7 @@
  "gitlab.com/jengun/sdltrs@205ddfd78fd00b32b3f730453175dbd70782ce79": [
   "CMakeLists.txt",
   "README.md",
+  "configure.ac",
   "src/trs_cassette.c",
   "src/trs_chars.c",
   "src/trs_clones.c",
@@ -9775,7 +10148,8 @@
  ],
  "gitlab.com/jgemu/bsnes@53e6a7c2ec4b4220adc2f8dcb3786489bd04fe0e": [
   "src/cartridge.cpp",
-  "src/coprocessor/icd.cpp"
+  "src/coprocessor/icd.cpp",
+  "version.h"
  ],
  "gitlab.com/jgemu/geolith@05ddef568212e7225ceec22f3ecb20b5a9b640e6": [
   "jg.c",
@@ -9787,7 +10161,8 @@
   "src/jcv_coleco.c",
   "src/jcv_crvision.c",
   "src/jcv_db.c",
-  "src/jollycv.c"
+  "src/jollycv.c",
+  "version.h"
  ],
  "gitlab.com/jgemu/nestopia@b3adbeb42482e979ab99e16bcd9a22480f13479f": [],
  "gitlab.com/parallel-launcher/parallel-launcher@8dc2a83770c57bc00e1b1fae0aed71f2120cc875": [
@@ -9795,6 +10170,7 @@
   "src/core/rom-finder.cpp",
   "src/core/settings.hpp",
   "src/core/updates.cpp",
+  "src/core/version.cpp",
   "src/main.cpp",
   "src/rhdc/core/sync.cpp",
   "src/ui/main-window.cpp",
@@ -9841,6 +10217,7 @@
   "source/Video.cpp"
  ],
  "gitlab.com/solarus-games/solarus@49d1d4686f67ec81c86c90ca30279a4ce06b1729": [
+  "CMakeLists.txt",
   "cmake/AddDefines.cmake",
   "cmake/AddInstallDirs.cmake",
   "cmake/AddInstallTargets.cmake",
@@ -9851,6 +10228,7 @@
  ],
  "gitlab.com/solarus-games/solarus@86fa2031e1303aaaf9924a2f03dfdb7b7d1cbf4b": [
   ".gitlab-ci.yml",
+  "CMakeLists.txt",
   "cmake/AddDefines.cmake",
   "cmake/AddInstallDirs.cmake",
   "cmake/AddInstallTargets.cmake",

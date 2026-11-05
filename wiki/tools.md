@@ -15,7 +15,7 @@ Run everything in sequence:
 
 ```bash
 python scripts/pipeline.py --offline              # DB + verify + packs + manifests + integrity + readme + site
-python scripts/pipeline.py --offline --skip-packs  # DB + verify + readme + site
+python scripts/pipeline.py --offline --skip-packs  # no packs or manifests
 python scripts/pipeline.py --offline --skip-docs   # skip readme + site generation
 python scripts/pipeline.py --offline --target switch  # filter by hardware target
 python scripts/pipeline.py --offline --with-truth  # include truth generation + diff
@@ -63,8 +63,8 @@ Pipeline flags:
 | Flag | Effect |
 |------|--------|
 | `--offline` | skip every step that needs the network (2, 2a, 2a2, 2b, 2b2), and pack only the release assets already in `.cache/large/` |
-| `--skip-packs` | skip steps 4, 4b, 4c, 6 and the consistency check. README and site are still rewritten unless `--skip-docs` is given too |
-| `--skip-docs` | skip steps 7 and 8 |
+| `--skip-packs` | skip steps 4, 4b, 4c, 5 and 6. Steps 4d and 4e still run, and README and site are still rewritten unless `--skip-docs` is given too |
+| `--skip-docs` | skip steps 7, 8 and 8b |
 | `--include-archived` | include archived platforms in verify, packs, truth and export |
 | `--target TARGET` | filter verify, packs and truth by hardware target |
 | `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py`. Refused with `--skip-packs` |
@@ -1334,7 +1334,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `validate_site.py` | Validate rendered metadata, heading order, image alternatives, JSON-LD, local resources, links and fragments, and the page size and search index budgets |
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, and rebuild a pinned archive from ROMs already held |
 | `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
-| `deterministic_zip.py` | Rebuild MAME BIOS ZIPs deterministically (same ROMs = same hash) |
+| `deterministic_zip.py` | The fixed date pack members carry. Its archive rebuild is no longer called by the pack, which copies each ZIP byte for byte |
 | `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents) |
 | `crypto_verify.py` | 3DS RSA signature and AES crypto verification |
 | `sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
@@ -1373,7 +1373,7 @@ Further options, by script:
 | `romset_recipes.py` | `--dat-recipes PATH`, a snapshot or a directory of them (default `recipes/`) |
 | `split_pack.py` | `--max-size 1900M`, the ceiling per part (K, M, G, default 2G) |
 | `torrentzip.py` | `--check ZIP` reports conformance, `--rebuild ZIP -o OUT` normalizes an archive |
-| `validate_pr.py` | `--changed` takes the BIOS files the branch changes, a folder named checks every file under it, `--markdown`, `--json` |
+| `validate_pr.py` | `--changed` takes the BIOS files the branch changes, a folder named checks every file under it, `--place` copies each recognised file from outside `bios/` to its folder and declared name (or its `.variants/` slot), `--markdown`, `--json` |
 | `validate_site.py` | `--site-dir` (rendered site, default `website/dist`), `--base` (path the site is served under), `--max-errors N` |
 | `scraper/coreinfo_scraper.py` | `--compare-db database.json` lists the `.info` firmware the database lacks |
 | `scraper/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |

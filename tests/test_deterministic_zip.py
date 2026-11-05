@@ -252,6 +252,21 @@ class TestPackDeterminism(unittest.TestCase):
             names = {i.filename.rsplit("/", 1)[-1] for i in zf.infolist()}
         self.assertIn("romset.zip", names)
 
+    def test_a_romset_is_the_collection_bytes_and_the_wiki_says_so(self):
+        """The pack copies each ZIP byte for byte since fed03c3db, and the
+        wiki still told a third party to rebuild romsets to compare."""
+        pack = self._build("out1")
+        with zipfile.ZipFile(pack) as zf:
+            member = next(n for n in zf.namelist() if n.endswith("romset.zip"))
+            self.assertEqual(zf.read(member), (self.bios / "romset.zip").read_bytes())
+        root = Path(__file__).resolve().parent.parent / "wiki"
+        for page in ("architecture.md", "tools.md"):
+            with self.subTest(page=page):
+                text = " ".join((root / page).read_text(encoding="utf-8").split())
+                self.assertNotIn("rebuilt deterministically", text)
+                self.assertNotIn("rebuilds MAME", text)
+                self.assertNotIn("Rebuild MAME BIOS ZIPs", text)
+
     def test_every_member_carries_the_fixed_epoch(self):
         """A member's date must come from the build's inputs, not its clock.
 

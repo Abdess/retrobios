@@ -15,7 +15,7 @@ display_name: "Sony - PlayStation (PCSX1)"
 cores: [pcsx1]
 systems: [sony-playstation]
 notes: >
-  Never-completed fork of PCSX-ReARMed targeting general PC hardware. Experimental, abandoned since 2018.
+  Fork of PCSX-ReARMed targeting general PC hardware. The last commit on libretro/pcsx1-libretro is from 2018-02-11.
   HLE BIOS built-in: if no BIOS file found, core warns and falls back to HLE automatically.
   BIOS search order: scph1001.bin, scph5501.bin, scph7001.bin by exact filename, then scans system
   directory for any file matching "scph*" (case-insensitive) with size == 512 KB.

@@ -254,11 +254,16 @@ class WhatTheAppShipsIsNoFileToGet(unittest.TestCase):
         self.assertIn(">comes with the app</span>", badges)
         self.assertNotIn(">required</span>", badges)
         self.assertNotIn(">missing</span>", badges)
-        # Installed by one build only: the other still reads it from the folder.
+        # Narrowed to one build, the entry is that build's alone, as verify
+        # and the pack read it: EightyOne installs its ROMs, and the libretro
+        # core, which embeds them, reads no entry. Nothing to fetch.
         dual = " ".join(gs._file_badges({"name": "a", "bundled": True, "mode": "standalone",
                                          "required": True}, False))
-        self.assertIn(">required</span>", dual)
+        self.assertNotIn(">required</span>", dual)
+        self.assertNotIn(">missing</span>", dual)
         self.assertIn("installed with the standalone emulator", dual)
+        rom = next(f for f in _profile("81")["files"] if f["name"] == "jupiterace.rom")
+        self.assertTrue(gs.comes_with_app(rom))
 
     def test_counts_leave_them_out(self):
         shipped = sum(1 for f in self.profile["files"] if gs.comes_with_app(f))
@@ -399,7 +404,9 @@ class AnAppThatReadsAnyBios(unittest.TestCase):
         install = self.page[self.page.index("Install this emulator's files"):]
         install = install[:install.index("</details>")]
         self.assertRegex(install, r"With [^:]+: the installer finds")
-        self.assertEqual(set(re.findall(r'<TabItem label="([^"]+)">', install)), {"On the device"})
+        # One place to run it, so no tab bar (one tab offers no choice).
+        self.assertNotIn("<Tabs", install)
+        self.assertIn("curl -fsSL", install)
         nether = _pages("nethersx2")["nethersx2"]
         if "--emulator nethersx2" in nether:
             self.assertIn("With ", nether)
