@@ -353,6 +353,54 @@ class PinParsingTests(unittest.TestCase):
         self.assertTrue(cf.specifier_allows(">=10.14", "12.0.1"))
 
 
+class RomFolderPins(unittest.TestCase):
+    """The rom folders of a setup were pinned by hand and nothing compared
+    the pins with the platform file or the project's releases."""
+
+    def _tree(self, tmp: str, platform_source: str, os_source: str) -> Path:
+        root = Path(tmp)
+        (root / "romfolders" / "_sources").mkdir(parents=True)
+        (root / "_registry.yml").write_text("platforms:\n  plat: {}\n")
+        (root / "plat.yml").write_text(f"source: {platform_source}\n")
+        (root / "romfolders" / "_sources" / "plat.yml").write_text(
+            f"sources:\n  os:\n    repo: https://github.com/o/r\n{os_source}")
+        (root / "romfolders" / "_sources" / "other.yml").write_text(
+            "sources:\n  os:\n    repo: https://github.com/x/y\n    commit: " + "c" * 40 + "\n")
+        return root
+
+    def test_a_platform_setup_follows_its_platform_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._tree(tmp, "https://raw.githubusercontent.com/o/r/v2/list.txt",
+                              "    tag: v1\n    commit: " + "a" * 40 + "\n")
+            rows = {f.subject: f for f in cf.check_romfolders(root, "", True)}
+        self.assertEqual(rows["plat"].status, cf.STALE)
+        self.assertIn("scraped at v2, the rom folders at v1", rows["plat"].detail)
+        self.assertEqual(rows["other"].status, cf.SKIPPED)
+
+    def test_the_same_revision_is_fresh(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._tree(tmp, "https://github.com/o/r/tree/" + "a" * 40,
+                              "    commit: " + "a" * 40 + "\n")
+            rows = {f.subject: f for f in cf.check_romfolders(root, "", True)}
+        self.assertEqual(rows["plat"].status, cf.OK)
+
+    def test_a_newer_release_makes_another_setup_stale(self):
+        release = cf.upstream.Release("v9", "2026-11-01", False)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self._tree(tmp, "https://github.com/o/r/tree/" + "a" * 40,
+                              "    commit: " + "a" * 40 + "\n")
+            with mock.patch.object(cf.upstream, "commit_date", return_value="2026-10-01T00:00:00"), \
+                    mock.patch.object(cf.upstream, "latest_release", return_value=release):
+                rows = {f.subject: f for f in cf.check_romfolders(root, "", False)}
+        self.assertEqual((rows["other"].status, rows["other"].remote), (cf.STALE, "v9 (2026-11-01)"))
+
+    def test_the_committed_setups_agree_with_their_platform_files(self):
+        platforms = REPO_ROOT / "platforms"
+        drift = [d for setup, doc in cf.romfolder_sources(platforms).items()
+                 if (d := cf.romfolder_pin_drift(setup, doc, platforms))]
+        self.assertEqual(drift, [])
+
+
 class CatalogParsingTests(unittest.TestCase):
     def test_game_catalogs_are_watched(self):
         """The 38 game catalogs the games-on-card mode identifies discs by

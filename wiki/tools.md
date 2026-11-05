@@ -676,6 +676,14 @@ patches from and reports an original that is absent, that came from another
 URL than the one the platform YAML names, or that was fetched before the
 platform YAML was last rewritten.
 
+The `romfolders` area compares each pin of `platforms/romfolders/_sources/`.
+A setup that is a registered platform must be read at the revision its
+platform file was scraped at, which needs no network unless one side names a
+tag and the other a commit. Any other setup is compared with its project's
+newest release, or with its branch head when the project publishes none. A
+stale pin is moved by hand, then `python -m scripts.scraper.romfolders --setup
+NAME` reads the folders again.
+
 The `profiles` area always checks `website/src/data/source-paths.json`
 against the profiles, offline: a recorded tree that no profile pins any more
 is `STALE` until `sitesources.py --fetch` runs again.

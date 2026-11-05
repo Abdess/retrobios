@@ -4,7 +4,7 @@ platform: amberelec
 sources:
   os:
     repo: "https://github.com/AmberELEC/AmberELEC"
-    commit: 5a3882cbb755dcd614aea8952ff20f5a4151505b
+    commit: a21975bfb1a3af68f66e07a931b994b523e1e6e2
   es:
     repo: "https://github.com/AmberELEC/emulationstation"
     commit: e3846751ce50fdced1f2bbd7a5bb51f4da2e7007
