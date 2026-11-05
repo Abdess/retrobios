@@ -193,8 +193,15 @@ rb_open_log() {
 
 # --- Python ---------------------------------------------------------------
 
-rb_python_ok() {
+# The modules install.py needs that a Python can be built without: a python3
+# lacking ssl was chosen over PortMaster's runtime, and every download failed
+# as if the network were down.
+rb_python_new() {
   "$@" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 8) else 1)' >/dev/null 2>&1
+}
+
+rb_python_ok() {
+  rb_python_new "$@" && "$@" -c 'import ssl, unicodedata, zlib' >/dev/null 2>&1
 }
 
 # The OS python3 when it is 3.8 or newer, else PortMaster's python_3.11
@@ -252,6 +259,9 @@ rb_release_python() {
 rb_python_text() {
   local found
   found=$(python3 --version 2>&1 | awk '{print $2}')
+  if command -v python3 >/dev/null 2>&1 && rb_python_new python3; then
+    found="$found, built without a module install.py needs (ssl, unicodedata or zlib)"
+  fi
   case "$RB_PYTHON_PROBLEM" in
     old) printf '%s\n' "Python 3.8 or newer is needed. This system has ${found:-none}, and PortMaster's Python runtime exists for aarch64 only, and this device is $(rb_arch). $RB_PC_ROUTE" ;;
     runtime_offline) printf '%s\n' "Python 3.8 or newer is needed. This system has ${found:-none}, and PortMaster's $RB_RUNTIME runtime needs a connection to download. $RB_PC_ROUTE" ;;

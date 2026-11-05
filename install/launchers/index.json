@@ -62,8 +62,8 @@
         {
           "dest": "roms/ports/retrobios/tui.txt",
           "repo_path": "ports/shared/tui.txt",
-          "size": 35984,
-          "sha256": "7291b11eef5b5c2df8d2befab10614a2d515bffdf96dc208529b5dee9e6df0f1",
+          "size": 36434,
+          "sha256": "fa05432a9a4325f3fd3220eec0548ad932dffc1888b93a08af2047cc78aa4d0c",
           "executable": false
         }
       ]
@@ -71,8 +71,8 @@
     "muos": {
       "archive": {
         "dest": "ARCHIVE/RetroBIOS.muxapp",
-        "size": 1134145,
-        "sha256": "9a837360311366ecb4a65c4c4eff5388319ff0ade4f6acad3709cd4e63249a59"
+        "size": 1134595,
+        "sha256": "72ef1c1054aaff03491127694455e27d25edcc5565ace9e490bb5623c2a62840"
       },
       "members": [
         {
@@ -141,8 +141,8 @@
         {
           "name": "RetroBIOS/tui.txt",
           "repo_path": "ports/shared/tui.txt",
-          "size": 35984,
-          "sha256": "7291b11eef5b5c2df8d2befab10614a2d515bffdf96dc208529b5dee9e6df0f1",
+          "size": 36434,
+          "sha256": "fa05432a9a4325f3fd3220eec0548ad932dffc1888b93a08af2047cc78aa4d0c",
           "executable": false
         }
       ]
@@ -208,8 +208,8 @@
         {
           "dest": ".config/modules/retrobios/tui.txt",
           "repo_path": "ports/shared/tui.txt",
-          "size": 35984,
-          "sha256": "7291b11eef5b5c2df8d2befab10614a2d515bffdf96dc208529b5dee9e6df0f1",
+          "size": 36434,
+          "sha256": "fa05432a9a4325f3fd3220eec0548ad932dffc1888b93a08af2047cc78aa4d0c",
           "executable": false
         }
       ]

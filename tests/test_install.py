@@ -2575,6 +2575,51 @@ class NoPythonNamesThisSystemsCommand(unittest.TestCase):
         self.assertNotIn("apt", proc.stderr)
 
 
+class ABootstrapPythonCanDoHttps(unittest.TestCase):
+    """find_python checked the version only: a python3 built without ssl
+    was chosen over a full python, and every download then failed."""
+
+    def _bin(self) -> tuple[Path, Path]:
+        root = Path(_tempdir(self))
+        fake_bin = root / "bin"
+        fake_bin.mkdir()
+        for tool in ("sed", "tr", "dirname", "cat", "awk", "uname"):
+            found = shutil.which(tool)
+            if found:
+                (fake_bin / tool).symlink_to(found)
+        shadow = root / "no-ssl"
+        shadow.mkdir()
+        (shadow / "ssl.py").write_text('raise ImportError("built without ssl")\n')
+        (fake_bin / "python3").write_text(
+            f'#!/bin/sh\nPYTHONPATH="{shadow}" exec {shlex.quote(sys.executable)} "$@"\n')
+        (fake_bin / "python3").chmod(0o755)
+        (root / "install.py").write_text("import ssl; print('installer ran')\n")
+        shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
+        return root, fake_bin
+
+    def _run(self, root: Path, fake_bin: Path) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            ["/bin/sh", str(root / "install.sh")], cwd=root,
+            env={"PATH": str(fake_bin), "HOME": str(root)},
+            capture_output=True, text=True, timeout=30, check=False,
+            stdin=subprocess.DEVNULL, start_new_session=True,
+        )
+
+    def test_a_full_python_is_preferred(self):
+        root, fake_bin = self._bin()
+        (fake_bin / "python").symlink_to(sys.executable)
+        proc = self._run(root, fake_bin)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn("installer ran", proc.stdout)
+
+    def test_the_missing_module_is_named(self):
+        root, fake_bin = self._bin()
+        proc = self._run(root, fake_bin)
+        self.assertEqual(proc.returncode, 1)
+        self.assertNotIn("installer ran", proc.stdout)
+        self.assertIn("python3 is built without a module the installer needs", proc.stderr)
+
+
 @unittest.skipUnless(shutil.which("pwsh") and shutil.which("script"), "needs PowerShell and a terminal")
 class WindowsWithoutPythonIsOfferedWinget(unittest.TestCase):
     """A Windows machine without Python was told to install it, open a new

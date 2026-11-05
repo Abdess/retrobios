@@ -43,7 +43,7 @@ rb_fetch_runtime() {
   fi
   PortMasterDialogInit "no-check"
   PortMasterDialog "messages_begin"
-  PortMasterDialog "message" "This system's Python is older than 3.8. Downloading PortMaster's $RB_RUNTIME runtime."
+  PortMasterDialog "message" "This system's Python is older than 3.8 or lacks a module install.py needs. Downloading PortMaster's $RB_RUNTIME runtime."
   answer=$(rb_answer "check_runtime" "$RB_RUNTIME.squashfs")
   PortMasterDialog "messages_end"
   PortMasterDialogExit

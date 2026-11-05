@@ -84,7 +84,7 @@
             param($candidate)
             if (-not $candidate) { return $false }
             $arguments = $candidate[1]
-            & $candidate[0].Source @arguments -c "import sys; raise SystemExit(sys.version_info < (3, 8))" | Out-Null
+            & $candidate[0].Source @arguments -c "import sys, ssl, unicodedata, zlib; raise SystemExit(sys.version_info < (3, 8))" 2>$null | Out-Null
             return ($LASTEXITCODE -eq 0)
         }
         $needPython = "Python 3.8 or newer is required. Install it with " +

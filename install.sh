@@ -121,14 +121,21 @@ if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   INSTALLER="$TEMP_INSTALLER"
 fi
 
+# A Python can be built without ssl, unicodedata or zlib, and the installer
+# needs all three: a python3 lacking ssl was chosen over a full python and
+# every download then failed as if the network were down.
 find_python() {
   PYTHON=""
+  PYTHON_LACKING=""
   for command_name in python3 python; do
-    if command -v "$command_name" >/dev/null 2>&1 \
-      && "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' 2>/dev/null; then
+    command -v "$command_name" >/dev/null 2>&1 || continue
+    "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' \
+      2>/dev/null || continue
+    if "$command_name" -c 'import ssl, unicodedata, zlib' 2>/dev/null; then
       PYTHON=$command_name
       return 0
     fi
+    PYTHON_LACKING=${PYTHON_LACKING:-$command_name}
   done
   return 1
 }
@@ -171,6 +178,11 @@ if ! find_python; then
       *) pkg install -y python </dev/tty && find_python || true ;;
     esac
   fi
+fi
+if [ -z "$PYTHON" ] && [ -n "$PYTHON_LACKING" ]; then
+  echo "Error: $PYTHON_LACKING is built without a module the installer needs" >&2
+  echo "  (ssl, unicodedata or zlib). Run it with a full Python 3.8 or newer." >&2
+  exit 1
 fi
 if [ -z "$PYTHON" ]; then
   echo "Error: Python 3.8 or newer is required." >&2
