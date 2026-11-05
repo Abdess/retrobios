@@ -525,7 +525,8 @@ prose that the same pass would have moved is not reported as blocked. Drop
 A moved pin also moves the links the site draws into the cited sources: a
 path is linked only where `website/src/data/source-paths.json` records it in
 the tree the profile pins. Refresh that record after a pin moves or a profile
-is added, and commit it with the profiles:
+is added, and commit it with the profiles. Every tree a run tries is recorded,
+read or not, so `check_freshness.py` reports a pinned tree the record lacks:
 
 ```bash
 python scripts/sitesources.py --fetch

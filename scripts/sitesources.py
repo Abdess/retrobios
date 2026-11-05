@@ -311,9 +311,9 @@ def build_source_paths(
             if tree is None:
                 unread.add(tree_key(repo, pin))
                 continue
-            found = paths & tree
-            if found:
-                held.setdefault(tree_key(repo, pin), set()).update(found)
+            # Recorded even when it holds no cited path, so a pinned tree
+            # missing from the record is one no run has read.
+            held.setdefault(tree_key(repo, pin), set()).update(paths & tree)
     return {key: sorted(paths) for key, paths in sorted(held.items())}, sorted(unread)
 
 
@@ -323,12 +323,13 @@ def keep_unread(
     """Carry over what the last record held for the trees this run could not read.
 
     A tree key names a pinned sha, so what it held then it holds now. A run
-    that GitLab rate-limited dropped about twenty trees it never read.
+    that GitLab rate-limited dropped about twenty trees it never read. A tree
+    no run could read is recorded empty: confirming no path, it links none,
+    and check_freshness tells it from a pin no run has tried.
     """
     kept = dict(held)
     for key in unread:
-        if key not in kept and key in previous:
-            kept[key] = previous[key]
+        kept.setdefault(key, previous.get(key, []))
     return dict(sorted(kept.items()))
 
 

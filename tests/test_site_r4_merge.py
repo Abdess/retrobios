@@ -13,6 +13,7 @@ import glob
 import json
 import re
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -122,6 +123,37 @@ class SourcePathsFreshness(unittest.TestCase):
         finding = check_freshness.check_source_paths({"geolith": moved})
         self.assertEqual(finding.status, check_freshness.STALE)
         self.assertIn("sitesources.py --fetch", finding.detail)
+
+    def test_a_pinned_tree_never_read_is_stale(self):
+        """fbneo moved to two new pins while fbneo_cps12 kept the old ones:
+        no recorded tree was orphaned, so the check said OK and 174 citations
+        stayed unlinked."""
+        import sitesources  # noqa: PLC0415
+
+        profile = _profile("geolith")
+        trees = [sitesources.tree_key(r, p) for r, p in sitesources.profile_trees(profile)]
+        record = json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8"))
+        for key in trees:
+            record.pop(key, None)
+        # Kept pinned by another profile, as fbneo_cps12 kept the old FBNeo trees.
+        record.update({key: [] for key in trees[1:]})
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "source-paths.json"
+            path.write_text(json.dumps(record), encoding="utf-8")
+            with mock.patch.object(sitesources, "SOURCE_PATHS", path):
+                finding = check_freshness.check_source_paths({"geolith": profile})
+        self.assertEqual(finding.status, check_freshness.STALE)
+        self.assertIn("1 pinned trees not recorded", finding.detail)
+
+    def test_a_tree_read_with_no_cited_path_is_recorded(self):
+        import sitesources  # noqa: PLC0415
+
+        profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40,
+                   "files": [{"source_ref": "src/a.c:5"}]}
+        with mock.patch.object(sitesources, "_cached_tree", return_value=frozenset({"x.c"})):
+            held, unread = sitesources.build_source_paths({"p": profile}, [Path("tmp")])
+        self.assertEqual(held, {"github.com/o/r@" + "e" * 40: []})
+        self.assertEqual(unread, [])
 
 
 class OptionsGlanceFromTheParser(unittest.TestCase):

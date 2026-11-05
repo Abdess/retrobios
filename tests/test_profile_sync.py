@@ -4882,7 +4882,8 @@ class AnUnreadTreeKeepsItsRecord(unittest.TestCase):
         kept = sitesources.keep_unread(
             {"a@1": ["x.c"]}, ["b@2", "c@3"], {"b@2": ["y.c"], "a@1": ["old.c"]}
         )
-        self.assertEqual(kept, {"a@1": ["x.c"], "b@2": ["y.c"]})
+        # c@3 was never read: recorded empty, it confirms no path.
+        self.assertEqual(kept, {"a@1": ["x.c"], "b@2": ["y.c"], "c@3": []})
 
 
 class FreshRefusesOffline(unittest.TestCase):
