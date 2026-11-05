@@ -12,7 +12,7 @@ version_basis:
   distance: 0
 display_name: "Bermuda Syndrome (bs)"
 cores: [bsyndrome]
-systems: [bsyndrome]
+systems: [bermuda-syndrome]
 
 notes: |
   Rewrite of the engine of Bermuda Syndrome (Century Interactive, BMG, 1995)
@@ -54,7 +54,7 @@ files:
   - name: "_01.SCN"
     path: "DATA/SCN/_01.SCN"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: true
     description: "Startup scene of the English and French releases"
     source_ref: "game.cpp:33-51"
@@ -64,7 +64,7 @@ files:
   - name: "bermuda.wgp"
     path: "DATA/bermuda.wgp"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: true
     description: "Bag background image"
     source_ref: "resource.cpp:51"
@@ -73,7 +73,7 @@ files:
   - name: "bermuda.spr"
     path: "DATA/bermuda.spr"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: true
     description: "Common sprites"
     source_ref: "resource.cpp:60"
@@ -82,7 +82,7 @@ files:
   - name: "bermuda.ovr"
     path: "DATA/bermuda.ovr"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: true
     description: "Overlay data of the full game"
     source_ref: "resource.cpp:45-49"
@@ -92,7 +92,7 @@ files:
   - name: "LOGO.AVI"
     path: "DATA/DATA/LOGO.AVI"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "Logo video"
     source_ref: "game.cpp:138, 1043-1058"
@@ -102,7 +102,7 @@ files:
   - name: "track01.ogg"
     path: "MUSIC/track01.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 01, played in place of title.mid"
     source_ref: "game.cpp:1078-1112"
@@ -111,7 +111,7 @@ files:
   - name: "track02.ogg"
     path: "MUSIC/track02.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 02, played in place of flyaway.mid"
     source_ref: "game.cpp:1078-1112"
@@ -120,7 +120,7 @@ files:
   - name: "track03.ogg"
     path: "MUSIC/track03.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 03, played in place of jungle1.mid and of the demo musik.mid"
     source_ref: "game.cpp:1078-1112"
@@ -129,7 +129,7 @@ files:
   - name: "track04.ogg"
     path: "MUSIC/track04.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 04, played in place of sadialog.mid"
     source_ref: "game.cpp:1078-1112"
@@ -138,7 +138,7 @@ files:
   - name: "track05.ogg"
     path: "MUSIC/track05.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 05, played in place of caves.mid"
     source_ref: "game.cpp:1078-1112"
@@ -147,7 +147,7 @@ files:
   - name: "track06.ogg"
     path: "MUSIC/track06.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 06, played in place of jungle2.mid"
     source_ref: "game.cpp:1078-1112"
@@ -156,7 +156,7 @@ files:
   - name: "track07.ogg"
     path: "MUSIC/track07.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 07, played in place of darkcave.mid"
     source_ref: "game.cpp:1078-1112"
@@ -165,7 +165,7 @@ files:
   - name: "track08.ogg"
     path: "MUSIC/track08.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 08, played in place of waterdiv.mid"
     source_ref: "game.cpp:1078-1112"
@@ -174,7 +174,7 @@ files:
   - name: "track09.ogg"
     path: "MUSIC/track09.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 09, played in place of merian1.mid"
     source_ref: "game.cpp:1078-1112"
@@ -183,7 +183,7 @@ files:
   - name: "track10.ogg"
     path: "MUSIC/track10.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 10, played in place of telquad.mid"
     source_ref: "game.cpp:1078-1112"
@@ -192,7 +192,7 @@ files:
   - name: "track11.ogg"
     path: "MUSIC/track11.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 11, played in place of gameover.mid"
     source_ref: "game.cpp:1078-1112"
@@ -201,7 +201,7 @@ files:
   - name: "track12.ogg"
     path: "MUSIC/track12.ogg"
     category: game_data
-    system: bsyndrome
+    system: bermuda-syndrome
     required: false
     description: "CD audio track 12, played in place of complete.mid"
     source_ref: "game.cpp:1078-1112"

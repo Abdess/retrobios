@@ -890,7 +890,6 @@ SYSTEM_NAMES: dict[str, str] = {
     "bermuda-syndrome": "Bermuda Syndrome game",
     "brezzasoft-crystal": "BrezzaSoft Crystal System",
     "bshift": "Half-Life: Blue Shift",
-    "bsyndrome": "Bermuda Syndrome game",
     "caesar3": "Caesar III",
     "cambridge-z88": "Cambridge Computer Z88",
     "camplynx": "Camputers Lynx",
