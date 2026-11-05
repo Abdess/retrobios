@@ -613,7 +613,9 @@ Writes are explicit and mechanical only. `--backfill-commits` fills a
 missing `source_commit`, `--rebase-refs` recales `SHIFTED` and `RENAMED`
 line ranges and moves `source_commit` to HEAD with them, all or nothing,
 `--bump-commit` advances `source_commit` to HEAD only when nothing needs a
-re-read. All three refuse to run on a dirty `emulators/` without `--force`,
+re-read. It leaves a profile a single registered platform ships until the
+profile says what that platform builds: `pin_frozen` for a fixed revision,
+`pin_follows` for the branch tip. All three refuse to run on a dirty `emulators/` without `--force`,
 and every write is verified by reparsing the document.
 
 Uses `GITHUB_TOKEN` when set, which `--all` requires. Responses are cached

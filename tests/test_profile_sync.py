@@ -3256,6 +3256,35 @@ class TestBumpCommit(unittest.TestCase):
         # Nothing was compared upstream, so its pin is not written.
         self.assertNotIn("uphead", text)
 
+    def test_a_profile_one_platform_ships_waits_for_its_build(self):
+        """EmuELEC alone ships RigelEngine and builds its package.mk
+        PKG_VERSION. A bulk advance moved fheroes2 and supertux past that
+        build, and rigelengine is a commit ahead of it already."""
+        root = Path(__file__).resolve().parents[1]
+        path = Path(self.tmp.name) / "rigelengine.yml"
+        path.write_text(
+            SAMPLE.replace("\nnotes:", "\ntype: standalone\ncores: [rigelengine, RigelEngine]\n\nnotes:", 1),
+            encoding="utf-8",
+        )
+        report = ProfileReport(
+            name="rigelengine", repo="o/n", pin="pin", head="newhead", entries=[],
+            counts={}, skipped=profile_sync.NO_SOURCE_REF,
+        )
+        platforms = str(root / "platforms")
+        self.assertEqual(
+            profile_sync.shipping_platforms("rigelengine", self.tmp.name, platforms),
+            ["emuelec"],
+        )
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertFalse(bump_commit(path, report, platforms_dir=platforms))
+        self.assertIn("only emuelec ships it", err.getvalue())
+        path.write_text(
+            path.read_text(encoding="utf-8")
+            + 'pin_follows: "EmuELEC builds the branch tip"\n',
+            encoding="utf-8",
+        )
+        self.assertTrue(bump_commit(path, report, platforms_dir=platforms))
+
     def test_any_other_skip_still_holds_the_pin(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead", entries=[], counts={},

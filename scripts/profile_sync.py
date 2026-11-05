@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import bisect
 import difflib
+import functools
 import itertools
 import json
 import os
@@ -35,7 +36,10 @@ import version_basis
 from common import (
     _norm_system_id,
     github_token,
+    list_registered_platforms,
     load_emulator_profiles,
+    load_platform_config,
+    resolve_platform_cores,
     suggest_names,
     system_index,
 )
@@ -3497,9 +3501,37 @@ def _needs_review(report: ProfileReport, accept_changed: bool) -> bool:
     return any((report.counts or {}).get(s) for s in blocking)
 
 
+@functools.lru_cache(maxsize=4)
+def _platform_cores(emulators_dir: str, platforms_dir: str) -> tuple[tuple[str, frozenset[str]], ...]:
+    profiles = load_emulator_profiles(emulators_dir)
+    return tuple(
+        (platform, frozenset(resolve_platform_cores(
+            load_platform_config(platform, platforms_dir), profiles
+        )))
+        for platform in list_registered_platforms(platforms_dir, include_archived=True)
+    )
+
+
+def shipping_platforms(
+    name: str, emulators_dir: str, platforms_dir: str = "platforms",
+) -> list[str]:
+    """The registered platforms whose cores resolve to this profile.
+
+    Archived platforms count: RetroPie still builds the packages it lists.
+    """
+    return [
+        platform
+        for platform, cores in _platform_cores(
+            os.path.realpath(emulators_dir), platforms_dir
+        )
+        if name in cores
+    ]
+
+
 def bump_commit(
     path: Path, report: ProfileReport, accept_changed: bool = False,
     cache_dir: str = DEFAULT_CACHE, offline: bool = False,
+    platforms_dir: str = "platforms",
 ) -> bool:
     """Advance source_commit to HEAD when nothing needs a read again.
 
@@ -3523,6 +3555,20 @@ def bump_commit(
             file=sys.stderr,
         )
         return False
+    if not (document.get("pin_frozen") or document.get("pin_follows")):
+        shipped = shipping_platforms(path.stem, str(path.parent), platforms_dir)
+        if len(shipped) == 1:
+            # One platform ships it, so the pin is the revision that platform
+            # builds: a bulk advance moved fheroes2, supertux and
+            # supermariowar past what EmuELEC compiles, and rigelengine is
+            # already one commit ahead of its package.mk.
+            print(
+                f"{path.stem}: only {shipped[0]} ships it. Read the revision its "
+                "build compiles and set pin_frozen, or pin_follows when it "
+                "builds the branch tip",
+                file=sys.stderr,
+            )
+            return False
     if any(isinstance(document.get(f), dict) for f in ("source_commit", "upstream_commit")):
         # A pin per build mode names one revision per repository, and the
         # report heads only the primary one: rewriting str(dict) was a

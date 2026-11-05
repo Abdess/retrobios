@@ -4,7 +4,8 @@ core_classification: game_engine
 source: "https://github.com/lethal-guitar/RigelEngine"
 upstream: "https://github.com/lethal-guitar/RigelEngine"
 profiled_date: "2026-10-22"
-source_commit: "30afeff8f0b105eac77ee0a2fbd54b06e1a49b60"
+source_commit: "f05996f9b3ad3b3ea5bb818e49e7977636746343"
+pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/rigelengine/package.mk:5 at v4.8). Later commits are not part of that build."
 core_version: "0.9.1"
 version_basis:
   kind: file

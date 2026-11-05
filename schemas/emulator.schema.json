@@ -991,6 +991,10 @@
       "type": "string",
       "description": "Why source_commit is held on purpose rather than followed. The profile is then judged against its own revision, like one pinned to a superseded tag: comparing it to HEAD says nothing and recaling would repoint its refs at code the build it documents never had."
     },
+    "pin_follows": {
+      "type": "string",
+      "description": "Why source_commit follows the branch tip although a single platform ships the profile: that platform builds the tip, cited by its build file. Without it or pin_frozen, a bump refuses a profile one platform ships."
+    },
     "data_root": {
       "type": "object",
       "minProperties": 1,
