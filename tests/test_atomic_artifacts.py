@@ -154,6 +154,38 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
         artifacts.write_text_atomic(str(self.dir / "a.json"), "{}")
         self.assertEqual(self._mode(self.dir / "a.json"), 0o664)
 
+    def test_threads_reading_the_mode_leave_the_umask_alone(self):
+        """mame_devices fetches on eight threads and every cache write reads
+        the umask: unguarded, two readers interleaved and left it at 0."""
+        import threading  # noqa: PLC0415
+
+        interval = sys.getswitchinterval()
+        sys.setswitchinterval(1e-6)
+        self.addCleanup(sys.setswitchinterval, interval)
+        modes: set[int] = set()
+
+        def read() -> None:
+            seen = {artifacts.plain_file_mode() for _ in range(20000)}
+            modes.update(seen)
+
+        threads = [threading.Thread(target=read) for _ in range(8)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+        current = os.umask(0o022)
+        self.assertEqual(current, 0o022)
+        self.assertEqual(modes, {0o644})
+
+    def test_no_script_reads_the_umask_unguarded(self):
+        offenders = [
+            f"{path.name}:{number}"
+            for path in sorted((REPO_ROOT / "scripts").rglob("*.py"))
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1)
+            if "os.umask(" in line and path.name != "artifacts.py"
+        ]
+        self.assertEqual(offenders, [])
+
     def test_packs_and_their_manifest(self):
         import zipfile  # noqa: PLC0415
 
