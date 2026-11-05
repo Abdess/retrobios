@@ -85,6 +85,22 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
 
 
 
+class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
+    """`verify --all --target swich` ended on "no platform has it" after 17
+    INFO lines, two of which held the suggestion."""
+
+    def test_the_refusal_suggests_and_names_the_platforms(self):
+        platforms = common.list_registered_platforms(str(REPO_ROOT / "platforms"))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), self.assertRaises(ValueError) as caught:
+            common.build_target_cores_cache(
+                platforms, "swich", str(REPO_ROOT / "platforms"), is_all=True
+            )
+        self.assertIn("Did you mean: switch (", str(caught.exception))
+        self.assertIn("retroarch", str(caught.exception))
+        self.assertEqual(out.getvalue(), "")
+
+
 class AMistypedDataKeyGetsTheClosestName(unittest.TestCase):
     """`--key dolphin-sis` printed all 27 keys on one line."""
 

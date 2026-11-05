@@ -3250,24 +3250,53 @@ def build_target_cores_cache(
     """
     cache: dict[str, set[str] | None] = {}
     skip: list[str] = []
+    notes: list[str] = []
     for p in platforms:
         try:
             cache[p] = load_target_config(p, target, platforms_dir)
         except FileNotFoundError:
             if not is_all:
                 raise
-            print(f"INFO: Skipping {p}: no hardware targets")
+            notes.append(f"INFO: Skipping {p}: no hardware targets")
             skip.append(p)
         except ValueError as e:
             if is_all:
-                print(f"INFO: Skipping {p}: {e}")
+                notes.append(f"INFO: Skipping {p}: {e}")
                 skip.append(p)
             else:
                 raise
     kept = [p for p in platforms if p not in skip]
     if is_all and platforms and not kept:
-        raise ValueError(f"unknown target '{target}': no platform has it")
+        # The seventeen per-platform lines buried the one suggestion that
+        # mattered: the refusal names the closest target across them all.
+        raise ValueError(_unknown_target_message(target, platforms, platforms_dir))
+    for note in notes:
+        print(note)
     return cache, kept
+
+
+def _unknown_target_message(target: str, platforms: list[str], platforms_dir: str) -> str:
+    """A target no platform has, with the closest names any of them knows."""
+    import difflib  # noqa: PLC0415
+
+    targets_dir = os.path.join(platforms_dir, "targets")
+    owners: dict[str, list[str]] = {}
+    for platform in platforms:
+        target_file = os.path.join(targets_dir, f"{platform}.yml")
+        if not os.path.exists(target_file):
+            continue
+        with open(target_file) as f:
+            targets = (yaml_load(f) or {}).get("targets", {})
+        overrides = _target_overrides(platform, targets_dir)
+        for name in _target_alias_index(targets, overrides):
+            owners.setdefault(name, []).append(platform)
+    message = f"unknown target '{target}': no platform has it."
+    close = difflib.get_close_matches(target, sorted(owners), n=3, cutoff=0.6)
+    if close:
+        named = ", ".join(f"{n} ({', '.join(sorted(owners[n]))})" for n in close)
+        return f"{message} Did you mean: {named}?"
+    return (f"{message} python scripts/verify.py --platform <name> --list-targets "
+            "lists the targets of one platform.")
 
 
 # Re-exported so the existing call sites keep working while the
