@@ -2429,6 +2429,12 @@ def launchbox_bios_dirs(root: Path) -> dict[str, Path]:
 
 # (folder, why in words) for each folder detection could not look in.
 _DETECTION_REFUSED: list[tuple[Path, str]] = []
+# Those of them that failed for another cause than a permission: a read
+# error from a failing card, a link that loops.
+_DETECTION_UNREADABLE: set[Path] = set()
+# The errors that say a place is not there, as against one that is there
+# and could not be read.
+_ABSENT_ERRNOS = (errno.ENOENT, errno.ENOTDIR, errno.EINVAL, errno.ENAMETOOLONG)
 # The platforms whose configuration names a folder with a control character.
 _UNNAMEABLE: list[str] = []
 
@@ -2437,13 +2443,18 @@ def refused_words(folder: Path, why: str, shown: str = "") -> str:
     """The line said for a folder detection could not look in. shown is
     the folder as the screen writes it (~/.config/EmuDeck), the full path
     by default."""
+    if folder in _DETECTION_UNREADABLE:
+        return (f"Could not look for setups: {shown or folder} could not be read ({why}). "
+                "A failing card or a link that loops gives this: check it, or name the "
+                "BIOS folder with --dest.")
     return (f"Could not look for setups: this user cannot open {shown or folder} ({why}). "
             "Run as its owner (su - or sudo -H), or name the BIOS folder "
             "with --dest.")
 
 
 def _note_refused(path: Path, exc: OSError) -> None:
-    """Say once that a folder detection looks in is closed to this user.
+    """Say once that a folder detection looks in is closed to this user,
+    or could not be read.
 
     A probe refused there counts as absent and the others go on: a config
     folder a sudo run left at 0700 (~/.config/EmuDeck) hid a RetroArch whose
@@ -2451,12 +2462,16 @@ def _note_refused(path: Path, exc: OSError) -> None:
     not read.
     """
     if (not getattr(_SETUP_SEARCH, "active", False) or getattr(_SETUP_SEARCH, "quiet", False)
-            or not isinstance(exc, PermissionError)):
+            or exc.errno in _ABSENT_ERRNOS):
         return
     refused = closed_folder(path) or (path, exc.strerror or str(exc))
     if refused in _DETECTION_REFUSED:
         return
     _DETECTION_REFUSED.append(refused)
+    if not isinstance(exc, PermissionError):
+        # An EIO on retroarch.cfg counted as absent: the card about to be
+        # written to failed, and the run said nothing was detected.
+        _DETECTION_UNREADABLE.add(refused[0])
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=refused[1], message=words)
     print(f"  {screen_text(words)}", file=sys.stderr)
@@ -5038,10 +5053,8 @@ def _probed(probe: Callable[[], bool], path: Path) -> bool:
         # raised: a refusal is told from absence by the stat it hides.
         try:
             os.stat(path)
-        except PermissionError as exc:
+        except OSError as exc:
             _note_refused(path, exc)
-        except OSError:
-            pass
     return found
 
 
