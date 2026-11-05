@@ -1707,7 +1707,7 @@ class CleanupSurvivesABrokenTerminal(unittest.TestCase):
             self.assertEqual(signal.getsignal(number), handler)
 
 
-class AuditRoundTwo(unittest.TestCase):
+class TicksBarAndPaths(unittest.TestCase):
     """Ticks, the key bar, the network clock and typed paths."""
 
     def systems(self) -> install.TuiState:
@@ -2273,7 +2273,7 @@ class CopyFromAnOldCard(unittest.TestCase):
         self.assertIn("1.0 MB/s, 1:38 left", text)
 
 
-class AuditRoundThree(unittest.TestCase):
+class CardsSpaceAndConfirm(unittest.TestCase):
     """Each card by its own files, Space on install, and a short card."""
 
     CARDS = {
@@ -2957,7 +2957,7 @@ class AReadErrorIsNotAClosedWindow(unittest.TestCase):
                 os.close(master)
 
 
-class AuditRoundFour(unittest.TestCase):
+class SaveDirectoryLeftOut(unittest.TestCase):
     """Files left out of the save directory are said."""
 
     UNPLACED = {"reason": "no_save_directory", "label": "no save directory", "files": 2,
@@ -3730,7 +3730,7 @@ class OfflineInTheInterface(unittest.TestCase):
         self.assertIn("--offline", install.tui_command(state))
 
 
-class AuditFive(unittest.TestCase):
+class BackTicksAndSaveFolder(unittest.TestCase):
     """Going back keeps the ticks, and the save folder is said once."""
 
     def long_list(self) -> install.TuiState:
@@ -6077,7 +6077,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                     self.assertTrue(choice.note)
 
 
-class AuditSix(unittest.TestCase):
+class ConfirmRefusalsAndCardRows(unittest.TestCase):
     """Confirm before an install, refusals said in full, and card rows."""
 
     def setUp(self):
@@ -6357,7 +6357,7 @@ class AuditSix(unittest.TestCase):
         self.assertIn(" +2 shared: counted once", install.tui_view(state, 40, 12))
 
 
-class AuditSevenOneCardReading(unittest.TestCase):
+class OneCardReading(unittest.TestCase):
     """One reading
     of a card's root, said the same on the screen and in line mode."""
 
@@ -6620,7 +6620,7 @@ class AuditSevenOneCardReading(unittest.TestCase):
         self.assertIn("--platform anbernicstockfirmware --dest", err.getvalue())
 
 
-class AuditSevenScreens(unittest.TestCase):
+class WhatEachScreenOffers(unittest.TestCase):
     """What each screen offers and says."""
 
     def setUp(self):
@@ -8583,7 +8583,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertEqual(out.getvalue().count(install.shown_path(folder)), 1)
 
 
-class AuditSeventeenAndTen(unittest.TestCase):
+class PacksWordingAndDocs(unittest.TestCase):
     """What the screen, the packs, the
     wording and the docs answer, line mode's parity being in
     LineModeAndScreenDecideAlike."""
@@ -9035,7 +9035,7 @@ class OneDeviceRegistry(unittest.TestCase):
                         .rstrip().endswith("TrimUI Smar..."))
 
 
-class AuditFifteenAndEightScreens(unittest.TestCase):
+class CardFoldersAndNarrowBars(unittest.TestCase):
     """Card folders, refusals and bars at 40 columns, as the screens show
     them."""
 
@@ -9273,7 +9273,7 @@ def _screen_text(state: install.TuiState, cols: int = 80, rows: int = 24) -> str
     return "\n".join(line.rstrip() for line in install.tui_view(state, cols, rows))
 
 
-class AuditSixteenAndNineLineMode(unittest.TestCase):
+class LineModeDecisions(unittest.TestCase):
     """Line mode read other decisions than the
     screen (a drive's root for Batocera, no other setup once one was found,
     no Enter default, a folder question with no way out)."""
@@ -9439,6 +9439,9 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         listing = self.root / "batocera.json"
         listing.write_text(json.dumps({"manifest_version": 2, "platform": "batocera",
                                        "files": []}))
+        # --manifest sets the process-wide sources: a later test fetching
+        # the list must not find this one.
+        self.addCleanup(install.LOCAL.reset)
         events = io.StringIO()
         with mock.patch.object(install, "detect_platforms", return_value=[]), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
@@ -9455,7 +9458,7 @@ class AuditSixteenAndNineLineMode(unittest.TestCase):
         self.assertEqual(kinds[-1], "error")
 
 
-class AuditSixteenAndNineScreens(unittest.TestCase):
+class ScreenRowsAndFilters(unittest.TestCase):
     """Rows, filters and help as the screens draw them."""
 
     def setUp(self):
@@ -9773,7 +9776,7 @@ class EdgesTheMutantsFound(unittest.TestCase):
 
 
 
-class AuditEighteenAndEleven(_CardFixtures, unittest.TestCase):
+class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
     """What the cards, the screens and the
     docs answer, line mode's parity being in LineModeAndScreenDecideAlike."""
 
@@ -10680,7 +10683,7 @@ def _game_state() -> install.TuiState:
     return state
 
 
-class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
+class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
     """What the screens answer, line mode's
     parity being in LineModeAndScreenDecideAlike."""
 
@@ -11258,7 +11261,7 @@ class TapsOnAPty(unittest.TestCase):
         self.assertGreater(term.raw.rfind(b"\x1b[?1000l"), mark)
 
 
-class AuditTwentyAndThirteen(unittest.TestCase):
+class OneChoicePerRun(unittest.TestCase):
     """One choice for the run, taps that
     never commit what was not seen, and the words that fit."""
 
@@ -12276,7 +12279,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         term.close()
 
 
-class AuditTwentyOneAndFourteen(unittest.TestCase):
+class ChoiceStateInBothModes(unittest.TestCase):
     """One choice state in both modes, the
     cards found first, packs that hold nothing, and words that fit."""
 
@@ -12284,10 +12287,10 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
     line_run = LineModeAndScreenDecideAlike.line_run
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    receive = staticmethod(AuditTwentyAndThirteen.receive)
-    game_manifest = AuditTwentyAndThirteen.game_manifest
-    game_events = AuditTwentyAndThirteen.game_events
-    game_plan = AuditTwentyAndThirteen.game_plan
+    receive = staticmethod(OneChoicePerRun.receive)
+    game_manifest = OneChoicePerRun.game_manifest
+    game_events = OneChoicePerRun.game_events
+    game_plan = OneChoicePerRun.game_plan
 
     @staticmethod
     def screen(state: install.TuiState, cols: int = 80, rows: int = 24) -> str:
@@ -12695,7 +12698,7 @@ class AuditTwentyOneAndFourteen(unittest.TestCase):
 
 
 
-class AuditTwentyTwoAndFifteen(unittest.TestCase):
+class DriveIsACardByItsFiles(unittest.TestCase):
     """A drive is a handheld's card only by
     the files its system writes, one settle from the frame shown, one
     vocabulary and one count per run, and the focus after an action."""
@@ -12704,12 +12707,12 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
     line_run = LineModeAndScreenDecideAlike.line_run
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    receive = staticmethod(AuditTwentyAndThirteen.receive)
-    game_manifest = AuditTwentyAndThirteen.game_manifest
-    game_events = AuditTwentyAndThirteen.game_events
-    game_plan = AuditTwentyAndThirteen.game_plan
-    game_listing = AuditTwentyOneAndFourteen.game_listing
-    screen = staticmethod(AuditTwentyOneAndFourteen.screen)
+    receive = staticmethod(OneChoicePerRun.receive)
+    game_manifest = OneChoicePerRun.game_manifest
+    game_events = OneChoicePerRun.game_events
+    game_plan = OneChoicePerRun.game_plan
+    game_listing = ChoiceStateInBothModes.game_listing
+    screen = staticmethod(ChoiceStateInBothModes.screen)
 
     def drive(self, name: str, folders: tuple) -> Path:
         root = self.root / "media" / name
@@ -13034,7 +13037,7 @@ class OneVocabularyOneCount(unittest.TestCase):
     line_run = LineModeAndScreenDecideAlike.line_run
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    screen = staticmethod(AuditTwentyOneAndFourteen.screen)
+    screen = staticmethod(ChoiceStateInBothModes.screen)
 
     def two_files(self) -> tuple[Path, Path, Path]:
         """A list of two files, the first in place, the second in an old
@@ -13265,7 +13268,7 @@ class FocusAfterAnAction(unittest.TestCase):
                     install.tui_update(state, Key("f1"))
 
     def test_the_game_data_row_keeps_the_focus_when_changed(self):
-        audit = AuditTwentyAndThirteen()
+        audit = OneChoicePerRun()
         state = audit.game_plan()
         rows = install.tui_rows(state)
         state.focus["plan"] = next(i for i, row in enumerate(rows) if row.action == "gamedata")
@@ -13346,7 +13349,7 @@ class TheFromPlanSaysItsKinds(unittest.TestCase):
     the Game data row and said neither the kinds nor what game data is."""
 
     def test_the_kinds_and_the_definition_stay(self):
-        audit = AuditTwentyAndThirteen()
+        audit = OneChoicePerRun()
         state = audit.game_plan()
         folder = "/media/moi/packx"
         state.from_folders = [Path(folder)]
@@ -13415,7 +13418,7 @@ class TheSystemsQuestionFits(unittest.TestCase):
         self.assertTrue(re.match(r" +\d+\) ", lines[row + 1]))
 
 
-class AuditTwentyThreeAndSixteen(unittest.TestCase):
+class ProvenCardsAndCounts(unittest.TestCase):
     """A card its markers prove is that
     system's card everywhere, counts and states that tell the truth, one
     width for every layout, line mode's order and words as the screen's,
@@ -13426,13 +13429,13 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     listing = LineModeAndScreenDecideAlike.listing
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
     both = LineModeAndScreenDecideAlike.both
-    drive = AuditTwentyTwoAndFifteen.drive
-    first_screen = AuditTwentyTwoAndFifteen.first_screen
-    folder_screen = AuditTwentyTwoAndFifteen.folder_screen
-    game_listing = AuditTwentyOneAndFourteen.game_listing
-    game_manifest = AuditTwentyAndThirteen.game_manifest
-    receive = staticmethod(AuditTwentyAndThirteen.receive)
-    screen = staticmethod(AuditTwentyOneAndFourteen.screen)
+    drive = DriveIsACardByItsFiles.drive
+    first_screen = DriveIsACardByItsFiles.first_screen
+    folder_screen = DriveIsACardByItsFiles.folder_screen
+    game_listing = ChoiceStateInBothModes.game_listing
+    game_manifest = OneChoicePerRun.game_manifest
+    receive = staticmethod(OneChoicePerRun.receive)
+    screen = staticmethod(ChoiceStateInBothModes.screen)
 
     def amberelec(self, name: str = "GAMES") -> Path:
         return games_part(self.root / "media" / name)
@@ -14066,7 +14069,7 @@ def core_list(path: Path, files: list) -> Path:
     return path
 
 
-class AuditTwentyFourAndSeventeen(unittest.TestCase):
+class CoresListAndFolderFailures(unittest.TestCase):
     """The cores the run accepts, one tick
     list, a folder failure said as it happened, every proven card named,
     reads that show, and tests that leave the host alone."""
@@ -14074,9 +14077,9 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
     setUp = LineModeAndScreenDecideAlike.setUp
     line_run = LineModeAndScreenDecideAlike.line_run
     entry = staticmethod(LineModeAndScreenDecideAlike.entry)
-    drive = AuditTwentyTwoAndFifteen.drive
-    first_screen = AuditTwentyTwoAndFifteen.first_screen
-    line_from = AuditTwentyThreeAndSixteen.line_from
+    drive = DriveIsACardByItsFiles.drive
+    first_screen = DriveIsACardByItsFiles.first_screen
+    line_from = ProvenCardsAndCounts.line_from
 
     # Root cause 1: the cores a choice is made among are the run's.
 

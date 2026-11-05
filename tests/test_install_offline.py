@@ -945,7 +945,7 @@ class OneOfflineVocabulary(Scratch):
         self.assertNotIn("install everything", text)
 
 
-class AuditFifteenOffline(Scratch):
+class OfflineAndPackLeaveOut(Scratch):
     """What --offline and a
     pack leave out, and what a folder copied from holds, said as such."""
 

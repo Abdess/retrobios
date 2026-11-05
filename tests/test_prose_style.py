@@ -261,6 +261,19 @@ class NoReviewTags(unittest.TestCase):
                     offenders.append(f"{path.relative_to(ROOT)}:{number}")
         self.assertEqual(offenders, [], "\n".join(offenders[:20]))
 
+    def test_tests_are_named_by_subject(self):
+        """Test modules and classes were named after the review that wrote
+        them (test_site_r4_p0, a class per review number). A name says what
+        the test holds."""
+        rounds = sorted(p.name for p in (ROOT / "tests").glob("test_*_r[0-9]_*.py"))
+        self.assertEqual(rounds, [])
+        classes = []
+        for path in sorted((ROOT / "tests").glob("test_*.py")):
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                if re.match(r"class Audit[A-Z]", line):
+                    classes.append(f"{path.name}:{number}")
+        self.assertEqual(classes, [])
+
 
 class ProfilesStateFactsAboutOtherProjects(unittest.TestCase):
     """A profile says what another project's file declares and what the code

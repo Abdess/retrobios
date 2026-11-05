@@ -3248,7 +3248,7 @@ def with_setup_table(page: str, coverages: dict, registry: dict | None = None) -
 
 # A platform's file lists are split by the share of a page they render to,
 # in thousandths: their elements against validate_site's MAX_PAGE_ELEMENTS,
-# their bytes against the 600,000 of test_site_r2_gate, whichever is
+# their bytes against the 600,000 of test_site_built_gate, whichever is
 # larger. Measured in Markdown characters, the lists split anew whenever
 # their markup changed: rows written as tables moved 38 more systems to
 # pages of their own.

@@ -113,7 +113,7 @@ class SystemLinks(unittest.TestCase):
                 cls.manufacturers, siterender.program_names(profiles))
             # The system pages give every arcade board a section of its own
             # and record it. The built pages are checked by
-            # the round 4 gate.
+            # test_site_built_gate.
             siterender.reset_console_pages()
             # The sections as the system pages hold them: each board, the
             # sets a reviewed machine owns under that machine.

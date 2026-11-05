@@ -1,12 +1,12 @@
-"""Gate of the second site round, read from the built site (website/dist).
+"""The merged site, read from the built site (website/dist).
 
-Each package of the round was checked on its own. These checks hold the
-merged site to what the round set out to fix: no sidebar label a number, no
+Each part of the site is checked on its own elsewhere. These checks hold
+the merged site to what they fix: no sidebar label a number, no
 "Next" tip, a sidebar label that is the page's own title, a card's link icon
 kept out of the heading a search indexes, crumbs that lead to a tab or a
 section, phone tables stacked where the reading level asks for it, and every
-page under 15,000 elements and 600 KB of HTML. The integration items of the
-round are held too: the platform logo beside the title, a section for every
+page under 15,000 elements and 600 KB of HTML. Items that cross pages
+are held too: the platform logo beside the title, a section for every
 letter of the emulators index, system links to the section of the system's
 own name, dates in words and the moved getting-started page.
 
