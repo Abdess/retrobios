@@ -501,6 +501,27 @@ class TestVerifyAtPin(unittest.TestCase):
         self.assertIsNone(profile_sync.cites_another_version(same, "0.16.0"))
         self.assertIsNone(profile_sync.cites_another_version(same, {"libretro": "v0.16.0"}))
 
+    def test_a_profile_citing_versions_documents_its_own(self):
+        """ti99sim's core_version went null while doc/CHANGES.html at its pin
+        reads 0.16.0: every (v0.16.0) part then read as another version, and
+        the profile reported 0 to review with nothing checked."""
+        import yaml
+
+        root = Path(__file__).resolve().parents[1] / "emulators"
+        silent = []
+        for path in sorted(root.glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            refs = " ".join(
+                str(entry.get("source_ref") or "") for entry in profile.get("files") or []
+            )
+            if not profile_sync._VERSION_NOTE_RE.search(refs):
+                continue
+            declared = profile.get("core_version")
+            values = declared.values() if isinstance(declared, dict) else [declared]
+            if not any(values):
+                silent.append(path.stem)
+        self.assertEqual(silent, [])
+
     def test_a_name_stem_elsewhere_does_not_move_a_ref(self):
         """linapple cites the PRAVETS82 option, and the stem also names an install line."""
         lines = ['option(ENABLE_ROM_CLONE_PRAVETS "" OFF)', "", "", "", "", "",
