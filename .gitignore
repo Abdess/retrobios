@@ -12,6 +12,9 @@ site/
 !bios/**/*.tmp
 *.log
 node_modules/
+# pip install -e . writes its metadata beside pyproject.toml.
+*.egg-info/
+/build/
 
 # Pages of the MkDocs build the site had before Astro Starlight: a clone may
 # still hold them. The Starlight project ignores its own generated folders.
