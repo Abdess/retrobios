@@ -309,6 +309,7 @@ class ShownOutputIsPrintedOutput(unittest.TestCase):
         (r"^  Core files held but not packed: \d+ \(.+\)$", '"  Core files held but not packed: '),
         (r"^  Game data: \d+ in pack, (0 missing|\d+ missing \(--verbose lists them\))$",
          '"  Game data: {gd_packed} in pack'),
+        (r"^  Game data held but not packed: \d+ \(.+\)$", '"  Game data held but not packed: '),
         (r"^  No external files: \d+ cores \(--verbose lists them\)$",
          '"  No external files: {len(exclusions)} cores (--verbose lists them)"'),
         (r"^  Ground truth: \d+/\d+ files have emulator validation \(\d+%\)$",

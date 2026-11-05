@@ -192,10 +192,6 @@ class ASingleTargetFiltersNothing(unittest.TestCase):
                 checked += 1
         self.assertGreaterEqual(checked, 3)
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class PublishedListsAreNotNarrowed(unittest.TestCase):
     """pipeline --target switch wrote install/retroarch_nintendoswitch.json
     next to the published lists. The site picker then replaced RetroArch's
@@ -216,3 +212,7 @@ class PublishedListsAreNotNarrowed(unittest.TestCase):
                 self.assertNotIn("no_game_data", data)
                 self.assertEqual(data["source"], "full")
                 self.assertEqual(data["regions"], [])
+
+
+if __name__ == "__main__":
+    unittest.main()
