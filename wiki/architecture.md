@@ -280,17 +280,16 @@ being intact: see [verifying a release](release-process.md#verifying-a-release).
 
 Three things make that hold. Generated members (`README.txt`, `manifest.json`)
 carry a fixed date rather than the wall clock, and the manifest's `generated`
-field is read from `database.json` instead of the build time. MAME and FBNeo
-romsets are rebuilt deterministically from their ROMs, so a pack does not
-inherit whatever metadata the source archive happened to carry. And every
-member is written with the same fixed date: `ZipFile.write` copies the source
-file's mtime, which is the checkout time for a file from the collection and
-the wall clock for one the build just staged in `tmp/`.
+field is read from `database.json` instead of the build time. Each ZIP of the
+collection, MAME and FBNeo romsets included, is copied byte for byte, so it
+hashes to the SHA1 the install list and the site publish, and git fixes those
+bytes. And every member is written with the same fixed date: `ZipFile.write`
+copies the source file's mtime, which is the checkout time for a file from the
+collection and the wall clock for one the build just staged in `tmp/`.
 
 `tests/test_deterministic_zip.py` builds the same fixture twice and compares
 the bytes, for both the platform and the emulator pack paths. Its fixture
-holds a romset, because without one the comparison never reaches the rebuild
-path and passes while the real packs still move.
+holds a ZIP, so the comparison covers the archive copy as well as loose files.
 
 ## Collection rules
 
@@ -383,7 +382,8 @@ resolution.
   deploy identity. No workflow builds or publishes a release.
 
 - `safe_extract_zip()` prevents zip-slip path traversal attacks
-- `deterministic_zip` rebuilds MAME ZIPs so same ROMs always produce the same hash
+- a pack copies each ZIP of the collection byte for byte, so every member
+  hashes to the SHA1 the install list publishes
 - `crypto_verify.py` and `sect233r1.py` verify 3DS RSA-2048 signatures and AES-128-CBC integrity
 - ZIP inner ROM verification via `checkInsideZip()` replicates Batocera's behavior
 - `md5_composite()` replicates Recalbox's composite ZIP hash

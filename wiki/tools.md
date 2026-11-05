@@ -1325,7 +1325,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `validate_site.py` | Validate rendered metadata, heading order, image alternatives, JSON-LD, local resources, links and fragments, and the page size and search index budgets |
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, and rebuild a pinned archive from ROMs already held |
 | `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
-| `deterministic_zip.py` | Rebuild MAME BIOS ZIPs deterministically (same ROMs = same hash) |
+| `deterministic_zip.py` | The fixed date pack members carry. Its archive rebuild is no longer called by the pack, which copies each ZIP byte for byte |
 | `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents) |
 | `crypto_verify.py` | 3DS RSA signature and AES crypto verification |
 | `sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
