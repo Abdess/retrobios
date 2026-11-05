@@ -3065,7 +3065,9 @@ def refuse_name(platform: str, *lines: str) -> NoReturn:
     or emulator), refused before any download.
 
     The reason went to stderr only: a reader of --events got start, then
-    end with code 1, and could not tell a typo from a failed download.
+    end with code 1, and could not tell a typo from a failed download. Code
+    2, as for an option argparse refuses: 1 also means --check found files
+    to fetch, and a script reading it reran the install on a typo forever.
     """
     message = " ".join(line.strip() for line in lines)
     if message.startswith("Error: "):
@@ -3074,7 +3076,7 @@ def refuse_name(platform: str, *lines: str) -> NoReturn:
                 message=message)
     for line in lines:
         print(line, file=sys.stderr)
-    sys.exit(1)
+    sys.exit(2)
 
 
 def normalize_platform(name: str, say: bool = True) -> str:

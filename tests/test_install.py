@@ -3980,7 +3980,7 @@ class AnUnknownNameIsAnEvent(unittest.TestCase):
                  "unknown emulator: nope")):
             with self.subTest(argv=argv):
                 code, events = self._events(*argv)
-                self.assertNotEqual(code, 0)
+                self.assertEqual(code, 2)
                 errors = [event for event in events if event["event"] == "error"]
                 self.assertEqual(len(errors), 1, events)
                 self.assertEqual((errors[0]["stage"], errors[0]["reason"]),
@@ -4019,7 +4019,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as raised:
             install.normalize_platform("batocra")
-        self.assertEqual(raised.exception.code, 1)
+        self.assertEqual(raised.exception.code, 2)
         self.assertIn("Did you mean: batocera?", err.getvalue())
         self.assertNotIn("recalbox", err.getvalue())
 
