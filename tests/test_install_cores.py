@@ -426,7 +426,8 @@ class APlatformWithoutTargetsSaysSo(unittest.TestCase):
     user, when no value can work there."""
 
     def test_the_way_forward_is_named(self):
-        with contextlib.redirect_stderr(io.StringIO()) as err:
+        with contextlib.redirect_stderr(io.StringIO()) as err, \
+                self.assertRaises(SystemExit):
             install._unknown_target("switch", "misterfpga", {})
         said = err.getvalue()
         self.assertIn("MiSTer FPGA has no hardware targets: run again without --target.", said)

@@ -51,7 +51,7 @@ import xml.etree.ElementTree as ET
 import zipfile
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
 from pathlib import Path, PurePosixPath
-from typing import Any, BinaryIO, ContextManager, NamedTuple, TextIO
+from typing import Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
 
 # Built as C extensions that a Python compiled without their libraries
 # lacks: the run stopped on a ModuleNotFoundError traceback.
@@ -662,7 +662,9 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # reason: not_found, not_a_folder, unreadable, or system for the root
     # of the system and /proc, /sys, /dev) or dest (reason: unreadable, a
     # folder above it this user cannot open, or not_writable, the BIOS
-    # folder cannot be created, a summary following).
+    # folder cannot be created, a summary following) or option (reason:
+    # unknown, a platform, target, system, core or emulator the run cannot
+    # use, refused before any download).
     "error": ("stage", "reason", "platform", "message"),
     # A folder named with --from, once read: the files it holds (counted
     # up to MAX_SCANNED_FILES, truncated past them), and the folders below
@@ -3058,6 +3060,23 @@ def did_you_mean(
     return f"{listing} lists all {len(known)}."
 
 
+def refuse_name(platform: str, *lines: str) -> NoReturn:
+    """End the run on a name it cannot use (a platform, target, system, core
+    or emulator), refused before any download.
+
+    The reason went to stderr only: a reader of --events got start, then
+    end with code 1, and could not tell a typo from a failed download.
+    """
+    message = " ".join(line.strip() for line in lines)
+    if message.startswith("Error: "):
+        message = message[len("Error: "):]
+    EVENTS.emit("error", stage="option", reason="unknown", platform=platform,
+                message=message)
+    for line in lines:
+        print(line, file=sys.stderr)
+    sys.exit(1)
+
+
 def normalize_platform(name: str, say: bool = True) -> str:
     """Return the canonical platform id for user-supplied input.
 
@@ -3077,10 +3096,8 @@ def normalize_platform(name: str, say: bool = True) -> str:
                 print(f"  {rule.name} gets the {display_name(rule.manifest)} file list: "
                       f"--platform {rule.manifest}.")
             return rule.manifest
-    print(f"Unknown platform '{name.strip()}'. "
-          + did_you_mean([name], list(AVAILABLE_PLATFORMS), "--list-platforms"),
-          file=sys.stderr)
-    sys.exit(1)
+    refuse_name(name.strip(), f"Unknown platform '{name.strip()}'. "
+                + did_you_mean([name], list(AVAILABLE_PLATFORMS), "--list-platforms"))
 
 
 def _read_limited_json(
@@ -9061,8 +9078,7 @@ def _narrow_to_emulators(
     try:
         chosen = resolve_choices(names, known, "emulator")
     except ValueError as exc:
-        print(f"Error: {plat}: {exc}", file=sys.stderr)
-        sys.exit(1)
+        refuse_name(plat, f"Error: {plat}: {exc}")
     before = len(files)
     files, omitted = narrow_to_cores(manifest, chosen, files, omitted)
     # A whole-platform install keeps the platform's files of a system no
@@ -9118,8 +9134,7 @@ def _requested_narrowing(
         cores = resolve_choices(args.core or [], choices["cores"], "core")
         regions = resolve_regions(args.region or [])
     except ValueError as exc:
-        print(f"Error: {plat}: {exc}", file=sys.stderr)
-        sys.exit(1)
+        refuse_name(plat, f"Error: {plat}: {exc}")
     return systems, cores, regions
 
 
@@ -14393,14 +14408,13 @@ def _several_found(platforms: list[tuple[str, Path]], setups: list) -> None:
     sys.exit(1)
 
 
-def _unknown_target(target: str, plat: str, targets: dict) -> None:
+def _unknown_target(target: str, plat: str, targets: dict, *after: str) -> NoReturn:
     if not targets:
         # No value can work: "unknown target" read as a typo of the board.
-        print(f"Error: {display_name(plat)} has no hardware targets: run again "
-              "without --target.", file=sys.stderr)
-        return
-    print(f"Error: unknown target '{target}' for {display_name(plat)}.", file=sys.stderr)
-    print("  " + did_you_mean([target], sorted(targets), "--list-targets"), file=sys.stderr)
+        refuse_name(plat, f"Error: {display_name(plat)} has no hardware targets: run again "
+                    "without --target.", *after)
+    refuse_name(plat, f"Error: unknown target '{target}' for {display_name(plat)}.",
+                "  " + did_you_mean([target], sorted(targets), "--list-targets"), *after)
 
 
 def _is_terminal(stream: TextIO) -> bool:
@@ -14743,11 +14757,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 sys.exit(1)
             target_lists[plat_name] = targets
             if args.target not in targets:
-                _unknown_target(args.target, plat_name, targets)
-                if len(platforms) > 1:
-                    print("  Nothing was installed. Name one platform with "
-                          "--platform to install it alone.", file=sys.stderr)
-                sys.exit(1)
+                _unknown_target(args.target, plat_name, targets, *(
+                    ["  Nothing was installed. Name one platform with "
+                     "--platform to install it alone."] if len(platforms) > 1 else []))
 
     if args.romm_firmware is not None:
         # Applied or refused, never ignored.
@@ -14869,7 +14881,6 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # of what a filter was asked for: a 4 GB download instead of
                 # the subset the target needs. Refuse rather than ignore.
                 _unknown_target(target, plat_name, targets)
-                sys.exit(1)
             elif target_info.get("cores") is None:
                 print(
                     f"  Target '{target}' publishes no core list: "

@@ -3952,6 +3952,44 @@ def _install_run(env: dict, *argv: str, **kwargs) -> subprocess.CompletedProcess
     )
 
 
+class AnUnknownNameIsAnEvent(unittest.TestCase):
+    """--events carried start then end with code 1 for an unknown platform,
+    target or system: the reason was on stderr only, which readers ignore."""
+
+    def _events(self, *argv: str) -> tuple[int, list[dict]]:
+        env = {key: value for key, value in os.environ.items()
+               if key != "RETROBIOS_BASE_URL"}
+        env[install.OFFLINE_VARIABLE] = "1"
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as dest:
+            proc = subprocess.run(
+                [sys.executable, str(REPO_ROOT / "install.py"), "--dest", dest,
+                 "--check", "--events", "--no-input", *argv],
+                env=env, capture_output=True, text=True, timeout=120,
+                stdin=subprocess.DEVNULL)
+        return proc.returncode, [json.loads(line) for line in proc.stdout.splitlines()]
+
+    def test_each_refusal_says_why(self):
+        manifest = str(REPO_ROOT / "install" / "retroarch.json")
+        for argv, words in (
+                (["--platform", "nope"], "Unknown platform 'nope'"),
+                (["--platform", "retroarch", "--manifest", manifest, "--system", "nope"],
+                 "unknown system: nope"),
+                (["--platform", "retroarch", "--manifest", manifest, "--core", "nope"],
+                 "unknown core: nope"),
+                (["--platform", "retroarch", "--manifest", manifest, "--emulator", "nope"],
+                 "unknown emulator: nope")):
+            with self.subTest(argv=argv):
+                code, events = self._events(*argv)
+                self.assertNotEqual(code, 0)
+                errors = [event for event in events if event["event"] == "error"]
+                self.assertEqual(len(errors), 1, events)
+                self.assertEqual((errors[0]["stage"], errors[0]["reason"]),
+                                 ("option", "unknown"))
+                self.assertIn(words, errors[0]["message"])
+                self.assertFalse(errors[0]["message"].startswith("Error"))
+                self.assertEqual(events[-1]["event"], "end")
+
+
 class ATypoGetsTheClosestName(unittest.TestCase):
     """--platform batocra, --system playstation or --core swanstaton were
     answered with every name the platform has, up to 400 on one line, and
@@ -4013,7 +4051,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
 
     def test_a_target_typo(self):
         err = io.StringIO()
-        with contextlib.redirect_stderr(err):
+        with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
             install._unknown_target("swich", "retroarch", {"switch": {}, "desktop": {}})
         self.assertIn("Did you mean: switch?", err.getvalue())
         self.assertIn("--list-targets", err.getvalue())
