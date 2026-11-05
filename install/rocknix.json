@@ -6,7 +6,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "20261001",
-  "generated": "2026-11-05T12:13:24Z",
+  "generated": "2026-11-05T14:56:18Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -21,11 +21,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 7354,
-  "total_size": 8271327929,
-  "pack_files": 7356,
-  "pack_size": 8271327929,
-  "total_omitted": 116,
+  "total_files": 7355,
+  "total_size": 8271344313,
+  "pack_files": 7357,
+  "pack_size": 8271344313,
+  "total_omitted": 115,
   "omitted_files": [
     {
       "dest": "Citra/Citra/sysdata/aes_keys.txt",
@@ -721,16 +721,6 @@
         "gzdoom"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "ep128emu/roms/ide12.rom",
-      "name": "ide12.rom",
-      "system": "enterprise-128",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "ep128emu_core"
-      ]
     },
     {
       "dest": "extras.wad",
@@ -57735,6 +57725,16 @@
       "systems": [
         "nintendo-gb",
         "nintendo-gbc"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/ide12.rom",
+      "sha1": "ecb999ac1cc2fcca29bae71195741c451e747824",
+      "sha256": "31fce2d3927f40e4b33a729138f721ad45fe6051a366c19314bc6142a583f566",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/ide12.rom",
+      "cores": [
+        "ep128emu_core"
       ]
     },
     {

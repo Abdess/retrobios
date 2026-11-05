@@ -6,7 +6,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.0",
-  "generated": "2026-11-03T13:36:34Z",
+  "generated": "2026-11-05T14:56:18Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -26,7 +26,7 @@
   "total_size": 872654387,
   "pack_files": 467,
   "pack_size": 872654387,
-  "total_omitted": 774,
+  "total_omitted": 775,
   "omitted_files": [
     {
       "dest": "32X_G_BIOS.BIN",
@@ -2344,6 +2344,16 @@
     {
       "dest": "ep128emu/roms/exdos14isdos10uk.rom",
       "name": "exdos14isdos10uk.rom",
+      "system": "enterprise-128",
+      "required": false,
+      "reason": "below_platform_folder",
+      "cores": [
+        "ep128emu_core"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/ide12.rom",
+      "name": "ide12.rom",
       "system": "enterprise-128",
       "required": false,
       "reason": "below_platform_folder",

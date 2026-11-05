@@ -6,7 +6,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "2.7EA",
-  "generated": "2026-11-05T12:13:24Z",
+  "generated": "2026-11-05T14:56:18Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -305,11 +305,11 @@
       }
     }
   ],
-  "total_files": 8429,
-  "total_size": 7887233066,
-  "pack_files": 8431,
-  "pack_size": 7887233066,
-  "total_omitted": 38,
+  "total_files": 8430,
+  "total_size": 7887249450,
+  "pack_files": 8432,
+  "pack_size": 7887249450,
+  "total_omitted": 37,
   "omitted_files": [
     {
       "dest": "doomu.wad",
@@ -321,16 +321,6 @@
         "prboom"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "ep128emu/roms/ide12.rom",
-      "name": "ide12.rom",
-      "system": "enterprise-128",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "ep128emu_core"
-      ]
     },
     {
       "dest": "freedoom.wad",
@@ -71773,6 +71763,16 @@
       "repo_path": "bios/Nokia/N-Gage/SYM.ROM",
       "cores": [
         "eka2l1"
+      ]
+    },
+    {
+      "dest": "ep128emu/roms/ide12.rom",
+      "sha1": "ecb999ac1cc2fcca29bae71195741c451e747824",
+      "sha256": "31fce2d3927f40e4b33a729138f721ad45fe6051a366c19314bc6142a583f566",
+      "size": 16384,
+      "repo_path": "bios/Enterprise/64-128/ide12.rom",
+      "cores": [
+        "ep128emu_core"
       ]
     },
     {
