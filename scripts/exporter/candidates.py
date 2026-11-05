@@ -375,6 +375,7 @@ class EntryCategories:
         # entry with a proof walks its reader's whole profile, and a MAME
         # profile's archive members were hashed again for each.
         self._accepted: dict[int, set[str]] = {}
+        self._entry_index: dict[tuple[str, str], tuple[dict, dict]] = {}
         # One index per core and per kind, so a proof names its reader.
         self._readers: list[tuple[str, str, ReadEvidence]] = []
         for key in sorted(examined):
@@ -418,6 +419,24 @@ class EntryCategories:
             accepted = self._accepted[id(profile_entry)] = _entry_hashes(profile_entry)
         return accepted
 
+    def _index_of(self, key: str, kind: str) -> tuple[dict, dict]:
+        """A profile's entries of one kind by casefolded name and by accepted
+        hash, each list in file order. Built once per profile and kind: a
+        scan per platform entry cost 2 s of verify --all on MAME alone."""
+        index = self._entry_index.get((key, kind))
+        if index is None:
+            by_name: dict[str, list[tuple[int, dict]]] = {}
+            by_hash: dict[str, list[tuple[int, dict]]] = {}
+            for position, f in enumerate(self._profiles[key].get("files") or []):
+                if not isinstance(f, dict) or (f.get("category") == GAME_DATA) != (kind == GAME_DATA):
+                    continue
+                for n in {str(n).casefold() for n in (f.get("name"), *(f.get("aliases") or [])) if n}:
+                    by_name.setdefault(n, []).append((position, f))
+                for value in self._accepted_by(f):
+                    by_hash.setdefault(value, []).append((position, f))
+            index = self._entry_index[(key, kind)] = (by_name, by_hash)
+        return index
+
     def _matching(self, key: str, kind: str, entry: dict) -> list[dict]:
         """The profile entries of `key` that read the platform entry.
 
@@ -434,19 +453,28 @@ class EntryCategories:
             if n
         }
         declared = _declared_hashes(entry)
-        by_hash: list[dict] = []
-        by_name: list[dict] = []
-        for f in self._profiles[key].get("files") or []:
-            if not isinstance(f, dict) or (f.get("category") == GAME_DATA) != (kind == GAME_DATA):
-                continue
-            cited = {k: f[k] for k in ("name", "source_ref") if f.get(k)}
-            if declared and _accepts(self._accepted_by(f), declared):
-                by_hash.append(cited)
-                continue
-            own = {str(n).casefold() for n in (f.get("name"), *(f.get("aliases") or [])) if n}
-            if own & names and not (declared and _contradicts(f, declared)):
-                by_name.append({**cited, "by": "name"})
-        return by_hash or by_name
+        by_name_index, by_hash_index = self._index_of(key, kind)
+
+        def cited(f: dict) -> dict:
+            return {k: f[k] for k in ("name", "source_ref") if f.get(k)}
+
+        found: dict[int, dict] = {}
+        for values in declared.values():
+            for value in values:
+                for position, f in by_hash_index.get(value, ()):
+                    found[position] = f
+                if _CUT_MD5 <= len(value) < _FULL_MD5:
+                    for accepted, hits in by_hash_index.items():
+                        if accepted.startswith(value):
+                            found.update(hits)
+        if found:
+            return [cited(found[p]) for p in sorted(found)]
+        named = {position: f for n in names for position, f in by_name_index.get(n, ())}
+        return [
+            {**cited(named[p]), "by": "name"}
+            for p in sorted(named)
+            if not (declared and _contradicts(named[p], declared))
+        ]
 
     def explain(self, entry: dict, destination: str, system: str) -> dict:
         """The category of an entry and what establishes it."""

@@ -220,5 +220,49 @@ class IndexedProof(unittest.TestCase):
                 self.assertEqual(index.proofs(entry, destination), expected)
 
 
+class AProfileIsIndexedOncePerKind(unittest.TestCase):
+    """_matching walked the reader's whole profile for each platform entry:
+    2,135 scans of the MAME profile took 2 s of verify --all."""
+
+    FILES = [
+        {"name": "zero.bin", "md5": "0" * 32, "source_ref": "a.c:1"},
+        {"name": "one.bin", "md5": "1" * 32, "source_ref": "a.c:2"},
+        {"name": "one.bin", "md5": "2" * 32, "source_ref": "a.c:3"},
+        {"name": "two.bin", "aliases": ["TWO.ROM"], "source_ref": "a.c:4"},
+        {"name": "data.pak", "category": "game_data", "source_ref": "a.c:5"},
+    ]
+
+    def setUp(self):
+        profiles = {"core": {"emulator": "Core", "type": "libretro", "cores": ["core"],
+                             "systems": ["s"], "files": self.FILES}}
+        self.cats = EntryCategories(_config(["core"], []), profiles)
+
+    def test_the_index_answers_as_the_scan_did(self):
+        cases = [
+            ({"name": "one.bin", "md5": "2" * 32}, BIOS, [{"name": "one.bin", "source_ref": "a.c:3"}]),
+            # A cut md5 (Batocera's 29 characters) matches by prefix.
+            ({"name": "x", "md5": "1" * 29}, BIOS, [{"name": "one.bin", "source_ref": "a.c:2"}]),
+            ({"name": "one.bin"}, BIOS, [
+                {"name": "one.bin", "source_ref": "a.c:2", "by": "name"},
+                {"name": "one.bin", "source_ref": "a.c:3", "by": "name"},
+            ]),
+            ({"name": "one.bin", "md5": "9" * 32}, BIOS, []),
+            ({"name": "two.rom"}, BIOS, [{"name": "two.bin", "source_ref": "a.c:4", "by": "name"}]),
+            ({"name": "data.pak"}, BIOS, []),
+            ({"name": "data.pak"}, GAME_DATA, [{"name": "data.pak", "source_ref": "a.c:5", "by": "name"}]),
+        ]
+        for entry, kind, expected in cases:
+            with self.subTest(entry=entry, kind=kind):
+                self.assertEqual(self.cats._matching("core", kind, entry), expected)
+
+    def test_the_profile_is_walked_once_per_kind(self):
+        from unittest import mock
+
+        with mock.patch.object(self.cats, "_accepted_by", wraps=self.cats._accepted_by) as hashed:
+            for _ in range(50):
+                self.cats._matching("core", BIOS, {"name": "zero.bin", "md5": "0" * 32})
+        self.assertEqual(hashed.call_count, 4)
+
+
 if __name__ == "__main__":
     unittest.main()
