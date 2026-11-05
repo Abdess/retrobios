@@ -8182,10 +8182,13 @@ def _render_emulator_file(
     if consumers and f.get("type") == "directory":
         details.extend(_directory_copies(f, consumers))
     if consumers:
-        sha1 = consumers.sha1_of(f, f.get("path") or "", owner=owner)
+        sha1 = consumers.sha1_of(
+            *consumers.entry_target(f, profile.get("files") or []), owner=owner)
         held = consumers.path_of(sha1) if sha1 and in_repo else ""
         parts = held.split("/")
-        if len(parts) >= 3 and parts[0] == "bios":
+        if len(parts) >= 3 and parts[0] == "bios" and f.get("archive"):
+            details.append(_held_copy_line((held, f["name"]), consumers))
+        elif len(parts) >= 3 and parts[0] == "bios":
             # Which copy answers this entry, linked to its collection card
             # (provenance, every hash, download): an entry declaring no hash
             # said "in repo" without naming the file.

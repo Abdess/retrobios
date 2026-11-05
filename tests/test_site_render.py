@@ -454,3 +454,33 @@ class OneDefinitionPerName(unittest.TestCase):
                     self.assertNotIn(name, seen, f"{path.name}:{node.lineno} binds {name} "
                                      f"again, first at line {seen.get(name)}")
                     seen[name] = node.lineno
+
+
+@unittest.skipUnless((REPO_ROOT / "database.json").is_file(), "database.json is not built")
+class AMemberIsReadInItsArchive(unittest.TestCase):
+    """FBNeo reads sm1.sm1 inside neogeo.zip. Resolved by its crc32, the
+    entry credited a loose sm1.sm1 FBNeo never opens, and no neogeo.zip card
+    named FBNeo, while the pack ships it one."""
+
+    def test_the_archive_is_credited_and_named_on_the_card(self):
+        import json
+
+        import generate_site as gs
+        from common import archive_entry, resolve_local_file
+        from cross_reference import FileConsumers
+
+        db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "fbneo.yml").read_text(encoding="utf-8"))
+        files = profile["files"]
+        consumers = FileConsumers(db)
+        consumers.add_emulators({"fbneo": profile})
+        credited = {consumers.path_of(sha1) for sha1 in consumers.emulators}
+        shipped, _status = resolve_local_file(
+            {**archive_entry("neogeo.zip", files), "source_profile": "fbneo"}, db)
+        self.assertIn(shipped, credited)
+        self.assertFalse([p for p in credited if p.endswith("/sm1.sm1")])
+        sm1 = next(f for f in files if f["name"] == "sm1.sm1")
+        rows = "\n".join(gs._render_emulator_file(sm1, profile, consumers, files,
+                                                  lambda _f: True, owner="fbneo"))
+        self.assertIn("Collection copy: member `sm1.sm1` of", rows)
+        self.assertIn(shipped, rows)

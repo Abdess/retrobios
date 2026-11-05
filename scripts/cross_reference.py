@@ -27,6 +27,7 @@ from common import (
     platform_arg,
     ProfileSelectionError,
     _norm_system_id,
+    archive_entry,
     directory_members,
     expand_directory_entries,
     get_mame_clone_map,
@@ -545,6 +546,20 @@ class FileConsumers:
             if member is not entry
         }
 
+    @staticmethod
+    def entry_target(entry: dict, files: list[dict]) -> tuple[dict, str]:
+        """The entry a profile entry resolves through, and its destination.
+
+        A ROM read inside an archive is the archive: FBNeo opens sm1.sm1 in
+        neogeo.zip, and resolved by its crc32 it credited a loose copy FBNeo
+        never opens, while no neogeo.zip card named FBNeo. The archive
+        members the profile reads decide between same-named copies, as in
+        the emulator pack and verify.
+        """
+        if entry.get("archive"):
+            return archive_entry(entry["archive"], files), ""
+        return with_archive_members(entry, files), entry.get("path") or ""
+
     def add_emulators(self, profiles: dict[str, dict]) -> None:
         """Each file a profile entry resolves to, a directory's members included.
 
@@ -573,12 +588,7 @@ class FileConsumers:
                         for dest, sha1 in members.items()
                     ]
                 else:
-                    # The archive members the profile reads decide between
-                    # same-named copies, as in the emulator pack and verify.
-                    found = [self.sha1_of(
-                        with_archive_members(entry, files), entry.get("path") or "",
-                        owner=name,
-                    )]
+                    found = [self.sha1_of(*self.entry_target(entry, files), owner=name)]
                 for sha1 in found:
                     if sha1:
                         self.emulators.setdefault(sha1, set()).add(name)
