@@ -1069,7 +1069,7 @@ class AChecksumLineIsAHash(unittest.TestCase):
             "deadbeef.bin",
             f"{md5} {sha1}",
         ]
-        out = _node(code + f"console.log(JSON.stringify({json.dumps(cases)}.map((c) => "
+        out = _node_typescript(code + f"console.log(JSON.stringify({json.dumps(cases)}.map((c) => "
                            "[normalizeHash(c), isHash(normalizeHash(c))])));")
         self.assertEqual(json.loads(out), [
             [md5, True], [sha1, True], [sha1, True], [sha1, True], [md5, True],

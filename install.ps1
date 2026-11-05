@@ -68,30 +68,35 @@
             $installer = $temporary
         }
 
-        # The py launcher first, then python3 and python. The Microsoft Store
-        # places a python.exe that only points at the Store: it fails the
-        # version check like a missing one.
-        $findPython = {
-            $found = Get-Command py -ErrorAction SilentlyContinue
-            if ($found) { return ,@($found, @("-3")) }
-            foreach ($name in @("python3", "python")) {
-                $found = Get-Command $name -ErrorAction SilentlyContinue
-                if ($found) { return ,@($found, @()) }
-            }
-            return $null
-        }
         $usable = {
             param($candidate)
             if (-not $candidate) { return $false }
             $arguments = $candidate[1]
-            & $candidate[0].Source @arguments -c "import sys; raise SystemExit(sys.version_info < (3, 8))" | Out-Null
+            & $candidate[0].Source @arguments -c "import sys, ssl, unicodedata, zlib; raise SystemExit(sys.version_info < (3, 8))" 2>$null | Out-Null
             return ($LASTEXITCODE -eq 0)
+        }
+        # The py launcher first, then python3 and python, the first that
+        # passes the check: a py launcher left with no usable runtime hid a
+        # Python 3.12 on PATH. The Microsoft Store places a python.exe that
+        # only points at the Store: it fails the check like a missing one.
+        $findPython = {
+            $candidates = @()
+            $found = Get-Command py -ErrorAction SilentlyContinue
+            if ($found) { $candidates += ,@($found, @("-3")) }
+            foreach ($name in @("python3", "python")) {
+                $found = Get-Command $name -ErrorAction SilentlyContinue
+                if ($found) { $candidates += ,@($found, @()) }
+            }
+            foreach ($candidate in $candidates) {
+                if (& $usable $candidate) { return ,$candidate }
+            }
+            return $null
         }
         $needPython = "Python 3.8 or newer is required. Install it with " +
             "'winget install Python.Python.3.12' or from https://www.python.org/downloads/ " +
             "(tick 'Add python.exe to PATH'), then open a new PowerShell window and run this command again."
         $candidate = & $findPython
-        if (-not (& $usable $candidate)) {
+        if (-not $candidate) {
             # winget ships with Windows 10 and 11: at a console the bootstrap
             # offers to run the install the message names, then carries on.
             $winget = Get-Command winget -ErrorAction SilentlyContinue
@@ -109,7 +114,7 @@
                     $candidate = & $findPython
                 }
             }
-            if (-not (& $usable $candidate)) { throw $needPython }
+            if (-not $candidate) { throw $needPython }
         }
         $python = $candidate[0]
         $launcher = $candidate[1]
