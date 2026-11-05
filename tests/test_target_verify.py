@@ -58,5 +58,32 @@ class ANameClaimsOnlyANarrowingThatHappened(unittest.TestCase):
         )
 
 
+class AMistypedTargetIsRefusedFirst(unittest.TestCase):
+    """`--platform retroarch --target swich` took the dist lock and waited on
+    the data directory refresh, 22 s here and hours behind a pipeline, before
+    saying the target does not exist."""
+
+    def test_no_lock_and_no_refresh_before_the_refusal(self):
+        from unittest import mock
+
+        import generate_pack
+
+        def touched(*_a, **_kw):
+            raise AssertionError("lock or refresh taken before the target check")
+
+        argv = ["generate_pack.py", "--platform", "retroarch", "--target", "swich",
+                "--output-dir", str(REPO_ROOT / "tmp" / "never-written")]
+        err = io.StringIO()
+        with mock.patch.object(sys, "argv", argv), \
+                mock.patch.object(generate_pack, "_pack_output_lock", touched), \
+                mock.patch.object(generate_pack, "hold_data_dirs", touched), \
+                contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(err), \
+                self.assertRaises(SystemExit) as ctx:
+            generate_pack.main()
+        self.assertEqual(ctx.exception.code, 1)
+        self.assertIn("Unknown target 'swich'", err.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -3477,6 +3477,22 @@ def _main(held: contextlib.ExitStack) -> None:
         parser.error("Specify --platform or --all")
         return
 
+    # A mistyped target is refused before the output lock and the data
+    # directory refresh: checked after them, `--target swich` waited on a
+    # pipeline's caches before saying the target does not exist.
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        try:
+            target_cores_cache, platforms = build_target_cores_cache(
+                platforms,
+                args.target,
+                args.platforms_dir,
+                is_all=args.all,
+            )
+        except (FileNotFoundError, ValueError) as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            sys.exit(1)
+
     data_registry = load_data_dir_registry(args.platforms_dir)
     # The output directory is claimed before the data directory refresh: a
     # refresh waits for every run that holds a cache, so a second build
@@ -3497,19 +3513,6 @@ def _main(held: contextlib.ExitStack) -> None:
             hold_data_dirs(held, data_registry)
 
         emu_profiles = load_emulator_profiles(args.emulators_dir)
-
-        target_cores_cache: dict[str, set[str] | None] = {}
-        if args.target:
-            try:
-                target_cores_cache, platforms = build_target_cores_cache(
-                    platforms,
-                    args.target,
-                    args.platforms_dir,
-                    is_all=args.all,
-                )
-            except (FileNotFoundError, ValueError) as e:
-                print(f"ERROR: {e}", file=sys.stderr)
-                sys.exit(1)
 
         groups = group_identical_platforms(
             platforms, args.platforms_dir, target_cores_cache if args.target else None
