@@ -1747,13 +1747,20 @@ def _print_detail_entries(details: list[dict], seen: set[str], verbose: bool) ->
                         print(f"    {line}")
 
 
-def _print_undeclared_entry(u: dict, prefix: str, verbose: bool) -> None:
-    """Print a single undeclared file entry with its validation checks."""
+def _print_undeclared_entry(
+    u: dict, prefix: str, verbose: bool, repeated: frozenset[str] = frozenset()
+) -> None:
+    """Print a single undeclared file entry with its validation checks.
+
+    A name in ``repeated`` is read at more than one path, and the line names
+    the path: two identical lines told no one there were two slots to fill.
+    """
+    name = u["path"] if u["name"] in repeated and u.get("path") else u["name"]
     arc_count = u.get("archive_file_count")
     if arc_count:
-        name_label = f"{u['name']} ({arc_count} file{'s' if arc_count != 1 else ''})"
+        name_label = f"{name} ({arc_count} file{'s' if arc_count != 1 else ''})"
     else:
-        name_label = u["name"]
+        name_label = name
     print(f"    {prefix}: {u['emulator']} needs {name_label}")
     checks = u.get("checks", [])
     if checks:
@@ -1799,6 +1806,12 @@ def _core_required_missing(bios_files: list[dict]) -> list[dict]:
         if u["required"] and not u["in_repo"] and not u.get("hle_fallback")
         and not u.get("bundled")
     ]
+
+
+def _repeated_names(entries: list[dict]) -> frozenset[str]:
+    """Names more than one of ``entries`` carries."""
+    counts = Counter(u["name"] for u in entries)
+    return frozenset(name for name, count in counts.items() if count > 1)
 
 
 def _omission_reasons(entries: list[dict]) -> str:
@@ -1855,13 +1868,14 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     )
     # The missing files follow the line that counts them: printed after the
     # held-but-not-packed line, they read as files installed with their emulator.
+    repeated = _repeated_names(req_not_in_repo + req_hle_not_in_repo + opt_not_in_repo)
     for u in req_not_in_repo:
-        _print_undeclared_entry(u, "MISSING (required)", verbose)
+        _print_undeclared_entry(u, "MISSING (required)", verbose, repeated)
     for u in req_hle_not_in_repo:
-        _print_undeclared_entry(u, "MISSING (required, HLE fallback)", verbose)
+        _print_undeclared_entry(u, "MISSING (required, HLE fallback)", verbose, repeated)
     if verbose:
         for u in opt_not_in_repo:
-            _print_undeclared_entry(u, "MISSING (optional)", verbose)
+            _print_undeclared_entry(u, "MISSING (optional)", verbose, repeated)
     if bundled:
         names = ", ".join(sorted({u["name"] for u in bundled}))
         print(f"  Bundled with their emulator, not collected: {names}")
@@ -1880,8 +1894,9 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
             listed = "" if verbose or not gd_missing else " (--verbose lists them)"
             print(f"  Game data: {gd_packed} in pack, {len(gd_missing)} missing{listed}")
         if verbose:
+            repeated = _repeated_names(gd_missing)
             for u in gd_missing:
-                _print_undeclared_entry(u, "MISSING (game data)", verbose)
+                _print_undeclared_entry(u, "MISSING (game data)", verbose, repeated)
         if gd_unplaced:
             print(
                 f"  Game data held but not packed: {len(gd_unplaced)} "

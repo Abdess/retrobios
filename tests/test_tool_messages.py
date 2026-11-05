@@ -202,6 +202,18 @@ class HeldButNotPackedNamesEachReason(unittest.TestCase):
         self.assertIn("MISSING (required): FinalBurn Neo needs sfiii2a.zip", lines[1])
         self.assertTrue(lines[2].startswith("  Core files held but not packed: "), lines)
 
+    def test_one_name_read_at_two_paths_prints_both_paths(self):
+        """MyMinUI printed 'FinalBurn Neo needs sfiii2a.zip' twice, word for
+        word, for Bios/FBN/ and Bios/NG/."""
+        base = {"name": "sfiii2a.zip", "emulator": "FinalBurn Neo", "required": True,
+                "in_repo": False, "category": "bios"}
+        lone = dict(base, name="other.zip", path="Bios/FBN/other.zip")
+        text = self._printed([dict(base, path="Bios/FBN/sfiii2a.zip"),
+                              dict(base, path="Bios/NG/sfiii2a.zip"), lone])
+        self.assertIn("FinalBurn Neo needs Bios/FBN/sfiii2a.zip", text)
+        self.assertIn("FinalBurn Neo needs Bios/NG/sfiii2a.zip", text)
+        self.assertIn("FinalBurn Neo needs other.zip\n", text)
+
     def test_a_single_reason_reads_as_before(self):
         text = self._printed([self._entry("a.rom", "installed with its emulator")] * 2)
         self.assertIn("Core files held but not packed: 2 (installed with its emulator)", text)
