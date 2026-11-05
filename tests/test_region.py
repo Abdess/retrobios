@@ -509,6 +509,11 @@ class OneCodeOneRegionAnswer(unittest.TestCase):
         profiles = common.load_emulator_profiles(self.PROFILES)
         bios_sms = next(e for e in profiles["clk"]["files"] if e["name"] == "bios.sms")
         self.assertIn("oceania", bios_sms["region"])
+        # A Mexican export cartridge is analysed as Europe or USA and boots the
+        # western BIOS: only Japan selects the other one.
+        self.assertEqual(
+            region.rank(region.normalize_declared(bios_sms["region"]), ["mexico"]), 0
+        )
         tagged = {
             e["name"]: e.get("region") for e in profiles["kronos"]["files"]
             if e.get("archive") == "stvbios.zip" and e["name"].startswith("epr-")
