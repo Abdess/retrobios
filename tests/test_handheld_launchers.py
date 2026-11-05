@@ -965,7 +965,7 @@ class ThePortMasterPort(unittest.TestCase):
         self.assertIn("log.txt", device.screen)
 
     def test_a_quit_chosen_shows_no_message(self):
-        """code_audit_19 P3-1: a quit chosen exits 2, below 128, and the
+        """A quit chosen exits 2, below 128, and the
         first line of tui.err went into a message box waiting for A."""
         device = self.device()
         proc = device.run(["bash", self.script], FAKE_QUIT="1", FAKE_CODE="2",

@@ -1,4 +1,4 @@
-"""System pages and file cards (round 2, package 6).
+"""System pages and file cards.
 
 The Sony page opened on LibPS.exe, its card titles read "scph5501.bin
 permalink" in the site search, the two setup lines of a card were defined
@@ -115,7 +115,7 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
     def test_a_long_list_names_the_first_and_counts_the_rest(self):
         files = [_file(f"rom{i}.bin", "abcdefgh"[i]) for i in range(8)]
         # One emulator requires all eight: files each required by another
-        # emulator are other names for one slot (round 5, 6.2).
+        # emulator are other names for one slot.
         consumers = _consumers({f["sha1"]: [{"required": True}] for f in files})
         consumers.emulator_files = {"emu": [{"required": True}] * len(files)}
         consumers.emulator_entries = {f["sha1"]: {"emu": i} for i, f in enumerate(files)}
@@ -172,7 +172,7 @@ class TheCardLinesSayWhatTheyMean(unittest.TestCase):
 
     def test_labels_and_display_names(self):
         text = "\n".join(self.lines)
-        # Grouped by where the setups put the file (round 4, 6.9).
+        # Grouped by where the setups put the file.
         self.assertIn("<dt>On the setup's list</dt><dd><code>scph5501.bin</code>: <a href=\"../"
                       "platforms/batocera.md#sony-playstation\">Batocera</a></dd>", text)
         self.assertIn("<dt>Packed for its emulators by</dt><dd><code>bios/scph5501.bin</code>: "
@@ -182,7 +182,7 @@ class TheCardLinesSayWhatTheyMean(unittest.TestCase):
 
     def test_the_facts_are_out_of_the_search(self):
         # The setup list made every card's excerpt a run of names and
-        # paths (round 4, V6): the card's title is what the search reads.
+        # paths: the card's title is what the search reads.
         # The facts shown open are one list, the others one fold, both
         # out of the search.
         shown = self.lines[:next(i for i, line in enumerate(self.lines) if line.startswith("<details"))]

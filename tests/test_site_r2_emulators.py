@@ -1,4 +1,4 @@
-"""Emulator pages say what is needed first, in names (round 2, package 7).
+"""Emulator pages say what is needed first, in names.
 
 DuckStation's page opened on "It reads 105 files, 3 of them required" and
 read as "get all three", its three BIOS were cards 12 to 14 under one

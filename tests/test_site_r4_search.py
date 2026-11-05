@@ -1,4 +1,4 @@
-"""Search (round 4, package 3).
+"""Search.
 
 The search gate listed the queries that missed and no workflow ran it: its
 browser runner could not even start from the repository root. Console and

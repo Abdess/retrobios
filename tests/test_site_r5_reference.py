@@ -1,4 +1,4 @@
-"""Reference pages and data (round 5, package 8).
+"""Reference pages and data.
 
 The API said Lakka and RetroPie had a release pack while their pages said
 none, 50 nested manifest fields and the nine omission codes had no

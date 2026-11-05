@@ -1,4 +1,4 @@
-"""Wiki copy and the diagrams module (round 2, package 5).
+"""Wiki copy and the diagrams module.
 
 Each class names the finding it holds: a safety line the code contradicted,
 install commands with no Windows form, a run's end described wrongly, pages

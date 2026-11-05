@@ -1,4 +1,4 @@
-"""Reference pages (round 2, package 8).
+"""Reference pages.
 
 A reference page cites a hash, a source line or a count, and each citation
 has to hold when an expert checks it: the reader of a pinned dump is the

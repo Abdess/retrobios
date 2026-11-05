@@ -1,4 +1,4 @@
-"""Navigation (round 2, package 3).
+"""Navigation.
 
 The 404 page's sidebar read "0 1 2 3 4". A sidebar group label was a link
 to its first page ("Handhelds and TV boxes" opened AmberELEC), and a crumb

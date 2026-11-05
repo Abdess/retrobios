@@ -1,4 +1,4 @@
-"""Entry pages and guides (round 3, package 4).
+"""Entry pages and guides.
 
 A handheld owner found no tile for Android, ArkOS, muOS, Onion or spruceOS:
 the systems sat in a closed note with a path seen from inside the device.
@@ -161,7 +161,7 @@ class SetupPagesOfferPartOfThePack(unittest.TestCase):
                 # The screen's own row: the line menu's c is not what the
                 # one-liner opens.
                 self.assertIn("or the command's **Choose systems**.", text)
-                # Never "choose **Choose systems**" (tui_audit_17 P3-9).
+                # Never "choose **Choose systems**".
                 self.assertNotIn("choose **Choose systems**", text)
 
     def test_the_anchor_exists(self):
@@ -271,7 +271,7 @@ class HomeCopy(unittest.TestCase):
         self.assertIn("- **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.", home)
         self.assertIn("- **Better with it** for Dreamcast: some games need it.", home)
         # A question and the link that answers it: no level label, which
-        # read as a broken crumb beside the Reference tab (round 4).
+        # read as a broken crumb beside the Reference tab.
         self.assertNotIn("Reference:", home.split("\n---\n", 1)[-1])
         self.assertIn("- Have a file? [Check it]", home)
         self.assertIn("BIOS missing, even with the file there?", home)

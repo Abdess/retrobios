@@ -1,4 +1,4 @@
-"""System pages and file cards (round 4, package 6).
+"""System pages and file cards.
 
 The Game Boy, NES and SNES sections said "Start with" a file one core of
 sixteen requires, under a home page saying they need none. The romset line
@@ -167,7 +167,7 @@ class EachArcadeBoardHasASection(unittest.TestCase):
     """6.4: the Arcade page was cut by storage folder."""
 
     def test_each_board_heads_its_page(self) -> None:
-        # The page's title names the board, no h2 says it again (round 5, 6.8).
+        # The page's title names the board, no h2 says it again.
         for name in BOARDS:
             slug = toc_slug(name)
             html = _page(DIST / "systems" / f"arcade-{slug}" / "index.html")

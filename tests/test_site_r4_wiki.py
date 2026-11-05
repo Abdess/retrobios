@@ -1,4 +1,4 @@
-"""Wiki and release docs (round 4, package 5).
+"""Wiki and release docs.
 
 Each class names the finding it holds: an error message a reader types
 into search and no page that says it, an arcade answer written for

@@ -1,4 +1,4 @@
-"""Entry pages and guides (round 2, package 4).
+"""Entry pages and guides.
 
 The home page said the command "writes only in your BIOS folder" while
 install.py writes the entries a manifest files under `root: save` into the

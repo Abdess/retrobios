@@ -4427,7 +4427,7 @@ class EmulatorPagesStateTheirDataForMachines(unittest.TestCase):
                       {"name": "free.bin"}],
         })
         self.assertEqual(data["about"]["codeRepository"], "https://github.com/stenzek/duckstation")
-        # The release the profile describes, never the pin (round 5, 3.5).
+        # The release the profile describes, never the pin.
         self.assertEqual(data["about"]["version"], "v0.1-12070")
         self.assertNotIn("description", data["about"])
         self.assertEqual(data["dateModified"], "2026-03-23")

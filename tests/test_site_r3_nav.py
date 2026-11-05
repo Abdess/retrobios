@@ -1,4 +1,4 @@
-"""Navigation and search (round 3, package 3).
+"""Navigation and search.
 
 "playstation bios" found five setups' lists for the console before its own
 page: the pages a setup's list moves a console to weighed 1.5, three times a
@@ -65,7 +65,7 @@ class MetaFields(unittest.TestCase):
         body = ('<h3 class="rb-file-title"><code>scph5501.bin</code></h3>'
                 '<h3 class="rb-file-title"><code>a,b.bin</code></h3>')
         meta = sitestarlight.file_names_meta(body)
-        # Each name as its parts, each part once (round 5, 3.2).
+        # Each name as its parts, each part once.
         self.assertIn('data-pagefind-meta="files:a b bin scph5501"', meta)
         self.assertRegex(meta, r"<span [^>]*hidden></span>")
 
@@ -94,7 +94,7 @@ class MetaFields(unittest.TestCase):
 
 class SystemPartsSitUnderTheirMaker(unittest.TestCase):
     """The crumbs say where a system part sits, read from its parent: field.
-    The "Part of" line under them said it again (round 5, 6.9)."""
+    The "Part of" line under them said it again."""
 
     def test_every_part_names_its_maker_as_parent(self) -> None:
         pages = sorted((DOCS / "systems").glob("*.md"))

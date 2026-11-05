@@ -1,4 +1,4 @@
-"""Every system id with a section leads to it (rounds 3 and 4, package P0).
+"""Every system id with a section leads to it.
 
 260 of 636 system ids linked: a variant (WonderSwan Color, Neo Geo MVS)
 never matched a heading, twin folders (DS and Nintendo DS) made the exact
@@ -112,7 +112,7 @@ class SystemLinks(unittest.TestCase):
             siterender.set_console_sections(
                 cls.manufacturers, siterender.program_names(profiles))
             # The system pages give every arcade board a section of its own
-            # (round 4, 6.4) and record it. The built pages are checked by
+            # and record it. The built pages are checked by
             # the round 4 gate.
             siterender.reset_console_pages()
             # The sections as the system pages hold them: each board, the

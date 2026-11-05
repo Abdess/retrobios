@@ -1,4 +1,4 @@
-"""Reference pages and data (round 4, package 8).
+"""Reference pages and data.
 
 The lookup answered a SHA1 without the setups that list the same file by
 MD5, the published folder check failed 134 EmuDeck entries a folder EmuDeck

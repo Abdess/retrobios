@@ -1,4 +1,4 @@
-"""Emulator pages (round 5, package 7).
+"""Emulator pages.
 
 61 profiles cite the folder their app reads its data from (data_root) and
 no page printed it: AetherSX2's step said "inside the app's own data

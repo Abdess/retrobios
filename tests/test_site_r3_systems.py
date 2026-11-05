@@ -1,4 +1,4 @@
-"""System pages and file cards (round 3, package 6).
+"""System pages and file cards.
 
 The DS section opened on five DSi files, the Game Boy Advance line printed
 BizHawk's file name where eight setups write another, the Neo Geo section

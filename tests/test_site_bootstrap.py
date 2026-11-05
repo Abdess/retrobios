@@ -57,8 +57,7 @@ class ServedCopies(unittest.TestCase):
                 served = sitebootstrap.served_text(name, REPO_ROOT, self.commit).splitlines()
                 self.assertEqual(len(original), len(served))
                 changed = [(a, b) for a, b in zip(original, served) if a != b]
-                # The address, and the advice a refusal gives (code_audit_21
-                # P3-1).
+                # The address, and the advice a refusal gives.
                 self.assertEqual(len(changed), 2, changed)
                 advice = [pair for pair in changed if sitebootstrap.SERVED_ADVICE in pair[1]]
                 self.assertEqual(len(advice), 1, changed)
@@ -99,7 +98,7 @@ class ServedCopies(unittest.TestCase):
                                  sitebootstrap.served_text(path.name, REPO_ROOT, self.commit))
 
     def test_the_served_copy_never_blames_a_cut_download_or_caches(self):
-        """code_audit_21 P3-1: the commit-pinned copy said "cut short, try
+        """The commit-pinned copy said "cut short, try
         again" and "waiting five minutes settles that", neither of which can
         happen to it."""
         for name in sitebootstrap.SOURCES:
@@ -116,7 +115,7 @@ class ServedCopies(unittest.TestCase):
         self.assertIn("something changed the file", answer)
 
     def test_a_stale_pin_stops_the_build(self):
-        """code_audit_21 P3-2: a pin that is not the installer's was served,
+        """A pin that is not the installer's was served,
         and refused every install until the next good deploy."""
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir()
                                          else None) as scratch:

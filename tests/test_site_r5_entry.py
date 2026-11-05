@@ -1,4 +1,4 @@
-"""Entry pages, get/ and guides (round 5, package 4).
+"""Entry pages, get/ and guides.
 
 The get/ page of a setup with no ZIP printed one command for three
 systems, with no --dest, so it failed on the computer most readers open

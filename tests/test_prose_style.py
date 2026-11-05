@@ -237,6 +237,31 @@ class NoToolingNames(unittest.TestCase):
         self.assertEqual(offenders, [], "\n".join(offenders[:20]))
 
 
+class NoReviewTags(unittest.TestCase):
+    """A comment cites what the code does, never the private review that
+    asked for it. About 650 comments and test texts ended on a tag such as
+    "(tui review 13, P3-8)" written in its short form, which points at notes
+    no clone holds. The pattern is assembled so this file does not match."""
+
+    TAG = re.compile(r"[a-z]+_" + "aud" + r"it_\d+|\(rounds? \d")
+
+    def test_the_pattern_matches_the_short_forms(self):
+        for text in ("tui_" + "aud" + "it_13 P3-8", "(" + "round 5, 6.3)",
+                     "code_" + "aud" + "it_24"):
+            with self.subTest(text=text):
+                self.assertRegex(text, self.TAG)
+        self.assertNotRegex("test_" + "aud" + "it_regressions", self.TAG)
+
+    def test_no_tracked_file_carries_one(self):
+        offenders = []
+        for path in _tracked():
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for number, line in enumerate(text.splitlines(), 1):
+                if self.TAG.search(line):
+                    offenders.append(f"{path.relative_to(ROOT)}:{number}")
+        self.assertEqual(offenders, [], "\n".join(offenders[:20]))
+
+
 class ProfilesStateFactsAboutOtherProjects(unittest.TestCase):
     """A profile says what another project's file declares and what the code
     does, never a verdict on that file. Ten notes and comments in ten profiles

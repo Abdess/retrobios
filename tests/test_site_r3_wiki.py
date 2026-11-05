@@ -1,4 +1,4 @@
-"""Wiki copy (round 3, package 5).
+"""Wiki copy.
 
 Each class names the finding it holds: a legal page that opened on case law,
 no arcade answer where players look, a Dreamcast "yes" the Dreamcast

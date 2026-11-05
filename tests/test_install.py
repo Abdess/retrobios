@@ -35,8 +35,8 @@ _spec.loader.exec_module(install)
 sys.path.insert(0, str(REPO_ROOT / "tests"))
 from netguard import module_guard  # noqa: E402
 
-# No connection off the loopback and no card of the host reaches a test
-# (code_audit_24 P3-13): the module fails at its end otherwise.
+# No connection off the loopback and no card of the host reaches a test:
+# the module fails at its end otherwise.
 setUpModule, tearDownModule = module_guard("test_install")
 
 
@@ -1807,7 +1807,7 @@ class TestDetectedPlatformPrompt(unittest.TestCase):
         self.assertIn("Type a number from 1 to 2, or q to quit.", out)
 
     def test_enter_takes_the_first_and_there_is_no_all(self):
-        """tui_audit_9 P3-11: the screen focuses the first and has no All."""
+        """The screen focuses the first and has no All."""
         result, out = self._answer("")
         self.assertEqual(result, [self.PLATFORMS[0]])
         self.assertNotIn("All", out)
@@ -1817,8 +1817,7 @@ class TestManualPlatformPrompt(unittest.TestCase):
     """With nothing detected, an interactive run asks instead of exiting.
 
     Every test runs on no drive and a home of its own: two read the host's
-    drives and home, and failed with a card in the reader (code_audit_23
-    P3-7)."""
+    drives and home, and failed with a card in the reader."""
 
     def setUp(self):
         home = Path(_tempdir(self))
@@ -1869,7 +1868,7 @@ class TestManualPlatformPrompt(unittest.TestCase):
         self.assertEqual(chosen, [("lakka", install.DEFAULT_DESTS["lakka"])])
 
     def test_batocera_on_a_computer_gets_no_default(self):
-        """tui_audit_8 P2-4: /userdata/bios, a folder only the Batocera
+        """/userdata/bios, a folder only the Batocera
         machine has, was offered on a computer, and Enter took it."""
         answers = iter(["batocera", "", "~/share/bios"])
         out = io.StringIO()
@@ -4204,7 +4203,7 @@ class AQuestionLeftWithCtrlDOrCtrlCIsAStop(unittest.TestCase):
             [sys.executable, "install.py", "--plain"], cwd=REPO_ROOT, stdin=slave,
             stdout=slave, stderr=slave,
             # No request leaves the machine: the standalone emulators' lists
-            # come from the network (code_audit_24 P3-13).
+            # come from the network.
             env={**os.environ, "HOME": str(home), "RETROBIOS_OS": "linux",
                  "RETROBIOS_INSTALL_OFFLINE": "1"},
         )
@@ -4272,8 +4271,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         lines = [line for line in proc.stdout.splitlines() if line.strip()]
         self.assertIn("Nothing was written", lines[-1])
         at = next(index for index, line in enumerate(lines) if line.startswith("Would download"))
-        # One total on the header, the data files among the kinds under it
-        # (code_audit_21 P3-8).
+        # One total on the header, the data files among the kinds under it.
         self.assertNotIn("data files", lines[at])
         self.assertIn("data files", lines[at + 1])
 
@@ -4321,7 +4319,7 @@ class DestAloneFollowsWhatIsFoundHere(unittest.TestCase):
                 return exc, out.getvalue()
 
     def test_a_card_system_chosen_checks_the_folder(self):
-        """code_audit_13 P2-3: the menu offered no card system, and one
+        """The menu offered no card system, and one
         chosen now reads --dest as --platform does."""
         root = Path(_tempdir(self))
         answers = iter(["Onion", "retroarch"])
@@ -5245,7 +5243,7 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
             # The systems Choose systems lists, before the files are read.
             {"event": "choices", "platform": "retroarch",
              "systems": ["sys-a", "sys-b", "other"]},
-            # Nothing set aside before the choice (code_audit_24 P3-3).
+            # Nothing set aside before the choice.
             {"event": "set_aside", "platform": "retroarch", "dests": []},
             # a.bin and b.bin are in place: the first read and the last.
             {"event": "checking", "files_done": 1, "files_total": 2},

@@ -1,4 +1,4 @@
-"""Wiki (round 5, package 5).
+"""Wiki.
 
 Each class names the finding it holds: a "no setup" command that sent
 macOS and Steam Deck files where RetroArch never reads, a level 0 rule that

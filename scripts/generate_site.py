@@ -3943,9 +3943,9 @@ def first_screen_words() -> list[str]:
     installer = _installer()
     # The screen it opens first: the setup found, or the list when none
     # is. Install comes on the next one, Choose systems beside it and named
-    # above on the page (tui_audit_16 P3-10).
+    # above on the page.
     # Nothing found, the folder comes before Install: which-pack left it
-    # out (tui_audit_17 P3-9).
+    # out.
     return [f"It asks **{installer.TUI_FOUND_TITLE}** (or **{installer.TUI_CHOOSE_TITLE}** "
             f"and **{installer.TUI_FOLDER_TITLE}**), then offers **{installer.TUI_INSTALL_ROW}**."]
 
@@ -3954,7 +3954,7 @@ def check_pass_line() -> str:
     """The pass line of "How to check": the words `--check` prints only when
     no file is missing or wrong (install.py EVERYTHING_IN_PLACE), read from
     the installer. Typed here, it kept "All files up to date." after the
-    installer said "Everything is in place." (tui_audit_15 P3-10)."""
+    installer said "Everything is in place."."""
     return f"All good when it says `{_installer().EVERYTHING_IN_PLACE}`"
 
 # Under "From your computer": a device with no network installs from the ZIP
@@ -9970,7 +9970,7 @@ def _emulator_part_page(
                              for n, (stem, _e) in enumerate(parts, 1)], number - 1),
         f"# {emu_name} files, part {number} of {len(parts)}",
         "",
-        # The crumbs end on the emulator, read from parent: (round 5, 7.5).
+        # The crumbs end on the emulator, read from parent:.
         f"This part holds {_count(len(files), 'entry', 'entries')}, "
         f"{_code(first)} to {_code(last)}. The other parts: {others}.",
         "",

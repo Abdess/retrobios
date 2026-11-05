@@ -159,12 +159,12 @@ class InstallerOutputExample(unittest.TestCase):
         """The run counted 8069 files where its menu counted 3259 BIOS files
         and 5089 game data files: the parts add up to the total they divide,
         the sizes within the rounding of their three figures."""
-        # Data files are a third kind, counted beside the two (tui_audit_12 P2-3).
+        # Data files are a third kind, counted beside the two.
         split = re.search(r"(\d+) BIOS files \(([\d.]+) ([KMG]B)\)(?:,| and) (\d+) game data "
                           r"files \(([\d.]+) ([KMG]B)\)", text)
         self.assertIsNotNone(split, "a categorized list says its BIOS files and game data")
         bios, bios_size, bios_unit, games, game_size, game_unit = split.groups()
-        # The data files in the one total, the third kind (code_audit_21 P3-8).
+        # The data files in the one total, the third kind.
         data = re.search(r"and (\d+) data files \(([\d.]+) ([KMG]B)\)", text)
         data_count, data_size, data_unit = data.groups() if data else ("0", "0", "KB")
         self.assertEqual(int(bios) + int(games) + int(data_count), int(count))
@@ -176,7 +176,7 @@ class InstallerOutputExample(unittest.TestCase):
 
 
 class InstallerSamplesSayWhatTheCodePrints(unittest.TestCase):
-    """code_audit_24 P3-8 to P3-12: samples typed by hand outside the
+    """Samples typed by hand outside the
     generated blocks, a sentence on a log read as the terminal's, pages that
     described the generator as tables alone, and a sandbox that asked DNS."""
 

@@ -1,4 +1,4 @@
-"""System pages and boards (round 5, package 6).
+"""System pages and boards.
 
 NAOMI opened on hod2bios.zip, a set 13 of the 19 emulators listing it read
 for one game. Lines read other names for one file as files to get: "Start

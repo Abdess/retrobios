@@ -86,7 +86,7 @@ class TablesStackWhenBuilt(unittest.TestCase):
             "short-start": {"labels": ["System", "Runs", "BIOS folder"], "rows": 8, "action": False, "level": "start"},
             "long-setup": {"labels": ["System", "Files", "Status"], "rows": 97, "action": False, "level": "setup"},
             "reference": {"labels": ["A", "B", "C"], "rows": 5, "action": False, "level": "reference"},
-            # Four columns do not fit a phone column, on any page (round 3).
+            # Four columns do not fit a phone column, on any page.
             "wide": {"labels": ["File", "Region", "Required", "Hash"], "rows": 105, "action": False, "level": "reference"},
             # A hash never breaks: three columns with one overflow a phone (NetherSX2).
             "hashes": {"labels": ["File", "Required", "Hash"], "rows": 40, "action": False, "level": "reference"},
@@ -172,7 +172,7 @@ def _title_block(html: str) -> str:
 
 class LevelBadgeOnlyWhereItAddsSomething(unittest.TestCase):
     def test_badge_follows_the_crumb(self):
-        # A tab root: the header tab already says it (round 3, 2.1).
+        # A tab root: the header tab already says it.
         self.assertNotIn('class="rb-level ', _title_block(_built("platforms")))
         # Under the "Start here" or "Your setup" crumb the badge repeated it.
         for page in ("which-pack", "platforms/batocera"):

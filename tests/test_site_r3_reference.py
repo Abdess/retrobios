@@ -1,4 +1,4 @@
-"""Reference pages and data (round 3, package 8).
+"""Reference pages and data.
 
 The CSV and SQLite dropped zipped_file, so a check built from them judged
 106 good Batocera files wrong. The manifest a pack installs was nowhere on

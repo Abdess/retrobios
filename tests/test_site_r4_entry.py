@@ -1,4 +1,4 @@
-"""Entry pages and guides (round 4, package 4).
+"""Entry pages and guides.
 
 Six handheld setups have no ZIP, and three of them offered SSH as root as
 the only route while their page already named a network folder. Six rows

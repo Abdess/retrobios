@@ -390,7 +390,7 @@ class DecliningTheSizePointsAtTheChoice(unittest.TestCase):
         self.assertNotIn("see --help", out)
 
     def test_options_given_keep_the_option_advice(self):
-        # The menu is shown with --system too (tui_audit_9 P3-8): Enter keeps it.
+        # The menu is shown with --system too: Enter keeps it.
         out = self._run(["", "n"], "--system", "sony-playstation")
         self.assertIn("--system, --core and --region install less", out)
 
@@ -677,7 +677,7 @@ class TheOneLinerNarrows(unittest.TestCase):
     @unittest.skipUnless(shutil.which("script"), "script(1) provides the terminal")
     def test_the_custom_mode_at_a_terminal(self):
         """Typed answers: customise, PlayStation only, US first. Its one
-        core is not asked about (tui_audit_11 P3-10)."""
+        core is not asked about."""
         with FakeRepository() as repo:
             command = " ".join(shlex.quote(part) for part in repo.command())
             proc = subprocess.run(
@@ -724,7 +724,7 @@ class TheOneLinerNarrows(unittest.TestCase):
     def test_q_at_every_menu_stops_on_the_quit_code(self):
         """`install.sh && retroarch` started RetroArch after a q, which left
         with 0. A quit chosen ends on 2, nothing installed, where Ctrl+C and
-        Ctrl+D leave with 130 (code_audit_19 P3-1)."""
+        Ctrl+D leave with 130."""
         files = [{"dest": "a.bin", "size": 1, "systems": ["nintendo-gba"]}]
         menus = (
             lambda: install._choose_platform("Platform:"),
@@ -1632,7 +1632,7 @@ class SomethingElseAtADestination(unittest.TestCase):
             proc = repo.run("--yes")
             self.assertEqual(proc.returncode, 1, proc.stderr)
             self.assertNotIn("Traceback", proc.stderr)
-            # Each failure named once, on its FAILED line (tui_audit_17 P3-7).
+            # Each failure named once, on its FAILED line.
             self.assertIn("FAILED scph5500.bin (a folder sits where this file goes",
                           proc.stdout)
             self.assertIn("FAILED scph5501.bin (file in place could not be kept aside",

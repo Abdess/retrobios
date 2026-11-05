@@ -1,4 +1,4 @@
-"""Emulator pages say what to get, and fit (round 3, package 7).
+"""Emulator pages say what to get, and fit.
 
 NetherSX2 counted three interface fonts its app ships among "4 required"
 files and opened its file list on the project's counts. AetherSX2's summary
@@ -91,7 +91,7 @@ class WhatTheAppShipsIsNoFileToGet(unittest.TestCase):
         summary = self.page[self.page.index("## Files"):]
         self.assertIn(f"{shipped} more files come with the app.", summary)
         self.assertIn(": 1 required,", summary)
-        # Found by content: one BIOS of any name, said as steps (round 4).
+        # Found by content: one BIOS of any name, said as steps.
         self.assertIn("NetherSX2 needs one Sony PlayStation 2 BIOS file, any region.", self.page)
 
     def test_their_own_section_after_the_others(self):
