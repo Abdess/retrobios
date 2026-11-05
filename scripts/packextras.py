@@ -244,6 +244,7 @@ class ExtraResolver:
         offline: bool | None = True,
         *,
         profiles: dict,
+        pending_assets: bool = False,
     ) -> None:
         self.profiles = profiles
         self.db = db
@@ -253,10 +254,13 @@ class ExtraResolver:
         self.validation_index = validation_index
         self.validation_owners = validation_owners
         self.offline = offline
+        # verify's replay: never downloads, and counts the release asset an
+        # online build fetches, as it does for a platform entry.
+        self.pending_assets = pending_assets
 
     def resolve(self, fe: dict, dest: str) -> tuple[str | None, str, str]:
         """(local copy or None, resolver status, the core's disagreement)."""
-        from packresolve import resolve_file
+        from packresolve import pending_release_asset, resolve_file, run_is_offline
         from validation import core_size_refusal, extra_alternatives, validated_choice
 
         local_path, status = resolve_file(
@@ -264,6 +268,15 @@ class ExtraResolver:
             dest_hint=fe.get("destination", ""),
             data_dir_registry=self.data_registry, offline=self.offline,
         )
+        if (
+            self.pending_assets and status in ("not_found", "hash_mismatch")
+            and not run_is_offline()
+        ):
+            # The asset the online builder fetches in resolve_file. Its record
+            # answers the declaration, and there are no bytes on disk to check.
+            asset = pending_release_asset(fe, self.db)
+            if asset:
+                return asset, "release_asset", ""
         if status in ("not_found", "external", "user_provided") or not local_path:
             return None, status, ""
         local_path, disagreement = validated_choice(

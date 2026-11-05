@@ -116,6 +116,24 @@ class VerifyPackChoice(unittest.TestCase):
             dict(zip((name for _p, name in checked), self.variants)), names
         )
 
+    def test_a_target_the_platform_lacks_is_refused(self):
+        """`--platform bizhawk --target rpi4typo --verify-packs` verified the
+        full pack and said `all OK`, where the build refused the target."""
+        import contextlib
+        import io
+
+        bizhawk = self.gp._platform_pack_stem(["bizhawk"], "bizhawk", "platforms")
+        self._touch(f"{bizhawk}_BIOS_Pack.zip")
+        self._touch(f"{self.stem}_BIOS_Pack.zip")
+        for platform, target in (("bizhawk", "rpi4typo"), ("retroarch", "swich")):
+            with self.subTest(platform=platform), \
+                    contextlib.redirect_stdout(io.StringIO()), \
+                    contextlib.redirect_stderr(io.StringIO()), \
+                    self.assertRaises(SystemExit) as ctx:
+                self._run(self._args(platform=platform, target=target))
+            self.assertEqual(ctx.exception.code, 1)
+            self.assertEqual(self.variants, [])
+
     def test_the_run_ends_on_a_summary(self):
         """A failing pack was named only above its own error lines, and the
         log ended on the last platform's OK line."""

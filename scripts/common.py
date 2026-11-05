@@ -664,8 +664,15 @@ def load_target_config(
     targets_dir = os.path.join(platforms_dir, "targets")
     target_file = os.path.join(targets_dir, f"{platform_name}.yml")
     if not os.path.exists(target_file):
+        # The expected state for a platform that ships one build, said as
+        # such: the file path read like a file missing from the repository.
+        with_targets = sorted(
+            Path(f).stem for f in os.listdir(targets_dir)
+            if f.endswith(".yml") and not f.startswith("_")
+        )
         raise FileNotFoundError(
-            f"No target config for platform '{platform_name}': {target_file}"
+            f"{platform_name} has no hardware targets: drop --target "
+            f"(platforms with targets: {', '.join(with_targets)})"
         )
     with open(target_file) as f:
         data = yaml_load(f) or {}
@@ -2986,6 +2993,46 @@ def filter_systems_by_target(
     }
 
 
+def platform_scope_systems(
+    config: dict,
+    profiles: dict[str, dict],
+    target_cores: set[str] | None,
+    system_filter: list[str] | None = None,
+) -> dict[str, dict]:
+    """The systems a pack or a report of a platform covers.
+
+    Those a core of the target runs, then the ones a --system list keeps.
+    verify.py and generate_pack.py read this one function.
+    """
+    plat_cores = resolve_platform_cores(config, profiles) if target_cores else None
+    systems = filter_systems_by_target(
+        config.get("systems", {}), profiles, target_cores, platform_cores=plat_cores
+    )
+    return select_systems(systems, system_filter) if system_filter else systems
+
+
+def system_scope_error(
+    config: dict, platform_name: str, system_filter: list[str], target: str | None
+) -> str:
+    """Why a --system list leaves a platform no system.
+
+    A system the platform declares but no core of the target runs was
+    reported as a system the platform lacks, with a lookalike to try and a
+    listing that refuses --target.
+    """
+    systems = config.get("systems", {})
+    declared = select_systems(systems, system_filter)
+    if declared and target:
+        return (
+            f"no core {platform_name} runs on target {target} emulates "
+            f"{', '.join(sorted(declared))}"
+        )
+    hint = suggest_names(
+        system_filter, sorted(systems), f"--platform {platform_name} --list-systems"
+    )
+    return f"{platform_name} has no system matching {', '.join(system_filter)}. {hint}"
+
+
 def platform_declarations(
     config: dict, db: dict, *, enrich: bool = True
 ) -> dict[str, list[tuple[int | None, str]]]:
@@ -3143,6 +3190,22 @@ def list_system_ids(emulators_dir: str) -> None:
     for _key, (spelling, emulators) in sorted(index.items(), key=lambda kv: kv[1][0]):
         count = len(emulators)
         print(f"  {spelling:35s} ({count} emulator{'s' if count > 1 else ''})")
+
+
+def print_platform_listing(platforms_dir: str) -> None:
+    """Every registered platform, one per line, marked when archived or
+    served by the installer only.
+
+    Every platform takes --platform. --all covers the active ones, and the
+    pack builder's --all the release packs. Printed by --list-platforms in
+    verify.py and generate_pack.py, the name install.py gives it.
+    """
+    active = set(list_registered_platforms(platforms_dir))
+    released = set(list_release_pack_platforms(platforms_dir, include_archived=True))
+    for name in list_registered_platforms(platforms_dir, include_archived=True):
+        marks = [m for m, on in (("archived", name not in active),
+                                 ("installer only", name not in released)) if on]
+        print(f"{name} ({', '.join(marks)})" if marks else name)
 
 
 def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:

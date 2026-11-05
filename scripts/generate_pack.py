@@ -53,7 +53,10 @@ from common import (
     list_platform_system_ids,
     platform_system_names,
     resolve_system_arg,
+    print_platform_listing,
     select_systems,
+    platform_scope_systems,
+    system_scope_error,
     canonical_target_name,
     platform_files_target,
     list_registered_platforms,
@@ -753,31 +756,13 @@ def generate_pack(
         target_cores=target_cores, source=source,
     )
 
-    # Filter systems by target if specified
-    plat_cores = (
-        resolve_platform_cores(config, emu_profiles or {}) if target_cores else None
+    pack_systems = platform_scope_systems(
+        config, emu_profiles or {}, target_cores, system_filter
     )
-    pack_systems = filter_systems_by_target(
-        config.get("systems", {}),
-        emu_profiles or {},
-        target_cores,
-        platform_cores=plat_cores,
-    )
-
-    if system_filter:
-        filtered = select_systems(pack_systems, system_filter)
-        if not filtered:
-            hint = suggest_names(
-                system_filter,
-                sorted(pack_systems),
-                f"--platform {platform_name} --list-systems",
-            )
-            print(
-                f"  WARNING: {platform_name} has no system matching "
-                f"{', '.join(system_filter)}. {hint}"
-            )
-            return None
-        pack_systems = filtered
+    if system_filter and not pack_systems:
+        reason = system_scope_error(config, platform_name, system_filter, target_name)
+        print(f"  WARNING: {reason}")
+        return None
     if extras_only:
         # The part of a split that carries the core extras no platform system
         # owns: the platform's own files and trees went to the other parts.
@@ -1882,11 +1867,6 @@ def generate_system_pack(
         shutil.rmtree(scratch, ignore_errors=True)
 
 
-def list_platforms(platforms_dir: str) -> list[str]:
-    """List available platform names from registry."""
-    return list_registered_platforms(platforms_dir, include_archived=True)
-
-
 def _system_display_name(system_id: str) -> str:
     """Convert system ID to display name for ZIP naming."""
     s = system_id.lower().replace("_", "-")
@@ -1935,7 +1915,6 @@ def generate_split_packs(
 ) -> list[str]:
     """Generate split packs (one ZIP per system or manufacturer)."""
     config = load_platform_config(platform_name, platforms_dir)
-    platform_display = config.get("platform", platform_name)
     # The split directory carries the same tags as the packs inside it, or two
     # differently narrowed runs write into one another.
     split_tags = "".join(
@@ -1951,13 +1930,19 @@ def generate_split_packs(
     # The parts carry the version, so the directory does too: a rescrape that
     # moves the version would otherwise leave the old parts beside the new
     # under one SHA256SUMS.txt.
-    version = config.get("version", config.get("dat_version", ""))
-    ver_tag = f"_{version.replace(' ', '')}" if version else ""
-    part_prefix = f"{platform_display.replace(' ', '_')}{ver_tag}{split_tags}"
+    # Named by the stem the full pack reads: assembled here by hand, a '/' in
+    # a version nested the directory where the check never looked for it.
+    part_prefix = (
+        f"{_platform_pack_stem([platform_name], platform_name, platforms_dir)}{split_tags}"
+    )
     split_dir = os.path.join(output_dir, f"{part_prefix}{group_tag}_Split")
     os.makedirs(split_dir, exist_ok=True)
 
-    systems = config.get("systems", {})
+    if emu_profiles is None:
+        emu_profiles = load_emulator_profiles(emulators_dir)
+    # The systems a core of the target runs: a part per declared system sent
+    # each one the target drops to a refusal naming it as unknown.
+    systems = platform_scope_systems(config, emu_profiles, target_cores)
 
     if group_by == "manufacturer":
         groups = _group_systems_by_manufacturer(systems, db, bios_dir)
@@ -1966,8 +1951,6 @@ def generate_split_packs(
 
     # Pre-compute core extras once (expensive: scans 260+ emulator profiles)
     # then distribute per group based on emulator system overlap
-    if emu_profiles is None:
-        emu_profiles = load_emulator_profiles(emulators_dir)
     base_dest = config.get("base_destination", "")
     # Each part cuts the platform's own entries from the full profiles. The
     # extras are collected once here, already without the cores' game data.
@@ -2373,6 +2356,46 @@ def _resolve_systems(args: argparse.Namespace, parser: argparse.ArgumentParser) 
         parser.error(f"--system {args.system}: {exc}")
 
 
+def _platforms_with_systems(
+    args: argparse.Namespace,
+    platforms: list[str],
+    system_filter: list[str],
+    emu_profiles: dict,
+    target_cores_cache: dict[str, set[str] | None],
+) -> list[str]:
+    """The platforms a --system list leaves a system to pack, before any lock.
+
+    Under --all a platform without one is out of scope, as a platform
+    without the target is: `--all --system sony-playstation-2` built every
+    PS2 pack and exited 1 on MiSTer, which has no PS2. Under --platform the
+    request is refused here, with its reason.
+    """
+    kept = []
+    for name in platforms:
+        config = load_platform_config(name, args.platforms_dir)
+        tc = target_cores_cache.get(name) if args.target else None
+        if platform_scope_systems(config, emu_profiles, tc, system_filter):
+            kept.append(name)
+            continue
+        if not args.all:
+            reason = system_scope_error(config, name, system_filter, args.target)
+            print(f"ERROR: {reason}", file=sys.stderr)
+            sys.exit(1)
+        declared = select_systems(config.get("systems", {}), system_filter)
+        reason = (
+            system_scope_error(config, name, system_filter, args.target)
+            if declared and args.target
+            else f"no system {', '.join(system_filter)}"
+        )
+        print(f"INFO: Skipping {name}: {reason}")
+    if not kept:
+        where = f" on target {args.target}" if args.target else ""
+        print(f"ERROR: no platform packed here runs {', '.join(system_filter)}{where}",
+              file=sys.stderr)
+        sys.exit(1)
+    return kept
+
+
 def _refuse_for_verify_packs(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
     """What --verify-packs cannot be combined with, refused before any lock.
 
@@ -2652,6 +2675,19 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
     else:
         raise ValueError("--verify-packs requires --platform or --all")
 
+    # The target is checked as the build checks it: a mistyped one, or one
+    # the platform does not publish, was dropped and the full pack verified
+    # under it, `all OK` for a pack no build had made.
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        try:
+            target_cores_cache, platforms = build_target_cores_cache(
+                platforms, args.target, args.platforms_dir, is_all=args.all
+            )
+        except (FileNotFoundError, ValueError) as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            sys.exit(1)
+
     all_ok = True
     verify_regions = getattr(args, "regions", None)
     verify_profiles = load_emulator_profiles(args.emulators_dir)
@@ -2689,7 +2725,7 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
             else:
                 print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
             continue
-        tc = _target_cores_for(platform_name, args.target, args.platforms_dir)
+        tc = target_cores_cache.get(platform_name)
         # A group pack and a pack built for the platform alone can both be
         # present, and each one is a pack of this platform.
         for pack_name in found:
@@ -3057,7 +3093,7 @@ def _refuse_unapplied_flags(args: argparse.Namespace, parser: argparse.ArgumentP
             name for name, on in (
                 ("--manifest-targets", args.manifest_targets),
                 ("--verify-packs", args.verify_packs and not args.all_variants),
-                ("--list", args.list),
+                ("--list-platforms", args.list),
                 ("--list-emulators", args.list_emulators),
                 ("--list-systems", args.list_systems),
                 ("--list-targets", args.list_targets),
@@ -3083,7 +3119,7 @@ QUICK_MODE_FLAGS: dict[str, set[str]] = {
     },
     # One manifest per hardware target, from the target files themselves.
     "--manifest-targets": set(),
-    "--list": set(),
+    "--list-platforms": set(),
     "--list-emulators": set(),
     "--list-systems": {"--platform"},
     "--list-targets": {"--platform"},
@@ -3112,7 +3148,7 @@ def _given_flags(args: argparse.Namespace) -> set[str]:
         "--target": args.target,
         "--region": args.region,
         "--one-per-slot": args.one_per_slot,
-        "--list": args.list,
+        "--list-platforms": args.list,
         "--list-emulators": args.list_emulators,
         "--list-systems": args.list_systems,
         "--list-targets": args.list_targets,
@@ -3209,7 +3245,11 @@ def _main(held: contextlib.ExitStack) -> None:
         action="store_true",
         help="Pack the data directories as cached, still fetching release assets",
     )
-    parser.add_argument("--list", action="store_true", help="List available platforms")
+    # install.py's name. --list stays for the scripts that already type it.
+    parser.add_argument(
+        "--list-platforms", "--list", dest="list", action="store_true",
+        help="List available platforms",
+    )
     parser.add_argument(
         "--required-only",
         action="store_true",
@@ -3311,14 +3351,7 @@ def _main(held: contextlib.ExitStack) -> None:
             )
         return
     if args.list:
-        # Every platform builds with --platform. --all builds the release
-        # packs only, the others are served by the installer.
-        active = set(list_registered_platforms(args.platforms_dir))
-        released = set(list_release_pack_platforms(args.platforms_dir, include_archived=True))
-        for p in list_platforms(args.platforms_dir):
-            marks = [m for m, on in (("archived", p not in active),
-                                     ("installer only", p not in released)) if on]
-            print(f"{p} ({', '.join(marks)})" if marks else p)
+        print_platform_listing(args.platforms_dir)
         return
     if args.list_emulators:
         list_emulator_profiles(args.emulators_dir)
@@ -3464,6 +3497,28 @@ def _main(held: contextlib.ExitStack) -> None:
         parser.error("Specify --platform or --all")
         return
 
+    # A mistyped target is refused before the output lock and the data
+    # directory refresh: checked after them, `--target swich` waited on a
+    # pipeline's caches before saying the target does not exist.
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        try:
+            target_cores_cache, platforms = build_target_cores_cache(
+                platforms,
+                args.target,
+                args.platforms_dir,
+                is_all=args.all,
+            )
+        except (FileNotFoundError, ValueError) as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            sys.exit(1)
+
+    emu_profiles = load_emulator_profiles(args.emulators_dir)
+    if system_filter:
+        platforms = _platforms_with_systems(
+            args, platforms, system_filter, emu_profiles, target_cores_cache
+        )
+
     data_registry = load_data_dir_registry(args.platforms_dir)
     # The output directory is claimed before the data directory refresh: a
     # refresh waits for every run that holds a cache, so a second build
@@ -3482,21 +3537,6 @@ def _main(held: contextlib.ExitStack) -> None:
                 print(f"WARNING: data directory refresh failed: {', '.join(failed)}")
         if data_registry:
             hold_data_dirs(held, data_registry)
-
-        emu_profiles = load_emulator_profiles(args.emulators_dir)
-
-        target_cores_cache: dict[str, set[str] | None] = {}
-        if args.target:
-            try:
-                target_cores_cache, platforms = build_target_cores_cache(
-                    platforms,
-                    args.target,
-                    args.platforms_dir,
-                    is_all=args.all,
-                )
-            except (FileNotFoundError, ValueError) as e:
-                print(f"ERROR: {e}", file=sys.stderr)
-                sys.exit(1)
 
         groups = group_identical_platforms(
             platforms, args.platforms_dir, target_cores_cache if args.target else None
@@ -4877,17 +4917,12 @@ def _target_cores_for(
 ) -> set[str] | None:
     """Cores a target leaves available, or None when no target was asked for.
 
-    None means no narrowing, which is what an unfiltered pack expects. Read
-    the way --all builds: a platform without a target file was packed
-    unnarrowed under the target's name, and checking that pack must not
-    raise where building it did not.
+    Called on a platform the build already packed under the target, so the
+    target is known to it: a platform without one is left out of the run.
     """
     if not target_name:
         return None
-    try:
-        return load_target_config(platform_name, target_name, platforms_dir)
-    except (FileNotFoundError, ValueError):
-        return None
+    return load_target_config(platform_name, target_name, platforms_dir)
 
 
 def _expected_pack_names(

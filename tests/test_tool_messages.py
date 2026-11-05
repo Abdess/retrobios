@@ -132,7 +132,7 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
             ({"severity_counts": {}, "details": details}, ["RetroArch"]),
             ({"severity_counts": {}, "details": []}, ["Batocera"]),
         ])
-        self.assertIn("1 discrepancy (RetroArch)", summary)
+        self.assertIn("1 discrepancy (RetroArch 1)", summary)
 
     def test_a_shared_destination_names_the_path_and_both_sides(self):
         result = {"name": "disk.rom", "status": verify.Status.UNTESTED}
@@ -143,6 +143,121 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
         message = result["discrepancy"]
         for part in ("bios/disk.rom", "nec-pc-88", "coco", "md5 793f8678"):
             self.assertIn(part, message)
+
+
+class EveryPlatformInTheSummaryCarriesItsCount(unittest.TestCase):
+    """'17 discrepancies (Lakka 5, RetroArch 5, RetroBat 2, RetroDECK 4,
+    ROCKNIX)': the one platform with a single entry had no number, and the
+    named counts did not add up to the total."""
+
+    def test_a_count_of_one_is_written(self):
+        one = {"severity_counts": {verify.Severity.WARNING: 1}, "details": []}
+        two = {"severity_counts": {verify.Severity.WARNING: 2}, "details": []}
+        summary = verify._overall_summary([(two, ["Lakka"]), (one, ["ROCKNIX"])])
+        self.assertIn("3 warning (Lakka 2, ROCKNIX 1)", summary)
+
+
+class HeldButNotPackedNamesEachReason(unittest.TestCase):
+    """'Core files held but not packed: 16 (a packed file occupies its
+    directory)' on Lakka, where 14 of the 16 are installed with their
+    emulator: the first entry's reason stood for the whole count."""
+
+    @staticmethod
+    def _entry(name: str, reason: str, category: str = "bios") -> dict:
+        return {"name": name, "emulator": "x", "required": True, "in_repo": True,
+                "in_pack": False, "omitted": reason, "category": category}
+
+    def _printed(self, entries: list[dict]) -> str:
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            verify._print_undeclared_section({"undeclared_files": entries}, False)
+        return out.getvalue()
+
+    def test_each_reason_carries_its_count(self):
+        entries = [self._entry("a.rom", "a packed file occupies its directory")]
+        entries += [self._entry(f"{i}.rom", "installed with its emulator") for i in range(3)]
+        entries += [self._entry(f"g{i}", "installed with its emulator", "game_data")
+                    for i in range(2)]
+        entries.append(self._entry("g9", "no platform slug for its system", "game_data"))
+        text = self._printed(entries)
+        self.assertIn(
+            "Core files held but not packed: 4 (3 installed with its emulator, "
+            "1 a packed file occupies its directory)", text)
+        self.assertIn(
+            "Game data held but not packed: 3 (2 installed with its emulator, "
+            "1 no platform slug for its system)", text)
+
+    def test_a_missing_file_follows_the_line_that_counts_it(self):
+        """Indented under 'held but not packed: 102 (installed with its
+        emulator)', Batocera's one missing sfiii2a.zip read as one of them."""
+        missing = {"name": "sfiii2a.zip", "emulator": "FinalBurn Neo", "required": True,
+                   "in_repo": False, "category": "bios"}
+        lines = self._printed(
+            [missing, self._entry("a.rom", "installed with its emulator")]
+        ).splitlines()
+        self.assertTrue(lines[0].startswith("  Core files: "), lines)
+        self.assertIn("MISSING (required): FinalBurn Neo needs sfiii2a.zip", lines[1])
+        self.assertTrue(lines[2].startswith("  Core files held but not packed: "), lines)
+
+    def test_one_name_read_at_two_paths_prints_both_paths(self):
+        """MyMinUI printed 'FinalBurn Neo needs sfiii2a.zip' twice, word for
+        word, for Bios/FBN/ and Bios/NG/."""
+        base = {"name": "sfiii2a.zip", "emulator": "FinalBurn Neo", "required": True,
+                "in_repo": False, "category": "bios"}
+        lone = dict(base, name="other.zip", path="Bios/FBN/other.zip")
+        text = self._printed([dict(base, path="Bios/FBN/sfiii2a.zip"),
+                              dict(base, path="Bios/NG/sfiii2a.zip"), lone])
+        self.assertIn("FinalBurn Neo needs Bios/FBN/sfiii2a.zip", text)
+        self.assertIn("FinalBurn Neo needs Bios/NG/sfiii2a.zip", text)
+        self.assertIn("FinalBurn Neo needs other.zip\n", text)
+
+    def test_a_single_reason_reads_as_before(self):
+        text = self._printed([self._entry("a.rom", "installed with its emulator")] * 2)
+        self.assertIn("Core files held but not packed: 2 (installed with its emulator)", text)
+
+
+class APlatformWithoutTargetsSaysSo(unittest.TestCase):
+    """`--platform misterfpga --target switch` printed 'No target config for
+    platform 'misterfpga': platforms/targets/misterfpga.yml', which reads as
+    a file missing from the repository."""
+
+    def test_the_message_names_the_reason_and_the_platforms_with_targets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "targets").mkdir()
+            for name in ("retroarch", "batocera", "_overrides"):
+                (Path(tmp) / "targets" / f"{name}.yml").write_text("targets: {}\n")
+            with self.assertRaises(FileNotFoundError) as caught:
+                common.load_target_config("misterfpga", "switch", tmp)
+        self.assertEqual(
+            str(caught.exception),
+            "misterfpga has no hardware targets: drop --target "
+            "(platforms with targets: batocera, retroarch)",
+        )
+
+
+class OneNameListsThePlatforms(unittest.TestCase):
+    """install.py --list-platforms, generate_pack.py --list, and no listing
+    at all in verify.py: three scripts, three answers to one question."""
+
+    def _run(self, script: str, flag: str) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [sys.executable, f"scripts/{script}", flag], capture_output=True, text=True,
+            cwd=str(REPO_ROOT), timeout=120, check=False,
+        )
+
+    def test_both_tools_take_it_and_agree(self):
+        verify_out = self._run("verify.py", "--list-platforms")
+        pack_out = self._run("generate_pack.py", "--list-platforms")
+        self.assertEqual(verify_out.returncode, 0, verify_out.stderr)
+        self.assertEqual(pack_out.returncode, 0, pack_out.stderr)
+        self.assertEqual(verify_out.stdout, pack_out.stdout)
+        self.assertIn("retroarch", verify_out.stdout.split())
+        self.assertIn("--list-platforms", (REPO_ROOT / "install.py").read_text())
+
+    def test_the_installer_name_is_the_one_documented(self):
+        tools = (REPO_ROOT / "wiki" / "tools.md").read_text()
+        self.assertIn("generate_pack.py --list-platforms", tools)
+        self.assertIn("verify.py --list-platforms", tools)
 
 
 class OneSpellingPerOption(unittest.TestCase):

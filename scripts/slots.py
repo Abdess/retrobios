@@ -100,6 +100,20 @@ class Conflict:
     def emulators(self) -> list[str]:
         return sorted({c.emulator for c in self.profile_claims if c.emulator})
 
+    def files_read(self) -> list[tuple[str | None, list[str], str]]:
+        """Each file the profiles want here, with the emulators reading it
+        and the proof of the first claim on it.
+
+        One file stood for every claim: Recalbox's neocdz.zip line gave
+        geolith the archive fbneo reads, not the one geolith pins.
+        """
+        files: dict[str | None, tuple[list[str], str]] = {}
+        for claim in self.profile_claims:
+            emulators, status = files.setdefault(claim.local_path, ([], claim.status))
+            if claim.emulator and claim.emulator not in emulators:
+                emulators.append(claim.emulator)
+        return [(path, sorted(emus), status) for path, (emus, status) in files.items()]
+
 
 def _normalize(destination: str, fold: bool = True) -> str:
     """Comparable form of a destination, since layers write it differently.
@@ -661,11 +675,13 @@ def format_decision(decision: Decision) -> str:
             f"{conflict.destination}: serve {decision.winner.local_path}, "
             "the pack answers to the emulator"
         )
-    expected = ", ".join(conflict.emulators) or "the profile"
+    rejected = ", ".join(
+        f"{path}, the file {', '.join(emulators) or 'the profile'} reads"
+        for path, emulators, _status in conflict.files_read()
+    )
     return (
         f"{conflict.destination}: keep {decision.winner.local_path}, the frontend "
-        f"verifies content and would reject "
-        f"{conflict.profile_claims[0].local_path}, the file {expected} reads"
+        f"verifies content and would reject {rejected}"
     )
 
 
@@ -996,8 +1012,10 @@ def main() -> int:
                         "ships": c.platform_claim.local_path,
                         "ships_evidence": c.platform_claim.status,
                         "emulators": c.emulators,
-                        "expected": c.profile_claims[0].local_path,
-                        "expected_evidence": c.profile_claims[0].status,
+                        "expected": [
+                            {"file": path, "evidence": status, "emulators": emulators}
+                            for path, emulators, status in c.files_read()
+                        ],
                     }
                     for c in conflicts
                 ]

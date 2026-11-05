@@ -29,6 +29,7 @@ import contextlib
 import json
 import os
 import sys
+from collections import Counter
 from collections.abc import Mapping
 from pathlib import Path
 
@@ -54,7 +55,6 @@ from common import (
     compute_hashes,
     expand_directory_entries,
     platform_declarations,
-    filter_systems_by_target,
     group_identical_platforms,
     list_emulator_profiles,
     list_system_ids,
@@ -63,7 +63,10 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     resolve_system_arg,
+    print_platform_listing,
     select_systems,
+    platform_scope_systems,
+    system_scope_error,
     md5sum,
     require_yaml,
     resolve_local_file,
@@ -1217,16 +1220,7 @@ def verify_platform(
     validation_index = _build_validation_index(platform_profiles)
     validation_owners = destination_owners(platform_profiles)
 
-    if not target_cores:
-        plat_cores = None
-    verify_systems = filter_systems_by_target(
-        config.get("systems", {}),
-        profiles,
-        target_cores,
-        platform_cores=plat_cores,
-    )
-    if system_filter:
-        verify_systems = select_systems(verify_systems, system_filter)
+    verify_systems = platform_scope_systems(config, profiles, target_cores, system_filter)
 
     details = []
     file_status: dict[str, str] = {}
@@ -1315,8 +1309,12 @@ def verify_platform(
                     "release_asset": local_path,
                     "reason": "release asset, fetched when the pack is built",
                 }
+                # Written at its path like any held file: keyed to None, it
+                # stayed out of pack_destinations and step 5 read the pack's
+                # copy as a file only the pack holds.
                 packed_order.append((
-                    sys_id, f"{base_dest}/{destination}" if base_dest else destination, None,
+                    sys_id, f"{base_dest}/{destination}" if base_dest else destination,
+                    local_path,
                 ))
                 shipped_keys.add(_dest_key(file_entry, sys_id))
                 local_path = None
@@ -1465,7 +1463,7 @@ def verify_platform(
         region_drops, report_for_builder,
         ExtraResolver(
             db, DEFAULT_BIOS_DIR, zip_contents, data_dir_registry, validation_index,
-            validation_owners, profiles=profiles,
+            validation_owners, profiles=profiles, pending_assets=True,
         ),
         placed_kind,
         system_filter,
@@ -1746,13 +1744,20 @@ def _print_detail_entries(details: list[dict], seen: set[str], verbose: bool) ->
                         print(f"    {line}")
 
 
-def _print_undeclared_entry(u: dict, prefix: str, verbose: bool) -> None:
-    """Print a single undeclared file entry with its validation checks."""
+def _print_undeclared_entry(
+    u: dict, prefix: str, verbose: bool, repeated: frozenset[str] = frozenset()
+) -> None:
+    """Print a single undeclared file entry with its validation checks.
+
+    A name in ``repeated`` is read at more than one path, and the line names
+    the path: two identical lines told no one there were two slots to fill.
+    """
+    name = u["path"] if u["name"] in repeated and u.get("path") else u["name"]
     arc_count = u.get("archive_file_count")
     if arc_count:
-        name_label = f"{u['name']} ({arc_count} file{'s' if arc_count != 1 else ''})"
+        name_label = f"{name} ({arc_count} file{'s' if arc_count != 1 else ''})"
     else:
-        name_label = u["name"]
+        name_label = name
     print(f"    {prefix}: {u['emulator']} needs {name_label}")
     checks = u.get("checks", [])
     if checks:
@@ -1800,6 +1805,25 @@ def _core_required_missing(bios_files: list[dict]) -> list[dict]:
     ]
 
 
+def _repeated_names(entries: list[dict]) -> frozenset[str]:
+    """Names more than one of ``entries`` carries."""
+    counts = Counter(u["name"] for u in entries)
+    return frozenset(name for name, count in counts.items() if count > 1)
+
+
+def _omission_reasons(entries: list[dict]) -> str:
+    """Each reason a held file was left out, with its count when several.
+
+    Printing the first entry's reason for the whole count named one cause
+    for 412 RomM files when 20 carried it.
+    """
+    counts = Counter(u.get("omitted", "not placed") for u in entries)
+    if len(counts) == 1:
+        return next(iter(counts))
+    ranked = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    return ", ".join(f"{count} {reason}" for reason, count in ranked)
+
+
 def _print_undeclared_section(result: dict, verbose: bool) -> None:
     """Print cross-reference section for undeclared files used by cores."""
     undeclared = result.get("undeclared_files", [])
@@ -1839,19 +1863,22 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         f"  Core files: {core_in_pack} in pack, {core_missing_req} required missing, "
         f"{core_missing_opt} optional missing{listed}"
     )
+    # The missing files follow the line that counts them: printed after the
+    # held-but-not-packed line, they read as files installed with their emulator.
+    repeated = _repeated_names(req_not_in_repo + req_hle_not_in_repo + opt_not_in_repo)
+    for u in req_not_in_repo:
+        _print_undeclared_entry(u, "MISSING (required)", verbose, repeated)
+    for u in req_hle_not_in_repo:
+        _print_undeclared_entry(u, "MISSING (required, HLE fallback)", verbose, repeated)
+    if verbose:
+        for u in opt_not_in_repo:
+            _print_undeclared_entry(u, "MISSING (optional)", verbose, repeated)
     if bundled:
         names = ", ".join(sorted({u["name"] for u in bundled}))
         print(f"  Bundled with their emulator, not collected: {names}")
     if unplaced:
-        print(f"  Core files held but not packed: {len(unplaced)} ({unplaced[0]['omitted']})")
-
-    for u in req_not_in_repo:
-        _print_undeclared_entry(u, "MISSING (required)", verbose)
-    for u in req_hle_not_in_repo:
-        _print_undeclared_entry(u, "MISSING (required, HLE fallback)", verbose)
-    if verbose:
-        for u in opt_not_in_repo:
-            _print_undeclared_entry(u, "MISSING (optional)", verbose)
+        print(f"  Core files held but not packed: {len(unplaced)} "
+              f"({_omission_reasons(unplaced)})")
 
     if game_data:
         gd_missing = [u for u in game_data if not u["in_repo"]]
@@ -1864,12 +1891,13 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
             listed = "" if verbose or not gd_missing else " (--verbose lists them)"
             print(f"  Game data: {gd_packed} in pack, {len(gd_missing)} missing{listed}")
         if verbose:
+            repeated = _repeated_names(gd_missing)
             for u in gd_missing:
-                _print_undeclared_entry(u, "MISSING (game data)", verbose)
+                _print_undeclared_entry(u, "MISSING (game data)", verbose, repeated)
         if gd_unplaced:
             print(
                 f"  Game data held but not packed: {len(gd_unplaced)} "
-                f"({gd_unplaced[0].get('omitted', 'not placed')})"
+                f"({_omission_reasons(gd_unplaced)})"
             )
 
 
@@ -2597,6 +2625,7 @@ def _refuse_listing_narrowings(
     """
     listing = next(
         (flag for flag, on in (
+            ("--list-platforms", args.list_platforms),
             ("--list-emulators", args.list_emulators),
             ("--list-systems", args.list_systems),
             ("--list-targets", args.list_targets),
@@ -2605,7 +2634,7 @@ def _refuse_listing_narrowings(
     )
     if not listing:
         return
-    reads_platform = listing != "--list-emulators"
+    reads_platform = listing not in ("--list-emulators", "--list-platforms")
     for flag, on in (
         ("--platform", args.platform and not reads_platform),
         ("--all", args.all),
@@ -2655,7 +2684,9 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
 
 
 def _run_listing(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
-    if args.list_emulators:
+    if args.list_platforms:
+        print_platform_listing(args.platforms_dir)
+    elif args.list_emulators:
         list_emulator_profiles(args.emulators_dir)
     elif args.list_systems and args.platform:
         list_platform_system_ids(args.platform, args.platforms_dir)
@@ -2693,6 +2724,9 @@ def _main(held: contextlib.ExitStack) -> None:
     )
     parser.add_argument(
         "--list-systems", action="store_true", help="List available systems"
+    )
+    parser.add_argument(
+        "--list-platforms", action="store_true", help="List available platforms"
     )
     parser.add_argument(
         "--include-archived", action="store_true",
@@ -2767,7 +2801,7 @@ def _main(held: contextlib.ExitStack) -> None:
             parser.error(str(exc))
 
     _refuse_listing_narrowings(args, parser)
-    if args.list_emulators or args.list_systems or args.list_targets:
+    if args.list_platforms or args.list_emulators or args.list_systems or args.list_targets:
         _run_listing(args, parser)
         return
 
@@ -2853,6 +2887,18 @@ def _main(held: contextlib.ExitStack) -> None:
         except (FileNotFoundError, ValueError) as e:
             print(f"ERROR: {e}", file=sys.stderr)
             sys.exit(1)
+        # A system the target leaves no core for was reported 0/0 with exit 0,
+        # where generate_pack refuses the same request.
+        if platform_systems:
+            config = load_platform_config(args.platform, args.platforms_dir)
+            if not platform_scope_systems(
+                config, emu_profiles, target_cores_cache.get(args.platform), platform_systems
+            ):
+                reason = system_scope_error(
+                    config, args.platform, platform_systems, args.target
+                )
+                print(f"ERROR: {reason}", file=sys.stderr)
+                sys.exit(1)
 
     # Group identical platforms (same function as generate_pack)
     groups = group_identical_platforms(
@@ -2961,8 +3007,7 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
     platforms = sum(len(group) for _, group in group_results)
 
     def where(counts: dict[str, int]) -> str:
-        named = [f"{name} {count}" if count > 1 else name
-                 for name, count in counts.items() if count]
+        named = [f"{name} {count}" for name, count in counts.items() if count]
         return f" ({', '.join(named)})" if named else ""
 
     parts = []

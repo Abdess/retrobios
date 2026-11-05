@@ -4830,7 +4830,7 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
         summary = verify._overall_summary(
             [(clean, ["RetroArch"]), (warned, ["RetroDECK"]), (core_miss, ["ROCKNIX"])]
         )
-        self.assertIn("1 warning (RetroDECK)", summary)
+        self.assertIn("1 warning (RetroDECK 1)", summary)
         self.assertIn("ROCKNIX: n64.psh", summary)
         self.assertIn("0 critical,", summary)
 
