@@ -294,6 +294,28 @@ def build_indexes(files: dict, aliases: dict) -> dict:
     }
 
 
+def shadowed_alias_index(
+    shadowed: list[tuple[str, set[str], list[str]]], by_name: dict
+) -> dict[str, list[str]]:
+    """Profile aliases that a primary's name keeps out of by_name.
+
+    QUASI88 reads DISK.ROM as n88sub.rom, but DISK.ROM is the MSX disk ROM's
+    own name, so by_name never points it at the PC-88 file. The resolver reads
+    this index only where the system names a maker and no copy filed under
+    that maker answers the name. An entry with no hash designates the content
+    its own name holds alone in by_name.
+    """
+    index: dict[str, set[str]] = {}
+    for entry_name, matched, taken in shadowed:
+        held = by_name.get(entry_name, [])
+        designated = matched or (set(held) if len(held) == 1 else set())
+        for alias in taken:
+            fresh = designated - set(by_name.get(alias, []))
+            if fresh:
+                index.setdefault(alias, set()).update(fresh)
+    return {alias: sorted(sha1s) for alias, sha1s in sorted(index.items())}
+
+
 def load_cache(cache_path: str) -> dict:
     """Load cache file if it exists."""
     try:
@@ -429,8 +451,9 @@ def main() -> int:
     if preserved:
         print(f"  Preserved {preserved} large file entries from existing database")
 
+    shadowed: list[tuple[str, set[str], list[str]]] = []
     try:
-        platform_aliases = _collect_all_aliases(files, aliases)
+        platform_aliases = _collect_all_aliases(files, aliases, shadowed)
     except UnreadableSource as exc:
         for source in exc.sources:
             print(f"Error: cannot read {source}", file=sys.stderr)
@@ -446,6 +469,7 @@ def main() -> int:
     provenance_counts = annotate_provenance(files, snapshots)
 
     indexes = build_indexes(files, aliases)
+    indexes["by_shadowed_alias"] = shadowed_alias_index(shadowed, indexes["by_name"])
     total_size = sum(entry["size"] for entry in files.values())
 
     database = {
@@ -508,11 +532,17 @@ class UnreadableSource(Exception):
         self.sources = sources
 
 
-def _collect_all_aliases(files: dict, copies: dict | None = None) -> dict:
+def _collect_all_aliases(
+    files: dict,
+    copies: dict | None = None,
+    shadowed: list[tuple[str, set[str], list[str]]] | None = None,
+) -> dict:
     """Collect alternate filenames from platform YAMLs, core-info, and known aliases.
 
     Registers alternate names so generate_pack can resolve files stored under different names.
     ``copies`` maps a sha1 to the other files the scan found with that content.
+    ``shadowed`` receives, per profile entry, its name, the contents its hashes
+    designate and the aliases a primary's name already carries.
     """
     md5_to_sha1 = {}
     name_to_sha1 = {}
@@ -635,6 +665,13 @@ def _collect_all_aliases(files: dict, copies: dict | None = None) -> dict:
                     entry_aliases.insert(0, entry_name)
                 if not entry_aliases:
                     continue
+                if shadowed is not None:
+                    taken = [
+                        alias for alias in entry_aliases
+                        if alias != entry_name and alias in named_primaries
+                    ]
+                    if taken:
+                        shadowed.append((entry_name, set(matched), taken))
                 if not matched and len(holders.get(entry_name, ())) == 1:
                     # A name carried by several contents names none of them:
                     # quasi88's disk.rom aliases went to whichever

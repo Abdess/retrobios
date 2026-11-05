@@ -6,7 +6,7 @@
   "platform": "amberelec",
   "display_name": "AmberELEC",
   "version": "prerelease-20261019_1835",
-  "generated": "2026-11-05T18:33:47Z",
+  "generated": "2026-11-05T22:08:47Z",
   "base_destination": "",
   "detect": [
     {
@@ -30,9 +30,9 @@
   ],
   "standalone_copies": [],
   "total_files": 4958,
-  "total_size": 5348102161,
+  "total_size": 5348087825,
   "pack_files": 5152,
-  "pack_size": 5348202505,
+  "pack_size": 5348188169,
   "total_omitted": 285,
   "omitted_files": [
     {
@@ -8414,10 +8414,10 @@
     },
     {
       "dest": "bios/quasi88/DISK.ROM",
-      "sha1": "032cb1c1c75b9a191fa1230978971698d9d2a17f",
-      "sha256": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/DISK.ROM",
+      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
+      "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/N88SUB.ROM",
       "cores": null,
       "systems": [
         "nec-pc-88"

@@ -114,6 +114,9 @@
         },
         "by_path_suffix": {
           "$ref": "#/$defs/listIndex"
+        },
+        "by_shadowed_alias": {
+          "$ref": "#/$defs/listIndex"
         }
       }
     }

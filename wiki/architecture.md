@@ -99,7 +99,8 @@ Upstream sources          Scrapers parse       generate_db.py scans
   batocera-systems                             builds database.json
   es_bios.xml (recalbox)                       (SHA1 primary key,
   core-info .info files                         indexes: by_md5, by_name,
-  FirmwareDatabase.cs                           by_crc32, by_sha256, by_path_suffix)
+  FirmwareDatabase.cs                           by_crc32, by_sha256, by_path_suffix,
+                                                by_shadowed_alias)
   bios_db.json.zip (MiSTer)
   MAME/FBNeo source
 
@@ -411,6 +412,12 @@ resolution.
 `verify.py` and `generate_pack.py` both call it. Every declared hash is tried
 before a path or a name, so a path never wins over a hash. The steps, in order,
 are listed under [file resolution chain](verification-modes.md#file-resolution-chain).
+
+A platform entry with no hash is never answered by name with a file filed under
+another maker than the one its system id names. When that leaves nothing, the
+profile aliases a primary's name keeps out of `by_name` (`by_shadowed_alias`)
+answer, within that maker's folder: AmberELEC's `nec-pc-88` `DISK.ROM` is QUASI88's
+`n88sub.rom`, not the MSX disk ROM.
 
 ## Platform inheritance
 
