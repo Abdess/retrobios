@@ -43,17 +43,25 @@ import textwrap
 import threading
 import time
 import traceback
-import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
 import weakref
 import xml.etree.ElementTree as ET
 import zipfile
-import zlib
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
 from pathlib import Path, PurePosixPath
 from typing import Any, BinaryIO, ContextManager, NamedTuple, TextIO
+
+# Built as C extensions that a Python compiled without their libraries
+# lacks: the run stopped on a ModuleNotFoundError traceback.
+try:
+    import unicodedata
+    import zlib
+except ImportError as _missing:
+    print(f"Error: this Python was built without its {_missing.name} module, which "
+          "the installer needs. Run it with another Python 3.8 or newer.", file=sys.stderr)
+    sys.exit(1)
 
 # File lists are read from main, the newest ones, whichever commit the
 # installer came from. RETROBIOS_REF pins them to a tag or a commit when
@@ -645,8 +653,9 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # platforms: [{"platform", "name", "bios_dir"}], empty when none is found.
     "detect": ("os", "os_name", "platforms"),
     # stage: manifest (reason: network, not_found, invalid, clock for a
-    # refused certificate under a clock set in the past, or no_ca for no
-    # trusted certificates on the machine) or detect (reason: conflict, two
+    # refused certificate under a clock set in the past, no_ca for no
+    # trusted certificates on the machine, or no_ssl for a Python built
+    # without ssl) or detect (reason: conflict, two
     # systems found on one machine, or not_found, the platform named with
     # --platform, or by a file list or a pack in a run without questions,
     # found nowhere and no folder to assume) or from (a folder named with --from,
@@ -3811,7 +3820,7 @@ def network_words(
 ) -> tuple[str, str]:
     """The reason a request failed, and the same in words a beginner reads.
 
-    The reason is clock, no_ca, network, or offline for a request the run
+    The reason is clock, no_ca, no_ssl, network, or offline for a request the run
     was told not to make. Offline, the run printed
     "[Errno -2] Name or service not known": the raw text now follows the
     words only under --verbose.
@@ -3823,7 +3832,14 @@ def network_words(
     raw = str(reason or exc)
     code, words = "network", ""
     cert_error = getattr(sys.modules.get("ssl"), "SSLCertVerificationError", None)
-    if cert_error is not None and isinstance(inner, cert_error):
+    if (isinstance(exc, urllib.error.URLError) and raw.startswith("unknown url type")
+            and not hasattr(urllib.request, "HTTPSHandler")):
+        # urllib defines no HTTPS handler in a Python built without ssl:
+        # three attempts and a word on the connection blamed the network.
+        code = "no_ssl"
+        words = ("This Python was built without its ssl module and cannot use HTTPS. "
+                 "Run the installer with another Python 3.8 or newer")
+    elif cert_error is not None and isinstance(inner, cert_error):
         today = today or datetime.date.today()
         if not _ca_bundle_found():
             code = "no_ca"
@@ -22588,7 +22604,8 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
                 f"(--from-pack PACK), or {offline_undo()}."], 1))
             return
         title = {"clock": "The clock is wrong",
-                 "no_ca": "No trusted certificates"}.get(code, "No connection")
+                 "no_ca": "No trusted certificates",
+                 "no_ssl": "This Python cannot use HTTPS"}.get(code, "No connection")
         # The screen's first row is Try again: "then run again" was a second way.
         lines = [words[0].upper() + words[1:].replace(", then run again",
                                                       ", then choose Try again") + "."]

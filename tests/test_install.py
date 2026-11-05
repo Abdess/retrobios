@@ -5513,6 +5513,39 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
         self.assertIn("route-keys", said)
 
 
+class AStrippedPythonIsNamed(unittest.TestCase):
+    """A Python built without ssl blamed the network three times, and one
+    without zlib or unicodedata stopped on a ModuleNotFoundError traceback."""
+
+    def _run(self, hidden: str, *argv: str) -> subprocess.CompletedProcess:
+        code = (f"import runpy, sys; sys.modules[{hidden!r}] = None; "
+                "sys.argv = sys.argv[1:]; "
+                "runpy.run_path(sys.argv[0], run_name='__main__')")
+        env = {key: value for key, value in os.environ.items()
+               if key not in ("RETROBIOS_BASE_URL", install.OFFLINE_VARIABLE)}
+        return subprocess.run(
+            [sys.executable, "-c", code, str(REPO_ROOT / "install.py"), *argv],
+            env=env, capture_output=True, text=True, timeout=60,
+            stdin=subprocess.DEVNULL)
+
+    def test_a_missing_c_module_is_named(self):
+        for hidden in ("zlib", "unicodedata"):
+            with self.subTest(module=hidden):
+                proc = self._run(hidden, "--help")
+                self.assertEqual(proc.returncode, 1)
+                self.assertNotIn("Traceback", proc.stderr)
+                self.assertIn(f"built without its {hidden} module", proc.stderr)
+
+    def test_no_ssl_is_said_once_not_retried(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as dest:
+            proc = self._run("ssl", "--platform", "retroarch", "--dest", dest,
+                             "--check", "--no-input")
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("built without its ssl module and cannot use HTTPS", proc.stderr)
+        self.assertNotIn("trying again", proc.stderr)
+        self.assertNotIn("HTTPS_PROXY", proc.stderr)
+
+
 class NetworkFailuresInPlainWords(unittest.TestCase):
     """Offline, the run printed "[Errno -2] Name or service not known". A
     beginner needs "no internet connection", and the raw text only under
