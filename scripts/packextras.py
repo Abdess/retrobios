@@ -253,11 +253,27 @@ class ExtraResolver:
         self.validation_index = validation_index
         self.validation_owners = validation_owners
         self.offline = offline
+        # Each profile's entries by slot, built on first use: every extra
+        # scanned its whole profile, 33 million entries in one verify --all.
+        self._slots: dict[str, dict[tuple[str, str], list[dict]]] = {}
+
+    def alternatives(self, fe: dict) -> list[dict]:
+        """The versions the extra's own profile accepts at its slot, as
+        validation.extra_alternatives finds them."""
+        from validation import slot_index
+
+        key = fe.get("source_profile") or ""
+        index = self._slots.get(key)
+        if index is None:
+            profile = (self.profiles or {}).get(key, {})
+            index = self._slots[key] = slot_index(profile.get("files") or [])
+        name = fe.get("source_name") or fe.get("name", "")
+        return index.get((name, fe.get("source_path") or name), [])
 
     def resolve(self, fe: dict, dest: str) -> tuple[str | None, str, str]:
         """(local copy or None, resolver status, the core's disagreement)."""
         from packresolve import resolve_file
-        from validation import core_size_refusal, extra_alternatives, validated_choice
+        from validation import core_size_refusal, validated_choice
 
         local_path, status = resolve_file(
             fe, self.db, self.bios_dir, self.zip_contents,
@@ -272,9 +288,7 @@ class ExtraResolver:
         )
         # The platform never reads the bytes, the core does: a copy it turns
         # away by its own size check is not its file, on any platform.
-        if core_size_refusal(
-            fe, local_path, extra_alternatives(fe, self.profiles)
-        ):
+        if core_size_refusal(fe, local_path, self.alternatives(fe)):
             return None, "not_found", ""
         return local_path, status, disagreement
 
