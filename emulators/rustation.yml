@@ -30,7 +30,7 @@ notes: >
   Database contains 24 entries (22 good, 2 known-bad rejected)
   covering BIOS versions 1.0 through 4.5.
   .info declares firmware_count=0, while the core reads the BIOS images this profile lists.
-  Project abandoned, superseded by rustation-ng.
+  Its README says it is no longer developed and points to rustation-ng.
 
 files:
   # -- Region: Japan --

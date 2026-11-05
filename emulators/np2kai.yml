@@ -16,7 +16,7 @@ cores: [np2kai]
 systems: [pc-98]
 
 # NP2kai is a PC-9801/9821 emulator by AZO234, enhanced fork of Neko Project II
-# by Yui (original upstream dead: np2.yui.ne.jp). All files load from
+# by Yui (original site: np2.yui.ne.jp). All files load from
 # <system>/np2kai/ subdirectory, set in retro_load_game()
 # (sdl/libretro/libretro.c:1800-1815). All getbiospath() calls resolve
 # relative to that directory.
