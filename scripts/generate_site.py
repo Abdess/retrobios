@@ -6662,7 +6662,7 @@ def _start_groups(
     for f in primaries:
         sha1 = str(f.get("sha1", ""))
         for emulator, entry in _reading_pairs(sha1, consumers):
-            if entry.get("bundled"):
+            if comes_with_app(entry):
                 continue
             system = None
             systems = _entry_systems(emulator, entry)
@@ -6677,7 +6677,7 @@ def _start_groups(
         for sha1, emulator, entry, system in _entries_by_section(consumers).get(here, []):
             record = known.get(sha1)
             parts = str((record or {}).get("path", "")).split("/")
-            if (sha1 in held or not record or entry.get("bundled") or ".variants" in parts
+            if (sha1 in held or not record or comes_with_app(entry) or ".variants" in parts
                     or len(parts) < 3 or parts[1] != "Arcade"):
                 continue
             if sha1 not in kept:
@@ -7819,12 +7819,15 @@ def generate_emulators_index(profiles: dict) -> str:
 
 
 def comes_with_app(f: dict) -> bool:
-    """The emulator installs the file in every build the profile documents.
+    """The emulator installs the file in the build the entry describes.
 
-    ``bundled`` narrowed by ``mode`` is installed by one build only, and the
-    other build still reads it from the user's folder.
+    The rule verify and the pack read (``installed_with_emulator``). An entry
+    narrowed by ``mode`` is that build's alone: the other build reads its
+    own entry, or nothing.
     """
-    return f.get("bundled") is True and not f.get("mode")
+    from validation import installed_with_emulator  # noqa: PLC0415
+
+    return installed_with_emulator(f)
 
 
 def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
@@ -7841,7 +7844,6 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     category = f.get("category", "")
     region = f.get("region", "")
     storage = f.get("storage", "")
-    bundled = f.get("bundled", False)
     embedded = f.get("embedded", False)
     has_builtin = f.get("has_builtin", False)
     archive = f.get("archive", "")
@@ -7851,9 +7853,10 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     if shipped:
         # NetherSX2's three interface fonts sat beside the BIOS as
         # "required" and "missing": the app ships them, nobody fetches them.
-        badges.append(
-            '<span class="rb-badge rb-badge-info">comes with the app</span>'
-        )
+        # Narrowed to one build, the build is named.
+        build = f.get("mode") if f.get("mode") in ("standalone", "libretro") else ""
+        label = f"installed with the {build} emulator" if build else "comes with the app"
+        badges.append(f'<span class="rb-badge rb-badge-info">{label}</span>')
     elif required:
         needed = f"required for {html.escape(for_system)}" if for_system else "required"
         badges.append(
@@ -7879,7 +7882,7 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
         badges.append(
             '<span class="rb-badge rb-badge-info">HLE fallback</span>'
         )
-    if mode:
+    if mode and not (shipped and mode in ("standalone", "libretro")):
         badges.append(
             f'<span class="rb-badge rb-badge-muted">{mode}</span>'
         )
@@ -7895,13 +7898,6 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     if storage and storage != "embedded":
         badges.append(
             f'<span class="rb-badge rb-badge-muted">{storage}</span>'
-        )
-    if bundled and not shipped:
-        # Said in words: the pack leaves the file out because the emulator,
-        # in the build the entry names, already installs it.
-        build = f" {f['mode']}" if f.get("mode") in ("standalone", "libretro") else ""
-        badges.append(
-            f'<span class="rb-badge rb-badge-muted">installed with the{build} emulator</span>'
         )
     if embedded:
         badges.append(
@@ -8860,7 +8856,7 @@ def standalone_place(name: str, profile: dict, entry: dict, key: str = "") -> st
     if not isinstance(entry, dict) or not profile.get("data_root"):
         return ""
     mode = entry.get("mode")
-    if mode == "libretro" or (entry.get("bundled") is True and mode in (None, "standalone")):
+    if mode == "libretro" or comes_with_app(entry):
         return ""
     excluded = _folder_only(name, entry)
     if "*" in excluded or (key in excluded if key else excluded):
@@ -8898,7 +8894,7 @@ def _data_root_folder(name: str, profile: dict, key: str, entries: list[dict]) -
     folders = set()
     for f in entries:
         mode = f.get("mode")
-        if mode == "libretro" or (f.get("bundled") is True and mode in (None, "standalone")):
+        if mode == "libretro" or comes_with_app(f):
             continue
         place = standalone_place(name, profile, f, key)
         if not place:
