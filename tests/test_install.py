@@ -3362,6 +3362,28 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
         self.assertEqual(state.board, "Board bcm2711 found on the card (x)")
 
 
+class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
+    """Offline, --target on AmberELEC asked for install/targets/amberelec.json,
+    which exists nowhere: online the same run says it has no targets."""
+
+    def test_the_list_matches_the_published_targets(self):
+        published = {path.stem for path in (REPO_ROOT / "install" / "targets").glob("*.json")}
+        self.assertEqual(install.TARGET_PLATFORMS, published)
+
+    def test_offline_says_there_are_no_targets(self):
+        dest = Path(_tempdir(self))
+        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "amberelec.json")]):
+            with self.subTest(manifest=bool(extra)):
+                proc = subprocess.run(
+                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "amberelec",
+                     "--dest", str(dest), "--target", "rk3326", "--offline", "--no-input",
+                     "--dry-run", *extra],
+                    capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+                self.assertEqual(proc.returncode, 2, proc.stderr)
+                self.assertIn("AmberELEC has no hardware targets", proc.stderr)
+                self.assertNotIn("targets/amberelec.json", proc.stderr)
+
+
 class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
     """Batocera, Recalbox and ROCKNIX each write the board they were built
     for, but the installer read none of them, so a Batocera RPi4 installed

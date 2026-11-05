@@ -104,6 +104,14 @@ def _checked_base_url(value: str) -> str:
 BASE_URL = _checked_base_url(os.environ.get("RETROBIOS_BASE_URL", DEFAULT_BASE_URL))
 MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
 TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
+# The platforms that publish a core list per board, install/targets/ in the
+# repository: a test holds the two equal. Offline, a platform outside it
+# has no hardware targets, where the run sent the user after a list that
+# exists nowhere.
+TARGET_PLATFORMS = frozenset({
+    "batocera", "emudeck", "knulli", "lakka", "recalbox", "retroarch", "retrobat",
+    "retrodeck", "retropie", "rocknix", "romm",
+})
 RAW_FILE_URL = f"{BASE_URL}/{{path}}"
 RELEASE_URL = (
     "https://github.com/Abdess/retrobios/releases/download/large-files/{asset}"
@@ -4209,6 +4217,8 @@ def fetch_targets(plat: str) -> "dict | None":
     held = local_targets(plat)
     if held is not None:
         return held
+    if LOCAL.offline and plat not in TARGET_PLATFORMS:
+        return {}
     if LOCAL.offline:
         source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
                   else f"{offline_named()} makes no request")
@@ -13327,8 +13337,14 @@ def main() -> None:
         # The runs the full-screen interface starts read it from here, and
         # the words name the option given.
         os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
+    named = next((plat for plat in AVAILABLE_PLATFORMS if args.platform and _name_key(
+        args.platform) in (_name_key(plat), _name_key(display_name(plat)))), "")
+    if offline_requested() and args.target and named and named not in TARGET_PLATFORMS:
+        refuse_name(named, f"Error: {display_name(named)} has no hardware targets: run "
+                    "again without --target.")
     if (offline_requested() and (args.target or args.list_targets)
-            and not (args.manifest or args.from_pack)):
+            and not (args.manifest or args.from_pack)
+            and not (named and named not in TARGET_PLATFORMS)):
         # No list can be at hand: a pack carries one, and so can the folder
         # of a --manifest (targets/<platform>.json).
         parser.error("--target and --list-targets read a core list from the network, "
