@@ -113,3 +113,19 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GuidesInstallFromTheZipInHand(unittest.TestCase):
+    """Option A sent a user holding the ZIP to the one-liner, which downloads
+    every file again. --from-pack installs from the archive itself."""
+
+    def test_every_automatic_guide_names_from_pack(self):
+        for name, data in _registry()["platforms"].items():
+            detect = (data.get("install", {}) or {}).get("detect", [])
+            if not detect:
+                continue
+            text = _build_readme(name, name, "", 1, 1, detect=detect)
+            if "Option A: Automatic" not in text:
+                continue
+            with self.subTest(platform=name):
+                self.assertIn(f"--platform {name} --from-pack ", text)

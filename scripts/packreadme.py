@@ -16,6 +16,21 @@ def _detect_systems(detect: list[dict]) -> list[str]:
     return [name for name in order if name in seen]
 
 
+def _from_pack(platform_name: str, posix: bool, windows: bool,
+               dest: tuple[str, str] = ("", "")) -> list[str]:
+    """The same command, reading the files from the ZIP in hand. The
+    one-liner alone downloads every file again."""
+    args = f"--platform {platform_name} --from-pack"
+    lines = ["  Already have this ZIP? Add --from-pack and its path: the files",
+             "  come from it, not from the network. For a pack in parts, name one part.", ""]
+    if posix:
+        lines.append(f"    curl -fsSL {INSTALL_SH} | sh -s -- {args} /path/to/pack.zip{dest[0]}")
+    if windows:
+        lines.append(f"    &([scriptblock]::Create((irm {INSTALL_PS1}))) {args} C:\\path\\to\\pack.zip"
+                     f"{dest[1]}")
+    return [*lines, ""]
+
+
 def _card_section(platform_name: str, display: str) -> str:
     """The one-line install for a frontend whose files live on its SD card.
 
@@ -32,6 +47,8 @@ def _card_section(platform_name: str, display: str) -> str:
         f"    &([scriptblock]::Create((irm {INSTALL_PS1}))) --platform {platform_name} --dest E:\\\n\n"
         f"  The installer writes each file where {display} hands it to the core\n"
         "  and checks every file.\n\n"
+        + "\n".join(_from_pack(platform_name, True, True, (" --dest /path/to/card", " --dest E:\\")))
+        + "\n"
     )
 
 
@@ -52,7 +69,7 @@ def _card_manual(display: str) -> str:
 
 
 def _automatic_section(
-    display: str, detect: list[dict], standalone_copies: list[dict] | None,
+    platform_name: str, display: str, detect: list[dict], standalone_copies: list[dict] | None,
 ) -> str:
     """The one-line install, for every system the registry detects the
     platform on. Written per platform by hand, it left ROCKNIX and MiSTer
@@ -82,6 +99,7 @@ def _automatic_section(
         f"  The installer finds the {display} BIOS folder on this machine and",
         "  installs there, checking every file. --dest names another folder.",
         "",
+        *_from_pack(platform_name, bool(posix), "windows" in systems),
     ]
     # On a desktop: an emulator folder under the home of a console's own
     # system is not one its frontend reads.
@@ -222,7 +240,7 @@ def _build_readme(
     else:
         guide = (
             "INSTALLATION GUIDE\n\n"
-            + _automatic_section(platform_display, detect, standalone_copies)
+            + _automatic_section(platform_name, platform_display, detect, standalone_copies)
             + (pack_manual(platform_name) or _generic_manual(bios_paths))
         )
 
