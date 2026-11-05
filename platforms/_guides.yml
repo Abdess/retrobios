@@ -116,8 +116,8 @@ terminals:
   android:
     label: Android (Termux)
     how: >-
-      Install **Termux**, a terminal app. Run `pkg install python` and `termux-setup-storage`
-      once. Then paste the line. Press Enter.
+      Install **Termux**, a terminal app. Paste the line. Press Enter. Accept the Python
+      install and allow the storage access Android asks for.
     shell: sh
   device:
     label: On the device

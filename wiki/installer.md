@@ -1397,11 +1397,12 @@ writable (Android 10 and earlier), it is a standalone copy target.
 
 Under scoped storage the two RetroArch config paths are unreadable from Termux on
 Android 11 and later, so on current devices the folders are what answers.
-Running `termux-setup-storage` once is what makes the shared one reachable:
+Running `termux-setup-storage` once is what makes the shared one reachable.
+The one-line command runs it when `~/storage` is missing, then waits up to a
+minute for the permission Android asks for, as it offers `pkg install python`
+when Python is missing:
 
 ```bash
-pkg install python
-termux-setup-storage
 curl -fsSL https://abdess.github.io/retrobios/i | sh
 ```
 

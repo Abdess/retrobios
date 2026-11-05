@@ -212,6 +212,27 @@ if [ -z "$PYTHON" ]; then
   exit 1
 fi
 
+# Termux reaches shared storage, where RetroArch keeps its system folder,
+# once termux-setup-storage has run: the installer told the user to run it
+# and start again. At a terminal the bootstrap runs it here. It only asks
+# the Termux app, which shows Android's permission dialog and creates
+# ~/storage once allowed: the wait gives the user time to answer.
+case "${TERMUX_VERSION:-}:${PREFIX:-}" in
+  ?*:*|*com.termux*)
+    if [ ! -d "$HOME/storage" ] && command -v termux-setup-storage >/dev/null 2>&1 \
+      && (: </dev/tty) 2>/dev/null; then
+      echo "Android asks for the storage permission: allow it, so that the files reach" >/dev/tty
+      echo "the RetroArch folder." >/dev/tty
+      termux-setup-storage </dev/tty >/dev/tty 2>&1 || true
+      waited=0
+      while [ ! -d "$HOME/storage" ] && [ "$waited" -lt 60 ]; do
+        sleep 1
+        waited=$((waited + 1))
+      done
+    fi
+    ;;
+esac
+
 # Piped from curl, standard input is this script, not the terminal: the
 # installer would skip every question it can ask. Hand it the terminal when
 # there is one.

@@ -2694,6 +2694,51 @@ class WindowsWithoutPythonIsOfferedWinget(unittest.TestCase):
         self.assertFalse((fake_bin / "python3").exists())
 
 
+@unittest.skipUnless(shutil.which("script"), "needs a terminal")
+class TermuxStorageIsSetUpByTheBootstrap(unittest.TestCase):
+    """The installer told an Android user to run termux-setup-storage and
+    start the whole run over: the bootstrap runs it and waits for ~/storage."""
+
+    def _run(self, storage_exists: bool) -> tuple[subprocess.CompletedProcess, Path]:
+        root = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
+        (root / "install.py").write_text("print('installer ran')\n")
+        home = root / "home"
+        home.mkdir()
+        if storage_exists:
+            (home / "storage").mkdir()
+        fake_bin = root / "bin"
+        fake_bin.mkdir()
+        for tool in ("sed", "tr", "dirname", "cat", "awk", "uname", "sleep", "mkdir"):
+            found = shutil.which(tool)
+            if found:
+                (fake_bin / tool).symlink_to(found)
+        (fake_bin / "python3").symlink_to(sys.executable)
+        # The app creates ~/storage once Android's dialog is answered.
+        (fake_bin / "termux-setup-storage").write_text(
+            f'#!/bin/sh\necho ran >> "{root}/setup.log"\nmkdir "$HOME/storage"\n')
+        (fake_bin / "termux-setup-storage").chmod(0o755)
+        command = (f"PATH={shlex.quote(str(fake_bin))} HOME={shlex.quote(str(home))} "
+                   f"TERMUX_VERSION=0.118 /bin/sh {shlex.quote(str(root / 'install.sh'))}")
+        proc = subprocess.run(
+            [shutil.which("script"), "-qec", command, "/dev/null"],
+            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+        return proc, root
+
+    def test_it_runs_once_then_the_installer(self):
+        proc, root = self._run(storage_exists=False)
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertEqual((root / "setup.log").read_text(), "ran\n")
+        self.assertIn("allow it", proc.stdout)
+        self.assertIn("installer ran", proc.stdout)
+
+    def test_a_set_up_storage_is_left_alone(self):
+        proc, root = self._run(storage_exists=True)
+        self.assertEqual(proc.returncode, 0, proc.stdout)
+        self.assertFalse((root / "setup.log").exists())
+        self.assertIn("installer ran", proc.stdout)
+
+
 @unittest.skipUnless(shutil.which("pwsh"), "needs PowerShell")
 class APyLauncherWithoutARuntimeIsPassed(unittest.TestCase):
     """findPython returned the py launcher as soon as it existed: one left

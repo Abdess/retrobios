@@ -575,7 +575,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "# Windows (PowerShell)",
         install_command("powershell"),
         "",
-        "# Android (Termux, after pkg install python and termux-setup-storage)",
+        "# Android (Termux: it installs Python and asks for storage access)",
         install_command("sh"),
         "",
         "# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Onion, spruceOS or MinUI card",

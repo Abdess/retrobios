@@ -24,7 +24,7 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh
 # Windows (PowerShell)
 irm https://abdess.github.io/retrobios/i.ps1 | iex
 
-# Android (Termux, after pkg install python and termux-setup-storage)
+# Android (Termux: it installs Python and asks for storage access)
 curl -fsSL https://abdess.github.io/retrobios/i | sh
 
 # SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Onion, spruceOS or MinUI card

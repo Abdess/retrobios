@@ -8471,7 +8471,7 @@ def install_commands(args: str = "", indent: str = "",
     for label, shell in (
         ("Linux, macOS, Steam Deck:", "sh"),
         ("Windows (PowerShell):", "powershell"),
-        ("Android (Termux, after `pkg install python` and `termux-setup-storage`):", "sh"),
+        ("Android (Termux, the command installs Python and asks for storage access):", "sh"),
     ):
         lines += [f"{indent}{label}", "", *fence(shell, install_command(shell, args), indent), ""]
     return lines
