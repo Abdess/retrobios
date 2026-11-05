@@ -5801,6 +5801,71 @@ class AHashScanningCoreContradictsNoPlatform(unittest.TestCase):
         self.assertEqual(claimed, [])
 
 
+class FsUaeKickstartIsFoundByContent(unittest.TestCase):
+    """FS-UAE scans its Kickstarts directory and names a ROM by checksum
+    (src/fs-uae/config.c:121-140, main.c:431-470), and with no ROM loads the
+    AROS replacement (memory.cpp:2374-2379). kick13.rom and its required
+    flag came from the RetroPie launcher, which the platform layer records."""
+
+    def test_the_kickstart_is_an_optional_label(self):
+        from scripts.validation import opens_by_name
+
+        profile = yaml.safe_load((ROOT / "emulators" / "fs-uae.yml").read_text(encoding="utf-8"))
+        entry = next(f for f in profile["files"] if f.get("sha1") == "891e9a547772fe0c6c19b610baf8bc4ea7fcb785")
+        self.assertFalse(opens_by_name(entry, profile, standalone=True))
+        self.assertFalse(entry.get("required"))
+        self.assertNotIn("RetroPie launcher", entry.get("note", ""))
+
+
+class NoProfileHashFromASecondarySource(unittest.TestCase):
+    """ecwolf.yml pinned ecwolf.pk3 to an md5 its note said came from the
+    .info. The code checks none, and no file shipped at the pin carries it:
+    a source without a hash gives the profile none."""
+
+    PATTERN = re.compile(
+        r"(md5|sha1|crc32|hash)[^.]{0,40}\bfrom (the )?(\.info|core-?info|docs?|documentation)",
+        re.IGNORECASE,
+    )
+
+    def test_no_hashed_entry_names_a_secondary_source(self):
+        found = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            for entry in profile.get("files") or []:
+                if not isinstance(entry, dict):
+                    continue
+                if any(entry.get(k) for k in ("md5", "sha1", "crc32", "sha256")) and (
+                    self.PATTERN.search(str(entry.get("note", "")))
+                ):
+                    found.append(f"{path.name}: {entry.get('name')}")
+        self.assertEqual(found, [])
+
+
+class XeniosFollowsThePreviewBranch(unittest.TestCase):
+    """The xenios pin 87b176a0 and tag v2.0.1 are ancestors of `preview`
+    (compare: ahead 129, behind 0) and diverged from the default `xenios`
+    branch (ahead 1784, behind 24). Without source_branch, profile_sync read
+    the pin as orphaned and 19 refs as moved by the branch divergence."""
+
+    def test_the_profile_names_the_branch_its_pin_is_on(self):
+        profile = yaml.safe_load((ROOT / "emulators" / "xenios.yml").read_text(encoding="utf-8"))
+        self.assertEqual(profile.get("source_branch"), "preview")
+        self.assertNotIn("from the xenios branch", profile.get("notes", ""))
+
+
+class PcemUpstreamPinIsTheLastSync(unittest.TestCase):
+    """The pcem bump set upstream_commit to dev's HEAD 25b54e3f, and dev was
+    rewritten: the pin left every branch (compare: diverged 109/114). The
+    port shares no history with upstream and took mainline patches by hand
+    until 2016-04-13, whose last upstream commit is 10739b96. Held there, a
+    bump cannot move it to a HEAD the port never contained."""
+
+    def test_the_upstream_pin_is_held_at_the_last_sync(self):
+        profile = yaml.safe_load((ROOT / "emulators" / "pcem.yml").read_text(encoding="utf-8"))
+        self.assertEqual(profile["upstream_commit"], "10739b9618e388a5bf8c21e752f12b3952fa83e1")
+        self.assertTrue(profile.get("upstream_frozen"))
+
+
 class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
     """A core that finds its firmware by content names no file, so each
     entry name is a label. ares labelled its Famicom Disk System revision

@@ -6,7 +6,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "20261001",
-  "generated": "2026-11-05T14:56:18Z",
+  "generated": "2026-11-05T18:33:47Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -21,10 +21,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 7355,
-  "total_size": 8271344313,
-  "pack_files": 7357,
-  "pack_size": 8271344313,
+  "total_files": 7357,
+  "total_size": 8271921849,
+  "pack_files": 7359,
+  "pack_size": 8271921849,
   "total_omitted": 115,
   "omitted_files": [
     {
@@ -2480,7 +2480,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
@@ -2490,7 +2490,7 @@
           "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
           "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
           "size": 8192,
-          "repo_path": "bios/Other/zesarux/sms.rom",
+          "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
           "cores": [
             "emux_sms",
             "gearsystem",
@@ -4995,7 +4995,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "ares",
         "genesis_plus_gx",
@@ -5032,7 +5032,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "ares",
         "genesis_plus_gx",
@@ -58501,7 +58501,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": [
         "fuse"
       ]
@@ -76167,6 +76167,16 @@
       ]
     },
     {
+      "dest": "np2/FONT.ROM",
+      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+      "size": 288768,
+      "repo_path": "bios/NEC/PC-98/font.rom",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
       "dest": "np2/sound.rom",
       "sha1": "d5dbc4fea3b8367024d363f5351baecd6adcd8ef",
       "sha256": "667a0e17189cc9f28185386ac6fe86784164740992a662b0a6fb0e00713b20e8",
@@ -76405,6 +76415,16 @@
       "sha256": "41535bd7242c07d69ec5427584d31f068ca4eb996ca95246caed4e3573a494e6",
       "size": 524350,
       "repo_path": "bios/NEC/PC-98/font.bmp",
+      "cores": [
+        "np2kai"
+      ]
+    },
+    {
+      "dest": "np2kai/FONT.ROM",
+      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+      "size": 288768,
+      "repo_path": "bios/NEC/PC-98/font.rom",
       "cores": [
         "np2kai"
       ]

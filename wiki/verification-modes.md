@@ -363,7 +363,7 @@ evidence-compatible match:
 | 2 | SHA256 | `sha256_exact` | A declared SHA256 identifies a record, again requiring all declarations to agree |
 | 3 | CRC32 plus size | `crc32_exact` | Used only when no stronger hash is declared. Size confirms the weaker checksum when available |
 | 4 | MD5 | `md5_exact` | Direct lookup. An explicitly supported truncated MD5 also needs a compatible name |
-| 5 | Path suffix | `path_exact` or a hash-exact status | Disambiguates regional paths. With any declared hash, the path is accepted only when the content matches it |
+| 5 | Path suffix | `path_exact` or a hash-exact status | Disambiguates regional paths. With any declared hash, the path is accepted only when the content matches it. A platform declaration with no hash then looks for its destination's tail in the data directories: AmberELEC's `Machines/MSX - Arabic/config.ini` is blueMSX's, never the first `config.ini` the name step meets |
 | 6 | Name or alias | `name_exact` | Existence/size resolution only when no content hash is declared. Prefers primary files and supports casefold matching |
 | 7 | Named candidate inspection | `md5_composite_exact`, `md5_exact`, or `hash_mismatch` | Checks composite ZIP MD5 or direct MD5. A matching name with wrong content is surfaced, never treated as exact |
 | 8 | ZIP contents index | `zip_exact` | `zipped_file` with MD5. Searches the inner-ROM index only after name-based resolution fails |

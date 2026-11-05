@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T14:56:18Z",
+  "generated_at": "2026-11-05T18:33:47Z",
   "total_files": 19944,
   "total_size": 16892646538,
   "bios_dir": "bios",
@@ -166326,8 +166326,8 @@
       "adler32": "b49cf464"
     },
     "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e": {
-      "path": "bios/Other/zesarux/if1-v1.rom",
-      "name": "if1-v1.rom",
+      "path": "bios/Sinclair/ZX Spectrum/if1-1.rom",
+      "name": "if1-1.rom",
       "size": 8192,
       "sha1": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
       "md5": "5c11c61a2dd2ca4bf39328d9ff42d289",
@@ -166343,8 +166343,8 @@
       }
     },
     "5cfb6bca4177c45fefd571734576b55e3a127c08": {
-      "path": "bios/Other/zesarux/if1-v2.rom",
-      "name": "if1-v2.rom",
+      "path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
+      "name": "if1-2.rom",
       "size": 8192,
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "md5": "31b704ae925305e74f50699271fddd9a",
@@ -166360,8 +166360,8 @@
       }
     },
     "8cafb292af58617907b9e6b9093d3588a75849b8": {
-      "path": "bios/Other/zesarux/p2.rom",
-      "name": "p2.rom",
+      "path": "bios/Sinclair/ZX Spectrum/plus2.rom",
+      "name": "plus2.rom",
       "size": 32768,
       "sha1": "8cafb292af58617907b9e6b9093d3588a75849b8",
       "md5": "238f77692156a5c49d20c0aa2862e8bb",
@@ -166377,8 +166377,8 @@
       }
     },
     "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4": {
-      "path": "bios/Other/zesarux/p2a40.rom",
-      "name": "p2a40.rom",
+      "path": "bios/Sinclair/ZX Spectrum/plus3.rom",
+      "name": "plus3.rom",
       "size": 65536,
       "sha1": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
       "md5": "05de80a055b5e7866f55769db0584d6e",
@@ -166394,8 +166394,8 @@
       }
     },
     "a584272f21dc82c14b7d4f1ed440e23a976e71f0": {
-      "path": "bios/Other/zesarux/pentagon.rom",
-      "name": "pentagon.rom",
+      "path": "bios/Sinclair/ZX Spectrum/ZX_pentagon.rom",
+      "name": "ZX_pentagon.rom",
       "size": 32768,
       "sha1": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
       "md5": "178d780c1347cf6634471805bd10e52c",
@@ -166411,8 +166411,8 @@
       }
     },
     "c315672807d8ddb8d91443729405c766dd95cae7": {
-      "path": "bios/Other/zesarux/sms.rom",
-      "name": "sms.rom",
+      "path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "name": "SMS_us_1.3.sms",
       "size": 8192,
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "md5": "840481177270d5642a14ca71ee72844c",
@@ -258574,10 +258574,12 @@
         "3b31fc68fa7f47b21c1a1cb027b86b9e87afbfff"
       ],
       "N88KNJ2.ROM": [
-        "7e6591cd465cbb35d6d3446c5a83b46d30fafe95"
+        "7e6591cd465cbb35d6d3446c5a83b46d30fafe95",
+        "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53"
       ],
       "N88N.ROM": [
-        "5b922ed9de07d2a729bdf1da7b57c50ddf08809a"
+        "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
+        "063609dd518c124a4fc9ba35d1bae35771666a34"
       ],
       "n88.rom": [
         "9b1346d44044eeea921c4cce69b5dc49dbc0b7e9",
@@ -258648,22 +258650,28 @@
         "d70660b4d67baecfc503f3777f56843b267c5960"
       ],
       "2608_BD.WAV": [
-        "22fb2cd4412df057762c23dd22729ebcb922fe0e"
+        "22fb2cd4412df057762c23dd22729ebcb922fe0e",
+        "0a56c142ef40cec50f3ee56a6e42d0029c9e2818"
       ],
       "2608_HH.WAV": [
-        "ac7bc5f6849eb16087c04e88680ea477d553b436"
+        "ac7bc5f6849eb16087c04e88680ea477d553b436",
+        "12f676cef249b82480b6f19c454e234b435ca7b6"
       ],
       "2608_RIM.WAV": [
-        "4ecf900db8d0f69d6154bde376206d727ddddaae"
+        "4ecf900db8d0f69d6154bde376206d727ddddaae",
+        "c65592330c9dd84011151daed52f9aec926b7e56"
       ],
       "2608_SD.WAV": [
-        "0ea4f93b81df9dbb8d48590b440f5910c0b798b6"
+        "0ea4f93b81df9dbb8d48590b440f5910c0b798b6",
+        "3c79663ef74c0b0439d13351326eb1c52a657008"
       ],
       "2608_TOM.WAV": [
-        "aa29f5e47cbd710077fa723929592c66d8bcb876"
+        "aa29f5e47cbd710077fa723929592c66d8bcb876",
+        "9513fb4a3f41e75a972a273a5104cbd834c1e2c5"
       ],
       "2608_TOP.WAV": [
-        "a160bf60a4f148fd191edc989429e6909d431fcb"
+        "a160bf60a4f148fd191edc989429e6909d431fcb",
+        "aa4a8f766a86b830687d5083fd3b9db0652f46fc"
       ],
       "2608_bd.wav": [
         "8a1cf3c72683a2620bef0737f1aa0c32bde47ae5",
@@ -258690,7 +258698,8 @@
       ],
       "FONT.ROM": [
         "541271ea46c5166a1e054379963b0dc663e9b60f",
-        "554b87377d176830d21bd03964dc71f8e98676b1"
+        "554b87377d176830d21bd03964dc71f8e98676b1",
+        "78ba9960f135372825ab7244b5e4e73a810002ff"
       ],
       "ITF.ROM": [
         "9bca7d5116788776ed0f297bccb4dfc485379b41"
@@ -265764,7 +265773,8 @@
         "21ce0ee54bff57f69fafa741025bf2f15b356405"
       ],
       "SCSIINROM.DAT": [
-        "3f063d4231cdf53da6adc4db96533725e260076a"
+        "3f063d4231cdf53da6adc4db96533725e260076a",
+        "15a17798839a3f7f361119205aebc301c2df5967"
       ],
       "SCCore.dll": [
         "41911c21d7e1d6da5574cb42c35c7ba96ea110e0",
@@ -265826,22 +265836,22 @@
       "zxevo_baseconf.rom": [
         "5da084d0425bc433952e03a6cef3f57e16a46886"
       ],
-      "if1-v1.rom": [
+      "if1-1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
-      "if1-v2.rom": [
+      "if1-2.rom": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
-      "p2.rom": [
+      "plus2.rom": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
-      "p2a40.rom": [
+      "plus3.rom": [
         "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
-      "pentagon.rom": [
+      "ZX_pentagon.rom": [
         "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
       ],
-      "sms.rom": [
+      "SMS_us_1.3.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
       "430vx.nvr": [
@@ -273750,10 +273760,12 @@
         "9e179392cd416af14024d8f31c981d9ee9a64517",
         "fc7eb9141f38c92bf98d9134816f64b45e811112",
         "3af7b66248d34eb26da40c92bf2fa4c73a46a051",
-        "aa92ae576ca670b00855e278378d89e9f85e0351"
+        "aa92ae576ca670b00855e278378d89e9f85e0351",
+        "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
       "bios_U.sms": [
-        "fc465122134d95363112eb51b9ab71db3576cefd"
+        "fc465122134d95363112eb51b9ab71db3576cefd",
+        "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
       "japanese-bios.sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
@@ -273996,7 +274008,8 @@
         "fec7527ecbf79b1ac697137f770bb8715fe8a652"
       ],
       "IPLROM.X1": [
-        "c4db9a6e99873808c8022afd1c50fef556a8b44d"
+        "c4db9a6e99873808c8022afd1c50fef556a8b44d",
+        "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a"
       ],
       "FNT0808.X1": [
         "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2"
@@ -279109,7 +279122,7 @@
       "bios_J.sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
       ],
-      "SMS_us_1.3.sms": [
+      "sms.rom": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
       "[BIOS] Sega Master System (USA, Europe) (v1.3).sms": [
@@ -279218,16 +279231,16 @@
       "ZXS128.ROM": [
         "16375d42ea109b47edded7a16028de7fdb3013a1"
       ],
-      "ZX_pentagon.rom": [
+      "pentagon.rom": [
         "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
       ],
-      "if1-1.rom": [
+      "if1-v1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
       "interface1.edition1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
-      "if1-2.rom": [
+      "if1-v2.rom": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
       "interface1.edition2.rom": [
@@ -279239,7 +279252,7 @@
       "IF1.ROM": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
-      "plus2.rom": [
+      "p2.rom": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
       "spectrum+2.rom": [
@@ -279248,7 +279261,7 @@
       "ZXSPLUS2.ROM": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
-      "plus3.rom": [
+      "p2a40.rom": [
         "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
       "spectrum+3.version4-0.rom": [
@@ -279904,6 +279917,14 @@
       ],
       "Kickstart v3.0 rev 39.106 (1992)(Commodore)(A1200)[!].rom": [
         "70033828182fffc7ed106e5373a8b89dda76faa5"
+      ],
+      "N80.ROM": [
+        "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
+        "063609dd518c124a4fc9ba35d1bae35771666a34"
+      ],
+      "n80.rom": [
+        "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
+        "063609dd518c124a4fc9ba35d1bae35771666a34"
       ],
       "iplrom.x1t": [
         "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
@@ -281475,13 +281496,13 @@
       "MSXSP.ROM": [
         "342e7d4bd86f3351766f460f6de3c89a40791ee0"
       ],
-      "N80.ROM": [
-        "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
-        "063609dd518c124a4fc9ba35d1bae35771666a34"
+      "KANJI2.ROM": [
+        "7e6591cd465cbb35d6d3446c5a83b46d30fafe95",
+        "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53"
       ],
-      "n80.rom": [
-        "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
-        "063609dd518c124a4fc9ba35d1bae35771666a34"
+      "kanji2.rom": [
+        "7e6591cd465cbb35d6d3446c5a83b46d30fafe95",
+        "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53"
       ],
       "N88JISHO.ROM": [
         "deef0cc2a9734ba891a6d6c022aa70ffc66f783e"
@@ -281984,11 +282005,11 @@
       "Parallel.rom": [
         "c75c751589cbcc1ad4ab4f63676af7abadd86f5b"
       ],
-      "POCKSTAT.ROM": [
-        "6ae880493ddde880827d1e9f08e9cb2c38f9f2ec"
-      ],
       "FONT.BMP": [
         "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5"
+      ],
+      "POCKSTAT.ROM": [
+        "6ae880493ddde880827d1e9f08e9cb2c38f9f2ec"
       ],
       "bank3.bin": [
         "0877ffb4b4d1c18283468be3579b72ed8c22e3ac"
@@ -282292,14 +282313,6 @@
       "n88ext3.rom": [
         "af452aed79b072c4d17985830b7c5dca64d4b412",
         "efce0b51cab9f0da6cf68507757f1245a2867a72"
-      ],
-      "KANJI2.ROM": [
-        "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53",
-        "7e6591cd465cbb35d6d3446c5a83b46d30fafe95"
-      ],
-      "kanji2.rom": [
-        "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53",
-        "7e6591cd465cbb35d6d3446c5a83b46d30fafe95"
       ],
       "FONT2.ROM": [
         "0a056b6d28b4b9e29a2d255bdaa25c24f176cf1e"
@@ -518274,40 +518287,40 @@
       ".variants/zxevo_baseconf.rom.ff28d4cd": [
         "5da084d0425bc433952e03a6cef3f57e16a46886"
       ],
-      "Other/zesarux/if1-v1.rom": [
+      "Sinclair/ZX Spectrum/if1-1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
-      "zesarux/if1-v1.rom": [
+      "ZX Spectrum/if1-1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
-      "Other/zesarux/if1-v2.rom": [
+      "Sinclair/ZX Spectrum/if1-2.rom": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
-      "zesarux/if1-v2.rom": [
+      "ZX Spectrum/if1-2.rom": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
-      "Other/zesarux/p2.rom": [
+      "Sinclair/ZX Spectrum/plus2.rom": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
-      "zesarux/p2.rom": [
+      "ZX Spectrum/plus2.rom": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
-      "Other/zesarux/p2a40.rom": [
+      "Sinclair/ZX Spectrum/plus3.rom": [
         "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
-      "zesarux/p2a40.rom": [
+      "ZX Spectrum/plus3.rom": [
         "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
-      "Other/zesarux/pentagon.rom": [
+      "Sinclair/ZX Spectrum/ZX_pentagon.rom": [
         "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
       ],
-      "zesarux/pentagon.rom": [
+      "ZX Spectrum/ZX_pentagon.rom": [
         "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
       ],
-      "Other/zesarux/sms.rom": [
+      "Sega/Master System/SMS_us_1.3.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
-      "zesarux/sms.rom": [
+      "Master System/SMS_us_1.3.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
       "PC/PCem/430vx.nvr": [
@@ -599462,10 +599475,10 @@
       "Master System/bios_J.sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
       ],
-      "Sega/Master System/SMS_us_1.3.sms": [
+      "Other/zesarux/sms.rom": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
-      "Master System/SMS_us_1.3.sms": [
+      "zesarux/sms.rom": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
       "Sega/Master System/[BIOS] Sega Master System (USA, Europe) (v1.3).sms": [
@@ -599627,16 +599640,16 @@
       "ZX Spectrum/spectrum128.rom": [
         "16375d42ea109b47edded7a16028de7fdb3013a1"
       ],
-      "Sinclair/ZX Spectrum/ZX_pentagon.rom": [
+      "Other/zesarux/pentagon.rom": [
         "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
       ],
-      "ZX Spectrum/ZX_pentagon.rom": [
+      "zesarux/pentagon.rom": [
         "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
       ],
-      "Sinclair/ZX Spectrum/if1-1.rom": [
+      "Other/zesarux/if1-v1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
-      "ZX Spectrum/if1-1.rom": [
+      "zesarux/if1-v1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
       "Sinclair/ZX Spectrum/interface1.edition1.rom": [
@@ -599645,10 +599658,10 @@
       "ZX Spectrum/interface1.edition1.rom": [
         "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
       ],
-      "Sinclair/ZX Spectrum/if1-2.rom": [
+      "Other/zesarux/if1-v2.rom": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
-      "ZX Spectrum/if1-2.rom": [
+      "zesarux/if1-v2.rom": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
       "Sinclair/ZX Spectrum/interface1.edition2.rom": [
@@ -599657,10 +599670,10 @@
       "ZX Spectrum/interface1.edition2.rom": [
         "5cfb6bca4177c45fefd571734576b55e3a127c08"
       ],
-      "Sinclair/ZX Spectrum/plus2.rom": [
+      "Other/zesarux/p2.rom": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
-      "ZX Spectrum/plus2.rom": [
+      "zesarux/p2.rom": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
       "Sinclair/ZX Spectrum/spectrum+2.rom": [
@@ -599669,10 +599682,10 @@
       "ZX Spectrum/spectrum+2.rom": [
         "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
-      "Sinclair/ZX Spectrum/plus3.rom": [
+      "Other/zesarux/p2a40.rom": [
         "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
-      "ZX Spectrum/plus3.rom": [
+      "zesarux/p2a40.rom": [
         "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
       "Sinclair/ZX Spectrum/spectrum+3.version4-0.rom": [

@@ -129,7 +129,7 @@ files:
     system: nintendo-3ds
     required: false
     hle_fallback: true
-    region: [japan, north-america, europe, oceania]
+    region: [japan, north-america, latin-america, europe, oceania]
     description: "shared font system archive, title 0x0004009b00014002"
     note: "First step of the shared font chain, holding cbf_std.bcfnt.lz in its RomFS. This title low ID is the one the embedded open-source font answers."
     source_ref: "src/core/hle/service/apt/apt.cpp:124-182, src/core/file_sys/archive_ncch.cpp:143-148"
@@ -178,7 +178,7 @@ files:
     required: false
     bundled: true
     hle_fallback: true
-    region: [japan, north-america, europe, oceania]
+    region: [japan, north-america, latin-america, europe, oceania]
     description: "shared font for JPN, USA, EUR and AUS"
     note: "Read to offset 0x80 of the shared memory block, so the file is a bare uncompressed BCFNT. Selected for every CFG region other than CHN, KOR and TWN. The embedded open-source font answers the archive request first, so this file is only reached when that archive path is taken out."
     source_ref: "src/core/hle/service/apt/apt.cpp:184-228, src/core/file_sys/archive_ncch.cpp:143-148"

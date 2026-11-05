@@ -106,6 +106,27 @@ def _settled_hashes(
     )
 
 
+def _emulator_tree(path: str) -> bool:
+    """Whether a path lies in one emulator's own tree, bios/Other/<emulator>/."""
+    parts = path.replace("\\", "/").split("/")
+    return len(parts) > 3 and parts[1] == "Other"
+
+
+def _takes_primary(current: str, candidate: str) -> bool:
+    """Whether another copy of the same bytes becomes the content's path.
+
+    A .variants/ copy yields to any other one. A copy in an emulator's own
+    tree yields to one filed under its machine: ZEsarUX's sms.rom sorted
+    before bios/Sega/Master System/, the resolver set it aside as another
+    emulator's file, and Genesis Plus GX got a variant instead of v1.3.
+    """
+    if "/.variants/" in candidate.replace("\\", "/"):
+        return False
+    if "/.variants/" in current:
+        return True
+    return _emulator_tree(current) and not _emulator_tree(candidate)
+
+
 def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict, dict]:
     """Scan bios directory and compute hashes, using cache when possible."""
     files = {}
@@ -135,10 +156,8 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
             if fresh and all(name in cached for name in CACHED_HASHES):
                 hashes = {name: cached[name] for name in CACHED_HASHES}
                 sha1 = hashes["sha1"]
-                is_variant = "/.variants/" in rel_path or "\\.variants\\" in rel_path
                 if sha1 in files:
-                    existing_is_variant = "/.variants/" in files[sha1]["path"]
-                    if existing_is_variant and not is_variant:
+                    if _takes_primary(files[sha1]["path"], rel_path):
                         if sha1 not in aliases:
                             aliases[sha1] = []
                         aliases[sha1].append(
@@ -169,11 +188,8 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
 
         hashes = _settled_hashes(filepath, cache.get(cache_key), mtime, size)
         sha1 = hashes["sha1"]
-        is_variant = "/.variants/" in rel_path or "\\.variants\\" in rel_path
         if sha1 in files:
-            existing_is_variant = "/.variants/" in files[sha1]["path"]
-            if existing_is_variant and not is_variant:
-                # Non-variant file should be primary over .variants/ file
+            if _takes_primary(files[sha1]["path"], rel_path):
                 if sha1 not in aliases:
                     aliases[sha1] = []
                 aliases[sha1].append(
@@ -520,8 +536,16 @@ def _collect_all_aliases(files: dict, copies: dict | None = None) -> dict:
 
     aliases = {}
 
+    # A name only .variants/ copies carry is not a primary's: those copies are
+    # the other revisions of whatever the name designates. Retroarch pins
+    # bios_E.sms to v1.3, and with the name refused, Genesis Plus GX got the
+    # first variant in index order, a 256 KB BIOS, by the name step.
+    named_primaries = {
+        entry["name"] for entry in files.values() if "/.variants/" not in entry["path"]
+    }
+
     def _add_alias(name: str, matched_sha1: str) -> None:
-        if not name or name in name_to_sha1:
+        if not name or name in named_primaries:
             return
         if matched_sha1 not in aliases:
             aliases[matched_sha1] = []

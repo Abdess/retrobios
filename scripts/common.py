@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from collections import Counter
 
+import filecmp
 import hashlib
 import functools
 import json
@@ -889,6 +890,38 @@ def _resolve_in_data_dirs(
     return None, mismatch
 
 
+def _data_dir_tail(
+    dest_hint: str, data_dir_registry: dict, file_entry: dict, db: dict
+) -> str | None:
+    """The cached data-directory file at the destination's own tail.
+
+    The full destination first, then without its leading segment, never
+    down to the bare name. A shortened tail two caches hold with different
+    bytes proves nothing. The size and Adler-32 the code checks still bound
+    the file, as on every name or path step without a hash.
+    """
+    parts = dest_hint.split("/")
+    for start in range(min(2, len(parts) - 1)):
+        tail = "/".join(parts[start:])
+        hits = [
+            os.path.join(cache_dir, tail)
+            for cache_dir in (
+                dd_entry.get("local_cache", "") for dd_entry in data_dir_registry.values()
+            )
+            if cache_dir and os.path.isfile(os.path.join(cache_dir, tail))
+        ]
+        if start and any(
+            not filecmp.cmp(hits[0], other, shallow=False) for other in hits[1:]
+        ):
+            continue
+        for candidate in hits:
+            if name_match_size_ok(
+                file_entry, os.path.getsize(candidate)
+            ) and adler32_fits(file_entry, candidate, db):
+                return candidate
+    return None
+
+
 # Basename index per data-directory cache. Walking the whole tree again for
 # every unresolved name made resolution O(names x tree) on each pack build.
 _data_dir_index: dict[str, dict[str, list[tuple[int, str]]]] = {}
@@ -1503,6 +1536,27 @@ def resolve_local_file(
                 status = _record_match_status(match_sha1)
                 if status:
                     return path, status
+
+    # 2c. The same tail in a data directory. by_path_suffix indexes bios/
+    # only, so AmberELEC's Machines/MSX - Arabic/config.ini fell through to
+    # the name step and got msx-emu's ColecoVision config.ini, while
+    # data/bluemsx held blueMSX's own at that very path. A platform
+    # declaration is resolved without a hint, and its destination is that
+    # path. The descent and the ambiguity rule are those of the bios/ tails.
+    # A profile's entry is not asked here: it names its owner, the name step
+    # sends it to its data directories when another emulator's copy answers,
+    # and a dump it declares outranks the free one its tree bundles at the
+    # same path (Dolphin's dsp_coef.bin over Sys/GC's).
+    tail_hint = dest_hint or str(file_entry.get("destination") or "")
+    if (
+        tail_hint
+        and data_dir_registry
+        and not has_strong_hash
+        and not _owner_tokens(file_entry)
+    ):
+        hit = _data_dir_tail(tail_hint, data_dir_registry, file_entry, db)
+        if hit:
+            return hit, "path_exact"
 
     # 3. No MD5 = any file with that name or alias (existence check)
     def _size_ok(match_sha1: str) -> bool:
@@ -2396,6 +2450,22 @@ def standalone_set(config: dict) -> set[str]:
             for h in handed_directories(config)
         }
     return names
+
+
+def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
+    """The standalone set of several platforms read as one tree.
+
+    A per-core directory marker says which cores one platform hands a folder
+    and that it hands the others none. Carried into the union, MinUI's 86
+    markers left every core they do not list without a layout: the global
+    gap report lost 238 profiles and 1201 files without a word.
+    """
+    return {
+        tag
+        for config in configs
+        for tag in standalone_set(config)
+        if not tag.startswith(CORE_DIR_PREFIX)
+    }
 
 
 def _handed(standalone_cores: Iterable[str]) -> list:

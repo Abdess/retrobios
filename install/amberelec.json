@@ -6,7 +6,7 @@
   "platform": "amberelec",
   "display_name": "AmberELEC",
   "version": "prerelease-20261019_1835",
-  "generated": "2026-11-05T14:56:18Z",
+  "generated": "2026-11-05T18:33:47Z",
   "base_destination": "",
   "detect": [
     {
@@ -29,11 +29,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5148,
-  "total_size": 5347592912,
-  "pack_files": 5150,
-  "pack_size": 5347592912,
-  "total_omitted": 93,
+  "total_files": 4958,
+  "total_size": 5348102161,
+  "pack_files": 5152,
+  "pack_size": 5348202505,
+  "total_omitted": 285,
   "omitted_files": [
     {
       "dest": "FB Alpha 2012/hiscore.dat",
@@ -172,6 +172,90 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/Machines/COL - Bit Corporation Dina/config.ini",
+      "name": "config.ini",
+      "system": "coleco-colecovision",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "coleco-colecovision"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/COL - ColecoVision with Opcode Memory Extension/config.ini",
+      "name": "config.ini",
+      "system": "coleco-colecovision",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "coleco-colecovision"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/COL - Spectravideo SVI-603 Coleco/config.ini",
+      "name": "config.ini",
+      "system": "coleco-colecovision",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "coleco-colecovision"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/Forte II Games - Pesadelo/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Al Alamiah AX-170/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Arabic/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Brazilian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX - Brazilian/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -181,6 +265,138 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX - C-BIOS/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Canon V-10/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Canon V-20/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Daewoo DPC-100/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Daewoo DPC-180/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Daewoo DPC-200/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Daewoo DPC-200E/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Estonian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Frael Bruc 100-1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - French/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - German/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX - German/hardwareconfig.xml",
@@ -194,6 +410,102 @@
       ]
     },
     {
+      "dest": "bios/Machines/MSX - Goldstar FC-200/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Gradiente Expert 1.0/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Gradiente Expert 1.1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Gradiente Expert 1.3/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Gradiente Expert DDPlus/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Gradiente Expert Plus/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - JVC HC-7GB/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Japanese/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX - Japanese/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -203,6 +515,18 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX - Korean/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX - Korean/hardwareconfig.xml",
@@ -216,6 +540,558 @@
       ]
     },
     {
+      "dest": "bios/Machines/MSX - Mitsubishi ML-F80/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Mitsubishi ML-FX1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - National CF-1200/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - National CF-2000/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - National CF-2700/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - National CF-3000/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - National CF-3300/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - National FS-1300/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - National FS-4000/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Olympia PHC-2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Olympia PHC-28/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Panasonic CF-2700G/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Philips NMS-801/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Philips VG-8000/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Philips VG-8010/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Philips VG-8010F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Philips VG-8020-00/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Philips VG-8020-20/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Philips VG-8020F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Pioneer PX-7/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Pioneer PX-V60/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Russian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sanyo MPC-100/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sanyo MPC-64/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sanyo PHC-28L/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sanyo PHC-28S/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sanyo Wavy MPC-10/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.3b/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.3p/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-10P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-201/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-201P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-20P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-501P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-55D/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-55P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-75D/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Sony HB-75P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Spanish/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Spectravideo SVI-728/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Spectravideo SVI-738 Henrik Gilvad/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Spectravideo SVI-738 Swedish/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Spectravideo SVI-738/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Swedish/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX - Swedish/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -225,6 +1101,234 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX - Talent DPC-200/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Talent DPC-200A/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Toshiba HX-10/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Toshiba HX-10S/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Toshiba HX-20/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha CX5M-1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha CX5M-128/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha CX5M-2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha CX5MII/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha YIS303/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha YIS503/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha YIS503F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha YIS503II/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha YIS503IIR Estonian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha YIS503IIR/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yamaha YIS503M/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yashica YC-64/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yeno DPC-64/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX - Yeno MX64/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX/hardwareconfig.xml",
@@ -238,6 +1342,42 @@
       ]
     },
     {
+      "dest": "bios/Machines/MSX2 - Al Alamiah AX-350/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Al Alamiah AX-370/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Arabic/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX2 - Arabic/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -247,6 +1387,18 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Brazilian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX2 - Brazilian/hardwareconfig.xml",
@@ -260,6 +1412,90 @@
       ]
     },
     {
+      "dest": "bios/Machines/MSX2 - C-BIOS/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Daewoo CPC-300/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Daewoo CPC-300E/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Daewoo CPC-400/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Daewoo CPC-400S/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Estonian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - French/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX2 - French/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -269,6 +1505,18 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX2 - German/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX2 - German/hardwareconfig.xml",
@@ -282,6 +1530,30 @@
       ]
     },
     {
+      "dest": "bios/Machines/MSX2 - Gradiente Expert 2.0/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Japanese/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX2 - Japanese/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -291,6 +1563,18 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Korean/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX2 - Korean/hardwareconfig.xml",
@@ -304,6 +1588,90 @@
       ]
     },
     {
+      "dest": "bios/Machines/MSX2 - National FS-4500/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - National FS-4600/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - National FS-4700/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - National FS-5000/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - National FS-5500F1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - National FS-5500F2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Only PSG/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX2 - Only PSG/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -313,6 +1681,222 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Panasonic FS-A1 (a)/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Panasonic FS-A1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Panasonic FS-A1F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Panasonic FS-A1FM/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Panasonic FS-A1MK2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8220 (a)/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8220/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8245/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8245F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8250/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8255/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8280/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips NMS-8280G/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips VG-8230/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips VG-8235/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips VG-8235F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Philips VG-8240/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Russian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX2 - Russian/hardwareconfig.xml",
@@ -326,6 +1910,258 @@
       ]
     },
     {
+      "dest": "bios/Machines/MSX2 - Sanyo Wavy MPC-25FD/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sanyo Wavy PHC-23/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sharp Epcom HotBit 2.0/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F1II/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F1XD/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F1XDMK2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F500/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F500P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F700D/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F700F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F700P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F700S/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F900 (a)/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F900/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F9P Russian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F9P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-F9S/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-G900AP/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Sony HB-G900P/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Spanish/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
       "dest": "bios/Machines/MSX2 - Spanish/hardwareconfig.xml",
       "name": "hardwareconfig.xml",
       "system": "microsoft-msx",
@@ -335,6 +2171,342 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Spectravideo SVI-738-2 CUC/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Spectravideo SVI-738-2 JP Grobler/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Spectravideo SVI-738-2 LC Grosso/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Swedish/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Talent TPC-310/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Toshiba HX-23/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Toshiba HX-23F/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Virtual Haesung Console/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Yamaha CX7M-128/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2 - Yamaha CX7M/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Brazilian/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - C-BIOS/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Ciel Expert 3 IDE/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Ciel Expert 3 Turbo/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - European/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Gradiente Expert AC88+/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Gradiente Expert DDX+/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - MSXPLAYer 2003/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1FX/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1WSX/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1WX (a)/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1WX/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Sanyo Wavy PHC-35J/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Sanyo Wavy PHC-70FD1/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Sanyo Wavy PHC-70FD2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Sony HB-F1XDJ/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Sony HB-F1XV/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSX2+ - Sony HB-F9S+/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/MSX2+/hardwareconfig.xml",
@@ -357,6 +2529,138 @@
       "systems": [
         "microsoft-msx"
       ]
+    },
+    {
+      "dest": "bios/Machines/MSXturboR - European/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1GT/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1ST (a)/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1ST (b)/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1ST/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/SEGA - SC-3000/config.ini",
+      "name": "config.ini",
+      "system": "sc-3000",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "sc-3000"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/SVI - Spectravideo SVI-318/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/SVI - Spectravideo SVI-328 80 Column/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/SVI - Spectravideo SVI-328 80 Swedish/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/SVI - Spectravideo SVI-328 MK2/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
+    },
+    {
+      "dest": "bios/Machines/SVI - Spectravideo SVI-328/config.ini",
+      "name": "config.ini",
+      "system": "microsoft-msx",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ],
+      "held": true
     },
     {
       "dest": "bios/Machines/Turbo-R/hardwareconfig.xml",
@@ -2277,17 +4581,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/COL - Bit Corporation Dina/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "coleco-colecovision"
-      ]
-    },
-    {
       "dest": "bios/Machines/COL - Bit Corporation Dina/czz50-1.rom",
       "sha1": "17fbbf2aa6a336454f9bd6f3f2b7b17bbe28c072",
       "sha256": "dd270740b9354b049592a5bd59227af41423c7debfa01a32fbb797c287976581",
@@ -2354,28 +4647,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/COL - ColecoVision with Opcode Memory Extension/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "coleco-colecovision"
-      ]
-    },
-    {
-      "dest": "bios/Machines/COL - Spectravideo SVI-603 Coleco/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "coleco-colecovision"
-      ]
-    },
-    {
       "dest": "bios/Machines/COL - Spectravideo SVI-603 Coleco/SVI603.ROM",
       "sha1": "8a30abe5ffef810b0f99b86db38b1b3c9d259b78",
       "sha256": "f4cc5d5c9fd71866c2108d44a8c3906e3c6b96b3f5b8d3cc753374f6626b3a65",
@@ -2388,10 +4659,10 @@
     },
     {
       "dest": "bios/Databases/colecodb.xml",
-      "sha1": "7a812f277cf2440421044a7acde1c47abd01951e",
-      "sha256": "b59745c9fb79e0c467958385ac27924e7da61b997b4c240d1b661defadc3f0a5",
-      "size": 158187,
-      "repo_path": "bios/Microsoft/MSX/Databases/colecodb.xml",
+      "sha1": "7811316216d035c065b076b174df912e481e13f0",
+      "sha256": "84cf4cf9338a0f4784318807b03de9a7f722f22e501c79a5a3a71d23cf706ba9",
+      "size": 164848,
+      "repo_path": "bios/Microsoft/MSX/Databases/.variants/colecodb.xml.78113162",
       "cores": null,
       "systems": [
         "coleco-colecovision"
@@ -2930,17 +5201,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/Forte II Games - Pesadelo/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/Forte II Games - Pesadelo/pesadelo.rom",
       "sha1": "12880dd7ad82acf04861843fb9d4f0f926d18f6b",
       "sha256": "236d8d7df3ff7b78807da62edda112aa92199cc5da28e414e85bf28bcdfb3693",
@@ -2949,6 +5209,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "12880dd7ad82acf04861843fb9d4f0f926d18f6b",
+          "sha256": "236d8d7df3ff7b78807da62edda112aa92199cc5da28e414e85bf28bcdfb3693",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Forte II Games - Pesadelo/pesadelo.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "12880dd7ad82acf04861843fb9d4f0f926d18f6b",
+          "sha256": "236d8d7df3ff7b78807da62edda112aa92199cc5da28e414e85bf28bcdfb3693",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Forte II Games - Pesadelo/pesadelo.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -3040,39 +5322,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/MSX - Al Alamiah AX-170/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Arabic/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Brazilian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/MSX - C-BIOS/cbios.txt",
       "sha1": "1152f3e3eff0afac2143d478f157fd26c7466e6e",
       "sha256": "2c8e6134c6d76ce7744f9b0e96cb732498da140fc1700761c5ac1f6dcdbb3036",
@@ -3092,6 +5341,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "95fe138745f5e627b021085c7e4629a6dfe6f93a",
+          "sha256": "0859615554861142a8262354e1347e67a45016448322f8180f24ea1976a368d2",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX - C-BIOS/cbios_logo_msx1.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "95fe138745f5e627b021085c7e4629a6dfe6f93a",
+          "sha256": "0859615554861142a8262354e1347e67a45016448322f8180f24ea1976a368d2",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX - C-BIOS/cbios_logo_msx1.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -3115,6 +5386,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "a49bcf7a5a1115815f730782a1fd7d1c79ce29e7",
+          "sha256": "b7cec7c09c4381675050313e822f3e1fe5af07ee83ee58a2fb304afab2f5c8aa",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/MSX - C-BIOS/cbios_main_msx1.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "a49bcf7a5a1115815f730782a1fd7d1c79ce29e7",
+          "sha256": "b7cec7c09c4381675050313e822f3e1fe5af07ee83ee58a2fb304afab2f5c8aa",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/MSX - C-BIOS/cbios_main_msx1.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "a49bcf7a5a1115815f730782a1fd7d1c79ce29e7",
@@ -3128,693 +5421,11 @@
       ]
     },
     {
-      "dest": "bios/Machines/MSX - C-BIOS/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Canon V-10/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Canon V-20/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Daewoo DPC-100/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Daewoo DPC-180/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Daewoo DPC-200/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Estonian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Frael Bruc 100-1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - French/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - German/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Goldstar FC-200/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Gradiente Expert 1.0/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Gradiente Expert 1.1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Gradiente Expert 1.3/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Gradiente Expert DDPlus/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Gradiente Expert Plus/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Japanese/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - JVC HC-7GB/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Korean/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Mitsubishi ML-F80/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Mitsubishi ML-FX1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - National CF-1200/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Panasonic FS-A1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Panasonic FS-A1 (a)/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Panasonic FS-A1F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Panasonic FS-A1FM/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Panasonic FS-A1MK2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8220/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8220 (a)/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8245/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8245F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8250/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8255/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8280/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips NMS-8280G/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips VG-8230/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips VG-8235/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.3b/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.3p/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-10P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-201/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-201P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-20P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-501P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-55D/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-55P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-75D/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sony HB-75P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Spanish/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Spectravideo SVI-728/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Spectravideo SVI-738/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Spectravideo SVI-738-2 CUC/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Spectravideo SVI-738-2 JP Grobler/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Spectravideo SVI-738-2 LC Grosso/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Swedish/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Talent TPC-310/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Toshiba HX-23/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Toshiba HX-23F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Virtual Haesung Console/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Yamaha CX7M/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Yamaha CX7M-128/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/MSX2+/config.ini",
-      "sha1": "460ded0dbfc0285490da87a446b0321b6496aa5b",
-      "sha256": "5fac8e0886bd505bd536439c80b660bcc358738b8189d44fe36be6547c14d6e2",
-      "size": 649,
-      "repo_path": "bios/Other/msx-emu/Machines/MSX2/config.ini",
+      "sha1": "cb7d14a17c4f4632f17ba5a64160cdd876dd6010",
+      "sha256": "6d6f259bd9e161174000bcd4705b0cfbe3b9c333ea8df644049543ca3e68bebd",
+      "size": 773,
+      "repo_path": "bios/Other/msx-emu/Machines/MSX2+/config.ini",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -3887,17 +5498,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/MSX2+ - Brazilian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/MSX2+ - C-BIOS/cbios.txt",
       "sha1": "1152f3e3eff0afac2143d478f157fd26c7466e6e",
       "sha256": "2c8e6134c6d76ce7744f9b0e96cb732498da140fc1700761c5ac1f6dcdbb3036",
@@ -3917,6 +5517,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "6e55cfc48d0d6ee57b041cb09427f614fb6a1910",
+          "sha256": "3436ed432f8afca2da51e004b895f6e7d3120fbb43ba45e864cc5a4af7e17754",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2+ - C-BIOS/cbios_logo_msx2+.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "6e55cfc48d0d6ee57b041cb09427f614fb6a1910",
+          "sha256": "3436ed432f8afca2da51e004b895f6e7d3120fbb43ba45e864cc5a4af7e17754",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2+ - C-BIOS/cbios_logo_msx2+.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -3940,6 +5562,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "c5edc3b289dea120fe60ad38596a51c2e28838aa",
+          "sha256": "ca2814c8f28d745fba3ba0730d63c29ceb1e18da10747582735dc95d99a11aa1",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/MSX2+ - C-BIOS/cbios_main_msx2+.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "c5edc3b289dea120fe60ad38596a51c2e28838aa",
+          "sha256": "ca2814c8f28d745fba3ba0730d63c29ceb1e18da10747582735dc95d99a11aa1",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/MSX2+ - C-BIOS/cbios_main_msx2+.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "c5edc3b289dea120fe60ad38596a51c2e28838aa",
@@ -3962,6 +5606,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "5c5eb001e6a1fe29edb7abd428a3967bb388e5db",
+          "sha256": "8b4adaea1893d8176f32f64fbb87603663b070ee7c0c3f028d141a37d7ed4bc4",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2+ - C-BIOS/cbios_music.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "5c5eb001e6a1fe29edb7abd428a3967bb388e5db",
+          "sha256": "8b4adaea1893d8176f32f64fbb87603663b070ee7c0c3f028d141a37d7ed4bc4",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2+ - C-BIOS/cbios_music.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "5c5eb001e6a1fe29edb7abd428a3967bb388e5db",
@@ -3980,259 +5646,6 @@
       "sha256": "fa89daa803d4f1f284c530d3e396a3a88ce74f3a45c459339c6ed154f2d836df",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2 - C-BIOS/cbios_sub.rom",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - C-BIOS/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Ciel Expert 3 IDE/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Ciel Expert 3 Turbo/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Spectravideo SVI-738 Swedish/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Swedish/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Talent DPC-200/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Talent DPC-200A/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Toshiba HX-10/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Toshiba HX-10S/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Toshiba HX-20/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha CX5M-1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha CX5M-128/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha CX5M-2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha CX5MII/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha YIS303/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha YIS503/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha YIS503F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha YIS503II/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha YIS503IIR/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha YIS503M/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yashica YC-64/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yeno DPC-64/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yeno MX64/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -4316,50 +5729,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/MSX2 - Al Alamiah AX-350/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Al Alamiah AX-370/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Arabic/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Brazilian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/MSX2 - C-BIOS/cbios.txt",
       "sha1": "1152f3e3eff0afac2143d478f157fd26c7466e6e",
       "sha256": "2c8e6134c6d76ce7744f9b0e96cb732498da140fc1700761c5ac1f6dcdbb3036",
@@ -4379,6 +5748,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "6fc989ae715fe8492700a9d15934113d910aed36",
+          "sha256": "ba26b4fa1f47912351dedfb26f883c55d0ec370ca96f745d6fc808bcafe8141d",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2 - C-BIOS/cbios_logo_msx2.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "6fc989ae715fe8492700a9d15934113d910aed36",
+          "sha256": "ba26b4fa1f47912351dedfb26f883c55d0ec370ca96f745d6fc808bcafe8141d",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2 - C-BIOS/cbios_logo_msx2.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -4402,6 +5793,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "0808d0486f77a44d3aa08cd77828a3748a356b8d",
+          "sha256": "0172ae8c78d7164fd2283214e6702ca8812574ec2e1299a3d10096b91c6cfea2",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/MSX2 - C-BIOS/cbios_main_msx2.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "0808d0486f77a44d3aa08cd77828a3748a356b8d",
+          "sha256": "0172ae8c78d7164fd2283214e6702ca8812574ec2e1299a3d10096b91c6cfea2",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/MSX2 - C-BIOS/cbios_main_msx2.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "0808d0486f77a44d3aa08cd77828a3748a356b8d",
@@ -4424,6 +5837,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "565143f7c6fe0ffa12ec3069048113f44759d91a",
+          "sha256": "fa89daa803d4f1f284c530d3e396a3a88ce74f3a45c459339c6ed154f2d836df",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2 - C-BIOS/cbios_sub.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "565143f7c6fe0ffa12ec3069048113f44759d91a",
+          "sha256": "fa89daa803d4f1f284c530d3e396a3a88ce74f3a45c459339c6ed154f2d836df",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/MSX2 - C-BIOS/cbios_sub.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "565143f7c6fe0ffa12ec3069048113f44759d91a",
@@ -4437,748 +5872,11 @@
       ]
     },
     {
-      "dest": "bios/Machines/MSX2 - C-BIOS/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Daewoo CPC-300/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Daewoo CPC-300E/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Daewoo CPC-400/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Daewoo CPC-400S/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Estonian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - French/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - German/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Gradiente Expert 2.0/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Japanese/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Korean/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - National FS-4500/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - National FS-4600/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - National FS-4700/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - National FS-5000/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - National FS-5500F1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - National FS-5500F2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Daewoo DPC-200E/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - National CF-2000/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sharp Epcom HotBit 1.1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Spectravideo SVI-738 Henrik Gilvad/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Yamaha YIS503IIR Estonian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Only PSG/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips VG-8235F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Spanish/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - European/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - National CF-2700/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - National CF-3000/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - National CF-3300/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - National FS-1300/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - National FS-4000/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Olympia PHC-2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Olympia PHC-28/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Panasonic CF-2700G/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Philips NMS-801/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Philips VG-8000/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Philips VG-8010/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Philips VG-8010F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Philips VG-8020-00/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Philips VG-8020-20/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Philips VG-8020F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Pioneer PX-7/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Pioneer PX-V60/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Russian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sanyo MPC-100/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sanyo MPC-64/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sanyo PHC-28L/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sanyo PHC-28S/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX - Sanyo Wavy MPC-10/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Gradiente Expert AC88+/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Gradiente Expert DDX+/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - MSXPLAYer 2003/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1FX/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1WSX/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1WX/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Panasonic FS-A1WX (a)/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Sanyo Wavy PHC-35J/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Sanyo Wavy PHC-70FD1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Sanyo Wavy PHC-70FD2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Sony HB-F1XDJ/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Sony HB-F1XV/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2+ - Sony HB-F9S+/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/MSXturboR/config.ini",
-      "sha1": "9836d109ec7879374dcd044da149f1b5aafd4664",
-      "sha256": "20307bb16d8d170e80f75d4c3c8c6a35052ec6dd02c229ac9c7e351597e72385",
+      "sha1": "0b7a99c3beccee2b6df0fbe8e8c6db9bbf011de1",
+      "sha256": "5ff4fd117fe632c57a7c81d15d4eb64ffda3f8cc7204773560159104ae003347",
       "size": 941,
-      "repo_path": "bios/Other/msx-emu/Machines/MSXturboR/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSXturboR - European/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1GT/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1ST/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1ST (a)/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSXturboR - Panasonic FS-A1ST (b)/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
+      "repo_path": "bios/Other/msx-emu/Machines/MSXturboR/.variants/config.ini.0b7a99c3",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -5193,6 +5891,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "b17d9bea0eb16a1aa2d0ccbd7c9488da9f57698e",
+          "sha256": "e0fa7138fe887ef672994f1d397b2e9afbc8e9cdfdf0d651bc75b77d30527f53",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2G.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "b17d9bea0eb16a1aa2d0ccbd7c9488da9f57698e",
+          "sha256": "e0fa7138fe887ef672994f1d397b2e9afbc8e9cdfdf0d651bc75b77d30527f53",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2G.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5216,6 +5936,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "0527fb75775caa76c7eca8d449938ace83d36e96",
+          "sha256": "bd60f7e2d146f7b90ff1a9a7967c9ee4906f40e5deb91692948410dc40303aee",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXDOS23.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "0527fb75775caa76c7eca8d449938ace83d36e96",
+          "sha256": "bd60f7e2d146f7b90ff1a9a7967c9ee4906f40e5deb91692948410dc40303aee",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXDOS23.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "0527fb75775caa76c7eca8d449938ace83d36e96",
@@ -5237,6 +5979,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "0287b2ec897b9196788cd9f10c99e1487d7adbbb",
+          "sha256": "91c33f3304c437c151b9ad877019463d1b68e1dbaa792a6b42a7a890f8c55c34",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/ARAB1.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "0287b2ec897b9196788cd9f10c99e1487d7adbbb",
+          "sha256": "91c33f3304c437c151b9ad877019463d1b68e1dbaa792a6b42a7a890f8c55c34",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/ARAB1.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5260,6 +6024,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "2c9600c6e0025fee10d249e97448ecaa37e38c42",
+          "sha256": "c530b4749986b0384fd4a0a2c0d6841a6aa229e745a7f40a27d67b29f872d43e",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/ARABIC.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "2c9600c6e0025fee10d249e97448ecaa37e38c42",
+          "sha256": "c530b4749986b0384fd4a0a2c0d6841a6aa229e745a7f40a27d67b29f872d43e",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/ARABIC.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "2c9600c6e0025fee10d249e97448ecaa37e38c42",
@@ -5281,6 +6067,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "077bdfff644b931b6a13bab8ab847aee766d163e",
+          "sha256": "48f08f1532cb1e9be54e584382c099d067ceb13a949a630916baf515aa1cf50f",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/BEERIDE.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "077bdfff644b931b6a13bab8ab847aee766d163e",
+          "sha256": "48f08f1532cb1e9be54e584382c099d067ceb13a949a630916baf515aa1cf50f",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/BEERIDE.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5326,6 +6134,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "977fed1135b6cc73e765b47f51570fc00acd5b79",
+          "sha256": "531537e092df40ae8ae5728e58dd9224521fe98cde7c5af53f38007ed1b0353b",
+          "size": 8192,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/GCVMX80.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "977fed1135b6cc73e765b47f51570fc00acd5b79",
+          "sha256": "531537e092df40ae8ae5728e58dd9224521fe98cde7c5af53f38007ed1b0353b",
+          "size": 8192,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/GCVMX80.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "977fed1135b6cc73e765b47f51570fc00acd5b79",
@@ -5347,6 +6177,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "965f4982790f1817bcbabbb38c8777183b231a55",
+          "sha256": "0ba0a8e4c4fc4635621170faef6866b630aac7680aa13f044ed3becbccaca0a5",
+          "size": 131072,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/HANGUL.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "965f4982790f1817bcbabbb38c8777183b231a55",
+          "sha256": "0ba0a8e4c4fc4635621170faef6866b630aac7680aa13f044ed3becbccaca0a5",
+          "size": 131072,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/HANGUL.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5391,6 +6243,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "f59d33311c95edc0168445f74eddd8a6772aa6a0",
+          "sha256": "6bf8131271b409e1da8edc694cb6411d26cc9486a4352d5e3524c844d1dafbd2",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MICROSOLDISK.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "f59d33311c95edc0168445f74eddd8a6772aa6a0",
+          "sha256": "6bf8131271b409e1da8edc694cb6411d26cc9486a4352d5e3524c844d1dafbd2",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MICROSOLDISK.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5480,6 +6354,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "35195ab67c289a0b470883464df66bc6ea5b00d3",
+          "sha256": "169a45c439dad87574aae9f9a5b36bc147e4b1984d5fff1a54e0c53cb958a818",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2AR.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "35195ab67c289a0b470883464df66bc6ea5b00d3",
+          "sha256": "169a45c439dad87574aae9f9a5b36bc147e4b1984d5fff1a54e0c53cb958a818",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2AR.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "35195ab67c289a0b470883464df66bc6ea5b00d3",
@@ -5501,6 +6397,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "ebb76f9061e875365023523607db610f2eda1d26",
+          "sha256": "1083d84573a2de5555c8ad96a8f2e9f22ad7da3c6b90124c9ef24f6a04b4368f",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2AREXT.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "ebb76f9061e875365023523607db610f2eda1d26",
+          "sha256": "1083d84573a2de5555c8ad96a8f2e9f22ad7da3c6b90124c9ef24f6a04b4368f",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2AREXT.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5524,6 +6442,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "9c43106dba3ae2829e9a11dffa9d000ed6d6454c",
+          "sha256": "0a89f2a084d18c470b148ecea91e5be34f4ab242ba0828f5f011553fa556ca30",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2BR.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "9c43106dba3ae2829e9a11dffa9d000ed6d6454c",
+          "sha256": "0a89f2a084d18c470b148ecea91e5be34f4ab242ba0828f5f011553fa556ca30",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2BR.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "9c43106dba3ae2829e9a11dffa9d000ed6d6454c",
@@ -5545,6 +6485,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "4f2a7e0172f0214f025f23845f6e053d0ffd28e8",
+          "sha256": "d129d2e265fa51686455771e4ab05369a19b449fe731b9911715e40e0fa0b36e",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2BREXT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "4f2a7e0172f0214f025f23845f6e053d0ffd28e8",
+          "sha256": "d129d2e265fa51686455771e4ab05369a19b449fe731b9911715e40e0fa0b36e",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2BREXT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5590,6 +6552,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "3926cdd91fa89657a811463e48cfbdb350676e51",
+          "sha256": "2c495e1c4d84171f28ac3e6fe1b462cff5e960040ca4f41edba353206312916d",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2FR.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "3926cdd91fa89657a811463e48cfbdb350676e51",
+          "sha256": "2c495e1c4d84171f28ac3e6fe1b462cff5e960040ca4f41edba353206312916d",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2FR.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "3926cdd91fa89657a811463e48cfbdb350676e51",
@@ -5611,6 +6595,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "792e6b2814ab783d06c7576c1e3ccd6a9bbac34a",
+          "sha256": "3d431ef60adc1524ed8c7e293084b245d40f210480b1d5711e8f9e5254448e4a",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2FREXT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "792e6b2814ab783d06c7576c1e3ccd6a9bbac34a",
+          "sha256": "3d431ef60adc1524ed8c7e293084b245d40f210480b1d5711e8f9e5254448e4a",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2FREXT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5634,6 +6640,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "4ab7b2030d022f5486abaab22aaeaf8aa23e05f3",
+          "sha256": "2564b28a0c82fcf3c9a84c3131da93f9fb6ca78185eabecd12b2224ff9367d1c",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2GEXT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "4ab7b2030d022f5486abaab22aaeaf8aa23e05f3",
+          "sha256": "2564b28a0c82fcf3c9a84c3131da93f9fb6ca78185eabecd12b2224ff9367d1c",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2GEXT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "4ab7b2030d022f5486abaab22aaeaf8aa23e05f3",
@@ -5655,6 +6683,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "87936f808423dddfd00629056d6807b4be1dc63e",
+          "sha256": "092a9b5157e0d4703955584f388f0f44035e4991e21b8e1499db8f333076bca7",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2HAN.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "87936f808423dddfd00629056d6807b4be1dc63e",
+          "sha256": "092a9b5157e0d4703955584f388f0f44035e4991e21b8e1499db8f333076bca7",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2HAN.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5700,6 +6750,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344",
+          "sha256": "fb6daa38e31431b81971eb5618241685447e23b1450051008a1deb5023513ce9",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2JEXT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344",
+          "sha256": "fb6daa38e31431b81971eb5618241685447e23b1450051008a1deb5023513ce9",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2JEXT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344",
@@ -5722,6 +6794,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "affa3c5cd8db79a1450ad8a7f405a425b251653d",
+          "sha256": "d359eaa3f82758d546f121c9b2dacea0587cc231db1f40f51bc20dc118ad57a9",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2KR.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "affa3c5cd8db79a1450ad8a7f405a425b251653d",
+          "sha256": "d359eaa3f82758d546f121c9b2dacea0587cc231db1f40f51bc20dc118ad57a9",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2KR.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "affa3c5cd8db79a1450ad8a7f405a425b251653d",
@@ -5743,6 +6837,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "b6d3649a6647fa9f6bd61efc317485a20901128f",
+          "sha256": "c0aa4a95a5d6eefafd2f191058d6c675b9ca87bf29d88fc20b05aa45a5d1475e",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2KREXT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "b6d3649a6647fa9f6bd61efc317485a20901128f",
+          "sha256": "c0aa4a95a5d6eefafd2f191058d6c675b9ca87bf29d88fc20b05aa45a5d1475e",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2KREXT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5810,6 +6926,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3",
+          "sha256": "e49cc4f1ad9de4df6c965d92fc631175c1d004e647d680d884ec6971a824eebc",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2PMUS.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3",
+          "sha256": "e49cc4f1ad9de4df6c965d92fc631175c1d004e647d680d884ec6971a824eebc",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2PMUS.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3",
@@ -5831,6 +6969,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "0f851ee7a1cf79819f61cc89e9948ee72a413802",
+          "sha256": "52673f35702a43ae6650c0b2d4b3cf447245b8ac4d121cf839ae92e054e67fa0",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2R.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "0f851ee7a1cf79819f61cc89e9948ee72a413802",
+          "sha256": "52673f35702a43ae6650c0b2d4b3cf447245b8ac4d121cf839ae92e054e67fa0",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2R.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5876,6 +7036,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "03bf6d2ac86f5c9ab618e155442787c700f99fed",
+          "sha256": "482a822df0111c09bb74d67e89eda62b7dfb47ff9672fa838a96da0237d987e8",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2REXT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "03bf6d2ac86f5c9ab618e155442787c700f99fed",
+          "sha256": "482a822df0111c09bb74d67e89eda62b7dfb47ff9672fa838a96da0237d987e8",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2REXT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "03bf6d2ac86f5c9ab618e155442787c700f99fed",
@@ -5897,6 +7079,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "1b70a195a00b1fc4995766390f39d3ba884b5148",
+          "sha256": "8040485c8b31824f2a054ce2e21f03ba3e9074872b4323bd67e8459336b03887",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2SE.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "1b70a195a00b1fc4995766390f39d3ba884b5148",
+          "sha256": "8040485c8b31824f2a054ce2e21f03ba3e9074872b4323bd67e8459336b03887",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2SE.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5920,6 +7124,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "4811956f878c3e03da46317f787cdc4bebc86f47",
+          "sha256": "47a6aa250d58973c175d82597de12a72d4b82251ee4b316cd45a5be8fb466bf4",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2SP.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "4811956f878c3e03da46317f787cdc4bebc86f47",
+          "sha256": "47a6aa250d58973c175d82597de12a72d4b82251ee4b316cd45a5be8fb466bf4",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2SP.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "4811956f878c3e03da46317f787cdc4bebc86f47",
@@ -5941,6 +7167,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "1e9a955943aeea9b1807ddf1250ba6436d8dd276",
+          "sha256": "8bec5c46af4dfde9bb64ac0b383d590ffcccae7b828c7f3dc1ca21b68d8e34fb",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2SPEXT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "1e9a955943aeea9b1807ddf1250ba6436d8dd276",
+          "sha256": "8bec5c46af4dfde9bb64ac0b383d590ffcccae7b828c7f3dc1ca21b68d8e34fb",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2SPEXT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -5964,6 +7212,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "5e094fca95ab8e91873ee372a3f1239b9a48a48d",
+          "sha256": "7c94a655f8c5a135a1f08bb5f54887612a58fa810787a9002e50993105542696",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXAR.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "5e094fca95ab8e91873ee372a3f1239b9a48a48d",
+          "sha256": "7c94a655f8c5a135a1f08bb5f54887612a58fa810787a9002e50993105542696",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXAR.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "5e094fca95ab8e91873ee372a3f1239b9a48a48d",
@@ -5985,6 +7255,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "d6720845928ee848cfa88a86accb067397685f02",
+          "sha256": "992b1fb91abd833c6c35e20e5278f35d4411551c02187129b8fb2e872455600a",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXBR.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "d6720845928ee848cfa88a86accb067397685f02",
+          "sha256": "992b1fb91abd833c6c35e20e5278f35d4411551c02187129b8fb2e872455600a",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXBR.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6019,6 +7311,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "9eaad185efc8e224368d1db4949eb9659c26fb2c",
+          "sha256": "6b64e772f5a655ff052a8b7bc4e66912bf2acef207a94996f70ec6fc51781413",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXFR.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "9eaad185efc8e224368d1db4949eb9659c26fb2c",
+          "sha256": "6b64e772f5a655ff052a8b7bc4e66912bf2acef207a94996f70ec6fc51781413",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXFR.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "9eaad185efc8e224368d1db4949eb9659c26fb2c",
@@ -6041,6 +7355,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "38a645febd0e0fe86d594f27c2d14be995acc730",
+          "sha256": "0571b0d49f8a0df42203d16e3590128949dabba4db2e32773eec79f2f3afd710",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXG.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "38a645febd0e0fe86d594f27c2d14be995acc730",
+          "sha256": "0571b0d49f8a0df42203d16e3590128949dabba4db2e32773eec79f2f3afd710",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXG.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "38a645febd0e0fe86d594f27c2d14be995acc730",
@@ -6062,6 +7398,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "d41676fde0a3047792f93c4a41509b8749e55e74",
+          "sha256": "974bb2dfca1a6da6cf19a11d3370a8dab96e42e329b395c82eb5ab9d2da0196c",
+          "size": 8192,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXHAN.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "d41676fde0a3047792f93c4a41509b8749e55e74",
+          "sha256": "974bb2dfca1a6da6cf19a11d3370a8dab96e42e329b395c82eb5ab9d2da0196c",
+          "size": 8192,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXHAN.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6129,6 +7487,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "171b587bd5a947a13f3114120b6e7baca3b57d78",
+          "sha256": "cda1e25c0859d33441f2c39485e98d31d13c0e82b7761213512c554e32fcaaab",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXKR.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "171b587bd5a947a13f3114120b6e7baca3b57d78",
+          "sha256": "cda1e25c0859d33441f2c39485e98d31d13c0e82b7761213512c554e32fcaaab",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXKR.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "171b587bd5a947a13f3114120b6e7baca3b57d78",
@@ -6150,6 +7530,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "4f3114e96d7b892911e3dccf1eece712be26f396",
+          "sha256": "fc425ee1282bf8dbaa6b2f0144e2a54f9f6cf17c81d1896adfdbe9516b639161",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXR.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "4f3114e96d7b892911e3dccf1eece712be26f396",
+          "sha256": "fc425ee1282bf8dbaa6b2f0144e2a54f9f6cf17c81d1896adfdbe9516b639161",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXR.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6184,6 +7586,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "87f4d0fa58cfe9cef818a3185df2735e6da6168c",
+          "sha256": "62ff34891880af12b41294b35ce86f90c8b10f6593fd36e05da9490f50c6d811",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXSE.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "87f4d0fa58cfe9cef818a3185df2735e6da6168c",
+          "sha256": "62ff34891880af12b41294b35ce86f90c8b10f6593fd36e05da9490f50c6d811",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXSE.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "87f4d0fa58cfe9cef818a3185df2735e6da6168c",
@@ -6205,6 +7629,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "342e7d4bd86f3351766f460f6de3c89a40791ee0",
+          "sha256": "cf2a04ab1fb9c859811e8ff2f6c0a5ec6042e812e576e6f5f3558c841beb9c70",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXSP.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "342e7d4bd86f3351766f460f6de3c89a40791ee0",
+          "sha256": "cf2a04ab1fb9c859811e8ff2f6c0a5ec6042e812e576e6f5f3558c841beb9c70",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXSP.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6228,6 +7674,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "242e73d8284a012b275c0a266844ebbc4269d787",
+          "sha256": "e101bd0f95ab8b566dae60e699cf88d4e3db1f445a28ca195f34b1bf8c5627e8",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTR.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "242e73d8284a012b275c0a266844ebbc4269d787",
+          "sha256": "e101bd0f95ab8b566dae60e699cf88d4e3db1f445a28ca195f34b1bf8c5627e8",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTR.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "242e73d8284a012b275c0a266844ebbc4269d787",
@@ -6249,6 +7717,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "018d7a5222f28514908fb1b1513286a6558a6d05",
+          "sha256": "730e2e6e64cf8919308105365dd902eec984fcd61b3307eccdc0744b4407531d",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTREXT.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "018d7a5222f28514908fb1b1513286a6558a6d05",
+          "sha256": "730e2e6e64cf8919308105365dd902eec984fcd61b3307eccdc0744b4407531d",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTREXT.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6272,6 +7762,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "6aea1aef5ec31c1826c22edf580525f93baad425",
+          "sha256": "ddb783c9792af34afd58dfed611926deafa6eba225d62ab9dfdb2d49cc6ef1f8",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTRMUS.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "6aea1aef5ec31c1826c22edf580525f93baad425",
+          "sha256": "ddb783c9792af34afd58dfed611926deafa6eba225d62ab9dfdb2d49cc6ef1f8",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTRMUS.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "6aea1aef5ec31c1826c22edf580525f93baad425",
@@ -6293,6 +7805,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "b4433a3975c57dd440d6bf12dbd28b2ac1b90ef4",
+          "sha256": "af602b457b73d1c04275e02e07ed0b9561a3d4f523812890a8f6faf2ec01a810",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTROPT.ROM",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "b4433a3975c57dd440d6bf12dbd28b2ac1b90ef4",
+          "sha256": "af602b457b73d1c04275e02e07ed0b9561a3d4f523812890a8f6faf2ec01a810",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/MSXTROPT.ROM",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6338,6 +7872,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9",
+          "sha256": "9b57b6bfb8958d435ba34bcbbcd44b46710fa7ed7b9d41bcd2485fac05a602ce",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/NOVAXIS.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9",
+          "sha256": "9b57b6bfb8958d435ba34bcbbcd44b46710fa7ed7b9d41bcd2485fac05a602ce",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/NOVAXIS.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9",
@@ -6359,6 +7915,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "1d4c09166755c6569ff0ed3878bbf1b22d7e3864",
+          "sha256": "086a8fb824f97fae60a37edf602875bd0b3e9a59366af5e00b1282b3cd936f84",
+          "size": 524288,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/nowindDos1.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "1d4c09166755c6569ff0ed3878bbf1b22d7e3864",
+          "sha256": "086a8fb824f97fae60a37edf602875bd0b3e9a59366af5e00b1282b3cd936f84",
+          "size": 524288,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/nowindDos1.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6382,6 +7960,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5",
+          "sha256": "4ead27806ebec667561e5806c7791891f64f155b37bbe11f3123e00a204eaf5f",
+          "size": 524288,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/nowindDos2.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5",
+          "sha256": "4ead27806ebec667561e5806c7791891f64f155b37bbe11f3123e00a204eaf5f",
+          "size": 524288,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/nowindDos2.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5",
@@ -6403,6 +8003,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "ace202e87337fbc54fea21e22c0b3af0abe6f4ae",
+          "sha256": "f90caee0fca8ab50308ca65339c647a07998f31e75132c9feb8fd609461a20fd",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/PAINT.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "ace202e87337fbc54fea21e22c0b3af0abe6f4ae",
+          "sha256": "f90caee0fca8ab50308ca65339c647a07998f31e75132c9feb8fd609461a20fd",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/PAINT.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6462,10 +8084,10 @@
     },
     {
       "dest": "bios/Machines/Shared Roms/RS232.ROM",
-      "sha1": "7aec0134ad6a5177f4056fcb6047083e8e00529b",
-      "sha256": "4df4236ea4687fc729eba6c5bf57a9ac1eceda0c012c5bbe5170b8d722ab9387",
-      "size": 16640,
-      "repo_path": "bios/Microsoft/MSX/RS232.ROM",
+      "sha1": "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7",
+      "sha256": "696da03345b9fd27799b8fd92024050a201c020ef730e9006cb8f10bbbf68004",
+      "size": 8192,
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/RS232.ROM",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -6503,6 +8125,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "1c79c8fcfd661394f91be94b218955c84cabd742",
+          "sha256": "bcec49242e97df4cf68d7bcb687565f6c76ad4b3ebddbe3afa81594231cd0ae7",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/SUNRISEIDE.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "1c79c8fcfd661394f91be94b218955c84cabd742",
+          "sha256": "bcec49242e97df4cf68d7bcb687565f6c76ad4b3ebddbe3afa81594231cd0ae7",
+          "size": 65536,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/SUNRISEIDE.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "1c79c8fcfd661394f91be94b218955c84cabd742",
@@ -6524,6 +8168,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "4b4508131dca6d811694ae6379f41364c477de58",
+          "sha256": "9ced6187b238a4c44a6f41596177a10ff8b6325a374dc7756c3032e7e6318ddd",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/SWP.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "4b4508131dca6d811694ae6379f41364c477de58",
+          "sha256": "9ced6187b238a4c44a6f41596177a10ff8b6325a374dc7756c3032e7e6318ddd",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/SWP.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6547,6 +8213,28 @@
       "systems": [
         "microsoft-msx"
       ],
+      "slot_choices": [
+        {
+          "sha1": "47370bec7ca1f0615a54eda548b07fbc0c7ef398",
+          "sha256": "6bd7e4b1afafa49136084147301905417472675416cbd30a5c68e116a2a59f9b",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/XBASIC2.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "47370bec7ca1f0615a54eda548b07fbc0c7ef398",
+          "sha256": "6bd7e4b1afafa49136084147301905417472675416cbd30a5c68e116a2a59f9b",
+          "size": 16384,
+          "repo_path": "bios/Microsoft/MSX/Shared Roms/XBASIC2.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
+      ],
       "alternatives": [
         {
           "sha1": "47370bec7ca1f0615a54eda548b07fbc0c7ef398",
@@ -6560,17 +8248,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/SVI - Spectravideo SVI-318/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/SVI - Spectravideo SVI-318/svi318.rom",
       "sha1": "07758272df475e5e06187aa3574241df1b14035b",
       "sha256": "75b7d8fb77591e903650c0a9773fe0dd501901a651b419ea5244fd5407b6b272",
@@ -6579,6 +8256,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "07758272df475e5e06187aa3574241df1b14035b",
+          "sha256": "75b7d8fb77591e903650c0a9773fe0dd501901a651b419ea5244fd5407b6b272",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/SVI - Spectravideo SVI-318/svi318.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "07758272df475e5e06187aa3574241df1b14035b",
+          "sha256": "75b7d8fb77591e903650c0a9773fe0dd501901a651b419ea5244fd5407b6b272",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/SVI - Spectravideo SVI-318/svi318.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6593,17 +8292,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/SVI - Spectravideo SVI-328/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/SVI - Spectravideo SVI-328/svi328.rom",
       "sha1": "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c",
       "sha256": "f26339802bccd3c09657a8c1de89005570c3a23bcf8a5e8d4b5b23904c2f2e29",
@@ -6612,6 +8300,28 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
+      ],
+      "slot_choices": [
+        {
+          "sha1": "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c",
+          "sha256": "f26339802bccd3c09657a8c1de89005570c3a23bcf8a5e8d4b5b23904c2f2e29",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/SVI - Spectravideo SVI-328/svi328.rom",
+          "cores": [
+            "bluemsx"
+          ]
+        }
+      ],
+      "declared_choices": [
+        {
+          "sha1": "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c",
+          "sha256": "f26339802bccd3c09657a8c1de89005570c3a23bcf8a5e8d4b5b23904c2f2e29",
+          "size": 32768,
+          "repo_path": "bios/Microsoft/MSX/SVI - Spectravideo SVI-328/svi328.rom",
+          "systems": [
+            "microsoft-msx"
+          ]
+        }
       ],
       "alternatives": [
         {
@@ -6623,17 +8333,6 @@
             "bluemsx"
           ]
         }
-      ]
-    },
-    {
-      "dest": "bios/Machines/SVI - Spectravideo SVI-328 80 Column/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
       ]
     },
     {
@@ -6659,17 +8358,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/SVI - Spectravideo SVI-328 80 Swedish/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
       "dest": "bios/Machines/SVI - Spectravideo SVI-328 80 Swedish/svi328a.rom",
       "sha1": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "sha256": "407b47ff8c1ed31d8050600233ef8b70c495f5176d86f98511c4a0cee438f559",
@@ -6686,17 +8374,6 @@
       "sha256": "9e7672a1b31c1222256c793fa409ef2e8e1e68c9831460155750be0fdc325ea4",
       "size": 4096,
       "repo_path": "bios/Microsoft/MSX/SVI - Spectravideo SVI-328 80 Swedish/svi806se.rom",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/SVI - Spectravideo SVI-328 MK2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -6730,248 +8407,6 @@
       "sha256": "55ce22eba820e6b6abebebf1a37b43d82d175e7dd6e8e6bd4d362671ed40be4e",
       "size": 4096,
       "repo_path": "bios/Microsoft/MSX/SVI - Spectravideo SVI-328 80 Column/svi806.rom",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Philips VG-8240/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Russian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sanyo Wavy MPC-25FD/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sanyo Wavy PHC-23/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sharp Epcom HotBit 2.0/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F1/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F1II/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F1XD/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F1XDMK2/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F500/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F500P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F700D/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F700F/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F700P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F700S/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F900/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F900 (a)/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F9P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F9P Russian/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-F9S/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-G900AP/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "microsoft-msx"
-      ]
-    },
-    {
-      "dest": "bios/Machines/MSX2 - Sony HB-G900P/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
       "cores": null,
       "systems": [
         "microsoft-msx"
@@ -7457,17 +8892,6 @@
       ]
     },
     {
-      "dest": "bios/Machines/SEGA - SC-3000/config.ini",
-      "sha1": "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e",
-      "sha256": "e8080500d5699602bf5103efcd4ca6514bd3f9d028c400164b98f5a11c92656c",
-      "size": 347,
-      "repo_path": "bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini",
-      "cores": null,
-      "systems": [
-        "sc-3000"
-      ]
-    },
-    {
       "dest": "bios/dc/dc_boot.bin",
       "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
       "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
@@ -7590,17 +9014,17 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
       ],
       "alternatives": [
         {
-          "sha1": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
-          "sha256": "c51ec80b7a609c5ee3d203ceee2b602ae4dfb4479caf15dc1d030c40c0364e93",
-          "size": 262144,
-          "repo_path": "bios/Sega/Master System/.variants/bios_E.sms.81c3476b",
+          "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+          "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+          "size": 8192,
+          "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
           "cores": [
             "genesis_plus_gx",
             "genesis_plus_gx_wide"
@@ -7613,7 +9037,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
@@ -7629,10 +9053,10 @@
       ],
       "alternatives": [
         {
-          "sha1": "fc465122134d95363112eb51b9ab71db3576cefd",
-          "sha256": "6f4e6de10f1d07bda695c629c67457bb0248eeb8ffa0c61a2742b8529274de30",
-          "size": 16384,
-          "repo_path": "bios/Sega/Master System/.variants/bios_U.sms.ee2c29ba",
+          "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+          "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+          "size": 8192,
+          "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
           "cores": [
             "genesis_plus_gx",
             "genesis_plus_gx_wide"
@@ -44486,7 +45910,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": [
         "fuse"
       ],
@@ -44620,7 +46044,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "gearsystem",
         "smsplus"
@@ -62209,6 +63633,16 @@
       ]
     },
     {
+      "dest": "bios/np2/FONT.ROM",
+      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+      "size": 288768,
+      "repo_path": "bios/NEC/PC-98/font.rom",
+      "cores": [
+        "nekop2"
+      ]
+    },
+    {
       "dest": "bios/np2/sound.rom",
       "sha1": "d5dbc4fea3b8367024d363f5351baecd6adcd8ef",
       "sha256": "667a0e17189cc9f28185386ac6fe86784164740992a662b0a6fb0e00713b20e8",
@@ -62441,6 +63875,16 @@
       "sha256": "41535bd7242c07d69ec5427584d31f068ca4eb996ca95246caed4e3573a494e6",
       "size": 524350,
       "repo_path": "bios/NEC/PC-98/font.bmp",
+      "cores": [
+        "np2kai"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/FONT.ROM",
+      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+      "size": 288768,
+      "repo_path": "bios/NEC/PC-98/font.rom",
       "cores": [
         "np2kai"
       ]

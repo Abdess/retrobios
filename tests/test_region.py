@@ -956,7 +956,7 @@ class DsiNandFollowsTheHeaderRegion(unittest.TestCase):
 
     SLOTS = {
         "JPN": ["japan"],
-        "USA": ["north-america"],
+        "USA": ["north-america", "latin-america"],
         "EUR": ["europe"],
         "AUS": ["oceania"],
         "CHN": ["china"],
@@ -1409,6 +1409,47 @@ class MachineModelRomsCarryNoTerritory(unittest.TestCase):
         self.assertFalse(
             [e["name"] for e in profiles["c64-emu"]["files"] if e.get("region")]
         )
+
+
+class UsaRegionServesTheAmericas(unittest.TestCase):
+    """A code that knows a USA region and no Latin America one selects the
+    USA file there: Citra's shared font for CFG USA is 0x00014002
+    (apt.cpp:128-140), and a --region br,cn pack dropped it for the Chinese
+    archive alone."""
+
+    PROFILE = Path(__file__).resolve().parents[1] / "emulators" / "citra-mmj.yml"
+    FONT = (
+        "nand/00000000000000000000000000000000/title/0004009b/00014002/"
+        "content/00000000.app.romfs"
+    )
+
+    def test_brazil_ranks_the_default_shared_font(self):
+        import yaml
+
+        profile = yaml.safe_load(self.PROFILE.read_text(encoding="utf-8"))
+        index = region.build_region_index({"citra-mmj": profile})
+        requested = region.parse_requested("br,cn")
+        for destination, name in (
+            (self.FONT, "00000000.app.romfs"),
+            ("sysdata/cbf_std.bcfnt", "cbf_std.bcfnt"),
+        ):
+            with self.subTest(file=destination):
+                regions = region.lookup_regions(index, destination, name)
+                self.assertEqual(region.rank(regions, requested), 0)
+
+    def test_brazil_ranks_the_usa_dsi_nand_before_the_japanese_one(self):
+        """BizHawk's DecideNAND knows JPN, USA, EUR, AUS, CHN and KOR region
+        bits (MelonDS.cs:684-706): a DSi title from the Americas carries USA."""
+        import yaml
+
+        bizhawk = self.PROFILE.with_name("bizhawk.yml")
+        profile = yaml.safe_load(bizhawk.read_text(encoding="utf-8"))
+        index = region.build_region_index({"bizhawk": profile})
+        requested = region.parse_requested("br,jp")
+        usa = region.lookup_regions(index, "", "DSi_Nand_USA.bin")
+        jpn = region.lookup_regions(index, "", "DSi_Nand_JPN.bin")
+        self.assertEqual(region.rank(usa, requested), 0)
+        self.assertEqual(region.rank(jpn, requested), 1)
 
 
 if __name__ == "__main__":

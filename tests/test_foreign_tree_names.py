@@ -93,6 +93,54 @@ class ForeignTreeNames(unittest.TestCase):
         self.assertEqual(status, "data_dir")
         self.assertEqual(Path(path).read_bytes(), b"B" * 64)
 
+    def _bluemsx_cache(self, rel: str, data: bytes) -> dict:
+        cache = self.root / "data" / "bluemsx"
+        (cache / rel).parent.mkdir(parents=True, exist_ok=True)
+        (cache / rel).write_bytes(data)
+        return {"bluemsx": {"local_cache": str(cache)}}
+
+    def test_a_platform_declaration_reads_the_data_directory_at_its_path(self):
+        """AmberELEC declares every blueMSX machine's config.ini with no hash.
+        The name step met msx-emu's ColecoVision config.ini first and wrote it
+        into each machine folder, while data/bluemsx held the machine's own
+        at that very path."""
+        self._hold("bios/Other/msx-emu/Machines/COL - ColecoVision/config.ini", b"C" * 64)
+        registry = self._bluemsx_cache("Machines/MSX - Arabic/config.ini", b"A" * 64)
+        entry = {
+            "name": "config.ini",
+            "destination": "bios/Machines/MSX - Arabic/config.ini",
+        }
+        path, status = resolve_local_file(entry, self.db, data_dir_registry=registry)
+        self.assertEqual(status, "path_exact")
+        self.assertEqual(Path(path).read_bytes(), b"A" * 64)
+
+    def test_a_platform_rs232_rom_reads_the_data_directory_at_its_path(self):
+        self._hold("bios/Microsoft/MSX/RS232.ROM", b"L" * 128)
+        registry = self._bluemsx_cache("Machines/Shared Roms/RS232.ROM", b"S" * 64)
+        entry = {
+            "name": "RS232.ROM",
+            "destination": "bios/Machines/Shared Roms/RS232.ROM",
+        }
+        path, _status = resolve_local_file(entry, self.db, data_dir_registry=registry)
+        self.assertEqual(Path(path).read_bytes(), b"S" * 64)
+
+    def test_a_profile_dump_outranks_the_free_copy_of_its_tree(self):
+        """Dolphin's dsp_coef.bin: the dump in bios/ wins over the free
+        replacement Sys/GC bundles at the same path."""
+        own = self._hold("bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867", b"R" * 64)
+        cache = self.root / "data" / "dolphin-sys"
+        (cache / "GC").mkdir(parents=True)
+        (cache / "GC" / "dsp_coef.bin").write_bytes(b"F" * 64)
+        entry = {
+            "name": "dsp_coef.bin", "destination": "GC/dsp_coef.bin",
+            "source_profile": "dolphin",
+        }
+        path, _status = resolve_local_file(
+            entry, self.db, dest_hint="GC/dsp_coef.bin",
+            data_dir_registry={"dolphin-sys": {"local_cache": str(cache)}},
+        )
+        self.assertEqual(path, own)
+
     def test_another_casing_in_another_tree_is_not_the_file(self):
         """reminiscence's music module reunion took skyline's
         zoneinfo/Indian/Reunion, a time-zone file, on the casefold step."""

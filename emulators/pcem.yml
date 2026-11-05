@@ -5,7 +5,8 @@ source: "https://github.com/libretro/libretro-pcem"
 upstream: "https://github.com/sarah-walker-pcem/pcem"
 profiled_date: "2026-03-24"
 source_commit: "e07923e902dcedcf65a502fb3f14e75b9ded5271"
-upstream_commit: "25b54e3ff1d51cbf2469b447e55bce7a589697e9"
+upstream_commit: "10739b9618e388a5bf8c21e752f12b3952fa83e1"
+upstream_frozen: "The port took PCem mainline patches by hand until 2016-04-13 (libretro-pcem c9f3593f, 223f434f), which carry this commit of 2016-04-12 and none after it."
 core_version: "v10.1"
 version_basis:
   kind: file
