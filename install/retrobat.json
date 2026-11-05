@@ -6,7 +6,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "8.3.1",
-  "generated": "2026-11-05T22:35:40Z",
+  "generated": "2026-11-05T22:39:43Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -285,9 +285,9 @@
     }
   ],
   "total_files": 5561,
-  "total_size": 8549891130,
+  "total_size": 8559861547,
   "pack_files": 5563,
-  "pack_size": 8549891130,
+  "pack_size": 8559861547,
   "total_omitted": 203,
   "omitted_files": [
     {
@@ -72871,10 +72871,10 @@
     },
     {
       "dest": "dc.zip",
-      "sha1": "24e80cdf0695361ae8de7cceda29843e0474ecd0",
-      "sha256": "83f786e067425936e108529ac5391089d7a3bbf48ac138a58546bd860516c584",
-      "size": 1083674,
-      "repo_path": "bios/Sega/Dreamcast/dc.zip",
+      "sha1": "6acea737ac7d2c17a4d817e7328897c85492e180",
+      "sha256": "e144fce93abcfef5cfde593b22fd453db5201125abae212ae0c4be1f88186852",
+      "size": 11054091,
+      "repo_path": "bios/Other/demul/dc.zip",
       "cores": [
         "demul"
       ],

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T22:35:40Z",
-  "total_files": 19945,
-  "total_size": 16909338231,
+  "generated_at": "2026-11-05T22:39:43Z",
+  "total_files": 19947,
+  "total_size": 16926035621,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -140307,6 +140307,16 @@
       "crc32": "6893a2d1",
       "adler32": "fd861022"
     },
+    "6acea737ac7d2c17a4d817e7328897c85492e180": {
+      "path": "bios/Other/demul/dc.zip",
+      "name": "dc.zip",
+      "size": 11054091,
+      "sha1": "6acea737ac7d2c17a4d817e7328897c85492e180",
+      "md5": "cba6d176b46e22dea35c99526c1769c1",
+      "sha256": "e144fce93abcfef5cfde593b22fd453db5201125abae212ae0c4be1f88186852",
+      "crc32": "cab6d410",
+      "adler32": "15986809"
+    },
     "c620aafa730c597bddb6dcc7ed32673c96783c6d": {
       "path": "bios/Other/demul/naomi.zip",
       "name": "naomi.zip",
@@ -195532,6 +195542,16 @@
       "crc32": "5bfffcdb",
       "adler32": "2591d715"
     },
+    "4325522368df5b40c204bbe9d53e681a49a138b7": {
+      "path": "bios/Sega/Dreamcast/.variants/dcdev.zip.065b2357",
+      "name": "dcdev.zip",
+      "size": 4705067,
+      "sha1": "4325522368df5b40c204bbe9d53e681a49a138b7",
+      "md5": "065b2357c6eff96a2794d417f1d23135",
+      "sha256": "a07c0c73c49e4b11dc76cd9fe1af46db3a874c1fa2099e2fb9a32645b7e01e3d",
+      "crc32": "02c1f4a9",
+      "adler32": "4f9ed0da"
+    },
     "62a0d456ff84664a4f631938d3991088bc122f1b": {
       "path": "bios/Sega/Dreamcast/.variants/f355bios.zip.62a0d456",
       "name": "f355bios.zip",
@@ -195759,15 +195779,15 @@
       "crc32": "20199dc0",
       "adler32": "7d4b7821"
     },
-    "4325522368df5b40c204bbe9d53e681a49a138b7": {
+    "bed3a7427ddd9a11358eabb74106e8a62493da12": {
       "path": "bios/Sega/Dreamcast/dcdev.zip",
       "name": "dcdev.zip",
-      "size": 4705067,
-      "sha1": "4325522368df5b40c204bbe9d53e681a49a138b7",
-      "md5": "065b2357c6eff96a2794d417f1d23135",
-      "sha256": "a07c0c73c49e4b11dc76cd9fe1af46db3a874c1fa2099e2fb9a32645b7e01e3d",
-      "crc32": "02c1f4a9",
-      "adler32": "4f9ed0da"
+      "size": 5643299,
+      "sha1": "bed3a7427ddd9a11358eabb74106e8a62493da12",
+      "md5": "8dcca9600a688ea5069bf0f199cbdbea",
+      "sha256": "1c6981df73131526be146795cf0bc22939f0784ad013d697bb726ecef803bd37",
+      "crc32": "9c73a502",
+      "adler32": "fca902ac"
     },
     "b19ef74970df5480c28e63fb0ba5d30b2134c09a": {
       "path": "bios/Sega/Dreamcast/dcfish.zip",
@@ -218505,6 +218525,7 @@
       "afacfb61877401f1611998d2b590dffd": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "3ab3f9386a280de051e82c0f147385ce": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "2c72c2c8020be91779cf30e6965d6bf8": "a9cd6c37e1da95584eab7f4227da2c98abdb7321",
+      "cba6d176b46e22dea35c99526c1769c1": "6acea737ac7d2c17a4d817e7328897c85492e180",
       "246fb8a02cf930a8d75df625ad5a8abc": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
       "d677421733ba64f4b493c98667d6ab78": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "a1d3c0e5a40f163f4fb00a5e0774c63c": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
@@ -223999,6 +224020,7 @@
       "23df18aa53c8b30784cd9a84e061d008": "11e02433e13b793ec7ffe0ae2356750bb8a575b4",
       "9338b10ee6f13fbc8bfcd6276e156fad": "f695e418bbfff01c47443fb8c4626d742951ed6a",
       "697c60c42421724f40663b338f34af01": "2b5a72381c900b438910983f62efd1cbdbefa80d",
+      "065b2357c6eff96a2794d417f1d23135": "4325522368df5b40c204bbe9d53e681a49a138b7",
       "f126d318f135f38ee377fef2acf08d7e": "62a0d456ff84664a4f631938d3991088bc122f1b",
       "5e83867c751f692a000afdf658dc181f": "3c1c6422c332fc57c69c938db4dd3ac91eff4f02",
       "9c755171b222fb1f4e1439d5b709dbf1": "b3a86809857fe9ce575da73f6ed6c5441d558e3d",
@@ -224021,7 +224043,7 @@
       "0a93f7940c455905bea6e392dfde92a4": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
       "93a9766f14159b403178ac77417c6b68": "e3d1ca03142a1f4f846966ad8d5eac6fcbcbdda5",
       "314fb1b16bd77154db4d30ff780a8e4f": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
-      "065b2357c6eff96a2794d417f1d23135": "4325522368df5b40c204bbe9d53e681a49a138b7",
+      "8dcca9600a688ea5069bf0f199cbdbea": "bed3a7427ddd9a11358eabb74106e8a62493da12",
       "320d5e0428a00881c03bc79bd6325807": "b19ef74970df5480c28e63fb0ba5d30b2134c09a",
       "46f12cad72051c30326c98207848bbfa": "88b90ca52e4dc9c2e94828f3faf3a33ee5bce258",
       "54099a23e3d6e87b4786b8eb48bd4274": "7d20a34242c98ac5ea76a8ca55bef0697d22e409",
@@ -260660,6 +260682,10 @@
       "dokan2.dll": [
         "f6b64d7b039a90af956c2c0873b30f6639a59878"
       ],
+      "dc.zip": [
+        "6acea737ac7d2c17a4d817e7328897c85492e180",
+        "24e80cdf0695361ae8de7cceda29843e0474ecd0"
+      ],
       "wiitdb.txt": [
         "f6a0cbfda6838065065e830ff40f322e6a3b6b00"
       ],
@@ -273671,6 +273697,10 @@
         "2b5a72381c900b438910983f62efd1cbdbefa80d",
         "72c65f2a11ee7b72b77b9945187b7a332632e14a"
       ],
+      "dcdev.zip": [
+        "4325522368df5b40c204bbe9d53e681a49a138b7",
+        "bed3a7427ddd9a11358eabb74106e8a62493da12"
+      ],
       "Atomiswave-0.220_NoClones_V1.0 barhi.dat.7z": [
         "09f1ed9e0f8ece181a1850ec89361cef78f37c9e"
       ],
@@ -273695,9 +273725,6 @@
       "Naomi_datfiles.zip": [
         "3251d3b601850aed422f006b61ce9776cdb799d2"
       ],
-      "dc.zip": [
-        "24e80cdf0695361ae8de7cceda29843e0474ecd0"
-      ],
       "dc_bios.bin": [
         "8951d1bb219ab2ff8583033d2119c899cc81f18c"
       ],
@@ -273709,9 +273736,6 @@
       ],
       "dc_flash_region_free_hack.bin": [
         "e3d1ca03142a1f4f846966ad8d5eac6fcbcbdda5"
-      ],
-      "dcdev.zip": [
-        "4325522368df5b40c204bbe9d53e681a49a138b7"
       ],
       "dcfish.zip": [
         "b19ef74970df5480c28e63fb0ba5d30b2134c09a"
@@ -296468,6 +296492,7 @@
       "a4fcab0b": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "dcbd4121": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "6893a2d1": "a9cd6c37e1da95584eab7f4227da2c98abdb7321",
+      "cab6d410": "6acea737ac7d2c17a4d817e7328897c85492e180",
       "1749ebfb": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
       "c1f446c6": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "9ac7f0c7": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
@@ -301961,6 +301986,7 @@
       "b7e5aeeb": "11e02433e13b793ec7ffe0ae2356750bb8a575b4",
       "fa297c5b": "f695e418bbfff01c47443fb8c4626d742951ed6a",
       "5bfffcdb": "2b5a72381c900b438910983f62efd1cbdbefa80d",
+      "02c1f4a9": "4325522368df5b40c204bbe9d53e681a49a138b7",
       "5177e8c4": "62a0d456ff84664a4f631938d3991088bc122f1b",
       "87e1cf82": "3c1c6422c332fc57c69c938db4dd3ac91eff4f02",
       "277c7fee": "b3a86809857fe9ce575da73f6ed6c5441d558e3d",
@@ -301983,7 +302009,7 @@
       "c611b498": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
       "e0d202a2": "e3d1ca03142a1f4f846966ad8d5eac6fcbcbdda5",
       "20199dc0": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
-      "02c1f4a9": "4325522368df5b40c204bbe9d53e681a49a138b7",
+      "9c73a502": "bed3a7427ddd9a11358eabb74106e8a62493da12",
       "7a6d5c2c": "b19ef74970df5480c28e63fb0ba5d30b2134c09a",
       "75f469e7": "88b90ca52e4dc9c2e94828f3faf3a33ee5bce258",
       "96b7ce1e": "7d20a34242c98ac5ea76a8ca55bef0697d22e409",
@@ -316414,6 +316440,7 @@
       "82e02a1c48ef74e449b75081d3d118bd935b81d52634dd7c6a8c95686fd83fd1": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "75600aba867acbdfdb85fcd142b524da769bdc611b855a760aeb0c6e2eaae17a": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "6ea2c350626d85a22410ad6ad8700388e28166ab8c5c2e88d83d7a696fceb335": "a9cd6c37e1da95584eab7f4227da2c98abdb7321",
+      "e144fce93abcfef5cfde593b22fd453db5201125abae212ae0c4be1f88186852": "6acea737ac7d2c17a4d817e7328897c85492e180",
       "07398d8d153e0e77ff986cb87ce0b5fd5103b2726d8ec8e857fb695de71e0858": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
       "3c042d3a3bac17f6a3a989c549fe127de1ba38dfdee9ffd6c13d5379238e5c13": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
@@ -321908,6 +321935,7 @@
       "cc95728462969138d17e5aa7c58f93e509887d4102a4f41c392a093a5fa92698": "11e02433e13b793ec7ffe0ae2356750bb8a575b4",
       "8eadb1bcb23dc6b407f49646f2065aa55006d3e1cd2bd3984b83e983fa4042a0": "f695e418bbfff01c47443fb8c4626d742951ed6a",
       "5af9e888d74e9feb47d3ed46fdc7d15a20209ce4b4df2170382805e81f39a75f": "2b5a72381c900b438910983f62efd1cbdbefa80d",
+      "a07c0c73c49e4b11dc76cd9fe1af46db3a874c1fa2099e2fb9a32645b7e01e3d": "4325522368df5b40c204bbe9d53e681a49a138b7",
       "0f50f12d38f9e4a893a787bef31dcb98f689e7d9f68ef9675cdf05f11b4df75f": "62a0d456ff84664a4f631938d3991088bc122f1b",
       "e7c0369a22ee0a42ac55b634ed1c6282aea91a6af07ba1402627b8fbe7c2afd5": "3c1c6422c332fc57c69c938db4dd3ac91eff4f02",
       "766c3823b2c3512817628dbb5d6b05aa39322c3c97b8ee244ce4e47d84593084": "b3a86809857fe9ce575da73f6ed6c5441d558e3d",
@@ -321930,7 +321958,7 @@
       "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
       "2521bd7cbed55c33820ace6b12a70ae23a4192a06f4290770bf72987c3488dfe": "e3d1ca03142a1f4f846966ad8d5eac6fcbcbdda5",
       "15a9bc3aa59fa998c03bfe0b1cf6cb1958c1660e8e72b3d7195b653f44038407": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
-      "a07c0c73c49e4b11dc76cd9fe1af46db3a874c1fa2099e2fb9a32645b7e01e3d": "4325522368df5b40c204bbe9d53e681a49a138b7",
+      "1c6981df73131526be146795cf0bc22939f0784ad013d697bb726ecef803bd37": "bed3a7427ddd9a11358eabb74106e8a62493da12",
       "70bdc1de879c5b43d04ca718f1eae1b8522f08bcd0a03e5c253438039cd60c78": "b19ef74970df5480c28e63fb0ba5d30b2134c09a",
       "650f1c43c0731e1448d55fcff977d7ea24a7daf2acba2d897f2a1e4b87038b1d": "88b90ca52e4dc9c2e94828f3faf3a33ee5bce258",
       "40c19c3a3c478f55f6c855fd1b084805d2864a584f95a46815bed1a2c5497f52": "7d20a34242c98ac5ea76a8ca55bef0697d22e409",
@@ -492721,6 +492749,12 @@
       "cxbx-reloaded/keys.bin": [
         "a9cd6c37e1da95584eab7f4227da2c98abdb7321"
       ],
+      "Other/demul/dc.zip": [
+        "6acea737ac7d2c17a4d817e7328897c85492e180"
+      ],
+      "demul/dc.zip": [
+        "6acea737ac7d2c17a4d817e7328897c85492e180"
+      ],
       "Other/demul/naomi.zip": [
         "c620aafa730c597bddb6dcc7ed32673c96783c6d"
       ],
@@ -563748,6 +563782,15 @@
       ".variants/dc_nvmem.bin.5bfffcdb": [
         "2b5a72381c900b438910983f62efd1cbdbefa80d"
       ],
+      "Sega/Dreamcast/.variants/dcdev.zip.065b2357": [
+        "4325522368df5b40c204bbe9d53e681a49a138b7"
+      ],
+      "Dreamcast/.variants/dcdev.zip.065b2357": [
+        "4325522368df5b40c204bbe9d53e681a49a138b7"
+      ],
+      ".variants/dcdev.zip.065b2357": [
+        "4325522368df5b40c204bbe9d53e681a49a138b7"
+      ],
       "Sega/Dreamcast/.variants/f355bios.zip.62a0d456": [
         "62a0d456ff84664a4f631938d3991088bc122f1b"
       ],
@@ -563899,10 +563942,10 @@
         "72c65f2a11ee7b72b77b9945187b7a332632e14a"
       ],
       "Sega/Dreamcast/dcdev.zip": [
-        "4325522368df5b40c204bbe9d53e681a49a138b7"
+        "bed3a7427ddd9a11358eabb74106e8a62493da12"
       ],
       "Dreamcast/dcdev.zip": [
-        "4325522368df5b40c204bbe9d53e681a49a138b7"
+        "bed3a7427ddd9a11358eabb74106e8a62493da12"
       ],
       "Sega/Dreamcast/dcfish.zip": [
         "b19ef74970df5480c28e63fb0ba5d30b2134c09a"
