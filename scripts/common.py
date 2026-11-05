@@ -1870,12 +1870,12 @@ def select_emulator_profiles(
     all_profiles: dict,
     standalone: bool = False,
 ) -> list[tuple[str, dict]]:
-    """Resolve named profiles, refusing the ones that answer for others.
+    """Resolve named profiles, refusing the ones that answer for no core.
 
-    An alias is the same binary under another name and a launcher only
-    starts an emulator, so neither has requirements of its own: naming one
-    is a question about the wrong profile, and the error says which one to
-    ask instead. Raising rather than exiting lets the verifier stop and the
+    An alias is the same binary under another name, so naming one selects
+    the profile it is an alias of, said on stderr. A launcher only starts an
+    emulator and has no requirements of its own: naming one is a question
+    about the wrong profile, and the error says so. Raising rather than exiting lets the verifier stop and the
     builder return empty-handed from one rule.
     """
     selected: list[tuple[str, dict]] = []
@@ -1916,11 +1916,17 @@ def select_emulator_profiles(
                 ),
                 None,
             )
-            raise ProfileSelectionError(
-                f"{name} is an alias of {target}: use --emulator {target}"
-                if target
-                else f"{name} is an alias with no profile of its own to name"
-            )
+            if not target or target not in all_profiles:
+                raise ProfileSelectionError(
+                    f"{name} is an alias with no profile of its own to name"
+                )
+            # The name a user reads in RetroArch or on the buildbot: the tool
+            # knows the profile, so it says which and carries on.
+            print(f"{name} is {target}: using its profile", file=sys.stderr)
+            name, profile = target, all_profiles[target]
+            kind = profile.get("type", "libretro")
+            if any(key == name for key, _ in selected):
+                continue
         if kind == "launcher":
             raise ProfileSelectionError(
                 f"{name} is a launcher: use the emulator it launches"

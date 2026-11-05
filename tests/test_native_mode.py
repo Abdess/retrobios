@@ -10,6 +10,8 @@ it, and these tests make the agreement checkable instead of reviewable.
 
 from __future__ import annotations
 
+import contextlib
+import io
 import json
 import sys
 import unittest
@@ -446,10 +448,12 @@ class OneProfileSelector(unittest.TestCase):
         self.assertIsNone(error)
         self.assertEqual([n for n, _p in selected], ["real"])
 
-    def test_an_alias_names_the_profile_to_ask_instead(self):
-        _selected, error = self._select(["ghost"])
-        self.assertIn("alias of real", error)
-        self.assertIn("--emulator real", error)
+    def test_an_alias_selects_the_profile_it_names(self):
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            selected, error = self._select(["ghost"])
+        self.assertIsNone(error)
+        self.assertEqual([n for n, _p in selected], ["real"])
+        self.assertIn("ghost is real", err.getvalue())
 
     def test_a_launcher_is_refused(self):
         _selected, error = self._select(["starter"])

@@ -5610,12 +5610,17 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
 
 
 
-class AnAliasNamesItsProfile(unittest.TestCase):
-    """"flycast_gles2 is an alias of flycast -use --emulator flycast": the
-    dash read as an option, and an alias without alias_of advised
-    "--emulator ?"."""
+class AnAliasSelectsItsProfile(unittest.TestCase):
+    """`--emulator mednafen_psx` refused with "use --emulator beetle_psx",
+    a step the tool could take itself: the name a user reads in RetroArch
+    now selects the profile it is an alias of, and says so on stderr. An
+    alias without alias_of is found through the profile whose cores: names
+    it."""
 
-    def test_the_message(self):
+    def test_the_alias_selects_its_profile(self):
+        import contextlib as _contextlib
+        import io as _io
+
         from scripts.common import ProfileSelectionError, select_emulator_profiles
 
         profiles = {
@@ -5623,12 +5628,28 @@ class AnAliasNamesItsProfile(unittest.TestCase):
             "flycast_gles2": {"type": "alias", "alias_of": "flycast"},
             "orphan": {"type": "alias"},
             "core": {"type": "libretro", "cores": ["orphan"]},
+            "lost": {"type": "alias"},
         }
-        for name, expected in (("flycast_gles2", "alias of flycast: use --emulator flycast"),
-                               ("orphan", "alias of core: use --emulator core")):
-            with self.subTest(name=name), self.assertRaises(ProfileSelectionError) as caught:
-                select_emulator_profiles([name], profiles)
-            self.assertIn(expected, str(caught.exception))
+        for name, expected in (("flycast_gles2", "flycast"), ("orphan", "core")):
+            err = _io.StringIO()
+            with self.subTest(name=name), _contextlib.redirect_stderr(err):
+                selected = select_emulator_profiles([name], profiles)
+            self.assertEqual([key for key, _ in selected], [expected])
+            self.assertIn(f"{name} is {expected}", err.getvalue())
+        with _contextlib.redirect_stderr(_io.StringIO()):
+            both = select_emulator_profiles(["flycast", "flycast_gles2"], profiles)
+        self.assertEqual([key for key, _ in both], ["flycast"])
+        with self.assertRaises(ProfileSelectionError):
+            select_emulator_profiles(["lost"], profiles)
+
+    def test_verify_runs_the_alias(self):
+        result = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--emulator", "mednafen_psx"],
+            cwd=ROOT, capture_output=True, text=True, timeout=300, check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("beetle_psx", result.stdout)
+        self.assertIn("mednafen_psx is beetle_psx", result.stderr)
 
 
 

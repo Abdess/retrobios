@@ -541,6 +541,8 @@ def check_emulator_packs(
     all_ok = True
     compared = 0
     for name in sorted(profiles):
+        if profiles[name].get("type") == "alias":
+            continue  # selects the profile it names, compared under that name
         for standalone in (False, True):
             try:
                 select_emulator_profiles([name], profiles, standalone)
