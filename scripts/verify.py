@@ -1827,7 +1827,11 @@ def _omission_reasons(entries: list[dict]) -> str:
 def _print_undeclared_section(result: dict, verbose: bool) -> None:
     """Print cross-reference section for undeclared files used by cores."""
     undeclared = result.get("undeclared_files", [])
-    if not undeclared:
+    # The pack's core copies can come from no gap entry: recalbox
+    # --system nec-pc-engine packs six root syscard copies for geargrafx
+    # with an empty gap report, and returning here hid them.
+    packed = result.get("packed_extras")
+    if not undeclared and not (packed and any(packed.values())):
         return
 
     game_data, bios_files, unplaced = _split_undeclared(undeclared)
@@ -1850,7 +1854,6 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     # The builder's count, one file per pack path, when the platform pass
     # replayed it. Counting entries said 1130 for RetroArch, 48 more than the
     # pack holds: rom.key alone was claimed by three Amiga cores.
-    packed = result.get("packed_extras")
     core_in_pack = (
         packed["bios"] if packed is not None else len(req_in_repo) + len(opt_in_repo)
     )
@@ -1880,7 +1883,7 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         print(f"  Core files held but not packed: {len(unplaced)} "
               f"({_omission_reasons(unplaced)})")
 
-    if game_data:
+    if game_data or (packed and packed.get("game_data")):
         gd_missing = [u for u in game_data if not u["in_repo"]]
         gd_packed = (
             packed["game_data"] if packed is not None
