@@ -1450,34 +1450,26 @@ def _parse_bash_var(path: Path, key: str) -> str | None:
 # recalbox-system.mk RECALBOX_SYSTEM_PLATFORM, ROCKNIX's scripts/image puts
 # HW_DEVICE in os-release (RK3326, our rk3326). Lakka's scripts/image writes
 # LIBREELEC_DEVICE when the image is built for a device (RPi4) and always
-# LIBREELEC_PROJECT (Generic): the first one set is the board.
+# LIBREELEC_PROJECT (Generic): the first one set is the board. KNULLI moves
+# /usr/share/batocera to /usr/share/knulli (knulli-linux 57afa662,
+# board/scripts/post-build-script.sh:264-278) and writes KNULLI_SYSTEM_ARCH
+# to knulli.arch (package/system/knulli-system/knulli-system.mk:98-99).
 _BOARD_SOURCES: dict[str, tuple[str, str]] = {
     "batocera": ("file", "/usr/share/batocera/batocera.arch"),
     "recalbox": ("file", "/recalbox/recalbox.arch"),
     "rocknix": ("os_release", "HW_DEVICE"),
     "lakka": ("os_release", "LIBREELEC_DEVICE|LIBREELEC_PROJECT"),
+    "knulli": ("file", "/usr/share/knulli/knulli.arch"),
 }
 
-
-# A platform that names its board without publishing a core list per board.
-# Knulli moves /usr/share/batocera to /usr/share/knulli (knulli-linux
-# 57afa662, board/scripts/post-build-script.sh:264-278) and writes its board
-# to knulli.arch (package/system/knulli-system/knulli-system.mk:98-99).
-_DERIVATIVE_BOARDS: dict[str, tuple[str, str]] = {
-    "knulli": ("Knulli", "/usr/share/knulli/knulli.arch"),
+# The board a system's own name stands for, where the two differ: the
+# target lists are named for the board files (configs/knulli-rk3566.board),
+# and the arch file for the TARGET flag the board sets. knulli-rk3566.board
+# sets BR2_PACKAGE_BATOCERA_TARGET_RK3568, which knulli-system.mk:22-23
+# (20260511) writes as rk3568.
+_BOARD_NAMES: dict[str, dict[str, str]] = {
+    "knulli": {"rk3568": "rk3566"},
 }
-
-
-def derivative_board(platform: str) -> tuple[str, str] | None:
-    """(derivative, board) when a derivative of the platform names its board."""
-    name, where = _DERIVATIVE_BOARDS.get(platform, ("", ""))
-    if not where:
-        return None
-    try:
-        board = Path(where).read_text(encoding="utf-8", errors="replace").strip().lower()
-    except OSError:
-        return None
-    return (name, board) if board else None
 
 
 # The board a card names on a partition a computer reads. Batocera writes
@@ -1520,7 +1512,11 @@ def detect_board(platform: str) -> str | None:
         value = next((release[key] for key in where.split("|") if release.get(key)), "")
     else:
         return None
-    return value.strip().lower() or None
+    board = value.strip().lower()
+    # A board no TARGET line names is written "unknown" (KNULLI's r16).
+    if board == "unknown":
+        return None
+    return _BOARD_NAMES.get(platform, {}).get(board, board) or None
 
 
 def _parse_json_path(path: Path, *keys: str) -> str | None:
@@ -12989,7 +12985,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--target",
         metavar="NAME",
         help="hardware target for core filtering (switch, rpi4, ...). "
-        "On Batocera, Recalbox, ROCKNIX and Lakka the board is read from the system",
+        "On Batocera, Recalbox, ROCKNIX, Lakka and KNULLI the board is read from the system",
     )
     parser.add_argument(
         "--every-board",
@@ -15064,12 +15060,6 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(f"  {words}")
                 EVENTS.emit("board", platform=plat_name, board=board,
                             applied=target == board, message=words)
-            else:
-                derived = derivative_board(plat_name)
-                if derived:
-                    print(f"  {derived[0]} board {derived[1]} detected. {derived[0]} "
-                          "builds its own set of cores and publishes no core list "
-                          "per board: installing the files of every board")
         if target:
             targets = target_lists.get(plat_name)
             if targets is None:

@@ -5400,20 +5400,34 @@ class BatoceraAndKnulliByWhatTheirBuildsWrite(unittest.TestCase):
                          [("emuelec", Path("/storage/roms"))])
         self.assertEqual(self._detect({"NAME": "CoreELEC", "ID": "coreelec"}, ()), [])
 
-    def test_a_knulli_board_is_named_and_not_narrowed(self):
-        board = Path(_tempdir(self)) / "knulli.arch"
-        board.write_text("a133")
-        with unittest.mock.patch.dict(install._DERIVATIVE_BOARDS,
-                                      {"knulli": ("Knulli", str(board))}):
-            self.assertEqual(install.derivative_board("knulli"), ("Knulli", "a133"))
-            self.assertIsNone(install.derivative_board("recalbox"))
+    def test_a_knulli_board_narrows_to_its_target(self):
+        """KNULLI publishes a core list per board since 2026-11-05, and an
+        H700 handheld still took every board's files (9.3 GB for 4.5)."""
+        arch = Path(_tempdir(self)) / "knulli.arch"
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "knulli.json")
+                             .read_text(encoding="utf-8"))
+        for written, board in (("h700", "h700"), ("rk3568", "rk3566"), ("unknown", None)):
+            arch.write_text(written)
+            with self.subTest(written=written), unittest.mock.patch.dict(
+                    install._BOARD_SOURCES, {"knulli": ("file", str(arch))}):
+                self.assertEqual(install.detect_board("knulli"), board)
+                if board:
+                    self.assertIn(board, targets)
+
+    def test_each_board_name_is_a_published_target(self):
+        for plat, names in install._BOARD_NAMES.items():
+            targets = json.loads((REPO_ROOT / "install" / "targets" / f"{plat}.json")
+                                 .read_text(encoding="utf-8"))
+            for written, board in names.items():
+                with self.subTest(platform=plat, board=board):
+                    self.assertIn(board, targets)
+                    self.assertNotIn(written, targets)
 
     def test_the_run_says_why_every_board_is_installed(self):
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         block = source[source.index("board = detect_board(plat_name)"):]
         block = block[:block.index("if target:")]
         self.assertIn("has no", block)
-        self.assertIn("derivative_board(plat_name)", block)
 
 
 class RomMFirmwareFollowsItsTemplate(unittest.TestCase):
