@@ -175,6 +175,10 @@ def route_keys() -> str:
     return _table(heading, rows)
 
 
+# Card markers that are files with no extension: the MiSTer binary.
+_BARE_FILES = frozenset({"MiSTer"})
+
+
 def _marker(rule: _install._OsRule) -> str:
     """A card rule's evidence in words: the file or folder, and the line it
     holds for a rule that reads one."""
@@ -182,8 +186,8 @@ def _marker(rule: _install._OsRule) -> str:
         path, pattern = rule.values
         line = re.sub(r"\\s\*\$$", "", re.sub(r"^(\^|\\A)", "", pattern)).replace("\\", "")
         return f"`{path}` holding the line `{line}`"
-    named = ", ".join(f"`{value}`" if PurePosixPath(value).suffix else f"`{value}/`"
-                      for value in rule.values)
+    named = ", ".join(f"`{value}`" if PurePosixPath(value).suffix or value in _BARE_FILES
+                      else f"`{value}/`" for value in rule.values)
     if rule.method == "games_part":
         # Told on the games part beside its bios folder, on a drive the
         # system does not call fixed (install.games_part).

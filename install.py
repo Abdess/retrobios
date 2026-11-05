@@ -13737,6 +13737,12 @@ _SHARE_RULES: tuple[_OsRule, ...] = (
     _OsRule("rocknix", "ROCKNIX", "file_matches",
             (".config/system/configs/system.cfg", r"^root\.password=rocknix\s*$"),
             "roms/bios"),
+    # MiSTer's is its exFAT partition, /media/fat (Main_MiSTer e0a234f9,
+    # file_io.cpp:1177), whose root holds the MiSTer binary and menu.rbf
+    # (Distribution_MiSTer ce602319) and which reads each core's files
+    # below games/ (GAMES_DIR, file_io.h:171). A card prepared on a
+    # computer got RetroArch's list, or MiSTer's at its root.
+    _OsRule("misterfpga", "MiSTer FPGA", "file_exists", ("MiSTer", "menu.rbf"), "games"),
 )
 
 

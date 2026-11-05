@@ -1097,6 +1097,7 @@ gives for the device, below the card's root instead of its mount point:
 | `system/configs/emulationstation/about.info` holding the line `KNULLI` | KNULLI | `bios`, KNULLI's list |
 | `system/batocera.conf` holding the line `system.hostname=KNULLI` | KNULLI | `bios`, KNULLI's list |
 | `.config/system/configs/system.cfg` holding the line `root.password=rocknix` | ROCKNIX | `roms/bios`, ROCKNIX's list |
+| `MiSTer`, `menu.rbf` | MiSTer FPGA | `games`, MiSTer FPGA's list |
 | `MUOS/` | muOS | `MUOS/bios`, RetroArch's list |
 | `spruce/` | spruceOS | `BIOS`, RetroArch's list |
 | `System/usr/trimui/crossmix-version.txt` | CrossMix-OS | `BIOS`, RetroArch's list |
@@ -1220,7 +1221,7 @@ beside its executable wherever the archive was extracted, so a forced
 `--platform bizhawk` that finds no install stops and asks for `--dest`.
 
 The systems that run from an SD card keep their files there: MinUI, NextUI,
-MyMinUI, KNULLI, ROCKNIX, AmberELEC and EmuELEC (the card's games part, which
+MyMinUI, KNULLI, ROCKNIX, MiSTer FPGA, AmberELEC and EmuELEC (the card's games part, which
 they mount as `/storage/roms`), and each system of the
 [Linux handhelds](../platforms/linux-handhelds.md) that gets RetroArch's list
 (Onion, muOS, spruceOS, ArkOS, UnofficialOS and the others). Run on the
@@ -1556,7 +1557,9 @@ names each route it tried, and `log.prev.txt` keeps the run before.
 **From a computer.** Onion, MinUI, NextUI, Allium, GarlicOS and the Switch
 have no Python 3 to run the installer. Put the card in a computer and run
 the [one-line command](#one-line) there: it finds a mounted Onion,
-spruceOS, MinUI, muOS, Knulli or ROCKNIX card by itself. For a card it does
+spruceOS, MinUI, muOS, Knulli, ROCKNIX or MiSTer card by itself (MiSTer's
+files go to `games/` below the card's root, which MiSTer reads as
+`/media/fat/games`). For a card it does
 not recognise, add `--platform <platform> --dest <BIOS folder on the card>`.
 This works for every system above too.
 

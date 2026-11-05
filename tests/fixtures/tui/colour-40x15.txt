@@ -27,7 +27,7 @@
    RetroDECK
    RomM
    BizHawk
-   MiSTer FPGA
+   RetroPie
 ^[[0;2m 1-10 of 34^[[0m
  ^[[0;1;35mA^[[0m Choose  ^[[0;2mB^[[0m Back  ^[[0;2m/^[[0m Filter  ^[[0;2m?^[[0m Help
 === folder

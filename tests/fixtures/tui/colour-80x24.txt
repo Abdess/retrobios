@@ -36,7 +36,6 @@
    RetroDECK
    RomM
    BizHawk
-   MiSTer FPGA
    RetroPie
    Allium, SD card                   Miyoo Mini, Miyoo Mini Plus, +1
    AmberELEC, SD card                RG351, RG552
@@ -46,6 +45,7 @@
    CrossMix-OS, SD card              TrimUI Smart Pro
    dArkOS, SD card                   Odroid Go Advance, RGB10, RG351MP, G350
    EmuELEC, SD card                  Odroid Go
+   JELOS, SD card                    RG351M, RG351V, RG353M, RG353P, +30
 ^[[0;2m 1-19 of 34^[[0m
  ^[[0;1;35mA/Enter^[[0m Choose  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m/^[[0m Filter  ^[[0;2m?^[[0m Help
 === folder

@@ -6097,6 +6097,26 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
             self.assertEqual(install.card_choice(setup.name, setup.plat, nested).folder,
                              nested)
 
+    def test_a_mister_card_gets_its_files_below_games(self):
+        """A MiSTer card mounted on a computer got RetroArch's list, and
+        with --platform misterfpga its files at the root, where MiSTer
+        reads none: it reads games/<core>/ below /media/fat."""
+        card = self.root / "MiSTer"
+        (card / "games").mkdir(parents=True)
+        (card / "_Computer").mkdir()
+        for name in ("MiSTer", "menu.rbf", "MiSTer.ini"):
+            (card / name).write_text("", encoding="utf-8")
+        self.assertEqual(install.card_system(card),
+                         ("misterfpga", card / "games", "MiSTer FPGA"))
+        for named in (card, card / "games"):
+            with self.subTest(named=named.name):
+                choice = install.card_choice("misterfpga", "misterfpga", named)
+                self.assertEqual((choice.refused, choice.folder), ("", card / "games"))
+        # A folder holding a games folder and nothing of MiSTer's is no card.
+        other = self.root / "stick"
+        (other / "games").mkdir(parents=True)
+        self.assertIsNone(install.card_system(other))
+
     def test_a_blank_drive_is_refused_where_the_card_always_names_its_system(self):
         blank = self.root / "BLANK"
         blank.mkdir()
@@ -7074,8 +7094,13 @@ class _CardFixtures:
     def narrowed(self, plat: str, **given) -> tuple[int, str, list]:
         """(exit code, what was said, the files kept) of a --dry-run narrowed
         as given."""
-        dest = self.root / "dest"
-        if not dest.exists():
+        dest = self.root / f"dest-{plat}"
+        if plat == "misterfpga" and not dest.exists():
+            # A MinUI card is another system's card for MiSTer's list.
+            dest.mkdir()
+            for marker in ("MiSTer", "menu.rbf"):
+                (dest / marker).write_text("", encoding="utf-8")
+        elif not dest.exists():
             make_card(dest, "MinUI")
         stream = io.StringIO()
         code = 0
