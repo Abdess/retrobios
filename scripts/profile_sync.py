@@ -1257,6 +1257,14 @@ def _follow_fork_base(
         base = upstream.fork_base(
             view.repo, view.head, source.repo, source.head, cache_dir, offline
         )
+        if base and base != view.pin:
+            # A pin newer than the merge base names code the port does not
+            # carry: the upstream is a build of its own, the Qt melonDS or the
+            # EasyRPG Player a standalone + libretro profile documents, and
+            # its HEAD stays the reference. melonds read 825 commits back.
+            moved = upstream.ancestry(view.repo, base, view.pin, cache_dir, offline)
+            if moved and moved[0] > 0 and moved[1] == 0:
+                base = None
         followed.append(
             replace(view, head=base, origin=f"{view.origin}, fork base of {source.repo.slug}")
             if base else view

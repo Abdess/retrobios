@@ -5465,7 +5465,7 @@ class UpstreamForkedByThePort(unittest.TestCase):
     upstream with the fork. Compared to upstream's own HEAD, a bump moved it
     past anything the port carries."""
 
-    def _views(self, base):
+    def _views(self, base, ancestry=None):
         from unittest import mock  # noqa: PLC0415
 
         fork = profile_sync.upstream.make_repo("github.com", "f", "port")
@@ -5477,7 +5477,9 @@ class UpstreamForkedByThePort(unittest.TestCase):
         ]
         with mock.patch.object(
             profile_sync.upstream, "fork_base", return_value=base
-        ) as asked:
+        ) as asked, mock.patch.object(
+            profile_sync.upstream, "ancestry", return_value=ancestry
+        ):
             followed = profile_sync._follow_fork_base(views, "cache", True)
         return followed, asked
 
@@ -5491,6 +5493,17 @@ class UpstreamForkedByThePort(unittest.TestCase):
     def test_a_port_outside_the_network_keeps_the_tip(self):
         views, _ = self._views(None)
         self.assertEqual(views[1].head, "up-tip")
+
+    def test_a_pin_newer_than_the_base_keeps_the_tip(self):
+        """melonds documents the Qt standalone from melonDS-emu/melonDS: its
+        upstream_commit is 825 commits past the merge base with the libretro
+        fork, and reading its refs at the 2021 base reported them CHANGED."""
+        views, _ = self._views("old-merge", ancestry=(825, 0))
+        self.assertEqual(views[1].head, "up-tip")
+
+    def test_a_pin_behind_the_base_follows_it(self):
+        views, _ = self._views("new-base", ancestry=(0, 12))
+        self.assertEqual(views[1].head, "new-base")
 
 
 class ACachedTipOlderThanThePin(TestBuildReport):
