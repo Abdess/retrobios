@@ -29,6 +29,7 @@ pack_structure:
 
 data_directories:
   - ref: dolphin-sys
+    unread_on: [romm]
     mode: libretro
     destination: "Sys"
     source_ref: "Source/Core/Common/CommonPaths.h:130-131"

@@ -21,7 +21,7 @@ pack_structure:
 
 data_directories:
   - ref: ppsspp-assets
-    installed_on: [batocera, emudeck, lakka, recalbox, retrobat, retrodeck, retropie]
+    installed_on: [amberelec, batocera, emudeck, lakka, recalbox, retrobat, retrodeck, retropie, romm]
     mode: libretro
     destination: ""
     source_ref: "libretro/libretro.cpp:1228-1237, libretro/libretro.cpp:1283"

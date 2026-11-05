@@ -51,7 +51,8 @@ pack_structure:
 
 data_directories:
   - ref: dolphin-sys
-    installed_on: [batocera, lakka, retrobat, retrodeck]
+    installed_on: [batocera, knulli, lakka, retrobat, retrodeck]
+    unread_on: [recalbox, romm]
     mode: libretro
     destination: "Sys"
     source_ref: "source Source/Core/Common/CommonPaths.h:128-141"

@@ -403,13 +403,13 @@ A RetroArch dry run into an empty folder, with the list of 2026-11-05, printed t
 ```
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
-  11002 files (6.7 GB)
-    3272 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2641 data files (40.2 MB).
+  14942 files (6.8 GB)
+    3272 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.4 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 37 files are not in the collection, 2 of them required.
 
 Checking existing files...
-  0 in place, 11002 missing, 0 wrong copies
+  0 in place, 14942 missing, 0 wrong copies
 ```
 <!-- /generated: dry-run -->
 
@@ -468,13 +468,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  14724 files (9.2 GB)
-    3180 BIOS files (4.4 GB) and 11544 game data files (4.8 GB).
-    Game data: files a game or a game engine reads, of no use to the other cores.
+  18196 files (9.3 GB)
+    3180 BIOS files (4.4 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
+    Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 426 files are not in the collection, 80 of them required.
 
 Checking existing files...
-  0 in place, 14724 missing, 0 wrong copies
+  0 in place, 18196 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -504,8 +504,8 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 14724 files installed.
-  Installed: 3180 BIOS files and 11544 game data files.
+Done. 18196 files installed.
+  Installed: 3180 BIOS files, 11544 game data files and 3472 data files.
 BIOS folder: /userdata/bios
 426 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (1 file):
@@ -559,7 +559,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  14724 in place, 0 missing, 0 wrong copies
+  18196 in place, 0 missing, 0 wrong copies
 
   Everything is in place.
 ```
@@ -753,8 +753,8 @@ by `scripts/generate_installer_doc.py`):
 <!-- generated: line-menu -->
 
 ```
-RetroArch: 11002 files, 6.7 GB.
-  3272 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2641 data files (40.2 MB).
+RetroArch: 14942 files, 6.8 GB.
+  3272 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.4 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
@@ -768,8 +768,8 @@ RetroArch: 11002 files, 6.7 GB.
 
   Counted again for your choices. Nothing is written before Enter.
 
-RetroArch: 5913 files, 4.2 GB.
-  3272 BIOS files (4.1 GB) and 2641 data files (40.2 MB). 5089 game data files left out.
+RetroArch: 9853 files, 4.3 GB.
+  3272 BIOS files (4.1 GB) and 6581 data files (135.4 MB). 5089 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.

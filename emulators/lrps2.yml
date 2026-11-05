@@ -40,6 +40,7 @@ notes: |
 data_directories:
   - ref: lrps2
     installed_on: [batocera, lakka, recalbox, retrobat, retrodeck]
+    unread_on: [romm]
     destination: ""
     source_ref: "source pcsx2/GameDatabase.cpp:49, source pcsx2/GameDatabase.cpp:979"
 

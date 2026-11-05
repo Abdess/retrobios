@@ -433,19 +433,26 @@ def parse_pack_paths(output: str) -> dict[str, str]:
 _PACK_NOTES = re.compile(r"(^README\.txt$|^manifest\.json$|(^|/)(INSTRUCTIONS|RENAMED)_[^/]*\.txt$)")
 
 
-def _tree_members(platform: str, platforms_dir: str) -> dict[str, int]:
+def _tree_members(
+    platform: str, platforms_dir: str, emulators_dir: str = "emulators",
+) -> dict[str, int]:
     """Archive path -> size of every file the platform's data trees can add."""
     import generate_pack  # noqa: PLC0415
-    from common import load_platform_config  # noqa: PLC0415
+    from common import load_emulator_profiles, load_platform_config  # noqa: PLC0415
     from packpaths import _flat  # noqa: PLC0415
 
     config = load_platform_config(platform, platforms_dir)
     base_dest = config.get("base_destination", "")
+    registry = load_data_dir_registry(platforms_dir)
+    core_trees = generate_pack.core_data_trees(
+        config, load_emulator_profiles(emulators_dir), platform, registry,
+    )
     members: dict[str, int] = {}
     with contextlib.redirect_stdout(io.StringIO()):
         for src, full in generate_pack._data_directory_members(
-            config.get("systems", {}), load_data_dir_registry(platforms_dir),
+            config.get("systems", {}), registry,
             platform, base_dest, False, set(), set(), set(),
+            core_trees=core_trees,
         ):
             members[_flat(full, base_dest, True)] = os.path.getsize(src)
     return members
