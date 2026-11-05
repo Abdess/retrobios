@@ -14156,6 +14156,12 @@ def _card_and_below(setup: CardSetup, path: Path) -> tuple[Path, bool]:
     name: an Onion card mounted as BIOS was read as a BIOS folder, its
     parent checked as the card and refused."""
     below = setup.below
+    if (not below and setup.name in _GAMES_PART_CARDS and path.name.casefold() == "bios"
+            and not _is_dir(path / "bios") and _card_is(setup, path)[0] == "unknown"
+            and not _card_boundary(path)):
+        # Its list writes bios/ below the games part's root: its BIOS
+        # folder named got bios/bios, or was refused as inside the card.
+        return path.parent, True
     depth = len(PurePosixPath(below).parts)
     if (below and _ends_with(path, below) and _card_is(setup, path)[0] == "unknown"
             and not any(_card_boundary(folder)
@@ -14312,7 +14318,8 @@ def card_choice(named: str, plat: str, root: Path) -> CardChoice:
                               f"{setup.name} card, whose root is {shown_path(holder[2])}",
                               short=f"That is inside {_a(setup.name)} card.",
                               below=setup.below, root=holder[2])
-    folder = root if inside or not setup.below else card / setup.below
+    folder = (card if inside and not setup.below
+              else root if inside or not setup.below else card / setup.below)
     if kind == "other":
         return _not_the_card(setup, root, card, what)
     if kind == "own":

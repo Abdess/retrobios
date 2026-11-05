@@ -1256,7 +1256,9 @@ Under WSL a drive letter (`D:`, `D:\`) is that Windows drive, typed or given
 to `--dest`, `--from`, `--from-pack`, `--save-dir` and `--cores-dir`, and the
 screens write the folder `D:\BIOS`. Without questions (`--no-input`) the
 run stops with a `--dest` example. A `--dest` that is a folder inside a MinUI
-card (its `Bios/`) is refused with the root to name instead. A refused
+card (its `Bios/`) is refused with the root to name instead. AmberELEC
+and EmuELEC write `bios/` below their games part: their `bios` folder named
+with `--dest` stands for the games part, as RetroDECK's for its folder. A refused
 `--dest` ends with code 1 and an `error` event (`stage` `detect`). On Android a forced `--platform retroarch` falls back to
 `<shared storage>/RetroArch/system` instead, a home directory there belonging
 to Termux rather than to the frontend. Pass `--dest` to say where instead of

@@ -6077,6 +6077,26 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                         self.assertNotIn(card, install.mounted_cards_of(setup.name,
                                                                         setup.plat))
 
+    def test_a_games_part_named_by_its_bios_folder_is_its_card(self):
+        """AmberELEC and EmuELEC write bios/ below their games part, as
+        RetroDECK below its folder. Their BIOS folder named got bios/bios
+        on a card not started once, and was refused on one started."""
+        for setup in self.setups:
+            if setup.name not in install._GAMES_PART_CARDS:
+                continue
+            started = _card_from_rules(self.root / setup.name / "started", setup)
+            blank = self.root / setup.name / "blank"
+            (blank / "bios").mkdir(parents=True)
+            for card in (started, blank):
+                with self.subTest(system=setup.name, card=card.name):
+                    choice = install.card_choice(setup.name, setup.plat, card / "bios")
+                    self.assertEqual((choice.refused, choice.folder), ("", card))
+            # A folder named bios holding bios/ is a card's root, as named.
+            nested = self.root / setup.name / "bios"
+            (nested / "bios").mkdir(parents=True)
+            self.assertEqual(install.card_choice(setup.name, setup.plat, nested).folder,
+                             nested)
+
     def test_a_blank_drive_is_refused_where_the_card_always_names_its_system(self):
         blank = self.root / "BLANK"
         blank.mkdir()
