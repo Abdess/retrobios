@@ -14,6 +14,8 @@ parts extracted into one folder are the pack.
 
 from __future__ import annotations
 
+import contextlib
+import io
 import os
 import stat
 import subprocess
@@ -229,6 +231,20 @@ class PartsAreNotTakenForPacks(SplitFixture):
             builder._pack_archives(str(self.dist)), [],
             [p.name for p in parts],
         )
+
+    def test_launcher_archives_are_not_packs(self):
+        """build_port.py writes RetroBIOS.zip, RetroBIOS-tools.zip and
+        RetroBIOS-batocera.zip to dist/: verify_and_finalize_packs judged
+        them as packs, failed them and injected a manifest into each."""
+        for name in ("RetroBIOS.zip", "RetroBIOS-tools.zip", "RetroBIOS-batocera.zip"):
+            self._build(self.dist / name, {"RetroBIOS.sh": b"#!/bin/sh\n"})
+        before = {p.name: p.read_bytes() for p in self.dist.glob("RetroBIOS*.zip")}
+        self.assertEqual(builder._pack_archives(str(self.dist)), [self.pack.name])
+        with contextlib.redirect_stdout(io.StringIO()):
+            builder.verify_and_finalize_packs(str(self.dist), {"files": {}, "indexes": {}},
+                                              skip_conformance=True)
+        self.assertEqual({p.name: p.read_bytes() for p in self.dist.glob("RetroBIOS*.zip")},
+                         before)
 
     def test_the_directory_form_splits_only_what_is_too_large(self):
         small = self.dist / "Small_BIOS_Pack.zip"

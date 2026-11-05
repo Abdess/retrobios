@@ -5083,11 +5083,15 @@ def _pack_archives(output_dir: str) -> list[str]:
     A part of a split pack holds a share of a platform by design and was
     checked against the whole when it was cut: judged as a pack it would
     fail conformance, and injecting a manifest would change published bytes.
+    Every name the builder gives ends in the pack suffix: build_port.py
+    writes its launcher archives (RetroBIOS.zip) to the same dist/, and
+    taking every ZIP rewrote them with a manifest after build_port had
+    printed their hashes.
     """
     return sorted(
         name
         for name in os.listdir(output_dir)
-        if name.endswith(".zip") and not split_pack.is_part(name)
+        if name.endswith(split_pack.PACK_SUFFIX) and not split_pack.is_part(name)
     )
 
 
