@@ -116,10 +116,6 @@ class SystemNames(unittest.TestCase):
         self.assertFalse(names & siterender.program_names(self.profiles))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class SectionsComeBeforeThePlan(unittest.TestCase):
     """plan_emulator_pages names systems. Run before set_console_sections,
     it made siterender read ./database.json and ./emulators whatever --db
@@ -137,3 +133,7 @@ class SectionsComeBeforeThePlan(unittest.TestCase):
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
                 lines.setdefault(node.func.id, node.lineno)
         self.assertLess(lines["set_console_sections"], lines["plan_emulator_pages"])
+
+
+if __name__ == "__main__":
+    unittest.main()

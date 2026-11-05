@@ -427,10 +427,6 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         self.assertIn(short, text)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class OneDefinitionPerName(unittest.TestCase):
     """generate_site defined _REGION_WORDS twice: the second table replaced
     the first at import, and _region_word, written beside the first, never
@@ -505,3 +501,7 @@ class NoTooltipInsideAName(unittest.TestCase):
             "Emulator settings come first. The PlayStation BIOS goes there.", terms)
         self.assertIn('title="An app that acts like a console.">Emulator</abbr>', marked)
         self.assertIn('>BIOS</abbr>', marked)
+
+
+if __name__ == "__main__":
+    unittest.main()
