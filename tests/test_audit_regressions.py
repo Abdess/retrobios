@@ -5764,6 +5764,30 @@ class FsUaeKickstartIsFoundByContent(unittest.TestCase):
         self.assertNotIn("RetroPie launcher", entry.get("note", ""))
 
 
+class NoProfileHashFromASecondarySource(unittest.TestCase):
+    """ecwolf.yml pinned ecwolf.pk3 to an md5 its note said came from the
+    .info. The code checks none, and no file shipped at the pin carries it:
+    a source without a hash gives the profile none."""
+
+    PATTERN = re.compile(
+        r"(md5|sha1|crc32|hash)[^.]{0,40}\bfrom (the )?(\.info|core-?info|docs?|documentation)",
+        re.IGNORECASE,
+    )
+
+    def test_no_hashed_entry_names_a_secondary_source(self):
+        found = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            for entry in profile.get("files") or []:
+                if not isinstance(entry, dict):
+                    continue
+                if any(entry.get(k) for k in ("md5", "sha1", "crc32", "sha256")) and (
+                    self.PATTERN.search(str(entry.get("note", "")))
+                ):
+                    found.append(f"{path.name}: {entry.get('name')}")
+        self.assertEqual(found, [])
+
+
 class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
     """A core that finds its firmware by content names no file, so each
     entry name is a label. ares labelled its Famicom Disk System revision

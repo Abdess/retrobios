@@ -47,11 +47,10 @@ files:
     required: true
     mode: standalone
     bundled: true
-    md5: "c011b428819eea4a80b455c245a5a04d"
     source_ref: "src/version.h:12 (MAIN_PK3), src/wl_iwad.cpp:664-672 (embedded open + fatal)"
     note: >
       Built from wadsrc/static/ via zipdir. Contains IWADINFO (game detection rules),
       palettes (wolfpal, spearpal, blakepal, noahpal), map lump remappers (wl6map,
       sodmap, etc.), DECORATE actor definitions, MAPINFO, SNDINFO, SNDSEQ, textures,
-      sprites, fonts, and localization strings. md5 from .info, not validated by code.
+      sprites, fonts, and localization strings. The code checks no hash.
       Shipped beside the executable in the Windows zip and in /usr/share/ecwolf by the .deb.
