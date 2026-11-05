@@ -10888,7 +10888,15 @@ class PackSource:
             elif path.is_file():
                 given.append(path)
             else:
-                raise ValueError(f"{path} does not exist")
+                # "X does not exist" named neither the option nor the packs
+                # beside it, where a typo in the name is the usual cause.
+                near = sorted(p.name for p in path.parent.glob("*_BIOS_Pack*.zip")
+                              if p.is_file()) if path.parent.is_dir() else []
+                beside = (f" The packs in {path.parent}: {', '.join(near[:3])}"
+                          + (f" and {len(near) - 3} more" if len(near) > 3 else "") + "."
+                          if near else "")
+                raise ValueError(f"{path} does not exist: --from-pack names a pack ZIP, "
+                                 f"its parts or the folder holding them.{beside}")
         if not given:
             raise ValueError(f"no pack ZIP in {', '.join(map(str, paths))}")
         packs: dict[str, list[Path]] = {}

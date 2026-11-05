@@ -4048,6 +4048,20 @@ def _install_run(env: dict, *argv: str, **kwargs) -> subprocess.CompletedProcess
     )
 
 
+class AMissingPackNamesTheOptionAndThePacksBeside(unittest.TestCase):
+    """A typo in --from-pack said "Error: X does not exist": not the option,
+    not the pack sitting next to the name typed."""
+
+    def test_the_pack_beside_is_named(self):
+        folder = Path(_tempdir(self))
+        (folder / "RetroArch_BIOS_Pack.zip").write_bytes(b"")
+        with self.assertRaises(ValueError) as raised:
+            install.PackSource._resolve([folder / "RetroArch_BIOS_Pak.zip"])
+        said = str(raised.exception)
+        self.assertIn("--from-pack names a pack ZIP", said)
+        self.assertIn(f"The packs in {folder}: RetroArch_BIOS_Pack.zip.", said)
+
+
 class RomMIsToldToScan(unittest.TestCase, _LoopbackRun):
     """RomM serves the firmware its library scan records, and the run ended
     on "installed" with no word of the scan the player waits on."""
