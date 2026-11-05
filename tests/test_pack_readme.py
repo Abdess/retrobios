@@ -111,10 +111,6 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
         self.assertEqual(packreadme.INSTALL_PS1, f"{INSTALL_BASE}/{sitebootstrap.PS1_NAME}")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class GuidesInstallFromTheZipInHand(unittest.TestCase):
     """Option A sent a user holding the ZIP to the one-liner, which downloads
     every file again. --from-pack installs from the archive itself."""
@@ -129,3 +125,7 @@ class GuidesInstallFromTheZipInHand(unittest.TestCase):
                 continue
             with self.subTest(platform=name):
                 self.assertIn(f"--platform {name} --from-pack ", text)
+
+
+if __name__ == "__main__":
+    unittest.main()
