@@ -535,11 +535,10 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
     emulator_count = len(profiles)
     comp = compute_composition(db)
     missing_total = len(set().union(*(c["missing_names"] for c in coverages.values())))
-    # "Not in the collection yet" implies somebody could still put it there.
-    # Most of this figure cannot be: per-user registration keys, slots the
-    # emulator expects the user to fill, dumps nobody has made. Counting those
-    # beside genuinely acquirable files overstates what is actionable, so the
-    # two are reported apart.
+    # The entries marked `unsourceable:` are never served by name, so a
+    # homonym cannot take their place: retail game data, per-user keys, slots
+    # the user fills. Each stays an acquisition target with its reason, and
+    # is counted apart from the files still to be found.
     unsourceable_total = len(
         set().union(*(c["unsourceable_names"] for c in coverages.values()))
     )
@@ -668,9 +667,10 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
             "",
             (
                 f"- **{acquirable_total:,} files** the platforms' emulators load"
-                f" are still to be found, and {unsourceable_total:,} more cannot"
-                f" be sourced at all (per-user keys, user-filled slots, dumps"
-                f" nobody has made). Both are named in the"
+                f" are still to be found, and {unsourceable_total:,} more the"
+                f" collection does not hold and does not serve by name (retail"
+                f" data, per-user keys, user-filled slots), each with its reason."
+                f" Both are named in the"
                 f" [gap analysis]({SITE_URL}gaps/)"
                 if missing_total
                 else "- **Nothing missing**: every file the platforms'"

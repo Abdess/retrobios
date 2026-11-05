@@ -1710,6 +1710,15 @@ class ReadmeKeepsItsPointers(unittest.TestCase):
         block = block[:block.index("\n## ", 1)]
         self.assertIn("--required-only", block)
 
+    def test_unsourceable_files_are_not_said_to_exist_nowhere(self):
+        """The README said 138 files 'cannot be sourced at all (... dumps
+        nobody has made)', while most of their reasons read 'retail data the
+        collection does not hold'."""
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertNotIn("sourced at all", readme)
+        self.assertNotIn("nobody has made", readme)
+        self.assertRegex(readme, r"more the collection does not hold and does not serve by name")
+
 
 class ReportExcerptIsTheRun(unittest.TestCase):
     """reading-reports.md quoted 'From python scripts/verify.py --platform
