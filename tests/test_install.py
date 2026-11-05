@@ -2404,6 +2404,22 @@ class FileListsAreRetried(unittest.TestCase):
         self.assertIs(result, missing)
         self.assertEqual(len(calls), 1)
 
+    def test_a_sign_in_page_is_named(self):
+        """A Wi-Fi sign-in page read as "invalid file list: Expecting value:
+        line 1 column 1 (char 0)", with no cause and no next step."""
+        page = io.BytesIO(b"<html>Sign in to Hotel WiFi</html>")
+        page.headers = {}
+        err = io.StringIO()
+        with unittest.mock.patch.object(
+                install.urllib.request, "urlopen",
+                lambda url, timeout=None: contextlib.nullcontext(page)), \
+                contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
+            install.fetch_manifest("retroarch")
+        said = err.getvalue()
+        self.assertIn("a Wi-Fi sign-in page or a cut download looks like this", said)
+        self.assertIn("run the same command again", said)
+        self.assertNotIn("Expecting value", said)
+
     def test_three_failures_end_with_advice(self):
         import urllib.error
 

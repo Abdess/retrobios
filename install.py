@@ -4056,9 +4056,20 @@ def fetch_manifest(plat: str) -> dict:
     try:
         return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list"), plat)
     except ValueError as exc:
+        words = f"the file list is not valid: {exc}"
+        if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
+            # The parser's "Expecting value: line 1 column 1" told no one
+            # anything, where the full screen names the usual cause.
+            words = ("what arrived is not a file list: a Wi-Fi sign-in page or a cut "
+                     "download looks like this")
         EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                    message=f"the file list is not valid: {exc}")
-        print(f"  The file list for {plat} is not valid: {exc}", file=sys.stderr)
+                    message=words)
+        print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
+        if words.startswith("what arrived"):
+            for line in _address_lines(url):
+                print(line, file=sys.stderr)
+            print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
+                  "same command again.", file=sys.stderr)
         sys.exit(1)
     except urllib.error.HTTPError as exc:
         EVENTS.emit(
