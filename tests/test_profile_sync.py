@@ -5809,7 +5809,7 @@ class TestBranchCheckIsWired(unittest.TestCase):
         import generate_readme  # noqa: PLC0415
 
         text = generate_readme.generate_contributing()
-        self.assertIn("profile_sync.py --changed --strict", text)
+        self.assertIn("profile_sync.py --added --base upstream/main --strict", text)
         self.assertNotIn("--emulator NAME --strict", text)
         workflow = (root / ".github" / "workflows" / "validate.yml").read_text()
         self.assertIn("profile_sync.py --added --base", workflow)
