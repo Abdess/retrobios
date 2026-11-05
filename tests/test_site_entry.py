@@ -925,7 +925,9 @@ class ARouteWithoutANetwork(unittest.TestCase):
         self.assertEqual(siteguides.GUIDES["retropie"].card_run, ("linux",))
         text = _plain_page("platforms/retropie.md")
         card = text.split("No network?", 1)[1].split("## On the device", 1)[0]
-        self.assertEqual(_tab_labels(card), {"Linux"})
+        # One system, so no tab bar: its label leads the command.
+        self.assertEqual(_tab_labels(card), set())
+        self.assertIn("**Linux**", card)
 
     def test_no_zip_is_promised_for_an_unmarked_setup(self):
         for name in SETUPS:

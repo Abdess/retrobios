@@ -139,8 +139,17 @@ def details(kind: str, title: str, body: list[str], indent: str = "", opened: bo
 
 def tabs(items: list[tuple[str, list[str]]], indent: str = "", sync: str = "os") -> list[str]:
     """Content tabs. Tabs that share a label share the reader's choice
-    across pages."""
+    across pages.
+
+    One item is no choice: 142 bars offered a single tab, most of them
+    "On the device" under a heading that says so. Its body stands alone,
+    led by its label when it has one: the RetroPie card is read from Linux
+    only, and the label is where the page said so."""
     lines: list[str] = []
+    if len(items) == 1:
+        label, body = items[0]
+        lead = [f"{indent}**{label}**", ""] if label else []
+        return [*lead, *_indented(_trim(body), indent), ""]
     if _engine == "mkdocs":
         for label, body in items:
             lines += [f'{indent}=== "{label}"', "", *_indented(_trim(body), indent + "    "), ""]

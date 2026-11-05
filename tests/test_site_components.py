@@ -334,6 +334,22 @@ class NoLevelBadgeOnATabRoot(unittest.TestCase):
                 self.assertNotIn('class="rb-level ', _title_through_heading(_built(page)))
 
 
+class OneTabIsNoTabBar(unittest.TestCase):
+    """142 tab bars held one tab, most of them "On the device" right under
+    the heading "On the device"."""
+
+    def test_a_single_item_stands_alone(self):
+        import sitemarkup
+        import siteguides
+
+        self.assertEqual(sitemarkup.tabs([("Linux", ["run it"])]), ["**Linux**", "", "run it", ""])
+        self.assertEqual(sitemarkup.tabs([("", ["run it"])]), ["run it", ""])
+        self.assertIn('<Tabs syncKey="os">', sitemarkup.tabs([("A", ["a"]), ("B", ["b"])]))
+        device = "\n".join(siteguides.terminal_tabs(("device",), {}))
+        self.assertNotIn("<Tab", device)
+        self.assertNotIn("On the device", device)
+
+
 class FooterLicenceMatchesTheLicenceFile(unittest.TestCase):
     """The footer said MIT covers the tooling. LICENSE names the metadata too."""
 

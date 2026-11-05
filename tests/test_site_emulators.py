@@ -404,7 +404,9 @@ class AnAppThatReadsAnyBios(unittest.TestCase):
         install = self.page[self.page.index("Install this emulator's files"):]
         install = install[:install.index("</details>")]
         self.assertRegex(install, r"With [^:]+: the installer finds")
-        self.assertEqual(set(re.findall(r'<TabItem label="([^"]+)">', install)), {"On the device"})
+        # One place to run it, so no tab bar (one tab offers no choice).
+        self.assertNotIn("<Tabs", install)
+        self.assertIn("curl -fsSL", install)
         nether = _pages("nethersx2")["nethersx2"]
         if "--emulator nethersx2" in nether:
             self.assertIn("With ", nether)

@@ -4202,7 +4202,7 @@ def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]
             # lines are on the get/ page, the one the command is shared from.
             tabs = ("windows",) if page_link else ("windows", "macos", "linux")
             computer += [
-                "Needs the device on your network. Run the command on the computer.",
+                "Needs the device on your network.",
                 "",
                 *terminal_tabs(tabs, args, how=how),
                 *([f"[Mac or Linux](../{get_page_link(name)}#from-your-computer)", ""]
