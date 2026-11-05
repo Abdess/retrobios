@@ -1463,7 +1463,7 @@ def verify_platform(
         region_drops, report_for_builder,
         ExtraResolver(
             db, DEFAULT_BIOS_DIR, zip_contents, data_dir_registry, validation_index,
-            validation_owners, profiles=profiles,
+            validation_owners, profiles=profiles, pending_assets=True,
         ),
         placed_kind,
         system_filter,

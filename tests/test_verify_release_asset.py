@@ -123,6 +123,59 @@ class ReleaseAssetNotCachedMd5(ReleaseAssetNotCached):
     mode = "md5"
 
 
+class CoreExtraReleaseAssetNotCached(ReleaseAssetNotCached):
+    """The same asset read by a core and declared by no platform entry: the
+    builder fetched and packed it online, verify's replay of the extras
+    resolved it offline and left its path out of the pack."""
+
+    def setUp(self):
+        super().setUp()
+        self.config["systems"]["sys"]["files"] = []
+        self.config["cores"] = ["bigcore"]
+        Path("platforms/big.yml").write_text(yaml.dump(self.config))
+        self.profiles = {"bigcore": {
+            "emulator": "Big Core", "type": "libretro", "systems": ["sys"],
+            "files": [{"name": "big.bin", "required": True, "sha1": SHA1}],
+        }}
+        Path("emulators/bigcore.yml").write_text(yaml.dump(self.profiles["bigcore"]))
+        common._platform_config_cache.clear()
+        common._emulator_profiles_cache.clear()
+
+    def _report(self) -> dict:
+        return verify_platform(self.config, self.db, "emulators", self.profiles)
+
+    def test_counted_as_fetched_when_the_pack_is_built(self):
+        report = self._report()
+        self.assertIn("big.bin", report["pack_destinations"])
+        self.assertEqual(report["packed_extras"]["bios"], 1)
+
+    def test_its_path_is_a_pack_destination(self):
+        cache = Path("cache/big.bin")
+        cache.parent.mkdir()
+        cache.write_bytes(PAYLOAD)
+        with mock.patch.object(
+            packresolve, "fetch_large_file", return_value=str(cache)
+        ):
+            zip_path = builder.generate_pack(
+                "big", "platforms", self.db, "bios", "out",
+                emulators_dir="emulators", emu_profiles=self.profiles, offline=False,
+            )
+        with zipfile.ZipFile(zip_path) as zf:
+            packed = {n for n in zf.namelist() if not n.endswith("/")}
+        self.assertIn("big.bin", packed)
+        self.assertIn("big.bin", self._report()["pack_destinations"])
+
+    def test_offline_counts_it_missing(self):
+        packresolve.set_offline(True)
+        self.assertNotIn("big.bin", self._report()["pack_destinations"])
+
+    def test_an_asset_with_other_content_is_not_counted(self):
+        self.profiles["bigcore"]["files"][0]["sha1"] = "0" * 40
+        self.assertNotIn("big.bin", self._report()["pack_destinations"])
+
+    test_the_online_build_packs_it = None
+
+
 class OfflinePipelineVerifiesOffline(unittest.TestCase):
     """The offline pipeline builds packs without release assets: its verify
     step has to count them the same way, or step 5 compares two answers."""
