@@ -10,6 +10,7 @@ version_basis:
   tag: "RELEASE_22_0_RC2"
   distance: 0
 display_name: "MSX / ColecoVision / Spectravideo (openMSX)"
+found_by: content
 cores:
   - openmsx
 systems:
@@ -29,7 +30,9 @@ notes: |
 
   ROM resolution via FilePool (src/file/FilePool.cc, FilePoolCore.cc):
   searches configured directories for files matching SHA1 checksums.
-  Filenames are secondary hints, while SHA1 is the primary lookup key.
+  A ROM in share/systemroms is reached by its SHA1 alone: a filename is only
+  looked up beside the machine's XML (src/memory/Rom.cc:121-170,
+  src/config/HardwareConfig.cc:279-280, src/file/FileContext.cc:152-156).
   Files may be gzipped or individually zipped.
   Each user data directory contributes share/systemroms, scanned
   recursively (src/file/FilePool.cc:27, src/file/FilePoolCore.cc:369-385). RetroBat

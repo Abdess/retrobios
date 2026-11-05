@@ -6924,5 +6924,25 @@ class Dev9FilesAreReadFromTheWorkingDirectory(unittest.TestCase):
         self.assertEqual(unset, [])
 
 
+class OpenMsxSystemRomsAreFoundBySha1(unittest.TestCase):
+    """openMSX reaches a ROM in share/systemroms through the file pool by
+    SHA1 alone, a filename being looked up only beside the machine's XML
+    (src/memory/Rom.cc:121-170). Read as names the core opens, the labels
+    were added to the KNULLI and Batocera exports."""
+
+    def test_no_systemrom_label_reads_as_a_name(self):
+        import yaml
+
+        from validation import opens_by_name
+
+        profile = yaml.safe_load((ROOT / "emulators" / "openmsx.yml").read_text())
+        named = [
+            entry["name"] for entry in profile["files"]
+            if "share/systemroms/" in str(entry.get("path"))
+            and opens_by_name(entry, profile)
+        ]
+        self.assertEqual(named, [])
+
+
 if __name__ == "__main__":
     unittest.main()
