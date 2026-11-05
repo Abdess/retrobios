@@ -118,3 +118,22 @@ class SystemNames(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SectionsComeBeforeThePlan(unittest.TestCase):
+    """plan_emulator_pages names systems. Run before set_console_sections,
+    it made siterender read ./database.json and ./emulators whatever --db
+    and --emulators-dir gave, so the parts were cut on another collection."""
+
+    def test_generate_installs_the_sections_before_planning(self):
+        import ast
+        import inspect
+
+        import generate_site
+
+        tree = ast.parse(inspect.getsource(generate_site._generate))
+        lines = {}
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                lines.setdefault(node.func.id, node.lineno)
+        self.assertLess(lines["set_console_sections"], lines["plan_emulator_pages"])

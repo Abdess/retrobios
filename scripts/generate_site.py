@@ -12142,15 +12142,16 @@ def _generate(args: argparse.Namespace) -> None:
     # The test each emulator page builds for itself: the parts a page is
     # cut into weigh the status its rows show.
     file_held = _availability_check(db, suppl_names)
+    # The plan names systems: the sections must be this run's data first.
+    manufacturers = _group_by_manufacturer(db)
+    set_console_sections(manufacturers, program_names(profiles))
     plan_emulator_pages(profiles, file_held)
     # Build system_id -> manufacturer page map (needed by all generators)
     print("Building system cross-reference map...")
-    manufacturers = _group_by_manufacturer(db)
     set_system_page_map(
         _system_pages_from_data(manufacturers, coverages, db, profiles)
     )
     print(f"  {len(_system_page_map)} system IDs mapped to pages")
-    set_console_sections(manufacturers, program_names(profiles))
     from siterender import link_coverage, system_ids  # noqa: PLC0415
 
     print("Generating system pages...")
