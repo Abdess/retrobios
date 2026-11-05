@@ -15,7 +15,7 @@ Run everything in sequence:
 
 ```bash
 python scripts/pipeline.py --offline              # DB + verify + packs + manifests + integrity + readme + site
-python scripts/pipeline.py --offline --skip-packs  # DB + verify + readme + site
+python scripts/pipeline.py --offline --skip-packs  # no packs or manifests
 python scripts/pipeline.py --offline --skip-docs   # skip readme + site generation
 python scripts/pipeline.py --offline --target switch  # filter by hardware target
 python scripts/pipeline.py --offline --with-truth  # include truth generation + diff
@@ -63,8 +63,8 @@ Pipeline flags:
 | Flag | Effect |
 |------|--------|
 | `--offline` | skip every step that needs the network (2, 2a, 2a2, 2b, 2b2), and pack only the release assets already in `.cache/large/` |
-| `--skip-packs` | skip steps 4, 4b, 4c, 6 and the consistency check. README and site are still rewritten unless `--skip-docs` is given too |
-| `--skip-docs` | skip steps 7 and 8 |
+| `--skip-packs` | skip steps 4, 4b, 4c, 5 and 6. Steps 4d and 4e still run, and README and site are still rewritten unless `--skip-docs` is given too |
+| `--skip-docs` | skip steps 7, 8 and 8b |
 | `--include-archived` | include archived platforms in verify, packs, truth and export |
 | `--target TARGET` | filter verify, packs and truth by hardware target |
 | `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py`. Refused with `--skip-packs` |

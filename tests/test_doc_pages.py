@@ -1794,5 +1794,36 @@ class ReportExcerptIsTheRun(unittest.TestCase):
                 self.assertIn(line, printed)
 
 
+class SkipFlagsNameTheSteps(unittest.TestCase):
+    """--skip-packs said "add --skip-docs to stop after verify" while 4d and
+    4e still ran, and the flag table left 8b out of --skip-docs."""
+
+    STEP = r"\b\d[a-z]?\d?\b"
+
+    def test_the_flag_row_the_help_and_the_usage_agree_with_the_step_table(self):
+        page = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
+        table = page.split("Pipeline steps:", 1)[1].split("Pipeline flags:", 1)[0]
+        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        helps = {}
+        for node in ast.walk(ast.parse(source)):
+            if (isinstance(node, ast.Call) and getattr(node.func, "attr", "") == "add_argument"
+                    and node.args and isinstance(node.args[0], ast.Constant)):
+                helps.update({node.args[0].value: ast.literal_eval(kw.value)
+                              for kw in node.keywords if kw.arg == "help"})
+        for flag in ("--skip-packs", "--skip-docs"):
+            steps = set()
+            for row in table.splitlines():
+                cells = [c.strip() for c in row.split("|")]
+                if len(cells) > 3 and cells[3].startswith(f"`{flag}`"):
+                    steps.add(cells[1])
+            self.assertTrue(steps)
+            row = re.search(rf"^\| `{flag}` \| skip steps ([^.|]*)", page, re.M).group(1)
+            usage = re.search(rf"pipeline\.py {flag} +# skip steps (.*)$", source, re.M).group(1)
+            said = helps[flag].split(":", 1)[0]
+            for text in (row, usage, said):
+                with self.subTest(flag=flag, text=text):
+                    self.assertEqual(set(re.findall(self.STEP, text)), steps)
+
+
 if __name__ == "__main__":
     unittest.main()
