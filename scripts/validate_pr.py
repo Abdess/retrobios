@@ -34,6 +34,8 @@ from common import (
     parse_md5_list,
 )
 from hashing import parse_hash_list
+from nativemode import digest_algorithm
+from validation import frontend_digest_matches, inner_rom_check
 
 try:
     import yaml
@@ -140,7 +142,8 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
     bios/<Manufacturer>/<Console>/ folders the collection files its system
     under, read from the other files of that system it holds.
     """
-    known = {"sha1": set(), "md5": set(), "names": set(), "folders": {}, "sizes": {}}
+    known = {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
+             "names": set(), "folders": {}, "sizes": {}, "entries": {}}
     systems_of: dict[str, set[str]] = {}
     folders_of: dict[str, dict[str, int]] = {}
     files = (db or {}).get("files", {})
@@ -160,15 +163,31 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
             print(f"WARNING: {name}: {exc}", file=sys.stderr)
             continue
 
+        mode, rule = config.get("verification_mode"), config.get("hash_rule", "")
         for system_id, system in config.get("systems", {}).items():
             for file_entry in system.get("files", []):
                 sha1s = parse_hash_list(file_entry.get("sha1"))
                 md5s = parse_md5_list(file_entry.get("md5"))
+                sha256s = parse_hash_list(file_entry.get("sha256"))
                 known["sha1"].update(sha1s)
                 known["md5"].update(md5s)
+                known["sha256"].update(sha256s)
+                if not (sha1s or md5s or sha256s) and isinstance(file_entry.get("size"), int):
+                    # The resolver's reading: a crc32 counts where no stronger
+                    # hash is declared, bounded by the declared size.
+                    known["crc32"].update(
+                        (crc.zfill(8), file_entry["size"])
+                        for crc in parse_hash_list(file_entry.get("crc32"))
+                    )
                 if "name" in file_entry:
                     known["names"].add(file_entry["name"])
                     _note_sizes(known["sizes"], [file_entry["name"]], file_entry)
+                    # A frontend that hashes a ZIP's member or its members
+                    # together, or that takes any hash at the declared size,
+                    # answers by its own rule, read per entry.
+                    known["entries"].setdefault(file_entry["name"].lower(), []).append(
+                        (file_entry, mode, rule, name)
+                    )
                 for value in (*sha1s, *md5s):
                     systems_of.setdefault(value, set()).add(system_id)
                 _note_folder(folders_of, system_id, files, by_md5, sha1s, md5s)
@@ -354,6 +373,14 @@ def validate_file(
 
     sha1_known = result.sha1 in platform_hashes.get("sha1", set())
     md5_known = result.md5 in platform_hashes.get("md5", set())
+    other_known = (
+        hashes.get("sha256", "") in platform_hashes.get("sha256", set())
+        or (result.crc32, result.size) in platform_hashes.get("crc32", set())
+    )
+    accepted_by = (
+        set() if sha1_known or md5_known or other_known
+        else _platforms_accepting(filepath, result.filename, platform_hashes)
+    )
     name_known = result.filename in platform_hashes.get("names", set())
 
     profile_hashes = profile_hashes or {}
@@ -369,6 +396,12 @@ def validate_file(
         result.add_check(True, "SHA1 matches known platform requirement")
     elif md5_known:
         result.add_check(True, "MD5 matches known platform requirement")
+    elif other_known:
+        result.add_check(True, "Hash matches known platform requirement")
+    elif accepted_by:
+        result.add_check(
+            True, "Accepted by the platform's own check: " + ", ".join(sorted(accepted_by))
+        )
     elif by_profile:
         names = sorted(by_profile)
         shown = ", ".join(names[:5]) + (f" and {len(names) - 5} more" if len(names) > 5 else "")
@@ -415,10 +448,10 @@ def validate_file(
             "File is not under bios/ yet. Its system's files are in "
             + " or ".join(f"`{f}`" for f in expected_folders)
         )
-    elif _variant_home(db, result.filename):
+    elif _variant_home(db, result.filename, result.sha1):
         result.add_warning(
             "File is not under bios/ yet. The collection keeps this name in "
-            f"`{_variant_home(db, result.filename)}`"
+            f"`{_variant_home(db, result.filename, result.sha1)}`"
         )
     else:
         result.add_warning(
@@ -439,7 +472,8 @@ def validate_file(
             f"this file has {result.size:,}: truncated or another file"
         )
 
-    if name_known and not sha1_known and not md5_known and not by_profile and size_fits:
+    if (name_known and not (sha1_known or md5_known or other_known or accepted_by)
+            and not by_profile and size_fits):
         home = _variant_home(db, result.filename)
         result.add_info(
             "This may be a valid variant. If accepted, it will be placed in "
@@ -449,10 +483,43 @@ def validate_file(
     return result
 
 
-def _variant_home(db: dict | None, name: str) -> str:
-    """The folder the collection keeps a name in, for its variants beside it."""
+def _platforms_accepting(filepath: str, filename: str, platform_hashes: dict) -> set[str]:
+    """Platforms whose declaration of this name accepts the file by their
+    own check, as verify and the pack builder read it.
+
+    Batocera pins a ROM inside the ZIP (zipped_file), Recalbox hashes a
+    ZIP's members together, RomM takes any hash at the declared size: the
+    container's sha1 or md5 is in none of those lists, and adam_fdc.zip,
+    which Batocera accepts, was called an unknown variant.
+    """
+    accepted: set[str] = set()
+    for entry, mode, rule, platform in platform_hashes.get("entries", {}).get(
+        filename.lower(), []
+    ):
+        if platform in accepted:
+            continue
+        if entry.get("zipped_file"):
+            ok = inner_rom_check(entry, filepath) == "ok"
+        else:
+            algorithm = digest_algorithm(mode)
+            ok = bool(algorithm or rule) and frontend_digest_matches(
+                entry, filepath, algorithm or "", rule
+            )
+        if ok:
+            accepted.add(platform)
+    return accepted
+
+
+def _variant_home(db: dict | None, name: str, held: str = "") -> str:
+    """The folder the collection keeps a name in, for its variants beside it.
+
+    The folder of an identical copy comes first: adam_fdc.zip, held in
+    bios/Coleco/Adam/, was sent to bios/Arcade/MAME/, the first folder
+    the name index gave.
+    """
     files = (db or {}).get("files", {})
-    for sha1 in (db or {}).get("indexes", {}).get("by_name", {}).get(name, []):
+    by_name = (db or {}).get("indexes", {}).get("by_name", {}).get(name, [])
+    for sha1 in ([held] if held in files else []) + list(by_name):
         path = str(files.get(sha1, {}).get("path", ""))
         folder = path.rsplit("/", 1)[0] + "/" if "/" in path else ""
         if folder and "/.variants" not in "/" + folder:

@@ -177,16 +177,53 @@ class EveryRevisionACoreAcceptsStays(unittest.TestCase):
 
     def test_a_revision_known_by_one_hash_is_no_mismatch(self):
         """1.04 carries md5 and sha1, 1.07 only its sha1: a platform entry
-        giving 1.07's sha1 and md5 is that revision, not a mismatch."""
+        giving 1.07's sha1 and md5 is that revision, not a mismatch. dosbox
+        checks the sha1 (validation), so its md5 describes one revision and
+        contradicts nothing, the rule the export applies too."""
         from truth import _hash_mismatch
 
-        truth = {"name": "MT32_CONTROL.ROM", "md5": "c" * 32, "sha1": ["a" * 40, "b" * 40]}
+        truth = {"name": "MT32_CONTROL.ROM", "md5": "c" * 32, "sha1": ["a" * 40, "b" * 40],
+                 "validation": ["sha1"]}
         scraped = {"name": "MT32_CONTROL.ROM", "md5": "d" * 32, "sha1": "b" * 40}
         self.assertIsNone(_hash_mismatch(truth, scraped))
         self.assertEqual(
             _hash_mismatch(truth, {**scraped, "sha1": "e" * 40})["hash_type"], "sha1"
         )
 
+
+
+class DiffAndExportShareOneMismatchRule(unittest.TestCase):
+    """diff_truth let one shared value settle every field and read no
+    sha256, while the export corrected each field on its own: the diff
+    stayed silent on hashes the export rewrote."""
+
+    CASES = (
+        ({"sha1": "a" * 40, "md5": "1" * 32}, {"sha1": "a" * 40, "md5": "2" * 32}),
+        ({"sha256": "a" * 64}, {"sha256": "b" * 64}),
+        ({"sha1": "a" * 40, "md5": "1" * 32}, {"sha1": "a" * 40, "md5": "1" * 32}),
+    )
+
+    def test_the_diff_names_what_the_export_corrects(self):
+        from exporter.baseline import build_native_model  # noqa: PLC0415
+        from truth import diff_platform_truth  # noqa: PLC0415
+
+        for t_hashes, p_hashes in self.CASES:
+            with self.subTest(truth=t_hashes, platform=p_hashes):
+                truth = {"systems": {"s": {"files": [
+                    {"name": "f.bin", "required": True, "_cores": ["c"], **t_hashes}]}}}
+                scraped = {"systems": {"s": {"files": [
+                    {"name": "f.bin", "destination": "f.bin", "required": True, **p_hashes}]}}}
+                diff = diff_platform_truth(truth, scraped)
+                reported = {
+                    m["hash_type"]
+                    for system in diff.get("divergences", {}).values()
+                    for m in system.get("hash_mismatch", [])
+                }
+                _, report = build_native_model(truth, scraped)
+                corrected = {item.split()[-1] for item in report.hashes_corrected}
+                # One record per entry, naming the first field the export corrects.
+                self.assertEqual(bool(reported), bool(corrected))
+                self.assertLessEqual(reported, corrected)
 
 
 def _filed(truth: dict, name: str) -> list[str]:
@@ -452,6 +489,59 @@ class TheModelIsAFunctionOfItsInputs(unittest.TestCase):
         self.assertEqual(
             json.dumps(generate_platform_truth("p", config, {}, dict(shuffled))), expected
         )
+
+
+class DatabaseSizeRefutesASameNamedDeclaration(unittest.TestCase):
+    """Batocera's BK system declares BASIC10.ROM by md5 alone. clk's Oric
+    basic10.rom, 16 KB with its own system:, was filed under the BK and
+    added to its list: the 24576 bytes the database holds for that md5
+    were never compared."""
+
+    def test_the_size_behind_a_declared_hash_counts(self):
+        bk_md5, oric_md5 = "3" * 32, "e" * 32
+        db = {"files": {"1" * 40: {"sha1": "1" * 40, "md5": bk_md5, "size": 24576}},
+              "indexes": {"by_md5": {bk_md5: "1" * 40}}}
+        profiles = {"clk": {"emulator": "clk", "type": "libretro", "systems": ["oric"],
+                            "files": [{"name": "basic10.rom", "path": "Oric/basic10.rom",
+                                       "system": "oric", "size": 16384, "md5": oric_md5}]}}
+        config = {"cores": ["clk"], "systems": {"elektronika-bk": {"files": [
+            {"name": "BASIC10.ROM", "md5": bk_md5}]}}}
+        truth = generate_platform_truth("p", config, {}, profiles, db=db)
+        self.assertNotIn("basic10.rom", {
+            f["name"] for f in truth["systems"].get("elektronika-bk", {}).get("files", [])})
+
+
+class RegionFollowsEveryReader(unittest.TestCase):
+    """The first core to tag a file set its region in the truth: the ST-V
+    BIOS kept beetle_saturn's Americas and lost mednafen_stv's Korea, and
+    psxonpsp660.bin read japan although beetle_psx declares it untagged.
+    The pack's region index takes the union and voids it on an untagged
+    reader, and the truth now says the same."""
+
+    @staticmethod
+    def _profile(name: str, region: list[str] | None) -> dict:
+        entry = {"name": "bios.bin", "system": "sega-stv", "md5": "a" * 32}
+        if region is not None:
+            entry["region"] = region
+        return {"emulator": name, "type": "libretro", "systems": ["sega-stv"],
+                "files": [entry]}
+
+    def _region(self, profiles: dict) -> object:
+        config = {"cores": sorted(profiles), "systems": {"sega-stv": {"files": []}}}
+        truth = generate_platform_truth("p", config, {}, profiles)
+        (entry,) = truth["systems"]["sega-stv"]["files"]
+        self.assertNotIn("_region_void", entry)
+        return entry.get("region")
+
+    def test_tags_of_every_reader_are_kept(self):
+        region = self._region({"a": self._profile("a", ["north-america"]),
+                               "b": self._profile("b", ["south-korea", "north-america"])})
+        self.assertEqual(region, ["north-america", "south-korea"])
+
+    def test_an_untagged_reader_leaves_no_region(self):
+        for order in (("a", "b"), ("b", "a")):
+            profiles = {"a": self._profile("a", ["japan"]), "b": self._profile("b", None)}
+            self.assertIsNone(self._region({k: profiles[k] for k in order}))
 
 
 if __name__ == "__main__":

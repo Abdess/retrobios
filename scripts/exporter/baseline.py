@@ -84,6 +84,26 @@ def comparable(entry: dict | None) -> dict:
     return {k: v for k, v in entry.items() if k != "md5"}
 
 
+def contradicted_hashes(truth_entry: dict, platform_entry: dict | None) -> list[str]:
+    """The hash fields a platform entry declares against the truth.
+
+    A field contradicts when both sides declare it without a value in
+    common, among the hashes the code checks and the platform values a
+    profile can be compared with. export_native corrects exactly these and
+    diff_truth reports them: the diff read three fields and let one shared
+    value settle all of them, so it stayed silent on an md5 or a sha256
+    the export rewrote.
+    """
+    checked = checked_hashes(truth_entry) or {}
+    theirs = comparable(platform_entry)
+    return [
+        field_name for field_name in HASH_FIELDS
+        if (ours := set(_hash_values(checked, field_name)))
+        and (held := set(_hash_values(theirs, field_name)))
+        and not ours & held
+    ]
+
+
 def is_label(entry: dict) -> bool:
     """A name only content-scanning cores give: no core opens that file.
 
@@ -595,17 +615,18 @@ def build_native_model(
             if matched is not None:
                 matched.truth = truth_entry
                 checked = checked_hashes(truth_entry) or {}
+                contradicted = contradicted_hashes(truth_entry, matched.platform)
                 for field_name in HASH_FIELDS:
-                    ours = set(_hash_values(checked, field_name))
                     if field_name == "md5" and matched.composite_md5:
                         continue
-                    theirs = set(_hash_values(comparable(matched.platform), field_name))
-                    if ours and theirs and not ours & theirs:
+                    if field_name in contradicted:
                         matched.corrections.append(field_name)
                         report.hashes_corrected.append(
                             f"{matched.native_system}/{matched.name} {field_name}"
                         )
-                    elif ours and not theirs:
+                    elif _hash_values(checked, field_name) and not _hash_values(
+                        comparable(matched.platform), field_name
+                    ):
                         matched.filled.append(field_name)
                 t_req = truth_entry.get("required")
                 p_req = (matched.platform or {}).get("required")

@@ -329,7 +329,8 @@ class Reporting(_Fixture):
 class PlatformHashLoading(_Fixture):
     def test_missing_directory_yields_empty_sets(self):
         known = validate_pr.load_platform_hashes(str(self.tmp / "absent"))
-        self.assertEqual(known, {"sha1": set(), "md5": set(), "names": set(), "folders": {}, "sizes": {}})
+        self.assertEqual(known, {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
+                                 "names": set(), "folders": {}, "sizes": {}, "entries": {}})
 
     def test_declared_hashes_and_names_are_collected(self):
         platforms = self.tmp / "platforms"
@@ -350,6 +351,77 @@ class PlatformHashLoading(_Fixture):
         self.assertIn("a" * 40, known["sha1"])
         self.assertIn("b" * 32, known["md5"])
         self.assertIn("boot.bin", known["names"])
+
+
+class ThePlatformsOwnCheckDecides(_Fixture):
+    """Batocera pins a ROM inside adam_fdc.zip, Recalbox hashes a ZIP's
+    members, RetroDECK declares a sha256: the container's sha1 and md5 are
+    in none of those lists, and a file verify counts OK was reported as an
+    unknown variant to be filed under .variants/."""
+
+    def _platforms(self, registry: str, systems: str) -> dict:
+        platforms = self.tmp / "platforms"
+        platforms.mkdir()
+        (platforms / "_registry.yml").write_text(
+            f"platforms:\n  p:\n    config: p.yml\n    status: active\n{registry}",
+            encoding="utf-8")
+        (platforms / "p.yml").write_text(f"platform: P\nsystems:\n  s:\n    files:\n{systems}",
+                                         encoding="utf-8")
+        return validate_pr.load_platform_hashes(str(platforms))
+
+    def _zip(self) -> str:
+        import zipfile  # noqa: PLC0415
+
+        path = self.tmp / "contrib" / "set.zip"
+        path.parent.mkdir()
+        with zipfile.ZipFile(path, "w") as archive:
+            archive.writestr("rom.u10", b"ROM")
+        return "contrib/set.zip"
+
+    def _verdict(self, path: str, known: dict) -> str:
+        return validate_pr.validate_file(path, None, known).to_markdown()
+
+    def test_a_member_pinned_by_zipped_file(self):
+        import hashlib  # noqa: PLC0415
+
+        md5 = hashlib.md5(b"ROM").hexdigest()
+        known = self._platforms(
+            "    verification_mode: md5\n",
+            f"      - {{name: set.zip, md5: {md5}, zipped_file: rom.u10}}\n")
+        markdown = self._verdict(self._zip(), known)
+        self.assertIn("Accepted by the platform's own check: p", markdown)
+        self.assertNotIn(".variants/", markdown)
+
+    def test_a_member_digest(self):
+        from hashing import md5_composite  # noqa: PLC0415
+
+        path = self._zip()
+        known = self._platforms(
+            "    verification_mode: md5\n    zip_digest: composite\n",
+            f"      - {{name: set.zip, md5: {md5_composite(path)}}}\n")
+        self.assertIn("Accepted by the platform's own check: p", self._verdict(path, known))
+
+    def test_a_sha256(self):
+        import hashlib  # noqa: PLC0415
+
+        path = self._zip()
+        digest = hashlib.sha256((self.tmp / path).read_bytes()).hexdigest()
+        known = self._platforms("    verification_mode: md5\n",
+                                f"      - {{name: set.zip, sha256: {digest}}}\n")
+        self.assertIn("Hash matches known platform requirement", self._verdict(path, known))
+
+    def test_an_identical_copy_names_the_folder(self):
+        db = {"files": {"m" * 40: {"path": "bios/Arcade/MAME/set.zip"},
+                        "c" * 40: {"path": "bios/Coleco/Adam/set.zip"}},
+              "indexes": {"by_name": {"set.zip": ["m" * 40, "c" * 40]}}}
+        self.assertEqual(validate_pr._variant_home(db, "set.zip", "c" * 40), "bios/Coleco/Adam/")
+        self.assertEqual(validate_pr._variant_home(db, "set.zip"), "bios/Arcade/MAME/")
+
+    def test_another_member_is_still_a_variant(self):
+        known = self._platforms(
+            "    verification_mode: md5\n",
+            f"      - {{name: set.zip, md5: {'0' * 32}, zipped_file: rom.u10}}\n")
+        self.assertIn("may be a variant", self._verdict(self._zip(), known))
 
 
 class FlagsAreAppliedOrRefused(unittest.TestCase):

@@ -18,7 +18,7 @@ from common import (
     resolve_platform_cores,
     standalone_set as platform_standalone_set,
 )
-from hashing import compute_hashes, parse_md5_list
+from hashing import compute_hashes
 from validation import (
     filter_files_by_mode,
     installed_with_emulator,
@@ -113,7 +113,6 @@ _FILLED_FIELDS = (
     "note",
     "aliases",
     "contents",
-    "region",
 )
 _COPIED_FIELDS = (
     "sha1",
@@ -290,6 +289,27 @@ def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
         if file_entry.get(field) is not None and existing.get(field) is None:
             existing[field] = file_entry[field]
     _merge_priority(existing, file_entry.get("priority"))
+    _merge_region(existing, file_entry.get("region"))
+
+
+def _merge_region(existing: dict, theirs: str | list | None) -> None:
+    """The regions every reader selects the file for, the pack's own rule.
+
+    region.build_region_index takes the union of the tags and keeps a file
+    untagged as soon as one reader declares it without a region. The first
+    tag used to win: psxonpsp660.bin came out japan from pcsx_rearmed while
+    SwanStation tags it world and beetle_psx not at all.
+    """
+    if existing.get("_region_void"):
+        return
+    if not theirs:
+        existing.pop("region", None)
+        existing["_region_void"] = True
+        return
+    ours = existing.get("region") or []
+    ours = ours if isinstance(ours, list) else [ours]
+    added = [r for r in (theirs if isinstance(theirs, list) else [theirs]) if r not in ours]
+    existing["region"] = [*ours, *added]
 
 
 def _merge_hashes(
@@ -373,6 +393,8 @@ def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
     crc = entry.get("crc32")
     if isinstance(crc, str):
         entry["crc32"] = crc.removeprefix("0x").lower()
+    if not file_entry.get("region"):
+        entry["_region_void"] = True
     entry["_cores"] = {emu_name}
     entry["_required_by"] = {emu_name} if file_entry.get("required") else set()
     entry["_named_by"] = {emu_name} if file_entry.get("_opens_by_name", True) else set()
@@ -486,14 +508,19 @@ def _sizes_clash(a: dict, b: dict) -> bool:
     return False
 
 
-def _identity_values(entry: dict, db: dict | None) -> set[str]:
-    """Every hash an entry declares, with the siblings the database knows."""
+def _identity(entry: dict, db: dict | None) -> dict:
+    """The entry with the hashes and size the database knows for its hash."""
     probe = {k: entry[k] for k in ("sha1", "md5", "crc32", "size") if entry.get(k)}
     if db and probe and not any(isinstance(v, list) for v in probe.values()):
         _enrich_hashes(probe, db)
+    return {**entry, **{k: v for k, v in probe.items() if not entry.get(k)}}
+
+
+def _identity_values(entry: dict) -> set[str]:
+    """Every hash an identity declares."""
     values: set[str] = set()
     for field in ("sha1", "md5", "sha256", "crc32"):
-        values |= _declared(entry, field) | _declared(probe, field)
+        values |= _declared(entry, field)
     return values
 
 
@@ -503,10 +530,14 @@ def _declaration_verdict(entry: dict, declaration: dict, db: dict | None) -> str
     A shared hash proves it. Sizes no value of which agrees refute it, as
     name_match_size_ok refutes a candidate. Two hashes at one size are two
     revisions of one slot, as slots.py reads them, so they refute nothing.
+    The size the database holds for a declared hash counts as declared:
+    Batocera's BK BASIC10.ROM names only an md5, of a 24576-byte file, and
+    clk's 16 KB Oric basic10.rom was filed under the BK beside it.
     """
-    if _identity_values(entry, db) & _identity_values(declaration, db):
+    ours, theirs = _identity(entry, db), _identity(declaration, db)
+    if _identity_values(ours) & _identity_values(theirs):
         return "same"
-    if _sizes_clash(entry, declaration):
+    if _sizes_clash(ours, theirs):
         return "other"
     return "undecided"
 
@@ -814,6 +845,7 @@ def generate_platform_truth(
     for sys_id, sys_data in systems.items():
         for fe in sys_data.get("files", []):
             fe.pop("_hash_by", None)
+            fe.pop("_region_void", None)
             fe["_cores"] = sorted(fe.get("_cores", set()))
             fe["_required_by"] = sorted(fe.get("_required_by", set()))
             fe["_named_by"] = sorted(fe.get("_named_by", set()))
@@ -846,53 +878,30 @@ def generate_platform_truth(
 # Platform truth diffing
 
 
-def _hash_values(entry: dict, field: str) -> set[str]:
-    """The values a diffed entry declares for a hash field.
-
-    A profile writes a list, a platform YAML one comma-separated string
-    (Recalbox's multi-hash): both are read the way the exporter reads them.
-    A number is a hash YAML coerced and no longer spells: it is ignored.
-    """
-    raw = entry.get(field)
-    return set(parse_md5_list(raw)) if isinstance(raw, (str, list)) else set()
-
-
-def _hash_set(entry: dict) -> set[str]:
-    return {value for h in ("sha1", "md5", "crc32") for value in _hash_values(entry, h)}
-
-
 def _path_tail(value: object) -> str:
     return str(value or "").replace("\\", "/").casefold()
 
 
 def _hash_mismatch(t_entry: dict, s_entry: dict) -> dict | None:
-    """The first hash both sides declare without a value in common.
+    """The first hash field the export would correct, by the export's rule.
 
-    A value shared on any field settles it: the truth holds every revision a
-    core accepts, and a profile may give one revision's sha1 without its md5.
-    A hash the code does not check contradicts nothing (checked_hashes), and
-    a platform md5 that is a composite of a zip's members is no container
-    md5 (comparable), the rule pair_entries applies.
+    contradicted_hashes is the one decision: a hash the code does not check
+    contradicts nothing (checked_hashes), and a platform md5 that is a
+    composite of a zip's members is no container md5 (comparable).
     """
-    from exporter.baseline import checked_hashes, comparable
+    from exporter.baseline import contradicted_hashes
 
-    s_entry = comparable(s_entry)
-    if _hash_set(t_entry) & _hash_set(s_entry):
+    fields = contradicted_hashes(t_entry, s_entry)
+    if not fields:
         return None
-    t_entry = checked_hashes(t_entry) or {}
-    for h in ("sha1", "md5", "crc32"):
-        t_hash = t_entry.get(h, "")
-        s_hash = s_entry.get(h, "")
-        t_values, s_values = _hash_values(t_entry, h), _hash_values(s_entry, h)
-        if t_values and s_values and not t_values & s_values:
-            return {
-                "name": s_entry["name"],
-                "hash_type": h,
-                f"truth_{h}": t_hash,
-                f"scraped_{h}": s_hash,
-                "truth_cores": list(t_entry.get("_cores", [])),
-            }
-    return None
+    h = fields[0]
+    return {
+        "name": s_entry["name"],
+        "hash_type": h,
+        f"truth_{h}": t_entry.get(h, ""),
+        f"scraped_{h}": s_entry.get(h, ""),
+        "truth_cores": list(t_entry.get("_cores", [])),
+    }
 
 
 def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
