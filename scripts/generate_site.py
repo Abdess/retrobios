@@ -8469,8 +8469,9 @@ def emulator_romset(profile: dict) -> str:
     return ""
 
 
-def _version_said(value: object, basis: dict) -> str:
-    """One build's version and where the profile reads it."""
+def _version_said(value: object, basis: dict, profile: dict, mode: str = "") -> str:
+    """One build's version and where the profile reads it, linked to the
+    file or the tag where the source allows."""
     kind = basis.get("kind")
     if kind == "none":
         return "none stated in the source"
@@ -8479,13 +8480,18 @@ def _version_said(value: object, basis: dict) -> str:
             return f"unknown: {_UNVERIFIED.get(str(basis.get('why')), 'unread')}"
         return "none published"
     value = str(value)
+    url = version_basis_url(profile, basis, mode) if kind in ("file", "tag") else ""
+
+    def shown(text: object) -> str:
+        return f"[{_code(str(text))}]({url})" if url else _code(str(text))
+
     if kind == "file":
-        return f"{value}, stated in `{basis.get('path')}`"
+        return f"{value}, stated in {shown(basis.get('path'))}"
     if kind == "tag":
         distance = int(basis.get("distance") or 0)
         if not distance:
             return f"{value}, the tag at this revision"
-        return f"{value}, {distance} commit{'s' if distance != 1 else ''} after tag `{basis.get('tag')}`"
+        return f"{value}, {distance} commit{'s' if distance != 1 else ''} after tag {shown(basis.get('tag'))}"
     if kind == "package":
         return f"{value}, read from {basis.get('artifact')}"
     if kind == "unverified":
@@ -8520,10 +8526,10 @@ def version_markdown(profile: dict) -> str:
         values = value if isinstance(value, dict) else {}
         modes = list(dict.fromkeys([*values, *basis]))
         return ", ".join(
-            f"{_version_said(values.get(mode), basis.get(mode) or {})} ({mode})"
+            f"{_version_said(values.get(mode), basis.get(mode) or {}, profile, mode)} ({mode})"
             for mode in modes
         )
-    return _version_said(value, basis)
+    return _version_said(value, basis, profile)
 
 
 ROMSET_FAQ_PAGE = Path(WIKI_SRC_DIR) / "technical-faq.md"
@@ -12463,6 +12469,7 @@ from sitesources import (  # noqa: E402,F401
     _forge_sources,
     _source_permalink,
     _source_ref_markdown,
+    version_basis_url,
 )
 from siterender import (  # noqa: E402,F401
     _by_mode,
