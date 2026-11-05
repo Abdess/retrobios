@@ -2334,6 +2334,35 @@ class TestAvailablePlatforms(unittest.TestCase):
                     self.assertEqual(sorted(p.name for p in root.iterdir()),
                                      ["bin", "started"])
 
+    @unittest.skipIf(os.name == "nt", "the sh bootstrap is POSIX")
+    def test_a_versioned_python_is_found_beside_an_old_python3(self):
+        """Buster keeps python3 at 3.7: the user installs python3.8 as the
+        advice says, and the bootstrap, trying python3 and python alone,
+        gave the same advice again."""
+        root = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
+        (root / "install.py").write_text("import sys\nprint('ran', sys.version_info >= (3, 8))\n")
+        fake_bin = root / "bin"
+        fake_bin.mkdir()
+        old = ("#!/bin/sh\ncase \"$*\" in *SystemExit*) exit 1 ;; esac\n"
+               "echo 3.7.3\n")
+        for name in ("python3", "python"):
+            (fake_bin / name).write_text(old)
+            (fake_bin / name).chmod(0o755)
+        tools = root / "tools"
+        tools.mkdir()
+        for tool in ("sh", "grep", "sort", "basename", "dirname", "uname", "sed", "tr"):
+            found = shutil.which(tool)
+            if found:
+                (tools / tool).symlink_to(found)
+        (fake_bin / "python3.11").symlink_to(sys.executable)
+        proc = subprocess.run(
+            [shutil.which("sh"), str(root / "install.sh")],
+            env={"PATH": f"{fake_bin}{os.pathsep}{tools}", "HOME": str(root)},
+            capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("ran True", proc.stdout)
+
     def test_a_failed_download_says_so_in_one_message(self):
         """Offline, the one-liner printed curl's progress table and
         "curl: (6) ...", then exited 6, a code the table does not list."""

@@ -1634,8 +1634,8 @@ site build refuses to publish a copy whose pin is not the SHA-256 of the
 deploys, so a failed check keeps the last good pair served. Any change to
 `install.py` therefore means recomputing that pin in both wrappers.
 
-They locate a Python 3.8 or newer interpreter (`python3` then `python` on
-POSIX, `py -3` then `python3` then `python` on Windows). Without one,
+They locate a Python 3.8 or newer interpreter (`python3`, `python`, then each
+`python3.X` on PATH, newest first, on POSIX, `py -3` then `python3` then `python` on Windows). Without one,
 `install.sh` names the command that installs it on the system it runs on
 (`pkg install python` in Termux, which it offers to run since Termux installs
 without root, `xcode-select --install` on macOS, apt, dnf, pacman, zypper or apk

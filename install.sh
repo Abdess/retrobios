@@ -130,11 +130,25 @@ fi
 # A Python can be built without ssl, unicodedata or zlib, and the installer
 # needs all three: a python3 lacking ssl was chosen over a full python and
 # every download then failed as if the network were down.
+# A python3.X on PATH counts too, newest first: Buster and Ubuntu 18.04
+# keep python3 at 3.7 or 3.6 beside the python3.8 the advice below has the
+# user install, and the same advice looped.
+versioned_pythons() {
+  (
+    IFS=:
+    for dir in $PATH; do
+      for path in "$dir"/python3.[0-9]*; do
+        [ -x "$path" ] && basename -- "$path"
+      done
+    done
+  ) | grep -E '^python3\.[0-9]+$' | sort -t . -k 2,2nr -u
+}
+
 find_python() {
   PYTHON=""
   PYTHON_LACKING=""
   PYTHON_OLD=""
-  for command_name in python3 python; do
+  for command_name in python3 python $(versioned_pythons); do
     command -v "$command_name" >/dev/null 2>&1 || continue
     if ! "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' \
         2>/dev/null; then
