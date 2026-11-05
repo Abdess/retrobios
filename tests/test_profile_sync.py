@@ -5896,6 +5896,24 @@ class TestBranchProfiles(unittest.TestCase):
             ["draft", "edited", "new"],
         )
 
+    def test_a_fork_clone_compares_with_the_project(self):
+        """origin is the fork, pushed: origin/main is HEAD, and the default
+        base found nothing to check while the PR's CI failed."""
+        base = subprocess.run(
+            ["git", "rev-parse", "main"], cwd=self.root, capture_output=True,
+            text=True, check=True,
+        ).stdout.strip()
+        self._git("remote", "add", "origin", "https://github.com/someone/retrobios")
+        self._git("remote", "add", "upstream", "https://github.com/Abdess/retrobios")
+        self._git("update-ref", "refs/remotes/origin/main", "HEAD")
+        self._git("update-ref", "refs/remotes/upstream/main", base)
+        args = profile_sync.build_parser().parse_args(["--changed"])
+        profiles = {"kept": {}, "edited": {}, "new": {}, "draft": {}}
+        self.assertEqual(
+            list(profile_sync.select_profiles(profiles, args)),
+            ["draft", "edited", "new"],
+        )
+
 
 class TestBranchCheckIsWired(unittest.TestCase):
     """CONTRIBUTING and CI name the branch's profiles through the flag."""

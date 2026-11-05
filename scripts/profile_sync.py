@@ -4158,9 +4158,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="the profiles the branch adds against --base, as CI checks them",
     )
     parser.add_argument(
-        "--base", default="origin/main",
+        "--base",
         help="revision --changed and --added compare with, through its merge "
-        "base with HEAD (default: %(default)s)",
+        "base with HEAD (default: the project's main line, upstream/main or "
+        "origin/main when that remote names the project, fetched otherwise)",
     )
     parser.add_argument(
         "--emulators-dir", default="emulators",
@@ -4327,14 +4328,33 @@ def branch_profiles(emulators_dir: str, base: str, added_only: bool) -> list[str
     })
 
 
+def project_base() -> str:
+    """The project's main line, the base --changed compares with by default.
+
+    In a fork's clone origin/main is the fork: once the branch is pushed it
+    is HEAD, and --changed --strict found nothing and passed while the PR's
+    CI then failed. validate_pr.py resolves the same line the same way.
+    """
+    from validate_pr import _git_lines as git_lines, _project_main_line
+
+    line = _project_main_line()
+    if line:
+        return line
+    for remote in ("upstream", "origin"):
+        if git_lines("rev-parse", "--verify", "--quiet", f"{remote}/main"):
+            return f"{remote}/main"
+    return "HEAD"
+
+
 def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
     """Profiles matching the selection flags."""
     if args.changed or args.added:
-        names = branch_profiles(args.emulators_dir, args.base, args.added)
+        base = args.base or project_base()
+        names = branch_profiles(args.emulators_dir, base, args.added)
         selected = {name: profiles[name] for name in names if name in profiles}
         if not selected:
             verb = "adds" if args.added else "adds or edits"
-            print(f"the branch {verb} no profile against {args.base}", file=sys.stderr)
+            print(f"the branch {verb} no profile against {base}", file=sys.stderr)
         return selected
     if args.emulator:
         names = [args.emulator] if isinstance(args.emulator, str) else args.emulator

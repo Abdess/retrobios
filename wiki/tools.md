@@ -447,8 +447,10 @@ to show one cited file and `--context N` lines around each hunk. `--strict`
 exits 1 when a profile has refs to review, and CI runs it on every profile a change
 adds. `--offline` answers from `--cache-dir` alone. `--changed` selects the
 profiles the branch adds or edits, uncommitted ones included, and `--added`
-the ones it adds, both against the merge base of `--base` (`origin/main` by
-default) and HEAD.
+the ones it adds, both against the merge base of `--base` and HEAD. By
+default `--base` is the project's main line: `upstream/main` or `origin/main`
+when that remote is the project, fetched from the project in a fork's clone,
+where `origin/main` is the fork.
 
 ```bash
 python scripts/profile_sync.py --all --system sega-saturn --changed-only
