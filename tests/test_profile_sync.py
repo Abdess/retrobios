@@ -514,6 +514,25 @@ class TestVerifyAtPin(unittest.TestCase):
         self.assertIsNone(profile_sync.cites_another_version(same, "0.16.0"))
         self.assertIsNone(profile_sync.cites_another_version(same, {"libretro": "v0.16.0"}))
 
+    def test_a_profile_with_a_repository_names_a_revision(self):
+        """redream declared libretro/redream, a repository that never
+        existed, with no pin and no date: profile_sync skipped it and no
+        revision answered for the files Batocera, RetroBat and KNULLI ship."""
+        import yaml
+
+        root = Path(__file__).resolve().parents[1] / "emulators"
+        unpinned = [
+            path.stem
+            for path in sorted(root.glob("*.yml"))
+            if (profile := yaml.safe_load(path.read_text(encoding="utf-8")) or {})
+            and (profile.get("source") or profile.get("upstream"))
+            and not any(
+                profile.get(key)
+                for key in ("source_commit", "upstream_commit", "profiled_date")
+            )
+        ]
+        self.assertEqual(unpinned, [])
+
     def test_a_profile_citing_versions_documents_its_own(self):
         """ti99sim's core_version went null while doc/CHANGES.html at its pin
         reads 0.16.0: every (v0.16.0) part then read as another version, and
