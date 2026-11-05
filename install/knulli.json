@@ -6,7 +6,7 @@
   "platform": "knulli",
   "display_name": "KNULLI",
   "version": "20260511",
-  "generated": "2026-11-05T18:33:47Z",
+  "generated": "2026-11-05T22:35:40Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -30,9 +30,9 @@
   ],
   "standalone_copies": [],
   "total_files": 9598,
-  "total_size": 9721492125,
+  "total_size": 9727764223,
   "pack_files": 9600,
-  "pack_size": 9721492125,
+  "pack_size": 9727764223,
   "total_omitted": 425,
   "omitted_files": [
     {
@@ -141285,10 +141285,10 @@
     },
     {
       "dest": "naomi.zip",
-      "sha1": "a39d7d17e52c26435ed1745503c7d6a68b36be1d",
-      "sha256": "9b85d2183bc3739efa2ebf1440c73abb252c6ca8944efcff3a7204645f7e03d4",
-      "size": 10419595,
-      "repo_path": "bios/Arcade/MAME/naomi.zip",
+      "sha1": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
+      "sha256": "07398d8d153e0e77ff986cb87ce0b5fd5103b2726d8ec8e857fb695de71e0858",
+      "size": 16691693,
+      "repo_path": "bios/Other/demul/naomi.zip",
       "cores": [
         "demul"
       ],

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T18:33:47Z",
-  "total_files": 19944,
-  "total_size": 16892646538,
+  "generated_at": "2026-11-05T22:35:40Z",
+  "total_files": 19945,
+  "total_size": 16909338231,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -140307,6 +140307,16 @@
       "crc32": "6893a2d1",
       "adler32": "fd861022"
     },
+    "c620aafa730c597bddb6dcc7ed32673c96783c6d": {
+      "path": "bios/Other/demul/naomi.zip",
+      "name": "naomi.zip",
+      "size": 16691693,
+      "sha1": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
+      "md5": "246fb8a02cf930a8d75df625ad5a8abc",
+      "sha256": "07398d8d153e0e77ff986cb87ce0b5fd5103b2726d8ec8e857fb695de71e0858",
+      "crc32": "1749ebfb",
+      "adler32": "c6e4322c"
+    },
     "f6a0cbfda6838065065e830ff40f322e6a3b6b00": {
       "path": "bios/Other/dolphin-mmjr/Load/wiitdb.txt",
       "name": "wiitdb.txt",
@@ -218495,6 +218505,7 @@
       "afacfb61877401f1611998d2b590dffd": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "3ab3f9386a280de051e82c0f147385ce": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "2c72c2c8020be91779cf30e6965d6bf8": "a9cd6c37e1da95584eab7f4227da2c98abdb7321",
+      "246fb8a02cf930a8d75df625ad5a8abc": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
       "d677421733ba64f4b493c98667d6ab78": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "a1d3c0e5a40f163f4fb00a5e0774c63c": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "9bef639b7426ef6948602a12b33522a8": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -225362,6 +225373,7 @@
         "788aee0f30ee80ea54dcd705afe93944accafc31",
         "055e72e6866662ae3ae97575f7bb7882c77869db",
         "a39d7d17e52c26435ed1745503c7d6a68b36be1d",
+        "c620aafa730c597bddb6dcc7ed32673c96783c6d",
         "43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a",
         "e352ae6943f7bead98cf73c0340dc07c1ff90135",
         "d7ef86bd03de7c1d0e2b0762e04b6f8f8d26dbdb"
@@ -296456,6 +296468,7 @@
       "a4fcab0b": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "dcbd4121": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "6893a2d1": "a9cd6c37e1da95584eab7f4227da2c98abdb7321",
+      "1749ebfb": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
       "c1f446c6": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "9ac7f0c7": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "6fe1f772": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -316401,6 +316414,7 @@
       "82e02a1c48ef74e449b75081d3d118bd935b81d52634dd7c6a8c95686fd83fd1": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "75600aba867acbdfdb85fcd142b524da769bdc611b855a760aeb0c6e2eaae17a": "f6b64d7b039a90af956c2c0873b30f6639a59878",
       "6ea2c350626d85a22410ad6ad8700388e28166ab8c5c2e88d83d7a696fceb335": "a9cd6c37e1da95584eab7f4227da2c98abdb7321",
+      "07398d8d153e0e77ff986cb87ce0b5fd5103b2726d8ec8e857fb695de71e0858": "c620aafa730c597bddb6dcc7ed32673c96783c6d",
       "3c042d3a3bac17f6a3a989c549fe127de1ba38dfdee9ffd6c13d5379238e5c13": "f6a0cbfda6838065065e830ff40f322e6a3b6b00",
       "38f9f59d505bc4e2d86b0196706195f33ad72b7fe9d029cf263072cde19d044f": "7fbbedcc7a1ae00414a4e9e967109cc78be1fe3b",
       "4ad991be2b0aa305f09b90a79fc50f57833b30b008890b5ef1336cc3d9d0bae0": "483a17ff25b68a8f18cae691da99f16beefbe370",
@@ -492706,6 +492720,12 @@
       ],
       "cxbx-reloaded/keys.bin": [
         "a9cd6c37e1da95584eab7f4227da2c98abdb7321"
+      ],
+      "Other/demul/naomi.zip": [
+        "c620aafa730c597bddb6dcc7ed32673c96783c6d"
+      ],
+      "demul/naomi.zip": [
+        "c620aafa730c597bddb6dcc7ed32673c96783c6d"
       ],
       "Other/dolphin-mmjr/Load/wiitdb.txt": [
         "f6a0cbfda6838065065e830ff40f322e6a3b6b00"

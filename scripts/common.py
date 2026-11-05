@@ -1206,8 +1206,13 @@ def _covering_archives(paths: list[str]) -> list[str]:
     deleting an unrelated duplicate flipped which copy a core received.
     """
     # A variant is served only when no primary is, so the primaries are
-    # the copies this choice is between.
-    pool = [path for path in paths if "/.variants/" not in path] or paths
+    # the copies this choice is between. A copy in an emulator's own tree
+    # (bios/Other/<emulator>/) is that emulator's file, not a revision of
+    # the set: an entry no profile owns is not decided by it.
+    pool = [
+        path for path in paths
+        if "/.variants/" not in path and not path.startswith("bios/Other/")
+    ] or [path for path in paths if "/.variants/" not in path] or paths
     crcs = {path: zip_member_crcs(path) for path in pool}
     covering = [
         path for path in pool
@@ -1652,6 +1657,13 @@ def resolve_local_file(
             if zipped_file:
                 candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
             members = file_entry.get("members") or contents_members(file_entry)
+            if members or (len(candidates) > 1 and name.casefold().endswith(".zip")):
+                # Another emulator's own copy takes no part in the ranking:
+                # Demul's naomi.zip holds more NAOMI BIOS rows than any MAME
+                # set and broke the superset the MAME cores were served.
+                candidates = [
+                    p for p in candidates if not _foreign_tree(p, owners)
+                ] or candidates
             if members:
                 candidates = _holding_members(candidates, members)
             elif len(candidates) > 1 and name.casefold().endswith(".zip"):
