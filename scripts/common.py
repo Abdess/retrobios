@@ -2446,6 +2446,22 @@ def standalone_set(config: dict) -> set[str]:
     return names
 
 
+def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
+    """The standalone set of several platforms read as one tree.
+
+    A per-core directory marker says which cores one platform hands a folder
+    and that it hands the others none. Carried into the union, MinUI's 86
+    markers left every core they do not list without a layout: the global
+    gap report lost 238 profiles and 1201 files without a word.
+    """
+    return {
+        tag
+        for config in configs
+        for tag in standalone_set(config)
+        if not tag.startswith(CORE_DIR_PREFIX)
+    }
+
+
 def _handed(standalone_cores: Iterable[str]) -> list:
     """The directories a standalone set carries, as launchers built them."""
     from launchers import HandedDirectory  # noqa: PLC0415

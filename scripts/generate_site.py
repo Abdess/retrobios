@@ -1159,7 +1159,7 @@ def build_emulator_gap_report(
         for k, v in profiles.items()
         if v.get("type") not in ("alias", "test")
     }
-    from common import platform_declarations, standalone_set
+    from common import merged_standalone_set, platform_declarations
     from validation import case_folded_slots
 
     # The command line passes these too: without them a RetroBat file named
@@ -1171,8 +1171,8 @@ def build_emulator_gap_report(
     return run_cross_reference(
         unique_profiles, declared, db,
         data_names=data_names, all_declared=all_declared,
-        standalone_cores=set().union(
-            *(standalone_set(cov["config"]) for cov in coverages.values())
+        standalone_cores=merged_standalone_set(
+            cov["config"] for cov in coverages.values()
         ),
         folded_slots=folded,
     )

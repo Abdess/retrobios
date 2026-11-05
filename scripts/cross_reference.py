@@ -1156,12 +1156,12 @@ def main() -> None:
         # The tree as every platform runs it: a profile some platform runs
         # standalone keeps its standalone entries. Laid out as libretro only,
         # eka2l1, dolphin and xenia-edge lost 133 files no platform declares.
-        from common import list_registered_platforms
+        from common import list_registered_platforms, merged_standalone_set
 
-        standalone_cores = set().union(*(
-            standalone_set(load_platform_config(name, args.platforms_dir))
+        standalone_cores = merged_standalone_set(
+            load_platform_config(name, args.platforms_dir)
             for name in list_registered_platforms(args.platforms_dir, include_archived=True)
-        ))
+        )
 
     if not profiles:
         if emulator and args.target and emulator in run_anywhere:

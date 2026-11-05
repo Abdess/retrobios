@@ -439,5 +439,30 @@ class TheSitePageOfACardPlatform(unittest.TestCase):
         self.assertIn("No ZIP for MinUI. The command installs every file and checks it.", page)
 
 
+class TheWholeTreeKeepsCoresMinUILeavesOut(unittest.TestCase):
+    """Without --platform, cross_reference and the site's gap report merge
+    every platform's standalone set. MinUI's per-core folders came along and
+    left every core MinUI does not list with no layout: px68k showed 0 files
+    and the global report lost 238 profiles."""
+
+    def test_a_core_minui_does_not_list_keeps_its_files(self):
+        from common import merged_standalone_set, platform_layouts
+
+        minui = {"core_system_dirs": {"Bios/FC": {"cores": ["fceumm"]}}}
+        retroarch = {}
+        merged = merged_standalone_set([minui, retroarch])
+        profile = {"type": "libretro", "files": [{"name": "cgrom.tmp"}]}
+        layouts = platform_layouts("px68k", profile, merged)
+        self.assertEqual(layouts, [(profile, False)])
+
+    def test_both_readers_build_the_set_the_same_way(self):
+        for script in ("cross_reference.py", "generate_site.py"):
+            source = (REPO_ROOT / "scripts" / script).read_text(encoding="utf-8")
+            with self.subTest(script=script):
+                self.assertIn("merged_standalone_set(", source)
+                self.assertNotIn("set().union(*(\n            standalone_set(", source)
+                self.assertNotIn("*(standalone_set(cov", source)
+
+
 if __name__ == "__main__":
     unittest.main()
