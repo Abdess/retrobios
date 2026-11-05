@@ -415,7 +415,7 @@ class AnUnknownTargetStopsTheRunFirst(unittest.TestCase):
                 contextlib.redirect_stderr(io.StringIO()) as err:
             with self.assertRaises(SystemExit) as stop:
                 install.main()
-        self.assertEqual(stop.exception.code, 1)
+        self.assertEqual(stop.exception.code, 2)
         self.assertIn("unknown target 'steamos' for RetroArch", err.getvalue())
         self.assertIn("Nothing was installed", err.getvalue())
         fetch.assert_not_called()

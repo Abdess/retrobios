@@ -4894,7 +4894,7 @@ class TheEmulatorNamesHaveTheirOwnListing(unittest.TestCase, _LoopbackRun):
     def test_the_hint_counts_what_the_listing_prints(self):
         proc = _install_run(self.env, "--platform", "retroarch", "--no-input",
                             "--emulator", "nope")
-        self.assertEqual(proc.returncode, 1, proc.stdout)
+        self.assertEqual(proc.returncode, 2, proc.stdout)
         found = re.search(r"--list-emulators lists all (\d+)\.", proc.stderr)
         self.assertIsNotNone(found, proc.stderr)
         listing = _install_run(self.env, "--platform", "retroarch", "--no-input",
