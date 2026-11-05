@@ -565,8 +565,11 @@ Checking existing files...
 ```
 <!-- /generated: run-check -->
 
-The files the collection does not hold are listed after it again, as long as
-they are absent from the folder. A number before `wrong copies` means a file is
+`Everything is in place.` is said only when the data folders are complete
+too. With the BIOS files in place and data files missing (PPSSPP's assets,
+Dolphin's `Sys`), the line counts those instead (`169 data files to fetch`),
+and `--check` exits with code 1. The files the collection does not hold are
+listed after it again, as long as they are absent from the folder. A number before `wrong copies` means a file is
 in place with contents the platform does not accept. Running the install again
 replaces it and keeps the old one, see
 [Files you already had](#files-you-already-had).

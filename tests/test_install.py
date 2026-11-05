@@ -4814,6 +4814,22 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         self.assertIn("File list: RetroArch", proc.stdout)
         self.assertIn("--platform", proc.stdout)
 
+    def test_check_says_in_place_only_when_the_data_files_are_too(self):
+        """The PSP BIOS in place and PPSSPP's assets absent: --check said
+        "Everything is in place." then "169 to fetch", and exited 1."""
+        dest = self.home / "psp"
+        (dest / "PPSSPP").mkdir(parents=True)
+        for repo_path in ("bios/Sony/PlayStation Portable/ppge_atlas.zim",
+                          "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta"):
+            shutil.copy(REPO_ROOT / repo_path, dest / "PPSSPP")
+        proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
+                            "--system", "sony-psp", "--check", "--no-input")
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertNotIn("Everything is in place", proc.stdout)
+        found = re.search(r"(\d+) in place, (\d+) missing", proc.stdout)
+        self.assertIsNotNone(found, proc.stdout)
+        self.assertIn(f"\n  {found.group(2)} data files to fetch\n", proc.stdout)
+
     def test_a_cores_folder_can_be_named(self):
         cores = self.home / "cores"
         cores.mkdir()

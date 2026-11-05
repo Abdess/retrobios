@@ -15554,7 +15554,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 lacking = pack_lacks([f for f in to_download if id(f) not in copies])
                 if lacking:
                     print(f"\n  {pack_lacks_words(len(lacking), len(to_download) - len(copies))}")
-                print(f"\n  {_plural(len(to_download), 'file')} "
+                # One total with the count above it, the data files among
+                # them as the screen counts them: "0 in place, 10805 missing"
+                # stood over "8164 files to download".
+                print(f"\n  {_plural(len(to_download) + trees_missing, 'file')} "
                       + ("not in place:" if offline or LOCAL.pack is not None
                          else "to download:"))
                 for line in check_lines(missing, mismatched, files, manifest, bios_path,
@@ -15565,6 +15568,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(_check_fetch_line(len(to_download) - len(copies), "the BIOS folder",
                                         len(lacking)))
                 check_pending += len(to_download)
+            elif trees_missing:
+                # The screen's headline: "Everything is in place." stood
+                # above "0/169 data files present" and exit code 1.
+                print(f"\n  {_plural(trees_missing, 'data file')} to fetch")
             else:
                 print(f"\n  {EVERYTHING_IN_PLACE}")
             absent = _absent_required(omitted_files, bios_path)
