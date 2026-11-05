@@ -429,3 +429,28 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OneDefinitionPerName(unittest.TestCase):
+    """generate_site defined _REGION_WORDS twice: the second table replaced
+    the first at import, and _region_word, written beside the first, never
+    read it."""
+
+    def test_no_module_name_is_bound_twice(self):
+        import ast
+
+        for path in sorted((REPO_ROOT / "scripts").glob("*site*.py")):
+            seen: dict[str, int] = {}
+            for node in ast.parse(path.read_text(encoding="utf-8")).body:
+                if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
+                    names = [node.name]
+                elif isinstance(node, ast.Assign):
+                    names = [t.id for t in node.targets if isinstance(t, ast.Name)]
+                elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+                    names = [node.target.id]
+                else:
+                    continue
+                for name in names:
+                    self.assertNotIn(name, seen, f"{path.name}:{node.lineno} binds {name} "
+                                     f"again, first at line {seen.get(name)}")
+                    seen[name] = node.lineno

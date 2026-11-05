@@ -6443,13 +6443,6 @@ def _region_order() -> dict[str, int]:
     return {region: index for index, region in enumerate(ordered)}
 
 
-_REGION_WORDS = {"uk": "UK", "asia-ntsc": "Asia (NTSC)", "asia-pal": "Asia (PAL)"}
-
-
-def _region_word(region: str) -> str:
-    return _REGION_WORDS.get(region) or region.replace("-", " ").title()
-
-
 def _reading_pairs(sha1: str, consumers: FileConsumers) -> list[tuple[str, dict]]:
     """The profile entries that read a file, each with its emulator."""
     files_of = getattr(consumers, "emulator_files", {})
@@ -7031,7 +7024,7 @@ def _group_start(group: _StartGroup, first_below: bool) -> list[tuple[str, str]]
         else:
             regional[(*same, region)] = regional.pop(same)
 
-    out = [(", ".join(_region_word(r) for r in regions), regional[regions])
+    out = [(", ".join(_region_words(r) for r in regions), regional[regions])
            for regions in sorted(regional, key=lambda rs: (order.get(rs[0], len(order)), rs))]
     # A name a region line gives already is no "also", and one only
     # emulators no region line answers reads is an "instead": armsx1 reads
