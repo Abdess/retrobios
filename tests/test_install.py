@@ -14,6 +14,7 @@ import select
 import shlex
 import re
 import shutil
+import signal
 import socket
 import subprocess
 import sys
@@ -2287,6 +2288,51 @@ class TestAvailablePlatforms(unittest.TestCase):
             )
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("retroarch", proc.stdout)
+
+    @unittest.skipIf(os.name == "nt", "the sh bootstrap is POSIX")
+    def test_ctrl_c_during_the_download_ends_with_130(self):
+        """Ctrl+C while install.py downloaded: the trap cleaned up and the
+        script went on to blame the network, with code 1."""
+        scratch = REPO_ROOT / "tmp" / "tests"
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+            root = Path(directory)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            started = root / "started"
+            (fake_bin / "curl").write_text(
+                f"#!/bin/sh\n: > '{started}'\nexec sleep 60\n", encoding="utf-8")
+            (fake_bin / "curl").chmod(0o755)
+            env = {**os.environ, "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}",
+                   "TMPDIR": str(root),
+                   "RETROBIOS_INSTALL_URL": "https://example.invalid/install.py"}
+            for shell in ("sh", "bash"):
+                if not shutil.which(shell):
+                    continue
+                with self.subTest(shell=shell):
+                    started.unlink(missing_ok=True)
+                    proc = subprocess.Popen(
+                        [shell, "-s", "--", "--check"], cwd=root, env=env,
+                        stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE, text=True, start_new_session=True)
+                    proc.stdin.write((REPO_ROOT / "install.sh").read_text(encoding="utf-8"))
+                    proc.stdin.close()
+                    proc.stdin = None
+                    try:
+                        deadline = time.monotonic() + 30
+                        while not started.exists() and time.monotonic() < deadline:
+                            time.sleep(0.05)
+                        self.assertTrue(started.exists(), "the download never started")
+                        os.killpg(proc.pid, signal.SIGINT)
+                        _out, err = proc.communicate(timeout=30)
+                    finally:
+                        if proc.poll() is None:
+                            os.killpg(proc.pid, signal.SIGKILL)
+                            proc.communicate()
+                    self.assertEqual(proc.returncode, 130, err)
+                    self.assertNotIn("could not be downloaded", err)
+                    self.assertEqual(sorted(p.name for p in root.iterdir()),
+                                     ["bin", "started"])
 
     def test_a_failed_download_says_so_in_one_message(self):
         """Offline, the one-liner printed curl's progress table and

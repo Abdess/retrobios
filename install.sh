@@ -34,7 +34,13 @@ cleanup() {
     rmdir -- "$TEMP_DIRECTORY" 2>/dev/null || true
   fi
 }
-trap cleanup EXIT HUP INT TERM
+# A signal ends the run with the code a shell gives it, 130 for Ctrl+C:
+# trapped by cleanup alone, the run went on, and Ctrl+C during the download
+# was told as a network failure, with code 1.
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   install_url=${RETROBIOS_INSTALL_URL:-$DEFAULT_INSTALL_URL}
