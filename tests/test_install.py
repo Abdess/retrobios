@@ -3221,18 +3221,21 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
             json.dumps({"bcm2711": ["picore"], "x86_64": ["pccore"]}))
 
     def run_main(self, *extra: str) -> tuple[str, list[dict]]:
-        out = io.StringIO()
-        argv = ["install.py", "--platform", "batocera", "--dest", str(self.share),
-                "--manifest", str(self.list), "--offline", "--check", "--events", *extra]
-        with unittest.mock.patch.object(install, "_mounted_cards", return_value=[self.boot]), \
-                unittest.mock.patch.object(sys, "argv", argv), \
-                unittest.mock.patch.dict(os.environ), \
-                contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()), \
-                contextlib.suppress(SystemExit):
-            install.main()
-        events = [json.loads(line) for line in out.getvalue().splitlines()
+        # A child process: main() changes the run's globals (the file list,
+        # the event stream), which leaked into the next tests.
+        code = ("import sys; from pathlib import Path; sys.path.insert(0, sys.argv[1]); "
+                "import install; card = Path(sys.argv[2]); "
+                "install._mounted_cards = lambda: [card]; "
+                "sys.argv = ['install.py', *sys.argv[3:]]; install.main()")
+        env = {**os.environ, "RETROBIOS_OS": "linux", "HOME": str(self.root)}
+        proc = subprocess.run(
+            [sys.executable, "-c", code, str(REPO_ROOT), str(self.boot),
+             "--platform", "batocera", "--dest", str(self.share), "--manifest",
+             str(self.list), "--offline", "--check", "--events", *extra],
+            env=env, capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+        events = [json.loads(line) for line in proc.stdout.splitlines()
                   if line.startswith("{")]
-        return out.getvalue(), events
+        return proc.stdout + proc.stderr, events
 
     def test_the_boot_partition_names_the_board(self):
         with unittest.mock.patch.object(install, "_mounted_cards", return_value=[self.boot]):
