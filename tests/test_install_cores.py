@@ -416,9 +416,21 @@ class AnUnknownTargetStopsTheRunFirst(unittest.TestCase):
             with self.assertRaises(SystemExit) as stop:
                 install.main()
         self.assertEqual(stop.exception.code, 1)
-        self.assertIn("unknown target 'steamos' for retroarch", err.getvalue())
+        self.assertIn("unknown target 'steamos' for RetroArch", err.getvalue())
         self.assertIn("Nothing was installed", err.getvalue())
         fetch.assert_not_called()
+
+
+class APlatformWithoutTargetsSaysSo(unittest.TestCase):
+    """`--target switch` on MiSTer FPGA read "unknown target", a typo to the
+    user, when no value can work there."""
+
+    def test_the_way_forward_is_named(self):
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            install._unknown_target("switch", "misterfpga", {})
+        said = err.getvalue()
+        self.assertIn("MiSTer FPGA has no hardware targets: run again without --target.", said)
+        self.assertNotIn("unknown target", said)
 
 
 class _CoreRepository(FakeRepository):

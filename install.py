@@ -14388,12 +14388,13 @@ def _several_found(platforms: list[tuple[str, Path]], setups: list) -> None:
 
 
 def _unknown_target(target: str, plat: str, targets: dict) -> None:
-    print(f"Error: unknown target '{target}' for {plat}.", file=sys.stderr)
-    if targets:
-        print("  " + did_you_mean([target], sorted(targets), "--list-targets"),
-              file=sys.stderr)
-    else:
-        print(f"  {plat} publishes no target list", file=sys.stderr)
+    if not targets:
+        # No value can work: "unknown target" read as a typo of the board.
+        print(f"Error: {display_name(plat)} has no hardware targets: run again "
+              "without --target.", file=sys.stderr)
+        return
+    print(f"Error: unknown target '{target}' for {display_name(plat)}.", file=sys.stderr)
+    print("  " + did_you_mean([target], sorted(targets), "--list-targets"), file=sys.stderr)
 
 
 def _is_terminal(stream: TextIO) -> bool:
