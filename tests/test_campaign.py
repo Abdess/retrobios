@@ -1019,24 +1019,6 @@ class ContentFile(Workspace):
         self.assertIn("Other Game (Japan)", out.getvalue())
 
 
-class InstallTimer(unittest.TestCase):
-    def test_writes_the_units_and_enables_only_when_asked(self) -> None:
-        calls = []
-        real_run = subprocess.run
-
-        def fake_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess:
-            if "install-timers" not in argv:
-                return real_run(argv, **kwargs)
-            calls.append(argv)
-            return subprocess.CompletedProcess(argv, 0)
-        with unittest.mock.patch.object(campaign.subprocess, "run", fake_run):
-            self.assertEqual(campaign.main(["install-timer"]), 0)
-            self.assertEqual(campaign.main(["install-timer", "--enable"]), 0)
-        self.assertEqual([argv[2:] for argv in calls],
-                         [["install-timers"], ["install-timers", "--enable"]])
-        self.assertTrue(calls[0][1].endswith("scripts/autorun.py"))
-
-
 class Registry(unittest.TestCase):
     def test_no_profile_takes_a_campaign_file_name(self) -> None:
         stems = {p.stem for p in (REPO_ROOT / "emulators").glob("*.yml")}
@@ -1054,18 +1036,13 @@ class Registry(unittest.TestCase):
                 self.assertGreater(len(item.reason), 40)
                 self.assertGreater(item.frames, item.frame_hash_every)
 
-    def test_the_autorun_job(self) -> None:
-        jobs = campaign.autorun.load_jobs()
-        job = jobs["campaign"]
-        self.assertTrue(job.lock and job.worktree and job.schedule)
-        self.assertEqual(job.gate[0].argv, ("python", "scripts/campaign.py", "gate"))
-        self.assertEqual({p for rule in job.commits for p in rule.paths},
-                         {"measurements/*.jsonl", "emulators/*.yml"})
-        self.assertGreater(job.schedule, jobs["nightly"].schedule)
-
-    def test_autorun_tells_its_steps_the_lock_is_held(self) -> None:
-        job = campaign.autorun.load_jobs()["campaign"]
-        self.assertEqual(campaign.autorun.job_env(job)[campaign.LOCK_HELD_ENV], "1")
+    def test_no_job_runs_a_standing_campaign(self) -> None:
+        """A daily pass over every profile contradicted the rule that probes
+        run on demand, for a question that names its profiles."""
+        for name, job in campaign.autorun.load_jobs().items():
+            for step in [*job.steps, *job.gate]:
+                with self.subTest(job=name):
+                    self.assertNotIn("scripts/campaign.py", step.argv)
 
 
 @unittest.skipUnless(shutil.which("cc") and shutil.which("strace"), "no C compiler or no strace")

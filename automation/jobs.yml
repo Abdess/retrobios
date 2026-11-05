@@ -94,35 +94,6 @@ jobs:
         stdout: tmp/autorun/bios-integrity.json
     report: tmp/autorun/bios-integrity.json
 
-  campaign:
-    schedule: "*-*-* 06:00"
-    network: true
-    max_load_wait: 7200
-    timeout: 12600
-    steps:
-      - run: [python, scripts/campaign.py, run, --budget, 150m]
-        ok_codes: [0, 75]
-        stdout: tmp/autorun/campaign.json
-        env: [RETROBIOS_ROMFETCH, RETROBIOS_AUTO_LOCK, ROMFETCH_CONTENT_DIR, ROMFETCH_CACHE_DIR,
-              ROMFETCH_DATS_DIR, ROMFETCH_RETOOL_DIR, ROMFETCH_MIN_INTERVAL, ROMFETCH_MAX_SIZE,
-              ROMFETCH_DISABLED_SOURCES, XDG_CONFIG_HOME]
-    gate:
-      - [python, scripts/campaign.py, gate]
-    commits:
-      - subject: "chore: add campaign measurements"
-        body: >-
-          Core probe records, findings and the pass summary written by
-          campaign.py, behind the measurement tests and the schemas.
-        paths: [measurements/*.jsonl]
-      - subject: "chore: apply fields the campaign proved"
-        body: >-
-          Fields the campaign's rule table settled from real runs, each with
-          the record ids in evidence:, behind verify and an emulator pack of
-          every changed profile.
-        paths: [emulators/*.yml]
-    report: tmp/autorun/campaign.json
-    scratch: [tmp/autorun, tmp/core_probe]
-
   assets:
     schedule: "*-*-* 04:30"
     network: true
