@@ -387,6 +387,17 @@ Two kinds of entry skip every answer given by a name alone: steps 6 and 9, the
 The content steps still apply to both, so collecting the real bytes, or restoring
 the asset, makes the entry resolve.
 
+A platform's own entry with no hash, whose system id names a maker (`nec-pc-88`
+names `NEC`), takes no file filed under another maker's folder in steps 6 and 7.
+`bios/Other/` and `bios/Arcade/` file copies by emulator and stay open to it.
+`load_platform_config` writes the system on each entry as `platform_system`. When
+no copy is left, step 6 reads `by_shadowed_alias`, the profile aliases that
+`by_name` refuses because a primary already carries the name, and keeps only the
+files under the system's maker. AmberELEC's `DISK.ROM` got the 16 KB MSX disk ROM
+by name. QUASI88 reads that name as `n88sub.rom`, the 2 KB PC-88 disk ROM, and
+that is now the file served. An entry that names its emulator is placed by that
+emulator's tree instead.
+
 The `hash_mismatch` status means a file with the right name or path exists but its hash
 does not match. This still resolves to a local path (the file is present), but verification
 will report it as UNTESTED with a reason string showing the expected vs actual hash prefix.

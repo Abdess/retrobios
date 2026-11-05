@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T18:33:47Z",
+  "generated_at": "2026-11-05T22:08:47Z",
   "total_files": 19944,
   "total_size": 16892646538,
   "bios_dir": "bios",
@@ -600407,6 +600407,130 @@
       ],
       "sf2/custom0.sf2": [
         "286b2e1fb21cc79851da01666db6c0b0e88f25e3"
+      ]
+    },
+    "by_shadowed_alias": {
+      "DISK.ROM": [
+        "bb7103a0818850a039c67ff666a31ce49a8d516f",
+        "d4181c9f046aafc3fb326b381baac809d9e38d16"
+      ],
+      "Mac OS ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "N88EXT1.ROM": [
+        "4ae4d37409ff99411a623da9f6a44192170a854e"
+      ],
+      "N88EXT2.ROM": [
+        "e94278682ef9e9bbb82201f72c50382748dcea2a"
+      ],
+      "N88EXT3.ROM": [
+        "af452aed79b072c4d17985830b7c5dca64d4b412"
+      ],
+      "ROM1": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "basic10.rom": [
+        "af7eae90c398ec12942a408fa5ac2722e331738c"
+      ],
+      "basic2.rom": [
+        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
+      ],
+      "bios.bin": [
+        "6e89d1227581c76441a53d605f9e324185f1da33"
+      ],
+      "bios.rom": [
+        "6e89d1227581c76441a53d605f9e324185f1da33"
+      ],
+      "bios9821.rom": [
+        "0877ffb4b4d1c18283468be3579b72ed8c22e3ac"
+      ],
+      "biosdsi7.bin": [
+        "d2b17224e156ee5e55b5d8d9f323b1c9b86dd951"
+      ],
+      "biosdsi9.bin": [
+        "db61fa39ddbc5f5ed71fb19cda47609ef0201723"
+      ],
+      "d8000.rom": [
+        "0877ffb4b4d1c18283468be3579b72ed8c22e3ac"
+      ],
+      "disk.rom": [
+        "bb7103a0818850a039c67ff666a31ce49a8d516f",
+        "d4181c9f046aafc3fb326b381baac809d9e38d16"
+      ],
+      "epr-17740.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-17740a.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-17741a.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-17742a.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-17951a.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-17952a.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-17953a.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-17954a.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-19730.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-19854.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "epr-23603.ic8": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "hisaturn.bin": [
+        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
+      ],
+      "n88.rom": [
+        "3b31fc68fa7f47b21c1a1cb027b86b9e87afbfff"
+      ],
+      "n88_0.rom": [
+        "d239c26ad7ac5efac6e947b0e9549b1534aa970d"
+      ],
+      "n88_1.rom": [
+        "8528eef7946edf6501a6ccb1f416b60c64efac7c"
+      ],
+      "n88_2.rom": [
+        "b7c8bcea219b77d9cc3ee0efafe343cc307425d1"
+      ],
+      "n88_3.rom": [
+        "efce0b51cab9f0da6cf68507757f1245a2867a72"
+      ],
+      "ps2-0250j-20100415.bin": [
+        "f9229fe159d0353b9f0632f3fdc66819c9030458"
+      ],
+      "rom1.bin": [
+        "aea7a4c0c7ffe1f212f7b9faecfd728862ac6904"
+      ],
+      "rom2.bin": [
+        "5d5ab4313a2d0effe7572bb129193b64cab002c1"
+      ],
+      "rom2_st.bin": [
+        "5d5ab4313a2d0effe7572bb129193b64cab002c1"
+      ],
+      "sega1003.bin": [
+        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
+      ],
+      "sega_100.bin": [
+        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
+      ],
+      "sega_100a.bin": [
+        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
+      ],
+      "vsaturn.bin": [
+        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
       ]
     }
   }

@@ -40,6 +40,8 @@ from typing import TypeVar
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    BUCKET_FOLDERS,
+    names_manufacturer,
     upstream_profile_index,
     build_zip_contents_index,
     GAME_DATA_TOPS,
@@ -219,19 +221,8 @@ def _copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
     return places
 
 
-# bios/Other/<emulator> and bios/Arcade/<emulator or board> file a copy by
-# who loads it, not by machine. A copy also filed under a machine's maker
-# places the system there.
-_BUCKET_FOLDERS = frozenset({"Other", "Arcade"})
-
-
 def _slug(manufacturer: str) -> str:
     return manufacturer.lower().replace(" ", "-")
-
-
-def _names_manufacturer(sys_id: str, manufacturer: str) -> bool:
-    slug = _slug(manufacturer)
-    return sys_id == slug or sys_id.startswith(f"{slug}-")
 
 
 def _copies_by_path(db: dict) -> dict[str, set[tuple[str, str, str]]]:
@@ -276,13 +267,13 @@ def _system_folder(
         declared = str(fe.get("name", "")).casefold()
         named = {
             (m, c) for m, c, base in held
-            if base.casefold() == declared or _names_manufacturer(sys_id, m)
+            if base.casefold() == declared or names_manufacturer(sys_id, m)
         }
         for place in named or {(m, c) for m, c, _ in held}:
             votes[place] = votes.get(place, 0) + 1
     if votes:
-        own = [place for place in votes if _names_manufacturer(sys_id, place[0])]
-        makers = [place for place in votes if place[0] not in _BUCKET_FOLDERS]
+        own = [place for place in votes if names_manufacturer(sys_id, place[0])]
+        makers = [place for place in votes if place[0] not in BUCKET_FOLDERS]
         candidates = own or makers or list(votes)
         return max(sorted(candidates), key=lambda place: votes[place])
     for fe in files:
@@ -1044,6 +1035,20 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
     """
     allowed = _contract_keys()
     contract = {key: value for key, value in config.items() if key in allowed}
+    # platform_system is the resolver's copy of the key each entry sits under.
+    if isinstance(contract.get("systems"), dict):
+        contract["systems"] = {
+            sys_id: {
+                **system,
+                "files": [
+                    {k: v for k, v in f.items() if k != "platform_system"}
+                    for f in system["files"]
+                ],
+            }
+            if isinstance(system, dict) and system.get("files")
+            else system
+            for sys_id, system in contract["systems"].items()
+        }
     registry = {key: value for key, value in config.items()
                 if key not in allowed and key != "_key"}
     # The merged config gives a child its parent's release_pack: Lakka and

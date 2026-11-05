@@ -90,6 +90,71 @@ def _casefold_name_index(by_name: dict) -> dict[str, list[str]]:
     return folded
 
 
+# bios/Other/<emulator> and bios/Arcade/<emulator or board> file a copy by
+# who loads it, not by machine.
+BUCKET_FOLDERS = frozenset({"Other", "Arcade"})
+
+
+def names_manufacturer(sys_id: str, manufacturer: str) -> bool:
+    """Whether a system id names a maker folder: nec-pc-88 names NEC."""
+    slug = manufacturer.lower().replace(" ", "-")
+    return sys_id == slug or sys_id.startswith(f"{slug}-")
+
+
+def _maker_folder(path: str, bios_dir: str) -> str | None:
+    """The bios/<maker>/ folder a collection path is filed under."""
+    prefix = f"{bios_dir.rstrip('/')}/"
+    if not path.startswith(prefix):
+        return None
+    parts = path[len(prefix):].split("/")
+    return parts[0] if len(parts) >= 2 else None
+
+
+# One slot, keyed like the casefold view: the files dict, its size, the folders.
+_maker_folders_cache: list[tuple[dict, int, frozenset[str]]] = []
+
+
+def _maker_folders(db: dict) -> frozenset[str]:
+    """Every maker folder the collection files a copy under."""
+    files_db = db.get("files", {})
+    if _maker_folders_cache:
+        source, size, folders = _maker_folders_cache[0]
+        if source is files_db and size == len(files_db):
+            return folders
+    bios_dir = str(db.get("bios_dir") or "bios")
+    folders = frozenset(
+        folder
+        for entry in files_db.values()
+        if (folder := _maker_folder(str(entry.get("path", "")), bios_dir))
+        and folder not in BUCKET_FOLDERS
+    )
+    _maker_folders_cache[:] = [(files_db, len(files_db), folders)]
+    return folders
+
+
+def system_makers(file_entry: dict, db: dict) -> frozenset[str]:
+    """The maker folders a platform entry's system names.
+
+    Only a platform's own entry is asked: one that names an owning emulator
+    is placed by that emulator's tree. Empty when the system names no maker
+    (pc88, arcade), so nothing is narrowed there.
+    """
+    sys_id = str(file_entry.get("platform_system") or "")
+    if not sys_id or _owner_tokens(file_entry):
+        return frozenset()
+    return frozenset(
+        folder for folder in _maker_folders(db) if names_manufacturer(sys_id, folder)
+    )
+
+
+def other_maker(path: str, makers: frozenset[str], db: dict) -> bool:
+    """Whether a path is filed under a maker the entry's system does not name."""
+    if not makers:
+        return False
+    folder = _maker_folder(path, str(db.get("bios_dir") or "bios"))
+    return folder is not None and folder not in BUCKET_FOLDERS and folder not in makers
+
+
 def name_match_size_ok(file_entry: dict, candidate_size: int | None) -> bool:
     """Whether a candidate found by name may be the file the entry describes.
 
@@ -356,6 +421,19 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
             }
             for sys_id, system in config.get("systems", {}).items()
         }
+
+    # Each entry carries the system that declares it: a hashless name match is
+    # narrowed to the maker folder that system names (resolve_local_file).
+    # Fresh dicts, since a YAML anchor can share one entry between systems.
+    config["systems"] = {
+        sys_id: {
+            **system,
+            "files": [{**f, "platform_system": sys_id} for f in system["files"]],
+        }
+        if isinstance(system, dict) and system.get("files")
+        else system
+        for sys_id, system in config.get("systems", {}).items()
+    }
 
     # The registry key, which per-platform profile fields (installed_on,
     # not_bundled_on) name: the display name differs (MiSTer FPGA).
@@ -1573,6 +1651,10 @@ def resolve_local_file(
     # hash and path steps above run first, so collecting the real bytes makes
     # the entry resolve.
     unsourceable = bool(file_entry.get("unsourceable")) or own_file_absent
+    # A platform's own hashless entry whose system names a maker takes no copy
+    # filed under another maker: AmberELEC's nec-pc-88 DISK.ROM, which QUASI88
+    # reads as the 2 KB PC-88 disk ROM, got the 16 KB MSX one by name.
+    makers = frozenset() if has_strong_hash else system_makers(file_entry, db)
 
     if not has_strong_hash and not unsourceable:
         candidates = []
@@ -1636,6 +1718,26 @@ def resolve_local_file(
                         if _foreign_tree(path, owners):
                             continue
                         if os.path.exists(path) and path not in candidates:
+                            candidates.append(path)
+        if makers and candidates:
+            candidates = [p for p in candidates if not other_maker(p, makers, db)]
+            if not candidates:
+                # The name belongs to another maker's file here. An emulator
+                # of this system may still read it as an alias of one of its
+                # own files, an alias by_name leaves out because a primary
+                # already carries the name: QUASI88 reads DISK.ROM as
+                # n88sub.rom.
+                shadowed = db.get("indexes", {}).get("by_shadowed_alias", {})
+                for try_name in own_names:
+                    for match_sha1 in shadowed.get(try_name, []):
+                        path = files_db.get(match_sha1, {}).get("path", "")
+                        if (
+                            _maker_folder(path, str(db.get("bios_dir") or "bios"))
+                            in makers
+                            and _size_ok(match_sha1)
+                            and os.path.exists(path)
+                            and path not in candidates
+                        ):
                             candidates.append(path)
         if candidates:
             if zipped_file:
@@ -1701,6 +1803,8 @@ def resolve_local_file(
 
     if zipped_file:
         candidates = [c for c in candidates if ".zip" in os.path.basename(c[0])]
+    # Another maker's file is no mismatch of this one, it is another file.
+    candidates = [c for c in candidates if not other_maker(c[0], makers, db)]
     # A size the emulator itself verifies settles a name collision, so a
     # candidate that fits is preferred over one that does not: "ROM" answers
     # both an Apple IIgs image and a Macintosh one. It ranks rather than

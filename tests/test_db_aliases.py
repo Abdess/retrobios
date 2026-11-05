@@ -247,7 +247,7 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
 
     def test_the_build_passes_the_scan_copies(self):
         source = (REPO_ROOT / "scripts" / "generate_db.py").read_text(encoding="utf-8")
-        self.assertIn("_collect_all_aliases(files, aliases)", source)
+        self.assertIn("_collect_all_aliases(files, aliases, shadowed)", source)
 
 
 class TheSmsBiosKeepsItsNames(unittest.TestCase):
