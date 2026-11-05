@@ -39,8 +39,9 @@ tests are reported as skipped, so install them before a pull request
 (`pip install "jsonschema[format-nongpl]" markdown`). The installer's
 full-screen tests drive `install.py --tui` on a pseudo-terminal and read the
 screen back with `pyte`, and fuzz the key decoder with `hypothesis`: both skip
-without them (`pip install pyte hypothesis`). No test framework beyond the
-standard library `unittest` module.
+without them (`pip install pyte hypothesis`). `pip install -e ".[dev]"` from the
+checkout installs all of these at once, from the `dev` extra of `pyproject.toml`.
+No test framework beyond the standard library `unittest` module.
 
 ## Modules at a glance
 

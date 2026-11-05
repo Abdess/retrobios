@@ -2725,6 +2725,34 @@ class DeclaredDependenciesMatchTheDocumentedWorkflows(unittest.TestCase):
         )
 
 
+class TheProjectInstallsWithPip(unittest.TestCase):
+    """pyproject declared a dev extra that pip could not install: without a
+    [build-system] and an explicit module list, setuptools' flat-layout
+    discovery found scripts/ and tests/ and refused to build."""
+
+    def test_setuptools_discovers_nothing_to_package(self):
+        import importlib.util  # noqa: PLC0415
+
+        if importlib.util.find_spec("setuptools") is None:
+            self.skipTest("setuptools is not installed")
+        program = (
+            "from setuptools.dist import Distribution\n"
+            "from setuptools.config.pyprojecttoml import apply_configuration\n"
+            "dist = apply_configuration(Distribution(), 'pyproject.toml')\n"
+            "dist.set_defaults()\n"
+            "print(sorted(dist.packages or []), sorted(dist.py_modules or []))\n"
+        )
+        done = subprocess.run([sys.executable, "-c", program], cwd=ROOT,
+                              capture_output=True, text=True, check=False)
+        self.assertEqual(done.returncode, 0, done.stderr[-2000:])
+        self.assertEqual(done.stdout.strip(), "[] []")
+        import tomllib  # noqa: PLC0415
+
+        with (ROOT / "pyproject.toml").open("rb") as handle:
+            build = tomllib.load(handle)["build-system"]
+        self.assertEqual(build["build-backend"], "setuptools.build_meta")
+
+
 class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
     """Exiting zero says the question was answered and the answer was yes.
 
