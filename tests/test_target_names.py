@@ -198,7 +198,7 @@ if __name__ == "__main__":
 
 class PublishedListsAreNotNarrowed(unittest.TestCase):
     """pipeline --target switch wrote install/retroarch_nintendoswitch.json
-    next to the published lists; the site picker then replaced RetroArch's
+    next to the published lists. The site picker then replaced RetroArch's
     file list with the Switch one and check_release asked for it as an asset."""
 
     def test_pipeline_writes_install_unfiltered(self):
