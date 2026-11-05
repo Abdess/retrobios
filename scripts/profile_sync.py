@@ -4355,6 +4355,10 @@ def branch_profiles(emulators_dir: str, base: str, added_only: bool) -> list[str
     branch point are not counted, and ends at the working tree, so a
     profile not yet committed is checked too. A rename reads as an addition.
     """
+    if subprocess.run(["git", "rev-parse", "--verify", "--quiet", base],
+                      capture_output=True, check=False).returncode:
+        remote = base.split("/", 1)[0] if "/" in base else "upstream"
+        raise SystemExit(f"ERROR: {base} is not in this clone: run git fetch {remote} first")
     merge_base = _git_lines(["merge-base", base, "HEAD"])[0]
     paths = _git_lines([
         "diff", "--name-only", "--no-renames",

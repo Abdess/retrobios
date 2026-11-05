@@ -5918,6 +5918,13 @@ class TestBranchProfiles(unittest.TestCase):
             ["draft", "new"],
         )
 
+    def test_an_unfetched_base_says_to_fetch(self):
+        """`--base upstream/main` with upstream added and never fetched
+        stopped on git's "Not a valid object name" and no next step."""
+        with self.assertRaises(SystemExit) as raised:
+            profile_sync.branch_profiles("emulators", "upstream/main", added_only=True)
+        self.assertIn("git fetch upstream", str(raised.exception))
+
     def test_the_flag_selects_those_profiles(self):
         args = profile_sync.build_parser().parse_args(["--changed", "--base", "main"])
         profiles = {"kept": {}, "edited": {}, "new": {}, "draft": {}}

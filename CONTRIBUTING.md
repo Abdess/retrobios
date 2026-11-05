@@ -80,8 +80,9 @@ vermin --no-tips -t=3.8- --violations install.py         # install.py stays on P
 ```
 
 `upstream` is this repository as a remote of your fork
-(`git remote add upstream https://github.com/Abdess/retrobios`). A profile you
-only edit is not held to `--strict`: its older refs are reviewed by hand.
+(`git remote add upstream https://github.com/Abdess/retrobios`, then
+`git fetch upstream`). A profile you only edit is not held to `--strict`: its
+older refs are reviewed by hand.
 
 The full pipeline is not needed for a contribution: it rebuilds every pack
 in `dist/`, which is why maintainers run it before a release.
