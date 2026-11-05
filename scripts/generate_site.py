@@ -2516,6 +2516,12 @@ def _page_description(markdown: str, relative: Path, title: str) -> str:
         return _system_description(markdown, browser)
     if key.startswith("emulators/") and relative.stem != "index":
         return _emulator_description(markdown, key, title, _first_paragraph(lead))
+    if key.startswith("platforms/") and relative.stem != "index":
+        # The summary ends on a link to the platform's site, whose label
+        # alone was left: "A system for handhelds. ROCKNIX website."
+        summary = _first_paragraph(lead).removesuffix(f" {title} website.")
+        return _shorten(f"The BIOS files for {title}, the folder they go in and the "
+                        f"command that installs them. {summary}", 155)
     first = _first_paragraph(lead, minimum=35)
     questions = [_plain_markdown(re.sub(r"\s*\{[^}]*\}\s*$", "", heading))
                  for heading in re.findall(r"^## (.+\?)(?:[ \t]*\{[^}]*\})?[ \t]*$", markdown, re.M)]
