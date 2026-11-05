@@ -180,7 +180,11 @@ A platform and an emulator profile can each name a different file for the same
 place in the BIOS folder: RetroBat puts its own `ATARIOSB.ROM` at
 `bios/ATARIOSB.ROM`, where atari800 reads another dump. A claim counts only when
 it rests on content or on the path. A file found by its name alone claims
-nothing. The pack then answers to whoever asked for it:
+nothing, unless its copy has the exact size the profile declares and the
+platform's file has another size (`size_exact`): RetroDECK's `sgb2.boot.rom` is
+the Super Game Boy 2 SNES program ROM where supersnes9x reads a 256-byte boot ROM.
+Two files of equal size are revisions, not a conflict. The pack then answers to
+whoever asked for it:
 
 - A **platform pack** must leave the frontend's own check green, since a user
   reading red concludes the pack is broken. Where the frontend only looks for

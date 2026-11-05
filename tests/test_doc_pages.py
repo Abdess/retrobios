@@ -1794,6 +1794,21 @@ class ReportExcerptIsTheRun(unittest.TestCase):
                 self.assertIn(line, printed)
 
 
+class ClaimRuleNamesTheSizeProof(unittest.TestCase):
+    """architecture.md said a file found by its name claims nothing, while
+    slots.py has counted a name-found copy at the declared size against a
+    platform file of another size since 2b535525e."""
+
+    def test_the_page_states_what_slots_counts(self):
+        import slots
+
+        self.assertIn(slots.SIZE_EXACT, slots.PROVEN_STATUSES)
+        page = " ".join((ROOT / "wiki" / "architecture.md").read_text(encoding="utf-8").split())
+        section = page.split("### When both layers claim one destination", 1)[1].split("###", 1)[0]
+        self.assertIn(f"(`{slots.SIZE_EXACT}`)", section)
+        self.assertIn("Two files of equal size are revisions", section)
+
+
 class SkipFlagsNameTheSteps(unittest.TestCase):
     """--skip-packs said "add --skip-docs to stop after verify" while 4d and
     4e still ran, and the flag table left 8b out of --skip-docs."""
