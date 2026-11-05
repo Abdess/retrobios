@@ -16,6 +16,7 @@
         "error",
         "scanned",
         "version",
+        "board",
         "choices",
         "set_aside",
         "file",
@@ -58,6 +59,9 @@
     },
     {
       "$ref": "#/$defs/version"
+    },
+    {
+      "$ref": "#/$defs/board"
     },
     {
       "$ref": "#/$defs/choices"
@@ -286,6 +290,34 @@
         },
         "installed_version": {
           "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "board": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "board",
+        "applied",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "board"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "board": {
+          "type": "string"
+        },
+        "applied": {
+          "type": "boolean"
         },
         "message": {
           "type": "string"

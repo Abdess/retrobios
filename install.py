@@ -676,6 +676,12 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # message says it and what it means. Not written when either version
     # is unknown, and never a refusal.
     "version": ("platform", "list_version", "installed_version", "message"),
+    # Before choices: the board the system or its card names, read with no
+    # --target given. applied is whether the run keeps its cores' files
+    # only, false for a board the platform's list does not name. message
+    # says it. A kind of its own: the full-screen interface always gives
+    # --dest, and the board was never applied there.
+    "board": ("platform", "board", "applied", "message"),
     # Before the file events of a check: the systems the run's list lets
     # one choose among, --system aside, in id order (other for the files
     # no system names). What Choose systems lists, and what the plan counts
@@ -1469,6 +1475,33 @@ def derivative_board(platform: str) -> tuple[str, str] | None:
     except OSError:
         return None
     return (name, board) if board else None
+
+
+# The board a card names on a partition a computer reads. Batocera writes
+# its image's board to boot/batocera.board on the BATOCERA boot partition,
+# the FAT one beside SHARE (batocera-43.1, board/batocera/scripts/
+# post-image-script.sh:60), and reads it there itself (package/batocera/
+# core/batocera-scripts/scripts/batocera-info). batocera.arch is inside the
+# image, out of a computer's reach.
+_CARD_BOARD_FILES: dict[str, str] = {"batocera": "boot/batocera.board"}
+
+
+def card_board(platform: str) -> str | None:
+    """The board the card mounted here names, None where no card or two
+    cards of different boards do: a card is most often prepared on a
+    computer, where the system's own board file does not exist."""
+    where = _CARD_BOARD_FILES.get(platform)
+    if where is None:
+        return None
+    boards: set[str] = set()
+    for mount in _mounted_cards():
+        try:
+            value = (mount / where).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if value.strip() and not _CONTROLS.search(value.strip()):
+            boards.add(value.strip().lower())
+    return boards.pop() if len(boards) == 1 else None
 
 
 def detect_board(platform: str) -> str | None:
@@ -15001,19 +15034,28 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
 
         # Target filtering. With no --target, a system that names its board
         # narrows to it: a Batocera RPi4 took 8.6 GiB where its board needs
-        # 5.5. Only on the device itself, where the board file exists.
+        # 5.5. Read from the device itself, else from the card mounted here:
+        # a card prepared on a computer took every board's files, and the
+        # full-screen interface, which always gives --dest, never applied one.
         target = args.target
-        if (not target and not args.every_board and args.dest is None
+        if (not target and not args.every_board
                 and (not LOCAL.offline or local_targets(plat_name) is not None)):
             board = detect_board(plat_name)
+            where = "detected"
+            if not board and args.dest is not None:
+                board, where = card_board(plat_name), "found on the card"
             if board:
                 known = fetch_targets(plat_name) or {}
                 if board in known:
                     target = board
-                    print(f"  Board {board} detected (--every-board installs all boards)")
+                    words = f"Board {board} {where} (--every-board installs all boards)"
                 else:
-                    print(f"  Board {board} has no {PLATFORM_NAMES.get(plat_name, plat_name)} "
-                          "core list: installing the files of every board")
+                    words = (f"Board {board} {where} has no "
+                             f"{PLATFORM_NAMES.get(plat_name, plat_name)} core list: "
+                             "installing the files of every board")
+                print(f"  {words}")
+                EVENTS.emit("board", platform=plat_name, board=board,
+                            applied=target == board, message=words)
             else:
                 derived = derivative_board(plat_name)
                 if derived:
@@ -16428,7 +16470,8 @@ def _folded(text: str) -> str:
 # --system plan: Back with the same ticks gives that plan back.
 _CHECK_FIELDS = ("check", "files", "systems", "choices", "set_aside", "found", "scanned",
                  "unreadable", "saves", "check_summary", "checked_flags", "cli_systems",
-                 "facts", "ticked", "version", "checked_dests", "games", "games_unavailable")
+                 "facts", "ticked", "version", "board", "checked_dests", "games",
+                 "games_unavailable")
 
 
 class TuiState:
@@ -16595,6 +16638,9 @@ class TuiState:
         self.version: str = ""
         # The note in one line, for a plan with no room for its sentences.
         self.version_short: str = ""
+        # The board event of the check: the board read from the system or
+        # its card, said on the plan.
+        self.board: str = ""
         # The same of the confirm or preview run, and of the install: a
         # choice of systems can leave the save file out, or keep it.
         self.dry_saves: dict | None = None
@@ -18120,7 +18166,7 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
         state.choices = state.set_aside = None
         state.found, state.scanned, state.unreadable = [], [], []
         state.check_summary = state.saves = None
-        state.version = state.version_short = ""
+        state.version = state.version_short = state.board = ""
         state.games = state.games_reading = state.games_unavailable = None
         state.checked_flags = tui_flags(state)
     elif run in ("confirm", "preview"):
@@ -20042,6 +20088,8 @@ def _take_event(state: TuiState, event: dict) -> None:
         state.choices = list(event["systems"])
     elif kind == "set_aside" and state.run == "check":
         state.set_aside = set(event["dests"])
+    elif kind == "board" and state.run == "check":
+        state.board = str(event["message"])
     elif kind == "version" and state.run == "check":
         state.version = str(event["message"])
         state.version_short = (f"List for {display_name(state.platform, state.manifest)} "
@@ -21256,6 +21304,10 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
         free = next((index for index, line in enumerate(lines)
                      if str(line).startswith("Free space:")), len(lines))
         lines.insert(free, state.version)
+    if state.board:
+        free = next((index for index, line in enumerate(lines)
+                     if str(line).startswith("Free space:")), len(lines))
+        lines.insert(free, state.board)
     if state.status:
         lines.append(state.status)
     if defined:

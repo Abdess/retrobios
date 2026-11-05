@@ -3190,6 +3190,78 @@ class AndroidEmulatorsOutOfReachAreSaid(unittest.TestCase):
         self.assertIn("DraStic is installed", err.getvalue())
 
 
+class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
+    """A Batocera RPi4 card prepared on a PC took every board's files (8.9 GB
+    where bcm2711 reads 5.8): the board was read only on the device, and
+    only without --dest, which the full-screen interface always gives."""
+
+    def setUp(self):
+        self.root = Path(_tempdir(self))
+        self.boot = self.root / "BATOCERA"
+        (self.boot / "boot").mkdir(parents=True)
+        (self.boot / "boot" / "batocera.board").write_text("bcm2711\n")
+        self.share = self.root / "SHARE"
+        (self.share / "system").mkdir(parents=True)
+        (self.share / "system" / "batocera.conf").write_text("system.hostname=BATOCERA\n")
+        lists = self.root / "lists"
+        (lists / "targets").mkdir(parents=True)
+        one, two = b"pi core file", b"pc core file"
+        self.list = lists / "batocera.json"
+        self.list.write_text(json.dumps({
+            "manifest_version": 2, "platform": "batocera", "base_destination": "bios",
+            "files": [
+                {"dest": "pi.bin", "sha1": hashlib.sha1(one).hexdigest(), "size": len(one),
+                 "repo_path": "bios/pi.bin", "cores": ["picore"], "systems": ["pi"]},
+                {"dest": "pc.bin", "sha1": hashlib.sha1(two).hexdigest(), "size": len(two),
+                 "repo_path": "bios/pc.bin", "cores": ["pccore"], "systems": ["pc"]},
+            ],
+            "system_cores": {"pi": ["picore"], "pc": ["pccore"]},
+        }))
+        (lists / "targets" / "batocera.json").write_text(
+            json.dumps({"bcm2711": ["picore"], "x86_64": ["pccore"]}))
+
+    def run_main(self, *extra: str) -> tuple[str, list[dict]]:
+        out = io.StringIO()
+        argv = ["install.py", "--platform", "batocera", "--dest", str(self.share),
+                "--manifest", str(self.list), "--offline", "--check", "--events", *extra]
+        with unittest.mock.patch.object(install, "_mounted_cards", return_value=[self.boot]), \
+                unittest.mock.patch.object(sys, "argv", argv), \
+                unittest.mock.patch.dict(os.environ), \
+                contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()), \
+                contextlib.suppress(SystemExit):
+            install.main()
+        events = [json.loads(line) for line in out.getvalue().splitlines()
+                  if line.startswith("{")]
+        return out.getvalue(), events
+
+    def test_the_boot_partition_names_the_board(self):
+        with unittest.mock.patch.object(install, "_mounted_cards", return_value=[self.boot]):
+            self.assertEqual(install.card_board("batocera"), "bcm2711")
+            self.assertIsNone(install.card_board("retroarch"))
+
+    def test_the_run_keeps_that_boards_files(self):
+        _out, events = self.run_main()
+        [board] = [event for event in events if event["event"] == "board"]
+        self.assertEqual((board["board"], board["applied"]), ("bcm2711", True))
+        self.assertIn("found on the card", board["message"])
+        files = {event["dest"] for event in events if event["event"] == "file"}
+        self.assertEqual(files, {"pi.bin"})
+
+    def test_every_board_keeps_them_all(self):
+        _out, events = self.run_main("--every-board")
+        self.assertFalse([event for event in events if event["event"] == "board"])
+        files = {event["dest"] for event in events if event["event"] == "file"}
+        self.assertEqual(files, {"pi.bin", "pc.bin"})
+
+    def test_the_plan_says_it(self):
+        state = install.TuiState()
+        state.run = "check"
+        install._take_event(state, {"event": "board", "platform": "batocera",
+                                  "board": "bcm2711", "applied": True,
+                                  "message": "Board bcm2711 found on the card (x)"})
+        self.assertEqual(state.board, "Board bcm2711 found on the card (x)")
+
+
 class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
     """Batocera, Recalbox and ROCKNIX each write the board they were built
     for, but the installer read none of them, so a Batocera RPi4 installed
