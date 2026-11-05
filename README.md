@@ -142,6 +142,9 @@ python scripts/generate_pack.py --platform retroarch --region us --one-per-slot
 # Firmware only: the game data a list or a core names is left out, each file named
 python scripts/generate_pack.py --platform emuelec --no-game-data
 
+# The bare minimum: only the files each core needs to start
+python scripts/generate_pack.py --platform batocera --required-only
+
 # List available emulators and systems
 python scripts/generate_pack.py --list-emulators
 python scripts/generate_pack.py --list-systems
@@ -203,4 +206,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-05T10:43:18Z*
+*Auto-generated on 2026-11-05T10:52:39Z*

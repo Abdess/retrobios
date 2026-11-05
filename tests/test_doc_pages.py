@@ -1700,5 +1700,16 @@ class InstallerVariablesAreDocumented(unittest.TestCase):
         self.assertIn("cache", section[:section.index("\n## ", 1)])
 
 
+class ReadmeKeepsItsPointers(unittest.TestCase):
+    def test_the_bare_minimum_is_built_below(self):
+        """The README sent a reader to 'build your own pack below' for a bare
+        minimum, and the block below never named --required-only."""
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("For a bare minimum, build your own pack below.", readme)
+        block = readme[readme.index("## Build your own pack"):]
+        block = block[:block.index("\n## ", 1)]
+        self.assertIn("--required-only", block)
+
+
 if __name__ == "__main__":
     unittest.main()
