@@ -3401,20 +3401,14 @@ def _served_line(f: dict) -> str:
             f"(sha1 `{sha1[:8]}`)")
 
 
-# Platforms whose launcher records are read from the repository and revision
-# of their BIOS list: batocera_scraper reads configgen at its tag,
-# retrobat_scraper reads emulatorLauncher at the list's commit
-# (launcher_revision). The others read another repository.
-_LAUNCHERS_IN_LIST_REPO = frozenset({"batocera", "retrobat"})
-
-
-def _launcher_refs(platform: str, config: dict) -> dict[str, list[str]]:
+def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
     from launchers import _names as launcher_names
     from sitesources import launcher_ref_markdown, list_source
 
-    source = (list_source(str(config.get("source") or ""))
-              if platform in _LAUNCHERS_IN_LIST_REPO else None)
+    # Every scraper reads its launchers in the repository and at the revision
+    # of the list it scrapes, so `source` pins each source_ref.
+    source = list_source(str(config.get("source") or ""))
     found: dict[str, list[str]] = {}
     for record in config.get("launchers") or []:
         if not isinstance(record, dict) or not record.get("source_ref"):
@@ -3626,7 +3620,7 @@ def _render_platform_systems(
     # Per-system detail sections (collapsible for large platforms)
     use_collapsible = len(by_system) > 10
     by_system_declared = _declared_by_system(config_files)
-    launched = _launcher_refs(platform[0] if platform else "", config or {})
+    launched = _launcher_refs(config or {})
 
     sections: list[dict] = []
     for sys_id, files in sorted(by_system.items()):
