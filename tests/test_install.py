@@ -6132,7 +6132,8 @@ class TheListVersionIsComparedWithTheSystems(unittest.TestCase):
         self.assertEqual((listed, installed), ("43.1", "41"))
         self.assertEqual(
             text, "This list was built for Batocera 43.1, this machine runs 41. "
-            "Batocera's own BIOS check may report some files as wrong though they work.")
+            "Batocera's own BIOS check reads the list of the version it runs, and "
+            "may show some files as not matching it.")
         self.assertIsNone(self.note("batocera", "41"))
 
     def test_recalbox_reads_only_a_release(self):
@@ -6243,7 +6244,8 @@ class TheListVersionIsSaidBeforeAndAfter(unittest.TestCase):
         )
 
     SAID = ("This list was built for RetroBat 8.3.1, this machine runs 8.2.0. "
-            "RetroBat's own BIOS check may report some files as wrong though they work.")
+            "RetroBat's own BIOS check reads the list of the version it runs, and "
+            "may show some files as not matching it.")
 
     def test_line_mode_says_it_before_the_install_and_with_the_result(self):
         proc = self.run_installer()

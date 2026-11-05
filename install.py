@@ -1762,7 +1762,10 @@ _VERSION_TEXT = re.compile(r"[0-9A-Za-z][0-9A-Za-z._+-]{0,39}")
 # What generate_pack.py wrote as every list's version until it recorded the
 # platform's own: not a version, so a list holding it names none.
 _NO_LIST_VERSION = "1.0"
-_MD5_CHECK = "{name}'s own BIOS check may report some files as wrong though they work."
+# What the platform's own check does, not a verdict on it: it compares the
+# files with the list of its own version, and no run proved them working.
+_MD5_CHECK = ("{name}'s own BIOS check reads the list of the version it runs, and "
+              "may show some files as not matching it.")
 
 
 def _version_line(path: Path) -> str:

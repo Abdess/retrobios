@@ -10920,7 +10920,8 @@ class AuditNineteenAndTwelve(_CardFixtures, unittest.TestCase):
         """code_audit_19 P2-1, tui_audit_12 P2-4: line mode said it, the
         screen dropped the version event."""
         said = ("This list was built for RetroBat 8.3.1, this machine runs 8.2.0.1. "
-                "RetroBat's own BIOS check may report some files as wrong though they work.")
+                "RetroBat's own BIOS check reads the list of the version it runs, and "
+                "may show some files as not matching it.")
         state = fresh_state()
         state.stack = ["setup"]
         with mock.patch.object(install.Path, "exists", return_value=True):

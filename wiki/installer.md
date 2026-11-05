@@ -355,8 +355,8 @@ The file list names the version of the platform it was built for (Batocera
 43.1, RetroBat 8.3.1). Where the system writes its own version in a file, the
 installer reads it, and when the two differ it says so before the install and
 again with the result: "This list was built for Batocera 43.1, this machine
-runs 41. Batocera's own BIOS check may report some files as wrong though they
-work." The install goes on. The files read are
+runs 41. Batocera's own BIOS check reads the list of the version it runs, and
+may show some files as not matching it." The install goes on. The files read are
 `/usr/share/batocera/batocera.version` on Batocera, `/recalbox/recalbox.version`
 on Recalbox (a release, not a branch build), `system\version.info` beside the
 `bios` folder of RetroBat, and `VERSION_ID` in `/etc/os-release` on Lakka and
