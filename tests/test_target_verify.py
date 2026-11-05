@@ -163,5 +163,38 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
         self.assertIn("sony-playstation", systems)
 
 
+class APlatformWithoutTheSystemIsOutOfScope(unittest.TestCase):
+    """`--all --system sony-playstation-2` built the five PS2 packs and
+    exited 1 on 'no pack for misterfpga', which has no PS2."""
+
+    def _scope(self, **args):
+        import argparse
+
+        import generate_pack
+        from common import load_emulator_profiles
+
+        values = {"platforms_dir": str(REPO_ROOT / "platforms"), "target": None,
+                  "all": True}
+        values.update(args)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+            kept = generate_pack._platforms_with_systems(
+                argparse.Namespace(**values), ["retroarch", "misterfpga"],
+                ["sony-playstation-2"],
+                load_emulator_profiles(str(REPO_ROOT / "emulators")), {},
+            )
+        return kept, out.getvalue()
+
+    def test_all_skips_it(self):
+        kept, out = self._scope()
+        self.assertEqual(kept, ["retroarch"])
+        self.assertIn("INFO: Skipping misterfpga: no system sony-playstation-2", out)
+
+    def test_a_named_platform_is_refused(self):
+        with self.assertRaises(SystemExit) as ctx:
+            self._scope(all=False)
+        self.assertEqual(ctx.exception.code, 1)
+
+
 if __name__ == "__main__":
     unittest.main()

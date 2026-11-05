@@ -53,6 +53,7 @@ from common import (
     list_platform_system_ids,
     platform_system_names,
     resolve_system_arg,
+    select_systems,
     platform_scope_systems,
     system_scope_error,
     canonical_target_name,
@@ -2358,6 +2359,46 @@ def _resolve_systems(args: argparse.Namespace, parser: argparse.ArgumentParser) 
         parser.error(f"--system {args.system}: {exc}")
 
 
+def _platforms_with_systems(
+    args: argparse.Namespace,
+    platforms: list[str],
+    system_filter: list[str],
+    emu_profiles: dict,
+    target_cores_cache: dict[str, set[str] | None],
+) -> list[str]:
+    """The platforms a --system list leaves a system to pack, before any lock.
+
+    Under --all a platform without one is out of scope, as a platform
+    without the target is: `--all --system sony-playstation-2` built every
+    PS2 pack and exited 1 on MiSTer, which has no PS2. Under --platform the
+    request is refused here, with its reason.
+    """
+    kept = []
+    for name in platforms:
+        config = load_platform_config(name, args.platforms_dir)
+        tc = target_cores_cache.get(name) if args.target else None
+        if platform_scope_systems(config, emu_profiles, tc, system_filter):
+            kept.append(name)
+            continue
+        if not args.all:
+            reason = system_scope_error(config, name, system_filter, args.target)
+            print(f"ERROR: {reason}", file=sys.stderr)
+            sys.exit(1)
+        declared = select_systems(config.get("systems", {}), system_filter)
+        reason = (
+            system_scope_error(config, name, system_filter, args.target)
+            if declared and args.target
+            else f"no system {', '.join(system_filter)}"
+        )
+        print(f"INFO: Skipping {name}: {reason}")
+    if not kept:
+        where = f" on target {args.target}" if args.target else ""
+        print(f"ERROR: no platform packed here runs {', '.join(system_filter)}{where}",
+              file=sys.stderr)
+        sys.exit(1)
+    return kept
+
+
 def _refuse_for_verify_packs(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
     """What --verify-packs cannot be combined with, refused before any lock.
 
@@ -3478,6 +3519,12 @@ def _main(held: contextlib.ExitStack) -> None:
             print(f"ERROR: {e}", file=sys.stderr)
             sys.exit(1)
 
+    emu_profiles = load_emulator_profiles(args.emulators_dir)
+    if system_filter:
+        platforms = _platforms_with_systems(
+            args, platforms, system_filter, emu_profiles, target_cores_cache
+        )
+
     data_registry = load_data_dir_registry(args.platforms_dir)
     # The output directory is claimed before the data directory refresh: a
     # refresh waits for every run that holds a cache, so a second build
@@ -3496,8 +3543,6 @@ def _main(held: contextlib.ExitStack) -> None:
                 print(f"WARNING: data directory refresh failed: {', '.join(failed)}")
         if data_registry:
             hold_data_dirs(held, data_registry)
-
-        emu_profiles = load_emulator_profiles(args.emulators_dir)
 
         groups = group_identical_platforms(
             platforms, args.platforms_dir, target_cores_cache if args.target else None
