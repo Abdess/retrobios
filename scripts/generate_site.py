@@ -1664,6 +1664,7 @@ def generate_data_exports(
             ),
         })
     write_if_changed(str(downloads / "retrobios.dat"), collection_dat(db, generated_at))
+    platform_dats = _write_platform_dats(downloads / "dat", db, members, generated_at)
     write_if_changed(
         str(downloads / "files.csv"),
         _csv_document(
@@ -1741,6 +1742,7 @@ def generate_data_exports(
         (downloads / "files.csv", "File hashes CSV", "text/csv", None),
         (downloads / "retrobios.dat", "Collection DAT (Logiqx XML, for clrmamepro and RomVault)",
          "application/xml", None),
+        *((path, f"Setup DAT: {path.stem}", "application/xml", None) for path in platform_dats),
         (downloads / "platform-files.csv", "Platform declarations CSV", "text/csv", None),
         (downloads / "cross-reference.csv", "Cross-reference CSV", "text/csv", None),
         (downloads / "gaps.csv", "Verification and coverage gaps CSV", "text/csv", None),
@@ -1988,6 +1990,14 @@ def _is_target_list(item: dict) -> bool:
     return item["url"].startswith("api/v1/targets/")
 
 
+def _is_setup_dat(item: dict) -> bool:
+    return item["url"].startswith("downloads/dat/")
+
+
+def _is_export_report(item: dict) -> bool:
+    return item["url"].startswith("api/v1/exports/")
+
+
 def _served_schemas() -> list[tuple[str, str]]:
     """(file name, title) of every schema api/v1/schemas/ serves, from the folder
     the export copies: the page linked 7 of 11."""
@@ -2126,7 +2136,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
     ]
     for item in exports:
         if (item["media_type"] != "application/json" or _is_manifest(item)
-                or _is_target_list(item)):
+                or _is_target_list(item) or _is_export_report(item)):
             continue
         schema = (
             f"[JSON Schema](api/v1/{item['schema']})"
@@ -2233,6 +2243,9 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
             f"[{item['url'].rsplit('/', 1)[-1].removesuffix('.json')}]({item['url']})"
             for item in targets) + "." if targets else "",
         "",
+        "`api/v1/exports/<platform>.json` lists every change of a setup's "
+        "[updated file](exports.md), the report that page is written from.",
+        "",
         "| Field | Meaning |",
         "|-------|---------|",
         *_schema_field_rows(manifest_schema, MANIFEST_TOP_FIELDS),
@@ -2296,7 +2309,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "|--------|--------|-----:|--------|",
     ])
     for item in exports:
-        if item["media_type"] == "application/json":
+        if item["media_type"] == "application/json" or _is_setup_dat(item):
             continue
         lines.append(
             f"| [{item['title']}]({item['url']}) | `{item['media_type']}` | "
@@ -2311,8 +2324,14 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "per `bios/<Manufacturer>/<Console>/` folder of the collection, named "
         "`Manufacturer\\Console` so the tools look in that subfolder, each file a "
         "rom named by its path below that folder. It audits a copy of the "
-        "collection's `bios/` tree, or rebuilds that layout from your own dumps. A "
-        "platform pack has its own layout and is checked with `install.py --check`.",
+        "collection's `bios/` tree, or rebuilds that layout from your own dumps.",
+        "",
+        "A setup's DAT, `downloads/dat/<platform>.dat`, describes its BIOS folder "
+        "once installed: one game named after the folder (`bios`, `system`), each "
+        "file a rom named by its place below it, as its manifest lists it. It audits "
+        "that folder with the same tools. Setup DATs: " + ", ".join(
+            f"[{item['url'].rsplit('/', 1)[-1].removesuffix('.dat')}]({item['url']})"
+            for item in exports if _is_setup_dat(item)) + ".",
         "",
         "The SQLite file contains indexed tables for content hashes, provenance "
         "catalog matches, platform declarations, emulator profiles and current "
@@ -2620,8 +2639,6 @@ def collection_dat(db: dict, generated_at: str) -> str:
     folder, subfolders joined with a backslash as Logiqx DATs write them. An auditor checking a BIOS tree against the
     collection had JSON, CSV and SQLite, and a converter to write.
     """
-    import xml.etree.ElementTree as ET  # noqa: PLC0415
-
     games: dict[str, list[dict]] = {}
     files = db.get("files", {})
     # Every copy, not the one path the database keeps: an audit of bios/
@@ -2637,12 +2654,64 @@ def collection_dat(db: dict, generated_at: str) -> str:
             games.setdefault("\\".join(folder), []).append(
                 {**files[sha1], "_rom": "\\".join(parts[1 + len(folder):])}
             )
+    return _logiqx(SITE_NAME, f"{SITE_NAME} collection ({sum(map(len, games.values()))} files)",
+                   games, generated_at)
+
+
+def _write_platform_dats(folder: Path, db: dict, members: dict, generated_at: str) -> list[Path]:
+    """downloads/dat/<platform>.dat for each install manifest."""
+    folder.mkdir(parents=True, exist_ok=True)
+    digests = _data_member_digests(members)
+    written = []
+    for source in sorted((_REPO_ROOT / "install").glob("*.json")):
+        manifest = json.loads(source.read_text(encoding="utf-8"))
+        path = folder / f"{source.stem}.dat"
+        write_if_changed(str(path), platform_dat(manifest, db, digests, generated_at))
+        written.append(path)
+    return written
+
+
+def platform_dat(manifest: dict, db: dict, member_digests: dict[str, dict[str, str]],
+                 generated_at: str) -> str:
+    """What one setup's BIOS folder holds once installed, as a Logiqx DAT.
+
+    One game named after the folder (`bios`, `system`), each file a rom
+    named by its place below it, as the install manifest writes it: the
+    files of the setup's list and those its cores load, and the members of
+    its data directories. A Batocera user auditing share/bios against the
+    collection DAT met thousands of sets laid out by manufacturer.
+    """
+    files = db.get("files", {})
+    roms: list[dict] = []
+    for entry in manifest.get("files") or []:
+        if entry.get("root") == "save":
+            continue  # installed in the save directory, not this folder
+        sha1 = str(entry.get("sha1", ""))
+        roms.append({**files.get(sha1, {}), "sha1": sha1, "size": entry.get("size", 0),
+                     "_rom": str(entry["dest"]).replace("/", "\\")})
+    for tree in manifest.get("data_directories") or []:
+        dest = str(tree.get("dest") or "").strip("/")
+        for member, info in (tree.get("files") or {}).items():
+            sha1 = str(info.get("sha1", ""))
+            path = f"{dest}/{member}" if dest else member
+            roms.append({**member_digests.get(sha1, {}), "sha1": sha1,
+                         "size": info.get("size", 0), "_rom": path.replace("/", "\\")})
+    folder = str(manifest.get("base_destination") or "bios").strip("/").rsplit("/", 1)[-1]
+    name = f"{SITE_NAME} - {manifest.get('display_name') or manifest['platform']}"
+    unique = list({rom["_rom"]: rom for rom in reversed(roms)}.values())
+    return _logiqx(name, f"{name} ({len(unique)} files)", {folder: unique}, generated_at)
+
+
+def _logiqx(name: str, description: str, games: dict[str, list[dict]], generated_at: str) -> str:
+    """Games of roms as a Logiqx datafile, each rom's `_rom` its name."""
+    import xml.etree.ElementTree as ET  # noqa: PLC0415
+
     root = ET.Element("datafile")
     header = ET.SubElement(root, "header")
     version = generated_at[:10].replace("-", "")
     for tag, text in (
-        ("name", SITE_NAME),
-        ("description", f"{SITE_NAME} collection ({sum(map(len, games.values()))} files)"),
+        ("name", name),
+        ("description", description),
         ("version", version),
         ("date", generated_at[:10]),
         ("author", SITE_NAME),
@@ -3759,6 +3828,8 @@ def _platform_data_links(name: str) -> str:
     ]
     if (_REPO_ROOT / "install" / f"{name}.json").is_file():
         links.append(f"[install manifest]({REPO_URL}/blob/main/install/{name}.json)")
+        # The installed BIOS folder for clrmamepro and RomVault.
+        links.append(f"[DAT](../downloads/dat/{name}.dat)")
     return ", ".join(links)
 
 
