@@ -85,5 +85,48 @@ class AMistypedTargetIsRefusedFirst(unittest.TestCase):
         self.assertIn("Unknown target 'swich'", err.getvalue())
 
 
+class ASystemTheTargetDropsIsNamedAsSuch(unittest.TestCase):
+    """`--platform retroarch --system sony-playstation-2 --target switch`:
+    verify printed 0/0 with exit 0 under --strict, and generate_pack said
+    RetroArch has no such system and suggested sony-playstation."""
+
+    PLATFORMS = str(REPO_ROOT / "platforms")
+
+    def test_both_tools_read_one_scope(self):
+        from common import (
+            load_emulator_profiles, load_platform_config, platform_scope_systems,
+        )
+
+        config = load_platform_config("retroarch", self.PLATFORMS)
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        switch = _target_cores_for("retroarch", "switch", self.PLATFORMS)
+        wanted = ["sony-playstation-2"]
+        self.assertEqual(platform_scope_systems(config, profiles, switch, wanted), {})
+        self.assertEqual(list(platform_scope_systems(config, profiles, None, wanted)), wanted)
+
+    def test_the_message_names_the_target(self):
+        from common import system_scope_error
+
+        config = {"systems": {"sony-playstation-2": {}, "sony-playstation": {}}}
+        self.assertEqual(
+            system_scope_error(config, "retroarch", ["sony-playstation-2"], "switch"),
+            "no core retroarch runs on target switch emulates sony-playstation-2",
+        )
+        undeclared = system_scope_error(config, "retroarch", ["nec-pc-98"], "switch")
+        self.assertTrue(undeclared.startswith("retroarch has no system matching nec-pc-98."))
+
+    def test_verify_refuses_it(self):
+        import subprocess
+
+        proc = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--platform", "retroarch",
+             "--system", "sony-playstation-2", "--target", "switch", "--strict"],
+            capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600, check=False,
+        )
+        self.assertEqual(proc.returncode, 1, proc.stdout[-300:])
+        self.assertIn("no core retroarch runs on target switch emulates sony-playstation-2",
+                      proc.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

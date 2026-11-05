@@ -53,7 +53,8 @@ from common import (
     list_platform_system_ids,
     platform_system_names,
     resolve_system_arg,
-    select_systems,
+    platform_scope_systems,
+    system_scope_error,
     canonical_target_name,
     platform_files_target,
     list_registered_platforms,
@@ -753,31 +754,13 @@ def generate_pack(
         target_cores=target_cores, source=source,
     )
 
-    # Filter systems by target if specified
-    plat_cores = (
-        resolve_platform_cores(config, emu_profiles or {}) if target_cores else None
+    pack_systems = platform_scope_systems(
+        config, emu_profiles or {}, target_cores, system_filter
     )
-    pack_systems = filter_systems_by_target(
-        config.get("systems", {}),
-        emu_profiles or {},
-        target_cores,
-        platform_cores=plat_cores,
-    )
-
-    if system_filter:
-        filtered = select_systems(pack_systems, system_filter)
-        if not filtered:
-            hint = suggest_names(
-                system_filter,
-                sorted(pack_systems),
-                f"--platform {platform_name} --list-systems",
-            )
-            print(
-                f"  WARNING: {platform_name} has no system matching "
-                f"{', '.join(system_filter)}. {hint}"
-            )
-            return None
-        pack_systems = filtered
+    if system_filter and not pack_systems:
+        reason = system_scope_error(config, platform_name, system_filter, target_name)
+        print(f"  WARNING: {reason}")
+        return None
     if extras_only:
         # The part of a split that carries the core extras no platform system
         # owns: the platform's own files and trees went to the other parts.

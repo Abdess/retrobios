@@ -55,7 +55,6 @@ from common import (
     compute_hashes,
     expand_directory_entries,
     platform_declarations,
-    filter_systems_by_target,
     group_identical_platforms,
     list_emulator_profiles,
     list_system_ids,
@@ -65,6 +64,8 @@ from common import (
     load_platform_config,
     resolve_system_arg,
     select_systems,
+    platform_scope_systems,
+    system_scope_error,
     md5sum,
     require_yaml,
     resolve_local_file,
@@ -1218,16 +1219,7 @@ def verify_platform(
     validation_index = _build_validation_index(platform_profiles)
     validation_owners = destination_owners(platform_profiles)
 
-    if not target_cores:
-        plat_cores = None
-    verify_systems = filter_systems_by_target(
-        config.get("systems", {}),
-        profiles,
-        target_cores,
-        platform_cores=plat_cores,
-    )
-    if system_filter:
-        verify_systems = select_systems(verify_systems, system_filter)
+    verify_systems = platform_scope_systems(config, profiles, target_cores, system_filter)
 
     details = []
     file_status: dict[str, str] = {}
@@ -2884,6 +2876,18 @@ def _main(held: contextlib.ExitStack) -> None:
         except (FileNotFoundError, ValueError) as e:
             print(f"ERROR: {e}", file=sys.stderr)
             sys.exit(1)
+        # A system the target leaves no core for was reported 0/0 with exit 0,
+        # where generate_pack refuses the same request.
+        if platform_systems:
+            config = load_platform_config(args.platform, args.platforms_dir)
+            if not platform_scope_systems(
+                config, emu_profiles, target_cores_cache.get(args.platform), platform_systems
+            ):
+                reason = system_scope_error(
+                    config, args.platform, platform_systems, args.target
+                )
+                print(f"ERROR: {reason}", file=sys.stderr)
+                sys.exit(1)
 
     # Group identical platforms (same function as generate_pack)
     groups = group_identical_platforms(

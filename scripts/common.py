@@ -2993,6 +2993,46 @@ def filter_systems_by_target(
     }
 
 
+def platform_scope_systems(
+    config: dict,
+    profiles: dict[str, dict],
+    target_cores: set[str] | None,
+    system_filter: list[str] | None = None,
+) -> dict[str, dict]:
+    """The systems a pack or a report of a platform covers.
+
+    Those a core of the target runs, then the ones a --system list keeps.
+    verify.py and generate_pack.py read this one function.
+    """
+    plat_cores = resolve_platform_cores(config, profiles) if target_cores else None
+    systems = filter_systems_by_target(
+        config.get("systems", {}), profiles, target_cores, platform_cores=plat_cores
+    )
+    return select_systems(systems, system_filter) if system_filter else systems
+
+
+def system_scope_error(
+    config: dict, platform_name: str, system_filter: list[str], target: str | None
+) -> str:
+    """Why a --system list leaves a platform no system.
+
+    A system the platform declares but no core of the target runs was
+    reported as a system the platform lacks, with a lookalike to try and a
+    listing that refuses --target.
+    """
+    systems = config.get("systems", {})
+    declared = select_systems(systems, system_filter)
+    if declared and target:
+        return (
+            f"no core {platform_name} runs on target {target} emulates "
+            f"{', '.join(sorted(declared))}"
+        )
+    hint = suggest_names(
+        system_filter, sorted(systems), f"--platform {platform_name} --list-systems"
+    )
+    return f"{platform_name} has no system matching {', '.join(system_filter)}. {hint}"
+
+
 def platform_declarations(
     config: dict, db: dict, *, enrich: bool = True
 ) -> dict[str, list[tuple[int | None, str]]]:
