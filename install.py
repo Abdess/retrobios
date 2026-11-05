@@ -14074,6 +14074,12 @@ def _list_card_choice(plat: str, dest: Path) -> CardChoice:
         return CardChoice(plat, dest, f"{screen_text(str(dest))} holds the files of "
                           f"{names}: installing into it as named. Name the card's BIOS "
                           "folder with --dest to write there.")
+    if plat == "retrodeck" and dest.name.lower() == "bios" and not _is_dir(dest / "bios"):
+        # RetroDECK's list writes bios/, roms/ and the rest below its own
+        # folder: its BIOS folder, which --help asks for, got bios/bios.
+        return CardChoice(plat, dest.parent, f"{shown_path(dest)} is RetroDECK's BIOS "
+                          f"folder: the files go below {shown_path(dest.parent)}, the "
+                          "RetroDECK folder holding it")
     return CardChoice(plat, dest)
 
 

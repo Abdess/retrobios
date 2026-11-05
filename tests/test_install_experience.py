@@ -823,6 +823,27 @@ class APartlyClosedHome(unittest.TestCase):
         self.assertEqual([entry["bios_dir"] for entry in detect["platforms"]], [str(system)])
 
 
+class RetroDeckBiosFolderNamedAsDest(unittest.TestCase):
+    """`--platform retrodeck --dest ~/retrodeck/bios`, as --help asks for a
+    BIOS folder, put every file under bios/bios, which RetroDECK never reads."""
+
+    def test_the_files_go_below_the_retrodeck_folder(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        (root / "bios").mkdir()
+        choice = install.card_choice("retrodeck", "retrodeck", root / "bios")
+        self.assertEqual(choice.folder, root)
+        self.assertIn("RetroDECK's BIOS folder", choice.note)
+        self.assertFalse(choice.refused)
+
+    def test_the_retrodeck_folder_itself_is_kept(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        (root / "bios").mkdir()
+        choice = install.card_choice("retrodeck", "retrodeck", root)
+        self.assertEqual((choice.folder, choice.note), (root, ""))
+
+
 class AnUnreadableRetroArchConfigIsSaid(unittest.TestCase):
     """A retroarch.cfg a `sudo retroarch` left at 0600 for root was read as
     no config at all: RetroArch was not found and nothing said why."""
