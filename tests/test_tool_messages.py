@@ -97,6 +97,39 @@ class AMistypedDataKeyGetsTheClosestName(unittest.TestCase):
                       proc.stderr)
         self.assertNotIn("ppsspp-assets", proc.stderr)
 
+class TheGapHeadingAddsUp(unittest.TestCase):
+    """Amiberry read 261 files in profile, 7 declared and 238 undeclared:
+    16 entries were set aside without a word."""
+
+    def test_every_entry_is_counted_once(self):
+        import cross_reference as xref
+
+        files = [
+            {"name": "kick.rom", "required": True},
+            {"name": "game.grp", "size": 10},
+            {"name": "game.grp", "size": 20},
+            {"name": "a.bin", "archive": "set.zip"},
+            {"name": "b.bin", "archive": "set.zip"},
+            {"name": "picked.bin", "path": None},
+            {"name": "gone.bin", "unsourceable": "never distributed"},
+        ]
+        profiles = {"emu": {"emulator": "Emu", "type": "libretro", "systems": ["s"],
+                            "files": files}}
+        report = xref.cross_reference(profiles, {}, {"files": {}, "indexes": {}},
+                                      all_declared={"kick.rom": [(None, "kick.rom")]})
+        data = report["emu"]
+        self.assertEqual(
+            xref.profile_breakdown(data),
+            "1 declared by platforms, 3 undeclared, 1 unsourceable, "
+            "2 set aside (1 other versions of a slot, 1 outside the pack)",
+        )
+        self.assertEqual(
+            data["declared_files"] + data["undeclared_files"] + data["unsourceable_files"]
+            + sum(data["set_aside"].values()),
+            data["total_files"],
+        )
+
+
 class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
     """The markdown wrote `**Remove** hiscore.dat (phantom)` beside six
     `**Add** hiscore.dat`, none with a path, for files profiled cores read."""
