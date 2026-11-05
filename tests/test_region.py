@@ -1411,5 +1411,32 @@ class MachineModelRomsCarryNoTerritory(unittest.TestCase):
         )
 
 
+class UsaRegionServesTheAmericas(unittest.TestCase):
+    """A code that knows a USA region and no Latin America one selects the
+    USA file there: Citra's shared font for CFG USA is 0x00014002
+    (apt.cpp:128-140), and a --region br,cn pack dropped it for the Chinese
+    archive alone."""
+
+    PROFILE = Path(__file__).resolve().parents[1] / "emulators" / "citra-mmj.yml"
+    FONT = (
+        "nand/00000000000000000000000000000000/title/0004009b/00014002/"
+        "content/00000000.app.romfs"
+    )
+
+    def test_brazil_ranks_the_default_shared_font(self):
+        import yaml
+
+        profile = yaml.safe_load(self.PROFILE.read_text(encoding="utf-8"))
+        index = region.build_region_index({"citra-mmj": profile})
+        requested = region.parse_requested("br,cn")
+        for destination, name in (
+            (self.FONT, "00000000.app.romfs"),
+            ("sysdata/cbf_std.bcfnt", "cbf_std.bcfnt"),
+        ):
+            with self.subTest(file=destination):
+                regions = region.lookup_regions(index, destination, name)
+                self.assertEqual(region.rank(regions, requested), 0)
+
+
 if __name__ == "__main__":
     unittest.main()
