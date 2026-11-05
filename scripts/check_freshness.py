@@ -822,6 +822,9 @@ def check_coreinfo(
     record_path: Path = CORE_INFO_RECORD,
 ) -> list[Finding]:
     blobs = core_info_blobs(cache_dir, offline)
+    if blobs is None and offline:
+        # Offline with no cached listing, nothing was asked of the upstream.
+        return [Finding("coreinfo", "libretro-core-info", SKIPPED, detail="offline")]
     if blobs is None:
         return [Finding("coreinfo", "libretro-core-info", UNKNOWN, detail="listing unavailable")]
     names = list(blobs)

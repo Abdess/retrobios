@@ -310,6 +310,15 @@ class CoreResolutionTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 cf.record_core_info({"a": "2"}, ["ghost"], record)
 
+    def test_offline_without_a_cached_listing_is_skipped(self):
+        """Offline, the row read UNKNOWN and failed the run as an upstream
+        that could not be read, though nothing was asked of it."""
+        with mock.patch.object(cf, "core_info_blobs", return_value=None):
+            (row,) = cf.check_coreinfo(self.PROFILES, "", True)
+            self.assertEqual((row.status, row.detail), (cf.SKIPPED, "offline"))
+            (row,) = cf.check_coreinfo(self.PROFILES, "", False)
+            self.assertEqual(row.status, cf.UNKNOWN)
+
     def test_the_committed_record_holds_git_blobs(self):
         recorded = cf.load_core_info_record()
         self.assertIsNotNone(recorded)
