@@ -684,11 +684,14 @@ def profile_breakdown(data: dict) -> str:
     others were nowhere: the versions a slot accepts, the entries the
     platform never opens and the ones no pack carries.
     """
-    parts = [f"{data['declared_files']} declared by platforms",
-             f"{data['undeclared_files']} undeclared"]
-    if data["unsourceable_files"]:
-        parts.append(f"{data['unsourceable_files']} unsourceable")
-    aside = data["set_aside"]
+    # A report built without the per-entry tally (a fixture, a saved --json
+    # of an earlier run) falls back to its row counts.
+    parts = [f"{data.get('declared_files', data['platform_covered'])} declared by platforms",
+             f"{data.get('undeclared_files', data['gaps'])} undeclared"]
+    unsourceable = data.get("unsourceable_files", len(data.get("unsourceable") or []))
+    if unsourceable:
+        parts.append(f"{unsourceable} unsourceable")
+    aside = data.get("set_aside") or {}
     detail = [f"{aside[key]} {label}" for key, label in SET_ASIDE.items() if aside.get(key)]
     if detail:
         parts.append(f"{sum(aside.values())} set aside ({', '.join(detail)})")
