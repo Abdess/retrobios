@@ -865,7 +865,9 @@ it. So does an arcade set the core does not know. **Only what starts**
 (`--required-only`) leaves out the files the cores mark optional.
 
 The games are read without hashing whole discs, and a cache keeps what was
-read, so a second run over the same card reads only new files. Offline, with
+read, so a second run over the same card reads only new files. It is a
+`retrobios` folder in the system's cache folder (`RETROBIOS_CACHE`, see
+[Environment overrides](#environment-overrides)), written by `--dry-run` too. Offline, with
 no games index on this machine, the run keeps every file and says so.
 
 ### Firmware without game data
@@ -1826,6 +1828,8 @@ RetroArch folder that holds only `scph5501.bin`, in the order written:
 | `RETROBIOS_PAD` | The buttons a handheld launcher's mapper sends to the full screen (`gptokeyb`, `gptokeyb_muxterm`, `muxterm`, `evmapy`, `miyoo`), so its hints name them. See [On a handheld](#on-a-handheld-the-retrobios-port) |
 | `RETROBIOS_IDLE_EXIT` | Seconds the full screen waits for a first button, counted while nothing runs. With none pressed, it closes with exit status 2, as a quit, or with the code of the error or result screen it closed on |
 | `RETROBIOS_NO_MOUSE` | Set to any value but `0` or an empty one: the full screen never asks the terminal for clicks, and the mouse selects text everywhere as it does outside the installer |
+| `RETROBIOS_CACHE` | The folder that keeps the games index and what a run read of the games, for the next run. Defaults to `retrobios` in `$XDG_CACHE_HOME` (else `~/.cache`), `~/Library/Caches` on macOS, `%LOCALAPPDATA%` on Windows. Deleting it loses nothing |
+| `RETROBIOS_DEBUG` | Set to anything: says why the games index could not be fetched or a cache file not written |
 | `HTTPS_PROXY`, `NO_PROXY` | Honoured for every download through the standard library's default proxy handling: one names the proxy, the other the hosts to reach directly |
 
 ## When something goes wrong

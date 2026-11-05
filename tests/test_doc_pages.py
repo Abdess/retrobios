@@ -1678,5 +1678,27 @@ class InstallerPagesFollowTheCode(unittest.TestCase):
         self.assertEqual(len(unserved_one_liners("installer.md", old)), 2)
 
 
+class InstallerVariablesAreDocumented(unittest.TestCase):
+    """RETROBIOS_CACHE moved a cache that --for-games writes, even under
+    --dry-run, and no page named it or the folder it defaults to."""
+
+    # Set by the full-screen interface for the runs it starts, never by a user.
+    INTERNAL = {"RETROBIOS_TUI_LIST"}
+
+    def test_every_variable_install_py_reads_is_in_the_table(self):
+        source = (ROOT / "install.py").read_text(encoding="utf-8")
+        page = (WIKI / "installer.md").read_text(encoding="utf-8")
+        table = page[page.index("## Environment overrides"):]
+        table = table[:table.index("\n## ", 1)]
+        for name in sorted(set(re.findall(r'"(RETROBIOS_[A-Z_]+)"', source)) - self.INTERNAL):
+            with self.subTest(variable=name):
+                self.assertIn(f"`{name}`", table)
+
+    def test_the_faq_names_the_cache(self):
+        faq = (WIKI / "faq.md").read_text(encoding="utf-8")
+        section = faq[faq.index("## Is the command safe?"):]
+        self.assertIn("cache", section[:section.index("\n## ", 1)])
+
+
 if __name__ == "__main__":
     unittest.main()

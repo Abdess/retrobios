@@ -57,7 +57,8 @@ Game sets must match the emulator's version:
 
 - It stops if the installer does not match its expected fingerprint, and
   checks each file.
-- It writes in your BIOS folder, and some emulators' save folder.
+- It writes in your BIOS folder, some emulators' save folder, and a cache
+  of what it read about your games.
 - It never touches games or saves.
 - It keeps each file it replaces in `retrobios-backup`, for `--restore`.
 
