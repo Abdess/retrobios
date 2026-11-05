@@ -2628,6 +2628,18 @@ class ABootstrapPythonCanDoHttps(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertIn("installer ran", proc.stdout)
 
+    def test_an_old_python_is_named_with_its_version(self):
+        """Debian Buster's python3 3.7 got "Install it with: sudo apt install
+        python3", which apt answers with "already the newest version"."""
+        root, fake_bin = self._bin()
+        (fake_bin / "python3").write_text(
+            '#!/bin/sh\ncase "$2" in *print*) echo 3.7.3 ;; esac\nexit 1\n')
+        proc = self._run(root, fake_bin)
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("Python 3.8 or newer is required, and python3 here is 3.7.3.",
+                      proc.stderr)
+        self.assertNotIn("Install it with: sudo apt", proc.stderr)
+
     def test_the_missing_module_is_named(self):
         root, fake_bin = self._bin()
         proc = self._run(root, fake_bin)

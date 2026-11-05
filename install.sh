@@ -127,10 +127,18 @@ fi
 find_python() {
   PYTHON=""
   PYTHON_LACKING=""
+  PYTHON_OLD=""
   for command_name in python3 python; do
     command -v "$command_name" >/dev/null 2>&1 || continue
-    "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' \
-      2>/dev/null || continue
+    if ! "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' \
+        2>/dev/null; then
+      found_version=$("$command_name" -c \
+        'import sys; print("%d.%d.%d" % tuple(sys.version_info[:3]))' 2>/dev/null)
+      if [ -n "$found_version" ]; then
+        PYTHON_OLD=${PYTHON_OLD:-"$command_name here is $found_version"}
+      fi
+      continue
+    fi
     if "$command_name" -c 'import ssl, unicodedata, zlib' 2>/dev/null; then
       PYTHON=$command_name
       return 0
@@ -182,6 +190,15 @@ fi
 if [ -z "$PYTHON" ] && [ -n "$PYTHON_LACKING" ]; then
   echo "Error: $PYTHON_LACKING is built without a module the installer needs" >&2
   echo "  (ssl, unicodedata or zlib). Run it with a full Python 3.8 or newer." >&2
+  exit 1
+fi
+if [ -z "$PYTHON" ] && [ -n "$PYTHON_OLD" ]; then
+  # Debian Buster ships 3.7: apt answers that python3 is already the newest
+  # version, and the same advice looped.
+  echo "Error: Python 3.8 or newer is required, and $PYTHON_OLD." >&2
+  echo "  Install a newer one: from this system's packages if they offer one, by" >&2
+  echo "  updating the system, or from https://www.python.org/downloads/." >&2
+  echo "  Then run this command again." >&2
   exit 1
 fi
 if [ -z "$PYTHON" ]; then
