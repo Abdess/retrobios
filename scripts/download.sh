@@ -29,6 +29,15 @@ case "$API_BASE" in
 esac
 API="${API_BASE%/}/repos/${REPO}/releases/latest"
 
+# Global, not local to download_pack: the EXIT trap runs once that function's
+# scope is gone, and under set -u a local would be unbound there.
+STAGING=""
+cleanup_staging() {
+    if [ -n "$STAGING" ]; then
+        rm -rf "$STAGING"
+    fi
+}
+
 usage() {
     echo "Usage: $0 <platform> <destination>"
     echo "       $0 --list"
@@ -148,7 +157,8 @@ EOF
     local staging="${dest%/}/.retrobios-download"
     rm -rf "$staging"
     mkdir -p "$staging"
-    trap 'rm -rf "$staging"' EXIT
+    STAGING="$staging"
+    trap cleanup_staging EXIT
 
     local index=0
     local url name
@@ -184,7 +194,7 @@ EOF
         unzip -o -q "$file" -d "$dest"
     done
 
-    rm -rf "$staging"
+    cleanup_staging
     trap - EXIT
     echo "Done! BIOS files extracted to ${dest}/"
 }

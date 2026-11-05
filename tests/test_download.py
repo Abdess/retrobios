@@ -371,6 +371,10 @@ class ReleaseServer:
         ]
         self.index.write_text(json.dumps(release))
 
+    def drop_last_asset(self) -> None:
+        """A part the release lists but no longer serves: its URL gives 404."""
+        (self.root / "assets" / self.names[-1]).unlink()
+
     def corrupt_last_volume(self) -> None:
         target = self.root / "assets" / self.names[-1]
         target.write_bytes(target.read_bytes()[:-16] + b"0" * 16)
@@ -560,6 +564,15 @@ class TestDownloadShell(DownloaderCase):
     def test_an_unknown_platform_lists_what_exists(self):
         proc = self.run_cli("nintendo", str(self.dest), expect_success=False)
         self.assertIn(self.platform_label, proc.stdout + proc.stderr)
+
+    def test_a_failed_part_leaves_no_staging_behind(self):
+        """The EXIT trap read a variable local to the function that set it:
+        under set -u it failed on `staging: unbound variable` and left the
+        parts already downloaded in the BIOS folder."""
+        self.server.drop_last_asset()
+        proc = self.run_cli(self.platform, str(self.dest), expect_success=False)
+        self.assertNotIn("unbound variable", proc.stderr)
+        self.assertEqual(list(self.dest.iterdir()), [])
 
 
 class TestWholePackPython(WholePackCase, TestDownloadPython):
