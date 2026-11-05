@@ -201,6 +201,22 @@ class PlatformReferenceInWords(unittest.TestCase):
         self.assertIn("[r repository at commit aaaaaaaaaaaa](https://github.com/o/r/tree/"
                       + "a" * 40 + ")", page)
 
+    def test_every_check_label_reads_the_hash_rule(self):
+        """RomM's badge and table rows said MD5 beside a sentence saying it
+        accepts the size and any one hash."""
+        details = [{"name": "f.bin", "status": "ok", "system": "sony-playstation"}]
+        cov = {"platform": "RomM", "details": details, "total": 1, "verified": 1,
+               "present": 1, "missing": 0, "untested": 0, "mode": "md5",
+               "core_present": 0, "core_missing": 0, "core_unsourceable": 0,
+               "config": {"hash_type": "md5", "hash_rule": "size_and_any_hash",
+                          "systems": {"sony-playstation": {"files": [{"name": "f.bin"}]}},
+                          "source": "https://github.com/o/r/tree/" + "a" * 40}}
+        page = generate_site.generate_platform_page("romm", cov, {})
+        self.assertIn(">size, then any hash</span>", page)
+        self.assertNotIn(">MD5</span>", page)
+        table = "\n".join(generate_site.setup_table({"romm": cov}, {}))
+        self.assertIn("| size, then any hash |", table)
+
     def test_systems_by_name_with_the_id_in_small_text(self):
         systems = {"sony-playstation": {"files": [{"name": "f.bin"}]}}
         page = self._page("md5", "md5", systems)

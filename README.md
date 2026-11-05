@@ -99,24 +99,24 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | On its BIOS list | Files its emulators load | Checked by |
 |----------|-----------------:|-------------------------:|------------|
-| AmberELEC | 414/434 | 4,751/4,935 | MD5 hash |
-| Batocera | 353/353 | 14,171/15,291 | MD5 hash |
-| BizHawk | 118/118 | - | SHA1 hash |
-| EmuDeck | 168/168 | 8,422/8,525 | MD5 hash |
-| EmuELEC | 544/572 | 4,786/10,215 | MD5 hash |
-| KNULLI | 290/290 | 9,126/15,349 | MD5 hash |
-| Lakka | 532/532 | 7,910/7,996 | file presence |
-| MiSTer FPGA | 81/81 | - | MD5 hash |
-| MinUI | 0/0 | 78/79 | file presence |
-| MyMinUI | 0/0 | 356/367 | file presence |
-| NextUI | 0/0 | 343/350 | file presence |
-| ROCKNIX | 38/38 | 7,421/9,134 | MD5 hash |
-| Recalbox | 351/351 | 3,125/3,344 | MD5 hash |
-| RetroArch | 526/526 | 7,919/7,987 | file presence |
-| RetroBat | 348/348 | 5,133/9,658 | MD5 hash |
-| RetroDECK | 2,007/2,008 | 6,703/6,991 | MD5 hash |
-| RetroPie * | 532/532 | 8,120/12,775 | file presence |
-| RomM | 383/383 | 83/873 | MD5 hash |
+| AmberELEC | 414/434 | 4,751/4,935 | MD5 |
+| Batocera | 353/353 | 14,171/15,291 | MD5 |
+| BizHawk | 118/118 | - | SHA-1 |
+| EmuDeck | 168/168 | 8,422/8,525 | MD5 |
+| EmuELEC | 544/572 | 4,786/10,215 | MD5 |
+| KNULLI | 290/290 | 9,126/15,349 | MD5 |
+| Lakka | 532/532 | 7,910/7,996 | name only |
+| MiSTer FPGA | 81/81 | - | MD5 |
+| MinUI | 0/0 | 78/79 | name only |
+| MyMinUI | 0/0 | 356/367 | name only |
+| NextUI | 0/0 | 343/350 | name only |
+| ROCKNIX | 38/38 | 7,421/9,134 | MD5 |
+| Recalbox | 351/351 | 3,125/3,344 | MD5 |
+| RetroArch | 526/526 | 7,919/7,987 | name only |
+| RetroBat | 348/348 | 5,133/9,658 | MD5 |
+| RetroDECK | 2,007/2,008 | 6,703/6,991 | MD5 |
+| RetroPie * | 532/532 | 8,120/12,775 | name only |
+| RomM | 383/383 | 83/873 | size, then any hash |
 
 Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
 That second number is a floor, not a ceiling: an emulator that accepts any file handed to it names none in its code, so nothing there can be counted.
@@ -203,4 +203,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-03T17:50:12Z*
+*Auto-generated on 2026-11-05T10:43:18Z*

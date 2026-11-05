@@ -34,6 +34,7 @@ from common import (
     unique_emulator_profiles,
     write_if_changed,
 )
+from nativemode import check_label
 import release_record
 from siteguides import install_command
 from verify import verify_platform
@@ -737,15 +738,9 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         ]
     )
 
-    mode_labels = {
-        "md5": "MD5 hash",
-        "sha1": "SHA1 hash",
-        "existence": "file presence",
-    }
-
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = f"{cov['platform']} *" if name in archived else cov["platform"]
-        checked = mode_labels.get(cov["mode"], cov["mode"])
+        checked = check_label(cov["mode"], cov["config"].get("hash_rule"))
         core_total = (
             cov["core_present"] + cov["core_missing"] + cov["core_unsourceable"]
         )

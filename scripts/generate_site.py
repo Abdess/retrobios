@@ -64,7 +64,7 @@ from common import (
 from artifacts import ArtifactLockBusy, artifact_lock
 from artifacts import json_text as _json_text
 from cross_reference import FileConsumers, held_copy
-from nativemode import digest_algorithm, reads_file_contents
+from nativemode import check_label, digest_algorithm, reads_file_contents
 
 
 
@@ -3194,8 +3194,6 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
 SETUP_TABLE_PAGE = "wiki/verification-modes.md"
 SETUP_TABLE_ANCHOR = "every-setup-at-a-glance"
 SETUP_TABLE_LINK = f"{SETUP_TABLE_PAGE}#{SETUP_TABLE_ANCHOR}"
-# How a setup checks a file, in the words of a reader.
-_HOW_IT_CHECKS = {"existence": "name only", "md5": "MD5", "sha1": "SHA-1"}
 
 
 def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
@@ -3220,7 +3218,7 @@ def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
         lines.append(
             f"| [{cov['platform']}](../platforms/{name}.md)"
             f"{' (archived)' if status == 'archived' else ''} | {listed} | {zipped} | "
-            f"{_HOW_IT_CHECKS.get(cov['mode'], cov['mode'])} |"
+            f"{check_label(cov['mode'], cov['config'].get('hash_rule'))} |"
         )
     lines += [
         "",
@@ -4292,9 +4290,8 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     return lines
 
 
-# How a platform checks a file, in words.
-_CHECK_WORDS = {"existence": "name only", "md5": "MD5", "sha1": "SHA-1", "sha256": "SHA-256",
-                "crc32": "CRC32"}
+# A hash a platform's list writes, in words.
+_HASH_WORDS = {"md5": "MD5", "sha1": "SHA-1", "sha256": "SHA-256", "crc32": "CRC32"}
 
 
 def generate_platform_page(
@@ -4374,7 +4371,7 @@ def generate_platform_page(
             *_stat(f"{cov['present']}/{cov['total']}", f"Coverage ({pct})"),
             *_stat(str(cov["verified"]), "Verified"),
             *_stat(str(cov["missing"]), "Missing"),
-            *_stat(f'<span class="rb-badge {mode_badge}">{_CHECK_WORDS.get(mode, mode)}</span>',
+            *_stat(f'<span class="rb-badge {mode_badge}">{check_label(mode, config.get("hash_rule"))}</span>',
                    "Checked by"),
             "</div>",
             "",
@@ -4384,7 +4381,7 @@ def generate_platform_page(
     # The hash the list writes, when it is not the one the platform checks:
     # RetroArch checks presence and its System.dat writes sha1.
     if hash_type and hash_type != mode:
-        lines.append(f"| Hashes in the list | {_CHECK_WORDS.get(hash_type, hash_type)} |")
+        lines.append(f"| Hashes in the list | {_HASH_WORDS.get(hash_type, hash_type)} |")
     if version:
         lines.append(f"| Version | {version} |")
     # base_destination is only the root the platform's own list writes its
@@ -10409,12 +10406,6 @@ def generate_gap_analysis(
         "|----------|-----------------:|-------------------------:|------------|",
     ])
 
-    mode_labels = {
-        "md5": "MD5 hash",
-        "sha1": "SHA1 hash",
-        "existence": "file presence",
-    }
-
     for pname, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
         display = cov["platform"]
         core_total = (
@@ -10424,7 +10415,7 @@ def generate_gap_analysis(
             f"| [{display}](platforms/{pname}.md) "
             f"| {_ratio_cell(cov['present'], cov['total'], _missing_required_firmware(cov))} "
             f"| {_ratio_cell(cov['core_present'], core_total)} "
-            f"| {mode_labels.get(cov['mode'], cov['mode'])} |"
+            f"| {check_label(cov['mode'], cov['config'].get('hash_rule'))} |"
         )
     lines.extend([
         "",
