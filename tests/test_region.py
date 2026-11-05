@@ -956,7 +956,7 @@ class DsiNandFollowsTheHeaderRegion(unittest.TestCase):
 
     SLOTS = {
         "JPN": ["japan"],
-        "USA": ["north-america"],
+        "USA": ["north-america", "latin-america"],
         "EUR": ["europe"],
         "AUS": ["oceania"],
         "CHN": ["china"],
