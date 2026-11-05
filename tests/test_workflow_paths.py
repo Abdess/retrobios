@@ -142,6 +142,11 @@ class ThePullRequestBuildsTheSite(unittest.TestCase):
         )
         suite = next(i for i, run in enumerate(runs) if "unittest discover" in run)
         self.assertLess(generate, suite)
+        # The built pages too: about fifty tests read website/dist.
+        build = next(i for i, run in enumerate(runs) if "npm run build" in run)
+        self.assertLess(generate, build)
+        self.assertLess(build, suite)
+        self.assertEqual(steps[build].get("if"), "${{ !cancelled() }}")
         self.assertEqual(steps[suite].get("if"), "${{ !cancelled() }}")
         # A failed data fetch skipped the generator, and all 228 site tests
         # then failed under it: the generator runs whatever came before.
