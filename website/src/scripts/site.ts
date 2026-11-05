@@ -24,7 +24,21 @@ type Item = {
 };
 
 const siteRoot = () => new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), location.origin);
-const normalizeHash = (raw: string) => raw.trim().toLowerCase().replace(/^0x/, '').replace(/\s+/g, '');
+// A pasted hash, or the line a checksum tool prints around it: md5sum
+// (`<hash>  <file>`), BSD and shasum --tag (`SHA1 (<file>) = <hash>`),
+// certutil (the bytes spaced on a line of their own), Get-FileHash's table.
+// The one word of an MD5, SHA1 or SHA256's length is taken: an 8-character
+// word in a file name searched for is no CRC32. None or two, and the text is
+// kept as typed, which isHash refuses.
+const normalizeHash = (raw: string) => {
+	const text = raw.trim().toLowerCase();
+	const bare = text.replace(/^0x/, '').replace(/\s+/g, '');
+	if (/^[0-9a-f]*$/.test(bare)) return bare;
+	const words = text.split('\n').flatMap((line) =>
+		/^[0-9a-f ]+$/.test(line.trim()) ? [line.replace(/\s+/g, '')] : (line.match(/\b[0-9a-f]+\b/g) ?? []));
+	const found = [...new Set(words.filter((word) => word.length > 8 && word.length in HASH_LENGTHS))];
+	return found.length === 1 ? found[0] : bare;
+};
 const isHash = (value: string) => /^[0-9a-f]+$/.test(value) && value.length in HASH_LENGTHS;
 
 // Tables

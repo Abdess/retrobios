@@ -4517,8 +4517,9 @@ def generate_files_page() -> str:
         "",
         '<form class="rb-file-lookup" action="./" method="get">',
         '<label for="rb-hash">SHA1, MD5, CRC32 or SHA256</label> ',
+        # No pattern: the line md5sum or certutil prints is taken whole, and
+        # the page reads the hash out of it.
         '<input id="rb-hash" name="hash" size="66" autocomplete="off" spellcheck="false" '
-        'pattern="\\s*(0x)?([0-9a-fA-F]{8}|[0-9a-fA-F]{32}|[0-9a-fA-F]{40}|[0-9a-fA-F]{64})\\s*" '
         'required> ',
         '<button type="submit">Find</button>',
         "</form>",

@@ -265,5 +265,38 @@ class CopyButtonInTheHeader(unittest.TestCase):
         self.assertIn(".expressive-code .frame.has-title .copy { inset-block-start:", source)
 
 
+class AChecksumLineIsAHash(unittest.TestCase):
+    """The lookup and the search took a bare hash only: the line md5sum,
+    shasum --tag, certutil or Get-FileHash prints was refused whole."""
+
+    def test_the_hash_is_read_out_of_the_line(self):
+        source = _read(SITE_TS)
+        code = (source[source.index("const HASH_LENGTHS"):source.index("\n", source.index("const HASH_LENGTHS"))]
+                + source[source.index("const normalizeHash"):source.index("// Tables")])
+        md5, sha1 = "490f666e1afb15b7362b406ed1cea246", "b05def971d8ec59f346f2d9ac21fb742e3eb6917"
+        spaced = " ".join(sha1[i:i + 2] for i in range(0, 40, 2))
+        cases = [
+            f"{md5}  scph5501.bin",
+            f"SHA1 (scph5501.bin) = {sha1}",
+            f"SHA1 hash of scph5501.bin:\r\n{spaced}\r\nCertUtil: -hashfile command completed successfully.",
+            f"Algorithm Hash Path\n--------- ---- ----\nSHA1 {sha1.upper()} C:\\bios\\scph5501.bin",
+            f"  0x{md5.upper()} ",
+            "8d8cb7e4",
+            "deadbeef.bin",
+            f"{md5} {sha1}",
+        ]
+        out = _node(code + f"console.log(JSON.stringify({json.dumps(cases)}.map((c) => "
+                           "[normalizeHash(c), isHash(normalizeHash(c))])));")
+        self.assertEqual(json.loads(out), [
+            [md5, True], [sha1, True], [sha1, True], [sha1, True], [md5, True],
+            ["8d8cb7e4", True], ["deadbeef.bin", False], [md5 + sha1, False],
+        ])
+
+    def test_the_form_takes_the_line(self):
+        source = _read(REPO_ROOT / "scripts" / "generate_site.py")
+        start = source.index('<input id="rb-hash"')
+        self.assertNotIn("pattern=", source[start:source.index("required>", start)])
+
+
 if __name__ == "__main__":
     unittest.main()
