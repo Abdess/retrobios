@@ -2157,8 +2157,8 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "",
         *(f"- [`{name}`](api/v1/schemas/{name}): {title}" for name, title in _served_schemas()),
         "",
-        "`database.json`, `stats.json`, `release.json`, the manifests and the export reports "
-        "are not envelopes. Their revision is the `commit` of `catalog.json` that lists "
+        "`database.json`, `stats.json`, `release.json` and the manifests are not "
+        "envelopes. Their revision is the `commit` of `catalog.json` that lists "
         "their SHA256.",
         "",
         "One emulator profile without the whole list: "
@@ -2244,7 +2244,8 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
             for item in targets) + "." if targets else "",
         "",
         "`api/v1/exports/<platform>.json` lists every change of a setup's "
-        "[updated file](exports.md), the report that page is written from.",
+        "[updated file](exports.md), the report that page is written from, copied "
+        "byte for byte like the manifests.",
         "",
         "| Field | Meaning |",
         "|-------|---------|",

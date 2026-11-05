@@ -34,7 +34,7 @@ option.
 
 ## Zip or unzip? { #zip-or-unzip }
 
-Unzip it into the folder your setup's page names. Keep
+Unzip into the folder your setup's page names. Keep
 inner ZIPs zipped, like `neogeo.zip`.
 
 ## Does a BIOS work on every setup?
@@ -55,9 +55,9 @@ Game sets must match the emulator's version:
 
 ## Is the command safe? { #is-piping-the-installer-into-a-shell-safe }
 
-- It stops if the installer does not match its fingerprint, and
+- It stops if the installer does not match its expected fingerprint, and
   checks each file.
-- It writes in your BIOS folder, some emulators' save folder and a games cache.
+- It fills the BIOS folder, some save folders and a games cache.
 - It never touches games or saves.
 - It keeps each file it replaces in `retrobios-backup`, for `--restore`.
 
@@ -73,12 +73,12 @@ and download their files.
 ## Why is there no ZIP for my setup?
 
 ZIPs are made for the setups most people download. The command installs every
-setup's files and checks them. `--dry-run` shows the list first.
+setup's files and checks each one. `--dry-run` shows the list first.
 
 ## Fill an SD card from a computer?
 
-The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI or ROCKNIX
-card. Name your setup and the card's BIOS folder. For RetroArch on a Switch,
+The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI or ROCKNIX card by
+itself. Name your setup and the card's BIOS folder. For RetroArch on a Switch,
 with the card in drive `E:`, run:
 
 <!-- os-tabs windows: --platform retroarch --dest E:\retroarch\cores\system -->
