@@ -1149,19 +1149,30 @@ def contents_members(file_entry: dict) -> list[dict]:
     A member is its crc32 where the profile declares one, its name where the
     code opens it by name alone: Flycast reads epr-21329.ic27 in
     hod2bios.zip by filename, and a copy without it has no Japan BIOS.
+    A crc32 two members share also keeps the name: fpr23905.ic36 and
+    fpr23905c.ic36 both have crc32 ffffffff in segadimm.zip, so the crc
+    alone cannot tell a copy holding one from a copy holding both.
     """
-    return [
-        {"crc32": str(m["crc32"]).lower(), "required": True}
-        if m.get("crc32") else {"name": str(m["name"]), "required": True}
-        for m in file_entry.get("contents") or []
-        if m.get("crc32") or m.get("name")
-    ]
+    listed = [m for m in file_entry.get("contents") or [] if m.get("crc32") or m.get("name")]
+    seen = Counter(str(m["crc32"]).lower() for m in listed if m.get("crc32"))
+    members = []
+    for m in listed:
+        if not m.get("crc32"):
+            members.append({"name": str(m["name"]), "required": True})
+            continue
+        crc = str(m["crc32"]).lower()
+        member = {"crc32": crc, "required": True}
+        if seen[crc] > 1 and m.get("name"):
+            member["name"] = str(m["name"])
+        members.append(member)
+    return members
 
 
 def _member_held(member: dict, crcs: frozenset[str], names: frozenset[str]) -> bool:
+    named = member.get("name", "").rsplit("/", 1)[-1].casefold() in names
     if member.get("crc32"):
-        return member["crc32"] in crcs
-    return member["name"].rsplit("/", 1)[-1].casefold() in names
+        return member["crc32"] in crcs and ("name" not in member or named)
+    return named
 
 
 def _holding_members(paths: list[str], members: list[dict]) -> list[str]:

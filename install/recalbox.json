@@ -280,9 +280,9 @@
     }
   ],
   "total_files": 3743,
-  "total_size": 4682168657,
+  "total_size": 4685153679,
   "pack_files": 3745,
-  "pack_size": 4682168657,
+  "pack_size": 4685153679,
   "total_omitted": 62,
   "omitted_files": [
     {
@@ -42218,14 +42218,13 @@
     },
     {
       "dest": "segasp.zip",
-      "sha1": "de78a0b8df78d5ffdb1a274f80d877a96ef204aa",
-      "sha256": "3bca348667d6ff08fd5efe38eec35100ccbe0de3cd1e0b5dd72ae5c6cc201ee9",
-      "size": 1281424,
-      "repo_path": "bios/Arcade/Arcade/segasp.zip",
+      "sha1": "b4c7e46fb510096acf8fb19fb99c8c5a8ab1d9e1",
+      "sha256": "bda96939992d42410034caf3f5296d8fc63eced1693b5b522536c6ac717ded73",
+      "size": 4266446,
+      "repo_path": "bios/Arcade/MAME/segasp.zip",
       "cores": [
         "mame0258",
-        "mame0278",
-        "mame2016"
+        "mame0278"
       ],
       "systems": [
         "3do",
@@ -42238,6 +42237,17 @@
         "scv",
         "stv",
         "ti994a"
+      ],
+      "alternatives": [
+        {
+          "sha1": "de78a0b8df78d5ffdb1a274f80d877a96ef204aa",
+          "sha256": "3bca348667d6ff08fd5efe38eec35100ccbe0de3cd1e0b5dd72ae5c6cc201ee9",
+          "size": 1281424,
+          "repo_path": "bios/Arcade/Arcade/segasp.zip",
+          "cores": [
+            "mame2016"
+          ]
+        }
       ]
     },
     {

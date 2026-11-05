@@ -390,6 +390,22 @@ class AnArchiveRankedByWhatItHolds(unittest.TestCase):
             for name in ("epr-21330.ic27", "epr-21332.ic27")]}
         self.assertEqual(self._resolve(entry, db), "bios/MAME/hod2bios.zip")
 
+    def test_a_shared_crc_keeps_the_member_name(self):
+        """segadimm.zip holds fpr23905.ic36 and fpr23905c.ic36, both crc32
+        ffffffff. Ranked by crc alone, a copy without fpr23905c.ic36 tied with
+        the full set and came first in the index."""
+        self.roms["fpr23905.ic36"] = self.roms["fpr23905c.ic36"] = b"\xff" * 16
+        db = self._db([("bios/Arcade/hod2bios.zip", ["epr-21330.ic27", "fpr23905.ic36"]),
+                       ("bios/MAME/hod2bios.zip",
+                        ["epr-21330.ic27", "fpr23905.ic36", "fpr23905c.ic36"])])
+        crc = format(zlib.crc32(b"\xff" * 16), "08x")
+        first = format(zlib.crc32(self.roms["epr-21330.ic27"]), "08x")
+        entry = {"name": "hod2bios.zip", "contents": [
+            {"name": "epr-21330.ic27", "crc32": first},
+            {"name": "fpr23905.ic36", "crc32": crc},
+            {"name": "fpr23905c.ic36", "crc32": crc}]}
+        self.assertEqual(self._resolve(entry, db), "bios/MAME/hod2bios.zip")
+
     def test_a_copy_holding_no_declared_member_is_not_the_archive(self):
         """galgames.zip held only an assembler listing and none of the six
         ROMs MAME declares: the name step served it as the BIOS set."""
