@@ -1466,8 +1466,10 @@ _BOARD_SOURCES: dict[str, tuple[str, str]] = {
 # target lists are named for the board files (configs/knulli-rk3566.board),
 # and the arch file for the TARGET flag the board sets. knulli-rk3566.board
 # sets BR2_PACKAGE_BATOCERA_TARGET_RK3568, which knulli-system.mk:22-23
-# (20260511) writes as rk3568.
+# (20260511) writes as rk3568. batocera-zen3.board sets TARGET_ZEN3, which
+# batocera-system.mk:56-57 (batocera-43.1) writes as x86-64-v3.
 _BOARD_NAMES: dict[str, dict[str, str]] = {
+    "batocera": {"x86-64-v3": "zen3"},
     "knulli": {"rk3568": "rk3566"},
 }
 

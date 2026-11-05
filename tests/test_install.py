@@ -5414,6 +5414,15 @@ class BatoceraAndKnulliByWhatTheirBuildsWrite(unittest.TestCase):
                 if board:
                     self.assertIn(board, targets)
 
+    def test_a_batocera_zen3_board_narrows_to_its_target(self):
+        """batocera.arch says x86-64-v3 on a zen3 image, which no target
+        list names: the run installed the files of every board."""
+        arch = Path(_tempdir(self)) / "batocera.arch"
+        arch.write_text("x86-64-v3")
+        with unittest.mock.patch.dict(install._BOARD_SOURCES,
+                                      {"batocera": ("file", str(arch))}):
+            self.assertEqual(install.detect_board("batocera"), "zen3")
+
     def test_each_board_name_is_a_published_target(self):
         for plat, names in install._BOARD_NAMES.items():
             targets = json.loads((REPO_ROOT / "install" / "targets" / f"{plat}.json")
