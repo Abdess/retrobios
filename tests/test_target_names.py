@@ -194,3 +194,25 @@ class ASingleTargetFiltersNothing(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PublishedListsAreNotNarrowed(unittest.TestCase):
+    """pipeline --target switch wrote install/retroarch_nintendoswitch.json
+    next to the published lists; the site picker then replaced RetroArch's
+    file list with the Switch one and check_release asked for it as an asset."""
+
+    def test_pipeline_writes_install_unfiltered(self):
+        pipeline = (REPO_ROOT / "scripts" / "pipeline.py").read_text()
+        self.assertNotIn('manifest_cmd.extend(["--target"', pipeline)
+
+    def test_every_install_list_is_a_whole_platform(self):
+        import json  # noqa: PLC0415
+
+        for path in sorted((REPO_ROOT / "install").glob("*.json")):
+            data = json.loads(path.read_text(encoding="utf-8"))
+            with self.subTest(path=path.name):
+                self.assertEqual(path.stem, data["platform"])
+                self.assertNotIn("target", data)
+                self.assertNotIn("no_game_data", data)
+                self.assertEqual(data["source"], "full")
+                self.assertEqual(data["regions"], [])
