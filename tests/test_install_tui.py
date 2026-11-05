@@ -5901,6 +5901,12 @@ def _card_from_rules(root: Path, setup: install.CardSetup) -> Path:
     return root
 
 
+def _card_row(setup: install.CardSetup) -> str:
+    """The setup list's row of a card system: MiSTer's board sits on a desk
+    and keeps its plain row among the platforms."""
+    return setup.name if setup.plat in install._DESK_CARDS else f"{setup.name}, SD card"
+
+
 def _setup_folder(setup: install.CardSetup, card: Path) -> Path:
     return card / setup.below if setup.below else card
 
@@ -5968,7 +5974,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                 state = self.platforms()
                 rows = install.tui_rows(state)
                 index = next(i for i, row in enumerate(rows)
-                             if row.label == f"{setup.name}, SD card")
+                             if row.label == _card_row(setup))
                 state.focus["platforms"] = index
                 with mock.patch.object(install, "_mounted_cards", return_value=[]):
                     effects = press(state, "enter")
@@ -5983,7 +5989,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
         for setup in self.setups:
             with self.subTest(system=setup.name):
                 rows = install.tui_rows(self.platforms(setup.name))
-                self.assertIn(f"{setup.name}, SD card", [row.label for row in rows])
+                self.assertIn(_card_row(setup), [row.label for row in rows])
 
     def test_platform_named_on_a_computer_asks_for_the_card(self):
         for setup in self.setups:

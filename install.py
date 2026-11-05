@@ -19384,13 +19384,14 @@ def setup_list(setups: list, mounted: set, needle: str = "",
             continue
         setup = card_setup(plat, plat)
         label = display_name(plat)
-        if setup and _found_device(setups, mounted, plat, setup.name) is None:
+        if (setup and plat not in _DESK_CARDS
+                and _found_device(setups, mounted, plat, setup.name) is None):
             label += ", SD card"
         # The systems and devices the filter named, else a card's devices.
         shown = named or (list(_setup_devices(plat, os_type)) if setup else [])
         row = TuiRow("platform", label, ", ".join(shown), plat, narrow=_device_forms(shown),
                      cut=shown[0] if shown else "")
-        if setup:
+        if setup and plat not in _DESK_CARDS:
             handheld.append((label, row))
         else:
             desktop.append(row)
@@ -19421,6 +19422,11 @@ def setup_list(setups: list, mounted: set, needle: str = "",
         return [*lead, *cards_rows, *rest]
     return [*desktop, *cards_rows]
 
+
+# The systems that run from an SD card on a board kept on a desk, not in
+# the hand: their row stays among the platforms, and the handhelds' block,
+# which leads when nothing is found here, keeps Onion four presses away.
+_DESK_CARDS = frozenset({"misterfpga"})
 
 # The setups a computer runs, by its system, first in the setup list when
 # nothing was found here. RetroBat runs on Windows alone (retrobat.org), and

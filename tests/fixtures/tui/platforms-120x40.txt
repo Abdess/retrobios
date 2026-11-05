@@ -12,6 +12,7 @@
    RetroDECK
    RomM
    BizHawk
+   MiSTer FPGA
    RetroPie
    Allium, SD card                   Miyoo Mini, Miyoo Mini Plus, +1
    AmberELEC, SD card                RG351, RG552
@@ -26,7 +27,6 @@
    KOLOS, SD card                    RG353P, RG353M, RG353V, RG353VS, RG503, +3
    Koriki, SD card                   Miyoo Mini
    MinUI, SD card                    RG28XX, RG34XX, RG34XX SP, RG35XX, +19
-   MiSTer FPGA, SD card
    MiyooCFW, SD card                 BittBoy, Pocket Go, PowKiddy Q90, +4
    muOS, SD card                     RG35XX H, RG35XX Plus, RG35XX SP, +8
    MyMinUI, SD card                  RG35XX, Miyoo Mini, Miyoo Mini Flip, +18
