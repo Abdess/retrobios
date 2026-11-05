@@ -575,6 +575,35 @@ class TestDownloadShell(DownloaderCase):
         self.assertNotIn("unbound variable", proc.stderr)
         self.assertEqual(list(self.dest.iterdir()), [])
 
+    def test_an_interrupted_extraction_keeps_the_installed_file(self):
+        """unzip -o unlinks a file and writes the new one under its final
+        name: a run killed mid-file left a partial BIOS where a valid one
+        was. Extraction now writes beside the folder and renames."""
+        shim = Path(_tempdir(self))
+        (shim / "unzip").write_text(
+            "#!/bin/sh\n"
+            'for target; do :; done\n'
+            'mkdir -p "$target/bios"\n'
+            'printf partial > "$target/bios/scph5501.bin"\n'
+            "exit 137\n"
+        )
+        (shim / "unzip").chmod(0o755)
+        installed = self.dest / "bios" / "scph5501.bin"
+        installed.parent.mkdir(parents=True)
+        installed.write_bytes(b"valid")
+        env = self.env()
+        env["PATH"] = f"{shim}{os.pathsep}{env['PATH']}"
+        proc = subprocess.run(
+            ["bash", str(SHELL), self.platform, str(self.dest)],
+            env=env, capture_output=True, text=True, timeout=120,
+        )
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertEqual(installed.read_bytes(), b"valid")
+        self.assertEqual(
+            sorted(p.name for p in self.dest.iterdir()), ["bios"],
+            "staging left behind",
+        )
+
     def test_two_runs_into_one_folder_both_finish(self):
         """Both runs staged in `<dest>/.retrobios-download` and the second
         emptied it while the first was still writing its parts."""

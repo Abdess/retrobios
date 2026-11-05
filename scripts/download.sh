@@ -191,9 +191,27 @@ EOF
     done
 
     echo "Extracting to ${dest}/..."
+    # unzip -o unlinks a file and writes its replacement under the final
+    # name, so a run stopped mid-file left a partial BIOS. Members land in
+    # the staging folder, on the same filesystem, and each is renamed into
+    # place: a file in the BIOS folder is the old one or the new one.
+    local extracted="${staging}/extracted"
     for file in "${staging}"/*.zip; do
-        unzip -o -q "$file" -d "$dest"
+        unzip -o -q "$file" -d "$extracted"
     done
+    local target
+    target=$(cd "$dest" && pwd)
+    (
+        cd "$extracted"
+        find . -type f -exec sh -c '
+            target="$1"
+            shift
+            for member; do
+                mkdir -p "$target/$(dirname "$member")"
+                mv -f "$member" "$target/$member"
+            done
+        ' sh "$target" {} +
+    )
 
     cleanup_staging
     trap - EXIT
