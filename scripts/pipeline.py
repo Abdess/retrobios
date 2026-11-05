@@ -22,7 +22,7 @@ Steps, numbered as the run prints them:
   4c   --manifest-targets           per-target core lists
   4d   bundled_only.py --strict     copies only an emulator install provides
   4e   generate_games_index.py      install/games/: what the games-on-card mode reads
-  5    consistency check            verify == pack: counts, paths, every emulator pack
+  5    consistency check            verify == pack: counts, paths, emulator and system packs
   6    --verify-packs               pack integrity, extraction and hashes
   7    generate_readme.py           README.md and CONTRIBUTING.md
        generate_installer_doc.py    run samples and tables of wiki/installer.md
@@ -518,7 +518,7 @@ def check_emulator_packs(
     emulators_dir: str = "emulators", platforms_dir: str = "platforms",
     db_path: str = "database.json",
 ) -> bool:
-    """Build every emulator pack in memory and compare it with verify --emulator.
+    """Build every emulator and system pack in memory and compare it with verify.
 
     Each profile in each build it has (libretro, standalone): the paths the
     pack fills with the profile's files against the ones verify credits. No
@@ -528,9 +528,11 @@ def check_emulator_packs(
     import verify  # noqa: PLC0415
     from common import (  # noqa: PLC0415
         ProfileSelectionError,
+        _norm_system_id,
         build_zip_contents_index,
         load_database,
         load_emulator_profiles,
+        profiles_for_systems,
         select_emulator_profiles,
     )
 
@@ -566,7 +568,45 @@ def check_emulator_packs(
                 print("\n".join(lines))
                 all_ok = False
     print(f"  {compared} emulator packs compared, {'all equal' if all_ok else 'differences above'}")
-    return all_ok
+    # A system pack builds every profile of the system together: a placement
+    # rule that only goes wrong when two profiles share a path (the bluemsx
+    # tree beside msx-emu's files) never meets in a one-profile pack.
+    systems = sorted({
+        _norm_system_id(str(sid))
+        for profile in profiles.values()
+        if profile.get("type") not in ("launcher", "alias", "test")
+        for sid in profile.get("systems") or []
+    })
+    systems_ok = True
+    compared = 0
+    for sid in systems:
+        for standalone in (False, True):
+            matching = profiles_for_systems(profiles, [sid], standalone)
+            if len(matching) < 2:
+                continue
+            record = generate_pack.PackRecord()
+            with contextlib.redirect_stdout(io.StringIO()), \
+                    contextlib.redirect_stderr(io.StringIO()):
+                generate_pack.generate_emulator_pack(
+                    matching, emulators_dir, db, "bios", "", standalone, zip_contents,
+                    offline=True, platforms_dir=platforms_dir, record=record,
+                    system_ids=[sid],
+                )
+                report = verify.verify_emulator(
+                    matching, emulators_dir, db, standalone, platforms_dir=platforms_dir,
+                    system_ids=[sid],
+                )
+            compared += 1
+            label = f"--system {sid}{' --standalone' if standalone else ''}"
+            lines = _set_difference_lines(
+                label, set(report["pack_destinations"]), set(record.files)
+            )
+            if lines:
+                print("\n".join(lines))
+                systems_ok = False
+    print(f"  {compared} system packs compared, "
+          f"{'all equal' if systems_ok else 'differences above'}")
+    return all_ok and systems_ok
 
 
 class _Skipped:

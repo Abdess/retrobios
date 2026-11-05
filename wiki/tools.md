@@ -52,7 +52,7 @@ Pipeline steps:
 | 4c | Generate target manifests | `--skip-packs` |
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
 | 4e | Games index: what the installer reads for the games on a card (`generate_games_index.py`, fails under its coverage floor) | - (reads the committed install lists) |
-| 5 | Consistency check: counts, paths per archive, every emulator pack | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
+| 5 | Consistency check: counts, paths per archive, every emulator and system pack | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
 | 6 | Pack integrity (extract + hash) | `--skip-packs`, or no full pack built |
 | 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
@@ -91,8 +91,9 @@ alone, run `python scripts/check_buildbot_system.py`.
 - **verify.py and generate_pack.py read the same functions.** A count or a
   path that differs between the report and the pack is a defect, which is
   what step 5 checks: the counts, the paths each archive holds against the
-  ones verify credits (`--destinations`), and every emulator pack, each
-  profile in each build, built in memory against `verify --emulator`.
+  ones verify credits (`--destinations`), every emulator pack, each
+  profile in each build, built in memory against `verify --emulator`, and
+  every system pack that gathers several profiles against `verify --system`.
   Equal counts once hid four RetroArch paths credited and never written.
 - **Generators write through `write_if_changed()`.** A new timestamp alone
   rewrites nothing, so a diff on a generated file always means content.
