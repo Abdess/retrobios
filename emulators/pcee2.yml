@@ -23,7 +23,8 @@ resources_directory: "pcsx2/resources/"
 data_directories:
   - ref: pcsx2-resources
     destination: "pcsx2/resources"
-    source_ref: "pcee2-libretro/Libretro.cpp:543-571, pcsx2/Pcsx2Config.cpp:2417-2429"
+    bundled: true
+    source_ref: "pcee2-libretro/Libretro.cpp:543-571, pcsx2/Pcsx2Config.cpp:2417-2429, cmake/EmbedResources.cmake:19-31, 46-62"
 
 notes: |
   libretro port of current PCSX2, merged up to upstream ab0b401f (v2.9.138,

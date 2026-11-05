@@ -333,10 +333,10 @@ def write_small_list(path: Path) -> None:
 def _child(spec: dict) -> int:
     """install.main() as the sample runs it, in its own process. Only the
     transport and the machine are stood in for: no connection leaves the
-    loopback, detection finds the card folder the spec names, a file of a
-    landed run reports its bytes written without fetching them, and a held
-    run finds every file in place. The counts, sizes and words are the
-    installer's own."""
+    loopback, detection finds the card folder the spec names, a file or a
+    data tree of a landed run reports its bytes written without fetching
+    them, and a held run finds every file and tree in place. The counts,
+    sizes and words are the installer's own."""
     import concurrent.futures  # noqa: PLC0415
     import socket  # noqa: PLC0415
     from unittest import mock  # noqa: PLC0415
@@ -362,6 +362,13 @@ def _child(spec: dict) -> int:
     def held(files: list[dict], _bios: Path, **_kwargs: object) -> tuple:
         return [], list(files), []
 
+    def tree_landed(entry: dict, _bios: Path, state: object = None) -> dict:
+        return {"present": 0, "installed": len(entry["files"]), "changed": 0,
+                "absent": 0, "error": "", "not_kept": []}
+
+    def tree_held(entry: dict, bios: Path, remember: bool = False) -> tuple:
+        return bios / entry.get("dest", ""), {}, len(entry["files"])
+
     patches = [
         mock.patch.object(socket, "create_connection", loopback_only),
         # One worker and the submission order: the progress lines of a log.
@@ -376,8 +383,10 @@ def _child(spec: dict) -> int:
         ]
     if spec.get("landed"):
         patches.append(mock.patch.object(_install, "_download_one", landed))
+        patches.append(mock.patch.object(_install, "install_data_directory", tree_landed))
     if spec.get("held"):
         patches.append(mock.patch.object(_install, "check_local", held))
+        patches.append(mock.patch.object(_install, "data_directory_state", tree_held))
     with contextlib.ExitStack() as stack:
         for patch in patches:
             stack.enter_context(patch)

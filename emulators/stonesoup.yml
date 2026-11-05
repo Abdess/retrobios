@@ -42,7 +42,8 @@ notes: |
 data_directories:
   - ref: stonesoup
     installed_on: [recalbox]
-    source_ref: "crawl-ref/source/files.cc:375-458"
+    load_from: content_dir
+    source_ref: "crawl-ref/libretro/libretro.cc:178-197, crawl-ref/source/files.cc:375-458"
 
 files: []
 # no BIOS/firmware, game data loaded via data_directories

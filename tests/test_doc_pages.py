@@ -845,9 +845,14 @@ class FirstInstallWalkthrough(unittest.TestCase):
         self.assertNotRegex(self.text, r"\d+ (in place|missing|files installed)")
         self.assertIn(f"  {install.EVERYTHING_IN_PLACE}", self.text)
         step3 = _generated(self.run, "run-index")
-        count, size = re.search(r"\n  (\d+) files \(([\d.]+ [KMG]B)\)", step3).groups()
+        count = re.search(r"\n  (\d+) files \([\d.]+ [KMG]B\)", step3).group(1)
         self.assertIn(f"0 in place, {count} missing", step3)
-        self.assertIn(f"Downloading {count} files ({size})", _generated(self.run, "run-download"))
+        # The data trees are fetched after the files, from their archives:
+        # the download line counts the files alone.
+        trees = re.search(r" and (\d+) data files", step3)
+        downloaded = int(count) - (int(trees.group(1)) if trees else 0)
+        self.assertRegex(_generated(self.run, "run-download"),
+                         rf"Downloading {downloaded} files \([\d.]+ [KMG]B\)")
         step4 = _generated(self.run, "run-end")
         self.assertIn(f"Done. {count} files installed", step4)
         self.assertIn(f"{count} in place, 0 missing", _generated(self.run, "run-check"))

@@ -69,9 +69,14 @@ from common import (
     MANUFACTURER_PREFIXES,
     require_yaml,
     ProfileSelectionError,
+    core_system_dirs,
+    declared_root,
     entry_serves_systems,
+    entry_system_ids,
+    platform_layouts,
     sanitize_pack_path,
     select_emulator_profiles,
+    standalone_set,
     system_core_reach,
     upstream_profile_index,
     yaml_load,
@@ -100,6 +105,7 @@ from validation import (
     _build_validation_index,
     _parse_validation,
     deliverable,
+    read_from_system_dir,
     with_archive_members,
     extra_alternatives,
 )
@@ -376,6 +382,97 @@ def platform_list_version(config: dict, platform: str) -> str:
 PACK_DOCUMENTS = ("README.txt", "manifest.json")
 
 
+def core_data_trees(
+    config: dict,
+    profiles: dict[str, dict],
+    platform_name: str,
+    data_registry: dict | None,
+    target_cores: set[str] | None = None,
+) -> list[dict]:
+    """The data directories the platform's cores read, as tree references.
+
+    A profile's ``data_directories`` reach the pack of every platform that
+    runs the core as a libretro core, below the system directory it hands
+    the core (and the build's own folder, ``pack_structure``), as the
+    emulator pack lays them out. Left out: a tree the platform's package
+    installs, for this core or another reading the same tree
+    (``installed_data_refs``), one the build bundles or the platform never
+    opens (``deliverable``), and one whose registry entry names the
+    platforms it serves (``for_platforms``) without this one. A standalone build reads its data below its own folder, which a
+    tree's destination does not describe, so its trees stay out, as does a
+    tree read beside the content (``load_from``).
+
+    Each reference carries the profile's systems (``source_systems``, as a
+    core extra does), which --system and --split narrow on.
+    """
+    if not data_registry:
+        return []
+    installed = installed_data_refs(platform_name)
+    handed = standalone_set(config)
+    # Relative to base_destination, which the members are written under. A
+    # platform with none writes its BIOS folder into every destination, and
+    # the trees go there as the core extras do.
+    root = declared_root(config)
+    trees: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+    for core in sorted(_platform_cores(config, profiles, target_cores)):
+        profile = profiles[core]
+        if all(standalone for _view, standalone in platform_layouts(core, profile, handed)):
+            continue
+        declared = [t for t in profile.get("data_directories") or [] if isinstance(t, dict)]
+        directories = core_system_dirs(core, profile, handed)
+        structure = str((profile.get("pack_structure") or {}).get("libretro") or "")
+        for tree in deliverable(declared, False, platform_name):
+            if not read_from_system_dir(tree):
+                continue
+            ref = str(tree.get("ref") or "")
+            entry = data_registry.get(ref)
+            if entry is None or ref in installed:
+                continue
+            allowed = entry.get("for_platforms")
+            if allowed and platform_name not in allowed:
+                continue
+            for directory in [""] if directories is None else directories:
+                destination = prefixed_destination("/".join(
+                    part.strip("/")
+                    for part in (directory, structure, str(tree.get("destination") or ""))
+                    if part.strip("/")
+                ), root) or root
+                if (ref, destination) in seen:
+                    continue
+                seen.add((ref, destination))
+                trees.append({
+                    "ref": ref,
+                    "destination": destination,
+                    "required": tree.get("required"),
+                    "core": core,
+                    "source_systems": entry_system_ids(tree, profile),
+                })
+    return trees
+
+
+def _in_data_cache(path: str, data_registry: dict | None) -> bool:
+    """Whether a resolved file lies in one of the data directory caches."""
+    real = os.path.realpath(path)
+    return any(
+        real.startswith(os.path.realpath(entry["local_cache"]) + os.sep)
+        for entry in (data_registry or {}).values()
+        if entry.get("local_cache")
+    )
+
+
+def _tree_references(
+    pack_systems: dict, core_trees: Iterable[dict],
+) -> Iterator[tuple[tuple[str, ...], dict]]:
+    """(systems, reference) for each tree a pack carries: those its systems
+    declare, then those its cores read."""
+    for sys_id, system in sorted(pack_systems.items()):
+        for dd in system.get("data_directories", []):
+            yield (sys_id,), dd
+    for tree in core_trees:
+        yield tuple(tree["source_systems"]), tree
+
+
 def _data_directory_members(
     pack_systems: dict,
     data_registry: dict | None,
@@ -387,12 +484,20 @@ def _data_directory_members(
     seen_parents: set,
     refs_out: dict | None = None,
     required_only: bool = False,
+    core_trees: Iterable[dict] = (),
+    reclaim: dict[str, str] | None = None,
 ) -> Iterator[tuple[str, str]]:
     """Yield (source, destination) for the cached data directories a
-    platform's systems declare.
+    platform's systems declare, then those its cores read (``core_trees``,
+    from core_data_trees).
+
+    ``reclaim`` maps a destination already taken to the cache file it was
+    resolved to: the manifest found the platform's entry there and cannot
+    list it as a file, so the tree yields it once more and the installer
+    gets it from the tree's archive.
 
     ``refs_out``, when given, maps each yielded destination to
-    (registry key, system id, directory destination), for the manifest.
+    (registry key, system ids, directory destination), for the manifest.
 
     These are not BIOS and carry no hash of their own: they are whole
     trees an emulator reads, refreshed from upstream, so what ships is
@@ -402,54 +507,61 @@ def _data_directory_members(
     core runs without, as it leaves out such a file.
     """
     # Data directories from _data_dirs.yml
-    for sys_id, system in sorted(pack_systems.items()):
-        for dd in system.get("data_directories", []):
-            ref_key = dd.get("ref", "")
-            if not ref_key or not data_registry or ref_key not in data_registry:
-                continue
-            if required_only and dd.get("required") is False:
-                continue
-            if ref_key in installed_data_refs(platform_name):
-                continue
-            entry = data_registry[ref_key]
-            allowed = entry.get("for_platforms")
-            if allowed and platform_name not in allowed:
-                continue
-            local_path = entry.get("local_cache", "")
-            if not local_path or not os.path.isdir(local_path):
-                print(
-                    f"  WARNING: data directory '{ref_key}' not cached at {local_path} (run refresh_data_dirs.py)"
-                )
-                _MISSING_DATA_DIRS.add(ref_key)
-                continue
-            dd_dest = dd.get("destination", "")
-            if base_dest and dd_dest:
-                dd_prefix = f"{base_dest}/{dd_dest}"
-            elif base_dest:
-                dd_prefix = base_dest
-            else:
-                dd_prefix = dd_dest
-            # Held while the caller writes what is yielded: a refresh swapping
-            # the tree waits until the walk is done.
-            with cache_lock(local_path, shared=True):
-                for root, _dirs, filenames in os.walk(local_path):
-                    for fname in filenames:
-                        src = os.path.join(root, fname)
-                        rel = os.path.relpath(src, local_path)
-                        full = f"{dd_prefix}/{rel}"
-                        if full in seen_destinations or (
-                            full.lower() in seen_lower and case_insensitive
-                        ):
-                            continue
-                        if _has_path_conflict(full, seen_destinations, seen_parents):
-                            continue
-                        seen_destinations.add(full)
-                        _register_path(full, seen_destinations, seen_parents)
-                        if case_insensitive:
-                            seen_lower.add(full.lower())
+    for systems, dd in _tree_references(pack_systems, core_trees):
+        ref_key = dd.get("ref", "")
+        if not ref_key or not data_registry or ref_key not in data_registry:
+            continue
+        if required_only and dd.get("required") is False:
+            continue
+        if ref_key in installed_data_refs(platform_name):
+            continue
+        entry = data_registry[ref_key]
+        allowed = entry.get("for_platforms")
+        if allowed and platform_name not in allowed:
+            continue
+        local_path = entry.get("local_cache", "")
+        if not local_path or not os.path.isdir(local_path):
+            print(
+                f"  WARNING: data directory '{ref_key}' not cached at {local_path} (run refresh_data_dirs.py)"
+            )
+            _MISSING_DATA_DIRS.add(ref_key)
+            continue
+        dd_dest = dd.get("destination", "")
+        if base_dest and dd_dest:
+            dd_prefix = f"{base_dest}/{dd_dest}"
+        elif base_dest:
+            dd_prefix = base_dest
+        else:
+            dd_prefix = dd_dest
+        # Held while the caller writes what is yielded: a refresh swapping
+        # the tree waits until the walk is done.
+        with cache_lock(local_path, shared=True):
+            for root, _dirs, filenames in os.walk(local_path):
+                for fname in filenames:
+                    src = os.path.join(root, fname)
+                    rel = os.path.relpath(src, local_path)
+                    full = f"{dd_prefix}/{rel}" if dd_prefix else rel
+                    if reclaim and full in reclaim and (
+                        os.path.normpath(reclaim[full]) == os.path.normpath(src)
+                    ):
+                        del reclaim[full]
                         if refs_out is not None:
-                            refs_out[full] = (ref_key, sys_id, dd_prefix)
+                            refs_out[full] = (ref_key, systems, dd_prefix)
                         yield src, full
+                        continue
+                    if full in seen_destinations or (
+                        full.lower() in seen_lower and case_insensitive
+                    ):
+                        continue
+                    if _has_path_conflict(full, seen_destinations, seen_parents):
+                        continue
+                    seen_destinations.add(full)
+                    _register_path(full, seen_destinations, seen_parents)
+                    if case_insensitive:
+                        seen_lower.add(full.lower())
+                    if refs_out is not None:
+                        refs_out[full] = (ref_key, systems, dd_prefix)
+                    yield src, full
 
 
 def _pack_data_directories(
@@ -464,13 +576,14 @@ def _pack_data_directories(
     seen_lower: set,
     seen_parents: set,
     required_only: bool = False,
+    core_trees: Iterable[dict] = (),
 ) -> int:
     """Add the data directories to the pack. Returns how many files went in."""
     added = 0
     for src, full in _data_directory_members(
         pack_systems, data_registry, platform_name, base_dest,
         case_insensitive, seen_destinations, seen_lower, seen_parents,
-        required_only=required_only,
+        required_only=required_only, core_trees=core_trees,
     ):
         _add_pack_member(zf, src, _flat(full, base_dest, flatten))
         added += 1
@@ -1169,10 +1282,23 @@ def generate_pack(
               save_count += 1
           total_files += 1
 
+      # The trees the cores read follow them as their extras do: by the
+      # systems asked for, and those of no system in the part of their own.
+      core_trees = (
+          [] if source == "platform"
+          else core_data_trees(
+              config, emu_profiles, platform_name, data_registry, target_cores
+          )
+      )
+      if extras_only:
+          owned = list(platform_scope_systems(config, emu_profiles, target_cores))
+          core_trees = [t for t in core_trees if not _extras_for_systems([t], owned)]
+      elif system_filter:
+          core_trees = _extras_for_systems(core_trees, system_filter)
       total_files += _pack_data_directories(
           zf, pack_systems, data_registry, platform_name, base_dest,
           flatten, case_insensitive, seen_destinations, seen_lower,
-          seen_parents, required_only=required_only,
+          seen_parents, required_only=required_only, core_trees=core_trees,
       )
 
       # README.txt for users: personalized step-by-step per platform
@@ -4334,6 +4460,9 @@ def generate_manifest(
     # Sizes of the files the pack carries and the installer cannot fetch: the
     # collection does not index them, a data directory cache answered.
     pack_only_sizes: list[int] = []
+    # Platform entries resolved into a data directory cache: destination ->
+    # (cache file, size). Settled once the trees are walked.
+    cache_held: dict[str, tuple[str, int]] = {}
     rename_notes: set[str] = set()
     slot_overrides = slots.pack_overrides(
         config, emu_profiles, db, zip_contents, data_registry,
@@ -4564,7 +4693,10 @@ def generate_manifest(
                 if entry is None:
                     record_omission(full_dest, file_entry, sys_id, "not_found", None)
                     if file_size and full_dest not in seen_destinations:
-                        pack_only_sizes.append(file_size)
+                        if _in_data_cache(local_path, data_registry):
+                            cache_held[full_dest] = (local_path, file_size)
+                        else:
+                            pack_only_sizes.append(file_size)
                         seen_destinations.add(dedup_key)
                         _register_path(dedup_key, seen_destinations, seen_parents)
                         if case_insensitive:
@@ -4643,12 +4775,28 @@ def generate_manifest(
     # Phase 3: data directories. They are not files of the collection: the
     # installer fetches each from its source archive and keeps the members
     # whose hash the list below records, the same tree the pack carries.
-    data_refs: dict[str, tuple[str, str, str]] = {}
+    data_refs: dict[str, tuple[str, tuple[str, ...], str]] = {}
+    reclaim = {full: path for full, (path, _size) in cache_held.items()}
     data_members = list(_data_directory_members(
         pack_systems, data_registry, platform_name, base_dest,
         case_insensitive, seen_destinations, seen_lower, seen_parents,
         data_refs, required_only=required_only,
+        core_trees=(
+            [] if source == "platform"
+            else core_data_trees(
+                config, emu_profiles, platform_name, data_registry, target_cores
+            )
+        ),
+        reclaim=reclaim,
     ))
+    # A platform entry found in a tree the pack carries is that tree's member:
+    # the installer rebuilds it from the tree's archive. One found in a tree
+    # the pack does not carry stays omitted, held by the pack alone.
+    for full_dest, (_path, size) in cache_held.items():
+        if full_dest in reclaim:
+            pack_only_sizes.append(size)
+        else:
+            omitted_by_destination.pop(full_dest, None)
     data_sizes = pack_only_sizes + [os.path.getsize(src) for src, _dest in data_members]
     data_directories = _manifest_data_directories(
         data_members, data_refs, data_registry or {}, base_dest
@@ -4738,7 +4886,7 @@ def generate_manifest(
 
 def _manifest_data_directories(
     members: list[tuple[str, str]],
-    refs: dict[str, tuple[str, str, str]],
+    refs: dict[str, tuple[str, tuple[str, ...], str]],
     registry: dict,
     base_dest: str,
 ) -> list[dict]:
@@ -4752,7 +4900,7 @@ def _manifest_data_directories(
     """
     grouped: dict[tuple[str, str], dict] = {}
     for src, full in members:
-        ref, system, prefix = refs[full]
+        ref, systems, prefix = refs[full]
         entry = registry.get(ref, {})
         key = (ref, prefix)
         group = grouped.get(key)
@@ -4775,8 +4923,7 @@ def _manifest_data_directories(
                 group["source_path"] = str(entry.get("source_path", "")).format(version=version)
             if entry.get("exclude"):
                 group["exclude"] = [str(e) for e in entry["exclude"]]
-        if system not in group["systems"]:
-            group["systems"].append(system)
+        group["systems"].extend(s for s in systems if s not in group["systems"])
         rel = full[len(prefix):].lstrip("/") if prefix else full
         hashes = compute_hashes(src, frozenset({"sha1"}))
         group["files"][rel] = {"sha1": hashes["sha1"], "size": os.path.getsize(src)}
@@ -5222,6 +5369,7 @@ from packpaths import (  # noqa: E402,F401
 from packextras import (  # noqa: E402,F401
     ExtraResolver,
     extra_full_destination,
+    prefixed_destination,
     save_entry_fields,
     save_manifest_dest,
     _detect_extras_prefix,

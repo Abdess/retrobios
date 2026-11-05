@@ -5544,7 +5544,10 @@ class DocumentedExamplesHoldTogether(unittest.TestCase):
         page = (ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         downloading = re.search(r"Downloading (\d+) files", page).group(1)
         done = re.search(r"Done\. (\d+) files installed", page).group(1)
-        self.assertEqual(done, downloading)
+        # The data trees come after the download, counted in the index.
+        index = page[page.index("Fetching file index for batocera"):]
+        trees = re.search(r"^    .* and (\d+) data files", index, re.M)
+        self.assertEqual(int(done), int(downloading) + (int(trees.group(1)) if trees else 0))
 
 
 

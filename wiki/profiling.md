@@ -548,7 +548,7 @@ reports the profile as uncheckable, and the CI job that runs
 | `mode` | no | default mode: `standalone`, `libretro`, or `both` |
 | `verification` | no | how the core verifies BIOS: `existence`, `md5`, `sha1`, `crc32` |
 | `files` | yes, unless `type: alias` | list of file entries |
-| `data_directories` | no | whole directory trees the core needs, referencing `_data_dirs.yml` keys. An entry may carry `mode:` when only one build reads the tree, and `required: false` when the core runs without it (`--required-only` then leaves it out) |
+| `data_directories` | no | whole directory trees the core needs, referencing `_data_dirs.yml` keys. An entry may carry `mode:` when only one build reads the tree, `required: false` when the core runs without it (`--required-only` then leaves it out), and `load_from: content_dir` when the core reads it beside the content rather than in the system directory. Every platform that runs the core as a libretro core gets the tree in its pack, unless the entry names it in `installed_on` or `unread_on`, or the `_data_dirs.yml` entry has a `for_platforms` list without it |
 | `notes` | no | free-form technical notes |
 | `note` | no | single-paragraph variant of `notes` |
 | `exclusion_note` | no | why the profile has no files despite .info declaring firmware |
