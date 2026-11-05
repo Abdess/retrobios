@@ -89,6 +89,12 @@ class ReleaseAssetNotCached(unittest.TestCase):
         self.assertEqual(entry["status"], Status.OK)
         self.assertEqual(entry["release_asset"], REGISTERED[0])
 
+    def test_its_path_is_a_pack_destination(self):
+        """The pack holds the fetched file at its path: absent from
+        pack_destinations, step 5 reported it 'pack only'."""
+        report = verify_platform(self.config, self.db, "emulators", {})
+        self.assertIn("big.bin", report["pack_destinations"])
+
     def test_offline_counts_it_missing(self):
         packresolve.set_offline(True)
         self.assertEqual(self._entry()["status"], Status.MISSING)

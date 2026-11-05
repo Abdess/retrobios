@@ -1309,8 +1309,12 @@ def verify_platform(
                     "release_asset": local_path,
                     "reason": "release asset, fetched when the pack is built",
                 }
+                # Written at its path like any held file: keyed to None, it
+                # stayed out of pack_destinations and step 5 read the pack's
+                # copy as a file only the pack holds.
                 packed_order.append((
-                    sys_id, f"{base_dest}/{destination}" if base_dest else destination, None,
+                    sys_id, f"{base_dest}/{destination}" if base_dest else destination,
+                    local_path,
                 ))
                 shipped_keys.add(_dest_key(file_entry, sys_id))
                 local_path = None
