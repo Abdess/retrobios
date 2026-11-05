@@ -507,7 +507,8 @@ BIOS folder: /userdata/bios
 426 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (1 file):
     capcom-cps3 (fbneo): sfiii2a.zip
-  Each emulator's page says what these files are: https://abdess.github.io/retrobios/emulators/
+      https://abdess.github.io/retrobios/emulators/fbneo/
+  Each emulator's page, linked above, says what these files are.
   Not available here: DARK.GOB, DARKWAR.RTL, DARKWAR.WAD and 76 more, game data their games read. Copy them from your own copy of the game into /userdata/bios/, /userdata/bios/Source/, /userdata/bios/base/ and 10 more folders.
   Game data: files a game or a game engine reads, of no use to the other cores.
 To check this later, run the same command with --check.

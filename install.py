@@ -6586,17 +6586,24 @@ def _needed_lines(entries: list[dict], heading: str, every: bool = False) -> lis
     count = sum(len(names) for names, _cores in by_system.values())
     lines = [f"  {heading} ({_plural(count, 'file')}):"]
     systems = sorted(by_system)
-    for system in systems if every else systems[:8]:
+    shown = systems if every else systems[:8]
+    for system in shown:
         names, cores = by_system[system]
         readers = f" ({', '.join(sorted(cores))})" if cores else ""
         lines.append(f"    {system}{readers}: {', '.join(sorted(names))}")
+        # Each emulator's own page, one click away: the index alone sent the
+        # user searching several hundred pages for theforceengine.
+        lines += [f"      {SITE_URL}emulators/{core}/" for core in sorted(cores)]
     if not every and len(systems) > 8:
         # A file several systems share is a group of its own, counted as one.
         unit = "groups" if any(", " in system for system in systems) else "systems"
         more = len(systems) - 8
         lines.append(f"    ... and {more} more {unit if more > 1 else unit[:-1]} "
                      "(--check --verbose lists them all)")
-    lines.append(f"  Each emulator's page says what these files are: {SITE_URL}emulators/")
+    if all(by_system[system][1] for system in shown):
+        lines.append("  Each emulator's page, linked above, says what these files are.")
+    else:
+        lines.append(f"  Each emulator's page says what these files are: {SITE_URL}emulators/")
     return lines
 
 

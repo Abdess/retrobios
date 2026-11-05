@@ -4411,6 +4411,16 @@ class WhatTheCollectionLacksSaysForWhom(unittest.TestCase):
         self.assertIn("    dark-forces (theforceengine): DARK.GOB, SOUNDS.GOB", lines)
         self.assertIn("    sonic-mania (sonicmania): Data.rsdk", lines)
         self.assertIn("(3 files)", lines[0])
+        # The page of each emulator under its group: the index alone left a
+        # search over several hundred pages.
+        self.assertEqual(lines[lines.index("    dark-forces (theforceengine): DARK.GOB, "
+                                           "SOUNDS.GOB") + 1],
+                         f"      {install.SITE_URL}emulators/theforceengine/")
+        self.assertIn(f"      {install.SITE_URL}emulators/sonicmania/", lines)
+        self.assertNotIn(f"{install.SITE_URL}emulators/\n", "\n".join(lines) + "\n")
+
+    def test_a_group_with_no_emulator_keeps_the_index(self):
+        lines = install._needed_lines([{"dest": "x.bin", "system": "x"}], "Needed")
         self.assertIn(f"{install.SITE_URL}emulators/", lines[-1])
 
 
