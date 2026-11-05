@@ -132,7 +132,7 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
             ({"severity_counts": {}, "details": details}, ["RetroArch"]),
             ({"severity_counts": {}, "details": []}, ["Batocera"]),
         ])
-        self.assertIn("1 discrepancy (RetroArch)", summary)
+        self.assertIn("1 discrepancy (RetroArch 1)", summary)
 
     def test_a_shared_destination_names_the_path_and_both_sides(self):
         result = {"name": "disk.rom", "status": verify.Status.UNTESTED}
@@ -143,6 +143,18 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
         message = result["discrepancy"]
         for part in ("bios/disk.rom", "nec-pc-88", "coco", "md5 793f8678"):
             self.assertIn(part, message)
+
+
+class EveryPlatformInTheSummaryCarriesItsCount(unittest.TestCase):
+    """'17 discrepancies (Lakka 5, RetroArch 5, RetroBat 2, RetroDECK 4,
+    ROCKNIX)': the one platform with a single entry had no number, and the
+    named counts did not add up to the total."""
+
+    def test_a_count_of_one_is_written(self):
+        one = {"severity_counts": {verify.Severity.WARNING: 1}, "details": []}
+        two = {"severity_counts": {verify.Severity.WARNING: 2}, "details": []}
+        summary = verify._overall_summary([(two, ["Lakka"]), (one, ["ROCKNIX"])])
+        self.assertIn("3 warning (Lakka 2, ROCKNIX 1)", summary)
 
 
 class OneSpellingPerOption(unittest.TestCase):

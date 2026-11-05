@@ -2961,8 +2961,7 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
     platforms = sum(len(group) for _, group in group_results)
 
     def where(counts: dict[str, int]) -> str:
-        named = [f"{name} {count}" if count > 1 else name
-                 for name, count in counts.items() if count]
+        named = [f"{name} {count}" for name, count in counts.items() if count]
         return f" ({', '.join(named)})" if named else ""
 
     parts = []
