@@ -332,6 +332,7 @@ Register the target scraper in `_registry.yml`:
 |---------|--------|----------|
 | `retroarch_targets` | libretro buildbot nightly | Scrape directory listings for each target arch |
 | `batocera_targets` | Config.in + es_systems.yml | Cross-reference kernel config with system definitions |
+| `knulli_targets` | KNULLI's own Config.in + es_systems.yml | The Batocera scraper's Kconfig resolution against KNULLI's tree |
 | `emudeck_targets` | EmuScripts + RetroArch cores | GitHub API for script availability per OS |
 | `retropie_targets` | scriptmodules + rp_module_flags | Parse Bash scriptmodules for platform flags |
 | `lakka_targets` | Lakka-LibreELEC `package.mk` and project options | Core list minus each project and device's exclusions |

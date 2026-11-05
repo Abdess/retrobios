@@ -176,6 +176,153 @@ class BatoceraKconfig(unittest.TestCase):
                           "BR2_PACKAGE_RUFFLE"} & active)
 
 
+class BatoceraDerivedFlags(unittest.TestCase):
+    """A condition continued with a backslash was cut at its first line:
+    "BR2_PACKAGE_BATOCERA_TARGET_X86_ANY ||" held on every board, so GLES3
+    did too, and a GLES2 Raspberry Pi got yabasanshiro and eduke32. A block
+    whose config is not a package (KNULLI's BR2_KERNEL_LEGACY_3_10) sent
+    the regex backtracking without end."""
+
+    CONFIG_IN = (
+        "if BR2_PACKAGE_BATOCERA_TARGET_X86_64 || \\\n"
+        "   BR2_PACKAGE_BATOCERA_TARGET_H700\n"
+        "\tconfig BR2_PACKAGE_BATOCERA_GLES3\n\tbool \"gles3\"\n\tdefault y\nendif\n\n"
+        "if BR2_PACKAGE_BATOCERA_TARGET_SUNXI_R16\n"
+        "        config BR2_KERNEL_LEGACY_3_10\n        default y\nendif\n\n"
+        + "config BR2_PACKAGE_FILLER\n\tbool \"filler\"\n" * 400
+        + "config BR2_PACKAGE_BATOCERA_SYSTEM\n"
+        "\tselect BR2_PACKAGE_EDUKE32\tif BR2_PACKAGE_BATOCERA_GLES3\n"
+        "\tselect BR2_PACKAGE_DUCKSTATION_LEGACY\tif !BR2_PACKAGE_BATOCERA_GLES3\n"
+    )
+
+    def active(self, board: set[str]) -> frozenset[str]:
+        from scraper.targets.batocera_targets_scraper import (  # noqa: PLC0415
+            _active_symbols,
+            _parse_meta_flags,
+            _parse_owned_selects,
+        )
+
+        return _active_symbols(
+            board | {"BR2_PACKAGE_BATOCERA_SYSTEM"},
+            _parse_meta_flags(self.CONFIG_IN),
+            _parse_owned_selects(self.CONFIG_IN),
+        )
+
+    def test_a_continued_condition_keeps_its_later_lines(self):
+        from scraper.targets.batocera_targets_scraper import (  # noqa: PLC0415
+            _parse_meta_flags,
+        )
+
+        rules = dict(_parse_meta_flags(self.CONFIG_IN))
+        self.assertIn("BR2_PACKAGE_BATOCERA_TARGET_H700", rules["BR2_PACKAGE_BATOCERA_GLES3"])
+        self.assertEqual(rules["BR2_KERNEL_LEGACY_3_10"],
+                         "BR2_PACKAGE_BATOCERA_TARGET_SUNXI_R16")
+
+    def test_gles3_follows_the_board(self):
+        h700 = self.active({"BR2_PACKAGE_BATOCERA_TARGET_H700"})
+        self.assertIn("BR2_PACKAGE_EDUKE32", h700)
+        r16 = self.active({"BR2_PACKAGE_BATOCERA_TARGET_SUNXI_R16"})
+        self.assertNotIn("BR2_PACKAGE_BATOCERA_GLES3", r16)
+        self.assertNotIn("BR2_PACKAGE_EDUKE32", r16)
+
+    def test_a_negated_select_drops_once_the_flag_is_derived(self):
+        """GLES3 is derived on the first pass, after which `!GLES3` no
+        longer holds: accumulating kept duckstation-legacy on every GLES3
+        board."""
+        h700 = self.active({"BR2_PACKAGE_BATOCERA_TARGET_H700"})
+        self.assertNotIn("BR2_PACKAGE_DUCKSTATION_LEGACY", h700)
+        r16 = self.active({"BR2_PACKAGE_BATOCERA_TARGET_SUNXI_R16"})
+        self.assertIn("BR2_PACKAGE_DUCKSTATION_LEGACY", r16)
+
+
+class KnulliPerBoard(unittest.TestCase):
+    """KNULLI builds per board on Batocera's model from its own tree:
+    configs/knulli-*.board, package/system/knulli-system/Config.in and
+    package/emulationstation/knulli-es-system/es_systems.yml, with
+    BR2_PACKAGE_KNULLI_SYSTEM as the config every image turns on."""
+
+    FILES = {
+        "configs/knulli-board.common": "BR2_PACKAGE_KNULLI_SYSTEM=y\n",
+        "configs/knulli-board.libs": "BR2_PACKAGE_BATOCERA_SYSTEM=n\n",
+        "configs/knulli-h700.board": (
+            "include knulli-board.common\n\nBR2_aarch64=y\n"
+            "BR2_PACKAGE_BATOCERA_TARGET_H700=y\n"
+        ),
+        "configs/knulli-r16.board": (
+            "include knulli-board.common\n\nBR2_arm=y\n"
+            "BR2_PACKAGE_BATOCERA_TARGET_SUNXI_R16=y\n"
+        ),
+        "configs/knulli-h700_armhf_libs.board": (
+            "include knulli-board.libs\ninclude knulli-h700_armhf_libs.packages\n"
+            "BR2_arm=y\nBR2_PACKAGE_BATOCERA_TARGET_H700=y\n"
+        ),
+        "configs/knulli-h700_armhf_libs.packages": "BR2_PACKAGE_SDL2=y\n",
+        "package/system/knulli-system/Config.in": (
+            "if BR2_PACKAGE_BATOCERA_TARGET_H700 || \\\n"
+            "   BR2_PACKAGE_BATOCERA_TARGET_A133\n"
+            "\tconfig BR2_PACKAGE_BATOCERA_GLES3\n\tdefault y\nendif\n\n"
+            "config BR2_PACKAGE_KNULLI_SYSTEM\n"
+            "\tselect BR2_PACKAGE_LIBRETRO_MGBA\n"
+            "\tselect BR2_PACKAGE_PPSSPP\tif BR2_PACKAGE_BATOCERA_GLES3\n"
+        ),
+        "package/emulationstation/knulli-es-system/es_systems.yml": (
+            "gba:\n  emulators:\n    libretro:\n"
+            "      mgba: {requireAnyOf: [BR2_PACKAGE_LIBRETRO_MGBA]}\n"
+            "psp:\n  emulators:\n    ppsspp:\n"
+            "      ppsspp: {requireAnyOf: [BR2_PACKAGE_PPSSPP]}\n"
+        ),
+    }
+
+    def test_each_board_gets_its_own_cores(self):
+        from scripts.scraper.targets import knulli_targets_scraper  # noqa: PLC0415
+
+        pin = knulli_targets_scraper.Scraper.pinned_revision("knulli")
+        raw = f"https://raw.githubusercontent.com/knulli-cfw/knulli-linux/{pin}/"
+        api = "https://api.github.com/repos/knulli-cfw/knulli-linux/contents/"
+        seen: list[str] = []
+
+        class _Body:
+            def __init__(self, body: str):
+                self.body = body.encode()
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+            def read(self):
+                return self.body
+
+        def urlopen(request, *_a, **_k):
+            url = request.full_url
+            seen.append(url)
+            if url == f"{api}configs?ref={pin}":
+                names = [p.removeprefix("configs/") for p in self.FILES if p.startswith("configs/")]
+                return _Body(json.dumps([{"name": n} for n in names]))
+            if url == f"{api}buildroot?ref={pin}":
+                return _Body('{"sha": "c2d7985b"}')
+            if url.startswith("https://raw.githubusercontent.com/knulli-cfw/buildroot/c2d7985b/"):
+                return _Body("config BR2_aarch64\n\tselect BR2_ARCH_IS_64\n")
+            path = url.removeprefix(raw)
+            if path in self.FILES:
+                return _Body(self.FILES[path])
+            _refuse()
+
+        with mock.patch.object(batocera_targets_scraper.urllib.request, "urlopen", urlopen):
+            data = knulli_targets_scraper.Scraper().fetch_targets()
+
+        self.assertEqual(data["platform"], "knulli")
+        self.assertEqual(data["source"],
+                         f"https://github.com/knulli-cfw/knulli-linux/tree/{pin}")
+        self.assertEqual(sorted(data["targets"]), ["h700", "r16"])
+        self.assertEqual(data["targets"]["h700"],
+                         {"architecture": "aarch64", "cores": ["mgba", "ppsspp"]})
+        self.assertEqual(data["targets"]["r16"],
+                         {"architecture": "arm", "cores": ["mgba"]})
+        self.assertTrue(all(pin in url or "buildroot/c2d7985b" in url for url in seen), seen)
+
+
 class RocknixPerDevice(unittest.TestCase):
     """ROCKNIX had no target list: an H700 handheld got the PS2, GameCube
     and PS3 firmware of emulators its image does not carry."""

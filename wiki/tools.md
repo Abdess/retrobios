@@ -1648,6 +1648,7 @@ Located in `scripts/scraper/targets/`. Each inherits `BaseTargetScraper` and imp
 |---------|--------|----------------|
 | `retroarch_targets_scraper` | libretro buildbot nightly listings | buildbot architecture |
 | `batocera_targets_scraper` | Config.in + es_systems.yml + Buildroot Kconfig | board |
+| `knulli_targets_scraper` | the same, read from KNULLI's tree and Buildroot fork | board |
 | `recalbox_targets_scraper` | board defconfigs + system.ini cores | board |
 | `rocknix_targets_scraper` | emulators package.mk + device options | device |
 | `lakka_targets_scraper` | libretro_cores package.mk + project and device options | device image |
