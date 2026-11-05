@@ -1829,6 +1829,26 @@ class CrossReferenceSettlesBySlotAndSize(unittest.TestCase):
         self.assertNotIn("appear in the platform config", section)
 
 
+class CommittedLargeFilesAreTheOnesNamed(unittest.TestCase):
+    """release-process.md named tbblue.mmc among the committed files over
+    50 MB two weeks after it left bios/, and not uqm-remix-disc1.uqm."""
+
+    def test_the_list_is_the_tree(self):
+        import subprocess
+
+        listed = subprocess.run(["git", "ls-files", "-z", "bios"], cwd=ROOT, capture_output=True,
+                                check=True).stdout.decode("utf-8").split("\0")
+        large = sorted(Path(path).name for path in listed
+                       if path and (ROOT / path).is_file()
+                       and (ROOT / path).stat().st_size > 50_000_000)
+        page = " ".join((ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8").split())
+        said = re.search(r"Size does not decide it: (\w+) committed files are over 50 MB \(([^)]*)\)",
+                         page)
+        self.assertIsNotNone(said)
+        self.assertEqual(sorted(re.findall(r"`([^`]+)`", said.group(2))), large)
+        self.assertEqual(said.group(1), {3: "three", 4: "four", 5: "five"}.get(len(large)))
+
+
 class SkipFlagsNameTheSteps(unittest.TestCase):
     """--skip-packs said "add --skip-docs to stop after verify" while 4d and
     4e still ran, and the flag table left 8b out of --skip-docs."""
