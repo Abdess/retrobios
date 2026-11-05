@@ -5160,6 +5160,54 @@ class ANetworkFailureNamesTheNetwork(unittest.TestCase):
         self.assertNotIn("being written to", text)
 
 
+class AnHttpErrorNamesItsAddress(unittest.TestCase):
+    """A file the server answered 404 for ended on "HTTP 404" alone: no
+    address, no cause, and a mirror chosen with RETROBIOS_BASE_URL went
+    unnamed, as it did behind a NETWORK failure of that mirror."""
+
+    def _said(self, failures: list, base_url: str = "") -> str:
+        out = io.StringIO()
+        env = {"RETROBIOS_BASE_URL": base_url} if base_url else {}
+        with unittest.mock.patch.dict(os.environ, env), contextlib.redirect_stdout(out), \
+                self.assertRaises(SystemExit) as raised:
+            install._report_outcome([Path("/bios")], 0, 0, len(failures), 0, False,
+                                    failures=failures)
+        self.assertEqual(raised.exception.code, 2)
+        return " ".join(out.getvalue().split())
+
+    def _reason(self, kind: type, words: str, url: str) -> str:
+        reason = kind(words)
+        reason.url = url
+        return reason
+
+    def test_the_address_and_the_cause_are_said(self):
+        url = "https://raw.githubusercontent.com/Abdess/retrobios/main/bios/a.bin"
+        failures = [("a.bin", self._reason(install.HttpReason, "HTTP 404", url)),
+                    ("b.bin", self._reason(install.HttpReason, "HTTP 404", url + "x"))]
+        with unittest.mock.patch.dict(os.environ):
+            os.environ.pop("RETROBIOS_BASE_URL", None)
+            text = self._said(failures)
+        self.assertIn(f"The server answered HTTP 404 for {url} (and 1 other file).", text)
+        self.assertIn("running again changes nothing", text)
+        self.assertIn("BIOS folder: /bios", text)
+        self.assertNotIn("RETROBIOS_BASE_URL", text)
+
+    def test_a_mirror_named_in_the_environment_is_said(self):
+        mirror = "http://127.0.0.1:18766"
+        for kind, words in ((install.HttpReason, "HTTP 404"),
+                            (install.NetworkReason, "the connection timed out")):
+            with self.subTest(kind=kind.__name__):
+                text = self._said([("a.bin", self._reason(kind, words, f"{mirror}/a.bin"))],
+                                  base_url=mirror)
+                self.assertIn("RETROBIOS_BASE_URL is set in this environment", text)
+
+    def test_the_download_records_the_address(self):
+        error = urllib.error.HTTPError("https://x/bios/a.bin", 404, "Not Found", None, None)
+        reason = ANetworkFailureNamesTheNetwork._fail(self, error)
+        self.assertIsInstance(reason, install.HttpReason)
+        self.assertTrue(reason.url.endswith("/bios/a.bin"), reason.url)
+
+
 class RetroBatIsFoundWhereItSaysItIs(unittest.TestCase):
     """RetroBat on D:\\RetroBat was not detected, and --platform retrobat
     wrote 7.6 GB into C:\\RetroBat\\bios, a folder it does not read.

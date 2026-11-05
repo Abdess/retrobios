@@ -5759,8 +5759,9 @@ def _download_one(
             reason = f"HTTP {exc.code}"
             if exc.code in (403, 429):
                 reason += " (GitHub rate limit or access refused)"
-            if exc.code >= 500 or exc.code == 429:
-                reason = NetworkReason(reason)
+            reason = (NetworkReason if exc.code >= 500 or exc.code == 429
+                      else HttpReason)(reason)
+            reason.url = url
             if verbose:
                 print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
             if tmp_path is not None and partial is None and tmp_path.exists():
@@ -6264,6 +6265,32 @@ class NetworkReason(str):
     """A failure the connection caused: cut, timed out, refused by a server
     or a proxy. The summary names the network instead of the folder."""
 
+    url = ""
+
+
+class HttpReason(str):
+    """A file the server answered for with an error of its own (HTTP 404):
+    the summary names the address, where "HTTP 404" alone told the user
+    neither what failed nor that running again changes nothing."""
+
+    url = ""
+
+
+def _http_failure_lines(failures: list[tuple[str, str]]) -> list[str]:
+    """The address the first refused file was asked at, and what chose it:
+    a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
+    the files, or a list out of step with the files it names."""
+    refused = [reason for _dest, reason in failures if isinstance(reason, HttpReason)]
+    if not refused:
+        return []
+    more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
+    lines = [f"  The server answered {refused[0]} for {refused[0].url}{more}."]
+    if os.environ.get("RETROBIOS_BASE_URL"):
+        return lines + _address_lines(refused[0].url)[1:]
+    return lines + ["  The file list names files the server does not hold, and running "
+                    "again changes nothing until the two match.",
+                    f"  More help: {TROUBLESHOOTING_PAGE}"]
+
 
 def _transfer_failure(exc: BaseException) -> bool:
     """Whether a download error came from the connection, not the disk."""
@@ -6409,8 +6436,12 @@ def _report_outcome(
     if any(reason == READ_ONLY for _dest, reason in failures or []):
         advice.append("  Files marked read-only are in the way: clear that attribute "
                       "(or delete them), then run again.")
+    advice += _http_failure_lines(failures or [])
     if any(isinstance(reason, NetworkReason) for _dest, reason in failures or []):
         advice.append(NETWORK_FAILURE_ADVICE)
+        if os.environ.get("RETROBIOS_BASE_URL"):
+            # A mirror that is down read as this machine's connection.
+            advice += _address_lines(BASE_URL)[1:]
     if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures or []):
         # The same run fails the same way: "retry only those" sent a phone
         # user round the loop with nothing changed.
@@ -6472,7 +6503,7 @@ def _report_outcome(
 
     if errors and not downloaded:
         say(f"\nNothing was installed. {_plural(errors, 'file')} failed.")
-        if failures and all(isinstance(r, (NetworkReason, OfflineReason))
+        if failures and all(isinstance(r, (NetworkReason, HttpReason, OfflineReason))
                             for _d, r in failures):
             # The folder was never the problem: naming it as the place being
             # written to sent people looking at their disk.
