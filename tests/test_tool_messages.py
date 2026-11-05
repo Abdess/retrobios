@@ -157,6 +157,44 @@ class EveryPlatformInTheSummaryCarriesItsCount(unittest.TestCase):
         self.assertIn("3 warning (Lakka 2, ROCKNIX 1)", summary)
 
 
+class HeldButNotPackedNamesEachReason(unittest.TestCase):
+    """'Core files held but not packed: 16 (a packed file occupies its
+    directory)' on Lakka, where 14 of the 16 are installed with their
+    emulator: the first entry's reason stood for the whole count."""
+
+    @staticmethod
+    def _entry(name: str, reason: str, category: str = "bios") -> dict:
+        return {"name": name, "emulator": "x", "required": True, "in_repo": True,
+                "in_pack": False, "omitted": reason, "category": category}
+
+    def _printed(self, entries: list[dict]) -> str:
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            verify._print_undeclared_section({"undeclared_files": entries}, False)
+        return out.getvalue()
+
+    def test_each_reason_carries_its_count(self):
+        entries = [self._entry("a.rom", "a packed file occupies its directory")]
+        entries += [self._entry(f"{i}.rom", "installed with its emulator") for i in range(3)]
+        entries += [self._entry(f"g{i}", "installed with its emulator", "game_data")
+                    for i in range(2)]
+        entries.append(self._entry("g9", "no platform slug for its system", "game_data"))
+        text = self._printed(entries)
+        self.assertIn(
+            "Core files held but not packed: 4 (3 installed with its emulator, "
+            "1 a packed file occupies its directory)", text)
+        self.assertIn(
+            "Game data held but not packed: 3 (2 installed with its emulator, "
+            "1 no platform slug for its system)", text)
+
+    def test_a_single_reason_reads_as_before(self):
+        text = self._printed([self._entry("a.rom", "installed with its emulator")] * 2)
+        self.assertIn("Core files held but not packed: 2 (installed with its emulator)", text)
+
+
 class OneSpellingPerOption(unittest.TestCase):
     """verify.py -p batocera worked and slots.py -p batocera was refused."""
 

@@ -117,7 +117,8 @@ RetroDECK: 2007/2008 OK, 1 untested [md5]
 
 The run prints more `DISCREPANCY` lines than this excerpt shows. The core
 and game data lines count what the emulator cores add beyond the platform's
-own list. A file held but not packed is left out for the reason in parentheses.
+own list. A file held but not packed is left out for the reason in parentheses, each
+reason with its count when the files have several.
 
 `--verbose` also lists the passing entries that an emulator validates, with
 the check and the source lines behind it:

@@ -29,6 +29,7 @@ import contextlib
 import json
 import os
 import sys
+from collections import Counter
 from collections.abc import Mapping
 from pathlib import Path
 
@@ -1800,6 +1801,19 @@ def _core_required_missing(bios_files: list[dict]) -> list[dict]:
     ]
 
 
+def _omission_reasons(entries: list[dict]) -> str:
+    """Each reason a held file was left out, with its count when several.
+
+    Printing the first entry's reason for the whole count named one cause
+    for 412 RomM files when 20 carried it.
+    """
+    counts = Counter(u.get("omitted", "not placed") for u in entries)
+    if len(counts) == 1:
+        return next(iter(counts))
+    ranked = sorted(counts.items(), key=lambda item: (-item[1], item[0]))
+    return ", ".join(f"{count} {reason}" for reason, count in ranked)
+
+
 def _print_undeclared_section(result: dict, verbose: bool) -> None:
     """Print cross-reference section for undeclared files used by cores."""
     undeclared = result.get("undeclared_files", [])
@@ -1843,7 +1857,8 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         names = ", ".join(sorted({u["name"] for u in bundled}))
         print(f"  Bundled with their emulator, not collected: {names}")
     if unplaced:
-        print(f"  Core files held but not packed: {len(unplaced)} ({unplaced[0]['omitted']})")
+        print(f"  Core files held but not packed: {len(unplaced)} "
+              f"({_omission_reasons(unplaced)})")
 
     for u in req_not_in_repo:
         _print_undeclared_entry(u, "MISSING (required)", verbose)
@@ -1869,7 +1884,7 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         if gd_unplaced:
             print(
                 f"  Game data held but not packed: {len(gd_unplaced)} "
-                f"({gd_unplaced[0].get('omitted', 'not placed')})"
+                f"({_omission_reasons(gd_unplaced)})"
             )
 
 
