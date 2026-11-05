@@ -284,10 +284,10 @@
       }
     }
   ],
-  "total_files": 5562,
-  "total_size": 8544784571,
-  "pack_files": 5564,
-  "pack_size": 8544784571,
+  "total_files": 5561,
+  "total_size": 8543619032,
+  "pack_files": 5563,
+  "pack_size": 8543619032,
   "total_omitted": 203,
   "omitted_files": [
     {
@@ -7328,12 +7328,20 @@
       ],
       "alternatives": [
         {
+          "sha1": "041feccfae58fe052247119138098b51c26448ed",
+          "sha256": "f71329fce4e616df3473f1e115931e36afbe13a36769df652db6cdae28ccfccf",
+          "size": 1049242,
+          "repo_path": "bios/Arcade/Arcade/hikaru.zip",
+          "cores": [
+            "demul"
+          ]
+        },
+        {
           "sha1": "8ce366388c9e09c5d218d639f19d1d816b59395d",
           "sha256": "806a236b5665bbcc4f204e8e877e8c9416d150353a34d469849244bbaa138dbf",
           "size": 1049493,
           "repo_path": "bios/Sega/Hikaru/hikaru.zip",
           "cores": [
-            "demul",
             "groovymame",
             "mame",
             "mame2010",
@@ -7352,10 +7360,6 @@
       "repo_path": "bios/Arcade/Arcade/mie.zip",
       "cores": null,
       "systems": [
-        "hikaru",
-        "sega-dreamcast"
-      ],
-      "declared_in": [
         "hikaru"
       ],
       "alternatives": [
@@ -47214,205 +47218,13 @@
       ]
     },
     {
-      "dest": "naomigd.zip",
-      "sha1": "4b92936f396c8199f745d3ed0ff588a324b8dd70",
-      "sha256": "793db2a859be2d814d334ab511811c42c6727a16841e7627fa7c33171c3de441",
-      "size": 4972898,
-      "repo_path": "bios/Arcade/Arcade/naomigd.zip",
-      "cores": [
-        "demul",
-        "groovymame"
-      ],
-      "alternatives": [
-        {
-          "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
-          "sha256": "d185636dd45be0545cb22557793b4ac0543c8b8a9abcf6a78eaffc3cc9d3f8fa",
-          "size": 3387512,
-          "repo_path": "bios/Arcade/MAME/naomigd.zip",
-          "cores": [
-            "mame"
-          ]
-        },
-        {
-          "sha1": "4b92936f396c8199f745d3ed0ff588a324b8dd70",
-          "sha256": "793db2a859be2d814d334ab511811c42c6727a16841e7627fa7c33171c3de441",
-          "size": 4972898,
-          "repo_path": "bios/Arcade/Arcade/naomigd.zip",
-          "cores": [
-            "mame2010",
-            "mame2014",
-            "mame2016",
-            "teknoparrot"
-          ]
-        }
-      ]
-    },
-    {
-      "dest": "hod2bios.zip",
-      "sha1": "07fd3fae7af650a37a3329ed09d039bd7360294f",
-      "sha256": "6ca1cfa70cd956b0305a2140e2d049eb19e95b6bccd0f24296c5f19e8a57dd86",
-      "size": 1889870,
-      "repo_path": "bios/Arcade/MAME/hod2bios.zip",
-      "cores": [
-        "demul",
-        "groovymame",
-        "mame",
-        "mame2010",
-        "mame2014",
-        "mame2016",
-        "teknoparrot"
-      ],
-      "systems": [
-        "3do",
-        "cdi",
-        "chihiro",
-        "hikaru",
-        "namco-system246",
-        "neogeo64",
-        "segastv",
-        "triforce"
-      ]
-    },
-    {
-      "dest": "f355bios.zip",
-      "sha1": "37487f9f73734e8dd621004a5ef98c5a2301bd1d",
-      "sha256": "47ebe6dad9d8398c7eacb69c652d8f5c449c6f7ce420579c3a287c1b73e0250b",
-      "size": 1396910,
-      "repo_path": "bios/Arcade/MAME/f355bios.zip",
-      "cores": [
-        "demul"
-      ],
-      "systems": [
-        "3do",
-        "cdi",
-        "chihiro",
-        "hikaru",
-        "namco-system246",
-        "neogeo64",
-        "segastv",
-        "triforce"
-      ],
-      "alternatives": [
-        {
-          "sha1": "b6ff66dcb5547bd91760d239ddf428a655631c53",
-          "sha256": "8335208b035253d5c671ecaaa113369409ffd70e86d1c87ab1e21bdf352fff6c",
-          "size": 1394278,
-          "repo_path": "bios/Arcade/Arcade/f355bios.zip",
-          "cores": [
-            "groovymame"
-          ]
-        },
-        {
-          "sha1": "37487f9f73734e8dd621004a5ef98c5a2301bd1d",
-          "sha256": "47ebe6dad9d8398c7eacb69c652d8f5c449c6f7ce420579c3a287c1b73e0250b",
-          "size": 1396910,
-          "repo_path": "bios/Arcade/MAME/f355bios.zip",
-          "cores": [
-            "mame",
-            "mame2010",
-            "mame2014",
-            "mame2016",
-            "teknoparrot"
-          ]
-        }
-      ]
-    },
-    {
-      "dest": "f355dlx.zip",
-      "sha1": "7740229e15dd80b20a8d263a67cd37c310602ee4",
-      "sha256": "92d8634d8c61a1b50aa0b517638d8829bb70e7fe051423695722e77869d6780c",
-      "size": 2331068,
-      "repo_path": "bios/Arcade/MAME/f355dlx.zip",
-      "cores": [
-        "demul"
-      ],
-      "systems": [
-        "3do",
-        "cdi",
-        "chihiro",
-        "hikaru",
-        "namco-system246",
-        "neogeo64",
-        "segastv",
-        "triforce"
-      ],
-      "alternatives": [
-        {
-          "sha1": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab",
-          "sha256": "58e88cedb31918e2b9deeaddb80df45b8484cc1c4f10792520360a2585ad5014",
-          "size": 2328436,
-          "repo_path": "bios/Arcade/Arcade/f355dlx.zip",
-          "cores": [
-            "groovymame"
-          ]
-        },
-        {
-          "sha1": "7740229e15dd80b20a8d263a67cd37c310602ee4",
-          "sha256": "92d8634d8c61a1b50aa0b517638d8829bb70e7fe051423695722e77869d6780c",
-          "size": 2331068,
-          "repo_path": "bios/Arcade/MAME/f355dlx.zip",
-          "cores": [
-            "mame",
-            "mame2014",
-            "mame2016",
-            "teknoparrot"
-          ]
-        }
-      ]
-    },
-    {
-      "dest": "airlbios.zip",
-      "sha1": "03c9d1c3f59e8c6f320ea74abde1e4e7c5bfa623",
-      "sha256": "9f7b0bf853d7ce6f5b27e3542fc132ff4f19a31332dab4ab601daafa80ee3f69",
-      "size": 718362,
-      "repo_path": "bios/Arcade/MAME/airlbios.zip",
-      "cores": [
-        "demul"
-      ],
-      "systems": [
-        "3do",
-        "cdi",
-        "chihiro",
-        "hikaru",
-        "namco-system246",
-        "neogeo64",
-        "segastv",
-        "triforce"
-      ],
-      "alternatives": [
-        {
-          "sha1": "e18c5e9ca21654dfd724aa54e625b386e6ffb2c5",
-          "sha256": "983487f67861b4ec2b7f20cc49b25de0cb6f2160ec741283312deabb199e465e",
-          "size": 702637,
-          "repo_path": "bios/Arcade/Arcade/airlbios.zip",
-          "cores": [
-            "groovymame"
-          ]
-        },
-        {
-          "sha1": "03c9d1c3f59e8c6f320ea74abde1e4e7c5bfa623",
-          "sha256": "9f7b0bf853d7ce6f5b27e3542fc132ff4f19a31332dab4ab601daafa80ee3f69",
-          "size": 718362,
-          "repo_path": "bios/Arcade/MAME/airlbios.zip",
-          "cores": [
-            "mame",
-            "mame2010",
-            "mame2014",
-            "mame2016",
-            "teknoparrot"
-          ]
-        }
-      ]
-    },
-    {
       "dest": "segasp.zip",
       "sha1": "de78a0b8df78d5ffdb1a274f80d877a96ef204aa",
       "sha256": "3bca348667d6ff08fd5efe38eec35100ccbe0de3cd1e0b5dd72ae5c6cc201ee9",
       "size": 1281424,
       "repo_path": "bios/Arcade/Arcade/segasp.zip",
       "cores": [
-        "demul",
-        "groovymame"
+        "demul"
       ],
       "systems": [
         "3do",
@@ -47431,6 +47243,7 @@
           "size": 4266446,
           "repo_path": "bios/Arcade/MAME/segasp.zip",
           "cores": [
+            "groovymame",
             "mame"
           ]
         },
@@ -47446,19 +47259,18 @@
       ]
     },
     {
-      "dest": "jvs13551.zip",
-      "sha1": "2c79934afdbcfc15684de9b75a520ac196ca75d5",
-      "sha256": "ecaa2e254c5200ec1a136d06dec3e3d18314f6dc7d26918ebc62296a59051d1e",
-      "size": 15088,
-      "repo_path": "bios/Sega/Hikaru/jvs13551.zip",
+      "dest": "segadimm.zip",
+      "sha1": "5cb1c1773e8d7beaf7ff9880f0aa4c8a61109754",
+      "sha256": "fe0e0e6b50c67a5060fdb4ec3294fdcbd75fef103624070aa7d520659f3f79c3",
+      "size": 5632733,
+      "repo_path": "bios/Arcade/MAME/segadimm.zip",
       "cores": [
         "demul",
         "mame"
       ],
       "systems": [
         "chihiro",
-        "hikaru",
-        "sega-dreamcast"
+        "triforce"
       ]
     },
     {
@@ -49327,6 +49139,168 @@
             "mame2010",
             "mame2014",
             "mame2016"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "naomigd.zip",
+      "sha1": "4b92936f396c8199f745d3ed0ff588a324b8dd70",
+      "sha256": "793db2a859be2d814d334ab511811c42c6727a16841e7627fa7c33171c3de441",
+      "size": 4972898,
+      "repo_path": "bios/Arcade/Arcade/naomigd.zip",
+      "cores": [
+        "groovymame"
+      ],
+      "alternatives": [
+        {
+          "sha1": "a0f07de6070d98f86d55a4ecd61b4a5b05a4a0d5",
+          "sha256": "d185636dd45be0545cb22557793b4ac0543c8b8a9abcf6a78eaffc3cc9d3f8fa",
+          "size": 3387512,
+          "repo_path": "bios/Arcade/MAME/naomigd.zip",
+          "cores": [
+            "mame"
+          ]
+        },
+        {
+          "sha1": "4b92936f396c8199f745d3ed0ff588a324b8dd70",
+          "sha256": "793db2a859be2d814d334ab511811c42c6727a16841e7627fa7c33171c3de441",
+          "size": 4972898,
+          "repo_path": "bios/Arcade/Arcade/naomigd.zip",
+          "cores": [
+            "mame2010",
+            "mame2014",
+            "mame2016",
+            "teknoparrot"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "hod2bios.zip",
+      "sha1": "07fd3fae7af650a37a3329ed09d039bd7360294f",
+      "sha256": "6ca1cfa70cd956b0305a2140e2d049eb19e95b6bccd0f24296c5f19e8a57dd86",
+      "size": 1889870,
+      "repo_path": "bios/Arcade/MAME/hod2bios.zip",
+      "cores": [
+        "groovymame",
+        "mame",
+        "mame2010",
+        "mame2014",
+        "mame2016",
+        "teknoparrot"
+      ],
+      "systems": [
+        "3do",
+        "cdi",
+        "chihiro",
+        "hikaru",
+        "namco-system246",
+        "neogeo64",
+        "segastv",
+        "triforce"
+      ]
+    },
+    {
+      "dest": "f355dlx.zip",
+      "sha1": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab",
+      "sha256": "58e88cedb31918e2b9deeaddb80df45b8484cc1c4f10792520360a2585ad5014",
+      "size": 2328436,
+      "repo_path": "bios/Arcade/Arcade/f355dlx.zip",
+      "cores": [
+        "groovymame"
+      ],
+      "systems": [
+        "3do",
+        "cdi",
+        "chihiro",
+        "hikaru",
+        "namco-system246",
+        "neogeo64",
+        "segastv",
+        "triforce"
+      ],
+      "alternatives": [
+        {
+          "sha1": "7740229e15dd80b20a8d263a67cd37c310602ee4",
+          "sha256": "92d8634d8c61a1b50aa0b517638d8829bb70e7fe051423695722e77869d6780c",
+          "size": 2331068,
+          "repo_path": "bios/Arcade/MAME/f355dlx.zip",
+          "cores": [
+            "mame",
+            "mame2014",
+            "mame2016",
+            "teknoparrot"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "f355bios.zip",
+      "sha1": "b6ff66dcb5547bd91760d239ddf428a655631c53",
+      "sha256": "8335208b035253d5c671ecaaa113369409ffd70e86d1c87ab1e21bdf352fff6c",
+      "size": 1394278,
+      "repo_path": "bios/Arcade/Arcade/f355bios.zip",
+      "cores": [
+        "groovymame"
+      ],
+      "systems": [
+        "3do",
+        "cdi",
+        "chihiro",
+        "hikaru",
+        "namco-system246",
+        "neogeo64",
+        "segastv",
+        "triforce"
+      ],
+      "alternatives": [
+        {
+          "sha1": "37487f9f73734e8dd621004a5ef98c5a2301bd1d",
+          "sha256": "47ebe6dad9d8398c7eacb69c652d8f5c449c6f7ce420579c3a287c1b73e0250b",
+          "size": 1396910,
+          "repo_path": "bios/Arcade/MAME/f355bios.zip",
+          "cores": [
+            "mame",
+            "mame2010",
+            "mame2014",
+            "mame2016",
+            "teknoparrot"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "airlbios.zip",
+      "sha1": "e18c5e9ca21654dfd724aa54e625b386e6ffb2c5",
+      "sha256": "983487f67861b4ec2b7f20cc49b25de0cb6f2160ec741283312deabb199e465e",
+      "size": 702637,
+      "repo_path": "bios/Arcade/Arcade/airlbios.zip",
+      "cores": [
+        "groovymame"
+      ],
+      "systems": [
+        "3do",
+        "cdi",
+        "chihiro",
+        "hikaru",
+        "namco-system246",
+        "neogeo64",
+        "segastv",
+        "triforce"
+      ],
+      "alternatives": [
+        {
+          "sha1": "03c9d1c3f59e8c6f320ea74abde1e4e7c5bfa623",
+          "sha256": "9f7b0bf853d7ce6f5b27e3542fc132ff4f19a31332dab4ab601daafa80ee3f69",
+          "size": 718362,
+          "repo_path": "bios/Arcade/MAME/airlbios.zip",
+          "cores": [
+            "mame",
+            "mame2010",
+            "mame2014",
+            "mame2016",
+            "teknoparrot"
           ]
         }
       ]
@@ -61966,6 +61940,20 @@
       ]
     },
     {
+      "dest": "jvs13551.zip",
+      "sha1": "2c79934afdbcfc15684de9b75a520ac196ca75d5",
+      "sha256": "ecaa2e254c5200ec1a136d06dec3e3d18314f6dc7d26918ebc62296a59051d1e",
+      "size": 15088,
+      "repo_path": "bios/Sega/Hikaru/jvs13551.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "chihiro",
+        "hikaru"
+      ]
+    },
+    {
       "dest": "k573_dio.zip",
       "sha1": "9695831910742a7d6e3b17f5e3f811320e8b4125",
       "sha256": "fedf850039d0b8a18f34bddebb995bdb1801120e6d58a49000759ca6af6e5452",
@@ -66214,20 +66202,6 @@
       ],
       "systems": [
         "segastv"
-      ]
-    },
-    {
-      "dest": "segadimm.zip",
-      "sha1": "5cb1c1773e8d7beaf7ff9880f0aa4c8a61109754",
-      "sha256": "fe0e0e6b50c67a5060fdb4ec3294fdcbd75fef103624070aa7d520659f3f79c3",
-      "size": 5632733,
-      "repo_path": "bios/Arcade/MAME/segadimm.zip",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "chihiro",
-        "triforce"
       ]
     },
     {
@@ -72896,24 +72870,11 @@
       ]
     },
     {
-      "dest": "dc_boot.bin",
-      "sha1": "8951d1bb219ab2ff8583033d2119c899cc81f18c",
-      "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
-      "size": 2097152,
-      "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
-      "cores": [
-        "demul"
-      ],
-      "systems": [
-        "sega-dreamcast"
-      ]
-    },
-    {
-      "dest": "dc_flash.bin",
-      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
-      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+      "dest": "dc.zip",
+      "sha1": "24e80cdf0695361ae8de7cceda29843e0474ecd0",
+      "sha256": "83f786e067425936e108529ac5391089d7a3bbf48ac138a58546bd860516c584",
+      "size": 1083674,
+      "repo_path": "bios/Sega/Dreamcast/dc.zip",
       "cores": [
         "demul"
       ],

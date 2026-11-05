@@ -104,7 +104,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | BizHawk | 118/118 | - | SHA-1 |
 | EmuDeck | 168/168 | 8,427/8,529 | MD5 |
 | EmuELEC | 544/572 | 4,788/10,217 | MD5 |
-| KNULLI | 290/290 | 9,127/15,350 | MD5 |
+| KNULLI | 290/290 | 9,128/15,351 | MD5 |
 | Lakka | 532/532 | 7,910/7,995 | name only |
 | MiSTer FPGA | 81/81 | - | MD5 |
 | MinUI | 0/0 | 78/79 | name only |
@@ -206,4 +206,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-05T18:57:27Z*
+*Auto-generated on 2026-11-05T21:38:18Z*

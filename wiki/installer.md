@@ -468,13 +468,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  14724 files (9.2 GB)
-    3180 BIOS files (4.4 GB) and 11544 game data files (4.8 GB).
+  14723 files (9.2 GB)
+    3179 BIOS files (4.4 GB) and 11544 game data files (4.8 GB).
     Game data: files a game or a game engine reads, of no use to the other cores.
   Not installable: 426 files are not in the collection, 80 of them required.
 
 Checking existing files...
-  0 in place, 14724 missing, 0 wrong copies
+  0 in place, 14723 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -489,10 +489,10 @@ as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 14724 files (9.2 GB)...
+Downloading 14723 files (9.2 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/14724] panafz1.bin ok
-  [2/14724] panafz10.bin ok
+  [1/14723] panafz1.bin ok
+  [2/14723] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -504,8 +504,8 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 14724 files installed.
-  Installed: 3180 BIOS files and 11544 game data files.
+Done. 14723 files installed.
+  Installed: 3179 BIOS files and 11544 game data files.
 BIOS folder: /userdata/bios
 426 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (1 file):
@@ -559,7 +559,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  14724 in place, 0 missing, 0 wrong copies
+  14723 in place, 0 missing, 0 wrong copies
 
   Everything is in place.
 ```
