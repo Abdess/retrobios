@@ -3339,18 +3339,49 @@ PLATFORM_PART_BUDGET = 700
 PLATFORM_REFERENCE_BUDGET = 600
 
 
-# Every part page a platform list has had, with the system it held:
-# platforms/batocera-atari-st.md -> platforms/batocera.md#atari-st. When a
-# budget or a list changes, a part can fold back into its platform page,
-# and its address then redirects there instead of ending on the 404 page.
-PLATFORM_PARTS_FILE = (Path(__file__).resolve().parent.parent
-                       / "website" / "src" / "data" / "platform-parts.json")
+# Every part page the site has published, with the page it belongs to:
+# platforms/batocera-atari-st.md -> platforms/batocera.md#atari-st,
+# gaps-files-to-source-7.md -> gaps.md. When a budget or a list changes, a
+# part can fold back or the list shrink, and its address then redirects to
+# that page instead of ending on the 404 page.
+PUBLISHED_PARTS_FILE = (Path(__file__).resolve().parent.parent
+                        / "website" / "src" / "data" / "published-parts.json")
 
 
-def _published_platform_parts() -> dict[str, str]:
-    if not PLATFORM_PARTS_FILE.is_file():
+def _published_parts() -> dict[str, str]:
+    if not PUBLISHED_PARTS_FILE.is_file():
         return {}
-    return json.loads(PLATFORM_PARTS_FILE.read_text(encoding="utf-8"))
+    return json.loads(PUBLISHED_PARTS_FILE.read_text(encoding="utf-8"))
+
+
+def _parent_page(link: str) -> str:
+    """The page a `parent:` link names (/platforms/batocera/), under docs/."""
+    path, _, fragment = link.partition("#")
+    stem = path.strip("/") or "index"
+    return f"{stem}.md" + (f"#{fragment}" if fragment else "")
+
+
+def record_parts(docs: Path, present: set[str], published: dict[str, str]) -> dict[str, str]:
+    """``published`` with every page of this run that names its parent.
+
+    Only platform parts were recorded: gaps-files-to-source-7 or
+    mame-files-10, gone once their list shrank, ended on the 404 page. A
+    part already recorded keeps its target, which may name a section.
+    """
+    found = dict(published)
+    for rel in sorted(present):
+        page = docs / rel
+        if not page.is_file():
+            page = page.with_suffix(".mdx")
+        try:
+            with page.open(encoding="utf-8") as handle:
+                head = handle.read(2048)
+        except OSError:
+            continue
+        link = re.search(r"^parent:\n(?:  .*\n)*?  link: (\"[^\"\n]*\")", head, re.M)
+        if link and rel not in found:
+            found[rel] = _parent_page(json.loads(link[1]))
+    return dict(sorted(found.items()))
 
 
 # A list moved off a reference page (gaps, provenance) is cut in parts of
@@ -12156,7 +12187,7 @@ def _generate(args: argparse.Namespace) -> None:
     )
     if HANDHELD_GUIDE:
         write_if_changed(str(docs / HANDHELD_GUIDE.path), generate_handheld_guide(HANDHELD_GUIDE))
-    published_parts = _published_platform_parts()
+    published_parts = _published_parts()
     for name, cov in coverages.items():
         # The emulators this platform runs, not every one of the system.
         runs = resolve_platform_cores(cov["config"], profiles)
@@ -12345,8 +12376,6 @@ def _generate(args: argparse.Namespace) -> None:
     stale += _sweep_top_pages(docs)
 
     print("Adding page metadata and structured data...")
-    write_if_changed(str(PLATFORM_PARTS_FILE),
-                     json.dumps(dict(sorted(published_parts.items())), indent=1) + "\n")
     lastmod = decorate_markdown_pages(docs)
 
     nav = generate_nav(coverages, manufacturers, profiles, registry,
@@ -12357,6 +12386,8 @@ def _generate(args: argparse.Namespace) -> None:
         path.relative_to(docs).with_suffix(".md").as_posix()
         for path in docs.rglob("*.md*") if path.suffix in (".md", ".mdx")
     } - {"404.md"}
+    published_parts = record_parts(docs, present, published_parts)
+    write_if_changed(str(PUBLISHED_PARTS_FILE), json.dumps(published_parts, indent=1) + "\n")
     generated = site / "src" / "generated"
     generated.mkdir(parents=True, exist_ok=True)
     write_if_changed(str(generated / "sidebar.json"),
