@@ -63,7 +63,7 @@ from common import (
 )
 from artifacts import ArtifactLockBusy, artifact_lock
 from artifacts import json_text as _json_text
-from cross_reference import FileConsumers, held_copy
+from cross_reference import FileConsumers, entry_target, held_copy
 from nativemode import check_label, digest_algorithm, reads_file_contents
 
 
@@ -8220,7 +8220,7 @@ def _render_emulator_file(
         details.extend(_directory_copies(f, consumers))
     if consumers:
         sha1 = consumers.sha1_of(
-            *consumers.entry_target(f, profile.get("files") or []), owner=owner)
+            *entry_target(f, profile.get("files") or []), owner=owner)
         held = consumers.path_of(sha1) if sha1 and in_repo else ""
         parts = held.split("/")
         if len(parts) >= 3 and parts[0] == "bios" and f.get("archive"):
