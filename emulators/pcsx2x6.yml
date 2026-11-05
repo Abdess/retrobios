@@ -80,6 +80,7 @@ notes: |
 
 files:
   - name: COH-H31100.rom0
+    found_by: content
     system: namco-system246
     required: true
     min_size: 4194304

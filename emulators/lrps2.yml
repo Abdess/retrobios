@@ -45,6 +45,7 @@ data_directories:
 
 files:
   - name: "<bios>.bin"
+    found_by: content
     path: "pcsx2/bios/<bios>.bin"
     required: true
     description: "PS2 BIOS binary"

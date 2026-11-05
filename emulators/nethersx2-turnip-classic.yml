@@ -168,6 +168,7 @@ notes: |
 
 files:
   - name: ps2-0230a-20080220.bin
+    found_by: content
     path: bios/ps2-0230a-20080220.bin
     required: true
     min_size: 4194304

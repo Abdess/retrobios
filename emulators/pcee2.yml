@@ -91,6 +91,7 @@ notes: |
 
 files:
   - name: "<bios>.bin"
+    found_by: content
     path: "pcsx2/bios/<bios>.bin"
     description: "PS2 BIOS image"
     min_size: 4194304

@@ -6878,5 +6878,31 @@ class ProfileNotesDescribeTheCoreAlone(unittest.TestCase):
         self.assertEqual(found, [])
 
 
+class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
+    """PCSX2 and its forks scan the BIOS folder and keep the first 4 to 8 MB
+    image with a romdir (pcsx2/ps2/BiosTools.cpp:258-282 at f0523f8a). With
+    no found_by the label ps2-0230a-20080220.bin read as a name the core
+    opens, and the RetroDECK export added it as a required file."""
+
+    def test_every_ps2_image_scan_is_marked(self):
+        import yaml
+
+        from validation import opens_by_name
+
+        named = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            if profile.get("bios_mode") != "agnostic":
+                continue
+            for entry in profile.get("files") or []:
+                if (
+                    entry.get("min_size") == 4194304
+                    and entry.get("max_size") == 8388608
+                    and opens_by_name(entry, profile)
+                ):
+                    named.append(f"{path.stem}: {entry['name']}")
+        self.assertEqual(named, [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -163,6 +163,7 @@ notes: |
 
 files:
   - name: ps2-0230a-20080220.bin
+    found_by: content
     path: pcsx2/bios/ps2-0230a-20080220.bin
     aliases: [ps2-0250j-20100415.bin]
     standalone_path: bios/ps2-0230a-20080220.bin
