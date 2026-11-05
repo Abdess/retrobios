@@ -708,6 +708,35 @@ class AHomeThisUserCannotOpen(unittest.TestCase):
         self.assertNotIn("using default path", proc.stdout + proc.stderr)
 
 
+class ASettingsFileThisUserCannotRead(unittest.TestCase):
+    """A sudo EmuDeck run left settings.sh to root: its parser swallowed the
+    refusal and the run said "No supported platform detected" without a
+    word on the file, where the same refusal on retroarch.cfg is said."""
+
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        install._DETECTION_REFUSED.clear()
+        self.addCleanup(install._DETECTION_REFUSED.clear)
+        install._SETUP_SEARCH.active = True
+        self.addCleanup(setattr, install._SETUP_SEARCH, "active", False)
+
+    def test_each_settings_parser_says_the_refusal(self):
+        for parse, name in ((install._parse_bash_var, "settings.sh"),
+                            (install._parse_ps1_var, "settings.ps1")):
+            with self.subTest(file=name):
+                install._DETECTION_REFUSED.clear()
+                path = self.root / name
+                path.write_text('emulationPath="/x"\n', encoding="utf-8")
+                refusal = PermissionError(errno.EACCES, "Permission denied", str(path))
+                with mock.patch.object(Path, "read_text", side_effect=refusal), \
+                        mock.patch.object(Path, "read_bytes", side_effect=refusal), \
+                        contextlib.redirect_stderr(io.StringIO()) as err:
+                    self.assertIsNone(parse(path, "emulationPath"))
+                self.assertEqual(install._DETECTION_REFUSED, [(path, "Permission denied")])
+                self.assertIn(f"cannot open {path}", err.getvalue())
+
+
 class TheFrontendsOwnFolderClosed(unittest.TestCase):
     """The Flatpak RetroArch's folder at 000: its retroarch.cfg names
     ~/Games/bios, and the run took ~/.config/retroarch/system, a folder it

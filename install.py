@@ -1439,8 +1439,9 @@ def _parse_bash_var(path: Path, key: str) -> str | None:
             if line.startswith(f"{key}="):
                 _, _, value = line.partition("=")
                 return _shell_unquote(value)
-    except OSError:
-        pass
+    except OSError as exc:
+        # A settings.sh a sudo EmuDeck run left to root hid the setup.
+        _note_refused(path, exc)
     return None
 
 
@@ -1551,8 +1552,8 @@ def _parse_ps1_var(path: Path, key: str) -> str | None:
             if check.startswith(f"{normalized}="):
                 _, _, value = check.partition("=")
                 return value.strip('"').strip("'")
-    except OSError:
-        pass
+    except OSError as exc:
+        _note_refused(path, exc)
     return None
 
 
