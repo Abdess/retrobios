@@ -9233,6 +9233,7 @@ class GamesData:
             raw = _read_capped(beside / "index.json", MAX_GAMES_INDEX_BYTES)
         cached = self.cached("index.json")
         reason = "offline"
+        failure = ""
         if raw is None and network:
             try:
                 raw = _fetch_json(GAMES_URL.format(path="index.json"), MAX_GAMES_INDEX_BYTES,
@@ -9242,8 +9243,7 @@ class GamesData:
             except (urllib.error.URLError, OSError, ValueError,
                     http.client.HTTPException) as exc:
                 reason = "network"
-                if os.environ.get("RETROBIOS_DEBUG"):
-                    print(f"  Games index: {exc}", file=sys.stderr)
+                failure = str(exc)
             else:
                 if cached is not None:
                     _cache_write(cached, raw)
@@ -9252,7 +9252,8 @@ class GamesData:
         if raw is None:
             raise GamesUnavailable(reason, (
                 f"the games index is not on this machine and {offline_words()}"
-                if reason == "offline" else "the games index could not be downloaded"))
+                if reason == "offline"
+                else f"the games index could not be downloaded ({failure})"))
         try:
             data = json.loads(raw.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:

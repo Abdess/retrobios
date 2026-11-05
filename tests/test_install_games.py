@@ -22,6 +22,7 @@ import sys
 import tempfile
 import threading
 import unittest
+import urllib.error
 import zipfile
 import zlib
 from pathlib import Path
@@ -776,6 +777,18 @@ class Unavailable(GamesTestCase):
         with self.assertRaises(install.GamesUnavailable) as caught:
             install.plan_games("retroarch", self.card.bios, manifest(), os_type="linux")
         self.assertEqual(caught.exception.reason, "offline")
+
+    def test_a_failed_download_says_why(self):
+        """The cause was printed only under RETROBIOS_DEBUG: a proxy's 403
+        or a TLS refusal read as a bare "could not be downloaded"."""
+        shutil.rmtree(self.card.lists / "games")
+        refusal = urllib.error.HTTPError(
+            "https://example.invalid/index.json", 403, "Forbidden", {}, None)
+        with mock.patch.object(install, "_fetch_json", side_effect=refusal), \
+                self.assertRaises(install.GamesUnavailable) as caught:
+            install.GamesData().load_index(network=True, attempts=1)
+        self.assertEqual(caught.exception.reason, "network")
+        self.assertIn("403", caught.exception.words)
 
     def test_a_document_that_is_not_the_one_listed_is_refused(self):
         (self.card.lists / "games" / "setups" / "retroarch.json").write_text("{}")
