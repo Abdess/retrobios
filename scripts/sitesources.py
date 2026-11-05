@@ -527,16 +527,18 @@ def link_prose_citations(profile: dict, text: str) -> str:
     """Prose file:line citations as pinned links, where the target is certain.
 
     profile_sync keeps these citations on their pin, and the page printed
-    4,328 of them as plain text. A citation links only when the profile reads
-    one repository and the path is rooted (it holds a directory) or is one a
-    structured source_ref of the profile already uses: a bare name could be
-    anywhere in the tree, and a link to the wrong file is a false citation.
+    4,328 of them as plain text. A citation links only when the path is
+    rooted (it holds a directory) or is one a structured source_ref of the
+    profile already uses: a bare name could be anywhere in the tree, and a
+    link to the wrong file is a false citation. Of the repositories a profile
+    reads, the one its role word names is taken, else the one tree holding
+    the path: held by both, the citation does not say which it means.
     Text already in backticks or in a link is left alone.
     """
     candidates = _forge_sources(profile)
-    if len(candidates) != 1 or ":" not in text:
+    if not candidates or ":" not in text:
         return text
-    repo, pin = candidates[0]
+    by_role = role_sources(profile)
     structured = {
         part.path
         for entry in profile.get("files") or []
@@ -554,14 +556,15 @@ def link_prose_citations(profile: dict, text: str) -> str:
                 continue
             if "/" not in path and path not in structured:
                 continue
-            role = parts[0].role
-            if role and (role_sources(profile).get(role) or (None,))[0] != repo:
-                # `upstream a.c:5` names a repository this link would not reach.
-                continue
             if any(lo <= path_span[0] < hi for lo, hi in guarded):
                 continue
-            if not tree_holds(repo, pin, path):
+            role = parts[0].role
+            # `upstream a.c:5` names its repository: none other is linked.
+            named = [by_role[role]] if role in by_role else [] if role else candidates
+            holders = [tree for tree in named if tree_holds(*tree, path)]
+            if len(holders) != 1:
                 continue
+            repo, pin = holders[0]
             for index, ((lo, hi), part) in enumerate(zip(spans, parts)):
                 start = path_span[0] if index == 0 else lo
                 url = _source_permalink(repo, pin, part.path, part.start, part.end)

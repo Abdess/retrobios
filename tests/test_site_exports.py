@@ -800,6 +800,28 @@ class ProseCitationsLinkToThePin(unittest.TestCase):
         two = {**self.PROFILE, "upstream": "https://github.com/x/y", "upstream_commit": "a" * 40}
         self.assertEqual(link_prose_citations(two, "src/a.c:5"), "src/a.c:5")
 
+    def test_two_repositories_link_into_the_one_holding_the_path(self):
+        """1,044 citations in 86 profiles that read two repositories stayed
+        text, the swanstation note on FindBIOSImageInDirectory among them."""
+        from sitesources import link_prose_citations
+
+        two = {**self.PROFILE, "upstream": "https://github.com/x/y", "upstream_commit": "a" * 40}
+
+        def holds(repo, _pin, path):
+            return path == "src/both.c" or (path == "src/port.c") == (repo.owner == "libretro")
+
+        with mock.patch("sitesources.tree_holds", holds):
+            text = link_prose_citations(two, "src/port.c:5, src/emu.c:7 and src/both.c:9")
+            upstream_only = link_prose_citations(two, "upstream src/port.c:5")
+            named = link_prose_citations(two, "upstream src/both.c:9")
+        self.assertIn("[`src/both.c:9`](https://github.com/x/y/blob/", named)
+        self.assertIn("[`src/port.c:5`](https://github.com/libretro/FreeChaF/blob/", text)
+        self.assertIn("[`src/emu.c:7`](https://github.com/x/y/blob/" + "a" * 40, text)
+        # Held by both: the citation does not say which it means.
+        self.assertIn(" src/both.c:9", text)
+        # The role word names a repository that does not hold it.
+        self.assertNotIn("](", upstream_only)
+
 
 class ACitationSaysWhoseCodeItIs(unittest.TestCase):
     """Readers could not tell whether the libretro core or the emulator asked
