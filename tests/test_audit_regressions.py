@@ -6283,6 +6283,20 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
             copies = bundled_only.other_copies([row], Path(tmp))
             self.assertEqual([c["path"] for c in copies], [Path(tmp, "dir2/a.bmp").as_posix()])
 
+    def test_the_collection_holds_no_copy_only_an_install_provides(self):
+        """The pull request checks run this suite, not the pipeline: without
+        this, a copy only a bundled entry reaches merges green."""
+        import bundled_only
+        from common import load_database, load_emulator_profiles
+
+        rows = bundled_only.bundled_only(
+            load_database(str(ROOT / "database.json")),
+            load_emulator_profiles(str(ROOT / "emulators")),
+            str(ROOT / "platforms"), ROOT / "install",
+        )
+        self.assertEqual([f"{r['path']} ({', '.join(r['emulators'])})" for r in rows], [],
+                         "remove the copy: the emulator's own install provides it")
+
 
 class TheApiSchemaHoldsTheFieldsItPromises(unittest.TestCase):
     """The data page promises fields are only added within v1, and the
