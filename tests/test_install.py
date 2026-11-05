@@ -2694,6 +2694,29 @@ class WindowsWithoutPythonIsOfferedWinget(unittest.TestCase):
         self.assertFalse((fake_bin / "python3").exists())
 
 
+@unittest.skipUnless(shutil.which("pwsh"), "needs PowerShell")
+class APyLauncherWithoutARuntimeIsPassed(unittest.TestCase):
+    """findPython returned the py launcher as soon as it existed: one left
+    with no usable runtime hid a Python 3.12 on PATH, and the bootstrap
+    offered a second install or gave up."""
+
+    def test_python_on_path_runs_the_installer(self):
+        folder = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
+        (folder / "install.py").write_text("print('installer ran')\n")
+        fake_bin = folder / "bin"
+        fake_bin.mkdir()
+        (fake_bin / "py").write_text("#!/bin/sh\necho 'No installed Python found!' >&2\nexit 1\n")
+        (fake_bin / "py").chmod(0o755)
+        (fake_bin / "python3").symlink_to(sys.executable)
+        proc = subprocess.run(
+            [shutil.which("pwsh"), "-NoProfile", "-File", str(folder / "install.ps1")],
+            env={**os.environ, "PATH": f"{fake_bin}{os.pathsep}/usr/bin/nonexistent"},
+            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("installer ran", proc.stdout)
+
+
 class ThePowerShellWrapperPassesTheStatusOn(unittest.TestCase):
     """Every non-zero exit became a red "installer failed" exception and
     code 1: a --check that found work read as a crash, 2 and 130 were lost."""
