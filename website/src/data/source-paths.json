@@ -1798,6 +1798,7 @@
   "Analyser/Static/Commodore/Target.hpp",
   "Analyser/Static/MSX/StaticAnalyser.cpp",
   "Analyser/Static/MSX/Target.hpp",
+  "Analyser/Static/Sega/StaticAnalyser.cpp",
   "Analyser/Static/Sega/Target.hpp",
   "Components/DiskII/DiskII.cpp",
   "Machines/Apple/Macintosh/Macintosh.cpp",
@@ -3183,6 +3184,11 @@
  ],
  "github.com/finalburnneo/FBNeo@697e385c8285bfc528343b96d948ee3a4f9e24c5": [
   "src/burn/burn.cpp",
+  "src/burn/drv/neogeo/d_neogeo.cpp",
+  "src/burn/hiscore.cpp"
+ ],
+ "github.com/finalburnneo/FBNeo@c110542721d8674b6ff48e691ac032c040fecbba": [
+  "src/burn/burn.cpp",
   "src/burn/drv/atari/d_atarisy1.cpp",
   "src/burn/drv/channelf/d_channelf.cpp",
   "src/burn/drv/coleco/d_coleco.cpp",
@@ -3468,39 +3474,6 @@
   "src/xenia/ui/imgui_drawer.cc",
   "src/xenia/ui/vulkan/vulkan_instance.cc"
  ],
- "github.com/hatari/hatari@23bc3060ebf0da348cc842e358c102ba88002b56": [
-  "CMakeLists.txt",
-  "doc/release-checklist.txt",
-  "src/CMakeLists.txt",
-  "src/cart.c",
-  "src/change.c",
-  "src/configuration.c",
-  "src/debug/symbols.c",
-  "src/falcon/nvram.c",
-  "src/file.c",
-  "src/floppies/stx.c",
-  "src/floppy.c",
-  "src/includes/configuration.h",
-  "src/includes/version.h",
-  "src/m68000.c",
-  "src/main.c",
-  "src/midi.c",
-  "src/options.c",
-  "src/paths.c",
-  "src/printer.c",
-  "src/reset.c",
-  "src/retro/disk_control.c",
-  "src/retro/harddisk.c",
-  "src/retro/keymap.c",
-  "src/retro/main_retro.c",
-  "src/retro/options.c",
-  "src/retro/statusbar.c",
-  "src/rs232.c",
-  "src/scc.c",
-  "src/sdl/keymap.c",
-  "src/sdl/screen.c",
-  "src/tos.c"
- ],
  "github.com/hatari/hatari@c1a5c88bc06e56778b6b7f8483becfd58a7da2b4": [
   "src/cart.c",
   "src/change.c",
@@ -3513,6 +3486,42 @@
   "src/paths.c",
   "src/tos.c",
   "src/vdi.c"
+ ],
+ "github.com/hatari/hatari@c453b85f811fc11bed10e19e5e48fe95377e5a23": [
+  "CMakeLists.txt",
+  "doc/release-checklist.txt",
+  "src/CMakeLists.txt",
+  "src/cart.c",
+  "src/change.c",
+  "src/configuration.c",
+  "src/debug/symbols.c",
+  "src/falcon/nvram.c",
+  "src/file.c",
+  "src/filename.c",
+  "src/floppies/stx.c",
+  "src/floppy.c",
+  "src/includes/configuration.h",
+  "src/includes/version.h",
+  "src/m68000.c",
+  "src/main.c",
+  "src/midi.c",
+  "src/options.c",
+  "src/paths.c",
+  "src/printer.c",
+  "src/reset.c",
+  "src/retro/disk_control.c",
+  "src/retro/file_retro.c",
+  "src/retro/harddisk.c",
+  "src/retro/keymap.c",
+  "src/retro/main_retro.c",
+  "src/retro/options.c",
+  "src/retro/statusbar.c",
+  "src/retro/vfs.c",
+  "src/rs232.c",
+  "src/scc.c",
+  "src/sdl/keymap.c",
+  "src/sdl/screen.c",
+  "src/tos.c"
  ],
  "github.com/hex007/freej2me@8b9bc8a19baf26e3d92f88934a64a32f1cbc2795": [
   "build.xml",
@@ -3589,6 +3598,12 @@
   "src/storyboard.go",
   "src/system.go",
   "src/util_desktop.go"
+ ],
+ "github.com/inolen/redream@ffb7302245ff40515cb9f0f0b0e233a4b39342d3": [
+  "src/guest/bios/bios.c",
+  "src/guest/rom/boot.c",
+  "src/guest/rom/flash.c",
+  "src/host/retro_host.c"
  ],
  "github.com/io12/qemu-libretro@aaba4471880587540314f82419d920431d55b769": [
   "hw/alpha/dp264.c",
@@ -3844,7 +3859,7 @@
   "README.md",
   "sdl12main.c"
  ],
- "github.com/lethal-guitar/RigelEngine@30afeff8f0b105eac77ee0a2fbd54b06e1a49b60": [
+ "github.com/lethal-guitar/RigelEngine@f05996f9b3ad3b3ea5bb818e49e7977636746343": [
   "README.md",
   "cmake/rigel_pack.cmake",
   "src/assets/cmp_file_package.cpp",
@@ -3870,6 +3885,12 @@
   "libretro.c"
  ],
  "github.com/libretro/FBNeo@32958a89abd645ed20387c8d31d21ede3bc48161": [
+  "src/burn/burn.cpp",
+  "src/burn/drv/neogeo/d_neogeo.cpp",
+  "src/burn/hiscore.cpp",
+  "src/burner/libretro/libretro.cpp"
+ ],
+ "github.com/libretro/FBNeo@da14132bab6683980b1ad7e4d0d6fd47bf06dce7": [
   "src/burn/burn.cpp",
   "src/burn/drv/atari/d_atarisy1.cpp",
   "src/burn/drv/channelf/d_channelf.cpp",
@@ -4427,7 +4448,7 @@
   "gwrom/gwrom.h",
   "src/libretro.c"
  ],
- "github.com/libretro/hatari@50929946d196f431906932420c55e1b3593dacc5": [
+ "github.com/libretro/hatari@25f488b1667ed064a25c30eb3f06b40bc877c495": [
   ".gitlab-ci-libretro.yml",
   "CMakeLists.txt",
   "cmake/BuildDependencies.cmake",
@@ -4439,6 +4460,7 @@
   "src/debug/symbols.c",
   "src/falcon/nvram.c",
   "src/file.c",
+  "src/filename.c",
   "src/floppies/stx.c",
   "src/floppy.c",
   "src/includes/configuration.h",
@@ -4451,6 +4473,7 @@
   "src/printer.c",
   "src/reset.c",
   "src/retro/disk_control.c",
+  "src/retro/file_retro.c",
   "src/retro/floppy_sound.c",
   "src/retro/harddisk.c",
   "src/retro/keymap.c",
@@ -4657,6 +4680,7 @@
   "src/drivers/cvs.c",
   "src/drivers/decocass.c",
   "src/drivers/konamigx.c",
+  "src/drivers/namcos11.c",
   "src/drivers/neogeo.c",
   "src/drivers/nss.c",
   "src/drivers/pgm.c",
@@ -8127,10 +8151,13 @@
   "share/machines/Philips_VG_8020.xml",
   "share/machines/Pioneer_PX-7.xml",
   "share/machines/Spectravideo_SVI-328.xml",
+  "src/config/HardwareConfig.cc",
   "src/file/File.cc",
+  "src/file/FileContext.cc",
   "src/file/FilePool.cc",
   "src/file/FilePoolCore.cc",
-  "src/file/ZipFileAdapter.cc"
+  "src/file/ZipFileAdapter.cc",
+  "src/memory/Rom.cc"
  ],
  "github.com/openmoh/openmohaa@a2f340195975f4f042e28a60b62561dd9a0b2700": [
   "code/qcommon/common.c",
