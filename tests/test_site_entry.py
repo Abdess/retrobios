@@ -443,14 +443,22 @@ class PackNamesItsVersion(unittest.TestCase):
         block = generate_site._pack_buttons("batocera")
         version = generate_site._pack_version(release_record.pack_name_for("batocera", record))
         self.assertIn(f"Made for Batocera {version}. "
-                      + generate_site.OTHER_VERSION, block)
+                      + generate_site.other_version("batocera"), block)
 
     def test_a_version_gap_is_said_once(self):
         record = {"tag": "v2026.10.10", "packs": {"RetroBat_1.0_BIOS_Pack.zip": {
             "assets": ["RetroBat_1.0_BIOS_Pack.zip"], "platforms": ["retrobat"]}}}
         released = generate_site.release_line("retrobat", record)
         line = generate_site.version_line("retrobat", record, named=len(released) > 1)
-        self.assertEqual(line, generate_site.OTHER_VERSION)
+        self.assertEqual(line, generate_site.other_version("retrobat"))
+
+    def test_another_version_is_sent_to_the_check_commands(self):
+        """A ZIP reader read "Run `--check` after copying." with no command."""
+        line = generate_site.other_version("emudeck")
+        self.assertNotIn("Run `--check`", line)
+        self.assertIn("](../platforms/emudeck.md#how-to-check)", line)
+        page = _page("platforms/emudeck.md")
+        self.assertIn("{ #how-to-check }", page)
 
     def test_the_v_prefix_is_dropped(self):
         self.assertEqual(generate_site.setup_version("retroarch", {}),

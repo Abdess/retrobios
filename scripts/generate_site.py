@@ -679,9 +679,13 @@ def release_line(platform_name: str, record: dict) -> list[str]:
     return lines
 
 
-# What a reader on another version of the setup does with the pack. Our data
-# says which list the pack was made from, not what an older list lacks.
-OTHER_VERSION = "Other version? Run `--check` after copying."
+def other_version(platform_name: str, prefix: str = "../") -> str:
+    """What a reader on another version of the setup does with the pack.
+    Our data says which list the pack was made from, not what an older list
+    lacks. A bare `--check` was no command to run for someone holding a ZIP:
+    the line links the setup page's commands that check."""
+    target = f"{prefix}platforms/{platform_name}.md#how-to-check"
+    return f"Other version? [Check the files]({target}) after copying."
 
 
 def setup_version(platform_name: str, record: dict | None = None) -> str:
@@ -700,13 +704,15 @@ def setup_version(platform_name: str, record: dict | None = None) -> str:
     return f"{config.get('platform', platform_name)} {version.removeprefix('v')}"
 
 
-def version_line(platform_name: str, record: dict, named: bool = False) -> str:
+def version_line(platform_name: str, record: dict, named: bool = False,
+                 prefix: str = "../") -> str:
     """The version the pack fits, and what to do on another. *named* when
     the release line already named the pack's version."""
     made_from = setup_version(platform_name, record)
+    other = other_version(platform_name, prefix)
     if named or not made_from:
-        return OTHER_VERSION
-    return f"Made for {made_from}. {OTHER_VERSION}"
+        return other
+    return f"Made for {made_from}. {other}"
 
 
 # Why a setup has no ZIP, answered once on the FAQ.
@@ -793,7 +799,8 @@ def _pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
     )
     released = release_line(platform_name, record)
     return "\n\n".join([buttons, *released,
-                        version_line(platform_name, record, named=len(released) > 1)])
+                        version_line(platform_name, record, named=len(released) > 1,
+                                     prefix=prefix)])
 
 
 def generate_get_page(platform_name: str) -> str:
