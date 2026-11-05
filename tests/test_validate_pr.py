@@ -54,6 +54,17 @@ class FileShapeChecks(_Fixture):
             self.assertNotIn(label, markdown)
         self.assertIn("--changed", markdown)
 
+    def test_a_folder_is_read_file_by_file(self):
+        self._bios_file("card/bios/a.bin")
+        self._bios_file("card/bios/sub/b.bin")
+        (self.tmp / "empty").mkdir()
+        self.assertEqual(
+            validate_pr.expand_folders(["card", "empty", "loose.bin"]),
+            [str(Path("card/bios/a.bin")), str(Path("card/bios/sub/b.bin")), "empty", "loose.bin"],
+        )
+        result = validate_pr.validate_file("empty", None, EMPTY_HASHES)
+        self.assertIn("Folder with no file in it", result.to_markdown())
+
     def test_empty_file_fails(self):
         rel = self._bios_file("bios/Sony/PS/empty.bin", b"")
         result = validate_pr.validate_file(rel, None, EMPTY_HASHES)

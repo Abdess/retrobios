@@ -1349,7 +1349,7 @@ Further options, by script:
 | `romset_recipes.py` | `--dat-recipes PATH`, a snapshot or a directory of them (default `recipes/`) |
 | `split_pack.py` | `--max-size 1900M`, the ceiling per part (K, M, G, default 2G) |
 | `torrentzip.py` | `--check ZIP` reports conformance, `--rebuild ZIP -o OUT` normalizes an archive |
-| `validate_pr.py` | `--changed` takes the BIOS files the branch changes, `--markdown`, `--json` |
+| `validate_pr.py` | `--changed` takes the BIOS files the branch changes, a folder named checks every file under it, `--markdown`, `--json` |
 | `validate_site.py` | `--site-dir` (rendered site, default `website/dist`), `--base` (path the site is served under), `--max-errors N` |
 | `scraper/coreinfo_scraper.py` | `--compare-db database.json` lists the `.info` firmware the database lacks |
 | `scraper/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |

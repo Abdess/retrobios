@@ -24,7 +24,8 @@ the most useful contribution.
 
 From a clone, the file goes to `bios/Manufacturer/Console/filename`, and
 `python scripts/validate_pr.py path/to/file` names that folder for a file still
-outside `bios/`. A file over the browser's 25 MB limit goes in that way.
+outside `bios/`. Given a folder, such as an old card's BIOS folder, it checks
+every file under it. A file over the browser's 25 MB limit goes in that way.
 
 ## Add a platform
 
