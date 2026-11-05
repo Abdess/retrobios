@@ -179,13 +179,29 @@ class CheckNamesWhyAFileIsRefused(Scratch):
             self.skipTest("this filesystem does not keep case")
         data = json.loads(self.list.read_text())
         twin = next(f for f in data["files"] if f["dest"] == "gba_bios.bin")
-        data["case_variants"] = [{**twin, "dest": "twin/gba_bios.bin"}]
+        data["case_variants"] = [{**twin, "dest": "GBA_BIOS.BIN"}]
         self.list.write_text(json.dumps(data))
         self.complete()
         out = self.check()
-        self.assertIn("missing: twin/gba_bios.bin", out)
+        self.assertIn("missing: GBA_BIOS.BIN", out)
         self.assertIn("a second name the pack leaves out", out)
         self.assertNotIn("wrong folder: it is at gba_bios.bin", out)
+
+    def test_a_case_twin_is_plain_missing_when_no_pack_was_used(self):
+        """On an empty folder every case variant came first, uncapped, with
+        a note on a pack never downloaded: the BIOS files the user looked
+        for sat in "... and N more missing"."""
+        probe = self.root / "CaseProbe"
+        probe.write_text("x")
+        if (self.root / "caseprobe").exists():
+            self.skipTest("this filesystem does not keep case")
+        data = json.loads(self.list.read_text())
+        twin = next(f for f in data["files"] if f["dest"] == "gba_bios.bin")
+        data["case_variants"] = [{**twin, "dest": "GBA_BIOS.BIN"}]
+        self.list.write_text(json.dumps(data))
+        out = self.check()
+        self.assertIn("missing: GBA_BIOS.BIN", out)
+        self.assertNotIn("a second name the pack leaves out", out)
 
     def test_a_nested_bios_folder_is_named(self):
         for name, data in PAYLOAD.items():

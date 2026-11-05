@@ -23,7 +23,7 @@ DEFAULT_INSTALL_URL="https://raw.githubusercontent.com/Abdess/retrobios/main/ins
 # curl or wget stop on a cut transfer before the hash is read: the site's
 # build rewrites this line there (scripts/sitebootstrap.py).
 MISMATCH_ADVICE="The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-DEFAULT_INSTALL_SHA256="f0410caadbcc354efc86038decb95da63478ddf018cad03ec09e41ce2b5e4d63"
+DEFAULT_INSTALL_SHA256="d9b9e08c5a3ff983f8bb440512edd0c68e33493ff6c3c5b119dfe72582b3a3d1"
 MAX_INSTALLER_BYTES=2097152
 
 cleanup() {
@@ -34,7 +34,13 @@ cleanup() {
     rmdir -- "$TEMP_DIRECTORY" 2>/dev/null || true
   fi
 }
-trap cleanup EXIT HUP INT TERM
+# A signal ends the run with the code a shell gives it, 130 for Ctrl+C:
+# trapped by cleanup alone, the run went on, and Ctrl+C during the download
+# was told as a network failure, with code 1.
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   install_url=${RETROBIOS_INSTALL_URL:-$DEFAULT_INSTALL_URL}
@@ -124,11 +130,25 @@ fi
 # A Python can be built without ssl, unicodedata or zlib, and the installer
 # needs all three: a python3 lacking ssl was chosen over a full python and
 # every download then failed as if the network were down.
+# A python3.X on PATH counts too, newest first: Buster and Ubuntu 18.04
+# keep python3 at 3.7 or 3.6 beside the python3.8 the advice below has the
+# user install, and the same advice looped.
+versioned_pythons() {
+  (
+    IFS=:
+    for dir in $PATH; do
+      for path in "$dir"/python3.[0-9]*; do
+        [ -x "$path" ] && basename -- "$path"
+      done
+    done
+  ) | grep -E '^python3\.[0-9]+$' | sort -t . -k 2,2nr -u
+}
+
 find_python() {
   PYTHON=""
   PYTHON_LACKING=""
   PYTHON_OLD=""
-  for command_name in python3 python; do
+  for command_name in python3 python $(versioned_pythons); do
     command -v "$command_name" >/dev/null 2>&1 || continue
     if ! "$command_name" -c 'import sys; raise SystemExit(sys.version_info < (3, 8))' \
         2>/dev/null; then

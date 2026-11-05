@@ -104,6 +104,14 @@ def _checked_base_url(value: str) -> str:
 BASE_URL = _checked_base_url(os.environ.get("RETROBIOS_BASE_URL", DEFAULT_BASE_URL))
 MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
 TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
+# The platforms that publish a core list per board, install/targets/ in the
+# repository: a test holds the two equal. Offline, a platform outside it
+# has no hardware targets, where the run sent the user after a list that
+# exists nowhere.
+TARGET_PLATFORMS = frozenset({
+    "batocera", "emudeck", "knulli", "lakka", "recalbox", "retroarch", "retrobat",
+    "retrodeck", "retropie", "rocknix", "romm",
+})
 RAW_FILE_URL = f"{BASE_URL}/{{path}}"
 RELEASE_URL = (
     "https://github.com/Abdess/retrobios/releases/download/large-files/{asset}"
@@ -138,8 +146,10 @@ OMISSION_REASONS = {
 # says, and as the installer words it. Firmware carries no category.
 GAME_DATA = "game_data"
 CATEGORY_LABELS = {GAME_DATA: "game data"}
-_SHA1_RE = re.compile(r"^[0-9a-fA-F]{40}$")
-_SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+# The manifest writes its digests in lowercase, as hashlib gives them, and
+# every comparison reads them as written.
+_SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 # The region vocabulary of scripts/region.py, which this file cannot import.
 # A test holds the two copies equal.
@@ -1437,8 +1447,9 @@ def _parse_bash_var(path: Path, key: str) -> str | None:
             if line.startswith(f"{key}="):
                 _, _, value = line.partition("=")
                 return _shell_unquote(value)
-    except OSError:
-        pass
+    except OSError as exc:
+        # A settings.sh a sudo EmuDeck run left to root hid the setup.
+        _note_refused(path, exc)
     return None
 
 
@@ -1447,34 +1458,29 @@ def _parse_bash_var(path: Path, key: str) -> str | None:
 # recalbox-system.mk RECALBOX_SYSTEM_PLATFORM, ROCKNIX's scripts/image puts
 # HW_DEVICE in os-release (RK3326, our rk3326). Lakka's scripts/image writes
 # LIBREELEC_DEVICE when the image is built for a device (RPi4) and always
-# LIBREELEC_PROJECT (Generic): the first one set is the board.
+# LIBREELEC_PROJECT (Generic): the first one set is the board. KNULLI moves
+# /usr/share/batocera to /usr/share/knulli (knulli-linux 57afa662,
+# board/scripts/post-build-script.sh:264-278) and writes KNULLI_SYSTEM_ARCH
+# to knulli.arch (package/system/knulli-system/knulli-system.mk:98-99).
 _BOARD_SOURCES: dict[str, tuple[str, str]] = {
     "batocera": ("file", "/usr/share/batocera/batocera.arch"),
     "recalbox": ("file", "/recalbox/recalbox.arch"),
     "rocknix": ("os_release", "HW_DEVICE"),
     "lakka": ("os_release", "LIBREELEC_DEVICE|LIBREELEC_PROJECT"),
+    "knulli": ("file", "/usr/share/knulli/knulli.arch"),
+    "retropie": ("retropie", ""),
 }
 
-
-# A platform that names its board without publishing a core list per board.
-# Knulli moves /usr/share/batocera to /usr/share/knulli (knulli-linux
-# 57afa662, board/scripts/post-build-script.sh:264-278) and writes its board
-# to knulli.arch (package/system/knulli-system/knulli-system.mk:98-99).
-_DERIVATIVE_BOARDS: dict[str, tuple[str, str]] = {
-    "knulli": ("Knulli", "/usr/share/knulli/knulli.arch"),
+# The board a system's own name stands for, where the two differ: the
+# target lists are named for the board files (configs/knulli-rk3566.board),
+# and the arch file for the TARGET flag the board sets. knulli-rk3566.board
+# sets BR2_PACKAGE_BATOCERA_TARGET_RK3568, which knulli-system.mk:22-23
+# (20260511) writes as rk3568. batocera-zen3.board sets TARGET_ZEN3, which
+# batocera-system.mk:56-57 (batocera-43.1) writes as x86-64-v3.
+_BOARD_NAMES: dict[str, dict[str, str]] = {
+    "batocera": {"x86-64-v3": "zen3"},
+    "knulli": {"rk3568": "rk3566"},
 }
-
-
-def derivative_board(platform: str) -> tuple[str, str] | None:
-    """(derivative, board) when a derivative of the platform names its board."""
-    name, where = _DERIVATIVE_BOARDS.get(platform, ("", ""))
-    if not where:
-        return None
-    try:
-        board = Path(where).read_text(encoding="utf-8", errors="replace").strip().lower()
-    except OSError:
-        return None
-    return (name, board) if board else None
 
 
 # The board a card names on a partition a computer reads. Batocera writes
@@ -1515,9 +1521,55 @@ def detect_board(platform: str) -> str | None:
     elif kind == "os_release":
         release = _parse_os_release()
         value = next((release[key] for key in where.split("|") if release.get(key)), "")
+    elif kind == "retropie":
+        value = _retropie_board() or ""
     else:
         return None
-    return value.strip().lower() or None
+    board = value.strip().lower()
+    # A board no TARGET line names is written "unknown" (KNULLI's r16).
+    if board == "unknown":
+        return None
+    return _BOARD_NAMES.get(platform, {}).get(board, board) or None
+
+
+# RetroPie names its board as get_platform does (RetroPie-Setup f5ebfba6,
+# scriptmodules/system.sh:396-424 and 425-513): a Pi by the BCM Hardware
+# line of /proc/cpuinfo or raspberrypi in its device tree, its model by the
+# CPU field (bits 12-15) of a revision code with bit 23 set, rpi1 without
+# it. With neither a Hardware line nor a device tree, the machine: x86_64.
+# Read only where RetroPie is installed (rootdir /opt/retropie,
+# retropie_packages.sh:17): a computer preparing a Pi's card is no Pi.
+_RPI_MODELS = {0: "rpi1", 1: "rpi2", 2: "rpi3", 3: "rpi4", 4: "rpi5"}
+
+
+def _retropie_board() -> str | None:
+    """The target RetroPie's own reading of this machine names, or None."""
+    if not _is_dir(_on_device("/opt/retropie")):
+        return None
+    try:
+        cpuinfo = _on_device("/proc/cpuinfo").read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        cpuinfo = ""
+    fields = {key.strip(): value.strip() for key, sep, value in
+              (line.partition(":") for line in cpuinfo.splitlines()) if sep}
+    tree = _on_device("/proc/device-tree/compatible")
+    try:
+        compatible = tree.read_bytes().decode("ascii", errors="replace")
+    except OSError:
+        compatible = None
+    hardware = fields.get("Hardware", "")
+    if hardware.startswith("BCM") or (not hardware and compatible is not None
+                                      and "raspberrypi" in compatible):
+        try:
+            revision = int(fields.get("Revision", ""), 16)
+        except ValueError:
+            return None
+        if not (revision >> 23) & 1:
+            return "rpi1"
+        return _RPI_MODELS.get((revision >> 12) & 15)
+    if hardware or compatible is not None:
+        return None
+    return "x86_64" if platform.machine() == "x86_64" else None
 
 
 def _parse_json_path(path: Path, *keys: str) -> str | None:
@@ -1549,8 +1601,8 @@ def _parse_ps1_var(path: Path, key: str) -> str | None:
             if check.startswith(f"{normalized}="):
                 _, _, value = check.partition("=")
                 return value.strip('"').strip("'")
-    except OSError:
-        pass
+    except OSError as exc:
+        _note_refused(path, exc)
     return None
 
 
@@ -2426,6 +2478,12 @@ def launchbox_bios_dirs(root: Path) -> dict[str, Path]:
 
 # (folder, why in words) for each folder detection could not look in.
 _DETECTION_REFUSED: list[tuple[Path, str]] = []
+# Those of them that failed for another cause than a permission: a read
+# error from a failing card, a link that loops.
+_DETECTION_UNREADABLE: set[Path] = set()
+# The errors that say a place is not there, as against one that is there
+# and could not be read.
+_ABSENT_ERRNOS = (errno.ENOENT, errno.ENOTDIR, errno.EINVAL, errno.ENAMETOOLONG)
 # The platforms whose configuration names a folder with a control character.
 _UNNAMEABLE: list[str] = []
 
@@ -2434,13 +2492,18 @@ def refused_words(folder: Path, why: str, shown: str = "") -> str:
     """The line said for a folder detection could not look in. shown is
     the folder as the screen writes it (~/.config/EmuDeck), the full path
     by default."""
+    if folder in _DETECTION_UNREADABLE:
+        return (f"Could not look for setups: {shown or folder} could not be read ({why}). "
+                "A failing card or a link that loops gives this: check it, or name the "
+                "BIOS folder with --dest.")
     return (f"Could not look for setups: this user cannot open {shown or folder} ({why}). "
             "Run as its owner (su - or sudo -H), or name the BIOS folder "
             "with --dest.")
 
 
 def _note_refused(path: Path, exc: OSError) -> None:
-    """Say once that a folder detection looks in is closed to this user.
+    """Say once that a folder detection looks in is closed to this user,
+    or could not be read.
 
     A probe refused there counts as absent and the others go on: a config
     folder a sudo run left at 0700 (~/.config/EmuDeck) hid a RetroArch whose
@@ -2448,12 +2511,16 @@ def _note_refused(path: Path, exc: OSError) -> None:
     not read.
     """
     if (not getattr(_SETUP_SEARCH, "active", False) or getattr(_SETUP_SEARCH, "quiet", False)
-            or not isinstance(exc, PermissionError)):
+            or exc.errno in _ABSENT_ERRNOS):
         return
     refused = closed_folder(path) or (path, exc.strerror or str(exc))
     if refused in _DETECTION_REFUSED:
         return
     _DETECTION_REFUSED.append(refused)
+    if not isinstance(exc, PermissionError):
+        # An EIO on retroarch.cfg counted as absent: the card about to be
+        # written to failed, and the run said nothing was detected.
+        _DETECTION_UNREADABLE.add(refused[0])
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=refused[1], message=words)
     print(f"  {screen_text(words)}", file=sys.stderr)
@@ -3592,9 +3659,6 @@ def _check_entry(
     return size, largest
 
 
-_SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
-
-
 def _check_data_directory(entry: object, where: str) -> None:
     """A data directory: its source archive, its mapping, its file list."""
     if not isinstance(entry, dict):
@@ -3631,7 +3695,7 @@ def _check_data_directory(entry: object, where: str) -> None:
         if (
             not isinstance(meta, dict)
             or not isinstance(meta.get("sha1"), str)
-            or not _SHA1_RE.match(meta["sha1"])
+            or not _SHA1_RE.fullmatch(meta["sha1"])
             or not isinstance(meta.get("size"), int)
             or not 0 <= meta["size"] <= MAX_DOWNLOAD_SIZE
         ):
@@ -4196,6 +4260,8 @@ def fetch_targets(plat: str) -> "dict | None":
     held = local_targets(plat)
     if held is not None:
         return held
+    if LOCAL.offline and plat not in TARGET_PLATFORMS:
+        return {}
     if LOCAL.offline:
         source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
                   else f"{offline_named()} makes no request")
@@ -5038,10 +5104,8 @@ def _probed(probe: Callable[[], bool], path: Path) -> bool:
         # raised: a refusal is told from absence by the stat it hides.
         try:
             os.stat(path)
-        except PermissionError as exc:
+        except OSError as exc:
             _note_refused(path, exc)
-        except OSError:
-            pass
     return found
 
 
@@ -5695,8 +5759,9 @@ def _download_one(
             reason = f"HTTP {exc.code}"
             if exc.code in (403, 429):
                 reason += " (GitHub rate limit or access refused)"
-            if exc.code >= 500 or exc.code == 429:
-                reason = NetworkReason(reason)
+            reason = (NetworkReason if exc.code >= 500 or exc.code == 429
+                      else HttpReason)(reason)
+            reason.url = url
             if verbose:
                 print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
             if tmp_path is not None and partial is None and tmp_path.exists():
@@ -6200,6 +6265,32 @@ class NetworkReason(str):
     """A failure the connection caused: cut, timed out, refused by a server
     or a proxy. The summary names the network instead of the folder."""
 
+    url = ""
+
+
+class HttpReason(str):
+    """A file the server answered for with an error of its own (HTTP 404):
+    the summary names the address, where "HTTP 404" alone told the user
+    neither what failed nor that running again changes nothing."""
+
+    url = ""
+
+
+def _http_failure_lines(failures: list[tuple[str, str]]) -> list[str]:
+    """The address the first refused file was asked at, and what chose it:
+    a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
+    the files, or a list out of step with the files it names."""
+    refused = [reason for _dest, reason in failures if isinstance(reason, HttpReason)]
+    if not refused:
+        return []
+    more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
+    lines = [f"  The server answered {refused[0]} for {refused[0].url}{more}."]
+    if os.environ.get("RETROBIOS_BASE_URL"):
+        return lines + _address_lines(refused[0].url)[1:]
+    return lines + ["  The file list names files the server does not hold, and running "
+                    "again changes nothing until the two match.",
+                    f"  More help: {TROUBLESHOOTING_PAGE}"]
+
 
 def _transfer_failure(exc: BaseException) -> bool:
     """Whether a download error came from the connection, not the disk."""
@@ -6345,8 +6436,12 @@ def _report_outcome(
     if any(reason == READ_ONLY for _dest, reason in failures or []):
         advice.append("  Files marked read-only are in the way: clear that attribute "
                       "(or delete them), then run again.")
+    advice += _http_failure_lines(failures or [])
     if any(isinstance(reason, NetworkReason) for _dest, reason in failures or []):
         advice.append(NETWORK_FAILURE_ADVICE)
+        if os.environ.get("RETROBIOS_BASE_URL"):
+            # A mirror that is down read as this machine's connection.
+            advice += _address_lines(BASE_URL)[1:]
     if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures or []):
         # The same run fails the same way: "retry only those" sent a phone
         # user round the loop with nothing changed.
@@ -6408,7 +6503,7 @@ def _report_outcome(
 
     if errors and not downloaded:
         say(f"\nNothing was installed. {_plural(errors, 'file')} failed.")
-        if failures and all(isinstance(r, (NetworkReason, OfflineReason))
+        if failures and all(isinstance(r, (NetworkReason, HttpReason, OfflineReason))
                             for _d, r in failures):
             # The folder was never the problem: naming it as the place being
             # written to sent people looking at their disk.
@@ -12073,16 +12168,35 @@ def _copy_reason(entry: dict, copy: LocalCopy, bios_path: Path, known: set[str])
     return _place_reason(entry, copy.path, copy.index, expected, known)[0]
 
 
+def _twin_in_place(entry: dict, files: list[dict], bios_path: Path) -> bool:
+    """Whether the name a case variant shares with another entry, but for
+    the case (bios.col and BIOS.col), is in place."""
+    folded = str(entry.get("dest", "")).casefold()
+    for twin in files:
+        if twin is entry or twin.get("case_variant") or \
+                str(twin.get("dest", "")).casefold() != folded:
+            continue
+        try:
+            if _is_file(_entry_path(bios_path, twin)):
+                return True
+        except ValueError:
+            continue
+    return False
+
+
 def _found_elsewhere(
     entry: dict, index: FolderIndex, bios_path: Path, files: list[dict],
     known: set[str], zipped: _ZippedLookup | None = None,
 ) -> tuple[str, str]:
     """(reason, folder too deep) for an entry missing at its place."""
     dest = str(entry.get("dest", ""))
-    if entry.get("case_variant"):
+    if entry.get("case_variant") and _twin_in_place(entry, files, bios_path):
         # A pack is read on Windows and macOS too, where two names that
         # differ only by case are one file: it carries one of the pair. Moving
         # the other copy here would take it from the core that opens it.
+        # Only its twin in place says a pack was used: on an empty folder the
+        # note named a pack never downloaded and pushed the BIOS files the
+        # user looked for into "... and N more".
         return ("a second name the pack leaves out: Windows and macOS see it "
                 "as the same file. Run the command without --check to add it"), ""
     name = dest.rsplit("/", 1)[-1]
@@ -12976,7 +13090,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--target",
         metavar="NAME",
         help="hardware target for core filtering (switch, rpi4, ...). "
-        "On Batocera, Recalbox, ROCKNIX and Lakka the board is read from the system",
+        "On Batocera, Recalbox, ROCKNIX, Lakka, KNULLI and RetroPie the board is read "
+        "from the system",
     )
     parser.add_argument(
         "--every-board",
@@ -13316,8 +13431,14 @@ def main() -> None:
         # The runs the full-screen interface starts read it from here, and
         # the words name the option given.
         os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
+    named = next((plat for plat in AVAILABLE_PLATFORMS if args.platform and _name_key(
+        args.platform) in (_name_key(plat), _name_key(display_name(plat)))), "")
+    if offline_requested() and args.target and named and named not in TARGET_PLATFORMS:
+        refuse_name(named, f"Error: {display_name(named)} has no hardware targets: run "
+                    "again without --target.")
     if (offline_requested() and (args.target or args.list_targets)
-            and not (args.manifest or args.from_pack)):
+            and not (args.manifest or args.from_pack)
+            and not (named and named not in TARGET_PLATFORMS)):
         # No list can be at hand: a pack carries one, and so can the folder
         # of a --manifest (targets/<platform>.json).
         parser.error("--target and --list-targets read a core list from the network, "
@@ -13625,6 +13746,30 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     return True
 
 
+def _check_cores_dir(folder: Path) -> None:
+    """Refuse a --cores-dir that cannot be listed, saying why: a typo
+    (core/ for cores/) or a closed folder read as an empty one, and the
+    run said "none in" and asked for the --cores-dir it was given."""
+    try:
+        with os.scandir(folder):
+            return
+    except FileNotFoundError:
+        why = "does not exist"
+    except NotADirectoryError:
+        why = "is not a folder"
+    except PermissionError as exc:
+        closed = closed_folder(folder)
+        why = (f"cannot be opened by this user ({exc.strerror or exc})"
+               if closed is None or closed[0] == folder
+               else f"cannot be opened: {closed_folder_words(folder, closed)}")
+    except OSError as exc:
+        why = f"could not be read ({exc.strerror or exc})"
+    print(f"Error: --cores-dir {screen_text(str(folder))} {why}.", file=sys.stderr)
+    print("  Name the folder RetroArch loads cores from (libretro_directory in "
+          "retroarch.cfg, cores/ beside RetroArch by default).", file=sys.stderr)
+    sys.exit(1)
+
+
 def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
     """Refuse --installed-cores with no core, and say how to point at them.
 
@@ -13702,6 +13847,12 @@ _SHARE_RULES: tuple[_OsRule, ...] = (
     _OsRule("rocknix", "ROCKNIX", "file_matches",
             (".config/system/configs/system.cfg", r"^root\.password=rocknix\s*$"),
             "roms/bios"),
+    # MiSTer's is its exFAT partition, /media/fat (Main_MiSTer e0a234f9,
+    # file_io.cpp:1177), whose root holds the MiSTer binary and menu.rbf
+    # (Distribution_MiSTer ce602319) and which reads each core's files
+    # below games/ (GAMES_DIR, file_io.h:171). A card prepared on a
+    # computer got RetroArch's list, or MiSTer's at its root.
+    _OsRule("misterfpga", "MiSTer FPGA", "file_exists", ("MiSTer", "menu.rbf"), "games"),
 )
 
 
@@ -14157,6 +14308,12 @@ def _card_and_below(setup: CardSetup, path: Path) -> tuple[Path, bool]:
     name: an Onion card mounted as BIOS was read as a BIOS folder, its
     parent checked as the card and refused."""
     below = setup.below
+    if (not below and setup.name in _GAMES_PART_CARDS and path.name.casefold() == "bios"
+            and not _is_dir(path / "bios") and _card_is(setup, path)[0] == "unknown"
+            and not _card_boundary(path)):
+        # Its list writes bios/ below the games part's root: its BIOS
+        # folder named got bios/bios, or was refused as inside the card.
+        return path.parent, True
     depth = len(PurePosixPath(below).parts)
     if (below and _ends_with(path, below) and _card_is(setup, path)[0] == "unknown"
             and not any(_card_boundary(folder)
@@ -14313,7 +14470,8 @@ def card_choice(named: str, plat: str, root: Path) -> CardChoice:
                               f"{setup.name} card, whose root is {shown_path(holder[2])}",
                               short=f"That is inside {_a(setup.name)} card.",
                               below=setup.below, root=holder[2])
-    folder = root if inside or not setup.below else card / setup.below
+    folder = (card if inside and not setup.below
+              else root if inside or not setup.below else card / setup.below)
     if kind == "other":
         return _not_the_card(setup, root, card, what)
     if kind == "own":
@@ -14949,6 +15107,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     cores_found: dict[tuple[str, Path], list[str]] = {}
     for plat_name, bios_path in platforms:
         if plat_name in CORE_PLATFORMS:
+            if args.cores_dir:
+                _check_cores_dir(args.cores_dir)
             searched = [args.cores_dir] if args.cores_dir else core_dirs(plat_name, bios_path)
             cores_found[(plat_name, bios_path)] = installed_cores(searched)
         elif args.installed_cores:
@@ -15044,12 +15204,6 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(f"  {words}")
                 EVENTS.emit("board", platform=plat_name, board=board,
                             applied=target == board, message=words)
-            else:
-                derived = derivative_board(plat_name)
-                if derived:
-                    print(f"  {derived[0]} board {derived[1]} detected. {derived[0]} "
-                          "builds its own set of cores and publishes no core list "
-                          "per board: installing the files of every board")
         if target:
             targets = target_lists.get(plat_name)
             if targets is None:
@@ -15419,7 +15573,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 lacking = pack_lacks([f for f in to_download if id(f) not in copies])
                 if lacking:
                     print(f"\n  {pack_lacks_words(len(lacking), len(to_download) - len(copies))}")
-                print(f"\n  {_plural(len(to_download), 'file')} "
+                # One total with the count above it, the data files among
+                # them as the screen counts them: "0 in place, 10805 missing"
+                # stood over "8164 files to download".
+                print(f"\n  {_plural(len(to_download) + trees_missing, 'file')} "
                       + ("not in place:" if offline or LOCAL.pack is not None
                          else "to download:"))
                 for line in check_lines(missing, mismatched, files, manifest, bios_path,
@@ -15427,9 +15584,16 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     print(line)
                 for line in unreadable_lines(unread, args.verbose):
                     print(line)
-                print(_check_fetch_line(len(to_download) - len(copies), "the BIOS folder",
-                                        len(lacking)))
+                # The data files need the internet too: offline, "8164 files
+                # need the internet" stood under "10805 files not in place".
+                trees_fetched = trees_missing if LOCAL.pack is None else 0
+                print(_check_fetch_line(len(to_download) - len(copies) + trees_fetched,
+                                        "the BIOS folder", len(lacking)))
                 check_pending += len(to_download)
+            elif trees_missing:
+                # The screen's headline: "Everything is in place." stood
+                # above "0/169 data files present" and exit code 1.
+                print(f"\n  {_plural(trees_missing, 'data file')} to fetch")
             else:
                 print(f"\n  {EVERYTHING_IN_PLACE}")
             absent = _absent_required(omitted_files, bios_path)
@@ -19220,13 +19384,14 @@ def setup_list(setups: list, mounted: set, needle: str = "",
             continue
         setup = card_setup(plat, plat)
         label = display_name(plat)
-        if setup and _found_device(setups, mounted, plat, setup.name) is None:
+        if (setup and plat not in _DESK_CARDS
+                and _found_device(setups, mounted, plat, setup.name) is None):
             label += ", SD card"
         # The systems and devices the filter named, else a card's devices.
         shown = named or (list(_setup_devices(plat, os_type)) if setup else [])
         row = TuiRow("platform", label, ", ".join(shown), plat, narrow=_device_forms(shown),
                      cut=shown[0] if shown else "")
-        if setup:
+        if setup and plat not in _DESK_CARDS:
             handheld.append((label, row))
         else:
             desktop.append(row)
@@ -19257,6 +19422,11 @@ def setup_list(setups: list, mounted: set, needle: str = "",
         return [*lead, *cards_rows, *rest]
     return [*desktop, *cards_rows]
 
+
+# The systems that run from an SD card on a board kept on a desk, not in
+# the hand: their row stays among the platforms, and the handhelds' block,
+# which leads when nothing is found here, keeps Onion four presses away.
+_DESK_CARDS = frozenset({"misterfpga"})
 
 # The setups a computer runs, by its system, first in the setup list when
 # nothing was found here. RetroBat runs on Windows alone (retrobat.org), and

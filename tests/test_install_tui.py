@@ -5901,6 +5901,12 @@ def _card_from_rules(root: Path, setup: install.CardSetup) -> Path:
     return root
 
 
+def _card_row(setup: install.CardSetup) -> str:
+    """The setup list's row of a card system: MiSTer's board sits on a desk
+    and keeps its plain row among the platforms."""
+    return setup.name if setup.plat in install._DESK_CARDS else f"{setup.name}, SD card"
+
+
 def _setup_folder(setup: install.CardSetup, card: Path) -> Path:
     return card / setup.below if setup.below else card
 
@@ -5968,7 +5974,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                 state = self.platforms()
                 rows = install.tui_rows(state)
                 index = next(i for i, row in enumerate(rows)
-                             if row.label == f"{setup.name}, SD card")
+                             if row.label == _card_row(setup))
                 state.focus["platforms"] = index
                 with mock.patch.object(install, "_mounted_cards", return_value=[]):
                     effects = press(state, "enter")
@@ -5983,7 +5989,7 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
         for setup in self.setups:
             with self.subTest(system=setup.name):
                 rows = install.tui_rows(self.platforms(setup.name))
-                self.assertIn(f"{setup.name}, SD card", [row.label for row in rows])
+                self.assertIn(_card_row(setup), [row.label for row in rows])
 
     def test_platform_named_on_a_computer_asks_for_the_card(self):
         for setup in self.setups:
@@ -6076,6 +6082,46 @@ class EveryCardSetupGoesToItsCard(unittest.TestCase):
                                            return_value=list(cards.values())):
                         self.assertNotIn(card, install.mounted_cards_of(setup.name,
                                                                         setup.plat))
+
+    def test_a_games_part_named_by_its_bios_folder_is_its_card(self):
+        """AmberELEC and EmuELEC write bios/ below their games part, as
+        RetroDECK below its folder. Their BIOS folder named got bios/bios
+        on a card not started once, and was refused on one started."""
+        for setup in self.setups:
+            if setup.name not in install._GAMES_PART_CARDS:
+                continue
+            started = _card_from_rules(self.root / setup.name / "started", setup)
+            blank = self.root / setup.name / "blank"
+            (blank / "bios").mkdir(parents=True)
+            for card in (started, blank):
+                with self.subTest(system=setup.name, card=card.name):
+                    choice = install.card_choice(setup.name, setup.plat, card / "bios")
+                    self.assertEqual((choice.refused, choice.folder), ("", card))
+            # A folder named bios holding bios/ is a card's root, as named.
+            nested = self.root / setup.name / "bios"
+            (nested / "bios").mkdir(parents=True)
+            self.assertEqual(install.card_choice(setup.name, setup.plat, nested).folder,
+                             nested)
+
+    def test_a_mister_card_gets_its_files_below_games(self):
+        """A MiSTer card mounted on a computer got RetroArch's list, and
+        with --platform misterfpga its files at the root, where MiSTer
+        reads none: it reads games/<core>/ below /media/fat."""
+        card = self.root / "MiSTer"
+        (card / "games").mkdir(parents=True)
+        (card / "_Computer").mkdir()
+        for name in ("MiSTer", "menu.rbf", "MiSTer.ini"):
+            (card / name).write_text("", encoding="utf-8")
+        self.assertEqual(install.card_system(card),
+                         ("misterfpga", card / "games", "MiSTer FPGA"))
+        for named in (card, card / "games"):
+            with self.subTest(named=named.name):
+                choice = install.card_choice("misterfpga", "misterfpga", named)
+                self.assertEqual((choice.refused, choice.folder), ("", card / "games"))
+        # A folder holding a games folder and nothing of MiSTer's is no card.
+        other = self.root / "stick"
+        (other / "games").mkdir(parents=True)
+        self.assertIsNone(install.card_system(other))
 
     def test_a_blank_drive_is_refused_where_the_card_always_names_its_system(self):
         blank = self.root / "BLANK"
@@ -7054,8 +7100,13 @@ class _CardFixtures:
     def narrowed(self, plat: str, **given) -> tuple[int, str, list]:
         """(exit code, what was said, the files kept) of a --dry-run narrowed
         as given."""
-        dest = self.root / "dest"
-        if not dest.exists():
+        dest = self.root / f"dest-{plat}"
+        if plat == "misterfpga" and not dest.exists():
+            # A MinUI card is another system's card for MiSTer's list.
+            dest.mkdir()
+            for marker in ("MiSTer", "menu.rbf"):
+                (dest / marker).write_text("", encoding="utf-8")
+        elif not dest.exists():
             make_card(dest, "MinUI")
         stream = io.StringIO()
         code = 0

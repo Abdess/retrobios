@@ -16,7 +16,7 @@
     # and Invoke-WebRequest throws on a cut transfer before the hash is read:
     # the site's build rewrites this line there (scripts/sitebootstrap.py).
     $mismatchAdvice = "The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-    $defaultInstallSha256 = "f0410caadbcc354efc86038decb95da63478ddf018cad03ec09e41ce2b5e4d63"
+    $defaultInstallSha256 = "d9b9e08c5a3ff983f8bb440512edd0c68e33493ff6c3c5b119dfe72582b3a3d1"
     $maximumInstallerBytes = 2MB
     $installerExit = 0
     $installer = if ($PSScriptRoot) { Join-Path $PSScriptRoot "install.py" } else { $null }
@@ -42,7 +42,11 @@
             }
             $temporary = Join-Path ([IO.Path]::GetTempPath()) ("retrobios-install-{0}.py" -f [Guid]::NewGuid())
             try {
-                Invoke-WebRequest -Uri $uri -OutFile $temporary -UseBasicParsing
+                # A server that takes the connection and never answers (a
+                # captive portal, a proxy) held the window forever with no
+                # line: the wait for an answer stops after 30 s, as curl's
+                # --connect-timeout in install.sh.
+                Invoke-WebRequest -Uri $uri -OutFile $temporary -UseBasicParsing -TimeoutSec 30
             } catch {
                 # The raw WebException read as a crash and named no next step.
                 throw ("The installer could not be downloaded from {0}: {1} " +

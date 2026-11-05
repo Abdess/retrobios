@@ -192,6 +192,29 @@ class TheBoundaryBoundsAlternatives(unittest.TestCase):
             install._validate_manifest(manifest, "retroarch")
 
 
+class OneDigestRuleAtTheBoundary(unittest.TestCase):
+    """install.py defined _SHA1_RE twice: the second, lowercase only,
+    replaced the first everywhere, so an uppercase sha1 was refused where
+    an uppercase sha256 passed. Every comparison reads the digest as
+    hashlib writes it, so both refuse uppercase, data trees included."""
+
+    def _manifest(self, **digests: str) -> dict:
+        entry = {"dest": "a.bin", "size": 1, "repo_path": "bios/a.bin", **digests}
+        return {"manifest_version": 2, "platform": "retroarch", "files": [entry]}
+
+    def test_sha1_and_sha256_follow_the_same_rule(self):
+        install._validate_manifest(self._manifest(sha1="a" * 40), "retroarch")
+        install._validate_manifest(self._manifest(sha256="a" * 64), "retroarch")
+        for digests in ({"sha1": "A" * 40}, {"sha256": "A" * 64}):
+            with self.subTest(digests=digests), self.assertRaises(ValueError):
+                install._validate_manifest(self._manifest(**digests), "retroarch")
+
+    def test_one_definition_each(self):
+        source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
+        for name in ("_SHA1_RE", "_SHA256_RE"):
+            self.assertEqual(source.count(f"\n{name} = "), 1, name)
+
+
 class APlatformOmissionKeepsItsClaim(unittest.TestCase):
     """A file the platform declares and a core reads, absent from the
     collection, was recorded under the core alone: RetroPie's dsi_nand.bin

@@ -14,6 +14,7 @@ import select
 import shlex
 import re
 import shutil
+import signal
 import socket
 import subprocess
 import sys
@@ -2288,6 +2289,80 @@ class TestAvailablePlatforms(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("retroarch", proc.stdout)
 
+    @unittest.skipIf(os.name == "nt", "the sh bootstrap is POSIX")
+    def test_ctrl_c_during_the_download_ends_with_130(self):
+        """Ctrl+C while install.py downloaded: the trap cleaned up and the
+        script went on to blame the network, with code 1."""
+        scratch = REPO_ROOT / "tmp" / "tests"
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+            root = Path(directory)
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            started = root / "started"
+            (fake_bin / "curl").write_text(
+                f"#!/bin/sh\n: > '{started}'\nexec sleep 60\n", encoding="utf-8")
+            (fake_bin / "curl").chmod(0o755)
+            env = {**os.environ, "PATH": f"{fake_bin}{os.pathsep}{os.environ['PATH']}",
+                   "TMPDIR": str(root),
+                   "RETROBIOS_INSTALL_URL": "https://example.invalid/install.py"}
+            for shell in ("sh", "bash"):
+                if not shutil.which(shell):
+                    continue
+                with self.subTest(shell=shell):
+                    started.unlink(missing_ok=True)
+                    proc = subprocess.Popen(
+                        [shell, "-s", "--", "--check"], cwd=root, env=env,
+                        stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE, text=True, start_new_session=True)
+                    proc.stdin.write((REPO_ROOT / "install.sh").read_text(encoding="utf-8"))
+                    proc.stdin.close()
+                    proc.stdin = None
+                    try:
+                        deadline = time.monotonic() + 30
+                        while not started.exists() and time.monotonic() < deadline:
+                            time.sleep(0.05)
+                        self.assertTrue(started.exists(), "the download never started")
+                        os.killpg(proc.pid, signal.SIGINT)
+                        _out, err = proc.communicate(timeout=30)
+                    finally:
+                        if proc.poll() is None:
+                            os.killpg(proc.pid, signal.SIGKILL)
+                            proc.communicate()
+                    self.assertEqual(proc.returncode, 130, err)
+                    self.assertNotIn("could not be downloaded", err)
+                    self.assertEqual(sorted(p.name for p in root.iterdir()),
+                                     ["bin", "started"])
+
+    @unittest.skipIf(os.name == "nt", "the sh bootstrap is POSIX")
+    def test_a_versioned_python_is_found_beside_an_old_python3(self):
+        """Buster keeps python3 at 3.7: the user installs python3.8 as the
+        advice says, and the bootstrap, trying python3 and python alone,
+        gave the same advice again."""
+        root = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.sh", root / "install.sh")
+        (root / "install.py").write_text("import sys\nprint('ran', sys.version_info >= (3, 8))\n")
+        fake_bin = root / "bin"
+        fake_bin.mkdir()
+        old = ("#!/bin/sh\ncase \"$*\" in *SystemExit*) exit 1 ;; esac\n"
+               "echo 3.7.3\n")
+        for name in ("python3", "python"):
+            (fake_bin / name).write_text(old)
+            (fake_bin / name).chmod(0o755)
+        tools = root / "tools"
+        tools.mkdir()
+        for tool in ("sh", "grep", "sort", "basename", "dirname", "uname", "sed", "tr"):
+            found = shutil.which(tool)
+            if found:
+                (tools / tool).symlink_to(found)
+        (fake_bin / "python3.11").symlink_to(sys.executable)
+        proc = subprocess.run(
+            [shutil.which("sh"), str(root / "install.sh")],
+            env={"PATH": f"{fake_bin}{os.pathsep}{tools}", "HOME": str(root)},
+            capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("ran True", proc.stdout)
+
     def test_a_failed_download_says_so_in_one_message(self):
         """Offline, the one-liner printed curl's progress table and
         "curl: (6) ...", then exited 6, a code the table does not list."""
@@ -2759,6 +2834,29 @@ class APyLauncherWithoutARuntimeIsPassed(unittest.TestCase):
             capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("installer ran", proc.stdout)
+
+
+@unittest.skipUnless(shutil.which("pwsh"), "needs PowerShell")
+class APowerShellDownloadThatNeverAnswersEnds(unittest.TestCase):
+    """Invoke-WebRequest had no timeout: behind a server that takes the
+    connection and never answers, the window waited forever with no line."""
+
+    def test_a_silent_server_ends_on_the_network_advice(self):
+        folder = Path(_tempdir(self))
+        shutil.copy(REPO_ROOT / "install.ps1", folder / "install.ps1")
+        with socket.socket() as listener:
+            listener.bind(("127.0.0.1", 0))
+            listener.listen(4)
+            port = listener.getsockname()[1]
+            started = time.monotonic()
+            proc = subprocess.run(
+                ["pwsh", "-NoProfile", "-File", str(folder / "install.ps1"), "--check"],
+                env={**os.environ,
+                     "RETROBIOS_INSTALL_URL": f"https://127.0.0.1:{port}/install.py"},
+                capture_output=True, text=True, timeout=150, stdin=subprocess.DEVNULL)
+        self.assertLess(time.monotonic() - started, 120)
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("could not be downloaded", " ".join((proc.stdout + proc.stderr).split()))
 
 
 class ThePowerShellWrapperPassesTheStatusOn(unittest.TestCase):
@@ -3264,6 +3362,28 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
         self.assertEqual(state.board, "Board bcm2711 found on the card (x)")
 
 
+class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
+    """Offline, --target on AmberELEC asked for install/targets/amberelec.json,
+    which exists nowhere: online the same run says it has no targets."""
+
+    def test_the_list_matches_the_published_targets(self):
+        published = {path.stem for path in (REPO_ROOT / "install" / "targets").glob("*.json")}
+        self.assertEqual(install.TARGET_PLATFORMS, published)
+
+    def test_offline_says_there_are_no_targets(self):
+        dest = Path(_tempdir(self))
+        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "amberelec.json")]):
+            with self.subTest(manifest=bool(extra)):
+                proc = subprocess.run(
+                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "amberelec",
+                     "--dest", str(dest), "--target", "rk3326", "--offline", "--no-input",
+                     "--dry-run", *extra],
+                    capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+                self.assertEqual(proc.returncode, 2, proc.stderr)
+                self.assertIn("AmberELEC has no hardware targets", proc.stderr)
+                self.assertNotIn("targets/amberelec.json", proc.stderr)
+
+
 class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
     """Batocera, Recalbox and ROCKNIX each write the board they were built
     for, but the installer read none of them, so a Batocera RPi4 installed
@@ -3279,6 +3399,42 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
                                         return_value={"HW_DEVICE": "RK3326"}):
             self.assertEqual(install.detect_board("rocknix"), "rk3326")
         self.assertIsNone(install.detect_board("retroarch"))
+
+    def test_retropie_names_its_pi_as_get_platform_does(self):
+        """A RetroPie Pi 4 installed every target's files, 8.4 GiB where
+        rpi4 needs 4.0: nothing read the Pi model."""
+        root = Path(_tempdir(self))
+        (root / "proc" / "device-tree").mkdir(parents=True)
+        cpuinfo = root / "proc" / "cpuinfo"
+        tree = root / "proc" / "device-tree" / "compatible"
+        cases = (
+            ("Hardware\t: BCM2835\nRevision\t: c03114\n", None, "rpi4"),
+            ("Revision\t: d04170\n", b"raspberrypi,5-model-b\0brcm,bcm2712\0", "rpi5"),
+            ("Hardware\t: BCM2835\nRevision\t: a02082\n", None, "rpi3"),
+            ("Hardware\t: BCM2835\nRevision\t: 000e\n", None, "rpi1"),
+            ("Hardware\t: ODROIDC\n", None, None),
+        )
+        with unittest.mock.patch.object(install, "_SYSTEM_ROOT", root):
+            # Not installed here: a computer preparing a Pi's card.
+            cpuinfo.write_text(cases[0][0])
+            self.assertIsNone(install.detect_board("retropie"))
+            (root / "opt" / "retropie").mkdir(parents=True)
+            for text, compatible, board in cases:
+                with self.subTest(board=board, text=text):
+                    cpuinfo.write_text(text)
+                    if compatible is None:
+                        tree.unlink(missing_ok=True)
+                    else:
+                        tree.write_bytes(compatible)
+                    self.assertEqual(install.detect_board("retropie"), board)
+            tree.unlink(missing_ok=True)
+            cpuinfo.write_text("processor\t: 0\n")
+            with unittest.mock.patch.object(install.platform, "machine",
+                                            return_value="x86_64"):
+                self.assertEqual(install.detect_board("retropie"), "x86_64")
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "retropie.json")
+                             .read_text(encoding="utf-8"))
+        self.assertLessEqual({*install._RPI_MODELS.values(), "x86_64"}, set(targets))
 
     def test_lakka_names_its_device_or_its_project(self):
         # An RPi4 Lakka installed 5.7 GB of every board's files: its board
@@ -4658,6 +4814,35 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         self.assertIn("File list: RetroArch", proc.stdout)
         self.assertIn("--platform", proc.stdout)
 
+    def test_check_says_in_place_only_when_the_data_files_are_too(self):
+        """The PSP BIOS in place and PPSSPP's assets absent: --check said
+        "Everything is in place." then "169 to fetch", and exited 1."""
+        dest = self.home / "psp"
+        (dest / "PPSSPP").mkdir(parents=True)
+        for repo_path in ("bios/Sony/PlayStation Portable/ppge_atlas.zim",
+                          "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta"):
+            shutil.copy(REPO_ROOT / repo_path, dest / "PPSSPP")
+        proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
+                            "--system", "sony-psp", "--check", "--no-input")
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertNotIn("Everything is in place", proc.stdout)
+        found = re.search(r"(\d+) in place, (\d+) missing", proc.stdout)
+        self.assertIsNotNone(found, proc.stdout)
+        self.assertIn(f"\n  {found.group(2)} data files to fetch\n", proc.stdout)
+
+    def test_check_gives_one_total_offline(self):
+        """Offline on an empty folder: "10805 missing", then "8164 files not in
+        place" and "8164 files need the internet", the data files left out."""
+        dest = self.home / "empty"
+        dest.mkdir()
+        proc = _install_run({**self.env, "RETROBIOS_INSTALL_OFFLINE": "1"}, "--platform",
+                            "retroarch", "--dest", str(dest), "--check", "--no-input",
+                            "--manifest", str(REPO_ROOT / "install" / "retroarch.json"))
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        missing = re.search(r"0 in place, (\d+) missing", proc.stdout).group(1)
+        self.assertIn(f"\n  {missing} files not in place:\n", proc.stdout)
+        self.assertIn(f"  {missing} files need the internet", proc.stdout)
+
     def test_a_cores_folder_can_be_named(self):
         cores = self.home / "cores"
         cores.mkdir()
@@ -4667,6 +4852,37 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
                             "--dry-run", "--no-input")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("to the installed cores", proc.stdout)
+
+    def test_a_cores_folder_that_cannot_be_listed_says_why(self):
+        """A typo (core/ for cores/) or a closed folder read as an empty
+        one: the run said "none in" and asked for the --cores-dir given."""
+        missing = self.home / "core"
+        a_file = self.home / "cores.txt"
+        a_file.write_text("")
+        for folder, why in ((missing, "does not exist"), (a_file, "is not a folder")):
+            with self.subTest(why=why):
+                proc = _install_run(self.env, "--platform", "retroarch", "--dest",
+                                    str(self.home / "s"), "--cores-dir", str(folder),
+                                    "--dry-run", "--no-input")
+                self.assertEqual(proc.returncode, 1)
+                self.assertIn(f"--cores-dir {folder} {why}", proc.stderr)
+                self.assertNotIn("none in", proc.stderr)
+
+    @unittest.skipIf(os.name == "nt" or os.geteuid() == 0,
+                     "a folder without read permission is POSIX")
+    def test_a_closed_cores_folder_says_so(self):
+        cores = self.home / "closed"
+        cores.mkdir()
+        (cores / "handy_libretro.so").write_bytes(b"")
+        os.chmod(cores, 0o000)
+        try:
+            proc = _install_run(self.env, "--platform", "retroarch", "--dest",
+                                str(self.home / "s"), "--cores-dir", str(cores),
+                                "--dry-run", "--no-input")
+        finally:
+            os.chmod(cores, 0o755)
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn(f"--cores-dir {cores} cannot be opened by this user", proc.stderr)
 
     def test_no_core_found_says_how_to_go_on(self):
         proc = _install_run(self.env, "--platform", "retroarch", "--dest",
@@ -4971,6 +5187,54 @@ class ANetworkFailureNamesTheNetwork(unittest.TestCase):
         self.assertIn("HTTPS_PROXY", text)
         self.assertIn("BIOS folder: /bios", text)
         self.assertNotIn("being written to", text)
+
+
+class AnHttpErrorNamesItsAddress(unittest.TestCase):
+    """A file the server answered 404 for ended on "HTTP 404" alone: no
+    address, no cause, and a mirror chosen with RETROBIOS_BASE_URL went
+    unnamed, as it did behind a NETWORK failure of that mirror."""
+
+    def _said(self, failures: list, base_url: str = "") -> str:
+        out = io.StringIO()
+        env = {"RETROBIOS_BASE_URL": base_url} if base_url else {}
+        with unittest.mock.patch.dict(os.environ, env), contextlib.redirect_stdout(out), \
+                self.assertRaises(SystemExit) as raised:
+            install._report_outcome([Path("/bios")], 0, 0, len(failures), 0, False,
+                                    failures=failures)
+        self.assertEqual(raised.exception.code, 2)
+        return " ".join(out.getvalue().split())
+
+    def _reason(self, kind: type, words: str, url: str) -> str:
+        reason = kind(words)
+        reason.url = url
+        return reason
+
+    def test_the_address_and_the_cause_are_said(self):
+        url = "https://raw.githubusercontent.com/Abdess/retrobios/main/bios/a.bin"
+        failures = [("a.bin", self._reason(install.HttpReason, "HTTP 404", url)),
+                    ("b.bin", self._reason(install.HttpReason, "HTTP 404", url + "x"))]
+        with unittest.mock.patch.dict(os.environ):
+            os.environ.pop("RETROBIOS_BASE_URL", None)
+            text = self._said(failures)
+        self.assertIn(f"The server answered HTTP 404 for {url} (and 1 other file).", text)
+        self.assertIn("running again changes nothing", text)
+        self.assertIn("BIOS folder: /bios", text)
+        self.assertNotIn("RETROBIOS_BASE_URL", text)
+
+    def test_a_mirror_named_in_the_environment_is_said(self):
+        mirror = "http://127.0.0.1:18766"
+        for kind, words in ((install.HttpReason, "HTTP 404"),
+                            (install.NetworkReason, "the connection timed out")):
+            with self.subTest(kind=kind.__name__):
+                text = self._said([("a.bin", self._reason(kind, words, f"{mirror}/a.bin"))],
+                                  base_url=mirror)
+                self.assertIn("RETROBIOS_BASE_URL is set in this environment", text)
+
+    def test_the_download_records_the_address(self):
+        error = urllib.error.HTTPError("https://x/bios/a.bin", 404, "Not Found", None, None)
+        reason = ANetworkFailureNamesTheNetwork._fail(self, error)
+        self.assertIsInstance(reason, install.HttpReason)
+        self.assertTrue(reason.url.endswith("/bios/a.bin"), reason.url)
 
 
 class RetroBatIsFoundWhereItSaysItIs(unittest.TestCase):
@@ -5400,20 +5664,43 @@ class BatoceraAndKnulliByWhatTheirBuildsWrite(unittest.TestCase):
                          [("emuelec", Path("/storage/roms"))])
         self.assertEqual(self._detect({"NAME": "CoreELEC", "ID": "coreelec"}, ()), [])
 
-    def test_a_knulli_board_is_named_and_not_narrowed(self):
-        board = Path(_tempdir(self)) / "knulli.arch"
-        board.write_text("a133")
-        with unittest.mock.patch.dict(install._DERIVATIVE_BOARDS,
-                                      {"knulli": ("Knulli", str(board))}):
-            self.assertEqual(install.derivative_board("knulli"), ("Knulli", "a133"))
-            self.assertIsNone(install.derivative_board("recalbox"))
+    def test_a_knulli_board_narrows_to_its_target(self):
+        """KNULLI publishes a core list per board since 2026-11-05, and an
+        H700 handheld still took every board's files (9.3 GB for 4.5)."""
+        arch = Path(_tempdir(self)) / "knulli.arch"
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "knulli.json")
+                             .read_text(encoding="utf-8"))
+        for written, board in (("h700", "h700"), ("rk3568", "rk3566"), ("unknown", None)):
+            arch.write_text(written)
+            with self.subTest(written=written), unittest.mock.patch.dict(
+                    install._BOARD_SOURCES, {"knulli": ("file", str(arch))}):
+                self.assertEqual(install.detect_board("knulli"), board)
+                if board:
+                    self.assertIn(board, targets)
+
+    def test_a_batocera_zen3_board_narrows_to_its_target(self):
+        """batocera.arch says x86-64-v3 on a zen3 image, which no target
+        list names: the run installed the files of every board."""
+        arch = Path(_tempdir(self)) / "batocera.arch"
+        arch.write_text("x86-64-v3")
+        with unittest.mock.patch.dict(install._BOARD_SOURCES,
+                                      {"batocera": ("file", str(arch))}):
+            self.assertEqual(install.detect_board("batocera"), "zen3")
+
+    def test_each_board_name_is_a_published_target(self):
+        for plat, names in install._BOARD_NAMES.items():
+            targets = json.loads((REPO_ROOT / "install" / "targets" / f"{plat}.json")
+                                 .read_text(encoding="utf-8"))
+            for written, board in names.items():
+                with self.subTest(platform=plat, board=board):
+                    self.assertIn(board, targets)
+                    self.assertNotIn(written, targets)
 
     def test_the_run_says_why_every_board_is_installed(self):
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         block = source[source.index("board = detect_board(plat_name)"):]
         block = block[:block.index("if target:")]
         self.assertIn("has no", block)
-        self.assertIn("derivative_board(plat_name)", block)
 
 
 class RomMFirmwareFollowsItsTemplate(unittest.TestCase):
