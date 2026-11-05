@@ -27,7 +27,7 @@ import zipfile
 from collections.abc import Iterator
 from pathlib import Path
 from artifacts import file_lock as _file_lock, set_plain_mode
-from common import github_token, platform_arg, require_platform, yaml_load
+from common import github_token, platform_arg, require_platform, suggest_names, yaml_load
 
 try:
     import yaml
@@ -607,7 +607,7 @@ def main() -> None:
 
     if args.key:
         if args.key not in registry:
-            log.error("unknown key: %s (available: %s)", args.key, ", ".join(registry))
+            log.error("unknown key: %s. %s", args.key, suggest_names([args.key], list(registry), "--dry-run"))
             raise SystemExit(1)
         allowed = registry[args.key].get("for_platforms")
         if args.platform and allowed and args.platform not in allowed:

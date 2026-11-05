@@ -83,6 +83,20 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
         self.assertNotIn("board-0", message)
 
 
+
+class AMistypedDataKeyGetsTheClosestName(unittest.TestCase):
+    """`--key dolphin-sis` printed all 27 keys on one line."""
+
+    def test_did_you_mean(self):
+        proc = subprocess.run(
+            [sys.executable, "scripts/refresh_data_dirs.py", "--key", "dolphin-sis", "--dry-run"],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("unknown key: dolphin-sis. Did you mean: dolphin-sys? --dry-run lists all",
+                      proc.stderr)
+        self.assertNotIn("ppsspp-assets", proc.stderr)
+
 class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
     """The markdown wrote `**Remove** hiscore.dat (phantom)` beside six
     `**Add** hiscore.dat`, none with a path, for files profiled cores read."""
