@@ -3380,11 +3380,13 @@ def _emulator_named_link(key: str, prefix: str = "") -> str:
     return f"[{label}]({prefix}emulators/{key}.md)"
 
 
-def _served_line(f: dict) -> str:
+def _served_line(f: dict, declared_sha1: str = "") -> str:
     """Which collection file answers the entry, from the resolver's result.
 
     "OK" with no path gave an expert nothing to check: Batocera's
     scph1001.bin is served by bios/Sony/PlayStation/scph1001_v20.bin.
+    The copy's sha1 is named only when it is not one the row already
+    declares (Recalbox joins several with commas).
     """
     path = str(f.get("path") or "")
     if f.get("status") == "missing":
@@ -3399,8 +3401,9 @@ def _served_line(f: dict) -> str:
         return f"{label}: {_code(path)}"
     # The card of that copy: every hash, provenance and the download.
     page = urllib.parse.quote(card_page(path, sha1))
-    return (f"{label}: [{_code(path)}](../systems/{page}.md#sha1-{sha1[:12]}) "
-            f"(sha1 `{sha1[:8]}`)")
+    link = f"{label}: [{_code(path)}](../systems/{page}.md#sha1-{sha1[:12]})"
+    declared = {value.strip().lower() for value in declared_sha1.split(",")}
+    return link if sha1 in declared else f"{link} (sha1 `{sha1[:8]}`)"
 
 
 # Platforms whose launcher records are read from the repository and revision
@@ -3559,7 +3562,7 @@ def _platform_file_row(f: dict, cfg_entry: dict, hash_type: str = "",
             "unread": "No core the platform runs opens it"}.get(f.get("category", ""))
     if kind:
         facts.append(kind)
-    served = _served_line(f)
+    served = _served_line(f, str(hashes["sha1"] or ""))
     if served:
         facts.append(_inline_html(served))
     if f.get("category_evidence"):

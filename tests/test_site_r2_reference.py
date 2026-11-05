@@ -152,6 +152,11 @@ class EachEntryNamesItsFile(unittest.TestCase):
         self.assertRegex(served, rf"\]\(\.\./systems/[^)]+\.md#sha1-{digest[:12]}\)")
         self.assertTrue(served.startswith("Served by: "))
         self.assertIn(f"`{digest[:8]}`", served)
+        # The row already shows the declared sha1: repeating it said nothing.
+        quiet = generate_site._served_line({"status": "ok", "path": path}, f"aaaa, {digest.upper()}")
+        self.assertNotIn(digest[:8], quiet.split(")", 1)[1])
+        self.assertIn(f"`{digest[:8]}`", generate_site._served_line(
+            {"status": "ok", "path": path}, "a" * 40))
         self.assertEqual(generate_site._served_line({"status": "missing"}), "Not held")
         self.assertTrue(generate_site._served_line(
             {"status": "untested", "path": path}).startswith("Held, not the declared hash"))
