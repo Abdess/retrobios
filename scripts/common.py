@@ -691,7 +691,7 @@ def load_target_config(
             # --target but have no --list-targets of their own.
             + suggest_names(
                 [target], sorted(alias_index),
-                f"verify.py --platform {platform_name} --list-targets", len(targets),
+                f"python scripts/verify.py --platform {platform_name} --list-targets", len(targets),
             )
         )
 

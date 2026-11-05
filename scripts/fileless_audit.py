@@ -128,7 +128,7 @@ def main() -> None:
     if unknown:
         raise SystemExit(
             "ERROR: unknown profile " + ", ".join(unknown) + ". "
-            + suggest_names(unknown, known, "verify.py --list-emulators")
+            + suggest_names(unknown, known, "python scripts/verify.py --list-emulators")
         )
     names = args.emulators
     if args.all:

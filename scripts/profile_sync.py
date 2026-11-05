@@ -4414,7 +4414,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
             )
             raise SystemExit(
                 f"ERROR: unknown profile {', '.join(unknown)}. "
-                + suggest_names(unknown, listed, "verify.py --list-emulators")
+                + suggest_names(unknown, listed, "python scripts/verify.py --list-emulators")
             )
         return {name: profiles[name] for name in dict.fromkeys(names)}
 
@@ -4451,7 +4451,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
         if args.system:
             # Suggested from the spellings the named listing prints.
             systems = sorted(spelling for spelling, _ in system_index(profiles).values())
-            hint = " " + suggest_names([args.system], systems, "verify.py --list-systems")
+            hint = " " + suggest_names([args.system], systems, "python scripts/verify.py --list-systems")
         elif args.type_:
             kinds = sorted({str(p.get("type")) for p in profiles.values() if p.get("type")})
             hint = f" Types: {', '.join(kinds)}."

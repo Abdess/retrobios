@@ -524,7 +524,7 @@ def check_native(
             )
             if reason:
                 reason += (
-                    f", export_native.py --platform {name} --refresh-cache"
+                    f", python scripts/export_native.py --platform {name} --refresh-cache"
                     " fetches it, then the export is written again"
                 )
             else:
@@ -532,7 +532,7 @@ def check_native(
                     name, exporter_class, truth_dir, platforms_dir, cache_dir, published
                 )
                 if reason:
-                    reason += f", export_native.py --platform {name} writes it again"
+                    reason += f", python scripts/export_native.py --platform {name} writes it again"
         findings.append(
             Finding(
                 "native",
@@ -974,7 +974,7 @@ def check_coreinfo(
     if recorded is None:
         findings.append(Finding(
             "coreinfo", "reviewed .info", UNKNOWN,
-            detail=f"no {record_path.name}: run check_freshness.py --record-coreinfo",
+            detail=f"no {record_path.name}: run python scripts/check_freshness.py --record-coreinfo",
         ))
         return findings
     findings.extend(
@@ -982,7 +982,7 @@ def check_coreinfo(
             "coreinfo", name, STALE,
             local=(recorded.get(name) or "not recorded")[:12], remote=blobs[name][:12],
             detail=(".info changed since reviewed: read its firmware, then "
-                    f"check_freshness.py --record-coreinfo {name}"),
+                    f"python scripts/check_freshness.py --record-coreinfo {name}"),
         )
         for name in coreinfo_drift(blobs, recorded, profiles)
     )
@@ -1456,7 +1456,7 @@ def check_source_paths(profiles: dict) -> Finding:
         "source-paths.json",
         STALE if problems else OK,
         local=f"{len(recorded)} trees",
-        detail=(", ".join(problems) + ": run scripts/sitesources.py --fetch") if problems
+        detail=(", ".join(problems) + ": run python scripts/sitesources.py --fetch") if problems
         else "every pinned tree is recorded, and only those",
     )
 
@@ -1468,7 +1468,7 @@ def check_profiles(run: bool, offline: bool) -> list[Finding]:
                 "profiles",
                 "profile_sync",
                 SKIPPED,
-                detail="pass --profiles, or run profile_sync.py --all --triage",
+                detail="pass --profiles, or run python scripts/profile_sync.py --all --triage",
             )
         ]
     cmd = [

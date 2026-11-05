@@ -2725,7 +2725,8 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
             if args.platform:
                 print(
                     f"  {platform_name}: FAIL (no pack in {args.output_dir}; build it with "
-                    f"generate_pack.py --platform {platform_name} --output-dir {args.output_dir})"
+                    f"python scripts/generate_pack.py --platform {platform_name} "
+                    f"--output-dir {args.output_dir})"
                 )
                 all_ok = False
                 failing.append(f"{platform_name} (no pack)")
