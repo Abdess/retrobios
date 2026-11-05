@@ -632,7 +632,7 @@ def _project_main_line() -> str | None:
     if fetched.returncode != 0:
         raise RuntimeError(
             f"this clone does not hold the main of {PROJECT_URLS[0]}, and "
-            f"fetching it from {source} failed: {fetched.stderr.strip()}"
+            f"fetching its main from {source} failed: {fetched.stderr.strip()}"
         )
     return "FETCH_HEAD"
 

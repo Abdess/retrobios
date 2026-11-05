@@ -422,7 +422,11 @@ class BuiltBatoceraPage(unittest.TestCase):
         # PlayStation's list is long enough to sit on a page of its own.
         pages = [main] + [p.read_text(encoding="utf-8") for p in
                           (DIST / "platforms").glob("batocera-sony-playstation*/index.html")]
-        html = "".join(pages)
+        # Read as a browser shows it: a page with no tab bar is plain
+        # Markdown, which keeps the entity a name's underscore is written as.
+        import html as _html
+
+        html = _html.unescape("".join(pages))
         for text in ("Served by:", "scph1001_v20.bin", "https://github.com/stenzek/duckstation/blob/"):
             with self.subTest(text=text):
                 self.assertTrue(text in html)
