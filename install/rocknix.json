@@ -6,7 +6,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "20261001",
-  "generated": "2026-11-05T18:31:29Z",
+  "generated": "2026-11-05T18:33:47Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -2480,7 +2480,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
@@ -2490,7 +2490,7 @@
           "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
           "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
           "size": 8192,
-          "repo_path": "bios/Other/zesarux/sms.rom",
+          "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
           "cores": [
             "emux_sms",
             "gearsystem",
@@ -4995,7 +4995,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "ares",
         "genesis_plus_gx",
@@ -5032,7 +5032,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "ares",
         "genesis_plus_gx",
@@ -58501,7 +58501,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": [
         "fuse"
       ]

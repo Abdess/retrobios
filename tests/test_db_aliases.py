@@ -250,5 +250,70 @@ class AliasesFollowContentNotPrimaryCopy(unittest.TestCase):
         self.assertIn("_collect_all_aliases(files, aliases)", source)
 
 
+class TheSmsBiosKeepsItsNames(unittest.TestCase):
+    """RetroArch pins bios_E.sms and bios_U.sms to the v1.3 BIOS. Its only
+    path was ZEsarUX's sms.rom, which sorted before bios/Sega/Master System/,
+    and the two names were refused because .variants/ copies carried them.
+    Genesis Plus GX then got the Store Display Unit BIOS as bios_U.sms."""
+
+    def test_a_name_only_variants_carry_is_registered_for_the_pinned_content(self):
+        files = {
+            "v13": {"name": "SMS_us_1.3.sms", "path": "bios/Sega/MS/SMS_us_1.3.sms", "md5": "m13"},
+            "kiosk": {"name": "bios_U.sms", "path": "bios/Sega/MS/.variants/bios_U.sms.ee2c29ba",
+                      "md5": "mk"},
+        }
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            previous = os.getcwd()
+            os.chdir(tmp)
+            try:
+                Path("platforms").mkdir()
+                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    status: active\n")
+                Path("platforms/p.yml").write_text(
+                    "systems:\n  sms:\n    files:\n"
+                    '      - name: "bios_U.sms"\n        sha1: "v13"\n'
+                )
+                aliases = generate_db._collect_all_aliases(files)
+            finally:
+                os.chdir(previous)
+        self.assertIn("bios_U.sms", {a["name"] for a in aliases.get("v13", [])})
+
+    def test_a_primary_name_still_refuses_another_content(self):
+        files = {
+            "v13": {"name": "SMS_us_1.3.sms", "path": "bios/Sega/MS/SMS_us_1.3.sms", "md5": "m13"},
+            "other": {"name": "bios_U.sms", "path": "bios/Sega/MS/bios_U.sms", "md5": "mo"},
+        }
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            previous = os.getcwd()
+            os.chdir(tmp)
+            try:
+                Path("platforms").mkdir()
+                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    status: active\n")
+                Path("platforms/p.yml").write_text(
+                    "systems:\n  sms:\n    files:\n"
+                    '      - name: "bios_U.sms"\n        sha1: "v13"\n'
+                )
+                aliases = generate_db._collect_all_aliases(files)
+            finally:
+                os.chdir(previous)
+        self.assertEqual(aliases, {})
+
+    def test_a_copy_under_its_machine_is_the_path_over_an_emulator_tree(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            bios = Path(tmp) / "bios"
+            for rel in ("Other/zesarux/sms.rom", "Sega/Master System/SMS_us_1.3.sms"):
+                (bios / rel).parent.mkdir(parents=True, exist_ok=True)
+                (bios / rel).write_bytes(b"v1.3")
+            (bios / "Other/zesarux/own.rom").write_bytes(b"only zesarux")
+            files, copies, _cache = generate_db.scan_bios_dir(bios, {}, True)
+        paths = {entry["path"] for entry in files.values()}
+        self.assertIn("bios/Sega/Master System/SMS_us_1.3.sms", paths)
+        self.assertIn("bios/Other/zesarux/own.rom", paths)
+        self.assertNotIn("bios/Other/zesarux/sms.rom", paths)
+        self.assertIn(
+            "bios/Other/zesarux/sms.rom",
+            {copy["path"] for entries in copies.values() for copy in entries},
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

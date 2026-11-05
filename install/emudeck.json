@@ -6,7 +6,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "2.7EA",
-  "generated": "2026-11-05T18:31:29Z",
+  "generated": "2026-11-05T18:33:47Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -4005,18 +4005,6 @@
       ]
     },
     {
-      "dest": "bios_U.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
-      "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
-      "cores": [
-        "ares",
-        "genesis_plus_gx",
-        "genesis_plus_gx_wide"
-      ]
-    },
-    {
       "dest": "bios_J.sms",
       "sha1": "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2",
       "sha256": "67846e26764bd862f19179294347f7353a4166b62ac4198a5ec32933b7da486e",
@@ -4033,18 +4021,6 @@
       ],
       "region_groups": [
         "master-system"
-      ]
-    },
-    {
-      "dest": "bios_E.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
-      "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
-      "cores": [
-        "ares",
-        "genesis_plus_gx",
-        "genesis_plus_gx_wide"
       ]
     },
     {
@@ -20656,7 +20632,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "mesence",
         "emux_sms",
@@ -72656,7 +72632,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": [
         "fuse"
       ]
@@ -72829,6 +72805,28 @@
       "repo_path": "bios/Fujitsu/FM Towns/fmtownsftv.zip",
       "cores": [
         "geartowns"
+      ]
+    },
+    {
+      "dest": "bios_U.sms",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "cores": [
+        "genesis_plus_gx",
+        "genesis_plus_gx_wide"
+      ]
+    },
+    {
+      "dest": "bios_E.sms",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "cores": [
+        "genesis_plus_gx",
+        "genesis_plus_gx_wide"
       ]
     },
     {

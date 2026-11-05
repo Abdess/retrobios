@@ -6,7 +6,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "10.1.1",
-  "generated": "2026-11-05T12:13:24Z",
+  "generated": "2026-11-05T18:33:47Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -280,9 +280,9 @@
     }
   ],
   "total_files": 3743,
-  "total_size": 4682430801,
+  "total_size": 4682168657,
   "pack_files": 3745,
-  "pack_size": 4682430801,
+  "pack_size": 4682168657,
   "total_omitted": 62,
   "omitted_files": [
     {
@@ -5681,7 +5681,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
@@ -5692,7 +5692,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
@@ -40151,7 +40151,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": [
         "fuse"
       ],
@@ -40255,7 +40255,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "gearsystem"
       ],
@@ -45545,10 +45545,10 @@
     },
     {
       "dest": "bios_U.sms",
-      "sha1": "fc465122134d95363112eb51b9ab71db3576cefd",
-      "sha256": "6f4e6de10f1d07bda695c629c67457bb0248eeb8ffa0c61a2742b8529274de30",
-      "size": 16384,
-      "repo_path": "bios/Sega/Master System/.variants/bios_U.sms.ee2c29ba",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "genesis_plus_gx",
         "genesis_plus_gx_wide"
@@ -45568,10 +45568,10 @@
     },
     {
       "dest": "bios_E.sms",
-      "sha1": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
-      "sha256": "c51ec80b7a609c5ee3d203ceee2b602ae4dfb4479caf15dc1d030c40c0364e93",
-      "size": 262144,
-      "repo_path": "bios/Sega/Master System/.variants/bios_E.sms.81c3476b",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": [
         "genesis_plus_gx",
         "genesis_plus_gx_wide"

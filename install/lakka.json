@@ -6,7 +6,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "v6.1",
-  "generated": "2026-11-05T18:31:29Z",
+  "generated": "2026-11-05T18:33:47Z",
   "base_destination": "system",
   "detect": [
     {
@@ -9424,7 +9424,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
@@ -9434,7 +9434,7 @@
           "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
           "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
           "size": 8192,
-          "repo_path": "bios/Other/zesarux/sms.rom",
+          "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
           "cores": [
             "emux_sms",
             "gearsystem",
@@ -9449,17 +9449,17 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
       ],
       "alternatives": [
         {
-          "sha1": "6aca0e3dffe461ba1cb11a86cd4caf5b97e1b8df",
-          "sha256": "c51ec80b7a609c5ee3d203ceee2b602ae4dfb4479caf15dc1d030c40c0364e93",
-          "size": 262144,
-          "repo_path": "bios/Sega/Master System/.variants/bios_E.sms.81c3476b",
+          "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+          "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+          "size": 8192,
+          "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
           "cores": [
             "genesis_plus_gx",
             "genesis_plus_gx_wide"
@@ -9504,7 +9504,7 @@
       "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/sms.rom",
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
       "cores": null,
       "systems": [
         "sega-master-system"
@@ -9523,10 +9523,10 @@
       ],
       "alternatives": [
         {
-          "sha1": "fc465122134d95363112eb51b9ab71db3576cefd",
-          "sha256": "6f4e6de10f1d07bda695c629c67457bb0248eeb8ffa0c61a2742b8529274de30",
-          "size": 16384,
-          "repo_path": "bios/Sega/Master System/.variants/bios_U.sms.ee2c29ba",
+          "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+          "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+          "size": 8192,
+          "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
           "cores": [
             "genesis_plus_gx",
             "genesis_plus_gx_wide"
@@ -10260,7 +10260,7 @@
       "sha1": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
       "sha256": "6bb2eb282723e539f627a33002c2c31b633b4d3b712755f28696f0c4e49470f2",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v1.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-1.rom",
       "cores": null,
       "systems": [
         "sinclair-zx-spectrum"
@@ -10271,7 +10271,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": null,
       "systems": [
         "sinclair-zx-spectrum"
@@ -87792,7 +87792,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": [
         "fuse"
       ],

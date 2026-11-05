@@ -6,7 +6,7 @@
   "platform": "myminui",
   "display_name": "MyMinUI",
   "version": "2026-08-09",
-  "generated": "2026-11-03T13:36:34Z",
+  "generated": "2026-11-05T18:33:47Z",
   "base_destination": "",
   "detect": [
     {
@@ -1002,7 +1002,7 @@
       "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/if1-v2.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
       "cores": [
         "fuse"
       ]
