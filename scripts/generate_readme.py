@@ -37,6 +37,7 @@ from common import (
 from nativemode import check_label
 import release_record
 from siteguides import install_command
+from validate_pr import LARGE_FILE_ISSUE_URL
 from verify import verify_platform
 
 
@@ -929,8 +930,12 @@ the most useful contribution.
 
 From a clone, the file goes to `bios/Manufacturer/Console/filename`, and
 `python scripts/validate_pr.py path/to/file` names that folder for a file still
-outside `bios/`. Given a folder, such as an old card's BIOS folder, it checks
-every file under it. A file over the browser's 25 MB limit goes in that way.
+outside `bios/`, and `--place` copies it there under its declared name. Given a
+folder, such as an old card's BIOS folder, it checks every file under it. A
+file over the browser's 25 MB limit goes in that way, up to the 100 MB GitHub
+accepts in a push. A larger file stays out of the pull request: [open an
+issue]({LARGE_FILE_ISSUE_URL}) with the hashes `validate_pr.py` prints, and a
+maintainer adds it to the `large-files` release.
 
 ## Add a platform
 
@@ -969,18 +974,22 @@ validation above is its check. For code, profiles or platform files, these are
 the checks CI runs on a pull request (Python 3.12 or newer):
 
 ```bash
-pip install pyyaml "jsonschema[format-nongpl]" markdown
+pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
 python scripts/profile_sync.py --added --base upstream/main --strict  # each profile the branch adds
 python scripts/refresh_data_dirs.py  # data directories the pack-building tests read
 python scripts/generate_site.py       # the pages the site tests read
+npm ci --prefix website && npm run build --prefix website  # the built site, Node 24
 python -m unittest discover -s tests -t .
+python scripts/validate_site.py --site-dir website/dist  # links and page budgets
+vermin --no-tips -t=3.8- --violations install.py         # install.py stays on Python 3.8
 ```
 
 `upstream` is this repository as a remote of your fork
-(`git remote add upstream https://github.com/Abdess/retrobios`). A profile you
-only edit is not held to `--strict`: its older refs are reviewed by hand.
+(`git remote add upstream https://github.com/Abdess/retrobios`, then
+`git fetch upstream`). A profile you only edit is not held to `--strict`: its
+older refs are reviewed by hand.
 
 The full pipeline is not needed for a contribution: it rebuilds every pack
 in `dist/`, which is why maintainers run it before a release.

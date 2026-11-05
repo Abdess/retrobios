@@ -17,7 +17,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from cross_reference import FileConsumers  # noqa: E402
+from cross_reference import FileConsumers, entry_target  # noqa: E402
 from generate_site import generate_system_page  # noqa: E402
 
 _TMP = tempfile.TemporaryDirectory()
@@ -246,7 +246,6 @@ class EveryReaderIsTheEmulatorPackFile(unittest.TestCase):
             build_zip_contents_index, load_data_dir_registry,
             load_emulator_profiles, resolve_local_file,
         )
-        from validation import with_archive_members
 
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
@@ -275,9 +274,12 @@ class EveryReaderIsTheEmulatorPackFile(unittest.TestCase):
                 if members:
                     from_trees |= {(sha1, name) for sha1 in members.values()}
                     continue
+                # A ROM read inside an archive is the archive, as the
+                # emulator pack resolves it (archive_entry).
+                target, dest = entry_target(entry, files)
                 path, status = resolve_local_file(
-                    {**with_archive_members(entry, files), "source_profile": name},
-                    db, zips, dest_hint=entry.get("path") or "",
+                    {**target, "source_profile": name},
+                    db, zips, dest_hint=dest,
                     data_dir_registry=registry,
                 )
                 if path and status not in ("not_found", "hash_mismatch"):

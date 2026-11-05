@@ -21,6 +21,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -36,6 +37,7 @@ from common import (
 )
 from hashing import parse_hash_list
 from nativemode import digest_algorithm
+from dedup import _in_nodedup_dir
 from validation import frontend_digest_matches, inner_rom_check
 
 try:
@@ -79,6 +81,13 @@ class ValidationResult:
         self.md5 = ""
         self.crc32 = ""
         self.size = 0
+        # "held" (a copy of a file the collection has) or "unknown" (no list
+        # or profile declares it): no check fails, and neither is a file
+        # the pull request adds to the collection.
+        self.outcome = ""
+        # Where --place copies the file: one folder and one declared name, or
+        # the .variants/ slot of a name the collection already holds.
+        self.destination = ""
 
     def add_check(self, passed: bool, message: str) -> None:
         self.checks.append(("PASS" if passed else "FAIL", message))
@@ -93,8 +102,12 @@ class ValidationResult:
     def passed(self) -> bool:
         return all(s != "FAIL" for s, _ in self.checks)
 
+    @property
+    def status(self) -> str:
+        return "FAIL" if not self.passed else "REVIEW" if self.outcome else "PASS"
+
     def to_markdown(self) -> str:
-        status = "PASS" if self.passed else "FAIL"
+        status = self.status
         lines = [f"### {status} `{self.filename}`"]
         lines.append("")
         lines.append(f"- **Path**: `{self.filepath}`")
@@ -147,7 +160,7 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
     under, read from the other files of that system it holds.
     """
     known = {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
-             "names": set(), "folders": {}, "sizes": {}, "entries": {}}
+             "names": set(), "folders": {}, "sizes": {}, "entries": {}, "named": {}}
     systems_of: dict[str, set[str]] = {}
     folders_of: dict[str, dict[str, int]] = {}
     files = (db or {}).get("files", {})
@@ -194,6 +207,9 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
                     )
                 for value in (*sha1s, *md5s):
                     systems_of.setdefault(value, set()).add(system_id)
+                for value in (*sha1s, *md5s, *sha256s):
+                    if "name" in file_entry:
+                        known["named"].setdefault(value, set()).add(file_entry["name"])
                 _note_folder(folders_of, system_id, files, by_md5, sha1s, md5s)
 
     known["folders"] = _system_homes(systems_of, folders_of)
@@ -251,6 +267,7 @@ def load_profile_hashes(
     """
     known: dict[str, dict] = {
         "sha1": {}, "sha256": {}, "md5": {}, "crc32": {}, "sizes": {}, "folders": {},
+        "named": {},
     }
     systems_of: dict[str, set[str]] = {}
     folders_of: dict[str, dict[str, int]] = {}
@@ -274,6 +291,8 @@ def load_profile_hashes(
             for algo, values in hashes.items():
                 for value in values:
                     known[algo].setdefault(value, set()).add(emulator)
+                    if isinstance(entry.get("name"), str):
+                        known["named"].setdefault(value, set()).add(entry["name"])
             # The entry's own system, or the profile's when it emulates one.
             system = entry.get("system") or (
                 declared_systems[0] if len(declared_systems) == 1 else None
@@ -374,9 +393,15 @@ def validate_file(
                 # PR that regenerated database.json was told each new file
                 # duplicated itself.
                 result.add_check(True, "Already in the database at this path")
+            elif _in_nodedup_dir(relative):
+                result.add_info(
+                    f"Identical to `{existing['path']}`, kept: this tree is read by path"
+                )
             else:
+                result.outcome = "held"
                 result.add_warning(
-                    f"Duplicate: identical file already exists at `{existing['path']}`"
+                    f"Already held at `{existing['path']}`: nothing to add, "
+                    "leave this copy out of the pull request"
                 )
         else:
             result.add_check(True, "Not a duplicate in database")
@@ -421,8 +446,11 @@ def validate_file(
             "Filename matches a known requirement but hash differs - may be a variant"
         )
     else:
+        result.outcome = "unknown"
         result.add_warning(
-            "File not referenced in any platform config - needs manual review"
+            "Not recognised: no platform list or emulator profile declares this "
+            "file. Say in the pull request which emulator reads it, for which "
+            "system, and where the dump comes from"
         )
 
     normalized = os.path.normpath(relative)
@@ -452,11 +480,27 @@ def validate_file(
             result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
         else:
             result.add_warning("File should be in bios/Manufacturer/Console/ structure")
+    elif result.outcome == "held":
+        pass
     elif expected_folders:
         # The contributor asks before forking: say where it goes.
+        names = {
+            name
+            for table in (platform_hashes, profile_hashes)
+            for value in (result.sha1, result.md5, hashes.get("sha256", ""))
+            for name in table.get("named", {}).get(value, ())
+        }
+        name = next(iter(names)) if len(names) == 1 else ""
+        if len(expected_folders) == 1 and name and "/" not in name:
+            folder = expected_folders[0]
+            result.destination = (
+                f"{folder}.variants/{name}.{result.sha1[:8]}"
+                if os.path.exists(folder + name) else folder + name
+            )
         result.add_warning(
             "File is not under bios/ yet. Its system's files are in "
             + " or ".join(f"`{f}`" for f in expected_folders)
+            + (f". --place copies it to `{result.destination}`" if result.destination else "")
         )
     elif _variant_home(db, result.filename, result.sha1):
         result.add_warning(
@@ -485,9 +529,11 @@ def validate_file(
     if (name_known and not (sha1_known or md5_known or other_known or accepted_by)
             and not by_profile and size_fits):
         home = _variant_home(db, result.filename)
+        slot = f"{home}.variants/{result.filename}.{result.sha1[:8]}"
+        if home and not normalized.startswith("bios" + os.sep):
+            result.destination = slot
         result.add_info(
-            "This may be a valid variant. If accepted, it will be placed in "
-            f"`{home}.variants/{result.filename}.{result.sha1[:8]}`"
+            f"This may be a valid variant. If accepted, it will be placed in `{slot}`"
         )
 
     return result
@@ -558,30 +604,35 @@ def _repo_key(url: str) -> str:
 
 
 def _project_main_line() -> str | None:
-    """The project's main line, fetched when no remote of this clone names it.
+    """The project's main line, fetched when this clone does not hold it.
 
     A fork's clone has origin alone. Once the commit is pushed to the fork's
     main, origin/main is HEAD and the diff against it was empty, so --changed
-    found nothing and exited 0. None leaves the upstream/ and origin/ lines
-    in charge: a remote of that name names the project, or the clone has no
-    remote at all and only its uncommitted files can be read.
+    found nothing and exited 0. A remote added as CONTRIBUTING says and never
+    fetched did the same: upstream/main did not exist and origin/main won.
+    None leaves the upstream/ and origin/ lines in charge when the clone has
+    no remote at all and only its uncommitted files can be read.
     """
     remotes = _git_lines("remote") or []
     if not remotes:
         return None
     project = {_repo_key(url) for url in PROJECT_URLS}
+    source = PROJECT_URLS[0]
     for remote in remotes:
         urls = _git_lines("remote", "get-url", "--all", remote) or []
         if any(_repo_key(url) in project for url in urls):
-            return None if remote in ("upstream", "origin") else f"{remote}/main"
+            if _git_lines("rev-parse", "--verify", "--quiet", f"{remote}/main"):
+                return f"{remote}/main"
+            source = remote
+            break
     fetched = subprocess.run(
-        ["git", "fetch", "--quiet", "--no-tags", PROJECT_URLS[0], "main"],
+        ["git", "fetch", "--quiet", "--no-tags", source, "main"],
         capture_output=True, text=True, check=False,
     )
     if fetched.returncode != 0:
         raise RuntimeError(
-            f"no remote of this clone is {PROJECT_URLS[0]}, and fetching its "
-            f"main failed: {fetched.stderr.strip()}"
+            f"this clone does not hold the main of {PROJECT_URLS[0]}, and "
+            f"fetching its main from {source} failed: {fetched.stderr.strip()}"
         )
     return "FETCH_HEAD"
 
@@ -675,6 +726,28 @@ def _files_to_validate(
     return files
 
 
+def place(results: list[ValidationResult]) -> list[str]:
+    """Copy each placeable file to its destination, never over a file.
+
+    The report named the folder of each file and left 40 copies from a card
+    to be made by hand, each .variants/ name retyped. The source is copied,
+    not moved: it is often a card or another tree the contributor keeps.
+    """
+    placed = []
+    for r in results:
+        if not (r.passed and r.destination and not r.outcome):
+            continue
+        target = Path(r.destination)
+        if target.exists():
+            print(f"not placed: {target} exists", file=sys.stderr)
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(r.filepath, target)
+        placed.append(r.destination)
+        print(f"placed {r.filepath} at {r.destination}", file=sys.stderr)
+    return placed
+
+
 def _load_database_if_any(path: str) -> dict | None:
     """The database, optional only where the default is meant.
 
@@ -709,6 +782,11 @@ def main() -> None:
         "--markdown", action="store_true", help="Output as markdown (for PR comments)"
     )
     output.add_argument("--json", action="store_true", help="Output as JSON")
+    parser.add_argument(
+        "--place", action="store_true",
+        help="copy each recognised file from outside bios/ to the folder and name "
+        "the report gives, or to .variants/ beside the name it varies",
+    )
     args = parser.parse_args()
 
     # The database, platforms and profiles are read from the repository
@@ -745,6 +823,8 @@ def main() -> None:
                 {
                     "file": r.filepath,
                     "passed": r.passed,
+                    "outcome": r.outcome or "new",
+                    "destination": r.destination,
                     "sha1": r.sha1,
                     "md5": r.md5,
                     "size": r.size,
@@ -754,7 +834,15 @@ def main() -> None:
         print(json.dumps(output, indent=2))
     elif args.markdown:
         lines = ["## BIOS Validation Report", ""]
-        status = "all checks passed" if all_passed else "some checks failed"
+        held = sum(r.outcome == "held" for r in results)
+        unknown = sum(r.outcome == "unknown" for r in results)
+        review = ", ".join(part for part in (
+            f"{held} already held" if held else "",
+            f"{unknown} not recognised" if unknown else "",
+        ) if part)
+        status = ("some checks failed" if not all_passed
+                  else f"no check failed, to review: {review}" if review
+                  else "all checks passed")
         lines.append(f"**Status**: {status}")
         lines.append("")
 
@@ -765,8 +853,7 @@ def main() -> None:
         print("\n".join(lines))
     else:
         for r in results:
-            status = "PASS" if r.passed else "FAIL"
-            print(f"\n[{status}] {r.filepath}")
+            print(f"\n[{r.status}] {r.filepath}")
             if r.sha1:
                 print(f"  SHA1: {r.sha1}")
                 print(f"  MD5:  {r.md5}")
@@ -782,6 +869,9 @@ def main() -> None:
                     else "info"
                 )
                 print(f"  [{marker}] {m}")
+
+    if args.place:
+        place(results)
 
     if not all_passed:
         sys.exit(1)

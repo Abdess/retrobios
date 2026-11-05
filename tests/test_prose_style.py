@@ -308,6 +308,22 @@ class ProfilesStateFactsAboutOtherProjects(unittest.TestCase):
         ]
         self.assertEqual(offenders, [], "\n".join(offenders[:40]))
 
+    # A project's state is a dated fact or its own words, never a verdict:
+    # "Upstream project is dead" (yabause), "abandoned fork" (gearboy).
+    PROJECT_VERDICTS = re.compile(
+        r"\b(?:(?:project|upstream)(?:\s+project)?\s+(?:is\s+)?dead|"
+        r"abandoned\s+(?:fork|since)|project\s+abandoned|never-completed)\b",
+        re.IGNORECASE,
+    )
+
+    def test_no_verdict_on_a_project(self):
+        offenders = [
+            f"{path.relative_to(ROOT)}: {found.group(0)}"
+            for path in sorted((ROOT / "emulators").glob("*.yml"))
+            for found in self.PROJECT_VERDICTS.finditer(path.read_text(encoding="utf-8"))
+        ]
+        self.assertEqual(offenders, [], "\n".join(offenders[:40]))
+
     def test_no_grade_on_another_projects_file(self):
         offenders = [
             f"{path.relative_to(ROOT)}: {line.strip()[:100]}"

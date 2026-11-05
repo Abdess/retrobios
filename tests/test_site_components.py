@@ -334,6 +334,22 @@ class NoLevelBadgeOnATabRoot(unittest.TestCase):
                 self.assertNotIn('class="rb-level ', _title_through_heading(_built(page)))
 
 
+class OneTabIsNoTabBar(unittest.TestCase):
+    """142 tab bars held one tab, most of them "On the device" right under
+    the heading "On the device"."""
+
+    def test_a_single_item_stands_alone(self):
+        import sitemarkup
+        import siteguides
+
+        self.assertEqual(sitemarkup.tabs([("Linux", ["run it"])]), ["**Linux**", "", "run it", ""])
+        self.assertEqual(sitemarkup.tabs([("", ["run it"])]), ["run it", ""])
+        self.assertIn('<Tabs syncKey="os">', sitemarkup.tabs([("A", ["a"]), ("B", ["b"])]))
+        device = "\n".join(siteguides.terminal_tabs(("device",), {}))
+        self.assertNotIn("<Tab", device)
+        self.assertNotIn("On the device", device)
+
+
 class FooterLicenceMatchesTheLicenceFile(unittest.TestCase):
     """The footer said MIT covers the tooling. LICENSE names the metadata too."""
 
@@ -353,14 +369,23 @@ class WideTablesStackAndFiltersAreBuilt(unittest.TestCase):
     def test_every_wide_table_stacks(self):
         for page in ("emulators/duckstation", "gaps", "gaps-files-to-source", "emulators", "data",
                      "wiki/verification-modes"):
-            html = (DIST / page / "index.html")
-            if not html.is_file():
-                continue
-            for table in _tables(_read(html)):
+            for table in _tables(_built(page)):
                 if len(_headers(table)) < 4:
                     continue
                 with self.subTest(page=page, header=_headers(table)):
                     self.assertIn('data-rb-stack="true"', table.split(">", 1)[0])
+
+    def test_no_build_is_a_skip_not_a_pass(self):
+        """Every missing page was a `continue`: with no build the test ran no
+        assertion and still reported ok."""
+        from unittest import mock
+
+        module = sys.modules[__name__]
+        case = WideTablesStackAndFiltersAreBuilt("test_every_wide_table_stacks")
+        result = unittest.TestResult()
+        with mock.patch.object(module, "DIST", REPO_ROOT / "tmp" / "no-such-dist"):
+            case.run(result)
+        self.assertEqual(len(result.skipped), 1)
 
     def test_long_tables_get_their_labels_at_runtime(self):
         """Labels on every cell of a long stacked table were 122 KB of

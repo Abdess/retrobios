@@ -140,8 +140,13 @@ are still included in packs automatically. A required one the collection lacks
 is listed under the counts, and `--verbose` lists the optional ones too.
 
 The cross-reference uses `resolve_platform_cores()` to determine which emulator
-profiles are relevant for each platform, then checks whether each profile's files
-appear in the platform config.
+profiles are relevant for each platform, then checks whether the platform
+already declares each profile's files (`declaration_settles()`). A name alone
+is not enough. The declaration must fill the core's own slot or have a size the
+core accepts: Galaksija's 4 KiB `ROM1.BIN` does not stand for DOSBox's 32 KiB
+SC-55 one. An alias counts only at the path where the core reads it, so
+RetroDECK's root `MSX.ROM` is not CLK's `MSX/MSX.ROM`. An archive counts by its
+name.
 
 ### Filtering output
 

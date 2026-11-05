@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 import yaml
@@ -144,6 +145,46 @@ class RunFromAnyDirectory(unittest.TestCase):
         messages = [c["message"] for c in reports[False]]
         self.assertIn("SHA1 matches known platform requirement", messages)
         self.assertIn("Already in the database at this path", messages)
+
+
+class AnUnfetchedUpstreamIsFetched(unittest.TestCase):
+    """CONTRIBUTING has the project added as `upstream` with no fetch. The
+    remote named the project, so nothing was fetched, upstream/main did not
+    exist, origin/main was the pushed branch, and --changed found nothing."""
+
+    def _git(self, cwd: Path, *args: str) -> None:
+        subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True, text=True)
+
+    def test_the_branch_file_is_found(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            root = Path(tmp)
+            project = root / "Abdess" / "retrobios.git"
+            fork = root / "fork.git"
+            clone = root / "clone"
+            for bare in (project, fork):
+                bare.mkdir(parents=True)
+                self._git(bare, "init", "-q", "--bare", "-b", "main")
+            clone.mkdir()
+            self._git(clone, "init", "-q", "-b", "main")
+            self._git(clone, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q",
+                      "--allow-empty", "-m", "base")
+            self._git(clone, "push", "-q", str(project), "main")
+            (clone / "bios").mkdir()
+            (clone / "bios" / "new.bin").write_bytes(b"x")
+            self._git(clone, "add", "bios/new.bin")
+            self._git(clone, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q",
+                      "-m", "add")
+            self._git(clone, "remote", "add", "origin", str(fork))
+            self._git(clone, "push", "-q", "origin", "main")
+            self._git(clone, "fetch", "-q", "origin")
+            self._git(clone, "remote", "add", "upstream", str(project))
+            cwd = os.getcwd()
+            os.chdir(clone)
+            try:
+                with mock.patch.object(validate_pr, "PROJECT_URLS", (str(project),)):
+                    self.assertEqual(validate_pr.get_changed_files(), ["bios/new.bin"])
+            finally:
+                os.chdir(cwd)
 
 
 if __name__ == "__main__":

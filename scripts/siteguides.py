@@ -454,6 +454,10 @@ def fence(shell: str, command: str, indent: str = "") -> list[str]:
     return [f'{indent}```{shell} title="{FENCE_TITLES[shell]}"', f"{indent}{command}", f"{indent}```"]
 
 
+# Terminals named by where the command runs, not by the system it runs on.
+PLACES = ("device", "server")
+
+
 def terminal_tabs(
     tabs: tuple[str, ...], args: dict[str, str], indent: str = "", steps: bool = True,
     how: dict[str, str] | None = None,
@@ -465,6 +469,8 @@ def terminal_tabs(
     items = []
     for key in tabs:
         label, shared, shell = TERMINALS[key]
+        if len(tabs) == 1 and key in PLACES:
+            label = ""  # one place, which the text around already names
         text = (how or {}).get(key) or shared
         body = [text, ""] if steps else []
         items.append((label, body + fence(shell, install_command(shell, args.get(key, "")))))

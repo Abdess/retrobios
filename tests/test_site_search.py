@@ -231,6 +231,40 @@ class Descriptions(unittest.TestCase):
         self.assertTrue(text.startswith("DuckStation emulates Sony PlayStation."))
         self.assertNotIn("source-pinned", text)
 
+    def test_a_page_whose_files_come_with_the_app_promises_none(self) -> None:
+        """DaedalusX64's three files come with the app. The result read
+        "DaedalusX64 BIOS files" over "DaedalusX64 emulates Nintendo 64."."""
+        saved, shipped = dict(gs.PAGE_DATA), set(gs.NOTHING_TO_FETCH)
+        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved),
+                                 gs.NOTHING_TO_FETCH.clear(), gs.NOTHING_TO_FETCH.update(shipped)))
+        with open(REPO_ROOT / "emulators" / "daedalusx64.yml", encoding="utf-8") as handle:
+            gs.record_emulator_page("daedalusx64", yaml.safe_load(handle))
+        key = Path("emulators/daedalusx64.md")
+        self.assertEqual(gs._browser_title(key, "DaedalusX64"), "DaedalusX64 emulator")
+        body = "# DaedalusX64\n\nDaedalusX64 emulates Nintendo 64.\n"
+        self.assertEqual(gs._page_description(body, key, "DaedalusX64"),
+                         "DaedalusX64 emulates Nintendo 64. Every file it reads comes with the app.")
+
+    def test_an_initial_does_not_end_the_sentence(self) -> None:
+        """hcl's description was "Hydra Castle Labyrinth: open-source port of E."."""
+        body = ("# Hydra Castle Labyrinth\n\n<details>\n<summary>Technical notes</summary>\n\n"
+                "Open-source port of E. Hashimoto's 2008 freeware Metroidvania. It reads "
+                "its data folder.\n\n</details>\n")
+        text = gs._emulator_description(body, "emulators/hcl.md", "Hydra Castle Labyrinth", "")
+        self.assertTrue(text.startswith("Hydra Castle Labyrinth: open-source port of E. "
+                                        "Hashimoto's 2008 freeware Metroidvania."), text)
+        self.assertNotIn("It reads", text)
+
+    def test_a_platform_page_says_what_it_gives(self) -> None:
+        """All 18 ended on the label of a link a snippet cannot follow,
+        "ROCKNIX website.", and never named the BIOS files or their folder."""
+        body = ("# ROCKNIX\n\nA system for handhelds. [ROCKNIX website](https://rocknix.org).\n\n"
+                "## On the device { #install }\n")
+        self.assertEqual(
+            gs._page_description(body, Path("platforms/rocknix.md"), "ROCKNIX"),
+            "The BIOS files for ROCKNIX, the folder they go in and the command that installs "
+            "them. A system for handhelds.")
+
     def test_a_console_page_is_described_by_its_start_line(self) -> None:
         body = "# Sega: Dreamcast\n\nPart of Sega.\n\n**Start with**: `dc_boot.bin`, `dc_flash.bin`.\n"
         text = gs._page_description(body, Path("systems/sega-dreamcast.md"), "Sega: Dreamcast")

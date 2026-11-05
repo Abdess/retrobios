@@ -1794,5 +1794,91 @@ class ReportExcerptIsTheRun(unittest.TestCase):
                 self.assertIn(line, printed)
 
 
+class ClaimRuleNamesTheSizeProof(unittest.TestCase):
+    """architecture.md said a file found by its name claims nothing, while
+    slots.py has counted a name-found copy at the declared size against a
+    platform file of another size since 2b535525e."""
+
+    def test_the_page_states_what_slots_counts(self):
+        import slots
+
+        self.assertIn(slots.SIZE_EXACT, slots.PROVEN_STATUSES)
+        page = " ".join((ROOT / "wiki" / "architecture.md").read_text(encoding="utf-8").split())
+        section = page.split("### When both layers claim one destination", 1)[1].split("###", 1)[0]
+        self.assertIn(f"(`{slots.SIZE_EXACT}`)", section)
+        self.assertIn("Two files of equal size are revisions", section)
+
+
+class CrossReferenceSettlesBySlotAndSize(unittest.TestCase):
+    """reading-reports.md said the cross-reference checks whether a profile's
+    files "appear in the platform config", a by-name rule, while verify
+    settles a file only at its slot or at a size the core accepts."""
+
+    def test_the_page_states_the_rule_verify_reads(self):
+        from validation import declaration_settles
+
+        rom1 = {"name": "ROM1.BIN", "size": 32768, "validation": ["size"]}
+        self.assertFalse(declaration_settles(rom1, "ROM1.BIN", {"ROM1.BIN": [(4096, "rom1.bin")]},
+                                             dest="dosbox/ROM1.BIN"))
+        self.assertTrue(declaration_settles(rom1, "ROM1.BIN", {"ROM1.BIN": [(32768, "rom1.bin")]},
+                                            dest="dosbox/ROM1.BIN"))
+        page = " ".join((ROOT / "wiki" / "reading-reports.md").read_text(encoding="utf-8").split())
+        section = page.split("### Cross-reference section", 1)[1].split("###", 1)[0]
+        self.assertIn("declaration_settles()", section)
+        self.assertIn("A name alone is not enough", section)
+        self.assertNotIn("appear in the platform config", section)
+
+
+class CommittedLargeFilesAreTheOnesNamed(unittest.TestCase):
+    """release-process.md named tbblue.mmc among the committed files over
+    50 MB two weeks after it left bios/, and not uqm-remix-disc1.uqm."""
+
+    def test_the_list_is_the_tree(self):
+        import subprocess
+
+        listed = subprocess.run(["git", "ls-files", "-z", "bios"], cwd=ROOT, capture_output=True,
+                                check=True).stdout.decode("utf-8").split("\0")
+        large = sorted(Path(path).name for path in listed
+                       if path and (ROOT / path).is_file()
+                       and (ROOT / path).stat().st_size > 50_000_000)
+        page = " ".join((ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8").split())
+        said = re.search(r"Size does not decide it: (\w+) committed files are over 50 MB \(([^)]*)\)",
+                         page)
+        self.assertIsNotNone(said)
+        self.assertEqual(sorted(re.findall(r"`([^`]+)`", said.group(2))), large)
+        self.assertEqual(said.group(1), {3: "three", 4: "four", 5: "five"}.get(len(large)))
+
+
+class SkipFlagsNameTheSteps(unittest.TestCase):
+    """--skip-packs said "add --skip-docs to stop after verify" while 4d and
+    4e still ran, and the flag table left 8b out of --skip-docs."""
+
+    STEP = r"\b\d[a-z]?\d?\b"
+
+    def test_the_flag_row_the_help_and_the_usage_agree_with_the_step_table(self):
+        page = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
+        table = page.split("Pipeline steps:", 1)[1].split("Pipeline flags:", 1)[0]
+        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        helps = {}
+        for node in ast.walk(ast.parse(source)):
+            if (isinstance(node, ast.Call) and getattr(node.func, "attr", "") == "add_argument"
+                    and node.args and isinstance(node.args[0], ast.Constant)):
+                helps.update({node.args[0].value: ast.literal_eval(kw.value)
+                              for kw in node.keywords if kw.arg == "help"})
+        for flag in ("--skip-packs", "--skip-docs"):
+            steps = set()
+            for row in table.splitlines():
+                cells = [c.strip() for c in row.split("|")]
+                if len(cells) > 3 and cells[3].startswith(f"`{flag}`"):
+                    steps.add(cells[1])
+            self.assertTrue(steps)
+            row = re.search(rf"^\| `{flag}` \| skip steps ([^.|]*)", page, re.M).group(1)
+            usage = re.search(rf"pipeline\.py {flag} +# skip steps (.*)$", source, re.M).group(1)
+            said = helps[flag].split(":", 1)[0]
+            for text in (row, usage, said):
+                with self.subTest(flag=flag, text=text):
+                    self.assertEqual(set(re.findall(self.STEP, text)), steps)
+
+
 if __name__ == "__main__":
     unittest.main()
