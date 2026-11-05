@@ -2547,7 +2547,9 @@ def _emulator_description(markdown: str, key: str, title: str, intro: str) -> st
     its profile table when the profile names no system."""
     notes = re.search(r"<summary>Technical notes</summary>\s*\n\n(.+?)(?:\n\n|$)", markdown, re.S)
     if not intro and notes:
-        sentence = re.split(r"(?<=\.)\s", _plain_markdown(notes[1]), maxsplit=1)[0]
+        # An initial is no sentence end: hcl's read "open-source port of E."
+        sentence = re.split(r"(?<![\s(][A-Z]\.)(?<=\.)\s", _plain_markdown(notes[1]),
+                            maxsplit=1)[0]
         intro = f"{title}: {sentence[:1].lower()}{sentence[1:]}"
     if not intro:
         row = {name: _plain_markdown(value) for name, value in re.findall(

@@ -245,6 +245,16 @@ class Descriptions(unittest.TestCase):
         self.assertEqual(gs._page_description(body, key, "DaedalusX64"),
                          "DaedalusX64 emulates Nintendo 64. Every file it reads comes with the app.")
 
+    def test_an_initial_does_not_end_the_sentence(self) -> None:
+        """hcl's description was "Hydra Castle Labyrinth: open-source port of E."."""
+        body = ("# Hydra Castle Labyrinth\n\n<details>\n<summary>Technical notes</summary>\n\n"
+                "Open-source port of E. Hashimoto's 2008 freeware Metroidvania. It reads "
+                "its data folder.\n\n</details>\n")
+        text = gs._emulator_description(body, "emulators/hcl.md", "Hydra Castle Labyrinth", "")
+        self.assertTrue(text.startswith("Hydra Castle Labyrinth: open-source port of E. "
+                                        "Hashimoto's 2008 freeware Metroidvania."), text)
+        self.assertNotIn("It reads", text)
+
     def test_a_platform_page_says_what_it_gives(self) -> None:
         """All 18 ended on the label of a link a snippet cannot follow,
         "ROCKNIX website.", and never named the BIOS files or their folder."""
