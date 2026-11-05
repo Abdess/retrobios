@@ -1919,7 +1919,6 @@ def generate_split_packs(
 ) -> list[str]:
     """Generate split packs (one ZIP per system or manufacturer)."""
     config = load_platform_config(platform_name, platforms_dir)
-    platform_display = config.get("platform", platform_name)
     # The split directory carries the same tags as the packs inside it, or two
     # differently narrowed runs write into one another.
     split_tags = "".join(
@@ -1935,9 +1934,11 @@ def generate_split_packs(
     # The parts carry the version, so the directory does too: a rescrape that
     # moves the version would otherwise leave the old parts beside the new
     # under one SHA256SUMS.txt.
-    version = config.get("version", config.get("dat_version", ""))
-    ver_tag = f"_{version.replace(' ', '')}" if version else ""
-    part_prefix = f"{platform_display.replace(' ', '_')}{ver_tag}{split_tags}"
+    # Named by the stem the full pack reads: assembled here by hand, a '/' in
+    # a version nested the directory where the check never looked for it.
+    part_prefix = (
+        f"{_platform_pack_stem([platform_name], platform_name, platforms_dir)}{split_tags}"
+    )
     split_dir = os.path.join(output_dir, f"{part_prefix}{group_tag}_Split")
     os.makedirs(split_dir, exist_ok=True)
 

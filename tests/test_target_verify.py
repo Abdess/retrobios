@@ -10,6 +10,7 @@ out of a targeted --all run, and the check refuses it as the build does.
 
 from __future__ import annotations
 
+import os
 import sys
 import contextlib
 import io
@@ -194,6 +195,30 @@ class APlatformWithoutTheSystemIsOutOfScope(unittest.TestCase):
         with self.assertRaises(SystemExit) as ctx:
             self._scope(all=False)
         self.assertEqual(ctx.exception.code, 1)
+
+
+class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
+    """The split prefix was assembled by hand: a version 'release/1.22' made
+    'RetroArch_release/1.22_Split', a nested directory the check never
+    found, beside a full pack named 'RetroArch_release-1.22_BIOS_Pack.zip'."""
+
+    def test_a_reserved_character_is_made_safe_as_in_the_full_pack(self):
+        from unittest import mock
+
+        import generate_pack
+
+        config = {"platform": "Foo: Bar", "version": "release/1.22", "systems": {}}
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
+                mock.patch.object(generate_pack, "load_platform_config",
+                                  return_value=config), \
+                mock.patch.object(generate_pack, "_collect_emulator_extras",
+                                  return_value=[]):
+            generate_pack.generate_split_packs(
+                "foo", "platforms", {"files": {}}, "bios", out, emu_profiles={},
+            )
+            stem = generate_pack._platform_pack_stem(["foo"], "foo", "platforms")
+            self.assertEqual(os.listdir(out), [f"{stem}_Split"])
+        self.assertEqual(stem, "Foo-_Bar_release-1.22")
 
 
 if __name__ == "__main__":
