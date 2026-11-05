@@ -37,6 +37,7 @@ from common import (
 from nativemode import check_label
 import release_record
 from siteguides import install_command
+from validate_pr import LARGE_FILE_ISSUE_URL
 from verify import verify_platform
 
 
@@ -930,7 +931,10 @@ the most useful contribution.
 From a clone, the file goes to `bios/Manufacturer/Console/filename`, and
 `python scripts/validate_pr.py path/to/file` names that folder for a file still
 outside `bios/`. Given a folder, such as an old card's BIOS folder, it checks
-every file under it. A file over the browser's 25 MB limit goes in that way.
+every file under it. A file over the browser's 25 MB limit goes in that way,
+up to the 100 MB GitHub accepts in a push. A larger file stays out of the pull
+request: [open an issue]({LARGE_FILE_ISSUE_URL}) with the hashes
+`validate_pr.py` prints, and a maintainer adds it to the `large-files` release.
 
 ## Add a platform
 

@@ -97,6 +97,17 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
             with self.subTest(package=package):
                 self.assertRegex(pip_line, rf"\b{package}\b")
 
+    def test_a_file_too_large_for_git_has_a_route(self):
+        """The guide sent any file over 25 MB through a clone, which GitHub
+        refuses past 100 MB, and only a maintainer can write to the release."""
+        import validate_pr
+
+        text = generate_readme.generate_contributing()
+        section = text.split("## What happens next", 1)[1].split("\n## ", 1)[0]
+        self.assertEqual(validate_pr.MAX_FILE_SIZE, 100 * 1024 * 1024)
+        self.assertIn("100 MB", section)
+        self.assertIn(f"]({validate_pr.LARGE_FILE_ISSUE_URL})", section)
+
     def test_it_installs_what_the_checks_need_and_no_site_package(self):
         """The site is built by Node from website/package-lock.json: a pip
         line naming the old theme installed packages nothing reads."""
