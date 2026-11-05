@@ -91,13 +91,15 @@ class NoZipNoUnzipText(unittest.TestCase):
         args, how = generate_site._share_tabs("recalbox", "\\\\RECALBOX\\share\\bios")
         self.assertEqual(args["macos"], "--platform recalbox --dest /Volumes/share/bios")
         self.assertIn("`smb://recalbox/share`", how["macos"])
-        self.assertIn("`/Volumes/share`", how["macos"])
         self.assertEqual(args["linux"], "--platform recalbox --dest /path/to/share/bios")
         self.assertIn("`smb://recalbox/share`", how["linux"])
         lines = generate_site._setup_routes("recalbox", "Recalbox")
         routes = "\n".join(lines[:lines.index("## On the device { #install }")])
         for label in ("Windows", "macOS", "Linux"):
             self.assertIn(f'label="{label}"', routes)
+        # The setup page sends a Mac or Linux reader to those tabs.
+        lines = generate_site._setup_routes("recalbox", "Recalbox", page_link=True)
+        self.assertIn("[Mac or Linux](../get/recalbox.md#from-your-computer)", lines)
 
     def test_the_network_route_needs_a_share_and_no_zip(self):
         for name in SETUPS:

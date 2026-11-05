@@ -3860,7 +3860,8 @@ def _platform_data_links(name: str) -> str:
         f"[JSON](../api/v1/platforms/{name}.json)",
     ]
     if (_REPO_ROOT / "install" / f"{name}.json").is_file():
-        links.append(f"[install manifest]({REPO_URL}/blob/main/install/{name}.json)")
+        # The site's own copy, byte for byte (_publish_manifests).
+        links.append(f"[install manifest](../api/v1/manifests/{name}.json)")
         # The installed BIOS folder for clrmamepro and RomVault.
         links.append(f"[DAT](../downloads/dat/{name}.dat)")
     return ", ".join(links)
@@ -4098,11 +4099,10 @@ def _share_tabs(name: str, share: str) -> tuple[dict[str, str], dict[str, str]]:
         "linux": f"--platform {name} --dest /path/to/{volume}{tail}",
     }
     how = {
-        "macos": (f"In Finder, choose Go, then Connect to Server, and enter `{url}`. "
-                  f"It opens as `/Volumes/{volume}`. Then open **Terminal**, in "
-                  "Applications, then Utilities. Paste the line. Press Return."),
-        "linux": (f"Open `{url}` in your file manager. Open a terminal, paste the line "
-                  f"and change `/path/to/{volume}` to the folder it opened. Press Enter."),
+        "macos": (f"In Finder, Go > Connect to Server: `{url}`. Then paste the line in "
+                  "**Terminal**."),
+        "linux": (f"Open `{url}` in your file manager. Paste the line in a terminal, "
+                  f"with the folder it opened for `/path/to/{volume}`."),
     }
     return args, how
 
@@ -4168,10 +4168,15 @@ def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]
         computer = ["## From your computer { #from-your-computer }", ""]
         if share:
             args, how = _share_tabs(name, share)
+            # The setup page stays in its word budget: its Mac and Linux
+            # lines are on the get/ page, the one the command is shared from.
+            tabs = ("windows",) if page_link else ("windows", "macos", "linux")
             computer += [
                 "Needs the device on your network. Run the command on the computer.",
                 "",
-                *terminal_tabs(("windows", "macos", "linux"), args, how=how),
+                *terminal_tabs(tabs, args, how=how),
+                *([f"[Mac or Linux](../{get_page_link(name)}#from-your-computer)", ""]
+                  if page_link else []),
                 SAFE_LINK,
                 "",
             ]

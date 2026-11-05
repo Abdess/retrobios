@@ -59,8 +59,14 @@ class GetPagesGiveTheSetupsOwnRoutes(unittest.TestCase):
     def test_every_command_on_a_get_page_is_on_its_setup_page(self):
         for name in SETUPS:
             get = set(COMMAND.findall(_page(f"get/{name}.md")))
-            setup = set(COMMAND.findall(_page(f"platforms/{name}.md")))
+            page = _page(f"platforms/{name}.md")
+            setup = set(COMMAND.findall(page))
             with self.subTest(setup=name):
+                # The Mac and Linux lines of the network folder live on the
+                # get/ page alone, which the setup page links for them.
+                if f"(/retrobios/get/{name}/#from-your-computer)" in page:
+                    get = {c for c in get if "--dest /Volumes/" not in c
+                           and "--dest /path/to/" not in c}
                 self.assertTrue(get <= setup, sorted(get - setup))
                 if not _with_zip(name):
                     self.assertTrue(get, "a setup with no ZIP gets its command")
@@ -82,7 +88,8 @@ class GetPagesGiveTheSetupsOwnRoutes(unittest.TestCase):
             allowed = {labels[key] for key in guide.run}
             allowed |= {labels[key] for key in guide.card_run or ("windows", "macos", "linux")}
             if generate_site._network_share(name, guide):
-                allowed.add(labels["windows"])
+                # The network folder is reached from any computer.
+                allowed |= {labels[key] for key in ("windows", "macos", "linux")}
             with self.subTest(setup=name):
                 self.assertLessEqual(_tab_labels(_page(f"get/{name}.md")), allowed)
                 self.assertNotIn("Android (Termux", _page(f"get/{name}.md"))
