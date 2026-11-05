@@ -64,13 +64,16 @@ validation above is its check. For code, profiles or platform files, these are
 the checks CI runs on a pull request (Python 3.12 or newer):
 
 ```bash
-pip install pyyaml "jsonschema[format-nongpl]" markdown
+pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
 python scripts/profile_sync.py --added --base upstream/main --strict  # each profile the branch adds
 python scripts/refresh_data_dirs.py  # data directories the pack-building tests read
 python scripts/generate_site.py       # the pages the site tests read
+npm ci --prefix website && npm run build --prefix website  # the built site, Node 24
 python -m unittest discover -s tests -t .
+python scripts/validate_site.py --site-dir website/dist  # links and page budgets
+vermin --no-tips -t=3.8- --violations install.py         # install.py stays on Python 3.8
 ```
 
 `upstream` is this repository as a remote of your fork
