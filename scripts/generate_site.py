@@ -1035,6 +1035,20 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
     """
     allowed = _contract_keys()
     contract = {key: value for key, value in config.items() if key in allowed}
+    # platform_system is the resolver's copy of the key each entry sits under.
+    if isinstance(contract.get("systems"), dict):
+        contract["systems"] = {
+            sys_id: {
+                **system,
+                "files": [
+                    {k: v for k, v in f.items() if k != "platform_system"}
+                    for f in system["files"]
+                ],
+            }
+            if isinstance(system, dict) and system.get("files")
+            else system
+            for sys_id, system in contract["systems"].items()
+        }
     registry = {key: value for key, value in config.items()
                 if key not in allowed and key != "_key"}
     # The merged config gives a child its parent's release_pack: Lakka and

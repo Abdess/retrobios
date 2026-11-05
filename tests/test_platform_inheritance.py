@@ -51,7 +51,10 @@ class AChildLeavesItsParentAlone(unittest.TestCase):
         self.load("child")
         parent = self.load("parent")
         self.assertEqual(list(parent["systems"]), ["sys-a"])
-        self.assertEqual(parent["systems"]["sys-a"]["files"], [{"name": "a.bin"}])
+        self.assertEqual(
+            parent["systems"]["sys-a"]["files"],
+            [{"name": "a.bin", "platform_system": "sys-a"}],
+        )
 
     def test_the_child_reads_its_own_registry_entry_first(self):
         self.load("parent")
@@ -59,7 +62,10 @@ class AChildLeavesItsParentAlone(unittest.TestCase):
         self.assertEqual((child["status"], child["scraper"]), ("archived", "child"))
         # What it does not say comes from its parent's entry.
         self.assertEqual((child["hash_type"], child["cores"]), ("md5", "all_libretro"))
-        self.assertEqual(child["systems"]["sys-a"]["files"], [{"name": "child.bin"}])
+        self.assertEqual(
+            child["systems"]["sys-a"]["files"],
+            [{"name": "child.bin", "platform_system": "sys-a"}],
+        )
 
 
 
