@@ -11832,15 +11832,36 @@ def _copies(entry: dict) -> list[dict]:
             *entry.get("declared_choices", [])]
 
 
+# id(manifest) -> (manifest, the cores its entries name), read once per list.
+_LISTED_CORES: dict[int, tuple[dict, frozenset]] = {}
+
+
+def _listed_cores(manifest: dict) -> frozenset:
+    """Every core a copy of the list's entries names: the platform's own.
+
+    system_cores reaches every profile, the target rule needing the cores off
+    the platform too, and the "read by" line named Recalbox's mame0258 on
+    Batocera and BizHawk on RetroArch.
+    """
+    cached = _LISTED_CORES.get(id(manifest))
+    if cached is None or cached[0] is not manifest:
+        cores = frozenset(
+            core for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]
+            for copy in _copies(entry) for core in copy.get("cores") or [])
+        cached = _LISTED_CORES[id(manifest)] = (manifest, cores)
+    return cached[1]
+
+
 def readers(entry: dict, manifest: dict) -> list[str]:
-    """The cores that open an entry: as its copies name them, else every core
-    the platform runs for its systems."""
+    """The cores that open an entry: as its copies name them, else the cores
+    of its systems that the platform's own list names."""
     named = sorted({core for copy in _copies(entry) for core in copy.get("cores") or []})
     if named:
         return named
     system_cores = manifest.get("system_cores") or {}
+    listed = _listed_cores(manifest)
     return sorted({core for system in entry_systems(entry)
-                   for core in system_cores.get(system, [])})
+                   for core in system_cores.get(system, []) if core in listed})
 
 
 def opened_line(entry: dict, manifest: dict, bios_path: Path) -> str:

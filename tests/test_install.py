@@ -4397,6 +4397,28 @@ class AQuestionLeftWithCtrlDOrCtrlCIsAStop(unittest.TestCase):
         self.assertIn("Stopped", out)
 
 
+class ReadersAreThePlatformsCores(unittest.TestCase):
+    """--check said bbcb.zip is "read by clk, mame, mame0258, mame0278" on
+    Batocera: system_cores reaches every profile, Recalbox's builds too."""
+
+    def test_an_off_platform_core_is_not_named(self):
+        manifest = {
+            "system_cores": {"bbc": ["clk", "mame", "mame0258"]},
+            "files": [{"dest": "bbcb.zip", "systems": ["bbc"], "cores": None},
+                      {"dest": "other.rom", "systems": ["x"], "cores": ["clk", "mame"]}],
+        }
+        self.assertEqual(install.readers(manifest["files"][0], manifest), ["clk", "mame"])
+
+    def test_on_the_real_lists(self):
+        for plat, dest, absent in (("batocera", "bbcb.zip", "mame0258"),
+                                   ("retroarch", "prboom.wad", "bizhawk")):
+            manifest = json.loads((REPO_ROOT / "install" / f"{plat}.json").read_text())
+            [entry] = [e for e in manifest["files"] + manifest["omitted_files"]
+                       if e["dest"] == dest]
+            with self.subTest(platform=plat):
+                self.assertNotIn(absent, install.readers(entry, manifest))
+
+
 class WhatTheCollectionLacksSaysForWhom(unittest.TestCase):
     """Required files the installer cannot supply were listed by bare name:
     DARK.GOB, Data.rsdk, ... and 69 more, with no system and no emulator."""
