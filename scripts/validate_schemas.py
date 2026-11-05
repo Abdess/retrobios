@@ -701,6 +701,34 @@ def _games_source_errors() -> list[str]:
     return out
 
 
+def _arcade_pin_errors() -> list[str]:
+    """games/arcade/<profile>.json read at the revision and version its
+    profile pins. A bump of the profile left the game-to-BIOS map of the old
+    code in place, and the installer kept serving it."""
+    out: list[str] = []
+    for path in sorted((ROOT / "games" / "arcade").glob("*.json")):
+        doc = _load_json(path)
+        profile_path = ROOT / "emulators" / f"{doc.get('profile')}.yml"
+        label = str(path.relative_to(ROOT))
+        if not profile_path.is_file():
+            out.append(f"{label}: no profile emulators/{profile_path.name}")
+            continue
+        profile = _load_source(profile_path) or {}
+        pinned = profile.get("source_commit")
+        pins = set(pinned.values()) if isinstance(pinned, dict) else {pinned}
+        commit = (doc.get("source") or {}).get("commit")
+        drifted = []
+        if commit and commit not in pins:
+            drifted.append(f"read at {commit[:12]}, the profile pins {pinned}")
+        if doc.get("core_version") != profile.get("core_version"):
+            drifted.append(f"core_version {doc.get('core_version')!r}, "
+                           f"the profile says {profile.get('core_version')!r}")
+        if drifted:
+            out.append(f"{label}: {'; '.join(drifted)} "
+                       f"(python -m scripts.scraper.arcade_parent_importer --profile {doc.get('profile')})")
+    return out
+
+
 def _games_index_errors() -> list[str]:
     """install/games/: each document against its kind, and the index
     against the files it lists (size and sha256)."""
@@ -765,6 +793,7 @@ def main() -> int:
     errors.extend(_measurement_errors())
     errors.extend(_romfolder_errors())
     errors.extend(_games_source_errors())
+    errors.extend(_arcade_pin_errors())
 
     if not args.source_only:
         database_path = ROOT / "database.json"

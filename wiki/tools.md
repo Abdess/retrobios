@@ -1644,6 +1644,10 @@ keeps, is computed from `install/<platform>.json` with the installer's own
 core narrowing. Every published file is listed in `install/games/index.json`
 with its size, its gzip size and its sha256.
 
+`validate_schemas.py` refuses a `games/arcade/<profile>.json` whose source
+commit or `core_version` is not the one its profile pins: after a profile's pin
+moves, rerun `arcade_parent_importer --profile NAME`.
+
 ## Target scrapers
 
 Located in `scripts/scraper/targets/`. Each inherits `BaseTargetScraper` and implements `fetch_targets()`.
