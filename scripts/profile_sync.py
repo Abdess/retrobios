@@ -4154,16 +4154,22 @@ def _refuse_dirty_tree(emulators_dir: str, names: list[str]) -> None:
         print(f"{e}. Pass --force to write anyway.", file=sys.stderr)
         raise SystemExit(1) from e
     if dirty:
+        # Another session may own the change, so the refusal names the files:
+        # --force writes over them.
+        one = len(dirty) == 1
         print(
-            f"{emulators_dir} carries uncommitted changes to the selected "
-            "profiles. Commit them first or pass --force.",
+            f"{', '.join(dirty)} {'has' if one else 'have'} uncommitted changes: "
+            f"commit {'it' if one else 'them'} or pass --force, which writes over "
+            f"{'it' if one else 'them'}.",
             file=sys.stderr,
         )
         raise SystemExit(1)
 
 
-def emulators_dir_is_dirty(emulators_dir: str, names: list[str] | None = None) -> bool:
-    """True when the profile directory carries uncommitted changes.
+def emulators_dir_is_dirty(emulators_dir: str, names: list[str] | None = None) -> list[str]:
+    """The files of the profile directory that carry uncommitted changes.
+
+    Paths read as the status prints them, from the repository root.
 
     ``names`` narrows the question to those profiles. Git is asked from
     inside the directory, so a profile tree that lives in another
@@ -4181,7 +4187,11 @@ def emulators_dir_is_dirty(emulators_dir: str, names: list[str] | None = None) -
         raise RuntimeError(
             f"cannot read the git status of {emulators_dir}: {result.stderr.strip()}"
         )
-    return bool(result.stdout.strip())
+    return sorted(
+        line[3:].split(" -> ")[-1].strip('"')
+        for line in result.stdout.splitlines()
+        if line.strip()
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:

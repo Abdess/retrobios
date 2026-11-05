@@ -5303,6 +5303,24 @@ class TestEmulatorsDirStatus(unittest.TestCase):
             self.assertTrue(profile_sync.emulators_dir_is_dirty(root, ["a"]))
             self.assertFalse(profile_sync.emulators_dir_is_dirty(root, ["b"]))
 
+    def test_the_refusal_names_the_changed_profile(self):
+        """One profile changed by another session among ~375 refused the
+        whole run without saying which."""
+        with tempfile.TemporaryDirectory() as root:
+            self._git("init", "-q", cwd=root)
+            for name in "abc":
+                Path(root, f"{name}.yml").write_text(f"emulator: {name}\n")
+            self._git("add", "a.yml", "b.yml", "c.yml", cwd=root)
+            self._git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "p", cwd=root)
+            Path(root, "b.yml").write_text("emulator: b2\n")
+            self.assertEqual(profile_sync.emulators_dir_is_dirty(root, ["a", "b", "c"]),
+                             ["b.yml"])
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
+                profile_sync._refuse_dirty_tree(root, ["a", "b", "c"])
+        self.assertIn("b.yml has uncommitted changes", err.getvalue())
+        self.assertNotIn("a.yml", err.getvalue())
+
     def test_a_tree_outside_any_repository_is_not_clean(self):
         with tempfile.TemporaryDirectory() as root, mock.patch.dict(
             os.environ, {"GIT_CEILING_DIRECTORIES": str(Path(root).parent)}
