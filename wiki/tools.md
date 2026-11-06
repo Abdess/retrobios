@@ -1416,7 +1416,7 @@ Further options, by script:
 | `scraper/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |
 | `scraper/romset_dat_importer.py` | `--cache-dir` (downloaded listxml and DATs) |
 | `scraper/game_dat_importer.py` | `--source no-intro\|redump` (repeatable), `--pack FILE` imports a local ZIP, directory or DAT, `--refresh` asks the servers again, `--cache-dir`, `--output-dir`, `--dry-run` |
-| `scraper/arcade_parent_importer.py` | `--profile NAME` (one core version), `--emulators-dir`, `--database` (BIOS roots checked against it by archive name), `--output-dir`, `--cache-dir`, `--offline`, `--dry-run` |
+| `scraper/arcade_parent_importer.py` | `--profile NAME` (one core version), `--emulators-dir`, `--db` (BIOS roots checked against it by archive name), `--output-dir`, `--cache-dir`, `--offline`, `--dry-run` |
 | `scraper/romfolders` | `--sources DIR` (default `platforms/romfolders/_sources`), `--output-dir`, `--dry-run` |
 | `game_rules.py` | `--regions`, `--extras`, `--headers` (files checked against the profiles and the header readers), `--emulators-dir`, `--json` |
 | `generate_games_index.py` | `--output-dir` (default `install/games`), `--check`, `--quiet` |

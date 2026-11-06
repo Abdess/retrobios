@@ -455,6 +455,25 @@ class OneSpellingPerOption(unittest.TestCase):
                         missing.append(f"{path.relative_to(REPO_ROOT)}:{node.lineno} {long}")
         self.assertEqual(missing, [])
 
+    def test_one_long_name_per_option(self):
+        """arcade_parent_importer took --database where every other script
+        takes --db, and refused `--db database.json`."""
+        import ast  # noqa: PLC0415
+
+        renamed = {"--database": "--db"}
+        found = []
+        for path in sorted((REPO_ROOT / "scripts").rglob("*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for node in ast.walk(tree):
+                if (isinstance(node, ast.Call)
+                        and getattr(node.func, "attr", None) == "add_argument"):
+                    found.extend(
+                        f"{path.relative_to(REPO_ROOT)}:{node.lineno} {a.value}"
+                        for a in node.args
+                        if isinstance(a, ast.Constant) and a.value in renamed
+                    )
+        self.assertEqual(found, [])
+
 
 class ThePipelineRefreshesTheCommittedExport(unittest.TestCase):
     """Step 2e wrote to <output-dir>/upstream while exports/ is the copy the
