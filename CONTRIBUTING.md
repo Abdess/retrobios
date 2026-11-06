@@ -22,6 +22,10 @@ the most useful contribution.
    hash differs from the one already held under its name goes to that folder's
    `.variants/`.
 
+A ZIP that no list declares as a whole is read file by file, and the report
+says which of them the collection already holds: upload the files
+themselves, unzipped.
+
 From a clone, the file goes to `bios/Manufacturer/Console/filename`, and
 `python scripts/validate_pr.py path/to/file` names that folder for a file still
 outside `bios/`, and `--place` copies it there under its declared name. Given a
