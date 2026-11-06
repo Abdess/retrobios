@@ -19,6 +19,7 @@ import signal
 import sys
 import zipfile
 from pathlib import Path
+from typing import Any, TextIO
 
 # Every build script imports this module. verify.py, slots.py, validate_pr.py
 # and cross_reference.py started under 3.8 and stopped halfway on a
@@ -60,6 +61,33 @@ class InputMissing(FileNotFoundError):
 
 class DatabaseUnreadable(InputMissing):
     """The database a command was pointed at does not exist or is not JSON."""
+
+
+class SourceUnreadable(ValueError):
+    """A profile or platform file that is not valid YAML. Not an InputMissing:
+    the callers that skip a platform whose file is absent must not skip one
+    whose file is damaged. run_cli prints the message on one line."""
+
+
+def source_yaml(stream: TextIO) -> Any:
+    """Parse one of our YAML sources, naming the file a syntax error is in.
+
+    Every profile is loaded whatever the command, so one misindented key in
+    an unrelated profile stopped `verify.py --emulator handy` on a 37-line
+    traceback, the faulty file named only near its end.
+    """
+    if yaml is None:
+        return yaml_load(stream)
+    try:
+        return yaml_load(stream)
+    except yaml.YAMLError as exc:
+        mark = getattr(exc, "problem_mark", None)
+        where = f"{stream.name}:{mark.line + 1}" if mark else stream.name
+        problem = getattr(exc, "problem", None) or str(exc).splitlines()[0]
+        raise SourceUnreadable(
+            f"{where}: {problem}. Check it with: "
+            "python scripts/validate_schemas.py --source-only"
+        ) from None
 
 
 def load_database(db_path: str) -> dict:
@@ -323,7 +351,7 @@ def _inherited_yaml(platform_name: str, platforms_dir: str) -> tuple[dict, list[
         raise FileNotFoundError(f"Platform config not found: {config_file}")
 
     with open(config_file) as f:
-        config = yaml_load(f) or {}
+        config = source_yaml(f) or {}
     if "inherits" not in config:
         return config, [platform_name]
 
@@ -369,7 +397,7 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
         reg_real = os.path.realpath(registry_path)
         if reg_real not in _shared_yml_cache:
             with open(registry_path) as f:
-                _shared_yml_cache[reg_real] = yaml_load(f) or {}
+                _shared_yml_cache[reg_real] = source_yaml(f) or {}
         reg = _shared_yml_cache[reg_real]
         # The platform's own entry first, then its parents' for what it does
         # not say: RetroPie's status, scraper and install are its own, its
@@ -408,7 +436,7 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
         shared_real = os.path.realpath(shared_path)
         if shared_real not in _shared_yml_cache:
             with open(shared_path) as f:
-                _shared_yml_cache[shared_real] = yaml_load(f) or {}
+                _shared_yml_cache[shared_real] = source_yaml(f) or {}
         shared = _shared_yml_cache[shared_real]
         shared_groups = shared.get("shared_groups", {})
         for system in config.get("systems", {}).values():
@@ -515,7 +543,7 @@ def load_data_dir_registry(platforms_dir: str = "platforms") -> dict:
     if not os.path.exists(registry_path):
         return {}
     with open(registry_path) as f:
-        data = yaml_load(f) or {}
+        data = source_yaml(f) or {}
     return data.get("data_directories", {})
 
 
@@ -525,7 +553,7 @@ def load_platform_registry(platforms_dir: str = "platforms") -> dict:
     if not os.path.exists(registry_path):
         return {}
     with open(registry_path) as f:
-        return (yaml_load(f) or {}).get("platforms", {})
+        return (source_yaml(f) or {}).get("platforms", {})
 
 
 def list_registered_platforms(platforms_dir: str = "platforms") -> list[str]:
@@ -542,7 +570,7 @@ def list_registered_platforms(platforms_dir: str = "platforms") -> list[str]:
     if not os.path.exists(registry_path):
         raise InputMissing(f"no platform registry at {registry_path}")
     with open(registry_path) as f:
-        registry = yaml_load(f) or {}
+        registry = source_yaml(f) or {}
     platforms = []
     for name, meta in sorted(registry.get("platforms", {}).items()):
         config_path = os.path.join(platforms_dir, meta.get("config", f"{name}.yml"))
@@ -690,7 +718,7 @@ def _target_overrides(platform_name: str, targets_dir: str) -> dict:
     if not os.path.exists(overrides_file):
         return {}
     with open(overrides_file) as f:
-        all_overrides = yaml_load(f) or {}
+        all_overrides = source_yaml(f) or {}
     return all_overrides.get(platform_name, {}).get("targets", {})
 
 
@@ -711,7 +739,7 @@ def platform_files_target(platform: str, target: str, platforms_dir: str = "plat
     if not os.path.exists(target_file):
         return False
     with open(target_file) as f:
-        targets = (yaml_load(f) or {}).get("targets", {})
+        targets = (source_yaml(f) or {}).get("targets", {})
     return target in _target_alias_index(targets, _target_overrides(platform, targets_dir))
 
 
@@ -731,7 +759,7 @@ def canonical_target_name(
         if not os.path.exists(target_file):
             continue
         with open(target_file) as f:
-            targets = (yaml_load(f) or {}).get("targets", {})
+            targets = (source_yaml(f) or {}).get("targets", {})
         canonical = _target_alias_index(
             targets, _target_overrides(platform_name, targets_dir)
         ).get(target)
@@ -785,7 +813,7 @@ def load_target_config(
             f"(platforms with targets: {', '.join(with_targets)})"
         )
     with open(target_file) as f:
-        data = yaml_load(f) or {}
+        data = source_yaml(f) or {}
 
     targets = data.get("targets", {})
     overrides = _target_overrides(platform_name, targets_dir)
@@ -843,7 +871,7 @@ def list_available_targets(
     if not os.path.exists(target_file):
         return []
     with open(target_file) as f:
-        data = yaml_load(f) or {}
+        data = source_yaml(f) or {}
 
     # The count --target filters on: overrides applied, as load_target_config
     # applies them. The scraped list counted Batocera's machine variants and
@@ -2250,7 +2278,7 @@ def load_emulator_profiles(
         raise InputMissing(f"no emulator profile directory at {emulators_dir}")
     for f in source_yaml_paths(emu_path):
         with open(f) as fh:
-            profile = yaml_load(fh) or {}
+            profile = source_yaml(fh) or {}
         if "emulator" not in profile:
             continue
         _normalize_hash_fields(profile)
@@ -2380,7 +2408,7 @@ def group_identical_platforms(
         try:
             raw_path = os.path.join(platforms_dir, f"{platform}.yml")
             with open(raw_path) as f:
-                raw = yaml_load(f) or {}
+                raw = source_yaml(f) or {}
             inherits[platform] = "inherits" in raw
             config = load_platform_config(platform, platforms_dir)
         except FileNotFoundError:
@@ -3524,6 +3552,9 @@ def build_target_cores_cache(
                 raise
             notes.append(f"INFO: Skipping {p}: no hardware targets")
             skip.append(p)
+        except SourceUnreadable:
+            # A damaged targets file is not a platform without the target.
+            raise
         except ValueError as e:
             if is_all:
                 notes.append(f"INFO: Skipping {p}: {e}")
@@ -3551,7 +3582,7 @@ def _unknown_target_message(target: str, platforms: list[str], platforms_dir: st
         if not os.path.exists(target_file):
             continue
         with open(target_file) as f:
-            targets = (yaml_load(f) or {}).get("targets", {})
+            targets = (source_yaml(f) or {}).get("targets", {})
         overrides = _target_overrides(platform, targets_dir)
         for name in _target_alias_index(targets, overrides):
             owners.setdefault(name, []).append(platform)
@@ -3648,7 +3679,8 @@ def run_cli(main: Callable[[], int | None]) -> None:
     try:
         code = main()
         sys.stdout.flush()
-    except (InputMissing, ArtifactLockBusy, ArtifactDirectoryMissing) as exc:
+    except (InputMissing, SourceUnreadable, ArtifactLockBusy,
+            ArtifactDirectoryMissing) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
     except BrokenPipeError:

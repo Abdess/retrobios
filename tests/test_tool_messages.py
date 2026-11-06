@@ -109,6 +109,44 @@ class TheSystemHintCountsTheListing(unittest.TestCase):
                 self.assertIn(f"--list-systems lists all {printed}.", proc.stderr)
 
 
+class ADamagedProfileNamesItself(unittest.TestCase):
+    """One misindented key in an unrelated profile stopped `verify.py
+    --emulator handy` and generate_pack on a 37-line yaml traceback, the
+    faulty file named near its end."""
+
+    def test_one_line_names_the_file_and_line(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+            profiles = Path(folder)
+            (profiles / "handy.yml").write_text(
+                (REPO_ROOT / "emulators" / "handy.yml").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (profiles / "bad.yml").write_text(
+                "emulator: Bad\nfiles:\n  - name: a\n   size: 3\n", encoding="utf-8"
+            )
+            for script, extra in (("verify.py", []),
+                                  ("generate_pack.py", ["--output-dir", folder])):
+                with self.subTest(script=script):
+                    proc = subprocess.run(
+                        [sys.executable, f"scripts/{script}", "--emulator", "handy",
+                         "--emulators-dir", folder, *extra],
+                        cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+                        check=False,
+                    )
+                    self.assertEqual(proc.returncode, 1, proc.stderr)
+                    self.assertNotIn("Traceback", proc.stderr)
+                    self.assertEqual(proc.stderr.strip().splitlines(), [
+                        f"ERROR: {profiles / 'bad.yml'}:4: did not find expected '-' "
+                        "indicator. Check it with: python scripts/validate_schemas.py "
+                        "--source-only"
+                    ])
+
+    def test_a_damaged_file_is_not_an_absent_one(self):
+        """Ten callers skip a platform whose file is absent (except
+        FileNotFoundError): a damaged one has to stop them instead."""
+        self.assertFalse(issubclass(common.SourceUnreadable, FileNotFoundError))
+
+
 class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
     """`verify --all --target swich` ended on "no platform has it" after 17
     INFO lines, two of which held the suggestion."""
