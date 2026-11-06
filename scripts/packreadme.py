@@ -300,8 +300,8 @@ def _build_readme(
         if fallback_systems:
             listed = "\n".join(f"    {_group_label(s)}" for s in fallback_systems)
             region_info += (
-                "\n  These systems have no BIOS in those regions, so all\n"
-                "  of theirs were kept:\n"
+                "\n  These systems have no BIOS in those regions, so every\n"
+                "  BIOS file for them was kept:\n"
                 f"{listed}\n"
             )
         region_info += (
@@ -316,7 +316,7 @@ def _build_readme(
         slot_info = (
             "  Where a core declares which BIOS it prefers, only that one was\n"
             "  kept for each system and region. Systems whose cores declare no\n"
-            "  order keep all of theirs.\n"
+            "  order keep every BIOS file.\n"
         )
         if undecidable_slots:
             slot_info += (
