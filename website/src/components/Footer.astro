@@ -1,7 +1,8 @@
 ---
 // Starlight's footer (edit link, previous and next), who keeps the project
 // and where to report a problem, the release the packs come from, and the
-// licence line. The release is read from release.json, written when the
+// licence line, and "Did this page help?" (src/scripts/count.ts, shown
+// only where the answer is counted). The release is read from release.json, written when the
 // packs were published: the site may be newer than the packs. None of it
 // is in the search index: "MIT for the tooling" was the excerpt of short
 // pages, and "bios", "release" and "problem" matched every page.
@@ -24,9 +25,16 @@ const date = releaseDate(tag);
 <div class="rb-footer-root" data-pagefind-ignore>
 <Default />
 <div class="rb-footer">
+	<p class="rb-helpful" data-rb-helpful-box hidden>
+		Did this page help?
+		<button type="button" data-rb-helpful="yes">Yes</button>
+		<button type="button" data-rb-helpful="no">No</button>
+		<span data-rb-helpful-thanks hidden>Thanks, counted.</span>
+	</p>
 	<p>
 		Maintained by <a href="https://github.com/Abdess">Abdess on GitHub</a>.{' '}
 		<a href={`${REPO}/issues/new`}>Report a problem</a>.
+		<a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}wiki/privacy/`}>Privacy</a>.
 	</p>
 	<p>
 		Packs from release <a href={`${REPO}/releases/tag/${tag}`}>{tag}</a>{date && <>, <time datetime={tag.slice(1).replaceAll('.', '-')}>{date}</time></>}.
@@ -37,6 +45,10 @@ const date = releaseDate(tag);
 	</p>
 </div>
 </div>
+
+<script>
+	import '../scripts/count.ts';
+</script>
 
 <style>
 	/* The wrapper only keeps the footer out of the search index: it adds no box. */
@@ -52,4 +64,16 @@ const date = releaseDate(tag);
 	.rb-footer a { color: inherit; }
 	.rb-footer a:hover { color: var(--sl-color-white); }
 	.rb-footer .rb-copyright { margin-top: 0.75rem; }
+	.rb-helpful button {
+		margin-left: 0.4rem;
+		padding: 0.1rem 0.6rem;
+		font: inherit;
+		color: var(--sl-color-white);
+		background: transparent;
+		border: 1px solid var(--sl-color-gray-4);
+		border-radius: 0.25rem;
+		cursor: pointer;
+	}
+	.rb-helpful button:hover { border-color: var(--sl-color-accent); }
+	.rb-helpful span { margin-left: 0.4rem; }
 </style>
