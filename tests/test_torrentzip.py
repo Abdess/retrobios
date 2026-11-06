@@ -155,6 +155,72 @@ def _as_file(test: unittest.TestCase, data: bytes) -> str:
     return path
 
 
+class StreamingWriter(unittest.TestCase):
+    """Members stream through in chunks, one in memory at a time."""
+
+    def _members(self) -> list[tuple[str, bytes]]:
+        import random
+
+        noise = random.Random(7).randbytes(70_000)
+        return [("b.rom", noise + bytes(50_000) + noise[:9_000]), ("A.rom", b"x" * 1_000)]
+
+    def test_chunked_input_gives_the_one_shot_bytes(self):
+        """Deflate output does not depend on how its input is cut."""
+        import io
+        import torrentzip
+
+        members = self._members()
+        whole = torrentzip.build_torrentzip(members)
+        saved = torrentzip.CHUNK
+        try:
+            for chunk in (1, 333, 4096):
+                torrentzip.CHUNK = chunk
+                self.assertEqual(torrentzip.build_torrentzip(members), whole, chunk)
+        finally:
+            torrentzip.CHUNK = saved
+        sink = io.BytesIO()
+        written = torrentzip.write_torrentzip(
+            sink, [(name, lambda d=data: io.BytesIO(d)) for name, data in members]
+        )
+        self.assertEqual(sink.getvalue(), whole)
+        self.assertEqual(
+            [(w.name, w.size, w.sha1) for w in written],
+            [(name, len(data), hashlib.sha1(data).hexdigest())
+             for name, data in sorted(members, key=lambda m: m[0].lower())],
+        )
+
+    def test_a_member_past_32_bits_takes_a_zip64_field(self):
+        """cspect-next-8gb.zip holds an 8 GiB image: its size needs ZIP64."""
+        import torrentzip
+
+        members = self._members()
+        saved = torrentzip.ZIP32_LIMIT
+        torrentzip.ZIP32_LIMIT = 60_000
+        try:
+            data = torrentzip.build_torrentzip(members)
+        finally:
+            torrentzip.ZIP32_LIMIT = saved
+        with zipfile.ZipFile(_as_file(self, data)) as zf:
+            self.assertIsNone(zf.testzip())
+            self.assertEqual(
+                {info.filename: zf.read(info) for info in zf.infolist()}, dict(members)
+            )
+        self.assertNotEqual(data, build_torrentzip(members))
+
+    def test_zlib_ng_is_recognised(self):
+        """python.org 3.14 on Windows links zlib-ng, which gives other bytes."""
+        from types import SimpleNamespace
+
+        from torrentzip import zlib_ng_version
+
+        stock = SimpleNamespace(ZLIB_RUNTIME_VERSION="1.3.1")
+        windows = SimpleNamespace(ZLIB_RUNTIME_VERSION="1.3.1.zlib-ng")
+        binding = SimpleNamespace(ZLIB_RUNTIME_VERSION="1.3.1", ZLIBNG_VERSION="2.2.4")
+        self.assertIsNone(zlib_ng_version(stock))
+        self.assertEqual(zlib_ng_version(windows), "1.3.1.zlib-ng")
+        self.assertEqual(zlib_ng_version(binding), "2.2.4")
+
+
 class CheckModeExitCode(unittest.TestCase):
     """--check printed `conform: False` and exited 0, so no script could use it."""
 

@@ -16,9 +16,12 @@ in its repository, so both are fetched without a browser:
 
 Only sets the collection has a reason to know are kept, so the committed
 snapshot stays small: the archive names that emulator profiles or platform
-BIOS lists reference, and the sets holding a dump-catalog entry the
-collection lacks (provenance_report names the set as where to find it).
-``--all`` keeps everything.
+BIOS lists reference, the archives the collection holds, the sets holding a
+dump-catalog entry the collection lacks (provenance_report names the set as
+where to find it), and every set whose members equal an archive the
+collection keeps under another name. That last entry carries the
+collection's name and keeps the upstream one in ``set``. ``--all`` keeps
+everything.
 
 Members without a CRC32 are undumped. A real romset does not carry them, so
 they are dropped from the recipe rather than disqualifying the whole set.
@@ -80,6 +83,83 @@ def relevant_archives(emulators_dir: str, platforms_dir: str) -> set[str]:
 
 
 Targets = dict[tuple[str, int], set[str]]
+MemberList = tuple[tuple[str, str], ...]
+ByMembers = dict[MemberList, set[str]]
+
+_VARIANT_TAG = re.compile(r"\.[0-9a-f]{8}$")
+
+
+def member_list(members: list[dict]) -> MemberList:
+    """Sorted (name, crc32) of a recipe, the key an archive is matched on."""
+    return tuple(
+        sorted((str(m["name"]), str(m.get("crc32") or "").lower()) for m in members)
+    )
+
+
+def collection_archives(db_path: str) -> tuple[set[str], ByMembers]:
+    """Names and member lists of every archive the collection holds.
+
+    A set the collection keeps under another name is still that set:
+    ``aga.zip`` holds exactly MAME's ``isa_aga`` and ``votrax.zip`` its
+    ``votrsc01a``. Matched by name alone, neither ever entered the snapshot.
+    A ``.variants/`` copy stands for the name its tag is cut from.
+    """
+    with open(db_path, encoding="utf-8") as handle:
+        files = json.load(handle).get("files", {})
+    names: set[str] = set()
+    by_members: ByMembers = {}
+    for entry in files.values():
+        path = Path(entry.get("path", ""))
+        name = _VARIANT_TAG.sub("", path.name)
+        if not name.lower().endswith(".zip") or not path.is_file():
+            continue
+        try:
+            with zipfile.ZipFile(path) as archive:
+                held = [
+                    {"name": info.filename, "crc32": f"{info.CRC:08x}"}
+                    for info in archive.infolist() if not info.is_dir()
+                ]
+        except (OSError, zipfile.BadZipFile) as exc:
+            print(f"  UNREADABLE: {path}: {exc}", file=sys.stderr)
+            continue
+        names.add(name)
+        if held:
+            by_members.setdefault(member_list(held), set()).add(name)
+    return names, by_members
+
+
+def _entry(
+    dat: str, archive: str, set_name: str, description: str, members: list[dict]
+) -> dict:
+    return {
+        "dat": dat,
+        "name": archive,
+        "set": set_name,
+        "description": description,
+        "members": sorted(members, key=lambda member: member["name"]),
+    }
+
+
+def named_entries(
+    dat: str,
+    set_name: str,
+    description: str,
+    members: list[dict],
+    kept: bool,
+    by_members: ByMembers | None,
+) -> list[dict]:
+    """The snapshot entries one upstream set gives.
+
+    Under its own name when kept, and under every collection name whose
+    archive holds exactly its members. ``set`` keeps the upstream name.
+    """
+    archives = {f"{set_name}.zip"} if kept else set()
+    if by_members:
+        archives |= by_members.get(member_list(members), set())
+    return [
+        _entry(dat, archive, set_name, description, members)
+        for archive in sorted(archives)
+    ]
 
 
 def catalog_targets(provenance_dir: str, db_path: str) -> Targets:
@@ -116,8 +196,28 @@ def holds_target(members: list[dict], targets: Targets | None) -> bool:
     return False
 
 
+def one_set_per_archive(entries: list[dict]) -> list[dict]:
+    """One entry per archive and member list, its own set preferred.
+
+    Thirty MAME keyboard sets carry the same ROM, so ``a500kbd_ch.zip``
+    matches all of them. The set named like the archive is the one kept,
+    then the first by name.
+    """
+    chosen: dict[tuple[str, MemberList], dict] = {}
+    for entry in entries:
+        key = (entry["name"], member_list(entry["members"]))
+        current = chosen.get(key)
+        own = entry["name"] == f"{entry['set']}.zip"
+        if current is None or (own and current["name"] != f"{current['set']}.zip"):
+            chosen[key] = entry
+    return sorted(chosen.values(), key=lambda e: (e["name"], e["set"]))
+
+
 def recipe_entries(
-    dat: LogiqxDat, keep: set[str] | None = None, targets: Targets | None = None
+    dat: LogiqxDat,
+    keep: set[str] | None = None,
+    targets: Targets | None = None,
+    by_members: ByMembers | None = None,
 ) -> list[dict]:
     """Group a parsed DAT into one recipe per set."""
     by_set: dict[str, list] = {}
@@ -128,32 +228,22 @@ def recipe_entries(
 
     entries: list[dict] = []
     for set_name, roms in sorted(by_set.items()):
-        archive = f"{set_name}.zip"
-        if keep is not None and archive not in keep and not holds_target(
-            [{"crc32": r.crc32, "size": r.size, "sha1": r.sha1} for r in roms], targets
-        ):
-            continue
-        entries.append(
-            {
-                "dat": dat.name or "unnamed",
-                "name": archive,
-                "set": set_name,
-                "description": roms[0].description,
-                "members": sorted(
-                    (
-                        {
-                            "name": rom.name,
-                            "size": rom.size,
-                            "crc32": rom.crc32,
-                            "sha1": rom.sha1,
-                        }
-                        for rom in roms
-                    ),
-                    key=lambda member: member["name"],
-                ),
-            }
+        members = [
+            {"name": rom.name, "size": rom.size, "crc32": rom.crc32, "sha1": rom.sha1}
+            for rom in roms
+        ]
+        kept = (
+            keep is None
+            or f"{set_name}.zip" in keep
+            or holds_target(members, targets)
         )
-    return entries
+        entries.extend(
+            named_entries(
+                dat.name or "unnamed", set_name, roms[0].description, members,
+                kept, by_members,
+            )
+        )
+    return one_set_per_archive(entries)
 
 
 _MACHINE = re.compile(rb'<machine name="([^"]+)"([^>]*)>')
@@ -240,19 +330,31 @@ def listxml_entries(
     label: str,
     keep: set[str] | None,
     targets: Targets | None = None,
+    by_members: ByMembers | None = None,
 ) -> list[dict]:
     """Recipes from a MAME -listxml document, parents resolved.
 
     A non-merged archive carries its parent set's ROMs as well as its own, so
     a machine with ``romof`` is read as the union, its own members winning a
     name collision. Two passes: the parents a set needs are only known once
-    that set has been seen.
+    that set has been seen. Matching by member list reads every machine in
+    one pass, every parent included.
     """
+    def kept(name: str) -> bool:
+        return keep is None or f"{name}.zip" in keep
+
     with open_stream() as stream:
         wanted = _scan_listxml(
-            stream, lambda name: keep is None or f"{name}.zip" in keep, targets
+            stream, (lambda _name: True) if by_members else kept, targets
         )
-    requested = set(wanted)
+    requested = (
+        {
+            name for name, (_parent, roms) in wanted.items()
+            if kept(name) or holds_target(roms, targets)
+        }
+        if by_members
+        else set(wanted)
+    )
     parents = {
         parent for parent, _roms in wanted.values() if parent and parent not in wanted
     }
@@ -263,23 +365,20 @@ def listxml_entries(
 
     entries: list[dict] = []
     for name, (parent, roms) in sorted(wanted.items()):
-        # A parent read only to complete a child is not itself an entry.
-        if name not in requested:
+        if not by_members and name not in requested:
+            # A parent read only to complete a child is not itself an entry.
             continue
         members = {member["name"]: member for member in wanted.get(parent, (None, []))[1]} if parent else {}
         members.update({member["name"]: member for member in roms})
         if not members:
             continue
-        entries.append(
-            {
-                "dat": label,
-                "name": f"{name}.zip",
-                "set": name,
-                "description": f"parent {parent}" if parent else name,
-                "members": sorted(members.values(), key=lambda m: m["name"]),
-            }
+        entries.extend(
+            named_entries(
+                label, name, f"parent {parent}" if parent else name,
+                list(members.values()), name in requested, by_members,
+            )
         )
-    return entries
+    return one_set_per_archive(entries)
 
 
 def _recipe_key(entry: dict) -> tuple[str, str]:
@@ -609,12 +708,13 @@ def main() -> int:
 
     output = args.output or DEFAULT_OUTPUT.format(source=args.source)
     Path(output).parent.mkdir(parents=True, exist_ok=True)
-    keep = (
-        None
-        if args.all
-        else relevant_archives(args.emulators_dir, args.platforms_dir)
-    )
-    targets = None if args.all else catalog_targets(args.provenance_dir, args.db)
+    keep: set[str] | None = None
+    targets = None
+    by_members: ByMembers | None = None
+    if not args.all:
+        held, by_members = collection_archives(args.db)
+        keep = relevant_archives(args.emulators_dir, args.platforms_dir) | held
+        targets = catalog_targets(args.provenance_dir, args.db)
 
     dats: dict[str, str] = {}
     entries: list[dict] = []
@@ -622,7 +722,9 @@ def main() -> int:
 
     if _is_listxml(pack):
         label = f"MAME {pack.stem.replace('lx', '')}"
-        entries = listxml_entries(_listxml_opener(pack), label, keep, targets)
+        entries = listxml_entries(
+            _listxml_opener(pack), label, keep, targets, by_members
+        )
         dats[label] = pack.stem
         print(f"  {label}: {len(entries)} sets retenus")
         members = sum(len(entry["members"]) for entry in entries)
@@ -645,7 +747,7 @@ def main() -> int:
             continue
         if revision:
             dat.name = f"{dat.name or member} @ {revision}"
-        found = recipe_entries(dat, keep, targets)
+        found = recipe_entries(dat, keep, targets, by_members)
         if not found:
             continue
         dats[dat.name or member] = dat.version

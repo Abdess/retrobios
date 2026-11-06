@@ -66,6 +66,13 @@ KEPT = {
     "bios/Mattel/Aquarius/.variants/aquarius_ar.zip.73026a45": (
         "a platform pack copy; its TMCTV.png is held only here"
     ),
+    # Each carries slot ROMs beside its own set. Its own members, TorrentZipped,
+    # are byte for byte the archive under the newer MAME name in Arcade/MAME,
+    # so trimming it makes a duplicate: whether the old name stays is the
+    # owner's storage decision (2026-11-06).
+    "bios/Arcade/Arcade/fccpu20.zip": "MAME 0.196 to 0.258 fccpu20, now sys68k_cpu20.zip",
+    "bios/Arcade/Arcade/fcisio1.zip": "MAME 0.196 to 0.258 fcisio1, now sys68k_isio1.zip",
+    "bios/Arcade/Arcade/interpod.zip": "MAME 0.177 to 0.215 interpod, now cbm_interpod.zip",
     "bios/Sega/Dreamcast/dc.zip": (
         "RetroBat's dc/dc.zip holds dc_boot.bin and dc_flash.bin, the names the "
         "Dreamcast BIOS goes by outside MAME, not MAME's dc set"

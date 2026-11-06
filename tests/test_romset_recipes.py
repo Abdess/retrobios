@@ -246,6 +246,25 @@ class ReportsOverAFixture(unittest.TestCase):
         self.assertEqual(len(report["unreproducible"]), 1)
         self.assertEqual(report["unreproducible"][0]["recipes_tried"], ["v1"])
 
+    def test_a_composite_md5_is_no_container_target(self):
+        """Recalbox hashes a ZIP by its members: its md5 names no archive bytes."""
+        platforms = self.root / "platforms"
+        platforms.mkdir()
+        (platforms / "_registry.yml").write_text(
+            "platforms:\n  demo:\n    config: demo.yml\n    zip_digest: composite\n",
+            encoding="utf-8",
+        )
+        (platforms / "demo.yml").write_text(
+            "platform: Demo\nsystems:\n  arcade:\n    files:\n"
+            "      - name: set.zip\n        destination: set.zip\n"
+            f"        md5: {'f' * 32}\n",
+            encoding="utf-8",
+        )
+        self.db["indexes"]["by_md5"] = {}
+
+        report = missing_report(self.recipes, self.pool, self.db, str(platforms))
+        self.assertEqual(report, {"constructible": [], "unreproducible": [], "no_recipe": []})
+
 
 DAT = """<?xml version="1.0"?>
 <datafile>
@@ -408,6 +427,87 @@ class ListXmlRecipes(unittest.TestCase):
         self.assertEqual([entry["name"] for entry in entries], ["childset.zip"])
         self.assertEqual(
             [m["name"] for m in entries[0]["members"]], ["own.rom", "shared.rom"]
+        )
+
+    def test_a_set_kept_under_another_name_is_matched_by_members(self):
+        """aga.zip holds exactly MAME's isa_aga: the entry carries the
+        collection's name and keeps the upstream one in ``set``."""
+        from scripts.scraper.romset_dat_importer import member_list
+
+        child = [
+            {"name": "own.rom", "crc32": _crc(ROM_B)},
+            {"name": "shared.rom", "crc32": _crc(ROM_A)},
+        ]
+        entries = listxml_entries(
+            self._opener(self._document()), "MAME 0.289", {"other.zip"},
+            by_members={member_list(child): {"mine.zip"}},
+        )
+        self.assertEqual(
+            [(entry["name"], entry["set"]) for entry in entries],
+            [("mine.zip", "childset")],
+        )
+        self.assertEqual(
+            [m["name"] for m in entries[0]["members"]], ["own.rom", "shared.rom"]
+        )
+
+    def test_matching_by_members_keeps_the_named_sets(self):
+        from scripts.scraper.romset_dat_importer import member_list
+
+        entries = listxml_entries(
+            self._opener(self._document()), "MAME 0.289", {"parentset.zip"},
+            by_members={member_list([{"name": "nothing", "crc32": "0"}]): {"x.zip"}},
+        )
+        self.assertEqual([entry["name"] for entry in entries], ["parentset.zip"])
+
+    def test_one_entry_per_archive_its_own_set_first(self):
+        """Thirty keyboard sets share one ROM: the set named like the archive wins."""
+        from scripts.scraper.romset_dat_importer import one_set_per_archive
+
+        members = [{"name": "kbd.rom", "crc32": "12345678"}]
+        entries = one_set_per_archive([
+            {"name": "a500kbd.zip", "set": "a2000kbd", "members": members},
+            {"name": "a500kbd.zip", "set": "a500kbd", "members": members},
+            {"name": "a500kbd.zip", "set": "a600kbd", "members": members},
+        ])
+        self.assertEqual([entry["set"] for entry in entries], ["a500kbd"])
+
+    def test_a_logiqx_set_is_matched_by_members_too(self):
+        from scripts.scraper.romset_dat_importer import member_list
+
+        members = [
+            {"name": "01", "crc32": _crc(ROM_A)},
+            {"name": "23", "crc32": _crc(ROM_B)},
+        ]
+        entries = recipe_entries(
+            parse_logiqx(DAT.format(crc_a=_crc(ROM_A), crc_b=_crc(ROM_B))),
+            keep=set(), by_members={member_list(members): {"salora.zip"}},
+        )
+        self.assertEqual(
+            [(entry["name"], entry["set"]) for entry in entries],
+            [("salora.zip", "manager")],
+        )
+
+    def test_the_collection_names_and_member_lists(self):
+        """A .variants/ copy stands for the name its tag is cut from."""
+        from scripts.scraper.romset_dat_importer import collection_archives, member_list
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as temp:
+            root = Path(temp)
+            plain, variant = root / "set.zip", root / "other.zip.1a2b3c4d"
+            for path in (plain, variant):
+                with zipfile.ZipFile(path, "w") as archive:
+                    archive.writestr("a.rom", ROM_A)
+            loose = root / "loose.bin"
+            loose.write_bytes(ROM_B)
+            db = root / "db.json"
+            db.write_text(json.dumps({"files": {
+                str(i): {"path": str(path)} for i, path in enumerate((plain, variant, loose))
+            }}), encoding="utf-8")
+            names, by_members = collection_archives(str(db))
+        self.assertEqual(names, {"set.zip", "other.zip"})
+        self.assertEqual(
+            by_members,
+            {member_list([{"name": "a.rom", "crc32": _crc(ROM_A)}]): {"set.zip", "other.zip"}},
         )
 
     def test_a_set_holding_a_missing_catalog_dump_is_kept(self):

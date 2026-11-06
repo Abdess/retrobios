@@ -20,6 +20,24 @@ Two questions follow, and this module answers both:
 Reconstruction is only possible when the pinned archive is itself TorrentZip.
 An archive whose bytes carry metadata unrelated to its contents cannot be
 derived from ROMs by anyone, and is reported as such rather than guessed at.
+
+Every archive the collection holds also has a recipe of its own in
+``recipes/archives.json`` (scripts/archive_build.py):
+
+``--capture``
+    Write a record for every archive in database.json: members in order with
+    size, crc32 and sha1, container sha1, md5 and size, and whether the
+    TorrentZip build reproduces the bytes (``exact``) or only the members
+    (``canonical``). Archives already recorded under the same sha1 are not
+    read again.
+
+``--build NAME --output-dir DIR``
+    Build an archive from the members the collection holds, loose or inside
+    another archive, and verify it before moving it into place.
+
+``--build-all --output-dir DIR``
+    The same for every recorded archive, with one line per archive: exact,
+    canonical, or impossible with the member nothing holds.
 """
 
 from __future__ import annotations
@@ -42,6 +60,8 @@ from common import (
     list_registered_platforms,
 )
 from torrentzip import build_torrentzip, is_torrentzip
+
+ARCHIVES_FILE = Path(__file__).resolve().parent.parent / "recipes" / "archives.json"
 
 Recipe = list[tuple[str, str]]
 
@@ -290,7 +310,9 @@ def platform_targets(platforms_dir: str) -> dict[str, set[str]]:
     """Container MD5s the platforms pin, per archive name.
 
     ``zipped_file`` entries pin an inner ROM instead of the container, so
-    their MD5 is not an archive hash and is skipped.
+    their MD5 is not an archive hash and is skipped. So is a Recalbox md5,
+    the composite of the members (``zip_digest: composite``, Bios.cpp:64-68):
+    no container build can ever give it.
     """
     targets: dict[str, set[str]] = defaultdict(set)
     for name in list_registered_platforms(platforms_dir):
@@ -298,7 +320,11 @@ def platform_targets(platforms_dir: str) -> dict[str, set[str]]:
         for system in config.get("systems", {}).values():
             for entry in system.get("files", []) or []:
                 archive = entry.get("name", "")
-                if not archive.endswith(".zip") or entry.get("zipped_file"):
+                if (
+                    not archive.endswith(".zip")
+                    or entry.get("zipped_file")
+                    or entry.get("zip_digest") == "composite"
+                ):
                     continue
                 for value in str(entry.get("md5") or "").split(","):
                     value = value.strip().lower()
@@ -453,6 +479,95 @@ def print_missing(gap: dict) -> None:
         print(f"  NO RECIPE: {record['archive']} md5={record['md5'][:8]}")
 
 
+def run_capture(args: argparse.Namespace, db: dict) -> int:
+    """Write recipes/archives.json for every archive the database lists."""
+    import archive_build  # noqa: PLC0415
+
+    try:
+        records, failed = archive_build.capture(
+            db,
+            archive_build.load_ledger(Path(args.archives)),
+            archive_build.recipe_index(args.emulators_dir, args.dat_recipes),
+            archive_build.container_pins(args.platforms_dir, args.emulators_dir),
+        )
+    except archive_build.ZlibNgError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 2
+    for path, reason in sorted(failed.items()):
+        print(f"  UNREADABLE: {path}: {reason}", file=sys.stderr)
+    changed = archive_build.write_ledger(records, Path(args.archives))
+    by_class: dict[str, int] = defaultdict(int)
+    for record in records.values():
+        by_class[record["rebuild"]] += 1
+    agreed = sum(1 for record in records.values() if len(record["sources"]) > 1)
+    pinned = sum(1 for record in records.values() if record.get("bytes_pinned"))
+    print(
+        f"{len(records)} archive recipes: {by_class['exact']} exact, "
+        f"{by_class['canonical']} canonical; {agreed} agree with a profile or DAT "
+        f"recipe, {pinned} pinned as bytes"
+    )
+    print(f"{'Wrote' if changed else 'Unchanged'} {args.archives}")
+    return 1 if failed else 0
+
+
+def run_build(args: argparse.Namespace, db: dict) -> int:
+    """Build one archive, or all of them, from the members the collection holds."""
+    import archive_build  # noqa: PLC0415
+
+    if not args.output_dir:
+        print("ERROR: --build and --build-all need --output-dir", file=sys.stderr)
+        return 2
+    ledger = archive_build.load_ledger(Path(args.archives))
+    if args.build_all:
+        records = [ledger[path] for path in sorted(ledger)]
+    else:
+        records = archive_build.select(ledger, args.build)
+        if not records:
+            print(f"ERROR: no archive recipe named {args.build}", file=sys.stderr)
+            return 2
+    ng = archive_build.zlib_ng_version()
+    if ng:
+        print(
+            f"  zlib-ng {ng} in use: TorrentZip bytes are stock zlib's output, so no "
+            "build is claimed exact here; exact recipes are checked by their members"
+        )
+    root = Path(args.bios_dir).resolve().parent
+    atoms = archive_build.AtomIndex.from_collection(ledger, db, root)
+    counts: dict[str, int] = defaultdict(int)
+    own: list[tuple[str, int]] = []
+    for record in records:
+        result = archive_build.build_archive(record, atoms, Path(args.output_dir), root)
+        counts[result.status] += 1
+        if result.own_members:
+            own.append((result.path, result.own_members))
+        if result.status == "impossible":
+            for member in result.missing:
+                print(
+                    f"  IMPOSSIBLE: {result.path}: missing {member['name']} "
+                    f"({member['sha1']})"
+                )
+        elif result.status == "failed":
+            print(f"  FAILED: {result.path}: {result.detail}")
+        else:
+            note = f" ({result.detail})" if result.detail else ""
+            print(f"  {result.status.upper()}: {result.path}{note}")
+            if args.discard:
+                Path(result.output).unlink()
+    print(
+        f"\n{len(records)} archives: {counts['exact']} rebuilt exact, "
+        f"{counts['canonical']} canonical, {counts['impossible']} impossible, "
+        f"{counts['failed']} failed"
+    )
+    print(
+        f"  {len(own)} of them read {sum(n for _p, n in own)} members from their "
+        "own archive, held nowhere else in the collection"
+    )
+    if counts["failed"]:
+        print("ERROR: a build did not match its recipe and was not kept", file=sys.stderr)
+        return 1
+    return 1 if counts["impossible"] else 0
+
+
 def _resolve_modes(args: argparse.Namespace) -> None:
     """Which reports run: both by default, and --missing whenever --write.
 
@@ -502,11 +617,35 @@ def main() -> int:
         default="recipes",
         help="recipe snapshot file, or a directory of them",
     )
+    parser.add_argument(
+        "--archives", default=str(ARCHIVES_FILE),
+        help="archive recipe file (default: recipes/archives.json)",
+    )
+    parser.add_argument(
+        "--capture", action="store_true",
+        help="write a recipe for every archive in the database",
+    )
+    build = parser.add_mutually_exclusive_group()
+    build.add_argument("--build", metavar="ARCHIVE", help="build one archive, by path or name")
+    build.add_argument("--build-all", action="store_true", help="build every recorded archive")
+    parser.add_argument("--output-dir", help="where --build and --build-all write")
+    parser.add_argument(
+        "--discard", action="store_true",
+        help="delete each build once verified: a full proof without the disk space",
+    )
     args = parser.parse_args()
     require_directory(args.bios_dir)
-    _resolve_modes(args)
+    if (args.output_dir or args.discard) and not (args.build or args.build_all):
+        parser.error("--output-dir and --discard need --build or --build-all")
+    if args.capture and (args.build or args.build_all):
+        parser.error("--capture runs alone")
 
     db = load_database(args.db)
+    if args.capture:
+        return run_capture(args, db)
+    if args.build or args.build_all:
+        return run_build(args, db)
+    _resolve_modes(args)
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     profile_recipes = collect_recipes(profiles)
     dat_recipes = load_dat_recipes(args.dat_recipes)
@@ -560,7 +699,7 @@ def main() -> int:
         )
         print(
             "  The label is the oldest version producing these bytes: a recipe "
-            "unchanged since 0.190 is counted there, not at its own version."
+            "unchanged since 0.177 is counted there, not at its own version."
         )
         by_recipe: dict[str, int] = defaultdict(int)
         for record in ident["identified"]:

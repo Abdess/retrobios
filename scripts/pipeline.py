@@ -5,7 +5,8 @@ Steps, numbered as the run prints them:
   0    validate_schemas.py          profiles and platform YAMLs, as PR CI checks them
   1    generate_db.py --force       rebuild database.json from bios/
   1b   provenance_report.py         dump-catalog coverage, derivable.json
-  1c   romset_recipes.py            archive identification, reconstruction targets
+  1c   romset_recipes.py            archive identification, reconstruction targets,
+                                    and --capture: recipes/archives.json
   2    refresh_data_dirs.py         Dolphin Sys, PPSSPP assets and the other trees
   2a   mame_hash_scraper            MAME BIOS hashes, and device sets on a new release
   2a2  fbneo_hash_scraper           FBNeo BIOS hashes
@@ -1216,6 +1217,14 @@ def main() -> None:
         [sys.executable, "scripts/romset_recipes.py"],
         STEP_LABELS["romset_recipes"],
     )
+    # A recipe for every archive database.json lists (recipes/archives.json):
+    # only an archive whose sha1 moved is read again, so the step costs the
+    # archives added since the last run.
+    captured, _ = run(
+        [sys.executable, "scripts/romset_recipes.py", "--capture"],
+        f"{STEP_LABELS['romset_recipes']} (archive recipes)",
+    )
+    ok = ok and captured
     results["romset_recipes"] = ok
     all_ok = all_ok and ok
 

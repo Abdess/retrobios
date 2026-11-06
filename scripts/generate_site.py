@@ -5985,7 +5985,7 @@ def _romset_line(f: dict) -> str:
     MAME and FBNeo check the members of an archive by CRC32, never its own
     bytes or its member names: a set works with a release when it holds
     every CRC32 the release's recipe lists, extra members or not. The
-    main neogeo.zip, which every MAME from 0.190 to 0.289 loads, read "No
+    main neogeo.zip, which every MAME from 0.177 to 0.289 loads, read "No
     match" when names had to agree and no member could be extra. Empty
     when no recipe names the archive or the file is not on disk.
     """

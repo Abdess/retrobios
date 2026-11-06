@@ -54,7 +54,7 @@ Every module in `tests/`, by the area it guards.
 | Area | Fixtures | Modules |
 |------|----------|---------|
 | Core regression suites | synthetic | `test_e2e`, `test_audit_regressions`, `test_tool_messages` |
-| File resolution and identity | synthetic + collection | `test_adler32_resolution`, `test_agnostic_scan`, `test_agnostic_scan_mode`, `test_agnostic_scope`, `test_agnostic_substitute`, `test_archive_choice`, `test_archive_recipes`, `test_bios_companions`, `test_bundled_identity`, `test_casefold_cache`, `test_db_aliases`, `test_declared_names`, `test_derivations`, `test_directory_entries`, `test_extra_identity`, `test_foreign_tree`, `test_foreign_tree_names`, `test_frontend_digest`, `test_game_data_homonyms`, `test_hashing`, `test_identity`, `test_maker_folder_names`, `test_md5_pack_context`, `test_name_tiebreak`, `test_nec_filing`, `test_np2_fonts`, `test_owner_resolution`, `test_path_suffix`, `test_resolution_evidence`, `test_sega_filing`, `test_shipped_content`, `test_twin_declaration_status`, `test_twin_declarations`, `test_validated_choice`, `test_variant_choice`, `test_variant_identity`, `test_zipped_member` |
+| File resolution and identity | synthetic + collection | `test_adler32_resolution`, `test_agnostic_scan`, `test_agnostic_scan_mode`, `test_agnostic_scope`, `test_agnostic_substitute`, `test_archive_build`, `test_archive_choice`, `test_archive_recipes`, `test_bios_companions`, `test_bundled_identity`, `test_casefold_cache`, `test_db_aliases`, `test_declared_names`, `test_derivations`, `test_directory_entries`, `test_extra_identity`, `test_foreign_tree`, `test_foreign_tree_names`, `test_frontend_digest`, `test_game_data_homonyms`, `test_hashing`, `test_identity`, `test_maker_folder_names`, `test_md5_pack_context`, `test_name_tiebreak`, `test_nec_filing`, `test_np2_fonts`, `test_owner_resolution`, `test_path_suffix`, `test_resolution_evidence`, `test_sega_filing`, `test_shipped_content`, `test_twin_declaration_status`, `test_twin_declarations`, `test_validated_choice`, `test_variant_choice`, `test_variant_identity`, `test_zipped_member` |
 | Verification, cross-reference and profile checks | synthetic + profiles | `test_bios_layout`, `test_cache_independent_counts`, `test_case_insensitive_platforms`, `test_checks_have_values`, `test_core_file_fills_declaration`, `test_core_size_refusal`, `test_cross_reference_sources`, `test_crypto_aes`, `test_crypto_unique_data`, `test_crypto_verify`, `test_entry_categories`, `test_file_consumers`, `test_fileless_audit`, `test_flycast_layout`, `test_gap_settlement`, `test_hidden_extras`, `test_launcher_aliases`, `test_launcher_layer`, `test_native_mode`, `test_no_case_collisions`, `test_path_conflict_status`, `test_path_null_copies`, `test_profile_checks`, `test_profile_names`, `test_profile_paths`, `test_profile_repositories`, `test_romm_hash_rule`, `test_shared_groups`, `test_standalone_links`, `test_standalone_mode`, `test_undeclared_dedup`, `test_unplaced_extras`, `test_validation_scope`, `test_verify_all_dir`, `test_verify_data_dir_notice`, `test_verify_emulator_evidence`, `test_verify_listing`, `test_verify_pack_choice`, `test_verify_release_asset` |
 | Packs and manifests | synthetic + real packs | `test_artifact_lock`, `test_atomic_artifacts`, `test_batocera_cores`, `test_core_data_trees`, `test_deterministic_zip`, `test_emulator_pack_counts`, `test_finalize_pack_names`, `test_large_file_cache`, `test_libretro_layout`, `test_manifest_entry`, `test_minui_platform`, `test_no_game_data`, `test_pack_conformance_dirs`, `test_pack_core_extras`, `test_pack_counts`, `test_pack_destinations`, `test_pack_failures`, `test_pack_file_names`, `test_pack_grouping`, `test_pack_integrity`, `test_pack_member_identity`, `test_pack_readme`, `test_platform_inheritance`, `test_platform_keys`, `test_release_packs`, `test_required_only_archives`, `test_required_only_twins`, `test_save_root`, `test_split_extras`, `test_split_names`, `test_split_pack`, `test_system_pack_extras`, `test_system_pack_parity`, `test_torrentzip`, `test_which_pack` |
 | Slots and regions | synthetic + profiles | `test_region`, `test_region_agnostic_scan`, `test_region_groups`, `test_region_held`, `test_region_platform_index`, `test_region_required_only`, `test_slot`, `test_slots`, `test_slots_shipped_file` |
@@ -190,8 +190,20 @@ module level, so nothing leaves the machine.
 
 ### Tests that read the working tree
 
-Three modules assert on real repository data instead of fixtures. Each skips
+Four modules assert on real repository data instead of fixtures. Each skips
 when its input is missing, so a partial checkout still runs green.
+
+**test_archive_build.** Reads `database.json` and `recipes/archives.json` and
+fails when an archive has no recipe, when a recipe outlives its archive or
+names another container, or when a recipe member is held nowhere in the
+collection, neither as a loose file nor inside any archive. That list is the
+acquisition list, printed by the failure, and it is empty today. With `bios/`
+present it also holds each recipe against the archive's central directory:
+names in order, sizes and crc32. Its fixture classes build an exact and a
+canonical archive, refuse a mismatch without leaving a file, report a member
+held nowhere as impossible, and never claim an exact build under zlib-ng.
+After adding or changing an archive, `python scripts/romset_recipes.py
+--capture` (pipeline step 1c) brings the recipes back in line.
 
 **test_torrentzip.** Rebuilds real MAME romsets through the TorrentZip builder
 and asserts the output is byte-identical, which is what keeps arcade ZIP hashes
