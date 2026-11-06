@@ -89,6 +89,7 @@ from generate_readme import (
 from provenance_report import build_report, distinct_missing
 import sitemarkup as markup
 import siteentries
+import siteinputs
 import retired_files
 import sitestarlight
 from siteexports import generate_exports_page, load_export_reports
@@ -3174,7 +3175,9 @@ def _front_matter(markdown: str) -> dict:
     return data if isinstance(data, dict) else {}
 
 
-_SHA1_BY_PREFIX: dict[str, str] = {}
+@functools.lru_cache(maxsize=None)
+def _sha1_by_prefix(db_path: str) -> dict[str, str]:
+    return {sha1[:12]: sha1 for sha1 in load_database(db_path)["files"]}
 
 
 def _cards_elsewhere(markdown: str) -> str:
@@ -3185,11 +3188,9 @@ def _cards_elsewhere(markdown: str) -> str:
     away = {ident for ident in links if f'id="{ident}"' not in markdown}
     if not away:
         return markdown
-    if not _SHA1_BY_PREFIX:
-        db = load_database(str(_REPO_ROOT / "database.json"))
-        _SHA1_BY_PREFIX.update({sha1[:12]: sha1 for sha1 in db["files"]})
+    by_prefix = _sha1_by_prefix(str(siteinputs.current().db))
     for ident in away:
-        full = _SHA1_BY_PREFIX[ident.removeprefix("sha1-")]
+        full = by_prefix[ident.removeprefix("sha1-")]
         markdown = markdown.replace(f"](#{ident})", f"]({markup.site_href(f'files/?sha1={full}')})")
     return markdown
 
@@ -3500,10 +3501,14 @@ def _list_pages(
         f"[part {i}]({other}.md)" for i, other in enumerate(stems, 1))
 
 
-@functools.lru_cache(maxsize=1)
 def _collection_sha1_by_path() -> dict[str, str]:
     """The sha1 of each file the collection holds, by its path."""
-    with open(_REPO_ROOT / "database.json", encoding="utf-8") as handle:
+    return _sha1_by_path_in(str(siteinputs.current().db))
+
+
+@functools.lru_cache(maxsize=None)
+def _sha1_by_path_in(db_path: str) -> dict[str, str]:
+    with open(db_path, encoding="utf-8") as handle:
         files = json.load(handle).get("files", {})
     return {str(entry.get("path", "")): sha1 for sha1, entry in files.items()}
 
@@ -12260,6 +12265,12 @@ def main() -> None:
 
 def _generate(args: argparse.Namespace) -> None:
 
+    # Every page reads these, never the repository's own files.
+    siteinputs.use(siteinputs.SiteInputs(
+        db=Path(args.db).resolve(),
+        emulators=Path(args.emulators_dir).resolve(),
+        platforms=Path(args.platforms_dir).resolve(),
+    ))
     db = load_database(args.db)
     docs = Path(args.docs_dir)
     # Files the site serves as they are (data, downloads, images), in the
