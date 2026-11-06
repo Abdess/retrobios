@@ -54,11 +54,13 @@ import pin_installer  # noqa: E402
 import refresh_data_dirs  # noqa: E402
 import upstream  # noqa: E402
 from common import (  # noqa: E402
+    InputMissing,
     apply_target_overrides,
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_registry,
     require_directory,
+    suggest_names,
     upstream_profile_index,
     write_text_atomic,
     yaml_load,
@@ -893,7 +895,10 @@ def record_core_info(
     """
     unknown = sorted(set(names) - set(blobs))
     if unknown:
-        raise ValueError(f"no such .info in core-info: {', '.join(unknown)}")
+        raise InputMissing(
+            f"no such .info in core-info: {', '.join(unknown)}. "
+            + suggest_names(unknown, list(blobs), "libretro-core-info")
+        )
     recorded = load_core_info_record(path) or {}
     recorded.update({n: blobs[n] for n in (names or blobs)})
     payload = {"repository": CORE_INFO_REPO, "blobs": dict(sorted(recorded.items()))}
@@ -1839,7 +1844,10 @@ def main() -> int:
     if args.record_coreinfo is not None:
         blobs = core_info_blobs(args.cache_dir, args.offline)
         if not blobs:
-            raise RuntimeError("core-info listing unavailable: nothing recorded")
+            raise InputMissing(
+                f"core-info listing not in {args.cache_dir}: run without --offline"
+                if args.offline else "core-info listing unavailable: the GitHub API did not answer"
+            )
         done = record_core_info(blobs, args.record_coreinfo)
         print(f"recorded {len(done)} .info file(s) as reviewed")
         return 0

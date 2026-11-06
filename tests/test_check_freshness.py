@@ -316,8 +316,23 @@ class CoreResolutionTests(unittest.TestCase):
             record.write_text(cf.json.dumps({"blobs": {"a": "1", "b": "1"}}))
             cf.record_core_info({"a": "2", "b": "2"}, ["a"], record)
             self.assertEqual(cf.load_core_info_record(record), {"a": "2", "b": "1"})
-            with self.assertRaises(ValueError):
-                cf.record_core_info({"a": "2"}, ["ghost"], record)
+            with self.assertRaises(cf.InputMissing) as raised:
+                cf.record_core_info({"a": "2", "ghosts": "1"}, ["ghost"], record)
+            self.assertIn("Did you mean: ghosts?", str(raised.exception))
+
+    def test_record_errors_are_one_line(self):
+        """A mistyped core and an empty offline cache ended on a traceback."""
+        import subprocess  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory() as tmp:
+            proc = subprocess.run(
+                [sys.executable, str(REPO_ROOT / "scripts" / "check_freshness.py"), "--offline",
+                 "--cache-dir", tmp, "--record-coreinfo"],
+                capture_output=True, text=True, check=False, timeout=120,
+            )
+        self.assertEqual(proc.returncode, 1)
+        self.assertNotIn("Traceback", proc.stderr)
+        self.assertIn("run without --offline", proc.stderr)
 
     def test_offline_without_a_cached_listing_is_skipped(self):
         """Offline, the row read UNKNOWN and failed the run as an upstream
