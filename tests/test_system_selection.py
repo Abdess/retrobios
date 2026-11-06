@@ -404,6 +404,32 @@ class AMissingInputFileIsNamed(unittest.TestCase):
                 self._refused(argv, "ERROR: Registry not found: nosuch.yml")
 
 
+class ASystemReportCountsTheClaimsThePackCounts(unittest.TestCase):
+    """`--platform retroarch --system panasonic-3do` packed MAME 2009's
+    taitofx1.zip, which MAME 2016 claims for that system, and the report's
+    core coverage did not name it: the builder read other_claims, verify
+    read only the entry's own system."""
+
+    def test_a_claim_riding_on_an_entry_selects_it(self):
+        from packextras import extras_for_systems, report_owned_by_systems
+
+        entry = {
+            "name": "taitofx1.zip", "system": "arcade", "systems": ["arcade"],
+            "other_claims": [{"name": "taitofx1.zip", "system": None,
+                              "systems": ["arcade", "panasonic-3do"]}],
+        }
+        extra = {"source_system": "arcade", "source_systems": ["arcade"],
+                 "other_claims": [{"source_system": None,
+                                   "source_systems": ["arcade", "panasonic-3do"]}]}
+        for system in ("panasonic-3do", "arcade", "sony-playstation"):
+            with self.subTest(system=system):
+                self.assertEqual(
+                    bool(report_owned_by_systems([entry], [system])),
+                    bool(extras_for_systems([extra], [system])),
+                )
+        self.assertEqual(report_owned_by_systems([entry], ["panasonic-3do"]), [entry])
+
+
 class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     """verify exited 0 with a required file missing on an md5 platform, so
     the pipeline printed "verify OK" over a pack the frontend rejects."""

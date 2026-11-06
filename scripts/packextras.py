@@ -1552,11 +1552,19 @@ def extras_for_systems(extras: list[dict], system_ids: list[str]) -> list[dict]:
 
 
 def report_owned_by_systems(report: list[dict], system_ids: list[str]) -> list[dict]:
-    """Gap report entries whose extra a pack built with --system carries."""
+    """Gap report entries whose extra a pack built with --system carries.
+
+    The other cores whose claim rides on the entry count, as the builder
+    counts them: MAME 2009's taitofx1.zip went into a --system
+    panasonic-3do pack for MAME 2016 and was missing from the report.
+    """
+    def owner(entry: dict) -> dict:
+        return {"source_system": entry.get("system"), "source_systems": entry.get("systems", [])}
+
     return [
         u for u in report
         if extras_for_systems(
-            [{"source_system": u.get("system"), "source_systems": u.get("systems", [])}],
+            [{**owner(u), "other_claims": [owner(c) for c in u.get("other_claims", [])]}],
             system_ids,
         )
     ]
