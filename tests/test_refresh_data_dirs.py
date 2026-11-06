@@ -118,6 +118,35 @@ class RefreshConcurrency(unittest.TestCase):
         self.assertTrue(finished, "the refresh waited for a reader")
         self.assertEqual(result, [False])
 
+    def test_a_waiting_refresh_names_the_lock_and_the_way_around(self):
+        """"waiting for data/dolphin-sys: another run holds it" named
+        neither the lock nor its holder, and the build waited unbounded."""
+        import fcntl  # noqa: PLC0415
+
+        self.cache.mkdir(parents=True)
+        lock_path = self.cache.with_name(".pak.lock")
+        entered = threading.Event()
+
+        def refresh() -> None:
+            with rdd.cache_lock(self.cache):
+                entered.set()
+
+        with open(lock_path, "a") as reader, self.assertLogs(rdd.log, "WARNING") as logs:
+            fcntl.flock(reader, fcntl.LOCK_SH)
+            worker = threading.Thread(target=refresh, daemon=True)
+            worker.start()
+            for _ in range(200):
+                if logs.records:
+                    break
+                worker.join(timeout=0.05)
+            self.assertFalse(entered.is_set())
+            fcntl.flock(reader, fcntl.LOCK_UN)
+            worker.join(timeout=20)
+        self.assertTrue(entered.is_set())
+        message = logs.records[0].getMessage()
+        self.assertIn(f"lsof {lock_path}", message)
+        self.assertIn("--no-refresh-data", message)
+
     def test_version_file_is_never_left_truncated(self):
         Path(self.versions).parent.mkdir(parents=True)
         Path(self.versions).write_text(json.dumps({"keep": {"sha": "1"}}))
