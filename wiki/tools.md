@@ -52,7 +52,7 @@ Pipeline steps:
 | 4c | Generate target manifests | `--skip-packs` |
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
 | 4e | Games index: what the installer reads for the games on a card (`generate_games_index.py`, fails under its coverage floor) | - (reads the committed install lists) |
-| 5 | Consistency check: counts, paths per archive, every emulator and system pack | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
+| 5 | Consistency check: counts, paths per archive, every emulator and system pack, the narrowed platform packs | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
 | 6 | Pack integrity (extract + hash) | `--skip-packs`, or no full pack built |
 | 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
@@ -69,6 +69,7 @@ Pipeline flags:
 | `--target TARGET` | filter verify, packs and truth by hardware target |
 | `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py`. Refused with `--skip-packs` |
 | `--all-variants` | build the 6 source x required combinations. Refused with `--skip-packs` and with `--source` |
+| `--full-narrowings` | step 5 compares every region, target and system of each platform instead of three of each. Refused with `--skip-packs` |
 | `--check-buildbot` | run step 2b. Additive, and ignored under `--offline` |
 | `--with-truth` | run steps 2c and 2d |
 | `--with-export` | run steps 2c, 2d and 2e |
@@ -95,6 +96,16 @@ alone, run `python scripts/check_buildbot_system.py`.
   profile in each build, built in memory against `verify --emulator`, and
   every system pack that gathers several profiles against `verify --system`.
   Equal counts once hid four RetroArch paths credited and never written.
+- **Each narrowed platform pack is compared too.** Step 5 builds in memory
+  the `--required-only` and `--no-game-data` pack of every platform, and its
+  `--region`, `--target` and `--system` packs, against verify with the same
+  narrowing. The full matrix is 1,150 packs and took 25 minutes on 2026-11-05,
+  so a run compares the first, the middle and the last region, target and
+  system of each platform (155 packs, about 3 minutes), which reaches every
+  code path each narrowing takes. `--full-narrowings` compares them all.
+  `--source` and `--one-per-slot` are not compared: verify has no report of
+  a platform-only, truth-only or one-per-slot pack. A test fails when a new
+  narrowing reaches the pack name without being compared or exempted.
 - **Generators write through `write_if_changed()`.** A new timestamp alone
   rewrites nothing, so a diff on a generated file always means content.
 - **One run per output directory.** Pack generation takes a lock on

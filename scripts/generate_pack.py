@@ -139,14 +139,17 @@ class PackRecord:
     """A pack build kept in memory: the paths it writes, no archive.
 
     ``members`` is every path written, ``files`` the ones the build counts as
-    the profile's files (archives and loose files, not trees or notes). The
-    pipeline builds every emulator pack this way and compares ``files`` with
-    what verify --emulator credits, without reading or compressing a byte.
+    the profile's files (archives and loose files, not trees or notes), and
+    ``trees`` the members a platform pack takes from its data directories.
+    The pipeline builds every emulator pack and every narrowed platform pack
+    this way and compares them with what verify credits, without reading or
+    compressing a byte.
     """
 
     def __init__(self) -> None:
         self.members: list[str] = []
         self.files: list[str] = []
+        self.trees: list[str] = []
 
 
 def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> None:
@@ -586,6 +589,8 @@ def _pack_data_directories(
         required_only=required_only, core_trees=core_trees,
     ):
         _add_pack_member(zf, src, _flat(full, base_dest, flatten))
+        if isinstance(zf, PackRecord):
+            zf.trees.append(_flat(full, base_dest, flatten))
         added += 1
     return added
 
@@ -790,6 +795,7 @@ def generate_pack(
     offline: bool | None = None,
     pack_name: str | None = None,
     no_game_data: bool = False,
+    record: PackRecord | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -799,6 +805,9 @@ def generate_pack(
     ``pack_name`` replaces the derived file name: a split part is named after
     its group, and a name built from every system of a hundred-system group
     is longer than a file name can be.
+
+    ``record`` builds the pack in memory (PackRecord): no archive is written,
+    no external file fetched, and the paths are kept on it.
 
     Returns the path to the generated ZIP, or None on failure.
     """
@@ -832,7 +841,8 @@ def generate_pack(
             platform_name, platforms_dir, narrowings, system_filter, pack_name
         ),
     )
-    os.makedirs(output_dir, exist_ok=True)
+    if record is None:
+        os.makedirs(output_dir, exist_ok=True)
 
     # Case-insensitive dedup only for platforms targeting Windows/macOS.
     # Linux-only platforms (Batocera, Recalbox, RetroDECK, Lakka, RomM)
@@ -919,7 +929,10 @@ def generate_pack(
         undeclared=undeclared,
     )
 
-    with _writing_pack(zip_path) as zf:
+    with (
+        contextlib.nullcontext(record) if record is not None
+        else _writing_pack(zip_path)
+    ) as zf:
       if source != "truth":
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
@@ -1040,7 +1053,7 @@ def generate_pack(
                     if case_insensitive:
                         seen_lower.add(dedup_key.lower())
                     try:
-                        if download_external(file_entry, tmp_path):
+                        if record is None and download_external(file_entry, tmp_path):
                             extract = file_entry.get("extract", False)
                             if extract and tmp_path.endswith(".zip"):
                                 _extract_zip_to_archive(tmp_path, _flat(full_dest, base_dest, flatten), zf)
@@ -1371,6 +1384,13 @@ def _extract_zip_to_archive(
 ) -> None:
     """Extract contents of a source ZIP into target ZIP under dest_prefix."""
     with zipfile.ZipFile(source_zip, "r") as src:
+        if isinstance(target_zf, PackRecord):
+            target_zf.members.extend(
+                f"{dest_prefix}/{name}" if dest_prefix else name
+                for name in map(sanitize_pack_path, src.namelist())
+                if name and not name.endswith("/")
+            )
+            return
         for info in src.infolist():
             if info.is_dir():
                 continue

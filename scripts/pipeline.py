@@ -22,7 +22,8 @@ Steps, numbered as the run prints them:
   4c   --manifest-targets           per-target core lists
   4d   bundled_only.py --strict     copies only an emulator install provides
   4e   generate_games_index.py      install/games/: what the games-on-card mode reads
-  5    consistency check            verify == pack: counts, paths, emulator and system packs
+  5    consistency check            verify == pack: counts, paths, emulator and system packs,
+                                    narrowed platform packs (see check_narrowed_packs)
   6    --verify-packs               pack integrity, extraction and hashes
   7    generate_readme.py           README.md and CONTRIBUTING.md
        generate_installer_doc.py    run samples and tables of wiki/installer.md
@@ -616,6 +617,165 @@ def check_emulator_packs(
     return all_ok and systems_ok
 
 
+# How each _narrowings() dimension is compared by check_narrowed_packs, or why
+# it is not. A test reads the builder's signature against these two tables, so
+# a new narrowing fails it until it is compared or a reason is written here.
+NARROWINGS_COMPARED = frozenset({"regions", "target_name", "required_only", "no_game_data"})
+NARROWINGS_NOT_COMPARED = {
+    "standalone": "an emulator pack mode, compared by check_emulator_packs",
+    "source": "verify has no platform-only or truth-only report to compare with",
+    "one_per_slot": "verify has no slot choice to compare with",
+}
+
+
+def _matrix_coverage(full: bool, count: int) -> range | list[int]:
+    """Which of *count* variants of one dimension a run compares.
+
+    The full matrix takes every one. The default takes the first, the last
+    and one in between, which reaches each code path the dimension takes
+    (an empty selection, a single system, a large one) without its cost.
+    """
+    if full or count <= 3:
+        return range(count)
+    return sorted({0, count // 2, count - 1})
+
+
+def narrowed_variants(
+    platform: str, config: dict, profiles: dict, platforms_dir: str, full: bool,
+) -> list[tuple[str, dict]]:
+    """(label, builder arguments) of each narrowed pack compared for a platform.
+
+    Every region a file of the platform's cores declares, every hardware
+    target, every system, --no-game-data and --required-only. Without
+    *full*, regions, targets and systems are sampled (_matrix_coverage).
+    """
+    import region as region_mod  # noqa: PLC0415
+    from common import list_available_targets  # noqa: PLC0415
+
+    regions = sorted({
+        r for entry in region_mod.platform_region_index(config, profiles).values()
+        for r in entry["regions"]
+    })
+    targets = [t["name"] for t in list_available_targets(platform, platforms_dir)]
+    systems = sorted(config.get("systems") or {})
+    variants: list[tuple[str, dict]] = [
+        ("--required-only", {"required_only": True}),
+        ("--no-game-data", {"no_game_data": True}),
+    ]
+    variants += [
+        (f"--region {regions[i]}", {"regions": [regions[i]]})
+        for i in _matrix_coverage(full, len(regions))
+    ]
+    variants += [
+        (f"--target {targets[i]}", {"target_name": targets[i]})
+        for i in _matrix_coverage(full, len(targets))
+    ]
+    variants += [
+        (f"--system {systems[i]}", {"system_filter": [systems[i]]})
+        for i in _matrix_coverage(full, len(systems))
+    ]
+    return variants
+
+
+def check_narrowed_packs(
+    emulators_dir: str = "emulators", platforms_dir: str = "platforms",
+    db_path: str = "database.json", include_archived: bool = False,
+    full: bool = False,
+) -> bool:
+    """Build each narrowed platform pack in memory and compare it with verify.
+
+    The paths the pack writes against the ones verify credits for the same
+    narrowing, as check_pack_destinations compares the full packs. Both sides
+    run offline: a release asset the cache lacks is missing on each.
+
+    Coverage: --required-only and --no-game-data for every platform, and
+    --region, --target and --system. Measured on 2026-11-05, the full matrix
+    is 1,150 packs and took 25 minutes, one to two seconds a pack, most
+    of it platform-wide work (slot overrides, the gap report) that each build
+    redoes. A run therefore takes the first, middle and last region, target
+    and system of each platform, 155 packs in about 3 minutes: each value of
+    a dimension runs the same code, so three reach every path a narrowing
+    takes (the empty end, one system, a large one). *full* (--full-narrowings)
+    compares every value. NARROWINGS_NOT_COMPARED says why --source and
+    --one-per-slot are not compared.
+    """
+    import generate_pack  # noqa: PLC0415
+    import packresolve  # noqa: PLC0415
+    import verify  # noqa: PLC0415
+    from common import (  # noqa: PLC0415
+        build_zip_contents_index,
+        group_identical_platforms,
+        list_registered_platforms,
+        load_database,
+        load_emulator_profiles,
+        load_platform_config,
+        load_target_config,
+    )
+
+    print(f"\n--- {step_title(STEP_LABELS['consistency'])}, narrowed packs ---")
+    db = load_database(db_path)
+    zip_contents = build_zip_contents_index(db)
+    profiles = load_emulator_profiles(emulators_dir)
+    registry = load_data_dir_registry(platforms_dir)
+    groups = group_identical_platforms(
+        list_registered_platforms(platforms_dir, include_archived=include_archived),
+        platforms_dir,
+    )
+    was_offline = packresolve._OFFLINE
+    packresolve.set_offline(True)
+    all_ok = True
+    compared = 0
+    try:
+        for _members, platform in groups:
+            config = load_platform_config(platform, platforms_dir)
+            for label, narrowing in narrowed_variants(
+                platform, config, profiles, platforms_dir, full,
+            ):
+                target = narrowing.get("target_name")
+                target_cores = (
+                    load_target_config(platform, target, platforms_dir) if target else None
+                )
+                record = generate_pack.PackRecord()
+                with contextlib.redirect_stdout(io.StringIO()), \
+                        contextlib.redirect_stderr(io.StringIO()):
+                    built = generate_pack.generate_pack(
+                        platform, platforms_dir, db, "bios", "",
+                        emulators_dir=emulators_dir, zip_contents=zip_contents,
+                        data_registry=registry, emu_profiles=profiles,
+                        target_cores=target_cores, offline=True, record=record,
+                        **narrowing,
+                    )
+                    report = verify.verify_platform(
+                        load_platform_config(platform, platforms_dir), db,
+                        emulators_dir, profiles, target_cores=target_cores,
+                        data_dir_registry=registry,
+                        **{k: v for k, v in narrowing.items() if k != "target_name"},
+                    ) if built else None
+                compared += 1
+                name = f"{platform} {label}"
+                if report is None:
+                    # The builder declines a system no core of the platform runs.
+                    print(f"  {name}: the builder wrote no pack")
+                    all_ok = False
+                    continue
+                credited = set(report["pack_destinations"])
+                trees = set(record.trees) - credited
+                written = {
+                    m for m in record.members
+                    if not _PACK_NOTES.search(m) and m not in trees
+                }
+                lines = _set_difference_lines(name, credited, written)
+                if lines:
+                    print("\n".join(lines))
+                    all_ok = False
+    finally:
+        packresolve.set_offline(was_offline)
+    scope = "full matrix" if full else "sampled"
+    print(f"  {compared} narrowed platform packs compared ({scope}), "
+          f"{'all equal' if all_ok else 'differences above'}")
+    return all_ok
+
+
 class _Skipped:
     """A step that did not run. Truthy, so it never fails the pipeline, and
     distinct, so the summary does not report it as work that was done."""
@@ -636,7 +796,8 @@ def _refuse_unapplied_flags(
     """A flag the run would drop is refused before any step.
 
     --all-variants builds every source itself, so a --source beside it is
-    dropped; --skip-packs builds none, so both are.
+    dropped; --skip-packs builds none, so both are, and step 5 does not run
+    for --full-narrowings to widen.
     """
     # --source defaults to None so a typed `--source full` is seen: compared
     # with its default value, it went through beside the modes that refuse it.
@@ -645,7 +806,8 @@ def _refuse_unapplied_flags(
         parser.error("--source is incompatible with --all-variants")
     if args.skip_packs:
         for flag, on in (("--source", source_given),
-                         ("--all-variants", args.all_variants)):
+                         ("--all-variants", args.all_variants),
+                         ("--full-narrowings", args.full_narrowings)):
             if on:
                 parser.error(f"{flag} is incompatible with --skip-packs")
     if args.source is None:
@@ -774,6 +936,11 @@ def main() -> None:
         "--all-variants", action="store_true",
         help="Build the six source x required packs of each platform; "
         "not with --source or --skip-packs",
+    )
+    parser.add_argument(
+        "--full-narrowings", action="store_true",
+        help="Step 5 compares every region, target and system of each "
+        "platform, not a sample of three (about 25 minutes)",
     )
     parser.add_argument(
         "--check-buildbot",
@@ -1143,6 +1310,9 @@ def main() -> None:
         # Counts can agree while the paths differ, both ways at once.
         ok = check_pack_destinations(destinations_file, pack_output) and ok
         ok = check_emulator_packs() and ok
+        ok = check_narrowed_packs(
+            include_archived=args.include_archived, full=args.full_narrowings,
+        ) and ok
         print(
             f"--- {step_title(STEP_LABELS['consistency'])}, counts and paths: "
             f"{'OK' if ok else 'FAILED'} ---"

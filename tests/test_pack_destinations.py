@@ -122,6 +122,95 @@ class AnEntryWithoutAFileTakesNoPath(unittest.TestCase):
         self.assertEqual(set(occupied), {"bios/a.bin"})
 
 
+class ARequiredOnlyPack(_Fixture):
+    """verify had no --required-only: nothing compared the pack to a report."""
+
+    def test_verify_credits_what_the_pack_writes(self):
+        from common import load_emulator_profiles, load_platform_config
+        from generate_pack import PackRecord, generate_pack
+        from verify import verify_platform
+
+        (self.emulators / "coreemu.yml").write_text(yaml.safe_dump({
+            "emulator": "CoreEmu", "type": "libretro", "systems": ["sys"],
+            "files": [{"name": "core.bin", "required": False}],
+        }))
+        self._platform(
+            [{"name": "sgb.sfc", "destination": "SGB1.sfc"},
+             {"name": "program.rom", "destination": "program.rom", "required": False}],
+            cores=["coreemu"],
+        )
+        profiles = load_emulator_profiles(str(self.emulators))
+        record = PackRecord()
+        with contextlib.redirect_stdout(io.StringIO()):
+            zip_path = generate_pack(
+                "paths", str(self.platforms), self.db, str(self.bios),
+                str(self.root / "out"), emulators_dir=str(self.emulators),
+                emu_profiles=profiles, offline=True, required_only=True,
+            )
+            generate_pack(
+                "paths", str(self.platforms), self.db, str(self.bios), "",
+                emulators_dir=str(self.emulators), emu_profiles=profiles,
+                offline=True, required_only=True, record=record,
+            )
+        with zipfile.ZipFile(zip_path) as zf:
+            members = set(zf.namelist())
+        # The record names what the archive holds, nothing more or less.
+        self.assertEqual(set(record.members), members)
+        report = verify_platform(
+            load_platform_config("paths", str(self.platforms)), self.db,
+            str(self.emulators), profiles, required_only=True,
+        )
+        self.assertEqual(set(report["pack_destinations"]), {"SGB1.sfc"})
+        self.assertEqual(members - {"README.txt"}, {"SGB1.sfc"})
+
+
+class EveryNarrowingIsCompared(unittest.TestCase):
+    """A way to narrow a pack that step 5 does not build is a way for the pack
+    and verify to drift with nothing to say so."""
+
+    def test_each_dimension_of_the_name_builder_is_accounted_for(self):
+        import inspect
+
+        import pipeline
+        from generate_pack import _narrowings
+
+        dimensions = set(inspect.signature(_narrowings).parameters)
+        compared = set(pipeline.NARROWINGS_COMPARED)
+        exempt = set(pipeline.NARROWINGS_NOT_COMPARED)
+        self.assertFalse(compared & exempt)
+        self.assertEqual(dimensions, compared | exempt,
+                         "compare the new narrowing in check_narrowed_packs, "
+                         "or write in NARROWINGS_NOT_COMPARED why it is not")
+
+    def test_the_variants_reach_every_compared_dimension(self):
+        import pipeline
+        from common import load_emulator_profiles, load_platform_config
+
+        platforms = str(REPO_ROOT / "platforms")
+        config = load_platform_config("retroarch", platforms)
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        for full in (False, True):
+            with self.subTest(full=full):
+                variants = pipeline.narrowed_variants(
+                    "retroarch", config, profiles, platforms, full,
+                )
+                used = {key for _label, narrowing in variants for key in narrowing}
+                self.assertEqual(used, pipeline.NARROWINGS_COMPARED | {"system_filter"})
+        systems = [n for _l, n in variants if "system_filter" in n]
+        self.assertEqual(len(systems), len(config["systems"]))
+
+    def test_the_sample_takes_both_ends_and_the_middle(self):
+        import pipeline
+
+        self.assertEqual(list(pipeline._matrix_coverage(False, 2)), [0, 1])
+        self.assertEqual(pipeline._matrix_coverage(False, 11), [0, 5, 10])
+        self.assertEqual(list(pipeline._matrix_coverage(True, 11)), list(range(11)))
+
+    def test_the_run_compares_them(self):
+        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        self.assertIn("ok = check_narrowed_packs(", source)
+
+
 class ThePipelineComparesPaths(unittest.TestCase):
     """Equal counts, other paths: the comparison fails and names both sides."""
 

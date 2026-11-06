@@ -4141,6 +4141,7 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
         "scripts/pipeline.py": [
             ["--offline", "--skip-packs", "--source", "truth"],
             ["--offline", "--skip-packs", "--all-variants"],
+            ["--offline", "--skip-packs", "--full-narrowings"],
             ["--offline", "--all-variants", "--source", "platform"],
             ["--offline", "--all-variants", "--source", "full"],
             ["--offline", "--skip-packs", "--source", "full"],

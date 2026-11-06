@@ -948,6 +948,7 @@ def _mark_hidden(
     resolver: object | None = None,
     placed_kind: dict[str, str] | None = None,
     system_ids: list[str] | None = None,
+    required_only: bool = False,
 ) -> set[str]:
     """What the builder holds but cannot place beside the files it packed.
 
@@ -963,7 +964,7 @@ def _mark_hidden(
         emu_profiles if emu_profiles is not None
         else load_emulator_profiles(emulators_dir),
         shipped, target_cores, region_drops, placed, report, resolver, placed_kind,
-        system_ids=system_ids,
+        system_ids=system_ids, required_only=required_only,
     )
     for u in undeclared:
         reason = hidden.get(
@@ -1146,6 +1147,7 @@ def verify_platform(
     regions: list[str] | None = None,
     system_filter: list[str] | None = None,
     no_game_data: bool = False,
+    required_only: bool = False,
 ) -> dict:
     """Verify all BIOS files for a platform, including cross-reference gaps.
 
@@ -1156,6 +1158,9 @@ def verify_platform(
     same list would carry, using the same selection function as the builder.
     ``system_filter`` does the same for a pack built with --system: the
     systems it keeps and the core extras those systems own.
+    ``required_only`` reports on the pack built with --required-only: the
+    declarations, trees and core extras marked ``required: false`` are left
+    out before any of them takes a path, as the builder leaves them out.
     """
     left_out: list[str] = []
     if no_game_data:
@@ -1221,6 +1226,16 @@ def verify_platform(
     validation_owners = destination_owners(platform_profiles)
 
     verify_systems = platform_scope_systems(config, profiles, target_cores, system_filter)
+    if required_only:
+        verify_systems = {
+            sys_id: {
+                **system,
+                "files": [
+                    fe for fe in system.get("files", []) if fe.get("required") is not False
+                ],
+            }
+            for sys_id, system in verify_systems.items()
+        }
 
     details = []
     file_status: dict[str, str] = {}
@@ -1252,6 +1267,7 @@ def verify_platform(
             config.get("base_destination", ""),
             profiles,
             target_cores=target_cores,
+            required_only=required_only,
             held_out=held,
         )
         region_index = region_mod.platform_region_index(config, profiles, target_cores)
@@ -1445,6 +1461,8 @@ def verify_platform(
         from packextras import report_owned_by_systems
 
         undeclared = report_owned_by_systems(undeclared, system_filter)
+    if required_only:
+        undeclared = [u for u in undeclared if u.get("required") is not False]
     if region_drops:
         undeclared = [
             u
@@ -1467,6 +1485,7 @@ def verify_platform(
         ),
         placed_kind,
         system_filter,
+        required_only,
     )
     # What the builder places from the cores, one per pack path, by category:
     # several entries claim one path (rom.key from three Amiga cores) and the
