@@ -6027,6 +6027,25 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
         self.assertEqual(lines[-1], "2 profiles, 1 with something to review")
         self.assertEqual(len(err.getvalue().splitlines()), 1, err.getvalue())
 
+    def test_an_uncheckable_profile_ranks_first_and_counts(self):
+        """simple64 and teknoparrot answered 404 and --strict failed on them,
+        while the triage put them at 0 under the clean profiles."""
+        gone = ProfileReport(
+            name="gone", pin="p", skipped="no declared repository answers (o/n)",
+        )
+        reports = [self._report("clean", 1), gone]
+        selected = {r.name: {"source": "https://github.com/o/n"} for r in reports}
+        args = argparse.Namespace(cache_dir="unused", offline=True)
+        out = io.StringIO()
+        with mock.patch.object(profile_sync, "check_version", return_value=None), \
+                mock.patch.object(profile_sync.upstream, "commits_touching",
+                                  return_value=0), \
+                contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+            profile_sync._print_triage(args, selected, reports)
+        lines = out.getvalue().splitlines()
+        self.assertIn("gone", lines[1])
+        self.assertEqual(lines[-1], "2 profiles, 1 with something to review")
+
 
 class TestBranchProfiles(unittest.TestCase):
     """--changed and --added name the profiles a branch brings, not by hand."""

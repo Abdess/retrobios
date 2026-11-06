@@ -2665,6 +2665,9 @@ def drift_score(
     # set again before any ref can be read, so each outranks a GONE ref:
     # pcem ranked last at 0 with an orphaned upstream_commit.
     score += PIN_WEIGHT * (len(report.orphaned) + len(report.moved_repos))
+    # A profile no repository answers for cannot be read at all, and
+    # --strict fails on it: it ranked at 0 under the clean profiles.
+    score += PIN_WEIGHT * report.uncheckable()
     score += min(commits, 20) // 4
     return score
 
@@ -5034,7 +5037,7 @@ def _print_triage(
         state = triage_state(report)
         if refused:
             state += f", {refused}"
-        pending += bool(report.needs_review())
+        pending += bool(report.needs_review() or report.uncheckable())
         print(f"{score:5d}  {report.name:30s}  {state}")
     print(f"{len(ranked)} profiles, {pending} with something to review")
 
