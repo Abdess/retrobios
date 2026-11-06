@@ -12923,6 +12923,9 @@ class DriveIsACardByItsFiles(unittest.TestCase):
             self.assertEqual(install.games_setups(index, "retroarch", arkos / "bios"), ["arkos"])
             self.assertEqual(install.games_setups(index, "retroarch", self.root / "bios"),
                              ["retroarch"])
+            # Its games are offered without --for-games: EASYROMS keeps no
+            # roms folder, its console folders sit beside bios.
+            self.assertTrue(install._may_hold_games(arkos / "bios"))
 
     def test_a_card_beside_a_data_drive_comes_first(self):
         """The ArkOS card and the data drive mounted,
