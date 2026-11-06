@@ -3914,7 +3914,8 @@ def _realign_part(
 
 
 def _writing_pairs(
-    document: dict, repos: list, revisions: list[tuple[str, dict]], intro_sha: str
+    document: dict, repos: list, revisions: list[tuple[str, dict]], intro_sha: str,
+    served: dict | None = None,
 ) -> tuple[list[list], list[str]]:
     """Every reading of where the text was written, and the ambiguities.
 
@@ -3944,8 +3945,9 @@ def _writing_pairs(
             ambiguous.append(f"{pin_field}_commit {' -> '.join(written)}")
         # The current pin among the candidates reads as "no move" (None) for
         # that repository, which the other candidates must then agree with.
+        reader = (served or {}).get(repo, repo)
         options.append([
-            (repo, pin, current) if pin != current else None for pin in written
+            (reader, pin, current) if pin != current else None for pin in written
         ])
     readings = [
         [pair for pair in combo if pair is not None]
@@ -4026,8 +4028,20 @@ def realign_prose(
     ]
     if not repos:
         return []
+    # A source declared gone is read through its mirror, which carries the
+    # same commits: teknoparrot's notes stayed blocked once
+    # teknogods/TeknoParrotUI answered 404, every reading of the old pin
+    # calling the files absent.
+    mirror = (
+        upstream.parse_repo(str(document.get("source_mirror") or ""))
+        if document.get("upstream_gone") else None
+    )
+    served = {
+        repo: mirror for field, _mode, repo in repos
+        if mirror is not None and field == "source"
+    }
     pinned = [
-        (repo, pin)
+        (served.get(repo, repo), pin)
         for field, mode, repo in repos
         if (pin := _pin_of(document, f"{field}_commit", mode))
     ]
@@ -4107,7 +4121,9 @@ def realign_prose(
         if intro_sha is None:
             # The scalar is not committed yet: written now, under this pin.
             continue
-        readings, ambiguous = _writing_pairs(document, repos, revisions, intro_sha)
+        readings, ambiguous = _writing_pairs(
+            document, repos, revisions, intro_sha, served
+        )
         if not any(readings):
             continue
         moves, blocked = _realign_citation(

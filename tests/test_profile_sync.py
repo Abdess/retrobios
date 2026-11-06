@@ -4784,6 +4784,34 @@ class TestRealignProse(unittest.TestCase):
         self.assertTrue(flagged, messages)
         self.assertFalse([m for m in messages if "b.c:" in m], messages)
 
+    def test_a_source_declared_gone_is_read_through_its_mirror(self):
+        """teknogods/TeknoParrotUI answers 404. Read there, every citation
+        written under the old pin was absent and blocked the profile."""
+        self._repo_with_advanced_pin()
+        self._commit(
+            PROSE_SAMPLE.replace(
+                'source_commit: "pin"\n',
+                'source_commit: "pin"\n'
+                'upstream_gone: "o/n answers 404."\n'
+                'source_mirror: "https://github.com/m/n"\n',
+            ),
+            "advance the pin, declare the forge gone",
+        )
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        served = profile_sync.upstream.fetch_file
+        profile_sync.upstream.fetch_file = (
+            lambda repo, sha, path, cache_dir, offline=False: (
+                served(repo, sha, path, cache_dir, offline)
+                if repo.slug == "m/n" else None
+            )
+        )
+        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        # b.c did not move between the two pins: nothing to read again.
+        self.assertFalse([m for m in messages if "b.c:" in m], messages)
+
     def test_a_citation_in_an_unmoved_upstream_needs_no_reading(self):
         """nethersx2 cites AetherSX2 files that only its upstream carries,
         at an upstream pin that never moved. The port's pin did move under
