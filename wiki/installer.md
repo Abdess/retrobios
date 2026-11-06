@@ -1181,7 +1181,7 @@ usual folders of a setup that has one on each side: RetroArch's in this Linux
 | `~/Library/Application Support/RetroArch/config/retroarch.cfg` | RetroArch (macOS) | `system_directory`. At default, `~/Documents/RetroArch/system` (portable, Steam build included: `Application Support/RetroArch/system`) |
 | `retroarch.cfg` beside `retroarch.exe` (`C:\RetroArch-Win64`, `C:\RetroArch`, `Program Files\RetroArch`) | RetroArch (Windows) | `system_directory`. At default or without a config, `system` beside the exe |
 | `%APPDATA%\RetroArch\retroarch.cfg` | RetroArch (Windows) | `system_directory`, read when the exe folder has no config |
-| `%ProgramFiles(x86)%\Steam\steamapps\common\RetroArch\retroarch.cfg` | RetroArch (Steam) | `system_directory` |
+| `steamapps\common\RetroArch\retroarch.cfg` in every Steam library: the client's folder (`SteamPath` under `HKCU\Software\Valve\Steam`, else `%ProgramFiles(x86)%\Steam`) and the libraries its `libraryfolders.vdf` lists | RetroArch (Steam) | `system_directory` |
 | `%LOCALAPPDATA%\Packages\1e4cf179-f3c2-404f-b9f3-cb2070a5aad8_*\LocalState` | RetroArch (UWP/MSIX package) | `system_directory` of the `retroarch.cfg` there, `~` meaning that folder. By default `LocalState\system` |
 | LaunchBox `Data\Emulators.xml` | RetroArch (portable) | the system directory that entry points at |
 | LaunchBox `Data\Emulators.xml` naming `EmuHawk.exe` | BizHawk (portable) | `Firmware` beside `EmuHawk.exe` |

@@ -4511,6 +4511,33 @@ class WindowsSeenFromWsl(unittest.TestCase):
             self.assertEqual(os.environ["ProgramFiles"], "")
 
 
+    def test_a_steam_client_outside_program_files_is_found(self):
+        """A Steam client in D:\\Steam hid every library: only Program Files
+        was searched, and Steam's RetroArch was not detected."""
+        empty = self.root / "c" / "Program Files (x86)"
+        empty.mkdir(parents=True)
+        common = self.root / "d" / "steam" / "steamapps" / "common" / "RetroArch"
+        common.mkdir(parents=True)
+        (common / "retroarch.exe").write_bytes(b"MZ")
+        (common / "retroarch.cfg").write_text('system_directory = "default"\n')
+        home = Path(_tempdir(self))
+        cleared = {name: "" for name in (*install._WINDOWS_VARIABLES, "SCOOP", "SCOOP_GLOBAL",
+                                         "ProgramData")}
+        asked: list = []
+
+        def registry(key, value):
+            asked.append((key, value))
+            return "d:/steam" if (key, value) == ("HKCU\\Software\\Valve\\Steam",
+                                                  "SteamPath") else None
+
+        with unittest.mock.patch.dict(os.environ, {**cleared, "HOME": str(home),
+                                                   "ProgramFiles(x86)": str(empty)}), \
+                unittest.mock.patch.object(Path, "home", return_value=home), \
+                unittest.mock.patch.object(install, "_read_registry", registry):
+            self.assertEqual(install._steam_libraries(), [self.root / "d" / "steam"])
+            found = install.detect_platforms("wsl")
+        self.assertIn(("retroarch", common / "system"), found)
+
     def test_windows_not_answering_is_said_not_taken_for_nothing(self):
         """cmd.exe timing out on the first variable ended the import without
         a word, and detection said no setup was installed."""

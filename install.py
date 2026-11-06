@@ -1324,13 +1324,22 @@ def _steam_libraries() -> list[Path]:
 
     Steam lists the others in steamapps/libraryfolders.vdf, each as a
     "path" line. A RetroArch installed on D:/SteamLibrary was not found
-    when only Program Files was searched.
+    when only Program Files was searched. The client's own folder is the
+    SteamPath value it writes under HKCU\\Software\\Valve\\Steam, read the
+    same way by Playnite (PlayniteExtensions 886468f6,
+    source/Libraries/SteamLibrary/Steam.cs:34-38): a client installed in
+    D:\\Steam hid every library.
     """
     roots: list[Path] = []
+    steam_path = _read_registry("HKCU\\Software\\Valve\\Steam", "SteamPath")
+    candidates = [_host_path(steam_path.replace("/", "\\"))] if steam_path else []
     for var in ("ProgramFiles(x86)", "ProgramFiles"):
         base = os.environ.get(var, "")
-        if base and _is_dir(Path(base) / "Steam"):
-            roots.append(Path(base) / "Steam")
+        if base:
+            candidates.append(Path(base) / "Steam")
+    for candidate in candidates:
+        if candidate not in roots and _is_dir(candidate):
+            roots.append(candidate)
     libraries = list(roots)
     for root in roots:
         vdf = root / "steamapps" / "libraryfolders.vdf"
@@ -2919,15 +2928,9 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
             if ra_dir:
                 found.append(("retroarch", ra_dir))
 
-        # RetroArch from Steam: a portable install under the default library
-        for var in ("ProgramFiles(x86)", "ProgramFiles"):
-            program_files = os.environ.get(var, "")
-            if not program_files:
-                continue
-            steam_cfg = (
-                Path(program_files) / "Steam" / "steamapps" / "common"
-                / "RetroArch" / "retroarch.cfg"
-            )
+        # RetroArch from Steam: a portable install in a Steam library
+        for library in _steam_libraries():
+            steam_cfg = library / "steamapps" / "common" / "RetroArch" / "retroarch.cfg"
             ra_dir = _parse_retroarch_system_dir(steam_cfg)
             if ra_dir and not any(name == "retroarch" for name, _ in found):
                 found.append(("retroarch", ra_dir))
