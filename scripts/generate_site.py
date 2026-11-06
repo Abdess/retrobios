@@ -7397,6 +7397,9 @@ SYSTEM_PAGES_MOVED = {
     "systems/arcade-sharp-mz-2500.md": "systems/sharp.md",
     "systems/arcade-miuchiz.md": "systems/arcade.md",
     "systems/arcade-yamaha-ym2608.md": "systems/arcade.md",
+    # Oric is filed under its maker since 2026-10-23, and a reader still
+    # followed the old address to the 404 page.
+    "systems/oric.md": "systems/tangerine.md#oric",
     "systems/other-scummvm.md": "systems/scummvm.md",
     "systems/other-sdlpal.md": "systems/sdlpal.md",
     "systems/sega-dreamcast.md": "systems/sega.md",
