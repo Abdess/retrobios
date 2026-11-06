@@ -1719,6 +1719,7 @@ Located in `scripts/scraper/targets/`. Each inherits `BaseTargetScraper` and imp
 | `recalbox_targets_scraper` | board defconfigs + system.ini cores | board |
 | `rocknix_targets_scraper` | emulators package.mk + device options | device |
 | `amberelec_targets_scraper` | Makefile devices + metapackage extra cores + es_systems.cfg | device |
+| `emuelec_targets_scraper` | release assets + metapackage package.mk + core install steps + es_systems.json | device |
 | `lakka_targets_scraper` | libretro_cores package.mk + project and device options | device image |
 | `emudeck_targets_scraper` | EmuScripts (SteamOS and Windows) | operating system |
 | `retropie_targets_scraper` | scriptmodules + rp_module_flags | platform flag |

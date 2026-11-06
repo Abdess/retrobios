@@ -195,7 +195,7 @@ knulli:
         - rice
         - vaixterm
 
-# EmuELEC and AmberELEC have no target file: the scrapers read these lists.
+# Read by the EmuELEC and AmberELEC platform and target scrapers alike.
 # mpv and ffplay play the Media Player system's videos (EmuELEC
 # emuelecRunEmu.sh:301-303, AmberELEC runemu.py:122). gmloader runs a
 # GameMaker game's own Android library (emuelecRunEmu.sh:331-334). Ports

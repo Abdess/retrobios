@@ -109,8 +109,8 @@ TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
 # has no hardware targets, where the run sent the user after a list that
 # exists nowhere.
 TARGET_PLATFORMS = frozenset({
-    "amberelec", "batocera", "emudeck", "knulli", "lakka", "recalbox", "retroarch", "retrobat",
-    "retrodeck", "retropie", "rocknix", "romm",
+    "amberelec", "batocera", "emudeck", "emuelec", "knulli", "lakka", "recalbox", "retroarch",
+    "retrobat", "retrodeck", "retropie", "rocknix", "romm",
 })
 RAW_FILE_URL = f"{BASE_URL}/{{path}}"
 RELEASE_URL = (
@@ -1484,9 +1484,11 @@ def _parse_bash_var(path: Path, key: str) -> str | None:
 # board/scripts/post-build-script.sh:264-278) and writes KNULLI_SYSTEM_ARCH
 # to knulli.arch (package/system/knulli-system/knulli-system.mk:98-99).
 # AmberELEC's scripts/image writes COREELEC_DEVICE (a21975bf, line 168), the
-# DEVICE its Makefile builds (RG351P).
+# DEVICE its Makefile builds (RG351P). EmuELEC's writes the same line (v4.8,
+# line 189), the DEVICE of the release image (OdroidGoAdvance).
 _BOARD_SOURCES: dict[str, tuple[str, str]] = {
     "amberelec": ("os_release", "COREELEC_DEVICE"),
+    "emuelec": ("os_release", "COREELEC_DEVICE"),
     "batocera": ("file", "/usr/share/batocera/batocera.arch"),
     "recalbox": ("file", "/recalbox/recalbox.arch"),
     "rocknix": ("os_release", "HW_DEVICE"),
