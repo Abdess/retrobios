@@ -289,6 +289,29 @@ class RetroPiePackageList(unittest.TestCase):
         self.assertEqual(config["inherits"], "retroarch")
         self.assertEqual(config["base_destination"], "BIOS")
 
+    def test_a_libretro_package_takes_the_buildbot_core_name(self):
+        """lr-dosbox-pure builds dosbox_pure. Kept hyphenated, it matched
+        DOSBox Pure Unleashed, a standalone build RetroPie does not ship,
+        while the target scraper wrote dosbox_pure."""
+        from scraper.targets.retropie_targets_scraper import core_name as target_name
+
+        scraper = self._scraper(
+            {
+                "retropie_packages.sh": '__version="4.8.12"\n',
+                "scriptmodules/libretrocores/lr-dosbox-pure.sh": (
+                    'rp_module_id="lr-dosbox-pure"\n'
+                ),
+                "scriptmodules/emulators/dosbox-staging.sh": (
+                    'rp_module_id="dosbox-staging"\n'
+                ),
+            }
+        )
+        cores = scraper.generate_platform_yaml()["cores"]
+        self.assertEqual(cores, ["dosbox-staging", "dosbox_pure"])
+        self.assertEqual(
+            sorted(target_name(m) for m in scraper.module_ids()), cores
+        )
+
     def test_a_package_built_outside_libretro_runs_standalone(self):
         """hatari ships as lr-hatari and as hatari: both layouts are read."""
         scraper = self._scraper(

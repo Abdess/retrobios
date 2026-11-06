@@ -16,10 +16,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 8690,
-  "total_size": 8755302720,
-  "pack_files": 14766,
-  "pack_size": 8873685802,
+  "total_files": 8684,
+  "total_size": 8721213852,
+  "pack_files": 14760,
+  "pack_size": 8839596934,
   "total_omitted": 347,
   "omitted_files": [
     {
@@ -20247,19 +20247,6 @@
         "cgenius"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "system/CM32LN_CONTROL.ROM",
-      "sha1": "dc1c5b1b90a4646d00f7daf3679733c7badc7077",
-      "sha256": "9f32c5a670421961c3d46a9cdcff0a1d333b886a72c0c260c9607645a3abf773",
-      "size": 65536,
-      "repo_path": "bios/DOS/DOSBox/CM32LN_CONTROL.ROM",
-      "cores": [
-        "dosbox-pure-unleashed"
-      ],
-      "systems": [
-        "dos"
-      ]
     },
     {
       "dest": "mt32-roms/ctrl_mt32_1_04.rom",
@@ -92506,19 +92493,6 @@
       ]
     },
     {
-      "dest": "system/DOSBOX.SF2",
-      "sha1": "a00461dbea40093cb9ca1694de9c0ec7ca5650c1",
-      "sha256": "9575028c7a1f589f5770fccc8cff2734566af40cd26ed836944e9a5152688cfe",
-      "size": 32319396,
-      "repo_path": "bios/Other/GeneralUser GS/GeneralUser-GS.sf2",
-      "cores": [
-        "dosbox-pure-unleashed"
-      ],
-      "systems": [
-        "dos"
-      ]
-    },
-    {
       "dest": "soundfonts/GeneralUser-GS.sf2",
       "sha1": "a00461dbea40093cb9ca1694de9c0ec7ca5650c1",
       "sha256": "9575028c7a1f589f5770fccc8cff2734566af40cd26ed836944e9a5152688cfe",
@@ -119352,58 +119326,6 @@
       ],
       "systems": [
         "nintendo-gamecube"
-      ]
-    },
-    {
-      "dest": "system/MT32_CONTROL.ROM",
-      "sha1": "5a5cb5a77d7d55ee69657c2f870416daed52dea7",
-      "sha256": "c0ea149eaadc48049572ec429e45f90ab1bb75f1ed07000c636fc0124b64da23",
-      "size": 65536,
-      "repo_path": "bios/Roland/mt32-roms/ctrl_mt32_1_04.rom",
-      "cores": [
-        "dosbox-pure-unleashed"
-      ],
-      "systems": [
-        "dos"
-      ]
-    },
-    {
-      "dest": "system/CM32L_CONTROL.ROM",
-      "sha1": "73683d585cd6948cc19547942ca0e14a0319456d",
-      "sha256": "c8aea5fb1b28183523601bbc5fd7e2f48397c1cb26f8687d240333c2190e83e2",
-      "size": 65536,
-      "repo_path": "bios/Roland/mt32-roms/ctrl_cm32l_1_00.rom",
-      "cores": [
-        "dosbox-pure-unleashed"
-      ],
-      "systems": [
-        "dos"
-      ]
-    },
-    {
-      "dest": "system/MT32_PCM.ROM",
-      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
-      "sha256": "d9164063f293410cf33f2f64cdcea6893b44723fe41938e07ec9aef58b406238",
-      "size": 524288,
-      "repo_path": "bios/Roland/MT-32/MT32_PCM.ROM",
-      "cores": [
-        "dosbox-pure-unleashed"
-      ],
-      "systems": [
-        "dos"
-      ]
-    },
-    {
-      "dest": "system/CM32L_PCM.ROM",
-      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
-      "sha256": "0dc50190bb7ea3fb212c970346b771a511772b528801e7eda6d27efda8c40698",
-      "size": 1048576,
-      "repo_path": "bios/Roland/CM-32L/CM32L_PCM.ROM",
-      "cores": [
-        "dosbox-pure-unleashed"
-      ],
-      "systems": [
-        "dos"
       ]
     },
     {
