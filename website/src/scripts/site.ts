@@ -21,6 +21,8 @@ type Item = {
 	owner?: string;
 	sha1?: string;
 	system_name?: string;
+	// On an archive-member record: the collection archive holding the member.
+	archive?: string;
 };
 
 const siteRoot = () => new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), location.origin);
@@ -521,7 +523,9 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 	// naomi2.zip by the MD5 of a ROM inside it, which no file of the
 	// collection has.
 	const searched = new Set(matched.map((item) => item.value));
-	const carried = [...new Set(matched.flatMap((item) => (item.sha1 && !searched.has(item.sha1) ? [item.sha1] : [])))];
+	// A member's record names its archive, which is not the file searched for.
+	const carried = [...new Set(matched.flatMap((item) =>
+		(item.sha1 && item.layer !== 'archive-member' && !searched.has(item.sha1) ? [item.sha1] : [])))];
 	const found = carried.length ? [...matched, ...(await lookupValues(carried).catch(() => [] as Item[]))] : matched;
 	const held = distinct(found.filter((item) => item.layer === 'collection'), (item) => item.sha1 ?? item.url);
 	const files = await Promise.all(held.map((item) => heldFile(item).catch(() => undefined)));
@@ -550,8 +554,11 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 	const readEntries = emulators.map((item) => readerEntry(reader.get(item.owner ?? ''), item, valuesOf(item)));
 	const setups = new Set(platforms.map((item) => item.owner));
 
+	const members = distinct(byLayer('archive-member'), (item) => `${item.sha1}|${item.name}`);
 	const counted = [
-		held.length ? count(held.length, 'file in the collection', 'files in the collection') : 'not in the collection',
+		held.length ? count(held.length, 'file in the collection', 'files in the collection')
+			: members.length ? count(members.length, 'member of a collection archive', 'members of collection archives')
+			: 'not in the collection',
 		...(platforms.length ? [`${count(platforms.length, 'declaration', 'declarations')} by ${count(setups.size, 'setup', 'setups')}`] : []),
 		...(owners.length ? [count(owners.length, 'emulator that reads it', 'emulators that read it')] : []),
 	];
@@ -606,7 +613,17 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 			),
 		);
 	});
-	if (!held.length) blocks.push(paragraph('No file in the collection has this hash.'));
+	if (!held.length && !members.length) blocks.push(paragraph('No file in the collection has this hash.'));
+	if (members.length) {
+		// A ROM the collection holds inside a set: the set's card, by its name.
+		const list = document.createElement('ul');
+		for (const item of members) {
+			const row = document.createElement('li');
+			row.append(code(item.name ?? item.value), ' in ', link(item.url, code(item.archive ?? '')));
+			list.append(row);
+		}
+		blocks.push(paragraph(strong('Inside an archive of the collection')), list);
+	}
 	const shipped = byLayer('data-directory');
 	if (shipped.length) {
 		const list = document.createElement('ul');

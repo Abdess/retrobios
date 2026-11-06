@@ -785,6 +785,53 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
             self.assertNotIn("no.json", names)
 
 
+class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
+    """A pasted CRC of logica2.u2 (8484f426), which the collection holds
+    inside a500.zip, answered that no file the site knows has it: the
+    lookup held the members a profile's `contents:` declares, 7,389 of
+    33,403."""
+
+    def test_each_member_is_a_record_leading_to_its_archive(self):
+        import zipfile  # noqa: PLC0415
+
+        import generate_site  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
+            root = Path(tmp)
+            archive = root / "bios" / "Arcade" / "Arcade" / "a500.zip"
+            archive.parent.mkdir(parents=True)
+            with zipfile.ZipFile(archive, "w") as handle:
+                handle.writestr("logica2.u2", b"rom")
+                handle.writestr("sub/kick.rom", b"kick")
+            entry = {"name": "a500.zip", "path": "bios/Arcade/Arcade/a500.zip"}
+            records = generate_site._archive_member_records(entry, "ab" * 20, "/retrobios/x/", root)
+            plain = generate_site._archive_member_records(
+                {"name": "a.bin", "path": "bios/a.bin"}, "cd" * 20, "/retrobios/y/", root)
+        self.assertEqual(plain, [])
+        import zlib  # noqa: PLC0415
+
+        self.assertEqual(records, [
+            {"value": f"{zlib.crc32(b'rom'):08x}", "algorithm": "crc32", "layer": "archive-member",
+             "name": "logica2.u2", "archive": "a500.zip", "sha1": "ab" * 20, "url": "/retrobios/x/"},
+            {"value": f"{zlib.crc32(b'kick'):08x}", "algorithm": "crc32", "layer": "archive-member",
+             "name": "kick.rom", "archive": "a500.zip", "sha1": "ab" * 20, "url": "/retrobios/x/"},
+        ])
+
+    def test_the_lookup_and_the_schema_carry_the_layer(self):
+        import json as _json  # noqa: PLC0415
+
+        import generate_site  # noqa: PLC0415
+
+        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        self.assertIn("records += _archive_member_records(entry, sha1, item[\"url\"])", source)
+        schema = _json.loads((Path(__file__).resolve().parents[1] / "schemas"
+                              / "site-api-envelope.schema.json").read_text())
+        self.assertIn('"archive-member"', _json.dumps(schema))
+        script = (Path(__file__).resolve().parents[1] / "website" / "src" / "scripts"
+                  / "site.ts").read_text(encoding="utf-8")
+        self.assertIn("byLayer('archive-member')", script)
+
+
 class AFileHasAnAddressByContent(unittest.TestCase):
     """mt32_control.rom moved from the Commodore page to the Roland page and
     every link to its card broke: the anchor was content-based, the page

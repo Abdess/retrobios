@@ -2201,8 +2201,8 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "One hash without the whole list: `api/v1/lookup/<xx>.json`, where `<xx>` "
         "is the first two characters of the hash in lowercase, holds every SHA1, "
         "MD5, CRC32 and SHA256 starting with them. Each record names its `layer` "
-        "(the collection, a data directory, a platform's list or an emulator "
-        "profile), the file `name`, the `url` of the page that shows it and, "
+        "(the collection, a member of a collection archive, a data directory, a "
+        "platform's list or an emulator profile), the file `name`, the `url` of the page that shows it and, "
         "when one is known, the `system_name` the site gives its system. "
         "[Find or check a file](files/index.md) reads it.",
         "",
@@ -2226,7 +2226,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "  const response = await fetch(`${base}${sha1.slice(0, 2)}.json`);",
         "  if (!response.ok) return [];",
         "  const shard = await response.json();",
-        "  // layer: collection, data-directory, platform or emulator. owner: which one.",
+        "  // layer: collection, archive-member, data-directory, platform or emulator.",
         "  return shard.items.filter((item) => item.value === sha1);",
         "}",
         "```",
@@ -4924,6 +4924,31 @@ def _data_member_digests(
     return found
 
 
+def _archive_member_records(entry: dict, sha1: str, url: str,
+                            root: Path = _REPO_ROOT) -> list[dict]:
+    """The CRC32 of each member of a collection archive, read from its
+    central directory.
+
+    A pasted CRC of a ROM the collection holds only inside a set (logica2.u2
+    in a500.zip, 8484f426) found nothing: 26,014 of 33,403 members were in
+    no record. The record leads to the archive's card and names it.
+    """
+    path = root / str(entry.get("path", ""))
+    if path.suffix.lower() != ".zip" or not path.is_file():
+        return []
+    try:
+        with zipfile.ZipFile(path) as archive:
+            members = [(info.filename, info.CRC) for info in archive.infolist()
+                       if not info.is_dir()]
+    except (OSError, zipfile.BadZipFile) as exc:
+        print(f"  WARNING: {path}: members unreadable ({exc})", file=sys.stderr)
+        return []
+    return [{"value": f"{crc:08x}", "algorithm": "crc32", "layer": "archive-member",
+             "name": member.rsplit("/", 1)[-1], "archive": str(entry.get("name", "")),
+             "sha1": sha1, "url": url}
+            for member, crc in members]
+
+
 def file_lookup_records(
     db: dict,
     coverages: dict,
@@ -4968,6 +4993,7 @@ def file_lookup_records(
                     "name": str(entry.get("name", "")), "sha1": sha1, "url": item["url"],
                     **({"system_name": held_by} if held_by else {}),
                 })
+        records += _archive_member_records(entry, sha1, item["url"])
     for key, coverage in sorted(coverages.items()):
         for system_id, system in sorted((coverage["config"].get("systems") or {}).items()):
             url = _site_path(f"platforms/{key}.md#{system_id.replace(' ', '-')}")

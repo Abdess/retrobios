@@ -389,10 +389,15 @@
                 "layer": {
                   "enum": [
                     "collection",
+                    "archive-member",
                     "data-directory",
                     "platform",
                     "emulator"
                   ]
+                },
+                "archive": {
+                  "type": "string",
+                  "description": "On an archive-member record: the name of the collection archive holding the member, whose SHA1 is `sha1`. Its value is the member's CRC32, read from the archive's central directory."
                 },
                 "name": {
                   "type": "string"
