@@ -6,6 +6,8 @@ today's upstream no longer carries, but the bytes are in the project's history.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import sys
 import unittest

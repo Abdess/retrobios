@@ -14,6 +14,8 @@ and skip when it has not been populated (python scripts/export_native.py
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import difflib
 import io
 import json

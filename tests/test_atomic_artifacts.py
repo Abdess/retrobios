@@ -8,6 +8,8 @@ path in bios/: a scan running beside the copy hashed the truncated file.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import os
 import sys
 import tempfile

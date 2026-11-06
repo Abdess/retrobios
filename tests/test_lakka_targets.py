@@ -7,6 +7,8 @@ platform outright.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import unittest
 
 from scripts.scraper.targets import lakka_targets_scraper as lakka

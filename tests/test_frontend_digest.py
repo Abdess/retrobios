@@ -8,6 +8,8 @@ the pack and the manifest while verify, comparing md5, called it OK.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import os
 import sys

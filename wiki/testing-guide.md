@@ -222,8 +222,14 @@ disambiguated by a hash suffix on purpose.
    output or formatting.
 
 5. **Run the full suite.** After adding your test, run `python -m unittest
-   discover -s tests -t . -v` to verify nothing else broke. `-t .` imports
-   `tests/__init__.py`, which keeps the suite offline.
+   discover -s tests -t . -v` to verify nothing else broke.
+
+A new module starts with `import tests` right after
+`from __future__ import annotations`. The package import is what keeps a run
+offline, puts its scratch under `tmp/` and gives it its own installer cache,
+however the module is started: `discover tests`, `python -m unittest
+tests.test_e2e` or `python -m tests.test_e2e`. A test fails on any module
+without it.
 
 A fix comes with a test that fails without it. Write the test first, watch it
 fail on the current code, then fix: a test written after the fix may never

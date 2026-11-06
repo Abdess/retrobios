@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import ast
 import contextlib
 import hashlib
@@ -251,6 +253,46 @@ class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
             # tmpfs, and a full tmpfs failed modules no change touched.
             scratch = str((clone / "tmp" / "tests").resolve())
             self.assertEqual(proc.stdout.split(), [scratch, scratch])
+
+
+class EveryTestModuleImportsTheIsolation(unittest.TestCase):
+    """tests/__init__.py keeps a run offline, its scratch under tmp/ and its
+    installer cache its own, but only `discover -s tests -t .` imported it:
+    `discover tests` ran with RETROBIOS_OFFLINE unset, scratch in /tmp and
+    the user's real cache. Each module now imports the package first."""
+
+    def test_the_package_import_comes_before_any_other(self):
+        missing = []
+        for path in sorted((ROOT / "tests").glob("test_*.py")):
+            body = ast.parse(path.read_text(encoding="utf-8")).body
+            imports = [
+                node for node in body
+                if isinstance(node, (ast.Import, ast.ImportFrom))
+                and getattr(node, "module", None) != "__future__"
+            ]
+            first = imports[0] if imports else None
+            if not (isinstance(first, ast.Import)
+                    and [alias.name for alias in first.names] == ["tests"]):
+                missing.append(path.name)
+        self.assertEqual(missing, [])
+
+    def test_discover_without_a_top_level_runs_isolated(self):
+        env = {k: v for k, v in os.environ.items()
+               if k not in ("RETROBIOS_OFFLINE", "TMPDIR", "RETROBIOS_CACHE")}
+        proc = subprocess.run(
+            [sys.executable, "-c",
+             "import os, sys, tempfile, unittest\n"
+             "unittest.TestLoader().discover('tests', pattern='test_artifact_lock.py')\n"
+             "print(os.environ.get('RETROBIOS_OFFLINE'), tempfile.gettempdir(),"
+             " os.environ.get('RETROBIOS_CACHE'))\n"],
+            cwd=ROOT, env=env, capture_output=True, text=True, timeout=120,
+            check=False,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        offline, scratch, cache = proc.stdout.split()
+        self.assertEqual(offline, "1")
+        self.assertEqual(scratch, str(ROOT / "tmp" / "tests"))
+        self.assertEqual(cache, str(ROOT / "tmp" / "tests" / "cache"))
 
 
 class ReleaseSigningRegressions(unittest.TestCase):

@@ -18,6 +18,8 @@ Layouts, from Azahar src/core/hw/unique_data.cpp and src/core/file_sys/otp.cpp:
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import struct
 import sys

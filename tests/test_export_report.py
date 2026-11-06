@@ -7,6 +7,8 @@ file from and no list to check the diff against.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import re
 import sys
 import tempfile

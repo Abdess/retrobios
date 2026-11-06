@@ -9,6 +9,8 @@ libretro's System.dat (N88EXT0-3.ROM) as if libretro declared them.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import sys
 import tempfile
 import unittest

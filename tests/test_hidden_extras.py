@@ -9,6 +9,8 @@ ROCKNIX's higan SGB1.sfc/program.rom under the file SGB1.sfc.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import os
 import sys
 import unittest

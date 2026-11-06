@@ -8,6 +8,8 @@ test fails if either hands the index the whole profile set again.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import re
 import unittest
 from pathlib import Path

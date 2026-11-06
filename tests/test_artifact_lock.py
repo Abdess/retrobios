@@ -7,6 +7,8 @@ ZIPs, which surfaces as BadZipFile far from its cause.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import os
 import subprocess
 import sys

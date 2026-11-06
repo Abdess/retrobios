@@ -8,6 +8,8 @@ listed them neither in files nor in omitted_files.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import os
 import sys

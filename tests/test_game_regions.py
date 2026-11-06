@@ -8,6 +8,8 @@ can lose its backing, then on the repository's own files.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import copy
 import json
 import sys

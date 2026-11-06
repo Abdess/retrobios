@@ -8,6 +8,8 @@ and a RetroArch target pack lost LRPS2's files.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import re
 import sys
 import unittest

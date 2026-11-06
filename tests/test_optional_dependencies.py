@@ -7,6 +7,8 @@ fifteen errors instead of skipped schema checks.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import subprocess
 import sys
 import unittest
