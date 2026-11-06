@@ -3573,6 +3573,9 @@ def _main(held: contextlib.ExitStack) -> None:
         except ValueError as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             sys.exit(1)
+        except OSError as exc:
+            print(f"ERROR: --from-md5-file {args.from_md5_file}: {exc.strerror}", file=sys.stderr)
+            sys.exit(1)
         if not hashes:
             print(
                 f"ERROR: no hash in the input. Accepted: {ACCEPTED_HASHES}",

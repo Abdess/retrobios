@@ -375,6 +375,29 @@ class AMissingPlatformsDirIsRefused(unittest.TestCase):
                 self.assertRegex(proc.stderr, r"ERROR: .*nosuch")
 
 
+class AMissingInputFileIsNamed(unittest.TestCase):
+    """The documented `--from-md5-file missing.txt` ended on a
+    FileNotFoundError at the bottom of a stack trace."""
+
+    def _refused(self, argv: list[str], message: str) -> None:
+        proc = subprocess.run(
+            [sys.executable, *argv], capture_output=True, text=True,
+            cwd=str(REPO_ROOT), timeout=600, check=False,
+            env={**os.environ, "RETROBIOS_OFFLINE": "1"},
+        )
+        self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
+        self.assertNotIn("Traceback", proc.stderr, proc.stderr[-1500:])
+        self.assertIn(message, proc.stderr)
+
+    def test_a_missing_hash_list_is_named(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            self._refused(
+                ["scripts/generate_pack.py", "--platform", "batocera", "--from-md5-file",
+                 "nosuch.txt", "--offline", "--output-dir", tmp],
+                "ERROR: --from-md5-file nosuch.txt: No such file or directory",
+            )
+
+
 class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     """verify exited 0 with a required file missing on an md5 platform, so
     the pipeline printed "verify OK" over a pack the frontend rejects."""
