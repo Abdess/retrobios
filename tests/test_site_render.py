@@ -503,5 +503,34 @@ class NoTooltipInsideAName(unittest.TestCase):
         self.assertIn('>BIOS</abbr>', marked)
 
 
+class TheArcadeCacheHoldsItsDatabase(unittest.TestCase):
+    """The set of sha1s filed under Arcade/ was cached by id(db): a database
+    freed and replaced at the same address answered with the first one's set,
+    and an arcade card of the second landed in another section."""
+
+    @staticmethod
+    def _db(sha1: str) -> dict:
+        return {"files": {}, "indexes": {"by_path_suffix": {"Arcade/x.zip": [sha1]}}}
+
+    def test_a_new_database_at_a_reused_address_is_read_again(self):
+        saved = siterender._suffix_cache[0]
+        self.addCleanup(siterender._suffix_cache.__setitem__, 0, saved)
+        first = self._db("a" * 40)
+        self.assertTrue(siterender._in_arcade("a" * 40, first))
+        address = id(first)
+        del first
+        # CPython hands a freed dict's address to a later one of its size,
+        # unless the cache still holds the first database.
+        for _ in range(1000):
+            second = self._db("b" * 40)
+            if id(second) == address:
+                break
+            del second
+        else:
+            second = self._db("b" * 40)
+        self.assertTrue(siterender._in_arcade("b" * 40, second))
+        self.assertFalse(siterender._in_arcade("a" * 40, second))
+
+
 if __name__ == "__main__":
     unittest.main()
