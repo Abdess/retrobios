@@ -434,8 +434,6 @@ class PagesOpenOnTheirContent(unittest.TestCase):
         self.assertEqual(announcing, [])
 
 
-
-
 class CoreCountsReadFromTheData(unittest.TestCase):
     """The cores page said "623 cores across 18 platforms": that was every
     profile, and 91 of them no platform runs."""
@@ -609,9 +607,6 @@ class EveryOptionExists(unittest.TestCase):
                  if (bad := unknown_options(text))}
         self.assertEqual(wrong, {})
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
     """validate.yml fetches each platform's own file before the suite. The
@@ -636,3 +631,7 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
 
     def test_the_testing_guide_names_the_command(self):
         self.assertIn("export_native.py --all --fetch", _read("wiki/testing-guide.md"))
+
+
+if __name__ == "__main__":
+    unittest.main()

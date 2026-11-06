@@ -35,7 +35,6 @@ class OneContributingText(unittest.TestCase):
         )
 
 
-
 class CoverageReadsTheGivenProfiles(unittest.TestCase):
     """generate_site --emulators-dir changed the emulator pages but not the
     platform coverage, which read ./emulators whatever was given."""
@@ -202,10 +201,6 @@ class OneFileThroughTheBrowser(unittest.TestCase):
         ))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class TheGuideRebuildsWhenItsPinsMove(unittest.TestCase):
     """The checklist quotes validate.yml, so a pin bump there must redeploy
     the guide and meet the README/CONTRIBUTING freshness check."""
@@ -282,3 +277,7 @@ class OneCommandRunsTheChecks(unittest.TestCase):
         self.assertIn("FAILED   python -c raise(SystemExit(3)) (exit 3)", out.getvalue())
         self.assertIn("NOT RUN  no-such-tool-here --x", out.getvalue())
         self.assertIn("1/3 checks passed", out.getvalue())
+
+
+if __name__ == "__main__":
+    unittest.main()

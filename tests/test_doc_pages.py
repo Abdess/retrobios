@@ -1983,7 +1983,6 @@ class NoTextClaimsAScheduledScrape(unittest.TestCase):
             self.assertNotIn("list_platforms", workflow.read_text(encoding="utf-8"))
 
 
-
 class TheCatalogRowsStateFacts(unittest.TestCase):
     """tools.md said "redump.org serves stale DATs" and "Dat-o-Matic blocks
     automation", verdicts on two preservation projects, and gave Redump's
@@ -1999,11 +1998,6 @@ class TheCatalogRowsStateFacts(unittest.TestCase):
         scraper = (ROOT / "scripts" / "scraper" / "redump_dat_scraper.py").read_text(encoding="utf-8")
         self.assertIn("/bios/<CODE>", scraper)
         self.assertIn("`/bios/<CODE>`", rows[0])
-
-
-if __name__ == "__main__":
-    unittest.main()
-
 
 
 class RegionFreeRuleNamesWhereItDoesNotHold(unittest.TestCase):
@@ -2099,3 +2093,7 @@ class LandingAChangeNamesTheCommitRules(unittest.TestCase):
         self.assertEqual(refused.returncode, 1, refused.stderr)
         self.assertIn("which review asked for it", refused.stderr)
         self.assertEqual(accepted.returncode, 0, accepted.stderr)
+
+
+if __name__ == "__main__":
+    unittest.main()
