@@ -1220,6 +1220,19 @@ def archive_entry(archive: str, files: list[dict]) -> dict:
     return {**own, "members": members} if members else own
 
 
+def archive_is_optional(entry: dict, archive: str, files: list[dict]) -> bool:
+    """Optional as a whole: its own entry and every member it carries.
+
+    A --required-only pack leaves it out, and the report of that pack too.
+    geolith's _Required pack held neocd.zip and irrmaze.zip all the same.
+    """
+    return entry.get("required") is False and all(
+        member.get("required") is False
+        for member in files
+        if member.get("archive") == archive
+    )
+
+
 def holds_required_members(path: str, members: list[dict]) -> bool:
     """Whether an archive holds every member a profile requires inside it."""
     crcs = zip_member_crcs(path)

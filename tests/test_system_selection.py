@@ -430,6 +430,51 @@ class ASystemReportCountsTheClaimsThePackCounts(unittest.TestCase):
         self.assertEqual(report_owned_by_systems([entry], ["panasonic-3do"]), [entry])
 
 
+class VerifyReportsTheRequiredOnlyPack(unittest.TestCase):
+    """`generate_pack --emulator mame --required-only` held 164 archives and
+    the only report, `verify --emulator mame`, credited 2302 paths:
+    --required-only was refused by verify, and the archive rule existed in
+    the builder only."""
+
+    def setUp(self):
+        previous = os.getcwd()
+        os.chdir(REPO_ROOT)
+        self.addCleanup(os.chdir, previous)
+
+    def test_the_report_holds_the_paths_the_pack_holds(self):
+        import contextlib
+        import io
+
+        from verify import verify_emulator
+
+        db = common.load_database("database.json")
+        for name in ("beetle_psx", "dolphin", "fbneo", "geolith", "mame"):
+            with self.subTest(emulator=name):
+                record = builder.PackRecord()
+                with contextlib.redirect_stdout(io.StringIO()), \
+                        contextlib.redirect_stderr(io.StringIO()):
+                    builder.generate_emulator_pack(
+                        [name], "emulators", db, "bios", "", offline=True,
+                        platforms_dir="platforms", record=record, required_only=True,
+                    )
+                    report = verify_emulator([name], "emulators", db,
+                                             platforms_dir="platforms", required_only=True)
+                    full = verify_emulator([name], "emulators", db, platforms_dir="platforms")
+                self.assertEqual(sorted(report["pack_destinations"]), sorted(record.files))
+                self.assertLessEqual(set(report["pack_destinations"]),
+                                     set(full["pack_destinations"]))
+
+    def test_every_mode_takes_the_flag(self):
+        for argv in (["--platform", "lakka"], ["--emulator", "handy"],
+                     ["--system", "atari-lynx"]):
+            with self.subTest(argv=argv):
+                proc = subprocess.run(
+                    [sys.executable, "scripts/verify.py", *argv, "--required-only"],
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=False,
+                )
+                self.assertEqual(proc.returncode, 0, proc.stderr[-1500:])
+
+
 class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     """verify exited 0 with a required file missing on an md5 platform, so
     the pipeline printed "verify OK" over a pack the frontend rejects."""

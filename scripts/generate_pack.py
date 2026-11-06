@@ -47,6 +47,7 @@ from common import (
     archive_entry,
     profiles_for_systems,
     write_text_atomic,
+    archive_is_optional,
     artifact_lock,
     repository_output_lock,
     ArtifactLockBusy,
@@ -1473,18 +1474,6 @@ class DamagedArchiveError(OSError):
 
 
 
-def _archive_is_optional(archive_entry: dict, archive_name: str, files: list[dict]) -> bool:
-    """Optional as a whole: its own entry and every member it carries.
-
-    geolith's _Required pack held neocd.zip and irrmaze.zip all the same.
-    """
-    return archive_entry.get("required") is False and all(
-        member.get("required") is False
-        for member in files
-        if member.get("archive") == archive_name
-    )
-
-
 def _pack_data_tree(
     zf: zipfile.ZipFile,
     local_cache: str,
@@ -1673,7 +1662,7 @@ def generate_emulator_pack(
                 )
 
                 own_entry = archive_entry(archive_name, files)
-                if required_only and _archive_is_optional(own_entry, archive_name, files):
+                if required_only and archive_is_optional(own_entry, archive_name, files):
                     continue
                 local_path, status = resolve_file(
                     own_entry,

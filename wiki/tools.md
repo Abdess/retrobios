@@ -148,6 +148,7 @@ python scripts/verify.py --platform batocera --system psx  # one system of a pla
 python scripts/verify.py --platform retroarch --target switch  # filter by hardware
 python scripts/verify.py --platform recalbox --region us   # regional priority list
 python scripts/verify.py --platform emuelec --no-game-data  # the firmware-only pack, game data named
+python scripts/verify.py --emulator mame --required-only    # the pack built with --required-only
 python scripts/verify.py --all --destinations tmp/paths.json  # also write the paths each pack holds
 python scripts/verify.py --all --offline             # a release asset the cache lacks counts missing, as in an offline build
 python scripts/verify.py --list-platforms          # list all platforms
@@ -258,7 +259,8 @@ own verification mode ([discrepancy detection](verification-modes.md#discrepancy
   with the closest matches before any work. Without `--platform`, `--system`
   takes our ids only.
 - `--required-only`: exclude optional files and the data directories declared
-  `required: false`, keep only required
+  `required: false`, keep only required. `verify.py --required-only` reports
+  on the same file set, for `--platform`, `--emulator` and `--system`
 - `--no-game-data`: firmware only. Leaves out the platform's entries
   categorized game data and the cores' `category: game_data` files, and names
   each one. Tags the pack `_NoGameData`. `verify.py --no-game-data` and
