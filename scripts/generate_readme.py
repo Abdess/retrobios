@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    InputMissing,
     compute_composition,
     count_catalog_matched,
     declared_root,
@@ -211,6 +212,10 @@ def platform_coverages(
                 coverages[name] = compute_coverage(
                     name, platforms_dir, db, data_registry, emulators_dir=emulators_dir,
                 )
+            except InputMissing:
+                # A missing profile or platform directory is no platform
+                # left out: it emptied every one and cached the result.
+                raise
             except FileNotFoundError as exc:
                 print(f"  {name}: skipped ({exc})", file=sys.stderr)
         COVERAGE_CACHE_DIR.mkdir(parents=True, exist_ok=True)

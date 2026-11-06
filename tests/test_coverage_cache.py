@@ -95,6 +95,21 @@ class CoverageCache(unittest.TestCase):
         self._run()
         self.assertEqual(len(list((self.work / "cache").glob("*.pickle"))), 1)
 
+    def test_a_missing_input_directory_stops_the_run(self):
+        """A missing --emulators-dir skipped every platform as if it had no
+        YAML, then replaced the cache with the empty result."""
+        self._run()
+        kept = sorted((self.work / "cache").glob("*.pickle"))
+
+        def missing(*_args, **_kwargs):
+            raise generate_readme.InputMissing("no emulator profile directory at nosuch")
+
+        with mock.patch.object(generate_readme, "compute_coverage", missing), \
+                mock.patch.object(generate_readme, "_coverage_inputs", return_value="other"), \
+                self.assertRaises(generate_readme.InputMissing):
+            self._run()
+        self.assertEqual(sorted((self.work / "cache").glob("*.pickle")), kept)
+
 
 if __name__ == "__main__":
     unittest.main()
