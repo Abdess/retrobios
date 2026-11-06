@@ -2330,7 +2330,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         f"({REPO_URL}/blob/main/scripts/check_platform_folder.py). A test runs it "
         "against the verifier on a sample folder, so the two give the same answer. "
         "It exits 1 when a file is wrong or missing. For an unknown platform it "
-        "prints the known ones.",
+        "prints the known ones, and it names a folder that does not exist.",
         "",
         "`install.py --check` answers another question by default: whether the folder "
         "holds what the pack installs, the manifest above. With `--declared-only`, or "
