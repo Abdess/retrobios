@@ -84,16 +84,18 @@ def run(steps: tuple[Step, ...] = STEPS) -> int:
     return 1 if failed else 0
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
     parser.add_argument("--list", action="store_true", help="print the steps and exit")
     args = parser.parse_args()
     if args.list:
         for step in STEPS:
             print(step.command)
-        return
-    sys.exit(run())
+        return 0
+    return run()
 
 
 if __name__ == "__main__":
-    main()
+    from common import run_cli
+
+    run_cli(main)
