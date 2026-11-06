@@ -445,7 +445,8 @@ The figures change with each release.
 The size depends on the platform and changes with each release. The run prints
 it before downloading, and asks first when the download reaches 1 GB. The
 installer also measures the free space and refuses before writing anything if
-there is not enough.
+there is not enough. The count holds the BIOS files, every data file still to
+come, and the largest source archive, which sits in its tree while it is read.
 
 `curl` or `wget`, and Python 3.8 or newer, are checked by the command itself:
 it stops with a message naming what is absent. PowerShell's execution policy

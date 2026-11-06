@@ -411,6 +411,84 @@ class TestFreeSpaceGuard(unittest.TestCase):
         self.assertLess(check, source.index("bios_path.mkdir(parents=True, exist_ok=True)"))
 
 
+class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
+    """The space check held only the BIOS files: 18.8 KB passed on a card
+    with 20 MB free, then 55.4 MB of archives came and 81.8 MB were written,
+    against the page's promise to refuse before writing anything."""
+
+    def _run(self, *frees_after_bios: int) -> list[tuple[int, str, list]]:
+        """One run per free size, in one folder: the second finds the BIOS
+        files the first installed."""
+        from types import SimpleNamespace
+
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        member = os.urandom(4096)
+        results = []
+        with FakeRepository() as repo, unittest.mock.patch.dict(os.environ):
+            listed = json.loads((repo.root / "install" / "retroarch.json").read_text())
+            listed["data_directories"] = [{
+                "ref": "tree", "dest": "tree", "type": "zip", "archive_size": 50_000_000,
+                "url": "https://example.invalid/tree.zip", "systems": ["nintendo-gba"],
+                "files": {"Sys/a.bin": {"sha1": hashlib.sha1(member).hexdigest(),
+                                        "size": len(member)}}}]
+            (repo.root / "install" / "retroarch.json").write_text(json.dumps(listed))
+            bios = sum(len(payload) for payload, *_ in FakeRepository.PAYLOADS.values())
+            base = repo.env()["RETROBIOS_BASE_URL"]
+            for after in frees_after_bios:
+                out = io.StringIO()
+                fetched: list = []
+                free = bios + after
+                with unittest.mock.patch.object(
+                        sys, "argv", ["install.py", "--platform", "retroarch", "--dest",
+                                      str(repo.dest), "--no-input"]), \
+                        unittest.mock.patch.object(install, "MANIFEST_URL",
+                                                   base + "/install/{platform}.json"), \
+                        unittest.mock.patch.object(install, "RAW_FILE_URL", base + "/{path}"), \
+                        unittest.mock.patch.object(install.shutil, "disk_usage",
+                                                   lambda _p, free=free: SimpleNamespace(free=free)), \
+                        unittest.mock.patch.object(
+                            install, "install_data_directory",
+                            lambda entry, *a, fetched=fetched, **k: fetched.append(entry["ref"]) or {
+                                "present": 0, "installed": 1, "changed": 0, "absent": 0,
+                                "error": "", "not_kept": []}), \
+                        contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+                    try:
+                        install.main()
+                        code = 0
+                    except SystemExit as exc:
+                        code = exc.code
+                results.append((code, out.getvalue(), repo.installed() + fetched))
+        return results
+
+    def test_a_card_short_for_the_trees_is_refused_before_any_write(self):
+        ((code, said, written),) = self._run(20_000_000)
+        self.assertEqual(code, 2, said)
+        self.assertIn("Not enough space", said)
+        self.assertEqual(written, [])
+
+    def test_room_for_the_trees_goes_on(self):
+        ((code, said, written),) = self._run(60_000_000)
+        self.assertEqual(code, 0, said)
+        self.assertIn("tree", written)
+
+    def test_the_trees_alone_are_checked_too(self):
+        """Every BIOS file in place: the trees were written unchecked."""
+        _first, (code, said, written) = self._run(60_000_000, -1)
+        self.assertEqual(code, 2, said)
+        self.assertIn("Not enough space", said)
+        self.assertNotIn("tree", written)
+
+    def test_the_bytes_counted(self):
+        state = (Path("x"), {"a": {"size": 10}, "b": {"size": 5}}, 0)
+        entry = {"archive_size": 1000}
+        with unittest.mock.patch.object(install.LOCAL, "pack", None), \
+                unittest.mock.patch.object(install, "_offline_only", return_value=False):
+            self.assertEqual(install.data_space_bytes([(entry, state), (entry, state)]), 1030)
+        with unittest.mock.patch.object(install.LOCAL, "pack", object()):
+            self.assertEqual(install.data_space_bytes([(entry, state)]), 15)
+
+
 class AMissingDestIsSaid(unittest.TestCase):
     """--dest ~/.config/retroarh/system (a typo) was created with every
     missing parent and reported done, and --check on it said only

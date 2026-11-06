@@ -7377,6 +7377,22 @@ def data_directory_state(entry: dict, bios_path: Path,
     return root, needed, present
 
 
+def data_space_bytes(data_states: list[tuple[dict, tuple[Path, dict[str, dict], int]]]) -> int:
+    """What the data trees take on the drive while they are rebuilt: every
+    file they lack, plus the largest source archive, which sits in its tree
+    until that tree is read. Only the BIOS files were held against the free
+    space: 18.8 KB passed on a card with 20 MB left, and 81.8 MB followed.
+    Nothing is written for them offline without a pack."""
+    if LOCAL.pack is None and _offline_only():
+        return 0
+    files = sum(meta.get("size", 0) for _entry, (_root, needed, _present) in data_states
+                for meta in needed.values())
+    if LOCAL.pack is not None:
+        return files
+    return files + max((data_fetch_bytes(entry, state[1]) for entry, state in data_states
+                        if state[1]), default=0)
+
+
 def data_fetch_bytes(entry: dict, needed: dict[str, dict]) -> int:
     """What getting a tree's missing files costs: its source archive, which
     comes whole for one file, or from a pack the files themselves. A list
@@ -15997,6 +16013,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(line)
             continue
 
+        space_checked = False
         if to_download:
             fetched = [f for f in to_download if id(f) not in copies]
             if _offline_only() and fetched:
@@ -16093,9 +16110,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             print("  Press Ctrl+C to stop. Running the same command again "
                   "carries on from here.")
             # Checked before the folder is created: a run stopped for space
-            # left an empty BIOS folder behind.
-            _check_free_space(bios_path, dl_size, plat_name, 1 if total_downloaded else 2,
-                              on_its_card(plat_name, bios_path))
+            # left an empty BIOS folder behind. The data trees count too,
+            # written after the files on the same drive.
+            _check_free_space(bios_path, dl_size + data_space_bytes(data_states), plat_name,
+                              1 if total_downloaded else 2, on_its_card(plat_name, bios_path))
+            space_checked = True
             created = not bios_path.exists()
             try:
                 bios_path.mkdir(parents=True, exist_ok=True)
@@ -16173,6 +16192,12 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     total_errors += 1
                 else:
                     writable.append((entry, state))
+            if writable and not space_checked:
+                # With every BIOS file in place, the trees alone: checked
+                # before the first archive is written.
+                _check_free_space(bios_path, data_space_bytes(writable), plat_name,
+                                  1 if total_downloaded else 2,
+                                  on_its_card(plat_name, bios_path))
             if writable:
                 print("\nData directories:")
             for entry, state in writable:
