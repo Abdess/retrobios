@@ -52,7 +52,7 @@ Pipeline steps:
 | 4c | Generate target manifests | `--skip-packs` |
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
 | 4e | Games index: what the installer reads for the games on a card (`generate_games_index.py`, fails under its coverage floor) | - (reads the committed install lists) |
-| 5 | Consistency check: counts, paths per archive, every emulator and system pack, the narrowed platform packs | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
+| 5 | Consistency check: counts, paths per archive, every emulator and system pack, the narrowed platform packs, the `--split` parts | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
 | 6 | Pack integrity (extract + hash) | `--skip-packs`, or no full pack built |
 | 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
@@ -110,6 +110,12 @@ alone, run `python scripts/check_buildbot_system.py`.
   `--source` and `--one-per-slot` are not compared: verify has no report of
   a platform-only, truth-only or one-per-slot pack. A test fails when a new
   narrowing reaches the pack name without being compared or exempted.
+- **The `--split` parts add up to the full pack.** Step 5 builds the parts of
+  every platform in memory and compares their union with the full pack, path
+  for path and byte for byte: a part is built against the full pack's own
+  placement, so a path the full pack settles (a file/directory clash, a case
+  twin, a path two systems declare) is not written again in a part. The 17
+  platform packs took about four and a half minutes on 2026-11-06.
 - **Generators write through `write_if_changed()`.** A new timestamp alone
   rewrites nothing, so a diff on a generated file always means content.
 - **One run per output directory.** Pack generation takes a lock on

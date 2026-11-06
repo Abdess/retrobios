@@ -195,5 +195,48 @@ class SplitPartsHoldWhatTheFullPackHolds(unittest.TestCase):
         self._assert_parts_add_up(full, parts)
 
 
+class PipelineComparesTheSplitParts(unittest.TestCase):
+    """Step 5 compared the --region, --target, --system, --required-only and
+    --no-game-data packs with verify, and nothing compared the --split parts
+    with the full pack: RetroDECK's SGB1.sfc file/directory clash and
+    RetroBat's 21 openmsx/openMSX twins passed every check."""
+
+    def setUp(self):
+        import pipeline
+
+        self.pipeline = pipeline
+
+    def _record(self, sources: dict[str, str]) -> PackRecord:
+        record = PackRecord()
+        record.members = [*sources, "README.txt"]
+        record.sources = dict(sources)
+        return record
+
+    def test_equal_parts_report_nothing(self):
+        full = self._record({"a.bin": "x", "b.bin": "y"})
+        parts = {"A": self._record({"a.bin": "x"}), "B": self._record({"b.bin": "y"})}
+        self.assertEqual(self.pipeline.split_differences(full, parts, str.__eq__), [])
+
+    def test_each_difference_is_named(self):
+        full = self._record({"SGB1.sfc": "x", "kept.bin": "k", "lost.bin": "l"})
+        parts = {
+            "Snes": self._record({"SGB1.sfc": "x", "kept.bin": "other"}),
+            "Other": self._record({"SGB1.sfc/program.rom": "p"}),
+        }
+        self.assertEqual(
+            self.pipeline.split_differences(full, parts, str.__eq__),
+            [
+                "in a part, not in the full pack: SGB1.sfc/program.rom",
+                "in the full pack, in no part: lost.bin",
+                "other bytes in Snes: kept.bin",
+            ],
+        )
+
+    def test_step_five_runs_the_comparison(self):
+        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text()
+        step = source[source.index("# Step 5: Consistency check"):source.index("# Step 6:")]
+        self.assertIn("check_split_packs(", step)
+
+
 if __name__ == "__main__":
     unittest.main()
