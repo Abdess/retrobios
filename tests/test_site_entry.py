@@ -441,7 +441,8 @@ class PackNamesItsVersion(unittest.TestCase):
         if not release_record.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
         block = generate_site._pack_buttons("batocera")
-        version = generate_site._pack_version(release_record.pack_name_for("batocera", record))
+        name = release_record.pack_name_for("batocera", record)
+        version = generate_site._pack_version(name, ["batocera"])
         self.assertIn(f"Made for Batocera {version}. "
                       + generate_site.other_version("batocera"), block)
 
@@ -451,6 +452,18 @@ class PackNamesItsVersion(unittest.TestCase):
         released = generate_site.release_line("retrobat", record)
         line = generate_site.version_line("retrobat", record, named=len(released) > 1)
         self.assertEqual(line, generate_site.other_version("retrobat"))
+
+    def test_a_version_with_an_underscore_is_read_whole(self):
+        """AmberELEC's prerelease-20261019_1835 read as 1835, and the page
+        said the pack was built for another version."""
+        from generate_pack import _platform_pack_stem
+
+        version = load_platform_config("amberelec", "platforms")["version"]
+        name = _platform_pack_stem(["amberelec"], "amberelec", "platforms") + "_BIOS_Pack.zip"
+        self.assertEqual(generate_site._pack_version(name, ["amberelec"]), version)
+        record = {"tag": "v2026.10.10", "packs": {name: {
+            "assets": [name], "platforms": ["amberelec"]}}}
+        self.assertEqual(len(generate_site.release_line("amberelec", record)), 1)
 
     def test_another_version_is_sent_to_the_check_commands(self):
         """A ZIP reader read "Run `--check` after copying." with no command."""

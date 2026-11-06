@@ -369,13 +369,25 @@ def _platform_pack_stem(
     rep_cfg = load_platform_config(representative, platforms_dir)
     version = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
     version_tag = f"_{_name_part(str(version))}" if version else ""
+    return platform_pack_prefix(group_platforms, representative, platforms_dir) + version_tag
+
+
+def platform_pack_prefix(
+    group_platforms: list[str], representative: str, platforms_dir: str
+) -> str:
+    """Platform part of a pack name without the version.
+
+    The site reads a pack's version back by removing this prefix: a version
+    may hold an underscore (AmberELEC prerelease-20261019_1835).
+    """
     if len(group_platforms) <= 1:
-        return _name_part(rep_cfg.get("platform", representative), "_") + version_tag
+        rep_cfg = load_platform_config(representative, platforms_dir)
+        return _name_part(rep_cfg.get("platform", representative), "_")
     names = [
         load_platform_config(p, platforms_dir).get("platform", p)
         for p in group_platforms
     ]
-    return "_".join(_name_part(n) for n in names) + version_tag
+    return "_".join(_name_part(n) for n in names)
 
 
 def platform_list_version(config: dict, platform: str) -> str:
