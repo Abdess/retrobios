@@ -54,7 +54,7 @@ notes: |
   the mods/hf file list under the BUILD_MOD_MPQS option
   (CMake/Mods.cmake:11-36, 61-71). The compiled
   binary expects devilutionx.mpq next to the executable on every
-  platform except Android, Apple and 3DS/Switch (:511-518), where its
+  platform except Android, Apple and 3DS/Switch (Source/engine/assets.cpp:511-518), where its
   contents are shipped loose. After loading the core archives the engine
   reads the asset ASSETS_VERSION and aborts with "Failed to load UI
   resources" unless its content is "1\n" (Source/init.cpp:54, 79-85,

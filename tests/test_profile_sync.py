@@ -5919,6 +5919,39 @@ class ARoleIsReadPerPart(unittest.TestCase):
             ("src/a.cpp", "source"), ("src/a.cpp", "source"), ("b.c", "upstream"),
         ])
 
+    def test_an_abbreviated_location_reads_in_the_file_named_last(self):
+        """devilutionx writes `Source/engine/assets.cpp:` then `(:507)` for
+        each loader, and its pin moved under five uncollected numbers."""
+        from sourceref import _prose_runs
+
+        text = (
+            "Load order is defined in Source/engine/assets.cpp:\n"
+            "  LoadCoreArchives() (:507) - devilutionx.mpq, fonts.mpq\n"
+            "  LoadLanguageArchive() (:523) - <lang>.mpq\n"
+            "Startup (src/port/Engine.cpp:65-127) loads sf64.o2r (:72, :88-89),\n"
+            "falls back at :90-106. Wrapped (code/q_shared.h\n"
+            ":44,65) and lightspark's (tools/errorgen:20).\n"
+        )
+        cited = [
+            (p.path, p.start, p.end) for run in _prose_runs(text) for p in run[3]
+        ]
+        self.assertEqual(cited, [
+            ("Source/engine/assets.cpp", 507, 507),
+            ("Source/engine/assets.cpp", 523, 523),
+            ("src/port/Engine.cpp", 65, 127),
+            ("src/port/Engine.cpp", 72, 72),
+            ("src/port/Engine.cpp", 88, 89),
+            ("src/port/Engine.cpp", 90, 106),
+            ("code/q_shared.h", 44, 44),
+            ("code/q_shared.h", 65, 65),
+            ("tools/errorgen", 20, 20),
+        ])
+
+    def test_an_abbreviated_location_needs_a_file_before_it(self):
+        from sourceref import _prose_runs
+
+        self.assertEqual(list(_prose_runs("read at boot (:507), devilutionx.mpq")), [])
+
 
 class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
     """Prose written under an older pin refuses the recale and the bump, yet
