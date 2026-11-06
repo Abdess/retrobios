@@ -1863,12 +1863,28 @@ class TestManualPlatformPrompt(unittest.TestCase):
         self.assertEqual(chosen, [("batocera", Path("~/my bios").expanduser())])
 
     def test_default_directory_comes_from_the_table(self):
-        answers = iter(["lakka", ""])
+        answers = iter(["retropie", ""])
         with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)), \
                 unittest.mock.patch.object(install, "_mounted_cards", return_value=[]), \
                 contextlib.redirect_stdout(io.StringIO()):
             chosen = install._prompt_manual_platform("linux")
-        self.assertEqual(chosen, [("lakka", install.DEFAULT_DESTS["lakka"])])
+        self.assertEqual(chosen, [("retropie", install.DEFAULT_DESTS["retropie"])])
+
+    def test_lakka_on_a_computer_asks_for_its_card(self):
+        """/storage/system, a folder only the Lakka machine has, was taken
+        on a computer: Lakka keeps its BIOS on its card's STORAGE part."""
+        card = Path(_tempdir(self))
+        (card / ".config" / "retroarch").mkdir(parents=True)
+        (card / ".config" / "retroarch" / "retroarch.cfg").write_text(
+            'system_directory = "/tmp/system"\n')
+        answers = iter(["lakka"])
+        out = io.StringIO()
+        with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)), \
+                unittest.mock.patch.object(install, "_mounted_cards", return_value=[card]), \
+                contextlib.redirect_stdout(out):
+            chosen = install._prompt_manual_platform("linux")
+        self.assertEqual(chosen, [("lakka", card / "system")])
+        self.assertIn("Lakka card found", out.getvalue())
 
     def test_batocera_on_a_computer_gets_no_default(self):
         """/userdata/bios, a folder only the Batocera
