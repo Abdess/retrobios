@@ -338,6 +338,10 @@ def main() -> int:
     # The packs are rewritten in place by generate_pack under this lock: a
     # build running beside the split mixes its bytes into the pack being
     # read, or writes a pack that the split then deletes.
+    if not args.target.exists():
+        print(f"Error: {args.target}: no such pack or directory, pass a pack or the "
+              "--output-dir generate_pack wrote (default dist/)", file=sys.stderr)
+        return 1
     directory = args.target if args.target.is_dir() else args.target.parent
     try:
         with artifact_lock(str(directory)):
