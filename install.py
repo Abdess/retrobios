@@ -7198,7 +7198,12 @@ def install_data_directory(entry: dict, bios_path: Path,
         # Kept apart, so the advice is the offline one, not the network's.
         counts["error"] = OfflineReason(str(exc))
     except (urllib.error.URLError, OSError, ValueError, tarfile.TarError) as exc:
-        counts["error"] = str(getattr(exc, "reason", None) or exc)
+        # The tree's folder refused, not the source: said as the BIOS files
+        # say it, never as an archive that could not be read.
+        counts["error"] = (NOT_WRITABLE if isinstance(exc, OSError)
+                           and not isinstance(exc, urllib.error.URLError)
+                           and _write_refused(exc) and not _folder_writable(root)
+                           else str(getattr(exc, "reason", None) or exc))
     except _MEMBER_ERRORS as exc:
         # A damaged, encrypted or unsupported member, in words.
         counts["error"] = unreadable_words(exc)
@@ -15838,8 +15843,19 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # PPSSPP's assets. Fetched from their source archive, each file
         # checked against the hash the list records.
         if data_dirs and not total_interrupted:
-            print("\nData directories:")
+            # A tree whose folder this user cannot write is not fetched: the
+            # BIOS files above already said the cause and its remedy, and
+            # each archive was named as unreadable.
+            writable = []
             for entry, state in data_states:
+                if state[1] and not _folder_writable(state[0]):
+                    failures.append((entry["ref"], NOT_WRITABLE))
+                    total_errors += 1
+                else:
+                    writable.append((entry, state))
+            if writable:
+                print("\nData directories:")
+            for entry, state in writable:
                 counts = install_data_directory(entry, bios_path, state)
                 total_downloaded += counts["installed"]
                 data_landed += counts["installed"]
@@ -15866,7 +15882,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                                  f", {counts['changed'] + counts['absent']} no longer in "
                                  "the source (the pack has them)")
                     print(line)
-                if counts["error"]:
+                if counts["error"] == NOT_WRITABLE:
+                    failures.append((entry["ref"], NOT_WRITABLE))
+                    total_errors += 1
+                elif counts["error"]:
                     print(f"  {entry['ref']}: could not read "
                           f"{LOCAL.pack.name if LOCAL.pack is not None else entry['url']}: "
                           f"{counts['error']}", file=sys.stderr)
