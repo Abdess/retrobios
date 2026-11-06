@@ -2909,6 +2909,26 @@ class BatoceraNotesStayWithTheirItem(unittest.TestCase):
         self.assertEqual(trailing, {("bios/bk0010.zip", "two.rom"): "# tail"})
 
 
+class TheWikiNamesWhatCountsAnExport(unittest.TestCase):
+    """adding-a-platform listed the methods that say what a format can hold
+    and none of those that count what render wrote, which seven exporters
+    override so the report matches the diff."""
+
+    def test_every_overridden_contract_method_is_documented(self):
+        documented = ("carries", "requires", "can_add", "keys_by_system",
+                      "lands", "states", "fills", "clears", "names_anew", "withheld")
+        overridden = {
+            name
+            for cls in discover_exporters().values()
+            for name in documented
+            if name in vars(cls)
+        }
+        wiki = (REPO_ROOT / "wiki" / "adding-a-platform.md").read_text(encoding="utf-8")
+        for name in sorted(overridden):
+            with self.subTest(method=name):
+                self.assertIn(f"`{name}(", wiki)
+
+
 class BatoceraEntriesAtAnyIndent(unittest.TestCase):
     """EmuELEC indents 23 of its systems with one tab. The entry pattern
     required four spaces, so each was appended again whole and the export
