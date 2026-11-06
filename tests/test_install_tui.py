@@ -5898,7 +5898,10 @@ def _card_from_rules(root: Path, setup: install.CardSetup) -> Path:
             (root / "bios").mkdir(exist_ok=True)
         for value in rule.values:
             (root / value).parent.mkdir(parents=True, exist_ok=True)
-            if rule.method == "games_part" and "." not in PurePosixPath(value).name:
+            # A marker the BIOS folder sits under is a folder on the card
+            # (muOS's MUOS/bios): written as a file, no folder fits below it.
+            if (rule.method == "games_part" and "." not in PurePosixPath(value).name
+                    or str(setup.below).startswith(f"{value}/")):
                 (root / value).mkdir(exist_ok=True)
             else:
                 (root / value).write_text("", encoding="utf-8")
@@ -9763,14 +9766,21 @@ class ScreenRowsAndFilters(unittest.TestCase):
 
         from test_install_offline import PAYLOAD, _offline_env, _pack
 
-        blocker = self.root / "file"
-        blocker.write_text("not a folder")
+        if os.name == "nt" or os.geteuid() == 0:
+            self.skipTest("a folder that refuses writes is POSIX, and root writes anyway")
+        # A file in the way is refused before the plan, as not_a_folder.
+        blocker = self.root / "closed"
+        blocker.mkdir()
         pack = _pack(self.root, "RetroArch_v1_BIOS_Pack.zip", PAYLOAD)
-        proc = subprocess.run(
-            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
-             "--dest", str(blocker / "system"), "--from-pack", str(pack), "--events"],
-            env=_offline_env(), capture_output=True, text=True, timeout=120, check=False,
-            stdin=subprocess.DEVNULL)
+        os.chmod(blocker, 0o500)
+        try:
+            proc = subprocess.run(
+                [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
+                 "--dest", str(blocker / "system"), "--from-pack", str(pack), "--events"],
+                env=_offline_env(), capture_output=True, text=True, timeout=120,
+                check=False, stdin=subprocess.DEVNULL)
+        finally:
+            os.chmod(blocker, 0o700)
         events = [json.loads(line) for line in proc.stdout.splitlines()]
         kinds = [event["event"] for event in events]
         self.assertEqual(kinds[-3:], ["error", "summary", "end"], proc.stderr)
