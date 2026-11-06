@@ -406,7 +406,7 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-11-05, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-06, printed this:
 
 ```
 Fetching file index for retroarch...
@@ -436,7 +436,7 @@ the installer can fetch them.
 <!-- generated: run-date -->
 
 Each line a first install prints, and what it means. The run below is a
-Batocera install into an empty folder, from the list of 2026-11-05.
+Batocera install into an empty folder, from the list of 2026-11-06.
 The figures change with each release.
 <!-- /generated: run-date -->
 
@@ -476,13 +476,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  18171 files (9.3 GB)
-    3155 BIOS files (4.4 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
+  18176 files (9.3 GB)
+    3160 BIOS files (4.4 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 426 files are not in the collection, 80 of them required.
 
 Checking existing files...
-  0 in place, 18171 missing, 0 wrong copies
+  0 in place, 18176 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -497,10 +497,10 @@ as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 14699 files (9.2 GB)...
+Downloading 14704 files (9.2 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/14699] panafz1.bin ok
-  [2/14699] panafz10.bin ok
+  [1/14704] panafz1.bin ok
+  [2/14704] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -512,8 +512,8 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 18171 files installed.
-  Installed: 3155 BIOS files, 11544 game data files and 3472 data files.
+Done. 18176 files installed.
+  Installed: 3160 BIOS files, 11544 game data files and 3472 data files.
 BIOS folder: /userdata/bios
 426 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (1 file):
@@ -532,7 +532,7 @@ would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-11-05:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-06:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).
@@ -567,7 +567,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  18171 in place, 0 missing, 0 wrong copies
+  18176 in place, 0 missing, 0 wrong copies
 
   Everything is in place.
 ```
@@ -1333,8 +1333,9 @@ rather than from the platform's BIOS tree. `--standalone-copies` copies them
 there after the install, and only then: without the flag nothing is written
 outside the selected tree, apart from the files kept in `retrobios-backup`.
 
-The manifest carries the list, fifteen entries on the six platforms that
-declare them (Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK):
+The manifest carries the list on the six platforms that declare one
+(Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK). It has two
+parts. The registry names fifteen entries, Flatpak folders included:
 
 | Files | Copied to |
 |-------|-----------|
@@ -1343,9 +1344,19 @@ declare them (Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK):
 | `Citra/sysdata/aes_keys.txt`, `Citra/sysdata/boot9.bin` | Azahar `sysdata` |
 | `scph*.bin` | DuckStation `bios` |
 | `ps2-*.bin` | PCSX2 `bios`, native and Flatpak |
-| `GC/USA/IPL.bin`, `GC/EUR/IPL.bin`, `GC/JAP/IPL.bin`, `dsp_rom.bin`, `dsp_coef.bin` | Dolphin, per region for the IPL |
+| `GC/USA/IPL.bin`, `GC/EUR/IPL.bin`, `GC/JAP/IPL.bin`, `dsp_rom.bin`, `dsp_coef.bin` | Dolphin `GC`, per region for the IPL |
 | `PPSSPP/ppge_atlas.zim` | PPSSPP `PSP/SYSTEM` |
-| `dc/dc_boot.bin`, `dc/dc_nvmem.bin` | Flycast `data`, native and Flatpak |
+| `dc/dc_boot.bin`, `dc/dc_nvmem.bin` | Flycast's data folder, native and Flatpak |
+
+The rest comes from the emulator profiles. A profile that gives the folder its
+standalone build reads (`data_root`, per system) has each file with a
+`standalone_path` copied to that path under the folder: Cemu's `keys.txt`,
+`otp.bin` and `seeprom.bin` to `~/.local/share/Cemu`, xemu's EEPROM, melonDS's
+DSi SD image. A copy carries `as` when the emulator reads the file under
+another name (`eeprom.bin`, `dsisd.bin`). A folder no run can name (beside an
+executable, picked in the app) is not a target, nor is a place the registry
+already gives for the same file. A file the emulator finds by its contents in a
+folder the user sets (Amiberry's ROMs) is left out.
 
 An entry names one file or a glob, and one entry carries no file at all: when
 an RPCS3 configuration directory is present it prints that `PS3UPDAT.PUP` is

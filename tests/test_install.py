@@ -26,7 +26,7 @@ from types import SimpleNamespace
 import unittest.mock
 import urllib.error
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
@@ -4569,6 +4569,46 @@ class WindowsSeenFromWsl(unittest.TestCase):
                          str(self.root))
 
 
+class StandaloneCopiesUnderTheirOwnName(unittest.TestCase):
+    """melonDS reads dsisd.bin and xemu eeprom.bin, names the platforms
+    give dsi_sd_card.bin and xbox_eeprom.bin: a copy says the name the
+    emulator reads."""
+
+    def test_the_copy_takes_the_emulator_name(self):
+        bios = Path(_tempdir(self))
+        (bios / "xbox_eeprom.bin").write_bytes(b"eeprom")
+        folder = Path(_tempdir(self))
+        manifest = {"standalone_copies": [
+            {"file": "xbox_eeprom.bin", "as": "eeprom.bin", "targets": {"linux": [str(folder)]}}]}
+        install._validate_manifest({**self._published(), **manifest}, "emudeck")
+        self.assertEqual(install.do_standalone_copies(manifest, bios, "linux"), (1, 0, 0))
+        self.assertEqual((folder / "eeprom.bin").read_bytes(), b"eeprom")
+        self.assertFalse((folder / "xbox_eeprom.bin").exists())
+        plan = install.standalone_plan(
+            [{"files": [{"dest": "xbox_eeprom.bin", "sha1": "0" * 40, "size": 6}],
+              **manifest}], "linux")
+        self.assertEqual([entry["dest"] for entry in plan[0][1]], ["eeprom.bin"])
+
+    def _published(self) -> dict:
+        return json.loads((REPO_ROOT / "install" / "emudeck.json").read_text())
+
+    def test_a_name_that_climbs_is_refused(self):
+        for name in ("../eeprom.bin", "a/eeprom.bin", "", 3):
+            with self.subTest(name=name), \
+                    self.assertRaisesRegex(ValueError, "standalone copy name|\\.as"):
+                install._validate_manifest({**self._published(), "standalone_copies": [
+                    {"file": "x.bin", "as": name, "targets": {}}]}, "emudeck")
+
+    def test_cemu_alone_is_found_from_the_published_list(self):
+        home = Path(_tempdir(self))
+        (home / ".local" / "share" / "Cemu").mkdir(parents=True)
+        manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
+        with unittest.mock.patch.dict(os.environ, {"HOME": str(home)}):
+            plan = dict(install.standalone_plan([manifest], "linux"))
+        names = {entry["dest"] for entry in plan[home / ".local" / "share" / "Cemu"]}
+        self.assertLessEqual({"keys.txt", "otp.bin", "seeprom.bin"}, names)
+
+
 class RetroArchAppImageIsPortable(unittest.TestCase):
     """The buildbot's Linux RetroArch is an AppImage beside a .home folder
     the AppImage runtime makes its HOME: the run found nothing and offered
@@ -5677,7 +5717,15 @@ class StandaloneEmulatorsWithoutAPlatformAreServed(unittest.TestCase, _LoopbackR
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         names = sorted(path.name for path in self.duckstation.iterdir())
         self.assertIn("scph5501.bin", names)
-        self.assertTrue(all(name.startswith("scph") for name in names), names)
+        # Every image the DuckStation profile places in its bios folder,
+        # its PS2 and OpenBIOS images included, and nothing else.
+        import yaml  # noqa: PLC0415
+
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "duckstation.yml").read_text())
+        named = {PurePosixPath(entry["standalone_path"]).name
+                 for entry in profile["files"] if entry.get("standalone_path")}
+        self.assertEqual([name for name in names
+                          if name not in named and not name.startswith("scph")], [])
         proc = _install_run(self.env, "--no-input", "--check")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("Everything is in place.", proc.stdout)

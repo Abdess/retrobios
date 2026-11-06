@@ -3980,6 +3980,12 @@ def _validate_manifest(data: object, plat: str) -> dict:
             _safe_relative_path(
                 entry["source"], f"standalone_copies[{index}].source"
             )
+        if "as" in entry and (
+            "file" not in entry or not isinstance(entry["as"], str)
+            or PurePosixPath(_safe_relative_path(
+                entry["as"], f"standalone_copies[{index}].as")).name != entry["as"]
+        ):
+            raise ValueError(f"invalid standalone copy name at {where}")
         if "pattern" in entry:
             pattern = entry["pattern"]
             if (
@@ -7585,7 +7591,9 @@ def standalone_plan(
                     continue
                 chosen = plan.setdefault(folder, {})
                 for entry in sources:
-                    name = PurePosixPath(entry["dest"]).name
+                    # `as`: the name the emulator reads, when it is not the
+                    # platform's (melonDS's dsisd.bin, xemu's eeprom.bin).
+                    name = copy.get("as") or PurePosixPath(entry["dest"]).name
                     chosen.setdefault(name, {**entry, "dest": name})
     return [(folder, list(entries.values())) for folder, entries in plan.items() if entries]
 
@@ -7749,7 +7757,7 @@ def do_standalone_copies(
                 continue
             resolved_dir = target_dir.resolve()
             for src in sources:
-                dest = target_dir / src.name
+                dest = target_dir / (entry.get("as") or src.name)
                 linked = dest.is_symlink()
                 # A crafted source name would climb out of the directory.
                 if not linked and not _within(dest, resolved_dir):
@@ -7759,7 +7767,7 @@ def do_standalone_copies(
                         failures.append((str(dest), OUTSIDE_TARGET))
                     continue
                 try:
-                    KEPT.keep(resolved_dir, PurePosixPath(src.name), dest, {}, src)
+                    KEPT.keep(resolved_dir, PurePosixPath(dest.name), dest, {}, src)
                 except _NotKept as exc:
                     print(f"  ERROR: {dest}: {NOT_KEPT} ({exc})")
                     failed += 1
