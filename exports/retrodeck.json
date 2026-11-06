@@ -379,7 +379,7 @@
       "new": "bf05cc848e403f8ae457bfe26faa8135cf4725cfff956fa030f5c0a00a26adcc"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "mame",
       "name": "p1_rom.zip",
       "destination": "bios/p1_rom.zip",
@@ -388,7 +388,7 @@
       "new": false
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "fbneo",
       "name": "neocdz.zip",
       "destination": "bios/neocdz.zip",
@@ -408,7 +408,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "nds",
       "name": "bios7.bin",
       "destination": "bios/bios7.bin",
@@ -417,7 +417,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "nds",
       "name": "bios9.bin",
       "destination": "bios/bios9.bin",
@@ -503,7 +503,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pico8",
       "name": "pico8_dyn",
       "destination": "bios/pico-8/pico8_dyn",
@@ -649,7 +649,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga",
       "name": "kick34005.A500",
       "destination": "bios/kick34005.A500",
@@ -658,7 +658,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga",
       "name": "kick40068.A1200",
       "destination": "bios/kick40068.A1200",
@@ -667,7 +667,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga",
       "name": "kick34005.CDTV",
       "destination": "bios/kick34005.CDTV",
@@ -676,7 +676,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga",
       "name": "kick40060.CD32",
       "destination": "bios/kick40060.CD32",
@@ -685,7 +685,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga",
       "name": "kick40060.CD32.ext",
       "destination": "bios/kick40060.CD32.ext",
@@ -730,7 +730,7 @@
       "new": "4b5ed8cb2472013c19021fea99352fee6a50a116295cc38d4c040514c2eb39f1"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atarixe",
       "name": "xegs.zip",
       "destination": "bios/xegs.zip",
@@ -739,7 +739,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atari5200",
       "name": "ATARIXL.ROM",
       "destination": "bios/ATARIXL.ROM",
@@ -748,7 +748,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atari5200",
       "name": "ATARIBAS.ROM",
       "destination": "bios/ATARIBAS.ROM",
@@ -757,7 +757,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atari5200",
       "name": "ATARIOSA.ROM",
       "destination": "bios/ATARIOSA.ROM",
@@ -953,7 +953,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "apple2",
       "name": "a2diskiing.zip",
       "destination": "bios/a2diskiing.zip",
@@ -962,7 +962,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "apple2",
       "name": "apple2e.zip",
       "destination": "bios/apple2e.zip",
@@ -971,7 +971,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "apple2",
       "name": "d2fdc.zip",
       "destination": "bios/d2fdc.zip",
@@ -980,7 +980,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "apple2",
       "name": "apple2gs.zip",
       "destination": "bios/apple2gs.zip",
@@ -989,7 +989,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "cdimono1",
       "name": "cdibios.zip",
       "destination": "bios/cdibios.zip",
@@ -1186,7 +1186,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "gamecom",
       "name": "gamecom.zip",
       "destination": "bios/gamecom.zip",
@@ -1206,7 +1206,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "gmaster",
       "name": "gmaster.zip",
       "destination": "bios/gmaster.zip",
@@ -1226,7 +1226,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "neogeo",
       "name": "aes.zip",
       "destination": "bios/aes.zip",
@@ -1253,7 +1253,7 @@
       "new": "1d39368f8dd5c2c65be1b872e749f7e20fe5707f9897deefe54a82d11d4748c7"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "ngp",
       "name": "ngp.zip",
       "destination": "bios/ngp.zip",
@@ -1262,7 +1262,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "odyssey2",
       "name": "c52.bin",
       "destination": "bios/c52.bin",
@@ -1271,7 +1271,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx",
       "name": "DISK.ROM",
       "destination": "bios/DISK.ROM",
@@ -1289,7 +1289,7 @@
       "new": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx",
       "name": "MSXDOS2.ROM",
       "destination": "bios/MSXDOS2.ROM",
@@ -1325,7 +1325,7 @@
       "new": "56785703b14f252ce77be586716dbf5d94125e93b9e6069ff26f7686566cd91a"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx",
       "name": "CARTS.SHA",
       "destination": "bios/CARTS.SHA",
@@ -1343,7 +1343,7 @@
       "new": "0a09940701f40647a2715271b43c9ab0d82bd488871427ad627b7e0f462f5dda"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx",
       "name": "RS232.ROM",
       "destination": "bios/RS232.ROM",
@@ -1415,7 +1415,7 @@
       "new": "728fbc6dd5f7532b526d1fa6e55bade10060954cf5412d23e61ceafaa1e6bf85"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "nes",
       "name": "disksys.rom",
       "destination": "bios/disksys.rom",
@@ -1424,7 +1424,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "sega32x",
       "name": "32X_M_BIOS.BIN",
       "destination": "bios/32X_M_BIOS.BIN",
@@ -1433,7 +1433,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "sega32x",
       "name": "32X_S_BIOS.BIN",
       "destination": "bios/32X_S_BIOS.BIN",
@@ -1442,7 +1442,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "dreamcast",
       "name": "dc_boot.bin",
       "destination": "bios/dc/dc_boot.bin",
@@ -1451,7 +1451,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "dreamcast",
       "name": "dc_flash.bin",
       "destination": "bios/dc/dc_flash.bin",
@@ -1478,7 +1478,7 @@
       "new": "8c8a21335038285cfa03dc076100c1f0bfadf3e4ff70796f11f3dfaaab60eee2"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "colecovision",
       "name": "colecovision.rom",
       "destination": "bios/colecovision.rom",
@@ -1487,7 +1487,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "colecovision",
       "name": "coleco.rom",
       "destination": "bios/coleco.rom",
@@ -1677,7 +1677,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "snes",
       "name": "BS-X.bin",
       "destination": "bios/BS-X.bin",
@@ -1686,7 +1686,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "snes",
       "name": "STBIOS.bin",
       "destination": "bios/STBIOS.bin",
@@ -1731,7 +1731,7 @@
       "new": "ea65e0fb44ee93ede4b6c507509b7e5ddf497fb7155023bea91ef229469fa04d"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "scv",
       "name": "upd7801g.s01",
       "destination": "bios/upd7801g.s01",
@@ -1749,7 +1749,7 @@
       "new": "248ec2f28294316558475ba0e416da19cfff0a5dd8ad3525a484a9be67b8a290"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "scv",
       "name": "scv.zip",
       "destination": "bios/scv.zip",
@@ -1769,7 +1769,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "supracan",
       "name": "umc6650.zip",
       "destination": "bios/umc6650.zip",
@@ -1778,7 +1778,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "supracan",
       "name": "supracan.zip",
       "destination": "bios/supracan.zip",
@@ -1809,7 +1809,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "vsmile",
       "name": "vsmile.zip",
       "destination": "bios/vsmile.zip",
@@ -1840,7 +1840,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "xbox",
       "name": "mcpx_1.0.bin",
       "destination": "bios/mcpx_1.0.bin",
@@ -1849,7 +1849,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "xbox",
       "name": "Complex.bin",
       "destination": "bios/Complex.bin",
@@ -1878,7 +1878,7 @@
       "new": "fc0e900bfec6b52f0f80ba1e65a4712808d2a411b5b00496639ef1a2152351f1"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "tanodragon",
       "name": "d64tano.rom",
       "destination": "bios/d64tano.rom",
@@ -1905,7 +1905,7 @@
       "new": "c3d0b8fd92020c939ec97388402d10b3890e6e26455963d50cc00b5f9cd68fa5"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "tanodragon",
       "name": "d200rom1.rom",
       "destination": "bios/d200rom1.rom",
@@ -1923,7 +1923,7 @@
       "new": "0486c51d3b6f7b6b4bcdde661d54f076278fd6a4ee92cbf9d1bc791554e16bd7"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "tanodragon",
       "name": "ddos10.rom",
       "destination": "bios/ddos10.rom",
@@ -1986,7 +1986,7 @@
       "new": "09e8573e31effc16e9f1a177f46514ed9f332a6c5e4e46a550574bd969319c11"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "tanodragon",
       "name": "cp400bas.rom",
       "destination": "bios/cp400bas.rom",
@@ -2069,7 +2069,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "coco",
       "name": "cp400extbas.rom",
       "destination": "bios/cp400extbas.rom",
@@ -2123,7 +2123,7 @@
       "new": "5375b1caef9df815b781d9cd6df81ecdaddd2642b06a01adac521e40f1329751"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "coco",
       "name": "coco3.rom",
       "destination": "bios/coco3.rom",
@@ -2150,7 +2150,7 @@
       "new": "ccd347508f177cb3eeb2e17fd60d3cccb64312d069c5084771467cfbbc04a27c"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "coco",
       "name": "extbas11.rom",
       "destination": "bios/extbas11.rom",
@@ -2177,7 +2177,7 @@
       "new": "8c86c83720043525029797dd3defd0fd285651549a373117304cc470e8e61f91"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "coco",
       "name": "disk11.rom",
       "destination": "bios/disk11.rom",
@@ -2195,7 +2195,7 @@
       "new": "1c40c5a74e72edaeecc2511fee1aab347eae2c3d5fc6778cb622e3df14d63157"
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "coco",
       "name": "coco3p.rom",
       "destination": "bios/coco3p.rom",
@@ -2265,7 +2265,7 @@
       }
     }
   ],
-  "hashes_corrected": [
+  "hashes_updated": [
     "fbneo/neocdz.zip md5"
   ],
   "hashes_filled": [
@@ -2364,10 +2364,10 @@
     "coco/disk11.rom sha256",
     "coco/coco3p.rom sha256"
   ],
-  "sizes_corrected": [],
+  "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "requirements_corrected": 52,
+  "required_aligned": 52,
   "withheld": [],
   "found_by_content": 279,
   "removal_candidates": [

@@ -1379,7 +1379,7 @@ class RecalboxExport(unittest.TestCase):
         self.assertNotEqual(element.get("mandatory"), "false")
         self.assertEqual(
             [c for c in landed_changes(exporter, systems).records
-             if c["kind"] == "requirement_corrected"],
+             if c["kind"] == "required_aligned"],
             [],
         )
 

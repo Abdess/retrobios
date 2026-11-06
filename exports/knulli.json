@@ -48,7 +48,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "neogeo",
       "name": "neogeo.zip",
       "destination": "neogeo.zip",
@@ -233,7 +233,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "nds",
       "name": "dsi_bios7.bin",
       "destination": "dsi_bios7.bin",
@@ -242,7 +242,7 @@
       "new": "322ceeafb77b0cc96a1fcc6271e0e0ae"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "nds",
       "name": "dsi_bios9.bin",
       "destination": "dsi_bios9.bin",
@@ -284,7 +284,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "msx",
       "name": "MSX.ROM",
       "destination": "MSX.ROM",
@@ -1393,17 +1393,17 @@
       }
     }
   ],
-  "hashes_corrected": [
+  "hashes_updated": [
     "neogeo/neogeo.zip md5",
     "nds/dsi_bios7.bin md5",
     "nds/dsi_bios9.bin md5",
     "msx/MSX.ROM md5"
   ],
   "hashes_filled": [],
-  "sizes_corrected": [],
+  "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "requirements_corrected": 0,
+  "required_aligned": 0,
   "withheld": [],
   "found_by_content": 114,
   "removal_candidates": [

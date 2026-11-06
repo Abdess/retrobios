@@ -16,7 +16,7 @@
   },
   "changes": [
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga600",
       "name": "kick34005.A500",
       "destination": "amiga/bios/kick34005.A500",
@@ -25,7 +25,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga600",
       "name": "kick37175.A500",
       "destination": "amiga/bios/kick37175.A500",
@@ -298,7 +298,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amiga1200",
       "name": "kick40068.A4000",
       "destination": "amiga/bios/kick40068.A4000",
@@ -307,7 +307,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "amigacd32",
       "name": "kick40060.CD32.ext",
       "destination": "amiga/bios/kick40060.CD32.ext",
@@ -316,7 +316,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "macintosh",
       "name": "MinivMacBootv2.dsk",
       "destination": "macintosh/MinivMacBootv2.dsk",
@@ -325,7 +325,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atari800",
       "name": "ATARIBAS.ROM",
       "destination": "atari800/ATARIBAS.ROM",
@@ -334,7 +334,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atari800",
       "name": "ATARIOSA.ROM",
       "destination": "atari800/ATARIOSA.ROM",
@@ -343,7 +343,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atari800",
       "name": "ATARIOSB.ROM",
       "destination": "atari800/ATARIOSB.ROM",
@@ -352,7 +352,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atari800",
       "name": "ATARIXL.ROM",
       "destination": "atari800/ATARIXL.ROM",
@@ -361,7 +361,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "bk",
       "name": "B11M_BOS.ROM",
       "destination": "bk/B11M_BOS.ROM",
@@ -370,7 +370,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "bk",
       "name": "B11M_EXT.ROM",
       "destination": "bk/B11M_EXT.ROM",
@@ -379,7 +379,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "bk",
       "name": "BAS11M_0.ROM",
       "destination": "bk/BAS11M_0.ROM",
@@ -388,7 +388,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "bk",
       "name": "BAS11M_1.ROM",
       "destination": "bk/BAS11M_1.ROM",
@@ -397,7 +397,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "bk",
       "name": "DISK_327.ROM",
       "destination": "bk/DISK_327.ROM",
@@ -406,7 +406,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "bk",
       "name": "FOCAL10.ROM",
       "destination": "bk/FOCAL10.ROM",
@@ -643,7 +643,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "dreamcast",
       "name": "dc_boot.bin",
       "destination": "dc/dc_boot.bin",
@@ -664,7 +664,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pc88",
       "name": "n88_1.rom",
       "destination": "quasi88/n88_1.rom",
@@ -673,7 +673,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pc88",
       "name": "n88_2.rom",
       "destination": "quasi88/n88_2.rom",
@@ -682,7 +682,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pc88",
       "name": "n88_3.rom",
       "destination": "quasi88/n88_3.rom",
@@ -691,7 +691,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pc88",
       "name": "n88n.rom",
       "destination": "quasi88/n88n.rom",
@@ -700,7 +700,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pc98",
       "name": "bios.rom",
       "destination": "np2kai/bios.rom",
@@ -709,7 +709,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pc98",
       "name": "font.bmp",
       "destination": "np2kai/font.bmp",
@@ -718,7 +718,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "pc98",
       "name": "sound.rom",
       "destination": "np2kai/sound.rom",
@@ -739,7 +739,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "sufami",
       "name": "STBIOS.bin",
       "destination": "sufami/STBIOS.bin",
@@ -748,7 +748,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "CARTS.SHA",
       "destination": "msx/CARTS.SHA",
@@ -757,7 +757,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "CYRILLIC.FNT",
       "destination": "msx/CYRILLIC.FNT",
@@ -766,7 +766,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "DISK.ROM",
       "destination": "msx/DISK.ROM",
@@ -775,7 +775,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "FMPAC.ROM",
       "destination": "msx/FMPAC.ROM",
@@ -784,7 +784,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "ITALIC.FNT",
       "destination": "msx/ITALIC.FNT",
@@ -793,7 +793,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "KANJI.ROM",
       "destination": "msx/KANJI.ROM",
@@ -802,7 +802,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "MSXDOS2.ROM",
       "destination": "msx/MSXDOS2.ROM",
@@ -811,7 +811,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "PAINTER.ROM",
       "destination": "msx/PAINTER.ROM",
@@ -820,7 +820,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2",
       "name": "RS232.ROM",
       "destination": "msx/RS232.ROM",
@@ -829,7 +829,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "pesadelo.rom",
       "destination": "Machines/Forte II Games - Pesadelo/pesadelo.rom",
@@ -838,7 +838,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_logo_msx1.rom",
       "destination": "Machines/MSX - C-BIOS/cbios_logo_msx1.rom",
@@ -847,7 +847,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_main_msx1.rom",
       "destination": "Machines/MSX - C-BIOS/cbios_main_msx1.rom",
@@ -856,7 +856,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_logo_msx2.rom",
       "destination": "Machines/MSX2 - C-BIOS/cbios_logo_msx2.rom",
@@ -865,7 +865,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_main_msx2.rom",
       "destination": "Machines/MSX2 - C-BIOS/cbios_main_msx2.rom",
@@ -874,7 +874,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_sub.rom",
       "destination": "Machines/MSX2 - C-BIOS/cbios_sub.rom",
@@ -883,7 +883,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_logo_msx2+.rom",
       "destination": "Machines/MSX2+ - C-BIOS/cbios_logo_msx2+.rom",
@@ -892,7 +892,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_main_msx2+.rom",
       "destination": "Machines/MSX2+ - C-BIOS/cbios_main_msx2+.rom",
@@ -901,7 +901,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "cbios_music.rom",
       "destination": "Machines/MSX2+ - C-BIOS/cbios_music.rom",
@@ -910,7 +910,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "Msx2pe.rom",
       "destination": "Machines/MSX2+ - European/Msx2pe.rom",
@@ -919,7 +919,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "Msx2pexte.rom",
       "destination": "Machines/MSX2+ - European/Msx2pexte.rom",
@@ -928,7 +928,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "ARAB1.ROM",
       "destination": "Machines/Shared Roms/ARAB1.ROM",
@@ -937,7 +937,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "ARABIC.rom",
       "destination": "Machines/Shared Roms/ARABIC.rom",
@@ -946,7 +946,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "BEERIDE.ROM",
       "destination": "Machines/Shared Roms/BEERIDE.ROM",
@@ -955,7 +955,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "FMPAC.rom",
       "destination": "Machines/Shared Roms/FMPAC.rom",
@@ -964,7 +964,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "GCVMX80.ROM",
       "destination": "Machines/Shared Roms/GCVMX80.ROM",
@@ -973,7 +973,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "HANGUL.rom",
       "destination": "Machines/Shared Roms/HANGUL.rom",
@@ -982,7 +982,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "KANJI.rom",
       "destination": "Machines/Shared Roms/KANJI.rom",
@@ -991,7 +991,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MICROSOLDISK.ROM",
       "destination": "Machines/Shared Roms/MICROSOLDISK.ROM",
@@ -1000,7 +1000,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MOONSOUND.rom",
       "destination": "Machines/Shared Roms/MOONSOUND.rom",
@@ -1009,7 +1009,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2AR.ROM",
       "destination": "Machines/Shared Roms/MSX2AR.ROM",
@@ -1018,7 +1018,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2AREXT.ROM",
       "destination": "Machines/Shared Roms/MSX2AREXT.ROM",
@@ -1027,7 +1027,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2BR.rom",
       "destination": "Machines/Shared Roms/MSX2BR.rom",
@@ -1036,7 +1036,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2BREXT.rom",
       "destination": "Machines/Shared Roms/MSX2BREXT.rom",
@@ -1045,7 +1045,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2FR.rom",
       "destination": "Machines/Shared Roms/MSX2FR.rom",
@@ -1054,7 +1054,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2FREXT.rom",
       "destination": "Machines/Shared Roms/MSX2FREXT.rom",
@@ -1063,7 +1063,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2G.rom",
       "destination": "Machines/Shared Roms/MSX2G.rom",
@@ -1072,7 +1072,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2GEXT.rom",
       "destination": "Machines/Shared Roms/MSX2GEXT.rom",
@@ -1081,7 +1081,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2HAN.rom",
       "destination": "Machines/Shared Roms/MSX2HAN.rom",
@@ -1090,7 +1090,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2J.rom",
       "destination": "Machines/Shared Roms/MSX2J.rom",
@@ -1099,7 +1099,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2JEXT.rom",
       "destination": "Machines/Shared Roms/MSX2JEXT.rom",
@@ -1108,7 +1108,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2KR.rom",
       "destination": "Machines/Shared Roms/MSX2KR.rom",
@@ -1117,7 +1117,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2KREXT.rom",
       "destination": "Machines/Shared Roms/MSX2KREXT.rom",
@@ -1126,7 +1126,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2R.rom",
       "destination": "Machines/Shared Roms/MSX2R.rom",
@@ -1135,7 +1135,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2R2.ROM",
       "destination": "Machines/Shared Roms/MSX2R2.ROM",
@@ -1144,7 +1144,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2REXT.rom",
       "destination": "Machines/Shared Roms/MSX2REXT.rom",
@@ -1153,7 +1153,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2SE.rom",
       "destination": "Machines/Shared Roms/MSX2SE.rom",
@@ -1162,7 +1162,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2SP.rom",
       "destination": "Machines/Shared Roms/MSX2SP.rom",
@@ -1171,7 +1171,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSX2SPEXT.rom",
       "destination": "Machines/Shared Roms/MSX2SPEXT.rom",
@@ -1180,7 +1180,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXAR.ROM",
       "destination": "Machines/Shared Roms/MSXAR.ROM",
@@ -1189,7 +1189,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXBR.rom",
       "destination": "Machines/Shared Roms/MSXBR.rom",
@@ -1198,7 +1198,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXFR.rom",
       "destination": "Machines/Shared Roms/MSXFR.rom",
@@ -1207,7 +1207,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXG.rom",
       "destination": "Machines/Shared Roms/MSXG.rom",
@@ -1216,7 +1216,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXHAN.rom",
       "destination": "Machines/Shared Roms/MSXHAN.rom",
@@ -1225,7 +1225,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXJ.rom",
       "destination": "Machines/Shared Roms/MSXJ.rom",
@@ -1234,7 +1234,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXKANJI.rom",
       "destination": "Machines/Shared Roms/MSXKANJI.rom",
@@ -1243,7 +1243,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXKR.rom",
       "destination": "Machines/Shared Roms/MSXKR.rom",
@@ -1252,7 +1252,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXR.rom",
       "destination": "Machines/Shared Roms/MSXR.rom",
@@ -1261,7 +1261,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXR2.ROM",
       "destination": "Machines/Shared Roms/MSXR2.ROM",
@@ -1270,7 +1270,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXSE.ROM",
       "destination": "Machines/Shared Roms/MSXSE.ROM",
@@ -1279,7 +1279,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "MSXSP.rom",
       "destination": "Machines/Shared Roms/MSXSP.rom",
@@ -1288,7 +1288,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "NATIONALDISK.rom",
       "destination": "Machines/Shared Roms/NATIONALDISK.rom",
@@ -1297,7 +1297,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "NOVAXIS.rom",
       "destination": "Machines/Shared Roms/NOVAXIS.rom",
@@ -1306,7 +1306,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "PAINT.rom",
       "destination": "Machines/Shared Roms/PAINT.rom",
@@ -1315,7 +1315,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "PANASONICDISK.rom",
       "destination": "Machines/Shared Roms/PANASONICDISK.rom",
@@ -1324,7 +1324,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "PHILIPSDISK.rom",
       "destination": "Machines/Shared Roms/PHILIPSDISK.rom",
@@ -1333,7 +1333,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "RS232.ROM",
       "destination": "Machines/Shared Roms/RS232.ROM",
@@ -1342,7 +1342,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "SUNRISEIDE.rom",
       "destination": "Machines/Shared Roms/SUNRISEIDE.rom",
@@ -1351,7 +1351,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "SWP.rom",
       "destination": "Machines/Shared Roms/SWP.rom",
@@ -1360,7 +1360,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "XBASIC2.rom",
       "destination": "Machines/Shared Roms/XBASIC2.rom",
@@ -1369,7 +1369,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "nowindDos1.rom",
       "destination": "Machines/Shared Roms/nowindDos1.rom",
@@ -1378,7 +1378,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "msx1,msx2,msxturbor",
       "name": "nowindDos2.rom",
       "destination": "Machines/Shared Roms/nowindDos2.rom",
@@ -1387,7 +1387,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "lynx",
       "name": "lynxboot.img",
       "destination": "lynx/lynxboot.img",
@@ -1396,7 +1396,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "atarist",
       "name": "tos.img",
       "destination": "atarist/tos.img",
@@ -1441,7 +1441,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "o2em",
       "name": "c52.bin",
       "destination": "o2em/c52.bin",
@@ -1450,7 +1450,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "videopacplus",
       "name": "g7400.bin",
       "destination": "o2em/g7400.bin",
@@ -1459,7 +1459,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "videopacplus",
       "name": "jopac.bin",
       "destination": "o2em/jopac.bin",
@@ -1468,7 +1468,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "3do",
       "name": "panafz1.bin",
       "destination": "3do/panafz1.bin",
@@ -1477,7 +1477,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "3do",
       "name": "panafz1j.bin",
       "destination": "3do/panafz1j.bin",
@@ -1486,7 +1486,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "3do",
       "name": "panafz1j-norsa.bin",
       "destination": "3do/panafz1j-norsa.bin",
@@ -1507,7 +1507,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "x1",
       "name": "IPLROM.X1",
       "destination": "xmil/IPLROM.X1",
@@ -1516,7 +1516,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "x1",
       "name": "IPLROM.X1T",
       "destination": "xmil/IPLROM.X1T",
@@ -1525,7 +1525,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "psx",
       "name": "scph101.bin",
       "destination": "scph101.bin",
@@ -1534,7 +1534,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "psx",
       "name": "scph7001.bin",
       "destination": "scph7001.bin",
@@ -1543,7 +1543,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "psx",
       "name": "scph1001.bin",
       "destination": "scph1001.bin",
@@ -1576,7 +1576,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "nds",
       "name": "bios7.bin",
       "destination": "nds/bios7.bin",
@@ -1585,7 +1585,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "nds",
       "name": "bios9.bin",
       "destination": "nds/bios9.bin",
@@ -1594,7 +1594,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "nds",
       "name": "firmware.bin",
       "destination": "nds/firmware.bin",
@@ -1603,7 +1603,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "oricatmos",
       "name": "jasmin.rom",
       "destination": "oricutron/jasmin.rom",
@@ -1612,7 +1612,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "oricatmos",
       "name": "microdis.rom",
       "destination": "oricutron/microdis.rom",
@@ -1621,7 +1621,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "gb,gbc",
       "name": "SGB1.sfc",
       "destination": "sgb/SGB1.sfc",
@@ -1630,7 +1630,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "gb,gbc",
       "name": "SGB2.sfc",
       "destination": "sgb/SGB2.sfc",
@@ -1903,7 +1903,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "64dd",
       "name": "IPL.n64",
       "destination": "Mupen64plus/IPL.n64",
@@ -1912,7 +1912,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "saturn",
       "name": "mpr-18811-mx.ic1",
       "destination": "saturn/mpr-18811-mx.ic1",
@@ -1921,7 +1921,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "saturn",
       "name": "mpr-19367-mx.ic1",
       "destination": "saturn/mpr-19367-mx.ic1",
@@ -1930,7 +1930,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "neogeocd",
       "name": "neocd.bin",
       "destination": "neocd/neocd.bin",
@@ -1939,7 +1939,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "neogeocd",
       "name": "neocd.zip",
       "destination": "geolith/neocd.zip",
@@ -1948,7 +1948,7 @@
       "new": false
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ti994a",
       "name": "TI-994A.ctg",
       "destination": "ti994a/TI-994A.ctg",
@@ -1957,7 +1957,7 @@
       "new": "fb1ca5c58357896a0be5d6725894845d"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ti994a",
       "name": "ti-disk.ctg",
       "destination": "ti994a/ti-disk.ctg",
@@ -2002,7 +2002,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "dragon",
       "name": "d64rom2.rom",
       "destination": "dragon/d64rom2.rom",
@@ -2011,7 +2011,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "dragon",
       "name": "d200rom1.rom",
       "destination": "dragon/d200rom1.rom",
@@ -2080,7 +2080,7 @@
       }
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "trs80coco",
       "name": "bas11.rom",
       "destination": "trs80coco/bas11.rom",
@@ -2089,7 +2089,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "trs80coco",
       "name": "extbas10.rom",
       "destination": "trs80coco/extbas10.rom",
@@ -2098,7 +2098,7 @@
       "new": false
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "trs80coco",
       "name": "mx1600bas.rom",
       "destination": "trs80coco/mx1600bas.rom",
@@ -2107,7 +2107,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "trs80coco",
       "name": "mc10.rom",
       "destination": "trs80coco/mc10.rom",
@@ -2116,7 +2116,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "trs80coco",
       "name": "coco3.rom",
       "destination": "trs80coco/coco3.rom",
@@ -2125,7 +2125,7 @@
       "new": true
     },
     {
-      "kind": "requirement_corrected",
+      "kind": "required_aligned",
       "system": "trs80coco",
       "name": "coco3p.rom",
       "destination": "trs80coco/coco3p.rom",
@@ -2218,15 +2218,15 @@
       }
     }
   ],
-  "hashes_corrected": [
+  "hashes_updated": [
     "ti994a/TI-994A.ctg md5",
     "ti994a/ti-disk.ctg md5"
   ],
   "hashes_filled": [],
-  "sizes_corrected": [],
+  "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "requirements_corrected": 128,
+  "required_aligned": 128,
   "withheld": [],
   "found_by_content": 103,
   "removal_candidates": [

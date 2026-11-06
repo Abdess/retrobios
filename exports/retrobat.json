@@ -662,7 +662,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "dragon32",
       "name": "d64_1.rom",
       "destination": "dragon/d64_1.rom",
@@ -766,7 +766,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "neogeocd",
       "name": "neocdz.zip",
       "destination": "neocdz.zip",
@@ -885,7 +885,7 @@
       }
     }
   ],
-  "hashes_corrected": [
+  "hashes_updated": [
     "dragon32/d64_1.rom md5",
     "neogeocd/neocdz.zip md5"
   ],
@@ -894,10 +894,10 @@
     "nds/dsi_bios9.bin md5",
     "nds/dsi_bios7.bin md5"
   ],
-  "sizes_corrected": [],
+  "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "requirements_corrected": 0,
+  "required_aligned": 0,
   "withheld": [],
   "found_by_content": 420,
   "removal_candidates": [

@@ -29,7 +29,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Arcade",
       "name": "aes.zip",
       "destination": "aes.zip",
@@ -38,7 +38,7 @@
       "new": "23c66caa80b93199914fae246a5ea6e84db1be29"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Arcade",
       "name": "aes.zip",
       "destination": "aes.zip",
@@ -47,7 +47,7 @@
       "new": "ad9585c72130c56f04ae26aae87c289d"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Arcade",
       "name": "aes.zip",
       "destination": "aes.zip",
@@ -56,7 +56,7 @@
       "new": "12c66621"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "Arcade",
       "name": "aes.zip",
       "destination": "aes.zip",
@@ -903,7 +903,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Nintendo - Nintendo DSi",
       "name": "dsi_bios7.bin",
       "destination": "dsi_bios7.bin",
@@ -912,7 +912,7 @@
       "new": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Nintendo - Nintendo DSi",
       "name": "dsi_bios7.bin",
       "destination": "dsi_bios7.bin",
@@ -921,7 +921,7 @@
       "new": "322ceeafb77b0cc96a1fcc6271e0e0ae"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Nintendo - Nintendo DSi",
       "name": "dsi_bios7.bin",
       "destination": "dsi_bios7.bin",
@@ -930,7 +930,7 @@
       "new": "4316cc42"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Nintendo - Nintendo DSi",
       "name": "dsi_bios9.bin",
       "destination": "dsi_bios9.bin",
@@ -939,7 +939,7 @@
       "new": "719b9eef33692406d7170ff526069615759c4dfc"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Nintendo - Nintendo DSi",
       "name": "dsi_bios9.bin",
       "destination": "dsi_bios9.bin",
@@ -948,7 +948,7 @@
       "new": "23031f25602a52c2df32c39554b0c55e"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "Nintendo - Nintendo DSi",
       "name": "dsi_bios9.bin",
       "destination": "dsi_bios9.bin",
@@ -971,7 +971,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "SNK - NeoGeo CD",
       "name": "neocdz.zip",
       "destination": "neocdz.zip",
@@ -1979,7 +1979,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "access.dat",
       "destination": "scummvm/extra/access.dat",
@@ -1988,7 +1988,7 @@
       "new": "775b12b7e787bbaaeb73aa45b1ad3bb383e041ef"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "access.dat",
       "destination": "scummvm/extra/access.dat",
@@ -1997,7 +1997,7 @@
       "new": "4f9dd40b455876d5c54b5ebd93aec88c"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "access.dat",
       "destination": "scummvm/extra/access.dat",
@@ -2006,7 +2006,7 @@
       "new": "f63ddcc5"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "access.dat",
       "destination": "scummvm/extra/access.dat",
@@ -2015,7 +2015,7 @@
       "new": 520352
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "cryomni3d.dat",
       "destination": "scummvm/extra/cryomni3d.dat",
@@ -2024,7 +2024,7 @@
       "new": "3971847e26be0abad8196caf03e5852a81ddbdea"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "cryomni3d.dat",
       "destination": "scummvm/extra/cryomni3d.dat",
@@ -2033,7 +2033,7 @@
       "new": "7224c7a94074addeb69015b1346695d2"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "cryomni3d.dat",
       "destination": "scummvm/extra/cryomni3d.dat",
@@ -2042,7 +2042,7 @@
       "new": "5956e0e9"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "cryomni3d.dat",
       "destination": "scummvm/extra/cryomni3d.dat",
@@ -2051,7 +2051,7 @@
       "new": 70416
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "drascula.dat",
       "destination": "scummvm/extra/drascula.dat",
@@ -2060,7 +2060,7 @@
       "new": "05c97e92439b67aea8f6eb7fc96db023edf62124"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "drascula.dat",
       "destination": "scummvm/extra/drascula.dat",
@@ -2069,7 +2069,7 @@
       "new": "b304979ed642a6dcaf26f43f8a37a1de"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "drascula.dat",
       "destination": "scummvm/extra/drascula.dat",
@@ -2078,7 +2078,7 @@
       "new": "b36f7b0e"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "drascula.dat",
       "destination": "scummvm/extra/drascula.dat",
@@ -2087,7 +2087,7 @@
       "new": 259625
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "fonts.dat",
       "destination": "scummvm/extra/fonts.dat",
@@ -2096,7 +2096,7 @@
       "new": "1eaef39122559500fbbc705c9425500311d23e03"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "fonts.dat",
       "destination": "scummvm/extra/fonts.dat",
@@ -2105,7 +2105,7 @@
       "new": "6df29d218962e155d0a2114006af45c0"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "fonts.dat",
       "destination": "scummvm/extra/fonts.dat",
@@ -2114,7 +2114,7 @@
       "new": "f59313fa"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "fonts.dat",
       "destination": "scummvm/extra/fonts.dat",
@@ -2123,7 +2123,7 @@
       "new": 6449829
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "freescape.dat",
       "destination": "scummvm/extra/freescape.dat",
@@ -2132,7 +2132,7 @@
       "new": "c6b3d3152e4e2ff4c9bf55e103bb39ed7faca2bd"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "freescape.dat",
       "destination": "scummvm/extra/freescape.dat",
@@ -2141,7 +2141,7 @@
       "new": "71697f90fb0c7747616dbb0799ce966b"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "freescape.dat",
       "destination": "scummvm/extra/freescape.dat",
@@ -2150,7 +2150,7 @@
       "new": "54f0350e"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "freescape.dat",
       "destination": "scummvm/extra/freescape.dat",
@@ -2159,7 +2159,7 @@
       "new": 30124
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "hugo.dat",
       "destination": "scummvm/extra/hugo.dat",
@@ -2168,7 +2168,7 @@
       "new": "74a5fa172f5327fedc145cb9eccc8fd050b9cfb9"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "hugo.dat",
       "destination": "scummvm/extra/hugo.dat",
@@ -2177,7 +2177,7 @@
       "new": "a865e70f1b0998a500f522dab441c8fc"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "hugo.dat",
       "destination": "scummvm/extra/hugo.dat",
@@ -2186,7 +2186,7 @@
       "new": "fc0dd1cb"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "hugo.dat",
       "destination": "scummvm/extra/hugo.dat",
@@ -2195,7 +2195,7 @@
       "new": 186866
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "kyra.dat",
       "destination": "scummvm/extra/kyra.dat",
@@ -2204,7 +2204,7 @@
       "new": "31b0b9418af2f9dd4e4094aada05d48eb355975b"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "kyra.dat",
       "destination": "scummvm/extra/kyra.dat",
@@ -2213,7 +2213,7 @@
       "new": "ebddd7bbd97135a427083db5daf6f9fc"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "kyra.dat",
       "destination": "scummvm/extra/kyra.dat",
@@ -2222,7 +2222,7 @@
       "new": "6b7229ce"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "kyra.dat",
       "destination": "scummvm/extra/kyra.dat",
@@ -2231,7 +2231,7 @@
       "new": 2028520
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "lure.dat",
       "destination": "scummvm/extra/lure.dat",
@@ -2240,7 +2240,7 @@
       "new": "516347ec0ec2a397265d1b2fb053aa3758382e09"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "lure.dat",
       "destination": "scummvm/extra/lure.dat",
@@ -2249,7 +2249,7 @@
       "new": "6f90cf73f36453d332d5c9cee311f81c"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "lure.dat",
       "destination": "scummvm/extra/lure.dat",
@@ -2258,7 +2258,7 @@
       "new": "d616bea5"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "lure.dat",
       "destination": "scummvm/extra/lure.dat",
@@ -2267,7 +2267,7 @@
       "new": 768832
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "macventure.dat",
       "destination": "scummvm/extra/macventure.dat",
@@ -2276,7 +2276,7 @@
       "new": "e431e718e3c784532422ea2654d5fc6042a95c09"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "macventure.dat",
       "destination": "scummvm/extra/macventure.dat",
@@ -2285,7 +2285,7 @@
       "new": "3b1faf40e685b955372e02f54ed70263"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "macventure.dat",
       "destination": "scummvm/extra/macventure.dat",
@@ -2294,7 +2294,7 @@
       "new": "24a09690"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "macventure.dat",
       "destination": "scummvm/extra/macventure.dat",
@@ -2303,7 +2303,7 @@
       "new": 4146
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "mm.dat",
       "destination": "scummvm/extra/mm.dat",
@@ -2312,7 +2312,7 @@
       "new": "0816fe29b57911b28cbf774348f5492062326a85"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "mm.dat",
       "destination": "scummvm/extra/mm.dat",
@@ -2321,7 +2321,7 @@
       "new": "01f074a6ac34dd86fcc6d1e8090614f0"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "mm.dat",
       "destination": "scummvm/extra/mm.dat",
@@ -2330,7 +2330,7 @@
       "new": "f007671e"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "mm.dat",
       "destination": "scummvm/extra/mm.dat",
@@ -2339,7 +2339,7 @@
       "new": 280803
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "nancy.dat",
       "destination": "scummvm/extra/nancy.dat",
@@ -2348,7 +2348,7 @@
       "new": "7c8907d33da59afd4e4b62eee67541910e0b78d9"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "nancy.dat",
       "destination": "scummvm/extra/nancy.dat",
@@ -2357,7 +2357,7 @@
       "new": "eb7cfdb3f74972beb8f43196e4e44001"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "nancy.dat",
       "destination": "scummvm/extra/nancy.dat",
@@ -2366,7 +2366,7 @@
       "new": "d7976af8"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "nancy.dat",
       "destination": "scummvm/extra/nancy.dat",
@@ -2375,7 +2375,7 @@
       "new": 255042
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "queen.tbl",
       "destination": "scummvm/extra/queen.tbl",
@@ -2384,7 +2384,7 @@
       "new": "7bafa28dfd9b3be17430d467d8787d8204437ba0"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "queen.tbl",
       "destination": "scummvm/extra/queen.tbl",
@@ -2393,7 +2393,7 @@
       "new": "93c6d6379eb0290ce93854a6888ec3f4"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "queen.tbl",
       "destination": "scummvm/extra/queen.tbl",
@@ -2402,7 +2402,7 @@
       "new": "d713b1ab"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "queen.tbl",
       "destination": "scummvm/extra/queen.tbl",
@@ -2411,7 +2411,7 @@
       "new": 1100505
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "supernova.dat",
       "destination": "scummvm/extra/supernova.dat",
@@ -2420,7 +2420,7 @@
       "new": "8a571cfc431b5fe794f0262f0e55f72927ab27b4"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "supernova.dat",
       "destination": "scummvm/extra/supernova.dat",
@@ -2429,7 +2429,7 @@
       "new": "89664136c503a30894d5c713be5bfe90"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "supernova.dat",
       "destination": "scummvm/extra/supernova.dat",
@@ -2438,7 +2438,7 @@
       "new": "9643ad1a"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "supernova.dat",
       "destination": "scummvm/extra/supernova.dat",
@@ -2447,7 +2447,7 @@
       "new": 523211
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "teenagent.dat",
       "destination": "scummvm/extra/teenagent.dat",
@@ -2456,7 +2456,7 @@
       "new": "0d488164930332bae3aa1ad38cef44abbe3d00a6"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "teenagent.dat",
       "destination": "scummvm/extra/teenagent.dat",
@@ -2465,7 +2465,7 @@
       "new": "4594620989a0bfd8b120da2de7ac30de"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "teenagent.dat",
       "destination": "scummvm/extra/teenagent.dat",
@@ -2474,7 +2474,7 @@
       "new": "90b9e752"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "teenagent.dat",
       "destination": "scummvm/extra/teenagent.dat",
@@ -2483,7 +2483,7 @@
       "new": 403315
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "toon.dat",
       "destination": "scummvm/extra/toon.dat",
@@ -2492,7 +2492,7 @@
       "new": "85bb688125d66f2797a41f153ce1fa177027a83f"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "toon.dat",
       "destination": "scummvm/extra/toon.dat",
@@ -2501,7 +2501,7 @@
       "new": "2b71a5d9aa19219d46711e8a77451f0f"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "toon.dat",
       "destination": "scummvm/extra/toon.dat",
@@ -2510,7 +2510,7 @@
       "new": "7731190d"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "toon.dat",
       "destination": "scummvm/extra/toon.dat",
@@ -2519,7 +2519,7 @@
       "new": 20996
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "ultima.dat",
       "destination": "scummvm/extra/ultima.dat",
@@ -2528,7 +2528,7 @@
       "new": "e049932518390257f4d49b1691cad229e6060079"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "ultima.dat",
       "destination": "scummvm/extra/ultima.dat",
@@ -2537,7 +2537,7 @@
       "new": "e359fb7f14c4cb072b6e9300a23a6d62"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "ultima.dat",
       "destination": "scummvm/extra/ultima.dat",
@@ -2546,7 +2546,7 @@
       "new": "c15f9059"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "ultima.dat",
       "destination": "scummvm/extra/ultima.dat",
@@ -2555,7 +2555,7 @@
       "new": 15981464
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "wintermute.zip",
       "destination": "scummvm/extra/wintermute.zip",
@@ -2564,7 +2564,7 @@
       "new": "5302f543384b21fb55466118a6966e5ef46b85f6"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "wintermute.zip",
       "destination": "scummvm/extra/wintermute.zip",
@@ -2573,7 +2573,7 @@
       "new": "9783248899f9cb531f0a3e0a711ab8b3"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "wintermute.zip",
       "destination": "scummvm/extra/wintermute.zip",
@@ -2582,7 +2582,7 @@
       "new": "f7dc9bc4"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "wintermute.zip",
       "destination": "scummvm/extra/wintermute.zip",
@@ -2591,7 +2591,7 @@
       "new": 4520
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "gui-icons.dat",
       "destination": "scummvm/theme/gui-icons.dat",
@@ -2600,7 +2600,7 @@
       "new": "38e74e6994924781487a0d39cc53dc4708a90c1c"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "gui-icons.dat",
       "destination": "scummvm/theme/gui-icons.dat",
@@ -2609,7 +2609,7 @@
       "new": "9c59e0e9875434456ec1b7eb8e51666f"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "gui-icons.dat",
       "destination": "scummvm/theme/gui-icons.dat",
@@ -2618,7 +2618,7 @@
       "new": "0aa0c87d"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "gui-icons.dat",
       "destination": "scummvm/theme/gui-icons.dat",
@@ -2627,7 +2627,7 @@
       "new": 3315855
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "residualvm.zip",
       "destination": "scummvm/theme/residualvm.zip",
@@ -2636,7 +2636,7 @@
       "new": "589b622f55c9944c4883e4163d4d49508e22e056"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "residualvm.zip",
       "destination": "scummvm/theme/residualvm.zip",
@@ -2645,7 +2645,7 @@
       "new": "b2811fa9b209733b61cd49ddb21e1e95"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "residualvm.zip",
       "destination": "scummvm/theme/residualvm.zip",
@@ -2654,7 +2654,7 @@
       "new": "93296840"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "residualvm.zip",
       "destination": "scummvm/theme/residualvm.zip",
@@ -2663,7 +2663,7 @@
       "new": 94555
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummclassic.zip",
       "destination": "scummvm/theme/scummclassic.zip",
@@ -2672,7 +2672,7 @@
       "new": "69836fb392710f2182df07bab8960e8a2d92c1a9"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummclassic.zip",
       "destination": "scummvm/theme/scummclassic.zip",
@@ -2681,7 +2681,7 @@
       "new": "8f37bd19dd51be456ac8f005fd5669a8"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummclassic.zip",
       "destination": "scummvm/theme/scummclassic.zip",
@@ -2690,7 +2690,7 @@
       "new": "103168ea"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "scummclassic.zip",
       "destination": "scummvm/theme/scummclassic.zip",
@@ -2699,7 +2699,7 @@
       "new": 16488
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummmodern.zip",
       "destination": "scummvm/theme/scummmodern.zip",
@@ -2708,7 +2708,7 @@
       "new": "aa2dfd12c11c6e6f3baaf7bf199bd6bcd71a520c"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummmodern.zip",
       "destination": "scummvm/theme/scummmodern.zip",
@@ -2717,7 +2717,7 @@
       "new": "ee71d6cd464c618c632e6fd62b430d2c"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummmodern.zip",
       "destination": "scummvm/theme/scummmodern.zip",
@@ -2726,7 +2726,7 @@
       "new": "00194297"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "scummmodern.zip",
       "destination": "scummvm/theme/scummmodern.zip",
@@ -2735,7 +2735,7 @@
       "new": 68087
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummremastered.zip",
       "destination": "scummvm/theme/scummremastered.zip",
@@ -2744,7 +2744,7 @@
       "new": "03e53349eefc39ce25220bfcb1ae4a580704d29d"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummremastered.zip",
       "destination": "scummvm/theme/scummremastered.zip",
@@ -2753,7 +2753,7 @@
       "new": "0d990484d0dfc1680b20cfabcae373cd"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "scummremastered.zip",
       "destination": "scummvm/theme/scummremastered.zip",
@@ -2762,7 +2762,7 @@
       "new": "6fa86fae"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "scummremastered.zip",
       "destination": "scummvm/theme/scummremastered.zip",
@@ -2771,7 +2771,7 @@
       "new": 93901
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "translations.dat",
       "destination": "scummvm/theme/translations.dat",
@@ -2780,7 +2780,7 @@
       "new": "e5b6f6d6473e2d6aa0a250fd9983b573ebf6fbe4"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "translations.dat",
       "destination": "scummvm/theme/translations.dat",
@@ -2789,7 +2789,7 @@
       "new": "a206e54bac1af13559ac8b2d9e550577"
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "ScummVM",
       "name": "translations.dat",
       "destination": "scummvm/theme/translations.dat",
@@ -2798,7 +2798,7 @@
       "new": "14689714"
     },
     {
-      "kind": "size_corrected",
+      "kind": "size_updated",
       "system": "ScummVM",
       "name": "translations.dat",
       "destination": "scummvm/theme/translations.dat",
@@ -2947,7 +2947,7 @@
       }
     }
   ],
-  "hashes_corrected": [
+  "hashes_updated": [
     "Arcade/aes.zip sha1",
     "Arcade/aes.zip md5",
     "Arcade/aes.zip crc32",
@@ -3029,7 +3029,7 @@
     "ScummVM/translations.dat crc32"
   ],
   "hashes_filled": [],
-  "sizes_corrected": [
+  "sizes_updated": [
     "Arcade/aes.zip",
     "ScummVM/access.dat",
     "ScummVM/cryomni3d.dat",
@@ -3062,7 +3062,7 @@
     "SNK - NeoGeo CD/neocdz.zip sha1",
     "SNK - NeoGeo CD/neocdz.zip crc32"
   ],
-  "requirements_corrected": 0,
+  "required_aligned": 0,
   "withheld": [],
   "found_by_content": 97,
   "removal_candidates": [
