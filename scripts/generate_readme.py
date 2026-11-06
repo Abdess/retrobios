@@ -940,8 +940,8 @@ def contributing_text(
     .md for the site); *site_words* names the site from where the text is read.
     """
     pip_line, floor_line = ci_install_lines()
-    width = max(len(step.command) for step in pr_checks.STEPS)
-    steps = "\n".join(f"{step.command:<{width}}  # {step.why}" for step in pr_checks.STEPS)
+    width = max(len(pr_checks.shown(step)) for step in pr_checks.STEPS)
+    steps = "\n".join(f"{pr_checks.shown(step):<{width}}  # {step.why}" for step in pr_checks.STEPS)
     return f"""{title}
 
 ## Add a BIOS file

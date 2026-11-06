@@ -30,6 +30,9 @@ class Step:
     needs: str = ""
     provider: str = ""
     env: dict[str, str] = field(default_factory=dict)
+    # A second command that reads the first one's output, as a shell pipe
+    # would: mypy's report goes through mypy-baseline filter.
+    then: str = ""
 
 
 # The order of validate.yml: data fetched, site generated and built, then the
@@ -37,9 +40,13 @@ class Step:
 STEPS: tuple[Step, ...] = (
     Step("python scripts/validate_pr.py --changed", "the BIOS files the branch adds"),
     Step("python scripts/validate_schemas.py --source-only", "profiles and platform files"),
+    Step("mypy", "no type error beyond mypy-baseline.txt", needs="mypy",
+         provider="the pip line of CONTRIBUTING.md", then="mypy-baseline filter --no-colors"),
     Step("python scripts/profile_sync.py --added --strict", "each profile the branch adds"),
     Step("vermin --no-tips -t=3.8- --violations install.py", "install.py stays on Python 3.8",
          needs="vermin", provider="the pip line of CONTRIBUTING.md"),
+    Step("shellcheck --version", "the launcher test runs shellcheck", needs="shellcheck",
+         provider="the shellcheck package"),
     Step("python scripts/export_native.py --all --fetch --output-dir tmp/native",
          "files the exporter tests compare with"),
     Step("python scripts/refresh_data_dirs.py", "data directories the pack-building tests read"),
@@ -57,24 +64,36 @@ STEPS: tuple[Step, ...] = (
 )
 
 
-def argv(step: Step) -> list[str]:
+def argv(command: str) -> list[str]:
     """The command, with `python` run by the interpreter running this script."""
-    words = step.command.split()
+    words = command.split()
     return [sys.executable, *words[1:]] if words[0] == "python" else words
+
+
+def shown(step: Step) -> str:
+    return f"{step.command} | {step.then}" if step.then else step.command
+
+
+def execute(step: Step) -> int:
+    env = {**os.environ, **step.env}
+    if not step.then:
+        return subprocess.run(argv(step.command), cwd=ROOT, env=env).returncode
+    first = subprocess.run(argv(step.command), cwd=ROOT, env=env, stdout=subprocess.PIPE)
+    return subprocess.run(argv(step.then), cwd=ROOT, env=env, input=first.stdout).returncode
 
 
 def run(steps: tuple[Step, ...] = STEPS) -> int:
     failed: list[str] = []
     not_run: list[str] = []
     for step in steps:
-        print(f"\n== {step.command}", flush=True)
+        print(f"\n== {shown(step)}", flush=True)
         if step.needs and shutil.which(step.needs) is None:
             print(f"not run: {step.needs} is not installed ({step.provider})")
-            not_run.append(f"{step.command} ({step.needs}: {step.provider})")
+            not_run.append(f"{shown(step)} ({step.needs}: {step.provider})")
             continue
-        code = subprocess.run(argv(step), cwd=ROOT, env={**os.environ, **step.env}).returncode
+        code = execute(step)
         if code:
-            failed.append(f"{step.command} (exit {code})")
+            failed.append(f"{shown(step)} (exit {code})")
     print()
     for line in failed:
         print(f"FAILED   {line}")
@@ -90,7 +109,7 @@ def main() -> int:
     args = parser.parse_args()
     if args.list:
         for step in STEPS:
-            print(step.command)
+            print(shown(step))
         return 0
     return run()
 

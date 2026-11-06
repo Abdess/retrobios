@@ -221,7 +221,7 @@ class OneCommandRunsTheChecks(unittest.TestCase):
     skipping one (refresh_data_dirs) failed the pack tests with no hint."""
 
     CHECK = re.compile(r"(?:xargs -0 |run: |^\s*)((?:python3?\.?8? -m unittest|python scripts/\w+\.py"
-                       r"|vermin|npm (?:ci|run build)))")
+                       r"|vermin|npm (?:ci|run build)|mypy-baseline filter|mypy|shellcheck))")
 
     def test_every_check_ci_runs_is_a_step(self):
         import pr_checks
@@ -230,7 +230,7 @@ class OneCommandRunsTheChecks(unittest.TestCase):
         ran = {m.group(1) for line in workflow.splitlines()
                if not line.strip().startswith("#") for m in [self.CHECK.search(line)] if m}
         self.assertGreaterEqual(len(ran), 10)
-        steps = [step.command for step in pr_checks.STEPS]
+        steps = [c for step in pr_checks.STEPS for c in (step.command, step.then) if c]
         for check in sorted(ran):
             with self.subTest(check=check):
                 self.assertTrue(any(command.startswith(check) for command in steps))
