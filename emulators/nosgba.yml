@@ -29,13 +29,13 @@ notes: |
   NO$GBA.EXE of no$gba-w.zip v3.06, 14 Apr 2025 (224175 bytes, sha1
   a167242d3800ccc0ac7e5b42e8d6f3f150ed6283), after removing its UPX layer.
   Addresses are virtual addresses of the unpacked image (base 0x400000). The
-  nosgba package RetroBat installs, stable and beta alike, still carries the
-  v3.04 executable of 23 Mar 2021 (220079 bytes, sha1
+  nosgba package RetroBat installs, stable and beta alike, holds the v3.04
+  executable of 23 Mar 2021 (220079 bytes, sha1
   935b857bc1249479124247612755eeb2a247f23c). Its boot ROM table, loader,
   checksum pairs, firmware and wifi reads, DSi image naming and Atheros ROM
   reads are the same instructions at other addresses, and its 236-byte GBA
-  stub is the same bytes. The official zip also carries DSI-SD.ZIP, which
-  RetroBat leaves out.
+  stub is the same bytes. The official zip also holds DSI-SD.ZIP, which the
+  RetroBat package does not include.
 
   Every file is opened by bare name. Before each open the program builds its
   own folder from the module path and makes it the current directory

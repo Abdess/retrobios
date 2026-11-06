@@ -185,6 +185,13 @@ class ProfilesStateNoVerdict(unittest.TestCase):
 
     VERDICTS = [
         re.compile(r"\bcode bug\b", re.IGNORECASE),
+        # nosgba said RetroBat "leaves out" a file and "still carries" an
+        # older executable: a reproach, where the package's content is a fact.
+        re.compile(
+            r"\b(RetroArch|Batocera|Recalbox|RetroBat|RetroDECK|EmuDeck|RetroPie|"
+            r"Lakka|ROCKNIX|KNULLI|AmberELEC|EmuELEC|RomM|MiSTer)\b[^.]{0,60}?"
+            r"\b(leaves out|left out|still carries|forgot|forgets)\b"
+        ),
     ]
 
     def test_no_profile_note_passes_a_verdict(self):
