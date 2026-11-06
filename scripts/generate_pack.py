@@ -4065,16 +4065,16 @@ def _profile_copies(
                 continue
             source = held[0]
             where = PurePosixPath(standalone)
-            targets: dict[str, list[str]] = {}
+            placed: dict[str, list[str]] = {}
             for system, root in roots.items():
                 sep = "\\" if system == "windows" else "/"
                 target = root if str(where.parent) == "." else (
                     root + sep + str(where.parent).replace("/", sep))
                 if not covered(system, target, where.name):
-                    targets[system] = [target]
-            if not targets:
+                    placed[system] = [target]
+            if not placed:
                 continue
-            copy = {"file": source, "targets": targets}
+            copy = {"file": source, "targets": placed}
             if where.name != PurePosixPath(source).name:
                 copy["as"] = where.name
             copies.append(copy)

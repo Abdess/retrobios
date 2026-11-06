@@ -1202,7 +1202,7 @@ def _parse_os_release() -> dict[str, str]:
 # path and nothing Windows-side was ever found from WSL.
 # unasked: why Windows could not be asked for its folders, said once by
 # detection.
-_WSL = {"active": False, "root": "/mnt", "unasked": ""}
+_WSL: dict[str, Any] = {"active": False, "root": "/mnt", "unasked": ""}
 _WINDOWS_VARIABLES = ("USERPROFILE", "APPDATA", "LOCALAPPDATA", "ProgramFiles", "ProgramFiles(x86)")
 
 

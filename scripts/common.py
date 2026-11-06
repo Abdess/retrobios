@@ -1933,7 +1933,7 @@ def resolve_local_file(
 
     # 4. Name + alias fallback with md5_composite + direct MD5 per candidate
     md5_set = set(md5_list)
-    candidates = []
+    named: list[tuple[str, str, int | None]] = []
     seen_paths = set()
     for try_name in names_to_try:
         for match_sha1 in by_name.get(try_name, []):
@@ -1942,28 +1942,28 @@ def resolve_local_file(
                 path = entry["path"]
                 if os.path.exists(path) and path not in seen_paths:
                     seen_paths.add(path)
-                    candidates.append(
+                    named.append(
                         (path, entry.get("md5", ""), entry.get("size"))
                     )
 
     if zipped_file:
-        candidates = [c for c in candidates if ".zip" in os.path.basename(c[0])]
+        named = [c for c in named if ".zip" in os.path.basename(c[0])]
     # Another maker's file is no mismatch of this one, it is another file.
-    candidates = [c for c in candidates if not other_maker(c[0], makers, db)]
+    named = [c for c in named if not other_maker(c[0], makers, db)]
     # A size the emulator itself verifies settles a name collision, so a
     # candidate that fits is preferred over one that does not: "ROM" answers
     # both an Apple IIgs image and a Macintosh one. It ranks rather than
     # excludes, because a present file of the wrong size is reported as
     # present and untested, and dropping it would report it as absent.
-    sized = [c for c in candidates if name_match_size_ok(file_entry, c[2])]
+    sized = [c for c in named if name_match_size_ok(file_entry, c[2])]
     if sized:
-        candidates = sized
+        named = sized
 
-    if candidates:
+    if named:
         if md5_set and not (sha1_candidates or sha256_candidates or crc_candidates):
             if composite_only:
-                candidates.sort(key=lambda c: "/.variants/" in c[0])
-            for path, db_md5, _size in candidates:
+                named.sort(key=lambda c: "/.variants/" in c[0])
+            for path, db_md5, _size in named:
                 if ".zip" in os.path.basename(path):
                     try:
                         composite = md5_composite(path).lower()
@@ -1982,7 +1982,7 @@ def resolve_local_file(
         # When zipped_file is set, only accept candidates that contain it
         if zipped_file:
             valid = []
-            for path, m, size in candidates:
+            for path, m, size in named:
                 try:
                     with zipfile.ZipFile(path) as zf:
                         inner_names = {n.casefold() for n in zf.namelist()}
@@ -2001,7 +2001,7 @@ def resolve_local_file(
                 return (primary[0] if primary else valid[0][0]), "hash_mismatch"
             # No candidate contains the zipped_file: fall through to step 5
         elif not unsourceable:
-            ordered = _by_affinity([c[0] for c in candidates], file_entry, dest_hint)
+            ordered = _by_affinity([c[0] for c in named], file_entry, dest_hint)
             primary = [c for c in ordered if "/.variants/" not in c]
             return (primary[0] if primary else ordered[0]), "hash_mismatch"
 
