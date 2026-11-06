@@ -173,6 +173,23 @@ class TheDestinationsFlagNeedsAPack(unittest.TestCase):
                 self.assertEqual(result.returncode, 2, result.stdout[-300:])
                 self.assertIn("--destinations", result.stderr)
 
+    def test_the_lock_stack_is_not_rebound(self):
+        """The --destinations branch reused `held`, the ExitStack that holds
+        the data directory locks, for its dict: a later enter_context in
+        that mode raised AttributeError."""
+        import ast
+
+        tree = ast.parse((REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8"))
+        body = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "_main")
+        stack = body.args.args[0].arg
+        rebound = [
+            node.lineno for node in ast.walk(body)
+            if isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign))
+            for target in (node.targets if isinstance(node, ast.Assign) else [node.target])
+            if isinstance(target, ast.Name) and target.id == stack
+        ]
+        self.assertEqual(rebound, [])
+
 
 class EveryGapCountedIsNamed(unittest.TestCase):
     """verify --platform batocera --verbose counted 3 optional core files and

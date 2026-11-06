@@ -2988,13 +2988,13 @@ def _main(held: contextlib.ExitStack) -> None:
             print(_overall_summary(group_results))
 
     if args.destinations:
-        held = {}
+        destinations = {}
         for (result, names), (group, _rep) in zip(group_results, groups):
             for name, key in zip(names, group):
-                held[name] = {
+                destinations[name] = {
                     "platform": key, "pack_destinations": result["pack_destinations"],
                 }
-        Path(args.destinations).write_text(json.dumps(held, indent=1, sort_keys=True))
+        Path(args.destinations).write_text(json.dumps(destinations, indent=1, sort_keys=True))
 
     if args.json:
         for r in all_results.values():
