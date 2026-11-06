@@ -513,7 +513,10 @@ A part opening with `source` or `upstream`, in a source_ref or in prose,
 is read in that repository. The word belongs to the part, not to its path:
 one profile can cite the same file under both. `--triage` prints a header,
 ranks worst first and closes on the number of profiles with something to
-review.
+review. Online, a pass over many profiles takes several minutes or more: it
+names its size on stderr, then writes a progress line every 30 seconds.
+Ctrl-C prints the output for the profiles already read and exits 130.
+`--offline` answers from the cache alone.
 
 A single cited line is often not distinctive, so the anchor widens by
 steps of ±3, ±6, ±12, ±25 and ±50 lines until it is unique. Three further
