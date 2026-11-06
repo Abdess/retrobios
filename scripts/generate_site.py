@@ -8198,17 +8198,20 @@ def _exact_size(size: int) -> str:
 
 def _build_file_links(pin_build: list[dict]) -> list[str]:
     """Each platform build file that holds the revision, linked at the
-    revision it was read at. The prose of pin_frozen named the file as
-    plain text, while pin_build carries all a pinned link needs."""
-    from sitesources import _browse_repo, _source_permalink  # noqa: PLC0415
+    commit it was read at when the source record holds it. The prose of
+    pin_frozen named the file as plain text."""
+    from sitesources import _browse_repo, _source_permalink, tree_holds  # noqa: PLC0415
 
     links = []
     for build in pin_build:
         repo = _browse_repo(str(build["repo"]))
         path = str(build["path"])
+        revision = str(build["revision"])
         text = f"{_escape_tags(_platform_display(str(build['platform'])))} {_code(path)}"
-        if repo is not None:
-            text = f"[{text}]({_source_permalink(repo, str(build['revision']), path, None, None)})"
+        # Linked where the record saw the file at that commit, as every
+        # source link is: a tag can move, and is never recorded.
+        if repo is not None and tree_holds(repo, revision, path):
+            text = f"[{text}]({_source_permalink(repo, revision, path, None, None)})"
         links.append(f"{text} at {_code(str(build['revision']))} sets {_code(str(build['variable']))}")
     return links
 

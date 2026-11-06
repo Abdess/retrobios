@@ -5222,11 +5222,30 @@ class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
             "platform": "knulli", "repo": "https://github.com/knulli-cfw/knulli-linux",
             "revision": "20260511", "path": "package/emulators/advanced_drastic/advanced_drastic.mk",
             "variable": "ADVANCED_DRASTIC_VERSION", "value": "eaf41ab9"}]})
+        # A tag can move: named, never linked.
         self.assertIn(
-            "| Build file | [KNULLI `package/emulators/advanced_drastic/advanced_drastic.mk`]"
-            "(https://github.com/knulli-cfw/knulli-linux/blob/20260511/package/emulators/"
-            "advanced_drastic/advanced_drastic.mk) at `20260511` sets `ADVANCED_DRASTIC_VERSION` |",
-            rows)
+            "| Build file | KNULLI `package/emulators/advanced_drastic/advanced_drastic.mk` "
+            "at `20260511` sets `ADVANCED_DRASTIC_VERSION` |", rows)
+
+    def test_a_build_read_at_a_recorded_commit_links(self):
+        from scripts.generate_site import _build_rows
+
+        pin = "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+        rows = _build_rows({"pin_build": [{
+            "platform": "retropie", "repo": "https://github.com/RetroPie/RetroPie-Setup",
+            "revision": pin, "path": "scriptmodules/emulators/advmame-1.4.sh",
+            "variable": "rp_module_repo", "value": "x"}]})
+        self.assertIn(
+            f"[RetroPie `scriptmodules/emulators/advmame-1.4.sh`](https://github.com/RetroPie/"
+            f"RetroPie-Setup/blob/{pin}/scriptmodules/emulators/advmame-1.4.sh)", rows[0])
+
+    def test_the_record_holds_the_build_files(self):
+        import sitesources  # noqa: PLC0415
+
+        files = sitesources.build_files({"pin_build": [
+            {"repo": "https://github.com/o/r", "revision": "a" * 40, "path": "p.mk"},
+            {"repo": "https://github.com/o/r", "revision": "v1", "path": "q.mk"}]})
+        self.assertEqual([(f[1], f[2]) for f in files], [("a" * 40, "p.mk")])
 
 
 class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
