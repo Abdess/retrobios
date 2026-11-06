@@ -1584,6 +1584,8 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
             with self.subTest(platform=platform):
                 self.assertEqual(sorted(targets), sorted(known))
             for target, cores in targets.items():
+                # A target that names its card images carries them beside.
+                cores = cores["cores"] if isinstance(cores, dict) else cores
                 with self.subTest(platform=platform, target=target):
                     resolved = load_target_config(platform, target, platforms)
                     self.assertEqual(cores, None if resolved is None else sorted(resolved))
@@ -1861,12 +1863,28 @@ class TestManualPlatformPrompt(unittest.TestCase):
         self.assertEqual(chosen, [("batocera", Path("~/my bios").expanduser())])
 
     def test_default_directory_comes_from_the_table(self):
-        answers = iter(["lakka", ""])
+        answers = iter(["retropie", ""])
         with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)), \
                 unittest.mock.patch.object(install, "_mounted_cards", return_value=[]), \
                 contextlib.redirect_stdout(io.StringIO()):
             chosen = install._prompt_manual_platform("linux")
-        self.assertEqual(chosen, [("lakka", install.DEFAULT_DESTS["lakka"])])
+        self.assertEqual(chosen, [("retropie", install.DEFAULT_DESTS["retropie"])])
+
+    def test_lakka_on_a_computer_asks_for_its_card(self):
+        """/storage/system, a folder only the Lakka machine has, was taken
+        on a computer: Lakka keeps its BIOS on its card's STORAGE part."""
+        card = Path(_tempdir(self))
+        (card / ".config" / "retroarch").mkdir(parents=True)
+        (card / ".config" / "retroarch" / "retroarch.cfg").write_text(
+            'system_directory = "/tmp/system"\n')
+        answers = iter(["lakka"])
+        out = io.StringIO()
+        with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)), \
+                unittest.mock.patch.object(install, "_mounted_cards", return_value=[card]), \
+                contextlib.redirect_stdout(out):
+            chosen = install._prompt_manual_platform("linux")
+        self.assertEqual(chosen, [("lakka", card / "system")])
+        self.assertIn("Lakka card found", out.getvalue())
 
     def test_batocera_on_a_computer_gets_no_default(self):
         """/userdata/bios, a folder only the Batocera
@@ -3347,6 +3365,44 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
         files = {event["dest"] for event in events if event["event"] == "file"}
         self.assertEqual(files, {"pi.bin"})
 
+    def test_a_card_naming_its_image_gets_the_board_of_that_image(self):
+        """A Batocera RG35XX Plus card names anbernic-rg35xx-plus, a zen3 one
+        x86-64-v3: neither is a target name, and the card took every
+        board's files (9.0 GB where h700 reads 6.1)."""
+        (self.boot / "boot" / "batocera.board").write_text("anbernic-rg35xx-plus\n")
+        (self.list.parent / "targets" / "batocera.json").write_text(json.dumps({
+            "h700": {"cores": ["picore"], "images": ["anbernic-rg28xx",
+                                                    "anbernic-rg35xx-plus"]},
+            "x86_64": ["pccore"]}))
+        out, events = self.run_main()
+        [board] = [event for event in events if event["event"] == "board"]
+        self.assertEqual((board["board"], board["applied"]), ("h700", True))
+        self.assertIn("Board h700 (anbernic-rg35xx-plus) found on the card", out)
+        files = {event["dest"] for event in events if event["event"] == "file"}
+        self.assertEqual(files, {"pi.bin"})
+
+    def test_an_image_two_boards_build_names_neither(self):
+        targets = install._validate_targets({
+            "zen3": {"cores": ["a"], "images": ["x86-64-v3"]},
+            "rk3326": {"cores": ["b"], "images": ["r36s"]},
+            "rk3566": {"cores": ["c"], "images": ["r36s"]}})
+        self.assertEqual(install.board_target("x86-64-v3", targets), "zen3")
+        self.assertEqual(install.board_target("zen3", targets), "zen3")
+        self.assertIsNone(install.board_target("r36s", targets))
+
+    def test_a_knulli_card_names_its_image_too(self):
+        (self.boot / "boot" / "knulli.board").write_text("rg35xx-plus\n")
+        with unittest.mock.patch.object(install, "_mounted_cards", return_value=[self.boot]):
+            self.assertEqual(install.card_board("knulli"), "rg35xx-plus")
+        published = json.loads((REPO_ROOT / "install" / "targets" / "knulli.json").read_text())
+        self.assertEqual(install.board_target(
+            "rg35xx-plus", install._validate_targets(published)), "h700")
+        batocera = install._validate_targets(json.loads(
+            (REPO_ROOT / "install" / "targets" / "batocera.json").read_text()))
+        for image, board in (("anbernic-rg35xx-plus", "h700"), ("x86-64-v3", "zen3"),
+                             ("odroidn2", "s922x"), ("bcm2711", "bcm2711")):
+            self.assertEqual(install.board_target(image, batocera), board)
+
     def test_every_board_keeps_them_all(self):
         _out, events = self.run_main("--every-board")
         self.assertFalse([event for event in events if event["event"] == "board"])
@@ -3667,13 +3723,74 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             },
         }
 
+    def test_the_archive_is_drawn_and_counted(self):
+        """82 MB of archives came with no progress line, and the run ended
+        on "310.5 KB downloaded", the BIOS files alone."""
+        work = Path(_tempdir(self))
+        body = self._zip(work).read_bytes()
+        attempts: list[int] = []
+
+        class Response(io.BytesIO):
+            headers = {"Content-Length": str(len(body))}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        def urlopen(_url, timeout=None):
+            attempts.append(1)
+            if len(attempts) == 1:
+                class Cut(Response):
+                    def read(self, size=-1):
+                        if self.tell():
+                            raise ConnectionResetError("cut")
+                        return super().read(5)
+                return Cut(body)
+            return Response(body)
+
+        progress = install.Progress(1, 0, install.Terminal(io.StringIO()), events=False)
+        with unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None), \
+                unittest.mock.patch.object(install, "_retry_delay", lambda *a: 0), \
+                unittest.mock.patch.object(install.EVENTS, "emit") as emit:
+            path = install._fetch_archive("https://example.invalid/D.zip", work, progress)
+        self.assertEqual(path.read_bytes(), body)
+        self.assertEqual(len(attempts), 2)
+        # The cut attempt's five bytes are taken back.
+        self.assertEqual((progress.transferred(), progress.expected_bytes),
+                         (len(body), len(body)))
+        emit.assert_not_called()
+
+    def test_the_run_ends_on_the_archive_bytes_too(self):
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        member = os.urandom(300_000)
+        with FakeRepository() as repo:
+            with zipfile.ZipFile(repo.root / "tree.zip", "w") as zf:
+                zf.writestr("Sys/big.bin", member)
+            archive = (repo.root / "tree.zip").stat().st_size
+            listed = json.loads((repo.root / "install" / "retroarch.json").read_text())
+            listed["data_directories"] = [{
+                "ref": "tree", "dest": "tree", "type": "zip",
+                "url": f"http://127.0.0.1:{repo.httpd.server_address[1]}/tree.zip",
+                "systems": ["nintendo-gba"],
+                "files": {"Sys/big.bin": {"sha1": hashlib.sha1(member).hexdigest(),
+                                          "size": len(member)}}}]
+            (repo.root / "install" / "retroarch.json").write_text(json.dumps(listed))
+            proc = repo.run("--no-input")
+            bios = sum(len(payload) for payload, *_ in FakeRepository.PAYLOADS.values())
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(f"{install.format_size(bios + archive)} downloaded in", proc.stdout)
+
     def test_verified_members_land_the_rest_are_said(self):
         work = Path(_tempdir(self))
         archive = self._zip(work)
         bios = work / "system"
         bios.mkdir()
 
-        def fetch(url, directory):
+        def fetch(url, directory, progress=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy
@@ -3710,7 +3827,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Endless())
 
         with unittest.mock.patch.object(install, "_fetch_archive",
-                                        lambda url, d: Path(d) / "a"), \
+                                        lambda url, d, progress=None: Path(d) / "a"), \
                 unittest.mock.patch.object(install, "_archive_members", members):
             counts = install.install_data_directory(entry, work)
         self.assertEqual(counts["changed"], 1)
@@ -3738,7 +3855,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                     yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Broken())
 
                 with unittest.mock.patch.object(install, "_fetch_archive",
-                                                lambda url, d: Path(d) / "a"), \
+                                                lambda url, d, progress=None: Path(d) / "a"), \
                         unittest.mock.patch.object(install, "_archive_members", members):
                     counts = install.install_data_directory(entry, work)
                 self.assertTrue(counts["error"])
@@ -6418,7 +6535,7 @@ class AFileYouHadIsKept(unittest.TestCase):
                  "type": "zip", "files": {"Sys/a.ini": {
                      "sha1": hashlib.sha1(self.NEW).hexdigest(), "size": len(self.NEW)}}}
 
-        def fetch(url, directory):
+        def fetch(url, directory, progress=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy

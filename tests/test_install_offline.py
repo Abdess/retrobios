@@ -463,6 +463,21 @@ class ABoardWithoutTheNetwork(Scratch):
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("for target psx-board", proc.stdout)
 
+    def test_the_boards_are_listed_from_where_target_reads_them(self):
+        """Offline, the refusal of --list-targets named --manifest, and
+        --manifest with --list-targets was refused: no form listed a board."""
+        (self.root / "targets").mkdir()
+        (self.root / "targets" / "retroarch.json").write_text(json.dumps(BOARDS))
+        _carrying(self.pack, {"install_list": manifest(), "targets": BOARDS})
+        for given in (["--offline", "--manifest", str(self.list)],
+                      ["--from-pack", str(self.pack)]):
+            with self.subTest(given=given[-1]):
+                proc = self.run_installer(*given, "--list-targets", "--no-input")
+                self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+                for board in BOARDS:
+                    self.assertIn(f"  {board} (", proc.stdout)
+                self.assertFalse(self.dest.exists())
+
     def test_a_pack_without_a_list_says_why(self):
         proc = self.run_installer("--from-pack", str(self.pack), "--target", "gba-board",
                                   "--no-input")
@@ -935,6 +950,33 @@ class OfflineLeavesFilesMissing(Scratch):
                       proc.stdout)
         self.assertNotIn("could not read", proc.stderr)
         self.assertNotIn("no longer in the source", proc.stdout)
+
+    @unittest.skipIf(os.name == "nt" or os.geteuid() == 0,
+                     "a read-only folder is refused by POSIX permissions")
+    def test_a_tree_in_a_folder_not_writable_is_not_fetched(self):
+        """A read-only card blamed each data archive's URL with a raw
+        errno, and that second cause split the one-line summary."""
+        listed = manifest()
+        listed["data_directories"] = [{
+            "ref": "bluemsx", "dest": "Machines", "type": "zip",
+            "url": "https://example.invalid/blueMSX.zip", "systems": ["nintendo-gba"],
+            "files": {"a.txt": {"sha1": _sha1(b"a"), "size": 1}},
+        }, {
+            "ref": "fbneo-cheats", "dest": "fbneo/cheats", "type": "zip",
+            "url": "https://example.invalid/cheats.zip", "systems": ["nintendo-gba"],
+            "files": {"b.txt": {"sha1": _sha1(b"b"), "size": 1}},
+        }]
+        self.list.write_text(json.dumps(listed))
+        self.complete()
+        self.dest.chmod(0o555)
+        self.addCleanup(self.dest.chmod, 0o755)
+        proc = self.run_installer("--manifest", str(self.list), "--no-input")
+        out = proc.stdout + proc.stderr
+        self.assertEqual(proc.returncode, 2, out)
+        self.assertNotIn("could not read", out)
+        self.assertNotIn("Errno", out)
+        self.assertNotIn("Data directories:", out)
+        self.assertIn("failed: 2 files (folder not writable), first bluemsx", out)
 
 
 class OneOfflineVocabulary(Scratch):

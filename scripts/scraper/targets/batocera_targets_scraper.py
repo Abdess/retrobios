@@ -36,6 +36,35 @@ except ImportError:
 
 _TARGET_FLAG_RE = re.compile(r"^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y", re.MULTILINE)
 
+# The images a target flag builds, each a board directory whose last segment
+# post-image-script.sh writes to boot/<system>.board on the card
+# (batocera-43.1 board/batocera/scripts/post-image-script.sh:50,60, KNULLI
+# 20260511 board/scripts/post-image-script.sh:57,66): Config.in lists them
+# under BR2_TARGET_<SYSTEM>_IMAGES, one "default" per target flag.
+_IMAGES_DEFAULT_RE = re.compile(
+    r'^\s*default\s+"([^"]*)"\s+if\s+(BR2_PACKAGE_BATOCERA_TARGET_\w+)\s*$')
+
+
+def _parse_images(text: str) -> dict[str, list[str]]:
+    """Each target flag's image names, in the words a card's board file uses."""
+    lines = text.replace("\\\n", " ").splitlines()
+    start = next((n for n, line in enumerate(lines)
+                  if re.match(r"^\s*config\s+BR2_TARGET_[A-Z]+_IMAGES\s*$", line)), None)
+    if start is None:
+        return {}
+    images: dict[str, list[str]] = {}
+    for line in lines[start + 1:]:
+        if not line.strip():
+            continue
+        m = _IMAGES_DEFAULT_RE.match(line)
+        if m:
+            images.setdefault(m.group(2), []).extend(
+                path.rsplit("/", 1)[-1] for path in m.group(1).split())
+        elif not re.match(r"^\s*(string|default|help)\b", line):
+            break
+    return images
+
+
 _IF_RE = re.compile(r"^if\s+(.*)$")
 _DEFAULT_Y_RE = re.compile(r"^\s*default\s+y\s*(?:#.*)?$")
 
@@ -428,6 +457,9 @@ class Scraper(BaseTargetScraper):
         )
         if not package_to_emulators:
             raise RuntimeError(f"no package->emulator mappings parsed from {es_systems_url}")
+        images_by_flag = _parse_images(config_in_text)
+        if not images_by_flag:
+            raise RuntimeError(f"no target image list parsed from {config_in_url}")
 
         targets: dict[str, dict] = {}
         for board_name in sorted(boards):
@@ -456,6 +488,9 @@ class Scraper(BaseTargetScraper):
                 "architecture": arch,
                 "cores": sorted(emulators),
             }
+            images = sorted(set(images_by_flag.get(primary_flag, [])))
+            if images and images != [target_key]:
+                targets[target_key]["images"] = images
             print(
                 f"    {len(emulators)} emulators ({len(selected_packages)} packages selected)",
                 file=sys.stderr,

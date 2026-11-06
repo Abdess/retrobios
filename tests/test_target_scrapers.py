@@ -96,7 +96,9 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
                                  b"BR2_PACKAGE_BATOCERA_SYSTEM=y\n")
                 if url.endswith("Config.in"):
                     return _Body(b"config BR2_PACKAGE_BATOCERA_SYSTEM\n"
-                                 b"\tselect BR2_PACKAGE_MGBA\n")
+                                 b"\tselect BR2_PACKAGE_MGBA\n\n"
+                                 b"config BR2_TARGET_BATOCERA_IMAGES\n\tstring \"x\"\n"
+                                 b"\tdefault \"x86_64\" if BR2_PACKAGE_BATOCERA_TARGET_X86_64\n")
                 return _Body(
                     b"gba:\n  emulators:\n    libretro:\n"
                     b"      mgba: {requireAnyOf: [BR2_PACKAGE_MGBA]}\n"
@@ -263,7 +265,14 @@ class KnulliPerBoard(unittest.TestCase):
             "\tconfig BR2_PACKAGE_BATOCERA_GLES3\n\tdefault y\nendif\n\n"
             "config BR2_PACKAGE_KNULLI_SYSTEM\n"
             "\tselect BR2_PACKAGE_LIBRETRO_MGBA\n"
-            "\tselect BR2_PACKAGE_PPSSPP\tif BR2_PACKAGE_BATOCERA_GLES3\n"
+            "\tselect BR2_PACKAGE_PPSSPP\tif BR2_PACKAGE_BATOCERA_GLES3\n\n"
+            "config BR2_TARGET_KNULLI_IMAGES_DEFINITIONS\n"
+            "\tbool \"target images definitions\"\n"
+            "\tconfig BR2_TARGET_KNULLI_IMAGES\n\tstring \"target images\"\n"
+            "\tdefault \"allwinner/h700/rg35xx-sp allwinner/h700/rg35xx-plus\" \\\n"
+            "\t\tif BR2_PACKAGE_BATOCERA_TARGET_H700\n"
+            "\tdefault \"allwinner/r16/miyoo-a30\"\tif BR2_PACKAGE_BATOCERA_TARGET_SUNXI_R16\n\n"
+            "\tchoice\n\tprompt \"knulli target\"\n"
         ),
         "package/emulationstation/knulli-es-system/es_systems.yml": (
             "gba:\n  emulators:\n    libretro:\n"
@@ -316,10 +325,12 @@ class KnulliPerBoard(unittest.TestCase):
         self.assertEqual(data["source"],
                          f"https://github.com/knulli-cfw/knulli-linux/tree/{pin}")
         self.assertEqual(sorted(data["targets"]), ["h700", "r16"])
+        # The images name what a card's boot/knulli.board holds.
         self.assertEqual(data["targets"]["h700"],
-                         {"architecture": "aarch64", "cores": ["mgba", "ppsspp"]})
+                         {"architecture": "aarch64", "cores": ["mgba", "ppsspp"],
+                          "images": ["rg35xx-plus", "rg35xx-sp"]})
         self.assertEqual(data["targets"]["r16"],
-                         {"architecture": "arm", "cores": ["mgba"]})
+                         {"architecture": "arm", "cores": ["mgba"], "images": ["miyoo-a30"]})
         self.assertTrue(all(pin in url or "buildroot/c2d7985b" in url for url in seen), seen)
 
 
