@@ -44,9 +44,9 @@ class TheCounterAsksNothingOfTheDevice(unittest.TestCase):
         self.assertIn("from.origin", self.code)
         self.assertNotIn("from.pathname", self.code)
 
-    def test_a_search_with_personal_details_is_not_sent(self) -> None:
-        self.assertIn("!query.includes('@')", self.code)
-        self.assertIn("\\d{7,}", self.code)
+    def test_a_search_is_sent_only_as_a_file_name_or_a_hash(self) -> None:
+        self.assertIn("isHash(query) || isFileName(query) || isFileStem(query) ? query : 'other'", self.code)
+        self.assertIn("countEvent(`search-none/${searchWords(query)}`)", self.code)
         self.assertIn("message.startsWith('No results for')", self.code)
 
     def test_one_endpoint(self) -> None:

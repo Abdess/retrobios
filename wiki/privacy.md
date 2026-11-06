@@ -25,8 +25,9 @@ code made from the request for 8 hours, then drops it.
 These actions are counted the same way, with the page they happened on:
 
 - a click on a copy button, a pack download or a file link;
-- a site search that found nothing, with its words, so a missing page shows up.
-  Words with an `@` or a long number are never sent;
+- a site search that found nothing, so a missing page shows up. Its words are
+  sent only when they read as a file name (`scph5501.bin`, `scph5501`) or a
+  hash. Any other search is counted as "other", without its words;
 - the answer to "Did this page help?".
 
 Not sent: your screen size, your language, a search that found results.
