@@ -206,7 +206,12 @@ file's own name. A path whose asset name differs from its file name is
 uploaded from a copy carrying the asset name.
 
 **Local cache.** `generate_pack.py` calls `fetch_large_file()` which downloads
-from the release and caches in `.cache/large/` for subsequent runs.
+from the release and caches in `.cache/large/` for subsequent runs. The path it
+returns is a hard link under `.cache/large/.by-sha1/<sha1>/`, never the cached
+name: another run that finds the asset re-uploaded replaces the name, and the
+first run still reads the bytes it verified. A revision no name holds is
+dropped a day later, at the next download. `restore_large_files.py` hashes
+each copy before it moves it into place.
 
 **Check.** The installer refuses a download whose `Content-Length` differs
 from the manifest size, and the manifest size is that of the local file. A

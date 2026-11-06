@@ -158,9 +158,9 @@ class LargeFileCacheTest(unittest.TestCase):
             raise AssertionError("must not download when the cache is valid")
 
         largefiles.urllib.request.urlopen = fail
-        self.assertEqual(
-            common.fetch_large_file("asset.bin", dest_dir=self.dir), str(cached)
-        )
+        self.assertTrue(os.path.samefile(
+            common.fetch_large_file("asset.bin", dest_dir=self.dir), cached
+        ))
 
     def test_offline_cache_miss_never_opens_the_network(self):
         def fail(req, timeout=None):
@@ -182,15 +182,15 @@ class LargeFileCacheTest(unittest.TestCase):
             raise AssertionError("offline cache hit must not open the network")
 
         largefiles.urllib.request.urlopen = fail
-        self.assertEqual(
+        self.assertTrue(os.path.samefile(
             common.fetch_large_file(
                 "asset.bin",
                 dest_dir=self.dir,
                 expected_sha1=hashlib.sha1(PAYLOAD_A).hexdigest(),
                 offline=True,
             ),
-            str(cached),
-        )
+            cached,
+        ))
 
     def _serve(self, payload: bytes, gets: list):
         class _Head(io.BytesIO):
@@ -222,7 +222,7 @@ class LargeFileCacheTest(unittest.TestCase):
             "asset.bin", dest_dir=self.dir,
             expected_sha1=hashlib.sha1(rebuilt).hexdigest(),
         )
-        self.assertEqual(result, str(cached))
+        self.assertTrue(os.path.samefile(result, cached))
         self.assertEqual(cached.read_bytes(), rebuilt)
         self.assertEqual(len(gets), 1)
 
@@ -582,7 +582,7 @@ class ReleaseAssetNames(unittest.TestCase):
                 offline=True,
                 registered=self.REGISTERED,
             )
-            self.assertEqual(got, os.path.join(cache, names[self.RTCW]))
+            self.assertTrue(os.path.samefile(got, os.path.join(cache, names[self.RTCW])))
             # The cache entry of the other asset is a valid file, not stale.
             self.assertTrue(Path(cache, names[self.ET]).exists())
 
@@ -762,7 +762,7 @@ class ASameSizeReuploadIsSeen(unittest.TestCase):
                 "dsi_nand.bin", str(self.dir), hashlib.sha1(new).hexdigest(), "",
                 offline=False,
             )
-        self.assertEqual(found, str(self.cached))
+        self.assertTrue(os.path.samefile(found, self.cached))
 
     def test_the_release_check_compares_digests_at_equal_size(self):
         expected = {"bios/Nintendo/DSi/dsi_nand.bin": 8}
@@ -792,3 +792,49 @@ class ASameSizeReuploadIsSeen(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class AVerifiedPathKeepsItsBytes(unittest.TestCase):
+    """fetch_large_file verified a cached copy and returned its name. Another
+    run that found the release re-uploaded then replaced that name with the
+    new revision, and the first run packed bytes it never verified, under a
+    manifest sha1 that describes the old ones."""
+
+    def setUp(self):
+        _test_registry(self)
+        self.dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.dir, True)
+        (self.dir / "asset.bin").write_bytes(PAYLOAD_A)
+        self.served = {"asset.bin": hashlib.sha256(PAYLOAD_B).hexdigest()}
+
+    def _fetch(self, payload: bytes, offline: bool) -> str | None:
+        def urlopen(req, timeout=None):
+            return _SlowResponse(PAYLOAD_B)
+
+        with mock.patch.object(largefiles, "_served_digests", lambda: self.served), \
+                mock.patch.object(largefiles.urllib.request, "urlopen", urlopen):
+            return largefiles.fetch_large_file(
+                "asset.bin", dest_dir=str(self.dir),
+                expected_sha1=hashlib.sha1(payload).hexdigest(), offline=offline,
+            )
+
+    def test_a_revision_promoted_after_the_check_is_not_read(self):
+        first = self._fetch(PAYLOAD_A, offline=True)
+        second = self._fetch(PAYLOAD_B, offline=False)
+        self.assertEqual((self.dir / "asset.bin").read_bytes(), PAYLOAD_B)
+        self.assertEqual(Path(second).read_bytes(), PAYLOAD_B)
+        self.assertEqual(Path(first).read_bytes(), PAYLOAD_A)
+        self.assertEqual(Path(first).name, "asset.bin")
+
+    def test_an_orphaned_revision_is_dropped_after_the_grace(self):
+        first = self._fetch(PAYLOAD_A, offline=True)
+        self._fetch(PAYLOAD_B, offline=False)
+        self.assertTrue(Path(first).exists())
+        with mock.patch.object(largefiles, "ORPHAN_GRACE", -1):
+            largefiles._prune_verified(str(self.dir))
+        self.assertFalse(Path(first).exists())
+        self.assertEqual((self.dir / "asset.bin").read_bytes(), PAYLOAD_B)
+        self.assertEqual(
+            [p.name for p in (self.dir / largefiles.VERIFIED_STORE).iterdir()],
+            [hashlib.sha1(PAYLOAD_B).hexdigest()],
+        )
