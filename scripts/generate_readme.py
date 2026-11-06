@@ -1035,11 +1035,7 @@ def main() -> None:
         help="platform YAML directory (default: %(default)s)",
     )
     args = parser.parse_args()
-    with repository_output_lock("README.md"):
-        _write(args)
 
-
-def _write(args: argparse.Namespace) -> None:
     import contextlib
 
     from common import load_data_dir_registry
@@ -1049,9 +1045,13 @@ def _write(args: argparse.Namespace) -> None:
 
     # Coverage resolves against data/: a refresh swapping a tree mid-read
     # published counts taken from half of it.
-    with contextlib.ExitStack() as held:
+    with repository_output_lock("README.md"), contextlib.ExitStack() as held:
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
         readme = generate_readme(db, args.platforms_dir, args.db)
+        _write(readme)
+
+
+def _write(readme: str) -> None:
     status = "Generated" if write_if_changed("README.md", readme) else "Unchanged"
     print(f"{status} ./README.md")
 
