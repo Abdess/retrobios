@@ -475,7 +475,7 @@ python scripts/profile_sync.py --all --stale-before 2026-06-01 --limit 20 --tria
 python scripts/profile_sync.py --emulator vice --full-diff --ref vice/src/c64/c64rom.h --context 6
 python scripts/profile_sync.py --emulator vice --strict
 python scripts/profile_sync.py --changed --strict
-python scripts/profile_sync.py --added --base upstream/main --strict
+python scripts/profile_sync.py --added --strict
 ```
 
 Per part of a ref: `ANCHORED` (same content, same lines), `SHIFTED` (same

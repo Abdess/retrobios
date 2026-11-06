@@ -75,7 +75,8 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
         # CI holds added profiles to their upstream, not edited ones: --changed
         # failed a contributor on refs they never wrote.
         self.assertIn("profile_sync.py --added --base", workflow)
-        self.assertIn("profile_sync.py --added --base upstream/main --strict", block)
+        self.assertIn("profile_sync.py --added --strict", block)
+        self.assertNotIn("upstream/main", section)
         self.assertNotIn("--changed --strict", block)
 
     def test_it_names_the_site_build_and_the_packages_ci_runs(self):
