@@ -50,7 +50,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from ..artifacts import write_text_atomic
-from ..common import load_emulator_profiles
+from ..common import load_emulator_profiles, run_cli
 from .romset_dat_importer import (
     LISTXML_CHUNK,
     MAME_LISTXML_URL,
@@ -1203,4 +1203,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    run_cli(main)

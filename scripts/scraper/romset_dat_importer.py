@@ -45,6 +45,7 @@ from ..common import (
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_config,
+    run_cli,
 )
 from ..dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from .logiqx_parser import LogiqxDat, parse_logiqx
@@ -665,4 +666,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    run_cli(main)

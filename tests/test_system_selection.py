@@ -262,6 +262,75 @@ class AMissingBiosDirIsRefused(unittest.TestCase):
         self.assertFalse(Path(out).exists())
 
 
+def _scripts_taking(flag: str) -> list[Path]:
+    pattern = re.compile(r'add_argument\(\s*"%s"' % re.escape(flag))
+    return [
+        path for path in sorted((REPO_ROOT / "scripts").glob("*.py"))
+        + sorted((REPO_ROOT / "scripts" / "scraper").glob("*.py"))
+        if pattern.search(path.read_text(encoding="utf-8"))
+    ]
+
+
+def _command(path: Path) -> list[str]:
+    if path.parent.name == "scraper":
+        return [sys.executable, "-m", f"scripts.scraper.{path.stem}"]
+    return [sys.executable, f"scripts/{path.name}"]
+
+
+class AMissingProfileDirIsRefused(unittest.TestCase):
+    """A mistyped --emulators-dir read as "no emulator": generate_pack built
+    a pack without its core files marked OK, verify --strict passed, and
+    sitesources wrote {} over source-paths.json, every one exiting 0."""
+
+    EXTRA = {
+        "arcade_parent_importer": ["--all", "--offline"],
+        "fileless_audit": ["--all"],
+        "generate_pack": ["--platform", "retroarch", "--system", "atari-lynx",
+                          "--offline", "--output-dir", "{out}"],
+        "generate_site": ["--docs-dir", "{out}"],
+        "generate_truth": ["--all", "--output-dir", "{out}"],
+        "mame_ref_audit": ["mame"],
+        "profile_sync": ["--all", "--triage"],
+        "romset_dat_importer": ["--source", "mame", "--pack", "{dat}", "--output", "{out}/r.json"],
+        "sitesources": ["--cache-dir", "{cache}", "--output", "{out}/source-paths.json"],
+        "validate_pr": ["bios/Sony/PlayStation/scph5501.bin"],
+        "verify": ["--platform", "retroarch", "--strict"],
+    }
+
+    def test_every_script_taking_an_emulators_dir_refuses_a_missing_one(self):
+        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.addCleanup(scratch.cleanup)
+        root = Path(scratch.name)
+        (root / "cache").mkdir()
+        (root / "empty.dat").write_bytes(b"")
+        values = {"out": str(root / "out"), "cache": str(root / "cache"),
+                  "dat": str(root / "empty.dat")}
+        taking = _scripts_taking("--emulators-dir")
+        self.assertGreater(len(taking), 15)
+        tracked = ["git", "diff", "--name-only"]
+        before = subprocess.run(tracked, cwd=REPO_ROOT, capture_output=True, text=True).stdout
+        for path in taking:
+            extra = [arg.format(**values) for arg in self.EXTRA.get(path.stem, [])]
+            with self.subTest(script=path.stem):
+                proc = subprocess.run(
+                    [*_command(path), "--emulators-dir", "nosuch", *extra],
+                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    check=False, env={**os.environ, "RETROBIOS_OFFLINE": "1"},
+                )
+                self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
+                self.assertNotIn("Traceback", proc.stderr, proc.stderr[-1500:])
+                self.assertRegex(proc.stderr, r"ERROR: .*nosuch")
+        written = [
+            str(p.relative_to(root)) for p in (root / "out").rglob("*")
+            if p.is_file() and p.name != ".lock"
+        ]
+        self.assertEqual(written, [])
+        # Read as empty, generate_site rewrote published-parts.json and the
+        # FAQ, and sitesources source-paths.json.
+        after = subprocess.run(tracked, cwd=REPO_ROOT, capture_output=True, text=True).stdout
+        self.assertEqual(after, before)
+
+
 class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     """verify exited 0 with a required file missing on an md5 platform, so
     the pipeline printed "verify OK" over a pack the frontend rejects."""

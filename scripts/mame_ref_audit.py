@@ -27,6 +27,7 @@ from dataclasses import dataclass
 sys.path.insert(0, os.path.dirname(__file__))
 
 import upstream
+from common import require_directory
 from safeparse import yaml_load
 from scraper.mame_parser import _MACHINE_MACROS, strip_comments
 
@@ -145,6 +146,7 @@ def main() -> None:
         help="rewrite the refs the audit can settle",
     )
     args = parser.parse_args()
+    require_directory(args.emulators_dir, "--emulators-dir")
 
     total = 0
     for name in args.emulators:

@@ -2836,17 +2836,10 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
         )
 
     def test_a_missing_profile_directory_says_so(self):
-        import io as _io
-
         from scripts import common as _common
 
-        stderr = _io.StringIO()
-        with contextlib.redirect_stderr(stderr):
-            profiles = _common.load_emulator_profiles(
-                str(ROOT / "no-such-emulator-dir")
-            )
-        self.assertEqual(profiles, {})
-        self.assertIn("no emulator profile directory", stderr.getvalue())
+        with self.assertRaisesRegex(_common.InputMissing, "no emulator profile directory"):
+            _common.load_emulator_profiles(str(ROOT / "no-such-emulator-dir"))
 
 
 class TestEntryPointsRunEveryClass(unittest.TestCase):

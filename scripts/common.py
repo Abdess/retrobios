@@ -43,7 +43,12 @@ def require_directory(path: str, flag: str = "--bios-dir") -> None:
         raise SystemExit(f"ERROR: {flag} {path} is not a directory")
 
 
-class DatabaseUnreadable(FileNotFoundError):
+class InputMissing(FileNotFoundError):
+    """An input a command was pointed at does not exist. run_cli prints the
+    message on one line instead of a stack trace."""
+
+
+class DatabaseUnreadable(InputMissing):
     """The database a command was pointed at does not exist or is not JSON."""
 
 
@@ -2181,12 +2186,11 @@ def load_emulator_profiles(
         return {}
     profiles = {}
     emu_path = Path(emulators_dir)
-    if not emu_path.exists():
-        print(
-            f"warning: no emulator profile directory at {emulators_dir}",
-            file=sys.stderr,
-        )
-        return profiles
+    if not emu_path.is_dir():
+        # Read as "no emulator", a mistyped --emulators-dir built a pack
+        # without any core file marked OK, and sitesources wrote {} over
+        # source-paths.json, both exiting 0.
+        raise InputMissing(f"no emulator profile directory at {emulators_dir}")
     for f in source_yaml_paths(emu_path):
         with open(f) as fh:
             profile = yaml_load(fh) or {}
@@ -3571,7 +3575,7 @@ def run_cli(main: Callable[[], int | None]) -> None:
     try:
         code = main()
         sys.stdout.flush()
-    except DatabaseUnreadable as exc:
+    except InputMissing as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
     except BrokenPipeError:
