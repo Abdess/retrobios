@@ -789,6 +789,22 @@ class AnEmulatorPageNamesItsSetups(unittest.TestCase):
         self.assertIn("EmuDeck", card[1].splitlines()[0])
 
 
+class SizesTheCodeComparesAreExact(unittest.TestCase):
+    """raze validates DUKE3D.GRP by size, and its page showed 42.3 MB for
+    44,356,548 and 44,348,015 bytes alike."""
+
+    def test_a_validated_size_carries_its_bytes(self):
+        profile = {"emulator": "x", "type": "libretro", "systems": ["sony-playstation"], "files": [
+            {"name": "DUKE3D.GRP", "size": 44348015, "validation": ["size", "crc32"]},
+            {"name": "other.bin", "size": 44356548},
+            {"name": "built.bin", "size": 2304, "validation": {"core": ["size"]}},
+        ]}
+        page = _page("x", profile)
+        self.assertIn("Size: 42.3 MB (44,348,015 bytes)", page)
+        self.assertIn("Size: 2.2 KB (2,304 bytes)", page)
+        self.assertNotIn("44,356,548", page)
+
+
 class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):
     """pcee2's page linked github.com/PCSX2/pcsx2/archive/{version}.tar.gz,
     a 404, and buildbot zips showed `Revision: master (2047720058)`: a branch

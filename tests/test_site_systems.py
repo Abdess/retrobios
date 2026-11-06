@@ -184,6 +184,19 @@ class ThePermalinkIsAnIcon(unittest.TestCase):
         self.assertEqual(page.count('href="#rb-link-icon"'), 2)
 
 
+class TheCardGivesTheSizeInBytes(unittest.TestCase):
+    """The badge rounded to 0.1 KB and no line of a system card gave the
+    bytes an emulator compares."""
+
+    def test_the_badge_is_exact(self):
+        for size, shown in ((524288, "512 KB"), (44348015, "44,348,015 B"),
+                            (2 * 1024 * 1024, "2 MB"), (2304, "2,304 B"), (10, "10 B")):
+            with self.subTest(size=size):
+                card = {**_sony_file("scph5501.bin", "4"), "size": size}
+                title = gs._system_file_card(card, FileConsumers({"files": {}}))[2]
+                self.assertIn(f'<span class="rb-badge rb-badge-muted">{shown}</span>', title)
+
+
 class TheCardLinesSayWhatTheyMean(unittest.TestCase):
     """"Platforms:" and "Also installed by:" listed different setups, as
     lower-case ids, and only a code comment told them apart."""

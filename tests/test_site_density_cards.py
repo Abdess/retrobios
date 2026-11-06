@@ -110,7 +110,7 @@ class ASystemCardShowsTheAnswerFirst(unittest.TestCase):
         self.shown = self.text.replace(self.fold, "")
 
     def test_the_open_part(self) -> None:
-        for fact in ("<code>ppge_atlas.zim</code>", ">650.9 KB<", ">Download</a>",
+        for fact in ("<code>ppge_atlas.zim</code>", ">666,539 B<", ">Download</a>",
                      "<dt>On the setup's list</dt>", "<dt>Packed for its emulators by</dt>",
                      "<dt>Emulators</dt>", f'<dt>SHA1</dt><dd class="rb-hash">{SHA1[:12]}</dd>'):
             self.assertIn(fact, self.shown)

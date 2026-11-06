@@ -6022,7 +6022,9 @@ def _system_file_card(
     name = f["name"]
     sha1_full = f.get("sha1", "unknown")
     md5_full = f.get("md5", "unknown")
-    size = _fmt_size(f.get("size", 0))
+    # The size a card names is the file's own, exact: rounded, 44,348,015
+    # and 44,356,548 bytes were one 42.3 MB.
+    size = _card_size(int(f.get("size", 0)))
     # Who reads this file, not who reads a file of this name
     plats = sorted(consumers.platforms.get(sha1_full, ()))
     emus = sorted(consumers.emulators.get(sha1_full, ()))
@@ -8051,6 +8053,26 @@ def emulator_setups(coverages: dict, profiles: dict) -> dict[str, list[str]]:
     }
 
 
+def _validation_names(validation: object) -> set[str]:
+    """The checks a `validation:` names, a list or one list per build."""
+    if isinstance(validation, dict):
+        return {str(v) for checks in validation.values() for v in checks or []}
+    return {str(v) for v in validation or []}
+
+
+def _card_size(size: int) -> str:
+    """A file's size, exact: in whole MB or KB when it is one, else in B."""
+    for unit, scale in (("MB", 1024 * 1024), ("KB", 1024)):
+        if size >= scale and size % scale == 0:
+            return f"{size // scale:,} {unit}"
+    return f"{size:,} B"
+
+
+def _exact_size(size: int) -> str:
+    """A rounded size with its bytes, where the bytes are not the same figure."""
+    return _fmt_size(size) if size < 1024 else f"{_fmt_size(size)} ({size:,} bytes)"
+
+
 def _build_rows(profile: dict) -> list[str]:
     """Meta card rows for who ships the build, how its files are found, why
     its revision is held and where its releases are announced."""
@@ -8184,25 +8206,28 @@ def _render_emulator_file(
         details.append(f"Found by: {found}")
     if fsystem:
         details.append(f"System: {_named_system_link(fsystem, '../')}")
+    # Where the code compares the size, the exact bytes: raze tells three
+    # DUKE3D.GRP apart by size, all three shown as 42.3 MB.
+    sized = _exact_size if "size" in _validation_names(validation) else _fmt_size
     if size:
         if isinstance(size, list):
-            size_str = " / ".join(_fmt_size(s) for s in size)
+            size_str = " / ".join(sized(s) for s in size)
         else:
-            size_str = _fmt_size(size)
+            size_str = sized(size)
         if fmin or fmax:
             bounds = []
             if fmin:
-                bounds.append(f"min {_fmt_size(fmin)}")
+                bounds.append(f"min {sized(fmin)}")
             if fmax:
-                bounds.append(f"max {_fmt_size(fmax)}")
+                bounds.append(f"max {sized(fmax)}")
             size_str += f" ({', '.join(bounds)})"
         details.append(f"Size: {size_str}")
     elif fmin or fmax:
         bounds = []
         if fmin:
-            bounds.append(f"min {_fmt_size(fmin)}")
+            bounds.append(f"min {sized(fmin)}")
         if fmax:
-            bounds.append(f"max {_fmt_size(fmax)}")
+            bounds.append(f"max {sized(fmax)}")
         details.append(f"Size: {', '.join(bounds)}")
     # Starlight folds the hashes and gives each a copy button.
     copyable = markup.starlight()
