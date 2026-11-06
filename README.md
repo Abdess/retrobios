@@ -27,7 +27,7 @@ irm https://abdess.github.io/retrobios/i.ps1 | iex
 # Android (Termux: it installs Python and asks for storage access)
 curl -fsSL https://abdess.github.io/retrobios/i | sh
 
-# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, MiSTer, Onion, spruceOS or MinUI card
+# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Lakka, MiSTer, Onion, spruceOS or MinUI card
 # is found by itself. For another card, --dest is its BIOS folder
 # (RetroArch on Switch: retroarch/cores/system, on Android: RetroArch/system)
 curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform retroarch --dest /path/to/sdcard/retroarch/cores/system
@@ -208,4 +208,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-06T03:08:31Z*
+*Auto-generated on 2026-11-06T04:51:43Z*

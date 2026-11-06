@@ -77,8 +77,8 @@ setup's files and checks each one. `--dry-run` shows the list first.
 
 ## Fill an SD card from a computer?
 
-The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX or MiSTer
-card. Else name your setup and its BIOS folder. For RetroArch on a Switch,
+The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka or
+MiSTer card. Else name your setup and its BIOS folder. For RetroArch on a Switch,
 with the card in drive `E:`, run:
 
 <!-- os-tabs windows: --platform retroarch --dest E:\retroarch\cores\system -->
