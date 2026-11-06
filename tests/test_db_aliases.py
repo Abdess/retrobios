@@ -56,6 +56,25 @@ class AliasesNeedAnUnambiguousName(unittest.TestCase):
         named = {a["name"] for entries in aliases.values() for a in entries}
         self.assertNotIn("n88sub.rom", named)
 
+    def test_homonyms_differing_in_case_take_no_alias(self):
+        """dosbox's SC-55 ROM2.BIN: Galaksija's ROM2.BIN was the only exact
+        holder, and ROM2_ST.BIN went to it beside SC-55's rom2.bin."""
+        files = {
+            "a": self._file("DISK.ROM", "bios/NEC/PC-98/DISK.ROM", "m1"),
+            "b": self._file("disk.rom", "bios/Tandy/CoCo/disk.rom", "m2"),
+        }
+        aliases = self._aliases(files)
+        named = {a["name"] for entries in aliases.values() for a in entries}
+        self.assertNotIn("n88sub.rom", named)
+
+    def test_a_primary_and_its_variant_are_one_file(self):
+        files = {
+            "a": self._file("disk.rom", "bios/NEC/PC-88/disk.rom", "m1"),
+            "b": self._file("DISK.ROM", "bios/NEC/PC-88/.variants/DISK.ROM.0123abcd", "m2"),
+        }
+        aliases = self._aliases(files)
+        self.assertEqual([a["name"] for a in aliases.get("a", [])], ["n88sub.rom"])
+
     def test_a_unique_name_still_carries_its_aliases(self):
         files = {"a": self._file("disk.rom", "bios/NEC/PC-88/disk.rom", "m1")}
         aliases = self._aliases(files)

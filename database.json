@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T23:59:37Z",
+  "generated_at": "2026-11-06T07:21:27Z",
   "total_files": 19947,
   "total_size": 16926035621,
   "bios_dir": "bios",
@@ -281812,9 +281812,6 @@
       ],
       "TRIO64 (Ver. 1.5-07) [VGA] (S3 Incorporated).bin": [
         "a308b15f93da34961c0141ec95b98c211557e2d5"
-      ],
-      "ROM2_ST.BIN": [
-        "5d5ab4313a2d0effe7572bb129193b64cab002c1"
       ],
       "mt32_ctrl_1_04.rom": [
         "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
