@@ -3474,17 +3474,6 @@
       "cores": null,
       "systems": [
         "macintosh"
-      ],
-      "alternatives": [
-        {
-          "sha1": "20bb0271d02b1ab3b4cfe7c8d6b599abdbc5324e",
-          "sha256": "90dceaece71be101bf709ee20691c9e8486969417ffc51e4d1fb3c11e567f796",
-          "size": 25165824,
-          "repo_path": "bios/Apple/Macintosh II/MinivMacBootv2.dsk",
-          "cores": [
-            "minivmac"
-          ]
-        }
       ]
     },
     {

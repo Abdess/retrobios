@@ -272,10 +272,10 @@
       }
     }
   ],
-  "total_files": 14699,
-  "total_size": 9868500923,
-  "pack_files": 18173,
-  "pack_size": 9954326213,
+  "total_files": 14698,
+  "total_size": 9843335099,
+  "pack_files": 18172,
+  "pack_size": 9929160389,
   "total_omitted": 426,
   "omitted_files": [
     {
@@ -204300,19 +204300,6 @@
       "repo_path": "bios/Nintendo/NES/MesenPalette.pal",
       "cores": [
         "mesen"
-      ]
-    },
-    {
-      "dest": "macintosh/MinivMacBootv2.dsk",
-      "sha1": "20bb0271d02b1ab3b4cfe7c8d6b599abdbc5324e",
-      "sha256": "90dceaece71be101bf709ee20691c9e8486969417ffc51e4d1fb3c11e567f796",
-      "size": 25165824,
-      "repo_path": "bios/Apple/Macintosh II/MinivMacBootv2.dsk",
-      "cores": [
-        "minivmac"
-      ],
-      "systems": [
-        "apple-macintosh-ii"
       ]
     },
     {

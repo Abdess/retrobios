@@ -643,10 +643,10 @@
       }
     }
   ],
-  "total_files": 8339,
-  "total_size": 7105270311,
-  "pack_files": 14922,
-  "pack_size": 7247303675,
+  "total_files": 8338,
+  "total_size": 7080104487,
+  "pack_files": 14921,
+  "pack_size": 7222137851,
   "total_omitted": 37,
   "omitted_files": [
     {
@@ -108870,19 +108870,6 @@
       "sha256": "79fae48e2d5cfde68520e46616503963f8c16430903f410514b62c1379af20cb",
       "size": 262144,
       "repo_path": "bios/Apple/Macintosh II/MacIIx.ROM",
-      "cores": [
-        "minivmac"
-      ],
-      "systems": [
-        "apple-macintosh-ii"
-      ]
-    },
-    {
-      "dest": "macintosh/MinivMacBootv2.dsk",
-      "sha1": "20bb0271d02b1ab3b4cfe7c8d6b599abdbc5324e",
-      "sha256": "90dceaece71be101bf709ee20691c9e8486969417ffc51e4d1fb3c11e567f796",
-      "size": 25165824,
-      "repo_path": "bios/Apple/Macintosh II/MinivMacBootv2.dsk",
       "cores": [
         "minivmac"
       ],
