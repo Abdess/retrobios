@@ -3742,15 +3742,6 @@ def _git_file_at(path: Path, sha: str) -> dict | None:
     return document if isinstance(document, dict) else None
 
 
-def _scalar_values(document: dict) -> dict[str, str]:
-    """String scalars of the document, keyed by field path."""
-    return {
-        field: value
-        for kind, field, _, _, value in _walk_document(document)
-        if kind == "str"
-    }
-
-
 def _pin_of(
     document: dict, field: str, mode: str = "",
     repo: upstream.Repo | None = None,
@@ -3786,26 +3777,6 @@ def _pin_of(
         ):
             return None
     return value
-
-
-_CITATION_RUN_RE = re.compile(
-    PROSE_CITE_RE.pattern + r"(?:, *\d+(?:-\d+)?)*"
-)
-
-
-def _scalar_citations(text: str | None) -> tuple[str, ...] | None:
-    """The citations a scalar carries, in order, without the prose around them.
-
-    A note reworded around unchanged citations was still written under the
-    pin those citations describe: comparing whole texts moved the writing
-    revision to the rewording commit, whose pin is current, and the stale
-    citations were never offered for realignment again.
-    """
-    if text is None:
-        return None
-    return tuple(
-        _citation_key(m.group(0)) for m in _CITATION_RUN_RE.finditer(text)
-    )
 
 
 def _writing_pins(
@@ -4066,68 +4037,73 @@ def realign_prose(
     if not history:
         return []
 
-    current_values = _scalar_values(document)
-    fields = {citation.field for citation in citations}
-    alive = dict.fromkeys(fields, True)
-    intro: dict[str, str | None] = dict.fromkeys(fields)
+    # Each citation is followed on its own: a field's text changes whenever
+    # one of its citations is corrected by hand, and dating the whole field
+    # from that commit put idtech4a++'s untouched Game.java:69-72 under the
+    # current pin, so the stale range was never offered again.
+    keys = [(c.field, _citation_key(c.ref)) for c in citations]
+    alive = [True] * len(citations)
+    intro: list[str | None] = [None] * len(citations)
     revisions: list[tuple[str, dict]] = []
-    # Fields whose writing pin lies past a revision that cannot be read:
+    # Citations whose writing pin lies past a revision that cannot be read:
     # where their text came in is unknown, so they are not moved.
-    unknown: dict[str, str] = {}
+    unknown: dict[int, str] = {}
     # A revision that does not parse is passed over unless the pins differ
-    # on its two sides while the field's citations changed across it: then
-    # the text may have come in there under either pin. Otherwise nothing
+    # on its two sides while the citation is absent across it: then the
+    # text may have come in there under either pin. Otherwise nothing
     # it could hold changes the reading. lindbergh-loader
     # committed invalid YAML once (df7346b3), fixed the same day, and every
     # note older than that commit stayed blocked for good.
     gap: str | None = None
+
+    def carried_by(past: dict) -> set[tuple[str, str]]:
+        return {
+            (c.field, _citation_key(c.ref))
+            for c in collect_citations(past) if c.kind == "prose"
+        }
+
     for sha in history:
-        if not any(alive.values()):
+        if not any(alive):
             break
         past = _git_file_at(path, sha)
         if past is None:
             gap = gap or sha
             continue
+        held = carried_by(past)
         if gap:
             newer = revisions[-1][1] if revisions else document
             moved = any(
                 newer.get(pin) != past.get(pin)
                 for pin in ("source_commit", "upstream_commit")
             )
-            values = _scalar_values(past)
-            for field, live in alive.items():
-                if live and moved and _scalar_citations(values.get(field)) != (
-                    _scalar_citations(current_values.get(field))
-                ):
-                    unknown[field] = gap
-                    alive[field] = False
+            for index, live in enumerate(alive):
+                if live and moved and keys[index] not in held:
+                    unknown[index] = gap
+                    alive[index] = False
             gap = None
         revisions.append((sha, past))
-        values = _scalar_values(past)
-        for field in fields:
-            if not alive[field]:
+        for index, live in enumerate(alive):
+            if not live:
                 continue
-            if _scalar_citations(values.get(field)) == _scalar_citations(
-                current_values.get(field)
-            ):
-                intro[field] = sha
+            if keys[index] in held:
+                intro[index] = sha
             else:
-                alive[field] = False
+                alive[index] = False
     if gap:
         # The oldest revisions do not parse: where the text came in is past
         # what can be read.
-        unknown.update({field: gap for field, live in alive.items() if live})
+        unknown.update({index: gap for index, live in enumerate(alive) if live})
 
     messages: list[str] = []
     jobs: list[tuple[Citation, dict]] = []
-    for citation in citations:
-        if citation.field in unknown:
+    for index, citation in enumerate(citations):
+        if index in unknown:
             messages.append(
                 f"read again: {citation.field}: {citation.ref} "
-                f"(revision {unknown[citation.field][:8]} unreadable)"
+                f"(revision {unknown[index][:8]} unreadable)"
             )
             continue
-        intro_sha = intro.get(citation.field)
+        intro_sha = intro[index]
         if intro_sha is None:
             # The scalar is not committed yet: written now, under this pin.
             continue

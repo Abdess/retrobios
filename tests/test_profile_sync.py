@@ -4766,6 +4766,24 @@ class TestRealignProse(unittest.TestCase):
             any("pin moved under this text" in m for m in messages), messages
         )
 
+    def test_a_citation_corrected_beside_another_dates_only_itself(self):
+        """idtech4a++ advanced its pin in the commit that corrected two
+        citations of its notes by hand. Dated per field, the untouched
+        Game.java:69-72 took that commit's current pin and was never
+        offered again, though its lines had moved."""
+        self._repo_with_advanced_pin()
+        self._commit(
+            PROSE_SAMPLE.replace("(b.c:2,8-9)", "(b.c:3,9-10)"),
+            "advance the pin, b.c corrected by hand",
+        )
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
+        self.files[("pin", "b.c")] = list("pqrstuvwxyz")
+        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        flagged = [m for m in messages if "a.c:10" in m]
+        self.assertTrue(flagged, messages)
+        self.assertFalse([m for m in messages if "b.c:" in m], messages)
+
     def test_a_citation_in_an_unmoved_upstream_needs_no_reading(self):
         """nethersx2 cites AetherSX2 files that only its upstream carries,
         at an upstream pin that never moved. The port's pin did move under
