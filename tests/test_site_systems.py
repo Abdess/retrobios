@@ -1189,7 +1189,8 @@ class EnginesGoByEngine(unittest.TestCase):
     def test_moved_pages_redirect(self) -> None:
         if not SYSTEMS.is_dir():
             self.skipTest("pages not generated")
-        for old, new in gs.SYSTEM_PAGES_MOVED.items():
+        for old, target in gs.SYSTEM_PAGES_MOVED.items():
+            new = target.partition("#")[0]
             self.assertFalse((CONTENT / old).exists() or (CONTENT / old).with_suffix(".mdx").exists(), old)
             # A page with tabs is written as MDX.
             self.assertTrue((CONTENT / new).exists() or (CONTENT / new).with_suffix(".mdx").exists(), new)
@@ -1197,6 +1198,7 @@ class EnginesGoByEngine(unittest.TestCase):
         if redirects.is_file():
             table = json.loads(redirects.read_text(encoding="utf-8"))
             self.assertEqual(table.get("/systems/other-scummvm/"), "/systems/scummvm/")
+            self.assertEqual(table.get("/systems/oric/"), "/systems/tangerine/#oric")
 
 
 class OneLabelOnceOnABoardPage(unittest.TestCase):

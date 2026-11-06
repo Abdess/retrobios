@@ -139,8 +139,14 @@ def fetch_goatcounter(start: dt.date, end: dt.date) -> dict[str, list[tuple[str,
         if not answer.get("more"):
             break
     refs = _get_json(f"{GOATCOUNTER}/stats/toprefs?{urllib.parse.urlencode({**span, 'limit': 50})}", auth)
-    referrers = [(r.get("name") or "(direct)", int(r["count"])) for r in refs.get("stats", [])]
-    return {"hits": hits, "referrers": referrers}
+    total = _get_json(f"{GOATCOUNTER}/stats/total?{urllib.parse.urlencode(span)}", auth)
+    # An action carries no referrer, and GoatCounter files it as a direct
+    # visit: 592 of the first day's 1,145 "direct" were clicks.
+    events = int(total.get("total_events", 0))
+    referrers = [("(direct)", max(int(r["count"]) - events, 0)) if not r.get("name") else (r["name"], int(r["count"]))
+                 for r in refs.get("stats", [])]
+    return {"hits": hits, "referrers": sorted(referrers, key=lambda row: -row[1]),
+            "visits": int(total.get("total", 0)) - events, "actions": events}
 
 
 def fetch_github() -> dict:
@@ -246,7 +252,8 @@ def report(start: dt.date, end: dt.date, queries: list[Query] | None, goat: dict
                  "helpful": "Did this page help?", "get": "Pack pages opened",
                  "download": "Release downloads", "file": "File downloads", "copy": "Copy buttons",
                  "out": "Links leaving the site", "pages": "Pages"}
-        out += ["## On the site", ""]
+        out += ["## On the site", "",
+                f"{goat.get('visits', 0):,} page views, {goat.get('actions', 0):,} actions.", ""]
         for kind, title in named.items():
             if kind in actions:
                 out += [f"### {title}", "", *_table(("Name", "Visits"), [(n, f"{c:,}") for n, c in actions[kind]])]
