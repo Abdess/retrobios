@@ -790,10 +790,6 @@ class ASameSizeReuploadIsSeen(unittest.TestCase):
         )
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class AVerifiedPathKeepsItsBytes(unittest.TestCase):
     """fetch_large_file verified a cached copy and returned its name. Another
     run that found the release re-uploaded then replaced that name with the
@@ -838,3 +834,7 @@ class AVerifiedPathKeepsItsBytes(unittest.TestCase):
             [p.name for p in (self.dir / largefiles.VERIFIED_STORE).iterdir()],
             [hashlib.sha1(PAYLOAD_B).hexdigest()],
         )
+
+
+if __name__ == "__main__":
+    unittest.main()
