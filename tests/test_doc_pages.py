@@ -1986,3 +1986,20 @@ class ArchivedIsWhatTheToolsDo(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TheCatalogRowsStateFacts(unittest.TestCase):
+    """tools.md said "redump.org serves stale DATs" and "Dat-o-Matic blocks
+    automation", verdicts on two preservation projects, and gave Redump's
+    /static/bios links, which the scraper no longer reads."""
+
+    def test_dates_and_routes_not_verdicts(self):
+        text = (WIKI / "tools.md").read_text(encoding="utf-8")
+        rows = [line for line in text.splitlines()
+                if line.startswith(("| Redump |", "| No-Intro |"))]
+        self.assertEqual(len(rows), 2)
+        for word in ("stale", "blocks"):
+            self.assertNotIn(word, " ".join(rows))
+        scraper = (ROOT / "scripts" / "scraper" / "redump_dat_scraper.py").read_text(encoding="utf-8")
+        self.assertIn("/bios/<CODE>", scraper)
+        self.assertIn("`/bios/<CODE>`", rows[0])
