@@ -264,6 +264,13 @@ class Descriptions(unittest.TestCase):
         self.assertLessEqual(len(text), 155)
         self.assertFalse(text.endswith("..."), text)
 
+    def test_a_switch_emulator_reads_keys(self) -> None:
+        self.assertEqual(gs._snippet_noun(["prod.keys", "dev.keys", "title.keys", "key_retail.bin"], 4, 4), "keys")
+        self.assertEqual(gs._snippet_noun(["prod.keys", "title.keys", "<firmware>.zip", "a.txt"], 3, 4),
+                         "keys and firmware")
+        self.assertEqual(gs._snippet_noun(["gba_bios.bin", "gb_bios.bin"], 2, 2), "BIOS")
+        self.assertEqual(gs._snippet_noun(["oot.z64", "oot-mq.z64", "font.bin"], 1, 3), "files")
+
     def test_an_any_name_snippet_says_what_to_do(self) -> None:
         saved = dict(gs.PAGE_DATA)
         self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
@@ -356,6 +363,15 @@ class GetPagesSitInYourSetup(unittest.TestCase):
         for rel in get_pages:
             with self.subTest(page=rel):
                 self.assertIn("/" + sitestarlight._sidebar_link(rel).strip("/"), setup)
+
+    def test_a_get_page_is_dated_by_its_release(self):
+        """The sitemap gave no date to the pages that change only with a release."""
+        saved = dict(gs.PAGE_DATA)
+        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
+        record = json.loads((REPO_ROOT / "release.json").read_text(encoding="utf-8"))
+        tag = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", record["tag"])
+        gs.generate_get_page("retroarch")
+        self.assertEqual(gs.PAGE_DATA["get/retroarch.md"], {"dateModified": "-".join(tag.groups())})
 
     def test_no_page_is_left_out_of_every_tab(self):
         nav = _nav()
