@@ -24,6 +24,7 @@ import re
 import shutil
 import subprocess
 import sys
+import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -70,6 +71,22 @@ MAX_FILE_SIZE = 100 * 1024 * 1024
 LARGE_FILE_ISSUE_URL = (
     "https://github.com/Abdess/retrobios/issues/new?template=missing-bios.yml"
 )
+
+
+def large_file_issue_url(result: ValidationResult) -> str:
+    """The issue form with the values this run computed already filled in.
+
+    GitHub fills an issue form field from the query parameter named by its
+    id: filename, sha1, md5 and size in missing-bios.yml.
+    """
+    fields = {
+        "title": f"[BIOS] Missing: {result.filename}",
+        "filename": result.filename,
+        "sha1": result.sha1,
+        "md5": result.md5,
+        "size": str(result.size),
+    }
+    return f"{LARGE_FILE_ISSUE_URL}&{urllib.parse.urlencode(fields)}"
 
 
 class ValidationResult:
@@ -358,14 +375,15 @@ def validate_file(
     if ext in BLOCKED_EXTENSIONS:
         result.add_check(False, f"Blocked file extension: {ext}")
 
-    if result.size > MAX_FILE_SIZE:
+    too_large = result.size > MAX_FILE_SIZE
+    if too_large:
         # GitHub refuses a pushed file over 100 MiB, so a pull request cannot
         # carry it. Only a maintainer can add an asset to the release.
         result.add_check(
             False,
             f"File too large for git ({result.size:,} > {MAX_FILE_SIZE:,} bytes). "
-            "Leave it out of the pull request and open an issue "
-            f"({LARGE_FILE_ISSUE_URL}) with the hashes above and where the file "
+            "Leave it out of the pull request and open an issue, its hashes "
+            f"filled in ({large_file_issue_url(result)}), saying where the file "
             "can be obtained: a maintainer adds it to the `large-files` release.",
         )
     elif result.size == 0:
@@ -449,8 +467,8 @@ def validate_file(
         result.outcome = "unknown"
         result.add_warning(
             "Not recognised: no platform list or emulator profile declares this "
-            "file. Say in the pull request which emulator reads it, for which "
-            "system, and where the dump comes from"
+            f"file. Say in the {'issue' if too_large else 'pull request'} which "
+            "emulator reads it, for which system, and where the dump comes from"
         )
 
     normalized = os.path.normpath(relative)
@@ -466,7 +484,11 @@ def validate_file(
         set(),
     )
     expected_folders = sorted(expected)
-    if normalized.startswith("bios" + os.sep):
+    if too_large:
+        # The file stays out of the pull request, so no folder of bios/ is
+        # the contributor's to choose: the release asset is placed by hand.
+        pass
+    elif normalized.startswith("bios" + os.sep):
         parts = normalized.split(os.sep)
         here = f"bios/{parts[1]}/{parts[2]}/" if len(parts) >= 4 else ""
         makers = {folder.split("/")[1] for folder in expected}
