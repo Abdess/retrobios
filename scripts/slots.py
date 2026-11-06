@@ -1000,10 +1000,6 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="JSON output")
     parser.add_argument(
-        "--include-archived", action="store_true",
-        help="with all platforms, the archived ones too (RetroPie)",
-    )
-    parser.add_argument(
         "--target", "-t", help="judge only the cores a hardware target builds",
     )
     parser.add_argument(
@@ -1028,14 +1024,10 @@ def main() -> int:
     profiles = load_emulator_profiles(args.emulators_dir)
     if args.platform:
         require_platform(args.platform, args.platforms_dir)
-    if args.include_archived and args.platform:
-        parser.error("--include-archived widens the list of all platforms; --platform names one")
     names = (
         [args.platform]
         if args.platform
-        else list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived
-        )
+        else list_registered_platforms(args.platforms_dir)
     )
     target_cores: dict[str, set[str] | None] = {}
     if args.target:

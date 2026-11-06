@@ -245,7 +245,7 @@ class VisibleWordsStayUnderTheirCeiling(unittest.TestCase):
     def test_platform_pages(self):
         from common import list_registered_platforms
 
-        mains = set(list_registered_platforms(str(REPO_ROOT / "platforms"), include_archived=True))
+        mains = set(list_registered_platforms(str(REPO_ROOT / "platforms")))
         for page in sorted(_SITE.glob("*/index.html")):
             name = page.parent.name
             text = page.read_text(encoding="utf-8")

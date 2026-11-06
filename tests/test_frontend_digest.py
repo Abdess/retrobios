@@ -43,7 +43,7 @@ class FrontendDigestDecides(unittest.TestCase):
         (root / "emulators").mkdir()
         self.emulators = root / "emulators"
         (self.platforms / "_registry.yml").write_text(
-            yaml.safe_dump({"platforms": {"digestplat": {"status": "active"}}})
+            yaml.safe_dump({"platforms": {"digestplat": {"config": "digestplat.yml"}}})
         )
         (self.platforms / "digestplat.yml").write_text(yaml.safe_dump({
             "platform": "DigestPlat",

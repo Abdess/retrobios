@@ -1436,7 +1436,7 @@ def system_search_aliases(sys_id: str) -> list[str]:
 
         platforms_dir = str(siteinputs.current().platforms)
         index: dict[str, set[str]] = {}
-        for platform in list_registered_platforms(platforms_dir, include_archived=True):
+        for platform in list_registered_platforms(platforms_dir):
             config = load_platform_config(platform, platforms_dir)
             names = platform_system_names(config, list(config.get("systems", {})))
             for owner, spelled in names.items():

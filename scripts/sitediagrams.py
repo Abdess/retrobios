@@ -328,8 +328,8 @@ def _registry_in(platforms_dir: str) -> dict:
 
 
 def setups() -> tuple[str, ...]:
-    """The registered setups, archived ones included: each has its own page,
-    pack and file list, so every count of setups on the site is this one."""
+    """The registered setups: each has its own page, pack and file list, so
+    every count of setups on the site is this one."""
     return _setups_in(str(siteinputs.current().platforms))
 
 
@@ -337,7 +337,7 @@ def setups() -> tuple[str, ...]:
 def _setups_in(platforms_dir: str) -> tuple[str, ...]:
     from common import list_registered_platforms
 
-    return tuple(sorted(list_registered_platforms(platforms_dir, include_archived=True)))
+    return tuple(sorted(list_registered_platforms(platforms_dir)))
 
 
 def setups_named(named: list[str]) -> str:

@@ -83,7 +83,7 @@ def load_platform_files(
     declared = {}
     platform_data_dirs = {}
     for platform_name in platforms or list_registered_platforms(
-        platforms_dir, include_archived=True
+        platforms_dir
     ):
         config = load_platform_config(platform_name, platforms_dir)
         for sys_id, system in config.get("systems", {}).items():
@@ -114,7 +114,7 @@ def declared_names(
         [
             load_platform_config(platform_name, platforms_dir)
             for platform_name in platforms or list_registered_platforms(
-                platforms_dir, include_archived=True
+                platforms_dir
             )
         ],
         db,
@@ -133,7 +133,7 @@ def folded_declared_slots(
 
     slots: set[str] = set()
     for platform_name in platforms or list_registered_platforms(
-        platforms_dir, include_archived=True
+        platforms_dir
     ):
         config = load_platform_config(platform_name, platforms_dir)
         slots |= case_folded_slots(config, platform_declarations(config, db))
@@ -1257,7 +1257,7 @@ def main() -> None:
 
         standalone_cores = merged_standalone_set(
             load_platform_config(name, args.platforms_dir)
-            for name in list_registered_platforms(args.platforms_dir, include_archived=True)
+            for name in list_registered_platforms(args.platforms_dir)
         )
 
     if not profiles:

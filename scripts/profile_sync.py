@@ -3532,17 +3532,14 @@ def _platform_cores(emulators_dir: str, platforms_dir: str) -> tuple[tuple[str, 
         (platform, frozenset(resolve_platform_cores(
             load_platform_config(platform, platforms_dir), profiles
         )))
-        for platform in list_registered_platforms(platforms_dir, include_archived=True)
+        for platform in list_registered_platforms(platforms_dir)
     )
 
 
 def shipping_platforms(
     name: str, emulators_dir: str, platforms_dir: str = "platforms",
 ) -> list[str]:
-    """The registered platforms whose cores resolve to this profile.
-
-    Archived platforms count: RetroPie still builds the packages it lists.
-    """
+    """The registered platforms whose cores resolve to this profile."""
     return [
         platform
         for platform, cores in _platform_cores(

@@ -61,7 +61,7 @@ class ReleaseAssetNotCached(unittest.TestCase):
         }
         Path("platforms/big.yml").write_text(yaml.dump(self.config))
         Path("platforms/_registry.yml").write_text(
-            yaml.dump({"platforms": {"big": {"status": "active"}}})
+            yaml.dump({"platforms": {"big": {"config": "big.yml"}}})
         )
         common._platform_config_cache.clear()
         common._emulator_profiles_cache.clear()

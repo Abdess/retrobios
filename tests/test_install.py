@@ -2243,7 +2243,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         self.assertEqual(set(install.AVAILABLE_PLATFORMS), manifests)
 
     def test_every_registered_platform_is_installable(self):
-        """Archived platforms still ship packs, so they still need a manifest."""
+        """The installer serves every registered platform from its manifest."""
         import sys as _sys
 
         _sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -2251,7 +2251,7 @@ class TestAvailablePlatforms(unittest.TestCase):
 
         registered = set(
             list_registered_platforms(
-                str(REPO_ROOT / "platforms"), include_archived=True
+                str(REPO_ROOT / "platforms")
             )
         )
         missing = registered - set(install.AVAILABLE_PLATFORMS)

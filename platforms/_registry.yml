@@ -184,7 +184,6 @@ _standalone_copies: &standalone_copies
 platforms:
   retroarch:
     config: retroarch.yml
-    status: active
     release_pack: true
     device_group: computer
     extract_to: system/
@@ -503,7 +502,6 @@ platforms:
       standalone_copies: *standalone_copies
   batocera:
     config: batocera.yml
-    status: active
     release_pack: true
     device_group: gaming-os
     extract_to: /userdata/bios/
@@ -541,7 +539,6 @@ platforms:
       standalone_copies: *standalone_copies
   recalbox:
     config: recalbox.yml
-    status: active
     device_group: gaming-os
     extract_to: /recalbox/share/bios/
     logo: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/svg/recalbox.svg
@@ -579,7 +576,6 @@ platforms:
       standalone_copies: *standalone_copies
   retrobat:
     config: retrobat.yml
-    status: active
     release_pack: true
     device_group: computer
     extract_to: bios/
@@ -627,7 +623,6 @@ platforms:
       standalone_copies: *standalone_copies
   emudeck:
     config: emudeck.yml
-    status: active
     release_pack: true
     device_group: computer
     extract_to: ~/Emulation/bios/
@@ -688,7 +683,6 @@ platforms:
       standalone_copies: *standalone_copies
   lakka:
     config: lakka.yml
-    status: active
     device_group: gaming-os
     extract_to: /storage/system/
     logo: https://raw.githubusercontent.com/libretro/retroarch-assets/master/src/xmb/flatui/lakka.svg
@@ -719,7 +713,6 @@ platforms:
         bios_path: /storage/system
   retrodeck:
     config: retrodeck.yml
-    status: active
     device_group: computer
     extract_to: ~/retrodeck/
     logo: https://raw.githubusercontent.com/RetroDECK/RetroDECK/main/res/icon.svg
@@ -769,7 +762,6 @@ platforms:
       standalone_copies: *standalone_copies
   romm:
     config: romm.yml
-    status: active
     release_pack: true
     device_group: server
     extract_to: library/bios/
@@ -838,7 +830,6 @@ platforms:
     - xemu
   rocknix:
     config: rocknix.yml
-    status: active
     device_group: handheld
     extract_to: /storage/roms/bios/
     logo: https://avatars.githubusercontent.com/u/163176886
@@ -868,7 +859,6 @@ platforms:
   # Several device images, no per-device core list: no target file.
   amberelec:
     config: amberelec.yml
-    status: active
     device_group: handheld
     extract_to: /storage/roms/
     logo: https://avatars.githubusercontent.com/u/102820909
@@ -909,7 +899,6 @@ platforms:
   # the dict and the later entry is the one Python keeps.
   emuelec:
     config: emuelec.yml
-    status: active
     device_group: handheld
     extract_to: /storage/roms/
     logo: https://avatars.githubusercontent.com/u/57574835
@@ -942,7 +931,6 @@ platforms:
   # BR2_PACKAGE_BATOCERA_TARGET_*), read by knulli_targets_scraper.
   knulli:
     config: knulli.yml
-    status: active
     device_group: handheld
     extract_to: /userdata/bios/
     logo: https://avatars.githubusercontent.com/u/166268572
@@ -982,7 +970,6 @@ platforms:
         derives_from: Batocera
   retropie:
     config: retropie.yml
-    status: archived
     device_group: gaming-os
     extract_to: ~/RetroPie/BIOS/
     logo: https://avatars.githubusercontent.com/u/11378204
@@ -1010,7 +997,6 @@ platforms:
         path: $HOME/RetroPie/BIOS
   bizhawk:
     config: bizhawk.yml
-    status: active
     device_group: computer
     extract_to: Firmware/
     # EmuHawk's application icon (<ApplicationIcon> in BizHawk.Client.EmuHawk.csproj).
@@ -1047,7 +1033,6 @@ platforms:
         bios_subdir: Firmware
   misterfpga:
     config: misterfpga.yml
-    status: active
     release_pack: true
     device_group: fpga
     extract_to: /media/fat/games/
@@ -1074,7 +1059,6 @@ platforms:
         bios_path: /media/fat/games
   minui:
     config: minui.yml
-    status: active
     device_group: handheld
     # The card root: minarch hands each core SDCARD_PATH/Bios/<TAG>
     # (workspace/all/minarch/minarch.c:2943).
@@ -1103,7 +1087,6 @@ platforms:
         first_line_prefix: MinUI-
   nextui:
     config: nextui.yml
-    status: active
     device_group: handheld
     # minarch hands each core SDCARD_PATH/Bios/<TAG>
     # (workspace/all/minarch/ma_core.c:76).
@@ -1131,7 +1114,6 @@ platforms:
         first_line_prefix: NextUI-
   myminui:
     config: myminui.yml
-    status: active
     device_group: handheld
     # minarch hands each core SDCARD_PATH/Bios/<TAG>
     # (workspace/all/minarch/minarch.c:3532).

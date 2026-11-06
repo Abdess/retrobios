@@ -932,7 +932,7 @@ class PickerFollowsTheRegistry(unittest.TestCase):
     def test_picker_offers_only_registry_packs(self):
         offered = _picker_packs()
         self.assertTrue(offered)
-        released = set(list_release_pack_platforms(str(REPO_ROOT / "platforms"), include_archived=True))
+        released = set(list_release_pack_platforms(str(REPO_ROOT / "platforms")))
         self.assertLessEqual(offered, released)
 
     def test_picker_setup_and_get_pages_agree(self):

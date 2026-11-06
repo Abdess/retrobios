@@ -34,8 +34,7 @@ Steps, numbered as the run prints them:
 come from .cache/large/ only.
 
 Usage:
-    python scripts/pipeline.py                    # active platforms
-    python scripts/pipeline.py --include-archived # all platforms
+    python scripts/pipeline.py                    # every registered platform
     python scripts/pipeline.py --skip-packs       # skip steps 4, 4b, 4c, 5 and 6
     python scripts/pipeline.py --skip-docs        # skip steps 7, 8 and 8b
     python scripts/pipeline.py --offline          # no network, see above
@@ -326,13 +325,13 @@ def _match_key(label: str) -> set[str]:
     } - {""}
 
 
-def release_pack_keys(platforms_dir: str = "platforms", include_archived: bool = False) -> set[str]:
+def release_pack_keys(platforms_dir: str = "platforms") -> set[str]:
     """Comparable identities of the platforms --all builds a pack for: their
     registry ids and display names, normalized as _match_key does."""
     from common import list_release_pack_platforms, load_platform_config  # noqa: PLC0415
 
     keys: set[str] = set()
-    for name in list_release_pack_platforms(platforms_dir, include_archived):
+    for name in list_release_pack_platforms(platforms_dir):
         keys |= _match_key(name)
         keys |= _match_key(str(load_platform_config(name, platforms_dir).get("platform", name)))
     return keys
@@ -714,8 +713,7 @@ def narrowed_variants(
 
 def check_narrowed_packs(
     emulators_dir: str = "emulators", platforms_dir: str = "platforms",
-    db_path: str = "database.json", include_archived: bool = False,
-    full: bool = False,
+    db_path: str = "database.json", full: bool = False,
 ) -> bool:
     """Build each narrowed platform pack in memory and compare it with verify.
 
@@ -753,7 +751,7 @@ def check_narrowed_packs(
     profiles = load_emulator_profiles(emulators_dir)
     registry = load_data_dir_registry(platforms_dir)
     groups = group_identical_platforms(
-        list_registered_platforms(platforms_dir, include_archived=include_archived),
+        list_registered_platforms(platforms_dir),
         platforms_dir,
     )
     was_offline = packresolve._OFFLINE
@@ -837,7 +835,7 @@ def split_differences(
 
 def check_split_packs(
     emulators_dir: str = "emulators", platforms_dir: str = "platforms",
-    db_path: str = "database.json", include_archived: bool = False,
+    db_path: str = "database.json",
 ) -> bool:
     """Build each platform's --split parts in memory and compare them with
     the full pack: the parts must add up to it, path for path and byte for
@@ -863,7 +861,7 @@ def check_split_packs(
     profiles = load_emulator_profiles(emulators_dir)
     registry = load_data_dir_registry(platforms_dir)
     groups = group_identical_platforms(
-        list_registered_platforms(platforms_dir, include_archived=include_archived),
+        list_registered_platforms(platforms_dir),
         platforms_dir,
     )
     was_offline = packresolve._OFFLINE
@@ -917,8 +915,6 @@ def integrity_command(args: argparse.Namespace) -> list[str]:
         sys.executable, "scripts/generate_pack.py", "--all", "--verify-packs",
         "--output-dir", args.output_dir,
     ]
-    if args.include_archived:
-        cmd.append("--include-archived")
     # Without the target a targeted run reported every system the target
     # removed as missing from a pack that was exactly right. Without
     # --all-variants the five narrowed packs were never opened, and an empty
@@ -1073,9 +1069,6 @@ def _truth_steps(args: argparse.Namespace, results: dict) -> bool:
 
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Run the full retrobios pipeline")
-    parser.add_argument(
-        "--include-archived", action="store_true", help="Include archived platforms"
-    )
     parser.add_argument(
         "--skip-packs",
         action="store_true",
@@ -1311,8 +1304,6 @@ def main() -> None:
         sys.executable, "scripts/verify.py", "--all", "--strict",
         "--destinations", destinations_file,
     ]
-    if args.include_archived:
-        verify_cmd.append("--include-archived")
     if args.target:
         verify_cmd.extend(["--target", args.target])
     if args.offline:
@@ -1338,11 +1329,9 @@ def main() -> None:
     # upstream declaration no build can repair, so this reports and never gates.
     # A crash is not a report: without --strict slots.py exits 0 on every
     # conflict, so a non-zero code means it never finished reading.
-    # The same platforms and cores verify judged: without these flags the
-    # arbitration of an --include-archived run never looked at RetroPie.
+    # The same cores verify judged: without the target the arbitration of a
+    # targeted run judged cores the target does not ship.
     slots_cmd = [sys.executable, "scripts/slots.py"]
-    if args.include_archived:
-        slots_cmd.append("--include-archived")
     if args.target:
         slots_cmd.extend(["--target", args.target])
     ok, _ = run(slots_cmd, "3b slot arbitration")
@@ -1381,8 +1370,6 @@ def main() -> None:
             "--output-dir",
             args.output_dir,
         ]
-        if args.include_archived:
-            pack_cmd.append("--include-archived")
         if args.offline:
             pack_cmd.append("--offline")
         else:
@@ -1412,8 +1399,6 @@ def main() -> None:
             "--output-dir",
             "install",
         ]
-        if args.include_archived:
-            manifest_cmd.append("--include-archived")
         if args.offline:
             manifest_cmd.append("--offline")
         else:
@@ -1479,15 +1464,13 @@ def main() -> None:
     elif pack_output and verify_output:
         ok = check_consistency(
             verify_output, pack_output,
-            release_pack_keys(include_archived=args.include_archived),
+            release_pack_keys(),
         )
         # Counts can agree while the paths differ, both ways at once.
         ok = check_pack_destinations(destinations_file, pack_output) and ok
         ok = check_emulator_packs(full=args.full_narrowings) and ok
-        ok = check_narrowed_packs(
-            include_archived=args.include_archived, full=args.full_narrowings,
-        ) and ok
-        ok = check_split_packs(include_archived=args.include_archived) and ok
+        ok = check_narrowed_packs(full=args.full_narrowings) and ok
+        ok = check_split_packs() and ok
         print(
             f"--- {step_title(STEP_LABELS['consistency'])}, counts and paths: "
             f"{'OK' if ok else 'FAILED'} ---"

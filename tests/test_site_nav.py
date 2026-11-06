@@ -52,7 +52,7 @@ def _nav() -> list:
     registry = load_platform_registry(str(platforms))
     coverages = {
         key: {"platform": load_platform_config(key, str(platforms))["platform"]}
-        for key in list_registered_platforms(str(platforms), include_archived=True)
+        for key in list_registered_platforms(str(platforms))
     }
     manufacturers = {"Sony": {}, "Sega": {}, "ScummVM": {}}
     profiles = {
@@ -312,7 +312,7 @@ class Redirects(unittest.TestCase):
 
 class PlatformShareCards(unittest.TestCase):
     def test_every_platform_page_shares_its_own_card(self):
-        for key in list_registered_platforms(str(REPO_ROOT / "platforms"), include_archived=True):
+        for key in list_registered_platforms(str(REPO_ROOT / "platforms")):
             with self.subTest(platform=key):
                 card = REPO_ROOT / "docs_assets" / "og" / "platforms" / f"{key}.png"
                 data = card.read_bytes()
@@ -437,7 +437,7 @@ def _front(text: str) -> str:
 
 
 def _moved_platform_pages() -> list[Path]:
-    platforms = set(list_registered_platforms(str(REPO_ROOT / "platforms"), include_archived=True))
+    platforms = set(list_registered_platforms(str(REPO_ROOT / "platforms")))
     folder = DOCS / "platforms"
     if not folder.is_dir():
         return []

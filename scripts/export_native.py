@@ -1009,7 +1009,6 @@ def main() -> None:
     if args.all:
         platforms = list_registered_platforms(
             args.platforms_dir,
-            include_archived=True,
         )
     else:
         require_platform(args.platform, args.platforms_dir)

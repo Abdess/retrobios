@@ -1779,7 +1779,7 @@ def generate_emulator_pack(
                 else:
                     report_missing(archive_name, archive_dest)
 
-            # Pack individual files (skip archived ones). The entries of one
+            # Pack individual files (skip archive members). The entries of one
             # profile on one destination are the releases the code accepts
             # there (raze's seven SW.GRP): the first one the core accepts
             # fills the slot, as verify --emulator credits it, and the slot
@@ -2605,10 +2605,7 @@ def _resolve_systems(args: argparse.Namespace, parser: argparse.ArgumentParser) 
         config = None
         systems = sorted({
             sid
-            for name in list_registered_platforms(
-                args.platforms_dir,
-                include_archived=args.include_archived or args.manifest,
-            )
+            for name in list_registered_platforms(args.platforms_dir)
             for sid in load_platform_config(name, args.platforms_dir).get("systems", {})
         })
         listing = "--platform <name> --list-systems"
@@ -2933,9 +2930,7 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
     elif args.all:
         # The packs --all builds: a platform without release_pack has no pack
         # to check, and its absence from the directory is no failure.
-        platforms = list_release_pack_platforms(
-            args.platforms_dir, include_archived=args.include_archived
-        )
+        platforms = list_release_pack_platforms(args.platforms_dir)
     else:
         raise ValueError("--verify-packs requires --platform or --all")
 
@@ -3334,15 +3329,6 @@ def _refuse_refresh_data(args: argparse.Namespace, parser: argparse.ArgumentPars
                 parser.error(f"{name} is incompatible with {flag}")
 
 
-def _refuse_include_archived(
-    args: argparse.Namespace, parser: argparse.ArgumentParser
-) -> None:
-    """Only --all chooses among registered platforms. Every other mode names
-    its own platform, emulator, system or hash."""
-    if args.include_archived and not args.all:
-        parser.error("--include-archived requires --all")
-
-
 def _refuse_unapplied_flags(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
     """Refuse every flag the requested mode would not apply.
 
@@ -3350,7 +3336,6 @@ def _refuse_unapplied_flags(args: argparse.Namespace, parser: argparse.ArgumentP
     about an artifact the caller did not name. Run before any quick-exit
     mode, since --verify-packs and --manifest-targets return early.
     """
-    _refuse_include_archived(args, parser)
     # Parsed before the quick-exit modes: --verify-packs returns early and
     # still needs the region priority list to narrow its expectation.
     args.regions = []
@@ -3392,8 +3377,7 @@ QUICK_MODE_FLAGS: dict[str, set[str]] = {
     # Checks packs already on disk against the platform's own list, narrowed
     # by region and target and by nothing else.
     "--verify-packs": {
-        "--platform", "--all", "--target", "--region", "--include-archived",
-        "--no-game-data",
+        "--platform", "--all", "--target", "--region", "--no-game-data",
     },
     # One manifest per hardware target, from the target files themselves.
     "--manifest-targets": set(),
@@ -3430,7 +3414,6 @@ def _given_flags(args: argparse.Namespace) -> set[str]:
         "--list-emulators": args.list_emulators,
         "--list-systems": args.list_systems,
         "--list-targets": args.list_targets,
-        "--include-archived": args.include_archived,
         "--refresh-data": args.refresh_data,
         "--no-refresh-data": args.no_refresh_data,
     }
@@ -3485,9 +3468,6 @@ def _main(held: contextlib.ExitStack) -> None:
     )
     parser.add_argument(
         "--list-systems", action="store_true", help="List available systems"
-    )
-    parser.add_argument(
-        "--include-archived", action="store_true", help="Include archived platforms"
     )
     parser.add_argument(
         "--platforms-dir", default=DEFAULT_PLATFORMS_DIR,
@@ -3760,16 +3740,12 @@ def _main(held: contextlib.ExitStack) -> None:
     # Platform mode
     if args.all and args.manifest:
         # Install manifests cover every registered platform: the installer
-        # serves each one, with or without a release pack. "Archived" keeps a
-        # platform out of the runs that cover every platform, not out of the
-        # installer: it has not lost its users.
-        platforms = list_registered_platforms(args.platforms_dir, include_archived=True)
+        # serves each one, with or without a release pack.
+        platforms = list_registered_platforms(args.platforms_dir)
     elif args.all:
         # A release publishes the packs the registry marks release_pack and
         # nothing else: a pack built for another platform is one nobody uploads.
-        platforms = list_release_pack_platforms(
-            args.platforms_dir, include_archived=args.include_archived
-        )
+        platforms = list_release_pack_platforms(args.platforms_dir)
         if not platforms:
             parser.error("no registered platform has release_pack: true")
     elif args.platform:
@@ -5291,31 +5267,27 @@ def _expected_pack_names(
         for p in platforms
     }
     # Groups depend on which platforms a run built: the release packs of
-    # --all, alone or with --include-archived. Both compositions are names a
-    # pack can carry.
-    for include_archived in (False, True):
-        pool = list_release_pack_platforms(
-            platforms_dir, include_archived=include_archived
-        )
-        cache = None
-        if target_name:
-            try:
-                cache, pool = build_target_cores_cache(
-                    pool, target_name, platforms_dir, is_all=True
-                )
-            except ValueError:
-                # No platform has the target: no pack was built under it.
-                continue
-        for group, representative in group_identical_platforms(
-            pool, platforms_dir, cache
-        ):
-            if len(group) < 2:
-                continue
-            stem = _platform_pack_stem(group, representative, platforms_dir)
-            for tags in narrow_tags(representative):
-                for p in group:
-                    if p in names:
-                        names[p].add(f"{stem}{tags}_BIOS_Pack.zip")
+    # --all.
+    pool = list_release_pack_platforms(platforms_dir)
+    cache = None
+    if target_name:
+        try:
+            cache, pool = build_target_cores_cache(
+                pool, target_name, platforms_dir, is_all=True
+            )
+        except ValueError:
+            # No platform has the target: no pack was built under it.
+            return names
+    for group, representative in group_identical_platforms(
+        pool, platforms_dir, cache
+    ):
+        if len(group) < 2:
+            continue
+        stem = _platform_pack_stem(group, representative, platforms_dir)
+        for tags in narrow_tags(representative):
+            for p in group:
+                if p in names:
+                    names[p].add(f"{stem}{tags}_BIOS_Pack.zip")
     return names
 
 
@@ -5442,7 +5414,7 @@ def verify_and_finalize_packs(
     # By the exact name this run's reduction gives a platform's pack, never by
     # substring: a _Custom or regional pack left by another run was judged
     # against this run's expectation and failed it.
-    registered = list_registered_platforms(platforms_dir, include_archived=True)
+    registered = list_registered_platforms(platforms_dir)
     expected = _expected_pack_names(
         registered, platforms_dir, regions, target_name, no_game_data=no_game_data
     )

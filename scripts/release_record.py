@@ -58,7 +58,7 @@ def release_owners(platforms_dir: str = "platforms") -> dict[str, list[str]]:
     """
     import generate_pack
 
-    platforms = list_release_pack_platforms(platforms_dir, include_archived=True)
+    platforms = list_release_pack_platforms(platforms_dir)
     owners: dict[str, list[str]] = {}
     for platform, names in generate_pack._expected_pack_names(
         platforms, platforms_dir, None, None
@@ -150,7 +150,7 @@ def advertised(record: dict, platforms_dir: str = "platforms") -> dict:
     """
     if not record:
         return {}
-    released = set(list_release_pack_platforms(platforms_dir, include_archived=True))
+    released = set(list_release_pack_platforms(platforms_dir))
     packs = {}
     for name, pack in record.get("packs", {}).items():
         serves = [p for p in pack.get("platforms", ()) if p in released]

@@ -185,7 +185,7 @@ class DocumentedSteps(unittest.TestCase):
         self.assertEqual(sorted(f for f in fields if f"`{f}`" not in page), [])
 
     def test_every_option_says_what_it_does(self):
-        """--include-archived and --all-variants, and 94 others, showed in
+        """--all-variants, and 95 others, showed in
         --help with no text: their constraints surfaced only as errors."""
         sources = [*SCRIPTS.rglob("*.py"), REPO_ROOT / "install.py"]
         silent = []

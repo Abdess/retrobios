@@ -1026,7 +1026,7 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
             "systems": {"sys": {"files": []}},
         }))
         Path("platforms/_registry.yml").write_text(
-            json.dumps({"platforms": {"p": {"status": "active"}}})
+            json.dumps({"platforms": {"p": {"config": "p.yml"}}})
         )
         Path("emulators").mkdir()
         Path("emulators/core.yml").write_text(json.dumps({
@@ -1102,7 +1102,7 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
             "standalone_cores": ["dsa"], "systems": {"sys": {"files": []}},
         }))
         Path("platforms/_registry.yml").write_text(
-            json.dumps({"platforms": {"p": {"status": "active"}}})
+            json.dumps({"platforms": {"p": {"config": "p.yml"}}})
         )
         Path("emulators").mkdir()
         Path("emulators/dsa.yml").write_text(json.dumps({
@@ -1189,7 +1189,7 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
             ]}},
         }))
         Path("platforms/_registry.yml").write_text(
-            json.dumps({"platforms": {"p": {"status": "active"}}})
+            json.dumps({"platforms": {"p": {"config": "p.yml"}}})
         )
         Path("emulators").mkdir()
         Path("emulators/dsa.yml").write_text(json.dumps({

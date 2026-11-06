@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://abdess.github.io/retrobios/api/v1/schemas/registry.schema.json",
   "title": "RetroBIOS platform registry",
-  "description": "platforms/_registry.yml: each registered platform, its status, and whether a release publishes a ZIP pack for it. Install detection and the other per-platform fields are read by their own tools.",
+  "description": "platforms/_registry.yml: each registered platform and whether a release publishes a ZIP pack for it. Install detection and the other per-platform fields are read by their own tools.",
   "type": "object",
   "required": ["platforms"],
   "properties": {
@@ -12,13 +12,9 @@
       "propertyNames": { "pattern": "^[a-z0-9_]+$" },
       "additionalProperties": {
         "type": "object",
-        "required": ["config", "status"],
+        "required": ["config"],
         "properties": {
           "config": { "type": "string", "pattern": "\\.yml$" },
-          "status": {
-            "description": "active: scraped and released. archived: the configuration is kept, no scheduled scrape.",
-            "enum": ["active", "archived"]
-          },
           "release_pack": {
             "description": "true when a release publishes the platform's full ZIP pack. Absent or false: the installer serves the platform, its manifest is written all the same.",
             "type": "boolean"

@@ -203,7 +203,7 @@ class AFileNobodyHoldsIsAnOmission(unittest.TestCase):
             "systems": {"diablo": {"files": []}},
         }))
         (root / "platforms" / "_registry.yml").write_text(yaml.safe_dump({
-            "platforms": {"fakeplat": {"config": "fakeplat.yml", "status": "active"}},
+            "platforms": {"fakeplat": {"config": "fakeplat.yml"}},
         }))
         (root / "emulators" / "devil.yml").write_text(yaml.safe_dump({
             "emulator": "Devil", "type": "libretro", "cores": ["devil"],

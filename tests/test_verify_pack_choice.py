@@ -47,7 +47,6 @@ class VerifyPackChoice(unittest.TestCase):
             "db": str(self.db),
             "platform": "retroarch",
             "all": False,
-            "include_archived": False,
             "emulators_dir": "emulators",
             "platforms_dir": "platforms",
             "output_dir": str(self.out),
@@ -160,13 +159,13 @@ class VerifyPackChoice(unittest.TestCase):
 
     def test_the_sweep_checks_release_packs_and_a_named_platform_its_own(self):
         """--all checks the packs a release publishes (release_pack): the
-        RetroPie pack, archived and served by the installer, is left to a
-        check that names it."""
+        RetroPie pack, served by the installer, is left to a check that names
+        it."""
         stem = self.gp._platform_pack_stem(["retropie"], "retropie", "platforms")
         self._touch(f"{stem}_BIOS_Pack.zip")
         self._touch(f"{self.stem}_BIOS_Pack.zip")
         checked = self._run(
-            self._args(platform=None, all=True, include_archived=True)
+            self._args(platform=None, all=True)
         )
         self.assertIn(("retroarch", f"{self.stem}_BIOS_Pack.zip"), checked)
         self.assertNotIn(("retropie", f"{stem}_BIOS_Pack.zip"), checked)

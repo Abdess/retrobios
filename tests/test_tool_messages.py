@@ -606,22 +606,18 @@ class HelpTextsWrapBetweenWords(unittest.TestCase):
                     self.assertIn(line, proc.stdout.splitlines())
 
 
-class ListPlatformsTakesTheSharedFlag(unittest.TestCase):
-    """verify, generate_pack, slots and pipeline say --include-archived."""
+class PlatformListsNameEveryPlatform(unittest.TestCase):
+    def test_list_platforms_prints_every_registered_platform(self):
+        env = {k: v for k, v in os.environ.items() if k != "GITHUB_OUTPUT"}
+        proc = subprocess.run(
+            [sys.executable, "scripts/list_platforms.py"],
+            capture_output=True, text=True, cwd=REPO_ROOT, check=False,
+            env=env, timeout=60,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn("retropie", proc.stdout)
 
-    def test_both_spellings(self):
-        for flag in ("--include-archived", "--all"):
-            with self.subTest(flag=flag):
-                env = {k: v for k, v in os.environ.items() if k != "GITHUB_OUTPUT"}
-                proc = subprocess.run(
-                    [sys.executable, "scripts/list_platforms.py", flag],
-                    capture_output=True, text=True, cwd=REPO_ROOT, check=False,
-                    env=env, timeout=60,
-                )
-                self.assertEqual(proc.returncode, 0, proc.stderr)
-                self.assertIn("retropie", proc.stdout)
-
-    def test_the_pack_list_marks_archived_platforms(self):
+    def test_the_pack_list_marks_installer_only_platforms(self):
         """generate_pack --list printed retropie like a platform with a
         release pack."""
         proc = subprocess.run(
@@ -630,7 +626,7 @@ class ListPlatformsTakesTheSharedFlag(unittest.TestCase):
         )
         self.assertEqual(proc.returncode, 0, proc.stderr)
         lines = proc.stdout.splitlines()
-        self.assertIn("retropie (archived, installer only)", lines)
+        self.assertIn("retropie (installer only)", lines)
         self.assertIn("knulli (installer only)", lines)
         self.assertIn("retroarch", lines)
 

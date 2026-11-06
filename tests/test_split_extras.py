@@ -48,7 +48,7 @@ class SplitPartsCoverTheExtras(unittest.TestCase):
                 },
             }
             (root / "platforms" / "_registry.yml").write_text(
-                yaml.dump({"platforms": {"plat": {"status": "active"}}})
+                yaml.dump({"platforms": {"plat": {"config": "plat.yml"}}})
             )
             (root / "platforms" / "plat.yml").write_text(yaml.dump({
                 "platform": "Plat", "verification_mode": "existence",
@@ -108,7 +108,7 @@ class SplitPartsHoldWhatTheFullPackHolds(unittest.TestCase):
             },
         }
         (root / "platforms" / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"plat": {"status": "active"}}})
+            yaml.dump({"platforms": {"plat": {"config": "plat.yml"}}})
         )
         (root / "platforms" / "plat.yml").write_text(yaml.dump(platform))
         for name, profile in profiles.items():

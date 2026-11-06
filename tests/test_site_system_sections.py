@@ -120,7 +120,7 @@ class SystemLinks(unittest.TestCase):
             cls.sections, _installs = arcade_board_sections(cls.manufacturers, {})
             platforms = [
                 load_platform_config(name, "platforms")
-                for name in list_registered_platforms("platforms", include_archived=True)
+                for name in list_registered_platforms("platforms")
             ]
             cls.ids = siterender.system_ids(profiles, platforms)
 

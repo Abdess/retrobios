@@ -101,7 +101,7 @@ class _Fixture(unittest.TestCase):
         }
         (self.platforms / "handheld.yml").write_text(yaml.dump(platform))
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"handheld": {"status": "active"}}})
+            yaml.dump({"platforms": {"handheld": {"config": "handheld.yml"}}})
         )
         common._platform_config_cache.clear()
         common._emulator_profiles_cache.clear()

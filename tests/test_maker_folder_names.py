@@ -87,7 +87,7 @@ class _Collection(unittest.TestCase):
         Path("emulators/quasi88.yml").write_text(QUASI88)
         Path("platforms/handheld.yml").write_text(yaml.dump(PLATFORM))
         Path("platforms/_registry.yml").write_text(
-            yaml.dump({"platforms": {"handheld": {"status": "active"}}})
+            yaml.dump({"platforms": {"handheld": {"config": "handheld.yml"}}})
         )
         subprocess.run(
             [sys.executable, str(REPO_ROOT / "scripts/generate_db.py"), "--force",
@@ -245,7 +245,7 @@ class NoHashlessNameMatchCrossesMakers(unittest.TestCase):
             if len(parts := entry["path"].split("/")) >= 3 and parts[0] == "bios"
         } - common.BUCKET_FOLDERS
         crossings = []
-        for platform in common.list_registered_platforms("platforms", include_archived=True):
+        for platform in common.list_registered_platforms("platforms"):
             config = common.load_platform_config(platform, "platforms")
             for sys_id, system in config.get("systems", {}).items():
                 makers = {f for f in folders if common.names_manufacturer(sys_id, f)}

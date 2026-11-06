@@ -18,7 +18,6 @@ Cross-references emulator profiles to detect undeclared files used by available 
 Usage:
     python scripts/verify.py --all
     python scripts/verify.py --platform batocera
-    python scripts/verify.py --all --include-archived
     python scripts/verify.py --all --json
 """
 
@@ -2366,7 +2365,7 @@ def verify_emulator(
         emu_results: dict[str, list[tuple[dict, bool, bool]]] = {}
 
         for file_entry in files:
-            # Skip archived files (verified as archive units above)
+            # Skip archive members (verified as archive units above)
             if file_entry.get("archive"):
                 continue
 
@@ -2754,7 +2753,6 @@ def _refuse_listing_narrowings(
         ("--region", getattr(args, "region", None)),
         ("--target", getattr(args, "target", None)),
         ("--standalone", args.standalone),
-        ("--include-archived", args.include_archived),
         ("--json", args.json),
         ("--strict", args.strict),
         ("--verbose", args.verbose),
@@ -2774,7 +2772,6 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
          "--standalone requires --emulator or --system"),
         (args.standalone and args.platform,
          "--standalone is incompatible with --platform"),
-        (args.include_archived and not args.all, "--include-archived requires --all"),
         (args.target and not (args.platform or args.all),
          "--target requires --platform or --all"),
         (args.target and (args.emulator or (args.system and not args.platform)),
@@ -2839,10 +2836,6 @@ def _main(held: contextlib.ExitStack) -> None:
     )
     parser.add_argument(
         "--list-platforms", action="store_true", help="List available platforms"
-    )
-    parser.add_argument(
-        "--include-archived", action="store_true",
-        help="With --all, also verify the archived platforms (RetroPie)",
     )
     parser.add_argument("--target", "-t", help="Hardware target (e.g., switch, rpi4)")
     parser.add_argument(
@@ -2981,9 +2974,7 @@ def _main(held: contextlib.ExitStack) -> None:
 
     # Platform mode (existing)
     if args.all:
-        platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived
-        )
+        platforms = list_registered_platforms(args.platforms_dir)
     elif args.platform:
         platforms = [args.platform]
     else:

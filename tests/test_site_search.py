@@ -338,7 +338,7 @@ PLATFORMS = str(REPO_ROOT / "platforms")
 
 def _sidebar_with_get_pages() -> tuple[dict, list[str]]:
     nav = _nav()
-    names = list_registered_platforms(PLATFORMS, include_archived=True)
+    names = list_registered_platforms(PLATFORMS)
     get_pages = ["get/index.md", *(f"get/{name}.md" for name in names)]
     return sitestarlight.sidebar(nav, _present(nav) | set(get_pages), ANCHORS), get_pages
 

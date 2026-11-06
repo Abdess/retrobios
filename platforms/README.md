@@ -4,7 +4,7 @@ How platform YAML files work and where subdirectory requirements come from.
 
 ## Files
 
-- `_registry.yml` -- platform metadata (name, status, display order)
+- `_registry.yml` -- platform metadata (name, release pack, display order)
 - `_shared.yml` -- shared file groups with canonical destinations
 - `<platform>.yml` -- per-platform BIOS declarations
 - Inheritance: `lakka.yml` inherits `retroarch`, `retropie.yml` inherits `retroarch`

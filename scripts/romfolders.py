@@ -111,7 +111,7 @@ class SystemResolver:
                 use[str(sid)] = use.get(str(sid), 0) + 1
         ids = set(use)
         native: dict[str, dict[str, set[str]]] = {}
-        for platform in list_registered_platforms(platforms_dir, include_archived=True):
+        for platform in list_registered_platforms(platforms_dir):
             config = load_platform_config(platform, platforms_dir)
             ids.update(config.get("systems", {}))
             names: dict[str, set[str]] = {}

@@ -114,7 +114,7 @@ class HeldArchivesMatchTheirRecipes(unittest.TestCase):
         pinned: set[str] = set()
         zipped: dict[str, set[tuple[str, str]]] = defaultdict(set)
         platforms_dir = str(REPO_ROOT / "platforms")
-        for platform in list_registered_platforms(platforms_dir, include_archived=True):
+        for platform in list_registered_platforms(platforms_dir):
             config = load_platform_config(platform, platforms_dir)
             for system in config.get("systems", {}).values():
                 for entry in system.get("files", []) or []:

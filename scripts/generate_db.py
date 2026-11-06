@@ -623,7 +623,7 @@ def _collect_all_aliases(
     platforms_dir = Path("platforms")
     if platforms_dir.is_dir():
         for platform_name in list_registered_platforms(
-            str(platforms_dir), include_archived=True
+            str(platforms_dir)
         ):
             config_file = platforms_dir / f"{platform_name}.yml"
             try:

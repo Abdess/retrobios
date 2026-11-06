@@ -68,10 +68,10 @@ def _extract_folders(record: dict, platforms_dir: str) -> dict[str, str]:
 
 def without_pack(platforms_dir: str) -> list[str]:
     """Display names of the registered setups no release publishes a ZIP for."""
-    released = set(list_release_pack_platforms(platforms_dir, include_archived=True))
+    released = set(list_release_pack_platforms(platforms_dir))
     names = [
         str(load_platform_config(key, platforms_dir).get("platform", key))
-        for key in list_registered_platforms(platforms_dir, include_archived=True)
+        for key in list_registered_platforms(platforms_dir)
         if key not in released
     ]
     return sorted(names, key=str.casefold)

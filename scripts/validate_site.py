@@ -410,9 +410,9 @@ def _check_get_pages(
     if not (platforms_dir / "_registry.yml").is_file():
         return [f"no platform registry in {platforms_dir}"]
     record = release_record.load_advertised(record_path, str(platforms_dir))
-    released = set(list_release_pack_platforms(str(platforms_dir), include_archived=True))
+    released = set(list_release_pack_platforms(str(platforms_dir)))
     issues: list[str] = []
-    for platform in list_registered_platforms(str(platforms_dir), include_archived=True):
+    for platform in list_registered_platforms(str(platforms_dir)):
         rel = f"{release_record.GET_DIR}/{platform}/index.html"
         page = pages.get((site / rel).resolve())
         if page is None or page.redirect:

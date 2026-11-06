@@ -533,7 +533,7 @@ def _write_release(args: argparse.Namespace) -> None:
 def _platform_archives() -> list[tuple[str, str]]:
     """(file name, system) for every file a registered platform declares."""
     stated: list[tuple[str, str]] = []
-    for name in list_registered_platforms(str(_PLATFORMS_DIR), include_archived=True):
+    for name in list_registered_platforms(str(_PLATFORMS_DIR)):
         config = load_platform_config(name, str(_PLATFORMS_DIR))
         for system, data in (config.get("systems") or {}).items():
             for entry in (data or {}).get("files") or []:

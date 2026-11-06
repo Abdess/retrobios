@@ -30,7 +30,7 @@ class SiteCoreCounts(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
         coverages = {}
-        for name in list_registered_platforms(platforms, include_archived=True):
+        for name in list_registered_platforms(platforms):
             config = load_platform_config(name, platforms)
             coverages[name] = {"platform": config.get("platform", name), "config": config}
         moved: dict[str, str] = {}

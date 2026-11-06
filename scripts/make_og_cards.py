@@ -43,7 +43,7 @@ def platform_cards() -> dict[str, tuple[str, str]]:
     return {
         f"platforms/{name}": (load_platform_config(name, str(platforms))["platform"],
                               PLATFORM_TAGLINE)
-        for name in list_registered_platforms(str(platforms), include_archived=True)
+        for name in list_registered_platforms(str(platforms))
     }
 
 

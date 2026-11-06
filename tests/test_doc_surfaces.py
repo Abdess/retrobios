@@ -176,7 +176,7 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
             "bizhawk": {"platform": "BizHawk"},
             "romm": {"platform": "RomM"},
         }
-        rows = download_table(coverages, set(), {}, SPLIT_RECORD)[2:]
+        rows = download_table(coverages, {}, SPLIT_RECORD)[2:]
         self.assertEqual(len(rows), 3)
         for row in rows:
             self.assertNotIn("/releases/", row)
@@ -191,8 +191,8 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
         readme = _read("README.md")
         table = _section(readme, "## Download BIOS packs")
         self.assertNotIn("/releases/download/", table)
-        released = set(list_release_pack_platforms("platforms", include_archived=True))
-        for key in list_registered_platforms("platforms", include_archived=True):
+        released = set(list_release_pack_platforms("platforms"))
+        for key in list_registered_platforms("platforms"):
             with self.subTest(platform=key):
                 self.assertIn(f"]({SITE_URL}get/{key}/)", table)
                 row = next(line for line in table.splitlines()
@@ -216,7 +216,7 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
 
         record = release_record.load_advertised()
         page = _which_pack()
-        for key in list_registered_platforms("platforms", include_archived=True):
+        for key in list_registered_platforms("platforms"):
             if release_record.pack_for(key, record) is not None:
                 continue
             label = load_platform_config(key, "platforms").get("platform", key)

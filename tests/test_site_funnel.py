@@ -31,7 +31,7 @@ FENCED = re.compile(r"^\s*```.*?^\s*```", re.S | re.M)
 
 
 def _registered() -> list[str]:
-    return list_registered_platforms(str(REPO_ROOT / "platforms"), include_archived=True)
+    return list_registered_platforms(str(REPO_ROOT / "platforms"))
 
 
 def _which_pack() -> str:

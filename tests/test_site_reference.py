@@ -103,7 +103,7 @@ class ReaderMatchedByHash(unittest.TestCase):
 
     def test_every_cited_entry_accepts_the_md5_or_says_by_name(self):
         by_name = 0
-        for platform in list_registered_platforms(PLATFORMS, include_archived=True):
+        for platform in list_registered_platforms(PLATFORMS):
             config = load_platform_config(platform, PLATFORMS)
             cats = EntryCategories(config, self.profiles)
             for sys_id, system in (config.get("systems") or {}).items():
@@ -276,7 +276,7 @@ class PlatformReferenceInWords(unittest.TestCase):
         page = generate_site.generate_platform_page("romm", cov, {})
         self.assertIn(">size, then any hash</span>", page)
         self.assertNotIn(">MD5</span>", page)
-        table = "\n".join(generate_site.setup_table({"romm": cov}, {}))
+        table = "\n".join(generate_site.setup_table({"romm": cov}))
         self.assertIn("| size, then any hash |", table)
 
     def test_systems_by_name_with_the_id_in_small_text(self):
@@ -609,7 +609,7 @@ class TheContractsValidate(unittest.TestCase):
         schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())
         validator = Draft202012Validator(schema)
         platforms = str(REPO_ROOT / "platforms")
-        for name in list_registered_platforms(platforms, include_archived=True):
+        for name in list_registered_platforms(platforms):
             config = load_platform_config(name, platforms)
             contract, registry = generate_site._split_contract(config)
             with self.subTest(platform=name):
@@ -1264,7 +1264,7 @@ SCHEMA = json.loads((REPO_ROOT / "schemas" / "install-manifest.schema.json").rea
 
 
 def _released() -> set[str]:
-    return set(list_release_pack_platforms(str(REPO_ROOT / "platforms"), include_archived=True))
+    return set(list_release_pack_platforms(str(REPO_ROOT / "platforms")))
 
 
 class OneAnswerOnReleasePacks(unittest.TestCase):

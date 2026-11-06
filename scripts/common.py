@@ -507,10 +507,7 @@ def load_platform_registry(platforms_dir: str = "platforms") -> dict:
         return (yaml_load(f) or {}).get("platforms", {})
 
 
-def list_registered_platforms(
-    platforms_dir: str = "platforms",
-    include_archived: bool = False,
-) -> list[str]:
+def list_registered_platforms(platforms_dir: str = "platforms") -> list[str]:
     """List platforms registered in _registry.yml.
 
     Only registered platforms generate packs and appear in CI.
@@ -527,9 +524,6 @@ def list_registered_platforms(
         registry = yaml_load(f) or {}
     platforms = []
     for name, meta in sorted(registry.get("platforms", {}).items()):
-        status = meta.get("status", "active")
-        if status == "archived" and not include_archived:
-            continue
         config_path = os.path.join(platforms_dir, meta.get("config", f"{name}.yml"))
         if not os.path.exists(config_path):
             raise FileNotFoundError(
@@ -539,10 +533,7 @@ def list_registered_platforms(
     return platforms
 
 
-def list_release_pack_platforms(
-    platforms_dir: str = "platforms",
-    include_archived: bool = False,
-) -> list[str]:
+def list_release_pack_platforms(platforms_dir: str = "platforms") -> list[str]:
     """Registered platforms a release publishes a ZIP pack for.
 
     `release_pack: true` in _registry.yml is the whole list: the build of
@@ -553,7 +544,7 @@ def list_release_pack_platforms(
     registry = load_platform_registry(platforms_dir)
     return [
         name
-        for name in list_registered_platforms(platforms_dir, include_archived)
+        for name in list_registered_platforms(platforms_dir)
         if registry.get(name, {}).get("release_pack") is True
     ]
 
@@ -641,7 +632,7 @@ def platform_arg(value: str) -> str:
     key = re.sub(r"[^a-z0-9]", "", value.lower())
     if yaml is None or not os.path.isdir("platforms"):
         return value
-    known = list_registered_platforms("platforms", include_archived=True)
+    known = list_registered_platforms("platforms")
     for name in known:
         if re.sub(r"[^a-z0-9]", "", name.lower()) == key:
             return name
@@ -665,7 +656,7 @@ def require_platform(name: str, platforms_dir: str = "platforms") -> None:
         return
     import difflib  # noqa: PLC0415
 
-    known = list_registered_platforms(platforms_dir, include_archived=True)
+    known = list_registered_platforms(platforms_dir)
     close = difflib.get_close_matches(name, known, n=1)
     hint = f" Did you mean '{close[0]}'?" if close else ""
     raise SystemExit(
@@ -3460,19 +3451,16 @@ def list_system_ids(emulators_dir: str) -> None:
 
 
 def print_platform_listing(platforms_dir: str) -> None:
-    """Every registered platform, one per line, marked when archived or
-    served by the installer only.
+    """Every registered platform, one per line, marked when the installer
+    alone serves it.
 
-    Every platform takes --platform. --all covers the active ones, and the
-    pack builder's --all the release packs. Printed by --list-platforms in
+    Every platform takes --platform. --all covers every one, and the pack
+    builder's --all the release packs. Printed by --list-platforms in
     verify.py and generate_pack.py, the name install.py gives it.
     """
-    active = set(list_registered_platforms(platforms_dir))
-    released = set(list_release_pack_platforms(platforms_dir, include_archived=True))
-    for name in list_registered_platforms(platforms_dir, include_archived=True):
-        marks = [m for m, on in (("archived", name not in active),
-                                 ("installer only", name not in released)) if on]
-        print(f"{name} ({', '.join(marks)})" if marks else name)
+    released = set(list_release_pack_platforms(platforms_dir))
+    for name in list_registered_platforms(platforms_dir):
+        print(name if name in released else f"{name} (installer only)")
 
 
 def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:

@@ -54,7 +54,7 @@ class SplitPartNames(unittest.TestCase):
             },
         }
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"longplat": {"status": "active"}}})
+            yaml.dump({"platforms": {"longplat": {"config": "longplat.yml"}}})
         )
         self.sha1 = h["sha1"]
 

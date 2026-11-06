@@ -54,7 +54,7 @@ class SystemNames(unittest.TestCase):
         platforms_dir = str(REPO_ROOT / "platforms")
         cls.platform_ids = {
             sys_id
-            for name in list_registered_platforms(platforms_dir, include_archived=True)
+            for name in list_registered_platforms(platforms_dir)
             for sys_id in load_platform_config(name, platforms_dir).get("systems", {})
         }
         cls.profile_ids = _profile_system_ids(cls.profiles)

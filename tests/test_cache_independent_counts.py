@@ -45,7 +45,7 @@ class DeclaredFilesResolveWithoutDataCaches(unittest.TestCase):
             db = load_database("database.json")
             zip_contents = build_zip_contents_index(db)
             offenders = []
-            for platform in list_registered_platforms(str(platforms_dir), include_archived=True):
+            for platform in list_registered_platforms(str(platforms_dir)):
                 config = load_platform_config(platform, str(platforms_dir))
                 for sys_id, system in config.get("systems", {}).items():
                     for entry in system.get("files", []) or []:

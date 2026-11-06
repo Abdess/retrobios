@@ -2486,7 +2486,7 @@ class TestE2E(unittest.TestCase):
                 },
             }
 
-            registry = {"platforms": {"splitplat": {"status": "active"}}}
+            registry = {"platforms": {"splitplat": {"config": "splitplat.yml"}}}
             with open(os.path.join(plat_dir, "_registry.yml"), "w") as f:
                 yaml.dump(registry, f)
             plat_cfg = {
@@ -2708,7 +2708,7 @@ class TestE2E(unittest.TestCase):
                 },
             }
 
-            registry = {"platforms": {"testplat": {"status": "active"}}}
+            registry = {"platforms": {"testplat": {"config": "testplat.yml"}}}
             with open(os.path.join(plat_dir, "_registry.yml"), "w") as f:
                 yaml.dump(registry, f)
             plat_cfg = {
@@ -4474,7 +4474,6 @@ class TestE2E(unittest.TestCase):
             "platforms": {
                 "testmerge": {
                     "config": "testmerge.yml",
-                    "status": "active",
                     "cores": ["core_a", "core_b"],
                 }
             }
@@ -5729,8 +5728,8 @@ struct BurnDriver BurnDrvneogeo = {
             os.makedirs(plat_dir)
             registry = {
                 "platforms": {
-                    "alpha": {"status": "active"},
-                    "beta": {"status": "active"},
+                    "alpha": {"config": "alpha.yml"},
+                    "beta": {"config": "beta.yml"},
                 }
             }
             with open(os.path.join(plat_dir, "_registry.yml"), "w") as f:
@@ -6214,13 +6213,6 @@ struct BurnDriver BurnDrvneogeo = {
             (["--system", "sony-playstation"], ["--no-refresh-data"], "refuse"),
             (["--platform", "retroarch", "--offline"], ["--no-refresh-data"], "refuse"),
             (["--platform", "retroarch", "--refresh-data"], ["--no-refresh-data"],
-             "refuse"),
-            # Only --all chooses among platforms, as verify.py already says.
-            (["--platform", "retroarch"], ["--include-archived"], "refuse"),
-            (["--emulator", "handy"], ["--include-archived"], "refuse"),
-            (["--system", "atari-lynx"], ["--include-archived"], "refuse"),
-            (["--from-md5", "d8f1"], ["--include-archived"], "refuse"),
-            (["--platform", "retroarch", "--verify-packs"], ["--include-archived"],
              "refuse"),
             # Documented as adding core files, read by nothing.
             (["--emulator", "handy"], ["--include-extras"], "refuse"),

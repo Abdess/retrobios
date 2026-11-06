@@ -69,12 +69,10 @@ The Files column counts what a pack holds once extracted, the figure a file mana
 | RetroArch | 8,504 | 6.0 GB | `system/` | [Download](https://abdess.github.io/retrobios/get/retroarch/) |
 | RetroBat | 12,399 | 7.9 GB | `bios/` | [Download](https://abdess.github.io/retrobios/get/retrobat/) |
 | RetroDECK | - | - | `~/retrodeck/` | [Use the command](https://abdess.github.io/retrobios/get/retrodeck/) |
-| RetroPie * | - | - | `~/RetroPie/BIOS/` | [Use the command](https://abdess.github.io/retrobios/get/retropie/) |
+| RetroPie | - | - | `~/RetroPie/BIOS/` | [Use the command](https://abdess.github.io/retrobios/get/retropie/) |
 | RomM | 1,087 | 1.5 GB | `library/bios/` | [Download](https://abdess.github.io/retrobios/get/romm/) |
 
 ZIPs are made for the setups most people download. The others read "Use the command": the installer above installs every file for them and checks each one, and `--dry-run` shows what it would install ([why no ZIP](https://abdess.github.io/retrobios/wiki/faq/#why-is-there-no-zip-for-my-setup)).
-
-\* Archived: the installer serves it, and checks that cover every setup include it only on request.
 
 ## What's included
 
@@ -117,7 +115,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RetroArch | 526/526 | 7,919/7,986 | name only |
 | RetroBat | 348/348 | 5,135/9,659 | MD5 |
 | RetroDECK | 2,007/2,008 | 6,706/6,993 | MD5 |
-| RetroPie * | 532/532 | 8,118/12,772 | name only |
+| RetroPie | 532/532 | 8,118/12,772 | name only |
 | RomM | 383/383 | 83/875 | size, then any hash |
 
 Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
@@ -208,4 +206,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-06T09:30:57Z*
+*Auto-generated on 2026-11-06T10:21:06Z*

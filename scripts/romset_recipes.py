@@ -293,7 +293,7 @@ def platform_targets(platforms_dir: str) -> dict[str, set[str]]:
     their MD5 is not an archive hash and is skipped.
     """
     targets: dict[str, set[str]] = defaultdict(set)
-    for name in list_registered_platforms(platforms_dir, include_archived=True):
+    for name in list_registered_platforms(platforms_dir):
         config = load_platform_config(name, platforms_dir)
         for system in config.get("systems", {}).values():
             for entry in system.get("files", []) or []:

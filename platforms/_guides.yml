@@ -650,8 +650,6 @@ guides:
     - >-
       RetroPie also installs standalone emulators (openMSX, PCSX2, XRoar, Amiberry and
       others) whose files only the RetroPie file list carries.
-    - >-
-      RetroPie is archived here: checks of every setup include it only on request.
     pack_manual: |
       Option B: Via network share
       --------------------------
