@@ -2031,3 +2031,22 @@ class RegionFreeRuleNamesWhereItDoesNotHold(unittest.TestCase):
                 if drops:
                     with self.subTest(platform=platform, file=name):
                         self.assertRegex(bullet, rf"(?i)\b{re.escape(platform)}\b")
+
+
+class BuildYourOwnPackSaysWhatTheCloneCosts(unittest.TestCase):
+    """The README sent a user after a minimal pack to "Clone the repo", with no
+    command and no size, and the clone runs to several gigabytes."""
+
+    def test_readme_gives_the_clone_command_and_its_size(self):
+        import generate_readme
+
+        db = json.loads((ROOT / "database.json").read_text(encoding="utf-8"))
+        line = generate_readme.clone_line(db)
+        self.assertIn("git clone --depth 1", line)
+        self.assertRegex(line, r"over \d+(\.\d)? GB")
+        section = _section((ROOT / "README.md").read_text(encoding="utf-8"),
+                           "Build your own pack")
+        self.assertIn("git clone --depth 1", section)
+
+    def test_advanced_usage_names_the_shallow_clone(self):
+        self.assertIn("--depth 1", _page("advanced-usage.md").split("## Custom packs")[0])

@@ -19,7 +19,8 @@ boot, with no message saying why. It is not a guarantee either: source
 profiles can document files nobody has dumped or that only the user can
 provide, all of them visible in the [gap analysis](../gaps.md).
 
-From a clone of the repository, `python scripts/generate_pack.py --platform
+A clone carries the whole collection, several gigabytes, and `git clone
+--depth 1` leaves its history out. From that clone, `python scripts/generate_pack.py --platform
 retroarch --region us` builds a narrower pack, `--required-only` the bare
 minimum each core needs to start, and `--no-game-data` keeps the firmware and
 leaves out the files a game reads. `--help` lists every way to build your own,

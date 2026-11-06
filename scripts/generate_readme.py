@@ -40,6 +40,7 @@ from nativemode import check_label
 import release_record
 from siteguides import install_command
 from validate_pr import LARGE_FILE_ISSUE_URL
+from largefiles import load_registered_paths
 from verify import verify_platform
 
 
@@ -447,6 +448,29 @@ REPO = "Abdess/retrobios"
 UPLOAD_URL = f"https://github.com/{REPO}/upload/main/bios"
 
 
+def clone_line(db: dict) -> str:
+    """How to get the clone the commands below run in, and its size.
+
+    Said bare, "clone the repo" started a multi-gigabyte transfer for a user
+    after a 20 MB --required-only pack. The size counts the collection files
+    the repository commits, a floor: release assets are fetched only when a
+    pack needs them.
+    """
+    assets = set(load_registered_paths())
+    committed = sum(
+        entry.get("size", 0) for entry in db.get("files", {}).values()
+        if entry.get("path") not in assets
+    )
+    return (
+        "Packs are built from a clone, and the clone carries the collection:"
+        f" its checkout alone is over {format_size(committed)}."
+        f" `git clone --depth 1 https://github.com/{REPO}.git` leaves the"
+        " history out. Files kept as release assets are downloaded when a"
+        " pack needs them. Then generate packs for any platform, emulator,"
+        " or system:"
+    )
+
+
 def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:
     """The contributors already published, read back from the file.
 
@@ -767,7 +791,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
             "",
             "## Build your own pack",
             "",
-            "Clone the repo and generate packs for any platform, emulator, or system:",
+            clone_line(db),
             "",
             "```bash",
             "# The pack of a platform, as released",
