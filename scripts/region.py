@@ -107,6 +107,19 @@ ALIASES: dict[str, str] = {
 }
 
 
+# Slugs a person does not write title-cased: "Asia Ntsc" read as machine text.
+LABELS: dict[str, str] = {
+    "uk": "UK",
+    "asia-ntsc": "Asia (NTSC)",
+    "asia-pal": "Asia (PAL)",
+}
+
+
+def label(slug: str) -> str:
+    """A region slug in words: north-america as North America."""
+    return LABELS.get(slug) or " ".join(word.title() for word in slug.split("-"))
+
+
 def unknown_region_message(raw: str, aliases: dict[str, str], regions: frozenset[str]) -> str:
     """What to type instead: the closest spellings, then every short form.
 

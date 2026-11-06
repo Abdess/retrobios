@@ -1452,5 +1452,23 @@ class UsaRegionServesTheAmericas(unittest.TestCase):
         self.assertEqual(region.rank(jpn, requested), 1)
 
 
+class RegionWordsInAPackReadme(unittest.TestCase):
+    """The pack README title-cased each slug: asia-ntsc read "Asia Ntsc"."""
+
+    def test_the_priority_line_reads_as_written(self):
+        from packreadme import _build_readme  # noqa: PLC0415
+
+        readme = _build_readme(
+            "retroarch", "RetroArch", "system", 1, 1,
+            regions=region.parse_requested("us,asia-ntsc,jp"),
+        )
+        self.assertIn("Region priority: North America, Asia (NTSC), Japan", readme)
+
+    def test_every_region_has_a_label(self):
+        for slug in region.REGIONS:
+            with self.subTest(slug=slug):
+                self.assertNotRegex(region.label(slug), r"\bNtsc\b|\bPal\b|\bUk\b")
+
+
 if __name__ == "__main__":
     unittest.main()

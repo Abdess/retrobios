@@ -7750,20 +7750,17 @@ def _distinct_spellings(names: list) -> list[str]:
     return list(seen.values())
 
 
-# Region slugs whose words are not the slug title-cased.
-_REGION_WORDS = {
-    "uk": "UK",
-    "asia-ntsc": "Asia (NTSC)",
-    "asia-pal": "Asia (PAL)",
-    "world": "every region",
-}
+# Region slugs whose words are not the slug title-cased, beyond region.LABELS.
+_REGION_WORDS = {"world": "every region"}
 
 
 def _region_words(value: object, most: int = 0) -> str:
     """A region: value in words. ``most`` caps the regions named, the rest
     counted: one Saturn BIOS serves seven."""
     raw = value if isinstance(value, list) else [value] if value else []
-    words = [_REGION_WORDS.get(str(r), str(r).replace("-", " ").title()) for r in raw]
+    from region import label  # noqa: PLC0415
+
+    words = [_REGION_WORDS.get(str(r)) or label(str(r)) for r in raw]
     if most and len(words) > most:
         words = words[:most] + [f"{len(words) - most} more"]
     return _said_as_list(words)
