@@ -148,6 +148,72 @@ class AbsentFileIsNotReplacedByAHomonym(unittest.TestCase):
         self.assertEqual(self._resolve(), (None, "not_found"))
 
 
+class APlatformEntryTakesNoOtherEmulatorsTree(unittest.TestCase):
+    """A platform declaration names no profile, so another emulator's tree
+    was never foreign to it: EmuELEC's ports/VVVVVV/data.zip was served
+    xrick's data.zip, Rick Dangerous sounds, then xrick's data directory
+    copy. A system that lists its cores says whose files it asks for."""
+
+    def setUp(self):
+        import tempfile
+
+        import generate_db
+
+        self._tmp = tempfile.TemporaryDirectory()
+        self._cwd = os.getcwd()
+        os.chdir(self._tmp.name)
+        payload = b"rick dangerous"
+        target = Path("bios/Other/xrick/data.zip")
+        target.parent.mkdir(parents=True)
+        target.write_bytes(payload)
+        cache = Path("data/xrick/data.zip")
+        cache.parent.mkdir(parents=True)
+        cache.write_bytes(payload)
+        sha1 = hashlib.sha1(payload).hexdigest()
+        files = {sha1: {
+            "path": str(target), "name": "data.zip", "size": len(payload),
+            "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
+            "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "0",
+        }}
+        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        self.registry = {"xrick": {"local_cache": "data/xrick"}}
+
+    def tearDown(self):
+        os.chdir(self._cwd)
+        self._tmp.cleanup()
+
+    def _resolve(self, **fields):
+        entry = {"name": "data.zip", "destination": "ports/VVVVVV/data.zip",
+                 "platform_system": "vvvvvv", **fields}
+        return resolve_local_file(
+            entry, self.db, {}, dest_hint=entry["destination"],
+            data_dir_registry=self.registry,
+        )
+
+    def test_a_system_naming_other_cores_gets_nothing(self):
+        self.assertEqual(self._resolve(platform_cores=["VVVVVV"]), (None, "not_found"))
+
+    def test_the_owners_own_system_still_gets_it(self):
+        self.assertEqual(
+            self._resolve(platform_cores=["xrick"]),
+            ("bios/Other/xrick/data.zip", "name_exact"),
+        )
+
+    def test_the_emuelec_entry_is_not_served_xrick(self):
+        os.chdir(self._cwd)
+        from common import load_platform_config
+
+        config = load_platform_config("emuelec", str(REPO_ROOT / "platforms"))
+        entry = config["systems"]["vvvvvv"]["files"][0]
+        self.assertEqual(entry["platform_cores"], ["VVVVVV"])
+        db = load_database(str(REPO_ROOT / "database.json"))
+        path, _status = resolve_local_file(
+            entry, db, {}, dest_hint=entry["destination"],
+            data_dir_registry=load_data_dir_registry(str(REPO_ROOT / "platforms")),
+        )
+        self.assertFalse(path and "xrick" in path, path)
+
+
 class SecondPassKeepsIdentity(unittest.TestCase):
     """A copy of a covered file at another core's path keeps the entry's proof.
 

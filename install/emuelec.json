@@ -20,11 +20,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5297,
-  "total_size": 4143074421,
-  "pack_files": 9169,
-  "pack_size": 4257242836,
-  "total_omitted": 197,
+  "total_files": 5296,
+  "total_size": 4141616981,
+  "pack_files": 9168,
+  "pack_size": 4255785396,
+  "total_omitted": 198,
   "omitted_files": [
     {
       "dest": "FB Alpha 2012/hiscore.dat",
@@ -2067,6 +2067,18 @@
       "reason": "not_found",
       "cores": [
         "gzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "ports/VVVVVV/data.zip",
+      "name": "data.zip",
+      "system": "vvvvvv",
+      "required": true,
+      "reason": "not_found",
+      "cores": null,
+      "systems": [
+        "vvvvvv"
       ],
       "category": "game_data"
     },
@@ -8908,18 +8920,6 @@
       "cores": null,
       "systems": [
         "tyrian"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "ports/VVVVVV/data.zip",
-      "sha1": "ecfc092fe6371dbf38e238a8ba5f90785b5db52d",
-      "sha256": "2a86458696e83eb924fc6c6fda3ca5d320ca90885bd6c2f32d121757ade389bb",
-      "size": 1457440,
-      "repo_path": "bios/Other/xrick/data.zip",
-      "cores": null,
-      "systems": [
-        "vvvvvv"
       ],
       "category": "game_data"
     },
