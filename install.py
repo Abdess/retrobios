@@ -13451,9 +13451,10 @@ def main() -> None:
     ):
         parser.error("--from copies files into the BIOS folder, which a listing "
                      "does not write")
-    if (args.from_pack or args.manifest) and (args.list_platforms or args.list_targets):
+    if (args.from_pack or args.manifest) and args.list_platforms:
+        # --list-targets reads its boards from them, where --target does.
         parser.error("--from-pack and --manifest give a file list, which --list-platforms "
-                     "and --list-targets do not read")
+                     "does not read")
     if args.no_game_data and (args.list_platforms or args.list_targets):
         parser.error("--no-game-data narrows a file list, not --list-platforms "
                      "or --list-targets")
