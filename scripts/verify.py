@@ -3121,6 +3121,13 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
         named = [f"{name} {count}" for name, count in counts.items() if count]
         return f" ({', '.join(named)})" if named else ""
 
+    def on(groups: tuple[str, ...]) -> str:
+        """The platforms a file is missing on, by the shorter side."""
+        if len(group_results) < 2 or len(groups) * 2 <= len(group_results):
+            return ", ".join(groups)
+        others = [" / ".join(g) for _, g in group_results if " / ".join(g) not in groups]
+        return "every platform" + (f" but {', '.join(others)}" if others else "")
+
     parts = []
     for severity, label in ((Severity.CRITICAL, "critical"), (Severity.WARNING, "warning"),
                             (Severity.INFO, "info")):
@@ -3139,18 +3146,26 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
     parts.append(f"{total} {'discrepancy' if total == 1 else 'discrepancies'}{where(counts)}")
     lines = [f"{platforms} platforms: {', '.join(parts)}"]
 
-    missing = {
-        " / ".join(group): sorted({
+    # Grouped by file, not by platform: sfiii2a.zip missing everywhere was
+    # counted and printed once per platform, 24 files for 10 distinct ones.
+    holders: dict[str, list[str]] = {}
+    for r, group in group_results:
+        for name in sorted({
             u["name"] for u in _core_required_missing(_split_undeclared(
                 r.get("undeclared_files", []))[1])
-        })
-        for r, group in group_results
-    }
-    total = sum(len(names) for names in missing.values())
-    if total:
-        detail = "; ".join(f"{group}: {', '.join(names)}"
-                           for group, names in missing.items() if names)
-        lines.append(f"{total} core file(s) a core cannot run without are missing ({detail})")
+        }):
+            holders.setdefault(name, []).append(" / ".join(group))
+    if holders:
+        by_platforms: dict[tuple[str, ...], list[str]] = {}
+        for name, groups in sorted(holders.items()):
+            by_platforms.setdefault(tuple(groups), []).append(name)
+        detail = "; ".join(
+            f"{', '.join(names)} ({on(groups)})"
+            for groups, names in sorted(by_platforms.items(),
+                                        key=lambda item: (-len(item[0]), item[1]))
+        )
+        lines.append(f"{len(holders)} core file(s) a core cannot run without are "
+                     f"missing: {detail}")
     for category, label in _NOT_FIRMWARE.items():
         counts = {
             " / ".join(group): len((r.get("missing_not_firmware") or {}).get(category, []))

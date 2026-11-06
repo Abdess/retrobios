@@ -5070,8 +5070,33 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
             [(clean, ["RetroArch"]), (warned, ["RetroDECK"]), (core_miss, ["ROCKNIX"])]
         )
         self.assertIn("1 warning (RetroDECK 1)", summary)
-        self.assertIn("ROCKNIX: n64.psh", summary)
+        self.assertIn("n64.psh (ROCKNIX)", summary)
         self.assertIn("0 critical,", summary)
+
+    def test_a_file_missing_on_several_platforms_is_counted_once(self):
+        """sfiii2a.zip missing on 15 platforms read '24 core file(s)' for 10
+        distinct files, the name printed 15 times on one line."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import verify
+
+        def missing(*names: str) -> dict:
+            return {"severity_counts": {}, "undeclared_files": [
+                {"name": name, "required": True, "in_repo": False,
+                 "category": "bios", "in_pack": True} for name in names
+            ]}
+
+        summary = verify._overall_summary([
+            (missing("sfiii2a.zip"), ["Batocera"]),
+            (missing("sfiii2a.zip", "ROM"), ["RetroPie"]),
+            (missing("sfiii2a.zip"), ["RomM"]),
+            (missing(), ["MinUI"]),
+        ])
+        self.assertIn(
+            "2 core file(s) a core cannot run without are missing: "
+            "sfiii2a.zip (every platform but MinUI); ROM (RetroPie)",
+            summary,
+        )
+        self.assertEqual(summary.count("sfiii2a.zip"), 1)
 
 
 
