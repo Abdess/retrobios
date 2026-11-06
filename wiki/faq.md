@@ -25,14 +25,12 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --dry-run
 
 ## Do I need every file of a console?
 
-No. `--core` keeps what your emulator reads, here PCSX for PlayStation:
+No. `--core pcsx1` keeps what PCSX reads:
 
 <!-- os-tabs -->
 ```sh
 curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --system sony-playstation --core pcsx1
 ```
-
-`--region us` drops another region's BIOS where a US one exists.
 
 ## Does the BIOS set the game's language?
 
