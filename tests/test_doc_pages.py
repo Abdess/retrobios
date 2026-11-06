@@ -1984,9 +1984,6 @@ class ArchivedIsWhatTheToolsDo(unittest.TestCase):
             self.assertNotIn("list_platforms", workflow.read_text(encoding="utf-8"))
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class TheCatalogRowsStateFacts(unittest.TestCase):
     """tools.md said "redump.org serves stale DATs" and "Dat-o-Matic blocks
@@ -2003,3 +2000,8 @@ class TheCatalogRowsStateFacts(unittest.TestCase):
         scraper = (ROOT / "scripts" / "scraper" / "redump_dat_scraper.py").read_text(encoding="utf-8")
         self.assertIn("/bios/<CODE>", scraper)
         self.assertIn("`/bios/<CODE>`", rows[0])
+
+
+if __name__ == "__main__":
+    unittest.main()
+
