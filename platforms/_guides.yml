@@ -648,8 +648,8 @@ guides:
       RetroPie also installs standalone emulators (openMSX, PCSX2, XRoar, Amiberry and
       others) whose files only the RetroPie file list carries.
     - >-
-      RetroPie is archived in this project: its configuration is kept and the command
-      serves it, but its upstream list is no longer read again on a schedule.
+      RetroPie is archived in this project: the command serves it, and checks that cover
+      every setup include it only on request.
     pack_manual: |
       Option B: Via network share
       --------------------------

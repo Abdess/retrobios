@@ -1918,6 +1918,7 @@ class ArchivedIsWhatTheToolsDo(unittest.TestCase):
             "generate_site": inspect.getsource(generate_site),
             "generate_pack": inspect.getsource(generate_pack),
             "list_platforms": inspect.getsource(list_platforms),
+            "_guides.yml": (ROOT / "platforms" / "_guides.yml").read_text(encoding="utf-8"),
         }
         for name, text in texts.items():
             with self.subTest(name):
