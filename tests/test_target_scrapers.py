@@ -541,6 +541,59 @@ class TargetsReadThePlatformRevision(unittest.TestCase):
         self.assertTrue(steamos)
         self.assertTrue(all(u.endswith(f"?ref={pin}") for u in steamos), steamos)
 
+    def test_emudeck_platform_lists_its_installers_at_the_pin(self):
+        """cores: was read on master while launchers: and the SteamOS target
+        were read at the pin: the YAML described two revisions."""
+        from scripts.scraper import emudeck_scraper
+
+        pin = "d" * 40
+        seen: list[str] = []
+
+        class _Body:
+            def __init__(self, url):
+                seen.append(url)
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_exc):
+                return False
+
+            def read(self):
+                return json.dumps([{"name": "emuDeckRMG.sh"}]).encode()
+
+        with mock.patch("urllib.request.urlopen", lambda req, **_kw: _Body(req.full_url)):
+            cores = emudeck_scraper.Scraper(checkbios_url="pinned")._fetch_installed_emulators(pin)
+        self.assertEqual(cores, ["mupen64plus_next"])
+        self.assertEqual(len(seen), 1)
+        self.assertTrue(seen[0].endswith(f"?ref={pin}"), seen)
+
+
+class EmuDeckScriptNamesHaveOneRule(unittest.TestCase):
+    """The target scraper kept its own copy of the EmuScripts-to-profile
+    table: it published emudeck-we's template skeleton as a core, and a
+    rename added to one copy only made --target filter that core out."""
+
+    def test_the_target_scraper_names_scripts_as_the_platform_does(self):
+        from scripts.scraper.emudeck_launchers import emulator_of_script
+
+        listing = [
+            "emuDeckRMG.sh",
+            "emuDeckPCSX2QT.ps1",
+            "emuDeckTemplate.ps1",
+            "emuDeckRetroArch.ps1",
+            "RetroArch_maincfg.sh",
+            "emuDeckXemu.ps1",
+        ]
+        scraper = emudeck_targets_scraper.Scraper(revision="0" * 40)
+        with mock.patch.object(
+            emudeck_targets_scraper, "_list_emuscripts", return_value=listing
+        ), mock.patch.object(scraper, "_load_retroarch_cores", return_value=["mgba"]):
+            cores = scraper._fetch_cores_for_target("unused", "Windows")
+        standalone = {emulator_of_script(name) for name in listing} - {None, "retroarch"}
+        self.assertEqual(standalone, {"mupen64plus_next", "pcsx2", "xemu"})
+        self.assertEqual(cores, sorted(standalone | {"mgba"}))
+
 
 class HashScrapersRefuseAnUnknownVersion(unittest.TestCase):
     """mame_hash_scraper wrote core_version "unknown" after a failed API call

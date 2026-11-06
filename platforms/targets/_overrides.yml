@@ -121,13 +121,6 @@ retrodeck:
       # includes the frontend name alongside the actual cores.
       remove_cores: [retroarch]
 
-emudeck:
-  targets:
-    _default:
-      # EmuDeck's EmuScripts tree carries a template.sh placeholder used
-      # to scaffold new installers. It is not an emulator.
-      remove_cores: [template]
-
 lakka:
   targets:
     generic:

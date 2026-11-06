@@ -469,9 +469,10 @@ class Scraper(BaseScraper):
 
         version = fetch_github_latest_version("dragoonDorise/EmuDeck")
 
-        cores = self._fetch_installed_emulators()
+        revision = launcher_revision(self.checkbios_url)
+        cores = self._fetch_installed_emulators(revision)
         standalone = [core for core in cores if core != "retroarch"]
-        tree = RepoTree.github(EMUDECK_REPO, launcher_revision(self.checkbios_url))
+        tree = RepoTree.github(EMUDECK_REPO, revision)
         libretro = set(installed_libretro_cores(tree.read(RETROARCH_SCRIPT)))
 
         return {
@@ -501,16 +502,16 @@ class Scraper(BaseScraper):
             "launchers": extract_launchers(tree),
         }
 
-    def _fetch_installed_emulators(self) -> list[str]:
-        """Fetch the list of emulators installed by EmuDeck from EmuScripts.
-
-        Returns core names normalized to match emulator profile keys.
+    def _fetch_installed_emulators(self, revision: str) -> list[str]:
+        """The emulators EmuDeck's EmuScripts install at the pinned revision,
+        named as their profiles are: the launcher layer and the SteamOS
+        target are read at that revision too.
         """
         import json
 
         api_url = (
             "https://api.github.com/repos/dragoonDorise/EmuDeck/"
-            "contents/functions/EmuScripts"
+            f"contents/functions/EmuScripts?ref={revision}"
         )
         try:
             req = urllib.request.Request(api_url, headers=github_headers())
