@@ -24,7 +24,19 @@
     {
       "os": "linux",
       "method": "config_file",
+      "config": "$XDG_CONFIG_HOME/retroarch/retroarch.cfg",
+      "parse_key": "system_directory"
+    },
+    {
+      "os": "linux",
+      "method": "config_file",
       "config": "$HOME/.config/retroarch/retroarch.cfg",
+      "parse_key": "system_directory"
+    },
+    {
+      "os": "linux",
+      "method": "config_file",
+      "config": "$HOME/.retroarch.cfg",
       "parse_key": "system_directory"
     },
     {

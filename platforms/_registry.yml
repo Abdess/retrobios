@@ -219,9 +219,22 @@ platforms:
         method: config_file
         config: $HOME/snap/retroarch/current/.config/retroarch/retroarch.cfg
         parse_key: system_directory
+      # Native: $XDG_CONFIG_HOME/retroarch when the variable is set, else
+      # $HOME/.config/retroarch, then $HOME/.retroarch.cfg when that file is
+      # missing (file_path_special.c fill_pathname_application_data,
+      # configuration.c open_default_config_file). A value left at default
+      # is the system folder of the first of the two folders.
+      - os: linux
+        method: config_file
+        config: $XDG_CONFIG_HOME/retroarch/retroarch.cfg
+        parse_key: system_directory
       - os: linux
         method: config_file
         config: $HOME/.config/retroarch/retroarch.cfg
+        parse_key: system_directory
+      - os: linux
+        method: config_file
+        config: $HOME/.retroarch.cfg
         parse_key: system_directory
       # configuration.c reads <Application Support>/RetroArch/config, and a value
       # left at default is ~/Documents/RetroArch/system (platform_darwin.m).

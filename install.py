@@ -291,7 +291,6 @@ def _os_default_dests(os_type: str) -> dict[str, Path]:
     the command line but not found must not land in ~/bios, which none of
     them reads.
     """
-    home = Path.home()
     if os_type == "windows":
         return {
             # RetroArch's system directory defaults to <exe folder>\system
@@ -307,13 +306,13 @@ def _os_default_dests(os_type: str) -> dict[str, Path]:
         # RetroArch may be the Linux one inside the distribution, while RetroBat
         # only exists on the Windows side, reached through /mnt/c.
         return {
-            "retroarch": home / ".config" / "retroarch" / "system",
+            "retroarch": _unix_retroarch_base() / "system",
             "retrobat": _host_path("C:/RetroBat/bios"),
         }
     if os_type == "darwin":
         return {"retroarch": _macos_retroarch_base() / "system"}
     return {
-        "retroarch": home / ".config" / "retroarch" / "system",
+        "retroarch": _unix_retroarch_base() / "system",
     }
 
 
@@ -1383,6 +1382,17 @@ def _macos_retroarch_base() -> Path:
     if _is_dir(steam) and not _is_dir(Path("/Applications/RetroArch.app")):
         return support
     return Path.home() / "Documents" / "RetroArch"
+
+
+def _unix_retroarch_base() -> Path:
+    """RetroArch's base folder on Linux: $XDG_CONFIG_HOME/retroarch when the
+    variable is set, else ~/.config/retroarch (fill_pathname_application_data
+    in file_path_special.c, frontend_unix_get_env in platform_unix.c). The
+    code tests only that the variable exists, so an empty one counts."""
+    xdg = os.environ.get("XDG_CONFIG_HOME")
+    if xdg is not None:
+        return Path(xdg) / "retroarch"
+    return Path.home() / ".config" / "retroarch"
 
 
 # System directory -> the retroarch.cfg it was read from and the directory
@@ -2773,11 +2783,16 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
         if ra_dir:
             found.append(("retroarch", ra_dir))
 
-        # RetroArch native
-        native_cfg = home / ".config" / "retroarch" / "retroarch.cfg"
-        ra_dir = _parse_retroarch_system_dir(native_cfg)
-        if ra_dir:
-            found.append(("retroarch", ra_dir))
+        # RetroArch native: the config under its base folder, then
+        # ~/.retroarch.cfg when that one is missing (open_default_config_file
+        # in configuration.c). Either way the system folder defaults to the
+        # base folder's.
+        native_base = _unix_retroarch_base()
+        for native_cfg in (native_base / "retroarch.cfg", home / ".retroarch.cfg"):
+            ra_dir = _parse_retroarch_system_dir(native_cfg, native_base)
+            if ra_dir:
+                found.append(("retroarch", ra_dir))
+                break
 
     if os_type == "darwin":
         # open_default_config_file reads <Application Support>/RetroArch/config

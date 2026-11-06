@@ -2646,6 +2646,52 @@ class RetroArchWhereItReallyLives(unittest.TestCase):
             self.assertIn(("retroarch", support / "system"), found)
 
 
+class LinuxRetroArchFollowsXdgConfigHome(unittest.TestCase):
+    """RetroArch on Linux keeps its config under $XDG_CONFIG_HOME/retroarch
+    when the variable is set, then falls back to ~/.retroarch.cfg
+    (file_path_special.c fill_pathname_application_data, configuration.c
+    open_default_config_file). Only ~/.config/retroarch was read: a home
+    with its own XDG layout detected nothing."""
+
+    def _env(self) -> tuple[Path, Path]:
+        home = Path(_tempdir(self))
+        xdg = Path(_tempdir(self))
+        patcher = unittest.mock.patch.dict(os.environ, {"HOME": str(home)}, clear=True)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        return home, xdg
+
+    def test_the_config_under_xdg_config_home_is_read(self):
+        home, xdg = self._env()
+        (xdg / "retroarch").mkdir()
+        (xdg / "retroarch" / "retroarch.cfg").write_text('system_directory = "/srv/bios"\n')
+        # A config under ~/.config is not the one this RetroArch opens.
+        (home / ".config" / "retroarch").mkdir(parents=True)
+        (home / ".config" / "retroarch" / "retroarch.cfg").write_text(
+            'system_directory = "/elsewhere"\n')
+        os.environ["XDG_CONFIG_HOME"] = str(xdg)
+        found = install.detect_platforms("linux")
+        self.assertIn(("retroarch", Path("/srv/bios")), found)
+        self.assertNotIn(("retroarch", Path("/elsewhere")), found)
+        self.assertEqual(install._os_default_dests("linux")["retroarch"],
+                         xdg / "retroarch" / "system")
+
+    def test_home_retroarch_cfg_is_the_fallback(self):
+        home, xdg = self._env()
+        os.environ["XDG_CONFIG_HOME"] = str(xdg)
+        (home / ".retroarch.cfg").write_text('system_directory = "default"\n')
+        found = install.detect_platforms("linux")
+        self.assertIn(("retroarch", xdg / "retroarch" / "system"), found)
+
+    def test_without_the_variable_the_folder_is_under_dot_config(self):
+        home, _ = self._env()
+        (home / ".config" / "retroarch").mkdir(parents=True)
+        (home / ".config" / "retroarch" / "retroarch.cfg").write_text(
+            'system_directory = "default"\n')
+        found = install.detect_platforms("linux")
+        self.assertIn(("retroarch", home / ".config" / "retroarch" / "system"), found)
+
+
 class NoPythonNamesThisSystemsCommand(unittest.TestCase):
     """Without Python the bootstrap said `sudo apt install python3` on every
     system: Termux has no sudo and installs with `pkg install python`, and
