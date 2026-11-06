@@ -4609,16 +4609,18 @@ def generate_manifest(
     # (cache file, size). Settled once the trees are walked.
     cache_held: dict[str, tuple[str, int]] = {}
     rename_notes: set[str] = set()
+    # The full manifest records every core's answer at a contested slot, so a
+    # target narrowed from it gets what that target's own pack serves.
+    whole = target_cores is None and source != "platform" and bool(emu_profiles)
+    slot_choices = (
+        slots.slot_choices(config, emu_profiles, db, zip_contents, data_registry)
+        if whole else {}
+    )
+    # Derived from the same choices: computed twice, it was 8% of a run.
     slot_overrides = slots.pack_overrides(
         config, emu_profiles, db, zip_contents, data_registry,
         target_cores=target_cores, source=source,
-    )
-    # The full manifest records every core's answer at a contested slot, so a
-    # target narrowed from it gets what that target's own pack serves.
-    slot_choices = (
-        slots.slot_choices(config, emu_profiles, db, zip_contents, data_registry)
-        if target_cores is None and source != "platform" and emu_profiles
-        else {}
+        choices=slot_choices if whole else None,
     )
 
     def manifest_destination(full_destination: str) -> str:

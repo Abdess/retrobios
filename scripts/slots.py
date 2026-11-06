@@ -514,6 +514,7 @@ def pack_overrides(
     data_dir_registry: dict | None = None,
     target_cores: set[str] | None = None,
     source: str = "full",
+    choices: dict[str, list[tuple[str, str | None]]] | None = None,
 ) -> dict[str, str]:
     """Full pack destination -> the file a platform pack serves there instead.
 
@@ -522,7 +523,8 @@ def pack_overrides(
     existence mode the frontend never reads the bytes, so serving the
     emulator's file satisfies both. The ZIP builder, the install manifest and
     verify all read this: two of them deciding alone gave the one-line
-    installer different bytes than the ZIP.
+    installer different bytes than the ZIP. ``choices`` is slot_choices
+    for the same arguments when the caller already holds it.
     """
     # A baseline-only pack serves what the platform declares, and a target's
     # pack answers to the cores that hardware builds: DuckStation does not
@@ -531,10 +533,10 @@ def pack_overrides(
         return {}
     cores = set(resolve_platform_cores(config, profiles, target_cores=target_cores))
     overrides: dict[str, str] = {}
-    for destination, choices in slot_choices(
-        config, profiles, db, zip_contents, data_dir_registry
-    ).items():
-        path = next((path for emulator, path in choices if emulator in cores), None)
+    if choices is None:
+        choices = slot_choices(config, profiles, db, zip_contents, data_dir_registry)
+    for destination, ordered in choices.items():
+        path = next((path for emulator, path in ordered if emulator in cores), None)
         if path:
             overrides[destination] = path
     return overrides

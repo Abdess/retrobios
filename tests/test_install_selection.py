@@ -1231,6 +1231,16 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
         )
         return {m for m in record.members if m.startswith("bios/")}
 
+    def test_the_slot_choices_are_computed_once(self):
+        """pack_overrides recomputed the choices the manifest had just
+        computed with the same arguments: 8% of a manifest run."""
+        import slots
+
+        real = slots.slot_choices
+        with mock.patch.object(slots, "slot_choices", side_effect=real) as counted:
+            self._manifest(None)
+        self.assertEqual(counted.call_count, 1)
+
     def test_the_pack_and_the_installer_drop_the_same_files(self):
         full = self._manifest(None)
         files, _omitted = install.narrow(
