@@ -427,7 +427,7 @@ START_HERE = [
     "/retrobios/", "/retrobios/wiki/what-are-bios-files/", "/retrobios/which-pack/",
     "/retrobios/wiki/first-install/", "/retrobios/wiki/troubleshooting/",
     "/retrobios/wiki/faq/", "/retrobios/wiki/legal/", "/retrobios/wiki/glossary/",
-    "/retrobios/platforms/",
+    "/retrobios/wiki/privacy/", "/retrobios/platforms/",
 ]
 
 

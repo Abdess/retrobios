@@ -3552,7 +3552,7 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
 class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
     """Offline, --target on AmberELEC asked for install/targets/amberelec.json,
     which existed nowhere: online the same run said it had no targets.
-    EmuELEC has none still."""
+    MiSTer FPGA has none still."""
 
     def test_the_list_matches_the_published_targets(self):
         published = {path.stem for path in (REPO_ROOT / "install" / "targets").glob("*.json")}
@@ -3560,16 +3560,16 @@ class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
 
     def test_offline_says_there_are_no_targets(self):
         dest = Path(_tempdir(self))
-        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "emuelec.json")]):
+        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "misterfpga.json")]):
             with self.subTest(manifest=bool(extra)):
                 proc = subprocess.run(
-                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "emuelec",
-                     "--dest", str(dest), "--target", "rk3326", "--offline", "--no-input",
+                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "misterfpga",
+                     "--dest", str(dest), "--target", "de10-nano", "--offline", "--no-input",
                      "--dry-run", *extra],
                     capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
                 self.assertEqual(proc.returncode, 2, proc.stderr)
-                self.assertIn("EmuELEC has no hardware targets", proc.stderr)
-                self.assertNotIn("targets/emuelec.json", proc.stderr)
+                self.assertIn("MiSTer FPGA has no hardware targets", proc.stderr)
+                self.assertNotIn("targets/misterfpga.json", proc.stderr)
 
 
 class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
@@ -3634,6 +3634,18 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
         targets = json.loads((REPO_ROOT / "install" / "targets" / "amberelec.json")
                              .read_text(encoding="utf-8"))
         self.assertIn("rg351p", targets)
+
+    def test_emuelec_names_its_device(self):
+        # An OdroidGoAdvance image carries no DuckStation, Dolphin or MAME
+        # core, and the full list was installed: EmuELEC had no target list.
+        with unittest.mock.patch.object(
+            install, "_parse_os_release", return_value={"COREELEC_DEVICE": "OdroidGoAdvance"}
+        ):
+            self.assertEqual(install.detect_board("emuelec"), "odroidgoadvance")
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "emuelec.json")
+                             .read_text(encoding="utf-8"))
+        self.assertIn("odroidgoadvance", targets)
+        self.assertNotIn("Duckstation", targets["odroidgoadvance"])
 
     def test_lakka_names_its_device_or_its_project(self):
         # An RPi4 Lakka installed 5.7 GB of every board's files: its board
