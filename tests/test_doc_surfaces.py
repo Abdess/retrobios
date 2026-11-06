@@ -248,6 +248,21 @@ class SlicesLeaveWithTheirRelease(unittest.TestCase):
         self.assertNotIn(".zip.001", _which_pack())
 
 
+class TheReadmeLeadsBeginnersToTheirPages(unittest.TestCase):
+    """The README linked the installer reference and the FAQ's no-ZIP anchor
+    only: a user stopped by an install error or a BIOS-not-found message had
+    no link to the first install or troubleshooting page."""
+
+    def test_quick_install_links_the_start_pages(self):
+        # The code block holds `#` comment lines, so the section runs to
+        # the next level-two heading.
+        section = _read("README.md").split("## Quick install", 1)[1].split("\n## ", 1)[0]
+        for page in ("first-install", "troubleshooting", "faq"):
+            with self.subTest(page=page):
+                self.assertIn(f"wiki/{page}/)", section)
+                self.assertTrue((REPO_ROOT / "wiki" / f"{page}.md").is_file())
+
+
 class EndUsersCheckTheirOwnFolder(unittest.TestCase):
     """verify.py reads database.json and bios/. Advice about a user's own
     files points at the installer's --check, which hashes their folder."""

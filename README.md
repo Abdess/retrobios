@@ -39,6 +39,8 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform retroarch 
 The script opens a full-screen installer, driven with the arrow keys and Enter, or with a controller on a handheld. It finds your setup and its BIOS folder, downloads only the missing files and checks each one. It can also copy the BIOS files from your old SD card.
 Every option, and what the installer detects and writes, is on the [installer page](https://abdess.github.io/retrobios/wiki/installer/#passing-options).
 
+First time? Follow the [first install, step by step](https://abdess.github.io/retrobios/wiki/first-install/). A game does not start: [what to check](https://abdess.github.io/retrobios/wiki/troubleshooting/). Other questions: the [FAQ](https://abdess.github.io/retrobios/wiki/faq/).
+
 ## Download BIOS packs
 
 A pack holds everything its platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. Each Download link is a page that keeps its address from one release to the next. The installer above does the same file by file: its screen installs everything, or fewer under **Choose systems**, and `--system`, `--core`, `--region` and `--target` make the same choice without questions. For a bare minimum, build your own pack below.
@@ -206,4 +208,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-06T02:18:34Z*
+*Auto-generated on 2026-11-06T02:20:28Z*

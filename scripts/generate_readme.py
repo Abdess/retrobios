@@ -593,6 +593,10 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         " files and checks each one. It can also copy the BIOS files from your old SD card.",
         f"Every option, and what the installer detects and writes, is on the [installer page]({SITE_URL}wiki/installer/#passing-options).",
         "",
+        f"First time? Follow the [first install, step by step]({SITE_URL}wiki/first-install/)."
+        f" A game does not start: [what to check]({SITE_URL}wiki/troubleshooting/)."
+        f" Other questions: the [FAQ]({SITE_URL}wiki/faq/).",
+        "",
         "## Download BIOS packs",
         "",
         "A pack holds everything its platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. Each Download link is a page that keeps its address from one release to the next. The installer above does the same file by file: its screen installs everything, or fewer under **" + _installer_words().TUI_SYSTEMS_ROW + "**, and `--system`, `--core`, `--region` and `--target` make the same choice without questions. For a bare minimum, build your own pack below.",
