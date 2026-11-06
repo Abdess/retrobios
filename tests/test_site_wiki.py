@@ -426,6 +426,19 @@ def _entry(profile: dict, name: str) -> dict:
     raise AssertionError(f"{name} not in the profile")
 
 
+class TheFaqAnswersWithACommand(unittest.TestCase):
+    """"Do I need every file of a console?" answered `--region us keeps only
+    your region's BIOS`, with no command to run, and that run kept 44 files
+    of the PlayStation set, Japanese PS2 images among them. `--core pcsx1`
+    is the lever the installer itself names."""
+
+    def test_every_file_of_a_console(self):
+        section = _section(_wiki("faq.md"), "Do I need every file of a console?")
+        self.assertIn("<!-- os-tabs -->", section)
+        self.assertIn("--system sony-playstation --core pcsx1", section)
+        self.assertNotIn("only your region", section)
+
+
 class LegalOpensInPlainWords(unittest.TestCase):
     """C5: Is it legal? is a Start here page and opened on case law."""
 
