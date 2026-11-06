@@ -23,6 +23,7 @@ CLI:
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import io
 import struct
@@ -30,7 +31,19 @@ import zipfile
 import zlib
 from collections.abc import Callable, Iterable
 from pathlib import Path
-from typing import BinaryIO, NamedTuple
+from typing import Any, NamedTuple, Protocol
+
+
+class Source(Protocol):
+    """An open member: read in chunks, closed by its ``with`` block."""
+
+    def read(self, size: int = -1, /) -> bytes: ...
+    def __enter__(self) -> Source: ...
+    def __exit__(self, *exc: Any) -> Any: ...
+
+
+class Sink(Protocol):
+    def write(self, data: bytes, /) -> int: ...
 
 # TorrentZip constants: 1996-12-24 23:32:00, deflate level 9
 _DOS_DATE = ((1996 - 1980) << 9) | (12 << 5) | 24
@@ -70,7 +83,7 @@ def zlib_ng_version(module: object = zlib) -> str | None:
     return runtime if "zlib-ng" in runtime.lower() else None
 
 
-def _deflate(stream: BinaryIO) -> tuple[bytes, Written]:
+def _deflate(stream: Source) -> tuple[bytes, Written]:
     compressor = zlib.compressobj(9, zlib.DEFLATED, -15)
     blob = bytearray()
     crc, size, sha1 = 0, 0, hashlib.sha1()
@@ -84,7 +97,7 @@ def _deflate(stream: BinaryIO) -> tuple[bytes, Written]:
 
 
 def write_torrentzip(
-    sink: BinaryIO, members: Iterable[tuple[str, Callable[[], BinaryIO]]]
+    sink: Sink, members: Iterable[tuple[str, Callable[[], Source]]]
 ) -> list[Written]:
     """Write a TorrentZip archive to *sink*, one member in memory at a time.
 
@@ -154,7 +167,7 @@ def build_torrentzip(members: list[tuple[str, bytes]]) -> bytes:
     """
     sink = io.BytesIO()
     write_torrentzip(
-        sink, [(name, lambda data=data: io.BytesIO(data)) for name, data in members]
+        sink, [(name, functools.partial(io.BytesIO, data)) for name, data in members]
     )
     return sink.getvalue()
 

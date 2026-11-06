@@ -45,6 +45,7 @@ from typing import BinaryIO
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from torrentzip import Source as Readable
 from torrentzip import write_torrentzip, zlib_ng_version  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -141,7 +142,7 @@ class _Member(io.RawIOBase):
         super().close()
 
 
-def _opener(source: Path, member: str | None) -> Callable[[], BinaryIO]:
+def _opener(source: Path, member: str | None) -> Callable[[], Readable]:
     if member is None:
         return lambda: source.open("rb")
     return lambda: _Member(source, member)
