@@ -76,7 +76,7 @@ Pipeline flags:
 | `--target TARGET` | filter verify, packs and truth by hardware target |
 | `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py`. Refused with `--skip-packs` |
 | `--all-variants` | build the 6 source x required combinations. Refused with `--skip-packs` and with `--source` |
-| `--full-narrowings` | step 5 compares every region, target and system of each platform instead of three of each. Refused with `--skip-packs` |
+| `--full-narrowings` | step 5 compares every region, target and system of each platform instead of three of each. Refused with `--skip-packs` and with `--source platform` or `--source truth` |
 | `--check-buildbot` | run step 2b. Additive, and ignored under `--offline` |
 | `--with-truth` | run steps 2c and 2d |
 | `--with-export` | run steps 2c, 2d and 2e |

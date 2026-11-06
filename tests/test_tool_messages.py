@@ -213,6 +213,45 @@ class AnOfflineExportWithNoOriginalsStopsFirst(unittest.TestCase):
         self.assertIn("export_native.py --all --refresh-cache", text)
 
 
+class ThePipelineFlagTableSaysEveryRefusal(unittest.TestCase):
+    """tools.md said --full-narrowings is refused with --skip-packs only, and
+    advanced-usage.md kept its own shorter list: `--source truth
+    --full-narrowings` failed with nothing on either page saying so."""
+
+    PAIRS = {"--source": "platform", "--all-variants": True, "--full-narrowings": True,
+             "--skip-packs": True}
+
+    def _refused(self, flags: dict) -> bool:
+        import argparse
+
+        args = argparse.Namespace(source=None, all_variants=False, full_narrowings=False,
+                                  skip_packs=False)
+        for flag, value in flags.items():
+            setattr(args, flag.lstrip("-").replace("-", "_"), value)
+        parser = mock.Mock()
+        pipeline._refuse_unapplied_flags(parser, args)
+        return parser.error.called
+
+    def test_each_refused_pair_is_in_the_row_of_a_flag(self):
+        import itertools
+
+        text = (REPO_ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
+        rows = {line.split("`")[1].split()[0]: line for line in text.splitlines()
+                if line.startswith("| `--")}
+        for (a, va), (b, vb) in itertools.combinations(self.PAIRS.items(), 2):
+            if not self._refused({a: va, b: vb}):
+                continue
+            with self.subTest(pair=(a, b)):
+                self.assertTrue(f"`{b}" in rows.get(a, "") or f"`{a}" in rows.get(b, ""),
+                                f"{a} with {b} is refused, and neither row says so")
+        self.assertIn("`--source truth`", rows["--full-narrowings"])
+
+    def test_one_list_of_refusals(self):
+        text = (REPO_ROOT / "wiki" / "advanced-usage.md").read_text(encoding="utf-8")
+        self.assertNotIn("are refused with", text)
+        self.assertIn("tools.md#pipeline", text)
+
+
 class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
     """The markdown wrote `**Remove** hiscore.dat (phantom)` beside six
     `**Add** hiscore.dat`, none with a path, for files profiled cores read."""
