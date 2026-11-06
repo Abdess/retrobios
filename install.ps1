@@ -16,7 +16,7 @@
     # and Invoke-WebRequest throws on a cut transfer before the hash is read:
     # the site's build rewrites this line there (scripts/sitebootstrap.py).
     $mismatchAdvice = "The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-    $defaultInstallSha256 = "34fd006cc0456c61b9a621e52f35cee6d3fd55ff14bbc6cea207ddc7bc57d858"
+    $defaultInstallSha256 = "f90d3dc9f71f7d4b309f2a9a564907291eb694eb6f88dd651b861e54f7414e38"
     $maximumInstallerBytes = 2MB
     $installerExit = 0
     $installer = if ($PSScriptRoot) { Join-Path $PSScriptRoot "install.py" } else { $null }

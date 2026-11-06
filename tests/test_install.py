@@ -3420,7 +3420,8 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
 
 class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
     """Offline, --target on AmberELEC asked for install/targets/amberelec.json,
-    which exists nowhere: online the same run says it has no targets."""
+    which existed nowhere: online the same run said it had no targets.
+    EmuELEC has none still."""
 
     def test_the_list_matches_the_published_targets(self):
         published = {path.stem for path in (REPO_ROOT / "install" / "targets").glob("*.json")}
@@ -3428,16 +3429,16 @@ class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
 
     def test_offline_says_there_are_no_targets(self):
         dest = Path(_tempdir(self))
-        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "amberelec.json")]):
+        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "emuelec.json")]):
             with self.subTest(manifest=bool(extra)):
                 proc = subprocess.run(
-                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "amberelec",
+                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "emuelec",
                      "--dest", str(dest), "--target", "rk3326", "--offline", "--no-input",
                      "--dry-run", *extra],
                     capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
                 self.assertEqual(proc.returncode, 2, proc.stderr)
-                self.assertIn("AmberELEC has no hardware targets", proc.stderr)
-                self.assertNotIn("targets/amberelec.json", proc.stderr)
+                self.assertIn("EmuELEC has no hardware targets", proc.stderr)
+                self.assertNotIn("targets/emuelec.json", proc.stderr)
 
 
 class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
@@ -3491,6 +3492,17 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
         targets = json.loads((REPO_ROOT / "install" / "targets" / "retropie.json")
                              .read_text(encoding="utf-8"))
         self.assertLessEqual({*install._RPI_MODELS.values(), "x86_64"}, set(targets))
+
+    def test_amberelec_names_its_device(self):
+        # An RG351P image carries no melonDS or bsnes, and the full list was
+        # installed: AmberELEC had no target list to read the device against.
+        with unittest.mock.patch.object(
+            install, "_parse_os_release", return_value={"COREELEC_DEVICE": "RG351P"}
+        ):
+            self.assertEqual(install.detect_board("amberelec"), "rg351p")
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "amberelec.json")
+                             .read_text(encoding="utf-8"))
+        self.assertIn("rg351p", targets)
 
     def test_lakka_names_its_device_or_its_project(self):
         # An RPi4 Lakka installed 5.7 GB of every board's files: its board
