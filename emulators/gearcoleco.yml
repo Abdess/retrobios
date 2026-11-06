@@ -67,6 +67,7 @@ files:
     size: 8192
     crc32: "3aa93ef3"
     validation: [size, crc32]
+    on_mismatch: {crc32: warn}
     source_ref: "platforms/libretro/libretro.cpp:779-840 (find_firmware), platforms/libretro/libretro.cpp:858-885 (load_colecovision_firmware), platforms/libretro/libretro.cpp:2453-2457, platforms/libretro/libretro.cpp:2258-2259, src/Adam.cpp:28-31, src/Adam.h:52, src/Memory.cpp:310-319, src/Memory.cpp:246-249"
     note: >
       Loaded for both machines. Any 8192-byte image is accepted, and a CRC32
@@ -80,6 +81,7 @@ files:
     size: 8192
     crc32: "05a37a34"
     validation: [size, crc32]
+    on_mismatch: {crc32: warn}
     source_ref: "platforms/libretro/libretro.cpp:887-948 (load_adam_firmware), platforms/libretro/libretro.cpp:2426-2427, platforms/libretro/libretro.cpp:2483-2487, platforms/libretro/libretro.cpp:2500-2501, platforms/libretro/libretro.cpp:2584-2588, src/Adam.cpp:32-35, src/Adam.h:53, src/Adam.cpp:137-146, src/Adam.cpp:166-188, src/GearcolecoCore.cpp:414-419, src/Adam.cpp:519-522"
     note: >
       The 8 KiB EOS bank, the first half of the 16 KiB u22 chip. A CRC32
@@ -94,6 +96,7 @@ files:
     size: 32768
     crc32: "58d86a2a"
     validation: [size, crc32]
+    on_mismatch: {crc32: warn}
     source_ref: "platforms/libretro/libretro.cpp:887-948 (load_adam_firmware), platforms/libretro/libretro.cpp:2426-2427, platforms/libretro/libretro.cpp:2483-2487, platforms/libretro/libretro.cpp:2500-2501, platforms/libretro/libretro.cpp:2584-2588, src/Adam.cpp:36-39, src/Adam.h:54, src/Adam.cpp:137-146, src/Adam.cpp:166-188, src/GearcolecoCore.cpp:414-419, src/Adam.cpp:513-522"
     note: >
       A CRC32 other than 58d86a2a logs "Unknown SmartWriter revision" and

@@ -86,5 +86,35 @@ class ContentFoundLabelsTakeTheirRegionSlot(unittest.TestCase):
             self.assertIsNotNone(check_file_validation(str(path), "scph1001.bin", index))
 
 
+class GearcolecoWarnsOnAnUnknownRevision(unittest.TestCase):
+    """Gearcoleco rejects a firmware by size only and logs an unknown CRC32
+    before loading it (platforms/libretro/libretro.cpp:811-816, 875-876,
+    928-935 at be1a3716): another OS-7 revision of 8 KiB runs."""
+
+    def test_another_revision_passes(self):
+        import sys
+        import tempfile
+
+        import yaml
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from validation import _build_validation_index, check_file_validation
+
+        profile = yaml.safe_load(
+            (REPO_ROOT / "emulators" / "gearcoleco.yml").read_text(encoding="utf-8")
+        )
+        index = _build_validation_index({"gearcoleco": profile})
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, size in (("colecovision.rom", 8192), ("eos.rom", 8192),
+                               ("writer.rom", 32768)):
+                path = Path(tmp) / name
+                path.write_bytes(b"\x01" * size)
+                with self.subTest(name=name):
+                    self.assertIsNone(check_file_validation(str(path), name, index))
+                path.write_bytes(b"\x01" * (size - 1))
+                with self.subTest(name=name, size="short"):
+                    self.assertIsNotNone(check_file_validation(str(path), name, index))
+
+
 if __name__ == "__main__":
     unittest.main()
