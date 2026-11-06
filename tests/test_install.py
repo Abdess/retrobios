@@ -4609,6 +4609,21 @@ class StandaloneCopiesUnderTheirOwnName(unittest.TestCase):
         self.assertLessEqual({"keys.txt", "otp.bin", "seeprom.bin"}, names)
 
 
+class TheBoardSystemsAreNamedFromTheCode(unittest.TestCase):
+    """--help and the wiki named six systems whose board is read, while the
+    code read eight: an AmberELEC user concluded --target was needed."""
+
+    def test_help_and_wiki_name_every_one(self):
+        names = [install.display_name(name) for name in install._BOARD_SOURCES]
+        help_text = " ".join(install.build_parser().format_help().split())
+        wiki = " ".join((REPO_ROOT / "wiki" / "installer.md").read_text().split())
+        paragraph = wiki[:wiki.index("RetroPie reads the Pi model") + len("RetroPie")][-400:]
+        for name in names:
+            with self.subTest(name=name):
+                self.assertIn(name, help_text[help_text.index("--target"):])
+                self.assertIn(name, paragraph)
+
+
 class RetroArchAppImageIsPortable(unittest.TestCase):
     """The buildbot's Linux RetroArch is an AppImage beside a .home folder
     the AppImage runtime makes its HOME: the run found nothing and offered

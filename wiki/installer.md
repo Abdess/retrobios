@@ -1069,8 +1069,9 @@ AmberELEC, EmuELEC and KNULLI install the BIOS list they publish themselves. The
 image or source of its Odroid Go builds is published, so neither its marker
 files nor its folder could be read.
 
-Batocera, Recalbox, ROCKNIX, Lakka and KNULLI also name the board they were built
-for, RetroPie reads the Pi model as its setup script does (`x86_64` on a PC),
+AmberELEC, EmuELEC, Batocera, Recalbox, ROCKNIX, Lakka and KNULLI also name the
+board they were built for (AmberELEC and EmuELEC as `COREELEC_DEVICE` in
+`/etc/os-release`), RetroPie reads the Pi model as its setup script does (`x86_64` on a PC),
 and that board narrows the install unless `--target` or `--every-board` says
 otherwise (see the options above). A board with no core list of its own is
 named and gets the files of every board. KNULLI writes its board to

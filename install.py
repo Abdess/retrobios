@@ -13384,8 +13384,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--target",
         metavar="NAME",
         help="hardware target for core filtering (switch, rpi4, ...). "
-        "On Batocera, Recalbox, ROCKNIX, Lakka, KNULLI and RetroPie the board is read "
-        "from the system",
+        f"On {_names_and([display_name(name) for name in _BOARD_SOURCES])} the board "
+        "is read from the system",
     )
     parser.add_argument(
         "--every-board",
