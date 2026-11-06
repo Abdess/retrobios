@@ -16,9 +16,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import upstream
-from siterender import _by_mode
+from siterender import _by_mode, _escape_tags
 from sourceref import (
-    _HEX_ADDRESS_RE, _prose_runs, is_binary_citation, ref_role, source_ref_values,
+    _HEX_ADDRESS_RE, _prose_runs, is_binary_citation, ref_annotation, ref_role,
+    source_ref_values,
     split_source_ref,
 )
 
@@ -512,7 +513,7 @@ def source_ref_items(profile: dict, value: str | dict | None) -> list[tuple[str,
         for part in split_source_ref(refs):
             if is_binary_citation(part.path):
                 text, binary = _binary_citation(part.path, binary)
-                rendered.append((text, ""))
+                rendered.append((text + _annotation_markdown(ref_annotation(part.raw)), ""))
                 continue
             binary = ""
             role, bare = ref_role(part.path)
@@ -544,17 +545,29 @@ def source_ref_items(profile: dict, value: str | dict | None) -> list[tuple[str,
 
             role = (role_label(profile, current_role, part.path)
                     if current_role and _two_repositories(profile) else "")
+            note = _annotation_markdown(ref_annotation(part.raw))
             if selected is None:
-                rendered.append((f"`{display}`", role))
+                rendered.append((f"`{display}`{note}", role))
             else:
                 repo, pin = selected
                 url = _source_permalink(
                     repo, pin, real_path, part.start, part.end
                 )
-                rendered.append((f"[`{display}`]({url})", role))
+                rendered.append((f"[`{display}`]({url}){note}", role))
 
         groups.append((label, rendered or [(f"`{refs}`", "")]))
     return groups
+
+
+def _annotation_markdown(text: str) -> str:
+    """A part's annotation after its citation, as written: `(lsf default)`.
+
+    Profile prose, so placeholders keep their brackets and nothing in it
+    opens emphasis or a table cell.
+    """
+    if not text:
+        return ""
+    return " " + _escape_tags(re.sub(r"([*|\\])", r"\\\1", text))
 
 
 def _binary_citation(path: str, previous: str) -> tuple[str, str]:
