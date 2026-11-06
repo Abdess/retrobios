@@ -2761,20 +2761,26 @@ def preferred_profile(index: dict[str, set[str]], name: str) -> str | None:
     return name if name in claimants else sorted(claimants)[0]
 
 
-def profile_blind_platforms(
+def without_profile_blind(
     platforms: list[str],
+    flags: list[str],
     platforms_dir: str,
     profiles: dict[str, dict],
-    target_cores: dict[str, set[str] | None] | None = None,
+    target_cores: dict[str, set[str] | None] | None,
+    is_all: bool,
 ) -> list[str]:
-    """Platforms that run no core a profile describes.
+    """The platforms a narrowing read from profiles can apply to.
 
     Regions, search order and game data are read from the profiles of the
     cores a platform runs. MiSTer and BizHawk declare `cores: []`: a
     --region, --one-per-slot or --no-game-data pack of theirs withdrew
-    nothing while its name and README said it had.
+    nothing while its name and README said it had. A named platform is
+    refused (exit 1). Under --all it is left out with a notice. generate_pack
+    and verify both read this.
     """
-    return [
+    if not flags:
+        return platforms
+    blind = [
         name for name in platforms
         if not resolve_platform_cores(
             load_platform_config(name, platforms_dir),
@@ -2782,6 +2788,16 @@ def profile_blind_platforms(
             target_cores=(target_cores or {}).get(name),
         )
     ]
+    for name in blind:
+        message = (
+            f"{name} runs no core a profile describes, and {', '.join(flags)} "
+            "reads the profiles"
+        )
+        if not is_all:
+            print(f"ERROR: {message}: drop {', '.join(flags)}", file=sys.stderr)
+            sys.exit(1)
+        print(f"  {message}: left out")
+    return [name for name in platforms if name not in blind]
 
 
 def resolve_platform_cores(

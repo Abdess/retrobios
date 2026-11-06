@@ -75,7 +75,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
-    profile_blind_platforms,
+    without_profile_blind,
     MANUFACTURER_PREFIXES,
     require_yaml,
     ProfileSelectionError,
@@ -3099,42 +3099,6 @@ def _pack_label(source: str, required_only: bool) -> str:
     return f"[source={source}, required]" if required_only else f"[source={source}]"
 
 
-def _without_profile_blind(
-    args: argparse.Namespace,
-    platforms: list[str],
-    emu_profiles: dict,
-    target_cores_cache: dict[str, set[str] | None],
-) -> list[str]:
-    """Refuse a narrowing read from profiles on a platform that runs none.
-
-    Named, the platform is refused. Under --all it is left out with a
-    notice, as an empty truth pack is under --all-variants.
-    """
-    flags = [
-        flag for flag, given in (
-            ("--region", getattr(args, "regions", None)),
-            ("--one-per-slot", getattr(args, "one_per_slot", False)),
-            ("--no-game-data", getattr(args, "no_game_data", False)),
-        ) if given
-    ]
-    if not flags:
-        return platforms
-    blind = profile_blind_platforms(
-        platforms, args.platforms_dir, emu_profiles,
-        target_cores_cache if args.target else None,
-    )
-    for name in blind:
-        message = (
-            f"{name} runs no core a profile describes, and {', '.join(flags)} "
-            "reads the profiles"
-        )
-        if not args.all:
-            print(f"ERROR: {message}: drop {', '.join(flags)}", file=sys.stderr)
-            sys.exit(1)
-        print(f"  {message}: left out")
-    return [name for name in platforms if name not in blind]
-
-
 def _truth_layer_is_empty(
     platform: str, platforms_dir: str, emu_profiles: dict, target_cores: set[str] | None
 ) -> bool:
@@ -3846,8 +3810,19 @@ def _main(held: contextlib.ExitStack) -> None:
         platforms = _platforms_with_systems(
             args, platforms, system_filter, emu_profiles, target_cores_cache
         )
-    platforms = _without_profile_blind(
-        args, platforms, emu_profiles, target_cores_cache
+    platforms = without_profile_blind(
+        platforms,
+        [
+            flag for flag, given in (
+                ("--region", getattr(args, "regions", None)),
+                ("--one-per-slot", getattr(args, "one_per_slot", False)),
+                ("--no-game-data", getattr(args, "no_game_data", False)),
+            ) if given
+        ],
+        args.platforms_dir,
+        emu_profiles,
+        target_cores_cache if args.target else None,
+        args.all,
     )
 
     data_registry = load_data_dir_registry(args.platforms_dir)
