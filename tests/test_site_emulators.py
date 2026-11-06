@@ -763,5 +763,34 @@ class SmallFixes(unittest.TestCase):
         self.assertEqual(said, [])
 
 
+class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):
+    """pcee2's page linked github.com/PCSX2/pcsx2/archive/{version}.tar.gz,
+    a 404, and buildbot zips showed `Revision: master (2047720058)`: a branch
+    that means nothing for a buildbot URL and the server's ETag."""
+
+    def test_the_url_is_substituted_and_a_commit_is_linked(self):
+        entry = {"source_url": "https://github.com/PCSX2/pcsx2/archive/{version}.tar.gz",
+                 "version": "6db638dc0373769b4c5d5b5dd7ed6da641b9a18e"}
+        lines = gs.data_directory_origin(entry, {"sha": entry["version"],
+                                                 "version": entry["version"]})
+        self.assertEqual(lines[0], "Fetched from <https://github.com/PCSX2/pcsx2/archive/"
+                                   "6db638dc0373769b4c5d5b5dd7ed6da641b9a18e.tar.gz>")
+        self.assertIn("(https://github.com/PCSX2/pcsx2/commit/6db638dc0373769b4c5d5b5dd7ed6da641b9a18e)",
+                      lines[1])
+        self.assertNotIn("{version}", " ".join(lines))
+
+    def test_an_etag_is_no_revision(self):
+        entry = {"source_url": "https://buildbot.libretro.com/assets/system/Dolphin.zip"}
+        lines = gs.data_directory_origin(entry, {"sha": '"2047720058"', "version": "master"})
+        self.assertEqual(lines, ["Fetched from <https://buildbot.libretro.com/assets/system/Dolphin.zip>"])
+
+    def test_every_registered_url_resolves(self):
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_data_dirs.yml").read_text())
+        for ref, entry in (registry.get("data_directories") or registry).items():
+            if isinstance(entry, dict):
+                with self.subTest(ref=ref):
+                    self.assertNotIn("{", " ".join(gs.data_directory_origin(entry, {})))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4759,6 +4759,33 @@ def data_directory_revisions(data_dir: Path = _REPO_ROOT / "data") -> dict[str, 
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+_GIT_COMMIT = re.compile(r"[0-9a-f]{40}")
+_GITHUB_REPO = re.compile(r"https://github\.com/([^/]+/[^/]+)/")
+
+
+def data_directory_origin(entry: dict, fetched: dict) -> list[str]:
+    """Where a data directory is fetched from, and the commit the packs hold.
+
+    The URL is written with the `{version}` refresh_data_dirs substitutes:
+    printed raw it led to a 404. A zip source records the server's ETag,
+    which names no revision anyone can fetch, so only a git commit is shown.
+    """
+    lines = []
+    url = str(entry.get("source_url") or "")
+    if url:
+        url = url.replace("{version}", str(entry.get("version", "master")))
+        lines.append(f"Fetched from <{url}>")
+    sha = str(fetched.get("sha", "")).strip('"')
+    if _GIT_COMMIT.fullmatch(sha):
+        repo = _GITHUB_REPO.match(url)
+        commit = f"[{_code(sha[:12])}](https://github.com/{repo.group(1)}/commit/{sha})" \
+            if repo else _code(sha)
+        branch = str(fetched.get("version", ""))
+        lines.append(f"Revision: {commit}" + (
+            f", the head of `{branch}` when fetched" if branch and branch != sha else ""))
+    return lines
+
+
 def page_data_directories(name: str, profiles: dict) -> list[dict]:
     """The data directories an emulator page lists.
 
@@ -10075,15 +10102,8 @@ def emulator_pages(
             if entry.get("description"):
                 line += f": {entry['description']}"
             lines.append(line)
-            if entry.get("source_url"):
-                lines.append(f"    - Fetched from <{entry['source_url']}>")
-            fetched = _DATA_REVISIONS.get(ref) or {}
-            if fetched.get("version") or fetched.get("sha"):
-                # The URL serves whatever is current: the revision says
-                # which content the packs were built from.
-                revision = str(fetched.get("sha", "")).strip('"')
-                lines.append(f"    - Revision: {fetched.get('version', '')}"
-                             + (f" ({_code(revision)})" if revision else ""))
+            lines.extend(f"    - {line}" for line in data_directory_origin(
+                entry, _DATA_REVISIONS.get(ref) or {}))
             if dd.get("mode"):
                 lines.append(f"    - Read by the {dd['mode']} build only")
             if dd.get("bundled"):
