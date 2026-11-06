@@ -328,12 +328,22 @@ def og_section(rel: str, level: str) -> str:
 OG_DIR = Path(__file__).resolve().parent.parent / "docs_assets" / "og"
 
 
+# An emulator page's card is that of the maker of the first system it runs,
+# by page path: "emulators/mgba.mdx" -> "nintendo". One card per emulator
+# would be some 900 images in the repository; the maker's names the
+# consoles. Filled by generate_site.record_emulator_page.
+EMULATOR_CARDS: dict[str, str] = {}
+
+
 def og_image(rel: str, level: str) -> str:
-    """The sharing card's address: the page's own when it has one, else
-    its section's."""
+    """The sharing card's address: the page's own when it has one, its
+    maker's for an emulator, else its section's."""
     own = re.fullmatch(r"(platforms|systems)/([a-z0-9_-]+)\.mdx?", rel)
     if own and own[2] != "index" and (OG_DIR / own[1] / f"{own[2]}.png").is_file():
         return f"{SITE_URL}assets/og/{own[1]}/{own[2]}.png"
+    maker = EMULATOR_CARDS.get(re.sub(r"\.mdx?$", "", rel))
+    if maker and (OG_DIR / "systems" / f"{maker}.png").is_file():
+        return f"{SITE_URL}assets/og/systems/{maker}.png"
     return f"{SITE_URL}assets/og/{og_section(rel, level)}.png"
 
 
@@ -350,6 +360,11 @@ def page_head(rel: str, level: str, title: str, browser_title: str, structured: 
     if rel == NOT_FOUND:
         return head + [{"tag": "meta", "attrs": {"name": "robots", "content": "noindex"}}]
     image = og_image(rel, level)
+    if browser_title != title:
+        # Starlight writes og:title from the H1 ("mGBA"): a shared link
+        # reads as the search result does ("mGBA BIOS files").
+        head += [{"tag": "meta", "attrs": {"property": "og:title", "content": browser_title}},
+                 {"tag": "meta", "attrs": {"name": "twitter:title", "content": browser_title}}]
     head += [
         {"tag": "meta", "attrs": {"property": "og:image", "content": image}},
         {"tag": "meta", "attrs": {"property": "og:image:width", "content": "1200"}},

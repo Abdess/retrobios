@@ -772,6 +772,11 @@ def generate_get_page(platform_name: str) -> str:
     pack = release_record.pack_for(platform_name, record)
     released = has_release_pack(platform_name)
     title = get_page_title(platform_name, display)
+    # The page changes with the release it lists: its tag is its date, the
+    # one the sitemap gives (vYYYY.MM.DD).
+    tag_date = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", str(record.get("tag", "")))
+    if released and pack and tag_date:
+        PAGE_DATA[f"{release_record.GET_DIR}/{platform_name}.md"] = {"dateModified": "-".join(tag_date.groups())}
     if released and pack and pack.get("assets"):
         description = (f"The BIOS pack for {display}: {_fmt_size(pack['download_size'])} to "
                        "download. The address stays the same and always gives the latest ZIP.")
@@ -3014,6 +3019,11 @@ def record_emulator_page(name: str, profile: dict) -> None:
     fetched = [f for f in listed if f.get("name") and not comes_with_app(f)]
     systems = profile.get("systems") or []
     first = systems[0] if systems else ""
+    makers = [_system_page_map[sys_id][0] for sys_id in systems if sys_id in _system_page_map]
+    if makers:
+        sitestarlight.EMULATOR_CARDS[f"emulators/{name}"] = makers[0]
+    else:
+        sitestarlight.EMULATOR_CARDS.pop(f"emulators/{name}", None)
     # The first system's files first: "dreamcast bios" found Flycast's
     # page, whose required NAOMI archives came before dc_boot.bin.
     names: dict[str, str] = {}
@@ -3027,8 +3037,7 @@ def record_emulator_page(name: str, profile: dict) -> None:
         system_name(first) if 0 < len(systems) <= 5 else "",
         list(names.values()),
         len({Path(str(f["name"])).name.casefold() for f in fetched if f.get("required") is True}),
-        # Ship of Harkinian reads game ROMs: they are no BIOS.
-        "BIOS" if len(firmware) * 2 >= len(fetched) else "files",
+        _snippet_noun(names.values(), len(firmware), len(fetched)),
     )
     if listed and all(comes_with_app(f) for f in listed):
         NOTHING_TO_FETCH.add(key)
@@ -7240,6 +7249,9 @@ SYSTEM_PAGES_MOVED = {
     "systems/arcade-sharp-mz-2500.md": "systems/sharp.md",
     "systems/arcade-miuchiz.md": "systems/arcade.md",
     "systems/arcade-yamaha-ym2608.md": "systems/arcade.md",
+    # Oric is filed under its maker since 2026-10-23, and a reader still
+    # followed the old address to the 404 page.
+    "systems/oric.md": "systems/tangerine.md#oric",
     "systems/other-scummvm.md": "systems/scummvm.md",
     "systems/other-sdlpal.md": "systems/sdlpal.md",
     "systems/sega-dreamcast.md": "systems/sega.md",
@@ -7893,6 +7905,19 @@ def generate_emulators_index(profiles: dict) -> str:
         lines.append("")
 
     return "\n".join(lines) + "\n"
+
+
+def _snippet_noun(names, firmware: int, fetched: int) -> str:
+    """What an emulator's files are called in its snippet. A Switch
+    emulator reads keys, and "eden keys" is what readers search for; Ship
+    of Harkinian reads game ROMs, which are no BIOS."""
+    names = list(names)
+    keys = sum("key" in name.casefold() for name in names)
+    if keys >= 2 and any("firmware" in name.casefold() for name in names):
+        return "keys and firmware"
+    if names and keys * 2 > len(names):
+        return "keys"
+    return "BIOS" if firmware * 2 >= fetched else "files"
 
 
 def comes_with_app(f: dict) -> bool:
