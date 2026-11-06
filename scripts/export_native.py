@@ -776,6 +776,8 @@ def export_platform(
             # A content-scanning core's names are labels: a list checked
             # by path cannot hold them.
             (report.labels, "entry", "entries", "found by content"),
+            (len(report.unattributed), "file", "",
+             "no single native system of the platform takes"),
         )
         if number
     ]
@@ -833,6 +835,7 @@ def export_platform(
         "requirements_corrected": requirements,
         "withheld": list(withheld),
         "found_by_content": report.labels,
+        "unattributed": report.unattributed,
         "removal_candidates": candidates,
         "doubled": doubled,
         "invalid": issues,

@@ -499,6 +499,28 @@ class Reconciliation(unittest.TestCase):
         systems, _ = build_native_model({"systems": {}}, scraped)
         self.assertEqual(sorted(systems), ["pcengine", "supergrafx"])
 
+    def test_an_addition_joins_the_native_id_its_cores_read(self):
+        """RetroDECK's arcade spans mame and fbneo with no primary id. Every
+        addition went under fbneo, the first sorted, MAME device archives
+        included. One the cores do not settle is not written."""
+        scraped = {"systems": {"arcade": {"files": [
+            {"name": "neogeo.zip", "destination": "neogeo.zip", "native_system": "mame"},
+            {"name": "pgm.zip", "destination": "pgm.zip", "native_system": "fbneo"},
+        ]}}}
+        truth = {"systems": {"arcade": {"files": [
+            {"name": "neogeo.zip", "_cores": ["mame"]},
+            {"name": "pgm.zip", "_cores": ["fbneo"]},
+            {"name": "a2autokbd.zip", "_cores": ["mame"]},
+            {"name": "dkong.zip", "_cores": ["mame", "fbneo"]},
+        ]}}}
+        systems, report = build_native_model(truth, scraped)
+        self.assertEqual(
+            [fe.name for fe in systems["mame"].files if fe.platform is None],
+            ["a2autokbd.zip"],
+        )
+        self.assertFalse([fe for fe in systems["fbneo"].files if fe.platform is None])
+        self.assertEqual(report.unattributed, ["arcade/dkong.zip"])
+
     def test_an_entry_the_platform_declares_without_a_hash_is_still_written(self):
         """Batocera and RetroBat both ship entries with an empty md5."""
         scraped = {
