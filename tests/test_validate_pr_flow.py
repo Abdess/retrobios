@@ -7,6 +7,8 @@ cannot hold has to be an action the contributor can take.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import os
 import subprocess

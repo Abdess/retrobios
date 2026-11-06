@@ -10,6 +10,8 @@ role of each reference named by one word that a legend defines once.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import html
 import re
 import sys

@@ -146,6 +146,9 @@ def main() -> int:
         "--strict", action="store_true", help="exit non-zero when any is found"
     )
     args = parser.parse_args()
+    from common import work_from_repo_root  # noqa: PLC0415
+
+    work_from_repo_root(args, parser, ["bios_dir"])
     from common import require_directory  # noqa: PLC0415
 
     require_directory(args.bios_dir)

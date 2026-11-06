@@ -7,6 +7,8 @@ the run, and one registered only in the copy was never checked.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import subprocess
 import sys

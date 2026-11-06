@@ -9,6 +9,8 @@ and put every file one directory too deep.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import unittest
 from pathlib import Path
 

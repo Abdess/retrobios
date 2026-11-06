@@ -1009,6 +1009,9 @@ def main() -> int:
         "without it the run reports them and exits 0",
     )
     args = parser.parse_args()
+    from common import work_from_repo_root  # noqa: PLC0415
+
+    work_from_repo_root(args, parser, ["db", "platforms_dir", "emulators_dir"])
 
     import contextlib
 

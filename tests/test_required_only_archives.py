@@ -6,6 +6,8 @@ its _Required pack held them anyway: the archive loop never read `required`.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import subprocess
 import sys
 import tempfile

@@ -9,6 +9,8 @@ frontend hashes bios/disk.rom for xroar and finds the PC-88 ROM.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import os
 import sys

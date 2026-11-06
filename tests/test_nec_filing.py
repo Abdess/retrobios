@@ -9,6 +9,8 @@ no PC-88 emulator reads. Reads the repository.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import sys
 import unittest
 from pathlib import Path

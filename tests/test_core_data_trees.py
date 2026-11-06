@@ -10,6 +10,8 @@ reader now gets the tree, or the profile says its package installs it.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import os
 import sys
 import unittest

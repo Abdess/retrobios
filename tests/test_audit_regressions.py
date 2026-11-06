@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import ast
 import contextlib
 import hashlib
@@ -136,6 +138,41 @@ class ReadmeRegressions(unittest.TestCase):
         self.assertNotIn("SyntaxError", proc.stderr)
         self.assertIn("generate_pack.py needs Python 3.9", proc.stderr)
 
+    def test_every_script_names_the_floor_under_an_older_interpreter(self):
+        """Only generate_pack.py and pipeline.py checked the version. verify.py,
+        slots.py, validate_pr.py and cross_reference.py started under 3.8 and
+        stopped halfway on a str.removeprefix AttributeError."""
+        import shutil  # noqa: PLC0415
+
+        python38 = shutil.which("python3.8")
+        if python38 is None:
+            if os.environ.get("CI"):
+                self.fail("CI must provide python3.8")
+            self.skipTest("no python3.8 on PATH")
+        commands = (
+            ["verify.py", "--emulator", "handy"],
+            ["verify.py", "--platform", "batocera"],
+            ["validate_pr.py", "--json", "README.md"],
+            ["cross_reference.py", "--emulator", "handy"],
+            ["slots.py"],
+            ["identity.py"],
+            ["generate_site.py", "--help"],
+            ["campaign.py", "--help"],
+            ["region_check.py", "--help"],
+        )
+        for command in commands:
+            with self.subTest(command=" ".join(command)):
+                # -E -s rather than -I: -I drops the script's folder from
+                # sys.path, so the imports would fail before any check.
+                proc = subprocess.run(
+                    [python38, "-E", "-s", f"scripts/{command[0]}", *command[1:]],
+                    cwd=ROOT, capture_output=True, text=True, timeout=60,
+                    check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertNotIn("Traceback", proc.stderr)
+                self.assertIn(f"{command[0]} needs Python 3.9", proc.stderr)
+
     def test_the_floor_interpreter_imports_every_script(self):
         """Every module under scripts/ is loaded by a real interpreter of the
         floor version, as the installer's 3.8 floor is proven by running it.
@@ -216,6 +253,46 @@ class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
             # tmpfs, and a full tmpfs failed modules no change touched.
             scratch = str((clone / "tmp" / "tests").resolve())
             self.assertEqual(proc.stdout.split(), [scratch, scratch])
+
+
+class EveryTestModuleImportsTheIsolation(unittest.TestCase):
+    """tests/__init__.py keeps a run offline, its scratch under tmp/ and its
+    installer cache its own, but only `discover -s tests -t .` imported it:
+    `discover tests` ran with RETROBIOS_OFFLINE unset, scratch in /tmp and
+    the user's real cache. Each module now imports the package first."""
+
+    def test_the_package_import_comes_before_any_other(self):
+        missing = []
+        for path in sorted((ROOT / "tests").glob("test_*.py")):
+            body = ast.parse(path.read_text(encoding="utf-8")).body
+            imports = [
+                node for node in body
+                if isinstance(node, (ast.Import, ast.ImportFrom))
+                and getattr(node, "module", None) != "__future__"
+            ]
+            first = imports[0] if imports else None
+            if not (isinstance(first, ast.Import)
+                    and [alias.name for alias in first.names] == ["tests"]):
+                missing.append(path.name)
+        self.assertEqual(missing, [])
+
+    def test_discover_without_a_top_level_runs_isolated(self):
+        env = {k: v for k, v in os.environ.items()
+               if k not in ("RETROBIOS_OFFLINE", "TMPDIR", "RETROBIOS_CACHE")}
+        proc = subprocess.run(
+            [sys.executable, "-c",
+             "import os, sys, tempfile, unittest\n"
+             "unittest.TestLoader().discover('tests', pattern='test_artifact_lock.py')\n"
+             "print(os.environ.get('RETROBIOS_OFFLINE'), tempfile.gettempdir(),"
+             " os.environ.get('RETROBIOS_CACHE'))\n"],
+            cwd=ROOT, env=env, capture_output=True, text=True, timeout=120,
+            check=False,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        offline, scratch, cache = proc.stdout.split()
+        self.assertEqual(offline, "1")
+        self.assertEqual(scratch, str(ROOT / "tmp" / "tests"))
+        self.assertEqual(cache, str(ROOT / "tmp" / "tests" / "cache"))
 
 
 class ReleaseSigningRegressions(unittest.TestCase):
@@ -2834,6 +2911,50 @@ class DeclaredDependenciesMatchTheDocumentedWorkflows(unittest.TestCase):
         )
 
 
+class TheAnnotationsAreChecked(unittest.TestCase):
+    """Every signature carried type hints and nothing read them: six pack
+    helpers declared `zipfile.ZipFile` while every caller also passed a
+    PackRecord, and 990 such contradictions went through CI green. mypy now
+    runs in CI against mypy-baseline.txt, the errors the code carried when the
+    check started."""
+
+    BASELINE = ROOT / "mypy-baseline.txt"
+    ENTRY = re.compile(r"(?P<path>[^:]+\.py):0: error: .+  \[[a-z-]+\]")
+
+    def test_ci_holds_the_code_to_the_baseline(self):
+        body = (ROOT / ".github" / "workflows" / "validate.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("mypy-baseline filter", body)
+        self.assertNotIn("--allow-unsynced", body)
+
+    def test_every_baseline_entry_names_a_file_that_exists(self):
+        stale = []
+        for line in self.BASELINE.read_text(encoding="utf-8").splitlines():
+            match = self.ENTRY.fullmatch(line)
+            self.assertIsNotNone(match, f"unreadable baseline entry: {line}")
+            if not (ROOT / match["path"]).is_file():
+                stale.append(match["path"])
+        self.assertEqual(stale, [], "baseline entries for files that are gone")
+
+    def test_the_code_reports_no_error_outside_the_baseline(self):
+        for module in ("mypy", "mypy_baseline"):
+            try:
+                __import__(module)
+            except ImportError:
+                self.skipTest(f"{module} is not installed (pip install -e '.[dev]')")
+        report = subprocess.run(
+            [sys.executable, "-m", "mypy"],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+        )
+        result = subprocess.run(
+            [sys.executable, "-m", "mypy_baseline", "filter", "--no-colors"],
+            cwd=ROOT, input=report.stdout, capture_output=True, text=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+
 class TheProjectInstallsWithPip(unittest.TestCase):
     """pyproject declared a dev extra that pip could not install: without a
     [build-system] and an explicit module list, setuptools' flat-layout
@@ -4991,8 +5112,33 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
             [(clean, ["RetroArch"]), (warned, ["RetroDECK"]), (core_miss, ["ROCKNIX"])]
         )
         self.assertIn("1 warning (RetroDECK 1)", summary)
-        self.assertIn("ROCKNIX: n64.psh", summary)
+        self.assertIn("n64.psh (ROCKNIX)", summary)
         self.assertIn("0 critical,", summary)
+
+    def test_a_file_missing_on_several_platforms_is_counted_once(self):
+        """sfiii2a.zip missing on 15 platforms read '24 core file(s)' for 10
+        distinct files, the name printed 15 times on one line."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import verify
+
+        def missing(*names: str) -> dict:
+            return {"severity_counts": {}, "undeclared_files": [
+                {"name": name, "required": True, "in_repo": False,
+                 "category": "bios", "in_pack": True} for name in names
+            ]}
+
+        summary = verify._overall_summary([
+            (missing("sfiii2a.zip"), ["Batocera"]),
+            (missing("sfiii2a.zip", "ROM"), ["RetroPie"]),
+            (missing("sfiii2a.zip"), ["RomM"]),
+            (missing(), ["MinUI"]),
+        ])
+        self.assertIn(
+            "2 core file(s) a core cannot run without are missing: "
+            "sfiii2a.zip (every platform but MinUI); ROM (RetroPie)",
+            summary,
+        )
+        self.assertEqual(summary.count("sfiii2a.zip"), 1)
 
 
 
@@ -5955,6 +6101,20 @@ class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
             with self.assertRaises(DatabaseUnreadable) as caught:
                 load_database(target)
             self.assertIn(f"--output {target}", str(caught.exception))
+
+    def test_a_typo_beside_the_database_names_the_database(self):
+        """--db databse.json beside database.json was told to rescan the whole
+        collection into a second file named after the typo."""
+        from scripts.common import DatabaseUnreadable, load_database
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            (Path(directory) / "database.json").write_text("{}")
+            typo = Path(directory) / "databse.json"
+            with self.assertRaises(DatabaseUnreadable) as caught:
+                load_database(str(typo))
+        message = str(caught.exception)
+        self.assertIn(f"Did you mean {typo.with_name('database.json')}?", message)
+        self.assertNotIn("generate_db.py", message)
 
 
 class VerifyPacksRefusesWhatItCannotDo(unittest.TestCase):

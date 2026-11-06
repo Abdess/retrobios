@@ -9,6 +9,8 @@ list the page shows is not what the command it prints installs.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import importlib.util
 import json
 import random

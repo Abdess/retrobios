@@ -7,6 +7,8 @@ PS2 BIOS and the pcsx2 standalone core, exit code 0.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import io
 import json
 import sys

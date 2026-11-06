@@ -8,6 +8,8 @@ cites. A construct that is gone or unknown must stop the scrape.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import dataclasses
 import json
 import sys

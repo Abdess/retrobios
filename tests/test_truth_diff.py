@@ -9,6 +9,8 @@ discrepancy that does not exist. Content decides, as everywhere else here.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import pathlib
 import subprocess
 import sys

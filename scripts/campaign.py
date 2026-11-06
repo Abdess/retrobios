@@ -83,14 +83,17 @@ from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
-import yaml
-
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+# First: core_probe stops an interpreter older than 3.9 before anything else
+# fails on it.
+import core_probe
+
+import yaml
 
 import autorun
 import campaign_profiles
 import campaign_rules as rules
-import core_probe
 import measurement_records as mr
 
 ROOT = Path(__file__).resolve().parent.parent

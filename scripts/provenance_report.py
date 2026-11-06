@@ -384,6 +384,9 @@ def main() -> int:
         "(the pipeline writes derivable.json)",
     )
     args = parser.parse_args()
+    from common import work_from_repo_root  # noqa: PLC0415
+
+    work_from_repo_root(args, parser, ["db", "provenance_dir", "emulators_dir", "write_derivable"])
     if args.write_derivable and not args.derive:
         parser.error("--write-derivable records what --derive finds: pass both")
 

@@ -14,6 +14,8 @@ constants rather than against itself. The AES vector is from NIST SP 800-38A.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import shutil
 import sys

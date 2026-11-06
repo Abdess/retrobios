@@ -9,6 +9,8 @@ that long, so each copy reads install.py from the commit it was built from.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import json
 import os

@@ -247,6 +247,9 @@ def main() -> int:
                         help="profiles the rules are checked against (default emulators)")
     parser.add_argument("--json", action="store_true", help="print the summary as JSON")
     args = parser.parse_args()
+    from common import work_from_repo_root  # noqa: PLC0415
+
+    work_from_repo_root(args, parser, ["regions", "extras", "headers", "emulators_dir"])
 
     regions = load_yaml(args.regions)
     extras = load_yaml(args.extras)

@@ -32,6 +32,8 @@ Linux handheld rows sent the reader to a menu.
 """
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import re
 import sys

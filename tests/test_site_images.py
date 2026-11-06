@@ -8,6 +8,8 @@ CDN. These tests hold the replacements in place.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import re
 import sys
