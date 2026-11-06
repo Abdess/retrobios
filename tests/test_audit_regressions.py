@@ -5207,6 +5207,25 @@ class CollectionCardsCarryFullHashes(unittest.TestCase):
             self.assertIn(f'<dd class="rb-hash">{value}</dd>', text)
 
 
+class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
+    """advanced_drastic's page printed the KNULLI build file that holds its
+    revision as plain text, while pin_build carries the repository, the tag
+    and the path a pinned link needs. 36 profiles carry one."""
+
+    def test_the_build_file_row(self):
+        from scripts.generate_site import _build_rows
+
+        rows = _build_rows({"pin_frozen": "KNULLI builds this revision.", "pin_build": [{
+            "platform": "knulli", "repo": "https://github.com/knulli-cfw/knulli-linux",
+            "revision": "20260511", "path": "package/emulators/advanced_drastic/advanced_drastic.mk",
+            "variable": "ADVANCED_DRASTIC_VERSION", "value": "eaf41ab9"}]})
+        self.assertIn(
+            "| Build file | [KNULLI `package/emulators/advanced_drastic/advanced_drastic.mk`]"
+            "(https://github.com/knulli-cfw/knulli-linux/blob/20260511/package/emulators/"
+            "advanced_drastic/advanced_drastic.mk) at `20260511` sets `ADVANCED_DRASTIC_VERSION` |",
+            rows)
+
+
 class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
     """The Download button of a .variants/ card saved advision.zip.1c086064,
     the storage name, and nothing said RetroBat looks for advision.zip."""

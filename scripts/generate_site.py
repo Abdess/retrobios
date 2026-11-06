@@ -8196,6 +8196,23 @@ def _exact_size(size: int) -> str:
     return _fmt_size(size) if size < 1024 else f"{_fmt_size(size)} ({size:,} bytes)"
 
 
+def _build_file_links(pin_build: list[dict]) -> list[str]:
+    """Each platform build file that holds the revision, linked at the
+    revision it was read at. The prose of pin_frozen named the file as
+    plain text, while pin_build carries all a pinned link needs."""
+    from sitesources import _browse_repo, _source_permalink  # noqa: PLC0415
+
+    links = []
+    for build in pin_build:
+        repo = _browse_repo(str(build["repo"]))
+        path = str(build["path"])
+        text = f"{_escape_tags(_platform_display(str(build['platform'])))} {_code(path)}"
+        if repo is not None:
+            text = f"[{text}]({_source_permalink(repo, str(build['revision']), path, None, None)})"
+        links.append(f"{text} at {_code(str(build['revision']))} sets {_code(str(build['variable']))}")
+    return links
+
+
 def _build_rows(profile: dict) -> list[str]:
     """Meta card rows for who ships the build, how its files are found, why
     its revision is held and where its releases are announced."""
@@ -8216,6 +8233,9 @@ def _build_rows(profile: dict) -> list[str]:
         if frozen:
             held = _escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
             rows.append(f"| {label} | {held} |")
+    builds = _build_file_links(profile.get("pin_build") or [])
+    if builds:
+        rows.append(f"| Build file | {'<br>'.join(builds)} |")
     announced = profile.get("version_source")
     if isinstance(announced, dict) and announced.get("url"):
         url = str(announced["url"])
