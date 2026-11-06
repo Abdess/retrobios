@@ -778,7 +778,12 @@ class OfflineMakesNoRequest(Scratch):
                 self.assertIn("--offline", proc.stderr)
 
     def test_a_listing_and_a_pack_need_no_network_anyway(self):
-        proc = self.run_installer("--offline", "--list-platforms")
+        # --platform alone with it is refused: the listing names every one.
+        proc = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "install.py"), "--offline", "--list-platforms"],
+            env=_offline_env(), capture_output=True, text=True, timeout=120,
+            check=False, stdin=subprocess.DEVNULL,
+        )
         self.assertEqual(proc.returncode, 0, proc.stderr)
 
 

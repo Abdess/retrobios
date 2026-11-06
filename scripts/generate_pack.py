@@ -4949,9 +4949,12 @@ def _manifest_data_directories(
     (strip_components for a ZIP, source_path for a tarball, exclude) come
     from _data_dirs.yml, the same refresh_data_dirs applies. Every file
     carries the sha1 and size the cache holds, so a member the source
-    changed since is refused rather than installed.
+    changed since is refused rather than installed. archive_size is the
+    size of the archive refresh_data_dirs last downloaded, what fetching
+    the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
     """
     grouped: dict[tuple[str, str], dict] = {}
+    versions: dict[str, dict[str, dict]] = {}
     for src, full in members:
         ref, systems, prefix = refs[full]
         entry = registry.get(ref, {})
@@ -4976,6 +4979,17 @@ def _manifest_data_directories(
                 group["source_path"] = str(entry.get("source_path", "")).format(version=version)
             if entry.get("exclude"):
                 group["exclude"] = [str(e) for e in entry["exclude"]]
+            cache = entry.get("local_cache")
+            if cache:
+                recorded = Path(cache).parent / ".versions.json"
+                if str(recorded) not in versions:
+                    try:
+                        versions[str(recorded)] = json.loads(recorded.read_text())
+                    except FileNotFoundError:
+                        versions[str(recorded)] = {}
+                size = versions[str(recorded)].get(ref, {}).get("archive_size")
+                if isinstance(size, int) and size > 0:
+                    group["archive_size"] = size
         group["systems"].extend(s for s in systems if s not in group["systems"])
         rel = full[len(prefix):].lstrip("/") if prefix else full
         hashes = compute_hashes(src, frozenset({"sha1"}))

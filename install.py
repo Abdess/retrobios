@@ -291,7 +291,6 @@ def _os_default_dests(os_type: str) -> dict[str, Path]:
     the command line but not found must not land in ~/bios, which none of
     them reads.
     """
-    home = Path.home()
     if os_type == "windows":
         return {
             # RetroArch's system directory defaults to <exe folder>\system
@@ -307,13 +306,13 @@ def _os_default_dests(os_type: str) -> dict[str, Path]:
         # RetroArch may be the Linux one inside the distribution, while RetroBat
         # only exists on the Windows side, reached through /mnt/c.
         return {
-            "retroarch": home / ".config" / "retroarch" / "system",
+            "retroarch": _unix_retroarch_base() / "system",
             "retrobat": _host_path("C:/RetroBat/bios"),
         }
     if os_type == "darwin":
         return {"retroarch": _macos_retroarch_base() / "system"}
     return {
-        "retroarch": home / ".config" / "retroarch" / "system",
+        "retroarch": _unix_retroarch_base() / "system",
     }
 
 
@@ -681,8 +680,9 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # found nowhere and no folder to assume) or from (a folder named with --from,
     # reason: not_found, not_a_folder, unreadable, or system for the root
     # of the system and /proc, /sys, /dev) or dest (reason: unreadable, a
-    # folder above it this user cannot open, or not_writable, the BIOS
-    # folder cannot be created, a summary following) or option (reason:
+    # folder above it this user cannot open, not_a_folder, the BIOS folder
+    # is a file or lies under one, or not_writable, the BIOS folder cannot
+    # be created, a summary following) or option (reason:
     # unknown, a platform, target, system, core or emulator the run cannot
     # use, refused before any download).
     "error": ("stage", "reason", "platform", "message"),
@@ -1383,6 +1383,17 @@ def _macos_retroarch_base() -> Path:
     if _is_dir(steam) and not _is_dir(Path("/Applications/RetroArch.app")):
         return support
     return Path.home() / "Documents" / "RetroArch"
+
+
+def _unix_retroarch_base() -> Path:
+    """RetroArch's base folder on Linux: $XDG_CONFIG_HOME/retroarch when the
+    variable is set, else ~/.config/retroarch (fill_pathname_application_data
+    in file_path_special.c, frontend_unix_get_env in platform_unix.c). The
+    code tests only that the variable exists, so an empty one counts."""
+    xdg = os.environ.get("XDG_CONFIG_HOME")
+    if xdg is not None:
+        return Path(xdg) / "retroarch"
+    return Path.home() / ".config" / "retroarch"
 
 
 # System directory -> the retroarch.cfg it was read from and the directory
@@ -2773,11 +2784,16 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
         if ra_dir:
             found.append(("retroarch", ra_dir))
 
-        # RetroArch native
-        native_cfg = home / ".config" / "retroarch" / "retroarch.cfg"
-        ra_dir = _parse_retroarch_system_dir(native_cfg)
-        if ra_dir:
-            found.append(("retroarch", ra_dir))
+        # RetroArch native: the config under its base folder, then
+        # ~/.retroarch.cfg when that one is missing (open_default_config_file
+        # in configuration.c). Either way the system folder defaults to the
+        # base folder's.
+        native_base = _unix_retroarch_base()
+        for native_cfg in (native_base / "retroarch.cfg", home / ".retroarch.cfg"):
+            ra_dir = _parse_retroarch_system_dir(native_cfg, native_base)
+            if ra_dir:
+                found.append(("retroarch", ra_dir))
+                break
 
     if os_type == "darwin":
         # open_default_config_file reads <Application Support>/RetroArch/config
@@ -3692,6 +3708,9 @@ def _check_data_directory(entry: object, where: str) -> None:
     strip = entry.get("strip_components", 0)
     if not isinstance(strip, int) or isinstance(strip, bool) or not 0 <= strip <= 16:
         raise ValueError(f"{where}.strip_components is invalid")
+    size = entry.get("archive_size", 1)
+    if not isinstance(size, int) or isinstance(size, bool) or size < 1:
+        raise ValueError(f"{where}.archive_size is invalid")
     if kind == "tarball" and (
         not isinstance(entry.get("source_path"), str) or not entry["source_path"]
     ):
@@ -6440,7 +6459,8 @@ def _report_outcome(
     kept = _kept_lines() + ([
         f"{_plural(len(unplaced), 'file')} read from "
         f"{unplaced[0].get('frontend') or 'the frontend'}'s save directory left out: "
-        f"its place is not known. {LINE_SAVE_REMEDY}"] if unplaced else [])
+        + (f"{unplaced[0]['save_why']}." if unplaced[0].get("save_why")
+           else f"its place is not known. {LINE_SAVE_REMEDY}")] if unplaced else [])
     kept += list(notes or [])
     if interrupted:
         say(f"\nStopped. {_plural(downloaded, 'file')} installed.")
@@ -6856,11 +6876,12 @@ def _print_plan(
     # files, and 2636 data files" read as two kinds of one thing. The kinds
     # follow, adding up to it.
     total = counts.files + tree_files
-    parts = ([f"{_plural(total, 'file')} ({format_size(counts.size + tree_counts.size)})"]
+    tree_bytes = sum(data_fetch_bytes(entry, needed) for entry, needed in trees)
+    parts = ([f"{_plural(total, 'file')} ({format_size(counts.size + tree_bytes)})"]
              if total else [])
     split = parts_words(counts if (manifest or {}).get("categorized")
                         else tally({"size": e.get("size")} for e in to_download),
-                        tree_files, tree_counts.size)
+                        tree_files, tree_bytes)
     if split and trees:
         split += f", the data files extracted from {_plural(len(trees), 'archive')}"
     # A pack is copied from, not downloaded: "Would download 23 files" was
@@ -6935,8 +6956,11 @@ def _print_plan(
                   "every system and its files.")
     for entry, needed in trees:
         source = LOCAL.pack.name if LOCAL.pack is not None else entry["url"]
+        fetched = data_fetch_bytes(entry, needed)
+        archive = ("" if fetched == sum(meta.get("size", 0) for meta in needed.values())
+                   else f" (a {format_size(fetched)} archive)")
         print(f"  {term.bold(entry['ref'] + ' data')}  {_sized(list(needed.values()))}, "
-              f"from {source}")
+              f"from {source}{archive}")
     for folder, (count, size) in sorted((kept or {}).items()):
         print(f"\n  Would keep {_plural(count, 'file')} you have ({format_size(size)}), "
               f"whose contents differ, in {folder}")
@@ -7062,20 +7086,72 @@ def download_files(
     return failed, interrupted
 
 
-def _fetch_archive(url: str, directory: Path, progress: Progress | None = None) -> Path:
+def _archive_validator(headers: object) -> str:
+    """What names this revision of an archive to its server: an If-Range
+    with it gets the rest of the same bytes, or the whole new archive."""
+    if not headers:
+        return ""
+    etag = headers.get("ETag", "") or ""
+    # A weak tag never answers a range (RFC 9110 13.1.5).
+    return etag if etag and not etag.startswith("W/") else headers.get("Last-Modified", "") or ""
+
+
+def _fetch_archive(url: str, directory: Path, progress: Progress | None = None,
+                   keep: Path | None = None) -> Path:
     """A data directory's source archive, in *directory*, retried like files.
-    progress draws its bytes as they come, an attempt that failed taken back."""
+    progress draws its bytes as they come, an attempt that failed taken back.
+
+    With keep, the archive is written there and kept when the transfer is
+    cut, beside a note of its address and the validator its server sent:
+    the next attempt, or the next run, asks for the rest with Range and
+    If-Range, and a server that changed the archive sends it whole. A cut
+    50 MB archive started again from zero, and a link that drops more often
+    than one archive takes never installed the tree.
+    """
     _network_allowed(url)
+    note = keep.with_name(keep.name + ".source") if keep is not None else None
     reason: Exception | None = None
     for attempt in range(1, MAX_RETRIES + 1):
-        handle = tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False)
+        offset = 0
+        validator = ""
+        if keep is not None:
+            try:
+                recorded = note.read_text(encoding="utf-8").split("\n")
+                if recorded[0] == url and len(recorded) > 1 and recorded[1]:
+                    validator = recorded[1]
+                    offset = keep.stat().st_size
+            except (OSError, UnicodeError):
+                offset = 0
+        request = urllib.request.Request(url)
+        if offset:
+            request.add_header("Range", f"bytes={offset}-")
+            request.add_header("If-Range", validator)
+        handle = (open(keep, "r+b" if offset else "wb") if keep is not None else
+                  tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False))
         received = 0
+        resumed = 0
         try:
-            with handle, urllib.request.urlopen(url, timeout=60) as resp:
+            with handle, urllib.request.urlopen(request, timeout=60) as resp:
+                headers = resp.headers or {}
+                ranged = (offset and getattr(resp, "status", 200) == 206 and str(
+                    headers.get("Content-Range", "")).startswith(f"bytes {offset}-"))
+                if not ranged:
+                    offset = 0
+                handle.seek(offset)
+                handle.truncate()
+                if keep is not None and not offset:
+                    # Written before the first byte: a cut transfer is then
+                    # resumed only against the revision it holds.
+                    note.write_text(f"{url}\n{_archive_validator(headers)}\n",
+                                    encoding="utf-8")
                 if progress is not None:
-                    length = resp.headers.get("Content-Length", "")
+                    length = headers.get("Content-Length", "")
                     if length.isdigit():
-                        progress.expect(int(length))
+                        progress.expect(offset + int(length))
+                    if offset:
+                        progress.add(offset, resumed=True)
+                        resumed = offset
+                total = offset
                 while True:
                     if _stop.is_set():
                         raise _Interrupted()
@@ -7083,28 +7159,49 @@ def _fetch_archive(url: str, directory: Path, progress: Progress | None = None) 
                     if not chunk:
                         break
                     received += len(chunk)
-                    if received > MAX_DATA_ARCHIVE_SIZE:
+                    total += len(chunk)
+                    if total > MAX_DATA_ARCHIVE_SIZE:
                         raise ValueError("archive exceeds the size limit")
                     handle.write(chunk)
                     if progress is not None:
                         progress.add(len(chunk))
-            return Path(handle.name)
+            return keep if keep is not None else Path(handle.name)
         except urllib.error.HTTPError as exc:
-            Path(handle.name).unlink(missing_ok=True)
-            if exc.code < 500 and exc.code != 429:
+            if keep is None or exc.code == 416 or exc.code < 500 and exc.code != 429:
+                # Refused, or a range past an archive that shrank: no
+                # attempt resumes it.
+                _drop_archive(Path(handle.name), note)
+            if exc.code < 500 and exc.code not in (416, 429):
                 raise
             reason = exc
         except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
-            Path(handle.name).unlink(missing_ok=True)
+            if keep is None:
+                Path(handle.name).unlink(missing_ok=True)
             reason = exc if isinstance(exc, OSError) else ConnectionError(repr(exc))
-        except BaseException:
-            Path(handle.name).unlink(missing_ok=True)
+        except ValueError:
+            _drop_archive(Path(handle.name), note)
             raise
-        if progress is not None and received:
-            progress.add(-received)
+        except BaseException:
+            # Stopped: a kept archive waits for the next run.
+            if keep is None:
+                Path(handle.name).unlink(missing_ok=True)
+            raise
+        if progress is not None:
+            if received:
+                progress.add(-received)
+            if resumed:
+                progress.add(-resumed)
+                progress.forget_resumed(resumed)
         if attempt < MAX_RETRIES:
             time.sleep(_retry_delay(attempt, None))
     raise reason if reason else OSError("download failed")
+
+
+def _drop_archive(path: Path, note: Path | None) -> None:
+    """Remove an archive and the note of where it came from."""
+    path.unlink(missing_ok=True)
+    if note is not None:
+        note.unlink(missing_ok=True)
 
 
 def _archive_members(
@@ -7167,6 +7264,19 @@ def data_directory_state(entry: dict, bios_path: Path,
     return root, needed, present
 
 
+def data_fetch_bytes(entry: dict, needed: dict[str, dict]) -> int:
+    """What getting a tree's missing files costs: its source archive, which
+    comes whole for one file, or from a pack the files themselves. A list
+    that records no archive size gives the files' own sizes: a tarball whose
+    tree is 10 KB was announced as 10 KB and was a download of 21 MB."""
+    if not needed:
+        return 0
+    size = entry.get("archive_size")
+    if LOCAL.pack is None and isinstance(size, int) and size > 0:
+        return size
+    return sum(meta.get("size", 0) for meta in needed.values())
+
+
 def install_data_directory(entry: dict, bios_path: Path,
                            state: tuple[Path, dict[str, dict], int] | None = None,
                            progress: Progress | None = None) -> dict:
@@ -7186,6 +7296,7 @@ def install_data_directory(entry: dict, bios_path: Path,
     if not needed:
         return counts
     _writing.set()
+    fetched: Path | None = None
     try:
         root.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=root) as scratch:
@@ -7193,7 +7304,11 @@ def install_data_directory(entry: dict, bios_path: Path,
                 # The pack holds the tree where it extracts, already mapped.
                 members = LOCAL.pack.tree(entry.get("dest", ""))
             else:
-                archive = _fetch_archive(entry["url"], Path(scratch), progress)
+                # Beside the tree, outside the scratch folder: a transfer
+                # cut short is resumed by the next attempt or the next run.
+                kept = root / f".{entry['ref']}.archive.part"
+                archive = _fetch_archive(entry["url"], Path(scratch), progress, kept)
+                fetched = archive
                 members = _archive_members(archive, entry)
             for rel, declared, opener in members:
                 meta = needed.pop(rel, None)
@@ -7227,6 +7342,10 @@ def install_data_directory(entry: dict, bios_path: Path,
     except _MEMBER_ERRORS as exc:
         # A damaged, encrypted or unsupported member, in words.
         counts["error"] = unreadable_words(exc)
+    finally:
+        if fetched is not None:
+            # Read whole: the next run fetches the archive afresh.
+            _drop_archive(fetched, fetched.with_name(fetched.name + ".source"))
     counts["absent"] = len(needed)
     return counts
 
@@ -8620,6 +8739,13 @@ def saves_line(display: str, count: int, where: str) -> str:
             f"{shown_path(folder)}")
 
 
+def unlisted_saves_words(display: str) -> str:
+    """Why a file list holds none of the files read from the save
+    directory: the platform keeps it in no fixed place, and the list leaves
+    them out with no hash or address, which --save-dir cannot change."""
+    return f"{display} keeps it in no fixed place, and its file list holds none of them"
+
+
 def unplaced_line(display: str, count: int, remedy: str) -> str:
     """The files read from an unknown save directory, left out."""
     return (f"{_plural(count, 'file')} read from {display}'s save directory left out: "
@@ -8939,7 +9065,7 @@ def found_head(files: list[dict], trees: list[dict], bios_path: Path) -> str:
     for tree in trees:
         _root, wanted, _present = data_directory_state(tree, bios_path, remember=True)
         data += len(wanted)
-        data_bytes += sum(meta.get("size", 0) for meta in wanted.values())
+        data_bytes += data_fetch_bytes(tree, wanted)
     left = [entry for entry in needed if id(entry) not in copies]
     rest = len(left) + data
     where = ", ".join(f"{count} found in {_last_name(label)}"
@@ -13413,6 +13539,29 @@ def main() -> None:
         if (args.list_platforms or args.list_targets or args.list_systems
                 or args.list_cores or args.list_emulators):
             parser.error("--for-games narrows an install, not a listing")
+    # Applied or refused, never ignored: a run prints one list, and the
+    # narrowing options apply to --list-systems and --list-cores only, past
+    # --target and --installed-cores, which --list-emulators also reads.
+    listings = [flag for flag, given in (
+        ("--list-platforms", args.list_platforms), ("--list-targets", args.list_targets),
+        ("--list-systems", args.list_systems), ("--list-cores", args.list_cores),
+        ("--list-emulators", args.list_emulators)) if given]
+    if len(listings) > 1:
+        parser.error(f"{listings[0]} and {listings[1]} each print a list: run them "
+                     "one at a time")
+    if listings and listings[0] in ("--list-platforms", "--list-targets",
+                                    "--list-emulators"):
+        unread = (("--system", args.system), ("--core", args.core),
+                  ("--region", args.region), ("--emulator", args.emulator))
+        if listings[0] != "--list-emulators":
+            unread += (("--target", args.target), ("--every-board", args.every_board),
+                       ("--installed-cores", args.installed_cores))
+        if listings[0] == "--list-platforms":
+            unread += (("--platform", args.platform),)
+        given = next((flag for flag, value in unread if value), "")
+        if given:
+            parser.error(f"{listings[0]} prints the whole list, which {given} "
+                         "does not narrow")
     if args.declared_only:
         # Applied or refused, never ignored.
         for given, reason in (
@@ -13758,6 +13907,27 @@ def _refuse_closed(dest: Path, named: str) -> None:
     sys.exit(1)
 
 
+def _refuse_file(dest: Path, named: str) -> None:
+    """End the run on a BIOS folder that is a file, or lies under one.
+
+    mkdir then failed on EEXIST or ENOTDIR, and the run blamed permissions
+    and offered sudo, which fails the same way.
+    """
+    for folder in (dest, *dest.parents):
+        if _exists(folder):
+            break
+    else:
+        return
+    if _is_dir(folder):
+        return
+    where = (f"{shown_path(dest)} is a file, not a folder" if folder == dest
+             else f"{shown_path(dest)} cannot be a folder: {shown_path(folder)} is a file")
+    EVENTS.emit("error", stage="dest", reason="not_a_folder", platform="", message=where)
+    print(f"Error: {screen_text(where)}. Name the folder the BIOS files go in, not "
+          f"the file {named}.", file=sys.stderr)
+    sys.exit(1)
+
+
 def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
                   again: bool = False) -> bool:
     """Say that a --dest folder does not exist before anything goes there.
@@ -13772,6 +13942,7 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     a card's folder ended the run where it meant "not that card".
     """
     _refuse_closed(dest, named)
+    _refuse_file(dest, named)
     if dest.exists():
         return True
     nearest = dest.absolute()
@@ -15099,6 +15270,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                      else f"{found_in[0]} names" if found_in else "detected here")
             # One setup by now: two found without questions stopped above.
             _refuse_closed(path, f"{named} (name another with --dest)")
+            _refuse_file(path, f"{named} (name another with --dest)")
 
     total_downloaded = 0
     total_up_to_date = 0
@@ -15137,7 +15309,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     # --installed-cores is below: EmuDeck installed 3.2 GB and only then was
     # steamos refused for RetroArch, with no summary of what had landed.
     target_lists: dict[str, dict] = {}
-    if args.target and not args.list_targets:
+    if args.target:
         for plat_name, _bios_path in platforms:
             targets = fetch_targets(plat_name)
             if targets is None:
@@ -15333,6 +15505,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         display = display_name(plat_name, manifest)
         files, unplaced = place_save_entries(
             files, bios_path, manifest, args.save_dir, display, say=False)
+        if not manifest.get("save_directory"):
+            # Its own list leaves these files out: naming the folder with
+            # --save-dir installs none of them, and was advised in a loop.
+            _SAVE_WHY[bios_path] = unlisted_saves_words(display)
         # The games of the card, read before the choices: where it holds
         # some, what they need is the menu's first choice, and --for-games
         # narrows the list here, before the systems are counted.
@@ -15535,7 +15711,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             total_omitted += len(omitted_files)
             # Named for the end of the run: ROCKNIX's own list leaves them out,
             # and the end said "the frontend's save directory".
-            omitted_seen.extend({**entry, "frontend": display}
+            omitted_seen.extend({**entry, "frontend": display,
+                                 "save_why": unlisted_saves_words(display)}
                                 if entry.get("reason") == "no_save_directory"
                                 and not entry.get("frontend") else entry
                                 for entry in omitted_files)
@@ -15608,8 +15785,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 plat_name, manifest, bios_path, files, up_to_date, mismatched,
                 sum(len(state[1]) for _entry, state in data_states), len(omitted_files),
                 chosen=selection[0] if selection else None,
-                data_bytes=sum(meta.get("size", 0) for _entry, state in data_states
-                               for meta in state[1].values()),
+                data_bytes=sum(data_fetch_bytes(entry, state[1])
+                               for entry, state in data_states),
             )
             emit_copies(plat_name, to_download, copies, bios_index, bios_path, files)
             emit_unreadable(plat_name, unread)
@@ -21150,6 +21327,9 @@ def _unplaced_lines(summary: dict | None, state: TuiState,
     if not count:
         return []
     name = display_name(state.platform) if state.platform else "the frontend"
+    if state.manifest and not state.manifest.get("save_directory"):
+        return [f"{_plural(count, 'file')} read from {name}'s save directory left out: "
+                f"{unlisted_saves_words(name)}."]
     return [f"{_plural(count, 'file')} read from {name}'s save directory left out: "
             f"its place is not known. {remedy or TUI_SAVE_REMEDY}"]
 
