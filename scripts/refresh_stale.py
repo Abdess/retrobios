@@ -579,7 +579,7 @@ def main() -> int:
     parser.add_argument(
         "--json",
         action="store_true",
-        help="machine-readable summary (jobs, surfaced, ignored)",
+        help="machine-readable summary (jobs, surfaced, ignored), the plan with --dry-run",
     )
     parser.add_argument(
         "--findings",
@@ -618,6 +618,22 @@ def main() -> int:
     registry = _load_platform_registry()
     jobs, surfaced, ignored = plan_jobs(findings, registry)
 
+    if args.dry_run and args.json:
+        print(json.dumps({
+            "planned": [
+                {
+                    "area": job.area,
+                    "subject": job.subject,
+                    "command": job.command,
+                    "after": sorted(job.after),
+                    "then": [list(command) for command in job.then],
+                }
+                for job in sorted(jobs, key=lambda j: (j.area, j.subject))
+            ],
+            "surfaced": surfaced,
+            "ignored_count": len(ignored),
+        }, indent=2))
+        return 0
     if args.dry_run:
         print(f"\n[plan] {len(jobs)} refreshable, {len(surfaced)} manual, "
               f"{len(ignored)} already clean/skipped")

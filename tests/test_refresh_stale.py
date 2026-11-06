@@ -234,6 +234,28 @@ class SavedFindings(unittest.TestCase):
             findings = rs.load_findings(path, ("data", "catalogs"))
             self.assertEqual([f["subject"] for f in findings], ["dolphin-sys"])
 
+    def test_dry_run_json_prints_the_plan_as_json(self):
+        """--dry-run --json printed the text plan, and a caller parsing it
+        as JSON failed on the first line."""
+        import json  # noqa: PLC0415
+        import subprocess  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+            path = Path(directory) / "freshness.json"
+            path.write_text(json.dumps([
+                finding("catalogs", "mame recipes"), finding("coreinfo", "anybor"),
+            ]), encoding="utf-8")
+            proc = subprocess.run(
+                [sys.executable, "scripts/refresh_stale.py", "--findings", str(path),
+                 "--dry-run", "--json"],
+                cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=120,
+            )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        plan = json.loads(proc.stdout)
+        self.assertEqual([(j["area"], j["subject"]) for j in plan["planned"]],
+                         [("catalogs", "mame recipes")])
+        self.assertEqual([f["subject"] for f in plan["surfaced"]], ["anybor"])
+
     def test_a_report_that_is_not_a_list_is_refused(self):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
             path = Path(directory) / "freshness.json"
