@@ -123,7 +123,7 @@ def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
             return rows
 
 
-def fetch_goatcounter(start: dt.date, end: dt.date) -> dict[str, list[tuple[str, int]]]:
+def fetch_goatcounter(start: dt.date, end: dt.date) -> dict:
     """Paths and events with their visit counts, and the referring domains."""
     token = (CONFIG / "goatcounter-api-token.txt").read_text(encoding="utf-8").strip()
     auth = {"Authorization": f"Bearer {token}"}
@@ -140,6 +140,8 @@ def fetch_goatcounter(start: dt.date, end: dt.date) -> dict[str, list[tuple[str,
             break
     refs = _get_json(f"{GOATCOUNTER}/stats/toprefs?{urllib.parse.urlencode({**span, 'limit': 50})}", auth)
     total = _get_json(f"{GOATCOUNTER}/stats/total?{urllib.parse.urlencode(span)}", auth)
+    if not isinstance(refs, dict) or not isinstance(total, dict):
+        raise SystemExit("GoatCounter answered with something other than an object")
     # An action carries no referrer, and GoatCounter files it as a direct
     # visit: 592 of the first day's 1,145 "direct" were clicks.
     events = int(total.get("total_events", 0))

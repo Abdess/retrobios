@@ -5018,7 +5018,7 @@ def _print_triage(
 ) -> bool:
     """Profiles ranked by drift, worst first. False when Ctrl-C cut the
     scoring short: the ranking then covers the profiles scored."""
-    ranked = []
+    ranked: list[tuple[int, ProfileReport, str]] = []
     sampled = 0
     progress = _Progress(len(reports), "scored", args.offline or len(reports) < 2)
     complete = True
@@ -5299,7 +5299,7 @@ def main() -> None:
             raise SystemExit(1)
         return
 
-    reports = []
+    reports: list[ProfileReport] = []
     quiet = args.offline or len(selected) < 2
     if not quiet:
         print(
@@ -5474,18 +5474,18 @@ def _emit(
     triage was cut short."""
     if args.as_json:
         print(json.dumps([report_to_dict(r) for r in shown], indent=2))
-        return
+        return None
     if args.markdown:
         target = Path(args.report_dir) / f"profile-sync-{date.today().isoformat()}.md"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(format_markdown(shown), encoding="utf-8")
         print(f"written: {target}")
-        return
+        return None
     if args.fetch_plan:
         for report in shown:
             for url in fetch_plan(report):
                 print(url)
-        return
+        return None
     if args.triage:
         return _print_triage(args, selected, shown)
     for report in shown:
@@ -5494,6 +5494,7 @@ def _emit(
         print()
     if args.changed_only:
         _print_elided(reports, len(shown), frozenset(report.name for report in shown))
+    return None
 
 
 def _print_elided(

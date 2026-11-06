@@ -89,7 +89,8 @@ VIDEO_FPS = 25
 def game_bytes(name: str) -> bytes:
     """Bytes of a game no catalog names, the same on every run."""
     seed = hashlib.sha256(name.encode("utf-8")).digest()
-    blocks, counter = [], 0
+    blocks: list[bytes] = []
+    counter = 0
     while len(blocks) * 32 < GAME_BYTES:
         blocks.append(hashlib.sha256(seed + counter.to_bytes(4, "big")).digest())
         counter += 1
