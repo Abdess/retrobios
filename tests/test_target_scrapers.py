@@ -372,6 +372,21 @@ class RocknixPerDevice(unittest.TestCase):
         self.assertIn("dolphin", amd64)
         self.assertNotIn("drastic", amd64)
 
+    def test_a_standalone_package_keeps_both_spellings(self):
+        """vice-standalone answers to vice-sa only, as scummvm-standalone to
+        scummvm-sa: stripped to vice, every targeted pack left them out
+        while the untargeted one, read from the platform scraper, kept them."""
+        from scraper.rocknix_scraper import standalone_emulators  # noqa: PLC0415
+        from scraper.targets.rocknix_targets_scraper import (  # noqa: PLC0415
+            core_names,
+            parse_device_cores,
+        )
+
+        libretro, standalone = parse_device_cores(self.PACKAGE_MK, "SM8550", "aarch64", False)
+        names = set(core_names(libretro, standalone))
+        self.assertTrue({"aethersx2-sa", "aethersx2", "dolphin-sa", "dolphin"} <= names)
+        self.assertTrue(set(standalone_emulators(standalone)) <= names)
+
     def test_a_metapackage_names_the_cores_it_installs(self):
         from scraper.targets.rocknix_targets_scraper import metapackage_cores  # noqa: PLC0415
 

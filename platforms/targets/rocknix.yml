@@ -1,6 +1,6 @@
 platform: rocknix
 source: https://github.com/ROCKNIX/distribution/tree/20261001/projects/ROCKNIX/packages/virtual/emulators/package.mk
-scraped_at: '2026-10-17T13:15:29Z'
+scraped_at: '2026-11-06T03:04:24Z'
 targets:
   amd64:
     architecture: x86_64
@@ -10,9 +10,12 @@ targets:
     - amiberry
     - arduous
     - ares
+    - ares-sa
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -39,13 +42,16 @@ targets:
     - bsnes_mercury_performance
     - cap32
     - cemu
+    - cemu-sa
     - crocods
     - daphne
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -55,6 +61,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - fmsx
     - freechaf
     - freeintv
@@ -70,10 +77,13 @@ targets:
     - genesis_plus_gx_wide
     - geolith
     - gopher64
+    - gopher64-sa
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -82,6 +92,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -91,8 +102,10 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - nanoboyadvance
+    - nanoboyadvance-sa
     - neocd
     - nestopia
     - np2kai
@@ -106,6 +119,7 @@ targets:
     - pokemini
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -118,7 +132,9 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
+    - skyemu-sa
     - smsplus_gx
     - snes9x
     - snes9x2002
@@ -131,22 +147,27 @@ targets:
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uzem
     - vba_next
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - vitaquake3
     - wasm4
     - wine
     - xemu
+    - xemu-sa
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   h700:
     architecture: aarch64
     cores:
@@ -184,8 +205,11 @@ targets:
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -195,6 +219,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -213,8 +238,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -232,6 +259,7 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - neocd
     - nestopia
@@ -247,6 +275,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -259,6 +288,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -272,6 +302,7 @@ targets:
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -279,6 +310,7 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vitaquake2
@@ -286,6 +318,7 @@ targets:
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   rk3326:
     architecture: aarch64
     cores:
@@ -323,8 +356,11 @@ targets:
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -334,6 +370,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -352,8 +389,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -371,6 +410,7 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - neocd
     - nestopia
@@ -386,6 +426,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -398,6 +439,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -411,6 +453,7 @@ targets:
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -418,6 +461,7 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vitaquake2
@@ -425,15 +469,18 @@ targets:
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   rk3399:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - b2
     - beetle_gba
@@ -464,12 +511,16 @@ targets:
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -479,6 +530,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -497,8 +549,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -507,6 +561,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -516,8 +571,10 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - nanoboyadvance
+    - nanoboyadvance-sa
     - neocd
     - nestopia
     - np2kai
@@ -532,6 +589,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -544,6 +602,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -557,6 +616,7 @@ targets:
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -564,6 +624,7 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vitaquake2
@@ -571,17 +632,21 @@ targets:
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   rk3566:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -608,12 +673,16 @@ targets:
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -623,6 +692,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -641,8 +711,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -651,6 +723,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -660,6 +733,7 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - neocd
     - nestopia
@@ -675,6 +749,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -687,6 +762,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -700,6 +776,7 @@ targets:
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -707,25 +784,31 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   rk3576:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -752,12 +835,16 @@ targets:
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -767,6 +854,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -785,8 +873,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -795,6 +885,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -804,6 +895,7 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - neocd
     - nestopia
@@ -819,6 +911,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -831,6 +924,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -844,6 +938,7 @@ targets:
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -851,25 +946,31 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   rk3588:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -900,12 +1001,16 @@ targets:
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -915,6 +1020,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -933,8 +1039,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -943,6 +1051,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -952,6 +1061,7 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - neocd
     - nestopia
@@ -967,6 +1077,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -979,6 +1090,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -987,12 +1099,14 @@ targets:
     - snes9x2010
     - stella
     - supermodel
+    - supermodel-sa
     - supersnes9x
     - swanstation
     - tgbdual
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -1000,25 +1114,31 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   s922x:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -1033,6 +1153,7 @@ targets:
     - beetle_vb
     - beetle_wswan
     - bigpemu
+    - bigpemu-sa
     - bk
     - bluemsx
     - box64
@@ -1049,12 +1170,16 @@ targets:
     - crocods
     - daphne
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -1064,6 +1189,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -1081,8 +1207,10 @@ targets:
     - geolith
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -1090,6 +1218,7 @@ targets:
     - mame2010
     - mame2015
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -1099,6 +1228,7 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - neocd
     - nestopia
@@ -1114,6 +1244,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -1126,6 +1257,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -1139,6 +1271,7 @@ targets:
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -1146,25 +1279,31 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   sm4450:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -1179,6 +1318,7 @@ targets:
     - beetle_vb
     - beetle_wswan
     - bigpemu
+    - bigpemu-sa
     - bk
     - bluemsx
     - box64
@@ -1193,16 +1333,21 @@ targets:
     - bsnes_mercury_performance
     - cap32
     - cemu
+    - cemu-sa
     - crocods
     - daedalusx64
+    - daedalusx64-sa
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -1212,6 +1357,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -1230,8 +1376,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - heroic
     - hypseus-singe
     - jaxe
@@ -1242,6 +1390,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -1251,8 +1400,10 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - nanoboyadvance
+    - nanoboyadvance-sa
     - neocd
     - nestopia
     - np2kai
@@ -1267,6 +1418,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -1279,7 +1431,9 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
+    - skyemu-sa
     - smsplus_gx
     - snes9x
     - snes9x2002
@@ -1288,12 +1442,14 @@ targets:
     - steam
     - stella
     - supermodel
+    - supermodel-sa
     - supersnes9x
     - swanstation
     - tgbdual
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -1301,26 +1457,33 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xemu
+    - xemu-sa
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   sm6115:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -1351,12 +1514,16 @@ targets:
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -1366,6 +1533,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -1384,8 +1552,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - hypseus-singe
     - jaxe
     - mame
@@ -1394,6 +1564,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -1403,6 +1574,7 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - neocd
     - nestopia
@@ -1418,6 +1590,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -1430,6 +1603,7 @@ targets:
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
     - smsplus_gx
     - snes9x
@@ -1438,12 +1612,14 @@ targets:
     - snes9x2010
     - stella
     - supermodel
+    - supermodel-sa
     - supersnes9x
     - swanstation
     - tgbdual
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -1451,25 +1627,31 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   sm8250:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -1484,6 +1666,7 @@ targets:
     - beetle_vb
     - beetle_wswan
     - bigpemu
+    - bigpemu-sa
     - bk
     - bluemsx
     - box64
@@ -1498,16 +1681,21 @@ targets:
     - bsnes_mercury_performance
     - cap32
     - cemu
+    - cemu-sa
     - crocods
     - daedalusx64
+    - daedalusx64-sa
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -1517,6 +1705,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -1535,8 +1724,10 @@ targets:
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - heroic
     - hypseus-singe
     - jaxe
@@ -1547,6 +1738,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -1556,8 +1748,10 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - nanoboyadvance
+    - nanoboyadvance-sa
     - neocd
     - nestopia
     - np2kai
@@ -1572,6 +1766,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -1581,11 +1776,14 @@ targets:
     - quicknes
     - race
     - rpcs3
+    - rpcs3-sa
     - same_cdi
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
+    - skyemu-sa
     - smsplus_gx
     - snes9x
     - snes9x2002
@@ -1594,12 +1792,14 @@ targets:
     - steam
     - stella
     - supermodel
+    - supermodel-sa
     - supersnes9x
     - swanstation
     - tgbdual
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -1607,27 +1807,35 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xemu
+    - xemu-sa
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   sm8550:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - ares
+    - ares-sa
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -1642,6 +1850,7 @@ targets:
     - beetle_vb
     - beetle_wswan
     - bigpemu
+    - bigpemu-sa
     - bk
     - bluemsx
     - box64
@@ -1656,17 +1865,23 @@ targets:
     - bsnes_mercury_performance
     - cap32
     - cemu
+    - cemu-sa
     - crocods
     - daedalusx64
+    - daedalusx64-sa
     - daphne
     - desmume
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - drastic
+    - drastic-sa
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -1676,6 +1891,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -1692,11 +1908,14 @@ targets:
     - genesis_plus_gx_wide
     - geolith
     - gopher64
+    - gopher64-sa
     - gpsp
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - heroic
     - hypseus-singe
     - jaxe
@@ -1707,6 +1926,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -1716,8 +1936,10 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - nanoboyadvance
+    - nanoboyadvance-sa
     - neocd
     - nestopia
     - np2kai
@@ -1732,6 +1954,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -1741,11 +1964,14 @@ targets:
     - quicknes
     - race
     - rpcs3
+    - rpcs3-sa
     - same_cdi
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
+    - skyemu-sa
     - smsplus_gx
     - snes9x
     - snes9x2002
@@ -1754,12 +1980,14 @@ targets:
     - steam
     - stella
     - supermodel
+    - supermodel-sa
     - supersnes9x
     - swanstation
     - tgbdual
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -1767,27 +1995,35 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xemu
+    - xemu-sa
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   sm8650:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - ares
+    - ares-sa
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -1802,6 +2038,7 @@ targets:
     - beetle_vb
     - beetle_wswan
     - bigpemu
+    - bigpemu-sa
     - bk
     - bluemsx
     - box64
@@ -1815,14 +2052,18 @@ targets:
     - bsnes_mercury_performance
     - cap32
     - cemu
+    - cemu-sa
     - crocods
     - daphne
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -1832,6 +2073,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -1848,10 +2090,13 @@ targets:
     - genesis_plus_gx_wide
     - geolith
     - gopher64
+    - gopher64-sa
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - heroic
     - hypseus-singe
     - jaxe
@@ -1862,6 +2107,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -1871,8 +2117,10 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - nanoboyadvance
+    - nanoboyadvance-sa
     - neocd
     - nestopia
     - np2kai
@@ -1887,6 +2135,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -1896,11 +2145,14 @@ targets:
     - quicknes
     - race
     - rpcs3
+    - rpcs3-sa
     - same_cdi
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
+    - skyemu-sa
     - smsplus_gx
     - snes9x
     - snes9x2002
@@ -1909,12 +2161,14 @@ targets:
     - steam
     - stella
     - supermodel
+    - supermodel-sa
     - supersnes9x
     - swanstation
     - tgbdual
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -1922,27 +2176,35 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xemu
+    - xemu-sa
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
   sm8750:
     architecture: aarch64
     cores:
     - '81'
     - a5200
     - aethersx2
+    - aethersx2-sa
     - amiberry
     - arduous
     - ares
+    - ares-sa
     - armsx2
+    - armsx2-sa
     - atari800
     - azahar
+    - azahar-sa
     - b2
     - beetle_gba
     - beetle_lynx
@@ -1957,6 +2219,7 @@ targets:
     - beetle_vb
     - beetle_wswan
     - bigpemu
+    - bigpemu-sa
     - bk
     - bluemsx
     - box64
@@ -1970,14 +2233,18 @@ targets:
     - bsnes_mercury_performance
     - cap32
     - cemu
+    - cemu-sa
     - crocods
     - daphne
     - dolphin
+    - dolphin-sa
     - dosbox_core
     - dosbox_pure
     - doublecherrygb
     - dsperate
+    - dsperate-sa
     - duckstation
+    - duckstation-sa
     - easyrpg
     - ecwolf
     - emuscv
@@ -1987,6 +2254,7 @@ targets:
     - fbneo
     - fceumm
     - flycast
+    - flycast-sa
     - flycast2021
     - fmsx
     - freechaf
@@ -2003,10 +2271,13 @@ targets:
     - genesis_plus_gx_wide
     - geolith
     - gopher64
+    - gopher64-sa
     - gw
     - gzdoom
+    - gzdoom-sa
     - handy
     - hatari
+    - hatarisa
     - heroic
     - hypseus-singe
     - jaxe
@@ -2017,6 +2288,7 @@ targets:
     - mame2015
     - mednafen
     - melonds
+    - melonds-sa
     - melonds_ds
     - mesen
     - mesen_s
@@ -2026,8 +2298,10 @@ targets:
     - moonlight
     - mu
     - mupen64plus
+    - mupen64plus-sa
     - mupen64plus_nx
     - nanoboyadvance
+    - nanoboyadvance-sa
     - neocd
     - nestopia
     - np2kai
@@ -2042,6 +2316,7 @@ targets:
     - portmaster
     - potator
     - ppsspp
+    - ppsspp-sa
     - prboom
     - prosystem
     - puae
@@ -2051,11 +2326,14 @@ targets:
     - quicknes
     - race
     - rpcs3
+    - rpcs3-sa
     - same_cdi
     - sameboy
     - sameduck
     - scummvm
+    - scummvm-sa
     - skyemu
+    - skyemu-sa
     - smsplus_gx
     - snes9x
     - snes9x2002
@@ -2064,12 +2342,14 @@ targets:
     - steam
     - stella
     - supermodel
+    - supermodel-sa
     - supersnes9x
     - swanstation
     - tgbdual
     - theodore
     - tic80
     - touchhle
+    - touchhle-sa
     - tyrquake
     - uae4arm
     - uzem
@@ -2077,12 +2357,16 @@ targets:
     - vbam
     - vecx
     - vice
+    - vice-sa
     - vircon32
     - virtualjaguar
     - vita3k
+    - vita3k-sa
     - vitaquake2
     - wasm4
     - wine
     - xemu
+    - xemu-sa
     - xmil
     - yabasanshiro
+    - yabasanshiro-sa
