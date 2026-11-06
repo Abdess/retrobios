@@ -608,6 +608,7 @@ def _report_pack_counts(
     core_count: int,
     source: str,
     verification_mode: str,
+    tree_count: int = 0,
 ) -> None:
     """Print the line the pipeline's consistency check reads.
 
@@ -639,10 +640,11 @@ def _report_pack_counts(
             f"{core_count} from emulator profiles [{verification_mode}]"
         )
     else:
-        baseline = total_files - core_count
+        baseline = total_files - core_count - tree_count
+        trees = f"{tree_count} in core data trees + " if tree_count else ""
         print(
             f"  {zip_path}: {total_files} files packed ({baseline} baseline + "
-            f"{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
+            f"{trees}{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
         )
 
 def _select_variants(
@@ -1314,11 +1316,19 @@ def generate_pack(
           core_trees = [t for t in core_trees if not _extras_for_systems([t], owned)]
       elif system_filter:
           core_trees = _extras_for_systems(core_trees, system_filter)
+      # Counted apart: the trees a core reads are not on the platform's
+      # list. MyMinUI declares nothing and its line read "6944 baseline".
       total_files += _pack_data_directories(
           zf, pack_systems, data_registry, platform_name, base_dest,
           flatten, case_insensitive, seen_destinations, seen_lower,
+          seen_parents, required_only=required_only,
+      )
+      tree_count = _pack_data_directories(
+          zf, {}, data_registry, platform_name, base_dest,
+          flatten, case_insensitive, seen_destinations, seen_lower,
           seen_parents, required_only=required_only, core_trees=core_trees,
       )
+      total_files += tree_count
 
       # README.txt for users: personalized step-by-step per platform
       num_systems = len(pack_systems)
@@ -1357,7 +1367,7 @@ def generate_pack(
 
     _report_pack_counts(
         zip_path, file_status, total_files, core_count, source,
-        verification_mode,
+        verification_mode, tree_count=tree_count,
     )
     if cut is not None:
         _report_left_out(

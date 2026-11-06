@@ -165,5 +165,30 @@ class AmberelecCarriesTheMachines(unittest.TestCase):
         )
 
 
+class TheCountLineKeepsTreesOutOfTheBaseline(unittest.TestCase):
+    """MyMinUI declares no file, and its pack line read "6944 baseline": the
+    fbneo trees its cores read were counted as the platform's list."""
+
+    def test_a_platform_declaring_nothing_has_no_baseline(self) -> None:
+        import contextlib
+        import io
+
+        previous = os.getcwd()
+        os.chdir(REPO_ROOT)
+        self.addCleanup(os.chdir, previous)
+        db = common.load_database("database.json")
+        record = builder.PackRecord()
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            builder.generate_pack(
+                "myminui", "platforms", db, "bios", "tmp", offline=True, record=record,
+                data_registry=common.load_data_dir_registry("platforms"),
+            )
+        line = next(l for l in out.getvalue().splitlines() if "files packed" in l)
+        self.assertIn("(0 baseline + ", line)
+        if record.trees:
+            self.assertIn(f"+ {len(record.trees)} in core data trees + ", line)
+
+
 if __name__ == "__main__":
     unittest.main()
