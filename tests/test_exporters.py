@@ -2909,6 +2909,24 @@ class BatoceraNotesStayWithTheirItem(unittest.TestCase):
         self.assertEqual(trailing, {("bios/bk0010.zip", "two.rom"): "# tail"})
 
 
+class BatoceraEntriesAtAnyIndent(unittest.TestCase):
+    """EmuELEC indents 23 of its systems with one tab. The entry pattern
+    required four spaces, so each was appended again whole and the export
+    carried 21 duplicated keys that ast.literal_eval kept silently."""
+
+    def test_a_tab_indented_entry_is_located(self):
+        from exporter.batocera_exporter import Exporter
+
+        body = [
+            '    "atari5200": { "name": "5200", "biosFiles": [ { "md5": "a", "file": "bios/5200.rom" } ] },',
+            '\t"amiga": { "name": "Amiga", "biosFiles": [ { "md5": "b", "file": "bios/kick.rom" },',
+            '\t\t{ "md5": "c", "file": "bios/kick2.rom" } ] },',
+        ]
+        self.assertEqual(
+            Exporter._entry_spans(body), {"atari5200": (0, 0), "amiga": (1, 2)}
+        )
+
+
 class RecalboxKeepsUnchangedText(unittest.TestCase):
     """Every element the model held was re-rendered: attribute order,
     alignment, line breaks inside md5 and digest case changed in 222
