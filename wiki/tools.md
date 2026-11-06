@@ -95,6 +95,10 @@ alone, run `python scripts/check_buildbot_system.py`.
   ones verify credits (`--destinations`), every emulator pack, each
   profile in each build, built in memory against `verify --emulator`, and
   every system pack that gathers several profiles against `verify --system`.
+  Each of them is also built with `--required-only` and with the regions
+  its files declare (first, middle and last, all of them with
+  `--full-narrowings`). 2,112 emulator and 1,493 system packs took about
+  two minutes on 2026-11-06.
   Equal counts once hid four RetroArch paths credited and never written.
 - **Each narrowed platform pack is compared too.** Step 5 builds in memory
   the `--required-only` and `--no-game-data` pack of every platform, and its
