@@ -9118,15 +9118,15 @@ def _default_setup(declared: list[tuple[str, str]]) -> tuple[str, str]:
     """The setup an install box shows before the reader picks one.
 
     The first in alphabetical order was AmberELEC on 17 system pages, a
-    handheld system under a Windows tab. RetroArch runs on every OS the box
-    has a tab for. Without it, a setup the release publishes a ZIP for,
-    the ones most people download (`release_pack`).
+    handheld system under a Windows tab. The box shows the setup whose
+    command runs under the most of its tabs (the guide's `run`), then on the
+    most systems overall, then one the release publishes a ZIP for.
     """
-    for wanted in (lambda p: p == "retroarch", has_release_pack):
-        chosen = next((pair for pair in declared if wanted(pair[0])), None)
-        if chosen:
-            return chosen
-    return declared[0]
+    def reach(pair: tuple[str, str]) -> tuple[int, int, bool]:
+        runs = GUIDES[pair[0]].run if pair[0] in GUIDES else ()
+        return (len(set(runs) & set(INSTALL_PICKER_OSES)), len(runs), has_release_pack(pair[0]))
+
+    return max(declared, key=reach)
 
 
 def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
