@@ -1135,7 +1135,10 @@ def generate_pack(
                     config.get("hash_rule", ""),
                 )
                 if refusal:
-                    file_status[dedup_key] = "excluded"
+                    # An earlier declaration of this path shipped a file this
+                    # one refuses: it is in the pack, untested as verify
+                    # counts it, not excluded.
+                    file_status[dedup_key] = "untested" if already_packed else "excluded"
                     file_reasons[dedup_key] = refusal
                     continue
                 if not hash_mismatch_excludes_file(verification_mode) and (
@@ -1171,6 +1174,9 @@ def generate_pack(
 
                 if already_packed:
                     continue
+                if file_status.get(dedup_key) == "excluded":
+                    # An earlier declaration refused the file this one ships.
+                    file_status[dedup_key] = "untested"
                 seen_destinations.add(dedup_key)
                 _register_path(dedup_key, seen_destinations, seen_parents)
                 if case_insensitive:
