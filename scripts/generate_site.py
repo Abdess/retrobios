@@ -1620,6 +1620,7 @@ def generate_data_exports(
 
     members = data_directory_members()
     locations = file_location_items(db, profiles, members)
+    wanted = _provenance_wanted_rows(db)
     envelopes = {
         "platforms.json": ("platforms", platform_items),
         "emulators.json": ("emulators", emulator_items),
@@ -1628,7 +1629,7 @@ def generate_data_exports(
     }
     write_lookup_shards(
         api, file_lookup_records(db, coverages, profiles, locations, members, consumers,
-                                 retired_files.load(_REPO_ROOT / "retired.json")),
+                                 retired_files.load(_REPO_ROOT / "retired.json"), wanted),
         generated_at, commit,
     )
     for filename, (kind, items) in envelopes.items():
@@ -1747,7 +1748,7 @@ def generate_data_exports(
     _record(downloads / "retrobios.sqlite")
     write_if_changed(
         str(downloads / "provenance-wanted.csv"),
-        _csv_document(list(WANTED_FIELDS), _provenance_wanted_rows(db)),
+        _csv_document(list(WANTED_FIELDS), wanted),
     )
 
     assets = [
@@ -5010,12 +5011,14 @@ def file_lookup_records(
     members: dict | None = None,
     consumers: FileConsumers | None = None,
     retired: dict | None = None,
+    wanted: list[dict] | None = None,
 ) -> list[dict]:
     """Every hash the site knows, one record per value, for files/?hash=.
 
     The collection's own files lead to their card, a platform's declared
     value to the system section of its page, a profile's to the entry's
-    card. The site search indexed these values as text, 4 MB of the 21 MB
+    card, a wanted dump (``wanted``, the provenance-wanted.csv rows) to
+    its catalog on the provenance page. The site search indexed these values as text, 4 MB of the 21 MB
     it made every visitor download: the lookup reads one shard instead.
     """
     files = db.get("files", {})
@@ -5088,6 +5091,7 @@ def file_lookup_records(
                             **({"system_name": entry_label} if entry_label else {}),
                         })
     records += retired_records(retired or {}, files, locations)
+    records += wanted_records(wanted or [])
     records += _held_under_every_hash(records, files, db.get("indexes") or {})
     for record in records:
         if record["layer"] in ("platform", "emulator"):
@@ -5097,6 +5101,23 @@ def file_lookup_records(
     unique = {json.dumps(r, sort_keys=True): r for r in records}
     return sorted(unique.values(), key=lambda r: (
         r["value"], r["layer"], r.get("owner", ""), r["name"], r["url"]))
+
+
+def wanted_records(rows: list[dict]) -> list[dict]:
+    """A record under each hash of a dump a catalog lists and the collection
+    lacks, from the rows of provenance-wanted.csv. A pasted hash of a
+    wanted dump (Redump's ps2-dvd-212k.bin) answered that nothing the site
+    knows has it, and never said the dump is wanted."""
+    records = []
+    for row in rows:
+        label = _PROVENANCE_LABELS.get(row["catalog"], row["catalog"])
+        url = _site_path(f"provenance.md#{_slugify_anchor(label)}")
+        for algorithm in ("sha1", "md5", "crc32"):
+            value = str(row.get(algorithm) or "").lower()
+            if value:
+                records.append({"value": value, "algorithm": algorithm, "layer": "wanted",
+                                "owner": label, "name": row["name"], "url": url})
+    return records
 
 
 def _read_by_name(records: list[dict], files: dict, consumers: FileConsumers) -> list[dict]:

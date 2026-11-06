@@ -832,6 +832,40 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
         self.assertIn("byLayer('archive-member')", script)
 
 
+class AWantedDumpIsFoundByItsHash(unittest.TestCase):
+    """The SHA1 of a PS2 SCPH-30005R BIOS, which Redump lists as
+    ps2-dvd-212k.bin and the Wanted page asks for, answered that no file
+    the site knows has it."""
+
+    def test_each_hash_of_a_wanted_row_is_a_record(self):
+        import generate_site  # noqa: PLC0415
+
+        row = {"catalog": "redump", "dat": "Sony - PlayStation 2 - BIOS Images",
+               "name": "ps2-dvd-212k.bin", "description": "", "size": "4194304",
+               "crc32": "1A2B3C4D", "md5": "", "sha1": "5b346eb9258d710609a9855befd35cab8f3a334a"}
+        records = generate_site.file_lookup_records(
+            {"files": {}, "indexes": {}}, {}, {}, [], wanted=[row, {**row, "dat": "other"}])
+        self.assertEqual(records, [
+            {"value": "1a2b3c4d", "algorithm": "crc32", "layer": "wanted", "owner": "Redump",
+             "name": "ps2-dvd-212k.bin", "url": "/retrobios/provenance/#redump"},
+            {"value": "5b346eb9258d710609a9855befd35cab8f3a334a", "algorithm": "sha1",
+             "layer": "wanted", "owner": "Redump", "name": "ps2-dvd-212k.bin",
+             "url": "/retrobios/provenance/#redump"},
+        ])
+
+    def test_the_schema_and_the_page_carry_the_layer(self):
+        import json as _json  # noqa: PLC0415
+
+        import generate_site  # noqa: PLC0415
+
+        root = Path(__file__).resolve().parents[1]
+        schema = _json.loads((root / "schemas" / "site-api-envelope.schema.json").read_text())
+        self.assertIn('"wanted"', _json.dumps(schema))
+        self.assertIn("byLayer('wanted')", (root / "website" / "src" / "scripts" / "site.ts").read_text())
+        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        self.assertIn('retired_files.load(_REPO_ROOT / "retired.json"), wanted)', source)
+
+
 class AFileHasAnAddressByContent(unittest.TestCase):
     """mt32_control.rom moved from the Commodore page to the Roland page and
     every link to its card broke: the anchor was content-based, the page
