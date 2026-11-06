@@ -119,6 +119,18 @@ class ProfileAliasesAreCodeNames(unittest.TestCase):
             "code, stated in the entry's note with its source_ref, or removed",
         )
 
+    def test_rosalies_mupen_gui_names_stay_out_of_mupen64plus(self) -> None:
+        """RetroBat's mupen64 generator configures Rosalie's Mupen GUI and
+        writes IPL_USA.n64 and IPL_DEV.n64 into its config
+        (Mupen64.Generator.cs:232-238). Mupen64Plus fixes no IPL name."""
+        profiles = _profiles()
+        for key in ("mupen64plus", "mupen64plus-ae", "m64plus-fz"):
+            aliases = {
+                str(a) for entry in profiles[key].get("files") or []
+                for a in entry.get("aliases") or []
+            }
+            self.assertFalse(aliases & {"IPL_USA.n64", "IPL_DEV.n64"}, key)
+
     def test_check_catches_a_launcher_name(self) -> None:
         self.assertFalse(_named_without_platform(
             "cerbios.bin", "Batocera writes bios/cerbios.bin into flashrom_path.",

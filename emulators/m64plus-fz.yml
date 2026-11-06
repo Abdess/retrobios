@@ -148,7 +148,7 @@ files:
     source_ref: "app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:599-612,621-623, app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:455-484, app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:417,715, mupen64plus-core/upstream/src/main/main.c:1080-1145"
 
   - name: "64DD_IPL_US.n64"
-    aliases: ["64DD_IPL_USA.bin", "IPL_USA.n64"]
+    aliases: ["64DD_IPL_USA.bin"]
     system: nintendo-64dd
     required: true
     validation: [signature]
@@ -163,7 +163,7 @@ files:
     source_ref: "app/src/main/java/paulscode/android/mupen64plusae/util/RomHeader.java:180-212, app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:221,455-484, mupen64plus-core/upstream/src/main/main.c:1080-1145"
 
   - name: "64DD_IPL_DEV.n64"
-    aliases: ["64DD_IPL_DEV.bin", "IPL_DEV.n64"]
+    aliases: ["64DD_IPL_DEV.bin"]
     system: nintendo-64dd
     required: true
     validation: [signature]

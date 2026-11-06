@@ -89,7 +89,7 @@ files:
     source_ref: "src/main.c:321, src/main.c:729-732, src/main.c:874-877, upstream src/main/main.c:1183-1248"
 
   - name: "64DD_IPL_US.n64"
-    aliases: ["64DD_IPL_USA.bin", "IPL_USA.n64"]
+    aliases: ["64DD_IPL_USA.bin"]
     system: nintendo-64dd
     required: true
     unread_on: [amberelec]
@@ -98,7 +98,7 @@ files:
     source_ref: "src/main.c:874-892, upstream src/main/main.c:1183-1248"
 
   - name: "64DD_IPL_DEV.n64"
-    aliases: ["64DD_IPL_DEV.bin", "IPL_DEV.n64"]
+    aliases: ["64DD_IPL_DEV.bin"]
     system: nintendo-64dd
     required: true
     unread_on: [amberelec]
