@@ -115932,7 +115932,8 @@
           "size": 344
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 4465709
     },
     {
       "ref": "cemu-gameprofiles",
@@ -116888,7 +116889,8 @@
           "size": 36
         }
       },
-      "source_path": "Cemu-3310f3b8b184d64a62b89fd59088c799432badf5/bin/gameProfiles/default"
+      "source_path": "Cemu-3310f3b8b184d64a62b89fd59088c799432badf5/bin/gameProfiles/default",
+      "archive_size": 21360579
     },
     {
       "ref": "dirksimple",
@@ -116944,7 +116946,8 @@
           "size": 12988
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 175384
     },
     {
       "ref": "fbneo-cheats",
@@ -130673,7 +130676,8 @@
           "size": 10054
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 5083767
     },
     {
       "ref": "fbneo-samples",
@@ -130906,7 +130910,8 @@
           "size": 551776
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 53006540
     },
     {
       "ref": "freeintv-overlays",
@@ -131278,7 +131283,8 @@
           "size": 248636
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 21311170
     },
     {
       "ref": "yaps2-resources",
@@ -131738,7 +131744,8 @@
           "size": 637
         }
       },
-      "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources"
+      "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources",
+      "archive_size": 21181421
     }
   ],
   "save_directory": {

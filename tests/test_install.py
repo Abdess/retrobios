@@ -3888,6 +3888,37 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn(f"{install.format_size(bios + archive)} downloaded in", proc.stdout)
 
+    def test_the_plan_announces_the_archive_not_the_tree(self):
+        """yaps2's tarball is 21.2 MB for a 6.5 MB tree, Cemu's 21.4 MB for
+        9.9 KB: the plan announced the tree, and the run downloaded far more."""
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        member = b"profile"
+        archive_size = 21_360_579
+        with FakeRepository() as repo:
+            listed = json.loads((repo.root / "install" / "retroarch.json").read_text())
+            listed["data_directories"] = [{
+                "ref": "cemu-gameprofiles", "dest": "cemu", "type": "tarball",
+                "url": "https://example.invalid/Cemu.tar.gz", "source_path": "Cemu-1/bin",
+                "systems": ["nintendo-gba"], "archive_size": archive_size,
+                "files": {"gameProfiles/a.ini": {"sha1": hashlib.sha1(member).hexdigest(),
+                                                 "size": len(member)}}}]
+            (repo.root / "install" / "retroarch.json").write_text(json.dumps(listed))
+            proc = repo.run("--no-input", "--dry-run")
+            bios = sum(len(payload) for payload, *_ in FakeRepository.PAYLOADS.values())
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(f"({install.format_size(bios + archive_size)})", proc.stdout)
+        self.assertIn(f"(a {install.format_size(archive_size)} archive)", proc.stdout)
+
+    def test_a_pack_or_an_old_list_counts_the_files_themselves(self):
+        needed = {"a": {"size": 7}}
+        entry = {"archive_size": 21_360_579}
+        self.assertEqual(install.data_fetch_bytes(entry, needed), 21_360_579)
+        self.assertEqual(install.data_fetch_bytes({}, needed), 7)
+        self.assertEqual(install.data_fetch_bytes(entry, {}), 0)
+        with unittest.mock.patch.object(install.LOCAL, "pack", object()):
+            self.assertEqual(install.data_fetch_bytes(entry, needed), 7)
+
     def test_verified_members_land_the_rest_are_said(self):
         work = Path(_tempdir(self))
         archive = self._zip(work)

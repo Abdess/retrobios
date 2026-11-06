@@ -6,7 +6,7 @@
   "platform": "nextui",
   "display_name": "NextUI",
   "version": "2026-10-20",
-  "generated": "2026-11-05T18:33:47Z",
+  "generated": "2026-11-05T23:59:37Z",
   "base_destination": "",
   "detect": [
     {
@@ -5635,7 +5635,8 @@
           "size": 344
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 4465709
     },
     {
       "ref": "fbneo-cheats",
@@ -19364,7 +19365,8 @@
           "size": 10054
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 5083767
     },
     {
       "ref": "fbneo-samples",
@@ -19597,7 +19599,8 @@
           "size": 551776
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 53006540
     }
   ]
 }

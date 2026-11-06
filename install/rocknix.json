@@ -86538,7 +86538,8 @@
           "size": 344
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 4465709
     },
     {
       "ref": "dinothawr",
@@ -86986,7 +86987,8 @@
           "size": 105
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 5752250
     },
     {
       "ref": "dirksimple",
@@ -87042,7 +87044,8 @@
           "size": 12988
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 175384
     },
     {
       "ref": "dolphin-sys",
@@ -95719,7 +95722,8 @@
       "strip_components": 2,
       "exclude": [
         "Themes"
-      ]
+      ],
+      "archive_size": 3197914
     },
     {
       "ref": "fbneo-cheats",
@@ -109448,7 +109452,8 @@
           "size": 10054
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 5083767
     },
     {
       "ref": "fbneo-samples",
@@ -109681,7 +109686,8 @@
           "size": 551776
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 53006540
     },
     {
       "ref": "freeintv-overlays",
@@ -110053,7 +110059,8 @@
           "size": 248636
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 21311170
     },
     {
       "ref": "lrps2",
@@ -110069,7 +110076,8 @@
           "size": 1814032
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 318896
     },
     {
       "ref": "ppsspp-assets",
@@ -110757,7 +110765,8 @@
           "size": 15005
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 9844388
     },
     {
       "ref": "yaps2-resources",
@@ -111217,7 +111226,8 @@
           "size": 637
         }
       },
-      "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources"
+      "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources",
+      "archive_size": 21181421
     }
   ]
 }

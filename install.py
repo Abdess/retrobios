@@ -3708,6 +3708,9 @@ def _check_data_directory(entry: object, where: str) -> None:
     strip = entry.get("strip_components", 0)
     if not isinstance(strip, int) or isinstance(strip, bool) or not 0 <= strip <= 16:
         raise ValueError(f"{where}.strip_components is invalid")
+    size = entry.get("archive_size", 1)
+    if not isinstance(size, int) or isinstance(size, bool) or size < 1:
+        raise ValueError(f"{where}.archive_size is invalid")
     if kind == "tarball" and (
         not isinstance(entry.get("source_path"), str) or not entry["source_path"]
     ):
@@ -6873,11 +6876,12 @@ def _print_plan(
     # files, and 2636 data files" read as two kinds of one thing. The kinds
     # follow, adding up to it.
     total = counts.files + tree_files
-    parts = ([f"{_plural(total, 'file')} ({format_size(counts.size + tree_counts.size)})"]
+    tree_bytes = sum(data_fetch_bytes(entry, needed) for entry, needed in trees)
+    parts = ([f"{_plural(total, 'file')} ({format_size(counts.size + tree_bytes)})"]
              if total else [])
     split = parts_words(counts if (manifest or {}).get("categorized")
                         else tally({"size": e.get("size")} for e in to_download),
-                        tree_files, tree_counts.size)
+                        tree_files, tree_bytes)
     if split and trees:
         split += f", the data files extracted from {_plural(len(trees), 'archive')}"
     # A pack is copied from, not downloaded: "Would download 23 files" was
@@ -6952,8 +6956,11 @@ def _print_plan(
                   "every system and its files.")
     for entry, needed in trees:
         source = LOCAL.pack.name if LOCAL.pack is not None else entry["url"]
+        fetched = data_fetch_bytes(entry, needed)
+        archive = ("" if fetched == sum(meta.get("size", 0) for meta in needed.values())
+                   else f" (a {format_size(fetched)} archive)")
         print(f"  {term.bold(entry['ref'] + ' data')}  {_sized(list(needed.values()))}, "
-              f"from {source}")
+              f"from {source}{archive}")
     for folder, (count, size) in sorted((kept or {}).items()):
         print(f"\n  Would keep {_plural(count, 'file')} you have ({format_size(size)}), "
               f"whose contents differ, in {folder}")
@@ -7182,6 +7189,19 @@ def data_directory_state(entry: dict, bios_path: Path,
         else:
             needed[rel] = meta
     return root, needed, present
+
+
+def data_fetch_bytes(entry: dict, needed: dict[str, dict]) -> int:
+    """What getting a tree's missing files costs: its source archive, which
+    comes whole for one file, or from a pack the files themselves. A list
+    that records no archive size gives the files' own sizes: a tarball whose
+    tree is 10 KB was announced as 10 KB and was a download of 21 MB."""
+    if not needed:
+        return 0
+    size = entry.get("archive_size")
+    if LOCAL.pack is None and isinstance(size, int) and size > 0:
+        return size
+    return sum(meta.get("size", 0) for meta in needed.values())
 
 
 def install_data_directory(entry: dict, bios_path: Path,
@@ -8963,7 +8983,7 @@ def found_head(files: list[dict], trees: list[dict], bios_path: Path) -> str:
     for tree in trees:
         _root, wanted, _present = data_directory_state(tree, bios_path, remember=True)
         data += len(wanted)
-        data_bytes += sum(meta.get("size", 0) for meta in wanted.values())
+        data_bytes += data_fetch_bytes(tree, wanted)
     left = [entry for entry in needed if id(entry) not in copies]
     rest = len(left) + data
     where = ", ".join(f"{count} found in {_last_name(label)}"
@@ -15683,8 +15703,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 plat_name, manifest, bios_path, files, up_to_date, mismatched,
                 sum(len(state[1]) for _entry, state in data_states), len(omitted_files),
                 chosen=selection[0] if selection else None,
-                data_bytes=sum(meta.get("size", 0) for _entry, state in data_states
-                               for meta in state[1].values()),
+                data_bytes=sum(data_fetch_bytes(entry, state[1])
+                               for entry, state in data_states),
             )
             emit_copies(plat_name, to_download, copies, bios_index, bios_path, files)
             emit_unreadable(plat_name, unread)

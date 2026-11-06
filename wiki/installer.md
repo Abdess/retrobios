@@ -1620,8 +1620,11 @@ built (`strip_components` for a ZIP, `source_path` for a tarball, `exclude`),
 and writes a file only when its hash matches the list. A file the source has
 changed since is left out and counted, and the pack still holds it. `--check`
 counts the data files missing, `--dry-run` names each tree it would fetch, and
-narrowing with `--system`, `--core` or `--target` keeps only the trees of the
-systems that stay.
+the size announced for a tree is its archive's (`archive_size`, recorded when
+`refresh_data_dirs.py` last downloaded it): one missing file fetches the whole
+archive, and a tarball can be a thousand times its tree. Narrowing with
+`--system`, `--core` or `--target` keeps only the trees of the systems that
+stay.
 
 ## What the bootstrap does
 
@@ -1802,7 +1805,7 @@ other schemas under `api/v1/schemas/`.
 | `games_unavailable` | `platform`, `reason`, `message` | With `--for-games`, what the games need could not be read (`offline`, `network`, `invalid`, `stale`, `no_sets`, `no_folder`): the run keeps every file of the list, except for a `FOLDER` that does not exist, where it stops |
 | `check` | `platform`, `name`, `bios_dir`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed`, `data_missing`, `not_installable` | The platform's totals. `data_missing` counts data-tree files to fetch, `not_installable` the files the collection cannot supply |
 | `declared` | `platform`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed`, `dests` | Right after `check`, the same counts over the files the platform's own list names (`cores: null`), and their `dests` in the order of the `file` events. A setup that checks its own list reads its answer here, with or without `--declared-only` |
-| `data` | `platform`, `files`, `bytes` | Right after `declared`: the data-tree files to fetch (the `data_missing` of `check`) and the bytes they write once in place |
+| `data` | `platform`, `files`, `bytes` | Right after `declared`: the data-tree files to fetch (the `data_missing` of `check`) and the bytes fetching them costs: each tree's archive, or the files themselves from a pack or a list that records no archive size |
 | `found` | `platform`, `dest`, `folder`, `path`, `member`, `reason` | Each file to install that this machine already holds, after `check` and before anything is written, in `--check` and `--dry-run` too. `folder` is the `--from` folder as given, or the `bios_dir` of the check when the BIOS folder holds the file at another place, and then `reason` says where in words (`nested folder: ...` for a misplaced file, `the same file is at ...` for one the list installs there too). `path` is the file, and `member` the ZIP member holding the bytes when `path` is an archive, an empty string otherwise. Its copy is reported by a `downloaded` event |
 | `unreadable` | `platform`, `folder`, `path`, `member`, `reason` | Each file in a `--from` folder that could not be read and may be one the run still needs, right after the `found` events: its size is that of a file no copy was found for, or unknown (a folder that could not be listed, a ZIP that would not open). `member` names the ZIP member, or is empty. `reason` says why in words (`Permission denied`, `it is encrypted, a password is needed`) |
 | `saves` | `platform`, `files`, `folder` | After `choices` and before `checking`, when the files the run installs (once `--system` and the other choices narrowed the list) hold some read from the frontend's save directory and that directory is known: how many, and the `folder` they go to, where `<system>` and `<core>` stand for one folder per system or per core (the screen and `--plain` say it in words: "a folder per core under /sdcard/RetroArch/saves"). When it is not known, the files are counted in the summary's `skipped` instead (`no_save_directory`) |

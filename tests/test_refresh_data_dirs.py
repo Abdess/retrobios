@@ -93,6 +93,26 @@ class RefreshConcurrency(unittest.TestCase):
             )
         self.assertEqual(seen, [True])
 
+    def test_the_archive_size_is_recorded_without_replacing_the_tree(self):
+        """The installer announces a tree's download as the archive's size:
+        a tarball extracted to 10 KB is a download of 21 MB. A tree current
+        before the size was kept is measured, its files left as they are."""
+        payload = _zip_bytes({"a.bin": b"x" * 100})
+        entry = {"source_type": "zip", "source_url": "https://x/pak.zip",
+                 "local_cache": str(self.cache)}
+        with mock.patch.object(rdd.urllib.request, "urlopen",
+                               lambda *a, **k: _Response(payload)), \
+                mock.patch.object(rdd, "_get_remote_etag", return_value="e1"):
+            self.assertTrue(rdd.refresh_entry("pak", entry, versions_path=self.versions))
+            self.assertEqual(rdd._load_versions(self.versions)["pak"]["archive_size"],
+                             len(payload))
+            rdd._record_version("pak", {"sha": "e1"}, self.versions)
+            (self.cache / "a.bin").write_bytes(b"kept")
+            self.assertFalse(rdd.refresh_entry("pak", entry, versions_path=self.versions))
+        self.assertEqual(rdd._load_versions(self.versions)["pak"],
+                         {"sha": "e1", "archive_size": len(payload)})
+        self.assertEqual((self.cache / "a.bin").read_bytes(), b"kept")
+
     def test_a_current_tree_is_not_waited_for(self):
         """A pipeline reads every tree for its whole run. A build beside it
         waited on the exclusive lock before asking the remote, which would
@@ -100,7 +120,7 @@ class RefreshConcurrency(unittest.TestCase):
         import fcntl  # noqa: PLC0415
 
         self.cache.mkdir(parents=True)
-        rdd._record_version("pak", {"sha": "e1"}, self.versions)
+        rdd._record_version("pak", {"sha": "e1", "archive_size": 1}, self.versions)
         entry = {"source_type": "zip", "source_url": "https://x/pak.zip",
                  "local_cache": str(self.cache)}
         result: list = []
@@ -229,7 +249,7 @@ class DryRunReport(unittest.TestCase):
     def test_the_remote_tag_is_shown_beside_the_cached_one(self):
         with tempfile.TemporaryDirectory() as tmp:
             versions = Path(tmp) / "versions.json"
-            versions.write_text(json.dumps({"k": {"etag": '"2725165595"'}}))
+            versions.write_text(json.dumps({"k": {"etag": '"2725165595"', "archive_size": 1}}))
             entry = {"source_type": "zip", "source_url": "https://x.invalid/a.zip",
                      "local_cache": tmp}
             with mock.patch.object(rdd, "_get_remote_etag", return_value='"2685251384"'), \
@@ -247,6 +267,31 @@ class DryRunReport(unittest.TestCase):
             rdd.summarize({"a": True, "b": None}, dry_run=False),
             "2 entries: 1 refreshed, 0 up to date, 1 failed",
         )
+
+
+class TheManifestCarriesTheArchiveSize(unittest.TestCase):
+    """The size refresh_data_dirs recorded reaches the install list, which
+    the installer announces as the tree's download."""
+
+    def test_recorded_size_is_written_and_an_unrecorded_one_left_out(self):
+        from generate_pack import _manifest_data_directories  # noqa: PLC0415
+
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            data = Path(tmp) / "data"
+            for ref in ("pak", "old"):
+                (data / ref).mkdir(parents=True)
+                (data / ref / "a.bin").write_bytes(b"abc")
+            (data / ".versions.json").write_text(json.dumps(
+                {"pak": {"sha": "e1", "archive_size": 21_360_579}, "old": {"sha": "e2"}}))
+            registry = {ref: {"source_type": "zip", "source_url": f"https://x/{ref}.zip",
+                              "local_cache": str(data / ref)} for ref in ("pak", "old")}
+            members = [(str(data / ref / "a.bin"), f"{ref}/a.bin") for ref in ("pak", "old")]
+            refs = {f"{ref}/a.bin": (ref, ("s",), ref) for ref in ("pak", "old")}
+            listed = {entry["ref"]: entry for entry in
+                      _manifest_data_directories(members, refs, registry, "")}
+        self.assertEqual(listed["pak"]["archive_size"], 21_360_579)
+        self.assertNotIn("archive_size", listed["old"])
 
 
 if __name__ == "__main__":
