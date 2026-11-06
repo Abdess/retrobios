@@ -2826,14 +2826,29 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
             self.assertEqual(unsatisfied, ["bios/absent.bin"])
 
     def test_an_unreachable_buildbot_is_not_a_fresh_verdict(self):
-        source = (ROOT / "scripts" / "check_buildbot_system.py").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn(
-            'if report.get("error") or pending(report):',
-            source.split("def main(")[-1],
-            "main() ignores the error the report carries",
-        )
+        """Every HEAD unanswered printed "16 unknown" and exited 0, so the
+        online pipeline printed check_buildbot OK."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import check_buildbot_system as cbs  # noqa: PLC0415
+
+        registry = str(ROOT / "platforms" / "_data_dirs.yml")
+        tracked = cbs.load_tracked_entries(registry)
+        self.assertTrue(tracked)
+        cases = {
+            "index unreachable": mock.patch.object(
+                cbs, "fetch_index", side_effect=OSError("down")),
+            "every HEAD unanswered": mock.patch.object(
+                cbs, "fetch_index", return_value=set(tracked)),
+        }
+        for label, index in cases.items():
+            with self.subTest(label), index, \
+                    mock.patch.object(cbs, "get_remote_etag", return_value=None), \
+                    mock.patch.object(sys, "argv", ["check_buildbot_system.py",
+                                                    "--registry", registry]), \
+                    contextlib.redirect_stdout(io.StringIO()), \
+                    self.assertRaises(SystemExit) as stop:
+                cbs.main()
+            self.assertEqual(stop.exception.code, 1)
 
     def test_a_missing_profile_directory_says_so(self):
         from scripts import common as _common
