@@ -499,6 +499,23 @@ class Reconciliation(unittest.TestCase):
         systems, _ = build_native_model({"systems": {}}, scraped)
         self.assertEqual(sorted(systems), ["pcengine", "supergrafx"])
 
+    def test_a_container_md5_leaves_a_zipped_file_md5_alone(self):
+        """Batocera's checkInsideZip compares a zippedFile item's md5 with
+        the member's. A profile's container md5 was written in its place
+        and counted as a hash updated to the emulator source."""
+        scraped = {"systems": {"pc6001": {"native_id": "pc6001", "files": [
+            {"name": "pc6001.zip", "destination": "pc6001.zip", "md5": "1" * 32,
+             "zipped_file": "basicrom.60"},
+        ]}}}
+        truth = {"systems": {"pc6001": {"files": [
+            {"name": "pc6001.zip", "md5": "2" * 32},
+        ]}}}
+        systems, report = build_native_model(truth, scraped)
+        entry = systems["pc6001"].files[0]
+        self.assertEqual(entry.corrections, [])
+        self.assertEqual(report.hashes_corrected, [])
+        self.assertEqual(entry.hashes("md5"), ["1" * 32])
+
     def test_an_addition_joins_the_native_id_its_cores_read(self):
         """RetroDECK's arcade spans mame and fbneo with no primary id. Every
         addition went under fbneo, the first sorted, MAME device archives

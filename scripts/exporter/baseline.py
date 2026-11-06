@@ -148,8 +148,10 @@ class NativeFile:
     # platform gives it), empty when no core the platform runs is named.
     runners: list[tuple[bool, str]] = field(default_factory=list)
     # The platform reads this file's md5 as a composite of its members
-    # (Recalbox on a .zip): the truth's md5 describes the container and
-    # can be neither compared with it nor written in its place.
+    # (Recalbox on a .zip) or as one member's (Batocera's zippedFile, which
+    # checkInsideZip compares inside the archive): the truth's md5 describes
+    # the container and can be neither compared with it nor written in its
+    # place.
     composite_md5: bool = False
     # Every truth entry of the system that answers to this platform entry's
     # name, whichever one the pairing took: the element names its cores, and
@@ -531,7 +533,8 @@ def build_native_model(
                     destination=destination,
                     native_system=native_id,
                     platform=file_entry,
-                    composite_md5=file_entry.get("zip_digest") == "composite",
+                    composite_md5=file_entry.get("zip_digest") == "composite"
+                    or bool(file_entry.get("zipped_file")),
                 )
             )
             report.files_kept += 1
