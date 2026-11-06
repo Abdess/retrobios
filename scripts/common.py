@@ -73,6 +73,18 @@ def load_database(db_path: str) -> dict:
         with open(db_path) as f:
             return json.load(f)
     except FileNotFoundError:
+        # A mistyped --db beside the real database was told to rescan the
+        # whole collection into a second file under the typo.
+        import difflib  # noqa: PLC0415
+
+        typed = Path(db_path)
+        close = difflib.get_close_matches(
+            typed.name, [p.name for p in typed.parent.glob("*.json")], n=1, cutoff=0.8
+        )
+        if close:
+            raise DatabaseUnreadable(
+                f"{db_path} not found. Did you mean {typed.with_name(close[0])}?"
+            ) from None
         raise DatabaseUnreadable(
             f"{db_path} not found. Build it with: python scripts/generate_db.py "
             f"--force --bios-dir bios --output {db_path}"

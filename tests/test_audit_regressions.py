@@ -6060,6 +6060,20 @@ class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
                 load_database(target)
             self.assertIn(f"--output {target}", str(caught.exception))
 
+    def test_a_typo_beside_the_database_names_the_database(self):
+        """--db databse.json beside database.json was told to rescan the whole
+        collection into a second file named after the typo."""
+        from scripts.common import DatabaseUnreadable, load_database
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            (Path(directory) / "database.json").write_text("{}")
+            typo = Path(directory) / "databse.json"
+            with self.assertRaises(DatabaseUnreadable) as caught:
+                load_database(str(typo))
+        message = str(caught.exception)
+        self.assertIn(f"Did you mean {typo.with_name('database.json')}?", message)
+        self.assertNotIn("generate_db.py", message)
+
 
 class VerifyPacksRefusesWhatItCannotDo(unittest.TestCase):
     """The --verify-packs refusals lived in the --all-variants checks, which
