@@ -94,7 +94,16 @@ if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   fi
   actual_size=$(wc -c < "$TEMP_INSTALLER" | tr -d ' ')
   if [ "$actual_size" -gt "$MAX_INSTALLER_BYTES" ]; then
-    echo "Error: downloaded installer exceeds the size limit." >&2
+    # A page served in place of the file says the network answered, not this
+    # project: the one cause a user can act on.
+    echo "Error: the downloaded installer is $actual_size bytes, more than the $MAX_INSTALLER_BYTES this script accepts." >&2
+    echo "  Nothing was run and nothing was written. A network that answers with a page of" >&2
+    echo "  its own (a sign-in portal, a proxy) gives this: open any web page to sign in," >&2
+    echo "  then run the same command again." >&2
+    if [ -n "${RETROBIOS_INSTALL_URL:-}" ]; then
+      echo "  RETROBIOS_INSTALL_URL is set in this environment and names another installer:" >&2
+      echo "  unset it to use the installer this script names." >&2
+    fi
     exit 1
   fi
   if command -v sha256sum >/dev/null 2>&1; then

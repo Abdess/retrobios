@@ -4764,6 +4764,38 @@ class TheBoardSystemsAreNamedFromTheCode(unittest.TestCase):
                 self.assertIn(name, paragraph)
 
 
+class TheInstallerFitsTheOneLiners(unittest.TestCase):
+    """install.sh and install.ps1 refuse an installer over 2 MiB, and
+    install.py grew from 596 KB to 1.1 MB in twelve days with nothing
+    holding it under that: past it, every one-line install would stop."""
+
+    def _caps(self) -> dict[str, int]:
+        import re
+
+        shell = (REPO_ROOT / "install.sh").read_text(encoding="utf-8")
+        ps1 = (REPO_ROOT / "install.ps1").read_text(encoding="utf-8")
+        units = {"": 1, "KB": 1024, "MB": 1024 ** 2}
+        number, unit = re.search(r"\$maximumInstallerBytes = (\d+)(KB|MB)?", ps1).groups()
+        return {"install.sh": int(re.search(r"^MAX_INSTALLER_BYTES=(\d+)$", shell, re.M)[1]),
+                "install.ps1": int(number) * units[unit or ""]}
+
+    def test_a_quarter_of_each_cap_stays_free(self):
+        size = (REPO_ROOT / "install.py").stat().st_size
+        for script, cap in self._caps().items():
+            with self.subTest(script=script):
+                self.assertLessEqual(
+                    size, cap * 3 // 4,
+                    f"install.py is {size} bytes, past three quarters of the {cap} {script} "
+                    "accepts: shrink it or raise the cap in both one-liners")
+
+    def test_the_refusal_names_a_cause_and_a_way_out(self):
+        for script in ("install.sh", "install.ps1"):
+            text = " ".join((REPO_ROOT / script).read_text(encoding="utf-8").split())
+            with self.subTest(script=script):
+                self.assertIn("this script accepts", text)
+                self.assertIn("open any web page to sign in", text)
+
+
 class RetroArchAppImageIsPortable(unittest.TestCase):
     """The buildbot's Linux RetroArch is an AppImage beside a .home folder
     the AppImage runtime makes its HOME: the run found nothing and offered

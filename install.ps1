@@ -53,8 +53,19 @@
                     "Check the network connection and any proxy, then run the same command again. " +
                     "Nothing was run and nothing was written.") -f $url, $_.Exception.Message
             }
-            if ((Get-Item -LiteralPath $temporary).Length -gt $maximumInstallerBytes) {
-                throw "Downloaded installer exceeds the size limit."
+            $downloaded = (Get-Item -LiteralPath $temporary).Length
+            if ($downloaded -gt $maximumInstallerBytes) {
+                # A page served in place of the file says the network
+                # answered, not this project: the one cause a user can act on.
+                $tooLarge = ("The downloaded installer is {0} bytes, more than the {1} this script accepts. " +
+                    "Nothing was run and nothing was written. A network that answers with a page of its own " +
+                    "(a sign-in portal, a proxy) gives this: open any web page to sign in, then run the same " +
+                    "command again.") -f $downloaded, $maximumInstallerBytes
+                if ([Environment]::GetEnvironmentVariable("RETROBIOS_INSTALL_URL")) {
+                    $tooLarge += " RETROBIOS_INSTALL_URL is set in this session and names another installer: " +
+                        "remove it to use the installer this script names."
+                }
+                throw $tooLarge
             }
             $actual = (Get-FileHash -LiteralPath $temporary -Algorithm SHA256).Hash.ToLowerInvariant()
             if ($actual -ne $expected.ToLowerInvariant()) {
