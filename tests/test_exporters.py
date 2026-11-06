@@ -1010,6 +1010,28 @@ class CachedOriginal(unittest.TestCase):
         )
         self.assertEqual((originals, missing), ({"list.txt": "two"}, []))
 
+    def test_an_empty_or_html_original_fails_the_platform(self):
+        """A System.dat served as an HTML page with 200, or a 0-byte cache,
+        was parsed as a file with no entries: four exporters rebuilt it from
+        our data and reported OK."""
+        for body in ("", "  \n", "<html><body>Too Many Requests</body></html>",
+                     "<!DOCTYPE html>\n<html></html>"):
+            with self.subTest(body=body):
+                url = self._upstream("served.txt", body)
+                originals, missing = collect_originals(
+                    _OneFileExporter(url), {}, self.cache, True, refresh=True
+                )
+                self.assertEqual(originals, {})
+                self.assertEqual(len(missing), 1)
+                cached = self.cache / "plat" / "list.txt"
+                cached.parent.mkdir(parents=True, exist_ok=True)
+                cached.write_text(body, encoding="utf-8")
+                _, missing = collect_originals(
+                    _OneFileExporter(url), {}, self.cache, False
+                )
+                self.assertEqual(len(missing), 1)
+                cached.unlink()
+
     def test_offline_serves_what_is_cached_and_names_what_is_not(self):
         url = self._upstream("v1.txt", "one")
         _, missing = collect_originals(_OneFileExporter(url), {}, self.cache, False)

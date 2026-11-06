@@ -105,6 +105,25 @@ def _read_archive(unpack: Callable[[bytes], dict[str, str]], payload: bytes) -> 
         ) from exc
 
 
+def _read_text(payload: bytes) -> str:
+    """A text original, refused when it cannot be the platform's file.
+
+    An empty body or an HTML error page served with 200 parsed as a file
+    with no entries, and four exporters rebuilt the platform's file from our
+    data alone and said OK: libretro's quoted names and Recalbox's comments
+    were gone.
+    """
+    text = payload.decode("utf-8", errors="replace")
+    head = text.lstrip()[:64].lower()
+    if not head:
+        raise OriginalUnreadable("empty file: --refresh-cache downloads it again")
+    if head.startswith(("<!doctype html", "<html")):
+        raise OriginalUnreadable(
+            "an HTML page, not the platform's file: --refresh-cache downloads it again"
+        )
+    return text
+
+
 def fetch(
     url: str,
     destination: Path,
@@ -331,7 +350,7 @@ def collect_originals(
     for relative, url in wanted.items():
         path = root / relative
         archive = callable(unpack) and relative.endswith((".zip", ".tar.gz"))
-        check = (lambda raw: _read_archive(unpack, raw)) if archive else None
+        check = (lambda raw: _read_archive(unpack, raw)) if archive else _read_text
         try:
             if allow_fetch:
                 payload = fetch(url, path, index, refresh, check)
@@ -348,7 +367,7 @@ def collect_originals(
                 if callable(keep):
                     keep(relative, payload)
             else:
-                originals[relative] = payload.decode("utf-8", errors="replace")
+                originals[relative] = _read_text(payload)
         # One platform's unreadable file fails that platform: raised, it
         # stopped --all before the platforms after it.
         except (OSError, http.client.HTTPException, OriginalUnreadable) as exc:
@@ -699,6 +718,8 @@ def export_platform(
     )
     if missing:
         return False, [f"the platform's own file is required: {m}" for m in missing]
+    if exporter.needs_original() and not originals:
+        return False, ["the platform's own file is required and none was read"]
 
     try:
         produced = exporter.render(systems, report, originals, scraped)
