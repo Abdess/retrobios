@@ -80,11 +80,17 @@ def profile_needs(profiles: dict, db: dict) -> dict:
         (_crc_key(str(f.get("crc32", "")).lower()), f.get("size"))
         for f in files.values() if f.get("crc32")
     }
+    # Held under its own name or under an alias the database indexes, as
+    # the resolver and verify read it: np2pi's KANJI2.ROM is the PC-88
+    # n88knj2.rom, and its own name alone listed it missing.
     sizes_by_name: dict[str, set[int]] = {}
     for record in files.values():
         sizes_by_name.setdefault(str(record.get("name", "")).casefold(), set()).add(
             record.get("size")
         )
+    for alias, sha1s in indexes.get("by_name", {}).items():
+        held = sizes_by_name.setdefault(str(alias).casefold(), set())
+        held.update(files[sha1].get("size") for sha1 in sha1s if sha1 in files)
 
     by_hash: dict[tuple, list[dict]] = {}
     by_name: dict[str, list[tuple[dict, dict]]] = {}
@@ -117,7 +123,9 @@ def profile_needs(profiles: dict, db: dict) -> dict:
             if all(entry.get(k) is None for k in ("size", "min_size", "max_size")):
                 continue
             names = [name, *(entry.get("aliases") or [])]
-            if any(
+            # An unsourceable entry is not held by a homonym: xm7's
+            # KANJI2.ROM is the Fujitsu font, the held one the PC-88's.
+            if not entry.get("unsourceable") and any(
                 _fits(held, entry)
                 for alias in names
                 for held in sizes_by_name.get(str(alias).casefold(), ())
