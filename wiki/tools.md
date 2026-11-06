@@ -1353,6 +1353,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
 | `generate_site.py` | Generate the site (this documentation) into the Starlight project in `website/` |
 | `sitesources.py` | Record which cited source paths each pinned upstream tree holds, for the site's source links (`--fetch` reads a tree no cache holds) |
+| `site_insights.py` | What readers look for and do not find, from totals only: searches that show the site but are rarely clicked, file names searched and whether the collection holds them, site searches that found nothing, broken addresses, "Did this page help?" answers, GitHub traffic and release downloads (`--days`, `--skip gsc,goatcounter,github`, `--output`). Reads Search Console, GoatCounter and GitHub with credentials kept outside the repository. [What the site counts](privacy.md) |
 | `validate_site.py` | Validate rendered metadata, heading order, image alternatives, JSON-LD, local resources, links and fragments, and the page size and search index budgets |
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, and rebuild a pinned archive from ROMs already held |
 | `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
