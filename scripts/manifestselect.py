@@ -19,7 +19,13 @@ from dataclasses import dataclass
 
 import region as region_mod
 from common import _norm_system_id, sanitize_pack_path
-from packextras import _kept, _serving_system_ids, extra_region_groups, system_spellings
+from packextras import (
+    _kept,
+    _serving_system_ids,
+    extra_region_groups,
+    extra_region_key,
+    system_spellings,
+)
 
 
 def _dest(entry: dict) -> str:
@@ -44,6 +50,7 @@ class SelectionIndex:
         pack_systems: dict[str, dict],
         extras: list[dict],
         required_only: bool = False,
+        extras_prefix: str = "",
     ) -> SelectionIndex:
         by_norm: dict[str, set[str]] = {}
         for sys_id in pack_systems:
@@ -60,7 +67,8 @@ class SelectionIndex:
         extra_groups: dict[str, set[str]] = {}
         spellings = system_spellings(pack_systems)
         for extra in extras:
-            dest = _dest(extra)
+            # Keyed as platform_region_groups keys it (extra_region_key).
+            dest = extra_region_key(extra, extras_prefix)
             if not dest:
                 continue
             extra_groups.setdefault(dest, set()).update(

@@ -1148,6 +1148,99 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
         self.assertEqual({f["dest"] for f in files}, {f["dest"] for f in built["files"]})
 
 
+class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
+    """RetroDECK declares bios/scph5501.bin and writes core files below bios/.
+    Beetle PSX's scph5501.bin was grouped bare, a key whose region lookup
+    another core leaves untagged, while the declaration's key resolved to
+    DuckStation's American tag: `--region japan` dropped the declaration and
+    the pack kept the file through the core's claim, while the installer,
+    which records the path once, dropped it."""
+
+    def setUp(self):
+        import common
+        import generate_db
+        import generate_pack
+
+        self.gp = generate_pack
+        tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.addCleanup(tmp.cleanup)
+        previous = os.getcwd()
+        os.chdir(tmp.name)
+        self.addCleanup(os.chdir, previous)
+        Path("bios/Sys").mkdir(parents=True)
+        files = {}
+        for name in ("us.bin", "jp.bin"):
+            payload = name.encode()
+            Path(f"bios/Sys/{name}").write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            files[sha1] = {"path": f"bios/Sys/{name}", "name": name,
+                           "size": len(payload), "sha1": sha1,
+                           "md5": hashlib.md5(payload).hexdigest(),
+                           "sha256": hashlib.sha256(payload).hexdigest(),
+                           "crc32": "00000001"}
+        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        Path("platforms").mkdir()
+        Path("platforms/p.yml").write_text(json.dumps({
+            "platform": "P", "version": "2.1", "verification_mode": "existence",
+            "base_destination": "", "cores": ["beetle", "dsa", "other"],
+            "standalone_cores": ["dsa"], "systems": {"sys": {"files": [
+                {"name": name, "destination": f"bios/{name}", "required": False}
+                for name in ("us.bin", "jp.bin")
+            ]}},
+        }))
+        Path("platforms/_registry.yml").write_text(
+            json.dumps({"platforms": {"p": {"status": "active"}}})
+        )
+        Path("emulators").mkdir()
+        Path("emulators/dsa.yml").write_text(json.dumps({
+            "emulator": "dsa", "type": "standalone + libretro", "systems": ["sys"],
+            "files": [
+                {"name": name, "standalone_path": f"bios/{name}", "system": "sys",
+                 "region": [region_name], "required": False}
+                for name, region_name in (("us.bin", "north-america"), ("jp.bin", "japan"))
+            ]}))
+        # Read before dsa, as beetle_psx is before duckstation, and untagged
+        # by name through a second reader, as pcsx1 leaves scph5501.bin.
+        Path("emulators/beetle.yml").write_text(json.dumps({
+            "emulator": "beetle", "type": "libretro", "systems": ["sys"], "files": [
+                {"name": "us.bin", "system": "sys", "region": ["north-america"],
+                 "required": False},
+            ]}))
+        Path("emulators/other.yml").write_text(json.dumps({
+            "emulator": "other", "type": "libretro", "systems": ["sys"], "files": [
+                {"name": "us.bin", "path": "alt/us.bin", "system": "sys", "required": False},
+            ]}))
+        common._platform_config_cache.clear()
+        common._emulator_profiles_cache.clear()
+        self.addCleanup(common._platform_config_cache.clear)
+        self.addCleanup(common._emulator_profiles_cache.clear)
+        self.profiles = common.load_emulator_profiles("emulators")
+
+    def _manifest(self, regions):
+        return self.gp.generate_manifest(
+            "p", "platforms", self.db, "bios", "platforms/_registry.yml",
+            emulators_dir="emulators", emu_profiles=self.profiles,
+            regions=regions, offline=True,
+        )
+
+    def _pack(self, regions):
+        record = self.gp.PackRecord()
+        self.gp.generate_pack(
+            "p", "platforms", self.db, "bios", "", emulators_dir="emulators",
+            emu_profiles=self.profiles, regions=regions, offline=True, record=record,
+        )
+        return {m for m in record.members if m.startswith("bios/")}
+
+    def test_the_pack_and_the_installer_drop_the_same_files(self):
+        full = self._manifest(None)
+        files, _omitted = install.narrow(
+            full["files"], full["omitted_files"], [], [], ["japan"]
+        )
+        installed = {f["dest"] for f in files if f["dest"].startswith("bios/")}
+        self.assertIn("bios/jp.bin", installed)
+        self.assertEqual(self._pack(["japan"]), installed)
+
+
 class ACoreWithNothingHeldIsAnOmission(unittest.TestCase):
     """DOSBox serves SC-55/WAVEROM3.BIN, DOSBox Pure wants it and nothing is
     held for it. A pack built for a target without DOSBox lists it as left

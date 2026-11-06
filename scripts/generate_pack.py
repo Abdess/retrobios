@@ -1250,7 +1250,7 @@ def generate_pack(
           if required_only and fe.get("required") is False:
               continue
           dest = sanitize_pack_path(fe.get("destination", fe["name"]))
-          if region_drops and dest in region_drops:
+          if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
               continue
           if not dest:
               continue
@@ -4168,7 +4168,8 @@ def _manifest_core_entries(
         dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
             continue
-        if region_drops and dest in region_drops:
+        region_key = extra_region_key(fe, declared_root(config))
+        if region_drops and region_key in region_drops:
             continue
         full_dest = extra_full_destination(fe, extras_pfx)
         if not full_dest:
@@ -4242,7 +4243,7 @@ def _manifest_core_entries(
         entry, file_size = _manifest_entry(
             local_path, manifest_dest, [source_emu] if source_emu else [],
             db, repo_root,
-            selection.fields(dest, fe.get("name", "")),
+            selection.fields(region_key, fe.get("name", "")),
         )
         if entry is not None and save_root:
             entry.update(save_entry_fields(fe))
@@ -4356,7 +4357,8 @@ def _manifest_selection(
         else set()
     )
     return drops, SelectionIndex.build(
-        region_groups, region_index, pack_systems, extras, required_only
+        region_groups, region_index, pack_systems, extras, required_only,
+        extras_prefix=declared_root(config),
     ), held
 
 
@@ -4381,7 +4383,9 @@ def _record_absent(
         if required_only and fe.get("required") is False:
             continue
         dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
-        if not dest or (region_drops and dest in region_drops):
+        if not dest or (
+            region_drops and extra_region_key(fe, declared_root(config)) in region_drops
+        ):
             continue
         full_dest = extra_full_destination(fe, extras_pfx)
         if not full_dest:
@@ -4576,8 +4580,10 @@ def generate_manifest(
         reason: str,
         cores: list[str] | None,
     ) -> None:
-        bare = sanitize_pack_path(
-            file_entry.get("destination", file_entry.get("name", ""))
+        # A core extra (cores given) is keyed as the region pass keys it.
+        bare = (
+            sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+            if cores is None else extra_region_key(file_entry, declared_root(config))
         )
         save_root = file_entry.get("root") == "save"
         omitted_by_destination[full_destination] = {
@@ -5464,6 +5470,7 @@ from packpaths import (  # noqa: E402,F401
 from packextras import (  # noqa: E402,F401
     ExtraResolver,
     extra_full_destination,
+    extra_region_key,
     prefixed_destination,
     save_entry_fields,
     save_manifest_dest,
