@@ -39,6 +39,10 @@ from pathlib import Path
 from typing import TypeVar
 
 sys.path.insert(0, os.path.dirname(__file__))
+from sitecollection import (  # noqa: E402
+    _copy_places, _group_by_manufacturer, _profiles_in,
+    _profiles_on_disk, _slug, collection_paths,
+)
 from common import (
     BUCKET_FOLDERS,
     names_manufacturer,
@@ -68,10 +72,6 @@ from artifacts import ArtifactLockBusy, artifact_lock
 from artifacts import json_text as _json_text
 from cross_reference import FileConsumers, entry_target, held_copy
 from nativemode import check_label, digest_algorithm, reads_file_contents
-
-
-
-
 
 
 yaml = require_yaml()
@@ -138,8 +138,6 @@ GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki", "api", "downloads
 PUBLIC_DIRS = ("api", "downloads")
 
 
-
-
 def _content_check_ceiling(profiles: dict) -> str:
     """How far content checking can reach across every profiled entry."""
     hashed = sized = neither = 0
@@ -169,9 +167,6 @@ def _content_check_ceiling(profiles: dict) -> str:
     )
 
 
-
-
-
 CLS_LABELS = {
     "official_port": "Official ports",
     "community_fork": "Community forks",
@@ -199,33 +194,6 @@ CLS_LABEL_ONE = {
     "unclassified": "Unclassified",
     "other": "Other",
 }
-
-
-def _copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
-    """sha1 -> every (manufacturer, console, file name) holding a copy.
-
-    The database keeps one path per content, deduplication having left one
-    copy. by_path_suffix still records the other folders a copy is filed in,
-    under the name that folder gives it.
-    """
-    files = db.get("files", {})
-    bios_dir = Path(str(db.get("bios_dir") or "bios"))
-    places: dict[str, set[tuple[str, str, str]]] = {}
-    for sha1, entry in files.items():
-        parts = str(entry.get("path", "")).split("/")
-        if len(parts) >= 3 and parts[0] == "bios":
-            places.setdefault(sha1, set()).add((parts[1], parts[2], parts[-1]))
-    for tail, sha1s in db.get("indexes", {}).get("by_path_suffix", {}).items():
-        parts = tail.split("/")
-        if len(parts) < 3 or parts[1].startswith(".") or len(sha1s) != 1:
-            continue
-        if sha1s[0] in files and (bios_dir / tail).is_file():
-            places.setdefault(sha1s[0], set()).add((parts[0], parts[1], parts[-1]))
-    return places
-
-
-def _slug(manufacturer: str) -> str:
-    return manufacturer.lower().replace(" ", "-")
 
 
 def _copies_by_path(db: dict) -> dict[str, set[tuple[str, str, str]]]:
@@ -413,11 +381,6 @@ def _system_pages_from_data(
     return pages
 
 
-
-
-
-
-
 def _timestamp() -> str:
     """The build time for data files (stats, API records), ISO 8601."""
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -434,8 +397,6 @@ def data_as_of(moment: datetime | None = None) -> str:
 def _date_line() -> str:
     """The date a page closes on, in the words of data_as_of()."""
     return f'<div class="rb-timestamp">{data_as_of()}.</div>'
-
-
 
 
 # Home page
@@ -5271,122 +5232,6 @@ def write_lookup_shards(
     return len(shards)
 
 
-def collection_paths(db: dict) -> dict[str, set[str]]:
-    """Every path under bios/ that holds each file, by sha1.
-
-    The database keeps one path per content. The others are the full tails
-    by_path_suffix records that name a file on disk: RPG Maker, engine
-    trees and the copies filed under several consoles keep 2,502 of them.
-    """
-    files = db.get("files", {})
-    bios_dir = Path(str(db.get("bios_dir") or "bios"))
-    paths: dict[str, set[str]] = {}
-    for sha1, entry in files.items():
-        path = str(entry.get("path", ""))
-        if path.startswith("bios/") and path.count("/") >= 2:
-            paths.setdefault(sha1, set()).add(path)
-    for tail, sha1s in db.get("indexes", {}).get("by_path_suffix", {}).items():
-        if tail.count("/") < 2 or len(sha1s) != 1 or sha1s[0] not in files:
-            continue
-        if (bios_dir / tail).is_file():
-            paths.setdefault(sha1s[0], set()).add(f"bios/{tail}")
-    return paths
-
-
-def _group_by_manufacturer(db: dict) -> dict[str, dict[str, list]]:
-    """Group files by manufacturer -> console -> files.
-
-    The database keeps one path per content, and a copy filed elsewhere was
-    on no page of its own: the Channel F BIOS sat under Arcade > FBNeo only,
-    and Fairchild had no system page. Every folder holding a copy lists it,
-    read from the full paths by_path_suffix records. The game engines'
-    files are grouped by engine (_engine_sections).
-    """
-    files = db.get("files", {})
-    manufacturers: dict[str, dict[str, list]] = {}
-    for sha1, where in _copy_places(db).items():
-        for manufacturer, console in sorted({(m, c) for m, c, _ in where}):
-            manufacturers.setdefault(manufacturer, {}).setdefault(console, []).append(files[sha1])
-    return _engine_sections(manufacturers)
-
-
-def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dict[str, list]]:
-    """A game engine's files in one section headed with the engine's name.
-
-    The Systems index listed ".variants", "scummvm.zip" and "wildmidi.cfg"
-    as games, and ScummVM's files sat on three pages. A folder of variants
-    joins the section of its primary, a file kept at a top's root joins
-    the section of the one engine that reads it (else of the engine the
-    top is named after), the folder under Other named after a game-engine
-    top joins that top, and a folder named by a profile key is headed with
-    the engine's name (SECTION_LABELS), its address unchanged.
-    """
-    from siterender import _PROGRAM_TOPS, SECTION_LABELS, record_card_move  # noqa: PLC0415
-
-    profiles = {key: profile for key, profile in _profiles_on_disk().items()
-                if profile.get("type") not in ("alias", "test")}
-    readers: dict[str, set[str]] = {}
-    for key, profile in profiles.items():
-        for entry in profile.get("files") or []:
-            if isinstance(entry, dict):
-                for name in [entry.get("name"), *(entry.get("aliases") or [])]:
-                    if name:
-                        readers.setdefault(str(name).rsplit("/", 1)[-1], set()).add(key)
-
-    def engine(key: str) -> str:
-        return str(profiles[key].get("emulator") or key)
-
-    def profile_of(name: str) -> str | None:
-        return next((k for k in sorted(profiles)
-                     if name.casefold() in (k.casefold(), engine(k).casefold())), None)
-
-    out: dict[str, dict[str, list]] = {}
-    for mfr, consoles in manufacturers.items():
-        if mfr not in GAME_DATA_TOPS:
-            out[mfr] = dict(consoles)
-            continue
-        own = profile_of(mfr)
-        regrouped: dict[str, list] = {}
-        for console, files in sorted(consoles.items(), key=lambda item: item[0].startswith(".")):
-            for f in files:
-                parts = str(f.get("path", "")).split("/")
-                target = console
-                if console.startswith(".") or (len(parts) == 3 and console == parts[-1]):
-                    # A variant answers its primary's name: scummvm.zip.a93f1c4b.
-                    base = parts[-1].rsplit(".", 1)[0] if console.startswith(".") else parts[-1]
-                    keys = sorted(readers.get(base, ()))
-                    key = keys[0] if len(keys) == 1 else own
-                    found = next((c for c, held in regrouped.items()
-                                  if any(h.get("name") == base for h in held)), None)
-                    target = found or (next((c for c in consoles if c == key), None)
-                                       or (engine(key) if key else base))
-                if target != console:
-                    record_card_move(mfr, console, str(f.get("sha1", "")), mfr, target)
-                regrouped.setdefault(target, []).append(f)
-        out[mfr] = regrouped
-    # The folder under Other an engine top is named after: ScummVM's
-    # engine data under Other/ScummVM, its themes under ScummVM/.
-    others = out.get("Other", {})
-    for folder in sorted(others):
-        top = next((t for t in out if t in GAME_DATA_TOPS and t.casefold() == folder.casefold()),
-                   None)
-        if top is None or top in _PROGRAM_TOPS:
-            continue
-        sections = out[top]
-        target = next((c for c in sections if c.casefold() == folder.casefold()), folder)
-        held = {str(f.get("sha1", "")) for f in sections.get(target, [])}
-        for f in others[folder]:
-            record_card_move("Other", folder, str(f.get("sha1", "")), top, target)
-        sections[target] = [*sections.get(target, []),
-                            *(f for f in others.pop(folder) if str(f.get("sha1", "")) not in held)]
-    for mfr in GAME_DATA_TOPS:
-        for console in out.get(mfr, {}):
-            key = profiles.get(console) and console
-            if key and engine(key) != console:
-                SECTION_LABELS[(mfr, console)] = engine(key)
-    return {mfr: consoles for mfr, consoles in out.items() if consoles}
-
-
 def _console_display(manufacturer: str, console: str) -> str:
     """A console section's name as the reader looks for it: the heading
     system_name gives its id, or the folder alone under a program's top
@@ -6699,15 +6544,6 @@ def _reading_pairs(sha1: str, consumers: FileConsumers) -> list[tuple[str, dict]
         if 0 <= index < len(files) and isinstance(files[index], dict):
             pairs.append((emulator, files[index]))
     return pairs
-
-
-def _profiles_on_disk() -> dict[str, dict]:
-    return _profiles_in(str(siteinputs.current().emulators), skip_aliases=False)
-
-
-@functools.lru_cache(maxsize=None)
-def _profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
-    return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)
 
 
 def _entry_systems(emulator: str, entry: dict) -> list[str]:
@@ -11359,8 +11195,6 @@ def generate_gap_analysis(
 
     lines.extend(["", _date_line()])
     return "\n".join(lines) + "\n"
-
-
 
 
 def _core_scope_note(config: dict, profiles: dict) -> str:

@@ -85,11 +85,48 @@ class TheGivenProfilesAndPlatforms(_Inputs):
         self.assertEqual(sitediagrams.registry()["retroarch"].get("release_pack"), False)
 
 
+class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):
+    """database.json names its bios folder "bios", and the collection model
+    read it from the working directory: started from tmp/, it found no copy
+    on disk and dropped five system sections and 2,500 collection paths."""
+
+    def test_same_sections_and_paths_from_another_directory(self) -> None:
+        import json
+
+        import sitecollection
+
+        db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
+        here = sitecollection.collection_paths(db)
+        places = sitecollection._copy_places(db)
+        elsewhere = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir() else None))
+        self.addCleanup(shutil.rmtree, elsewhere)
+        cwd = os.getcwd()
+        os.chdir(elsewhere)
+        self.addCleanup(os.chdir, cwd)
+        self.assertEqual(sitecollection.collection_paths(db), here)
+        self.assertEqual(sitecollection._copy_places(db), places)
+        self.assertGreater(sum(map(len, here.values())), len(here))
+
+    def test_the_bios_folder_sits_beside_the_given_database(self) -> None:
+        import siteinputs
+
+        siteinputs.use(siteinputs.SiteInputs(db=Path("/elsewhere/database.json")))
+        self.addCleanup(siteinputs.use, siteinputs.SiteInputs())
+        self.assertEqual(siteinputs.bios_dir({"bios_dir": "bios"}), Path("/elsewhere/bios"))
+        self.assertEqual(siteinputs.bios_dir({"bios_dir": "/abs/bios"}), Path("/abs/bios"))
+
+    def test_the_image_tools_do_not_load_the_page_generator(self) -> None:
+        for module in ("make_og_cards.py", "fetch_site_images.py", "siterender.py"):
+            with self.subTest(module=module):
+                source = (REPO_ROOT / "scripts" / module).read_text(encoding="utf-8")
+                self.assertNotIn("from generate_site import", source)
+
+
 class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
     """A helper that opens the repository's database, profiles or platform
     files itself bypasses the flags. siteinputs.current() is the one source."""
 
-    MODULES = ("generate_site.py", "siterender.py", "sitediagrams.py")
+    MODULES = ("generate_site.py", "siterender.py", "sitediagrams.py", "sitecollection.py")
     INPUTS = {"database.json", "emulators", "platforms"}
 
     def test_no_literal_input_path(self) -> None:

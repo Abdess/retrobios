@@ -47,6 +47,7 @@ on:
       - "scripts/safeparse.py"
       - "scripts/sect233r1.py"
       - "scripts/sitebootstrap.py"
+      - "scripts/sitecollection.py"
       - "scripts/sitediagrams.py"
       - "scripts/siteentries.py"
       - "scripts/siteguides.py"
