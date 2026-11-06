@@ -40,7 +40,7 @@ class ZippedMemberIsChecked(unittest.TestCase):
                             "by_path_suffix": {}},
             }
             (root / "platforms" / "_registry.yml").write_text(
-                yaml.dump({"platforms": {"plat": {"status": "active"}}})
+                yaml.dump({"platforms": {"plat": {"config": "plat.yml"}}})
             )
             (root / "platforms" / "plat.yml").write_text(yaml.dump({
                 "platform": "Plat", "verification_mode": "md5",

@@ -379,7 +379,6 @@ def _paragraphs(texts: list[str]) -> list[str]:
 
 def download_table(
     coverages: dict,
-    archived: set[str],
     extract_paths: dict[str, str],
     record: dict,
 ) -> list[str]:
@@ -389,12 +388,9 @@ def download_table(
         "|----------|------:|---------------:|-----------|----------|",
     ]
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
-        display = cov["platform"]
-        if name in archived:
-            display = f"{display} *"
         files, size = release_totals(name, record)
         lines.append(
-            f"| {display} | {f'{files:,}' if files else '-'} |"
+            f"| {cov['platform']} | {f'{files:,}' if files else '-'} |"
             f" {format_size(size) if size else '-'} |"
             f" {extract_paths.get(cov['platform'], '')} |"
             f" {download_links(name, record, 'Download', site=SITE_URL)} |"
@@ -530,7 +526,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
     total_size = db.get("total_size", 0)
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    platform_names = list_registered_platforms(platforms_dir, include_archived=True)
+    platform_names = list_registered_platforms(platforms_dir)
 
     from common import load_data_dir_registry
 
@@ -632,29 +628,16 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
     # a pack whose entries already carry their own root (RetroDECK) extracts
     # one level above it.
     extract_paths = _extract_cells(platforms_dir)
-    archived = {
-        name
-        for name, entry in load_platform_registry(platforms_dir).items()
-        if entry.get("status") == "archived"
-    }
 
     lines.extend(
         download_table(
-            coverages, archived, extract_paths,
+            coverages, extract_paths,
             release_record.load_advertised(platforms_dir=platforms_dir),
         )
     )
     lines.extend(["", no_pack_line()])
 
     lines.extend(_paragraphs(extract_notes(platforms_dir, released_only=True)))
-    if archived:
-        lines.extend(
-            [
-                "",
-                "\\* Archived: the installer serves it, and checks that cover every"
-                " setup include it only on request.",
-            ]
-        )
 
     lines.extend(
         [
@@ -753,7 +736,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
     )
 
     for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
-        display = f"{cov['platform']} *" if name in archived else cov["platform"]
+        display = cov["platform"]
         checked = check_label(cov["mode"], cov["config"].get("hash_rule"))
         core_total = (
             cov["core_present"] + cov["core_missing"] + cov["core_unsourceable"]

@@ -193,7 +193,7 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
     # and a Recalbox md5 field split into the revisions it lists. The raw
     # file kept "a,b,c" as one value, so a PR adding the seventh accepted
     # falcon.img was told its hash differs.
-    for name in list_registered_platforms(platforms_dir, include_archived=True):
+    for name in list_registered_platforms(platforms_dir):
         try:
             config = load_platform_config(name, platforms_dir)
         except (OSError, yaml.YAMLError) as exc:

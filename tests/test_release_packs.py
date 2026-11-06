@@ -61,22 +61,17 @@ def _which_pack() -> str:
 class TheFieldIsTheList(unittest.TestCase):
     def test_the_registry_marks_the_most_downloaded_setups(self):
         self.assertEqual(
-            set(common.list_release_pack_platforms(PLATFORMS, include_archived=True)), RELEASED
+            set(common.list_release_pack_platforms(PLATFORMS)), RELEASED
         )
 
-    def test_only_marked_platforms_are_listed_and_archived_ones_on_request(self):
+    def test_only_marked_platforms_are_listed(self):
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             platforms_dir = _write_registry(Path(tmp), {
-                "big": {"status": "active", "release_pack": True},
-                "small": {"status": "active"},
-                "off": {"status": "active", "release_pack": False},
-                "old": {"status": "archived", "release_pack": True},
+                "big": {"release_pack": True},
+                "small": {},
+                "off": {"release_pack": False},
             })
             self.assertEqual(common.list_release_pack_platforms(platforms_dir), ["big"])
-            self.assertEqual(
-                common.list_release_pack_platforms(platforms_dir, include_archived=True),
-                ["big", "old"],
-            )
             self.assertEqual(
                 common.list_registered_platforms(platforms_dir), ["big", "off", "small"]
             )
@@ -93,6 +88,36 @@ class TheFieldIsTheList(unittest.TestCase):
         self.assertEqual([e.message for e in validator.iter_errors(registry)], [])
         registry["platforms"]["knulli"]["release_pack"] = "yes"
         self.assertTrue(list(validator.iter_errors(registry)))
+
+
+class NoPlatformIsSetApart(unittest.TestCase):
+    """A registry `status: archived` kept RetroPie out of every full run
+    unless --include-archived was typed, after release_pack had become the
+    only thing that sets platforms apart. A platform is registered or not."""
+
+    def test_the_registry_carries_no_status(self):
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
+        flagged = sorted(
+            name for name, entry in registry["platforms"].items() if "status" in (entry or {})
+        )
+        self.assertEqual(flagged, [])
+
+    def test_the_schema_declares_no_status(self):
+        text = (REPO_ROOT / "schemas" / "registry.schema.json").read_text(encoding="utf-8")
+        for word in ('"status"', "archived"):
+            with self.subTest(word=word):
+                self.assertNotIn(word, text)
+
+    def test_no_script_knows_the_word(self):
+        found = sorted(
+            str(path.relative_to(REPO_ROOT))
+            for path in (REPO_ROOT / "scripts").rglob("*.py")
+            if any(
+                word in path.read_text(encoding="utf-8").lower()
+                for word in ("archived", "include_archived", "include-archived")
+            )
+        )
+        self.assertEqual(found, [])
 
 
 class TheBuildReadsTheField(unittest.TestCase):
@@ -116,15 +141,10 @@ class TheBuildReadsTheField(unittest.TestCase):
     def test_all_builds_the_release_packs_only(self):
         self.assertEqual(set(self._groups("--all", "--offline")), RELEASED)
 
-    def test_archived_platforms_without_the_field_stay_out(self):
-        self.assertEqual(
-            set(self._groups("--all", "--include-archived", "--offline")), RELEASED
-        )
-
     def test_manifests_cover_every_platform(self):
         self.assertEqual(
             set(self._groups("--all", "--manifest", "--offline")),
-            set(common.list_registered_platforms(PLATFORMS, include_archived=True)),
+            set(common.list_registered_platforms(PLATFORMS)),
         )
 
     def test_the_release_owners_are_the_marked_platforms(self):
@@ -177,7 +197,7 @@ class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
 
     def test_the_pipeline_passes_the_release_platforms(self):
         source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
-        self.assertIn("release_pack_keys(include_archived=args.include_archived)", source)
+        self.assertIn("release_pack_keys()", source)
 
     def test_verify_packs_sweeps_the_release_packs_only(self):
         import subprocess
@@ -314,7 +334,7 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
 
         record = release_record.load_advertised()
         with contextlib.chdir(REPO_ROOT):
-            for name in common.list_registered_platforms(PLATFORMS, include_archived=True):
+            for name in common.list_registered_platforms(PLATFORMS):
                 page = generate_site.generate_get_page(name)
                 pack = release_record.pack_for(name, record)
                 with self.subTest(platform=name):
@@ -340,7 +360,7 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
         docs = REPO_ROOT / "website" / "src" / "content" / "docs" / release_record.GET_DIR
         if not docs.is_dir():
             self.skipTest("the site is not generated")
-        for name in common.list_registered_platforms(PLATFORMS, include_archived=True):
+        for name in common.list_registered_platforms(PLATFORMS):
             with self.subTest(platform=name):
                 self.assertTrue(any(docs.glob(f"{name}.md*")))
 
@@ -368,7 +388,7 @@ class TheSiteCheckResolvesEveryGetPage(unittest.TestCase):
             record_path.write_text(json.dumps(record), encoding="utf-8")
             pages = {
                 f"get/{name}/index.html": "install.sh"
-                for name in common.list_registered_platforms(PLATFORMS, include_archived=True)
+                for name in common.list_registered_platforms(PLATFORMS)
             }
             pages["get/romm/index.html"] = f'<a href="{download}v1/RomM_BIOS_Pack.zip">x</a>'
             pages["get/knulli/index.html"] = f'<a href="{download}v1/K_BIOS_Pack.zip">x</a>'

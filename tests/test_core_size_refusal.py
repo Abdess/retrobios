@@ -82,7 +82,7 @@ class _Collection(unittest.TestCase):
         }
         Path("platforms/exist.yml").write_text(yaml.dump(self.config))
         Path("platforms/_registry.yml").write_text(
-            yaml.dump({"platforms": {"exist": {"status": "active"}}})
+            yaml.dump({"platforms": {"exist": {"config": "exist.yml"}}})
         )
         Path("emulators/sized.yml").write_text(SIZED)
         Path("emulators/unsized.yml").write_text(UNSIZED)

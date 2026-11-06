@@ -72,7 +72,7 @@ class SlugPlatform(unittest.TestCase):
         }
         (self.platforms / "slugs.yml").write_text(yaml.dump(self.config))
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"slugs": {"status": "active"}}})
+            yaml.dump({"platforms": {"slugs": {"config": "slugs.yml"}}})
         )
         (self.emulators / "dosbox.yml").write_text(PROFILE)
         common._platform_config_cache.clear()
@@ -190,7 +190,7 @@ class FlatFirmwareFolder(unittest.TestCase):
                     },
                 }
                 Path("platforms/flat.yml").write_text(yaml.dump(config))
-                entry = {"status": "active"}
+                entry = {"config": "flat.yml"}
                 if flat:
                     entry["firmware_folder_flat"] = True
                 Path("platforms/_registry.yml").write_text(

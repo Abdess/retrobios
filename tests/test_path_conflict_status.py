@@ -64,7 +64,7 @@ class ConflictingDeclarations(unittest.TestCase):
         }
         (self.platforms / "conflict.yml").write_text(yaml.dump(platform))
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"conflict": {"status": "active"}}})
+            yaml.dump({"platforms": {"conflict": {"config": "conflict.yml"}}})
         )
         common._platform_config_cache.clear()
         common._emulator_profiles_cache.clear()
@@ -133,7 +133,7 @@ class AnExtraDoesNotPassAHashCheck(unittest.TestCase):
         }
         (self.platforms / "hashed.yml").write_text(yaml.dump(platform))
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"hashed": {"status": "active"}}})
+            yaml.dump({"platforms": {"hashed": {"config": "hashed.yml"}}})
         )
         profile = {
             "emulator": "FX", "type": "libretro", "cores": ["fxcore"],

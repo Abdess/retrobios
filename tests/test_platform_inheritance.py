@@ -35,9 +35,9 @@ class AChildLeavesItsParentAlone(unittest.TestCase):
                 "systems": {"sys-a": {"files": [{"name": "child.bin"}]},
                             "sys-new": {"files": [{"name": "new.bin"}]}}}},
             "_registry.yml": {"platforms": {
-                "parent": {"status": "active", "scraper": "parent", "hash_type": "md5",
-                           "cores": "all_libretro"},
-                "child": {"status": "archived", "scraper": "child"},
+                "parent": {"device_group": "computer", "scraper": "parent",
+                           "hash_type": "md5", "cores": "all_libretro"},
+                "child": {"device_group": "gaming-os", "scraper": "child"},
             }},
         }
         for name, data in files.items():
@@ -59,7 +59,7 @@ class AChildLeavesItsParentAlone(unittest.TestCase):
     def test_the_child_reads_its_own_registry_entry_first(self):
         self.load("parent")
         child = self.load("child")
-        self.assertEqual((child["status"], child["scraper"]), ("archived", "child"))
+        self.assertEqual((child["device_group"], child["scraper"]), ("gaming-os", "child"))
         # What it does not say comes from its parent's entry.
         self.assertEqual((child["hash_type"], child["cores"]), ("md5", "all_libretro"))
         self.assertEqual(

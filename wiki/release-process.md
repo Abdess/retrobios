@@ -237,8 +237,8 @@ pipeline runs here, the archives are checked here, and `gh` uploads them.
 # 1. Full pipeline, online, so data directories and MAME/FBNeo hashes are
 #    fresh. It builds the packs of the platforms marked release_pack (see
 #    "Which platforms get a pack" below) and the install manifests of every
-#    platform, RetroPie included with --include-archived.
-python scripts/pipeline.py --include-archived
+#    platform.
+python scripts/pipeline.py
 
 # 2. A release file must be under 2 GiB. A larger pack becomes parts that are
 #    each a ZIP of whole files (Pack.part1of2.zip): any tool opens one, and

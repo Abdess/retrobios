@@ -108,7 +108,7 @@ class EveryReaderHasTheTreeOrAReason(unittest.TestCase):
         registry = common.load_data_dir_registry(platforms_dir)
         profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
         unexplained = []
-        for platform in common.list_registered_platforms(platforms_dir, include_archived=True):
+        for platform in common.list_registered_platforms(platforms_dir):
             config = common.load_platform_config(platform, platforms_dir)
             handed = common.standalone_set(config)
             for core in sorted(common.resolve_platform_cores(config, profiles)):

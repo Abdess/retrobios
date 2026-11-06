@@ -20,7 +20,6 @@ python scripts/pipeline.py --offline --skip-docs   # skip readme + site generati
 python scripts/pipeline.py --offline --target switch  # filter by hardware target
 python scripts/pipeline.py --offline --with-truth  # include truth generation + diff
 python scripts/pipeline.py --offline --with-export # include native format export
-python scripts/pipeline.py --offline --include-archived  # include archived platforms
 python scripts/pipeline.py --check-buildbot        # online run + buildbot freshness check
 ```
 
@@ -72,7 +71,6 @@ Pipeline flags:
 | `--offline` | skip every step that needs the network (2, 2a, 2a2, 2b, 2b2), and pack only the release assets already in `.cache/large/` |
 | `--skip-packs` | skip steps 4, 4b, 4c, 5 and 6. Steps 4d and 4e still run, and README and site are still rewritten unless `--skip-docs` is given too |
 | `--skip-docs` | skip steps 7, 8 and 8b |
-| `--include-archived` | include archived platforms in verify, packs, truth and export |
 | `--target TARGET` | filter verify, packs and truth by hardware target |
 | `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py`. Refused with `--skip-packs` |
 | `--all-variants` | build the 6 source x required combinations. Refused with `--skip-packs` and with `--source` |
@@ -340,8 +338,7 @@ python scripts/diff_truth.py --all                        # diff all platforms
 
 Write each platform's own BIOS file, updated from the emulators' code: System.dat, es_bios.xml,
 batocera-systems, checkBIOS.sh, FirmwareDatabase.cs, the RetroDECK manifests,
-MiSTer's BiosDB, RetroPie's scriptmodules. Every platform in the registry,
-archived included.
+MiSTer's BiosDB, RetroPie's scriptmodules. Every platform in the registry.
 
 ```bash
 python scripts/export_native.py --platform batocera --fetch
@@ -1353,7 +1350,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `retired_files.py` | The record of files that left the collection, `retired.json`, which `generate_db.py` appends to and the site's lookup reads. `--backfill` rebuilds it from the history of `database.json` since content addresses were published (`--output` names another file) |
 | `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`): byte-identical copies are deleted and one kept. Identical MAME sets under other names stay one file, named in `_mame_clones.json`. Trees addressed by path are left alone (`NODEDUP_DIRS`), under a folder of that name at any depth: BBK, Bungie, C-Dogs SDL, Ikemen GO, mame, PinMAME, RPG Maker, ScummVM, Softdisk, TheXTech, splitwolf, Theme Hospital, c64-emu, opentyrian, tzdata |
 | `identity.py` | One content filed under two identities: groups `bios/` by content and reports a group that crosses manufacturers outside `KNOWN_SHARED` (`--strict` exits 1, pipeline step 3a) |
-| `slots.py` | Destinations the platform and a core both claim, and how the pack settles each (`--platform`, `--include-archived`, `--target`, `--json`, `--strict`, and pipeline step 3b passes the run's own `--include-archived` and `--target`) |
+| `slots.py` | Destinations the platform and a core both claim, and how the pack settles each (`--platform`, `--target`, `--json`, `--strict`, and pipeline step 3b passes the run's own `--target`) |
 | `region_audit.py` | Confront every profile `region:` with the regions No-Intro names for the same dump (`--json`, `--db`, `--emulators-dir`). An opinion, never an authority: the code decides, and a disagreement is a line to read in the emulator's source |
 | `validate_pr.py` | Validate BIOS files in pull requests, post markdown report |
 | `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
@@ -1361,7 +1358,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `generate_installer_doc.py` | Rewrite the generated blocks of `wiki/installer.md` from `install.py`: the tables (options, events, exit codes, keys per route, card markers), the line menu, and the run samples `install.py` prints in a sandbox against the committed `install/*.json`, so a new list rewrites the page (`--check` exits 1 when a block is stale, `--page FILE` writes another copy of the page). Pipeline step 7 |
 | `pin_installer.py` | Write the SHA-256 of `install.py` into the pins of `install.sh` and `install.ps1`, which refuse any other installer (`--check` writes nothing and exits 1 when a pin is stale). `check_freshness.py` reports a stale pin and `refresh_stale.py` runs this |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline). A download is accepted only when every cryptographic hash the entry declares (sha256, sha1, md5) matches. crc32 and size find a file the database already holds, never accept a download. An entry with no cryptographic hash is reported and not searched |
-| `list_platforms.py` | List active platforms (`--include-archived` adds the archived ones) |
+| `list_platforms.py` | List the registered platforms as JSON |
 | `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |
 | `download.sh` | Same, as a shell one-liner (`curl` + `unzip`) |
 | `split_pack.py` | Cut a pack over the release asset limit into parts that are each a ZIP of whole files, each with a marker naming every part, read back before the pack is removed |

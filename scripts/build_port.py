@@ -134,7 +134,7 @@ def release_pack_labels(root: Path = REPO_ROOT) -> dict[str, str]:
     """Platform -> the platform part of the release pack that serves it.
 
     Only the platforms the registry marks release_pack have a pack, grouped
-    as the release builds them (pipeline.py --include-archived). install.py
+    as the release builds them (pipeline.py). install.py
     refuses a pack whose name does not spell the platform, so a platform
     outside these groups has no pack to copy, whatever its file list.
     """
@@ -146,7 +146,7 @@ def release_pack_labels(root: Path = REPO_ROOT) -> dict[str, str]:
     from generate_pack import _name_part, _platform_pack_stem  # noqa: PLC0415
 
     platforms_dir = str(root / "platforms")
-    pool = list_release_pack_platforms(platforms_dir, include_archived=True)
+    pool = list_release_pack_platforms(platforms_dir)
     labels: dict[str, str] = {}
     for group, representative in group_identical_platforms(pool, platforms_dir):
         stem = _platform_pack_stem(group, representative, platforms_dir)

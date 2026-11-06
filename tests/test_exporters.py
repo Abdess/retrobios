@@ -593,13 +593,13 @@ class ExporterRegistry(unittest.TestCase):
     def test_every_registered_platform_can_be_exported(self):
         """A platform with no exporter is a platform we cannot hand back.
 
-        Archived included: the export is a correction we offer, not a
-        release artefact, and RetroPie's users are not fewer for it.
+        The export is a correction we offer, not a release artefact: a
+        platform without a release pack is exported all the same.
         """
         exporters = discover_exporters()
         registered = set(
             list_registered_platforms(
-                str(REPO_ROOT / "platforms"), include_archived=True
+                str(REPO_ROOT / "platforms")
             )
         )
         self.assertEqual(registered - set(exporters) - _without_native_list(), set())
@@ -641,7 +641,7 @@ class ExporterRegistry(unittest.TestCase):
         exporters = set(discover_exporters())
         registered = set(
             list_registered_platforms(
-                str(REPO_ROOT / "platforms"), include_archived=True
+                str(REPO_ROOT / "platforms")
             )
         )
         self.assertEqual(exporters - registered, set())

@@ -87,7 +87,7 @@ class DirectoryFixture(unittest.TestCase):
 
         (self.platforms / "demo.yml").write_text(yaml.dump(PLATFORM))
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"demo": {"status": "active"}}})
+            yaml.dump({"platforms": {"demo": {"config": "demo.yml"}}})
         )
         common._emulator_profiles_cache.clear()
 

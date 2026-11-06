@@ -352,7 +352,7 @@ class PlacementBySystem(_Fixture):
         platforms = self.tmp / "platforms"
         platforms.mkdir()
         (platforms / "_registry.yml").write_text(
-            "platforms:\n  p:\n    config: p.yml\n    status: active\n", encoding="utf-8")
+            "platforms:\n  p:\n    config: p.yml\n", encoding="utf-8")
         (platforms / "p.yml").write_text(
             "platform: P\nsystems:\n  arcade:\n    files:\n"
             "      - {name: a.zip, sha1: aaaa}\n      - {name: b.zip, sha1: bbbb}\n",
@@ -434,7 +434,7 @@ class PlatformHashLoading(_Fixture):
         platforms = self.tmp / "platforms"
         platforms.mkdir()
         (platforms / "_registry.yml").write_text(
-            "platforms:\n  demo:\n    status: active\n"
+            "platforms:\n  demo:\n    config: demo.yml\n"
         )
         (platforms / "demo.yml").write_text(
             "platform: Demo\n"
@@ -461,7 +461,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         platforms = self.tmp / "platforms"
         platforms.mkdir()
         (platforms / "_registry.yml").write_text(
-            f"platforms:\n  p:\n    config: p.yml\n    status: active\n{registry}",
+            f"platforms:\n  p:\n    config: p.yml\n{registry}",
             encoding="utf-8")
         (platforms / "p.yml").write_text(f"platform: P\nsystems:\n  s:\n    files:\n{systems}",
                                          encoding="utf-8")

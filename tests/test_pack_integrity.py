@@ -45,7 +45,7 @@ def _registered_platforms() -> list[str]:
     sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
     from common import list_registered_platforms
 
-    return list_registered_platforms(PLATFORMS_DIR, include_archived=True)
+    return list_registered_platforms(PLATFORMS_DIR)
 
 
 def _profiles_newer_than(path: str, platform_name: str) -> list[str]:

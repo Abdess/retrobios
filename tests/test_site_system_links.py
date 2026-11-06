@@ -288,7 +288,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
         siterender.set_console_sections(gs._group_by_manufacturer(db), siterender.program_names(profiles))
         platforms = REPO_ROOT / "platforms"
         ids = {str(sid) for profile in profiles.values() for sid in profile.get("systems") or []}
-        for name in list_registered_platforms(str(platforms), include_archived=True):
+        for name in list_registered_platforms(str(platforms)):
             ids |= {str(sid) for sid in load_platform_config(name, str(platforms)).get("systems") or {}}
         cls.ids = sorted(ids)
         cls.siterender = siterender

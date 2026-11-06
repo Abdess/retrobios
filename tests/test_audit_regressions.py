@@ -594,7 +594,7 @@ class EverySharedGroupServesAPlatform(unittest.TestCase):
             groups = set((yaml.safe_load(handle) or {}).get("shared_groups") or {})
         served = {
             entry.get("shared_group")
-            for name in list_registered_platforms(platforms_dir, include_archived=True)
+            for name in list_registered_platforms(platforms_dir)
             for system in load_platform_config(name, platforms_dir).get("systems", {}).values()
             for entry in system.get("files", [])
         }
@@ -977,8 +977,7 @@ class PipelineRegressions(unittest.TestCase):
         import argparse  # noqa: PLC0415
 
         def command(**flags) -> list[str]:
-            base = {"output_dir": "dist", "include_archived": False,
-                    "target": None, "all_variants": False}
+            base = {"output_dir": "dist", "target": None, "all_variants": False}
             return pipeline.integrity_command(argparse.Namespace(**{**base, **flags}))
 
         self.assertIn("--all-variants", command(all_variants=True))
@@ -4258,7 +4257,6 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
             ["--list-systems", "--region", "us"],
             ["--emulator", "handy", "--target", "switch"],
             ["--platform", "retroarch", "--standalone"],
-            ["--platform", "retroarch", "--include-archived"],
         ],
         "scripts/pipeline.py": [
             ["--offline", "--skip-packs", "--source", "truth"],
@@ -4452,7 +4450,7 @@ class TheIssueFormListsEveryPlatform(unittest.TestCase):
             item["attributes"]["options"] for item in form["body"]
             if item.get("id") == "platform"
         )
-        for name in list_registered_platforms(str(ROOT / "platforms"), include_archived=True):
+        for name in list_registered_platforms(str(ROOT / "platforms")):
             display = load_platform_config(name, str(ROOT / "platforms"))["platform"]
             self.assertIn(display, options)
 
@@ -5090,7 +5088,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         sys.path.insert(0, str(ROOT / "scripts"))
         from common import list_registered_platforms, load_emulator_profiles
 
-        known = set(list_registered_platforms(str(ROOT / "platforms"), include_archived=True))
+        known = set(list_registered_platforms(str(ROOT / "platforms")))
         unknown = sorted({
             (name, platform)
             for name, profile in load_emulator_profiles(str(ROOT / "emulators")).items()
@@ -6001,7 +5999,7 @@ class AHashScanningCoreContradictsNoPlatform(unittest.TestCase):
         db = json.loads((root / "database.json").read_text(encoding="utf-8"))
         claimed = [
             (platform, conflict.destination)
-            for platform in list_registered_platforms(str(root / "platforms"), include_archived=True)
+            for platform in list_registered_platforms(str(root / "platforms"))
             for conflict in slots.scan_platform(platform, profiles, db, str(root / "platforms"))
             if any(claim.emulator == "ares" for claim in conflict.profile_claims)
         ]
@@ -6616,9 +6614,9 @@ class TheReleaseBuildsEveryServedPackInOneRun(unittest.TestCase):
     """The release ran the pipeline, then built and checked RetroPie by hand:
     the consistency check between verify and the pack never covered it."""
 
-    def test_the_pipeline_step_includes_archived_platforms(self):
+    def test_the_pipeline_step_covers_every_platform(self):
         page = (ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
-        self.assertIn("python scripts/pipeline.py --include-archived", page)
+        self.assertIn("python scripts/pipeline.py\n", page)
         self.assertNotIn("generate_pack.py --platform retropie", page)
 
 
@@ -7187,8 +7185,7 @@ class AnUnknownSystemIsRefusedBeforeAnyWork(unittest.TestCase):
         parser = argparse.ArgumentParser()
         args = argparse.Namespace(
             system="sony-playstation", platform="retroarch", all=False,
-            platforms_dir=str(ROOT / "platforms"), include_archived=False,
-            manifest=False,
+            platforms_dir=str(ROOT / "platforms"), manifest=False,
         )
         generate_pack._resolve_systems(args, parser)
         self.assertEqual(args.system_ids, ["sony-playstation"])

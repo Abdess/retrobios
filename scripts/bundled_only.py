@@ -51,7 +51,7 @@ def bundled_only(db: dict, profiles: dict, platforms_dir: str, install_dir: Path
     """Collected files a bundled entry resolves to and nothing else needs."""
     consumers = FileConsumers(db)
     needed: set[str] = set(shipped_by_manifests(install_dir))
-    for name in list_registered_platforms(platforms_dir, include_archived=True):
+    for name in list_registered_platforms(platforms_dir):
         config = load_platform_config(name, platforms_dir)
         for system in config.get("systems", {}).values():
             for entry in system.get("files", []):

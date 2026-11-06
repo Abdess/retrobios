@@ -416,8 +416,8 @@ def _registry_contract() -> list[str]:
     """The registry against its schema, and a release that still ships a pack.
 
     `release_pack` is the only list of the ZIPs a release publishes: a
-    registry where no active platform carries it would cut a release with
-    no pack at all, and every download link would lead to the command.
+    registry where no platform carries it would cut a release with no pack
+    at all, and every download link would lead to the command.
     """
     registry_path = ROOT / "platforms" / "_registry.yml"
     if not registry_path.is_file():
@@ -428,12 +428,10 @@ def _registry_contract() -> list[str]:
     out = _errors(_validator("registry.schema.json"), registry, label)
     platforms = registry.get("platforms") or {}
     if isinstance(platforms, dict) and not any(
-        isinstance(entry, dict)
-        and entry.get("release_pack") is True
-        and entry.get("status", "active") == "active"
+        isinstance(entry, dict) and entry.get("release_pack") is True
         for entry in platforms.values()
     ):
-        out.append(f"{label}: no active platform has release_pack: true")
+        out.append(f"{label}: no platform has release_pack: true")
     return out
 
 

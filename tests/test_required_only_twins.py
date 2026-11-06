@@ -69,7 +69,7 @@ class RequiredTwins(unittest.TestCase):
         }
         (self.platforms / "twins.yml").write_text(yaml.dump(platform))
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"twins": {"status": "active"}}})
+            yaml.dump({"platforms": {"twins": {"config": "twins.yml"}}})
         )
         common._platform_config_cache.clear()
         common._emulator_profiles_cache.clear()

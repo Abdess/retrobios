@@ -198,7 +198,7 @@ class ReportsOverAFixture(unittest.TestCase):
         platforms.mkdir()
         pinned = hashlib.md5(self.pool.build(self.recipe)).hexdigest()
         (platforms / "_registry.yml").write_text(
-            "platforms:\n  demo:\n    config: demo.yml\n    status: active\n",
+            "platforms:\n  demo:\n    config: demo.yml\n",
             encoding="utf-8",
         )
         (platforms / "demo.yml").write_text(
@@ -228,7 +228,7 @@ class ReportsOverAFixture(unittest.TestCase):
         platforms = self.root / "platforms"
         platforms.mkdir()
         (platforms / "_registry.yml").write_text(
-            "platforms:\n  demo:\n    config: demo.yml\n    status: active\n",
+            "platforms:\n  demo:\n    config: demo.yml\n",
             encoding="utf-8",
         )
         (platforms / "demo.yml").write_text(

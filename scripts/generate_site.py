@@ -1073,7 +1073,7 @@ def _release_pack_platforms() -> frozenset[str]:
 
 @functools.lru_cache(maxsize=None)
 def _release_packs_in(platforms_dir: str) -> frozenset[str]:
-    return frozenset(list_release_pack_platforms(platforms_dir, include_archived=True))
+    return frozenset(list_release_pack_platforms(platforms_dir))
 
 
 # Per-entry fields a folder check needs beyond the hashes: an md5 is a ZIP
@@ -3393,28 +3393,23 @@ SETUP_TABLE_ANCHOR = "every-setup-at-a-glance"
 SETUP_TABLE_LINK = f"{SETUP_TABLE_PAGE}#{SETUP_TABLE_ANCHOR}"
 
 
-def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
+def setup_table(coverages: dict) -> list[str]:
     """Every setup side by side: the files on its own list, the files in its
     ZIP, and how it checks them. Written under the Reference level, on the
     page that explains each way of checking."""
-    registry = registry or {}
     lines = [
         f"## Every setup at a glance {{ #{SETUP_TABLE_ANCHOR} }}",
         "",
         "| Setup | Files on its own list | Files in the ZIP | How it checks |",
         "|-------|------:|------:|---------------|",
     ]
-    archived = False
     for name, cov in sorted(coverages.items(), key=lambda item: item[1]["platform"].casefold()):
-        status = registry.get(name, {}).get("status")
-        archived |= status == "archived"
         listed = f"{cov['total']:,}" if cov["total"] else "No list of its own"
         files, _size = release_totals(name, release_record.load_advertised())
         zipped = (f"{files:,}" if files
                   else "No ZIP yet" if has_release_pack(name) else "No ZIP")
         lines.append(
-            f"| [{cov['platform']}](../platforms/{name}.md)"
-            f"{' (archived)' if status == 'archived' else ''} | {listed} | {zipped} | "
+            f"| [{cov['platform']}](../platforms/{name}.md) | {listed} | {zipped} | "
             f"{check_label(cov['mode'], cov['config'].get('hash_rule'))} |"
         )
     lines += [
@@ -3424,16 +3419,13 @@ def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
     ]
     lines += ["No ZIP: the setup is served by the command alone. "
               f"[Why?](../{NO_ZIP_FAQ})", ""]
-    if archived:
-        lines += ["An archived setup keeps its page and the command. Checks that cover "
-                  "every setup include it only on request.", ""]
     return lines
 
 
-def with_setup_table(page: str, coverages: dict, registry: dict | None = None) -> str:
+def with_setup_table(page: str, coverages: dict) -> str:
     """The comparison table placed before the Next steps of its page, or at
     its end."""
-    table = "\n".join(setup_table(coverages, registry))
+    table = "\n".join(setup_table(coverages))
     marker = "\n## Next steps"
     if marker in page:
         head, tail = page.split(marker, 1)
@@ -4606,11 +4598,6 @@ def generate_platform_page(
         f"# {display}",
         "",
     ]
-
-    if registry.get(name, {}).get("status") == "archived":
-        lines.extend(markup.aside("warning", "Archived platform", [
-            f"{display}'s list is kept as last read. Its pack is still built.",
-        ]))
 
     summary = GUIDES[name].summary if name in GUIDES else ""
     if summary:
@@ -12471,7 +12458,7 @@ def _generate(args: argparse.Namespace) -> None:
             registry = (yaml_load(f) or {}).get("platforms", {})
 
     platform_names = list_registered_platforms(
-        args.platforms_dir, include_archived=True
+        args.platforms_dir
     )
 
     from common import load_data_dir_registry
@@ -12767,7 +12754,7 @@ def _generate(args: argparse.Namespace) -> None:
     table_page = docs / SETUP_TABLE_PAGE
     if table_page.is_file():
         write_if_changed(str(table_page), with_setup_table(
-            table_page.read_text(encoding="utf-8"), coverages, registry))
+            table_page.read_text(encoding="utf-8"), coverages))
     # data-model.md is generated (contains live DB stats)
     write_if_changed(
         str(wiki_dest / "data-model.md"), generate_wiki_data_model(db, profiles)
@@ -12776,8 +12763,8 @@ def _generate(args: argparse.Namespace) -> None:
     print("Generating which-pack page...")
     write_if_changed(str(docs / "which-pack.md"), generate_which_pack())
 
-    # One permanent download address per registered platform, archived ones
-    # included: the README's table links each of them.
+    # One permanent download address per registered platform: the README's
+    # table links each of them.
     print("Generating download pages...")
     get_dir = docs / release_record.GET_DIR
     get_dir.mkdir(parents=True, exist_ok=True)

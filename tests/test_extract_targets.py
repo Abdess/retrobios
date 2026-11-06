@@ -3,8 +3,8 @@
 Both kept a hand table keyed by display name. RomM's row said
 `bios/{platform_slug}/` while the pack already carries one folder per slug
 at its root, so following it nested every file one level too deep. The
-README's RetroDECK sentence sat inside the archived-platforms block and
-would have vanished the day RetroPie became active again.
+README's RetroDECK sentence sat inside a block about RetroPie and would
+have vanished with it.
 """
 
 from __future__ import annotations
@@ -34,7 +34,7 @@ class ExtractTargets(unittest.TestCase):
         templated = [d for d, folder in extract_targets(PLATFORMS) if "{" in folder]
         self.assertEqual(templated, [])
 
-    def test_a_pack_with_its_own_root_is_explained_whatever_is_archived(self):
+    def test_a_pack_with_its_own_root_is_explained(self):
         rooted = sorted(
             load_platform_config(key, PLATFORMS).get("platform", key)
             for key in load_platform_registry(PLATFORMS)

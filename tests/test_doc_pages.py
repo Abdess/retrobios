@@ -1954,13 +1954,13 @@ class APlatformListIsDescribedNotJudged(unittest.TestCase):
                 self.assertIsNone(pattern.search(page.read_text(encoding="utf-8")))
 
 
-class ArchivedIsWhatTheToolsDo(unittest.TestCase):
-    """The README and the setup pages said an archived platform is no longer
-    scraped on a schedule, and adding-a-platform said `active` feeds a CI
-    matrix and the scrapers. No workflow calls list_platforms.py and no tool
-    reads `schedule:`: what `archived` changes is which full runs include it."""
+class NoTextClaimsAScheduledScrape(unittest.TestCase):
+    """The README and the setup pages said a platform is scraped on a
+    schedule, and adding-a-platform said the registry feeds a CI matrix and
+    the scrapers. No workflow calls list_platforms.py and no tool reads
+    `schedule:`."""
 
-    def test_no_text_ties_the_status_to_automation(self):
+    def test_no_text_ties_the_registry_to_automation(self):
         import generate_pack  # noqa: PLC0415
         import generate_readme  # noqa: PLC0415
         import generate_site  # noqa: PLC0415
@@ -1979,7 +1979,6 @@ class ArchivedIsWhatTheToolsDo(unittest.TestCase):
                 for claim in ("scraped on a schedule", "read again on a schedule",
                               "CI matrix", "without the automation"):
                     self.assertNotIn(claim, text)
-        self.assertIn("`--include-archived`", texts["adding-a-platform.md"])
         for workflow in (ROOT / ".github" / "workflows").glob("*.yml"):
             self.assertNotIn("list_platforms", workflow.read_text(encoding="utf-8"))
 

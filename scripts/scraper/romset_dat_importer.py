@@ -69,7 +69,7 @@ def relevant_archives(emulators_dir: str, platforms_dir: str) -> set[str]:
             archive = entry.get("archive", "")
             if archive:
                 names.add(archive)
-    for platform_name in list_registered_platforms(platforms_dir, include_archived=True):
+    for platform_name in list_registered_platforms(platforms_dir):
         config = load_platform_config(platform_name, platforms_dir)
         for system in config.get("systems", {}).values():
             for entry in system.get("files", []) or []:

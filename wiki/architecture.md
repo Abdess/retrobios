@@ -25,7 +25,7 @@ bios/                    BIOS and firmware files, organized by Manufacturer/Cons
 emulators/               one YAML profile per core/engine
 platforms/               one YAML config per platform (scraped from upstream)
   _shared.yml            shared file groups across platforms
-  _registry.yml          platform metadata (logos, scrapers, status, install config)
+  _registry.yml          platform metadata (logos, scrapers, release packs, install config)
   _guides.yml            the guide text of each platform's page
   _data_dirs.yml         data directory definitions (Dolphin Sys, PPSSPP...)
   targets/               hardware target configs + _overrides.yml

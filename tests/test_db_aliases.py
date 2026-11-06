@@ -286,7 +286,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
             os.chdir(tmp)
             try:
                 Path("platforms").mkdir()
-                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    status: active\n")
+                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    config: p.yml\n")
                 Path("platforms/p.yml").write_text(
                     "systems:\n  sms:\n    files:\n"
                     '      - name: "bios_U.sms"\n        sha1: "v13"\n'
@@ -306,7 +306,7 @@ class TheSmsBiosKeepsItsNames(unittest.TestCase):
             os.chdir(tmp)
             try:
                 Path("platforms").mkdir()
-                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    status: active\n")
+                Path("platforms/_registry.yml").write_text("platforms:\n  p:\n    config: p.yml\n")
                 Path("platforms/p.yml").write_text(
                     "systems:\n  sms:\n    files:\n"
                     '      - name: "bios_U.sms"\n        sha1: "v13"\n'

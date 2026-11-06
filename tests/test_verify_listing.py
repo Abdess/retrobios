@@ -33,16 +33,13 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
     """The mode x flag matrix generate_pack has, for verify.
 
     --list-emulators --standalone printed the full list, --list-systems --json
-    printed columns, --platform --include-archived covered nothing more: each
-    with rc 0, each letting the caller believe the flag applied.
+    printed columns: each with rc 0, each letting the caller believe the flag
+    applied.
     """
 
     MATRIX = (
         (("--list-emulators",), "--standalone"),
         (("--list-systems",), "--json"),
-        (("--list-targets", "--platform", "retroarch"), "--include-archived"),
-        (("--platform", "retroarch"), "--include-archived"),
-        (("--emulator", "handy"), "--include-archived"),
         (("--platform", "retroarch"), "--standalone"),
         # Game data is categorized against a platform's list and its cores.
         (("--emulator", "handy"), "--no-game-data"),

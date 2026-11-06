@@ -102,7 +102,7 @@ class PackCountFixture(unittest.TestCase):
         self.registry = {"demo-data": {"local_cache": str(self.data)}}
         (self.platforms / "demo.yml").write_text(yaml.dump(PLATFORM))
         (self.platforms / "_registry.yml").write_text(
-            yaml.dump({"platforms": {"demo": {"status": "active"}}})
+            yaml.dump({"platforms": {"demo": {"config": "demo.yml"}}})
         )
         (self.emulators / "demo.yml").write_text(PROFILE)
         common._emulator_profiles_cache.clear()
@@ -326,7 +326,6 @@ class TheTableDescribesTheRelease(unittest.TestCase):
     def test_the_download_table_gives_the_file_count_of_each_pack(self):
         rows = generate_readme.download_table(
             {"retroarch": {"platform": "RetroArch"}, "vita3k": {"platform": "Vita3K"}},
-            set(),
             {"RetroArch": "`system/`"},
             RECORD,
         )
@@ -506,7 +505,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
             }
             Path("platforms/hashy.yml").write_text(yaml.dump(config))
             Path("platforms/_registry.yml").write_text(
-                yaml.dump({"platforms": {"hashy": {"status": "active"}}})
+                yaml.dump({"platforms": {"hashy": {"config": "hashy.yml"}}})
             )
             common._platform_config_cache.clear()
             self.addCleanup(common._platform_config_cache.clear)

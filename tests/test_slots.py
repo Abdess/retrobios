@@ -935,27 +935,14 @@ class AnArchiveIsClaimedByItsMembers(unittest.TestCase):
 
 
 class SlotsJudgeWhatVerifyJudged(unittest.TestCase):
-    """pipeline --include-archived verified RetroPie and built its pack, but
-    step 3b ran slots.py without the flag (it had none) and never arbitrated
-    RetroPie's 31 contested destinations; --target was dropped the same way."""
+    """Step 3b ran slots.py without the run's --target and arbitrated cores
+    the target does not ship."""
 
-    def test_the_pipeline_passes_both_flags(self):
+    def test_the_pipeline_passes_the_target(self):
         source = (Path(__file__).resolve().parents[1] / "scripts" / "pipeline.py").read_text()
         step = source[source.index('slots_cmd = [sys.executable, "scripts/slots.py"]'):]
         step = step[:step.index("3b slot arbitration")]
-        self.assertIn('slots_cmd.append("--include-archived")', step)
         self.assertIn('slots_cmd.extend(["--target", args.target])', step)
-
-    def test_slots_accepts_them(self):
-        import subprocess
-
-        root = Path(__file__).resolve().parents[1]
-        result = subprocess.run(
-            [sys.executable, "scripts/slots.py", "--include-archived", "--platform", "retropie"],
-            cwd=root, capture_output=True, text=True, timeout=600,
-        )
-        self.assertEqual(result.returncode, 2, result.stderr)
-        self.assertIn("--include-archived", result.stderr)
 
 
 class ARecordIsFoundByItsPathOnce(unittest.TestCase):

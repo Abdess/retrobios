@@ -308,7 +308,7 @@ def _scrapable_platforms(platforms_dir: Path) -> list[tuple[str, str, Path]]:
     with (platforms_dir / "_registry.yml").open(encoding="utf-8") as fh:
         registry = (yaml_load(fh) or {}).get("platforms") or {}
     rows = []
-    for name in list_registered_platforms(str(platforms_dir), include_archived=True):
+    for name in list_registered_platforms(str(platforms_dir)):
         path = platforms_dir / f"{name}.yml"
         if not path.is_file():
             continue
@@ -513,7 +513,7 @@ def check_native(
     except export_native.SourcesIndexUnreadable as exc:
         return [Finding("native", index.name, ERROR, detail=str(exc))]
     findings: list[Finding] = []
-    for name in list_registered_platforms(str(platforms_dir), include_archived=True):
+    for name in list_registered_platforms(str(platforms_dir)):
         exporter_class = exporters.get(name)
         if not exporter_class:
             continue

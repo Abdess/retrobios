@@ -248,7 +248,7 @@ class SetupCount(unittest.TestCase):
         from common import list_registered_platforms
 
         self.assertEqual(len(sitediagrams.setups()),
-                         len(list_registered_platforms(str(REPO_ROOT / "platforms"), include_archived=True)))
+                         len(list_registered_platforms(str(REPO_ROOT / "platforms"))))
 
     def test_every_rendered_count_agrees(self):
         """Each "RetroArch, Batocera, EmuDeck and N more" names three setups."""

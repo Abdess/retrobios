@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
-"""List the registered platforms.
-
-Respects the `status` field in _registry.yml:
-- active: listed by default
-- archived: listed with --include-archived only
+"""List the platforms registered in _registry.yml.
 
 Usage:
-    python scripts/list_platforms.py                # active platforms
-    python scripts/list_platforms.py --include-archived  # archived ones too
+    python scripts/list_platforms.py
     python scripts/list_platforms.py >> "$GITHUB_OUTPUT"
 """
 
@@ -24,22 +19,16 @@ from common import list_registered_platforms
 PLATFORMS_DIR = "platforms"
 
 
-def list_platforms(include_archived: bool = False) -> list[str]:
-    """List platform config files, filtering by status from _registry.yml."""
-    return list_registered_platforms(PLATFORMS_DIR, include_archived=include_archived)
+def list_platforms() -> list[str]:
+    """Every registered platform."""
+    return list_registered_platforms(PLATFORMS_DIR)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="List available platforms")
-    # The name verify, generate_pack, slots and pipeline use. --all is the
-    # older spelling, still read so existing commands keep working.
-    parser.add_argument(
-        "--include-archived", "--all", dest="include_archived", action="store_true",
-        help="include archived platforms",
-    )
-    args = parser.parse_args()
+    parser.parse_args()
 
-    platforms = list_platforms(include_archived=args.include_archived)
+    platforms = list_platforms()
 
     if not platforms:
         print("No platform configs found", file=sys.stderr)

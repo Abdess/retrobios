@@ -82,7 +82,6 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
 
         Path("platforms/p.yml").write_text(yaml.dump(self.config))
         Path("platforms/_registry.yml").write_text(yaml.dump({"platforms": {"p": {
-            "status": "active",
             "install": {"detect": [{"os": os_name} for os_name in systems]},
         }}}))
         common._platform_config_cache.clear()

@@ -584,7 +584,7 @@ class YourSetupIndexInPlainWords(unittest.TestCase):
 
     def test_insertion_keeps_next_steps_last(self):
         page = "# T\n\nBody.\n\n## Next steps\n\n- [A](a.md)\n"
-        out = generate_site.with_setup_table(page, {}, {})
+        out = generate_site.with_setup_table(page, {})
         self.assertTrue(out.rstrip().endswith("- [A](a.md)"))
         self.assertIn("## Every setup at a glance", out)
 

@@ -47,7 +47,7 @@ class TwinDeclarationStatus(unittest.TestCase):
         }}
         self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
         Path("platforms/_registry.yml").write_text(
-            yaml.dump({"platforms": {"twin": {"status": "active"}}})
+            yaml.dump({"platforms": {"twin": {"config": "twin.yml"}}})
         )
         self.addCleanup(common._platform_config_cache.clear)
 

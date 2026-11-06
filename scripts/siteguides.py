@@ -288,9 +288,9 @@ def _handheld_guide(data: object, registry: dict, guides: dict, where: str) -> H
 def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
     """The guides file, checked against the registry.
 
-    Every registered platform, archived ones included, has a guide and a
-    device group the file describes. A mistake raises GuideError naming the
-    key, so the site is never built from half a guide.
+    Every registered platform has a guide and a device group the file
+    describes. A mistake raises GuideError naming the key, so the site is
+    never built from half a guide.
     """
     yaml = require_yaml()
     if registry is None:
@@ -413,9 +413,8 @@ def _plain_folders(name: str) -> str:
 
 
 def setup_count() -> int:
-    """Setups the site covers: every registered platform, archived ones
-    included, since each keeps its page, its pack and its command. The one
-    count every page states."""
+    """Setups the site covers: every registered platform, since each keeps
+    its page, its pack and its command. The one count every page states."""
     return len(GUIDES)
 
 

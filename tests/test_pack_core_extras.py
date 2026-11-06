@@ -176,7 +176,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
                   ]}}}
         Path("platforms/p.yml").write_text(yaml.safe_dump(config), encoding="utf-8")
         Path("platforms/_registry.yml").write_text(
-            yaml.safe_dump({"platforms": {"p": {"status": "active"}}}), encoding="utf-8"
+            yaml.safe_dump({"platforms": {"p": {"config": "p.yml"}}}), encoding="utf-8"
         )
         Path("emulators").mkdir()
         Path("emulators/c.yml").write_text(yaml.safe_dump({

@@ -239,7 +239,7 @@ def main() -> int:
         print(f"ERROR: {SUMS}: {exc}", file=sys.stderr)
         return 2
 
-    released = set(list_release_pack_platforms(args.platforms_dir, include_archived=True))
+    released = set(list_release_pack_platforms(args.platforms_dir))
     findings = compare_release(record, sums, assets, tag, local_files, released,
                                installer_files(args.install_dir))
     if args.json:
