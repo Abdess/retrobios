@@ -24,7 +24,7 @@ import time
 import urllib.error
 import urllib.request
 import zipfile
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from pathlib import Path
 from artifacts import file_lock as _file_lock, set_plain_mode
 from common import InputMissing, github_token, platform_arg, require_platform, suggest_names, yaml_load
@@ -71,6 +71,24 @@ def cache_lock(
     return _announced_lock(cache_dir.with_name(f".{cache_dir.name}.lock"), shared, cache_dir)
 
 
+def _wait_message(lock_path: Path, shared: bool, cache_dir: Path) -> str:
+    """Who to wait for, and, for a refresh, how not to.
+
+    The bare "another run holds it" named neither the lock nor its holder,
+    and the build waited with no limit.
+    """
+    message = (
+        f"waiting for {cache_dir}: another run holds {lock_path} "
+        f"(lsof {lock_path} names it)"
+    )
+    if not shared:
+        message += (
+            ". generate_pack.py --no-refresh-data, or --offline there and in"
+            " pipeline.py, builds from the cache as it is without waiting"
+        )
+    return message
+
+
 @contextlib.contextmanager
 def _announced_lock(lock_path: Path, shared: bool, cache_dir: Path) -> Iterator[None]:
     """file_lock, saying so when it has to wait.
@@ -90,7 +108,7 @@ def _announced_lock(lock_path: Path, shared: bool, cache_dir: Path) -> Iterator[
         try:
             fcntl.flock(handle, mode | fcntl.LOCK_NB)
         except BlockingIOError:
-            log.warning("waiting for %s: another run holds it", cache_dir)
+            log.warning(_wait_message(lock_path, shared, cache_dir))
             fcntl.flock(handle, mode)
         try:
             yield
@@ -270,10 +288,12 @@ def _download_and_extract(
     source_path: str,
     local_cache: str,
     exclude: list[str] | None = None,
+    measured: Callable[[int], None] | None = None,
 ) -> int:
     """Download tarball, extract source_path subtree to local_cache.
 
-    Returns the number of files extracted.
+    Returns the number of files extracted. measured receives the size of
+    the archive downloaded.
     """
     exclude = exclude or []
     cache_dir = Path(local_cache)
@@ -290,6 +310,8 @@ def _download_and_extract(
                     if not chunk:
                         break
                     f.write(chunk)
+        if measured is not None:
+            measured(tarball_path.stat().st_size)
 
         log.info("extracting %s -> %s", source_path, local_cache)
 
@@ -347,6 +369,7 @@ def _download_and_extract_zip(
     local_cache: str,
     exclude: list[str] | None = None,
     strip_components: int = 0,
+    measured: Callable[[int], None] | None = None,
 ) -> int:
     """Download ZIP, extract to local_cache. Returns file count.
 
@@ -369,6 +392,8 @@ def _download_and_extract_zip(
                     if not chunk:
                         break
                     f.write(chunk)
+        if measured is not None:
+            measured(zip_path.stat().st_size)
 
         extract_dir = Path(tmpdir) / "extract"
         extract_dir.mkdir()
@@ -406,6 +431,46 @@ def _download_and_extract_zip(
         _promote(extract_dir, cache_dir, Path(tmpdir))
 
     return file_count
+
+
+def _measure_archive(source_url: str) -> int | None:
+    """The size of the archive at source_url, read by streaming it: a
+    tarball GitHub builds on request is sent without a Content-Length."""
+    req = urllib.request.Request(source_url, headers={"User-Agent": USER_AGENT})
+    size = 0
+    try:
+        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp:
+            while chunk := resp.read(65536):
+                size += len(chunk)
+    except _TRANSIENT as exc:
+        log.warning("could not measure %s: %s", source_url, exc)
+        return None
+    return size or None
+
+
+def _record_archive_size(key: str, entry: dict, versions_path: str) -> None:
+    """Record the archive size of a tree current since before it was kept.
+
+    The installer announces a tree's download as that size: a tarball
+    whose tree is 10 KB is a download of 21 MB. Measured, not refetched,
+    so the tree the packs carry stays the one recorded.
+    """
+    path = Path(versions_path)
+    with _file_lock(path.with_name(f".{path.name}.lock")):
+        versions = _load_versions(versions_path)
+        record = versions.get(key)
+        if record is None or "archive_size" in record:
+            return
+    version = entry.get("version", "master")
+    size = _measure_archive(entry["source_url"].format(version=version))
+    if size is None:
+        return
+    with _file_lock(path.with_name(f".{path.name}.lock")):
+        versions = _load_versions(versions_path)
+        if key in versions and "archive_size" not in versions[key]:
+            versions[key]["archive_size"] = size
+            _save_versions(versions, versions_path)
+    log.info("[%s] archive size recorded: %d bytes", key, size)
 
 
 def _get_remote_etag(source_url: str) -> str | None:
@@ -456,6 +521,7 @@ def refresh_entry(
             return None
         if not needs:
             log.info("[%s] up to date (tag: %s)", key, _short_tag(cached_tag))
+            _record_archive_size(key, entry, versions_path)
             return False
     with cache_lock(entry["local_cache"]):
         return _refresh_entry(key, entry, force, dry_run, versions_path)
@@ -516,13 +582,19 @@ def _refresh_entry(
         else:
             remote_tag = get_remote_sha(entry["source_url"], version)
 
+    archive_sizes: list[int] = []
+
     def fetch() -> int:
+        archive_sizes.clear()
         if source_type == "zip":
             return _download_and_extract_zip(
-                source_url, local_cache, exclude, entry.get("strip_components", 0)
+                source_url, local_cache, exclude, entry.get("strip_components", 0),
+                measured=archive_sizes.append,
             )
         source_path = entry["source_path"].format(version=version)
-        return _download_and_extract(source_url, source_path, local_cache, exclude)
+        return _download_and_extract(
+            source_url, source_path, local_cache, exclude, measured=archive_sizes.append
+        )
 
     # An archive that reads but holds nothing under the path is the same on
     # every try: only a failed or unreadable download is tried again.
@@ -540,7 +612,10 @@ def _refresh_entry(
             log.warning("[%s] download failed (%s), trying again in %d s", key, exc, wait)
             time.sleep(wait)
 
-    _record_version(key, {"sha": remote_tag or "", "version": version}, versions_path)
+    record = {"sha": remote_tag or "", "version": version}
+    if archive_sizes:
+        record["archive_size"] = archive_sizes[-1]
+    _record_version(key, record, versions_path)
 
     log.info("[%s] refreshed: %d files extracted to %s", key, file_count, local_cache)
     return True

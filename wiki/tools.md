@@ -28,6 +28,13 @@ python scripts/pipeline.py --check-buildbot        # online run + buildbot fresh
 `python scripts/refresh_data_dirs.py` once first. A run that builds packs with no
 data directory cached is refused before step 0.
 
+`--with-export` online passes `--fetch` to step 2e, which downloads each
+platform's own file and patches it. Offline that file must already be in
+`.cache/upstream-native/`: on a fresh clone run
+`python scripts/export_native.py --all --refresh-cache` once first. An offline
+run with `--with-export` and an empty cache for any platform it patches is
+refused before step 0.
+
 Pipeline steps:
 
 | Step | Description | Skipped by |
@@ -52,7 +59,7 @@ Pipeline steps:
 | 4c | Generate target manifests | `--skip-packs` |
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
 | 4e | Games index: what the installer reads for the games on a card (`generate_games_index.py`, fails under its coverage floor) | - (reads the committed install lists) |
-| 5 | Consistency check: counts, paths per archive, every emulator and system pack, the narrowed platform packs | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
+| 5 | Consistency check: counts, paths per archive, every emulator and system pack, the narrowed platform packs, the `--split` parts | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
 | 6 | Pack integrity (extract + hash) | `--skip-packs`, or no full pack built |
 | 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
@@ -69,7 +76,7 @@ Pipeline flags:
 | `--target TARGET` | filter verify, packs and truth by hardware target |
 | `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py`. Refused with `--skip-packs` |
 | `--all-variants` | build the 6 source x required combinations. Refused with `--skip-packs` and with `--source` |
-| `--full-narrowings` | step 5 compares every region, target and system of each platform instead of three of each. Refused with `--skip-packs` |
+| `--full-narrowings` | step 5 compares every region, target and system of each platform instead of three of each. Refused with `--skip-packs` and with `--source platform` or `--source truth` |
 | `--check-buildbot` | run step 2b. Additive, and ignored under `--offline` |
 | `--with-truth` | run steps 2c and 2d |
 | `--with-export` | run steps 2c, 2d and 2e |
@@ -110,6 +117,12 @@ alone, run `python scripts/check_buildbot_system.py`.
   `--source` and `--one-per-slot` are not compared: verify has no report of
   a platform-only, truth-only or one-per-slot pack. A test fails when a new
   narrowing reaches the pack name without being compared or exempted.
+- **The `--split` parts add up to the full pack.** Step 5 builds the parts of
+  every platform in memory and compares their union with the full pack, path
+  for path and byte for byte: a part is built against the full pack's own
+  placement, so a path the full pack settles (a file/directory clash, a case
+  twin, a path two systems declare) is not written again in a part. The 17
+  platform packs took about four and a half minutes on 2026-11-06.
 - **Generators write through `write_if_changed()`.** A new timestamp alone
   rewrites nothing, so a diff on a generated file always means content.
 - **One run per output directory.** Pack generation takes a lock on
@@ -154,7 +167,7 @@ python scripts/verify.py --platform recalbox --region us   # regional priority l
 python scripts/verify.py --platform emuelec --no-game-data  # the firmware-only pack, game data named
 python scripts/verify.py --emulator mame --required-only    # the pack built with --required-only
 python scripts/verify.py --all --destinations tmp/paths.json  # also write the paths each pack holds
-python scripts/verify.py --all --offline             # a release asset the cache lacks counts missing, as in an offline build
+python scripts/verify.py --all --offline             # a release asset the cache lacks counts missing, as in an offline build (any mode, --emulator included)
 python scripts/verify.py --list-platforms          # list all platforms
 python scripts/verify.py --list-emulators          # list all emulators
 python scripts/verify.py --list-systems            # list all systems
@@ -760,7 +773,10 @@ committed.
 
 Rows that need a decision are listed and never run: a buildbot core with no
 profile, a new `.info` file, the Redump, No-Intro and TOSEC packs, the CI
-pins, and `profile_sync`. A failed scraper leaves its cached original
+pins, `profile_sync`, and a rom-folder pin (moved by hand in
+`platforms/romfolders/_sources/`, then `python -m scripts.scraper.romfolders
+--setup NAME` reads it again). `--dry-run --json` prints the plan as JSON.
+A failed scraper leaves its cached original
 untouched. Each job writes its output to `tmp/refresh_stale/`, and a GitHub
 token is taken from `GITHUB_TOKEN` or from `gh auth token`.
 
@@ -1343,6 +1359,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
 | `generate_event_schema.py` | Write `schemas/install-events.schema.json` from `EVENT_KEYS` in `install.py` (`--check` exits 1 when the file is stale, which `validate_schemas.py` also reports) |
 | `generate_installer_doc.py` | Rewrite the generated blocks of `wiki/installer.md` from `install.py`: the tables (options, events, exit codes, keys per route, card markers), the line menu, and the run samples `install.py` prints in a sandbox against the committed `install/*.json`, so a new list rewrites the page (`--check` exits 1 when a block is stale, `--page FILE` writes another copy of the page). Pipeline step 7 |
+| `pin_installer.py` | Write the SHA-256 of `install.py` into the pins of `install.sh` and `install.ps1`, which refuse any other installer (`--check` writes nothing and exits 1 when a pin is stale). `check_freshness.py` reports a stale pin and `refresh_stale.py` runs this |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline). A download is accepted only when every cryptographic hash the entry declares (sha256, sha1, md5) matches. crc32 and size find a file the database already holds, never accept a download. An entry with no cryptographic hash is reported and not searched |
 | `list_platforms.py` | List active platforms (`--include-archived` adds the archived ones) |
 | `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |
@@ -1644,8 +1661,8 @@ names the profiles read.
 
 | Catalog | Acquisition | Notes |
 |---------|------------|-------|
-| Redump | direct fetch from redump.info `/static/bios` | 4 BIOS DATs. redump.org serves stale DATs |
-| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic blocks automation, and the `hugo19941994/auto-datfile-generator` mirror rebuilds daily |
+| Redump | direct fetch from redump.info, one `/bios/<CODE>` route per system | 4 BIOS DATs. redump.org serves BIOS DATs dated 2010 to 2022, redump.info the current ones |
+| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic serves its DATs through a browser session, and the `hugo19941994/auto-datfile-generator` mirror rebuilds daily |
 | TOSEC | local pack, imported with `dat_pack_importer` | annual pack from tosecdev.org, 138 Firmware DATs |
 
 The join is by SHA1, then by MD5 + size. A match sets the `provenance` field
@@ -1702,6 +1719,8 @@ Located in `scripts/scraper/targets/`. Each inherits `BaseTargetScraper` and imp
 | `knulli_targets_scraper` | the same, read from KNULLI's tree and Buildroot fork | board |
 | `recalbox_targets_scraper` | board defconfigs + system.ini cores | board |
 | `rocknix_targets_scraper` | emulators package.mk + device options | device |
+| `amberelec_targets_scraper` | Makefile devices + metapackage extra cores + es_systems.cfg | device |
+| `emuelec_targets_scraper` | release assets + metapackage package.mk + core install steps + es_systems.json | device |
 | `lakka_targets_scraper` | libretro_cores package.mk + project and device options | device image |
 | `emudeck_targets_scraper` | EmuScripts (SteamOS and Windows) | operating system |
 | `retropie_targets_scraper` | scriptmodules + rp_module_flags | platform flag |

@@ -349,9 +349,13 @@ class TheSitemapIsAnnouncedWhereCrawlersLook(unittest.TestCase):
         config = (root / "website" / "astro.config.mjs").read_text()
         self.assertIn("site: SITE", config)
         self.assertIn("sitemap.xml", config)
-        source = (root / "scripts" / "generate_site.py").read_text()
-        self.assertNotIn('"robots.txt"),\n        "User-agent', source)
-        self.assertNotIn("Sitemap: https://", source)
+        from tests.sitepages import generator_sources
+
+        for path in generator_sources():
+            source = path.read_text(encoding="utf-8")
+            with self.subTest(module=path.name):
+                self.assertNotIn('"robots.txt"),\n        "User-agent', source)
+                self.assertNotIn("Sitemap: https://", source)
 
 
 
@@ -409,8 +413,12 @@ class PlainHouseStyle(unittest.TestCase):
     def test_headings_do_not_repeat_the_site_name(self):
         # The header bar already names the site, and the browser title gets
         # it from the theme: "# DuckStation - RetroBIOS" said it twice.
-        source = (ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
-        self.assertNotRegex(source, r'"# [^"]* - (?:\{SITE_NAME\}|RetroBIOS)')
+        from tests.sitepages import generator_sources
+
+        for path in generator_sources():
+            with self.subTest(module=path.name):
+                self.assertNotRegex(path.read_text(encoding="utf-8"),
+                                    r'"# [^"]* - (?:\{SITE_NAME\}|RetroBIOS)')
         for page in sorted((ROOT / "wiki").glob("*.md")):
             first = page.read_text(encoding="utf-8").splitlines()[0]
             with self.subTest(page=page.name):

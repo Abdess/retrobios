@@ -606,6 +606,28 @@ of files:
   own system, so an entry filed under one of our system ids is never written.
 - `needs_original()` - `True` as soon as `native_sources()` names a file.
 
+Those methods say what the format could hold. The report counts what `render()`
+actually wrote, through a second set, read entry by entry:
+
+- `lands(fe)` - whether the entry is in the written file. Defaults to
+  `writable()`. Override it when `render()` drops an entry the format could
+  hold: RetroBat merges an addition into a path it already declares, and
+  System.dat leaves out a file with no section name.
+- `states(fe, field)` - whether the written entry carries the corrected field.
+  Defaults to `field in carries()`.
+- `fills(fe, field)` and `clears(fe, field)` - whether a hash only the truth
+  names is written, and whether a hash the truth contradicts leaves the entry.
+  Both default to `states()`.
+- `names_anew(fe)` - whether the render wrote, for the first time, a file the
+  platform already declares. Only a format whose unit is not the entry needs it
+  (a RetroPie help sentence).
+- `withheld()` - corrections the render proved and still did not write, named
+  so the run does not read as nothing to do.
+
+An exporter whose `render()` skips anything the defaults count must override
+the matching method. Otherwise the summary announces a change the maintainer
+will not find in the diff.
+
 ### Round-trip validation
 
 The scraper and the exporter are checked against each other as

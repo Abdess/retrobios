@@ -43,7 +43,7 @@ First time? Follow the [first install, step by step](https://abdess.github.io/re
 
 ## Download BIOS packs
 
-A pack holds everything its platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. Each Download link is a page that keeps its address from one release to the next. The installer above does the same file by file: its screen installs everything, or fewer under **Choose systems**, and `--system`, `--core`, `--region` and `--target` make the same choice without questions. For a bare minimum, build your own pack below.
+A pack holds its platform's own BIOS list plus the files its emulator cores load. What no pack carries yet is in the [gap analysis](https://abdess.github.io/retrobios/gaps/). Pick your platform, download the ZIP, extract to the BIOS path. Each Download link is a page that keeps its address from one release to the next. The installer above does the same file by file: its screen installs everything, or fewer under **Choose systems**, and `--system`, `--core`, `--region` and `--target` make the same choice without questions. For a bare minimum, build your own pack below.
 
 A pack over 2 GB comes in several parts (`Pack.part1of2.zip`, `Pack.part2of2.zip`), and every part is needed. Each part is an ordinary ZIP: extract them all into the same folder.
 
@@ -83,7 +83,7 @@ These are the files an emulator loads from disk instead of carrying inside itsel
 
 Each file is checked the way your platform checks it. Most compare a checksum, the fingerprint of a file's contents, which catches a corrupt or unexpected copy. RetroArch, Lakka and RetroPie check that the file is present under its name without reading its contents (`path_is_valid` in RetroArch's `core_info.c`), and MinUI, NextUI and MyMinUI hand each core its folder without opening a file in it: the Coverage table says which applies to you. Independently of that, the collection records five fingerprints per file, and wherever an emulator's code states an expected size or hash, that value is read from its source and rechecked here.
 
-- **1,086 files** the platforms' emulators load are still to be found, and 138 more the collection does not hold and does not serve by name (retail data, per-user keys, user-filled slots), each with its reason. Both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
+- **1,087 files** the platforms' emulators load are still to be found, and 138 more the collection does not hold and does not serve by name (retail data, per-user keys, user-filled slots), each with its reason. Both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **18 platforms** supported with platform-specific verification
 - **623 emulators** profiled from source (RetroArch cores + standalone)
 - **532 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
@@ -102,11 +102,11 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | Platform | On its BIOS list | Files its emulators load | Checked by |
 |----------|-----------------:|-------------------------:|------------|
 | AmberELEC | 414/434 | 4,754/4,937 | MD5 |
-| Batocera | 353/353 | 14,173/15,292 | MD5 |
+| Batocera | 353/353 | 14,172/15,292 | MD5 |
 | BizHawk | 118/118 | - | SHA-1 |
 | EmuDeck | 168/168 | 8,427/8,529 | MD5 |
 | EmuELEC | 543/572 | 4,788/10,217 | MD5 |
-| KNULLI | 290/290 | 9,128/15,351 | MD5 |
+| KNULLI | 290/290 | 9,127/15,351 | MD5 |
 | Lakka | 532/532 | 7,910/7,995 | name only |
 | MiSTer FPGA | 81/81 | - | MD5 |
 | MinUI | 0/0 | 78/79 | name only |
@@ -208,4 +208,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-06T05:38:30Z*
+*Auto-generated on 2026-11-06T09:30:57Z*

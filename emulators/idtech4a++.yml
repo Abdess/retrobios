@@ -110,7 +110,7 @@ notes: |
        Q3E/src/main/jni/quake2/yquake2/src/common/filesystem.c:1801-1850,
        Q3E/src/main/jni/zdoom/src/d_iwad.cpp:738,
        Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:766,
-       idTech4Amm/src/main/java/com/karin/idTech4Amm/sys/GameResourceUrl.java:14-118
+       idTech4Amm/src/main/java/com/karin/idTech4Amm/sys/GameResourceUrl.java:15-121
 
   The Quake III lineage keeps id's release checksums for `baseq3` pak0 through
   pak8 and `missionpack` pak0 through pak3, and an archive whose value disagrees
@@ -130,7 +130,7 @@ notes: |
   two games whose data is a file rather than a folder.
   ref: Q3E/src/main/jni/zdoom/src/d_iwad.cpp:287-297, 321-342,
        Q3E/src/main/jni/zdoom/src/version.h:100-102,
-       idTech4Amm/src/main/java/com/karin/idTech4Amm/sys/Game.java:69-72,
+       idTech4Amm/src/main/java/com/karin/idTech4Amm/sys/Game.java:72-75,
        Q3E/src/main/java/com/n0n3m4/q3e/Q3EInterface.java:710-713
 
   Starting a game extracts that game's bundled resources first. A text file named

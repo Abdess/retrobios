@@ -162,6 +162,11 @@ class Planning(unittest.TestCase):
         self.assertEqual(jobs, [])
         self.assertEqual(len(surfaced), 3)
 
+    def test_the_installer_pin_is_written_by_its_script(self):
+        jobs, surfaced, _ = self._plan(finding("ci", "install.py pin"))
+        self.assertEqual([job.command[1:] for job in jobs], [["scripts/pin_installer.py"]])
+        self.assertEqual(surfaced, [])
+
 
 class Running(unittest.TestCase):
     def test_a_child_starts_after_its_parent_ends(self):
@@ -233,6 +238,38 @@ class SavedFindings(unittest.TestCase):
             )
             findings = rs.load_findings(path, ("data", "catalogs"))
             self.assertEqual([f["subject"] for f in findings], ["dolphin-sys"])
+
+    def test_dry_run_json_prints_the_plan_as_json(self):
+        """--dry-run --json printed the text plan, and a caller parsing it
+        as JSON failed on the first line."""
+        import json  # noqa: PLC0415
+        import subprocess  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+            path = Path(directory) / "freshness.json"
+            path.write_text(json.dumps([
+                finding("catalogs", "mame recipes"), finding("coreinfo", "anybor"),
+            ]), encoding="utf-8")
+            proc = subprocess.run(
+                [sys.executable, "scripts/refresh_stale.py", "--findings", str(path),
+                 "--dry-run", "--json"],
+                cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=120,
+            )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        plan = json.loads(proc.stdout)
+        self.assertEqual([(j["area"], j["subject"]) for j in plan["planned"]],
+                         [("catalogs", "mame recipes")])
+        self.assertEqual([f["subject"] for f in plan["surfaced"]], ["anybor"])
+
+    def test_every_area_check_freshness_reports_is_known(self):
+        """romfolders was added to check_freshness and not here: its rows
+        were dropped from a saved report without a word, and --only
+        romfolders was refused."""
+        import check_freshness  # noqa: PLC0415
+
+        self.assertEqual(set(check_freshness.AREAS), set(rs.AUTO_AREAS + rs.MANUAL_AREAS))
+        jobs, surfaced, _ = rs.plan_jobs([finding("romfolders", "muos")], REGISTRY, {})
+        self.assertEqual((jobs, [f["subject"] for f in surfaced]), ([], ["muos"]))
 
     def test_a_report_that_is_not_a_list_is_refused(self):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:

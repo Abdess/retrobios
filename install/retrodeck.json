@@ -380,7 +380,11 @@
       "reason": "no_save_system",
       "cores": [
         "trident"
-      ]
+      ],
+      "systems": [
+        "nintendo-3ds"
+      ],
+      "held": true
     },
     {
       "dest": "Trident/Emulator Files/sysdata/seeddb.bin",
@@ -2862,6 +2866,10 @@
       "repo_path": "bios/Apple/Apple II/apple2gs.zip",
       "cores": null,
       "systems": [
+        "apple-ii",
+        "apple-iigs"
+      ],
+      "declared_in": [
         "apple-ii"
       ],
       "alternatives": [
@@ -3149,6 +3157,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/4dparprn.zip.c48d747c",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3292,6 +3304,10 @@
       "repo_path": "bios/Arcade/Arcade/3dobios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3647,6 +3663,10 @@
       "repo_path": "bios/Arcade/Arcade/a2ap16.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3669,6 +3689,10 @@
       "repo_path": "bios/Arcade/Arcade/a2ap16a.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3691,6 +3715,10 @@
       "repo_path": "bios/Arcade/Arcade/a2aevm80.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3713,6 +3741,10 @@
       "repo_path": "bios/Arcade/MAME/a2booti.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3735,6 +3767,10 @@
       "repo_path": "bios/Arcade/Arcade/a2aplcrd.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3757,6 +3793,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2bufgrapplerplus.zip.6fc70a25",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3790,6 +3830,10 @@
       "repo_path": "bios/Arcade/Arcade/a2corvus.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3812,6 +3856,11 @@
       "repo_path": "bios/Apple/Apple II/a2diskiing.zip",
       "cores": null,
       "systems": [
+        "apple-ii",
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "apple-ii",
         "arcade"
       ],
@@ -3847,6 +3896,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2cffa2.zip.412c3834",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3891,6 +3944,10 @@
       "repo_path": "bios/Apple/Apple II/a2cffa02.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3914,6 +3971,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2bufgrapplerplus.zip.6fc70a25",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3936,6 +3997,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2grappler.zip.7bb9144a",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3958,6 +4023,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2grapplerplus.zip.dbca76b5",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -3980,6 +4049,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2ieee488.zip.a7d7e258",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4002,6 +4075,10 @@
       "repo_path": "bios/Arcade/MAME/a2q68.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4024,6 +4101,10 @@
       "repo_path": "bios/Arcade/MAME/a2q68.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4046,6 +4127,10 @@
       "repo_path": "bios/Arcade/Arcade/a2ramfac.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4112,6 +4197,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2scsi.zip.db6dbc79",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4156,6 +4245,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2ssc.zip.2a708d20",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4178,6 +4271,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2sider1.zip.17f6c1e2",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4200,6 +4297,10 @@
       "repo_path": "bios/Arcade/MAME/a2superdrive.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4266,6 +4367,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2sider2.zip.c8ec70ff",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4310,6 +4415,10 @@
       "repo_path": "bios/Arcade/Arcade/a2thunpl.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4332,6 +4441,10 @@
       "repo_path": "bios/Arcade/Arcade/a2tmstho.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4376,6 +4489,10 @@
       "repo_path": "bios/Arcade/MAME/a2vidtrm.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4398,6 +4515,10 @@
       "repo_path": "bios/Arcade/Arcade/a2ultrme.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4420,6 +4541,10 @@
       "repo_path": "bios/Arcade/Arcade/a2ulttrm.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4442,6 +4567,10 @@
       "repo_path": "bios/Arcade/Arcade/a2vtc1.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4464,6 +4593,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2uniprint.zip.189b3977",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4508,6 +4641,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2vulgld.zip.3c35dfcc",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4530,6 +4667,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2vulcan.zip.ca1faf2b",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -4574,6 +4715,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/a2zipdrv.zip.d90e8d67",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -5300,6 +5445,22 @@
       "repo_path": "bios/Arcade/MAME/abc830.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -5924,6 +6085,10 @@
       "repo_path": "bios/Apple/Macintosh II/adbmodem.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6211,6 +6376,12 @@
       "repo_path": "bios/Arcade/Arcade/.variants/airlbios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6277,6 +6448,12 @@
       "repo_path": "bios/Arcade/Arcade/aleck64.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6313,6 +6490,10 @@
       "repo_path": "bios/Arcade/Arcade/alg3do.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6335,6 +6516,12 @@
       "repo_path": "bios/Arcade/Arcade/allied.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6368,6 +6555,12 @@
       "repo_path": "bios/Arcade/Arcade/alg_bios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6656,6 +6849,13 @@
       "repo_path": "bios/Arcade/Arcade/ap2000.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6700,6 +6900,11 @@
       "repo_path": "bios/Arcade/MAME/aplcd150.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6722,6 +6927,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/aprissi.zip.f4b7587f",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6755,6 +6964,12 @@
       "repo_path": "bios/Arcade/Arcade/ar_bios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -7971,6 +8186,12 @@
       "repo_path": "bios/Arcade/Arcade/aristmk5.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -8136,6 +8357,12 @@
       "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -8312,6 +8539,12 @@
       "repo_path": "bios/Arcade/Arcade/aristmk6.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -8395,6 +8628,22 @@
       "repo_path": "bios/Arcade/MAME/ax208p.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -8760,6 +9009,10 @@
       "repo_path": "bios/Arcade/Arcade/bbc_beebspch.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -8782,6 +9035,10 @@
       "repo_path": "bios/Arcade/MAME/bbc_chameleon.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -10179,6 +10436,12 @@
       "repo_path": "bios/Arcade/Arcade/.variants/bubsys.zip.9a48e38c",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -10513,6 +10776,22 @@
       "repo_path": "bios/Arcade/Arcade/c1571cr.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -10733,6 +11012,22 @@
       "repo_path": "bios/Arcade/Arcade/c64_mscr.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -10854,6 +11149,22 @@
       "repo_path": "bios/Arcade/MAME/c64_z80videopak.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -10876,6 +11187,22 @@
       "repo_path": "bios/Arcade/Arcade/c64_xl80.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11240,6 +11567,10 @@
       "repo_path": "bios/Arcade/Arcade/cd6809_fdc.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11306,6 +11637,11 @@
       "repo_path": "bios/Arcade/MAME/cdd2000.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11328,6 +11664,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/ccs7710.zip.5aa34c6b",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11372,6 +11712,11 @@
       "repo_path": "bios/Arcade/MAME/cdr4210.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11394,6 +11739,11 @@
       "repo_path": "bios/Arcade/MAME/cdrn820s.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11463,6 +11813,11 @@
       "repo_path": "bios/Arcade/MAME/cdu415.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11485,6 +11840,11 @@
       "repo_path": "bios/Arcade/MAME/cdu75s.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11507,6 +11867,11 @@
       "repo_path": "bios/Arcade/MAME/cdu561_25.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11640,6 +12005,11 @@
       "repo_path": "bios/Arcade/MAME/cfp1080s.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11761,6 +12131,22 @@
       "repo_path": "bios/Arcade/Arcade/cga.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -11883,6 +12269,13 @@
       "repo_path": "bios/Arcade/MAME/chessmachine.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12204,6 +12597,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/coco_dcmodem.zip.3cd646b2",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12226,6 +12623,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/cmsscsi.zip.50055fab",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12248,6 +12649,11 @@
       "repo_path": "bios/Arcade/MAME/coco_psg.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12270,6 +12676,11 @@
       "repo_path": "bios/Arcade/Arcade/coco_orch90.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12303,6 +12714,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/coco_rs232.zip.5ea00bef",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12325,6 +12740,10 @@
       "repo_path": "bios/Arcade/MAME/coco_fdc.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12358,6 +12777,10 @@
       "repo_path": "bios/Arcade/MAME/coco_wpk.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12380,6 +12803,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/coco_scii.zip.c435d412",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12402,6 +12829,11 @@
       "repo_path": "bios/Arcade/Arcade/coco_ssc.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12424,6 +12856,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/coco_t4426.zip.ba47d47f",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12446,6 +12882,10 @@
       "repo_path": "bios/Arcade/MAME/coco_wpk.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12468,6 +12908,10 @@
       "repo_path": "bios/Arcade/MAME/coco_wpk.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -12947,6 +13391,13 @@
       "repo_path": "bios/Arcade/Arcade/comx_pl80.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13013,6 +13464,11 @@
       "repo_path": "bios/Arcade/MAME/cp2024.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13079,6 +13535,10 @@
       "repo_path": "bios/Arcade/Arcade/cp450_fdc.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13420,6 +13880,11 @@
       "repo_path": "bios/Arcade/MAME/crd254sh.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13519,6 +13984,12 @@
       "repo_path": "bios/Arcade/Arcade/crysbios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13591,6 +14062,22 @@
       "repo_path": "bios/Arcade/MAME/cuda302.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13635,6 +14122,22 @@
       "repo_path": "bios/Arcade/MAME/cudalite.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13657,6 +14160,11 @@
       "repo_path": "bios/Arcade/MAME/cw7501.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -13727,6 +14235,11 @@
       "repo_path": "bios/Arcade/Arcade/a3fdc.zip",
       "cores": null,
       "systems": [
+        "apple-ii",
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "apple-ii",
         "arcade"
       ],
@@ -14465,6 +14978,10 @@
       "repo_path": "bios/Arcade/Arcade/dragon_fdc.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -14487,6 +15004,10 @@
       "repo_path": "bios/Arcade/Arcade/dragon_jcbsnd.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -14509,6 +15030,10 @@
       "repo_path": "bios/Arcade/MAME/dragon_jcbspch.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -14553,6 +15078,10 @@
       "repo_path": "bios/Arcade/MAME/.variants/dragon_serial.zip.86197dbe",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -14575,6 +15104,10 @@
       "repo_path": "bios/Arcade/MAME/dragon_sprites.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -14597,6 +15130,22 @@
       "repo_path": "bios/Arcade/MAME/ds1001.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -14938,6 +15487,10 @@
       "repo_path": "bios/Apple/Macintosh/egret.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15367,6 +15920,10 @@
       "repo_path": "bios/Arcade/MAME/enetlctp.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15389,6 +15946,10 @@
       "repo_path": "bios/Arcade/MAME/enetlc.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15433,6 +15994,10 @@
       "repo_path": "bios/Arcade/MAME/enetnbtp.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15499,6 +16064,13 @@
       "repo_path": "bios/Arcade/MAME/epson_jx80.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15521,6 +16093,13 @@
       "repo_path": "bios/Arcade/MAME/epson_fx80.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15543,6 +16122,10 @@
       "repo_path": "bios/Enterprise/64-128/ep64_exdos.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15609,6 +16192,13 @@
       "repo_path": "bios/Arcade/MAME/epson_rx80.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15950,6 +16540,13 @@
       "repo_path": "bios/Arcade/Arcade/ex800.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -15972,6 +16569,12 @@
       "repo_path": "bios/Arcade/Arcade/f355dlx.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -16014,6 +16617,12 @@
       "repo_path": "bios/Arcade/Arcade/f355bios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -16355,6 +16964,12 @@
       "repo_path": "bios/Arcade/Arcade/galgbios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -16491,6 +17106,12 @@
       "repo_path": "bios/Arcade/Arcade/gp_110.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -16524,6 +17145,10 @@
       "repo_path": "bios/Arcade/Arcade/gq863.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -16593,6 +17218,12 @@
       "repo_path": "bios/Arcade/Arcade/gts1.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -16868,6 +17499,10 @@
       "repo_path": "bios/Arcade/MAME/bbc_lcd.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17000,6 +17635,14 @@
       "repo_path": "bios/Arcade/MAME/heath_gp19_tlb.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17110,6 +17753,14 @@
       "repo_path": "bios/Arcade/MAME/heath_super19_tlb.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17132,6 +17783,14 @@
       "repo_path": "bios/Arcade/MAME/heath_tlb.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17154,6 +17813,14 @@
       "repo_path": "bios/Arcade/MAME/heath_ultra_tlb.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17176,6 +17843,14 @@
       "repo_path": "bios/Arcade/MAME/heath_imaginator_tlb.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17198,6 +17873,14 @@
       "repo_path": "bios/Arcade/MAME/heath_watz_tlb.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17220,6 +17903,14 @@
       "repo_path": "bios/Arcade/MAME/heath_superset_tlb.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17242,6 +17933,10 @@
       "repo_path": "bios/Arcade/MAME/hng64.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17385,6 +18080,10 @@
       "repo_path": "bios/Arcade/Arcade/hp9122c.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17429,6 +18128,12 @@
       "repo_path": "bios/Arcade/Arcade/.variants/hod2bios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17479,6 +18184,10 @@
       "repo_path": "bios/Arcade/MAME/hp9133.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17567,6 +18276,10 @@
       "repo_path": "bios/Arcade/Arcade/hp9895.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17743,6 +18456,14 @@
       "repo_path": "bios/Arcade/Arcade/a2232.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -17842,6 +18563,14 @@
       "repo_path": "bios/Arcade/Arcade/ie15kbd.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -18513,6 +19242,12 @@
       "repo_path": "bios/Arcade/Arcade/isgsm.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -18798,6 +19533,12 @@
       "repo_path": "bios/Arcade/Arcade/.variants/iteagle.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -19247,6 +19988,12 @@
       "repo_path": "bios/Arcade/Arcade/.variants/konamigx.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -19640,6 +20387,22 @@
       "repo_path": "bios/Arcade/MAME/abc830.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -19662,6 +20425,13 @@
       "repo_path": "bios/Arcade/Arcade/lx810l.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -19684,6 +20454,13 @@
       "repo_path": "bios/Arcade/Arcade/lx800.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -19816,6 +20593,10 @@
       "repo_path": "bios/Arcade/Arcade/m68705p3.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -19992,6 +20773,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110a.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20014,6 +20799,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110a.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20058,6 +20847,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110a.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20080,6 +20873,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20102,6 +20899,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20124,6 +20925,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20146,6 +20951,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20168,6 +20977,10 @@
       "repo_path": "bios/Apple/Macintosh/mackbd_m0110.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20190,6 +21003,10 @@
       "repo_path": "bios/Apple/Macintosh II/mackbd_m0120.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20212,6 +21029,10 @@
       "repo_path": "bios/Arcade/Arcade/mackbd.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20267,6 +21088,12 @@
       "repo_path": "bios/Arcade/Arcade/macsbios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20319,6 +21146,12 @@
       "repo_path": "bios/Arcade/Arcade/maxaflex.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20388,6 +21221,22 @@
       "repo_path": "bios/Arcade/MAME/md_rom_svp.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20819,6 +21668,13 @@
       "repo_path": "bios/Arcade/MAME/miuchiz.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "hartung-game-master",
+        "supracan",
+        "tiger-game-com"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20931,6 +21787,14 @@
       "repo_path": "bios/Arcade/Arcade/mm5740.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -20976,6 +21840,14 @@
       "repo_path": "bios/Arcade/MAME/mockingboardd.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -21603,6 +22475,22 @@
       "repo_path": "bios/Arcade/Arcade/c64_cs.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -22318,6 +23206,13 @@
       "repo_path": "bios/Arcade/MAME/mz1p16.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23112,6 +24007,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_aenet.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23198,6 +24097,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_image.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23220,6 +24123,10 @@
       "repo_path": "bios/Arcade/MAME/nb_laserview.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23242,6 +24149,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_amc3b.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23264,6 +24175,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_m2hr.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23286,6 +24201,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_btbug.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23308,6 +24227,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_c264.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23330,6 +24253,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_m2vc.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23352,6 +24279,10 @@
       "repo_path": "bios/Apple/Macintosh II/nb_mdc824.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23374,6 +24305,10 @@
       "repo_path": "bios/Grundy/NewBrain/nb_48gc.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23396,6 +24331,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_qdlink.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23418,6 +24357,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_rtpd.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23440,6 +24383,10 @@
       "repo_path": "bios/Arcade/MAME/nb_pcs8.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23462,6 +24409,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_sp8s3.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23484,6 +24435,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_spdq.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23506,6 +24461,10 @@
       "repo_path": "bios/Arcade/MAME/nb_thungx.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23528,6 +24487,10 @@
       "repo_path": "bios/Arcade/MAME/nb_wkstn.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23550,6 +24513,22 @@
       "repo_path": "bios/Arcade/MAME/nb_thungx16.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23572,6 +24551,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_vikbw.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23638,6 +24621,10 @@
       "repo_path": "bios/Arcade/Arcade/nb_wspt.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -23880,6 +24867,13 @@
       "repo_path": "bios/Arcade/MAME/nlq401.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24059,6 +25053,14 @@
       "repo_path": "bios/Arcade/MAME/nss_tvinterface.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24389,6 +25391,13 @@
       "repo_path": "bios/Arcade/Arcade/p72.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24565,6 +25574,22 @@
       "repo_path": "bios/Arcade/MAME/pc88va2_fd_if.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24906,6 +25931,10 @@
       "repo_path": "bios/Arcade/Arcade/pd3_30hr.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24928,6 +25957,10 @@
       "repo_path": "bios/Arcade/Arcade/pd3_lviw.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24950,6 +25983,10 @@
       "repo_path": "bios/Arcade/Arcade/pd3_mclr.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24972,6 +26009,10 @@
       "repo_path": "bios/Arcade/Arcade/pd3_30hr.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -24994,6 +26035,10 @@
       "repo_path": "bios/Arcade/Arcade/pd3_c264.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25016,6 +26061,10 @@
       "repo_path": "bios/Arcade/Arcade/pd3_mclr.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25038,6 +26087,10 @@
       "repo_path": "bios/Arcade/MAME/pd3_pcs8.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25060,6 +26113,10 @@
       "repo_path": "bios/Arcade/Arcade/pd3_pc16.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25082,6 +26139,10 @@
       "repo_path": "bios/Arcade/MAME/pds30_emac.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25126,6 +26187,10 @@
       "repo_path": "bios/Arcade/MAME/pdslc_macconlc.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25148,6 +26213,10 @@
       "repo_path": "bios/Arcade/MAME/pds_hyper.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25170,6 +26239,10 @@
       "repo_path": "bios/Arcade/Arcade/pds_sefp.zip",
       "cores": null,
       "systems": [
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25551,6 +26624,10 @@
       "repo_path": "bios/Arcade/Arcade/premier_fdc.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -25980,6 +27057,11 @@
       "repo_path": "bios/Arcade/MAME/px320a.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27466,6 +28548,22 @@
       "repo_path": "bios/Arcade/MAME/saa5051.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27510,6 +28608,22 @@
       "repo_path": "bios/Arcade/Arcade/saa5053.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27554,6 +28668,22 @@
       "repo_path": "bios/Arcade/Arcade/saa5054.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27576,6 +28706,22 @@
       "repo_path": "bios/Arcade/Arcade/saa5057.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27598,6 +28744,22 @@
       "repo_path": "bios/Arcade/Arcade/saa5056.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27664,6 +28826,22 @@
       "repo_path": "bios/Arcade/MAME/saa5243e.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27708,6 +28886,12 @@
       "repo_path": "bios/Arcade/Arcade/sammymdl.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27890,6 +29074,14 @@
       "repo_path": "bios/Arcade/MAME/scorpion_ic.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27945,6 +29137,10 @@
       "repo_path": "bios/Arcade/Arcade/sdtandy_fdc.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -27989,6 +29185,22 @@
       "repo_path": "bios/Arcade/Arcade/sed1200da.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28033,6 +29245,22 @@
       "repo_path": "bios/Arcade/Arcade/sed1200db.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28242,6 +29470,12 @@
       "repo_path": "bios/Arcade/Arcade/segasp.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28273,6 +29507,10 @@
       "repo_path": "bios/Arcade/MAME/segadimm.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28439,6 +29677,12 @@
       "repo_path": "bios/Arcade/Arcade/shtzone.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28637,6 +29881,11 @@
       "repo_path": "bios/Arcade/MAME/smoc501.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28827,6 +30076,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_dsp1bleg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28849,6 +30114,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_dsp1leg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28871,6 +30152,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_dsp1leg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28893,6 +30190,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_dsp2leg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28915,6 +30228,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_dsp3leg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28937,6 +30266,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_rom_sgb.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28959,6 +30304,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_rom_sgb2.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -28981,6 +30342,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_dsp4leg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -29003,6 +30380,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_seta11leg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -29025,6 +30418,22 @@
       "repo_path": "bios/Arcade/Arcade/sns_seta10leg.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -30268,6 +31677,12 @@
       "repo_path": "bios/Arcade/Arcade/su2000.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -30520,6 +31935,14 @@
       "repo_path": "bios/Arcade/MAME/swtpc8212_device.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -30777,6 +32200,12 @@
       "repo_path": "bios/Arcade/Arcade/taitotz.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -31651,6 +33080,12 @@
       "repo_path": "bios/Arcade/Arcade/tourvis.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -31808,6 +33243,10 @@
       "repo_path": "bios/Arcade/Arcade/triforce.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -32057,6 +33496,10 @@
       "repo_path": "bios/Arcade/Arcade/upd7220.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -32123,6 +33566,12 @@
       "repo_path": "bios/Arcade/Arcade/v4bios.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "arcade",
+        "philips-cdi",
+        "triforce"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -32620,6 +34069,14 @@
       "repo_path": "bios/Arcade/MAME/votraxtnt.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -32697,6 +34154,15 @@
       "repo_path": "bios/Arcade/Arcade/votrax.zip",
       "cores": null,
       "systems": [
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128"
+      ],
+      "declared_in": [
         "apple-ii",
         "arcade"
       ],
@@ -33379,6 +34845,22 @@
       "repo_path": "bios/Arcade/MAME/ymf281.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -33401,6 +34883,22 @@
       "repo_path": "bios/Arcade/MAME/ym2423.zip",
       "cores": null,
       "systems": [
+        "3do",
+        "apple-iigs",
+        "apple-macintosh-ii",
+        "arcade",
+        "coco",
+        "dragon64",
+        "enterprise-64-128",
+        "epoch-scv",
+        "hartung-game-master",
+        "philips-cdi",
+        "tiger-game-com",
+        "triforce",
+        "vectrex",
+        "vtech-vsmile"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -33423,6 +34921,11 @@
       "repo_path": "bios/Arcade/MAME/ym2413.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coco",
+        "dragon64"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -33555,6 +35058,11 @@
       "repo_path": "bios/Arcade/MAME/zip100_ide.zip",
       "cores": null,
       "systems": [
+        "apple-iigs",
+        "arcade",
+        "coco"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -33599,6 +35107,10 @@
       "repo_path": "bios/SNK/Neo Geo CD/neocdz.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "snk-neogeo-cd"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -33630,6 +35142,10 @@
       "repo_path": "bios/Arcade/Arcade/coleco.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "coleco-colecovision"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -33918,6 +35434,10 @@
       "repo_path": "bios/Atari/400-800/ROM_OS_BB02R3V4",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -33940,6 +35460,10 @@
       "repo_path": "bios/Atari/400-800/ROM_OS_CC01R4",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -33984,6 +35508,10 @@
       "repo_path": "bios/Atari/400-800/ROM_OS_BB01R59",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -34006,6 +35534,10 @@
       "repo_path": "bios/Atari/400-800/ROM_OS_BB01R59A",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -34105,6 +35637,10 @@
       "repo_path": "bios/Atari/5200/5200.rom",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-5200"
       ],
       "alternatives": [
@@ -35338,6 +36874,10 @@
       "repo_path": "bios/Tandy/CoCo/cp400bas.rom",
       "cores": null,
       "systems": [
+        "coco",
+        "dragon64"
+      ],
+      "declared_in": [
         "dragon64"
       ],
       "alternatives": [
@@ -37857,6 +39397,11 @@
       "repo_path": "bios/Nintendo/SNES/Satellaview_BS-X.sfc",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -37932,6 +39477,11 @@
       "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -37956,6 +39506,11 @@
       "repo_path": "bios/Nintendo/Super Game Boy/SGB2.sfc/program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38047,6 +39602,11 @@
       "repo_path": "bios/Nintendo/Game Boy/GB_sgb2.bin",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38114,6 +39674,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp1.data.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38143,6 +39708,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp1b.data.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38173,6 +39743,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp1b.program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38203,6 +39778,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp2.data.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38233,6 +39813,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp2.program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38263,6 +39848,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp3.data.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38293,6 +39883,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp3.program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38323,6 +39918,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp4.data.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38353,6 +39953,11 @@
       "repo_path": "bios/Nintendo/SNES/dsp4.program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38383,6 +39988,11 @@
       "repo_path": "bios/Nintendo/SNES/st010.data.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38413,6 +40023,11 @@
       "repo_path": "bios/Nintendo/SNES/st010.program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38443,6 +40058,11 @@
       "repo_path": "bios/Nintendo/SNES/st011.data.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -38473,6 +40093,11 @@
       "repo_path": "bios/Nintendo/SNES/st011.program.rom",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-snes"
+      ],
+      "declared_in": [
         "nintendo-snes"
       ],
       "alternatives": [
@@ -39115,6 +40740,9 @@
       "regions": [
         "japan"
       ],
+      "region_groups": [
+        "sega-master-system"
+      ],
       "region_system_groups": [
         "sega-master-system"
       ],
@@ -39144,6 +40772,9 @@
       "regions": [
         "europe",
         "oceania"
+      ],
+      "region_groups": [
+        "sega-mega-cd"
       ],
       "region_system_groups": [
         "sega-mega-cd"
@@ -39177,6 +40808,9 @@
         "latin-america",
         "north-america"
       ],
+      "region_groups": [
+        "sega-mega-cd"
+      ],
       "region_system_groups": [
         "sega-mega-cd"
       ],
@@ -39207,6 +40841,9 @@
       ],
       "regions": [
         "japan"
+      ],
+      "region_groups": [
+        "sega-mega-cd"
       ],
       "region_system_groups": [
         "sega-mega-cd"
@@ -40265,6 +41902,9 @@
       "regions": [
         "japan"
       ],
+      "region_groups": [
+        "sony-playstation"
+      ],
       "region_system_groups": [
         "sony-playstation"
       ],
@@ -40298,6 +41938,9 @@
       "regions": [
         "latin-america",
         "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ],
       "region_system_groups": [
         "sony-playstation"
@@ -40333,6 +41976,9 @@
       "regions": [
         "europe",
         "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ],
       "region_system_groups": [
         "sony-playstation"
@@ -40570,6 +42216,9 @@
         "europe",
         "oceania"
       ],
+      "region_groups": [
+        "sony-playstation"
+      ],
       "region_system_groups": [
         "sony-playstation"
       ],
@@ -40631,6 +42280,9 @@
       "regions": [
         "latin-america",
         "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ],
       "region_system_groups": [
         "sony-playstation"
@@ -119889,7 +121541,14 @@
       ],
       "systems": [
         "sony-playstation"
-      ]
+      ],
+      "regions": [
+        "world"
+      ],
+      "region_groups": [
+        "sony-playstation"
+      ],
+      "priority": 200
     },
     {
       "dest": "bios/epr-20091.ic8",
@@ -137751,7 +139410,8 @@
           "size": 36
         }
       },
-      "source_path": "Cemu-3310f3b8b184d64a62b89fd59088c799432badf5/bin/gameProfiles/default"
+      "source_path": "Cemu-3310f3b8b184d64a62b89fd59088c799432badf5/bin/gameProfiles/default",
+      "archive_size": 21360579
     },
     {
       "ref": "fbneo-cheats",
@@ -151480,7 +153140,8 @@
           "size": 10054
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 5083767
     },
     {
       "ref": "fbneo-samples",
@@ -151713,7 +153374,8 @@
           "size": 551776
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 53006540
     },
     {
       "ref": "freeintv-overlays",
@@ -152085,7 +153747,8 @@
           "size": 248636
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 21311170
     },
     {
       "ref": "yaps2-resources",
@@ -152549,7 +154212,8 @@
           "size": 637
         }
       },
-      "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources"
+      "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources",
+      "archive_size": 21181421
     }
   ],
   "save_directory": {

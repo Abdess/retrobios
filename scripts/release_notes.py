@@ -7,7 +7,8 @@ issue 81 happened. Install commands, the parts sentence and the table come
 from the record and the registry. Each row links the platform's page under
 get/ on the site, which outlives the release, and the setups the registry
 does not mark release_pack are named with the command. The maintainer writes
-what changed, and that text is appended as given.
+what changed, and that text is appended as given once it holds none of the
+REFUSED phrases.
 
 Usage:
     python scripts/release_notes.py --whats-new tmp/whats-new.md --output notes.md
@@ -102,6 +103,20 @@ def _link(name: str, pack: dict) -> str:
     return f"[{label}]({release_record.get_page(_owner(name, pack), SITE)})"
 
 
+# Words the published notes of v2026.10.10 carried by hand: "never from a
+# forum list" judged lists other people keep, and "a game never stops on a
+# missing file" was a claim the gap analysis contradicts. Text about other
+# projects says what changed, not who erred (wiki/release-process.md).
+REFUSED = ("their file", "theirs", "of ours", "corrected", "wrong", "drift",
+           "left out", "never seen", "forum", "never stops", "never fails")
+
+
+def refused_words(text: str) -> list[str]:
+    """The refused phrases the text holds, case ignored."""
+    lowered = text.lower()
+    return [phrase for phrase in REFUSED if phrase in lowered]
+
+
 def render(record: dict, platforms_dir: str, whats_new: str) -> str:
     packs = record.get("packs", {})
     folders = _extract_folders(record, platforms_dir)
@@ -124,7 +139,8 @@ def render(record: dict, platforms_dir: str, whats_new: str) -> str:
         "### Download a pack",
         "",
         ("One complete pack for each platform below: the BIOS list the platform"
-         " publishes plus every file its emulators open. Each link is a page"
+         " publishes plus the files its emulators open. Files no pack carries yet"
+         f" are listed in the [gap analysis]({SITE}gaps/). Each link is a page"
          " that keeps its address from one release to the next. Files is what the pack"
          " holds once extracted, the count a file manager shows. Extracted size"
          " is the space those files take, and the download is smaller."),
@@ -172,6 +188,12 @@ def main() -> int:
     whats_new = args.whats_new.read_text(encoding="utf-8")
     if not whats_new.strip():
         print(f"Error: {args.whats_new} is empty", file=sys.stderr)
+        return 1
+    refused = refused_words(whats_new)
+    if refused:
+        print(f"Error: {args.whats_new} says {', '.join(repr(w) for w in refused)}. State what"
+              " changed and how it was checked, not a verdict on other projects or a"
+              " promise the gap analysis contradicts", file=sys.stderr)
         return 1
     write_text_atomic(str(args.output), render(record, args.platforms_dir, whats_new))
     print(f"Wrote {args.output} for {record['tag']}, {len(record['packs'])} packs")

@@ -17,11 +17,14 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import os
 import sys
+import tempfile
 
 sys.path.insert(0, os.path.dirname(__file__))
+from artifacts import set_plain_mode
 from common import copy_file_atomic, load_database
 
 
@@ -56,6 +59,36 @@ def index_cache(cache_dir: str) -> dict[str, str]:
     return index
 
 
+def _copy_verified(source: str, path: str, sha1: str) -> bool:
+    """Copy *source* to *path* only if the copy hashes to *sha1*.
+
+    The cache was hashed before the copy, and another run can replace a
+    cached name in between (a re-uploaded asset): the copy is what counts.
+    Whole or absent: a scan running beside a plain copy hashed the truncated
+    file and published that in the database.
+    """
+    handle, scratch = tempfile.mkstemp(
+        dir=os.path.dirname(os.path.abspath(path)),
+        prefix=f".{os.path.basename(path)}.", suffix=".tmp",
+    )
+    os.close(handle)
+    try:
+        copy_file_atomic(source, scratch)
+        digest = hashlib.sha1()
+        with open(scratch, "rb") as f:
+            for chunk in iter(lambda: f.read(1 << 20), b""):
+                digest.update(chunk)
+        if digest.hexdigest() != sha1:
+            print(f"Changed in the cache while restoring: {source}", file=sys.stderr)
+            return False
+        set_plain_mode(scratch)
+        os.replace(scratch, path)
+        return True
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(scratch)
+
+
 def restore(
     cache_dir: str, db_path: str, gitignore: str
 ) -> tuple[int, list[str]]:
@@ -79,9 +112,9 @@ def restore(
             unsatisfied.append(path)
             continue
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        # Whole or absent: a scan running beside a plain copy hashed the
-        # truncated file and published that in the database.
-        copy_file_atomic(source, path)
+        if not _copy_verified(source, path, sha1):
+            unsatisfied.append(path)
+            continue
         print(f"Restored: {path}")
         restored += 1
     print(f"Total: {restored} files restored")

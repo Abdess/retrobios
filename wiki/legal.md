@@ -18,7 +18,7 @@ It depends on your country. Nothing here is legal advice.
 
 ## The reasoning in detail
 
-Redistributing firmware is not settled law. Below is the reasoning the project acts on, with the strength of each argument, so anyone can weigh it. None of it is legal advice, and none of it has been tested in court.
+Redistributing firmware is not settled law. Below is the reasoning the project acts on, with the strength of each argument, so anyone can weigh it. None of it has been tested in court.
 
 ### Emulation and BIOS redistribution
 
@@ -29,7 +29,7 @@ Redistributing firmware is not settled law. Below is the reasoning the project a
 
 ### Encryption keys (Switch prod.keys, 3DS AES keys, Wii U keys)
 
-This is the most contested area, and the weakest part of the project's position.
+This is the most contested area, and the weakest part of the project's position. The project accepts that risk deliberately, in the belief that these files are worth preserving while they can still be obtained.
 
 - **Keys are unlikely to be copyrightable.** A bare numeric value has no author's creative expression, so copyright is a poor fit. This says nothing about the DMCA, which is the provision that actually applies.
 - **DMCA 1201(f) is narrow.** Section 1201(f) allows a person who has lawfully obtained the right to use a copy to circumvent for the sole purpose of achieving interoperability with an independently created program, and 1201(f)(3) allows the means to be made available to others only for that same purpose. Publishing keys openly is not obviously within that allowance, and the trafficking prohibitions in 1201(a)(2) and 1201(b) remain in play. This is the clearest legal risk the project carries.
@@ -42,12 +42,6 @@ This is the most contested area, and the weakest part of the project's position.
 - **Free download is not a licence.** Manufacturers publish these updates on open CDNs without authentication, which makes them easy to obtain but does not grant a right to redistribute them, and PlayStation firmware ships under an end-user licence agreement. The practical argument is that mirroring a file the manufacturer already gives away for free causes no identifiable loss, not that doing so is expressly permitted.
 - **Functional necessity.** Emulators cannot run the software these systems were built for without this firmware. That is why the files are collected. It is a statement of purpose, not a legal defence in itself.
 - **Yuzu context.** The Yuzu settlement (2024) concerned the emulator and its alleged facilitation of piracy. Yuzu settled without admitting liability, so it set no precedent either way on firmware or key redistribution. It does show that rights holders in this space litigate.
-
-### Summary
-
-This project preserves BIOS files, firmware and keys for personal use, archival and interoperability. The strongest ground is the older, discontinued firmware, where fair use and the absence of a market both point the same way. The weakest is the encryption keys, where DMCA 1201 applies and the interoperability exemption is narrower than the use made of it here. The project accepts that risk deliberately, in the belief that these files are worth preserving while they can still be obtained.
-
-This reflects the project's good-faith understanding, not legal advice.
 
 ## Asking for a file to be removed
 

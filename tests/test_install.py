@@ -36,6 +36,9 @@ _spec.loader.exec_module(install)
 sys.path.insert(0, str(REPO_ROOT / "tests"))
 from netguard import module_guard  # noqa: E402
 
+# What a stale pin's failure says: the fix is one command.
+PIN_ADVICE = "install.py changed: python scripts/pin_installer.py rewrites both pins"
+
 # No connection off the loopback and no card of the host reaches a test:
 # the module fails at its end otherwise.
 setUpModule, tearDownModule = module_guard("test_install")
@@ -446,6 +449,64 @@ class AMissingDestIsSaid(unittest.TestCase):
         out, code = self._call(root / "a" / "b", False, "n")
         self.assertIsNone(code)
         self.assertIn("does not exist", out)
+
+
+class ADestThatIsAFileIsNamed(unittest.TestCase):
+    """--dest naming a file, or a path under one, failed at mkdir with
+    EEXIST or ENOTDIR, and the run said this user cannot write there and
+    offered a sudo command that fails the same way."""
+
+    def _run(self, dest: Path) -> subprocess.CompletedProcess:
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        return subprocess.run(
+            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
+             "--dest", str(dest), "--manifest", str(REPO_ROOT / "install" / "retroarch.json"),
+             "--system", "nintendo-gba", "--yes", "--events", "--offline"],
+            env=env, capture_output=True, text=True, timeout=120, check=False,
+            stdin=subprocess.DEVNULL)
+
+    def test_the_file_is_named_and_sudo_is_not_offered(self):
+        root = Path(_tempdir(self))
+        (root / "scph5501.bin").write_bytes(b"x")
+        for dest, words in (
+            (root / "scph5501.bin", f"{root / 'scph5501.bin'} is a file, not a folder"),
+            (root / "scph5501.bin" / "sub",
+             f"cannot be a folder: {root / 'scph5501.bin'} is a file"),
+        ):
+            with self.subTest(dest=dest):
+                proc = self._run(dest)
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertIn(words, proc.stderr)
+                self.assertNotIn("sudo", proc.stderr)
+                errors = [json.loads(line) for line in proc.stdout.splitlines()
+                          if line.startswith("{") and '"error"' in line]
+                self.assertEqual([(e["stage"], e["reason"]) for e in errors],
+                                 [("dest", "not_a_folder")])
+                self.assertEqual((root / "scph5501.bin").read_bytes(), b"x")
+
+
+class SaveFilesAListHoldsNoneOfAreNotPromised(unittest.TestCase):
+    """RetroPie, ROCKNIX, AmberELEC, EmuELEC and RomM keep their save
+    directory in no fixed place: their lists leave those files out with no
+    hash or address. The run said "Name it with --save-dir", and said it
+    again with --save-dir given, which installs none of them."""
+
+    def test_the_reason_is_said_and_no_option_is_offered(self):
+        manifest = json.loads((REPO_ROOT / "install" / "retropie.json").read_text())
+        self.assertIsNone(manifest.get("save_directory"))
+        root = Path(_tempdir(self))
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        for extra in ([], ["--save-dir", str(root / "saves")]):
+            with self.subTest(extra=extra):
+                proc = _install_run(
+                    env, "--platform", "retropie", "--dest", str(root / "bios"),
+                    "--manifest", "install/retropie.json", "--offline", "--no-input",
+                    "--yes", "--emulator", "azahar", *extra)
+                out = proc.stdout + proc.stderr
+                self.assertIn("read from RetroPie's save directory left out: RetroPie "
+                              "keeps it in no fixed place, and its file list holds none "
+                              "of them.", out)
+                self.assertNotIn("Name it with --save-dir", out)
 
 
 class AFolderThatRefusesWritesIsNamed(unittest.TestCase):
@@ -2201,7 +2262,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         match = re.search(r'\$defaultInstallSha256 = "([0-9a-f]{64})"', content)
         self.assertIsNotNone(match, "install.ps1 must embed the installer SHA256")
         expected = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
-        self.assertEqual(match.group(1), expected)
+        self.assertEqual(match.group(1), expected, PIN_ADVICE)
 
     def test_powershell_wrapper_rejects_non_https_bootstrap(self):
         content = (REPO_ROOT / "install.ps1").read_text()
@@ -2212,7 +2273,31 @@ class TestAvailablePlatforms(unittest.TestCase):
         match = re.search(r'DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', content)
         self.assertIsNotNone(match, "install.sh must embed the installer SHA256")
         expected = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
-        self.assertEqual(match.group(1), expected)
+        self.assertEqual(match.group(1), expected, PIN_ADVICE)
+
+    def test_pin_script_writes_both_pins(self):
+        """Every edit to install.py meant a sha256sum pasted by hand into two
+        files with two syntaxes, and the failing test named no command."""
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import pin_installer  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+            root = Path(directory)
+            for name in ("install.py", "install.sh", "install.ps1"):
+                shutil.copy2(REPO_ROOT / name, root / name)
+            (root / "install.py").write_text("# changed\n", encoding="utf-8")
+            sh_mode = (root / "install.sh").stat().st_mode
+            self.assertEqual(pin_installer.stale_pins(root), ["install.sh", "install.ps1"])
+            self.assertEqual(pin_installer.write_pins(root), ["install.sh", "install.ps1"])
+            self.assertEqual(pin_installer.stale_pins(root), [])
+            digest = hashlib.sha256(b"# changed\n").hexdigest()
+            for name in ("install.sh", "install.ps1"):
+                before = (REPO_ROOT / name).read_text(encoding="utf-8").splitlines()
+                after = (root / name).read_text(encoding="utf-8").splitlines()
+                changed = [b for a, b in zip(before, after) if a != b]
+                self.assertEqual(len(changed), 1, name)
+                self.assertIn(digest, changed[0])
+            self.assertEqual((root / "install.sh").stat().st_mode, sh_mode)
 
     def test_shell_one_liner_downloads_verifies_and_forwards_arguments(self):
         scratch = REPO_ROOT / "tmp" / "tests"
@@ -2644,6 +2729,52 @@ class RetroArchWhereItReallyLives(unittest.TestCase):
             (support / "portable.txt").write_text("")
             found = install.detect_platforms("darwin")
             self.assertIn(("retroarch", support / "system"), found)
+
+
+class LinuxRetroArchFollowsXdgConfigHome(unittest.TestCase):
+    """RetroArch on Linux keeps its config under $XDG_CONFIG_HOME/retroarch
+    when the variable is set, then falls back to ~/.retroarch.cfg
+    (file_path_special.c fill_pathname_application_data, configuration.c
+    open_default_config_file). Only ~/.config/retroarch was read: a home
+    with its own XDG layout detected nothing."""
+
+    def _env(self) -> tuple[Path, Path]:
+        home = Path(_tempdir(self))
+        xdg = Path(_tempdir(self))
+        patcher = unittest.mock.patch.dict(os.environ, {"HOME": str(home)}, clear=True)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        return home, xdg
+
+    def test_the_config_under_xdg_config_home_is_read(self):
+        home, xdg = self._env()
+        (xdg / "retroarch").mkdir()
+        (xdg / "retroarch" / "retroarch.cfg").write_text('system_directory = "/srv/bios"\n')
+        # A config under ~/.config is not the one this RetroArch opens.
+        (home / ".config" / "retroarch").mkdir(parents=True)
+        (home / ".config" / "retroarch" / "retroarch.cfg").write_text(
+            'system_directory = "/elsewhere"\n')
+        os.environ["XDG_CONFIG_HOME"] = str(xdg)
+        found = install.detect_platforms("linux")
+        self.assertIn(("retroarch", Path("/srv/bios")), found)
+        self.assertNotIn(("retroarch", Path("/elsewhere")), found)
+        self.assertEqual(install._os_default_dests("linux")["retroarch"],
+                         xdg / "retroarch" / "system")
+
+    def test_home_retroarch_cfg_is_the_fallback(self):
+        home, xdg = self._env()
+        os.environ["XDG_CONFIG_HOME"] = str(xdg)
+        (home / ".retroarch.cfg").write_text('system_directory = "default"\n')
+        found = install.detect_platforms("linux")
+        self.assertIn(("retroarch", xdg / "retroarch" / "system"), found)
+
+    def test_without_the_variable_the_folder_is_under_dot_config(self):
+        home, _ = self._env()
+        (home / ".config" / "retroarch").mkdir(parents=True)
+        (home / ".config" / "retroarch" / "retroarch.cfg").write_text(
+            'system_directory = "default"\n')
+        found = install.detect_platforms("linux")
+        self.assertIn(("retroarch", home / ".config" / "retroarch" / "system"), found)
 
 
 class NoPythonNamesThisSystemsCommand(unittest.TestCase):
@@ -3420,7 +3551,8 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
 
 class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
     """Offline, --target on AmberELEC asked for install/targets/amberelec.json,
-    which exists nowhere: online the same run says it has no targets."""
+    which existed nowhere: online the same run said it had no targets.
+    MiSTer FPGA has none still."""
 
     def test_the_list_matches_the_published_targets(self):
         published = {path.stem for path in (REPO_ROOT / "install" / "targets").glob("*.json")}
@@ -3428,16 +3560,16 @@ class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
 
     def test_offline_says_there_are_no_targets(self):
         dest = Path(_tempdir(self))
-        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "amberelec.json")]):
+        for extra in ([], ["--manifest", str(REPO_ROOT / "install" / "misterfpga.json")]):
             with self.subTest(manifest=bool(extra)):
                 proc = subprocess.run(
-                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "amberelec",
-                     "--dest", str(dest), "--target", "rk3326", "--offline", "--no-input",
+                    [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "misterfpga",
+                     "--dest", str(dest), "--target", "de10-nano", "--offline", "--no-input",
                      "--dry-run", *extra],
                     capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
                 self.assertEqual(proc.returncode, 2, proc.stderr)
-                self.assertIn("AmberELEC has no hardware targets", proc.stderr)
-                self.assertNotIn("targets/amberelec.json", proc.stderr)
+                self.assertIn("MiSTer FPGA has no hardware targets", proc.stderr)
+                self.assertNotIn("targets/misterfpga.json", proc.stderr)
 
 
 class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
@@ -3491,6 +3623,29 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
         targets = json.loads((REPO_ROOT / "install" / "targets" / "retropie.json")
                              .read_text(encoding="utf-8"))
         self.assertLessEqual({*install._RPI_MODELS.values(), "x86_64"}, set(targets))
+
+    def test_amberelec_names_its_device(self):
+        # An RG351P image carries no melonDS or bsnes, and the full list was
+        # installed: AmberELEC had no target list to read the device against.
+        with unittest.mock.patch.object(
+            install, "_parse_os_release", return_value={"COREELEC_DEVICE": "RG351P"}
+        ):
+            self.assertEqual(install.detect_board("amberelec"), "rg351p")
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "amberelec.json")
+                             .read_text(encoding="utf-8"))
+        self.assertIn("rg351p", targets)
+
+    def test_emuelec_names_its_device(self):
+        # An OdroidGoAdvance image carries no DuckStation, Dolphin or MAME
+        # core, and the full list was installed: EmuELEC had no target list.
+        with unittest.mock.patch.object(
+            install, "_parse_os_release", return_value={"COREELEC_DEVICE": "OdroidGoAdvance"}
+        ):
+            self.assertEqual(install.detect_board("emuelec"), "odroidgoadvance")
+        targets = json.loads((REPO_ROOT / "install" / "targets" / "emuelec.json")
+                             .read_text(encoding="utf-8"))
+        self.assertIn("odroidgoadvance", targets)
+        self.assertNotIn("Duckstation", targets["odroidgoadvance"])
 
     def test_lakka_names_its_device_or_its_project(self):
         # An RPi4 Lakka installed 5.7 GB of every board's files: its board
@@ -3763,6 +3918,96 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                          (len(body), len(body)))
         emit.assert_not_called()
 
+    def test_a_cut_archive_resumes_where_it_stopped(self):
+        """A data archive cut at 90% was deleted and fetched again from
+        zero, on the retry and on the next run, while the run said that
+        nothing was lost."""
+        work = Path(_tempdir(self))
+        body = self._zip(work).read_bytes()
+        keep = work / ".dolphin-sys.archive.part"
+        requests: list[dict] = []
+
+        class Response(io.BytesIO):
+            def __init__(self, data, status, headers):
+                super().__init__(data)
+                self.status, self.headers = status, headers
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        def urlopen(request, timeout=None):
+            sent = dict(request.header_items())
+            requests.append(sent)
+            if "Range" in sent:
+                start = int(sent["Range"][len("bytes="):-1])
+                if sent.get("If-range") != '"v1"':
+                    return Response(body, 200, {"ETag": '"v2"'})
+                return Response(body[start:], 206, {
+                    "Content-Range": f"bytes {start}-{len(body) - 1}/{len(body)}",
+                    "Content-Length": str(len(body) - start), "ETag": '"v1"'})
+            cut = len(body) * 9 // 10
+
+            class Cut(Response):
+                def read(self, size=-1):
+                    if self.tell() >= cut:
+                        raise ConnectionResetError("cut")
+                    return super().read(min(size, cut - self.tell()))
+            return Cut(body, 200, {"Content-Length": str(len(body)), "ETag": '"v1"'})
+
+        with unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None), \
+                unittest.mock.patch.object(install, "_retry_delay", lambda *a: 0):
+            # The next run, after a stop: what the cut attempt wrote is kept.
+            with unittest.mock.patch.object(install, "MAX_RETRIES", 1), \
+                    self.assertRaises(ConnectionResetError):
+                install._fetch_archive("https://example.invalid/D.zip", work, None, keep)
+            self.assertEqual(keep.stat().st_size, len(body) * 9 // 10)
+            path = install._fetch_archive("https://example.invalid/D.zip", work, None, keep)
+        self.assertEqual(path.read_bytes(), body)
+        self.assertEqual(requests[-1]["Range"], f"bytes={len(body) * 9 // 10}-")
+        self.assertEqual(requests[-1]["If-range"], '"v1"')
+
+    def test_a_changed_archive_is_fetched_whole(self):
+        work = Path(_tempdir(self))
+        body = self._zip(work).read_bytes()
+        keep = work / ".dolphin-sys.archive.part"
+        keep.write_bytes(b"older revision")
+        keep.with_name(keep.name + ".source").write_text(
+            'https://example.invalid/D.zip\n"v0"\n')
+
+        class Whole(io.BytesIO):
+            status, headers = 200, {"ETag": '"v1"'}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        with unittest.mock.patch.object(install.urllib.request, "urlopen",
+                                        lambda request, timeout=None: Whole(body)), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None):
+            path = install._fetch_archive("https://example.invalid/D.zip", work, None, keep)
+        self.assertEqual(path.read_bytes(), body)
+
+    def test_a_tree_read_whole_leaves_no_archive(self):
+        work = Path(_tempdir(self))
+        archive = self._zip(work)
+        bios = work / "system"
+        bios.mkdir()
+
+        def fetch(url, directory, progress=None, keep=None):
+            shutil.copy(archive, keep)
+            keep.with_name(keep.name + ".source").write_text(f"{url}\n\"v1\"\n")
+            return keep
+
+        with unittest.mock.patch.object(install, "_fetch_archive", fetch):
+            install.install_data_directory(self._entry(), bios)
+        self.assertEqual([p.name for p in (bios / "dolphin-emu").iterdir()], ["Sys"])
+
     def test_the_run_ends_on_the_archive_bytes_too(self):
         from test_install_selection import FakeRepository  # noqa: PLC0415
 
@@ -3784,13 +4029,44 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn(f"{install.format_size(bios + archive)} downloaded in", proc.stdout)
 
+    def test_the_plan_announces_the_archive_not_the_tree(self):
+        """yaps2's tarball is 21.2 MB for a 6.5 MB tree, Cemu's 21.4 MB for
+        9.9 KB: the plan announced the tree, and the run downloaded far more."""
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        member = b"profile"
+        archive_size = 21_360_579
+        with FakeRepository() as repo:
+            listed = json.loads((repo.root / "install" / "retroarch.json").read_text())
+            listed["data_directories"] = [{
+                "ref": "cemu-gameprofiles", "dest": "cemu", "type": "tarball",
+                "url": "https://example.invalid/Cemu.tar.gz", "source_path": "Cemu-1/bin",
+                "systems": ["nintendo-gba"], "archive_size": archive_size,
+                "files": {"gameProfiles/a.ini": {"sha1": hashlib.sha1(member).hexdigest(),
+                                                 "size": len(member)}}}]
+            (repo.root / "install" / "retroarch.json").write_text(json.dumps(listed))
+            proc = repo.run("--no-input", "--dry-run")
+            bios = sum(len(payload) for payload, *_ in FakeRepository.PAYLOADS.values())
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(f"({install.format_size(bios + archive_size)})", proc.stdout)
+        self.assertIn(f"(a {install.format_size(archive_size)} archive)", proc.stdout)
+
+    def test_a_pack_or_an_old_list_counts_the_files_themselves(self):
+        needed = {"a": {"size": 7}}
+        entry = {"archive_size": 21_360_579}
+        self.assertEqual(install.data_fetch_bytes(entry, needed), 21_360_579)
+        self.assertEqual(install.data_fetch_bytes({}, needed), 7)
+        self.assertEqual(install.data_fetch_bytes(entry, {}), 0)
+        with unittest.mock.patch.object(install.LOCAL, "pack", object()):
+            self.assertEqual(install.data_fetch_bytes(entry, needed), 7)
+
     def test_verified_members_land_the_rest_are_said(self):
         work = Path(_tempdir(self))
         archive = self._zip(work)
         bios = work / "system"
         bios.mkdir()
 
-        def fetch(url, directory, progress=None):
+        def fetch(url, directory, progress=None, keep=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy
@@ -3826,8 +4102,9 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         def members(_archive, _entry):
             yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Endless())
 
-        with unittest.mock.patch.object(install, "_fetch_archive",
-                                        lambda url, d, progress=None: Path(d) / "a"), \
+        with unittest.mock.patch.object(
+                install, "_fetch_archive",
+                lambda url, d, progress=None, keep=None: Path(d) / "a"), \
                 unittest.mock.patch.object(install, "_archive_members", members):
             counts = install.install_data_directory(entry, work)
         self.assertEqual(counts["changed"], 1)
@@ -3854,8 +4131,9 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                 def members(_archive, _entry):
                     yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Broken())
 
-                with unittest.mock.patch.object(install, "_fetch_archive",
-                                                lambda url, d, progress=None: Path(d) / "a"), \
+                with unittest.mock.patch.object(
+                        install, "_fetch_archive",
+                        lambda url, d, progress=None, keep=None: Path(d) / "a"), \
                         unittest.mock.patch.object(install, "_archive_members", members):
                     counts = install.install_data_directory(entry, work)
                 self.assertTrue(counts["error"])
@@ -4393,6 +4671,50 @@ def _install_run(env: dict, *argv: str, **kwargs) -> subprocess.CompletedProcess
         [sys.executable, "install.py", *argv], cwd=REPO_ROOT, env=env,
         capture_output=True, text=True, timeout=300, check=False, **kwargs,
     )
+
+
+class AListingAppliesItsOptionsOrRefusesThem(unittest.TestCase):
+    """--list-systems --list-cores printed the systems alone, and
+    --list-platforms, --list-targets and --list-emulators printed the same
+    list with --system, --region or --core as without, code 0."""
+
+    def test_two_listings_or_an_option_a_listing_ignores_are_refused(self):
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        given = ["--platform", "retroarch", "--offline", "--no-input",
+                 "--manifest", "install/retroarch.json"]
+        for argv, words in (
+            ([*given, "--list-systems", "--list-cores"],
+             "--list-systems and --list-cores each print a list"),
+            ([*given, "--list-cores", "--list-emulators"],
+             "--list-cores and --list-emulators each print a list"),
+            (["--list-platforms", "--list-systems", "--platform", "retroarch"],
+             "--list-platforms and --list-systems each print a list"),
+            (["--list-platforms", "--region", "us"],
+             "--list-platforms prints the whole list, which --region does not narrow"),
+            (["--list-platforms", "--platform", "retroarch"],
+             "--list-platforms prints the whole list, which --platform does not narrow"),
+            ([*given, "--list-targets", "--system", "sony-playstation"],
+             "--list-targets prints the whole list, which --system does not narrow"),
+            ([*given, "--list-targets", "--target", "switch"],
+             "--list-targets prints the whole list, which --target does not narrow"),
+            ([*given, "--list-emulators", "--system", "sony-playstation"],
+             "--list-emulators prints the whole list, which --system does not narrow"),
+            ([*given, "--list-emulators", "--core", "beetle_psx"],
+             "--list-emulators prints the whole list, which --core does not narrow"),
+        ):
+            with self.subTest(argv=argv):
+                proc = _install_run(env, *argv)
+                self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+                self.assertIn(words, proc.stderr)
+
+    def test_the_options_a_listing_reads_still_apply(self):
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        given = ["--platform", "retroarch", "--offline", "--no-input",
+                 "--manifest", "install/retroarch.json"]
+        whole = _install_run(env, *given, "--list-cores")
+        narrowed = _install_run(env, *given, "--list-cores", "--system", "nintendo-gba")
+        self.assertEqual((whole.returncode, narrowed.returncode), (0, 0), narrowed.stderr)
+        self.assertLess(len(narrowed.stdout), len(whole.stdout))
 
 
 class AMissingPackNamesTheOptionAndThePacksBeside(unittest.TestCase):
@@ -6535,7 +6857,7 @@ class AFileYouHadIsKept(unittest.TestCase):
                  "type": "zip", "files": {"Sys/a.ini": {
                      "sha1": hashlib.sha1(self.NEW).hexdigest(), "size": len(self.NEW)}}}
 
-        def fetch(url, directory, progress=None):
+        def fetch(url, directory, progress=None, keep=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy

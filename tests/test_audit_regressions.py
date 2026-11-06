@@ -206,11 +206,16 @@ class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
             )
             proc = subprocess.run(
                 [sys.executable, "-I", "-c",
-                 "import sys; sys.path.insert(0, '.'); import tests"],
+                 "import sys; sys.path.insert(0, '.'); import tests, tempfile, os;"
+                 " print(tempfile.gettempdir()); print(os.environ['TMPDIR'])"],
                 cwd=clone, capture_output=True, text=True, timeout=60, check=False,
             )
             self.assertEqual(proc.returncode, 0, proc.stderr)
             self.assertTrue((clone / "tmp" / "tests").is_dir())
+            # 264 TemporaryDirectory() calls without dir= wrote to the /tmp
+            # tmpfs, and a full tmpfs failed modules no change touched.
+            scratch = str((clone / "tmp" / "tests").resolve())
+            self.assertEqual(proc.stdout.split(), [scratch, scratch])
 
 
 class ReleaseSigningRegressions(unittest.TestCase):
@@ -1140,9 +1145,12 @@ class PipelineRegressions(unittest.TestCase):
 
         argv = ["pipeline.py", "--offline", "--skip-packs", "--skip-docs",
                 "--with-export", "--target", "switch"]
+        # The originals the offline export patches are not cached in a
+        # checkout: the run would be refused before any step.
         with mock.patch.object(sys, "argv", argv), mock.patch.object(
             pipeline, "run", side_effect=fake_run
-        ), contextlib.redirect_stdout(io.StringIO()), contextlib.suppress(SystemExit):
+        ), mock.patch.object(pipeline, "_refuse_offline_export_without_originals"), \
+                contextlib.redirect_stdout(io.StringIO()), contextlib.suppress(SystemExit):
             pipeline.main()
         truth_runs = [c for c in commands if "scripts/generate_truth.py" in c]
         export = next(c for c in commands if "scripts/export_native.py" in c)
@@ -2054,6 +2062,44 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
             finally:
                 os.chdir(cwd)
 
+    def test_restore_refuses_a_copy_replaced_after_the_index(self):
+        """The cache is hashed first and copied later: another run that
+        replaced the cached name in between put its bytes at a path the
+        database pins to the old ones."""
+        from scripts import restore_large_files
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            cache = root / "cache"
+            cache.mkdir()
+            payload = b"firmware bytes"
+            (cache / "asset.bin").write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            (root / ".gitignore").write_text("bios/Sony/big.pup\n", encoding="utf-8")
+            (root / "database.json").write_text(
+                json.dumps({"files": {sha1: {"path": "bios/Sony/big.pup"}}}),
+                encoding="utf-8",
+            )
+            real_index = restore_large_files.index_cache
+
+            def index_then_replace(cache_dir: str) -> dict[str, str]:
+                index = real_index(cache_dir)
+                (cache / "asset.bin").write_bytes(b"re-uploaded bytes")
+                return index
+
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                with mock.patch.object(restore_large_files, "index_cache", index_then_replace):
+                    restored, unsatisfied = restore_large_files.restore(
+                        str(cache), "database.json", ".gitignore"
+                    )
+                self.assertEqual((restored, unsatisfied), (0, ["bios/Sony/big.pup"]))
+                self.assertFalse((root / "bios/Sony/big.pup").exists())
+                self.assertEqual(os.listdir(root / "bios/Sony"), [])
+            finally:
+                os.chdir(cwd)
+
     def test_restore_leaves_tracked_paths_alone(self):
         from scripts.restore_large_files import restore
 
@@ -2291,7 +2337,9 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
                         else "gitignored" if repo_path in ignored
                         else "untracked, never committed"
                     )
-                    if bool(entry.get("release_asset")) != (state == "gitignored"):
+                    if state == "untracked, never committed" or (
+                        bool(entry.get("release_asset")) != (state == "gitignored")
+                    ):
                         wrong.append((entry["dest"], repo_path, state))
                 self.assertEqual(wrong, [], f"{name} picks the wrong source: {wrong[:3]}")
 
@@ -2304,6 +2352,36 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
         if untracked is None:
             self.skipTest("not a git checkout")
         self.assertEqual(sorted(untracked)[:20], [], f"{len(untracked)} untracked files under bios/")
+
+    def test_every_database_path_is_committed_or_a_release_asset(self):
+        """A git mv under bios/ committed without regenerating anything left
+        database.json and the manifests agreeing on the old path: the tests
+        above compare them with each other, so all passed, and the installer
+        got a 404 (issue 78, with the database stale too)."""
+        database = ROOT / "database.json"
+        if not database.is_file():
+            self.skipTest("database.json not generated")
+        files = json.loads(database.read_text(encoding="utf-8"))["files"]
+        paths = {
+            path
+            for entry in files.values()
+            for path in [entry.get("path"), *(entry.get("paths") or [])]
+            if path
+        }
+        tracked = _git_paths("ls-files", "-z")
+        if tracked is None:
+            self.skipTest("not a git checkout")
+        outside = sorted(paths - tracked)
+        ignored = _git_paths("check-ignore", "-z", "--no-index", "--stdin", stdin=outside)
+        if ignored is None:
+            self.skipTest("not a git checkout")
+        stale = [path for path in outside if path not in ignored]
+        self.assertEqual(
+            stale[:20], [],
+            f"{len(stale)} database paths git neither holds nor ignores: "
+            "python scripts/generate_db.py --force --bios-dir bios --output database.json, "
+            "then the manifests",
+        )
 
 
 class ReleaseAssetCriterion(unittest.TestCase):
@@ -5143,8 +5221,32 @@ class UnsourceableCardSaysWhy(unittest.TestCase):
         text = "\n".join(_render_emulator_file(
             entry, {"files": [entry]}, None, [entry], lambda f: False, "file-x",
         ))
-        self.assertIn("Not collectable: written by the firmware editor", text)
-        self.assertIn("../gaps.md#acknowledged-gaps", text)
+        self.assertIn("Not collected yet: written by the firmware editor", text)
+        self.assertIn("../gaps.md#not-collected-yet", text)
+        self.assertNotIn("collectable", text)
+
+    def test_the_gaps_page_names_where_a_wanted_file_is_listed(self):
+        """The section read "Acknowledged gaps ... (verified from source
+        code)" while No-Intro lists XM7's KANJI2.ROM and MAME's fm7740sx.zip
+        carries it: the flag only keeps a homonym out, the file is wanted."""
+        from scripts.generate_site import generate_gap_analysis
+
+        unsourced = {"name": "KANJI2.ROM", "reason": "no dump distributed", "source_ref": ""}
+        report = {"xm7": {"emulator": "XM7", "gaps": 0, "gap_missing": 0, "gap_bios": 0,
+                          "unsourceable": [unsourced], "gap_details": []}}
+        catalogued = {"no-intro": {"missing": [{
+            "name": "KANJI2.rom",
+            "romsets": [{"source": "mame", "archive": "fm7740sx.zip"}],
+            "needed_by": [{"emulator": "xm7", "name": "KANJI2.ROM", "required": True}],
+        }]}}
+        page = generate_gap_analysis(
+            {"xm7": {"emulator": "XM7", "files": []}}, {}, {"files": {}, "indexes": {}},
+            gap_report=report, catalogued=catalogued)
+        self.assertIn("## Not collected yet", page)
+        self.assertIn('<span id="acknowledged-gaps"></span>', page)
+        self.assertIn("| No-Intro `KANJI2.rom`, mame `fm7740sx.zip` |", page)
+        self.assertNotIn("Acknowledged", page)
+        self.assertNotIn("verified from source code", page)
 
 
 
@@ -5181,6 +5283,61 @@ class CollectionCardsCarryFullHashes(unittest.TestCase):
         text = "\n".join(_system_file_card(entry, FileConsumers({}, {})))
         for value in (entry["sha1"], entry["md5"], entry["crc32"], entry["sha256"]):
             self.assertIn(f'<dd class="rb-hash">{value}</dd>', text)
+
+
+class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
+    """advanced_drastic's page printed the KNULLI build file that holds its
+    revision as plain text, while pin_build carries the repository, the tag
+    and the path a pinned link needs. 36 profiles carry one."""
+
+    def test_the_build_file_row(self):
+        from scripts.generate_site import _build_rows
+
+        rows = _build_rows({"pin_frozen": "KNULLI builds this revision.", "pin_build": [{
+            "platform": "knulli", "repo": "https://github.com/knulli-cfw/knulli-linux",
+            "revision": "20260511", "path": "package/emulators/advanced_drastic/advanced_drastic.mk",
+            "variable": "ADVANCED_DRASTIC_VERSION", "value": "eaf41ab9"}]})
+        # A tag can move: named, never linked.
+        self.assertIn(
+            "| Build file | KNULLI `package/emulators/advanced_drastic/advanced_drastic.mk` "
+            "at `20260511` sets `ADVANCED_DRASTIC_VERSION` |", rows)
+
+    def test_a_build_read_at_a_recorded_commit_links(self):
+        from scripts.generate_site import _build_rows
+
+        pin = "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+        rows = _build_rows({"pin_build": [{
+            "platform": "retropie", "repo": "https://github.com/RetroPie/RetroPie-Setup",
+            "revision": pin, "path": "scriptmodules/emulators/advmame-1.4.sh",
+            "variable": "rp_module_repo", "value": "x"}]})
+        self.assertIn(
+            f"[RetroPie `scriptmodules/emulators/advmame-1.4.sh`](https://github.com/RetroPie/"
+            f"RetroPie-Setup/blob/{pin}/scriptmodules/emulators/advmame-1.4.sh)", rows[0])
+
+    def test_the_record_holds_the_build_files(self):
+        import sitesources  # noqa: PLC0415
+
+        files = sitesources.build_files({"pin_build": [
+            {"repo": "https://github.com/o/r", "revision": "a" * 40, "path": "p.mk"},
+            {"repo": "https://github.com/o/r", "revision": "v1", "path": "q.mk"}]})
+        self.assertEqual([(f[1], f[2]) for f in files], [("a" * 40, "p.mk")])
+
+
+class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
+    """The Download button of a .variants/ card saved advision.zip.1c086064,
+    the storage name, and nothing said RetroBat looks for advision.zip."""
+
+    def test_the_name_to_save_it_under(self):
+        from scripts.generate_site import FileConsumers, _system_file_card
+
+        entry = {"name": "advision.zip", "size": 10, "sha1": "a" * 40,
+                 "path": "bios/Entex/Adventure Vision/.variants/advision.zip.1c086064"}
+        text = "\n".join(_system_file_card(entry, FileConsumers({}, {})))
+        self.assertIn("Save as", text)
+        self.assertIn("advision.zip.1c086064", text)
+        plain = "\n".join(_system_file_card(
+            {**entry, "path": "bios/Entex/Adventure Vision/advision.zip"}, FileConsumers({}, {})))
+        self.assertNotIn("Save as", plain)
 
 
 

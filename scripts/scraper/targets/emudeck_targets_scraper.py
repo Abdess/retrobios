@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 import urllib.error
 import urllib.request
@@ -22,6 +21,7 @@ import yaml
 
 from common import github_token, yaml_load
 
+from ..emudeck_launchers import SCRIPT_SUFFIXES, emulator_of_script
 from . import BaseTargetScraper
 
 PLATFORM_NAME = "emudeck"
@@ -32,24 +32,6 @@ STEAMOS_API = (
 WINDOWS_API = (
     "https://api.github.com/repos/EmuDeck/emudeck-we/contents/functions/EmuScripts"
 )
-
-# Map EmuDeck script names to emulator profile keys
-# Script naming: emuDeckDolphin.sh -> dolphin
-# Some need explicit mapping when names differ
-_NAME_OVERRIDES: dict[str, str] = {
-    "pcsx2qt": "pcsx2",
-    "rpcs3legacy": "rpcs3",
-    "cemuproton": "cemu",
-    "rmg": "mupen64plus_next",
-    "bigpemu": "bigpemu",
-    "eden": "eden",
-    "suyu": "suyu",
-    "ares": "ares",
-}
-
-# Scripts that are not emulators (config helpers, etc.)
-_SKIP = {"retroarch_maincfg", "retroarch"}
-
 
 def _fetch(url: str) -> str:
     headers = {"User-Agent": "retrobios-scraper/1.0"}
@@ -69,24 +51,11 @@ def _list_emuscripts(api_url: str) -> list[str]:
     """List emulator script filenames from GitHub API."""
     entries = json.loads(_fetch(api_url))
     names = [
-        e["name"] for e in entries if e.get("name", "").endswith((".sh", ".ps1"))
+        e["name"] for e in entries if e.get("name", "").endswith(SCRIPT_SUFFIXES)
     ]
     if not names:
         raise RuntimeError(f"no emulator scripts listed at {api_url}")
     return names
-
-
-def _script_to_core(filename: str) -> str | None:
-    """Convert EmuScripts filename to core profile key."""
-    # Strip extension and emuDeck prefix
-    name = re.sub(r"\.(sh|ps1)$", "", filename, flags=re.IGNORECASE)
-    name = re.sub(r"^emuDeck", "", name, flags=re.IGNORECASE)
-    if not name:
-        return None
-    key = name.lower()
-    if key in _SKIP:
-        return None
-    return _NAME_OVERRIDES.get(key, key)
 
 
 class Scraper(BaseTargetScraper):
@@ -114,14 +83,13 @@ class Scraper(BaseTargetScraper):
         seen: set[str] = set()
         has_retroarch = False
         for script in scripts:
-            core = _script_to_core(script)
-            if core and core not in seen:
+            core = emulator_of_script(script)
+            # RetroArch stands for its libretro cores, added below.
+            if core == "retroarch":
+                has_retroarch = True
+            elif core and core not in seen:
                 seen.add(core)
                 cores.append(core)
-            # Detect RetroArch presence (provides all libretro cores)
-            name = re.sub(r"\.(sh|ps1)$", "", script, flags=re.IGNORECASE)
-            if name.lower() in ("emudeckretroarch", "retroarch_maincfg"):
-                has_retroarch = True
 
         standalone_count = len(cores)
         # EmuDeck ships RetroArch = all its libretro cores are available

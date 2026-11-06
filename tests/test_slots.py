@@ -111,6 +111,35 @@ class TestConflicts(unittest.TestCase):
         conflicts = slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
         self.assertEqual([c.destination for c in conflicts], ["bios/GC/JAP/IPL.bin"])
 
+    def test_a_core_found_by_content_takes_any_dump_it_accepts(self):
+        """DuckStation identifies its BIOS by content, so the name of its
+        scph1001.bin entry is a label. Batocera ships the v2.0 dump there,
+        which the profile accepts under scph1001_v20.bin: no conflict."""
+        files = [
+            {"name": "IPL.bin", "path": "GC/JAP/IPL.bin", "md5": "n" * 32,
+             "region": ["japan"]},
+            {"name": "IPL_alt.bin", "md5": "m" * 32, "region": ["japan"]},
+        ]
+        by_name = slots.find_conflicts(
+            self._config("m" * 32), {"dolphin": {"files": files}}, REGIONS_DB
+        )
+        self.assertEqual(len(by_name), 1)
+        by_content = slots.find_conflicts(
+            self._config("m" * 32),
+            {"dolphin": {"found_by": "content", "files": files}},
+            REGIONS_DB,
+        )
+        self.assertEqual(by_content, [])
+        # Another region is another slot: openMSX finds each ROM by sha1 too,
+        # and one machine's ROM never stands for another's.
+        files[1]["region"] = ["north-america"]
+        other_slot = slots.find_conflicts(
+            self._config("m" * 32),
+            {"dolphin": {"found_by": "content", "files": files}},
+            REGIONS_DB,
+        )
+        self.assertEqual(len(other_slot), 1)
+
     def test_wrong_region_under_a_region_slot_is_reported(self):
         conflicts = slots.find_conflicts(
             self._config("m" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
@@ -508,6 +537,23 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         collisions = slots.find_collisions(config, REGIONS_DB)
         self.assertEqual(len(collisions), 1)
         self.assertEqual(len(collisions[0].resolved), 2)
+
+    def test_the_line_names_each_system_and_the_file_packed(self):
+        """The line named two files and neither the system that declares
+        each nor the one the pack ships: the reader went to the YAML."""
+        config = {"systems": {
+            "zeta": {"files": [{"name": "IPL.bin", "destination": "disk.rom",
+                                "md5": "m" * 32}]},
+            "alpha": {"files": [{"name": "IPL.bin", "destination": "disk.rom",
+                                 "md5": "n" * 32}]},
+        }}
+        collision = slots.find_collisions(config, REGIONS_DB)[0]
+        line = slots.format_collision(collision)
+        left, packed = collision.resolved
+        # The builder walks the systems sorted: alpha's declaration ships.
+        self.assertIn(f"{packed} (alpha) packed", line)
+        self.assertIn(f"{left} (zeta) left out", line)
+        self.assertEqual(collision.shipped, packed)
 
     def test_one_archive_named_by_its_inner_roms_is_not_a_collision(self):
         # The documented zipped_file pattern: several md5s, one archive.

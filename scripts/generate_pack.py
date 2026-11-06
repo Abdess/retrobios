@@ -26,6 +26,7 @@ import argparse
 import contextlib
 import functools
 import hashlib
+import io
 import json
 import os
 import re
@@ -158,6 +159,9 @@ class PackRecord:
         self.members: list[str] = []
         self.files: list[str] = []
         self.trees: list[str] = []
+        # The collection file each copied member comes from: a split part
+        # writes a file only where the full pack writes the same bytes.
+        self.sources: dict[str, str] = {}
 
 
 def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> None:
@@ -173,6 +177,7 @@ def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> Non
     """
     if isinstance(zf, PackRecord):
         zf.members.append(arcname)
+        zf.sources[arcname] = source_path
         return
     info = zipfile.ZipInfo(filename=arcname, date_time=_FIXED_DATE_TIME)
     info.compress_type = _member_compression(arcname)
@@ -603,6 +608,17 @@ def _pack_data_directories(
     return added
 
 
+def _case_twin_pairs(
+    twins: list[str], seen_destinations: set[str], base_dest: str, flatten: bool,
+) -> list[tuple[str, str]]:
+    """Each spelling left out, with the spelling the pack holds."""
+    held = {
+        _flat(dest, base_dest, flatten).lower(): _flat(dest, base_dest, flatten)
+        for dest in seen_destinations
+    }
+    return sorted({(twin, held[twin.lower()]) for twin in twins if twin.lower() in held})
+
+
 def _report_pack_counts(
     zip_path: str,
     file_status: dict,
@@ -806,6 +822,7 @@ def generate_pack(
     pack_name: str | None = None,
     no_game_data: bool = False,
     record: PackRecord | None = None,
+    within: dict[str, str] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -818,6 +835,12 @@ def generate_pack(
 
     ``record`` builds the pack in memory (PackRecord): no archive is written,
     no external file fetched, and the paths are kept on it.
+
+    ``within`` is the full pack's PackRecord.sources, given to a split part:
+    a declared file or core extra is written only where the full pack writes
+    the same bytes. A part sees neither the other systems' declarations nor
+    their extras, so a path the full pack settles (a file/directory conflict,
+    a case twin, a path another system's file takes) was written again.
 
     Returns the path to the generated ZIP, or None on failure.
     """
@@ -867,6 +890,8 @@ def generate_pack(
     user_provided = []
     seen_destinations: set[str] = set()
     seen_lower: set[str] = set()  # only used when case_insensitive=True
+    # Spellings left out as case twins of a packed file, for the README.
+    case_twins: list[str] = []
     seen_parents: set[str] = (
         set()
     )  # parent dirs of added files (path conflict detection)
@@ -1135,7 +1160,10 @@ def generate_pack(
                     config.get("hash_rule", ""),
                 )
                 if refusal:
-                    file_status[dedup_key] = "excluded"
+                    # An earlier declaration of this path shipped a file this
+                    # one refuses: it is in the pack, untested as verify
+                    # counts it, not excluded.
+                    file_status[dedup_key] = "untested" if already_packed else "excluded"
                     file_reasons[dedup_key] = refusal
                     continue
                 if not hash_mismatch_excludes_file(verification_mode) and (
@@ -1170,7 +1198,17 @@ def generate_pack(
                         )
 
                 if already_packed:
+                    if dedup_key not in seen_destinations:
+                        case_twins.append(_flat(full_dest, base_dest, flatten))
                     continue
+                if within is not None and not _same_bytes(
+                    local_path, within.get(_flat(full_dest, base_dest, flatten))
+                ):
+                    # The full pack holds another system's file here.
+                    continue
+                if file_status.get(dedup_key) == "excluded":
+                    # An earlier declaration refused the file this one ships.
+                    file_status[dedup_key] = "untested"
                 seen_destinations.add(dedup_key)
                 _register_path(dedup_key, seen_destinations, seen_parents)
                 if case_insensitive:
@@ -1227,7 +1265,7 @@ def generate_pack(
           if required_only and fe.get("required") is False:
               continue
           dest = sanitize_pack_path(fe.get("destination", fe["name"]))
-          if region_drops and dest in region_drops:
+          if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
               continue
           if not dest:
               continue
@@ -1244,10 +1282,13 @@ def generate_pack(
           # Taken, a case twin on a case-insensitive filesystem, or a
           # file/directory conflict (SGB1.sfc vs SGB1.sfc/): verify replays
           # the same rule (packextras.hidden_extras).
-          if placement_block(
+          block = placement_block(
               full_dest, seen_destinations, seen_lower, seen_parents,
               case_insensitive,
-          ):
+          )
+          if block:
+              if block == "case_twin" and extra_resolver.resolve(fe, dest)[0]:
+                  case_twins.append(_flat(full_dest, base_dest, flatten))
               continue
 
           # The emulator's own check picks the copy, as for a declared file
@@ -1275,6 +1316,8 @@ def generate_pack(
               )
 
           flat_dest = _flat(full_dest, base_dest, flatten)
+          if within is not None and not _same_bytes(local_path, within.get(flat_dest)):
+              continue
           if local_path.endswith(".zip"):
               _add_zip_to_pack(local_path, flat_dest, zf, fe)
           else:
@@ -1339,6 +1382,37 @@ def generate_pack(
       if _registry_path.exists():
           with open(_registry_path) as _rf:
               _pack_registry = (yaml_load(_rf) or {}).get("platforms", {})
+      keeps_case = case_insensitive and any(
+          d.get("os") not in CASE_FOLDING_OS
+          for d in (_pack_registry.get(platform_name, {}).get("install", {}) or {})
+          .get("detect", [])
+      )
+      if keeps_case and source != "platform" and precomputed_extras is None:
+          # The spellings a folded platform counts as declared never reach
+          # the extras: collected as the filesystem that keeps case sees
+          # them, as the manifest's case_variants are (Mesen-CE's bios.col
+          # beside the declared BIOS.col).
+          unfolded = _collect_emulator_extras(
+              {**config, "case_insensitive_fs": False}, emulators_dir, db, set(),
+              base_dest, emu_profiles, target_cores=target_cores,
+              include_all=(source == "truth"),
+          )
+          if system_filter:
+              unfolded = _extras_for_systems(unfolded, system_filter)
+          prefix = _detect_extras_prefix(config, base_dest)
+          for fe in unfolded:
+              if required_only and fe.get("required") is False:
+                  continue
+              if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
+                  continue
+              full = extra_full_destination(fe, prefix)
+              if (
+                  full and full not in seen_destinations and full.lower() in seen_lower
+                  and extra_resolver.resolve(
+                      fe, sanitize_pack_path(fe.get("destination", fe["name"]))
+                  )[0]
+              ):
+                  case_twins.append(_flat(full, base_dest, flatten))
       readme_text = _build_readme(
           platform_name, platform_display, base_dest, total_files, num_systems,
           source=source,
@@ -1364,6 +1438,10 @@ def generate_pack(
               ) if save_count else ""
           ),
           save_by_system=bool(save_count and save_layout(config).by_system),
+          case_twins=(
+              _case_twin_pairs(case_twins, seen_destinations, base_dest, flatten)
+              if keeps_case else []
+          ),
       )
       _write_generated_member(zf, "README.txt", readme_text)
 
@@ -1408,6 +1486,7 @@ def _extract_zip_to_archive(
                 for name in map(sanitize_pack_path, src.namelist())
                 if name and not name.endswith("/")
             )
+            target_zf.sources[dest_prefix] = source_zip
             return
         for info in src.infolist():
             if info.is_dir():
@@ -1441,6 +1520,7 @@ def _add_zip_to_pack(
     """
     if isinstance(target_zf, PackRecord):
         target_zf.members.append(dest_path)
+        target_zf.sources[dest_path] = source_zip
         return
     _check_zip_members(source_zip)
     _add_pack_member(target_zf, source_zip, dest_path)
@@ -2069,8 +2149,14 @@ def generate_split_packs(
     one_per_slot: bool = False,
     offline: bool | None = None,
     no_game_data: bool = False,
+    records: dict[str, PackRecord] | None = None,
 ) -> list[str]:
-    """Generate split packs (one ZIP per system or manufacturer)."""
+    """Generate split packs (one ZIP per system or manufacturer).
+
+    The parts add up to the full pack: each is built against the full pack's
+    own placement (``within``). ``records`` builds the parts in memory, keyed
+    by part name, with no archive written.
+    """
     config = load_platform_config(platform_name, platforms_dir)
     # The split directory carries the same tags as the packs inside it, or two
     # differently narrowed runs write into one another.
@@ -2093,10 +2179,36 @@ def generate_split_packs(
         f"{_platform_pack_stem([platform_name], platform_name, platforms_dir)}{split_tags}"
     )
     split_dir = os.path.join(output_dir, f"{part_prefix}{group_tag}_Split")
-    os.makedirs(split_dir, exist_ok=True)
+    if records is None:
+        os.makedirs(split_dir, exist_ok=True)
 
     if emu_profiles is None:
         emu_profiles = load_emulator_profiles(emulators_dir)
+    narrowing = {
+        "emulators_dir": emulators_dir, "zip_contents": zip_contents,
+        "data_registry": data_registry, "emu_profiles": emu_profiles,
+        "target_cores": target_cores, "required_only": required_only,
+        "source": source, "regions": regions, "target_name": target_name,
+        "one_per_slot": one_per_slot, "offline": offline,
+        "no_game_data": no_game_data,
+    }
+    full = PackRecord()
+    with contextlib.redirect_stdout(io.StringIO()):
+        generate_pack(
+            platform_name, platforms_dir, db, bios_dir, split_dir,
+            record=full, **narrowing,
+        )
+
+    def part(pack_name: str, **scope: object) -> str | None:
+        record = PackRecord() if records is not None else None
+        zip_path = generate_pack(
+            platform_name, platforms_dir, db, bios_dir, split_dir,
+            pack_name=pack_name, record=record, within=full.sources,
+            **scope, **narrowing,
+        )
+        if record is not None and zip_path:
+            records[pack_name] = record
+        return zip_path
     # The systems a core of the target runs: a part per declared system sent
     # each one the target drops to a refusal naming it as unknown.
     systems = platform_scope_systems(config, emu_profiles, target_cores)
@@ -2130,27 +2242,9 @@ def generate_split_packs(
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
-        zip_path = generate_pack(
-            platform_name,
-            platforms_dir,
-            db,
-            bios_dir,
-            split_dir,
-            emulators_dir=emulators_dir,
-            zip_contents=zip_contents,
-            data_registry=data_registry,
-            emu_profiles=emu_profiles,
-            target_cores=target_cores,
-            required_only=required_only,
-            system_filter=group_system_ids,
-            precomputed_extras=group_extras,
-            source=source,
-            regions=regions,
-            target_name=target_name,
-            one_per_slot=one_per_slot,
-            offline=offline,
-            pack_name=f"{part_prefix}_{_name_part(group_name, '_')}_BIOS_Pack.zip",
-            no_game_data=no_game_data,
+        zip_path = part(
+            f"{part_prefix}_{_name_part(group_name, '_')}_BIOS_Pack.zip",
+            system_filter=group_system_ids, precomputed_extras=group_extras,
         )
         if zip_path:
             results.append(zip_path)
@@ -2166,15 +2260,9 @@ def generate_split_packs(
     }
     undistributed = [fe for fe in all_extras if id(fe) not in distributed]
     if undistributed:
-        zip_path = generate_pack(
-            platform_name, platforms_dir, db, bios_dir, split_dir,
-            emulators_dir=emulators_dir, zip_contents=zip_contents,
-            data_registry=data_registry, emu_profiles=emu_profiles,
-            target_cores=target_cores, required_only=required_only,
-            precomputed_extras=undistributed, extras_only=True, source=source,
-            regions=regions, target_name=target_name, one_per_slot=one_per_slot,
-            offline=offline, pack_name=f"{part_prefix}_Other_Cores_BIOS_Pack.zip",
-            no_game_data=no_game_data,
+        zip_path = part(
+            f"{part_prefix}_Other_Cores_BIOS_Pack.zip",
+            precomputed_extras=undistributed, extras_only=True,
         )
         if zip_path:
             results.append(zip_path)
@@ -4133,7 +4221,8 @@ def _manifest_core_entries(
         dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
             continue
-        if region_drops and dest in region_drops:
+        region_key = extra_region_key(fe, declared_root(config))
+        if region_drops and region_key in region_drops:
             continue
         full_dest = extra_full_destination(fe, extras_pfx)
         if not full_dest:
@@ -4207,7 +4296,7 @@ def _manifest_core_entries(
         entry, file_size = _manifest_entry(
             local_path, manifest_dest, [source_emu] if source_emu else [],
             db, repo_root,
-            selection.fields(dest, fe.get("name", "")),
+            selection.fields(region_key, fe.get("name", "")),
         )
         if entry is not None and save_root:
             entry.update(save_entry_fields(fe))
@@ -4321,7 +4410,8 @@ def _manifest_selection(
         else set()
     )
     return drops, SelectionIndex.build(
-        region_groups, region_index, pack_systems, extras, required_only
+        region_groups, region_index, pack_systems, extras, required_only,
+        extras_prefix=declared_root(config),
     ), held
 
 
@@ -4346,7 +4436,9 @@ def _record_absent(
         if required_only and fe.get("required") is False:
             continue
         dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
-        if not dest or (region_drops and dest in region_drops):
+        if not dest or (
+            region_drops and extra_region_key(fe, declared_root(config)) in region_drops
+        ):
             continue
         full_dest = extra_full_destination(fe, extras_pfx)
         if not full_dest:
@@ -4517,16 +4609,18 @@ def generate_manifest(
     # (cache file, size). Settled once the trees are walked.
     cache_held: dict[str, tuple[str, int]] = {}
     rename_notes: set[str] = set()
+    # The full manifest records every core's answer at a contested slot, so a
+    # target narrowed from it gets what that target's own pack serves.
+    whole = target_cores is None and source != "platform" and bool(emu_profiles)
+    slot_choices = (
+        slots.slot_choices(config, emu_profiles, db, zip_contents, data_registry)
+        if whole else {}
+    )
+    # Derived from the same choices: computed twice, it was 8% of a run.
     slot_overrides = slots.pack_overrides(
         config, emu_profiles, db, zip_contents, data_registry,
         target_cores=target_cores, source=source,
-    )
-    # The full manifest records every core's answer at a contested slot, so a
-    # target narrowed from it gets what that target's own pack serves.
-    slot_choices = (
-        slots.slot_choices(config, emu_profiles, db, zip_contents, data_registry)
-        if target_cores is None and source != "platform" and emu_profiles
-        else {}
+        choices=slot_choices if whole else None,
     )
 
     def manifest_destination(full_destination: str) -> str:
@@ -4541,8 +4635,10 @@ def generate_manifest(
         reason: str,
         cores: list[str] | None,
     ) -> None:
-        bare = sanitize_pack_path(
-            file_entry.get("destination", file_entry.get("name", ""))
+        # A core extra (cores given) is keyed as the region pass keys it.
+        bare = (
+            sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+            if cores is None else extra_region_key(file_entry, declared_root(config))
         )
         save_root = file_entry.get("root") == "save"
         omitted_by_destination[full_destination] = {
@@ -4949,9 +5045,12 @@ def _manifest_data_directories(
     (strip_components for a ZIP, source_path for a tarball, exclude) come
     from _data_dirs.yml, the same refresh_data_dirs applies. Every file
     carries the sha1 and size the cache holds, so a member the source
-    changed since is refused rather than installed.
+    changed since is refused rather than installed. archive_size is the
+    size of the archive refresh_data_dirs last downloaded, what fetching
+    the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
     """
     grouped: dict[tuple[str, str], dict] = {}
+    versions: dict[str, dict[str, dict]] = {}
     for src, full in members:
         ref, systems, prefix = refs[full]
         entry = registry.get(ref, {})
@@ -4976,6 +5075,17 @@ def _manifest_data_directories(
                 group["source_path"] = str(entry.get("source_path", "")).format(version=version)
             if entry.get("exclude"):
                 group["exclude"] = [str(e) for e in entry["exclude"]]
+            cache = entry.get("local_cache")
+            if cache:
+                recorded = Path(cache).parent / ".versions.json"
+                if str(recorded) not in versions:
+                    try:
+                        versions[str(recorded)] = json.loads(recorded.read_text())
+                    except FileNotFoundError:
+                        versions[str(recorded)] = {}
+                size = versions[str(recorded)].get(ref, {}).get("archive_size")
+                if isinstance(size, int) and size > 0:
+                    group["archive_size"] = size
         group["systems"].extend(s for s in systems if s not in group["systems"])
         rel = full[len(prefix):].lstrip("/") if prefix else full
         hashes = compute_hashes(src, frozenset({"sha1"}))
@@ -5429,6 +5539,7 @@ from packpaths import (  # noqa: E402,F401
 from packextras import (  # noqa: E402,F401
     ExtraResolver,
     extra_full_destination,
+    extra_region_key,
     prefixed_destination,
     save_entry_fields,
     save_manifest_dest,

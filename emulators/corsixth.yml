@@ -54,7 +54,7 @@ notes: |
   upper-case names the DOS release ships and the lookup normalises to.
 
   The sound/music path uses the game's XMI tracks when a SoundFont is
-  available (App:findSoundFont at :1591 probes GeneralUser-GS.sf2,
+  available (App:findSoundFont at CorsixTH/Lua/app.lua:1591 probes GeneralUser-GS.sf2,
   FluidR3_GM.sf2, FluidR3.sf3 and three Linux system paths), and the
   SoundFont is a user preference, not game data.
 

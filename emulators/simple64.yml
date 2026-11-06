@@ -5,6 +5,8 @@ source: "https://github.com/simple64/simple64"
 upstream: "https://github.com/simple64/simple64"
 profiled_date: "2026-08-08"
 source_commit: "d8c969c7b932e3d76e6a25549d76348839dbaefd"
+upstream_gone: "simple64/simple64 answers 404 on the API and the web, and the simple64 organisation lists no repository. The README at the pin archives the project in favour of gopher64. Observed 2026-11-06. simple64-vault/simple64 keeps main at the analysed commit."
+source_mirror: "https://github.com/simple64-vault/simple64"
 core_version: "v2024.12.1-5-gd8c969c"
 version_basis:
   kind: tag

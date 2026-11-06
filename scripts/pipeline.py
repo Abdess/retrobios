@@ -55,6 +55,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections.abc import Callable
 from pathlib import Path
 
 # The build scripts need CPython 3.9, which builds the same database,
@@ -562,6 +563,7 @@ def check_emulator_packs(
     comparison holds them together. No archive is written and no file read.
     """
     import generate_pack  # noqa: PLC0415
+    import packresolve  # noqa: PLC0415
     import verify  # noqa: PLC0415
     from common import (  # noqa: PLC0415
         ProfileSelectionError,
@@ -580,16 +582,23 @@ def check_emulator_packs(
 
     def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
         record = generate_pack.PackRecord()
-        with contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()):
-            generate_pack.generate_emulator_pack(
-                names, emulators_dir, db, "bios", "", standalone, zip_contents,
-                offline=True, platforms_dir=platforms_dir, record=record, **narrowing,
-            )
-            report = verify.verify_emulator(
-                names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
-                **narrowing,
-            )
+        was_offline = packresolve._OFFLINE
+        # The pack is built offline: verify counts a release asset the cache
+        # lacks the same way, missing, as the narrowed-pack step does.
+        packresolve.set_offline(True)
+        try:
+            with contextlib.redirect_stdout(io.StringIO()), \
+                    contextlib.redirect_stderr(io.StringIO()):
+                generate_pack.generate_emulator_pack(
+                    names, emulators_dir, db, "bios", "", standalone, zip_contents,
+                    offline=True, platforms_dir=platforms_dir, record=record, **narrowing,
+                )
+                report = verify.verify_emulator(
+                    names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
+                    **narrowing,
+                )
+        finally:
+            packresolve.set_offline(was_offline)
         lines = _set_difference_lines(
             label, set(report["pack_destinations"]), set(record.files)
         )
@@ -802,6 +811,92 @@ def check_narrowed_packs(
     return all_ok
 
 
+def split_differences(
+    full: object, parts: dict[str, object], same_bytes: Callable[[str, str], bool],
+) -> list[str]:
+    """Where the --split parts of a pack, together, are not the full pack.
+
+    A path in a part and not in the full pack, a path of the full pack in no
+    part, and a path a part fills with other bytes than the full pack.
+    """
+    full_members = {m for m in full.members if not _PACK_NOTES.search(m)}
+    union = {
+        m for record in parts.values() for m in record.members
+        if not _PACK_NOTES.search(m)
+    }
+    lines = [f"in a part, not in the full pack: {m}" for m in sorted(union - full_members)]
+    lines += [f"in the full pack, in no part: {m}" for m in sorted(full_members - union)]
+    lines += sorted({
+        f"other bytes in {name}: {member}"
+        for name, record in parts.items()
+        for member, source in record.sources.items()
+        if member in full.sources and not same_bytes(source, full.sources[member])
+    })
+    return lines
+
+
+def check_split_packs(
+    emulators_dir: str = "emulators", platforms_dir: str = "platforms",
+    db_path: str = "database.json", include_archived: bool = False,
+) -> bool:
+    """Build each platform's --split parts in memory and compare them with
+    the full pack: the parts must add up to it, path for path and byte for
+    byte. Each part is a pack of its own and used to settle its paths alone:
+    RetroDECK's parts carried bios/SGB1.sfc as a file and as a directory,
+    RetroBat's 21 openmsx/ twins of openMSX/ files. Offline, as every
+    comparison of this step.
+    """
+    import generate_pack  # noqa: PLC0415
+    import packresolve  # noqa: PLC0415
+    from common import (  # noqa: PLC0415
+        build_zip_contents_index,
+        group_identical_platforms,
+        list_registered_platforms,
+        load_data_dir_registry,
+        load_database,
+        load_emulator_profiles,
+    )
+
+    print(f"\n--- {step_title(STEP_LABELS['consistency'])}, split packs ---")
+    db = load_database(db_path)
+    zip_contents = build_zip_contents_index(db)
+    profiles = load_emulator_profiles(emulators_dir)
+    registry = load_data_dir_registry(platforms_dir)
+    groups = group_identical_platforms(
+        list_registered_platforms(platforms_dir, include_archived=include_archived),
+        platforms_dir,
+    )
+    was_offline = packresolve._OFFLINE
+    packresolve.set_offline(True)
+    all_ok = True
+    try:
+        for _members, platform in groups:
+            args = dict(
+                emulators_dir=emulators_dir, zip_contents=zip_contents,
+                data_registry=registry, emu_profiles=profiles, offline=True,
+            )
+            full = generate_pack.PackRecord()
+            parts: dict[str, generate_pack.PackRecord] = {}
+            with contextlib.redirect_stdout(io.StringIO()), \
+                    contextlib.redirect_stderr(io.StringIO()):
+                generate_pack.generate_pack(
+                    platform, platforms_dir, db, "bios", "", record=full, **args,
+                )
+                generate_pack.generate_split_packs(
+                    platform, platforms_dir, db, "bios", "", records=parts, **args,
+                )
+            lines = split_differences(full, parts, generate_pack._same_bytes)
+            if lines:
+                all_ok = False
+                print(f"  {platform} --split: {len(lines)} differences")
+                print("\n".join(f"    {line}" for line in lines[:20]))
+    finally:
+        packresolve.set_offline(was_offline)
+    print(f"  {len(groups)} split platform packs compared, "
+          f"{'all equal' if all_ok else 'differences above'}")
+    return all_ok
+
+
 class _Skipped:
     """A step that did not run. Truthy, so it never fails the pipeline, and
     distinct, so the summary does not report it as work that was done."""
@@ -880,6 +975,32 @@ def _refuse_offline_without_caches(
         parser.error(
             "no data directory is cached and --offline skips their refresh: run "
             "python scripts/refresh_data_dirs.py once, or drop --offline"
+        )
+
+
+def _refuse_offline_export_without_originals(
+    parser: argparse.ArgumentParser, args: argparse.Namespace,
+    cache: str = ".cache/upstream-native",
+) -> None:
+    """An offline run with --with-export needs each patched file cached.
+
+    Seven formats carry code, so step 2e patches the platform's own file,
+    which --offline does not fetch. On a fresh clone the database, verify
+    and the truth model were built before step 2e failed on every one.
+    """
+    if not (args.offline and args.with_export):
+        return
+    from exporter import discover_exporters  # noqa: PLC0415
+
+    lacking = sorted(
+        name for name, exporter in discover_exporters().items()
+        if exporter.needs_original() and not any(Path(cache, name).glob("*"))
+    )
+    if lacking:
+        parser.error(
+            f"--with-export patches each platform's own file, and {cache}/ holds none "
+            f"for {', '.join(lacking)}: run python scripts/export_native.py --all "
+            "--refresh-cache once, or drop --offline"
         )
 
 
@@ -1010,6 +1131,7 @@ def main() -> None:
     args = parser.parse_args()
     _refuse_unapplied_flags(parser, args)
     _refuse_offline_without_caches(parser, args)
+    _refuse_offline_export_without_originals(parser, args)
     if not args.offline:
         # Read once and put in the environment every step inherits: the
         # scrapers and refresh_data_dirs went anonymous unless the user had
@@ -1365,6 +1487,7 @@ def main() -> None:
         ok = check_narrowed_packs(
             include_archived=args.include_archived, full=args.full_narrowings,
         ) and ok
+        ok = check_split_packs(include_archived=args.include_archived) and ok
         print(
             f"--- {step_title(STEP_LABELS['consistency'])}, counts and paths: "
             f"{'OK' if ok else 'FAILED'} ---"

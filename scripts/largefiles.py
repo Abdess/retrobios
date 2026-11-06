@@ -12,6 +12,7 @@ import os
 import sys
 import re
 import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -26,6 +27,13 @@ from hashing import compute_hashes
 LARGE_FILES_RELEASE = "large-files"
 LARGE_FILES_REPO = "Abdess/retrobios"
 LARGE_FILES_CACHE = ".cache/large"
+# Verified revisions, hard-linked as <sha1>/<asset> beside the cache. A name
+# in the cache is replaced when the release serves new bytes under it, so a
+# path handed out by name could hold other bytes by the time the caller read
+# them. Nothing ever writes other bytes under a sha1. The asset name stays
+# last: callers read the extension (an archive is packed as one).
+VERIFIED_STORE = ".by-sha1"
+ORPHAN_GRACE = 24 * 3600
 GITIGNORE = Path(__file__).resolve().parent.parent / ".gitignore"
 
 _UNSAFE_ASSET_CHARS = re.compile(r"[^A-Za-z0-9._-]+")
@@ -169,14 +177,14 @@ def _fetch_asset(
 
     if os.path.isdir(cached):
         return None
-    if os.path.exists(cached) and not (expected_sha1 or expected_md5):
-        return cached
     if os.path.exists(cached):
         snapshot = _read_once(cached)
         if snapshot is None:
             pass
         elif _matches(snapshot[0], expected_sha1, expected_md5):
-            return cached
+            pinned = _pin_verified(cached, snapshot, dest_dir, name)
+            if pinned:
+                return pinned
         elif not _replaced_on_release(name, snapshot[0]["sha256"], snapshot[1], offline):
             # A copy of this asset that answers another hash: the caller
             # wants a different revision under the same name, and the
@@ -220,15 +228,69 @@ def _fetch_asset(
                 print(f"  large file {candidate}: {exc}", file=sys.stderr)
         if not downloaded:
             return None
-        if (expected_sha1 or expected_md5) and not _matches(
-            compute_hashes(tmp_path), expected_sha1, expected_md5
-        ):
+        snapshot = _read_once(tmp_path)
+        if snapshot is None or not _matches(snapshot[0], expected_sha1, expected_md5):
             return None
         set_plain_mode(tmp_path)
+        pinned = _pin_verified(tmp_path, snapshot, dest_dir, name)
         os.replace(tmp_path, cached)
-        return cached
+        _prune_verified(dest_dir)
+        return pinned
     finally:
         _drop(tmp_path)
+
+
+def _pin_verified(
+    path: str, snapshot: tuple[dict[str, str], int, int], dest_dir: str, name: str,
+) -> str | None:
+    """The verified revision at *path*, as <sha1>/<name> in VERIFIED_STORE.
+
+    *snapshot* is what _read_once read: the link is kept only if it holds
+    that inode, so a copy another run promoted after the hash is never
+    passed off as the one verified. None when the name moved in between.
+    """
+    revision = os.path.join(dest_dir, VERIFIED_STORE, snapshot[0]["sha1"])
+    os.makedirs(revision, exist_ok=True)
+    final = os.path.join(revision, name)
+    if os.path.isfile(final):
+        return final
+    scratch = os.path.join(revision, f".{os.getpid()}.{os.urandom(4).hex()}.tmp")
+    try:
+        os.link(path, scratch)
+    except FileNotFoundError:
+        return None
+    try:
+        if os.stat(scratch).st_ino != snapshot[2]:
+            return None
+        os.replace(scratch, final)
+        return final
+    finally:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(scratch)
+
+
+def _prune_verified(dest_dir: str) -> None:
+    """Drop the revisions no cache name has held for ORPHAN_GRACE seconds.
+
+    Losing its cache name changes the inode's ctime, so a revision another
+    run pinned just before the release replaced it stays readable while that
+    run packs it.
+    """
+    store = os.path.join(dest_dir, VERIFIED_STORE)
+    now = time.time()
+    for revision in os.scandir(store):
+        if not revision.is_dir():
+            continue
+        for entry in os.scandir(revision.path):
+            if entry.name.endswith(".tmp"):
+                continue
+            with contextlib.suppress(FileNotFoundError):
+                stat = entry.stat()
+                if stat.st_nlink == 1 and now - stat.st_ctime > ORPHAN_GRACE:
+                    os.unlink(entry.path)
+        # Another run may be linking a copy into it: left for the next prune.
+        with contextlib.suppress(FileNotFoundError, OSError):
+            os.rmdir(revision.path)
 
 
 def _asset_urls(name: str) -> list[tuple[str, str]]:
@@ -252,9 +314,9 @@ def _asset_urls(name: str) -> list[tuple[str, str]]:
     ]
 
 
-def _read_once(path: str) -> tuple[dict[str, str], int] | None:
-    """Digests and size of the file at *path*, all read from one file, or
-    None when it is gone.
+def _read_once(path: str) -> tuple[dict[str, str], int, int] | None:
+    """Digests, size and inode of the file at *path*, all read from one
+    file, or None when it is gone.
 
     Every judgement on a cache copy reads this one snapshot. Hashed, then
     hashed again by path for the release check, a copy another run promoted
@@ -271,7 +333,7 @@ def _read_once(path: str) -> tuple[dict[str, str], int] | None:
         except FileNotFoundError:
             return None
         if (before.st_ino, before.st_mtime_ns) == (after.st_ino, after.st_mtime_ns):
-            return hashes, after.st_size
+            return hashes, after.st_size, after.st_ino
     return None
 
 

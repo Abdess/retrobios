@@ -13,6 +13,7 @@ temporary directory instead of naming the missing parent.
 from __future__ import annotations
 
 import os
+import tempfile
 from pathlib import Path
 
 os.environ.setdefault("RETROBIOS_OFFLINE", "1")
@@ -22,9 +23,16 @@ os.environ.setdefault(
     str(Path(__file__).resolve().parent.parent / "tmp" / "tests" / "probe.lock"),
 )
 
-(Path(__file__).resolve().parent.parent / "tmp" / "tests").mkdir(
-    parents=True, exist_ok=True
-)
+_SCRATCH = Path(__file__).resolve().parent.parent / "tmp" / "tests"
+_SCRATCH.mkdir(parents=True, exist_ok=True)
+# A TemporaryDirectory() without dir= landed in /tmp, a 4 GB tmpfs here: once
+# another run filled it, modules unrelated to any change failed with ENOSPC.
+# The default is the repository's tmp/, for this process and its children.
+os.environ["TMPDIR"] = str(_SCRATCH)
+tempfile.tempdir = str(_SCRATCH)
+# A scratch directory is not part of this checkout: git run inside one must
+# not walk up to the repository, as it could not from /tmp.
+os.environ["GIT_CEILING_DIRECTORIES"] = str(_SCRATCH)
 # The installer's cache (the games index, what reading a card found) is the
 # suite's own: a run never reads nor fills the one of the person running it.
 os.environ.setdefault(

@@ -220,10 +220,21 @@ PROSE_EXTENSIONLESS = (
     "COPYING",
     "CHANGELOG",
 )
-PROSE_CITE_RE = re.compile(
+# Any other dotless file is cited with its directory, which a constant or a
+# hex address never carries: lightspark's tools/errorgen:20.
+_PROSE_PATH = (
     r"(?P<path>[A-Za-z0-9_][\w./+-]*\.[A-Za-z]\w*"
-    r"|(?:[\w./+-]*/)?(?:" + "|".join(PROSE_EXTENSIONLESS) + r"))"
-    r":(?P<range>\d+(?:-\d+)?)"
+    r"|(?:[\w./+-]*/)?(?:" + "|".join(PROSE_EXTENSIONLESS) + r")"
+    r"|(?:[\w.+-]+/)+[A-Za-z_][\w+-]*)"
+)
+PROSE_CITE_RE = re.compile(_PROSE_PATH + r":(?P<range>\d+(?:-\d+)?)")
+# A file named before its locations, `Source/engine/assets.cpp:` then a
+# list, and a location that leaves the file out, `(:507)`, which reads in
+# the file named last: devilutionx, corsixth and starship cite their load
+# order this way. Neither was collected, so no bump or guard followed them.
+_PROSE_FILE_NAMED_RE = re.compile(_PROSE_PATH + r":(?=\s|$)")
+_PROSE_ABBREVIATED_RE = re.compile(
+    r"(?:(?<=[(\s])|^):(?P<range>\d+(?:-\d+)?)(?![\w:-])(?!\.\d)"
 )
 PROSE_LIST_ITEM_RE = re.compile(r"\d+[.)](?:\s|$)")
 PROSE_WRAPPED_RANGE_RE = re.compile(r":\d+(?:-\d+)?(?:[,)\s]|$)")
@@ -344,6 +355,12 @@ def _prose_runs(
     joined line, so a writer can put each span back on its own line.
     """
     lines = text.splitlines()
+    # The file an abbreviated location reads in, and the role it was named
+    # under, carried from line to line within the scalar.
+    named: tuple[str, str] | None = None
+    # Where the run wrapped from the line before ends in this one: its
+    # ranges are that run's, not abbreviated locations of their own.
+    carried = 0
     for number, own in enumerate(lines):
         # A literal block keeps its line breaks, so a citation wrapped after
         # `file:` or after a range's comma lost the ranges on the next line
@@ -369,46 +386,35 @@ def _prose_runs(
         elif following and line.endswith(","):
             joined_at = len(line) + 1
             line += " " + following
-        consumed = 0
-        for match in PROSE_CITE_RE.finditer(line):
+        consumed, carried = carried, 0
+        events = sorted(
+            [(m.start(), 0, m) for m in PROSE_CITE_RE.finditer(line)]
+            + [(m.start(), 1, m) for m in _PROSE_FILE_NAMED_RE.finditer(line)]
+            + [(m.start(), 2, m) for m in _PROSE_ABBREVIATED_RE.finditer(line)],
+            key=lambda event: (event[0], event[1]),
+        )
+        for _start, kind, match in events:
             if match.start() >= boundary:
                 break
             if match.start() < consumed:
                 continue
-            token_start = max(line.rfind(" ", 0, match.start()),
-                              line.rfind("\t", 0, match.start())) + 1
-            token = line[token_start:].split()[0] if line[token_start:] else ""
-            if "://" in token:
+            if kind == 1:
+                if "://" not in line[max(0, match.start() - 3):match.end()]:
+                    named = (match.group("path"), "")
                 continue
-            path = match.group("path")
-            path_start = match.start("path")
-            # A dotfile citation opens its token with the dot: `.gitlab-ci.yml`
-            # after a delimiter is the filename, while the dot of `boot.cfg`
-            # inside a word belongs to the word before it.
-            if (
-                path_start > 0
-                and line[path_start - 1] == "."
-                and (path_start == 1 or line[path_start - 2] in " \t(")
-            ):
-                path_start -= 1
-                path = "." + path
-            # A path opening its line reads its role or project word at the
-            # end of the line before: genesis_plus_gx_expanded wrapped
-            # `(Batocera` and `package/batocera/...mk:7` one line apart.
-            lead = line[:path_start]
-            if number and not lead.strip():
-                lead = lines[number - 1].rstrip() + " "
-            role = _prose_role(lead, len(lead))
-            if not role and _prose_external(lead, len(lead), known):
-                # Kept with its project word, the source_ref convention: the
-                # report looks for the project inside the declared trees
-                # (mupen64plus-ae vendors `rice Config.cpp`) and calls the
-                # citation EXTERNAL only when none carries it.
-                before = lead.rstrip()
-                word = before[max(before.rfind(" "), before.rfind("\t"),
-                                  before.rfind("(")) + 1:]
-                path = f"{word} {path}"
-            path_span = (path_start, match.end("path"))
+            if kind == 2:
+                if named is None:
+                    continue
+                path, role = named
+                path_start = match.start()
+                path_span = (path_start, path_start)
+            else:
+                path, role, path_start, path_span = _prose_path(
+                    line, lines, number, match, known
+                )
+                if path is None:
+                    continue
+                named = (path, role)
             spans = [(match.start("range"), match.end("range"))]
             end = match.end()
             while True:
@@ -429,6 +435,9 @@ def _prose_runs(
                 spans.append((cont.start("range"), cont.end("range")))
                 end = cont.end()
             consumed = end
+            if end > boundary:
+                indent = len(lines[number + 1]) - len(lines[number + 1].lstrip())
+                carried = indent + end - joined_at
             parts = []
             for lo, hi in spans:
                 rng = line[lo:hi]
@@ -438,3 +447,44 @@ def _prose_runs(
                 number, path_span, tuple(spans), tuple(parts),
                 line[path_start:end], joined_at if end > boundary else 0,
             )
+
+
+def _prose_path(
+    line: str, lines: list[str], number: int, match: re.Match,
+    known: frozenset[str] | set[str],
+) -> tuple[str | None, str, int, tuple[int, int]]:
+    """(path, role, start, span) of one written citation, None for a URL."""
+    token_start = max(line.rfind(" ", 0, match.start()),
+                      line.rfind("\t", 0, match.start())) + 1
+    token = line[token_start:].split()[0] if line[token_start:] else ""
+    if "://" in token:
+        return None, "", 0, (0, 0)
+    path = match.group("path")
+    path_start = match.start("path")
+    # A dotfile citation opens its token with the dot: `.gitlab-ci.yml`
+    # after a delimiter is the filename, while the dot of `boot.cfg`
+    # inside a word belongs to the word before it.
+    if (
+        path_start > 0
+        and line[path_start - 1] == "."
+        and (path_start == 1 or line[path_start - 2] in " \t(")
+    ):
+        path_start -= 1
+        path = "." + path
+    # A path opening its line reads its role or project word at the
+    # end of the line before: genesis_plus_gx_expanded wrapped
+    # `(Batocera` and `package/batocera/...mk:7` one line apart.
+    lead = line[:path_start]
+    if number and not lead.strip():
+        lead = lines[number - 1].rstrip() + " "
+    role = _prose_role(lead, len(lead))
+    if not role and _prose_external(lead, len(lead), known):
+        # Kept with its project word, the source_ref convention: the
+        # report looks for the project inside the declared trees
+        # (mupen64plus-ae vendors `rice Config.cpp`) and calls the
+        # citation EXTERNAL only when none carries it.
+        before = lead.rstrip()
+        word = before[max(before.rfind(" "), before.rfind("\t"),
+                          before.rfind("(")) + 1:]
+        path = f"{word} {path}"
+    return path, role, path_start, (path_start, match.end("path"))

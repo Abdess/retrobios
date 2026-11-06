@@ -62,6 +62,20 @@ def prefixed_destination(dest: str, prefix: str) -> str:
     return f"{prefix}/{dest}"
 
 
+def extra_region_key(fe: dict, prefix: str) -> str:
+    """The key a core extra is grouped, dropped and held under by --region.
+
+    Its destination with the BIOS directory the platform writes in front of
+    its own (declared_root): RetroDECK declares bios/scph5501.bin, and
+    Beetle PSX's scph5501.bin grouped bare was looked up under another key,
+    kept by the pack while the declaration of the same file was dropped,
+    and the installer, which records the path once, dropped it.
+    """
+    return prefixed_destination(
+        sanitize_pack_path(fe.get("destination", fe.get("name", ""))), prefix
+    )
+
+
 def save_entry_fields(fe: dict) -> dict:
     """What a manifest entry adds for a file read below the save directory.
 
@@ -364,6 +378,7 @@ def hidden_extras(
         content[dest.lower()] = sha1_by_path.get(local)
     lower = set(content) if case_insensitive else set()
     prefix = _detect_extras_prefix(config, base_dest)
+    region_prefix = declared_root(config)
     hidden: dict[tuple[str, str, str], str] = {}
     packed_keys: set[tuple[str, str, str]] = set()
     extras = _collect_emulator_extras(
@@ -377,7 +392,7 @@ def hidden_extras(
         if required_only and fe.get("required") is False:
             continue
         dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
-        if not dest or (region_drops and dest in region_drops):
+        if not dest or (region_drops and extra_region_key(fe, region_prefix) in region_drops):
             continue
         full = extra_full_destination(fe, prefix)
         if not full:
@@ -1705,8 +1720,9 @@ def platform_region_groups(
     )
     held = {id(extra) for extra in extras}
     spellings = system_spellings(systems)
+    region_prefix = declared_root(config)
     for extra in _kept(extras + absent, required_only):
-        dest = sanitize_pack_path(extra.get("destination", extra.get("name", "")))
+        dest = extra_region_key(extra, region_prefix)
         if not dest:
             continue
         name = extra.get("name", "")

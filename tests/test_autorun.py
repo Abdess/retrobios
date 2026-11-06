@@ -891,6 +891,16 @@ class BiosIntegrity(Scratch):
         self.assertEqual([(f.path, f.verdict) for f in report.findings], [(rel, bib.SKIPPED)])
         self.assertEqual((self.repo / rel).read_bytes(), b"\x02" * 80)
 
+    def test_an_unreadable_index_stops_before_any_restore(self):
+        """git status failed on a corrupt index, its empty stdout read as
+        "unmodified", and --apply wrote HEAD's bytes over the session's."""
+        rel = "bios/Sony/edited.bin"
+        (self.repo / rel).write_bytes(b"\x02" * 80)
+        (self.repo / ".git" / "index").write_bytes(b"garbage\n")
+        with self.assertRaises(bib.GitFailed):
+            bib.check(self.repo, self.db, apply=True)
+        self.assertEqual((self.repo / rel).read_bytes(), b"\x02" * 80)
+
     def test_a_mismatch_the_second_read_does_not_confirm_is_a_misread(self):
         reads = {}
         expected = {e["path"]: e["sha1"] for e in self.db["files"].values()}

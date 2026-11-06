@@ -173,6 +173,23 @@ class TheDestinationsFlagNeedsAPack(unittest.TestCase):
                 self.assertEqual(result.returncode, 2, result.stdout[-300:])
                 self.assertIn("--destinations", result.stderr)
 
+    def test_the_lock_stack_is_not_rebound(self):
+        """The --destinations branch reused `held`, the ExitStack that holds
+        the data directory locks, for its dict: a later enter_context in
+        that mode raised AttributeError."""
+        import ast
+
+        tree = ast.parse((REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8"))
+        body = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "_main")
+        stack = body.args.args[0].arg
+        rebound = [
+            node.lineno for node in ast.walk(body)
+            if isinstance(node, (ast.Assign, ast.AnnAssign, ast.AugAssign))
+            for target in (node.targets if isinstance(node, ast.Assign) else [node.target])
+            if isinstance(target, ast.Name) and target.id == stack
+        ]
+        self.assertEqual(rebound, [])
+
 
 class EveryGapCountedIsNamed(unittest.TestCase):
     """verify --platform batocera --verbose counted 3 optional core files and
@@ -198,6 +215,33 @@ class EveryGapCountedIsNamed(unittest.TestCase):
             verify._print_undeclared_section(result, verbose=True)
         self.assertIn("MISSING (optional): core needs opt.rom", verbose.getvalue())
         self.assertIn("MISSING (game data): engine needs level.dat", verbose.getvalue())
+
+
+class BundledGameDataIsNotMissing(unittest.TestCase):
+    """cross_reference put Abuse's abuse.lsp, defaults.prp and english.lsp
+    under bundled while verify called them missing game data: 24 of the 427
+    Batocera counted."""
+
+    def test_bundled_game_data_is_counted_apart(self):
+        import contextlib
+        import io
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        result = {"undeclared_files": [
+            {"name": "abuse.lsp", "emulator": "Abuse", "required": True,
+             "in_repo": False, "category": "game_data", "bundled": True,
+             "in_pack": False},
+            {"name": "level.dat", "emulator": "engine", "required": True,
+             "in_repo": False, "category": "game_data"},
+        ]}
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            verify._print_undeclared_section(result, verbose=True)
+        self.assertIn("Game data: 0 in pack, 1 missing", out.getvalue())
+        self.assertNotIn("needs abuse.lsp", out.getvalue())
+        self.assertIn("Bundled with their emulator, not collected: 1 (abuse.lsp)",
+                      out.getvalue())
 
 
 class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):

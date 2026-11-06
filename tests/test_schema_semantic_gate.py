@@ -120,5 +120,31 @@ class DataRootIsKeyedBySystem(unittest.TestCase):
         self.assertTrue(self._errors({}))
 
 
+class WithoutJsonschema(unittest.TestCase):
+    """The documented command stopped on a bare ImportError traceback that
+    named neither the install nor the format-nongpl extra."""
+
+    def test_the_command_names_the_install(self):
+        import os
+        import subprocess
+
+        scratch = REPO_ROOT / "tmp" / "tests"
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+            stub = Path(directory) / "jsonschema"
+            stub.mkdir()
+            (stub / "__init__.py").write_text(
+                'raise ImportError("No module named jsonschema")\n', encoding="utf-8"
+            )
+            env = {**os.environ, "PYTHONPATH": directory}
+            proc = subprocess.run(
+                [sys.executable, "scripts/validate_schemas.py", "--source-only"],
+                capture_output=True, text=True, check=False, cwd=REPO_ROOT, env=env,
+            )
+        self.assertEqual(proc.returncode, 1)
+        self.assertNotIn("Traceback", proc.stderr)
+        self.assertIn('pip install "jsonschema[format-nongpl]"', proc.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

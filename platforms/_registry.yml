@@ -219,9 +219,22 @@ platforms:
         method: config_file
         config: $HOME/snap/retroarch/current/.config/retroarch/retroarch.cfg
         parse_key: system_directory
+      # Native: $XDG_CONFIG_HOME/retroarch when the variable is set, else
+      # $HOME/.config/retroarch, then $HOME/.retroarch.cfg when that file is
+      # missing (file_path_special.c fill_pathname_application_data,
+      # configuration.c open_default_config_file). A value left at default
+      # is the system folder of the first of the two folders.
+      - os: linux
+        method: config_file
+        config: $XDG_CONFIG_HOME/retroarch/retroarch.cfg
+        parse_key: system_directory
       - os: linux
         method: config_file
         config: $HOME/.config/retroarch/retroarch.cfg
+        parse_key: system_directory
+      - os: linux
+        method: config_file
+        config: $HOME/.retroarch.cfg
         parse_key: system_directory
       # configuration.c reads <Application Support>/RetroArch/config, and a value
       # left at default is ~/Documents/RetroArch/system (platform_darwin.m).
@@ -852,7 +865,6 @@ platforms:
   # 99-distribution.conf:320 passes --strictfilter, an argument the script
   # does not handle, so that path reports nothing. No release since
   # 20230203: the scraper reads the commit of the newest prerelease.
-  # Several device images, no per-device core list: no target file.
   amberelec:
     config: amberelec.yml
     status: active
@@ -868,8 +880,8 @@ platforms:
     # setsettings.py leaves it: saves sit beside each game, no single place.
     save_directory: null
     schedule: monthly
-    target_scraper: null
-    target_source: null
+    target_scraper: amberelec_targets
+    target_source: https://github.com/AmberELEC/AmberELEC/blob/dev/packages/amberelec/package.mk
     install:
       detect:
       # AmberELEC 5a3882cb scripts/image:150-152, options:17. CHAos
@@ -893,7 +905,8 @@ platforms:
   # member's md5 and report UNTESTED whatever the archive holds. Run by
   # EmulationStation's BIOS screen and by ee_check_bios after a failed
   # launch (99-emuelec.conf:261). naomi and Dinothawr are written twice in
-  # the dict and the later entry is the one Python keeps.
+  # the dict and the later entry is the one Python keeps. One image per
+  # device the release publishes, its cores read by emuelec_targets_scraper.
   emuelec:
     config: emuelec.yml
     status: active
@@ -909,8 +922,8 @@ platforms:
     # RetroArch saves beside each game: no single place.
     save_directory: null
     schedule: monthly
-    target_scraper: null
-    target_source: null
+    target_scraper: emuelec_targets
+    target_source: https://github.com/EmuELEC/EmuELEC/blob/dev/packages/sx05re/emuelec/package.mk
     install:
       detect:
       # EmuELEC d4c7b2f1 scripts/image:172-176, options:4.

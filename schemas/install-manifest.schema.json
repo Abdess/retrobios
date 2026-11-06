@@ -429,6 +429,11 @@
             "minimum": 0,
             "description": "With type zip: leading path parts dropped from each member."
           },
+          "archive_size": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Bytes of the source archive when it was last downloaded: what fetching the tree costs. Absent when not recorded."
+          },
           "source_path": {
             "type": "string",
             "description": "With type tarball: only members below this path are kept, relative to it."

@@ -61,6 +61,28 @@ class ArtifactLockTest(unittest.TestCase):
             with artifact_lock(self.dir, exclusive=False):
                 pass
 
+    def test_a_reader_never_creates_the_directory(self):
+        """A mistyped --output-dir given to --verify-packs or release_record
+        was created holding a .lock, and the next run with the same typo no
+        longer said the path did not exist."""
+        from common import ArtifactDirectoryMissing  # noqa: PLC0415
+
+        missing = os.path.join(self.dir, "sub", "dsit")
+        with self.assertRaises(ArtifactDirectoryMissing):
+            with artifact_lock(missing, exclusive=False):
+                pass
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "sub")))
+
+    def test_split_refuses_a_missing_target_before_locking(self):
+        missing = Path(self.dir) / "sub" / "dsit"
+        proc = subprocess.run(
+            [sys.executable, "scripts/split_pack.py", str(missing)],
+            cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=60,
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("no such pack or directory", proc.stderr)
+        self.assertFalse(missing.parent.exists())
+
     def test_lock_is_released_on_exit(self):
         with artifact_lock(self.dir):
             pass

@@ -386,6 +386,18 @@ class NoClauseSemicolons(unittest.TestCase):
         ]
         self.assertEqual(offenders, [], "\n".join(offenders[:20]))
 
+    def test_bold_labels_do_not_run_together(self):
+        """community-tools.md wrote Author, Repository and License on three
+        lines of one paragraph: rendered, the three ran on one line."""
+        label = r"\*\*[^*\n]+:\*\*"
+        run = re.compile(rf"^{label}.*\n{label}", re.M)
+        offenders = [
+            f"{p.relative_to(ROOT)}: {m.group(0).splitlines()[0]}"
+            for p in _tracked() if p.suffix == ".md"
+            for m in run.finditer(FENCED.sub("", p.read_text(encoding="utf-8")))
+        ]
+        self.assertEqual(offenders, [], "\n".join(offenders[:20]))
+
     def test_wiki_headings_use_sentence_case(self):
         """The gaps page and two wiki pages titled in Title Case ("What Each
         Pack Contains") beside sentence-case pages ("Quick install")."""

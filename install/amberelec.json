@@ -2106,6 +2106,10 @@
       "repo_path": "bios/Atari/400-800/ATARIXL.ROM",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -2128,6 +2132,10 @@
       "repo_path": "bios/Atari/400-800/ATARIBAS.ROM",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -2150,6 +2158,10 @@
       "repo_path": "bios/Atari/400-800/ATARIOSA.ROM",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -2172,6 +2184,10 @@
       "repo_path": "bios/Atari/400-800/ATARIOSB.ROM",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-400-800"
       ],
       "alternatives": [
@@ -2194,6 +2210,10 @@
       "repo_path": "bios/Atari/5200/5200.rom",
       "cores": null,
       "systems": [
+        "atari-400-800",
+        "atari-5200"
+      ],
+      "declared_in": [
         "atari-5200"
       ],
       "alternatives": [
@@ -2361,6 +2381,11 @@
       "repo_path": "bios/Microsoft/MSX/Databases/.variants/colecodb.xml.78113162",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "coleco-colecovision"
       ],
       "alternatives": [
@@ -3432,6 +3457,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/ARAB1.ROM",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3454,6 +3484,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/ARABIC.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3476,6 +3511,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/BEERIDE.ROM",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3498,6 +3538,11 @@
       "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3520,6 +3565,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/GCVMX80.ROM",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3542,6 +3592,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/HANGUL.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3564,6 +3619,11 @@
       "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjifont.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3586,6 +3646,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/MICROSOLDISK.ROM",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -3608,6 +3673,11 @@
       "repo_path": "bios/Microsoft/MSX/openmsx/yrw801.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4301,6 +4371,11 @@
       "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjibasic.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4510,6 +4585,11 @@
       "repo_path": "bios/Microsoft/MSX/share/systemroms/fs-5500_disk.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4532,6 +4612,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/NOVAXIS.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4554,6 +4639,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/nowindDos1.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4576,6 +4666,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/nowindDos2.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4598,6 +4693,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/PAINT.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4620,6 +4720,11 @@
       "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_disk.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4642,6 +4747,11 @@
       "repo_path": "bios/Microsoft/MSX/nms8250_disk.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4664,6 +4774,11 @@
       "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/RS232.ROM",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4697,6 +4812,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/SUNRISEIDE.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4719,6 +4839,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/SWP.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -4741,6 +4866,11 @@
       "repo_path": "bios/Microsoft/MSX/Shared Roms/XBASIC2.rom",
       "cores": null,
       "systems": [
+        "coleco-colecovision",
+        "microsoft-msx",
+        "sc-3000"
+      ],
+      "declared_in": [
         "microsoft-msx"
       ],
       "alternatives": [
@@ -5316,6 +5446,11 @@
       "repo_path": "bios/Nintendo/SNES/BS-X.bin",
       "cores": null,
       "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-satellaview"
+      ],
+      "declared_in": [
         "nintendo-satellaview"
       ],
       "alternatives": [
@@ -5512,6 +5647,9 @@
         "north-america",
         "oceania"
       ],
+      "region_groups": [
+        "sega-master-system"
+      ],
       "region_system_groups": [
         "sega-master-system"
       ],
@@ -5540,6 +5678,9 @@
       ],
       "regions": [
         "japan"
+      ],
+      "region_groups": [
+        "sega-master-system"
       ],
       "region_system_groups": [
         "sega-master-system"
@@ -5570,6 +5711,9 @@
       "regions": [
         "europe",
         "oceania"
+      ],
+      "region_groups": [
+        "sega-mega-cd"
       ],
       "region_system_groups": [
         "sega-mega-cd"
@@ -5602,6 +5746,9 @@
         "latin-america",
         "north-america"
       ],
+      "region_groups": [
+        "sega-mega-cd"
+      ],
       "region_system_groups": [
         "sega-mega-cd"
       ],
@@ -5631,6 +5778,9 @@
       ],
       "regions": [
         "japan"
+      ],
+      "region_groups": [
+        "sega-mega-cd"
       ],
       "region_system_groups": [
         "sega-mega-cd"
@@ -6104,6 +6254,9 @@
       "regions": [
         "japan"
       ],
+      "region_groups": [
+        "sony-playstation"
+      ],
       "region_system_groups": [
         "sony-playstation"
       ],
@@ -6136,6 +6289,9 @@
         "latin-america",
         "north-america"
       ],
+      "region_groups": [
+        "sony-playstation"
+      ],
       "region_system_groups": [
         "sony-playstation"
       ],
@@ -6167,6 +6323,9 @@
       "regions": [
         "europe",
         "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ],
       "region_system_groups": [
         "sony-playstation"
@@ -8987,7 +9146,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 10
     },
     {
       "dest": "bios/scph1002a.bin",
@@ -9233,7 +9393,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 10
     },
     {
       "dest": "bios/scph7002.bin",
@@ -63489,7 +63650,8 @@
           "size": 344
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 4465709
     },
     {
       "ref": "fbneo-cheats",
@@ -77218,7 +77380,8 @@
           "size": 10054
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 5083767
     },
     {
       "ref": "fbneo-samples",
@@ -77451,7 +77614,8 @@
           "size": 551776
         }
       },
-      "strip_components": 0
+      "strip_components": 0,
+      "archive_size": 53006540
     },
     {
       "ref": "freeintv-overlays",
@@ -77823,7 +77987,8 @@
           "size": 248636
         }
       },
-      "strip_components": 1
+      "strip_components": 1,
+      "archive_size": 21311170
     }
   ]
 }

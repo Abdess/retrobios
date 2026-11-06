@@ -269,6 +269,29 @@ class HashRecognition(_Fixture):
         self.assertIn("no platform list or emulator profile declares this file", markdown)
         self.assertIn("which emulator reads it", markdown)
 
+    def test_a_zip_of_bios_files_is_read_member_by_member(self):
+        """A card's BIOS folder zipped to upload it was hashed as one file,
+        and its contributor was asked where that dump came from."""
+        import hashlib  # noqa: PLC0415
+        import zipfile  # noqa: PLC0415
+
+        held, declared = b"HELD BIOS", b"DECLARED BIOS"
+        with zipfile.ZipFile(self.tmp / "mybios.zip", "w") as archive:
+            archive.writestr("scph5501.bin", held)
+            archive.writestr("sub/declared.bin", declared)
+            archive.writestr("other.bin", b"noise")
+        db = {"files": {hashlib.sha1(held).hexdigest(): {"path": "bios/Sony/PS/scph5501.bin"}}}
+        known = {**EMPTY_HASHES, "md5": {hashlib.md5(declared).hexdigest()}}
+        result = validate_pr.validate_file("mybios.zip", db, known)
+        markdown = result.to_markdown()
+        self.assertEqual(result.outcome, "unknown")
+        self.assertIn("unzipped, not the archive", markdown)
+        self.assertIn("`scph5501.bin` already held at `bios/Sony/PS/scph5501.bin`", markdown)
+        self.assertIn("`sub/declared.bin` declared and not held", markdown)
+        self.assertIn("`other.bin` not recognised", markdown)
+        self.assertNotIn("where the dump comes from", markdown)
+        self.assertNotIn("Place it in", markdown)
+
     def test_a_duplicate_of_a_known_file_is_reported(self):
         """A copy of a held file passed, and was sent to the folder that
         already holds it."""
@@ -521,6 +544,15 @@ class FlagsAreAppliedOrRefused(unittest.TestCase):
         result = self._run("--json", "--markdown", "bios/Sony/PlayStation/scph5501.bin")
         self.assertEqual(result.returncode, 2)
         self.assertIn("not allowed with", result.stderr)
+
+    def test_a_failed_file_is_not_reported_new(self):
+        """A path that does not exist came out as "outcome": "new", and a
+        reader listing new contributions announced a BIOS nobody sent."""
+        import json  # noqa: PLC0415
+
+        result = self._run("--json", "bios/nope.bin")
+        report = json.loads(result.stdout)
+        self.assertEqual([(r["passed"], r["outcome"]) for r in report], [(False, "failed")])
 
 
 

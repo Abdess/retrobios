@@ -16,6 +16,7 @@ from common import (
     adler32_of,
     archive_members,
     compute_hashes,
+    entry_system_ids,
     name_match_size_ok,
     sanitize_pack_path,
     size_fits,
@@ -145,6 +146,72 @@ def _rule_failure(
     return None
 
 
+def _found_by_content(entry: dict, profile: dict) -> bool:
+    """Whether every build of the core identifies this entry by content."""
+    return not opens_by_name(entry, profile) and not opens_by_name(
+        entry, profile, standalone=True
+    )
+
+
+def _regions(entry: dict) -> set[str]:
+    value = entry.get("region")
+    return set(value) if isinstance(value, list) else {value} if value else set()
+
+
+def content_alternatives(entry: dict, profile: dict) -> list[dict]:
+    """The labels a content-found core takes in place of this one.
+
+    rustation scans its folder by sha256 (found_by: content): its
+    scph1001.bin is a label for v2.2, and the v2.0 dump ROCKNIX ships under
+    that name boots the same North American console, labelled
+    scph1001_v20.bin. Alternatives share the entry's system and declared
+    region, the slot slot.py groups by: openMSX also finds its ROMs by
+    sha1, but each one serves its own machine and declares no region.
+    """
+    if not _found_by_content(entry, profile):
+        return []
+    regions = _regions(entry)
+    if not regions:
+        return []
+    systems = set(entry_system_ids(entry, profile))
+    return [
+        other for other in profile.get("files") or []
+        if isinstance(other, dict)
+        and _found_by_content(other, profile)
+        and regions & _regions(other)
+        and systems == set(entry_system_ids(other, profile))
+    ]
+
+
+def _labels_widened(profile: dict) -> list[dict]:
+    """The profile's entries, each content-found label accepting the dumps
+    of its alternatives (content_alternatives)."""
+    widened = []
+    for f in profile.get("files") or []:
+        if not isinstance(f, dict):
+            continue
+        siblings = content_alternatives(f, profile)
+        if len(siblings) < 2:
+            widened.append(f)
+            continue
+        merged = dict(f)
+        for field_name in ("crc32", "md5", "sha1", "sha256"):
+            if f.get(field_name):
+                merged[field_name] = list(dict.fromkeys(
+                    value for other in siblings
+                    for value in parse_hash_list(other.get(field_name))
+                ))
+        if f.get("size") is not None:
+            merged["size"] = sorted({
+                size for other in siblings
+                for size in (other["size"] if isinstance(other.get("size"), list)
+                             else [other.get("size")])
+                if size is not None
+            })
+        widened.append(merged)
+    return widened
+
+
 def _build_validation_index(profiles: dict) -> dict[str, dict]:
     """Build per-filename validation rules from emulator profiles.
 
@@ -170,7 +237,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
     for emu_name, profile in profiles.items():
         if profile.get("type") in ("launcher", "alias"):
             continue
-        for f in profile.get("files", []):
+        for f in _labels_widened(profile):
             fname = f.get("name", "")
             if not fname:
                 continue

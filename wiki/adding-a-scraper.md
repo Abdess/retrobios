@@ -338,6 +338,8 @@ Register the target scraper in `_registry.yml`:
 | `lakka_targets` | Lakka-LibreELEC `package.mk` and project options | Core list minus each project and device's exclusions |
 | `recalbox_targets` | board defconfigs + `system.ini` | Buildroot packages each image enables, cores per system |
 | `rocknix_targets` | emulators `package.mk` + device options | Cores per SoC block and 32-bit support per device |
+| `amberelec_targets` | Makefile devices + metapackage `package.mk` + `es_systems.cfg` | Extra cores kept only on the devices the metapackage names |
+| `emuelec_targets` | release asset names + metapackage `package.mk` + each core's install step | Packages per device, mapped to cores by the `.so` or program each installs |
 
 ## Parser modules
 

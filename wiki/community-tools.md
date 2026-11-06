@@ -12,9 +12,9 @@ Projects built on RetroBIOS data.
 
 ## BIOS preservation tool
 
-**Author:** [monster-penguin](https://github.com/monster-penguin)
-**Repository:** [github.com/monster-penguin/BIOS-Preservation-Tool](https://github.com/monster-penguin/BIOS-Preservation-Tool)
-**License:** MIT
+- **Author:** [monster-penguin](https://github.com/monster-penguin)
+- **Repository:** [github.com/monster-penguin/BIOS-Preservation-Tool](https://github.com/monster-penguin/BIOS-Preservation-Tool)
+- **License:** MIT
 
 A local tool for managing your own BIOS collection. Point it at your files, it verifies them against RetroBIOS platform YAMLs, stores them in a deduplicated database, and produces ready-to-use directories for each platform. Supports scanning directories, archives, and URLs.
 

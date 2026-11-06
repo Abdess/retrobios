@@ -2967,12 +2967,44 @@ class SaveDirectoryLeftOut(unittest.TestCase):
     UNPLACED = {"reason": "no_save_directory", "label": "no save directory", "files": 2,
                 "required": 0}
 
+    def _ended(self, manifest: dict) -> tuple:
+        state = fresh_state()
+        state.stack = ["setup"]
+        with mock.patch.object(install.Path, "exists", return_value=True):
+            install.tui_update(state, Key("enter"))
+        install.tui_receive(state, ("manifest", "retroarch", manifest))
+        summary = {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 0,
+                   "pending": 5, "failed": [], "skipped": [self.UNPLACED], "left_out": [],
+                   "kept": [], "interrupted": False}
+        for event in [*FILES, *SYSTEMS, CHECK, summary]:
+            install.tui_receive(state, ("event", state.run_id, event))
+        with mock.patch.object(install, "_tui_folder_facts", return_value={
+                "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
+            install.tui_receive(state, ("ended", state.run_id, 1, []))
+        return state, summary
+
+    def test_a_list_that_holds_none_of_them_offers_no_folder(self):
+        """RetroPie's list leaves its save files out with no hash or address:
+        --save-dir installs none of them, and was advised again each run."""
+        state, summary = self._ended(MANIFEST)
+        line = ("2 files read from RetroArch's save directory left out: RetroArch keeps "
+                "it in no fixed place, and its file list holds none of them.")
+        plan = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
+        self.assertIn(line, plan)
+        self.assertNotIn("--save-dir", plan)
+        state.stack.append("result")
+        state.code = 0
+        state.summary = {**summary, "mode": "install", "installed": 5}
+        self.assertEqual([text for text in install.tui_outcome(state)[1] if "save" in text],
+                         [line])
+
     def test_files_left_out_of_the_save_directory_are_said(self):
         state = fresh_state()
         state.stack = ["setup"]
         with mock.patch.object(install.Path, "exists", return_value=True):
             install.tui_update(state, Key("enter"))
-        install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
+        install.tui_receive(state, ("manifest", "retroarch", {
+            **MANIFEST, "save_directory": {"folder": "saves", "by_core": True}}))
         summary = {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 0,
                    "pending": 5, "failed": [], "skipped": [self.UNPLACED], "left_out": [],
                    "kept": [], "interrupted": False}
@@ -3834,6 +3866,8 @@ class BackTicksAndSaveFolder(unittest.TestCase):
     def test_the_save_folder_remedy_is_the_same_on_both_screens(self):
         summary = {"skipped": [{"reason": "no_save_directory", "files": 1}]}
         state = checked_state()
+        state.manifest = {**state.manifest, "save_directory": {"folder": "saves",
+                                                               "by_core": True}}
         lines = install._unplaced_lines(summary, state)
         self.assertIn("Options, Save folder (--save-dir)", lines[0])
 
@@ -5898,7 +5932,10 @@ def _card_from_rules(root: Path, setup: install.CardSetup) -> Path:
             (root / "bios").mkdir(exist_ok=True)
         for value in rule.values:
             (root / value).parent.mkdir(parents=True, exist_ok=True)
-            if rule.method == "games_part" and "." not in PurePosixPath(value).name:
+            # A marker the BIOS folder sits under is a folder on the card
+            # (muOS's MUOS/bios): written as a file, no folder fits below it.
+            if (rule.method == "games_part" and "." not in PurePosixPath(value).name
+                    or str(setup.below).startswith(f"{value}/")):
                 (root / value).mkdir(exist_ok=True)
             else:
                 (root / value).write_text("", encoding="utf-8")
@@ -9763,14 +9800,21 @@ class ScreenRowsAndFilters(unittest.TestCase):
 
         from test_install_offline import PAYLOAD, _offline_env, _pack
 
-        blocker = self.root / "file"
-        blocker.write_text("not a folder")
+        if os.name == "nt" or os.geteuid() == 0:
+            self.skipTest("a folder that refuses writes is POSIX, and root writes anyway")
+        # A file in the way is refused before the plan, as not_a_folder.
+        blocker = self.root / "closed"
+        blocker.mkdir()
         pack = _pack(self.root, "RetroArch_v1_BIOS_Pack.zip", PAYLOAD)
-        proc = subprocess.run(
-            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
-             "--dest", str(blocker / "system"), "--from-pack", str(pack), "--events"],
-            env=_offline_env(), capture_output=True, text=True, timeout=120, check=False,
-            stdin=subprocess.DEVNULL)
+        os.chmod(blocker, 0o500)
+        try:
+            proc = subprocess.run(
+                [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
+                 "--dest", str(blocker / "system"), "--from-pack", str(pack), "--events"],
+                env=_offline_env(), capture_output=True, text=True, timeout=120,
+                check=False, stdin=subprocess.DEVNULL)
+        finally:
+            os.chmod(blocker, 0o700)
         events = [json.loads(line) for line in proc.stdout.splitlines()]
         kinds = [event["event"] for event in events]
         self.assertEqual(kinds[-3:], ["error", "summary", "end"], proc.stderr)
@@ -11836,6 +11880,8 @@ class OneChoicePerRun(unittest.TestCase):
 
     def test_the_farewell_names_the_option_not_the_screen(self):
         state = _installed_state(SYSTEM_DIR)
+        state.manifest = {**state.manifest, "save_directory": {"folder": "saves",
+                                                               "by_core": True}}
         state.summary = {**state.summary, "skipped": [
             {"reason": "no_save_directory", "label": "", "files": 1, "required": False}]}
         farewell = " ".join(install.tui_farewell(state))

@@ -3036,12 +3036,16 @@ SYSTEM_ALIASES: dict[str, str] = {
 }
 
 
+@functools.lru_cache(maxsize=None)
 def _norm_system_id(sid: str) -> str:
     """Normalize system ID for cross-platform matching.
 
     Resolves known aliases, then strips manufacturer prefixes and separators
     so that platform-specific IDs (e.g., "xbox", "nintendo-wiiu") match
     profile IDs (e.g., "microsoft-xbox", "nintendo-wii-u").
+
+    A function of the string and two constant tables: a manifest run asks it
+    1.7 million times for about 1,100 ids.
     """
     s = sid.lower().replace("_", "-")
     s = SYSTEM_ALIASES.get(s, s)
@@ -3587,6 +3591,7 @@ from artifacts import (  # noqa: E402,F401
     copy_file_atomic,
     plain_file_mode,
     set_plain_mode,
+    ArtifactDirectoryMissing,
     ArtifactLockBusy,
     artifact_lock,
     hold_artifact_lock,
@@ -3634,7 +3639,7 @@ def run_cli(main: Callable[[], int | None]) -> None:
     try:
         code = main()
         sys.stdout.flush()
-    except (InputMissing, ArtifactLockBusy) as exc:
+    except (InputMissing, ArtifactLockBusy, ArtifactDirectoryMissing) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
     except BrokenPipeError:

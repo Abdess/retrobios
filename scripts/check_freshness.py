@@ -32,7 +32,6 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import hashlib
 import io
 import json
 import re
@@ -51,6 +50,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import export_native  # noqa: E402
+import pin_installer  # noqa: E402
 import refresh_data_dirs  # noqa: E402
 import upstream  # noqa: E402
 from common import (  # noqa: E402
@@ -83,7 +83,6 @@ PYPI_URL = "https://pypi.org/pypi/{name}/json"
 NPM_URL = "https://registry.npmjs.org/{name}/latest"
 # The site's npm dependencies, pinned to exact versions and built by Deploy Site.
 SITE_PACKAGE = REPO_ROOT / "website" / "package.json"
-INSTALLERS = ("install.sh", "install.ps1")
 
 SHOWN_ITEMS = 4  # items named in a diff summary before ", ..."
 SHOWN_NAMES = 12  # core names named in an unresolved row before ", ..."
@@ -509,7 +508,10 @@ def check_native(
 ) -> list[Finding]:
     exporters = discover_exporters()
     index = cache_dir / export_native.SOURCES_INDEX
-    recorded = export_native.load_sources(cache_dir)
+    try:
+        recorded = export_native.load_sources(cache_dir)
+    except export_native.SourcesIndexUnreadable as exc:
+        return [Finding("native", index.name, ERROR, detail=str(exc))]
     findings: list[Finding] = []
     for name in list_registered_platforms(str(platforms_dir), include_archived=True):
         exporter_class = exporters.get(name)
@@ -1462,18 +1464,16 @@ def check_ci(cache_dir: str, offline: bool) -> list[Finding]:
 
 def _check_installer_pins() -> Finding:
     """The bootstraps pin install.py by SHA-256, so a stale pin refuses every install."""
-    digest = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
-    stale = []
-    for name in INSTALLERS:
-        text = (REPO_ROOT / name).read_text(encoding="utf-8", errors="replace")
-        if digest not in text:
-            stale.append(name)
+    stale = pin_installer.stale_pins(REPO_ROOT)
     return Finding(
         "ci",
         "install.py pin",
         STALE if stale else OK,
-        local=digest[:12],
-        detail=("pin outdated in " + ", ".join(stale)) if stale else "install.sh and install.ps1 match",
+        local=pin_installer.installer_sha256(REPO_ROOT)[:12],
+        detail=(
+            f"pin outdated in {', '.join(stale)}, {pin_installer.COMMAND} writes it"
+            if stale else "install.sh and install.ps1 match"
+        ),
     )
 
 
@@ -1492,6 +1492,11 @@ def check_source_paths(profiles: dict) -> Finding:
         sitesources.tree_key(repo, pin)
         for profile in profiles.values() if sitesources.cited_paths(profile)
         for repo, pin in sitesources.profile_trees(profile)
+    } | {
+        # The platform build files pin_build names, linked from a page too.
+        sitesources.tree_key(repo, pin)
+        for profile in profiles.values()
+        for repo, pin, _path in sitesources.build_files(profile)
     }
     try:
         recorded = set(json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8")))
@@ -1757,15 +1762,18 @@ def render(findings: list[Finding]) -> str:
         # Columns are padded, never cut: the profile_sync row says in its
         # local and remote values what to re-read, and lost the end of it.
         local_width = min(max((len(f.local) for f in rows), default=0), 44)
+        remote_width = min(max((len(f.remote) for f in rows), default=0), 44)
+        # The arrow and the remote value, or as many blanks where a row has none.
+        remote_span = 4 + remote_width if remote_width else 0
         for f in rows:
             cols = f"  {f.status:7} {f.subject:{width}}"
             if f.remote:
-                cols += f"  {f.local:{local_width}} -> {f.remote}"
-            elif f.local or (f.detail and local_width):
-                # An arrow pointing at nothing read as a lost value. An empty
-                # local value still takes its column, or the detail starts
-                # where the other rows show theirs.
-                cols += f"  {f.local:{local_width}}"
+                cols += f"  {f.local:{local_width}} -> {f.remote:{remote_width}}"
+            elif f.local or (f.detail and (local_width or remote_span)):
+                # An arrow pointing at nothing read as a lost value. Empty
+                # local and remote values still take their columns, or the
+                # detail starts where the other rows show theirs.
+                cols += f"  {f.local:{local_width}}" + " " * remote_span
             if f.detail:
                 cols += f"  {f.detail}"
             lines.append(cols.rstrip())

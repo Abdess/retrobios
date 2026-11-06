@@ -4766,6 +4766,52 @@ class TestRealignProse(unittest.TestCase):
             any("pin moved under this text" in m for m in messages), messages
         )
 
+    def test_a_citation_corrected_beside_another_dates_only_itself(self):
+        """idtech4a++ advanced its pin in the commit that corrected two
+        citations of its notes by hand. Dated per field, the untouched
+        Game.java:69-72 took that commit's current pin and was never
+        offered again, though its lines had moved."""
+        self._repo_with_advanced_pin()
+        self._commit(
+            PROSE_SAMPLE.replace("(b.c:2,8-9)", "(b.c:3,9-10)"),
+            "advance the pin, b.c corrected by hand",
+        )
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
+        self.files[("pin", "b.c")] = list("pqrstuvwxyz")
+        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        flagged = [m for m in messages if "a.c:10" in m]
+        self.assertTrue(flagged, messages)
+        self.assertFalse([m for m in messages if "b.c:" in m], messages)
+
+    def test_a_source_declared_gone_is_read_through_its_mirror(self):
+        """teknogods/TeknoParrotUI answers 404. Read there, every citation
+        written under the old pin was absent and blocked the profile."""
+        self._repo_with_advanced_pin()
+        self._commit(
+            PROSE_SAMPLE.replace(
+                'source_commit: "pin"\n',
+                'source_commit: "pin"\n'
+                'upstream_gone: "o/n answers 404."\n'
+                'source_mirror: "https://github.com/m/n"\n',
+            ),
+            "advance the pin, declare the forge gone",
+        )
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        served = profile_sync.upstream.fetch_file
+        profile_sync.upstream.fetch_file = (
+            lambda repo, sha, path, cache_dir, offline=False: (
+                served(repo, sha, path, cache_dir, offline)
+                if repo.slug == "m/n" else None
+            )
+        )
+        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        # b.c did not move between the two pins: nothing to read again.
+        self.assertFalse([m for m in messages if "b.c:" in m], messages)
+
     def test_a_citation_in_an_unmoved_upstream_needs_no_reading(self):
         """nethersx2 cites AetherSX2 files that only its upstream carries,
         at an upstream pin that never moved. The port's pin did move under
@@ -5901,6 +5947,39 @@ class ARoleIsReadPerPart(unittest.TestCase):
             ("src/a.cpp", "source"), ("src/a.cpp", "source"), ("b.c", "upstream"),
         ])
 
+    def test_an_abbreviated_location_reads_in_the_file_named_last(self):
+        """devilutionx writes `Source/engine/assets.cpp:` then `(:507)` for
+        each loader, and its pin moved under five uncollected numbers."""
+        from sourceref import _prose_runs
+
+        text = (
+            "Load order is defined in Source/engine/assets.cpp:\n"
+            "  LoadCoreArchives() (:507) - devilutionx.mpq, fonts.mpq\n"
+            "  LoadLanguageArchive() (:523) - <lang>.mpq\n"
+            "Startup (src/port/Engine.cpp:65-127) loads sf64.o2r (:72, :88-89),\n"
+            "falls back at :90-106. Wrapped (code/q_shared.h\n"
+            ":44,65) and lightspark's (tools/errorgen:20).\n"
+        )
+        cited = [
+            (p.path, p.start, p.end) for run in _prose_runs(text) for p in run[3]
+        ]
+        self.assertEqual(cited, [
+            ("Source/engine/assets.cpp", 507, 507),
+            ("Source/engine/assets.cpp", 523, 523),
+            ("src/port/Engine.cpp", 65, 127),
+            ("src/port/Engine.cpp", 72, 72),
+            ("src/port/Engine.cpp", 88, 89),
+            ("src/port/Engine.cpp", 90, 106),
+            ("code/q_shared.h", 44, 44),
+            ("code/q_shared.h", 65, 65),
+            ("tools/errorgen", 20, 20),
+        ])
+
+    def test_an_abbreviated_location_needs_a_file_before_it(self):
+        from sourceref import _prose_runs
+
+        self.assertEqual(list(_prose_runs("read at boot (:507), devilutionx.mpq")), [])
+
 
 class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
     """Prose written under an older pin refuses the recale and the bump, yet
@@ -5947,6 +6026,25 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
         self.assertIn("0 to review", lines[2])
         self.assertEqual(lines[-1], "2 profiles, 1 with something to review")
         self.assertEqual(len(err.getvalue().splitlines()), 1, err.getvalue())
+
+    def test_an_uncheckable_profile_ranks_first_and_counts(self):
+        """simple64 and teknoparrot answered 404 and --strict failed on them,
+        while the triage put them at 0 under the clean profiles."""
+        gone = ProfileReport(
+            name="gone", pin="p", skipped="no declared repository answers (o/n)",
+        )
+        reports = [self._report("clean", 1), gone]
+        selected = {r.name: {"source": "https://github.com/o/n"} for r in reports}
+        args = argparse.Namespace(cache_dir="unused", offline=True)
+        out = io.StringIO()
+        with mock.patch.object(profile_sync, "check_version", return_value=None), \
+                mock.patch.object(profile_sync.upstream, "commits_touching",
+                                  return_value=0), \
+                contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+            profile_sync._print_triage(args, selected, reports)
+        lines = out.getvalue().splitlines()
+        self.assertIn("gone", lines[1])
+        self.assertEqual(lines[-1], "2 profiles, 1 with something to review")
 
 
 class TestBranchProfiles(unittest.TestCase):

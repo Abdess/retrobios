@@ -47,5 +47,74 @@ class HleIndexScope(unittest.TestCase):
         self.assertIn("for profile in platform_profiles.values()", block)
         self.assertNotIn("profiles.values()", block.replace("platform_profiles.values()", ""))
 
+
+class ContentFoundLabelsTakeTheirRegionSlot(unittest.TestCase):
+    """rustation scans its folder by sha256, so its scph1001.bin entry is a
+    label. ROCKNIX ships the v2.0 dump under that name, which rustation
+    boots (labelled scph1001_v20.bin), and verify called it a mismatch."""
+
+    def test_an_alternative_dump_passes_under_the_label(self):
+        import hashlib
+        import sys
+        import tempfile
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from validation import _build_validation_index, check_file_validation
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "scph1001.bin"
+            path.write_bytes(b"v2.0")
+            v20 = hashlib.sha256(b"v2.0").hexdigest()
+            profile = {
+                "found_by": "content",
+                "systems": ["sony-playstation"],
+                "files": [
+                    {"name": "scph1001.bin", "region": ["north-america"],
+                     "validation": ["sha256"], "sha256": "a" * 64},
+                    {"name": "scph1001_v20.bin", "region": ["north-america"],
+                     "validation": ["sha256"], "sha256": v20},
+                    {"name": "scph5500.bin", "region": ["japan"],
+                     "validation": ["sha256"], "sha256": "b" * 64},
+                ],
+            }
+            index = _build_validation_index({"rustation": profile})
+            self.assertIsNone(check_file_validation(str(path), "scph1001.bin", index))
+            # Another region is another slot.
+            self.assertIsNotNone(check_file_validation(str(path), "scph5500.bin", index))
+            # A core that opens the file by name rejects it.
+            index = _build_validation_index({"rustation": {**profile, "found_by": "name"}})
+            self.assertIsNotNone(check_file_validation(str(path), "scph1001.bin", index))
+
+
+class GearcolecoWarnsOnAnUnknownRevision(unittest.TestCase):
+    """Gearcoleco rejects a firmware by size only and logs an unknown CRC32
+    before loading it (platforms/libretro/libretro.cpp:811-816, 875-876,
+    928-935 at be1a3716): another OS-7 revision of 8 KiB runs."""
+
+    def test_another_revision_passes(self):
+        import sys
+        import tempfile
+
+        import yaml
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from validation import _build_validation_index, check_file_validation
+
+        profile = yaml.safe_load(
+            (REPO_ROOT / "emulators" / "gearcoleco.yml").read_text(encoding="utf-8")
+        )
+        index = _build_validation_index({"gearcoleco": profile})
+        with tempfile.TemporaryDirectory() as tmp:
+            for name, size in (("colecovision.rom", 8192), ("eos.rom", 8192),
+                               ("writer.rom", 32768)):
+                path = Path(tmp) / name
+                path.write_bytes(b"\x01" * size)
+                with self.subTest(name=name):
+                    self.assertIsNone(check_file_validation(str(path), name, index))
+                path.write_bytes(b"\x01" * (size - 1))
+                with self.subTest(name=name, size="short"):
+                    self.assertIsNotNone(check_file_validation(str(path), name, index))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -91,8 +91,19 @@ def sha1_of(path: Path) -> str:
     return digest.hexdigest()
 
 
+class GitFailed(RuntimeError):
+    """A git command failed: its empty output says nothing about the file."""
+
+
 def git(root: Path, *args: str) -> subprocess.CompletedProcess:
-    return subprocess.run(["git", "-C", str(root), *args], capture_output=True, check=False)
+    """Run git in root. A failure raises: an unreadable index read as an empty
+    status made a session's working change look unmodified, and --apply wrote
+    HEAD's bytes over it."""
+    done = subprocess.run(["git", "-C", str(root), *args], capture_output=True, check=False)
+    if done.returncode:
+        message = done.stderr.decode(errors="replace").strip()
+        raise GitFailed(f"git {' '.join(args)} exited {done.returncode}: {message}")
+    return done
 
 
 def head_blob(root: Path, path: str) -> str:
@@ -197,7 +208,11 @@ def main() -> int:
     from common import load_database
 
     root = Path.cwd()
-    report = check(root, load_database(args.db), args.apply)
+    try:
+        report = check(root, load_database(args.db), args.apply)
+    except GitFailed as exc:
+        print(f"ERROR: {exc}. Nothing was restored past this point.", file=sys.stderr)
+        return 2
     if args.json:
         print(json.dumps(report.as_dict(), indent=2))
     else:

@@ -43,7 +43,12 @@ from common import (
     variant_base_name,
 )
 from packresolve import preferred_entries
-from validation import outside_gap_scope, read_from_save_dir, with_archive_members
+from validation import (
+    content_alternatives,
+    outside_gap_scope,
+    read_from_save_dir,
+    with_archive_members,
+)
 
 if TYPE_CHECKING:
     from packextras import ExtraPlacement
@@ -85,6 +90,9 @@ class Claim:
     entry: dict = field(default_factory=dict)
     local_path: str | None = None
     status: str = ""
+    # A core that identifies its firmware by content reads no file by this
+    # name: any dump it takes for the same system and region answers for it.
+    accepts: tuple[dict, ...] = ()
 
     @property
     def is_proven(self) -> bool:
@@ -260,6 +268,7 @@ def profile_claims(
                 )
                 if status == "name_exact" and _size_the_code_reads(entry, local):
                     status = SIZE_EXACT
+                accepts = tuple(content_alternatives(entry, profile))
                 claims.append(
                     Claim(
                         origin="profile",
@@ -269,6 +278,7 @@ def profile_claims(
                         entry=entry,
                         local_path=local,
                         status=status,
+                        accepts=accepts,
                     )
                 )
     return claims
@@ -514,6 +524,7 @@ def pack_overrides(
     data_dir_registry: dict | None = None,
     target_cores: set[str] | None = None,
     source: str = "full",
+    choices: dict[str, list[tuple[str, str | None]]] | None = None,
 ) -> dict[str, str]:
     """Full pack destination -> the file a platform pack serves there instead.
 
@@ -522,7 +533,8 @@ def pack_overrides(
     existence mode the frontend never reads the bytes, so serving the
     emulator's file satisfies both. The ZIP builder, the install manifest and
     verify all read this: two of them deciding alone gave the one-line
-    installer different bytes than the ZIP.
+    installer different bytes than the ZIP. ``choices`` is slot_choices
+    for the same arguments when the caller already holds it.
     """
     # A baseline-only pack serves what the platform declares, and a target's
     # pack answers to the cores that hardware builds: DuckStation does not
@@ -531,10 +543,10 @@ def pack_overrides(
         return {}
     cores = set(resolve_platform_cores(config, profiles, target_cores=target_cores))
     overrides: dict[str, str] = {}
-    for destination, choices in slot_choices(
-        config, profiles, db, zip_contents, data_dir_registry
-    ).items():
-        path = next((path for emulator, path in choices if emulator in cores), None)
+    if choices is None:
+        choices = slot_choices(config, profiles, db, zip_contents, data_dir_registry)
+    for destination, ordered in choices.items():
+        path = next((path for emulator, path in ordered if emulator in cores), None)
         if path:
             overrides[destination] = path
     return overrides
@@ -677,12 +689,21 @@ class Collision:
     resolved: list[str]
     # Each declaration with the file it resolved to, in the platform's order.
     declarations: list[tuple[dict, str | None]] = field(default_factory=list)
+    # The system of each declaration, in the same order.
+    systems: list[str] = field(default_factory=list)
+    # The file the pack ships at the destination, as the builder decides it.
+    shipped: str | None = None
 
 
 def _collision_json(collision: Collision) -> dict:
     return {
         "destination": collision.destination,
         "resolved": list(collision.resolved),
+        "shipped": collision.shipped,
+        "declarations": [
+            {"system": system, "name": entry.get("name", ""), "file": local}
+            for system, (entry, local) in zip(collision.systems, collision.declarations)
+        ],
     }
 
 
@@ -702,19 +723,27 @@ def find_collisions(
     CoCo disk ROM at one bios/disk.rom.
     """
     fold = bool(config.get("case_insensitive_fs", False))
-    by_dest: dict[str, list[dict]] = {}
-    for system in (config.get("systems") or {}).values():
+    systems = config.get("systems") or {}
+    # The builder lets a hash-constrained declaration that resolves by
+    # content take the path, else the first it reaches walking the systems
+    # sorted: the same choice says which file ships.
+    preferred = set(
+        preferred_entries(systems, db, "bios", "", False, zip_contents, True).values()
+    )
+    by_dest: dict[str, list[tuple[str, dict]]] = {}
+    for sys_id, system in systems.items():
         for entry in system.get("files") or []:
             if not isinstance(entry, dict):
                 continue
             dest = entry.get("destination") or entry.get("name") or ""
             if dest:
-                by_dest.setdefault(_normalize(dest, fold), []).append(entry)
+                by_dest.setdefault(_normalize(dest, fold), []).append((sys_id, entry))
 
     collisions = []
-    for key, entries in sorted(by_dest.items()):
-        if len(entries) < 2:
+    for key, claims in sorted(by_dest.items()):
+        if len(claims) < 2:
             continue
+        entries = [entry for _sys_id, entry in claims]
         resolved = []
         declarations = []
         for entry in entries:
@@ -734,8 +763,22 @@ def find_collisions(
             # also names the first one's file.
             if any(_accepted_by_all(path, entries, db) for path in resolved):
                 continue
+            reached = sorted(
+                (sys_id, local)
+                for (sys_id, _entry), (_e, local) in zip(claims, declarations) if local
+            )
+            shipped = next(
+                (local for entry, local in declarations if local and id(entry) in preferred),
+                reached[0][1],
+            )
             collisions.append(
-                Collision(destination=key, resolved=resolved, declarations=declarations)
+                Collision(
+                    destination=key,
+                    resolved=resolved,
+                    declarations=declarations,
+                    systems=[sys_id for sys_id, _entry in claims],
+                    shipped=shipped,
+                )
             )
     return collisions
 
@@ -746,6 +789,10 @@ def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
     They agree when they resolve to the same bytes, when the platform's own
     hash list accepts the profile's file, or when the profile's accepts the
     platform's. A contradiction needs both lists to reject the other side.
+    A core found by content (found_by: content) reads no file by the
+    destination's name, so any dump it takes for the same system and region
+    settles the slot: DuckStation takes Batocera's scph1001.bin v2.0, which its profile
+    labels scph1001_v20.bin.
     """
     if profile.local_path == platform.local_path:
         return True
@@ -762,6 +809,11 @@ def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
         profile.local_path
         and _lists_hashes(platform.entry)
         and _accepted_by_all(profile.local_path, [platform.entry], db)
+    ):
+        return True
+    if platform.local_path and any(
+        _lists_hashes(label) and _accepted_by_all(platform.local_path, [label], db)
+        for label in profile.accepts
     ):
         return True
     return bool(
@@ -863,11 +915,18 @@ def _same_file_family(paths: list[str]) -> bool:
 
 
 def format_collision(collision: Collision) -> str:
-    """One line naming the destination and the files fighting for it."""
-    return (
-        f"{collision.destination}: declared for "
-        + " and for ".join(collision.resolved)
-    )
+    """One line naming the destination, which system declares which file,
+    and the one the pack ships there."""
+    owners: dict[str, list[str]] = {}
+    for system, (_entry, local) in zip(collision.systems, collision.declarations):
+        if local and system not in owners.setdefault(local, []):
+            owners[local].append(system)
+    parts = [
+        f"{path} ({', '.join(owners[path])}) "
+        + ("packed" if path == collision.shipped else "left out")
+        for path in collision.resolved
+    ]
+    return f"{collision.destination}: " + ", ".join(parts)
 
 
 def format_conflict(conflict: Conflict) -> str:

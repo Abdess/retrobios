@@ -26,11 +26,12 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import functools
 import json
 import os
 import sys
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from pathlib import Path
 
 import slots
@@ -38,6 +39,8 @@ import slots
 sys.path.insert(0, os.path.dirname(__file__))
 from hashing import parse_md5_list
 from common import (
+    _foreign_tree,
+    _owner_tokens,
     platform_arg,
     target_listing_line,
     suggest_names,
@@ -419,14 +422,25 @@ def _build_expected(file_entry: dict, checks: list[str]) -> dict:
     return expected
 
 
+def _in_foreign_tree(db: dict, owners: set[str], sha1: str) -> bool:
+    """Whether the collection keeps this sha1 in another emulator's tree."""
+    return _foreign_tree(db.get("files", {}).get(sha1, {}).get("path", ""), owners)
+
+
 def _name_in_index(
     name: str,
     by_name: dict,
     by_path_suffix: dict | None = None,
     data_names: set[str] | None = None,
     by_name_lower: dict[str, str] | None = None,
+    foreign: Callable[[str], bool] | None = None,
 ) -> bool:
-    """Check if a name is resolvable in the database indexes or data directories."""
+    """Check if a name is resolvable in the database indexes or data directories.
+
+    *foreign* tells a copy in another emulator's tree from the sha1 of a
+    name: matched in another casing, such a copy is not the asker's, as in
+    resolve_local_file's case-insensitive step.
+    """
     # Strip trailing slash for directory-type entries (e.g. nestopia/samples/foo/)
     name = name.rstrip("/")
     if name in by_name:
@@ -435,11 +449,11 @@ def _name_in_index(
     if basename != name and basename in by_name:
         return True
     if by_name_lower:
-        key = name.lower()
-        if key in by_name_lower:
-            return True
-        if basename != name and basename.lower() in by_name_lower:
-            return True
+        for key in {name.lower(), basename.lower()}:
+            if key in by_name_lower and not (
+                foreign and all(foreign(s) for s in by_name[by_name_lower[key]])
+            ):
+                return True
     if by_path_suffix and name in by_path_suffix:
         return True
     if data_names:
@@ -667,23 +681,30 @@ def find_undeclared_files(
                 # Resolution: name, then path basename
                 # storage: release names where the bytes are served from, not
                 # that the collection holds them: resolved like any file.
+                # Resolved as the asker, as the builder's ExtraResolver does:
+                # another casing of the name in another emulator's tree is
+                # not this emulator's file (dosbox-x's et4000.bin and pcem's
+                # et4000.BIN).
+                owned = {**f, "source_profile": emu_name}
+                foreign = functools.partial(_in_foreign_tree, db, _owner_tokens(owned))
                 if shipped_on_mismatch and (f.get("md5") or f.get("sha1")):
                     # The entry states what its content should be and the builder
                     # drops a copy that contradicts it, so content decides here
                     # too. A name match would not do: generic names collide across
                     # systems, and answering yes on one describes a pack that will
                     # not contain the file.
-                    _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                    _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                     in_repo = _lp is not None and _st != "hash_mismatch"
                 else:
                     in_repo = _name_in_index(
                         fname, by_name, by_path_suffix, data_names, by_name_lower,
+                        foreign,
                     )
                     if not in_repo and dest != fname:
                         path_base = dest.rsplit("/", 1)[-1]
                         in_repo = _name_in_index(
                             path_base, by_name, by_path_suffix, data_names,
-                            by_name_lower,
+                            by_name_lower, foreign,
                         )
                     if in_repo and not any(
                         f.get(h) for h in ("sha1", "md5", "crc32", "sha256")
@@ -693,7 +714,7 @@ def find_undeclared_files(
                         # rejects them all. NanoBoyAdvance's 16 KB bios.bin met
                         # only PCem's and QEMU's PC BIOS images of that name.
                         # The fallback below then decides as for any mismatch.
-                        _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                        _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                         if _st == "hash_mismatch":
                             in_repo = False
                     if not in_repo:
@@ -707,7 +728,7 @@ def find_undeclared_files(
                         # frontend would reject it, the builder leaves it out, and
                         # calling it available here would describe a pack that
                         # does not contain it.
-                        _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                        _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                         in_repo = _st != "not_found" and _lp is not None
                         if in_repo and _st == "hash_mismatch" and shipped_on_mismatch:
                             in_repo = False
@@ -717,7 +738,7 @@ def find_undeclared_files(
                         # held for it, the rule the builder's lookup applies
                         # (packextras.ExtraResolver). The Apple IIGS' 128 KB
                         # ROM is not Basilisk II's ROM.
-                        _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                        _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                         if core_size_refusal(
                             f, _lp, same_slot_entries(profile.get("files"), fname, dest)
                         ):
@@ -1575,6 +1596,13 @@ def verify_platform(
         "exclusion_notes": exclusions,
         "region_fallbacks": sorted(region_fallbacks),
         **({"left_out": left_out} if no_game_data else {}),
+        # Every tree of the registry answers a declaration by its tail, so
+        # one that was never refreshed leaves its files missing here while
+        # an online pack build refreshes it and packs them.
+        "data_dir_notices": sorted(
+            key for key, entry in (data_dir_registry or {}).items()
+            if not os.path.isdir(entry.get("local_cache", ""))
+        ),
         "details": details,
         "ground_truth_coverage": {
             "with_validation": with_validation,
@@ -1845,6 +1873,13 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
 
     game_data, bios_files, unplaced = _split_undeclared(undeclared)
 
+    # A file installed with its emulator is never collected, firmware or
+    # game data, required or not: cross_reference counts it apart. The
+    # firmware already left the pack lists (_mark_unplaced), the game data
+    # did not, and Abuse's three bundled data files read as missing.
+    bundled = [u for u in undeclared if not u["in_repo"] and u.get("bundled")]
+    game_data = [u for u in game_data if u["in_repo"] or not u.get("bundled")]
+
     req_not_in_repo = _core_required_missing(bios_files)
     req_hle_not_in_repo = [
         u
@@ -1854,12 +1889,6 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     req_in_repo = [u for u in bios_files if u["required"] and u["in_repo"]]
     opt_in_repo = [u for u in bios_files if not u["required"] and u["in_repo"]]
     opt_not_in_repo = [u for u in bios_files if not u["required"] and not u["in_repo"]]
-
-    bundled = [
-        u for u in bios_files
-        if u["required"] and not u["in_repo"] and u.get("bundled")
-        and not u.get("hle_fallback")
-    ]
     # The builder's count, one file per pack path, when the platform pass
     # replayed it. Counting entries said 1130 for RetroArch, 48 more than the
     # pack holds: rom.key alone was claimed by three Amiga cores.
@@ -1886,8 +1915,17 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         for u in opt_not_in_repo:
             _print_undeclared_entry(u, "MISSING (optional)", verbose, repeated)
     if bundled:
-        names = ", ".join(sorted({u["name"] for u in bundled}))
-        print(f"  Bundled with their emulator, not collected: {names}")
+        # The required firmware is named, as a missing one would be. The
+        # rest (shaders, runtime libraries, engine data) on request.
+        shown = bundled if verbose else [
+            u for u in bundled
+            if u["required"] and u.get("category", "bios") != "game_data"
+        ]
+        names = ", ".join(sorted({u["name"] for u in shown}))
+        print(
+            f"  Bundled with their emulator, not collected: {len(bundled)}"
+            + (f" ({names})" if names else "")
+        )
     if unplaced:
         print(f"  Core files held but not packed: {len(unplaced)} "
               f"({_omission_reasons(unplaced)})")
@@ -1952,6 +1990,13 @@ def print_platform_result(
         # them missing, as an offline build leaves them out.
         shown = ", ".join(fetched[:10]) + (f" (+{len(fetched) - 10})" if len(fetched) > 10 else "")
         print(f"  Release assets fetched when the pack is built ({len(fetched)}): {shown}")
+    uncached = result.get("data_dir_notices") or []
+    if uncached and result.get("status_counts", {}).get(Status.MISSING):
+        shown = ", ".join(uncached[:10]) + (f" (+{len(uncached) - 10})" if len(uncached) > 10 else "")
+        print(
+            f"  Data directories not cached ({len(uncached)}), their files count missing "
+            f"until refresh_data_dirs.py runs (an online pack build refreshes them): {shown}"
+        )
     for line in result.get("left_out") or []:
         print(f"  {line}")
     fallbacks = result.get("region_fallbacks") or []
@@ -2058,7 +2103,7 @@ def verify_emulator(
     it and every member it carries are optional, as the builder leaves them.
     """
     from packextras import expand_agnostic_entries
-    from packresolve import resolve_file
+    from packresolve import pending_release_asset, resolve_file, run_is_offline
     from packpaths import (
         _archive_destination,
         _register_path,
@@ -2083,6 +2128,16 @@ def verify_emulator(
     selected_profiles = {n: p for n, p in selected}
     validation_index = _build_validation_index(selected_profiles)
     data_registry = load_data_dir_registry(platforms_dir)
+
+    def pending(entry: dict, local_path: str | None, status: str) -> tuple[str | None, str]:
+        # Read from disk and the cache, as _resolve_for_platform does: a
+        # release asset the cache lacks is fetched by an online build
+        # (generate_emulator_pack resolves with offline=offline).
+        if status in ("not_found", "hash_mismatch") and not run_is_offline():
+            asset = pending_release_asset(entry, db)
+            if asset:
+                return asset, RELEASE_ASSET_PENDING
+        return local_path, status
 
     details = []
     file_status: dict[str, str] = {}
@@ -2223,14 +2278,15 @@ def verify_emulator(
             archive = file_entry.get("archive")
             if archive and archive not in seen_archives:
                 seen_archives.add(archive)
-                local_path, resolve_status = resolve_file(
-                    archive_entry(archive, files),
+                own_entry = archive_entry(archive, files)
+                local_path, resolve_status = pending(own_entry, *resolve_file(
+                    own_entry,
                     db,
                     DEFAULT_BIOS_DIR,
                     zip_contents,
                     data_dir_registry=data_registry,
                     offline=True,
-                )
+                ))
                 required = any(
                     f.get("archive") == archive and f.get("required", True)
                     for f in files
@@ -2254,6 +2310,8 @@ def verify_emulator(
                         "required": required,
                         "path": local_path,
                     }
+                    if resolve_status == RELEASE_ASSET_PENDING:
+                        result["release_asset"] = local_path
                 else:
                     result = {
                         "name": archive,
@@ -2314,7 +2372,7 @@ def verify_emulator(
 
             dest_hint = file_entry.get("path", "")
             # The emulator pack's resolution, release assets included.
-            local_path, resolve_status = resolve_file(
+            local_path, resolve_status = pending(file_entry, *resolve_file(
                 {**with_archive_members(file_entry, files), "source_profile": emu_name},
                 db,
                 DEFAULT_BIOS_DIR,
@@ -2322,7 +2380,7 @@ def verify_emulator(
                 dest_hint=dest_hint,
                 data_dir_registry=data_registry,
                 offline=True,
-            )
+            ))
             if resolve_status in ("not_found", "user_provided", "external"):
                 local_path = None
             name = file_entry.get("name", "")
@@ -2332,6 +2390,15 @@ def verify_emulator(
             stored = _storage_verdict(file_entry, emulator_pack=True)
             if stored is not None:
                 result = stored
+            elif resolve_status == RELEASE_ASSET_PENDING:
+                result = {
+                    "name": name,
+                    "status": Status.OK,
+                    "required": required,
+                    "path": local_path,
+                    "release_asset": local_path,
+                    "reason": "release asset, fetched when the pack is built",
+                }
             elif not local_path:
                 result = {"name": name, "status": Status.MISSING, "required": required}
                 # An entry the profile documents as unsourceable is absent by
@@ -2582,6 +2649,10 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
     if unsourceable:
         parts.append(f"{unsourceable} unsourceable")
     print(f"{label}: {', '.join(parts)} [{mode}]")
+    fetched = sorted({d["name"] for d in result["details"] if d.get("release_asset")})
+    if fetched:
+        shown = ", ".join(fetched[:10]) + (f" (+{len(fetched) - 10})" if len(fetched) > 10 else "")
+        print(f"  Release assets fetched when the pack is built ({len(fetched)}): {shown}")
 
     seen = set()
     for d in result["details"]:
@@ -2712,8 +2783,6 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
          "--destinations describes the full pack and is incompatible with --system"),
         (args.destinations and not (args.platform or args.all),
          "--destinations requires --platform or --all"),
-        (args.offline and not (args.platform or args.all),
-         "--offline requires --platform or --all"),
         # Game data is categorized against a platform's list and its cores.
         (getattr(args, "no_game_data", False) and not (args.platform or args.all),
          "--no-game-data requires --platform or --all"),
@@ -2988,13 +3057,13 @@ def _main(held: contextlib.ExitStack) -> None:
             print(_overall_summary(group_results))
 
     if args.destinations:
-        held = {}
+        destinations = {}
         for (result, names), (group, _rep) in zip(group_results, groups):
             for name, key in zip(names, group):
-                held[name] = {
+                destinations[name] = {
                     "platform": key, "pack_destinations": result["pack_destinations"],
                 }
-        Path(args.destinations).write_text(json.dumps(held, indent=1, sort_keys=True))
+        Path(args.destinations).write_text(json.dumps(destinations, indent=1, sort_keys=True))
 
     if args.json:
         for r in all_results.values():
