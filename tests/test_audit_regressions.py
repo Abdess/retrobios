@@ -7138,5 +7138,47 @@ class OpenMsxSystemRomsAreFoundBySha1(unittest.TestCase):
         self.assertEqual(named, [])
 
 
+class TupleAnnotationsMatchTheirReturns(unittest.TestCase):
+    """`_by_affinity.score` gained a fifth sort key while its annotation kept
+    four, so the signature misread the order that sends C-Dogs'
+    gamecontrollerdb.txt behind a neutral copy."""
+
+    @staticmethod
+    def _own_returns(fn: ast.AST):
+        stack = list(ast.iter_child_nodes(fn))
+        while stack:
+            node = stack.pop()
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
+                continue
+            if isinstance(node, ast.Return):
+                yield node
+            stack.extend(ast.iter_child_nodes(node))
+
+    def test_a_fixed_tuple_annotation_counts_its_returned_values(self):
+        sources = sorted((ROOT / "scripts").rglob("*.py")) + [ROOT / "install.py"]
+        mismatched = []
+        for path in sources:
+            for fn in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+                if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    continue
+                hint = fn.returns
+                if not (isinstance(hint, ast.Subscript) and isinstance(hint.value, ast.Name)
+                        and hint.value.id == "tuple"):
+                    continue
+                declared = hint.slice.elts if isinstance(hint.slice, ast.Tuple) else [hint.slice]
+                if any(isinstance(e, ast.Constant) and e.value is Ellipsis for e in declared):
+                    continue
+                for ret in self._own_returns(fn):
+                    value = ret.value
+                    if (isinstance(value, ast.Tuple)
+                            and not any(isinstance(e, ast.Starred) for e in value.elts)
+                            and len(value.elts) != len(declared)):
+                        mismatched.append(
+                            f"{path.relative_to(ROOT)}:{ret.lineno} "
+                            f"{len(value.elts)} returned, {len(declared)} declared"
+                        )
+        self.assertEqual(mismatched, [])
+
+
 if __name__ == "__main__":
     unittest.main()

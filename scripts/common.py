@@ -1317,7 +1317,7 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
     owners = _owner_tokens(file_entry)
     sized = any(file_entry.get(k) for k in ("size", "min_size", "max_size"))
 
-    def score(path: str) -> tuple[int, bool, bool, int]:
+    def score(path: str) -> tuple[int, bool, bool, bool, int]:
         fits = 0
         if sized and os.path.exists(path):
             fits = int(size_fits(file_entry, os.path.getsize(path)))
