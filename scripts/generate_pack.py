@@ -3037,6 +3037,8 @@ def _run_platform_packs(
     # Per pack, the systems each of its files is for, written into its
     # manifest.json once the pack is verified (pack_systems).
     systems_for: dict[str, dict] = {}
+    # The packs this run writes, the only ones it verifies and rewrites.
+    built: set[str] = set()
 
     failed: list[str] = []
     for source, required_only in variants:
@@ -3137,7 +3139,12 @@ def _run_platform_packs(
                 # the output directory already held and exit 0.
                 if not _produced(args.split, zip_path, zip_paths):
                     failed.append(representative)
-                elif zip_path and not system_filter:
+                    continue
+                built.update(
+                    os.path.relpath(path, args.output_dir)
+                    for path in ([zip_path] if zip_path else zip_paths)
+                )
+                if zip_path and not system_filter:
                     # The install list of the same choices names each file's
                     # systems: the pack records them, so a pack alone (a
                     # handheld without Wi-Fi) can be narrowed by system.
@@ -3160,6 +3167,7 @@ def _run_platform_packs(
         db,
         platforms_dir=args.platforms_dir,
         emulators_dir=args.emulators_dir,
+        built=built,
         pack_systems_by_name=systems_for,
         skip_conformance=skip_conf,
         data_registry=data_registry,
@@ -3176,6 +3184,10 @@ def _run_platform_packs(
                     db,
                     platforms_dir=args.platforms_dir,
                     emulators_dir=args.emulators_dir,
+                    built={
+                        os.path.basename(name) for name in built
+                        if os.path.dirname(name) == entry
+                    },
                     skip_conformance=True,
                     data_registry=data_registry,
                     regions=getattr(args, "regions", None),
@@ -5294,11 +5306,17 @@ def verify_and_finalize_packs(
     emulators_dir: str = "emulators",
     no_game_data: bool = False,
     pack_systems_by_name: dict[str, dict] | None = None,
+    built: Iterable[str] | None = None,
 ) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
     pack_systems_by_name gives, per pack file name, the systems its
     manifest.json records (pack_systems).
+
+    ``built`` names the packs this run wrote, and only those are verified
+    and get a manifest. A pack another run left in the directory was
+    reopened, recompressed and given a manifest without its pack_systems,
+    which made the installer refuse to narrow it. None takes every pack.
 
     Two-stage verification:
     1. Hash check against database.json (integrity)
@@ -5316,14 +5334,17 @@ def verify_and_finalize_packs(
     expected = _expected_pack_names(
         registered, platforms_dir, regions, target_name, no_game_data=no_game_data
     )
+    packs = _pack_archives(output_dir)
+    if built is not None:
+        packs = [name for name in packs if name in set(built)]
     pack_to_platform: dict[str, list[str]] = {}
-    for name in _pack_archives(output_dir):
+    for name in packs:
         for pname in registered:
             if name in expected[pname]:
                 pack_to_platform.setdefault(name, []).append(pname)
 
     failing: list[str] = []
-    for name in _pack_archives(output_dir):
+    for name in packs:
         zip_path = os.path.join(output_dir, name)
 
         # Stage 1: database integrity
