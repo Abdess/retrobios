@@ -699,7 +699,7 @@ def main() -> int:
         )
         print(
             "  The label is the oldest version producing these bytes: a recipe "
-            "unchanged since 0.190 is counted there, not at its own version."
+            "unchanged since 0.177 is counted there, not at its own version."
         )
         by_recipe: dict[str, int] = defaultdict(int)
         for record in ident["identified"]:

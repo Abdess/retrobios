@@ -1520,10 +1520,10 @@ against. Every MAME release with a `-listxml` asset is imported, 0.177 to
 A `romof` parent's members are merged into the child, and members with no
 CRC32 are dropped: those are undumped and a real romset does not carry them.
 
-The store is compacted: 113 MAME versions produce 173,985 entries but only
-2,936 distinct recipes, since most sets do not change between releases. Each
-is kept once, `dats` listing every version that agrees and `dat` naming the
-earliest, so an identification reads as "unchanged since that version".
+The store is compacted: 113 MAME versions produce 173,985 entries but only 2,936
+distinct recipes, since most sets do not change between releases. Each is kept
+once, `dats` listing every version that agrees and `dat` naming the earliest, so
+an identification reads as "unchanged since that version".
 
 `--identify` answers what an archive on disk actually is: the version whose
 recipe reproduces it byte for byte. Step 1c of the pipeline prints how many

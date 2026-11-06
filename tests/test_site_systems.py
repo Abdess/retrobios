@@ -752,7 +752,7 @@ class TheRomsetLineMatchesByCrc(unittest.TestCase):
         if main is None or not (REPO_ROOT / main["path"]).is_file():
             self.skipTest("the main neogeo.zip is not in this checkout")
         line = gs._romset_line(main)
-        self.assertIn("Holds every ROM of MAME 0.190 to 0.289", line)
+        self.assertIn("Holds every ROM of MAME 0.177 to 0.289", line)
         self.assertNotIn("No match", line)
 
 
