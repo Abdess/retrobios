@@ -732,10 +732,13 @@ This executes in sequence, numbered as the run prints them (`STEP_LABELS` in
 
 `--offline` skips steps 2 to 2b2.
 
-A new platform is archived-by-default nowhere: `status: active` puts it in
-`list_platforms.py`, the CI matrix, and the scrapers. Set
-`status: archived` to keep the configuration without the automation. Archived
-platforms are excluded unless `--all` or `--include-archived` is passed.
+A new platform is `status: active`. `status: archived` keeps the platform
+out of the runs that cover every platform (`verify.py --all`,
+`generate_pack.py --all`, `slots.py`, `pipeline.py`, `list_platforms.py`)
+unless `--include-archived` is passed. The installer manifests, the site, the
+native export and `check_freshness.py` cover archived platforms as well. No
+tool scrapes a platform on its own, archived or not: the `schedule:` field is
+the cadence a maintainer keeps by hand.
 
 A new platform has no release ZIP: `release_pack: true` is set for the setups
 most people download, and the installer serves every other one from its

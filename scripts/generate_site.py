@@ -3346,8 +3346,8 @@ def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
     lines += ["No ZIP: the setup is served by the command alone. "
               f"[Why?](../{NO_ZIP_FAQ})", ""]
     if archived:
-        lines += ["An archived setup keeps its page and the command. Its list is no longer "
-                  "read again on a schedule.", ""]
+        lines += ["An archived setup keeps its page and the command. Checks that cover "
+                  "every setup include it only on request.", ""]
     return lines
 
 

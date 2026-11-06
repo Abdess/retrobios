@@ -638,8 +638,8 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         lines.extend(
             [
                 "",
-                "\\* Archived: the configuration is kept and the installer serves it,"
-                " but upstream is no longer scraped on a schedule.",
+                "\\* Archived: the installer serves it, and checks that cover every"
+                " setup include it only on request.",
             ]
         )
 

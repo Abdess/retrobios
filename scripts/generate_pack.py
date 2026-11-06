@@ -3639,9 +3639,9 @@ def _main(held: contextlib.ExitStack) -> None:
     # Platform mode
     if args.all and args.manifest:
         # Install manifests cover every registered platform: the installer
-        # serves each one, with or without a release pack. "Archived" means
-        # upstream is no longer scraped on a schedule, not that the platform
-        # lost its users.
+        # serves each one, with or without a release pack. "Archived" keeps a
+        # platform out of the runs that cover every platform, not out of the
+        # installer: it has not lost its users.
         platforms = list_registered_platforms(args.platforms_dir, include_archived=True)
     elif args.all:
         # A release publishes the packs the registry marks release_pack and

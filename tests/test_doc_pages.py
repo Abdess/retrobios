@@ -1900,5 +1900,34 @@ class SkipFlagsNameTheSteps(unittest.TestCase):
                     self.assertEqual(set(re.findall(self.STEP, text)), steps)
 
 
+class ArchivedIsWhatTheToolsDo(unittest.TestCase):
+    """The README and the setup pages said an archived platform is no longer
+    scraped on a schedule, and adding-a-platform said `active` feeds a CI
+    matrix and the scrapers. No workflow calls list_platforms.py and no tool
+    reads `schedule:`: what `archived` changes is which full runs include it."""
+
+    def test_no_text_ties_the_status_to_automation(self):
+        import generate_pack  # noqa: PLC0415
+        import generate_readme  # noqa: PLC0415
+        import generate_site  # noqa: PLC0415
+        import list_platforms  # noqa: PLC0415
+
+        texts = {
+            "adding-a-platform.md": (WIKI / "adding-a-platform.md").read_text(encoding="utf-8"),
+            "generate_readme": inspect.getsource(generate_readme),
+            "generate_site": inspect.getsource(generate_site),
+            "generate_pack": inspect.getsource(generate_pack),
+            "list_platforms": inspect.getsource(list_platforms),
+        }
+        for name, text in texts.items():
+            with self.subTest(name):
+                for claim in ("scraped on a schedule", "read again on a schedule",
+                              "CI matrix", "without the automation"):
+                    self.assertNotIn(claim, text)
+        self.assertIn("`--include-archived`", texts["adding-a-platform.md"])
+        for workflow in (ROOT / ".github" / "workflows").glob("*.yml"):
+            self.assertNotIn("list_platforms", workflow.read_text(encoding="utf-8"))
+
+
 if __name__ == "__main__":
     unittest.main()
