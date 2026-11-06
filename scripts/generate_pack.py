@@ -48,6 +48,7 @@ from common import (
     profiles_for_systems,
     write_text_atomic,
     artifact_lock,
+    repository_output_lock,
     ArtifactLockBusy,
     build_target_cores_cache,
     build_zip_contents_index,
@@ -2809,9 +2810,11 @@ def _run_manifest_mode(
 
 @contextlib.contextmanager
 def _pack_output_lock(output_dir: str, exclusive: bool = True) -> Iterator[None]:
-    """Hold the output directory for the duration of a pack run."""
+    """Hold the output directory for the duration of a pack run, and the
+    repository's fixed outputs when it is one of them (install/)."""
     try:
-        with artifact_lock(output_dir, exclusive=exclusive):
+        with artifact_lock(output_dir, exclusive=exclusive), \
+                repository_output_lock(output_dir) if exclusive else contextlib.nullcontext():
             yield
     except ArtifactLockBusy as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

@@ -49,6 +49,7 @@ from common import (  # noqa: E402
     load_emulator_profiles,
     load_platform_config,
     native_layer,
+    repository_output_lock,
     run_cli,
 )
 from region import normalize_declared  # noqa: E402
@@ -661,7 +662,13 @@ def main() -> int:
                         help="exit 1 when a file would change, naming what differs (implies --quiet)")
     parser.add_argument("--quiet", action="store_true", help="print only failures")
     args = parser.parse_args()
+    if args.check:
+        return _index(args)
+    with repository_output_lock(str(args.output_dir)):
+        return _index(args)
 
+
+def _index(args: argparse.Namespace) -> int:
     files, coverage = render(args.output_dir)
     if not (args.quiet or args.check):
         print_coverage(coverage, files)

@@ -3547,6 +3547,8 @@ from artifacts import (  # noqa: E402,F401
     artifact_lock,
     hold_artifact_lock,
     hold_repository_outputs,
+    publish_hold,
+    repository_output_lock,
     _TIMESTAMP_PATTERNS,
     _strip_timestamps,
 )
@@ -3588,7 +3590,7 @@ def run_cli(main: Callable[[], int | None]) -> None:
     try:
         code = main()
         sys.stdout.flush()
-    except InputMissing as exc:
+    except (InputMissing, ArtifactLockBusy) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
     except BrokenPipeError:

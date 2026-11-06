@@ -30,6 +30,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     load_platform_registry,
+    repository_output_lock,
     resolve_platform_cores,
     system_index,
     unique_emulator_profiles,
@@ -1034,7 +1035,11 @@ def main() -> None:
         help="platform YAML directory (default: %(default)s)",
     )
     args = parser.parse_args()
+    with repository_output_lock("README.md"):
+        _write(args)
 
+
+def _write(args: argparse.Namespace) -> None:
     import contextlib
 
     from common import load_data_dir_registry

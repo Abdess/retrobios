@@ -73,6 +73,7 @@ from common import (
     hold_artifact_lock,
     hold_repository_outputs,
     load_data_dir_registry,
+    publish_hold,
 )
 from refresh_data_dirs import hold_data_dirs
 
@@ -1002,9 +1003,11 @@ def main() -> None:
     # rewrote them beside the run on dist/.
     held = contextlib.ExitStack()
     try:
-        held.enter_context(
-            hold_repository_outputs(str(Path(__file__).resolve().parent.parent))
-        )
+        root = str(Path(__file__).resolve().parent.parent)
+        held.enter_context(hold_repository_outputs(root))
+        # Its steps write database.json, install/ and README.md themselves,
+        # and take the same lock to do so.
+        held.enter_context(publish_hold(root))
         if not args.skip_packs:
             held.enter_context(hold_artifact_lock(args.output_dir))
     except ArtifactLockBusy as exc:

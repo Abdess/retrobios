@@ -26,6 +26,7 @@ from common import (
     DEFAULT_PROVENANCE_DIR,
     list_registered_platforms,
     load_provenance_snapshots,
+    repository_output_lock,
     require_yaml,
     set_plain_mode,
     source_yaml_paths,
@@ -430,7 +431,11 @@ def main() -> int:
         help="Directory with dump-catalog snapshots",
     )
     args = parser.parse_args()
+    with repository_output_lock(args.output):
+        return _generate(args)
 
+
+def _generate(args: argparse.Namespace) -> int:
     bios_dir = Path(args.bios_dir)
     if not bios_dir.is_dir():
         print(f"Error: BIOS directory '{bios_dir}' not found", file=sys.stderr)
@@ -742,4 +747,6 @@ def _collect_all_aliases(
 
 
 if __name__ == "__main__":
-    sys.exit(main() or 0)
+    from common import run_cli
+
+    run_cli(main)
