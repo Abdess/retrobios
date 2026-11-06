@@ -29,14 +29,15 @@ from common import copy_file_atomic, load_database
 
 
 def gitignored_paths(gitignore: str) -> set[str]:
-    """Paths the repository keeps out of git, as written in .gitignore."""
-    try:
-        with open(gitignore) as f:
-            return {
-                line.strip() for line in f if line.strip().startswith("bios/")
-            }
-    except FileNotFoundError:
-        return set()
+    """Paths the repository keeps out of git, as written in .gitignore.
+
+    A missing file raises: read as empty, it left nothing to restore and
+    nothing unsatisfied, and the run exited 0 with every asset absent.
+    """
+    with open(gitignore) as f:
+        return {
+            line.strip() for line in f if line.strip().startswith("bios/")
+        }
 
 
 def index_cache(cache_dir: str) -> dict[str, str]:
@@ -144,6 +145,8 @@ def main() -> None:
         help="the .gitignore listing release-asset files (default: %(default)s)",
     )
     args = parser.parse_args()
+    if not os.path.isfile(args.gitignore):
+        parser.error(f"no file at {args.gitignore}: it lists the release assets")
     _restored, unsatisfied = restore(args.cache, args.db, args.gitignore)
     if unsatisfied:
         raise SystemExit(1)

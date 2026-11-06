@@ -228,6 +228,36 @@ class LargeFileCacheTest(unittest.TestCase):
         self.assertEqual(cached.read_bytes(), rebuilt)
         self.assertEqual(len(gets), 1)
 
+    def test_an_orphan_link_is_never_returned(self):
+        """A revision link whose cache name was removed has one link left.
+        Downloaded again with the same bytes, the old link was returned and
+        the prune of that same download removed it."""
+        self._serve(PAYLOAD_A, [])
+        sha1 = hashlib.sha1(PAYLOAD_A).hexdigest()
+        first = common.fetch_large_file("asset.bin", dest_dir=self.dir, expected_sha1=sha1)
+        self.assertTrue(first and os.path.isfile(first))
+        os.unlink(Path(self.dir) / "asset.bin")
+        with mock.patch.object(largefiles, "ORPHAN_GRACE", -1):
+            second = common.fetch_large_file(
+                "asset.bin", dest_dir=self.dir, expected_sha1=sha1
+            )
+        self.assertTrue(second and os.path.isfile(second))
+        self.assertTrue(os.path.samefile(second, Path(self.dir) / "asset.bin"))
+
+    def test_a_cache_hit_relinks_an_orphan(self):
+        """The cache name was replaced by a copy with the same bytes: the hit
+        handed out the old link, which a prune elsewhere would remove."""
+        self._serve(PAYLOAD_A, [])
+        sha1 = hashlib.sha1(PAYLOAD_A).hexdigest()
+        common.fetch_large_file("asset.bin", dest_dir=self.dir, expected_sha1=sha1)
+        cached = Path(self.dir) / "asset.bin"
+        os.unlink(cached)
+        cached.write_bytes(PAYLOAD_A)
+        hit = common.fetch_large_file(
+            "asset.bin", dest_dir=self.dir, expected_sha1=sha1, offline=True
+        )
+        self.assertTrue(os.path.samefile(hit, cached))
+
     def test_a_revision_the_release_still_serves_is_kept(self):
         cached = Path(self.dir) / "asset.bin"
         cached.write_bytes(PAYLOAD_A)

@@ -107,7 +107,7 @@ RetroDECK: 2007/2008 OK, 1 untested [md5]
   UNTESTED (required): nintendo-ds/dsifirmware.bin: declared hash contradicted by the local file
   DISCREPANCY: nintendo-snes/sgb2.boot.rom: RetroDECK says OK but supersnes9x says size mismatch: got 524288, accepted [256]
     supersnes9x [size]
-  Core files: 1764 in pack, 1 required missing, 26 optional missing (--verbose lists them)
+  Core files: 1763 in pack, 1 required missing, 26 optional missing (--verbose lists them)
   Core files held but not packed: 154 (142 installed with its emulator, 8 read below a save folder per system and no system runs the core there, 4 a packed file occupies its directory)
     MISSING (required): FinalBurn Neo needs sfiii2a.zip (1 file)
   Bundled with their emulator, not collected: 20 (--verbose lists them)

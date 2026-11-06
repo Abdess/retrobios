@@ -1011,7 +1011,9 @@ platforms:
     # EmuHawk finds firmware by SHA1 against FirmwareDatabase.FirmwareRecords
     # and its cores are its own builds (CoreNames.cs): no libretro profile
     # describes what it reads, so the database alone decides, as MiSTer's
-    # BiosDB does.
+    # BiosDB does. emulators/bizhawk.yml also documents the options the scan
+    # never takes, so it is not listed here, and --region, --one-per-slot
+    # and --no-game-data are refused for this platform.
     cores: []
     target_scraper: null
     target_source: null

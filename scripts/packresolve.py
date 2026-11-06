@@ -14,6 +14,7 @@ import urllib.request
 from pathlib import Path
 
 from largefiles import fetch_large_file
+from hashing import cut_md5_owner
 from common import (
     declared_hash_verdict,
     resolution_is_hash_exact,
@@ -203,8 +204,8 @@ def pending_release_asset(
     return None
 
 
-# Digest length in hex digits -> kind. 29 is the MD5 Batocera writes with
-# its last three digits cut, matched by prefix as the resolver does.
+# Digest length in hex digits -> kind. A 29-digit MD5 is a value cut short,
+# looked up as the resolver looks one up (cut_md5_owner).
 _HASH_KINDS = {8: "crc32", 29: "md5", 32: "md5", 40: "sha1", 64: "sha256"}
 _HEX_DIGITS = re.compile(r"[0-9a-f]+")
 _WORD = re.compile(r"[0-9A-Za-z]+")
@@ -289,9 +290,9 @@ def sha1_for_hash(hash_type: str, hash_val: str, db: dict) -> str | None:
     elif hash_type == "md5":
         by_md5 = indexes.get("by_md5", {})
         sha1 = by_md5.get(hash_val)
-        if sha1 is None and len(hash_val) < 32:
-            prefixed = {v for k, v in by_md5.items() if k.startswith(hash_val)}
-            sha1 = prefixed.pop() if len(prefixed) == 1 else None
+        if sha1 is None:
+            owner = cut_md5_owner(hash_val, by_md5)
+            sha1 = by_md5.get(owner) if owner else None
     else:
         sha1 = next(
             (k for k, e in files_db.items() if e.get("sha256") == hash_val), None

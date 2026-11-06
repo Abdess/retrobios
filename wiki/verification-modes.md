@@ -88,8 +88,10 @@ Batocera's script compares the full string ([`batocera-systems:1088`](https://gi
 shorter than 32 characters matches no file there. The Batocera scraper completes such
 a value when exactly one MD5 in `database.json` starts with it
 (`_resolve_truncated_md5` in `scripts/scraper/batocera_scraper.py`) and keeps it as
-written otherwise. `resolve_local_file` matches a value still shorter than 32
-characters by prefix, and only for a file whose name the entry also names.
+written otherwise. `resolve_local_file` and `--from-md5` read a value still shorter
+than 32 characters by the same rule (`cut_md5_owner` in `scripts/hashing.py`), and the
+resolver keeps the file only when its name is one the entry names. Every verdict
+compares whole digests, as Batocera does: a cut value never verifies a file.
 
 ### md5_composite (Recalbox ZIP verification)
 
@@ -397,6 +399,12 @@ files under the system's maker. AmberELEC's `DISK.ROM` got the 16 KB MSX disk RO
 by name. QUASI88 reads that name as `n88sub.rom`, the 2 KB PC-88 disk ROM, and
 that is now the file served. An entry that names its emulator is placed by that
 emulator's tree instead.
+
+Step 6 reads a name through `by_proven_name` first. A name lands there when no
+declaration of it proves the held file by hash, while declarations of it prove
+another primary in the same directory. `dsi_bios7.bin` holds the DSi Panda devkit
+boot ROM, whose eMMC key-Y is zeroed, and every md5 and crc32 declared under that
+name designates a retail dump: an entry with no hash gets the retail ROM.
 
 The `hash_mismatch` status means a file with the right name or path exists but its hash
 does not match. This still resolves to a local path (the file is present), but verification

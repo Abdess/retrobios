@@ -1509,6 +1509,15 @@ def resolve_local_file(
             names_to_try.append(hint_base)
 
     md5_list = parse_md5_list(file_entry.get("md5"))
+    files_db = db.get("files", {})
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    # A value cut short stands for the one held md5 it starts, and only
+    # then (cut_md5_owner): the dump it names is still name-guarded below.
+    cut_owners = {
+        cut: owner for cut in md5_list
+        if len(cut) < 32 and (owner := cut_md5_owner(cut, by_md5))
+    }
+    md5_list = [cut_owners.get(value, value) for value in md5_list]
     sha1_candidates = [
         str(value).strip().lower()
         for value in (sha1 if isinstance(sha1, list) else [sha1] if sha1 else [])
@@ -1536,8 +1545,6 @@ def resolve_local_file(
     has_strong_hash = bool(
         sha1_candidates or sha256_candidates or md5_list or crc_candidates
     )
-    files_db = db.get("files", {})
-    by_md5 = db.get("indexes", {}).get("by_md5", {})
     by_name = db.get("indexes", {}).get("by_name", {})
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
 
@@ -1558,7 +1565,7 @@ def resolve_local_file(
         # With zipped_file the MD5 identifies the member, not the container.
         if md5_list and not zipped_file:
             actual_md5 = str(entry.get("md5", "")).lower()
-            if not any(actual_md5.startswith(expected) for expected in md5_list):
+            if actual_md5 not in md5_list:
                 return None
             statuses.append("md5_exact")
         if crc_candidates:
@@ -1642,20 +1649,13 @@ def resolve_local_file(
             sha1_match = by_md5.get(md5_candidate)
             if sha1_match and sha1_match in files_db:
                 path = files_db[sha1_match]["path"]
-                # Full MD5 (32 chars) is a strong identifier: trust it
-                # without name guard. Truncated MD5 still needs name check
-                # to avoid cross-contamination.
+                # A full md5 as declared is a strong identifier: trusted
+                # without name guard. One completed from a cut value still
+                # needs the name check to avoid cross-contamination.
                 status = _record_match_status(sha1_match)
                 if status and os.path.exists(path):
-                    if len(md5_candidate) >= 32 or _md5_name_ok(path):
+                    if md5_candidate not in cut_owners.values() or _md5_name_ok(path):
                         return path, status
-            if len(md5_candidate) < 32:
-                for db_md5, db_sha1 in by_md5.items():
-                    if db_md5.startswith(md5_candidate) and db_sha1 in files_db:
-                        path = files_db[db_sha1]["path"]
-                        status = _record_match_status(db_sha1)
-                        if status and os.path.exists(path) and _md5_name_ok(path):
-                            return path, status
 
     # 2b. Path suffix lookup is useful for same-named regional files, but it
     # is identity evidence only when no content hash was declared.  A stale
@@ -1776,9 +1776,15 @@ def resolve_local_file(
         # none of them answers. melonDS Nightly's dsi_nand.bin is read at
         # dsi/nand.bin: with the DSi image absent from the checkout, the
         # basename let the Wii nand.bin outrank the entry's own DSi variant.
+        # A name whose held file no declaration proves, while declarations
+        # of that name prove another dump beside it, means that dump: the
+        # DSi devkit boot ROMs filed as dsi_bios7.bin went to RetroBat.
+        by_proven_name = db.get("indexes", {}).get("by_proven_name", {})
         for tier in (own_names, names_to_try[len(own_names):]):
             for try_name in tier:
-                for match_sha1 in by_name.get(try_name, []):
+                for match_sha1 in (
+                    by_proven_name.get(try_name) or by_name.get(try_name, [])
+                ):
                     if match_sha1 in files_db and _size_ok(match_sha1):
                         path = files_db[match_sha1]["path"]
                         if os.path.exists(path) and path not in candidates:
@@ -2830,6 +2836,45 @@ def preferred_profile(index: dict[str, set[str]], name: str) -> str | None:
     return name if name in claimants else sorted(claimants)[0]
 
 
+def without_profile_blind(
+    platforms: list[str],
+    flags: list[str],
+    platforms_dir: str,
+    profiles: dict[str, dict],
+    target_cores: dict[str, set[str] | None] | None,
+    is_all: bool,
+) -> list[str]:
+    """The platforms a narrowing read from profiles can apply to.
+
+    Regions, search order and game data are read from the profiles of the
+    cores a platform runs. MiSTer and BizHawk declare `cores: []`: a
+    --region, --one-per-slot or --no-game-data pack of theirs withdrew
+    nothing while its name and README said it had. A named platform is
+    refused (exit 1). Under --all it is left out with a notice. generate_pack
+    and verify both read this.
+    """
+    if not flags:
+        return platforms
+    blind = [
+        name for name in platforms
+        if not resolve_platform_cores(
+            load_platform_config(name, platforms_dir),
+            profiles,
+            target_cores=(target_cores or {}).get(name),
+        )
+    ]
+    for name in blind:
+        message = (
+            f"{name} runs no core a profile describes, and {', '.join(flags)} "
+            "reads the profiles"
+        )
+        if not is_all:
+            print(f"ERROR: {message}: drop {', '.join(flags)}", file=sys.stderr)
+            sys.exit(1)
+        print(f"  {message}: left out")
+    return [name for name in platforms if name not in blind]
+
+
 def resolve_platform_cores(
     config: dict,
     profiles: dict[str, dict],
@@ -3635,6 +3680,7 @@ from hashing import (  # noqa: E402,F401
     md5sum,
     md5_composite,
     parse_md5_list,
+    cut_md5_owner,
     _ALL_ALGORITHMS,
     _md5_composite_cache,
 )

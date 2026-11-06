@@ -25,8 +25,8 @@ def accepts(entry: dict, path: Path, mode: str) -> bool:
                 member = names.get(entry["zipped_file"].casefold())
                 return bool(member) and hashlib.new(digest, archive.read(member)).hexdigest() in values
         actual = hashlib.new(digest, path.read_bytes()).hexdigest()
-        if entry.get("zip_digest") != "composite" and any(actual.startswith(v) for v in values):
-            return True  # a truncated md5 (Batocera) compares by its prefix
+        if entry.get("zip_digest") != "composite" and actual in values:
+            return True  # whole digests, as batocera-systems:1088 compares them
         if digest == DIGESTS["md5"] and path.suffix.lower() == ".zip":  # Recalbox: members in name order
             with zipfile.ZipFile(path) as archive:
                 names = sorted(name for name in archive.namelist() if not name.endswith("/"))

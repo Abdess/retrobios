@@ -125,7 +125,7 @@ files:
     min_size: 131072
     validation: [size]
     source_ref: "linux-sdl/vm/xm7.h:260, linux-sdl/vm/kanji.c:71-81, 128-133"
-    unsourceable: "XM7 checks no hash and its upstream distributes no dump. The KANJI.ROM files the collection holds are MSX and FPseNG fonts, not the Fujitsu ROM."
+    unsourceable: "XM7 checks no hash and its upstream distributes no dump. The collection holds no JIS78 table. The KANJI.ROM files are MSX and FPseNG fonts, and the Fujitsu kanji ROM inside fm7.zip and fm77av.zip (MAME kanji.rom, crc32 62402ac9) draws the JIS83 forms at the codes linux-sdl/vm/kanji.c:353-380 swaps (0x3646, 0x445B, 0x4768)."
     note: "Without it a JIS78 table is generated from KANJI1.ROM."
 
   - name: DICROM.ROM

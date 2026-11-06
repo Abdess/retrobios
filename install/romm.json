@@ -6,7 +6,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.0",
-  "generated": "2026-11-05T18:33:47Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -26,7 +26,7 @@
   "total_size": 872654387,
   "pack_files": 467,
   "pack_size": 872654387,
-  "total_omitted": 777,
+  "total_omitted": 776,
   "omitted_files": [
     {
       "dest": "32X_G_BIOS.BIN",
@@ -3014,16 +3014,6 @@
       "reason": "no_platform_slug",
       "cores": [
         "mame2003"
-      ]
-    },
-    {
-      "dest": "macintosh/MinivMacBootv2.dsk",
-      "name": "MinivMacBootv2.dsk",
-      "system": "",
-      "required": false,
-      "reason": "below_platform_folder",
-      "cores": [
-        "minivmac"
       ]
     },
     {

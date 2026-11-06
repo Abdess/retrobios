@@ -318,6 +318,76 @@ def shadowed_alias_index(
     return {alias: sorted(sha1s) for alias, sha1s in sorted(index.items())}
 
 
+def _declarations(platforms_dir: Path, emulators_dir: Path) -> list[dict]:
+    """Every file entry the registered platforms and the profiles declare."""
+    sources = [
+        platforms_dir / f"{name}.yml"
+        for name in list_registered_platforms(str(platforms_dir))
+    ] if platforms_dir.is_dir() else []
+    entries: list[dict] = []
+    for source in sources:
+        with open(source) as f:
+            config = yaml_load(f) or {}
+        for system in (config.get("systems") or {}).values():
+            entries.extend(system.get("files") or [])
+    if emulators_dir.is_dir():
+        for source in source_yaml_paths(emulators_dir):
+            with open(source) as f:
+                entries.extend((yaml_load(f) or {}).get("files") or [])
+    return entries
+
+
+def proven_name_index(
+    files: dict, indexes: dict, declarations: list[dict]
+) -> dict[str, list[str]]:
+    """Names whose held primary no declaration proves, mapped to the primaries
+    of the same directory that declarations of that name prove by hash.
+
+    A hashless entry takes a name's file by name alone. The collection files
+    the DSi Panda devkit boot ROMs as dsi_bios7.bin and dsi_bios9.bin, with
+    the eMMC key-Y zeroed, while every hash declared under those names
+    designates a retail dump beside them: RetroBat and dsperate were served
+    the devkit ROMs. Another revision kept in .variants/ is not a primary,
+    and a dump filed elsewhere is another machine's file.
+    """
+    by_hash = {
+        "sha1": {sha1: sha1 for sha1 in files},
+        "md5": indexes.get("by_md5", {}),
+        "crc32": indexes.get("by_crc32", {}),
+        "sha256": indexes.get("by_sha256", {}),
+    }
+    proven: dict[str, set[str]] = {}
+    for entry in declarations:
+        # A zipped_file hash is the member's, not the file the name designates.
+        if not isinstance(entry, dict) or entry.get("zipped_file"):
+            continue
+        name = str(entry.get("name") or "").rsplit("/", 1)[-1]
+        if not name:
+            continue
+        for kind, index in by_hash.items():
+            for value in _as_list(entry.get(kind)):
+                held = index.get(value)
+                if held in files:
+                    proven.setdefault(name, set()).add(held)
+    result: dict[str, list[str]] = {}
+    for name, designated in sorted(proven.items()):
+        primaries = {
+            sha1 for sha1 in indexes.get("by_name", {}).get(name, [])
+            if sha1 in files and "/.variants/" not in files[sha1]["path"]
+        }
+        if not primaries or primaries & designated:
+            continue
+        homes = {os.path.dirname(files[sha1]["path"]) for sha1 in primaries}
+        beside = [
+            sha1 for sha1 in designated
+            if "/.variants/" not in files[sha1]["path"]
+            and os.path.dirname(files[sha1]["path"]) in homes
+        ]
+        if beside:
+            result[name] = sorted(beside, key=lambda sha1: files[sha1]["path"])
+    return result
+
+
 def load_cache(cache_path: str) -> dict:
     """Load cache file if it exists."""
     try:
@@ -476,6 +546,9 @@ def _generate(args: argparse.Namespace) -> int:
 
     indexes = build_indexes(files, aliases)
     indexes["by_shadowed_alias"] = shadowed_alias_index(shadowed, indexes["by_name"])
+    indexes["by_proven_name"] = proven_name_index(
+        files, indexes, _declarations(Path("platforms"), Path("emulators"))
+    )
     total_size = sum(entry["size"] for entry in files.values())
 
     database = {

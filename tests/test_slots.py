@@ -994,6 +994,42 @@ class TwoPathsHoldingOneContentAgree(unittest.TestCase):
             self.assertFalse(slots._satisfies(different, platform, db))
 
 
+class ACopierHeaderIsNotAnotherImage(unittest.TestCase):
+    """Geargrafx drops a 512-byte header before the crc32 (src/media.cpp:
+    754-773). EmuELEC's headered syscard3.pce was reported contested, though
+    the core reads it as the 6d9a73ef image its profile lists."""
+
+    def test_headered_file_satisfies_the_profile(self):
+        import zlib  # noqa: PLC0415
+
+        image = b"S" * 1024
+        with tempfile.TemporaryDirectory() as tmp:
+            headered = Path(tmp, "headered.pce")
+            headered.write_bytes(b"\0" * 512 + image)
+            plain = Path(tmp, "plain.pce")
+            plain.write_bytes(image)
+            crc = f"{zlib.crc32(image):08x}"
+            db = {"files": {
+                "a" * 40: {"path": str(headered), "size": 1536,
+                           "crc32": f"{zlib.crc32(headered.read_bytes()):08x}"},
+                "b" * 40: {"path": str(plain), "size": 1024, "crc32": crc},
+            }}
+            platform = Claim("platform", "syscard3.pce", "syscard3.pce",
+                             local_path=str(headered), status="md5_exact")
+            profile = Claim(
+                "profile", "syscard3.pce", "syscard3.pce", emulator="geargrafx",
+                local_path=str(plain), status="crc32_exact",
+                entry={"name": "syscard3.pce", "crc32": [crc], "size": [1024, 1536]},
+            )
+            self.assertTrue(slots._satisfies(profile, platform, db))
+            one_size = Claim(
+                "profile", "syscard3.pce", "syscard3.pce", emulator="geargrafx",
+                local_path=str(plain), status="crc32_exact",
+                entry={"name": "syscard3.pce", "crc32": [crc], "size": 1024},
+            )
+            self.assertFalse(slots._satisfies(one_size, platform, db))
+
+
 class TheSlotsSummaryClosesTheRun(unittest.TestCase):
     """The totals came before the collision section and ignored it, and the
     help said the default run fails on conflicts the pack should settle,

@@ -51,19 +51,6 @@ files:
       Macintosh IIx ROM image (256 KB). Tried first in the loading sequence.
       If present, takes priority over MacII.ROM.
 
-  - name: "MinivMacBootv2.dsk"
-    path: "macintosh/MinivMacBootv2.dsk"
-    required: false
-    source_ref: "libretro/libretro-core.c:181-195, libretro/libretro-core.c:396, minivmac/src/OSGLUERETRO.c:521-537, minivmac/src/OSGLUERETRO.c:1545-1547"
-    note: >
-      System boot disk. Content given as a .cmd file is read as a command
-      line, and every argument that is not an option is inserted as a disk,
-      opened read-write first. Recalbox 10.1.1 writes a .cmd naming
-      bios/macintosh/MinivMacBootv2.dsk ahead of the game disk. A missing
-      image raises an open-failure message and the machine starts without it.
-      ref: recalbox projects/configgen/configgen/recalboxFiles.py:174,
-      recalbox projects/configgen/configgen/generators/libretro/libretroGenerator.py:877-882
-
 notes:
   emulation_target: >
     Configured for Macintosh II (kEmMd_II). 68020 CPU, FPU, ADB, VIA2, ASC
@@ -71,3 +58,11 @@ notes:
   info_discrepancy: >
     .info declares firmware_count=1 (MacII.ROM only). The code also tries
     MacIIx.ROM first (OSGLUERETRO.c:778).
+  disks: >
+    No disk image has a fixed name. Content given as a .cmd file is read as
+    a command line, and every argument that is not an option is inserted as
+    a disk, opened read-write first (libretro/libretro-core.c:181-195,
+    minivmac/src/OSGLUERETRO.c:521-537). With no disk inserted,
+    LoadInitialImages tries disk1.dsk to disk9.dsk and stops at the first
+    missing one (minivmac/src/OSGLUERETRO.c:563-579). A boot disk is
+    whatever the frontend writes into the .cmd.

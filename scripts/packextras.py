@@ -1222,8 +1222,14 @@ def _collect_emulator_extras(
                 )
             continue
         if claimants is not None:
+            # Keyed as extra_region_key keys the extra that wins the path: a
+            # losing claim kept the bare path, and on RetroDECK (declared
+            # root bios/) verify --region listed Rustation's scph1002b.bin
+            # as packed while the builder had withdrawn bios/scph1002b.bin.
             claimants[(u.get("emulator", ""), u.get("name", ""), u.get("path") or "")] = (
-                sanitize_pack_path(placements[0][0])
+                prefixed_destination(
+                    sanitize_pack_path(placements[0][0]), declared_root(config)
+                )
             )
         for dest, full_dest in placements:
             candidates = [
@@ -1633,17 +1639,26 @@ def report_owned_by_systems(report: list[dict], system_ids: list[str]) -> list[d
     ]
 
 
-def _ships(config: dict, file_entry: dict, db: dict) -> bool:
+def _ships(
+    config: dict,
+    file_entry: dict,
+    db: dict,
+    zip_contents: dict | None,
+    data_registry: dict | None,
+    override: str | None,
+) -> bool:
     """Whether the builder packs this declaration: resolved, and not refused
     by a hash frontend. A dump whose md5 Recalbox would reject is left out
     of the pack, so it cannot win a regional slot over a file that ships.
+
+    Resolved with the builder's own inputs: without the data directories,
+    AmberELEC's bluemsx config.ini read as missing while the pack held it.
     """
     from packresolve import resolve_declaration
     from validation import baseline_verdict
 
-    # The builder's resolution: no destination hint, release assets included.
     path, status = resolve_declaration(
-        file_entry, db, "bios", None, None, None, offline=True,
+        file_entry, db, "bios", zip_contents, data_registry, override, offline=True,
     )
     if not path:
         return False
@@ -1668,6 +1683,9 @@ def platform_region_groups(
     extras_out: list[dict] | None = None,
     held_out: set[str] | None = None,
     undeclared: list[dict] | None = None,
+    zip_contents: dict | None = None,
+    data_registry: dict | None = None,
+    slot_overrides: dict[str, str] | None = None,
 ) -> tuple[dict[str, list[tuple[str, str]]], dict[tuple[str, str, str], str]]:
     """Group a platform's pack candidates the way region filtering reads them.
 
@@ -1682,7 +1700,9 @@ def platform_region_groups(
     two answer differently on the same request.  `extras_out` receives the
     core extras that were grouped, for the install manifest. ``undeclared``
     is the gap report when the caller holds it (undeclared_report, with the
-    same target_cores and include_all).
+    same target_cores and include_all). ``zip_contents``, ``data_registry``
+    and ``slot_overrides`` (keyed by full pack destination) are the ones the
+    builder resolves with, so a held declaration is the one the pack ships.
     """
     groups: dict[str, list[tuple[str, str]]] = {}
     for sys_id, system in systems.items():
@@ -1695,8 +1715,10 @@ def platform_region_groups(
             )
             if dest:
                 members.append((dest, file_entry.get("name", "")))
+                full_dest = f"{base_dest}/{dest}" if base_dest else dest
                 if held_out is not None and db is not None and _ships(
-                    config, file_entry, db
+                    config, file_entry, db, zip_contents, data_registry,
+                    (slot_overrides or {}).get(full_dest),
                 ):
                     held_out.add(dest)
 
@@ -1799,6 +1821,8 @@ def emulator_region_drops(
     regions: list[str],
     required_only: bool = False,
     db: dict | None = None,
+    zip_contents: dict | None = None,
+    data_registry: dict | None = None,
 ) -> set[str]:
     """Destinations an emulator-mode `--region` withdraws.
 
@@ -1810,7 +1834,8 @@ def emulator_region_drops(
     With `db`, a requested-region file the collection lacks never displaces
     a held one, as in platform mode: a held scph5501.bin was withdrawn for a
     Japanese image nobody had collected, and the pack shipped no PlayStation
-    BIOS at all.
+    BIOS at all. ``zip_contents`` and ``data_registry`` are the ones the
+    emulator pack resolves with.
     """
     import region as region_mod
     from packpaths import _resolve_destination
@@ -1832,27 +1857,36 @@ def emulator_region_drops(
                     (dest, fe.get("name", ""))
                 )
                 if held is not None and _emulator_ships(
-                    fe, emu_name, profile, db, dest, validation_index
+                    fe, emu_name, profile, db, validation_index,
+                    zip_contents, data_registry,
                 ):
                     held.add(dest)
     return region_mod.resolve_region_drops(region_groups, region_index, regions, held)
 
 
 def _emulator_ships(
-    file_entry: dict, emu_name: str, profile: dict, db: dict, dest: str,
-    validation_index: dict,
+    file_entry: dict, emu_name: str, profile: dict, db: dict,
+    validation_index: dict, zip_contents: dict | None, data_registry: dict | None,
 ) -> bool:
     """Whether the emulator pack ships this entry: held, and not refused by
     the core's own check, the test _ships applies on the platform side.
+
+    Resolved as generate_emulator_pack resolves: without the data
+    directories, dolphin-mmjr2's nwc24msg.cfg read as missing while the pack
+    held it.
     """
+    from packresolve import resolve_file
     from validation import validated_choice, with_archive_members
 
-    local, _status = resolve_local_file(
+    local, status = resolve_file(
         {**with_archive_members(file_entry, profile.get("files", [])),
          "source_profile": emu_name},
-        db, dest_hint=dest,
+        db, "bios", zip_contents,
+        dest_hint=file_entry.get("path", ""),
+        data_dir_registry=data_registry,
+        offline=True,
     )
-    if not local:
+    if status in ("not_found", "user_provided") or not local:
         return False
     _chosen, disagreement = validated_choice(
         file_entry, local, db, validation_index, "bios", None, emulators={emu_name},

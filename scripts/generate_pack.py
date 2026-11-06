@@ -76,6 +76,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    without_profile_blind,
     MANUFACTURER_PREFIXES,
     require_yaml,
     ProfileSelectionError,
@@ -373,13 +374,25 @@ def _platform_pack_stem(
     rep_cfg = load_platform_config(representative, platforms_dir)
     version = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
     version_tag = f"_{_name_part(str(version))}" if version else ""
+    return platform_pack_prefix(group_platforms, representative, platforms_dir) + version_tag
+
+
+def platform_pack_prefix(
+    group_platforms: list[str], representative: str, platforms_dir: str
+) -> str:
+    """Platform part of a pack name without the version.
+
+    The site reads a pack's version back by removing this prefix: a version
+    may hold an underscore (AmberELEC prerelease-20261019_1835).
+    """
     if len(group_platforms) <= 1:
-        return _name_part(rep_cfg.get("platform", representative), "_") + version_tag
+        rep_cfg = load_platform_config(representative, platforms_dir)
+        return _name_part(rep_cfg.get("platform", representative), "_")
     names = [
         load_platform_config(p, platforms_dir).get("platform", p)
         for p in group_platforms
     ]
-    return "_".join(_name_part(n) for n in names) + version_tag
+    return "_".join(_name_part(n) for n in names)
 
 
 def platform_list_version(config: dict, platform: str) -> str:
@@ -685,6 +698,9 @@ def _select_variants(
     one_per_slot: bool,
     required_only: bool = False,
     undeclared: list[dict] | None = None,
+    zip_contents: dict | None = None,
+    data_registry: dict | None = None,
+    slot_overrides: dict[str, str] | None = None,
 ) -> tuple[set, list, list]:
     """Which regional and slot alternatives this pack leaves out.
 
@@ -714,6 +730,9 @@ def _select_variants(
             required_only=required_only,
             held_out=held,
             undeclared=undeclared,
+            zip_contents=zip_contents,
+            data_registry=data_registry,
+            slot_overrides=slot_overrides,
         )
     if regions:
         region_index = region_mod.platform_region_index(
@@ -968,7 +987,8 @@ def generate_pack(
     region_drops, region_fallbacks, slot_undecidable = _select_variants(
         config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
         target_cores, source, regions, one_per_slot, required_only,
-        undeclared=undeclared,
+        undeclared=undeclared, zip_contents=zip_contents,
+        data_registry=data_registry, slot_overrides=slot_overrides,
     )
 
     with (
@@ -1646,6 +1666,9 @@ def generate_emulator_pack(
 ) -> str | None:
     """Generate a ZIP pack for specific emulator profiles.
 
+    Returns the path, "" when no file is needed (verify --emulator reports
+    0/0 OK), None on failure.
+
     `pack_name` is the caller's own file name: the system pack names its
     archive after the system, and joining 23 SNES emulator names went past
     the 255 bytes a file name may hold. `system_ids` keeps only the entries
@@ -1680,8 +1703,14 @@ def generate_emulator_pack(
     if record is None:
         os.makedirs(output_dir, exist_ok=True)
 
+    data_registry = load_data_dir_registry(
+        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
+    )
     region_drops: set[str] = (
-        emulator_region_drops(selected, standalone, regions, required_only, db)
+        emulator_region_drops(
+            selected, standalone, regions, required_only, db,
+            zip_contents=zip_contents, data_registry=data_registry,
+        )
         if regions
         else set()
     )
@@ -1712,9 +1741,6 @@ def generate_emulator_pack(
             missing_files.append(name)
 
     data_dir_notices: list[str] = []
-    data_registry = load_data_dir_registry(
-        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
-    )
 
     with (
         contextlib.nullcontext(record) if record is not None
@@ -1984,10 +2010,16 @@ def generate_emulator_pack(
                 )
 
     # Remove empty ZIP (no files packed and no missing = nothing to ship)
-    if record is None and total_files + data_files == 0 and not (
+    nothing_needed = total_files + data_files == 0 and not (
         missing_files or rejected_files or instruction_files or unsourceable_files
-    ):
+    )
+    if record is None and nothing_needed:
         os.unlink(zip_path)
+        # What verify --emulator reports as 0/0 OK: no file is needed, so
+        # no pack is written and the run succeeds. Printed with the path,
+        # the run named a file it had just removed and exited 1.
+        print(f"  {', '.join(display_names)}: no file needed, no pack written")
+        return ""
 
     # Report. The members of data trees are counted apart: verify --emulator
     # counts the profile's files, and folding 3500 tree members into the
@@ -2044,7 +2076,10 @@ def generate_system_pack(
     offline: bool | None = None,
     platforms_dir: str | None = None,
 ) -> str | None:
-    """Generate a ZIP pack for all emulators supporting given system IDs."""
+    """Generate a ZIP pack for all emulators supporting given system IDs.
+
+    Returns the path, "" when no file is needed, None on failure.
+    """
     profiles = load_emulator_profiles(emulators_dir)
     matching = profiles_for_systems(profiles, system_ids, standalone)
 
@@ -2108,7 +2143,7 @@ def generate_system_pack(
             final_dir=output_dir,
         )
         if not result:
-            return None
+            return result
         new_path = os.path.join(output_dir, final_name)
         os.replace(result, new_path)
         return new_path
@@ -3722,7 +3757,7 @@ def _main(held: contextlib.ExitStack) -> None:
                 offline=args.offline,
                 platforms_dir=args.platforms_dir,
             )
-        if not built:
+        if built is None:
             sys.exit(1)
         return
 
@@ -3743,7 +3778,7 @@ def _main(held: contextlib.ExitStack) -> None:
                 offline=args.offline,
                 platforms_dir=args.platforms_dir,
             )
-        if not built:
+        if built is None:
             sys.exit(1)
         return
 
@@ -3787,6 +3822,20 @@ def _main(held: contextlib.ExitStack) -> None:
         platforms = _platforms_with_systems(
             args, platforms, system_filter, emu_profiles, target_cores_cache
         )
+    platforms = without_profile_blind(
+        platforms,
+        [
+            flag for flag, given in (
+                ("--region", getattr(args, "regions", None)),
+                ("--one-per-slot", getattr(args, "one_per_slot", False)),
+                ("--no-game-data", getattr(args, "no_game_data", False)),
+            ) if given
+        ],
+        args.platforms_dir,
+        emu_profiles,
+        target_cores_cache if args.target else None,
+        args.all,
+    )
 
     data_registry = load_data_dir_registry(args.platforms_dir)
     # The output directory is claimed before the data directory refresh: a
@@ -4365,6 +4414,9 @@ def _manifest_selection(
     required_only: bool,
     regions: list[str] | None,
     undeclared: list[dict] | None = None,
+    zip_contents: dict | None = None,
+    data_registry: dict | None = None,
+    slot_overrides: dict[str, str] | None = None,
 ) -> tuple[set[str], SelectionIndex, set[str]]:
     """Destinations a region list removes, the groups the installer replays,
     and the destinations the builder holds.
@@ -4388,6 +4440,9 @@ def _manifest_selection(
         extras_out=extras,
         held_out=held,
         undeclared=undeclared,
+        zip_contents=zip_contents,
+        data_registry=data_registry,
+        slot_overrides=slot_overrides,
     )
     region_index = region_mod.platform_region_index(
         config, emu_profiles, target_cores
@@ -4667,6 +4722,8 @@ def generate_manifest(
     region_drops, selection, builder_held = _manifest_selection(
         config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
         target_cores, source, required_only, regions, undeclared=undeclared,
+        zip_contents=zip_contents, data_registry=data_registry,
+        slot_overrides=slot_overrides,
     )
 
     # Phase 1: baseline files

@@ -22,11 +22,6 @@ from common import _norm_system_id, resolve_platform_cores, unresolved_platform_
 from exporter.baseline import HASH_FIELDS, NativeSystem, _hash_values
 from launchers import _names as launcher_names
 
-# Batocera cuts some md5 to 29 characters: the prefix still names the dump.
-_FULL_MD5 = 32
-_CUT_MD5 = 29
-
-
 def _tails(path: str) -> list[str]:
     """Every trailing run of segments of a path, longest first."""
     parts = [p for p in path.casefold().strip("/").split("/") if p]
@@ -48,21 +43,11 @@ def _declared_hashes(entry: dict) -> dict[str, set[str]]:
     return {f: values for f, values in found.items() if values}
 
 
-def _same(declared: str, accepted: str) -> bool:
-    """Equal, or a cut md5 that starts the accepted one."""
-    return declared == accepted or (
-        _CUT_MD5 <= len(declared) < _FULL_MD5 and accepted.startswith(declared)
-    )
-
-
 def _accepts(accepted: set[str], declared: dict[str, set[str]]) -> bool:
     """True when the hashes a profile entry accepts, the members of its
     archive included, hold one the platform entry declares."""
     for values in declared.values():
         if values & accepted:
-            return True
-        cut = [d for d in values if _CUT_MD5 <= len(d) < _FULL_MD5]
-        if cut and any(a.startswith(d) for d in cut for a in accepted):
             return True
     return False
 
@@ -72,7 +57,7 @@ def _contradicts(profile_entry: dict, declared: dict[str, set[str]]) -> bool:
     the profile entry describes another dump under the same name."""
     for field_name, values in declared.items():
         own = set(_hash_values(profile_entry, field_name))
-        if own and not any(_same(d, a) for d in values for a in own):
+        if own and not set(values) & set(own):
             return True
     return False
 
@@ -158,10 +143,7 @@ class ReadEvidence:
         hashes = {
             v for f in (*HASH_FIELDS, "alt_md5") for v in _hash_values(entry, f)
         }
-        if hashes & self.hashes or any(
-            len(v) < _FULL_MD5 and any(h.startswith(v) for h in self.hashes)
-            for v in hashes if len(v) >= _CUT_MD5
-        ):
+        if hashes & self.hashes:
             return "hash"
         full = "/" + (tails[0] if tails else "")
         if any("/" + d in full for d in self.directories):
@@ -188,7 +170,7 @@ class ProofIndex:
 
     def __init__(self, readers: list[ReadEvidence]) -> None:
         self._index: dict[str, dict[str, set[int]]] = {
-            kind: {} for kind in ("tail", "launched", "name", "hash", "cut", "dir", "tree", "member")
+            kind: {} for kind in ("tail", "launched", "name", "hash", "dir", "tree", "member")
         }
         for position, evidence in enumerate(readers):
             for kind, keys in (
@@ -199,11 +181,6 @@ class ProofIndex:
             ):
                 for key in keys:
                     self._index[kind].setdefault(key, set()).add(position)
-            # A cut md5 names any hash it is the start of.
-            for value in evidence.hashes:
-                for length in range(_CUT_MD5, _FULL_MD5):
-                    if len(value) >= length:
-                        self._index["cut"].setdefault(value[:length], set()).add(position)
 
     def _hits(self, kind: str, keys: Iterable[str]) -> set[int]:
         table = self._index[kind]
@@ -224,7 +201,6 @@ class ProofIndex:
         hashes = {
             v for f in (*HASH_FIELDS, "alt_md5") for v in _hash_values(entry, f)
         }
-        cut = {v for v in hashes if _CUT_MD5 <= len(v) < _FULL_MD5}
         # "/" + d in "/" + path: d is a run of whole segments ending in "/",
         # so it is a run of the path's segments before the last one.
         parts = tails[0].split("/") if tails else []
@@ -236,7 +212,7 @@ class ProofIndex:
             "path": self._hits("tail", tails[:-1]),
             "launcher": self._hits("launched", names | last),
             "name": self._hits("name", names | last),
-            "hash": self._hits("hash", hashes) | self._hits("cut", cut),
+            "hash": self._hits("hash", hashes),
             "directory": self._hits("dir", runs),
             "data_directory": self._hits("tree", runs)
             | self._index["member"].get(tails[0] if tails else "", set()),
@@ -463,10 +439,6 @@ class EntryCategories:
             for value in values:
                 for position, f in by_hash_index.get(value, ()):
                     found[position] = f
-                if _CUT_MD5 <= len(value) < _FULL_MD5:
-                    for accepted, hits in by_hash_index.items():
-                        if accepted.startswith(value):
-                            found.update(hits)
         if found:
             return [cited(found[p]) for p in sorted(found)]
         named = {position: f for n in names for position, f in by_name_index.get(n, ())}

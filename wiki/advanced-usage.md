@@ -144,6 +144,11 @@ Three rules keep a filtered pack usable:
 - **Untagged files always survive.** Most BIOS are not regional and carry no
   `region:` at all.
 
+Regions, the search order `--one-per-slot` reads and the game data
+`--no-game-data` cuts all come from the profiles of the cores a platform runs.
+MiSTer and BizHawk declare no cores, their own databases decide, so the three
+flags are refused for them. Under `--all` they are left out with a notice.
+
 What this does and does not do: it shrinks the pack. It does not change how cores
 pick a BIOS. Most cores already select per region from fixed filename lists driven
 by the game's region (PicoDrive in `libretro.c`, Genesis Plus GX in `loadrom.c`),

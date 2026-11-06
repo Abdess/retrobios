@@ -117,6 +117,9 @@
         },
         "by_shadowed_alias": {
           "$ref": "#/$defs/listIndex"
+        },
+        "by_proven_name": {
+          "$ref": "#/$defs/listIndex"
         }
       }
     }

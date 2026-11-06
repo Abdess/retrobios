@@ -232,8 +232,8 @@ System ID consistency matters for cross-platform operations. The same console mu
   are available.
 - An MD5 shorter than 32 characters is completed when exactly one MD5 in
   `database.json` starts with it, as the Batocera scraper does
-  (`_resolve_truncated_md5`), and kept as written otherwise. The resolution layer
-  matches what remains by prefix.
+  (`_resolve_truncated_md5`, through `cut_md5_owner`), and kept as written
+  otherwise. A value kept short verifies nothing.
 
 Scraped data reflects what the upstream declares, which can differ from what the emulator source reads. The scraper's job is faithful transcription of upstream data, not correction. Corrections happen in the emulator profiles (source-verified) and in `_shared.yml` (curated). If a scraper meets a hash or filename that differs from the emulator source, log a warning and still include the upstream value. The divergence will surface during truth diffing.
 

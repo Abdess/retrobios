@@ -608,11 +608,26 @@ def _release_date(tag: str) -> str:
     return f"{moment.day} {moment.strftime('%B %Y')}"
 
 
-def _pack_version(pack_name: str) -> str:
+def _pack_version(pack_name: str, platforms: list[str]) -> str:
     """The platform version a pack was built for, from its name
-    (Batocera_43.1_BIOS_Pack.zip is 43.1)."""
+    (Batocera_43.1_BIOS_Pack.zip is 43.1).
+
+    Read past the platform part the builder writes, not at the last
+    underscore: AmberELEC_prerelease-20261019_1835 read as 1835.
+    """
+    from generate_pack import platform_pack_prefix  # noqa: PLC0415
+
     stem = pack_name.removesuffix("_BIOS_Pack.zip")
-    return stem.rsplit("_", 1)[1] if "_" in stem else ""
+    prefix = platform_pack_prefix(
+        platforms, platforms[0], str(siteinputs.current().platforms)
+    ) + "_"
+    return stem[len(prefix):] if stem.startswith(prefix) else ""
+
+
+def _pack_platforms(platform_name: str, record: dict, pack_name: str) -> list[str]:
+    """The platforms a release pack was built for, the one asked first."""
+    listed = list(record.get("packs", {}).get(pack_name, {}).get("platforms") or [])
+    return listed or [platform_name]
 
 
 def release_line(platform_name: str, record: dict) -> list[str]:
@@ -631,7 +646,9 @@ def release_line(platform_name: str, record: dict) -> list[str]:
     ]
     config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     page_version = str(config.get("version") or "")
-    pack_version = _pack_version(pack_name)
+    pack_version = _pack_version(
+        pack_name, _pack_platforms(platform_name, record, pack_name)
+    )
     if page_version and pack_version and page_version.lstrip("v") != pack_version.lstrip("v"):
         display = config.get("platform", platform_name)
         lines.append(f"This pack was built for {display} {pack_version}. The command "
@@ -658,7 +675,10 @@ def setup_version(platform_name: str, record: dict | None = None) -> str:
     except FileNotFoundError:
         return ""
     pack_name = release_record.pack_name_for(platform_name, record or {})
-    version = (_pack_version(pack_name) if pack_name else "") or str(config.get("version") or "")
+    version = (
+        _pack_version(pack_name, _pack_platforms(platform_name, record or {}, pack_name))
+        if pack_name else ""
+    ) or str(config.get("version") or "")
     if not version:
         return ""
     return f"{config.get('platform', platform_name)} {version.removeprefix('v')}"
