@@ -56,6 +56,7 @@ from common import (
     load_platform_config,
     load_provenance_snapshots,
     native_layer,
+    require_directory,
     require_yaml,
     resolution_is_hash_exact,
     resolve_local_file,
@@ -12390,6 +12391,10 @@ def main() -> None:
     args = parser.parse_args()
     if args.docs_dir is None:
         args.docs_dir = str(Path(args.site_dir) / STARLIGHT_CONTENT)
+    # Before any write: the public assets and the bootstraps went out first,
+    # and a mistyped folder stopped the run only after them.
+    require_directory(args.emulators_dir, "--emulators-dir")
+    require_directory(args.platforms_dir, "--platforms-dir")
     try:
         # Two runs over one docs/ delete each other's pages and scratch
         # files in the sweep, so the second is refused instead.
