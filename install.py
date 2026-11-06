@@ -680,8 +680,9 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # found nowhere and no folder to assume) or from (a folder named with --from,
     # reason: not_found, not_a_folder, unreadable, or system for the root
     # of the system and /proc, /sys, /dev) or dest (reason: unreadable, a
-    # folder above it this user cannot open, or not_writable, the BIOS
-    # folder cannot be created, a summary following) or option (reason:
+    # folder above it this user cannot open, not_a_folder, the BIOS folder
+    # is a file or lies under one, or not_writable, the BIOS folder cannot
+    # be created, a summary following) or option (reason:
     # unknown, a platform, target, system, core or emulator the run cannot
     # use, refused before any download).
     "error": ("stage", "reason", "platform", "message"),
@@ -13773,6 +13774,27 @@ def _refuse_closed(dest: Path, named: str) -> None:
     sys.exit(1)
 
 
+def _refuse_file(dest: Path, named: str) -> None:
+    """End the run on a BIOS folder that is a file, or lies under one.
+
+    mkdir then failed on EEXIST or ENOTDIR, and the run blamed permissions
+    and offered sudo, which fails the same way.
+    """
+    for folder in (dest, *dest.parents):
+        if _exists(folder):
+            break
+    else:
+        return
+    if _is_dir(folder):
+        return
+    where = (f"{shown_path(dest)} is a file, not a folder" if folder == dest
+             else f"{shown_path(dest)} cannot be a folder: {shown_path(folder)} is a file")
+    EVENTS.emit("error", stage="dest", reason="not_a_folder", platform="", message=where)
+    print(f"Error: {screen_text(where)}. Name the folder the BIOS files go in, not "
+          f"the file {named}.", file=sys.stderr)
+    sys.exit(1)
+
+
 def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
                   again: bool = False) -> bool:
     """Say that a --dest folder does not exist before anything goes there.
@@ -13787,6 +13809,7 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     a card's folder ended the run where it meant "not that card".
     """
     _refuse_closed(dest, named)
+    _refuse_file(dest, named)
     if dest.exists():
         return True
     nearest = dest.absolute()
@@ -15114,6 +15137,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                      else f"{found_in[0]} names" if found_in else "detected here")
             # One setup by now: two found without questions stopped above.
             _refuse_closed(path, f"{named} (name another with --dest)")
+            _refuse_file(path, f"{named} (name another with --dest)")
 
     total_downloaded = 0
     total_up_to_date = 0

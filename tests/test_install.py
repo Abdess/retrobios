@@ -448,6 +448,40 @@ class AMissingDestIsSaid(unittest.TestCase):
         self.assertIn("does not exist", out)
 
 
+class ADestThatIsAFileIsNamed(unittest.TestCase):
+    """--dest naming a file, or a path under one, failed at mkdir with
+    EEXIST or ENOTDIR, and the run said this user cannot write there and
+    offered a sudo command that fails the same way."""
+
+    def _run(self, dest: Path) -> subprocess.CompletedProcess:
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        return subprocess.run(
+            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
+             "--dest", str(dest), "--manifest", str(REPO_ROOT / "install" / "retroarch.json"),
+             "--system", "nintendo-gba", "--yes", "--events", "--offline"],
+            env=env, capture_output=True, text=True, timeout=120, check=False,
+            stdin=subprocess.DEVNULL)
+
+    def test_the_file_is_named_and_sudo_is_not_offered(self):
+        root = Path(_tempdir(self))
+        (root / "scph5501.bin").write_bytes(b"x")
+        for dest, words in (
+            (root / "scph5501.bin", f"{root / 'scph5501.bin'} is a file, not a folder"),
+            (root / "scph5501.bin" / "sub",
+             f"cannot be a folder: {root / 'scph5501.bin'} is a file"),
+        ):
+            with self.subTest(dest=dest):
+                proc = self._run(dest)
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertIn(words, proc.stderr)
+                self.assertNotIn("sudo", proc.stderr)
+                errors = [json.loads(line) for line in proc.stdout.splitlines()
+                          if line.startswith("{") and '"error"' in line]
+                self.assertEqual([(e["stage"], e["reason"]) for e in errors],
+                                 [("dest", "not_a_folder")])
+                self.assertEqual((root / "scph5501.bin").read_bytes(), b"x")
+
+
 class AFolderThatRefusesWritesIsNamed(unittest.TestCase):
     """A read-only BIOS folder ended the run on a traceback (a subfolder to
     create), or on three retries per file and "once that is resolved", and a
