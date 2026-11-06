@@ -1002,6 +1002,7 @@ pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin s
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
 python scripts/profile_sync.py --added --strict  # each profile the branch adds
+python scripts/export_native.py --all --fetch --output-dir tmp/native  # files the exporter tests compare with
 python scripts/refresh_data_dirs.py  # data directories the pack-building tests read
 python scripts/generate_site.py       # the pages the site tests read
 npm ci --prefix website && npm run build --prefix website  # the built site, Node 24

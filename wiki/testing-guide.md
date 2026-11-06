@@ -493,6 +493,10 @@ of main passes, not every commit under it.
 
 Modules that need real artifacts skip themselves when those artifacts are absent,
 so `test_pack_integrity` is a no-op in CI (no `dist/`) and a real check locally.
+The exporter fidelity cases go the other way: they compare with each platform's
+own file, which `python scripts/export_native.py --all --fetch --output-dir
+tmp/native` downloads into `.cache/upstream-native/`. CI runs it before the
+suite, and a clone without that cache skips them.
 Run `python -m unittest discover -s tests -t .` before pushing.
 
 Tests must pass before merge. If a test fails in CI, reproduce locally with:
