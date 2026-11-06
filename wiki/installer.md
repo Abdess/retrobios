@@ -1351,7 +1351,7 @@ parts. The registry names fifteen entries, Flatpak folders included:
 | `dc/dc_boot.bin`, `dc/dc_nvmem.bin` | Flycast's data folder, native and Flatpak |
 
 The rest comes from the emulator profiles. A profile that gives the folder its
-standalone build reads (`data_root`, per system) has each file with a
+standalone build reads, per system, has each file with a
 `standalone_path` copied to that path under the folder: Cemu's `keys.txt`,
 `otp.bin` and `seeprom.bin` to `~/.local/share/Cemu`, xemu's EEPROM, melonDS's
 DSi SD image. A copy carries `as` when the emulator reads the file under
