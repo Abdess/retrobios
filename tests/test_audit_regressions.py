@@ -5143,8 +5143,32 @@ class UnsourceableCardSaysWhy(unittest.TestCase):
         text = "\n".join(_render_emulator_file(
             entry, {"files": [entry]}, None, [entry], lambda f: False, "file-x",
         ))
-        self.assertIn("Not collectable: written by the firmware editor", text)
-        self.assertIn("../gaps.md#acknowledged-gaps", text)
+        self.assertIn("Not collected yet: written by the firmware editor", text)
+        self.assertIn("../gaps.md#not-collected-yet", text)
+        self.assertNotIn("collectable", text)
+
+    def test_the_gaps_page_names_where_a_wanted_file_is_listed(self):
+        """The section read "Acknowledged gaps ... (verified from source
+        code)" while No-Intro lists XM7's KANJI2.ROM and MAME's fm7740sx.zip
+        carries it: the flag only keeps a homonym out, the file is wanted."""
+        from scripts.generate_site import generate_gap_analysis
+
+        unsourced = {"name": "KANJI2.ROM", "reason": "no dump distributed", "source_ref": ""}
+        report = {"xm7": {"emulator": "XM7", "gaps": 0, "gap_missing": 0, "gap_bios": 0,
+                          "unsourceable": [unsourced], "gap_details": []}}
+        catalogued = {"no-intro": {"missing": [{
+            "name": "KANJI2.rom",
+            "romsets": [{"source": "mame", "archive": "fm7740sx.zip"}],
+            "needed_by": [{"emulator": "xm7", "name": "KANJI2.ROM", "required": True}],
+        }]}}
+        page = generate_gap_analysis(
+            {"xm7": {"emulator": "XM7", "files": []}}, {}, {"files": {}, "indexes": {}},
+            gap_report=report, catalogued=catalogued)
+        self.assertIn("## Not collected yet", page)
+        self.assertIn('<span id="acknowledged-gaps"></span>', page)
+        self.assertIn("| No-Intro `KANJI2.rom`, mame `fm7740sx.zip` |", page)
+        self.assertNotIn("Acknowledged", page)
+        self.assertNotIn("verified from source code", page)
 
 
 

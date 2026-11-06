@@ -86,7 +86,7 @@ from generate_readme import (
     extract_targets,
     release_totals,
 )
-from provenance_report import build_report, distinct_missing
+from provenance_report import build_report, distinct_missing, profile_needs
 import sitemarkup as markup
 import siteentries
 import siteinputs
@@ -8433,12 +8433,7 @@ def _render_emulator_file(
     if fnote:
         lines.append(f"- {data_root_words(_escape_tags(link_prose_citations(profile, str(fnote))), data_href)}")
     if not in_repo and f.get("unsourceable"):
-        # The badge alone sent readers after a dump that cannot exist, and the
-        # reason was only on the gaps page, which the card did not link.
-        lines.append(
-            f"- Not collectable: {_escape_tags(str(f['unsourceable']))} "
-            "([acknowledged gaps](../gaps.md#acknowledged-gaps))"
-        )
+        lines.append(f"- {_unsourceable_line(f)}")
     lines.extend(_contents_lines(contents))
     lines[body_start:] = _search_skipped_apart(lines[body_start:])
     lines.append("")
@@ -8550,12 +8545,7 @@ def _emulator_card_folds(
         open_lines.append(data_root_words(
             _escape_tags(link_prose_citations(profile, str(fnote))), data_href))
     if not in_repo and f.get("unsourceable"):
-        # The badge alone sent readers after a dump that cannot exist, and the
-        # reason was only on the gaps page, which the card did not link.
-        open_lines.append(
-            f"Not collectable: {_escape_tags(str(f['unsourceable']))} "
-            "([acknowledged gaps](../gaps.md#acknowledged-gaps))"
-        )
+        open_lines.append(_unsourceable_line(f))
     lines = [f"- {d}" for d in open_lines]
     shut_fold = [f"- {d}" for d in hashes + [m for m in more if skipped(m)]]
     read_fold = [f"- {m}" for m in more if not skipped(m)]
@@ -10459,6 +10449,33 @@ def _hash_cell(hashes: dict[str, list[str]]) -> str:
     )
 
 
+def _unsourceable_line(f: dict) -> str:
+    """Why the collection holds no copy of a file a profile marks
+    `unsourceable:`, linked to the list of them. The flag only keeps a
+    same-named file from being served in its place: the file is still
+    wanted, and "Not collectable" sent readers away from KANJI2.ROM, which
+    MAME's fm7740sx.zip carries."""
+    return (f"Not collected yet: {_escape_tags(str(f['unsourceable']))} "
+            "([files not collected yet](../gaps.md#not-collected-yet))")
+
+
+def _catalogued_needs(report: dict | None) -> dict[tuple[str, str], list[str]]:
+    """(profile, file name casefolded) -> where a dump catalog or an
+    imported romset lists that file, from a provenance report built with
+    the profiles' needs."""
+    out: dict[tuple[str, str], list[str]] = {}
+    for source, data in sorted((report or {}).items()):
+        label = _PROVENANCE_LABELS.get(source, source)
+        for entry in data.get("missing", []):
+            where = [f"{label} `{_escape_tags(str(entry.get('name', '')))}`"]
+            where += [f"{_escape_tags(str(hit['source']))} `{_escape_tags(str(hit['archive']))}`"
+                      for hit in entry.get("romsets", [])]
+            for need in entry.get("needed_by", []):
+                held = out.setdefault((need["emulator"], str(need["name"]).casefold()), [])
+                held += [w for w in where if w not in held]
+    return out
+
+
 def _reason_cell(text: str) -> str:
     """A reason in a gaps table, in the class that keeps its column readable."""
     return f'<span class="rb-reason">{text}</span>' if text else "-"
@@ -10753,8 +10770,13 @@ def generate_gap_analysis(
     registry: dict | None = None,
     gap_report: dict | None = None,
     moved: dict[str, str] | None = None,
+    catalogued: dict | None = None,
 ) -> str:
     """Generate a unified gap analysis page.
+
+    ``catalogued`` is a provenance report built with the profiles' needs:
+    a file the collection does not hold yet names the catalog or romset
+    that lists it.
 
     With ``moved``, the list of files to source goes to pages of its own,
     keyed by stem: on the page it made 662 KB of HTML.
@@ -11186,7 +11208,7 @@ def generate_gap_analysis(
                 "",
             ])
 
-    # ---- Section 4: Acknowledged gaps (unsourceable files) ----
+    # ---- Section 4: files the collection does not hold yet (unsourceable) ----
 
     all_unsourceable: list[dict] = []
     for emu_name, data in sorted(report_all.items()):
@@ -11200,19 +11222,26 @@ def generate_gap_analysis(
             })
 
     if all_unsourceable:
+        listed = _catalogued_needs(catalogued)
+        # The old heading's address still leads here.
         lines.extend([
-            "## Acknowledged gaps",
+            '<span id="acknowledged-gaps"></span>',
             "",
-            f"{len(all_unsourceable)} files documented as unsourceable "
-            "(verified from source code).",
+            "## Not collected yet",
             "",
-            "| File | Emulator | Reason | Source ref |",
-            "|------|----------|--------|-----------|",
+            f"{len(all_unsourceable)} files the collection does not hold. A file "
+            "with the same name is never served in their place. Each is still "
+            "wanted, and the last column names a catalog or romset that lists it.",
+            "",
+            "| File | Emulator | Reason | Source ref | Listed in |",
+            "|------|----------|--------|-----------|-----------|",
         ])
         for u in sorted(all_unsourceable, key=lambda x: x["name"]):
+            where = listed.get((u["emu_key"], str(u["name"]).casefold()), [])
             lines.append(
                 f"| `{u['name']}` | {u['emulator']} | {_reason_cell(u['reason'])} "
-                f"| {_source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} |"
+                f"| {_source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} "
+                f"| {', '.join(where) or '-'} |"
             )
         lines.append("")
 
@@ -12563,12 +12592,16 @@ def _generate(args: argparse.Namespace) -> None:
             sitestarlight.MOVED_PAGES.setdefault(
                 f"cross-reference-{pname}.md", f"platforms/{pname}.md")
 
+    provenance_report = build_report(
+        db, load_provenance_snapshots(), needs=profile_needs(profiles, db))
+
     print("Generating gap analysis page...")
     gap_pages: dict[str, str] = {}
     write_if_changed(
         str(docs / "gaps.md"),
         tables_out_of_search(generate_gap_analysis(
             profiles, coverages, db, suppl_names, registry, gap_report, gap_pages,
+            catalogued=provenance_report,
         )) + reference_next(),
     )
     for stem, page in gap_pages.items():
@@ -12584,7 +12617,6 @@ def _generate(args: argparse.Namespace) -> None:
     )
 
     print("Generating dump provenance page...")
-    provenance_report = build_report(db, load_provenance_snapshots())
     provenance_pages: dict[str, str] = {}
     write_if_changed(
         str(docs / "provenance.md"),
