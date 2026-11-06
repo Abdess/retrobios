@@ -7102,6 +7102,30 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         self.assertEqual(named, [])
 
 
+class SynthRomsAreFoundByContent(unittest.TestCase):
+    """dosbox-staging's libmt32emu scan identifies each file of the ROM
+    folder with identifyROMFile (src/midi/mt32_lasynth_model.cpp:68-91 at
+    fa1856c0), and the Sound Canvas plugin hashes its model folder
+    (Nuked-SC55-CLAP, RomLoader::Hashing). The truth read the labels as
+    names dosbox-staging opens, and MT32_CONTROL.ROM did not count."""
+
+    def test_every_synth_rom_is_marked(self):
+        import yaml
+
+        from validation import opens_by_name
+
+        profile = yaml.safe_load(
+            (ROOT / "emulators" / "dosbox-staging.yml").read_text(encoding="utf-8")
+        )
+        named = [
+            entry["name"]
+            for entry in profile["files"]
+            if str(entry.get("path", "")).startswith(("mt32-roms/", "soundcanvas-roms/"))
+            and opens_by_name(entry, profile)
+        ]
+        self.assertEqual(named, [])
+
+
 class Dev9FilesAreReadFromTheWorkingDirectory(unittest.TestCase):
     """DEV9 opens eeprom.dat and flash.dat by bare name (PCSX2
     pcsx2/DEV9/DEV9.cpp:144, AetherSX2 DEV9/flash.cpp:89): the working
