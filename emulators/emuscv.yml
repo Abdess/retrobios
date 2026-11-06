@@ -33,10 +33,11 @@ notes: |
 
   When CHECKBIOS core option is YES, the core computes MD5 of the loaded
   data and compares against 635a978fd40db9a18ee44eff449fc126. If the
-  hash does not match, the BIOS is rejected (zeroed out,
+  hash does not match, the BIOS is rejected (filled with 0xFF,
   bios_present=false). When CHECKBIOS is AUTO (default) or NO, any file
-  content is accepted. The log message for AUTO says "automatic (yes)"
-  but the code skips the check (code bug: != YES_VAL at line 80).
+  content is accepted. With AUTO the log says "automatic (yes)", and the
+  MD5 comparison runs only when the option equals YES_VAL
+  (src/vm/scv/memory.cpp:80), so AUTO accepts any content.
 
   The font/character data is embedded within the BIOS at offset 0x200
   (memory.h get_font() returns bios + 0x200). No separate font ROM file.

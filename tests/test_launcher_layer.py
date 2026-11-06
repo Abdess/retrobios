@@ -318,6 +318,32 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertNotIn("a.bin", names)
         self.assertEqual(result["packed_extras"]["bios"], len(names - {"plain.bin"}))
 
+    def test_the_gap_report_reads_the_launcher_too(self) -> None:
+        """cross_reference --platform batocera listed duckstation's
+        scph1002a.bin as packed while the PAL slot was filled by the
+        launcher's scph5502.bin, which verify and the builder both knew."""
+        from cross_reference import cross_reference, declared_names, load_platform_files
+        from launchers import declared_destinations
+
+        selected = ["launchertest"]
+        declared, data_dirs = load_platform_files(self.platforms_dir, selected)
+        layer = LauncherLayer(
+            self.config, self.profiles, self.profiles, self.db,
+            declared_destinations(self.config),
+        )
+        report = cross_reference(
+            self.profiles, declared, self.db, data_dirs, set(),
+            all_declared=declared_names(self.platforms_dir, selected, self.db),
+            standalone_cores={"psxemu", "fixemu"},
+            platform="launchertest", launcher_layer=layer,
+        )
+        gaps = sorted(
+            g["path"] for data in report.values() for g in data["gap_details"]
+        )
+        self.assertEqual(gaps, sorted(u["path"] for u in self._report()))
+        self.assertNotIn("core.bin", gaps)
+        self.assertEqual(report["fixemu"]["set_aside"]["launcher"], 1)
+
     def test_one_decision_for_verify_and_pack(self) -> None:
         """The layer is applied once, in the report both sides read."""
         import generate_pack

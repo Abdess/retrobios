@@ -20,7 +20,7 @@ systems:
 notes: |
   Bruno Vedder's OsmOse 0.8.1 as ported to the Raspberry Pi by palerider,
   with badman12345's joystick quit option (readme.rpi:1-13,
-  Version.h:3). RetroPie builds the tree with make and launches
+  Version.h:5). RetroPie builds the tree with make and launches
   osmose with the ROM and -tv -fs.
 
   The cartridge is mapped directly at reset. No BIOS image is loaded:

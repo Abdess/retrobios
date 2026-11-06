@@ -43,6 +43,69 @@ class Companions(unittest.TestCase):
         found = _companions("bios/PS2/SCPH-70004.BIN", "SCPH-70004.BIN", {"rom1", "nvm"}, files_db)
         self.assertEqual([sha for sha, _ in found], ["a"])
 
+    def test_a_companion_is_named_as_pcsx2_spells_it(self):
+        """PCSX2 stats SCPH-70004.BIN.rom1 then SCPH-70004.rom1, case kept
+        (BiosTools.cpp:214-229). The pack wrote SCPH-70004.ROM1, which a
+        Linux platform never finds, and the DVD ROM was skipped."""
+        files_db = {
+            "a": {"path": "bios/PS2/SCPH-70004.ROM1", "name": "SCPH-70004.ROM1"},
+            "b": {"path": "bios/PS2/scph-70004.bin.rom2", "name": "scph-70004.bin.rom2"},
+        }
+        found = _companions(
+            "bios/PS2/SCPH-70004.BIN", "SCPH-70004.BIN", {"rom1", "rom2"}, files_db
+        )
+        self.assertEqual(
+            [entry["name"] for _, entry in found],
+            ["SCPH-70004.rom1", "SCPH-70004.BIN.rom2"],
+        )
+
+    def test_a_companion_entry_scans_its_own_extension_only(self):
+        """The rom1 entry declared max 4 MB and swept every smaller file of
+        the PS2 folder (cheats, GameIndex.yaml, DVD firmware) to the BIOS
+        root under its stored name, SCPH-70004.ROM1 included."""
+        import os
+        import tempfile
+
+        from packextras import _agnostic_scan_extras
+
+        profile = {
+            "emulator": "PCSX2", "bios_mode": "agnostic", "files": [
+                {"name": "ps2-0230a-20080220.bin", "found_by": "content",
+                 "min_size": 8, "max_size": 16},
+                {"name": "ps2-0230a-20080220.rom1", "max_size": 4},
+            ],
+        }
+        stored = {
+            "ps2-0230a-20080220.bin": b"I" * 8,
+            "SCPH-70004.ROM1": b"R" * 6,
+            "cheats_ws.zip": b"Z",
+            "GameIndex.yaml": b"Y",
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            cwd = os.getcwd()
+            os.chdir(tmp)
+            try:
+                files, by_name = {}, {}
+                for name, payload in stored.items():
+                    path = f"bios/PS2/{name}"
+                    os.makedirs("bios/PS2", exist_ok=True)
+                    Path(path).write_bytes(payload)
+                    sha1 = f"{len(files):040d}"
+                    files[sha1] = {"path": path, "name": name, "size": len(payload),
+                                   "sha1": sha1}
+                    by_name[name] = [sha1]
+                db = {"files": files, "indexes": {
+                    "by_name": by_name, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {},
+                }}
+                extras = _agnostic_scan_extras(
+                    {"pcsx2": profile}, {"pcsx2"}, db, by_name, set(), "",
+                )
+            finally:
+                os.chdir(cwd)
+        names = {e["destination"] for e in extras}
+        self.assertIn("SCPH-70004.rom1", names)
+        self.assertFalse({"SCPH-70004.ROM1", "cheats_ws.zip", "GameIndex.yaml"} & names)
+
     def test_pcsx2_profiles_name_no_free_standing_companion(self):
         for name in ("pcsx2", "pcsx2-legacy"):
             profile = yaml.safe_load((REPO_ROOT / "emulators" / f"{name}.yml").read_text())

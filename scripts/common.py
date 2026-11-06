@@ -430,11 +430,24 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
 
     # Each entry carries the system that declares it: a hashless name match is
     # narrowed to the maker folder that system names (resolve_local_file).
+    # A system that names its own cores (EmuELEC, AmberELEC, KNULLI) also
+    # passes them on, so another emulator's tree is foreign to its entries.
     # Fresh dicts, since a YAML anchor can share one entry between systems.
     config["systems"] = {
         sys_id: {
             **system,
-            "files": [{**f, "platform_system": sys_id} for f in system["files"]],
+            "files": [
+                {
+                    **f,
+                    "platform_system": sys_id,
+                    **(
+                        {"platform_cores": list(system["cores"])}
+                        if system.get("cores")
+                        else {}
+                    ),
+                }
+                for f in system["files"]
+            ],
         }
         if isinstance(system, dict) and system.get("files")
         else system
@@ -1754,6 +1767,24 @@ def resolve_local_file(
                             continue
                         if os.path.exists(path) and path not in candidates:
                             candidates.append(path)
+        # A platform entry names no profile, but a system that lists its
+        # cores says whose files it asks for. A name only another emulator's
+        # tree answers is no evidence, and the data directories hold those
+        # emulators' trees too: EmuELEC's VVVVVV data.zip was served xrick's
+        # archive of the same name, then xrick's data directory copy.
+        core_owners = {
+            token
+            for core in file_entry.get("platform_cores") or ()
+            for token in _affinity_tokens(str(core))
+        }
+        if (
+            not owners
+            and core_owners
+            and candidates
+            and all(_foreign_tree(p, core_owners) for p in candidates)
+        ):
+            candidates = []
+            unsourceable = True
         if makers and candidates:
             candidates = [p for p in candidates if not other_maker(p, makers, db)]
             if not candidates:

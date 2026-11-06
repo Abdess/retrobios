@@ -1035,13 +1035,18 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
     """
     allowed = _contract_keys()
     contract = {key: value for key, value in config.items() if key in allowed}
-    # platform_system is the resolver's copy of the key each entry sits under.
+    # platform_system and platform_cores are the resolver's copies of the key
+    # each entry sits under and of that system's cores.
     if isinstance(contract.get("systems"), dict):
         contract["systems"] = {
             sys_id: {
                 **system,
                 "files": [
-                    {k: v for k, v in f.items() if k != "platform_system"}
+                    {
+                        k: v
+                        for k, v in f.items()
+                        if k not in ("platform_system", "platform_cores")
+                    }
                     for f in system["files"]
                 ],
             }

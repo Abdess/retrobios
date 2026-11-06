@@ -182,6 +182,7 @@ files:
     source_ref: "source pcsx2/ps2/BiosTools.cpp:17-18, source pcsx2/ps2/BiosTools.cpp:81-211, source pcsx2/ps2/BiosTools.cpp:421-450, source pcsx2/ps2/BiosTools.cpp:505-565"
 
   - name: r27v1602f.8g
+    found_by: content
     path: pcsx2/bios/r27v1602f.8g
     standalone_path: bios/r27v1602f.8g
     agnostic: true
@@ -201,6 +202,7 @@ files:
     source_ref: "source pcsx2/ps2/BiosTools.cpp:282-299, source pcsx2/ps2/BiosTools.cpp:331-419, source pcsx2/ps2/BiosTools.cpp:505-529, source pcsx2/VMManager.cpp:895-899, source pcsx2/VMManager.cpp:1847-1871, source pcsx2/VMManager.cpp:2123-2130"
 
   - name: r27v1602f.7d
+    found_by: content
     path: pcsx2/bios/r27v1602f.7d
     standalone_path: bios/r27v1602f.7d
     agnostic: true
@@ -217,6 +219,7 @@ files:
     source_ref: "source pcsx2/ps2/BiosTools.cpp:176-183, source pcsx2/ps2/BiosTools.cpp:331-419, source pcsx2/ps2/BiosTools.cpp:505-529"
 
   - name: COH-H31000.BIN
+    found_by: content
     path: pcsx2/bios/COH-H31000.BIN
     standalone_path: bios/COH-H31000.BIN
     agnostic: true

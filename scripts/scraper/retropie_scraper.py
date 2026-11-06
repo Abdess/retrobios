@@ -56,6 +56,18 @@ _VERSION = re.compile(r'^__version="([^"]+)"', re.MULTILINE)
 _PACKAGE_DIRS = _SCRIPT_SECTIONS
 
 
+def core_name(module_id: str) -> str:
+    """The core a RetroPie package installs, as the buildbot names it.
+
+    A libretro package is lr-<core> with the name hyphenated (lr-beetle-psx
+    builds beetle_psx). A standalone package keeps its id (dosbox-staging).
+    The platform and target scrapers both read it here.
+    """
+    if module_id.startswith("lr-"):
+        return module_id[3:].replace("-", "_")
+    return module_id
+
+
 class Scraper(BaseScraper):
     """Scraper for the RetroPie package list."""
 
@@ -148,10 +160,11 @@ class Scraper(BaseScraper):
         libretro cores and reads the same files, at BIOS/ instead of
         system/. Only the core list is its own.
         """
-        # A libretro package is lr-<core>; a standalone package is named
-        # after the emulator itself.
+        # Named by core_name(), as the target scraper names them. Kept
+        # hyphenated, lr-dosbox-pure named dosbox-pure, the standalone
+        # DOSBox Pure Unleashed build RetroPie does not ship.
         modules = self.module_ids()
-        cores = sorted({module.removeprefix("lr-") for module in modules})
+        cores = sorted({core_name(m) for m in modules})
         libretro = {m.removeprefix("lr-") for m in modules if m.startswith("lr-")}
         # The retroarch package is the frontend that runs the lr- cores.
         standalone = sorted(

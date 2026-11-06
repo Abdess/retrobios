@@ -19,7 +19,7 @@ systems:
 
 notes: |
   Raspberry Pi build by eagle0wl of Yui's Neko Project II 0.83
-  (np2ver.h:1), the SDL front end compiled with sdl/makefile.rpi and
+  (np2ver.h:2), the SDL front end compiled with sdl/makefile.rpi and
   sdl/raspberrypi/compiler.h. That header defines SUPPORT_SASI and
   SUPPORT_SCSI but not SUPPORT_PC9821, and bios/bios.c defines
   BIOS_SIMULATE, so bios9821.rom and itf.rom are never opened: the ITF

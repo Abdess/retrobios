@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING
 
 import nativemode
 from common import (
+    compute_hashes,
     platform_arg,
     archive_entry,
     build_zip_contents_index,
@@ -759,12 +760,18 @@ def find_collisions(
 def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
     """Whether the two layers agree on what ships at this destination.
 
-    They agree when they resolve to the same file, when the platform's own
+    They agree when they resolve to the same bytes, when the platform's own
     hash list accepts the profile's file, or when the profile's accepts the
     platform's. A contradiction needs both lists to reject the other side.
     """
     if profile.local_path == platform.local_path:
         return True
+    # Two paths can hold one content: AmberELEC's bluemsx declarations
+    # resolve into the data/bluemsx cache, the profile's into bios/.
+    if profile.local_path and platform.local_path:
+        shipped = _content_sha1(platform.local_path, db)
+        if shipped is not None and shipped == _content_sha1(profile.local_path, db):
+            return True
     members = profile.entry.get("members")
     if members and platform.local_path:
         return holds_required_members(platform.local_path, members)
@@ -819,6 +826,19 @@ def _record_at(path: str, db: dict) -> dict | None:
 
 
 _PATH_INDEX: dict[int, tuple[dict, dict[str, dict]]] = {}
+
+
+def _content_sha1(path: str, db: dict) -> str | None:
+    """The sha1 of the file at path, from the database or read from disk.
+
+    A data directory cache is not in the database, so its files are hashed.
+    """
+    record = _record_at(path, db)
+    if record is not None:
+        return record.get("sha1")
+    if not os.path.isfile(path):
+        return None
+    return compute_hashes(path, frozenset({"sha1"}))["sha1"]
 
 
 def _accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:

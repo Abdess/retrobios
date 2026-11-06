@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 
 import yaml
 
+from ..retropie_scraper import core_name
 from . import BaseTargetScraper
 
 PLATFORM_NAME = "retropie"
@@ -158,15 +159,10 @@ class Scraper(BaseTargetScraper):
             if not module_id:
                 print(f"  warning: no rp_module_id in {filename}", file=sys.stderr)
                 continue
-            # A libretro package is lr-<core> with the buildbot name hyphenated
-            # (lr-beetle-psx -> beetle_psx), and a standalone package keeps the id
-            # the platform list carries (dosbox-staging).
-            core_name = module_id
-            if core_name.startswith("lr-"):
-                core_name = core_name[3:].replace("-", "_")
+            # The platform scraper names the package the same way.
             for platform in PLATFORM_FLAGS:
                 if _is_available(flags, platform):
-                    platform_cores[platform].add(core_name)
+                    platform_cores[platform].add(core_name(module_id))
 
         print(f"  parsed {len(filenames)} scriptmodules", file=sys.stderr)
 

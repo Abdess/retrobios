@@ -20,7 +20,7 @@ import re
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 
-from common import declared_root, name_match_size_ok, sanitize_pack_path
+from common import declared_root, name_match_size_ok, resolve_local_file, sanitize_pack_path
 
 # The kinds whose names say which file the launcher opens. A link of a named
 # file is one too: ROCKNIX links /storage/roms/bios/nds_bios_arm9.bin into
@@ -328,6 +328,17 @@ def standalone_root(
             if link.folder is not None and record.directory in link.handles
         )
     return next(iter(folders)) if len(folders) == 1 else None
+
+
+def held_record(report: dict, db: dict) -> dict | None:
+    """The database record of the file the collection holds for a report entry."""
+    local, status = resolve_local_file(report, db, dest_hint=report.get("path") or "")
+    if local is None or status in ("not_found", "hash_mismatch"):
+        return None
+    for record in db.get("files", {}).values():
+        if record.get("path") == local:
+            return record
+    return None
 
 
 def declared_destinations(config: dict) -> set[str]:

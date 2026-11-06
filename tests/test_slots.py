@@ -936,6 +936,32 @@ class ARecordIsFoundByItsPathOnce(unittest.TestCase):
         self.assertEqual(Counted.walks, 1)
 
 
+class TwoPathsHoldingOneContentAgree(unittest.TestCase):
+    """AmberELEC's bluemsx declarations resolve into the data/bluemsx cache,
+    the profile into bios/. Neither declares a hash and the bytes are the
+    same, yet the paths differed and 56 destinations read as contradicted."""
+
+    def test_same_bytes_under_two_paths_satisfy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cache = Path(tmp, "data", "MSX2EXT.rom")
+            stored = Path(tmp, "bios", "MSX2EXT.rom")
+            other = Path(tmp, "bios", "other.rom")
+            for path, payload in ((cache, b"rom"), (stored, b"rom"), (other, b"xyz")):
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(payload)
+            db = {"files": {}}
+            platform = Claim("platform", "Machines/MSX2EXT.rom", "MSX2EXT.rom",
+                             local_path=str(cache), status="path_exact")
+            same = Claim("profile", "Machines/MSX2EXT.rom", "MSX2EXT.rom",
+                         emulator="bluemsx", local_path=str(stored),
+                         status="path_exact")
+            different = Claim("profile", "Machines/MSX2EXT.rom", "MSX2EXT.rom",
+                              emulator="bluemsx", local_path=str(other),
+                              status="path_exact")
+            self.assertTrue(slots._satisfies(same, platform, db))
+            self.assertFalse(slots._satisfies(different, platform, db))
+
+
 class TheSlotsSummaryClosesTheRun(unittest.TestCase):
     """The totals came before the collision section and ignored it, and the
     help said the default run fails on conflicts the pack should settle,

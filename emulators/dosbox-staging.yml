@@ -132,6 +132,7 @@ files:
   # merged in memory when the full image is absent.
 
   - name: "ctrl_mt32_1_04.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_04.rom"
     description: "MT-32 Control v1.04"
     required: false
@@ -141,6 +142,7 @@ files:
     source_ref: "src/midi/mt32.cpp:110, src/midi/mt32.cpp:154-160, munt ROMInfo.cpp:59, munt ROMInfo.cpp:89"
 
   - name: "ctrl_mt32_1_05.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_05.rom"
     description: "MT-32 Control v1.05"
     required: false
@@ -150,6 +152,7 @@ files:
     source_ref: "src/midi/mt32.cpp:114, src/midi/mt32.cpp:162-168, munt ROMInfo.cpp:62, munt ROMInfo.cpp:92"
 
   - name: "ctrl_mt32_1_06.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_06.rom"
     description: "MT-32 Control v1.06"
     required: false
@@ -159,6 +162,7 @@ files:
     source_ref: "src/midi/mt32.cpp:118, src/midi/mt32.cpp:170-176, munt ROMInfo.cpp:65, munt ROMInfo.cpp:95"
 
   - name: "ctrl_mt32_1_07.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_07.rom"
     description: "MT-32 Control v1.07"
     required: false
@@ -168,6 +172,7 @@ files:
     source_ref: "src/midi/mt32.cpp:122, src/midi/mt32.cpp:178-184, munt ROMInfo.cpp:68, munt ROMInfo.cpp:98"
 
   - name: "ctrl_mt32_bluer.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_bluer.rom"
     description: "MT-32 Control BlueRidge"
     required: false
@@ -180,6 +185,7 @@ files:
   # MAME dumps mt32_2.0.3.ic28, mt32_2.0.4.ic28 and mt32_2.0.7.ic28.
 
   - name: "ctrl_mt32_2_03.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_2_03.rom"
     description: "MT-32 Control v2.03"
     required: false
@@ -189,6 +195,7 @@ files:
     source_ref: "src/midi/mt32.cpp:130, src/midi/mt32.cpp:194-200, munt ROMInfo.cpp:73, munt ROMInfo.cpp:103"
 
   - name: "ctrl_mt32_2_04.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_2_04.rom"
     description: "MT-32 Control v2.04"
     required: false
@@ -198,6 +205,7 @@ files:
     source_ref: "src/midi/mt32.cpp:132, src/midi/mt32.cpp:202-208, munt ROMInfo.cpp:74, munt ROMInfo.cpp:104"
 
   - name: "ctrl_mt32_2_06.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_2_06.rom"
     description: "MT-32 Control v2.06"
     required: false
@@ -207,6 +215,7 @@ files:
     source_ref: "src/midi/mt32.cpp:134, src/midi/mt32.cpp:210-216, munt ROMInfo.cpp:75, munt ROMInfo.cpp:105"
 
   - name: "ctrl_mt32_2_07.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_2_07.rom"
     description: "MT-32 Control v2.07"
     required: false
@@ -219,6 +228,7 @@ files:
   # MAME dumps lapc-i.v1.0.0.ic3.bin and cm32l_control.rom.
 
   - name: "ctrl_cm32l_1_00.rom"
+    found_by: content
     path: "mt32-roms/ctrl_cm32l_1_00.rom"
     description: "CM-32L/LAPC-I Control v1.00"
     required: false
@@ -228,6 +238,7 @@ files:
     source_ref: "src/midi/mt32.cpp:143, src/midi/mt32.cpp:226-232, munt ROMInfo.cpp:77, munt ROMInfo.cpp:107"
 
   - name: "ctrl_cm32l_1_02.rom"
+    found_by: content
     path: "mt32-roms/ctrl_cm32l_1_02.rom"
     description: "CM-32L/LAPC-I Control v1.02"
     required: false
@@ -237,6 +248,7 @@ files:
     source_ref: "src/midi/mt32.cpp:144, src/midi/mt32.cpp:234-240, munt ROMInfo.cpp:78, munt ROMInfo.cpp:108"
 
   - name: "ctrl_cm32ln_1_00.rom"
+    found_by: content
     path: "mt32-roms/ctrl_cm32ln_1_00.rom"
     description: "CM-32LN/CM-500/LAPC-N Control v1.00"
     required: false
@@ -252,6 +264,7 @@ files:
   # blue_ridge__mt32a.bin (_a) and blue_ridge__mt32b.bin (_b).
 
   - name: "ctrl_mt32_1_04_a.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_04_a.rom"
     description: "MT-32 Control v1.04, even bytes"
     required: false
@@ -261,6 +274,7 @@ files:
     source_ref: "src/midi/mt32.cpp:111, src/midi/mt32.cpp:154-160, munt ROMInfo.cpp:57, munt ROMInfo.cpp:87"
 
   - name: "ctrl_mt32_1_04_b.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_04_b.rom"
     description: "MT-32 Control v1.04, odd bytes"
     required: false
@@ -270,6 +284,7 @@ files:
     source_ref: "src/midi/mt32.cpp:112, src/midi/mt32.cpp:154-160, munt ROMInfo.cpp:58, munt ROMInfo.cpp:88"
 
   - name: "ctrl_mt32_1_05_a.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_05_a.rom"
     description: "MT-32 Control v1.05, even bytes"
     required: false
@@ -279,6 +294,7 @@ files:
     source_ref: "src/midi/mt32.cpp:115, src/midi/mt32.cpp:162-168, munt ROMInfo.cpp:60, munt ROMInfo.cpp:90"
 
   - name: "ctrl_mt32_1_05_b.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_05_b.rom"
     description: "MT-32 Control v1.05, odd bytes"
     required: false
@@ -288,6 +304,7 @@ files:
     source_ref: "src/midi/mt32.cpp:116, src/midi/mt32.cpp:162-168, munt ROMInfo.cpp:61, munt ROMInfo.cpp:91"
 
   - name: "ctrl_mt32_1_06_a.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_06_a.rom"
     description: "MT-32 Control v1.06, even bytes"
     required: false
@@ -297,6 +314,7 @@ files:
     source_ref: "src/midi/mt32.cpp:119, src/midi/mt32.cpp:170-176, munt ROMInfo.cpp:63, munt ROMInfo.cpp:93"
 
   - name: "ctrl_mt32_1_06_b.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_06_b.rom"
     description: "MT-32 Control v1.06, odd bytes"
     required: false
@@ -306,6 +324,7 @@ files:
     source_ref: "src/midi/mt32.cpp:120, src/midi/mt32.cpp:170-176, munt ROMInfo.cpp:64, munt ROMInfo.cpp:94"
 
   - name: "ctrl_mt32_1_07_a.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_07_a.rom"
     description: "MT-32 Control v1.07, even bytes"
     required: false
@@ -315,6 +334,7 @@ files:
     source_ref: "src/midi/mt32.cpp:123, src/midi/mt32.cpp:178-184, munt ROMInfo.cpp:66, munt ROMInfo.cpp:96"
 
   - name: "ctrl_mt32_1_07_b.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_1_07_b.rom"
     description: "MT-32 Control v1.07, odd bytes"
     required: false
@@ -324,6 +344,7 @@ files:
     source_ref: "src/midi/mt32.cpp:124, src/midi/mt32.cpp:178-184, munt ROMInfo.cpp:67, munt ROMInfo.cpp:97"
 
   - name: "ctrl_mt32_bluer_a.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_bluer_a.rom"
     description: "MT-32 Control BlueRidge, even bytes"
     required: false
@@ -333,6 +354,7 @@ files:
     source_ref: "src/midi/mt32.cpp:127, src/midi/mt32.cpp:186-192, munt ROMInfo.cpp:69, munt ROMInfo.cpp:99"
 
   - name: "ctrl_mt32_bluer_b.rom"
+    found_by: content
     path: "mt32-roms/ctrl_mt32_bluer_b.rom"
     description: "MT-32 Control BlueRidge, odd bytes"
     required: false
@@ -348,6 +370,7 @@ files:
   # r15179845.ic22.bin and r15179945.ic8.bin.
 
   - name: "pcm_mt32.rom"
+    found_by: content
     path: "mt32-roms/pcm_mt32.rom"
     description: "MT-32 PCM ROM"
     required: false
@@ -360,6 +383,7 @@ files:
     source_ref: "src/midi/mt32.cpp:138, src/midi/mt32.cpp:151, munt ROMInfo.cpp:83, munt ROMInfo.cpp:113, munt ROMInfo.cpp:115"
 
   - name: "pcm_mt32_l.rom"
+    found_by: content
     path: "mt32-roms/pcm_mt32_l.rom"
     description: "MT-32 PCM ROM, first half"
     required: false
@@ -369,6 +393,7 @@ files:
     source_ref: "src/midi/mt32.cpp:139, munt ROMInfo.cpp:81, munt ROMInfo.cpp:111"
 
   - name: "pcm_mt32_h.rom"
+    found_by: content
     path: "mt32-roms/pcm_mt32_h.rom"
     description: "MT-32 PCM ROM, second half"
     required: false
@@ -378,6 +403,7 @@ files:
     source_ref: "src/midi/mt32.cpp:140, munt ROMInfo.cpp:82, munt ROMInfo.cpp:112"
 
   - name: "pcm_cm32l.rom"
+    found_by: content
     path: "mt32-roms/pcm_cm32l.rom"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
     required: false
@@ -387,6 +413,7 @@ files:
     source_ref: "src/midi/mt32.cpp:147, src/midi/mt32.cpp:226-248, munt ROMInfo.cpp:85, munt ROMInfo.cpp:117"
 
   - name: "pcm_cm32l_h.rom"
+    found_by: content
     path: "mt32-roms/pcm_cm32l_h.rom"
     description: "CM-32L/CM-64/LAPC-I PCM ROM, second half"
     required: false
@@ -400,6 +427,7 @@ files:
   # directory at a time, so each SC-55-v* directory in use needs its own copy.
 
   - name: "sc55_waverom1.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom1.bin"
     description: "SC-55 wave ROM A (R15209276)"
     required: false
@@ -409,6 +437,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:340, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:83"
 
   - name: "sc55_waverom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom2.bin"
     description: "SC-55 wave ROM B (R15209277)"
     required: false
@@ -418,6 +447,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:342, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:84"
 
   - name: "sc55_waverom3.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.21/sc55_waverom3.bin"
     description: "SC-55 wave ROM C (R15209281)"
     required: false
@@ -429,6 +459,7 @@ files:
   # -- Roland SC-55 MCU ROMs, one pair per firmware version --
 
   - name: "sc55_rom1.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.00/sc55_rom1.bin"
     description: "SC-55 v1.00 MCU ROM (R15199748)"
     required: false
@@ -438,6 +469,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:336, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.00/sc55_rom2.bin"
     description: "SC-55 v1.00 program ROM (R15449258)"
     required: false
@@ -447,6 +479,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:338, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom1.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.10/sc55_rom1.bin"
     description: "SC-55 v1.10 MCU ROM (R15199736)"
     required: false
@@ -456,6 +489,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:351, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.10/sc55_rom2.bin"
     description: "SC-55 v1.10 program ROM (R15209275)"
     required: false
@@ -465,6 +499,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:353, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom1.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.20/sc55_rom1.bin"
     description: "SC-55 v1.20 and v1.21 MCU ROM (R15199778)"
     required: false
@@ -475,6 +510,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:366, Nuked-SC55-CLAP 381, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.20/sc55_rom2.bin"
     description: "SC-55 v1.20 program ROM (R15209337)"
     required: false
@@ -484,6 +520,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:368, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v1.21/sc55_rom2.bin"
     description: "SC-55 v1.21 program ROM (R15209363)"
     required: false
@@ -493,6 +530,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:383, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "sc55_rom1.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v2.00/sc55_rom1.bin"
     description: "SC-55 v2.00 MCU ROM (R15199799)"
     required: false
@@ -502,6 +540,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:396, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "sc55_rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55-v2.00/sc55_rom2.bin"
     description: "SC-55 v2.00 program ROM (R15209387)"
     required: false
@@ -513,6 +552,7 @@ files:
   # -- Roland SC-55mk2 v1.01 --
 
   - name: "rom1.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom1.bin"
     description: "SC-55mk2 v1.01 MCU ROM (R15199858)"
     required: false
@@ -522,6 +562,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:295, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP mcu.h:216"
 
   - name: "rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
     description: "SC-55mk2 v1.01 program ROM (R00233567)"
     required: false
@@ -531,6 +572,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:297, Nuked-SC55-CLAP emu.cpp:247-254, Nuked-SC55-CLAP mcu.h:217"
 
   - name: "rom_sm.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom_sm.bin"
     description: "SC-55mk2 v1.01 sub-MCU ROM (R15199880)"
     required: false
@@ -540,6 +582,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:299, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP submcu.h:62"
 
   - name: "waverom1.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/waverom1.bin"
     description: "SC-55mk2 wave ROM 16M (R15209359)"
     required: false
@@ -549,6 +592,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:301, Nuked-SC55-CLAP emu.cpp:238, Nuked-SC55-CLAP pcm.h:83"
 
   - name: "waverom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/waverom2.bin"
     description: "SC-55mk2 wave ROM 8M (R15279813)"
     required: false
@@ -561,6 +605,7 @@ files:
   # Accepted in place of the stock SC-55mk2 program ROM.
 
   - name: "rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
     description: "SC-55mk2 program ROM, strict SC-55 tones, SC-55 v1.21 drums"
     required: false
@@ -570,6 +615,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:553"
 
   - name: "rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
     description: "SC-55mk2 program ROM, strict SC-55 tones, SC-55 v2.00 drums"
     required: false
@@ -579,6 +625,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:555"
 
   - name: "rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
     description: "SC-55mk2 program ROM, SC-55 tones, SC-55 v1.21 drums"
     required: false
@@ -588,6 +635,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:557"
 
   - name: "rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
     description: "SC-55mk2 program ROM, SC-55 tones, SC-55 v2.00 drums"
     required: false
@@ -597,6 +645,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:559"
 
   - name: "rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
     description: "SC-55mk2 program ROM, SC-55mkII tones, SC-55 v1.21 drums"
     required: false
@@ -606,6 +655,7 @@ files:
     source_ref: "Nuked-SC55-CLAP rom_io.cpp:561"
 
   - name: "rom2.bin"
+    found_by: content
     path: "soundcanvas-roms/SC-55mk2-v1.01/rom2.bin"
     description: "SC-55mk2 program ROM, SC-55mkII tones, SC-55 v2.00 drums"
     required: false

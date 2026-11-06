@@ -158,6 +158,7 @@ files:
 
   # pcsx2x6 component, System 246/256 (RetroBat core pcsx2x6)
   - name: COH-H31100.rom0
+    found_by: content
     path: "pcsx2x6/TeknoParrot/bios/COH-H31100.rom0"
     system: namco-system246
     required: true

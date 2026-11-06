@@ -7125,6 +7125,9 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
     opens, and the RetroDECK export added it as a required file."""
 
     def test_every_ps2_image_scan_is_marked(self):
+        """ARMSX2's arcade scan takes 2 to 8 MB COH-H images by their EXTINFO
+        serial (BiosTools.cpp:366-419 at 7f914418): r27v1602f.8g read as a
+        name armsx2 opens on six platforms."""
         import yaml
 
         from validation import opens_by_name
@@ -7132,15 +7135,40 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         named = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-            if profile.get("bios_mode") != "agnostic":
-                continue
+            # Whatever the profile's own flags: TeknoParrot documents its
+            # pcsx2x6 component, whose scan is the same (BiosTools.cpp:268-291
+            # at 583f0e90), and carries no agnostic flag.
             for entry in profile.get("files") or []:
                 if (
-                    entry.get("min_size") == 4194304
+                    entry.get("min_size") in (2097152, 4194304)
                     and entry.get("max_size") == 8388608
                     and opens_by_name(entry, profile)
                 ):
                     named.append(f"{path.stem}: {entry['name']}")
+        self.assertEqual(named, [])
+
+
+class SynthRomsAreFoundByContent(unittest.TestCase):
+    """dosbox-staging's libmt32emu scan identifies each file of the ROM
+    folder with identifyROMFile (src/midi/mt32_lasynth_model.cpp:68-91 at
+    fa1856c0), and the Sound Canvas plugin hashes its model folder
+    (Nuked-SC55-CLAP, RomLoader::Hashing). The truth read the labels as
+    names dosbox-staging opens, and MT32_CONTROL.ROM did not count."""
+
+    def test_every_synth_rom_is_marked(self):
+        import yaml
+
+        from validation import opens_by_name
+
+        profile = yaml.safe_load(
+            (ROOT / "emulators" / "dosbox-staging.yml").read_text(encoding="utf-8")
+        )
+        named = [
+            entry["name"]
+            for entry in profile["files"]
+            if str(entry.get("path", "")).startswith(("mt32-roms/", "soundcanvas-roms/"))
+            and opens_by_name(entry, profile)
+        ]
         self.assertEqual(named, [])
 
 

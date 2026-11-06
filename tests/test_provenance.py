@@ -417,6 +417,29 @@ class TestProvenanceReport(unittest.TestCase):
         )
 
 
+class HeldUnderAnAlias(unittest.TestCase):
+    """profile_needs read held names from each record's own name: np2pi's
+    KANJI2.ROM, which the database holds as the PC-88 n88knj2.rom, was
+    listed missing and paired with the Fujitsu FM77AV40SX dump."""
+
+    DB = {
+        "files": {"a" * 40: {"name": "n88knj2.rom", "size": 131072}},
+        "indexes": {"by_name": {"KANJI2.ROM": ["a" * 40], "n88knj2.rom": ["a" * 40]}},
+    }
+
+    def _needs(self, **fields):
+        from scripts.provenance_report import profile_needs
+
+        entry = {"name": "KANJI2.ROM", "size": 131072, **fields}
+        return profile_needs({"emu": {"files": [entry]}}, self.DB)["by_name"]
+
+    def test_an_alias_the_database_indexes_is_held(self):
+        self.assertEqual(self._needs(), {})
+
+    def test_an_unsourceable_entry_is_not_held_by_a_homonym(self):
+        self.assertIn("kanji2.rom", self._needs(unsourceable="another machine's font"))
+
+
 class TestProvenancePage(unittest.TestCase):
     def _page(self, extra_entries=None, provenance=True):
         db = {

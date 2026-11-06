@@ -148,8 +148,10 @@ class NativeFile:
     # platform gives it), empty when no core the platform runs is named.
     runners: list[tuple[bool, str]] = field(default_factory=list)
     # The platform reads this file's md5 as a composite of its members
-    # (Recalbox on a .zip): the truth's md5 describes the container and
-    # can be neither compared with it nor written in its place.
+    # (Recalbox on a .zip) or as one member's (Batocera's zippedFile, which
+    # checkInsideZip compares inside the archive): the truth's md5 describes
+    # the container and can be neither compared with it nor written in its
+    # place.
     composite_md5: bool = False
     # Every truth entry of the system that answers to this platform entry's
     # name, whichever one the pairing took: the element names its cores, and
@@ -356,6 +358,9 @@ class Report:
     required_corrected: list[str] = field(default_factory=list)
     # Entries only content-scanning cores name: never written as files.
     labels: int = 0
+    # Additions to a system spanning several native ids that their cores do
+    # not tell apart, as truth system/name: not written.
+    unattributed: list[str] = field(default_factory=list)
 
     @property
     def corrections(self) -> int:
@@ -528,7 +533,8 @@ def build_native_model(
                     destination=destination,
                     native_system=native_id,
                     platform=file_entry,
-                    composite_md5=file_entry.get("zip_digest") == "composite",
+                    composite_md5=file_entry.get("zip_digest") == "composite"
+                    or bool(file_entry.get("zipped_file")),
                 )
             )
             report.files_kept += 1
@@ -551,7 +557,9 @@ def build_native_model(
     for system in systems.values():
         native_by_norm.setdefault(_norm_system_id(system.native_id), system.native_id)
 
-    def _target_native_ids(truth_sid: str) -> list[str]:
+    def _target_native_ids(truth_sid: str) -> tuple[list[str], bool]:
+        """The native ids a truth system spans, and whether the first one
+        is where an addition belongs without asking which core reads it."""
         scraped_key = truth_sid if truth_sid in scraped_systems else None
         if scraped_key is None:
             scraped_key = norm_to_scraped.get(_norm_system_id(truth_sid))
@@ -562,7 +570,7 @@ def build_native_model(
                 for fe in sys_data.get("files", [])
             }
             if not ids:
-                return [sys_data.get("native_id") or scraped_key]
+                return [sys_data.get("native_id") or scraped_key], True
             # A file the platform does not declare joins the system's primary
             # id, not whichever of its native ids sorts first: Recalbox files
             # pcengine, pcenginecd and supergrafx under one slug, and an
@@ -572,9 +580,9 @@ def build_native_model(
             if primary in ids:
                 ordered.remove(primary)
                 ordered.insert(0, primary)
-            return ordered
+            return ordered, primary in ids or len(ordered) == 1
         direct = native_by_norm.get(_norm_system_id(truth_sid))
-        return [direct] if direct else [truth_sid]
+        return ([direct] if direct else [truth_sid]), True
 
     # Pass 2: apply the truth onto that grouping.
     for truth_sid in sorted(truth.get("systems", {})):
@@ -583,7 +591,7 @@ def build_native_model(
         if not truth_files:
             continue
 
-        target_ids = _target_native_ids(truth_sid)
+        target_ids, settled_id = _target_native_ids(truth_sid)
         truth_files = [
             entry for entry in truth_files
             if (name := str(entry.get("name", "")))
@@ -596,6 +604,13 @@ def build_native_model(
             if candidate.truth is None
         ]
         pairs = pair_entries(truth_files, [c.platform or {} for c in candidates])
+        # The cores that read what the platform files under each native id,
+        # from the truth entries its declarations pair with.
+        readers: dict[str, set[str]] = {}
+        for t_index, index in pairs.items():
+            readers.setdefault(candidates[index].native_system, set()).update(
+                truth_files[t_index].get("_cores") or ()
+            )
         for candidate in (
             c
             for native_id in target_ids
@@ -660,8 +675,21 @@ def build_native_model(
             if platform_declares(truth_entry, declared):
                 continue
 
-            # The truth knows a file the platform does not declare.
+            # The truth knows a file the platform does not declare. Across
+            # several native ids and no primary, it joins the one whose files
+            # its cores read: RetroDECK's arcade spans mame and fbneo, and
+            # MAME device archives were filed as FBNeo BIOS because fbneo
+            # sorts first. With no single answer it is not written.
             native_id = target_ids[0]
+            if not settled_id:
+                wanted = set(truth_entry.get("_cores") or ())
+                shared = {nid: len(readers.get(nid, set()) & wanted) for nid in target_ids}
+                best = max(shared.values())
+                winners = [nid for nid, count in shared.items() if count == best]
+                if not best or len(winners) > 1:
+                    report.unattributed.append(f"{truth_sid}/{name}")
+                    continue
+                native_id = winners[0]
             system = systems.get(native_id)
             if system is None:
                 system = NativeSystem(native_id=native_id, from_platform=False)

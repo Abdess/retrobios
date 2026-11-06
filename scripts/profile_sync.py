@@ -1154,11 +1154,19 @@ def select_views(
         branch = declared if pin_field == "source" else None
         head = None
         try:
+            unread: upstream.NotCachedError | None = None
             for candidate in branch_candidates(url):
-                head = upstream.resolve_head(repo, cache_dir, offline, candidate)
+                try:
+                    head = upstream.resolve_head(repo, cache_dir, offline, candidate)
+                except upstream.NotCachedError as exc:
+                    # Another prefix of the /tree/ tail may be the cached branch.
+                    unread = exc
+                    continue
                 if head:
                     branch = candidate
                     break
+            if unread and not head:
+                raise unread
             pin, origin = resolve_pin(
                 profile, repo, cache_dir, offline, pin_field, mode, branch
             )

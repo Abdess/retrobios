@@ -499,6 +499,45 @@ class Reconciliation(unittest.TestCase):
         systems, _ = build_native_model({"systems": {}}, scraped)
         self.assertEqual(sorted(systems), ["pcengine", "supergrafx"])
 
+    def test_a_container_md5_leaves_a_zipped_file_md5_alone(self):
+        """Batocera's checkInsideZip compares a zippedFile item's md5 with
+        the member's. A profile's container md5 was written in its place
+        and counted as a hash updated to the emulator source."""
+        scraped = {"systems": {"pc6001": {"native_id": "pc6001", "files": [
+            {"name": "pc6001.zip", "destination": "pc6001.zip", "md5": "1" * 32,
+             "zipped_file": "basicrom.60"},
+        ]}}}
+        truth = {"systems": {"pc6001": {"files": [
+            {"name": "pc6001.zip", "md5": "2" * 32},
+        ]}}}
+        systems, report = build_native_model(truth, scraped)
+        entry = systems["pc6001"].files[0]
+        self.assertEqual(entry.corrections, [])
+        self.assertEqual(report.hashes_corrected, [])
+        self.assertEqual(entry.hashes("md5"), ["1" * 32])
+
+    def test_an_addition_joins_the_native_id_its_cores_read(self):
+        """RetroDECK's arcade spans mame and fbneo with no primary id. Every
+        addition went under fbneo, the first sorted, MAME device archives
+        included. One the cores do not settle is not written."""
+        scraped = {"systems": {"arcade": {"files": [
+            {"name": "neogeo.zip", "destination": "neogeo.zip", "native_system": "mame"},
+            {"name": "pgm.zip", "destination": "pgm.zip", "native_system": "fbneo"},
+        ]}}}
+        truth = {"systems": {"arcade": {"files": [
+            {"name": "neogeo.zip", "_cores": ["mame"]},
+            {"name": "pgm.zip", "_cores": ["fbneo"]},
+            {"name": "a2autokbd.zip", "_cores": ["mame"]},
+            {"name": "dkong.zip", "_cores": ["mame", "fbneo"]},
+        ]}}}
+        systems, report = build_native_model(truth, scraped)
+        self.assertEqual(
+            [fe.name for fe in systems["mame"].files if fe.platform is None],
+            ["a2autokbd.zip"],
+        )
+        self.assertFalse([fe for fe in systems["fbneo"].files if fe.platform is None])
+        self.assertEqual(report.unattributed, ["arcade/dkong.zip"])
+
     def test_an_entry_the_platform_declares_without_a_hash_is_still_written(self):
         """Batocera and RetroBat both ship entries with an empty md5."""
         scraped = {
@@ -987,6 +1026,28 @@ class CachedOriginal(unittest.TestCase):
             _OneFileExporter(new), {}, self.cache, True
         )
         self.assertEqual((originals, missing), ({"list.txt": "two"}, []))
+
+    def test_an_empty_or_html_original_fails_the_platform(self):
+        """A System.dat served as an HTML page with 200, or a 0-byte cache,
+        was parsed as a file with no entries: four exporters rebuilt it from
+        our data and reported OK."""
+        for body in ("", "  \n", "<html><body>Too Many Requests</body></html>",
+                     "<!DOCTYPE html>\n<html></html>"):
+            with self.subTest(body=body):
+                url = self._upstream("served.txt", body)
+                originals, missing = collect_originals(
+                    _OneFileExporter(url), {}, self.cache, True, refresh=True
+                )
+                self.assertEqual(originals, {})
+                self.assertEqual(len(missing), 1)
+                cached = self.cache / "plat" / "list.txt"
+                cached.parent.mkdir(parents=True, exist_ok=True)
+                cached.write_text(body, encoding="utf-8")
+                _, missing = collect_originals(
+                    _OneFileExporter(url), {}, self.cache, False
+                )
+                self.assertEqual(len(missing), 1)
+                cached.unlink()
 
     def test_offline_serves_what_is_cached_and_names_what_is_not(self):
         url = self._upstream("v1.txt", "one")
@@ -1882,6 +1943,32 @@ class MisterDatabaseComesBackAsWritten(unittest.TestCase):
         self.assertEqual(landed_changes(exporter, systems).records, [])
         self.assertEqual(len(exporter.withheld()), 1)
         self.assertEqual(exporter.validate(systems, produced), [])
+
+    def test_a_kept_size_is_not_reported_removed(self):
+        """The truth accepts MiSTer's hash and states other sizes, so no
+        size of its own fits the entry. The render keeps MiSTer's size, and
+        the report counted it removed."""
+        database = {"db_id": "bios_db", "files": {
+            "games/X/boot.rom": {"hash": "a" * 32, "size": 1000, "url": "u"},
+        }}
+        original = json.dumps(database)
+        scraped = {"systems": {"x": {"files": [{
+            "name": "boot.rom", "destination": "X/boot.rom", "md5": "a" * 32,
+            "size": 1000,
+        }]}}}
+        truth = {"systems": {"x": {"files": [{
+            "name": "boot.rom", "path": "X/boot.rom", "md5": "a" * 32,
+            "size": [2000, 3000], "_cores": ["x"],
+        }]}}}
+        exporter = discover_exporters()["misterfpga"]()
+        systems, report = build_native_model(truth, scraped)
+        produced = exporter.render(systems, report, {"bios_db.json": original}, scraped)
+        written = json.loads(produced["bios_db.json"])["files"]["games/X/boot.rom"]
+        self.assertEqual(written["size"], 1000)
+        self.assertNotIn(
+            "size_removed",
+            [c["kind"] for c in landed_changes(exporter, systems).records],
+        )
 
     def test_an_accepted_hash_is_not_swapped_for_another(self):
         """The url serves MiSTer's dump, and the truth accepts it among two.

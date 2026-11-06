@@ -30,8 +30,10 @@ DEVICES_DIR = "projects/ROCKNIX/devices"
 
 try:
     from ..base_scraper import fetch_bytes, github_headers
+    from ..rocknix_scraper import standalone_emulators
 except ImportError:
     from scraper.base_scraper import fetch_bytes, github_headers
+    from scraper.rocknix_scraper import standalone_emulators
 
 # `NAME="a b \
 #   c"` or `NAME+=" a b"`, continuation lines joined first.
@@ -91,11 +93,13 @@ def core_names(libretro: list[str], standalone: list[str]) -> list[str]:
     """Package names as the profiles' cores: lists spell them.
 
     A libretro package is the core's name with `-lr` (`beetle-psx-lr`,
-    `neocd_lr`), spelled with underscores as the buildbot names it, and a
-    standalone package drops its `-sa` (`duckstation-sa`, `hatarisa`).
+    `neocd_lr`), spelled with underscores as the buildbot names it. A
+    standalone package is kept under both spellings, as the platform
+    scraper keeps it: `vice-sa` is the only name vice-standalone answers
+    to, `vice` that of the libretro profile.
     """
     names = {re.sub(r"[-_]lr$", "", package).replace("-", "_") for package in libretro}
-    names.update(re.sub(r"-?sa$", "", package) for package in standalone)
+    names.update(standalone_emulators(standalone))
     return sorted(names)
 
 

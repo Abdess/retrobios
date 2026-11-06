@@ -62,7 +62,7 @@ files:
     sha1: "a22ec279222ec6aeb3249932f7d377b7cf1e7bf1"
     md5: "c6f35123264db9cdfb216e8fdb673679"
     size: 215475
-    source_ref: "src/hiscore.c:14,102-116,248-262, src/cpuexec.c:280-282"
+    source_ref: "src/hiscore.c:15,102-116,248-262, src/cpuexec.c:280-282"
     note: >-
       high score definitions, auto-generated if missing from
       precompile/hiscore_dat.h, which holds metadata/hiscore.dat with CRLF line
