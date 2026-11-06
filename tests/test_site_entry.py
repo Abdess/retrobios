@@ -937,6 +937,19 @@ class ARouteWithoutANetwork(unittest.TestCase):
         self.assertEqual(_tab_labels(card), set())
         self.assertIn("**Linux**", card)
 
+    def test_a_linux_partition_card_says_why_and_offers_linux_alone(self):
+        """Lakka's /storage is the card's ext4 partition (Lakka-LibreELEC
+        scripts/mkimage): its page offered Windows and macOS tabs for a
+        folder neither can open."""
+        for name in ("lakka", "retropie"):
+            with self.subTest(setup=name):
+                self.assertEqual(siteguides.GUIDES[name].card_run, ("linux",))
+                card = _plain_page(f"platforms/{name}.md").split("No network?", 1)[1]
+                card = card.split("## On the device", 1)[0]
+                self.assertEqual(_tab_labels(card), set())
+                self.assertNotIn("E:\\", card)
+                self.assertIn("Only a Linux computer opens the card.", card)
+
     def test_no_zip_is_promised_for_an_unmarked_setup(self):
         for name in SETUPS:
             if REGISTRY[name].get("release_pack") is True:

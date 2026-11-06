@@ -452,6 +452,9 @@ guides:
       Turn on **SSH**, a terminal over the network, in Lakka's **Settings > Services**. From
       a computer, connect with `ssh root@lakka`, password `root`. Paste the line. Press
       Enter.
+    # /storage is the card's ext4 partition, the other one FAT32 (Lakka-LibreELEC
+    # 4696b48f, scripts/mkimage:71-72 and 95): from a computer, only Linux opens it.
+    card_run: [linux]
     reference_notes:
     - The folder is reachable over SSH and over the network share.
     pack_manual: |
@@ -648,8 +651,7 @@ guides:
       RetroPie also installs standalone emulators (openMSX, PCSX2, XRoar, Amiberry and
       others) whose files only the RetroPie file list carries.
     - >-
-      RetroPie is archived in this project: the command serves it, and checks that cover
-      every setup include it only on request.
+      RetroPie is archived here: checks of every setup include it only on request.
     pack_manual: |
       Option B: Via network share
       --------------------------

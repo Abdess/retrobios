@@ -4188,7 +4188,11 @@ def _card_route(name: str, display: str, guide: Guide) -> list[str]:
         lead = ("No network here? Run the command on a computer that has one, with a USB "
                 f"drive's folder after `--dest`. Then copy it into {_folder_words(display, extract_to)}.")
         return [lead, "", *terminal_tabs(tabs, args, steps=False)]
-    lead = ("No network? Put the device's card in your computer. After `--dest`, "
+    # A folder on the card's Linux partition: Windows and macOS show the
+    # small boot partition alone, and no folder there fits --dest.
+    put = ("Put the device's card in your computer." if "windows" in tabs
+           else "Only a Linux computer opens the card.")
+    lead = (f"No network? {put} After `--dest`, "
             f"name the folder the device calls `{extract_to}`.")
     return [lead, "", *terminal_tabs(tabs, args, steps=False),
             f"[More on SD cards](../{CARD_ROUTE_FAQ})", ""]
