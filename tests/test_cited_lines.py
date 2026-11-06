@@ -28,6 +28,9 @@ CITATIONS = [
         295,
         "AppPath = this.getExternalFilesDir(null)!!.absolutePath",
     ),
+    ("mame2003", "src/hiscore.c", 15, 'const char *db_filename = "hiscore.dat";'),
+    ("np2pi", "np2ver.h", 2, '"ver.0.83"'),
+    ("osmose", "Version.h", 5, '"OsmOse 0.8.1+rpi20121122"'),
 ]
 
 
