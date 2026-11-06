@@ -2061,6 +2061,25 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
             finally:
                 os.chdir(cwd)
 
+    def test_restore_without_its_registry_fails(self):
+        """A mistyped --gitignore read as an empty registry: nothing to
+        restore, nothing unsatisfied, exit 0 with every asset absent."""
+        import subprocess
+
+        from scripts.restore_large_files import gitignored_paths
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            missing = str(Path(directory) / "absent")
+            with self.assertRaises(FileNotFoundError):
+                gitignored_paths(missing)
+            proc = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "restore_large_files.py"),
+                 "--gitignore", missing, "--cache", directory],
+                capture_output=True, text=True, timeout=120,
+            )
+            self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+            self.assertIn("lists the release assets", proc.stderr)
+
     def test_restore_refuses_a_copy_replaced_after_the_index(self):
         """The cache is hashed first and copied later: another run that
         replaced the cached name in between put its bytes at a path the
