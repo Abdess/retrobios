@@ -41,7 +41,7 @@ Pipeline steps:
 | 0 | Validate profiles and platform YAMLs against the schemas | - (no `jsonschema` installed) |
 | 1 | Generate database | - |
 | 1b | Dump-catalog coverage report | - (offline, reads `provenance/`) |
-| 1c | Romset recipes: identify archives, list rebuild targets | - (offline, reads `recipes/`) |
+| 1c | Romset recipes: identify archives, list rebuild targets, then `--capture` writes a recipe for every archive (`recipes/archives.json`) | - (offline, reads `recipes/`) |
 | 2 | Refresh data directories | `--offline` |
 | 2a | Refresh MAME BIOS hashes | `--offline` |
 | 2a2 | Refresh FBNeo BIOS hashes | `--offline` |
@@ -1372,10 +1372,11 @@ before a release (wiki/release-process.md). Its lines stay in
 | `sitesources.py` | Record which cited source paths each pinned upstream tree holds, for the site's source links (`--fetch` reads a tree no cache holds) |
 | `site_insights.py` | What readers look for and do not find, from totals only: searches that show the site but are rarely clicked, file names searched and whether the collection holds them, site searches that found nothing, broken addresses, "Did this page help?" answers, GitHub traffic and release downloads (`--days`, `--skip gsc,goatcounter,github`, `--output`). Reads Search Console, GoatCounter and GitHub with credentials kept outside the repository. [What the site counts](privacy.md) |
 | `validate_site.py` | Validate rendered metadata, heading order, image alternatives, JSON-LD, local resources, links and fragments, and the page size and search index budgets |
-| `romset_recipes.py` | Identify which emulator version an arcade archive matches, and rebuild a pinned archive from ROMs already held |
+| `romset_recipes.py` | Identify which emulator version an arcade archive matches, rebuild a pinned archive from ROMs already held, record a recipe for every archive the collection holds and build any of them from the members it holds (see [Archive recipes](#archive-recipes)) |
+| `archive_build.py` | The archive recipes behind `romset_recipes.py --capture`, `--build` and `--build-all`: capture, member lookup by sha1, verified build |
 | `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
 | `deterministic_zip.py` | The fixed date pack members carry. Its archive rebuild is no longer called by the pack, which copies each ZIP byte for byte |
-| `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents) |
+| `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents, with stock zlib), streaming one member at a time |
 | `crypto_verify.py` | 3DS RSA signature and AES crypto verification |
 | `sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
 | `check_buildbot_system.py` | Detect stale data directories by comparing with buildbot |
@@ -1410,7 +1411,7 @@ Further options, by script:
 | `release_record.py` | `--install-dir` (manifests the archives are held against), `--platforms-dir` (registry the full pack names are rebuilt from: any other pack in the directory is refused), `--output` |
 | `release_notes.py` | `--whats-new FILE` (required, appended as written), `--record`, `--platforms-dir`, `--output` |
 | `restore_large_files.py` | `--cache` (downloaded assets), `--gitignore`, `--db` |
-| `romset_recipes.py` | `--dat-recipes PATH`, a snapshot or a directory of them (default `recipes/`) |
+| `romset_recipes.py` | `--dat-recipes PATH`, a snapshot or a directory of them (default `recipes/`). `--archives FILE` (default `recipes/archives.json`), `--output-dir DIR` for `--build` and `--build-all`, `--discard` deletes each build once verified |
 | `split_pack.py` | `--max-size 1900M`, the ceiling per part (K, M, G, default 2G) |
 | `torrentzip.py` | `--check ZIP` reports conformance, `--rebuild ZIP -o OUT` normalizes an archive |
 | `validate_pr.py` | `--changed` takes the BIOS files the branch changes, a folder named checks every file under it, `--place` copies each recognised file from outside `bios/` to its folder and declared name (or its `.variants/` slot), `--markdown`, `--json` |
@@ -1501,18 +1502,28 @@ check compares with.
 Snapshots land in `recipes/`, not `provenance/`: the latter holds dump catalogues
 and a recipe is not one. Versions accumulate rather than replace each other,
 because a platform pins the archive of whichever version its list was built
-against. Only sets a profile or platform references are kept, plus the sets
-holding a dump-catalog entry the collection lacks (crc32 and size, and sha1
-when both sides carry one), so `provenance_report.py --missing` can name the
-set that ships it: MAME's `fm7740sx` carries the FM77AV40SX `DICROM.rom`,
-`EXTSUB.rom` and `KANJI2.rom` that No-Intro lists. A `romof` parent's
-members are merged into the child, and members with no CRC32 are dropped: those
-are undumped and a real romset does not carry them.
+against. Every MAME release with a `-listxml` asset is imported, 0.177 to
+0.289, not one in five. Kept sets:
 
-The store is compacted: 22 MAME versions produce 31,141 entries but only 2,399
-distinct recipes, since most sets do not change between releases. Each is kept
-once, `dats` listing every version that agrees and `dat` naming the earliest, so
-an identification reads as "unchanged since that version".
+- the archive names a profile or platform references;
+- the archive names the collection holds;
+- the sets holding a dump-catalog entry the collection lacks (crc32 and size,
+  and sha1 when both sides carry one), so `provenance_report.py --missing` can
+  name the set that ships it: MAME's `fm7740sx` carries the FM77AV40SX
+  `DICROM.rom`, `EXTSUB.rom` and `KANJI2.rom` that No-Intro lists;
+- every set whose member list equals an archive the collection keeps under
+  another name. `aga.zip` holds exactly MAME's `isa_aga`: the entry carries
+  the collection's name and keeps the upstream one in `set`. When several sets
+  share one member list (thirty keyboard sets carry the same ROM), the set
+  named like the archive is kept, then the first by name.
+
+A `romof` parent's members are merged into the child, and members with no
+CRC32 are dropped: those are undumped and a real romset does not carry them.
+
+The store is compacted: 113 MAME versions produce 173,985 entries but only
+2,936 distinct recipes, since most sets do not change between releases. Each
+is kept once, `dats` listing every version that agrees and `dat` naming the
+earliest, so an identification reads as "unchanged since that version".
 
 `--identify` answers what an archive on disk actually is: the version whose
 recipe reproduces it byte for byte. Step 1c of the pipeline prints how many
@@ -1523,6 +1534,61 @@ Reconstruction only works when the pinned archive is itself TorrentZip. An
 archive whose bytes carry metadata unrelated to its contents cannot be derived
 from ROMs by anyone, so those are reported as unreproducible rather than guessed
 at. Writing is explicit: the pipeline only ever reports.
+
+### Archive recipes
+
+The collection must regenerate every archive it serves from the ROMs it holds
+plus a committed recipe, without a copy of that archive from elsewhere.
+`recipes/archives.json` holds one record per archive in `database.json`,
+`.variants/` copies included, keyed by path:
+
+- the members in archive order, each with its size, crc32 and sha1;
+- the container's sha1, md5 and size;
+- `rebuild`: `exact` when `build_torrentzip()` over the members gives the
+  container byte for byte (proven at capture by rebuilding it), `canonical`
+  when the archive was written by another tool, so the build gives the same
+  members in other container bytes. Directory entries are listed under
+  `directories` and not rebuilt;
+- `sources`: the profile `contents:` blocks and the MAME and FBNeo DAT
+  recipes whose member list equals the archive's, matched by members rather
+  than by name, then `collection`, the archive itself. A DAT is provenance,
+  never the only source;
+- `bytes_pinned` and `pins` when a platform or a profile pins the container
+  hash. A `zipped_file` md5 and a Recalbox composite md5 name no container
+  bytes and are not pins.
+
+```bash
+python scripts/romset_recipes.py --capture                 # pipeline step 1c
+python scripts/romset_recipes.py --build neogeo.zip --output-dir tmp/built
+python scripts/romset_recipes.py --build "bios/SNK/Neo Geo CD/neocdz.zip" --output-dir tmp/built
+python scripts/romset_recipes.py --build-all --output-dir tmp/built --discard
+```
+
+`--capture` reads only the archives whose sha1 changed since the last run,
+and recomputes sources and pins every time. `--build` takes a path or a file
+name (every archive of that name is built, each at its path below `bios/`
+inside the output directory). Each member is read by its sha1: a loose file
+first, then a member of another archive, then the archive's own copy. The
+result is written beside its destination, read back from disk and checked
+against the recipe: the recorded sha1 for an exact recipe, the members for a
+canonical one. A mismatch is built once more, then refused, and nothing is
+moved into place. `--build-all` prints one line per archive (exact, canonical,
+or impossible with the member nothing holds) and exits 1 when an archive
+failed or was impossible. `--discard` deletes each build once verified, which
+proves the whole collection without the disk space.
+
+The summary also counts the archives that read a member from their own copy:
+that member is held nowhere else, and would have to become a loose file before
+the archive bytes could be dropped from `bios/`.
+
+**Deflate implementation.** TorrentZip bytes are the output of zlib's level-9
+deflate (`compressobj(9, DEFLATED, -15)`). Stock zlib 1.2.13 to 1.3.2
+reproduced all 1,561 TorrentZip archives tested in November 2026, on Linux and
+on Windows. zlib-ng does not: python.org CPython 3.14 and 3.15 on Windows
+(zlib-ng 2.2.4) reproduced 479, and zlib-ng 2.3.3 545, the two versions
+disagreeing with each other. `--capture` refuses to run under zlib-ng, and
+`--build` says so and checks every recipe by its members, never claiming an
+exact rebuild. `torrentzip.zlib_ng_version()` is the test.
 
 ## Large files
 

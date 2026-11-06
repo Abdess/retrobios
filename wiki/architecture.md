@@ -30,7 +30,8 @@ platforms/               one YAML config per platform (scraped from upstream)
   _data_dirs.yml         data directory definitions (Dolphin Sys, PPSSPP...)
   targets/               hardware target configs + _overrides.yml
 provenance/              dump-catalog snapshots (redump, no-intro, tosec)
-recipes/                 romset recipes read from MAME and FBNeo DATs
+recipes/                 romset recipes read from MAME and FBNeo DATs, and
+                         archives.json, the recipe of every archive held
 exports/                 each platform's own file, updated, with a report of the changes
 measurements/            records of real runs, one JSONL file per emulator
 scripts/                 all tooling (Python and pyyaml, jsonschema for schema checks)
@@ -318,6 +319,11 @@ How files enter `bios/`, and why.
   An upstream romset whose MD5 a platform pins stays verbatim in `.variants/`.
   A member renamed by hand in an existing archive gives bytes that match no
   distributed romset and that nobody can regenerate.
+- **Every archive has a recipe.** `recipes/archives.json` records the members
+  of each archive the collection holds, by sha1, and whether the TorrentZip
+  build gives its bytes (`exact`) or only its members (`canonical`), so the
+  collection can rebuild it from the ROMs it holds
+  ([Archive recipes](tools.md#archive-recipes)).
 - **A pack carries what the user must obtain.** A file the emulator installs
   itself (`bundled: true`) is not kept once nothing else needs it, and step 4d
   of the pipeline fails on such a copy. Its sha1 and size are written into the
