@@ -90,6 +90,36 @@ class TheFieldIsTheList(unittest.TestCase):
         self.assertTrue(list(validator.iter_errors(registry)))
 
 
+class NoPlatformIsSetApart(unittest.TestCase):
+    """A registry `status: archived` kept RetroPie out of every full run
+    unless --include-archived was typed, after release_pack had become the
+    only thing that sets platforms apart. A platform is registered or not."""
+
+    def test_the_registry_carries_no_status(self):
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
+        flagged = sorted(
+            name for name, entry in registry["platforms"].items() if "status" in (entry or {})
+        )
+        self.assertEqual(flagged, [])
+
+    def test_the_schema_declares_no_status(self):
+        text = (REPO_ROOT / "schemas" / "registry.schema.json").read_text(encoding="utf-8")
+        for word in ('"status"', "archived"):
+            with self.subTest(word=word):
+                self.assertNotIn(word, text)
+
+    def test_no_script_knows_the_word(self):
+        found = sorted(
+            str(path.relative_to(REPO_ROOT))
+            for path in (REPO_ROOT / "scripts").rglob("*.py")
+            if any(
+                word in path.read_text(encoding="utf-8").lower()
+                for word in ("archived", "include_archived", "include-archived")
+            )
+        )
+        self.assertEqual(found, [])
+
+
 class TheBuildReadsTheField(unittest.TestCase):
     def _groups(self, *argv: str) -> list[str]:
         import generate_pack
