@@ -11,12 +11,14 @@ installer fetches and leaves out the data directories a pack also carries.
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import sys
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
+from unittest import mock
 
 import yaml
 
@@ -551,6 +553,35 @@ class TheReleaseNotesReadTheRecord(unittest.TestCase):
 
     def test_the_notes_never_open_on_the_collection(self):
         self.assertNotIn("collection", self.render().split("### What changed")[0])
+
+    def test_the_notes_claim_only_what_the_gaps_allow(self):
+        """v2026.10.10 said a pack holds every file its emulators open, "so a
+        game never stops on a missing file", and that hashes never come
+        "from a forum list". The gap analysis lists what no pack carries."""
+        text = self.render().split("### What changed")[0]
+        self.assertNotIn("every file its emulators", text)
+        self.assertIn("https://abdess.github.io/retrobios/gaps/", text)
+        self.assertEqual(release_notes.refused_words(text), [])
+
+    def test_a_judging_whats_new_is_refused(self):
+        self.assertEqual(
+            release_notes.refused_words(
+                "- Every hash comes from the emulator's source, never from a forum list.\n"
+                "- So a game never stops on a missing file."),
+            ["forum", "never stops"])
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            whats_new = Path(tmp) / "whats-new.md"
+            whats_new.write_text("- Hashes never from a forum list\n", encoding="utf-8")
+            record = Path(tmp) / "release.json"
+            record.write_text(json.dumps(self.RECORD), encoding="utf-8")
+            argv = ["release_notes.py", "--record", str(record), "--whats-new", str(whats_new),
+                    "--platforms-dir", str(REPO_ROOT / "platforms"),
+                    "--output", str(Path(tmp) / "notes.md")]
+            with mock.patch.object(sys, "argv", argv), \
+                    mock.patch("sys.stderr", new_callable=io.StringIO) as err:
+                self.assertEqual(release_notes.main(), 1)
+            self.assertIn("'forum'", err.getvalue())
+            self.assertFalse((Path(tmp) / "notes.md").exists())
 
     def test_the_release_process_runs_it(self):
         page = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")

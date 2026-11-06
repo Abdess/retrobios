@@ -276,7 +276,10 @@ python scripts/generate_site.py
 
 # 5. Write the notes: install commands, the parts sentence and the pack table
 #    come from release.json, and what changed since the previous tag is the
-#    maintainer's own text in tmp/whats-new.md, appended as written.
+#    maintainer's own text in tmp/whats-new.md, appended as written. The
+#    script refuses a text that judges another project ("forum list") or
+#    promises what the gap analysis contradicts ("never stops"): it says
+#    what changed and how it was checked.
 python scripts/release_notes.py --whats-new tmp/whats-new.md --output tmp/notes.md
 
 #    Create the release as a DRAFT, upload every asset, and only then publish it.

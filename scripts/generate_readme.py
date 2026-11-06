@@ -608,7 +608,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "",
         "## Download BIOS packs",
         "",
-        "A pack holds everything its platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. Each Download link is a page that keeps its address from one release to the next. The installer above does the same file by file: its screen installs everything, or fewer under **" + _installer_words().TUI_SYSTEMS_ROW + "**, and `--system`, `--core`, `--region` and `--target` make the same choice without questions. For a bare minimum, build your own pack below.",
+        f"A pack holds its platform's own BIOS list plus the files its emulator cores load. What no pack carries yet is in the [gap analysis]({SITE_URL}gaps/). Pick your platform, download the ZIP, extract to the BIOS path. Each Download link is a page that keeps its address from one release to the next. The installer above does the same file by file: its screen installs everything, or fewer under **" + _installer_words().TUI_SYSTEMS_ROW + "**, and `--system`, `--core`, `--region` and `--target` make the same choice without questions. For a bare minimum, build your own pack below.",
         "",
         "A pack over 2 GB comes in several parts (`Pack.part1of2.zip`,"
         " `Pack.part2of2.zip`), and every part is needed. Each part is an"
