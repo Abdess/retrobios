@@ -103,7 +103,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | Batocera | 353/353 | 14,173/15,292 | MD5 |
 | BizHawk | 118/118 | - | SHA-1 |
 | EmuDeck | 168/168 | 8,427/8,529 | MD5 |
-| EmuELEC | 544/572 | 4,788/10,217 | MD5 |
+| EmuELEC | 543/572 | 4,788/10,217 | MD5 |
 | KNULLI | 290/290 | 9,128/15,351 | MD5 |
 | Lakka | 532/532 | 7,910/7,995 | name only |
 | MiSTer FPGA | 81/81 | - | MD5 |
@@ -115,7 +115,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RetroArch | 526/526 | 7,919/7,986 | name only |
 | RetroBat | 348/348 | 5,135/9,659 | MD5 |
 | RetroDECK | 2,007/2,008 | 6,706/6,993 | MD5 |
-| RetroPie * | 532/532 | 8,120/12,774 | name only |
+| RetroPie * | 532/532 | 8,118/12,772 | name only |
 | RomM | 383/383 | 83/875 | size, then any hash |
 
 Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
@@ -206,4 +206,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-05T22:45:23Z*
+*Auto-generated on 2026-11-06T04:40:27Z*
