@@ -1738,6 +1738,12 @@ class ArchitectureStatesTheArbitration(unittest.TestCase):
         section = page[page.index("### When both layers claim one destination"):]
         section = section[:section.index("\n## ")]
         self.assertIn("`slots.arbitrate()`", section)
+        # The pack, the manifest and verify decide through slot_choices, and
+        # a test in test_slots forbids them to call arbitrate: the page names
+        # the function they read, not only the one the report prints.
+        self.assertIn("`slots.slot_choices()`", section)
+        self.assertIn("`slots.pack_overrides()`", section)
+        self.assertNotIn("both decide through `slots.arbitrate()`", section)
         source = inspect.getsource(slots.arbitrate)
         # The three outcomes the section describes.
         for outcome in ("ADDRESSEE", "SERVES_BOTH", "FRONTEND_CHECKS_CONTENT"):
