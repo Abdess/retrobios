@@ -1200,7 +1200,9 @@ def _parse_os_release() -> dict[str, str]:
 # Set under WSL: a Windows path read from a config or a rule names a drive
 # that Linux sees under /mnt (drvfs). C:\\RetroBat\\bios was used as a relative
 # path and nothing Windows-side was ever found from WSL.
-_WSL = {"active": False, "root": "/mnt"}
+# unasked: why Windows could not be asked for its folders, said once by
+# detection.
+_WSL = {"active": False, "root": "/mnt", "unasked": ""}
 _WINDOWS_VARIABLES = ("USERPROFILE", "APPDATA", "LOCALAPPDATA", "ProgramFiles", "ProgramFiles(x86)")
 
 
@@ -1255,11 +1257,25 @@ def _enter_wsl() -> None:
                 capture_output=True, text=True, timeout=10, stdin=subprocess.DEVNULL,
                 cwd="/mnt/c" if Path("/mnt/c").is_dir() else None,
             )
-        except (OSError, subprocess.SubprocessError):
+        except (OSError, subprocess.SubprocessError) as exc:
+            # The others would wait as long: detection is told the Windows
+            # side was not searched, never that nothing is there.
+            _windows_unasked("cmd.exe", exc)
             return
         value = result.stdout.strip()
         if value and not value.startswith("%"):
             os.environ[variable] = str(_host_path(value))
+
+
+def _windows_unasked(tool: str, exc: Exception) -> None:
+    """Keep why a Windows program run from WSL gave no answer: an interop
+    slow to start or turned off hid every Windows setup, and the run said
+    none was installed."""
+    if isinstance(exc, subprocess.TimeoutExpired):
+        why = f"{tool} did not answer in {exc.timeout:g} s"
+    else:
+        why = f"{tool} could not run: {getattr(exc, 'strerror', None) or exc}"
+    _WSL["unasked"] = _WSL["unasked"] or why
 
 
 def _expand_retroarch_path(value: str, app_dir: Path, home: Path | None = None) -> Path:
@@ -2521,6 +2537,9 @@ def refused_words(folder: Path, why: str, shown: str = "") -> str:
     """The line said for a folder detection could not look in. shown is
     the folder as the screen writes it (~/.config/EmuDeck), the full path
     by default."""
+    if _WSL["active"] and why == _WSL["unasked"] and folder == Path(_WSL["root"]):
+        return (f"Could not look for setups on the Windows side: {why}. "
+                "Run it again once Windows answers, or name the BIOS folder with --dest.")
     if folder in _DETECTION_UNREADABLE:
         return (f"Could not look for setups: {shown or folder} could not be read ({why}). "
                 "A failing card or a link that loops gives this: check it, or name the "
@@ -2552,6 +2571,22 @@ def _note_refused(path: Path, exc: OSError) -> None:
         _DETECTION_UNREADABLE.add(refused[0])
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=refused[1], message=words)
+    print(f"  {screen_text(words)}", file=sys.stderr)
+
+
+def _note_windows_unasked() -> None:
+    """Say once, as a folder detection could not look in, that Windows did
+    not answer: its drives are then searched without its folders."""
+    why = _WSL["unasked"]
+    if (not why or not getattr(_SETUP_SEARCH, "active", False)
+            or getattr(_SETUP_SEARCH, "quiet", False)):
+        return
+    refused = (Path(_WSL["root"]), why)
+    if refused in _DETECTION_REFUSED:
+        return
+    _DETECTION_REFUSED.append(refused)
+    words = refused_words(*refused)
+    EVENTS.emit("unsearched", folder=str(refused[0]), reason=why, message=words)
     print(f"  {screen_text(words)}", file=sys.stderr)
 
 
@@ -2694,7 +2729,9 @@ def _read_registry(key: str, value: str) -> str | None:
             capture_output=True, text=True, errors="replace", timeout=10,
             stdin=subprocess.DEVNULL, cwd="/mnt/c" if Path("/mnt/c").is_dir() else None,
         )
-    except (OSError, subprocess.SubprocessError):
+    except (OSError, subprocess.SubprocessError) as exc:
+        _windows_unasked("reg.exe", exc)
+        _note_windows_unasked()
         return None
     match = re.search(
         rf"^\s*{re.escape(value)}\s+REG_(?:EXPAND_)?SZ\s+(.+?)\s*$", result.stdout, re.M
@@ -2734,6 +2771,8 @@ def _detect_by_path(os_type: str, found: list[tuple[str, Path]]) -> None:
 def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     """Detect installed emulator platforms and their BIOS directories."""
     found: list[tuple[str, Path]] = []
+    if os_type == "wsl":
+        _note_windows_unasked()
 
     if os_type == "android":
         found.extend(_detect_android())

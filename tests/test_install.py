@@ -4511,6 +4511,37 @@ class WindowsSeenFromWsl(unittest.TestCase):
             self.assertEqual(os.environ["ProgramFiles"], "")
 
 
+    def test_windows_not_answering_is_said_not_taken_for_nothing(self):
+        """cmd.exe timing out on the first variable ended the import without
+        a word, and detection said no setup was installed."""
+        calls: list = []
+
+        def slow(argv, **kwargs):
+            calls.append(argv)
+            raise subprocess.TimeoutExpired(argv, kwargs.get("timeout", 10))
+
+        cleared = {name: "" for name in install._WINDOWS_VARIABLES}
+        home = Path(_tempdir(self))
+        err = io.StringIO()
+        with unittest.mock.patch.dict(os.environ, {**cleared, "HOME": str(home)}), \
+                unittest.mock.patch.object(install.subprocess, "run", slow), \
+                unittest.mock.patch.object(Path, "home", return_value=home), \
+                unittest.mock.patch.object(install, "_DETECTION_REFUSED", []), \
+                unittest.mock.patch.object(install.EVENTS, "emit") as emit, \
+                contextlib.redirect_stderr(err):
+            install._enter_wsl()
+            self.assertEqual(len(calls), 1)
+            install.detect_platforms("wsl")
+            install.detect_platforms("wsl")
+        said = err.getvalue()
+        self.assertEqual(said.count("on the Windows side"), 1, said)
+        self.assertIn("cmd.exe did not answer in 10 s", said)
+        kinds = [c.args[0] for c in emit.call_args_list]
+        self.assertEqual(kinds.count("unsearched"), 1)
+        self.assertEqual(emit.call_args_list[kinds.index("unsearched")].kwargs["folder"],
+                         str(self.root))
+
+
 class SteamRetroArchOnMacIsPortable(unittest.TestCase):
     """platform_darwin.m makes the Steam build portable (HAVE_STEAM) with no
     portable.txt: a default system_directory is Application Support's, and
