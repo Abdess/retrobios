@@ -3867,6 +3867,96 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                          (len(body), len(body)))
         emit.assert_not_called()
 
+    def test_a_cut_archive_resumes_where_it_stopped(self):
+        """A data archive cut at 90% was deleted and fetched again from
+        zero, on the retry and on the next run, while the run said that
+        nothing was lost."""
+        work = Path(_tempdir(self))
+        body = self._zip(work).read_bytes()
+        keep = work / ".dolphin-sys.archive.part"
+        requests: list[dict] = []
+
+        class Response(io.BytesIO):
+            def __init__(self, data, status, headers):
+                super().__init__(data)
+                self.status, self.headers = status, headers
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        def urlopen(request, timeout=None):
+            sent = dict(request.header_items())
+            requests.append(sent)
+            if "Range" in sent:
+                start = int(sent["Range"][len("bytes="):-1])
+                if sent.get("If-range") != '"v1"':
+                    return Response(body, 200, {"ETag": '"v2"'})
+                return Response(body[start:], 206, {
+                    "Content-Range": f"bytes {start}-{len(body) - 1}/{len(body)}",
+                    "Content-Length": str(len(body) - start), "ETag": '"v1"'})
+            cut = len(body) * 9 // 10
+
+            class Cut(Response):
+                def read(self, size=-1):
+                    if self.tell() >= cut:
+                        raise ConnectionResetError("cut")
+                    return super().read(min(size, cut - self.tell()))
+            return Cut(body, 200, {"Content-Length": str(len(body)), "ETag": '"v1"'})
+
+        with unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None), \
+                unittest.mock.patch.object(install, "_retry_delay", lambda *a: 0):
+            # The next run, after a stop: what the cut attempt wrote is kept.
+            with unittest.mock.patch.object(install, "MAX_RETRIES", 1), \
+                    self.assertRaises(ConnectionResetError):
+                install._fetch_archive("https://example.invalid/D.zip", work, None, keep)
+            self.assertEqual(keep.stat().st_size, len(body) * 9 // 10)
+            path = install._fetch_archive("https://example.invalid/D.zip", work, None, keep)
+        self.assertEqual(path.read_bytes(), body)
+        self.assertEqual(requests[-1]["Range"], f"bytes={len(body) * 9 // 10}-")
+        self.assertEqual(requests[-1]["If-range"], '"v1"')
+
+    def test_a_changed_archive_is_fetched_whole(self):
+        work = Path(_tempdir(self))
+        body = self._zip(work).read_bytes()
+        keep = work / ".dolphin-sys.archive.part"
+        keep.write_bytes(b"older revision")
+        keep.with_name(keep.name + ".source").write_text(
+            'https://example.invalid/D.zip\n"v0"\n')
+
+        class Whole(io.BytesIO):
+            status, headers = 200, {"ETag": '"v1"'}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        with unittest.mock.patch.object(install.urllib.request, "urlopen",
+                                        lambda request, timeout=None: Whole(body)), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None):
+            path = install._fetch_archive("https://example.invalid/D.zip", work, None, keep)
+        self.assertEqual(path.read_bytes(), body)
+
+    def test_a_tree_read_whole_leaves_no_archive(self):
+        work = Path(_tempdir(self))
+        archive = self._zip(work)
+        bios = work / "system"
+        bios.mkdir()
+
+        def fetch(url, directory, progress=None, keep=None):
+            shutil.copy(archive, keep)
+            keep.with_name(keep.name + ".source").write_text(f"{url}\n\"v1\"\n")
+            return keep
+
+        with unittest.mock.patch.object(install, "_fetch_archive", fetch):
+            install.install_data_directory(self._entry(), bios)
+        self.assertEqual([p.name for p in (bios / "dolphin-emu").iterdir()], ["Sys"])
+
     def test_the_run_ends_on_the_archive_bytes_too(self):
         from test_install_selection import FakeRepository  # noqa: PLC0415
 
@@ -3925,7 +4015,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         bios = work / "system"
         bios.mkdir()
 
-        def fetch(url, directory, progress=None):
+        def fetch(url, directory, progress=None, keep=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy
@@ -3961,8 +4051,9 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         def members(_archive, _entry):
             yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Endless())
 
-        with unittest.mock.patch.object(install, "_fetch_archive",
-                                        lambda url, d, progress=None: Path(d) / "a"), \
+        with unittest.mock.patch.object(
+                install, "_fetch_archive",
+                lambda url, d, progress=None, keep=None: Path(d) / "a"), \
                 unittest.mock.patch.object(install, "_archive_members", members):
             counts = install.install_data_directory(entry, work)
         self.assertEqual(counts["changed"], 1)
@@ -3989,8 +4080,9 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                 def members(_archive, _entry):
                     yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Broken())
 
-                with unittest.mock.patch.object(install, "_fetch_archive",
-                                                lambda url, d, progress=None: Path(d) / "a"), \
+                with unittest.mock.patch.object(
+                        install, "_fetch_archive",
+                        lambda url, d, progress=None, keep=None: Path(d) / "a"), \
                         unittest.mock.patch.object(install, "_archive_members", members):
                     counts = install.install_data_directory(entry, work)
                 self.assertTrue(counts["error"])
@@ -6714,7 +6806,7 @@ class AFileYouHadIsKept(unittest.TestCase):
                  "type": "zip", "files": {"Sys/a.ini": {
                      "sha1": hashlib.sha1(self.NEW).hexdigest(), "size": len(self.NEW)}}}
 
-        def fetch(url, directory, progress=None):
+        def fetch(url, directory, progress=None, keep=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy

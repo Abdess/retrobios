@@ -352,8 +352,10 @@ file list is downloaded once and handed to each run.
    times, after 1, 2 then 4 seconds or the delay a `Retry-After` header asks.
    A file of 16 MB or more keeps its partial copy (`.<name>.part`) when a
    transfer stops, and the next attempt or the next run requests only the
-   rest. A file already there with other contents is moved aside first, see
-   [Files you already had](#files-you-already-had).
+   rest. A data tree's archive does the same beside the tree
+   (`.<ref>.archive.part`), asking with `If-Range` so that a server whose
+   archive changed sends it whole. A file already there with other contents
+   is moved aside first, see [Files you already had](#files-you-already-had).
 8. Copies into standalone emulator directories, only with `--standalone-copies`.
 
 The file list names the version of the platform it was built for (Batocera

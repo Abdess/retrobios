@@ -7086,20 +7086,72 @@ def download_files(
     return failed, interrupted
 
 
-def _fetch_archive(url: str, directory: Path, progress: Progress | None = None) -> Path:
+def _archive_validator(headers: object) -> str:
+    """What names this revision of an archive to its server: an If-Range
+    with it gets the rest of the same bytes, or the whole new archive."""
+    if not headers:
+        return ""
+    etag = headers.get("ETag", "") or ""
+    # A weak tag never answers a range (RFC 9110 13.1.5).
+    return etag if etag and not etag.startswith("W/") else headers.get("Last-Modified", "") or ""
+
+
+def _fetch_archive(url: str, directory: Path, progress: Progress | None = None,
+                   keep: Path | None = None) -> Path:
     """A data directory's source archive, in *directory*, retried like files.
-    progress draws its bytes as they come, an attempt that failed taken back."""
+    progress draws its bytes as they come, an attempt that failed taken back.
+
+    With keep, the archive is written there and kept when the transfer is
+    cut, beside a note of its address and the validator its server sent:
+    the next attempt, or the next run, asks for the rest with Range and
+    If-Range, and a server that changed the archive sends it whole. A cut
+    50 MB archive started again from zero, and a link that drops more often
+    than one archive takes never installed the tree.
+    """
     _network_allowed(url)
+    note = keep.with_name(keep.name + ".source") if keep is not None else None
     reason: Exception | None = None
     for attempt in range(1, MAX_RETRIES + 1):
-        handle = tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False)
+        offset = 0
+        validator = ""
+        if keep is not None:
+            try:
+                recorded = note.read_text(encoding="utf-8").split("\n")
+                if recorded[0] == url and len(recorded) > 1 and recorded[1]:
+                    validator = recorded[1]
+                    offset = keep.stat().st_size
+            except (OSError, UnicodeError):
+                offset = 0
+        request = urllib.request.Request(url)
+        if offset:
+            request.add_header("Range", f"bytes={offset}-")
+            request.add_header("If-Range", validator)
+        handle = (open(keep, "r+b" if offset else "wb") if keep is not None else
+                  tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False))
         received = 0
+        resumed = 0
         try:
-            with handle, urllib.request.urlopen(url, timeout=60) as resp:
+            with handle, urllib.request.urlopen(request, timeout=60) as resp:
+                headers = resp.headers or {}
+                ranged = (offset and getattr(resp, "status", 200) == 206 and str(
+                    headers.get("Content-Range", "")).startswith(f"bytes {offset}-"))
+                if not ranged:
+                    offset = 0
+                handle.seek(offset)
+                handle.truncate()
+                if keep is not None and not offset:
+                    # Written before the first byte: a cut transfer is then
+                    # resumed only against the revision it holds.
+                    note.write_text(f"{url}\n{_archive_validator(headers)}\n",
+                                    encoding="utf-8")
                 if progress is not None:
-                    length = resp.headers.get("Content-Length", "")
+                    length = headers.get("Content-Length", "")
                     if length.isdigit():
-                        progress.expect(int(length))
+                        progress.expect(offset + int(length))
+                    if offset:
+                        progress.add(offset, resumed=True)
+                        resumed = offset
+                total = offset
                 while True:
                     if _stop.is_set():
                         raise _Interrupted()
@@ -7107,28 +7159,49 @@ def _fetch_archive(url: str, directory: Path, progress: Progress | None = None) 
                     if not chunk:
                         break
                     received += len(chunk)
-                    if received > MAX_DATA_ARCHIVE_SIZE:
+                    total += len(chunk)
+                    if total > MAX_DATA_ARCHIVE_SIZE:
                         raise ValueError("archive exceeds the size limit")
                     handle.write(chunk)
                     if progress is not None:
                         progress.add(len(chunk))
-            return Path(handle.name)
+            return keep if keep is not None else Path(handle.name)
         except urllib.error.HTTPError as exc:
-            Path(handle.name).unlink(missing_ok=True)
-            if exc.code < 500 and exc.code != 429:
+            if keep is None or exc.code == 416 or exc.code < 500 and exc.code != 429:
+                # Refused, or a range past an archive that shrank: no
+                # attempt resumes it.
+                _drop_archive(Path(handle.name), note)
+            if exc.code < 500 and exc.code not in (416, 429):
                 raise
             reason = exc
         except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
-            Path(handle.name).unlink(missing_ok=True)
+            if keep is None:
+                Path(handle.name).unlink(missing_ok=True)
             reason = exc if isinstance(exc, OSError) else ConnectionError(repr(exc))
-        except BaseException:
-            Path(handle.name).unlink(missing_ok=True)
+        except ValueError:
+            _drop_archive(Path(handle.name), note)
             raise
-        if progress is not None and received:
-            progress.add(-received)
+        except BaseException:
+            # Stopped: a kept archive waits for the next run.
+            if keep is None:
+                Path(handle.name).unlink(missing_ok=True)
+            raise
+        if progress is not None:
+            if received:
+                progress.add(-received)
+            if resumed:
+                progress.add(-resumed)
+                progress.forget_resumed(resumed)
         if attempt < MAX_RETRIES:
             time.sleep(_retry_delay(attempt, None))
     raise reason if reason else OSError("download failed")
+
+
+def _drop_archive(path: Path, note: Path | None) -> None:
+    """Remove an archive and the note of where it came from."""
+    path.unlink(missing_ok=True)
+    if note is not None:
+        note.unlink(missing_ok=True)
 
 
 def _archive_members(
@@ -7223,6 +7296,7 @@ def install_data_directory(entry: dict, bios_path: Path,
     if not needed:
         return counts
     _writing.set()
+    fetched: Path | None = None
     try:
         root.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=root) as scratch:
@@ -7230,7 +7304,11 @@ def install_data_directory(entry: dict, bios_path: Path,
                 # The pack holds the tree where it extracts, already mapped.
                 members = LOCAL.pack.tree(entry.get("dest", ""))
             else:
-                archive = _fetch_archive(entry["url"], Path(scratch), progress)
+                # Beside the tree, outside the scratch folder: a transfer
+                # cut short is resumed by the next attempt or the next run.
+                kept = root / f".{entry['ref']}.archive.part"
+                archive = _fetch_archive(entry["url"], Path(scratch), progress, kept)
+                fetched = archive
                 members = _archive_members(archive, entry)
             for rel, declared, opener in members:
                 meta = needed.pop(rel, None)
@@ -7264,6 +7342,10 @@ def install_data_directory(entry: dict, bios_path: Path,
     except _MEMBER_ERRORS as exc:
         # A damaged, encrypted or unsupported member, in words.
         counts["error"] = unreadable_words(exc)
+    finally:
+        if fetched is not None:
+            # Read whole: the next run fetches the archive afresh.
+            _drop_archive(fetched, fetched.with_name(fetched.name + ".source"))
     counts["absent"] = len(needed)
     return counts
 
