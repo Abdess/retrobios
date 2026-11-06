@@ -6374,6 +6374,27 @@ struct BurnDriver BurnDrvneogeo = {
             [f for f in os.listdir(out) if f.endswith(".zip")] if os.path.isdir(out) else []
         )
 
+    def test_an_emulator_needing_no_file_succeeds_like_verify(self):
+        """Handy requires no file. --required-only removed the empty ZIP,
+        printed its path and exited 1, while verify reported 0/0 OK."""
+        import subprocess
+
+        repo = os.path.join(os.path.dirname(__file__), "..")
+        out = os.path.join(self.root, "no_file_needed")
+        proc = subprocess.run(
+            [sys.executable, "scripts/generate_pack.py", "--emulator", "handy",
+             "--required-only", "--offline", "--output-dir", out],
+            capture_output=True, text=True, cwd=repo, timeout=300,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("no file needed, no pack written", proc.stdout)
+        self.assertNotIn(".zip", proc.stdout)
+        verify = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--emulator", "handy", "--required-only"],
+            capture_output=True, text=True, cwd=repo, timeout=300,
+        )
+        self.assertEqual(verify.returncode, proc.returncode)
+
     def test_a_platform_without_cores_refuses_profile_narrowings(self):
         """MiSTer and BizHawk declare cores: []. --region, --one-per-slot
         and --no-game-data read the profiles, so their packs withdrew

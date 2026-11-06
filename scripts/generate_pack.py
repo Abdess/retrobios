@@ -1645,6 +1645,9 @@ def generate_emulator_pack(
 ) -> str | None:
     """Generate a ZIP pack for specific emulator profiles.
 
+    Returns the path, "" when no file is needed (verify --emulator reports
+    0/0 OK), None on failure.
+
     `pack_name` is the caller's own file name: the system pack names its
     archive after the system, and joining 23 SNES emulator names went past
     the 255 bytes a file name may hold. `system_ids` keeps only the entries
@@ -1986,10 +1989,16 @@ def generate_emulator_pack(
                 )
 
     # Remove empty ZIP (no files packed and no missing = nothing to ship)
-    if record is None and total_files + data_files == 0 and not (
+    nothing_needed = total_files + data_files == 0 and not (
         missing_files or rejected_files or instruction_files or unsourceable_files
-    ):
+    )
+    if record is None and nothing_needed:
         os.unlink(zip_path)
+        # What verify --emulator reports as 0/0 OK: no file is needed, so
+        # no pack is written and the run succeeds. Printed with the path,
+        # the run named a file it had just removed and exited 1.
+        print(f"  {', '.join(display_names)}: no file needed, no pack written")
+        return ""
 
     # Report. The members of data trees are counted apart: verify --emulator
     # counts the profile's files, and folding 3500 tree members into the
@@ -2046,7 +2055,10 @@ def generate_system_pack(
     offline: bool | None = None,
     platforms_dir: str | None = None,
 ) -> str | None:
-    """Generate a ZIP pack for all emulators supporting given system IDs."""
+    """Generate a ZIP pack for all emulators supporting given system IDs.
+
+    Returns the path, "" when no file is needed, None on failure.
+    """
     profiles = load_emulator_profiles(emulators_dir)
     matching = profiles_for_systems(profiles, system_ids, standalone)
 
@@ -2107,7 +2119,7 @@ def generate_system_pack(
             final_dir=output_dir,
         )
         if not result:
-            return None
+            return result
         new_path = os.path.join(output_dir, final_name)
         os.replace(result, new_path)
         return new_path
@@ -3757,7 +3769,7 @@ def _main(held: contextlib.ExitStack) -> None:
                 offline=args.offline,
                 platforms_dir=args.platforms_dir,
             )
-        if not built:
+        if built is None:
             sys.exit(1)
         return
 
@@ -3778,7 +3790,7 @@ def _main(held: contextlib.ExitStack) -> None:
                 offline=args.offline,
                 platforms_dir=args.platforms_dir,
             )
-        if not built:
+        if built is None:
             sys.exit(1)
         return
 
