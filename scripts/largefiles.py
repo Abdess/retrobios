@@ -250,23 +250,33 @@ def _pin_verified(
     passed off as the one verified. None when the name moved in between.
     """
     revision = os.path.join(dest_dir, VERIFIED_STORE, snapshot[0]["sha1"])
-    os.makedirs(revision, exist_ok=True)
     final = os.path.join(revision, name)
-    if os.path.isfile(final):
-        return final
-    scratch = os.path.join(revision, f".{os.getpid()}.{os.urandom(4).hex()}.tmp")
-    try:
-        os.link(path, scratch)
-    except FileNotFoundError:
-        return None
-    try:
-        if os.stat(scratch).st_ino != snapshot[2]:
-            return None
-        os.replace(scratch, final)
-        return final
-    finally:
+    # A prune removes an empty revision directory: one that went between
+    # makedirs and link is made again, once.
+    for _attempt in range(2):
+        os.makedirs(revision, exist_ok=True)
+        # The link must hold the inode just verified. An older link left by a
+        # copy that lost its cache name has one link left, and the prune of
+        # this very download removed it after it was returned.
         with contextlib.suppress(FileNotFoundError):
-            os.unlink(scratch)
+            if os.stat(final).st_ino == snapshot[2]:
+                return final
+        scratch = os.path.join(revision, f".{os.getpid()}.{os.urandom(4).hex()}.tmp")
+        try:
+            os.link(path, scratch)
+        except FileNotFoundError:
+            if not os.path.exists(path):
+                return None
+            continue
+        try:
+            if os.stat(scratch).st_ino != snapshot[2]:
+                return None
+            os.replace(scratch, final)
+            return final
+        finally:
+            with contextlib.suppress(FileNotFoundError):
+                os.unlink(scratch)
+    return None
 
 
 def _prune_verified(dest_dir: str) -> None:
