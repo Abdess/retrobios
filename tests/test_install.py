@@ -6,6 +6,7 @@ import functools
 import hashlib
 import http.server
 import importlib.util
+import errno
 import io
 import json
 import os
@@ -4469,6 +4470,67 @@ class ARefusedStandaloneCopyIsNamed(unittest.TestCase):
         self.assertIn(str(target), text.split("BIOS folder")[-1])
         self.assertIn("cannot write there", text)
 
+
+
+class AFullDriveIsSaidAsOne(unittest.TestCase):
+    """A card filling up during a tree rebuild read `fbneo-cheats: could not
+    read https://...: [Errno 28] No space left on device`, putting the cause
+    on the source, and the run ended on `Run the same command again`."""
+
+    def test_the_tree_reports_the_drive(self):
+        work = Path(_tempdir(self))
+        entry = {"ref": "fbneo-cheats", "dest": "fbneo/cheats", "type": "zip",
+                 "url": "https://example.invalid/c.zip", "systems": ["arcade"],
+                 "files": {"1941r1.ini": {"sha1": "1" * 40, "size": 4}}}
+
+        class Full(io.RawIOBase):
+            def readable(self):
+                return True
+
+            def readinto(self, buffer):
+                return 0
+
+        def members(_archive, _entry):
+            yield "1941r1.ini", 4, lambda: io.BufferedReader(Full())
+
+        def full(*_args, **_kwargs):
+            raise OSError(errno.ENOSPC, "No space left on device")
+
+        with unittest.mock.patch.object(
+                install, "_fetch_archive",
+                lambda url, d, progress=None, keep=None: Path(d) / "a"), \
+                unittest.mock.patch.object(install, "_archive_members", members), \
+                unittest.mock.patch.object(install, "_install_data_member", full):
+            counts = install.install_data_directory(entry, work)
+        self.assertEqual(counts["error"], install.DRIVE_FULL)
+
+    def test_the_end_names_space_not_a_retry(self):
+        bios = Path(_tempdir(self))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), self.assertRaises(SystemExit) as ended:
+            install._report_outcome([bios], 7, 0, 1, 0, False,
+                                    failures=[("fbneo-cheats", install.DRIVE_FULL)])
+        text = out.getvalue()
+        self.assertEqual(ended.exception.code, 1)
+        self.assertIn("is full: free up space, or install to another drive with --dest", text)
+        self.assertNotIn("retry only those", text)
+
+    def test_a_bios_file_on_a_full_drive_is_not_retried(self):
+        bios = Path(_tempdir(self))
+        attempts: list = []
+
+        def urlopen(*_args, **_kwargs):
+            attempts.append(1)
+            raise OSError(errno.ENOSPC, "No space left on device")
+
+        entry = {"dest": "a.bin", "repo_path": "bios/a.bin", "size": 4,
+                 "sha1": "1" * 40, "sha256": "2" * 64}
+        with unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None), \
+                unittest.mock.patch.object(install, "_retry_delay", lambda *a: 0):
+            result = install._download_one(entry, bios)
+        self.assertEqual(result[1:], (False, install.DRIVE_FULL))
+        self.assertEqual(len(attempts), 1)
 
 
 class OneEmulatorsFilesInOneCommand(unittest.TestCase):
