@@ -18,7 +18,10 @@ CONTENT = REPO_ROOT / "website" / "src" / "content" / "docs"
 def require() -> Path:
     """The content folder, or a skip when the site was not generated (a
     failure in CI, which generates it before the suite)."""
-    if not (CONTENT / "index.md").is_file():
+    # The home page is MDX once it holds a component (the install demo):
+    # looking for index.md alone skipped every page test here and failed
+    # them all in CI.
+    if not page("index.md").is_file():
         if os.environ.get("CI"):
             raise AssertionError("CI generates the site before the suite")
         raise unittest.SkipTest("site not generated (python scripts/generate_site.py)")
