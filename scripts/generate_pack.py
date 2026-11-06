@@ -26,6 +26,7 @@ import argparse
 import contextlib
 import functools
 import hashlib
+import io
 import json
 import os
 import re
@@ -158,6 +159,9 @@ class PackRecord:
         self.members: list[str] = []
         self.files: list[str] = []
         self.trees: list[str] = []
+        # The collection file each copied member comes from: a split part
+        # writes a file only where the full pack writes the same bytes.
+        self.sources: dict[str, str] = {}
 
 
 def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> None:
@@ -173,6 +177,7 @@ def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> Non
     """
     if isinstance(zf, PackRecord):
         zf.members.append(arcname)
+        zf.sources[arcname] = source_path
         return
     info = zipfile.ZipInfo(filename=arcname, date_time=_FIXED_DATE_TIME)
     info.compress_type = _member_compression(arcname)
@@ -806,6 +811,7 @@ def generate_pack(
     pack_name: str | None = None,
     no_game_data: bool = False,
     record: PackRecord | None = None,
+    within: dict[str, str] | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -818,6 +824,12 @@ def generate_pack(
 
     ``record`` builds the pack in memory (PackRecord): no archive is written,
     no external file fetched, and the paths are kept on it.
+
+    ``within`` is the full pack's PackRecord.sources, given to a split part:
+    a declared file or core extra is written only where the full pack writes
+    the same bytes. A part sees neither the other systems' declarations nor
+    their extras, so a path the full pack settles (a file/directory conflict,
+    a case twin, a path another system's file takes) was written again.
 
     Returns the path to the generated ZIP, or None on failure.
     """
@@ -1174,6 +1186,11 @@ def generate_pack(
 
                 if already_packed:
                     continue
+                if within is not None and not _same_bytes(
+                    local_path, within.get(_flat(full_dest, base_dest, flatten))
+                ):
+                    # The full pack holds another system's file here.
+                    continue
                 if file_status.get(dedup_key) == "excluded":
                     # An earlier declaration refused the file this one ships.
                     file_status[dedup_key] = "untested"
@@ -1281,6 +1298,8 @@ def generate_pack(
               )
 
           flat_dest = _flat(full_dest, base_dest, flatten)
+          if within is not None and not _same_bytes(local_path, within.get(flat_dest)):
+              continue
           if local_path.endswith(".zip"):
               _add_zip_to_pack(local_path, flat_dest, zf, fe)
           else:
@@ -1414,6 +1433,7 @@ def _extract_zip_to_archive(
                 for name in map(sanitize_pack_path, src.namelist())
                 if name and not name.endswith("/")
             )
+            target_zf.sources[dest_prefix] = source_zip
             return
         for info in src.infolist():
             if info.is_dir():
@@ -1447,6 +1467,7 @@ def _add_zip_to_pack(
     """
     if isinstance(target_zf, PackRecord):
         target_zf.members.append(dest_path)
+        target_zf.sources[dest_path] = source_zip
         return
     _check_zip_members(source_zip)
     _add_pack_member(target_zf, source_zip, dest_path)
@@ -2075,8 +2096,14 @@ def generate_split_packs(
     one_per_slot: bool = False,
     offline: bool | None = None,
     no_game_data: bool = False,
+    records: dict[str, PackRecord] | None = None,
 ) -> list[str]:
-    """Generate split packs (one ZIP per system or manufacturer)."""
+    """Generate split packs (one ZIP per system or manufacturer).
+
+    The parts add up to the full pack: each is built against the full pack's
+    own placement (``within``). ``records`` builds the parts in memory, keyed
+    by part name, with no archive written.
+    """
     config = load_platform_config(platform_name, platforms_dir)
     # The split directory carries the same tags as the packs inside it, or two
     # differently narrowed runs write into one another.
@@ -2099,10 +2126,36 @@ def generate_split_packs(
         f"{_platform_pack_stem([platform_name], platform_name, platforms_dir)}{split_tags}"
     )
     split_dir = os.path.join(output_dir, f"{part_prefix}{group_tag}_Split")
-    os.makedirs(split_dir, exist_ok=True)
+    if records is None:
+        os.makedirs(split_dir, exist_ok=True)
 
     if emu_profiles is None:
         emu_profiles = load_emulator_profiles(emulators_dir)
+    narrowing = {
+        "emulators_dir": emulators_dir, "zip_contents": zip_contents,
+        "data_registry": data_registry, "emu_profiles": emu_profiles,
+        "target_cores": target_cores, "required_only": required_only,
+        "source": source, "regions": regions, "target_name": target_name,
+        "one_per_slot": one_per_slot, "offline": offline,
+        "no_game_data": no_game_data,
+    }
+    full = PackRecord()
+    with contextlib.redirect_stdout(io.StringIO()):
+        generate_pack(
+            platform_name, platforms_dir, db, bios_dir, split_dir,
+            record=full, **narrowing,
+        )
+
+    def part(pack_name: str, **scope: object) -> str | None:
+        record = PackRecord() if records is not None else None
+        zip_path = generate_pack(
+            platform_name, platforms_dir, db, bios_dir, split_dir,
+            pack_name=pack_name, record=record, within=full.sources,
+            **scope, **narrowing,
+        )
+        if record is not None and zip_path:
+            records[pack_name] = record
+        return zip_path
     # The systems a core of the target runs: a part per declared system sent
     # each one the target drops to a refusal naming it as unknown.
     systems = platform_scope_systems(config, emu_profiles, target_cores)
@@ -2136,27 +2189,9 @@ def generate_split_packs(
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
-        zip_path = generate_pack(
-            platform_name,
-            platforms_dir,
-            db,
-            bios_dir,
-            split_dir,
-            emulators_dir=emulators_dir,
-            zip_contents=zip_contents,
-            data_registry=data_registry,
-            emu_profiles=emu_profiles,
-            target_cores=target_cores,
-            required_only=required_only,
-            system_filter=group_system_ids,
-            precomputed_extras=group_extras,
-            source=source,
-            regions=regions,
-            target_name=target_name,
-            one_per_slot=one_per_slot,
-            offline=offline,
-            pack_name=f"{part_prefix}_{_name_part(group_name, '_')}_BIOS_Pack.zip",
-            no_game_data=no_game_data,
+        zip_path = part(
+            f"{part_prefix}_{_name_part(group_name, '_')}_BIOS_Pack.zip",
+            system_filter=group_system_ids, precomputed_extras=group_extras,
         )
         if zip_path:
             results.append(zip_path)
@@ -2172,15 +2207,9 @@ def generate_split_packs(
     }
     undistributed = [fe for fe in all_extras if id(fe) not in distributed]
     if undistributed:
-        zip_path = generate_pack(
-            platform_name, platforms_dir, db, bios_dir, split_dir,
-            emulators_dir=emulators_dir, zip_contents=zip_contents,
-            data_registry=data_registry, emu_profiles=emu_profiles,
-            target_cores=target_cores, required_only=required_only,
-            precomputed_extras=undistributed, extras_only=True, source=source,
-            regions=regions, target_name=target_name, one_per_slot=one_per_slot,
-            offline=offline, pack_name=f"{part_prefix}_Other_Cores_BIOS_Pack.zip",
-            no_game_data=no_game_data,
+        zip_path = part(
+            f"{part_prefix}_Other_Cores_BIOS_Pack.zip",
+            precomputed_extras=undistributed, extras_only=True,
         )
         if zip_path:
             results.append(zip_path)
