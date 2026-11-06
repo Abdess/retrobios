@@ -98,5 +98,37 @@ class TheGroupTakesThePlatformSpelling(unittest.TestCase):
         )
 
 
+class ALosingClaimIsKeyedLikeTheWinner(unittest.TestCase):
+    """RetroDECK writes its BIOS under bios/. The extra that won a path was
+    keyed bios/scph1002b.bin, the losing claims bare scph1002b.bin, so verify
+    --region never matched them against the drops and listed Rustation's
+    copies as packed while the builder had withdrawn them."""
+
+    def test_a_losing_claim_carries_the_declared_root(self):
+        import os
+
+        from common import declared_root, load_database, load_emulator_profiles
+        from common import load_platform_config
+        from packextras import platform_region_groups
+
+        previous = os.getcwd()
+        os.chdir(REPO_ROOT)
+        self.addCleanup(os.chdir, previous)
+        config = load_platform_config("retrodeck", "platforms")
+        root = declared_root(config)
+        self.assertTrue(root)
+        _groups, claims = platform_region_groups(
+            config, config["systems"], "emulators", load_database("database.json"),
+            config.get("base_destination", ""), load_emulator_profiles("emulators"),
+        )
+        rustation = {
+            name: dest for (emulator, name, _path), dest in claims.items()
+            if emulator == "Rustation" and name.startswith("scph")
+        }
+        self.assertTrue(rustation)
+        for name, dest in rustation.items():
+            self.assertEqual(dest, f"{root}/{name}")
+
+
 if __name__ == "__main__":
     unittest.main()

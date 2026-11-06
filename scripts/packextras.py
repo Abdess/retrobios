@@ -1222,8 +1222,14 @@ def _collect_emulator_extras(
                 )
             continue
         if claimants is not None:
+            # Keyed as extra_region_key keys the extra that wins the path: a
+            # losing claim kept the bare path, and on RetroDECK (declared
+            # root bios/) verify --region listed Rustation's scph1002b.bin
+            # as packed while the builder had withdrawn bios/scph1002b.bin.
             claimants[(u.get("emulator", ""), u.get("name", ""), u.get("path") or "")] = (
-                sanitize_pack_path(placements[0][0])
+                prefixed_destination(
+                    sanitize_pack_path(placements[0][0]), declared_root(config)
+                )
             )
         for dest, full_dest in placements:
             candidates = [
