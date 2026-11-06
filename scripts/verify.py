@@ -26,11 +26,12 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import functools
 import json
 import os
 import sys
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from pathlib import Path
 
 import slots
@@ -38,6 +39,8 @@ import slots
 sys.path.insert(0, os.path.dirname(__file__))
 from hashing import parse_md5_list
 from common import (
+    _foreign_tree,
+    _owner_tokens,
     platform_arg,
     target_listing_line,
     suggest_names,
@@ -419,14 +422,25 @@ def _build_expected(file_entry: dict, checks: list[str]) -> dict:
     return expected
 
 
+def _in_foreign_tree(db: dict, owners: set[str], sha1: str) -> bool:
+    """Whether the collection keeps this sha1 in another emulator's tree."""
+    return _foreign_tree(db.get("files", {}).get(sha1, {}).get("path", ""), owners)
+
+
 def _name_in_index(
     name: str,
     by_name: dict,
     by_path_suffix: dict | None = None,
     data_names: set[str] | None = None,
     by_name_lower: dict[str, str] | None = None,
+    foreign: Callable[[str], bool] | None = None,
 ) -> bool:
-    """Check if a name is resolvable in the database indexes or data directories."""
+    """Check if a name is resolvable in the database indexes or data directories.
+
+    *foreign* tells a copy in another emulator's tree from the sha1 of a
+    name: matched in another casing, such a copy is not the asker's, as in
+    resolve_local_file's case-insensitive step.
+    """
     # Strip trailing slash for directory-type entries (e.g. nestopia/samples/foo/)
     name = name.rstrip("/")
     if name in by_name:
@@ -435,11 +449,11 @@ def _name_in_index(
     if basename != name and basename in by_name:
         return True
     if by_name_lower:
-        key = name.lower()
-        if key in by_name_lower:
-            return True
-        if basename != name and basename.lower() in by_name_lower:
-            return True
+        for key in {name.lower(), basename.lower()}:
+            if key in by_name_lower and not (
+                foreign and all(foreign(s) for s in by_name[by_name_lower[key]])
+            ):
+                return True
     if by_path_suffix and name in by_path_suffix:
         return True
     if data_names:
@@ -672,6 +686,7 @@ def find_undeclared_files(
                 # not this emulator's file (dosbox-x's et4000.bin and pcem's
                 # et4000.BIN).
                 owned = {**f, "source_profile": emu_name}
+                foreign = functools.partial(_in_foreign_tree, db, _owner_tokens(owned))
                 if shipped_on_mismatch and (f.get("md5") or f.get("sha1")):
                     # The entry states what its content should be and the builder
                     # drops a copy that contradicts it, so content decides here
@@ -683,12 +698,13 @@ def find_undeclared_files(
                 else:
                     in_repo = _name_in_index(
                         fname, by_name, by_path_suffix, data_names, by_name_lower,
+                        foreign,
                     )
                     if not in_repo and dest != fname:
                         path_base = dest.rsplit("/", 1)[-1]
                         in_repo = _name_in_index(
                             path_base, by_name, by_path_suffix, data_names,
-                            by_name_lower,
+                            by_name_lower, foreign,
                         )
                     if in_repo and not any(
                         f.get(h) for h in ("sha1", "md5", "crc32", "sha256")
@@ -699,7 +715,7 @@ def find_undeclared_files(
                         # only PCem's and QEMU's PC BIOS images of that name.
                         # The fallback below then decides as for any mismatch.
                         _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
-                        if _st == "hash_mismatch" or _lp is None:
+                        if _st == "hash_mismatch":
                             in_repo = False
                     if not in_repo:
                         # Hash fallback: the repo may hold the content under a
