@@ -22,7 +22,7 @@ mode: standalone
 data_root:
   android:
     path: "Android/data/org.kenjinx.android/files"
-    source_ref: "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/MainActivity.kt:279,294, src/LibKenjinx/LibKenjinx.cs:59-68, src/Ryujinx.Common/Configuration/AppDataManager.cs:84-95"
+    source_ref: "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/MainActivity.kt:279,295, src/LibKenjinx/LibKenjinx.cs:59-68, src/Ryujinx.Common/Configuration/AppDataManager.cs:84-95"
   windows:
     path: "%APPDATA%/Ryujinx"
     source_ref: "src/Ryujinx.Common/Configuration/AppDataManager.cs:11-12, 52-82"
