@@ -440,11 +440,27 @@ def format_size(size: int) -> str:
 
 
 SITE_URL = "https://abdess.github.io/retrobios/"
+# The installer demo (scripts/make_demo.py): the recording and what it shows.
+DEMO_DIR = Path(__file__).resolve().parent.parent / "docs_assets" / "demo"
+DEMO_GIF = "docs_assets/demo/install.gif"
 REPO_PATH = "../.."
 REPO = "Abdess/retrobios"
 # GitHub's "Add file > Upload files" page for bios/: a browser upload by
 # someone without write access lands on a fork and opens a pull request.
 UPLOAD_URL = f"https://github.com/{REPO}/upload/main/bios"
+
+
+def demo_facts() -> dict:
+    """What the installer demo shows, as make_demo.py measured it."""
+    return json.loads((DEMO_DIR / "demo.json").read_text(encoding="utf-8"))
+
+
+def demo_description(facts: dict | None = None) -> str:
+    """The demo in words, for a reader who cannot see it."""
+    facts = facts or demo_facts()
+    return (f"Recording of the one-line command in a terminal. The installer finds an "
+            f"{facts['setup']} SD card with {facts['games']} games, plans {facts['files']} "
+            f"BIOS files ({facts['size']}) for them, installs them and shows the summary.")
 
 
 def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:
@@ -592,6 +608,8 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "# Options in PowerShell: anything after | iex goes to iex, so the script runs as a block",
         install_command("powershell", "--check"),
         "```",
+        "",
+        f"![{demo_description()}]({DEMO_GIF})",
         "",
         "The script opens a full-screen installer, driven with the arrow keys and Enter, or with a"
         " controller on a handheld. It finds your setup and its BIOS folder, downloads only the missing"
