@@ -19,7 +19,7 @@ reads is local and the same on every machine:
 - HOME is an empty folder and the prompt is "$ ".
 
 docs_assets/demo/install.tape drives VHS (github.com/charmbracelet/vhs, with
-ttyd, ffmpeg and a Chromium on PATH); this script encodes what it records:
+ttyd, ffmpeg and a Chromium on PATH). This script encodes what it records:
 
     docs_assets/demo/install.gif    the README
     docs_assets/demo/install.webm   the site, with install.mp4 as fallback
