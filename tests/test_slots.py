@@ -116,8 +116,9 @@ class TestConflicts(unittest.TestCase):
         scph1001.bin entry is a label. Batocera ships the v2.0 dump there,
         which the profile accepts under scph1001_v20.bin: no conflict."""
         files = [
-            {"name": "IPL.bin", "path": "GC/JAP/IPL.bin", "md5": "n" * 32},
-            {"name": "IPL_usa.bin", "md5": "m" * 32},
+            {"name": "IPL.bin", "path": "GC/JAP/IPL.bin", "md5": "n" * 32,
+             "region": ["japan"]},
+            {"name": "IPL_alt.bin", "md5": "m" * 32, "region": ["japan"]},
         ]
         by_name = slots.find_conflicts(
             self._config("m" * 32), {"dolphin": {"files": files}}, REGIONS_DB
@@ -129,6 +130,15 @@ class TestConflicts(unittest.TestCase):
             REGIONS_DB,
         )
         self.assertEqual(by_content, [])
+        # Another region is another slot: openMSX finds each ROM by sha1 too,
+        # and one machine's ROM never stands for another's.
+        files[1]["region"] = ["north-america"]
+        other_slot = slots.find_conflicts(
+            self._config("m" * 32),
+            {"dolphin": {"found_by": "content", "files": files}},
+            REGIONS_DB,
+        )
+        self.assertEqual(len(other_slot), 1)
 
     def test_wrong_region_under_a_region_slot_is_reported(self):
         conflicts = slots.find_conflicts(

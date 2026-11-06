@@ -44,7 +44,7 @@ from common import (
 )
 from packresolve import preferred_entries
 from validation import (
-    opens_by_name,
+    content_alternatives,
     outside_gap_scope,
     read_from_save_dir,
     with_archive_members,
@@ -91,7 +91,7 @@ class Claim:
     local_path: str | None = None
     status: str = ""
     # A core that identifies its firmware by content reads no file by this
-    # name: any dump it accepts for the system answers for it.
+    # name: any dump it takes for the same system and region answers for it.
     accepts: tuple[dict, ...] = ()
 
     @property
@@ -218,12 +218,6 @@ def profile_claims(
                     zip_contents, data_dir_registry,
                 )
             )
-            labels = [
-                f for f in profile.get("files") or []
-                if isinstance(f, dict)
-                and not opens_by_name(f, profile, is_standalone)
-                and _lists_hashes(f)
-            ]
             for entry in profile.get("files") or []:
                 if not isinstance(entry, dict):
                     continue
@@ -274,13 +268,7 @@ def profile_claims(
                 )
                 if status == "name_exact" and _size_the_code_reads(entry, local):
                     status = SIZE_EXACT
-                accepts: tuple[dict, ...] = ()
-                if not opens_by_name(entry, profile, is_standalone):
-                    systems = set(entry_system_ids(entry, profile))
-                    accepts = tuple(
-                        f for f in labels
-                        if not systems or systems & set(entry_system_ids(f, profile))
-                    )
+                accepts = tuple(content_alternatives(entry, profile))
                 claims.append(
                     Claim(
                         origin="profile",
@@ -769,8 +757,8 @@ def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
     hash list accepts the profile's file, or when the profile's accepts the
     platform's. A contradiction needs both lists to reject the other side.
     A core found by content (found_by: content) reads no file by the
-    destination's name, so any dump it accepts for the system settles the
-    slot: DuckStation takes Batocera's scph1001.bin v2.0, which its profile
+    destination's name, so any dump it takes for the same system and region
+    settles the slot: DuckStation takes Batocera's scph1001.bin v2.0, which its profile
     labels scph1001_v20.bin.
     """
     if profile.local_path == platform.local_path:
@@ -791,7 +779,8 @@ def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
     ):
         return True
     if platform.local_path and any(
-        _accepted_by_all(platform.local_path, [label], db) for label in profile.accepts
+        _lists_hashes(label) and _accepted_by_all(platform.local_path, [label], db)
+        for label in profile.accepts
     ):
         return True
     return bool(
