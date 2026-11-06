@@ -20,6 +20,7 @@ feeds the report this module prints.
 from __future__ import annotations
 
 import os
+import zlib
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
@@ -892,8 +893,35 @@ def _accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
         for field_name in ("md5", "sha1", "sha256", "crc32"):
             declared = _declared_hashes(entry, field_name)
             if declared and str(record.get(field_name, "")).lower() not in declared:
+                if field_name == "crc32" and _headerless_crc32(path, record, entry) in declared:
+                    continue
                 return False
     return True
+
+
+COPIER_HEADER = 512
+
+
+def _headerless_crc32(path: str, record: dict, entry: dict) -> str | None:
+    """The crc32 of a file past its 512-byte copier header, when the entry
+    declares both the file's size and the size without the header.
+
+    Geargrafx drops the header when the file is 512 bytes over the expected
+    size and computes the crc32 on the rest (src/media.cpp:754-773). The
+    profile lists both sizes. EmuELEC's headered syscard3.pce (crc32
+    64f78e3c) is the 6d9a73ef image the profile names.
+    """
+    sizes = entry.get("size")
+    declared = sizes if isinstance(sizes, list) else [sizes]
+    size = record.get("size")
+    if not isinstance(size, int) or not {size, size - COPIER_HEADER} <= set(declared):
+        return None
+    try:
+        with open(path, "rb") as f:
+            f.seek(COPIER_HEADER)
+            return f"{zlib.crc32(f.read()):08x}"
+    except OSError:
+        return None
 
 
 def _same_file_family(paths: list[str]) -> bool:
