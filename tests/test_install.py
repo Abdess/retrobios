@@ -482,6 +482,30 @@ class ADestThatIsAFileIsNamed(unittest.TestCase):
                 self.assertEqual((root / "scph5501.bin").read_bytes(), b"x")
 
 
+class SaveFilesAListHoldsNoneOfAreNotPromised(unittest.TestCase):
+    """RetroPie, ROCKNIX, AmberELEC, EmuELEC and RomM keep their save
+    directory in no fixed place: their lists leave those files out with no
+    hash or address. The run said "Name it with --save-dir", and said it
+    again with --save-dir given, which installs none of them."""
+
+    def test_the_reason_is_said_and_no_option_is_offered(self):
+        manifest = json.loads((REPO_ROOT / "install" / "retropie.json").read_text())
+        self.assertIsNone(manifest.get("save_directory"))
+        root = Path(_tempdir(self))
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        for extra in ([], ["--save-dir", str(root / "saves")]):
+            with self.subTest(extra=extra):
+                proc = _install_run(
+                    env, "--platform", "retropie", "--dest", str(root / "bios"),
+                    "--manifest", "install/retropie.json", "--offline", "--no-input",
+                    "--yes", "--emulator", "azahar", *extra)
+                out = proc.stdout + proc.stderr
+                self.assertIn("read from RetroPie's save directory left out: RetroPie "
+                              "keeps it in no fixed place, and its file list holds none "
+                              "of them.", out)
+                self.assertNotIn("Name it with --save-dir", out)
+
+
 class AFolderThatRefusesWritesIsNamed(unittest.TestCase):
     """A read-only BIOS folder ended the run on a traceback (a subfolder to
     create), or on three retries per file and "once that is resolved", and a

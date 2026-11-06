@@ -386,7 +386,10 @@ the save directory beside it (`saves`, `/storage/savefiles` on Lakka).
 applies, or when `savefiles_in_content_dir` or
 `sort_savefiles_by_content_enable` keeps saves beside each game, those files
 are left out and the run says why, like the other entries the list cannot
-install. The full screen says so on its plan and its result.
+install. The full screen says so on its plan and its result. RetroPie, ROCKNIX,
+AmberELEC, EmuELEC and RomM keep the save directory in no fixed place: their
+lists hold none of these files, so `--save-dir` installs none, and the run says
+that instead of naming the option.
 
 Batocera, KNULLI, Recalbox, RetroBat and RetroDECK write the save directory at
 each launch, one folder per system (`by_system` in the file list). Their lists

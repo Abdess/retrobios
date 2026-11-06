@@ -6456,7 +6456,8 @@ def _report_outcome(
     kept = _kept_lines() + ([
         f"{_plural(len(unplaced), 'file')} read from "
         f"{unplaced[0].get('frontend') or 'the frontend'}'s save directory left out: "
-        f"its place is not known. {LINE_SAVE_REMEDY}"] if unplaced else [])
+        + (f"{unplaced[0]['save_why']}." if unplaced[0].get("save_why")
+           else f"its place is not known. {LINE_SAVE_REMEDY}")] if unplaced else [])
     kept += list(notes or [])
     if interrupted:
         say(f"\nStopped. {_plural(downloaded, 'file')} installed.")
@@ -8634,6 +8635,13 @@ def saves_line(display: str, count: int, where: str) -> str:
     return (f"{_plural(count, 'file')} read from {display}'s save directory "
             f"{'goes' if count == 1 else 'go'} to {words + ' ' if words else ''}"
             f"{shown_path(folder)}")
+
+
+def unlisted_saves_words(display: str) -> str:
+    """Why a file list holds none of the files read from the save
+    directory: the platform keeps it in no fixed place, and the list leaves
+    them out with no hash or address, which --save-dir cannot change."""
+    return f"{display} keeps it in no fixed place, and its file list holds none of them"
 
 
 def unplaced_line(display: str, count: int, remedy: str) -> str:
@@ -15395,6 +15403,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         display = display_name(plat_name, manifest)
         files, unplaced = place_save_entries(
             files, bios_path, manifest, args.save_dir, display, say=False)
+        if not manifest.get("save_directory"):
+            # Its own list leaves these files out: naming the folder with
+            # --save-dir installs none of them, and was advised in a loop.
+            _SAVE_WHY[bios_path] = unlisted_saves_words(display)
         # The games of the card, read before the choices: where it holds
         # some, what they need is the menu's first choice, and --for-games
         # narrows the list here, before the systems are counted.
@@ -15597,7 +15609,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             total_omitted += len(omitted_files)
             # Named for the end of the run: ROCKNIX's own list leaves them out,
             # and the end said "the frontend's save directory".
-            omitted_seen.extend({**entry, "frontend": display}
+            omitted_seen.extend({**entry, "frontend": display,
+                                 "save_why": unlisted_saves_words(display)}
                                 if entry.get("reason") == "no_save_directory"
                                 and not entry.get("frontend") else entry
                                 for entry in omitted_files)
@@ -21212,6 +21225,9 @@ def _unplaced_lines(summary: dict | None, state: TuiState,
     if not count:
         return []
     name = display_name(state.platform) if state.platform else "the frontend"
+    if state.manifest and not state.manifest.get("save_directory"):
+        return [f"{_plural(count, 'file')} read from {name}'s save directory left out: "
+                f"{unlisted_saves_words(name)}."]
     return [f"{_plural(count, 'file')} read from {name}'s save directory left out: "
             f"its place is not known. {remedy or TUI_SAVE_REMEDY}"]
 
