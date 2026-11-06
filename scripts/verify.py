@@ -1887,7 +1887,7 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         for u in opt_not_in_repo:
             _print_undeclared_entry(u, "MISSING (optional)", verbose, repeated)
     if bundled:
-        # The required firmware is named, as a missing one would be; the
+        # The required firmware is named, as a missing one would be. The
         # rest (shaders, runtime libraries, engine data) on request.
         shown = bundled if verbose else [
             u for u in bundled
