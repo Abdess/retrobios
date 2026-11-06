@@ -1944,6 +1944,32 @@ class MisterDatabaseComesBackAsWritten(unittest.TestCase):
         self.assertEqual(len(exporter.withheld()), 1)
         self.assertEqual(exporter.validate(systems, produced), [])
 
+    def test_a_kept_size_is_not_reported_removed(self):
+        """The truth accepts MiSTer's hash and states other sizes, so no
+        size of its own fits the entry. The render keeps MiSTer's size, and
+        the report counted it removed."""
+        database = {"db_id": "bios_db", "files": {
+            "games/X/boot.rom": {"hash": "a" * 32, "size": 1000, "url": "u"},
+        }}
+        original = json.dumps(database)
+        scraped = {"systems": {"x": {"files": [{
+            "name": "boot.rom", "destination": "X/boot.rom", "md5": "a" * 32,
+            "size": 1000,
+        }]}}}
+        truth = {"systems": {"x": {"files": [{
+            "name": "boot.rom", "path": "X/boot.rom", "md5": "a" * 32,
+            "size": [2000, 3000], "_cores": ["x"],
+        }]}}}
+        exporter = discover_exporters()["misterfpga"]()
+        systems, report = build_native_model(truth, scraped)
+        produced = exporter.render(systems, report, {"bios_db.json": original}, scraped)
+        written = json.loads(produced["bios_db.json"])["files"]["games/X/boot.rom"]
+        self.assertEqual(written["size"], 1000)
+        self.assertNotIn(
+            "size_removed",
+            [c["kind"] for c in landed_changes(exporter, systems).records],
+        )
+
     def test_an_accepted_hash_is_not_swapped_for_another(self):
         """The url serves MiSTer's dump, and the truth accepts it among two.
         The first accepted md5 went in its place with no change reported,

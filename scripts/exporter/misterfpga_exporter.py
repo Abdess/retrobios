@@ -83,6 +83,10 @@ class Exporter(BaseExporter):
         written = getattr(self, "_written", None)
         if written is not None and id(fe) not in written:
             return False
+        if field_name == "size" and not fe.size():
+            # The render writes a size only when the truth states one, and
+            # otherwise keeps MiSTer's beside the hash: nothing is removed.
+            return False
         return super().states(fe, field_name)
 
     def written(self, fe: NativeFile, field_name: str) -> str:
