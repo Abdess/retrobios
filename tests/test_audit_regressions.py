@@ -1140,9 +1140,12 @@ class PipelineRegressions(unittest.TestCase):
 
         argv = ["pipeline.py", "--offline", "--skip-packs", "--skip-docs",
                 "--with-export", "--target", "switch"]
+        # The originals the offline export patches are not cached in a
+        # checkout: the run would be refused before any step.
         with mock.patch.object(sys, "argv", argv), mock.patch.object(
             pipeline, "run", side_effect=fake_run
-        ), contextlib.redirect_stdout(io.StringIO()), contextlib.suppress(SystemExit):
+        ), mock.patch.object(pipeline, "_refuse_offline_export_without_originals"), \
+                contextlib.redirect_stdout(io.StringIO()), contextlib.suppress(SystemExit):
             pipeline.main()
         truth_runs = [c for c in commands if "scripts/generate_truth.py" in c]
         export = next(c for c in commands if "scripts/export_native.py" in c)
