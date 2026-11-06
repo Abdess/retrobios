@@ -29,8 +29,8 @@ def _report(platform: str, files: list[str], **changes: object) -> dict:
         "originals": {f: f"https://example.org/{platform}/{f}" for f in files},
         "files": files,
         "summary": "3 kept, 1 file added, 7 hashes updated to the emulator source",
-        "hashes_corrected": [], "hashes_filled": [], "sizes_corrected": [],
-        "sizes_removed": [], "hashes_cleared": [], "requirements_corrected": 0,
+        "hashes_updated": [], "hashes_filled": [], "sizes_updated": [],
+        "sizes_removed": [], "hashes_cleared": [], "required_aligned": 0,
         "withheld": [], "invalid": [],
     }
     report.update(changes)
@@ -58,8 +58,8 @@ class ExportReportIsWrittenAndRead(unittest.TestCase):
         body = source[source.index("def export_platform("):source.index("def write_report(")]
         call = body[body.index("write_report("):]
         for key, value in (
-            ("hashes_corrected", "applied"), ("hashes_filled", "filled"),
-            ("sizes_corrected", "resized"), ("sizes_removed", "unsized"),
+            ("hashes_updated", "applied"), ("hashes_filled", "filled"),
+            ("sizes_updated", "resized"), ("sizes_removed", "unsized"),
             ("hashes_cleared", "cleared"), ("invalid", "issues"),
         ):
             self.assertIn(f'"{key}": {value},', call)
@@ -73,7 +73,7 @@ class CorrectedFilesPage(unittest.TestCase):
     def setUp(self):
         corrected = [f"sys/file{i}.bin md5" for i in range(12)]
         self.reports = [
-            _report("recalbox", ["es_bios.xml"], hashes_corrected=corrected),
+            _report("recalbox", ["es_bios.xml"], hashes_updated=corrected),
             _report("retropie", ["scriptmodules/a.sh", "scriptmodules/b.sh"],
                     invalid=["bash -n failed on a.sh"],
                     withheld=["a size the format has no field for"]),
@@ -154,7 +154,7 @@ class ThePageAddressesMaintainersAsPeers(unittest.TestCase):
         from siteexports import change_text
 
         report = _report("batocera", ["batocera-systems"],
-                         hashes_corrected=["a md5", "b md5"], requirements_corrected=3)
+                         hashes_updated=["a md5", "b md5"], required_aligned=3)
         report["counts"] = {"kept": 692, "added": 253, "not_added": 10, "not_kept": 0}
         self.assertEqual(
             change_text(report),
@@ -163,7 +163,7 @@ class ThePageAddressesMaintainersAsPeers(unittest.TestCase):
         )
 
     def test_no_wording_that_judges_the_original(self):
-        report = _report("batocera", ["batocera-systems"], hashes_corrected=["a md5"])
+        report = _report("batocera", ["batocera-systems"], hashes_updated=["a md5"])
         report["counts"] = {"kept": 1, "added": 0, "not_added": 4, "not_kept": 1}
         page = generate_exports_page([report], {}).lower()
         for word in ("their file", "theirs", "corrected", "wrong", "drift", "left out"):
@@ -243,13 +243,29 @@ class TheRunReportStatesWhatTheFileCarries(unittest.TestCase):
         for text in [report["summary"], *messages]:
             for word in self.JUDGING:
                 self.assertNotIn(word, text.lower())
+        # The report is served as api/v1/exports/<platform>.json, keys and
+        # change kinds included: "hash_corrected" sat on 130 Recalbox lines.
+        names = [*report, *(c["kind"] for c in report["changes"])]
+        self.assertIn("hash_updated", names)
+        for name in names:
+            for word in self.JUDGING:
+                self.assertNotIn(word, name)
+
+    def test_the_committed_reports_use_the_same_names(self):
+        import json  # noqa: PLC0415
+
+        for path in sorted((ROOT / "exports").glob("*.json")):
+            report = json.loads(path.read_text(encoding="utf-8"))
+            names = [*report, *(c["kind"] for c in report.get("changes") or [])]
+            with self.subTest(report=path.name):
+                self.assertFalse([n for n in names if "corrected" in n])
 
 
 UPSTREAM_CACHE = ROOT / ".cache" / "upstream-native"
 _DAT_ROM = re.compile(r"^\trom \( name (\"[^\"]+\"|\S+) (.*) \)$")
 _DAT_FIELDS = {"size": "size", "crc": "crc32", "md5": "md5", "sha1": "sha1"}
 _HASH_KINDS = {
-    "hash_corrected", "hash_filled", "hash_cleared", "size_corrected", "size_removed",
+    "hash_updated", "hash_filled", "hash_cleared", "size_updated", "size_removed",
 }
 
 
@@ -366,7 +382,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
             ((c["system"], path_of[(c["system"], c["name"], c["destination"])]),
              c["field"], _norm(c["old"]), _norm(c["new"]))
             for c in changes
-            if c["kind"] in _HASH_KINDS or c["kind"] == "requirement_corrected"
+            if c["kind"] in _HASH_KINDS or c["kind"] == "required_aligned"
         }
         self.assertTrue(changed, "nothing changed, the comparison proves nothing")
         self.assertEqual(reported, changed)
@@ -420,10 +436,10 @@ class ThePageShowsEachValueBeforeAndAfter(unittest.TestCase):
 
         self.report = _report(
             "recalbox", ["es_bios.xml"],
-            hashes_corrected=["psx/scph5501.bin md5"], requirements_corrected=1,
+            hashes_updated=["psx/scph5501.bin md5"], required_aligned=1,
             changes=[
-                change("hash_corrected", "md5", "5626" + "0" * 28, "c523" + "1" * 28),
-                change("requirement_corrected", "required", True, False),
+                change("hash_updated", "md5", "5626" + "0" * 28, "c523" + "1" * 28),
+                change("required_aligned", "required", True, False),
                 change("hash_filled", "sha1", None, "f" * 40),
             ],
         )

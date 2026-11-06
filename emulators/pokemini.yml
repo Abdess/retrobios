@@ -21,8 +21,8 @@ notes: |
 
   The core has an embedded FreeBIOS (open-source replacement) compiled
   directly into the binary from freebios/freebios.c. This means the
-  real BIOS is never strictly required -- games will run with FreeBIOS
-  alone, though compatibility may differ from the original firmware.
+  real BIOS is never strictly required. Games run with FreeBIOS alone,
+  though compatibility may differ from the original firmware.
 
   BIOS loading sequence in the libretro port:
 

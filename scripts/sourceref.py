@@ -123,6 +123,25 @@ def split_source_ref(ref: str) -> list[RefPart]:
     return parts
 
 
+_LOCATION_RE = re.compile(r":\d+(?:-\d+)?|^\s*\d+(?:-\d+)?(?=\s|$)")
+
+
+def ref_annotation(raw: str) -> str:
+    """The words a part writes beside its location, for a reader.
+
+    split_source_ref drops them because a comparison has no use for them,
+    but `src/loader2.cpp:284 (lsf default), src/netcfg.cpp:204 (lsf
+    override)` says which line wins only through them, and 1,103 of the
+    profiles' annotations were on no page.
+    """
+    paren = raw.find("(")
+    head = raw if paren < 0 else raw[:paren]
+    located = _LOCATION_RE.search(head)
+    if located:
+        return raw[located.end():].strip()
+    return raw[paren:].strip() if paren >= 0 else ""
+
+
 def ref_prose_text(ref: str) -> str:
     """The text of a source_ref its parts do not read, positions kept.
 

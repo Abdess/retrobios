@@ -817,8 +817,9 @@ hard-links `.cache/large/`, `data/` and the gitignored `bios/` files from the
 main checkout. Before each job it is fast-forwarded, or rebased when it holds
 unpushed commits, onto `origin/main`. A job that finds anything uncommitted
 there stops as `blocked` and cleans nothing. Commits name their files
-(`git commit -- <paths>`), and their subjects are checked against the
-commit-msg hook when the registry loads. A job that leaves a change no commit
+(`git commit -- <paths>`), and their subjects are checked against
+`scripts/commit_rules.py`, the rules the commit-msg hook runs, when the
+registry loads. A job that leaves a change no commit
 rule takes fails.
 
 `--push` sends the batch: rebase on `origin/main` (a conflict keeps the batch
@@ -1356,6 +1357,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `slots.py` | Destinations the platform and a core both claim, and how the pack settles each (`--platform`, `--target`, `--json`, `--strict`, and pipeline step 3b passes the run's own `--target`) |
 | `region_audit.py` | Confront every profile `region:` with the regions No-Intro names for the same dump (`--json`, `--db`, `--emulators-dir`). An opinion, never an authority: the code decides, and a disagreement is a line to read in the emulator's source |
 | `validate_pr.py` | Validate BIOS files in pull requests, post markdown report |
+| `pr_checks.py` | Run the checks `validate.yml` runs on a pull request, in its order, past a failure as CI does, and name each check that failed or whose tool is absent (`--list` prints them) |
 | `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
 | `generate_event_schema.py` | Write `schemas/install-events.schema.json` from `EVENT_KEYS` in `install.py` (`--check` exits 1 when the file is stale, which `validate_schemas.py` also reports) |
 | `generate_installer_doc.py` | Rewrite the generated blocks of `wiki/installer.md` from `install.py`: the tables (options, events, exit codes, keys per route, card markers), the line menu, and the run samples `install.py` prints in a sandbox against the committed `install/*.json`, so a new list rewrites the page (`--check` exits 1 when a block is stale, `--page FILE` writes another copy of the page). Pipeline step 7 |
@@ -1392,7 +1394,7 @@ Further options, by script:
 
 | Script | Options |
 |--------|---------|
-| `auto_fetch.py` | `--create-issues` prints a GitHub issue body per file still missing. It posts nothing |
+| `auto_fetch.py` | `--create-issues` prints a GitHub issue body per platform for the files still missing, with their full hashes. It posts nothing |
 | `check_buildbot_system.py` | `--update` refreshes the entries found stale, `--json`, `--registry` |
 | `check_freshness.py` | `--cache-dir`, `--native-cache-dir` (originals of the native export) and `--truth-dir` move the caches it reads |
 | `check_release.py` | `--tag`, `--sums dist/SHA256SUMS.txt`, `--record` (default `release.json`), `--json` |

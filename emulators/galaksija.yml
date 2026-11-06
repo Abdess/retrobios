@@ -20,7 +20,7 @@ systems:
 # Z80-based at 3.072 MHz, PAL 50fps, character-mode display (32x16 chars, 256x208 px).
 #
 # The core embeds all three firmware files compressed in rom.c (LoadCHRGENBIN,
-# LoadROM1BIN, LoadROM2BIN). External files are optional overrides -- if ANY of
+# LoadROM1BIN, LoadROM2BIN). External files are optional overrides. If ANY of
 # CHRGEN.BIN or ROM1.BIN is missing from <system_dir>/galaksija/, the core sets
 # firmware_ignore=true and loads all ROMs from the embedded copies instead.
 #
@@ -73,7 +73,7 @@ files:
     note: >
       Math extension ROM. Mapped at 0x1000-0x1FFF. Adds floating-point math
       functions (SIN, COS, TG, SQR, LN, EXP, POW, etc). Optional even when
-      loading from disk -- missing ROM2 only triggers a warning. Embedded in
+      loading from disk, where a missing ROM2 only triggers a warning. Embedded in
       rom.c as fallback.
     source_ref: "source src/rom.h:11, source src/libretro.c:107-110, source src/external/galaksija-emulator/src/init.c:83-92"
 
