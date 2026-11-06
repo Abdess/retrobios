@@ -32,7 +32,6 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import hashlib
 import io
 import json
 import re
@@ -51,6 +50,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import export_native  # noqa: E402
+import pin_installer  # noqa: E402
 import refresh_data_dirs  # noqa: E402
 import upstream  # noqa: E402
 from common import (  # noqa: E402
@@ -83,7 +83,6 @@ PYPI_URL = "https://pypi.org/pypi/{name}/json"
 NPM_URL = "https://registry.npmjs.org/{name}/latest"
 # The site's npm dependencies, pinned to exact versions and built by Deploy Site.
 SITE_PACKAGE = REPO_ROOT / "website" / "package.json"
-INSTALLERS = ("install.sh", "install.ps1")
 
 SHOWN_ITEMS = 4  # items named in a diff summary before ", ..."
 SHOWN_NAMES = 12  # core names named in an unresolved row before ", ..."
@@ -1465,18 +1464,16 @@ def check_ci(cache_dir: str, offline: bool) -> list[Finding]:
 
 def _check_installer_pins() -> Finding:
     """The bootstraps pin install.py by SHA-256, so a stale pin refuses every install."""
-    digest = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
-    stale = []
-    for name in INSTALLERS:
-        text = (REPO_ROOT / name).read_text(encoding="utf-8", errors="replace")
-        if digest not in text:
-            stale.append(name)
+    stale = pin_installer.stale_pins(REPO_ROOT)
     return Finding(
         "ci",
         "install.py pin",
         STALE if stale else OK,
-        local=digest[:12],
-        detail=("pin outdated in " + ", ".join(stale)) if stale else "install.sh and install.ps1 match",
+        local=pin_installer.installer_sha256(REPO_ROOT)[:12],
+        detail=(
+            f"pin outdated in {', '.join(stale)}, {pin_installer.COMMAND} writes it"
+            if stale else "install.sh and install.ps1 match"
+        ),
     )
 
 

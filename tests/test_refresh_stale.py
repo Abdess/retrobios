@@ -162,6 +162,11 @@ class Planning(unittest.TestCase):
         self.assertEqual(jobs, [])
         self.assertEqual(len(surfaced), 3)
 
+    def test_the_installer_pin_is_written_by_its_script(self):
+        jobs, surfaced, _ = self._plan(finding("ci", "install.py pin"))
+        self.assertEqual([job.command[1:] for job in jobs], [["scripts/pin_installer.py"]])
+        self.assertEqual(surfaced, [])
+
 
 class Running(unittest.TestCase):
     def test_a_child_starts_after_its_parent_ends(self):

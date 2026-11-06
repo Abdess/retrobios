@@ -34,7 +34,8 @@ has ended, and its export is rewritten even when no row named it.
 
 Surfaced only (no refresh): data rows that are not a _data_dirs.yml key
 (the registry itself, buildbot assets it does not track), coreinfo gaps, redump/no-intro/tosec packs,
-CI pins (install.py SHA-256, PyPI, pinned actions), profile_sync, rom-folder
+CI pins (PyPI, pinned actions; the install.py SHA-256 pin is written by
+scripts/pin_installer.py), profile_sync, rom-folder
 pins (moved by hand, then python -m scripts.scraper.romfolders --setup NAME
 reads them again). Each needs
 a human read (new .info file, manual DAT download, PyPI version bump).
@@ -400,6 +401,10 @@ def _command_for(
             subject,
             "--force",
         ]
+
+    if area == "ci" and subject == "install.py pin":
+        # The pin is the hash of the committed install.py, nothing to judge.
+        return [sys.executable, "scripts/pin_installer.py"]
 
     if area == "catalogs":
         if subject == "mame recipes":

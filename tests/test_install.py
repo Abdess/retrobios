@@ -36,6 +36,9 @@ _spec.loader.exec_module(install)
 sys.path.insert(0, str(REPO_ROOT / "tests"))
 from netguard import module_guard  # noqa: E402
 
+# What a stale pin's failure says: the fix is one command.
+PIN_ADVICE = "install.py changed: python scripts/pin_installer.py rewrites both pins"
+
 # No connection off the loopback and no card of the host reaches a test:
 # the module fails at its end otherwise.
 setUpModule, tearDownModule = module_guard("test_install")
@@ -2201,7 +2204,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         match = re.search(r'\$defaultInstallSha256 = "([0-9a-f]{64})"', content)
         self.assertIsNotNone(match, "install.ps1 must embed the installer SHA256")
         expected = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
-        self.assertEqual(match.group(1), expected)
+        self.assertEqual(match.group(1), expected, PIN_ADVICE)
 
     def test_powershell_wrapper_rejects_non_https_bootstrap(self):
         content = (REPO_ROOT / "install.ps1").read_text()
@@ -2212,7 +2215,31 @@ class TestAvailablePlatforms(unittest.TestCase):
         match = re.search(r'DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', content)
         self.assertIsNotNone(match, "install.sh must embed the installer SHA256")
         expected = hashlib.sha256((REPO_ROOT / "install.py").read_bytes()).hexdigest()
-        self.assertEqual(match.group(1), expected)
+        self.assertEqual(match.group(1), expected, PIN_ADVICE)
+
+    def test_pin_script_writes_both_pins(self):
+        """Every edit to install.py meant a sha256sum pasted by hand into two
+        files with two syntaxes, and the failing test named no command."""
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import pin_installer  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
+            root = Path(directory)
+            for name in ("install.py", "install.sh", "install.ps1"):
+                shutil.copy2(REPO_ROOT / name, root / name)
+            (root / "install.py").write_text("# changed\n", encoding="utf-8")
+            sh_mode = (root / "install.sh").stat().st_mode
+            self.assertEqual(pin_installer.stale_pins(root), ["install.sh", "install.ps1"])
+            self.assertEqual(pin_installer.write_pins(root), ["install.sh", "install.ps1"])
+            self.assertEqual(pin_installer.stale_pins(root), [])
+            digest = hashlib.sha256(b"# changed\n").hexdigest()
+            for name in ("install.sh", "install.ps1"):
+                before = (REPO_ROOT / name).read_text(encoding="utf-8").splitlines()
+                after = (root / name).read_text(encoding="utf-8").splitlines()
+                changed = [b for a, b in zip(before, after) if a != b]
+                self.assertEqual(len(changed), 1, name)
+                self.assertIn(digest, changed[0])
+            self.assertEqual((root / "install.sh").stat().st_mode, sh_mode)
 
     def test_shell_one_liner_downloads_verifies_and_forwards_arguments(self):
         scratch = REPO_ROOT / "tmp" / "tests"
