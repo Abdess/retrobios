@@ -85,9 +85,9 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 - **18 platforms** supported with platform-specific verification
 - **623 emulators** profiled from source (RetroArch cores + standalone)
 - **532 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **19,944 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,741 system files, 2,975 arcade ROM sets, 11,228 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
-- **566 of 5,741 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC). Arcade sets and engine data fall outside what those catalogs index
-- **15.7 GB** for the whole collection
+- **19,947 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,744 system files, 2,975 arcade ROM sets, 11,228 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
+- **566 of 5,744 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC). Arcade sets and engine data fall outside what those catalogs index
+- **15.8 GB** for the whole collection
 
 ## Supported systems
 
@@ -104,7 +104,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | BizHawk | 118/118 | - | SHA-1 |
 | EmuDeck | 168/168 | 8,427/8,529 | MD5 |
 | EmuELEC | 544/572 | 4,788/10,217 | MD5 |
-| KNULLI | 290/290 | 9,127/15,350 | MD5 |
+| KNULLI | 290/290 | 9,128/15,351 | MD5 |
 | Lakka | 532/532 | 7,910/7,995 | name only |
 | MiSTer FPGA | 81/81 | - | MD5 |
 | MinUI | 0/0 | 78/79 | name only |
@@ -206,4 +206,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-05T18:57:27Z*
+*Auto-generated on 2026-11-05T22:45:23Z*

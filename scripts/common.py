@@ -1227,19 +1227,30 @@ def contents_members(file_entry: dict) -> list[dict]:
     A member is its crc32 where the profile declares one, its name where the
     code opens it by name alone: Flycast reads epr-21329.ic27 in
     hod2bios.zip by filename, and a copy without it has no Japan BIOS.
+    A crc32 two members share also keeps the name: fpr23905.ic36 and
+    fpr23905c.ic36 both have crc32 ffffffff in segadimm.zip, so the crc
+    alone cannot tell a copy holding one from a copy holding both.
     """
-    return [
-        {"crc32": str(m["crc32"]).lower(), "required": True}
-        if m.get("crc32") else {"name": str(m["name"]), "required": True}
-        for m in file_entry.get("contents") or []
-        if m.get("crc32") or m.get("name")
-    ]
+    listed = [m for m in file_entry.get("contents") or [] if m.get("crc32") or m.get("name")]
+    seen = Counter(str(m["crc32"]).lower() for m in listed if m.get("crc32"))
+    members = []
+    for m in listed:
+        if not m.get("crc32"):
+            members.append({"name": str(m["name"]), "required": True})
+            continue
+        crc = str(m["crc32"]).lower()
+        member = {"crc32": crc, "required": True}
+        if seen[crc] > 1 and m.get("name"):
+            member["name"] = str(m["name"])
+        members.append(member)
+    return members
 
 
 def _member_held(member: dict, crcs: frozenset[str], names: frozenset[str]) -> bool:
+    named = member.get("name", "").rsplit("/", 1)[-1].casefold() in names
     if member.get("crc32"):
-        return member["crc32"] in crcs
-    return member["name"].rsplit("/", 1)[-1].casefold() in names
+        return member["crc32"] in crcs and ("name" not in member or named)
+    return named
 
 
 def _holding_members(paths: list[str], members: list[dict]) -> list[str]:
@@ -1273,8 +1284,13 @@ def _covering_archives(paths: list[str]) -> list[str]:
     deleting an unrelated duplicate flipped which copy a core received.
     """
     # A variant is served only when no primary is, so the primaries are
-    # the copies this choice is between.
-    pool = [path for path in paths if "/.variants/" not in path] or paths
+    # the copies this choice is between. A copy in an emulator's own tree
+    # (bios/Other/<emulator>/) is that emulator's file, not a revision of
+    # the set: an entry no profile owns is not decided by it.
+    pool = [
+        path for path in paths
+        if "/.variants/" not in path and not path.startswith("bios/Other/")
+    ] or [path for path in paths if "/.variants/" not in path] or paths
     crcs = {path: zip_member_crcs(path) for path in pool}
     covering = [
         path for path in pool
@@ -1743,6 +1759,13 @@ def resolve_local_file(
             if zipped_file:
                 candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
             members = file_entry.get("members") or contents_members(file_entry)
+            if members or (len(candidates) > 1 and name.casefold().endswith(".zip")):
+                # Another emulator's own copy takes no part in the ranking:
+                # Demul's naomi.zip holds more NAOMI BIOS rows than any MAME
+                # set and broke the superset the MAME cores were served.
+                candidates = [
+                    p for p in candidates if not _foreign_tree(p, owners)
+                ] or candidates
             if members:
                 candidates = _holding_members(candidates, members)
             elif len(candidates) > 1 and name.casefold().endswith(".zip"):

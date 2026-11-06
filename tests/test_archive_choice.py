@@ -390,6 +390,22 @@ class AnArchiveRankedByWhatItHolds(unittest.TestCase):
             for name in ("epr-21330.ic27", "epr-21332.ic27")]}
         self.assertEqual(self._resolve(entry, db), "bios/MAME/hod2bios.zip")
 
+    def test_a_shared_crc_keeps_the_member_name(self):
+        """segadimm.zip holds fpr23905.ic36 and fpr23905c.ic36, both crc32
+        ffffffff. Ranked by crc alone, a copy without fpr23905c.ic36 tied with
+        the full set and came first in the index."""
+        self.roms["fpr23905.ic36"] = self.roms["fpr23905c.ic36"] = b"\xff" * 16
+        db = self._db([("bios/Arcade/hod2bios.zip", ["epr-21330.ic27", "fpr23905.ic36"]),
+                       ("bios/MAME/hod2bios.zip",
+                        ["epr-21330.ic27", "fpr23905.ic36", "fpr23905c.ic36"])])
+        crc = format(zlib.crc32(b"\xff" * 16), "08x")
+        first = format(zlib.crc32(self.roms["epr-21330.ic27"]), "08x")
+        entry = {"name": "hod2bios.zip", "contents": [
+            {"name": "epr-21330.ic27", "crc32": first},
+            {"name": "fpr23905.ic36", "crc32": crc},
+            {"name": "fpr23905c.ic36", "crc32": crc}]}
+        self.assertEqual(self._resolve(entry, db), "bios/MAME/hod2bios.zip")
+
     def test_a_copy_holding_no_declared_member_is_not_the_archive(self):
         """galgames.zip held only an assembler listing and none of the six
         ROMs MAME declares: the name step served it as the BIOS set."""
@@ -495,6 +511,61 @@ class ALooseEntryNamingItsArchive(unittest.TestCase):
         self.assertNotIn("missing", out.getvalue())
         self.assertEqual({d["status"] for d in report["details"]}, {"ok"})
         self.assertEqual(report["total_files"], 1)
+
+
+class AnotherEmulatorsOwnSet(unittest.TestCase):
+    """Demul's naomi.zip in bios/Other/demul/ holds more NAOMI BIOS rows than
+    any MAME set. Ranked with the others it won the member count for Flycast
+    and broke the superset rule for the MAME cores, which then got a smaller
+    copy."""
+
+    def setUp(self):
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        previous = os.getcwd()
+        os.chdir(root)
+        self.addCleanup(os.chdir, previous)
+        self.roms = {f"r{n}.ic27": bytes([n]) * 16 for n in range(5)}
+        layout = {"bios/Arcade/naomi.zip": ["r0.ic27", "r1.ic27"],
+                  "bios/MAME/naomi.zip": ["r0.ic27", "r1.ic27", "r2.ic27"],
+                  "bios/Other/demul/naomi.zip": list(self.roms)}
+        files, by_name = {}, {}
+        for relative, members in layout.items():
+            Path(relative).parent.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(relative, "w") as zf:
+                for member in members:
+                    zf.writestr(member, self.roms[member])
+            sha1 = hashlib.sha1(Path(relative).read_bytes()).hexdigest()
+            files[sha1] = {"path": relative, "name": "naomi.zip", "sha1": sha1}
+            by_name.setdefault("naomi.zip", []).append(sha1)
+        self.db = {"files": files, "indexes": {"by_name": by_name, "by_md5": {},
+                                               "by_path_suffix": {}, "by_crc32": {}}}
+
+    def _contents(self, names: list[str]) -> list[dict]:
+        return [{"name": n, "crc32": format(zlib.crc32(self.roms[n]), "08x")} for n in names]
+
+    def test_its_member_count_does_not_rank_for_another_emulator(self):
+        from common import resolve_local_file
+
+        entry = {"name": "naomi.zip", "source_profile": "flycast",
+                 "contents": self._contents(list(self.roms))}
+        path, _status = resolve_local_file(entry, self.db)
+        self.assertEqual(path, "bios/MAME/naomi.zip")
+
+    def test_it_does_not_break_the_superset_of_an_unowned_entry(self):
+        from common import resolve_local_file
+
+        path, _status = resolve_local_file({"name": "naomi.zip"}, self.db)
+        self.assertEqual(path, "bios/MAME/naomi.zip")
+
+    def test_its_owner_still_gets_it(self):
+        from common import resolve_local_file
+
+        entry = {"name": "naomi.zip", "source_profile": "demul",
+                 "contents": self._contents(list(self.roms))}
+        path, _status = resolve_local_file(entry, self.db)
+        self.assertEqual(path, "bios/Other/demul/naomi.zip")
 
 
 class ArchiveMembersIndexOnce(unittest.TestCase):

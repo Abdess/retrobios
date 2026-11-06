@@ -468,13 +468,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  18196 files (9.3 GB)
-    3180 BIOS files (4.4 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
+  18195 files (9.3 GB)
+    3179 BIOS files (4.4 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 426 files are not in the collection, 80 of them required.
 
 Checking existing files...
-  0 in place, 18196 missing, 0 wrong copies
+  0 in place, 18195 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -489,10 +489,10 @@ as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 14724 files (9.2 GB)...
+Downloading 14723 files (9.2 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/14724] panafz1.bin ok
-  [2/14724] panafz10.bin ok
+  [1/14723] panafz1.bin ok
+  [2/14723] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -504,8 +504,8 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 18196 files installed.
-  Installed: 3180 BIOS files, 11544 game data files and 3472 data files.
+Done. 18195 files installed.
+  Installed: 3179 BIOS files, 11544 game data files and 3472 data files.
 BIOS folder: /userdata/bios
 426 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (1 file):
@@ -559,7 +559,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  18196 in place, 0 missing, 0 wrong copies
+  18195 in place, 0 missing, 0 wrong copies
 
   Everything is in place.
 ```

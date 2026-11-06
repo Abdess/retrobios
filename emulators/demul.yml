@@ -1,14 +1,16 @@
 emulator: Demul
 type: standalone
-upstream: "https://demul.emulation64.com"
+source: "https://demul.emulation64.com"
+upstream: closed-source
 version_source:
   url: "http://demul.emulation64.com/"
   pattern: '<div class="normaltext">\[[^\]]*\] DEmul (\d+\.\d+)'
-profiled_date: "2026-03-26"
+profiled_date: "2026-11-05"
 core_version: "0.7"
 version_basis:
-  kind: unverified
-  why: no_artifact
+  kind: package
+  url: "https://www.retrobat.ovh/repo/win64/stable/emulators/demul.7z"
+  artifact: "demul.7z, demul.exe banner (0x53232c-0x53235a)"
 display_name: "Sega - Dreamcast/NAOMI/Hikaru (Demul)"
 cores:
   - demul
@@ -21,143 +23,551 @@ systems:
   - sega-system-sp
   - gaelco-powervr
   - cave-cv1000
+mode: standalone
 
 notes: |
-  Closed-source Windows emulator for Sega Dreamcast and related arcade hardware.
-  Run via Wine (32-bit, win32 prefix) on Linux platforms (Batocera, RetroBat).
-  Uses MAME ROM naming conventions for arcade BIOS archives.
+  Closed Windows emulator for the Dreamcast and the arcade boards built on it.
+  The build read is demul.exe 0.7 dated 20 December 2025, sha1
+  e326ae663c97e5982e40dbbfe7d02a0c38bd426a. RetroBat installs it from
+  demul.7z and Batocera 43.1 ships it as demul_251220.7z: both archives carry
+  the same executable. Batocera runs it under Wine. It is a 32-bit PE
+  with no packer, and every address below is a virtual address in it.
 
-  Batocera configgen (demulGenerator.py) maps roms0 to the BIOS directory.
-  All BIOS ZIPs are placed directly in bios/ (no subdirectory prefix).
-  Demul searches configured ROM paths for both game ROMs and BIOS archives.
+  The BIOS images are rows of seven tables of 28-byte records (id, description,
+  set, member, size, crc32, sha1), registered at startup (0x544270-0x5443cf):
+  dc 0x6b4d80, naomi 0x6b46b8 (whose rows name the sets naomi, naomi2 and
+  segasp), awbios 0x6b4648, hikaru 0x6b44a0, segadimm 0x6b4530, mie 0x6b4468
+  and crp 0x6b4430. The machine loader (0x53c300-0x53d5d3) takes one row per
+  board and passes its set, member, size, crc32 and sha1 to the file loader
+  (0x53daa0-0x53eb8c). For each [files] romsN path that loader tries the loose
+  file <romsN>\<set>\<member>, then <romsN>\<set>.zip, then <romsN>\<set>.7z.
+  Inside an archive a member is taken when its name or its crc32 matches, and
+  is then rejected on a wrong size, crc32 or sha1 ("Wrong size", "Wrong Crc32",
+  "Wrong SHA1 of '...' in romset '...'"). When no path holds it the loader
+  shows "Unable to find '<member>' in romset '<set>'" and returns false.
 
-  Gaelco PowerVR and Cave CV1000 (3rd gen) games are self-contained ROM sets
-  and do not require separate BIOS archives.
+  The row comes from the Demul.ini [main] index of the board (dreamBios,
+  naomiBios, atomiswaveBios, hikaruBios, [dimm] bios), or from the -bios=
+  switch. An index past the end of its table is reset to 0 (0x535963-0x5359d5)
+  and none of the platforms writes these keys, so the first row is the one read
+  by default. With naomiBiosAuto or hikaruBiosAuto the row is the one the game
+  record names (0x53ec90). Each set below therefore lists every row Demul may
+  read, and one of them is enough.
 
-  HLE MIE emulation available (changelog: "full HLE MIE" mode). LLE mode
-  requires mie.zip with the 315-6146 MCU firmware.
+  The sets are MAME-style archives, with older MAME groupings: the House of the
+  Dead 2, F355 Challenge and Airline Pilots BIOS rows belong to the naomi set,
+  so Demul reads them from naomi.zip and never opens hod2bios.zip, f355bios.zip,
+  f355dlx.zip or airlbios.zip. No string or record names those archives,
+  naomigd.zip, jvs13551.zip, dc_boot.bin or dc_flash.bin. The flash and EEPROM
+  images (.flash, .eeprom, .sram) live in the nvram directory and are written by
+  the emulator (0x544b20).
 
-  Supported launch modes via -run= parameter:
-    dc, naomi, naomi2, hikaru, atomiswave, gaelco, cave3rd, segasp.
+  The crp set (crp-1231br-10_ver01.07.epr, CRP firmware, crc32 d1ba64b3) is
+  registered at 0x544348-0x54436f but no code reads its table to load a file.
 
-  BIOS requirements verified against Batocera configgen, batocera-systems
-  declarations, MAME ROM set conventions, and community documentation.
-  No source code available for direct verification.
+  Batocera points roms0 at the BIOS directory, RetroBat writes roms0 =
+  bios\dc and roms1 = bios, so both find these sets at the BIOS root. Gaelco
+  PowerVR and Cave CV1000 games read no BIOS set.
 
 files:
-  # -------------------------------------------------------
-  # Sega Dreamcast
-  # -------------------------------------------------------
-  - name: dc_boot.bin
+  - name: dc.zip
     system: sega-dreamcast
     required: true
-    size: 2097152
-    note: "Dreamcast boot ROM (2 MB). No HLE fallback in Demul."
-
-  - name: dc_flash.bin
-    system: sega-dreamcast
-    required: false
-    size: 131072
-    note: "Dreamcast flash memory (128 KB). Created by emulator if missing."
-
-  # -------------------------------------------------------
-  # Sega NAOMI
-  # -------------------------------------------------------
+    category: bios_zip
+    note: "Dreamcast boot ROM set, read by -run=dc. The dreamBios row is loaded into the 2 MB boot area and a failed load stops the start. Without a Demul.ini key the first row, mpr-23588.ic501 (v1.022), is the one read."
+    source_ref: "demul.exe 0x6b4d80-0x6b4ea3 (dc table), 0x53c338-0x53c36f (dreamBios row), 0x53ca4d-0x53ca7e (load, fatal), 0x535963-0x535979 (index reset)"
+    contents:
+      - name: "mpr-23588.ic501"
+        description: "Dreamcast v1.022 (World)"
+        size: 2097152
+        crc32: "786168f9"
+        sha1: "ba8bbb90fdb29525f24f17055dc2c7b2d7674437"
+      - name: "mpr-21931.ic501"
+        description: "Dreamcast v1.01d (World)"
+        size: 2097152
+        crc32: "89f2b1a1"
+        sha1: "8951d1bb219ab2ff8583033d2119c899cc81f18c"
+      - name: "1_01d_02.bin"
+        description: "Dreamcast v1.01d [T+Chi]"
+        size: 2097152
+        crc32: "a2564fad"
+        sha1: "edc5d3d70a93c935703d26119b37731fd317d2bf"
+      - name: "mpr-21871.ic501"
+        description: "Dreamcast v1.01c (World)"
+        size: 2097152
+        crc32: "2f551bc5"
+        sha1: "1ede8d5be49116a4c6f3fe0961175469537a0434"
+      - name: "mpr-21068.ic501"
+        description: "Dreamcast v1.004 (Japan)"
+        size: 2097152
+        crc32: "5454841f"
+        sha1: "1ea132c0fbbf07ef76789eadc07908045c089bd6"
+      - name: "set5v1.011.ic507"
+        description: "Katana Set5 v1.011 (World)"
+        size: 2097152
+        crc32: "2186e0e5"
+        sha1: "6bd18fb83f8fdb56f1941e079580e5dd672a6dad"
+      - name: "set5v1.001.ic507"
+        description: "Katana Set5 v1.001 (Japan)"
+        size: 2097152
+        crc32: "5702d38f"
+        sha1: "ea7a3ae1de73683008dd795c252941a4fc81b42e"
+      - name: "set5v0.976.ic507"
+        description: "Katana Set5 v0.976 (Japan)"
+        size: 2097152
+        crc32: "dcb2e86f"
+        sha1: "c88b4b6704811e3a428ee225727e4f7df467a3b5"
+      - name: "set5v0.972.ic507"
+        description: "Katana Set5 v0.972 (Japan)"
+        size: 2097152
+        crc32: "1a2f2a91"
+        sha1: "08df891f02cf959189bc9b7c4ac1a4e6a4475b50"
+      - name: "set5v0.71.bin"
+        description: "Katana Set5 Checker v0.71"
+        size: 2097152
+        crc32: "52d01969"
+        sha1: "28aec4a01419d2d2a664c540bef30ea289ca0644"
+      - name: "set5v0.41.bin"
+        description: "Katana Set5 Checker v0.41"
+        size: 2097152
+        crc32: "485877bd"
+        sha1: "dc1af1f1248ffa87d57bc5ef2ea41aac95ecfc5e"
   - name: naomi.zip
     system: sega-naomi
     required: true
     category: bios_zip
-    note: >
-      NAOMI system BIOS archive (MAME format). Contains region-specific
-      BIOS ROMs (EPR-21576 Japan, EPR-21577 USA, EPR-21578 Export,
-      EPR-21579 Korea) plus development and special BIOS variants.
-
-  - name: naomigd.zip
-    system: sega-naomi
-    required: false
-    category: bios_zip
-    note: "NAOMI GD-ROM BIOS. Shares ROMs with naomi.zip (subset of region BIOS variants)."
-
-  - name: hod2bios.zip
-    system: sega-naomi
-    required: false
-    category: bios_zip
-    note: "House of the Dead 2 game-specific BIOS. Japan/USA/Export variants."
-
-  - name: f355bios.zip
-    system: sega-naomi
-    required: false
-    category: bios_zip
-    note: "Ferrari F355 Challenge game-specific BIOS. Japan/USA/Export variants."
-
-  - name: f355dlx.zip
-    system: sega-naomi
-    required: false
-    category: bios_zip
-    note: "Ferrari F355 Challenge Deluxe game-specific BIOS. Japan/USA/Export variants."
-
-  - name: airlbios.zip
-    system: sega-naomi
-    required: false
-    category: bios_zip
-    note: "Airline Pilots Deluxe game-specific BIOS. USA/Export variants."
-
-  # -------------------------------------------------------
-  # Sega NAOMI 2
-  # -------------------------------------------------------
+    note: "NAOMI BIOS set. The naomiBios row, or with naomiBiosAuto the row the game names, is loaded and a failed load stops the start. The House of the Dead 2, F355 Challenge and Airline Pilots BIOS rows are members of this set, not separate archives."
+    source_ref: "demul.exe 0x6b46b8-0x6b4b6b and 0x6b4d2c-0x6b4d47 (naomi rows), 0x53c42d-0x53c46c (naomiBios row and auto choice), 0x53ca4d-0x53ca7e (load, fatal), 0x53ec90 (game BIOS id)"
+    contents:
+      - name: "epr-21576h.ic27"
+        description: "Naomi epr-21576h (Japan)"
+        size: 2097152
+        crc32: "d4895685"
+        sha1: "91424d481ff99a8d3f4c45cea6d3f0eada049a6d"
+      - name: "epr-21576g.ic27"
+        description: "Naomi epr-21576g (Japan)"
+        size: 2097152
+        crc32: "d2a1c6bf"
+        sha1: "6d27d71aec4dfba98f66316ae74a1426d567698a"
+      - name: "epr-21576e.ic27"
+        description: "Naomi epr-21576e (Japan)"
+        size: 2097152
+        crc32: "08c0add7"
+        sha1: "e7c1a7673cb2ccb21748ef44105e46d1bad7266d"
+      - name: "epr-21576d.ic27"
+        description: "Naomi epr-21576d (Japan)"
+        size: 2097152
+        crc32: "3b2afa7b"
+        sha1: "d007e1d321c198a38c5baff86eb2ab84385d150a"
+      - name: "epr-21576c.ic27"
+        description: "Naomi epr-21576c (Japan)"
+        size: 2097152
+        crc32: "4599ad13"
+        sha1: "7e730e9452a792d76f210c33a955d385538682c7"
+      - name: "epr-21576b.ic27"
+        description: "Naomi epr-21576b (Japan)"
+        size: 2097152
+        crc32: "755a6e07"
+        sha1: "7e8b8ccfc063144d89668e7224dcd8a36c54f3b3"
+      - name: "epr-21576a.ic27"
+        description: "Naomi epr-21576a (Japan)"
+        size: 2097152
+        crc32: "cedfe439"
+        sha1: "f27798bf3d890863ef0c1d9dcb4e7782249dca27"
+      - name: "epr-21576.ic27"
+        description: "Naomi epr-21576 (Japan)"
+        size: 2097152
+        crc32: "9dad3495"
+        sha1: "5fb66f9a2b68d120f059c72758e65d34f461044a"
+      - name: "epr-21577h.ic27"
+        description: "Naomi epr-21577h (USA)"
+        size: 2097152
+        crc32: "fdf17452"
+        sha1: "5f3e4b677f0046ce690a4f096b0481e5dd8bb6e6"
+      - name: "epr-21577g.ic27"
+        description: "Naomi epr-21577g (USA)"
+        size: 2097152
+        crc32: "25f64af7"
+        sha1: "99f9e6cc0642319bd2da492611220540add573e8"
+      - name: "epr-21577e.ic27"
+        description: "Naomi epr-21577e (USA)"
+        size: 2097152
+        crc32: "cf36e97b"
+        sha1: "b085305982e7572e58b03a9d35f17ae319c3bbc6"
+      - name: "epr-21577d.ic27"
+        description: "Naomi epr-21577d (USA)"
+        size: 2097152
+        crc32: "60ddcbbe"
+        sha1: "58b15096d269d6df617ca1810b66b47deb184958"
+      - name: "epr-21577a.ic27"
+        description: "Naomi epr-21577a (USA)"
+        size: 2097152
+        crc32: "969dc491"
+        sha1: "581d1eae328b87b67508a7586ffc60cee256f70f"
+      - name: "epr-21578h.ic27"
+        description: "Naomi epr-21578h (Export)"
+        size: 2097152
+        crc32: "7b452946"
+        sha1: "8e9f153bbada24b37066dc45b64a7bf0d4f26a9b"
+      - name: "epr-21578g.ic27"
+        description: "Naomi epr-21578g (Export)"
+        size: 2097152
+        crc32: "55413214"
+        sha1: "bd2748365a9fc1821c9369aa7155d7c41c4df43e"
+      - name: "epr-21578f.ic27"
+        description: "Naomi epr-21578f (Export)"
+        size: 2097152
+        crc32: "628a27fd"
+        sha1: "dae7add616b1a2478f00608823e88c3b82a0e78f"
+      - name: "epr-21578e.ic27"
+        description: "Naomi epr-21578e (Export)"
+        size: 2097152
+        crc32: "087f09a3"
+        sha1: "0418eb2cf9766f0b1b874a4e92528779e22c0a4a"
+      - name: "epr-21578d.ic27"
+        description: "Naomi epr-21578d (Export)"
+        size: 2097152
+        crc32: "dfd5f42a"
+        sha1: "614a0db4743a5e5a206190d6786ade24325afbfd"
+      - name: "epr-21578a.ic27"
+        description: "Naomi epr-21578a (Export)"
+        size: 2097152
+        crc32: "6c9aad83"
+        sha1: "555918de76d8dbee2a97d8a95297ef694b3e803f"
+      - name: "epr-21579d.ic27"
+        description: "Naomi epr-21579d (Korea)"
+        size: 2097152
+        crc32: "33513691"
+        sha1: "b1d8c7c516e1471a788fcf7a02a794ad2f05aeeb"
+      - name: "epr-21579.ic27"
+        description: "Naomi epr-21579 (Korea)"
+        size: 2097152
+        crc32: "71f9c918"
+        sha1: "d15af8b947f41eea7c203b565cd403e3f37a2017"
+      - name: "epr-21580a.ic27"
+        description: "Naomi epr-21580a (Australia)"
+        size: 2097152
+        crc32: "46dbe90f"
+        sha1: "822b2ea8e254ea3ce66f0ea67e80a8c7e1125ec9"
+      - name: "epr-21331.ic27"
+        description: "Naomi House of the Dead 2 (Export)"
+        size: 2097152
+        crc32: "065f8500"
+        sha1: "49a3881e8d76f952ef5e887200d77b4a415d47fe"
+      - name: "epr-21330.ic27"
+        description: "Naomi House of the Dead 2 (USA)"
+        size: 2097152
+        crc32: "9e3bfa1b"
+        sha1: "b539d38c767b0551b8e7956c1ff795de8bbe2fbc"
+      - name: "epr-21329.ic27"
+        description: "Naomi House of the Dead 2 (Japan)"
+        size: 2097152
+        crc32: "d99e5b9b"
+        sha1: "453ffb41b6197cac6d12e7814bb1d7281ccf1659"
+      - name: "epr-21332.ic27"
+        description: "Naomi House of the Dead 2 (Korea)"
+        size: 2097152
+        crc32: "bd6ce0ec"
+        sha1: "3d1ce5cb6978afe57967d8b53bc969259dd64749"
+      - name: "hotd2proto.ic27"
+        description: "Naomi House of the Dead 2 (Prototype)"
+        size: 2097152
+        crc32: "ea74e967"
+        sha1: "e4d037480eb6555d335a8ab9cd6c56122335586d"
+      - name: "epr-22851.ic27"
+        description: "Naomi F355 epr-22851 (Export)"
+        size: 2097152
+        crc32: "62483677"
+        sha1: "3e3bcacf5f972c376b569f45307ee7fd0b5031b7"
+      - name: "epr-22850.ic27"
+        description: "Naomi F355 epr-22850 (USA)"
+        size: 2097152
+        crc32: "28aa539d"
+        sha1: "14485368656af80504b212da620179c49f84c1a2"
+      - name: "epr-22849.ic27"
+        description: "Naomi F355 epr-22849 (Japan)"
+        size: 2097152
+        crc32: "121e009c"
+        sha1: "3beb91f660e60590491b209b6be8584b05a90548"
+      - name: "epr-21864.ic27"
+        description: "Naomi F355 epr-21864 (Export)"
+        size: 2097152
+        crc32: "12ed7c66"
+        sha1: "046be66e92eae766f3e05594aa837fc8888534ed"
+      - name: "epr-21863.ic27"
+        description: "Naomi F355 epr-21863 (USA)"
+        size: 2097152
+        crc32: "0615a4d1"
+        sha1: "2c6986580b84278af75f396229fdd587bebc1768"
+      - name: "epr-21862.ic27"
+        description: "Naomi F355 epr-21862 (Japan)"
+        size: 2097152
+        crc32: "1f630716"
+        sha1: "8d157809770467c3e7618c6299f3b96b5f10518c"
+      - name: "epr-21864p.ic27"
+        description: "Naomi F355 epr-21864 (Export, Proto)"
+        size: 2097152
+        crc32: "05128861"
+        sha1: "5bdb320d84015b8429527a8eb4524958031862aa"
+      - name: "epr-21862p.ic27"
+        description: "Naomi F355 epr-21862 (Japan, Proto)"
+        size: 2097152
+        crc32: "f0cd4aaa"
+        sha1: "9a9157992bf7a104c096efcdb8b02ceece186cbb"
+      - name: "epr-21802.ic27"
+        description: "Naomi Airline Pilots Deluxe (Export)"
+        size: 2097152
+        crc32: "a77c6b1c"
+        sha1: "bd50a6bb8fa9bac121b076e21ea048a83a240a48"
+      - name: "epr-21801.ic27"
+        description: "Naomi Airline Pilots Deluxe (USA)"
+        size: 2097152
+        crc32: "a21bef24"
+        sha1: "c6c6ed09772b63a9a84ef0678fc1b7527484038a"
+      - name: "boot_rom_64b8.ic606"
+        description: "Naomi Set4 Dev BIOS"
+        size: 524288
+        crc32: "7a50fab9"
+        sha1: "ef79f448e0bf735d1264ad4f051d24178822110f"
+      - name: "develop110.ic27"
+        description: "Naomi Dev BIOS v1.10"
+        size: 2097152
+        crc32: "de7cfdb0"
+        sha1: "da16800edc4d49f70481c124d487f544c2fa8ce7"
+      - name: "epr-21336a.ic27"
+        description: "Naomi Dev BIOS v1.2"
+        size: 2097152
+        crc32: "d3d57af8"
+        sha1: "0eb72c2a20ad8b86d442b77760eab5e89521d469"
+      - name: "develop.ic27"
+        description: "Naomi Dev BIOS"
+        size: 2097152
+        crc32: "309a196a"
+        sha1: "409b50371feb648f10efd6b7ac420bf08d9a3b5a"
+      - name: "zukinver0930.ic25"
+        description: "Naomi Zukin Dev BIOS"
+        size: 2097152
+        crc32: "58e17c23"
+        sha1: "19330f906accf1b859f56bbcedc2edff73747599"
+      - name: "naomi_boot_2491.ic27"
+        description: "Naomi Dev Boot 2491"
+        size: 2097152
+        crc32: "5b28f868"
+        sha1: "d101f58c69d9835e87a969688e43dc9b699b89d0"
+      - name: "epr-21576h_multi.ic27"
+        description: "Naomi epr-21576h Multi (hack)"
+        size: 2097152
+        crc32: "cce01f1f"
+        sha1: "cca17119ad13e3a4ef7cb6902a37b65d6a844aee"
   - name: naomi2.zip
     system: sega-naomi2
     required: true
     category: bios_zip
-    note: >
-      NAOMI 2 system BIOS archive (MAME format). Contains region-specific
-      BIOS ROMs (EPR-23605 Japan, EPR-23607 USA, EPR-23608 Export,
-      EPR-23609 Korea, EPR-23610 Australia).
-
-  # -------------------------------------------------------
-  # Sega Hikaru
-  # -------------------------------------------------------
-  - name: hikaru.zip
-    system: sega-hikaru
-    required: true
-    category: bios_zip
-    note: >
-      Hikaru system BIOS archive (MAME format). Contains EPR-23400a (latest),
-      EPR-23400, EPR-21904 (early), prot_bot (dev/prototype). All 2 MB at IC94.
-
-  # -------------------------------------------------------
-  # Sammy Atomiswave
-  # -------------------------------------------------------
-  - name: awbios.zip
-    system: sammy-atomiswave
-    required: true
-    category: bios_zip
-    note: "Atomiswave system BIOS archive (MAME format). Contains bios0.ic23 and bios1.ic23 (128 KB each)."
-
-  # -------------------------------------------------------
-  # Sega System SP
-  # -------------------------------------------------------
+    note: "NAOMI 2 BIOS set. Its rows sit in the same table as NAOMI and are chosen the same way. The row's set field makes the loader open naomi2.zip."
+    source_ref: "demul.exe 0x6b4b6c-0x6b4cd7 and 0x6b4d48-0x6b4d63 (naomi2 rows), 0x53c42d-0x53c46c (row), 0x53ca4d-0x53ca7e (load, fatal)"
+    contents:
+      - name: "epr-23605c.ic27"
+        description: "Naomi 2 epr-23605c (Japan)"
+        size: 2097152
+        crc32: "297ea6ed"
+        sha1: "cfbfe57c80e6ee86a101fa83aec0a01e00c0f42a"
+      - name: "epr-23605b.ic27"
+        description: "Naomi 2 epr-23605b (Japan)"
+        size: 2097152
+        crc32: "3a3242d4"
+        sha1: "aaca4df51ef91d926f8191d372f3dfe1d20d9484"
+      - name: "epr-23605a.ic27"
+        description: "Naomi 2 epr-23605a (Japan)"
+        size: 2097152
+        crc32: "7bc3fc2d"
+        sha1: "a4a9531a7c66ff30046908cf71f6c7b6fb59c392"
+      - name: "epr-23605.ic27"
+        description: "Naomi 2 epr-23605 (Japan)"
+        size: 2097152
+        crc32: "5731e446"
+        sha1: "787b0844fc408cf124c12405c095c59948709ea6"
+      - name: "epr-23607c.ic27"
+        description: "Naomi 2 epr-23607c (USA)"
+        size: 2097152
+        crc32: "750e254b"
+        sha1: "81d0b1a076c274c6bd7c53b65e7b80e14fe039e1"
+      - name: "epr-23607b.ic27"
+        description: "Naomi 2 epr-23607b (USA)"
+        size: 2097152
+        crc32: "f308c5e9"
+        sha1: "5470ab1cee6afecbd8ca8cf40f8fbe4ec2cb1471"
+      - name: "epr-23607.ic27"
+        description: "Naomi 2 epr-23607 (USA)"
+        size: 2097152
+        crc32: "2b55add2"
+        sha1: "547de5f97d3183c8cd069c4fa3c09f13d8b637d9"
+      - name: "epr-23608c.ic27"
+        description: "Naomi 2 epr-23608c (Export)"
+        size: 2097152
+        crc32: "6ef1dd8e"
+        sha1: "25ef957ec1c58fdaff5e89102002bca6c38832c5"
+      - name: "epr-23608b.ic27"
+        description: "Naomi 2 epr-23608b (Export)"
+        size: 2097152
+        crc32: "a554b1e3"
+        sha1: "343b727a3619d1c75a9b6d4cc156a9050447f155"
+      - name: "epr-23608a.ic27"
+        description: "Naomi 2 epr-23608a (Export)"
+        size: 2097152
+        crc32: "e8f884d1"
+        sha1: "28f4de747bb3cf860b9ebf897322fbc5d7c1e156"
+      - name: "epr-23608.ic27"
+        description: "Naomi 2 epr-23608 (Export)"
+        size: 2097152
+        crc32: "929cc3a6"
+        sha1: "47d00c818de23f733a4a33b1bbc72eb8aa729246"
+      - name: "epr-23609b.ic27"
+        description: "Naomi 2 epr-23609b (Korea)"
+        size: 2097152
+        crc32: "99e3751f"
+        sha1: "8a244f75595c49d2a37a42ab96b6bab35163ca0e"
+      - name: "epr-23610b.ic27"
+        description: "Naomi 2 epr-23610b (Australia)"
+        size: 2097152
+        crc32: "de8e1267"
+        sha1: "0b3a36446c308fcbfe3647df45c848091e8797f1"
+      - name: "epr-23605c_multi.ic27"
+        description: "Naomi 2 epr-23605c Multi (hack)"
+        size: 2097152
+        crc32: "353fdbcd"
+        sha1: "a8b7dce572b74e02e65cb949b2c366c87625157f"
   - name: segasp.zip
     system: sega-system-sp
     required: true
     category: bios_zip
-    note: >
-      System SP (Aurora/Spider) BIOS archive (MAME format). Contains
-      EPR-24236a, EPR-24328/a BIOS ROMs, serial EEPROM, and network
-      firmware variants.
-
-  # -------------------------------------------------------
-  # Device ROMs (NAOMI / NAOMI 2 / Hikaru)
-  # -------------------------------------------------------
-  - name: mie.zip
-    required: false
-    hle_fallback: true
-    category: bios_zip
-    note: "MIE (Maple-JVS bridge) Z80 MCU firmware (315-6146.bin). HLE mode available, LLE mode requires this archive."
-
-  - name: jvs13551.zip
+    note: "System SP BIOS set, chosen like NAOMI. Games whose family is spider also get their .eeprom and .sram images from the nvram directory."
+    source_ref: "demul.exe 0x6b4cd8-0x6b4d2b (segasp rows), 0x53c42d-0x53c46c (row), 0x53ca4d-0x53ca7e (load, fatal)"
+    contents:
+      - name: "epr-24328a.ic50"
+        description: "System SP epr-24328a"
+        size: 2097152
+        crc32: "03ec3805"
+        sha1: "a8fbaea826ca257be0b2b86952f247254929e046"
+      - name: "epr-24328.ic50"
+        description: "System SP epr-24328"
+        size: 2097152
+        crc32: "25f2ef00"
+        sha1: "e58dec9f171e52b3ded213b3fcd9a0de8a438076"
+      - name: "epr-24236a.ic50"
+        description: "System SP epr-24236a"
+        size: 2097152
+        crc32: "ca7df0de"
+        sha1: "504c74d5fc96c53ef9f7753e9e37fb8b39cb628c"
+  - name: awbios.zip
+    system: sammy-atomiswave
     required: true
     category: bios_zip
-    note: >
-      Sega 837-13551 JVS I/O board firmware. Contains sp5001.bin,
-      sp5001-a.bin, sp5001-b.bin, sp5002-a.bin, 315-6215.bin.
+    note: "Atomiswave BIOS set, row from atomiswaveBios. A row larger than the 128 KB BIOS area (fpr-24363.ic48, 512 KB) is read whole and its last 128 KB are copied. A failed load stops the start."
+    source_ref: "demul.exe 0x6b4648-0x6b469b (awbios table), 0x53c709-0x53c76d (row, oversized read, fatal), 0x53ca4d-0x53ca7e (load)"
+    contents:
+      - name: "bios0.ic23"
+        description: "Sammy BIOS (1)"
+        size: 131072
+        crc32: "719b2b0b"
+        sha1: "b4c1a26bc8906d5275eb28c701dff2b9365bcdfa"
+      - name: "bios1.ic23"
+        description: "Sammy BIOS (2)"
+        size: 131072
+        crc32: "d3e80a9f"
+        sha1: "33024f9d51c04884c2b44ce146f340e7a857b959"
+      - name: "fpr-24363.ic48"
+        description: "Sega BIOS"
+        size: 524288
+        crc32: "82a105f0"
+        sha1: "5128fe2ddcced77332bdcab691c09958051fa564"
+  - name: hikaru.zip
+    system: sega-hikaru
+    required: true
+    category: bios_zip
+    note: "Hikaru BIOS set, row from hikaruBios or, with hikaruBiosAuto, the game's. A failed load stops the start."
+    source_ref: "demul.exe 0x6b44a0-0x6b450f (hikaru table), 0x53c82f-0x53c86c (row and auto choice), 0x53ca4d-0x53ca7e (load, fatal)"
+    contents:
+      - name: "prot_bot.ic94"
+        description: "Hikaru v0.74 Dev BIOS"
+        size: 2097152
+        crc32: "7cbf2fb6"
+        sha1: "7384e3c9314add7d61f93c9edd9fb7788d08f423"
+      - name: "epr-21904.ic94"
+        description: "Hikaru v0.84 epr-21904"
+        size: 2097152
+        crc32: "d96298b6"
+        sha1: "d10d837bc7d68eb7125c34beffe21a91305627b0"
+      - name: "epr-23400.ic94"
+        description: "Hikaru v0.92 epr-23400"
+        size: 2097152
+        crc32: "3d557104"
+        sha1: "d39879f5a1acbd54ad8ee4fbd412f870c9ff4aa5"
+      - name: "epr-23400a.ic94"
+        description: "Hikaru v0.96 epr-23400a"
+        size: 2097152
+        crc32: "2aa906a7"
+        sha1: "098c9909b123ed6c338ac874f2ee90e3b2da4c02"
+  - name: mie.zip
+    system: sega-hikaru
+    required: true
+    category: bios_zip
+    note: "315-6146 MIE MCU firmware. Hikaru loads it before the BIOS and stops when it fails. NAOMI loads it into each MIE device and for the RFID reader (naomiLLEMIE) without checking the result, so NAOMI games start without it."
+    source_ref: "demul.exe 0x6b4468-0x6b4483 (mie table), 0x53c8dd-0x53c94e (Hikaru, fatal), 0x53c680-0x53c6c8 (NAOMI, result ignored), 0x540560-0x540750 (RFID, result ignored)"
+    contents:
+      - name: "315-6146.bin"
+        description: "315-6146 MCU Firmware"
+        size: 2048
+        crc32: "9b197e35"
+        sha1: "864d14d58732dd4e2ee538ccc71fa8df7013ba06"
+  - name: segadimm.zip
+    system: sega-naomi
+    required: false
+    category: bios_zip
+    note: "Net DIMM firmware set, read only when Demul.ini [dimm] enabled is set or a GD-ROM game has an empty disc entry, with the [dimm] bios row or then the last row (401_203.bin). GD-ROM games boot without it by default."
+    source_ref: "demul.exe 0x6b4530-0x6b462b (segadimm table), 0x53d23e-0x53d3b4 (DIMM path, fatal once taken), 0x535877-0x5358a3 ([dimm] keys)"
+    contents:
+      - name: "fpr-23489c.ic14"
+        description: "Sega DIMM 1.02"
+        size: 2097152
+        crc32: "bc38bea1"
+        sha1: "b36fcc6902f397d9749e9d02de1bbb7a5e29d468"
+      - name: "203_203.bin"
+        description: "VxWorks 2.03"
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "6f55f1ae0606816a4eca6645ed36eb7f9c7ad9cf"
+      - name: "fpr23718.ic36"
+        description: "VxWorks 2.06"
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "b7b5a55a6a4cf0aa2df1b3dff62ff67f864c55e8"
+      - name: "213_203.bin"
+        description: "VxWorks 2.13"
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "17131f318632610b87bc095156ffad4597fed4ca"
+      - name: "217_203.bin"
+        description: "VxWorks 2.17"
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "e5a229ae7ed48b2955cad63529fd938c6db555e5"
+      - name: "fpr23905c.ic36"
+        description: "VxWorks 3.01"
+        size: 2097152
+        crc32: "ffffffff"
+        sha1: "972b3b73aa1eabb1091e9096b57a7e5e1d0436d8"
+      - name: "fpr23905.ic36"
+        description: "VxWorks 3.03"
+        size: 2097152
+        crc32: "ffffffff"
+        sha1: "acade4362807c7571b1c2a48ed6067e4bddd404b"
+      - name: "317_312.bin"
+        description: "VxWorks 3.17"
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "31d698cd659446ee09a2eeedec6e4bc6a19d05e8"
+      - name: "401_203.bin"
+        description: "VxWorks 4.01"
+        size: 2097152
+        crc32: "a738ea1c"
+        sha1: "edb52597108462bcea8eb2a47c19e51e5fb60638"
