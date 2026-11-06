@@ -1389,7 +1389,7 @@ Further options, by script:
 
 | Script | Options |
 |--------|---------|
-| `auto_fetch.py` | `--create-issues` prints a GitHub issue body per file still missing. It posts nothing |
+| `auto_fetch.py` | `--create-issues` prints a GitHub issue body per platform for the files still missing, with their full hashes. It posts nothing |
 | `check_buildbot_system.py` | `--update` refreshes the entries found stale, `--json`, `--registry` |
 | `check_freshness.py` | `--cache-dir`, `--native-cache-dir` (originals of the native export) and `--truth-dir` move the caches it reads |
 | `check_release.py` | `--tag`, `--sums dist/SHA256SUMS.txt`, `--record` (default `release.json`), `--json` |

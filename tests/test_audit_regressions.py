@@ -7414,5 +7414,36 @@ class TupleAnnotationsMatchTheirReturns(unittest.TestCase):
         self.assertEqual(mismatched, [])
 
 
+class AutoFetchIssueBodyReadsAsWritten(unittest.TestCase):
+    """The --create-issues body was a template: Title Case headings, "The
+    following...", an exclamation mark, numbered orders to the reader, a
+    spaced dash, and hashes cut to 12 characters a contributor cannot
+    match a file against."""
+
+    ENTRY = {"name": "scph5501.bin", "system": "sony-playstation",
+             "sha1": "b056ee5a4d65937e1a3a17e1e78f3258ea49c38e",
+             "md5": "490f666e1afb15b7362b406ed1cea246"}
+
+    def test_full_hashes_and_no_template_phrasing(self):
+        from scripts import auto_fetch
+
+        body = auto_fetch.generate_issue_body([self.ENTRY], "RetroArch")
+        self.assertIn(f"`{self.ENTRY['sha1']}`", body)
+        self.assertIn(f"`{self.ENTRY['md5']}`", body)
+        self.assertNotIn("...", body)
+        self.assertNotIn("!", body)
+        self.assertNotRegex(body, r"(?i)the following|please| - |\bfork\b")
+        self.assertNotRegex(body, r"(?m)^\d+\. ")
+        for heading in re.findall(r"(?m)^#+ (.*)$", body):
+            later = [w for w in heading.split()[1:] if w != "RetroArch"]
+            self.assertEqual(later, [w.lower() for w in later], heading)
+
+    def test_the_docstring_says_nothing_is_posted(self):
+        from scripts import auto_fetch
+
+        self.assertNotIn("Create GitHub Issue", auto_fetch.__doc__)
+        self.assertIn("posts nothing", auto_fetch.__doc__)
+
+
 if __name__ == "__main__":
     unittest.main()
