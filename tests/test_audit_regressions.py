@@ -6923,9 +6923,11 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
 
     def test_every_tree_walk_reads_the_flag(self):
         source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
-        self.assertEqual(
-            source.count('if required_only and dd.get("required") is False:'), 2
-        )
+        # The pack's walk and the manifest's, which records the flag for
+        # install.py --required-only.
+        self.assertEqual(source.count('if required_only and dd.get("required") is False:'), 1)
+        self.assertIn('needed = dd.get("required") is not False\n        if required_only and not needed:',
+                      source)
         self.assertIn("seen_parents, required_only=required_only,", source)
         self.assertIn("data_refs, required_only=required_only,", source)
 

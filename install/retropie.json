@@ -6,7 +6,7 @@
   "platform": "retropie",
   "display_name": "RetroPie",
   "version": "4.8.12",
-  "generated": "2026-11-05T23:59:37Z",
+  "generated": "2026-11-06T07:21:27Z",
   "base_destination": "BIOS",
   "detect": [
     {
@@ -146474,7 +146474,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767
+      "archive_size": 5083767,
+      "optional": true
     },
     {
       "ref": "fbneo-samples",
@@ -146708,7 +146709,8 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 53006540
+      "archive_size": 53006540,
+      "optional": true
     },
     {
       "ref": "freeintv-overlays",
@@ -147081,7 +147083,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 21311170
+      "archive_size": 21311170,
+      "optional": true
     },
     {
       "ref": "yaps2-resources",
