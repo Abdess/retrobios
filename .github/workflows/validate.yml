@@ -29,6 +29,7 @@ on:
       - "database.json"
       - "release.json"
       - "derivable.json"
+      - "retired.json"
       - "measurements/**"
       - "website/**"
   # Spelled out twice because the workflow parser reads no YAML anchor. A test
@@ -54,6 +55,7 @@ on:
       - "database.json"
       - "release.json"
       - "derivable.json"
+      - "retired.json"
       - "measurements/**"
       - "website/**"
 

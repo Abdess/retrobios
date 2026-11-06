@@ -52,6 +52,7 @@ website/                 Astro Starlight project; pages, data and navigation
 _mame_clones.json        MAME parent/clone set mappings
 database.json            file index built from bios/ (SHA1 primary key)
 derivable.json           files a held dump already contains, from provenance_report.py
+retired.json             files that left the collection, written by generate_db.py
 release.json             files, sizes and assets of each pack of the last release
 allowed_signers          public key that signs SHA256SUMS.txt
 dist/                    generated packs (gitignored)

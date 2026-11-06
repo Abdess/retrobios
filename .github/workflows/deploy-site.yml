@@ -53,6 +53,7 @@ on:
       - "scripts/sitemeasurements.py"
       - "scripts/siteexports.py"
       - "scripts/siterender.py"
+      - "scripts/retired_files.py"
       - "scripts/sitesources.py"
       - "scripts/sitestarlight.py"
       - "scripts/sitewrite.py"
@@ -79,6 +80,7 @@ on:
       - "database.json"
       - "release.json"
       - "derivable.json"
+      - "retired.json"
       - "measurements/**"
       # The Proof lines of the emulator pages read what an issue's runs showed.
       - "tests/campaign/observations.yml"

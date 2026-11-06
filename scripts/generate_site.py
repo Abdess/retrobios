@@ -89,6 +89,7 @@ from generate_readme import (
 from provenance_report import build_report, distinct_missing
 import sitemarkup as markup
 import siteentries
+import retired_files
 import sitestarlight
 from siteexports import generate_exports_page, load_export_reports
 from siteguides import (
@@ -1618,7 +1619,8 @@ def generate_data_exports(
         "file-locations.json": ("file-locations", locations),
     }
     write_lookup_shards(
-        api, file_lookup_records(db, coverages, profiles, locations, members, consumers),
+        api, file_lookup_records(db, coverages, profiles, locations, members, consumers,
+                                 retired_files.load(_REPO_ROOT / "retired.json")),
         generated_at, commit,
     )
     for filename, (kind, items) in envelopes.items():
@@ -2201,8 +2203,9 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "One hash without the whole list: `api/v1/lookup/<xx>.json`, where `<xx>` "
         "is the first two characters of the hash in lowercase, holds every SHA1, "
         "MD5, CRC32 and SHA256 starting with them. Each record names its `layer` "
-        "(the collection, a member of a collection archive, a data directory, a "
-        "platform's list or an emulator profile), the file `name`, the `url` of the page that shows it and, "
+        "(the collection, a member of a collection archive, a file that left the "
+        "collection, a data directory, a platform's list or an emulator profile), "
+        "the file `name`, the `url` of the page that shows it and, "
         "when one is known, the `system_name` the site gives its system. "
         "[Find or check a file](files/index.md) reads it.",
         "",
@@ -2226,7 +2229,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "  const response = await fetch(`${base}${sha1.slice(0, 2)}.json`);",
         "  if (!response.ok) return [];",
         "  const shard = await response.json();",
-        "  // layer: collection, archive-member, data-directory, platform or emulator.",
+        "  // layer: collection, archive-member, retired, data-directory, platform, emulator.",
         "  return shard.items.filter((item) => item.value === sha1);",
         "}",
         "```",
@@ -4734,7 +4737,9 @@ def generate_files_page() -> str:
         "A file's card lives on its manufacturer's page, and a file refiled "
         "between manufacturers moves with it. `files/?sha1=<sha1>` is the address "
         "that does not move: it opens the card wherever it is now. The link icon "
-        "beside each card's name is that address.",
+        "beside each card's name is that address. A file that left the "
+        "collection keeps it: the page says when, and opens the card of the "
+        "file in its place.",
         "",
         "## The index behind it",
         "",
@@ -4924,6 +4929,39 @@ def _data_member_digests(
     return found
 
 
+def retired_records(retired: dict[str, dict], files: dict, locations: list[dict]) -> list[dict]:
+    """A record for each hash of a file that left the collection.
+
+    Its address (files/?sha1=, #sha1-<12>) was published and answered that
+    no file the site knows has the hash, inviting a contribution of a file
+    the collection held. The record says when it left, and leads to the
+    card of the file holding its place, followed to the one held today.
+    """
+    cards = {item["sha1"]: item["url"] for item in locations}
+    records = []
+    for sha1, record in sorted(retired.items()):
+        if sha1 in files:
+            continue
+        successor, seen = record.get("successor"), {sha1}
+        while successor and successor not in files and successor not in seen:
+            seen.add(successor)
+            successor = (retired.get(successor) or {}).get("successor")
+        url = cards.get(successor) if successor in files else None
+        extra = {"left": str(record["left"])}
+        if url:
+            extra["successor"] = successor
+        else:
+            # The page its card was on: the reader lands among its neighbours.
+            url = _site_path(f"systems/{card_page(str(record.get('path', '')), sha1)}.md")
+        for algorithm in HASH_ALGORITHMS:
+            value = sha1 if algorithm == "sha1" else record.get(algorithm)
+            for one in _hash_values(value):
+                records.append({"value": one, "algorithm": algorithm, "layer": "retired",
+                                "name": str(record.get("name", "")), "sha1": sha1,
+                                "url": url, **extra})
+    return records
+
+
 def _archive_member_records(entry: dict, sha1: str, url: str,
                             root: Path = _REPO_ROOT) -> list[dict]:
     """The CRC32 of each member of a collection archive, read from its
@@ -4956,6 +4994,7 @@ def file_lookup_records(
     locations: list[dict],
     members: dict | None = None,
     consumers: FileConsumers | None = None,
+    retired: dict | None = None,
 ) -> list[dict]:
     """Every hash the site knows, one record per value, for files/?hash=.
 
@@ -5033,6 +5072,7 @@ def file_lookup_records(
                             "owner": key, "name": name, "url": url,
                             **({"system_name": entry_label} if entry_label else {}),
                         })
+    records += retired_records(retired or {}, files, locations)
     records += _held_under_every_hash(records, files, db.get("indexes") or {})
     for record in records:
         if record["layer"] in ("platform", "emulator"):
