@@ -7089,11 +7089,11 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         named = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-            if profile.get("bios_mode") != "agnostic":
-                continue
+            agnostic = profile.get("bios_mode") == "agnostic"
             for entry in profile.get("files") or []:
                 if (
-                    entry.get("min_size") in (2097152, 4194304)
+                    (agnostic or entry.get("agnostic"))
+                    and entry.get("min_size") in (2097152, 4194304)
                     and entry.get("max_size") == 8388608
                     and opens_by_name(entry, profile)
                 ):
