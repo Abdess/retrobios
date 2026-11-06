@@ -1900,6 +1900,18 @@ class SkipFlagsNameTheSteps(unittest.TestCase):
                     self.assertEqual(set(re.findall(self.STEP, text)), steps)
 
 
+class APlatformListIsDescribedNotJudged(unittest.TestCase):
+    """adding-a-platform opened on files a platform's own list "leaves out",
+    read first by the maintainer of that platform: "does not name" says the
+    same without imputing an omission."""
+
+    def test_no_page_says_a_list_leaves_files_out(self):
+        pattern = re.compile(r"\blists? (?:leaves|left|leave) out\b")
+        for page in sorted(WIKI.glob("*.md")):
+            with self.subTest(page=page.name):
+                self.assertIsNone(pattern.search(page.read_text(encoding="utf-8")))
+
+
 class ArchivedIsWhatTheToolsDo(unittest.TestCase):
     """The README and the setup pages said an archived platform is no longer
     scraped on a schedule, and adding-a-platform said `active` feeds a CI

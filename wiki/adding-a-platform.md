@@ -7,7 +7,7 @@ order: 20
 
 Adding a platform gives its users a pack and a one-line install with the files
 their setup checks, in the place it checks them, plus every file its emulators
-need that its own list leaves out. The work is to read how the platform
+need that its own list does not name. The work is to read how the platform
 declares and checks BIOS files, then teach this project to read that
 declaration. A platform can be a frontend like Batocera, a manager like EmuDeck
 or a firmware database like BizHawk.
