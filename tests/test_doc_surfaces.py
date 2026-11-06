@@ -322,6 +322,8 @@ class ShownOutputIsPrintedOutput(unittest.TestCase):
          r"(0 optional missing|\d+ optional missing \(--verbose lists them\))$",
          '"  Core files: {core_in_pack} in pack'),
         (r"^  Core files held but not packed: \d+ \(.+\)$", '"  Core files held but not packed: '),
+        (r"^  Bundled with their emulator, not collected: \d+( \(.+\))?$",
+         '"  Bundled with their emulator, not collected: {len(bundled)}"'),
         (r"^  Game data: \d+ in pack, (0 missing|\d+ missing \(--verbose lists them\))$",
          '"  Game data: {gd_packed} in pack'),
         (r"^  Game data held but not packed: \d+ \(.+\)$", '"  Game data held but not packed: '),
