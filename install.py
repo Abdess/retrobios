@@ -9831,10 +9831,14 @@ def games_root(setup: dict, bios_path: Path) -> Path | None:
 
 def _may_hold_games(bios_path: Path) -> bool:
     """Whether a rom folder could sit near this BIOS folder, said without the
-    network: a folder named roms in it or up to two levels above it, or a
-    path that runs through one (roms, games)."""
+    network: a folder named roms in it or up to two levels above it, a path
+    that runs through one (roms, games), or a handheld's games part, whose
+    console folders sit beside bios (ArkOS's EASYROMS plugged into a
+    computer was never offered its games)."""
     holders = [bios_path, *list(bios_path.absolute().parents)[:2]]
     if any(part.casefold() in ("roms", "games") for part in bios_path.absolute().parts[-3:]):
+        return True
+    if games_part(bios_path.parent) is not None:
         return True
     return any(entry.name.casefold() == "roms" and _entry_is_dir(entry)
                for holder in holders for entry in _list_dir(holder))
