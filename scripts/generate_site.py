@@ -5805,6 +5805,13 @@ def _wanted_list(source: str, label: str, data: dict, by_dat: dict[str, list],
 _RELEASE_ASSET_NAMES: dict[str, str] | None = None
 
 
+def _download_name(path: str) -> str:
+    """The name a browser saves a collection file under: the last segment
+    of its download URL. Neither host sends a Content-Disposition, and the
+    download attribute is ignored on another origin."""
+    return urllib.parse.unquote(_fetch_url(path).rsplit("/", 1)[-1])
+
+
 def _fetch_url(path: str) -> str:
     """Where a collection file downloads from: its raw URL, or the
     large-files release asset when .gitignore keeps it out of git."""
@@ -6179,6 +6186,12 @@ def _system_file_card(
     # Each fact: its label, its values, whether the search reads it. What a
     # setup does with the file comes first, the fingerprints last.
     facts: list[tuple[str, list[str], bool]] = []
+    saved = _download_name(f["path"]) if f.get("path") else name
+    if saved != name:
+        # A .variants/ copy is stored as advision.zip.1c086064, and the
+        # browser names the download after the URL: copied as it came, the
+        # file a platform pins was not found under its name.
+        facts.append(("Save as", [f"{_code(name)}, the download is named {_code(saved)}"], False))
     if plats:
         # Each link lands on the platform's system section, and says where
         # that platform puts the file. Out of the search: the card's title
@@ -6237,7 +6250,7 @@ def _system_file_card(
 # What a system card shows at a glance: who lists the file and who reads it.
 # Its fingerprints and the rest open on demand, so a page of 250 cards reads
 # as a list of files, not a wall of hashes.
-_CARD_KEY_FACTS = ("On the setup's list", "Packed for its emulators by", "Emulators")
+_CARD_KEY_FACTS = ("Save as", "On the setup's list", "Packed for its emulators by", "Emulators")
 _CARD_HASHES = ("SHA1", "MD5", "CRC32", "SHA256")
 # The words a card's fold names its other facts by.
 _CARD_MORE_WORDS = {"Romset": "romset", "Collection path": "collection path",

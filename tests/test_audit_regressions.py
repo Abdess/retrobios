@@ -5207,6 +5207,23 @@ class CollectionCardsCarryFullHashes(unittest.TestCase):
             self.assertIn(f'<dd class="rb-hash">{value}</dd>', text)
 
 
+class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
+    """The Download button of a .variants/ card saved advision.zip.1c086064,
+    the storage name, and nothing said RetroBat looks for advision.zip."""
+
+    def test_the_name_to_save_it_under(self):
+        from scripts.generate_site import FileConsumers, _system_file_card
+
+        entry = {"name": "advision.zip", "size": 10, "sha1": "a" * 40,
+                 "path": "bios/Entex/Adventure Vision/.variants/advision.zip.1c086064"}
+        text = "\n".join(_system_file_card(entry, FileConsumers({}, {})))
+        self.assertIn("Save as", text)
+        self.assertIn("advision.zip.1c086064", text)
+        plain = "\n".join(_system_file_card(
+            {**entry, "path": "bios/Entex/Adventure Vision/advision.zip"}, FileConsumers({}, {})))
+        self.assertNotIn("Save as", plain)
+
+
 
 class NullReadsAsNone(unittest.TestCase):
     """`upstream: ~` printed `| Upstream | None |` and `bios_filename: null`
