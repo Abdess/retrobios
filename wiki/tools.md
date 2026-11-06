@@ -1328,6 +1328,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | Script | Purpose |
 |--------|---------|
 | `common.py` | Shared library: hash computation, file resolution, platform config loading, emulator profiles, target filtering |
+| `retired_files.py` | The record of files that left the collection, `retired.json`, which `generate_db.py` appends to and the site's lookup reads. `--backfill` rebuilds it from the history of `database.json` since content addresses were published (`--output` names another file) |
 | `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`): byte-identical copies are deleted and one kept. Identical MAME sets under other names stay one file, named in `_mame_clones.json`. Trees addressed by path are left alone (`NODEDUP_DIRS`), under a folder of that name at any depth: BBK, Bungie, C-Dogs SDL, Ikemen GO, mame, PinMAME, RPG Maker, ScummVM, Softdisk, TheXTech, splitwolf, Theme Hospital, c64-emu, opentyrian, tzdata |
 | `identity.py` | One content filed under two identities: groups `bios/` by content and reports a group that crosses manufacturers outside `KNOWN_SHARED` (`--strict` exits 1, pipeline step 3a) |
 | `slots.py` | Destinations the platform and a core both claim, and how the pack settles each (`--platform`, `--include-archived`, `--target`, `--json`, `--strict`, and pipeline step 3b passes the run's own `--include-archived` and `--target`) |

@@ -24,6 +24,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from common import run_cli, write_if_changed  # noqa: E402
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RETIRED_FILE = REPO_ROOT / "retired.json"
 # The commit that published content addresses: 0d586ef6b, 2026-10-19.
@@ -95,8 +98,6 @@ def dump(records: dict[str, dict]) -> str:
 
 def update(path: Path, old: dict, new: dict, day: str) -> int:
     """Records what *new* dropped from *old*. Returns how many left now."""
-    from common import write_if_changed  # noqa: PLC0415
-
     left = retired_between(old, new, day)
     record = load(path)
     merged = merge(record, left, new)
@@ -136,9 +137,6 @@ def main() -> int:
     if not args.backfill:
         parser.print_help()
         return 2
-    sys.path.insert(0, str(Path(__file__).parent))
-    from common import write_if_changed  # noqa: PLC0415
-
     records = backfill()
     current = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
     records = merge(records, {}, current)
@@ -148,4 +146,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    run_cli(main)
