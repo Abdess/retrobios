@@ -321,7 +321,26 @@ def build_source_paths(
             # Recorded even when it holds no cited path, so a pinned tree
             # missing from the record is one no run has read.
             held.setdefault(tree_key(repo, pin), set()).update(paths & tree)
+        for repo, pin, path in build_files(profile):
+            tree = (_cached_tree(repo, pin, cache_dirs, fetch)
+                    or _listed_directories(repo, pin, {path}, cache_dirs, fetch))
+            if tree is None:
+                unread.add(tree_key(repo, pin))
+                continue
+            held.setdefault(tree_key(repo, pin), set()).update({path} & tree)
     return {key: sorted(paths) for key, paths in sorted(held.items())}, sorted(unread)
+
+
+def build_files(profile: dict) -> list[tuple[upstream.Repo, str, str]]:
+    """The platform build files `pin_build` names at a commit, as (repo,
+    revision, path). A tag can move, so a build read at a tag is not linked."""
+    found = []
+    for build in profile.get("pin_build") or []:
+        repo = _browse_repo(str(build.get("repo", "")))
+        revision = str(build.get("revision", ""))
+        if repo is not None and re.fullmatch(r"[0-9a-f]{40}", revision):
+            found.append((repo, revision, str(build.get("path", ""))))
+    return found
 
 
 def keep_unread(

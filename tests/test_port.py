@@ -124,6 +124,13 @@ class LauncherIndex(unittest.TestCase):
             "install/launchers/index.json is stale: run "
             "python scripts/generate_launcher_index.py")
 
+    def test_the_installer_page_says_when_to_rewrite_it(self):
+        """The list records install.py's SHA-256, and the page that says
+        what a change to install.py rewrites named only the two pins."""
+        page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
+        section = page.split("## Changing the installer", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("scripts/generate_launcher_index.py", section)
+
     def test_every_member_of_the_archives_is_listed(self):
         import generate_launcher_index  # noqa: PLC0415
 

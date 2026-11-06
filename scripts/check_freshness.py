@@ -1492,6 +1492,11 @@ def check_source_paths(profiles: dict) -> Finding:
         sitesources.tree_key(repo, pin)
         for profile in profiles.values() if sitesources.cited_paths(profile)
         for repo, pin in sitesources.profile_trees(profile)
+    } | {
+        # The platform build files pin_build names, linked from a page too.
+        sitesources.tree_key(repo, pin)
+        for profile in profiles.values()
+        for repo, pin, _path in sitesources.build_files(profile)
     }
     try:
         recorded = set(json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8")))

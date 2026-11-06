@@ -393,7 +393,8 @@
                     "retired",
                     "data-directory",
                     "platform",
-                    "emulator"
+                    "emulator",
+                    "wanted"
                   ]
                 },
                 "left": {
@@ -433,7 +434,8 @@
                   "description": "On a platform or emulator record: the algorithm of the value its owner wrote, filed under that value and under the file's other hashes. name: the emulator reads the file by its name and declares no hash that matches it."
                 },
                 "owner": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "On a platform or emulator record: the platform or profile key. On a wanted record: the dump catalog that lists the value (Redump, No-Intro, TOSEC), the collection holding no file with it."
                 },
                 "system_name": {
                   "type": "string",

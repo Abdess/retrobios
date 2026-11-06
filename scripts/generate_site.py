@@ -86,9 +86,10 @@ from generate_readme import (
     extract_targets,
     release_totals,
 )
-from provenance_report import build_report, distinct_missing
+from provenance_report import build_report, distinct_missing, profile_needs
 import sitemarkup as markup
 import siteentries
+import siteinputs
 import retired_files
 import sitestarlight
 from siteexports import generate_exports_page, load_export_reports
@@ -662,7 +663,7 @@ def release_line(platform_name: str, record: dict) -> list[str]:
         f"[SHA256SUMS.txt]({base}/SHA256SUMS.txt) and its "
         f"[signature]({base}/SHA256SUMS.txt.sig).",
     ]
-    config = load_platform_config(platform_name, "platforms")
+    config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     page_version = str(config.get("version") or "")
     pack_version = _pack_version(pack_name)
     if page_version and pack_version and page_version.lstrip("v") != pack_version.lstrip("v"):
@@ -687,7 +688,7 @@ def setup_version(platform_name: str, record: dict | None = None) -> str:
     platform YAML was read at. Empty when neither says, or when the
     platform has no YAML to read a version from."""
     try:
-        config = load_platform_config(platform_name, "platforms")
+        config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     except FileNotFoundError:
         return ""
     pack_name = release_record.pack_name_for(platform_name, record or {})
@@ -714,8 +715,7 @@ NO_ZIP_FAQ = "wiki/faq.md#why-is-there-no-zip-for-my-setup"
 
 def has_release_pack(platform_name: str) -> bool:
     """Whether a release publishes a ZIP for the platform (`release_pack`)."""
-    entry = load_platform_registry("platforms").get(platform_name) or {}
-    return entry.get("release_pack") is True
+    return platform_name in _release_pack_platforms()
 
 
 def no_zip_line(display: str) -> str:
@@ -734,7 +734,7 @@ def get_page_title(platform_name: str, display: str) -> str:
     the system's own download. A setup that is also an emulator (BizHawk)
     names it last: "BizHawk BIOS files" is the title of its emulator page."""
     kind = "BIOS pack" if has_release_pack(platform_name) else "BIOS files"
-    if (_REPO_ROOT / "emulators" / f"{platform_name}.yml").is_file():
+    if (siteinputs.current().emulators / f"{platform_name}.yml").is_file():
         return f"{kind} for {display}"
     return f"{display} {kind}"
 
@@ -779,7 +779,7 @@ def _pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
     frontend user asks. A setup with no release pack gets the line that
     says so, and why."""
     if not has_release_pack(platform_name):
-        display = display or load_platform_config(platform_name, "platforms").get(
+        display = display or load_platform_config(platform_name, str(siteinputs.current().platforms)).get(
             "platform", platform_name)
         return f"{no_zip_line(display)} [Why no ZIP?]({prefix}{NO_ZIP_FAQ})"
     record = release_record.load_advertised()
@@ -804,7 +804,7 @@ def generate_get_page(platform_name: str) -> str:
     the files of the pack the current release holds, read from release.json,
     or the command when no release publishes one. The release process
     never touches it: committing release.json rebuilds it."""
-    config = load_platform_config(platform_name, "platforms")
+    config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     display = config.get("platform", platform_name)
     record = release_record.load_advertised()
     pack = release_record.pack_for(platform_name, record)
@@ -823,7 +823,7 @@ def generate_get_page(platform_name: str) -> str:
     if released and pack and pack.get("assets"):
         parts = len(pack["assets"])
         release = release_line(platform_name, record)
-        extract_to = (load_platform_registry("platforms").get(platform_name) or {}).get("extract_to")
+        extract_to = (load_platform_registry(str(siteinputs.current().platforms)).get(platform_name) or {}).get("extract_to")
         lines += [
             "This address stays the same. It always gives the latest ZIP.",
             "",
@@ -872,7 +872,7 @@ def generate_get_page(platform_name: str) -> str:
 def generate_get_index() -> str:
     """get/: the permanent page of every setup, grouped as the home tiles
     are. A link trimmed to /get/ answered 404."""
-    registry = load_platform_registry("platforms")
+    registry = load_platform_registry(str(siteinputs.current().platforms))
     lines = [
         "---", "search: exclude",
         'description: "The BIOS files of every setup, one page each. Each address stays the same."',
@@ -886,7 +886,7 @@ def generate_get_index() -> str:
             continue
         lines += [f"## {label}", ""]
         for name in names:
-            display = load_platform_config(name, "platforms").get("platform", name)
+            display = load_platform_config(name, str(siteinputs.current().platforms)).get("platform", name)
             lines.append(f"- [{get_page_title(name, display)}]({name}.md)")
         lines.append("")
     return "\n".join(lines)
@@ -1067,10 +1067,13 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
     return contract, registry
 
 
-@functools.lru_cache(maxsize=1)
 def _release_pack_platforms() -> frozenset[str]:
-    return frozenset(list_release_pack_platforms(
-        str(_REPO_ROOT / "platforms"), include_archived=True))
+    return _release_packs_in(str(siteinputs.current().platforms))
+
+
+@functools.lru_cache(maxsize=None)
+def _release_packs_in(platforms_dir: str) -> frozenset[str]:
+    return frozenset(list_release_pack_platforms(platforms_dir, include_archived=True))
 
 
 # Per-entry fields a folder check needs beyond the hashes: an md5 is a ZIP
@@ -1617,6 +1620,7 @@ def generate_data_exports(
 
     members = data_directory_members()
     locations = file_location_items(db, profiles, members)
+    wanted = _provenance_wanted_rows(db)
     envelopes = {
         "platforms.json": ("platforms", platform_items),
         "emulators.json": ("emulators", emulator_items),
@@ -1625,7 +1629,7 @@ def generate_data_exports(
     }
     write_lookup_shards(
         api, file_lookup_records(db, coverages, profiles, locations, members, consumers,
-                                 retired_files.load(_REPO_ROOT / "retired.json")),
+                                 retired_files.load(_REPO_ROOT / "retired.json"), wanted),
         generated_at, commit,
     )
     for filename, (kind, items) in envelopes.items():
@@ -1744,7 +1748,7 @@ def generate_data_exports(
     _record(downloads / "retrobios.sqlite")
     write_if_changed(
         str(downloads / "provenance-wanted.csv"),
-        _csv_document(list(WANTED_FIELDS), _provenance_wanted_rows(db)),
+        _csv_document(list(WANTED_FIELDS), wanted),
     )
 
     assets = [
@@ -2104,7 +2108,7 @@ def _short_sha256(item: dict, catalog: str) -> str:
 
 def _platforms_without_a_list(platforms_dir: Path | None = None) -> list[str]:
     """The names of the platforms whose registry says they keep no list."""
-    platforms_dir = platforms_dir or _REPO_ROOT / "platforms"
+    platforms_dir = platforms_dir or siteinputs.current().platforms
     names = []
     for key, entry in sorted(load_platform_registry(str(platforms_dir)).items()):
         if entry.get("native_list") != "none":
@@ -3236,7 +3240,9 @@ def _front_matter(markdown: str) -> dict:
     return data if isinstance(data, dict) else {}
 
 
-_SHA1_BY_PREFIX: dict[str, str] = {}
+@functools.lru_cache(maxsize=None)
+def _sha1_by_prefix(db_path: str) -> dict[str, str]:
+    return {sha1[:12]: sha1 for sha1 in load_database(db_path)["files"]}
 
 
 def _cards_elsewhere(markdown: str) -> str:
@@ -3247,11 +3253,9 @@ def _cards_elsewhere(markdown: str) -> str:
     away = {ident for ident in links if f'id="{ident}"' not in markdown}
     if not away:
         return markdown
-    if not _SHA1_BY_PREFIX:
-        db = load_database(str(_REPO_ROOT / "database.json"))
-        _SHA1_BY_PREFIX.update({sha1[:12]: sha1 for sha1 in db["files"]})
+    by_prefix = _sha1_by_prefix(str(siteinputs.current().db))
     for ident in away:
-        full = _SHA1_BY_PREFIX[ident.removeprefix("sha1-")]
+        full = by_prefix[ident.removeprefix("sha1-")]
         markdown = markdown.replace(f"](#{ident})", f"]({markup.site_href(f'files/?sha1={full}')})")
     return markdown
 
@@ -3562,10 +3566,14 @@ def _list_pages(
         f"[part {i}]({other}.md)" for i, other in enumerate(stems, 1))
 
 
-@functools.lru_cache(maxsize=1)
 def _collection_sha1_by_path() -> dict[str, str]:
     """The sha1 of each file the collection holds, by its path."""
-    with open(_REPO_ROOT / "database.json", encoding="utf-8") as handle:
+    return _sha1_by_path_in(str(siteinputs.current().db))
+
+
+@functools.lru_cache(maxsize=None)
+def _sha1_by_path_in(db_path: str) -> dict[str, str]:
+    with open(db_path, encoding="utf-8") as handle:
         files = json.load(handle).get("files", {})
     return {str(entry.get("path", "")): sha1 for sha1, entry in files.items()}
 
@@ -3595,7 +3603,7 @@ def _system_named_link(sys_id: str, prefix: str = "") -> str:
 def _emulator_named_link(key: str, prefix: str = "") -> str:
     """An emulator by the name its page carries, linked to that page. A
     profile with no page (an alias, a test) is named only."""
-    profile = load_emulator_profiles(str(_REPO_ROOT / "emulators"), skip_aliases=False).get(key, {})
+    profile = _profiles_on_disk().get(key, {})
     label = _escape_tags(str(profile.get("emulator") or key))
     if profile.get("type") in ("alias", "test"):
         return label
@@ -3985,10 +3993,9 @@ def _platform_data_links(name: str) -> str:
     return ", ".join(links)
 
 
-@functools.lru_cache(maxsize=1)
 def _site_profiles() -> dict[str, dict]:
     """Every emulator profile, read once for the citations of a page."""
-    return load_emulator_profiles(str(_REPO_ROOT / "emulators"))
+    return _profiles_in(str(siteinputs.current().emulators), skip_aliases=True)
 
 
 # Whose code a source reference cites, in one word: a platform page names
@@ -4072,13 +4079,17 @@ def _category_evidence_md(evidence: dict, launched: list[str] | None = None) -> 
     return f"No reader found ({cores})"
 
 
-@functools.lru_cache(maxsize=1)
 def _profiles_by_core_name() -> dict[str, list[str]]:
     """Core name as a platform writes it -> the profiles with a page for it.
 
     MinUI writes `mednafen_vb`, the profile and its page are `beetle_vb`.
     """
-    profiles = load_emulator_profiles(str(_REPO_ROOT / "emulators"))
+    return _core_names_in(str(siteinputs.current().emulators))
+
+
+@functools.lru_cache(maxsize=None)
+def _core_names_in(emulators_dir: str) -> dict[str, list[str]]:
+    profiles = _profiles_in(emulators_dir, skip_aliases=True)
     with_page = {k for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
     return {
         core: sorted(k for k in keys if k in with_page)
@@ -4248,7 +4259,7 @@ def _card_route(name: str, display: str, guide: Guide) -> list[str]:
     sees it is the reader's to name: no guide cites it."""
     if guide.on_card or _offline_line(name):
         return []
-    extract_to = (load_platform_registry("platforms").get(name) or {}).get("extract_to")
+    extract_to = (load_platform_registry(str(siteinputs.current().platforms)).get(name) or {}).get("extract_to")
     leaf = (extract_to or "bios").rstrip("/").rsplit("/", 1)[-1].lstrip("~") or "bios"
     tabs = guide.card_run or ("windows", "macos", "linux")
     args = {key: f"--platform {name} --dest "
@@ -4449,7 +4460,7 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
     A handheld owner starts from the device name. The systems were named
     only in a closed note, with a path seen from inside the device."""
     uses = GUIDES[guide.uses]
-    display = load_platform_config(guide.uses, "platforms").get("platform", guide.uses)
+    display = load_platform_config(guide.uses, str(siteinputs.current().platforms)).get("platform", guide.uses)
     args = {"windows": f"--platform {guide.uses} --dest E:\\BIOS",
             "macos": f"--platform {guide.uses} --dest /path/to/card/BIOS",
             "linux": f"--platform {guide.uses} --dest /path/to/card/BIOS"}
@@ -4504,7 +4515,7 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     lines.append("")
     for note in guide.notes:
         lines += [note, ""]
-    lines += [line for note in extract_notes("platforms", released_only=True)
+    lines += [line for note in extract_notes(str(siteinputs.current().platforms), released_only=True)
               if f"The {display} pack " in note
               for line in (note, "")]
     if guide.more_folders:
@@ -4979,7 +4990,7 @@ def _data_member_digests(
     from hashing import compute_hashes  # noqa: PLC0415
 
     if data_registry is None:
-        data_registry = load_data_dir_registry(str(root / "platforms"))
+        data_registry = load_data_dir_registry(str(siteinputs.current().platforms))
     found: dict[str, dict[str, str]] = {}
     for ref, tree in sorted(members.items()):
         cache = (data_registry.get(ref) or {}).get("local_cache")
@@ -5062,12 +5073,14 @@ def file_lookup_records(
     members: dict | None = None,
     consumers: FileConsumers | None = None,
     retired: dict | None = None,
+    wanted: list[dict] | None = None,
 ) -> list[dict]:
     """Every hash the site knows, one record per value, for files/?hash=.
 
     The collection's own files lead to their card, a platform's declared
     value to the system section of its page, a profile's to the entry's
-    card. The site search indexed these values as text, 4 MB of the 21 MB
+    card, a wanted dump (``wanted``, the provenance-wanted.csv rows) to
+    its catalog on the provenance page. The site search indexed these values as text, 4 MB of the 21 MB
     it made every visitor download: the lookup reads one shard instead.
     """
     files = db.get("files", {})
@@ -5140,6 +5153,7 @@ def file_lookup_records(
                             **({"system_name": entry_label} if entry_label else {}),
                         })
     records += retired_records(retired or {}, files, locations)
+    records += wanted_records(wanted or [])
     records += _held_under_every_hash(records, files, db.get("indexes") or {})
     for record in records:
         if record["layer"] in ("platform", "emulator"):
@@ -5149,6 +5163,23 @@ def file_lookup_records(
     unique = {json.dumps(r, sort_keys=True): r for r in records}
     return sorted(unique.values(), key=lambda r: (
         r["value"], r["layer"], r.get("owner", ""), r["name"], r["url"]))
+
+
+def wanted_records(rows: list[dict]) -> list[dict]:
+    """A record under each hash of a dump a catalog lists and the collection
+    lacks, from the rows of provenance-wanted.csv. A pasted hash of a
+    wanted dump (Redump's ps2-dvd-212k.bin) answered that nothing the site
+    knows has it, and never said the dump is wanted."""
+    records = []
+    for row in rows:
+        label = _PROVENANCE_LABELS.get(row["catalog"], row["catalog"])
+        url = _site_path(f"provenance.md#{_slugify_anchor(label)}")
+        for algorithm in ("sha1", "md5", "crc32"):
+            value = str(row.get(algorithm) or "").lower()
+            if value:
+                records.append({"value": value, "algorithm": algorithm, "layer": "wanted",
+                                "owner": label, "name": row["name"], "url": url})
+    return records
 
 
 def _read_by_name(records: list[dict], files: dict, consumers: FileConsumers) -> list[dict]:
@@ -5836,6 +5867,13 @@ def _wanted_list(source: str, label: str, data: dict, by_dat: dict[str, list],
 _RELEASE_ASSET_NAMES: dict[str, str] | None = None
 
 
+def _download_name(path: str) -> str:
+    """The name a browser saves a collection file under: the last segment
+    of its download URL. Neither host sends a Content-Disposition, and the
+    download attribute is ignored on another origin."""
+    return urllib.parse.unquote(_fetch_url(path).rsplit("/", 1)[-1])
+
+
 def _fetch_url(path: str) -> str:
     """Where a collection file downloads from: its raw URL, or the
     large-files release asset when .gitignore keeps it out of git."""
@@ -5867,7 +5905,7 @@ def _platform_display(name: str) -> str:
     display = _platform_names.get(name)
     if display is None:
         try:
-            config = load_platform_config(name, str(_REPO_ROOT / "platforms"))
+            config = load_platform_config(name, str(siteinputs.current().platforms))
         except FileNotFoundError:
             config = {}
         display = _platform_names[name] = str(config.get("platform") or name)
@@ -6210,6 +6248,12 @@ def _system_file_card(
     # Each fact: its label, its values, whether the search reads it. What a
     # setup does with the file comes first, the fingerprints last.
     facts: list[tuple[str, list[str], bool]] = []
+    saved = _download_name(f["path"]) if f.get("path") else name
+    if saved != name:
+        # A .variants/ copy is stored as advision.zip.1c086064, and the
+        # browser names the download after the URL: copied as it came, the
+        # file a platform pins was not found under its name.
+        facts.append(("Save as", [f"{_code(name)}, the download is named {_code(saved)}"], False))
     if plats:
         # Each link lands on the platform's system section, and says where
         # that platform puts the file. Out of the search: the card's title
@@ -6268,7 +6312,7 @@ def _system_file_card(
 # What a system card shows at a glance: who lists the file and who reads it.
 # Its fingerprints and the rest open on demand, so a page of 250 cards reads
 # as a list of files, not a wall of hashes.
-_CARD_KEY_FACTS = ("On the setup's list", "Packed for its emulators by", "Emulators")
+_CARD_KEY_FACTS = ("Save as", "On the setup's list", "Packed for its emulators by", "Emulators")
 _CARD_HASHES = ("SHA1", "MD5", "CRC32", "SHA256")
 # The words a card's fold names its other facts by.
 _CARD_MORE_WORDS = {"Romset": "romset", "Collection path": "collection path",
@@ -6664,11 +6708,13 @@ def _reading_pairs(sha1: str, consumers: FileConsumers) -> list[tuple[str, dict]
     return pairs
 
 
-@functools.lru_cache(maxsize=1)
 def _profiles_on_disk() -> dict[str, dict]:
-    from common import load_emulator_profiles  # noqa: PLC0415
+    return _profiles_in(str(siteinputs.current().emulators), skip_aliases=False)
 
-    return load_emulator_profiles(str(_REPO_ROOT / "emulators"), skip_aliases=False)
+
+@functools.lru_cache(maxsize=None)
+def _profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
+    return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)
 
 
 def _entry_systems(emulator: str, entry: dict) -> list[str]:
@@ -8212,6 +8258,26 @@ def _exact_size(size: int) -> str:
     return _fmt_size(size) if size < 1024 else f"{_fmt_size(size)} ({size:,} bytes)"
 
 
+def _build_file_links(pin_build: list[dict]) -> list[str]:
+    """Each platform build file that holds the revision, linked at the
+    commit it was read at when the source record holds it. The prose of
+    pin_frozen named the file as plain text."""
+    from sitesources import _browse_repo, _source_permalink, tree_holds  # noqa: PLC0415
+
+    links = []
+    for build in pin_build:
+        repo = _browse_repo(str(build["repo"]))
+        path = str(build["path"])
+        revision = str(build["revision"])
+        text = f"{_escape_tags(_platform_display(str(build['platform'])))} {_code(path)}"
+        # Linked where the record saw the file at that commit, as every
+        # source link is: a tag can move, and is never recorded.
+        if repo is not None and tree_holds(repo, revision, path):
+            text = f"[{text}]({_source_permalink(repo, revision, path, None, None)})"
+        links.append(f"{text} at {_code(str(build['revision']))} sets {_code(str(build['variable']))}")
+    return links
+
+
 def _build_rows(profile: dict) -> list[str]:
     """Meta card rows for who ships the build, how its files are found, why
     its revision is held and where its releases are announced."""
@@ -8232,6 +8298,9 @@ def _build_rows(profile: dict) -> list[str]:
         if frozen:
             held = _escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
             rows.append(f"| {label} | {held} |")
+    builds = _build_file_links(profile.get("pin_build") or [])
+    if builds:
+        rows.append(f"| Build file | {'<br>'.join(builds)} |")
     announced = profile.get("version_source")
     if isinstance(announced, dict) and announced.get("url"):
         url = str(announced["url"])
@@ -8483,12 +8552,7 @@ def _render_emulator_file(
     if fnote:
         lines.append(f"- {data_root_words(_escape_tags(link_prose_citations(profile, str(fnote))), data_href)}")
     if not in_repo and f.get("unsourceable"):
-        # The badge alone sent readers after a dump that cannot exist, and the
-        # reason was only on the gaps page, which the card did not link.
-        lines.append(
-            f"- Not collectable: {_escape_tags(str(f['unsourceable']))} "
-            "([acknowledged gaps](../gaps.md#acknowledged-gaps))"
-        )
+        lines.append(f"- {_unsourceable_line(f)}")
     lines.extend(_contents_lines(contents))
     lines[body_start:] = _search_skipped_apart(lines[body_start:])
     lines.append("")
@@ -8600,12 +8664,7 @@ def _emulator_card_folds(
         open_lines.append(data_root_words(
             _escape_tags(link_prose_citations(profile, str(fnote))), data_href))
     if not in_repo and f.get("unsourceable"):
-        # The badge alone sent readers after a dump that cannot exist, and the
-        # reason was only on the gaps page, which the card did not link.
-        open_lines.append(
-            f"Not collectable: {_escape_tags(str(f['unsourceable']))} "
-            "([acknowledged gaps](../gaps.md#acknowledged-gaps))"
-        )
+        open_lines.append(_unsourceable_line(f))
     lines = [f"- {d}" for d in open_lines]
     shut_fold = [f"- {d}" for d in hashes + [m for m in more if skipped(m)]]
     read_fold = [f"- {m}" for m in more if not skipped(m)]
@@ -8988,10 +9047,14 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     return command, setups, oses
 
 
-@functools.cache
 def _standalone_cores(platform: str) -> frozenset[str]:
     """The emulators a setup launches as apps, by its platform file."""
-    config = load_platform_config(platform, str(_REPO_ROOT / "platforms"))
+    return _standalone_cores_in(str(siteinputs.current().platforms), platform)
+
+
+@functools.cache
+def _standalone_cores_in(platforms_dir: str, platform: str) -> frozenset[str]:
+    config = load_platform_config(platform, platforms_dir)
     return frozenset(str(c) for c in config.get("standalone_cores") or [])
 
 
@@ -10505,6 +10568,33 @@ def _hash_cell(hashes: dict[str, list[str]]) -> str:
     )
 
 
+def _unsourceable_line(f: dict) -> str:
+    """Why the collection holds no copy of a file a profile marks
+    `unsourceable:`, linked to the list of them. The flag only keeps a
+    same-named file from being served in its place: the file is still
+    wanted, and "Not collectable" sent readers away from KANJI2.ROM, which
+    MAME's fm7740sx.zip carries."""
+    return (f"Not collected yet: {_escape_tags(str(f['unsourceable']))} "
+            "([files not collected yet](../gaps.md#not-collected-yet))")
+
+
+def _catalogued_needs(report: dict | None) -> dict[tuple[str, str], list[str]]:
+    """(profile, file name casefolded) -> where a dump catalog or an
+    imported romset lists that file, from a provenance report built with
+    the profiles' needs."""
+    out: dict[tuple[str, str], list[str]] = {}
+    for source, data in sorted((report or {}).items()):
+        label = _PROVENANCE_LABELS.get(source, source)
+        for entry in data.get("missing", []):
+            where = [f"{label} `{_escape_tags(str(entry.get('name', '')))}`"]
+            where += [f"{_escape_tags(str(hit['source']))} `{_escape_tags(str(hit['archive']))}`"
+                      for hit in entry.get("romsets", [])]
+            for need in entry.get("needed_by", []):
+                held = out.setdefault((need["emulator"], str(need["name"]).casefold()), [])
+                held += [w for w in where if w not in held]
+    return out
+
+
 def _reason_cell(text: str) -> str:
     """A reason in a gaps table, in the class that keeps its column readable."""
     return f'<span class="rb-reason">{text}</span>' if text else "-"
@@ -10799,8 +10889,13 @@ def generate_gap_analysis(
     registry: dict | None = None,
     gap_report: dict | None = None,
     moved: dict[str, str] | None = None,
+    catalogued: dict | None = None,
 ) -> str:
     """Generate a unified gap analysis page.
+
+    ``catalogued`` is a provenance report built with the profiles' needs:
+    a file the collection does not hold yet names the catalog or romset
+    that lists it.
 
     With ``moved``, the list of files to source goes to pages of its own,
     keyed by stem: on the page it made 662 KB of HTML.
@@ -11232,7 +11327,7 @@ def generate_gap_analysis(
                 "",
             ])
 
-    # ---- Section 4: Acknowledged gaps (unsourceable files) ----
+    # ---- Section 4: files the collection does not hold yet (unsourceable) ----
 
     all_unsourceable: list[dict] = []
     for emu_name, data in sorted(report_all.items()):
@@ -11246,19 +11341,26 @@ def generate_gap_analysis(
             })
 
     if all_unsourceable:
+        listed = _catalogued_needs(catalogued)
+        # The old heading's address still leads here.
         lines.extend([
-            "## Acknowledged gaps",
+            '<span id="acknowledged-gaps"></span>',
             "",
-            f"{len(all_unsourceable)} files documented as unsourceable "
-            "(verified from source code).",
+            "## Not collected yet",
             "",
-            "| File | Emulator | Reason | Source ref |",
-            "|------|----------|--------|-----------|",
+            f"{len(all_unsourceable)} files the collection does not hold. A file "
+            "with the same name is never served in their place. Each is still "
+            "wanted, and the last column names a catalog or romset that lists it.",
+            "",
+            "| File | Emulator | Reason | Source ref | Listed in |",
+            "|------|----------|--------|-----------|-----------|",
         ])
         for u in sorted(all_unsourceable, key=lambda x: x["name"]):
+            where = listed.get((u["emu_key"], str(u["name"]).casefold()), [])
             lines.append(
                 f"| `{u['name']}` | {u['emulator']} | {_reason_cell(u['reason'])} "
-                f"| {_source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} |"
+                f"| {_source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} "
+                f"| {', '.join(where) or '-'} |"
             )
         lines.append("")
 
@@ -11844,7 +11946,7 @@ def _own_root_folders(registry: dict) -> dict[str, str]:
     destination carries its root in every path."""
     folders = {}
     for key, entry in registry.items():
-        config = load_platform_config(key, "platforms")
+        config = load_platform_config(key, str(siteinputs.current().platforms))
         if config.get("base_destination") == "" and entry.get("extract_to"):
             folders[key] = entry["extract_to"]
     return folders
@@ -11944,9 +12046,10 @@ def generate_which_pack() -> str:
 
     The tiles are the choice. Open tables under them listed every setup a
     second time and made the page 11,800 px tall on a phone."""
-    registry = load_platform_registry("platforms")
+    registry = load_platform_registry(str(siteinputs.current().platforms))
     record = release_record.load_advertised()
-    display = {key: load_platform_config(key, "platforms").get("platform", key) for key in registry}
+    display = {key: load_platform_config(key, str(siteinputs.current().platforms)).get("platform", key)
+               for key in registry}
     all_tabs = ("windows", "macos", "linux", "steamdeck", "android")
     lines = [
         "---",
@@ -12322,6 +12425,12 @@ def main() -> None:
 
 def _generate(args: argparse.Namespace) -> None:
 
+    # Every page reads these, never the repository's own files.
+    siteinputs.use(siteinputs.SiteInputs(
+        db=Path(args.db).resolve(),
+        emulators=Path(args.emulators_dir).resolve(),
+        platforms=Path(args.platforms_dir).resolve(),
+    ))
     db = load_database(args.db)
     docs = Path(args.docs_dir)
     # Files the site serves as they are (data, downloads, images), in the
@@ -12602,12 +12711,16 @@ def _generate(args: argparse.Namespace) -> None:
             sitestarlight.MOVED_PAGES.setdefault(
                 f"cross-reference-{pname}.md", f"platforms/{pname}.md")
 
+    provenance_report = build_report(
+        db, load_provenance_snapshots(), needs=profile_needs(profiles, db))
+
     print("Generating gap analysis page...")
     gap_pages: dict[str, str] = {}
     write_if_changed(
         str(docs / "gaps.md"),
         tables_out_of_search(generate_gap_analysis(
             profiles, coverages, db, suppl_names, registry, gap_report, gap_pages,
+            catalogued=provenance_report,
         )) + reference_next(),
     )
     for stem, page in gap_pages.items():
@@ -12623,7 +12736,6 @@ def _generate(args: argparse.Namespace) -> None:
     )
 
     print("Generating dump provenance page...")
-    provenance_report = build_report(db, load_provenance_snapshots())
     provenance_pages: dict[str, str] = {}
     write_if_changed(
         str(docs / "provenance.md"),

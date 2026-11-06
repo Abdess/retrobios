@@ -1711,8 +1711,11 @@ The build scripts need 3.9 and are not bound by this.
 
 Every change to `install.py` recomputes the SHA-256 pinned in `install.sh` and
 `install.ps1` in the same commit: `python scripts/pin_installer.py` writes both
-(`--check` writes nothing and exits 1 on a stale pin). The tests compare the
-pins with the file and name that command when they differ.
+(`--check` writes nothing and exits 1 on a stale pin). It also runs
+`scripts/generate_launcher_index.py`: `install/launchers/index.json` records the
+hash of `install.py` that `--add-app` checks before it writes a launcher on a
+card. The tests compare the pins and the list with the file and name the command
+that fixes each.
 
 The tables of options, events, exit codes, keys and card markers, the line
 menu and the run samples on this page sit between `generated` markers and are

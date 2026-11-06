@@ -424,6 +424,11 @@
   "crates/wqxemu/src/keypad.rs",
   "crates/wqxemu/src/main.rs"
  ],
+ "github.com/AmberELEC/AmberELEC@a21975bfb1a3af68f66e07a931b994b523e1e6e2": [
+  "packages/games/emulators/lzdoom/package.mk",
+  "packages/games/emulators/piemu/package.mk",
+  "packages/games/libretro/flycast2021le/package.mk"
+ ],
  "github.com/Amjad50/plastic@74152adb3acd890d3abee2ff5906408f26a199e2": [
   "plastic_core/src/cartridge/mod.rs",
   "plastic_core/src/display/color.rs",
@@ -1583,6 +1588,13 @@
   "imagine/src/base/linux/ApplicationContext.cc",
   "imagine/src/font/FreetypeFont.cc",
   "imagine/src/fs/ArchiveFS.cc"
+ ],
+ "github.com/RetroPie/RetroPie-Setup@46128cd252cdecae852a4d0bafa2aaf9d03ab563": [
+  "scriptmodules/emulators/advmame-1.4.sh",
+  "scriptmodules/emulators/ppsspp-1.5.4.sh",
+  "scriptmodules/ports/alephone.sh",
+  "scriptmodules/ports/love-0.10.2.sh",
+  "scriptmodules/ports/lzdoom.sh"
  ],
  "github.com/RetroPie/mame4all-pi@c6bfd2aef331b5a5e157c15d8bf8a77393c85689": [
   "readme.txt",
@@ -3475,6 +3487,7 @@
   "src/ui/video.rs"
  ],
  "github.com/habib256/pom2@de86e8e35df96fe6ffced56dfb727bbd567f8568": [
+  "CMakeLists.txt",
   "packaging/bundle.manifest",
   "packaging/fujinet/stage.py",
   "src/AppleParallelCard.cpp",
@@ -8930,6 +8943,7 @@
   "nes.c"
  ],
  "github.com/sarah-walker-pcem/pcem@10739b9618e388a5bf8c21e752f12b3952fa83e1": [
+  "configure.ac",
   "src/mem.c",
   "src/nvr.c",
   "src/ps1.c",

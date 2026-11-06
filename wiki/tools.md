@@ -28,6 +28,13 @@ python scripts/pipeline.py --check-buildbot        # online run + buildbot fresh
 `python scripts/refresh_data_dirs.py` once first. A run that builds packs with no
 data directory cached is refused before step 0.
 
+`--with-export` online passes `--fetch` to step 2e, which downloads each
+platform's own file and patches it. Offline that file must already be in
+`.cache/upstream-native/`: on a fresh clone run
+`python scripts/export_native.py --all --refresh-cache` once first. An offline
+run with `--with-export` and an empty cache for any platform it patches is
+refused before step 0.
+
 Pipeline steps:
 
 | Step | Description | Skipped by |
@@ -69,7 +76,7 @@ Pipeline flags:
 | `--target TARGET` | filter verify, packs and truth by hardware target |
 | `--source {platform,truth,full}` | pack file source, passed through to `generate_pack.py`. Refused with `--skip-packs` |
 | `--all-variants` | build the 6 source x required combinations. Refused with `--skip-packs` and with `--source` |
-| `--full-narrowings` | step 5 compares every region, target and system of each platform instead of three of each. Refused with `--skip-packs` |
+| `--full-narrowings` | step 5 compares every region, target and system of each platform instead of three of each. Refused with `--skip-packs` and with `--source platform` or `--source truth` |
 | `--check-buildbot` | run step 2b. Additive, and ignored under `--offline` |
 | `--with-truth` | run steps 2c and 2d |
 | `--with-export` | run steps 2c, 2d and 2e |
@@ -1653,8 +1660,8 @@ names the profiles read.
 
 | Catalog | Acquisition | Notes |
 |---------|------------|-------|
-| Redump | direct fetch from redump.info `/static/bios` | 4 BIOS DATs. redump.org serves stale DATs |
-| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic blocks automation, and the `hugo19941994/auto-datfile-generator` mirror rebuilds daily |
+| Redump | direct fetch from redump.info, one `/bios/<CODE>` route per system | 4 BIOS DATs. redump.org serves BIOS DATs dated 2010 to 2022, redump.info the current ones |
+| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic serves its DATs through a browser session, and the `hugo19941994/auto-datfile-generator` mirror rebuilds daily |
 | TOSEC | local pack, imported with `dat_pack_importer` | annual pack from tosecdev.org, 138 Firmware DATs |
 
 The join is by SHA1, then by MD5 + size. A match sets the `provenance` field

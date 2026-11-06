@@ -426,6 +426,19 @@ def _entry(profile: dict, name: str) -> dict:
     raise AssertionError(f"{name} not in the profile")
 
 
+class TheFaqAnswersWithACommand(unittest.TestCase):
+    """"Do I need every file of a console?" answered `--region us keeps only
+    your region's BIOS`, with no command to run, and that run kept 44 files
+    of the PlayStation set, Japanese PS2 images among them. `--core pcsx1`
+    is the lever the installer itself names."""
+
+    def test_every_file_of_a_console(self):
+        section = _section(_wiki("faq.md"), "Do I need every file of a console?")
+        self.assertIn("<!-- os-tabs -->", section)
+        self.assertIn("--system sony-playstation --core pcsx1", section)
+        self.assertNotIn("only your region", section)
+
+
 class LegalOpensInPlainWords(unittest.TestCase):
     """C5: Is it legal? is a Start here page and opened on case law."""
 
@@ -454,6 +467,13 @@ class LegalOpensInPlainWords(unittest.TestCase):
         detail = detail.split("## Asking for a file to be removed", 1)[0]
         self.assertEqual(re.findall(r"(?m)^## ", detail), [])
         self.assertIn("### Emulation and BIOS redistribution", detail)
+
+    def test_said_once(self):
+        """A closing Summary restated the opening lines, and "not legal
+        advice" came three times."""
+        self.assertEqual(self.text.count("legal advice"), 1)
+        self.assertNotIn("### Summary", self.text)
+        self.assertIn("The project accepts that risk deliberately", self.text)
 
     def test_a_contact_section_names_only_a_channel_that_exists(self):
         section = _section(self.text, "Contact")

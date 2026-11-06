@@ -558,9 +558,12 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 	const setups = new Set(platforms.map((item) => item.owner));
 
 	const members = distinct(byLayer('archive-member'), (item) => `${item.sha1}|${item.name}`);
+	// A dump a catalog lists and the collection lacks: the Wanted list.
+	const wanted = held.length || members.length ? [] : distinct(byLayer('wanted'), (item) => `${item.owner}|${item.name}`);
 	const counted = [
 		held.length ? count(held.length, 'file in the collection', 'files in the collection')
 			: members.length ? count(members.length, 'member of a collection archive', 'members of collection archives')
+			: wanted.length ? 'a wanted dump, not in the collection yet'
 			: 'not in the collection',
 		...(platforms.length ? [`${count(platforms.length, 'declaration', 'declarations')} by ${count(setups.size, 'setup', 'setups')}`] : []),
 		...(owners.length ? [count(owners.length, 'emulator that reads it', 'emulators that read it')] : []),
@@ -617,8 +620,20 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 		);
 	});
 	const retired = held.length ? [] : distinct(byLayer('retired'), (item) => item.sha1 ?? item.value);
-	if (!held.length && !members.length && !retired.length) blocks.push(paragraph('No file in the collection has this hash.'));
+	if (!held.length && !members.length && !retired.length && !wanted.length) blocks.push(paragraph('No file in the collection has this hash.'));
 	blocks.push(...retired.map(retiredParagraph));
+	if (wanted.length) {
+		const list = document.createElement('ul');
+		for (const item of wanted) {
+			const row = document.createElement('li');
+			row.append(link(item.url, item.owner ?? ''), ' lists it as ', code(item.name ?? item.value));
+			list.append(row);
+		}
+		blocks.push(
+			paragraph(strong('Wanted.'), ' The collection does not hold this dump yet. If you dumped it yourself, ', link('contributing/', 'add it'), '.'),
+			list,
+		);
+	}
 	if (members.length) {
 		// A ROM the collection holds inside a set: the set's card, by its name.
 		const list = document.createElement('ul');
@@ -799,7 +814,10 @@ const resolveFileAddress = () => {
 
 // A file card moved to another page keeps its address: an id of the form
 // sha1-<12 hex> that this page does not hold is looked up by content, and
-// an emulator card listed in the table of a split page opens its page.
+// an emulator card listed in the table of a split page opens its page. A
+// part of a split emulator page (emulators/mame-files-1/) sends a card id
+// it no longer holds to that table: an entry added to the profile moves
+// hundreds of cards from one part to the next.
 const followMovedCard = () => {
 	const id = decodeURIComponent(location.hash.slice(1));
 	if (!id) return;
@@ -809,8 +827,14 @@ const followMovedCard = () => {
 		location.replace(link.href);
 		return;
 	}
+	if (target) return;
 	const match = /^sha1-([0-9a-f]{12})$/.exec(id);
-	if (match && !target) location.replace(new URL(`files/?sha1=${match[1]}`, siteRoot()));
+	if (match) {
+		location.replace(new URL(`files/?sha1=${match[1]}`, siteRoot()));
+		return;
+	}
+	const part = /\/emulators\/(.+)-files-\d+\/?$/.exec(location.pathname);
+	if (part && id.startsWith('file-')) location.replace(new URL(`emulators/${part[1]}/#${encodeURIComponent(id)}`, siteRoot()));
 };
 
 // A link to a card folded in a table row (emulators with many entries)

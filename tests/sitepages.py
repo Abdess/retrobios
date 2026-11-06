@@ -44,3 +44,12 @@ def pages() -> list[Path]:
 def name(path: Path) -> str:
     """A page file's docs path, the name tests use for it."""
     return path.relative_to(CONTENT).with_suffix(".md").as_posix()
+
+
+def generator_sources() -> list[Path]:
+    """Every module whose strings reach a page: generate_site.py, each
+    scripts/site*.py and the pack README writer. Listed by glob, so text
+    moved out of generate_site.py stays under the guards that read it."""
+    scripts = REPO_ROOT / "scripts"
+    return sorted({*scripts.glob("site*.py"), scripts / "generate_site.py",
+                   scripts / "packreadme.py"})

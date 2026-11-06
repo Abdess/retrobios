@@ -978,6 +978,32 @@ def _refuse_offline_without_caches(
         )
 
 
+def _refuse_offline_export_without_originals(
+    parser: argparse.ArgumentParser, args: argparse.Namespace,
+    cache: str = ".cache/upstream-native",
+) -> None:
+    """An offline run with --with-export needs each patched file cached.
+
+    Seven formats carry code, so step 2e patches the platform's own file,
+    which --offline does not fetch. On a fresh clone the database, verify
+    and the truth model were built before step 2e failed on every one.
+    """
+    if not (args.offline and args.with_export):
+        return
+    from exporter import discover_exporters  # noqa: PLC0415
+
+    lacking = sorted(
+        name for name, exporter in discover_exporters().items()
+        if exporter.needs_original() and not any(Path(cache, name).glob("*"))
+    )
+    if lacking:
+        parser.error(
+            f"--with-export patches each platform's own file, and {cache}/ holds none "
+            f"for {', '.join(lacking)}: run python scripts/export_native.py --all "
+            "--refresh-cache once, or drop --offline"
+        )
+
+
 def _truth_steps(args: argparse.Namespace, results: dict) -> bool:
     """Steps 2c to 2e: truth model, its diff, the native export."""
     all_ok = True
@@ -1105,6 +1131,7 @@ def main() -> None:
     args = parser.parse_args()
     _refuse_unapplied_flags(parser, args)
     _refuse_offline_without_caches(parser, args)
+    _refuse_offline_export_without_originals(parser, args)
     if not args.offline:
         # Read once and put in the environment every step inherits: the
         # scrapers and refresh_data_dirs went anonymous unless the user had

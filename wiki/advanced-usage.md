@@ -538,7 +538,8 @@ Include truth generation and diffing in the pipeline:
 python scripts/pipeline.py --offline --with-truth
 ```
 
-Include truth + native format export:
+Include truth + native format export. Offline, the platforms' own files
+must already be cached ([tools](tools.md#pipeline)):
 
 ```bash
 python scripts/pipeline.py --offline --with-export
@@ -546,7 +547,7 @@ python scripts/pipeline.py --offline --with-export
 
 ### Combining flags
 
-These flags compose (`--source` and `--all-variants` are refused with `--skip-packs`):
+These flags compose, except the pairs the [pipeline flags](tools.md#pipeline) table marks as refused:
 
 ```bash
 python scripts/pipeline.py --offline --skip-packs --skip-docs --with-truth --target switch

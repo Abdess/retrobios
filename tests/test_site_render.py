@@ -50,15 +50,16 @@ class EveryPageAddressesPlatformsAsPeers(unittest.TestCase):
     text every site generator writes, docstrings and bare identifiers aside."""
 
     WORDS = ("their file", "theirs", "of ours", "corrected", "left out", "drift")
-    SOURCES = ("generate_site.py", "siterender.py", "sitesources.py", "siteexports.py")
-
     def test_no_page_text_judges_another_project(self):
         import ast
         import re
 
+        from tests.sitepages import generator_sources
+
         found = []
-        for name in self.SOURCES:
-            tree = ast.parse((REPO_ROOT / "scripts" / name).read_text(encoding="utf-8"))
+        for source in generator_sources():
+            name = source.name
+            tree = ast.parse(source.read_text(encoding="utf-8"))
             docstrings = {
                 id(node.body[0].value) for node in ast.walk(tree)
                 if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef,

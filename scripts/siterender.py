@@ -7,6 +7,7 @@ import urllib.parse
 from collections.abc import Callable
 from pathlib import Path
 
+import siteinputs
 import sitemarkup as markup
 
 
@@ -401,7 +402,8 @@ def _build_boards() -> None:
 
         from common import load_emulator_profiles
 
-        database = _REPO_ROOT / "database.json"
+        inputs = siteinputs.current()
+        database = inputs.db
         if not database.exists():
             _archive_boards.clear()
             _board_names.clear()
@@ -409,7 +411,7 @@ def _build_boards() -> None:
             return
         with open(database, encoding="utf-8") as handle:
             db = json.load(handle)
-        profiles = load_emulator_profiles(str(_REPO_ROOT / "emulators"), skip_aliases=False)
+        profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
         _arcade_source[0] = (profiles, db)
     profiles, db = _arcade_source[0]
     files = db.get("files", {})
@@ -780,9 +782,10 @@ def _ensure_console_sections() -> None:
     from common import load_emulator_profiles
     from generate_site import _group_by_manufacturer
 
-    with open(_REPO_ROOT / "database.json", encoding="utf-8") as handle:
+    inputs = siteinputs.current()
+    with open(inputs.db, encoding="utf-8") as handle:
         db = json.load(handle)
-    profiles = load_emulator_profiles(str(_REPO_ROOT / "emulators"), skip_aliases=False)
+    profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
     set_console_sections(_group_by_manufacturer(db), program_names(profiles))
 
 
@@ -1431,7 +1434,7 @@ def system_search_aliases(sys_id: str) -> list[str]:
             platform_system_names,
         )
 
-        platforms_dir = str(_REPO_ROOT / "platforms")
+        platforms_dir = str(siteinputs.current().platforms)
         index: dict[str, set[str]] = {}
         for platform in list_registered_platforms(platforms_dir, include_archived=True):
             config = load_platform_config(platform, platforms_dir)

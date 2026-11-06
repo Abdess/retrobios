@@ -117,6 +117,21 @@ class SourcePathsFreshness(unittest.TestCase):
         finding = check_freshness.check_source_paths(profiles)
         self.assertEqual(finding.status, check_freshness.OK, finding.detail)
 
+    def test_a_recorded_build_file_tree_is_pinned(self):
+        """The record holds the platform trees pin_build reads at a commit,
+        and the check called them orphaned."""
+        import sitesources  # noqa: PLC0415
+
+        pin = "a" * 40
+        profile = {"pin_build": [{"repo": "https://github.com/o/r", "revision": pin,
+                                  "path": "p.mk"}]}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "source-paths.json"
+            path.write_text(json.dumps({f"github.com/o/r@{pin}": ["p.mk"]}), encoding="utf-8")
+            with mock.patch.object(sitesources, "SOURCE_PATHS", path):
+                finding = check_freshness.check_source_paths({"p": profile})
+        self.assertEqual(finding.status, check_freshness.OK, finding.detail)
+
     def test_a_moved_pin_is_stale(self):
         profile = _profile("geolith")
         moved = dict(profile, source_commit="f" * 40, upstream_commit="e" * 40)
