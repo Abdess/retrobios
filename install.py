@@ -7712,7 +7712,7 @@ def _install_standalone_folders(
     if args.check:
         if pending:
             print("\n" + _check_fetch_line(pending, "its folder"))
-            sys.exit(1)
+            sys.exit(3)
         return True
     if args.dry_run:
         return True
@@ -16320,9 +16320,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             skipped=_skipped(omitted_seen), left_out=_left_out_events(left_out_seen),
             kept=KEPT.summary(), interrupted=total_interrupted,
         )
-    # A check scripted as `--check && launch` reads the exit code only.
+    # A check scripted as `--check && launch` reads the exit code only. Its
+    # own code, 3: with 1, a check that found files missing could not be
+    # told from a check that never ran (a list refused, a --from missing).
     if args.check and check_pending:
-        sys.exit(1)
+        sys.exit(3)
     if not args.check and not listing and not args.dry_run:
         _report_outcome(
             installed_paths,

@@ -1509,7 +1509,7 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
             cwd=REPO_ROOT, env=env, capture_output=True, text=True, timeout=300,
             check=False,
         )
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertIn("to download:", proc.stdout)
 
     def test_no_syntax_a_312_parser_lets_through(self):
@@ -4533,6 +4533,24 @@ class AFullDriveIsSaidAsOne(unittest.TestCase):
         self.assertEqual(len(attempts), 1)
 
 
+class ACheckThatFindsFilesMissingIsNoFailure(unittest.TestCase):
+    """--check ended on 1 for files missing as for a list refused or a
+    --from folder that does not exist: a scheduled check could not tell a
+    BIOS folder to complete from a tool that never ran."""
+
+    def test_missing_is_3_and_a_failure_stays_1(self):
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        with FakeRepository() as repo:
+            missing = repo.run("--no-input", "--check")
+            nowhere = repo.run("--no-input", "--check", "--from", str(repo.root / "nope"))
+            repo.run("--no-input")
+            complete = repo.run("--no-input", "--check")
+        self.assertEqual(missing.returncode, 3, missing.stdout + missing.stderr)
+        self.assertEqual(nowhere.returncode, 1, nowhere.stdout + nowhere.stderr)
+        self.assertEqual(complete.returncode, 0, complete.stdout + complete.stderr)
+
+
 class OneEmulatorsFilesInOneCommand(unittest.TestCase):
     """An emulator page offers one command for that emulator's files.
     --core kept the platform's whole list, and narrowing to cores kept the
@@ -4921,7 +4939,7 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
         self.assertEqual(self._run("--dest", str(dest), "--system", "atari-lynx", "--yes").returncode, 0)
         (dest / "lynxboot.img").write_bytes(b"corrupt")
         proc = self._run("--dest", str(dest), "--system", "atari-lynx", "--check")
-        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(proc.returncode, 3)
         self.assertIn("wrong copy: lynxboot.img", proc.stdout)
         self.assertIn("without --check", proc.stdout)
 
@@ -5607,7 +5625,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         (dest / "scph5501.bin").write_bytes(b"junk")
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
                             "--check", "--no-input")
-        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stderr)
         listing = proc.stdout.split("to download:\n", 1)[1].splitlines()
         self.assertEqual(listing[0].strip(), "wrong copy: scph5501.bin")
 
@@ -5639,7 +5657,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
             shutil.copy(REPO_ROOT / repo_path, dest / "PPSSPP")
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
                             "--system", "sony-psp", "--check", "--no-input")
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertNotIn("Everything is in place", proc.stdout)
         found = re.search(r"(\d+) in place, (\d+) missing", proc.stdout)
         self.assertIsNotNone(found, proc.stdout)
@@ -5653,7 +5671,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         proc = _install_run({**self.env, "RETROBIOS_INSTALL_OFFLINE": "1"}, "--platform",
                             "retroarch", "--dest", str(dest), "--check", "--no-input",
                             "--manifest", str(REPO_ROOT / "install" / "retroarch.json"))
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         missing = re.search(r"0 in place, (\d+) missing", proc.stdout).group(1)
         self.assertIn(f"\n  {missing} files not in place:\n", proc.stdout)
         self.assertIn(f"  {missing} files need the internet", proc.stdout)
@@ -6764,13 +6782,13 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
 
     def test_a_check_run(self):
         proc, events = self._run("--check")
-        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(proc.returncode, 3)
         installer = events[0]["installer"]
         self.assertEqual(events, self._head("check", installer) + [
             {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 1,
              "pending": 3, "failed": [], "skipped": self.SKIPPED, "left_out": [], "kept": [],
              "interrupted": False},
-            {"event": "end", "code": 1},
+            {"event": "end", "code": 3},
         ])
         self.assertIn("1 in place, 2 missing, 1 wrong copy", proc.stderr)
         self.assertFalse((self.bios / "c.bin").exists())
@@ -6986,7 +7004,7 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
                       self.scratch.read_text(encoding="utf-8"))
 
     def test_the_exit_codes_are_the_ones_install_py_exits_with(self):
-        self.assertEqual(self.generator.exit_codes(), [0, 1, 2, 130, 141])
+        self.assertEqual(self.generator.exit_codes(), [0, 1, 2, 3, 130, 141])
 
     def test_a_missing_marker_stops_it(self):
         page = self.scratch.read_text(encoding="utf-8")

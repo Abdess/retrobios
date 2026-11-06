@@ -577,7 +577,7 @@ Checking existing files...
 `Everything is in place.` is said only when the data folders are complete
 too. With the BIOS files in place and data files missing (PPSSPP's assets,
 Dolphin's `Sys`), the line counts those instead (`169 data files to fetch`),
-and `--check` exits with code 1. The files the collection does not hold are
+and `--check` exits with code 3. The files the collection does not hold are
 listed after it again, as long as they are absent from the folder. A number before `wrong copies` means a file is
 in place with contents the platform does not accept. Running the install again
 replaces it and keeps the old one, see
@@ -1011,8 +1011,8 @@ what the options name, everything by default.
 
 <!-- /generated: options -->
 
-`--check` exits with code 1 when a file is missing or does not match, and 0
-when every one does. What it lists is under
+`--check` exits with code 3 when a file is missing or does not match, 0
+when every one does, and 1 when the check itself failed. What it lists is under
 [Why a file is refused](#why-a-file-is-refused). An install leaves a file with
 the expected hash untouched and replaces any other, the old one kept beside
 the BIOS folder. Files the list does not name are never read, moved or deleted.
@@ -1768,8 +1768,9 @@ fields, the installer refuses to narrow rather than install everything.
 | Code | Meaning |
 |------|---------|
 | `0` | everything asked for is installed or already in place |
-| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, `--check` found files to fetch, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, or `--add-app` could not put every file of the app on the card |
+| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, or `--add-app` could not put every file of the app on the card |
 | `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board`, `--target` with `--from-pack` or `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set) when no core list per board is at hand (the pack carries none and none is beside `--manifest` as `targets/<platform>.json`), or for a platform that publishes none, which is said to have no hardware targets, `--list-targets` with `--offline` and neither, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also an unknown platform, target, system, core or emulator, said in an `Error:` or `Unknown platform` line and an `error` event whose `stage` is `option`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore`, a folder that is not a dated folder inside `retrobios-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
+| `3` | `--check` ran and found files to fetch or wrong copies, nothing having failed. A failure takes `1` as before: a manifest refused, a `--from` folder that does not exist. Until November 2026 this case also ended on `1`, so a script that reads any code but `0` as "not ready" needs no change |
 | `130` | stopped with Ctrl+C, or with Ctrl+C or Ctrl+D at a question, the terminal keeping `RetroBIOS: stopped. Nothing was installed.` before an install. Run the same command again to carry on |
 | `141` | the output was piped to a reader that closed early (`--list-platforms \| head`) |
 
@@ -1792,9 +1793,9 @@ in the session.
 Failures that are per-file, such as a download exhausting its three attempts,
 are counted and reported at the end.
 
-To tell missing files from a failure, read the `check` event of
-[Machine-readable events](#machine-readable-events): `missing` and `wrong_hash`
-count what is left.
+`--check` tells missing files (`3`) from a failure (`1`) by its code. The
+`check` event of [Machine-readable events](#machine-readable-events) counts what
+is left in `missing` and `wrong_hash`.
 
 ## Machine-readable events
 

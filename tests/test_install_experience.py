@@ -546,7 +546,7 @@ class AFolderThisUserCannotEnter(unittest.TestCase):
             finally:
                 os.chmod(locked, 0o755)
         self.assertNotIn("Traceback", proc.stderr)
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertIn("wrong copy: pcsx/extra.bin", proc.stdout)
         self.assertIn("could not be read (Permission denied)", proc.stdout)
         self.assertIn("missing: scph5501.bin", proc.stdout)

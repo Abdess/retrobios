@@ -1726,7 +1726,7 @@ class SomethingElseAtADestination(unittest.TestCase):
         with FakeRepository() as repo:
             self.prepare(repo)
             proc = repo.run("--check")
-            self.assertEqual(proc.returncode, 1, proc.stderr)
+            self.assertEqual(proc.returncode, 3, proc.stderr)
             self.assertNotIn("Traceback", proc.stderr)
             self.assertIn("    wrong copy: scph5500.bin\n      a folder sits where this "
                           "file goes: move it away, then run again", proc.stdout)
