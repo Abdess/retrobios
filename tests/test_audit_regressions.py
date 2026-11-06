@@ -6284,7 +6284,13 @@ class DocsDescribeTheRegistriesTheyName(unittest.TestCase):
         from dedup import NODEDUP_DIRS
         tools = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
         line = next(l for l in tools.splitlines() if "NODEDUP_DIRS" in l)
-        self.assertEqual(sorted(d for d in NODEDUP_DIRS if d not in line), [])
+        # Compared as list items: `mame` was missing while the substring
+        # test found it in `_mame_clones.json` on the same line.
+        listed = line.split("`NODEDUP_DIRS`", 1)[1].split(":", 1)[1].rstrip(" |")
+        self.assertEqual(
+            sorted(item.strip() for item in listed.split(",")),
+            sorted(NODEDUP_DIRS),
+        )
         readme_gen = (ROOT / "scripts" / "generate_readme.py").read_text(encoding="utf-8")
         self.assertIn("NODEDUP_DIRS", readme_gen)
 
