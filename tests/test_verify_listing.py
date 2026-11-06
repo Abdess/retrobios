@@ -241,6 +241,37 @@ class BundledGameDataIsNotMissing(unittest.TestCase):
                       out.getvalue())
 
 
+class TheBundledLineSaysWhatItLeavesOut(unittest.TestCase):
+    """'Bundled with their emulator, not collected: 154' listed 14 names,
+    the required firmware, and nothing said 140 more existed."""
+
+    def test_the_hidden_names_are_counted(self):
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        result = {"undeclared_files": [
+            {"name": name, "emulator": "e", "required": required, "in_repo": False,
+             "bundled": True, "in_pack": False}
+            for name, required in (("fw.bin", True), ("a.frag", False), ("b.dll", False))
+        ]}
+        with contextlib.redirect_stdout(io.StringIO()) as quiet:
+            verify._print_undeclared_section(result, verbose=False)
+        self.assertIn(
+            "Bundled with their emulator, not collected: 3 "
+            "(fw.bin, 2 more, --verbose lists them)",
+            quiet.getvalue(),
+        )
+        with contextlib.redirect_stdout(io.StringIO()) as verbose:
+            verify._print_undeclared_section(result, verbose=True)
+        self.assertIn(
+            "Bundled with their emulator, not collected: 3 (a.frag, b.dll, fw.bin)",
+            verbose.getvalue(),
+        )
+
+
 class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):
     """verify --platform recalbox --system nec-pc-engine printed no Core
     files line while the pack held six geargrafx syscard copies: the gap

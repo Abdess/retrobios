@@ -1921,10 +1921,14 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
             u for u in bundled
             if u["required"] and u.get("category", "bios") != "game_data"
         ]
-        names = ", ".join(sorted({u["name"] for u in shown}))
+        named = sorted({u["name"] for u in shown})
+        # The required firmware alone read as the whole count: 14 names
+        # for 154 entries, nothing saying the rest existed.
+        hidden = len({u["name"] for u in bundled}) - len(named)
+        listed = named + ([f"{hidden} more, --verbose lists them"] if hidden else [])
         print(
             f"  Bundled with their emulator, not collected: {len(bundled)}"
-            + (f" ({names})" if names else "")
+            + (f" ({', '.join(listed)})" if listed else "")
         )
     if unplaced:
         print(f"  Core files held but not packed: {len(unplaced)} "
