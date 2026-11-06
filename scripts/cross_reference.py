@@ -26,7 +26,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     platform_arg,
     ProfileSelectionError,
+    _foreign_tree,
     _norm_system_id,
+    _owner_tokens,
     archive_entry,
     directory_members,
     expand_directory_entries,
@@ -215,8 +217,14 @@ def _resolve_source(
     none of the hashes the entry declares: a name never wins over a declared
     hash, and zquestclassic's ending.mid read as held because Hydra Castle
     Labyrinth has another file of that name.
+
+    Another casing of the name in another emulator's tree proves nothing, as
+    in resolve_local_file's case-insensitive step: dosbox-x's et4000.bin read
+    as held through pcem's et4000.BIN, which the pack and the installer
+    refuse it.
     """
     declared = _declared_content(file_entry or {})
+    owners = _owner_tokens(file_entry or {})
 
     def _can_be(sha1s: list | str) -> bool:
         if not file_entry or db_files is None:
@@ -233,6 +241,14 @@ def _resolve_source(
         """Whether the files indexed under *name* can be this entry."""
         return _can_be(by_name.get(name) or [])
 
+    def _folded_hit(name: str) -> bool:
+        """_name_hit for a name matched in another casing."""
+        return _can_be([
+            sha1 for sha1 in by_name.get(name) or []
+            if db_files is None
+            or not _foreign_tree(db_files.get(sha1, {}).get("path", ""), owners)
+        ])
+
     # bios/ via database.json by_name
     if fname in by_name and _name_hit(fname):
         return "bios"
@@ -241,10 +257,10 @@ def _resolve_source(
     if basename and basename in by_name and _name_hit(basename):
         return "bios"
     key = fname.lower()
-    if key in by_name_lower and _name_hit(by_name_lower[key]):
+    if key in by_name_lower and _folded_hit(by_name_lower[key]):
         return "bios"
     if basename:
-        if basename.lower() in by_name_lower and _name_hit(
+        if basename.lower() in by_name_lower and _folded_hit(
             by_name_lower[basename.lower()]
         ):
             return "bios"
@@ -257,7 +273,7 @@ def _resolve_source(
     if canonical and canonical != fname:
         if canonical in by_name and _name_hit(canonical):
             return "bios"
-        if canonical.lower() in by_name_lower and _name_hit(
+        if canonical.lower() in by_name_lower and _folded_hit(
             by_name_lower[canonical.lower()]
         ):
             return "bios"
@@ -901,7 +917,9 @@ def _cross_reference_profile(
         source = next(
             (
                 found for version in versions[slot]
-                if (found := entry_source(version, index)) is not None
+                if (found := entry_source(
+                    {**version, "source_profile": emu_name}, index,
+                )) is not None
             ),
             "missing",
         )

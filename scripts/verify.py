@@ -667,13 +667,18 @@ def find_undeclared_files(
                 # Resolution: name, then path basename
                 # storage: release names where the bytes are served from, not
                 # that the collection holds them: resolved like any file.
+                # Resolved as the asker, as the builder's ExtraResolver does:
+                # another casing of the name in another emulator's tree is
+                # not this emulator's file (dosbox-x's et4000.bin and pcem's
+                # et4000.BIN).
+                owned = {**f, "source_profile": emu_name}
                 if shipped_on_mismatch and (f.get("md5") or f.get("sha1")):
                     # The entry states what its content should be and the builder
                     # drops a copy that contradicts it, so content decides here
                     # too. A name match would not do: generic names collide across
                     # systems, and answering yes on one describes a pack that will
                     # not contain the file.
-                    _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                    _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                     in_repo = _lp is not None and _st != "hash_mismatch"
                 else:
                     in_repo = _name_in_index(
@@ -693,8 +698,8 @@ def find_undeclared_files(
                         # rejects them all. NanoBoyAdvance's 16 KB bios.bin met
                         # only PCem's and QEMU's PC BIOS images of that name.
                         # The fallback below then decides as for any mismatch.
-                        _lp, _st = resolve_local_file(f, db, dest_hint=dest)
-                        if _st == "hash_mismatch":
+                        _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
+                        if _st == "hash_mismatch" or _lp is None:
                             in_repo = False
                     if not in_repo:
                         # Hash fallback: the repo may hold the content under a
@@ -707,7 +712,7 @@ def find_undeclared_files(
                         # frontend would reject it, the builder leaves it out, and
                         # calling it available here would describe a pack that
                         # does not contain it.
-                        _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                        _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                         in_repo = _st != "not_found" and _lp is not None
                         if in_repo and _st == "hash_mismatch" and shipped_on_mismatch:
                             in_repo = False
@@ -717,7 +722,7 @@ def find_undeclared_files(
                         # held for it, the rule the builder's lookup applies
                         # (packextras.ExtraResolver). The Apple IIGS' 128 KB
                         # ROM is not Basilisk II's ROM.
-                        _lp, _st = resolve_local_file(f, db, dest_hint=dest)
+                        _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                         if core_size_refusal(
                             f, _lp, same_slot_entries(profile.get("files"), fname, dest)
                         ):

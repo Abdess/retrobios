@@ -1841,8 +1841,7 @@
       "reason": "not_found",
       "cores": [
         "dosbox-x"
-      ],
-      "held": true
+      ]
     },
     {
       "dest": "extras.wad",

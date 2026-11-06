@@ -185,5 +185,53 @@ class RetailDashboardTree(unittest.TestCase):
                     self.assertEqual(status, "path_exact", path)
 
 
+class TheGapReportAsksAsTheEmulator(unittest.TestCase):
+    """dosbox-x's et4000.bin, no hash: pcem's et4000.BIN was its only
+    casing. The resolver, asked as dosbox-x, refuses it and the pack and the
+    installer leave the file out, while the gap report, verify's core files
+    and the manifest's held flag counted it available."""
+
+    _hold = ForeignTreeNames._hold
+
+    def setUp(self):
+        ForeignTreeNames.setUp(self)
+        self._hold("bios/Other/pcem/roms/et4000.BIN", b"E" * 64)
+        self.entry = {"name": "et4000.bin", "required": True}
+
+    def _source(self, owner: str) -> str | None:
+        from cross_reference import entry_source
+
+        by_name = self.db["indexes"]["by_name"]
+        index = {
+            "by_name": by_name, "by_name_lower": {k.lower(): k for k in by_name},
+            "by_path_suffix": {}, "by_md5": {}, "by_sha256": {}, "by_crc32": {},
+            "db_files": self.db["files"], "data_names": None,
+        }
+        return entry_source({**self.entry, "source_profile": owner}, index)
+
+    def test_another_tree_casing_is_not_held(self):
+        self.assertIsNone(self._source("dosbox-x"))
+        entry = {**self.entry, "source_profile": "dosbox-x"}
+        self.assertEqual(resolve_local_file(entry, self.db), (None, "not_found"))
+
+    def test_the_tree_owner_holds_it(self):
+        self.assertEqual(self._source("pcem"), "bios")
+
+    def test_core_files_follow_the_resolver(self):
+        from verify import find_undeclared_files
+
+        profiles = {"dosbox-x": {
+            "emulator": "DOSBox-X", "type": "libretro", "systems": ["dos"],
+            "files": [self.entry],
+        }}
+        config = {"platform": "P", "verification_mode": "md5", "cores": ["dosbox-x"],
+                  "systems": {"dos": {"files": []}}}
+        (found,) = [
+            u for u in find_undeclared_files(config, "emulators", self.db, profiles)
+            if u["name"] == "et4000.bin"
+        ]
+        self.assertFalse(found["in_repo"])
+
+
 if __name__ == "__main__":
     unittest.main()
