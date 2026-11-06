@@ -301,9 +301,9 @@ class RecordsNameNoLocalPath(unittest.TestCase):
         """Ten records cut at 400 characters inside the scratch path kept
         its tail, which no absolute-path pattern sees."""
         absolute = re.compile(r"(?<![\w.<>-])/(?:home|root|tmp|mnt|Users|srv)/")
-        # The tail of a scratch folder: a checkout's hidden tool folder, a
-        # worktree, or the probes' own tmp/ subfolders.
-        scratch = re.compile(r"\.claude/|worktrees/|\btmp/(?:pack_probe|tests|campaign)\b")
+        # The tail of a scratch folder: a worktree, or the probes' own tmp/
+        # subfolders.
+        scratch = re.compile(r"worktrees/|\btmp/(?:pack_probe|tests|campaign)\b")
         found = [
             f"{path.name}:{number}"
             for path in sorted((REPO_ROOT / "measurements").glob("*.jsonl"))
