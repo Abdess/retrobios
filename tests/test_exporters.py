@@ -801,14 +801,20 @@ class SearchOrder(unittest.TestCase):
         longest = ('rp_module_id="xm7"\nrp_module_help="Copy bios files '
                    + ", ".join(f"n{i}.rom" for i in range(12)) + ' and n12.rom to $biosdir"\n')
         exporter = discover_exporters()["retropie"]()
-        produced = exporter.render(
+        written = exporter.render(
             systems, None,
             {"scriptmodules/libretrocores/lr-flycast.sh": script,
              "scriptmodules/emulators/xm7.sh": longest},
-        )["scriptmodules/libretrocores/lr-flycast.sh"]
+        )
+        produced = written["scriptmodules/libretrocores/lr-flycast.sh"]
         self.assertIn("Dreamcast BIOS file dc_boot.bin to", produced)
         self.assertIn("BIOS files naomi.zip, awbios.zip and naomi2.zip to", produced)
         self.assertNotIn("other.zip", produced)
+        # Rewritten for naomi2.zip, other.zip left out: the summary said
+        # "Left as is" of a package in the diff.
+        outcome = exporter.outcome(systems, written)
+        self.assertIn("Updated in part: lr-flycast,", outcome)
+        self.assertNotIn("Left as is: lr-flycast", outcome)
 
     def test_cores_that_disagree_keep_the_best_rank(self):
         """Nothing is dropped on the rank here, so the best one wins.
