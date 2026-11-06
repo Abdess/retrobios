@@ -15,6 +15,7 @@ import functools
 import json
 import os
 import re
+import signal
 import sys
 import zipfile
 from pathlib import Path
@@ -3564,6 +3565,10 @@ from dumpcatalog import (  # noqa: E402,F401
 )
 
 
+def _exit_on_signal(signum: int, _frame: object) -> None:
+    sys.exit(128 + signum)
+
+
 def run_cli(main: Callable[[], int | None]) -> None:
     """Run a command-line entry point to its exit status.
 
@@ -3571,7 +3576,15 @@ def run_cli(main: Callable[[], int | None]) -> None:
     and the next write died on a BrokenPipeError traceback. Output nobody
     reads any more ends the run quietly, with the status a shell gives a
     writer whose reader left.
+
+    SIGTERM (timeout, kill) and SIGHUP (a closed terminal) end the process
+    without unwinding by default: a pack build left its multi-GB hidden
+    .partial behind. Raised as SystemExit, they run the cleanup a failed
+    write runs, and the status stays the one a shell gives the signal.
     """
+    for name in ("SIGTERM", "SIGHUP"):
+        if hasattr(signal, name):
+            signal.signal(getattr(signal, name), _exit_on_signal)
     try:
         code = main()
         sys.stdout.flush()
