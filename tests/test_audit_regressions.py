@@ -2296,7 +2296,9 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
                         else "gitignored" if repo_path in ignored
                         else "untracked, never committed"
                     )
-                    if bool(entry.get("release_asset")) != (state == "gitignored"):
+                    if state == "untracked, never committed" or (
+                        bool(entry.get("release_asset")) != (state == "gitignored")
+                    ):
                         wrong.append((entry["dest"], repo_path, state))
                 self.assertEqual(wrong, [], f"{name} picks the wrong source: {wrong[:3]}")
 
@@ -2309,6 +2311,36 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
         if untracked is None:
             self.skipTest("not a git checkout")
         self.assertEqual(sorted(untracked)[:20], [], f"{len(untracked)} untracked files under bios/")
+
+    def test_every_database_path_is_committed_or_a_release_asset(self):
+        """A git mv under bios/ committed without regenerating anything left
+        database.json and the manifests agreeing on the old path: the tests
+        above compare them with each other, so all passed, and the installer
+        got a 404 (issue 78, with the database stale too)."""
+        database = ROOT / "database.json"
+        if not database.is_file():
+            self.skipTest("database.json not generated")
+        files = json.loads(database.read_text(encoding="utf-8"))["files"]
+        paths = {
+            path
+            for entry in files.values()
+            for path in [entry.get("path"), *(entry.get("paths") or [])]
+            if path
+        }
+        tracked = _git_paths("ls-files", "-z")
+        if tracked is None:
+            self.skipTest("not a git checkout")
+        outside = sorted(paths - tracked)
+        ignored = _git_paths("check-ignore", "-z", "--no-index", "--stdin", stdin=outside)
+        if ignored is None:
+            self.skipTest("not a git checkout")
+        stale = [path for path in outside if path not in ignored]
+        self.assertEqual(
+            stale[:20], [],
+            f"{len(stale)} database paths git neither holds nor ignores: "
+            "python scripts/generate_db.py --force --bios-dir bios --output database.json, "
+            "then the manifests",
+        )
 
 
 class ReleaseAssetCriterion(unittest.TestCase):
