@@ -134,9 +134,12 @@ Three rules keep a filtered pack usable:
 - **No system is ever emptied.** If nothing matches, the whole group is kept.
   `--region us` still ships `disksys.rom`, because the Famicom Disk System has no
   American BIOS.
-- **Region-free files always survive.** `psxonpsp660.bin`, `ps1_rom.bin` and
-  `openbios.bin` are declared `[world]`: they add a capability rather than
-  competing regionally.
+- **Region-free files survive.** A file one of the platform's cores declares
+  `[world]` is kept. SwanStation declares `psxonpsp660.bin` and `ps1_rom.bin`
+  that way, DuckStation `openbios.bin`. The tag comes from each core:
+  PCSX ReARMed reads the region inside `psxonpsp660.bin` and files it as
+  `[japan]`, so on MinUI, NextUI and MyMinUI, where it is the only PlayStation
+  core, `--region us` drops it.
 - **Untagged files always survive.** Most BIOS are not regional and carry no
   `region:` at all.
 

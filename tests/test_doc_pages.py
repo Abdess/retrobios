@@ -2004,3 +2004,30 @@ class TheCatalogRowsStateFacts(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
+
+
+class RegionFreeRuleNamesWhereItDoesNotHold(unittest.TestCase):
+    """advanced-usage.md said psxonpsp660.bin is declared [world] and always
+    survives --region. PCSX ReARMed declares it [japan], and on the platforms
+    where it is the only PlayStation core the filter drops it."""
+
+    def test_every_platform_that_drops_a_named_file_is_named(self):
+        from common import (list_registered_platforms, load_emulator_profiles,
+                            load_platform_config)
+        from region import WORLD, platform_region_index
+
+        section = _section(_page("advanced-usage.md"), "Region filtering")
+        bullet = next(p for p in section.split("\n- ") if "Region-free" in p)
+        files = re.findall(r"`([^`]+\.bin)`", bullet)
+        self.assertTrue(files)
+        profiles = load_emulator_profiles(str(ROOT / "emulators"))
+        for platform in list_registered_platforms(str(ROOT / "platforms")):
+            config = load_platform_config(platform, str(ROOT / "platforms"))
+            index = platform_region_index(config, profiles)
+            for name in files:
+                entry = index.get(name)
+                drops = bool(entry and entry["regions"] and WORLD not in entry["regions"]
+                             and not entry["has_untagged"])
+                if drops:
+                    with self.subTest(platform=platform, file=name):
+                        self.assertRegex(bullet, rf"(?i)\b{re.escape(platform)}\b")
