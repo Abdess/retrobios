@@ -468,6 +468,22 @@ class SitePages(unittest.TestCase):
     def item(self, **values: object) -> dict:
         return {**self.ITEM, **values}
 
+    def test_the_data_page_claims_no_link_an_emulator_page_lacks(self) -> None:
+        """The Data page said each per-emulator database is "linked from its
+        page". An emulator page shows the proof lines, which link the record
+        lines and never the database."""
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
+            path = Path(scratch) / "m.sqlite"
+            connection = sqlite3.connect(path)
+            connection.execute("CREATE TABLE meta (key TEXT)")
+            connection.commit()
+            connection.close()
+            text = "\n".join(sm.data_page_section(path))
+        proofs = "\n".join(sm.proof_section([self.item()]))
+        self.assertNotIn("downloads/measurements/", proofs)
+        self.assertNotIn("linked from its page", text)
+        self.assertIn("downloads/measurements/<emulator>.sqlite", text)
+
     URL = f"{REPO_URL}/blob/{'e' * 40}/measurements/beetle_psx.jsonl"
 
     def record(self, line: int, proves=(), shown=None, observed=None) -> dict:
