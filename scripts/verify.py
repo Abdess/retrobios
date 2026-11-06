@@ -2830,7 +2830,7 @@ def _main(held: contextlib.ExitStack) -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Platform-native BIOS verification")
     parser.add_argument("--platform", "-p", type=platform_arg, help="Platform name")
     parser.add_argument(
-        "--all", action="store_true", help="Verify all active platforms"
+        "--all", action="store_true", help="Verify every registered platform"
     )
     parser.add_argument(
         "--emulator", "-e", help="Emulator profile name(s), comma-separated"

@@ -172,6 +172,22 @@ class TheVerdictClosesARedirectedReport(unittest.TestCase):
         self.assertEqual(proc.stdout.splitlines(), ["report", "ERROR: verdict"])
 
 
+class TheAllHelpNamesWhatItCovers(unittest.TestCase):
+    """`verify.py --help` kept 'Verify all active platforms' after the
+    archived status was dropped: --all covers every registered platform,
+    and a reader looked for an --include-archived that no longer exists."""
+
+    def test_no_help_text_speaks_of_active_platforms(self):
+        proc = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--help"], cwd=REPO_ROOT,
+            capture_output=True, text=True, timeout=60, check=True,
+        )
+        self.assertIn("Verify every registered platform", proc.stdout)
+        stale = [path.name for path in sorted((REPO_ROOT / "scripts").rglob("*.py"))
+                 if "active platform" in path.read_text(encoding="utf-8")]
+        self.assertEqual(stale, [])
+
+
 class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
     """`verify --all --target swich` ended on "no platform has it" after 17
     INFO lines, two of which held the suggestion."""
