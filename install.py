@@ -1401,6 +1401,49 @@ def _macos_retroarch_base() -> Path:
     return Path.home() / "Documents" / "RetroArch"
 
 
+def _retroarch_appimage_dirs(home: Path) -> list[Path]:
+    """The system folder of each RetroArch AppImage kept with a portable
+    folder, up to two folders below home.
+
+    The buildbot's Linux build unpacks RetroArch-Linux-x86_64.AppImage beside
+    RetroArch-Linux-x86_64.AppImage.home/.config/retroarch. The AppImage
+    runtime sets HOME to <AppImage>.home and XDG_CONFIG_HOME to
+    <AppImage>.config when those folders exist (type2-runtime fedfad51,
+    src/runtime/runtime.c:1449-1462), so this RetroArch never reads
+    ~/.config/retroarch. The archive holds no retroarch.cfg: until the first
+    run writes one, the system folder is the base folder's (frontend_unix_get_env
+    in platform_unix.c).
+    """
+    images: list[Path] = []
+    for depth in ("", "*/", "*/*/"):
+        for suffix in (".home", ".config"):
+            try:
+                hits = sorted(home.glob(f"{depth}*.AppImage{suffix}"))
+            except OSError:
+                continue
+            for hit in hits:
+                image = hit.with_name(hit.name[:-len(suffix)])
+                if image not in images and _is_file(image):
+                    images.append(image)
+    dirs: list[Path] = []
+    for image in images:
+        portable_home = image.with_name(image.name + ".home")
+        portable_config = image.with_name(image.name + ".config")
+        if _is_dir(portable_config):
+            base = portable_config / "retroarch"
+        elif _is_dir(portable_home) and "XDG_CONFIG_HOME" not in os.environ:
+            base = portable_home / ".config" / "retroarch"
+        else:
+            continue
+        tilde = portable_home if _is_dir(portable_home) else home
+        system = _parse_retroarch_system_dir(base / "retroarch.cfg", base, tilde)
+        if system is None and _is_dir(base):
+            system = base / "system"
+        if system is not None and system not in dirs:
+            dirs.append(system)
+    return dirs
+
+
 def _unix_retroarch_base() -> Path:
     """RetroArch's base folder on Linux: $XDG_CONFIG_HOME/retroarch when the
     variable is set, else ~/.config/retroarch (fill_pathname_application_data
@@ -2838,6 +2881,8 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
             if ra_dir:
                 found.append(("retroarch", ra_dir))
                 break
+
+        found.extend(("retroarch", ra_dir) for ra_dir in _retroarch_appimage_dirs(home))
 
     if os_type == "darwin":
         # open_default_config_file reads <Application Support>/RetroArch/config

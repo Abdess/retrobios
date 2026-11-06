@@ -4542,6 +4542,53 @@ class WindowsSeenFromWsl(unittest.TestCase):
                          str(self.root))
 
 
+class RetroArchAppImageIsPortable(unittest.TestCase):
+    """The buildbot's Linux RetroArch is an AppImage beside a .home folder
+    the AppImage runtime makes its HOME: the run found nothing and offered
+    ~/.config/retroarch/system, a folder this RetroArch never reads."""
+
+    def _detect(self, home: Path, env: dict | None = None) -> list:
+        cleared = {"HOME": str(home), "XDG_CONFIG_HOME": ""}
+        with unittest.mock.patch.dict(os.environ, {**cleared, **(env or {})}), \
+                unittest.mock.patch.object(Path, "home", return_value=home):
+            os.environ.pop("XDG_CONFIG_HOME")
+            return install.detect_platforms("linux")
+
+    def _unpack(self, home: Path) -> Path:
+        folder = home / "Downloads" / "RetroArch-Linux-x86_64"
+        base = folder / "RetroArch-Linux-x86_64.AppImage.home" / ".config" / "retroarch"
+        (base / "system").mkdir(parents=True)
+        (folder / "RetroArch-Linux-x86_64.AppImage").write_bytes(b"\x7fELF")
+        return base
+
+    def test_the_unpacked_archive_is_found(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        self.assertIn(("retroarch", base / "system"), self._detect(home))
+
+    def test_its_config_is_read_with_its_own_home(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        (base / "retroarch.cfg").write_text('system_directory = "~/bios"\n')
+        portable = base.parent.parent
+        self.assertIn(("retroarch", portable / "bios"), self._detect(home))
+
+    def test_a_config_folder_beside_it_wins(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        config = base.parent.parent.with_name("RetroArch-Linux-x86_64.AppImage.config")
+        (config / "retroarch").mkdir(parents=True)
+        found = self._detect(home)
+        self.assertIn(("retroarch", config / "retroarch" / "system"), found)
+        self.assertNotIn(("retroarch", base / "system"), found)
+
+    def test_a_folder_without_its_appimage_is_left(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        (base.parent.parent.with_name("RetroArch-Linux-x86_64.AppImage")).unlink()
+        self.assertNotIn(("retroarch", base / "system"), self._detect(home))
+
+
 class SteamRetroArchOnMacIsPortable(unittest.TestCase):
     """platform_darwin.m makes the Steam build portable (HAVE_STEAM) with no
     portable.txt: a default system_directory is Application Support's, and

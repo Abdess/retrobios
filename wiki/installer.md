@@ -1177,6 +1177,7 @@ usual folders of a setup that has one on each side: RetroArch's in this Linux
 | `~/.var/app/org.libretro.RetroArch/config/retroarch/retroarch.cfg` | RetroArch (Flatpak) | `system_directory` |
 | `~/snap/retroarch/current/.config/retroarch/retroarch.cfg` | RetroArch (Snap) | `system_directory` |
 | `~/.config/retroarch/retroarch.cfg` | RetroArch (native) | `system_directory` |
+| `<name>.AppImage.home/.config/retroarch/retroarch.cfg` (or `<name>.AppImage.config/retroarch/`) beside an AppImage in `~`, or one or two folders below it | RetroArch (AppImage from the buildbot, whose portable folder becomes its home) | `system_directory`. Without a config, `system` in that `retroarch` folder |
 | `~/Library/Application Support/RetroArch/config/retroarch.cfg` | RetroArch (macOS) | `system_directory`. At default, `~/Documents/RetroArch/system` (portable, Steam build included: `Application Support/RetroArch/system`) |
 | `retroarch.cfg` beside `retroarch.exe` (`C:\RetroArch-Win64`, `C:\RetroArch`, `Program Files\RetroArch`) | RetroArch (Windows) | `system_directory`. At default or without a config, `system` beside the exe |
 | `%APPDATA%\RetroArch\retroarch.cfg` | RetroArch (Windows) | `system_directory`, read when the exe folder has no config |
