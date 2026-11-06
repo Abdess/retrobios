@@ -455,6 +455,13 @@ class LegalOpensInPlainWords(unittest.TestCase):
         self.assertEqual(re.findall(r"(?m)^## ", detail), [])
         self.assertIn("### Emulation and BIOS redistribution", detail)
 
+    def test_said_once(self):
+        """A closing Summary restated the opening lines, and "not legal
+        advice" came three times."""
+        self.assertEqual(self.text.count("legal advice"), 1)
+        self.assertNotIn("### Summary", self.text)
+        self.assertIn("The project accepts that risk deliberately", self.text)
+
     def test_a_contact_section_names_only_a_channel_that_exists(self):
         section = _section(self.text, "Contact")
         self.assertIn("https://github.com/Abdess/retrobios/issues", section)
