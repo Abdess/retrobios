@@ -7414,6 +7414,40 @@ class TupleAnnotationsMatchTheirReturns(unittest.TestCase):
         self.assertEqual(mismatched, [])
 
 
+class PrboomPlusCitesFullPaths(unittest.TestCase):
+    """prboom-plus cited gl_hires.c, e6y.c, d_client.c and g_game.c bare:
+    none resolves against the repository, so the page showed them as plain
+    code with no link, and "behind GL_DOOM and PRBOOM_DEBUG" was read as a
+    seventeenth citation. Each name has one path in the tree at the pin."""
+
+    def test_every_cited_file_has_its_directory(self):
+        import yaml
+
+        from scripts.sourceref import source_ref_values, split_source_ref
+
+        profile = yaml.safe_load((ROOT / "emulators" / "prboom-plus.yml").read_text(encoding="utf-8"))
+        refs: list[str] = []
+
+        def walk(node):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    if key == "source_ref":
+                        refs.extend(r for _, r in source_ref_values(value))
+                    else:
+                        walk(value)
+            elif isinstance(node, list):
+                for item in node:
+                    walk(item)
+
+        walk(profile)
+        parts = [p for ref in refs for p in split_source_ref(ref)]
+        self.assertGreater(len(parts), 40)
+        for part in parts:
+            with self.subTest(path=part.path):
+                self.assertIsNotNone(part.start)
+                self.assertTrue(part.path.startswith("prboom2/"), part.path)
+
+
 class AutoFetchIssueBodyReadsAsWritten(unittest.TestCase):
     """The --create-issues body was a template: Title Case headings, "The
     following...", an exclamation mark, numbered orders to the reader, a
