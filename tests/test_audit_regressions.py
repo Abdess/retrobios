@@ -7089,11 +7089,12 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         named = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-            agnostic = profile.get("bios_mode") == "agnostic"
+            # Whatever the profile's own flags: TeknoParrot documents its
+            # pcsx2x6 component, whose scan is the same (BiosTools.cpp:268-291
+            # at 583f0e90), and carries no agnostic flag.
             for entry in profile.get("files") or []:
                 if (
-                    (agnostic or entry.get("agnostic"))
-                    and entry.get("min_size") in (2097152, 4194304)
+                    entry.get("min_size") in (2097152, 4194304)
                     and entry.get("max_size") == 8388608
                     and opens_by_name(entry, profile)
                 ):
