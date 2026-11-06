@@ -2058,7 +2058,7 @@ def verify_emulator(
     it and every member it carries are optional, as the builder leaves them.
     """
     from packextras import expand_agnostic_entries
-    from packresolve import resolve_file
+    from packresolve import pending_release_asset, resolve_file, run_is_offline
     from packpaths import (
         _archive_destination,
         _register_path,
@@ -2083,6 +2083,16 @@ def verify_emulator(
     selected_profiles = {n: p for n, p in selected}
     validation_index = _build_validation_index(selected_profiles)
     data_registry = load_data_dir_registry(platforms_dir)
+
+    def pending(entry: dict, local_path: str | None, status: str) -> tuple[str | None, str]:
+        # Read from disk and the cache, as _resolve_for_platform does: a
+        # release asset the cache lacks is fetched by an online build
+        # (generate_emulator_pack resolves with offline=offline).
+        if status in ("not_found", "hash_mismatch") and not run_is_offline():
+            asset = pending_release_asset(entry, db)
+            if asset:
+                return asset, RELEASE_ASSET_PENDING
+        return local_path, status
 
     details = []
     file_status: dict[str, str] = {}
@@ -2223,14 +2233,15 @@ def verify_emulator(
             archive = file_entry.get("archive")
             if archive and archive not in seen_archives:
                 seen_archives.add(archive)
-                local_path, resolve_status = resolve_file(
-                    archive_entry(archive, files),
+                own_entry = archive_entry(archive, files)
+                local_path, resolve_status = pending(own_entry, *resolve_file(
+                    own_entry,
                     db,
                     DEFAULT_BIOS_DIR,
                     zip_contents,
                     data_dir_registry=data_registry,
                     offline=True,
-                )
+                ))
                 required = any(
                     f.get("archive") == archive and f.get("required", True)
                     for f in files
@@ -2254,6 +2265,8 @@ def verify_emulator(
                         "required": required,
                         "path": local_path,
                     }
+                    if resolve_status == RELEASE_ASSET_PENDING:
+                        result["release_asset"] = local_path
                 else:
                     result = {
                         "name": archive,
@@ -2314,7 +2327,7 @@ def verify_emulator(
 
             dest_hint = file_entry.get("path", "")
             # The emulator pack's resolution, release assets included.
-            local_path, resolve_status = resolve_file(
+            local_path, resolve_status = pending(file_entry, *resolve_file(
                 {**with_archive_members(file_entry, files), "source_profile": emu_name},
                 db,
                 DEFAULT_BIOS_DIR,
@@ -2322,7 +2335,7 @@ def verify_emulator(
                 dest_hint=dest_hint,
                 data_dir_registry=data_registry,
                 offline=True,
-            )
+            ))
             if resolve_status in ("not_found", "user_provided", "external"):
                 local_path = None
             name = file_entry.get("name", "")
@@ -2332,6 +2345,15 @@ def verify_emulator(
             stored = _storage_verdict(file_entry, emulator_pack=True)
             if stored is not None:
                 result = stored
+            elif resolve_status == RELEASE_ASSET_PENDING:
+                result = {
+                    "name": name,
+                    "status": Status.OK,
+                    "required": required,
+                    "path": local_path,
+                    "release_asset": local_path,
+                    "reason": "release asset, fetched when the pack is built",
+                }
             elif not local_path:
                 result = {"name": name, "status": Status.MISSING, "required": required}
                 # An entry the profile documents as unsourceable is absent by
@@ -2582,6 +2604,10 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
     if unsourceable:
         parts.append(f"{unsourceable} unsourceable")
     print(f"{label}: {', '.join(parts)} [{mode}]")
+    fetched = sorted({d["name"] for d in result["details"] if d.get("release_asset")})
+    if fetched:
+        shown = ", ".join(fetched[:10]) + (f" (+{len(fetched) - 10})" if len(fetched) > 10 else "")
+        print(f"  Release assets fetched when the pack is built ({len(fetched)}): {shown}")
 
     seen = set()
     for d in result["details"]:
@@ -2712,8 +2738,6 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
          "--destinations describes the full pack and is incompatible with --system"),
         (args.destinations and not (args.platform or args.all),
          "--destinations requires --platform or --all"),
-        (args.offline and not (args.platform or args.all),
-         "--offline requires --platform or --all"),
         # Game data is categorized against a platform's list and its cores.
         (getattr(args, "no_game_data", False) and not (args.platform or args.all),
          "--no-game-data requires --platform or --all"),

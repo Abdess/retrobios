@@ -154,7 +154,7 @@ python scripts/verify.py --platform recalbox --region us   # regional priority l
 python scripts/verify.py --platform emuelec --no-game-data  # the firmware-only pack, game data named
 python scripts/verify.py --emulator mame --required-only    # the pack built with --required-only
 python scripts/verify.py --all --destinations tmp/paths.json  # also write the paths each pack holds
-python scripts/verify.py --all --offline             # a release asset the cache lacks counts missing, as in an offline build
+python scripts/verify.py --all --offline             # a release asset the cache lacks counts missing, as in an offline build (any mode, --emulator included)
 python scripts/verify.py --list-platforms          # list all platforms
 python scripts/verify.py --list-emulators          # list all emulators
 python scripts/verify.py --list-systems            # list all systems

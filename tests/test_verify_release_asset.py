@@ -29,7 +29,7 @@ import common  # noqa: E402
 import generate_db  # noqa: E402
 import generate_pack as builder  # noqa: E402
 import packresolve  # noqa: E402
-from verify import Status, verify_platform  # noqa: E402
+from verify import Status, verify_emulator, verify_platform  # noqa: E402
 
 PAYLOAD = b"a firmware image the repository does not commit"
 SHA1 = hashlib.sha1(PAYLOAD).hexdigest()
@@ -174,6 +174,65 @@ class CoreExtraReleaseAssetNotCached(ReleaseAssetNotCached):
         self.assertNotIn("big.bin", self._report()["pack_destinations"])
 
     test_the_online_build_packs_it = None
+
+
+class EmulatorReleaseAssetNotCached(ReleaseAssetNotCached):
+    """verify --emulator against generate_emulator_pack: the emulator pack
+    resolves with offline=offline and fetched the asset online, while verify
+    forced offline resolution and called it missing."""
+
+    def setUp(self):
+        super().setUp()
+        self.profile = {
+            "emulator": "Big Core", "type": "libretro", "systems": ["sys"],
+            "files": [{"name": "big.bin", "required": True, "sha1": SHA1}],
+        }
+        Path("emulators/bigcore.yml").write_text(yaml.dump(self.profile))
+        common._emulator_profiles_cache.clear()
+
+    def _report(self) -> dict:
+        common._emulator_profiles_cache.clear()
+        return verify_emulator(["bigcore"], "emulators", self.db, platforms_dir="platforms")
+
+    def _entry(self) -> dict:
+        return next(d for d in self._report()["details"] if d["name"] == "big.bin")
+
+    def test_counted_as_fetched_when_the_pack_is_built(self):
+        entry = self._entry()
+        self.assertEqual(entry["status"], Status.OK)
+        self.assertEqual(entry["release_asset"], REGISTERED[0])
+
+    def test_its_path_is_a_pack_destination(self):
+        self.assertIn("big.bin", self._report()["pack_destinations"])
+
+    def test_offline_counts_it_missing(self):
+        packresolve.set_offline(True)
+        self.assertEqual(self._entry()["status"], Status.MISSING)
+        self.assertNotIn("big.bin", self._report()["pack_destinations"])
+
+    def test_an_asset_with_other_content_is_not_counted(self):
+        self.profile["files"][0]["sha1"] = "0" * 40
+        Path("emulators/bigcore.yml").write_text(yaml.dump(self.profile))
+        self.assertEqual(self._entry()["status"], Status.MISSING)
+
+    def test_an_archive_asset_is_counted_too(self):
+        self.profile["files"] = [{"name": "inner.rom", "archive": "big.bin"}]
+        Path("emulators/bigcore.yml").write_text(yaml.dump(self.profile))
+        self.assertIn("big.bin", self._report()["pack_destinations"])
+
+    def test_the_online_build_packs_it(self):
+        cache = Path("cache/big.bin")
+        cache.parent.mkdir()
+        cache.write_bytes(PAYLOAD)
+        record = builder.PackRecord()
+        with mock.patch.object(
+            packresolve, "fetch_large_file", return_value=str(cache)
+        ):
+            builder.generate_emulator_pack(
+                ["bigcore"], "emulators", self.db, "bios", "out",
+                offline=False, platforms_dir="platforms", record=record,
+            )
+        self.assertEqual(set(record.files), set(self._report()["pack_destinations"]))
 
 
 class OfflinePipelineVerifiesOffline(unittest.TestCase):

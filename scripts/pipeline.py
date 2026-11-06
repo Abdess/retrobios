@@ -562,6 +562,7 @@ def check_emulator_packs(
     comparison holds them together. No archive is written and no file read.
     """
     import generate_pack  # noqa: PLC0415
+    import packresolve  # noqa: PLC0415
     import verify  # noqa: PLC0415
     from common import (  # noqa: PLC0415
         ProfileSelectionError,
@@ -580,16 +581,23 @@ def check_emulator_packs(
 
     def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
         record = generate_pack.PackRecord()
-        with contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()):
-            generate_pack.generate_emulator_pack(
-                names, emulators_dir, db, "bios", "", standalone, zip_contents,
-                offline=True, platforms_dir=platforms_dir, record=record, **narrowing,
-            )
-            report = verify.verify_emulator(
-                names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
-                **narrowing,
-            )
+        was_offline = packresolve._OFFLINE
+        # The pack is built offline: verify counts a release asset the cache
+        # lacks the same way, missing, as the narrowed-pack step does.
+        packresolve.set_offline(True)
+        try:
+            with contextlib.redirect_stdout(io.StringIO()), \
+                    contextlib.redirect_stderr(io.StringIO()):
+                generate_pack.generate_emulator_pack(
+                    names, emulators_dir, db, "bios", "", standalone, zip_contents,
+                    offline=True, platforms_dir=platforms_dir, record=record, **narrowing,
+                )
+                report = verify.verify_emulator(
+                    names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
+                    **narrowing,
+                )
+        finally:
+            packresolve.set_offline(was_offline)
         lines = _set_difference_lines(
             label, set(report["pack_destinations"]), set(record.files)
         )
