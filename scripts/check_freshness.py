@@ -1760,15 +1760,18 @@ def render(findings: list[Finding]) -> str:
         # Columns are padded, never cut: the profile_sync row says in its
         # local and remote values what to re-read, and lost the end of it.
         local_width = min(max((len(f.local) for f in rows), default=0), 44)
+        remote_width = min(max((len(f.remote) for f in rows), default=0), 44)
+        # The arrow and the remote value, or as many blanks where a row has none.
+        remote_span = 4 + remote_width if remote_width else 0
         for f in rows:
             cols = f"  {f.status:7} {f.subject:{width}}"
             if f.remote:
-                cols += f"  {f.local:{local_width}} -> {f.remote}"
-            elif f.local or (f.detail and local_width):
-                # An arrow pointing at nothing read as a lost value. An empty
-                # local value still takes its column, or the detail starts
-                # where the other rows show theirs.
-                cols += f"  {f.local:{local_width}}"
+                cols += f"  {f.local:{local_width}} -> {f.remote:{remote_width}}"
+            elif f.local or (f.detail and (local_width or remote_span)):
+                # An arrow pointing at nothing read as a lost value. Empty
+                # local and remote values still take their columns, or the
+                # detail starts where the other rows show theirs.
+                cols += f"  {f.local:{local_width}}" + " " * remote_span
             if f.detail:
                 cols += f"  {f.detail}"
             lines.append(cols.rstrip())

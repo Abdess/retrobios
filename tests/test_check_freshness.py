@@ -742,6 +742,19 @@ class RowsSayAllTheyStandFor(unittest.TestCase):
         rows = [line for line in text.splitlines() if line.startswith("  STALE")]
         self.assertEqual(rows[0].index("no longer"), rows[1].index("is not what"))
 
+    def test_a_remote_value_keeps_the_detail_column(self):
+        """A row with a remote value pushed its detail past the column the
+        rows without one used, in [coreinfo] by some fifteen characters."""
+        text = cf.render([
+            cf.Finding("coreinfo", "anybor", cf.STALE, detail="no profile claims"),
+            cf.Finding("coreinfo", "amiberry", cf.STALE, local="e5d1f0f9a143",
+                       remote="ae545d85c06f", detail=".info changed"),
+            cf.Finding("coreinfo", "x", cf.STALE, local="abc", remote="d", detail="third"),
+        ])
+        rows = [line for line in text.splitlines() if line.startswith("  STALE")]
+        columns = {row.index(word) for row, word in zip(rows, ("no profile", ".info", "third"))}
+        self.assertEqual(len(columns), 1, rows)
+
     def test_json_carries_every_unresolved_name(self):
         missing = {f"core{i:02d}": [] for i in range(50)}
         (row,) = cf._unresolved_findings("retropie", missing)
