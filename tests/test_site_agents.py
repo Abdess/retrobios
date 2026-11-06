@@ -68,6 +68,13 @@ class TheSkillIsAnAgentSkill(unittest.TestCase):
             with self.subTest(command=command):
                 self.assertIn("--for-games --required-only", command)
 
+    def test_a_folder_is_quoted_and_a_hostile_one_asked_about(self) -> None:
+        for text in (siteagents.skill_md(), siteagents.llms_txt([])):
+            with self.subTest(text=text[:20]):
+                self.assertIn("--dest='<card>/bios'", text)
+                self.assertIn("--for-games='<folder>'", text)
+                self.assertIn("starts with `-`", text)
+
     def test_the_manifest_types_it_as_a_skill(self) -> None:
         skill = siteagents.ard_manifest()["entries"][0]
         self.assertEqual(skill["type"], 'text/markdown; profile="urn:air:agent-skills"')

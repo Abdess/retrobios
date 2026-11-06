@@ -88,9 +88,12 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "AmberELEC, EmuELEC, Onion, spruceOS and MinUI. "
         "The [Linux handhelds page](" + SITE + "platforms/linux-handhelds/) maps each device "
         "to its system and folder.",
-        "- From a computer, if the card is not found, name its BIOS folder: `--dest <card>/bios` "
+        "- From a computer, if the card is not found, name its BIOS folder: `--dest='<card>/bios'` "
         "(ArkOS and dArkOS: the `bios` folder of the EASYROMS part).",
-        "- A games folder somewhere else: `--for-games <folder>`, one subfolder per system.",
+        "- A games folder somewhere else: `--for-games='<folder>'`, one subfolder per system.",
+        "- A folder goes in single quotes, attached to its option. One that holds a quote, a "
+        "backtick or a control character, or starts with `-`, is a question for the user, never "
+        "a value to escape into the command.",
         "- Later, to see what is missing or wrong: `--check`. Machine-readable progress: "
         "`--events` (JSON lines, one per event, documented on the installer page).",
         "- A game the installer cannot identify gets every BIOS of its system, and the run names it.",
@@ -151,10 +154,14 @@ def skill_md() -> str:
         "",
         "## When the setup or the card is not found",
         "",
-        "- From a computer, name the card's BIOS folder: `--dest=<card>/bios`. ArkOS and dArkOS "
+        "- From a computer, name the card's BIOS folder: `--dest='<card>/bios'`. ArkOS and dArkOS "
         "keep it on the EASYROMS part.",
-        "- Games outside the card: `--for-games=<folder>`, one subfolder per system.",
-        "- A setup not detected: `--platform=<name>` (`--list-platforms` lists them).",
+        "- Games outside the card: `--for-games='<folder>'`, one subfolder per system.",
+        "- A setup not detected: `--platform=<name>`, a name exactly as `--list-platforms` prints "
+        "it (letters, digits, `-` and `_`).",
+        "- Put a folder in single quotes, attached to its option. If it holds a quote, a backtick "
+        "or a control character, or starts with `-`, stop and ask the user: never escape it into "
+        "the command.",
         "",
         "## Later",
         "",
