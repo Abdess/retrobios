@@ -27,7 +27,7 @@ irm https://abdess.github.io/retrobios/i.ps1 | iex
 # Android (Termux: it installs Python and asks for storage access)
 curl -fsSL https://abdess.github.io/retrobios/i | sh
 
-# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Onion, spruceOS or MinUI card
+# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Lakka, MiSTer, Onion, spruceOS or MinUI card
 # is found by itself. For another card, --dest is its BIOS folder
 # (RetroArch on Switch: retroarch/cores/system, on Android: RetroArch/system)
 curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform retroarch --dest /path/to/sdcard/retroarch/cores/system
@@ -38,6 +38,8 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform retroarch 
 
 The script opens a full-screen installer, driven with the arrow keys and Enter, or with a controller on a handheld. It finds your setup and its BIOS folder, downloads only the missing files and checks each one. It can also copy the BIOS files from your old SD card.
 Every option, and what the installer detects and writes, is on the [installer page](https://abdess.github.io/retrobios/wiki/installer/#passing-options).
+
+First time? Follow the [first install, step by step](https://abdess.github.io/retrobios/wiki/first-install/). A game does not start: [what to check](https://abdess.github.io/retrobios/wiki/troubleshooting/). Other questions: the [FAQ](https://abdess.github.io/retrobios/wiki/faq/).
 
 ## Download BIOS packs
 
@@ -72,7 +74,7 @@ The Files column counts what a pack holds once extracted, the figure a file mana
 
 ZIPs are made for the setups most people download. The others read "Use the command": the installer above installs every file for them and checks each one, and `--dry-run` shows what it would install ([why no ZIP](https://abdess.github.io/retrobios/wiki/faq/#why-is-there-no-zip-for-my-setup)).
 
-\* Archived: the configuration is kept and the installer serves it, but upstream is no longer scraped on a schedule.
+\* Archived: the installer serves it, and checks that cover every setup include it only on request.
 
 ## What's included
 
@@ -206,4 +208,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-06T04:40:27Z*
+*Auto-generated on 2026-11-06T05:38:30Z*

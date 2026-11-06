@@ -588,7 +588,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "# Android (Termux: it installs Python and asks for storage access)",
         install_command("sh"),
         "",
-        "# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Onion, spruceOS or MinUI card",
+        "# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Lakka, MiSTer, Onion, spruceOS or MinUI card",
         "# is found by itself. For another card, --dest is its BIOS folder",
         "# (RetroArch on Switch: retroarch/cores/system, on Android: RetroArch/system)",
         install_command("sh", "--platform retroarch --dest /path/to/sdcard/retroarch/cores/system"),
@@ -601,6 +601,10 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         " controller on a handheld. It finds your setup and its BIOS folder, downloads only the missing"
         " files and checks each one. It can also copy the BIOS files from your old SD card.",
         f"Every option, and what the installer detects and writes, is on the [installer page]({SITE_URL}wiki/installer/#passing-options).",
+        "",
+        f"First time? Follow the [first install, step by step]({SITE_URL}wiki/first-install/)."
+        f" A game does not start: [what to check]({SITE_URL}wiki/troubleshooting/)."
+        f" Other questions: the [FAQ]({SITE_URL}wiki/faq/).",
         "",
         "## Download BIOS packs",
         "",
@@ -647,8 +651,8 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         lines.extend(
             [
                 "",
-                "\\* Archived: the configuration is kept and the installer serves it,"
-                " but upstream is no longer scraped on a schedule.",
+                "\\* Archived: the installer serves it, and checks that cover every"
+                " setup include it only on request.",
             ]
         )
 
@@ -986,7 +990,7 @@ the checks CI runs on a pull request (Python 3.12 or newer):
 pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin setuptools
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
-python scripts/profile_sync.py --added --base upstream/main --strict  # each profile the branch adds
+python scripts/profile_sync.py --added --strict  # each profile the branch adds
 python scripts/refresh_data_dirs.py  # data directories the pack-building tests read
 python scripts/generate_site.py       # the pages the site tests read
 npm ci --prefix website && npm run build --prefix website  # the built site, Node 24
@@ -995,10 +999,9 @@ python scripts/validate_site.py --site-dir website/dist  # links and page budget
 vermin --no-tips -t=3.8- --violations install.py         # install.py stays on Python 3.8
 ```
 
-`upstream` is this repository as a remote of your fork
-(`git remote add upstream https://github.com/Abdess/retrobios`, then
-`git fetch upstream`). A profile you only edit is not held to `--strict`: its
-older refs are reviewed by hand.
+`profile_sync.py` compares the branch with this repository's `main`, and
+fetches it in a fork's clone. A profile you only edit is not held to
+`--strict`: its older refs are reviewed by hand.
 
 The full pipeline is not needed for a contribution: it rebuilds every pack
 in `dist/`, which is why maintainers run it before a release.

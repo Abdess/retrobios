@@ -1738,6 +1738,12 @@ class ArchitectureStatesTheArbitration(unittest.TestCase):
         section = page[page.index("### When both layers claim one destination"):]
         section = section[:section.index("\n## ")]
         self.assertIn("`slots.arbitrate()`", section)
+        # The pack, the manifest and verify decide through slot_choices, and
+        # a test in test_slots forbids them to call arbitrate: the page names
+        # the function they read, not only the one the report prints.
+        self.assertIn("`slots.slot_choices()`", section)
+        self.assertIn("`slots.pack_overrides()`", section)
+        self.assertNotIn("both decide through `slots.arbitrate()`", section)
         source = inspect.getsource(slots.arbitrate)
         # The three outcomes the section describes.
         for outcome in ("ADDRESSEE", "SERVES_BOTH", "FRONTEND_CHECKS_CONTENT"):
@@ -1892,6 +1898,90 @@ class SkipFlagsNameTheSteps(unittest.TestCase):
             for text in (row, usage, said):
                 with self.subTest(flag=flag, text=text):
                     self.assertEqual(set(re.findall(self.STEP, text)), steps)
+
+
+class TheInstallerSamplesTravelWithTheManifests(unittest.TestCase):
+    """A manifest refresh (c624a820f) went out without the run samples of
+    wiki/installer.md, which count what the manifests hold, and CI turned
+    red. The rule lived in no page, and the nightly's commit rules had no
+    place for the samples the gate's pipeline rewrites."""
+
+    def test_the_pages_and_the_nightly_carry_them(self):
+        import autorun  # noqa: PLC0415
+
+        guide = (WIKI / "testing-guide.md").read_text(encoding="utf-8")
+        for name in ("wiki/installer.md", "derivable.json", "generate_installer_doc.py"):
+            self.assertIn(name, guide)
+        tools = (WIKI / "tools.md").read_text(encoding="utf-8")
+        manifests = tools.index("--all --manifest --output-dir install/")
+        self.assertIn("generate_installer_doc.py", tools[manifests:manifests + 300])
+        nightly = autorun.load_jobs()["nightly"]
+        patterns = [p for rule in nightly.commits for p in rule.paths]
+        for path in ("wiki/installer.md", "derivable.json", "install/retroarch.json"):
+            with self.subTest(path=path):
+                self.assertTrue(any(autorun.path_matches(p, path) for p in patterns))
+
+
+class TheRemovalProofsAreTheExportersOwn(unittest.TestCase):
+    """tools.md listed the proofs that keep an entry out of
+    removal_candidates without the platform's launcher records, which
+    candidates.py checks right after a path."""
+
+    WORDS = {"path": "`path:`", "launcher": "`launchers:`", "name": "by name or alias",
+             "hash": "by any hash", "directory": "`type: directory`",
+             "data_directory": "a data directory"}
+
+    def test_the_page_names_each_proof_in_order(self):
+        from exporter.candidates import _PROOF_ORDER  # noqa: PLC0415
+
+        page = (WIKI / "tools.md").read_text(encoding="utf-8")
+        start = page.index("No entry the platform declares is removed.")
+        section = page[start:page.index("removal_candidates", start)]
+        self.assertEqual(set(self.WORDS), set(_PROOF_ORDER))
+        positions = [section.index(self.WORDS[kind]) for kind in _PROOF_ORDER]
+        self.assertEqual(positions, sorted(positions))
+
+
+class APlatformListIsDescribedNotJudged(unittest.TestCase):
+    """adding-a-platform opened on files a platform's own list "leaves out",
+    read first by the maintainer of that platform: "does not name" says the
+    same without imputing an omission."""
+
+    def test_no_page_says_a_list_leaves_files_out(self):
+        pattern = re.compile(r"\blists? (?:leaves|left|leave) out\b")
+        for page in sorted(WIKI.glob("*.md")):
+            with self.subTest(page=page.name):
+                self.assertIsNone(pattern.search(page.read_text(encoding="utf-8")))
+
+
+class ArchivedIsWhatTheToolsDo(unittest.TestCase):
+    """The README and the setup pages said an archived platform is no longer
+    scraped on a schedule, and adding-a-platform said `active` feeds a CI
+    matrix and the scrapers. No workflow calls list_platforms.py and no tool
+    reads `schedule:`: what `archived` changes is which full runs include it."""
+
+    def test_no_text_ties_the_status_to_automation(self):
+        import generate_pack  # noqa: PLC0415
+        import generate_readme  # noqa: PLC0415
+        import generate_site  # noqa: PLC0415
+        import list_platforms  # noqa: PLC0415
+
+        texts = {
+            "adding-a-platform.md": (WIKI / "adding-a-platform.md").read_text(encoding="utf-8"),
+            "generate_readme": inspect.getsource(generate_readme),
+            "generate_site": inspect.getsource(generate_site),
+            "generate_pack": inspect.getsource(generate_pack),
+            "list_platforms": inspect.getsource(list_platforms),
+            "_guides.yml": (ROOT / "platforms" / "_guides.yml").read_text(encoding="utf-8"),
+        }
+        for name, text in texts.items():
+            with self.subTest(name):
+                for claim in ("scraped on a schedule", "read again on a schedule",
+                              "CI matrix", "without the automation"):
+                    self.assertNotIn(claim, text)
+        self.assertIn("`--include-archived`", texts["adding-a-platform.md"])
+        for workflow in (ROOT / ".github" / "workflows").glob("*.yml"):
+            self.assertNotIn("list_platforms", workflow.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

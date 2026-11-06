@@ -21,6 +21,11 @@ type Item = {
 	owner?: string;
 	sha1?: string;
 	system_name?: string;
+	// On an archive-member record: the collection archive holding the member.
+	archive?: string;
+	// On a retired record: the day the file left, and the file in its place.
+	left?: string;
+	successor?: string;
 };
 
 const siteRoot = () => new URL(import.meta.env.BASE_URL.replace(/\/?$/, '/'), location.origin);
@@ -521,7 +526,9 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 	// naomi2.zip by the MD5 of a ROM inside it, which no file of the
 	// collection has.
 	const searched = new Set(matched.map((item) => item.value));
-	const carried = [...new Set(matched.flatMap((item) => (item.sha1 && !searched.has(item.sha1) ? [item.sha1] : [])))];
+	// A member's record names its archive, which is not the file searched for.
+	const carried = [...new Set(matched.flatMap((item) =>
+		(item.sha1 && !['archive-member', 'retired'].includes(item.layer) && !searched.has(item.sha1) ? [item.sha1] : [])))];
 	const found = carried.length ? [...matched, ...(await lookupValues(carried).catch(() => [] as Item[]))] : matched;
 	const held = distinct(found.filter((item) => item.layer === 'collection'), (item) => item.sha1 ?? item.url);
 	const files = await Promise.all(held.map((item) => heldFile(item).catch(() => undefined)));
@@ -550,8 +557,11 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 	const readEntries = emulators.map((item) => readerEntry(reader.get(item.owner ?? ''), item, valuesOf(item)));
 	const setups = new Set(platforms.map((item) => item.owner));
 
+	const members = distinct(byLayer('archive-member'), (item) => `${item.sha1}|${item.name}`);
 	const counted = [
-		held.length ? count(held.length, 'file in the collection', 'files in the collection') : 'not in the collection',
+		held.length ? count(held.length, 'file in the collection', 'files in the collection')
+			: members.length ? count(members.length, 'member of a collection archive', 'members of collection archives')
+			: 'not in the collection',
 		...(platforms.length ? [`${count(platforms.length, 'declaration', 'declarations')} by ${count(setups.size, 'setup', 'setups')}`] : []),
 		...(owners.length ? [count(owners.length, 'emulator that reads it', 'emulators that read it')] : []),
 	];
@@ -606,7 +616,19 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 			),
 		);
 	});
-	if (!held.length) blocks.push(paragraph('No file in the collection has this hash.'));
+	const retired = held.length ? [] : distinct(byLayer('retired'), (item) => item.sha1 ?? item.value);
+	if (!held.length && !members.length && !retired.length) blocks.push(paragraph('No file in the collection has this hash.'));
+	blocks.push(...retired.map(retiredParagraph));
+	if (members.length) {
+		// A ROM the collection holds inside a set: the set's card, by its name.
+		const list = document.createElement('ul');
+		for (const item of members) {
+			const row = document.createElement('li');
+			row.append(code(item.name ?? item.value), ' in ', link(item.url, code(item.archive ?? '')));
+			list.append(row);
+		}
+		blocks.push(paragraph(strong('Inside an archive of the collection')), list);
+	}
 	const shipped = byLayer('data-directory');
 	if (shipped.length) {
 		const list = document.createElement('ul');
@@ -639,6 +661,15 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 	}
 	result.replaceChildren(...blocks);
 };
+
+// A file the collection held: its address keeps answering, with the day
+// it left and the card of the file in its place.
+const retiredParagraph = (item: Item) =>
+	paragraph(
+		code(item.name || item.value), ` left the collection on ${item.left}. `,
+		item.successor ? link(item.url, 'Open the card of the file in its place') : link(item.url, 'Open the page it was on'),
+		'.',
+	);
 
 const WANTED = 'provenance/#wanted-catalogued-dumps-this-project-does-not-have';
 
@@ -749,8 +780,12 @@ const resolveFileAddress = () => {
 			const matches = items.filter((item) =>
 				prefix ? item.algorithm === 'sha1' && item.value.startsWith(value) : item.value === value);
 			const cards = matches.filter((item) => item.layer === 'collection' || item.layer === 'data-directory');
+			const retired = matches.filter((item) => item.layer === 'retired' && item.algorithm === 'sha1');
 			if (new Set(cards.map((item) => item.url)).size === 1) {
 				location.replace(new URL(cards[0].url, siteRoot()));
+			} else if (!cards.length && retired.length) {
+				status.textContent = 'This file is no longer in the collection.';
+				result.replaceChildren(...distinct(retired, (item) => item.value).map(retiredParagraph));
 			} else if (matches.length) {
 				return renderMatches(status, result, prefix ? cards : matches);
 			} else {
@@ -1086,7 +1121,7 @@ const copyButtons = () => {
 };
 
 // A system's install box: one command, for the setup picked in its list,
-// under the site's OS tabs. The box is built with the first setup's command;
+// under the site's OS tabs. The box is built with its selected setup's command;
 // the choice rewrites the options of each command and its copy text, and is
 // remembered for the next box and the next page. Without this script the
 // picker stays hidden and the list of every command shows instead.

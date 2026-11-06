@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""List available platforms for CI matrix strategy.
+"""List the registered platforms.
 
 Respects the `status` field in _registry.yml:
-- active: included in CI releases and automated scraping
-- archived: excluded from CI, user can generate manually
+- active: listed by default
+- archived: listed with --include-archived only
 
 Usage:
-    python scripts/list_platforms.py                # Active platforms (for CI)
+    python scripts/list_platforms.py                # active platforms
     python scripts/list_platforms.py --include-archived  # archived ones too
     python scripts/list_platforms.py >> "$GITHUB_OUTPUT"
 """

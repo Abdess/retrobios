@@ -75,31 +75,6 @@ def tearDownModule():
     shutil.rmtree(_ROOT, ignore_errors=True)
 
 
-class TestClaimIndex(unittest.TestCase):
-    """Keyed by destination and by name, the name carrying the union."""
-
-    def _claims(self):
-        return [
-            slots.Claim("profile", "GC/USA/IPL.bin", "IPL.bin", emulator="dolphin"),
-            slots.Claim("profile", "GC/JAP/IPL.bin", "IPL.bin", emulator="dolphin"),
-        ]
-
-    def test_destination_key_separates_same_named_entries(self):
-        index = slots.build_claim_index(self._claims())
-        self.assertEqual(len(index["gc/usa/ipl.bin"]), 1)
-        self.assertEqual(len(index["gc/jap/ipl.bin"]), 1)
-
-    def test_bare_name_answers_with_the_union(self):
-        index = slots.build_claim_index(self._claims())
-        self.assertEqual(len(index["ipl.bin"]), 2)
-
-    def test_lookup_ignores_case_and_leading_separator(self):
-        index = slots.build_claim_index(
-            [slots.Claim("platform", "/BIOS/Disk.rom", "Disk.rom")]
-        )
-        self.assertIn("bios/disk.rom", index)
-
-
 class TestConflicts(unittest.TestCase):
     """A proven profile claim contradicting what the baseline would ship."""
 
@@ -410,6 +385,28 @@ class TestArbitration(unittest.TestCase):
         overrides = slots.pack_overrides(config, profiles, REGIONS_DB)
         # The hashed declaration keeps the file the frontend checks.
         self.assertEqual(overrides, {"IPL.bin": "bios/Console/GC/JAP/IPL.bin"})
+
+    def test_the_report_and_the_pack_decide_alike(self):
+        """The report prints arbitrate(), the pack, the manifest and verify
+        read slot_choices(): both must name the same file for a slot."""
+        for mode in ("existence", "md5"):
+            config = {
+                "verification_mode": mode,
+                "cores": ["dolphin"],
+                "systems": {"console": {"files": [
+                    {"name": "IPL.bin", "destination": "GC/JAP/IPL.bin", "md5": "m" * 32},
+                ]}},
+            }
+            profiles = {"dolphin": {"type": "libretro", "systems": ["console"], "files": [
+                {"name": "IPL.bin", "path": "GC/JAP/IPL.bin"},
+            ]}}
+            with self.subTest(mode=mode):
+                [conflict] = slots.find_conflicts(config, profiles, REGIONS_DB)
+                decision = slots.arbitrate(conflict, mode)
+                served = slots.pack_overrides(config, profiles, REGIONS_DB).get(
+                    "GC/JAP/IPL.bin", conflict.platform_claim.local_path
+                )
+                self.assertEqual(served, decision.winner.local_path)
 
     def test_the_reported_line_gives_the_ground_for_the_decision(self):
         kept = slots.format_decision(slots.arbitrate(self._conflict(), "md5"))

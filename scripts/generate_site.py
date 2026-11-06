@@ -47,6 +47,7 @@ from common import (
     GAME_DATA_TOPS,
     compute_composition,
     count_catalog_matched,
+    entry_system_ids,
     list_registered_platforms,
     list_release_pack_platforms,
     load_platform_registry,
@@ -88,6 +89,7 @@ from generate_readme import (
 from provenance_report import build_report, distinct_missing
 import sitemarkup as markup
 import siteentries
+import retired_files
 import sitestarlight
 from siteexports import generate_exports_page, load_export_reports
 from siteguides import (
@@ -1622,7 +1624,8 @@ def generate_data_exports(
         "file-locations.json": ("file-locations", locations),
     }
     write_lookup_shards(
-        api, file_lookup_records(db, coverages, profiles, locations, members, consumers),
+        api, file_lookup_records(db, coverages, profiles, locations, members, consumers,
+                                 retired_files.load(_REPO_ROOT / "retired.json")),
         generated_at, commit,
     )
     for filename, (kind, items) in envelopes.items():
@@ -1808,7 +1811,9 @@ def generate_data_exports(
     # entry point is a document of its own, naming where to start.
     entry_points = [
         {"title": "Catalog", "url": "catalog.json",
-         "description": "Every published file with its size, SHA256 and schema."},
+         "description": "Each dataset, manifest, export and download with its size, "
+                        "SHA256 and schema. The one-item documents of emulators/, "
+                        "platforms/, systems/ and lookup/ are not listed."},
         {"title": "System ids", "url": "systems.json",
          "description": "Each system id with its name and the section holding its files."},
         {"title": "Core names", "url": "cores.json",
@@ -2203,10 +2208,14 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "One hash without the whole list: `api/v1/lookup/<xx>.json`, where `<xx>` "
         "is the first two characters of the hash in lowercase, holds every SHA1, "
         "MD5, CRC32 and SHA256 starting with them. Each record names its `layer` "
-        "(the collection, a data directory, a platform's list or an emulator "
-        "profile), the file `name`, the `url` of the page that shows it and, "
+        "(the collection, a member of a collection archive, a file that left the "
+        "collection, a data directory, a platform's list or an emulator profile), "
+        "the file `name`, the `url` of the page that shows it and, "
         "when one is known, the `system_name` the site gives its system. "
         "[Find or check a file](files/index.md) reads it.",
+        "",
+        "`catalog.json` lists the datasets, manifests, exports and downloads. It "
+        "does not list these one-item documents, which hold no SHA256 of their own.",
         "",
         "In a browser, the SHA1 of a file the reader picks finds its records when "
         "the collection holds that file. A list naming a file the collection lacks "
@@ -2225,7 +2234,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "  const response = await fetch(`${base}${sha1.slice(0, 2)}.json`);",
         "  if (!response.ok) return [];",
         "  const shard = await response.json();",
-        "  // layer: collection, data-directory, platform or emulator. owner: which one.",
+        "  // layer: collection, archive-member, retired, data-directory, platform, emulator.",
         "  return shard.items.filter((item) => item.value === sha1);",
         "}",
         "```",
@@ -3350,8 +3359,8 @@ def setup_table(coverages: dict, registry: dict | None = None) -> list[str]:
     lines += ["No ZIP: the setup is served by the command alone. "
               f"[Why?](../{NO_ZIP_FAQ})", ""]
     if archived:
-        lines += ["An archived setup keeps its page and the command. Its list is no longer "
-                  "read again on a schedule.", ""]
+        lines += ["An archived setup keeps its page and the command. Checks that cover "
+                  "every setup include it only on request.", ""]
     return lines
 
 
@@ -4187,7 +4196,11 @@ def _card_route(name: str, display: str, guide: Guide) -> list[str]:
         lead = ("No network here? Run the command on a computer that has one, with a USB "
                 f"drive's folder after `--dest`. Then copy it into {_folder_words(display, extract_to)}.")
         return [lead, "", *terminal_tabs(tabs, args, steps=False)]
-    lead = ("No network? Put the device's card in your computer. After `--dest`, "
+    # A folder on the card's Linux partition: Windows and macOS show the
+    # small boot partition alone, and no folder there fits --dest.
+    put = ("Put the device's card in your computer." if "windows" in tabs
+           else "Only a Linux computer opens the card.")
+    lead = (f"No network? {put} After `--dest`, "
             f"name the folder the device calls `{extract_to}`.")
     return [lead, "", *terminal_tabs(tabs, args, steps=False),
             f"[More on SD cards](../{CARD_ROUTE_FAQ})", ""]
@@ -4729,7 +4742,9 @@ def generate_files_page() -> str:
         "A file's card lives on its manufacturer's page, and a file refiled "
         "between manufacturers moves with it. `files/?sha1=<sha1>` is the address "
         "that does not move: it opens the card wherever it is now. The link icon "
-        "beside each card's name is that address.",
+        "beside each card's name is that address. A file that left the "
+        "collection keeps it: the page says when, and opens the card of the "
+        "file in its place.",
         "",
         "## The index behind it",
         "",
@@ -4761,6 +4776,33 @@ def data_directory_revisions(data_dir: Path = _REPO_ROOT / "data") -> dict[str, 
     if not path.is_file():
         return {}
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+_GIT_COMMIT = re.compile(r"[0-9a-f]{40}")
+_GITHUB_REPO = re.compile(r"https://github\.com/([^/]+/[^/]+)/")
+
+
+def data_directory_origin(entry: dict, fetched: dict) -> list[str]:
+    """Where a data directory is fetched from, and the commit the packs hold.
+
+    The URL is written with the `{version}` refresh_data_dirs substitutes:
+    printed raw it led to a 404. A zip source records the server's ETag,
+    which names no revision anyone can fetch, so only a git commit is shown.
+    """
+    lines = []
+    url = str(entry.get("source_url") or "")
+    if url:
+        url = url.replace("{version}", str(entry.get("version", "master")))
+        lines.append(f"Fetched from <{url}>")
+    sha = str(fetched.get("sha", "")).strip('"')
+    if _GIT_COMMIT.fullmatch(sha):
+        repo = _GITHUB_REPO.match(url)
+        commit = f"[{_code(sha[:12])}](https://github.com/{repo.group(1)}/commit/{sha})" \
+            if repo else _code(sha)
+        branch = str(fetched.get("version", ""))
+        lines.append(f"Revision: {commit}" + (
+            f", the head of `{branch}` when fetched" if branch and branch != sha else ""))
+    return lines
 
 
 def page_data_directories(name: str, profiles: dict) -> list[dict]:
@@ -4892,6 +4934,64 @@ def _data_member_digests(
     return found
 
 
+def retired_records(retired: dict[str, dict], files: dict, locations: list[dict]) -> list[dict]:
+    """A record for each hash of a file that left the collection.
+
+    Its address (files/?sha1=, #sha1-<12>) was published and answered that
+    no file the site knows has the hash, inviting a contribution of a file
+    the collection held. The record says when it left, and leads to the
+    card of the file holding its place, followed to the one held today.
+    """
+    cards = {item["sha1"]: item["url"] for item in locations}
+    records = []
+    for sha1, record in sorted(retired.items()):
+        if sha1 in files:
+            continue
+        successor, seen = record.get("successor"), {sha1}
+        while successor and successor not in files and successor not in seen:
+            seen.add(successor)
+            successor = (retired.get(successor) or {}).get("successor")
+        url = cards.get(successor) if successor in files else None
+        extra = {"left": str(record["left"])}
+        if url:
+            extra["successor"] = successor
+        else:
+            # The page its card was on: the reader lands among its neighbours.
+            url = _site_path(f"systems/{card_page(str(record.get('path', '')), sha1)}.md")
+        for algorithm in HASH_ALGORITHMS:
+            value = sha1 if algorithm == "sha1" else record.get(algorithm)
+            for one in _hash_values(value):
+                records.append({"value": one, "algorithm": algorithm, "layer": "retired",
+                                "name": str(record.get("name", "")), "sha1": sha1,
+                                "url": url, **extra})
+    return records
+
+
+def _archive_member_records(entry: dict, sha1: str, url: str,
+                            root: Path = _REPO_ROOT) -> list[dict]:
+    """The CRC32 of each member of a collection archive, read from its
+    central directory.
+
+    A pasted CRC of a ROM the collection holds only inside a set (logica2.u2
+    in a500.zip, 8484f426) found nothing: 26,014 of 33,403 members were in
+    no record. The record leads to the archive's card and names it.
+    """
+    path = root / str(entry.get("path", ""))
+    if path.suffix.lower() != ".zip" or not path.is_file():
+        return []
+    try:
+        with zipfile.ZipFile(path) as archive:
+            members = [(info.filename, info.CRC) for info in archive.infolist()
+                       if not info.is_dir()]
+    except (OSError, zipfile.BadZipFile) as exc:
+        print(f"  WARNING: {path}: members unreadable ({exc})", file=sys.stderr)
+        return []
+    return [{"value": f"{crc:08x}", "algorithm": "crc32", "layer": "archive-member",
+             "name": member.rsplit("/", 1)[-1], "archive": str(entry.get("name", "")),
+             "sha1": sha1, "url": url}
+            for member, crc in members]
+
+
 def file_lookup_records(
     db: dict,
     coverages: dict,
@@ -4899,6 +4999,7 @@ def file_lookup_records(
     locations: list[dict],
     members: dict | None = None,
     consumers: FileConsumers | None = None,
+    retired: dict | None = None,
 ) -> list[dict]:
     """Every hash the site knows, one record per value, for files/?hash=.
 
@@ -4936,6 +5037,7 @@ def file_lookup_records(
                     "name": str(entry.get("name", "")), "sha1": sha1, "url": item["url"],
                     **({"system_name": held_by} if held_by else {}),
                 })
+        records += _archive_member_records(entry, sha1, item["url"])
     for key, coverage in sorted(coverages.items()):
         for system_id, system in sorted((coverage["config"].get("systems") or {}).items()):
             url = _site_path(f"platforms/{key}.md#{system_id.replace(' ', '-')}")
@@ -4975,6 +5077,7 @@ def file_lookup_records(
                             "owner": key, "name": name, "url": url,
                             **({"system_name": entry_label} if entry_label else {}),
                         })
+    records += retired_records(retired or {}, files, locations)
     records += _held_under_every_hash(records, files, db.get("indexes") or {})
     for record in records:
         if record["layer"] in ("platform", "emulator"):
@@ -5999,7 +6102,9 @@ def _system_file_card(
     name = f["name"]
     sha1_full = f.get("sha1", "unknown")
     md5_full = f.get("md5", "unknown")
-    size = _fmt_size(f.get("size", 0))
+    # The size a card names is the file's own, exact: rounded, 44,348,015
+    # and 44,356,548 bytes were one 42.3 MB.
+    size = _card_size(int(f.get("size", 0)))
     # Who reads this file, not who reads a file of this name
     plats = sorted(consumers.platforms.get(sha1_full, ()))
     emus = sorted(consumers.emulators.get(sha1_full, ()))
@@ -6254,7 +6359,7 @@ def search_excluded(lines: list[str]) -> list[str]:
 SEARCH_SKIPPED = (
     "- SHA1:", "- MD5:", "- CRC32:", "- SHA256:", "- Adler32", "- Size:",
     "- Validation", "- Priority:", "- Contents (",
-    "- Platforms:", "- Also installed by:", "- Source:", "- Asked for by:",
+    "- Platforms:", "- Source:", "- Asked for by:",
     "- Collection path:", "- Collection copy:", "- Collection copies:",
     "- Installed by the platform's own package on:",
     "- Not in the platform's package", "- Never opened on these platforms",
@@ -6505,9 +6610,10 @@ def _profiles_on_disk() -> dict[str, dict]:
 
 
 def _entry_systems(emulator: str, entry: dict) -> list[str]:
-    """The system an entry is read for: its own, or its profile's only one."""
-    if entry.get("system"):
-        return [str(entry["system"])]
+    """The systems an entry is read for: its own `system:` or `systems:`
+    (a MAME device set several systems load), else its profile's only one."""
+    if entry.get("system") or entry.get("systems"):
+        return entry_system_ids(entry, {})
     systems = (_profiles_on_disk().get(emulator) or {}).get("systems") or []
     return [str(systems[0])] if len(systems) == 1 else []
 
@@ -7719,20 +7825,17 @@ def _distinct_spellings(names: list) -> list[str]:
     return list(seen.values())
 
 
-# Region slugs whose words are not the slug title-cased.
-_REGION_WORDS = {
-    "uk": "UK",
-    "asia-ntsc": "Asia (NTSC)",
-    "asia-pal": "Asia (PAL)",
-    "world": "every region",
-}
+# Region slugs whose words are not the slug title-cased, beyond region.LABELS.
+_REGION_WORDS = {"world": "every region"}
 
 
 def _region_words(value: object, most: int = 0) -> str:
     """A region: value in words. ``most`` caps the regions named, the rest
     counted: one Saturn BIOS serves seven."""
     raw = value if isinstance(value, list) else [value] if value else []
-    words = [_REGION_WORDS.get(str(r), str(r).replace("-", " ").title()) for r in raw]
+    from region import label  # noqa: PLC0415
+
+    words = [_REGION_WORDS.get(str(r)) or label(str(r)) for r in raw]
     if most and len(words) > most:
         words = words[:most] + [f"{len(words) - most} more"]
     return _said_as_list(words)
@@ -8015,6 +8118,38 @@ def _on_mismatch_lines(value: object) -> list[str]:
     return []
 
 
+def emulator_setups(coverages: dict, profiles: dict) -> dict[str, list[str]]:
+    """Each emulator with the platforms that run it, by display name."""
+    setups: dict[str, list[str]] = {}
+    for platform, cov in coverages.items():
+        for emulator in resolve_platform_cores(cov["config"], profiles):
+            setups.setdefault(emulator, []).append(platform)
+    return {
+        emulator: sorted(names, key=lambda p: _platform_display(p).casefold())
+        for emulator, names in setups.items()
+    }
+
+
+def _validation_names(validation: object) -> set[str]:
+    """The checks a `validation:` names, a list or one list per build."""
+    if isinstance(validation, dict):
+        return {str(v) for checks in validation.values() for v in checks or []}
+    return {str(v) for v in validation or []}
+
+
+def _card_size(size: int) -> str:
+    """A file's size, exact: in whole MB or KB when it is one, else in B."""
+    for unit, scale in (("MB", 1024 * 1024), ("KB", 1024)):
+        if size >= scale and size % scale == 0:
+            return f"{size // scale:,} {unit}"
+    return f"{size:,} B"
+
+
+def _exact_size(size: int) -> str:
+    """A rounded size with its bytes, where the bytes are not the same figure."""
+    return _fmt_size(size) if size < 1024 else f"{_fmt_size(size)} ({size:,} bytes)"
+
+
 def _build_rows(profile: dict) -> list[str]:
     """Meta card rows for who ships the build, how its files are found, why
     its revision is held and where its releases are announced."""
@@ -8148,25 +8283,28 @@ def _render_emulator_file(
         details.append(f"Found by: {found}")
     if fsystem:
         details.append(f"System: {_named_system_link(fsystem, '../')}")
+    # Where the code compares the size, the exact bytes: raze tells three
+    # DUKE3D.GRP apart by size, all three shown as 42.3 MB.
+    sized = _exact_size if "size" in _validation_names(validation) else _fmt_size
     if size:
         if isinstance(size, list):
-            size_str = " / ".join(_fmt_size(s) for s in size)
+            size_str = " / ".join(sized(s) for s in size)
         else:
-            size_str = _fmt_size(size)
+            size_str = sized(size)
         if fmin or fmax:
             bounds = []
             if fmin:
-                bounds.append(f"min {_fmt_size(fmin)}")
+                bounds.append(f"min {sized(fmin)}")
             if fmax:
-                bounds.append(f"max {_fmt_size(fmax)}")
+                bounds.append(f"max {sized(fmax)}")
             size_str += f" ({', '.join(bounds)})"
         details.append(f"Size: {size_str}")
     elif fmin or fmax:
         bounds = []
         if fmin:
-            bounds.append(f"min {_fmt_size(fmin)}")
+            bounds.append(f"min {sized(fmin)}")
         if fmax:
-            bounds.append(f"max {_fmt_size(fmax)}")
+            bounds.append(f"max {sized(fmax)}")
         details.append(f"Size: {', '.join(bounds)}")
     # Starlight folds the hashes and gives each a copy button.
     copyable = markup.starlight()
@@ -9040,6 +9178,21 @@ def _install_args(platform: str, system: str, shell: str) -> str:
     return f"--platform {platform} --system {quoted}"
 
 
+def _default_setup(declared: list[tuple[str, str]]) -> tuple[str, str]:
+    """The setup an install box shows before the reader picks one.
+
+    The first in alphabetical order was AmberELEC on 17 system pages, a
+    handheld system under a Windows tab. The box shows the setup whose
+    command runs under the most of its tabs (the guide's `run`), then on the
+    most systems overall, then one the release publishes a ZIP for.
+    """
+    def reach(pair: tuple[str, str]) -> tuple[int, int, bool]:
+        runs = GUIDES[pair[0]].run if pair[0] in GUIDES else ()
+        return (len(set(runs) & set(INSTALL_PICKER_OSES)), len(runs), has_release_pack(pair[0]))
+
+    return max(declared, key=reach)
+
+
 def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
     """One command, for the setup the reader picks, under the OS tabs.
 
@@ -9054,15 +9207,16 @@ def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
         return html.escape(text, quote=False).replace('"', "&quot;")
 
     names = Counter(platform for platform, _system in declared)
+    lead = _default_setup(declared)
     options = "".join(
-        f'<option value="{attribute(platform)}" '
-        f'data-sh="{attribute(_install_args(platform, system, "sh"))}" '
+        f'<option value="{attribute(platform)}"'
+        + (" selected" if (platform, system) == lead else "")
+        + f' data-sh="{attribute(_install_args(platform, system, "sh"))}" '
         f'data-ps="{attribute(_install_args(platform, system, "powershell"))}">'
         + html.escape(_platform_display(platform) + (f" ({system})" if names[platform] > 1 else ""),
                       quote=False)
         + "</option>"
         for platform, system in declared)
-    lead = declared[0]
     args = {key: _install_args(*lead, TERMINALS[key][2]) for key in INSTALL_PICKER_OSES}
     return [
         "Each platform names the system its own way.",
@@ -9379,6 +9533,8 @@ def _said_as_list(items: list[str]) -> str:
 # Data directory members and revisions, read once per build.
 _DATA_MEMBERS: dict[str, dict[str, dict]] = {}
 _DATA_REVISIONS: dict[str, dict] = {}
+# Emulator -> the platforms that run it, as resolve_platform_cores answers.
+_EMULATOR_SETUPS: dict[str, list[str]] = {}
 # The measurement index items of each emulator, for the proof lines of its page.
 _MEASUREMENT_ITEMS: dict[str, list[dict]] = {}
 # The emulator pages that list each data directory, by ref.
@@ -9974,6 +10130,15 @@ def emulator_pages(
     if revision:
         lines.append(f"| Revision | {revision} |")
     lines.extend(_build_rows(profile))
+    setups = _EMULATOR_SETUPS.get(name)
+    if setups:
+        # The file cards name the setups whose own list holds a file: the
+        # ones that run the emulator and pack its files were said nowhere.
+        # Said once here: a line on each card put MAME's parts and four
+        # other pages over their element budget. Out of the search: setup
+        # names on 530 pages ranked the data page first for "batocera folder".
+        lines.append(f"| Run by | <span {markup.search_exclude()}>" + ", ".join(
+            f"[{_platform_display(p)}](../platforms/{p}.md)" for p in setups) + "</span> |")
     lines.append(f"| Profiled | {profiled} |")
     # The YAML is the reusable document this site renders, and the JSON is the
     # same profile for a program.
@@ -10078,15 +10243,8 @@ def emulator_pages(
             if entry.get("description"):
                 line += f": {entry['description']}"
             lines.append(line)
-            if entry.get("source_url"):
-                lines.append(f"    - Fetched from <{entry['source_url']}>")
-            fetched = _DATA_REVISIONS.get(ref) or {}
-            if fetched.get("version") or fetched.get("sha"):
-                # The URL serves whatever is current: the revision says
-                # which content the packs were built from.
-                revision = str(fetched.get("sha", "")).strip('"')
-                lines.append(f"    - Revision: {fetched.get('version', '')}"
-                             + (f" ({_code(revision)})" if revision else ""))
+            lines.extend(f"    - {line}" for line in data_directory_origin(
+                entry, _DATA_REVISIONS.get(ref) or {}))
             if dd.get("mode"):
                 lines.append(f"    - Read by the {dd['mode']} build only")
             if dd.get("bundled"):
@@ -12311,6 +12469,7 @@ def _generate(args: argparse.Namespace) -> None:
         PAGE_DATA[f"platforms/{name}.md"] = platform_structured_data(name, cov)
 
     print("Generating emulator pages...")
+    _EMULATOR_SETUPS.update(emulator_setups(coverages, profiles))
     _DATA_MEMBERS.update(data_directory_members())
     _DATA_REVISIONS.update(data_directory_revisions())
     for key in sorted(profiles):

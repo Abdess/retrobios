@@ -6034,7 +6034,11 @@ class TestBranchCheckIsWired(unittest.TestCase):
         import generate_readme  # noqa: PLC0415
 
         text = generate_readme.generate_contributing()
-        self.assertIn("profile_sync.py --added --base upstream/main --strict", text)
+        self.assertIn("profile_sync.py --added --strict", text)
+        # The default base is fetched by the tool: a documented upstream
+        # remote failed every clone that had origin alone.
+        self.assertNotIn("--base upstream/main", text)
+        self.assertNotIn("remote add upstream", text)
         self.assertNotIn("--emulator NAME --strict", text)
         workflow = (root / ".github" / "workflows" / "validate.yml").read_text()
         self.assertIn("profile_sync.py --added --base", workflow)

@@ -649,6 +649,24 @@ class TheContractsValidate(unittest.TestCase):
                     [e.message for e in envelope.iter_errors(json.loads((API / name).read_text()))], [])
 
 
+class TheIndexSaysWhatTheCatalogLists(unittest.TestCase):
+    """index.json called catalog.json every published file, while the 990
+    one-item documents of emulators/, platforms/, systems/ and lookup/ are
+    in none of its 80 items."""
+
+    def test_the_description_matches_the_items(self):
+        index = json.loads(_built(API / "index.json").read_text())
+        catalog = json.loads(_built(API / "catalog.json").read_text())
+        described = next(i["description"] for i in index["items"] if i["url"] == "catalog.json")
+        self.assertNotIn("Every published file", described)
+        listed = {item["url"].split("/", 1)[0] for item in catalog["items"]}
+        for folder in ("emulators", "platforms", "systems", "lookup"):
+            with self.subTest(folder=folder):
+                self.assertIn(f"{folder}/", described)
+                self.assertNotIn(folder, listed)
+                self.assertTrue(any((API / folder).glob("*.json")))
+
+
 class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
     """8.5: emulators/ and systems/ lacked `commit` (716 documents)."""
 

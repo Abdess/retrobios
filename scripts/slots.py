@@ -7,11 +7,14 @@ module existed nothing compared the two: the builder resolves the platform
 entry first and drops the profile entry on a bare filename match, so a profile
 that names the right file for a slot could never win and never even be heard.
 
-The index is keyed by destination AND by name, the name carrying the union of
-what every same-named entry claims. Dolphin declares three IPL.bin separated
-only by their path, so a name-only key merges them, and a path-only key answers
-nothing when a candidate is known by name alone. Ambiguity resolves to the
-union and is never discarded, the same rule region.py already applies.
+Claims are keyed by destination, folded to one case only where the platform's
+filesystem folds it. Dolphin declares three IPL.bin separated only by their
+path, and each is its own slot. A profile claim resting on a bare filename
+proves nothing about content and contests no slot.
+
+The pack builder, the install manifest and verify read slot_choices() through
+pack_overrides(). arbitrate() states the same decision for one conflict and
+feeds the report this module prints.
 """
 
 from __future__ import annotations
@@ -124,26 +127,6 @@ def _normalize(destination: str, fold: bool = True) -> str:
     """
     cleaned = destination.strip().strip("/").replace("\\", "/")
     return cleaned.casefold() if fold else cleaned
-
-
-def build_claim_index(claims: list[Claim]) -> dict[str, list[Claim]]:
-    """Index claims by destination and by name, the name carrying the union.
-
-    A lookup by full destination answers for one slot. A lookup by bare name
-    answers with every slot that shares it, which is what a candidate known
-    only by its filename needs in order not to be dropped.
-    """
-    index: dict[str, list[Claim]] = {}
-    for claim in claims:
-        keys = {_normalize(claim.destination)}
-        if claim.name:
-            keys.add(_normalize(claim.name))
-        base = claim.destination.rsplit("/", 1)[-1]
-        if base:
-            keys.add(_normalize(base))
-        for key in keys - {""}:
-            index.setdefault(key, []).append(claim)
-    return index
 
 
 def platform_claims(

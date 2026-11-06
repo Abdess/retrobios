@@ -372,19 +372,21 @@ def _in_arcade(sha1: str, db: dict) -> bool:
     return sha1 in _arcade_suffix_sha1s(db)
 
 
-_suffix_cache: list[tuple[int, frozenset[str]] | None] = [None]
+_suffix_cache: list[tuple[dict, frozenset[str]] | None] = [None]
 
 
 def _arcade_suffix_sha1s(db: dict) -> frozenset[str]:
+    # Holding the database itself, never id(db): a database freed and
+    # replaced at the same address answered with the first one's set.
     cached = _suffix_cache[0]
-    if cached is not None and cached[0] == id(db):
+    if cached is not None and cached[0] is db:
         return cached[1]
     found = frozenset(
         sha1s[0]
         for tail, sha1s in db.get("indexes", {}).get("by_path_suffix", {}).items()
         if tail.startswith("Arcade/") and len(sha1s) == 1
     )
-    _suffix_cache[0] = (id(db), found)
+    _suffix_cache[0] = (db, found)
     return found
 
 

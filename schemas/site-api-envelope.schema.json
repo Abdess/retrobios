@@ -389,10 +389,26 @@
                 "layer": {
                   "enum": [
                     "collection",
+                    "archive-member",
+                    "retired",
                     "data-directory",
                     "platform",
                     "emulator"
                   ]
+                },
+                "left": {
+                  "type": "string",
+                  "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+                  "description": "On a retired record: the day the file, whose SHA1 is `sha1`, left the collection (retired.json)."
+                },
+                "successor": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$",
+                  "description": "On a retired record: SHA1 of the collection file now holding its place, whose card `url` leads to."
+                },
+                "archive": {
+                  "type": "string",
+                  "description": "On an archive-member record: the name of the collection archive holding the member, whose SHA1 is `sha1`. Its value is the member's CRC32, read from the archive's central directory."
                 },
                 "name": {
                   "type": "string"

@@ -5,6 +5,7 @@ goes, and which ones the user has to rename."""
 
 from __future__ import annotations
 
+from region import label as region_label
 from siteguides import INSTALL_PS1, INSTALL_SH, pack_manual
 
 def _detect_systems(detect: list[dict]) -> list[str]:
@@ -290,9 +291,7 @@ def _build_readme(
 
     region_info = ""
     if regions:
-        pretty = ", ".join(
-            " ".join(w.title() for w in slug.split("-")) for slug in regions
-        )
+        pretty = ", ".join(region_label(slug) for slug in regions)
         region_info = (
             "PACK TYPE: Region Filtered\n\n"
             f"  Region priority: {pretty}\n\n"

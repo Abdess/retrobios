@@ -206,13 +206,21 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
         import install  # noqa: PLC0415
 
         section = " ".join(self._section("Fill an SD card from a computer?").split())
-        self.assertIn("The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI or ROCKNIX "
-                      "card by itself.", section)
+        self.assertIn("The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka "
+                      "or MiSTer card.", section)
         known = {rule.name for rule in install._card_rules()}
         known |= {install.display_name(name) for name, _marker, _prefix in install._CARD_RULES}
-        for name in ("muOS", "Onion", "spruceOS", "MinUI", "KNULLI", "ROCKNIX"):
+        for name in ("muOS", "Onion", "spruceOS", "MinUI", "KNULLI", "ROCKNIX", "MiSTer FPGA"):
             with self.subTest(card=name):
                 self.assertIn(name, known)
+        # A card told by a rule of its share (MiSTer since 73b82375d) is named
+        # here and in the README, or its user passes --dest the card's root.
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        for rule in install._SHARE_RULES:
+            word = rule.name.split()[0]
+            with self.subTest(share=rule.name):
+                self.assertIn(word, section)
+                self.assertRegex(readme, rf"# SD card mounted on a PC: .*\b{word}\b")
         # The label the first screen gives a card found: "Onion SD card".
         self.assertEqual(install._card_word(("retroarch", Path("/x/BIOS"), "Onion")), "SD card")
         self.assertEqual(install._card_word(("batocera", Path("/x/bios"), "Batocera")),

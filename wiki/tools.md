@@ -243,6 +243,7 @@ python scripts/generate_pack.py --all --offline       # cache-only, never open t
 # Install manifests (consumed by install.py)
 python scripts/generate_pack.py --all --manifest --output-dir install/
 python scripts/generate_pack.py --manifest-targets --output-dir install/targets/
+python scripts/generate_installer_doc.py  # run samples of wiki/installer.md, from the manifests
 ```
 
 Packs include platform baseline files plus files required by the platform's cores.
@@ -364,9 +365,11 @@ test reads the original and the updated System.dat and es_bios.xml back to
 check that the list is the diff.
 
 No entry the platform declares is removed. One the truth does not pair is
-looked for in the profiles of every core the platform runs: by name or
-alias, by the basename or tail of a `path:`, by any hash (archive members
-included), under a `type: directory` entry or a data directory. An entry
+looked for, in this order: by the tail of a `path:` in the profiles of every
+core the platform runs, by a name the platform's own launch code reads (its
+`launchers:` records, such as the 22 names Batocera's DuckStation generator
+tries), then in those profiles by name or alias, by any hash (archive
+members included), under a `type: directory` entry or a data directory. An entry
 none of them answers is written to `exports/<platform>.json` under
 `removal_candidates`, with the cores examined for its system and a reason.
 The verdict is `undetermined` when a core the platform names has no
@@ -481,7 +484,7 @@ python scripts/profile_sync.py --all --stale-before 2026-06-01 --limit 20 --tria
 python scripts/profile_sync.py --emulator vice --full-diff --ref vice/src/c64/c64rom.h --context 6
 python scripts/profile_sync.py --emulator vice --strict
 python scripts/profile_sync.py --changed --strict
-python scripts/profile_sync.py --added --base upstream/main --strict
+python scripts/profile_sync.py --added --strict
 ```
 
 Per part of a ref: `ANCHORED` (same content, same lines), `SHIFTED` (same
@@ -694,8 +697,9 @@ directories are checked against their upstream, dump catalogs and romset
 snapshots against the catalog they were read from (Redump DAT versions, the
 No-Intro daily rebuild, the newest TOSEC pack, the newest MAME release, the
 git blobs of the FBNeo DATs), the game catalogs of `games/catalogs/` against
-the No-Intro pack and the Redump datfiles they were read from, and the CI
-toolchain against PyPI and the actions' latest releases.
+the No-Intro pack and the Redump datfiles they were read from, the CI
+toolchain against PyPI and the actions' latest releases, and the site's exact
+npm pins in `website/package.json` against the npm registry.
 
 The `native` area needs no network. It reads the cache `export_native.py`
 patches from and reports an original that is absent, that came from another
@@ -1330,7 +1334,8 @@ before a release (wiki/release-process.md). Its lines stay in
 | Script | Purpose |
 |--------|---------|
 | `common.py` | Shared library: hash computation, file resolution, platform config loading, emulator profiles, target filtering |
-| `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`): byte-identical copies are deleted and one kept. Identical MAME sets under other names stay one file, named in `_mame_clones.json`. Trees addressed by path are left alone (`NODEDUP_DIRS`): BBK, Bungie, C-Dogs SDL, Ikemen GO, PinMAME, RPG Maker, ScummVM, Softdisk, TheXTech, splitwolf, Theme Hospital, c64-emu, opentyrian, tzdata |
+| `retired_files.py` | The record of files that left the collection, `retired.json`, which `generate_db.py` appends to and the site's lookup reads. `--backfill` rebuilds it from the history of `database.json` since content addresses were published (`--output` names another file) |
+| `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`): byte-identical copies are deleted and one kept. Identical MAME sets under other names stay one file, named in `_mame_clones.json`. Trees addressed by path are left alone (`NODEDUP_DIRS`), under a folder of that name at any depth: BBK, Bungie, C-Dogs SDL, Ikemen GO, mame, PinMAME, RPG Maker, ScummVM, Softdisk, TheXTech, splitwolf, Theme Hospital, c64-emu, opentyrian, tzdata |
 | `identity.py` | One content filed under two identities: groups `bios/` by content and reports a group that crosses manufacturers outside `KNOWN_SHARED` (`--strict` exits 1, pipeline step 3a) |
 | `slots.py` | Destinations the platform and a core both claim, and how the pack settles each (`--platform`, `--include-archived`, `--target`, `--json`, `--strict`, and pipeline step 3b passes the run's own `--include-archived` and `--target`) |
 | `region_audit.py` | Confront every profile `region:` with the regions No-Intro names for the same dump (`--json`, `--db`, `--emulators-dir`). An opinion, never an authority: the code decides, and a disagreement is a line to read in the emulator's source |

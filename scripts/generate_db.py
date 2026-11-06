@@ -35,6 +35,7 @@ from common import (
     write_text_atomic,
     yaml_load,
 )
+import retired_files
 
 # Platform and profile aliases are read from YAML: without pyyaml the
 # database lost every one of them and the run still exited 0.
@@ -488,6 +489,19 @@ def _generate(args: argparse.Namespace) -> int:
         "files": files,
         "indexes": indexes,
     }
+
+    # A sha1 the rebuild drops keeps its published address: the record
+    # beside the database says when it left and what holds its place.
+    output = Path(args.output)
+    if output.is_file():
+        previous = json.loads(output.read_text(encoding="utf-8"))
+        left = retired_files.update(
+            retired_files.retired_path(output), previous, database,
+            database["generated_at"][:10],
+        )
+        if left:
+            print(f"  Left the collection: {left} files, recorded in "
+                  f"{retired_files.retired_path(output)}")
 
     new_content = json.dumps(database, indent=2)
     written = write_if_changed(args.output, new_content)

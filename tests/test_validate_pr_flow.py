@@ -115,6 +115,30 @@ class OversizedFileAdvice(unittest.TestCase):
         self.assertIn("open an issue", message)
         self.assertIn(validate_pr.LARGE_FILE_ISSUE_URL, message)
 
+    def test_the_issue_form_is_filled_and_nothing_points_to_the_pr(self):
+        """The link opened an empty form, and the same report said to put the
+        file in the pull request and under bios/."""
+        import urllib.parse  # noqa: PLC0415
+
+        path = self.tmp / "big.bin"
+        path.write_bytes(b"x" * 8)
+        validate_pr.MAX_FILE_SIZE = 4
+        result = validate_pr.validate_file(
+            "big.bin", None, {"sha1": set(), "md5": set(), "names": set()},
+        )
+        message = next(m for s, m in result.checks if s == "FAIL" and "too large" in m)
+        url = message.split("(", 2)[2].split(")", 1)[0]
+        query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
+        template = (REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "missing-bios.yml").read_text()
+        for field, value in (("filename", "big.bin"), ("sha1", result.sha1),
+                             ("md5", result.md5), ("size", "8")):
+            with self.subTest(field=field):
+                self.assertIn(f"id: {field}\n", template)
+                self.assertEqual(query[field], [value])
+        others = " ".join(m for _s, m in result.checks)
+        self.assertNotIn("pull request which", others)
+        self.assertNotIn("not under bios/", others)
+
     def test_the_linked_issue_template_exists(self):
         template = validate_pr.LARGE_FILE_ISSUE_URL.rsplit("template=", 1)[1]
         self.assertTrue(

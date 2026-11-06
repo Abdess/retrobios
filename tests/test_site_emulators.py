@@ -763,5 +763,76 @@ class SmallFixes(unittest.TestCase):
         self.assertEqual(said, [])
 
 
+class AnEmulatorPageNamesItsSetups(unittest.TestCase):
+    """emulators/handy named no setup that runs Handy: its lynxboot.img card
+    names the setups whose own list holds it, not EmuDeck, ROCKNIX and
+    NextUI, which pack it for the core."""
+
+    def test_setups_come_from_the_core_resolution(self):
+        coverages = {
+            "b": {"config": {"cores": ["handy"]}},
+            "a": {"config": {"cores": ["handy", "other"]}},
+            "c": {"config": {"cores": ["other"]}},
+        }
+        profiles = {"handy": {"type": "libretro"}, "other": {"type": "libretro"}}
+        self.assertEqual(gs.emulator_setups(coverages, profiles)["handy"], ["a", "b"])
+
+    def test_the_page_names_them(self):
+        from tests import sitepages  # noqa: PLC0415
+
+        sitepages.require()
+        text = sitepages.page("emulators/handy.md").read_text(encoding="utf-8")
+        row = next(line for line in text.splitlines() if line.startswith("| Run by |"))
+        for setup in ("emudeck", "rocknix", "nextui", "retroarch"):
+            self.assertIn(f"/platforms/{setup}/", row)
+        # Setup names on every emulator page outranked the setup's own page.
+        self.assertIn("data-pagefind-ignore", row)
+
+
+class SizesTheCodeComparesAreExact(unittest.TestCase):
+    """raze validates DUKE3D.GRP by size, and its page showed 42.3 MB for
+    44,356,548 and 44,348,015 bytes alike."""
+
+    def test_a_validated_size_carries_its_bytes(self):
+        profile = {"emulator": "x", "type": "libretro", "systems": ["sony-playstation"], "files": [
+            {"name": "DUKE3D.GRP", "size": 44348015, "validation": ["size", "crc32"]},
+            {"name": "other.bin", "size": 44356548},
+            {"name": "built.bin", "size": 2304, "validation": {"core": ["size"]}},
+        ]}
+        page = _page("x", profile)
+        self.assertIn("Size: 42.3 MB (44,348,015 bytes)", page)
+        self.assertIn("Size: 2.2 KB (2,304 bytes)", page)
+        self.assertNotIn("44,356,548", page)
+
+
+class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):
+    """pcee2's page linked github.com/PCSX2/pcsx2/archive/{version}.tar.gz,
+    a 404, and buildbot zips showed `Revision: master (2047720058)`: a branch
+    that means nothing for a buildbot URL and the server's ETag."""
+
+    def test_the_url_is_substituted_and_a_commit_is_linked(self):
+        entry = {"source_url": "https://github.com/PCSX2/pcsx2/archive/{version}.tar.gz",
+                 "version": "6db638dc0373769b4c5d5b5dd7ed6da641b9a18e"}
+        lines = gs.data_directory_origin(entry, {"sha": entry["version"],
+                                                 "version": entry["version"]})
+        self.assertEqual(lines[0], "Fetched from <https://github.com/PCSX2/pcsx2/archive/"
+                                   "6db638dc0373769b4c5d5b5dd7ed6da641b9a18e.tar.gz>")
+        self.assertIn("(https://github.com/PCSX2/pcsx2/commit/6db638dc0373769b4c5d5b5dd7ed6da641b9a18e)",
+                      lines[1])
+        self.assertNotIn("{version}", " ".join(lines))
+
+    def test_an_etag_is_no_revision(self):
+        entry = {"source_url": "https://buildbot.libretro.com/assets/system/Dolphin.zip"}
+        lines = gs.data_directory_origin(entry, {"sha": '"2047720058"', "version": "master"})
+        self.assertEqual(lines, ["Fetched from <https://buildbot.libretro.com/assets/system/Dolphin.zip>"])
+
+    def test_every_registered_url_resolves(self):
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_data_dirs.yml").read_text())
+        for ref, entry in (registry.get("data_directories") or registry).items():
+            if isinstance(entry, dict):
+                with self.subTest(ref=ref):
+                    self.assertNotIn("{", " ".join(gs.data_directory_origin(entry, {})))
+
+
 if __name__ == "__main__":
     unittest.main()
