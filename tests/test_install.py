@@ -3707,13 +3707,74 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             },
         }
 
+    def test_the_archive_is_drawn_and_counted(self):
+        """82 MB of archives came with no progress line, and the run ended
+        on "310.5 KB downloaded", the BIOS files alone."""
+        work = Path(_tempdir(self))
+        body = self._zip(work).read_bytes()
+        attempts: list[int] = []
+
+        class Response(io.BytesIO):
+            headers = {"Content-Length": str(len(body))}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        def urlopen(_url, timeout=None):
+            attempts.append(1)
+            if len(attempts) == 1:
+                class Cut(Response):
+                    def read(self, size=-1):
+                        if self.tell():
+                            raise ConnectionResetError("cut")
+                        return super().read(5)
+                return Cut(body)
+            return Response(body)
+
+        progress = install.Progress(1, 0, install.Terminal(io.StringIO()), events=False)
+        with unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None), \
+                unittest.mock.patch.object(install, "_retry_delay", lambda *a: 0), \
+                unittest.mock.patch.object(install.EVENTS, "emit") as emit:
+            path = install._fetch_archive("https://example.invalid/D.zip", work, progress)
+        self.assertEqual(path.read_bytes(), body)
+        self.assertEqual(len(attempts), 2)
+        # The cut attempt's five bytes are taken back.
+        self.assertEqual((progress.transferred(), progress.expected_bytes),
+                         (len(body), len(body)))
+        emit.assert_not_called()
+
+    def test_the_run_ends_on_the_archive_bytes_too(self):
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        member = os.urandom(300_000)
+        with FakeRepository() as repo:
+            with zipfile.ZipFile(repo.root / "tree.zip", "w") as zf:
+                zf.writestr("Sys/big.bin", member)
+            archive = (repo.root / "tree.zip").stat().st_size
+            listed = json.loads((repo.root / "install" / "retroarch.json").read_text())
+            listed["data_directories"] = [{
+                "ref": "tree", "dest": "tree", "type": "zip",
+                "url": f"http://127.0.0.1:{repo.httpd.server_address[1]}/tree.zip",
+                "systems": ["nintendo-gba"],
+                "files": {"Sys/big.bin": {"sha1": hashlib.sha1(member).hexdigest(),
+                                          "size": len(member)}}}]
+            (repo.root / "install" / "retroarch.json").write_text(json.dumps(listed))
+            proc = repo.run("--no-input")
+            bios = sum(len(payload) for payload, *_ in FakeRepository.PAYLOADS.values())
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(f"{install.format_size(bios + archive)} downloaded in", proc.stdout)
+
     def test_verified_members_land_the_rest_are_said(self):
         work = Path(_tempdir(self))
         archive = self._zip(work)
         bios = work / "system"
         bios.mkdir()
 
-        def fetch(url, directory):
+        def fetch(url, directory, progress=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy
@@ -3750,7 +3811,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Endless())
 
         with unittest.mock.patch.object(install, "_fetch_archive",
-                                        lambda url, d: Path(d) / "a"), \
+                                        lambda url, d, progress=None: Path(d) / "a"), \
                 unittest.mock.patch.object(install, "_archive_members", members):
             counts = install.install_data_directory(entry, work)
         self.assertEqual(counts["changed"], 1)
@@ -3778,7 +3839,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                     yield "Sys/GC/font.bin", 4, lambda: io.BufferedReader(Broken())
 
                 with unittest.mock.patch.object(install, "_fetch_archive",
-                                                lambda url, d: Path(d) / "a"), \
+                                                lambda url, d, progress=None: Path(d) / "a"), \
                         unittest.mock.patch.object(install, "_archive_members", members):
                     counts = install.install_data_directory(entry, work)
                 self.assertTrue(counts["error"])
@@ -6458,7 +6519,7 @@ class AFileYouHadIsKept(unittest.TestCase):
                  "type": "zip", "files": {"Sys/a.ini": {
                      "sha1": hashlib.sha1(self.NEW).hexdigest(), "size": len(self.NEW)}}}
 
-        def fetch(url, directory):
+        def fetch(url, directory, progress=None):
             copy = Path(directory) / "a.zip"
             shutil.copy(archive, copy)
             return copy

@@ -528,7 +528,8 @@ class Progress:
 
     BAR = 24
 
-    def __init__(self, total_files: int, total_bytes: int, term: Terminal) -> None:
+    def __init__(self, total_files: int, total_bytes: int, term: Terminal,
+                 events: bool = True) -> None:
         self.total_files = total_files
         self.expected_bytes = total_bytes
         self.total_bytes = max(total_bytes, 1)
@@ -548,6 +549,15 @@ class Progress:
         self._drawn = 0.0
         self._evented = self.start
         self._lock = threading.Lock()
+        # A data tree's archive draws the line and writes no event: the
+        # progress events count the files of the download event.
+        self.events = events
+
+    def expect(self, total_bytes: int) -> None:
+        """The size the transfer turns out to have, once its server says it."""
+        with self._lock:
+            self.expected_bytes = total_bytes
+            self.total_bytes = max(total_bytes, 1)
 
     def add(self, count: int, resumed: bool = False, network: bool | None = None) -> None:
         """count bytes written, resumed ones left out of the speed. network
@@ -563,7 +573,7 @@ class Progress:
             if self.term.live and not self.term.quiet and now - self._drawn >= 0.1:
                 self._drawn = now
                 self._draw()
-            if EVENTS.on and now - self._evented >= EVENT_PROGRESS_INTERVAL:
+            if self.events and EVENTS.on and now - self._evented >= EVENT_PROGRESS_INTERVAL:
                 self._evented = now
                 EVENTS.emit("progress", files_done=self.files, files_total=self.total_files,
                             bytes_done=self.bytes, bytes_total=self.expected_bytes)
@@ -7052,15 +7062,20 @@ def download_files(
     return failed, interrupted
 
 
-def _fetch_archive(url: str, directory: Path) -> Path:
-    """A data directory's source archive, in *directory*, retried like files."""
+def _fetch_archive(url: str, directory: Path, progress: Progress | None = None) -> Path:
+    """A data directory's source archive, in *directory*, retried like files.
+    progress draws its bytes as they come, an attempt that failed taken back."""
     _network_allowed(url)
     reason: Exception | None = None
     for attempt in range(1, MAX_RETRIES + 1):
         handle = tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False)
+        received = 0
         try:
             with handle, urllib.request.urlopen(url, timeout=60) as resp:
-                received = 0
+                if progress is not None:
+                    length = resp.headers.get("Content-Length", "")
+                    if length.isdigit():
+                        progress.expect(int(length))
                 while True:
                     if _stop.is_set():
                         raise _Interrupted()
@@ -7071,6 +7086,8 @@ def _fetch_archive(url: str, directory: Path) -> Path:
                     if received > MAX_DATA_ARCHIVE_SIZE:
                         raise ValueError("archive exceeds the size limit")
                     handle.write(chunk)
+                    if progress is not None:
+                        progress.add(len(chunk))
             return Path(handle.name)
         except urllib.error.HTTPError as exc:
             Path(handle.name).unlink(missing_ok=True)
@@ -7083,6 +7100,8 @@ def _fetch_archive(url: str, directory: Path) -> Path:
         except BaseException:
             Path(handle.name).unlink(missing_ok=True)
             raise
+        if progress is not None and received:
+            progress.add(-received)
         if attempt < MAX_RETRIES:
             time.sleep(_retry_delay(attempt, None))
     raise reason if reason else OSError("download failed")
@@ -7149,7 +7168,8 @@ def data_directory_state(entry: dict, bios_path: Path,
 
 
 def install_data_directory(entry: dict, bios_path: Path,
-                           state: tuple[Path, dict[str, dict], int] | None = None) -> dict:
+                           state: tuple[Path, dict[str, dict], int] | None = None,
+                           progress: Progress | None = None) -> dict:
     """Rebuild one data tree from its source archive, file by file verified.
     state is the tree's data_directory_state when the run already read it:
     each read hashes every file in place.
@@ -7173,7 +7193,7 @@ def install_data_directory(entry: dict, bios_path: Path,
                 # The pack holds the tree where it extracts, already mapped.
                 members = LOCAL.pack.tree(entry.get("dest", ""))
             else:
-                archive = _fetch_archive(entry["url"], Path(scratch))
+                archive = _fetch_archive(entry["url"], Path(scratch), progress)
                 members = _archive_members(archive, entry)
             for rel, declared, opener in members:
                 meta = needed.pop(rel, None)
@@ -15856,7 +15876,18 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             if writable:
                 print("\nData directories:")
             for entry, state in writable:
-                counts = install_data_directory(entry, bios_path, state)
+                # Its archive is drawn as the BIOS files were, and counted
+                # in the bytes and time the run ends on: 82 MB came in
+                # silence and the end said 310.5 KB.
+                fetching = bool(state[1]) and LOCAL.pack is None
+                progress = Progress(len(state[1]), 0, term, events=False) if fetching else None
+                try:
+                    counts = install_data_directory(entry, bios_path, state, progress)
+                finally:
+                    if progress is not None:
+                        progress.finish()
+                        total_bytes += progress.transferred()
+                        total_seconds += progress.elapsed()
                 total_downloaded += counts["installed"]
                 data_landed += counts["installed"]
                 total_up_to_date += counts["present"]

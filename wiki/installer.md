@@ -342,7 +342,9 @@ file list is downloaded once and handed to each run.
    [Copy from an old card](#copy-from-an-old-card).
 6. Downloads what is still missing or wrong, up to 8 files at a time. At a
    terminal one line shows the progress, the speed and the time left, while in a
-   log each finished file gets its own line. In an interactive run, a
+   log each finished file gets its own line. A data tree's archive gets the
+   same line at a terminal, and the bytes and time the run ends on count
+   it with the files. In an interactive run, a
    download of 1 GB or more is confirmed first (`--yes` skips the question).
 7. Verifies each download against the declared size, SHA-256 and SHA-1 before
    it touches the destination, then moves it into place with `os.replace` so
