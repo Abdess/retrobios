@@ -1922,6 +1922,26 @@ class TheInstallerSamplesTravelWithTheManifests(unittest.TestCase):
                 self.assertTrue(any(autorun.path_matches(p, path) for p in patterns))
 
 
+class TheRemovalProofsAreTheExportersOwn(unittest.TestCase):
+    """tools.md listed the proofs that keep an entry out of
+    removal_candidates without the platform's launcher records, which
+    candidates.py checks right after a path."""
+
+    WORDS = {"path": "`path:`", "launcher": "`launchers:`", "name": "by name or alias",
+             "hash": "by any hash", "directory": "`type: directory`",
+             "data_directory": "a data directory"}
+
+    def test_the_page_names_each_proof_in_order(self):
+        from exporter.candidates import _PROOF_ORDER  # noqa: PLC0415
+
+        page = (WIKI / "tools.md").read_text(encoding="utf-8")
+        start = page.index("No entry the platform declares is removed.")
+        section = page[start:page.index("removal_candidates", start)]
+        self.assertEqual(set(self.WORDS), set(_PROOF_ORDER))
+        positions = [section.index(self.WORDS[kind]) for kind in _PROOF_ORDER]
+        self.assertEqual(positions, sorted(positions))
+
+
 class APlatformListIsDescribedNotJudged(unittest.TestCase):
     """adding-a-platform opened on files a platform's own list "leaves out",
     read first by the maintainer of that platform: "does not name" says the

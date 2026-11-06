@@ -359,9 +359,11 @@ test reads the original and the updated System.dat and es_bios.xml back to
 check that the list is the diff.
 
 No entry the platform declares is removed. One the truth does not pair is
-looked for in the profiles of every core the platform runs: by name or
-alias, by the basename or tail of a `path:`, by any hash (archive members
-included), under a `type: directory` entry or a data directory. An entry
+looked for, in this order: by the tail of a `path:` in the profiles of every
+core the platform runs, by a name the platform's own launch code reads (its
+`launchers:` records, such as the 22 names Batocera's DuckStation generator
+tries), then in those profiles by name or alias, by any hash (archive
+members included), under a `type: directory` entry or a data directory. An entry
 none of them answers is written to `exports/<platform>.json` under
 `removal_candidates`, with the cores examined for its system and a reason.
 The verdict is `undetermined` when a core the platform names has no
