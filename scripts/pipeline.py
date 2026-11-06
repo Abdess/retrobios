@@ -578,7 +578,7 @@ def check_emulator_packs(
     zip_contents = build_zip_contents_index(db)
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
 
-    def compare(names: list[str], standalone: bool, label: str, **narrowing) -> bool:
+    def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
         record = generate_pack.PackRecord()
         with contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(io.StringIO()):
