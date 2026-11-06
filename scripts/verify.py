@@ -1575,6 +1575,13 @@ def verify_platform(
         "exclusion_notes": exclusions,
         "region_fallbacks": sorted(region_fallbacks),
         **({"left_out": left_out} if no_game_data else {}),
+        # Every tree of the registry answers a declaration by its tail, so
+        # one that was never refreshed leaves its files missing here while
+        # an online pack build refreshes it and packs them.
+        "data_dir_notices": sorted(
+            key for key, entry in (data_dir_registry or {}).items()
+            if not os.path.isdir(entry.get("local_cache", ""))
+        ),
         "details": details,
         "ground_truth_coverage": {
             "with_validation": with_validation,
@@ -1952,6 +1959,13 @@ def print_platform_result(
         # them missing, as an offline build leaves them out.
         shown = ", ".join(fetched[:10]) + (f" (+{len(fetched) - 10})" if len(fetched) > 10 else "")
         print(f"  Release assets fetched when the pack is built ({len(fetched)}): {shown}")
+    uncached = result.get("data_dir_notices") or []
+    if uncached and result.get("status_counts", {}).get(Status.MISSING):
+        shown = ", ".join(uncached[:10]) + (f" (+{len(uncached) - 10})" if len(uncached) > 10 else "")
+        print(
+            f"  Data directories not cached ({len(uncached)}), their files count missing "
+            f"until refresh_data_dirs.py runs (an online pack build refreshes them): {shown}"
+        )
     for line in result.get("left_out") or []:
         print(f"  {line}")
     fallbacks = result.get("region_fallbacks") or []
