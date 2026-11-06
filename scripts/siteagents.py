@@ -23,6 +23,13 @@ SITE = "https://abdess.github.io/retrobios/"
 PUBLISHER = "abdess.github.io"
 SH = "curl -fsSL https://abdess.github.io/retrobios/i | sh -s --"
 PS = "& ([scriptblock]::Create((irm https://abdess.github.io/retrobios/i.ps1)))"
+# What a folder put into a command may not hold, as agent-tools.ts refuses
+# it: PowerShell also ends a single-quoted string on the typographic quotes.
+REFUSED = "any quote, straight or typographic (' \" ‘ ’ ‚ ‛ “ ” „), a backtick or a control character"
+QUOTING = (f"A folder goes in single quotes, attached to its option. One that holds {REFUSED}, "
+           "or starts with `-`, is a question for the user, never a value to escape into the "
+           "command. On a page of the site, the `device_setup_command` WebMCP tool writes the "
+           "command and refuses such a folder.")
 
 START_PAGES = (
     ("Which pack do I need", "which-pack/", "pick a device or setup, get the folder its BIOS files go in, "
@@ -91,9 +98,7 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "- From a computer, if the card is not found, name its BIOS folder: `--dest='<card>/bios'` "
         "(ArkOS and dArkOS: the `bios` folder of the EASYROMS part).",
         "- A games folder somewhere else: `--for-games='<folder>'`, one subfolder per system.",
-        "- A folder goes in single quotes, attached to its option. One that holds a quote, a "
-        "backtick or a control character, or starts with `-`, is a question for the user, never "
-        "a value to escape into the command.",
+        f"- {QUOTING}",
         "- Later, to see what is missing or wrong: `--check`. Machine-readable progress: "
         "`--events` (JSON lines, one per event, documented on the installer page).",
         "- A game the installer cannot identify gets every BIOS of its system, and the run names it.",
@@ -159,9 +164,7 @@ def skill_md() -> str:
         "- Games outside the card: `--for-games='<folder>'`, one subfolder per system.",
         "- A setup not detected: `--platform=<name>`, a name exactly as `--list-platforms` prints "
         "it (letters, digits, `-` and `_`).",
-        "- Put a folder in single quotes, attached to its option. If it holds a quote, a backtick "
-        "or a control character, or starts with `-`, stop and ask the user: never escape it into "
-        "the command.",
+        f"- {QUOTING}",
         "",
         "## Later",
         "",

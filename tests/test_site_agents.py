@@ -74,6 +74,13 @@ class TheSkillIsAnAgentSkill(unittest.TestCase):
                 self.assertIn("--dest='<card>/bios'", text)
                 self.assertIn("--for-games='<folder>'", text)
                 self.assertIn("starts with `-`", text)
+                # The characters agent-tools.ts refuses, typographic quotes included.
+                # The backtick is named in words: Markdown would read it.
+                self.assertIn("a backtick", siteagents.REFUSED)
+                for char in "'\"‘’‚‛“”„":
+                    self.assertIn(char, siteagents.REFUSED)
+                    self.assertIn(char, TOOLS.read_text(encoding="utf-8"))
+                self.assertIn(siteagents.REFUSED, text)
 
     def test_the_manifest_types_it_as_a_skill(self) -> None:
         skill = siteagents.ard_manifest()["entries"][0]
