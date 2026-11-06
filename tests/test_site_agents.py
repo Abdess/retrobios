@@ -1,0 +1,93 @@
+"""What the site tells an AI agent: llms.txt, the ARD manifest, the WebMCP tools.
+
+An agent asked to set up a handheld reads these first. They must lead it to
+the fewest files the games need, and every address they give must exist.
+"""
+from __future__ import annotations
+
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
+import re
+import sys
+import unittest
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+import siteagents  # noqa: E402
+
+DIST = REPO_ROOT / "website" / "dist"
+TOOLS = REPO_ROOT / "website" / "src" / "scripts" / "agent-tools.ts"
+FOOTER = REPO_ROOT / "website" / "src" / "components" / "Footer.astro"
+CONFIG = REPO_ROOT / "website" / "astro.config.mjs"
+
+
+class TheGuideLeadsToTheFewestFiles(unittest.TestCase):
+    def setUp(self) -> None:
+        self.text = siteagents.llms_txt([("retroarch", "RetroArch"), ("batocera", "Batocera")])
+
+    def test_it_is_llms_txt(self) -> None:
+        self.assertTrue(self.text.startswith("# RetroBIOS\n\n> "))
+        self.assertIn("\n## Setting up a device for its user\n", self.text)
+
+    def test_every_command_installs_only_what_the_games_need(self) -> None:
+        commands = re.findall(r"`((?:curl|&) [^`]+)`", self.text)
+        self.assertGreaterEqual(len(commands), 3)
+        for command in commands:
+            with self.subTest(command=command):
+                self.assertIn("--for-games --required-only", command)
+
+    def test_each_setup_has_its_page(self) -> None:
+        self.assertIn("(https://abdess.github.io/retrobios/platforms/batocera/)", self.text)
+
+    @unittest.skipUnless((DIST / "llms.txt").is_file(), "website/dist is not built")
+    def test_every_address_of_the_built_guide_exists(self) -> None:
+        built = (DIST / "llms.txt").read_text(encoding="utf-8")
+        for url in re.findall(r"\((https://abdess\.github\.io/retrobios/[^)]*)\)", built):
+            with self.subTest(url=url):
+                target = DIST / url.removeprefix(siteagents.SITE)
+                self.assertTrue(target.is_file() or (target / "index.html").is_file(), url)
+
+
+class TheManifestIsAnArdManifest(unittest.TestCase):
+    """The terms ard-entry.schema.json requires (ards-project/ard-spec)."""
+
+    def test_entries(self) -> None:
+        entries = siteagents.ard_manifest()["entries"]
+        self.assertTrue(entries)
+        for entry in entries:
+            with self.subTest(entry=entry.get("identifier")):
+                self.assertRegex(entry["identifier"], r"^urn:air:[a-zA-Z0-9.-]+(:[a-zA-Z0-9._-]+)+$")
+                self.assertTrue(entry["displayName"])
+                self.assertRegex(entry["type"], r"^[a-z]+/[\w.+-]+$")
+                self.assertTrue(("url" in entry) != ("data" in entry))
+                self.assertTrue(2 <= len(entry["representativeQueries"]) <= 5)
+                self.assertTrue(entry["url"].startswith(siteagents.SITE))
+
+    def test_every_page_links_it(self) -> None:
+        self.assertIn("rel: 'ard'", CONFIG.read_text(encoding="utf-8"))
+
+
+class TheToolsReadOnly(unittest.TestCase):
+    def setUp(self) -> None:
+        self.source = TOOLS.read_text(encoding="utf-8")
+
+    def test_every_page_registers_them(self) -> None:
+        self.assertIn("import '../scripts/agent-tools.ts';", FOOTER.read_text(encoding="utf-8"))
+        names = re.findall(r"^\s*name: '([a-z_]+)'", self.source, re.M)
+        self.assertEqual(names, ["lookup_bios_hash", "emulator_bios_files", "search_retrobios",
+                                 "device_setup_command"])
+        self.assertEqual(self.source.count("readOnlyHint: true"), len(names))
+
+    def test_the_setup_command_defaults_to_the_games(self) -> None:
+        self.assertIn("const games = everything ? [] :", self.source)
+        self.assertIn("'--required-only'", self.source)
+
+    def test_they_reach_no_other_site(self) -> None:
+        code = re.sub(r"^\s*//.*$", "", self.source, flags=re.M)
+        self.assertEqual(set(re.findall(r"https://[\w.-]+", code)), {"https://abdess.github.io"})
+
+
+if __name__ == "__main__":
+    unittest.main()

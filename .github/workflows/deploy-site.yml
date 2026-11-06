@@ -45,6 +45,7 @@ on:
       - "scripts/restore_large_files.py"
       - "scripts/safeparse.py"
       - "scripts/sect233r1.py"
+      - "scripts/siteagents.py"
       - "scripts/sitebootstrap.py"
       - "scripts/sitediagrams.py"
       - "scripts/siteentries.py"

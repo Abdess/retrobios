@@ -32,7 +32,7 @@ import urllib.parse
 import urllib.request
 import zipfile
 from collections import Counter
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import TypeVar
@@ -92,6 +92,7 @@ import sitemarkup as markup
 import siteentries
 import siteinputs
 import retired_files
+import siteagents
 import sitestarlight
 from siteexports import generate_exports_page, load_export_reports
 from siteguides import (
@@ -8065,7 +8066,7 @@ def generate_emulators_index(profiles: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _snippet_noun(names, firmware: int, fetched: int) -> str:
+def _snippet_noun(names: Iterable[str], firmware: int, fetched: int) -> str:
     """What an emulator's files are called in its snippet. A Switch
     emulator reads keys, and "eden keys" is what readers search for; Ship
     of Harkinian reads game ROMs, which are no BIOS."""
@@ -12528,6 +12529,9 @@ def _generate(args: argparse.Namespace) -> None:
     stats = compute_stats(db, coverages, profiles)
     stats["composition"] = compute_composition(db)
     write_if_changed(str(public / "stats.json"), generate_stats(stats))
+    # llms.txt and the ARD manifest an agent reads first, from the registry.
+    siteagents.write(public, sorted(((name, cov["platform"]) for name, cov in coverages.items()),
+                                    key=lambda row: row[1].casefold()), write_if_changed)
 
     # Computed once: the gap analysis page and the published gaps export must
     # report the same files.
