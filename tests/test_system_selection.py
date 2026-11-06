@@ -397,6 +397,12 @@ class AMissingInputFileIsNamed(unittest.TestCase):
                 "ERROR: --from-md5-file nosuch.txt: No such file or directory",
             )
 
+    def test_a_missing_data_directory_registry_is_named(self):
+        for argv in (["scripts/refresh_data_dirs.py", "--registry", "nosuch.yml", "--dry-run"],
+                     ["scripts/check_buildbot_system.py", "--registry", "nosuch.yml"]):
+            with self.subTest(script=argv[0]):
+                self._refused(argv, "ERROR: Registry not found: nosuch.yml")
+
 
 class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     """verify exited 0 with a required file missing on an md5 platform, so

@@ -15,13 +15,14 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import subprocess
 import sys
 import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from common import yaml_load
+from common import InputMissing, yaml_load
 
 log = logging.getLogger(__name__)
 
@@ -194,6 +195,9 @@ def main() -> None:
         help="the data directory registry to check (default: %(default)s)",
     )
     args = parser.parse_args()
+    # Read after the buildbot answered, a mistyped path ended on a trace.
+    if not os.path.isfile(args.registry):
+        raise InputMissing(f"Registry not found: {args.registry}")
 
     report = check(args.registry)
 

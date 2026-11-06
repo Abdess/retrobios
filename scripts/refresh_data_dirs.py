@@ -27,7 +27,7 @@ import zipfile
 from collections.abc import Iterator
 from pathlib import Path
 from artifacts import file_lock as _file_lock, set_plain_mode
-from common import github_token, platform_arg, require_platform, suggest_names, yaml_load
+from common import InputMissing, github_token, platform_arg, require_platform, suggest_names, yaml_load
 
 try:
     import yaml
@@ -53,7 +53,7 @@ def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
         raise ImportError("PyYAML required: pip install pyyaml")
     path = Path(registry_path)
     if not path.exists():
-        raise FileNotFoundError(f"Registry not found: {registry_path}")
+        raise InputMissing(f"Registry not found: {registry_path}")
     with open(path) as f:
         data = yaml_load(f) or {}
     return data.get("data_directories", {})
