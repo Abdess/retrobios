@@ -49,6 +49,7 @@ on:
       - "scripts/sitediagrams.py"
       - "scripts/siteentries.py"
       - "scripts/siteguides.py"
+      - "scripts/siteinputs.py"
       - "scripts/sitemarkup.py"
       - "scripts/sitemeasurements.py"
       - "scripts/siteexports.py"
