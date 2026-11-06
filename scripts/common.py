@@ -2761,6 +2761,29 @@ def preferred_profile(index: dict[str, set[str]], name: str) -> str | None:
     return name if name in claimants else sorted(claimants)[0]
 
 
+def profile_blind_platforms(
+    platforms: list[str],
+    platforms_dir: str,
+    profiles: dict[str, dict],
+    target_cores: dict[str, set[str] | None] | None = None,
+) -> list[str]:
+    """Platforms that run no core a profile describes.
+
+    Regions, search order and game data are read from the profiles of the
+    cores a platform runs. MiSTer and BizHawk declare `cores: []`: a
+    --region, --one-per-slot or --no-game-data pack of theirs withdrew
+    nothing while its name and README said it had.
+    """
+    return [
+        name for name in platforms
+        if not resolve_platform_cores(
+            load_platform_config(name, platforms_dir),
+            profiles,
+            target_cores=(target_cores or {}).get(name),
+        )
+    ]
+
+
 def resolve_platform_cores(
     config: dict,
     profiles: dict[str, dict],

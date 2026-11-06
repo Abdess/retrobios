@@ -65,6 +65,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    profile_blind_platforms,
     resolve_system_arg,
     print_platform_listing,
     select_systems,
@@ -3016,6 +3017,30 @@ def _main(held: contextlib.ExitStack) -> None:
                 )
                 print(f"ERROR: {reason}", file=sys.stderr)
                 sys.exit(1)
+
+    # generate_pack refuses these on a platform whose cores no profile
+    # describes, and the report answers the same request the same way.
+    flags = [
+        flag for flag, given in (
+            ("--region", requested_regions),
+            ("--no-game-data", getattr(args, "no_game_data", False)),
+        ) if given
+    ]
+    if flags:
+        blind = profile_blind_platforms(
+            platforms, args.platforms_dir, emu_profiles,
+            target_cores_cache if args.target else None,
+        )
+        for name in blind:
+            message = (
+                f"{name} runs no core a profile describes, and "
+                f"{', '.join(flags)} reads the profiles"
+            )
+            if not args.all:
+                print(f"ERROR: {message}: drop {', '.join(flags)}", file=sys.stderr)
+                sys.exit(1)
+            print(f"  {message}: left out")
+        platforms = [name for name in platforms if name not in blind]
 
     # Group identical platforms (same function as generate_pack)
     groups = group_identical_platforms(

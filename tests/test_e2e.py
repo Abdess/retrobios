@@ -6374,6 +6374,33 @@ struct BurnDriver BurnDrvneogeo = {
             [f for f in os.listdir(out) if f.endswith(".zip")] if os.path.isdir(out) else []
         )
 
+    def test_a_platform_without_cores_refuses_profile_narrowings(self):
+        """MiSTer and BizHawk declare cores: []. --region, --one-per-slot
+        and --no-game-data read the profiles, so their packs withdrew
+        nothing under a name and README that said otherwise."""
+        import subprocess
+
+        repo = os.path.join(os.path.dirname(__file__), "..")
+        out = os.path.join(self.root, "blind")
+        runs = [
+            ["scripts/generate_pack.py", "--platform", "misterfpga", "--region", "us"],
+            ["scripts/generate_pack.py", "--platform", "misterfpga", "--one-per-slot"],
+            ["scripts/generate_pack.py", "--platform", "misterfpga", "--no-game-data"],
+            ["scripts/generate_pack.py", "--platform", "bizhawk", "--manifest",
+             "--region", "us"],
+            ["scripts/verify.py", "--platform", "bizhawk", "--region", "us"],
+        ]
+        for argv in runs:
+            extra = ["--offline", "--output-dir", out] if "generate_pack" in argv[0] else []
+            with self.subTest(argv=argv):
+                proc = subprocess.run(
+                    [sys.executable, *argv, *extra],
+                    capture_output=True, text=True, cwd=repo, timeout=300,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+                self.assertIn("runs no core a profile describes", proc.stderr)
+        self.assertFalse(os.listdir(out) if os.path.isdir(out) else [])
+
     def test_a_full_pack_is_not_announced_as_narrowed(self):
         from generate_pack import _build_readme, _narrowings
 
