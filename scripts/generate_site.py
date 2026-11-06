@@ -2485,10 +2485,16 @@ def _browser_title(relative: Path, title: str) -> str:
     return title
 
 
+_LINK_TEXT = r"(?:`[^`]*`|\[[^\]\[]*\]|[^\]\[])"
+
+
 def _plain_markdown(text: str) -> str:
     text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"!\[([^]]*)\]\([^)]*\)", r"\1", text)
-    text = re.sub(r"\[([^]]+)\]\([^)]*\)", r"\1", text)
+    # Link text may hold brackets: a code span or a No-Intro name such as
+    # `[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin` left the whole link,
+    # anchor included, in the Pioneer page's meta description.
+    text = re.sub(rf"!\[({_LINK_TEXT}*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(rf"\[({_LINK_TEXT}+)\]\([^)]*\)", r"\1", text)
     # Code spans keep their text whole: validate_schemas.py read
     # validateschemas.py once every underscore was taken for emphasis.
     pieces = re.split(r"(`[^`]*`)", text)
