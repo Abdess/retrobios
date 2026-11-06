@@ -6354,7 +6354,7 @@ def search_excluded(lines: list[str]) -> list[str]:
 SEARCH_SKIPPED = (
     "- SHA1:", "- MD5:", "- CRC32:", "- SHA256:", "- Adler32", "- Size:",
     "- Validation", "- Priority:", "- Contents (",
-    "- Platforms:", "- Packed for its emulators by:", "- Source:", "- Asked for by:",
+    "- Platforms:", "- Source:", "- Asked for by:",
     "- Collection path:", "- Collection copy:", "- Collection copies:",
     "- Installed by the platform's own package on:",
     "- Not in the platform's package", "- Never opened on these platforms",
@@ -8391,13 +8391,6 @@ def _render_emulator_file(
             details.append("Platforms: " + ". ".join(places))
         elif plat_links:
             details.append(f"Platforms: {', '.join(plat_links)}")
-        # The packs that carry the file for their emulators, as the system
-        # card says: handy's lynxboot.img named every setup but EmuDeck,
-        # ROCKNIX and NextUI, which install it for the core.
-        packed = _installed_places(
-            sha1, consumers, set(consumers.platforms.get(sha1, ()))) if sha1 else []
-        if packed:
-            details.append("Packed for its emulators by: " + ". ".join(_places_markdown(packed)))
 
     if dest and dest != fname and dest != fpath:
         details.append(f"Destination: `{dest}`")
@@ -10136,6 +10129,8 @@ def emulator_pages(
     if setups:
         # The file cards name the setups whose own list holds a file: the
         # ones that run the emulator and pack its files were said nowhere.
+        # Said once here: a line on each card put MAME's parts and four
+        # other pages over their element budget.
         lines.append("| Run by | " + ", ".join(
             f"[{_platform_display(p)}](../platforms/{p}.md)" for p in setups) + " |")
     lines.append(f"| Profiled | {profiled} |")

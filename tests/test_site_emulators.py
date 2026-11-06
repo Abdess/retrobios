@@ -764,8 +764,9 @@ class SmallFixes(unittest.TestCase):
 
 
 class AnEmulatorPageNamesItsSetups(unittest.TestCase):
-    """emulators/handy named no setup that runs Handy, and its lynxboot.img
-    card left out EmuDeck, ROCKNIX and NextUI, which pack it for the core."""
+    """emulators/handy named no setup that runs Handy: its lynxboot.img card
+    names the setups whose own list holds it, not EmuDeck, ROCKNIX and
+    NextUI, which pack it for the core."""
 
     def test_setups_come_from_the_core_resolution(self):
         coverages = {
@@ -776,7 +777,7 @@ class AnEmulatorPageNamesItsSetups(unittest.TestCase):
         profiles = {"handy": {"type": "libretro"}, "other": {"type": "libretro"}}
         self.assertEqual(gs.emulator_setups(coverages, profiles)["handy"], ["a", "b"])
 
-    def test_the_page_carries_both(self):
+    def test_the_page_names_them(self):
         from tests import sitepages  # noqa: PLC0415
 
         sitepages.require()
@@ -784,9 +785,6 @@ class AnEmulatorPageNamesItsSetups(unittest.TestCase):
         row = next(line for line in text.splitlines() if line.startswith("| Run by |"))
         for setup in ("emudeck", "rocknix", "nextui", "retroarch"):
             self.assertIn(f"/platforms/{setup}/", row)
-        card = text.split("lynxboot.img", 1)[1].split("\n- Packed for its emulators by:", 1)
-        self.assertEqual(len(card), 2)
-        self.assertIn("EmuDeck", card[1].splitlines()[0])
 
 
 class SizesTheCodeComparesAreExact(unittest.TestCase):
