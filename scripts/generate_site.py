@@ -6277,7 +6277,7 @@ def search_excluded(lines: list[str]) -> list[str]:
 SEARCH_SKIPPED = (
     "- SHA1:", "- MD5:", "- CRC32:", "- SHA256:", "- Adler32", "- Size:",
     "- Validation", "- Priority:", "- Contents (",
-    "- Platforms:", "- Also installed by:", "- Source:", "- Asked for by:",
+    "- Platforms:", "- Packed for its emulators by:", "- Source:", "- Asked for by:",
     "- Collection path:", "- Collection copy:", "- Collection copies:",
     "- Installed by the platform's own package on:",
     "- Not in the platform's package", "- Never opened on these platforms",
@@ -8039,6 +8039,18 @@ def _on_mismatch_lines(value: object) -> list[str]:
     return []
 
 
+def emulator_setups(coverages: dict, profiles: dict) -> dict[str, list[str]]:
+    """Each emulator with the platforms that run it, by display name."""
+    setups: dict[str, list[str]] = {}
+    for platform, cov in coverages.items():
+        for emulator in resolve_platform_cores(cov["config"], profiles):
+            setups.setdefault(emulator, []).append(platform)
+    return {
+        emulator: sorted(names, key=lambda p: _platform_display(p).casefold())
+        for emulator, names in setups.items()
+    }
+
+
 def _build_rows(profile: dict) -> list[str]:
     """Meta card rows for who ships the build, how its files are found, why
     its revision is held and where its releases are announced."""
@@ -8282,6 +8294,13 @@ def _render_emulator_file(
             details.append("Platforms: " + ". ".join(places))
         elif plat_links:
             details.append(f"Platforms: {', '.join(plat_links)}")
+        # The packs that carry the file for their emulators, as the system
+        # card says: handy's lynxboot.img named every setup but EmuDeck,
+        # ROCKNIX and NextUI, which install it for the core.
+        packed = _installed_places(
+            sha1, consumers, set(consumers.platforms.get(sha1, ()))) if sha1 else []
+        if packed:
+            details.append("Packed for its emulators by: " + ". ".join(_places_markdown(packed)))
 
     if dest and dest != fname and dest != fpath:
         details.append(f"Destination: `{dest}`")
@@ -9403,6 +9422,8 @@ def _said_as_list(items: list[str]) -> str:
 # Data directory members and revisions, read once per build.
 _DATA_MEMBERS: dict[str, dict[str, dict]] = {}
 _DATA_REVISIONS: dict[str, dict] = {}
+# Emulator -> the platforms that run it, as resolve_platform_cores answers.
+_EMULATOR_SETUPS: dict[str, list[str]] = {}
 # The measurement index items of each emulator, for the proof lines of its page.
 _MEASUREMENT_ITEMS: dict[str, list[dict]] = {}
 # The emulator pages that list each data directory, by ref.
@@ -9998,6 +10019,12 @@ def emulator_pages(
     if revision:
         lines.append(f"| Revision | {revision} |")
     lines.extend(_build_rows(profile))
+    setups = _EMULATOR_SETUPS.get(name)
+    if setups:
+        # The file cards name the setups whose own list holds a file: the
+        # ones that run the emulator and pack its files were said nowhere.
+        lines.append("| Run by | " + ", ".join(
+            f"[{_platform_display(p)}](../platforms/{p}.md)" for p in setups) + " |")
     lines.append(f"| Profiled | {profiled} |")
     # The YAML is the reusable document this site renders, and the JSON is the
     # same profile for a program.
@@ -12325,6 +12352,7 @@ def _generate(args: argparse.Namespace) -> None:
         PAGE_DATA[f"platforms/{name}.md"] = platform_structured_data(name, cov)
 
     print("Generating emulator pages...")
+    _EMULATOR_SETUPS.update(emulator_setups(coverages, profiles))
     _DATA_MEMBERS.update(data_directory_members())
     _DATA_REVISIONS.update(data_directory_revisions())
     for key in sorted(profiles):

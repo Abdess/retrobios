@@ -763,6 +763,32 @@ class SmallFixes(unittest.TestCase):
         self.assertEqual(said, [])
 
 
+class AnEmulatorPageNamesItsSetups(unittest.TestCase):
+    """emulators/handy named no setup that runs Handy, and its lynxboot.img
+    card left out EmuDeck, ROCKNIX and NextUI, which pack it for the core."""
+
+    def test_setups_come_from_the_core_resolution(self):
+        coverages = {
+            "b": {"config": {"cores": ["handy"]}},
+            "a": {"config": {"cores": ["handy", "other"]}},
+            "c": {"config": {"cores": ["other"]}},
+        }
+        profiles = {"handy": {"type": "libretro"}, "other": {"type": "libretro"}}
+        self.assertEqual(gs.emulator_setups(coverages, profiles)["handy"], ["a", "b"])
+
+    def test_the_page_carries_both(self):
+        from tests import sitepages  # noqa: PLC0415
+
+        sitepages.require()
+        text = sitepages.page("emulators/handy.md").read_text(encoding="utf-8")
+        row = next(line for line in text.splitlines() if line.startswith("| Run by |"))
+        for setup in ("emudeck", "rocknix", "nextui", "retroarch"):
+            self.assertIn(f"/platforms/{setup}/", row)
+        card = text.split("lynxboot.img", 1)[1].split("\n- Packed for its emulators by:", 1)
+        self.assertEqual(len(card), 2)
+        self.assertIn("EmuDeck", card[1].splitlines()[0])
+
+
 class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):
     """pcee2's page linked github.com/PCSX2/pcsx2/archive/{version}.tar.gz,
     a 404, and buildbot zips showed `Revision: master (2047720058)`: a branch
