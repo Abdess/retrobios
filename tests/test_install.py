@@ -1584,6 +1584,8 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
             with self.subTest(platform=platform):
                 self.assertEqual(sorted(targets), sorted(known))
             for target, cores in targets.items():
+                # A target that names its card images carries them beside.
+                cores = cores["cores"] if isinstance(cores, dict) else cores
                 with self.subTest(platform=platform, target=target):
                     resolved = load_target_config(platform, target, platforms)
                     self.assertEqual(cores, None if resolved is None else sorted(resolved))
@@ -3346,6 +3348,44 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
         self.assertIn("found on the card", board["message"])
         files = {event["dest"] for event in events if event["event"] == "file"}
         self.assertEqual(files, {"pi.bin"})
+
+    def test_a_card_naming_its_image_gets_the_board_of_that_image(self):
+        """A Batocera RG35XX Plus card names anbernic-rg35xx-plus, a zen3 one
+        x86-64-v3: neither is a target name, and the card took every
+        board's files (9.0 GB where h700 reads 6.1)."""
+        (self.boot / "boot" / "batocera.board").write_text("anbernic-rg35xx-plus\n")
+        (self.list.parent / "targets" / "batocera.json").write_text(json.dumps({
+            "h700": {"cores": ["picore"], "images": ["anbernic-rg28xx",
+                                                    "anbernic-rg35xx-plus"]},
+            "x86_64": ["pccore"]}))
+        out, events = self.run_main()
+        [board] = [event for event in events if event["event"] == "board"]
+        self.assertEqual((board["board"], board["applied"]), ("h700", True))
+        self.assertIn("Board h700 (anbernic-rg35xx-plus) found on the card", out)
+        files = {event["dest"] for event in events if event["event"] == "file"}
+        self.assertEqual(files, {"pi.bin"})
+
+    def test_an_image_two_boards_build_names_neither(self):
+        targets = install._validate_targets({
+            "zen3": {"cores": ["a"], "images": ["x86-64-v3"]},
+            "rk3326": {"cores": ["b"], "images": ["r36s"]},
+            "rk3566": {"cores": ["c"], "images": ["r36s"]}})
+        self.assertEqual(install.board_target("x86-64-v3", targets), "zen3")
+        self.assertEqual(install.board_target("zen3", targets), "zen3")
+        self.assertIsNone(install.board_target("r36s", targets))
+
+    def test_a_knulli_card_names_its_image_too(self):
+        (self.boot / "boot" / "knulli.board").write_text("rg35xx-plus\n")
+        with unittest.mock.patch.object(install, "_mounted_cards", return_value=[self.boot]):
+            self.assertEqual(install.card_board("knulli"), "rg35xx-plus")
+        published = json.loads((REPO_ROOT / "install" / "targets" / "knulli.json").read_text())
+        self.assertEqual(install.board_target(
+            "rg35xx-plus", install._validate_targets(published)), "h700")
+        batocera = install._validate_targets(json.loads(
+            (REPO_ROOT / "install" / "targets" / "batocera.json").read_text()))
+        for image, board in (("anbernic-rg35xx-plus", "h700"), ("x86-64-v3", "zen3"),
+                             ("odroidn2", "s922x"), ("bcm2711", "bcm2711")):
+            self.assertEqual(install.board_target(image, batocera), board)
 
     def test_every_board_keeps_them_all(self):
         _out, events = self.run_main("--every-board")

@@ -1488,8 +1488,11 @@ _BOARD_NAMES: dict[str, dict[str, str]] = {
 # the FAT one beside SHARE (batocera-43.1, board/batocera/scripts/
 # post-image-script.sh:60), and reads it there itself (package/batocera/
 # core/batocera-scripts/scripts/batocera-info). batocera.arch is inside the
-# image, out of a computer's reach.
-_CARD_BOARD_FILES: dict[str, str] = {"batocera": "boot/batocera.board"}
+# image, out of a computer's reach. KNULLI writes boot/knulli.board the same
+# way (knulli-linux 20260511, board/scripts/post-image-script.sh:66). Both
+# write the image's name, which the target list maps to its board.
+_CARD_BOARD_FILES: dict[str, str] = {"batocera": "boot/batocera.board",
+                                     "knulli": "boot/knulli.board"}
 
 
 def card_board(platform: str) -> str | None:
@@ -3905,7 +3908,24 @@ def _validate_targets(data: object) -> dict[str, dict]:
         ):
             raise ValueError(f"invalid core list for target {target}")
         normalized[target] = {"cores": cores}
+        images = value.get("images") if isinstance(value, dict) else None
+        if images is None:
+            continue
+        if not isinstance(images, list) or len(images) > 10_000 or not all(
+                isinstance(image, str) and 0 < len(image) <= 128 for image in images):
+            raise ValueError(f"invalid image list for target {target}")
+        normalized[target]["images"] = images
     return normalized
+
+
+def board_target(board: str, targets: dict[str, dict]) -> str | None:
+    """The target a board name stands for: the name itself, else the one
+    target whose images carry it. A card names its image (Batocera writes
+    anbernic-rg35xx-plus for the h700 target, x86-64-v3 for zen3)."""
+    if board in targets:
+        return board
+    owners = [name for name, info in targets.items() if board in info.get("images", ())]
+    return owners[0] if len(owners) == 1 else None
 
 
 NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
@@ -15195,9 +15215,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 board, where = card_board(plat_name), "found on the card"
             if board:
                 known = fetch_targets(plat_name) or {}
+                image, board = board, board_target(board, known) or board
                 if board in known:
                     target = board
-                    words = f"Board {board} {where} (--every-board installs all boards)"
+                    named = board if image == board else f"{board} ({image})"
+                    words = f"Board {named} {where} (--every-board installs all boards)"
                 else:
                     words = (f"Board {board} {where} has no "
                              f"{PLATFORM_NAMES.get(plat_name, plat_name)} core list: "

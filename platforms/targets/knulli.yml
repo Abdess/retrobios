@@ -1,6 +1,6 @@
 platform: knulli
 source: https://github.com/knulli-cfw/knulli-linux/tree/20260511
-scraped_at: '2026-11-05T10:55:16Z'
+scraped_at: '2026-11-06T02:19:00Z'
 targets:
   a133:
     architecture: aarch64
@@ -165,6 +165,13 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - magicx-zero-28
+    - magicx-zero-40
+    - powkiddy-v20
+    - powkiddy-v90s
+    - trimui-brick
+    - trimui-smart-pro
   a527:
     architecture: aarch64
     cores:
@@ -329,6 +336,9 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - helegany-action-pi
+    - trimui-smart-pro-s
   atm7039:
     architecture: arm
     cores:
@@ -460,6 +470,8 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - rg35xx
   h700:
     architecture: aarch64
     cores:
@@ -625,6 +637,17 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - rg-cubexx
+    - rg28xx
+    - rg34xx
+    - rg34xx-sp
+    - rg35xx-h
+    - rg35xx-plus
+    - rg35xx-pro
+    - rg35xx-sp
+    - rg40xx-h
+    - rg40xx-v
   r16:
     architecture: arm
     cores:
@@ -762,6 +785,8 @@ targets:
     - xscpu64
     - xvic
     - zc210
+    images:
+    - miyoo-a30
   rk3128:
     architecture: arm
     cores:
@@ -901,6 +926,10 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - powkiddy_a13
+    - ps5000
+    - ps7000
   rk3326:
     architecture: aarch64
     cores:
@@ -1052,6 +1081,11 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - g350
+    - magicx-mini-m
+    - pixel2
+    - r36s
   rk3566:
     architecture: aarch64
     cores:
@@ -1211,6 +1245,12 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - miyoo-flip
+    - powkiddy-rgb30
+    - powkiddy-x55
+    - rg-arc-s
+    - rg-ds
   rk3576:
     architecture: aarch64
     cores:
@@ -1369,6 +1409,8 @@ targets:
     - xvic
     - yabasanshiro
     - zc210
+    images:
+    - rg-vita-pro
   sm8250:
     architecture: aarch64
     cores:

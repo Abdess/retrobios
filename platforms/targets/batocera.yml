@@ -1,6 +1,6 @@
 platform: batocera
 source: https://github.com/batocera-linux/batocera.linux/tree/batocera-43.1
-scraped_at: '2026-11-05T10:55:18Z'
+scraped_at: '2026-11-06T02:18:59Z'
 targets:
   a3gen2:
     architecture: aarch64
@@ -169,6 +169,8 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - khadas-vim4
   bcm2711:
     architecture: aarch64
     cores:
@@ -1063,6 +1065,12 @@ targets:
     - xvic
     - yquake2
     - zc210
+    images:
+    - bananapi-m2-zero
+    - cha
+    - orangepi-one
+    - orangepi-pc
+    - orangepi-plus2e
   h5:
     architecture: aarch64
     cores:
@@ -1214,6 +1222,9 @@ targets:
     - xvic
     - yquake2
     - zc210
+    images:
+    - orangepi-pc2
+    - tritium-h5
   h6:
     architecture: aarch64
     cores:
@@ -1364,6 +1375,10 @@ targets:
     - xvic
     - yquake2
     - zc210
+    images:
+    - orangepi-3
+    - orangepi-3-lts
+    - orangepi-one-plus
   h616:
     architecture: aarch64
     cores:
@@ -1523,6 +1538,10 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - orangepi-zero2
+    - orangepi-zero3
+    - x96-mate
   h700:
     architecture: aarch64
     cores:
@@ -1695,6 +1714,22 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - anbernic-rg28xx
+    - anbernic-rg34xx
+    - anbernic-rg34xx-sp
+    - anbernic-rg35xx-2024
+    - anbernic-rg35xx-2024-rev6-panel
+    - anbernic-rg35xx-h
+    - anbernic-rg35xx-h-rev6-panel
+    - anbernic-rg35xx-plus
+    - anbernic-rg35xx-plus-rev6-panel
+    - anbernic-rg35xx-pro
+    - anbernic-rg35xx-sp
+    - anbernic-rg35xx-sp-v2-panel
+    - anbernic-rg40xx-h
+    - anbernic-rg40xx-v
+    - anbernic-rgcubexx
   jh7110:
     architecture: riscv64
     cores:
@@ -2328,6 +2363,8 @@ targets:
     - ymir
     - yquake2
     - zc210
+    images:
+    - dragonq6a
   rk3128:
     architecture: arm
     cores:
@@ -2471,6 +2508,10 @@ targets:
     - xvic
     - yquake2
     - zc210
+    images:
+    - powkiddy_a13
+    - ps5000
+    - ps7000
   rk3288:
     architecture: arm
     cores:
@@ -2626,6 +2667,9 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - miqi
+    - tinkerboard
   rk3326:
     architecture: aarch64
     cores:
@@ -2780,6 +2824,10 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - r36s
+    - rg351v-v2
+    - rk3326
   rk3328:
     architecture: aarch64
     cores:
@@ -2932,6 +2980,9 @@ targets:
     - xvic
     - yquake2
     - zc210
+    images:
+    - roc-cc
+    - rock64
   rk3399:
     architecture: aarch64
     cores:
@@ -3094,6 +3145,15 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - hugsun-x99
+    - nanopi-m4v2
+    - orangepi-800
+    - orangepi4-lts
+    - rg552
+    - rock-pi-4
+    - rock960
+    - rockpro64
   rk3568:
     architecture: aarch64
     cores:
@@ -3268,6 +3328,17 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - anbernic-rgxx3
+    - firefly-station-m2
+    - firefly-station-p2
+    - odroid-m1
+    - odroid-m1s
+    - orangepi-3b
+    - powkiddy-x55
+    - radxa-zero-3w
+    - rock-3a
+    - rock-3c
   rk3588-sdio:
     architecture: aarch64
     cores:
@@ -3455,6 +3526,9 @@ targets:
     - ymir
     - yquake2
     - zc210
+    images:
+    - orangepi-5-max
+    - orangepi-5-ultra
   rk3588:
     architecture: aarch64
     cores:
@@ -3642,6 +3716,25 @@ targets:
     - ymir
     - yquake2
     - zc210
+    images:
+    - bananapi-m7
+    - coolpi-4b
+    - firefly-station-m3
+    - friendlyelec-cm3588-nas
+    - gameforce-ace
+    - indiedroid-nova
+    - khadas-edge-2
+    - mekotronics-r58
+    - nanopi-m6
+    - orangepi-5
+    - orangepi-5-plus
+    - orangepi-5-pro
+    - orangepi-5b
+    - quartzpro64
+    - rock-5a
+    - rock-5b
+    - rock-5b-plus
+    - rock-5c
   s812:
     architecture: arm
     cores:
@@ -3940,6 +4033,14 @@ targets:
     - xvic
     - yquake2
     - zc210
+    images:
+    - lepotato
+    - lepotatov2
+    - minix-neo-u1
+    - odroidc2
+    - p201
+    - tvbox
+    - vim
   s905gen2:
     architecture: aarch64
     cores:
@@ -4102,6 +4203,9 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - khadas-vim2
+    - radxa-zero
   s905gen3:
     architecture: aarch64
     cores:
@@ -4264,6 +4368,10 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - khadas-vim3l
+    - odroidc4
+    - tvbox-gen3
   s922x:
     architecture: aarch64
     cores:
@@ -4431,6 +4539,15 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - gtking
+    - gtkingpro
+    - odroidn2
+    - odroidn2l
+    - odroidn2plus
+    - ogu
+    - vim3
+    - zero2
   s9gen4:
     architecture: aarch64
     cores:
@@ -4591,6 +4708,8 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - khadas-vim1s
   sm8250:
     architecture: aarch64
     cores:
@@ -5147,6 +5266,8 @@ targets:
     - yabasanshiro
     - yquake2
     - zc210
+    images:
+    - orangepi-4a
   x86_64:
     architecture: x86_64
     cores:
@@ -5599,3 +5720,5 @@ targets:
     - ymir
     - yquake2
     - zc210
+    images:
+    - x86-64-v3
