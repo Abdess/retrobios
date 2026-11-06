@@ -200,6 +200,33 @@ class EveryGapCountedIsNamed(unittest.TestCase):
         self.assertIn("MISSING (game data): engine needs level.dat", verbose.getvalue())
 
 
+class BundledGameDataIsNotMissing(unittest.TestCase):
+    """cross_reference put Abuse's abuse.lsp, defaults.prp and english.lsp
+    under bundled while verify called them missing game data: 24 of the 427
+    Batocera counted."""
+
+    def test_bundled_game_data_is_counted_apart(self):
+        import contextlib
+        import io
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        result = {"undeclared_files": [
+            {"name": "abuse.lsp", "emulator": "Abuse", "required": True,
+             "in_repo": False, "category": "game_data", "bundled": True,
+             "in_pack": False},
+            {"name": "level.dat", "emulator": "engine", "required": True,
+             "in_repo": False, "category": "game_data"},
+        ]}
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            verify._print_undeclared_section(result, verbose=True)
+        self.assertIn("Game data: 0 in pack, 1 missing", out.getvalue())
+        self.assertNotIn("needs abuse.lsp", out.getvalue())
+        self.assertIn("Bundled with their emulator, not collected: 1 (abuse.lsp)",
+                      out.getvalue())
+
+
 class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):
     """verify --platform recalbox --system nec-pc-engine printed no Core
     files line while the pack held six geargrafx syscard copies: the gap

@@ -1845,6 +1845,13 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
 
     game_data, bios_files, unplaced = _split_undeclared(undeclared)
 
+    # A file installed with its emulator is never collected, firmware or
+    # game data, required or not: cross_reference counts it apart. The
+    # firmware already left the pack lists (_mark_unplaced), the game data
+    # did not, and Abuse's three bundled data files read as missing.
+    bundled = [u for u in undeclared if not u["in_repo"] and u.get("bundled")]
+    game_data = [u for u in game_data if u["in_repo"] or not u.get("bundled")]
+
     req_not_in_repo = _core_required_missing(bios_files)
     req_hle_not_in_repo = [
         u
@@ -1854,12 +1861,6 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     req_in_repo = [u for u in bios_files if u["required"] and u["in_repo"]]
     opt_in_repo = [u for u in bios_files if not u["required"] and u["in_repo"]]
     opt_not_in_repo = [u for u in bios_files if not u["required"] and not u["in_repo"]]
-
-    bundled = [
-        u for u in bios_files
-        if u["required"] and not u["in_repo"] and u.get("bundled")
-        and not u.get("hle_fallback")
-    ]
     # The builder's count, one file per pack path, when the platform pass
     # replayed it. Counting entries said 1130 for RetroArch, 48 more than the
     # pack holds: rom.key alone was claimed by three Amiga cores.
@@ -1886,8 +1887,17 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         for u in opt_not_in_repo:
             _print_undeclared_entry(u, "MISSING (optional)", verbose, repeated)
     if bundled:
-        names = ", ".join(sorted({u["name"] for u in bundled}))
-        print(f"  Bundled with their emulator, not collected: {names}")
+        # The required firmware is named, as a missing one would be; the
+        # rest (shaders, runtime libraries, engine data) on request.
+        shown = bundled if verbose else [
+            u for u in bundled
+            if u["required"] and u.get("category", "bios") != "game_data"
+        ]
+        names = ", ".join(sorted({u["name"] for u in shown}))
+        print(
+            f"  Bundled with their emulator, not collected: {len(bundled)}"
+            + (f" ({names})" if names else "")
+        )
     if unplaced:
         print(f"  Core files held but not packed: {len(unplaced)} "
               f"({_omission_reasons(unplaced)})")
