@@ -43,6 +43,7 @@ from common import (
     require_directory,
     target_listing_line,
     suggest_names,
+    system_index,
     require_platform,
     load_target_config,
     archive_entry,
@@ -165,7 +166,9 @@ class PackRecord:
         self.sources: dict[str, str] = {}
 
 
-def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> None:
+def _add_pack_member(
+    zf: zipfile.ZipFile | PackRecord, source_path: str, arcname: str
+) -> None:
     """Add a file to the pack with metadata that does not depend on the build.
 
     ZipFile.write copies the source file's mtime into the member. For a file
@@ -198,7 +201,9 @@ def _add_pack_member(zf: zipfile.ZipFile, source_path: str, arcname: str) -> Non
         shutil.copyfileobj(source, target, 1024 * 1024)
 
 
-def _write_generated_member(zf: zipfile.ZipFile, arcname: str, text: str) -> None:
+def _write_generated_member(
+    zf: zipfile.ZipFile | PackRecord, arcname: str, text: str
+) -> None:
     """Write a pack member the builder composes rather than copies.
 
     READMEs, instruction notes and the manifest are produced at build time,
@@ -594,7 +599,7 @@ def _data_directory_members(
 
 
 def _pack_data_directories(
-    zf: zipfile.ZipFile,
+    zf: zipfile.ZipFile | PackRecord,
     pack_systems: dict,
     data_registry: dict | None,
     platform_name: str,
@@ -1496,7 +1501,9 @@ def generate_pack(
 
 
 def _extract_zip_to_archive(
-    source_zip: str, dest_prefix: str, target_zf: zipfile.ZipFile
+    source_zip: str,
+    dest_prefix: str,
+    target_zf: zipfile.ZipFile | PackRecord,
 ) -> None:
     """Extract contents of a source ZIP into target ZIP under dest_prefix."""
     with zipfile.ZipFile(source_zip, "r") as src:
@@ -1527,7 +1534,7 @@ def _extract_zip_to_archive(
 def _add_zip_to_pack(
     source_zip: str,
     dest_path: str,
-    target_zf: zipfile.ZipFile,
+    target_zf: zipfile.ZipFile | PackRecord,
     file_entry: dict | None = None,
 ) -> None:
     """Write a source ZIP into the pack, byte for byte.
@@ -1575,7 +1582,7 @@ class DamagedArchiveError(OSError):
 
 
 def _pack_data_tree(
-    zf: zipfile.ZipFile,
+    zf: zipfile.ZipFile | PackRecord,
     local_cache: str,
     dd_dest: str,
     seen_destinations: set[str],
@@ -2088,7 +2095,10 @@ def generate_system_pack(
                 f"No emulators found for system(s): {', '.join(system_ids)}",
                 file=sys.stderr,
             )
-        print(suggest_names(system_ids, sorted(all_systems), "--list-systems"),
+        # --list-systems merges spellings that differ in case or separator:
+        # the hint counted 579 spellings for the 532 lines it prints.
+        print(suggest_names(system_ids, sorted(all_systems), "--list-systems",
+                            listed=len(system_index(profiles))),
               file=sys.stderr)
         return None
 

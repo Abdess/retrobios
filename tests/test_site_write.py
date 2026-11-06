@@ -11,6 +11,8 @@ delete on the critical path and is why these tests exist.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import sys
 import tempfile
 import unittest

@@ -7,6 +7,8 @@ is two held ROMs end to end. The gap report listed them as acquisition targets.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import os
 import shutil

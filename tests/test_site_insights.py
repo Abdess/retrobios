@@ -1,6 +1,8 @@
 """The readings of scripts/site_insights.py, on synthetic figures."""
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import datetime as dt
 import sys
 import unittest

@@ -1188,6 +1188,9 @@ def main() -> None:
         "--list-emulators", action="store_true", help="List available emulators"
     )
     args = parser.parse_args()
+    from common import work_from_repo_root  # noqa: PLC0415
+
+    work_from_repo_root(args, parser, ["emulators_dir", "platforms_dir", "db"])
     if args.list_emulators:
         ignored = [flag for flag, on in (
             ("--emulator", args.emulator), ("--platform", args.platform),

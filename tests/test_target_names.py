@@ -7,6 +7,8 @@ and `--verify-packs --target nx` looked for a pack nobody had built.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import subprocess
 import sys
 import tempfile

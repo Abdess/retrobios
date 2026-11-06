@@ -8,6 +8,8 @@ the bare file names under a pack called Standalone.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import subprocess
 import sys

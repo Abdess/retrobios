@@ -110,7 +110,7 @@ RetroDECK: 2007/2008 OK, 1 untested [md5]
   Core files: 1763 in pack, 1 required missing, 26 optional missing (--verbose lists them)
   Core files held but not packed: 154 (142 installed with its emulator, 8 read below a save folder per system and no system runs the core there, 4 a packed file occupies its directory)
     MISSING (required): FinalBurn Neo needs sfiii2a.zip (1 file)
-  Bundled with their emulator, not collected: 20
+  Bundled with their emulator, not collected: 20 (--verbose lists them)
   Game data: 5099 in pack, 30 missing (--verbose lists them)
   Game data held but not packed: 30 (installed with its emulator)
   No external files: 78 cores (--verbose lists them)

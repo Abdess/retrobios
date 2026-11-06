@@ -16,7 +16,8 @@ description = "BIOS collection manager for retrogaming platforms"
 # install.py is the only entry point a user runs before cloning, and both
 # bootstraps accept 3.8, so the floor stays where the bootstraps put it. That
 # floor covers install.py alone: the build scripts under scripts/ need 3.9
-# (pipeline.py checks it), and CI runs the test suite on 3.12.
+# (common.py, which every build script imports, checks it), and CI runs the
+# test suite on 3.12.
 requires-python = ">=3.8"
 dependencies = [
     "pyyaml",
@@ -37,9 +38,34 @@ dev = [
     # installs only in its isolated build environment and 3.12 no longer
     # bundles: without it the guard skipped on every CI run.
     "setuptools>=61",
+    # The type check CI runs, pinned: another mypy reports other errors
+    # than the ones mypy-baseline.txt holds.
+    "mypy==1.18.2",
+    "mypy-baseline==0.7.4",
 ]
 # The site is built by Astro Starlight from website/package.json and its
 # lockfile (npm ci --prefix website): no Python package builds it.
 
 [project.urls]
 Repository = "https://github.com/Abdess/retrobios"
+
+# The annotations are checked, not only written. Third-party packages are left
+# out (no_site_packages) so the result does not depend on what the machine
+# has installed: yaml, jsonschema and the rest read as Any everywhere. The
+# errors the code carried when the check started sit in mypy-baseline.txt.
+# CI fails on an error that is not there and on an entry that no longer
+# occurs: `mypy > out.txt`, then `mypy-baseline filter < out.txt`, and
+# `mypy-baseline sync < out.txt` once the fix is in.
+[tool.mypy]
+files = ["install.py", "scripts"]
+python_version = "3.9"
+explicit_package_bases = true
+ignore_missing_imports = true
+no_site_packages = true
+disable_error_code = ["import-untyped"]
+cache_dir = "tmp/mypy_cache"
+
+[tool.mypy-baseline]
+baseline_path = "mypy-baseline.txt"
+ignore_categories = ["note"]
+sort_baseline = true

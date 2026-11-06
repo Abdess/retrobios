@@ -14,7 +14,6 @@ Usage:
 
 from __future__ import annotations
 
-from siterender import SECTION_LABELS, WIKI_SRC_DIR
 import argparse
 import csv
 import hashlib
@@ -64,6 +63,7 @@ from common import (
     unique_emulator_profiles,
     yaml_load,
 )
+from siterender import SECTION_LABELS, WIKI_SRC_DIR
 from artifacts import ArtifactLockBusy, artifact_lock
 from artifacts import json_text as _json_text
 from cross_reference import FileConsumers, entry_target, held_copy

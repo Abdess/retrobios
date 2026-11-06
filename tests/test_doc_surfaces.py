@@ -9,6 +9,8 @@ tool prints, and a size is the one the release record holds.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import ast
 import contextlib
 import re

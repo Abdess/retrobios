@@ -8,6 +8,8 @@ from the collection read as covered in the pack report and as missing in verify.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import contextlib
 import hashlib
 import io

@@ -222,8 +222,14 @@ disambiguated by a hash suffix on purpose.
    output or formatting.
 
 5. **Run the full suite.** After adding your test, run `python -m unittest
-   discover -s tests -t . -v` to verify nothing else broke. `-t .` imports
-   `tests/__init__.py`, which keeps the suite offline.
+   discover -s tests -t . -v` to verify nothing else broke.
+
+A new module starts with `import tests` right after
+`from __future__ import annotations`. The package import is what keeps a run
+offline, puts its scratch under `tmp/` and gives it its own installer cache,
+however the module is started: `discover tests`, `python -m unittest
+tests.test_e2e` or `python -m tests.test_e2e`. A test fails on any module
+without it.
 
 A fix comes with a test that fails without it. Write the test first, watch it
 fail on the current code, then fix: a test written after the fix may never
@@ -487,6 +493,19 @@ wired to pull requests alone would guard the road nobody takes. The test job
 (`run-tests`) runs in parallel with schema validation, and on a pull request
 with BIOS validation and auto-labeling too. Those two read pull request context
 and stay behind an event guard.
+
+The schema job also runs mypy over `install.py` and `scripts/`. The code
+carried 993 type errors when the check started, so they sit in
+`mypy-baseline.txt` and only a new one fails. An error the change removes fails
+too until the baseline is synced, so the file never hides a later error that
+reads the same:
+
+```bash
+pip install -e ".[dev]"
+mypy > tmp/mypy.txt
+mypy-baseline filter < tmp/mypy.txt   # what CI runs
+mypy-baseline sync < tmp/mypy.txt     # after a fix, commit the new baseline
+```
 
 A push series collapses to the tip, so what a green run states is that the head
 of main passes, not every commit under it.

@@ -8,6 +8,8 @@ app's own code joins that folder to its data root.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import unittest
 from pathlib import Path
 

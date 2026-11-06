@@ -201,6 +201,9 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="Machine-readable output")
     args = parser.parse_args()
+    from common import work_from_repo_root  # noqa: PLC0415
+
+    work_from_repo_root(args, parser, ["db", "emulators_dir"])
 
     db = load_database(args.db)
     profiles = load_emulator_profiles(args.emulators_dir)

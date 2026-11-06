@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import contextlib
 import io
 import os
@@ -83,6 +85,152 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
         self.assertIn("lists all 31", message)
         self.assertNotIn("board-0", message)
 
+
+
+class TheSystemHintCountsTheListing(unittest.TestCase):
+    """`--system sony-playstaton` said "--list-systems lists all 579" and
+    --list-systems printed 532: the hint counted spellings, the listing
+    merges the ones that differ in case or separator."""
+
+    def test_both_tools_count_the_lines_the_listing_prints(self):
+        listing = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--list-systems"],
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=300, check=True,
+        )
+        printed = sum(1 for line in listing.stdout.splitlines() if "emulator" in line)
+        for script in ("verify.py", "generate_pack.py"):
+            with self.subTest(script=script), tempfile.TemporaryDirectory() as out:
+                argv = [sys.executable, f"scripts/{script}", "--system", "sony-playstaton"]
+                if script == "generate_pack.py":
+                    argv += ["--output-dir", out]
+                proc = subprocess.run(
+                    argv, cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+                    check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertIn(f"--list-systems lists all {printed}.", proc.stderr)
+
+
+class ADamagedProfileNamesItself(unittest.TestCase):
+    """One misindented key in an unrelated profile stopped `verify.py
+    --emulator handy` and generate_pack on a 37-line yaml traceback, the
+    faulty file named near its end."""
+
+    def test_one_line_names_the_file_and_line(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+            profiles = Path(folder)
+            (profiles / "handy.yml").write_text(
+                (REPO_ROOT / "emulators" / "handy.yml").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (profiles / "bad.yml").write_text(
+                "emulator: Bad\nfiles:\n  - name: a\n   size: 3\n", encoding="utf-8"
+            )
+            for script, extra in (("verify.py", []),
+                                  ("generate_pack.py", ["--output-dir", folder])):
+                with self.subTest(script=script):
+                    proc = subprocess.run(
+                        [sys.executable, f"scripts/{script}", "--emulator", "handy",
+                         "--emulators-dir", folder, *extra],
+                        cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+                        check=False,
+                    )
+                    self.assertEqual(proc.returncode, 1, proc.stderr)
+                    self.assertNotIn("Traceback", proc.stderr)
+                    self.assertEqual(proc.stderr.strip().splitlines(), [
+                        f"ERROR: {profiles / 'bad.yml'}:4: did not find expected '-' "
+                        "indicator. Check it with: python scripts/validate_schemas.py "
+                        "--source-only"
+                    ])
+
+    def test_a_damaged_file_is_not_an_absent_one(self):
+        """Ten callers skip a platform whose file is absent (except
+        FileNotFoundError): a damaged one has to stop them instead."""
+        self.assertFalse(issubclass(common.SourceUnreadable, FileNotFoundError))
+
+
+class TheVerdictClosesARedirectedReport(unittest.TestCase):
+    """`verify.py --emulator fbneo --strict > log 2>&1` put the --strict
+    ERROR on the first line of the log: stdout redirected is block-buffered,
+    stderr is not, and the report it closes came after."""
+
+    def test_stderr_stays_after_what_stdout_wrote_first(self):
+        program = (
+            "import sys\n"
+            "sys.path.insert(0, 'scripts')\n"
+            "from common import run_cli\n"
+            "def main():\n"
+            "    print('report')\n"
+            "    print('ERROR: verdict', file=sys.stderr)\n"
+            "    return 1\n"
+            "run_cli(main)\n"
+        )
+        env = {k: v for k, v in os.environ.items() if k != "PYTHONUNBUFFERED"}
+        proc = subprocess.run(
+            [sys.executable, "-c", program], cwd=REPO_ROOT, stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT, text=True, timeout=60, check=False, env=env,
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(proc.stdout.splitlines(), ["report", "ERROR: verdict"])
+
+
+class TheAllHelpNamesWhatItCovers(unittest.TestCase):
+    """`verify.py --help` kept 'Verify all active platforms' after the
+    archived status was dropped: --all covers every registered platform,
+    and a reader looked for an --include-archived that no longer exists."""
+
+    def test_no_help_text_speaks_of_active_platforms(self):
+        proc = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--help"], cwd=REPO_ROOT,
+            capture_output=True, text=True, timeout=60, check=True,
+        )
+        self.assertIn("Verify every registered platform", proc.stdout)
+        stale = [path.name for path in sorted((REPO_ROOT / "scripts").rglob("*.py"))
+                 if "active platform" in path.read_text(encoding="utf-8")]
+        self.assertEqual(stale, [])
+
+
+class ReadOnlyToolsRunFromAnyFolder(unittest.TestCase):
+    """Only verify.py and generate_pack.py moved to the repository root.
+    From another folder slots, region_audit, provenance_report and
+    bundled_only said database.json was missing and to rebuild it,
+    identity and list_platforms named a missing folder, and game_rules
+    ended on a FileNotFoundError traceback."""
+
+    COMMANDS = (
+        ["slots.py", "--platform", "retroarch"],
+        ["identity.py"],
+        ["cross_reference.py", "--emulator", "handy"],
+        ["list_platforms.py"],
+        ["region_audit.py"],
+        ["provenance_report.py"],
+        ["bundled_only.py"],
+        ["game_rules.py"],
+    )
+
+    def test_each_reads_the_repository_from_a_subfolder(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+            for command in self.COMMANDS:
+                with self.subTest(command=command[0]):
+                    proc = subprocess.run(
+                        [sys.executable, str(REPO_ROOT / "scripts" / command[0]),
+                         *command[1:]],
+                        cwd=folder, capture_output=True, text=True, timeout=300,
+                        check=False,
+                    )
+                    self.assertEqual(proc.returncode, 0, proc.stderr[-500:])
+                    self.assertNotIn("Traceback", proc.stderr)
+                    self.assertEqual(os.listdir(folder), [])
+
+    def test_a_typed_path_is_read_from_where_it_was_typed(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+            proc = subprocess.run(
+                [sys.executable, str(REPO_ROOT / "scripts" / "slots.py"),
+                 "--db", "nosuch.json"],
+                cwd=folder, capture_output=True, text=True, timeout=300, check=False,
+            )
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn(str(Path(folder) / "nosuch.json"), proc.stderr)
 
 
 class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):

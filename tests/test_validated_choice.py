@@ -8,6 +8,8 @@ across 14 destinations on six platforms.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import ast
 import hashlib
 import sys

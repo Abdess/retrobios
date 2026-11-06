@@ -9,6 +9,8 @@ which fontpc98_read cannot parse, and FONT.ROM was never placed under its name.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import os
 import shutil

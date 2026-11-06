@@ -41,8 +41,10 @@ from common import (
     _foreign_tree,
     _owner_tokens,
     platform_arg,
+    work_from_repo_root,
     target_listing_line,
     suggest_names,
+    system_index,
     require_platform,
     archive_entry,
     archive_is_optional,
@@ -128,29 +130,6 @@ DEFAULT_BIOS_DIR = "bios"
 _REPO_PLATFORMS = os.path.join(os.path.dirname(__file__), "..", "platforms")
 DEFAULT_EMULATORS_DIR = "emulators"
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-def work_from_repo_root(
-    args: argparse.Namespace, parser: argparse.ArgumentParser, path_flags: list[str]
-) -> None:
-    """Run from the repository root, whichever directory the command started in.
-
-    database.json records every file from the root and the data registry
-    names its caches the same way, so a run from scripts/ ended on a
-    FileNotFoundError traceback. A path the caller typed is read from where
-    they typed it, a default from the root.
-    """
-    if os.path.realpath(os.getcwd()) == os.path.realpath(REPO_ROOT):
-        return
-    for flag in path_flags:
-        value = getattr(args, flag, None)
-        if value and value != parser.get_default(flag):
-            setattr(args, flag, os.path.abspath(value))
-    os.chdir(REPO_ROOT)
-    if getattr(args, "platform", None):
-        # Read before the move, the registry was not there to map
-        # "RetroArch" to its slug.
-        args.platform = platform_arg(args.platform)
 
 
 # Status model: aligned with Batocera BiosStatus (batocera-systems:967-969)
@@ -1813,7 +1792,8 @@ def _print_undeclared_entry(
                 ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
                 print(f"      validates {checks_label}{ref_part}")
         else:
-            print(f"      [{'+'.join(checks)}]")
+            # A bare "[size]" under the entry said nothing to a reader.
+            print(f"      validates {'+'.join(checks)}")
 
 
 def _split_undeclared(undeclared: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
@@ -1925,10 +1905,15 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
             u for u in bundled
             if u["required"] and u.get("category", "bios") != "game_data"
         ]
-        names = ", ".join(sorted({u["name"] for u in shown}))
+        named = sorted({u["name"] for u in shown})
+        # The required firmware alone read as the whole count: 14 names
+        # for 154 entries, nothing saying the rest existed.
+        hidden = len({u["name"] for u in bundled}) - len(named)
+        more = f"{hidden} more, " if named else ""
+        items = named + ([f"{more}--verbose lists them"] if hidden else [])
         print(
             f"  Bundled with their emulator, not collected: {len(bundled)}"
-            + (f" ({names})" if names else "")
+            + (f" ({', '.join(items)})" if items else "")
         )
     if unplaced:
         print(f"  Core files held but not packed: {len(unplaced)} "
@@ -2619,7 +2604,10 @@ def verify_system(
                 f"No emulators found for system(s): {', '.join(system_ids)}",
                 file=sys.stderr,
             )
-        print(suggest_names(system_ids, sorted(all_systems), "--list-systems"),
+        # --list-systems merges spellings that differ in case or separator:
+        # the hint counted 579 spellings for the 532 lines it prints.
+        print(suggest_names(system_ids, sorted(all_systems), "--list-systems",
+                            listed=len(system_index(profiles))),
               file=sys.stderr)
         sys.exit(1)
 
@@ -2829,7 +2817,7 @@ def _main(held: contextlib.ExitStack) -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Platform-native BIOS verification")
     parser.add_argument("--platform", "-p", type=platform_arg, help="Platform name")
     parser.add_argument(
-        "--all", action="store_true", help="Verify all active platforms"
+        "--all", action="store_true", help="Verify every registered platform"
     )
     parser.add_argument(
         "--emulator", "-e", help="Emulator profile name(s), comma-separated"
@@ -3145,6 +3133,13 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
         named = [f"{name} {count}" for name, count in counts.items() if count]
         return f" ({', '.join(named)})" if named else ""
 
+    def on(groups: tuple[str, ...]) -> str:
+        """The platforms a file is missing on, by the shorter side."""
+        if len(group_results) < 2 or len(groups) * 2 <= len(group_results):
+            return ", ".join(groups)
+        others = [" / ".join(g) for _, g in group_results if " / ".join(g) not in groups]
+        return "every platform" + (f" but {', '.join(others)}" if others else "")
+
     parts = []
     for severity, label in ((Severity.CRITICAL, "critical"), (Severity.WARNING, "warning"),
                             (Severity.INFO, "info")):
@@ -3163,18 +3158,26 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
     parts.append(f"{total} {'discrepancy' if total == 1 else 'discrepancies'}{where(counts)}")
     lines = [f"{platforms} platforms: {', '.join(parts)}"]
 
-    missing = {
-        " / ".join(group): sorted({
+    # Grouped by file, not by platform: sfiii2a.zip missing everywhere was
+    # counted and printed once per platform, 24 files for 10 distinct ones.
+    holders: dict[str, list[str]] = {}
+    for r, group in group_results:
+        for name in sorted({
             u["name"] for u in _core_required_missing(_split_undeclared(
                 r.get("undeclared_files", []))[1])
-        })
-        for r, group in group_results
-    }
-    total = sum(len(names) for names in missing.values())
-    if total:
-        detail = "; ".join(f"{group}: {', '.join(names)}"
-                           for group, names in missing.items() if names)
-        lines.append(f"{total} core file(s) a core cannot run without are missing ({detail})")
+        }):
+            holders.setdefault(name, []).append(" / ".join(group))
+    if holders:
+        by_platforms: dict[tuple[str, ...], list[str]] = {}
+        for name, groups in sorted(holders.items()):
+            by_platforms.setdefault(tuple(groups), []).append(name)
+        detail = "; ".join(
+            f"{', '.join(names)} ({on(groups)})"
+            for groups, names in sorted(by_platforms.items(),
+                                        key=lambda item: (-len(item[0]), item[1]))
+        )
+        lines.append(f"{len(holders)} core file(s) a core cannot run without are "
+                     f"missing: {detail}")
     for category, label in _NOT_FIRMWARE.items():
         counts = {
             " / ".join(group): len((r.get("missing_not_firmware") or {}).get(category, []))

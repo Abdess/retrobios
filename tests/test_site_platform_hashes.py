@@ -8,6 +8,8 @@ checking a dump against the page was told the wrong hash.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import sys
 import unittest
 from unittest import mock

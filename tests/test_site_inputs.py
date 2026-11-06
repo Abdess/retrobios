@@ -9,6 +9,8 @@ directory, so a get/ page said "No ZIP" for a setup the API marked as released.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import ast
 import json
 import os

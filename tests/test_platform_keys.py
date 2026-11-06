@@ -8,6 +8,8 @@ counted as declared: 76 Batocera entries added names such as boot0.rom.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import re
 import sys
 import unittest

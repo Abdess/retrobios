@@ -8,6 +8,8 @@ which cores keep each system, the rule a pack built for a target follows.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import contextlib
 import io
 import json
