@@ -545,7 +545,8 @@ class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
                 for entry in contract["systems"]["s"]["files"]
             ]
         self.assertEqual(found, expected)
-        self.assertEqual([v for _d, v in found], ["ok", "wrong", "ok", "wrong", "ok", "missing"])
+        # plain.bin declares a cut md5: Batocera compares the whole string.
+        self.assertEqual([v for _d, v in found], ["ok", "wrong", "wrong", "wrong", "ok", "missing"])
 
     def test_batocera_from_the_csv_matches_the_verifier(self):
         """A check driven by platform-files.csv, with zipped_file, gives the

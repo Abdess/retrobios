@@ -59,10 +59,11 @@ class EachProfileEntryIsHashedOnce(unittest.TestCase):
         cats = EntryCategories(_config(["core"], []), profiles)
         real = candidates._entry_hashes
         with mock.patch.object(candidates, "_entry_hashes", side_effect=real) as counted:
-            for md5 in ("a" * 32, "a" * 29):
-                self.assertEqual(cats.category({"name": "a.bin", "md5": md5}, "a.bin", "s"), BIOS)
+            for _ in range(2):
+                self.assertEqual(cats.category({"name": "a.bin", "md5": "a" * 32}, "a.bin", "s"), BIOS)
         self.assertEqual(counted.call_count, 1)
-        self.assertTrue(candidates._accepts({"a" * 32}, {"md5": {"a" * 29}}))
+        # A cut md5 verifies nothing: Batocera compares the whole string.
+        self.assertFalse(candidates._accepts({"a" * 32}, {"md5": {"a" * 29}}))
         self.assertFalse(candidates._accepts({"a" * 32}, {"md5": {"b" * 32}}))
 
 class Category(unittest.TestCase):
@@ -240,8 +241,8 @@ class AProfileIsIndexedOncePerKind(unittest.TestCase):
     def test_the_index_answers_as_the_scan_did(self):
         cases = [
             ({"name": "one.bin", "md5": "2" * 32}, BIOS, [{"name": "one.bin", "source_ref": "a.c:3"}]),
-            # A cut md5 (Batocera's 29 characters) matches by prefix.
-            ({"name": "x", "md5": "1" * 29}, BIOS, [{"name": "one.bin", "source_ref": "a.c:2"}]),
+            # A cut md5 proves nothing: hashes compare whole.
+            ({"name": "x", "md5": "1" * 29}, BIOS, []),
             ({"name": "one.bin"}, BIOS, [
                 {"name": "one.bin", "source_ref": "a.c:2", "by": "name"},
                 {"name": "one.bin", "source_ref": "a.c:3", "by": "name"},

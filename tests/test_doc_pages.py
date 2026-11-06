@@ -658,10 +658,11 @@ class ShortMd5Handling(unittest.TestCase):
         scraper = inspect.getsource(batocera_scraper)
         self.assertIn("_resolve_truncated_md5(value, md5_index) for value in values", scraper)
         resolver = inspect.getsource(common.resolve_local_file)
-        self.assertIn("if len(md5_candidate) < 32:", resolver)
+        self.assertIn("cut_md5_owner(cut, by_md5)", resolver)
         self.assertIn("_md5_name_ok(path)", resolver)
         section = _section(_page("verification-modes.md"), "MD5 shorter than 32 characters (Batocera)")
         self.assertIn("_resolve_truncated_md5", section)
+        self.assertIn("cut_md5_owner", section)
 
 
 class RegistryKeysDocumented(unittest.TestCase):
