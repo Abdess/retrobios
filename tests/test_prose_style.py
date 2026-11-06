@@ -155,6 +155,17 @@ class NoGeneratedTypography(unittest.TestCase):
                     offenders.append(f"{path.relative_to(ROOT)}:{number}: {line.strip()[:100]}")
         self.assertEqual(offenders, [], "\n".join(offenders[:40]))
 
+    def test_no_double_hyphen_dash_in_profiles(self):
+        """GLYPHS sees U+2014, not its ASCII spelling: "No separate upstream --
+        written directly for the libretro API" reached the cruzes page as is."""
+        dash = re.compile(r"[A-Za-z0-9)] -- [A-Za-z0-9(]")
+        offenders = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                if dash.search(BACKTICKS.sub("", line)):
+                    offenders.append(f"{path.relative_to(ROOT)}:{number}: {line.strip()[:100]}")
+        self.assertEqual(offenders, [], "\n".join(offenders))
+
 
 class NoMarketingVocabulary(unittest.TestCase):
     """The project bans these words in published text, and nothing checked

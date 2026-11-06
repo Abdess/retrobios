@@ -18,7 +18,7 @@ systems:
 
 notes: |
   Fork of the last GPLv3 release of redream (inolen) before it went closed-source.
-  The core has HLE bootstrap -- when boot.bin is missing, bios_invalid_instr()
+  The core has an HLE bootstrap. When boot.bin is missing, bios_invalid_instr()
   traps at PC=0x0 and calls bios_boot(), which loads IP.BIN and 1ST_READ.BIN
   directly from disc, sets up syscall vectors, and starts execution at 0xac008300.
 
