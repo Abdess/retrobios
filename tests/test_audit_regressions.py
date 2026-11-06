@@ -2834,6 +2834,50 @@ class DeclaredDependenciesMatchTheDocumentedWorkflows(unittest.TestCase):
         )
 
 
+class TheAnnotationsAreChecked(unittest.TestCase):
+    """Every signature carried type hints and nothing read them: six pack
+    helpers declared `zipfile.ZipFile` while every caller also passed a
+    PackRecord, and 990 such contradictions went through CI green. mypy now
+    runs in CI against mypy-baseline.txt, the errors the code carried when the
+    check started."""
+
+    BASELINE = ROOT / "mypy-baseline.txt"
+    ENTRY = re.compile(r"(?P<path>[^:]+\.py):0: error: .+  \[[a-z-]+\]")
+
+    def test_ci_holds_the_code_to_the_baseline(self):
+        body = (ROOT / ".github" / "workflows" / "validate.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("mypy-baseline filter", body)
+        self.assertNotIn("--allow-unsynced", body)
+
+    def test_every_baseline_entry_names_a_file_that_exists(self):
+        stale = []
+        for line in self.BASELINE.read_text(encoding="utf-8").splitlines():
+            match = self.ENTRY.fullmatch(line)
+            self.assertIsNotNone(match, f"unreadable baseline entry: {line}")
+            if not (ROOT / match["path"]).is_file():
+                stale.append(match["path"])
+        self.assertEqual(stale, [], "baseline entries for files that are gone")
+
+    def test_the_code_reports_no_error_outside_the_baseline(self):
+        for module in ("mypy", "mypy_baseline"):
+            try:
+                __import__(module)
+            except ImportError:
+                self.skipTest(f"{module} is not installed (pip install -e '.[dev]')")
+        report = subprocess.run(
+            [sys.executable, "-m", "mypy"],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+        )
+        result = subprocess.run(
+            [sys.executable, "-m", "mypy_baseline", "filter", "--no-colors"],
+            cwd=ROOT, input=report.stdout, capture_output=True, text=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+
 class TheProjectInstallsWithPip(unittest.TestCase):
     """pyproject declared a dev extra that pip could not install: without a
     [build-system] and an explicit module list, setuptools' flat-layout

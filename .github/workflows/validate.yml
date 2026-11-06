@@ -32,6 +32,9 @@ on:
       - "retired.json"
       - "measurements/**"
       - "website/**"
+      # The type check's configuration and baseline.
+      - "pyproject.toml"
+      - "mypy-baseline.txt"
   # Spelled out twice because the workflow parser reads no YAML anchor. A test
   # holds the two lists equal.
   push:
@@ -58,6 +61,8 @@ on:
       - "retired.json"
       - "measurements/**"
       - "website/**"
+      - "pyproject.toml"
+      - "mypy-baseline.txt"
 
 permissions:
   contents: read
@@ -162,6 +167,17 @@ jobs:
 
       - name: Validate platform configs and emulator profiles
         run: python scripts/validate_schemas.py --source-only
+
+      # The annotations are checked against mypy-baseline.txt, the errors the
+      # code carried when the check started: a new error fails, and so does
+      # an entry that no longer occurs until the baseline is synced. mypy
+      # reads no installed package (no_site_packages in pyproject.toml), so
+      # what this job has installed does not change the result.
+      - name: Type-check the scripts and the installer
+        run: |
+          pip install "mypy==1.18.2" "mypy-baseline==0.7.4"
+          mypy > "$RUNNER_TEMP/mypy.txt" || true
+          mypy-baseline filter --no-colors < "$RUNNER_TEMP/mypy.txt"
 
   # A profile written from a clone can cite lines that do not hold the value
   # it declares, and schemas and tests pass it. Each profile a change adds is

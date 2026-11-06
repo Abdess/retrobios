@@ -488,6 +488,19 @@ wired to pull requests alone would guard the road nobody takes. The test job
 with BIOS validation and auto-labeling too. Those two read pull request context
 and stay behind an event guard.
 
+The schema job also runs mypy over `install.py` and `scripts/`. The code
+carried 993 type errors when the check started, so they sit in
+`mypy-baseline.txt` and only a new one fails. An error the change removes fails
+too until the baseline is synced, so the file never hides a later error that
+reads the same:
+
+```bash
+pip install -e ".[dev]"
+mypy > tmp/mypy.txt
+mypy-baseline filter < tmp/mypy.txt   # what CI runs
+mypy-baseline sync < tmp/mypy.txt     # after a fix, commit the new baseline
+```
+
 A push series collapses to the tip, so what a green run states is that the head
 of main passes, not every commit under it.
 
