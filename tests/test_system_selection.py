@@ -10,6 +10,8 @@ libretro pack.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import os
 import re
 import subprocess
@@ -23,6 +25,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import common  # noqa: E402
 import generate_pack as builder  # noqa: E402
+from tests.scratchtree import scratch_checkout, snapshot  # noqa: E402
 
 
 class SpellingsAgree(unittest.TestCase):
@@ -219,7 +222,7 @@ class AMissingDatabaseIsNamed(unittest.TestCase):
             with self.subTest(script=script):
                 proc = subprocess.run(
                     [sys.executable, f"scripts/{script}", "--db", "nosuch.json", *extra],
-                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    capture_output=True, text=True, cwd=str(scratch_checkout()), timeout=600,
                     check=False,
                 )
                 self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
@@ -254,7 +257,7 @@ class AMissingBiosDirIsRefused(unittest.TestCase):
             with self.subTest(script=script):
                 proc = subprocess.run(
                     [sys.executable, f"scripts/{script}", "--bios-dir", "nosuch", *extra],
-                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    capture_output=True, text=True, cwd=str(scratch_checkout()), timeout=600,
                     check=False,
                 )
                 self.assertNotEqual(proc.returncode, 0)
@@ -307,14 +310,15 @@ class AMissingProfileDirIsRefused(unittest.TestCase):
                   "dat": str(root / "empty.dat")}
         taking = _scripts_taking("--emulators-dir")
         self.assertGreater(len(taking), 15)
-        tracked = ["git", "diff", "--name-only"]
-        before = subprocess.run(tracked, cwd=REPO_ROOT, capture_output=True, text=True).stdout
+        # In a copy: run in the checkout, a regression wrote there first.
+        checkout = scratch_checkout()
+        before = snapshot(checkout)
         for path in taking:
             extra = [arg.format(**values) for arg in self.EXTRA.get(path.stem, [])]
             with self.subTest(script=path.stem):
                 proc = subprocess.run(
                     [*_command(path), "--emulators-dir", "nosuch", *extra],
-                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    capture_output=True, text=True, cwd=str(checkout), timeout=600,
                     check=False, env={**os.environ, "RETROBIOS_OFFLINE": "1"},
                 )
                 self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
@@ -326,9 +330,11 @@ class AMissingProfileDirIsRefused(unittest.TestCase):
         ]
         self.assertEqual(written, [])
         # Read as empty, generate_site rewrote published-parts.json and the
-        # FAQ, and sitesources source-paths.json.
-        after = subprocess.run(tracked, cwd=REPO_ROOT, capture_output=True, text=True).stdout
-        self.assertEqual(after, before)
+        # FAQ, and sitesources source-paths.json. The copy compares the
+        # files themselves: a name `git diff` already listed hid a rewrite.
+        after = snapshot(checkout)
+        self.assertEqual(sorted(k for k in before.keys() | after.keys()
+                                if before.get(k) != after.get(k)), [])
 
 
 class AMissingPlatformsDirIsRefused(unittest.TestCase):
@@ -367,12 +373,34 @@ class AMissingPlatformsDirIsRefused(unittest.TestCase):
             with self.subTest(script=path.stem):
                 proc = subprocess.run(
                     [*_command(path), "--platforms-dir", "nosuch", *extra],
-                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    capture_output=True, text=True, cwd=str(scratch_checkout()), timeout=600,
                     check=False, env={**os.environ, "RETROBIOS_OFFLINE": "1"},
                 )
                 self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
                 self.assertNotIn("Traceback", proc.stderr, proc.stderr[-1500:])
                 self.assertRegex(proc.stderr, r"ERROR: .*nosuch")
+
+
+class TheCopyKeepsTheCheckoutOutOfReach(unittest.TestCase):
+    """The refusal tests above run their writers in a copy."""
+
+    def test_a_script_in_the_copy_writes_to_the_copy(self):
+        checkout = scratch_checkout()
+        proc = subprocess.run(
+            [sys.executable, "-c", "import sys; sys.path.insert(0, 'scripts'); "
+             "import generate_site; print(generate_site._REPO_ROOT)"],
+            capture_output=True, text=True, cwd=str(checkout), timeout=300, check=True,
+        )
+        self.assertEqual(Path(proc.stdout.strip()), checkout.resolve())
+
+    def test_a_rewrite_of_a_file_is_seen(self):
+        checkout = scratch_checkout()
+        page = checkout / "wiki" / "index.md"
+        before = snapshot(checkout)
+        original = page.read_bytes()
+        self.addCleanup(page.write_bytes, original)
+        page.write_bytes(original + b"\n")
+        self.assertNotEqual(snapshot(checkout), before)
 
 
 class AMissingInputFileIsNamed(unittest.TestCase):

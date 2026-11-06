@@ -9,6 +9,8 @@ those members were never read there, and the archive matched no recipe.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import sys
 import unittest

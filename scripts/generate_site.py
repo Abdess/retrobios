@@ -14,7 +14,6 @@ Usage:
 
 from __future__ import annotations
 
-from siterender import SECTION_LABELS, WIKI_SRC_DIR
 import argparse
 import csv
 import hashlib
@@ -56,6 +55,7 @@ from common import (
     load_platform_config,
     load_provenance_snapshots,
     native_layer,
+    require_directory,
     require_yaml,
     resolution_is_hash_exact,
     resolve_local_file,
@@ -64,6 +64,7 @@ from common import (
     unique_emulator_profiles,
     yaml_load,
 )
+from siterender import SECTION_LABELS, WIKI_SRC_DIR
 from artifacts import ArtifactLockBusy, artifact_lock
 from artifacts import json_text as _json_text
 from cross_reference import FileConsumers, entry_target, held_copy
@@ -2330,7 +2331,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         f"({REPO_URL}/blob/main/scripts/check_platform_folder.py). A test runs it "
         "against the verifier on a sample folder, so the two give the same answer. "
         "It exits 1 when a file is wrong or missing. For an unknown platform it "
-        "prints the known ones.",
+        "prints the known ones, and it names a folder that does not exist.",
         "",
         "`install.py --check` answers another question by default: whether the folder "
         "holds what the pack installs, the manifest above. With `--declared-only`, or "
@@ -12393,6 +12394,10 @@ def main() -> None:
     args = parser.parse_args()
     if args.docs_dir is None:
         args.docs_dir = str(Path(args.site_dir) / STARLIGHT_CONTENT)
+    # Before any write: the public assets and the bootstraps went out first,
+    # and a mistyped folder stopped the run only after them.
+    require_directory(args.emulators_dir, "--emulators-dir")
+    require_directory(args.platforms_dir, "--platforms-dir")
     try:
         # Two runs over one docs/ delete each other's pages and scratch
         # files in the sweep, so the second is refused instead.

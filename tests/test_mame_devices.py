@@ -9,6 +9,8 @@ filed under the systems of the machines that can load it, never guessed.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import io
 import json
 import tempfile

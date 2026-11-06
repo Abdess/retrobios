@@ -11,6 +11,8 @@ on disk.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import contextlib
 import io
 import json
@@ -297,12 +299,19 @@ class RecordsNameNoLocalPath(unittest.TestCase):
         self.assertEqual(summary, "Copy it from your own copy of the game into <dest>/jazz2/Source/. "
                                   "Saves go to <save-dir>.")
 
-    def test_no_committed_record_holds_an_absolute_path(self) -> None:
-        path = REPO_ROOT / "measurements" / "pack-probes.jsonl"
+    def test_no_committed_record_holds_a_local_path(self) -> None:
+        """Ten records cut at 400 characters inside the scratch path kept
+        its tail, which no absolute-path pattern sees."""
         absolute = re.compile(r"(?<![\w.<>-])/(?:home|root|tmp|mnt|Users|srv)/")
-        records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
-        found = [r["id"] for r in records
-                 if absolute.search((r.get("source") or {}).get("installer_summary", ""))]
+        # The tail of a scratch folder: a worktree, or the probes' own tmp/
+        # subfolders.
+        scratch = re.compile(r"worktrees/|\btmp/(?:pack_probe|tests|campaign)\b")
+        found = [
+            f"{path.name}:{number}"
+            for path in sorted((REPO_ROOT / "measurements").glob("*.jsonl"))
+            for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1)
+            if absolute.search(line) or scratch.search(line)
+        ]
         self.assertEqual(found, [])
 
 

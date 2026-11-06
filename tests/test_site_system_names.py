@@ -10,6 +10,8 @@ console folders, so the ids to name are the platforms' and the profiles'.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import sys
 import unittest

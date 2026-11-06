@@ -12,6 +12,8 @@ naomi.zip took the place of MAME's.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import sys
 import textwrap
 import unittest

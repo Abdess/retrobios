@@ -9,6 +9,8 @@ from a file other than the one the hash describes.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import sys
 import unittest

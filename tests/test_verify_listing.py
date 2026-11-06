@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import subprocess
 import sys
 import unittest
@@ -239,6 +241,62 @@ class BundledGameDataIsNotMissing(unittest.TestCase):
         self.assertNotIn("needs abuse.lsp", out.getvalue())
         self.assertIn("Bundled with their emulator, not collected: 1 (abuse.lsp)",
                       out.getvalue())
+
+
+class TheBundledLineSaysWhatItLeavesOut(unittest.TestCase):
+    """'Bundled with their emulator, not collected: 154' listed 14 names,
+    the required firmware, and nothing said 140 more existed."""
+
+    def test_the_hidden_names_are_counted(self):
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        result = {"undeclared_files": [
+            {"name": name, "emulator": "e", "required": required, "in_repo": False,
+             "bundled": True, "in_pack": False}
+            for name, required in (("fw.bin", True), ("a.frag", False), ("b.dll", False))
+        ]}
+        with contextlib.redirect_stdout(io.StringIO()) as quiet:
+            verify._print_undeclared_section(result, verbose=False)
+        self.assertIn(
+            "Bundled with their emulator, not collected: 3 "
+            "(fw.bin, 2 more, --verbose lists them)",
+            quiet.getvalue(),
+        )
+        with contextlib.redirect_stdout(io.StringIO()) as verbose:
+            verify._print_undeclared_section(result, verbose=True)
+        self.assertIn(
+            "Bundled with their emulator, not collected: 3 (a.frag, b.dll, fw.bin)",
+            verbose.getvalue(),
+        )
+        result["undeclared_files"] = result["undeclared_files"][1:]
+        with contextlib.redirect_stdout(io.StringIO()) as unnamed:
+            verify._print_undeclared_section(result, verbose=False)
+        self.assertIn("Bundled with their emulator, not collected: 2 (--verbose lists them)",
+                      unnamed.getvalue())
+
+
+class TheCheckLineSaysWhatItIs(unittest.TestCase):
+    """Without --verbose each missing core file was followed by a bare
+    '[size]' line, nine of them in verify --all."""
+
+    def test_the_checks_read_as_the_verbose_line(self):
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        entry = {"name": "FBASIC30.ROM", "emulator": "XM7", "checks": ["size"]}
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            verify._print_undeclared_entry(entry, "MISSING (required)", False, set())
+        self.assertEqual(out.getvalue().splitlines(), [
+            "    MISSING (required): XM7 needs FBASIC30.ROM",
+            "      validates size",
+        ])
 
 
 class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):

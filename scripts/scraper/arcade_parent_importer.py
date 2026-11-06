@@ -1122,7 +1122,7 @@ def main() -> int:
     which.add_argument("--all", action="store_true", help="every profile with an arcade source")
     parser.add_argument("--emulators-dir", default="emulators",
                         help="profiles whose BIOS sets are read (default emulators)")
-    parser.add_argument("--database", default="database.json",
+    parser.add_argument("--db", default="database.json",
                         help="collection index, to name BIOS sets the collection lacks")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT,
                         help=f"where the parent maps are written (default {DEFAULT_OUTPUT})")
@@ -1133,7 +1133,7 @@ def main() -> int:
     args = parser.parse_args()
 
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
-    names = collection_names(Path(args.database))
+    names = collection_names(Path(args.db))
     failed = False
     for profile in sorted(PROFILES) if args.all else args.profile:
         if profile not in profiles:

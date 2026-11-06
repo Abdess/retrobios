@@ -9,6 +9,8 @@ firmware of cores its image never had.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import sys
 import unittest

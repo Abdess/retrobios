@@ -16,6 +16,7 @@ import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
 
 import yaml
 
@@ -32,6 +33,7 @@ STEAMOS_API = (
 WINDOWS_API = (
     "https://api.github.com/repos/EmuDeck/emudeck-we/contents/functions/EmuScripts"
 )
+RETROARCH_TARGETS = Path(__file__).resolve().parents[3] / "platforms" / "targets" / "retroarch.yml"
 
 def _fetch(url: str) -> str:
     headers = {"User-Agent": "retrobios-scraper/1.0"}
@@ -75,7 +77,7 @@ class Scraper(BaseTargetScraper):
         return self._revision
 
     def _fetch_cores_for_target(
-        self, api_url: str, label: str, arch: str = "x86_64"
+        self, api_url: str, label: str, retroarch_target: str
     ) -> list[str]:
         print(f"  fetching {label} EmuScripts...", file=sys.stderr)
         scripts = _list_emuscripts(api_url)
@@ -94,7 +96,7 @@ class Scraper(BaseTargetScraper):
         standalone_count = len(cores)
         # EmuDeck ships RetroArch = all its libretro cores are available
         if has_retroarch:
-            ra_cores = self._load_retroarch_cores(arch)
+            ra_cores = self._load_retroarch_cores(retroarch_target)
             for c in ra_cores:
                 if c not in seen:
                     seen.add(c)
@@ -108,24 +110,21 @@ class Scraper(BaseTargetScraper):
         return sorted(cores)
 
     @staticmethod
-    def _load_retroarch_cores(arch: str) -> list[str]:
-        """Load RetroArch target cores for given architecture."""
-        import os
-
-        target_path = os.path.join("platforms", "targets", "retroarch.yml")
-        with open(target_path) as f:
+    def _load_retroarch_cores(target: str, path: Path = RETROARCH_TARGETS) -> list[str]:
+        """The buildbot's libretro cores for one RetroArch target, by name:
+        linux-x86_64 and windows-x86_64 share an architecture, not a list."""
+        with path.open(encoding="utf-8") as f:
             data = yaml_load(f) or {}
-        # Find a target matching the architecture
-        for tinfo in data.get("targets", {}).values():
-            if tinfo.get("architecture") == arch and tinfo.get("cores"):
-                return tinfo["cores"]
-        raise RuntimeError(f"no {arch} core list in {target_path}")
+        cores = ((data.get("targets") or {}).get(target) or {}).get("cores")
+        if not cores:
+            raise RuntimeError(f"no {target} core list in {path}")
+        return cores
 
     def fetch_targets(self) -> dict:
         steamos_cores = self._fetch_cores_for_target(
-            f"{STEAMOS_API}?ref={self.revision}", "SteamOS"
+            f"{STEAMOS_API}?ref={self.revision}", "SteamOS", "linux-x86_64"
         )
-        windows_cores = self._fetch_cores_for_target(WINDOWS_API, "Windows")
+        windows_cores = self._fetch_cores_for_target(WINDOWS_API, "Windows", "windows-x86_64")
 
         targets: dict[str, dict] = {}
         if steamos_cores:

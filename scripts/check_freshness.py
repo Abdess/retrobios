@@ -54,11 +54,13 @@ import pin_installer  # noqa: E402
 import refresh_data_dirs  # noqa: E402
 import upstream  # noqa: E402
 from common import (  # noqa: E402
+    InputMissing,
     apply_target_overrides,
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_registry,
     require_directory,
+    suggest_names,
     upstream_profile_index,
     write_text_atomic,
     yaml_load,
@@ -73,9 +75,13 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CORE_INFO_REPO = "https://github.com/libretro/libretro-core-info"
 # The git blob of every .info as last reviewed: `--record-coreinfo` writes it.
 CORE_INFO_RECORD = REPO_ROOT / "platforms" / "_core_info.json"
-NO_INTRO_MIRROR = "https://github.com/hugo19941994/auto-datfile-generator"
-NO_INTRO_RELEASE = "Daily_Rebuild"
-NO_INTRO_ASSET = "no-intro.zip"
+NO_INTRO_MIRROR = game_dat_importer.NOINTRO_MIRROR
+NO_INTRO_RELEASE = game_dat_importer.NOINTRO_RELEASE
+NO_INTRO_ASSET = game_dat_importer.NOINTRO_ASSET
+# The mirror rebuilds daily. A pack older than this is a mirror that stopped:
+# hugo19941994's failed every day from 2026-07-08, and comparing our import
+# date with its asset read OK for four months.
+NO_INTRO_MAX_AGE_DAYS = 7
 TOSEC_DOWNLOADS = "https://www.tosecdev.org/downloads"
 MAME_REPO = "https://github.com/mamedev/mame"
 FBNEO_REPO = "https://github.com/libretro/FBNeo"
@@ -893,7 +899,10 @@ def record_core_info(
     """
     unknown = sorted(set(names) - set(blobs))
     if unknown:
-        raise ValueError(f"no such .info in core-info: {', '.join(unknown)}")
+        raise InputMissing(
+            f"no such .info in core-info: {', '.join(unknown)}. "
+            + suggest_names(unknown, list(blobs), "libretro-core-info")
+        )
     recorded = load_core_info_record(path) or {}
     recorded.update({n: blobs[n] for n in (names or blobs)})
     payload = {"repository": CORE_INFO_REPO, "blobs": dict(sorted(recorded.items()))}
@@ -1083,6 +1092,25 @@ def _no_intro_asset_date(cache_dir: str, offline: bool) -> str:
     return ""
 
 
+def _today() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+
+def _no_intro_row(subject: str, local: str, updated: str) -> Finding:
+    """Our import against the mirror's pack, and the pack against today."""
+    age = (datetime.fromisoformat(_today()) - datetime.fromisoformat(updated)).days
+    if age > NO_INTRO_MAX_AGE_DAYS:
+        return Finding(
+            "catalogs", subject, STALE, local=local, remote=updated,
+            detail=f"the mirror last rebuilt {NO_INTRO_ASSET} on {updated}, {age} days ago, "
+                   f"though it rebuilds daily: {NO_INTRO_MIRROR}/actions",
+        )
+    return Finding(
+        "catalogs", subject, STALE if updated > local else OK,
+        local=local, remote=updated, detail=f"{NO_INTRO_ASSET} rebuilt {updated}",
+    )
+
+
 def _check_nointro_games(cache_dir: str, offline: bool) -> Finding:
     """games/catalogs/no-intro/ against the pack it was read from. The pack
     holds every DAT: rebuilt after the catalogs were read, it may carry
@@ -1094,10 +1122,7 @@ def _check_nointro_games(cache_dir: str, offline: bool) -> Finding:
     updated = _no_intro_asset_date(cache_dir, offline)
     if not updated:
         return Finding("catalogs", subject, UNKNOWN, local=fetched, detail="asset not listed")
-    return Finding(
-        "catalogs", subject, STALE if updated > fetched else OK,
-        local=fetched, remote=updated, detail=f"{NO_INTRO_ASSET} rebuilt {updated}",
-    )
+    return _no_intro_row(subject, fetched, updated)
 
 
 def redump_datfile_version(code: str) -> str:
@@ -1171,14 +1196,7 @@ def _check_no_intro(cache_dir: str, offline: bool) -> Finding:
     updated = _no_intro_asset_date(cache_dir, offline)
     if not updated:
         return Finding("catalogs", "no-intro", UNKNOWN, local=imported, detail="asset not listed")
-    return Finding(
-        "catalogs",
-        "no-intro",
-        STALE if updated > imported else OK,
-        local=imported,
-        remote=updated,
-        detail=f"{NO_INTRO_ASSET} rebuilt {updated}",
-    )
+    return _no_intro_row("no-intro", imported, updated)
 
 
 def tosec_latest_pack(html: str) -> str | None:
@@ -1839,7 +1857,10 @@ def main() -> int:
     if args.record_coreinfo is not None:
         blobs = core_info_blobs(args.cache_dir, args.offline)
         if not blobs:
-            raise RuntimeError("core-info listing unavailable: nothing recorded")
+            raise InputMissing(
+                f"core-info listing not in {args.cache_dir}: run without --offline"
+                if args.offline else "core-info listing unavailable: the GitHub API did not answer"
+            )
         done = record_core_info(blobs, args.record_coreinfo)
         print(f"recorded {len(done)} .info file(s) as reviewed")
         return 0

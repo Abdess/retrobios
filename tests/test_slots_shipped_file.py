@@ -11,6 +11,8 @@ Reads the repository: skips when the database or the files are absent.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import copy
 import hashlib
 import os

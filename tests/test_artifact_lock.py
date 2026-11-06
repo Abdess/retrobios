@@ -7,6 +7,8 @@ ZIPs, which surfaces as BadZipFile far from its cause.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import os
 import subprocess
 import sys
@@ -25,6 +27,7 @@ from common import (  # noqa: E402
     hold_repository_outputs,
     publish_hold,
 )
+from tests.scratchtree import scratch_checkout  # noqa: E402
 
 
 def _tempdir(test: unittest.TestCase) -> str:
@@ -115,11 +118,13 @@ class PackLockCliTest(unittest.TestCase):
         self.dir = _tempdir(self)
 
     def _run(self, argv: list[str]) -> subprocess.CompletedProcess:
+        # In a copy: a pipeline that missed the lock regenerated
+        # database.json and install/ wherever it ran.
         return subprocess.run(
             [sys.executable, *argv],
             capture_output=True,
             text=True,
-            cwd=str(REPO_ROOT),
+            cwd=str(scratch_checkout()),
             timeout=300,
         )
 
@@ -234,11 +239,12 @@ class PipelineHoldsItsFixedOutputs(unittest.TestCase):
 
     def test_a_second_pipeline_is_refused_whatever_its_output_dir(self):
         scratch = _tempdir(self)
-        with hold_repository_outputs(str(REPO_ROOT)):
+        checkout = scratch_checkout()
+        with hold_repository_outputs(str(checkout)):
             proc = subprocess.run(
                 [sys.executable, "scripts/pipeline.py", "--offline", "--skip-docs",
                  "--output-dir", scratch],
-                capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=120,
+                capture_output=True, text=True, cwd=str(checkout), timeout=120,
             )
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
         self.assertIn("another run is writing database.json", proc.stderr)
@@ -260,11 +266,12 @@ class StandaloneWritersHonourTheRepositoryHold(unittest.TestCase):
         env = {k: v for k, v in os.environ.items() if k != "RETROBIOS_HELD_ARTIFACT_DIR"}
         return subprocess.run(
             [sys.executable, *argv], capture_output=True, text=True,
-            cwd=str(REPO_ROOT), timeout=300, env=env, check=False,
+            cwd=str(scratch_checkout()), timeout=300, env=env, check=False,
         )
 
     def test_a_writer_of_a_fixed_output_is_refused(self):
-        with hold_repository_outputs(str(REPO_ROOT)):
+        # The writers run in a copy, where a missed lock writes nothing of ours.
+        with hold_repository_outputs(str(scratch_checkout())):
             for argv in (
                 ["scripts/generate_db.py", "--bios-dir", "bios", "--output", "database.json"],
                 ["scripts/generate_pack.py", "--all", "--manifest", "--offline",
@@ -369,7 +376,7 @@ class SiteGenerationHoldsDocs(unittest.TestCase):
         with artifact_lock(docs):
             result = subprocess.run(
                 [sys.executable, "scripts/generate_site.py", "--docs-dir", docs],
-                cwd=REPO_ROOT, capture_output=True, text=True, timeout=600,
+                cwd=scratch_checkout(), capture_output=True, text=True, timeout=600,
             )
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertIn("in use by another run", result.stderr)

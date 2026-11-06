@@ -8,6 +8,8 @@ set, enriched with every spelling the database knows.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import sys
 import unittest
 from pathlib import Path

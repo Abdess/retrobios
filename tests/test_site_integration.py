@@ -9,6 +9,8 @@ Node's compile cache into /tmp.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import glob
 import json
 import re

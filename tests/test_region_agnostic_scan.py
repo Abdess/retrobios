@@ -9,6 +9,8 @@ ROCKNIX. Reads the repository: skips when the database is absent.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import os
 import sys
 import unittest

@@ -6,6 +6,8 @@ level1.rom went out as OK where verify said "not found inside ZIP".
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import sys
 import tempfile

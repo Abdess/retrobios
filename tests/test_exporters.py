@@ -14,6 +14,8 @@ and skip when it has not been populated (python scripts/export_native.py
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import difflib
 import io
 import json
@@ -801,14 +803,20 @@ class SearchOrder(unittest.TestCase):
         longest = ('rp_module_id="xm7"\nrp_module_help="Copy bios files '
                    + ", ".join(f"n{i}.rom" for i in range(12)) + ' and n12.rom to $biosdir"\n')
         exporter = discover_exporters()["retropie"]()
-        produced = exporter.render(
+        written = exporter.render(
             systems, None,
             {"scriptmodules/libretrocores/lr-flycast.sh": script,
              "scriptmodules/emulators/xm7.sh": longest},
-        )["scriptmodules/libretrocores/lr-flycast.sh"]
+        )
+        produced = written["scriptmodules/libretrocores/lr-flycast.sh"]
         self.assertIn("Dreamcast BIOS file dc_boot.bin to", produced)
         self.assertIn("BIOS files naomi.zip, awbios.zip and naomi2.zip to", produced)
         self.assertNotIn("other.zip", produced)
+        # Rewritten for naomi2.zip, other.zip left out: the summary said
+        # "Left as is" of a package in the diff.
+        outcome = exporter.outcome(systems, written)
+        self.assertIn("Updated in part: lr-flycast,", outcome)
+        self.assertNotIn("Left as is: lr-flycast", outcome)
 
     def test_cores_that_disagree_keep_the_best_rank(self):
         """Nothing is dropped on the rank here, so the best one wins.
@@ -825,6 +833,70 @@ class SearchOrder(unittest.TestCase):
             truth=merged,
         )
         self.assertEqual(entry.priority, 2)
+
+
+class TwoAdditionsAtOnePath(unittest.TestCase):
+    """Two cores declaring two dumps of one file the platform lacks: both
+    were counted added while the render wrote one. Recalbox's md5 list takes
+    both, a System.dat name and a RetroDECK path hold one."""
+
+    A, B = "615a" + "0" * 28, "ef49" + "0" * 28
+
+    def _addition(self, md5: str, core: str, system: str = "dos") -> NativeFile:
+        return NativeFile(
+            name="MT32_CONTROL.ROM", destination="mt32/MT32_CONTROL.ROM", native_system=system,
+            truth={"name": "MT32_CONTROL.ROM", "path": "mt32/MT32_CONTROL.ROM", "md5": md5,
+                   "crc32": md5[:8], "required": True, "_cores": [core]},
+            runners=[(False, core)],
+        )
+
+    def _added(self, exporter, systems) -> list[str]:
+        return [c["name"] for c in landed_changes(exporter, systems).records
+                if c["kind"] == "added"]
+
+    def test_recalbox_writes_both_md5_in_one_element(self):
+        systems = {"dos": NativeSystem("dos", files=[
+            self._addition(self.A, "dosbox_pure"), self._addition(self.B, "dosbox_core")])}
+        exporter = discover_exporters()["recalbox"]()
+        produced = exporter.render(systems, Report(), {})["es_bios.xml"]
+        elements = [e for e in ET.fromstring(produced).iter("bios")]
+        self.assertEqual(len(elements), 1)
+        self.assertEqual(elements[0].get("md5").split(","), [self.A, self.B])
+        self.assertEqual(elements[0].get("core"), "libretro/dosbox_pure,libretro/dosbox_core")
+        self.assertEqual(exporter.validate(systems, {"es_bios.xml": produced}), [])
+        self.assertEqual(len(self._added(exporter, systems)), 2)
+
+    def test_system_dat_counts_the_line_it_wrote(self):
+        systems = {"DOS": NativeSystem("DOS", files=[
+            self._addition(self.A, "dosbox_pure", "DOS"),
+            self._addition(self.B, "dosbox_core", "DOS")])}
+        exporter = discover_exporters()["retroarch"]()
+        original = 'clrmamepro (\n\tname "System"\n)\n\ngame (\n\tname "System"\n' \
+                   '\tcomment "System"\n\n\tcomment "DOS"\n\trom ( name a.bin size 1 crc 00000000 )\n)\n'
+        produced = exporter.render(systems, Report(), {"System.dat": original})["System.dat"]
+        self.assertEqual(produced.count("MT32_CONTROL.ROM"), 1)
+        self.assertEqual(len(self._added(exporter, systems)), 1)
+
+    def test_retrodeck_counts_the_entry_it_appended(self):
+        theirs = NativeFile(
+            name="scph1001.bin", destination="scph1001.bin", native_system="psx",
+            platform={"name": "scph1001.bin", "md5": "1" * 32, "component": "duckstation"})
+
+        def addition(md5: str) -> NativeFile:
+            return NativeFile(
+                name="scph5501.bin", destination="scph5501.bin", native_system="psx",
+                truth={"name": "scph5501.bin", "md5": md5, "required": True,
+                       "_cores": ["duckstation"]},
+                runners=[(True, "duckstation")])
+
+        systems = {"psx": NativeSystem("psx", files=[theirs, addition(self.A), addition(self.B)])}
+        manifest = json.dumps({"duckstation": {"name": "DuckStation", "bios": [
+            {"filename": "scph1001.bin", "md5": "1" * 32, "system": "psx"}]}})
+        exporter = discover_exporters()["retrodeck"]()
+        produced = exporter.render(systems, Report(), {"duckstation/component_manifest.json": manifest})
+        bios = json.loads(produced["duckstation/component_manifest.json"])["duckstation"]["bios"]
+        self.assertEqual([e["filename"] for e in bios], ["scph1001.bin", "scph5501.bin"])
+        self.assertEqual(self._added(exporter, systems), ["scph5501.bin"])
 
 
 class AdditionOrder(unittest.TestCase):

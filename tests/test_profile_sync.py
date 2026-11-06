@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import argparse
 import contextlib
 import io
@@ -5979,6 +5981,55 @@ class ARoleIsReadPerPart(unittest.TestCase):
         from sourceref import _prose_runs
 
         self.assertEqual(list(_prose_runs("read at boot (:507), devilutionx.mpq")), [])
+
+
+class AnOnlinePassSaysWhereItIs(unittest.TestCase):
+    """`--all --triage` online printed nothing for 15 minutes, and Ctrl-C
+    left no ranking at all, while --offline answered in three."""
+
+    def _main(self, *argv: str, stop_after: int | None = None):
+        calls = []
+
+        def build(_args, name, _profile, _path, _failed):
+            if stop_after is not None and len(calls) == stop_after:
+                raise KeyboardInterrupt
+            calls.append(name)
+            return ProfileReport(name=name, entries=[], counts={})
+
+        out, err = io.StringIO(), io.StringIO()
+        saved = sys.argv
+        try:
+            sys.argv = ["profile_sync.py", "--all", "--triage", *argv]
+            with mock.patch.object(profile_sync, "_build_full_report", side_effect=build), \
+                    mock.patch.object(profile_sync, "_check_quota"), \
+                    contextlib.redirect_stdout(out), contextlib.redirect_stderr(err), \
+                    self.assertRaises(SystemExit) as caught:
+                profile_sync.main()
+                raise SystemExit(0)
+        finally:
+            sys.argv = saved
+        return caught.exception.code, out.getvalue(), err.getvalue()
+
+    def test_ctrl_c_prints_the_ranking_of_what_was_read(self):
+        code, out, err = self._main("--offline", stop_after=3)
+        self.assertEqual(code, 130)
+        self.assertEqual(out.splitlines()[-1], "3 profiles, 0 with something to review")
+        self.assertIn("interrupted after 3 of", err)
+
+    def test_an_online_pass_names_its_size_and_the_offline_mode(self):
+        _code, _out, err = self._main("--limit", "2")
+        self.assertIn("reading 2 profiles against their forges", err)
+        self.assertIn("--offline answers from the cache alone", err)
+
+    def test_a_progress_line_at_each_interval(self):
+        clock = iter([0.0, 10.0, profile_sync.PROGRESS_SECONDS + 1, 40.0])
+        err = io.StringIO()
+        with mock.patch.object(profile_sync.time, "monotonic", lambda: next(clock)), \
+                contextlib.redirect_stderr(err):
+            progress = profile_sync._Progress(9, "read", quiet=False)
+            for done, name in enumerate(("a", "b", "c")):
+                progress.step(done, name)
+        self.assertEqual(err.getvalue(), "read: 1 of 9, at b\n")
 
 
 class TheTriageCountsWhatBlocksThePin(unittest.TestCase):

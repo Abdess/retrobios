@@ -9,6 +9,8 @@ never swapped in. Both sides now read find_validated_variant.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import os
 import re

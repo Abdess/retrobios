@@ -6,6 +6,8 @@ published and carries 3916 files the RetroArch one does not.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import re
 import sys
 import unittest

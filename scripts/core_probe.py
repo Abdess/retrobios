@@ -40,6 +40,14 @@ from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
+# The probe tools do not import common.py, which states the 3.9 floor for the
+# other scripts. Under 3.8 they stopped on a str.removesuffix AttributeError.
+if sys.version_info < (3, 9):
+    sys.exit(
+        f"{Path(sys.argv[0]).name} needs Python 3.9 or newer, "
+        f"this is {sys.version.split()[0]}"
+    )
+
 ROOT = Path(__file__).resolve().parent.parent
 MIN_BENCH_REPETITIONS = 5
 DEFAULT_WORK_DIR = ROOT / "tmp" / "core_probe"

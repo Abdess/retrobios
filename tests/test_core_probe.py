@@ -7,6 +7,8 @@ probe on it: staging, the worker process, strace, the record and its schema.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import argparse
 import contextlib
 import hashlib

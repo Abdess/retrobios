@@ -9,6 +9,8 @@ armsx2's pack ships without a reader, and MAME's neogeo.zip without MAME.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import os
 import sys

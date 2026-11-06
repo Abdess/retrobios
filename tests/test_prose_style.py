@@ -8,6 +8,8 @@ not write them. This module names every place one comes back.
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import io
 import os
 import re

@@ -1,11 +1,9 @@
-"""Check a BIOS folder against one platform's list, from the published data only:
-python check_platform_folder.py batocera path/to/bios. Exit 1 on a file wrong or missing."""
+"""Usage: python check_platform_folder.py batocera path/to/bios. Exit 1 on a file wrong or missing."""
 from __future__ import annotations
 
 import hashlib
 import json
 import sys
-import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -42,14 +40,12 @@ def check(platform: str, root: Path, api: str = API) -> list[tuple[str, str]]:
     """(destination, ok | wrong | missing) per entry. With no destination (EmuDeck), any file with its hash passes."""
     with urllib.request.urlopen(f"{api}{platform}.json") as response:
         contract = json.load(response)["items"][0]["contract"]
-    mode, results = contract["verification_mode"], []
-    loose = [path for path in root.iterdir() if path.is_file()] if root.is_dir() else []
+    mode, results, loose = contract["verification_mode"], [], [p for p in root.iterdir() if p.is_file()]
     for system_id, system in contract["systems"].items():
         listed = [e for e in system.get("files") or [] if not e.get("destination")]
         for entry in (e for e in system.get("files") or [] if e.get("destination")):
             path = root / entry["destination"]
-            verdict = "ok" if accepts(entry, path, mode) else "wrong" if path.is_file() else "missing"
-            results.append((entry["destination"], verdict))
+            results.append((entry["destination"], "ok" if accepts(entry, path, mode) else "wrong" if path.is_file() else "missing"))
         if listed:
             held = any(accepts(e, path, mode) for e in listed for path in loose)
             results.append((f"{system_id}: any file", "ok" if held else "missing"))
@@ -57,12 +53,16 @@ def check(platform: str, root: Path, api: str = API) -> list[tuple[str, str]]:
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        sys.exit(__doc__)
     try:
         found = check(sys.argv[1], Path(sys.argv[2]))
-    except urllib.error.HTTPError as error:  # a 404: no platform has that name
+    except urllib.request.HTTPError as error:  # a 404: no platform has that name
         with urllib.request.urlopen(API.replace("platforms/", "catalog.json")) as response:
             known = sorted(i["url"][10:-5] for i in json.load(response)["items"] if i["url"].startswith("manifests/"))
         sys.exit(f"unknown platform: {sys.argv[1]}. Known: {', '.join(known)}" if error.code == 404 else error)
+    except OSError as error:  # no such folder, or no network (URLError)
+        sys.exit(f"error: {error}")
     for verdict in ("ok", "wrong", "missing"):
         names = sorted({dest for dest, seen in found if seen == verdict})
         print(f"{verdict}: {len(names)}" + "".join(f"\n  {name}" for name in names if verdict != "ok"))

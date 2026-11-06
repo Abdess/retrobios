@@ -10,6 +10,8 @@ the pad reaching the console, a compositor covering it) is not exercised.
 """
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import hashlib
 import importlib.util
 import json

@@ -513,7 +513,10 @@ A part opening with `source` or `upstream`, in a source_ref or in prose,
 is read in that repository. The word belongs to the part, not to its path:
 one profile can cite the same file under both. `--triage` prints a header,
 ranks worst first and closes on the number of profiles with something to
-review.
+review. Online, a pass over many profiles takes several minutes or more: it
+names its size on stderr, then writes a progress line every 30 seconds.
+Ctrl-C prints the output for the profiles already read and exits 130.
+`--offline` answers from the cache alone.
 
 A single cited line is often not distinctive, so the anchor widens by
 steps of ±3, ±6, ±12, ±25 and ±50 lines until it is unique. Three further
@@ -1416,7 +1419,7 @@ Further options, by script:
 | `scraper/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |
 | `scraper/romset_dat_importer.py` | `--cache-dir` (downloaded listxml and DATs) |
 | `scraper/game_dat_importer.py` | `--source no-intro\|redump` (repeatable), `--pack FILE` imports a local ZIP, directory or DAT, `--refresh` asks the servers again, `--cache-dir`, `--output-dir`, `--dry-run` |
-| `scraper/arcade_parent_importer.py` | `--profile NAME` (one core version), `--emulators-dir`, `--database` (BIOS roots checked against it by archive name), `--output-dir`, `--cache-dir`, `--offline`, `--dry-run` |
+| `scraper/arcade_parent_importer.py` | `--profile NAME` (one core version), `--emulators-dir`, `--db` (BIOS roots checked against it by archive name), `--output-dir`, `--cache-dir`, `--offline`, `--dry-run` |
 | `scraper/romfolders` | `--sources DIR` (default `platforms/romfolders/_sources`), `--output-dir`, `--dry-run` |
 | `game_rules.py` | `--regions`, `--extras`, `--headers` (files checked against the profiles and the header readers), `--emulators-dir`, `--json` |
 | `generate_games_index.py` | `--output-dir` (default `install/games`), `--check`, `--quiet` |
@@ -1659,7 +1662,7 @@ names the profiles read.
 | Catalog | Acquisition | Notes |
 |---------|------------|-------|
 | Redump | direct fetch from redump.info, one `/bios/<CODE>` route per system | 4 BIOS DATs. redump.org serves BIOS DATs dated 2010 to 2022, redump.info the current ones |
-| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic serves its DATs through a browser session, and the `hugo19941994/auto-datfile-generator` mirror rebuilds daily |
+| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic serves its DATs through a browser session, and the `dantob/auto-datfile-generator` mirror rebuilds daily. `check_freshness` reads a pack older than a week as a stopped mirror |
 | TOSEC | local pack, imported with `dat_pack_importer` | annual pack from tosecdev.org, 138 Firmware DATs |
 
 The join is by SHA1, then by MD5 + size. A match sets the `provenance` field
