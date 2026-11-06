@@ -38,7 +38,7 @@ notes: |
   FS-UAE is an Amiga emulator by Frode Solheim, based on UAE/WinUAE.
 
   Standalone: the launcher walks ROMs/Kickstart, ROMs/Kickstarts, ROM/Kickstart
-  and ROM/Kickstarts under the data directory, with lowercase variants on Linux,
+  and ROM/Kickstarts under the data directory (data_root), with lowercase variants on Linux,
   and the Amiga Forever shared ROM folder. Every .rom, .bin or model-suffixed
   file up to 8 MB is handed to the emulator with its CRC32 and SHA-1. rom.key
   is read from the folder of the encrypted ROM being loaded.
@@ -69,7 +69,7 @@ notes: |
 files:
   - name: "amiga-os-130.rom"
     path: "fsuae/Kickstarts/amiga-os-130.rom"
-    standalone_path: "amiga-os-130.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-130.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -83,7 +83,7 @@ files:
 
   - name: "amiga-os-204.rom"
     path: "fsuae/Kickstarts/amiga-os-204.rom"
-    standalone_path: "amiga-os-204.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-204.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -97,7 +97,7 @@ files:
 
   - name: "amiga-os-205.rom"
     path: "fsuae/Kickstarts/amiga-os-205.rom"
-    standalone_path: "amiga-os-205.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-205.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -111,7 +111,7 @@ files:
 
   - name: "amiga-os-120.rom"
     path: "fsuae/Kickstarts/amiga-os-120.rom"
-    standalone_path: "amiga-os-120.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-120.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -125,7 +125,7 @@ files:
 
   - name: "amiga-os-310-a1200.rom"
     path: "fsuae/Kickstarts/amiga-os-310-a1200.rom"
-    standalone_path: "amiga-os-310-a1200.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-310-a1200.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -139,7 +139,7 @@ files:
 
   - name: "amiga-os-310-a3000.rom"
     path: "fsuae/Kickstarts/amiga-os-310-a3000.rom"
-    standalone_path: "amiga-os-310-a3000.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-310-a3000.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -153,7 +153,7 @@ files:
 
   - name: "amiga-os-310-a4000.rom"
     path: "fsuae/Kickstarts/amiga-os-310-a4000.rom"
-    standalone_path: "amiga-os-310-a4000.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-310-a4000.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -167,7 +167,7 @@ files:
 
   - name: "amiga-os-310-cd32.rom"
     path: "fsuae/Kickstarts/amiga-os-310-cd32.rom"
-    standalone_path: "amiga-os-310-cd32.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-os-310-cd32.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -181,7 +181,7 @@ files:
 
   - name: "amiga-ext-310-cd32.rom"
     path: "fsuae/Kickstarts/amiga-ext-310-cd32.rom"
-    standalone_path: "amiga-ext-310-cd32.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-ext-310-cd32.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -194,7 +194,7 @@ files:
 
   - name: "cd32fmv.rom"
     path: "fsuae/Kickstarts/cd32fmv.rom"
-    standalone_path: "cd32fmv.rom"
+    standalone_path: "ROMs/Kickstarts/cd32fmv.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -207,7 +207,7 @@ files:
 
   - name: "amiga-ext-130-cdtv.rom"
     path: "fsuae/Kickstarts/amiga-ext-130-cdtv.rom"
-    standalone_path: "amiga-ext-130-cdtv.rom"
+    standalone_path: "ROMs/Kickstarts/amiga-ext-130-cdtv.rom"
     load_from: {libretro: save_dir}
     system: amiga
     required: false
@@ -220,7 +220,7 @@ files:
 
   - name: "rom.key"
     path: "fsuae/Kickstarts/rom.key"
-    standalone_path: "rom.key"
+    standalone_path: "ROMs/Kickstarts/rom.key"
     load_from: {libretro: save_dir}
     system: amiga
     found_by: name

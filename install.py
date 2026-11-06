@@ -1200,7 +1200,9 @@ def _parse_os_release() -> dict[str, str]:
 # Set under WSL: a Windows path read from a config or a rule names a drive
 # that Linux sees under /mnt (drvfs). C:\\RetroBat\\bios was used as a relative
 # path and nothing Windows-side was ever found from WSL.
-_WSL = {"active": False, "root": "/mnt"}
+# unasked: why Windows could not be asked for its folders, said once by
+# detection.
+_WSL = {"active": False, "root": "/mnt", "unasked": ""}
 _WINDOWS_VARIABLES = ("USERPROFILE", "APPDATA", "LOCALAPPDATA", "ProgramFiles", "ProgramFiles(x86)")
 
 
@@ -1255,11 +1257,25 @@ def _enter_wsl() -> None:
                 capture_output=True, text=True, timeout=10, stdin=subprocess.DEVNULL,
                 cwd="/mnt/c" if Path("/mnt/c").is_dir() else None,
             )
-        except (OSError, subprocess.SubprocessError):
+        except (OSError, subprocess.SubprocessError) as exc:
+            # The others would wait as long: detection is told the Windows
+            # side was not searched, never that nothing is there.
+            _windows_unasked("cmd.exe", exc)
             return
         value = result.stdout.strip()
         if value and not value.startswith("%"):
             os.environ[variable] = str(_host_path(value))
+
+
+def _windows_unasked(tool: str, exc: Exception) -> None:
+    """Keep why a Windows program run from WSL gave no answer: an interop
+    slow to start or turned off hid every Windows setup, and the run said
+    none was installed."""
+    if isinstance(exc, subprocess.TimeoutExpired):
+        why = f"{tool} did not answer in {exc.timeout:g} s"
+    else:
+        why = f"{tool} could not run: {getattr(exc, 'strerror', None) or exc}"
+    _WSL["unasked"] = _WSL["unasked"] or why
 
 
 def _expand_retroarch_path(value: str, app_dir: Path, home: Path | None = None) -> Path:
@@ -1308,13 +1324,22 @@ def _steam_libraries() -> list[Path]:
 
     Steam lists the others in steamapps/libraryfolders.vdf, each as a
     "path" line. A RetroArch installed on D:/SteamLibrary was not found
-    when only Program Files was searched.
+    when only Program Files was searched. The client's own folder is the
+    SteamPath value it writes under HKCU\\Software\\Valve\\Steam, read the
+    same way by Playnite (PlayniteExtensions 886468f6,
+    source/Libraries/SteamLibrary/Steam.cs:34-38): a client installed in
+    D:\\Steam hid every library.
     """
     roots: list[Path] = []
+    steam_path = _read_registry("HKCU\\Software\\Valve\\Steam", "SteamPath")
+    candidates = [_host_path(steam_path.replace("/", "\\"))] if steam_path else []
     for var in ("ProgramFiles(x86)", "ProgramFiles"):
         base = os.environ.get(var, "")
-        if base and _is_dir(Path(base) / "Steam"):
-            roots.append(Path(base) / "Steam")
+        if base:
+            candidates.append(Path(base) / "Steam")
+    for candidate in candidates:
+        if candidate not in roots and _is_dir(candidate):
+            roots.append(candidate)
     libraries = list(roots)
     for root in roots:
         vdf = root / "steamapps" / "libraryfolders.vdf"
@@ -1383,6 +1408,49 @@ def _macos_retroarch_base() -> Path:
     if _is_dir(steam) and not _is_dir(Path("/Applications/RetroArch.app")):
         return support
     return Path.home() / "Documents" / "RetroArch"
+
+
+def _retroarch_appimage_dirs(home: Path) -> list[Path]:
+    """The system folder of each RetroArch AppImage kept with a portable
+    folder, up to two folders below home.
+
+    The buildbot's Linux build unpacks RetroArch-Linux-x86_64.AppImage beside
+    RetroArch-Linux-x86_64.AppImage.home/.config/retroarch. The AppImage
+    runtime sets HOME to <AppImage>.home and XDG_CONFIG_HOME to
+    <AppImage>.config when those folders exist (type2-runtime fedfad51,
+    src/runtime/runtime.c:1449-1462), so this RetroArch never reads
+    ~/.config/retroarch. The archive holds no retroarch.cfg: until the first
+    run writes one, the system folder is the base folder's (frontend_unix_get_env
+    in platform_unix.c).
+    """
+    images: list[Path] = []
+    for depth in ("", "*/", "*/*/"):
+        for suffix in (".home", ".config"):
+            try:
+                hits = sorted(home.glob(f"{depth}*.AppImage{suffix}"))
+            except OSError:
+                continue
+            for hit in hits:
+                image = hit.with_name(hit.name[:-len(suffix)])
+                if image not in images and _is_file(image):
+                    images.append(image)
+    dirs: list[Path] = []
+    for image in images:
+        portable_home = image.with_name(image.name + ".home")
+        portable_config = image.with_name(image.name + ".config")
+        if _is_dir(portable_config):
+            base = portable_config / "retroarch"
+        elif _is_dir(portable_home) and "XDG_CONFIG_HOME" not in os.environ:
+            base = portable_home / ".config" / "retroarch"
+        else:
+            continue
+        tilde = portable_home if _is_dir(portable_home) else home
+        system = _parse_retroarch_system_dir(base / "retroarch.cfg", base, tilde)
+        if system is None and _is_dir(base):
+            system = base / "system"
+        if system is not None and system not in dirs:
+            dirs.append(system)
+    return dirs
 
 
 def _unix_retroarch_base() -> Path:
@@ -2521,6 +2589,9 @@ def refused_words(folder: Path, why: str, shown: str = "") -> str:
     """The line said for a folder detection could not look in. shown is
     the folder as the screen writes it (~/.config/EmuDeck), the full path
     by default."""
+    if _WSL["active"] and why == _WSL["unasked"] and folder == Path(_WSL["root"]):
+        return (f"Could not look for setups on the Windows side: {why}. "
+                "Run it again once Windows answers, or name the BIOS folder with --dest.")
     if folder in _DETECTION_UNREADABLE:
         return (f"Could not look for setups: {shown or folder} could not be read ({why}). "
                 "A failing card or a link that loops gives this: check it, or name the "
@@ -2552,6 +2623,22 @@ def _note_refused(path: Path, exc: OSError) -> None:
         _DETECTION_UNREADABLE.add(refused[0])
     words = refused_words(*refused)
     EVENTS.emit("unsearched", folder=str(refused[0]), reason=refused[1], message=words)
+    print(f"  {screen_text(words)}", file=sys.stderr)
+
+
+def _note_windows_unasked() -> None:
+    """Say once, as a folder detection could not look in, that Windows did
+    not answer: its drives are then searched without its folders."""
+    why = _WSL["unasked"]
+    if (not why or not getattr(_SETUP_SEARCH, "active", False)
+            or getattr(_SETUP_SEARCH, "quiet", False)):
+        return
+    refused = (Path(_WSL["root"]), why)
+    if refused in _DETECTION_REFUSED:
+        return
+    _DETECTION_REFUSED.append(refused)
+    words = refused_words(*refused)
+    EVENTS.emit("unsearched", folder=str(refused[0]), reason=why, message=words)
     print(f"  {screen_text(words)}", file=sys.stderr)
 
 
@@ -2694,7 +2781,9 @@ def _read_registry(key: str, value: str) -> str | None:
             capture_output=True, text=True, errors="replace", timeout=10,
             stdin=subprocess.DEVNULL, cwd="/mnt/c" if Path("/mnt/c").is_dir() else None,
         )
-    except (OSError, subprocess.SubprocessError):
+    except (OSError, subprocess.SubprocessError) as exc:
+        _windows_unasked("reg.exe", exc)
+        _note_windows_unasked()
         return None
     match = re.search(
         rf"^\s*{re.escape(value)}\s+REG_(?:EXPAND_)?SZ\s+(.+?)\s*$", result.stdout, re.M
@@ -2734,6 +2823,8 @@ def _detect_by_path(os_type: str, found: list[tuple[str, Path]]) -> None:
 def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     """Detect installed emulator platforms and their BIOS directories."""
     found: list[tuple[str, Path]] = []
+    if os_type == "wsl":
+        _note_windows_unasked()
 
     if os_type == "android":
         found.extend(_detect_android())
@@ -2800,6 +2891,8 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
                 found.append(("retroarch", ra_dir))
                 break
 
+        found.extend(("retroarch", ra_dir) for ra_dir in _retroarch_appimage_dirs(home))
+
     if os_type == "darwin":
         # open_default_config_file reads <Application Support>/RetroArch/config
         # (configuration.c). A value left at default is the documents folder,
@@ -2835,15 +2928,9 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
             if ra_dir:
                 found.append(("retroarch", ra_dir))
 
-        # RetroArch from Steam: a portable install under the default library
-        for var in ("ProgramFiles(x86)", "ProgramFiles"):
-            program_files = os.environ.get(var, "")
-            if not program_files:
-                continue
-            steam_cfg = (
-                Path(program_files) / "Steam" / "steamapps" / "common"
-                / "RetroArch" / "retroarch.cfg"
-            )
+        # RetroArch from Steam: a portable install in a Steam library
+        for library in _steam_libraries():
+            steam_cfg = library / "steamapps" / "common" / "RetroArch" / "retroarch.cfg"
             ra_dir = _parse_retroarch_system_dir(steam_cfg)
             if ra_dir and not any(name == "retroarch" for name, _ in found):
                 found.append(("retroarch", ra_dir))
@@ -3895,6 +3982,12 @@ def _validate_manifest(data: object, plat: str) -> dict:
             _safe_relative_path(
                 entry["source"], f"standalone_copies[{index}].source"
             )
+        if "as" in entry and (
+            "file" not in entry or not isinstance(entry["as"], str)
+            or PurePosixPath(_safe_relative_path(
+                entry["as"], f"standalone_copies[{index}].as")).name != entry["as"]
+        ):
+            raise ValueError(f"invalid standalone copy name at {where}")
         if "pattern" in entry:
             pattern = entry["pattern"]
             if (
@@ -5626,6 +5719,8 @@ def _download_one(
     except OSError as exc:
         if _write_refused(exc):
             return f["dest"], False, NOT_WRITABLE
+        if _drive_full(exc):
+            return f["dest"], False, DRIVE_FULL
         return f["dest"], False, exc.strerror or str(exc)
     try:
         in_place_folder = dest.is_dir()
@@ -5838,6 +5933,10 @@ def _download_one(
                 # place is not a folder this user cannot write.
                 reason = READ_ONLY if _read_only_file(dest) else NOT_WRITABLE
                 refused = True
+            elif _drive_full(exc):
+                # No attempt frees space either. A private copy is still
+                # removed below: it holds the space the next file needs.
+                reason = DRIVE_FULL
             elif _transfer_failure(exc):
                 reason = NetworkReason(network_words(exc)[1])
             else:
@@ -5856,7 +5955,7 @@ def _download_one(
             progress.add(-counted)
             if resumed_count:
                 progress.forget_resumed(resumed_count)
-        if refused:
+        if refused or reason == DRIVE_FULL:
             return f["dest"], False, reason
         if attempt < MAX_RETRIES and delay and _stop.wait(delay):
             return f["dest"], False, "stopped"
@@ -5972,6 +6071,21 @@ def _claim_partial(path: Path) -> BinaryIO | None:
     return handle
 
 
+def _release_claim(handle: BinaryIO, path: Path) -> None:
+    """Free a file taken with _claim_partial and remove it. Removed while
+    still held where the system allows it, so no other run takes the name
+    in between. Windows refuses to remove an open file: there it is closed
+    first, and one another run opened meanwhile is left to that run."""
+    if not _NO_RENAME_WHILE_OPEN:
+        path.unlink(missing_ok=True)
+    handle.close()
+    if _NO_RENAME_WHILE_OPEN:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError:
+            pass  # another run holds it now and removes it when done
+
+
 class _Unclosed:
     """The locked partial copy, written through without closing it."""
 
@@ -6010,6 +6124,16 @@ def _locations(paths: list[Path]) -> str:
 # A write refused by the file system: retrying cannot change it, and the
 # summary names the two ways out.
 NOT_WRITABLE = "folder not writable"
+
+
+# A write the drive had no room for: the same run fails the same way until
+# space is freed or another drive is named.
+DRIVE_FULL = "the drive is full"
+_FULL_ERRNOS = (errno.ENOSPC, getattr(errno, "EDQUOT", errno.ENOSPC))
+
+
+def _drive_full(exc: BaseException) -> bool:
+    return isinstance(exc, OSError) and exc.errno in _FULL_ERRNOS
 
 
 def _write_refused(exc: OSError) -> bool:
@@ -6490,6 +6614,9 @@ def _report_outcome(
         Path(dest).parent for dest, reason in failures or []
         if Path(dest).is_absolute() and reason == NOT_WRITABLE
     })]
+    if any(reason == DRIVE_FULL for _dest, reason in failures or []):
+        advice.append(f"  The drive holding {_locations(paths)} is full: free up space, or "
+                      "install to another drive with --dest, then run again.")
     if any(reason == READ_ONLY for _dest, reason in failures or []):
         advice.append("  Files marked read-only are in the way: clear that attribute "
                       "(or delete them), then run again.")
@@ -6593,7 +6720,8 @@ def _report_outcome(
         retry = _retry_words(failures)
         if retry:
             say(retry)
-        elif not all(str(reason).startswith(NOT_KEPT) for _dest, reason in failures or []):
+        elif not all(str(reason).startswith(NOT_KEPT) or reason == DRIVE_FULL
+                     for _dest, reason in failures or []):
             say("Run the same command again to retry only those.")
         for line in same_lines:
             say(line)
@@ -7271,6 +7399,22 @@ def data_directory_state(entry: dict, bios_path: Path,
     return root, needed, present
 
 
+def data_space_bytes(data_states: list[tuple[dict, tuple[Path, dict[str, dict], int]]]) -> int:
+    """What the data trees take on the drive while they are rebuilt: every
+    file they lack, plus the largest source archive, which sits in its tree
+    until that tree is read. Only the BIOS files were held against the free
+    space: 18.8 KB passed on a card with 20 MB left, and 81.8 MB followed.
+    Nothing is written for them offline without a pack."""
+    if LOCAL.pack is None and _offline_only():
+        return 0
+    files = sum(meta.get("size", 0) for _entry, (_root, needed, _present) in data_states
+                for meta in needed.values())
+    if LOCAL.pack is not None:
+        return files
+    return files + max((data_fetch_bytes(entry, state[1]) for entry, state in data_states
+                        if state[1]), default=0)
+
+
 def data_fetch_bytes(entry: dict, needed: dict[str, dict]) -> int:
     """What getting a tree's missing files costs: its source archive, which
     comes whole for one file, or from a pack the files themselves. A list
@@ -7304,6 +7448,8 @@ def install_data_directory(entry: dict, bios_path: Path,
         return counts
     _writing.set()
     fetched: Path | None = None
+    lock: BinaryIO | None = None
+    lock_path = root / f".{entry['ref']}.archive.lock"
     try:
         root.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=root) as scratch:
@@ -7313,7 +7459,11 @@ def install_data_directory(entry: dict, bios_path: Path,
             else:
                 # Beside the tree, outside the scratch folder: a transfer
                 # cut short is resumed by the next attempt or the next run.
-                kept = root / f".{entry['ref']}.archive.part"
+                # Two runs into one folder truncated or deleted the archive
+                # the other was still writing or reading: the run that finds
+                # it locked downloads into its scratch folder instead.
+                lock = _claim_partial(lock_path)
+                kept = root / f".{entry['ref']}.archive.part" if lock is not None else None
                 archive = _fetch_archive(entry["url"], Path(scratch), progress, kept)
                 fetched = archive
                 members = _archive_members(archive, entry)
@@ -7342,9 +7492,12 @@ def install_data_directory(entry: dict, bios_path: Path,
     except (urllib.error.URLError, OSError, ValueError, tarfile.TarError) as exc:
         # The tree's folder refused, not the source: said as the BIOS files
         # say it, never as an archive that could not be read.
+        # A full drive is said as one too: "could not read <url>: [Errno
+        # 28]" put the cause on the source, and the end said to run again.
         counts["error"] = (NOT_WRITABLE if isinstance(exc, OSError)
                            and not isinstance(exc, urllib.error.URLError)
                            and _write_refused(exc) and not _folder_writable(root)
+                           else DRIVE_FULL if _drive_full(exc)
                            else str(getattr(exc, "reason", None) or exc))
     except _MEMBER_ERRORS as exc:
         # A damaged, encrypted or unsupported member, in words.
@@ -7353,6 +7506,8 @@ def install_data_directory(entry: dict, bios_path: Path,
         if fetched is not None:
             # Read whole: the next run fetches the archive afresh.
             _drop_archive(fetched, fetched.with_name(fetched.name + ".source"))
+        if lock is not None:
+            _release_claim(lock, lock_path)
     counts["absent"] = len(needed)
     return counts
 
@@ -7482,7 +7637,9 @@ def standalone_plan(
                     continue
                 chosen = plan.setdefault(folder, {})
                 for entry in sources:
-                    name = PurePosixPath(entry["dest"]).name
+                    # `as`: the name the emulator reads, when it is not the
+                    # platform's (melonDS's dsisd.bin, xemu's eeprom.bin).
+                    name = copy.get("as") or PurePosixPath(entry["dest"]).name
                     chosen.setdefault(name, {**entry, "dest": name})
     return [(folder, list(entries.values())) for folder, entries in plan.items() if entries]
 
@@ -7562,7 +7719,7 @@ def _install_standalone_folders(
     if args.check:
         if pending:
             print("\n" + _check_fetch_line(pending, "its folder"))
-            sys.exit(1)
+            sys.exit(3)
         return True
     if args.dry_run:
         return True
@@ -7646,7 +7803,7 @@ def do_standalone_copies(
                 continue
             resolved_dir = target_dir.resolve()
             for src in sources:
-                dest = target_dir / src.name
+                dest = target_dir / (entry.get("as") or src.name)
                 linked = dest.is_symlink()
                 # A crafted source name would climb out of the directory.
                 if not linked and not _within(dest, resolved_dir):
@@ -7656,7 +7813,7 @@ def do_standalone_copies(
                         failures.append((str(dest), OUTSIDE_TARGET))
                     continue
                 try:
-                    KEPT.keep(resolved_dir, PurePosixPath(src.name), dest, {}, src)
+                    KEPT.keep(resolved_dir, PurePosixPath(dest.name), dest, {}, src)
                 except _NotKept as exc:
                     print(f"  ERROR: {dest}: {NOT_KEPT} ({exc})")
                     failed += 1
@@ -13285,8 +13442,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--target",
         metavar="NAME",
         help="hardware target for core filtering (switch, rpi4, ...). "
-        "On Batocera, Recalbox, ROCKNIX, Lakka, KNULLI and RetroPie the board is read "
-        "from the system",
+        "On AmberELEC, EmuELEC, Batocera, Recalbox, ROCKNIX, Lakka, KNULLI and RetroPie "
+        "the board is read from the system",
     )
     parser.add_argument(
         "--every-board",
@@ -15899,6 +16056,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(line)
             continue
 
+        space_checked = False
         if to_download:
             fetched = [f for f in to_download if id(f) not in copies]
             if _offline_only() and fetched:
@@ -15995,9 +16153,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             print("  Press Ctrl+C to stop. Running the same command again "
                   "carries on from here.")
             # Checked before the folder is created: a run stopped for space
-            # left an empty BIOS folder behind.
-            _check_free_space(bios_path, dl_size, plat_name, 1 if total_downloaded else 2,
-                              on_its_card(plat_name, bios_path))
+            # left an empty BIOS folder behind. The data trees count too,
+            # written after the files on the same drive.
+            _check_free_space(bios_path, dl_size + data_space_bytes(data_states), plat_name,
+                              1 if total_downloaded else 2, on_its_card(plat_name, bios_path))
+            space_checked = True
             created = not bios_path.exists()
             try:
                 bios_path.mkdir(parents=True, exist_ok=True)
@@ -16075,6 +16235,12 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     total_errors += 1
                 else:
                     writable.append((entry, state))
+            if writable and not space_checked:
+                # With every BIOS file in place, the trees alone: checked
+                # before the first archive is written.
+                _check_free_space(bios_path, data_space_bytes(writable), plat_name,
+                                  1 if total_downloaded else 2,
+                                  on_its_card(plat_name, bios_path))
             if writable:
                 print("\nData directories:")
             for entry, state in writable:
@@ -16115,8 +16281,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                                  f", {counts['changed'] + counts['absent']} no longer in "
                                  "the source (the pack has them)")
                     print(line)
-                if counts["error"] == NOT_WRITABLE:
-                    failures.append((entry["ref"], NOT_WRITABLE))
+                if counts["error"] in (NOT_WRITABLE, DRIVE_FULL):
+                    if counts["error"] == DRIVE_FULL:
+                        print(f"  {entry['ref']}: {DRIVE_FULL} ({shown_path(bios_path)})",
+                              file=sys.stderr)
+                    failures.append((entry["ref"], counts["error"]))
                     total_errors += 1
                 elif counts["error"]:
                     print(f"  {entry['ref']}: could not read "
@@ -16171,9 +16340,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             skipped=_skipped(omitted_seen), left_out=_left_out_events(left_out_seen),
             kept=KEPT.summary(), interrupted=total_interrupted,
         )
-    # A check scripted as `--check && launch` reads the exit code only.
+    # A check scripted as `--check && launch` reads the exit code only. Its
+    # own code, 3: with 1, a check that found files missing could not be
+    # told from a check that never ran (a list refused, a --from missing).
     if args.check and check_pending:
-        sys.exit(1)
+        sys.exit(3)
     if not args.check and not listing and not args.dry_run:
         _report_outcome(
             installed_paths,

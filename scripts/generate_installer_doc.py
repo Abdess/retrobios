@@ -443,9 +443,9 @@ class Sandbox:
             (system / "system" / "gba_bios.bin").write_bytes(data["gba_bios.bin"])
             with zipfile.ZipFile(system / "PSX BIOS.zip", "w") as archive:
                 archive.writestr("extra.bin", data["pcsx/extra.bin"])
-            # A check that flags a file ends on 1, as documented.
+            # A check that flags a file ends on 3, as documented.
             return self.run("retroarch", "--check", "--manifest", str(listed), home=home,
-                            codes=(1,))
+                            codes=(3,))
         old = home / "old"
         old.mkdir()
         for dest in ("scph5500.bin", "scph5501.bin"):

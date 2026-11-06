@@ -130664,7 +130664,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767
+      "archive_size": 5083767,
+      "optional": true
     },
     {
       "ref": "fbneo-samples",
@@ -130898,7 +130899,8 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 53006540
+      "archive_size": 53006540,
+      "optional": true
     },
     {
       "ref": "freeintv-overlays",
@@ -131271,7 +131273,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 21311170
+      "archive_size": 21311170,
+      "optional": true
     },
     {
       "ref": "yaps2-resources",

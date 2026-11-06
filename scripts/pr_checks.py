@@ -56,8 +56,10 @@ STEPS: tuple[Step, ...] = (
     Step("python scripts/generate_site.py", "the pages the site tests read"),
     Step("npm ci --prefix website", "the site's packages, Node 24",
          needs="npm", provider="Node 24"),
+    # Node's compile cache lands in /tmp, a 4 GB tmpfs here: one build
+    # filled it and every later command failed with ENOSPC.
     Step("npm run build --prefix website", "the built site",
-         needs="npm", provider="Node 24"),
+         needs="npm", provider="Node 24", env={"NODE_DISABLE_COMPILE_CACHE": "1"}),
     Step("python -m unittest discover -s tests -t .", "the suite",
          env={"RETROBIOS_OFFLINE": "1"}),
     Step("python3.8 -m unittest tests.test_install_tui", "the full screen on the installer's floor",

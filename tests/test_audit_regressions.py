@@ -733,6 +733,86 @@ class StandaloneCopiesNameTheirSource(unittest.TestCase):
         self.assertEqual(placed, copies)
 
 
+class StandaloneCopiesComeFromTheProfiles(unittest.TestCase):
+    """The copies were a hand-kept list of eight emulators while 61 profiles
+    give their data_root with the code that builds it: a machine with only
+    standalone Cemu got none of its keys."""
+
+    CEMU = {
+        "data_root": {
+            "linux": {"path": "$XDG_DATA_HOME/Cemu, else ~/.local/share/Cemu",
+                      "source_ref": "x"},
+            "windows": {"path": "%APPDATA%/Cemu", "source_ref": "x"},
+            "macos": {"path": "~/Library/Application Support/Cemu", "source_ref": "x"},
+        },
+        "files": [
+            {"name": "keys.txt", "path": "Cemu/keys.txt", "standalone_path": "keys.txt"},
+            {"name": "CafeCn.ttf", "path": "Cemu/mlc01/CafeCn.ttf",
+             "standalone_path": "mlc01/sys/CafeCn.ttf"},
+            {"name": "gone.bin", "path": "Cemu/gone.bin", "standalone_path": "gone.bin"},
+            {"name": "core.bin", "path": "Cemu/core.bin", "standalone_path": "core.bin",
+             "mode": "libretro"},
+        ],
+    }
+
+    def _copies(self, profiles, dests, declared=()):
+        from generate_pack import _profile_copies
+
+        return _profile_copies(profiles, dests, list(declared))
+
+    def test_each_file_goes_under_the_data_root(self):
+        copies = self._copies({"cemu": self.CEMU},
+                              ["Cemu/keys.txt", "Cemu/mlc01/CafeCn.ttf", "Cemu/core.bin"])
+        self.assertEqual(copies, [
+            {"file": "Cemu/keys.txt", "targets": {
+                "linux": ["$HOME/.local/share/Cemu"], "windows": ["%APPDATA%\\Cemu"],
+                "darwin": ["$HOME/Library/Application Support/Cemu"]}},
+            {"file": "Cemu/mlc01/CafeCn.ttf", "targets": {
+                "linux": ["$HOME/.local/share/Cemu/mlc01/sys"],
+                "windows": ["%APPDATA%\\Cemu\\mlc01\\sys"],
+                "darwin": ["$HOME/Library/Application Support/Cemu/mlc01/sys"]}},
+        ])
+
+    def test_a_place_no_run_can_name_is_left_out(self):
+        melonds = {
+            "data_root": {
+                "windows": {"path": "<folder of melonDS.exe>", "source_ref": "x"},
+                "linux": {"path": "$XDG_CONFIG_HOME/melonDS, else ~/.config/melonDS",
+                          "source_ref": "x"},
+            },
+            "files": [{"name": "dsi_sd_card.bin", "standalone_path": "dsisd.bin"}],
+        }
+        (copy,) = self._copies({"melonds": melonds}, ["dsi_sd_card.bin"])
+        self.assertEqual(copy, {"file": "dsi_sd_card.bin",
+                                "targets": {"linux": ["$HOME/.config/melonDS"]},
+                                "as": "dsisd.bin"})
+
+    def test_the_registry_keeps_what_it_already_names(self):
+        declared = [{"pattern": "k*.txt", "targets": {"linux": ["$HOME/.local/share/Cemu"]}}]
+        (copy, _font) = self._copies({"cemu": self.CEMU},
+                                     ["Cemu/keys.txt", "Cemu/mlc01/CafeCn.ttf"], declared)
+        self.assertNotIn("linux", copy["targets"])
+        self.assertIn("windows", copy["targets"])
+
+    def test_a_file_found_by_content_is_left_to_the_scan(self):
+        amiberry = {
+            "data_root": {"linux": {"path": "~/Amiberry", "source_ref": "x"}},
+            "files": [{"name": "cd32fmv.rom", "path": "roms/cd32fmv.rom",
+                       "standalone_path": "cd32fmv.rom", "found_by": "content"}],
+        }
+        self.assertEqual(self._copies({"amiberry": amiberry}, ["roms/cd32fmv.rom"]), [])
+
+    def test_the_published_retroarch_list_reaches_cemu(self):
+        import json
+
+        manifest = json.loads((ROOT / "install" / "retroarch.json").read_text())
+        files = {copy["file"]: copy for copy in manifest["standalone_copies"]
+                 if "file" in copy}
+        for name in ("Cemu/keys.txt", "Cemu/otp.bin", "Cemu/seeprom.bin"):
+            with self.subTest(name=name):
+                self.assertEqual(files[name]["targets"]["linux"], ["$HOME/.local/share/Cemu"])
+
+
 class ADamagedArchiveIsNotPacked(unittest.TestCase):
     """A member whose bytes fail their CRC stops the build. The builder once
     copied the damaged archive into the pack "for verify to flag", which

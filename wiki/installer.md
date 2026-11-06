@@ -354,7 +354,8 @@ file list is downloaded once and handed to each run.
    transfer stops, and the next attempt or the next run requests only the
    rest. A data tree's archive does the same beside the tree
    (`.<ref>.archive.part`), asking with `If-Range` so that a server whose
-   archive changed sends it whole. A file already there with other contents
+   archive changed sends it whole. A second run into the same folder finds
+   that archive in use and downloads its own copy. A file already there with other contents
    is moved aside first, see [Files you already had](#files-you-already-had).
 8. Copies into standalone emulator directories, only with `--standalone-copies`.
 
@@ -444,7 +445,8 @@ The figures change with each release.
 The size depends on the platform and changes with each release. The run prints
 it before downloading, and asks first when the download reaches 1 GB. The
 installer also measures the free space and refuses before writing anything if
-there is not enough.
+there is not enough. The count holds the BIOS files, every data file still to
+come, and the largest source archive, which sits in its tree while it is read.
 
 `curl` or `wget`, and Python 3.8 or newer, are checked by the command itself:
 it stops with a message naming what is absent. PowerShell's execution policy
@@ -475,13 +477,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  18170 files (9.2 GB)
-    3154 BIOS files (4.3 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
+  18175 files (9.2 GB)
+    3159 BIOS files (4.3 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 426 files are not in the collection, 80 of them required.
 
 Checking existing files...
-  0 in place, 18170 missing, 0 wrong copies
+  0 in place, 18175 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -496,10 +498,10 @@ as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 14698 files (9.2 GB)...
+Downloading 14703 files (9.2 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/14698] panafz1.bin ok
-  [2/14698] panafz10.bin ok
+  [1/14703] panafz1.bin ok
+  [2/14703] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -511,8 +513,8 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 18170 files installed.
-  Installed: 3154 BIOS files, 11544 game data files and 3472 data files.
+Done. 18175 files installed.
+  Installed: 3159 BIOS files, 11544 game data files and 3472 data files.
 BIOS folder: /userdata/bios
 426 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (1 file):
@@ -566,7 +568,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  18170 in place, 0 missing, 0 wrong copies
+  18175 in place, 0 missing, 0 wrong copies
 
   Everything is in place.
 ```
@@ -575,7 +577,7 @@ Checking existing files...
 `Everything is in place.` is said only when the data folders are complete
 too. With the BIOS files in place and data files missing (PPSSPP's assets,
 Dolphin's `Sys`), the line counts those instead (`169 data files to fetch`),
-and `--check` exits with code 1. The files the collection does not hold are
+and `--check` exits with code 3. The files the collection does not hold are
 listed after it again, as long as they are absent from the folder. A number before `wrong copies` means a file is
 in place with contents the platform does not accept. Running the install again
 replaces it and keeps the old one, see
@@ -1011,8 +1013,8 @@ what the options name, everything by default.
 
 <!-- /generated: options -->
 
-`--check` exits with code 1 when a file is missing or does not match, and 0
-when every one does. What it lists is under
+`--check` exits with code 3 when a file is missing or does not match, 0
+when every one does, and 1 when the check itself failed. What it lists is under
 [Why a file is refused](#why-a-file-is-refused). An install leaves a file with
 the expected hash untouched and replaces any other, the old one kept beside
 the BIOS folder. Files the list does not name are never read, moved or deleted.
@@ -1070,8 +1072,9 @@ AmberELEC, EmuELEC and KNULLI install the BIOS list they publish themselves. The
 image or source of its Odroid Go builds is published, so neither its marker
 files nor its folder could be read.
 
-Batocera, Recalbox, ROCKNIX, Lakka and KNULLI also name the board they were built
-for, RetroPie reads the Pi model as its setup script does (`x86_64` on a PC),
+AmberELEC, EmuELEC, Batocera, Recalbox, ROCKNIX, Lakka and KNULLI also name the
+board they were built for (AmberELEC and EmuELEC as `COREELEC_DEVICE` in
+`/etc/os-release`), RetroPie reads the Pi model as its setup script does (`x86_64` on a PC),
 and that board narrows the install unless `--target` or `--every-board` says
 otherwise (see the options above). A board with no core list of its own is
 named and gets the files of every board. KNULLI writes its board to
@@ -1161,7 +1164,9 @@ Under WSL both sides are searched. The Windows one is reached through its
 `/mnt/<drive>` mount: a `C:\` path from a rule or a config becomes
 `/mnt/c/...`, and the Windows variables the rules use (`USERPROFILE`,
 `APPDATA`, `LOCALAPPDATA`, `ProgramFiles`) are read through `cmd.exe` when
-WSL does not pass them. A forced `--platform retrobat` falls back to
+WSL does not pass them. When `cmd.exe` or `reg.exe` gives no answer within
+10 seconds or cannot run (interop turned off), the run says the Windows side
+was not searched, never that nothing is installed there. A forced `--platform retrobat` falls back to
 `/mnt/c/RetroBat/bios`. With nothing found, the folder question offers both
 usual folders of a setup that has one on each side: RetroArch's in this Linux
 (`~/.config/retroarch/system`, under Enter) and the Windows one
@@ -1176,10 +1181,11 @@ usual folders of a setup that has one on each side: RetroArch's in this Linux
 | `~/.var/app/org.libretro.RetroArch/config/retroarch/retroarch.cfg` | RetroArch (Flatpak) | `system_directory` |
 | `~/snap/retroarch/current/.config/retroarch/retroarch.cfg` | RetroArch (Snap) | `system_directory` |
 | `~/.config/retroarch/retroarch.cfg` | RetroArch (native) | `system_directory` |
+| `<name>.AppImage.home/.config/retroarch/retroarch.cfg` (or `<name>.AppImage.config/retroarch/`) beside an AppImage in `~`, or one or two folders below it | RetroArch (AppImage from the buildbot, whose portable folder becomes its home) | `system_directory`. Without a config, `system` in that `retroarch` folder |
 | `~/Library/Application Support/RetroArch/config/retroarch.cfg` | RetroArch (macOS) | `system_directory`. At default, `~/Documents/RetroArch/system` (portable, Steam build included: `Application Support/RetroArch/system`) |
 | `retroarch.cfg` beside `retroarch.exe` (`C:\RetroArch-Win64`, `C:\RetroArch`, `Program Files\RetroArch`) | RetroArch (Windows) | `system_directory`. At default or without a config, `system` beside the exe |
 | `%APPDATA%\RetroArch\retroarch.cfg` | RetroArch (Windows) | `system_directory`, read when the exe folder has no config |
-| `%ProgramFiles(x86)%\Steam\steamapps\common\RetroArch\retroarch.cfg` | RetroArch (Steam) | `system_directory` |
+| `steamapps\common\RetroArch\retroarch.cfg` in every Steam library: the client's folder (`SteamPath` under `HKCU\Software\Valve\Steam`, else `%ProgramFiles(x86)%\Steam`) and the libraries its `libraryfolders.vdf` lists | RetroArch (Steam) | `system_directory` |
 | `%LOCALAPPDATA%\Packages\1e4cf179-f3c2-404f-b9f3-cb2070a5aad8_*\LocalState` | RetroArch (UWP/MSIX package) | `system_directory` of the `retroarch.cfg` there, `~` meaning that folder. By default `LocalState\system` |
 | LaunchBox `Data\Emulators.xml` | RetroArch (portable) | the system directory that entry points at |
 | LaunchBox `Data\Emulators.xml` naming `EmuHawk.exe` | BizHawk (portable) | `Firmware` beside `EmuHawk.exe` |
@@ -1331,8 +1337,9 @@ rather than from the platform's BIOS tree. `--standalone-copies` copies them
 there after the install, and only then: without the flag nothing is written
 outside the selected tree, apart from the files kept in `retrobios-backup`.
 
-The manifest carries the list, fifteen entries on the six platforms that
-declare them (Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK):
+The manifest carries the list on the six platforms that declare one
+(Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK). It has two
+parts. The registry names fifteen entries, Flatpak folders included:
 
 | Files | Copied to |
 |-------|-----------|
@@ -1341,9 +1348,19 @@ declare them (Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK):
 | `Citra/sysdata/aes_keys.txt`, `Citra/sysdata/boot9.bin` | Azahar `sysdata` |
 | `scph*.bin` | DuckStation `bios` |
 | `ps2-*.bin` | PCSX2 `bios`, native and Flatpak |
-| `GC/USA/IPL.bin`, `GC/EUR/IPL.bin`, `GC/JAP/IPL.bin`, `dsp_rom.bin`, `dsp_coef.bin` | Dolphin, per region for the IPL |
+| `GC/USA/IPL.bin`, `GC/EUR/IPL.bin`, `GC/JAP/IPL.bin`, `dsp_rom.bin`, `dsp_coef.bin` | Dolphin `GC`, per region for the IPL |
 | `PPSSPP/ppge_atlas.zim` | PPSSPP `PSP/SYSTEM` |
-| `dc/dc_boot.bin`, `dc/dc_nvmem.bin` | Flycast `data`, native and Flatpak |
+| `dc/dc_boot.bin`, `dc/dc_nvmem.bin` | Flycast's data folder, native and Flatpak |
+
+The rest comes from the emulator profiles. A profile that gives the folder its
+standalone build reads, per system, has each file with a
+`standalone_path` copied to that path under the folder: Cemu's `keys.txt`,
+`otp.bin` and `seeprom.bin` to `~/.local/share/Cemu`, xemu's EEPROM, melonDS's
+DSi SD image. A copy carries `as` when the emulator reads the file under
+another name (`eeprom.bin`, `dsisd.bin`). A folder no run can name (beside an
+executable, picked in the app) is not a target, nor is a place the registry
+already gives for the same file. A file the emulator finds by its contents in a
+folder the user sets (Amiberry's ROMs) is left out.
 
 An entry names one file or a glob, and one entry carries no file at all: when
 an RPCS3 configuration directory is present it prints that `PS3UPDAT.PUP` is
@@ -1753,8 +1770,9 @@ fields, the installer refuses to narrow rather than install everything.
 | Code | Meaning |
 |------|---------|
 | `0` | everything asked for is installed or already in place |
-| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, `--check` found files to fetch, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, or `--add-app` could not put every file of the app on the card |
+| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, or `--add-app` could not put every file of the app on the card |
 | `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board`, `--target` with `--from-pack` or `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set) when no core list per board is at hand (the pack carries none and none is beside `--manifest` as `targets/<platform>.json`), or for a platform that publishes none, which is said to have no hardware targets, `--list-targets` with `--offline` and neither, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also an unknown platform, target, system, core or emulator, said in an `Error:` or `Unknown platform` line and an `error` event whose `stage` is `option`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore`, a folder that is not a dated folder inside `retrobios-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
+| `3` | `--check` ran and found files to fetch or wrong copies, nothing having failed. A failure takes `1` as before: a manifest refused, a `--from` folder that does not exist. Until November 2026 this case also ended on `1`, so a script that reads any code but `0` as "not ready" needs no change |
 | `130` | stopped with Ctrl+C, or with Ctrl+C or Ctrl+D at a question, the terminal keeping `RetroBIOS: stopped. Nothing was installed.` before an install. Run the same command again to carry on |
 | `141` | the output was piped to a reader that closed early (`--list-platforms \| head`) |
 
@@ -1777,9 +1795,9 @@ in the session.
 Failures that are per-file, such as a download exhausting its three attempts,
 are counted and reported at the end.
 
-To tell missing files from a failure, read the `check` event of
-[Machine-readable events](#machine-readable-events): `missing` and `wrong_hash`
-count what is left.
+`--check` tells missing files (`3`) from a failure (`1`) by its code. The
+`check` event of [Machine-readable events](#machine-readable-events) counts what
+is left in `missing` and `wrong_hash`.
 
 ## Machine-readable events
 
@@ -1798,7 +1816,7 @@ other schemas under `api/v1/schemas/`.
 | Kind | Keys | When |
 |------|------|------|
 | `start` | `schema`, `installer`, `mode` | First line. `schema` is 1, `installer` the identity `--version` prints, `mode` one of `install`, `check`, `dry-run`, `list` |
-| `unsearched` | `folder`, `reason`, `message` | Before `detect`, once for each folder the search for setups could not look in, this user being refused it or a read failing there (a failing card, a link that loops). What it would hold counts as absent, and the other places are still searched: `detect` then lists what they hold, and an empty `platforms` after an `unsearched` line means nothing was found where the installer could look. `reason` says why in words (`Permission denied`), `message` says it in a sentence |
+| `unsearched` | `folder`, `reason`, `message` | Before `detect`, once for each folder the search for setups could not look in, this user being refused it or a read failing there (a failing card, a link that loops), or under WSL the Windows side when Windows did not answer (`folder` is then the drive mount, `/mnt`). What it would hold counts as absent, and the other places are still searched: `detect` then lists what they hold, and an empty `platforms` after an `unsearched` line means nothing was found where the installer could look. `reason` says why in words (`Permission denied`), `message` says it in a sentence |
 | `detect` | `os`, `os_name`, `platforms` | Once the platforms are known. `os_name` comes from `/etc/os-release`. `platforms` lists `{platform, name, bios_dir}`, and is empty when nothing supported was found |
 | `error` | `stage`, `reason`, `platform`, `message` | The file list could not be read (`stage` is `manifest`): `reason` is `network`, `not_found` or `invalid`, `clock` when the server's certificate was refused and the system clock reads a date before the installer was written, `no_ca` when the machine holds no list of trusted certificates (`SSL_CERT_FILE` names one), `no_ssl` when this Python was built without its `ssl` module and cannot use HTTPS, or `offline` when `--offline` forbids the request. A folder named with `--from` cannot be read (`stage` is `from`, `reason` `not_found`, `not_a_folder` for a file that is no ZIP, `unreadable`, or `system` for the root of the system, `/proc`, `/sys` or `/dev`). The BIOS folder sits under a folder this user cannot open (`stage` is `dest`, `reason` `unreadable`), or is a file or lies under one (`reason` `not_a_folder`), and the run ends with code 1 before anything is written. A platform, target, system, core or emulator named on the command line is unknown or cannot be used here (`stage` is `option`, `reason` `unknown`, `platform` the platform it was checked against or the name typed), refused before any download with code 2. The BIOS folder cannot be created (`stage` is `dest`, `reason` `not_writable`): a `summary` follows with what the run installed before it. Two systems are detected on one machine and no `--dest` names the folder (`stage` is `detect`, `reason` `conflict`). The platform named with `--platform` is found nowhere and no folder can be assumed for it: a card system with no card named, a portable emulator, Batocera or Recalbox named on a computer (their folder is the `bios` folder of their SHARE drive), or no usual folder on this system or one set aside behind a folder this user cannot open (`stage` is `detect`, `reason` `not_found`). So is a platform named by a file list or a pack, in a run without questions where it is found nowhere here. A `--dest` refused as the card of the system named carries the same `stage` and `reason`: another system's card, a folder inside a card, a drive with none of the files its card always has, or a folder that does not exist. `message` says it in words, and is the only thing that tells these cases apart |
 | `scanned` | `folder`, `files`, `truncated`, `other_drives` | Each folder named with `--from`, once read and before `detect`. `files` counts the files found, `truncated` is true when the search stopped at 200,000 of them, and `other_drives` lists the folders below it on another drive, which were not entered |

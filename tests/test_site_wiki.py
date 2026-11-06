@@ -615,10 +615,10 @@ class ExitStatusAndPinnedInstaller(unittest.TestCase):
         self.text = _wiki("installer.md")
         self.source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
 
-    def test_the_check_event_tells_missing_from_failure(self):
+    def test_the_code_tells_missing_from_failure(self):
         section = _flat(_section(self.text, "Exit status"))
-        self.assertIn("read the `check` event", section)
-        self.assertIn("`missing` and `wrong_hash` count what is left", section)
+        self.assertIn("`--check` tells missing files (`3`) from a failure (`1`) by its code", section)
+        self.assertIn("is left in `missing` and `wrong_hash`", section)
         fields = re.search(r'"check": \(([^)]*)\)', self.source).group(1)
         for field in ("missing", "wrong_hash"):
             with self.subTest(field=field):

@@ -36,6 +36,8 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform retroarch 
 &([scriptblock]::Create((irm https://abdess.github.io/retrobios/i.ps1))) --check
 ```
 
+![Recording of the one-line command in a terminal. The installer finds an ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary.](docs_assets/demo/install.gif)
+
 The script opens a full-screen installer, driven with the arrow keys and Enter, or with a controller on a handheld. It finds your setup and its BIOS folder, downloads only the missing files and checks each one. It can also copy the BIOS files from your old SD card.
 Every option, and what the installer detects and writes, is on the [installer page](https://abdess.github.io/retrobios/wiki/installer/#passing-options).
 
@@ -124,7 +126,7 @@ Checked by is the test your platform runs on its own, replicated here from its s
 
 ## Build your own pack
 
-Clone the repo and generate packs for any platform, emulator, or system:
+Packs are built from a clone, and the clone carries the collection: its checkout alone is over 7.7 GB. `git clone --depth 1 https://github.com/Abdess/retrobios.git` leaves the history out. Files kept as release assets are downloaded when a pack needs them. Then generate packs for any platform, emulator, or system:
 
 ```bash
 # The pack of a platform, as released
@@ -206,4 +208,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-06T15:07:54Z*
+*Auto-generated on 2026-11-06T23:09:06Z*

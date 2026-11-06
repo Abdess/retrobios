@@ -33,7 +33,7 @@ import re
 import shutil
 import tempfile
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import resolve_platform_cores as _platform_cores
@@ -2923,8 +2923,13 @@ def _run_manifest_mode(
                         alias_registry = registry.get("platforms", {}).get(alias_plat, {})
                         alias_install = alias_registry.get("install", {})
                         alias_manifest["detect"] = alias_install.get("detect", [])
-                        alias_manifest["standalone_copies"] = alias_install.get(
-                            "standalone_copies", []
+                        # Placed and completed as the representative's are:
+                        # copied raw, an alias's copies named no source.
+                        alias_manifest["standalone_copies"] = _standalone_copies(
+                            alias_install.get("standalone_copies", []),
+                            {name: emu_profiles[name]
+                             for name in _platform_cores(alias_cfg, emu_profiles)},
+                            manifest["files"],
                         )
                         _write_manifest_if_changed(alias_path, alias_manifest)
                         print(f"  {alias_path}: alias of {representative}")
@@ -3978,6 +3983,116 @@ def _placed_copies(copies: list[dict], dests: list[str]) -> list[dict]:
     return placed
 
 
+# data_root keys of the profiles, as the copy targets name each system.
+_DATA_ROOT_SYSTEMS = {"linux": "linux", "macos": "darwin", "windows": "windows",
+                      "android": "android"}
+
+
+def _data_root_target(system: str, text: str) -> str | None:
+    """A profile's data_root on one system as a copy target, or None when it
+    names no place a run can find: a folder beside an executable, a working
+    directory, a folder picked in the app. Of `A, else B` the alternative
+    under the home is kept, the default the registry's targets write.
+    """
+    for choice in (part.strip() for part in text.split(", else ")):
+        if "<" in choice:
+            continue
+        if system == "windows" and re.match(r"^%[A-Za-z0-9_()]+%/", choice):
+            return choice.replace("/", "\\")
+        if system == "android" and choice.startswith("Android/data/"):
+            return "$EXTERNAL_STORAGE/" + choice
+        if system in ("linux", "darwin"):
+            if choice.startswith("~/"):
+                return "$HOME/" + choice[2:]
+            if choice.startswith("$HOME/"):
+                return choice
+    return None
+
+
+def _profile_copies(
+    profiles: dict[str, dict], dests: list[str], declared: list[dict],
+) -> list[dict]:
+    """The standalone copies the emulator profiles document: each file with
+    a standalone_path, into the data_root of each system that names a place.
+
+    The registry's list was kept by hand for eight emulators, while the
+    profiles give the folder of 61 with the code that builds it: a machine
+    with standalone Cemu only got none of its keys. A target the registry
+    already gives for the same name is left to it, and a file the manifest
+    does not carry, or carries under the save directory, has no source. A
+    file found by content (found_by) sits wherever the folder the user set
+    for the scan points: Amiberry reads its ROMs from rom_path, which
+    amiberry.conf moves, so its name under data_root proves nothing.
+    """
+    from fnmatch import fnmatch  # noqa: PLC0415
+
+    taken: list[tuple[str, str, str, bool]] = []
+    for copy in declared:
+        name = copy.get("pattern") or PurePosixPath(copy.get("file", "")).name
+        for system, targets in (copy.get("targets") or {}).items():
+            taken += [(system, target, name, "pattern" in copy) for target in targets]
+
+    def covered(system: str, target: str, name: str) -> bool:
+        return any(
+            system == t_system and target == t_target
+            and (fnmatch(name, t_name) if is_pattern else name == t_name)
+            for t_system, t_target, t_name, is_pattern in taken
+        )
+
+    by_tail: dict[str, list[str]] = {}
+    for dest in dests:
+        parts = dest.split("/")
+        for start in range(len(parts)):
+            by_tail.setdefault("/".join(parts[start:]), []).append(dest)
+    copies: list[dict] = []
+    for profile_name in sorted(profiles):
+        profile = profiles[profile_name]
+        roots = {
+            _DATA_ROOT_SYSTEMS[key]: target
+            for key, value in (profile.get("data_root") or {}).items()
+            if key in _DATA_ROOT_SYSTEMS and isinstance(value, dict)
+            and (target := _data_root_target(_DATA_ROOT_SYSTEMS[key], value.get("path", "")))
+        }
+        if not roots:
+            continue
+        for entry in profile.get("files", []):
+            standalone = entry.get("standalone_path")
+            if (not standalone or standalone.endswith("/") or entry.get("mode") == "libretro"
+                    or entry.get("type") == "directory" or entry.get("found_by") == "content"):
+                continue
+            held = by_tail.get(entry.get("path") or entry["name"], [])
+            if len(held) != 1:
+                continue
+            source = held[0]
+            where = PurePosixPath(standalone)
+            targets: dict[str, list[str]] = {}
+            for system, root in roots.items():
+                sep = "\\" if system == "windows" else "/"
+                target = root if str(where.parent) == "." else (
+                    root + sep + str(where.parent).replace("/", sep))
+                if not covered(system, target, where.name):
+                    targets[system] = [target]
+            if not targets:
+                continue
+            copy = {"file": source, "targets": targets}
+            if where.name != PurePosixPath(source).name:
+                copy["as"] = where.name
+            copies.append(copy)
+    return copies
+
+
+def _standalone_copies(
+    declared: list[dict], profiles: dict[str, dict], manifest_files: list[dict],
+) -> list[dict]:
+    """A manifest's standalone copies: the registry's, placed where this
+    manifest puts each file, then the ones the profiles document. A platform
+    whose registry entry declares none gets none."""
+    if not declared:
+        return []
+    dests = [entry["dest"] for entry in manifest_files if entry.get("root") != "save"]
+    return _placed_copies(declared, dests) + _profile_copies(profiles, dests, declared)
+
+
 def _stable_hashes(local_path: str, db: dict) -> dict:
     """The file's hashes, held against the scan that built the database.
 
@@ -5020,9 +5135,8 @@ def generate_manifest(
         "generated": now,
         "base_destination": base_dest,
         "detect": detect,
-        "standalone_copies": _placed_copies(
-            standalone_copies,
-            [entry["dest"] for entry in manifest_files if entry.get("root") != "save"],
+        "standalone_copies": _standalone_copies(
+            standalone_copies, manifest_profiles, manifest_files,
         ),
         "total_files": len(manifest_files),
         "total_size": total_size,

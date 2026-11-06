@@ -8,6 +8,7 @@ import functools
 import hashlib
 import http.server
 import importlib.util
+import errno
 import io
 import json
 import os
@@ -28,7 +29,7 @@ from types import SimpleNamespace
 import unittest.mock
 import urllib.error
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
@@ -411,6 +412,84 @@ class TestFreeSpaceGuard(unittest.TestCase):
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         check = source.index("_check_free_space(bios_path, dl_size")
         self.assertLess(check, source.index("bios_path.mkdir(parents=True, exist_ok=True)"))
+
+
+class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
+    """The space check held only the BIOS files: 18.8 KB passed on a card
+    with 20 MB free, then 55.4 MB of archives came and 81.8 MB were written,
+    against the page's promise to refuse before writing anything."""
+
+    def _run(self, *frees_after_bios: int) -> list[tuple[int, str, list]]:
+        """One run per free size, in one folder: the second finds the BIOS
+        files the first installed."""
+        from types import SimpleNamespace
+
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        member = os.urandom(4096)
+        results = []
+        with FakeRepository() as repo, unittest.mock.patch.dict(os.environ):
+            listed = json.loads((repo.root / "install" / "retroarch.json").read_text())
+            listed["data_directories"] = [{
+                "ref": "tree", "dest": "tree", "type": "zip", "archive_size": 50_000_000,
+                "url": "https://example.invalid/tree.zip", "systems": ["nintendo-gba"],
+                "files": {"Sys/a.bin": {"sha1": hashlib.sha1(member).hexdigest(),
+                                        "size": len(member)}}}]
+            (repo.root / "install" / "retroarch.json").write_text(json.dumps(listed))
+            bios = sum(len(payload) for payload, *_ in FakeRepository.PAYLOADS.values())
+            base = repo.env()["RETROBIOS_BASE_URL"]
+            for after in frees_after_bios:
+                out = io.StringIO()
+                fetched: list = []
+                free = bios + after
+                with unittest.mock.patch.object(
+                        sys, "argv", ["install.py", "--platform", "retroarch", "--dest",
+                                      str(repo.dest), "--no-input"]), \
+                        unittest.mock.patch.object(install, "MANIFEST_URL",
+                                                   base + "/install/{platform}.json"), \
+                        unittest.mock.patch.object(install, "RAW_FILE_URL", base + "/{path}"), \
+                        unittest.mock.patch.object(install.shutil, "disk_usage",
+                                                   lambda _p, free=free: SimpleNamespace(free=free)), \
+                        unittest.mock.patch.object(
+                            install, "install_data_directory",
+                            lambda entry, *a, fetched=fetched, **k: fetched.append(entry["ref"]) or {
+                                "present": 0, "installed": 1, "changed": 0, "absent": 0,
+                                "error": "", "not_kept": []}), \
+                        contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+                    try:
+                        install.main()
+                        code = 0
+                    except SystemExit as exc:
+                        code = exc.code
+                results.append((code, out.getvalue(), repo.installed() + fetched))
+        return results
+
+    def test_a_card_short_for_the_trees_is_refused_before_any_write(self):
+        ((code, said, written),) = self._run(20_000_000)
+        self.assertEqual(code, 2, said)
+        self.assertIn("Not enough space", said)
+        self.assertEqual(written, [])
+
+    def test_room_for_the_trees_goes_on(self):
+        ((code, said, written),) = self._run(60_000_000)
+        self.assertEqual(code, 0, said)
+        self.assertIn("tree", written)
+
+    def test_the_trees_alone_are_checked_too(self):
+        """Every BIOS file in place: the trees were written unchecked."""
+        _first, (code, said, written) = self._run(60_000_000, -1)
+        self.assertEqual(code, 2, said)
+        self.assertIn("Not enough space", said)
+        self.assertNotIn("tree", written)
+
+    def test_the_bytes_counted(self):
+        state = (Path("x"), {"a": {"size": 10}, "b": {"size": 5}}, 0)
+        entry = {"archive_size": 1000}
+        with unittest.mock.patch.object(install.LOCAL, "pack", None), \
+                unittest.mock.patch.object(install, "_offline_only", return_value=False):
+            self.assertEqual(install.data_space_bytes([(entry, state), (entry, state)]), 1030)
+        with unittest.mock.patch.object(install.LOCAL, "pack", object()):
+            self.assertEqual(install.data_space_bytes([(entry, state)]), 15)
 
 
 class AMissingDestIsSaid(unittest.TestCase):
@@ -1432,7 +1511,7 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
             cwd=REPO_ROOT, env=env, capture_output=True, text=True, timeout=300,
             check=False,
         )
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertIn("to download:", proc.stdout)
 
     def test_no_syntax_a_312_parser_lets_through(self):
@@ -4024,6 +4103,50 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             install.install_data_directory(self._entry(), bios)
         self.assertEqual([p.name for p in (bios / "dolphin-emu").iterdir()], ["Sys"])
 
+    def test_a_second_run_leaves_the_kept_archive_alone(self):
+        """Two runs into one BIOS folder shared .dolphin-sys.archive.part: the
+        one that finished first deleted the archive the other was still
+        writing, and the other truncated the one being read."""
+        work = Path(_tempdir(self))
+        archive = self._zip(work)
+        bios = work / "system"
+        root = bios / "dolphin-emu"
+        root.mkdir(parents=True)
+        other = root / ".dolphin-sys.archive.part"
+        other.write_bytes(b"another run is writing this")
+        kept: list = []
+
+        def fetch(url, directory, progress=None, keep=None):
+            kept.append(keep)
+            copy = Path(directory) / "private.zip"
+            shutil.copy(archive, copy)
+            return copy
+
+        held = install._claim_partial(root / ".dolphin-sys.archive.lock")
+        self.addCleanup(held.close)
+        with unittest.mock.patch.object(install, "_fetch_archive", fetch):
+            counts = install.install_data_directory(self._entry(), bios)
+        self.assertEqual(kept, [None])
+        self.assertEqual(counts["installed"], 1)
+        self.assertEqual(other.read_bytes(), b"another run is writing this")
+        self.assertTrue((root / ".dolphin-sys.archive.lock").exists())
+
+    def test_a_lone_run_keeps_its_archive_beside_the_tree(self):
+        work = Path(_tempdir(self))
+        archive = self._zip(work)
+        bios = work / "system"
+        kept: list = []
+
+        def fetch(url, directory, progress=None, keep=None):
+            kept.append(keep)
+            shutil.copy(archive, keep)
+            return keep
+
+        with unittest.mock.patch.object(install, "_fetch_archive", fetch):
+            install.install_data_directory(self._entry(), bios)
+        self.assertEqual(kept, [bios / "dolphin-emu" / ".dolphin-sys.archive.part"])
+        self.assertEqual(sorted(p.name for p in (bios / "dolphin-emu").iterdir()), ["Sys"])
+
     def test_the_run_ends_on_the_archive_bytes_too(self):
         from test_install_selection import FakeRepository  # noqa: PLC0415
 
@@ -4365,6 +4488,85 @@ class ARefusedStandaloneCopyIsNamed(unittest.TestCase):
 
 
 
+class AFullDriveIsSaidAsOne(unittest.TestCase):
+    """A card filling up during a tree rebuild read `fbneo-cheats: could not
+    read https://...: [Errno 28] No space left on device`, putting the cause
+    on the source, and the run ended on `Run the same command again`."""
+
+    def test_the_tree_reports_the_drive(self):
+        work = Path(_tempdir(self))
+        entry = {"ref": "fbneo-cheats", "dest": "fbneo/cheats", "type": "zip",
+                 "url": "https://example.invalid/c.zip", "systems": ["arcade"],
+                 "files": {"1941r1.ini": {"sha1": "1" * 40, "size": 4}}}
+
+        class Full(io.RawIOBase):
+            def readable(self):
+                return True
+
+            def readinto(self, buffer):
+                return 0
+
+        def members(_archive, _entry):
+            yield "1941r1.ini", 4, lambda: io.BufferedReader(Full())
+
+        def full(*_args, **_kwargs):
+            raise OSError(errno.ENOSPC, "No space left on device")
+
+        with unittest.mock.patch.object(
+                install, "_fetch_archive",
+                lambda url, d, progress=None, keep=None: Path(d) / "a"), \
+                unittest.mock.patch.object(install, "_archive_members", members), \
+                unittest.mock.patch.object(install, "_install_data_member", full):
+            counts = install.install_data_directory(entry, work)
+        self.assertEqual(counts["error"], install.DRIVE_FULL)
+
+    def test_the_end_names_space_not_a_retry(self):
+        bios = Path(_tempdir(self))
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), self.assertRaises(SystemExit) as ended:
+            install._report_outcome([bios], 7, 0, 1, 0, False,
+                                    failures=[("fbneo-cheats", install.DRIVE_FULL)])
+        text = out.getvalue()
+        self.assertEqual(ended.exception.code, 1)
+        self.assertIn("is full: free up space, or install to another drive with --dest", text)
+        self.assertNotIn("retry only those", text)
+
+    def test_a_bios_file_on_a_full_drive_is_not_retried(self):
+        bios = Path(_tempdir(self))
+        attempts: list = []
+
+        def urlopen(*_args, **_kwargs):
+            attempts.append(1)
+            raise OSError(errno.ENOSPC, "No space left on device")
+
+        entry = {"dest": "a.bin", "repo_path": "bios/a.bin", "size": 4,
+                 "sha1": "1" * 40, "sha256": "2" * 64}
+        with unittest.mock.patch.object(install.urllib.request, "urlopen", urlopen), \
+                unittest.mock.patch.object(install, "_network_allowed", lambda url: None), \
+                unittest.mock.patch.object(install, "_retry_delay", lambda *a: 0):
+            result = install._download_one(entry, bios)
+        self.assertEqual(result[1:], (False, install.DRIVE_FULL))
+        self.assertEqual(len(attempts), 1)
+
+
+class ACheckThatFindsFilesMissingIsNoFailure(unittest.TestCase):
+    """--check ended on 1 for files missing as for a list refused or a
+    --from folder that does not exist: a scheduled check could not tell a
+    BIOS folder to complete from a tool that never ran."""
+
+    def test_missing_is_3_and_a_failure_stays_1(self):
+        from test_install_selection import FakeRepository  # noqa: PLC0415
+
+        with FakeRepository() as repo:
+            missing = repo.run("--no-input", "--check")
+            nowhere = repo.run("--no-input", "--check", "--from", str(repo.root / "nope"))
+            repo.run("--no-input")
+            complete = repo.run("--no-input", "--check")
+        self.assertEqual(missing.returncode, 3, missing.stdout + missing.stderr)
+        self.assertEqual(nowhere.returncode, 1, nowhere.stdout + nowhere.stderr)
+        self.assertEqual(complete.returncode, 0, complete.stdout + complete.stderr)
+
+
 class OneEmulatorsFilesInOneCommand(unittest.TestCase):
     """An emulator page offers one command for that emulator's files.
     --core kept the platform's whole list, and narrowing to cores kept the
@@ -4483,6 +4685,198 @@ class WindowsSeenFromWsl(unittest.TestCase):
             self.assertEqual(os.environ["ProgramFiles"], "")
 
 
+    def test_a_steam_client_outside_program_files_is_found(self):
+        """A Steam client in D:\\Steam hid every library: only Program Files
+        was searched, and Steam's RetroArch was not detected."""
+        empty = self.root / "c" / "Program Files (x86)"
+        empty.mkdir(parents=True)
+        common = self.root / "d" / "steam" / "steamapps" / "common" / "RetroArch"
+        common.mkdir(parents=True)
+        (common / "retroarch.exe").write_bytes(b"MZ")
+        (common / "retroarch.cfg").write_text('system_directory = "default"\n')
+        home = Path(_tempdir(self))
+        cleared = {name: "" for name in (*install._WINDOWS_VARIABLES, "SCOOP", "SCOOP_GLOBAL",
+                                         "ProgramData")}
+        asked: list = []
+
+        def registry(key, value):
+            asked.append((key, value))
+            return "d:/steam" if (key, value) == ("HKCU\\Software\\Valve\\Steam",
+                                                  "SteamPath") else None
+
+        with unittest.mock.patch.dict(os.environ, {**cleared, "HOME": str(home),
+                                                   "ProgramFiles(x86)": str(empty)}), \
+                unittest.mock.patch.object(Path, "home", return_value=home), \
+                unittest.mock.patch.object(install, "_read_registry", registry):
+            self.assertEqual(install._steam_libraries(), [self.root / "d" / "steam"])
+            found = install.detect_platforms("wsl")
+        self.assertIn(("retroarch", common / "system"), found)
+
+    def test_windows_not_answering_is_said_not_taken_for_nothing(self):
+        """cmd.exe timing out on the first variable ended the import without
+        a word, and detection said no setup was installed."""
+        calls: list = []
+
+        def slow(argv, **kwargs):
+            calls.append(argv)
+            raise subprocess.TimeoutExpired(argv, kwargs.get("timeout", 10))
+
+        cleared = {name: "" for name in install._WINDOWS_VARIABLES}
+        home = Path(_tempdir(self))
+        err = io.StringIO()
+        with unittest.mock.patch.dict(os.environ, {**cleared, "HOME": str(home)}), \
+                unittest.mock.patch.object(install.subprocess, "run", slow), \
+                unittest.mock.patch.object(Path, "home", return_value=home), \
+                unittest.mock.patch.object(install, "_DETECTION_REFUSED", []), \
+                unittest.mock.patch.object(install.EVENTS, "emit") as emit, \
+                contextlib.redirect_stderr(err):
+            install._enter_wsl()
+            self.assertEqual(len(calls), 1)
+            install.detect_platforms("wsl")
+            install.detect_platforms("wsl")
+        said = err.getvalue()
+        self.assertEqual(said.count("on the Windows side"), 1, said)
+        self.assertIn("cmd.exe did not answer in 10 s", said)
+        kinds = [c.args[0] for c in emit.call_args_list]
+        self.assertEqual(kinds.count("unsearched"), 1)
+        self.assertEqual(emit.call_args_list[kinds.index("unsearched")].kwargs["folder"],
+                         str(self.root))
+
+
+class StandaloneCopiesUnderTheirOwnName(unittest.TestCase):
+    """melonDS reads dsisd.bin and xemu eeprom.bin, names the platforms
+    give dsi_sd_card.bin and xbox_eeprom.bin: a copy says the name the
+    emulator reads."""
+
+    def test_the_copy_takes_the_emulator_name(self):
+        bios = Path(_tempdir(self))
+        (bios / "xbox_eeprom.bin").write_bytes(b"eeprom")
+        folder = Path(_tempdir(self))
+        manifest = {"standalone_copies": [
+            {"file": "xbox_eeprom.bin", "as": "eeprom.bin", "targets": {"linux": [str(folder)]}}]}
+        install._validate_manifest({**self._published(), **manifest}, "emudeck")
+        self.assertEqual(install.do_standalone_copies(manifest, bios, "linux"), (1, 0, 0))
+        self.assertEqual((folder / "eeprom.bin").read_bytes(), b"eeprom")
+        self.assertFalse((folder / "xbox_eeprom.bin").exists())
+        plan = install.standalone_plan(
+            [{"files": [{"dest": "xbox_eeprom.bin", "sha1": "0" * 40, "size": 6}],
+              **manifest}], "linux")
+        self.assertEqual([entry["dest"] for entry in plan[0][1]], ["eeprom.bin"])
+
+    def _published(self) -> dict:
+        return json.loads((REPO_ROOT / "install" / "emudeck.json").read_text())
+
+    def test_a_name_that_climbs_is_refused(self):
+        for name in ("../eeprom.bin", "a/eeprom.bin", "", 3):
+            with self.subTest(name=name), \
+                    self.assertRaisesRegex(ValueError, "standalone copy name|\\.as"):
+                install._validate_manifest({**self._published(), "standalone_copies": [
+                    {"file": "x.bin", "as": name, "targets": {}}]}, "emudeck")
+
+    def test_cemu_alone_is_found_from_the_published_list(self):
+        home = Path(_tempdir(self))
+        (home / ".local" / "share" / "Cemu").mkdir(parents=True)
+        manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
+        with unittest.mock.patch.dict(os.environ, {"HOME": str(home)}):
+            plan = dict(install.standalone_plan([manifest], "linux"))
+        names = {entry["dest"] for entry in plan[home / ".local" / "share" / "Cemu"]}
+        self.assertLessEqual({"keys.txt", "otp.bin", "seeprom.bin"}, names)
+
+
+class TheBoardSystemsAreNamedFromTheCode(unittest.TestCase):
+    """--help and the wiki named six systems whose board is read, while the
+    code read eight: an AmberELEC user concluded --target was needed."""
+
+    def test_help_and_wiki_name_every_one(self):
+        names = [install.display_name(name) for name in install._BOARD_SOURCES]
+        help_text = " ".join(install.build_parser().format_help().split())
+        wiki = " ".join((REPO_ROOT / "wiki" / "installer.md").read_text().split())
+        paragraph = wiki[:wiki.index("RetroPie reads the Pi model") + len("RetroPie")][-400:]
+        for name in names:
+            with self.subTest(name=name):
+                self.assertIn(name, help_text[help_text.index("--target"):])
+                self.assertIn(name, paragraph)
+
+
+class TheInstallerFitsTheOneLiners(unittest.TestCase):
+    """install.sh and install.ps1 refuse an installer over 2 MiB, and
+    install.py grew from 596 KB to 1.1 MB in twelve days with nothing
+    holding it under that: past it, every one-line install would stop."""
+
+    def _caps(self) -> dict[str, int]:
+        import re
+
+        shell = (REPO_ROOT / "install.sh").read_text(encoding="utf-8")
+        ps1 = (REPO_ROOT / "install.ps1").read_text(encoding="utf-8")
+        units = {"": 1, "KB": 1024, "MB": 1024 ** 2}
+        number, unit = re.search(r"\$maximumInstallerBytes = (\d+)(KB|MB)?", ps1).groups()
+        return {"install.sh": int(re.search(r"^MAX_INSTALLER_BYTES=(\d+)$", shell, re.M)[1]),
+                "install.ps1": int(number) * units[unit or ""]}
+
+    def test_a_quarter_of_each_cap_stays_free(self):
+        size = (REPO_ROOT / "install.py").stat().st_size
+        for script, cap in self._caps().items():
+            with self.subTest(script=script):
+                self.assertLessEqual(
+                    size, cap * 3 // 4,
+                    f"install.py is {size} bytes, past three quarters of the {cap} {script} "
+                    "accepts: shrink it or raise the cap in both one-liners")
+
+    def test_the_refusal_names_a_cause_and_a_way_out(self):
+        for script in ("install.sh", "install.ps1"):
+            text = " ".join((REPO_ROOT / script).read_text(encoding="utf-8").split())
+            with self.subTest(script=script):
+                self.assertIn("this script accepts", text)
+                self.assertIn("open any web page to sign in", text)
+
+
+class RetroArchAppImageIsPortable(unittest.TestCase):
+    """The buildbot's Linux RetroArch is an AppImage beside a .home folder
+    the AppImage runtime makes its HOME: the run found nothing and offered
+    ~/.config/retroarch/system, a folder this RetroArch never reads."""
+
+    def _detect(self, home: Path, env: dict | None = None) -> list:
+        cleared = {"HOME": str(home), "XDG_CONFIG_HOME": ""}
+        with unittest.mock.patch.dict(os.environ, {**cleared, **(env or {})}), \
+                unittest.mock.patch.object(Path, "home", return_value=home):
+            os.environ.pop("XDG_CONFIG_HOME")
+            return install.detect_platforms("linux")
+
+    def _unpack(self, home: Path) -> Path:
+        folder = home / "Downloads" / "RetroArch-Linux-x86_64"
+        base = folder / "RetroArch-Linux-x86_64.AppImage.home" / ".config" / "retroarch"
+        (base / "system").mkdir(parents=True)
+        (folder / "RetroArch-Linux-x86_64.AppImage").write_bytes(b"\x7fELF")
+        return base
+
+    def test_the_unpacked_archive_is_found(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        self.assertIn(("retroarch", base / "system"), self._detect(home))
+
+    def test_its_config_is_read_with_its_own_home(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        (base / "retroarch.cfg").write_text('system_directory = "~/bios"\n')
+        portable = base.parent.parent
+        self.assertIn(("retroarch", portable / "bios"), self._detect(home))
+
+    def test_a_config_folder_beside_it_wins(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        config = base.parent.parent.with_name("RetroArch-Linux-x86_64.AppImage.config")
+        (config / "retroarch").mkdir(parents=True)
+        found = self._detect(home)
+        self.assertIn(("retroarch", config / "retroarch" / "system"), found)
+        self.assertNotIn(("retroarch", base / "system"), found)
+
+    def test_a_folder_without_its_appimage_is_left(self):
+        home = Path(_tempdir(self))
+        base = self._unpack(home)
+        (base.parent.parent.with_name("RetroArch-Linux-x86_64.AppImage")).unlink()
+        self.assertNotIn(("retroarch", base / "system"), self._detect(home))
+
+
 class SteamRetroArchOnMacIsPortable(unittest.TestCase):
     """platform_darwin.m makes the Steam build portable (HAVE_STEAM) with no
     portable.txt: a default system_directory is Application Support's, and
@@ -4561,7 +4955,7 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
         self.assertEqual(self._run("--dest", str(dest), "--system", "atari-lynx", "--yes").returncode, 0)
         (dest / "lynxboot.img").write_bytes(b"corrupt")
         proc = self._run("--dest", str(dest), "--system", "atari-lynx", "--check")
-        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(proc.returncode, 3)
         self.assertIn("wrong copy: lynxboot.img", proc.stdout)
         self.assertIn("without --check", proc.stdout)
 
@@ -5247,7 +5641,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         (dest / "scph5501.bin").write_bytes(b"junk")
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
                             "--check", "--no-input")
-        self.assertEqual(proc.returncode, 1, proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stderr)
         listing = proc.stdout.split("to download:\n", 1)[1].splitlines()
         self.assertEqual(listing[0].strip(), "wrong copy: scph5501.bin")
 
@@ -5279,7 +5673,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
             shutil.copy(REPO_ROOT / repo_path, dest / "PPSSPP")
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
                             "--system", "sony-psp", "--check", "--no-input")
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertNotIn("Everything is in place", proc.stdout)
         found = re.search(r"(\d+) in place, (\d+) missing", proc.stdout)
         self.assertIsNotNone(found, proc.stdout)
@@ -5293,7 +5687,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         proc = _install_run({**self.env, "RETROBIOS_INSTALL_OFFLINE": "1"}, "--platform",
                             "retroarch", "--dest", str(dest), "--check", "--no-input",
                             "--manifest", str(REPO_ROOT / "install" / "retroarch.json"))
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         missing = re.search(r"0 in place, (\d+) missing", proc.stdout).group(1)
         self.assertIn(f"\n  {missing} files not in place:\n", proc.stdout)
         self.assertIn(f"  {missing} files need the internet", proc.stdout)
@@ -5544,7 +5938,15 @@ class StandaloneEmulatorsWithoutAPlatformAreServed(unittest.TestCase, _LoopbackR
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         names = sorted(path.name for path in self.duckstation.iterdir())
         self.assertIn("scph5501.bin", names)
-        self.assertTrue(all(name.startswith("scph") for name in names), names)
+        # Every image the DuckStation profile places in its bios folder,
+        # its PS2 and OpenBIOS images included, and nothing else.
+        import yaml  # noqa: PLC0415
+
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "duckstation.yml").read_text())
+        named = {PurePosixPath(entry["standalone_path"]).name
+                 for entry in profile["files"] if entry.get("standalone_path")}
+        self.assertEqual([name for name in names
+                          if name not in named and not name.startswith("scph")], [])
         proc = _install_run(self.env, "--no-input", "--check")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("Everything is in place.", proc.stdout)
@@ -6396,13 +6798,13 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
 
     def test_a_check_run(self):
         proc, events = self._run("--check")
-        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(proc.returncode, 3)
         installer = events[0]["installer"]
         self.assertEqual(events, self._head("check", installer) + [
             {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 1,
              "pending": 3, "failed": [], "skipped": self.SKIPPED, "left_out": [], "kept": [],
              "interrupted": False},
-            {"event": "end", "code": 1},
+            {"event": "end", "code": 3},
         ])
         self.assertIn("1 in place, 2 missing, 1 wrong copy", proc.stderr)
         self.assertFalse((self.bios / "c.bin").exists())
@@ -6618,7 +7020,7 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
                       self.scratch.read_text(encoding="utf-8"))
 
     def test_the_exit_codes_are_the_ones_install_py_exits_with(self):
-        self.assertEqual(self.generator.exit_codes(), [0, 1, 2, 130, 141])
+        self.assertEqual(self.generator.exit_codes(), [0, 1, 2, 3, 130, 141])
 
     def test_a_missing_marker_stops_it(self):
         page = self.scratch.read_text(encoding="utf-8")

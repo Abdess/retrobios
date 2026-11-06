@@ -23,7 +23,7 @@ DEFAULT_INSTALL_URL="https://raw.githubusercontent.com/Abdess/retrobios/main/ins
 # curl or wget stop on a cut transfer before the hash is read: the site's
 # build rewrites this line there (scripts/sitebootstrap.py).
 MISMATCH_ADVICE="The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-DEFAULT_INSTALL_SHA256="b17220355845692a087bbc29cdb4a1008f68b1423d1126f34f00fa0259b53184"
+DEFAULT_INSTALL_SHA256="25a88f9a078717afbe34419481d222d2f6f42c4bf24b4ec64bc3faa9561ea01c"
 MAX_INSTALLER_BYTES=2097152
 
 cleanup() {
@@ -94,7 +94,16 @@ if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   fi
   actual_size=$(wc -c < "$TEMP_INSTALLER" | tr -d ' ')
   if [ "$actual_size" -gt "$MAX_INSTALLER_BYTES" ]; then
-    echo "Error: downloaded installer exceeds the size limit." >&2
+    # A page served in place of the file says the network answered, not this
+    # project: the one cause a user can act on.
+    echo "Error: the downloaded installer is $actual_size bytes, more than the $MAX_INSTALLER_BYTES this script accepts." >&2
+    echo "  Nothing was run and nothing was written. A network that answers with a page of" >&2
+    echo "  its own (a sign-in portal, a proxy) gives this: open any web page to sign in," >&2
+    echo "  then run the same command again." >&2
+    if [ -n "${RETROBIOS_INSTALL_URL:-}" ]; then
+      echo "  RETROBIOS_INSTALL_URL is set in this environment and names another installer:" >&2
+      echo "  unset it to use the installer this script names." >&2
+    fi
     exit 1
   fi
   if command -v sha256sum >/dev/null 2>&1; then

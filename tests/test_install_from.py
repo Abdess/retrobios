@@ -221,7 +221,7 @@ class CopyFromAnOldCard(FromFolder):
         self.keep("gba_bios.bin", GBA)
         proc = self.run_installer("--check", "--manifest", str(self.list), "--from",
                                   str(self.old))
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertIn(f"{self.old} holds 2 of these files: a run without --check "
                       "copies them.", proc.stdout)
         self.assertIn(f"in {self.old}: BIOS/SCPH5501.BIN", proc.stdout)
@@ -607,7 +607,7 @@ class UnreadableCopies(FromFolder):
         for options in (("--check",), ("--dry-run",), ()):
             with self.subTest(options=options):
                 proc = self.install(*options)
-                self.assertEqual(proc.returncode, 1 if options != ("--dry-run",) else 0,
+                self.assertEqual(proc.returncode, {("--check",): 3, ("--dry-run",): 0}.get(options, 1),
                                  proc.stdout + proc.stderr)
                 self.assertIn(line, proc.stdout)
                 self.assertNotIn("notes.txt", proc.stdout)

@@ -120,7 +120,7 @@ class Scratch(unittest.TestCase):
 
     def check(self) -> str:
         proc = self.run_installer("--check", "--manifest", str(self.list), "--verbose")
-        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         return proc.stdout
 
     def complete(self, *skip: str) -> None:
@@ -1037,7 +1037,7 @@ class OneOfflineVocabulary(Scratch):
         """"Run the same command without --check to fetch them"."""
         proc = self.run_installer("--check", "--offline", "--manifest", str(self.list))
         out = proc.stdout + proc.stderr
-        self.assertEqual(proc.returncode, 1, out)
+        self.assertEqual(proc.returncode, 3, out)
         self.assertNotIn("to fetch them", out)
         self.assertIn("4 files need the internet, which --offline does not use.", out)
         self.assertIn("Copy them from your old card or a folder (--from)", out)

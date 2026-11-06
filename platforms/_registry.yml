@@ -117,26 +117,28 @@ _standalone_copies: &standalone_copies
       - '%APPDATA%\Dolphin Emulator\GC\JAP'
       darwin:
       - $HOME/Library/Application Support/Dolphin/GC/JAP
+  # User/GC, then Sys/GC (DSPLLE.cpp:106-113, libretro/dolphin 3aac3f05).
   - file: dsp_rom.bin
     emulator: dolphin
     targets:
       linux:
-      - $HOME/.local/share/dolphin-emu
-      - $HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu
+      - $HOME/.local/share/dolphin-emu/GC
+      - $HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu/GC
       windows:
-      - '%APPDATA%\Dolphin Emulator'
+      - '%APPDATA%\Dolphin Emulator\GC'
       darwin:
-      - $HOME/Library/Application Support/Dolphin
+      - $HOME/Library/Application Support/Dolphin/GC
+  # User/GC, then Sys/GC (DSPLLE.cpp:106-113, libretro/dolphin 3aac3f05).
   - file: dsp_coef.bin
     emulator: dolphin
     targets:
       linux:
-      - $HOME/.local/share/dolphin-emu
-      - $HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu
+      - $HOME/.local/share/dolphin-emu/GC
+      - $HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu/GC
       windows:
-      - '%APPDATA%\Dolphin Emulator'
+      - '%APPDATA%\Dolphin Emulator\GC'
       darwin:
-      - $HOME/Library/Application Support/Dolphin
+      - $HOME/Library/Application Support/Dolphin/GC
   # PPSSPP
   - file: PPSSPP/ppge_atlas.zim
     targets:
@@ -148,13 +150,14 @@ _standalone_copies: &standalone_copies
       darwin:
       - $HOME/Library/Application Support/PPSSPP/PSP/SYSTEM
   # Flycast (Dreamcast)
+  # Linux reads the data folder itself (core/linux-dist/main.cpp:74-97,
+  # core/stdclass.cpp:95-107, flycast e88b0ced). Windows reads data\ beside
+  # flycast.exe (core/windows/winmain.cpp:56-77), a folder no rule can name.
   - file: dc/dc_boot.bin
     targets:
       linux:
-      - $HOME/.local/share/flycast/data
+      - $HOME/.local/share/flycast
       - $HOME/.var/app/org.flycast.Flycast/data/flycast
-      windows:
-      - '%APPDATA%\flycast\data'
       # shell/apple/emulator-osx/emulator-osx/osx-main.mm:83-101 (flycast 6bb0fc3e).
       darwin:
       - $HOME/Library/Application Support/Flycast/data
@@ -162,13 +165,14 @@ _standalone_copies: &standalone_copies
       # 143-159, flycast a9bd1c74), writable from Termux up to Android 10.
       android:
       - $EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data
+  # Linux reads the data folder itself (core/linux-dist/main.cpp:74-97,
+  # core/stdclass.cpp:95-107, flycast e88b0ced). Windows reads data\ beside
+  # flycast.exe (core/windows/winmain.cpp:56-77), a folder no rule can name.
   - file: dc/dc_nvmem.bin
     targets:
       linux:
-      - $HOME/.local/share/flycast/data
+      - $HOME/.local/share/flycast
       - $HOME/.var/app/org.flycast.Flycast/data/flycast
-      windows:
-      - '%APPDATA%\flycast\data'
       # shell/apple/emulator-osx/emulator-osx/osx-main.mm:83-101 (flycast 6bb0fc3e).
       darwin:
       - $HOME/Library/Application Support/Flycast/data

@@ -224,14 +224,14 @@
       "emulator": "dolphin",
       "targets": {
         "linux": [
-          "$HOME/.local/share/dolphin-emu",
-          "$HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu"
+          "$HOME/.local/share/dolphin-emu/GC",
+          "$HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu/GC"
         ],
         "windows": [
-          "%APPDATA%\\Dolphin Emulator"
+          "%APPDATA%\\Dolphin Emulator\\GC"
         ],
         "darwin": [
-          "$HOME/Library/Application Support/Dolphin"
+          "$HOME/Library/Application Support/Dolphin/GC"
         ]
       },
       "source": "GC/dsp_rom.bin"
@@ -241,14 +241,14 @@
       "emulator": "dolphin",
       "targets": {
         "linux": [
-          "$HOME/.local/share/dolphin-emu",
-          "$HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu"
+          "$HOME/.local/share/dolphin-emu/GC",
+          "$HOME/.var/app/org.DolphinEmu.dolphin-emu/data/dolphin-emu/GC"
         ],
         "windows": [
-          "%APPDATA%\\Dolphin Emulator"
+          "%APPDATA%\\Dolphin Emulator\\GC"
         ],
         "darwin": [
-          "$HOME/Library/Application Support/Dolphin"
+          "$HOME/Library/Application Support/Dolphin/GC"
         ]
       },
       "source": "GC/dsp_coef.bin"
@@ -272,11 +272,8 @@
       "file": "dc/dc_boot.bin",
       "targets": {
         "linux": [
-          "$HOME/.local/share/flycast/data",
+          "$HOME/.local/share/flycast",
           "$HOME/.var/app/org.flycast.Flycast/data/flycast"
-        ],
-        "windows": [
-          "%APPDATA%\\flycast\\data"
         ],
         "darwin": [
           "$HOME/Library/Application Support/Flycast/data"
@@ -290,17 +287,1763 @@
       "file": "dc/dc_nvmem.bin",
       "targets": {
         "linux": [
-          "$HOME/.local/share/flycast/data",
+          "$HOME/.local/share/flycast",
           "$HOME/.var/app/org.flycast.Flycast/data/flycast"
-        ],
-        "windows": [
-          "%APPDATA%\\flycast\\data"
         ],
         "darwin": [
           "$HOME/Library/Application Support/Flycast/data"
         ],
         "android": [
           "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ]
+      }
+    },
+    {
+      "file": "pcsx2/bios/ps2-0230a-20080220.nvm",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.armsx2/files/bios"
+        ],
+        "windows": [
+          "%USERPROFILE%\\Documents\\ARMSX2\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/ARMSX2/bios"
+        ],
+        "linux": [
+          "$HOME/.config/ARMSX2/bios"
+        ]
+      }
+    },
+    {
+      "file": "arcade/proverb.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.armsx2/files/arcade"
+        ],
+        "windows": [
+          "%USERPROFILE%\\Documents\\ARMSX2\\arcade"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/ARMSX2/arcade"
+        ],
+        "linux": [
+          "$HOME/.config/ARMSX2/arcade"
+        ]
+      }
+    },
+    {
+      "file": "dolphin-emu/Sys/GC/USA/IPL.bin",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/org.dolphinemu.dolphinemu/files/GC/USA"
+        ]
+      }
+    },
+    {
+      "file": "dolphin-emu/Sys/GC/EUR/IPL.bin",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/org.dolphinemu.dolphinemu/files/GC/EUR"
+        ]
+      }
+    },
+    {
+      "file": "dolphin-emu/Sys/GC/JAP/IPL.bin",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/org.dolphinemu.dolphinemu/files/GC/JAP"
+        ]
+      }
+    },
+    {
+      "file": "dolphin-emu/Sys/GC/dsp_rom.bin",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/org.dolphinemu.dolphinemu/files/GC"
+        ]
+      }
+    },
+    {
+      "file": "dolphin-emu/Sys/GC/dsp_coef.bin",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/org.dolphinemu.dolphinemu/files/GC"
+        ]
+      }
+    },
+    {
+      "file": "dolphin-emu/Sys/GC/font_western.bin",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/org.dolphinemu.dolphinemu/files/GC"
+        ],
+        "windows": [
+          "%APPDATA%\\Dolphin Emulator\\GC"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Dolphin/GC"
+        ],
+        "linux": [
+          "$HOME/.local/share/dolphin-emu/GC"
+        ]
+      }
+    },
+    {
+      "file": "dolphin-emu/Sys/GC/font_japanese.bin",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/org.dolphinemu.dolphinemu/files/GC"
+        ],
+        "windows": [
+          "%APPDATA%\\Dolphin Emulator\\GC"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Dolphin/GC"
+        ],
+        "linux": [
+          "$HOME/.local/share/dolphin-emu/GC"
+        ]
+      }
+    },
+    {
+      "file": "dtlh1100.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph18000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30003.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh10000_0117.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph10000_0117.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh10000_0217.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph10000_15000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh10000_0224.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh30001.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30001_0727.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30001_0902.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh30002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh30102_0902.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30002_0902.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph18000_gh003.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph18000_gh008.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh30101.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30001_35001.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh30102_1228.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30002_1228.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh30000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30000_35000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30001r_0427.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30000_0427.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30001r_0704.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30002r_0704.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30001r_1004.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30002r_1004.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph30005r.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph39001.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph39002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph37000_39000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph39008.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph39005.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh50000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50000_55000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh50002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50002_0227.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh50001_0325.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50001_0325.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh50009.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_desr5000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph55000_0623.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh50001_0623.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50001_0623.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50002_0623.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50005.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50009.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50000_0822.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50004_0822.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph50011.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph70000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph70001.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph70002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph70002_alt.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh70002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph70005.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_desr5500.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh75000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph75000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh75000a.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph75001.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph75002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph75006.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph77000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph77001.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph77002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph77006.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh90000_j.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph79000_90000.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_dtlh90000_a.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph79001_90001.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph79002_90002.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph79006_90006.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph90000_0220.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph90001_0220.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph90002_0220.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_scph90005_0220.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "ps2_kdl22px300.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "openbios.bin",
+      "targets": {
+        "windows": [
+          "%LOCALAPPDATA%\\DuckStation\\bios"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/DuckStation/bios"
+        ],
+        "linux": [
+          "$HOME/.local/share/duckstation/bios"
+        ]
+      }
+    },
+    {
+      "file": "eka2l1/firmware/SYM.ROM",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.github.eka2l1/files/data/roms/nem-4"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/EKA2L1/data/roms/nem-4"
+        ],
+        "linux": [
+          "$HOME/.local/share/EKA2L1/data/roms/nem-4"
+        ]
+      }
+    },
+    {
+      "file": "dc/naomi.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "dc/airlbios.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "dc/f355bios.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "dc/f355dlx.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "dc/hod2bios.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "dc/naomi2.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "dc/awbios.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "dc/segasp.zip",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/com.flycast.emulator/files/data"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Flycast/data"
+        ],
+        "linux": [
+          "$HOME/.local/share/flycast"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/AnimsSw.j2a",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/Data.j2d",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/Plus.j2d",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/prince.j2e",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/rescue.j2e",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/flash.j2e",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/monk.j2e",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/share.j2e",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/home.j2e",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/share1.j2l",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/share2.j2l",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/share3.j2l",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/sharectf.j2l",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/sharect2.j2l",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/sharetrs.j2l",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/labrat1n.j2t",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/psych2.j2t",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/diam2.j2t",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/menu.j2b",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/intro.j2b",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/labrat.j2b",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/funkyg.j2b",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/diamond.j2b",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/boss2.j2b",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "jazz2/Source/intro.j2v",
+      "targets": {
+        "android": [
+          "$EXTERNAL_STORAGE/Android/data/jazz2.resurrection/files/Source"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/Jazz\u00b2 Resurrection/Source"
+        ],
+        "linux": [
+          "$HOME/.local/share/jazz2/Source"
+        ]
+      }
+    },
+    {
+      "file": "dsi_sd_card.bin",
+      "targets": {
+        "darwin": [
+          "$HOME/Library/Preferences/melonDS"
+        ],
+        "linux": [
+          "$HOME/.config/melonDS"
+        ]
+      },
+      "as": "dsisd.bin"
+    },
+    {
+      "file": "Config/Music.xml",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/supermodel/Config"
+        ]
+      }
+    },
+    {
+      "file": "Xenia-Edge/xefu/xbox.xex",
+      "targets": {
+        "windows": [
+          "%USERPROFILE%\\Documents\\Xenia\\xefu"
+        ],
+        "darwin": [
+          "$HOME/.local/share/Xenia/xefu"
+        ],
+        "linux": [
+          "$HOME/.local/share/Xenia/xefu"
+        ]
+      }
+    },
+    {
+      "file": "pcsx2/bios/ps2-0230a-20080220.nvm",
+      "targets": {
+        "darwin": [
+          "$HOME/Library/Application Support/YAPS2/bios"
+        ],
+        "linux": [
+          "$HOME/.config/YAPS2/bios"
         ]
       }
     }
@@ -123390,7 +125133,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767
+      "archive_size": 5083767,
+      "optional": true
     },
     {
       "ref": "fbneo-samples",
@@ -123624,7 +125368,8 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 53006540
+      "archive_size": 53006540,
+      "optional": true
     },
     {
       "ref": "freeintv-overlays",
@@ -123997,7 +125742,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 21311170
+      "archive_size": 21311170,
+      "optional": true
     },
     {
       "ref": "lrps2",
