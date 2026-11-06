@@ -847,7 +847,8 @@ def main() -> None:
                 {
                     "file": r.filepath,
                     "passed": r.passed,
-                    "outcome": r.outcome or "new",
+                    # A file that failed, unread or refused, is not a new one.
+                    "outcome": r.outcome or ("new" if r.passed else "failed"),
                     "destination": r.destination,
                     "sha1": r.sha1,
                     "md5": r.md5,

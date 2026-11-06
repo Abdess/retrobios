@@ -522,6 +522,15 @@ class FlagsAreAppliedOrRefused(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("not allowed with", result.stderr)
 
+    def test_a_failed_file_is_not_reported_new(self):
+        """A path that does not exist came out as "outcome": "new", and a
+        reader listing new contributions announced a BIOS nobody sent."""
+        import json  # noqa: PLC0415
+
+        result = self._run("--json", "bios/nope.bin")
+        report = json.loads(result.stdout)
+        self.assertEqual([(r["passed"], r["outcome"]) for r in report], [(False, "failed")])
+
 
 
 class AFileOutsideBiosIsToldWhereToGo(unittest.TestCase):
