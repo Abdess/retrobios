@@ -193,11 +193,23 @@ class AnInstallBoxShowsOneCommand(unittest.TestCase):
         self.assertEqual(re.findall(r'<TabItem label="([^"]+)"', tabs),
                          ["Windows", "macOS", "Linux", "Steam Deck"])
         self.assertEqual(tabs.count("--platform"), 4)
-        self.assertEqual(tabs.count("--platform emudeck --system sony-psp"), 4)
+        # RetroArch, which runs on each tab's system, not the first by name.
+        self.assertEqual(tabs.count("--platform retroarch --system"), 4)
+
+    def test_the_default_setup(self) -> None:
+        """AmberELEC led 17 system pages, a handheld system under the
+        Windows tab, for being first in alphabetical order."""
+        self.assertEqual(gs._default_setup([("amberelec", "psx"), ("retroarch", "Sony - PlayStation")]),
+                         ("retroarch", "Sony - PlayStation"))
+        self.assertEqual(gs._default_setup([("amberelec", "x"), ("batocera", "x")]), ("batocera", "x"))
+        self.assertEqual(gs._default_setup([("amberelec", "x"), ("knulli", "x")]), ("amberelec", "x"))
+        select = re.search(r"<select>(.*?)</select>", self.text).group(1)
+        self.assertEqual(re.findall(r'<option value="([^"]+)" selected', select), ["retroarch"])
 
     def test_the_setup_list_carries_every_command(self) -> None:
         select = re.search(r"<select>(.*?)</select>", self.text).group(1)
-        options = re.findall(r'<option value="([^"]+)" data-sh="([^"]+)" data-ps="([^"]+)">', select)
+        options = re.findall(r'<option value="([^"]+)"(?: selected)? data-sh="([^"]+)" data-ps="([^"]+)">',
+                             select)
         self.assertEqual([value for value, _sh, _ps in options], ["emudeck", "retroarch", "retrobat"])
         self.assertIn(("retrobat", "--platform retrobat --system 'Neo Geo'",
                        "--platform retrobat --system 'Neo Geo'"), options)

@@ -9114,6 +9114,21 @@ def _install_args(platform: str, system: str, shell: str) -> str:
     return f"--platform {platform} --system {quoted}"
 
 
+def _default_setup(declared: list[tuple[str, str]]) -> tuple[str, str]:
+    """The setup an install box shows before the reader picks one.
+
+    The first in alphabetical order was AmberELEC on 17 system pages, a
+    handheld system under a Windows tab. RetroArch runs on every OS the box
+    has a tab for. Without it, a setup the release publishes a ZIP for,
+    the ones most people download (`release_pack`).
+    """
+    for wanted in (lambda p: p == "retroarch", has_release_pack):
+        chosen = next((pair for pair in declared if wanted(pair[0])), None)
+        if chosen:
+            return chosen
+    return declared[0]
+
+
 def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
     """One command, for the setup the reader picks, under the OS tabs.
 
@@ -9128,15 +9143,16 @@ def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
         return html.escape(text, quote=False).replace('"', "&quot;")
 
     names = Counter(platform for platform, _system in declared)
+    lead = _default_setup(declared)
     options = "".join(
-        f'<option value="{attribute(platform)}" '
-        f'data-sh="{attribute(_install_args(platform, system, "sh"))}" '
+        f'<option value="{attribute(platform)}"'
+        + (" selected" if (platform, system) == lead else "")
+        + f' data-sh="{attribute(_install_args(platform, system, "sh"))}" '
         f'data-ps="{attribute(_install_args(platform, system, "powershell"))}">'
         + html.escape(_platform_display(platform) + (f" ({system})" if names[platform] > 1 else ""),
                       quote=False)
         + "</option>"
         for platform, system in declared)
-    lead = declared[0]
     args = {key: _install_args(*lead, TERMINALS[key][2]) for key in INSTALL_PICKER_OSES}
     return [
         "Each platform names the system its own way.",

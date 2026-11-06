@@ -1086,7 +1086,7 @@ const copyButtons = () => {
 };
 
 // A system's install box: one command, for the setup picked in its list,
-// under the site's OS tabs. The box is built with the first setup's command;
+// under the site's OS tabs. The box is built with its selected setup's command;
 // the choice rewrites the options of each command and its copy text, and is
 // remembered for the next box and the next page. Without this script the
 // picker stays hidden and the list of every command shows instead.
