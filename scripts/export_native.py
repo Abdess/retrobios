@@ -36,6 +36,7 @@ from artifacts import file_lock, write_bytes_atomic, write_if_changed, write_tex
 import yaml
 
 from common import (
+    InputMissing,
     build_zip_contents_index,
     platform_arg,
     list_registered_platforms,
@@ -62,13 +63,27 @@ _USER_AGENT = "retrobios-exporter/1.0"
 _MAX_BYTES = 64 * 1024 * 1024
 
 
+class SourcesIndexUnreadable(InputMissing):
+    """The cache's URL index exists and does not read as JSON."""
+
+
 def _load_sources(index: Path | None) -> dict[str, str]:
+    """The URL each cached file was fetched from.
+
+    An absent index records nothing. An index that does not read raises:
+    read as empty it let every cached original pass for current, and the
+    next download rewrote it with that one entry.
+    """
     if index is None or not index.is_file():
         return {}
     try:
         return json.loads(index.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return {}
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SourcesIndexUnreadable(
+            f"{index} does not read ({exc}): remove it, then"
+            " python scripts/export_native.py --all --refresh-cache"
+            " downloads every original again and records its URL"
+        ) from exc
 
 
 def source_key(destination: Path, index: Path | None) -> str:

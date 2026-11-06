@@ -35,6 +35,14 @@ class NativeCacheTests(unittest.TestCase):
         self.root.mkdir()
         self.wanted = {"list.txt": "https://example.invalid/tag-2/list.txt"}
 
+    def test_an_unreadable_index_is_an_error_not_unrecorded(self):
+        """Read as empty, it named "no URL recorded" for every original."""
+        self.index.write_text("{", encoding="utf-8")
+        findings = cf.check_native(REPO_ROOT / "platforms", self.cache, self.cache)
+        self.assertEqual([(f.subject, f.status) for f in findings],
+                         [(self.index.name, cf.ERROR)])
+        self.assertIn("--refresh-cache", findings[0].detail)
+
     def _cached(self, mtime: float) -> None:
         path = self.root / "list.txt"
         path.write_text("x", encoding="utf-8")

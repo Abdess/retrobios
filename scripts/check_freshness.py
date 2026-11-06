@@ -509,7 +509,10 @@ def check_native(
 ) -> list[Finding]:
     exporters = discover_exporters()
     index = cache_dir / export_native.SOURCES_INDEX
-    recorded = export_native.load_sources(cache_dir)
+    try:
+        recorded = export_native.load_sources(cache_dir)
+    except export_native.SourcesIndexUnreadable as exc:
+        return [Finding("native", index.name, ERROR, detail=str(exc))]
     findings: list[Finding] = []
     for name in list_registered_platforms(str(platforms_dir), include_archived=True):
         exporter_class = exporters.get(name)

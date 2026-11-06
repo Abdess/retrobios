@@ -1005,6 +1005,22 @@ class CachedOriginal(unittest.TestCase):
         self._upstream("v1.txt", "moved")
         self.assertEqual(fetch(url, target, self.index), b"one")
 
+    def test_an_unreadable_index_serves_nothing(self):
+        """A truncated index read as empty: the cached batocera-41 file was
+        served for a 43.1 URL, and the next download erased every other
+        platform's recorded URL."""
+        import export_native
+
+        old = self._upstream("batocera-41.txt", "old")
+        target = self.cache / "plat" / "list.txt"
+        fetch(old, target, self.index)
+        self.index.write_text('{"plat/list.txt": "' + old + '",', encoding="utf-8")
+        new = self._upstream("batocera-43.txt", "new")
+        with self.assertRaises(export_native.SourcesIndexUnreadable) as caught:
+            fetch(new, target, self.index)
+        self.assertIn("--refresh-cache", str(caught.exception))
+        self.assertTrue(self.index.read_text(encoding="utf-8").endswith(","))
+
     def test_refresh_reads_a_branch_url_again(self):
         """A branch URL keeps its name while the platform moves."""
         url = self._upstream("branch.txt", "one")
