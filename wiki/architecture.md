@@ -101,7 +101,8 @@ Upstream sources          Scrapers parse       generate_db.py scans
   es_bios.xml (recalbox)                       (SHA1 primary key,
   core-info .info files                         indexes: by_md5, by_name,
   FirmwareDatabase.cs                           by_crc32, by_sha256, by_path_suffix,
-                                                by_shadowed_alias)
+                                                by_shadowed_alias,
+                                                by_proven_name)
   bios_db.json.zip (MiSTer)
   MAME/FBNeo source
 
@@ -420,6 +421,12 @@ another maker than the one its system id names. When that leaves nothing, the
 profile aliases a primary's name keeps out of `by_name` (`by_shadowed_alias`)
 answer, within that maker's folder: AmberELEC's `nec-pc-88` `DISK.ROM` is QUASI88's
 `n88sub.rom`, not the MSX disk ROM.
+
+A name whose held file no declaration proves by hash, while declarations of that
+name prove another dump in the same directory, answers with that dump
+(`by_proven_name`). The collection files the DSi Panda devkit boot ROMs as
+`dsi_bios7.bin` and `dsi_bios9.bin`, and every hash declared under those names
+designates a retail dump beside them.
 
 ## Platform inheritance
 

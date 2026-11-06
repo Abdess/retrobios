@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-06T07:21:27Z",
+  "generated_at": "2026-11-06T13:49:27Z",
   "total_files": 19947,
   "total_size": 16926035621,
   "bios_dir": "bios",
@@ -600591,6 +600591,25 @@
       ],
       "vsaturn.bin": [
         "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
+      ]
+    },
+    "by_proven_name": {
+      "dsi_bios7.bin": [
+        "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
+        "a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547"
+      ],
+      "dsi_bios9.bin": [
+        "719b9eef33692406d7170ff526069615759c4dfc",
+        "7bf549b8be9e48ab0cdc9b0fdadd49a5131f97eb"
+      ],
+      "dsi_firmware.bin": [
+        "3773f52559d5ac4fc6d8aefe35bce58730ae8181"
+      ],
+      "kick13.rom": [
+        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
+      ],
+      "spectrum.zip": [
+        "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b"
       ]
     }
   }

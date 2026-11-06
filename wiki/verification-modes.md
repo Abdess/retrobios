@@ -398,6 +398,12 @@ by name. QUASI88 reads that name as `n88sub.rom`, the 2 KB PC-88 disk ROM, and
 that is now the file served. An entry that names its emulator is placed by that
 emulator's tree instead.
 
+Step 6 reads a name through `by_proven_name` first. A name lands there when no
+declaration of it proves the held file by hash, while declarations of it prove
+another primary in the same directory. `dsi_bios7.bin` holds the DSi Panda devkit
+boot ROM, whose eMMC key-Y is zeroed, and every md5 and crc32 declared under that
+name designates a retail dump: an entry with no hash gets the retail ROM.
+
 The `hash_mismatch` status means a file with the right name or path exists but its hash
 does not match. This still resolves to a local path (the file is present), but verification
 will report it as UNTESTED with a reason string showing the expected vs actual hash prefix.

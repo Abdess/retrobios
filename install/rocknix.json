@@ -6,7 +6,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "20261001",
-  "generated": "2026-11-05T23:59:37Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -22,9 +22,9 @@
   ],
   "standalone_copies": [],
   "total_files": 7328,
-  "total_size": 8216898220,
+  "total_size": 8216627928,
   "pack_files": 13677,
-  "pack_size": 8360738317,
+  "pack_size": 8360468025,
   "total_omitted": 115,
   "omitted_files": [
     {
@@ -2123,20 +2123,12 @@
       ],
       "alternatives": [
         {
-          "sha1": "d2b17224e156ee5e55b5d8d9f323b1c9b86dd951",
-          "sha256": "28a13952901b4065ef3f08c3252b49a00b6525e301b7ddaa3a390b4c7cbef901",
-          "size": 65536,
-          "repo_path": "bios/Nintendo/Nintendo DSi/dsi_bios7.bin",
-          "cores": [
-            "dsperate"
-          ]
-        },
-        {
           "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
           "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
           "size": 65536,
           "repo_path": "bios/Nintendo/Nintendo DSi/NDS_Bios7i.bin",
           "cores": [
+            "dsperate",
             "melonds",
             "melonds_ds"
           ]
@@ -2155,20 +2147,12 @@
       ],
       "alternatives": [
         {
-          "sha1": "db61fa39ddbc5f5ed71fb19cda47609ef0201723",
-          "sha256": "664c608bd6ccfe583e87b3b924afa00f8697dc7ca92eeb6d206d68abb03d2e10",
-          "size": 65536,
-          "repo_path": "bios/Nintendo/Nintendo DSi/dsi_bios9.bin",
-          "cores": [
-            "dsperate"
-          ]
-        },
-        {
           "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
           "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
           "size": 65536,
           "repo_path": "bios/Nintendo/Nintendo DSi/NDS_Bios9i.bin",
           "cores": [
+            "dsperate",
             "melonds",
             "melonds_ds"
           ]
@@ -2187,10 +2171,10 @@
       ],
       "alternatives": [
         {
-          "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
-          "sha256": "1d7c771de535e6e07182fc9820ac32e76c6f0b5bcefd256a861fdfab144761ec",
+          "sha1": "3773f52559d5ac4fc6d8aefe35bce58730ae8181",
+          "sha256": "a52e281c4dfc8f2da61e7a193d0f40e15eff6f6142ba80bf48ffe755624e2017",
           "size": 131072,
-          "repo_path": "bios/Nintendo/Nintendo DSi/dsi_firmware.bin",
+          "repo_path": "bios/Nintendo/Nintendo DSi/dsifirmware.bin",
           "cores": [
             "dsperate",
             "melonds",
@@ -55104,10 +55088,10 @@
     },
     {
       "dest": "kick13.rom",
-      "sha1": "90933936cce43ca9bc6bf375662c076b27e3c458",
-      "sha256": "1d68ba18412501d2a4b307a0a632b94a50b839c2c7c5ff2df6de2c38b99a921f",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/kick13.rom",
+      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "sha256": "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
       "cores": [
         "amiberry"
       ]
@@ -57966,10 +57950,10 @@
     },
     {
       "dest": "spectrum.zip",
-      "sha1": "e5403cb209cf0df473bf1251cade7e70f94644fb",
-      "sha256": "4fd9bd458e6082144dd9120db6884a1b32de7810674b46632f6ccbec5f5b71a3",
-      "size": 16506,
-      "repo_path": "bios/Arcade/Arcade/spectrum.zip",
+      "sha1": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
+      "size": 12432,
+      "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbneo",
         "fbalpha2019"
@@ -82669,10 +82653,10 @@
     },
     {
       "dest": "fbneo/spectrum.zip",
-      "sha1": "e5403cb209cf0df473bf1251cade7e70f94644fb",
-      "sha256": "4fd9bd458e6082144dd9120db6884a1b32de7810674b46632f6ccbec5f5b71a3",
-      "size": 16506,
-      "repo_path": "bios/Arcade/Arcade/spectrum.zip",
+      "sha1": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
+      "size": 12432,
+      "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbneo"
       ]

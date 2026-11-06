@@ -6,7 +6,7 @@
   "platform": "nextui",
   "display_name": "NextUI",
   "version": "2026-10-20",
-  "generated": "2026-11-05T23:59:37Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "",
   "detect": [
     {
@@ -18,9 +18,9 @@
   ],
   "standalone_copies": [],
   "total_files": 402,
-  "total_size": 708038193,
+  "total_size": 708030045,
   "pack_files": 4094,
-  "pack_size": 794465422,
+  "pack_size": 794457274,
   "total_omitted": 4,
   "omitted_files": [
     {
@@ -4085,10 +4085,10 @@
     },
     {
       "dest": "Bios/FBN/spectrum.zip",
-      "sha1": "e5403cb209cf0df473bf1251cade7e70f94644fb",
-      "sha256": "4fd9bd458e6082144dd9120db6884a1b32de7810674b46632f6ccbec5f5b71a3",
-      "size": 16506,
-      "repo_path": "bios/Arcade/Arcade/spectrum.zip",
+      "sha1": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
+      "size": 12432,
+      "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbneo"
       ]
@@ -4685,10 +4685,10 @@
     },
     {
       "dest": "Bios/FBN/fbneo/spectrum.zip",
-      "sha1": "e5403cb209cf0df473bf1251cade7e70f94644fb",
-      "sha256": "4fd9bd458e6082144dd9120db6884a1b32de7810674b46632f6ccbec5f5b71a3",
-      "size": 16506,
-      "repo_path": "bios/Arcade/Arcade/spectrum.zip",
+      "sha1": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
+      "size": 12432,
+      "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbneo"
       ]

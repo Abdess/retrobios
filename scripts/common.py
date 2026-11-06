@@ -1701,9 +1701,15 @@ def resolve_local_file(
         # none of them answers. melonDS Nightly's dsi_nand.bin is read at
         # dsi/nand.bin: with the DSi image absent from the checkout, the
         # basename let the Wii nand.bin outrank the entry's own DSi variant.
+        # A name whose held file no declaration proves, while declarations
+        # of that name prove another dump beside it, means that dump: the
+        # DSi devkit boot ROMs filed as dsi_bios7.bin went to RetroBat.
+        by_proven_name = db.get("indexes", {}).get("by_proven_name", {})
         for tier in (own_names, names_to_try[len(own_names):]):
             for try_name in tier:
-                for match_sha1 in by_name.get(try_name, []):
+                for match_sha1 in (
+                    by_proven_name.get(try_name) or by_name.get(try_name, [])
+                ):
                     if match_sha1 in files_db and _size_ok(match_sha1):
                         path = files_db[match_sha1]["path"]
                         if os.path.exists(path) and path not in candidates:

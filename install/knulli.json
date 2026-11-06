@@ -6,7 +6,7 @@
   "platform": "knulli",
   "display_name": "KNULLI",
   "version": "20260511",
-  "generated": "2026-11-05T23:59:37Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -30,9 +30,9 @@
   ],
   "standalone_copies": [],
   "total_files": 9574,
-  "total_size": 9693434698,
+  "total_size": 9693164406,
   "pack_files": 13218,
-  "pack_size": 9796992041,
+  "pack_size": 9796721749,
   "total_omitted": 425,
   "omitted_files": [
     {
@@ -9434,20 +9434,20 @@
     },
     {
       "dest": "dsi_firmware.bin",
-      "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
-      "sha256": "1d7c771de535e6e07182fc9820ac32e76c6f0b5bcefd256a861fdfab144761ec",
+      "sha1": "3773f52559d5ac4fc6d8aefe35bce58730ae8181",
+      "sha256": "a52e281c4dfc8f2da61e7a193d0f40e15eff6f6142ba80bf48ffe755624e2017",
       "size": 131072,
-      "repo_path": "bios/Nintendo/Nintendo DSi/dsi_firmware.bin",
+      "repo_path": "bios/Nintendo/Nintendo DSi/dsifirmware.bin",
       "cores": null,
       "systems": [
         "nintendo-ds"
       ],
       "alternatives": [
         {
-          "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
-          "sha256": "1d7c771de535e6e07182fc9820ac32e76c6f0b5bcefd256a861fdfab144761ec",
+          "sha1": "3773f52559d5ac4fc6d8aefe35bce58730ae8181",
+          "sha256": "a52e281c4dfc8f2da61e7a193d0f40e15eff6f6142ba80bf48ffe755624e2017",
           "size": 131072,
-          "repo_path": "bios/Nintendo/Nintendo DSi/dsi_firmware.bin",
+          "repo_path": "bios/Nintendo/Nintendo DSi/dsifirmware.bin",
           "cores": [
             "melonds",
             "melonds_ds"
@@ -111760,10 +111760,10 @@
     },
     {
       "dest": "kick13.rom",
-      "sha1": "90933936cce43ca9bc6bf375662c076b27e3c458",
-      "sha256": "1d68ba18412501d2a4b307a0a632b94a50b839c2c7c5ff2df6de2c38b99a921f",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/kick13.rom",
+      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "sha256": "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
       "cores": [
         "amiberry"
       ],
@@ -141134,10 +141134,10 @@
     },
     {
       "dest": "spectrum.zip",
-      "sha1": "e5403cb209cf0df473bf1251cade7e70f94644fb",
-      "sha256": "4fd9bd458e6082144dd9120db6884a1b32de7810674b46632f6ccbec5f5b71a3",
-      "size": 16506,
-      "repo_path": "bios/Arcade/Arcade/spectrum.zip",
+      "sha1": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
+      "size": 12432,
+      "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbneo"
       ]
@@ -142551,10 +142551,10 @@
     },
     {
       "dest": "fbneo/spectrum.zip",
-      "sha1": "e5403cb209cf0df473bf1251cade7e70f94644fb",
-      "sha256": "4fd9bd458e6082144dd9120db6884a1b32de7810674b46632f6ccbec5f5b71a3",
-      "size": 16506,
-      "repo_path": "bios/Arcade/Arcade/spectrum.zip",
+      "sha1": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
+      "size": 12432,
+      "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbneo"
       ]
