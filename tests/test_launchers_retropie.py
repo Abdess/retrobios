@@ -376,8 +376,9 @@ class PlatformRecords(unittest.TestCase):
     def test_one_package_record_per_core(self):
         packages = [r["package"] for r in self.config["launchers"] if r["kind"] == "package"]
         self.assertEqual(len(packages), len(set(packages)))
-        stripped = {p.removeprefix("lr-") for p in packages}
-        self.assertEqual(stripped, set(self.config["cores"]))
+        from scraper.retropie_scraper import core_name  # noqa: PLC0415
+
+        self.assertEqual({core_name(p) for p in packages}, set(self.config["cores"]))
 
     def test_every_record_belongs_to_a_package(self):
         packages = {r["package"] for r in self.config["launchers"] if r["kind"] == "package"}
