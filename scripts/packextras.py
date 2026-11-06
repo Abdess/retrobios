@@ -555,7 +555,21 @@ def _agnostic_scan_extras(
                 if bios_dir and "/" in fpath and not fpath.startswith(bios_dir):
                     continue
 
-                path_prefix = resolved_dirs.get(id(f), "")
+                # A companion is read under its image's name with the
+                # extension the code appends, in that case: only a file of
+                # that extension is one, spelled as the code spells it. Its
+                # size identifies nothing, PCSX2 reads min(size, filesize)
+                # (BiosTools.cpp:234), and a 4 MB bound swept every smaller
+                # file of the folder to the BIOS root. It sits beside its
+                # image, so the scan looks where the image resolves: the
+                # held ps2-0230a-20080220.rom1 is a DVD firmware dump filed
+                # under DVD Firmware/.
+                companion_ext, image = _companion_of(profile, fname)
+
+                path_prefix = (
+                    resolved_dirs.get(id(image), "") if image
+                    else resolved_dirs.get(id(f), "")
+                )
                 if not path_prefix:
                     continue
                 # A name matching one file identifies it. A name matching several
@@ -570,11 +584,16 @@ def _agnostic_scan_extras(
                     path = entry.get("path", "")
                     if not path.startswith(path_prefix):
                         continue
-                    if not size_fits(f, entry.get("size", 0)):
+                    if not companion_ext and not size_fits(f, entry.get("size", 0)):
                         continue
                     scan_name = entry.get("name", "")
                     if not scan_name:
                         continue
+                    if companion_ext:
+                        stem, _, ext = scan_name.rpartition(".")
+                        if not stem or ext.lower() != companion_ext.lower():
+                            continue
+                        scan_name = f"{stem}.{companion_ext}"
                     # Into the directory the seed entry names, not the root:
                     # yaps2 reads its BIOS from pcsx2/bios/.
                     seed = f.get("path") or ""
@@ -771,6 +790,27 @@ def _companion_extras(
     return extras
 
 
+def _companion_of(profile: dict, name: str) -> tuple[str, dict | None]:
+    """The extension and the image of an entry named after a content-found image.
+
+    ps2-0230a-20080220.rom1 beside ps2-0230a-20080220.bin (found_by:
+    content) is the image's companion, read as <bios>.rom1. Empty for any
+    other entry.
+    """
+    stem, _, ext = name.rpartition(".")
+    if not stem:
+        return "", None
+    for entry in profile.get("files", []):
+        other = str(entry.get("name", ""))
+        if (
+            other != name
+            and entry.get("found_by") == "content"
+            and other.rpartition(".")[0].lower() == stem.lower()
+        ):
+            return ext, entry
+    return "", None
+
+
 def _companion_extensions(profile: dict, seed_name: str) -> set[str]:
     """Extensions the profile declares beside a free-named BIOS entry.
 
@@ -779,6 +819,8 @@ def _companion_extensions(profile: dict, seed_name: str) -> set[str]:
     CDVD.cpp:160-195). A profile states that by naming the companions after
     its BIOS entry: ps2-0230a-20080220.rom1 beside ps2-0230a-20080220.bin.
     """
+    if _companion_of(profile, seed_name)[0]:
+        return set()
     stem = seed_name.rsplit(".", 1)[0].lower()
     exts: set[str] = set()
     for entry in profile.get("files", []):
@@ -791,17 +833,23 @@ def _companion_extensions(profile: dict, seed_name: str) -> set[str]:
 def _companions(
     image_path: str, image_name: str, extensions: set[str], files_db: dict
 ) -> list[tuple[str, dict]]:
-    """Files beside a scanned image that the core opens as its companions."""
+    """Files beside a scanned image that the core opens as its companions.
+
+    Each is named as the core spells it: PCSX2 stats `<bios>.rom1`, then the
+    BIOS path with its extension replaced by `rom1`, both case-sensitive on
+    Linux (BiosTools.cpp:214-229). SCPH-70004.ROM1 as stored is never found
+    beside SCPH-70004.BIN, SCPH-70004.rom1 is.
+    """
     if not extensions:
         return []
     directory = image_path.rsplit("/", 1)[0] + "/"
-    stem = image_name.rsplit(".", 1)[0].lower()
-    wanted = {f"{image_name.lower()}.{ext}" for ext in extensions}
-    wanted |= {f"{stem}.{ext}" for ext in extensions}
+    stem = image_name.rsplit(".", 1)[0]
+    spelled = {f"{image_name}.{ext}".lower(): f"{image_name}.{ext}" for ext in extensions}
+    spelled.update({f"{stem}.{ext}".lower(): f"{stem}.{ext}" for ext in extensions})
     return sorted(
-        (sha1, entry)
+        (sha1, {**entry, "name": spelled[str(entry.get("name", "")).lower()]})
         for sha1, entry in _files_by_directory(files_db).get(directory, ())
-        if str(entry.get("name", "")).lower() in wanted
+        if str(entry.get("name", "")).lower() in spelled
     )
 
 
