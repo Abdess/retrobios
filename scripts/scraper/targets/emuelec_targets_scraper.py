@@ -325,7 +325,7 @@ PROVIDERS: dict[str, tuple[Install, ...]] = {
     "ikemen-go": (_sa("ikemen-go", 'cp "$PKG_BUILD/bin/Ikemen_Go_"* "$INSTALL/usr/bin/Ikemen_Go"',
                       "ikemen"),),
     "jzintv": (_sa("jzintv", "cp bin/jzintv ${INSTALL}/usr/bin", "jzintv"),),
-    # The metapackage's dependencies (line 10); mupen64plus itself comes from
+    # The metapackage's dependencies (line 10). mupen64plus itself comes from
     # mupen64plussa-ui-console's makeinstall_target.
     "mupen64plussa": (
         _sa("mupen64plussa", 'PKG_DEPENDS_TARGET="toolchain mupen64plussa-core '
