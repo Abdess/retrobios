@@ -13868,6 +13868,18 @@ _SHARE_RULES: tuple[_OsRule, ...] = (
     _OsRule("rocknix", "ROCKNIX", "file_matches",
             (".config/system/configs/system.cfg", r"^root\.password=rocknix\s*$"),
             "roms/bios"),
+    # Lakka's is /storage, its STORAGE partition (Lakka-LibreELEC v6.1,
+    # packages/sysutils/busybox/scripts/fs-resize:31). RetroArch reads its
+    # BIOS through /tmp/system, an overlay whose upper folder is
+    # /storage/system (packages/lakka/retroarch_base/retroarch/system.d/
+    # tmp-system.mount:12). With HOME=/storage (config/retroarch-env.conf:1)
+    # RetroArch writes .config/retroarch/retroarch.cfg from the /etc
+    # skeleton at its first start (RetroArch 69a4f0ea, configuration.c:
+    # 3650-3676), whose system_directory is that overlay (config/
+    # retroarch.cfg:3217): no other system we install for reads /tmp/system.
+    _OsRule("lakka", "Lakka", "file_matches",
+            (".config/retroarch/retroarch.cfg",
+             r'^system_directory = "/tmp/system"\s*$'), "system"),
     # MiSTer's is its exFAT partition, /media/fat (Main_MiSTer e0a234f9,
     # file_io.cpp:1177), whose root holds the MiSTer binary and menu.rbf
     # (Distribution_MiSTer ce602319) and which reads each core's files
@@ -19449,7 +19461,7 @@ def setup_list(setups: list, mounted: set, needle: str = "",
 # The systems that run from an SD card on a board kept on a desk, not in
 # the hand: their row stays among the platforms, and the handhelds' block,
 # which leads when nothing is found here, keeps Onion four presses away.
-_DESK_CARDS = frozenset({"misterfpga"})
+_DESK_CARDS = frozenset({"misterfpga", "lakka"})
 
 # The setups a computer runs, by its system, first in the setup list when
 # nothing was found here. RetroBat runs on Windows alone (retrobat.org), and

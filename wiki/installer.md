@@ -1101,6 +1101,7 @@ gives for the device, below the card's root instead of its mount point:
 | `system/configs/emulationstation/about.info` holding the line `KNULLI` | KNULLI | `bios`, KNULLI's list |
 | `system/batocera.conf` holding the line `system.hostname=KNULLI` | KNULLI | `bios`, KNULLI's list |
 | `.config/system/configs/system.cfg` holding the line `root.password=rocknix` | ROCKNIX | `roms/bios`, ROCKNIX's list |
+| `.config/retroarch/retroarch.cfg` holding the line `system_directory = "/tmp/system"` | Lakka | `system`, Lakka's list |
 | `MiSTer`, `menu.rbf` | MiSTer FPGA | `games`, MiSTer FPGA's list |
 | `MUOS/` | muOS | `MUOS/bios`, RetroArch's list |
 | `spruce/` | spruceOS | `BIOS`, RetroArch's list |
@@ -1225,7 +1226,7 @@ beside its executable wherever the archive was extracted, so a forced
 `--platform bizhawk` that finds no install stops and asks for `--dest`.
 
 The systems that run from an SD card keep their files there: MinUI, NextUI,
-MyMinUI, KNULLI, ROCKNIX, MiSTer FPGA, AmberELEC and EmuELEC (the card's games part, which
+MyMinUI, KNULLI, ROCKNIX, Lakka (its STORAGE partition, which a Linux computer reads, once Lakka has started once), MiSTer FPGA, AmberELEC and EmuELEC (the card's games part, which
 they mount as `/storage/roms`), and each system of the
 [Linux handhelds](../platforms/linux-handhelds.md) that gets RetroArch's list
 (Onion, muOS, spruceOS, ArkOS, UnofficialOS and the others). Run on the
