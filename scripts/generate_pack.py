@@ -678,6 +678,9 @@ def _select_variants(
     one_per_slot: bool,
     required_only: bool = False,
     undeclared: list[dict] | None = None,
+    zip_contents: dict | None = None,
+    data_registry: dict | None = None,
+    slot_overrides: dict[str, str] | None = None,
 ) -> tuple[set, list, list]:
     """Which regional and slot alternatives this pack leaves out.
 
@@ -707,6 +710,9 @@ def _select_variants(
             required_only=required_only,
             held_out=held,
             undeclared=undeclared,
+            zip_contents=zip_contents,
+            data_registry=data_registry,
+            slot_overrides=slot_overrides,
         )
     if regions:
         region_index = region_mod.platform_region_index(
@@ -961,7 +967,8 @@ def generate_pack(
     region_drops, region_fallbacks, slot_undecidable = _select_variants(
         config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
         target_cores, source, regions, one_per_slot, required_only,
-        undeclared=undeclared,
+        undeclared=undeclared, zip_contents=zip_contents,
+        data_registry=data_registry, slot_overrides=slot_overrides,
     )
 
     with (
@@ -1671,8 +1678,14 @@ def generate_emulator_pack(
     if record is None:
         os.makedirs(output_dir, exist_ok=True)
 
+    data_registry = load_data_dir_registry(
+        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
+    )
     region_drops: set[str] = (
-        emulator_region_drops(selected, standalone, regions, required_only, db)
+        emulator_region_drops(
+            selected, standalone, regions, required_only, db,
+            zip_contents=zip_contents, data_registry=data_registry,
+        )
         if regions
         else set()
     )
@@ -1703,9 +1716,6 @@ def generate_emulator_pack(
             missing_files.append(name)
 
     data_dir_notices: list[str] = []
-    data_registry = load_data_dir_registry(
-        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
-    )
 
     with (
         contextlib.nullcontext(record) if record is not None
@@ -4353,6 +4363,9 @@ def _manifest_selection(
     required_only: bool,
     regions: list[str] | None,
     undeclared: list[dict] | None = None,
+    zip_contents: dict | None = None,
+    data_registry: dict | None = None,
+    slot_overrides: dict[str, str] | None = None,
 ) -> tuple[set[str], SelectionIndex, set[str]]:
     """Destinations a region list removes, the groups the installer replays,
     and the destinations the builder holds.
@@ -4376,6 +4389,9 @@ def _manifest_selection(
         extras_out=extras,
         held_out=held,
         undeclared=undeclared,
+        zip_contents=zip_contents,
+        data_registry=data_registry,
+        slot_overrides=slot_overrides,
     )
     region_index = region_mod.platform_region_index(
         config, emu_profiles, target_cores
@@ -4655,6 +4671,8 @@ def generate_manifest(
     region_drops, selection, builder_held = _manifest_selection(
         config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
         target_cores, source, required_only, regions, undeclared=undeclared,
+        zip_contents=zip_contents, data_registry=data_registry,
+        slot_overrides=slot_overrides,
     )
 
     # Phase 1: baseline files

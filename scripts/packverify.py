@@ -30,6 +30,7 @@ from packextras import platform_region_groups
 from packpaths import _flat
 from nativemode import reads_file_contents
 import region as region_mod
+import slots
 from packresolve import resolve_declaration, resolve_file
 from exporter.candidates import BIOS, EntryCategories
 from gamedata import without_game_data
@@ -706,6 +707,7 @@ def verify_pack_against_platform(
             config, emu_profiles, target_cores
         )
         held: set[str] = set()
+        held_zip_contents = build_zip_contents_index(db) if db is not None else {}
         region_groups, _extra_dests = platform_region_groups(
             config,
             expected_systems,
@@ -718,6 +720,12 @@ def verify_pack_against_platform(
             include_all=(source == "truth"),
             required_only=required_only,
             held_out=held,
+            zip_contents=held_zip_contents,
+            data_registry=data_registry,
+            slot_overrides=slots.pack_overrides(
+                config, emu_profiles, db, held_zip_contents, data_registry,
+                target_cores=target_cores, source=source,
+            ) if db is not None else None,
         )
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_index, regions, held

@@ -1210,12 +1210,13 @@ def verify_platform(
         else load_emulator_profiles(emulators_dir)
     )
     base_dest = config.get("base_destination", "")
+    pack_overrides = slots.pack_overrides(
+        config, profiles, db, zip_contents, data_dir_registry,
+        target_cores=target_cores,
+    )
     slot_overrides = {
         (key[len(base_dest) + 1:] if base_dest and key.startswith(f"{base_dest}/") else key): path
-        for key, path in slots.pack_overrides(
-            config, profiles, db, zip_contents, data_dir_registry,
-            target_cores=target_cores,
-        ).items()
+        for key, path in pack_overrides.items()
     }
 
     # Build HLE + validation indexes from emulator profiles
@@ -1279,6 +1280,9 @@ def verify_platform(
             target_cores=target_cores,
             required_only=required_only,
             held_out=held,
+            zip_contents=zip_contents,
+            data_registry=data_dir_registry,
+            slot_overrides=pack_overrides,
         )
         region_index = region_mod.platform_region_index(config, profiles, target_cores)
         region_drops = region_mod.resolve_region_drops(
@@ -2153,7 +2157,10 @@ def verify_emulator(
     if regions:
         from packextras import emulator_region_drops
 
-        region_drops = emulator_region_drops(selected, standalone, regions, required_only, db=db)
+        region_drops = emulator_region_drops(
+            selected, standalone, regions, required_only, db=db,
+            zip_contents=zip_contents, data_registry=data_registry,
+        )
 
     # The emulator pack walks profiles in name order and keeps the first
     # file at a path, folding case: a later profile's different file there
