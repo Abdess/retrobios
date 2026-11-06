@@ -33,6 +33,9 @@ class Step:
     # A second command that reads the first one's output, as a shell pipe
     # would: mypy's report goes through mypy-baseline filter.
     then: str = ""
+    # validate.yml marks the step continue-on-error: its failure is shown
+    # and does not fail the run.
+    may_fail: bool = False
 
 
 # The order of validate.yml: data fetched, site generated and built, then the
@@ -48,7 +51,7 @@ STEPS: tuple[Step, ...] = (
     Step("shellcheck --version", "the launcher test runs shellcheck", needs="shellcheck",
          provider="the shellcheck package"),
     Step("python scripts/export_native.py --all --fetch --output-dir tmp/native",
-         "files the exporter tests compare with"),
+         "files the exporter tests compare with", may_fail=True),
     Step("python scripts/refresh_data_dirs.py", "data directories the pack-building tests read"),
     Step("python scripts/generate_site.py", "the pages the site tests read"),
     Step("npm ci --prefix website", "the site's packages, Node 24",
@@ -84,6 +87,7 @@ def execute(step: Step) -> int:
 
 def run(steps: tuple[Step, ...] = STEPS) -> int:
     failed: list[str] = []
+    allowed: list[str] = []
     not_run: list[str] = []
     for step in steps:
         print(f"\n== {shown(step)}", flush=True)
@@ -93,13 +97,15 @@ def run(steps: tuple[Step, ...] = STEPS) -> int:
             continue
         code = execute(step)
         if code:
-            failed.append(f"{shown(step)} (exit {code})")
+            (allowed if step.may_fail else failed).append(f"{shown(step)} (exit {code})")
     print()
     for line in failed:
         print(f"FAILED   {line}")
+    for line in allowed:
+        print(f"FAILED   {line}, continue-on-error in CI as well")
     for line in not_run:
         print(f"NOT RUN  {line}")
-    print(f"{len(steps) - len(failed) - len(not_run)}/{len(steps)} checks passed")
+    print(f"{len(steps) - len(failed) - len(allowed) - len(not_run)}/{len(steps)} checks passed")
     return 1 if failed else 0
 
 

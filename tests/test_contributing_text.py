@@ -235,6 +235,16 @@ class OneCommandRunsTheChecks(unittest.TestCase):
             with self.subTest(check=check):
                 self.assertTrue(any(command.startswith(check) for command in steps))
 
+    def test_a_step_ci_lets_fail_does_not_fail_the_run(self):
+        import pr_checks
+
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        tolerated = set(re.findall(r"continue-on-error: true\n\s*run: (\S+ \S+)", workflow))
+        self.assertTrue(tolerated)
+        for step in pr_checks.STEPS:
+            with self.subTest(step=step.command):
+                self.assertEqual(step.may_fail, " ".join(step.command.split()[:2]) in tolerated)
+
     def test_steps_keep_ci_order(self):
         import pr_checks
 
