@@ -330,7 +330,7 @@ OG_DIR = Path(__file__).resolve().parent.parent / "docs_assets" / "og"
 
 # An emulator page's card is that of the maker of the first system it runs,
 # by page path: "emulators/mgba.mdx" -> "nintendo". One card per emulator
-# would be some 900 images in the repository; the maker's names the
+# would be some 900 images in the repository. The maker's names the
 # consoles. Filled by generate_site.record_emulator_page.
 EMULATOR_CARDS: dict[str, str] = {}
 

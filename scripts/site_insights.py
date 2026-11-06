@@ -123,7 +123,15 @@ def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
             return rows
 
 
-def fetch_goatcounter(start: dt.date, end: dt.date) -> dict[str, list[tuple[str, int]]]:
+def _get_object(url: str, headers: dict[str, str] | None = None) -> dict:
+    """A JSON answer that must be an object: GoatCounter's stats endpoints."""
+    answer = _get_json(url, headers)
+    if not isinstance(answer, dict):
+        raise ValueError(f"{url} answered {type(answer).__name__}, not an object")
+    return answer
+
+
+def fetch_goatcounter(start: dt.date, end: dt.date) -> dict[str, list[tuple[str, int]] | int]:
     """Paths and events with their visit counts, and the referring domains."""
     token = (CONFIG / "goatcounter-api-token.txt").read_text(encoding="utf-8").strip()
     auth = {"Authorization": f"Bearer {token}"}
@@ -132,14 +140,14 @@ def fetch_goatcounter(start: dt.date, end: dt.date) -> dict[str, list[tuple[str,
     exclude: list[str] = []
     while True:
         params = urllib.parse.urlencode({**span, "limit": 100, "exclude_paths": ",".join(exclude)})
-        answer = _get_json(f"{GOATCOUNTER}/stats/hits?{params}", auth)
+        answer = _get_object(f"{GOATCOUNTER}/stats/hits?{params}", auth)
         for hit in answer.get("hits", []):
             hits.append((hit["path"] + (" [404]" if hit.get("title") == "404" else ""), int(hit["count"])))
             exclude.append(str(hit["path_id"]))
         if not answer.get("more"):
             break
-    refs = _get_json(f"{GOATCOUNTER}/stats/toprefs?{urllib.parse.urlencode({**span, 'limit': 50})}", auth)
-    total = _get_json(f"{GOATCOUNTER}/stats/total?{urllib.parse.urlencode(span)}", auth)
+    refs = _get_object(f"{GOATCOUNTER}/stats/toprefs?{urllib.parse.urlencode({**span, 'limit': 50})}", auth)
+    total = _get_object(f"{GOATCOUNTER}/stats/total?{urllib.parse.urlencode(span)}", auth)
     # An action carries no referrer, and GoatCounter files it as a direct
     # visit: 592 of the first day's 1,145 "direct" were clicks.
     events = int(total.get("total_events", 0))

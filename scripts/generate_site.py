@@ -32,7 +32,7 @@ import urllib.parse
 import urllib.request
 import zipfile
 from collections import Counter
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import TypeVar
@@ -7907,9 +7907,9 @@ def generate_emulators_index(profiles: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def _snippet_noun(names, firmware: int, fetched: int) -> str:
+def _snippet_noun(names: Iterable[str], firmware: int, fetched: int) -> str:
     """What an emulator's files are called in its snippet. A Switch
-    emulator reads keys, and "eden keys" is what readers search for; Ship
+    emulator reads keys, and "eden keys" is what readers search for. Ship
     of Harkinian reads game ROMs, which are no BIOS."""
     names = list(names)
     keys = sum("key" in name.casefold() for name in names)
