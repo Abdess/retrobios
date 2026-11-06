@@ -49,7 +49,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from ..artifacts import write_text_atomic
+from ..artifacts import write_if_changed
 from ..common import load_emulator_profiles, run_cli
 from .romset_dat_importer import (
     LISTXML_CHUNK,
@@ -1114,14 +1114,6 @@ def dump(doc: dict) -> str:
     return json.dumps(doc, sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n"
 
 
-def write_if_changed(path: Path, text: str) -> bool:
-    if path.is_file() and path.read_text(encoding="utf-8") == text:
-        return False
-    path.parent.mkdir(parents=True, exist_ok=True)
-    write_text_atomic(str(path), text)
-    return True
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
     which = parser.add_mutually_exclusive_group(required=True)
@@ -1197,7 +1189,8 @@ def main() -> int:
             continue
         if not args.dry_run:
             target = args.output_dir / f"{profile}.json"
-            if write_if_changed(target, dump(doc)):
+            target.parent.mkdir(parents=True, exist_ok=True)
+            if write_if_changed(str(target), dump(doc)):
                 print(f"  wrote {target}")
     return 1 if failed else 0
 

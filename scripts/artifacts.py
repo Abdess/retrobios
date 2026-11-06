@@ -19,6 +19,7 @@ import re
 _TIMESTAMP_PATTERNS = [
     re.compile(r'"generated_at":\s*"[^"]*"'),  # database.json
     re.compile(r'"imported_at":\s*"[^"]*"'),  # provenance snapshots
+    re.compile(r'"fetched":\s*"[^"]*"'),  # games/catalogs/
     re.compile(r"\*Auto-generated on [^*]*\*"),  # README.md
     re.compile(r"\*Generated on [^*]*\*"),  # docs site pages
     # The decorated pages carry the same stamp again as a rendered element,
@@ -208,6 +209,10 @@ def _strip_timestamps(text: str) -> str:
 class ArtifactLockBusy(RuntimeError):
     """Raised when another process already holds the artifact directory."""
 
+
+class ArtifactDirectoryMissing(FileNotFoundError):
+    """A reader named a directory that does not exist."""
+
 # A run that holds artifact directories for its whole duration names them
 # here, os.pathsep apart, for the steps it spawns: they would otherwise be
 # refused by it. A pipeline holds the repository root and its --output-dir.
@@ -227,6 +232,14 @@ def artifact_lock(directory: str, exclusive: bool = True) -> Iterator[None]:
     Writers take the lock exclusively, readers share it. On platforms
     without flock the lock is a no-op.
     """
+    # A reader creating the directory it was pointed at left a typo behind
+    # as a directory holding a .lock, and the next run with the same typo
+    # no longer said the path did not exist.
+    if not exclusive and not os.path.isdir(directory):
+        raise ArtifactDirectoryMissing(
+            f"{directory}: no such directory, pass the --output-dir the packs "
+            "were written to (default dist/)"
+        )
     try:
         import fcntl
     except ImportError:

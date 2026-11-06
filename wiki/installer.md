@@ -1702,7 +1702,9 @@ a real 3.8 interpreter, which CI installs beside 3.12 so the check cannot skip.
 The build scripts need 3.9 and are not bound by this.
 
 Every change to `install.py` recomputes the SHA-256 pinned in `install.sh` and
-`install.ps1` in the same commit. The tests compare the pins with the file.
+`install.ps1` in the same commit: `python scripts/pin_installer.py` writes both
+(`--check` writes nothing and exits 1 on a stale pin). The tests compare the
+pins with the file and name that command when they differ.
 
 The tables of options, events, exit codes, keys and card markers, the line
 menu and the run samples on this page sit between `generated` markers and are

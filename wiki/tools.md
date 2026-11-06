@@ -760,7 +760,10 @@ committed.
 
 Rows that need a decision are listed and never run: a buildbot core with no
 profile, a new `.info` file, the Redump, No-Intro and TOSEC packs, the CI
-pins, and `profile_sync`. A failed scraper leaves its cached original
+pins, `profile_sync`, and a rom-folder pin (moved by hand in
+`platforms/romfolders/_sources/`, then `python -m scripts.scraper.romfolders
+--setup NAME` reads it again). `--dry-run --json` prints the plan as JSON.
+A failed scraper leaves its cached original
 untouched. Each job writes its output to `tmp/refresh_stale/`, and a GitHub
 token is taken from `GITHUB_TOKEN` or from `gh auth token`.
 
@@ -1343,6 +1346,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
 | `generate_event_schema.py` | Write `schemas/install-events.schema.json` from `EVENT_KEYS` in `install.py` (`--check` exits 1 when the file is stale, which `validate_schemas.py` also reports) |
 | `generate_installer_doc.py` | Rewrite the generated blocks of `wiki/installer.md` from `install.py`: the tables (options, events, exit codes, keys per route, card markers), the line menu, and the run samples `install.py` prints in a sandbox against the committed `install/*.json`, so a new list rewrites the page (`--check` exits 1 when a block is stale, `--page FILE` writes another copy of the page). Pipeline step 7 |
+| `pin_installer.py` | Write the SHA-256 of `install.py` into the pins of `install.sh` and `install.ps1`, which refuse any other installer (`--check` writes nothing and exits 1 when a pin is stale). `check_freshness.py` reports a stale pin and `refresh_stale.py` runs this |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline). A download is accepted only when every cryptographic hash the entry declares (sha256, sha1, md5) matches. crc32 and size find a file the database already holds, never accept a download. An entry with no cryptographic hash is reported and not searched |
 | `list_platforms.py` | List active platforms (`--include-archived` adds the archived ones) |
 | `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |

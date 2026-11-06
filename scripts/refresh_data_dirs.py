@@ -71,6 +71,24 @@ def cache_lock(
     return _announced_lock(cache_dir.with_name(f".{cache_dir.name}.lock"), shared, cache_dir)
 
 
+def _wait_message(lock_path: Path, shared: bool, cache_dir: Path) -> str:
+    """Who to wait for, and, for a refresh, how not to.
+
+    The bare "another run holds it" named neither the lock nor its holder,
+    and the build waited with no limit.
+    """
+    message = (
+        f"waiting for {cache_dir}: another run holds {lock_path} "
+        f"(lsof {lock_path} names it)"
+    )
+    if not shared:
+        message += (
+            ". generate_pack.py --no-refresh-data, or --offline there and in"
+            " pipeline.py, builds from the cache as it is without waiting"
+        )
+    return message
+
+
 @contextlib.contextmanager
 def _announced_lock(lock_path: Path, shared: bool, cache_dir: Path) -> Iterator[None]:
     """file_lock, saying so when it has to wait.
@@ -90,7 +108,7 @@ def _announced_lock(lock_path: Path, shared: bool, cache_dir: Path) -> Iterator[
         try:
             fcntl.flock(handle, mode | fcntl.LOCK_NB)
         except BlockingIOError:
-            log.warning("waiting for %s: another run holds it", cache_dir)
+            log.warning(_wait_message(lock_path, shared, cache_dir))
             fcntl.flock(handle, mode)
         try:
             yield

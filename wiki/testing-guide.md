@@ -9,9 +9,11 @@ The tests hold what users and platforms rely on: a pack holds what its
 platform checks, the site states what the code does, the installer writes only
 where it should.
 
-No test needs network access. Most build synthetic fixtures under the
-repository's `tmp/`, and modules that read real artifacts skip when those are
-absent. The test runner prints the count.
+No test needs network access. Most build synthetic fixtures, and every
+temporary directory lands under the repository's `tmp/tests/`:
+`tests/__init__.py` points `tempfile` and `TMPDIR` there, never at the `/tmp`
+tmpfs. Modules that read real artifacts skip when those are absent. The test
+runner prints the count.
 
 ## Running tests
 

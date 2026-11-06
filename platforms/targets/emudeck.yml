@@ -1,6 +1,6 @@
 platform: emudeck
-source: https://github.com/dragoonDorise/EmuDeck
-scraped_at: '2026-10-17T18:43:57Z'
+source: https://github.com/dragoonDorise/EmuDeck/tree/dddb30229adbbd54d5ff7283cfd70e11c4322c26
+scraped_at: '2026-11-06T07:10:22Z'
 targets:
   steamos:
     architecture: x86_64
@@ -88,6 +88,7 @@ targets:
     - galaksija
     - gam4980
     - gambatte
+    - gametank
     - gearboy
     - gearcoleco
     - geargrafx
@@ -352,6 +353,7 @@ targets:
     - galaksija
     - gam4980
     - gambatte
+    - gametank
     - gearboy
     - gearcoleco
     - geargrafx
@@ -487,7 +489,6 @@ targets:
     - supermodel
     - swanstation
     - tamalibretro
-    - template
     - tgbdual
     - theodore
     - thepowdertoy

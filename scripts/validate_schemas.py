@@ -14,7 +14,15 @@ from pathlib import Path, PurePosixPath
 import yaml
 
 from common import source_yaml_paths, yaml_load
-from jsonschema import Draft202012Validator, FormatChecker
+
+try:
+    from jsonschema import Draft202012Validator, FormatChecker
+except ImportError:
+    # Tests import this module and skip on the ImportError, the command
+    # names the install pipeline.py names for the same step.
+    if __name__ != "__main__":
+        raise
+    sys.exit('Error: jsonschema required (pip install "jsonschema[format-nongpl]")')
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMAS = ROOT / "schemas"

@@ -38,7 +38,7 @@ _SCRIPTS_DIR = str(Path(__file__).resolve().parents[1])
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
-from artifacts import copy_stream_atomic, write_text_atomic  # noqa: E402
+from artifacts import copy_stream_atomic, write_if_changed, write_text_atomic  # noqa: E402
 from common import parse_untrusted_xml  # noqa: E402
 from region import REGIONS, WORLD  # noqa: E402
 from region_audit import NOINTRO  # noqa: E402
@@ -275,14 +275,6 @@ def dump_catalog(doc: dict) -> str:
     return f'{text},"games":[\n{games}\n]}}\n'
 
 
-def write_if_changed(path: Path, text: str) -> bool:
-    if path.is_file() and path.read_text(encoding="utf-8") == text:
-        return False
-    path.parent.mkdir(parents=True, exist_ok=True)
-    write_text_atomic(str(path), text)
-    return True
-
-
 # Fetching ---------------------------------------------------------------
 
 
@@ -503,7 +495,9 @@ def main() -> int:
             failures.append(f"{doc['source']}/{doc['system']}: {cov['games']} games, "
                             f"floor {floor_of(doc)}")
         if not args.dry_run:
-            write_if_changed(args.output_dir / doc["source"] / f"{doc['system']}.json", text)
+            target = args.output_dir / doc["source"] / f"{doc['system']}.json"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            write_if_changed(str(target), text)
     print(f"{len(docs)} catalogs, {raw_total} bytes raw, {gz_total} bytes gzip")
     for failure in failures:
         print(f"FAIL {failure}", file=sys.stderr)

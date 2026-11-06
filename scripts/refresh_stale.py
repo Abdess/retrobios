@@ -34,7 +34,10 @@ has ended, and its export is rewritten even when no row named it.
 
 Surfaced only (no refresh): data rows that are not a _data_dirs.yml key
 (the registry itself, buildbot assets it does not track), coreinfo gaps, redump/no-intro/tosec packs,
-CI pins (install.py SHA-256, PyPI, pinned actions), profile_sync. Each needs
+CI pins (PyPI, pinned actions, while scripts/pin_installer.py writes the
+install.py SHA-256 pin), profile_sync, rom-folder
+pins (moved by hand, then python -m scripts.scraper.romfolders --setup NAME
+reads them again). Each needs
 a human read (new .info file, manual DAT download, PyPI version bump).
 
 Usage:
@@ -65,7 +68,9 @@ PLATFORMS_REGISTRY = REPO_ROOT / "platforms" / "_registry.yml"
 DATA_DIRS_REGISTRY = REPO_ROOT / "platforms" / "_data_dirs.yml"
 
 AUTO_AREAS = ("platforms", "native", "targets", "data", "catalogs")
-MANUAL_AREAS = ("coreinfo", "ci", "profiles")
+# A rom-folder pin is moved by hand in platforms/romfolders/_sources/,
+# then `python -m scripts.scraper.romfolders --setup NAME` reads it again.
+MANUAL_AREAS = ("romfolders", "coreinfo", "ci", "profiles")
 
 JOB_TIMEOUT = 1800  # 30 minutes per refresher, scrapers rarely exceed 10
 
@@ -397,6 +402,10 @@ def _command_for(
             "--force",
         ]
 
+    if area == "ci" and subject == "install.py pin":
+        # The pin is the hash of the committed install.py, nothing to judge.
+        return [sys.executable, "scripts/pin_installer.py"]
+
     if area == "catalogs":
         if subject == "mame recipes":
             return [
@@ -563,7 +572,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.split("\n\n")[0])
     parser.add_argument(
         "--only",
-        help="comma-separated areas to check: " + ",".join(AUTO_AREAS),
+        help="comma-separated areas to check: " + ",".join(AUTO_AREAS)
+        + " (refreshed), " + ",".join(MANUAL_AREAS) + " (listed for a human)",
     )
     parser.add_argument(
         "--dry-run",
@@ -579,7 +589,7 @@ def main() -> int:
     parser.add_argument(
         "--json",
         action="store_true",
-        help="machine-readable summary (jobs, surfaced, ignored)",
+        help="machine-readable summary (jobs, surfaced, ignored), the plan with --dry-run",
     )
     parser.add_argument(
         "--findings",
@@ -618,6 +628,22 @@ def main() -> int:
     registry = _load_platform_registry()
     jobs, surfaced, ignored = plan_jobs(findings, registry)
 
+    if args.dry_run and args.json:
+        print(json.dumps({
+            "planned": [
+                {
+                    "area": job.area,
+                    "subject": job.subject,
+                    "command": job.command,
+                    "after": sorted(job.after),
+                    "then": [list(command) for command in job.then],
+                }
+                for job in sorted(jobs, key=lambda j: (j.area, j.subject))
+            ],
+            "surfaced": surfaced,
+            "ignored_count": len(ignored),
+        }, indent=2))
+        return 0
     if args.dry_run:
         print(f"\n[plan] {len(jobs)} refreshable, {len(surfaced)} manual, "
               f"{len(ignored)} already clean/skipped")

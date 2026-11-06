@@ -373,6 +373,8 @@ class Helpers(unittest.TestCase):
         self.assertEqual(el.emulator_of_script("emuDeckXemu.sh"), "xemu")
         self.assertIsNone(el.emulator_of_script("RetroArch_maincfg.sh"))
         self.assertIsNone(el.emulator_of_script("README.md"))
+        self.assertEqual(el.emulator_of_script("emuDeckPCSX2QT.ps1"), "pcsx2")
+        self.assertIsNone(el.emulator_of_script("emuDeckTemplate.ps1"))
 
     def test_the_revision_comes_from_the_pinned_url(self):
         url = (

@@ -724,7 +724,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
         with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
             RuntimeError
         ):
-            emudeck_scraper.Scraper()._fetch_installed_emulators()
+            emudeck_scraper.Scraper(checkbios_url="pinned")._fetch_installed_emulators("0" * 40)
 
     def test_libretro_core_metadata_raises(self):
         """libretro dropped every system name and manufacturer when the

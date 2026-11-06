@@ -509,6 +509,23 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         self.assertEqual(len(collisions), 1)
         self.assertEqual(len(collisions[0].resolved), 2)
 
+    def test_the_line_names_each_system_and_the_file_packed(self):
+        """The line named two files and neither the system that declares
+        each nor the one the pack ships: the reader went to the YAML."""
+        config = {"systems": {
+            "zeta": {"files": [{"name": "IPL.bin", "destination": "disk.rom",
+                                "md5": "m" * 32}]},
+            "alpha": {"files": [{"name": "IPL.bin", "destination": "disk.rom",
+                                 "md5": "n" * 32}]},
+        }}
+        collision = slots.find_collisions(config, REGIONS_DB)[0]
+        line = slots.format_collision(collision)
+        left, packed = collision.resolved
+        # The builder walks the systems sorted: alpha's declaration ships.
+        self.assertIn(f"{packed} (alpha) packed", line)
+        self.assertIn(f"{left} (zeta) left out", line)
+        self.assertEqual(collision.shipped, packed)
+
     def test_one_archive_named_by_its_inner_roms_is_not_a_collision(self):
         # The documented zipped_file pattern: several md5s, one archive.
         config = self._config(

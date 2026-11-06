@@ -3587,6 +3587,7 @@ from artifacts import (  # noqa: E402,F401
     copy_file_atomic,
     plain_file_mode,
     set_plain_mode,
+    ArtifactDirectoryMissing,
     ArtifactLockBusy,
     artifact_lock,
     hold_artifact_lock,
@@ -3634,7 +3635,7 @@ def run_cli(main: Callable[[], int | None]) -> None:
     try:
         code = main()
         sys.stdout.flush()
-    except (InputMissing, ArtifactLockBusy) as exc:
+    except (InputMissing, ArtifactLockBusy, ArtifactDirectoryMissing) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
     except BrokenPipeError:

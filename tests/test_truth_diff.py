@@ -60,6 +60,22 @@ class ATargetedModelIsItsOwnArtifact(unittest.TestCase):
             )
 
 
+    def test_a_named_platform_without_the_target_is_refused(self):
+        """bizhawk --target switch printed "skipped", then Done., exit 0,
+        and wrote no model: the diff after it failed instead."""
+        repo = pathlib.Path(__file__).resolve().parent.parent
+        with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
+            proc = subprocess.run(
+                [sys.executable, "scripts/generate_truth.py", "--platform", "bizhawk",
+                 "--target", "switch", "--output-dir", directory],
+                capture_output=True, check=False, text=True, cwd=str(repo), timeout=400,
+            )
+            self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+            self.assertIn("bizhawk has no hardware targets", proc.stderr)
+            self.assertNotIn("Done.", proc.stdout)
+            self.assertEqual(list(pathlib.Path(directory).iterdir()), [])
+
+
 class ADiffThatComparedNothingFails(unittest.TestCase):
     """diff_truth --all skipped every platform without a model and exited 0."""
 

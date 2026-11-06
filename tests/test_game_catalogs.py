@@ -102,6 +102,17 @@ class FixtureImport(unittest.TestCase):
             twin = second / path.relative_to(first)
             self.assertEqual(path.read_bytes(), twin.read_bytes(), path.name)
 
+    def test_a_new_fetch_date_alone_rewrites_nothing(self) -> None:
+        """A refresh rewrote every catalog for the day it ran, and the diff
+        read before commit no longer showed which DAT had moved."""
+        self.assertEqual(run_import("redump", self.out).returncode, 0)
+        path = self.out / "redump" / "sega-megacd.json"
+        doc = json.loads(path.read_text())
+        doc["fetched"] = "2000-01-01"
+        path.write_text(importer.dump_catalog(doc))
+        self.assertEqual(run_import("redump", self.out).returncode, 0)
+        self.assertEqual(json.loads(path.read_text())["fetched"], "2000-01-01")
+
     def test_floor_refuses_a_short_dat(self) -> None:
         result = run_import("no-intro", self.out, "--floor", "--dry-run")
         self.assertEqual(result.returncode, 1)

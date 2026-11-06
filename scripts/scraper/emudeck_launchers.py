@@ -46,14 +46,18 @@ STORAGE = "${storagePath}"
 FLATPAK_DATA = "${HOME}/.var/app/"
 
 # EmuScripts file names that differ from the emulator profile they set up.
+# The platform and target scrapers both read them here.
 SCRIPT_EMULATORS = {
     "pcsx2qt": "pcsx2",
     "rpcs3legacy": "rpcs3",
     "cemuproton": "cemu",
     "rmg": "mupen64plus_next",
 }
-# The main RetroArch config script installs no emulator.
-NOT_EMULATORS = {"retroarch_maincfg"}
+# The main RetroArch config script installs no emulator, and emudeck-we's
+# emuDeckTemplate.ps1 is the skeleton new installers are copied from.
+NOT_EMULATORS = {"retroarch_maincfg", "template"}
+# EmuDeck's SteamOS installers are shell scripts, emudeck-we's PowerShell.
+SCRIPT_SUFFIXES = (".sh", ".ps1")
 
 # What the emulator does with a directory written into each key.
 DIRECTORY_KINDS = {
@@ -66,9 +70,10 @@ DIRECTORY_KINDS = {
 
 def emulator_of_script(file_name: str) -> str | None:
     """The emulator an EmuScripts file sets up, None for a helper script."""
-    if not file_name.endswith(".sh"):
+    stem, dot, suffix = file_name.rpartition(".")
+    if not dot or f".{suffix}" not in SCRIPT_SUFFIXES:
         return None
-    key = re.sub(r"^emuDeck", "", file_name[: -len(".sh")], flags=re.IGNORECASE).lower()
+    key = re.sub(r"^emuDeck", "", stem, flags=re.IGNORECASE).lower()
     if not key or key in NOT_EMULATORS:
         return None
     return SCRIPT_EMULATORS.get(key, key)
