@@ -219,13 +219,16 @@ def platform_coverages(
             except FileNotFoundError as exc:
                 print(f"  {name}: skipped ({exc})", file=sys.stderr)
         COVERAGE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        for stale in COVERAGE_CACHE_DIR.glob("*.pickle"):
-            stale.unlink()
         scratch = cache.with_suffix(f".{os.getpid()}.tmp")
         with scratch.open("wb") as handle:
             pickle.dump({"platforms": names, "coverages": coverages}, handle,
                         protocol=pickle.HIGHEST_PROTOCOL)
         scratch.replace(cache)
+        # generate_site and generate_readme both purge here. One unlinking
+        # what the other had just listed ended it on FileNotFoundError.
+        for stale in COVERAGE_CACHE_DIR.glob("*.pickle"):
+            if stale != cache:
+                stale.unlink(missing_ok=True)
     ordered = {name: coverages[name] for name in platform_names if name in coverages}
     if report:
         for name in names:
