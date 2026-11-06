@@ -43,6 +43,7 @@ from common import (
     platform_arg,
     target_listing_line,
     suggest_names,
+    system_index,
     require_platform,
     archive_entry,
     archive_is_optional,
@@ -2611,7 +2612,10 @@ def verify_system(
                 f"No emulators found for system(s): {', '.join(system_ids)}",
                 file=sys.stderr,
             )
-        print(suggest_names(system_ids, sorted(all_systems), "--list-systems"),
+        # --list-systems merges spellings that differ in case or separator:
+        # the hint counted 579 spellings for the 532 lines it prints.
+        print(suggest_names(system_ids, sorted(all_systems), "--list-systems",
+                            listed=len(system_index(profiles))),
               file=sys.stderr)
         sys.exit(1)
 

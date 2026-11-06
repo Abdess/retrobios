@@ -85,6 +85,30 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
 
 
 
+class TheSystemHintCountsTheListing(unittest.TestCase):
+    """`--system sony-playstaton` said "--list-systems lists all 579" and
+    --list-systems printed 532: the hint counted spellings, the listing
+    merges the ones that differ in case or separator."""
+
+    def test_both_tools_count_the_lines_the_listing_prints(self):
+        listing = subprocess.run(
+            [sys.executable, "scripts/verify.py", "--list-systems"],
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=300, check=True,
+        )
+        printed = sum(1 for line in listing.stdout.splitlines() if "emulator" in line)
+        for script in ("verify.py", "generate_pack.py"):
+            with self.subTest(script=script), tempfile.TemporaryDirectory() as out:
+                argv = [sys.executable, f"scripts/{script}", "--system", "sony-playstaton"]
+                if script == "generate_pack.py":
+                    argv += ["--output-dir", out]
+                proc = subprocess.run(
+                    argv, cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+                    check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertIn(f"--list-systems lists all {printed}.", proc.stderr)
+
+
 class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
     """`verify --all --target swich` ended on "no platform has it" after 17
     INFO lines, two of which held the suggestion."""
