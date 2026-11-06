@@ -1904,7 +1904,8 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
         # The required firmware alone read as the whole count: 14 names
         # for 154 entries, nothing saying the rest existed.
         hidden = len({u["name"] for u in bundled}) - len(named)
-        items = named + ([f"{hidden} more, --verbose lists them"] if hidden else [])
+        more = f"{hidden} more, " if named else ""
+        items = named + ([f"{more}--verbose lists them"] if hidden else [])
         print(
             f"  Bundled with their emulator, not collected: {len(bundled)}"
             + (f" ({', '.join(items)})" if items else "")

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import subprocess
 import sys
 import unittest
@@ -270,6 +272,11 @@ class TheBundledLineSaysWhatItLeavesOut(unittest.TestCase):
             "Bundled with their emulator, not collected: 3 (a.frag, b.dll, fw.bin)",
             verbose.getvalue(),
         )
+        result["undeclared_files"] = result["undeclared_files"][1:]
+        with contextlib.redirect_stdout(io.StringIO()) as unnamed:
+            verify._print_undeclared_section(result, verbose=False)
+        self.assertIn("Bundled with their emulator, not collected: 2 (--verbose lists them)",
+                      unnamed.getvalue())
 
 
 class TheCheckLineSaysWhatItIs(unittest.TestCase):
