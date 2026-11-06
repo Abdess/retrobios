@@ -790,6 +790,25 @@ class _Skipped:
 SKIPPED = _Skipped()
 
 
+def integrity_command(args: argparse.Namespace) -> list[str]:
+    """Step 6: check the packs step 4 built, under the same expectation."""
+    cmd = [
+        sys.executable, "scripts/generate_pack.py", "--all", "--verify-packs",
+        "--output-dir", args.output_dir,
+    ]
+    if args.include_archived:
+        cmd.append("--include-archived")
+    # Without the target a targeted run reported every system the target
+    # removed as missing from a pack that was exactly right. Without
+    # --all-variants the five narrowed packs were never opened, and an empty
+    # _Platform pack passed.
+    if args.target:
+        cmd.extend(["--target", args.target])
+    if args.all_variants:
+        cmd.append("--all-variants")
+    return cmd
+
+
 def _refuse_unapplied_flags(
     parser: argparse.ArgumentParser, args: argparse.Namespace
 ) -> None:
@@ -1330,22 +1349,7 @@ def main() -> None:
         skip_notice("pack_integrity", "no full pack built")
         results["pack_integrity"] = SKIPPED
     elif not args.skip_packs:
-        integrity_cmd = [
-            sys.executable,
-            "scripts/generate_pack.py",
-            "--all",
-            "--verify-packs",
-            "--output-dir",
-            args.output_dir,
-        ]
-        if args.include_archived:
-            integrity_cmd.append("--include-archived")
-        # Step 4 built with the target, so step 6 has to check against the
-        # same expectation. Without it a targeted run reported every system
-        # the target removed as missing from a pack that was exactly right.
-        if args.target:
-            integrity_cmd.extend(["--target", args.target])
-        ok, _ = run(integrity_cmd, STEP_LABELS["pack_integrity"])
+        ok, _ = run(integrity_command(args), STEP_LABELS["pack_integrity"])
         results["pack_integrity"] = ok
         all_ok = all_ok and ok
     else:

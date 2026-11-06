@@ -966,6 +966,20 @@ class CatalogRatioRegressions(unittest.TestCase):
 
 
 class PipelineRegressions(unittest.TestCase):
+    def test_integrity_checks_the_variants_step_4_built(self):
+        """Step 6 ran --verify-packs without --all-variants: the five
+        narrowed packs were never opened and an empty _Platform passed."""
+        import argparse  # noqa: PLC0415
+
+        def command(**flags) -> list[str]:
+            base = {"output_dir": "dist", "include_archived": False,
+                    "target": None, "all_variants": False}
+            return pipeline.integrity_command(argparse.Namespace(**{**base, **flags}))
+
+        self.assertIn("--all-variants", command(all_variants=True))
+        self.assertNotIn("--all-variants", command())
+        self.assertEqual(command(target="switch")[-2:], ["--target", "switch"])
+
     def test_pack_parser_removes_source_metadata(self):
         output = "\n".join(
             [
