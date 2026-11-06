@@ -2059,6 +2059,44 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
             finally:
                 os.chdir(cwd)
 
+    def test_restore_refuses_a_copy_replaced_after_the_index(self):
+        """The cache is hashed first and copied later: another run that
+        replaced the cached name in between put its bytes at a path the
+        database pins to the old ones."""
+        from scripts import restore_large_files
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            cache = root / "cache"
+            cache.mkdir()
+            payload = b"firmware bytes"
+            (cache / "asset.bin").write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            (root / ".gitignore").write_text("bios/Sony/big.pup\n", encoding="utf-8")
+            (root / "database.json").write_text(
+                json.dumps({"files": {sha1: {"path": "bios/Sony/big.pup"}}}),
+                encoding="utf-8",
+            )
+            real_index = restore_large_files.index_cache
+
+            def index_then_replace(cache_dir: str) -> dict[str, str]:
+                index = real_index(cache_dir)
+                (cache / "asset.bin").write_bytes(b"re-uploaded bytes")
+                return index
+
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                with mock.patch.object(restore_large_files, "index_cache", index_then_replace):
+                    restored, unsatisfied = restore_large_files.restore(
+                        str(cache), "database.json", ".gitignore"
+                    )
+                self.assertEqual((restored, unsatisfied), (0, ["bios/Sony/big.pup"]))
+                self.assertFalse((root / "bios/Sony/big.pup").exists())
+                self.assertEqual(os.listdir(root / "bios/Sony"), [])
+            finally:
+                os.chdir(cwd)
+
     def test_restore_leaves_tracked_paths_alone(self):
         from scripts.restore_large_files import restore
 

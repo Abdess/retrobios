@@ -63,6 +63,10 @@ Group the split ZIPs by manufacturer (Sony, Nintendo, Sega, etc.):
 python scripts/generate_pack.py --platform retroarch --split --group-by manufacturer
 ```
 
+The parts together hold exactly the files of the full pack, so every part
+can be extracted into the same folder. Core files of a system the platform
+does not list go in an `Other_Cores` part.
+
 ### System-specific packs
 
 Extract only the files for a single system within a platform:

@@ -405,7 +405,7 @@ resolution.
 | MAME BIOS ZIPs | `contents` field documents inner structure |
 | Trees addressed by path (RPG Maker, ScummVM, tzdata, c64-emu and the rest of `NODEDUP_DIRS`) | excluded from dedup to keep files that are equal by design |
 | `strip_components` in data dirs | flattens cache prefix to match expected path |
-| case-insensitive dedup | prevents `font.rom` + `FONT.ROM` conflicts on Windows/macOS |
+| case-insensitive dedup | prevents `font.rom` + `FONT.ROM` conflicts on Windows/macOS. Where the platform also runs on a filesystem that keeps case (EmuDeck and RetroArch on Linux), the pack README lists each spelling it leaves out, and the installer adds them (`case_variants`) |
 | frozen snapshot cores | `.info` may reflect current version while code is pinned to an old one. Only the frozen source at the pinned tag is reliable (e.g. desmume2015, mame2003) |
 
 ### File resolution chain

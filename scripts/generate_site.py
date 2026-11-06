@@ -9478,7 +9478,7 @@ def _hash_spans(value: str | list, copy: bool = False) -> str:
 
 
 def _availability_check(
-    db: dict, data_names: set[str] | None
+    db: dict, data_names: set[str] | None, owner: str = "",
 ) -> Callable[[dict], bool]:
     """A predicate answering whether the collection holds a file.
 
@@ -9509,7 +9509,7 @@ def _availability_check(
         # under the name belongs to another game or release.
         if not f.get("name") or f.get("unsourceable"):
             return False
-        return entry_source(f, index) is not None
+        return entry_source({**f, "source_profile": owner} if owner else f, index) is not None
 
     return _file_available
 
@@ -10242,7 +10242,7 @@ def emulator_pages(
             lines.append("")
             lines.extend(markup.aside("info", "Why no files", [_escape_tags(str(exclusion))])[:-1])
     else:
-        _file_available = _availability_check(db, data_names)
+        _file_available = _availability_check(db, data_names, name)
 
         lines.extend(["## Files", ""])
         lines.extend(_emulator_file_summary(files))

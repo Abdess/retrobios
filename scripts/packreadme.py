@@ -207,6 +207,7 @@ def _build_readme(
     save_folder: str = "",
     save_where: str = "",
     save_by_system: bool = False,
+    case_twins: list[tuple[str, str]] | None = None,
 ) -> str:
     """Build a personalized step-by-step README for each platform pack.
 
@@ -216,6 +217,10 @@ def _build_readme(
     frontend's save directory, empty when the pack holds none, and
     ``save_where`` that directory's default place (save_place).
     ``save_by_system`` is set when the launcher hands each system a folder.
+    ``case_twins`` pairs each spelling the pack leaves out, a case twin of a
+    packed file, with the one it holds: given for a platform that also runs
+    where names keep their case (EmuDeck and RetroArch on Linux), where the
+    core asking for the other spelling finds nothing.
     """
     narrowings = narrowings or []
     sep = "=" * 50
@@ -243,6 +248,20 @@ def _build_readme(
             "INSTALLATION GUIDE\n\n"
             + _automatic_section(platform_name, platform_display, detect, standalone_copies)
             + (pack_manual(platform_name) or _generic_manual(bios_paths))
+        )
+
+    if case_twins:
+        listed = "".join(
+            f"    {missing}  (the pack has {held})\n" for missing, held in case_twins
+        )
+        guide += (
+            "NAMES THAT DIFFER ONLY BY CASE\n\n"
+            "  Some cores open the same file under another spelling. This\n"
+            "  pack holds one spelling of each, all Windows and macOS can\n"
+            "  store in one folder. Linux, SteamOS and Android keep both:\n"
+            "  there, run the installer, which adds these spellings, or\n"
+            "  copy each file under the name below.\n\n"
+            f"{listed}\n"
         )
 
     if save_folder:
