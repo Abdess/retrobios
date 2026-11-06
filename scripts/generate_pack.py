@@ -608,6 +608,17 @@ def _pack_data_directories(
     return added
 
 
+def _case_twin_pairs(
+    twins: list[str], seen_destinations: set[str], base_dest: str, flatten: bool,
+) -> list[tuple[str, str]]:
+    """Each spelling left out, with the spelling the pack holds."""
+    held = {
+        _flat(dest, base_dest, flatten).lower(): _flat(dest, base_dest, flatten)
+        for dest in seen_destinations
+    }
+    return sorted({(twin, held[twin.lower()]) for twin in twins if twin.lower() in held})
+
+
 def _report_pack_counts(
     zip_path: str,
     file_status: dict,
@@ -879,6 +890,8 @@ def generate_pack(
     user_provided = []
     seen_destinations: set[str] = set()
     seen_lower: set[str] = set()  # only used when case_insensitive=True
+    # Spellings left out as case twins of a packed file, for the README.
+    case_twins: list[str] = []
     seen_parents: set[str] = (
         set()
     )  # parent dirs of added files (path conflict detection)
@@ -1185,6 +1198,8 @@ def generate_pack(
                         )
 
                 if already_packed:
+                    if dedup_key not in seen_destinations:
+                        case_twins.append(_flat(full_dest, base_dest, flatten))
                     continue
                 if within is not None and not _same_bytes(
                     local_path, within.get(_flat(full_dest, base_dest, flatten))
@@ -1267,10 +1282,13 @@ def generate_pack(
           # Taken, a case twin on a case-insensitive filesystem, or a
           # file/directory conflict (SGB1.sfc vs SGB1.sfc/): verify replays
           # the same rule (packextras.hidden_extras).
-          if placement_block(
+          block = placement_block(
               full_dest, seen_destinations, seen_lower, seen_parents,
               case_insensitive,
-          ):
+          )
+          if block:
+              if block == "case_twin" and extra_resolver.resolve(fe, dest)[0]:
+                  case_twins.append(_flat(full_dest, base_dest, flatten))
               continue
 
           # The emulator's own check picks the copy, as for a declared file
@@ -1364,6 +1382,37 @@ def generate_pack(
       if _registry_path.exists():
           with open(_registry_path) as _rf:
               _pack_registry = (yaml_load(_rf) or {}).get("platforms", {})
+      keeps_case = case_insensitive and any(
+          d.get("os") not in CASE_FOLDING_OS
+          for d in (_pack_registry.get(platform_name, {}).get("install", {}) or {})
+          .get("detect", [])
+      )
+      if keeps_case and source != "platform" and precomputed_extras is None:
+          # The spellings a folded platform counts as declared never reach
+          # the extras: collected as the filesystem that keeps case sees
+          # them, as the manifest's case_variants are (Mesen-CE's bios.col
+          # beside the declared BIOS.col).
+          unfolded = _collect_emulator_extras(
+              {**config, "case_insensitive_fs": False}, emulators_dir, db, set(),
+              base_dest, emu_profiles, target_cores=target_cores,
+              include_all=(source == "truth"),
+          )
+          if system_filter:
+              unfolded = _extras_for_systems(unfolded, system_filter)
+          prefix = _detect_extras_prefix(config, base_dest)
+          for fe in unfolded:
+              if required_only and fe.get("required") is False:
+                  continue
+              if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
+                  continue
+              full = extra_full_destination(fe, prefix)
+              if (
+                  full and full not in seen_destinations and full.lower() in seen_lower
+                  and extra_resolver.resolve(
+                      fe, sanitize_pack_path(fe.get("destination", fe["name"]))
+                  )[0]
+              ):
+                  case_twins.append(_flat(full, base_dest, flatten))
       readme_text = _build_readme(
           platform_name, platform_display, base_dest, total_files, num_systems,
           source=source,
@@ -1389,6 +1438,10 @@ def generate_pack(
               ) if save_count else ""
           ),
           save_by_system=bool(save_count and save_layout(config).by_system),
+          case_twins=(
+              _case_twin_pairs(case_twins, seen_destinations, base_dest, flatten)
+              if keeps_case else []
+          ),
       )
       _write_generated_member(zf, "README.txt", readme_text)
 
