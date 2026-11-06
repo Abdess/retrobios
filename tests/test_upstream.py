@@ -537,6 +537,21 @@ class TestRevisions(unittest.TestCase):
         )
         self.assertIn("2026-03-29", self.calls[0])
 
+    def test_an_uncached_tip_offline_is_unknown_not_absent(self):
+        """xenios-jp/XeniOS was dropped offline, its preview tip never
+        cached, and its citations were judged against the other repository."""
+        with self.assertRaises(upstream.NotCachedError):
+            upstream.resolve_head(self.repo, self.dir, offline=True, branch="preview")
+        with self.assertRaises(upstream.NotCachedError):
+            upstream.resolve_commit_at(self.repo, "2026-03-29", self.dir, offline=True)
+        self.assertEqual(self.calls, [])
+
+    def test_a_cached_absence_offline_is_still_absent(self):
+        self.assertIsNone(upstream.resolve_head(self.repo, self.dir, branch="gone"))
+        self.assertIsNone(
+            upstream.resolve_head(self.repo, self.dir, offline=True, branch="gone")
+        )
+
     def test_api_response_is_cached(self):
         self.responses["/commits"] = [{"sha": "abc"}]
         upstream.resolve_commit_at(self.repo, "2026-03-29", self.dir)
@@ -587,10 +602,6 @@ class TestRevisions(unittest.TestCase):
         _os.utime(cached, (0, 0))
         upstream.resolve_commit_at(self.repo, "2026-03-29", self.dir)
         self.assertEqual(len(self.calls), 1)
-
-    def test_offline_without_cache_returns_none(self):
-        self.assertIsNone(upstream.resolve_head(self.repo, self.dir, offline=True))
-        self.assertEqual(self.calls, [])
 
     def test_empty_history_returns_none(self):
         self.responses["/commits"] = []

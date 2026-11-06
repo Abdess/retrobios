@@ -184,9 +184,14 @@ class TestCorpusIsAnswered(unittest.TestCase):
                     document = yaml_load(handle) or {}
                 if document.get("files"):
                     continue
-                if fileless_audit.audit(
-                    path.stem, str(ROOT / "emulators"), str(ROOT / ".cache"), True
-                ):
+                try:
+                    hits = fileless_audit.audit(
+                        path.stem, str(ROOT / "emulators"), str(ROOT / ".cache"), True
+                    )
+                except fileless_audit.upstream.NotCachedError:
+                    # A cold branch tip is unread too, not a branch gone.
+                    continue
+                if hits:
                     flagged.append(path.stem)
         if not read:
             self.skipTest("the upstream cache holds no source a fileless profile cites")

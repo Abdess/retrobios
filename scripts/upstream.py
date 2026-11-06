@@ -432,6 +432,22 @@ def fetch_file(
 MOVING_TTL = 6 * 3600
 
 
+def _api_target(url: str, cache_dir: str) -> Path:
+    """Where the cached answer to one API call lives."""
+    key = hashlib.sha256(url.encode()).hexdigest()
+    return Path(cache_dir) / "_api" / f"{key}.json"
+
+
+def _require_cached(url: str, cache_dir: str, offline: bool, what: str) -> None:
+    """Offline, refuse a call the cache holds no answer to, absence included.
+
+    _api answers None both for a resource the forge does not have and for
+    one never asked, and only the first is a fact.
+    """
+    if offline and not _api_target(url, cache_dir).is_file():
+        raise NotCachedError(f"{what} is not in the offline cache")
+
+
 def _api(
     url: str, cache_dir: str, offline: bool, max_age: float | None = None,
     absent_max_age: float | None = None,
@@ -443,8 +459,7 @@ def _api(
     ``absent_max_age`` bounds a cached absence alone, for a resource that
     can appear but, once there, does not change.
     """
-    key = hashlib.sha256(url.encode()).hexdigest()
-    target = Path(cache_dir) / "_api" / f"{key}.json"
+    target = _api_target(url, cache_dir)
     if target.is_file():
         raw = target.read_text(encoding="utf-8")
         bound = (
@@ -542,19 +557,31 @@ def resolve_head(
     default branch, so the code a profile documents can be absent from the
     tip the forge serves by default. ``fresh`` asks the forge again whatever
     the cache holds.
+
+    Offline, a tip the cache never stored raises NotCachedError: returning
+    None read as a branch the forge does not have, and profile_sync dropped
+    xenios-jp/XeniOS, judging its citations against the other repository.
     """
-    return _first_sha(
-        _api(_commits_url(repo, None, branch), cache_dir, offline, 0 if fresh else MOVING_TTL)
+    url = _commits_url(repo, None, branch)
+    _require_cached(
+        url, cache_dir, offline, f"{repo.slug}: tip of {branch or 'the default branch'}"
     )
+    return _first_sha(_api(url, cache_dir, offline, 0 if fresh else MOVING_TTL))
 
 
 def resolve_commit_at(
     repo: Repo, date: str, cache_dir: str, offline: bool = False,
     branch: str | None = None,
 ) -> str | None:
-    """Last commit on or before a date, on the default branch or a named one."""
+    """Last commit on or before a date, on the default branch or a named one.
+
+    Offline, an answer the cache never stored raises NotCachedError, as a
+    branch tip does: None means the forge has no such commit.
+    """
     if repo.family in ("github", "gitlab"):
-        return _first_sha(_api(_commits_url(repo, date, branch), cache_dir, offline))
+        url = _commits_url(repo, date, branch)
+        _require_cached(url, cache_dir, offline, f"{repo.slug}: commit at {date}")
+        return _first_sha(_api(url, cache_dir, offline))
     return _gitea_commit_at(repo, date, cache_dir, offline, branch)
 
 
@@ -581,7 +608,9 @@ def _gitea_commit_at(
         base += f"&sha={urllib.parse.quote(branch, safe='')}"
     page = 1
     while True:
-        payload = _api(f"{base}&page={page}", cache_dir, offline, MOVING_TTL)
+        url = f"{base}&page={page}"
+        _require_cached(url, cache_dir, offline, f"{repo.slug}: commit at {date}")
+        payload = _api(url, cache_dir, offline, MOVING_TTL)
         if not isinstance(payload, list) or not payload:
             return None
         for entry in payload:

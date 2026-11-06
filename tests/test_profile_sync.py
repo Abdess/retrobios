@@ -296,6 +296,23 @@ class TestSourceMirror(unittest.TestCase):
                          [("codeberg.org", "d16735f5")])
         self.assertIn(("head", "codeberg.org", "dev"), calls)
 
+    def test_a_repository_the_cache_never_read_stops_the_profile(self):
+        """xenios offline with no cached tip of XeniOS's preview branch kept
+        has207/xenia-edge alone and judged XeniOS's files there: GONE,
+        "written against HEAD", 21 refs to review instead of 1."""
+        import tempfile
+
+        profile = {
+            "source": "https://github.com/xenios-jp/XeniOS",
+            "source_branch": "preview",
+            "upstream": "https://github.com/has207/xenia-edge",
+            "source_commit": "87b176a",
+            "upstream_commit": "07021f0",
+        }
+        with tempfile.TemporaryDirectory() as cache:
+            with self.assertRaises(profile_sync.upstream.NotCachedError):
+                profile_sync.select_views(profile, cache, True)
+
     def test_a_profile_without_a_mirror_is_unchanged(self):
         profile = {"source": "https://github.com/o/port"}
         self.assertEqual(
