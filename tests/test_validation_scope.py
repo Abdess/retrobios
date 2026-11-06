@@ -47,5 +47,44 @@ class HleIndexScope(unittest.TestCase):
         self.assertIn("for profile in platform_profiles.values()", block)
         self.assertNotIn("profiles.values()", block.replace("platform_profiles.values()", ""))
 
+
+class ContentFoundLabelsTakeTheirRegionSlot(unittest.TestCase):
+    """rustation scans its folder by sha256, so its scph1001.bin entry is a
+    label. ROCKNIX ships the v2.0 dump under that name, which rustation
+    boots (labelled scph1001_v20.bin), and verify called it a mismatch."""
+
+    def test_an_alternative_dump_passes_under_the_label(self):
+        import hashlib
+        import sys
+        import tempfile
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from validation import _build_validation_index, check_file_validation
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "scph1001.bin"
+            path.write_bytes(b"v2.0")
+            v20 = hashlib.sha256(b"v2.0").hexdigest()
+            profile = {
+                "found_by": "content",
+                "systems": ["sony-playstation"],
+                "files": [
+                    {"name": "scph1001.bin", "region": ["north-america"],
+                     "validation": ["sha256"], "sha256": "a" * 64},
+                    {"name": "scph1001_v20.bin", "region": ["north-america"],
+                     "validation": ["sha256"], "sha256": v20},
+                    {"name": "scph5500.bin", "region": ["japan"],
+                     "validation": ["sha256"], "sha256": "b" * 64},
+                ],
+            }
+            index = _build_validation_index({"rustation": profile})
+            self.assertIsNone(check_file_validation(str(path), "scph1001.bin", index))
+            # Another region is another slot.
+            self.assertIsNotNone(check_file_validation(str(path), "scph5500.bin", index))
+            # A core that opens the file by name rejects it.
+            index = _build_validation_index({"rustation": {**profile, "found_by": "name"}})
+            self.assertIsNotNone(check_file_validation(str(path), "scph1001.bin", index))
+
+
 if __name__ == "__main__":
     unittest.main()
