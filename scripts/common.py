@@ -508,7 +508,7 @@ def list_registered_platforms(
     """
     registry_path = os.path.join(platforms_dir, "_registry.yml")
     if not os.path.exists(registry_path):
-        raise FileNotFoundError(f"no platform registry at {registry_path}")
+        raise InputMissing(f"no platform registry at {registry_path}")
     with open(registry_path) as f:
         registry = yaml_load(f) or {}
     platforms = []

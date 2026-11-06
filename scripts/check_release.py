@@ -33,7 +33,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from build_port import ARCHIVES
 from check_release_assets import digests_of
-from common import list_release_pack_platforms
+from common import list_release_pack_platforms, require_directory
 from largefiles import LARGE_FILES_REPO
 from release_record import RECORD, load_record
 
@@ -208,6 +208,7 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
+    require_directory(args.platforms_dir, "--platforms-dir")
 
     record = load_record(args.record)
     tag = args.tag or record.get("tag")

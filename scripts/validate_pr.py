@@ -34,6 +34,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     parse_md5_list,
+    require_directory,
 )
 from hashing import parse_hash_list
 from nativemode import digest_algorithm
@@ -798,6 +799,7 @@ def main() -> None:
     if os.path.realpath(os.getcwd()) != os.path.realpath(REPO_ROOT):
         args.files = [os.path.abspath(f) for f in args.files]
     work_from_repo_root(args, parser, ["db", "platforms_dir", "emulators_dir"])
+    require_directory(args.platforms_dir, "--platforms-dir")
 
     files = _files_to_validate(args, parser)
     if not files:

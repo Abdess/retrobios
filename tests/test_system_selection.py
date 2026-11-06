@@ -331,6 +331,50 @@ class AMissingProfileDirIsRefused(unittest.TestCase):
         self.assertEqual(after, before)
 
 
+class AMissingPlatformsDirIsRefused(unittest.TestCase):
+    """`verify.py --platforms-dir noplat` ended on a FileNotFoundError at the
+    bottom of a stack trace, and validate_pr read it as no platform at all
+    and exited 0."""
+
+    EXTRA = {
+        "auto_fetch": ["--all", "--dry-run"],
+        "check_release": ["--tag", "v1"],
+        "diff_truth": ["--all"],
+        "export_native": ["--all", "--output-dir", "{out}"],
+        "generate_pack": ["--platform", "retroarch", "--offline", "--output-dir", "{out}"],
+        "generate_site": ["--docs-dir", "{out}"],
+        "generate_truth": ["--all", "--output-dir", "{out}"],
+        "release_notes": ["--whats-new", "{notes}", "--output", "{out}/notes.md"],
+        "release_record": ["{out}", "--tag", "v1"],
+        "romset_dat_importer": ["--source", "mame", "--pack", "{dat}", "--output", "{out}/r.json"],
+        "validate_pr": ["bios/Sony/PlayStation/scph5501.bin"],
+        "validate_site": ["--site-dir", "{out}"],
+        "verify": ["--platform", "retroarch"],
+    }
+
+    def test_every_script_taking_a_platforms_dir_refuses_a_missing_one(self):
+        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.addCleanup(scratch.cleanup)
+        root = Path(scratch.name)
+        (root / "empty.dat").write_bytes(b"")
+        (root / "notes.md").write_text("Notes.\n")
+        values = {"out": str(root / "out"), "dat": str(root / "empty.dat"),
+                  "notes": str(root / "notes.md")}
+        taking = _scripts_taking("--platforms-dir")
+        self.assertGreater(len(taking), 15)
+        for path in taking:
+            extra = [arg.format(**values) for arg in self.EXTRA.get(path.stem, [])]
+            with self.subTest(script=path.stem):
+                proc = subprocess.run(
+                    [*_command(path), "--platforms-dir", "nosuch", *extra],
+                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    check=False, env={**os.environ, "RETROBIOS_OFFLINE": "1"},
+                )
+                self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
+                self.assertNotIn("Traceback", proc.stderr, proc.stderr[-1500:])
+                self.assertRegex(proc.stderr, r"ERROR: .*nosuch")
+
+
 class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     """verify exited 0 with a required file missing on an md5 platform, so
     the pipeline printed "verify OK" over a pack the frontend rejects."""

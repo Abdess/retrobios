@@ -499,6 +499,9 @@ def main() -> None:
         help="stop listing after this many errors (default: %(default)s)",
     )
     args = parser.parse_args()
+    from common import require_directory  # noqa: PLC0415
+
+    require_directory(str(args.platforms_dir), "--platforms-dir")
 
     try:
         issues = validate_site(Path(args.site_dir), args.base, args.platforms_dir, args.record)

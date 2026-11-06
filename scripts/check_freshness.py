@@ -58,6 +58,7 @@ from common import (  # noqa: E402
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_registry,
+    require_directory,
     upstream_profile_index,
     write_text_atomic,
     yaml_load,
@@ -1789,6 +1790,7 @@ def main() -> int:
     if unknown:
         parser.error(unknown_areas_message(unknown))
 
+    require_directory(args.platforms_dir, "--platforms-dir")
     platforms_dir = Path(args.platforms_dir)
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     findings: list[Finding] = []

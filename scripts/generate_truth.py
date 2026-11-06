@@ -21,6 +21,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     load_target_config,
+    require_directory,
     require_platform,
     require_yaml,
     truth_target_dir,
@@ -72,6 +73,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
+    require_directory(args.platforms_dir, "--platforms-dir")
 
     registry_path = os.path.join(args.platforms_dir, "_registry.yml")
     with open(registry_path) as f:
