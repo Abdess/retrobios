@@ -332,6 +332,28 @@ class PlatformShareCards(unittest.TestCase):
         self.assertEqual(sitestarlight.og_image("systems/no-such-maker.md", "explore"),
                          f"{sitestarlight.SITE_URL}assets/og/explore.png")
 
+    def test_an_emulator_page_shares_its_makers_card(self):
+        """Every emulator page shared the generic Explore card."""
+        saved = dict(sitestarlight.EMULATOR_CARDS)
+        self.addCleanup(lambda: (sitestarlight.EMULATOR_CARDS.clear(),
+                                 sitestarlight.EMULATOR_CARDS.update(saved)))
+        sitestarlight.EMULATOR_CARDS.update({"emulators/mgba": "nintendo", "emulators/odd": "no-such-maker"})
+        self.assertEqual(sitestarlight.og_image("emulators/mgba.mdx", "explore"),
+                         f"{sitestarlight.SITE_URL}assets/og/systems/nintendo.png")
+        self.assertEqual(sitestarlight.og_image("emulators/odd.md", "explore"),
+                         f"{sitestarlight.SITE_URL}assets/og/explore.png")
+
+    def test_a_shared_link_reads_the_search_title(self):
+        """og:title was the H1, "mGBA", under a result titled "mGBA BIOS files"."""
+        head = sitestarlight.page_head("emulators/mgba.md", "explore", "mGBA", "mGBA BIOS files", {})
+        shared = {tag["attrs"].get("property") or tag["attrs"].get("name"): tag["attrs"]["content"]
+                  for tag in head if tag.get("attrs", {}).get("content") and tag["tag"] == "meta"}
+        self.assertEqual(shared["og:title"], "mGBA BIOS files")
+        self.assertEqual(shared["twitter:title"], "mGBA BIOS files")
+        plain = sitestarlight.page_head("wiki/faq.md", "start", "FAQ", "FAQ", {})
+        self.assertFalse(any(tag.get("attrs", {}).get("property") == "og:title" for tag in plain))
+
+
 
 # The built site
 
