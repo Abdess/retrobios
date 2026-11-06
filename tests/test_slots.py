@@ -111,6 +111,25 @@ class TestConflicts(unittest.TestCase):
         conflicts = slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
         self.assertEqual([c.destination for c in conflicts], ["bios/GC/JAP/IPL.bin"])
 
+    def test_a_core_found_by_content_takes_any_dump_it_accepts(self):
+        """DuckStation identifies its BIOS by content, so the name of its
+        scph1001.bin entry is a label. Batocera ships the v2.0 dump there,
+        which the profile accepts under scph1001_v20.bin: no conflict."""
+        files = [
+            {"name": "IPL.bin", "path": "GC/JAP/IPL.bin", "md5": "n" * 32},
+            {"name": "IPL_usa.bin", "md5": "m" * 32},
+        ]
+        by_name = slots.find_conflicts(
+            self._config("m" * 32), {"dolphin": {"files": files}}, REGIONS_DB
+        )
+        self.assertEqual(len(by_name), 1)
+        by_content = slots.find_conflicts(
+            self._config("m" * 32),
+            {"dolphin": {"found_by": "content", "files": files}},
+            REGIONS_DB,
+        )
+        self.assertEqual(by_content, [])
+
     def test_wrong_region_under_a_region_slot_is_reported(self):
         conflicts = slots.find_conflicts(
             self._config("m" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
