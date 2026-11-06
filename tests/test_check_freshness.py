@@ -475,10 +475,28 @@ class CatalogParsingTests(unittest.TestCase):
             row = cf._check_redump_games(False)
             self.assertEqual((row.status, row.items), (cf.STALE, ["sony-playstation"]))
             self.assertEqual(cf._check_redump_games(True).status, cf.SKIPPED)
-        with mock.patch.object(cf, "_game_catalogs", return_value=[{"fetched": "2026-11-03"}]):
-            for rebuilt, status in (("2026-07-08", cf.OK), ("2026-11-04", cf.STALE)):
+        with mock.patch.object(cf, "_game_catalogs", return_value=[{"fetched": "2026-11-03"}]), \
+                mock.patch.object(cf, "_today", return_value="2026-11-06"):
+            for rebuilt, status in (("2026-11-02", cf.OK), ("2026-11-04", cf.STALE)):
                 with mock.patch.object(cf, "_no_intro_asset_date", return_value=rebuilt):
                     self.assertEqual(cf._check_nointro_games("", False).status, status)
+
+    def test_a_mirror_that_stopped_rebuilding_is_stale(self):
+        """The mirror failed every daily rebuild from 2026-07-08, and both
+        No-Intro rows read OK: an import newer than a dead pack is no
+        sign of a fresh catalog."""
+        with mock.patch.object(cf, "_today", return_value="2026-11-06"), \
+                mock.patch.object(cf, "_no_intro_asset_date", return_value="2026-07-08"), \
+                mock.patch.object(cf, "_game_catalogs", return_value=[{"fetched": "2026-11-03"}]), \
+                mock.patch.object(cf, "_snapshot", return_value={"imported_at": "2026-08-08"}):
+            for row in (cf._check_nointro_games("", False), cf._check_no_intro("", False)):
+                self.assertEqual(row.status, cf.STALE)
+                self.assertIn("2026-07-08, 121 days ago", row.detail)
+
+    def test_the_freshness_check_reads_the_importer_mirror(self):
+        self.assertEqual(cf.NO_INTRO_MIRROR, cf.game_dat_importer.NOINTRO_MIRROR)
+        self.assertIn(cf.NO_INTRO_MIRROR.removeprefix("https://github.com/"),
+                      cf.game_dat_importer.NOINTRO_RELEASE_API)
         self.assertIn("no-intro games",
                       [f.subject for f in cf.check_catalogs("", True)])
 

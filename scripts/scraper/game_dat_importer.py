@@ -14,6 +14,9 @@ games/catalogs/ and never in provenance/.
 
 No-Intro comes from the auto-datfile-generator release asset (Dat-o-Matic
 bans automated clients), Redump from redump.info's per-system datfile route.
+The mirror is dantob's fork: hugo19941994's original has failed its daily
+rebuild since Dat-o-Matic's 2026-07 re-layout (no-intro.zip last rebuilt
+2026-07-08), and the fork carries the fix (d4a9d769, 2026-07-31).
 Every download is cached under .cache/game-dats/ with what the server said
 about it, so a second run reads nothing from the network and writes the same
 bytes. A DAT's region tag is a market label, never the value a core computes.
@@ -49,8 +52,11 @@ SOURCES = ("no-intro", "redump")
 CACHE_DIR = Path(".cache") / "game-dats"
 OUTPUT_DIR = Path("games") / "catalogs"
 
+NOINTRO_MIRROR = "https://github.com/dantob/auto-datfile-generator"
+NOINTRO_RELEASE = "Daily_Rebuild"
 NOINTRO_RELEASE_API = (
-    "https://api.github.com/repos/hugo19941994/auto-datfile-generator/releases/tags/Daily_Rebuild"
+    NOINTRO_MIRROR.replace("https://github.com/", "https://api.github.com/repos/")
+    + f"/releases/tags/{NOINTRO_RELEASE}"
 )
 NOINTRO_ASSET = "no-intro.zip"
 REDUMP_DATFILE_URL = "https://redump.info/datfile/{code}"
@@ -120,7 +126,7 @@ LICENCES: dict[str, dict] = {
             "website or its operators is required for such use."
         ),
         "mirror": {
-            "repo": "https://github.com/hugo19941994/auto-datfile-generator",
+            "repo": NOINTRO_MIRROR,
             "licence": "MIT",
             "scope": "the mirror's scripts only, the DATs it republishes stay under the terms above",
         },

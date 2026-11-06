@@ -1659,7 +1659,7 @@ names the profiles read.
 | Catalog | Acquisition | Notes |
 |---------|------------|-------|
 | Redump | direct fetch from redump.info, one `/bios/<CODE>` route per system | 4 BIOS DATs. redump.org serves BIOS DATs dated 2010 to 2022, redump.info the current ones |
-| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic serves its DATs through a browser session, and the `hugo19941994/auto-datfile-generator` mirror rebuilds daily |
+| No-Intro | local pack, imported with `dat_pack_importer` | Dat-o-Matic serves its DATs through a browser session, and the `dantob/auto-datfile-generator` mirror rebuilds daily. `check_freshness` reads a pack older than a week as a stopped mirror |
 | TOSEC | local pack, imported with `dat_pack_importer` | annual pack from tosecdev.org, 138 Firmware DATs |
 
 The join is by SHA1, then by MD5 + size. A match sets the `provenance` field
