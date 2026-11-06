@@ -34,7 +34,9 @@ has ended, and its export is rewritten even when no row named it.
 
 Surfaced only (no refresh): data rows that are not a _data_dirs.yml key
 (the registry itself, buildbot assets it does not track), coreinfo gaps, redump/no-intro/tosec packs,
-CI pins (install.py SHA-256, PyPI, pinned actions), profile_sync. Each needs
+CI pins (install.py SHA-256, PyPI, pinned actions), profile_sync, rom-folder
+pins (moved by hand, then python -m scripts.scraper.romfolders --setup NAME
+reads them again). Each needs
 a human read (new .info file, manual DAT download, PyPI version bump).
 
 Usage:
@@ -65,7 +67,9 @@ PLATFORMS_REGISTRY = REPO_ROOT / "platforms" / "_registry.yml"
 DATA_DIRS_REGISTRY = REPO_ROOT / "platforms" / "_data_dirs.yml"
 
 AUTO_AREAS = ("platforms", "native", "targets", "data", "catalogs")
-MANUAL_AREAS = ("coreinfo", "ci", "profiles")
+# A rom-folder pin is moved by hand in platforms/romfolders/_sources/,
+# then `python -m scripts.scraper.romfolders --setup NAME` reads it again.
+MANUAL_AREAS = ("romfolders", "coreinfo", "ci", "profiles")
 
 JOB_TIMEOUT = 1800  # 30 minutes per refresher, scrapers rarely exceed 10
 
@@ -563,7 +567,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.split("\n\n")[0])
     parser.add_argument(
         "--only",
-        help="comma-separated areas to check: " + ",".join(AUTO_AREAS),
+        help="comma-separated areas to check: " + ",".join(AUTO_AREAS)
+        + " (refreshed), " + ",".join(MANUAL_AREAS) + " (listed for a human)",
     )
     parser.add_argument(
         "--dry-run",

@@ -760,7 +760,10 @@ committed.
 
 Rows that need a decision are listed and never run: a buildbot core with no
 profile, a new `.info` file, the Redump, No-Intro and TOSEC packs, the CI
-pins, and `profile_sync`. A failed scraper leaves its cached original
+pins, `profile_sync`, and a rom-folder pin (moved by hand in
+`platforms/romfolders/_sources/`, then `python -m scripts.scraper.romfolders
+--setup NAME` reads it again). `--dry-run --json` prints the plan as JSON.
+A failed scraper leaves its cached original
 untouched. Each job writes its output to `tmp/refresh_stale/`, and a GitHub
 token is taken from `GITHUB_TOKEN` or from `gh auth token`.
 

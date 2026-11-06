@@ -256,6 +256,16 @@ class SavedFindings(unittest.TestCase):
                          [("catalogs", "mame recipes")])
         self.assertEqual([f["subject"] for f in plan["surfaced"]], ["anybor"])
 
+    def test_every_area_check_freshness_reports_is_known(self):
+        """romfolders was added to check_freshness and not here: its rows
+        were dropped from a saved report without a word, and --only
+        romfolders was refused."""
+        import check_freshness  # noqa: PLC0415
+
+        self.assertEqual(set(check_freshness.AREAS), set(rs.AUTO_AREAS + rs.MANUAL_AREAS))
+        jobs, surfaced, _ = rs.plan_jobs([finding("romfolders", "muos")], REGISTRY, {})
+        self.assertEqual((jobs, [f["subject"] for f in surfaced]), ([], ["muos"]))
+
     def test_a_report_that_is_not_a_list_is_refused(self):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
             path = Path(directory) / "freshness.json"
