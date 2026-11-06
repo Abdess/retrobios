@@ -2284,6 +2284,10 @@ class CardsSpaceAndConfirm(unittest.TestCase):
                    "bios"),
         "ROCKNIX": ({".config/system/configs/system.cfg": "root.password=rocknix\n"},
                     "rocknix", "roms/bios"),
+        # Lakka's STORAGE partition, once RetroArch has written its config.
+        "Lakka": ({".config/retroarch/retroarch.cfg":
+                   'menu_driver = "xmb"\nsystem_directory = "/tmp/system"\n'},
+                  "lakka", "system"),
     }
 
     def card(self, files: dict) -> Path:

@@ -528,7 +528,8 @@ class Progress:
 
     BAR = 24
 
-    def __init__(self, total_files: int, total_bytes: int, term: Terminal) -> None:
+    def __init__(self, total_files: int, total_bytes: int, term: Terminal,
+                 events: bool = True) -> None:
         self.total_files = total_files
         self.expected_bytes = total_bytes
         self.total_bytes = max(total_bytes, 1)
@@ -548,6 +549,15 @@ class Progress:
         self._drawn = 0.0
         self._evented = self.start
         self._lock = threading.Lock()
+        # A data tree's archive draws the line and writes no event: the
+        # progress events count the files of the download event.
+        self.events = events
+
+    def expect(self, total_bytes: int) -> None:
+        """The size the transfer turns out to have, once its server says it."""
+        with self._lock:
+            self.expected_bytes = total_bytes
+            self.total_bytes = max(total_bytes, 1)
 
     def add(self, count: int, resumed: bool = False, network: bool | None = None) -> None:
         """count bytes written, resumed ones left out of the speed. network
@@ -563,7 +573,7 @@ class Progress:
             if self.term.live and not self.term.quiet and now - self._drawn >= 0.1:
                 self._drawn = now
                 self._draw()
-            if EVENTS.on and now - self._evented >= EVENT_PROGRESS_INTERVAL:
+            if self.events and EVENTS.on and now - self._evented >= EVENT_PROGRESS_INTERVAL:
                 self._evented = now
                 EVENTS.emit("progress", files_done=self.files, files_total=self.total_files,
                             bytes_done=self.bytes, bytes_total=self.expected_bytes)
@@ -1488,8 +1498,11 @@ _BOARD_NAMES: dict[str, dict[str, str]] = {
 # the FAT one beside SHARE (batocera-43.1, board/batocera/scripts/
 # post-image-script.sh:60), and reads it there itself (package/batocera/
 # core/batocera-scripts/scripts/batocera-info). batocera.arch is inside the
-# image, out of a computer's reach.
-_CARD_BOARD_FILES: dict[str, str] = {"batocera": "boot/batocera.board"}
+# image, out of a computer's reach. KNULLI writes boot/knulli.board the same
+# way (knulli-linux 20260511, board/scripts/post-image-script.sh:66). Both
+# write the image's name, which the target list maps to its board.
+_CARD_BOARD_FILES: dict[str, str] = {"batocera": "boot/batocera.board",
+                                     "knulli": "boot/knulli.board"}
 
 
 def card_board(platform: str) -> str | None:
@@ -3905,7 +3918,24 @@ def _validate_targets(data: object) -> dict[str, dict]:
         ):
             raise ValueError(f"invalid core list for target {target}")
         normalized[target] = {"cores": cores}
+        images = value.get("images") if isinstance(value, dict) else None
+        if images is None:
+            continue
+        if not isinstance(images, list) or len(images) > 10_000 or not all(
+                isinstance(image, str) and 0 < len(image) <= 128 for image in images):
+            raise ValueError(f"invalid image list for target {target}")
+        normalized[target]["images"] = images
     return normalized
+
+
+def board_target(board: str, targets: dict[str, dict]) -> str | None:
+    """The target a board name stands for: the name itself, else the one
+    target whose images carry it. A card names its image (Batocera writes
+    anbernic-rg35xx-plus for the h700 target, x86-64-v3 for zen3)."""
+    if board in targets:
+        return board
+    owners = [name for name, info in targets.items() if board in info.get("images", ())]
+    return owners[0] if len(owners) == 1 else None
 
 
 NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
@@ -7032,15 +7062,20 @@ def download_files(
     return failed, interrupted
 
 
-def _fetch_archive(url: str, directory: Path) -> Path:
-    """A data directory's source archive, in *directory*, retried like files."""
+def _fetch_archive(url: str, directory: Path, progress: Progress | None = None) -> Path:
+    """A data directory's source archive, in *directory*, retried like files.
+    progress draws its bytes as they come, an attempt that failed taken back."""
     _network_allowed(url)
     reason: Exception | None = None
     for attempt in range(1, MAX_RETRIES + 1):
         handle = tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False)
+        received = 0
         try:
             with handle, urllib.request.urlopen(url, timeout=60) as resp:
-                received = 0
+                if progress is not None:
+                    length = resp.headers.get("Content-Length", "")
+                    if length.isdigit():
+                        progress.expect(int(length))
                 while True:
                     if _stop.is_set():
                         raise _Interrupted()
@@ -7051,6 +7086,8 @@ def _fetch_archive(url: str, directory: Path) -> Path:
                     if received > MAX_DATA_ARCHIVE_SIZE:
                         raise ValueError("archive exceeds the size limit")
                     handle.write(chunk)
+                    if progress is not None:
+                        progress.add(len(chunk))
             return Path(handle.name)
         except urllib.error.HTTPError as exc:
             Path(handle.name).unlink(missing_ok=True)
@@ -7063,6 +7100,8 @@ def _fetch_archive(url: str, directory: Path) -> Path:
         except BaseException:
             Path(handle.name).unlink(missing_ok=True)
             raise
+        if progress is not None and received:
+            progress.add(-received)
         if attempt < MAX_RETRIES:
             time.sleep(_retry_delay(attempt, None))
     raise reason if reason else OSError("download failed")
@@ -7129,7 +7168,8 @@ def data_directory_state(entry: dict, bios_path: Path,
 
 
 def install_data_directory(entry: dict, bios_path: Path,
-                           state: tuple[Path, dict[str, dict], int] | None = None) -> dict:
+                           state: tuple[Path, dict[str, dict], int] | None = None,
+                           progress: Progress | None = None) -> dict:
     """Rebuild one data tree from its source archive, file by file verified.
     state is the tree's data_directory_state when the run already read it:
     each read hashes every file in place.
@@ -7153,7 +7193,7 @@ def install_data_directory(entry: dict, bios_path: Path,
                 # The pack holds the tree where it extracts, already mapped.
                 members = LOCAL.pack.tree(entry.get("dest", ""))
             else:
-                archive = _fetch_archive(entry["url"], Path(scratch))
+                archive = _fetch_archive(entry["url"], Path(scratch), progress)
                 members = _archive_members(archive, entry)
             for rel, declared, opener in members:
                 meta = needed.pop(rel, None)
@@ -7178,7 +7218,12 @@ def install_data_directory(entry: dict, bios_path: Path,
         # Kept apart, so the advice is the offline one, not the network's.
         counts["error"] = OfflineReason(str(exc))
     except (urllib.error.URLError, OSError, ValueError, tarfile.TarError) as exc:
-        counts["error"] = str(getattr(exc, "reason", None) or exc)
+        # The tree's folder refused, not the source: said as the BIOS files
+        # say it, never as an archive that could not be read.
+        counts["error"] = (NOT_WRITABLE if isinstance(exc, OSError)
+                           and not isinstance(exc, urllib.error.URLError)
+                           and _write_refused(exc) and not _folder_writable(root)
+                           else str(getattr(exc, "reason", None) or exc))
     except _MEMBER_ERRORS as exc:
         # A damaged, encrypted or unsupported member, in words.
         counts["error"] = unreadable_words(exc)
@@ -13451,9 +13496,10 @@ def main() -> None:
     ):
         parser.error("--from copies files into the BIOS folder, which a listing "
                      "does not write")
-    if (args.from_pack or args.manifest) and (args.list_platforms or args.list_targets):
+    if (args.from_pack or args.manifest) and args.list_platforms:
+        # --list-targets reads its boards from them, where --target does.
         parser.error("--from-pack and --manifest give a file list, which --list-platforms "
-                     "and --list-targets do not read")
+                     "does not read")
     if args.no_game_data and (args.list_platforms or args.list_targets):
         parser.error("--no-game-data narrows a file list, not --list-platforms "
                      "or --list-targets")
@@ -13847,6 +13893,18 @@ _SHARE_RULES: tuple[_OsRule, ...] = (
     _OsRule("rocknix", "ROCKNIX", "file_matches",
             (".config/system/configs/system.cfg", r"^root\.password=rocknix\s*$"),
             "roms/bios"),
+    # Lakka's is /storage, its STORAGE partition (Lakka-LibreELEC v6.1,
+    # packages/sysutils/busybox/scripts/fs-resize:31). RetroArch reads its
+    # BIOS through /tmp/system, an overlay whose upper folder is
+    # /storage/system (packages/lakka/retroarch_base/retroarch/system.d/
+    # tmp-system.mount:12). With HOME=/storage (config/retroarch-env.conf:1)
+    # RetroArch writes .config/retroarch/retroarch.cfg from the /etc
+    # skeleton at its first start (RetroArch 69a4f0ea, configuration.c:
+    # 3650-3676), whose system_directory is that overlay (config/
+    # retroarch.cfg:3217): no other system we install for reads /tmp/system.
+    _OsRule("lakka", "Lakka", "file_matches",
+            (".config/retroarch/retroarch.cfg",
+             r'^system_directory = "/tmp/system"\s*$'), "system"),
     # MiSTer's is its exFAT partition, /media/fat (Main_MiSTer e0a234f9,
     # file_io.cpp:1177), whose root holds the MiSTer binary and menu.rbf
     # (Distribution_MiSTer ce602319) and which reads each core's files
@@ -15194,9 +15252,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 board, where = card_board(plat_name), "found on the card"
             if board:
                 known = fetch_targets(plat_name) or {}
+                image, board = board, board_target(board, known) or board
                 if board in known:
                     target = board
-                    words = f"Board {board} {where} (--every-board installs all boards)"
+                    named = board if image == board else f"{board} ({image})"
+                    words = f"Board {named} {where} (--every-board installs all boards)"
                 else:
                     words = (f"Board {board} {where} has no "
                              f"{PLATFORM_NAMES.get(plat_name, plat_name)} core list: "
@@ -15803,9 +15863,31 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # PPSSPP's assets. Fetched from their source archive, each file
         # checked against the hash the list records.
         if data_dirs and not total_interrupted:
-            print("\nData directories:")
+            # A tree whose folder this user cannot write is not fetched: the
+            # BIOS files above already said the cause and its remedy, and
+            # each archive was named as unreadable.
+            writable = []
             for entry, state in data_states:
-                counts = install_data_directory(entry, bios_path, state)
+                if state[1] and not _folder_writable(state[0]):
+                    failures.append((entry["ref"], NOT_WRITABLE))
+                    total_errors += 1
+                else:
+                    writable.append((entry, state))
+            if writable:
+                print("\nData directories:")
+            for entry, state in writable:
+                # Its archive is drawn as the BIOS files were, and counted
+                # in the bytes and time the run ends on: 82 MB came in
+                # silence and the end said 310.5 KB.
+                fetching = bool(state[1]) and LOCAL.pack is None
+                progress = Progress(len(state[1]), 0, term, events=False) if fetching else None
+                try:
+                    counts = install_data_directory(entry, bios_path, state, progress)
+                finally:
+                    if progress is not None:
+                        progress.finish()
+                        total_bytes += progress.transferred()
+                        total_seconds += progress.elapsed()
                 total_downloaded += counts["installed"]
                 data_landed += counts["installed"]
                 total_up_to_date += counts["present"]
@@ -15831,7 +15913,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                                  f", {counts['changed'] + counts['absent']} no longer in "
                                  "the source (the pack has them)")
                     print(line)
-                if counts["error"]:
+                if counts["error"] == NOT_WRITABLE:
+                    failures.append((entry["ref"], NOT_WRITABLE))
+                    total_errors += 1
+                elif counts["error"]:
                     print(f"  {entry['ref']}: could not read "
                           f"{LOCAL.pack.name if LOCAL.pack is not None else entry['url']}: "
                           f"{counts['error']}", file=sys.stderr)
@@ -19426,7 +19511,7 @@ def setup_list(setups: list, mounted: set, needle: str = "",
 # The systems that run from an SD card on a board kept on a desk, not in
 # the hand: their row stays among the platforms, and the handhelds' block,
 # which leads when nothing is found here, keeps Onion four presses away.
-_DESK_CARDS = frozenset({"misterfpga"})
+_DESK_CARDS = frozenset({"misterfpga", "lakka"})
 
 # The setups a computer runs, by its system, first in the setup list when
 # nothing was found here. RetroBat runs on Windows alone (retrobat.org), and

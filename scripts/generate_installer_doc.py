@@ -362,7 +362,8 @@ def _child(spec: dict) -> int:
     def held(files: list[dict], _bios: Path, **_kwargs: object) -> tuple:
         return [], list(files), []
 
-    def tree_landed(entry: dict, _bios: Path, state: object = None) -> dict:
+    def tree_landed(entry: dict, _bios: Path, state: object = None,
+                    _progress: object = None) -> dict:
         return {"present": 0, "installed": len(entry["files"]), "changed": 0,
                 "absent": 0, "error": "", "not_kept": []}
 

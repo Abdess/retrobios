@@ -2415,7 +2415,7 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
     print(f"Generated {count} target manifest(s) in {output_dir}")
 
 
-def target_list(yml_file: Path) -> dict[str, list[str] | None]:
+def target_list(yml_file: Path) -> dict[str, list[str] | dict | None]:
     """A platform's cores per hardware target, as install/targets/ publishes
     them and a pack carries them: aliases included, overrides applied."""
     targets_path = yml_file.parent
@@ -2443,7 +2443,7 @@ def target_list(yml_file: Path) -> dict[str, list[str] | None]:
             if names:
                 alias_map[tname] = names
 
-    result: dict[str, list[str] | None] = {}
+    result: dict[str, list[str] | dict | None] = {}
     for target_name, target_info in targets.items():
         if not isinstance(target_name, str) or not target_name:
             raise ValueError(f"{yml_file}: target names must be non-empty strings")
@@ -2468,7 +2468,15 @@ def target_list(yml_file: Path) -> dict[str, list[str] | None]:
         resolved = load_target_config(
             yml_file.stem, target_name, str(targets_path.parent)
         )
-        result[target_name] = None if resolved is None else sorted(resolved)
+        listed = None if resolved is None else sorted(resolved)
+        images = target_info.get("images")
+        # The image names a card's board file holds (Batocera writes
+        # anbernic-rg35xx-plus for the h700 target): the installer reads
+        # the board of a card prepared on a computer through them.
+        result[target_name] = (
+            {"cores": listed, "images": images}
+            if images and listed is not None else listed
+        )
 
     for target_name, names in alias_map.items():
         if target_name not in result:
@@ -2478,7 +2486,9 @@ def target_list(yml_file: Path) -> dict[str, list[str] | None]:
                 raise ValueError(
                     f"{yml_file}: alias {alias!r} collides with a target name"
                 )
-            result[alias] = result[target_name]
+            # An alias names the board, not its images.
+            held = result[target_name]
+            result[alias] = held["cores"] if isinstance(held, dict) else held
     return result
 
 

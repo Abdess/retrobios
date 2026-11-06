@@ -13,7 +13,11 @@
         "additionalProperties": false,
         "required": ["cores"],
         "properties": {
-          "cores": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+          "cores": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "images": {
+            "description": "The image names the target builds, as a card's board file writes them (boot/batocera.board, boot/knulli.board).",
+            "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true
+          }
         }
       }
     ]
