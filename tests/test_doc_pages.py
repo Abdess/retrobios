@@ -1783,6 +1783,15 @@ class ReportExcerptIsTheRun(unittest.TestCase):
     def test_every_quoted_line_is_printed(self):
         import subprocess  # noqa: PLC0415
 
+        from restore_large_files import gitignored_paths  # noqa: PLC0415
+
+        # The excerpt is a run over the whole collection. A checkout without
+        # the release assets (the PR workflow restores none) prints other
+        # counts, which says nothing about the page.
+        absent = [p for p in gitignored_paths(str(ROOT / ".gitignore"))
+                  if not any(ROOT.glob(p))]
+        if absent:
+            self.skipTest(f"{len(absent)} release assets absent from this checkout, e.g. {absent[0]}")
         page = (WIKI / "reading-reports.md").read_text(encoding="utf-8")
         intro = "From `python scripts/verify.py --platform retrodeck`:"
         start = page.index("```\n", page.index(intro)) + 4
