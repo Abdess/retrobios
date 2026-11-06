@@ -1,6 +1,6 @@
 {
   "source": "fbneo",
-  "imported_at": "2026-10-21",
+  "imported_at": "2026-11-06",
   "dats": {
     "FinalBurn Neo - Arcade Games": "1.0.0.03",
     "FinalBurn Neo - Astrocade Home Computer Games": "1.0.0.03",
@@ -9,6 +9,7 @@
     "FinalBurn Neo - Fairchild Channel F Games": "1.0.0.03",
     "FinalBurn Neo - GBA Games": "1.0.0.03",
     "FinalBurn Neo - MSX 1 Games": "1.0.0.03",
+    "FinalBurn Neo - Master System Games": "1.0.0.03",
     "FinalBurn Neo - Megadrive Games": "1.0.0.03",
     "FinalBurn Neo - NES Games": "1.0.0.03",
     "FinalBurn Neo - Neo Geo Games": "1.0.0.03",
@@ -475,6 +476,77 @@
           "name": "cchip_upd78c11.bin",
           "size": 4096,
           "crc32": "43021521",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "ddp3.zip",
+      "set": "ddp3",
+      "description": "DoDonPachi III (World, 2002.05.15 Master Ver)",
+      "members": [
+        {
+          "name": "cave_a04401w064.u7",
+          "size": 8388608,
+          "crc32": "ed229794",
+          "sha1": ""
+        },
+        {
+          "name": "cave_a04402w064.u8",
+          "size": 8388608,
+          "crc32": "752167b0",
+          "sha1": ""
+        },
+        {
+          "name": "cave_b04401w064.u1",
+          "size": 8388608,
+          "crc32": "17731c9d",
+          "sha1": ""
+        },
+        {
+          "name": "cave_m04401b032.u17",
+          "size": 4194304,
+          "crc32": "5a0dbd76",
+          "sha1": ""
+        },
+        {
+          "name": "cave_t04401w064.u19",
+          "size": 8388608,
+          "crc32": "3a95f19c",
+          "sha1": ""
+        },
+        {
+          "name": "ddp3_bios.u37",
+          "size": 524288,
+          "crc32": "b3cc5c8f",
+          "sha1": ""
+        },
+        {
+          "name": "ddp3_defaults.nv",
+          "size": 131072,
+          "crc32": "571e96c0",
+          "sha1": ""
+        },
+        {
+          "name": "ddp3_v101_16m.u36",
+          "size": 2097152,
+          "crc32": "fba2180e",
+          "sha1": ""
+        },
+        {
+          "name": "pgm_m01s.rom",
+          "size": 2097152,
+          "crc32": "45ae7159",
+          "sha1": ""
+        },
+        {
+          "name": "pgm_t01s.rom",
+          "size": 2097152,
+          "crc32": "1a7123a0",
           "sha1": ""
         }
       ],
@@ -1026,6 +1098,213 @@
     },
     {
       "dat": "FinalBurn Neo - Arcade Games",
+      "name": "dotron.zip",
+      "set": "dotron",
+      "description": "Discs of Tron (Upright, 10/4/83)",
+      "members": [
+        {
+          "name": "82s123.12d",
+          "size": 32,
+          "crc32": "e1281ee9",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg0_10-4-83.1c",
+          "size": 16384,
+          "crc32": "40d00195",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg1_10-4-83.2c",
+          "size": 16384,
+          "crc32": "5a7d1300",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg2_10-4-83.3c",
+          "size": 16384,
+          "crc32": "cb89c9be",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg3_10-4-83.4c",
+          "size": 8192,
+          "crc32": "5098faf4",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd0_10-4-83.a7",
+          "size": 4096,
+          "crc32": "7fb54293",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd1_10-4-83.a8",
+          "size": 4096,
+          "crc32": "edef7326",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd2_9-22-83.a9",
+          "size": 4096,
+          "crc32": "e8ef6519",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd3_9-22-83.a10",
+          "size": 4096,
+          "crc32": "6b5aeb02",
+          "sha1": ""
+        },
+        {
+          "name": "loc-a.cp0",
+          "size": 8192,
+          "crc32": "b35f5374",
+          "sha1": ""
+        },
+        {
+          "name": "loc-b.cp9",
+          "size": 8192,
+          "crc32": "565a5c48",
+          "sha1": ""
+        },
+        {
+          "name": "loc-bg1.5f",
+          "size": 8192,
+          "crc32": "bb2d7a5d",
+          "sha1": ""
+        },
+        {
+          "name": "loc-bg2.6f",
+          "size": 8192,
+          "crc32": "40167124",
+          "sha1": ""
+        },
+        {
+          "name": "loc-c.cp8",
+          "size": 8192,
+          "crc32": "ef45d146",
+          "sha1": ""
+        },
+        {
+          "name": "loc-d.cp7",
+          "size": 8192,
+          "crc32": "5e8a3ef3",
+          "sha1": ""
+        },
+        {
+          "name": "loc-e.cp6",
+          "size": 8192,
+          "crc32": "ce957f1a",
+          "sha1": ""
+        },
+        {
+          "name": "loc-f.cp5",
+          "size": 8192,
+          "crc32": "d26053ce",
+          "sha1": ""
+        },
+        {
+          "name": "loc-g.cp4",
+          "size": 8192,
+          "crc32": "57a2b1ff",
+          "sha1": ""
+        },
+        {
+          "name": "loc-h.cp3",
+          "size": 8192,
+          "crc32": "3bb4d475",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "drgnwrld.zip",
+      "set": "drgnwrld",
+      "description": "Dragon World (World, V040O)",
+      "members": [
+        {
+          "name": "chinadr-v0400.u3",
+          "size": 524288,
+          "crc32": "a6daa2b8",
+          "sha1": ""
+        },
+        {
+          "name": "igs-d0301.u39",
+          "size": 4194304,
+          "crc32": "78ab45d9",
+          "sha1": ""
+        },
+        {
+          "name": "igs-s0302.u43",
+          "size": 262144,
+          "crc32": "fde63ce1",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "espgal.zip",
+      "set": "espgal",
+      "description": "Espgaluda (2003/10/15 Master Ver)",
+      "members": [
+        {
+          "name": "cave_a04801w064.u7",
+          "size": 8388608,
+          "crc32": "26dd4932",
+          "sha1": ""
+        },
+        {
+          "name": "cave_a04802w064.u8",
+          "size": 8388608,
+          "crc32": "0e6bf7a9",
+          "sha1": ""
+        },
+        {
+          "name": "cave_b04801w064.u1",
+          "size": 8388608,
+          "crc32": "98dce13a",
+          "sha1": ""
+        },
+        {
+          "name": "cave_t04801w064.u19",
+          "size": 8388608,
+          "crc32": "6021c79e",
+          "sha1": ""
+        },
+        {
+          "name": "cave_w04801b032.u17",
+          "size": 4194304,
+          "crc32": "60298536",
+          "sha1": ""
+        },
+        {
+          "name": "espgaluda_v100.u38",
+          "size": 2097152,
+          "crc32": "08ecec34",
+          "sha1": ""
+        },
+        {
+          "name": "t01s.u18",
+          "size": 2097152,
+          "crc32": "1a7123a0",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
       "name": "fireshrk.zip",
       "set": "fireshrk",
       "description": "Fire Shark",
@@ -1319,6 +1598,59 @@
           "name": "gtg_joy_v3.3_u5.u5",
           "size": 65536,
           "crc32": "983a5c0c",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "gwarrior.zip",
+      "set": "gwarrior",
+      "description": "Galactic Warriors",
+      "members": [
+        {
+          "name": "400-a01.fse",
+          "size": 256,
+          "crc32": "5827b1e8",
+          "sha1": ""
+        },
+        {
+          "name": "400-a02.fse",
+          "size": 256,
+          "crc32": "2f44f970",
+          "sha1": ""
+        },
+        {
+          "name": "400-a04.10l",
+          "size": 32768,
+          "crc32": "d02c9552",
+          "sha1": ""
+        },
+        {
+          "name": "400-a06.15l",
+          "size": 32768,
+          "crc32": "b99d8cff",
+          "sha1": ""
+        },
+        {
+          "name": "400-e03.5l",
+          "size": 8192,
+          "crc32": "a5a8e57d",
+          "sha1": ""
+        },
+        {
+          "name": "578-a05.12l",
+          "size": 131072,
+          "crc32": "76240e2e",
+          "sha1": ""
+        },
+        {
+          "name": "578-a07.17l",
+          "size": 131072,
+          "crc32": "0aedacb5",
           "sha1": ""
         }
       ],
@@ -3207,6 +3539,237 @@
     },
     {
       "dat": "FinalBurn Neo - Arcade Games",
+      "name": "ket.zip",
+      "set": "ket",
+      "description": "Ketsui: Kizuna Jigoku Tachi (2003/01/01. Master Ver.)",
+      "members": [
+        {
+          "name": "cave_a04701w064.u7",
+          "size": 8388608,
+          "crc32": "5ef1b94b",
+          "sha1": ""
+        },
+        {
+          "name": "cave_a04702w064.u8",
+          "size": 8388608,
+          "crc32": "26d6da7f",
+          "sha1": ""
+        },
+        {
+          "name": "cave_b04701w064.u1",
+          "size": 8388608,
+          "crc32": "1bec008d",
+          "sha1": ""
+        },
+        {
+          "name": "cave_m04701b032.u17",
+          "size": 4194304,
+          "crc32": "b46e22d1",
+          "sha1": ""
+        },
+        {
+          "name": "cave_t04701w064.u19",
+          "size": 8388608,
+          "crc32": "2665b041",
+          "sha1": ""
+        },
+        {
+          "name": "ket_defaults.nv",
+          "size": 131072,
+          "crc32": "3ca892d8",
+          "sha1": ""
+        },
+        {
+          "name": "ketsui_v100.u38",
+          "size": 2097152,
+          "crc32": "dfe62f3b",
+          "sha1": ""
+        },
+        {
+          "name": "pgm_t01s.rom",
+          "size": 2097152,
+          "crc32": "1a7123a0",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "kf2k3pcb.zip",
+      "set": "kf2k3pcb",
+      "description": "The King of Fighters 2003 (Japan, JAMMA PCB)",
+      "members": [
+        {
+          "name": "000-lo.lo",
+          "size": 131072,
+          "crc32": "5a86cff2",
+          "sha1": ""
+        },
+        {
+          "name": "271-c1.c1",
+          "size": 16777216,
+          "crc32": "f5ebb327",
+          "sha1": ""
+        },
+        {
+          "name": "271-c2.c2",
+          "size": 16777216,
+          "crc32": "2be21620",
+          "sha1": ""
+        },
+        {
+          "name": "271-c3.c3",
+          "size": 16777216,
+          "crc32": "ddded4ff",
+          "sha1": ""
+        },
+        {
+          "name": "271-c4.c4",
+          "size": 16777216,
+          "crc32": "d85521e6",
+          "sha1": ""
+        },
+        {
+          "name": "271-c5.c5",
+          "size": 16777216,
+          "crc32": "18aa3540",
+          "sha1": ""
+        },
+        {
+          "name": "271-c6.c6",
+          "size": 16777216,
+          "crc32": "1c40de87",
+          "sha1": ""
+        },
+        {
+          "name": "271-m1.m1",
+          "size": 524288,
+          "crc32": "d6bcf2bc",
+          "sha1": ""
+        },
+        {
+          "name": "271-p1.p1",
+          "size": 4194304,
+          "crc32": "b9da070c",
+          "sha1": ""
+        },
+        {
+          "name": "271-p2.p2",
+          "size": 4194304,
+          "crc32": "da3118c4",
+          "sha1": ""
+        },
+        {
+          "name": "271-p3.p3",
+          "size": 1048576,
+          "crc32": "5cefd0d2",
+          "sha1": ""
+        },
+        {
+          "name": "271-v1.v1",
+          "size": 16777216,
+          "crc32": "1d96154b",
+          "sha1": ""
+        },
+        {
+          "name": "sfix.sfix",
+          "size": 131072,
+          "crc32": "c2ea0cfd",
+          "sha1": ""
+        },
+        {
+          "name": "spj.sp1",
+          "size": 524288,
+          "crc32": "148dd727",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "konamigt.zip",
+      "set": "konamigt",
+      "description": "Konami GT",
+      "members": [
+        {
+          "name": "400-a01.fse",
+          "size": 256,
+          "crc32": "5827b1e8",
+          "sha1": ""
+        },
+        {
+          "name": "400-a02.fse",
+          "size": 256,
+          "crc32": "2f44f970",
+          "sha1": ""
+        },
+        {
+          "name": "561-b03.14a",
+          "size": 32768,
+          "crc32": "aef7df48",
+          "sha1": ""
+        },
+        {
+          "name": "561-b04.15a",
+          "size": 32768,
+          "crc32": "94bd4bd7",
+          "sha1": ""
+        },
+        {
+          "name": "561-b07.14c",
+          "size": 32768,
+          "crc32": "e9bd6250",
+          "sha1": ""
+        },
+        {
+          "name": "561-b08.15c",
+          "size": 32768,
+          "crc32": "b7236567",
+          "sha1": ""
+        },
+        {
+          "name": "561-b09.9c",
+          "size": 16384,
+          "crc32": "539d0c49",
+          "sha1": ""
+        },
+        {
+          "name": "561-c01.12a",
+          "size": 32768,
+          "crc32": "56245bfd",
+          "sha1": ""
+        },
+        {
+          "name": "561-c02.13a",
+          "size": 32768,
+          "crc32": "3407b7cb",
+          "sha1": ""
+        },
+        {
+          "name": "561-c05.12c",
+          "size": 32768,
+          "crc32": "8d651f44",
+          "sha1": ""
+        },
+        {
+          "name": "561-c06.13c",
+          "size": 32768,
+          "crc32": "209942d4",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
       "name": "midssio.zip",
       "set": "midssio",
       "description": "Midway SSIO Sound Board Internal pROM",
@@ -3215,6 +3778,83 @@
           "name": "82s123.12d",
           "size": 32,
           "crc32": "e1281ee9",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "ms5pcb.zip",
+      "set": "ms5pcb",
+      "description": "Metal Slug 5 (JAMMA PCB)",
+      "members": [
+        {
+          "name": "000-lo.lo",
+          "size": 131072,
+          "crc32": "5a86cff2",
+          "sha1": ""
+        },
+        {
+          "name": "268-c1.c1",
+          "size": 16777216,
+          "crc32": "802042e8",
+          "sha1": ""
+        },
+        {
+          "name": "268-c2.c2",
+          "size": 16777216,
+          "crc32": "3b89fb9f",
+          "sha1": ""
+        },
+        {
+          "name": "268-c3.c3",
+          "size": 16777216,
+          "crc32": "0f3f59e3",
+          "sha1": ""
+        },
+        {
+          "name": "268-c4.c4",
+          "size": 16777216,
+          "crc32": "3ad8435a",
+          "sha1": ""
+        },
+        {
+          "name": "268-m1.m1",
+          "size": 524288,
+          "crc32": "4a5a6e0e",
+          "sha1": ""
+        },
+        {
+          "name": "268-p1r.p1",
+          "size": 4194304,
+          "crc32": "d0466792",
+          "sha1": ""
+        },
+        {
+          "name": "268-p2r.p2",
+          "size": 4194304,
+          "crc32": "fbf6b61e",
+          "sha1": ""
+        },
+        {
+          "name": "268-v1.v1",
+          "size": 16777216,
+          "crc32": "8458afe5",
+          "sha1": ""
+        },
+        {
+          "name": "sfix.sfix",
+          "size": 131072,
+          "crc32": "c2ea0cfd",
+          "sha1": ""
+        },
+        {
+          "name": "sp-4x.sp1",
+          "size": 524288,
+          "crc32": "b4590283",
           "sha1": ""
         }
       ],
@@ -3266,6 +3906,83 @@
           "name": "c75.bin",
           "size": 16384,
           "crc32": "42f539a5",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "nemesis.zip",
+      "set": "nemesis",
+      "description": "Nemesis (ROM version)",
+      "members": [
+        {
+          "name": "400-a01.fse",
+          "size": 256,
+          "crc32": "5827b1e8",
+          "sha1": ""
+        },
+        {
+          "name": "400-a02.fse",
+          "size": 256,
+          "crc32": "2f44f970",
+          "sha1": ""
+        },
+        {
+          "name": "456-d01.12a",
+          "size": 32768,
+          "crc32": "35ff1aaa",
+          "sha1": ""
+        },
+        {
+          "name": "456-d02.13a",
+          "size": 32768,
+          "crc32": "ac0cf163",
+          "sha1": ""
+        },
+        {
+          "name": "456-d03.14a",
+          "size": 32768,
+          "crc32": "8cefb25f",
+          "sha1": ""
+        },
+        {
+          "name": "456-d04.15a",
+          "size": 32768,
+          "crc32": "9ca75592",
+          "sha1": ""
+        },
+        {
+          "name": "456-d05.12c",
+          "size": 32768,
+          "crc32": "23155faa",
+          "sha1": ""
+        },
+        {
+          "name": "456-d06.13c",
+          "size": 32768,
+          "crc32": "023f22a9",
+          "sha1": ""
+        },
+        {
+          "name": "456-d07.14c",
+          "size": 32768,
+          "crc32": "d50b82cb",
+          "sha1": ""
+        },
+        {
+          "name": "456-d08.15c",
+          "size": 32768,
+          "crc32": "03c0b7f5",
+          "sha1": ""
+        },
+        {
+          "name": "456-d09.9c",
+          "size": 16384,
+          "crc32": "26bf9636",
           "sha1": ""
         }
       ],
@@ -4409,6 +5126,215 @@
           "name": "sfiii2_usa.29f400.u2",
           "size": 524288,
           "crc32": "75dd72e0",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "sfiii2a.zip",
+      "set": "sfiii2a",
+      "description": "Street Fighter III 2nd Impact: Giant Attack (Asia 970930)",
+      "members": [
+        {
+          "name": "sfiii2-simm1.0",
+          "size": 2097152,
+          "crc32": "2d666f0b",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm1.1",
+          "size": 2097152,
+          "crc32": "2a3a8ef6",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm1.2",
+          "size": 2097152,
+          "crc32": "161d2206",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm1.3",
+          "size": 2097152,
+          "crc32": "87ded8a3",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.0",
+          "size": 2097152,
+          "crc32": "94a4ce0f",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.1",
+          "size": 2097152,
+          "crc32": "67585033",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.2",
+          "size": 2097152,
+          "crc32": "fabffcd5",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.3",
+          "size": 2097152,
+          "crc32": "623c09ca",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.0",
+          "size": 2097152,
+          "crc32": "dab2d766",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.1",
+          "size": 2097152,
+          "crc32": "1f2aa34b",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.2",
+          "size": 2097152,
+          "crc32": "6f1a04eb",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.3",
+          "size": 2097152,
+          "crc32": "e05ef205",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.4",
+          "size": 2097152,
+          "crc32": "affb074f",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.5",
+          "size": 2097152,
+          "crc32": "6962872e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.6",
+          "size": 2097152,
+          "crc32": "6eed87de",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.7",
+          "size": 2097152,
+          "crc32": "e18f479e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.0",
+          "size": 2097152,
+          "crc32": "764c2503",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.1",
+          "size": 2097152,
+          "crc32": "3e16af6e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.2",
+          "size": 2097152,
+          "crc32": "215705e6",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.3",
+          "size": 2097152,
+          "crc32": "e30cbd9c",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.4",
+          "size": 2097152,
+          "crc32": "4185ded9",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.5",
+          "size": 2097152,
+          "crc32": "4e8db013",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.6",
+          "size": 2097152,
+          "crc32": "08df48ce",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.7",
+          "size": 2097152,
+          "crc32": "bb8f80a5",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.0",
+          "size": 2097152,
+          "crc32": "ebdc4787",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.1",
+          "size": 2097152,
+          "crc32": "6b7c550e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.2",
+          "size": 2097152,
+          "crc32": "56ff8c50",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.3",
+          "size": 2097152,
+          "crc32": "3f2ac3e9",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.4",
+          "size": 2097152,
+          "crc32": "48cda50e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.5",
+          "size": 2097152,
+          "crc32": "520c0af6",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.6",
+          "size": 2097152,
+          "crc32": "2edc5986",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.7",
+          "size": 2097152,
+          "crc32": "93ffa199",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2_asia.29f400.u2",
+          "size": 524288,
+          "crc32": "4518d589",
           "sha1": ""
         }
       ],
@@ -6926,6 +7852,155 @@
     },
     {
       "dat": "FinalBurn Neo - Arcade Games",
+      "name": "sfiiina.zip",
+      "set": "sfiiina",
+      "description": "Street Fighter III: New Generation (Asia 970204, NO CD, BIOS set 2)",
+      "members": [
+        {
+          "name": "sfiii-simm1.0",
+          "size": 2097152,
+          "crc32": "cfc9e45a",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm1.1",
+          "size": 2097152,
+          "crc32": "57920546",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm1.2",
+          "size": 2097152,
+          "crc32": "0d8f2680",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm1.3",
+          "size": 2097152,
+          "crc32": "ea4ca054",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.0",
+          "size": 2097152,
+          "crc32": "080b3bd3",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.1",
+          "size": 2097152,
+          "crc32": "5c356f2f",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.2",
+          "size": 2097152,
+          "crc32": "f9c97a45",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.3",
+          "size": 2097152,
+          "crc32": "09de3ead",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.4",
+          "size": 2097152,
+          "crc32": "7dd7e1f3",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.5",
+          "size": 2097152,
+          "crc32": "47a03a3a",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.6",
+          "size": 2097152,
+          "crc32": "e9eb7a26",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm3.7",
+          "size": 2097152,
+          "crc32": "7f44395c",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.0",
+          "size": 2097152,
+          "crc32": "9ac080fc",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.1",
+          "size": 2097152,
+          "crc32": "6e2c4c94",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.2",
+          "size": 2097152,
+          "crc32": "8afc22d4",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.3",
+          "size": 2097152,
+          "crc32": "9f3873b8",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.4",
+          "size": 2097152,
+          "crc32": "166b3c97",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.5",
+          "size": 2097152,
+          "crc32": "e5ea2547",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.6",
+          "size": 2097152,
+          "crc32": "e85b9fdd",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm4.7",
+          "size": 2097152,
+          "crc32": "362c01b7",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm5.0",
+          "size": 2097152,
+          "crc32": "9bc108b2",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii-simm5.1",
+          "size": 2097152,
+          "crc32": "c6f1c066",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii_asia_nocd.29f400.u2",
+          "size": 524288,
+          "crc32": "73e32463",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
       "name": "sfiiiu.zip",
       "set": "sfiiiu",
       "description": "Street Fighter III: New Generation (USA 970204)",
@@ -7163,6 +8238,178 @@
     },
     {
       "dat": "FinalBurn Neo - Arcade Games",
+      "name": "svcpcb.zip",
+      "set": "svcpcb",
+      "description": "SNK vs. Capcom - SVC Chaos (JAMMA PCB, NEO-MVH MVO PCB)",
+      "members": [
+        {
+          "name": "000-lo.lo",
+          "size": 131072,
+          "crc32": "5a86cff2",
+          "sha1": ""
+        },
+        {
+          "name": "269-c1.c1",
+          "size": 33554432,
+          "crc32": "1b608f9c",
+          "sha1": ""
+        },
+        {
+          "name": "269-c2.c2",
+          "size": 33554432,
+          "crc32": "5a95f294",
+          "sha1": ""
+        },
+        {
+          "name": "269-m1.m1",
+          "size": 524288,
+          "crc32": "f6819d00",
+          "sha1": ""
+        },
+        {
+          "name": "269-p1.p1",
+          "size": 33554432,
+          "crc32": "432cfdfc",
+          "sha1": ""
+        },
+        {
+          "name": "269-v1.v1",
+          "size": 8388608,
+          "crc32": "c659b34c",
+          "sha1": ""
+        },
+        {
+          "name": "269-v2.v2",
+          "size": 8388608,
+          "crc32": "dd903835",
+          "sha1": ""
+        },
+        {
+          "name": "sfix.sfix",
+          "size": 131072,
+          "crc32": "c2ea0cfd",
+          "sha1": ""
+        },
+        {
+          "name": "sp-4x.sp1",
+          "size": 524288,
+          "crc32": "b4590283",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "svgpcb.zip",
+      "set": "svgpcb",
+      "description": "S.V.G. - Spectral vs Generation / Sheng Mo Shiji (M68k label V100JP) (ARM label V100JP, ROM 05/12/05 S.V.G V100) (Japan, JAMMA PCB)",
+      "members": [
+        {
+          "name": "igs_a05601w064.u44",
+          "size": 8388608,
+          "crc32": "ea6453e4",
+          "sha1": ""
+        },
+        {
+          "name": "igs_a05602w064.u45",
+          "size": 8388608,
+          "crc32": "6d00621b",
+          "sha1": ""
+        },
+        {
+          "name": "igs_a05603w064.u46",
+          "size": 8388608,
+          "crc32": "7b71c64f",
+          "sha1": ""
+        },
+        {
+          "name": "igs_a05604w032.u47",
+          "size": 4194304,
+          "crc32": "9452a567",
+          "sha1": ""
+        },
+        {
+          "name": "igs_b05601w064.u61",
+          "size": 8388608,
+          "crc32": "35c0a489",
+          "sha1": ""
+        },
+        {
+          "name": "igs_b05602w064.u62",
+          "size": 8388608,
+          "crc32": "8aad3f85",
+          "sha1": ""
+        },
+        {
+          "name": "igs_t05601w016.u70",
+          "size": 2097152,
+          "crc32": "03e110dc",
+          "sha1": ""
+        },
+        {
+          "name": "igs_w05601b064.u30",
+          "size": 8388608,
+          "crc32": "bfe61a71",
+          "sha1": ""
+        },
+        {
+          "name": "igs_w05602b032.u31",
+          "size": 4194304,
+          "crc32": "0685166d",
+          "sha1": ""
+        },
+        {
+          "name": "pgm_m01s.rom",
+          "size": 2097152,
+          "crc32": "45ae7159",
+          "sha1": ""
+        },
+        {
+          "name": "pgm_t01s.rom",
+          "size": 2097152,
+          "crc32": "1a7123a0",
+          "sha1": ""
+        },
+        {
+          "name": "svg_bios.u49",
+          "size": 131072,
+          "crc32": "3346401f",
+          "sha1": ""
+        },
+        {
+          "name": "svg_v100jp_u50.u50",
+          "size": 524288,
+          "crc32": "8d0405e4",
+          "sha1": ""
+        },
+        {
+          "name": "svg_v100jp_u64.u64",
+          "size": 4194304,
+          "crc32": "399d4a8b",
+          "sha1": ""
+        },
+        {
+          "name": "svg_v100jp_u65.u65",
+          "size": 4194304,
+          "crc32": "6e1c33b1",
+          "sha1": ""
+        },
+        {
+          "name": "svgcpb_igs027a_v100_japan.bin",
+          "size": 15992,
+          "crc32": "7a59da5d",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
       "name": "tekipaki.zip",
       "set": "tekipaki",
       "description": "Teki Paki",
@@ -7195,6 +8442,59 @@
           "name": "tp020-4.bin",
           "size": 524288,
           "crc32": "3ebbe41e",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "twinbee.zip",
+      "set": "twinbee",
+      "description": "TwinBee (ROM version)",
+      "members": [
+        {
+          "name": "400-a01.fse",
+          "size": 256,
+          "crc32": "5827b1e8",
+          "sha1": ""
+        },
+        {
+          "name": "400-a02.fse",
+          "size": 256,
+          "crc32": "2f44f970",
+          "sha1": ""
+        },
+        {
+          "name": "400-a04.10l",
+          "size": 32768,
+          "crc32": "d02c9552",
+          "sha1": ""
+        },
+        {
+          "name": "400-a06.15l",
+          "size": 32768,
+          "crc32": "b99d8cff",
+          "sha1": ""
+        },
+        {
+          "name": "400-e03.5l",
+          "size": 8192,
+          "crc32": "a5a8e57d",
+          "sha1": ""
+        },
+        {
+          "name": "412-a05.12l",
+          "size": 131072,
+          "crc32": "2b357069",
+          "sha1": ""
+        },
+        {
+          "name": "412-a07.17l",
+          "size": 131072,
+          "crc32": "d93c5499",
           "sha1": ""
         }
       ],
@@ -7962,6 +9262,47 @@
       ]
     },
     {
+      "dat": "FinalBurn Neo - ColecoVision Games",
+      "name": "twinbee.zip",
+      "set": "twinbee",
+      "description": "TwinBee (SGM) (HB)",
+      "members": [
+        {
+          "name": "TwinBee SGM (2014)(Team Pixelboy).rom",
+          "size": 131072,
+          "crc32": "e7e07a70",
+          "sha1": ""
+        },
+        {
+          "name": "coleco.rom",
+          "size": 8192,
+          "crc32": "3aa93ef3",
+          "sha1": ""
+        },
+        {
+          "name": "colecoa.rom",
+          "size": 8192,
+          "crc32": "39bb16fc",
+          "sha1": ""
+        },
+        {
+          "name": "czz50.rom",
+          "size": 16384,
+          "crc32": "4999abc6",
+          "sha1": ""
+        },
+        {
+          "name": "svi603.rom",
+          "size": 8192,
+          "crc32": "19e91b82",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - ColecoVision Games"
+      ]
+    },
+    {
       "dat": "FinalBurn Neo - FDS Games",
       "name": "fdsbios.zip",
       "set": "fdsbios",
@@ -7988,6 +9329,29 @@
           "name": "Galaga (Japan)(1990)(Namcot).fds",
           "size": 65516,
           "crc32": "a9ba7801",
+          "sha1": ""
+        },
+        {
+          "name": "fdsbios.nes",
+          "size": 8192,
+          "crc32": "5e607dcf",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - FDS Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - FDS Games",
+      "name": "twinbee.zip",
+      "set": "twinbee",
+      "description": "TwinBee (Japan)",
+      "members": [
+        {
+          "name": "TwinBee (Japan)(1988)(Konami).fds",
+          "size": 65500,
+          "crc32": "517be396",
           "sha1": ""
         },
         {
@@ -8040,6 +9404,29 @@
           "name": "gba_bios.bin",
           "size": 16384,
           "crc32": "81977335",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - GBA Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - GBA Games",
+      "name": "jajamaru.zip",
+      "set": "jajamaru",
+      "description": "Jajamaru Jr. Denshouki - Jalecolle mo Arisourou (Japan)",
+      "members": [
+        {
+          "name": "gba_bios.bin",
+          "size": 16384,
+          "crc32": "81977335",
+          "sha1": ""
+        },
+        {
+          "name": "jajamaru jr. denshouki - jalecolle mo arisourou (japan).bin",
+          "size": 4194304,
+          "crc32": "8ce6bce8",
           "sha1": ""
         }
       ],
@@ -8287,6 +9674,58 @@
       ]
     },
     {
+      "dat": "FinalBurn Neo - MSX 1 Games",
+      "name": "twinbee.zip",
+      "set": "twinbee",
+      "description": "Twin Bee (Japan)",
+      "members": [
+        {
+          "name": "Twin Bee (Japan)(1986)(Konami).rom",
+          "size": 32768,
+          "crc32": "c730d4a4",
+          "sha1": ""
+        },
+        {
+          "name": "kanji.rom",
+          "size": 262144,
+          "crc32": "1f6406fb",
+          "sha1": ""
+        },
+        {
+          "name": "msx.rom",
+          "size": 32768,
+          "crc32": "a317e6b4",
+          "sha1": ""
+        },
+        {
+          "name": "msxj.rom",
+          "size": 32768,
+          "crc32": "071135e0",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - MSX 1 Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Master System Games",
+      "name": "nemesis.zip",
+      "set": "nemesis",
+      "description": "Nemesis (Korea)",
+      "members": [
+        {
+          "name": "Nemesis (Korea)(1987)(Zemina).sms",
+          "size": 131072,
+          "crc32": "e316c06d",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Master System Games"
+      ]
+    },
+    {
       "dat": "FinalBurn Neo - Megadrive Games",
       "name": "bubsys.zip",
       "set": "bubsys",
@@ -8356,6 +9795,23 @@
     },
     {
       "dat": "FinalBurn Neo - NES Games",
+      "name": "duckhunt.zip",
+      "set": "duckhunt",
+      "description": "Duck Hunt (USA)",
+      "members": [
+        {
+          "name": "Duck Hunt (USA)(1984-85)(Nintendo).nes",
+          "size": 24592,
+          "crc32": "4644085e",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - NES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - NES Games",
       "name": "galaga.zip",
       "set": "galaga",
       "description": "Galaga: Demons of Death (USA)",
@@ -8364,6 +9820,40 @@
           "name": "Galaga - Demons of Death (USA)(1988)(Bandai).nes",
           "size": 40976,
           "crc32": "e36d5991",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - NES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - NES Games",
+      "name": "topgun.zip",
+      "set": "topgun",
+      "description": "Top Gun (USA, Rev. A)",
+      "members": [
+        {
+          "name": "Top Gun (USA, Rev A)(1987)(Konami).nes",
+          "size": 131088,
+          "crc32": "0c9a67a8",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - NES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - NES Games",
+      "name": "twinbee.zip",
+      "set": "twinbee",
+      "description": "TwinBee (Japan)",
+      "members": [
+        {
+          "name": "TwinBee (Japan)(1986)(Konami).nes",
+          "size": 49168,
+          "crc32": "4433ba0a",
           "sha1": ""
         }
       ],
@@ -8404,6 +9894,23 @@
           "name": "Fushigi no Yume no Alice (Japan)(1990)(Face).pce",
           "size": 393216,
           "crc32": "12c4e6fd",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - PC-Engine Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - PC-Engine Games",
+      "name": "twinbee.zip",
+      "set": "twinbee",
+      "description": "Detana!! TwinBee (Japan)",
+      "members": [
+        {
+          "name": "Detana!! TwinBee (Japan)(1992)(Konami).pce",
+          "size": 524288,
+          "crc32": "5cf59d80",
           "sha1": ""
         }
       ],
@@ -8506,6 +10013,125 @@
           "name": "dsp4.bin",
           "size": 10240,
           "crc32": "ce0c7783",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - SNES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - SNES Games",
+      "name": "sns_dsp1bleg.zip",
+      "set": "dsp1b",
+      "description": "DSP-1B",
+      "members": [
+        {
+          "name": "dsp1b.bin",
+          "size": 10240,
+          "crc32": "453557e0",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - SNES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - SNES Games",
+      "name": "sns_dsp1leg.zip",
+      "set": "dsp1",
+      "description": "DSP-1",
+      "members": [
+        {
+          "name": "dsp1.bin",
+          "size": 10240,
+          "crc32": "2838f9f5",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - SNES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - SNES Games",
+      "name": "sns_dsp2leg.zip",
+      "set": "dsp2",
+      "description": "DSP-2",
+      "members": [
+        {
+          "name": "dsp2.bin",
+          "size": 10240,
+          "crc32": "8e9fbd9b",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - SNES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - SNES Games",
+      "name": "sns_dsp3leg.zip",
+      "set": "dsp3",
+      "description": "DSP-3",
+      "members": [
+        {
+          "name": "dsp3.bin",
+          "size": 10240,
+          "crc32": "6b86728a",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - SNES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - SNES Games",
+      "name": "sns_dsp4leg.zip",
+      "set": "dsp4",
+      "description": "DSP-4",
+      "members": [
+        {
+          "name": "dsp4.bin",
+          "size": 10240,
+          "crc32": "ce0c7783",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - SNES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - SNES Games",
+      "name": "sns_seta10leg.zip",
+      "set": "st010",
+      "description": "Seta ST010",
+      "members": [
+        {
+          "name": "st010.bin",
+          "size": 69632,
+          "crc32": "aa11ee2d",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - SNES Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - SNES Games",
+      "name": "sns_seta11leg.zip",
+      "set": "st011",
+      "description": "Seta ST011",
+      "members": [
+        {
+          "name": "st011.bin",
+          "size": 69632,
+          "crc32": "34d2952c",
           "sha1": ""
         }
       ],
@@ -8692,6 +10318,35 @@
     },
     {
       "dat": "FinalBurn Neo - ZX Spectrum Games",
+      "name": "badlands.zip",
+      "set": "badlands",
+      "description": "Badlands (48K-128K)",
+      "members": [
+        {
+          "name": "Badlands 48K-128K (1990)(Domark).tap",
+          "size": 33672,
+          "crc32": "5df53959",
+          "sha1": ""
+        },
+        {
+          "name": "zx128_0.rom",
+          "size": 16384,
+          "crc32": "e76799d2",
+          "sha1": ""
+        },
+        {
+          "name": "zx128_1.rom",
+          "size": 16384,
+          "crc32": "b96a36be",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - ZX Spectrum Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - ZX Spectrum Games",
       "name": "cobra.zip",
       "set": "cobra",
       "description": "Cobra (48K)",
@@ -8807,6 +10462,29 @@
     },
     {
       "dat": "FinalBurn Neo - ZX Spectrum Games",
+      "name": "nemesis.zip",
+      "set": "nemesis",
+      "description": "Nemesis: The Final Challenge (48K)",
+      "members": [
+        {
+          "name": "Nemesis 48K (1987)(The Hit Squad).z80",
+          "size": 42781,
+          "crc32": "ad42684d",
+          "sha1": ""
+        },
+        {
+          "name": "spectrum.rom",
+          "size": 16384,
+          "crc32": "ddee531f",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - ZX Spectrum Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - ZX Spectrum Games",
       "name": "spec128.zip",
       "set": "spec128",
       "description": "ZX Spectrum 128 BIOS",
@@ -8865,6 +10543,23 @@
     },
     {
       "dat": "FinalBurn Neo - ZX Spectrum Games",
+      "name": "spec48k.zip",
+      "set": "spec48k",
+      "description": "ZX Spectrum 16K/48K (OS)",
+      "members": [
+        {
+          "name": "spectrum.rom",
+          "size": 16384,
+          "crc32": "ddee531f",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - ZX Spectrum Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - ZX Spectrum Games",
       "name": "spectrum.zip",
       "set": "spectrum",
       "description": "ZX Spectrum BIOS",
@@ -8883,25 +10578,25 @@
   ],
   "upstream": {
     "blobs": {
-      "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat": "06fd53978335037cbf2fc1c25f97348cb0dab319",
+      "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat": "653348431e89ef42c149710dc6b0ec8fa3786d7b",
       "FinalBurn Neo (ClrMame Pro XML, Bally Astrocade Games only).dat": "7acfd6d42e70c751c858ef069a62c77c4048a0ec",
       "FinalBurn Neo (ClrMame Pro XML, ColecoVision only).dat": "414430a8569c650e5f2ea8e726bce3050aa8ef25",
-      "FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat": "f42114f934da56c64627980e5188d3146534ad04",
+      "FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat": "3876d4e8edceb12afc31ea8ed15d4d2034a7e7d9",
       "FinalBurn Neo (ClrMame Pro XML, Fairchild Channel F Games only).dat": "90ce8903a387ff2086fc1163abd9ced97c2c76d0",
-      "FinalBurn Neo (ClrMame Pro XML, GBA Games only).dat": "69d6cd81bbd38a822886954cc782c9a5a4e924fe",
-      "FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat": "86072046457f04b335a82e64ff2762bfc86ce084",
-      "FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat": "63e44dfe07180a1cb946ac86dd0c3b7a3349d7a9",
-      "FinalBurn Neo (ClrMame Pro XML, Master System only).dat": "fafc4d832c45de94809d36b828bd15e6f9986a06",
-      "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat": "329ac56591d8b4a2cad15a51a9863b7c7141d8e2",
-      "FinalBurn Neo (ClrMame Pro XML, NES Games only).dat": "bb5feb4d4610f527c1761bce25a729b2413f16d5",
-      "FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat": "f6a8a097b8d1c073223767532044223cb78c2ed0",
-      "FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat": "421716a0ea7d9c74d33a568a538dda63d44eb1b5",
-      "FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat": "ee7a919b06c06505026cf99e93a34cc4a6df6766",
-      "FinalBurn Neo (ClrMame Pro XML, SNES Games only).dat": "21aadc7ce57083518f3b4019b254e9d1733f6cfc",
-      "FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat": "9da354dfcf066623e12d582ed3631177981e500b",
+      "FinalBurn Neo (ClrMame Pro XML, GBA Games only).dat": "0195b7e05f85e5232682278b49eb546740e75827",
+      "FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat": "5a6731571154d2f0f2cb2b0cd27fe40cb7875043",
+      "FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat": "ad53c313f23f2da392228421b181803629ddcbff",
+      "FinalBurn Neo (ClrMame Pro XML, Master System only).dat": "3f9881c9bf7c62fd4a1b58eaa324b40b0ef9cbd9",
+      "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat": "12c083528b133f58f5d88d09fbacead3e274d263",
+      "FinalBurn Neo (ClrMame Pro XML, NES Games only).dat": "6bed4f118cc7d049f85c18590599e636370eec6a",
+      "FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat": "d69197d2f9a5d69b122759e9a8c04c4102ba32e1",
+      "FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat": "88c6e65f9feff46edf7e079cac8dac9f16eea155",
+      "FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat": "70f0bad3677bd4883f97e439ba8b0b67fd70f4c7",
+      "FinalBurn Neo (ClrMame Pro XML, SNES Games only).dat": "6e344243d179655291e4795e8c5d32867ec952f3",
+      "FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat": "0ce025fee6d578668329f1c35142889c061da2bf",
       "FinalBurn Neo (ClrMame Pro XML, SuprGrafx only).dat": "bbdb2e89a5a278133ed8ea71b2c29ae92a27db85",
       "FinalBurn Neo (ClrMame Pro XML, TurboGrafx16 only).dat": "01be51eaf3ee6cb4c0cfe4b499c4086f3400000a",
-      "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat": "140833ab63c42c44c79740af2c8ad7a67f6dd5b7"
+      "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat": "2e90de08e12a7381cfc5c27e07768887852a1391"
     }
   }
 }
