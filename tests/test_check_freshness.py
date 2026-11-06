@@ -8,6 +8,7 @@ report is folded, since each of those decides whether a row says STALE.
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 import tempfile
@@ -351,6 +352,43 @@ class PinParsingTests(unittest.TestCase):
         self.assertFalse(cf.specifier_allows("==4.23.0", "4.26.0"))
         self.assertTrue(cf.specifier_allows("==4.23.0", "4.23.0"))
         self.assertTrue(cf.specifier_allows(">=10.14", "12.0.1"))
+
+
+class SiteNpmPins(unittest.TestCase):
+    """The site's npm dependencies are pinned to exact versions in
+    website/package.json, and the ci area compared only the PyPI and action
+    pins: astro 7.4.2 stayed behind 7.4.7 with no STALE row."""
+
+    def test_both_dependency_kinds_are_read(self):
+        pins = cf.parse_npm_pins(
+            '{"dependencies": {"astro": "7.4.2"}, "devDependencies": {"x": "^1.0.0"}}'
+        )
+        self.assertEqual(pins, {"astro": "7.4.2", "x": "^1.0.0"})
+
+    def test_a_newer_release_is_stale(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            package = Path(tmp) / "package.json"
+            package.write_text(json.dumps({"dependencies": {
+                "astro": "7.4.2", "@astrojs/starlight": "0.42.9", "y": "^2.0.0",
+            }}))
+            latest = {"astro": "7.4.7", "@astrojs/starlight": "0.42.9"}
+            def answer(url):
+                name = url.split("registry.npmjs.org/", 1)[1].rsplit("/latest", 1)[0]
+                return {"version": latest[name]}
+            with mock.patch.object(cf, "SITE_PACKAGE", package), \
+                    mock.patch.object(cf.upstream, "_http_json", side_effect=answer):
+                rows = {f.subject: f for f in cf._npm_findings()}
+        self.assertEqual(rows["npm:astro"].status, cf.STALE)
+        self.assertEqual(rows["npm:astro"].remote, "7.4.7")
+        self.assertEqual(rows["npm:@astrojs/starlight"].status, cf.OK)
+        self.assertEqual(rows["npm:y"].status, cf.UNKNOWN)
+
+    def test_the_ci_area_reads_the_site_pins(self):
+        with mock.patch.object(cf, "_npm_findings", return_value=[]) as npm, \
+                mock.patch.object(cf, "parse_pip_pins", return_value={}), \
+                mock.patch.object(cf, "parse_action_pins", return_value={}):
+            cf.check_ci("unused", offline=False)
+        npm.assert_called_once()
 
 
 class RomFolderPins(unittest.TestCase):

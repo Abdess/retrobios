@@ -688,8 +688,9 @@ directories are checked against their upstream, dump catalogs and romset
 snapshots against the catalog they were read from (Redump DAT versions, the
 No-Intro daily rebuild, the newest TOSEC pack, the newest MAME release, the
 git blobs of the FBNeo DATs), the game catalogs of `games/catalogs/` against
-the No-Intro pack and the Redump datfiles they were read from, and the CI
-toolchain against PyPI and the actions' latest releases.
+the No-Intro pack and the Redump datfiles they were read from, the CI
+toolchain against PyPI and the actions' latest releases, and the site's exact
+npm pins in `website/package.json` against the npm registry.
 
 The `native` area needs no network. It reads the cache `export_native.py`
 patches from and reports an original that is absent, that came from another
