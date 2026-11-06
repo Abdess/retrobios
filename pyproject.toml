@@ -33,6 +33,10 @@ dev = [
     "pyte>=0.8.2",
     "hypothesis>=6.100",
     "vermin>=1.9",
+    # The packaging guard reads this file through setuptools, which pip
+    # installs only in its isolated build environment and 3.12 no longer
+    # bundles: without it the guard skipped on every CI run.
+    "setuptools>=61",
 ]
 # The site is built by Astro Starlight from website/package.json and its
 # lockfile (npm ci --prefix website): no Python package builds it.

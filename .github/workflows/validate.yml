@@ -223,8 +223,9 @@ jobs:
       # heading guard's premise, and skipped on every run without it. pyte
       # reads the installer's full screen back in its end-to-end tests,
       # hypothesis fuzzes its key decoder, and vermin holds install.py to 3.8.
+      # setuptools reads pyproject.toml for the packaging guard.
       - name: Install dependencies
-        run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0" "markdown==3.10.2" "pyte==0.8.2" "hypothesis==6.170.8" "vermin==1.9.2"
+        run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0" "markdown==3.10.2" "pyte==0.8.2" "hypothesis==6.170.8" "vermin==1.9.2" "setuptools==80.9.0"
 
       # The full screen also runs under the 3.8 floor: the end-to-end tests
       # start install.py with the interpreter that runs them.

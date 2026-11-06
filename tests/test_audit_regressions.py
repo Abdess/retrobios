@@ -2766,6 +2766,10 @@ class TheProjectInstallsWithPip(unittest.TestCase):
         import importlib.util  # noqa: PLC0415
 
         if importlib.util.find_spec("setuptools") is None:
+            # The dev extra and CI install it: skipped there, the guard held
+            # nothing on any run.
+            if os.environ.get("CI"):
+                self.fail("CI must install setuptools")
             self.skipTest("setuptools is not installed")
         program = (
             "from setuptools.dist import Distribution\n"

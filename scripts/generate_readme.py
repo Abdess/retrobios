@@ -974,7 +974,7 @@ validation above is its check. For code, profiles or platform files, these are
 the checks CI runs on a pull request (Python 3.12 or newer):
 
 ```bash
-pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin
+pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin setuptools
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
 python scripts/profile_sync.py --added --base upstream/main --strict  # each profile the branch adds
