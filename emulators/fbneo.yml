@@ -51,10 +51,12 @@ data_directories:
   - ref: fbneo-cheats
     unread_on: [romm]
     destination: fbneo/cheats
+    required: false
     source_ref: "source src/burner/conc.cpp:167"
   - ref: fbneo-samples
     unread_on: [romm]
     destination: fbneo
+    required: false
     source_ref: "source src/burn/snd/samples.cpp:21-35"
 
 notes: |

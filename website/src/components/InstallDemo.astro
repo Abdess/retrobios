@@ -1,0 +1,115 @@
+---
+// The installer demo, recorded by scripts/make_demo.py and served from
+// public/assets/demo/. Nothing of it loads before it is on screen: the
+// poster and the sources are set by the script below once the video is in
+// view (preload="none", no src in the HTML). With reduced motion or Save-Data
+// the poster stays, and the button plays it. The button pauses it otherwise.
+interface Props {
+	description: string;
+	width: string;
+	height: string;
+}
+
+const { description, width, height } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const asset = (name: string) => `${base}assets/demo/${name}`;
+---
+
+<figure class="rb-demo" data-demo data-pagefind-ignore>
+	<video
+		width={width}
+		height={height}
+		muted
+		loop
+		playsinline
+		preload="none"
+		disablepictureinpicture
+		data-poster={asset('install.png')}
+		aria-describedby="rb-demo-text"
+	>
+		<source data-src={asset('install.webm')} type="video/webm" />
+		<source data-src={asset('install.mp4')} type="video/mp4" />
+	</video>
+	<button type="button" class="rb-demo-toggle" hidden>Play</button>
+	<figcaption id="rb-demo-text" class="sr-only">{description}</figcaption>
+</figure>
+
+<script>
+	const still = () =>
+		matchMedia('(prefers-reduced-motion: reduce)').matches ||
+		Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+
+	for (const figure of document.querySelectorAll<HTMLElement>('[data-demo]')) {
+		const video = figure.querySelector('video');
+		const toggle = figure.querySelector<HTMLButtonElement>('.rb-demo-toggle');
+		if (!video || !toggle) continue;
+		let wanted = !still();
+		let visible = false;
+		let loaded = false;
+		const sync = () => {
+			if (wanted && visible) {
+				if (!loaded) {
+					loaded = true;
+					for (const source of video.querySelectorAll('source')) source.src = source.dataset.src ?? '';
+					video.load();
+				}
+				video.play().catch(() => {
+					wanted = false;
+					toggle.textContent = 'Play';
+				});
+			} else {
+				video.pause();
+			}
+			toggle.textContent = wanted ? 'Pause' : 'Play';
+		};
+		toggle.hidden = false;
+		toggle.addEventListener('click', () => {
+			wanted = !wanted;
+			sync();
+		});
+		new IntersectionObserver(
+			(entries) => {
+				visible = entries.some((entry) => entry.isIntersecting);
+				if (visible && !video.poster) video.poster = video.dataset.poster ?? '';
+				sync();
+			},
+			{ threshold: 0.25 },
+		).observe(video);
+	}
+</script>
+
+<style>
+	.rb-demo {
+		position: relative;
+		margin-inline: 0;
+	}
+	.rb-demo video {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: #12131c;
+		border: 1px solid var(--rb-border);
+		border-radius: 0.5rem;
+	}
+	.rb-demo-toggle {
+		position: absolute;
+		inset-inline-end: 0.5rem;
+		inset-block-end: 0.5rem;
+		min-height: 2.75rem;
+		padding: 0.4rem 1rem;
+		font: inherit;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-white);
+		background: var(--rb-surface);
+		border: 1px solid var(--rb-border-strong);
+		border-radius: 0.4rem;
+		cursor: pointer;
+	}
+	.rb-demo-toggle:hover {
+		background: var(--sl-color-accent-low);
+	}
+	.rb-demo-toggle:focus-visible {
+		outline: 2px solid var(--sl-color-accent);
+		outline-offset: 2px;
+	}
+</style>

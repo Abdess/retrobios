@@ -3724,6 +3724,8 @@ def _check_data_directory(entry: object, where: str) -> None:
         values = entry.get(field, [])
         if not isinstance(values, list) or not all(isinstance(v, str) for v in values):
             raise ValueError(f"{where}.{field} is invalid")
+    if entry.get("optional", True) is not True:
+        raise ValueError(f"{where}.optional is invalid")
     files = entry.get("files")
     if not isinstance(files, dict) or not files or len(files) > MAX_MANIFEST_FILES:
         raise ValueError(f"{where}.files is invalid")
@@ -7393,11 +7395,16 @@ def _install_data_member(
             scratch.unlink(missing_ok=True)
 
 
-def select_data_directories(manifest: dict, files: list[dict], narrowed: bool) -> list[dict]:
-    """The data trees this install keeps: all, or those of a kept system."""
-    entries = manifest.get("data_directories") or []
+def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
+                            required_only: bool = False) -> list[dict]:
+    """The data trees this install keeps: all, or those of a kept system.
+    --required-only leaves out a tree every core reading it runs without
+    (`optional`): a GBA and a SNES game took FBNeo's cheats and samples,
+    3,472 files no game opened."""
+    entries = [e for e in manifest.get("data_directories") or []
+               if not (required_only and e.get("optional"))]
     if not narrowed:
-        return list(entries)
+        return entries
     kept = {system for f in files for system in entry_systems(f)}
     return [e for e in entries if kept & set(e.get("systems") or [])]
 
@@ -8824,7 +8831,8 @@ def _prompt_custom_selection(
     if bios_path is not None and not dry_run and current != INSTALLED_ONLY:
         kept = menu_choice(files, omitted, installed, current, False)[0]
         kept_trees = select_data_directories({"data_directories": trees}, kept,
-                                             narrowed or current is not None)
+                                             narrowed or current is not None,
+                                             isinstance(current, GamesChoice) and current.required)
         if kept and all_in_place(kept, kept_trees, bios_path):
             # Read before the menu, as the screen reads before it asks: a
             # rerun was offered an install that installs nothing, then told
@@ -8953,7 +8961,8 @@ def _print_menu_head(
     # The trees of the systems kept: 2636 data files of blueMSX, Dolphin
     # and PPSSPP were counted for every --system tried.
     kept_trees = select_data_directories({"data_directories": trees}, shown,
-                                         narrowed or current is not None)
+                                         narrowed or current is not None,
+                                         isinstance(current, GamesChoice) and current.required)
     data = sum(len(entry.get("files") or {}) for entry in kept_trees)
     data_size = sum(meta.get("size", 0) for entry in kept_trees
                     for meta in (entry.get("files") or {}).values())
@@ -9764,6 +9773,12 @@ def games_setups(index: dict, plat: str, bios_path: Path, os_type: str = "") -> 
     if not named:
         above = card_root_above(bios_path)
         named = above[0] if above else ""
+    if not named:
+        # --dest on a handheld's games part from a computer (ArkOS's
+        # EASYROMS/bios): detection never ran there, and the card's own rom
+        # folders sit beside the BIOS folder.
+        part = games_part(bios_path.parent)
+        named = part.name if part else ""
     key = _setup_key(named) if named else ""
     found = [name for name in sorted(setups) if key and (name == key or name.startswith(key + "-"))]
     if not found and plat in setups:
@@ -9816,10 +9831,14 @@ def games_root(setup: dict, bios_path: Path) -> Path | None:
 
 def _may_hold_games(bios_path: Path) -> bool:
     """Whether a rom folder could sit near this BIOS folder, said without the
-    network: a folder named roms in it or up to two levels above it, or a
-    path that runs through one (roms, games)."""
+    network: a folder named roms in it or up to two levels above it, a path
+    that runs through one (roms, games), or a handheld's games part, whose
+    console folders sit beside bios (ArkOS's EASYROMS plugged into a
+    computer was never offered its games)."""
     holders = [bios_path, *list(bios_path.absolute().parents)[:2]]
     if any(part.casefold() in ("roms", "games") for part in bios_path.absolute().parts[-3:]):
+        return True
+    if games_part(bios_path.parent) is not None:
         return True
     return any(entry.name.casefold() == "roms" and _entry_is_dir(entry)
                for holder in holders for entry in _list_dir(holder))
@@ -15671,7 +15690,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             != len(manifest.get("files", [])) + len(variants if case_kept else [])
             or games_applied
         )
-        data_dirs = select_data_directories(manifest, files, narrowed)
+        data_dirs = select_data_directories(manifest, files, narrowed,
+                                            bool(args.required_only))
         # The kinds as the plan and the menu head say them (parts_words),
         # the data files of the folders kept among them: this head said
         # BIOS files and game data beside a plan of three kinds, neither
@@ -21812,7 +21832,8 @@ def _plan_data(state: TuiState, check: dict) -> tuple[int, int | None]:
     if not _tui_estimating(state):
         data = check.get("data_missing", 0)
         return data, check.get("data_bytes") if data else None
-    trees = select_data_directories(state.manifest or {}, _choice_entries(state), True)
+    required = any(flag == "--required-only" for flag, _value in tui_flags(state))
+    trees = select_data_directories(state.manifest or {}, _choice_entries(state), True, required)
     sizes = [meta.get("size", 0) for entry in trees for meta in (entry.get("files") or {}).values()]
     return len(sizes), sum(sizes)
 

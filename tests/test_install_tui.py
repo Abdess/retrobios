@@ -12912,6 +12912,21 @@ class DriveIsACardByItsFiles(unittest.TestCase):
                 self.assertEqual([install.card_system(mount) for mount in mounts],
                                  [None, None, None])
 
+    def test_a_dest_on_a_games_part_reads_its_rom_folders(self):
+        """--dest EASYROMS/bios --for-games from a computer: detection never
+        ran on the card, the generic RetroArch folders were tried, and the
+        run kept every file of the list."""
+        arkos = games_part(self.root / "media" / "EASYROMS")
+        index = {"setups": {"arkos": {}, "retroarch": {}}}
+        with mock.patch.object(install, "_mount_points", return_value=frozenset()), \
+                mock.patch.object(install, "_drive_not_removable", return_value=False):
+            self.assertEqual(install.games_setups(index, "retroarch", arkos / "bios"), ["arkos"])
+            self.assertEqual(install.games_setups(index, "retroarch", self.root / "bios"),
+                             ["retroarch"])
+            # Its games are offered without --for-games: EASYROMS keeps no
+            # roms folder, its console folders sit beside bios.
+            self.assertTrue(install._may_hold_games(arkos / "bios"))
+
     def test_a_card_beside_a_data_drive_comes_first(self):
         """The ArkOS card and the data drive mounted,
         the data drive sorted first and took Enter. The card comes first in

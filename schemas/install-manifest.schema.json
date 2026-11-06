@@ -452,6 +452,11 @@
             },
             "description": "Platform systems whose cores read the tree."
           },
+          "optional": {
+            "type": "boolean",
+            "const": true,
+            "description": "Every core reading the tree runs without it (required: false in its profile): --required-only leaves it out."
+          },
           "files": {
             "type": "object",
             "additionalProperties": {

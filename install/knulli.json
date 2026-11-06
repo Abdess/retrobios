@@ -6,7 +6,7 @@
   "platform": "knulli",
   "display_name": "KNULLI",
   "version": "20260511",
-  "generated": "2026-11-05T23:59:37Z",
+  "generated": "2026-11-06T07:21:27Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -157933,7 +157933,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767
+      "archive_size": 5083767,
+      "optional": true
     },
     {
       "ref": "fbneo-samples",
@@ -158167,7 +158168,8 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 53006540
+      "archive_size": 53006540,
+      "optional": true
     },
     {
       "ref": "lrps2",

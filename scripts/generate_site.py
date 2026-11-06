@@ -82,6 +82,8 @@ from generate_readme import (
     NO_PACK,
     asset_links,
     contributing_text,
+    demo_description,
+    demo_facts,
     download_links,
     extract_notes,
     extract_targets,
@@ -92,6 +94,7 @@ import sitemarkup as markup
 import siteentries
 import siteinputs
 import retired_files
+import siteagents
 import sitestarlight
 from siteexports import generate_exports_page, load_export_reports
 from siteguides import (
@@ -515,6 +518,7 @@ def generate_home(
             "**Run one command.** Some setups have a ZIP.",
             "**Start a game.**",
         ]),
+        *install_demo(),
         "## Pick your device",
         "",
         *setup_picker(registry, display),
@@ -4152,6 +4156,20 @@ def first_screen_words() -> list[str]:
     # out.
     return [f"It asks **{installer.TUI_FOUND_TITLE}** (or **{installer.TUI_CHOOSE_TITLE}** "
             f"and **{installer.TUI_FOLDER_TITLE}**), then offers **{installer.TUI_INSTALL_ROW}**."]
+
+
+# The demo files the site serves (docs_assets/demo/, scripts/make_demo.py):
+# the GIF is the README's, the tape and demo.json are inputs.
+DEMO_ASSETS = ("install.webm", "install.mp4", "install.png")
+
+
+def install_demo() -> list[str]:
+    """The installer demo: a video that loads once it is on screen, its
+    description for screen readers."""
+    facts = demo_facts()
+    text = html.escape(demo_description(facts), quote=True)
+    return [f'<InstallDemo description="{text}" width="{facts["width"]}" '
+            f'height="{facts["height"]}" />', ""]
 
 
 def check_pass_line() -> str:
@@ -11956,6 +11974,7 @@ def generate_which_pack() -> str:
         "",
         *first_screen_words(),
         "",
+        *install_demo(),
         *trust_box(""),
         "**Check your folder later.** Add `--check`. It changes nothing.",
         "",
@@ -12315,6 +12334,10 @@ def _generate(args: argparse.Namespace) -> None:
         source = Path("docs_assets") / folder
         if source.is_dir():
             shutil.copytree(source, public / "assets" / dest, dirs_exist_ok=True)
+    demo_dest = public / "assets" / "demo"
+    demo_dest.mkdir(parents=True, exist_ok=True)
+    for name in DEMO_ASSETS:
+        shutil.copy2(Path("docs_assets") / "demo" / name, demo_dest / name)
     assets_src = Path(".github") / "assets"
     for name, dest_name in [("logo.png", "logo.png"), ("favicon.png", "favicon.png")]:
         src = assets_src / name
@@ -12368,6 +12391,9 @@ def _generate(args: argparse.Namespace) -> None:
     stats = compute_stats(db, coverages, profiles)
     stats["composition"] = compute_composition(db)
     write_if_changed(str(public / "stats.json"), generate_stats(stats))
+    # llms.txt and the ARD manifest an agent reads first, from the registry.
+    siteagents.write(public, sorted(((name, cov["platform"]) for name, cov in coverages.items()),
+                                    key=lambda row: row[1].casefold()), write_if_changed)
 
     # Computed once: the gap analysis page and the published gaps export must
     # report the same files.
