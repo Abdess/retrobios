@@ -88,8 +88,10 @@ Batocera's script compares the full string ([`batocera-systems:1088`](https://gi
 shorter than 32 characters matches no file there. The Batocera scraper completes such
 a value when exactly one MD5 in `database.json` starts with it
 (`_resolve_truncated_md5` in `scripts/scraper/batocera_scraper.py`) and keeps it as
-written otherwise. `resolve_local_file` matches a value still shorter than 32
-characters by prefix, and only for a file whose name the entry also names.
+written otherwise. `resolve_local_file` and `--from-md5` read a value still shorter
+than 32 characters by the same rule (`cut_md5_owner` in `scripts/hashing.py`), and the
+resolver keeps the file only when its name is one the entry names. Every verdict
+compares whole digests, as Batocera does: a cut value never verifies a file.
 
 ### md5_composite (Recalbox ZIP verification)
 

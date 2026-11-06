@@ -1300,23 +1300,29 @@ class OneBaselineVerdict(unittest.TestCase):
             )
 
     def test_the_builder_accepts_what_verify_accepts(self):
-        """verify took a 29-character md5 by prefix and a ZIP by its
-        composite, but the builder compared exact md5s and refused both when
-        another declared hash disagreed."""
+        """verify took a ZIP by its composite, but the builder compared exact
+        md5s and refused it when another declared hash disagreed. A value cut
+        short accepts nothing: Batocera compares the whole md5 string
+        (batocera-systems:1088), and verify accepted any prefix, down to one
+        digit."""
         import hashlib
 
         from scripts.common import md5_composite
-        from scripts.validation import baseline_verdict
+        from scripts.validation import baseline_verdict, digest_verdict
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             loose = Path(directory) / "abc.bin"
             loose.write_bytes(b"abc")
-            truncated = {"name": "abc.bin", "md5": hashlib.md5(b"abc").hexdigest()[:29],
-                         "crc32": "deadbeef"}
-            self.assertEqual(
-                baseline_verdict(truncated, str(loose), "hash_mismatch", "md5"),
-                ("frontend_digest_exact", None),
+            md5 = hashlib.md5(b"abc").hexdigest()
+            truncated = {"name": "abc.bin", "md5": md5[:29], "crc32": "deadbeef"}
+            self.assertIsNotNone(
+                baseline_verdict(truncated, str(loose), "hash_mismatch", "md5")[1]
             )
+            for length in (1, 29, 31):
+                self.assertFalse(
+                    digest_verdict({"md5": md5[:length]}, 3, lambda: {"md5": md5}, "md5")
+                )
+            self.assertTrue(digest_verdict({"md5": md5}, 3, lambda: {"md5": md5}, "md5"))
             archive = self._archive(Path(directory), "rom.bin")
             composite = {"name": "dragon32.zip", "md5": md5_composite(archive),
                          "crc32": "deadbeef"}

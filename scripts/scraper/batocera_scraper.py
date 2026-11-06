@@ -18,6 +18,7 @@ from pathlib import Path
 
 
 from common import yaml_load
+from hashing import cut_md5_owner
 from safeparse import yaml_load_upstream
 
 from .base_scraper import (
@@ -312,15 +313,15 @@ def _load_md5_index() -> dict[str, str]:
 
 
 def _resolve_truncated_md5(md5: str, md5_index: dict[str, str]) -> str:
-    """Resolve a truncated MD5 to its full 32-char version via prefix match."""
+    """Resolve a truncated MD5 to its full 32-char version (cut_md5_owner)."""
     if not md5 or len(md5) == 32:
         return md5
     if not _MD5_RE.match(md5):
         return md5
-    matches = [k for k in md5_index if k.startswith(md5)]
-    if len(matches) == 1:
-        print(f"  fixed truncated md5: {md5} -> {matches[0]}", file=sys.stderr)
-        return matches[0]
+    owner = cut_md5_owner(md5, md5_index)
+    if owner:
+        print(f"  fixed truncated md5: {md5} -> {owner}", file=sys.stderr)
+        return owner
     return md5
 
 

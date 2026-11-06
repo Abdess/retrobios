@@ -11,6 +11,7 @@ import zipfile
 import zlib
 from pathlib import Path
 from typing import BinaryIO
+from collections.abc import Iterable
 
 
 _ALL_ALGORITHMS = frozenset({"sha1", "md5", "sha256", "crc32", "adler32"})
@@ -129,6 +130,20 @@ def md5_composite_of(source: str | Path | BinaryIO) -> str:
                 continue  # skip oversized entries
             h.update(zf.read(name))
         return h.hexdigest()
+
+def cut_md5_owner(cut: str, md5s: Iterable[str]) -> str | None:
+    """The one md5 a value cut short starts, None when none or several do.
+
+    The single rule for a cut md5, read by the scraper, the resolver and
+    --from-md5. It names a dump, it never verifies one: Batocera compares
+    the whole string (batocera-systems:1088), so every verdict compares
+    exact digests.
+    """
+    if not cut or len(cut) >= 32:
+        return None
+    found = {md5 for md5 in md5s if md5.startswith(cut)}
+    return found.pop() if len(found) == 1 else None
+
 
 def parse_hash_list(raw: str | list | int | None) -> list[str]:
     """Normalize any hash field into its accepted values, lowercase.

@@ -857,8 +857,8 @@ def frontend_digest_matches(
 
     resolve_local_file calls a file `hash_mismatch` when any declared hash
     disagrees, but a frontend compares one digest. verify_entry_md5 reads it
-    too: Batocera compares a truncated md5 by prefix and Recalbox hashes a
-    ZIP by its members. Under SIZE_AND_ANY_HASH (RomM) the declared size must
+    too: Recalbox hashes a ZIP by its members. Batocera compares the whole
+    md5 string (batocera-systems:1088), so a value cut short accepts nothing. Under SIZE_AND_ANY_HASH (RomM) the declared size must
     match and then any one of md5, sha1 and crc32 does: a mistyped hash next
     to a right one does not withhold the file, a wrong size does.
     """
@@ -918,9 +918,7 @@ def digest_verdict(
     # Recalbox hashes a .zip by its members only (Bios.cpp:64-68), so the
     # container's own md5 answers nothing there.
     composite_only = file_entry.get("zip_digest") == "composite"
-    if not composite_only and any(
-        actual == d or (len(d) < 32 and actual.startswith(d)) for d in declared
-    ):
+    if not composite_only and actual in declared:
         return True
     member_digest = composite()
     return bool(member_digest) and member_digest.lower() in declared

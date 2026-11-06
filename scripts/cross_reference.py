@@ -317,10 +317,7 @@ def _record_carries(sha1: str, record: dict, declared: dict[str, set[str]]) -> b
         **{field: str(record.get(field) or "").lower() for field in ("md5", "sha256", "crc32")},
     }
     return any(
-        actual[field] and (
-            actual[field] in values
-            or (field == "md5" and any(len(v) < 32 and actual[field].startswith(v) for v in values))
-        )
+        actual[field] and actual[field] in values
         for field, values in declared.items()
     )
 
