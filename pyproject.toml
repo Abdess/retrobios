@@ -16,7 +16,8 @@ description = "BIOS collection manager for retrogaming platforms"
 # install.py is the only entry point a user runs before cloning, and both
 # bootstraps accept 3.8, so the floor stays where the bootstraps put it. That
 # floor covers install.py alone: the build scripts under scripts/ need 3.9
-# (pipeline.py checks it), and CI runs the test suite on 3.12.
+# (common.py, which every build script imports, checks it), and CI runs the
+# test suite on 3.12.
 requires-python = ">=3.8"
 dependencies = [
     "pyyaml",

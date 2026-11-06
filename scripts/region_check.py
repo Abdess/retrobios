@@ -36,6 +36,14 @@ import urllib.request
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
+# The probe tools do not import common.py, which states the 3.9 floor for the
+# other scripts. Under 3.8 they stopped on a str.removesuffix AttributeError.
+if sys.version_info < (3, 9):
+    sys.exit(
+        f"{Path(sys.argv[0]).name} needs Python 3.9 or newer, "
+        f"this is {sys.version.split()[0]}"
+    )
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import yaml  # noqa: E402

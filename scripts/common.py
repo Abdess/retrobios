@@ -20,6 +20,15 @@ import sys
 import zipfile
 from pathlib import Path
 
+# Every build script imports this module. verify.py, slots.py, validate_pr.py
+# and cross_reference.py started under 3.8 and stopped halfway on a
+# str.removeprefix AttributeError, which named no version.
+if sys.version_info < (3, 9):
+    sys.exit(
+        f"{Path(sys.argv[0]).name} needs Python 3.9 or newer, "
+        f"this is {sys.version.split()[0]}"
+    )
+
 
 try:
     import yaml

@@ -136,6 +136,41 @@ class ReadmeRegressions(unittest.TestCase):
         self.assertNotIn("SyntaxError", proc.stderr)
         self.assertIn("generate_pack.py needs Python 3.9", proc.stderr)
 
+    def test_every_script_names_the_floor_under_an_older_interpreter(self):
+        """Only generate_pack.py and pipeline.py checked the version. verify.py,
+        slots.py, validate_pr.py and cross_reference.py started under 3.8 and
+        stopped halfway on a str.removeprefix AttributeError."""
+        import shutil  # noqa: PLC0415
+
+        python38 = shutil.which("python3.8")
+        if python38 is None:
+            if os.environ.get("CI"):
+                self.fail("CI must provide python3.8")
+            self.skipTest("no python3.8 on PATH")
+        commands = (
+            ["verify.py", "--emulator", "handy"],
+            ["verify.py", "--platform", "batocera"],
+            ["validate_pr.py", "--json", "README.md"],
+            ["cross_reference.py", "--emulator", "handy"],
+            ["slots.py"],
+            ["identity.py"],
+            ["generate_site.py", "--help"],
+            ["campaign.py", "--help"],
+            ["region_check.py", "--help"],
+        )
+        for command in commands:
+            with self.subTest(command=" ".join(command)):
+                # -E -s rather than -I: -I drops the script's folder from
+                # sys.path, so the imports would fail before any check.
+                proc = subprocess.run(
+                    [python38, "-E", "-s", f"scripts/{command[0]}", *command[1:]],
+                    cwd=ROOT, capture_output=True, text=True, timeout=60,
+                    check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stderr)
+                self.assertNotIn("Traceback", proc.stderr)
+                self.assertIn(f"{command[0]} needs Python 3.9", proc.stderr)
+
     def test_the_floor_interpreter_imports_every_script(self):
         """Every module under scripts/ is loaded by a real interpreter of the
         floor version, as the installer's 3.8 floor is proven by running it.
