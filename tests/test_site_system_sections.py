@@ -304,5 +304,22 @@ class BuildCount(unittest.TestCase):
         self.assertIn("system ids linked", source)
 
 
+class AnEntryListingSystemsIsFiledUnderEach(unittest.TestCase):
+    """MAME declares a device set under `systems:`, the machines of several
+    systems loading it. The site read only `system:`, so ym2608.zip was filed
+    under neither Arcade nor NEC PC-88, and kept on pages it does not serve."""
+
+    def test_the_site_reads_the_common_rule(self):
+        import generate_site as gs  # noqa: PLC0415
+        from common import entry_system_ids  # noqa: PLC0415
+
+        entry = {"name": "ym2608.zip", "systems": ["arcade", "pc80"]}
+        self.assertEqual(gs._entry_systems("mame", entry), ["arcade", "pc80"])
+        self.assertEqual(
+            gs._entry_systems("mame", entry), entry_system_ids(entry, {"systems": []})
+        )
+        self.assertEqual(gs._entry_systems("mame", {"name": "a", "system": "pc80"}), ["pc80"])
+
+
 if __name__ == "__main__":
     unittest.main()

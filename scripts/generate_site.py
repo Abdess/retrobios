@@ -47,6 +47,7 @@ from common import (
     GAME_DATA_TOPS,
     compute_composition,
     count_catalog_matched,
+    entry_system_ids,
     list_registered_platforms,
     list_release_pack_platforms,
     load_platform_registry,
@@ -6500,9 +6501,10 @@ def _profiles_on_disk() -> dict[str, dict]:
 
 
 def _entry_systems(emulator: str, entry: dict) -> list[str]:
-    """The system an entry is read for: its own, or its profile's only one."""
-    if entry.get("system"):
-        return [str(entry["system"])]
+    """The systems an entry is read for: its own `system:` or `systems:`
+    (a MAME device set several systems load), else its profile's only one."""
+    if entry.get("system") or entry.get("systems"):
+        return entry_system_ids(entry, {})
     systems = (_profiles_on_disk().get(emulator) or {}).get("systems") or []
     return [str(systems[0])] if len(systems) == 1 else []
 
