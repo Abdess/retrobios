@@ -927,6 +927,8 @@ def ci_install_lines() -> tuple[str, str]:
     text = (_REPO / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
     main = re.search(r'^\s*run: (pip install pyyaml "jsonschema.*markdown.*)$', text, re.M)
     floor = re.search(r"^\s*run: (python3\.8 -m pip install .*)$", text, re.M)
+    if main is None or floor is None:
+        raise RuntimeError("validate.yml no longer installs the packages CONTRIBUTING quotes")
     return main.group(1), floor.group(1)
 
 

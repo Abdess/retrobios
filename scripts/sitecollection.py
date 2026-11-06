@@ -128,11 +128,11 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
                     # A variant answers its primary's name: scummvm.zip.a93f1c4b.
                     base = parts[-1].rsplit(".", 1)[0] if console.startswith(".") else parts[-1]
                     keys = sorted(readers.get(base, ()))
-                    key = keys[0] if len(keys) == 1 else own
+                    reader = keys[0] if len(keys) == 1 else own
                     found = next((c for c, held in regrouped.items()
                                   if any(h.get("name") == base for h in held)), None)
-                    target = found or (next((c for c in consoles if c == key), None)
-                                       or (engine(key) if key else base))
+                    target = found or (next((c for c in consoles if c == reader), None)
+                                       or (engine(reader) if reader else base))
                 if target != console:
                     record_card_move(mfr, console, str(f.get("sha1", "")), mfr, target)
                 regrouped.setdefault(target, []).append(f)
@@ -154,9 +154,9 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
                             *(f for f in others.pop(folder) if str(f.get("sha1", "")) not in held)]
     for mfr in GAME_DATA_TOPS:
         for console in out.get(mfr, {}):
-            key = profiles.get(console) and console
-            if key and engine(key) != console:
-                SECTION_LABELS[(mfr, console)] = engine(key)
+            named = console if console in profiles else None
+            if named and engine(named) != console:
+                SECTION_LABELS[(mfr, console)] = engine(named)
     return {mfr: consoles for mfr, consoles in out.items() if consoles}
 
 

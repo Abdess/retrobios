@@ -405,8 +405,6 @@ scripts/generate_site.py:0: error: Expected iterable as variadic argument  [misc
 scripts/generate_site.py:0: error: Generator has incompatible item type "int"; expected "bool"  [misc]
 scripts/generate_site.py:0: error: Incompatible types in assignment (expression has type "Optional[Any]", target has type "str")  [assignment]
 scripts/generate_site.py:0: error: Incompatible types in assignment (expression has type "Optional[str]", variable has type "str")  [assignment]
-scripts/generate_site.py:0: error: Incompatible types in assignment (expression has type "Optional[str]", variable has type "str")  [assignment]
-scripts/generate_site.py:0: error: Incompatible types in assignment (expression has type "Union[dict[Any, Any], str, None]", variable has type "str")  [assignment]
 scripts/generate_site.py:0: error: Incompatible types in assignment (expression has type "dict[Any, Any]", variable has type "int")  [assignment]
 scripts/generate_site.py:0: error: Incompatible types in assignment (expression has type "dict[str, set[str]]", variable has type "set[str]")  [assignment]
 scripts/generate_site.py:0: error: Incompatible types in assignment (expression has type "dict[str, str]", variable has type "dict[str, tuple[str, dict[str, list[Any]]]]")  [assignment]
