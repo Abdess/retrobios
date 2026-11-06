@@ -41,6 +41,7 @@ from common import (
     _foreign_tree,
     _owner_tokens,
     platform_arg,
+    work_from_repo_root,
     target_listing_line,
     suggest_names,
     system_index,
@@ -128,29 +129,6 @@ DEFAULT_BIOS_DIR = "bios"
 _REPO_PLATFORMS = os.path.join(os.path.dirname(__file__), "..", "platforms")
 DEFAULT_EMULATORS_DIR = "emulators"
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-def work_from_repo_root(
-    args: argparse.Namespace, parser: argparse.ArgumentParser, path_flags: list[str]
-) -> None:
-    """Run from the repository root, whichever directory the command started in.
-
-    database.json records every file from the root and the data registry
-    names its caches the same way, so a run from scripts/ ended on a
-    FileNotFoundError traceback. A path the caller typed is read from where
-    they typed it, a default from the root.
-    """
-    if os.path.realpath(os.getcwd()) == os.path.realpath(REPO_ROOT):
-        return
-    for flag in path_flags:
-        value = getattr(args, flag, None)
-        if value and value != parser.get_default(flag):
-            setattr(args, flag, os.path.abspath(value))
-    os.chdir(REPO_ROOT)
-    if getattr(args, "platform", None):
-        # Read before the move, the registry was not there to map
-        # "RetroArch" to its slug.
-        args.platform = platform_arg(args.platform)
 
 
 # Status model: aligned with Batocera BiosStatus (batocera-systems:967-969)

@@ -188,6 +188,49 @@ class TheAllHelpNamesWhatItCovers(unittest.TestCase):
         self.assertEqual(stale, [])
 
 
+class ReadOnlyToolsRunFromAnyFolder(unittest.TestCase):
+    """Only verify.py and generate_pack.py moved to the repository root.
+    From another folder slots, region_audit, provenance_report and
+    bundled_only said database.json was missing and to rebuild it,
+    identity and list_platforms named a missing folder, and game_rules
+    ended on a FileNotFoundError traceback."""
+
+    COMMANDS = (
+        ["slots.py", "--platform", "retroarch"],
+        ["identity.py"],
+        ["cross_reference.py", "--emulator", "handy"],
+        ["list_platforms.py"],
+        ["region_audit.py"],
+        ["provenance_report.py"],
+        ["bundled_only.py"],
+        ["game_rules.py"],
+    )
+
+    def test_each_reads_the_repository_from_a_subfolder(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+            for command in self.COMMANDS:
+                with self.subTest(command=command[0]):
+                    proc = subprocess.run(
+                        [sys.executable, str(REPO_ROOT / "scripts" / command[0]),
+                         *command[1:]],
+                        cwd=folder, capture_output=True, text=True, timeout=300,
+                        check=False,
+                    )
+                    self.assertEqual(proc.returncode, 0, proc.stderr[-500:])
+                    self.assertNotIn("Traceback", proc.stderr)
+                    self.assertEqual(os.listdir(folder), [])
+
+    def test_a_typed_path_is_read_from_where_it_was_typed(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as folder:
+            proc = subprocess.run(
+                [sys.executable, str(REPO_ROOT / "scripts" / "slots.py"),
+                 "--db", "nosuch.json"],
+                cwd=folder, capture_output=True, text=True, timeout=300, check=False,
+            )
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn(str(Path(folder) / "nosuch.json"), proc.stderr)
+
+
 class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
     """`verify --all --target swich` ended on "no platform has it" after 17
     INFO lines, two of which held the suggestion."""

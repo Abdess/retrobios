@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable
 from collections import Counter
 
+import argparse
 import filecmp
 import hashlib
 import functools
@@ -668,6 +669,31 @@ def suggest_names(
     if len(available) <= SHORT_LIST:
         return f"Known: {', '.join(available)}."
     return f"{listing_flag} lists all {total}."
+
+
+def work_from_repo_root(
+    args: argparse.Namespace, parser: argparse.ArgumentParser, path_flags: list[str]
+) -> None:
+    """Run from the repository root, whichever directory the command started in.
+
+    database.json records every file from the root and the data registry
+    names its caches the same way, so a run from scripts/ ended on a
+    FileNotFoundError traceback. A path the caller typed is read from where
+    they typed it, a default from the root.
+    """
+    root = Path(__file__).resolve().parent.parent
+    if Path.cwd().resolve() == root:
+        return
+    for flag in path_flags:
+        value = getattr(args, flag, None)
+        if value and value != parser.get_default(flag):
+            # A Path stays a Path for the code that joins onto it.
+            setattr(args, flag, type(value)(os.path.abspath(value)))
+    os.chdir(root)
+    if getattr(args, "platform", None):
+        # Read before the move, the registry was not there to map
+        # "RetroArch" to its slug.
+        args.platform = platform_arg(args.platform)
 
 
 def platform_arg(value: str) -> str:
