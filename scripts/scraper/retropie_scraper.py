@@ -160,10 +160,8 @@ class Scraper(BaseScraper):
         libretro cores and reads the same files, at BIOS/ instead of
         system/. Only the core list is its own.
         """
-        # A libretro package is lr-<core> with the buildbot name hyphenated
-        # (lr-dosbox-pure builds dosbox_pure), as the target scraper reads
-        # it; a standalone package is named after the emulator itself.
-        # Kept hyphenated, lr-dosbox-pure named dosbox-pure, the standalone
+        # Named by core_name(), as the target scraper names them. Kept
+        # hyphenated, lr-dosbox-pure named dosbox-pure, the standalone
         # DOSBox Pure Unleashed build RetroPie does not ship.
         modules = self.module_ids()
         cores = sorted({core_name(m) for m in modules})
