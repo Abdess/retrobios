@@ -976,9 +976,9 @@ what the options name, everything by default.
 | <span id="option-required-only"></span>`--required-only` | With `--for-games`, only the files the games cannot start without |
 | <span id="option-no-game-data"></span>`--no-game-data` | Leave out game data (a game's own files, not firmware) and install the firmware only. What it leaves out is named. See [Firmware without game data](#firmware-without-game-data) |
 | <span id="option-declared-only"></span>`--declared-only` | Keep only the files the platform's own list names (`cores: null` in the manifest), not the extra files cores load. With `--check`, the answer is about the list the platform itself checks. Refused with `--core`, the listings it does not change, `--standalone-copies` and `--tui` |
-| <span id="option-list-systems"></span>`--list-systems` | Print a platform's systems with the files and size each holds, the files other systems share too counted apart |
-| <span id="option-list-cores"></span>`--list-cores` | Print the cores whose extra files a platform installs |
-| <span id="option-list-emulators"></span>`--list-emulators` | Print every name `--emulator` accepts, each buildbot name beside the emulator it stands for |
+| <span id="option-list-systems"></span>`--list-systems` | Print a platform's systems with the files and size each holds, the files other systems share too counted apart. `--system`, `--core`, `--region`, `--target` and `--installed-cores` narrow it, as they narrow an install. A run prints one list: two listing options are refused |
+| <span id="option-list-cores"></span>`--list-cores` | Print the cores whose extra files a platform installs. The options that narrow `--list-systems` narrow it too |
+| <span id="option-list-emulators"></span>`--list-emulators` | Print every name `--emulator` accepts, each buildbot name beside the emulator it stands for. `--target` and `--installed-cores` narrow it, and `--system`, `--core`, `--region` and `--emulator` are refused |
 | <span id="option-romm-firmware"></span>`--romm-firmware TEMPLATE` | RomM: where each platform's firmware goes in the library, as `filesystem.structure.firmware` in RomM's `config.yml` says (`{platform}/bios` for a library laid out as `{platform}/roms`). Read from `config.yml` beside the library when it is there. See [RomM firmware layout](#romm-firmware-layout) |
 | <span id="option-no-input"></span>`--no-input` | Never ask a question, even at a terminal. A run whose output goes to a file or a pipe asks nothing either, and says so on stderr. It finds the setups and the mounted cards the screen finds: one is taken, as Enter takes it, two stop the run with an `error` event (`stage` `detect`, `reason` `conflict`) naming each with its `--platform` and `--dest`, and none stops it too, with `reason` `not_found` when a file list or a pack names the platform |
 | <span id="option-check"></span>`--check` | Report and exit without writing |
@@ -994,8 +994,8 @@ what the options name, everything by default.
 | <span id="option-tui"></span>`--tui` | Open the full-screen interface, or stop with the reason it cannot open here (code 2) instead of falling back to the questions. Wins over `RETROBIOS_PLAIN` and `ACCESSIBLE`. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-plain"></span>`--plain` | Ask the questions line by line instead of the full-screen interface, the mode for a screen reader. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-version"></span>`--version` | Print the installer's identity, the first 12 hex digits of the SHA-256 the bootstraps pin |
-| <span id="option-list-platforms"></span>`--list-platforms` | Print the supported platforms and what was detected here |
-| <span id="option-list-targets"></span>`--list-targets` | Print the hardware targets a platform publishes, with the core count each carries |
+| <span id="option-list-platforms"></span>`--list-platforms` | Print the supported platforms and what was detected here. An option that narrows a list (`--platform`, `--system`, `--core`, `--region`, `--emulator`, `--target`, `--every-board`, `--installed-cores`) is refused |
+| <span id="option-list-targets"></span>`--list-targets` | Print the hardware targets a platform publishes, with the core count each carries. `--system`, `--core`, `--region`, `--emulator`, `--target`, `--every-board` and `--installed-cores` are refused |
 | <span id="option-jobs"></span>`--jobs N`, `-j N` | Parallel downloads, 1 to 32, default 8 |
 | <span id="option-verbose"></span>`--verbose`, `-v` | Print per-attempt failures and hash mismatches |
 | <span id="option-standalone-copies"></span>`--standalone-copies` | Also copy into detected standalone emulator directories |

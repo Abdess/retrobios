@@ -4475,6 +4475,50 @@ def _install_run(env: dict, *argv: str, **kwargs) -> subprocess.CompletedProcess
     )
 
 
+class AListingAppliesItsOptionsOrRefusesThem(unittest.TestCase):
+    """--list-systems --list-cores printed the systems alone, and
+    --list-platforms, --list-targets and --list-emulators printed the same
+    list with --system, --region or --core as without, code 0."""
+
+    def test_two_listings_or_an_option_a_listing_ignores_are_refused(self):
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        given = ["--platform", "retroarch", "--offline", "--no-input",
+                 "--manifest", "install/retroarch.json"]
+        for argv, words in (
+            ([*given, "--list-systems", "--list-cores"],
+             "--list-systems and --list-cores each print a list"),
+            ([*given, "--list-cores", "--list-emulators"],
+             "--list-cores and --list-emulators each print a list"),
+            (["--list-platforms", "--list-systems", "--platform", "retroarch"],
+             "--list-platforms and --list-systems each print a list"),
+            (["--list-platforms", "--region", "us"],
+             "--list-platforms prints the whole list, which --region does not narrow"),
+            (["--list-platforms", "--platform", "retroarch"],
+             "--list-platforms prints the whole list, which --platform does not narrow"),
+            ([*given, "--list-targets", "--system", "sony-playstation"],
+             "--list-targets prints the whole list, which --system does not narrow"),
+            ([*given, "--list-targets", "--target", "switch"],
+             "--list-targets prints the whole list, which --target does not narrow"),
+            ([*given, "--list-emulators", "--system", "sony-playstation"],
+             "--list-emulators prints the whole list, which --system does not narrow"),
+            ([*given, "--list-emulators", "--core", "beetle_psx"],
+             "--list-emulators prints the whole list, which --core does not narrow"),
+        ):
+            with self.subTest(argv=argv):
+                proc = _install_run(env, *argv)
+                self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+                self.assertIn(words, proc.stderr)
+
+    def test_the_options_a_listing_reads_still_apply(self):
+        env = dict(os.environ, RETROBIOS_OS="linux")
+        given = ["--platform", "retroarch", "--offline", "--no-input",
+                 "--manifest", "install/retroarch.json"]
+        whole = _install_run(env, *given, "--list-cores")
+        narrowed = _install_run(env, *given, "--list-cores", "--system", "nintendo-gba")
+        self.assertEqual((whole.returncode, narrowed.returncode), (0, 0), narrowed.stderr)
+        self.assertLess(len(narrowed.stdout), len(whole.stdout))
+
+
 class AMissingPackNamesTheOptionAndThePacksBeside(unittest.TestCase):
     """A typo in --from-pack said "Error: X does not exist": not the option,
     not the pack sitting next to the name typed."""

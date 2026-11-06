@@ -13429,6 +13429,29 @@ def main() -> None:
         if (args.list_platforms or args.list_targets or args.list_systems
                 or args.list_cores or args.list_emulators):
             parser.error("--for-games narrows an install, not a listing")
+    # Applied or refused, never ignored: a run prints one list, and the
+    # narrowing options apply to --list-systems and --list-cores only, past
+    # --target and --installed-cores, which --list-emulators also reads.
+    listings = [flag for flag, given in (
+        ("--list-platforms", args.list_platforms), ("--list-targets", args.list_targets),
+        ("--list-systems", args.list_systems), ("--list-cores", args.list_cores),
+        ("--list-emulators", args.list_emulators)) if given]
+    if len(listings) > 1:
+        parser.error(f"{listings[0]} and {listings[1]} each print a list: run them "
+                     "one at a time")
+    if listings and listings[0] in ("--list-platforms", "--list-targets",
+                                    "--list-emulators"):
+        unread = (("--system", args.system), ("--core", args.core),
+                  ("--region", args.region), ("--emulator", args.emulator))
+        if listings[0] != "--list-emulators":
+            unread += (("--target", args.target), ("--every-board", args.every_board),
+                       ("--installed-cores", args.installed_cores))
+        if listings[0] == "--list-platforms":
+            unread += (("--platform", args.platform),)
+        given = next((flag for flag, value in unread if value), "")
+        if given:
+            parser.error(f"{listings[0]} prints the whole list, which {given} "
+                         "does not narrow")
     if args.declared_only:
         # Applied or refused, never ignored.
         for given, reason in (
@@ -15176,7 +15199,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     # --installed-cores is below: EmuDeck installed 3.2 GB and only then was
     # steamos refused for RetroArch, with no summary of what had landed.
     target_lists: dict[str, dict] = {}
-    if args.target and not args.list_targets:
+    if args.target:
         for plat_name, _bios_path in platforms:
             targets = fetch_targets(plat_name)
             if targets is None:
