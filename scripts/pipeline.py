@@ -816,7 +816,7 @@ def _refuse_unapplied_flags(
 
     --all-variants builds every source itself, so a --source beside it is
     dropped; --skip-packs builds none, so both are, and step 5 does not run
-    for --full-narrowings to widen.
+    for --full-narrowings to widen, nor does it without a full pack.
     """
     # --source defaults to None so a typed `--source full` is seen: compared
     # with its default value, it went through beside the modes that refuse it.
@@ -829,6 +829,10 @@ def _refuse_unapplied_flags(
                          ("--full-narrowings", args.full_narrowings)):
             if on:
                 parser.error(f"{flag} is incompatible with --skip-packs")
+    # Step 5 compares the full pack, and --source platform or truth builds
+    # none: the comparison is skipped and the flag had no effect.
+    if args.full_narrowings and source_given and args.source != "full":
+        parser.error(f"--full-narrowings is incompatible with --source {args.source}")
     if args.source is None:
         args.source = "full"
 

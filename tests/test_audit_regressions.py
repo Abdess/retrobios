@@ -4185,6 +4185,8 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
             ["--offline", "--all-variants", "--source", "platform"],
             ["--offline", "--all-variants", "--source", "full"],
             ["--offline", "--skip-packs", "--source", "full"],
+            ["--offline", "--source", "truth", "--full-narrowings"],
+            ["--offline", "--source", "platform", "--full-narrowings"],
         ],
     }
 
