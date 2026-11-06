@@ -245,6 +245,34 @@ class Descriptions(unittest.TestCase):
         self.assertEqual(gs._page_description(body, key, "DaedalusX64"),
                          "DaedalusX64 emulates Nintendo 64. Every file it reads comes with the app.")
 
+    def test_an_emulator_snippet_names_the_files_searched_for(self) -> None:
+        """"gba_bios.bin" and "dreamcast bios" landed on pages described as
+        "It reads 4 files, none of them required": fewer than 1 in 70 clicked."""
+        saved, snippets = dict(gs.PAGE_DATA), dict(gs.EMULATOR_SNIPPETS)
+        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved),
+                                 gs.EMULATOR_SNIPPETS.clear(),
+                                 gs.EMULATOR_SNIPPETS.update(snippets)))
+        with open(REPO_ROOT / "emulators" / "flycast.yml", encoding="utf-8") as handle:
+            gs.record_emulator_page("flycast", yaml.safe_load(handle))
+        key = Path("emulators/flycast.md")
+        body = ("# Flycast\n\nFlycast emulates Sega Dreamcast. It reads 10 files, 4 of them "
+                "required: without a required file it does not start games.\n")
+        text = gs._page_description(body, key, "Flycast")
+        self.assertTrue(text.startswith("Sega Dreamcast BIOS for Flycast: dc_boot.bin, "), text)
+        self.assertLessEqual(len(text), 155)
+        self.assertFalse(text.endswith("..."), text)
+
+    def test_an_any_name_snippet_says_what_to_do(self) -> None:
+        saved = dict(gs.PAGE_DATA)
+        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
+        gs.PAGE_DATA["emulators/aethersx2.md"] = {"hasPart": [{"name": "ps2.bin"}]}
+        body = ("# AetherSX2\n\nAetherSX2 needs one Sony PlayStation 2 BIOS file, any region."
+                "\n\n1. Download [`ps2.bin`](../x/).\n2. Put it in this folder:\n")
+        self.assertEqual(
+            gs._page_description(body, Path("emulators/aethersx2.md"), "AetherSX2"),
+            "AetherSX2 needs one Sony PlayStation 2 BIOS file, any region. Download one "
+            "from this page and put it in the folder it shows. Any file name works.")
+
     def test_an_initial_does_not_end_the_sentence(self) -> None:
         """hcl's description was "Hydra Castle Labyrinth: open-source port of E."."""
         body = ("# Hydra Castle Labyrinth\n\n<details>\n<summary>Technical notes</summary>\n\n"

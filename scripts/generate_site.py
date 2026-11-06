@@ -2591,13 +2591,53 @@ def _emulator_description(markdown: str, key: str, title: str, intro: str) -> st
         intro = f"{title}: {intro[:1].lower()}{intro[1:]}"
     if key in NOTHING_TO_FETCH:
         return _shorten(f"{intro} Every file it reads comes with the app.", 155)
+    if PAGE_DATA.get(key, {}).get("hasPart"):
+        return _shorten(_files_snippet(markdown, key, title, intro), 155)
     # An alias page sends the reader to the core whose files it shares.
-    if PAGE_DATA.get(key, {}).get("hasPart") or "uses the same firmware as" in intro:
+    if "uses the same firmware as" in intro:
         return _shorten(intro, 155)
     needs = "It needs no BIOS or firmware file."
     if "\n## Data directories" in markdown:
         needs = "It needs no BIOS or firmware file, only the data folders listed."
     return _shorten(f"{intro} {needs}", 155)
+
+
+def _files_snippet(markdown: str, key: str, title: str, intro: str) -> str:
+    """The snippet of an emulator page with files to get.
+
+    A search for "gba_bios.bin" or "scph5500.bin" landed on a page described
+    as "It reads 4 files, none of them required": the names the reader typed
+    were not in the result, and fewer than 1 in 70 clicked. The longest
+    form that fits is kept: a snippet cut by "..." reads as unfinished.
+    """
+    if " any region." in intro:
+        step = ("Download one from this page and put it in the folder it shows."
+                if re.search(r"^1\. Download ", _lead(markdown), re.M)
+                else "Where to get one and the folder it goes in.")
+        head = f"{intro.split(' any region.')[0]} any region."
+        forms = [f"{head} {step} Any file name works.", f"{head} {step}"]
+        return next((form for form in forms if len(form) <= 155), intro)
+    snippet = EMULATOR_SNIPPETS.get(key)
+    if not snippet or not snippet[1] or "It reads " not in intro:
+        return intro
+    system, names, required, noun = snippet
+    if required == 0:
+        need = "none required"
+    elif required == len(names):
+        need = "all required" if len(names) > 1 else "required"
+    else:
+        need = f"{required:,} required"
+    subject = f"{system} {noun} for {title}" if system else f"{title} {noun}"
+    tails = ["Where each goes, its hashes and one command that installs them."
+             if "Install this emulator's files" in markdown else "",
+             "Where each goes and its hashes.", "Where each goes."]
+    forms = []
+    for count in range(min(len(names), 4), 0, -1):
+        shown = (names if count == len(names)
+                 else [*names[:count - 1], f"{len(names) - count + 1:,} more"])
+        head = f"{subject}: {_said_as_list(shown)}, {need}."
+        forms += [f"{head} {tail}" for tail in tails if tail] + [head]
+    return next((form for form in forms if len(form) <= 155), intro)
 
 
 # Lines a page opens with that say where it sits, not what it holds.
@@ -2664,6 +2704,9 @@ PAGE_DATA: dict[str, dict] = {}
 # Emulator pages whose every file comes with the app: no "BIOS files" in
 # their title, and their description says so (DaedalusX64, ZEsarUX).
 NOTHING_TO_FETCH: set[str] = set()
+# The first system, the file names, the count of required names and the
+# word for them ("BIOS" or "files") of each emulator page, for its snippet.
+EMULATOR_SNIPPETS: dict[str, tuple[str, list[str], int, str]] = {}
 # Pages that hold part of a page too long for one (a console of a split
 # manufacturer, a run of an emulator's cards), by path relative to docs/:
 # their H1 already says what they are.
@@ -2996,6 +3039,25 @@ def record_emulator_page(name: str, profile: dict) -> None:
     key = f"emulators/{name}.md"
     PAGE_DATA[key] = emulator_structured_data(profile)
     listed = [f for f in profile.get("files") or [] if isinstance(f, dict)]
+    fetched = [f for f in listed if f.get("name") and not comes_with_app(f)]
+    systems = profile.get("systems") or []
+    first = systems[0] if systems else ""
+    # The first system's files first: "dreamcast bios" found Flycast's
+    # page, whose required NAOMI archives came before dc_boot.bin.
+    names: dict[str, str] = {}
+    for f in sorted(fetched, key=lambda f: (f.get("system", first) != first,
+                                            f.get("required") is not True)):
+        base = Path(str(f["name"])).name
+        names.setdefault(base.casefold(), base)
+    firmware = [f for f in fetched if f.get("category", "bios") in ("bios", "bios_zip")]
+    EMULATOR_SNIPPETS[key] = (
+        # One console names an emulator of five systems, not BizHawk of 40.
+        system_name(first) if 0 < len(systems) <= 5 else "",
+        list(names.values()),
+        len({Path(str(f["name"])).name.casefold() for f in fetched if f.get("required") is True}),
+        # Ship of Harkinian reads game ROMs: they are no BIOS.
+        "BIOS" if len(firmware) * 2 >= len(fetched) else "files",
+    )
     if listed and all(comes_with_app(f) for f in listed):
         NOTHING_TO_FETCH.add(key)
     else:
