@@ -1702,7 +1702,10 @@ a real 3.8 interpreter, which CI installs beside 3.12 so the check cannot skip.
 The build scripts need 3.9 and are not bound by this.
 
 Every change to `install.py` recomputes the SHA-256 pinned in `install.sh` and
-`install.ps1` in the same commit. The tests compare the pins with the file.
+`install.ps1` in the same commit, and runs `scripts/generate_launcher_index.py`:
+`install/launchers/index.json` records the hash of `install.py` that
+`--add-app` checks before it writes a launcher on a card. The tests compare
+the pins and the list with the file.
 
 The tables of options, events, exit codes, keys and card markers, the line
 menu and the run samples on this page sit between `generated` markers and are
