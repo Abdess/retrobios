@@ -520,7 +520,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         }}
         collision = slots.find_collisions(config, REGIONS_DB)[0]
         line = slots.format_collision(collision)
-        packed, left = collision.resolved
+        left, packed = collision.resolved
         # The builder walks the systems sorted: alpha's declaration ships.
         self.assertIn(f"{packed} (alpha) packed", line)
         self.assertIn(f"{left} (zeta) left out", line)

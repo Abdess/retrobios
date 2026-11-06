@@ -675,7 +675,7 @@ class Collision:
 
     destination: str
     resolved: list[str]
-    # Each declaration with the file it resolved to, in the builder's order.
+    # Each declaration with the file it resolved to, in the platform's order.
     declarations: list[tuple[dict, str | None]] = field(default_factory=list)
     # The system of each declaration, in the same order.
     systems: list[str] = field(default_factory=list)
@@ -712,14 +712,14 @@ def find_collisions(
     """
     fold = bool(config.get("case_insensitive_fs", False))
     systems = config.get("systems") or {}
-    # The builder walks the systems sorted and lets a hash-constrained
-    # declaration that resolves by content take the path: the same order
-    # and the same choice say which file ships.
+    # The builder lets a hash-constrained declaration that resolves by
+    # content take the path, else the first it reaches walking the systems
+    # sorted: the same choice says which file ships.
     preferred = set(
         preferred_entries(systems, db, "bios", "", False, zip_contents, True).values()
     )
     by_dest: dict[str, list[tuple[str, dict]]] = {}
-    for sys_id, system in sorted(systems.items()):
+    for sys_id, system in systems.items():
         for entry in system.get("files") or []:
             if not isinstance(entry, dict):
                 continue
@@ -751,9 +751,13 @@ def find_collisions(
             # also names the first one's file.
             if any(_accepted_by_all(path, entries, db) for path in resolved):
                 continue
+            reached = sorted(
+                (sys_id, local)
+                for (sys_id, _entry), (_e, local) in zip(claims, declarations) if local
+            )
             shipped = next(
                 (local for entry, local in declarations if local and id(entry) in preferred),
-                resolved[0],
+                reached[0][1],
             )
             collisions.append(
                 Collision(
