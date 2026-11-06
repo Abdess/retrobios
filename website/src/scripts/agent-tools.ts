@@ -141,12 +141,25 @@ const setupCommand: Tool = {
 	},
 	annotations: { readOnlyHint: true },
 	async execute({ shell, everything, bios_folder, games_folder, platform }) {
-		const quote = (value: unknown) => `'${String(value).replace(/'/g, shell === 'powershell' ? "''" : "'\\''")}'`;
-		const run = shell === 'powershell' ? PS : SH;
+		const powershell = shell === 'powershell';
+		// The command is pasted into a shell: a value that could close its
+		// quotes (PowerShell also ends a string on the typographic ones) or
+		// start another option is refused, never escaped.
+		const unsafe = /[\u0000-\u001f\u007f'"`‘’‚‛“”„]/;
+		for (const [field, value] of [['bios_folder', bios_folder], ['games_folder', games_folder]] as const) {
+			if (value !== undefined && (typeof value !== 'string' || !value || unsafe.test(value) || value.startsWith('-'))) {
+				return `${field} must be a folder path without quotes or control characters.`;
+			}
+		}
+		if (platform !== undefined && (typeof platform !== 'string' || !/^[a-z0-9_-]+$/.test(platform))) {
+			return 'platform must be a setup name such as retroarch or batocera.';
+		}
+		const run = powershell ? PS : SH;
+		const quote = (value: string) => `'${value}'`;
 		const place: string[] = [];
-		if (platform) place.push('--platform', quote(platform));
-		if (bios_folder) place.push('--dest', quote(bios_folder));
-		const games = everything ? [] : [...(games_folder ? ['--for-games', quote(games_folder)] : ['--for-games']), '--required-only'];
+		if (platform) place.push(`--platform=${platform}`);
+		if (bios_folder) place.push(`--dest=${quote(bios_folder as string)}`);
+		const games = everything ? [] : [games_folder ? `--for-games=${quote(games_folder as string)}` : '--for-games', '--required-only'];
 		const command = (...more: string[]) => [run, ...place, ...more].join(' ');
 		return JSON.stringify({
 			preview: command(...games, '--dry-run'),

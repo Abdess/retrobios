@@ -84,6 +84,15 @@ class TheToolsReadOnly(unittest.TestCase):
         self.assertIn("const games = everything ? [] :", self.source)
         self.assertIn("'--required-only'", self.source)
 
+    def test_a_value_that_could_escape_the_command_is_refused(self) -> None:
+        """The command is pasted into a shell: PowerShell also ends a single-quoted
+        string on the typographic quotes, and a path starting with "-" reads as
+        an option."""
+        self.assertIn("const unsafe = /[\\u0000-\\u001f\\u007f'\"`‘’‚‛“”„]/;", self.source)
+        self.assertIn("value.startsWith('-')", self.source)
+        self.assertIn("/^[a-z0-9_-]+$/.test(platform)", self.source)
+        self.assertIn("`--dest=${quote(bios_folder as string)}`", self.source)
+
     def test_they_reach_no_other_site(self) -> None:
         code = re.sub(r"^\s*//.*$", "", self.source, flags=re.M)
         self.assertEqual(set(re.findall(r"https://[\w.-]+", code)), {"https://abdess.github.io"})
