@@ -7079,6 +7079,9 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
     opens, and the RetroDECK export added it as a required file."""
 
     def test_every_ps2_image_scan_is_marked(self):
+        """ARMSX2's arcade scan takes 2 to 8 MB COH-H images by their EXTINFO
+        serial (BiosTools.cpp:366-419 at 7f914418): r27v1602f.8g read as a
+        name armsx2 opens on six platforms."""
         import yaml
 
         from validation import opens_by_name
@@ -7090,7 +7093,7 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
                 continue
             for entry in profile.get("files") or []:
                 if (
-                    entry.get("min_size") == 4194304
+                    entry.get("min_size") in (2097152, 4194304)
                     and entry.get("max_size") == 8388608
                     and opens_by_name(entry, profile)
                 ):
