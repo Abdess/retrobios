@@ -18,6 +18,7 @@ Outputs a structured report suitable for PR comments.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -25,6 +26,7 @@ import shutil
 import subprocess
 import sys
 import urllib.parse
+import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -335,6 +337,53 @@ def load_profile_hashes(
     return known
 
 
+def _archive_members(
+    filepath: str, db: dict | None, platform_hashes: dict, profile_hashes: dict
+) -> list[str] | None:
+    """What each file of a ZIP is, None when filepath is not a ZIP.
+
+    Read only for an archive no list declares as a whole: MAME and FBNeo
+    sets are ZIP BIOS files in their own right.
+    """
+    if not zipfile.is_zipfile(filepath):
+        return None
+    held = (db or {}).get("files", {})
+    described = []
+    try:
+        with zipfile.ZipFile(filepath) as archive:
+            for info in archive.infolist():
+                if info.is_dir():
+                    continue
+                if info.file_size > MAX_FILE_SIZE:
+                    described.append(f"`{info.filename}` too large to read here")
+                    continue
+                sha1, md5 = hashlib.sha1(), hashlib.md5()
+                with archive.open(info) as handle:
+                    for chunk in iter(lambda: handle.read(1 << 20), b""):
+                        sha1.update(chunk)
+                        md5.update(chunk)
+                sha1_hex, md5_hex = sha1.hexdigest(), md5.hexdigest()
+                crc = f"{info.CRC:08x}"
+                if sha1_hex in held:
+                    state = f"already held at `{held[sha1_hex]['path']}`"
+                elif (
+                    sha1_hex in platform_hashes.get("sha1", set())
+                    or md5_hex in platform_hashes.get("md5", set())
+                    or (crc, info.file_size) in platform_hashes.get("crc32", set())
+                    or profile_hashes.get("sha1", {}).get(sha1_hex)
+                    or profile_hashes.get("md5", {}).get(md5_hex)
+                    or profile_hashes.get("crc32", {}).get((crc, info.file_size))
+                ):
+                    state = "declared and not held"
+                else:
+                    state = "not recognised"
+                described.append(f"`{info.filename}` {state}")
+    except (zipfile.BadZipFile, RuntimeError, OSError) as exc:
+        # An encrypted member raises RuntimeError.
+        described.append(f"unreadable ({exc})")
+    return described
+
+
 def validate_file(
     filepath: str,
     db: dict | None,
@@ -446,6 +495,8 @@ def validate_file(
         or profile_hashes.get("crc32", {}).get((result.crc32, None))
     )
 
+    # The files of a ZIP no list declares whole, when the upload is one.
+    members: list[str] | None = None
     if sha1_known:
         result.add_check(True, "SHA1 matches known platform requirement")
     elif md5_known:
@@ -466,11 +517,26 @@ def validate_file(
         )
     else:
         result.outcome = "unknown"
-        result.add_warning(
-            "Not recognised: no platform list or emulator profile declares this "
-            f"file. Say in the {'issue' if too_large else 'pull request'} which "
-            "emulator reads it, for which system, and where the dump comes from"
+        members = None if too_large else _archive_members(
+            filepath, db, platform_hashes, profile_hashes
         )
+        if members is not None:
+            # A folder zipped to upload many files at once was hashed as one
+            # file and its contributor asked where that dump came from.
+            shown = "; ".join(members[:10]) + (
+                f"; and {len(members) - 10} more" if len(members) > 10 else ""
+            )
+            result.add_warning(
+                "A ZIP no platform list or emulator profile declares as a whole: "
+                "add the files it holds, unzipped, not the archive. Inside: "
+                + (shown or "nothing")
+            )
+        else:
+            result.add_warning(
+                "Not recognised: no platform list or emulator profile declares this "
+                f"file. Say in the {'issue' if too_large else 'pull request'} which "
+                "emulator reads it, for which system, and where the dump comes from"
+            )
 
     normalized = os.path.normpath(relative)
     # A platform's declaration first, then a profile's: most files the gaps
@@ -503,7 +569,8 @@ def validate_file(
             result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
         else:
             result.add_warning("File should be in bios/Manufacturer/Console/ structure")
-    elif result.outcome == "held":
+    elif result.outcome == "held" or members is not None:
+        # Nothing to place: a copy, or an archive whose files go in unzipped.
         pass
     elif expected_folders:
         # The contributor asks before forking: say where it goes.
