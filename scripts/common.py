@@ -3676,6 +3676,13 @@ def run_cli(main: Callable[[], int | None]) -> None:
     for name in ("SIGTERM", "SIGHUP"):
         if hasattr(signal, name):
             signal.signal(getattr(signal, name), _exit_on_signal)
+    # Redirected, stdout is block-buffered and stderr is not: the --strict
+    # verdict landed on the first line of the log, before the report it
+    # closes. Line buffering keeps the two in the order they were written.
+    # A stream a caller swapped in (a test's StringIO) has nothing to set.
+    reconfigure = getattr(sys.stdout, "reconfigure", None)
+    if reconfigure is not None:
+        reconfigure(line_buffering=True)
     try:
         code = main()
         sys.stdout.flush()

@@ -147,6 +147,31 @@ class ADamagedProfileNamesItself(unittest.TestCase):
         self.assertFalse(issubclass(common.SourceUnreadable, FileNotFoundError))
 
 
+class TheVerdictClosesARedirectedReport(unittest.TestCase):
+    """`verify.py --emulator fbneo --strict > log 2>&1` put the --strict
+    ERROR on the first line of the log: stdout redirected is block-buffered,
+    stderr is not, and the report it closes came after."""
+
+    def test_stderr_stays_after_what_stdout_wrote_first(self):
+        program = (
+            "import sys\n"
+            "sys.path.insert(0, 'scripts')\n"
+            "from common import run_cli\n"
+            "def main():\n"
+            "    print('report')\n"
+            "    print('ERROR: verdict', file=sys.stderr)\n"
+            "    return 1\n"
+            "run_cli(main)\n"
+        )
+        env = {k: v for k, v in os.environ.items() if k != "PYTHONUNBUFFERED"}
+        proc = subprocess.run(
+            [sys.executable, "-c", program], cwd=REPO_ROOT, stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT, text=True, timeout=60, check=False, env=env,
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertEqual(proc.stdout.splitlines(), ["report", "ERROR: verdict"])
+
+
 class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
     """`verify --all --target swich` ended on "no platform has it" after 17
     INFO lines, two of which held the suggestion."""
