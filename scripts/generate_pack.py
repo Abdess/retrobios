@@ -12,6 +12,13 @@ and 3-tier storage (embedded/external/user_provided).
 
 from __future__ import annotations
 
+import sys
+
+# The README's first command. Under 3.8 it stopped on a SyntaxError that read
+# like a damaged file. The build needs 3.9, as pipeline.py says.
+if sys.version_info < (3, 9):
+    sys.exit(f"generate_pack.py needs Python 3.9 or newer, this is {sys.version.split()[0]}")
+
 from collections.abc import Callable, Iterable, Iterator
 
 from artifacts import _build_timestamp, set_plain_mode
@@ -23,7 +30,6 @@ import json
 import os
 import re
 import shutil
-import sys
 import tempfile
 import zipfile
 from pathlib import Path
@@ -5079,10 +5085,8 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
             with zipfile.ZipFile(scratch, "a", zipfile.ZIP_DEFLATED) as zf:
                 _write_generated_member(zf, "manifest.json", manifest_json)
         else:
-            with (
-                zipfile.ZipFile(zip_path, "r") as src,
-                zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED) as dst,
-            ):
+            with zipfile.ZipFile(zip_path, "r") as src, \
+                    zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED) as dst:
                 for item in src.infolist():
                     if item.filename == "manifest.json":
                         continue

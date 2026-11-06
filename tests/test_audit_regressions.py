@@ -118,6 +118,24 @@ class ReadmeRegressions(unittest.TestCase):
         self.assertEqual(proc.returncode, 1)
         self.assertIn("needs Python 3.9", proc.stderr)
 
+    def test_the_readme_build_command_names_the_floor(self):
+        """The README's first command is generate_pack.py. Under 3.8 it
+        stopped on a raw SyntaxError at a parenthesized `with`."""
+        import shutil  # noqa: PLC0415
+
+        python38 = shutil.which("python3.8")
+        if python38 is None:
+            if os.environ.get("CI"):
+                self.fail("CI must provide python3.8")
+            self.skipTest("no python3.8 on PATH")
+        proc = subprocess.run(
+            [python38, "-I", "scripts/generate_pack.py", "--help"],
+            cwd=ROOT, capture_output=True, text=True, timeout=60, check=False,
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertNotIn("SyntaxError", proc.stderr)
+        self.assertIn("generate_pack.py needs Python 3.9", proc.stderr)
+
     def test_the_floor_interpreter_imports_every_script(self):
         """Every module under scripts/ is loaded by a real interpreter of the
         floor version, as the installer's 3.8 floor is proven by running it.

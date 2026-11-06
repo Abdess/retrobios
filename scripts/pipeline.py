@@ -57,8 +57,8 @@ import tempfile
 import time
 from pathlib import Path
 
-# generate_pack's parenthesized context managers do not compile before
-# CPython 3.9, which builds the same database, manifests and packs as 3.12.
+# The build scripts need CPython 3.9, which builds the same database,
+# manifests and packs as 3.12.
 # On an older interpreter the run got through the first steps and failed in
 # the packs, so it stops before step 0. A test compiles every script under
 # this floor.
