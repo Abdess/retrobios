@@ -48,6 +48,7 @@ from common import (
     select_emulator_profiles,
 )
 from hashing import parse_hash_list
+from launchers import LauncherLayer, declared_destinations, held_record
 from validation import (
     case_folded_slots,
     declaration_settles,
@@ -692,6 +693,7 @@ SET_ASIDE = {
     "other_versions": "other versions of a slot",
     "not_read": "not read on this platform",
     "outside_scope": "outside the pack",
+    "launcher": "filled by the platform's launcher",
 }
 
 
@@ -923,6 +925,19 @@ def _cross_reference_profile(
         }
         if save_root:
             entry["root"] = "save"
+        elif index.get("launcher_candidates") is not None:
+            # What verify hands the launcher layer for the same entry.
+            probe = {
+                **f,
+                "profile": emu_name,
+                "emulator": profile.get("emulator", emu_name),
+                "path": effective_path,
+                "in_repo": in_repo,
+                "bundled": entry["bundled"],
+            }
+            index["launcher_candidates"].append(
+                (emu_name, is_standalone, f, probe, entry)
+            )
         gaps.append(entry)
 
     for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
@@ -934,12 +949,7 @@ def _cross_reference_profile(
         "systems": systems,
         "total_files": len(emu_files),
         "platform_covered": len(covered),
-        "gaps": len(gaps),
-        "gap_in_repo": sum(1 for g in gaps if g["in_repo"]),
-        "gap_missing": sum(1 for g in gaps if g["source"] == "missing"),
-        "gap_bios": sum(1 for g in gaps if g["source"] == "bios"),
-        "gap_data": sum(1 for g in gaps if g["source"] == "data"),
-        "gap_large_file": sum(1 for g in gaps if g["source"] == "large_file"),
+        **_gap_counts(gaps),
         "gap_details": gaps,
         "unsourceable": unsourceable_list,
         # Entries, not rows: an archive's members are one gap row.
@@ -948,6 +958,61 @@ def _cross_reference_profile(
         "unsourceable_files": tally["unsourceable"],
         "set_aside": {key: tally[key] for key in SET_ASIDE},
     }
+
+
+def _gap_counts(gaps: list[dict]) -> dict[str, int]:
+    """The per-source tallies of a profile's gap rows."""
+    return {
+        "gaps": len(gaps),
+        "gap_in_repo": sum(1 for g in gaps if g["in_repo"]),
+        "gap_missing": sum(1 for g in gaps if g["source"] == "missing"),
+        "gap_bios": sum(1 for g in gaps if g["source"] == "bios"),
+        "gap_data": sum(1 for g in gaps if g["source"] == "data"),
+        "gap_large_file": sum(1 for g in gaps if g["source"] == "large_file"),
+    }
+
+
+def _settle_launcher_places(
+    report: dict,
+    candidates: list[tuple[str, bool, dict, dict, dict]],
+    layer: LauncherLayer,
+    db: dict,
+) -> None:
+    """Apply the platform's launcher places as find_undeclared_files does.
+
+    Batocera's DuckStation generator fills the PAL slot with scph5502.bin,
+    yet the report listed duckstation's scph1002a.bin as a file the pack
+    carries, which neither the pack nor the manifest does.
+    """
+    added, settled = layer.settle(
+        [(emu, standalone, f, probe) for emu, standalone, f, probe, _ in candidates],
+        lambda probe: held_record(probe, db),
+    )
+    for emu, _standalone, _f, probe, gap in candidates:
+        if id(probe) not in settled:
+            continue
+        data = report[emu]
+        data["gap_details"] = [g for g in data["gap_details"] if g is not gap]
+        data["undeclared_files"] -= 1
+        data["set_aside"]["launcher"] += 1
+    for entry in added:
+        data = report[entry["profile"]]
+        data["gap_details"].append({
+            "name": entry["name"],
+            "path": entry["path"],
+            "required": entry.get("required", False),
+            "bundled": False,
+            "note": "",
+            "source_ref": "",
+            "in_platform": False,
+            "in_repo": True,
+            "source": "bios",
+            "identity": entry.get("sha1") or "",
+            "launcher": entry["launcher"],
+            "launcher_of": entry["launcher_of"],
+        })
+    for data in report.values():
+        data.update(_gap_counts(data["gap_details"]))
 
 
 def cross_reference(
@@ -960,6 +1025,7 @@ def cross_reference(
     standalone_cores: set[str] | None = None,
     folded_slots: frozenset[str] = frozenset(),
     platform: str = "",
+    launcher_layer: LauncherLayer | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
@@ -998,12 +1064,15 @@ def cross_reference(
         "all_declared": all_declared,
         "folded_slots": folded_slots,
         "bios_dir": db.get("bios_dir"),
+        "launcher_candidates": [] if launcher_layer else None,
     }
     for emu_name, profile in profiles.items():
         _cross_reference_profile(
             emu_name, profile, declared, report, index, standalone_cores,
             platform,
         )
+    if launcher_layer:
+        _settle_launcher_places(report, index["launcher_candidates"], launcher_layer, db)
 
     return report
 
@@ -1195,6 +1264,10 @@ def main() -> None:
         standalone_cores=standalone_cores,
         folded_slots=folded_declared_slots(args.platforms_dir, selected, db),
         platform=config.get("_key", args.platform) if args.platform else "",
+        # What the platform's launchers open, as verify and the builder read it.
+        launcher_layer=LauncherLayer(
+            config, profiles, relevant, db, declared_destinations(config)
+        ) if args.platform else None,
     )
 
     if args.json:

@@ -84,7 +84,7 @@ from common import (
 
 yaml = require_yaml()
 from exporter.candidates import BIOS, EntryCategories
-from launchers import LauncherLayer, declared_destinations
+from launchers import LauncherLayer, declared_destinations, held_record
 from nativemode import (
     SIZE_AND_ANY_HASH,
     digest_algorithm,
@@ -489,17 +489,6 @@ def _identity_of(entry: dict) -> dict:
     }
 
 
-def _held_record(report: dict, db: dict) -> dict | None:
-    """The database record of the file the collection holds for a report entry."""
-    local, status = resolve_local_file(report, db, dest_hint=report.get("path") or "")
-    if local is None or status in ("not_found", "hash_mismatch"):
-        return None
-    for record in db.get("files", {}).values():
-        if record.get("path") == local:
-            return record
-    return None
-
-
 def find_undeclared_files(
     config: dict,
     emulators_dir: str,
@@ -778,7 +767,7 @@ def find_undeclared_files(
 
     if launcher_layer:
         added, settled = launcher_layer.settle(
-            launcher_candidates, lambda report: _held_record(report, db)
+            launcher_candidates, lambda report: held_record(report, db)
         )
         undeclared = [u for u in undeclared if id(u) not in settled]
         undeclared.extend(added)
