@@ -10130,9 +10130,10 @@ def emulator_pages(
         # The file cards name the setups whose own list holds a file: the
         # ones that run the emulator and pack its files were said nowhere.
         # Said once here: a line on each card put MAME's parts and four
-        # other pages over their element budget.
-        lines.append("| Run by | " + ", ".join(
-            f"[{_platform_display(p)}](../platforms/{p}.md)" for p in setups) + " |")
+        # other pages over their element budget. Out of the search: setup
+        # names on 530 pages ranked the data page first for "batocera folder".
+        lines.append(f"| Run by | <span {markup.search_exclude()}>" + ", ".join(
+            f"[{_platform_display(p)}](../platforms/{p}.md)" for p in setups) + "</span> |")
     lines.append(f"| Profiled | {profiled} |")
     # The YAML is the reusable document this site renders, and the JSON is the
     # same profile for a program.

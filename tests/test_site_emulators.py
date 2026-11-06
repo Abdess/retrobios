@@ -785,6 +785,8 @@ class AnEmulatorPageNamesItsSetups(unittest.TestCase):
         row = next(line for line in text.splitlines() if line.startswith("| Run by |"))
         for setup in ("emudeck", "rocknix", "nextui", "retroarch"):
             self.assertIn(f"/platforms/{setup}/", row)
+        # Setup names on every emulator page outranked the setup's own page.
+        self.assertIn("data-pagefind-ignore", row)
 
 
 class SizesTheCodeComparesAreExact(unittest.TestCase):
