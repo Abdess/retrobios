@@ -16,7 +16,8 @@ When a page opens, your browser sends one request to
 carries:
 
 - the page address, without the part after `?` or `#`;
-- the site you came from, by its domain only (`google.com`, `reddit.com`).
+- the site you came from, by its address without a path
+  (`https://www.google.com`).
 
 GoatCounter reads the browser name and the country from that request. It does
 not keep your IP address. To tell a reload from a second visitor it keeps a
@@ -25,9 +26,13 @@ code made from the request for 8 hours, then drops it.
 These actions are counted the same way, with the page they happened on:
 
 - a click on a copy button, a pack download or a file link;
+- a click on a link to another site, by that site's domain (`reddit.com`);
 - a site search that found nothing, so a missing page shows up. Its words are
   sent only when they read as a file name (`scph5501.bin`, `scph5501`) or a
-  hash. Any other search is counted as "other", without its words;
+  hash with at least one letter. A word of letters with a few digits is sent
+  as typed, so a nickname written that way (`dupont1985`) would be too. A
+  number alone, such as a phone number, never is. Any other search is counted
+  as "other", without its words;
 - the answer to "Did this page help?".
 
 Not sent: your screen size, your language, a search that found results.

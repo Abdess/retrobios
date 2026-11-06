@@ -49,6 +49,25 @@ class TheCounterAsksNothingOfTheDevice(unittest.TestCase):
         self.assertIn("countEvent(`search-none/${searchWords(query)}`)", self.code)
         self.assertIn("message.startsWith('No results for')", self.code)
 
+    def _shape(self, name: str):
+        """A search-shape predicate of count.ts, its regexes run by Python
+        (the counter's patterns use no syntax the two read differently)."""
+        body = re.search(rf"const {name} = \(query: string\): boolean =>(.*?);\n", self.code, re.S).group(1)
+        patterns = [re.compile(p) for p in re.findall(r"/(\^.*?\$|\[[^/]*?\]|\\d)/\.test\(query\)", body)]
+        digits = "(query.match(/\\d/g) ?? []).length <= 4" in body
+        return lambda q: all(p.search(q) for p in patterns) and (
+            not digits or len(re.findall(r"\d", q)) <= 4)
+
+    def test_a_number_alone_is_never_sent(self) -> None:
+        """An 8-digit phone number is valid hex and went out as a hash."""
+        shapes = [self._shape(n) for n in ("isHash", "isFileName", "isFileStem")]
+        for query in ("55512345", "91234567", "0612345678", "+33612345678"):
+            with self.subTest(query=query):
+                self.assertFalse(any(shape(query) for shape in shapes))
+        for query in ("b4430a3b", "scph5501", "scph5501.bin", "a" * 40):
+            with self.subTest(query=query):
+                self.assertTrue(any(shape(query) for shape in shapes))
+
     def test_one_endpoint(self) -> None:
         self.assertEqual(set(re.findall(r"https://[\w.-]+", self.code)),
                          {"https://retrobios.goatcounter.com"})
@@ -69,6 +88,19 @@ class ThePageSaysWhatIsCounted(unittest.TestCase):
                      "The installer sends nothing back", "retrobios.goatcounter.com"):
             with self.subTest(said=said):
                 self.assertIn(said, page)
+
+    def test_the_page_names_what_the_counter_cannot_tell_apart(self) -> None:
+        """The page left out outbound clicks, which count.ts sends, said the
+        referrer went by domain when the origin goes, and promised a search
+        word goes out only as a file name while a nickname with digits does."""
+        page = PRIVACY.read_text(encoding="utf-8")
+        code = COUNTER.read_text(encoding="utf-8")
+        self.assertIn("`out/${url.hostname}`", code)
+        self.assertIn("link to another site", page)
+        self.assertIn("from.origin", code)
+        self.assertIn("`https://www.google.com`", page)
+        self.assertIn("`dupont1985`", page)
+        self.assertIn("phone number, never is", page)
 
     def test_the_installer_has_no_counter(self) -> None:
         installer = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
