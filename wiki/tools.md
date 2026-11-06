@@ -1705,6 +1705,7 @@ Located in `scripts/scraper/targets/`. Each inherits `BaseTargetScraper` and imp
 | `knulli_targets_scraper` | the same, read from KNULLI's tree and Buildroot fork | board |
 | `recalbox_targets_scraper` | board defconfigs + system.ini cores | board |
 | `rocknix_targets_scraper` | emulators package.mk + device options | device |
+| `amberelec_targets_scraper` | Makefile devices + metapackage extra cores + es_systems.cfg | device |
 | `lakka_targets_scraper` | libretro_cores package.mk + project and device options | device image |
 | `emudeck_targets_scraper` | EmuScripts (SteamOS and Windows) | operating system |
 | `retropie_targets_scraper` | scriptmodules + rp_module_flags | platform flag |

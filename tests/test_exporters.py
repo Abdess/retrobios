@@ -2925,6 +2925,44 @@ class BatoceraNotesStayWithTheirItem(unittest.TestCase):
         self.assertEqual(trailing, {("bios/bk0010.zip", "two.rom"): "# tail"})
 
 
+class TheWikiNamesWhatCountsAnExport(unittest.TestCase):
+    """adding-a-platform listed the methods that say what a format can hold
+    and none of those that count what render wrote, which seven exporters
+    override so the report matches the diff."""
+
+    def test_every_overridden_contract_method_is_documented(self):
+        documented = ("carries", "requires", "can_add", "keys_by_system",
+                      "lands", "states", "fills", "clears", "names_anew", "withheld")
+        overridden = {
+            name
+            for cls in discover_exporters().values()
+            for name in documented
+            if name in vars(cls)
+        }
+        wiki = (REPO_ROOT / "wiki" / "adding-a-platform.md").read_text(encoding="utf-8")
+        for name in sorted(overridden):
+            with self.subTest(method=name):
+                self.assertIn(f"`{name}(", wiki)
+
+
+class BatoceraEntriesAtAnyIndent(unittest.TestCase):
+    """EmuELEC indents 23 of its systems with one tab. The entry pattern
+    required four spaces, so each was appended again whole and the export
+    carried 21 duplicated keys that ast.literal_eval kept silently."""
+
+    def test_a_tab_indented_entry_is_located(self):
+        from exporter.batocera_exporter import Exporter
+
+        body = [
+            '    "atari5200": { "name": "5200", "biosFiles": [ { "md5": "a", "file": "bios/5200.rom" } ] },',
+            '\t"amiga": { "name": "Amiga", "biosFiles": [ { "md5": "b", "file": "bios/kick.rom" },',
+            '\t\t{ "md5": "c", "file": "bios/kick2.rom" } ] },',
+        ]
+        self.assertEqual(
+            Exporter._entry_spans(body), {"atari5200": (0, 0), "amiga": (1, 2)}
+        )
+
+
 class RecalboxKeepsUnchangedText(unittest.TestCase):
     """Every element the model held was re-rendered: attribute order,
     alignment, line breaks inside md5 and digest case changed in 222

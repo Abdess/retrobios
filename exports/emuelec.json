@@ -6,14 +6,102 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "590 kept, 39 files added, 47 hashes added to an existing entry",
+  "summary": "590 kept, 47 files added, 47 hashes added to an existing entry",
   "counts": {
     "kept": 590,
-    "added": 39,
-    "not_added": 1117,
+    "added": 47,
+    "not_added": 1712,
     "not_kept": 0
   },
   "changes": [
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick33180.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick33180.A500.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "c993feb1eeddec1d2e687aa514231028"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick34005.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick34005.A500.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "7eb13d974af0992d672b67c317a7e0a1"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick37175.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick37175.A500.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "e057054449b5e21591ce27d2eb9ac720"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick36143.A3000.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick36143.A3000.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "2a2652daba6be3ef1d0bdf5ddd4347c6"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick39106.A1200.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick39106.A1200.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "af8b2e2227f01a142e20c8ab463f14ed"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick40063.A600.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40063.A600.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "3f97c1963d82c808ef29e7c984c4c688"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick40068.A1200.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40068.A1200.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "547b42b7b070c7f227ea45e0986d57a1"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "kick40068.A4000.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40068.A4000.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "f89f19b858ea6b1a04327c6f71ee1600"
+      }
+    },
     {
       "kind": "added",
       "system": "amiga",
@@ -922,7 +1010,8 @@
   "hashes_cleared": [],
   "requirements_corrected": 0,
   "withheld": [],
-  "found_by_content": 107,
+  "found_by_content": 312,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "colecovision",
@@ -4421,5 +4510,6 @@
       "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }

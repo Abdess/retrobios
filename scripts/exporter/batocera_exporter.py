@@ -19,7 +19,9 @@ SOURCE_URL = (
     "/package/batocera/core/batocera-scripts/scripts/batocera-systems"
 )
 
-_ENTRY_START = re.compile(r'^(\s{4})"([^"]+)":\s*\{')
+# Any indent: Batocera writes four spaces, EmuELEC one tab for 23 systems,
+# and an entry the pattern missed was appended again whole.
+_ENTRY_START = re.compile(r'^(\s+)"([^"]+)":\s*\{')
 _INDENT = " " * 4
 # One BIOS item: a dict literal with no nested braces.
 _ITEM = re.compile(r"\{[^{}\n]*\}")
@@ -382,12 +384,13 @@ class Exporter(BaseExporter):
         return inner if isinstance(inner, dict) else {}
 
     def _entry_line(
-        self, system: NativeSystem, files: list[NativeFile], before: dict | None = None
+        self, system: NativeSystem, files: list[NativeFile], before: dict | None = None,
+        indent: str = _INDENT,
     ) -> str:
         own = self._own_entry(system, before)
         runner = "".join(f"{key}, " for key in self._runner_keys(own))
         return (
-            f'{_INDENT}"{system.native_id}": '
+            f'{indent}"{system.native_id}": '
             f'{{ "name": "{self.display_name(system)}", {runner}'
             f'"biosFiles": [ {self._bios_files(files, own)} ] }},'
         )
@@ -440,16 +443,17 @@ class Exporter(BaseExporter):
         before = self._parse_entry(original)
         own = self._own_entry(system, before)
         items = self._bios_items(files, own)
+        indent = _ENTRY_START.match(original[0]).group(1)
         one_line = len(original) == 1 and not trailing and not leading
         if one_line:
-            return [self._entry_line(system, files, before)]
+            return [self._entry_line(system, files, before, indent)]
 
         runner = "".join(f"{key}, " for key in self._runner_keys(own))
         head = (
-            f'{_INDENT}"{system.native_id}": '
+            f'{indent}"{system.native_id}": '
             f'{{ "name": "{self.display_name(system)}", {runner}"biosFiles": ['
         )
-        pad = " " * (len(_INDENT) + 4)
+        pad = indent + " " * 4
         lines = [head]
         for index, item in enumerate(items):
             key = _note_key(item)
@@ -458,7 +462,7 @@ class Exporter(BaseExporter):
             note = trailing.get(key, "")
             suffix = f" {note}" if note else ""
             lines.append(f"{pad}{item}{separator}{suffix}")
-        lines.append(f"{_INDENT}] }},")
+        lines.append(f"{indent}] }},")
         return lines
 
     def _patched_entry(

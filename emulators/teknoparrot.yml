@@ -6,6 +6,8 @@ upstream: closed-source
 author: "TeknoGods"
 profiled_date: "2026-10-20"
 source_commit: "b75872addc1d5cce81a62f4c1468eab59e2d3cbe"
+upstream_gone: "teknogods/TeknoParrotUI answers 404 on the API and the web, and the teknogods organisation no longer lists it. Observed 2026-11-06. thecrixux/TeknoParrotUI keeps master at the analysed commit."
+source_mirror: "https://github.com/thecrixux/TeknoParrotUI"
 core_version: "TeknoParrotUI 7ffcdf1"
 version_basis:
   kind: unverified

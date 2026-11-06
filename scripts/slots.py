@@ -43,7 +43,12 @@ from common import (
     variant_base_name,
 )
 from packresolve import preferred_entries
-from validation import outside_gap_scope, read_from_save_dir, with_archive_members
+from validation import (
+    content_alternatives,
+    outside_gap_scope,
+    read_from_save_dir,
+    with_archive_members,
+)
 
 if TYPE_CHECKING:
     from packextras import ExtraPlacement
@@ -85,6 +90,9 @@ class Claim:
     entry: dict = field(default_factory=dict)
     local_path: str | None = None
     status: str = ""
+    # A core that identifies its firmware by content reads no file by this
+    # name: any dump it takes for the same system and region answers for it.
+    accepts: tuple[dict, ...] = ()
 
     @property
     def is_proven(self) -> bool:
@@ -260,6 +268,7 @@ def profile_claims(
                 )
                 if status == "name_exact" and _size_the_code_reads(entry, local):
                     status = SIZE_EXACT
+                accepts = tuple(content_alternatives(entry, profile))
                 claims.append(
                     Claim(
                         origin="profile",
@@ -269,6 +278,7 @@ def profile_claims(
                         entry=entry,
                         local_path=local,
                         status=status,
+                        accepts=accepts,
                     )
                 )
     return claims
@@ -777,6 +787,10 @@ def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
     They agree when they resolve to the same bytes, when the platform's own
     hash list accepts the profile's file, or when the profile's accepts the
     platform's. A contradiction needs both lists to reject the other side.
+    A core found by content (found_by: content) reads no file by the
+    destination's name, so any dump it takes for the same system and region
+    settles the slot: DuckStation takes Batocera's scph1001.bin v2.0, which its profile
+    labels scph1001_v20.bin.
     """
     if profile.local_path == platform.local_path:
         return True
@@ -793,6 +807,11 @@ def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
         profile.local_path
         and _lists_hashes(platform.entry)
         and _accepted_by_all(profile.local_path, [platform.entry], db)
+    ):
+        return True
+    if platform.local_path and any(
+        _lists_hashes(label) and _accepted_by_all(platform.local_path, [label], db)
+        for label in profile.accepts
     ):
         return True
     return bool(

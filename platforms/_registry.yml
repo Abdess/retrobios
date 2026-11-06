@@ -881,8 +881,8 @@ platforms:
     # setsettings.py leaves it: saves sit beside each game, no single place.
     save_directory: null
     schedule: monthly
-    target_scraper: null
-    target_source: null
+    target_scraper: amberelec_targets
+    target_source: https://github.com/AmberELEC/AmberELEC/blob/dev/packages/amberelec/package.mk
     install:
       detect:
       # AmberELEC 5a3882cb scripts/image:150-152, options:17. CHAos

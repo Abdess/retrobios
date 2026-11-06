@@ -576,12 +576,26 @@ def _collect_all_aliases(
     # naming its content once 64DD_IPL.bin sorted first, and its aliases
     # 64dd_ipl_J.bin and 64DD_IPL_JP.n64 went with it.
     holders: dict[str, set[str]] = {}
+    # The files a name designates once case is folded, as the resolver's
+    # name step folds it, a primary and its own .variants/ counted as one
+    # file. dosbox's SC-55 ROM2.BIN found Galaksija's ROM2.BIN the only
+    # exact holder, and its alias ROM2_ST.BIN went to a 4 KiB BASIC ROM,
+    # while SC-55's rom2.bin sat under the same folded name.
+    families: dict[str, set[str]] = {}
+
+    def _hold(name: str, path: str, sha1: str) -> None:
+        holders.setdefault(name, set()).add(sha1)
+        directory = path.rpartition("/")[0].removesuffix("/.variants")
+        families.setdefault(name.casefold(), set()).add(
+            f"{directory}/{variant_base_name(name)}".casefold()
+        )
+
     for sha1, entry in files.items():
-        holders.setdefault(entry["name"], set()).add(sha1)
+        _hold(entry["name"], entry["path"], sha1)
     for sha1, copy_list in (copies or {}).items():
         if sha1 in files:
             for copy in copy_list:
-                holders.setdefault(copy["name"], set()).add(sha1)
+                _hold(copy["name"], copy["path"], sha1)
 
     aliases = {}
 
@@ -691,11 +705,16 @@ def _collect_all_aliases(
                     ]
                     if taken:
                         shadowed.append((entry_name, set(matched), taken))
-                if not matched and len(holders.get(entry_name, ())) == 1:
+                held = holders.get(entry_name, set())
+                if (
+                    not matched
+                    and len(held) == 1
+                    and len(families[entry_name.casefold()]) == 1
+                ):
                     # A name carried by several contents names none of them:
                     # quasi88's disk.rom aliases went to whichever
                     # disk.rom the scan met last, a Tandy CoCo ROM.
-                    matched = set(holders[entry_name])
+                    matched = set(held)
                 for sha in sorted(matched):
                     for alias_name in entry_aliases:
                         _add_alias(alias_name, sha)
