@@ -175,6 +175,9 @@ class Exporter(BaseExporter):
 
         ours: dict[str, dict[str, str]] = {}
         added: dict[str, set[str]] = {}
+        # A rom name is one line: an addition whose name an earlier entry
+        # took is not written, and was counted added.
+        self._shadowed: set[int] = set()
         for system, files in self.exportable(systems):
             rendered: dict[str, str] = {}
             for fe in files:
@@ -194,7 +197,11 @@ class Exporter(BaseExporter):
                 sha1 = fe.record_hash("sha1")
                 if sha1:
                     parts.append(f"sha1 {sha1}")
-                rendered.setdefault(name, f"\trom ( {' '.join(parts)} )")
+                if name in rendered:
+                    if fe.platform is None:
+                        self._shadowed.add(id(fe))
+                    continue
+                rendered[name] = f"\trom ( {' '.join(parts)} )"
                 if fe.platform is None:
                     added.setdefault(system.native_id, set()).add(name)
             if rendered:
@@ -241,7 +248,11 @@ class Exporter(BaseExporter):
         return {self.native_filename(): "\n".join(lines)}
 
     def lands(self, fe: NativeFile) -> bool:
-        return self.writable(fe) and id(fe) not in getattr(self, "_untitled", set())
+        return (
+            self.writable(fe)
+            and id(fe) not in getattr(self, "_untitled", set())
+            and id(fe) not in getattr(self, "_shadowed", set())
+        )
 
     def validate(
         self,

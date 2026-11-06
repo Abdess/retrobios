@@ -221,12 +221,19 @@ class Exporter(BaseExporter):
         ours = str(entry.get("path") or entry.get("name", "")).split("/")[:-1]
         return not {d.casefold() for d in theirs} & {d.casefold() for d in ours}
 
-    def _bios_element(self, fe: NativeFile, native_id: str) -> str:
+    def _bios_element(
+        self, fe: NativeFile, native_id: str, also: tuple[NativeFile, ...] = ()
+    ) -> str:
+        """``also`` are further additions at fe's path: Bios.cpp reads one
+        element per path, and its md5 and core lists take every one of them."""
+        group = (fe, *also)
+        md5 = dict.fromkeys(h for f in group for h in f.hashes("md5"))
+        cores = dict.fromkeys(c for f in group for c in f.cores())
         attrs = [f"path={quoteattr(self._path(fe))}"]
-        attrs.append(f'md5={quoteattr(",".join(fe.hashes("md5")))}')
-        attrs.append(f'core={quoteattr(",".join(fe.cores()))}')
+        attrs.append(f'md5={quoteattr(",".join(md5))}')
+        attrs.append(f'core={quoteattr(",".join(cores))}')
 
-        if not self.required_value(fe):
+        if not any(self.required_value(f) for f in group):
             attrs.append('mandatory="false"')
         elif fe.native("mandatory_declared", None) is True:
             attrs.append('mandatory="true"')
@@ -343,11 +350,17 @@ class Exporter(BaseExporter):
         }
         ours: dict[str, tuple[NativeSystem, dict[str, tuple[NativeFile, str]]]] = {}
         for system in systems.values():
-            writable = [fe for fe in system.files if self.writable(fe)]
-            if writable:
+            # Two additions at one path (two cores, two dumps) are one
+            # element: keyed by path, the second replaced the first and its
+            # md5 left the file while both were counted added.
+            at_path: dict[str, list[NativeFile]] = {}
+            for fe in system.files:
+                if self.writable(fe):
+                    at_path.setdefault(self._path(fe), []).append(fe)
+            if at_path:
                 ours[system.native_id] = (system, {
-                    self._path(fe): (fe, self._bios_element(fe, system.native_id))
-                    for fe in writable
+                    path: (group[0], self._bios_element(group[0], system.native_id, tuple(group[1:])))
+                    for path, group in at_path.items()
                 })
 
         def element(attrs: dict[str, str]) -> str:
