@@ -866,6 +866,31 @@ class AWantedDumpIsFoundByItsHash(unittest.TestCase):
         self.assertIn('retired_files.load(_REPO_ROOT / "retired.json"), wanted)', source)
 
 
+class AMovedPartCardReachesItsPage(unittest.TestCase):
+    """One entry added to mame.yml moved 938 of its 1,585 cards from one
+    part page to another, and emulators/mame-files-1/#file-mackbd-m0110a-zip
+    led to a page without the card: part pages have no card index, and
+    site.js redirected only sha1- ids."""
+
+    def test_a_part_page_sends_a_missing_card_to_the_emulator_page(self):
+        import re as _re  # noqa: PLC0415
+
+        import generate_site  # noqa: PLC0415
+
+        script = (Path(__file__).resolve().parents[1] / "website" / "src" / "scripts"
+                  / "site.ts").read_text(encoding="utf-8")
+        body = script.split("const followMovedCard = () => {", 1)[1].split("\n};", 1)[0]
+        pattern = _re.search(r"const part = /(.+?)/\.exec\(location\.pathname\)", body).group(1)
+        files = [{"name": f"f{i}.bin", "path": f"f{i}.bin", "required": True} for i in range(600)]
+        stem = generate_site.emulator_parts("mame", files)[1][0]
+        found = _re.search(pattern.replace("\\/", "/"), f"/retrobios/emulators/{stem}/")
+        self.assertEqual(found.group(1), "mame")
+        self.assertIn("emulators/${part[1]}/#", body)
+        self.assertIn("id.startsWith('file-')", body)
+        # The emulator page holds the index whose row leads to the card.
+        self.assertIn("closest('.rb-card-index tr')", body)
+
+
 class AFileHasAnAddressByContent(unittest.TestCase):
     """mt32_control.rom moved from the Commodore page to the Roland page and
     every link to its card broke: the anchor was content-based, the page

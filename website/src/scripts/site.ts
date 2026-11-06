@@ -814,7 +814,10 @@ const resolveFileAddress = () => {
 
 // A file card moved to another page keeps its address: an id of the form
 // sha1-<12 hex> that this page does not hold is looked up by content, and
-// an emulator card listed in the table of a split page opens its page.
+// an emulator card listed in the table of a split page opens its page. A
+// part of a split emulator page (emulators/mame-files-1/) sends a card id
+// it no longer holds to that table: an entry added to the profile moves
+// hundreds of cards from one part to the next.
 const followMovedCard = () => {
 	const id = decodeURIComponent(location.hash.slice(1));
 	if (!id) return;
@@ -824,8 +827,14 @@ const followMovedCard = () => {
 		location.replace(link.href);
 		return;
 	}
+	if (target) return;
 	const match = /^sha1-([0-9a-f]{12})$/.exec(id);
-	if (match && !target) location.replace(new URL(`files/?sha1=${match[1]}`, siteRoot()));
+	if (match) {
+		location.replace(new URL(`files/?sha1=${match[1]}`, siteRoot()));
+		return;
+	}
+	const part = /\/emulators\/(.+)-files-\d+\/?$/.exec(location.pathname);
+	if (part && id.startsWith('file-')) location.replace(new URL(`emulators/${part[1]}/#${encodeURIComponent(id)}`, siteRoot()));
 };
 
 // A link to a card folded in a table row (emulators with many entries)
