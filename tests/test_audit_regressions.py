@@ -206,11 +206,16 @@ class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
             )
             proc = subprocess.run(
                 [sys.executable, "-I", "-c",
-                 "import sys; sys.path.insert(0, '.'); import tests"],
+                 "import sys; sys.path.insert(0, '.'); import tests, tempfile, os;"
+                 " print(tempfile.gettempdir()); print(os.environ['TMPDIR'])"],
                 cwd=clone, capture_output=True, text=True, timeout=60, check=False,
             )
             self.assertEqual(proc.returncode, 0, proc.stderr)
             self.assertTrue((clone / "tmp" / "tests").is_dir())
+            # 264 TemporaryDirectory() calls without dir= wrote to the /tmp
+            # tmpfs, and a full tmpfs failed modules no change touched.
+            scratch = str((clone / "tmp" / "tests").resolve())
+            self.assertEqual(proc.stdout.split(), [scratch, scratch])
 
 
 class ReleaseSigningRegressions(unittest.TestCase):
