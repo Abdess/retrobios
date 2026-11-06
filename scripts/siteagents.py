@@ -2,9 +2,11 @@
 
 - ``llms.txt`` (https://llmstxt.org): the pages and data an agent should
   read first, in Markdown, at the site's root.
+- ``skills/setup-bios/SKILL.md``: an Agent Skill that sets up a device's
+  BIOS files with the fewest downloads.
 - ``ard.json``: an Agentic Resource Discovery manifest
-  (https://github.com/ards-project/ard-spec) listing that file and the JSON
-  API, linked from every page's head with ``rel="ard"``.
+  (https://github.com/ards-project/ard-spec) listing that skill and the
+  JSON API, linked from every page's head with ``rel="ard"``.
 
 Both are written from the registry at each build, so a new platform or a
 moved page cannot leave them stale. The WebMCP tools a page registers live
@@ -92,6 +94,7 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "- Later, to see what is missing or wrong: `--check`. Machine-readable progress: "
         "`--events` (JSON lines, one per event, documented on the installer page).",
         "- A game the installer cannot identify gets every BIOS of its system, and the run names it.",
+        f"- The same steps as an Agent Skill: [SKILL.md]({SITE}{SKILL_PATH}).",
         "",
         "## Start",
         "",
@@ -112,24 +115,77 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
     return "\n".join(lines) + "\n"
 
 
+SKILL_PATH = "skills/setup-bios/SKILL.md"
+# The Agent Skills media type ARD names: Markdown with this profile.
+SKILL_TYPE = 'text/markdown; profile="urn:air:agent-skills"'
+
+
+def skill_md() -> str:
+    """An Agent Skill (SKILL.md: YAML front matter, then instructions) that
+    sets up a device's BIOS files with the fewest downloads."""
+    return "\n".join([
+        "---",
+        "name: setup-bios",
+        "description: Install the BIOS and firmware files a retrogaming device or computer needs "
+        "(RetroArch, Batocera, EmuDeck, ArkOS, dArkOS, muOS, KNULLI, ROCKNIX and others), only "
+        "what the games on its card need to start. Use when a user asks to set up emulators, "
+        "a handheld (R36S, Miyoo, Anbernic), BIOS files or firmware.",
+        "---",
+        "",
+        "# Set up BIOS files with RetroBIOS",
+        "",
+        "Most users want to play now, with the fewest files. Install only what the games on the "
+        "card need, unless the user asks for everything.",
+        "",
+        "## Steps",
+        "",
+        "1. Ask where the games are: on the device itself (you have its terminal or SSH), or on "
+        "its card plugged into this computer.",
+        f"2. Preview, nothing is written: `{SH} --for-games --required-only --dry-run` "
+        f"(Windows PowerShell: `{PS} --for-games --required-only --dry-run`).",
+        "3. Show the user the plan it prints: the setup found, the BIOS folder, the files and "
+        "their size. Ask before going on if the setup or the folder is not the one expected.",
+        "4. Install with the same command, `--yes` in place of `--dry-run`.",
+        "5. Report the summary line. A game the installer could not identify got every BIOS of "
+        "its system: say which.",
+        "",
+        "## When the setup or the card is not found",
+        "",
+        "- From a computer, name the card's BIOS folder: `--dest=<card>/bios`. ArkOS and dArkOS "
+        "keep it on the EASYROMS part.",
+        "- Games outside the card: `--for-games=<folder>`, one subfolder per system.",
+        "- A setup not detected: `--platform=<name>` (`--list-platforms` lists them).",
+        "",
+        "## Later",
+        "",
+        "- `--check` says what is missing or wrong, without downloading.",
+        "- `--events` writes the run as JSON lines, for reading by a program.",
+        "",
+        f"Every option: {SITE}wiki/installer/. Devices and their folders: "
+        f"{SITE}platforms/linux-handhelds/. The site's guide for agents: {SITE}llms.txt.",
+        "",
+    ])
+
+
 def ard_manifest() -> dict:
-    """The ARD manifest: the llms.txt and the JSON API, each with the
-    questions it answers."""
+    """The ARD manifest: the setup skill and the JSON API, each with the
+    questions it answers. llms.txt is found at the site root, as its
+    convention says."""
     return {
         "entries": [
             {
-                "identifier": f"urn:air:{PUBLISHER}:retrobios:guide",
-                "displayName": "RetroBIOS guide for agents",
-                "type": "text/markdown",
-                "url": f"{SITE}llms.txt",
-                "description": "The pages and datasets of RetroBIOS: BIOS and firmware files for "
-                               "emulators, checked against each emulator's source code.",
+                "identifier": f"urn:air:{PUBLISHER}:retrobios:setup-bios",
+                "displayName": "Set up BIOS files with RetroBIOS",
+                "type": SKILL_TYPE,
+                "url": f"{SITE}{SKILL_PATH}",
+                "description": "An agent skill that installs the BIOS files a device needs, only "
+                               "what the games on its card need to start.",
                 "representativeQueries": [
                     "install the minimum BIOS files for the games on my R36S running dArkOS",
-                    "which BIOS files does mGBA need",
-                    "where do PlayStation BIOS files go on Batocera",
-                    "how do I install BIOS files for RetroArch",
+                    "set up BIOS files for RetroArch on my Steam Deck",
+                    "my emulator says BIOS missing, fix it",
                 ],
+                "capabilities": ["SetupBios"],
                 "tags": ["bios", "firmware", "emulation", "retrogaming"],
             },
             {
@@ -142,7 +198,7 @@ def ard_manifest() -> dict:
                 "representativeQueries": [
                     "what file has the MD5 490f666e1afb15b7362b406ed1cea246",
                     "which files does the beetle_psx core read",
-                    "list the systems Batocera supports",
+                    "where do PlayStation BIOS files go on Batocera",
                 ],
                 "capabilities": ["HashLookup", "EmulatorFiles", "PlatformFiles"],
                 "tags": ["api", "json", "bios"],
@@ -154,4 +210,6 @@ def ard_manifest() -> dict:
 def write(public: Path, platforms: list[tuple[str, str]],
           write_if_changed: Callable[[str, str], object]) -> None:
     write_if_changed(str(public / "llms.txt"), llms_txt(platforms))
+    (public / SKILL_PATH).parent.mkdir(parents=True, exist_ok=True)
+    write_if_changed(str(public / SKILL_PATH), skill_md())
     write_if_changed(str(public / "ard.json"), json.dumps(ard_manifest(), indent=1) + "\n")

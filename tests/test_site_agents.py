@@ -50,6 +50,30 @@ class TheGuideLeadsToTheFewestFiles(unittest.TestCase):
                 self.assertTrue(target.is_file() or (target / "index.html").is_file(), url)
 
 
+class TheSkillIsAnAgentSkill(unittest.TestCase):
+    """ARD reserves text/markdown for agent skills (Lighthouse warns on a
+    plain Markdown entry): the setup steps are published as one."""
+
+    def test_front_matter_then_instructions(self) -> None:
+        import yaml  # noqa: PLC0415
+
+        text = siteagents.skill_md()
+        head, _, body = text.removeprefix("---\n").partition("\n---\n")
+        front = yaml.safe_load(head)
+        self.assertEqual(set(front), {"name", "description"})
+        self.assertRegex(front["name"], r"^[a-z0-9-]{1,64}$")
+        self.assertLessEqual(len(front["description"]), 1024)
+        self.assertTrue(body.lstrip().startswith("# "))
+        for command in re.findall(r"`((?:curl|&) [^`]+)`", body):
+            with self.subTest(command=command):
+                self.assertIn("--for-games --required-only", command)
+
+    def test_the_manifest_types_it_as_a_skill(self) -> None:
+        skill = siteagents.ard_manifest()["entries"][0]
+        self.assertEqual(skill["type"], 'text/markdown; profile="urn:air:agent-skills"')
+        self.assertTrue(skill["url"].endswith(siteagents.SKILL_PATH))
+
+
 class TheManifestIsAnArdManifest(unittest.TestCase):
     """The terms ard-entry.schema.json requires (ards-project/ard-spec)."""
 
@@ -60,7 +84,7 @@ class TheManifestIsAnArdManifest(unittest.TestCase):
             with self.subTest(entry=entry.get("identifier")):
                 self.assertRegex(entry["identifier"], r"^urn:air:[a-zA-Z0-9.-]+(:[a-zA-Z0-9._-]+)+$")
                 self.assertTrue(entry["displayName"])
-                self.assertRegex(entry["type"], r"^[a-z]+/[\w.+-]+$")
+                self.assertRegex(entry["type"], r'^[a-z]+/[\w.+-]+(; [a-z]+="[^"]+")?$')
                 self.assertTrue(("url" in entry) != ("data" in entry))
                 self.assertTrue(2 <= len(entry["representativeQueries"]) <= 5)
                 self.assertTrue(entry["url"].startswith(siteagents.SITE))
