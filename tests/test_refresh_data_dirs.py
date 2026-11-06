@@ -323,6 +323,7 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
                       _manifest_data_directories(members, refs, registry, "")}
         self.assertEqual(listed["pak"]["archive_size"], 21_360_579)
         self.assertNotIn("archive_size", listed["old"])
+        self.assertNotIn("optional", listed["pak"])
 
 
 if __name__ == "__main__":

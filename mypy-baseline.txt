@@ -899,6 +899,8 @@ scripts/scraper/targets/rocknix_targets_scraper.py:0: error: Name "github_header
 scripts/scraper/targets/rocknix_targets_scraper.py:0: error: Name "standalone_emulators" already defined (possibly by an import)  [no-redef]
 scripts/sect233r1.py:0: error: Incompatible types in assignment (expression has type "Optional[tuple[int, int]]", variable has type "tuple[int, int]")  [assignment]
 scripts/site_insights.py:0: error: Item "list[Any]" of "Union[dict[Any, Any], list[Any]]" has no attribute "get"  [union-attr]
+scripts/site_insights.py:0: error: Item "list[Any]" of "Union[dict[Any, Any], list[Any]]" has no attribute "get"  [union-attr]
+scripts/site_insights.py:0: error: Item "list[Any]" of "Union[dict[Any, Any], list[Any]]" has no attribute "get"  [union-attr]
 scripts/sitediagrams.py:0: error: "AST" has no attribute "value"  [attr-defined]
 scripts/sitediagrams.py:0: error: Argument 1 to "lstrip" of "bytes" has incompatible type "str"; expected "Optional[Buffer]"  [arg-type]
 scripts/sitediagrams.py:0: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]

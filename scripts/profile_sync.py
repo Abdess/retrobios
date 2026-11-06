@@ -5018,7 +5018,7 @@ def _print_triage(
 ) -> bool:
     """Profiles ranked by drift, worst first. False when Ctrl-C cut the
     scoring short: the ranking then covers the profiles scored."""
-    ranked: list[tuple] = []
+    ranked: list[tuple[int, ProfileReport, str]] = []
     sampled = 0
     progress = _Progress(len(reports), "scored", args.offline or len(reports) < 2)
     complete = True
