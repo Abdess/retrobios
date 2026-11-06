@@ -814,8 +814,9 @@ hard-links `.cache/large/`, `data/` and the gitignored `bios/` files from the
 main checkout. Before each job it is fast-forwarded, or rebased when it holds
 unpushed commits, onto `origin/main`. A job that finds anything uncommitted
 there stops as `blocked` and cleans nothing. Commits name their files
-(`git commit -- <paths>`), and their subjects are checked against the
-commit-msg hook when the registry loads. A job that leaves a change no commit
+(`git commit -- <paths>`), and their subjects are checked against
+`scripts/commit_rules.py`, the rules the commit-msg hook runs, when the
+registry loads. A job that leaves a change no commit
 rule takes fails.
 
 `--push` sends the batch: rebase on `origin/main` (a conflict keeps the batch

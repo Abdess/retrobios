@@ -2050,3 +2050,52 @@ class BuildYourOwnPackSaysWhatTheCloneCosts(unittest.TestCase):
 
     def test_advanced_usage_names_the_shallow_clone(self):
         self.assertIn("--depth 1", _page("advanced-usage.md").split("## Custom packs")[0])
+
+
+class LandingAChangeNamesTheCommitRules(unittest.TestCase):
+    """The page left out the review-tag rule scripts/commit_rules.py
+    enforces, and never said where the rules live or how a clone runs them:
+    the hook is not versioned."""
+
+    def _landing(self) -> str:
+        return _section(_page("testing-guide.md"), "Landing a change")
+
+    def test_every_refusal_is_on_the_page(self):
+        import commit_rules
+
+        section = self._landing()
+        words = re.search(r"\\b\((.*?)\)", commit_rules.REFUSED_WORDS.pattern).group(1)
+        from tests.test_prose_style import NoMarketingVocabulary
+
+        for word in words.replace("|", " ").split():
+            if NoMarketingVocabulary.WORDS.search(word):
+                # Named by "the marketing vocabulary above": spelled out,
+                # the page would fail that test.
+                continue
+            with self.subTest(word=word):
+                self.assertIn(word, section.lower())
+        self.assertIn("which review asked for it", section)
+        self.assertIn("scripts/commit_rules.py", section)
+
+    def test_the_hook_command_on_the_page_refuses_a_review_tag(self):
+        import subprocess
+        import tempfile
+
+        block = re.search(r"```bash\n(.*?)```", self._landing(), re.S).group(1)
+        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch:
+            clone = Path(scratch)
+            (clone / ".git" / "hooks").mkdir(parents=True)
+            (clone / "scripts").mkdir()
+            (clone / "scripts" / "commit_rules.py").write_bytes(
+                (ROOT / "scripts" / "commit_rules.py").read_bytes())
+            subprocess.run(["sh", "-c", block], cwd=clone, check=True)
+            message = clone / "MSG"
+            message.write_text("fix: address review 3 notes\n", encoding="utf-8")
+            refused = subprocess.run([str(clone / ".git" / "hooks" / "commit-msg"), "MSG"],
+                                     cwd=clone, capture_output=True, text=True)
+            message.write_text("fix: say what the change does\n", encoding="utf-8")
+            accepted = subprocess.run([str(clone / ".git" / "hooks" / "commit-msg"), "MSG"],
+                                      cwd=clone, capture_output=True, text=True)
+        self.assertEqual(refused.returncode, 1, refused.stderr)
+        self.assertIn("which review asked for it", refused.stderr)
+        self.assertEqual(accepted.returncode, 0, accepted.stderr)

@@ -373,6 +373,9 @@ to the way the project writes:
   line naming a .info, core-info or System.dat no "is correct", "is
   accurate", "still declares", "omits" or "missing". The note states what
   that file declares and what the code reads.
+- No pointer at a review in a comment, a docstring or a test name: a review
+  number in parentheses, a note file named after one, a test module or class
+  named after a review. The comment says what the code does.
 
 Formatting stays: bold labels, lists, tables and admonitions make a page
 easier to use. When markup shows raw on the site, the rendering is fixed and
@@ -456,13 +459,23 @@ A commit subject is English, 50 characters at most, `type: description` with a
 lowercase word after the colon. The types are `feat`, `refactor`, `chore`,
 `docs` and `fix`. The message does not use bug, regression, revert, dead code,
 broken, wrong, hack, workaround or implement (derived forms included), nor the
-marketing vocabulary above, and carries no Co-Authored-By trailer. A body
-explains the why when the subject cannot: the scenario that failed, the
+marketing vocabulary above, and carries no Co-Authored-By trailer. It says
+what the change does, never which review asked for it: "review 3", "audit 12"
+or "round 5" with its number points at notes no clone holds and is refused. A
+body explains the why when the subject cannot: the scenario that failed, the
 upstream `file:line` that decides it, what users will see.
 
 ```
 feat: add retrobat platform support
 refactor: extract shared utils to common.py
+```
+
+`scripts/commit_rules.py` holds these rules. Git does not copy hooks with a
+clone, so the commit-msg hook that runs them is set up once per clone:
+
+```bash
+printf '#!/bin/sh\nexec python3 scripts/commit_rules.py "$1"\n' > .git/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
 ```
 
 Files are staged by name, never with `git add -A` or `git add .`, which sweep in
