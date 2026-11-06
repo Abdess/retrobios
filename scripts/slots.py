@@ -675,14 +675,23 @@ class Collision:
 
     destination: str
     resolved: list[str]
-    # Each declaration with the file it resolved to, in the platform's order.
+    # Each declaration with the file it resolved to, in the builder's order.
     declarations: list[tuple[dict, str | None]] = field(default_factory=list)
+    # The system of each declaration, in the same order.
+    systems: list[str] = field(default_factory=list)
+    # The file the pack ships at the destination, as the builder decides it.
+    shipped: str | None = None
 
 
 def _collision_json(collision: Collision) -> dict:
     return {
         "destination": collision.destination,
         "resolved": list(collision.resolved),
+        "shipped": collision.shipped,
+        "declarations": [
+            {"system": system, "name": entry.get("name", ""), "file": local}
+            for system, (entry, local) in zip(collision.systems, collision.declarations)
+        ],
     }
 
 
@@ -702,19 +711,27 @@ def find_collisions(
     CoCo disk ROM at one bios/disk.rom.
     """
     fold = bool(config.get("case_insensitive_fs", False))
-    by_dest: dict[str, list[dict]] = {}
-    for system in (config.get("systems") or {}).values():
+    systems = config.get("systems") or {}
+    # The builder walks the systems sorted and lets a hash-constrained
+    # declaration that resolves by content take the path: the same order
+    # and the same choice say which file ships.
+    preferred = set(
+        preferred_entries(systems, db, "bios", "", False, zip_contents, True).values()
+    )
+    by_dest: dict[str, list[tuple[str, dict]]] = {}
+    for sys_id, system in sorted(systems.items()):
         for entry in system.get("files") or []:
             if not isinstance(entry, dict):
                 continue
             dest = entry.get("destination") or entry.get("name") or ""
             if dest:
-                by_dest.setdefault(_normalize(dest, fold), []).append(entry)
+                by_dest.setdefault(_normalize(dest, fold), []).append((sys_id, entry))
 
     collisions = []
-    for key, entries in sorted(by_dest.items()):
-        if len(entries) < 2:
+    for key, claims in sorted(by_dest.items()):
+        if len(claims) < 2:
             continue
+        entries = [entry for _sys_id, entry in claims]
         resolved = []
         declarations = []
         for entry in entries:
@@ -734,8 +751,18 @@ def find_collisions(
             # also names the first one's file.
             if any(_accepted_by_all(path, entries, db) for path in resolved):
                 continue
+            shipped = next(
+                (local for entry, local in declarations if local and id(entry) in preferred),
+                resolved[0],
+            )
             collisions.append(
-                Collision(destination=key, resolved=resolved, declarations=declarations)
+                Collision(
+                    destination=key,
+                    resolved=resolved,
+                    declarations=declarations,
+                    systems=[sys_id for sys_id, _entry in claims],
+                    shipped=shipped,
+                )
             )
     return collisions
 
@@ -863,11 +890,18 @@ def _same_file_family(paths: list[str]) -> bool:
 
 
 def format_collision(collision: Collision) -> str:
-    """One line naming the destination and the files fighting for it."""
-    return (
-        f"{collision.destination}: declared for "
-        + " and for ".join(collision.resolved)
-    )
+    """One line naming the destination, which system declares which file,
+    and the one the pack ships there."""
+    owners: dict[str, list[str]] = {}
+    for system, (_entry, local) in zip(collision.systems, collision.declarations):
+        if local and system not in owners.setdefault(local, []):
+            owners[local].append(system)
+    parts = [
+        f"{path} ({', '.join(owners[path])}) "
+        + ("packed" if path == collision.shipped else "left out")
+        for path in collision.resolved
+    ]
+    return f"{collision.destination}: " + ", ".join(parts)
 
 
 def format_conflict(conflict: Conflict) -> str:
