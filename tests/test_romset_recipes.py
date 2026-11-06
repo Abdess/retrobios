@@ -246,6 +246,25 @@ class ReportsOverAFixture(unittest.TestCase):
         self.assertEqual(len(report["unreproducible"]), 1)
         self.assertEqual(report["unreproducible"][0]["recipes_tried"], ["v1"])
 
+    def test_a_composite_md5_is_no_container_target(self):
+        """Recalbox hashes a ZIP by its members: its md5 names no archive bytes."""
+        platforms = self.root / "platforms"
+        platforms.mkdir()
+        (platforms / "_registry.yml").write_text(
+            "platforms:\n  demo:\n    config: demo.yml\n    zip_digest: composite\n",
+            encoding="utf-8",
+        )
+        (platforms / "demo.yml").write_text(
+            "platform: Demo\nsystems:\n  arcade:\n    files:\n"
+            "      - name: set.zip\n        destination: set.zip\n"
+            f"        md5: {'f' * 32}\n",
+            encoding="utf-8",
+        )
+        self.db["indexes"]["by_md5"] = {}
+
+        report = missing_report(self.recipes, self.pool, self.db, str(platforms))
+        self.assertEqual(report, {"constructible": [], "unreproducible": [], "no_recipe": []})
+
 
 DAT = """<?xml version="1.0"?>
 <datafile>

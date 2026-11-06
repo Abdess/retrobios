@@ -290,7 +290,9 @@ def platform_targets(platforms_dir: str) -> dict[str, set[str]]:
     """Container MD5s the platforms pin, per archive name.
 
     ``zipped_file`` entries pin an inner ROM instead of the container, so
-    their MD5 is not an archive hash and is skipped.
+    their MD5 is not an archive hash and is skipped. So is a Recalbox md5,
+    the composite of the members (``zip_digest: composite``, Bios.cpp:64-68):
+    no container build can ever give it.
     """
     targets: dict[str, set[str]] = defaultdict(set)
     for name in list_registered_platforms(platforms_dir):
@@ -298,7 +300,11 @@ def platform_targets(platforms_dir: str) -> dict[str, set[str]]:
         for system in config.get("systems", {}).values():
             for entry in system.get("files", []) or []:
                 archive = entry.get("name", "")
-                if not archive.endswith(".zip") or entry.get("zipped_file"):
+                if (
+                    not archive.endswith(".zip")
+                    or entry.get("zipped_file")
+                    or entry.get("zip_digest") == "composite"
+                ):
                     continue
                 for value in str(entry.get("md5") or "").split(","):
                     value = value.strip().lower()
