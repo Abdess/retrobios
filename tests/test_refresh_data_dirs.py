@@ -93,6 +93,31 @@ class RefreshConcurrency(unittest.TestCase):
             )
         self.assertEqual(seen, [True])
 
+    def test_a_current_tree_is_not_waited_for(self):
+        """A pipeline reads every tree for its whole run. A build beside it
+        waited on the exclusive lock before asking the remote, which would
+        have answered that nothing changed."""
+        import fcntl  # noqa: PLC0415
+
+        self.cache.mkdir(parents=True)
+        rdd._record_version("pak", {"sha": "e1"}, self.versions)
+        entry = {"source_type": "zip", "source_url": "https://x/pak.zip",
+                 "local_cache": str(self.cache)}
+        result: list = []
+        with open(self.cache.with_name(".pak.lock"), "a") as reader, \
+                mock.patch.object(rdd, "_get_remote_etag", return_value="e1"):
+            fcntl.flock(reader, fcntl.LOCK_SH)
+            worker = threading.Thread(target=lambda: result.append(
+                rdd.refresh_entry("pak", entry, versions_path=self.versions)
+            ), daemon=True)
+            worker.start()
+            worker.join(timeout=20)
+            finished = not worker.is_alive()
+            fcntl.flock(reader, fcntl.LOCK_UN)
+        worker.join(timeout=20)
+        self.assertTrue(finished, "the refresh waited for a reader")
+        self.assertEqual(result, [False])
+
     def test_version_file_is_never_left_truncated(self):
         Path(self.versions).parent.mkdir(parents=True)
         Path(self.versions).write_text(json.dumps({"keep": {"sha": "1"}}))
