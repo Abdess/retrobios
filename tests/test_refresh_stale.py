@@ -8,10 +8,12 @@ by the refresh of the original its export patches.
 
 from __future__ import annotations
 
+import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -277,6 +279,32 @@ class SavedFindings(unittest.TestCase):
             path.write_text('{"area": "data"}', encoding="utf-8")
             with self.assertRaises(RuntimeError):
                 rs.load_findings(path, ("data",))
+
+
+class AFailedCheckIsNamed(unittest.TestCase):
+    """A crash of check_freshness exits 1 like a STALE row: its traceback,
+    on stderr, was dropped for "unreadable JSON", and a timeout ended on
+    a traceback of refresh_stale itself."""
+
+    def _run(self, raises: Exception | None = None, **result):
+        proc = subprocess.CompletedProcess([], **result) if result else None
+        with mock.patch.object(rs.subprocess, "run", side_effect=raises, return_value=proc):
+            return rs._run_check_freshness(("coreinfo",), [])  # noqa: SLF001
+
+    def test_a_crash_shows_its_stderr(self):
+        with self.assertRaises(RuntimeError) as raised:
+            self._run(returncode=1, stdout="", stderr="Traceback\nRuntimeError: no listing\n")
+        self.assertIn("RuntimeError: no listing", str(raised.exception))
+        self.assertNotIn("JSON", str(raised.exception))
+
+    def test_stale_rows_are_read(self):
+        self.assertEqual(self._run(returncode=1, stdout='[{"area": "coreinfo"}]', stderr=""),
+                         [{"area": "coreinfo"}])
+
+    def test_a_timeout_says_what_to_run(self):
+        with self.assertRaises(RuntimeError) as raised:
+            self._run(raises=subprocess.TimeoutExpired(["x"], 1800))
+        self.assertIn("--findings", str(raised.exception))
 
 
 if __name__ == "__main__":
