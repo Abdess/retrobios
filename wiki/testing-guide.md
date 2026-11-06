@@ -463,9 +463,12 @@ refactor: extract shared utils to common.py
 
 Files are staged by name, never with `git add -A` or `git add .`, which sweep in
 deletions and work that is not yours. Generated artifacts (`database.json`,
-`install/*.json`, `README.md`, `CONTRIBUTING.md`, `exports/`) are committed
+`derivable.json`, `install/*.json`, `README.md`, `CONTRIBUTING.md`, `exports/`,
+the generated tables and run samples of `wiki/installer.md`) are committed
 with the data they derive from, never alone: a manifest committed before the
-files it points at gives the installer a 404.
+files it points at gives the installer a 404. The run samples count what the
+manifests hold, so `generate_installer_doc.py` runs after every manifest
+regeneration and its output goes in the same commit.
 
 ## CI integration
 

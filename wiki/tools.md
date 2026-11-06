@@ -238,6 +238,7 @@ python scripts/generate_pack.py --all --offline       # cache-only, never open t
 # Install manifests (consumed by install.py)
 python scripts/generate_pack.py --all --manifest --output-dir install/
 python scripts/generate_pack.py --manifest-targets --output-dir install/targets/
+python scripts/generate_installer_doc.py  # run samples of wiki/installer.md, from the manifests
 ```
 
 Packs include platform baseline files plus files required by the platform's cores.

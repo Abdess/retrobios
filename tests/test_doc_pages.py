@@ -1900,6 +1900,28 @@ class SkipFlagsNameTheSteps(unittest.TestCase):
                     self.assertEqual(set(re.findall(self.STEP, text)), steps)
 
 
+class TheInstallerSamplesTravelWithTheManifests(unittest.TestCase):
+    """A manifest refresh (c624a820f) went out without the run samples of
+    wiki/installer.md, which count what the manifests hold, and CI turned
+    red. The rule lived in no page, and the nightly's commit rules had no
+    place for the samples the gate's pipeline rewrites."""
+
+    def test_the_pages_and_the_nightly_carry_them(self):
+        import autorun  # noqa: PLC0415
+
+        guide = (WIKI / "testing-guide.md").read_text(encoding="utf-8")
+        for name in ("wiki/installer.md", "derivable.json", "generate_installer_doc.py"):
+            self.assertIn(name, guide)
+        tools = (WIKI / "tools.md").read_text(encoding="utf-8")
+        manifests = tools.index("--all --manifest --output-dir install/")
+        self.assertIn("generate_installer_doc.py", tools[manifests:manifests + 300])
+        nightly = autorun.load_jobs()["nightly"]
+        patterns = [p for rule in nightly.commits for p in rule.paths]
+        for path in ("wiki/installer.md", "derivable.json", "install/retroarch.json"):
+            with self.subTest(path=path):
+                self.assertTrue(any(autorun.path_matches(p, path) for p in patterns))
+
+
 class APlatformListIsDescribedNotJudged(unittest.TestCase):
     """adding-a-platform opened on files a platform's own list "leaves out",
     read first by the maintainer of that platform: "does not name" says the
