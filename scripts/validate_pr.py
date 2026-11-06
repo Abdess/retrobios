@@ -799,7 +799,6 @@ def main() -> None:
     if os.path.realpath(os.getcwd()) != os.path.realpath(REPO_ROOT):
         args.files = [os.path.abspath(f) for f in args.files]
     work_from_repo_root(args, parser, ["db", "platforms_dir", "emulators_dir"])
-    require_directory(args.platforms_dir, "--platforms-dir")
 
     files = _files_to_validate(args, parser)
     if not files:
@@ -808,6 +807,7 @@ def main() -> None:
         return
 
     db = _load_database_if_any(args.db)
+    require_directory(args.platforms_dir, "--platforms-dir")
     platform_hashes = load_platform_hashes(args.platforms_dir, db)
     profile_hashes = load_profile_hashes(args.emulators_dir, db)
 
