@@ -19,6 +19,7 @@ import re
 _TIMESTAMP_PATTERNS = [
     re.compile(r'"generated_at":\s*"[^"]*"'),  # database.json
     re.compile(r'"imported_at":\s*"[^"]*"'),  # provenance snapshots
+    re.compile(r'"fetched":\s*"[^"]*"'),  # games/catalogs/
     re.compile(r"\*Auto-generated on [^*]*\*"),  # README.md
     re.compile(r"\*Generated on [^*]*\*"),  # docs site pages
     # The decorated pages carry the same stamp again as a rendered element,
