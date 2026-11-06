@@ -318,7 +318,7 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
             registry = {ref: {"source_type": "zip", "source_url": f"https://x/{ref}.zip",
                               "local_cache": str(data / ref)} for ref in ("pak", "old")}
             members = [(str(data / ref / "a.bin"), f"{ref}/a.bin") for ref in ("pak", "old")]
-            refs = {f"{ref}/a.bin": (ref, ("s",), ref) for ref in ("pak", "old")}
+            refs = {f"{ref}/a.bin": (ref, ("s",), ref, True) for ref in ("pak", "old")}
             listed = {entry["ref"]: entry for entry in
                       _manifest_data_directories(members, refs, registry, "")}
         self.assertEqual(listed["pak"]["archive_size"], 21_360_579)
