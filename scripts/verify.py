@@ -1809,7 +1809,8 @@ def _print_undeclared_entry(
                 ref_part = f" [{u['source_ref']}]" if u.get("source_ref") else ""
                 print(f"      validates {checks_label}{ref_part}")
         else:
-            print(f"      [{'+'.join(checks)}]")
+            # A bare "[size]" under the entry said nothing to a reader.
+            print(f"      validates {'+'.join(checks)}")
 
 
 def _split_undeclared(undeclared: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:

@@ -272,6 +272,26 @@ class TheBundledLineSaysWhatItLeavesOut(unittest.TestCase):
         )
 
 
+class TheCheckLineSaysWhatItIs(unittest.TestCase):
+    """Without --verbose each missing core file was followed by a bare
+    '[size]' line, nine of them in verify --all."""
+
+    def test_the_checks_read_as_the_verbose_line(self):
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        entry = {"name": "FBASIC30.ROM", "emulator": "XM7", "checks": ["size"]}
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            verify._print_undeclared_entry(entry, "MISSING (required)", False, set())
+        self.assertEqual(out.getvalue().splitlines(), [
+            "    MISSING (required): XM7 needs FBASIC30.ROM",
+            "      validates size",
+        ])
+
+
 class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):
     """verify --platform recalbox --system nec-pc-engine printed no Core
     files line while the pack held six geargrafx syscard copies: the gap
