@@ -1083,7 +1083,7 @@ class AnExtendedListIsReported(unittest.TestCase):
                 self.assertEqual(fe.hashes("md5"), [A, B])
                 self.assertEqual(
                     [(r["kind"], r["field"], r["old"], r["new"]) for r in records],
-                    [("hash_corrected", "md5", A, [A, B])],
+                    [("hash_updated", "md5", A, [A, B])],
                 )
 
     def test_an_unchanged_value_reports_nothing(self):

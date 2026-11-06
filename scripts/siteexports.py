@@ -22,9 +22,9 @@ API_EXPORTS = "api/v1/exports"
 
 # Report key, then how a line of it reads on the page.
 CHANGE_KINDS = (
-    ("hashes_corrected", "Hashes updated to the emulator source"),
+    ("hashes_updated", "Hashes updated to the emulator source"),
     ("hashes_filled", "Hashes added where the original lists none"),
-    ("sizes_corrected", "Sizes updated to the emulator source"),
+    ("sizes_updated", "Sizes updated to the emulator source"),
     ("sizes_removed", "Sizes no longer stated"),
     ("hashes_cleared", "Hashes no longer listed"),
     ("withheld", "Changes not applied"),
@@ -33,9 +33,9 @@ CHANGE_KINDS = (
 
 # Report key, then the kind each line of `changes` carries.
 CHANGE_RECORDS = {
-    "hashes_corrected": "hash_corrected",
+    "hashes_updated": "hash_updated",
     "hashes_filled": "hash_filled",
-    "sizes_corrected": "size_corrected",
+    "sizes_updated": "size_updated",
     "sizes_removed": "size_removed",
     "hashes_cleared": "hash_cleared",
 }
@@ -52,11 +52,11 @@ def describe_change(change: dict) -> str:
     """One change in words, with the value before and after it."""
     label = f"`{change['system']}/{change['name']}` {change['field']}"
     kind, old, new = change["kind"], change["old"], change["new"]
-    if kind in ("hash_corrected", "size_corrected"):
+    if kind in ("hash_updated", "size_updated"):
         return f"{label} {_value(old)} becomes {_value(new)}"
     if kind == "hash_filled":
         return f"{label} {_value(new)} added"
-    if kind == "requirement_corrected":
+    if kind == "required_aligned":
         return f"`{change['system']}/{change['name']}` becomes {'required' if new else 'optional'}"
     return f"{label} {_value(old)} no longer listed"
 
@@ -76,7 +76,7 @@ def requirement_lines(report: dict) -> list[str]:
     """Each required flag aligned with the code, and what it is now."""
     items = [
         describe_change(c) for c in report.get("changes") or []
-        if c["kind"] == "requirement_corrected"
+        if c["kind"] == "required_aligned"
     ]
     if not items:
         return []
@@ -108,11 +108,11 @@ def change_text(report: dict) -> str:
     parts = [f"{_plural(counts['kept'], 'entry', 'entries')} kept"]
     extra = [
         (counts["added"], "file", "files", "added"),
-        (len(report.get("hashes_corrected") or []), "hash", "hashes", "updated"),
-        (report.get("requirements_corrected") or 0, "required flag", "required flags",
+        (len(report.get("hashes_updated") or []), "hash", "hashes", "updated"),
+        (report.get("required_aligned") or 0, "required flag", "required flags",
          "aligned with the code"),
         (len(report.get("hashes_filled") or []), "hash", "hashes", "added"),
-        (len(report.get("sizes_corrected") or []), "size", "sizes", "updated"),
+        (len(report.get("sizes_updated") or []), "size", "sizes", "updated"),
     ]
     parts += [f"{_plural(n, one, many)} {verb}" for n, one, many, verb in extra if n]
     return ", ".join(parts)
@@ -216,7 +216,7 @@ def _display(platform: str, names: dict[str, str]) -> str:
     return names.get(platform) or platform
 
 
-def _corrected_link(report: dict) -> str:
+def _updated_link(report: dict) -> str:
     platform, files = report["platform"], report["files"]
     if len(files) == 1:
         path = f"{EXPORTS_DIR}/{platform}/{files[0]}"
@@ -286,7 +286,7 @@ def generate_exports_page(reports: list[dict], names: dict[str, str]) -> str:
         platform = report["platform"]
         lines.append(
             f"| [{_display(platform, names)}](#{platform}) | "
-            f"{_original_link(report)} | {_corrected_link(report)} | "
+            f"{_original_link(report)} | {_updated_link(report)} | "
             f"{change_text(report)} |"
         )
     lines.append("")

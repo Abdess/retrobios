@@ -345,7 +345,7 @@ class SeveralAcceptedMd5BecomeAList(unittest.TestCase):
         self.assertEqual(
             produced, LISTING.replace(f'"md5": "{C}"', f'"md5": [ "{C}", "{D}" ]')
         )
-        record = next(r for r in changes.records if r["kind"] == "hash_corrected")
+        record = next(r for r in changes.records if r["kind"] == "hash_updated")
         self.assertEqual((record["old"], record["new"]), (C, [C, D]))
         self.assertEqual(changes.lists, 1)
 
@@ -433,7 +433,7 @@ class SeveralAcceptedMd5BecomeAList(unittest.TestCase):
 class SitePageShowsAList(unittest.TestCase):
     def test_a_list_reads_as_any_of_its_values(self):
         line = describe_change({
-            "kind": "hash_corrected", "system": "psx", "name": "scph5500.bin",
+            "kind": "hash_updated", "system": "psx", "name": "scph5500.bin",
             "field": "md5", "old": C, "new": [C, D],
         })
         self.assertEqual(line, f"`psx/scph5500.bin` md5 `{C}` becomes `{C}` or `{D}`")

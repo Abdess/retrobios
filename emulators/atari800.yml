@@ -16,7 +16,7 @@ cores: [atari800]
 systems: [atari-400-800, atari-5200, xegs]
 
 # Atari800 emulates the Atari 8-bit family (400/800/XL/XE) and the 5200 console.
-# All BIOS files are optional -- the core ships built-in Altirra OS replacements
+# All BIOS files are optional. The core ships built-in Altirra OS replacements
 # (altirraos_800, altirraos_xl, altirra_5200_os, altirra_basic) compiled into the
 # binary. If real ROM files are found in the system directory they take priority.
 #
@@ -121,9 +121,8 @@ files:
     note: >
       Atari 400/800 OS Rev B (NTSC). CRC32 0x0e86d61d matches sysrom.c
       SYSROM_B_NTSC. Preferred over Rev A for 400/800 mode.
-      Note: .info lists md5 a3e8d617c95d08031fe1b20d541434b2 which is a
-      different dump (crc32 3e28a1fe) -- both in repo, the CRC32-matched
-      version is the one sysrom.c auto-detects.
+      The .info lists md5 a3e8d617c95d08031fe1b20d541434b2, a different
+      dump (crc32 3e28a1fe). sysrom.c detects the CRC32-matched one.
     source_ref: "source atari800/src/sysrom.c:91, source atari800/src/sysrom.c:286"
 
   # -- Atari XL/XE OS --
@@ -165,7 +164,7 @@ files:
 
   # -- XEGS Missile Command built-in game --
   # The XEGS had Missile Command in ROM (8 KB), CRC32: 0xbdca01fb
-  # No filename auto-match -- must be set via config or detected by CRC.
+  # No filename auto-match. It must be set via config or detected by CRC.
 
   - name: "XEGAME.ROM"
     path: "XEGAME.ROM"

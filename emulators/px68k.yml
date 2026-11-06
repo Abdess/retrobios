@@ -23,7 +23,7 @@ systems:
 #   1. Base path set to <system_dir>/keropi/ via file_setcd(winx68k_dir) at line 969
 #   2. IPL ROM: iterates BIOSFILE[] = {iplrom.dat, iplrom30.dat, iplromco.dat, iplromxv.dat}
 #      and opens the first file found. Reads 0x20000 bytes (128 KB) into IPL buffer.
-#      Returns 0 (failure) if none found -- core will not start.
+#      Returns 0 (failure) if none found, and the core does not start.
 #   3. SCSI check (WinX68k_SCSICheck): if IPL contains SCSI vectors at offset 0x30600-0x30c00,
 #      patches a fake SCSI BIOS stub at $fc0000 with "Human68k" signature.
 #   4. Byte-swaps IPL in 16-bit pairs (big-endian ROM on little-endian host).
@@ -32,7 +32,7 @@ systems:
 #
 # SRAM (x68k/sram.c:50-73):
 #   sram.dat is 16 KB of battery-backed SRAM, loaded on init and saved on cleanup.
-#   Not a BIOS -- runtime state. Created automatically if missing.
+#   Not a BIOS but runtime state. Created automatically if missing.
 #
 # Directory layout expected:
 #   <system_dir>/keropi/iplrom.dat     (or iplrom30.dat, iplromco.dat, iplromxv.dat)
@@ -41,7 +41,7 @@ systems:
 #   <system_dir>/keropi/config         (auto-created, core settings)
 
 files:
-  # IPL ROM -- the main system BIOS. The core tries four filenames in order and
+  # IPL ROM, the main system BIOS. The core tries four filenames in order and
   # uses the first one found. Only one is needed. iplrom.dat is the original X68000,
   # iplrom30.dat is X68030, iplromco.dat is X68000 Compact, iplromxv.dat is X68000 XVI.
 
@@ -87,7 +87,7 @@ files:
       Only used if the three other IPL variants are not found.
     source_ref: "source libretro.c:985"
 
-  # Font ROM -- character generator ROM for text rendering.
+  # Font ROM, the character generator ROM for text rendering.
 
   - name: "cgrom.dat"
     installed_on: [recalbox]

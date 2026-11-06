@@ -72,17 +72,32 @@ validation above is its check. For code, profiles or platform files, these are
 the checks CI runs on a pull request (Python 3.12 or newer):
 
 ```bash
-pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin setuptools
-python scripts/validate_pr.py --changed          # the BIOS files the branch adds
-python scripts/validate_schemas.py --source-only # profiles and platform files
-python scripts/profile_sync.py --added --strict  # each profile the branch adds
-python scripts/refresh_data_dirs.py  # data directories the pack-building tests read
-python scripts/generate_site.py       # the pages the site tests read
-npm ci --prefix website && npm run build --prefix website  # the built site, Node 24
-python -m unittest discover -s tests -t .
-python scripts/validate_site.py --site-dir website/dist  # links and page budgets
-vermin --no-tips -t=3.8- --violations install.py         # install.py stays on Python 3.8
+pip install pyyaml "jsonschema[format-nongpl]==4.26.0" "markdown==3.10.2" "pyte==0.8.2" "hypothesis==6.170.8" "vermin==1.9.2" "setuptools==80.9.0"
+python scripts/pr_checks.py
 ```
+
+`pr_checks.py` runs these, in CI's order, carries on past a failure as CI
+does, and names at the end each check that failed or could not run:
+
+```bash
+python scripts/validate_pr.py --changed                                # the BIOS files the branch adds
+python scripts/validate_schemas.py --source-only                       # profiles and platform files
+python scripts/profile_sync.py --added --strict                        # each profile the branch adds
+vermin --no-tips -t=3.8- --violations install.py                       # install.py stays on Python 3.8
+python scripts/export_native.py --all --fetch --output-dir tmp/native  # files the exporter tests compare with
+python scripts/refresh_data_dirs.py                                    # data directories the pack-building tests read
+python scripts/generate_site.py                                        # the pages the site tests read
+npm ci --prefix website                                                # the site's packages, Node 24
+npm run build --prefix website                                         # the built site
+python -m unittest discover -s tests -t .                              # the suite
+python3.8 -m unittest tests.test_install_tui                           # the full screen on the installer's floor
+python scripts/validate_site.py --site-dir website/dist                # links and page budgets
+```
+
+The versions are the ones CI pins. Three tools come from the system, not from
+that line, and the tests that need them skip without them: `shellcheck` for the
+handheld launchers, `bwrap` (bubblewrap) for the probe sandbox, and a Python 3.8
+with pyte (`python3.8 -m pip install "pyte==0.8.2"`) for the full screen. CI has all three.
 
 `profile_sync.py` compares the branch with this repository's `main`, and
 fetches it in a fork's clone. A profile you only edit is not held to

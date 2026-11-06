@@ -733,8 +733,8 @@ def data_page_section(path: Path) -> list[str]:
         "",
         "[`measurements.sqlite`](downloads/measurements.sqlite) holds every core probe "
         f"record kept in [`{mr.RECORDS_DIR}/`]({REPO}/tree/main/{mr.RECORDS_DIR}), and "
-        "`downloads/measurements/<emulator>.sqlite` the records of one emulator, linked "
-        f"from its page. The [Measurements]({EXPLORER_PAGE}) page reads "
+        "`downloads/measurements/<emulator>.sqlite` the records of one emulator. The "
+        f"[Measurements]({EXPLORER_PAGE}) page reads "
         "[`data/measurements/index.json`](data/measurements/index.json). A record line is "
         "valid against [`core-probe-record.schema.json`](api/v1/schemas/core-probe-record.schema.json).",
         "",

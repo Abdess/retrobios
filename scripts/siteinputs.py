@@ -30,3 +30,14 @@ def current() -> SiteInputs:
 
 def use(inputs: SiteInputs) -> None:
     _current[0] = inputs
+
+
+def bios_dir(db: dict) -> Path:
+    """The database's bios folder, as the inputs place it.
+
+    database.json names it relative to its own folder ("bios"). Read from the
+    working directory instead, a tool started elsewhere found no copy on disk
+    and dropped five system sections and 2,500 collection paths in silence.
+    """
+    named = Path(str(db.get("bios_dir") or "bios"))
+    return named if named.is_absolute() else current().db.parent / named

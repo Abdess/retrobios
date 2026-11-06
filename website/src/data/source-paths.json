@@ -2878,11 +2878,19 @@
  "github.com/coelckers/prboom-plus@969515162c5aebea4ad7a125ee178dcad3d576ad": [
   "prboom2/CMakeLists.txt",
   "prboom2/data/CMakeLists.txt",
+  "prboom2/doc/prboom-plus.6",
   "prboom2/src/CMakeLists.txt",
   "prboom2/src/MUSIC/flplayer.c",
   "prboom2/src/SDL/i_system.c",
+  "prboom2/src/d_client.c",
   "prboom2/src/d_main.c",
+  "prboom2/src/e6y.c",
+  "prboom2/src/g_game.c",
+  "prboom2/src/gl_hires.c",
+  "prboom2/src/gl_shader.c",
+  "prboom2/src/m_menu.c",
   "prboom2/src/m_misc.c",
+  "prboom2/src/r_demo.c",
   "prboom2/src/w_wad.c"
  ],
  "github.com/crawl/crawl@a5ed93406571b9682050cfc318b15b9f637d4e7e": [

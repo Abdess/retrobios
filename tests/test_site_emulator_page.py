@@ -150,6 +150,15 @@ class WhatASearchSnippetSays(unittest.TestCase):
         self.assertTrue(plain.startswith(text[:-3]))
         self.assertIn(plain[len(text) - 3], " ,:")
 
+    def test_a_link_whose_text_holds_brackets_keeps_its_text_only(self):
+        """The Pioneer meta description published the whole link, anchor
+        included: the text `[BIOS] ...bin` stopped the pattern at its "]"."""
+        self.assertEqual(
+            gs._plain_markdown("**Start with** [`[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin`]"
+                               "(#sha1-6973e2593e66). ares reads it."),
+            "Start with [BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin. ares reads it.")
+        self.assertEqual(gs._plain_markdown("[a [b] c](x) and [d](y)"), "a [b] c and d")
+
     def test_code_keeps_its_underscores(self):
         self.assertEqual(gs._plain_markdown("only `validate_schemas.py` and _this_"),
                          "only validate_schemas.py and this")

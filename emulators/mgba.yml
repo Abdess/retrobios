@@ -30,7 +30,7 @@ notes: |
   All BIOS files are optional. mGBA ships a built-in HLE BIOS for GBA
   (src/gba/hle-bios.c) that covers most software. The real BIOS improves
   accuracy (startup logo, some edge-case SWI behavior). There is no HLE
-  BIOS for GB/GBC/SGB -- those rely on GBSkipBIOS() if no file is found.
+  BIOS for GB/GBC/SGB, which rely on GBSkipBIOS() if no file is found.
 
   BIOS loading is controlled by two core options:
     mgba_use_bios (default ON)  - whether to look for BIOS files at all

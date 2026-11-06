@@ -42,7 +42,7 @@ notes: |
 
   File path construction: retro_load_game() sets
   FolderUtilities::SetHomeFolder(systemFolder). All BIOS lookups use
-  CombinePath(GetHomeFolder(), filename) -- flat, no subdirectories.
+  CombinePath(GetHomeFolder(), filename), flat, with no subdirectories.
 
   No functional divergence between upstream and libretro for BIOS loading.
 

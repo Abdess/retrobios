@@ -780,7 +780,7 @@ def _ensure_console_sections() -> None:
     import json
 
     from common import load_emulator_profiles
-    from generate_site import _group_by_manufacturer
+    from sitecollection import _group_by_manufacturer
 
     inputs = siteinputs.current()
     with open(inputs.db, encoding="utf-8") as handle:

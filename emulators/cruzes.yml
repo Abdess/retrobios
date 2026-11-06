@@ -17,7 +17,7 @@ systems:
 
 notes: |
   Unfinished Picross puzzle game, part of the libretro-samples repository.
-  No separate upstream -- written directly for the libretro API.
+  The libretro API is its only target, with no separate upstream.
 
   supports_no_game true (tests/cruzes/cruzes.c:772), valid_extensions "" (tests/cruzes/cruzes.c:749).
   Puzzle grid hardcoded in retro_init (tests/cruzes/cruzes.c:706-717) via load_challenge.

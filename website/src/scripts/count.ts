@@ -4,11 +4,12 @@
 // not to be tracked (Do Not Track, Global Privacy Control), from a local
 // build, or from a page not served at the site's address.
 //
-// Sent: the page path (never its query or #anchor), the domain of the site
-// the reader came from, and the name of an action. An action is a click on
+// Sent: the page path (never its query or #anchor), the origin of the site
+// the reader came from (scheme and host, no path), and the name of an
+// action. An action is a click on
 // a copy button, a pack or file download, a link that leaves the site, a
-// site search that found nothing (its words only when they are a file
-// name or a hash), and the answer to "Did this page help?".
+// site search that found nothing (its words only in the shapes below),
+// and the answer to "Did this page help?".
 
 const ENDPOINT = 'https://retrobios.goatcounter.com/count';
 const HOST = 'abdess.github.io';
@@ -37,7 +38,7 @@ export const countEvent = (name: string): void => {
 	send({ p: name.slice(0, 120), t: pagePath(), e: 'true' });
 };
 
-// The site the reader came from, by domain alone: a path can carry a
+// The site the reader came from, by its origin alone: a path can carry a
 // search or a private thread.
 const referrer = (): string => {
 	try {
@@ -104,11 +105,16 @@ const onClick = (event: MouseEvent): void => {
 // Search
 
 // A search that found nothing names a missing page. Its words are sent
-// only in a shape no person's details take: a hash, a file name
-// ("scph5501.bin"), or one word of letters and at most four digits
-// ("scph5501", "ps3updat"). Any other search is counted with no words,
-// as "other": a name, a phone number or an address is never sent.
-const isHash = (query: string): boolean => /^(?:[0-9a-f]{8}|[0-9a-f]{32}|[0-9a-f]{40}|[0-9a-f]{64})$/.test(query);
+// only in three shapes: a hash with at least one letter, a file name
+// ("scph5501.bin"), or one word that starts with a letter and holds at most
+// four digits ("scph5501", "ps3updat"). Any other search is counted with no
+// words, as "other". A number alone, a phone number among them, is never
+// sent. A nickname of the third shape ("dupont1985") is, as wiki/privacy.md
+// says: nothing tells it from a file name.
+// An 8-digit phone number is valid hex: a hash needs a letter, and a CRC32
+// written in digits only is counted as "other".
+const isHash = (query: string): boolean =>
+	/^(?:[0-9a-f]{8}|[0-9a-f]{32}|[0-9a-f]{40}|[0-9a-f]{64})$/.test(query) && /[a-f]/.test(query);
 // The extensions of the files the collection holds: "john.smith" is no file.
 const isFileName = (query: string): boolean =>
 	/^[\w.+-]{1,60}\.(?:bin|rom|zip|7z|pup|keys|img|dat|bios|ic\d+|u\d+|sys|nvm|mec|rom1|j64|pce|col|sms|gb|gbc|gba|nds|cfg|chd|iso|txt|fw|xml|yaml|pak|pk3|grp)$/.test(query);
