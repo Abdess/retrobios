@@ -175,6 +175,44 @@ class AnOfflineRunWithNoCacheStopsFirst(unittest.TestCase):
             parser.error.assert_not_called()
 
 
+class AnOfflineExportWithNoOriginalsStopsFirst(unittest.TestCase):
+    """pipeline.py --offline --with-export, which tools.md listed as a
+    standard command, built the database, verify and the truth model on a
+    fresh clone, then failed step 2e on every platform whose own file it
+    patches: --offline never passes --fetch."""
+
+    def _args(self, **flags):
+        import argparse
+
+        return argparse.Namespace(**{"offline": True, "with_export": True, **flags})
+
+    def test_refused_before_any_step(self):
+        from exporter import discover_exporters
+
+        patched = sorted(n for n, e in discover_exporters().items() if e.needs_original())
+        self.assertIn("batocera", patched)
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            parser = mock.Mock()
+            pipeline._refuse_offline_export_without_originals(parser, self._args(), tmp)
+            message = parser.error.call_args.args[0]
+            self.assertIn("export_native.py --all --refresh-cache", message)
+            self.assertIn("batocera", message)
+            for args in (self._args(offline=False), self._args(with_export=False)):
+                parser = mock.Mock()
+                pipeline._refuse_offline_export_without_originals(parser, args, tmp)
+                parser.error.assert_not_called()
+            for name in patched:
+                (Path(tmp) / name).mkdir()
+                (Path(tmp) / name / "original").write_text("x")
+            parser = mock.Mock()
+            pipeline._refuse_offline_export_without_originals(parser, self._args(), tmp)
+            parser.error.assert_not_called()
+
+    def test_the_tools_page_says_so(self):
+        text = (REPO_ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
+        self.assertIn("export_native.py --all --refresh-cache", text)
+
+
 class TheTruthDiffShowsWhereAndAsksNothing(unittest.TestCase):
     """The markdown wrote `**Remove** hiscore.dat (phantom)` beside six
     `**Add** hiscore.dat`, none with a path, for files profiled cores read."""

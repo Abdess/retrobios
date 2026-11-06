@@ -28,6 +28,13 @@ python scripts/pipeline.py --check-buildbot        # online run + buildbot fresh
 `python scripts/refresh_data_dirs.py` once first. A run that builds packs with no
 data directory cached is refused before step 0.
 
+`--with-export` online passes `--fetch` to step 2e, which downloads each
+platform's own file and patches it. Offline that file must already be in
+`.cache/upstream-native/`: on a fresh clone run
+`python scripts/export_native.py --all --refresh-cache` once first. An offline
+run with `--with-export` and an empty cache for any platform it patches is
+refused before step 0.
+
 Pipeline steps:
 
 | Step | Description | Skipped by |
