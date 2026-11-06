@@ -14,13 +14,13 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    build_target_cores_cache,
     platform_arg,
     list_registered_platforms,
     load_data_dir_registry,
     load_database,
     load_emulator_profiles,
     load_platform_config,
-    load_target_config,
     require_directory,
     require_platform,
     require_yaml,
@@ -97,6 +97,19 @@ def main(argv: list[str] | None = None) -> None:
         require_platform(args.platform, args.platforms_dir)
         platforms = [args.platform]
 
+    # A named platform without that target is refused, as verify and
+    # generate_pack refuse it: skipped, it printed Done. and exited 0 with
+    # no model written. --all leaves such platforms out and says so.
+    target_cores_cache: dict[str, set[str] | None] = {}
+    if args.target:
+        try:
+            target_cores_cache, platforms = build_target_cores_cache(
+                platforms, args.target, args.platforms_dir, is_all=args.all
+            )
+        except (FileNotFoundError, ValueError) as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            sys.exit(1)
+
     # A target-narrowed model is a different artifact: written under the
     # platform's own name it overwrote the full one, and diff_truth then
     # compared a narrowed model against the whole scrape. Its directory is
@@ -109,17 +122,7 @@ def main(argv: list[str] | None = None) -> None:
                 output_dir, [name], args.target, args.platforms_dir
             )
         os.makedirs(output_dir, exist_ok=True)
-        target_cores: set[str] | None = None
-        if args.target:
-            try:
-                target_cores = load_target_config(
-                    name,
-                    args.target,
-                    args.platforms_dir,
-                )
-            except FileNotFoundError:
-                print(f"  {name}: no target config, skipped")
-                continue
+        target_cores = target_cores_cache.get(name)
 
         # Load platform config (with inheritance) and registry entry
         try:
