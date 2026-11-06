@@ -207,7 +207,7 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
 
         section = " ".join(self._section("Fill an SD card from a computer?").split())
         self.assertIn("The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX or "
-                      "MiSTer card by itself.", section)
+                      "MiSTer card.", section)
         known = {rule.name for rule in install._card_rules()}
         known |= {install.display_name(name) for name, _marker, _prefix in install._CARD_RULES}
         for name in ("muOS", "Onion", "spruceOS", "MinUI", "KNULLI", "ROCKNIX", "MiSTer FPGA"):
