@@ -1804,7 +1804,9 @@ def generate_data_exports(
     # entry point is a document of its own, naming where to start.
     entry_points = [
         {"title": "Catalog", "url": "catalog.json",
-         "description": "Every published file with its size, SHA256 and schema."},
+         "description": "Each dataset, manifest, export and download with its size, "
+                        "SHA256 and schema. The one-item documents of emulators/, "
+                        "platforms/, systems/ and lookup/ are not listed."},
         {"title": "System ids", "url": "systems.json",
          "description": "Each system id with its name and the section holding its files."},
         {"title": "Core names", "url": "cores.json",
@@ -2203,6 +2205,9 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "profile), the file `name`, the `url` of the page that shows it and, "
         "when one is known, the `system_name` the site gives its system. "
         "[Find or check a file](files/index.md) reads it.",
+        "",
+        "`catalog.json` lists the datasets, manifests, exports and downloads. It "
+        "does not list these one-item documents, which hold no SHA256 of their own.",
         "",
         "In a browser, the SHA1 of a file the reader picks finds its records when "
         "the collection holds that file. A list naming a file the collection lacks "
