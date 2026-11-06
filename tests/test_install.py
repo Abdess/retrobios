@@ -3880,6 +3880,20 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             },
         }
 
+    def test_required_only_leaves_out_an_optional_tree(self):
+        """A GBA and a SNES game with --for-games --required-only took
+        FBNeo's cheats and samples, 3,472 files no game opened."""
+        cheats = {**self._entry(), "ref": "fbneo-cheats", "systems": ["snes"], "optional": True}
+        sys_tree = {**self._entry(), "systems": ["snes"]}
+        manifest = {"data_directories": [cheats, sys_tree]}
+        files = [{"dest": "a.rom", "systems": ["snes"]}]
+        self.assertEqual(install.select_data_directories(manifest, files, True), [cheats, sys_tree])
+        self.assertEqual(install.select_data_directories(manifest, files, True, True), [sys_tree])
+        self.assertEqual(install.select_data_directories(manifest, files, False, True), [sys_tree])
+        install._check_data_directory(cheats, "data_directories[0]")
+        with self.assertRaises(ValueError):
+            install._check_data_directory({**cheats, "optional": False}, "data_directories[0]")
+
     def test_the_archive_is_drawn_and_counted(self):
         """82 MB of archives came with no progress line, and the run ended
         on "310.5 KB downloaded", the BIOS files alone."""

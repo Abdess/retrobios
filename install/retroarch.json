@@ -6,7 +6,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "v1.22.2",
-  "generated": "2026-11-05T23:59:37Z",
+  "generated": "2026-11-06T07:21:27Z",
   "base_destination": "system",
   "detect": [
     {
@@ -140789,7 +140789,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767
+      "archive_size": 5083767,
+      "optional": true
     },
     {
       "ref": "fbneo-samples",
@@ -141023,7 +141024,8 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 53006540
+      "archive_size": 53006540,
+      "optional": true
     },
     {
       "ref": "freeintv-overlays",
@@ -141396,7 +141398,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 21311170
+      "archive_size": 21311170,
+      "optional": true
     },
     {
       "ref": "ppsspp-assets",

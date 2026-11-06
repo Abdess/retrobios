@@ -518,7 +518,8 @@ def _data_directory_members(
     gets it from the tree's archive.
 
     ``refs_out``, when given, maps each yielded destination to
-    (registry key, system ids, directory destination), for the manifest.
+    (registry key, system ids, directory destination, whether the core
+    needs the tree), for the manifest.
 
     These are not BIOS and carry no hash of their own: they are whole
     trees an emulator reads, refreshed from upstream, so what ships is
@@ -532,7 +533,8 @@ def _data_directory_members(
         ref_key = dd.get("ref", "")
         if not ref_key or not data_registry or ref_key not in data_registry:
             continue
-        if required_only and dd.get("required") is False:
+        needed = dd.get("required") is not False
+        if required_only and not needed:
             continue
         if ref_key in installed_data_refs(platform_name):
             continue
@@ -567,7 +569,7 @@ def _data_directory_members(
                     ):
                         del reclaim[full]
                         if refs_out is not None:
-                            refs_out[full] = (ref_key, systems, dd_prefix)
+                            refs_out[full] = (ref_key, systems, dd_prefix, needed)
                         yield src, full
                         continue
                     if full in seen_destinations or (
@@ -581,7 +583,7 @@ def _data_directory_members(
                     if case_insensitive:
                         seen_lower.add(full.lower())
                     if refs_out is not None:
-                        refs_out[full] = (ref_key, systems, dd_prefix)
+                        refs_out[full] = (ref_key, systems, dd_prefix, needed)
                     yield src, full
 
 
@@ -4910,7 +4912,7 @@ def generate_manifest(
     # Phase 3: data directories. They are not files of the collection: the
     # installer fetches each from its source archive and keeps the members
     # whose hash the list below records, the same tree the pack carries.
-    data_refs: dict[str, tuple[str, tuple[str, ...], str]] = {}
+    data_refs: dict[str, tuple[str, tuple[str, ...], str, bool]] = {}
     reclaim = {full: path for full, (path, _size) in cache_held.items()}
     data_members = list(_data_directory_members(
         pack_systems, data_registry, platform_name, base_dest,
@@ -5021,7 +5023,7 @@ def generate_manifest(
 
 def _manifest_data_directories(
     members: list[tuple[str, str]],
-    refs: dict[str, tuple[str, tuple[str, ...], str]],
+    refs: dict[str, tuple[str, tuple[str, ...], str, bool]],
     registry: dict,
     base_dest: str,
 ) -> list[dict]:
@@ -5034,11 +5036,14 @@ def _manifest_data_directories(
     changed since is refused rather than installed. archive_size is the
     size of the archive refresh_data_dirs last downloaded, what fetching
     the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
+    ``optional`` marks a tree every core reading it runs without
+    (``required: false``): install.py --required-only leaves it out, as the
+    pack built with --required-only does.
     """
     grouped: dict[tuple[str, str], dict] = {}
     versions: dict[str, dict[str, dict]] = {}
     for src, full in members:
-        ref, systems, prefix = refs[full]
+        ref, systems, prefix, needed = refs[full]
         entry = registry.get(ref, {})
         key = (ref, prefix)
         group = grouped.get(key)
@@ -5072,11 +5077,19 @@ def _manifest_data_directories(
                 size = versions[str(recorded)].get(ref, {}).get("archive_size")
                 if isinstance(size, int) and size > 0:
                     group["archive_size"] = size
+        if needed:
+            group["needed"] = True
         group["systems"].extend(s for s in systems if s not in group["systems"])
         rel = full[len(prefix):].lstrip("/") if prefix else full
         hashes = compute_hashes(src, frozenset({"sha1"}))
         group["files"][rel] = {"sha1": hashes["sha1"], "size": os.path.getsize(src)}
-    return [grouped[key] for key in sorted(grouped)]
+    trees = []
+    for key in sorted(grouped):
+        group = grouped[key]
+        if not group.pop("needed", False):
+            group["optional"] = True
+        trees.append(group)
+    return trees
 
 
 def _manifest_core_index(

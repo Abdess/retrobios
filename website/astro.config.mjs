@@ -77,6 +77,9 @@ export default defineConfig({
 				// Ownership of the URL-prefix property https://abdess.github.io/retrobios/
 				// in Google Search Console. Removing it unverifies the property.
 				{ tag: 'meta', attrs: { name: 'google-site-verification', content: '8SueST3hNHl8_vM-OJJP0rz-ZMlI2DALLpChrwZoGMs' } },
+				// What an AI agent reads first (scripts/siteagents.py): the ARD manifest lists
+				// llms.txt and the JSON API.
+				{ tag: 'link', attrs: { rel: 'ard', type: 'application/json', href: `${BASE}ard.json` } },
 			],
 			social: [{ icon: 'github', label: 'RetroBIOS on GitHub', href: 'https://github.com/Abdess/retrobios' }],
 			customCss: ['./src/styles/retrobios.css'],
