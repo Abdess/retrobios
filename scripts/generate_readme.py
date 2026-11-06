@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from collections.abc import Callable
 from datetime import datetime, timezone
@@ -915,6 +916,19 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
     return "\n".join(lines) + "\n"
 
 
+def ci_install_lines() -> tuple[str, str]:
+    """The pip lines the test job of validate.yml runs, verbatim.
+
+    The guide listed the packages without their versions, so a local run
+    could pass on releases CI never installs. Read from the workflow, the
+    two cannot disagree. The second line is the Python 3.8 one.
+    """
+    text = (_REPO / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+    main = re.search(r'^\s*run: (pip install pyyaml "jsonschema.*markdown.*)$', text, re.M)
+    floor = re.search(r"^\s*run: (python3\.8 -m pip install .*)$", text, re.M)
+    return main.group(1), floor.group(1)
+
+
 def contributing_text(
     link: Callable[[str], str], title: str, site_words: str
 ) -> str:
@@ -924,6 +938,7 @@ def contributing_text(
     site. *link* renders a site page (absolute URL for the README, relative
     .md for the site); *site_words* names the site from where the text is read.
     """
+    pip_line, floor_line = ci_install_lines()
     return f"""{title}
 
 ## Add a BIOS file
@@ -998,7 +1013,7 @@ validation above is its check. For code, profiles or platform files, these are
 the checks CI runs on a pull request (Python 3.12 or newer):
 
 ```bash
-pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin setuptools
+{pip_line}
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
 python scripts/profile_sync.py --added --strict  # each profile the branch adds
@@ -1009,7 +1024,13 @@ npm ci --prefix website && npm run build --prefix website  # the built site, Nod
 python -m unittest discover -s tests -t .
 python scripts/validate_site.py --site-dir website/dist  # links and page budgets
 vermin --no-tips -t=3.8- --violations install.py         # install.py stays on Python 3.8
+python3.8 -m unittest tests.test_install_tui  # the full screen on the installer's floor
 ```
+
+The versions are the ones CI pins. Three tools come from the system, not from
+that line, and the tests that need them skip without them: `shellcheck` for the
+handheld launchers, `bwrap` (bubblewrap) for the probe sandbox, and a Python 3.8
+with pyte (`{floor_line}`) for the full screen. CI has all three.
 
 `profile_sync.py` compares the branch with this repository's `main`, and
 fetches it in a fork's clone. A profile you only edit is not held to

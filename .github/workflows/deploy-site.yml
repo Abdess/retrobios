@@ -89,6 +89,8 @@ on:
       # generated folders are gitignored and never trigger anything.
       - "website/**"
       - ".github/workflows/deploy-site.yml"
+      # The contributing guide quotes the pip lines of its test job.
+      - ".github/workflows/validate.yml"
   workflow_dispatch:
 
 permissions:

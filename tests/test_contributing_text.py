@@ -114,9 +114,39 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
         line naming the old theme installed packages nothing reads."""
         text = generate_readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
-        self.assertIn('pip install pyyaml "jsonschema[format-nongpl]" markdown', section)
+        self.assertIn('pip install pyyaml "jsonschema[format-nongpl]==', section)
         self.assertNotIn("mkdocs", section)
         self.assertTrue((REPO_ROOT / "website" / "package-lock.json").is_file())
+
+
+class TheChecklistInstallsWhatCiInstalls(unittest.TestCase):
+    """The pip line named the packages without versions, and nothing said
+    that shellcheck, bubblewrap and a Python 3.8 with pyte come from the
+    system: their tests skipped locally and failed first in CI."""
+
+    def test_the_pip_lines_are_the_workflow_lines(self):
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        text = generate_readme.generate_contributing()
+        section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
+        pinned = [line.split("run: ", 1)[1] for line in workflow.splitlines()
+                  if re.match(r"\s*run: (python3\.8 -m )?pip install .*==", line)
+                  and "pyte" in line]
+        self.assertEqual(len(pinned), 2)
+        for line in pinned:
+            with self.subTest(line=line):
+                self.assertIn(line, section)
+
+    def test_it_names_the_system_tools_ci_installs(self):
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        text = generate_readme.generate_contributing()
+        section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
+        for tool, step in (("shellcheck", "shellcheck --version"),
+                           ("bwrap", "bwrap --ro-bind"),
+                           ("python3.8 -m unittest tests.test_install_tui",
+                            "python3.8 -m unittest tests.test_install_tui")):
+            with self.subTest(tool=tool):
+                self.assertIn(step, workflow)
+                self.assertIn(tool, section)
 
 
 class OneFileThroughTheBrowser(unittest.TestCase):
@@ -174,3 +204,16 @@ class OneFileThroughTheBrowser(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TheGuideRebuildsWhenItsPinsMove(unittest.TestCase):
+    """The checklist quotes validate.yml, so a pin bump there must redeploy
+    the guide and meet the README/CONTRIBUTING freshness check."""
+
+    def test_deploy_site_watches_the_validation_workflow(self):
+        import yaml
+
+        deploy = yaml.safe_load(
+            (REPO_ROOT / ".github" / "workflows" / "deploy-site.yml").read_text(encoding="utf-8"))
+        paths = deploy[True]["push"]["paths"]
+        self.assertIn(".github/workflows/validate.yml", paths)

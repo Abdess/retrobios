@@ -42,7 +42,9 @@ tests are reported as skipped, so install them before a pull request
 full-screen tests drive `install.py --tui` on a pseudo-terminal and read the
 screen back with `pyte`, and fuzz the key decoder with `hypothesis`: both skip
 without them (`pip install pyte hypothesis`). `pip install -e ".[dev]"` from the
-checkout installs all of these at once, from the `dev` extra of `pyproject.toml`.
+checkout installs all of these at once, from the `dev` extra of `pyproject.toml`,
+which sets lower bounds only. The contributing guide's checklist reads the exact
+versions CI pins from `validate.yml`.
 No test framework beyond the standard library `unittest` module.
 
 ## Modules at a glance
