@@ -579,7 +579,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "# Android (Termux: it installs Python and asks for storage access)",
         install_command("sh"),
         "",
-        "# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Onion, spruceOS or MinUI card",
+        "# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, MiSTer, Onion, spruceOS or MinUI card",
         "# is found by itself. For another card, --dest is its BIOS folder",
         "# (RetroArch on Switch: retroarch/cores/system, on Android: RetroArch/system)",
         install_command("sh", "--platform retroarch --dest /path/to/sdcard/retroarch/cores/system"),
