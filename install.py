@@ -5970,6 +5970,21 @@ def _claim_partial(path: Path) -> BinaryIO | None:
     return handle
 
 
+def _release_claim(handle: BinaryIO, path: Path) -> None:
+    """Free a file taken with _claim_partial and remove it. Removed while
+    still held where the system allows it, so no other run takes the name
+    in between. Windows refuses to remove an open file: there it is closed
+    first, and one another run opened meanwhile is left to that run."""
+    if not _NO_RENAME_WHILE_OPEN:
+        path.unlink(missing_ok=True)
+    handle.close()
+    if _NO_RENAME_WHILE_OPEN:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError:
+            pass  # another run holds it now and removes it when done
+
+
 class _Unclosed:
     """The locked partial copy, written through without closing it."""
 
@@ -7302,6 +7317,8 @@ def install_data_directory(entry: dict, bios_path: Path,
         return counts
     _writing.set()
     fetched: Path | None = None
+    lock: BinaryIO | None = None
+    lock_path = root / f".{entry['ref']}.archive.lock"
     try:
         root.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=root) as scratch:
@@ -7311,7 +7328,11 @@ def install_data_directory(entry: dict, bios_path: Path,
             else:
                 # Beside the tree, outside the scratch folder: a transfer
                 # cut short is resumed by the next attempt or the next run.
-                kept = root / f".{entry['ref']}.archive.part"
+                # Two runs into one folder truncated or deleted the archive
+                # the other was still writing or reading: the run that finds
+                # it locked downloads into its scratch folder instead.
+                lock = _claim_partial(lock_path)
+                kept = root / f".{entry['ref']}.archive.part" if lock is not None else None
                 archive = _fetch_archive(entry["url"], Path(scratch), progress, kept)
                 fetched = archive
                 members = _archive_members(archive, entry)
@@ -7351,6 +7372,8 @@ def install_data_directory(entry: dict, bios_path: Path,
         if fetched is not None:
             # Read whole: the next run fetches the archive afresh.
             _drop_archive(fetched, fetched.with_name(fetched.name + ".source"))
+        if lock is not None:
+            _release_claim(lock, lock_path)
     counts["absent"] = len(needed)
     return counts
 

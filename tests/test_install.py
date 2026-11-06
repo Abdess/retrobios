@@ -4008,6 +4008,50 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             install.install_data_directory(self._entry(), bios)
         self.assertEqual([p.name for p in (bios / "dolphin-emu").iterdir()], ["Sys"])
 
+    def test_a_second_run_leaves_the_kept_archive_alone(self):
+        """Two runs into one BIOS folder shared .dolphin-sys.archive.part: the
+        one that finished first deleted the archive the other was still
+        writing, and the other truncated the one being read."""
+        work = Path(_tempdir(self))
+        archive = self._zip(work)
+        bios = work / "system"
+        root = bios / "dolphin-emu"
+        root.mkdir(parents=True)
+        other = root / ".dolphin-sys.archive.part"
+        other.write_bytes(b"another run is writing this")
+        kept: list = []
+
+        def fetch(url, directory, progress=None, keep=None):
+            kept.append(keep)
+            copy = Path(directory) / "private.zip"
+            shutil.copy(archive, copy)
+            return copy
+
+        held = install._claim_partial(root / ".dolphin-sys.archive.lock")
+        self.addCleanup(held.close)
+        with unittest.mock.patch.object(install, "_fetch_archive", fetch):
+            counts = install.install_data_directory(self._entry(), bios)
+        self.assertEqual(kept, [None])
+        self.assertEqual(counts["installed"], 1)
+        self.assertEqual(other.read_bytes(), b"another run is writing this")
+        self.assertTrue((root / ".dolphin-sys.archive.lock").exists())
+
+    def test_a_lone_run_keeps_its_archive_beside_the_tree(self):
+        work = Path(_tempdir(self))
+        archive = self._zip(work)
+        bios = work / "system"
+        kept: list = []
+
+        def fetch(url, directory, progress=None, keep=None):
+            kept.append(keep)
+            shutil.copy(archive, keep)
+            return keep
+
+        with unittest.mock.patch.object(install, "_fetch_archive", fetch):
+            install.install_data_directory(self._entry(), bios)
+        self.assertEqual(kept, [bios / "dolphin-emu" / ".dolphin-sys.archive.part"])
+        self.assertEqual(sorted(p.name for p in (bios / "dolphin-emu").iterdir()), ["Sys"])
+
     def test_the_run_ends_on_the_archive_bytes_too(self):
         from test_install_selection import FakeRepository  # noqa: PLC0415
 

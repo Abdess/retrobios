@@ -354,7 +354,8 @@ file list is downloaded once and handed to each run.
    transfer stops, and the next attempt or the next run requests only the
    rest. A data tree's archive does the same beside the tree
    (`.<ref>.archive.part`), asking with `If-Range` so that a server whose
-   archive changed sends it whole. A file already there with other contents
+   archive changed sends it whole. A second run into the same folder finds
+   that archive in use and downloads its own copy. A file already there with other contents
    is moved aside first, see [Files you already had](#files-you-already-had).
 8. Copies into standalone emulator directories, only with `--standalone-copies`.
 
