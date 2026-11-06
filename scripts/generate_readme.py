@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    InputMissing,
     compute_composition,
     count_catalog_matched,
     declared_root,
@@ -29,6 +30,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     load_platform_registry,
+    repository_output_lock,
     resolve_platform_cores,
     system_index,
     unique_emulator_profiles,
@@ -211,16 +213,23 @@ def platform_coverages(
                 coverages[name] = compute_coverage(
                     name, platforms_dir, db, data_registry, emulators_dir=emulators_dir,
                 )
+            except InputMissing:
+                # A missing profile or platform directory is no platform
+                # left out: it emptied every one and cached the result.
+                raise
             except FileNotFoundError as exc:
                 print(f"  {name}: skipped ({exc})", file=sys.stderr)
         COVERAGE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        for stale in COVERAGE_CACHE_DIR.glob("*.pickle"):
-            stale.unlink()
         scratch = cache.with_suffix(f".{os.getpid()}.tmp")
         with scratch.open("wb") as handle:
             pickle.dump({"platforms": names, "coverages": coverages}, handle,
                         protocol=pickle.HIGHEST_PROTOCOL)
         scratch.replace(cache)
+        # generate_site and generate_readme both purge here. One unlinking
+        # what the other had just listed ended it on FileNotFoundError.
+        for stale in COVERAGE_CACHE_DIR.glob("*.pickle"):
+            if stale != cache:
+                stale.unlink(missing_ok=True)
     ordered = {name: coverages[name] for name in platform_names if name in coverages}
     if report:
         for name in names:
@@ -974,7 +983,7 @@ validation above is its check. For code, profiles or platform files, these are
 the checks CI runs on a pull request (Python 3.12 or newer):
 
 ```bash
-pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin
+pip install pyyaml "jsonschema[format-nongpl]" markdown pyte hypothesis vermin setuptools
 python scripts/validate_pr.py --changed          # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only # profiles and platform files
 python scripts/profile_sync.py --added --base upstream/main --strict  # each profile the branch adds
@@ -1036,9 +1045,13 @@ def main() -> None:
 
     # Coverage resolves against data/: a refresh swapping a tree mid-read
     # published counts taken from half of it.
-    with contextlib.ExitStack() as held:
+    with repository_output_lock("README.md"), contextlib.ExitStack() as held:
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
         readme = generate_readme(db, args.platforms_dir, args.db)
+        _write(readme)
+
+
+def _write(readme: str) -> None:
     status = "Generated" if write_if_changed("README.md", readme) else "Unchanged"
     print(f"{status} ./README.md")
 

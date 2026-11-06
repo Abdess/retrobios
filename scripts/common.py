@@ -15,6 +15,7 @@ import functools
 import json
 import os
 import re
+import signal
 import sys
 import zipfile
 from pathlib import Path
@@ -43,7 +44,12 @@ def require_directory(path: str, flag: str = "--bios-dir") -> None:
         raise SystemExit(f"ERROR: {flag} {path} is not a directory")
 
 
-class DatabaseUnreadable(FileNotFoundError):
+class InputMissing(FileNotFoundError):
+    """An input a command was pointed at does not exist. run_cli prints the
+    message on one line instead of a stack trace."""
+
+
+class DatabaseUnreadable(InputMissing):
     """The database a command was pointed at does not exist or is not JSON."""
 
 
@@ -503,7 +509,7 @@ def list_registered_platforms(
     """
     registry_path = os.path.join(platforms_dir, "_registry.yml")
     if not os.path.exists(registry_path):
-        raise FileNotFoundError(f"no platform registry at {registry_path}")
+        raise InputMissing(f"no platform registry at {registry_path}")
     with open(registry_path) as f:
         registry = yaml_load(f) or {}
     platforms = []
@@ -1214,6 +1220,19 @@ def archive_entry(archive: str, files: list[dict]) -> dict:
     return {**own, "members": members} if members else own
 
 
+def archive_is_optional(entry: dict, archive: str, files: list[dict]) -> bool:
+    """Optional as a whole: its own entry and every member it carries.
+
+    A --required-only pack leaves it out, and the report of that pack too.
+    geolith's _Required pack held neocd.zip and irrmaze.zip all the same.
+    """
+    return entry.get("required") is False and all(
+        member.get("required") is False
+        for member in files
+        if member.get("archive") == archive
+    )
+
+
 def holds_required_members(path: str, members: list[dict]) -> bool:
     """Whether an archive holds every member a profile requires inside it."""
     crcs = zip_member_crcs(path)
@@ -1317,7 +1336,7 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
     owners = _owner_tokens(file_entry)
     sized = any(file_entry.get(k) for k in ("size", "min_size", "max_size"))
 
-    def score(path: str) -> tuple[int, bool, bool, int]:
+    def score(path: str) -> tuple[int, bool, bool, bool, int]:
         fits = 0
         if sized and os.path.exists(path):
             fits = int(size_fits(file_entry, os.path.getsize(path)))
@@ -2181,12 +2200,11 @@ def load_emulator_profiles(
         return {}
     profiles = {}
     emu_path = Path(emulators_dir)
-    if not emu_path.exists():
-        print(
-            f"warning: no emulator profile directory at {emulators_dir}",
-            file=sys.stderr,
-        )
-        return profiles
+    if not emu_path.is_dir():
+        # Read as "no emulator", a mistyped --emulators-dir built a pack
+        # without any core file marked OK, and sitesources wrote {} over
+        # source-paths.json, both exiting 0.
+        raise InputMissing(f"no emulator profile directory at {emulators_dir}")
     for f in source_yaml_paths(emu_path):
         with open(f) as fh:
             profile = yaml_load(fh) or {}
@@ -3542,6 +3560,8 @@ from artifacts import (  # noqa: E402,F401
     artifact_lock,
     hold_artifact_lock,
     hold_repository_outputs,
+    publish_hold,
+    repository_output_lock,
     _TIMESTAMP_PATTERNS,
     _strip_timestamps,
 )
@@ -3560,6 +3580,10 @@ from dumpcatalog import (  # noqa: E402,F401
 )
 
 
+def _exit_on_signal(signum: int, _frame: object) -> None:
+    sys.exit(128 + signum)
+
+
 def run_cli(main: Callable[[], int | None]) -> None:
     """Run a command-line entry point to its exit status.
 
@@ -3567,11 +3591,19 @@ def run_cli(main: Callable[[], int | None]) -> None:
     and the next write died on a BrokenPipeError traceback. Output nobody
     reads any more ends the run quietly, with the status a shell gives a
     writer whose reader left.
+
+    SIGTERM (timeout, kill) and SIGHUP (a closed terminal) end the process
+    without unwinding by default: a pack build left its multi-GB hidden
+    .partial behind. Raised as SystemExit, they run the cleanup a failed
+    write runs, and the status stays the one a shell gives the signal.
     """
+    for name in ("SIGTERM", "SIGHUP"):
+        if hasattr(signal, name):
+            signal.signal(getattr(signal, name), _exit_on_signal)
     try:
         code = main()
         sys.stdout.flush()
-    except DatabaseUnreadable as exc:
+    except (InputMissing, ArtifactLockBusy) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)
     except BrokenPipeError:

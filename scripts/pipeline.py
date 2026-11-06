@@ -57,8 +57,8 @@ import tempfile
 import time
 from pathlib import Path
 
-# generate_pack's parenthesized context managers do not compile before
-# CPython 3.9, which builds the same database, manifests and packs as 3.12.
+# The build scripts need CPython 3.9, which builds the same database,
+# manifests and packs as 3.12.
 # On an older interpreter the run got through the first steps and failed in
 # the packs, so it stops before step 0. A test compiles every script under
 # this floor.
@@ -73,6 +73,7 @@ from common import (
     hold_artifact_lock,
     hold_repository_outputs,
     load_data_dir_registry,
+    publish_hold,
 )
 from refresh_data_dirs import hold_data_dirs
 
@@ -522,15 +523,43 @@ def check_pack_destinations(
     return all_ok
 
 
+# The narrowings an emulator or system pack takes, compared by
+# check_emulator_packs. A test holds this to the builder's parameters.
+EMULATOR_NARROWINGS_COMPARED = frozenset({"standalone", "regions", "required_only"})
+
+
+def emulator_variants(profiles: list[dict], full: bool) -> list[tuple[str, dict]]:
+    """(label, builder arguments) of each narrowed emulator pack compared.
+
+    --required-only always, and each region the profiles' files declare,
+    sampled as check_narrowed_packs samples them unless *full*. A profile
+    without a regional file has nothing --region could withdraw.
+    """
+    import region as region_mod  # noqa: PLC0415
+
+    regions = sorted({
+        r for profile in profiles for fe in profile.get("files") or []
+        for r in region_mod.normalize_declared(fe.get("region"))
+    })
+    variants: list[tuple[str, dict]] = [("", {}), (" --required-only", {"required_only": True})]
+    variants += [
+        (f" --region {regions[i]}", {"regions": [regions[i]]})
+        for i in _matrix_coverage(full, len(regions))
+    ]
+    return variants
+
+
 def check_emulator_packs(
     emulators_dir: str = "emulators", platforms_dir: str = "platforms",
-    db_path: str = "database.json",
+    db_path: str = "database.json", full: bool = False,
 ) -> bool:
     """Build every emulator and system pack in memory and compare it with verify.
 
-    Each profile in each build it has (libretro, standalone): the paths the
-    pack fills with the profile's files against the ones verify credits. No
-    archive is written and no file read, so all of them take seconds.
+    Each profile in each build it has (libretro, standalone), full and under
+    each narrowing of emulator_variants: the paths the pack fills with the
+    profile's files against the ones verify credits. The region and
+    required-only rules are written twice, once per side, and only this
+    comparison holds them together. No archive is written and no file read.
     """
     import generate_pack  # noqa: PLC0415
     import verify  # noqa: PLC0415
@@ -548,6 +577,26 @@ def check_emulator_packs(
     db = load_database(db_path)
     zip_contents = build_zip_contents_index(db)
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
+
+    def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
+        record = generate_pack.PackRecord()
+        with contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            generate_pack.generate_emulator_pack(
+                names, emulators_dir, db, "bios", "", standalone, zip_contents,
+                offline=True, platforms_dir=platforms_dir, record=record, **narrowing,
+            )
+            report = verify.verify_emulator(
+                names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
+                **narrowing,
+            )
+        lines = _set_difference_lines(
+            label, set(report["pack_destinations"]), set(record.files)
+        )
+        if lines:
+            print("\n".join(lines))
+        return not lines
+
     all_ok = True
     compared = 0
     for name in sorted(profiles):
@@ -558,23 +607,10 @@ def check_emulator_packs(
                 select_emulator_profiles([name], profiles, standalone)
             except ProfileSelectionError:
                 continue
-            record = generate_pack.PackRecord()
-            with contextlib.redirect_stdout(io.StringIO()):
-                generate_pack.generate_emulator_pack(
-                    [name], emulators_dir, db, "bios", "", standalone, zip_contents,
-                    offline=True, platforms_dir=platforms_dir, record=record,
-                )
-                report = verify.verify_emulator(
-                    [name], emulators_dir, db, standalone, platforms_dir=platforms_dir,
-                )
-            compared += 1
-            label = f"{name}{' --standalone' if standalone else ''}"
-            lines = _set_difference_lines(
-                label, set(report["pack_destinations"]), set(record.files)
-            )
-            if lines:
-                print("\n".join(lines))
-                all_ok = False
+            for tag, narrowing in emulator_variants([profiles[name]], full):
+                compared += 1
+                label = f"{name}{' --standalone' if standalone else ''}{tag}"
+                all_ok = compare([name], standalone, label, **narrowing) and all_ok
     print(f"  {compared} emulator packs compared, {'all equal' if all_ok else 'differences above'}")
     # A system pack builds every profile of the system together: a placement
     # rule that only goes wrong when two profiles share a path (the bluemsx
@@ -592,34 +628,24 @@ def check_emulator_packs(
             matching = profiles_for_systems(profiles, [sid], standalone)
             if len(matching) < 2:
                 continue
-            record = generate_pack.PackRecord()
-            with contextlib.redirect_stdout(io.StringIO()), \
-                    contextlib.redirect_stderr(io.StringIO()):
-                generate_pack.generate_emulator_pack(
-                    matching, emulators_dir, db, "bios", "", standalone, zip_contents,
-                    offline=True, platforms_dir=platforms_dir, record=record,
-                    system_ids=[sid],
-                )
-                report = verify.verify_emulator(
-                    matching, emulators_dir, db, standalone, platforms_dir=platforms_dir,
-                    system_ids=[sid],
-                )
-            compared += 1
-            label = f"--system {sid}{' --standalone' if standalone else ''}"
-            lines = _set_difference_lines(
-                label, set(report["pack_destinations"]), set(record.files)
-            )
-            if lines:
-                print("\n".join(lines))
-                systems_ok = False
+            for tag, narrowing in emulator_variants(
+                [profiles[n] for n in matching if n in profiles], full
+            ):
+                compared += 1
+                label = f"--system {sid}{' --standalone' if standalone else ''}{tag}"
+                systems_ok = compare(
+                    matching, standalone, label, system_ids=[sid], **narrowing
+                ) and systems_ok
     print(f"  {compared} system packs compared, "
           f"{'all equal' if systems_ok else 'differences above'}")
     return all_ok and systems_ok
 
 
-# How each _narrowings() dimension is compared by check_narrowed_packs, or why
-# it is not. A test reads the builder's signature against these two tables, so
-# a new narrowing fails it until it is compared or a reason is written here.
+# How each _narrowings() dimension of a platform pack is compared by
+# check_narrowed_packs, or why it is not. A test reads the builder's
+# signature against these two tables, so a new narrowing fails it until it
+# is compared or a reason is written here. Emulator packs have their own
+# table, EMULATOR_NARROWINGS_COMPARED.
 NARROWINGS_COMPARED = frozenset({"regions", "target_name", "required_only", "no_game_data"})
 NARROWINGS_NOT_COMPARED = {
     "standalone": "an emulator pack mode, compared by check_emulator_packs",
@@ -790,6 +816,25 @@ class _Skipped:
 SKIPPED = _Skipped()
 
 
+def integrity_command(args: argparse.Namespace) -> list[str]:
+    """Step 6: check the packs step 4 built, under the same expectation."""
+    cmd = [
+        sys.executable, "scripts/generate_pack.py", "--all", "--verify-packs",
+        "--output-dir", args.output_dir,
+    ]
+    if args.include_archived:
+        cmd.append("--include-archived")
+    # Without the target a targeted run reported every system the target
+    # removed as missing from a pack that was exactly right. Without
+    # --all-variants the five narrowed packs were never opened, and an empty
+    # _Platform pack passed.
+    if args.target:
+        cmd.extend(["--target", args.target])
+    if args.all_variants:
+        cmd.append("--all-variants")
+    return cmd
+
+
 def _refuse_unapplied_flags(
     parser: argparse.ArgumentParser, args: argparse.Namespace
 ) -> None:
@@ -797,7 +842,7 @@ def _refuse_unapplied_flags(
 
     --all-variants builds every source itself, so a --source beside it is
     dropped; --skip-packs builds none, so both are, and step 5 does not run
-    for --full-narrowings to widen.
+    for --full-narrowings to widen, nor does it without a full pack.
     """
     # --source defaults to None so a typed `--source full` is seen: compared
     # with its default value, it went through beside the modes that refuse it.
@@ -810,6 +855,10 @@ def _refuse_unapplied_flags(
                          ("--full-narrowings", args.full_narrowings)):
             if on:
                 parser.error(f"{flag} is incompatible with --skip-packs")
+    # Step 5 compares the full pack, and --source platform or truth builds
+    # none: the comparison is skipped and the flag had no effect.
+    if args.full_narrowings and source_given and args.source != "full":
+        parser.error(f"--full-narrowings is incompatible with --source {args.source}")
     if args.source is None:
         args.source = "full"
 
@@ -940,7 +989,8 @@ def main() -> None:
     parser.add_argument(
         "--full-narrowings", action="store_true",
         help="Step 5 compares every region, target and system of each "
-        "platform, not a sample of three (about 25 minutes)",
+        "platform, and every region of each emulator and system pack, not a "
+        "sample of three (about 25 minutes)",
     )
     parser.add_argument(
         "--check-buildbot",
@@ -979,9 +1029,11 @@ def main() -> None:
     # rewrote them beside the run on dist/.
     held = contextlib.ExitStack()
     try:
-        held.enter_context(
-            hold_repository_outputs(str(Path(__file__).resolve().parent.parent))
-        )
+        root = str(Path(__file__).resolve().parent.parent)
+        held.enter_context(hold_repository_outputs(root))
+        # Its steps write database.json, install/ and README.md themselves,
+        # and take the same lock to do so.
+        held.enter_context(publish_hold(root))
         if not args.skip_packs:
             held.enter_context(hold_artifact_lock(args.output_dir))
     except ArtifactLockBusy as exc:
@@ -1309,7 +1361,7 @@ def main() -> None:
         )
         # Counts can agree while the paths differ, both ways at once.
         ok = check_pack_destinations(destinations_file, pack_output) and ok
-        ok = check_emulator_packs() and ok
+        ok = check_emulator_packs(full=args.full_narrowings) and ok
         ok = check_narrowed_packs(
             include_archived=args.include_archived, full=args.full_narrowings,
         ) and ok
@@ -1330,22 +1382,7 @@ def main() -> None:
         skip_notice("pack_integrity", "no full pack built")
         results["pack_integrity"] = SKIPPED
     elif not args.skip_packs:
-        integrity_cmd = [
-            sys.executable,
-            "scripts/generate_pack.py",
-            "--all",
-            "--verify-packs",
-            "--output-dir",
-            args.output_dir,
-        ]
-        if args.include_archived:
-            integrity_cmd.append("--include-archived")
-        # Step 4 built with the target, so step 6 has to check against the
-        # same expectation. Without it a targeted run reported every system
-        # the target removed as missing from a pack that was exactly right.
-        if args.target:
-            integrity_cmd.extend(["--target", args.target])
-        ok, _ = run(integrity_cmd, STEP_LABELS["pack_integrity"])
+        ok, _ = run(integrity_command(args), STEP_LABELS["pack_integrity"])
         results["pack_integrity"] = ok
         all_ok = all_ok and ok
     else:

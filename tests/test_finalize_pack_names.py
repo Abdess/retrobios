@@ -31,5 +31,35 @@ class FinalizeByExactName(unittest.TestCase):
         self.assertTrue(ok)
 
 
+class APackFromAnotherRunIsLeftAlone(unittest.TestCase):
+    """A one-platform build verified, recompressed and gave a new manifest to
+    every pack in the directory: MiSTer's lost its pack_systems fields after a
+    MinUI run, and a bizhawk run rewrote 52 GB of packs it never built."""
+
+    def test_a_second_platform_does_not_rewrite_the_first(self):
+        import json
+        import subprocess
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            def build(platform: str) -> str:
+                proc = subprocess.run(
+                    [sys.executable, "scripts/generate_pack.py", "--platform", platform,
+                     "--offline", "--output-dir", tmp],
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=False,
+                )
+                self.assertEqual(proc.returncode, 0, proc.stdout[-2000:] + proc.stderr[-2000:])
+                return proc.stdout
+
+            build("misterfpga")
+            (first,) = Path(tmp).glob("MiSTer*_BIOS_Pack.zip")
+            before = first.read_bytes()
+            output = build("minui")
+            self.assertNotIn(first.name, output)
+            self.assertEqual(first.read_bytes(), before)
+            with zipfile.ZipFile(first) as zf:
+                manifest = json.loads(zf.read("manifest.json"))
+            self.assertIn("install_list", manifest)
+
+
 if __name__ == "__main__":
     unittest.main()

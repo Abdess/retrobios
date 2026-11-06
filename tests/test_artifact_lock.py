@@ -23,6 +23,7 @@ from common import (  # noqa: E402
     artifact_lock,
     hold_artifact_lock,
     hold_repository_outputs,
+    publish_hold,
 )
 
 
@@ -218,7 +219,7 @@ class PipelineHoldsItsFixedOutputs(unittest.TestCase):
                 capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=120,
             )
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
-        self.assertIn("another pipeline run is writing database.json", proc.stderr)
+        self.assertIn("another run is writing database.json", proc.stderr)
         self.assertNotIn("generate database", proc.stdout.lower())
 
     def test_two_holds_of_the_repository_exclude_each_other(self):
@@ -226,6 +227,59 @@ class PipelineHoldsItsFixedOutputs(unittest.TestCase):
                 self.assertRaises(ArtifactLockBusy):
             with hold_repository_outputs(str(REPO_ROOT)):
                 pass
+
+
+class StandaloneWritersHonourTheRepositoryHold(unittest.TestCase):
+    """Only pipeline runs took the repository's lock: generate_db.py beside
+    a pipeline replaced database.json between its verify and its packs, and
+    a manifest run on install/ failed the pipeline's own manifest step."""
+
+    def _beside_a_pipeline(self, argv: list[str]) -> subprocess.CompletedProcess:
+        env = {k: v for k, v in os.environ.items() if k != "RETROBIOS_HELD_ARTIFACT_DIR"}
+        return subprocess.run(
+            [sys.executable, *argv], capture_output=True, text=True,
+            cwd=str(REPO_ROOT), timeout=300, env=env, check=False,
+        )
+
+    def test_a_writer_of_a_fixed_output_is_refused(self):
+        with hold_repository_outputs(str(REPO_ROOT)):
+            for argv in (
+                ["scripts/generate_db.py", "--bios-dir", "bios", "--output", "database.json"],
+                ["scripts/generate_pack.py", "--all", "--manifest", "--offline",
+                 "--output-dir", "install"],
+                ["scripts/generate_games_index.py", "--quiet"],
+            ):
+                with self.subTest(script=argv[0]):
+                    proc = self._beside_a_pipeline(argv)
+                    self.assertEqual(proc.returncode, 1, proc.stdout[-500:] + proc.stderr[-500:])
+                    self.assertIn("another run is writing database.json", proc.stderr)
+                    self.assertNotIn("Traceback", proc.stderr)
+
+    def _child(self, target: str, env: dict) -> subprocess.CompletedProcess:
+        code = (
+            "import sys; sys.path.insert(0, 'scripts')\n"
+            "from common import artifact_lock, repository_output_lock\n"
+            f"with repository_output_lock({target!r}), artifact_lock({self.scratch!r}):\n"
+            "    pass\n"
+        )
+        return subprocess.run([sys.executable, "-c", code], cwd=str(REPO_ROOT), env=env,
+                              capture_output=True, text=True, timeout=60, check=False)
+
+    def test_a_step_the_pipeline_spawns_passes(self):
+        """A pipeline holds the root and its --output-dir, and its steps
+        write both: the environment names the two, os.pathsep apart."""
+        self.scratch = _tempdir(self)
+        with hold_repository_outputs(str(REPO_ROOT)), publish_hold(str(REPO_ROOT)), \
+                hold_artifact_lock(self.scratch):
+            proc = self._child(str(REPO_ROOT / "install" / "games"), dict(os.environ))
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+
+    def test_a_scratch_output_takes_nothing(self):
+        self.scratch = _tempdir(self)
+        env = {k: v for k, v in os.environ.items() if k != "RETROBIOS_HELD_ARTIFACT_DIR"}
+        with hold_repository_outputs(str(REPO_ROOT)):
+            proc = self._child(os.path.join(self.scratch, "database.json"), env)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
 
 
 class HeldLockTest(unittest.TestCase):

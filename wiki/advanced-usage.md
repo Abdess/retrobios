@@ -95,6 +95,15 @@ What counts as "required" depends on the platform YAML. For existence-mode platf
 For MD5-mode platforms (Batocera), all declared files are treated as required unless
 explicitly marked optional.
 
+An emulator or system pack keeps the files and trees its profiles do not mark
+`required: false`, and an archive unless it and every ROM it carries are
+optional. `verify.py` takes the same flag and reports on that pack:
+
+```bash
+python scripts/verify.py --platform batocera --required-only
+python scripts/verify.py --emulator mame --required-only
+```
+
 ### Region filtering
 
 Keep one regional BIOS per system instead of all of them:

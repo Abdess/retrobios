@@ -118,6 +118,24 @@ class ReadmeRegressions(unittest.TestCase):
         self.assertEqual(proc.returncode, 1)
         self.assertIn("needs Python 3.9", proc.stderr)
 
+    def test_the_readme_build_command_names_the_floor(self):
+        """The README's first command is generate_pack.py. Under 3.8 it
+        stopped on a raw SyntaxError at a parenthesized `with`."""
+        import shutil  # noqa: PLC0415
+
+        python38 = shutil.which("python3.8")
+        if python38 is None:
+            if os.environ.get("CI"):
+                self.fail("CI must provide python3.8")
+            self.skipTest("no python3.8 on PATH")
+        proc = subprocess.run(
+            [python38, "-I", "scripts/generate_pack.py", "--help"],
+            cwd=ROOT, capture_output=True, text=True, timeout=60, check=False,
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertNotIn("SyntaxError", proc.stderr)
+        self.assertIn("generate_pack.py needs Python 3.9", proc.stderr)
+
     def test_the_floor_interpreter_imports_every_script(self):
         """Every module under scripts/ is loaded by a real interpreter of the
         floor version, as the installer's 3.8 floor is proven by running it.
@@ -948,6 +966,20 @@ class CatalogRatioRegressions(unittest.TestCase):
 
 
 class PipelineRegressions(unittest.TestCase):
+    def test_integrity_checks_the_variants_step_4_built(self):
+        """Step 6 ran --verify-packs without --all-variants: the five
+        narrowed packs were never opened and an empty _Platform passed."""
+        import argparse  # noqa: PLC0415
+
+        def command(**flags) -> list[str]:
+            base = {"output_dir": "dist", "include_archived": False,
+                    "target": None, "all_variants": False}
+            return pipeline.integrity_command(argparse.Namespace(**{**base, **flags}))
+
+        self.assertIn("--all-variants", command(all_variants=True))
+        self.assertNotIn("--all-variants", command())
+        self.assertEqual(command(target="switch")[-2:], ["--target", "switch"])
+
     def test_pack_parser_removes_source_metadata(self):
         output = "\n".join(
             [
@@ -2734,6 +2766,10 @@ class TheProjectInstallsWithPip(unittest.TestCase):
         import importlib.util  # noqa: PLC0415
 
         if importlib.util.find_spec("setuptools") is None:
+            # The dev extra and CI install it: skipped there, the guard held
+            # nothing on any run.
+            if os.environ.get("CI"):
+                self.fail("CI must install setuptools")
             self.skipTest("setuptools is not installed")
         program = (
             "from setuptools.dist import Distribution\n"
@@ -2808,27 +2844,35 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
             self.assertEqual(unsatisfied, ["bios/absent.bin"])
 
     def test_an_unreachable_buildbot_is_not_a_fresh_verdict(self):
-        source = (ROOT / "scripts" / "check_buildbot_system.py").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn(
-            'if report.get("error") or pending(report):',
-            source.split("def main(")[-1],
-            "main() ignores the error the report carries",
-        )
+        """Every HEAD unanswered printed "16 unknown" and exited 0, so the
+        online pipeline printed check_buildbot OK."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import check_buildbot_system as cbs  # noqa: PLC0415
+
+        registry = str(ROOT / "platforms" / "_data_dirs.yml")
+        tracked = cbs.load_tracked_entries(registry)
+        self.assertTrue(tracked)
+        cases = {
+            "index unreachable": mock.patch.object(
+                cbs, "fetch_index", side_effect=OSError("down")),
+            "every HEAD unanswered": mock.patch.object(
+                cbs, "fetch_index", return_value=set(tracked)),
+        }
+        for label, index in cases.items():
+            with self.subTest(label), index, \
+                    mock.patch.object(cbs, "get_remote_etag", return_value=None), \
+                    mock.patch.object(sys, "argv", ["check_buildbot_system.py",
+                                                    "--registry", registry]), \
+                    contextlib.redirect_stdout(io.StringIO()), \
+                    self.assertRaises(SystemExit) as stop:
+                cbs.main()
+            self.assertEqual(stop.exception.code, 1)
 
     def test_a_missing_profile_directory_says_so(self):
-        import io as _io
-
         from scripts import common as _common
 
-        stderr = _io.StringIO()
-        with contextlib.redirect_stderr(stderr):
-            profiles = _common.load_emulator_profiles(
-                str(ROOT / "no-such-emulator-dir")
-            )
-        self.assertEqual(profiles, {})
-        self.assertIn("no emulator profile directory", stderr.getvalue())
+        with self.assertRaisesRegex(_common.InputMissing, "no emulator profile directory"):
+            _common.load_emulator_profiles(str(ROOT / "no-such-emulator-dir"))
 
 
 class TestEntryPointsRunEveryClass(unittest.TestCase):
@@ -4145,6 +4189,8 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
             ["--offline", "--all-variants", "--source", "platform"],
             ["--offline", "--all-variants", "--source", "full"],
             ["--offline", "--skip-packs", "--source", "full"],
+            ["--offline", "--source", "truth", "--full-narrowings"],
+            ["--offline", "--source", "platform", "--full-narrowings"],
         ],
     }
 
@@ -7136,6 +7182,48 @@ class OpenMsxSystemRomsAreFoundBySha1(unittest.TestCase):
             and opens_by_name(entry, profile)
         ]
         self.assertEqual(named, [])
+
+
+class TupleAnnotationsMatchTheirReturns(unittest.TestCase):
+    """`_by_affinity.score` gained a fifth sort key while its annotation kept
+    four, so the signature misread the order that sends C-Dogs'
+    gamecontrollerdb.txt behind a neutral copy."""
+
+    @staticmethod
+    def _own_returns(fn: ast.AST):
+        stack = list(ast.iter_child_nodes(fn))
+        while stack:
+            node = stack.pop()
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
+                continue
+            if isinstance(node, ast.Return):
+                yield node
+            stack.extend(ast.iter_child_nodes(node))
+
+    def test_a_fixed_tuple_annotation_counts_its_returned_values(self):
+        sources = sorted((ROOT / "scripts").rglob("*.py")) + [ROOT / "install.py"]
+        mismatched = []
+        for path in sources:
+            for fn in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+                if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    continue
+                hint = fn.returns
+                if not (isinstance(hint, ast.Subscript) and isinstance(hint.value, ast.Name)
+                        and hint.value.id == "tuple"):
+                    continue
+                declared = hint.slice.elts if isinstance(hint.slice, ast.Tuple) else [hint.slice]
+                if any(isinstance(e, ast.Constant) and e.value is Ellipsis for e in declared):
+                    continue
+                for ret in self._own_returns(fn):
+                    value = ret.value
+                    if (isinstance(value, ast.Tuple)
+                            and not any(isinstance(e, ast.Starred) for e in value.elts)
+                            and len(value.elts) != len(declared)):
+                        mismatched.append(
+                            f"{path.relative_to(ROOT)}:{ret.lineno} "
+                            f"{len(value.elts)} returned, {len(declared)} declared"
+                        )
+        self.assertEqual(mismatched, [])
 
 
 if __name__ == "__main__":

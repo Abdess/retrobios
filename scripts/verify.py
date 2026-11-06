@@ -43,6 +43,7 @@ from common import (
     suggest_names,
     require_platform,
     archive_entry,
+    archive_is_optional,
     archive_members,
     profiles_for_systems,
     PROFILE_IDENTITY_FIELDS,
@@ -2056,12 +2057,16 @@ def verify_emulator(
     regions: list[str] | None = None,
     platforms_dir: str = _REPO_PLATFORMS,
     system_ids: list[str] | None = None,
+    required_only: bool = False,
 ) -> dict:
     """Verify files for specific emulator profiles.
 
     A region priority list narrows the report the same way a pack built with the
     same list would be narrowed, through the emulator pack's own drop set.
     `system_ids` keeps the entries of those systems, as the system pack does.
+    `required_only` reports on the pack built with --required-only: a loose
+    file or tree marked ``required: false`` is left out, and an archive when
+    it and every member it carries are optional, as the builder leaves them.
     """
     from packextras import expand_agnostic_entries
     from packresolve import resolve_file
@@ -2105,7 +2110,7 @@ def verify_emulator(
     if regions:
         from packextras import emulator_region_drops
 
-        region_drops = emulator_region_drops(selected, standalone, regions, db=db)
+        region_drops = emulator_region_drops(selected, standalone, regions, required_only, db=db)
 
     # The emulator pack walks profiles in name order and keeps the first
     # file at a path, folding case: a later profile's different file there
@@ -2142,6 +2147,8 @@ def verify_emulator(
         bluemsx's Machines/ tree holds msx-emu's coleco.rom path in a
         --system colecovision pack."""
         for dd in deliverable(profile.get("data_directories", []), standalone):
+            if required_only and dd.get("required") is False:
+                continue
             cache = (data_registry or {}).get(dd.get("ref", ""), {}).get("local_cache", "")
             if not cache or not os.path.isdir(cache):
                 continue
@@ -2170,6 +2177,17 @@ def verify_emulator(
         )
         if system_ids:
             files = [fe for fe in files if entry_serves_systems(fe, profile, system_ids)]
+        if required_only:
+            optional_archives = {
+                fe["archive"] for fe in files
+                if fe.get("archive")
+                and archive_is_optional(archive_entry(fe["archive"], files), fe["archive"], files)
+            }
+            files = [
+                fe for fe in files
+                if fe.get("archive") not in optional_archives
+                and (fe.get("archive") or fe.get("required") is not False)
+            ]
         if region_drops:
             # Loose files only, as the emulator pack: an archive ships whole,
             # and dropping kronos' regional stvbios.zip members rebuilt the
@@ -2185,6 +2203,8 @@ def verify_emulator(
         for dd in deliverable(
             profile.get("data_directories", []), standalone
         ):
+            if required_only and dd.get("required") is False:
+                continue
             ref = dd.get("ref", "")
             if not ref:
                 continue
@@ -2516,6 +2536,7 @@ def verify_system(
     standalone: bool = False,
     regions: list[str] | None = None,
     platforms_dir: str = _REPO_PLATFORMS,
+    required_only: bool = False,
 ) -> dict:
     """Verify files for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
@@ -2541,7 +2562,7 @@ def verify_system(
 
     return verify_emulator(
         matching, emulators_dir, db, standalone, regions=regions,
-        platforms_dir=platforms_dir, system_ids=system_ids,
+        platforms_dir=platforms_dir, system_ids=system_ids, required_only=required_only,
     )
 
 
@@ -2680,6 +2701,7 @@ def _refuse_listing_narrowings(
         ("--destinations", args.destinations),
         ("--offline", args.offline),
         ("--no-game-data", getattr(args, "no_game_data", False)),
+        ("--required-only", args.required_only),
     ):
         if on:
             parser.error(f"{flag} is incompatible with {listing}")
@@ -2708,6 +2730,8 @@ def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser
          "--no-game-data requires --platform or --all"),
         (args.destinations and getattr(args, "region", None),
          "--destinations describes the full pack and is incompatible with --region"),
+        (args.destinations and args.required_only,
+         "--destinations describes the full pack and is incompatible with --required-only"),
     ):
         if refused:
             parser.error(message)
@@ -2775,6 +2799,11 @@ def _main(held: contextlib.ExitStack) -> None:
         "--no-game-data", action="store_true",
         help="Report on the pack built with --no-game-data: game data left "
         "out and named, firmware only",
+    )
+    parser.add_argument(
+        "--required-only", action="store_true",
+        help="Report on the pack built with --required-only: files the code "
+        "runs without are left out",
     )
     parser.add_argument(
         "--db", default=DEFAULT_DB,
@@ -2867,6 +2896,7 @@ def _main(held: contextlib.ExitStack) -> None:
         result = verify_emulator(
             names, args.emulators_dir, db, args.standalone,
             regions=requested_regions, platforms_dir=args.platforms_dir,
+            required_only=args.required_only,
         )
         if args.json:
             result["details"] = _json_details(result["details"], args.verbose)
@@ -2881,6 +2911,7 @@ def _main(held: contextlib.ExitStack) -> None:
         result = verify_system(
             system_ids, args.emulators_dir, db, args.standalone,
             regions=requested_regions, platforms_dir=args.platforms_dir,
+            required_only=args.required_only,
         )
         if args.json:
             result["details"] = _json_details(result["details"], args.verbose)
@@ -2950,6 +2981,7 @@ def _main(held: contextlib.ExitStack) -> None:
             regions=requested_regions,
             system_filter=platform_systems,
             no_game_data=getattr(args, "no_game_data", False),
+            required_only=args.required_only,
         )
         names = [
             load_platform_config(p, args.platforms_dir).get("platform", p)

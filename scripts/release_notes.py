@@ -26,6 +26,7 @@ from common import (
     list_release_pack_platforms,
     load_platform_config,
     load_platform_registry,
+    require_directory,
     write_text_atomic,
 )
 from siteguides import install_command
@@ -162,6 +163,7 @@ def main() -> int:
     parser.add_argument("--output", required=True, type=Path,
                         help="notes file to write, passed to gh release create --notes-file")
     args = parser.parse_args()
+    require_directory(args.platforms_dir, "--platforms-dir")
 
     record = release_record.load_record(args.record)
     if not record.get("packs"):

@@ -12,6 +12,13 @@ and 3-tier storage (embedded/external/user_provided).
 
 from __future__ import annotations
 
+import sys
+
+# The README's first command. Under 3.8 it stopped on a SyntaxError that read
+# like a damaged file. The build needs 3.9, as pipeline.py says.
+if sys.version_info < (3, 9):
+    sys.exit(f"generate_pack.py needs Python 3.9 or newer, this is {sys.version.split()[0]}")
+
 from collections.abc import Callable, Iterable, Iterator
 
 from artifacts import _build_timestamp, set_plain_mode
@@ -23,7 +30,6 @@ import json
 import os
 import re
 import shutil
-import sys
 import tempfile
 import zipfile
 from pathlib import Path
@@ -41,7 +47,9 @@ from common import (
     archive_entry,
     profiles_for_systems,
     write_text_atomic,
+    archive_is_optional,
     artifact_lock,
+    repository_output_lock,
     ArtifactLockBusy,
     build_target_cores_cache,
     build_zip_contents_index,
@@ -602,6 +610,7 @@ def _report_pack_counts(
     core_count: int,
     source: str,
     verification_mode: str,
+    tree_count: int = 0,
 ) -> None:
     """Print the line the pipeline's consistency check reads.
 
@@ -633,10 +642,11 @@ def _report_pack_counts(
             f"{core_count} from emulator profiles [{verification_mode}]"
         )
     else:
-        baseline = total_files - core_count
+        baseline = total_files - core_count - tree_count
+        trees = f"{tree_count} in core data trees + " if tree_count else ""
         print(
             f"  {zip_path}: {total_files} files packed ({baseline} baseline + "
-            f"{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
+            f"{trees}{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
         )
 
 def _select_variants(
@@ -1308,11 +1318,19 @@ def generate_pack(
           core_trees = [t for t in core_trees if not _extras_for_systems([t], owned)]
       elif system_filter:
           core_trees = _extras_for_systems(core_trees, system_filter)
+      # Counted apart: the trees a core reads are not on the platform's
+      # list. MyMinUI declares nothing and its line read "6944 baseline".
       total_files += _pack_data_directories(
           zf, pack_systems, data_registry, platform_name, base_dest,
           flatten, case_insensitive, seen_destinations, seen_lower,
+          seen_parents, required_only=required_only,
+      )
+      tree_count = _pack_data_directories(
+          zf, {}, data_registry, platform_name, base_dest,
+          flatten, case_insensitive, seen_destinations, seen_lower,
           seen_parents, required_only=required_only, core_trees=core_trees,
       )
+      total_files += tree_count
 
       # README.txt for users: personalized step-by-step per platform
       num_systems = len(pack_systems)
@@ -1351,7 +1369,7 @@ def generate_pack(
 
     _report_pack_counts(
         zip_path, file_status, total_files, core_count, source,
-        verification_mode,
+        verification_mode, tree_count=tree_count,
     )
     if cut is not None:
         _report_left_out(
@@ -1454,18 +1472,6 @@ class DamagedArchiveError(OSError):
 
 # Emulator/system mode pack generation
 
-
-
-def _archive_is_optional(archive_entry: dict, archive_name: str, files: list[dict]) -> bool:
-    """Optional as a whole: its own entry and every member it carries.
-
-    geolith's _Required pack held neocd.zip and irrmaze.zip all the same.
-    """
-    return archive_entry.get("required") is False and all(
-        member.get("required") is False
-        for member in files
-        if member.get("archive") == archive_name
-    )
 
 
 def _pack_data_tree(
@@ -1656,7 +1662,7 @@ def generate_emulator_pack(
                 )
 
                 own_entry = archive_entry(archive_name, files)
-                if required_only and _archive_is_optional(own_entry, archive_name, files):
+                if required_only and archive_is_optional(own_entry, archive_name, files):
                     continue
                 local_path, status = resolve_file(
                     own_entry,
@@ -2803,9 +2809,11 @@ def _run_manifest_mode(
 
 @contextlib.contextmanager
 def _pack_output_lock(output_dir: str, exclusive: bool = True) -> Iterator[None]:
-    """Hold the output directory for the duration of a pack run."""
+    """Hold the output directory for the duration of a pack run, and the
+    repository's fixed outputs when it is one of them (install/)."""
     try:
-        with artifact_lock(output_dir, exclusive=exclusive):
+        with artifact_lock(output_dir, exclusive=exclusive), \
+                repository_output_lock(output_dir) if exclusive else contextlib.nullcontext():
             yield
     except ArtifactLockBusy as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
@@ -3031,6 +3039,8 @@ def _run_platform_packs(
     # Per pack, the systems each of its files is for, written into its
     # manifest.json once the pack is verified (pack_systems).
     systems_for: dict[str, dict] = {}
+    # The packs this run writes, the only ones it verifies and rewrites.
+    built: set[str] = set()
 
     failed: list[str] = []
     for source, required_only in variants:
@@ -3131,7 +3141,12 @@ def _run_platform_packs(
                 # the output directory already held and exit 0.
                 if not _produced(args.split, zip_path, zip_paths):
                     failed.append(representative)
-                elif zip_path and not system_filter:
+                    continue
+                built.update(
+                    os.path.relpath(path, args.output_dir)
+                    for path in ([zip_path] if zip_path else zip_paths)
+                )
+                if zip_path and not system_filter:
                     # The install list of the same choices names each file's
                     # systems: the pack records them, so a pack alone (a
                     # handheld without Wi-Fi) can be narrowed by system.
@@ -3154,6 +3169,7 @@ def _run_platform_packs(
         db,
         platforms_dir=args.platforms_dir,
         emulators_dir=args.emulators_dir,
+        built=built,
         pack_systems_by_name=systems_for,
         skip_conformance=skip_conf,
         data_registry=data_registry,
@@ -3170,6 +3186,10 @@ def _run_platform_packs(
                     db,
                     platforms_dir=args.platforms_dir,
                     emulators_dir=args.emulators_dir,
+                    built={
+                        os.path.basename(name) for name in built
+                        if os.path.dirname(name) == entry
+                    },
                     skip_conformance=True,
                     data_registry=data_registry,
                     regions=getattr(args, "regions", None),
@@ -3566,6 +3586,9 @@ def _main(held: contextlib.ExitStack) -> None:
             )
         except ValueError as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
+            sys.exit(1)
+        except OSError as exc:
+            print(f"ERROR: --from-md5-file {args.from_md5_file}: {exc.strerror}", file=sys.stderr)
             sys.exit(1)
         if not hashes:
             print(
@@ -5089,10 +5112,8 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
             with zipfile.ZipFile(scratch, "a", zipfile.ZIP_DEFLATED) as zf:
                 _write_generated_member(zf, "manifest.json", manifest_json)
         else:
-            with (
-                zipfile.ZipFile(zip_path, "r") as src,
-                zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED) as dst,
-            ):
+            with zipfile.ZipFile(zip_path, "r") as src, \
+                    zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED) as dst:
                 for item in src.infolist():
                     if item.filename == "manifest.json":
                         continue
@@ -5287,11 +5308,17 @@ def verify_and_finalize_packs(
     emulators_dir: str = "emulators",
     no_game_data: bool = False,
     pack_systems_by_name: dict[str, dict] | None = None,
+    built: Iterable[str] | None = None,
 ) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
     pack_systems_by_name gives, per pack file name, the systems its
     manifest.json records (pack_systems).
+
+    ``built`` names the packs this run wrote, and only those are verified
+    and get a manifest. A pack another run left in the directory was
+    reopened, recompressed and given a manifest without its pack_systems,
+    which made the installer refuse to narrow it. None takes every pack.
 
     Two-stage verification:
     1. Hash check against database.json (integrity)
@@ -5309,14 +5336,17 @@ def verify_and_finalize_packs(
     expected = _expected_pack_names(
         registered, platforms_dir, regions, target_name, no_game_data=no_game_data
     )
+    packs = _pack_archives(output_dir)
+    if built is not None:
+        packs = [name for name in packs if name in set(built)]
     pack_to_platform: dict[str, list[str]] = {}
-    for name in _pack_archives(output_dir):
+    for name in packs:
         for pname in registered:
             if name in expected[pname]:
                 pack_to_platform.setdefault(name, []).append(pname)
 
     failing: list[str] = []
-    for name in _pack_archives(output_dir):
+    for name in packs:
         zip_path = os.path.join(output_dir, name)
 
         # Stage 1: database integrity

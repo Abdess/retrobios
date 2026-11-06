@@ -182,6 +182,28 @@ class EveryNarrowingIsCompared(unittest.TestCase):
                          "compare the new narrowing in check_narrowed_packs, "
                          "or write in NARROWINGS_NOT_COMPARED why it is not")
 
+    def test_each_emulator_pack_narrowing_is_compared(self):
+        """check_emulator_packs built every pack without --region or
+        --required-only, while the table above counted both as compared:
+        it describes the platform packs only."""
+        import inspect
+
+        import pipeline
+        from generate_pack import _narrowings, generate_emulator_pack
+
+        taken = (set(inspect.signature(_narrowings).parameters)
+                 & set(inspect.signature(generate_emulator_pack).parameters))
+        self.assertEqual(taken, set(pipeline.EMULATOR_NARROWINGS_COMPARED))
+        profile = {"files": [{"name": "a.bin", "region": "japan"},
+                             {"name": "b.bin", "region": ["north-america", "europe"]}]}
+        used = {key for _label, narrowing in pipeline.emulator_variants([profile], False)
+                for key in narrowing}
+        # standalone is the loop around the variants, both builds of each profile.
+        self.assertEqual(used, pipeline.EMULATOR_NARROWINGS_COMPARED - {"standalone"})
+        regions = [n["regions"] for _l, n in pipeline.emulator_variants([profile], True)
+                   if "regions" in n]
+        self.assertEqual(len(regions), 3)
+
     def test_the_variants_reach_every_compared_dimension(self):
         import pipeline
         from common import load_emulator_profiles, load_platform_config
@@ -246,7 +268,7 @@ class ThePipelineComparesPaths(unittest.TestCase):
     def test_the_run_compares_every_emulator_pack(self):
         source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         self.assertIn("ok = check_pack_destinations(destinations_file, pack_output) and ok", source)
-        self.assertIn("ok = check_emulator_packs() and ok", source)
+        self.assertIn("ok = check_emulator_packs(full=args.full_narrowings) and ok", source)
         self.assertIn('"--destinations", destinations_file', source)
 
 

@@ -95,6 +95,38 @@ class CoverageCache(unittest.TestCase):
         self._run()
         self.assertEqual(len(list((self.work / "cache").glob("*.pickle"))), 1)
 
+    def test_a_purge_racing_another_generator_does_not_fail(self):
+        """generate_site and generate_readme purge the same directory: one
+        unlinking a pickle the other had listed ended on FileNotFoundError."""
+        cache_dir = self.work / "cache"
+        cache_dir.mkdir()
+        ghost = cache_dir / "gone.pickle"
+        real_glob = Path.glob
+
+        def listing_a_vanished_file(path, pattern):
+            found = list(real_glob(path, pattern))
+            return [*found, ghost] if path == cache_dir else found
+
+        with mock.patch.object(Path, "glob", listing_a_vanished_file):
+            coverages = self._run()
+        self.assertEqual(sorted(coverages), ["alpha", "beta"])
+        self.assertEqual(len(list(cache_dir.glob("*.pickle"))), 1)
+
+    def test_a_missing_input_directory_stops_the_run(self):
+        """A missing --emulators-dir skipped every platform as if it had no
+        YAML, then replaced the cache with the empty result."""
+        self._run()
+        kept = sorted((self.work / "cache").glob("*.pickle"))
+
+        def missing(*_args, **_kwargs):
+            raise generate_readme.InputMissing("no emulator profile directory at nosuch")
+
+        with mock.patch.object(generate_readme, "compute_coverage", missing), \
+                mock.patch.object(generate_readme, "_coverage_inputs", return_value="other"), \
+                self.assertRaises(generate_readme.InputMissing):
+            self._run()
+        self.assertEqual(sorted((self.work / "cache").glob("*.pickle")), kept)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -27,7 +27,7 @@ import zipfile
 from collections.abc import Iterator
 from pathlib import Path
 from artifacts import file_lock as _file_lock, set_plain_mode
-from common import github_token, platform_arg, require_platform, suggest_names, yaml_load
+from common import InputMissing, github_token, platform_arg, require_platform, suggest_names, yaml_load
 
 try:
     import yaml
@@ -53,7 +53,7 @@ def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
         raise ImportError("PyYAML required: pip install pyyaml")
     path = Path(registry_path)
     if not path.exists():
-        raise FileNotFoundError(f"Registry not found: {registry_path}")
+        raise InputMissing(f"Registry not found: {registry_path}")
     with open(path) as f:
         data = yaml_load(f) or {}
     return data.get("data_directories", {})
@@ -442,11 +442,43 @@ def refresh_entry(
     The decision and the swap run under one lock per directory: a run that
     waited for another session re-reads the version it recorded and finds
     nothing left to do.
+
+    The exclusive lock waits for every reader, and a pipeline reads the
+    trees for its whole run: a second build sat on "waiting" for a tree the
+    remote check would have found current. The check is made first without
+    it, and only a tree to replace waits.
     """
     if dry_run:
         return _refresh_entry(key, entry, force, dry_run, versions_path)
+    if not force:
+        needs, _remote, cached_tag = _decide(key, entry, False, versions_path)
+        if needs is None:
+            return None
+        if not needs:
+            log.info("[%s] up to date (tag: %s)", key, _short_tag(cached_tag))
+            return False
     with cache_lock(entry["local_cache"]):
         return _refresh_entry(key, entry, force, dry_run, versions_path)
+
+
+def _decide(
+    key: str, entry: dict, force: bool, versions_path: str
+) -> tuple[bool | None, str | None, str | None]:
+    """(whether the tree needs a refresh, the remote tag read, the recorded
+    tag). None when the remote could not be read."""
+    version = entry.get("version", "master")
+    cached = _load_versions(versions_path).get(key, {})
+    cached_tag = cached.get("sha") or cached.get("etag")
+    if force or not Path(entry["local_cache"]).exists():
+        return True, None, cached_tag
+    if entry.get("source_type", "tarball") == "zip":
+        remote_tag = _get_remote_etag(entry["source_url"].format(version=version))
+    else:
+        remote_tag = get_remote_sha(entry["source_url"], version)
+    if remote_tag is None:
+        log.warning("[%s] could not check remote, skipping", key)
+        return None, None, cached_tag
+    return remote_tag != cached_tag, remote_tag, cached_tag
 
 
 def _refresh_entry(
@@ -458,23 +490,9 @@ def _refresh_entry(
     local_cache = entry["local_cache"]
     exclude = entry.get("exclude", [])
 
-    versions = _load_versions(versions_path)
-    cached = versions.get(key, {})
-    cached_tag = cached.get("sha") or cached.get("etag")
-
-    needs_refresh = force or not Path(local_cache).exists()
-
-    remote_tag: str | None = None
-    if not needs_refresh:
-        if source_type == "zip":
-            remote_tag = _get_remote_etag(source_url)
-        else:
-            remote_tag = get_remote_sha(entry["source_url"], version)
-        if remote_tag is None:
-            log.warning("[%s] could not check remote, skipping", key)
-            return None
-        needs_refresh = remote_tag != cached_tag
-
+    needs_refresh, remote_tag, cached_tag = _decide(key, entry, force, versions_path)
+    if needs_refresh is None:
+        return None
     if not needs_refresh:
         log.info("[%s] up to date (tag: %s)", key, _short_tag(cached_tag))
         return False

@@ -735,13 +735,18 @@ def main() -> int:
     if not args.fetch and not any(path.is_dir() for path in cache_dirs):
         print(f"Error: no tree cache at {', '.join(map(str, cache_dirs))}", file=sys.stderr)
         return 1
-    from common import load_emulator_profiles, write_if_changed  # noqa: PLC0415
+    from common import (  # noqa: PLC0415
+        load_emulator_profiles,
+        repository_output_lock,
+        write_if_changed,
+    )
 
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
-    held, unread = build_source_paths(profiles, cache_dirs, args.fetch)
-    held = keep_unread(held, unread, read_record(args.output))
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    write_if_changed(str(args.output), json.dumps(held, indent=1, sort_keys=True) + "\n")
+    with repository_output_lock(str(args.output)):
+        held, unread = build_source_paths(profiles, cache_dirs, args.fetch)
+        held = keep_unread(held, unread, read_record(args.output))
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        write_if_changed(str(args.output), json.dumps(held, indent=1, sort_keys=True) + "\n")
     print(f"{sum(map(len, held.values()))} paths held in {len(held)} trees, "
           f"{len(unread)} trees not cached: {args.output}")
     return 0

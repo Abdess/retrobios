@@ -208,9 +208,14 @@ def _strip_timestamps(text: str) -> str:
 class ArtifactLockBusy(RuntimeError):
     """Raised when another process already holds the artifact directory."""
 
-# A run that holds an artifact directory for its whole duration names it
-# here for the steps it spawns: they would otherwise be refused by it.
+# A run that holds artifact directories for its whole duration names them
+# here, os.pathsep apart, for the steps it spawns: they would otherwise be
+# refused by it. A pipeline holds the repository root and its --output-dir.
 HELD_LOCK_ENV = "RETROBIOS_HELD_ARTIFACT_DIR"
+
+
+def _held_directories() -> list[str]:
+    return [d for d in os.environ.get(HELD_LOCK_ENV, "").split(os.pathsep) if d]
 
 
 @contextlib.contextmanager
@@ -229,7 +234,7 @@ def artifact_lock(directory: str, exclusive: bool = True) -> Iterator[None]:
         return
 
     os.makedirs(directory, exist_ok=True)
-    if os.environ.get(HELD_LOCK_ENV) == os.path.realpath(directory):
+    if os.path.realpath(directory) in _held_directories():
         yield
         return
     lock_path = os.path.join(directory, ".lock")
@@ -256,16 +261,24 @@ def hold_artifact_lock(directory: str) -> Iterator[None]:
     run can purge the packs one step built before the next step checks
     them. The children this process spawns inherit the hold.
     """
-    with artifact_lock(directory):
-        previous = os.environ.get(HELD_LOCK_ENV)
-        os.environ[HELD_LOCK_ENV] = os.path.realpath(directory)
-        try:
-            yield
-        finally:
-            if previous is None:
-                os.environ.pop(HELD_LOCK_ENV, None)
-            else:
-                os.environ[HELD_LOCK_ENV] = previous
+    with artifact_lock(directory), publish_hold(directory):
+        yield
+
+
+@contextlib.contextmanager
+def publish_hold(directory: str) -> Iterator[None]:
+    """Name a directory this process holds to the steps it spawns."""
+    previous = os.environ.get(HELD_LOCK_ENV)
+    os.environ[HELD_LOCK_ENV] = os.pathsep.join(
+        [*_held_directories(), os.path.realpath(directory)]
+    )
+    try:
+        yield
+    finally:
+        if previous is None:
+            os.environ.pop(HELD_LOCK_ENV, None)
+        else:
+            os.environ[HELD_LOCK_ENV] = previous
 
 
 # What a pipeline run writes at fixed paths, whatever its --output-dir.
@@ -280,18 +293,38 @@ def hold_repository_outputs(root: str = ".") -> Iterator[None]:
     on dist/: both rewrote database.json, and the second to reach the
     manifest step found install/ held after minutes of work, or, when the
     steps did not overlap, rewrote the committed manifests from its own
-    state. The lock file is the repository root's .lock.
+    state. The lock file is the repository root's .lock. A pipeline passes
+    it to its steps with publish_hold.
     """
     stack = contextlib.ExitStack()
     try:
         stack.enter_context(artifact_lock(root))
     except ArtifactLockBusy as exc:
         raise ArtifactLockBusy(
-            f"another pipeline run is writing {', '.join(REPOSITORY_OUTPUTS)} "
+            f"another run is writing {', '.join(REPOSITORY_OUTPUTS)} "
             f"(lock: {os.path.join(root, '.lock')}). Wait for it to finish."
         ) from exc
     with stack:
         yield
+
+
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+
+
+def repository_output_lock(path: str) -> contextlib.AbstractContextManager[None]:
+    """The repository hold, when *path* is one of its fixed outputs.
+
+    Only a pipeline took it: generate_db.py run beside a pipeline replaced
+    database.json between its verify and its packs, and a manifest run on
+    install/ made the pipeline's own manifest step fail after minutes of
+    work. A path elsewhere (a scratch --output) takes nothing.
+    """
+    target = os.path.realpath(path)
+    for output in REPOSITORY_OUTPUTS:
+        fixed = os.path.join(_REPO_ROOT, output.rstrip("/"))
+        if target == fixed or target.startswith(fixed + os.sep):
+            return hold_repository_outputs(_REPO_ROOT)
+    return contextlib.nullcontext()
 
 
 def _build_timestamp(db: dict | None = None) -> str:

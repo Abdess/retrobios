@@ -296,5 +296,43 @@ class RestoreSkipsDownloadsInProgress(unittest.TestCase):
             self.assertIn(str(cache / "done.bin"), index.values())
 
 
+class ATerminatedBuildLeavesNoScratch(unittest.TestCase):
+    """`timeout 120 generate_pack.py --platform RetroArch` left a 3.4 GB
+    hidden .partial in dist/: SIGTERM ended the process without running the
+    cleanup a failed write runs."""
+
+    CHILD = (
+        "import sys, time\n"
+        "sys.path.insert(0, 'scripts')\n"
+        "from common import run_cli\n"
+        "from generate_pack import _writing_pack\n"
+        "def main():\n"
+        "    with _writing_pack(sys.argv[1]) as zf:\n"
+        "        zf.writestr('a.bin', b'x')\n"
+        "        print('writing', flush=True)\n"
+        "        time.sleep(60)\n"
+        "run_cli(main)\n"
+    )
+
+    def test_sigterm_removes_the_partial_pack(self):
+        import signal  # noqa: PLC0415
+        import subprocess  # noqa: PLC0415
+
+        if not hasattr(signal, "SIGTERM") or os.name != "posix":
+            self.skipTest("POSIX signals")
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            pack = Path(tmp) / "Demo_BIOS_Pack.zip"
+            child = subprocess.Popen(
+                [sys.executable, "-c", self.CHILD, str(pack)], cwd=REPO_ROOT,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+            )
+            self.assertEqual(child.stdout.readline().strip(), "writing")
+            self.assertTrue(list(Path(tmp).glob(".*.partial")))
+            child.send_signal(signal.SIGTERM)
+            child.communicate(timeout=60)
+            self.assertEqual(child.returncode, 128 + signal.SIGTERM)
+            self.assertEqual(sorted(p.name for p in Path(tmp).iterdir()), [])
+
+
 if __name__ == "__main__":
     unittest.main()

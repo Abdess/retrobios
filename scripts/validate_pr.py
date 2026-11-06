@@ -34,6 +34,7 @@ from common import (
     load_emulator_profiles,
     load_platform_config,
     parse_md5_list,
+    require_directory,
 )
 from hashing import parse_hash_list
 from nativemode import digest_algorithm
@@ -806,6 +807,7 @@ def main() -> None:
         return
 
     db = _load_database_if_any(args.db)
+    require_directory(args.platforms_dir, "--platforms-dir")
     platform_hashes = load_platform_hashes(args.platforms_dir, db)
     profile_hashes = load_profile_hashes(args.emulators_dir, db)
 

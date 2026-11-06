@@ -262,6 +262,219 @@ class AMissingBiosDirIsRefused(unittest.TestCase):
         self.assertFalse(Path(out).exists())
 
 
+def _scripts_taking(flag: str) -> list[Path]:
+    pattern = re.compile(r'add_argument\(\s*"%s"' % re.escape(flag))
+    return [
+        path for path in sorted((REPO_ROOT / "scripts").glob("*.py"))
+        + sorted((REPO_ROOT / "scripts" / "scraper").glob("*.py"))
+        if pattern.search(path.read_text(encoding="utf-8"))
+    ]
+
+
+def _command(path: Path) -> list[str]:
+    if path.parent.name == "scraper":
+        return [sys.executable, "-m", f"scripts.scraper.{path.stem}"]
+    return [sys.executable, f"scripts/{path.name}"]
+
+
+class AMissingProfileDirIsRefused(unittest.TestCase):
+    """A mistyped --emulators-dir read as "no emulator": generate_pack built
+    a pack without its core files marked OK, verify --strict passed, and
+    sitesources wrote {} over source-paths.json, every one exiting 0."""
+
+    EXTRA = {
+        "arcade_parent_importer": ["--all", "--offline"],
+        "fileless_audit": ["--all"],
+        "generate_pack": ["--platform", "retroarch", "--system", "atari-lynx",
+                          "--offline", "--output-dir", "{out}"],
+        "generate_site": ["--docs-dir", "{out}"],
+        "generate_truth": ["--all", "--output-dir", "{out}"],
+        "mame_ref_audit": ["mame"],
+        "profile_sync": ["--all", "--triage"],
+        "romset_dat_importer": ["--source", "mame", "--pack", "{dat}", "--output", "{out}/r.json"],
+        "sitesources": ["--cache-dir", "{cache}", "--output", "{out}/source-paths.json"],
+        "validate_pr": ["bios/Sony/PlayStation/scph5501.bin"],
+        "verify": ["--platform", "retroarch", "--strict"],
+    }
+
+    def test_every_script_taking_an_emulators_dir_refuses_a_missing_one(self):
+        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.addCleanup(scratch.cleanup)
+        root = Path(scratch.name)
+        (root / "cache").mkdir()
+        (root / "empty.dat").write_bytes(b"")
+        values = {"out": str(root / "out"), "cache": str(root / "cache"),
+                  "dat": str(root / "empty.dat")}
+        taking = _scripts_taking("--emulators-dir")
+        self.assertGreater(len(taking), 15)
+        tracked = ["git", "diff", "--name-only"]
+        before = subprocess.run(tracked, cwd=REPO_ROOT, capture_output=True, text=True).stdout
+        for path in taking:
+            extra = [arg.format(**values) for arg in self.EXTRA.get(path.stem, [])]
+            with self.subTest(script=path.stem):
+                proc = subprocess.run(
+                    [*_command(path), "--emulators-dir", "nosuch", *extra],
+                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    check=False, env={**os.environ, "RETROBIOS_OFFLINE": "1"},
+                )
+                self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
+                self.assertNotIn("Traceback", proc.stderr, proc.stderr[-1500:])
+                self.assertRegex(proc.stderr, r"ERROR: .*nosuch")
+        written = [
+            str(p.relative_to(root)) for p in (root / "out").rglob("*")
+            if p.is_file() and p.name != ".lock"
+        ]
+        self.assertEqual(written, [])
+        # Read as empty, generate_site rewrote published-parts.json and the
+        # FAQ, and sitesources source-paths.json.
+        after = subprocess.run(tracked, cwd=REPO_ROOT, capture_output=True, text=True).stdout
+        self.assertEqual(after, before)
+
+
+class AMissingPlatformsDirIsRefused(unittest.TestCase):
+    """`verify.py --platforms-dir noplat` ended on a FileNotFoundError at the
+    bottom of a stack trace, and validate_pr read it as no platform at all
+    and exited 0."""
+
+    EXTRA = {
+        "auto_fetch": ["--all", "--dry-run"],
+        "check_release": ["--tag", "v1"],
+        "diff_truth": ["--all"],
+        "export_native": ["--all", "--output-dir", "{out}"],
+        "generate_pack": ["--platform", "retroarch", "--offline", "--output-dir", "{out}"],
+        "generate_site": ["--docs-dir", "{out}"],
+        "generate_truth": ["--all", "--output-dir", "{out}"],
+        "release_notes": ["--whats-new", "{notes}", "--output", "{out}/notes.md"],
+        "release_record": ["{out}", "--tag", "v1"],
+        "romset_dat_importer": ["--source", "mame", "--pack", "{dat}", "--output", "{out}/r.json"],
+        "validate_pr": ["bios/Sony/PlayStation/scph5501.bin"],
+        "validate_site": ["--site-dir", "{out}"],
+        "verify": ["--platform", "retroarch"],
+    }
+
+    def test_every_script_taking_a_platforms_dir_refuses_a_missing_one(self):
+        scratch = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
+        self.addCleanup(scratch.cleanup)
+        root = Path(scratch.name)
+        (root / "empty.dat").write_bytes(b"")
+        (root / "notes.md").write_text("Notes.\n")
+        values = {"out": str(root / "out"), "dat": str(root / "empty.dat"),
+                  "notes": str(root / "notes.md")}
+        taking = _scripts_taking("--platforms-dir")
+        self.assertGreater(len(taking), 15)
+        for path in taking:
+            extra = [arg.format(**values) for arg in self.EXTRA.get(path.stem, [])]
+            with self.subTest(script=path.stem):
+                proc = subprocess.run(
+                    [*_command(path), "--platforms-dir", "nosuch", *extra],
+                    capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600,
+                    check=False, env={**os.environ, "RETROBIOS_OFFLINE": "1"},
+                )
+                self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
+                self.assertNotIn("Traceback", proc.stderr, proc.stderr[-1500:])
+                self.assertRegex(proc.stderr, r"ERROR: .*nosuch")
+
+
+class AMissingInputFileIsNamed(unittest.TestCase):
+    """The documented `--from-md5-file missing.txt` ended on a
+    FileNotFoundError at the bottom of a stack trace."""
+
+    def _refused(self, argv: list[str], message: str) -> None:
+        proc = subprocess.run(
+            [sys.executable, *argv], capture_output=True, text=True,
+            cwd=str(REPO_ROOT), timeout=600, check=False,
+            env={**os.environ, "RETROBIOS_OFFLINE": "1"},
+        )
+        self.assertNotEqual(proc.returncode, 0, proc.stdout[-500:])
+        self.assertNotIn("Traceback", proc.stderr, proc.stderr[-1500:])
+        self.assertIn(message, proc.stderr)
+
+    def test_a_missing_hash_list_is_named(self):
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            self._refused(
+                ["scripts/generate_pack.py", "--platform", "batocera", "--from-md5-file",
+                 "nosuch.txt", "--offline", "--output-dir", tmp],
+                "ERROR: --from-md5-file nosuch.txt: No such file or directory",
+            )
+
+    def test_a_missing_data_directory_registry_is_named(self):
+        for argv in (["scripts/refresh_data_dirs.py", "--registry", "nosuch.yml", "--dry-run"],
+                     ["scripts/check_buildbot_system.py", "--registry", "nosuch.yml"]):
+            with self.subTest(script=argv[0]):
+                self._refused(argv, "ERROR: Registry not found: nosuch.yml")
+
+
+class ASystemReportCountsTheClaimsThePackCounts(unittest.TestCase):
+    """`--platform retroarch --system panasonic-3do` packed MAME 2009's
+    taitofx1.zip, which MAME 2016 claims for that system, and the report's
+    core coverage did not name it: the builder read other_claims, verify
+    read only the entry's own system."""
+
+    def test_a_claim_riding_on_an_entry_selects_it(self):
+        from packextras import extras_for_systems, report_owned_by_systems
+
+        entry = {
+            "name": "taitofx1.zip", "system": "arcade", "systems": ["arcade"],
+            "other_claims": [{"name": "taitofx1.zip", "system": None,
+                              "systems": ["arcade", "panasonic-3do"]}],
+        }
+        extra = {"source_system": "arcade", "source_systems": ["arcade"],
+                 "other_claims": [{"source_system": None,
+                                   "source_systems": ["arcade", "panasonic-3do"]}]}
+        for system in ("panasonic-3do", "arcade", "sony-playstation"):
+            with self.subTest(system=system):
+                self.assertEqual(
+                    bool(report_owned_by_systems([entry], [system])),
+                    bool(extras_for_systems([extra], [system])),
+                )
+        self.assertEqual(report_owned_by_systems([entry], ["panasonic-3do"]), [entry])
+
+
+class VerifyReportsTheRequiredOnlyPack(unittest.TestCase):
+    """`generate_pack --emulator mame --required-only` held 164 archives and
+    the only report, `verify --emulator mame`, credited 2302 paths:
+    --required-only was refused by verify, and the archive rule existed in
+    the builder only."""
+
+    def setUp(self):
+        previous = os.getcwd()
+        os.chdir(REPO_ROOT)
+        self.addCleanup(os.chdir, previous)
+
+    def test_the_report_holds_the_paths_the_pack_holds(self):
+        import contextlib
+        import io
+
+        from verify import verify_emulator
+
+        db = common.load_database("database.json")
+        for name in ("beetle_psx", "dolphin", "fbneo", "geolith", "mame"):
+            with self.subTest(emulator=name):
+                record = builder.PackRecord()
+                with contextlib.redirect_stdout(io.StringIO()), \
+                        contextlib.redirect_stderr(io.StringIO()):
+                    builder.generate_emulator_pack(
+                        [name], "emulators", db, "bios", "", offline=True,
+                        platforms_dir="platforms", record=record, required_only=True,
+                    )
+                    report = verify_emulator([name], "emulators", db,
+                                             platforms_dir="platforms", required_only=True)
+                    full = verify_emulator([name], "emulators", db, platforms_dir="platforms")
+                self.assertEqual(sorted(report["pack_destinations"]), sorted(record.files))
+                self.assertLessEqual(set(report["pack_destinations"]),
+                                     set(full["pack_destinations"]))
+
+    def test_every_mode_takes_the_flag(self):
+        for argv in (["--platform", "lakka"], ["--emulator", "handy"],
+                     ["--system", "atari-lynx"]):
+            with self.subTest(argv=argv):
+                proc = subprocess.run(
+                    [sys.executable, "scripts/verify.py", *argv, "--required-only"],
+                    cwd=REPO_ROOT, capture_output=True, text=True, timeout=600, check=False,
+                )
+                self.assertEqual(proc.returncode, 0, proc.stderr[-1500:])
+
+
 class StrictVerifyFailsOnACriticalMiss(unittest.TestCase):
     """verify exited 0 with a required file missing on an md5 platform, so
     the pipeline printed "verify OK" over a pack the frontend rejects."""
