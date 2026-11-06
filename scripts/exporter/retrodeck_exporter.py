@@ -215,6 +215,7 @@ class Exporter(BaseExporter):
         ours: list[OrderedDict],
         additions: list[OrderedDict] | None = None,
         appended: set[tuple[str, str]] | None = None,
+        held_back: list[int] | None = None,
     ) -> list[OrderedDict]:
         """Correct the component's own list, never replace it.
 
@@ -301,12 +302,18 @@ class Exporter(BaseExporter):
             for e in merged
             for system in (_systems_of(e) or [""])
         }
-        for entry in additions or []:
+        for index, entry in enumerate(additions or []):
             key = (str(entry.get("filename", "")), str(entry.get("system", "")), _paths_key(entry))
             if key[0] and key not in held:
                 held.add(key)
                 merged.append(entry)
+            elif held_back is not None:
+                held_back.append(index)
         return merged
+
+    def lands(self, fe: NativeFile) -> bool:
+        """An addition the list already held is not written a second time."""
+        return self.writable(fe) and id(fe) not in getattr(self, "_held_back", set())
 
     def render(
         self,
@@ -317,6 +324,7 @@ class Exporter(BaseExporter):
     ) -> dict[str, str]:
         self._place_additions(systems)
         self._appended: set[int] = set()
+        self._held_back: set[int] = set()
         grouped = self._by_component(systems)
         produced: dict[str, str] = {}
 
@@ -331,25 +339,28 @@ class Exporter(BaseExporter):
                 continue
 
             entries = [self._entry(fe) for fe in files if fe.platform is not None]
-            additions = [self._entry(fe) for fe in files if fe.platform is None]
+            added = [fe for fe in files if fe.platform is None]
+            additions = [self._entry(fe) for fe in added]
             appended: set[tuple[str, str]] = set()
+            held_back: list[int] = []
             for component_value in manifest.values():
                 if not isinstance(component_value, dict):
                     continue
                 holder = self._bios_holder(component_value)
                 if holder is None:
                     component_value["bios"] = self._merge(
-                        None, entries, additions, appended
+                        None, entries, additions, appended, held_back
                     )
                 else:
                     container, key = holder
                     written = container.get(key)
-                    merged = self._merge(written, entries, additions, appended)
+                    merged = self._merge(written, entries, additions, appended, held_back)
                     # A single object stays one while nothing is added to it.
                     container[key] = (
                         merged[0] if isinstance(written, dict) and len(merged) == 1 else merged
                     )
                 break
+            self._held_back.update(id(added[index]) for index in held_back)
             # A declared entry whose revision the platform does not hold is
             # written beside theirs: a new line, not a corrected value.
             self._appended.update(

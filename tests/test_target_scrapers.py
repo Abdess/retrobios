@@ -11,6 +11,7 @@ from __future__ import annotations
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
 import json
+import os
 import sys
 import unittest
 import urllib.error
@@ -591,10 +592,40 @@ class EmuDeckScriptNamesHaveOneRule(unittest.TestCase):
         with mock.patch.object(
             emudeck_targets_scraper, "_list_emuscripts", return_value=listing
         ), mock.patch.object(scraper, "_load_retroarch_cores", return_value=["mgba"]):
-            cores = scraper._fetch_cores_for_target("unused", "Windows")
+            cores = scraper._fetch_cores_for_target("unused", "Windows", "windows-x86_64")
         standalone = {emulator_of_script(name) for name in listing} - {None, "retroarch"}
         self.assertEqual(standalone, {"mupen64plus_next", "pcsx2", "xemu"})
         self.assertEqual(cores, sorted(standalone | {"mgba"}))
+
+
+class EmuDeckWindowsReadsTheWindowsBuild(unittest.TestCase):
+    """The RetroArch list was the first target of the architecture:
+    EmuDeck's Windows target carried fsuae, omicron and video_processor,
+    which the buildbot publishes for Linux only."""
+
+    def test_each_target_gets_its_own_retroarch_list(self):
+        seen: list[str] = []
+
+        def load(target: str) -> list[str]:
+            seen.append(target)
+            return [target]
+
+        scraper = emudeck_targets_scraper.Scraper(revision="0" * 40)
+        with mock.patch.object(
+            emudeck_targets_scraper, "_list_emuscripts", return_value=["emuDeckRetroArch.sh"]
+        ), mock.patch.object(scraper, "_load_retroarch_cores", side_effect=load):
+            data = scraper.fetch_targets()
+        self.assertEqual(seen, ["linux-x86_64", "windows-x86_64"])
+        self.assertEqual(data["targets"]["windows"]["cores"], ["windows-x86_64"])
+
+    def test_the_list_is_read_by_target_name_from_any_directory(self):
+        cwd = os.getcwd()
+        self.addCleanup(os.chdir, cwd)
+        os.chdir(Path(__file__).parent)
+        load = emudeck_targets_scraper.Scraper._load_retroarch_cores
+        windows, linux = load("windows-x86_64"), load("linux-x86_64")
+        self.assertNotIn("video_processor", windows)
+        self.assertIn("video_processor", linux)
 
 
 class HashScrapersRefuseAnUnknownVersion(unittest.TestCase):

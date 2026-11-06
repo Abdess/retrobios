@@ -20,6 +20,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 from collections import Counter
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import asdict, dataclass, field, replace
@@ -80,6 +81,9 @@ from upstream import CompareResult, find_renamed
 DEFAULT_CACHE = upstream.CACHE_DIR
 ANON_QUOTA = 60
 TRIAGE_PATH_SAMPLE = 5
+# A pass that asks the forges says where it is at this interval: an online
+# --all --triage ran 15 minutes without a word and read as hung.
+PROGRESS_SECONDS = 30
 
 STATUS_ORDER = (
     "ANCHORED", "UNCHECKED", "EXTERNAL", "BINARY", "SHIFTED", "RENAMED", "MOVED",
@@ -4991,35 +4995,40 @@ def _print_extras_from(
             print(f"  {line}")
 
 
+class _Progress:
+    """A stderr line every PROGRESS_SECONDS while a pass asks the forges."""
+
+    def __init__(self, total: int, doing: str, quiet: bool) -> None:
+        self.total, self.doing, self.quiet = total, doing, quiet
+        self.last = time.monotonic()
+
+    def step(self, done: int, name: str) -> None:
+        now = time.monotonic()
+        if not self.quiet and now - self.last >= PROGRESS_SECONDS:
+            print(f"{self.doing}: {done} of {self.total}, at {name}", file=sys.stderr, flush=True)
+            self.last = now
+
+
+def _interrupted(done: int, total: int, what: str) -> None:
+    print(f"interrupted after {done} of {total} profiles: {what}", file=sys.stderr, flush=True)
+
+
 def _print_triage(
     args: argparse.Namespace, selected: dict, reports: list[ProfileReport]
-) -> None:
-    """Profiles ranked by drift, worst first."""
+) -> bool:
+    """Profiles ranked by drift, worst first. False when Ctrl-C cut the
+    scoring short: the ranking then covers the profiles scored."""
     ranked = []
     sampled = 0
-    for report in reports:
-        profile = selected[report.name]
-        version = None
-        commits = 0
-        refused = ""
-        repo = select_repo(profile)
-        if report.head and repo is not None:
-            paths = _cited_paths(report)
-            try:
-                version = check_version(profile, repo, args.cache_dir, args.offline)
-                for path in paths[:TRIAGE_PATH_SAMPLE]:
-                    commits += upstream.commits_touching(
-                        repo, path, report.pin, args.cache_dir, args.offline,
-                        head=report.head,
-                    )
-            except upstream.UpstreamError as exc:
-                # One forge refusing a request (Eden's answers 403 to commit
-                # lookups) leaves this profile unscored, not the whole ranking.
-                refused = "commit history unreachable"
-                print(f"{report.name}: {exc}", file=sys.stderr)
-            if len(paths) > TRIAGE_PATH_SAMPLE and not refused:
-                sampled += 1
-        ranked.append((drift_score(report, version, commits), report, refused))
+    progress = _Progress(len(reports), "scored", args.offline or len(reports) < 2)
+    complete = True
+    try:
+        for done, report in enumerate(reports):
+            progress.step(done, report.name)
+            sampled += _score(args, selected, report, ranked)
+    except KeyboardInterrupt:
+        _interrupted(len(ranked), len(reports), "the ranking covers those scored")
+        complete = False
     if sampled:
         # One line for the run: a notice per profile buried the ranking
         # under 254 lines of stderr.
@@ -5037,6 +5046,37 @@ def _print_triage(
         pending += bool(report.needs_review() or report.uncheckable())
         print(f"{score:5d}  {report.name:30s}  {state}")
     print(f"{len(ranked)} profiles, {pending} with something to review")
+    return complete
+
+
+def _score(
+    args: argparse.Namespace, selected: dict, report: ProfileReport, ranked: list
+) -> bool:
+    """Append one profile's drift score to ``ranked``. True when its commit
+    count was read on a sample of the paths it cites."""
+    profile = selected[report.name]
+    version = None
+    commits = 0
+    refused = ""
+    sampled = False
+    repo = select_repo(profile)
+    if report.head and repo is not None:
+        paths = _cited_paths(report)
+        try:
+            version = check_version(profile, repo, args.cache_dir, args.offline)
+            for path in paths[:TRIAGE_PATH_SAMPLE]:
+                commits += upstream.commits_touching(
+                    repo, path, report.pin, args.cache_dir, args.offline,
+                    head=report.head,
+                )
+        except upstream.UpstreamError as exc:
+            # One forge refusing a request (Eden's answers 403 to commit
+            # lookups) leaves this profile unscored, not the whole ranking.
+            refused = "commit history unreachable"
+            print(f"{report.name}: {exc}", file=sys.stderr)
+        sampled = len(paths) > TRIAGE_PATH_SAMPLE and not refused
+    ranked.append((drift_score(report, version, commits), report, refused))
+    return sampled
 
 
 def _refuse_flag_combinations(args: argparse.Namespace) -> None:
@@ -5260,30 +5300,24 @@ def main() -> None:
         return
 
     reports = []
-    for name, profile in selected.items():
-        profile_path = Path(args.emulators_dir) / f"{name}.yml"
-        try:
-            report = _build_full_report(args, name, profile, profile_path, failed)
-        except upstream.RateLimitError as exc:
-            # A quota is one forge's: git.libretro.com answering 429 said
-            # nothing about the 600 profiles on GitHub. upstream stops asking
-            # that host, so the rest of the pass costs it nothing.
-            print(f"{name}: {exc}", file=sys.stderr)
-            report = ProfileReport(
-                name=name, entries=[], counts={},
-                skipped=f"rate limited: {exc.host or exc}",
-            )
-            failed.add(name)
-            reports.append(report)
-            continue
-        reports.append(report)
-        if writes:
-            try:
-                _apply_writes(args, name, profile, report)
-            except YamlWriteError as exc:
-                # The guard already left the file untouched, so keep going.
-                print(f"{name}: write refused: {exc}", file=sys.stderr)
-                failed.add(name)
+    quiet = args.offline or len(selected) < 2
+    if not quiet:
+        print(
+            f"reading {len(selected)} profiles against their forges, a line every "
+            f"{PROGRESS_SECONDS} s. --offline answers from the cache alone.",
+            file=sys.stderr, flush=True,
+        )
+    progress = _Progress(len(selected), "read", quiet)
+    complete = True
+    try:
+        for name, profile in selected.items():
+            progress.step(len(reports), name)
+            _read_one(args, name, profile, reports, failed, writes)
+    except KeyboardInterrupt:
+        # What was read is still worth printing: a ranking of 200 profiles
+        # beats none after 15 minutes.
+        _interrupted(len(reports), len(selected), "the output covers those read")
+        complete = False
 
     # --changed-only narrows every output, not the text report alone: the
     # documented `--all --changed-only --json` listed every profile.
@@ -5291,12 +5325,47 @@ def main() -> None:
         report for report in reports
         if not args.changed_only or report.needs_review() or report.name in failed
     ]
-    _emit(args, selected, reports, shown)
+    complete = _emit(args, selected, reports, shown) is not False and complete
     _refresh_source_paths(args)
+    if not complete:
+        raise SystemExit(130)
     if failed or (args.strict and any(
         report.needs_review() or report.uncheckable() for report in reports
     )):
         raise SystemExit(1)
+
+
+def _read_one(
+    args: argparse.Namespace,
+    name: str,
+    profile: dict,
+    reports: list[ProfileReport],
+    failed: set[str],
+    writes: bool,
+) -> None:
+    """Build one profile's report into ``reports``, then apply the writes."""
+    profile_path = Path(args.emulators_dir) / f"{name}.yml"
+    try:
+        report = _build_full_report(args, name, profile, profile_path, failed)
+    except upstream.RateLimitError as exc:
+        # A quota is one forge's: git.libretro.com answering 429 said
+        # nothing about the 600 profiles on GitHub. upstream stops asking
+        # that host, so the rest of the pass costs it nothing.
+        print(f"{name}: {exc}", file=sys.stderr)
+        reports.append(ProfileReport(
+            name=name, entries=[], counts={},
+            skipped=f"rate limited: {exc.host or exc}",
+        ))
+        failed.add(name)
+        return
+    reports.append(report)
+    if writes:
+        try:
+            _apply_writes(args, name, profile, report)
+        except YamlWriteError as exc:
+            # The guard already left the file untouched, so keep going.
+            print(f"{name}: write refused: {exc}", file=sys.stderr)
+            failed.add(name)
 
 
 # Profiles this run wrote. Their new pins name trees the site's record of
@@ -5400,8 +5469,9 @@ def _emit(
     selected: dict,
     reports: list[ProfileReport],
     shown: list[ProfileReport],
-) -> None:
-    """Write the reports in the form the flags ask for."""
+) -> bool | None:
+    """Write the reports in the form the flags ask for. False when the
+    triage was cut short."""
     if args.as_json:
         print(json.dumps([report_to_dict(r) for r in shown], indent=2))
         return
@@ -5417,8 +5487,7 @@ def _emit(
                 print(url)
         return
     if args.triage:
-        _print_triage(args, selected, shown)
-        return
+        return _print_triage(args, selected, shown)
     for report in shown:
         print(format_report(report, args.changed_only))
         _print_extras(args, selected[report.name], report)

@@ -644,21 +644,26 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
     def _refuse(*_args, **_kwargs):
         raise urllib.error.HTTPError("https://api.github.com/x", 403, "rate limited", {}, None)
 
+    # Read at a release tag: the pin is the tag, not a branch commit.
+    TAG_PINNED = {"amberelec", "batocera", "bizhawk", "emuelec", "knulli", "recalbox",
+                  "rocknix", "romm"}
+
+    @staticmethod
+    def _registry_scrapers() -> list[str]:
+        """Every platform scraper the registry names: a hand-written list
+        left rocknix, retrodeck, minui, nextui and myminui unchecked."""
+        import yaml  # noqa: PLC0415
+
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
+        return sorted({entry["scraper"] for entry in registry["platforms"].values()
+                       if entry.get("scraper")})
+
+    def test_the_tag_pinned_scrapers_are_registered(self):
+        self.assertLessEqual(self.TAG_PINNED, set(self._registry_scrapers()))
+
     def test_every_pinned_scraper_raises(self):
-        for name in (
-            "scraper.bizhawk_scraper",
-            "scraper.romm_scraper",
-            "scraper.batocera_scraper",
-            "scraper.recalbox_scraper",
-            "scraper.libretro_scraper",
-            "scraper.retrobat_scraper",
-            "scraper.emudeck_scraper",
-            "scraper.misterfpga_scraper",
-            "scraper.retropie_scraper",
-            "scraper.amberelec_scraper",
-            "scraper.emuelec_scraper",
-            "scraper.knulli_scraper",
-        ):
+        for scraper in self._registry_scrapers():
+            name = f"scraper.{scraper}_scraper"
             module = importlib.import_module(name)
             with self.subTest(scraper=name), mock.patch(
                 "urllib.request.urlopen", self._refuse
@@ -681,16 +686,16 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
         def answer(request, timeout=None):
             return Answer(json.dumps({"sha": sha}).encode())
 
-        for name in (
-            "scraper.libretro_scraper",
-            "scraper.retrobat_scraper",
-            "scraper.emudeck_scraper",
-            "scraper.misterfpga_scraper",
-            "scraper.retropie_scraper",
-        ):
+        branch_read = [s for s in self._registry_scrapers() if s not in self.TAG_PINNED]
+        self.assertGreater(len(branch_read), 8)
+        for scraper in branch_read:
+            name = f"scraper.{scraper}_scraper"
             module = importlib.import_module(name)
             with self.subTest(scraper=name), mock.patch("urllib.request.urlopen", answer):
-                self.assertRegex(module.Scraper().url, f"/{sha}(/|$)")
+                instance = module.Scraper()
+                # RetroDECK reads a tree of manifests and keeps the commit apart.
+                recorded = getattr(instance, "revision", "") or instance.url
+                self.assertRegex(recorded, f"(^|/){sha}(/|$)")
 
     def test_the_export_reads_the_recorded_tarball(self):
         from export_native import _tarball_at

@@ -1,6 +1,6 @@
 platform: emudeck
 source: https://github.com/dragoonDorise/EmuDeck/tree/dddb30229adbbd54d5ff7283cfd70e11c4322c26
-scraped_at: '2026-11-06T07:10:22Z'
+scraped_at: '2026-11-06T13:46:57Z'
 targets:
   steamos:
     architecture: x86_64
@@ -348,7 +348,6 @@ targets:
     - freechaf
     - freeintv
     - frodo
-    - fsuae
     - fuse
     - galaksija
     - gam4980
@@ -430,7 +429,6 @@ targets:
     - nxengine
     - o2em
     - oberon
-    - omicron
     - openlara
     - opera
     - panda3ds
@@ -511,7 +509,6 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
-    - video_processor
     - vircon32
     - virtualjaguar
     - virtualxt

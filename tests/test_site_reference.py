@@ -1466,6 +1466,31 @@ class TheFolderCheckExitCode(unittest.TestCase):
                 "nosuch", Path(folder), {"/nosuch.json": None, "/catalog.json": catalog})
         self.assertEqual(code, "unknown platform: nosuch. Known: batocera")
 
+    def test_a_folder_that_is_not_there_is_named(self):
+        """A mistyped folder read as every file missing, exit 1."""
+        with tempfile.TemporaryDirectory() as folder:
+            code, _err = self.run_script("p", Path(folder) / "bois", {"/p.json": self.CONTRACT})
+        self.assertIsInstance(code, str)
+        self.assertIn("bois", code)
+        self.assertIn("No such file or directory", code)
+
+    def test_a_missing_argument_prints_the_usage(self):
+        err = io.StringIO()
+        with mock.patch.object(sys, "argv", ["check", "batocera"]), \
+                mock.patch("sys.stderr", err), self.assertRaises(SystemExit) as raised:
+            runpy.run_path(self.SCRIPT, run_name="__main__")
+        self.assertTrue(str(raised.exception.code).startswith("Usage: "))
+
+    def test_no_network_is_a_message(self):
+        def offline(url: str, *args, **kwargs):
+            raise urllib.error.URLError("Name or service not known")
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch("urllib.request.urlopen", offline), \
+                mock.patch.object(sys, "argv", ["check", "p", folder]), \
+                self.assertRaises(SystemExit) as raised:
+            runpy.run_path(self.SCRIPT, run_name="__main__")
+        self.assertEqual(raised.exception.code, "error: <urlopen error Name or service not known>")
+
     def test_the_page_shows_the_script(self):
         script = Path(self.SCRIPT).read_text(encoding="utf-8")
         self.assertIn("```python\n" + script.rstrip("\n") + "\n```",

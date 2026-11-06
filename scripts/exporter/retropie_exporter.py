@@ -336,6 +336,8 @@ class Exporter(BaseExporter):
                     systems_of.setdefault(str(name).lower(), set()).add(fe.native_system)
         known = set(systems_of)
         self._skipped: dict[str, list[str]] = {}
+        # Rewritten, with a file of a system no clause lists left out.
+        self._partial: list[str] = []
         self._named: set[int] = set()
         produced: dict[str, str] = {}
 
@@ -400,12 +402,11 @@ class Exporter(BaseExporter):
                     homes.setdefault(owners[0], []).append(fe)
                 else:
                     homeless = True
-            if homeless:
-                # No enumeration of that system to extend, and a sentence we
-                # would have to write ourselves is a documentation change,
-                # not a correction.
-                skip("whose help text lists no files of that system to add to", module_id)
+            # No enumeration of that system to extend, and a sentence we
+            # would have to write ourselves is a documentation change, not a
+            # correction. With nothing placed the package is left as is.
             if not homes:
+                skip("whose help text lists no files of that system to add to", module_id)
                 continue
 
             added = sum(len(self._in_search_order(fes)) for fes in homes.values())
@@ -428,6 +429,8 @@ class Exporter(BaseExporter):
                 f'rp_module_help="{new_help}"',
                 1,
             )
+            if homeless:
+                self._partial.append(module_id)
 
         return produced
 
@@ -454,12 +457,20 @@ class Exporter(BaseExporter):
     ) -> str:
         """Packages are the unit here, not file entries."""
         skipped: dict[str, list[str]] = getattr(self, "_skipped", {})
+
+        def shown(modules: list[str]) -> str:
+            names = ", ".join(sorted(modules)[:4])
+            return names + (f" and {len(modules) - 4} more" if len(modules) > 4 else "")
+
         parts = [f"{len(produced)} packages updated"]
+        partial = getattr(self, "_partial", [])
+        if partial:
+            parts.append(
+                f"Updated in part: {shown(partial)}, whose help text lists no files "
+                "of one of their systems to add to"
+            )
         for reason, modules in sorted(skipped.items()):
-            shown = ", ".join(sorted(modules)[:4])
-            if len(modules) > 4:
-                shown += f" and {len(modules) - 4} more"
-            parts.append(f"Left as is: {shown}, {reason}")
+            parts.append(f"Left as is: {shown(modules)}, {reason}")
         return ". ".join(parts)
 
     def validate(

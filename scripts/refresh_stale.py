@@ -148,18 +148,28 @@ def _run_check_freshness(areas: tuple[str, ...], extra: list[str]) -> list[dict]
     if areas and set(areas) != set(AUTO_AREAS + MANUAL_AREAS):
         cmd += ["--only", ",".join(areas)]
     cmd += extra
-    proc = subprocess.run(
-        cmd, cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=1800
-    )
-    if proc.returncode not in (0, 1):
+    try:
+        proc = subprocess.run(
+            cmd, cwd=REPO_ROOT, capture_output=True, text=True, check=False, timeout=1800
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeError(
+            f"check_freshness.py did not finish in {exc.timeout:.0f} s: run "
+            f"`{' '.join(cmd[1:])} > report.json` alone, then pass --findings report.json"
+        ) from exc
+    # Exit 1 is the STALE rows, and also a crash: only a JSON list on stdout
+    # tells them apart, and the crash's own message is on stderr.
+    try:
+        findings = json.loads(proc.stdout) if proc.returncode in (0, 1) else None
+    except json.JSONDecodeError:
+        findings = None
+    if not isinstance(findings, list):
         tail = (proc.stderr or proc.stdout).strip().splitlines()[-3:]
         raise RuntimeError(
-            "check_freshness.py failed:\n" + "\n".join(tail or ["(no output)"])
+            f"check_freshness.py failed (exit {proc.returncode}):\n"
+            + "\n".join(tail or ["(no output)"])
         )
-    try:
-        return json.loads(proc.stdout)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError(f"check_freshness.py returned unreadable JSON: {exc}") from exc
+    return findings
 
 
 def load_findings(path: Path, areas: tuple[str, ...]) -> list[dict]:
