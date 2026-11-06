@@ -663,7 +663,7 @@ def release_line(platform_name: str, record: dict) -> list[str]:
         f"[SHA256SUMS.txt]({base}/SHA256SUMS.txt) and its "
         f"[signature]({base}/SHA256SUMS.txt.sig).",
     ]
-    config = load_platform_config(platform_name, "platforms")
+    config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     page_version = str(config.get("version") or "")
     pack_version = _pack_version(pack_name)
     if page_version and pack_version and page_version.lstrip("v") != pack_version.lstrip("v"):
@@ -688,7 +688,7 @@ def setup_version(platform_name: str, record: dict | None = None) -> str:
     platform YAML was read at. Empty when neither says, or when the
     platform has no YAML to read a version from."""
     try:
-        config = load_platform_config(platform_name, "platforms")
+        config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     except FileNotFoundError:
         return ""
     pack_name = release_record.pack_name_for(platform_name, record or {})
@@ -715,8 +715,7 @@ NO_ZIP_FAQ = "wiki/faq.md#why-is-there-no-zip-for-my-setup"
 
 def has_release_pack(platform_name: str) -> bool:
     """Whether a release publishes a ZIP for the platform (`release_pack`)."""
-    entry = load_platform_registry("platforms").get(platform_name) or {}
-    return entry.get("release_pack") is True
+    return platform_name in _release_pack_platforms()
 
 
 def no_zip_line(display: str) -> str:
@@ -735,7 +734,7 @@ def get_page_title(platform_name: str, display: str) -> str:
     the system's own download. A setup that is also an emulator (BizHawk)
     names it last: "BizHawk BIOS files" is the title of its emulator page."""
     kind = "BIOS pack" if has_release_pack(platform_name) else "BIOS files"
-    if (_REPO_ROOT / "emulators" / f"{platform_name}.yml").is_file():
+    if (siteinputs.current().emulators / f"{platform_name}.yml").is_file():
         return f"{kind} for {display}"
     return f"{display} {kind}"
 
@@ -780,7 +779,7 @@ def _pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
     frontend user asks. A setup with no release pack gets the line that
     says so, and why."""
     if not has_release_pack(platform_name):
-        display = display or load_platform_config(platform_name, "platforms").get(
+        display = display or load_platform_config(platform_name, str(siteinputs.current().platforms)).get(
             "platform", platform_name)
         return f"{no_zip_line(display)} [Why no ZIP?]({prefix}{NO_ZIP_FAQ})"
     record = release_record.load_advertised()
@@ -805,7 +804,7 @@ def generate_get_page(platform_name: str) -> str:
     the files of the pack the current release holds, read from release.json,
     or the command when no release publishes one. The release process
     never touches it: committing release.json rebuilds it."""
-    config = load_platform_config(platform_name, "platforms")
+    config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     display = config.get("platform", platform_name)
     record = release_record.load_advertised()
     pack = release_record.pack_for(platform_name, record)
@@ -824,7 +823,7 @@ def generate_get_page(platform_name: str) -> str:
     if released and pack and pack.get("assets"):
         parts = len(pack["assets"])
         release = release_line(platform_name, record)
-        extract_to = (load_platform_registry("platforms").get(platform_name) or {}).get("extract_to")
+        extract_to = (load_platform_registry(str(siteinputs.current().platforms)).get(platform_name) or {}).get("extract_to")
         lines += [
             "This address stays the same. It always gives the latest ZIP.",
             "",
@@ -873,7 +872,7 @@ def generate_get_page(platform_name: str) -> str:
 def generate_get_index() -> str:
     """get/: the permanent page of every setup, grouped as the home tiles
     are. A link trimmed to /get/ answered 404."""
-    registry = load_platform_registry("platforms")
+    registry = load_platform_registry(str(siteinputs.current().platforms))
     lines = [
         "---", "search: exclude",
         'description: "The BIOS files of every setup, one page each. Each address stays the same."',
@@ -887,7 +886,7 @@ def generate_get_index() -> str:
             continue
         lines += [f"## {label}", ""]
         for name in names:
-            display = load_platform_config(name, "platforms").get("platform", name)
+            display = load_platform_config(name, str(siteinputs.current().platforms)).get("platform", name)
             lines.append(f"- [{get_page_title(name, display)}]({name}.md)")
         lines.append("")
     return "\n".join(lines)
@@ -1068,10 +1067,13 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
     return contract, registry
 
 
-@functools.lru_cache(maxsize=1)
 def _release_pack_platforms() -> frozenset[str]:
-    return frozenset(list_release_pack_platforms(
-        str(_REPO_ROOT / "platforms"), include_archived=True))
+    return _release_packs_in(str(siteinputs.current().platforms))
+
+
+@functools.lru_cache(maxsize=None)
+def _release_packs_in(platforms_dir: str) -> frozenset[str]:
+    return frozenset(list_release_pack_platforms(platforms_dir, include_archived=True))
 
 
 # Per-entry fields a folder check needs beyond the hashes: an md5 is a ZIP
@@ -2105,7 +2107,7 @@ def _short_sha256(item: dict, catalog: str) -> str:
 
 def _platforms_without_a_list(platforms_dir: Path | None = None) -> list[str]:
     """The names of the platforms whose registry says they keep no list."""
-    platforms_dir = platforms_dir or _REPO_ROOT / "platforms"
+    platforms_dir = platforms_dir or siteinputs.current().platforms
     names = []
     for key, entry in sorted(load_platform_registry(str(platforms_dir)).items()):
         if entry.get("native_list") != "none":
@@ -3538,7 +3540,7 @@ def _system_named_link(sys_id: str, prefix: str = "") -> str:
 def _emulator_named_link(key: str, prefix: str = "") -> str:
     """An emulator by the name its page carries, linked to that page. A
     profile with no page (an alias, a test) is named only."""
-    profile = load_emulator_profiles(str(_REPO_ROOT / "emulators"), skip_aliases=False).get(key, {})
+    profile = _profiles_on_disk().get(key, {})
     label = _escape_tags(str(profile.get("emulator") or key))
     if profile.get("type") in ("alias", "test"):
         return label
@@ -3928,10 +3930,9 @@ def _platform_data_links(name: str) -> str:
     return ", ".join(links)
 
 
-@functools.lru_cache(maxsize=1)
 def _site_profiles() -> dict[str, dict]:
     """Every emulator profile, read once for the citations of a page."""
-    return load_emulator_profiles(str(_REPO_ROOT / "emulators"))
+    return _profiles_in(str(siteinputs.current().emulators), skip_aliases=True)
 
 
 # Whose code a source reference cites, in one word: a platform page names
@@ -4015,13 +4016,17 @@ def _category_evidence_md(evidence: dict, launched: list[str] | None = None) -> 
     return f"No reader found ({cores})"
 
 
-@functools.lru_cache(maxsize=1)
 def _profiles_by_core_name() -> dict[str, list[str]]:
     """Core name as a platform writes it -> the profiles with a page for it.
 
     MinUI writes `mednafen_vb`, the profile and its page are `beetle_vb`.
     """
-    profiles = load_emulator_profiles(str(_REPO_ROOT / "emulators"))
+    return _core_names_in(str(siteinputs.current().emulators))
+
+
+@functools.lru_cache(maxsize=None)
+def _core_names_in(emulators_dir: str) -> dict[str, list[str]]:
+    profiles = _profiles_in(emulators_dir, skip_aliases=True)
     with_page = {k for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
     return {
         core: sorted(k for k in keys if k in with_page)
@@ -4191,7 +4196,7 @@ def _card_route(name: str, display: str, guide: Guide) -> list[str]:
     sees it is the reader's to name: no guide cites it."""
     if guide.on_card or _offline_line(name):
         return []
-    extract_to = (load_platform_registry("platforms").get(name) or {}).get("extract_to")
+    extract_to = (load_platform_registry(str(siteinputs.current().platforms)).get(name) or {}).get("extract_to")
     leaf = (extract_to or "bios").rstrip("/").rsplit("/", 1)[-1].lstrip("~") or "bios"
     tabs = guide.card_run or ("windows", "macos", "linux")
     args = {key: f"--platform {name} --dest "
@@ -4392,7 +4397,7 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
     A handheld owner starts from the device name. The systems were named
     only in a closed note, with a path seen from inside the device."""
     uses = GUIDES[guide.uses]
-    display = load_platform_config(guide.uses, "platforms").get("platform", guide.uses)
+    display = load_platform_config(guide.uses, str(siteinputs.current().platforms)).get("platform", guide.uses)
     args = {"windows": f"--platform {guide.uses} --dest E:\\BIOS",
             "macos": f"--platform {guide.uses} --dest /path/to/card/BIOS",
             "linux": f"--platform {guide.uses} --dest /path/to/card/BIOS"}
@@ -4447,7 +4452,7 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     lines.append("")
     for note in guide.notes:
         lines += [note, ""]
-    lines += [line for note in extract_notes("platforms", released_only=True)
+    lines += [line for note in extract_notes(str(siteinputs.current().platforms), released_only=True)
               if f"The {display} pack " in note
               for line in (note, "")]
     if guide.more_folders:
@@ -4922,7 +4927,7 @@ def _data_member_digests(
     from hashing import compute_hashes  # noqa: PLC0415
 
     if data_registry is None:
-        data_registry = load_data_dir_registry(str(root / "platforms"))
+        data_registry = load_data_dir_registry(str(siteinputs.current().platforms))
     found: dict[str, dict[str, str]] = {}
     for ref, tree in sorted(members.items()):
         cache = (data_registry.get(ref) or {}).get("local_cache")
@@ -5810,7 +5815,7 @@ def _platform_display(name: str) -> str:
     display = _platform_names.get(name)
     if display is None:
         try:
-            config = load_platform_config(name, str(_REPO_ROOT / "platforms"))
+            config = load_platform_config(name, str(siteinputs.current().platforms))
         except FileNotFoundError:
             config = {}
         display = _platform_names[name] = str(config.get("platform") or name)
@@ -6607,11 +6612,13 @@ def _reading_pairs(sha1: str, consumers: FileConsumers) -> list[tuple[str, dict]
     return pairs
 
 
-@functools.lru_cache(maxsize=1)
 def _profiles_on_disk() -> dict[str, dict]:
-    from common import load_emulator_profiles  # noqa: PLC0415
+    return _profiles_in(str(siteinputs.current().emulators), skip_aliases=False)
 
-    return load_emulator_profiles(str(_REPO_ROOT / "emulators"), skip_aliases=False)
+
+@functools.lru_cache(maxsize=None)
+def _profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
+    return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)
 
 
 def _entry_systems(emulator: str, entry: dict) -> list[str]:
@@ -8931,10 +8938,14 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     return command, setups, oses
 
 
-@functools.cache
 def _standalone_cores(platform: str) -> frozenset[str]:
     """The emulators a setup launches as apps, by its platform file."""
-    config = load_platform_config(platform, str(_REPO_ROOT / "platforms"))
+    return _standalone_cores_in(str(siteinputs.current().platforms), platform)
+
+
+@functools.cache
+def _standalone_cores_in(platforms_dir: str, platform: str) -> frozenset[str]:
+    config = load_platform_config(platform, platforms_dir)
     return frozenset(str(c) for c in config.get("standalone_cores") or [])
 
 
@@ -11787,7 +11798,7 @@ def _own_root_folders(registry: dict) -> dict[str, str]:
     destination carries its root in every path."""
     folders = {}
     for key, entry in registry.items():
-        config = load_platform_config(key, "platforms")
+        config = load_platform_config(key, str(siteinputs.current().platforms))
         if config.get("base_destination") == "" and entry.get("extract_to"):
             folders[key] = entry["extract_to"]
     return folders
@@ -11887,9 +11898,10 @@ def generate_which_pack() -> str:
 
     The tiles are the choice. Open tables under them listed every setup a
     second time and made the page 11,800 px tall on a phone."""
-    registry = load_platform_registry("platforms")
+    registry = load_platform_registry(str(siteinputs.current().platforms))
     record = release_record.load_advertised()
-    display = {key: load_platform_config(key, "platforms").get("platform", key) for key in registry}
+    display = {key: load_platform_config(key, str(siteinputs.current().platforms)).get("platform", key)
+               for key in registry}
     all_tabs = ("windows", "macos", "linux", "steamdeck", "android")
     lines = [
         "---",

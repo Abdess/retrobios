@@ -36,6 +36,7 @@ from xml.sax.saxutils import escape
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import siteinputs  # noqa: E402
 import sitemarkup as markup  # noqa: E402
 
 PLACEHOLDER = re.compile(r"(?m)^([ \t]*)<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->[ \t]*$")
@@ -314,21 +315,29 @@ def svg(figure: Figure, layout: str, suffix: str) -> str:
 # Data
 
 
-@lru_cache(maxsize=None)
 def registry() -> dict:
+    return _registry_in(str(siteinputs.current().platforms))
+
+
+@lru_cache(maxsize=None)
+def _registry_in(platforms_dir: str) -> dict:
     import yaml
 
-    with open(ROOT / "platforms" / "_registry.yml", encoding="utf-8") as handle:
+    with open(Path(platforms_dir) / "_registry.yml", encoding="utf-8") as handle:
         return yaml.safe_load(handle).get("platforms", {})
 
 
-@lru_cache(maxsize=None)
 def setups() -> tuple[str, ...]:
     """The registered setups, archived ones included: each has its own page,
     pack and file list, so every count of setups on the site is this one."""
+    return _setups_in(str(siteinputs.current().platforms))
+
+
+@lru_cache(maxsize=None)
+def _setups_in(platforms_dir: str) -> tuple[str, ...]:
     from common import list_registered_platforms
 
-    return tuple(sorted(list_registered_platforms(str(ROOT / "platforms"), include_archived=True)))
+    return tuple(sorted(list_registered_platforms(platforms_dir, include_archived=True)))
 
 
 def setups_named(named: list[str]) -> str:
@@ -339,15 +348,19 @@ def setups_named(named: list[str]) -> str:
     return ", ".join(named) + (f" and {others} more" if others else "")
 
 
-@lru_cache(maxsize=None)
 def platform_modes() -> dict[str, tuple[str, str, str | None]]:
     """name -> (display name, verification mode, hash rule) for every platform."""
+    return _platform_modes_in(str(siteinputs.current().platforms))
+
+
+@lru_cache(maxsize=None)
+def _platform_modes_in(platforms_dir: str) -> dict[str, tuple[str, str, str | None]]:
     from common import load_platform_config
 
     out: dict[str, tuple[str, str, str | None]] = {}
-    for name in setups():
-        config = load_platform_config(name, str(ROOT / "platforms"))
-        rule = registry().get(name, {}).get("hash_rule") or config.get("hash_rule")
+    for name in _setups_in(platforms_dir):
+        config = load_platform_config(name, platforms_dir)
+        rule = _registry_in(platforms_dir).get(name, {}).get("hash_rule") or config.get("hash_rule")
         out[name] = (config.get("platform", name), config.get("verification_mode", ""), rule)
     return out
 
@@ -365,13 +378,17 @@ def _folder(name: str) -> str:
 CHAIN_EXAMPLES = (("batocera", "duckstation"), ("emudeck", "pcsx2"), ("retroarch", "beetle_psx"))
 
 
-@lru_cache(maxsize=None)
 def emulator_names() -> dict[str, str]:
+    return _emulator_names_in(str(siteinputs.current().emulators))
+
+
+@lru_cache(maxsize=None)
+def _emulator_names_in(emulators_dir: str) -> dict[str, str]:
     import yaml
 
     names: dict[str, str] = {}
     for _, emulator in CHAIN_EXAMPLES:
-        with open(ROOT / "emulators" / f"{emulator}.yml", encoding="utf-8") as handle:
+        with open(Path(emulators_dir) / f"{emulator}.yml", encoding="utf-8") as handle:
             label = str(yaml.safe_load(handle).get("emulator", emulator))
             names[emulator] = re.sub(r"\s*\(.*\)$", "", label)
     return names
