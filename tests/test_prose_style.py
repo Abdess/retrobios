@@ -178,6 +178,27 @@ class NoMarketingVocabulary(unittest.TestCase):
         self.assertEqual(offenders, [], "\n".join(offenders[:40]))
 
 
+class ProfilesStateNoVerdict(unittest.TestCase):
+    """A profile note says what the code does, never what is wrong with
+    another project's work (wiki/testing-guide.md): emuscv called its
+    core's option handling a "code bug"."""
+
+    VERDICTS = [
+        re.compile(r"\bcode bug\b", re.IGNORECASE),
+    ]
+
+    def test_no_profile_note_passes_a_verdict(self):
+        offenders = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            text = " ".join(path.read_text(encoding="utf-8").split())
+            offenders += [
+                f"{path.name}: {found.group(0)}"
+                for pattern in self.VERDICTS
+                for found in pattern.finditer(text)
+            ]
+        self.assertEqual(offenders, [], "\n".join(offenders))
+
+
 def _name(*parts: str) -> str:
     """A private name, assembled so that this file does not carry it."""
     return "".join(parts)
