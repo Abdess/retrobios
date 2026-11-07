@@ -87,6 +87,24 @@ class CoreDataTreesTest(unittest.TestCase):
     def test_standalone_build_brings_no_tree(self) -> None:
         self.assertNotIn("solo", {t["core"] for t in self.trees("other")})
 
+    def test_every_reader_of_a_shared_tree_is_recorded(self) -> None:
+        """The second core reading a tree was dropped with the duplicate, and an
+        install for its games would have lost the tree."""
+        twin = {**PROFILES["demo"], "emulator": "Twin", "cores": ["twin"]}
+        profiles = {**PROFILES, "twin": twin}
+        config = {**CONFIG, "cores": ["demo", "solo", "twin"]}
+        trees = builder.core_data_trees(config, profiles, "plat", REGISTRY)
+        shared = [t for t in trees if t["ref"] == "shared"]
+        self.assertEqual(len(shared), 1)
+        self.assertEqual(shared[0]["readers"], ["demo", "twin"])
+        self.assertEqual(builder.tree_readers({}, trees)["shared"], ["demo", "twin"])
+
+    def test_a_tree_a_system_declares_names_no_core(self) -> None:
+        trees = self.trees()
+        declared = {"demo-system": {"data_directories": [{"ref": "shared"}]}}
+        self.assertNotIn("shared", builder.tree_readers(declared, trees))
+        self.assertIn("shared", builder.tree_readers({}, trees))
+
     def test_tree_below_the_declared_bios_folder(self) -> None:
         config = {
             **CONFIG,

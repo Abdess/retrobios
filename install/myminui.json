@@ -18959,7 +18959,10 @@
       },
       "strip_components": 1,
       "archive_size": 5083767,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "fbneo-cheats",
@@ -32690,7 +32693,10 @@
       },
       "strip_components": 1,
       "archive_size": 5083767,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "fbneo-samples",
@@ -32925,7 +32931,10 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "fbneo-samples",
@@ -33160,7 +33169,10 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     }
   ]
 }

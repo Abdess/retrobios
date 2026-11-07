@@ -119822,7 +119822,10 @@
         }
       },
       "source_path": "Cemu-3310f3b8b184d64a62b89fd59088c799432badf5/bin/gameProfiles/default",
-      "archive_size": 21360579
+      "archive_size": 21360579,
+      "cores": [
+        "cemu"
+      ]
     },
     {
       "ref": "dinothawr",
@@ -120271,7 +120274,10 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 5752250
+      "archive_size": 5752250,
+      "cores": [
+        "dinothawr"
+      ]
     },
     {
       "ref": "dirksimple",
@@ -120328,7 +120334,10 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 175384
+      "archive_size": 175384,
+      "cores": [
+        "dirksimple"
+      ]
     },
     {
       "ref": "dolphin-sys",
@@ -142731,7 +142740,10 @@
       },
       "strip_components": 1,
       "archive_size": 5083767,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "fbneo-samples",
@@ -142966,7 +142978,10 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "freeintv-overlays",
@@ -144490,7 +144505,10 @@
         }
       },
       "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources",
-      "archive_size": 21181421
+      "archive_size": 21181421,
+      "cores": [
+        "yaps2"
+      ]
     }
   ],
   "save_directory": {

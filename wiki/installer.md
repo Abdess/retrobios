@@ -866,7 +866,10 @@ games on this card: yes**, and Install takes only what those games need. One
 press on the row installs everything instead. Line mode asks the same: Enter
 installs for the games, `e` everything, `r` only what starts. On the command
 line it is `--for-games`, and `--for-games FOLDER` reads a games folder on a
-computer, one subfolder per system.
+computer, one subfolder per system. A run that asks nothing (`--yes`,
+`--no-input`, `--events`) takes the same first choice when it finds games on
+the card, and says so. `--all-files` installs the whole list instead, as does
+a run narrowed by name (`--system`, `--core`, `--region`, `--emulator`).
 
 The rule is that every game must start. Per system, the run keeps what the
 system's default core reads. One region is kept only where the game's own
@@ -983,6 +986,7 @@ what the options name, everything by default.
 | <span id="option-region"></span>`--region LIST` | Preferred regions, best first (`us,eu,jp`): keep one BIOS per region where a system has several. Accepts the names and aliases of `generate_pack.py --region` |
 | <span id="option-for-games"></span>`--for-games FOLDER` | Install only what the games on the card need. See [For the games on this card](#for-the-games-on-this-card) |
 | <span id="option-required-only"></span>`--required-only` | With `--for-games`, only the files the games cannot start without |
+| <span id="option-all-files"></span>`--all-files` | The whole list, even when the card holds games. A run that asks nothing (`--yes`, `--no-input`, `--events`) otherwise installs what the card's games need, the plan's first choice. See [For the games on this card](#for-the-games-on-this-card) |
 | <span id="option-no-game-data"></span>`--no-game-data` | Leave out game data (a game's own files, not firmware) and install the firmware only. What it leaves out is named. See [Firmware without game data](#firmware-without-game-data) |
 | <span id="option-declared-only"></span>`--declared-only` | Keep only the files the platform's own list names (`cores: null` in the manifest), not the extra files cores load. With `--check`, the answer is about the list the platform itself checks. Refused with `--core`, the listings it does not change, `--standalone-copies` and `--tui` |
 | <span id="option-list-systems"></span>`--list-systems` | Print a platform's systems with the files and size each holds, the files other systems share too counted apart. `--system`, `--core`, `--region`, `--target` and `--installed-cores` narrow it, as they narrow an install. A run prints one list: two listing options are refused |

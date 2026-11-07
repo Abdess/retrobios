@@ -157969,7 +157969,10 @@
       },
       "strip_components": 1,
       "archive_size": 5083767,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "fbneo-samples",
@@ -158204,7 +158207,10 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "lrps2",
@@ -158221,7 +158227,10 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 318896
+      "archive_size": 318896,
+      "cores": [
+        "lrps2"
+      ]
     },
     {
       "ref": "ppsspp-assets",
@@ -158910,7 +158919,10 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 9844388
+      "archive_size": 9844388,
+      "cores": [
+        "ppsspp"
+      ]
     }
   ],
   "save_directory": {

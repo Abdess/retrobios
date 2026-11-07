@@ -457,6 +457,14 @@
             "const": true,
             "description": "Every core reading the tree runs without it (required: false in its profile): --required-only leaves it out."
           },
+          "cores": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "The cores that read the tree, when no platform system declares it: an install for the games of a card keeps it only when its plan runs one of them."
+          },
           "files": {
             "type": "object",
             "additionalProperties": {

@@ -912,6 +912,78 @@ class CommandLine(unittest.TestCase):
         self.assertTrue((self.card.cache / install.GAMES_SCAN_FILE).is_file())
 
 
+class ARunThatAsksNothing(unittest.TestCase):
+    """`--yes` alone installed the whole list (6.4 GB on a dArkOS card that
+    held two games), while the screen offers what the games need first."""
+
+    def install(self, *options: str) -> tuple[list[str], str]:
+        card = Card()
+        self.addCleanup(card.close)
+        card.game("SEGACD", "sonic.iso", mcd_iso(100))
+        card.game("MD", "eu.md", MD_EU)
+        root = card.root / "repo"
+        (root / "install").mkdir(parents=True)
+        shutil.copytree(card.lists / "games", root / "install" / "games")
+        listed = manifest()
+        (root / "bios").mkdir()
+        for entry in listed["files"]:
+            payload = entry["dest"].encode().ljust(entry["size"], b".")[:entry["size"]]
+            (root / entry["repo_path"]).write_bytes(payload)
+        (root / "install" / "retroarch.json").write_text(json.dumps(listed))
+        handler = functools.partial(_Quiet, directory=str(root))
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        self.addCleanup(server.server_close)
+        self.addCleanup(server.shutdown)
+        proc = run_cli(card, *options, offline=False,
+                       base=f"http://127.0.0.1:{server.server_address[1]}")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        return sorted(p.relative_to(card.bios).as_posix()
+                      for p in card.bios.rglob("*") if p.is_file()), proc.stdout
+
+    def test_it_installs_what_the_games_need(self):
+        unasked, said = self.install("--yes")
+        self.assertEqual(unasked, self.install("--for-games", "--yes")[0])
+        self.assertIn("--all-files installs the whole list", said)
+
+    def test_all_files_installs_the_whole_list(self):
+        everything, said = self.install("--all-files", "--yes")
+        self.assertEqual(everything, sorted(entry["dest"] for entry in manifest()["files"]))
+        self.assertNotIn("For the games", said)
+
+    def test_all_files_and_for_games_are_refused_together(self):
+        card = Card()
+        self.addCleanup(card.close)
+        proc = run_cli(card, "--all-files", "--for-games", "--check")
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn("--all-files and --for-games ask for two different lists", proc.stderr)
+
+
+class DataTreesFollowTheGamesCores(unittest.TestCase):
+    """One GBA and one SNES game took FBNeo's cheats and samples: a tree
+    only cores read is kept when the plan runs one of them."""
+
+    def test_a_tree_of_a_core_the_plan_does_not_run_is_left_out(self):
+        plan = install.GamesPlan(Path("card"), True)
+        plan.profiles = {"snes9x"}
+        fbneo = {"ref": "fbneo-cheats", "systems": ["nintendo-snes"], "cores": ["fbneo"]}
+        dolphin = {"ref": "dolphin-sys", "systems": ["nintendo-snes"]}
+        trees = {"data_directories": [fbneo, dolphin]}
+        files = [{"dest": "a.bin", "systems": ["nintendo-snes"]}]
+        self.assertEqual(install.select_data_directories(trees, files, True, games=plan), [dolphin])
+        plan.profiles.add("fbneo")
+        self.assertEqual(install.select_data_directories(trees, files, True, games=plan),
+                         [fbneo, dolphin])
+
+    def test_a_system_with_no_named_core_keeps_every_cores_tree(self):
+        plan = install.GamesPlan(Path("card"), True)
+        plan.any_core = {"nintendo-gba"}
+        fbneo = {"ref": "fbneo-cheats", "systems": ["nintendo-gba"], "cores": ["fbneo"]}
+        self.assertEqual(install.select_data_directories(
+            {"data_directories": [fbneo]}, [{"systems": ["nintendo-gba"]}], True, games=plan),
+            [fbneo])
+
+
 class _Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):  # noqa: A002 - stdlib signature
         return

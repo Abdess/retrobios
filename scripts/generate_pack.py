@@ -448,7 +448,7 @@ def core_data_trees(
     # the trees go there as the core extras do.
     root = declared_root(config)
     trees: list[dict] = []
-    seen: set[tuple[str, str]] = set()
+    seen: dict[tuple[str, str], int] = {}
     for core in sorted(_platform_cores(config, profiles, target_cores)):
         profile = profiles[core]
         if all(standalone for _view, standalone in platform_layouts(core, profile, handed)):
@@ -473,13 +473,19 @@ def core_data_trees(
                     if part.strip("/")
                 ), root) or root
                 if (ref, destination) in seen:
+                    # One tree, read by a second core: the manifest says both
+                    # (tree_readers), the pack writes it once.
+                    first = trees[seen[(ref, destination)]]
+                    if core not in first["readers"]:
+                        first["readers"].append(core)
                     continue
-                seen.add((ref, destination))
+                seen[(ref, destination)] = len(trees)
                 trees.append({
                     "ref": ref,
                     "destination": destination,
                     "required": tree.get("required"),
                     "core": core,
+                    "readers": [core],
                     "source_systems": entry_system_ids(tree, profile),
                 })
     return trees
@@ -5086,16 +5092,14 @@ def generate_manifest(
     # whose hash the list below records, the same tree the pack carries.
     data_refs: dict[str, tuple[str, tuple[str, ...], str, bool]] = {}
     reclaim = {full: path for full, (path, _size) in cache_held.items()}
+    core_trees = ([] if source == "platform"
+                  else core_data_trees(config, emu_profiles, platform_name, data_registry,
+                                       target_cores))
     data_members = list(_data_directory_members(
         pack_systems, data_registry, platform_name, base_dest,
         case_insensitive, seen_destinations, seen_lower, seen_parents,
         data_refs, required_only=required_only,
-        core_trees=(
-            [] if source == "platform"
-            else core_data_trees(
-                config, emu_profiles, platform_name, data_registry, target_cores
-            )
-        ),
+        core_trees=core_trees,
         reclaim=reclaim,
     ))
     # A platform entry found in a tree the pack carries is that tree's member:
@@ -5108,7 +5112,8 @@ def generate_manifest(
             omitted_by_destination.pop(full_dest, None)
     data_sizes = pack_only_sizes + [os.path.getsize(src) for src, _dest in data_members]
     data_directories = _manifest_data_directories(
-        data_members, data_refs, data_registry or {}, base_dest
+        data_members, data_refs, data_registry or {}, base_dest,
+        tree_readers(pack_systems, core_trees),
     )
 
     now = _build_timestamp(db)
@@ -5192,11 +5197,28 @@ def generate_manifest(
     return result
 
 
+def tree_readers(pack_systems: dict, core_trees: Iterable[dict]) -> dict[str, list[str]]:
+    """The cores that read each tree, for a tree only cores read. A tree a
+    platform system declares is the system's, whatever core runs it, and
+    gets no entry. Every reference counts: two cores reading one tree yield
+    its files once."""
+    cores: dict[str, set[str]] = {}
+    declared: set[str] = set()
+    for _systems, dd in _tree_references(pack_systems, core_trees):
+        ref = str(dd.get("ref") or "")
+        if dd.get("core"):
+            cores.setdefault(ref, set()).update(str(core) for core in dd.get("readers") or [dd["core"]])
+        else:
+            declared.add(ref)
+    return {ref: sorted(names) for ref, names in cores.items() if ref not in declared}
+
+
 def _manifest_data_directories(
     members: list[tuple[str, str]],
     refs: dict[str, tuple[str, tuple[str, ...], str, bool]],
     registry: dict,
     base_dest: str,
+    readers: dict[str, list[str]] | None = None,
 ) -> list[dict]:
     """Each data directory the pack carries, as the installer rebuilds it.
 
@@ -5209,7 +5231,9 @@ def _manifest_data_directories(
     the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
     ``optional`` marks a tree every core reading it runs without
     (``required: false``): install.py --required-only leaves it out, as the
-    pack built with --required-only does.
+    pack built with --required-only does. ``cores`` names the cores that
+    read a tree no platform system declares (``readers``): an install for
+    the games of a card keeps it only when its plan runs one of them.
     """
     grouped: dict[tuple[str, str], dict] = {}
     versions: dict[str, dict[str, dict]] = {}
@@ -5259,6 +5283,8 @@ def _manifest_data_directories(
         group = grouped[key]
         if not group.pop("needed", False):
             group["optional"] = True
+        if readers and group["ref"] in readers:
+            group["cores"] = readers[group["ref"]]
         trees.append(group)
     return trees
 

@@ -82,8 +82,8 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "Most people want to play now, with the fewest files. The installer does that in one "
         "command: it finds the setup and its BIOS folder, reads the games on the card, and with "
         "`--for-games --required-only` installs only the files those games cannot start "
-        "without. Without these two options it installs every file of the setup's list "
-        "(gigabytes), even with `--yes`.",
+        "without. `--yes` alone installs what the card's games need, optional files "
+        "included, and `--all-files` the setup's whole list (gigabytes).",
         "",
         f"1. Preview, nothing written: `{SH} --for-games --required-only --dry-run`",
         f"2. Install, no questions: `{SH} --for-games --required-only --yes`",
