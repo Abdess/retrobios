@@ -14,12 +14,12 @@
     "not_kept": 0
   },
   "changes": [],
-  "hashes_corrected": [],
+  "hashes_updated": [],
   "hashes_filled": [],
-  "sizes_corrected": [],
+  "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "requirements_corrected": 0,
+  "required_aligned": 0,
   "withheld": [],
   "found_by_content": 107,
   "removal_candidates": [

@@ -70,7 +70,7 @@ def system_cards() -> dict[str, tuple[str, str]]:
     manufacturer and listing its consoles. Read from the same grouping the
     system pages are written from."""
     from common import GAME_DATA_TOPS, load_database
-    from generate_site import _group_by_manufacturer, _slug
+    from sitecollection import _group_by_manufacturer, _slug
 
     def lead(manufacturer: str) -> str:
         # Other holds one folder per emulator, a game publisher's page its

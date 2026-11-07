@@ -1104,7 +1104,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40}
         text = sitesources._source_ref_markdown(
             profile, "Nesoid 2.5.0 libnes.so 0x455a4-0x45694 (setter), 0x8094-0x80ac")
-        self.assertEqual(text, "offset `0x455a4-0x45694` in `Nesoid 2.5.0 libnes.so`, "
+        self.assertEqual(text, "offset `0x455a4-0x45694` in `Nesoid 2.5.0 libnes.so` (setter), "
                                "offset `0x8094-0x80ac` in `Nesoid 2.5.0 libnes.so`")
 
     def test_only_a_recorded_path_links(self):

@@ -172,7 +172,8 @@ def fetch_logos() -> None:
 
 
 def fetch_icons() -> None:
-    from generate_site import _group_by_manufacturer, load_database
+    from common import load_database
+    from sitecollection import _group_by_manufacturer
     from siterender import SYSTEM_ICON_BASE, _icon_name
 
     db = load_database(str(ROOT / "database.json"))

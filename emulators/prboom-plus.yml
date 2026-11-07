@@ -120,7 +120,7 @@ files:
 
 analysis:
   engine_wad_contents:
-    source_ref: "data/CMakeLists.txt:24-340 (rdatawad input lists), data/CMakeLists.txt:342-362 (WAD_SRC and WAD_CMDLINE)"
+    source_ref: "prboom2/data/CMakeLists.txt:24-340 (rdatawad input lists), prboom2/data/CMakeLists.txt:342-362 (WAD_SRC and WAD_CMDLINE)"
     note: >
       What rdatawad packs into prboom-plus.wad, in the order the command line
       builds it.
@@ -135,8 +135,8 @@ analysis:
         - "SINETABL, TANGTABL, TANTOANG, GAMMATBL"
         - "CHEXDEH, BFGBEX, NERVEBEX"
         - "GLSHADOW, GLFP, GLVP"
-        - "-PRBHUD-, read by hu_stuff.c:1144"
-        - "the M_* OpenGL automap icons listed in gl_map.c:48-68"
+        - "-PRBHUD-, read by prboom2/src/hu_stuff.c:1144"
+        - "the M_* OpenGL automap icons listed in prboom2/src/gl_map.c:48-68"
     sounds: "DSDGSIT, DSDGATK, DSDGACT, DSDGDTH, DSDGPAIN"
     graphics: "the DIG* status bar digits, STBR*, the BOX* frame pieces, STKEYS6-8, STCFN096, M_BUTT1/2, M_COLORS, M_PALNO, M_PALSEL, M_VBOX, CROSS1-3"
     flats: "-N0_TEX-, between FF_START and FF_END"
@@ -146,7 +146,7 @@ analysis:
     files:
       - "shaders/glvp.txt"
       - "shaders/glfp.txt"
-    source_ref: "gl_shader.c:144-152 (path built from I_DoomExeDir), gl_shader.c:84-129 (ReadLump)"
+    source_ref: "prboom2/src/gl_shader.c:144-152 (path built from I_DoomExeDir), prboom2/src/gl_shader.c:84-129 (ReadLump)"
     note: >
       Read from the config directory when present. ReadLump falls back to the
       GLVP and GLFP lumps in the ns_prboom namespace when the file is missing,
@@ -160,18 +160,18 @@ analysis:
       - filename: "prboom-plus.cfg"
         source_ref: "prboom2/src/m_misc.c:1586-1600 (BOOM_CFG, path from I_DoomExeDir), prboom2/src/m_misc.c:1606 (read)"
       - filename: "RGB2PAL.dat"
-        source_ref: "gl_hires.c:938-953 (read), gl_hires.c:962-967 (opened wb and written)"
+        source_ref: "prboom2/src/gl_hires.c:938-953 (read), prboom2/src/gl_hires.c:962-967 (opened wb and written)"
         note: >
           A 24-bit RGB to palette lookup table built from V_GetPlaypal, so its
-          contents follow whichever IWAD is loaded. gl_hires.c:920-936 prefers
+          contents follow whichever IWAD is loaded. prboom2/src/gl_hires.c:920-936 prefers
           an RGB2PAL lump of the right length when a WAD supplies one.
       - filename: "<hires image>.cache"
-        source_ref: "gl_hires.c:1144-1147 (read), gl_hires.c:1179 (gld_HiRes_WriteCache)"
+        source_ref: "prboom2/src/gl_hires.c:1144-1147 (read), prboom2/src/gl_hires.c:1179 (gld_HiRes_WriteCache)"
         note: "Keyed on the source image mtime and discarded when it differs."
       - filename: "levelstat.txt"
-        source_ref: "e6y.c:968"
+        source_ref: "prboom2/src/e6y.c:968"
       - filename: "levelinfo.txt"
-        source_ref: "prboom2/src/d_main.c:1049-1060, behind GL_DOOM and PRBOOM_DEBUG"
+        source_ref: "prboom2/src/d_main.c:1049-1060 (behind GL_DOOM and PRBOOM_DEBUG)"
       - filename: "temp_a.nut, temp_v.nut"
         source_ref: "prboom2/src/m_misc.c:1065-1066 (cap_tempfile1, cap_tempfile2)"
 
@@ -189,11 +189,11 @@ analysis:
       - what: "autoload directories, <config dir>/autoload/doom-all and one per IWAD"
         source_ref: "prboom2/src/d_main.c:1400-1414 (GetAutoloadBaseDir), prboom2/src/d_main.c:1500-1519 (D_AutoloadIWadDir)"
       - what: "demos, -playdemo, -fastdemo, -record"
-        source_ref: "r_demo.c:89-119, g_game.c:2570, g_game.c:3150"
+        source_ref: "prboom2/src/r_demo.c:89-119, prboom2/src/g_game.c:2570, prboom2/src/g_game.c:3150"
       - what: "external high resolution texture packs, under textures/, flats/ and patches/"
-        source_ref: "gl_hires.c:467-631 (hires_paths), gl_hires.c:703-719 (gl_texture_hires_dir or I_DoomExeDir)"
+        source_ref: "prboom2/src/gl_hires.c:467-631 (hires_paths), prboom2/src/gl_hires.c:703-719 (gl_texture_hires_dir or I_DoomExeDir)"
       - what: "savegames, DOOMSAVEDIR or the config directory"
-        source_ref: "prboom2/src/d_main.c:1019-1032, m_menu.c:957"
+        source_ref: "prboom2/src/d_main.c:1019-1032, prboom2/src/m_menu.c:957"
       - what: "response files, @name"
         source_ref: "prboom2/src/d_main.c:1094-1112"
 
@@ -203,6 +203,6 @@ analysis:
       - what: "ffmpeg, video capture and muxing"
         source_ref: "prboom2/src/m_misc.c:1062-1064 (cap_soundcommand, cap_videocommand, cap_muxcommand)"
       - what: "wget then unzip, fetching a WAD a game server asks for"
-        source_ref: "d_client.c:236-257 (execlp), doc/prboom-plus.6:200-206"
+        source_ref: "prboom2/src/d_client.c:236-257 (execlp), prboom2/doc/prboom-plus.6:200-206"
       - what: "getwad_cmdline, run through system() when a needed WAD is missing"
-        source_ref: "r_demo.c:1641-1704 (D_TryGetWad), prboom2/src/m_misc.c:1029 (default empty, so the path is inert until configured)"
+        source_ref: "prboom2/src/r_demo.c:1641-1704 (D_TryGetWad), prboom2/src/m_misc.c:1029 (default empty, so the path is inert until configured)"

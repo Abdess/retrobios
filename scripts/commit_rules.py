@@ -10,6 +10,7 @@ Usage as a hook: python scripts/commit_rules.py MESSAGE_FILE
 
 from __future__ import annotations
 
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -51,10 +52,11 @@ def problems(message: str) -> list[str]:
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) != 2:
-        print("usage: commit_rules.py MESSAGE_FILE", file=sys.stderr)
-        return 2
-    found = problems(Path(argv[1]).read_text(encoding="utf-8", errors="replace"))
+    parser = argparse.ArgumentParser(
+        allow_abbrev=False, description="Check a commit message against the rules above")
+    parser.add_argument("message_file", type=Path, help="the message file a commit-msg hook receives")
+    args = parser.parse_args(argv[1:])
+    found = problems(args.message_file.read_text(encoding="utf-8", errors="replace"))
     for problem in found:
         print(f"commit-msg: {problem}", file=sys.stderr)
     return 1 if found else 0

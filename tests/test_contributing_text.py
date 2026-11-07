@@ -37,7 +37,6 @@ class OneContributingText(unittest.TestCase):
         )
 
 
-
 class CoverageReadsTheGivenProfiles(unittest.TestCase):
     """generate_site --emulators-dir changed the emulator pages but not the
     platform coverage, which read ./emulators whatever was given."""
@@ -67,7 +66,7 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
 
         text = (REPO_ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
-        block = _re.search(r"```bash\n(.*?)```", section, _re.S).group(1)
+        block = "".join(_re.findall(r"```bash\n(.*?)```", section, _re.S))
         for command in ("validate_pr.py --changed", "validate_schemas.py --source-only",
                         "unittest discover"):
             self.assertIn(command, block)
@@ -116,9 +115,39 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
         line naming the old theme installed packages nothing reads."""
         text = generate_readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
-        self.assertIn('pip install pyyaml "jsonschema[format-nongpl]" markdown', section)
+        self.assertIn('pip install pyyaml "jsonschema[format-nongpl]==', section)
         self.assertNotIn("mkdocs", section)
         self.assertTrue((REPO_ROOT / "website" / "package-lock.json").is_file())
+
+
+class TheChecklistInstallsWhatCiInstalls(unittest.TestCase):
+    """The pip line named the packages without versions, and nothing said
+    that shellcheck, bubblewrap and a Python 3.8 with pyte come from the
+    system: their tests skipped locally and failed first in CI."""
+
+    def test_the_pip_lines_are_the_workflow_lines(self):
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        text = generate_readme.generate_contributing()
+        section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
+        pinned = [line.split("run: ", 1)[1] for line in workflow.splitlines()
+                  if re.match(r"\s*run: (python3\.8 -m )?pip install .*==", line)
+                  and "pyte" in line]
+        self.assertEqual(len(pinned), 2)
+        for line in pinned:
+            with self.subTest(line=line):
+                self.assertIn(line, section)
+
+    def test_it_names_the_system_tools_ci_installs(self):
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        text = generate_readme.generate_contributing()
+        section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
+        for tool, step in (("shellcheck", "shellcheck --version"),
+                           ("bwrap", "bwrap --ro-bind"),
+                           ("python3.8 -m unittest tests.test_install_tui",
+                            "python3.8 -m unittest tests.test_install_tui")):
+            with self.subTest(tool=tool):
+                self.assertIn(step, workflow)
+                self.assertIn(tool, section)
 
 
 class OneFileThroughTheBrowser(unittest.TestCase):
@@ -172,6 +201,94 @@ class OneFileThroughTheBrowser(unittest.TestCase):
             "bios/ root" in message and "`bios/Maker/Console/`" in message
             for _status, message in result.checks
         ))
+
+
+class TheGuideRebuildsWhenItsPinsMove(unittest.TestCase):
+    """The checklist quotes validate.yml, so a pin bump there must redeploy
+    the guide and meet the README/CONTRIBUTING freshness check."""
+
+    def test_deploy_site_watches_the_validation_workflow(self):
+        import yaml
+
+        deploy = yaml.safe_load(
+            (REPO_ROOT / ".github" / "workflows" / "deploy-site.yml").read_text(encoding="utf-8"))
+        paths = deploy[True]["push"]["paths"]
+        self.assertIn(".github/workflows/validate.yml", paths)
+
+
+class OneCommandRunsTheChecks(unittest.TestCase):
+    """A contributor copied ten commands by hand before a pull request, and
+    skipping one (refresh_data_dirs) failed the pack tests with no hint."""
+
+    CHECK = re.compile(r"(?:xargs -0 |run: |^\s*)((?:python3?\.?8? -m unittest|python scripts/\w+\.py"
+                       r"|vermin|npm (?:ci|run build)|mypy-baseline filter|mypy|shellcheck))")
+
+    def test_every_check_ci_runs_is_a_step(self):
+        import pr_checks
+
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        ran = {m.group(1) for line in workflow.splitlines()
+               if not line.strip().startswith("#") for m in [self.CHECK.search(line)] if m}
+        self.assertGreaterEqual(len(ran), 10)
+        steps = [c for step in pr_checks.STEPS for c in (step.command, step.then) if c]
+        for check in sorted(ran):
+            with self.subTest(check=check):
+                self.assertTrue(any(command.startswith(check) for command in steps))
+
+    def test_a_step_ci_lets_fail_does_not_fail_the_run(self):
+        import pr_checks
+
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        tolerated = set(re.findall(r"continue-on-error: true\n\s*run: (\S+ \S+)", workflow))
+        self.assertTrue(tolerated)
+        for step in pr_checks.STEPS:
+            with self.subTest(step=step.command):
+                self.assertEqual(step.may_fail, " ".join(step.command.split()[:2]) in tolerated)
+
+    def test_steps_keep_ci_order(self):
+        import pr_checks
+
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        order = [workflow.index(key) for key in (
+            "refresh_data_dirs.py", "run: python scripts/generate_site.py",
+            "npm run build --prefix website", "python -m unittest discover",
+            "validate_site.py")]
+        self.assertEqual(order, sorted(order))
+        commands = [step.command for step in pr_checks.STEPS]
+        positions = [next(i for i, c in enumerate(commands) if key in c) for key in (
+            "refresh_data_dirs.py", "generate_site.py", "npm run build",
+            "unittest discover", "validate_site.py")]
+        self.assertEqual(positions, sorted(positions))
+
+    def test_the_guide_gives_the_runner_and_what_it_runs(self):
+        import pr_checks
+
+        text = generate_readme.generate_contributing()
+        section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
+        self.assertIn("python scripts/pr_checks.py\n", section)
+        for step in pr_checks.STEPS:
+            with self.subTest(step=step.command):
+                self.assertIn(step.command, section)
+
+    def test_a_missing_tool_is_reported_and_a_failure_does_not_stop_the_run(self):
+        import contextlib
+        import io
+
+        import pr_checks
+
+        steps = (
+            pr_checks.Step("python -c raise(SystemExit(3))", "fails"),
+            pr_checks.Step("no-such-tool-here --x", "absent", needs="no-such-tool-here",
+                           provider="nothing"),
+            pr_checks.Step("python -c pass", "passes"),
+        )
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = pr_checks.run(steps)
+        self.assertEqual(code, 1)
+        self.assertIn("FAILED   python -c raise(SystemExit(3)) (exit 3)", out.getvalue())
+        self.assertIn("NOT RUN  no-such-tool-here --x", out.getvalue())
+        self.assertIn("1/3 checks passed", out.getvalue())
 
 
 if __name__ == "__main__":

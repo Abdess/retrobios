@@ -436,8 +436,6 @@ class PagesOpenOnTheirContent(unittest.TestCase):
         self.assertEqual(announcing, [])
 
 
-
-
 class CoreCountsReadFromTheData(unittest.TestCase):
     """The cores page said "623 cores across 18 platforms": that was every
     profile, and 91 of them no platform runs."""
@@ -610,6 +608,32 @@ class EveryOptionExists(unittest.TestCase):
         wrong = {name: bad for name, text in _surfaces().items()
                  if (bad := unknown_options(text))}
         self.assertEqual(wrong, {})
+
+
+class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
+    """validate.yml fetches each platform's own file before the suite. The
+    checklist left it out, so the exporter fidelity cases skipped on a
+    contributor's clone and first ran, red, in CI."""
+
+    def test_the_pr_checklist_fetches_them_before_the_tests(self):
+        workflow = _read(".github/workflows/validate.yml")
+        self.assertLess(
+            workflow.index("python scripts/export_native.py --all --fetch"),
+            workflow.index("python -m unittest discover"),
+        )
+        for text in (
+            contributing_text(lambda page: page, "# C", "here"),
+            _read("CONTRIBUTING.md"),
+        ):
+            block = _section(text, "## Before opening a PR")
+            self.assertIn("python scripts/export_native.py --all --fetch", block)
+            self.assertLess(
+                block.index("export_native.py"), block.index("unittest discover")
+            )
+
+    def test_the_testing_guide_names_the_command(self):
+        self.assertIn("export_native.py --all --fetch", _read("wiki/testing-guide.md"))
+
 
 if __name__ == "__main__":
     unittest.main()

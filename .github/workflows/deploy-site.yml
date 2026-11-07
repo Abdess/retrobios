@@ -38,6 +38,7 @@ on:
       - "scripts/packreadme.py"
       - "scripts/packresolve.py"
       - "scripts/packverify.py"
+      - "scripts/pr_checks.py"
       - "scripts/provenance_report.py"
       - "scripts/refresh_data_dirs.py"
       - "scripts/region.py"
@@ -47,6 +48,7 @@ on:
       - "scripts/sect233r1.py"
       - "scripts/siteagents.py"
       - "scripts/sitebootstrap.py"
+      - "scripts/sitecollection.py"
       - "scripts/sitediagrams.py"
       - "scripts/siteentries.py"
       - "scripts/siteguides.py"
@@ -90,6 +92,8 @@ on:
       # generated folders are gitignored and never trigger anything.
       - "website/**"
       - ".github/workflows/deploy-site.yml"
+      # The contributing guide quotes the pip lines of its test job.
+      - ".github/workflows/validate.yml"
   workflow_dispatch:
 
 permissions:

@@ -126,7 +126,7 @@ Checked by is the test your platform runs on its own, replicated here from its s
 
 ## Build your own pack
 
-Clone the repo and generate packs for any platform, emulator, or system:
+Packs are built from a clone, and the clone carries the collection: its checkout alone is over 7.7 GB. `git clone --depth 1 https://github.com/Abdess/retrobios.git` leaves the history out. Files kept as release assets are downloaded when a pack needs them. Then generate packs for any platform, emulator, or system:
 
 ```bash
 # The pack of a platform, as released

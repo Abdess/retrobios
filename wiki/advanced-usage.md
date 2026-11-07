@@ -19,7 +19,8 @@ boot, with no message saying why. It is not a guarantee either: source
 profiles can document files nobody has dumped or that only the user can
 provide, all of them visible in the [gap analysis](../gaps.md).
 
-From a clone of the repository, `python scripts/generate_pack.py --platform
+A clone carries the whole collection, several gigabytes, and `git clone
+--depth 1` leaves its history out. From that clone, `python scripts/generate_pack.py --platform
 retroarch --region us` builds a narrower pack, `--required-only` the bare
 minimum each core needs to start, and `--no-game-data` keeps the firmware and
 leaves out the files a game reads. `--help` lists every way to build your own,
@@ -134,9 +135,12 @@ Three rules keep a filtered pack usable:
 - **No system is ever emptied.** If nothing matches, the whole group is kept.
   `--region us` still ships `disksys.rom`, because the Famicom Disk System has no
   American BIOS.
-- **Region-free files always survive.** `psxonpsp660.bin`, `ps1_rom.bin` and
-  `openbios.bin` are declared `[world]`: they add a capability rather than
-  competing regionally.
+- **Region-free files survive.** A file one of the platform's cores declares
+  `[world]` is kept. SwanStation declares `psxonpsp660.bin` and `ps1_rom.bin`
+  that way, DuckStation `openbios.bin`. The tag comes from each core:
+  PCSX ReARMed reads the region inside `psxonpsp660.bin` and files it as
+  `[japan]`, so on MinUI, NextUI and MyMinUI, where it is the only PlayStation
+  core, `--region us` drops it.
 - **Untagged files always survive.** Most BIOS are not regional and carry no
   `region:` at all.
 

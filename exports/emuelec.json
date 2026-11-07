@@ -955,7 +955,7 @@
       }
     }
   ],
-  "hashes_corrected": [],
+  "hashes_updated": [],
   "hashes_filled": [
     "msx/MSXDOS2.ROM md5",
     "msx/FMPAC.rom md5",
@@ -1005,10 +1005,10 @@
     "Cannonball/opr-10268.99 md5",
     "RickDangerous/data.zip md5"
   ],
-  "sizes_corrected": [],
+  "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "requirements_corrected": 0,
+  "required_aligned": 0,
   "withheld": [],
   "found_by_content": 312,
   "unattributed": [],

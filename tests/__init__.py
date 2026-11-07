@@ -17,12 +17,12 @@ import tempfile
 from pathlib import Path
 
 os.environ.setdefault("RETROBIOS_OFFLINE", "1")
-# The installer reads RetroArch's base folder from XDG_CONFIG_HOME as
-# RetroArch does. The GitHub runner sets it, and the tests that give the
-# installer a home of their own found the runner's ~/.config instead: six
-# failed in CI and passed here. A test that needs the variable sets it.
-for _xdg in ("XDG_CONFIG_HOME", "XDG_DATA_HOME"):
-    os.environ.pop(_xdg, None)
+# The installer reads the XDG base directories as RetroArch and the
+# emulators do. The CI runner sets XDG_CONFIG_HOME to its own home, so tests
+# that fake HOME found the runner's folders instead of theirs. A test that
+# exercises one of them sets it for itself.
+for _name in ("XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME"):
+    os.environ.pop(_name, None)
 # A test never waits on, nor blocks, the measurements running on the host.
 os.environ.setdefault(
     "RETROBIOS_PROBE_LOCK",

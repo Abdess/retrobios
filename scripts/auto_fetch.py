@@ -6,7 +6,8 @@ Pipeline:
 2. Scan old branches (git show origin/branch:path)
 3. Search public BIOS repos on GitHub
 4. Search archive.org collections
-5. Create GitHub Issue for community help
+5. Print an issue body for the files still missing (--create-issues).
+   It posts nothing.
 
 Usage:
     python scripts/auto_fetch.py --platform retroarch [--dry-run]
@@ -459,43 +460,37 @@ def fetch_missing(
             )
             stats["errors"] += 1
             continue
-        print("    [5] Not found - needs community contribution")
+        print("    [5] Not found, open for contributions")
         still_missing.append(entry)
         stats["not_found"] += 1
 
     return {"stats": stats, "still_missing": still_missing}
 
 
+CONTRIBUTING_URL = "https://github.com/Abdess/retrobios/blob/main/CONTRIBUTING.md"
+
+
 def generate_issue_body(missing: list[dict], platform: str) -> str:
-    """Generate a GitHub Issue body for missing BIOS files."""
+    """An issue body for the files a platform still needs.
+
+    The hashes are written in full: a contributor matches a file against
+    them, and a 12-character prefix confirms nothing.
+    """
     lines = [
-        f"## Missing BIOS Files for {platform}",
-        "",
-        "The following BIOS files are required but not available in the repository.",
-        "If you have any of these files, please submit a Pull Request!",
+        f"## Files {platform} still needs",
         "",
         "| File | System | SHA1 | MD5 |",
         "|------|--------|------|-----|",
     ]
-
     for entry in missing:
-        sha1 = ", ".join(sorted(_accepted(entry, "sha1"))) or "N/A"
-        md5 = ", ".join(sorted(_accepted(entry, "md5"))) or "N/A"
-        lines.append(
-            f"| `{entry['name']}` | {entry['system']} | `{sha1[:12]}...` | `{md5[:12]}...` |"
-        )
-
-    lines.extend(
-        [
-            "",
-            "### How to Contribute",
-            "",
-            "1. Fork this repository",
-            "2. Add the BIOS file to `bios/Manufacturer/Console/`",
-            "3. Create a Pull Request - checksums are verified automatically",
-        ]
-    )
-
+        sha1 = ", ".join(f"`{h}`" for h in sorted(_accepted(entry, "sha1"))) or "none declared"
+        md5 = ", ".join(f"`{h}`" for h in sorted(_accepted(entry, "md5"))) or "none declared"
+        lines.append(f"| `{entry['name']}` | {entry['system']} | {sha1} | {md5} |")
+    lines += [
+        "",
+        "A file with one of these hashes can be added through the upload link in"
+        f" [CONTRIBUTING.md]({CONTRIBUTING_URL}). CI checks it on arrival.",
+    ]
     return "\n".join(lines)
 
 
@@ -563,7 +558,7 @@ def main() -> None:
         result = fetch_missing(missing, db, args.bios_dir, args.dry_run)
 
         if result["still_missing"]:
-            all_still_missing[platform] = result["still_missing"]
+            all_still_missing[config.get("platform") or platform] = result["still_missing"]
 
         stats = result["stats"]
         print(

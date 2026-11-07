@@ -35,7 +35,7 @@ notes: |
   hle_state.psu1_hle and hle_state.psu2_hle (src/channelf_hle.c).
 
   The .info file declares all three firmware files as required (opt=false),
-  but the core does not abort on missing BIOS -- it falls back to HLE.
+  but the core does not abort on a missing BIOS. It falls back to HLE.
 
 files:
   - name: "sl31253.bin"

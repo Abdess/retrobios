@@ -30,8 +30,8 @@ notes: |
   binary as string constants (p8GlobalLuaFunctions.h, DefaultCart.h).
 
   When no ROM is passed (supports_no_game = true), the core queues its
-  built-in BIOS cart "__FAKE08-BIOS.p8" (platform/libretro/libretro.cpp:751). This is not
-  an external file -- it is generated internally by the VM.
+  built-in BIOS cart "__FAKE08-BIOS.p8" (platform/libretro/libretro.cpp:751). The VM
+  generates it internally, so no external file is read.
 
   The core accepts .p8 (text) and .png (cartridge-as-image) formats
   (platform/libretro/libretro.cpp:258). Content is loaded either via the libretro data buffer

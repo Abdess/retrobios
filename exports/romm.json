@@ -1316,7 +1316,7 @@
       }
     },
     {
-      "kind": "hash_corrected",
+      "kind": "hash_updated",
       "system": "doom",
       "name": "PLUTONIA.WAD",
       "destination": "doom/PLUTONIA.WAD",
@@ -1325,14 +1325,14 @@
       "new": "816c7c6b0098f66c299c9253f62bd908456efb63"
     }
   ],
-  "hashes_corrected": [
+  "hashes_updated": [
     "doom/PLUTONIA.WAD sha1"
   ],
   "hashes_filled": [],
-  "sizes_corrected": [],
+  "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "requirements_corrected": 0,
+  "required_aligned": 0,
   "withheld": [],
   "found_by_content": 0,
   "removal_candidates": [

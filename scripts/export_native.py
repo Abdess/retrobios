@@ -515,7 +515,7 @@ class LandedChanges:
 
     @property
     def applied(self) -> list[str]:
-        return self._labels("hash_corrected")
+        return self._labels("hash_updated")
 
     @property
     def filled(self) -> list[str]:
@@ -527,7 +527,7 @@ class LandedChanges:
 
     @property
     def resized(self) -> list[str]:
-        return [label.removesuffix(" size") for label in self._labels("size_corrected")]
+        return [label.removesuffix(" size") for label in self._labels("size_updated")]
 
     @property
     def unsized(self) -> list[str]:
@@ -535,7 +535,7 @@ class LandedChanges:
 
     @property
     def requirements(self) -> int:
-        return sum(r["kind"] == "requirement_corrected" for r in self.records)
+        return sum(r["kind"] == "required_aligned" for r in self.records)
 
     @property
     def lists(self) -> int:
@@ -624,14 +624,14 @@ def landed_changes(exporter: object, systems: dict) -> LandedChanges:
                 and exporter.required_value(entry) != bool(entry.platform["required"])
             ):
                 records.append(_change(
-                    "requirement_corrected", entry, "required",
+                    "required_aligned", entry, "required",
                     bool(entry.platform["required"]), exporter.required_value(entry),
                 ))
             for field_name in entry.corrections:
                 if field_name == "required" or not exporter.states(entry, field_name):
                     continue
                 records.append(_change(
-                    "hash_corrected", entry, field_name,
+                    "hash_updated", entry, field_name,
                     _platform_value(entry, field_name),
                     _written_value(exporter, entry, field_name),
                 ))
@@ -648,7 +648,7 @@ def landed_changes(exporter: object, systems: dict) -> LandedChanges:
                     and exporter.states(entry, field_name)
                 ):
                     records.append(_change(
-                        "hash_corrected", entry, field_name,
+                        "hash_updated", entry, field_name,
                         _platform_value(entry, field_name), listed,
                     ))
             records.extend(
@@ -666,7 +666,7 @@ def landed_changes(exporter: object, systems: dict) -> LandedChanges:
                 and exporter.states(entry, "size")
             ):
                 records.append(_change(
-                    "size_corrected", entry, "size", _single_size(theirs), ours
+                    "size_updated", entry, "size", _single_size(theirs), ours
                 ))
             elif (
                 theirs
@@ -690,7 +690,7 @@ def landed_changes(exporter: object, systems: dict) -> LandedChanges:
     # A value the render rewrote though the model reads it as the
     # platform's own (RomM's sha1 with a leading space).
     records.extend(
-        _change("hash_corrected", entry, field_name, old, new)
+        _change("hash_updated", entry, field_name, old, new)
         for entry, field_name, old, new in getattr(exporter, "normalized_values", [])
     )
     return changes
@@ -863,12 +863,12 @@ def export_platform(
             "not_kept": lost,
         },
         "changes": changes.records,
-        "hashes_corrected": applied,
+        "hashes_updated": applied,
         "hashes_filled": filled,
-        "sizes_corrected": resized,
+        "sizes_updated": resized,
         "sizes_removed": unsized,
         "hashes_cleared": cleared,
-        "requirements_corrected": requirements,
+        "required_aligned": requirements,
         "withheld": list(withheld),
         "found_by_content": report.labels,
         "unattributed": report.unattributed,
