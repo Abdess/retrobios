@@ -3726,6 +3726,9 @@ def _check_data_directory(entry: object, where: str) -> None:
             raise ValueError(f"{where}.{field} is invalid")
     if entry.get("optional", True) is not True:
         raise ValueError(f"{where}.optional is invalid")
+    cores = entry.get("cores", ["-"])
+    if not isinstance(cores, list) or not cores or not all(isinstance(c, str) and c for c in cores):
+        raise ValueError(f"{where}.cores is invalid")
     files = entry.get("files")
     if not isinstance(files, dict) or not files or len(files) > MAX_MANIFEST_FILES:
         raise ValueError(f"{where}.files is invalid")
@@ -6077,7 +6080,7 @@ _CHOICE_OPTIONS = ("--system", "--core", "--region", "--for-games", "--required-
 # An option not named here comes after them.
 _COMMAND_ORDER = (
     "--manifest", "--from-pack", "--system", "--core", "--emulator", "--region",
-    "--for-games", "--required-only", "--target", "--no-game-data", "--installed-cores", "--cores-dir", "--every-board",
+    "--for-games", "--required-only", "--all-files", "--target", "--no-game-data", "--installed-cores", "--cores-dir", "--every-board",
     "--declared-only", "--standalone-copies", "--save-dir", "--jobs", "--from",
     "--add-app", "--offline", "--check", "--dry-run",
 )
@@ -6114,6 +6117,7 @@ class Invocation:
             options.append(("--for-games", None if games is True else str(games)))
         for flag, on in (
             ("--required-only", getattr(args, "required_only", False)),
+            ("--all-files", getattr(args, "all_files", False)),
             ("--every-board", args.every_board),
             ("--installed-cores", args.installed_cores and not args.cores_dir),
             ("--no-game-data", args.no_game_data),
@@ -7396,13 +7400,20 @@ def _install_data_member(
 
 
 def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
-                            required_only: bool = False) -> list[dict]:
+                            required_only: bool = False,
+                            games: GamesPlan | None = None) -> list[dict]:
     """The data trees this install keeps: all, or those of a kept system.
     --required-only leaves out a tree every core reading it runs without
     (`optional`): a GBA and a SNES game took FBNeo's cheats and samples,
-    3,472 files no game opened."""
+    3,472 files no game opened. For the games of a card, a tree only cores
+    read (`cores`) is kept when the plan runs one of them, or runs a system
+    of the tree on a core no setup names."""
     entries = [e for e in manifest.get("data_directories") or []
                if not (required_only and e.get("optional"))]
+    if games is not None:
+        entries = [e for e in entries if not e.get("cores")
+                   or set(e["cores"]) & games.profiles
+                   or set(e.get("systems") or []) & games.any_core]
     if not narrowed:
         return entries
     kept = {system for f in files for system in entry_systems(f)}
@@ -8832,7 +8843,8 @@ def _prompt_custom_selection(
         kept = menu_choice(files, omitted, installed, current, False)[0]
         kept_trees = select_data_directories({"data_directories": trees}, kept,
                                              narrowed or current is not None,
-                                             isinstance(current, GamesChoice) and current.required)
+                                             isinstance(current, GamesChoice) and current.required,
+                                             current.plan if isinstance(current, GamesChoice) else None)
         if kept and all_in_place(kept, kept_trees, bios_path):
             # Read before the menu, as the screen reads before it asks: a
             # rerun was offered an install that installs nothing, then told
@@ -8962,7 +8974,8 @@ def _print_menu_head(
     # and PPSSPP were counted for every --system tried.
     kept_trees = select_data_directories({"data_directories": trees}, shown,
                                          narrowed or current is not None,
-                                         isinstance(current, GamesChoice) and current.required)
+                                         isinstance(current, GamesChoice) and current.required,
+                                         current.plan if isinstance(current, GamesChoice) else None)
     data = sum(len(entry.get("files") or {}) for entry in kept_trees)
     data_size = sum(meta.get("size", 0) for entry in kept_trees
                     for meta in (entry.get("files") or {}).values())
@@ -10526,6 +10539,10 @@ class GamesPlan:
         self.required: set[str] = set()
         self.unknown_core: list[str] = []
         self.truncated = False
+        # The cores the games run on (a folder's default and its boards'),
+        # and the systems of a folder no setup names a core for.
+        self.profiles: set[str] = set()
+        self.any_core: set[str] = set()
 
     @property
     def fallback(self) -> list[GameFacts]:
@@ -10753,6 +10770,11 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
     cache.save()
     for game_folder, group in read:
         if group:
+            for profile in _folder_profiles(game_folder.row):
+                if profile:
+                    plan.profiles.add(str(profile))
+                else:
+                    plan.any_core.update(str(s) for s in game_folder.row.get("systems") or [])
             arcade = game_folder.row.get("arcade")
             sets = (arcade_index(arcade) or {}).get("support", set()) \
                 if isinstance(arcade, str) else set()
@@ -13358,6 +13380,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="with --for-games, only the files the games cannot start without",
     )
     parser.add_argument(
+        "--all-files",
+        action="store_true",
+        help="install the whole list even when the card holds games. A run that "
+             "asks nothing (--yes, --no-input, --events) otherwise installs only "
+             "what the card's games need, the plan's first choice",
+    )
+    parser.add_argument(
         "--no-game-data",
         action="store_true",
         help="leave out game data (files a game reads, not firmware) and "
@@ -13556,6 +13585,8 @@ def main() -> None:
         parser.error("--quiet applies to an install, not to --check, --dry-run or a listing")
     if args.tui and args.plain:
         parser.error("--tui and --plain ask for two different interfaces")
+    if args.all_files and args.for_games is not None:
+        parser.error("--all-files and --for-games ask for two different lists")
     if args.required_only and args.for_games is None:
         parser.error("--required-only applies to --for-games: the list alone does not "
                      "say which files a game cannot start without")
@@ -15537,8 +15568,18 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # some, what they need is the menu's first choice, and --for-games
         # narrows the list here, before the systems are counted.
         will_ask = interactive and not args.check and not listing
+        # A run that asks nothing takes the plan's first choice: the games of
+        # the card. `--yes` alone installed 6.4 GB on a dArkOS card holding
+        # two games, while the screen offers what they need first. Not for a
+        # run given its list (the screen's own runs, the choice already
+        # made), nor one narrowed by name.
+        unasked = (not interactive and not args.check and not listing
+                   and not getattr(args, "all_files", False)
+                   and LOCAL.manifest is None and LOCAL.pack is None
+                   and not (args.installed_cores or args.no_game_data or args.system
+                            or args.core or args.region or args.emulator or args.declared_only))
         games_plan = None
-        if args.for_games is not None or (will_ask and not (
+        if args.for_games is not None or unasked or (will_ask and not (
                 args.installed_cores or args.no_game_data or LOCAL.pack is not None)):
             games_plan = read_games(args, plat_name, bios_path, manifest, term, os_type)
         games_applied = False
@@ -15551,6 +15592,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             games_applied = True
             print(f"  For the games: {_plural(len(files), 'file')} of the list"
                   + (f", {GAMES_REQUIRED_WORDS}" if args.required_only else ""))
+            if args.for_games is None:
+                print("  The card holds games, so only what they need is installed. "
+                      "--all-files installs the whole list.")
             version_notes += [line.strip() for line in fallback_lines(games_plan)]
         # --no-game-data leaves the game data out once the list is narrowed
         # to the choice: taken out first, its line named the 5099 game data
@@ -15691,7 +15735,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             or games_applied
         )
         data_dirs = select_data_directories(manifest, files, narrowed,
-                                            bool(args.required_only))
+                                            bool(args.required_only),
+                                            games_plan if games_applied else None)
         # The kinds as the plan and the menu head say them (parts_words),
         # the data files of the folders kept among them: this head said
         # BIOS files and game data beside a plan of three kinds, neither
