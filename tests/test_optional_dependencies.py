@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
+import re
 import subprocess
 import sys
 import unittest
@@ -32,16 +33,18 @@ sys.exit(0 if result.wasSuccessful() else 1)
 """
 
 
+IMPORTS_SCHEMA_CODE = re.compile(r"^\s*(?:import|from)\s+(?:jsonschema|validate_schemas)\b", re.M)
+
+
 class SuiteWithoutJsonschema(unittest.TestCase):
     def test_every_module_skips_instead_of_erroring(self):
+        # The modules that import either, at the top or inside a test: a
+        # module that only names them in a string has nothing to skip.
         names = sorted(
             f"tests.{path.stem}"
             for path in (REPO_ROOT / "tests").glob("test_*.py")
             if path.stem != Path(__file__).stem
-            and any(
-                token in path.read_text(encoding="utf-8")
-                for token in ("jsonschema", "validate_schemas")
-            )
+            and IMPORTS_SCHEMA_CODE.search(path.read_text(encoding="utf-8"))
         )
         completed = subprocess.run(
             [sys.executable, "-c", HIDE_AND_RUN, *names],
@@ -49,7 +52,9 @@ class SuiteWithoutJsonschema(unittest.TestCase):
             capture_output=True,
             check=False,
             text=True,
-            timeout=600,
+            # The CI runner takes about twice this host's time: 600 s cut
+            # the run short there while it passed here.
+            timeout=1800,
         )
         self.assertEqual(completed.returncode, 0, completed.stdout + completed.stderr[-2000:])
 
