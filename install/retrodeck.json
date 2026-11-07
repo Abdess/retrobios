@@ -139411,7 +139411,10 @@
         }
       },
       "source_path": "Cemu-3310f3b8b184d64a62b89fd59088c799432badf5/bin/gameProfiles/default",
-      "archive_size": 21360579
+      "archive_size": 21360579,
+      "cores": [
+        "cemu"
+      ]
     },
     {
       "ref": "fbneo-cheats",
@@ -153142,7 +153145,10 @@
       },
       "strip_components": 1,
       "archive_size": 5083767,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "fbneo-samples",
@@ -153377,7 +153383,10 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "freeintv-overlays",
@@ -153751,7 +153760,10 @@
       },
       "strip_components": 1,
       "archive_size": 21311170,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "freeintv"
+      ]
     },
     {
       "ref": "yaps2-resources",
@@ -154216,7 +154228,10 @@
         }
       },
       "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources",
-      "archive_size": 21181421
+      "archive_size": 21181421,
+      "cores": [
+        "yaps2"
+      ]
     }
   ],
   "save_directory": {

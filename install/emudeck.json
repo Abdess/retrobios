@@ -100487,7 +100487,10 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 4465709
+      "archive_size": 4465709,
+      "cores": [
+        "bluemsx"
+      ]
     },
     {
       "ref": "dinothawr",
@@ -100936,7 +100939,10 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 5752250
+      "archive_size": 5752250,
+      "cores": [
+        "dinothawr"
+      ]
     },
     {
       "ref": "dirksimple",
@@ -100993,7 +100999,10 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 175384
+      "archive_size": 175384,
+      "cores": [
+        "dirksimple"
+      ]
     },
     {
       "ref": "dolphin-sys",
@@ -109670,7 +109679,10 @@
       "exclude": [
         "Themes"
       ],
-      "archive_size": 3197914
+      "archive_size": 3197914,
+      "cores": [
+        "ishiiruka"
+      ]
     },
     {
       "ref": "fbneo-cheats",
@@ -123401,7 +123413,10 @@
       },
       "strip_components": 1,
       "archive_size": 5083767,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "fbneo-samples",
@@ -123636,7 +123651,10 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "fbneo"
+      ]
     },
     {
       "ref": "freeintv-overlays",
@@ -124010,7 +124028,10 @@
       },
       "strip_components": 1,
       "archive_size": 21311170,
-      "optional": true
+      "optional": true,
+      "cores": [
+        "freeintv"
+      ]
     },
     {
       "ref": "lrps2",
@@ -124027,7 +124048,10 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 318896
+      "archive_size": 318896,
+      "cores": [
+        "lrps2"
+      ]
     },
     {
       "ref": "yaps2-resources",
@@ -124488,7 +124512,10 @@
         }
       },
       "source_path": "yaps2-57ea93c0ce8306063b31fe6658dab6b492bbedfe/bin/resources",
-      "archive_size": 21181421
+      "archive_size": 21181421,
+      "cores": [
+        "yaps2"
+      ]
     }
   ],
   "save_directory": {
