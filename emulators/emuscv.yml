@@ -1,17 +1,17 @@
 emulator: EmuSCV
 type: libretro
 core_classification: community_fork
-source: "https://github.com/wzcwzc/emuscv"
+source: "https://git.libretro.com/libretro/libretro-emuscv"
 upstream: "http://takeda-toshiya.my.coocan.jp/"
-profiled_date: "2026-03-23"
-source_commit: "6d6e4594d79862dd5c2ff7f725c109e4266f0b03"
-core_version: "0.12.20220726135800"
+profiled_date: "2026-11-09"
+source_commit: "33900ce24f45c429b533fdae7844e04d64a9a1b9"
+core_version: "0.15.20260921084155"
 version_basis:
   kind: file
-  path: "Makefile.libretro"
-  pattern: '^EMUSCV_VERSION_MAJOR := (\d+)\s*\nEMUSCV_VERSION_MINOR := (\d+)\s*\n(?:#.*\n)*EMUSCV_VERSION_DATETIME := \u0027?(\d+)'
+  path: "src/emuscv.h"
+  pattern: 'EMUSCV_VERSION_MAJOR\s+"(\d+)"\n#define EMUSCV_VERSION_MINOR\s+"(\d+)"\n#define EMUSCV_VERSION_DATETIME\s+"(\d+)"'
   format: "{1}.{2}.{3}"
-display_name: "EPOCH/YENO Super Cassette Vision"
+display_name: "EPOCH/YENO Super Cassette Vision (EmuSCV)"
 cores:
   - emuscv
 systems:
@@ -20,9 +20,11 @@ systems:
 notes: |
   Libretro port of eSCV by Takeda Toshiya (Common Source Code Project),
   ported to libretro by MARCONATO Maxime. Upstream source mirrored at
-  https://github.com/tautologico/common-src-project (src/vm/scv/).
+  https://github.com/tautologico/common-src-project (src/vm/scv/). The
+  buildbot builds libretro's copy on git.libretro.com, which carries the
+  history of the former GitHub repository and continues it.
 
-  BIOS loading in src/vm/scv/memory.cpp:initialize() (lines 74-243).
+  BIOS loading in src/vm/scv/memory.cpp:initialize() (lines 84-250).
   Tries filenames in order: upd7801g.s01, upd7801g.bin, upd7801g.bios,
   bios.rom, bios.bin. First successful open wins. Upstream eSCV uses
   only BIOS.ROM (uppercase), and the libretro port renamed and added
@@ -31,13 +33,12 @@ notes: |
   The BIOS is read as 0x1000 (4096) bytes into the bios[] array, mapped
   read-only at CPU address 0x0000-0x0FFF (UPD7801 internal ROM area).
 
-  When CHECKBIOS core option is YES, the core computes MD5 of the loaded
-  data and compares against 635a978fd40db9a18ee44eff449fc126. If the
-  hash does not match, the BIOS is rejected (filled with 0xFF,
-  bios_present=false). When CHECKBIOS is AUTO (default) or NO, any file
-  content is accepted. With AUTO the log says "automatic (yes)", and the
-  MD5 comparison runs only when the option equals YES_VAL
-  (src/vm/scv/memory.cpp:80), so AUTO accepts any content.
+  upd7801g.s01 is checked against MD5 635a978fd40db9a18ee44eff449fc126
+  unless the CHECKBIOS core option is NO, so with the default AUTO a
+  file of other content under that name is rejected (filled with 0xFF,
+  bios_loaded=false) and the next name is tried. The four other names are
+  checked only when CHECKBIOS is YES, and AUTO accepts any content under
+  them (src/vm/scv/memory.cpp:84-112, 115-148, src/emuscv.cpp:3459-3472).
 
   The font/character data is embedded within the BIOS at offset 0x200
   (memory.h get_font() returns bios + 0x200). No separate font ROM file.
@@ -55,8 +56,8 @@ files:
     size: 4096
     md5: 635a978fd40db9a18ee44eff449fc126
     validation: [md5]
-    note: "UPD7801G internal ROM (BIOS). Mapped at 0x0000-0x0FFF. Contains character font at offset 0x200."
-    source_ref: "src/vm/scv/memory.cpp:74-243"
+    note: "UPD7801G internal ROM (BIOS). The MD5 is checked by default under this name only. Mapped at 0x0000-0x0FFF. Contains character font at offset 0x200."
+    source_ref: "src/vm/scv/memory.cpp:84-250"
     aliases:
       - "upd7801g.bin"
       - "upd7801g.bios"
@@ -69,7 +70,7 @@ platform_details:
     upd7801g:
       target: "0x0000-0x0FFF (CPU internal ROM, 4 KB)"
       format: "raw binary"
-      source_ref: "src/vm/scv/memory.cpp:249-254"
+      source_ref: "src/vm/scv/memory.cpp:259-264"
       notes: |
         Memory map from memory.cpp:initialize():
           0x0000-0x0FFF  BIOS ROM (read-only)

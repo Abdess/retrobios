@@ -1254,6 +1254,17 @@ class TestSelectRepo(unittest.TestCase):
     def test_none_when_no_supported_host(self):
         self.assertIsNone(select_repo({"source": "https://www.6809.org.uk/"}))
 
+    def test_source_keyed_by_mode_without_upstream(self):
+        repo = select_repo(
+            {
+                "source": {
+                    "standalone": "https://github.com/UZDoom/UZDoom",
+                    "libretro": "https://github.com/libretro/uzdoom",
+                },
+            }
+        )
+        self.assertEqual(repo.name, "UZDoom")
+
 
 class TestBuildReport(unittest.TestCase):
     def setUp(self):

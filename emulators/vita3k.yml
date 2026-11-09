@@ -1,22 +1,33 @@
 emulator: Vita3K
-type: standalone
-source: "https://github.com/Vita3K/Vita3K"
+type: standalone + libretro
+source:
+  standalone: "https://github.com/Vita3K/Vita3K"
+  libretro: "https://git.libretro.com/libretro/vita3k-libretro"
 upstream: "https://github.com/Vita3K/Vita3K"
-profiled_date: "2026-10-23"
-source_commit: "6ec8e6ce31f3d6099b14eb9dd0320c09ef6386b6"
-core_version: "v0.2.1"
+profiled_date: "2026-11-09"
+source_commit:
+  standalone: "6ec8e6ce31f3d6099b14eb9dd0320c09ef6386b6"
+  libretro: "87666afd9e84e1a59ec07d495bab4dc114f0798a"
+core_version:
+  standalone: "v0.2.1"
+  libretro: "v0.2.1"
 version_basis:
-  kind: file
-  path: "vita3k/CMakeLists.txt"
-  pattern: 'set\(VITA3K_APP_VER_HI (\d+)\)\nset\(VITA3K_APP_VER_MID (\d+)\)\nset\(VITA3K_APP_VER_LO (\d+)\)\nset\(VITA3K_APP_VERSION "v'
-  format: "v{1}.{2}.{3}"
+  standalone:
+    kind: file
+    path: "vita3k/CMakeLists.txt"
+    pattern: 'set\(VITA3K_APP_VER_HI (\d+)\)\nset\(VITA3K_APP_VER_MID (\d+)\)\nset\(VITA3K_APP_VER_LO (\d+)\)\nset\(VITA3K_APP_VERSION "v'
+    format: "v{1}.{2}.{3}"
+  libretro:
+    kind: file
+    path: "vita3k/CMakeLists.txt"
+    pattern: 'set\(VITA3K_APP_VER_HI (\d+)\)\nset\(VITA3K_APP_VER_MID (\d+)\)\nset\(VITA3K_APP_VER_LO (\d+)\)\nset\(VITA3K_APP_VERSION "v'
+    format: "v{1}.{2}.{3}"
 display_name: "Vita3K (PS Vita)"
 cores:
   - vita3k
   - "vita3k-sa"
 systems: [sony-playstation-vita]
 
-# Standalone emulator, no libretro core exists.
 # Firmware PUP files are one-time installations: install_pup() decrypts and
 # extracts partition images (os0, vs0, sa0, pd0) into the emulator data directory.
 # The PUP file itself is deleted after extraction.
@@ -29,6 +40,7 @@ systems: [sony-playstation-vita]
 
 files:
   - name: PSVUPDAT.PUP
+    mode: standalone
     path: "psvita/PSVUPDAT.PUP"
     required: true
     hle_fallback: true
@@ -41,6 +53,7 @@ files:
     source_ref: "vita3k/packages/src/pup.cpp:260-314, vita3k/app/src/app.cpp:176, vita3k/module/src/load_module.cpp:142-161, 187"
 
   - name: PSP2UPDAT.PUP
+    mode: standalone
     path: "psvita/PSP2UPDAT.PUP"
     required: false
     hle_fallback: true
@@ -50,8 +63,47 @@ files:
       font directory when the partition holds content.
     source_ref: "vita3k/packages/src/pup.cpp:296-297, vita3k/app/src/app.cpp:177, vita3k/renderer/src/renderer.cpp:161-167"
 
+  # The libretro build installs each part from a .pup it finds itself. The
+  # code names no file: a .pup is told apart by its name alone, so the
+  # labels below carry the word the code looks for.
+  - name: "PSVUPDAT.PUP"
+    mode: libretro
+    path: "vita3k/PSVUPDAT.PUP"
+    required: true
+    note: >
+      System firmware, installed into vs0 at the first start that finds it
+      missing. Any .pup in system/vita3k whose name holds neither preinst
+      nor font is taken for it, and psp2updat.pup or psvupdat.pup at the
+      root of the system directory too. The core starts a game without it,
+      and games do not run.
+    source_ref:
+      libretro: "vita3k/libretro/libretro_installer.cpp:188-195, vita3k/libretro/libretro_installer.cpp:201-222, vita3k/libretro/libretro_installer.cpp:271-278, vita3k/libretro/libretro_installer.cpp:295-345, vita3k/libretro/libretro_vita3k.cpp:873-877, vita3k/libretro/libretro_vita3k.cpp:2793-2796"
+
+  - name: "preinst.pup"
+    mode: libretro
+    path: "vita3k/preinst.pup"
+    required: false
+    note: >
+      Preinstalled package, installed into pd0. Any .pup in system/vita3k
+      with preinst in its name, whatever the case. Sony serves it as
+      PSP2UPDAT.PUP, which this build would take for the system firmware.
+    source_ref:
+      libretro: "vita3k/libretro/libretro_installer.cpp:188-195, vita3k/libretro/libretro_installer.cpp:271-278, vita3k/libretro/libretro_installer.cpp:318-345"
+
+  - name: "font.pup"
+    mode: libretro
+    path: "vita3k/font.pup"
+    required: false
+    note: >
+      Font package, installed into sa0. Any .pup in system/vita3k with font
+      in its name, whatever the case. Sony serves it as PSP2UPDAT.PUP, which
+      this build would take for the system firmware.
+    source_ref:
+      libretro: "vita3k/libretro/libretro_installer.cpp:188-195, vita3k/libretro/libretro_installer.cpp:271-278, vita3k/libretro/libretro_installer.cpp:318-345"
+
 notes: |
-  Standalone PS Vita emulator. No libretro core.
+  Standalone PS Vita emulator, with a libretro build kept on the libretro
+  branch of libretro's copy of the project, which merges upstream master.
   Firmware installed via File > Install Firmware or CLI --firmware flag.
   PUP files validated by SCEUF magic header only (vita3k/packages/src/pup.cpp:119), no hash check.
   After install, four partitions are extracted:
@@ -64,3 +116,14 @@ notes: |
   libsceavplayer, libSceJson, and more (vita3k/module/src/load_module.cpp:142-162).
   A third optional preinst firmware PUP (pd0 partition: system BGM, resources)
   is available from Sony but not commonly required for game compatibility.
+
+  The libretro build reads the three firmware packages from
+  system/vita3k and installs each part still missing into its storage at
+  load, the system firmware detected by its modules in
+  vs0/sys/external. A .pup loaded as content is installed the same way.
+  data/, the built-in shaders and the dialog icons are compiled into the
+  core and written into system/vita3k when the copy there is not this
+  build's (vita3k/libretro/embed_system_files.cmake:1-9).
+  ref: vita3k/libretro/libretro_installer.cpp:60-67,
+       vita3k/libretro/libretro_installer.cpp:159-177,
+       vita3k/libretro/libretro_vita3k.cpp:2414-2420
