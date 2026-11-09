@@ -185,7 +185,7 @@ files:
     size: 118767
     sha1: "538d220d87b86b997f539265eb12a6c319e17a1c"
     source_ref: "src/CMakeLists.txt:1225, src/gameconfigfile.cpp:175-202, src/sound/music/i_soundfont.cpp:352-356"
-    note: "OPL3 bank copied next to the executable, read only with adl_use_custom_bank. The RetroPie package leaves it out."
+    note: "OPL3 bank of the tree, copied to fm_banks/ beside the executable. The Windows and macOS builds search $PROGDIR/fm_banks, the Linux build searches $HOME/.config/lzdoom/fm_banks and the share directories but not the program directory (src/gameconfigfile.cpp:178-200). Played only when adl_use_custom_bank is on and adl_custom_bank names it (src/sound/music/music_config.cpp:92-99). The RetroPie package leaves it out."
 
   - name: "gs-by-papiezak-and-sneakernets.wopn"
     category: game_data
@@ -196,7 +196,7 @@ files:
     size: 274864
     sha1: "12e77c61ae107b7dbcebb230fe45ec7791a07877"
     source_ref: "src/CMakeLists.txt:1227, src/gameconfigfile.cpp:175-202, src/sound/music/i_soundfont.cpp:357-361"
-    note: "OPN2 bank copied next to the executable, read only with opn_use_custom_bank. The RetroPie package leaves it out."
+    note: "OPN2 bank of the tree, copied to fm_banks/ beside the executable. The Windows and macOS builds search $PROGDIR/fm_banks, the Linux build searches $HOME/.config/lzdoom/fm_banks and the share directories but not the program directory (src/gameconfigfile.cpp:178-200). Played only when opn_use_custom_bank is on and opn_custom_bank names it (src/sound/music/music_config.cpp:253-260). The RetroPie package leaves it out."
 
   # ================================================================
   # IWADs (user-supplied). One is needed to start a game.
