@@ -115,11 +115,10 @@
   "src/verite/lle/loader.rs",
   "src/verite/mod.rs"
  ],
- "git.libretro.com/libretro/wqxemu@caf0998989446e3d6659f67c1b8aabd708a0379d": [
+ "git.libretro.com/libretro/wqxemu@44f492cfac4c47e9e2470144c972264779c5f9bf": [
   "Cargo.toml",
   "crates/wqxemu-core/src/machine.rs",
   "crates/wqxemu-core/src/machines/cc800.rs",
-  "crates/wqxemu-core/src/machines/mod.rs",
   "crates/wqxemu-core/src/machines/nc1020.rs",
   "crates/wqxemu-core/src/machines/nc2000.rs",
   "crates/wqxemu-core/src/machines/nc3000.rs",
@@ -409,11 +408,10 @@
   "crates/spmp8000emu-libretro/src/libretro/api.rs",
   "crates/spmp8000emu-libretro/src/libretro/constants.rs"
  ],
- "github.com/AloysHF/WQXEmu@caf0998989446e3d6659f67c1b8aabd708a0379d": [
+ "github.com/AloysHF/WQXEmu@44f492cfac4c47e9e2470144c972264779c5f9bf": [
   "Cargo.toml",
   "crates/wqxemu-core/src/machine.rs",
   "crates/wqxemu-core/src/machines/cc800.rs",
-  "crates/wqxemu-core/src/machines/mod.rs",
   "crates/wqxemu-core/src/machines/nc1020.rs",
   "crates/wqxemu-core/src/machines/nc2000.rs",
   "crates/wqxemu-core/src/machines/nc3000.rs",
@@ -552,7 +550,7 @@
  "github.com/Clownacy/clownmdemu-libretro@d43c2708b0a31c285ce16724b6c4a2e92af07346": [
   "source/libretro-interface.c"
  ],
- "github.com/ColinPitrat/caprice32@8c778bf072a06fb7c23b9cccd179041db7f79a52": [
+ "github.com/ColinPitrat/caprice32@a0d78f0f7c6d19a5d3205d1b231bd4da100ec6f3": [
   "cap32.cfg",
   "rom/MF2.rom",
   "rom/amsdos.rom",
@@ -1022,14 +1020,21 @@
   "tools/installer/TRX_Installer/InstallMappings.cs"
  ],
  "github.com/LostArtefacts/TRX@4d55f7d3130f9d04bdc1fefb85bf4d8fa93a22d3": [
-  "data/trx/ship/games/tr1-demo-pc/gameflow.json5",
-  "data/trx/ship/games/tr1-ub/gameflow.json5",
-  "data/trx/ship/games/tr1/gameflow.json5",
   "data/trx/ship/games/tr2-gm/gameflow.json5",
   "data/trx/ship/games/tr2/gameflow.json5",
   "src/trx/game/game_flow/reader.c",
-  "src/trx/game/level/format/format_tr1.c",
   "src/trx/game/level/pipeline.c",
+  "src/trx/game/music/backend_files.c",
+  "src/trx/game/paths.c",
+  "tools/download_assets",
+  "tools/installer/TRX_Installer/InstallMappings.cs"
+ ],
+ "github.com/LostArtefacts/TRX@7d1f0e8cbad9e9c3d55248188184384aa6e0f5b5": [
+  "data/trx/ship/games/tr1-demo-pc/gameflow.json5",
+  "data/trx/ship/games/tr1-ub/gameflow.json5",
+  "data/trx/ship/games/tr1/gameflow.json5",
+  "src/trx/game/game_flow/reader.c",
+  "src/trx/game/level/format/format_tr1.c",
   "src/trx/game/locale/chain.h",
   "src/trx/game/music/backend_files.c",
   "src/trx/game/paths.c",
@@ -2100,7 +2105,7 @@
   "src/media.cpp",
   "src/video.cpp"
  ],
- "github.com/WizzardSK/pcee2-libretro@f52b5a6fe43278dcfc827b85b09fced5a82f863f": [
+ "github.com/WizzardSK/pcee2-libretro@2b0edbe67188977c7709b57d6effdc70147eeb0d": [
   "cmake/EmbedResources.cmake",
   "pcee2-libretro/Libretro.cpp",
   "pcsx2/Achievements.cpp",
@@ -2530,8 +2535,9 @@
   "src/mame/vtech/vtech1.cpp",
   "src/osd/modules/switchres/switchres_module.cpp"
  ],
- "github.com/ares-emulator/ares@d400eee9764fe22a8de0247a52757d2021d0539c": [
+ "github.com/ares-emulator/ares@dd737665221a6f58c6c4d2547d2f38b0abe3aef0": [
   "desktop-ui/desktop-ui.cpp",
+  "desktop-ui/emulator/arcade.cpp",
   "desktop-ui/emulator/atari-5200.cpp",
   "desktop-ui/emulator/colecovision.cpp",
   "desktop-ui/emulator/emulator.cpp",
@@ -2544,7 +2550,6 @@
   "desktop-ui/emulator/msx.cpp",
   "desktop-ui/emulator/msx2.cpp",
   "desktop-ui/emulator/neo-geo-aes.cpp",
-  "desktop-ui/emulator/neo-geo-mvs.cpp",
   "desktop-ui/emulator/neo-geo-pocket-color.cpp",
   "desktop-ui/emulator/neo-geo-pocket.cpp",
   "desktop-ui/emulator/nintendo-64dd.cpp",
@@ -2554,6 +2559,7 @@
   "desktop-ui/emulator/saturn.cpp",
   "desktop-ui/emulator/super-famicom.cpp",
   "desktop-ui/emulator/supergrafx-cd.cpp",
+  "desktop-ui/settings/cores.cpp",
   "desktop-ui/settings/firmware.cpp",
   "desktop-ui/settings/settings.hpp",
   "mia/medium/master-system.cpp",
@@ -2581,7 +2587,7 @@
   "src/main.qml",
   "src/qml.qrc"
  ],
- "github.com/autch/piece-emu@08ec4b45176e8df0d6d6f67e56b87e847cd64a65": [
+ "github.com/autch/piece-emu@9aedad032c5d06a8c6d7cf74142a2b9ac32d77ac": [
   "src/core/bus.hpp",
   "src/debug/pfi_loader_blob.cpp",
   "src/libretro/CMakeLists.txt",
@@ -2701,7 +2707,7 @@
   "core/windows/winmain.cpp",
   "shell/apple/emulator-osx/emulator-osx/osx-main.mm"
  ],
- "github.com/blueminder/supermodel-dojo@113a48d567c5d49a40292df386fee4a0acaea486": [
+ "github.com/blueminder/supermodel-dojo@9bdf7f26a7271cc13b0640487b72fbada0f9dd8b": [
   ".github/workflows/release.yml",
   "Assets/DIR.txt",
   "Config/Games.xml",
@@ -2975,7 +2981,7 @@
   "neo/framework/FileSystem.cpp",
   "neo/framework/Licensee.h"
  ],
- "github.com/diasurgical/DevilutionX@9d4871587e1a8d9606f97a43d85e939b82f77900": [
+ "github.com/diasurgical/DevilutionX@74ce5cdb15da44b28427ad6ee2b107bd6dcd6f61": [
   "CMake/Assets.cmake",
   "CMake/Mods.cmake",
   "CMakeLists.txt",
@@ -3293,7 +3299,7 @@
   "libretro/libretro.c"
  ],
  "github.com/emuplace/sudachi.emuplace.app@c7431bd420d66c54df277ba0a0b71de42cf0a5bf": [],
- "github.com/etlegacy/etlegacy@add16a92f4b10c2955136e3ab7868bfc9bff8fad": [
+ "github.com/etlegacy/etlegacy@13d8bea7b484f4eec993d2c8723b8756c6300963": [
   "README.md",
   "VERSION.txt",
   "cmake/ETLBuildMod.cmake",
@@ -3397,7 +3403,7 @@
   "mupen64plus-core/upstream/src/main/main.c",
   "settings.gradle"
  ],
- "github.com/garglk/garglk@9e06211c20bee35026744424a57f50375cdc29db": [
+ "github.com/garglk/garglk@f15b43dc9448ac14480310a64301bf859faf999d": [
   "CMakeLists.txt",
   "INSTALL.md",
   "VERSION",
@@ -4773,7 +4779,7 @@
   "atari800/src/sysrom.c",
   "libretro/config.h"
  ],
- "github.com/libretro/libretro-cap32@8e61dd69d948cea16c3bad734f7b9d0c2a018cc8": [
+ "github.com/libretro/libretro-cap32@06ad0da5d003ab8f2359300ebce4cf31d4c55b6e": [
   "cap32/cap32.c",
   "cap32/rom/464.h",
   "cap32/rom/6128.h",
@@ -6683,7 +6689,8 @@
   "src/launcher.cpp",
   "src/main.cpp",
   "src/parsing/textfile.cpp",
-  "src/platforms/engineutils.cpp"
+  "src/platforms/engineutils.cpp",
+  "tools/errorgen"
  ],
  "github.com/linappleii/linapple@7f4b60898d91bfecd6f4d8683a374f38b0564962": [
   "CMakeLists.txt",
@@ -9344,7 +9351,7 @@
   "Source/Core/DiscIO/NANDImporter.cpp",
   "Source/Core/DolphinQt/MenuBar.cpp"
  ],
- "github.com/shinovon/KEmulator@1ab219907cfcac0e6313d1b6ccba13ad74015d08": [
+ "github.com/shinovon/KEmulator@4dfdfe31243c9bdbcffa987101e27421618e79e8": [
   "m3g_swerve/src/javax/microedition/m3g/Graphics3D.java",
   "m3g_swerve/src/javax/microedition/m3g/Loader.java",
   "micro3d_dll/src/com/mascotcapsule/micro3d/v3/Figure.java",
