@@ -99,47 +99,67 @@ notes: |
 
 files:
   - name: mcpx_1.0.bin
-    path: "xemu/mcpx_1.0.bin"
-    standalone_path: mcpx_1.0.bin
-    required: true
+    mode: standalone
+    required: false
     size: 512
     validation: [size]
     config_key: sys.files.bootrom_path
+    found_by: content
     description: "MCPX boot ROM"
     note: >-
       Passed as the bootrom machine property and read over the last 512 bytes
       of the flash image, which the machine maps as a writable overlay at the
-      top of the address space. qemu_init drops the path with an error when
-      the file cannot be opened or is not 512 bytes, and the machine then runs
-      the flash alone. The core reads system/xemu/mcpx_1.0.bin, else
-      mcpx_1.0.bin at the root of the system directory, and refuses to load
-      when neither is there.
+      top of the address space. bootrom_path has no default, so the name is a
+      label. qemu_init drops a path that cannot be opened or is not 512 bytes
+      and queues an error, and the machine then runs the flash alone, as it
+      does when the path is empty.
+    source_ref: "system/vl.c:2983-3006, hw/xbox/xbox.c:143-171, hw/xbox/xbox.c:468-470, config_spec.yml:362-366"
+
+  - name: mcpx_1.0.bin
+    mode: libretro
+    path: "xemu/mcpx_1.0.bin"
+    required: true
+    size: 512
+    validation: [size]
+    description: "MCPX boot ROM"
+    note: >-
+      Read from system/xemu/mcpx_1.0.bin, else mcpx_1.0.bin at the root of
+      the system directory. The core refuses to load when neither is there.
     source_ref:
-      standalone: "system/vl.c:2983-3006, hw/xbox/xbox.c:143-171, hw/xbox/xbox.c:468-470"
       libretro: "ui/libretro.c:3370-3415, ui/libretro.c:3418-3427"
 
   - name: Complex_4627.bin
-    path: "xemu/Complex_4627.bin"
-    standalone_path: Complex_4627.bin
-    aliases: [Complex_4627v1.03.bin]
+    mode: standalone
     required: true
     size: [262144, 524288, 1048576]
     validation: [size]
     size_note: "Any size that is a positive multiple of 64 KiB is mapped, and the image is mirrored across the 16 MB flash window"
     config_key: sys.files.flashrom_path
+    found_by: content
     description: "Xbox flash ROM image"
     note: >-
-      Passed as -bios and opened through qemu_find_file. An image whose size
-      is not a multiple of 65536 bytes counts as a failed load, like a missing
-      file: the 256 KB region is filled with 0xFF and the machine starts
-      anyway. An unreadable path clears autostart in the standalone, which
-      takes any file the settings name. The core tries
-      Complex_4627v1.03.bin, then Complex_4627.bin, in system/xemu/ and
-      then at the root of the system directory, and refuses to load when
-      none is there.
+      Passed as -bios and opened through qemu_find_file. flashrom_path has no
+      default, so the name is a label. A path that cannot be opened, an empty
+      one included, queues an error and clears autostart, so the machine does
+      not start. An image whose size is not a multiple of 65536 bytes counts
+      as a failed load in the machine: the 256 KB region is filled with 0xFF.
+    source_ref: "system/vl.c:2527-2535, system/vl.c:3041-3053, hw/xbox/xbox.c:63-123, config_spec.yml:362-366"
+
+  - name: Complex_4627.bin
+    mode: libretro
+    path: "xemu/Complex_4627.bin"
+    aliases: [Complex_4627v1.03.bin]
+    required: true
+    size: [262144, 524288, 1048576]
+    validation: [size]
+    size_note: "Any size that is a positive multiple of 64 KiB is mapped, and the image is mirrored across the 16 MB flash window"
+    description: "Xbox flash ROM image"
+    note: >-
+      The core tries Complex_4627v1.03.bin, then Complex_4627.bin, in
+      system/xemu/ and then at the root of the system directory, and refuses
+      to load when none is there.
     source_ref:
-      standalone: "system/vl.c:3041-3053, hw/xbox/xbox.c:63-123"
-      libretro: "ui/libretro.c:3370-3415, ui/libretro.c:3429-3436"
+      libretro: "ui/libretro.c:3370-3415, ui/libretro.c:3429-3436, hw/xbox/xbox.c:63-123"
 
   - name: xbox_eeprom.bin
     path: "xemu/xbox_eeprom.bin"
@@ -167,8 +187,7 @@ files:
 
   - name: xbox_hdd.qcow2
     mode: standalone
-    path: xbox_hdd.qcow2
-    required: true
+    required: false
     installed_on: [batocera, emudeck, recalbox, retrodeck, rocknix]
     config_key: sys.files.hdd_path
     found_by: content
@@ -176,7 +195,7 @@ files:
     note: >-
       Attached as the IDE drive at index 0 with locked=on when the path is set
       and the file opens. An unreadable file only queues an error and an empty
-      path attaches no drive. Snapshots are stored inside the image.
+      path attaches no drive: the machine starts either way. Snapshots are stored inside the image.
       hdd_path has no default, so the name is a label: it is the file of
       the formatted image the project publishes apart from the xemu release
       (xemu-hdd-image 1.0, xbox_hdd.qcow2.zip), which carries its own
