@@ -2,7 +2,7 @@
 
 EmulationStation hands every launch to runemu.py. A libretro core runs in
 RetroArch or retrorun with the system directory their configs name, MAME
-machines get a .cmd file with a -rp search path, and every other emulator
+machines get a .cmd file with a `-rp` search path, and every other emulator
 runs the script its standalone_emulators table names (/usr/bin/<name>.sh,
 installed from the package). Those scripts, and the configs their packages
 install, say which file under /storage/roms/bios is opened: yabasanshiro.sh
@@ -127,7 +127,7 @@ def retrorun(read: Read) -> list[Launcher]:
 
 
 def mame(runemu: Runemu) -> list[Launcher]:
-    """The -rp search path of the .cmd file runemu writes for a MAME machine."""
+    """The `-rp` search path of the .cmd file runemu writes for a MAME machine."""
     src = runemu.src
     commands = [
         node for node in ast.walk(src.function("get_retroarch_command"))
