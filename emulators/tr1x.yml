@@ -4,14 +4,14 @@ type: standalone
 core_classification: game_engine
 source: "https://github.com/LostArtefacts/TRX"
 upstream: "https://github.com/LostArtefacts/TRX"
-source_commit: "4d55f7d3130f9d04bdc1fefb85bf4d8fa93a22d3"
+source_commit: "7d1f0e8cbad9e9c3d55248188184384aa6e0f5b5"
 upstream_commit: "3d39911a1b839c753b6efad236db67d9fb2b273e"
-core_version: "trx-1.11.1-784-g4d55f7d"
+core_version: "trx-1.12-25-g7d1f0e8"
 version_basis:
   kind: tag
   match: "trx-*"
-  tag: "trx-1.11.1"
-  distance: 784
+  tag: "trx-1.12"
+  distance: 25
 profiled_date: "2026-10-04"
 cores: []
 systems:
@@ -649,28 +649,28 @@ files:
     path: "games/tr1-ub/levels/egypt.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:65, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:65, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:17-20"
     note: "Return to Egypt. The installer offers the original edition and a fan-patched edition of the level set."
 
   - name: "cat.phd"
     path: "games/tr1-ub/levels/cat.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:89, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:89, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:17-20"
     note: "Temple of the Cat. The installer offers the original edition and a fan-patched edition of the level set."
 
   - name: "end.phd"
     path: "games/tr1-ub/levels/end.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:112, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:112, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:17-20"
     note: "Atlantean Stronghold. The installer offers the original edition and a fan-patched edition of the level set."
 
   - name: "end2.phd"
     path: "games/tr1-ub/levels/end2.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:134, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:134, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:17-20"
     note: "The Hive. The installer offers the original edition and a fan-patched edition of the level set."
 
   # PC demo
