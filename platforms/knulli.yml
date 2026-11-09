@@ -4914,6 +4914,7 @@ installable_cores:
 - bsnes_mercury_accuracy
 - bsnes_mercury_balanced
 - bsnes_mercury_performance
+- cannonball
 - chailove
 - crocods
 - dinothawr

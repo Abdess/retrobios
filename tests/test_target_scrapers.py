@@ -298,8 +298,13 @@ class CoreDownloaderReach(unittest.TestCase):
                     fetched |= load_target_config("retroarch", entry["downloads"], root) or set()
                 if entry["architecture"] == "aarch64":
                     self.assertNotIn("downloads", entry)
+            # A name the image gives a standalone emulator only is not the
+            # buildbot core of that name, which stays installable.
+            standalone_only = set(config.get("standalone_cores") or []) - set(
+                config.get("dual_mode_cores") or [])
             with self.subTest(platform=platform):
-                self.assertEqual(set(config["installable_cores"]), fetched - set(config["cores"]))
+                self.assertEqual(set(config["installable_cores"]),
+                                 fetched - (set(config["cores"]) - standalone_only))
 
 
 class KnulliPerBoard(unittest.TestCase):

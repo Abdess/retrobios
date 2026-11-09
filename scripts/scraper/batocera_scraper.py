@@ -14,7 +14,7 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from pathlib import Path
 
 
@@ -557,19 +557,27 @@ def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[
     return built
 
 
-def installable_cores(selection: BuildSelection, cores: list[str]) -> list[str]:
+def installable_cores(
+    selection: BuildSelection,
+    cores: list[str],
+    standalone: Iterable[str] = (),
+    dual: Iterable[str] = (),
+) -> list[str]:
     """Buildbot cores a board's RetroArch core downloader installs, beyond
     the cores the image builds.
 
     The targets scraper names, per board, the RetroArch targets entry its
     downloader reads (`downloads`): a Batocera x86_64 board installs any
-    core of linux-x86_64, an armv7 one any of linux-armhf.
+    core of linux-x86_64, an armv7 one any of linux-armhf. A name the image
+    gives a standalone emulator only (Batocera's amiberry, cemu, xemu) is
+    not that core: the buildbot one stays installable.
     """
     found: set[str] = set()
     for entry in selection.targets.values():
         if entry.get("downloads"):
             found |= load_target_config("retroarch", entry["downloads"]) or set()
-    return sorted(found - set(cores))
+    standalone_only = set(standalone) - set(dual)
+    return sorted(found - (set(cores) - standalone_only))
 
 
 def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dict]:
@@ -642,7 +650,7 @@ class Scraper(BaseScraper):
         built = boards_build(selection, launchers)
         launchers = records_run(launchers, built)
         cores, standalone, dual = self._fetch_cores(built)
-        installable = installable_cores(selection, cores)
+        installable = installable_cores(selection, cores, standalone, dual)
         libretro_systems = es_systems_libretro_systems(
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
         )

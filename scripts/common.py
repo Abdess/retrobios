@@ -2758,6 +2758,19 @@ def system_dir_path(entry: dict, path: str) -> str:
     return f"{directory}/{path}" if directory else path
 
 
+def launched_both_ways(config: dict) -> set[str]:
+    """The names a platform runs as a standalone emulator and as a core.
+
+    ``dual_mode_cores`` names those its frontend offers both ways. A name it
+    gives a standalone emulator only, whose buildbot core its RetroArch can
+    download (``installable_cores``), runs both ways too: Batocera's x86_64
+    RetroArch installs the amiberry core beside its own standalone Amiberry.
+    """
+    standalone = {str(c) for c in config.get("standalone_cores") or []}
+    installable = {str(c) for c in config.get("installable_cores") or []}
+    return {str(c) for c in config.get("dual_mode_cores") or []} | (standalone & installable)
+
+
 def standalone_set(config: dict) -> set[str]:
     """The emulators a platform launches standalone, with its dual-mode ones.
 
@@ -2766,7 +2779,7 @@ def standalone_set(config: dict) -> set[str]:
     same set, tagged, so every reader of standalone_cores sees them.
     """
     names = {str(c) for c in config.get("standalone_cores") or []}
-    names |= {DUAL_MODE_PREFIX + str(c) for c in config.get("dual_mode_cores") or []}
+    names |= {DUAL_MODE_PREFIX + c for c in launched_both_ways(config)}
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
     names |= {
@@ -3191,6 +3204,7 @@ def resolve_platform_cores(
     """
     cores_config = config.get("cores")
     platform_key = str(config.get("_key") or "")
+    downloaded_only: dict[str, str] = {}
     # The builds the platform compiles itself, by the names they answer to.
     # Such a name means that build there, and another revision of the same
     # project is not what the platform runs: ROCKNIX and RetroPie build only
@@ -3265,14 +3279,23 @@ def resolve_platform_cores(
         # build too. Batocera, Recalbox and RetroBat run pcsx2 standalone and
         # as LRPS2, two profiles: the key match kept the standalone one and
         # LRPS2's files never reached their packs.
-        result |= {
-            profile
-            for c in config.get("dual_mode_cores") or []
-            for profile in index.get(str(c), set())
+        dual_names = {str(c) for c in config.get("dual_mode_cores") or []}
+        both_ways = {
+            profile: c
+            for c in sorted(launched_both_ways(config))
+            for profile in index.get(c, set())
             if "libretro" in str(profiles[profile].get("type", ""))
             and not profiles[profile].get("built_by")
             and not replaced_by_own(profile, profiles[profile], libretro_only=True)
         }
+        # A core reached only through the RetroArch downloader runs on the
+        # boards whose downloader offers it: Batocera's x86_64 RetroArch
+        # installs the amiberry core, its armv7 and aarch64 boards cannot.
+        downloaded_only = {
+            profile: c for profile, c in both_ways.items()
+            if c not in dual_names and profile not in result
+        }
+        result |= set(both_ways)
         # Support "all_libretro" as a list element: combines all libretro
         # profiles with explicitly listed standalone cores (e.g. RetroDECK
         # ships RetroArch + standalone emulators)
@@ -3291,7 +3314,31 @@ def resolve_platform_cores(
 
     if target_cores is not None:
         result = result & designated_profiles(profiles, target_cores)
+        result -= {
+            profile for profile, c in downloaded_only.items()
+            if not downloadable_on(target_cores, c)
+        }
     return result
+
+
+@functools.lru_cache(maxsize=1)
+def _retroarch_target_sets() -> tuple[frozenset[str], ...]:
+    platforms = str(Path(__file__).resolve().parent.parent / "platforms")
+    return tuple(
+        frozenset(found)
+        for t in list_available_targets("retroarch", platforms)
+        if (found := load_target_config("retroarch", t["name"], platforms))
+    )
+
+
+def downloadable_on(target_cores: set[str], name: str) -> bool:
+    """Whether a board's core set holds a RetroArch download list offering `name`.
+
+    A board with a downloader carries a whole RetroArch targets entry in its
+    set (load_target_config, `downloads`), a board without one only what it
+    builds.
+    """
+    return any(name in found and found <= target_cores for found in _retroarch_target_sets())
 
 
 def unresolved_platform_cores(config: dict, profiles: dict[str, dict]) -> set[str]:

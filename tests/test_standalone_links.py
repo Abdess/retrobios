@@ -687,7 +687,7 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
         "rocknix": {"amiberry-5.6.5"},
         "amberelec": {"amiberry-7.1.1"},
         "emuelec": {"amiberry-8.0.0"},
-        "batocera": {"amiberry-7.1.1-332"},
+        "batocera": {"amiberry", "amiberry-7.1.1-332"},
         "knulli": {"amiberry-7.1.1"},
         "recalbox": {"amiberry-8.2.2"},
         "retrobat": {"amiberry", "amiberry-8.3.0"},
@@ -710,6 +710,22 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
         for platform, own in self.OWN.items():
             with self.subTest(platform=platform):
                 self.assertEqual(self.resolved(platform), own)
+
+    def test_the_buildbot_core_runs_where_retroarch_installs_it(self) -> None:
+        from common import load_target_config, resolve_platform_cores
+
+        for platform in ("retroarch", "lakka", "batocera"):
+            with self.subTest(platform=platform):
+                self.assertIn("amiberry", self.resolved(platform))
+        cfg = load_platform_config("batocera", str(REPO_ROOT / "platforms"))
+        # x86_64 boards download from linux-x86_64, which builds the core.
+        # linux-armhf does not, and aarch64 boards have no downloader.
+        for target, runs in (("x86_64", True), ("zen3", True), ("h3", False), ("bcm2711", False)):
+            cores = load_target_config("batocera", target, str(REPO_ROOT / "platforms"))
+            with self.subTest(target=target):
+                resolved = resolve_platform_cores(cfg, self.profiles, cores)
+                self.assertEqual("amiberry" in resolved, runs)
+                self.assertIn("amiberry-7.1.1-332", resolved)
 
     def test_retropie_reads_kickstarts_below_its_start_folder(self) -> None:
         # amiberry 5.7 and 6.3 read <start path>/kickstarts, which RetroPie
