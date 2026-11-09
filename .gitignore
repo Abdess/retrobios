@@ -50,6 +50,7 @@ bios/Nintendo/Nintendo DSi/DSi_Nand_AUS.bin
 bios/Nintendo/Nintendo DSi/DSi_Nand_CHN.bin
 bios/Nintendo/Nintendo DSi/DSi_Nand_KOR.bin
 bios/Nintendo/Nintendo DSi/dsi_nand.bin
+bios/Microsoft/Xbox 360/SystemUpdate_17559_USB.zip
 
 # QEMU EDK2 firmware (64MB each)
 bios/QEMU/QEMU/edk2-aarch64-code.fd
