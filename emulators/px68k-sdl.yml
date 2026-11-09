@@ -105,6 +105,7 @@ files:
     path: "cgrom30.tmp"
     priority: 2
     required: false
+    unsourceable: "rendered from TrueType fonts by the font generator, no canonical file"
     size: 786432
     source_ref: "SDL/SDL2/winx68k.cpp:280-282,317-331"
     note: "Substitute X68030 font, read when cgrom30.dat is absent."
@@ -123,6 +124,7 @@ files:
     path: "cgrom.tmp"
     priority: 4
     required: false
+    unsourceable: "rendered from TrueType fonts by the font generator, no canonical file"
     size: 786432
     source_ref: "SDL/SDL2/winx68k.cpp:280-282,317-331, SDL/tool/create_cgrom.c:20"
     note: >
