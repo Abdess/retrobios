@@ -3153,8 +3153,6 @@ SYSTEM_ALIASES: dict[str, str] = {
     "famicom": "nintendo-nes",
     "famicom-disk-system": "nintendo-fds",
     "super-famicom": "nintendo-snes",
-    "game-boy": "nintendo-gb",
-    "game-boy-color": "nintendo-gbc",
     "game-boy-advance": "nintendo-gba",
     "neo-geo-pocket": "snk-ngp",
     "snk-neogeo-pocket": "snk-ngp",
