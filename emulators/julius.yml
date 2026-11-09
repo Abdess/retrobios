@@ -5,6 +5,7 @@ source: "https://github.com/bvschaik/julius"
 upstream: "https://github.com/bvschaik/julius"
 profiled_date: "2026-10-17"
 source_commit: "33c777019b2640b847b73815c3b4344cf7bd9576"
+prose_written_at: "33c777019b2640b847b73815c3b4344cf7bd9576"
 pin_frozen: "Recalbox, the only platform that ships it, builds this revision (Recalbox package/julius/julius.mk:8). Later commits are not part of that build."
 pin_build:
   - platform: recalbox
