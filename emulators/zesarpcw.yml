@@ -1,0 +1,38 @@
+emulator: "ZEsarPCW"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/retrodiv/ZEsarPCW-libretro"
+upstream: "https://github.com/chernandezba/zesarux"
+profiled_date: "2026-11-09"
+source_commit: "23af8913c0ff22b9d89646ca9f98660db17f0057"
+upstream_commit: "0bb4277d714128311d78bc0625fb12ae8308899a"
+upstream_frozen: "The port is built from the ZEsarUX-13.0 release tarball that src/pin.json names, this tag's commit. Later ZEsarUX commits are not in it."
+core_version: "13.0.4"
+version_basis:
+  kind: file
+  path: "src/libretro/pcw_version.h"
+  pattern: '#define PCW_CORE_VERSION "([^"]+)"'
+display_name: "Amstrad - PCW (ZEsarPCW)"
+cores:
+  - "zesarpcw"
+systems:
+  - pcw
+
+notes: |
+  An Amstrad PCW 8256 and 8512 core cut out of ZEsarUX 13.0, with every
+  other machine removed. The major and minor numbers of library_version are
+  the ZEsarUX release, the last one the port's own.
+  ref: src/pin.json:1-8, src/libretro/libretro.c:246-255
+
+  The PCW boot ROM sequence is replaced by a bootstrap written in C, which
+  loads the boot sector of the inserted disc. When the disc is not bootable,
+  the OpenPCW-OS helper disc embedded in the core is mounted instead and
+  starts CP/M. Neither reads a file.
+  ref: src/cpu.c:487, src/libretro/pcw_boot.c:26-30, src/machines/pcw.c:1322-1358,
+       src/dsk.c:161-166, src/dsk.c:382-385
+
+  The core never asks the frontend for its system directory. The only files
+  it opens are the content discs.
+  ref: src/dsk.c:169-180
+
+files: []
