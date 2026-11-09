@@ -318,7 +318,9 @@ git commit -m "chore: record release v${DATE}" && git push
 #     so an unchanged install.py keeps its version and PyPI refuses it
 #     again. Publishing is not tied to a release: any push that changes
 #     install.py can be published. The build replaces any earlier one in
-#     tmp/pypi-dist. Build, run the wheel, then upload the two files. The
+#     tmp/pypi-dist. `uv build` builds it with the flit_core backend the
+#     project pins, dated by that commit (SOURCE_DATE_EPOCH), so a rebuild
+#     gives the same bytes. Build, run the wheel, then upload the two files. The
 #     token stays in its file: never in the repository, a script or a log.
 python scripts/build_pypi.py --output-dir tmp/pypi-dist
 python -m unittest tests.test_pypi_package

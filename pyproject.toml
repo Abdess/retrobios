@@ -41,6 +41,8 @@ dev = [
     # installs only in its isolated build environment and 3.12 no longer
     # bundles: without it the guard skipped on every CI run.
     "setuptools>=61",
+    # scripts/build_pypi.py runs `uv build` for the PyPI package and its test.
+    "uv==0.12.9",
     # The type check CI runs, pinned: another mypy reports other errors
     # than the ones mypy-baseline.txt holds.
     "mypy==1.18.2",
