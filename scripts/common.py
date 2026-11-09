@@ -2882,7 +2882,8 @@ OUTSIDE_BIOS_FOLDER = "outside_bios_folder"
 # describes. Each is located by the registry entry <root>_directory.
 ROMS_ROOT = "roms"
 EMULATORS_ROOT = "emulators"
-OUTER_ROOTS = (ROMS_ROOT, EMULATORS_ROOT)
+CONFIGS_ROOT = "configs"
+OUTER_ROOTS = (ROMS_ROOT, EMULATORS_ROOT, CONFIGS_ROOT)
 
 
 def outer_layout(config: dict, root: str) -> dict | None:
@@ -2915,6 +2916,15 @@ def outer_layout(config: dict, root: str) -> dict | None:
         return {"path": str(path), "install_prefix": "" if inside == "." else inside}
     if root == EMULATORS_ROOT:
         return config.get("emulators_directory") or None
+    if root == CONFIGS_ROOT:
+        # The frontend's configs folder, as its path code builds it
+        # (configs_root, Batocera's batoceraPaths CONFIGS).
+        found = config.get("configs_root") or {}
+        base = str(config.get("base_destination") or "")
+        if not (found.get("path") and found.get("from_bios") and base):
+            return None
+        return {"path": str(found["path"]), "from_bios": str(found["from_bios"]),
+                "bios_folder": base}
     return None
 
 

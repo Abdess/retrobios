@@ -19,6 +19,7 @@ mode: standalone
 standalone_directories:
   - "$XDG_CONFIG_HOME/Ryujinx"
   - "$HOME/.config/Ryujinx"
+  - "DefaultPortableDir"
 data_root:
   windows:
     path: "%APPDATA%/Ryujinx"

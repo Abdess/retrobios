@@ -41,11 +41,17 @@ from .batocera_scraper import (
     es_systems_by_system,
     es_systems_libretro_systems,
     extract_systems_dict,
+    package_names,
+    packages_and_programs,
     platform_systems,
+    repo_tree,
     requirements_from_systems,
+    submodule_revision,
 )
 from .es_emulators import attach_system_cores
+from .batocera_launchers import configs_root
 from .knulli_launchers import BATOCERA_SUBMODULE, extract_launchers
+from .knulli_launchers import configgen as knulli_configgen
 
 PLATFORM_NAME = "knulli"
 
@@ -123,11 +129,27 @@ class Scraper(BaseScraper):
         defaults = self._fetch_text(CONFIGGEN_DEFAULTS_TEMPLATE.format(ref=self.tag))
         es_systems = self._fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))
         dropped = _not_cores("batocera") | _not_cores(PLATFORM_NAME)
-        cores, standalone, dual = configgen_cores(defaults, es_systems, dropped)
+        revision = self.submodule_revision()
+        launchers = extract_launchers(
+            lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path),
+            lambda path: self._fetch_text(_BATOCERA_RAW.format(ref=revision) + path),
+        )
+        # The packages KNULLI builds come from its own tree, its batocera
+        # submodule and its buildroot submodule: a default no package of
+        # them builds (suyu) is not run.
+        paths = repo_tree(REPO, self.tag)
+        paths += repo_tree("batocera-linux/batocera.linux", revision)
+        paths += repo_tree(
+            "knulli-cfw/buildroot", submodule_revision(REPO, "buildroot", self.tag)
+        )
+        built = packages_and_programs(package_names(paths), launchers)
+        cores, standalone, dual = configgen_cores(defaults, es_systems, dropped, built)
         # Each system's own list (psx, es_systems.yml:640-653: libretro
         # pcsx_rearmed, swanstation, mednafen_psx, then duckstation and
         # duckstation-legacy).
-        attach_system_cores(systems, es_systems_by_system(es_systems, defaults, dropped))
+        attach_system_cores(
+            systems, es_systems_by_system(es_systems, defaults, dropped, built)
+        )
         result = {
             "platform": "KNULLI",
             "version": self.tag,
@@ -146,10 +168,9 @@ class Scraper(BaseScraper):
         # configgen hands a libretro core /userdata/saves/<system>, as
         # Batocera's does: the systems each core runs for are its save folders.
         result["libretro_systems"] = es_systems_libretro_systems(es_systems, dropped)
-        revision = self.submodule_revision()
-        result["launchers"] = extract_launchers(
-            lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path),
-            lambda path: self._fetch_text(_BATOCERA_RAW.format(ref=revision) + path),
+        result["launchers"] = launchers
+        result["configs_root"] = configs_root(
+            knulli_configgen(lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path))
         )
         return result
 

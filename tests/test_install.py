@@ -1150,7 +1150,7 @@ class OuterRootsAreUntrusted(unittest.TestCase):
     def test_unsafe_from_bios_is_refused(self):
         for value in (*self.UNSAFE, "../../../x", "../x/..", "x", "./x", "/x", "..x", None):
             with self.subTest(from_bios=value), self.assertRaises(ValueError):
-                install._check_roms_directory({"roms_directory": {**self.ROMS, "from_bios": value}})
+                install._check_relative_directories({"roms_directory": {**self.ROMS, "from_bios": value}})
 
     def test_the_relations_the_rom_folders_files_use_are_accepted(self):
         bios = Path("/card/system/bios")
@@ -1161,13 +1161,13 @@ class OuterRootsAreUntrusted(unittest.TestCase):
         }
         for value, root in expected.items():
             with self.subTest(from_bios=value):
-                install._check_roms_directory({"roms_directory": {**self.ROMS, "from_bios": value}})
-                self.assertEqual(install._roms_root(bios, value), root)
+                install._check_relative_directories({"roms_directory": {**self.ROMS, "from_bios": value}})
+                self.assertEqual(install._relative_root(bios, value), root)
         self.assertEqual(install.MAX_ROMS_UPS, 2)
 
     def test_a_list_without_a_roms_root_leaves_the_files_out(self):
         files = [{"dest": "pico-8/pico8_64", "root": "roms", "cores": ["x"]}]
-        kept, left = install.place_roms_entries(files, Path("/card/roms/bios"), {}, "x", say=False)
+        kept, left = install.place_relative_entries(files, Path("/card/roms/bios"), {}, "x", say=False)
         self.assertEqual((kept, [o["reason"] for o in left]), ([], ["no_roms_directory"]))
 
     def test_unsafe_emulator_folders_are_refused(self):
@@ -1192,7 +1192,7 @@ class OuterRootsAreUntrusted(unittest.TestCase):
             with unittest.mock.patch.object(install.os, "name", host):
                 for value in ("../C:x", "..\\x", "../x:", "../Roms:x"):
                     with self.subTest(host=host, from_bios=value), self.assertRaises(ValueError):
-                        install._check_roms_directory(
+                        install._check_relative_directories(
                             {"roms_directory": {**self.ROMS, "from_bios": value}})
                 for value in ("C:x/{key}", "x:/{key}", "emu:x/{key}"):
                     layout = {**self.EMULATORS, "searched": [value], "default": value}
@@ -7719,6 +7719,33 @@ class TheListVersionIsSaidBeforeAndAfter(unittest.TestCase):
         proc = self.run_installer()
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertNotIn("This list was built for", proc.stdout)
+
+
+class APackageHintNamesThePackageCommand(unittest.TestCase):
+    """Run from the retrobios package, a hint said `python3 install.py`,
+    a file the user does not have."""
+
+    def test_the_environment_names_the_command(self):
+        for prefix, command in (
+            ("/home/me/.cache/uv/archive-v0/UwL4i3xOlCEYSTnw", "uvx retrobios"),
+            ("C:\\Users\\me\\AppData\\Local\\uv\\cache\\archive-v0\\x1", "uvx retrobios"),
+            ("/home/me/.cache/pipx/539b8243c11ee7c", "pipx run retrobios"),
+            ("/home/me/.local/pipx/.cache/539b8243c11ee7c", "pipx run retrobios"),
+            ("/home/me/.local/share/pipx/venvs/retrobios", "retrobios"),
+            ("/home/me/.local/share/uv/tools/retrobios", "retrobios"),
+            ("/home/me/venv", "retrobios"),
+        ):
+            with self.subTest(prefix=prefix):
+                self.assertEqual(install.package_command(prefix), command)
+
+    def test_the_launcher_is_the_package_command(self):
+        hint = install.Invocation()
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_BOOTSTRAP": "pypi"}), \
+                unittest.mock.patch.object(install.sys, "prefix", "/home/me/.cache/uv/archive-v0/a"):
+            self.assertEqual(hint.launcher(), "uvx retrobios")
+            self.assertEqual(hint.launcher(elevated=True), "sudo uvx retrobios")
+            self.assertTrue(hint.command("retroarch", "DIR").startswith(
+                "uvx retrobios --platform retroarch --dest DIR"))
 
 
 if __name__ == "__main__":

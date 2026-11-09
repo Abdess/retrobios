@@ -331,6 +331,8 @@ BIOS_TREE = ""
 ROMS_TREE = "roms"
 # The emulator folders of a platform whose registry describes them.
 EMULATORS_TREE = "emulators"
+# The frontend's configs folder of a platform whose file records it.
+CONFIGS_TREE = "configs"
 # The tree a platform's list installs into when it starts above the BIOS
 # folder: a plain dest, with no prefix.
 INSTALL_TREE = "install"
@@ -494,6 +496,7 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                         source_ref=str(record.get("source_ref", "")),
                         roms_place=None if folder is not None else (
                             _roms_place(config, folder_in_roms(part, config))
+                            or _configs_place(folder_in_configs(part, config))
                             or _emulators_place(folder_in_emulators(part, config))
                         ),
                         systems=systems,
@@ -502,6 +505,11 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                         ),
                     ))
     return found
+
+
+def _configs_place(path: str | None) -> Place | None:
+    """A folder below the configs root, as a place of the configs tree."""
+    return None if path is None else (CONFIGS_TREE, path)
 
 
 def _emulators_place(path: str | None) -> Place | None:
@@ -523,6 +531,18 @@ def _roms_place(config: dict, path: str | None) -> Place | None:
     return (ROMS_TREE, path)
 
 
+def folder_in_configs(directory: str, config: dict) -> str | None:
+    """A directory relative to the frontend's configs folder, None outside it.
+
+    Only a platform whose file records its configs root has one
+    (``configs_root.path``): Batocera's /userdata/system/configs, where its
+    generators start shadPS4 from configs/shadps4.
+    """
+    from common import CONFIGS_ROOT  # noqa: PLC0415
+
+    return folder_in_root(directory, config, CONFIGS_ROOT)
+
+
 def folder_in_roms(directory: str, config: dict) -> str | None:
     """A directory relative to the platform's roms directory, None outside it.
 
@@ -530,9 +550,16 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
     (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
     folder and the folders its launchers run programs from.
     """
-    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+    from common import ROMS_ROOT  # noqa: PLC0415
 
-    roms = str((outer_layout(config, ROMS_ROOT) or {}).get("path") or "").rstrip("/")
+    return folder_in_root(directory, config, ROMS_ROOT)
+
+
+def folder_in_root(directory: str, config: dict, root: str) -> str | None:
+    """A directory relative to an outer root's path, None outside it."""
+    from common import outer_layout  # noqa: PLC0415
+
+    roms = str((outer_layout(config, root) or {}).get("path") or "").rstrip("/")
     directory = directory.strip().rstrip("/")
     if not roms or not directory.startswith(roms + "/"):
         return None

@@ -980,6 +980,7 @@ _UNPLACED_REASONS = {
     "outside_bios_folder": "read in a folder the platform keeps outside the BIOS tree",
     "no_roms_directory": "read below a roms folder the platform's registry does not name",
     "no_emulators_directory": "read in an emulator folder the platform's registry does not describe",
+    "no_configs_directory": "read below a configs folder the platform's file does not record",
     "no_platform_slug": "no platform slug for its system",
     "below_platform_folder": "below the folder the platform lists",
     "no_save_directory": "read below a save directory the platform keeps in no fixed place",

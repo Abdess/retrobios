@@ -63,6 +63,7 @@ files:
 standalone_directories:
   - "$XDG_DATA_HOME/eden"
   - "$HOME/.local/share/eden"
+  - "PORTABLE_DIR"
 data_root:
   windows:
     path: "%APPDATA%/eden"

@@ -4979,17 +4979,42 @@ launchers:
   kind: passes_path
   names: []
   search_dir: "<AppConfig.GetFullPath(\"citron\")>/user"
-  passes_to: PORTABLE_DIR, the user folder beside citron.exe
+  passes_to: PORTABLE_DIR, the portable folder beside citron.exe
   fails_when_missing: false
   source_ref: "emulatorLauncher/Generators/Citron.Generator.cs:25, 29-30"
+- emulator: eden
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"eden\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside eden.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Eden.Generator.cs:28, 35-36"
+- emulator: ryujinx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"ryujinx\")>/portable"
+  passes_to: DefaultPortableDir, the portable folder beside Ryujinx.exe
+  fails_when_missing: false
+  depends_on_option: unless saves/switch/ryujinx/portable exists, passed with -r
+  source_ref: "emulatorLauncher/Generators/Ryujinx.Generator.cs:31, 73-75"
 - emulator: shadps4
   build: standalone
   kind: passes_path
   names: []
   search_dir: "<AppConfig.GetFullPath(\"shadps4\")>/user"
-  passes_to: PORTABLE_DIR, the user folder beside shadPS4.exe
+  passes_to: PORTABLE_DIR, the portable folder beside shadPS4.exe
   fails_when_missing: false
   source_ref: "emulatorLauncher/Generators/ShadPS4.Generator.cs:29, 158-160"
+- emulator: yuzu
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"yuzu\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside yuzu.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Yuzu.Generator.cs:24, 33-34"
 - emulator: bizhawk
   build: standalone
   kind: names_searched

@@ -383,10 +383,10 @@ class AProgramRunFromItsFolder(unittest.TestCase):
         import install
 
         manifest = self.manifest("romsplat")
-        install._check_roms_directory(manifest)
+        install._check_relative_directories(manifest)
         files = list(manifest["files"])
         card = self.root / "card" / "roms" / "bios"
-        kept, left = install.place_roms_entries(files, card, manifest, "romsplat", say=False)
+        kept, left = install.place_relative_entries(files, card, manifest, "romsplat", say=False)
         self.assertEqual((len(kept), left), (2, []))
         self.assertEqual(
             install._entry_path(card, kept[0]),
@@ -394,22 +394,22 @@ class AProgramRunFromItsFolder(unittest.TestCase):
             if install._entry_path(card, kept[0]).is_absolute() else card.parent / kept[0]["dest"],
         )
         other = self.root / "elsewhere"
-        kept, left = install.place_roms_entries(files, other, manifest, "romsplat", say=False)
+        kept, left = install.place_relative_entries(files, other, manifest, "romsplat", say=False)
         self.assertEqual(kept, [])
         self.assertEqual({o["reason"] for o in left}, {"no_roms_directory"})
         with self.assertRaises(ValueError):
-            install._check_roms_directory({"files": files})
+            install._check_relative_directories({"files": files})
         # A roms root beside the BIOS folder (Batocera's ../roms).
         beside = {**manifest, "roms_directory": {"bios_folder": "bios", "from_bios": "../roms"}}
-        install._check_roms_directory(beside)
+        install._check_relative_directories(beside)
         disk = self.root / "userdata" / "bios"
-        install.place_roms_entries(files, disk, beside, "romsplat", say=False)
+        install.place_relative_entries(files, disk, beside, "romsplat", say=False)
         self.assertEqual(install._entry_place(disk, kept_entry := files[0])[0],
                          self.root / "userdata" / "roms")
         self.assertEqual(kept_entry["root"], "roms")
         for climbing in ("roms", "../roms/..", "/storage/roms"):
             with self.subTest(from_bios=climbing), self.assertRaises(ValueError):
-                install._check_roms_directory(
+                install._check_relative_directories(
                     {**manifest, "roms_directory": {"bios_folder": "bios", "from_bios": climbing}}
                 )
 
