@@ -60,6 +60,7 @@ on:
       - "scripts/siterender.py"
       - "scripts/retired_files.py"
       - "scripts/sitesources.py"
+      - "scripts/sitesteps.py"
       - "scripts/sitestarlight.py"
       - "scripts/sitewrite.py"
       - "scripts/slot.py"
