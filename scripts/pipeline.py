@@ -627,7 +627,7 @@ def check_emulator_packs(
     systems = sorted({
         _norm_system_id(str(sid))
         for profile in profiles.values()
-        if profile.get("type") not in ("launcher", "alias", "test")
+        if profile.get("type") not in ("launcher", "alias") and profile.get("role") != "test"
         for sid in profile.get("systems") or []
     })
     systems_ok = True

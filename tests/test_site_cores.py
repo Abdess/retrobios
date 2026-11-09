@@ -30,7 +30,7 @@ class SiteCoreCounts(unittest.TestCase):
     def test_each_platform_count_is_the_resolved_set(self):
         platforms = str(REPO_ROOT / "platforms")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
+        unique = {k: v for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"}
         coverages = {}
         for name in list_registered_platforms(platforms):
             config = load_platform_config(name, platforms)

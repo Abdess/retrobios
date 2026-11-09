@@ -1174,7 +1174,7 @@ def build_emulator_gap_report(
     unique_profiles = {
         k: v
         for k, v in profiles.items()
-        if v.get("type") not in ("alias", "test")
+        if v.get("type") != "alias" and v.get("role") != "test"
     }
     from common import merged_standalone_set, platform_declarations
     from validation import case_folded_slots
@@ -1306,7 +1306,7 @@ def _cross_reference_export_rows(coverages: dict, profiles: dict) -> list[dict]:
     unique = {
         key: value
         for key, value in profiles.items()
-        if value.get("type") not in ("alias", "test")
+        if value.get("type") != "alias" and value.get("role") != "test"
     }
     rows: list[dict] = []
     for platform_id, coverage in sorted(coverages.items()):
@@ -1922,7 +1922,7 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
             if sha1:
                 held.setdefault(str(detail.get("system", "")), set()).add(sha1)
     for profile in profiles.values():
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         own = [str(s) for s in profile.get("systems") or []]
         for entry in profile.get("files") or []:
@@ -1973,7 +1973,7 @@ def _first_file_place(
             return parts[1], _site_path(f"systems/{page}.md#sha1-{sha1[:12]}")
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") not in ("alias", "test") and sys_id in (profile.get("systems") or []):
+        if profile.get("type") != "alias" and profile.get("role") != "test" and sys_id in (profile.get("systems") or []):
             return "", _site_path(f"emulators/{key}.md")
     return "", None
 
@@ -1988,7 +1988,7 @@ def core_index_items(profiles: dict) -> list[dict]:
     """
     from common import preferred_profile, upstream_profile_index
 
-    published = {name for name, p in profiles.items() if p.get("type") not in ("alias", "test")}
+    published = {name for name, p in profiles.items() if p.get("type") != "alias" and p.get("role") != "test"}
     index = upstream_profile_index(profiles)
     for name, profile in profiles.items():
         target = str(profile.get("alias_of") or "")
@@ -3602,7 +3602,7 @@ def _emulator_named_link(key: str, prefix: str = "") -> str:
     profile with no page (an alias, a test) is named only."""
     profile = _profiles_on_disk().get(key, {})
     label = _escape_tags(str(profile.get("emulator") or key))
-    if profile.get("type") in ("alias", "test"):
+    if profile.get("type") == "alias" or profile.get("role") == "test":
         return label
     return f"[{label}]({prefix}emulators/{key}.md)"
 
@@ -4087,7 +4087,7 @@ def _profiles_by_core_name() -> dict[str, list[str]]:
 @functools.lru_cache(maxsize=None)
 def _core_names_in(emulators_dir: str) -> dict[str, list[str]]:
     profiles = _profiles_in(emulators_dir, skip_aliases=True)
-    with_page = {k for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
+    with_page = {k for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"}
     return {
         core: sorted(k for k in keys if k in with_page)
         for core, keys in upstream_profile_index(profiles).items()
@@ -4920,7 +4920,7 @@ def _data_member_owners(profiles: dict) -> dict[str, str]:
     """
     owners: dict[str, str] = {}
     for name in sorted(profiles):
-        if profiles[name].get("type") in ("alias", "test"):
+        if profiles[name].get("type") == "alias" or profiles[name].get("role") == "test":
             continue
         for tree in page_data_directories(name, profiles):
             owners.setdefault(str(tree.get("ref", "")), name)
@@ -5145,7 +5145,7 @@ def file_lookup_records(
                             **({"sha1": archive} if archive else {}),
                         })
     for key, profile in sorted(profiles.items()):
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         entries = profile.get("files") or []
         own_systems = [str(s) for s in profile.get("systems") or []]
@@ -5396,11 +5396,11 @@ def _folder_emulator(folder: str) -> tuple[str, str]:
     named after, by its profile key or its name, else the folder and "".
     """
     profiles = _profiles_on_disk()
-    if folder in profiles and profiles[folder].get("type") not in ("alias", "test"):
+    if folder in profiles and profiles[folder].get("type") != "alias" and profiles[folder].get("role") != "test":
         return str(profiles[folder].get("emulator") or folder), folder
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         names = {str(profile.get(field) or "").casefold() for field in ("emulator", "display_name")}
         if folder.casefold() in names:
@@ -7857,7 +7857,7 @@ def emulator_initial(display: str) -> str:
 def generate_emulators_index(profiles: dict) -> str:
     unique = {
         k: v for k, v in profiles.items()
-        if v.get("type") not in ("alias", "test")
+        if v.get("type") != "alias" and v.get("role") != "test"
     }
     aliases = {k: v for k, v in profiles.items() if v.get("type") == "alias"}
 
@@ -8660,7 +8660,7 @@ def emulator_romset(profile: dict) -> str:
     1.38.1 on MAME 0.289), else the version of a MAME build or of a
     FinalBurn core, whose sets follow its own release.
     """
-    if profile.get("type") in ("alias", "launcher", "test"):
+    if profile.get("type") in ("alias", "launcher") or profile.get("role") == "test":
         return ""
     emulator = str(profile.get("emulator", ""))
     version = str(profile.get("core_version") or "")
@@ -8939,7 +8939,7 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     the systems both run on: RetroArch's list names AetherSX2, and the
     command filled RetroArch's system folder, which the app never reads.
     """
-    if profile.get("type") in ("alias", "launcher", "test"):
+    if profile.get("type") in ("alias", "launcher") or profile.get("role") == "test":
         return "", [], ()
     if not [f for f in profile.get("files") or [] if isinstance(f, dict) and not comes_with_app(f)]:
         return "", [], ()
@@ -9873,7 +9873,7 @@ def plan_emulator_pages(profiles: dict,
     ``available`` is the test the pages use for a held file."""
     stems = set()
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         files = profile.get("files") or []
         anchors = emulator_file_anchors(files)
@@ -11046,7 +11046,7 @@ def generate_gap_analysis(
     unique_profiles = {
         k: v
         for k, v in profiles.items()
-        if v.get("type") not in ("alias", "test")
+        if v.get("type") != "alias" and v.get("role") != "test"
     }
     relevant_set: set[str] = set()
     for _name, cov in coverages.items():
@@ -11139,7 +11139,7 @@ def generate_gap_analysis(
         unique_profiles = {
             k: v
             for k, v in profiles.items()
-            if v.get("type") not in ("alias", "test")
+            if v.get("type") != "alias" and v.get("role") != "test"
         }
         for pname in coverages:
             config = coverages[pname]["config"]
@@ -11547,7 +11547,7 @@ def generate_cross_reference(
     ``moved`` collects one page per platform with its core table.
     """
     unique = {
-        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
+        k: v for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
     }
 
     total_cores = len(unique)
@@ -12591,7 +12591,7 @@ def _generate(args: argparse.Namespace) -> None:
     _DATA_MEMBERS.update(data_directory_members())
     _DATA_REVISIONS.update(data_directory_revisions())
     for key in sorted(profiles):
-        if profiles[key].get("type") in ("alias", "test"):
+        if profiles[key].get("type") == "alias" or profiles[key].get("role") == "test":
             continue
         display = str(profiles[key].get("emulator", key))
         for tree in page_data_directories(key, profiles):
@@ -12607,7 +12607,7 @@ def _generate(args: argparse.Namespace) -> None:
     public_profiles = {
         name: profile
         for name, profile in profiles.items()
-        if profile.get("type") not in ("alias", "test")
+        if profile.get("type") != "alias" and profile.get("role") != "test"
     }
     (public / "api" / "v1" / "emulators").mkdir(parents=True, exist_ok=True)
     for name, profile in public_profiles.items():

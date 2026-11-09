@@ -365,9 +365,12 @@ A few field conventions that protect the toolchain:
 - `type:` is operational. `resolve_platform_cores()` uses it to filter
   which profiles apply to a platform. Valid values are `libretro`,
   `standalone + libretro`, `standalone`, `alias`, `launcher`, `game`,
-  `utility`, `test`. Putting a classification concept here (like
+  `utility`. Putting a classification concept here (like
   "bizhawk-native") breaks the filtering. A BizHawk core is
-  `type: standalone`.
+  `type: standalone`. A libretro core that emulates no machine stays
+  `type: libretro` and says what it is for in `role:` (`game`, `utility`
+  or `test`): typed by its role, 2048 fell out of every all_libretro
+  platform and RetroArch's manifest no longer named it.
 
 - `core_classification:` is descriptive. It documents the relationship
   between the core and the original emulator (pure_libretro,
@@ -513,7 +516,8 @@ reports the profile as uncheckable, and the CI job that runs
 | Field | Required | Description |
 |-------|----------|-------------|
 | `emulator` | yes | display name |
-| `type` | yes | `libretro`, `standalone`, `standalone + libretro`, `alias`, `launcher`, `game`, `utility`, `test` |
+| `type` | yes | `libretro`, `standalone`, `standalone + libretro`, `alias`, `launcher`, `game`, `utility` |
+| `role` | no | `game`, `utility`, `test`: what a libretro core that emulates no machine is for. The site and coverage leave `test` cores out |
 | `core_classification` | no | `pure_libretro`, `official_port`, `community_fork`, `frozen_snapshot`, `enhanced_fork`, `game_engine`, `embedded_hle`, `launcher`, `alias`, `other` |
 | `source` | no | libretro core repository URL. A dict when the core ships under several repos |
 | `upstream` | no | original emulator repository URL |

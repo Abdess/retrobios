@@ -747,7 +747,7 @@ class AnIdLeadsToItsData(unittest.TestCase):
             "pcsx2": {"type": "standalone"},
             "lrps2": {"type": "libretro", "cores": ["pcsx2"]},
             "mednafen_psx_alias": {"type": "alias", "alias_of": "beetle_psx"},
-            "probe": {"type": "test", "cores": ["probe_core"]},
+            "probe": {"type": "libretro", "role": "test", "cores": ["probe_core"]},
         }
         items = generate_site.core_index_items(profiles)
         by_name: dict[str, list[tuple[str, bool]]] = {}

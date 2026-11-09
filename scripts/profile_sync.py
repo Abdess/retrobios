@@ -4453,7 +4453,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
             # alias and test profiles too, "lists all 553" pointed at 530 lines.
             listed = sorted(
                 name for name, profile in profiles.items()
-                if profile.get("type") not in ("alias", "test")
+                if profile.get("type") != "alias" and profile.get("role") != "test"
             )
             raise SystemExit(
                 f"ERROR: unknown profile {', '.join(unknown)}. "
@@ -4466,7 +4466,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
     wanted_system = _norm_system_id(args.system) if args.system else None
     selected = {}
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         if wanted_system and wanted_system not in {
             _norm_system_id(str(s)) for s in profile.get("systems") or []

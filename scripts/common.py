@@ -2209,7 +2209,7 @@ def profiles_for_systems(
     wanted = {_norm_system_id(sid) for sid in system_ids}
     matching = []
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias", "test"):
+        if profile.get("type") in ("launcher", "alias") or profile.get("role") == "test":
             continue
         if standalone and "standalone" not in profile.get("type", "libretro"):
             continue
@@ -2263,7 +2263,7 @@ def select_emulator_profiles(
             # and the spelling hints sent pcfx to two PlayStation cores.
             claimants = sorted(
                 key for key in upstream_profile_index(all_profiles).get(name, ())
-                if all_profiles[key].get("type") not in ("launcher", "test")
+                if all_profiles[key].get("type") != "launcher" and all_profiles[key].get("role") != "test"
             )
             if len(claimants) == 1:
                 name = claimants[0]
@@ -2276,7 +2276,7 @@ def select_emulator_profiles(
             available = sorted(
                 key
                 for key, value in all_profiles.items()
-                if value.get("type") not in ("alias", "test")
+                if value.get("type") != "alias" and value.get("role") != "test"
             )
             raise ProfileSelectionError(
                 f"emulator '{name}' not found\n"
@@ -2421,7 +2421,7 @@ def _normalize_hash_fields(node: object) -> None:
 def unique_emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
     """Profiles counting as distinct emulators (aliases and tests excluded)."""
     return {
-        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
+        k: v for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
     }
 
 
@@ -3993,7 +3993,7 @@ def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> Non
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
     for name in sorted(profiles):
         p = profiles[name]
-        if p.get("type") in ("alias", "test"):
+        if p.get("type") == "alias" or p.get("role") == "test":
             continue
         display = p.get("emulator", name)
         ptype = p.get("type", "libretro")
@@ -4014,7 +4014,7 @@ def system_index(profiles: dict) -> dict[str, tuple[str, set[str]]]:
     """
     index: dict[str, tuple[str, set[str]]] = {}
     for name, p in sorted(profiles.items()):
-        if p.get("type") in ("alias", "test", "launcher"):
+        if p.get("type") in ("alias", "launcher") or p.get("role") == "test":
             continue
         for sys_id in p.get("systems", []):
             key = _norm_system_id(sys_id)

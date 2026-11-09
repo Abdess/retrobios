@@ -21,6 +21,36 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from common import canonical_target_name  # noqa: E402
 
 
+class EveryBuildbotCoreIsNamed(unittest.TestCase):
+    """A core RetroArch installs that its manifest does not name is "a core
+    this list does not know" to --installed-cores (issue 87). 2048, gong,
+    radio, video_processor and test were typed by their role, which hid
+    their libretro build from all_libretro."""
+
+    def test_retroarch_names_every_buildbot_core(self):
+        import yaml  # noqa: PLC0415
+
+        from common import (  # noqa: PLC0415
+            load_emulator_profiles,
+            load_platform_config,
+            load_target_config,
+            resolve_platform_cores,
+            upstream_profile_index,
+        )
+
+        platforms = str(REPO_ROOT / "platforms")
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        runs = resolve_platform_cores(load_platform_config("retroarch", platforms), profiles)
+        index = upstream_profile_index(profiles, include_aliases=True)
+        targets = yaml.safe_load((REPO_ROOT / "platforms" / "targets" / "retroarch.yml").read_text())
+        names = {
+            name for target in targets["targets"]
+            for name in load_target_config("retroarch", target, platforms) or ()
+        }
+        unnamed = sorted(name for name in names if not (index.get(name, set()) & runs))
+        self.assertEqual(unnamed, [])
+
+
 class AliasesResolveToOneName(unittest.TestCase):
     def test_retroarch_switch_aliases(self):
         platforms = str(REPO_ROOT / "platforms")

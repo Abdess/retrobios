@@ -499,7 +499,7 @@ class TheTemplateIsNoEmulator(unittest.TestCase):
         self.assertNotIn("00_example", index)
         self.assertIn("melonds.md", index)
         # A test profile gets no page at all (generate_site's public_profiles).
-        self.assertEqual(_profile("00_example")["type"], "test")
+        self.assertEqual(_profile("00_example")["role"], "test")
 
 
 @unittest.skipUnless((DIST / "emulators" / "aethersx2" / "index.html").is_file(), "site not built")
@@ -517,7 +517,7 @@ class TheBuiltEmulatorPages(unittest.TestCase):
         self.assertNotIn("RetroArch", page.split("Install this emulator", 1)[1].split("</details>", 1)[0])
 
     def test_the_index_leaves_the_template_out(self):
-        # 00_example is `type: test`: no page, no index row.
+        # 00_example has `role: test`: no page, no index row.
         self.assertNotIn("00_example", self._html("emulators"))
         self.assertIn('data-pagefind-body', self._html("emulators/melonds"))
         self.assertFalse((DIST / "emulators" / "00_example").exists())
@@ -630,7 +630,7 @@ class DataFolderPrinted(unittest.TestCase):
         if not _generated():
             self.skipTest("site pages not generated")
         for name, profile in _profiles_with_data_root().items():
-            if profile.get("type") in ("alias", "test"):
+            if profile.get("type") == "alias" or profile.get("role") == "test":
                 continue
             page = _built_page(name)
             with self.subTest(profile=name):

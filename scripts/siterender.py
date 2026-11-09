@@ -423,7 +423,7 @@ def _build_boards() -> None:
     ids_by_name: dict[str, set[str]] = {}
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") == "test":
+        if profile.get("role") == "test":
             continue
         systems = [str(sys_id) for sys_id in profile.get("systems") or []]
         for entry in profile.get("files") or []:

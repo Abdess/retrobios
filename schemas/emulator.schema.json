@@ -122,6 +122,14 @@
         "alias",
         "launcher",
         "game",
+        "utility"
+      ]
+    },
+    "role": {
+      "description": "What a libretro core is for when it emulates no machine: a game of its own (2048), a utility (radio, video_processor), or a test core. Descriptive: the core stays type libretro, so every reader of all_libretro reaches it, and the site and coverage leave test cores out by this field.",
+      "type": "string",
+      "enum": [
+        "game",
         "utility",
         "test"
       ]
