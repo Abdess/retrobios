@@ -284,7 +284,10 @@ class TheExportKeepsTheirShape(unittest.TestCase):
 
 class TheCommittedListsAgree(unittest.TestCase):
     """A system's cores are a part of the platform's: a name only the system
-    carries would escape every reader of the platform list."""
+    carries would escape every reader of the platform list. A system keeps
+    the list its ES file writes, which says whose files its entries ask for,
+    so the one name it may carry beyond the platform's is one no device
+    image builds (EmuELEC's VVVVVV port engine, KNULLI's duckstation)."""
 
     def test_system_cores_are_platform_cores(self):
         import yaml
@@ -292,10 +295,14 @@ class TheCommittedListsAgree(unittest.TestCase):
         for name in ("amberelec", "emuelec", "knulli"):
             with self.subTest(platform=name):
                 config = yaml.safe_load((REPO_ROOT / "platforms" / f"{name}.yml").read_text())
+                targets = yaml.safe_load(
+                    (REPO_ROOT / "platforms" / "targets" / f"{name}.yml").read_text())["targets"]
+                built = {c for entry in targets.values() for c in entry["cores"]}
                 platform = {str(c) for c in config["cores"]}
                 listed = {str(c) for s in config["systems"].values() for c in s.get("cores", [])}
                 self.assertTrue(listed, "no system carries its cores")
-                self.assertEqual(listed - platform, set())
+                self.assertEqual(listed - platform - (listed - built), set())
+                self.assertEqual(platform - built - {"lexaloffle", "mpv", "vox_official"}, set())
 
 
 if __name__ == "__main__":

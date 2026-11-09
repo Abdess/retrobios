@@ -10,7 +10,6 @@ cores:
 - a5200
 - abuse
 - amiberry
-- applewin
 - arduous
 - atari800
 - azahar
@@ -30,7 +29,6 @@ cores:
 - cdogs
 - cemu
 - cgenius
-- citron
 - clk
 - corsixth
 - demul
@@ -50,7 +48,6 @@ cores:
 - easyrpg
 - ecwolf
 - eduke32
-- eka2l1
 - emuscv
 - ep128emu-core
 - etlegacy
@@ -66,7 +63,6 @@ cores:
 - fmsx
 - freechaf
 - freeintv
-- freej2me
 - fsuae
 - fury
 - fuse
@@ -76,7 +72,6 @@ cores:
 - genesisplusgx
 - genesisplusgx-expanded
 - genesisplusgx-wide
-- gong
 - gpsp
 - gsplus
 - gw
@@ -158,7 +153,6 @@ cores:
 - reminiscence
 - rpcs3
 - ruffle
-- ryujinx
 - samcoupe
 - same_cdi
 - sameduck
@@ -173,7 +167,6 @@ cores:
 - sonic2013
 - sonic3-air
 - soniccd
-- squirreljme
 - stella
 - stella2014
 - superbroswar
@@ -192,12 +185,10 @@ cores:
 - tyrian
 - tyrquake
 - uae4arm
-- uqm
 - uzem
 - vb
 - vba-m
 - vecx
-- vemulator
 - vice
 - vice_x128
 - vice_x64
@@ -5683,7 +5674,6 @@ systems:
 standalone_cores:
 - abuse
 - amiberry
-- applewin
 - azahar
 - bigpemu
 - bstone
@@ -5692,7 +5682,6 @@ standalone_cores:
 - cdogs
 - cemu
 - cgenius
-- citron
 - clk
 - corsixth
 - demul
@@ -5709,7 +5698,6 @@ standalone_cores:
 - easyrpg
 - ecwolf
 - eduke32
-- eka2l1
 - etlegacy
 - fallout1-ce
 - fallout2-ce
@@ -5755,7 +5743,6 @@ standalone_cores:
 - redream
 - rpcs3
 - ruffle
-- ryujinx
 - samcoupe
 - scummvm
 - sdlpop
@@ -5776,7 +5763,6 @@ standalone_cores:
 - tr2x
 - tsugaru
 - tyrian
-- uqm
 - vice
 - vita3k
 - vkquake
@@ -5800,7 +5786,6 @@ standalone_cores:
 - ymir
 - yquake2
 dual_mode_cores:
-- applewin
 - dolphin
 - easyrpg
 - flycast
@@ -5813,6 +5798,157 @@ dual_mode_cores:
 - scummvm
 - stella
 - tic80
+installable_cores:
+- "2048"
+- 3dengine
+- DoubleCherryGB
+- amiarcadia
+- anarch
+- applewin
+- ardens
+- b2
+- bbkemu
+- boom3_xp
+- bsnes-jg
+- bsnes2014_accuracy
+- bsnes2014_balanced
+- bsnes2014_performance
+- bsnes_cplusplus98
+- bsnes_hd_beta
+- bsnes_mercury_accuracy
+- bsnes_mercury_balanced
+- bsnes_mercury_performance
+- cdi2015
+- chailove
+- citra
+- citra2018
+- clownmdemu
+- coolbaremu
+- craft
+- crocods
+- desmume2015
+- dingooemu
+- dinothawr
+- dirksimple
+- dosbox_core
+- dosbox_svn
+- dosbox_svn_ce
+- doukutsu_rs
+- ep128emu_core
+- fbalpha2012
+- fbalpha2012_cps1
+- fbalpha2012_cps2
+- fbalpha2012_cps3
+- fbalpha2012_neogeo
+- fixgb
+- fixnes
+- frodo
+- galaksija
+- gam4980
+- gametank
+- gearboy
+- geargrafx
+- gearlynx
+- geartowns
+- genesis_plus_gx
+- genesis_plus_gx_wide
+- geolith
+- gme
+- gong
+- hatari2014
+- hbmame
+- higan_sfc
+- higan_sfc_balanced
+- hyperscanemu
+- hypseushw
+- irogb
+- jaxe
+- jollycv
+- jumpnbump
+- linuxloader
+- m2000
+- mame2000
+- mame2003
+- mame2003_midway
+- mame2003_plus
+- mame2010
+- mame2015
+- mame2016
+- mcsoftserve
+- mednafen_gba
+- mednafen_pce
+- mednafen_pce_fast
+- mednafen_pcfx
+- mednafen_psx_hw
+- mednafen_saturn
+- mednafen_snes
+- mednafen_supafaust
+- mednafen_vb
+- mesen2
+- meteor
+- mojozork
+- mu
+- mupen64plus_next
+- n64emu
+- native32emu
+- nekop2
+- nicaiemu
+- noods
+- nside_sfc_balanced
+- nuance
+- numero
+- oberon
+- odin
+- omicron
+- openlara
+- panda3ds
+- parallel_dc
+- pcee2
+- pcem
+- piece
+- playdiaemu
+- pocketcdg
+- pokket
+- pokketstation
+- qemu
+- quicknes
+- race
+- radio
+- remotejoy
+- retro8
+- romcleaner
+- rust_dos
+- rustynes
+- sameboy
+- skyemu
+- snes9x2002
+- snes9x2005
+- snes9x2005_plus
+- snes9x2010
+- spmp8000emu
+- squirreljme
+- stella2023
+- tamalibretro
+- test
+- thepowdertoy
+- tia
+- uw8
+- uzdoom
+- vaporspec
+- vba_next
+- vbam
+- vemulator
+- vice_xcbm2
+- vice_xcbm5x0
+- video_processor
+- virtualxt
+- vitaquake2-rogue
+- vitaquake2-xatrix
+- vitaquake2-zaero
+- vitaquake3
+- wqxemu
+- xenia_edge
+- yabause
 libretro_systems:
   "81":
   - zx81
@@ -6624,15 +6760,6 @@ launchers:
   fails_when_missing: false
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/shadps4/shadps4Generator.py:46,\
     \ 228"
-- emulator: citron
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/switch
-  passes_to: "CitronPath::KeysDir in src/common/fs/path_util.cpp returns it, in place\
-    \ of citron_path / KEYS_DIR"
-  fails_when_missing: false
-  source_ref: "package/batocera/emulators/citron/002-adjust-paths.patch:9-10"
 configs_root:
   path: /userdata/system/configs
   from_bios: ../system/configs

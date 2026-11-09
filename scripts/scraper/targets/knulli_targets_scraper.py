@@ -9,6 +9,8 @@ the tag platforms/knulli.yml names):
     the root Config.in in place of Batocera's batocera-system/Config.in
   - package/emulationstation/knulli-es-system/es_systems.yml
     -- emulator requireAnyOf flag mapping
+  - Config.in and what it sources, Batocera's packages read from the
+    batocera submodule at the commit the tag pins
 Sources (knulli-cfw/buildroot, at the submodule commit the tag pins):
   - arch/Config.in, package/mesa3d/Config.in, package/libglvnd/Config.in
 
@@ -32,6 +34,8 @@ class Scraper(BatoceraScraper):
     ES_SYSTEMS_PATH = "package/emulationstation/knulli-es-system/es_systems.yml"
     SYSTEM_SYMBOL = "BR2_PACKAGE_KNULLI_SYSTEM"
     BUILDROOT_REPO = "knulli-cfw/buildroot"
+    SUBMODULES = {"batocera/": "batocera-linux/batocera.linux"}
+    RETROARCH_MK = "package/retroarch/retroarch/retroarch.mk"
 
 
 def main() -> None:
