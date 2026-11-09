@@ -2,9 +2,9 @@ emulator: WinUAE
 type: standalone
 core_classification: other
 source: "https://github.com/tonioni/WinUAE"
-source_commit: "15110cf6606d1188800ea7ad86bf1cbd9c688741"
+source_commit: "16c85313c39685d24cfb676b1f5d279e40923004"
 profiled_date: "2026-10-20"
-core_version: "6.1.0 beta 19"
+core_version: "6.1.0 beta 22"
 version_basis:
   kind: file
   path: "include/winuae_version.h"
@@ -34,10 +34,10 @@ notes: |
   when no DetectedROMs list exists yet. Every file below 10000000 bytes
   whose extension is rom, bin, adf, key, a500, a600, a1200, a3000, a4000,
   cd32 or U followed by a digit is identified against the ROM table, whatever
-  the rest of its name (od-win32/win32.cpp:5385-5404,
-  od-win32/win32gui.cpp:1747-1772, od-win32/win32gui.cpp:1829-1876,
-  od-win32/win32gui.cpp:1974-2105). The guess step takes a scanned ROM whose
-  file name matches the configured one (rommgr.cpp:2428-2461). The Kickstart entries below are named after other
+  the rest of its name (od-win32/win32.cpp:5188-5207,
+  od-win32/win32gui.cpp:1915-1953, od-win32/win32gui.cpp:1994-2065,
+  rommgr.cpp:3025-3055). The guess step takes a scanned ROM whose
+  file name matches the configured one (rommgr.cpp:2429-2462). The Kickstart entries below are named after other
   profiles' names for the same dumps: the code opens none of those names.
   kickstart_ext_rom_file is opened as given, and a missing extended ROM
   only raises a notice (memory.cpp:1833-1849). The machine then starts on
@@ -47,15 +47,17 @@ notes: |
   modules of the extended ROMs: cdstrap, cd.device and cdfs.library in the
   CD32 ROM, cdtv.device, cdfs.library and cdstrap in the CDTV ROM. The CD32
   and CDTV Kickstarts carry none. The CD32 quickstart model and the base
-  CDTV model have no floppy drive (cfgfile.cpp:9394-9398, 9424-9425), and
-  both ask for the extended ROM (cfgfile.cpp:9409-9414, 9433-9442), so
+  CDTV model have no floppy drive (cfgfile.cpp:9345-9349, 9375-9376), and
+  both ask for the extended ROM (cfgfile.cpp:9360-9365, 9384-9393), so
   without it no CD is read or booted.
 
   CDTV and A600/A1200 internal devices are enabled with :ENABLED, which needs
   no ROM file. Cloanto encrypted ROMs are decoded with rom.key, searched in the
   configured key path, the ROM path, roms/, the data path, ../shared/rom/ and
-  next to the Kickstart file (rommgr.cpp:1459-1535). Without it an encrypted
-  ROM fails to load (rommgr.cpp:1724-1732).
+  next to the Kickstart file (rommgr.cpp:1460-1536). Without it an encrypted
+  ROM fails to load (rommgr.cpp:1725-1733). A rom.key met during the ROM
+  scan is added to the keyring and the scan starts again
+  (rommgr.cpp:3078-3102,3127-3136).
 
 files:
   - name: "kick.rom"
@@ -76,7 +78,7 @@ files:
     crc32: "c4f0f55f"
     sha1: "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
     note: "KS ROM v1.3 (A500, A1000, A2000), 315093-02."
-    source_ref: "rommgr.cpp:150-151"
+    source_ref: "rommgr.cpp:151-152"
 
   - name: "amiga-os-204.rom"
     system: commodore-amiga
@@ -86,7 +88,7 @@ files:
     crc32: "c3bdb240"
     sha1: "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
     note: "KS ROM v2.04 (A500+)."
-    source_ref: "rommgr.cpp:158-159"
+    source_ref: "rommgr.cpp:159-160"
 
   - name: "amiga-os-310-a600.rom"
     system: commodore-amiga
@@ -96,7 +98,7 @@ files:
     crc32: "fc24ae0d"
     sha1: "3b7f1493b27e212830f989f26ca76c02049f09ca"
     note: "KS ROM v3.1 r40.63 (A500, A600, A2000)."
-    source_ref: "rommgr.cpp:183-184"
+    source_ref: "rommgr.cpp:184-185"
 
   - name: "amiga-os-310-a1200.rom"
     system: commodore-amiga
@@ -106,7 +108,7 @@ files:
     crc32: "1483a091"
     sha1: "e21545723fe8374e91342617604f1b3d703094f1"
     note: "KS ROM v3.1 r40.68 (A1200)."
-    source_ref: "rommgr.cpp:185-186"
+    source_ref: "rommgr.cpp:186-187"
 
   - name: "amiga-os-310-a4000.rom"
     system: commodore-amiga
@@ -116,7 +118,7 @@ files:
     crc32: "d6bae334"
     sha1: "5fe04842d04a489720f0f4bb0e46948199406f49"
     note: "KS ROM v3.1 r40.68 (A4000)."
-    source_ref: "rommgr.cpp:195-196"
+    source_ref: "rommgr.cpp:196-197"
 
   - name: "amiga-os-310-cd32.rom"
     system: commodore-cd32
@@ -126,7 +128,7 @@ files:
     crc32: "1e62d4a5"
     sha1: "3525be8887f79b5929e017b42380a79edfee542d"
     note: "CD32 KS ROM v3.1 r40.60."
-    source_ref: "rommgr.cpp:323-324"
+    source_ref: "rommgr.cpp:324-325"
 
   - name: "amiga-ext-310-cd32.rom"
     system: commodore-cd32
@@ -135,7 +137,7 @@ files:
     crc32: "87746be2"
     sha1: "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
     note: "CD32 extended ROM r40.60, passed as kickstart_ext_rom_file."
-    source_ref: "rommgr.cpp:325-326, memory.cpp:1833-1849"
+    source_ref: "rommgr.cpp:326-327, memory.cpp:1833-1849"
 
   - name: "amiga-ext-130-cdtv.rom"
     system: commodore-cdtv
@@ -144,7 +146,7 @@ files:
     crc32: "42baa124"
     sha1: "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
     note: "CDTV extended ROM v1.0, passed as kickstart_ext_rom_file with the 1.3 Kickstart."
-    source_ref: "rommgr.cpp:339-340, memory.cpp:1833-1849"
+    source_ref: "rommgr.cpp:340-341, memory.cpp:1833-1849"
 
   - name: "rom.key"
     found_by: name
@@ -154,4 +156,4 @@ files:
     crc32: "869ae1b1"
     sha1: "801bbab32e3d37386dd1636d4f1d6fa7e21d5874"
     note: "Cloanto Amiga Forever ROM key. Read from the configured key path, the ROM path, roms/, the data path, ../shared/rom/ and next to the Kickstart file, needed only for encrypted ROMs."
-    source_ref: "rommgr.cpp:119-120, rommgr.cpp:1459-1535"
+    source_ref: "rommgr.cpp:120-121, rommgr.cpp:1460-1536"

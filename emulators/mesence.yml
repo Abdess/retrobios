@@ -8,7 +8,7 @@ upstream: "https://github.com/SourMesen/Mesen2"
 profiled_date: "2026-09-17"
 source_commit:
   standalone: "4b8a196e299b3de297b204fd1208d2981562c89b"
-  libretro: "4c4e069f16a8ad6ed79e046046c56d51558c7daf"
+  libretro: "a449fdc19580b86edcfc2a4c84eeb5e99462225b"
 upstream_commit: "b9fa69ddc6d0a331fb103fdb5eef6904305703c2"
 core_version:
   standalone: "2.2.1"
@@ -59,13 +59,13 @@ notes: |
   af2342818ca81a93b346146802047760400fc7b1 and does not touch
   Core/Shared/FirmwareHelper.h, so both builds read the same names with the
   same size checks. The buildbot publishes it as mesen2_libretro, and the port
-  announces library_version 2.0.0 (Libretro/libretro.cpp:2803) while the
+  announces library_version 2.0.0 (Libretro/libretro.cpp:3011) while the
   compiled core reports 2.2.1 (libretro tree, Core/Shared/EmuSettings.cpp:162-169).
 
   Firmware folder. Standalone reads <home>/Firmware/ (Utilities/FolderUtilities.cpp:81-91).
   The libretro port sets the home folder to the frontend system directory
   and overrides the firmware folder with that same directory
-  (Libretro/libretro.cpp:2253-2256), so every firmware sits at the system
+  (Libretro/libretro.cpp:2462-2465), so every firmware sits at the system
   directory root. Satellaview streams and MesenNesDB.txt are read relative
   to the home folder in both builds, which puts them under system/Satellaview/
   and system/MesenNesDB.txt for libretro.
@@ -89,14 +89,14 @@ notes: |
   (Core/Gameboy/GbBootRom.h:8,49,99), and the external files override them.
   Super Game Boy mode falls back to the plain GB core when the SNES-side
   ROM is missing (Core/SNES/BaseCartridge.cpp:698-716). GameboyConfig
-  keeps UseSgb2 at true and no core option changes it (libretro tree,
-  Core/Shared/SettingTypes.h:433), so the libretro build only ever asks
+  keeps UseSgb2 at true (Core/Shared/SettingTypes.h:455, line 433 in the
+  libretro tree) and no core option changes it, so the libretro build only ever asks
   for SGB2.sfc and sgb2_boot.bin. SGB1.sfc and sgb_boot.bin are standalone
   reads. The libretro port also offers a "Super Game Boy" subsystem taking
-  a GB ROM plus an SNES-side ROM (Libretro/libretro.cpp:1041-1052): the
+  a GB ROM plus an SNES-side ROM (Libretro/libretro.cpp:1023-1034): the
   second entry is copied into the system directory as SGB1.sfc or SGB2.sfc
   by size for the duration of the load, then removed or restored
-  (Libretro/libretro.cpp:2627-2677,2692-2761).
+  (Libretro/libretro.cpp:2835-2885,2900-2969).
 
   WonderSwan boot ROMs are read only when WsConfig.UseBootRom is on
   (Core/WS/WsConsole.cpp:145-150). The libretro port never sets it, so
@@ -107,12 +107,12 @@ notes: |
   from syscard3.pce, syscard3.bin, syscard.pce or syscard.bin when the
   canonical file is absent or not 256 KB: a 0x40200 or 0x60200 source is
   read past its 512-byte header, only the first 256 KB are written, and the
-  stub is removed after the load (Libretro/libretro.cpp:108-196,2347-2358,2380-2384).
+  stub is removed after the load (Libretro/libretro.cpp:108-196,2556-2567,2589-2593).
   Then FirmwareHelper reads the canonical name or syscard3.pce at exactly
   256 KB, in both builds.
 
   NES game database. The libretro port embeds a 6213-line MesenDB.txt
-  (Libretro/libretro.cpp:85-86,592-594) and then reads MesenNesDB.txt from
+  (Libretro/libretro.cpp:85-86,574-576) and then reads MesenNesDB.txt from
   the home folder on the first lookup (Core/NES/GameDatabase.cpp:92-103),
   merging its 10668 entries over the embedded ones. Standalone deploys the
   file from the application's Dependencies.zip. Five Satellaview stream
@@ -125,13 +125,13 @@ notes: |
 
   MesenPalette.pal is a libretro read: the mesen_palette core option value
   Custom loads it from the home folder, 192 or 1536 bytes
-  (Libretro/libretro.cpp:1178-1204,1304-1306).
+  (Libretro/libretro.cpp:1160-1186,1490-1492).
 
   HdPacks are per-game texture/audio replacements under <home>/HdPacks/
   (system/HdPacks/ for libretro), game content rather than system files.
 
   The libretro port lists nes|fds|unf|unif|sfc|smc|gb|gbc|gba|pce|sgx|cue|
-  sms|gg|ws|wsc as valid extensions (Libretro/libretro.cpp:2838-2840). The
+  sms|gg|ws|wsc as valid extensions (Libretro/libretro.cpp:3046-3048). The
   load path itself dispatches on the console extension tables, so .bs, .st,
   .col, .sg, .pc2 and .studybox content loads when the frontend passes it.
 
@@ -550,7 +550,7 @@ files:
     size: 548608
     sha256: "7eee6516f351ccc7db286587917bec415a1d8042ff5ef87c279f38200a3418dd"
     note: "NES game database for mapper and input detection, read from the home folder root on the first lookup. The libretro build starts from a 6213-line embedded copy and merges this file over it when present. Nothing deploys it."
-    source_ref: "source Core/NES/GameDatabase.cpp:92-103, source UI/Utilities/DependencyHelper.cs:14-67, source Libretro/libretro.cpp:85-86, 592-594"
+    source_ref: "source Core/NES/GameDatabase.cpp:92-103, source UI/Utilities/DependencyHelper.cs:14-67, source Libretro/libretro.cpp:85-86, 574-576"
 
   - name: "MesenNesDB.txt"
     standalone_path: "MesenNesDB.txt"
@@ -562,7 +562,7 @@ files:
     size: 548608
     sha256: "7eee6516f351ccc7db286587917bec415a1d8042ff5ef87c279f38200a3418dd"
     note: "NES game database for mapper and input detection. The application extracts it from its embedded Dependencies.zip (UI/Dependencies) into the home folder at startup."
-    source_ref: "source Core/NES/GameDatabase.cpp:92-103, source UI/Utilities/DependencyHelper.cs:14-67, source Libretro/libretro.cpp:85-86, 592-594"
+    source_ref: "source Core/NES/GameDatabase.cpp:92-103, source UI/Utilities/DependencyHelper.cs:14-67, source Libretro/libretro.cpp:85-86, 574-576"
 
   - name: "MesenPalette.pal"
     path: "MesenPalette.pal"
@@ -572,7 +572,7 @@ files:
     size: [192, 1536]
     validation: [size]
     note: "NES colour palette read from the home folder when the mesen_palette core option is Custom: 64 RGB triplets, or 512 covering the emphasis combinations. Any other size leaves the default palette in place."
-    source_ref: "source Libretro/libretro.cpp:1178-1204, source Libretro/libretro.cpp:1304-1306"
+    source_ref: "source Libretro/libretro.cpp:1160-1186, source Libretro/libretro.cpp:1490-1492"
 
   # -------------------------------------------------------
   # PC Engine
@@ -587,7 +587,7 @@ files:
     validation: [size]
     sha256: "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce"
     note: "Super CD-ROM System card, mandatory for CD games. Load fails without it. Both builds read this name or syscard3.pce at exactly 256 KB. The libretro build first builds the canonical file from syscard3.pce, syscard3.bin, syscard.pce or syscard.bin, skipping a 512-byte header, for the duration of a .cue load."
-    source_ref: "source Core/PCE/PceConsole.cpp:61-63, 151-164, source Core/Shared/FirmwareHelper.h:330-349, source Libretro/libretro.cpp:108-183, 2347-2358, source UI/Interop/FirmwareTypeExtensions.cs:61-62"
+    source_ref: "source Core/PCE/PceConsole.cpp:61-63, 151-164, source Core/Shared/FirmwareHelper.h:330-349, source Libretro/libretro.cpp:108-183, 2556-2567, source UI/Interop/FirmwareTypeExtensions.cs:61-62"
 
   - name: "[BIOS] Games Express CD Card (Japan).pce"
     path: "[BIOS] Games Express CD Card (Japan).pce"
@@ -810,4 +810,4 @@ platform_details:
   ui_hash_check: "sha256, advisory, standalone UI only (UI/Interop/FirmwareTypeExtensions.cs)"
   satellaview_streams: "Satellaview/BSX<channel>-<index>.bin"
   libretro_subsystem: "Super Game Boy: gb|gbc|gbx + sfc|smc"
-  source_ref: "source Utilities/FolderUtilities.cpp:81-91, Libretro/libretro.cpp:2253-2256, source Core/Shared/FirmwareHelper.h"
+  source_ref: "source Utilities/FolderUtilities.cpp:81-91, Libretro/libretro.cpp:2462-2465, source Core/Shared/FirmwareHelper.h"

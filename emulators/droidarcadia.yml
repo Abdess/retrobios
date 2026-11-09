@@ -8,11 +8,11 @@ version_source:
   pattern: 'Download DroidArcadia ([0-9.]+) for Android'
 author: "James Jacobs (Amigan Software)"
 profiled_date: "2026-10-24"
-core_version: "4.75"
+core_version: "4.76"
 version_basis:
   kind: package
   url: "https://amigan.1emu.net/releases/"
-  artifact: "DroidArcadia-src.rar, release 4.75 on the author's releases page"
+  artifact: "DroidArcadia-src.rar, release 4.76 on the author's releases page"
 display_name: "Emerson Arcadia 2001 / Interton VC 4000 (DroidArcadia)"
 cores:
   - droidarcadia
@@ -30,8 +30,8 @@ notes: |
   by the manifest under MIME type application/octet-stream or application/zip,
   a zip yielding its first member only, and the read stops at 32768 bytes. This
   reading is taken from the author's own source archive DroidArcadia-src.rar
-  4.75, md5 831a22d93781e22b07e0995a0688d0a1, and confirmed against the
-  published DroidArcadia.apk, md5 9f6047977a7b2d0f91e51f886032f236, signed
+  4.76, md5 05c7fa854e4f37ce7d16e60b41dea4ea, and confirmed against the
+  published DroidArcadia.apk, md5 89dbf79f04a9b0904eff06fc57eef3a6, signed
   by the Amigan Software key with certificate sha256
   B4904B06F8BB0832BB90472F1655E776C4A859CEB72753C51CDDB5DD360086A5.
   ref: app/src/main/cpp/da.h:3-5, app/src/main/AndroidManifest.xml:21-37,

@@ -129,7 +129,7 @@ systems:
 notes: |
   MAME fork adding Switchres 2.2.2 for CRT modeline generation, frame delay
   and low latency vsync. Branch groovymame0289, BARE_BUILD_VERSION 0.289
-  (makefile:1513). TARGET := mame with no SUBTARGET override (makefile:274-282),
+  (makefile:1513). TARGET := mame with no SUBTARGET override (makefile:273-284),
   so the build carries the full machine set.
 
   src/mame and src/devices are byte identical to mamedev/mame tag mame0289,
