@@ -1,6 +1,6 @@
 {
   "source": "mame",
-  "imported_at": "2026-11-06",
+  "imported_at": "2026-11-09",
   "dats": {
     "MAME mame0177": "mame0177lx",
     "MAME mame0178": "mame0178lx",
@@ -300930,6 +300930,365 @@
     },
     {
       "dat": "MAME mame0289",
+      "name": "18wheelr.zip",
+      "set": "18wheelr",
+      "description": "parent naomi",
+      "members": [
+        {
+          "name": "315-6188.ic31",
+          "size": 8244,
+          "crc32": "7c9fea46",
+          "sha1": "f77c07ae65dfed18c1c4c632c8945be21d02ddaf"
+        },
+        {
+          "name": "boot_rom_64b8.ic606",
+          "size": 524288,
+          "crc32": "7a50fab9",
+          "sha1": "ef79f448e0bf735d1264ad4f051d24178822110f"
+        },
+        {
+          "name": "develop.ic27",
+          "size": 2097152,
+          "crc32": "309a196a",
+          "sha1": "409b50371feb648f10efd6b7ac420bf08d9a3b5a"
+        },
+        {
+          "name": "develop110.ic27",
+          "size": 2097152,
+          "crc32": "de7cfdb0",
+          "sha1": "da16800edc4d49f70481c124d487f544c2fa8ce7"
+        },
+        {
+          "name": "epr-21336a.ic27",
+          "size": 2097152,
+          "crc32": "d3d57af8",
+          "sha1": "0eb72c2a20ad8b86d442b77760eab5e89521d469"
+        },
+        {
+          "name": "epr-21576.ic27",
+          "size": 2097152,
+          "crc32": "9dad3495",
+          "sha1": "5fb66f9a2b68d120f059c72758e65d34f461044a"
+        },
+        {
+          "name": "epr-21576a.ic27",
+          "size": 2097152,
+          "crc32": "cedfe439",
+          "sha1": "f27798bf3d890863ef0c1d9dcb4e7782249dca27"
+        },
+        {
+          "name": "epr-21576b.ic27",
+          "size": 2097152,
+          "crc32": "755a6e07",
+          "sha1": "7e8b8ccfc063144d89668e7224dcd8a36c54f3b3"
+        },
+        {
+          "name": "epr-21576c.ic27",
+          "size": 2097152,
+          "crc32": "4599ad13",
+          "sha1": "7e730e9452a792d76f210c33a955d385538682c7"
+        },
+        {
+          "name": "epr-21576d.ic27",
+          "size": 2097152,
+          "crc32": "3b2afa7b",
+          "sha1": "d007e1d321c198a38c5baff86eb2ab84385d150a"
+        },
+        {
+          "name": "epr-21576e.ic27",
+          "size": 2097152,
+          "crc32": "08c0add7",
+          "sha1": "e7c1a7673cb2ccb21748ef44105e46d1bad7266d"
+        },
+        {
+          "name": "epr-21576g.ic27",
+          "size": 2097152,
+          "crc32": "d2a1c6bf",
+          "sha1": "6d27d71aec4dfba98f66316ae74a1426d567698a"
+        },
+        {
+          "name": "epr-21576h.ic27",
+          "size": 2097152,
+          "crc32": "d4895685",
+          "sha1": "91424d481ff99a8d3f4c45cea6d3f0eada049a6d"
+        },
+        {
+          "name": "epr-21576h_multi.ic27",
+          "size": 2097152,
+          "crc32": "cce01f1f",
+          "sha1": "cca17119ad13e3a4ef7cb6902a37b65d6a844aee"
+        },
+        {
+          "name": "epr-21577a.ic27",
+          "size": 2097152,
+          "crc32": "969dc491",
+          "sha1": "581d1eae328b87b67508a7586ffc60cee256f70f"
+        },
+        {
+          "name": "epr-21577d.ic27",
+          "size": 2097152,
+          "crc32": "60ddcbbe",
+          "sha1": "58b15096d269d6df617ca1810b66b47deb184958"
+        },
+        {
+          "name": "epr-21577e.ic27",
+          "size": 2097152,
+          "crc32": "cf36e97b",
+          "sha1": "b085305982e7572e58b03a9d35f17ae319c3bbc6"
+        },
+        {
+          "name": "epr-21577g.ic27",
+          "size": 2097152,
+          "crc32": "25f64af7",
+          "sha1": "99f9e6cc0642319bd2da492611220540add573e8"
+        },
+        {
+          "name": "epr-21577h.ic27",
+          "size": 2097152,
+          "crc32": "fdf17452",
+          "sha1": "5f3e4b677f0046ce690a4f096b0481e5dd8bb6e6"
+        },
+        {
+          "name": "epr-21578a.ic27",
+          "size": 2097152,
+          "crc32": "6c9aad83",
+          "sha1": "555918de76d8dbee2a97d8a95297ef694b3e803f"
+        },
+        {
+          "name": "epr-21578d.ic27",
+          "size": 2097152,
+          "crc32": "dfd5f42a",
+          "sha1": "614a0db4743a5e5a206190d6786ade24325afbfd"
+        },
+        {
+          "name": "epr-21578e.ic27",
+          "size": 2097152,
+          "crc32": "087f09a3",
+          "sha1": "0418eb2cf9766f0b1b874a4e92528779e22c0a4a"
+        },
+        {
+          "name": "epr-21578f.ic27",
+          "size": 2097152,
+          "crc32": "628a27fd",
+          "sha1": "dae7add616b1a2478f00608823e88c3b82a0e78f"
+        },
+        {
+          "name": "epr-21578g.ic27",
+          "size": 2097152,
+          "crc32": "55413214",
+          "sha1": "bd2748365a9fc1821c9369aa7155d7c41c4df43e"
+        },
+        {
+          "name": "epr-21578h.ic27",
+          "size": 2097152,
+          "crc32": "7b452946",
+          "sha1": "8e9f153bbada24b37066dc45b64a7bf0d4f26a9b"
+        },
+        {
+          "name": "epr-21579.ic27",
+          "size": 2097152,
+          "crc32": "71f9c918",
+          "sha1": "d15af8b947f41eea7c203b565cd403e3f37a2017"
+        },
+        {
+          "name": "epr-21579d.ic27",
+          "size": 2097152,
+          "crc32": "33513691",
+          "sha1": "b1d8c7c516e1471a788fcf7a02a794ad2f05aeeb"
+        },
+        {
+          "name": "epr-21580a.ic27",
+          "size": 2097152,
+          "crc32": "46dbe90f",
+          "sha1": "822b2ea8e254ea3ce66f0ea67e80a8c7e1125ec9"
+        },
+        {
+          "name": "epr-21868.ic7",
+          "size": 65536,
+          "crc32": "c306a51f",
+          "sha1": "7833b73dc34c4c62401a30637968f46b949ceac0"
+        },
+        {
+          "name": "epr-21868p.ic7",
+          "size": 65536,
+          "crc32": "5d7b75f0",
+          "sha1": "faf7f06636b70298eb15770da4b0f7c435755dcb"
+        },
+        {
+          "name": "epr-22082.ic7",
+          "size": 65536,
+          "crc32": "de26fc6c",
+          "sha1": "cf8ef7969770fff8697299c3e3152413b898a967"
+        },
+        {
+          "name": "epr-22185a.ic22",
+          "size": 4194304,
+          "crc32": "219b29b0",
+          "sha1": "2f32caf3906fc1408fd8126a500e74c682ff20fa"
+        },
+        {
+          "name": "epr-23000.ic8",
+          "size": 65536,
+          "crc32": "e3b162f7",
+          "sha1": "52c7ad759c3c4a3148764e14d77ba5006bc8af48"
+        },
+        {
+          "name": "epr-24354.ic7",
+          "size": 65536,
+          "crc32": "0ce43505",
+          "sha1": "7700e3acfb756dfbf95f3ff14786d1bcb57e2f7d"
+        },
+        {
+          "name": "main_eeprom.bin",
+          "size": 128,
+          "crc32": "fea29cbb",
+          "sha1": "4099f1747aafa07db34f6e072cd9bfaa83bae10e"
+        },
+        {
+          "name": "mpr-22164.ic1",
+          "size": 8388608,
+          "crc32": "ca045315",
+          "sha1": "0c5becb5220659fa86f1e7901032f8c9a1329a51"
+        },
+        {
+          "name": "mpr-22165.ic2",
+          "size": 8388608,
+          "crc32": "e43f4ba8",
+          "sha1": "768159bccae6a72c809e9f374538df304c92fbfe"
+        },
+        {
+          "name": "mpr-22166.ic3",
+          "size": 8388608,
+          "crc32": "ea67edb1",
+          "sha1": "1214fdbfd8ce9f7a2b33e97f7c4e22ebb3eee988"
+        },
+        {
+          "name": "mpr-22167.ic4",
+          "size": 8388608,
+          "crc32": "df6125e2",
+          "sha1": "7244278cf89b88dbc7b8b1e3a537bf0b3f521c3a"
+        },
+        {
+          "name": "mpr-22168.ic5",
+          "size": 8388608,
+          "crc32": "8a919f9c",
+          "sha1": "28f1f9d8943e0a0b7bc186808cdab5d21d914e05"
+        },
+        {
+          "name": "mpr-22169.ic6",
+          "size": 8388608,
+          "crc32": "a0fa7d68",
+          "sha1": "010fc87f0df3cf9e3d01a5ca4d4aa7e84728652d"
+        },
+        {
+          "name": "mpr-22170.ic7",
+          "size": 8388608,
+          "crc32": "1f407049",
+          "sha1": "3c11b25168715d200f8d78a3db7bfc8cb3c29897"
+        },
+        {
+          "name": "mpr-22171.ic8",
+          "size": 8388608,
+          "crc32": "03ce8dcd",
+          "sha1": "9bf1eb0a2628317bea5d8899e34f6f4363729c52"
+        },
+        {
+          "name": "mpr-22172.ic9",
+          "size": 8388608,
+          "crc32": "c3e8c978",
+          "sha1": "96cbaa0f13e22365b04818cb5cad2ddc2027e38a"
+        },
+        {
+          "name": "mpr-22173.ic10",
+          "size": 8388608,
+          "crc32": "3caec8fc",
+          "sha1": "88ee6b0a1735788570d0a6507eec14a31ebabb9a"
+        },
+        {
+          "name": "mpr-22174.ic11",
+          "size": 8388608,
+          "crc32": "17245a27",
+          "sha1": "b3701155b1bbdbcbfb5ea686470c3c432d2573b7"
+        },
+        {
+          "name": "mpr-22175.ic12s",
+          "size": 8388608,
+          "crc32": "4d984682",
+          "sha1": "60270d6caa3bbc0025a0c01cf4d7b10783216e0b"
+        },
+        {
+          "name": "mpr-22176.ic13s",
+          "size": 8388608,
+          "crc32": "3ea2403f",
+          "sha1": "efde74c621a8fe17d8aa3a24da35e2ca6bc0bd9a"
+        },
+        {
+          "name": "mpr-22177.ic14s",
+          "size": 8388608,
+          "crc32": "15514cbc",
+          "sha1": "0171d67560b8d72ca3f718dcce301acc60dee1fa"
+        },
+        {
+          "name": "mpr-22178.ic15s",
+          "size": 8388608,
+          "crc32": "9ea0552f",
+          "sha1": "4b282110ef9f60f942518f3849acfff4a5faf4bd"
+        },
+        {
+          "name": "mpr-22179.ic16s",
+          "size": 8388608,
+          "crc32": "6915c4e6",
+          "sha1": "b44d49edcfdc0f2958bf1a3856b09b5442e8f1a3"
+        },
+        {
+          "name": "mpr-22180.ic17s",
+          "size": 8388608,
+          "crc32": "744c3a40",
+          "sha1": "56fba6ebc45d542ba6e4f4dd205194344f127ac2"
+        },
+        {
+          "name": "mpr-22181.ic18s",
+          "size": 8388608,
+          "crc32": "5a39b68e",
+          "sha1": "0f81ed1116b1829262f320fc82f93df107b6f848"
+        },
+        {
+          "name": "mpr-22182.ic19s",
+          "size": 8388608,
+          "crc32": "c5606c42",
+          "sha1": "5871104ff1c7acde0493e13b9a4d0abdf8a40728"
+        },
+        {
+          "name": "mpr-22183.ic20s",
+          "size": 8388608,
+          "crc32": "776af308",
+          "sha1": "7d29cb4dce75d34c622549fea7e102868d0da60a"
+        },
+        {
+          "name": "naomi_boot_2491.ic27",
+          "size": 2097152,
+          "crc32": "5b28f868",
+          "sha1": "d101f58c69d9835e87a969688e43dc9b699b89d0"
+        },
+        {
+          "name": "x76f100_eeprom.bin",
+          "size": 132,
+          "crc32": "3ea24b6a",
+          "sha1": "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
+        },
+        {
+          "name": "zukinver0930.ic25",
+          "size": 2097152,
+          "crc32": "58e17c23",
+          "sha1": "19330f906accf1b859f56bbcedc2edff73747599"
+        }
+      ],
+      "dats": [
+        "MAME mame0289"
+      ]
+    },
+    {
+      "dat": "MAME mame0289",
       "name": "a2autokbd.zip",
       "set": "a2autokbd",
       "description": "a2autokbd",
@@ -301054,6 +301413,53 @@
           "size": 65536,
           "crc32": "9c024fab",
           "sha1": "c8f3651768efe8282ceb914a99c2355735be8976"
+        }
+      ],
+      "dats": [
+        "MAME mame0289"
+      ]
+    },
+    {
+      "dat": "MAME mame0289",
+      "name": "fmtownsmx.zip",
+      "set": "fmtownsmx",
+      "description": "parent fmtowns",
+      "members": [
+        {
+          "name": "fmt_dic.rom",
+          "size": 524288,
+          "crc32": "b314c659",
+          "sha1": "3959c4c6be540252cabea06847bcd408f1911cfb"
+        },
+        {
+          "name": "fmt_dos.rom",
+          "size": 524288,
+          "crc32": "112872ee",
+          "sha1": "57fd146478226f7f215caf63154c763a6d52165e"
+        },
+        {
+          "name": "fmt_fnt.rom",
+          "size": 262144,
+          "crc32": "955c6b75",
+          "sha1": "fa5f7a18060afa35678dcbdc3589a1455aba26dc"
+        },
+        {
+          "name": "fmt_sys.rom",
+          "size": 262144,
+          "crc32": "53319e23",
+          "sha1": "15d9cc705f3534fe97a2386e4d4848a1602cc534"
+        },
+        {
+          "name": "fmtownsiimxbios.m79",
+          "size": 2097152,
+          "crc32": "f3fc636e",
+          "sha1": "a35a11ab56b1f11e3f69d70b61648ab83699a2df"
+        },
+        {
+          "name": "mytownsmx.rom",
+          "size": 32,
+          "crc32": "16e78766",
+          "sha1": "38e8810bee9ee6b54c3999d27f499b89e4a4c33f"
         }
       ],
       "dats": [
@@ -301824,6 +302230,263 @@
           "size": 4096,
           "crc32": "a501f197",
           "sha1": "136c2b562999a6e340fe0e9a3776cea8c2e3647e"
+        }
+      ],
+      "dats": [
+        "MAME mame0289"
+      ]
+    },
+    {
+      "dat": "MAME mame0289",
+      "name": "srally2.zip",
+      "set": "srally2",
+      "description": "srally2",
+      "members": [
+        {
+          "name": "epr-20512.bin",
+          "size": 65536,
+          "crc32": "cf64350d",
+          "sha1": "f30c8c7b65fb38f7dd63845f12b81388ff3b946d"
+        },
+        {
+          "name": "epr-20632.17",
+          "size": 2097152,
+          "crc32": "6829a801",
+          "sha1": "2aa3834f6a8c53f5db57ab52994b8ab3fde2d7c2"
+        },
+        {
+          "name": "epr-20633.18",
+          "size": 2097152,
+          "crc32": "f5a24f24",
+          "sha1": "6f741bc53d51ff4b5535dbee35aa490f159945ec"
+        },
+        {
+          "name": "epr-20634.19",
+          "size": 2097152,
+          "crc32": "45a09245",
+          "sha1": "1e7e844d38e9cba59c2a7e6f2e6ca2bba2c8b352"
+        },
+        {
+          "name": "epr-20635.20",
+          "size": 2097152,
+          "crc32": "7937473f",
+          "sha1": "d5bb57a08019a4523f976c418526efffc6ef988b"
+        },
+        {
+          "name": "epr-20636.21",
+          "size": 524288,
+          "crc32": "7139ebf8",
+          "sha1": "3e06e8aa5c3eaf371073caa51e5fc5b42826f015"
+        },
+        {
+          "name": "epr-20641.2",
+          "size": 131072,
+          "crc32": "c9b82035",
+          "sha1": "1e438f8104f79c2956bb1aeb710b01b6dc59101e"
+        },
+        {
+          "name": "mpr-20602.1",
+          "size": 4194304,
+          "crc32": "60cfa72a",
+          "sha1": "2cb9e16d50979461d39e0493273ee38d23900b45"
+        },
+        {
+          "name": "mpr-20603.2",
+          "size": 4194304,
+          "crc32": "ad0d8eb8",
+          "sha1": "5bcd0a72b2d48d1834f296b7b37a56ae13c461fa"
+        },
+        {
+          "name": "mpr-20604.3",
+          "size": 4194304,
+          "crc32": "99c5f396",
+          "sha1": "dc586591a684bde224704f8356640343eb7651b3"
+        },
+        {
+          "name": "mpr-20605.4",
+          "size": 4194304,
+          "crc32": "00513401",
+          "sha1": "c6ac665cea999dcf483e9837daefd7fcdd755043"
+        },
+        {
+          "name": "mpr-20606.5",
+          "size": 4194304,
+          "crc32": "072498fd",
+          "sha1": "f7804a7c2139901367b06823bf0a6472e24078a6"
+        },
+        {
+          "name": "mpr-20607.6",
+          "size": 4194304,
+          "crc32": "6da85aa3",
+          "sha1": "04fce70fa69aca615e5b009be99f7a657070b0c0"
+        },
+        {
+          "name": "mpr-20608.7",
+          "size": 4194304,
+          "crc32": "0c9b0571",
+          "sha1": "2e13ab15d7fb6104316dc86770172269c8280306"
+        },
+        {
+          "name": "mpr-20609.8",
+          "size": 4194304,
+          "crc32": "c03cc0e5",
+          "sha1": "8ee99dd37587dd1aa24d746ef14180515306e5d9"
+        },
+        {
+          "name": "mpr-20610.9",
+          "size": 4194304,
+          "crc32": "b6e0ff4e",
+          "sha1": "9b6ab7925b64b34f0d16ff0ba72dd0a0e6d23290"
+        },
+        {
+          "name": "mpr-20611.10",
+          "size": 4194304,
+          "crc32": "5d9f8ba2",
+          "sha1": "42bec0ca6cf8d0192183dd08c4a92157c34d3651"
+        },
+        {
+          "name": "mpr-20612.11",
+          "size": 4194304,
+          "crc32": "721a44b6",
+          "sha1": "151e4f9e2ed4095620c88bf54bf69f13f441e5ce"
+        },
+        {
+          "name": "mpr-20613.12",
+          "size": 4194304,
+          "crc32": "2938c0d9",
+          "sha1": "95c444ef0b53afd129d512f8a8961938b0fd703e"
+        },
+        {
+          "name": "mpr-20614.22",
+          "size": 4194304,
+          "crc32": "a3930e4a",
+          "sha1": "6a34f5b7817db8304454235997eaa453528bc655"
+        },
+        {
+          "name": "mpr-20615.24",
+          "size": 4194304,
+          "crc32": "62e8a94a",
+          "sha1": "abed71b1c6eb2563fe58e6598c10dd266340e5e0"
+        },
+        {
+          "name": "mpr-20616.26",
+          "size": 4194304,
+          "crc32": "e11dcf8b",
+          "sha1": "bbc384e95d52d883cbc68122f5a3c44dee98d54c"
+        },
+        {
+          "name": "mpr-20617.27",
+          "size": 4194304,
+          "crc32": "96acef3f",
+          "sha1": "a72ed7ac3f8132562c3d2e9bdf7b5c596082cb29"
+        },
+        {
+          "name": "mpr-20618.28",
+          "size": 4194304,
+          "crc32": "6c281281",
+          "sha1": "ddf056386e7e44f2d2d034f405c55bc5a3109848"
+        },
+        {
+          "name": "mpr-20619.29",
+          "size": 4194304,
+          "crc32": "0fa65819",
+          "sha1": "b9ce62a149f019b04eb72e0d6c9339472f403823"
+        },
+        {
+          "name": "mpr-20620.30",
+          "size": 4194304,
+          "crc32": "ee79585f",
+          "sha1": "ea1797667a6ef6e38cf48543a63fd69a097b1e50"
+        },
+        {
+          "name": "mpr-20621.31",
+          "size": 4194304,
+          "crc32": "3a99148f",
+          "sha1": "0a2e5b4af85a4ce370c8defeb8d81def1279e693"
+        },
+        {
+          "name": "mpr-20622.32",
+          "size": 4194304,
+          "crc32": "0618f056",
+          "sha1": "873063ab147b6b513683d4b4fe6a874f920ba818"
+        },
+        {
+          "name": "mpr-20623.33",
+          "size": 4194304,
+          "crc32": "ccf31b85",
+          "sha1": "b25ea13706734a2e5c2f7587f494d59b6ad43c1f"
+        },
+        {
+          "name": "mpr-20624.34",
+          "size": 4194304,
+          "crc32": "90f30936",
+          "sha1": "43be3fe5a4200ab4200a49d571d9114e894db700"
+        },
+        {
+          "name": "mpr-20625.35",
+          "size": 4194304,
+          "crc32": "04f804fa",
+          "sha1": "6537733d6a0c12e084937366bbdcc1b3bea3b4aa"
+        },
+        {
+          "name": "mpr-20626.36",
+          "size": 4194304,
+          "crc32": "2d6c97d6",
+          "sha1": "201d01556e8381f21670b9637eb479e8f88e880e"
+        },
+        {
+          "name": "mpr-20627.37",
+          "size": 4194304,
+          "crc32": "a14ee871",
+          "sha1": "c846e39760570703ec97ae085992b2de0daef458"
+        },
+        {
+          "name": "mpr-20628.38",
+          "size": 4194304,
+          "crc32": "bba829a3",
+          "sha1": "ad44d53e9cf5bc1f6a03fe961d5f13410261d912"
+        },
+        {
+          "name": "mpr-20629.39",
+          "size": 4194304,
+          "crc32": "ead2eb31",
+          "sha1": "cfb2ff20d5fcdaa9e0b075f84e94d07ff069d17e"
+        },
+        {
+          "name": "mpr-20630.40",
+          "size": 4194304,
+          "crc32": "cc5881b8",
+          "sha1": "6d9b973c442c5d3bb872624412b8dfbef0677b34"
+        },
+        {
+          "name": "mpr-20631.41",
+          "size": 4194304,
+          "crc32": "5cb69ffd",
+          "sha1": "654d8187634726c8218bf84304765a40c2d4b117"
+        },
+        {
+          "name": "mpr-20637.57",
+          "size": 4194304,
+          "crc32": "d66e8a02",
+          "sha1": "f5d2bf4c97139fa56d14ffe2885a86e8f17ee965"
+        },
+        {
+          "name": "mpr-20638.58",
+          "size": 4194304,
+          "crc32": "d1513382",
+          "sha1": "b4d5b7680e2e73b361530d689ffdb0bab62e9ee4"
+        },
+        {
+          "name": "mpr-20639.59",
+          "size": 4194304,
+          "crc32": "f6603b7b",
+          "sha1": "9f31a2562168e5eba51864935e1c15db4e3114fb"
+        },
+        {
+          "name": "mpr-20640.60",
+          "size": 4194304,
+          "crc32": "9eea07b7",
+          "sha1": "bdcf136f29e1435c9d82718730ef209d8cfe74d8"
         }
       ],
       "dats": [
