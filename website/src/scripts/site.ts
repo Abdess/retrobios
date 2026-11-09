@@ -630,7 +630,7 @@ const renderMatches = async (status: HTMLElement, result: HTMLElement, matched: 
 			list.append(row);
 		}
 		blocks.push(
-			paragraph(strong('Wanted.'), ' The collection does not hold this dump yet. If you dumped it yourself, ', link('contributing/', 'add it'), '.'),
+			paragraph(strong('Wanted.'), ' The collection does not hold this dump yet. Anyone who dumped it can ', link('contributing/', 'add it'), '.'),
 			list,
 		);
 	}
@@ -692,7 +692,7 @@ const WANTED = 'provenance/#wanted-catalogued-dumps-this-project-does-not-have';
 const renderNoMatch = (status: HTMLElement, result: HTMLElement) => {
 	status.textContent = 'No file, setup or emulator the site knows has this hash.';
 	result.replaceChildren(
-		paragraph('If you dumped it yourself, ', link('contributing/', 'add it'), '.'),
+		paragraph('Anyone who dumped it can ', link('contributing/', 'add it'), '.'),
 		paragraph('The ', link(WANTED, 'wanted list'), ' names the catalogued dumps the collection still lacks.'),
 	);
 };

@@ -129,7 +129,7 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
 
     def test_the_section_opens_on_the_bios_by_region(self):
         lines = gs._start_with(self.files, self.required_only())
-        self.assertEqual(lines[0], "**Start with** the BIOS for the region of your games:")
+        self.assertEqual(lines[0], "**Start with** the BIOS for the region of the games:")
         self.assertIn("- **North America**: [`scph5501.bin`](#sha1-444444444444)", lines)
         self.assertIn("- **Japan**: [`scph5500.bin`](#sha1-555555555555)", lines)
         self.assertLess(lines.index("- **North America**: [`scph5501.bin`](#sha1-444444444444)"),

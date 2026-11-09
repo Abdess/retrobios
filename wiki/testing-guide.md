@@ -69,7 +69,7 @@ Every module in `tests/`, by the area it guards.
 | Pack probe | the cores a platform runs for a system, staging grown to a fixed point, runs mapped to pack and manifest entries, the line and its schema, the probe lock per run, that no page shows its lines. One class builds a real pack narrowed to PlayStation and lays it out both ways, from the archive and with `install.py --dest`, and skips without the collection | `test_pack_probe` |
 | Automation runner, disk cleanup, asset sync and bit-flip repair | fake jobs, git repositories with a bare origin and session worktrees, a committed file with one bit flipped, canned CI runs in place of `gh` | `test_autorun` |
 | Truth and native export | synthetic + cached originals | `test_export_counts`, `test_export_native_layer`, `test_export_report`, `test_exporters`, `test_truth_data_dir_readers`, `test_truth_diff`, `test_truth_layout` |
-| Scrapers, upstream and provenance | inline sources, synthetic | `test_batocera_md5_list`, `test_check_freshness`, `test_cited_lines`, `test_contributing_text`, `test_coverage_cache`, `test_data_dir_refs`, `test_dataclass_defaults`, `test_dedup`, `test_doc_pages`, `test_doc_surfaces`, `test_elec_scrapers`, `test_fbneo_parser`, `test_find_pinned_revision`, `test_hash_merge`, `test_launchers`, `test_launchers_emudeck`, `test_launchers_recalbox`, `test_launchers_retrobat`, `test_launchers_retrodeck`, `test_launchers_retropie`, `test_launchers_rocknix`, `test_mame_devices`, `test_mame_parser`, `test_mame_ref_audit`, `test_optional_dependencies`, `test_pin_build`, `test_profile_sync`, `test_prose_style`, `test_provenance`, `test_refresh_data_dirs`, `test_refresh_failures`, `test_refresh_stale`, `test_retrodeck_scraper_errors`, `test_retired_files`, `test_romset_recipes`, `test_schema_semantic_gate`, `test_scraper_contract`, `test_site_agents`, `test_site_arcade_boards`, `test_site_availability`, `test_site_bootstrap`, `test_site_built_gate`, `test_site_components`, `test_site_console_folders`, `test_site_content_data`, `test_site_copy`, `test_site_cores`, `test_site_css`, `test_site_demo`, `test_site_density_cards`, `test_site_emulator_page`, `test_site_emulators`, `test_site_entry`, `test_site_entry_tables`, `test_site_exports`, `test_site_funnel`, `test_site_images`, `test_site_inputs`, `test_site_insights`, `test_site_integration`, `test_site_nav`, `test_site_picker`, `test_site_platform_density`, `test_site_platform_hashes`, `test_site_privacy`, `test_site_reference`, `test_site_render`, `test_site_search`, `test_site_steps`, `test_site_system_links`, `test_site_system_names`, `test_site_system_sections`, `test_site_systems`, `test_site_validation`, `test_site_weight`, `test_site_wiki`, `test_site_write`, `test_source_ref_targets`, `test_upstream`, `test_upstream_index`, `test_validate_pr`, `test_validate_pr_flow`, `test_validate_pr_hashes`, `test_version_basis`, `test_workflow_paths` |
+| Scrapers, upstream and provenance | inline sources, synthetic | `test_batocera_md5_list`, `test_check_freshness`, `test_cited_lines`, `test_contributing_text`, `test_coverage_cache`, `test_data_dir_refs`, `test_dataclass_defaults`, `test_dedup`, `test_doc_pages`, `test_doc_surfaces`, `test_elec_scrapers`, `test_fbneo_parser`, `test_find_pinned_revision`, `test_hash_merge`, `test_launchers`, `test_launchers_emudeck`, `test_launchers_recalbox`, `test_launchers_retrobat`, `test_launchers_retrodeck`, `test_launchers_retropie`, `test_launchers_rocknix`, `test_mame_devices`, `test_mame_parser`, `test_mame_ref_audit`, `test_optional_dependencies`, `test_pin_build`, `test_profile_sync`, `test_prose_style`, `test_provenance`, `test_refresh_data_dirs`, `test_refresh_failures`, `test_refresh_stale`, `test_retrodeck_scraper_errors`, `test_retired_files`, `test_romset_recipes`, `test_schema_semantic_gate`, `test_scraper_contract`, `test_site_agents`, `test_site_arcade_boards`, `test_site_availability`, `test_site_bootstrap`, `test_site_built_gate`, `test_site_components`, `test_site_console_folders`, `test_site_content_data`, `test_site_copy`, `test_site_cores`, `test_site_css`, `test_site_demo`, `test_site_density_cards`, `test_site_emulator_page`, `test_site_emulators`, `test_site_entry`, `test_site_entry_tables`, `test_site_exports`, `test_site_funnel`, `test_site_images`, `test_site_inputs`, `test_site_insights`, `test_site_integration`, `test_site_nav`, `test_site_picker`, `test_site_platform_density`, `test_site_platform_hashes`, `test_site_privacy`, `test_site_pronouns`, `test_site_reference`, `test_site_render`, `test_site_search`, `test_site_steps`, `test_site_system_links`, `test_site_system_names`, `test_site_system_sections`, `test_site_systems`, `test_site_validation`, `test_site_weight`, `test_site_wiki`, `test_site_write`, `test_source_ref_targets`, `test_upstream`, `test_upstream_index`, `test_validate_pr`, `test_validate_pr_flow`, `test_validate_pr_hashes`, `test_version_basis`, `test_workflow_paths` |
 | Games on the card | small DATs, listxml and setup sources, a fake fetcher, fixture install lists, and the committed data against its schemas | `test_arcade_parents`, `test_game_catalogs`, `test_game_headers`, `test_game_regions`, `test_games_index`, `test_romfolders_card`, `test_romfolders_es` |
 
 ## Test architecture
@@ -219,7 +219,7 @@ disambiguated by a hash suffix on purpose.
 ## How to add a test
 
 1. **Pick the right category.** Find the number range that matches the
-   subsystem you are testing. If none fits, start a new range after the last
+   subsystem under test. If none fits, start a new range after the last
    existing one.
 
 2. **Create synthetic fixtures.** Write the minimum YAML configs and fake
@@ -235,7 +235,7 @@ disambiguated by a hash suffix on purpose.
    method, file counts, or pack contents. Avoid brittle assertions on log
    output or formatting.
 
-5. **Run the full suite.** After adding your test, run `python -m unittest
+5. **Run the full suite.** After adding the test, run `python -m unittest
    discover -s tests -t . -v` to verify nothing else broke.
 
 A new module starts with `import tests` right after
@@ -497,7 +497,7 @@ chmod +x .git/hooks/commit-msg
 ```
 
 Files are staged by name, never with `git add -A` or `git add .`, which sweep in
-deletions and work that is not yours. Generated artifacts (`database.json`,
+deletions and other people's work. Generated artifacts (`database.json`,
 `retired.json`, `derivable.json`, `install/*.json`, `README.md`, `CONTRIBUTING.md`, `exports/`,
 the generated tables and run samples of `wiki/installer.md`) are committed
 with the data they derive from, never alone: a manifest committed before the

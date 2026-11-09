@@ -9,7 +9,7 @@ The words the reference and contributor pages use, each with a real case. The
 everyday words (BIOS, emulator, core, hash) are in the [glossary](glossary.md).
 
 **Frontend**
-:   The menu you pick and start games from, such as EmulationStation, MinUI or
+:   The menu that picks and starts games, such as EmulationStation, MinUI or
     the RetroArch menu. It starts the emulator.
 
 **Pack**

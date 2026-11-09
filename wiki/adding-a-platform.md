@@ -179,7 +179,7 @@ platforms:
 ```
 
 `device_group` places the platform among the devices a reader picks from: on
-the site's "Get your files" page, in the "Your setup" navigation and on the home
+the site's "Get the files" page, in the "Setups" navigation and on the home
 page. The groups, their labels and their anchors are under `device_groups` in
 `platforms/_guides.yml`, beside the platform's [guide text](#guide-text).
 
@@ -520,7 +520,7 @@ The YAML is the scraper's output and is never edited by hand: the next scrape
 would undo the edit, and the file would stop describing the platform. Anything
 an export has to write back (the platform's own system id, path, name) is
 recorded by the scraper and never reconstructed later, because several of the
-platform's systems can fold into one of ours. A rescrape can add systems, so
+platform's systems can fold into one of the collection's. A rescrape can add systems, so
 read `verify.py --platform` before committing the regenerated YAML.
 
 Verify the result:
@@ -602,7 +602,7 @@ of files:
 - `can_add()` - `False` when an entry is code rather than a row of data
   (BizHawk), so nothing is added.
 - `keys_by_system()` - `True` when the platform finds a file by the name of its
-  own system, so an entry filed under one of our system ids is never written.
+  own system, so an entry filed under one of the collection's system ids is never written.
 - `needs_original()` - `True` as soon as `native_sources()` names a file.
 
 Those methods say what the format could hold. The report counts what `render()`
@@ -631,7 +631,7 @@ will not find in the diff.
 
 The scraper and the exporter are checked against each other as
 [round-trip testing](adding-a-scraper.md#round-trip-testing) describes. The
-export must not lose anything the platform already declares. If your
+export must not lose anything the platform already declares. If the
 format carries code as well as data (a script, a C# database, a manifest
 whose BIOS list sits beside launch configuration), name the file in
 `native_sources()` and patch it rather than writing a new one. An exporter

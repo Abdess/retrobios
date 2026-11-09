@@ -267,13 +267,13 @@ own verification mode ([discrepancy detection](verification-modes.md#discrepancy
 ### Granular options
 
 - `--system` with `--platform`: filter to specific systems within a platform pack.
-  It takes our system ids (`sony-playstation`) and the platform's own names,
+  It takes the collection's system ids (`sony-playstation`) and the platform's own names,
   read from `native_system` in its YAML (Batocera `psx`, Recalbox `msx1,msx2`).
   `--platform <name> --list-systems` prints both. `verify.py --platform --system`
   reports on the same narrowed pack, and the installer's `--system` reads the
   same mapping from the manifest's `system_names`. An unknown name is refused
   with the closest matches before any work. Without `--platform`, `--system`
-  takes our ids only.
+  takes the collection's ids only.
 - `--required-only`: exclude optional files and the data directories declared
   `required: false`, keep only required. `verify.py --required-only` reports
   on the same file set, for `--platform`, `--emulator` and `--system`

@@ -210,7 +210,7 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
 
     def test_no_unzip_before_from_pack(self):
         section = " ".join(self._section("No internet on the device?").split())
-        self.assertIn("point `--from-pack` at your ZIP:", section)
+        self.assertIn("point `--from-pack` at the ZIP:", section)
         self.assertNotIn("unzip", section)
         install = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         self.assertIn("Install from a pack already downloaded: its ZIP, one of its parts",

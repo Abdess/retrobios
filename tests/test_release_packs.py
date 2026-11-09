@@ -290,7 +290,7 @@ class EverySurfaceSaysWhy(unittest.TestCase):
 
     def test_the_faq_answers_why(self):
         faq = (REPO_ROOT / "wiki" / "faq.md").read_text(encoding="utf-8")
-        section = faq.split("## Why is there no ZIP for my setup?", 1)[1].split("\n## ", 1)[0]
+        section = faq.split("## Why is there no ZIP for a setup?", 1)[1].split("\n## ", 1)[0]
         self.assertIn("most people download", section)
         self.assertIn("checks each one", section)
         self.assertIn("--dry-run", section)

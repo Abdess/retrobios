@@ -157,7 +157,7 @@ class NavFromFrontMatter(unittest.TestCase):
         tabs = self._nav(WIKI)
         self.assertEqual(tabs["Explore"][0], "explore.md")
         self.assertEqual([next(iter(e)) for e in tabs["Explore"][1:]], ["Systems", "Emulators"])
-        self.assertEqual(tabs["Your setup"][-1], {"All installer options": "wiki/installer.md"})
+        self.assertEqual(tabs["Setups"][-1], {"All installer options": "wiki/installer.md"})
         start = [e if isinstance(e, str) else next(iter(e)) for e in tabs["Start here"]]
         self.assertEqual(start.index("Is it legal?"), start.index("Common questions") + 1)
         self.assertEqual(tabs["Reference"][0], "wiki/index.md")

@@ -6,10 +6,10 @@ terms: mame version, romset version, which mame
 
 # Technical questions
 
-Answers to "how do you know?" questions: how a file is identified, why one BIOS
+Answers to "how is this known?" questions: how a file is identified, why one BIOS
 has several fingerprints, why some files are not BIOS, and which MAME version an
-arcade set belongs to. Each answer gives a real file as its example, so you can
-check it on the system pages. Questions asked before installing are in
+arcade set belongs to. Each answer gives a real file as its example, to check on the
+system pages. Questions asked before installing are in
 [Common questions](faq.md).
 
 ## What's a hash/checksum?
@@ -50,7 +50,7 @@ Two main reasons:
 1. **Regional variants.** The same filename (e.g., `IPL.bin` for GameCube) exists in different versions for USA, Europe, and Japan. Each region has a different hash.
 2. **Revision differences.** Console manufacturers released updated BIOS versions over time. A PlayStation SCPH-5501 BIOS differs from a SCPH-7001.
 
-Platforms that verify by MD5 accept specific hashes. If yours doesn't match any known hash, it may be a bad dump or an uncommon revision.
+Platforms that verify by MD5 accept specific hashes. A file that matches no known hash may be a bad dump or an uncommon revision.
 
 A filename is never allowed to stand in for a declared hash. When a file entry
 carries a hash, resolution matches on content and reports `hash_mismatch` if the
@@ -114,14 +114,14 @@ cross-referenced against their DATs: files matching a catalog entry
 carry a verified dump badge on the system pages, and catalog entries
 absent from the collection are tracked as acquisition targets. When
 the two views differ, this project follows the code, because that is
-what decides whether your emulator boots.
+what decides whether the emulator boots.
 
 The [dump provenance](../provenance.md) page has the current coverage
 per catalog and the full list of catalogued dumps still missing.
 
 ## Which MAME version do the arcade BIOS sets match?
 
-Your game sets and BIOS sets must come from the same version as your arcade
+Game sets and BIOS sets must come from the same version as the arcade
 emulator.
 
 <!-- generated: romsets -->
@@ -156,10 +156,10 @@ carry their own profiles on top of those generations: `mamearcade`,
 `mamemess`, `mame2003_midway`, the three `mame4droid` drops,
 `advancemame`, `groovymame` and `hbmame`. Recalbox compiles two MAME
 versions of its own, 0.258 and 0.278, profiled as `mame0258` and
-`mame0278`. The pack ships the sets matching the core you run, and a
+`mame0278`. The pack ships the sets matching the core in use, and a
 generic unversioned arcade pack cannot do that.
 
-## Why does my verification report say UNTESTED?
+## Why does a verification report say UNTESTED? { #why-does-my-verification-report-say-untested }
 
 `untested` means the file exists on disk but its hash does not match the expected value. This happens on MD5 and SHA1 platforms (Batocera, Recalbox, BizHawk, ROCKNIX, MiSTer FPGA, and the rest) when the file is present but contains different data than what the platform declares.
 

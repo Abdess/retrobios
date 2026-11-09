@@ -5,7 +5,7 @@ order: 60
 
 # Architecture
 
-How a BIOS list on a platform's site becomes a pack on your drive. Scrapers
+How a BIOS list on a platform's site becomes a pack on a drive. Scrapers
 copy each platform's own list. Emulator profiles record what each emulator's
 code opens. `database.json` indexes every file the collection holds by its
 contents. The pack builder joins the three and ships every file a platform's
@@ -147,7 +147,7 @@ Every part of the toolchain follows from a few rules.
   folders, file names or database, nor to one platform's conventions. The
   toolchain resolves a profile against the collection.
 - **Other projects are peers.** A finding about another project says what
-  changes, never who erred, and comes with its evidence. Our data can be
+  changes, never who erred, and comes with its evidence. The data here can be
   wrong too, and an issue that shows it is as welcome as a finding sent
   upstream.
 - **An inconsistency found is fixed now.** A fix comes with a test that fails

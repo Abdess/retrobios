@@ -1,4 +1,4 @@
-"""What the install box of Get your files shows under each tab.
+"""What the install box of Get the files shows under each tab.
 
 Two things per tab, both drawn from data:
 

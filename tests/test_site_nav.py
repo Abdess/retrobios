@@ -118,7 +118,7 @@ class GroupsAreGroups(unittest.TestCase):
         self.groups = self.side["groups"]
 
     def test_setup_groups_stay_groups_and_point_at_their_section(self):
-        setup = {key: value for key, value in self.groups.items() if key.startswith("Your setup/")}
+        setup = {key: value for key, value in self.groups.items() if key.startswith("Setups/")}
         self.assertTrue(setup)
         for key, group in setup.items():
             with self.subTest(group=key):
@@ -206,7 +206,7 @@ class OneNextPerPage(unittest.TestCase):
 
     def test_an_overview_is_named_after_what_it_opens(self):
         labels = {entry["link"]: entry["label"] for run in self.runs for entry in run}
-        self.assertEqual(labels["/retrobios/platforms/"], "Your setup")
+        self.assertEqual(labels["/retrobios/platforms/"], "Setups")
         self.assertEqual(labels["/retrobios/systems/"], "Systems")
         self.assertNotIn("Overview", labels.values())
 

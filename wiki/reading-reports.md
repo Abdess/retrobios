@@ -8,7 +8,7 @@ group: Checking files
 
 These sections are about this repository's own tools, run from a clone.
 `scripts/verify.py` checks the collection in `bios/` against each platform, never
-your BIOS folder: for that, use the installer's `--check`
+a user's BIOS folder: for that, use the installer's `--check`
 ([When a game does not start](troubleshooting.md)). How each platform checks a
 file is on [How each platform checks files](verification-modes.md).
 
@@ -43,7 +43,7 @@ version the emulator tries first, and some cores accept several versions.
 
 ## Pack is missing files
 
-A generated pack doesn't contain all the files you expected.
+A generated pack lacks some of the expected files.
 
 ### Severity levels
 
@@ -69,7 +69,7 @@ Files like PS3UPDAT.PUP, PSVUPDAT.PUP, and Switch firmware are too large for the
 git repository. They are stored as GitHub release assets under the `large-files`
 release and downloaded at build time.
 
-If a pack build fails to include these, check your network connection. In offline
+If a pack build fails to include these, check the network connection. In offline
 mode (`--offline`), large files are only included if already cached locally in
 `.cache/large/`.
 
