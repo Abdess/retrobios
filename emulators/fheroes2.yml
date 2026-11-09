@@ -4,14 +4,6 @@ core_classification: game_engine
 source: "https://github.com/ihhub/fheroes2"
 profiled_date: "2026-10-22"
 source_commit: "35ca4c915be00098547d5050412a325dd55cfd7f"
-pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/fheroes2/package.mk:5). Later commits are not part of that build."
-pin_build:
-  - platform: emuelec
-    repo: "https://github.com/EmuELEC/EmuELEC"
-    revision: "v4.8"
-    path: "packages/sx05re/emuelec-ports/fheroes2/package.mk"
-    variable: PKG_VERSION
-    value: "35ca4c915be00098547d5050412a325dd55cfd7f"
 core_version: "1.0.11"
 version_basis:
   kind: file
@@ -24,12 +16,13 @@ systems: [heroes-of-might-and-magic-2]
 
 notes: |
   Free reimplementation of the Heroes of Might and Magic II engine (New World
-  Computing, 1996). It plays the original or demo data. EmuELEC builds this
-  revision, installs the engine's resurrection.h2d under
-  /usr/share/fheroes2/files/data and runs fheroes2 from
-  /storage/roms/ports/fheroes2. When data/HEROES2.AGG is absent there, its
-  fheroes2.sh offers to download the demo (h2demo.zip from archive.org) and
-  unpacks its DATA and MAPS directories in place.
+  Computing, 1996). It plays the original or demo data. EmuELEC's tree builds
+  revision 35ca4c9 in its emuelec-ports package, which installs the engine's
+  resurrection.h2d under /usr/share/fheroes2/files/data and runs fheroes2
+  from /storage/roms/ports/fheroes2, its fheroes2.sh offering the demo
+  (h2demo.zip from archive.org) when data/HEROES2.AGG is absent. No package,
+  options file or Makefile of a v4.8 image pulls emuelec-ports in, so no
+  platform ships fheroes2.
   ref: version.txt:1,
        EmuELEC packages/sx05re/emuelec-ports/fheroes2/package.mk:4-7,15-23,
        EmuELEC packages/sx05re/emuelec-ports/fheroes2/scripts/fheroes2.sh:9-40
