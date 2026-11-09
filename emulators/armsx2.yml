@@ -8,12 +8,12 @@ profiled_date: "2026-10-26"
 source_commit: "fc4ab0b8b4f386617773cf1916e9bc6911dba59b"
 prose_written_at: "fc4ab0b8b4f386617773cf1916e9bc6911dba59b"
 upstream_commit: "36907f4b70d149b05c2700acae687bedb720a7af"
-core_version: "2.9-5-g7f91441"
+core_version: "2.9.2-77-gfc4ab0b"
 version_basis:
   kind: tag
   match: "[0-9]*"
-  tag: "2.9"
-  distance: 5
+  tag: "2.9.2"
+  distance: 77
 display_name: "Sony - PlayStation 2 (ARMSX2)"
 cores:
   - armsx2
