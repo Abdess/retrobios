@@ -131,7 +131,7 @@ class Exporter(BaseExporter):
                 output[key] = base[key]
                 continue
             system, files = exportable[key]
-            ours: OrderedDict[str, OrderedDict[str, str]] = OrderedDict()
+            ours: OrderedDict[str, OrderedDict[str, object]] = OrderedDict()
             # The checker reads one md5 per biosFiles item and reports the
             # item by its path, so a path holds one item. An addition whose
             # path the platform or an earlier addition holds is not written.
@@ -141,9 +141,16 @@ class Exporter(BaseExporter):
                 if fe.platform is None and (path in claimed or path in ours):
                     self._merged.add(id(fe))
                     continue
-                entry: OrderedDict[str, str] = OrderedDict()
+                entry: OrderedDict[str, object] = OrderedDict()
                 entry["md5"] = self.single_value(fe, "md5")
                 entry["file"] = path
+                # The two fields Program.cs reads besides md5 and file, as the
+                # scraper took them: group (one held file is enough) and
+                # optional (required: false).
+                if fe.platform is not None and fe.platform.get("group"):
+                    entry["group"] = str(fe.platform["group"])
+                if fe.platform is not None and fe.platform.get("required") is False:
+                    entry["optional"] = True
                 ours.setdefault(path, entry)
             bios_files = []
             for theirs in (base.get(key) or {}).get("biosFiles", []):
