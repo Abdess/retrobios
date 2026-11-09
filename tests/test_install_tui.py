@@ -12374,10 +12374,10 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
                 break
             term.send("\x1b[A")
         term.send("\r")
-        # The changed choices are counted again on Confirm. Waiting on the
-        # bare title matched the screen before it, and a runner that drew
-        # Confirm after one settle never pressed Enter there.
-        term.wait("RetroBIOS: Confirm")
+        # The changed choices are counted again on Confirm, which has no
+        # Install row until its dry run ends: Enter sent on the title alone
+        # fell on "Counting the files" and did nothing on a slow runner.
+        term.wait("Counted again for these choices")
         term.settle()
         term.send("\r")
         term.wait("files installed")
