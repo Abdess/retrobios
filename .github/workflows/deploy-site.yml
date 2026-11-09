@@ -61,6 +61,7 @@ on:
       - "scripts/retired_files.py"
       - "scripts/sitesources.py"
       - "scripts/sitestarlight.py"
+      - "scripts/sitesteps.py"
       - "scripts/sitewrite.py"
       - "scripts/slot.py"
       - "scripts/slots.py"
