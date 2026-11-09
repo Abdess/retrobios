@@ -5,13 +5,14 @@ source: "https://github.com/stenzek/duckstation"
 upstream: "https://github.com/stenzek/duckstation"
 logo: "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/images/duck.png"
 profiled_date: "2026-03-23"
-source_commit: "526b4a128827ecaef037134095cd95f431b52d06"
-core_version: "v0.1-12083-406-g526b4a1"
+source_commit: "c9dc225498e901908b2f3822a3875d1c508e2ccd"
+prose_written_at: "526b4a128827ecaef037134095cd95f431b52d06"
+core_version: "v0.1-12442-240-gc9dc225"
 version_basis:
   kind: tag
   match: "v*"
-  tag: "v0.1-12083"
-  distance: 406
+  tag: "v0.1-12442"
+  distance: 240
 display_name: "Sony - PlayStation (DuckStation)"
 cores: [duckstation, "Duckstation", "duckstation-sa"]
 found_by: content
@@ -21,20 +22,20 @@ verification: md5
 data_root:
   windows:
     path: "%LOCALAPPDATA%/DuckStation"
-    source_ref: "src/core/core.cpp:151-158, 160-196"
+    source_ref: "src/core/core.cpp:144-151, src/core/core.cpp:153-189"
     note: "Documents/DuckStation when that folder already exists. portable.txt or settings.ini beside the executable makes its folder the root"
   macos:
     path: "~/Library/Application Support/DuckStation"
-    source_ref: "src/core/core.cpp:151-158, 224-231"
+    source_ref: "src/core/core.cpp:144-151, src/core/core.cpp:217-224"
     note: "portable.txt or settings.ini beside the executable makes its folder the root"
   linux:
     path: "$XDG_CONFIG_HOME/duckstation, else ~/.local/share/duckstation"
-    source_ref: "src/core/core.cpp:144-158, 197-222"
+    source_ref: "src/core/core.cpp:137-151, src/core/core.cpp:190-215"
     note: "portable.txt or settings.ini beside the executable, or beside the AppImage, makes that folder the root"
 
 notes: |
   DuckStation auto-detects BIOS by MD5 hash from a flat scan of the BIOS directory.
-  ref: src/core/bios.cpp:460-482 (FindBIOSImagesInDirectory, scans all files by size)
+  ref: src/core/bios.cpp:458-479 (FindBIOSImagesInDirectory, scans all files by size)
   ref: src/core/bios.cpp:208 (MD5Digest::HashData identification)
 
   Accepts PS1 (512 KB), PS2 (4 MB), and PS3 (0x3E66F0) BIOS images.
@@ -47,19 +48,19 @@ notes: |
 
   The console region picks the image, Auto by default. NTSC-U answers the
   licence string `Sony Computer Entertainment Amer  ica` (two spaces, as
-  src/core/system.cpp:973 spells it), a SCUS or SLUS
+  src/core/system.cpp:1036 spells it), a SCUS or SLUS
   executable, and every disc whose region the detector cannot read
   (DiscRegion::Other, NonPS1), so a disc of any other market boots an NTSC-U image.
-  ref: src/core/system.cpp:664-676, 940-1009, 1739-1740, 1756
+  ref: src/core/system.cpp:706-718, 1003-1072, 1803-1804, 1820
   ref: src/core/bios.cpp:397-436 (FindBIOSImageInDirectory keeps a region match)
-  ref: src/core/settings.h:608 (DEFAULT_CONSOLE_REGION = Auto)
+  ref: src/core/settings.h:622 (DEFAULT_CONSOLE_REGION = Auto)
 
   ImageInfo gained a version and an expected_filename field after the previous
   profiling pass. Neither takes part in identification: expected_filename is read
   only by the two settings screens, which fall back to the real filename when it
   is null.
   ref: src/core/bios.h:41-43 (field declarations)
-  ref: src/duckstation-qt/biossettingswidget.cpp:153, src/core/fullscreenui_settings.cpp:3322
+  ref: src/duckstation-qt/biossettingswidget.cpp:158, src/core/fullscreenui_settings.cpp:3432
   Lower priority = preferred. PS2 deprioritized (>= 100) for dynamic fast boot.
   Late PAL deprioritized (>= 150) due to additional regional checks.
   OpenBIOS detected by signature at offset 0x78, not by hash.
@@ -68,7 +69,7 @@ notes: |
   Standalone: BIOS dir = EmuFolders::Bios, bios/ under the data root unless
   BIOS/SearchDirectory names another folder.
   ref: src/core/bios.cpp:378,383
-  ref: src/core/settings.cpp:2987,3020
+  ref: src/core/settings.cpp:3060,3093
   Libretro: BIOS dir = RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (flat).
   The libretro core was removed by the author (license change to non-commercial).
   The .info file and buildbot builds still exist from community forks.

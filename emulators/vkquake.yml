@@ -4,7 +4,8 @@ core_classification: game_engine
 source: "https://github.com/Novum/vkQuake"
 upstream: "https://sourceforge.net/projects/quakespasm/"
 profiled_date: "2026-10-23"
-source_commit: "a6cfba6904e0743dae4235f9dad9711bb5bd27f1"
+source_commit: "308ff19d881c2eab7e5e4a21b98847847525eef9"
+prose_written_at: "308ff19d881c2eab7e5e4a21b98847847525eef9"
 core_version: "1.37.1"
 version_basis:
   kind: file
@@ -33,7 +34,7 @@ notes: |
   gfx.wad and no palette (Misc/vq_pak/vq_pak_contents.txt).
 
   gfx.wad and gfx/colormap.lmp come from id1/pak0.pak, and without either the
-  engine stops with Sys_Error (Quake/wad.c:80-87, Quake/host.c:1415-1417).
+  engine stops with Sys_Error (Quake/wad.c:80-87, Quake/host.c:1416-1418).
   gfx/pop.lmp, present only in the registered id1/pak1.pak, sets the
   registered cvar (Quake/common.c:2023-2049).
 

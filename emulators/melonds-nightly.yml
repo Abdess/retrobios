@@ -3,7 +3,8 @@ type: standalone
 core_classification: community_fork
 source: "https://github.com/rafaelvcaetano/melonDS-android"
 upstream: "https://github.com/rafaelvcaetano/melonDS-android-lib"
-source_commit: "c42995caff0144f37ad9791dc9bc96d82e8a6f65"
+source_commit: "aaf263d233e65c348d5830db32c593f8b7a8e4c9"
+prose_written_at: "c42995caff0144f37ad9791dc9bc96d82e8a6f65"
 upstream_commit: "431ab4bd0003c4356e25fce89640ae1004579b9b"
 profiled_date: "2026-08-12"
 core_version: "2.0.1"
@@ -24,7 +25,7 @@ notes: |
 
   Nightly is a product flavor, not a separate tree: the build dimension "build"
   has prod and nightly, and nightly sets applicationIdSuffix ".nightly" and the
-  version suffix " (NIGHTLY)" (app/build.gradle.kts:59-61,76-79), giving the package
+  version suffix " (NIGHTLY)" (app/build.gradle.kts:63,79-87), giving the package
   id me.magnum.melonds.nightly. Its source set holds an app name and a launcher
   icon (app/src/nightly/res), and the gitHubNightly set points the update check
   at the nightly release instead of the tagged one
@@ -37,13 +38,13 @@ notes: |
   basename, so bios7.bin, bios9.bin and firmware.bin each name a DS image in one
   directory and a DSi image in the other. The accepted lengths are what tell them
   apart. The app lists the expected names on screen when a directory is unset or
-  rejected (app/src/main/res/values/strings.xml:116,118). Entries below carry the
+  rejected (app/src/main/res/values/strings.xml:120,122). Entries below carry the
   basename the app opens in the path, under the console identifier the picker
   binds to each directory, ds and dsi
   (app/src/main/res/xml/pref_custom_firmware.xml:33,39).
 
   use_custom_bios defaults off (app/src/main/res/xml/pref_custom_firmware.xml:11,
-  app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:258-260). With it off, launching a ROM
+  app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:259-261). With it off, launching a ROM
   skips the directory check entirely and the core substitutes FreeBIOS and a
   firmware built in memory, so DS games run with nothing supplied. Booting into
   the firmware menu instead of a ROM always turns it on
@@ -62,11 +63,11 @@ notes: |
   Neither SD card is reachable in this build. getSDCardArgs returns nothing when
   a card is disabled (app/src/main/cpp/SDCardArgsBuilder.cpp:19-20) and the JNI layer hardcodes
   both the DSi card and the homebrew DLDI card to disabled
-  (app/src/main/cpp/MelonDSAndroidConfiguration.cpp:93-94), with no preference anywhere in the app
+  (app/src/main/cpp/MelonDSAndroidConfiguration.cpp:95-96), with no preference anywhere in the app
   to turn either on, and the README lists DSi SD card support under missing features. The Action Replay database the core can parse is likewise
   never built: ARDatabaseDAT is reached only from src/frontend/qt_sdl, and the
   Android build sets BUILD_QT_SDL OFF and links the core alone
-  (app/CMakeLists.txt:8,73). Cheats are entered in the app's own database.
+  (app/CMakeLists.txt:8,74). Cheats are entered in the app's own database.
 
 files:
   # --- DS BIOS directory (preference bios_dir) ---

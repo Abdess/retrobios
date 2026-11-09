@@ -4,13 +4,13 @@ core_classification: game_engine
 source: "https://github.com/ikemen-engine/Ikemen-GO"
 upstream: "https://github.com/ikemen-engine/Ikemen-GO"
 profiled_date: "2026-10-04"
-source_commit: "e9bfe1125dea88769b265e57bcfaefdb22fa4322"
-core_version: "v1.0.0-rc.1-545-ge9bfe11"
+source_commit: "063a060e597b13d52dbe29b9cbd9b467b4c4bd4a"
+core_version: "v1.0.0-rc.1-611-g063a060"
 version_basis:
   kind: tag
   match: "v*"
   tag: "v1.0.0-rc.1"
-  distance: 545
+  distance: 611
 display_name: "Ikemen GO"
 cores: [ikemen]
 systems: []
@@ -47,7 +47,7 @@ notes: |
   names its music under sound/, which release packages ship empty.
 
   Characters and stages are found under chars/ and stages/
-  (src/system.go:5376, src/system.go:5602).
+  (src/system.go:5372, src/system.go:5598).
 
 files:
   - name: "script/"
@@ -58,7 +58,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:146, src/main.go:213-232"
+    source_ref: "src/resources/defaultConfig.ini:147, src/main.go:209-228"
     note: >
       main.go opens Config.System and panics when it is missing. main.lua
       requires debug, start, options and menu from the same directory.
@@ -70,7 +70,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:144, src/system.go:533-544"
+    source_ref: "src/resources/defaultConfig.ini:145, src/system.go:535-546"
 
   - name: "IkemenCylia_96.png"
     path: "ikemen/external/icons/IkemenCylia_96.png"
@@ -79,7 +79,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:144, src/system.go:533-544"
+    source_ref: "src/resources/defaultConfig.ini:145, src/system.go:535-546"
 
   - name: "IkemenCylia_48.png"
     path: "ikemen/external/icons/IkemenCylia_48.png"
@@ -88,7 +88,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:144, src/system.go:533-544"
+    source_ref: "src/resources/defaultConfig.ini:145, src/system.go:535-546"
 
   - name: "shaders/"
     type: directory
@@ -98,7 +98,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "external/script/options.lua:1653, src/system.go:461-474"
+    source_ref: "external/script/options.lua:1653, src/system.go:463-476"
 
   - name: "common.air"
     path: "ikemen/data/common.air"
@@ -107,7 +107,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:12, src/char.go:4675-4688"
+    source_ref: "src/resources/defaultConfig.ini:12, src/char.go:4686-4699"
 
   - name: "common.cmd"
     path: "ikemen/data/common.cmd"
@@ -125,7 +125,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:16, src/char.go:4337-4354"
+    source_ref: "src/resources/defaultConfig.ini:16, src/char.go:4352-4369"
 
   - name: "functions.zss"
     path: "ikemen/data/functions.zss"
@@ -228,7 +228,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:177, external/script/main.lua:648, src/script.go:4122-4125"
+    source_ref: "src/resources/defaultConfig.ini:178, external/script/main.lua:612, src/script.go:4185-4188"
     note: "loadDebugFont raises a Lua error when the font cannot be loaded."
 
   - name: "OpenSans-Bold.ttf"
@@ -250,7 +250,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultMotif.ini:75, src/motif.go:2597-2613"
+    source_ref: "src/resources/defaultMotif.ini:78, src/motif.go:2632-2648"
     note: "A motif font that fails to load is logged and replaced by an empty font."
 
   - name: "default-3x5.sff"
@@ -260,7 +260,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "font/default-3x5.def:21, src/font.go:414-420"
+    source_ref: "font/default-3x5.def:21, src/font.go:424-430"
     note: "LoadFntSff panics when default-3x5.def is loaded and this file is missing."
 
   - name: "system.def"
@@ -270,7 +270,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:99, src/motif.go:2631-2663, src/script.go:4263-4266"
+    source_ref: "src/resources/defaultConfig.ini:100, src/motif.go:2666-2698, src/script.go:4326-4329"
     note: >
       Held by the Ikemen-GO-Screenpack repository and copied into release
       packages. main.lua calls loadMotif at startup, which raises a Lua error
@@ -283,7 +283,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:21, src/fightscreen.go:85-102, src/system.go:6563-6567"
+    source_ref: "src/resources/defaultConfig.ini:21, src/fightscreen.go:85-102, src/system.go:6555-6559"
     note: >
       Held by the Ikemen-GO-Screenpack repository and copied into release
       packages. A load failure puts the match loader in its error state.
@@ -307,7 +307,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/motif.go:72-85, src/motif.go:2479-2491, src/motif.go:2598-2625, src/storyboard.go:561-620"
+    source_ref: "src/motif.go:72-85, src/motif.go:2512-2524, src/motif.go:2633-2660, src/storyboard.go:561-620"
     note: >
       Files named by system.def and searched beside it first. A sprite file
       or font that fails to load is logged and replaced by an empty one.
@@ -319,7 +319,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/motif.go:81, external/script/main.lua:1585, external/script/main.lua:43-50"
+    source_ref: "src/motif.go:81, external/script/main.lua:1546, external/script/main.lua:7-14"
     note: "main.lua reads the file at startup and raises an error when it cannot be opened."
 
   - name: "fight.def"
@@ -329,7 +329,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/motif.go:82, src/fightscreen.go:6005-6027, src/fightscreen.go:4792-4800, src/script.go:4247-4250, external/script/main.lua:1188"
+    source_ref: "src/motif.go:82, src/fightscreen.go:6023-6045, src/fightscreen.go:4810-4818, src/script.go:4310-4313, external/script/main.lua:1154"
     note: "main.lua calls loadFightScreen at startup, which raises a Lua error on a load failure."
 
   - name: "fight.sff"
@@ -339,7 +339,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/fightscreen.go:4916-4926"
+    source_ref: "src/fightscreen.go:4934-4944"
     note: "Named by the sff key of fight.def. A load failure fails loadFightScreen."
 
   - name: "fight.snd"
@@ -349,7 +349,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/fightscreen.go:4927-4937"
+    source_ref: "src/fightscreen.go:4945-4955"
     note: "Named by the snd key of fight.def. A load failure fails loadFightScreen."
 
   - name: "fightfx.sff"
@@ -359,7 +359,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/fightscreen.go:4938-4948"
+    source_ref: "src/fightscreen.go:4956-4966"
     note: "Named by the fightfx.sff key of fight.def. A load failure fails loadFightScreen."
 
   - name: "fightfx.air"
@@ -369,7 +369,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/fightscreen.go:4949-4959"
+    source_ref: "src/fightscreen.go:4967-4977"
     note: "Named by the fightfx.air key of fight.def. A load failure fails loadFightScreen."
 
   - name: "common.snd"
@@ -379,7 +379,7 @@ files:
     required: true
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/fightscreen.go:4960-4966"
+    source_ref: "src/fightscreen.go:4978-4984"
     note: "Named by the common.snd key of fight.def. A load failure fails loadFightScreen."
 
   - name: "system.snd"
@@ -389,7 +389,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultMotif.ini:69, src/motif.go:73, src/motif.go:2582-2594"
+    source_ref: "src/resources/defaultMotif.ini:72, src/motif.go:73, src/motif.go:2615-2629"
     note: "Named by the snd key of the motif. A load failure is logged and an empty sound set is used."
 
   - name: "glyphs.sff"
@@ -399,7 +399,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultMotif.ini:97, src/motif.go:84, src/motif.go:2494-2507"
+    source_ref: "src/resources/defaultMotif.ini:100, src/motif.go:84, src/motif.go:2527-2540"
     note: "A load failure is logged and an empty sprite set is used."
 
   - name: "font/"
@@ -410,7 +410,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/motif.go:64, src/motif.go:2598-2625, src/fightscreen.go:5017, src/storyboard.go:620, src/font.go:415"
+    source_ref: "src/motif.go:64, src/motif.go:2633-2660, src/fightscreen.go:5035, src/storyboard.go:620, src/font.go:425"
     note: "font/ is the default directory of every font lookup."
 
   - name: "video/"
@@ -433,7 +433,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/resources/defaultConfig.ini:156, src/system.go:448-449, src/input_sdl.go:261-271"
+    source_ref: "src/resources/defaultConfig.ini:157, src/system.go:450-451, src/input_sdl.go:261-271"
     note: "A read failure is logged."
 
   - name: "chars/"
@@ -444,7 +444,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/system.go:5376, src/script.go:3204-3205"
+    source_ref: "src/system.go:5372, src/script.go:3269-3270"
     note: >
       A character path that does not resolve as given is searched under
       chars/. Release packages ship the Kung Fu Man characters.
@@ -457,7 +457,7 @@ files:
     required: false
     bundled: true
     not_bundled_on: [batocera]
-    source_ref: "src/system.go:5602, src/resources/defaultConfig.ini:181, external/script/main.lua:1809-1813"
+    source_ref: "src/system.go:5598, src/resources/defaultConfig.ini:182, external/script/main.lua:1768-1772"
     note: >
       Debug.StartStage defaults to stages/stage0-720.def, the stage added
       when select.def lists none.
