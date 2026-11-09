@@ -111,6 +111,7 @@ from siteguides import (
     INSTALL_BASE,
     INSTALL_PS1,
     INSTALL_SH,
+    PACKAGE_COMMAND,
     TERMINALS,
     TRUST_ITEMS,
     detected_systems as _detected_systems,
@@ -12012,6 +12013,13 @@ def generate_which_pack() -> str:
             "",
             *fence("powershell", install_command(
                 "powershell", "--platform retroarch --dest E:\\retroarch\\cores\\system")),
+        ]),
+        *markup.details("note", "Have Python? Run it as a package", [
+            "The same installer, with Python 3.8 or newer:",
+            "",
+            *fence("sh", PACKAGE_COMMAND),
+            "",
+            "`pipx run retrobios` works too, or `pip install retrobios` and then `retrobios`.",
         ]),
         *markup.details("note", "Copy the BIOS files from your old card", [
             "Plug the old card in and add `--from` with its folder. The BIOS files "

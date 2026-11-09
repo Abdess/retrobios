@@ -1566,7 +1566,7 @@ def _literals() -> str:
 VALUE = re.compile(r"^(?:\S*[\d/\\~<>{}=]\S*|--?[\w-]+\S*|\S*[A-Z]{2,}\S*|\.\.\.|"
                    r"\S*\.\w{2,4}[,.:;)]?|[A-Z][a-z]+[A-Z]\S*|\(\S*)$")
 # A code span that is a command, a path or a shape, not a message.
-NOT_A_MESSAGE = re.compile(r"^(?:\{|-|\.|/|~|<|\$|%|python|py |curl|irm|sh |pkg |sudo|ls |"
+NOT_A_MESSAGE = re.compile(r"^(?:\{|-|\.|/|~|<|\$|%|python|py |curl|irm|uvx |pipx |pip |sh |pkg |sudo|ls |"
                            r"xcode|winget|termux|install\.py|scripts/|generate_|&\()")
 
 

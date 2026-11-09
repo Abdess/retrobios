@@ -39,7 +39,7 @@ from common import (
 )
 from nativemode import check_label
 import release_record
-from siteguides import install_command
+from siteguides import PACKAGE_COMMAND, install_command
 from validate_pr import LARGE_FILE_ISSUE_URL
 from largefiles import load_registered_paths
 import pr_checks
@@ -633,6 +633,9 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "",
         "# Options in PowerShell: anything after | iex goes to iex, so the script runs as a block",
         install_command("powershell", "--check"),
+        "",
+        "# With Python 3.8 or newer: the same installer as a package (or pipx run retrobios)",
+        PACKAGE_COMMAND,
         "```",
         "",
         f"![{demo_description()}]({DEMO_GIF})",

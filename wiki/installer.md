@@ -40,6 +40,15 @@ irm https://abdess.github.io/retrobios/i.ps1 | iex
 Always type the `https://`: without it the first request goes out in clear
 text, and anyone on the way could answer with another script.
 
+With Python 3.8 or newer, the same installer is a package:
+
+```bash
+uvx retrobios
+```
+
+`pipx run retrobios` works too, or `pip install retrobios` and then
+`retrobios`. Options follow the command: `uvx retrobios --check`.
+
 `i` and `i.ps1` are `install.sh` and `install.ps1` as of the commit the site
 was built from, set to download `install.py` from that same commit. The
 fingerprint they check and the installer they fetch never come from two

@@ -34,6 +34,9 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --platform retroarch 
 
 # Options in PowerShell: anything after | iex goes to iex, so the script runs as a block
 &([scriptblock]::Create((irm https://abdess.github.io/retrobios/i.ps1))) --check
+
+# With Python 3.8 or newer: the same installer as a package (or pipx run retrobios)
+uvx retrobios
 ```
 
 ![Recording of the one-line command in a terminal. The installer finds an ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary.](docs_assets/demo/install.gif)
