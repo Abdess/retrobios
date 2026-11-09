@@ -170,8 +170,8 @@ files:
     size: 184946
     sha1: "4d787bd5a071c729c4f374e6e7c7d7b06d7f9f63"
     md5: "bf51a61f07625ea20e891058afaa892c"
-    source_ref: "backends/events/default/default-events.cpp:74-77, backends/vkeybd/virtual-keyboard.cpp:118-128"
-    note: "Default virtual keyboard pack, built in because RetroPie passes --enable-vkeybd. RetroPie also copies it to extra/."
+    source_ref: "backends/events/default/default-events.cpp:74-77, backends/vkeybd/virtual-keyboard.cpp:118-128, configure:229, Makefile.common:414-416"
+    note: "Default virtual keyboard pack, read and installed only when configure enables the virtual keyboard (ENABLE_VKEYBD, off by default). RetroPie passes --enable-vkeybd and also copies it to extra/."
 
   - name: "vkeybd_small.zip"
     path: "share/scummvm/vkeybd_small.zip"
@@ -180,8 +180,8 @@ files:
     size: 86470
     sha1: "e813795cbc79e87facf7d1560c1f5946eab72167"
     md5: "95a179198a8fa032c751e476042c8849"
-    source_ref: "backends/events/default/default-events.cpp:74-77"
-    note: "Smaller virtual keyboard pack, loaded when vkeybd_pack_name selects it. RetroPie also copies it to extra/."
+    source_ref: "backends/events/default/default-events.cpp:74-77, Makefile.common:414-416"
+    note: "Smaller virtual keyboard pack, loaded when vkeybd_pack_name selects it in a build with ENABLE_VKEYBD. RetroPie also copies it to extra/."
 
   - name: "Roland_SC-55.sf2"
     path: "share/scummvm/Roland_SC-55.sf2"
@@ -190,8 +190,8 @@ files:
     size: 3283278
     sha1: "9dba9212f2e34446ab034595665809f09f303d63"
     md5: "dbb97c34404b753724a66fe0108a32e1"
-    source_ref: "base/commandLine.cpp:349-351, audio/softsynth/fluidsynth.cpp:284-310"
-    note: "Default FluidSynth soundfont. Installed because RetroPie pulls libfluidsynth-dev in. FluidSynth music is off when no soundfont is found."
+    source_ref: "base/commandLine.cpp:349-351, audio/softsynth/fluidsynth.cpp:284-310, configure:178, Makefile.common:468-470"
+    note: "Default soundfont of a build with FluidSynth, installed with it. configure enables FluidSynth when the library is found, and RetroPie installs libfluidsynth-dev. FluidSynth music is off when no soundfont is found."
 
   # Engine data shared by every engine.
   - name: "achievements.dat"

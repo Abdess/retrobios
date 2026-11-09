@@ -82,5 +82,5 @@ files:
     path: "dopa/pak0.pak"
     required: false
     source_ref: "fs.c:1448-1462, 2154-2168"
-    note: "Dimension of the Past data, added on top of id1 with -game dopa."
+    note: "Dimension of the Past data. The engine has no game mode for it and mounts it as a mod on top of id1 with -game dopa, which RetroPie's ports menu passes when this file exists."
     unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"

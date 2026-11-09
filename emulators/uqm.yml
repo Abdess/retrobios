@@ -72,9 +72,11 @@ files:
     system: ur-quan-masters
     category: game_data
     required: false
+    installed_on: [retropie]
     md5: "9e5801d45ca12028b486cdeb83568c02"
     validation: [md5]
     description: "UQM 3DO music track pack"
+    note: "The RetroPie scriptmodule downloads it into content/addons."
     source_ref: "sc2/build/win32_install/packages.nsh:6-8; sc2/build/win32_install/uqm-installer.nsi:315-327, sc2/src/options.c:393-402, 518-551, sc2/src/uqm/setup.c:118-132"
 
   - name: uqm-0.8.0-voice.uqm
@@ -82,9 +84,11 @@ files:
     system: ur-quan-masters
     category: game_data
     required: false
+    installed_on: [retropie]
     md5: "fc89f77d7b66c2669abca6c157f5259a"
     validation: [md5]
     description: "UQM alien-race voice-over pack"
+    note: "The RetroPie scriptmodule downloads it into content/addons."
     source_ref: "sc2/build/win32_install/packages.nsh:9-11; sc2/build/win32_install/uqm-installer.nsi:329-341, sc2/src/options.c:393-402, 518-551, sc2/src/uqm/setup.c:118-132"
 
   - name: uqm-remix-disc1.uqm
