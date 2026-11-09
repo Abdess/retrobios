@@ -4,11 +4,11 @@ core_classification: embedded_hle
 source: "https://github.com/ivanizag/izapple2"
 upstream: "https://github.com/ivanizag/izapple2"
 profiled_date: "2026-08-08"
-source_commit: "4e773baf9f1f3fb692e3f3444eb5f42fddb205ef"
-core_version: "v2.5.0-3-g4e773ba"
+source_commit: "9d8aafa596bb04aedebbe7af95b9564fbe3de331"
+core_version: "v2.6.0-3-g9d8aafa"
 version_basis:
   kind: tag
-  tag: "v2.5.0"
+  tag: "v2.6.0"
   distance: 3
 display_name: "Apple - Apple II (izapple2)"
 cores:
@@ -19,25 +19,29 @@ mode: standalone
 
 notes: |
   Apple II emulator written in Go by Ivan Izaguirre. Boards: Apple ][ and ][+
-  with 48 KB, Apple IIe and //e enhanced with 128 KB, and two clones, the Copam
-  Base 64A and the Basis 108 (setup.go:45-67).
+  with 48 KB, Apple IIe and //e enhanced with 128 KB, Apple IIc with ROM 255,
+  0, 3 and 4, and two clones, the Copam Base 64A and the Basis 108
+  (setup.go:51-90). The IIc board refuses any card but its built-in ones: the
+  language card in slot 0, the two serial ports in slots 1 and 2 and the disk
+  port in slot 6, and only the memory expansion may be added, in slot 4
+  (boardApple2c.go:369-401).
 
   Every ROM the machine needs is compiled into the binary. The whole resources
-  directory is embedded with //go:embed (resources.go:25-26) and the 17 machine
-  configs with //go:embed configs/*.cfg (configuration.go:57-58). LoadResource
+  directory is embedded with //go:embed (resources.go:25-26) and the 24 config
+  files with //go:embed configs/*.cfg (configuration.go:59-60). LoadResource
   routes a name by its prefix: <internal>/ reads the embedded filesystem,
   http:// and https:// fetch over the network, anything else is a path on disk
   (resources.go:55-88). The shipped configs name main ROM, character ROM and
   boot diskette as <internal>/ paths, so the emulator starts into DOS 3.3 with
   no file on disk. The base64a and basis108 configs set rom: <custom>, which
   dispatches to loadMultiPageRom over six embedded PROM dumps each
-  (setup.go:203-213, boardBase64a.go:7-16, boardBasis108.go:28-37).
+  (setup.go:222-232, boardBase64a.go:7-16, boardBasis108.go:28-37).
 
-  Two of the 27 registered cards name an image the emulator downloads instead
-  of carrying: prodosromdrive and prodosromcard3 (cardBuilder.go:87-88). Both
+  Two of the 35 registered cards name an image the emulator downloads instead
+  of carrying: prodosromdrive and prodosromcard3 (cardBuilder.go:108-109). Both
   read the card slot ROM out of that image, so neither card has a boot ROM
   without it. No shipped model uses either card, they are reached with -sN.
-  prodosnvramdrive is left out of the factory (cardBuilder.go:89).
+  prodosnvramdrive is left out of the factory (cardBuilder.go:110).
 
   -rom and -charrom replace the embedded main and character ROM with a file of
   the user's choosing, and every disk, hard disk and cassette parameter takes
@@ -47,7 +51,7 @@ notes: |
   console and headless. ES-DE runs a2sdl, built as izapple2sdl_linux_amd64 or
   izapple2sdl_windows_amd64.exe, and passes the image as a positional argument.
   The libretro core in frontend/a2libretro builds from source only, is absent
-  from the buildbot and the RetroArch online updater (doc/libretro.md), and its
+  from the buildbot and the RetroArch online updater (doc/frontend_libretro.md), and its
   izapple2_libretro.info declares firmware_count = 0. It exposes the machine as
   a model option and no card configuration, so the two card images cannot be
   reached through it.
@@ -73,7 +77,7 @@ analysis:
   embedded_resources:
     mechanism: "//go:embed resources, served by LoadResource on the <internal>/ prefix"
     source_ref: "resources.go:25-26,55-70"
-    count: 59
+    count: 65
     main_roms:
       - filename: "341-000x_integer.rom"
         size: 8192
@@ -95,6 +99,22 @@ analysis:
         size: 32768
         md5: 2f52e3571b952c0c6a7111bbe7d40b06
         sha1: 5f7b851dbcab1df8f1883d2112f6ab1d16109f24
+      - filename: Apple2c_ROM255.rom
+        size: 16384
+        md5: 6b2cf9588da87954de396ccb0286ecb4
+        sha1: 1a9b8aca5e32bb702ddb7791daddd60a89655729
+      - filename: Apple2c_ROM0.rom
+        size: 32768
+        md5: e0d67bb1aabe2030547b4cbdf3905b60
+        sha1: 10767e96cc17bad0970afda3a4146564e6272ba1
+      - filename: Apple2c_ROM3.rom
+        size: 32768
+        md5: a513397de6fdbb96a23d8ef7647e8c9a
+        sha1: 5338d9baa7ae202457b6500fde5883dbdc86e5d3
+      - filename: Apple2c_ROM4.rom
+        size: 32768
+        md5: eeef93ad674e43776d00050dccc1d774
+        sha1: 015061597c4cda7755aeb88b735994ffd2f235ca
 
     main_roms_clones:
       - filename: BASE64A_D0.BIN
@@ -253,6 +273,14 @@ analysis:
         size: 512
         md5: d2cf1b181b1934f9533c6d8b9d02f44c
         sha1: 5e2737d233f5769df654d2d5aa96d24f2fd85671
+      - filename: Apple II Super Serial Card ROM 341-0065-A.bin
+        size: 2048
+        md5: 67c0d61ab0911183faf05270f881a97e
+        sha1: 6dab633470c6bc4cb3e81d09fda46597caf8ee57
+      - filename: Apple II UniDisk 3.5 Interface Card ROM.bin
+        size: 4096
+        md5: 6e3eb8c47b60948a2e069af0dbeb8224
+        sha1: fa94ecc2aa23f336f7da9e18bc8f4a6cfbb4ea60
 
     diskettes:
       - filename: dos33.dsk
