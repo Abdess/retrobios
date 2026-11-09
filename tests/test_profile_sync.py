@@ -3076,7 +3076,10 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # builds mame2014, mess2015 and cdi2015, three system sets. And a
         # live build can add a system its frozen revision lacked
         # (advancemame's coh1002v, after advmame-1.4), so the frozen one's
-        # systems are a subset, not an equal set.
+        # systems are a subset, not an equal set. A live build can also drop
+        # a system upstream deleted: advancemame removed its Hyper Neo Geo 64
+        # driver in dff25b6ee7, which advmame-1.4 still carries.
+        removed_upstream = {("advmame-1.4", "advancemame"): {"hyper-neogeo64"}}
         pairs = 0
         for names in by_source.values():
             frozen = [
@@ -3093,7 +3096,8 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
                     pairs += 1
                     with self.subTest(frozen=old, live=new):
                         self.assertLessEqual(
-                            set(profiles[old].get("systems") or []),
+                            set(profiles[old].get("systems") or [])
+                            - removed_upstream.get((old, new), set()),
                             set(profiles[new].get("systems") or []),
                         )
                         if (old, new) not in builds_differ:
