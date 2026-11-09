@@ -5,6 +5,7 @@ source: "https://github.com/linappleii/linapple"
 upstream: "https://github.com/AppleWin/AppleWin"
 profiled_date: "2026-10-20"
 source_commit: "7f4b60898d91bfecd6f4d8683a374f38b0564962"
+prose_written_at: "7f4b60898d91bfecd6f4d8683a374f38b0564962"
 upstream_commit: "9970ef6b668a7cf057ce6d82f100dde6a751f4d3"
 core_version: "3.0.0"
 version_basis:
