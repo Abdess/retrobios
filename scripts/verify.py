@@ -91,6 +91,7 @@ from common import (
 yaml = require_yaml()
 from exporter.candidates import BIOS, EntryCategories
 from launchers import LauncherLayer, declared_destinations, held_record
+from cross_reference import launcher_reads_not_held
 from nativemode import (
     SIZE_AND_ANY_HASH,
     digest_algorithm,
@@ -1595,6 +1596,10 @@ def verify_platform(
         "excluded_files": excluded,
         "packed_extras": packed_extras,
         "undeclared_files": undeclared,
+        # Reported apart, never scored: no severity, count or exit code reads it.
+        "launcher_reads_not_held": launcher_reads_not_held(
+            {config.get("_key", platform): config}, db, profiles, data_dir_registry
+        ),
         "exclusion_notes": exclusions,
         "region_fallbacks": sorted(region_fallbacks),
         **({"left_out": left_out} if no_game_data else {}),
@@ -1959,6 +1964,23 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
             )
 
 
+def _print_launcher_reads(result: dict, verbose: bool) -> None:
+    """Names the platform's launch code reads that the collection lacks."""
+    rows = result.get("launcher_reads_not_held") or []
+    if not rows:
+        return
+    listed = "" if verbose else " (--verbose lists them)"
+    print(f"  Launcher reads, not held: {len(rows)}{listed}")
+    if not verbose:
+        return
+    for row in rows:
+        kinds = ", ".join(sorted({r["kind"] for r in row["readers"]}))
+        casing = f", held as {row['held_as']}" if row.get("held_as") else ""
+        print(f"    {row['name']} [{', '.join(row['emulators'])}, {kinds}{casing}]")
+        for reader in row["readers"]:
+            print(f"      {reader['emulator']}: {reader['source_ref']}")
+
+
 def print_platform_result(
     result: dict, group: list[str], verbose: bool = False
 ) -> None:
@@ -2026,6 +2048,7 @@ def print_platform_result(
     seen_details: set[str] = set()
     _print_detail_entries(result["details"], seen_details, verbose)
     _print_undeclared_section(result, verbose)
+    _print_launcher_reads(result, verbose)
 
     # The same notes come back for every platform running these cores and
     # filled 985 of the 1114 lines of verify --all: counted, listed on ask.
