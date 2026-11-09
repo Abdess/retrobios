@@ -3172,3 +3172,184 @@ systems:
     cores:
     - fuse
     - ep128emu_core
+launchers:
+- emulator: retroarch
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: ~/roms/bios
+  passes_to: retroarch.cfg system_directory
+  fails_when_missing: false
+  source_ref: "packages/games/tools/retroarch/sources/retroarch.cfg:611"
+- emulator: retrorun
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /roms/bios
+  passes_to: command line -d
+  fails_when_missing: false
+  source_ref: "packages/games/tools/retrorun/retrorun.sh:583"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /roms/bios/mame;/roms/bios;/roms/arcade;/roms/mame
+  passes_to: .cmd -rp
+  fails_when_missing: false
+  depends_on_option: self.emulator == 'mame'
+  source_ref: "packages/amberelec/sources/scripts/runemu.py:233, 252, 255"
+- emulator: atari800
+  build: libretro
+  kind: fixed_name
+  names:
+  - ATARIOSA.ROM
+  - ATARIXL.ROM
+  - 5200.rom
+  - 5200a.rom
+  - BASIC_Rev_A.rom
+  - BASIC_Rev_B.rom
+  - ATARIBAS.ROM
+  - ATARIOSB.ROM
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: atari800.cfg ROM_OS_A_PAL, ROM_OS_BB01R2, ROM_5200, ROM_5200_A, ROM_BASIC_A,
+    ROM_BASIC_B, ROM_BASIC_C, ROM_400/800_CUSTOM
+  fails_when_missing: false
+  source_ref: "packages/games/libretro/atari800/patches/atari800-01-add-emuelec-platform.patch:27,\
+    \ packages/amberelec/config/distribution/configs/atari800.cfg:3, 8, 16-22"
+- emulator: scummvm
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /roms/bios/scummvm/theme
+  passes_to: scummvm.ini themepath
+  fails_when_missing: false
+  depends_on_option: scummvm.sh libretro
+  source_ref: "packages/games/emulators/scummvmsa/scummvm.sh:34, 42"
+- emulator: scummvm
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /roms/bios/scummvm/extra
+  passes_to: scummvm.ini extrapath
+  fails_when_missing: false
+  depends_on_option: scummvm.sh libretro
+  source_ref: "packages/games/emulators/scummvmsa/scummvm.sh:34, 43"
+- emulator: freej2me
+  build: libretro
+  kind: copies
+  names:
+  - freej2me-lr.jar
+  case_insensitive: false
+  search_dir: /usr/config/distribution/freej2me
+  passes_to: /storage/roms/bios
+  fails_when_missing: false
+  source_ref: "packages/games/libretro/freej2me/freej2me.sh:11-12, 44"
+- emulator: freej2me-plus
+  build: libretro
+  kind: copies
+  names:
+  - freej2me-plus-lr.jar
+  case_insensitive: false
+  search_dir: /usr/config/distribution/freej2me
+  passes_to: /storage/roms/bios
+  fails_when_missing: false
+  source_ref: "packages/games/libretro/freej2me-plus/freej2me-plus.sh:11-12, 44"
+- emulator: easyrpg
+  build: libretro
+  kind: copies
+  names: []
+  search_dir: "https://dl.degica.com/rpgmakerweb/run-time-packages/rpg2000_rtp_installer.exe"
+  passes_to: /storage/roms/bios/rtp/2000
+  fails_when_missing: false
+  source_ref: "packages/games/libretro/easyrpg/easyrpg.sh:23, 42, 46, 60"
+- emulator: easyrpg
+  build: libretro
+  kind: copies
+  names: []
+  search_dir: "https://dl.degica.com/rpgmakerweb/run-time-packages/rpg2003_rtp_installer.zip"
+  passes_to: /storage/roms/bios/rtp/2003
+  fails_when_missing: false
+  source_ref: "packages/games/libretro/easyrpg/easyrpg.sh:23, 42, 46, 61"
+- emulator: AMIBERRY
+  build: standalone
+  kind: links
+  names: []
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: /usr/config/amiberry/kickstarts is a symlink to it
+  fails_when_missing: false
+  source_ref: "packages/games/emulators/amiberry/package.mk:35"
+- emulator: AMIBERRY
+  build: standalone
+  kind: fixed_name
+  slot: A1200
+  names:
+  - kick40068.A1200.rom
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: "AmigaA1200-default.uae kickstart_rom_file, $(FILE_PATH) = /storage/.config/amiberry/kickstarts/"
+  fails_when_missing: false
+  depends_on_option: "[ `echo $1 | egrep 'AGA|CD32' | wc -l` -eq 1 -o `echo \"$AMIBERRY_TMP_DIR\"\
+    /* | egrep 'AGA|CD32' | wc -l` -eq 1 ]"
+  source_ref: "packages/amberelec/sources/scripts/runemu.py:111, packages/games/emulators/amiberry/scripts/amiberry.sh:57-59,\
+    \ packages/games/emulators/amiberry/config/conf/AmigaA1200-default.uae:35, 85"
+- emulator: AMIBERRY
+  build: standalone
+  kind: fixed_name
+  slot: A500
+  names:
+  - kick34005.A500.rom
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: "AmigaA500-default.uae kickstart_rom_file, $(FILE_PATH) = /storage/.config/amiberry/kickstarts/"
+  fails_when_missing: false
+  depends_on_option: "not ([ `echo $1 | egrep 'AGA|CD32' | wc -l` -eq 1 -o `echo \"\
+    $AMIBERRY_TMP_DIR\"/* | egrep 'AGA|CD32' | wc -l` -eq 1 ])"
+  source_ref: "packages/amberelec/sources/scripts/runemu.py:111, packages/games/emulators/amiberry/scripts/amiberry.sh:60-62,\
+    \ packages/games/emulators/amiberry/config/conf/AmigaA500-default.uae:35, 85"
+- emulator: HATARISA
+  build: standalone
+  kind: fixed_name
+  names:
+  - tos.img
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: "Atari-ST-default.cfg [ROM] szTosImageFileName"
+  fails_when_missing: false
+  source_ref: "packages/amberelec/sources/scripts/runemu.py:113, packages/games/emulators/hatarisa/scripts/hatari.sh:36,\
+    \ 66, packages/games/emulators/hatarisa/config/conf/Atari-ST-default.cfg:200"
+- emulator: pico8
+  build: standalone
+  kind: fixed_name
+  names:
+  - pico8_64
+  - pico8.dat
+  case_insensitive: false
+  search_dir: /storage/roms/pico-8
+  passes_to: exec
+  fails_when_missing: Missing Pico-8 binaries!
+  source_ref: "packages/amberelec/sources/scripts/runemu.py:123, packages/amberelec/sources/pico-8.sh:51-54"
+- emulator: piemu
+  build: standalone
+  kind: fixed_name
+  names:
+  - all.bin
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: mkpfi argument
+  fails_when_missing: false
+  source_ref: "packages/amberelec/sources/scripts/runemu.py:124, packages/games/emulators/piemu/bin/piemu.sh:8-10,\
+    \ 33, 37, 50"
+- emulator: yabasanshiroSA
+  build: standalone
+  kind: fixed_name
+  names:
+  - saturn_bios.bin
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: command line -b
+  fails_when_missing: false
+  depends_on_option: use_hlebios
+  source_ref: "packages/amberelec/sources/scripts/runemu.py:127, packages/games/emulators/yabasanshiroSA/yabasanshiro.sh:36,\
+    \ 63-65, 78"

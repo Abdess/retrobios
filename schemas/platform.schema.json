@@ -226,7 +226,7 @@
             "scans_dir",
             "package"
           ],
-          "description": "names_searched: tries the names in order, first found wins. fixed_name: writes or opens one path per name. core_option: sets a core option whose value names the file. passes_path: hands over a directory. links, copies: links or copies a file to where the emulator reads it. moves: moves a file the user left in one folder to the folder the launcher links from. scans_dir: the emulator picks from a directory. package: names no file, records what a package builds (`repo`) and the systems it registers (`systems`)"
+          "description": "names_searched: tries the names in order, first found wins. fixed_name: writes or opens one path per name. core_option: sets a core option whose value names the file. passes_path: hands over a directory. links, copies: links or copies a file to where the emulator reads it (a copy names its files under search_dir, the folder it copies from, passes_to is the target, and the case that skips it is in depends_on_option). moves: moves a file the user left in one folder to the folder the launcher links from. scans_dir: the emulator picks from a directory. package: names no file, records what a package builds (`repo`) and the systems it registers (`systems`)"
         },
         "package": {
           "type": "string",

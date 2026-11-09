@@ -1042,7 +1042,10 @@ class HelpersAndCopies(unittest.TestCase):
         )
         self.assertEqual(segaboot["kind"], "copies")
         self.assertEqual(segaboot["names"], ["triforce/segaboot.gcm", "segaboot.gcm"])
-        self.assertEqual(segaboot["depends_on_option"], "_triforce, !_crediar")
+        self.assertEqual(
+            segaboot["depends_on_option"],
+            "_triforce, !_crediar, first name found, the target is absent, smaller or older",
+        )
 
     def test_dosbox_copies_grouped_by_target_folder(self):
         sources = _sources(
@@ -1055,16 +1058,17 @@ class HelpersAndCopies(unittest.TestCase):
                 (
                     "dosbox-pure",
                     ["MT32_CONTROL.ROM"],
-                    "copied to <emulator>/mt32-roms/<name>, only when the target does not exist",
+                    "<emulator>/mt32-roms/<name>",
                 ),
                 (
                     "dosbox-pure",
                     ["Roland_SC-55.sf2"],
-                    "copied to <emulator>/soundfonts/<name>, only when the target does not exist",
+                    "<emulator>/soundfonts/<name>",
                 ),
             ],
         )
         self.assertEqual(records[0]["search_dir"], "bios/scummvm/extra")
+        self.assertEqual(records[0]["depends_on_option"], "the target does not exist")
 
     def test_tsugaru_folder_chain(self):
         [record] = rl.tsugaru(_sources(**{f"{G}/Tsugaru.Generator.cs": TSUGARU}))
