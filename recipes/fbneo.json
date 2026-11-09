@@ -1,6 +1,6 @@
 {
   "source": "fbneo",
-  "imported_at": "2026-10-21",
+  "imported_at": "2026-11-09",
   "dats": {
     "FinalBurn Neo - Arcade Games": "1.0.0.03",
     "FinalBurn Neo - Astrocade Home Computer Games": "1.0.0.03",
@@ -1017,6 +1017,131 @@
           "name": "text.u58",
           "size": 262144,
           "crc32": "5dba06e7",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
+      "name": "dotron.zip",
+      "set": "dotron",
+      "description": "Discs of Tron (Upright, 10/4/83)",
+      "members": [
+        {
+          "name": "82s123.12d",
+          "size": 32,
+          "crc32": "e1281ee9",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg0_10-4-83.1c",
+          "size": 16384,
+          "crc32": "40d00195",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg1_10-4-83.2c",
+          "size": 16384,
+          "crc32": "5a7d1300",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg2_10-4-83.3c",
+          "size": 16384,
+          "crc32": "cb89c9be",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_pg3_10-4-83.4c",
+          "size": 8192,
+          "crc32": "5098faf4",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd0_10-4-83.a7",
+          "size": 4096,
+          "crc32": "7fb54293",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd1_10-4-83.a8",
+          "size": 4096,
+          "crc32": "edef7326",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd2_9-22-83.a9",
+          "size": 4096,
+          "crc32": "e8ef6519",
+          "sha1": ""
+        },
+        {
+          "name": "disc_tron_uprt_snd3_9-22-83.a10",
+          "size": 4096,
+          "crc32": "6b5aeb02",
+          "sha1": ""
+        },
+        {
+          "name": "loc-a.cp0",
+          "size": 8192,
+          "crc32": "b35f5374",
+          "sha1": ""
+        },
+        {
+          "name": "loc-b.cp9",
+          "size": 8192,
+          "crc32": "565a5c48",
+          "sha1": ""
+        },
+        {
+          "name": "loc-bg1.5f",
+          "size": 8192,
+          "crc32": "bb2d7a5d",
+          "sha1": ""
+        },
+        {
+          "name": "loc-bg2.6f",
+          "size": 8192,
+          "crc32": "40167124",
+          "sha1": ""
+        },
+        {
+          "name": "loc-c.cp8",
+          "size": 8192,
+          "crc32": "ef45d146",
+          "sha1": ""
+        },
+        {
+          "name": "loc-d.cp7",
+          "size": 8192,
+          "crc32": "5e8a3ef3",
+          "sha1": ""
+        },
+        {
+          "name": "loc-e.cp6",
+          "size": 8192,
+          "crc32": "ce957f1a",
+          "sha1": ""
+        },
+        {
+          "name": "loc-f.cp5",
+          "size": 8192,
+          "crc32": "d26053ce",
+          "sha1": ""
+        },
+        {
+          "name": "loc-g.cp4",
+          "size": 8192,
+          "crc32": "57a2b1ff",
+          "sha1": ""
+        },
+        {
+          "name": "loc-h.cp3",
+          "size": 8192,
+          "crc32": "3bb4d475",
           "sha1": ""
         }
       ],
@@ -4418,6 +4543,215 @@
     },
     {
       "dat": "FinalBurn Neo - Arcade Games",
+      "name": "sfiii2a.zip",
+      "set": "sfiii2a",
+      "description": "Street Fighter III 2nd Impact: Giant Attack (Asia 970930)",
+      "members": [
+        {
+          "name": "sfiii2-simm1.0",
+          "size": 2097152,
+          "crc32": "2d666f0b",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm1.1",
+          "size": 2097152,
+          "crc32": "2a3a8ef6",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm1.2",
+          "size": 2097152,
+          "crc32": "161d2206",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm1.3",
+          "size": 2097152,
+          "crc32": "87ded8a3",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.0",
+          "size": 2097152,
+          "crc32": "94a4ce0f",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.1",
+          "size": 2097152,
+          "crc32": "67585033",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.2",
+          "size": 2097152,
+          "crc32": "fabffcd5",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm2.3",
+          "size": 2097152,
+          "crc32": "623c09ca",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.0",
+          "size": 2097152,
+          "crc32": "dab2d766",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.1",
+          "size": 2097152,
+          "crc32": "1f2aa34b",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.2",
+          "size": 2097152,
+          "crc32": "6f1a04eb",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.3",
+          "size": 2097152,
+          "crc32": "e05ef205",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.4",
+          "size": 2097152,
+          "crc32": "affb074f",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.5",
+          "size": 2097152,
+          "crc32": "6962872e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.6",
+          "size": 2097152,
+          "crc32": "6eed87de",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm3.7",
+          "size": 2097152,
+          "crc32": "e18f479e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.0",
+          "size": 2097152,
+          "crc32": "764c2503",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.1",
+          "size": 2097152,
+          "crc32": "3e16af6e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.2",
+          "size": 2097152,
+          "crc32": "215705e6",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.3",
+          "size": 2097152,
+          "crc32": "e30cbd9c",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.4",
+          "size": 2097152,
+          "crc32": "4185ded9",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.5",
+          "size": 2097152,
+          "crc32": "4e8db013",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.6",
+          "size": 2097152,
+          "crc32": "08df48ce",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm4.7",
+          "size": 2097152,
+          "crc32": "bb8f80a5",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.0",
+          "size": 2097152,
+          "crc32": "ebdc4787",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.1",
+          "size": 2097152,
+          "crc32": "6b7c550e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.2",
+          "size": 2097152,
+          "crc32": "56ff8c50",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.3",
+          "size": 2097152,
+          "crc32": "3f2ac3e9",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.4",
+          "size": 2097152,
+          "crc32": "48cda50e",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.5",
+          "size": 2097152,
+          "crc32": "520c0af6",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.6",
+          "size": 2097152,
+          "crc32": "2edc5986",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2-simm5.7",
+          "size": 2097152,
+          "crc32": "93ffa199",
+          "sha1": ""
+        },
+        {
+          "name": "sfiii2_asia.29f400.u2",
+          "size": 524288,
+          "crc32": "4518d589",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
       "name": "sfiii2h.zip",
       "set": "sfiii2h",
       "description": "Street Fighter III 2nd Impact: Giant Attack (Hispanic 970930)",
@@ -7163,6 +7497,113 @@
     },
     {
       "dat": "FinalBurn Neo - Arcade Games",
+      "name": "svgpcb.zip",
+      "set": "svgpcb",
+      "description": "S.V.G. - Spectral vs Generation / Sheng Mo Shiji (M68k label V100JP) (ARM label V100JP, ROM 05/12/05 S.V.G V100) (Japan, JAMMA PCB)",
+      "members": [
+        {
+          "name": "igs_a05601w064.u44",
+          "size": 8388608,
+          "crc32": "ea6453e4",
+          "sha1": ""
+        },
+        {
+          "name": "igs_a05602w064.u45",
+          "size": 8388608,
+          "crc32": "6d00621b",
+          "sha1": ""
+        },
+        {
+          "name": "igs_a05603w064.u46",
+          "size": 8388608,
+          "crc32": "7b71c64f",
+          "sha1": ""
+        },
+        {
+          "name": "igs_a05604w032.u47",
+          "size": 4194304,
+          "crc32": "9452a567",
+          "sha1": ""
+        },
+        {
+          "name": "igs_b05601w064.u61",
+          "size": 8388608,
+          "crc32": "35c0a489",
+          "sha1": ""
+        },
+        {
+          "name": "igs_b05602w064.u62",
+          "size": 8388608,
+          "crc32": "8aad3f85",
+          "sha1": ""
+        },
+        {
+          "name": "igs_t05601w016.u70",
+          "size": 2097152,
+          "crc32": "03e110dc",
+          "sha1": ""
+        },
+        {
+          "name": "igs_w05601b064.u30",
+          "size": 8388608,
+          "crc32": "bfe61a71",
+          "sha1": ""
+        },
+        {
+          "name": "igs_w05602b032.u31",
+          "size": 4194304,
+          "crc32": "0685166d",
+          "sha1": ""
+        },
+        {
+          "name": "pgm_m01s.rom",
+          "size": 2097152,
+          "crc32": "45ae7159",
+          "sha1": ""
+        },
+        {
+          "name": "pgm_t01s.rom",
+          "size": 2097152,
+          "crc32": "1a7123a0",
+          "sha1": ""
+        },
+        {
+          "name": "svg_bios.u49",
+          "size": 131072,
+          "crc32": "3346401f",
+          "sha1": ""
+        },
+        {
+          "name": "svg_v100jp_u50.u50",
+          "size": 524288,
+          "crc32": "8d0405e4",
+          "sha1": ""
+        },
+        {
+          "name": "svg_v100jp_u64.u64",
+          "size": 4194304,
+          "crc32": "399d4a8b",
+          "sha1": ""
+        },
+        {
+          "name": "svg_v100jp_u65.u65",
+          "size": 4194304,
+          "crc32": "6e1c33b1",
+          "sha1": ""
+        },
+        {
+          "name": "svgcpb_igs027a_v100_japan.bin",
+          "size": 15992,
+          "crc32": "7a59da5d",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - Arcade Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - Arcade Games",
       "name": "tekipaki.zip",
       "set": "tekipaki",
       "description": "Teki Paki",
@@ -8692,6 +9133,35 @@
     },
     {
       "dat": "FinalBurn Neo - ZX Spectrum Games",
+      "name": "badlands.zip",
+      "set": "badlands",
+      "description": "Badlands (48K-128K)",
+      "members": [
+        {
+          "name": "Badlands 48K-128K (1990)(Domark).tap",
+          "size": 33672,
+          "crc32": "5df53959",
+          "sha1": ""
+        },
+        {
+          "name": "zx128_0.rom",
+          "size": 16384,
+          "crc32": "e76799d2",
+          "sha1": ""
+        },
+        {
+          "name": "zx128_1.rom",
+          "size": 16384,
+          "crc32": "b96a36be",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - ZX Spectrum Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - ZX Spectrum Games",
       "name": "cobra.zip",
       "set": "cobra",
       "description": "Cobra (48K)",
@@ -8883,25 +9353,25 @@
   ],
   "upstream": {
     "blobs": {
-      "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat": "06fd53978335037cbf2fc1c25f97348cb0dab319",
+      "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat": "07033a52f64f51532675f2d3845654b2b05e93cd",
       "FinalBurn Neo (ClrMame Pro XML, Bally Astrocade Games only).dat": "7acfd6d42e70c751c858ef069a62c77c4048a0ec",
       "FinalBurn Neo (ClrMame Pro XML, ColecoVision only).dat": "414430a8569c650e5f2ea8e726bce3050aa8ef25",
-      "FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat": "f42114f934da56c64627980e5188d3146534ad04",
+      "FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat": "3876d4e8edceb12afc31ea8ed15d4d2034a7e7d9",
       "FinalBurn Neo (ClrMame Pro XML, Fairchild Channel F Games only).dat": "90ce8903a387ff2086fc1163abd9ced97c2c76d0",
-      "FinalBurn Neo (ClrMame Pro XML, GBA Games only).dat": "69d6cd81bbd38a822886954cc782c9a5a4e924fe",
-      "FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat": "86072046457f04b335a82e64ff2762bfc86ce084",
-      "FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat": "63e44dfe07180a1cb946ac86dd0c3b7a3349d7a9",
-      "FinalBurn Neo (ClrMame Pro XML, Master System only).dat": "fafc4d832c45de94809d36b828bd15e6f9986a06",
-      "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat": "329ac56591d8b4a2cad15a51a9863b7c7141d8e2",
-      "FinalBurn Neo (ClrMame Pro XML, NES Games only).dat": "bb5feb4d4610f527c1761bce25a729b2413f16d5",
-      "FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat": "f6a8a097b8d1c073223767532044223cb78c2ed0",
-      "FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat": "421716a0ea7d9c74d33a568a538dda63d44eb1b5",
-      "FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat": "ee7a919b06c06505026cf99e93a34cc4a6df6766",
-      "FinalBurn Neo (ClrMame Pro XML, SNES Games only).dat": "21aadc7ce57083518f3b4019b254e9d1733f6cfc",
-      "FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat": "9da354dfcf066623e12d582ed3631177981e500b",
+      "FinalBurn Neo (ClrMame Pro XML, GBA Games only).dat": "0195b7e05f85e5232682278b49eb546740e75827",
+      "FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat": "5a6731571154d2f0f2cb2b0cd27fe40cb7875043",
+      "FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat": "ad53c313f23f2da392228421b181803629ddcbff",
+      "FinalBurn Neo (ClrMame Pro XML, Master System only).dat": "3f9881c9bf7c62fd4a1b58eaa324b40b0ef9cbd9",
+      "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat": "400edc165ecbae49ca6aabc5e4c89adf2e65ae62",
+      "FinalBurn Neo (ClrMame Pro XML, NES Games only).dat": "6bed4f118cc7d049f85c18590599e636370eec6a",
+      "FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat": "d69197d2f9a5d69b122759e9a8c04c4102ba32e1",
+      "FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat": "88c6e65f9feff46edf7e079cac8dac9f16eea155",
+      "FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat": "70f0bad3677bd4883f97e439ba8b0b67fd70f4c7",
+      "FinalBurn Neo (ClrMame Pro XML, SNES Games only).dat": "6e344243d179655291e4795e8c5d32867ec952f3",
+      "FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat": "0ce025fee6d578668329f1c35142889c061da2bf",
       "FinalBurn Neo (ClrMame Pro XML, SuprGrafx only).dat": "bbdb2e89a5a278133ed8ea71b2c29ae92a27db85",
       "FinalBurn Neo (ClrMame Pro XML, TurboGrafx16 only).dat": "01be51eaf3ee6cb4c0cfe4b499c4086f3400000a",
-      "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat": "140833ab63c42c44c79740af2c8ad7a67f6dd5b7"
+      "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat": "8e7dfbdf294e66f0cf2610b371c63d87107dc99f"
     }
   }
 }
