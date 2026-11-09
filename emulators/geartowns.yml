@@ -3,13 +3,14 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Geartowns"
 upstream: "https://github.com/drhelius/Geartowns"
-profiled_date: "2026-10-27"
-source_commit: "996d42b098bd572ba66a8246bfe56cee39e5ff6e"
-core_version: "1.0.1-5-g996d42b"
+profiled_date: "2026-11-09"
+source_commit: "0b3ee180c3d0405cac29f6b2587bc9e458664504"
+prose_written_at: "0b3ee180c3d0405cac29f6b2587bc9e458664504"
+core_version: "1.0.6-3-g0b3ee18"
 version_basis:
   kind: tag
-  tag: "1.0.1"
-  distance: 5
+  tag: "1.0.6"
+  distance: 3
 display_name: "Fujitsu - FM Towns (Geartowns)"
 cores:
   - "geartowns"
@@ -19,62 +20,66 @@ systems:
 notes: |
   FM Towns emulator by Ignacio Sanchez (drhelius). The same tree builds the
   desktop application and the libretro core (platforms/libretro). The core
-  emulates the Model 1/2, 1F/2F, 10F/20F, II CX, UX, UG, HG, HR and the Marty
-  (src/system/machine_profiles.h:112-126, `emulated` field). The version string
-  is `git describe` at build time (platforms/libretro/Makefile:369-371).
+  emulates the Model 1/2, 1F/2F, 10F/20F, II CX, UX, UG, HG, HR, UR, ME, MA,
+  MX, MF/Fresh and the Marty, the HC being listed but not emulated
+  (src/system/machine_profiles.h:120-134, `emulated` field). The version
+  string is `git describe` at build time (platforms/libretro/Makefile:369-371).
 
   retro_load_game() fails when load_bios() finds no firmware
-  (platforms/libretro/libretro.cpp:738-742). load_bios() searches
+  (platforms/libretro/libretro.cpp:818-822). load_bios() searches
   system/geartowns first, then the system directory itself, each time
   accepting first only a set made for the selected model and then any set
-  (platforms/libretro/libretro.cpp:844-871). Firmware::FindSources() takes
+  (platforms/libretro/libretro.cpp:937-964). Firmware::FindSources() takes
   as candidates the folder itself, every direct subfolder and every .zip in
   it (src/media/firmware.cpp:288-348). Folder and zip names are free. A
   candidate counts only when the System, OS, Font and Dictionary ROMs are all
   present at the right size, and the CRC32 of its System ROM names the set
-  (src/media/firmware.cpp:377-416, src/media/firmware.h:115-124).
+  (src/media/firmware.cpp:377-416, src/media/firmware.h:115-125).
 
-  Six sets are known (src/media/firmware.h:115-124): fmtowns (Model 1/2),
+  Six sets are known (src/media/firmware.h:115-125): fmtowns (Model 1/2),
   freetowns (Free FM Towns Project replacement ROMs, used by the Model 1/2),
   fmtownsux (UX, also used by 1F/2F, 10F/20F, CX and UG), fmtmarty (Marty),
-  fmtownshr (HR, also used by the HG) and fmtownsftv (also used by the HG,
-  after fmtownshr). On Auto the
+  fmtownshr (HR, also used by the HG and UR) and the V10 set (made for the
+  MF/Fresh and MX, also used by the HG, UR, ME and MA). The V10 set is read
+  from the MAME fmtownsftv files or from the single MX mask ROM. On Auto the
   model comes from the game database and falls back to the Model 1/2 or to
-  the first model in release order that has a set
-  (src/geartowns_core.cpp:1986-2022, src/geartowns_core.cpp:2106-2111). A
+  the first model in release order that has a set made for it or accepted by
+  it (src/geartowns_core.cpp:2088-2142, src/geartowns_core.cpp:2238-2243). A
   1.44 MB floppy (2HD at 300 rpm) inserted on Auto replaces a model without a
-  three-mode drive by the first one in release order that has it, the HG
-  (src/geartowns_core.cpp:776-779, src/geartowns_core.cpp:1997-2005), which
-  uses the fmtownshr or fmtownsftv set. A set made for another model still
-  loads in the second pass, with a warning
-  (platforms/libretro/libretro.cpp:873-906).
+  three-mode drive by the first one in release order that has it
+  (src/geartowns_core.cpp:803-806, src/geartowns_core.cpp:2115-2123). A set
+  made for another model still loads in the second pass, with a warning
+  (platforms/libretro/libretro.cpp:966-999).
 
   File names are matched without case, inside a zip only at the archive root
-  (src/media/firmware.cpp:617-666). Accepted names, one group per component,
+  (src/media/firmware.cpp:622-671). Accepted names, one group per component,
   are (FMT_SYS.ROM, FMT_SYS_A.ROM, FMTHR_SYS.ROM), (FMT_DOS.ROM, FMT_DOS_A.ROM),
   (FMT_FNT.ROM), (FMT_DIC.ROM), (FMT_F20.ROM, FMT_F20_A.ROM), (MYTOWNS.ROM,
-  MYTOWNSUX.ROM, MYTOWNSM2.ROM, MYTOWNSFTV.ROM, MYTOWNSHR.ROM) and (MAR_EX0.ROM
-  to MAR_EX3.ROM) (src/media/firmware.cpp:28-42). Without separate files the
-  Marty components are cut from MROM.M36 and MROM.M37, 2 MiB each
-  (src/media/firmware.cpp:500-511): OS at 0 and the first three extension
-  parts in M36, and the fourth extension part, 20-dot font at 0x80000,
-  dictionary at 0x100000, font at 0x180000 and System ROM at 0x1C0000 in M37.
+  MYTOWNSUX.ROM, MYTOWNSM2.ROM, MYTOWNSFTV.ROM, MYTOWNSHR.ROM, MYTOWNSMX.ROM)
+  and (MAR_EX0.ROM to MAR_EX3.ROM) (src/media/firmware.cpp:28-42). Without
+  separate files the components are cut from 2 MiB mask ROMs
+  (src/media/firmware.cpp:500-516). For the Marty, MROM.M36 holds the OS at 0
+  and the first three extension parts, and MROM.M37 the fourth extension
+  part, the 20-dot font at 0x80000, the dictionary at 0x100000, the font at
+  0x180000 and the System ROM at 0x1C0000. For the MX, FMTOWNSIIMXBIOS.M79
+  holds the OS at 0, the font at 0x80000, the System ROM at 0xC0000, the
+  20-dot font at 0x100000 and the dictionary at 0x180000.
 
   Each component must have its exact size or it is rejected
-  (src/media/firmware.cpp:533-615, src/common/defines.h:48-55): System
+  (src/media/firmware.cpp:538-620, src/common/defines.h:48-55): System
   256 KiB, OS 512 KiB, Font 256 KiB, Dictionary 512 KiB, 20-dot Font 512 KiB,
   Serial 32 bytes, Extension 2 MiB (four 512 KiB parts). System, OS, Font and
   Dictionary are required. A missing 20-dot Font or Extension is replaced by
   0xFF, a missing Serial ROM is generated (src/media/firmware.cpp:76-165,
   src/media/firmware.cpp:260-263). The CRC32 of every component is looked up
-  in game_db.h (src/media/firmware.cpp:167-184, src/media/game_db.h:344-376),
+  in game_db.h (src/media/firmware.cpp:167-184, src/media/game_db.h:345-380),
   and an unknown CRC only produces a warning. The Free FM Towns set is known by
   System 65DC3B1F, OS 43C18E92, Font 736D9CB1 and a blank Dictionary
   504BF849. The Marty slices are known by System 937311F6, OS 2BC2AF96,
   Extension E1A9FA72 and 20-dot Font 75660AAC.
 
   The CMOS is written by the core next to the saves
-  (platforms/libretro/libretro.cpp:3019-3033). It is state, not a file to
+  (platforms/libretro/libretro.cpp:3365-3379). It is state, not a file to
   obtain.
 
 files:
@@ -89,7 +94,7 @@ files:
       - { name: "fmt_dos.rom", size: 524288, crc32: "112872ee" }
       - { name: "fmt_fnt.rom", size: 262144, crc32: "955c6b75" }
       - { name: "fmt_dic.rom", size: 524288, crc32: "b314c659" }
-    source_ref: "platforms/libretro/libretro.cpp:738-742, platforms/libretro/libretro.cpp:853-871, src/media/firmware.h:117, src/media/firmware.cpp:28-33, src/media/firmware.cpp:288-348, src/media/game_db.h:344-348"
+    source_ref: "platforms/libretro/libretro.cpp:818-822, platforms/libretro/libretro.cpp:946-964, src/media/firmware.h:117, src/media/firmware.cpp:28-33, src/media/firmware.cpp:288-348, src/media/game_db.h:345-349"
     note: >
       Set for the Model 1/2, the machine Auto falls back to. The same four
       files load from any subfolder of system/geartowns or from
@@ -108,7 +113,7 @@ files:
       - { name: "fmt_fnt.rom", size: 262144, crc32: "dd6fd544" }
       - { name: "fmt_dic.rom", size: 524288, crc32: "82d1daa2" }
       - { name: "mytownsux.rom", size: 32, crc32: "5cc7e6bc" }
-    source_ref: "src/media/firmware.h:119-120, src/media/firmware.cpp:28-34, src/media/game_db.h:350-355"
+    source_ref: "src/media/firmware.h:119-120, src/media/firmware.cpp:28-35, src/media/game_db.h:351-356"
     note: "Set for the UX, also used by the 1F/2F, 10F/20F, CX and UG."
 
   - name: "fmtmarty.zip"
@@ -120,7 +125,7 @@ files:
     contents:
       - { name: "mrom.m36", size: 2097152 }
       - { name: "mrom.m37", size: 2097152 }
-    source_ref: "src/media/firmware.h:121, src/media/firmware.cpp:500-511, src/media/game_db.h:357-361"
+    source_ref: "src/media/firmware.h:121, src/media/firmware.cpp:500-516, src/media/game_db.h:358-362"
     note: >
       The core checks the CRC32 of the slices it cuts from the two mask
       ROMs, not of the files: System 937311F6, OS 2BC2AF96, Extension
@@ -139,11 +144,11 @@ files:
       - { name: "fmt_fnt.rom", size: 262144 }
       - { name: "fmt_dic.rom", size: 524288 }
       - { name: "mytownshr.rom", size: 32, crc32: "c52f0e89" }
-    source_ref: "src/media/firmware.h:122, src/media/firmware.cpp:28-34, src/media/game_db.h:363-365"
-    note: "Set for the HR, and first choice for the HG."
+    source_ref: "src/media/firmware.h:122, src/media/firmware.cpp:28-35, src/media/game_db.h:364-366"
+    note: "Set for the HR, and first choice for the HG and UR."
 
   - name: "fmtownsftv.zip"
-    description: "FM Towns II Fresh TV firmware set"
+    description: "FM Towns II V10 firmware set (MF/Fresh)"
     system: "fmtowns"
     category: bios_zip
     path: "geartowns/fmtownsftv.zip"
@@ -155,5 +160,20 @@ files:
       - { name: "fmt_dic.rom", size: 524288 }
       - { name: "fmt_f20.rom", size: 524288, crc32: "9f55a20c" }
       - { name: "mytownsftv.rom", size: 32, crc32: "a961aae7" }
-    source_ref: "src/media/firmware.h:123, src/media/firmware.cpp:28-34, src/media/game_db.h:367-370"
-    note: "Second choice for the HG. The MF/Fresh itself is not emulated."
+    source_ref: "src/media/firmware.h:123-124, src/media/firmware.cpp:28-35, src/media/game_db.h:368-371"
+    note: "V10 set for the MF/Fresh and MX, also used by the ME and MA, and second choice for the HG and UR."
+
+  - name: "fmtownsmx.zip"
+    description: "FM Towns II MX firmware set (V10)"
+    system: "fmtowns"
+    category: bios_zip
+    path: "geartowns/fmtownsmx.zip"
+    required: false
+    contents:
+      - { name: "fmtownsiimxbios.m79", size: 2097152 }
+      - { name: "mytownsmx.rom", size: 32, crc32: "16e78766" }
+    source_ref: "src/media/firmware.h:123-124, src/media/firmware.cpp:28-35, src/media/firmware.cpp:500-516, src/media/game_db.h:373-374"
+    note: >
+      The V10 set in the MX layout: OS, font, System ROM, 20-dot font and
+      dictionary are cut from the one mask ROM, and the System ROM slice is
+      the V10 one (AFE4EBCF). Serves the same models as fmtownsftv.zip.
