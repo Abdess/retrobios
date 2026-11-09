@@ -73,7 +73,8 @@ files:
     min_size: 4194304
     max_size: 8388608
     validation: [size]
-    source_ref: "source pcsx2/ps2/BiosTools.cpp:32-33, 64-187, 257-289, 349-415"
+    config_key: "pcsx2_bios"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:32-33, 64-187, 257-289, 349-415, source libretro/main.cpp:525-536"
     note: >
       Scans pcsx2/bios/ for any file between 4 MB and 8 MB. Validates via romdir
       structure parsing (RESET + ROMVER entries). User selects BIOS via core option
