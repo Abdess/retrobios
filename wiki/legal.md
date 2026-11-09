@@ -6,7 +6,7 @@ terms: license
 
 # Is it legal?
 
-It depends on your country. Nothing here is legal advice.
+It depends on the country. Nothing here is legal advice.
 
 - Making an emulator is legal in the US. EU law allows it under conditions.
 - Sharing BIOS files is not settled law. The strongest case is old consoles no

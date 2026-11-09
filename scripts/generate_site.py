@@ -96,6 +96,7 @@ import siteinputs
 import retired_files
 import siteagents
 import sitestarlight
+import sitesteps
 from siteexports import generate_exports_page, load_export_reports
 from siteguides import (
     ALSO_RUNS,
@@ -488,13 +489,13 @@ def generate_home(
     works_with = ", ".join(named) + (f" and {others} more" if others else "")
 
     lines = [
-        "# BIOS files for your emulators",
+        "# BIOS files for emulators",
         "",
         "Some consoles need a small program to start their games. It is called "
-        "the **BIOS**. Your emulator needs a copy of it. We put the right copy "
+        "the **BIOS**. The emulator needs a copy of it. RetroBIOS puts the right copy "
         "in the right folder.",
         "",
-        markup.button("Get your files", "which-pack.md", primary=True) + " "
+        markup.button("Get the files", "which-pack.md", primary=True) + " "
         + markup.button("What is a BIOS?", "wiki/what-are-bios-files.md"),
         "",
         f"Free. No account. Works with {works_with}.",
@@ -503,9 +504,9 @@ def generate_home(
         "[When a game does not start](wiki/troubleshooting.md)",
         "- Have a file? [Check it](files/index.md)",
         "",
-        "## Do I need it?",
+        "## Is it needed? { #do-i-need-it }",
         "",
-        "- **Yes**, if your emulator says a BIOS is missing.",
+        "- **Yes**, if the emulator says a BIOS is missing.",
         "- **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.",
         "- **Better with it** for Dreamcast: some games need it.",
         "- **Usually not** for NES, Super Nintendo, Mega Drive and Game Boy.",
@@ -515,12 +516,12 @@ def generate_home(
         "## Three steps",
         "",
         *markup.steps([
-            "**Pick your device.** Its page shows your BIOS folder.",
+            "**Pick the device.** Its page shows the BIOS folder.",
             "**Run one command.** Some setups have a ZIP.",
             "**Start a game.**",
         ]),
         *install_demo(),
-        "## Pick your device",
+        "## Pick the device { #pick-your-device }",
         "",
         *setup_picker(registry, display),
         "## Is it safe?",
@@ -574,7 +575,7 @@ def generate_explore_index(db: dict, coverages: dict, profiles: dict) -> str:
         "",
         "## Help the project",
         "",
-        "A file you hold, an emulator profile or a correction fills a gap for "
+        "A file sent in, an emulator profile or a correction fills a gap for "
         "every setup at once. For contributors: [How to contribute](contributing.md).",
         "",
     ]
@@ -752,7 +753,7 @@ def _folder_words(display: str, extract_to: str | None) -> str:
     """The folder a pack or a copy goes into, in words: the device's path,
     or a folder of the setup named as the setup's."""
     if not extract_to:
-        return "your BIOS folder"
+        return "the BIOS folder"
     if _setup_relative(extract_to):
         return f"{display}'s `{extract_to.rstrip('/')}` folder"
     return f"`{extract_to}`"
@@ -824,7 +825,7 @@ def generate_get_page(platform_name: str) -> str:
             "",
             f"- {_fmt_size(pack['download_size'])} to download, "
             f"{_fmt_size(pack['extracted_size'])} once unzipped.",
-            *(["- You need both parts." if parts == 2 else f"- You need all {parts} parts."]
+            *(["- Both parts are needed." if parts == 2 else f"- All {parts} parts are needed."]
               if parts > 1 else []),
             *_unzip_into(platform_name, display, extract_to, parts),
             *(line for text in release for line in (text, "")),
@@ -2349,7 +2350,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         "per `bios/<Manufacturer>/<Console>/` folder of the collection, named "
         "`Manufacturer\\Console` so the tools look in that subfolder, each file a "
         "rom named by its path below that folder. It audits a copy of the "
-        "collection's `bios/` tree, or rebuilds that layout from your own dumps.",
+        "collection's `bios/` tree, or rebuilds that layout from a reader's own dumps.",
         "",
         "A setup's DAT, `downloads/dat/<platform>.dat`, describes its BIOS folder "
         "once installed: one game named after the folder (`bios`, `system`), each "
@@ -2449,7 +2450,7 @@ def _browser_title(relative: Path, title: str) -> str:
         # Material appends " - RetroBIOS": the home title says what the site
         # is, instead of "RetroBIOS - RetroBIOS".
         "index.md": "BIOS and firmware packs for RetroArch, Batocera and more",
-        "platforms/index.md": "Your setup",
+        "platforms/index.md": "Setups",
         "systems/index.md": "Systems",
         "emulators/index.md": "Emulators",
         "wiki/index.md": "Reference",
@@ -2510,7 +2511,7 @@ def _shorten(plain: str, limit: int = 157) -> str:
 def _page_description(markdown: str, relative: Path, title: str) -> str:
     key = relative.as_posix()
     specific = {
-        "index.md": "The BIOS files your emulators need, for RetroArch, Batocera, EmuDeck and more: the folder they go in, one command that installs and checks them, and packs to download.",
+        "index.md": "The BIOS files emulators need, for RetroArch, Batocera, EmuDeck and more: the folder they go in, one command that installs and checks them, and packs to download.",
         "data.md": "Versioned RetroBIOS JSON API, CSV exports, SQLite snapshot, schemas, checksums and data interpretation guidance.",
         "cross-reference.md": "Every emulator core each retrogaming platform runs, the systems it emulates and the upstream project it comes from.",
         "gaps.md": "Current RetroBIOS verification gaps, platform-to-emulator divergences, missing files and documented source limitations.",
@@ -2518,7 +2519,7 @@ def _page_description(markdown: str, relative: Path, title: str) -> str:
         sitemeasurements.EXPLORER_PAGE: "The records of emulator cores run headless on demand, each with its claim, verdict, the BIOS it ran, method, computer and full record, filterable, and as SQLite.",
         "provenance.md": "Hash-based comparison of RetroBIOS metadata with No-Intro, Redump and TOSEC catalog snapshots.",
         "explore.md": "Systems, emulators and installer options to explore, with the figures of the BIOS collection.",
-        "which-pack.md": "Pick your device or setup and get its BIOS files: the folder they go in, one command that installs and checks them, or a ZIP pack to extract.",
+        "which-pack.md": "Pick a device or setup and get its BIOS files: the folder they go in, one command that installs and checks them, or a ZIP pack to extract.",
         "contributing.md": "Add a BIOS file the collection lacks from the browser, checked on arrival, or add a platform or an emulator profile.",
     }
     if key in specific:
@@ -2571,7 +2572,7 @@ def _lead(markdown: str) -> str:
 
 def _emulator_description(markdown: str, key: str, title: str, intro: str) -> str:
     """An emulator page by its intro sentence ("DuckStation emulates Sony
-    PlayStation. It picks the BIOS for your game's region: ..."), or by
+    PlayStation. It picks the BIOS for the game's region: ..."), or by
     its profile table when the profile names no system."""
     notes = re.search(r"<summary>Technical notes</summary>\s*\n\n(.+?)(?:\n\n|$)", markdown, re.S)
     if not intro and notes:
@@ -3357,12 +3358,12 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
 
 
 def generate_platform_index(coverages: dict, registry: dict | None = None) -> str:
-    """The Your setup tab: every platform by the device it runs on, and one
+    """The Setups tab: every platform by the device it runs on, and one
     line to the table that sets them side by side (setup_table), which is
     reference matter and sits with how each setup checks its files."""
     registry = registry or {}
     lines = [
-        "# Your setup",
+        "# Setups",
         "",
         "Each setup's page gives the folder and the command.",
         "",
@@ -4181,16 +4182,19 @@ def first_screen_words() -> list[str]:
 
 # The demo files the site serves (docs_assets/demo/, scripts/make_demo.py):
 # the GIF is the README's, the tape and demo.json are inputs.
-DEMO_ASSETS = ("install.webm", "install.mp4", "install.png")
+DEMO_ASSETS = tuple(f"{stem}.{ext}" for stem in ("install", "install-handheld")
+                    for ext in ("webm", "mp4", "png"))
 
 
-def install_demo() -> list[str]:
-    """The installer demo: a video that loads once it is on screen, its
-    description for screen readers."""
-    facts = demo_facts()
+def install_demo(variant: str = "default", name: str = "") -> list[str]:
+    """An installer demo (default, or handheld): a video that loads once it
+    is on screen, its description for screen readers. *name* tells two
+    demos of one page apart (the tab each sits in)."""
+    facts = demo_facts(variant)
     text = html.escape(demo_description(facts), quote=True)
+    own = f' variant="{variant}" name="{name}"' if name else ""
     return [f'<InstallDemo description="{text}" width="{facts["width"]}" '
-            f'height="{facts["height"]}" />', ""]
+            f'height="{facts["height"]}"{own} />', ""]
 
 
 def check_pass_line() -> str:
@@ -4238,7 +4242,7 @@ def _share_tabs(name: str, share: str) -> tuple[dict[str, str], dict[str, str]]:
     how = {
         "macos": (f"In Finder, Go > Connect to Server: `{url}`. Then paste the line in "
                   "**Terminal**."),
-        "linux": (f"Open `{url}` in your file manager. Paste the line in a terminal, "
+        "linux": (f"Open `{url}` in the file manager. Paste the line in a terminal, "
                   f"with the folder it opened for `/path/to/{volume}`."),
     }
     return args, how
@@ -4279,7 +4283,7 @@ def _card_route(name: str, display: str, guide: Guide) -> list[str]:
         return [lead, "", *terminal_tabs(tabs, args, steps=False)]
     # A folder on the card's Linux partition: Windows and macOS show the
     # small boot partition alone, and no folder there fits --dest.
-    put = ("Put the device's card in your computer." if "windows" in tabs
+    put = ("Put the device's card in a computer." if "windows" in tabs
            else "Only a Linux computer opens the card.")
     lead = (f"No network? {put} After `--dest`, "
             f"name the folder the device calls `{extract_to}`.")
@@ -4306,14 +4310,14 @@ def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]
     card = _card_route(name, display, guide)
     shared = _get_page_line(name, display) if page_link else []
     if share or (card and guide.run == ("device",)):
-        computer = ["## From your computer { #from-your-computer }", ""]
+        computer = ["## From a computer { #from-your-computer }", ""]
         if share:
             args, how = _share_tabs(name, share)
             # The setup page stays in its word budget: its Mac and Linux
             # lines are on the get/ page, the one the command is shared from.
             tabs = ("windows",) if page_link else ("windows", "macos", "linux")
             computer += [
-                "Needs the device on your network.",
+                "Needs the device on the same network.",
                 "",
                 *terminal_tabs(tabs, args, how=how),
                 *([f"[Mac or Linux](../{get_page_link(name)}#from-your-computer)", ""]
@@ -4327,7 +4331,7 @@ def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]
 
 
 # Shown in the "On the device" tab of a guide that has no `terminal:` of its own.
-DEVICE_TERMINAL_FALLBACK = "Or fill the folder from your computer, with the ZIP."
+DEVICE_TERMINAL_FALLBACK = "Or fill the folder from a computer, with the ZIP."
 
 
 def _computer_first(name: str, guide: Guide) -> bool:
@@ -4362,11 +4366,11 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
             f"{_fmt_size(pack['extracted_size'])} once unzipped."
         ]
         if parts > 1:
-            bullets.append("You need both parts." if parts == 2 else f"You need all {parts} parts.")
+            bullets.append("Both parts are needed." if parts == 2 else f"All {parts} parts are needed.")
         if _computer_first(name, guide) and network:
             target = "the network folder above"
         else:
-            target = f"`{extract_to}`" if extract_to else "your BIOS folder"
+            target = f"`{extract_to}`" if extract_to else "the BIOS folder"
         bullets.append(f"Unzip {'them all' if parts > 1 else 'it'} into {target}."
                        + (" Files like `neogeo.zip` stay zipped." if _ships_neogeo(name) else ""))
         if guide.download_hint and not _computer_first(name, guide):
@@ -4392,7 +4396,7 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
 
 
 def only_some_consoles(name: str, prefix: str = "") -> list[str]:
-    """The way to a smaller download, in the words Get your files uses."""
+    """The way to a smaller download, in the words Get the files uses."""
     return [
         f"Only some consoles? [Pick them]({prefix}which-pack.md?platform={name}"
         f"#only-some-consoles), or the command's **{_installer().TUI_SYSTEMS_ROW}**.",
@@ -4483,7 +4487,7 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
         "",
         "## Where the files go { #where-the-files-go }",
         "",
-        "Put the SD card in a computer. Find your system below.",
+        "Put the SD card in a computer. Find the system below.",
         "",
         "| System | Devices | BIOS folder on the card |",
         "|--------|---------|-------------------------|",
@@ -4539,7 +4543,7 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     if _computer_first(name, guide):
         lines += [
             *_guide_download(name, display, guide, extract_to,
-                             "## From your computer { #download }"),
+                             "## From a computer { #download }"),
             *_offline_line(name),
             *_guide_install(name, guide, "## On the device { #install }"),
         ]
@@ -5502,7 +5506,7 @@ def generate_provenance_page(
         "",
         *([f'<p class="rb-timestamp">Catalogs as of: {as_of}.</p>', ""] if as_of else []),
         "Provenance says whether a file is, byte for byte, a dump that Redump, "
-        "No-Intro or TOSEC catalogues. It tells you where a dump is known from, "
+        "No-Intro or TOSEC catalogues. It says where a dump is known from, "
         "not whether an emulator accepts it: that is the emulator's code, read "
         "in its profile. Example: `scph5501.bin` is Redump's `ps-30a.bin`.",
         "",
@@ -5539,7 +5543,7 @@ def generate_provenance_page(
         "arcade sets tracked by MAME driver source instead.",
         "",
         "When the two views disagree, this project follows the code, because "
-        "that is what decides whether your emulator boots. The reasoning is in "
+        "that is what decides whether the emulator boots. The reasoning is in "
         "the [technical questions](wiki/technical-faq.md#are-these-files-verified-against-original-"
         "hardware-dumps).",
         "",
@@ -6993,7 +6997,7 @@ def _group_lines(
         lines += [f"- **{key}**: {text.lstrip(': ')}"
                   for key, block in blocks.items() for _lead, text in block]
         return [*lines, ""]
-    lines = ["**Start with** the files of your machine:", ""]
+    lines = ["**Start with** the files of the machine:", ""]
     for key, block in blocks.items():
         for lead, text in block:
             if lead == "*":
@@ -7205,7 +7209,7 @@ def _start_lines(block: list[tuple[str, str]], console: str = "") -> list[str]:
         below = " They come first below." if _sep else ""
         return [" ".join(filter(None, [f"**Start with**: {named}.{below}", instead])), ""]
     bios = f"the {console} BIOS" if console else "the BIOS"
-    lines = [f"**Start with** {bios} for the region of your games:", ""]
+    lines = [f"**Start with** {bios} for the region of the games:", ""]
     for lead, text in block:
         lines.append(f"- **{lead or 'Some emulators also require'}**: {text}")
     if instead:
@@ -7262,7 +7266,7 @@ def _romset_note(consoles: dict[str, list]) -> list[str]:
 
 
 _NEXT_FROM_SYSTEMS = [
-    "[Get your files](../which-pack.md), for the setup you play on",
+    "[Get the files](../which-pack.md), for the setup in use",
     "[When a game does not start](../wiki/troubleshooting.md)",
     "[Every emulator](../emulators/index.md), and the files each one reads",
 ]
@@ -8976,7 +8980,7 @@ def _install_block(name: str, profile: dict) -> list[str]:
                 f"BIOS folder, then downloads only the files {emu} reads there and checks "
                 "each one.")
     else:
-        lead = ("The installer finds your setup and its BIOS folder, then downloads "
+        lead = ("The installer finds the setup and its BIOS folder, then downloads "
                 "only the files this emulator reads there and checks each one.")
         if profile.get("type") == "standalone + libretro":
             # The command fills a setup, never the app's own folder.
@@ -9242,7 +9246,7 @@ def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
         "",
         '<div class="rb-install" data-rb-install="" hidden>',
         "",
-        f'<label class="rb-install-setup">Your setup <select>{options}</select></label>',
+        f'<label class="rb-install-setup">Setup <select>{options}</select></label>',
         "",
         *terminal_tabs(INSTALL_PICKER_OSES, args, steps=False),
         "",
@@ -9505,7 +9509,7 @@ def _emulator_file_summary(files: list[dict]) -> list[str]:
     if _regional_choice([f for f in files if f.get("required") is True and not comes_with_app(f)]):
         # DuckStation takes the BIOS of the game's region: "3 required"
         # read as "get all three".
-        line = (f"{total}. One of {req_count:,} is required, for your games' region. "
+        line = (f"{total}. One of {req_count:,} is required, for the games' region. "
                 f"{len(slots) - req_count:,} {'is' if len(slots) - req_count == 1 else 'are'} "
                 "optional.")
     if hle_count:
@@ -9913,7 +9917,7 @@ def _any_name_folder(profile: dict, entry: dict) -> str:
         own = ("[the app's data folder](#data-folder)" if profile.get("data_root")
                else "the app's own data folder")
         return f"the {_code(folder.strip('/'))} folder inside {own}"
-    return f"{_code(folder)}, inside your BIOS folder"
+    return f"{_code(folder)}, inside the BIOS folder"
 
 
 def _any_name_steps(emu_name: str, profile: dict, entry: dict, href: str,
@@ -9998,7 +10002,7 @@ def _emulator_intro(emu_name: str, profile: dict, href: str = "", name: str = ""
         # DuckStation needs the BIOS of the game's region, not all three: the
         # page said "3 of them required" and read as "get all of these".
         others = len(files) - len(required)
-        sentences.append(f"It picks the BIOS for your game's region: {by_region}.")
+        sentences.append(f"It picks the BIOS for the game's region: {by_region}.")
         if others:
             sentences.append(
                 f"The {_count(others, 'other file')} {'is' if others == 1 else 'are'} optional.")
@@ -10290,7 +10294,7 @@ def emulator_pages(
         lines[trees_start:] = search_excluded(lines[trees_start:])
 
     lines.extend(_next_block([
-        "[Get your files](../which-pack.md), for the setup you play on",
+        "[Get the files](../which-pack.md), for the setup in use",
         "[Every system](../systems/index.md), and the files each one needs",
         "[When a game does not start](../wiki/troubleshooting.md)",
     ]))
@@ -10852,15 +10856,15 @@ def generate_gap_analysis(
     lines = [
         "# What the packs do not hold",
         "",
-        "What each pack still cannot give you, and why. Most gaps are not "
+        "What each pack still cannot give, and why. Most gaps are not "
         "firmware: a platform's list can also name game files, such as "
-        "Diablo's `diabdat.mpq`, which you copy from your own game, or files "
+        "Diablo's `diabdat.mpq`, which comes from an owned copy of the game, or files "
         "no emulator of that platform opens. Those are counted apart. A missing "
         "firmware file means a console that does not start, and each one is "
         "named below with the platforms that list it.",
         "",
-        "Each file here is a request: if you hold one of the files under "
-        "\"Files to source\", [adding it](contributing.md) fills the gap for "
+        "Each file here is a request: for a file under \"Files to source\", "
+        "[adding it](contributing.md) fills the gap for "
         "every platform at once.",
         "",
         " ".join([
@@ -11581,7 +11585,7 @@ def generate_not_found() -> str:
         '<p><button type="button" class="rb-notfound-search" data-rb-open-search>Search the site</button></p>',
         "",
         "- [Start here](index.md): what BIOS files are and how to install them",
-        "- [Get your files](which-pack.md): the pack or the command for your device",
+        "- [Get the files](which-pack.md): the pack or the command for each device",
         "- Browse [platforms](platforms/index.md), [systems](systems/index.md) "
         "or [emulators](emulators/index.md)",
         "",
@@ -11622,7 +11626,7 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
         "lists every file the collection holds, keyed by its SHA1. A platform YAML "
         "copies the BIOS list a setup publishes. An emulator profile records what "
         "one emulator opens, read from its code. The sections below show the "
-        "fields of each, with a real entry, so you can read the data or build on it.",
+        "fields of each, with a real entry, to read the data or build on it.",
         "",
         "Example: `scph5501.bin` is one entry of `database.json` (key "
         "`0555c6fa...`), one entry of `platforms/batocera.yml` (its MD5) and one "
@@ -11943,22 +11947,26 @@ def generate_which_pack() -> str:
     display = {key: load_platform_config(key, str(siteinputs.current().platforms)).get("platform", key)
                for key in registry}
     all_tabs = ("windows", "macos", "linux", "steamdeck", "android")
+    # The quick install box also runs on a game system: its tab shows the
+    # handheld recording (sitesteps).
+    box_tabs = (*all_tabs, "device")
+    box_steps, box_demos = sitesteps.install_box(box_tabs)
     lines = [
         "---",
         f"terms: {', '.join(IOS_TERMS)}",
         "---",
         "",
-        "# Get your files",
+        "# Get the files",
         "",
-        "Pick your setup. Its page gives the folder and the command.",
+        "Pick the setup. Its page gives the folder and the command.",
         "",
-        "## Pick your setup",
+        "## Pick the setup { #pick-your-setup }",
         "",
         *setup_picker(registry, display),
         "## Folders and ZIP files { #manual-download }",
         "",
         "- A big ZIP comes in parts, like `Pack.part1of2.zip`. Download every part.",
-        "- Unzip them into your BIOS folder. Put the files straight in it, "
+        "- Unzip them into the BIOS folder. Put the files straight in it, "
         "not in a new folder.",
         "- Leave the ZIPs inside, like `neogeo.zip`, as they are.",
         "- A few ZIPs hold their own top folder. Their setup's page says where "
@@ -11987,21 +11995,22 @@ def generate_which_pack() -> str:
         *ios_section(),
         "## Not in the list? One command finds it { #quick-install }",
         "",
-        "A **terminal** is a window where you type commands.",
+        "A **terminal** is a window for typing commands.",
         "",
-        *terminal_tabs(all_tabs, {}),
+        *terminal_tabs(box_tabs, {}, under_steps=box_steps, under_command=box_demos),
         "On Batocera, Recalbox and other game systems, run it on the device. "
-        "Your setup's page shows how.",
+        "The setup's page shows how.",
+        "",
+        f"With Python, `{PACKAGE_COMMAND}` does the same.",
         "",
         *first_screen_words(),
         "",
-        *install_demo(),
         *trust_box(""),
-        "**Check your folder later.** Add `--check`. It changes nothing.",
+        "**Check the folder later.** Add `--check`. It changes nothing.",
         "",
         *terminal_tabs(all_tabs, dict.fromkeys(TERMINALS, "--check"), steps=False),
         *markup.details("note", "Fill an SD card from a computer", [
-            "Name your setup and the BIOS folder on the card. For RetroArch on a "
+            "Name the setup and the BIOS folder on the card. For RetroArch on a "
             "Nintendo Switch:",
             "",
             "Linux, macOS:",
@@ -12014,14 +12023,7 @@ def generate_which_pack() -> str:
             *fence("powershell", install_command(
                 "powershell", "--platform retroarch --dest E:\\retroarch\\cores\\system")),
         ]),
-        *markup.details("note", "Have Python? Run it as a package", [
-            "The same installer, with Python 3.8 or newer:",
-            "",
-            *fence("sh", PACKAGE_COMMAND),
-            "",
-            "`pipx run retrobios` works too, or `pip install retrobios` and then `retrobios`.",
-        ]),
-        *markup.details("note", "Copy the BIOS files from your old card", [
+        *markup.details("note", "Copy the BIOS files from an old card", [
             "Plug the old card in and add `--from` with its folder. The BIOS files "
             "found there are copied, and the rest downloaded. The old card is only read.",
             "",
@@ -12113,7 +12115,7 @@ def _platform_nav(coverages: dict, registry: dict) -> list:
 # The tabs in reading order, by the level their pages declare.
 TABS = {
     "start": "Start here",
-    "setup": "Your setup",
+    "setup": "Setups",
     "explore": "Explore",
     "reference": "Reference",
     "contribute": "Contribute",
@@ -12213,7 +12215,7 @@ def generate_nav(
 ) -> list:
     """The navigation, five tabs in reading order.
 
-    Start here is for someone who knows nothing yet, Your setup for someone
+    Start here is for someone who knows nothing yet, Setups for someone
     who knows their device, Explore for one system or emulator, Reference for
     checking the work, Contribute for adding to it. Each tab opens on its
     index page.
@@ -12224,7 +12226,7 @@ def generate_nav(
     own order.
     """
     generated: dict[str, list[tuple]] = {
-        "start": [(0, "index.md"), (20, {"Get your files": "which-pack.md"})],
+        "start": [(0, "index.md"), (20, {"Get the files": "which-pack.md"})],
         "setup": [(10 * i, item)
                   for i, item in enumerate(_platform_nav(coverages, registry or {}))],
         "explore": [

@@ -210,7 +210,7 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
 
     def test_no_unzip_before_from_pack(self):
         section = " ".join(self._section("No internet on the device?").split())
-        self.assertIn("point `--from-pack` at your ZIP:", section)
+        self.assertIn("point `--from-pack` at the ZIP:", section)
         self.assertNotIn("unzip", section)
         install = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         self.assertIn("Install from a pack already downloaded: its ZIP, one of its parts",
@@ -237,7 +237,7 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
             word = rule.name.split()[0]
             with self.subTest(share=rule.name):
                 self.assertIn(word, section)
-                self.assertRegex(readme, rf"# SD card mounted on a PC: .*\b{word}\b")
+                self.assertRegex(readme, rf"\b{word}\b[^.]*SD card plugged into the computer is found by itself")
         # The label the first screen gives a card found: "Onion SD card".
         self.assertEqual(install._card_word(("retroarch", Path("/x/BIOS"), "Onion")), "SD card")
         self.assertEqual(install._card_word(("batocera", Path("/x/bios"), "Batocera")),

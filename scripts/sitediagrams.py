@@ -397,8 +397,8 @@ def _emulator_names_in(emulators_dir: str) -> dict[str, str]:
 def _bios_chain_boxes() -> list[Box]:
     platform, _emulator = CHAIN_EXAMPLES[0]
     return [
-        Box("Your device", ["A PC, a Steam Deck, a handheld or a TV box"], number="1"),
-        Box("Setup", ["The menu you pick a game from"], number="2"),
+        Box("The device", ["A PC, a Steam Deck, a handheld or a TV box"], number="1"),
+        Box("Setup", ["The menu that picks a game"], number="2"),
         Box("Emulator", ["Starts the game and reads its BIOS"], number="3"),
         Box("BIOS folder", [f"{_display(platform)} reads", Mono(_folder(platform))],
             accent=True, number="4"),
@@ -421,8 +421,8 @@ def _bios_chain_caption() -> str:
 
 def _install_boxes() -> list[Box]:
     return [
-        Box("Finds your setup", ["And the folder it reads"], number="1"),
-        Box("Looks at your files", ["The ones already in the folder"], number="2"),
+        Box("Finds the setup", ["And the folder it reads"], number="1"),
+        Box("Looks at the files", ["The ones already in the folder"], number="2"),
         Box("Downloads the rest", ["Only what is missing or different"], number="3"),
         Box("Checks each file", ["Before saving it"], accent=True, number="4"),
     ]
@@ -604,7 +604,7 @@ def _figures() -> dict[str, Figure]:
         "install-flow": Figure(
             "install-flow",
             "What the command does",
-            "The command finds your setup and its BIOS folder, looks at the files already "
+            "The command finds the setup and its BIOS folder, looks at the files already "
             "there, downloads what is missing or different, then checks each file before "
             "saving it.",
             "Running the command again repeats the same steps and downloads only what changed.",
@@ -904,7 +904,7 @@ GLANCE_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
                      "--cores-dir")),
     ("Look first", ("--check", "--dry-run", "--list-platforms", "--list-targets",
                     "--list-systems", "--list-cores", "--list-emulators")),
-    ("From files you have", ("--from", "--from-pack", "--manifest", "--offline", "--restore")),
+    ("From files on hand", ("--from", "--from-pack", "--manifest", "--offline", "--restore")),
     ("How the run talks", ("--tui", "--plain", "--no-input", "--yes", "--quiet", "--verbose",
                            "--events", "--jobs", "--version", "--help")),
 )
@@ -999,7 +999,7 @@ def prepare_page(markdown: str, page: Path) -> str:
 OG_SECTIONS: dict[str, tuple[str, str]] = {
     "home": ("BIOS and firmware packs", "Checked file by file, for {frontends}"),
     "start": ("Start here", "What BIOS files are, and how to install them with one command"),
-    "setup": ("Your setup", "Where the files go on each device and frontend"),
+    "setup": ("Setups", "Where the files go on each device and frontend"),
     "explore": ("Systems and emulators", "Which files each console and emulator reads"),
     "reference": ("Reference", "Verification modes, gaps, provenance and the data API"),
     "contribute": ("Contribute", "Adding files, emulator profiles and platforms"),

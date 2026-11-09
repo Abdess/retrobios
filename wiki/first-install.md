@@ -7,11 +7,11 @@ order: 30
 
 From an empty BIOS folder to games that start.
 
-**You need:** internet and some free space.
+**Needed:** internet and some free space.
 
 ## 1. Open a terminal and paste
 
-A **terminal** is a window where you type commands. Paste your system's
+A **terminal** is a window for typing commands. Paste the matching
 line, then press Enter.
 
 <Tabs syncKey="os">
@@ -64,7 +64,7 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh
 </Tabs>
 
 On Batocera, Recalbox and similar setups, see
-[Get your files](../which-pack.md).
+[Get the files](../which-pack.md).
 
 ## 2. Check the setup it found
 
@@ -88,8 +88,8 @@ touch screen, tap a row twice to open it, once to tick a box.
 
 ## 3. Install
 
-Press Enter on **Install**. **Choose systems** keeps the consoles you
-play.
+Press Enter on **Install**. **Choose systems** picks the consoles to
+keep.
 
 **Game data** (only a game reads it) has its own row.
 
@@ -130,14 +130,14 @@ All good:
 
 ## Undo
 
-Replaced files go to `retrobios-backup` beside your BIOS folder. The result
+Replaced files go to `retrobios-backup` beside the BIOS folder. The result
 says how to restore them.
 
 ## If it stops
 
 ### Nothing was found here.
 
-Choose your setup, then its folder. Where the screen offers
+Choose the setup, then its folder. Where the screen offers
 **Another setup or folder**, choose it first.
 
 ### Error: Python 3.8 or newer is required.
@@ -162,7 +162,7 @@ Nothing ran, because something changed the file. Try another network.
 
 ### Cannot create ...
 
-You cannot write there. Do what the message says.
+That folder cannot be written. Do what the message says.
 
 ### The card is full
 
@@ -174,6 +174,6 @@ See [When a game does not start](troubleshooting.md).
 
 ## Next steps
 
-- [Get your files](../which-pack.md)
+- [Get the files](../which-pack.md)
 - [When a game does not start](troubleshooting.md)
 - Details: [Reading the installer's output, line by line](installer.md#reading-a-run)

@@ -8,7 +8,7 @@ terms: bios not found, bios missing, firmware missing, bios error, check my bios
 
 Usually a BIOS file is missing or wrong.
 
-## 1. Check my BIOS folder { #checking-what-you-installed }
+## 1. Check the BIOS folder { #checking-what-you-installed }
 
 <span id="game-wont-start-black-screen"></span><span id="my-setup-says-untested"></span>
 
@@ -17,7 +17,7 @@ Usually a BIOS file is missing or wrong.
 platforms/libretro/libretro.cpp:866 "OS-7 BIOS missing" (23d0ec28), RetroArch
 intl/msg_hash_us.h:32805 "One or more firmware files are missing" (5333a7c5). -->
 
-Your emulator says **BIOS not found**, **BIOS missing** or **firmware
+The emulator says **BIOS not found**, **BIOS missing** or **firmware
 missing**? Run the command with `--check`. It changes nothing.
 
 <!-- os-tabs -->
@@ -42,9 +42,9 @@ Without `--check`, it adds missing files and replaces wrong ones.
 
 ## 3. Check the folder and the names
 
-- **Right folder?** [Get your files](../which-pack.md) names it.
+- **Right folder?** [Get the files](../which-pack.md) names it.
 - **Exact name?** `scph5501.bin` and `SCPH-5501.BIN` differ.
-- **A `bios` folder inside your BIOS folder?** The installer copies those
+- **A `bios` folder inside the BIOS folder?** The installer copies those
   files up one level.
 - **BIOS setting on a subfolder, like `system/dc`?** Point it at the BIOS
   folder. Emulators add their own, like `dc/` for Flycast.
@@ -94,5 +94,5 @@ Other messages: [When something goes wrong](installer.md#when-something-goes-wro
 
 ## Next steps
 
-- [Get your files](../which-pack.md)
+- [Get the files](../which-pack.md)
 - [Common questions](faq.md)

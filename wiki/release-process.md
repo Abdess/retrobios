@@ -367,7 +367,7 @@ download address. It lists the files of the pack the latest release holds,
 read from `release.json`, or gives the command when there is no pack. The
 README, the setup pages and the release notes link it, never an asset URL:
 step 6 deletes the previous tag, and with it every link to its assets. Six of
-the eight links one community wiki had to our packs answered 404 that way.
+the eight links one community wiki had to the packs answered 404 that way.
 Committing `release.json` in step 5 rebuilds these pages, so the release
 never touches them.
 

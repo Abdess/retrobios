@@ -651,8 +651,8 @@ def _sidebar_link(rel: str) -> str:
 PRUNED_TABS = ("explore",)
 
 # Reading runs from one tab into the next only here: the last Start here
-# page leads to Your setup. Every other tab is read on its own.
-CHAINED_TABS = (("start-here", "your-setup"),)
+# page leads to Setups. Every other tab is read on its own.
+CHAINED_TABS = (("start-here", "setups"),)
 
 
 def topic_id(label: str) -> str:
@@ -804,7 +804,7 @@ def sidebar(nav: list, present: set[str], anchors: dict[str, set[str]] | None = 
 
 def _reading(nav: list, present: set[str]) -> list[list[dict]]:
     """The previous and next links, in runs. An overview is named after the
-    group or tab it opens ("Your setup", not "Overview")."""
+    group or tab it opens ("Setups", not "Overview")."""
     def walk(value: list, name: str) -> Iterator[dict]:
         for entry in value:
             if isinstance(entry, str):

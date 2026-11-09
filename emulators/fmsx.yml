@@ -54,8 +54,8 @@ notes: |
   Place all ROM files directly in the RetroArch system directory. No subdirectory
   needed. The core does chdir() to system_dir before loading.
 
-  The default model is MSX2+, which needs MSX2P.ROM and MSX2PEXT.ROM. If you only
-  play cartridge ROMs, these two files are sufficient. For disk games (.dsk), also
+  The default model is MSX2+, which needs MSX2P.ROM and MSX2PEXT.ROM. For cartridge
+  ROMs alone, these two files are sufficient. For disk games (.dsk), also
   add DISK.ROM and enable "Simulate DiskROM" in core options.
 
   KANJI.ROM and FMPAC.ROM are loaded automatically when present, no option needed.

@@ -7,7 +7,7 @@ order: 0
 
 These pages describe how the files are checked, what the data holds and how the
 toolchain works. To set up BIOS files on a device, start with
-[Get your files](../which-pack.md).
+[Get the files](../which-pack.md).
 
 ## Checking files
 
@@ -51,7 +51,7 @@ at run time, so the source is the primary reference:
 - **[Release process](release-process.md)**: CI workflows, large files, manual release
 - **[Architecture](architecture.md)**: directory structure, data flow, platform inheritance, pack grouping, security, edge cases, CI workflows
 - **[Command-line tools](tools.md)**: every script, pipeline usage, scrapers
-- **[Build your own packs](advanced-usage.md)**: custom packs, region filtering, one file per slot, target filtering, truth generation, emulator verification, offline workflow
+- **[Build custom packs](advanced-usage.md)**: custom packs, region filtering, one file per slot, target filtering, truth generation, emulator verification, offline workflow
 
 See [contributing](../contributing.md) for submission guidelines.
 

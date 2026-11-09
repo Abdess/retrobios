@@ -56,14 +56,14 @@ class FiveTabs(unittest.TestCase):
         nav = generate_site.generate_nav({}, {}, {}, {})
         self.assertEqual(
             [next(iter(tab)) for tab in nav],
-            ["Start here", "Your setup", "Explore", "Reference", "Contribute"],
+            ["Start here", "Setups", "Explore", "Reference", "Contribute"],
         )
 
     def test_each_tab_opens_on_an_index_or_a_first_page(self):
         nav = generate_site.generate_nav({}, {}, {}, {})
         tabs = {next(iter(tab)): next(iter(tab.values())) for tab in nav}
         self.assertEqual(tabs["Start here"][0], "index.md")
-        self.assertEqual(tabs["Your setup"][0], "platforms/index.md")
+        self.assertEqual(tabs["Setups"][0], "platforms/index.md")
         self.assertEqual(tabs["Reference"][0], "wiki/index.md")
         self.assertEqual(tabs["Contribute"][0], "contributing.md")
 
@@ -125,7 +125,7 @@ class EveryPlatformOnThePicker(unittest.TestCase):
             for key in _registered()
         }
         nav = generate_site.generate_nav(coverages, {}, {}, registry)
-        setup = next(tab["Your setup"] for tab in nav if "Your setup" in tab)
+        setup = next(tab["Setups"] for tab in nav if "Setups" in tab)
         groups = {next(iter(item)): next(iter(item.values()))
                   for item in setup if isinstance(item, dict)}
         for key in coverages:
@@ -278,7 +278,7 @@ class GuidePagesEndOnANextStep(unittest.TestCase):
         text = sitepages.page("platforms/batocera.md").read_text(encoding="utf-8")
         # Batocera runs on its own device: the computer route comes first.
         order = [text.index(h) for h in (
-            "## Where the files go", "## From your computer", "## On the device",
+            "## Where the files go", "## From a computer", "## On the device",
             "## How to check", "## Reference: every file by system",
         )]
         self.assertEqual(order, sorted(order))

@@ -267,13 +267,13 @@ own verification mode ([discrepancy detection](verification-modes.md#discrepancy
 ### Granular options
 
 - `--system` with `--platform`: filter to specific systems within a platform pack.
-  It takes our system ids (`sony-playstation`) and the platform's own names,
+  It takes the collection's system ids (`sony-playstation`) and the platform's own names,
   read from `native_system` in its YAML (Batocera `psx`, Recalbox `msx1,msx2`).
   `--platform <name> --list-systems` prints both. `verify.py --platform --system`
   reports on the same narrowed pack, and the installer's `--system` reads the
   same mapping from the manifest's `system_names`. An unknown name is refused
   with the closest matches before any work. Without `--platform`, `--system`
-  takes our ids only.
+  takes the collection's ids only.
 - `--required-only`: exclude optional files and the data directories declared
   `required: false`, keep only required. `verify.py --required-only` reports
   on the same file set, for `--platform`, `--emulator` and `--system`
@@ -1374,7 +1374,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `sitesources.py` | Record which cited source paths each pinned upstream tree holds, for the site's source links (`--fetch` reads a tree no cache holds) |
 | `site_markdown.py` | Write each built page as Markdown beside its HTML (`<page>/index.md`, named in every page's head) and `llms-full.txt`, the guides and every setup's page in one file, for the assistants that read the site. The Astro build runs it once the pages are written |
 | `site_insights.py` | What readers look for and do not find, from totals only: searches that show the site but are rarely clicked, file names searched and whether the collection holds them, site searches that found nothing, broken addresses, "Did this page help?" answers, GitHub traffic and release downloads (`--days`, `--skip gsc,goatcounter,github`, `--output`). Reads Search Console, GoatCounter and GitHub with credentials kept outside the repository. [What the site counts](privacy.md) |
-| `make_demo.py` | Record the installer demo of the README and the site into `docs_assets/demo/`: an ArkOS card with six games built under `tmp/demo/` and mounted in a mount namespace of the user, this checkout served on loopback, `docs_assets/demo/install.tape` run by VHS (needs `vhs`, `ttyd`, `ffmpeg`, `unshare`), then the GIF, WebM, MP4 and poster encoded and held to their size targets. `demo.json` records what the recording shows, for the alt text. Never run by the build |
+| `make_demo.py` | Record the installer demos of the README and the site into `docs_assets/demo/`. An ArkOS card with six games is built under `tmp/demo/` in a mount namespace of the user, this checkout is served on loopback, and VHS runs one tape per variant: `default` (`install.tape`, the one-line command in a terminal, the card at `/media/EASYROMS`, needs `unshare`) and `handheld` (`install-handheld.tape`, the full-screen interface at 640x480 on an ArkOS root made with `bwrap`, as its Tools menu starts it, driven by the keys gptokeyb sends for the buttons). `--variant NAME` records one (repeatable), every variant by default, the others kept. Each needs `vhs`, `ttyd` and `ffmpeg`. The default gets the README's GIF, each gets a WebM, an MP4 and a poster, held to their size targets, and an entry in `demo.json` with what it shows and its alt text. No Windows variant: under pwsh on Linux the installer's summary gives `--dest /mnt/e/bios` back. Never run by the build |
 | `validate_site.py` | Validate rendered metadata, heading order, image alternatives, JSON-LD, local resources, links and fragments, and the page size and search index budgets |
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, rebuild a pinned archive from ROMs already held, record a recipe for every archive the collection holds and build any of them from the members it holds (see [Archive recipes](#archive-recipes)) |
 | `archive_build.py` | The archive recipes behind `romset_recipes.py --capture`, `--build` and `--build-all`: capture, member lookup by sha1, verified build |

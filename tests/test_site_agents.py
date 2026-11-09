@@ -124,7 +124,7 @@ class EveryPageHasAMarkdownCopy(unittest.TestCase):
         pages = sorted(DIST.rglob("index.html"))
         missing = [p for p in pages if not (p.parent / "index.md").is_file()]
         self.assertEqual(missing, [])
-        self.assertIn("# Get your files", (DIST / "which-pack" / "index.md").read_text(encoding="utf-8"))
+        self.assertIn("# Get the files", (DIST / "which-pack" / "index.md").read_text(encoding="utf-8"))
         self.assertTrue((DIST / "llms-full.txt").is_file())
 
 
