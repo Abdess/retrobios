@@ -1,28 +1,51 @@
 emulator: RPCS3
-type: standalone
-core_classification: official_port
-source: "https://github.com/RPCS3/rpcs3"
+type: standalone + libretro
+core_classification: community_fork
+source:
+  standalone: "https://github.com/RPCS3/rpcs3"
+  libretro: "https://git.libretro.com/libretro/rpcs3-libretro"
+source_mirror: "https://github.com/WizzardSK/rpcs3-libretro"
 upstream: "https://github.com/RPCS3/rpcs3"
 cores:
   - rpcs3
   - "rpcs3-sa"
-profiled_date: "2026-03-30"
-source_commit: "c365ea76a552961ff078ea1a46da9d4b07729674"
-core_version: "0.0.43"
+profiled_date: "2026-11-09"
+source_commit:
+  standalone: "47599599a4cea37f350eb0936d7c5e4de6f7bf57"
+  libretro: "8bafcb27ae9cbb708ed05b89d5b1a62fe87cd0ce"
+core_version:
+  standalone: "0.0.43"
+  libretro: "v0.0.43-20243"
 version_basis:
-  kind: file
-  path: "rpcs3/rpcs3_version.cpp"
-  pattern: 'utils::version version\{\s*(\d+),\s*(\d+),\s*(\d+),'
-  format: "{1}.{2}.{3}"
+  standalone:
+    kind: file
+    path: "rpcs3/rpcs3_version.cpp"
+    pattern: 'utils::version version\{\s*(\d+),\s*(\d+),\s*(\d+),'
+    format: "{1}.{2}.{3}"
+  libretro:
+    kind: file
+    path: "rpcs3/libretro/upstream.version"
+    pattern: '^RPCS3_VERSION=(\S+)'
 display_name: "Sony - PlayStation 3 (RPCS3)"
 systems: [sony-playstation-3]
 
 files:
   - name: PS3UPDAT.PUP
     required: true
+    mode: standalone
     storage: large_file
-    source_ref: "rpcs3/Loader/PUP.cpp:23-77"
+    source_ref:
+      standalone: "rpcs3/Loader/PUP.cpp:23-77"
     note: "PUP firmware package. Validated via SCEUF magic + HMAC-SHA1 per entry. Extracted to dev_flash/ at install time."
+
+  - name: PS3UPDAT.PUP
+    path: "rpcs3/PS3UPDAT.PUP"
+    required: true
+    mode: libretro
+    storage: large_file
+    source_ref:
+      libretro: "rpcs3/libretro/libretro_core.cpp:1442-1464, rpcs3/libretro/libretro_core.cpp:1938-1971, rpcs3/libretro/libretro_firmware.cpp:27-115, rpcs3/libretro/libretro_firmware.cpp:140-144"
+    note: "Looked for in system/rpcs3/, then system/, then system/rpcs3/firmware/, under any case of the name. Installed into system/rpcs3/dev_flash/ at core load whenever dev_flash/sys/external/liblv2.sprx is absent, then no longer read."
 
 # dev_flash filesystem layout extracted from PUP
 dev_flash:
@@ -202,7 +225,7 @@ dev_flash:
   # -- data/font/ : System fonts --
   fonts:
     path: "dev_flash/data/font/"
-    source_ref: "rpcs3/Emu/Cell/Modules/cellFont.cpp:226-281"
+    source_ref: "rpcs3/Emu/Cell/Modules/cellFont.cpp:232-287"
     note: >
       PS3 system fonts used by cellFont API. Loaded from dev_flash/data/font/
       and dev_flash/data/font/SONY-CC/ subdirectory. Games using cellFont will
@@ -242,7 +265,7 @@ dev_flash:
   # -- ps1emu/ : PS1 backward compatibility --
   ps1emu:
     path: "dev_flash/ps1emu/"
-    source_ref: "rpcs3/Emu/System.cpp:2252"
+    source_ref: "rpcs3/Emu/System.cpp:2248"
     note: "PS1 Classics emulator. Booted when running PS1 game via ps1_newemu.self"
     files:
       - {name: "ps1_newemu.self", purpose: "PS1 emulator binary"}
@@ -258,7 +281,7 @@ dev_flash:
   # -- pspemu/ : PSP backward compatibility --
   pspemu:
     path: "dev_flash/pspemu/"
-    source_ref: "rpcs3/Emu/System.cpp:2280, rpcs3/Crypto/key_vault.h:285-290"
+    source_ref: "rpcs3/Emu/System.cpp:2276, rpcs3/Crypto/key_vault.h:285-290"
     note: "PSP emulator for PS3. Contains psp_emulator.self, psp_translator.self, and release/*.sprx"
     files:
       - {name: "psp_emulator.self",  purpose: "PSP emulator main binary"}
@@ -291,6 +314,15 @@ dev_flash3:
   note: "Third flash partition"
 
 notes: |
+  The libretro build is WizzardSK's rpcs3-libretro, which the buildbot builds
+  from libretro/rpcs3-libretro on git.libretro.com. It carries RPCS3's
+  emulation code merged up to ab412d5d (rpcs3/libretro/upstream.version) and
+  keeps its config, caches, dev_hdd0 and dev_flash under system/rpcs3/
+  (rpcs3/libretro/libretro_core.cpp:1880-1893, 1925-1936). The PUP is found
+  and installed by the core itself, with no prompt, and the game database,
+  patches and vblank unlock list are embedded in the binary
+  (rpcs3/libretro/CMakeLists.txt:16-28).
+
   RPCS3 requires the official PS3 firmware (PS3UPDAT.PUP) from Sony. The PUP file is
   a signed update package containing multiple TAR archives prefixed with "dev_flash_".
   During installation, RPCS3 extracts these TARs into the dev_flash/ directory structure.
