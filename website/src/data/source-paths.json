@@ -3312,6 +3312,11 @@
  ],
  "github.com/finalburnneo/FBNeo@697e385c8285bfc528343b96d948ee3a4f9e24c5": [
   "src/burn/burn.cpp",
+  "src/burn/hiscore.cpp",
+  "src/burn/version.h"
+ ],
+ "github.com/finalburnneo/FBNeo@bc813f4664b5412c8353458bfc7174b71c61a221": [
+  "src/burn/burn.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
   "src/burn/hiscore.cpp",
   "src/burn/version.h"
@@ -4049,6 +4054,11 @@
   "libretro.c"
  ],
  "github.com/libretro/FBNeo@32958a89abd645ed20387c8d31d21ede3bc48161": [
+  "src/burn/burn.cpp",
+  "src/burn/hiscore.cpp",
+  "src/burn/version.h"
+ ],
+ "github.com/libretro/FBNeo@77016b4dff6c76beba08d24ea1c61ed2750bc0a7": [
   "src/burn/burn.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
   "src/burn/hiscore.cpp",
