@@ -696,6 +696,13 @@ files:
       name, and gets its own chorus and reverb parameters in auto mode
     source_ref: "src/midi/fluidsynth.cpp:194-230, src/midi/fluidsynth.cpp:802-808, src/midi/fluidsynth.cpp:430-434, src/midi/fluidsynth.cpp:573-577, src/midi/fluidsynth.cpp:962-987"
 
+  - name: "Roland_SC-88.sf2"
+    path: "soundfonts/Roland_SC-88.sf2"
+    description: "SoundFont under a Roland SC-88 name"
+    required: false
+    unsourceable: "user supplied, no canonical file: the soundfont setting opens any SoundFont it names"
+    source_ref: "src/midi/fluidsynth.cpp:194-230"
+
   - name: "FluidR3_GM.sf2"
     path: "soundfonts/FluidR3_GM.sf2"
     description: "Fluid R3 GM SoundFont by Frank Wen"
