@@ -6,7 +6,7 @@
   "platform": "minui",
   "display_name": "MinUI",
   "version": "2025-11-27",
-  "generated": "2026-10-27T10:27:58Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "",
   "detect": [
     {
@@ -24,18 +24,26 @@
   "total_omitted": 0,
   "omitted_files": [],
   "core_names": {
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
+    ],
     "mednafen_pce_fast": [
       "beetle-pce-fast",
       "beetle_pce_fast",
       "pce_fast"
     ],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ]
   },
   "system_cores": {},

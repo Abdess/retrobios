@@ -2274,7 +2274,11 @@
     ],
     "dolphin": [
       "dolphin-gui",
-      "dolphin-sa"
+      "dolphin-qt-gc",
+      "dolphin-qt-wii",
+      "dolphin-sa",
+      "dolphin-sa-gc",
+      "dolphin-sa-wii"
     ],
     "doublecherrygb": [
       "DoubleCherryGB"
@@ -2290,14 +2294,19 @@
       "fbalpha"
     ],
     "fbneo": [
-      "FBNEOSA"
+      "FBNEOSA",
+      "fbneo_32b",
+      "fbneo_plus",
+      "km_fbneo_xtreme_amped"
     ],
     "flycast": [
       "flycast-dev",
       "flycast-next",
       "flycast-sa",
+      "flycast32_rumble",
       "flycast_32b",
       "flycast_dev",
+      "flycast_rumble",
       "flycastsa",
       "flycastvl"
     ],
@@ -2339,12 +2348,17 @@
     "gopher64": [
       "gopher64-sa"
     ],
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
+    ],
     "gzdoom": [
       "GZDoom",
       "gzdoom-sa"
     ],
     "hatari": [
       "HATARISA",
+      "hatari-fast",
       "hatarisa"
     ],
     "hypseus-singe": [
@@ -2358,8 +2372,10 @@
     ],
     "lexaloffle": [
       "Pico-8",
+      "float-scaled",
       "pico-8",
       "pico8",
+      "pico_standalone",
       "vox_official"
     ],
     "linkboy": [
@@ -2428,13 +2444,17 @@
       "mesen2"
     ],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
     "msx-emu": [
       "MSX-EMU",
       "MSX.emu"
     ],
     "mupen64plus": [
+      "mupen64plus - standalone - glidemk2 - full",
+      "mupen64plus-auto",
       "mupen64plus-sa",
       "mupen64plussa"
     ],
@@ -2484,6 +2504,9 @@
     "openjazz": [
       "OpenJazz"
     ],
+    "openmsx": [
+      "openmsx-ld"
+    ],
     "opentyrian": [
       "tyrian"
     ],
@@ -2502,12 +2525,15 @@
       "pceemu"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ],
     "pcsx_rearmed_standalone": [
-      "pcsx-rearmed"
+      "pcsx-rearmed",
+      "pcsx_standalone"
     ],
     "pizza-boy-gba": [
       "PIZZA-BOY-GBA",
@@ -2629,8 +2655,10 @@
     ],
     "yabasanshiro": [
       "yabasanshiro-2",
+      "yabasanshiro-libretro",
       "yabasanshiro-sa",
-      "yabasanshiroSA"
+      "yabasanshiroSA",
+      "yabasanshiroSA1_5"
     ]
   },
   "system_cores": {

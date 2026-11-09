@@ -6315,6 +6315,10 @@
     }
   ],
   "core_names": {
+    "advanced_drastic": [
+      "DraStic-original",
+      "drastic - standalone"
+    ],
     "aethersx2": [
       "aethersx2-sa"
     ],
@@ -6329,10 +6333,12 @@
       "armsx2_libretro"
     ],
     "azahar": [
+      "azahar - standalone",
       "azahar-sa"
     ],
     "basiliskii": [
-      "basilisk"
+      "basilisk",
+      "basilisk2"
     ],
     "beetle_gba": [
       "mednafen_gba"
@@ -6403,7 +6409,11 @@
     ],
     "dolphin": [
       "dolphin-gui",
-      "dolphin-sa"
+      "dolphin-qt-gc",
+      "dolphin-qt-wii",
+      "dolphin-sa",
+      "dolphin-sa-gc",
+      "dolphin-sa-wii"
     ],
     "dosbox-staging": [
       "dosbox_staging"
@@ -6412,7 +6422,8 @@
       "dosboxx"
     ],
     "drastic": [
-      "drastic-sa"
+      "drastic-sa",
+      "drastic_standalone"
     ],
     "dsperate": [
       "dsperate-sa"
@@ -6439,14 +6450,19 @@
       "fbalpha"
     ],
     "fbneo": [
-      "FBNEOSA"
+      "FBNEOSA",
+      "fbneo_32b",
+      "fbneo_plus",
+      "km_fbneo_xtreme_amped"
     ],
     "flycast": [
       "flycast-dev",
       "flycast-next",
       "flycast-sa",
+      "flycast32_rumble",
       "flycast_32b",
       "flycast_dev",
+      "flycast_rumble",
       "flycastsa",
       "flycastvl"
     ],
@@ -6484,6 +6500,10 @@
       "genesisplusgx-wide",
       "genesisplusgxwide"
     ],
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
+    ],
     "gsplus-legacy": [
       "gsplus"
     ],
@@ -6493,6 +6513,7 @@
     ],
     "hatari": [
       "HATARISA",
+      "hatari-fast",
       "hatarisa"
     ],
     "higan_sfc_balanced": [
@@ -6508,8 +6529,10 @@
     ],
     "lexaloffle": [
       "Pico-8",
+      "float-scaled",
       "pico-8",
       "pico8",
+      "pico_standalone",
       "vox_official"
     ],
     "linkboy": [
@@ -6584,13 +6607,17 @@
       "mesen2"
     ],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
     "msx-emu": [
       "MSX-EMU",
       "MSX.emu"
     ],
     "mupen64plus": [
+      "mupen64plus - standalone - glidemk2 - full",
+      "mupen64plus-auto",
       "mupen64plus-sa",
       "mupen64plussa"
     ],
@@ -6649,6 +6676,9 @@
     "openjazz": [
       "OpenJazz"
     ],
+    "openmsx": [
+      "openmsx-ld"
+    ],
     "opentyrian": [
       "tyrian"
     ],
@@ -6666,17 +6696,23 @@
       "com.PceEmu",
       "pceemu"
     ],
+    "pcsx2": [
+      "pcsx2-sa"
+    ],
     "pcsx2-legacy": [
       "PCSX2-LEGACY",
       "pcsx2-16"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ],
     "pcsx_rearmed_standalone": [
-      "pcsx-rearmed"
+      "pcsx-rearmed",
+      "pcsx_standalone"
     ],
     "pizza-boy-gba": [
       "PIZZA-BOY-GBA",
@@ -6726,7 +6762,8 @@
       "scummvm-sa"
     ],
     "sdl2trs": [
-      "sdltrs"
+      "sdltrs",
+      "sdltrs-model1"
     ],
     "shadps4": [
       "shadps4-gui"
@@ -6835,10 +6872,16 @@
       "XM6TYPEG",
       "XM6TYPEG-WINDOWS"
     ],
+    "xroar": [
+      "xroar-cocous",
+      "xroar-dragon32"
+    ],
     "yabasanshiro": [
       "yabasanshiro-2",
+      "yabasanshiro-libretro",
       "yabasanshiro-sa",
-      "yabasanshiroSA"
+      "yabasanshiroSA",
+      "yabasanshiroSA1_5"
     ]
   },
   "system_cores": {

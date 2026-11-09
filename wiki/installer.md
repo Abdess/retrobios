@@ -421,7 +421,7 @@ A RetroArch dry run into an empty folder, with the list of 2026-11-06, printed t
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
   14929 files (6.7 GB)
-    3259 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.5 MB).
+    3259 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.6 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 37 files are not in the collection, 2 of them required.
 
@@ -772,7 +772,7 @@ by `scripts/generate_installer_doc.py`):
 
 ```
 RetroArch: 14929 files, 6.7 GB.
-  3259 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.5 MB).
+  3259 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.6 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). An owned copy goes in the BIOS folder.
@@ -787,7 +787,7 @@ RetroArch: 14929 files, 6.7 GB.
   Counted again for these choices. Nothing is written before Enter.
 
 RetroArch: 9840 files, 4.2 GB.
-  3259 BIOS files (4.1 GB) and 6581 data files (135.5 MB). 5089 game data files left out.
+  3259 BIOS files (4.1 GB) and 6581 data files (135.6 MB). 5089 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). An owned copy goes in the BIOS folder.

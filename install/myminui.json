@@ -88,10 +88,17 @@
   ],
   "core_names": {
     "fbneo": [
-      "FBNEOSA"
+      "FBNEOSA",
+      "fbneo_32b",
+      "fbneo_plus",
+      "km_fbneo_xtreme_amped"
     ],
     "fuse": [
       "fuse_libretro"
+    ],
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
     ],
     "mame2003_plus": [
       "mame078plus",
@@ -103,12 +110,16 @@
       "pce_fast"
     ],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ]
   },
   "system_cores": {},
