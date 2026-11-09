@@ -3132,6 +3132,29 @@ def fold_case_twins(files: list[dict]) -> tuple[list[dict], list[str]]:
     return kept, folded
 
 
+# Android's media scanner marks a folder holding a .nomedia file hidden, and
+# every folder below it (MediaProvider a183e2b9, FileUtils.java:1587-1629
+# isDirectoryHidden, ModernMediaScanner.java:845-846 and 1017-1020). Without
+# one, the samples, overlays and videos of a BIOS folder in shared storage
+# showed in the phone's gallery and music apps. RetroArch writes none
+# (libretro-common/file/file_path_io.c:194 only skips one).
+NOMEDIA = ".nomedia"
+
+
+def hide_from_media_scanner(folder: Path) -> bool:
+    """Leave an empty .nomedia in folder, True when this call wrote it."""
+    marker = folder / NOMEDIA
+    if not _is_dir(folder) or _exists(marker):
+        return False
+    try:
+        marker.touch()
+    except OSError as exc:
+        print(f"  {NOMEDIA} not written in {shown_path(folder)}: {exc.strerror}",
+              file=sys.stderr)
+        return False
+    return True
+
+
 def installed_cores(dirs: list[Path]) -> list[str]:
     """The cores present in these directories, by the name the buildbot uses.
 
@@ -16342,6 +16365,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     where = f"{entry['dest']}/{rel}" if entry.get("dest") else rel
                     failures.append((where, f"{NOT_KEPT} ({reason})"))
                     total_errors += 1
+
+        if os_type == "android" and not args.check and hide_from_media_scanner(bios_path):
+            print(f"  Added {NOMEDIA} to {shown_path(bios_path)}: the gallery and music "
+                  "apps leave its images, sounds and videos out")
 
         # Standalone copies
         if (

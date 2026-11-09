@@ -1461,6 +1461,13 @@ elsewhere. A custom BIOS directory is still named directly:
 python install.py --platform retroarch --dest /storage/emulated/0/RetroArch/system
 ```
 
+An install on Android leaves an empty `.nomedia` in the BIOS folder. Android's
+media scanner hides a folder holding one, and every folder below it
+(MediaProvider, `FileUtils.java` `isDirectoryHidden`), so the samples,
+overlays and videos of the BIOS folder stay out of the gallery and music
+apps. RetroArch writes none. A run that finds one already there leaves it,
+and `--check` and `--dry-run` write nothing.
+
 ## On a handheld { #on-a-handheld-the-retrobios-port }
 
 RetroBIOS also runs on the handheld itself, in the
