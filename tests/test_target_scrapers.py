@@ -393,35 +393,60 @@ class RocknixPerDevice(unittest.TestCase):
     )
 
     def test_each_device_gets_its_own_cores(self):
-        from scraper.targets.rocknix_targets_scraper import (  # noqa: PLC0415
-            core_names,
-            parse_device_cores,
-        )
+        from scraper.targets.rocknix_targets_scraper import parse_device_cores  # noqa: PLC0415
 
-        h700 = core_names(*parse_device_cores(self.PACKAGE_MK, "H700", "aarch64", True))
-        self.assertTrue({"drastic", "gpsp", "duckstation", "beetle_psx", "hatari",
-                         "81", "neocd"} <= set(h700))
-        self.assertFalse({"aethersx2", "dolphin"} & set(h700))
-        no32 = core_names(*parse_device_cores(self.PACKAGE_MK, "H700", "aarch64", False))
-        self.assertNotIn("gpsp", no32)
-        amd64 = core_names(*parse_device_cores(self.PACKAGE_MK, "AMD64", "x86_64", False))
-        self.assertIn("dolphin", amd64)
-        self.assertNotIn("drastic", amd64)
+        libretro, standalone = parse_device_cores(self.PACKAGE_MK, "H700", "aarch64", True)
+        self.assertTrue({"gpsp-lr", "duckstation-lr", "beetle-psx-lr", "81-lr",
+                         "neocd_lr"} <= set(libretro))
+        self.assertTrue({"drastic-sa", "hatarisa"} <= set(standalone))
+        self.assertFalse({"aethersx2-sa", "dolphin-sa"} & set(standalone))
+        libretro, _ = parse_device_cores(self.PACKAGE_MK, "H700", "aarch64", False)
+        self.assertNotIn("gpsp-lr", libretro)
+        _, standalone = parse_device_cores(self.PACKAGE_MK, "AMD64", "x86_64", False)
+        self.assertIn("dolphin-sa", standalone)
+        self.assertNotIn("drastic-sa", standalone)
+
+    def test_a_package_names_the_cores_it_installs(self):
+        """vice-lr builds ten EMUTYPEs: read as the package name, vice_x64
+        and its siblings reached no ROCKNIX device."""
+        from scraper.targets.rocknix_targets_scraper import installed_cores  # noqa: PLC0415
+
+        vice = ("makeinstall_target() {\n  mkdir -p ${INSTALL}/usr/lib/libretro\n"
+                "    cp -a built/vice_x128_libretro.so ${INSTALL}/usr/lib/libretro\n"
+                "    cp -a built/vice_x64_libretro.so ${INSTALL}/usr/lib/libretro\n}\n")
+        self.assertEqual(installed_cores(vice, "aarch64", True), ["vice_x128", "vice_x64"])
+        renamed = ("makeinstall_target() {\n"
+                   "    cp -a mednafen_psx_libretro.so ${INSTALL}/usr/lib/libretro/beetle_psx_libretro.so\n"
+                   "    cp -a fake08_libretro.{so,info} $INSTALL/usr/lib/libretro\n}\n")
+        self.assertEqual(installed_cores(renamed, "aarch64", True), ["beetle_psx", "fake08"])
+        pcsx = ("makeinstall_target() {\n"
+                "    case ${TARGET_ARCH} in\n"
+                "      aarch64|x86_64) cp -a ../pcsx_rearmed_libretro.so ${INSTALL}/usr/lib/libretro ;;\n"
+                "      arm) cp -a ../pcsx_rearmed_libretro.so ${INSTALL}/usr/lib/libretro/pcsx_rearmed32_libretro.so ;;\n"
+                "    esac\n"
+                '    if [ "${TARGET_ARCH}" = "aarch64" ] && [ "${ENABLE_32BIT}" = "true" ]; then\n'
+                "      cp -a x/usr/lib/libretro/pcsx_rearmed32_libretro.so ${INSTALL}/usr/lib/libretro\n"
+                "    fi\n}\n")
+        self.assertEqual(installed_cores(pcsx, "aarch64", True), ["pcsx_rearmed", "pcsx_rearmed32"])
+        self.assertEqual(installed_cores(pcsx, "aarch64", False), ["pcsx_rearmed"])
+        self.assertEqual(installed_cores(pcsx, "x86_64", True), ["pcsx_rearmed"])
+        with self.assertRaises(RuntimeError):
+            installed_cores('makeinstall_target() {\n  if [ "${DEVICE}" = "H700" ]; then\n'
+                            "    cp a_libretro.so ${INSTALL}/usr/lib/libretro\n  fi\n}\n",
+                            "aarch64", True)
+        with self.assertRaises(RuntimeError):
+            installed_cores("makeinstall_target() {\n  :\n}\n", "aarch64", True)
 
     def test_a_standalone_package_keeps_both_spellings(self):
         """vice-standalone answers to vice-sa only, as scummvm-standalone to
         scummvm-sa: stripped to vice, every targeted pack left them out
         while the untargeted one, read from the platform scraper, kept them."""
         from scraper.rocknix_scraper import standalone_emulators  # noqa: PLC0415
-        from scraper.targets.rocknix_targets_scraper import (  # noqa: PLC0415
-            core_names,
-            parse_device_cores,
-        )
+        from scraper.targets.rocknix_targets_scraper import parse_device_cores  # noqa: PLC0415
 
-        libretro, standalone = parse_device_cores(self.PACKAGE_MK, "SM8550", "aarch64", False)
-        names = set(core_names(libretro, standalone))
+        _, standalone = parse_device_cores(self.PACKAGE_MK, "SM8550", "aarch64", False)
+        names = set(standalone_emulators(standalone))
         self.assertTrue({"aethersx2-sa", "aethersx2", "dolphin-sa", "dolphin"} <= names)
-        self.assertTrue(set(standalone_emulators(standalone)) <= names)
 
     def test_a_metapackage_names_the_cores_it_installs(self):
         from scraper.targets.rocknix_targets_scraper import metapackage_cores  # noqa: PLC0415

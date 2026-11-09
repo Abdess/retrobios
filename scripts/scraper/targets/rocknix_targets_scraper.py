@@ -5,6 +5,8 @@ Sources (ROCKNIX/distribution, at the release tag platforms/rocknix.yml names):
     image carries, those aarch64 adds, and a `case "${DEVICE}"` block per SoC
   - projects/ROCKNIX/devices/<DEVICE>/options -- ENABLE_32BIT, which the 32-bit
     cores of a device depend on (distributions/ROCKNIX/options defaults it on)
+  - each libretro package's package.mk -- the cores its makeinstall_target
+    copies to ${INSTALL}/usr/lib/libretro (vice-lr installs ten of them)
 
 An H700 or RK3326 handheld carries neither Dolphin nor AetherSX2: without a
 target list, its pack shipped the PS2, GameCube and PS3 firmware anyway.
@@ -13,6 +15,7 @@ target list, its pack shipped the PS2, GameCube and PS3 firmware anyway.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from datetime import datetime, timezone
@@ -89,18 +92,90 @@ def parse_device_cores(
     return libretro, standalone
 
 
-def core_names(libretro: list[str], standalone: list[str]) -> list[str]:
-    """Package names as the profiles' cores: lists spell them.
+_INSTALL_BODY_RE = re.compile(r"^makeinstall_target\(\)\s*\{\n(.*?)^\}", re.M | re.S)
+_COPY_RE = re.compile(r"\bcp\s+(.*?)\s+\$\{?INSTALL\}?/usr/lib/libretro(?:/(\S*))?")
+_CORE_FILE_RE = re.compile(r"([\w+.-]+)_libretro\.(?:so\b|\{[^}]*\bso\b[^}]*\})")
+_TEST_RE = re.compile(r'\[\s*"\$\{(\w+)\}"\s*=\s*"([^"]*)"\s*\]')
 
-    A libretro package is the core's name with `-lr` (`beetle-psx-lr`,
-    `neocd_lr`), spelled with underscores as the buildbot names it. A
-    standalone package is kept under both spellings, as the platform
-    scraper keeps it: `vice-sa` is the only name vice-standalone answers
-    to, `vice` that of the libretro profile.
+
+def installed_cores(package_mk: str, arch: str, with_32bit: bool) -> list[str]:
+    """The cores a libretro package installs on a device.
+
+    The name is that of the file makeinstall_target copies to
+    ${INSTALL}/usr/lib/libretro ($INSTALL in some), renamed when the copy names its target:
+    beetle-psx-lr copies mednafen_psx_libretro.so as beetle_psx_libretro.so,
+    vice-lr ten EMUTYPE builds. pcsx_rearmed-lr picks its file by
+    TARGET_ARCH and adds the 32-bit build when ENABLE_32BIT is on, desmume-lr
+    copies the 32-bit build on aarch64 (ARCH). A test on another variable,
+    or a package that installs no core, is an error.
     """
-    names = {re.sub(r"[-_]lr$", "", package).replace("-", "_") for package in libretro}
-    names.update(standalone_emulators(standalone))
-    return sorted(names)
+    body = _INSTALL_BODY_RE.search(package_mk)
+    if body is None:
+        raise RuntimeError("package.mk has no makeinstall_target")
+    # config/options:36 sets TARGET_ARCH="${ARCH}".
+    values = {"ARCH": arch, "TARGET_ARCH": arch, "ENABLE_32BIT": "true" if with_32bit else "false"}
+
+    def holds(condition: str) -> bool:
+        tests = _TEST_RE.findall(condition)
+        if not tests or re.sub(_TEST_RE, "", condition).strip(" ;&") not in ("", "then"):
+            raise RuntimeError(f"makeinstall_target tests {condition.strip()!r}")
+        for variable, value in tests:
+            if variable not in values:
+                raise RuntimeError(f"makeinstall_target tests ${{{variable}}}")
+            if values[variable] != value:
+                return False
+        return True
+
+    found: list[str] = []
+    stack: list[bool] = []
+    in_case = False
+    for raw in body.group(1).splitlines():
+        line = raw.strip()
+        if re.match(r"case \$\{TARGET_ARCH\} in$", line):
+            in_case = True
+            stack.append(False)
+            continue
+        if line == "esac":
+            in_case = False
+            stack.pop()
+            continue
+        if in_case and (arm := re.match(r"([\w|*]+)\)\s*(.*)$", line)):
+            stack[-1] = arch in arm.group(1).split("|") or arm.group(1) == "*"
+            line = arm.group(2)
+        if line.startswith("if "):
+            stack.append(holds(line[3:]))
+            continue
+        if line == "else":
+            stack[-1] = not stack[-1]
+            continue
+        if line == "fi":
+            stack.pop()
+            continue
+        if not all(stack):
+            continue
+        for sources, target in _COPY_RE.findall(line):
+            if named := _CORE_FILE_RE.search(target):
+                found.append(named.group(1))
+                continue
+            for source in sources.split():
+                if not source.startswith("-") and (named := _CORE_FILE_RE.search(source.rsplit("/", 1)[-1])):
+                    found.append(named.group(1))
+    if not found:
+        raise RuntimeError("makeinstall_target installs no libretro core")
+    return sorted(set(found))
+
+
+def package_paths(tree: list[str]) -> dict[str, str]:
+    """package name -> its package.mk, a ROCKNIX project package first.
+
+    The build takes projects/ROCKNIX/packages/<...>/<name> over
+    packages/<...>/<name> when both exist.
+    """
+    found: dict[str, str] = {}
+    for path in sorted(tree, key=lambda p: not p.startswith("projects/ROCKNIX/")):
+        if path.endswith("/package.mk"):
+            found.setdefault(path.rsplit("/", 2)[-2], path)
+    return found
 
 
 # A package that builds nothing itself and pulls other cores in. idtech-lr
@@ -149,13 +224,40 @@ class Scraper(BaseTargetScraper):
             raise RuntimeError(f"no device in {DEVICES_DIR} at {self.tag}")
         return sorted(devices)
 
-    def fetch_targets(self) -> dict:
-        self.tag = self.pinned_revision(PLATFORM_NAME)
+    def _tree(self) -> list[str]:
+        listing = json.loads(fetch_bytes(
+            f"https://api.github.com/repos/ROCKNIX/distribution/git/trees/{self.tag}?recursive=1",
+            headers=github_headers(),
+        ))
+        if listing.get("truncated"):
+            raise RuntimeError(f"ROCKNIX tree at {self.tag} is truncated")
+        return [entry["path"] for entry in listing.get("tree", [])]
+
+    def device_builds(self, tag: str | None = None) -> dict[str, tuple[str, list[str], list[str]]]:
+        """{device: (architecture, libretro cores, standalone packages)}.
+
+        Read at `tag`, by default the revision platforms/rocknix.yml was
+        scraped at: metapackages resolved to the packages they pull in, and
+        each libretro package to the cores it installs on the device.
+        """
+        self.tag = tag or self.pinned_revision(PLATFORM_NAME)
         package_mk = self._raw(EMULATORS_MK)
         if "LIBRETRO_CORES" not in package_mk:
             raise RuntimeError(f"no LIBRETRO_CORES in {EMULATORS_MK} at {self.tag}")
+        paths = package_paths(self._tree())
+        texts: dict[str, str] = {}
 
-        targets: dict[str, dict] = {}
+        def cores_of(package: str, arch: str, with_32bit: bool) -> list[str]:
+            if package not in paths:
+                raise RuntimeError(f"no package.mk for {package} at {self.tag}")
+            if package not in texts:
+                texts[package] = self._raw(paths[package])
+            try:
+                return installed_cores(texts[package], arch, with_32bit)
+            except RuntimeError as e:
+                raise RuntimeError(f"{paths[package]}: {e}") from e
+
+        builds: dict[str, tuple[str, list[str], list[str]]] = {}
         for device in self._devices():
             options = self._raw(f"{DEVICES_DIR}/{device}/options")
             arch = "x86_64" if device == "AMD64" else "aarch64"
@@ -165,9 +267,19 @@ class Scraper(BaseTargetScraper):
                 if meta in libretro:
                     libretro.remove(meta)
                     libretro += metapackage_cores(self._raw(path), arch)
-            cores = core_names(libretro, standalone)
-            targets[device.lower()] = {"architecture": arch, "cores": cores}
-            print(f"  {device.lower()} ({arch}): {len(cores)} cores", file=sys.stderr)
+            cores = sorted({c for package in libretro for c in cores_of(package, arch, with_32bit)})
+            builds[device.lower()] = (arch, cores, standalone)
+        return builds
+
+    def fetch_targets(self) -> dict:
+        targets: dict[str, dict] = {}
+        for device, (arch, libretro, standalone) in self.device_builds().items():
+            # A standalone package is kept under both spellings, as the
+            # platform scraper keeps it: vice-sa is the only name
+            # vice-standalone answers to, vice that of the libretro profile.
+            cores = sorted({*libretro, *standalone_emulators(standalone)})
+            targets[device] = {"architecture": arch, "cores": cores}
+            print(f"  {device} ({arch}): {len(cores)} cores", file=sys.stderr)
 
         return {
             "platform": PLATFORM_NAME,
