@@ -6215,6 +6215,20 @@ def _command_rank(option: tuple[str, str | None]) -> int:
     return _COMMAND_ORDER.index(flag) if flag in _COMMAND_ORDER else len(_COMMAND_ORDER)
 
 
+def package_command(prefix: str) -> str:
+    """The command that ran the retrobios package, read from the environment
+    it runs in. uvx runs it from uv's cache (~/.cache/uv/archive-v0/<id>
+    with uv 0.12.9) and pipx run from pipx's (~/.cache/pipx/<id> with
+    pipx 1.4.3), and neither leaves a retrobios command behind. pip, pipx
+    install (pipx's venvs/) and uv tool install do."""
+    parts = re.split(r"[\\/]", prefix)
+    if "archive-v0" in parts:
+        return "uvx retrobios"
+    if any(part in ("pipx", ".pipx") for part in parts) and "venvs" not in parts:
+        return "pipx run retrobios"
+    return "retrobios"
+
+
 class Invocation:
     """How this run was started, so that a hint gives the command back whole.
 
@@ -6271,6 +6285,8 @@ class Invocation:
             return f"&([scriptblock]::Create((irm {BOOTSTRAP_URL}.ps1)))"
         if bootstrap == "sh":
             return f"curl -fsSL {BOOTSTRAP_URL} | {'sudo ' if elevated else ''}sh -s --"
+        if bootstrap == "pypi":
+            return f"{'sudo ' if elevated else ''}{package_command(sys.prefix)}"
         python = "python" if self.os_type == "windows" else "python3"
         return f"{'sudo ' if elevated else ''}{python} install.py"
 

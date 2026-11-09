@@ -44,6 +44,7 @@ MODULE = "retrobios"
 # keeps the exit codes it gives a reader that left (141) and Ctrl+C (130).
 LAUNCHER = '''"""The RetroBIOS installer, install.py, run as the retrobios command."""
 
+import os
 import runpy
 from pathlib import Path
 
@@ -51,6 +52,8 @@ __version__ = "{version}"
 
 
 def main() -> None:
+    # The hints give back the command that ran this, not python3 install.py.
+    os.environ["RETROBIOS_BOOTSTRAP"] = "pypi"
     runpy.run_path(str(Path(__file__).with_name("install.py")), run_name="__main__")
 '''
 
