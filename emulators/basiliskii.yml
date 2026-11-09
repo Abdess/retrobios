@@ -71,6 +71,7 @@ notes: |
 
 files:
   - name: ROM
+    aliases: ["MacROM.bin"]
     required: true
     min_size: 524288
     max_size: 1048576
