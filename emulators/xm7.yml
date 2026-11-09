@@ -145,14 +145,23 @@ files:
   - name: relay_on.wav
     description: "Cassette relay on sound"
     required: false
+    sha1: "85c43404f3f701e87f5c3b30bb2624465feb537c"
+    md5: "6233f2d067d775cd7a5951e7f56044c7"
     source_ref: "linux-sdl/sdl/api_snd2.cpp:155-157, 213-267, 660"
+    note: "Hashes of the copy in Win32/ of the XM7 V3.4L77SX+z09 final release archive (xm7_3477sxz09.zip, PI. and Ryu Takegami, retropc.net/ryu/xm7), dated 2003-01-23."
 
   - name: relayoff.wav
     description: "Cassette relay off sound"
     required: false
+    sha1: "ab06b4ce5ab88da51a6d0223dfcf7402e83cf965"
+    md5: "58f696bffef634819e0769a5c6e7c95f"
     source_ref: "linux-sdl/sdl/api_snd2.cpp:155-158, 213-267, 660"
+    note: "Hashes of the copy in Win32/ of the XM7 V3.4L77SX+z09 final release archive (xm7_3477sxz09.zip, PI. and Ryu Takegami, retropc.net/ryu/xm7), dated 2003-01-23."
 
   - name: fddseek.wav
     description: "Floppy drive seek sound"
     required: false
+    sha1: "bb36a2980975f6c469a861d64dbfdaacbf8c7f00"
+    md5: "b56fa2df7681a97190804f67f3e6900b"
     source_ref: "linux-sdl/sdl/api_snd2.cpp:155-159, 213-267, 660"
+    note: "Hashes of the copy in Win32/ of the XM7 V3.4L77SX+z09 final release archive (xm7_3477sxz09.zip, PI. and Ryu Takegami, retropc.net/ryu/xm7), dated 2003-01-23."
