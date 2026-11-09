@@ -3,13 +3,13 @@ type: standalone + libretro
 core_classification: official_port
 source: "https://github.com/AloysHF/CoolbarEmu"
 upstream: "https://github.com/AloysHF/CoolbarEmu"
-profiled_date: "2026-10-17"
-source_commit: "88e90440daab0bdc7bc141728b51841e0c730528"
-core_version: "v0.2.0"
+profiled_date: "2026-11-09"
+source_commit: "aa6df0ec289ffc4f89f4c03f748d0b121fb4323f"
+core_version: "v0.2.0-184-gaa6df0e"
 version_basis:
   kind: tag
   tag: "v0.2.0"
-  distance: 0
+  distance: 184
 display_name: "Coolbar (CoolbarEmu)"
 cores:
   - "coolbaremu"
@@ -24,29 +24,32 @@ notes: |
   crate and the phone firmware services are reimplemented in
   crates/coolbaremu-core/src/machine/services. Text is drawn with the unifont
   crate compiled into the core (Cargo.toml:35,
-  crates/coolbaremu-core/src/machine/drawing.rs:1886).
+  crates/coolbaremu-core/src/machine/drawing.rs:2163).
 
   The content is read whole by CbeArchive::load()
   (crates/coolbaremu-core/src/cbe/archive.rs:68-73). Files next to the .cbe
   (pay kernels, records, update data) are indexed as the guest filesystem
-  (crates/coolbaremu-core/src/machine/mod.rs:1022-1024,
-  crates/coolbaremu-core/src/machine/virtual_fs.rs:58-103), and they belong to
+  (crates/coolbaremu-core/src/machine/mod.rs:1071-1073,
+  crates/coolbaremu-core/src/machine/virtual_fs.rs:62-103), and they belong to
   the game.
 
-  The only system directory read is coolbaremu_orientation.csv, an optional
-  user list of CRC32, size and orientation for landscape titles missing from
-  the built-in table (crates/coolbaremu-libretro/src/libretro/api.rs:45,
-  crates/coolbaremu-libretro/src/libretro/api.rs:369-399,
-  crates/coolbaremu-core/src/orientation_profile.rs:31-54). A missing file is
-  logged and the built-in table applies. The standalone binary reads and
-  writes only the files named on its command line, --orientation-profile,
-  --screenshot, --save-state and --load-state
-  (crates/coolbaremu/src/main.rs:105-108, crates/coolbaremu/src/main.rs:153-167,
-  crates/coolbaremu/src/main.rs:186-187).
+  The only system directory read is coolbaremu/coolbaremu_orientation.csv,
+  an optional user list of CRC32, size and orientation for landscape titles
+  missing from the built-in table. Both names are matched with their exact
+  case (crates/coolbaremu-libretro/src/libretro/api.rs:44-46,
+  crates/coolbaremu-libretro/src/libretro/api.rs:400-468,
+  crates/coolbaremu-core/src/orientation_profile.rs:31-56). The core logs a
+  missing or invalid file and the built-in table applies. The standalone
+  binary looks for the same path under --system-dir, system by default, and
+  stops on a file it cannot parse. It otherwise reads and writes only the
+  files named on its command line, --screenshot, --save-state and
+  --load-state (crates/coolbaremu/src/main.rs:24-46,
+  crates/coolbaremu/src/main.rs:111-113, crates/coolbaremu/src/main.rs:176-190,
+  crates/coolbaremu/src/main.rs:209-216).
 
 files: []
 
 exclusion_note: >
   The firmware services are reimplemented in the core and the font is the
   embedded unifont crate. The system directory holds only an optional
-  user-written orientation list.
+  user-written orientation list under coolbaremu/.
