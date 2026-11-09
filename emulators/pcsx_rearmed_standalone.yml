@@ -47,14 +47,16 @@ notes: |
 files:
   - name: "SCPH1001.BIN"
     system: sony-playstation
-    description: "PlayStation BIOS, any 512 KiB image, named as RetroPie links it"
+    description: "PlayStation BIOS, any 512 KiB image of the bios folder"
     size: 524288
     validation: [size]
     required: false
     hle_fallback: true
     note: >-
-      The code accepts any file name. SCPH1001.BIN is the one name RetroPie
-      links into the bios folder, so it is the only image this install can
-      list. A 4 MiB file is also listed, and only its first 512 KiB are
-      loaded.
+      The code opens no file by name. scan_bios_plugins lists every regular
+      file or link of the bios folder whose size is 512 KiB or 4 MiB, in
+      directory order and unsorted, and the name of the one selected in the
+      menu is stored in Config.Bios. The entry name is a label: SCPH1001.BIN
+      is the file RetroPie links into that folder. Of a 4 MiB file only the
+      first 512 KiB are loaded.
     source_ref: "frontend/menu.c:2619-2628, libpcsxcore/psxmem.c:314-327"
