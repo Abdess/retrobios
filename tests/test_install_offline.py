@@ -1040,7 +1040,7 @@ class OneOfflineVocabulary(Scratch):
         self.assertEqual(proc.returncode, 3, out)
         self.assertNotIn("to fetch them", out)
         self.assertIn("4 files need the internet, which --offline does not use.", out)
-        self.assertIn("Copy them from your old card or a folder (--from)", out)
+        self.assertIn("Copy them from an old card or a folder (--from)", out)
 
     def test_the_screen_says_missing_not_failed(self):
         """On the full screen: "Finished with errors, 20 failed"."""

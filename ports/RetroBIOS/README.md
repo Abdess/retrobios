@@ -7,7 +7,7 @@ the system, checks every file its emulators read against its hash, and
 installs the missing ones.
 
 With a network connection the files are downloaded. Without one, copy the
-BIOS pack of your system (a `_BIOS_Pack.zip` file from the releases page)
+BIOS pack of the system (a `_BIOS_Pack.zip` file from the releases page)
 into `ports/retrobios` on the card, and RetroBIOS installs from it.
 
 Python 3.8 or newer: the system's, or PortMaster's `python_3.11` runtime on

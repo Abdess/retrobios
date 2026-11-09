@@ -293,10 +293,10 @@ class RecordsNameNoLocalPath(unittest.TestCase):
 
     def test_the_summary_names_the_options(self) -> None:
         root = Path("/srv/run/tmp/pack_probe/retroarch/installer")
-        out = (f"Copy it from your own copy of the game into {root / 'system'}/jazz2/Source/.\n"
+        out = (f"Copy it from an owned copy of the game into {root / 'system'}/jazz2/Source/.\n"
                f"Saves go to {root / 'saves'}.\n")
         summary = pp.installer_summary(out, root / "system", root / "saves")
-        self.assertEqual(summary, "Copy it from your own copy of the game into <dest>/jazz2/Source/. "
+        self.assertEqual(summary, "Copy it from an owned copy of the game into <dest>/jazz2/Source/. "
                                   "Saves go to <save-dir>.")
 
     def test_no_committed_record_holds_a_local_path(self) -> None:

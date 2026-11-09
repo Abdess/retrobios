@@ -1045,7 +1045,7 @@ class UnknownRegionSaysWhatToType(unittest.TestCase):
         with self.assertRaises(ValueError) as caught:
             region.parse_requested("uss")
         message = str(caught.exception)
-        self.assertIn("Did you mean: us", message)
+        self.assertIn("Close matches: us", message)
         self.assertIn("Short forms: jp", message)
 
     def test_the_installer_says_the_same(self):
@@ -1058,7 +1058,7 @@ class UnknownRegionSaysWhatToType(unittest.TestCase):
         spec.loader.exec_module(install)
         with self.assertRaises(ValueError) as caught:
             install.canonical_region("europ")
-        self.assertIn("Did you mean: europe", str(caught.exception))
+        self.assertIn("Close matches: europe", str(caught.exception))
         self.assertIn("Short forms:", str(caught.exception))
 
 

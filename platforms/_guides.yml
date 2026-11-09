@@ -372,7 +372,7 @@ guides:
     - where: From Windows, over the home network
       path: '`\\RECALBOX\share\bios\`'
     run: [device]
-    download_hint: From a computer, use the network folder above.
+    download_hint: From a computer, use the network folder below.
     pack_manual: |
       Option B: Manual (network share)
       --------------------------------

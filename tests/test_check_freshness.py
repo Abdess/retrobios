@@ -320,7 +320,7 @@ class CoreResolutionTests(unittest.TestCase):
             self.assertEqual(cf.load_core_info_record(record), {"a": "2", "b": "1"})
             with self.assertRaises(cf.InputMissing) as raised:
                 cf.record_core_info({"a": "2", "ghosts": "1"}, ["ghost"], record)
-            self.assertIn("Did you mean: ghosts?", str(raised.exception))
+            self.assertIn("Close matches: ghosts.", str(raised.exception))
 
     def test_record_errors_are_one_line(self):
         """A mistyped core and an empty offline cache ended on a traceback."""

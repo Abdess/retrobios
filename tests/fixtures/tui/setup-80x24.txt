@@ -1,4 +1,4 @@
- RetroBIOS: Where do you play?
+ RetroBIOS: Where to install?
 
  Found on this machine:
 

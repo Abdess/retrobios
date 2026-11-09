@@ -9,7 +9,7 @@
 
  > Install
    Choose systems
-   Copy from your old card or a folder
+   Copy from an old card or a folder
    Options
    Quit
  A Install  B Back  Y Options  ? Help

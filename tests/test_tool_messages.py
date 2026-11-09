@@ -49,7 +49,7 @@ class ABuildbotNameSelectsItsProfile(unittest.TestCase):
     def test_an_unknown_name_still_gets_a_hint(self):
         with self.assertRaises(common.ProfileSelectionError) as caught:
             common.select_emulator_profiles(["pcsx3"], self.PROFILES)
-        self.assertIn("Did you mean", str(caught.exception))
+        self.assertIn("Close match", str(caught.exception))
 
     def test_cross_reference_reports_the_resolved_profile(self):
         """cross_reference filtered on the typed name, found no profile under
@@ -81,7 +81,7 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
             with self.assertRaises(ValueError) as caught:
                 common.load_target_config("p", "swich", tmp)
         message = str(caught.exception)
-        self.assertIn("Did you mean: switch?", message)
+        self.assertIn("Close matches: switch.", message)
         self.assertIn("lists all 31", message)
         self.assertNotIn("board-0", message)
 
@@ -244,7 +244,7 @@ class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
             common.build_target_cores_cache(
                 platforms, "swich", str(REPO_ROOT / "platforms"), is_all=True
             )
-        self.assertIn("Did you mean: switch (", str(caught.exception))
+        self.assertIn("Close matches: switch (", str(caught.exception))
         self.assertIn("retroarch", str(caught.exception))
         self.assertEqual(out.getvalue(), "")
 
@@ -258,7 +258,7 @@ class AMistypedDataKeyGetsTheClosestName(unittest.TestCase):
             cwd=REPO_ROOT, capture_output=True, text=True, check=False,
         )
         self.assertEqual(proc.returncode, 1)
-        self.assertIn("unknown key: dolphin-sis. Did you mean: dolphin-sys? --dry-run lists all",
+        self.assertIn("unknown key: dolphin-sis. Close matches: dolphin-sys. --dry-run lists all",
                       proc.stderr)
         self.assertNotIn("ppsspp-assets", proc.stderr)
 

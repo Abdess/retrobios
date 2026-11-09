@@ -5240,7 +5240,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
             install.normalize_platform("spruce")
-        self.assertIn("Did you mean: spruceOS?", err.getvalue())
+        self.assertIn("Close matches: spruceOS.", err.getvalue())
         # The distinct names --list-platforms prints: Batocera is both a
         # platform and a system it recognises.
         names = [*install.AVAILABLE_PLATFORMS,
@@ -5254,7 +5254,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as raised:
             install.normalize_platform("batocra")
         self.assertEqual(raised.exception.code, 2)
-        self.assertIn("Did you mean: batocera?", err.getvalue())
+        self.assertIn("Close matches: batocera.", err.getvalue())
         self.assertNotIn("recalbox", err.getvalue())
 
     def test_a_system_is_found_inside_its_full_id(self):
@@ -5272,7 +5272,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         with self.assertRaises(ValueError) as raised:
             install.resolve_choices(["swanstaton"], known, "core")
         text = str(raised.exception)
-        self.assertIn("Did you mean: swanstation?", text)
+        self.assertIn("Close matches: swanstation.", text)
         self.assertIn("--list-cores lists all 201", text)
         self.assertNotIn("core17", text)
 
@@ -5287,7 +5287,7 @@ class ATypoGetsTheClosestName(unittest.TestCase):
         err = io.StringIO()
         with contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
             install._unknown_target("swich", "retroarch", {"switch": {}, "desktop": {}})
-        self.assertIn("Did you mean: switch?", err.getvalue())
+        self.assertIn("Close matches: switch.", err.getvalue())
         self.assertIn("--list-targets", err.getvalue())
 
 
@@ -7423,7 +7423,7 @@ class KeptFilesEndToEnd(unittest.TestCase, _SyntheticTree):
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(self.bios),
                             "--dry-run", "--no-input")
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertIn("Would keep 1 file you have (11 B)", proc.stdout)
+        self.assertIn("Would keep 1 file already there (11 B)", proc.stdout)
         self.assertIn(str(self.home / install.BACKUP_DIR), proc.stdout)
         self.assertFalse((self.home / install.BACKUP_DIR).exists())
         self.assertEqual((self.bios / "b.bin").read_bytes(), b"other bytes")
@@ -7440,7 +7440,7 @@ class KeptFilesEndToEnd(unittest.TestCase, _SyntheticTree):
         self.assertEqual((self.bios / "b.bin").read_bytes(), self.FILES["bios/A/b.bin"])
         runs = list((self.home / install.BACKUP_DIR).iterdir())
         self.assertEqual(len(runs), 1)
-        self.assertIn("Kept 1 file you had (11 B), which the collection's copies "
+        self.assertIn("Kept 1 file already there (11 B), which the collection's copies "
                       f"replaced, in {runs[0]}", proc.stdout)
         self.assertIn(f"--restore {runs[0]}", proc.stdout)
         # a.bin held the expected bytes: it is not among the kept files.

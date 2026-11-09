@@ -129,7 +129,7 @@ class AMistypedPlatformIsNamed(unittest.TestCase):
                 )
                 self.assertNotEqual(proc.returncode, 0)
                 self.assertNotIn("Traceback", proc.stderr, proc.stderr)
-                self.assertIn("Did you mean 'batocera'?", proc.stderr)
+                self.assertIn("Close match: 'batocera'.", proc.stderr)
         self.assertFalse(out.exists())
 
     def test_the_names_the_site_prints_are_accepted(self):
@@ -175,7 +175,7 @@ class CrossReferenceAnswersForTheEmulatorAsked(unittest.TestCase):
         proc = self._run("--emulator", "dolhpin")
         self.assertNotEqual(proc.returncode, 0)
         self.assertNotIn("Traceback", proc.stderr)
-        self.assertIn("Did you mean: dolphin", proc.stderr)
+        self.assertIn("Close matches: dolphin", proc.stderr)
         listing = self._run("--list-emulators")
         self.assertEqual(listing.returncode, 0)
         self.assertIn("dolphin", listing.stdout.split())
@@ -562,7 +562,7 @@ class ATypoGetsTheNearestNames(unittest.TestCase):
     def test_suggestions_follow_the_typed_name(self):
         hint = common.suggest_names(["sony-playstaton"],
                                     ["3do", "apple-ii", "sony-playstation"], "--list-systems")
-        self.assertEqual(hint, "Did you mean: sony-playstation? --list-systems lists all 3.")
+        self.assertEqual(hint, "Close matches: sony-playstation. --list-systems lists all 3.")
         self.assertEqual(common.suggest_names(["zzz"], ["3do"], "--list-systems"),
                          "Known: 3do.")
         many = [f"system-{i}" for i in range(40)]

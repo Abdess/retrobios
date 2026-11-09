@@ -71,7 +71,7 @@ On Batocera, Recalbox and similar setups, see
 It opens a menu:
 
 ```
- RetroBIOS: Where do you play?
+ RetroBIOS: Where to install?
  Found on this machine:
  > <your setup>
    Another setup or folder
@@ -93,7 +93,7 @@ keep.
 
 **Game data** (only a game reads it) has its own row.
 
-**Old card?** In a card reader, choose **Copy the BIOS files from your old
+**Old card?** In a card reader, choose **Copy the BIOS files from an old
 card or a folder**, then the card.
 
 ## 4. Wait

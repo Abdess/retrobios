@@ -517,8 +517,8 @@ def generate_home(
         "## Three steps",
         "",
         *markup.steps([
-            "**Pick the device.** Its page shows the BIOS folder.",
-            "**Run one command.** Some setups have a ZIP.",
+            "**Pick the device.** Its page gives one line to copy.",
+            "**Paste it, press Enter.** Some setups have a ZIP.",
             "**Start a game.**",
         ]),
         *install_demo(),
@@ -4519,6 +4519,8 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     guide = GUIDES[name]
     entry = registry.get(name, {})
     extract_to = entry.get("extract_to")
+    # An app's page opens on the command: one line to paste is the shortest
+    # way to a working setup, and the folder table is what a manual copy needs.
     lines = ["## Where the files go", ""]
     if guide.lead:
         lines += [guide.lead, ""]
@@ -4542,6 +4544,7 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     if guide.on_card:
         lines += ["<!-- image: minui-card -->", ""]
     if _computer_first(name, guide):
+        # The ZIP copied over the network needs the folder table above it.
         lines += [
             *_guide_download(name, display, guide, extract_to,
                              "## From a computer { #download }"),
@@ -4549,10 +4552,12 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
             *_guide_install(name, guide, "## On the device { #install }"),
         ]
     else:
-        lines += [
+        where = lines
+        lines = [
             *_setup_routes(name, display, page_link=True),
             *_guide_download(name, display, guide, extract_to, "## Download"),
             *_offline_line(name),
+            *where,
         ]
     check_args = {key: f"{args} --check" for key, args in platform_args(name, guide).items()}
     lines += [
