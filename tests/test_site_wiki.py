@@ -435,7 +435,7 @@ class TheFaqAnswersWithACommand(unittest.TestCase):
     is the lever the installer itself names."""
 
     def test_every_file_of_a_console(self):
-        section = _section(_wiki("faq.md"), "Do I need every file of a console?")
+        section = _section(_wiki("faq.md"), "Is every file of a console needed?")
         self.assertIn("<!-- os-tabs -->", section)
         self.assertIn("--system sony-playstation --core pcsx1", section)
         self.assertNotIn("only your region", section)
@@ -450,7 +450,7 @@ class LegalOpensInPlainWords(unittest.TestCase):
 
     def test_the_answer_comes_before_the_reasoning(self):
         self.assertIn("## The reasoning in detail", self.text)
-        self.assertIn("It depends on your country. Nothing here is legal advice.", self.opening)
+        self.assertIn("It depends on the country. Nothing here is legal advice.", self.opening)
         for case in ("Connectix", "Accolade", "DMCA", "CFR", "Chamberlain", "Yuzu"):
             with self.subTest(case=case):
                 self.assertNotIn(case, self.opening)
@@ -500,7 +500,7 @@ class ArcadeAnswerWherePlayersLook(unittest.TestCase):
                 self.assertIn(words, section)
 
     def test_the_faq_links_the_technical_answer(self):
-        section = _section(_wiki("faq.md"), "My arcade game fails (which MAME version?)")
+        section = _section(_wiki("faq.md"), "An arcade game fails (which MAME version?)")
         anchor = "technical-faq.md#which-mame-version-do-the-arcade-bios-sets-match"
         self.assertIn(anchor, section)
         self.assertIn("## Which MAME version do the arcade BIOS sets match?", _wiki("technical-faq.md"))
@@ -513,7 +513,7 @@ class ArcadeAnswerWherePlayersLook(unittest.TestCase):
                 self.assertTrue(profile.get("core_version") or profile.get("version"))
 
     def test_the_check_step_holds_the_searched_words(self):
-        self.assertIn("## 1. Check my BIOS folder { #checking-what-you-installed }",
+        self.assertIn("## 1. Check the BIOS folder { #checking-what-you-installed }",
                       _wiki("troubleshooting.md"))
 
 
@@ -583,7 +583,7 @@ class SetupsWithoutAPage(unittest.TestCase):
     """N9, J13: ES-DE, LaunchBox and iOS found nothing."""
 
     def test_the_answer(self):
-        section = _flat(_section(_wiki("faq.md"), "My setup is not in the list"))
+        section = _flat(_section(_wiki("faq.md"), "A setup is not in the list"))
         for words in ("--dest", "ES-DE", "LaunchBox", "iPhone"):
             with self.subTest(words=words):
                 self.assertIn(words, section)
@@ -604,7 +604,7 @@ class LinkLabelsMatchPages(unittest.TestCase):
         for name in ("first-install.md", "troubleshooting.md", "faq.md"):
             with self.subTest(page=name):
                 for label in re.findall(r"\[([^\]]+)\]\(\.\./which-pack\.md\)", _wiki(name)):
-                    self.assertEqual(label, "Get your files")
+                    self.assertEqual(label, "Get the files")
 
 
 class ExitStatusAndPinnedInstaller(unittest.TestCase):
@@ -712,7 +712,7 @@ class TroubleshootingSaysTheWordsOnScreen(unittest.TestCase):
         self.text = _wiki("troubleshooting.md")
 
     def test_step_one_opens_on_the_messages(self):
-        step = _flat(_section(self.text, "1. Check my BIOS folder"))
+        step = _flat(_section(self.text, "1. Check the BIOS folder"))
         self.assertIn("**BIOS not found**, **BIOS missing** or **firmware missing**?", step)
         self.assertLess(step.index("BIOS not found"), step.index("```"))
 
@@ -792,7 +792,7 @@ class ArcadeVersionTable(unittest.TestCase):
 
     def test_the_section_opens_on_the_answer(self):
         self.assertTrue(self.section.lstrip().startswith(
-            "Your game sets and BIOS sets must come from the same version as your arcade\nemulator."))
+            "Game sets and BIOS sets must come from the same version as the arcade\nemulator."))
         self.assertIn("| Emulator, as RetroArch names it | Sets from |", self.section)
         self.assertLess(self.section.index("| Emulator"), self.section.index("### How this is known"))
 
@@ -818,7 +818,7 @@ class ArcadeVersionTable(unittest.TestCase):
         self.assertIn(ARCADE_ANCHOR, arcade)
         self.assertNotIn("emulators/index.md", arcade)
         faq = _wiki("faq.md")
-        self.assertIn("## My arcade game fails (which MAME version?) "
+        self.assertIn("## An arcade game fails (which MAME version?) "
                       "{ #my-arcade-game-does-not-start }", faq)
 
 
@@ -830,7 +830,7 @@ class FaqLabels(unittest.TestCase):
 
     def test_no_reference_label(self):
         self.assertNotRegex(self.text, r"(?m)^Reference:")
-        arcade = _section(self.text, "My arcade game fails (which MAME version?)")
+        arcade = _section(self.text, "An arcade game fails (which MAME version?)")
         self.assertIn(f"Game sets must match the emulator's version:\n[the list]({ARCADE_ANCHOR}).",
                       arcade)
 
@@ -845,7 +845,7 @@ class CopyYourOwnBios(unittest.TestCase):
     """C-other, need 12: no page answered the legal route."""
 
     def test_each_console_has_a_guide(self):
-        section = _section(_wiki("faq.md"), "Can I copy my own console's BIOS?")
+        section = _section(_wiki("faq.md"), "Can an owned console's BIOS be copied?")
         links = re.findall(r"\[([^\]]+)\]\((https://[^)]+)\)", section)
         self.assertEqual(dict(links), {
             "PCSX2": "https://pcsx2.net/docs/setup/bios/",
@@ -1093,15 +1093,15 @@ class FaqAnswersLeadSomewhere(unittest.TestCase):
         self.generator = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
 
     def test_ios_goes_to_the_iphone_section(self):
-        section = _flat(_section(self.text, "My setup is not in the list"))
-        self.assertIn("iPhone, iPad (iOS): no terminal. [Pick your consoles and copy them "
+        section = _flat(_section(self.text, "A setup is not in the list"))
+        self.assertIn("iPhone, iPad (iOS): no terminal. [Pick the consoles and copy them "
                       "to the app](../which-pack.md#iphone-and-ipad).", section)
         self.assertNotIn("Use the ZIP", section)
         self.assertIn('"## iPhone and iPad { #iphone-and-ipad }"', self.generator)
 
     def test_antivirus_answer_covers_setups_without_a_zip(self):
-        section = _flat(_section(self.text, "Windows or my antivirus blocks the command"))
-        self.assertIn("Use your setup's ZIP. None? [Pick your consoles]"
+        section = _flat(_section(self.text, "Windows or an antivirus blocks the command"))
+        self.assertIn("Use the setup's ZIP. None? [Pick the consoles]"
                       "(../which-pack.md#only-some-consoles) and download their files.",
                       section)
         self.assertNotIn("if any", section)

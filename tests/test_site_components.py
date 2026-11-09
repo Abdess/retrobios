@@ -183,7 +183,7 @@ class SectionTabsInTheHeader(unittest.TestCase):
         nav = re.search(r'<nav class="rb-tabs[^"]*"[^>]*>(.*?)</nav>', html, re.S)
         self.assertIsNotNone(nav)
         labels = [re.sub(r"<[^>]+>", "", a).strip() for a in re.findall(r"<a\b[^>]*>.*?</a>", nav.group(1), re.S)]
-        self.assertEqual(labels, ["Start here", "Your setup", "Explore", "Reference", "Contribute"])
+        self.assertEqual(labels, ["Start here", "Setups", "Explore", "Reference", "Contribute"])
         self.assertEqual(nav.group(1).count('aria-current="true"'), 1)
         self.assertRegex(nav.group(1), r'aria-current="true"[^>]*>\s*Start here')
 
@@ -198,7 +198,7 @@ class LevelBadgeOnlyWhereItAddsSomething(unittest.TestCase):
     def test_badge_follows_the_crumb(self):
         # A tab root: the header tab already says it.
         self.assertNotIn('class="rb-level ', _title_block(_built("platforms")))
-        # Under the "Start here" or "Your setup" crumb the badge repeated it.
+        # Under the "Start here" or "Setups" crumb the badge repeated it.
         for page in ("which-pack", "platforms/batocera"):
             with self.subTest(page=page):
                 block = _title_block(_built(page))

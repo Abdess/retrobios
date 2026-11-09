@@ -4,7 +4,7 @@
 //   page or the section that introduces it, never to a sibling page. A
 //   group of names by their first letter (A, B) is no crumb;
 // - previous and next: the reading order of `reading`. Start here runs on
-//   into Your setup, every other tab is read on its own, and a system,
+//   into Setups, every other tab is read on its own, and a system,
 //   emulator or platform page has none;
 // - a pruned sidebar: in the tabs listing every system and emulator, a
 //   group that does not hold the page becomes one link to its overview, so

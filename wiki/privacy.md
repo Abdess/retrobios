@@ -4,23 +4,23 @@ order: 65
 terms: privacy, cookies, analytics, tracking
 ---
 
-# What we count
+# What is counted
 
-No cookies. No account. Nothing is stored on your device, and nothing
+No cookies. No account. Nothing is stored on the device, and nothing
 links a visit to a person.
 
 ## On this site
 
-When a page opens, your browser sends one request to
+When a page opens, the browser sends one request to
 [GoatCounter](https://www.goatcounter.com), an open-source counter. It
 carries:
 
 - the page address, without the part after `?` or `#`;
-- the site you came from, by its address without a path
+- the site the visit came from, by its address without a path
   (`https://www.google.com`).
 
 GoatCounter reads the browser name and the country from that request. It does
-not keep your IP address. To tell a reload from a second visitor it keeps a
+not keep the IP address. To tell a reload from a second visitor it keeps a
 code made from the request for 8 hours, then drops it.
 
 These actions are counted the same way, with the page they happened on:
@@ -35,12 +35,12 @@ These actions are counted the same way, with the page they happened on:
   as "other", without its words;
 - the answer to "Did this page help?".
 
-Not sent: your screen size, your language, a search that found results.
+Not sent: the screen size, the language, a search that found results.
 
 The totals are kept two years and are public:
 [retrobios.goatcounter.com](https://retrobios.goatcounter.com).
 
-If your browser sends Do Not Track or Global Privacy Control, nothing is sent,
+If the browser sends Do Not Track or Global Privacy Control, nothing is sent,
 and the "Did this page help?" question is not shown. A content blocker that
 stops GoatCounter changes nothing on the site.
 
@@ -51,6 +51,6 @@ those requests as it sees any download.
 
 ## Search engines
 
-Google and Bing tell us which searches showed the site and how often it was
-clicked. They report totals, from their own records, never from your
+Google and Bing report which searches showed the site and how often it was
+clicked. They give totals, from their own records, never from a reader's
 browser.

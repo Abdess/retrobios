@@ -7,8 +7,8 @@ terms: measurement, proof, tested, core probe, real conditions, method
 
 # How emulators are tested
 
-We run an emulator only when a question needs a real answer. That is an
-issue, a fix we send to a project, or a check before a release.
+An emulator runs here only when a question needs a real answer. That is an
+issue, a fix sent to a project, or a check before a release.
 
 A page that relies on a run says so in a **Proof** line. Every run is on the
 [Measurements](../measurements.md) page.
@@ -18,7 +18,7 @@ A page that relies on a run says so in a **Proof** line. Every run is on the
 - A script runs the emulator with no window and no sound.
 - It starts a game and runs it for a set time.
 - A test that compares files runs each case at least twice.
-- It compares the screens with ones we checked by eye.
+- It compares the screens with ones checked by eye.
 - It reads the emulator's log to see which BIOS it ran.
 
 ## What a result says
@@ -37,8 +37,8 @@ A page that relies on a run says so in a **Proof** line. Every run is on the
 
 - It shows the first minutes of one game, not the whole game.
 - It sees the files the emulator opened on this path, not every path.
-- Some emulators run their own BIOS when yours is refused. The game still works.
-- The app you play in may change settings the test left as they were.
+- Some emulators run their own BIOS when the given one is refused. The game still works.
+- The app that runs the game may change settings the test left as they were.
 
 ## How a file is proven
 

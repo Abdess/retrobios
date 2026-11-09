@@ -1,5 +1,5 @@
 ---
-// "Which files do I need": pick a setup and systems, get the file list and
+// "Which files are needed": pick a setup and systems, get the file list and
 // the install command. Client side only: reads public/data/picker/*.json,
 // which convert.py derives from install/<platform>.json. The selection
 // follows install.py narrow(): a file is kept when one of its systems is
@@ -22,7 +22,7 @@ const packs = Object.fromEntries(
 
 <div class="rb-picker" data-base={base} data-release={JSON.stringify({ tag: release.tag ?? '', packs })}>
 	<fieldset>
-		<label for="rb-pick-platform">Your setup</label>
+		<label for="rb-pick-platform">Setup</label>
 		<select id="rb-pick-platform" name="platform">
 			<option value="">Choose a setup</option>
 		</select>

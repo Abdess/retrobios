@@ -28,10 +28,10 @@ install_base: https://abdess.github.io/retrobios
 # (place_save_entries), and retrobios-backup beside the folder written to.
 trust_items:
 - It checks each file before saving it.
-- It writes in your BIOS folder. For some emulators it also adds files to your save folder.
+- It writes in the BIOS folder. For some emulators it also adds files to the save folder.
 - It never changes or deletes a game or a save.
 - >-
-  It keeps any file it replaces in a `retrobios-backup` folder, next to your BIOS folder.
+  It keeps any file it replaces in a `retrobios-backup` folder, next to the BIOS folder.
   `--restore` puts it back.
 
 # Order of the groups on the picker, in the navigation and on the home page.
@@ -57,7 +57,7 @@ device_groups:
     anchor: game-systems
   handheld:
     label: Handhelds and TV boxes (Anbernic, Retroid, Miyoo)
-    description: The system your handheld or TV box starts.
+    description: The system a handheld or TV box starts.
     anchor: handhelds
     also_runs:
     - setup: Android (Retroid Pocket, AYN Odin and others)
@@ -88,7 +88,7 @@ device_groups:
     anchor: fpga
   server:
     label: Self-hosted game library
-    description: A RomM server. It plays games in your web browser.
+    description: A RomM server. It plays games in the web browser.
     anchor: self-hosted
 
 # Ways to run the installer: the tab label, how to open a terminal there, and
@@ -132,7 +132,7 @@ terminals:
   server:
     label: On the server
     how: >-
-      Open a terminal on the machine that holds your RomM library. Put the path of its
+      Open a terminal on the machine that holds the RomM library. Put the path of its
       `bios` folder after `--dest`.
     shell: sh
 
@@ -287,18 +287,18 @@ guides:
     pack_manual: |
       Option B: Manual (PC)
       ---------------------
-      1. Find your RetroArch system directory:
+      1. Find the RetroArch system directory:
          - RetroArch > Settings > Directory > System/BIOS
          - Default: retroarch/system/
-      2. Extract all files from this archive directly into your system directory
+      2. Extract all files from this archive directly into the system directory
       3. Overwrite if asked
 
       Option C: Manual (handheld / SD card)
       -------------------------------------
-      1. Connect your SD card to your PC
+      1. Connect the SD card to a PC
       2. Find the BIOS folder in the list below
       3. Extract all files from this archive directly into that folder
-      4. Eject SD card and reboot your device
+      4. Eject the SD card and reboot the device
 
       Folders by device:
         {folders}
@@ -318,9 +318,9 @@ guides:
       root@batocera.local`, password `linux`. Paste the line. Press Enter.
     folders:
     - where: On Batocera
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\BATOCERA\share\bios\`'
-    - where: From a Mac or Linux, over your home network
+    - where: From a Mac or Linux, over the home network
       path: '`smb://batocera/share/bios/`'
     run: [device]
     download_hint: From a computer, use the network folder above.
@@ -330,7 +330,7 @@ guides:
 
       Option B: Manual (network share)
       --------------------------------
-      1. On your PC, open the Batocera network share:
+      1. On a PC, open the Batocera network share:
          - Windows: \\BATOCERA\share\bios\
          - Mac/Linux: smb://batocera/share/bios/
       2. Extract all files from this archive directly into the share
@@ -338,13 +338,13 @@ guides:
 
       Option C: Manual (SD card)
       --------------------------
-      1. Put the SD card in your PC
+      1. Put the SD card in a PC
       2. Open the bios folder at the root of the SHARE drive
          (Batocera itself names it /userdata/bios/)
       3. Extract all files from this archive directly into that folder
 
       NOTE: Dreamcast flash memory is named dc_nvmem.bin
-      (if your setup asks for dc_flash.bin, same file).
+      (if the setup asks for dc_flash.bin, same file).
     logo_owner: Batocera
     logo_licence: repository licence MIT
   recalbox:
@@ -355,24 +355,24 @@ guides:
     # a keyboard. SSH user root, password recalboxroot or the one set when flashing 10.0+.
     terminal: >-
       With a keyboard, press **Alt+F2**. From a computer, open a terminal over the network
-      with `ssh root@recalbox`, password `recalboxroot` or the one you set. Paste the line.
+      with `ssh root@recalbox`, password `recalboxroot` or the one set when flashing. Paste the line.
       Press Enter.
     folders:
     - where: On Recalbox
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\RECALBOX\share\bios\`'
     run: [device]
     download_hint: From a computer, use the network folder above.
     pack_manual: |
       Option B: Manual (network share)
       --------------------------------
-      1. On your PC, open the Recalbox network share:
+      1. On a PC, open the Recalbox network share:
          - Windows: \\RECALBOX\share\bios\
       2. Extract all files from this archive directly into the share
 
       Option C: Manual (SD card)
       --------------------------
-      1. Put the SD card in your PC
+      1. Put the SD card in a PC
       2. Open the bios folder at the root of the SHARE drive
          (Recalbox itself names it /recalbox/share/bios/)
       3. Extract all files from this archive directly into that folder
@@ -388,7 +388,7 @@ guides:
       path: '`C:\RetroBat\bios\`'
     run: [windows]
     notes:
-    - The command finds RetroBat wherever you installed it.
+    - The command finds RetroBat wherever it is installed.
     reference_notes:
     - >-
       RetroBat records its own folder each time it starts, and the installer reads it
@@ -396,15 +396,15 @@ guides:
     pack_manual: |
       Option B: Manual
       ----------------
-      1. Open your RetroBat installation folder
+      1. Open the RetroBat installation folder
       2. Navigate to the bios\ subfolder
          (default: C:\RetroBat\bios\)
-      3. Extract all files from this archive directly into your bios\ folder
+      3. Extract all files from this archive directly into the bios\ folder
       4. Overwrite if asked
     logo_owner: RetroBat
     logo_licence: repository states no licence
   emudeck:
-    summary: Installs your emulators and adds your games to Steam.
+    summary: Installs emulators and adds the games to Steam.
     folders:
     - where: Steam Deck and Linux
     # EmuDeck functions/helperFunctions.sh:89-99 (getSDPath, the card's mount point)
@@ -418,7 +418,7 @@ guides:
     run: [steamdeck, linux, windows, macos]
     notes:
     - >-
-      The `bios` folder is inside the Emulation folder you chose in EmuDeck.
+      The `bios` folder is inside the Emulation folder chosen in EmuDeck.
     # emudeck-electron src/renderer/translations/en.json:416-418 (b06bfcf5): the
     # "Bios files checker".
     finish: >-
@@ -444,7 +444,7 @@ guides:
     folders:
     - where: On Lakka
     # lakka.tv/doc/Accessing-Lakka-filesystem: Samba in Settings > Services, share System.
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\LAKKA\System\`'
     run: [device]
     notes:
@@ -467,7 +467,7 @@ guides:
       Option B: Via network share
       --------------------------
       1. On Lakka: Settings > Services > Samba Enable
-      2. On your PC, open the System share: \\LAKKA\System\
+      2. On a PC, open the System share: \\LAKKA\System\
       3. Extract all files from this archive directly into that share
 
       Option C: Via SSH
@@ -501,7 +501,7 @@ guides:
     logo_licence: repository licence GPL-3.0
   romm:
     summary: >-
-      A game library on your own server. It plays games in the web browser.
+      A game library on a self-hosted server. It plays games in the web browser.
     folders:
     - where: In the RomM library
       path: '`bios/`, one subfolder per platform'
@@ -510,7 +510,7 @@ guides:
       path: '`<platform>/bios/` for each platform'
     run: [server]
     notes:
-    - 'You can also add BIOS files in RomM''s web page.'
+    - 'BIOS files can also be added in RomM''s web page.'
     dest: /path/to/library/bios
     # RomM 5.4 places firmware by filesystem.structure.firmware in config.yml,
     # bios/{platform} by default, and suggests {platform}/bios for a library
@@ -543,7 +543,7 @@ guides:
     run: [device]
     notes:
     - >-
-      You can also reach the folder from a computer, over your home network.
+      The folder is also reachable from a computer, over the home network.
     # rocknix.org/faqs and rocknix.org/play/add-games: SSH off by default, turned on in
     # Network Settings, user root, the password shown in System Settings > Security.
     terminal: >-
@@ -565,7 +565,7 @@ guides:
     # AmberELEC 5a3882cb packages/network/samba/config/smb.conf:59-60 shares
     # /storage/roms as "roms". smbd runs unless samba.disabled exists
     # (system.d.opt/smbd.service:5).
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\AmberELEC\roms\`'
     run: [device]
     # amberelec.org/guides/getting-to-know-amberelec.html: host AmberELEC, root, amberelec.
@@ -588,7 +588,7 @@ guides:
     - where: On EmuELEC
     # EmuELEC wiki (35b92c78) Backup-and-Recovery-options.md:4 (\\EMUELEC, roms share)
     # and Bios.md (/storage/roms/bios).
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\EMUELEC\roms\`'
     run: [device]
     # EmuELEC wiki How-to-SSH-into-EmuELEC.md:38-44: root, password emuelec.
@@ -610,7 +610,7 @@ guides:
     - where: On KNULLI
     # knulli.org/play/add-games/network-transfer: \\KNULLI, its share folder, Samba
     # off by default. The share is /userdata, so bios is under it.
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\KNULLI\share\bios\`'
     run: [device]
     notes:
@@ -636,7 +636,7 @@ guides:
     - where: On the Raspberry Pi
     # RetroPie-Setup scriptmodules/supplementary/samba.sh:49-52 (46128cd2) shares
     # $home/RetroPie/BIOS as "bios", and docs/Transferring-Roms.md:29 names \\RETROPIE.
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\RETROPIE\bios\`'
     run: [device]
     # RetroPie docs/FAQ.md:193 (F4 in EmulationStation, its game menu), 175f5b15. The computer route
@@ -657,12 +657,12 @@ guides:
     pack_manual: |
       Option B: Via network share
       --------------------------
-      1. On your PC, open: \\RETROPIE\bios\
+      1. On a PC, open: \\RETROPIE\bios\
       2. Extract all files from this archive directly into that folder
 
       Option C: Via SSH
       -----------------
-      1. SSH into your Pi: ssh pi@retropie
+      1. SSH into the Pi: ssh pi@retropie
       2. Copy files to ~/RetroPie/BIOS/
 
       NOTE: the BIOS folder is on the card's Linux partition,
@@ -684,10 +684,10 @@ guides:
     pack_manual: |
       Option B: Manual
       ----------------
-      1. Open the folder you extracted BizHawk to, the one holding
+      1. Open the folder BizHawk was extracted to, the one holding
          EmuHawk.exe (Windows) or EmuHawkMono.sh (Linux)
       2. Navigate to its Firmware subfolder
-      3. Extract all files from this archive directly into your Firmware folder
+      3. Extract all files from this archive directly into the Firmware folder
       4. In BizHawk: Config > Paths > Firmware should
          point to this folder
     logo_owner: TASVideos
@@ -702,7 +702,7 @@ guides:
       path: '`/media/fat/games/`, one subfolder per core'
     # mister-devel.github.io/MkDocs_MiSTer/setup/games: run samba_on from the Scripts
     # menu, then \\MiSTer\sdcard\.
-    - where: From Windows, over your home network
+    - where: From Windows, over the home network
       path: '`\\MiSTer\sdcard\games\`'
     run: [device]
     # mister-devel.github.io/MkDocs_MiSTer/advanced/network: F9 for a Linux terminal,
@@ -734,7 +734,7 @@ guides:
     - >-
       Each console has its own folder, named after the tag in its Roms folder. `Roms/Sony
       PlayStation (PS)/` uses `Bios/PS/`.
-    - The command makes each console's folder for you.
+    - The command makes each console's folder.
     on_card: true
     reference_notes:
     - >-
@@ -759,7 +759,7 @@ guides:
     - >-
       Each console has its own folder, named after the tag in its Roms folder. `Roms/Sony
       PlayStation (PS)/` uses `Bios/PS/`.
-    - The command makes each console's folder for you.
+    - The command makes each console's folder.
     on_card: true
     reference_notes:
     - >-
@@ -779,7 +779,7 @@ guides:
     - >-
       Each console has its own folder, named after the tag in its Roms folder. `Roms/Sony
       PlayStation (PS)/` uses `Bios/PS/`.
-    - The command makes each console's folder for you.
+    - The command makes each console's folder.
     on_card: true
     reference_notes:
     - >-

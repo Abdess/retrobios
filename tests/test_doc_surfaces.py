@@ -271,10 +271,10 @@ class EndUsersCheckTheirOwnFolder(unittest.TestCase):
     files points at the installer's --check, which hashes their folder."""
 
     USER_SECTIONS = (
-        ("wiki/troubleshooting.md", "## 1. Check my BIOS folder { #checking-what-you-installed }"),
+        ("wiki/troubleshooting.md", "## 1. Check the BIOS folder { #checking-what-you-installed }"),
         ("wiki/troubleshooting.md", "## 2. Fix the files"),
-        ("wiki/faq.md", "## My game shows a black screen"),
-        ("wiki/faq.md", "## How do I know which BIOS I need?"),
+        ("wiki/faq.md", "## A game shows a black screen { #my-game-shows-a-black-screen }"),
+        ("wiki/faq.md", "## How to tell which BIOS is needed? { #how-do-i-know-which-bios-i-need }"),
     )
 
     def test_user_sections_never_send_to_verify(self):

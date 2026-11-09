@@ -6,7 +6,7 @@ terms: ios, iphone, ipad
 
 # Common questions
 
-## Do I need BIOS files?
+## Are BIOS files needed? { #do-i-need-bios-files }
 
 - **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.
 - **Better with it** for Dreamcast. Some games need it.
@@ -14,7 +14,7 @@ terms: ios, iphone, ipad
 
 [What is a BIOS?](what-are-bios-files.md)
 
-## How do I know which BIOS I need?
+## How to tell which BIOS is needed? { #how-do-i-know-which-bios-i-need }
 
 `--dry-run` lists them and changes nothing.
 
@@ -23,7 +23,7 @@ terms: ios, iphone, ipad
 curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --dry-run
 ```
 
-## Do I need every file of a console?
+## Is every file of a console needed? { #do-i-need-every-file-of-a-console }
 
 No. `--core pcsx1` keeps what PCSX reads:
 
@@ -39,14 +39,14 @@ option.
 
 ## Zip or unzip? { #zip-or-unzip }
 
-Unzip into the folder your setup's page names. Keep
+Unzip into the folder the setup's page names. Keep
 inner ZIPs zipped, like `neogeo.zip`.
 
 ## Does a BIOS work on every setup?
 
 Usually. The command installs each setup's own, like `neogeo.zip`.
 
-## My arcade game fails (which MAME version?) { #my-arcade-game-does-not-start }
+## An arcade game fails (which MAME version?) { #my-arcade-game-does-not-start }
 
 Game sets must match the emulator's version:
 [the list](technical-faq.md#which-mame-version-do-the-arcade-bios-sets-match).
@@ -70,12 +70,12 @@ Read them: [install.sh](https://github.com/Abdess/retrobios/blob/main/install.sh
 [install.ps1](https://github.com/Abdess/retrobios/blob/main/install.ps1),
 [install.py](https://github.com/Abdess/retrobios/blob/main/install.py).
 
-## Windows or my antivirus blocks the command
+## Windows or an antivirus blocks the command { #windows-or-my-antivirus-blocks-the-command }
 
-Use your setup's ZIP. None? [Pick your consoles](../which-pack.md#only-some-consoles)
+Use the setup's ZIP. None? [Pick the consoles](../which-pack.md#only-some-consoles)
 and download their files.
 
-## Why is there no ZIP for my setup?
+## Why is there no ZIP for a setup? { #why-is-there-no-zip-for-my-setup }
 
 ZIPs are made for the setups most people download. The command installs every
 setup's files and checks each one. `--dry-run` shows the list first.
@@ -83,7 +83,7 @@ setup's files and checks each one. `--dry-run` shows the list first.
 ## Fill an SD card from a computer?
 
 The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka or
-MiSTer card. Else name your setup and its BIOS folder. For RetroArch on a Switch,
+MiSTer card. Else name the setup and its BIOS folder. For RetroArch on a Switch,
 with the card in drive `E:`, run:
 
 <!-- os-tabs windows: --platform retroarch --dest E:\retroarch\cores\system -->
@@ -94,38 +94,38 @@ curl -fsSL https://abdess.github.io/retrobios/i \
 
 ## No internet on the device?
 
-Fill it from a computer or point `--from-pack` at your ZIP: [Without a network](installer.md#without-a-network-offline-install).
+Fill it from a computer or point `--from-pack` at the ZIP: [Without a network](installer.md#without-a-network-offline-install).
 
 ## Lost or wiped card?
 
 `--from` copies BIOS files from an old card or backup:
 [Copy from an old card](installer.md#copy-from-an-old-card).
 
-## My setup is not in the list
+## A setup is not in the list { #my-setup-is-not-in-the-list }
 
-- Name your emulator's BIOS folder with `--dest`.
+- Name the emulator's BIOS folder with `--dest`.
 - ES-DE or LaunchBox? It fills their emulators' folders.
 - iPhone, iPad (iOS): no terminal.
-  [Pick your consoles and copy them to the app](../which-pack.md#iphone-and-ipad).
+  [Pick the consoles and copy them to the app](../which-pack.md#iphone-and-ipad).
 
 ## Why is a file missing from the ZIP?
 
 Some come with the emulator.
 
-## My game shows a black screen
+## A game shows a black screen { #my-game-shows-a-black-screen }
 
 Often a missing BIOS: [When a game does not start](troubleshooting.md).
 
-## Can I copy my own console's BIOS? { #copy-your-own-bios }
+## Can an owned console's BIOS be copied? { #copy-your-own-bios }
 
 Yes: [PCSX2](https://pcsx2.net/docs/setup/bios/) for PlayStation 2,
 [melonDS](https://melonds.kuribo64.net/faq.php) for DS and DSi.
 
 ## Is this legal?
 
-[It depends on your country](legal.md).
+[It depends on the country](legal.md).
 
 ## Next steps
 
-- [Get your files](../which-pack.md)
+- [Get the files](../which-pack.md)
 - [Words used on this site](glossary.md)
