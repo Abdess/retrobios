@@ -1,9 +1,23 @@
 {
-  "width": 800,
-  "height": 460,
-  "setup": "ArkOS",
-  "games": 6,
-  "systems": 6,
-  "files": 43,
-  "size": "15.1 MB"
+  "default": {
+    "width": 800,
+    "height": 460,
+    "setup": "ArkOS",
+    "games": 6,
+    "systems": 6,
+    "files": 43,
+    "size": "15.1 MB",
+    "alt": "Recording of the one-line command in a terminal. The installer finds an ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary."
+  },
+  "handheld": {
+    "width": 640,
+    "height": 480,
+    "setup": "ArkOS",
+    "games": 6,
+    "systems": 6,
+    "files": 43,
+    "size": "15.1 MB",
+    "pad": "gptokeyb",
+    "alt": "Recording of the full-screen installer on the 640 by 480 screen of a handheld, started from the Tools menu of ArkOS. It finds the 6 games on the card, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary. The A button chooses, and the bottom line names the buttons."
+  }
 }

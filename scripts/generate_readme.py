@@ -476,17 +476,17 @@ def clone_line(db: dict) -> str:
     )
 
 
-def demo_facts() -> dict:
-    """What the installer demo shows, as make_demo.py measured it."""
-    return json.loads((DEMO_DIR / "demo.json").read_text(encoding="utf-8"))
+def demo_facts(variant: str = "default") -> dict:
+    """What an installer demo shows, as make_demo.py measured it: one entry
+    per variant (default, handheld)."""
+    facts = json.loads((DEMO_DIR / "demo.json").read_text(encoding="utf-8"))
+    return facts[variant]
 
 
 def demo_description(facts: dict | None = None) -> str:
-    """The demo in words, for a reader who cannot see it."""
-    facts = facts or demo_facts()
-    return (f"Recording of the one-line command in a terminal. The installer finds an "
-            f"{facts['setup']} SD card with {facts['games']} games, plans {facts['files']} "
-            f"BIOS files ({facts['size']}) for them, installs them and shows the summary.")
+    """The demo in words, for a reader who cannot see it: the alt text
+    make_demo.py wrote from what it measured."""
+    return str((facts or demo_facts())["alt"])
 
 
 def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:

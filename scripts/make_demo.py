@@ -1,35 +1,53 @@
 #!/usr/bin/env python3
-"""Record the installer demo shown in the README and on the site, once.
+"""Record the installer demos shown in the README and on the site, once.
 
-The recording is the full-screen installer run from the one-line command on
-an ArkOS SD card that holds six games: it finds the card, plans only the BIOS
-files those games need, installs them and shows the summary. Everything it
-reads is local and the same on every machine:
+Each recording is the installer on an ArkOS SD card that holds six games: it
+finds the card, plans only the BIOS files those games need, installs them
+and shows the summary. Two variants, by where the install box says the
+command runs:
+
+- default: the one-line command in a terminal on a Linux computer, the card
+  mounted at /media/EASYROMS. The README and every tab but one show it.
+- handheld: the full-screen interface on ArkOS itself, at the 640x480
+  screen of an R36S, as the Tools menu launcher starts it (ports/shared/
+  tui.txt: install.py --tui, RETROBIOS_PAD=gptokeyb, RETROBIOS_IDLE_EXIT).
+  The keys typed are the ones gptokeyb sends for the buttons
+  (ports/shared/retrobios.gptk: A is Enter), and the bottom line names the
+  buttons. The "On the device" tab shows it.
+
+No Windows variant: pwsh on Linux runs install.ps1's whole flow, but the
+installer reads drive E: there only through its WSL layout, and its summary
+gives the command back with --dest /mnt/e/bios, a path no Windows user sees.
+
+Everything a recording reads is local and the same on every machine:
 
 - The card is built under tmp/demo/ (bios/, the folders ArkOS writes on its
-  games partition, one game per console) and mounted at /media/EASYROMS in a
-  mount namespace of this user (unshare), on a tmpfs of a card's size. /media
-  and /mnt are emptied there, so no drive of this machine is shown.
+  games partition, one game per console) on a tmpfs of a card's size, in a
+  mount namespace of this user (unshare, or bwrap for the handheld, whose
+  root holds ArkOS's /home/ark, /opt/system and /roms). /media and /mnt are
+  emptied, so no drive of this machine is shown.
 - The repository is served on 127.0.0.1 and named with RETROBIOS_BASE_URL:
   the file lists, install/games/ and the BIOS files are this checkout's.
-- The one-line command runs this checkout's install.sh and install.py. The
-  shell of the recording answers `curl -fsSL <site>/i` with a line that
-  starts the local install.sh, which skips the download of the installer and
-  its SHA-256 check and runs the rest of the bootstrap as the site's copy does.
+- The one-line command runs this checkout's install.sh: the shell answers
+  `curl -fsSL <site>/i` with a line that starts the local install.sh, which
+  skips the download of the installer and its SHA-256 check and runs the
+  rest of the bootstrap as the site's copy does.
 - HOME is an empty folder and the prompt is "$ ".
 
-docs_assets/demo/install.tape drives VHS (github.com/charmbracelet/vhs, with
-ttyd, ffmpeg and a Chromium on PATH). This script encodes what it records:
+docs_assets/demo/<stem>.tape drives VHS (github.com/charmbracelet/vhs, with
+ttyd, ffmpeg and a Chromium on PATH, and bwrap for the handheld). This
+script encodes what it records:
 
-    docs_assets/demo/install.gif    the README
-    docs_assets/demo/install.webm   the site, with install.mp4 as fallback
-    docs_assets/demo/install.png    the first frame shown, the video's poster
-    docs_assets/demo/demo.json      what the recording shows, for the alt text
+    docs_assets/demo/install.gif     the README (the default variant only)
+    docs_assets/demo/<stem>.webm     the site, with <stem>.mp4 as fallback
+    docs_assets/demo/<stem>.png      the first frame shown, the video's poster
+    docs_assets/demo/demo.json       per variant, what it shows and its alt text
 
 The site build copies the video files and never runs this script. Run it
 again when a screen of the installer or the file list of its games changes:
 
-    python scripts/make_demo.py
+    python scripts/make_demo.py                      # both variants
+    python scripts/make_demo.py --variant handheld   # one, the others kept
 """
 
 from __future__ import annotations
@@ -48,19 +66,71 @@ import sys
 import threading
 from collections.abc import Iterator
 from contextlib import contextmanager
+from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs_assets" / "demo"
-TAPE = OUT / "install.tape"
 WORK = ROOT / "tmp" / "demo"
-# What the tape writes, read back here (paths relative to ROOT, the tape's
-# working directory).
-RECORDED = WORK / "recorded.mp4"
-POSTER_SHOT = WORK / "poster.png"
-MOUNT = "/media/EASYROMS"
+FACTS = OUT / "demo.json"
 CARD_SIZE = "29g"
 SETUP = "ArkOS"
+
+
+@dataclass(frozen=True)
+class Variant:
+    """One recording. *place* is "computer" (the card in a reader, the
+    one-line command typed) or "device" (the interface on the card's own
+    system). *os_type* is RETROBIOS_OS for the run."""
+
+    name: str
+    stem: str
+    mount: str
+    os_type: str
+    place: str
+    gif: bool = False
+
+    @property
+    def tape(self) -> Path:
+        return OUT / f"{self.stem}.tape"
+
+    @property
+    def suffix(self) -> str:
+        return "" if self.name == "default" else f"-{self.name}"
+
+    @property
+    def recorded(self) -> Path:
+        """What the tape writes, read back here (relative to ROOT, the
+        tape's working directory)."""
+        return WORK / f"recorded{self.suffix}.mp4"
+
+    @property
+    def poster_shot(self) -> Path:
+        return WORK / f"poster{self.suffix}.png"
+
+    @property
+    def outputs(self) -> tuple[str, ...]:
+        names = (f"{self.stem}.webm", f"{self.stem}.mp4", f"{self.stem}.png")
+        return ((f"{self.stem}.gif",) if self.gif else ()) + names
+
+
+VARIANTS: dict[str, Variant] = {
+    "default": Variant("default", "install", "/media/EASYROMS", "linux", "computer",
+                       gif=True),
+    "handheld": Variant("handheld", "install-handheld", "/roms", "linux", "device"),
+}
+# The default variant's paths, as the tests and the README name them.
+TAPE = VARIANTS["default"].tape
+RECORDED = VARIANTS["default"].recorded
+POSTER_SHOT = VARIANTS["default"].poster_shot
+MOUNT = VARIANTS["default"].mount
+
+# Where ArkOS keeps what the handheld recording needs: the Tools menu folder
+# the launcher sits in (ports/tools/RetroBIOS.sh, RB_DIR), the user, and
+# EASYROMS at /roms (install.py _OS_RULES, ArkOS).
+ARK_HOME = "/home/ark"
+ARK_TOOLS = "/opt/system/Tools"
+ARK_INSTALLER = f"{ARK_TOOLS}/retrobios/install.py"
 
 # The card: the folders ArkOS's default tree writes on EASYROMS (install.py
 # _GAMES_PART_RULES reads launchimages/), and one game per console folder,
@@ -79,11 +149,16 @@ GAME_BYTES = 256 * 1024
 # cores read the region from (install/games/systems/sony-playstation.json).
 PSX_LICENCE = b"          Licensed  by          Sony Computer Entertainment Amer  ica "
 
-# Size targets of the outputs, in bytes: the README and two site pages.
-LIMITS = {"install.gif": 1_500_000, "install.webm": 1_000_000,
-          "install.mp4": 1_000_000, "install.png": 150_000}
+# Size targets of the outputs, in bytes, by extension: the README and the
+# site's pages.
+LIMITS = {".gif": 1_500_000, ".webm": 1_000_000, ".mp4": 1_000_000, ".png": 150_000}
 GIF_FPS = 10
 VIDEO_FPS = 25
+
+
+def limits(variant: Variant) -> dict[str, int]:
+    """Each output of a variant and its size target."""
+    return {name: LIMITS[Path(name).suffix] for name in variant.outputs}
 
 
 def game_bytes(name: str) -> bytes:
@@ -133,10 +208,9 @@ def served_repository() -> Iterator[str]:
         server.server_close()
 
 
-def write_session(work: Path, names: list[str]) -> Path:
-    """The program the recording's shell becomes: the card mounted in a
-    namespace of its own, then a clean interactive bash, or the command
-    given as arguments, with only the variables names lists."""
+def _write_rc(work: Path) -> Path:
+    """The startup file of the shell the recording types into: the prompt,
+    no history, and the site's address answered with the local bootstrap."""
     rc = work / "bashrc"
     rc.write_text(
         "PS1='$ '\n"
@@ -151,67 +225,144 @@ def write_session(work: Path, names: list[str]) -> Path:
         "clear\n",
         encoding="utf-8",
     )
-    session = work / "session.sh"
-    session.write_text(
-        "#!/bin/sh\n"
-        "# Written by scripts/make_demo.py.\n"
-        "set -eu\n"
+    return rc
+
+
+def _computer_session(variant: Variant, work: Path, names: list[str]) -> str:
+    rc = _write_rc(work)
+    interactive = f'bash --noprofile --rcfile "{rc}" -i'
+    mount = variant.mount
+    return (
         "inner='set -eu\n"
         "mount -t tmpfs -o mode=0755 demo /media\n"
         "mount -t tmpfs -o mode=0755 demo /mnt\n"
-        f"mkdir {MOUNT}\n"
-        f"mount -t tmpfs -o size={CARD_SIZE},mode=0755 EASYROMS {MOUNT}\n"
-        f'cp -a "$RETROBIOS_DEMO_CARD/." {MOUNT}/\n'
+        f"mkdir {mount}\n"
+        f"mount -t tmpfs -o size={CARD_SIZE},mode=0755 EASYROMS {mount}\n"
+        f'cp -a "$RETROBIOS_DEMO_CARD/." {mount}/\n'
         'cd "$HOME"\n'
         'exec unshare --user --map-user="$RETROBIOS_DEMO_UID" '
         '--map-group="$RETROBIOS_DEMO_GID" env -i '
         + " ".join(f'{name}="${name}"' for name in names) + ' "$@"\'\n'
         'if [ "$#" -eq 0 ]; then\n'
-        f'  set -- bash --noprofile --rcfile "{rc}" -i\n'
+        f"  set -- {interactive}\n"
         "fi\n"
-        'exec unshare --user --mount --map-root-user /bin/sh -c "$inner" sh "$@"\n',
-        encoding="utf-8",
+        'exec unshare --user --mount --map-root-user /bin/sh -c "$inner" sh "$@"\n'
     )
+
+
+def _device_session(names: list[str]) -> str:
+    """ArkOS's own root, made of this machine's /usr and /etc: the user and
+    the Tools menu folder ArkOS is recognised by, EASYROMS at /roms, and
+    the installer where the Tools menu launcher keeps it."""
+    binds = " ".join(
+        f"--symlink usr/{name} /{name}" for name in ("bin", "lib", "lib64", "sbin"))
+    return (
+        'if [ "$#" -eq 0 ]; then\n'
+        f'  set -- python3 {ARK_INSTALLER} --tui\n'
+        "fi\n"
+        "exec bwrap --unshare-user --unshare-pid --unshare-ipc --unshare-uts --hostname arkos "
+        '--uid "$RETROBIOS_DEMO_UID" --gid "$RETROBIOS_DEMO_GID" '
+        f"--ro-bind /usr /usr {binds} --ro-bind /etc /etc --proc /proc --dev /dev "
+        f"--tmpfs /tmp --dir {ARK_HOME} --dir /opt/inttools --dir {ARK_TOOLS} "
+        f'--ro-bind "$RETROBIOS_DEMO_INSTALLER" {ARK_INSTALLER} '
+        f'--ro-bind "$RETROBIOS_DEMO_CARD" /card --size 31138512896 --tmpfs /roms '
+        f"--chdir {ARK_HOME} "
+        "/bin/sh -c 'cp -a /card/. /roms/ && exec env -i \"$@\"' sh "
+        + " ".join(f'{name}="${name}"' for name in names) + ' "$@"\n'
+    )
+
+
+def write_session(work: Path, names: list[str], variant: Variant = VARIANTS["default"]) -> Path:
+    """The program the recording's shell becomes: the card mounted in a
+    namespace of its own, then a clean interactive shell (or, on the
+    device, the interface), or the command given as arguments, with only
+    the variables names lists."""
+    body = (_device_session(names) if variant.place == "device"
+            else _computer_session(variant, work, names))
+    session = work / f"session{variant.suffix}.sh"
+    session.write_text("#!/bin/sh\n# Written by scripts/make_demo.py.\nset -eu\n" + body,
+                       encoding="utf-8")
     session.chmod(0o755)
     return session
 
 
-def session_env(base_url: str, work: Path, card: Path) -> dict[str, str]:
+def session_env(base_url: str, work: Path, card: Path,
+                variant: Variant = VARIANTS["default"]) -> dict[str, str]:
+    """The variables of the run, and of nothing else: the namespace starts
+    from an empty environment."""
+    own = {
+        "RETROBIOS_DEMO_CARD": str(card),
+        "RETROBIOS_DEMO_UID": str(os.getuid()),
+        "RETROBIOS_DEMO_GID": str(os.getgid()),
+    }
+    if variant.place == "device":
+        return {
+            **own,
+            "HOME": ARK_HOME,
+            "PATH": "/usr/local/bin:/usr/bin:/bin",
+            "LANG": "C.UTF-8",
+            # ArkOS's console (ports/tools/RetroBIOS.sh: console 1).
+            "TERM": "linux",
+            "RETROBIOS_OS": variant.os_type,
+            "RETROBIOS_BASE_URL": base_url,
+            # What ports/shared/tui.txt exports before the interface starts.
+            "RETROBIOS_PAD": "gptokeyb",
+            "RETROBIOS_IDLE_EXIT": "300",
+            "RETROBIOS_DEMO_INSTALLER": str(ROOT / "install.py"),
+        }
     home = work / "home"
     home.mkdir(parents=True, exist_ok=True)
     return {
+        **own,
         "HOME": str(home),
         "PATH": "/usr/local/bin:/usr/bin:/bin",
         "LANG": "C.UTF-8",
         "TERM": "xterm-256color",
         "TMPDIR": str(work / "scratch"),
-        "RETROBIOS_OS": "linux",
+        "RETROBIOS_OS": variant.os_type,
         "RETROBIOS_BASE_URL": base_url,
-        # What the downloaded bootstrap sets: commands given back are the
-        # one-line command, not a path to a temporary copy.
+        # What the downloaded bootstrap sets: commands given back are
+        # the one-line command, not a path to a temporary copy.
         "RETROBIOS_BOOTSTRAP": "sh",
         "RETROBIOS_DEMO_BOOTSTRAP": str(ROOT / "install.sh"),
-        "RETROBIOS_DEMO_CARD": str(card),
-        "RETROBIOS_DEMO_UID": str(os.getuid()),
-        "RETROBIOS_DEMO_GID": str(os.getgid()),
     }
 
 
-def format_size(size: int) -> str:
-    """The size as the installer writes it."""
+def _installer() -> object:
     spec = importlib.util.spec_from_file_location("retrobios_install", ROOT / "install.py")
     if spec is None or spec.loader is None:
         raise RuntimeError("install.py cannot be loaded")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    return str(module.format_size(size))
+    return module
 
 
-def measure(session: Path, env: dict[str, str]) -> dict:
+def format_size(size: int) -> str:
+    """The size as the installer writes it."""
+    return str(_installer().format_size(size))  # type: ignore[attr-defined]
+
+
+def describe(variant: str, facts: dict) -> str:
+    """A recording in words, for a reader who cannot see it: its alt text."""
+    plan = (f"plans {facts['files']} BIOS files ({facts['size']}) for them, installs them "
+            "and shows the summary.")
+    if variant == "handheld":
+        return (f"Recording of the full-screen installer on the {facts['width']} by "
+                f"{facts['height']} screen of a handheld, started from the Tools menu of "
+                f"{facts['setup']}. It finds the {facts['games']} games on the card, {plan} The "
+                "A button chooses, and the bottom line names the buttons.")
+    return (f"Recording of the one-line command in a terminal. The installer finds an "
+            f"{facts['setup']} SD card with {facts['games']} games, {plan}")
+
+
+def measure(session: Path, env: dict[str, str], variant: Variant = VARIANTS["default"]) -> dict:
     """What the recording shows, read from the same run without the screen:
     the games read on the card and the files planned for them."""
-    command = [str(session), sys.executable, str(ROOT / "install.py"), "--platform", "retroarch",
-               "--dest", f"{MOUNT}/bios", "--for-games", "--dry-run", "--events"]
+    installer = ARK_INSTALLER if variant.place == "device" else str(ROOT / "install.py")
+    options = ([] if variant.place == "device" else
+               ["--platform", "retroarch", "--dest", f"{variant.mount}/bios", "--for-games"])
+    command = [str(session), "python3" if variant.place == "device" else sys.executable,
+               installer, *options, "--dry-run", "--events", "--no-input"]
     result = subprocess.run(command, env=env, capture_output=True, text=True, check=False)
     if result.returncode != 0:
         raise RuntimeError(f"the dry run failed ({result.returncode}):\n{result.stderr}")
@@ -219,8 +370,9 @@ def measure(session: Path, env: dict[str, str]) -> dict:
     games = next(e for e in events if e["event"] == "games")
     check = next(e for e in events if e["event"] == "check")
     size = {key.lower(): int(value) for key, value in
-            re.findall(r"^Set (Width|Height) (\d+)$", TAPE.read_text(encoding="utf-8"), re.M)}
-    return {
+            re.findall(r"^Set (Width|Height) (\d+)$", variant.tape.read_text(encoding="utf-8"),
+                       re.M)}
+    facts = {
         "width": size["width"],
         "height": size["height"],
         "setup": SETUP,
@@ -229,61 +381,93 @@ def measure(session: Path, env: dict[str, str]) -> dict:
         "files": check["missing"],
         "size": format_size(check["bytes_needed"]),
     }
+    if variant.name == "handheld":
+        facts["pad"] = env["RETROBIOS_PAD"]
+    facts["alt"] = describe(variant.name, facts)
+    return facts
 
 
 def ffmpeg(*args: str) -> None:
     subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", *args], check=True)
 
 
-def encode(recorded: Path, poster: Path, out: Path, scratch: Path) -> None:
-    palette = scratch / "palette.png"
-    ffmpeg("-i", str(recorded), "-vf", f"fps={GIF_FPS},palettegen=max_colors=48:stats_mode=full",
-           str(palette))
-    ffmpeg("-i", str(recorded), "-i", str(palette), "-lavfi",
-           f"fps={GIF_FPS}[v];[v][1:v]paletteuse=dither=none:diff_mode=rectangle",
-           "-loop", "0", str(out / "install.gif"))
-    ffmpeg("-i", str(recorded), "-an", "-r", str(VIDEO_FPS), "-c:v", "libvpx-vp9",
+def encode(variant: Variant, out: Path, scratch: Path) -> None:
+    recorded, stem = str(variant.recorded), variant.stem
+    if variant.gif:
+        palette = scratch / "palette.png"
+        ffmpeg("-i", recorded, "-vf", f"fps={GIF_FPS},palettegen=max_colors=48:stats_mode=full",
+               str(palette))
+        ffmpeg("-i", recorded, "-i", str(palette), "-lavfi",
+               f"fps={GIF_FPS}[v];[v][1:v]paletteuse=dither=none:diff_mode=rectangle",
+               "-loop", "0", str(out / f"{stem}.gif"))
+    ffmpeg("-i", recorded, "-an", "-r", str(VIDEO_FPS), "-c:v", "libvpx-vp9",
            "-b:v", "0", "-crf", "42", "-row-mt", "1", "-deadline", "good",
-           "-pix_fmt", "yuv420p", str(out / "install.webm"))
-    ffmpeg("-i", str(recorded), "-an", "-r", str(VIDEO_FPS), "-c:v", "libx264",
+           "-pix_fmt", "yuv420p", str(out / f"{stem}.webm"))
+    ffmpeg("-i", recorded, "-an", "-r", str(VIDEO_FPS), "-c:v", "libx264",
            "-preset", "veryslow", "-crf", "30", "-tune", "animation", "-pix_fmt", "yuv420p",
-           "-movflags", "+faststart", str(out / "install.mp4"))
-    ffmpeg("-i", str(poster), "-pred", "mixed", "-compression_level", "100",
-           str(out / "install.png"))
+           "-movflags", "+faststart", str(out / f"{stem}.mp4"))
+    ffmpeg("-i", str(variant.poster_shot), "-pred", "mixed", "-compression_level", "100",
+           str(out / f"{stem}.png"))
 
 
-def check_sizes(out: Path) -> list[str]:
+def check_sizes(out: Path, variant: Variant = VARIANTS["default"]) -> list[str]:
     return [f"{name}: {(out / name).stat().st_size:,} bytes, over {limit:,}"
-            for name, limit in LIMITS.items() if (out / name).stat().st_size > limit]
+            for name, limit in limits(variant).items() if (out / name).stat().st_size > limit]
+
+
+def load_facts() -> dict:
+    """demo.json, an empty mapping before the first recording."""
+    if not FACTS.is_file():
+        return {}
+    return json.loads(FACTS.read_text(encoding="utf-8"))
+
+
+def record(variant: Variant) -> dict:
+    """Record one variant into OUT and return what it shows."""
+    card = WORK / "card"
+    build_card(card)
+    with served_repository() as base_url:
+        env = session_env(base_url, WORK, card, variant)
+        session = write_session(WORK, sorted(env), variant)
+        facts = measure(session, env, variant)
+        vhs_env = {**os.environ, **env, "PATH": os.environ.get("PATH", ""),
+                   "HOME": os.environ.get("HOME", ""),
+                   "RETROBIOS_DEMO_SESSION": str(session)}
+        subprocess.run(["vhs", str(variant.tape.relative_to(ROOT))], cwd=ROOT, env=vhs_env,
+                       check=True)
+    encode(variant, OUT, WORK / "scratch")
+    return facts
+
+
+def needed_tools(variant: Variant) -> list[str]:
+    tools = ["vhs", "ttyd", "ffmpeg"]
+    return [*tools, "bwrap" if variant.place == "device" else "unshare"]
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False,
-                                     description="Record the installer demo (VHS).")
-    parser.parse_args()
-    missing = [tool for tool in ("vhs", "ttyd", "ffmpeg", "unshare") if shutil.which(tool) is None]
+                                     description="Record the installer demos (VHS).")
+    parser.add_argument("--variant", action="append", choices=sorted(VARIANTS),
+                        help="record this variant only (repeatable); every variant by default")
+    args = parser.parse_args()
+    chosen = [VARIANTS[name] for name in (args.variant or VARIANTS)]
+    missing = sorted({tool for variant in chosen for tool in needed_tools(variant)
+                      if shutil.which(tool) is None})
     if missing:
         sys.exit(f"Missing on PATH: {', '.join(missing)} (VHS: github.com/charmbracelet/vhs)")
-    if WORK.exists():
-        shutil.rmtree(WORK)
-    (WORK / "scratch").mkdir(parents=True)
+    facts = load_facts()
+    over: list[str] = []
     try:
-        card = WORK / "card"
-        build_card(card)
-        with served_repository() as base_url:
-            env = session_env(base_url, WORK, card)
-            session = write_session(WORK, sorted(env))
-            facts = measure(session, env)
-            vhs_env = {**os.environ, **env, "PATH": os.environ.get("PATH", ""),
-                       "HOME": os.environ.get("HOME", ""),
-                       "RETROBIOS_DEMO_SESSION": str(session)}
-            subprocess.run(["vhs", str(TAPE.relative_to(ROOT))], cwd=ROOT, env=vhs_env,
-                           check=True)
-        encode(RECORDED, POSTER_SHOT, OUT, WORK / "scratch")
-        (OUT / "demo.json").write_text(json.dumps(facts, indent=2) + "\n", encoding="utf-8")
-        for name in (*LIMITS, "demo.json"):
-            print(f"{(OUT / name).relative_to(ROOT)}  {(OUT / name).stat().st_size:,} bytes")
-        over = check_sizes(OUT)
+        for variant in chosen:
+            if WORK.exists():
+                shutil.rmtree(WORK)
+            (WORK / "scratch").mkdir(parents=True)
+            facts[variant.name] = record(variant)
+            for name in variant.outputs:
+                print(f"{(OUT / name).relative_to(ROOT)}  {(OUT / name).stat().st_size:,} bytes")
+            over += check_sizes(OUT, variant)
+        ordered = {name: facts[name] for name in VARIANTS if name in facts}
+        FACTS.write_text(json.dumps(ordered, indent=2) + "\n", encoding="utf-8")
         if over:
             sys.exit("Over the size targets:\n  " + "\n  ".join(over))
     finally:

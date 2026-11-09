@@ -4,18 +4,25 @@
 // poster and the sources are set by the script below once the video is in
 // view (preload="none", no src in the HTML). With reduced motion or Save-Data
 // the poster stays, and the button plays it. The button pauses it otherwise.
+// variant names the recording (default, handheld), name the tab a demo sits
+// in when a page holds several: a demo in a closed tab is not on screen, so
+// it loads nothing until its tab is chosen.
 interface Props {
 	description: string;
 	width: string;
 	height: string;
+	variant?: 'default' | 'handheld';
+	name?: string;
 }
 
-const { description, width, height } = Astro.props;
+const { description, width, height, variant = 'default', name = '' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const asset = (name: string) => `${base}assets/demo/${name}`;
+const stem = variant === 'default' ? 'install' : `install-${variant}`;
+const asset = (ext: string) => `${base}assets/demo/${stem}.${ext}`;
+const textId = name ? `rb-demo-text-${name}` : 'rb-demo-text';
 ---
 
-<figure class="rb-demo" data-demo data-pagefind-ignore>
+<figure class="rb-demo" data-demo data-variant={variant} data-pagefind-ignore>
 	<video
 		width={width}
 		height={height}
@@ -24,14 +31,14 @@ const asset = (name: string) => `${base}assets/demo/${name}`;
 		playsinline
 		preload="none"
 		disablepictureinpicture
-		data-poster={asset('install.png')}
-		aria-describedby="rb-demo-text"
+		data-poster={asset('png')}
+		aria-describedby={textId}
 	>
-		<source data-src={asset('install.webm')} type="video/webm" />
-		<source data-src={asset('install.mp4')} type="video/mp4" />
+		<source data-src={asset('webm')} type="video/webm" />
+		<source data-src={asset('mp4')} type="video/mp4" />
 	</video>
 	<button type="button" class="rb-demo-toggle" hidden>Play</button>
-	<figcaption id="rb-demo-text" class="sr-only">{description}</figcaption>
+	<figcaption id={textId} class="sr-only">{description}</figcaption>
 </figure>
 
 <script>
@@ -90,6 +97,10 @@ const asset = (name: string) => `${base}assets/demo/${name}`;
 		background: #12131c;
 		border: 1px solid var(--rb-border);
 		border-radius: 0.5rem;
+	}
+	/* A handheld's 4:3 screen, no taller than the terminal recording. */
+	.rb-demo[data-variant='handheld'] {
+		max-inline-size: 32rem;
 	}
 	.rb-demo-toggle {
 		position: absolute;
