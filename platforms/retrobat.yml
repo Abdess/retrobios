@@ -2576,6 +2576,7 @@ systems:
       md5: 21038400dc633070a78ad53090c53017
       native_system: ps2
       native_path: bios/pcsx2/bios/ps2-0230a-20080220.bin
+      group: ps2
       native_name: PS2
     - name: ps2-0230e-20080220.bin
       destination: pcsx2/bios/ps2-0230e-20080220.bin
@@ -2583,6 +2584,7 @@ systems:
       md5: dc69f0643a3030aaa4797501b483d6c4
       native_system: ps2
       native_path: bios/pcsx2/bios/ps2-0230e-20080220.bin
+      group: ps2
       native_name: PS2
     - name: ps2-0230j-20080220.bin
       destination: pcsx2/bios/ps2-0230j-20080220.bin
@@ -2590,6 +2592,7 @@ systems:
       md5: 80ac46fa7e77b8ab4366e86948e54f83
       native_system: ps2
       native_path: bios/pcsx2/bios/ps2-0230j-20080220.bin
+      group: ps2
       native_name: PS2
     - name: ps2-0250e-20100415.bin
       destination: pcsx2/bios/ps2-0250e-20100415.bin
@@ -2597,6 +2600,7 @@ systems:
       md5: 93ea3bcee4252627919175ff1b16a1d9
       native_system: ps2
       native_path: bios/pcsx2/bios/ps2-0250e-20100415.bin
+      group: ps2
       native_name: PS2
     - name: SCPH30004R.bin
       destination: pcsx2/bios/SCPH30004R.bin
@@ -2604,6 +2608,7 @@ systems:
       md5: 28922c703cc7d2cf856f177f2985b3a9
       native_system: ps2
       native_path: bios/pcsx2/bios/SCPH30004R.bin
+      group: ps2
       native_name: PS2
     - name: scph39001.bin
       destination: pcsx2/bios/scph39001.bin
@@ -2611,30 +2616,35 @@ systems:
       md5: d5ce2c7d119f563ce04bc04dbc3a323e
       native_system: ps2
       native_path: bios/pcsx2/bios/scph39001.bin
+      group: ps2
       native_name: PS2
     - name: ps3_ps2_emu_bios.bin
       destination: pcsx2/bios/ps3_ps2_emu_bios.bin
       required: true
       native_system: ps2
       native_path: bios/pcsx2/bios/ps3_ps2_emu_bios.bin
+      group: ps2
       native_name: PS2
     - name: SCPH-39004_BIOS_V7_EUR_160.BIN
       destination: pcsx2/bios/SCPH-39004_BIOS_V7_EUR_160.BIN
       required: true
       native_system: ps2
       native_path: bios/pcsx2/bios/SCPH-39004_BIOS_V7_EUR_160.BIN
+      group: ps2
       native_name: PS2
     - name: SCPH-39001_BIOS_V7_USA_160.BIN
       destination: pcsx2/bios/SCPH-39001_BIOS_V7_USA_160.BIN
       required: true
       native_system: ps2
       native_path: bios/pcsx2/bios/SCPH-39001_BIOS_V7_USA_160.BIN
+      group: ps2
       native_name: PS2
     - name: SCPH-70000_BIOS_V12_JAP_200.BIN
       destination: pcsx2/bios/SCPH-70000_BIOS_V12_JAP_200.BIN
       required: true
       native_system: ps2
       native_path: bios/pcsx2/bios/SCPH-70000_BIOS_V12_JAP_200.BIN
+      group: ps2
       native_name: PS2
     name: PS2
   sony-playstation:

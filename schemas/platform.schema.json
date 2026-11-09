@@ -518,6 +518,10 @@
           "type": "string",
           "description": "Display name the platform gives its own system"
         },
+        "group": {
+          "type": "string",
+          "description": "RetroBat: files sharing a group are alternatives. One held is enough and the others are reported OPTIONAL"
+        },
         "md5_list": {
           "type": "boolean",
           "description": "Batocera: the platform writes md5 as a list of strings, any of which matches. md5 holds the items comma-joined, in order"

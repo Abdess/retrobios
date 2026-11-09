@@ -915,6 +915,40 @@ class TestE2E(unittest.TestCase):
         c = result["severity_counts"]
         self.assertGreater(c[Severity.WARNING], 0)
 
+    def test_24b_a_held_group_member_makes_the_others_optional(self):
+        """RetroBat's group: one file held is enough (batocera-systems/Program.cs)."""
+        from common import _platform_config_cache
+
+        with open(os.path.join(self.platforms_dir, "test_md5.yml")) as fh:
+            config = yaml.safe_load(fh)
+        held_md5 = next(
+            f["md5"] for f in config["systems"]["sys-renamed"]["files"]
+        )
+        config["systems"] = {
+            "sys-group": {"files": [
+                {"name": "correct_hash.bin", "destination": "g/held.bin",
+                 "md5": held_md5, "required": True, "group": "one"},
+                {"name": "absent_alt.bin", "destination": "g/absent_alt.bin",
+                 "md5": "0" * 32, "required": True, "group": "one"},
+                {"name": "absent_a.bin", "destination": "g/absent_a.bin",
+                 "md5": "1" * 32, "required": True, "group": "none"},
+                {"name": "absent_b.bin", "destination": "g/absent_b.bin",
+                 "md5": "2" * 32, "required": True, "group": "none"},
+            ]},
+        }
+        with open(os.path.join(self.platforms_dir, "grouped_md5.yml"), "w") as fh:
+            yaml.dump(config, fh)
+        _platform_config_cache.clear()
+        result = verify_platform(
+            load_platform_config("grouped_md5", self.platforms_dir), self.db, self.emulators_dir
+        )
+        by_name = {d["name"]: d for d in result["details"]}
+        self.assertEqual(by_name["correct_hash.bin"]["status"], Status.OK)
+        self.assertIs(by_name["absent_alt.bin"]["required"], False)
+        self.assertIs(by_name["absent_a.bin"]["required"], True)
+        self.assertIs(by_name["absent_b.bin"]["required"], True)
+        self.assertEqual(result["severity_counts"][Severity.CRITICAL], 2)
+
     def test_25_verify_sha1_platform(self):
         config = load_platform_config("test_sha1", self.platforms_dir)
         result = verify_platform(config, self.db, self.emulators_dir)
