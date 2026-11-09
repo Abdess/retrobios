@@ -17,6 +17,10 @@ systems:
   - commodore-amiga
   - commodore-cd32
   - commodore-cdtv
+standalone_directories:
+  - "rom_path"
+  - "AMIBERRY_HOME_DIR/ROMs"
+  - "~/Amiberry/ROMs"
 
 data_root:
   windows:
@@ -56,7 +60,17 @@ notes: |
   in the ROM multipath, the detected directory follows it.
   ref: libretro/libretro.cpp:4550-4588
 
-  Standalone ROM path: configurable via amiberry.conf "rom_path" setting.
+  Standalone ROM path: the "rom_path" setting of amiberry.conf, by default
+  ROMs below the content root (~/Amiberry, or $AMIBERRY_HOME_DIR). The ROM
+  scan reads the files directly in it and does not descend into its
+  folders, rom.key is read beside the Kickstart and the MT-32 ROMs from its
+  mt32-roms folder. The scan identifies a Kickstart by content: the
+  kick*.rom, cd32 and cdtv names are the libretro build's, which looks them
+  up in the system directory, and the standalone build reads the same
+  images under the entries of its ROM database.
+  ref: src/osdep/amiberry.cpp:8485, 13622, 4960-4963, 9359-9366,
+       src/osdep/amiberry_gui.cpp:431-462, 489-490, 505-531,
+       src/memory.cpp:2181, src/midiemu.cpp:119-125
   kickstart_rom_file and kickstart_ext_rom_file are opened as given, with
   no hash check. When the main ROM is not found there, the fallback order
   is {home_dir}/roms/kick.rom, {home_dir}/kick.rom, ../shared/rom/kick.rom,
@@ -219,6 +233,7 @@ files:
   #      src/rommgr.cpp:1668-1681
 
   - name: amiga-os-310.rom
+    standalone_path: "amiga-os-310.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -232,6 +247,7 @@ files:
     source_ref: "source src/rommgr.cpp:204-205, source src/cfgfile.cpp:10099-10107, source src/cfgfile.cpp:10160-10161"
 
   - name: "KS ROM v23.93 (Velvet).rom"
+    standalone_path: "KS ROM v23.93 (Velvet).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -243,6 +259,7 @@ files:
     source_ref: "source src/rommgr.cpp:144-145, source src/cfgfile.cpp:10244"
 
   - name: "KS ROM v1.0 (A1000)(NTSC).rom"
+    standalone_path: "KS ROM v1.0 (A1000)(NTSC).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -254,6 +271,7 @@ files:
     source_ref: "source src/rommgr.cpp:151-152, source src/cfgfile.cpp:9436"
 
   - name: "KS ROM v1.1 (A1000)(NTSC).rom"
+    standalone_path: "KS ROM v1.1 (A1000)(NTSC).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -266,6 +284,7 @@ files:
     source_ref: "source src/rommgr.cpp:153-154, source src/cfgfile.cpp:9436, source src/osdep/amiberry_whdbooter.cpp:368, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "KS ROM v1.1 (A1000)(PAL).rom"
+    standalone_path: "KS ROM v1.1 (A1000)(PAL).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -277,6 +296,7 @@ files:
     source_ref: "source src/rommgr.cpp:155-156, source src/cfgfile.cpp:9436"
 
   - name: "KS ROM v1.2 (A1000).rom"
+    standalone_path: "KS ROM v1.2 (A1000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -288,6 +308,7 @@ files:
     source_ref: "source src/rommgr.cpp:157-158, source src/cfgfile.cpp:9436, 10557, 10565"
 
   - name: "amiga-os-120.rom"
+    standalone_path: "amiga-os-120.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -300,6 +321,7 @@ files:
     source_ref: "source src/rommgr.cpp:159-160, source src/cfgfile.cpp:9436, 10556, 10564, source src/osdep/amiberry_whdbooter.cpp:369, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "amiga-os-130.rom"
+    standalone_path: "amiga-os-130.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -312,6 +334,7 @@ files:
     source_ref: "source src/rommgr.cpp:161-162, source src/cfgfile.cpp:9436, 10311, 10533, 10538, 10542, 10548, source src/osdep/amiberry_whdbooter.cpp:370, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "KS ROM v1.3 (A3000)(SK).rom"
+    standalone_path: "KS ROM v1.3 (A3000)(SK).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -323,6 +346,7 @@ files:
     source_ref: "source src/rommgr.cpp:163-164, source src/cfgfile.cpp:10312, 10534, 10539, 10543, 10549"
 
   - name: "KS ROM v1.4 (A3000).rom"
+    standalone_path: "KS ROM v1.4 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -334,6 +358,7 @@ files:
     source_ref: "source src/rommgr.cpp:165-166, source src/cfgfile.cpp:10069"
 
   - name: "amiga-os-204.rom"
+    standalone_path: "amiga-os-204.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -346,6 +371,7 @@ files:
     source_ref: "source src/rommgr.cpp:169-170, source src/cfgfile.cpp:9436, 10509, source src/osdep/amiberry_whdbooter.cpp:371, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "KS ROM v2.05 (A600).rom"
+    standalone_path: "KS ROM v2.05 (A600).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -357,6 +383,7 @@ files:
     source_ref: "source src/rommgr.cpp:171-172, source src/cfgfile.cpp:9436, 10474"
 
   - name: "KS ROM v2.05 (A600HD).rom"
+    standalone_path: "KS ROM v2.05 (A600HD).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -368,6 +395,7 @@ files:
     source_ref: "source src/rommgr.cpp:173-174, source src/cfgfile.cpp:9436, 10272, 10473"
 
   - name: "amiga-os-205-a600.rom"
+    standalone_path: "amiga-os-205-a600.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -379,6 +407,7 @@ files:
     source_ref: "source src/rommgr.cpp:175-176, source src/cfgfile.cpp:9436, 10273, 10472"
 
   - name: "KS ROM v2.04 (A3000).rom"
+    standalone_path: "KS ROM v2.04 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -390,6 +419,7 @@ files:
     source_ref: "source src/rommgr.cpp:177-178, source src/cfgfile.cpp:10067"
 
   - name: "amiga-os-300-a1200.rom"
+    standalone_path: "amiga-os-300-a1200.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -402,6 +432,7 @@ files:
     source_ref: "source src/rommgr.cpp:182-183, source src/cfgfile.cpp:10387, 10447, 10585, source src/osdep/amiberry_whdbooter.cpp:372, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "amiga-os-300-a4000.rom"
+    standalone_path: "amiga-os-300-a4000.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -413,6 +444,7 @@ files:
     source_ref: "source src/rommgr.cpp:186-187, source src/cfgfile.cpp:10109, 10584"
 
   - name: "KS ROM v3.1 (A4000).rom"
+    standalone_path: "KS ROM v3.1 (A4000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -424,6 +456,7 @@ files:
     source_ref: "source src/rommgr.cpp:190-191, source src/cfgfile.cpp:10108"
 
   - name: "amiga-os-310-a600.rom"
+    standalone_path: "amiga-os-310-a600.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -436,6 +469,7 @@ files:
     source_ref: "source src/rommgr.cpp:194-195, source src/cfgfile.cpp:9436, 10583, source src/osdep/amiberry_whdbooter.cpp:373, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "amiga-os-310-a1200.rom"
+    standalone_path: "amiga-os-310-a1200.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -448,6 +482,7 @@ files:
     source_ref: "source src/rommgr.cpp:196-197, source src/cfgfile.cpp:10388, 10446, 10582, source src/osdep/amiberry_whdbooter.cpp:374, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "amiga-os-310-a3000.rom"
+    standalone_path: "amiga-os-310-a3000.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -459,6 +494,7 @@ files:
     source_ref: "source src/rommgr.cpp:200-201, source src/cfgfile.cpp:10065"
 
   - name: "amiga-os-310-a4000.rom"
+    standalone_path: "amiga-os-310-a4000.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -471,6 +507,7 @@ files:
     source_ref: "source src/rommgr.cpp:206-207, source src/cfgfile.cpp:10106, 10580, source src/osdep/amiberry_whdbooter.cpp:375, source src/osdep/amiberry_whdbooter.cpp:297-342"
 
   - name: "amiga-os-310-a4000t.rom"
+    standalone_path: "amiga-os-310-a4000t.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -482,6 +519,7 @@ files:
     source_ref: "source src/rommgr.cpp:210-211, source src/cfgfile.cpp:10168"
 
   - name: "KS ROM v3.X (A4000)(Cloanto).rom"
+    standalone_path: "KS ROM v3.X (A4000)(Cloanto).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -493,6 +531,7 @@ files:
     source_ref: "source src/rommgr.cpp:214-215, source src/cfgfile.cpp:10111"
 
   - name: "KS ROM v3.1.4-1 (A1200).rom"
+    standalone_path: "KS ROM v3.1.4-1 (A1200).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -504,6 +543,7 @@ files:
     source_ref: "source src/rommgr.cpp:217-218, source src/cfgfile.cpp:10390"
 
   - name: "KS ROM v3.1.4-1 (A3000).rom"
+    standalone_path: "KS ROM v3.1.4-1 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -515,6 +555,7 @@ files:
     source_ref: "source src/rommgr.cpp:221-222"
 
   - name: "KS ROM v3.1.4-1 (A4000).rom"
+    standalone_path: "KS ROM v3.1.4-1 (A4000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -526,6 +567,7 @@ files:
     source_ref: "source src/rommgr.cpp:225-226, source src/cfgfile.cpp:10112"
 
   - name: "KS ROM v3.1.4-1 (A4000T).rom"
+    standalone_path: "KS ROM v3.1.4-1 (A4000T).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -537,6 +579,7 @@ files:
     source_ref: "source src/rommgr.cpp:229-230, source src/cfgfile.cpp:10169"
 
   - name: "KS ROM v3.1.4-1 (A500).rom"
+    standalone_path: "KS ROM v3.1.4-1 (A500).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -548,6 +591,7 @@ files:
     source_ref: "source src/rommgr.cpp:233-234"
 
   - name: "KS ROM v3.1.4-2 (A1200).rom"
+    standalone_path: "KS ROM v3.1.4-2 (A1200).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -559,6 +603,7 @@ files:
     source_ref: "source src/rommgr.cpp:236-237, source src/cfgfile.cpp:10391"
 
   - name: "KS ROM v3.1.4-2 (A3000).rom"
+    standalone_path: "KS ROM v3.1.4-2 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -570,6 +615,7 @@ files:
     source_ref: "source src/rommgr.cpp:240-241"
 
   - name: "KS ROM v3.1.4-2 (A4000).rom"
+    standalone_path: "KS ROM v3.1.4-2 (A4000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -581,6 +627,7 @@ files:
     source_ref: "source src/rommgr.cpp:244-245, source src/cfgfile.cpp:10113"
 
   - name: "KS ROM v3.1.4-2 (A4000T).rom"
+    standalone_path: "KS ROM v3.1.4-2 (A4000T).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -592,6 +639,7 @@ files:
     source_ref: "source src/rommgr.cpp:248-249, source src/cfgfile.cpp:10170"
 
   - name: "KS ROM v3.1.4-2 (A500).rom"
+    standalone_path: "KS ROM v3.1.4-2 (A500).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -603,6 +651,7 @@ files:
     source_ref: "source src/rommgr.cpp:252-253"
 
   - name: "KS ROM v3.2 (A1200).rom"
+    standalone_path: "KS ROM v3.2 (A1200).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -614,6 +663,7 @@ files:
     source_ref: "source src/rommgr.cpp:255-256, source src/cfgfile.cpp:10392"
 
   - name: "KS ROM v3.2 (A3000).rom"
+    standalone_path: "KS ROM v3.2 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -625,6 +675,7 @@ files:
     source_ref: "source src/rommgr.cpp:259-260"
 
   - name: "KS ROM v3.2 (A4000).rom"
+    standalone_path: "KS ROM v3.2 (A4000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -636,6 +687,7 @@ files:
     source_ref: "source src/rommgr.cpp:263-264, source src/cfgfile.cpp:10114"
 
   - name: "KS ROM v3.2 (A4000T).rom"
+    standalone_path: "KS ROM v3.2 (A4000T).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -647,6 +699,7 @@ files:
     source_ref: "source src/rommgr.cpp:267-268, source src/cfgfile.cpp:10171"
 
   - name: "KS ROM v3.2 (A500/A600/A2000/A1000/CDTV).rom"
+    standalone_path: "KS ROM v3.2 (A500-A600-A2000-A1000-CDTV).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -658,6 +711,7 @@ files:
     source_ref: "source src/rommgr.cpp:271-272"
 
   - name: "KS ROM v3.2.1 (A1200).rom"
+    standalone_path: "KS ROM v3.2.1 (A1200).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -669,6 +723,7 @@ files:
     source_ref: "source src/rommgr.cpp:274-275, source src/cfgfile.cpp:10393"
 
   - name: "KS ROM v3.2.1 (A3000).rom"
+    standalone_path: "KS ROM v3.2.1 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -680,6 +735,7 @@ files:
     source_ref: "source src/rommgr.cpp:278-279"
 
   - name: "KS ROM v3.2.1 (A4000).rom"
+    standalone_path: "KS ROM v3.2.1 (A4000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -691,6 +747,7 @@ files:
     source_ref: "source src/rommgr.cpp:282-283, source src/cfgfile.cpp:10115"
 
   - name: "KS ROM v3.2.1 (A4000T).rom"
+    standalone_path: "KS ROM v3.2.1 (A4000T).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -702,6 +759,7 @@ files:
     source_ref: "source src/rommgr.cpp:286-287, source src/cfgfile.cpp:10172"
 
   - name: "KS ROM v3.2.1 (A500/A600/A2000/A1000/CDTV).rom"
+    standalone_path: "KS ROM v3.2.1 (A500-A600-A2000-A1000-CDTV).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -713,6 +771,7 @@ files:
     source_ref: "source src/rommgr.cpp:290-291"
 
   - name: "KS ROM v3.2.2 (A1200).rom"
+    standalone_path: "KS ROM v3.2.2 (A1200).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -724,6 +783,7 @@ files:
     source_ref: "source src/rommgr.cpp:293-294, source src/cfgfile.cpp:10394"
 
   - name: "KS ROM v3.2.2 (A3000).rom"
+    standalone_path: "KS ROM v3.2.2 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -735,6 +795,7 @@ files:
     source_ref: "source src/rommgr.cpp:297-298"
 
   - name: "KS ROM v3.2.2 (A4000).rom"
+    standalone_path: "KS ROM v3.2.2 (A4000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -746,6 +807,7 @@ files:
     source_ref: "source src/rommgr.cpp:301-302, source src/cfgfile.cpp:10116"
 
   - name: "KS ROM v3.2.2 (A4000T).rom"
+    standalone_path: "KS ROM v3.2.2 (A4000T).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -757,6 +819,7 @@ files:
     source_ref: "source src/rommgr.cpp:305-306, source src/cfgfile.cpp:10173"
 
   - name: "KS ROM v3.2.2 (A500/A600/A2000/A1000/CDTV).rom"
+    standalone_path: "KS ROM v3.2.2 (A500-A600-A2000-A1000-CDTV).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -768,6 +831,7 @@ files:
     source_ref: "source src/rommgr.cpp:309-310"
 
   - name: "KS ROM v3.2.3 (A1200).rom"
+    standalone_path: "KS ROM v3.2.3 (A1200).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -779,6 +843,7 @@ files:
     source_ref: "source src/rommgr.cpp:312-313"
 
   - name: "KS ROM v3.2.3 (A3000).rom"
+    standalone_path: "KS ROM v3.2.3 (A3000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -790,6 +855,7 @@ files:
     source_ref: "source src/rommgr.cpp:314-315"
 
   - name: "KS ROM v3.2.3 (A4000).rom"
+    standalone_path: "KS ROM v3.2.3 (A4000).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -801,6 +867,7 @@ files:
     source_ref: "source src/rommgr.cpp:316-317"
 
   - name: "KS ROM v3.2.3 (A4000T).rom"
+    standalone_path: "KS ROM v3.2.3 (A4000T).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -812,6 +879,7 @@ files:
     source_ref: "source src/rommgr.cpp:318-319"
 
   - name: "KS ROM v3.2.3 (A500/A600/A2000/A1000/CDTV).rom"
+    standalone_path: "KS ROM v3.2.3 (A500-A600-A2000-A1000-CDTV).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -823,6 +891,7 @@ files:
     source_ref: "source src/rommgr.cpp:320-321"
 
   - name: "KS ROM v3.2 (Walker).rom"
+    standalone_path: "KS ROM v3.2 (Walker).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -834,6 +903,7 @@ files:
     source_ref: "source src/rommgr.cpp:323-324"
 
   - name: "Casablanca 74095 - 00 717 - 02.rom"
+    standalone_path: "Casablanca 74095 - 00 717 - 02.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -845,6 +915,7 @@ files:
     source_ref: "source src/rommgr.cpp:325-326"
 
   - name: "A1000 bootstrap ROM.rom"
+    standalone_path: "A1000 bootstrap ROM.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -856,6 +927,7 @@ files:
     source_ref: "source src/rommgr.cpp:372-373, source src/cfgfile.cpp:10227"
 
   - name: "The Diagnostic 2.0 (Logica).rom"
+    standalone_path: "The Diagnostic 2.0 (Logica).rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -872,6 +944,7 @@ files:
   # ref: src/rommgr.cpp:2532-2596
 
   - name: "amiga-os-310-cd32.rom"
+    standalone_path: "amiga-os-310-cd32.rom"
     mode: standalone
     system: commodore-cd32
     required: false
@@ -886,6 +959,7 @@ files:
     source_ref: "source src/rommgr.cpp:334-335, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866, source src/cfgfile.cpp:10341-10350"
 
   - name: "amiga-ext-310-cd32.rom"
+    standalone_path: "amiga-ext-310-cd32.rom"
     mode: standalone
     system: commodore-cd32
     required: false
@@ -900,6 +974,7 @@ files:
     source_ref: "source src/rommgr.cpp:336-339, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866, source src/cfgfile.cpp:10341-10350"
 
   - name: "cd32-rom-ks-plus-extended.rom"
+    standalone_path: "cd32-rom-ks-plus-extended.rom"
     mode: standalone
     system: commodore-cd32
     required: false
@@ -916,6 +991,7 @@ files:
     source_ref: "source src/rommgr.cpp:340-343, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866, source src/cfgfile.cpp:10341-10350"
 
   - name: "amiga-ext-130-cdtv.rom"
+    standalone_path: "amiga-ext-130-cdtv.rom"
     mode: standalone
     system: commodore-cdtv
     required: false
@@ -931,6 +1007,7 @@ files:
     source_ref: "source src/rommgr.cpp:350-353, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866, source src/cfgfile.cpp:10316-10321"
 
   - name: "cdtv-extended-rom-v2.7.rom"
+    standalone_path: "cdtv-extended-rom-v2.7.rom"
     mode: standalone
     system: commodore-cdtv
     required: false
@@ -946,6 +1023,7 @@ files:
     source_ref: "source src/rommgr.cpp:354-357, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866, source src/cfgfile.cpp:10316-10321"
 
   - name: "cdtv-a570-extended-rom-v2.30.rom"
+    standalone_path: "cdtv-a570-extended-rom-v2.30.rom"
     mode: standalone
     system: commodore-cdtv
     required: false
@@ -961,6 +1039,7 @@ files:
     source_ref: "source src/rommgr.cpp:358-361, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866, source src/cfgfile.cpp:10316-10321"
 
   - name: "cdtv-extended-rom-v47.1.rom"
+    standalone_path: "cdtv-extended-rom-v47.1.rom"
     mode: standalone
     system: commodore-cdtv
     required: false
@@ -975,6 +1054,7 @@ files:
     source_ref: "source src/rommgr.cpp:362-365, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866"
 
   - name: "cdtv-cr-extended-rom-v3.32.rom"
+    standalone_path: "cdtv-cr-extended-rom-v3.32.rom"
     mode: standalone
     system: commodore-cdtv
     required: false
@@ -989,6 +1069,7 @@ files:
     source_ref: "source src/rommgr.cpp:367-368, source src/rommgr.cpp:2565-2568, source src/memory.cpp:1842-1866, source src/cfgfile.cpp:10277-10281"
 
   - name: "cdtv-cr-extended-rom-v3.44.rom"
+    standalone_path: "cdtv-cr-extended-rom-v3.44.rom"
     mode: standalone
     system: commodore-cdtv
     required: false
@@ -1303,6 +1384,7 @@ files:
   # CPU and accelerator boards
 
   - name: "draco-boot-rom-v1.3.rom"
+    standalone_path: "draco-boot-rom-v1.3.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -1319,6 +1401,7 @@ files:
     source_ref: "source src/rommgr.cpp:329-330, source src/expansion.cpp:6921-6923, source src/draco.cpp:1536-1542, source src/cfgfile.cpp:10774-10779"
 
   - name: "draco-boot-rom-v1.5.rom"
+    standalone_path: "draco-boot-rom-v1.5.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3850,6 +3933,7 @@ files:
   # x86 bridgeboards
 
   - name: "a1060-bios-2.05.rom"
+    standalone_path: "a1060-bios-2.05.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3865,6 +3949,7 @@ files:
     source_ref: "source src/rommgr.cpp:881-882, source src/expansion.cpp:6220-6227, source src/x86.cpp:4138-4143"
 
   - name: "a1060-bios-2.06.rom"
+    standalone_path: "a1060-bios-2.06.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3880,6 +3965,7 @@ files:
     source_ref: "source src/rommgr.cpp:883-884, source src/expansion.cpp:6220-6227, source src/x86.cpp:4138-4143"
 
   - name: "a1060-bios-2.07.rom"
+    standalone_path: "a1060-bios-2.07.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3895,6 +3981,7 @@ files:
     source_ref: "source src/rommgr.cpp:885-886, source src/expansion.cpp:6220-6227, source src/x86.cpp:4138-4143"
 
   - name: "a2088-bios-3.4.rom"
+    standalone_path: "a2088-bios-3.4.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3910,6 +3997,7 @@ files:
     source_ref: "source src/rommgr.cpp:887-888, source src/expansion.cpp:6228-6235, source src/x86.cpp:4138-4143"
 
   - name: "a2088-bios-3.5.rom"
+    standalone_path: "a2088-bios-3.5.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3925,6 +4013,7 @@ files:
     source_ref: "source src/rommgr.cpp:889-890, source src/expansion.cpp:6228-6235, source src/x86.cpp:4138-4143"
 
   - name: "a2088-bios-3.6.1.rom"
+    standalone_path: "a2088-bios-3.6.1.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3940,6 +4029,7 @@ files:
     source_ref: "source src/rommgr.cpp:891-892, source src/expansion.cpp:6228-6235, source src/x86.cpp:4138-4143"
 
   - name: "a2088t-bios-4.0-09-11-89.rom"
+    standalone_path: "a2088t-bios-4.0-09-11-89.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3955,6 +4045,7 @@ files:
     source_ref: "source src/rommgr.cpp:893-894, source src/expansion.cpp:6236-6243, source src/x86.cpp:4138-4143"
 
   - name: "a2088t-bios-4.0-14-11-89.rom"
+    standalone_path: "a2088t-bios-4.0-14-11-89.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3970,6 +4061,7 @@ files:
     source_ref: "source src/rommgr.cpp:895-896, source src/expansion.cpp:6236-6243, source src/x86.cpp:4138-4143"
 
   - name: "a2088t-bios-4.10.rom"
+    standalone_path: "a2088t-bios-4.10.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -3985,6 +4077,7 @@ files:
     source_ref: "source src/rommgr.cpp:897-898, source src/expansion.cpp:6236-6243, source src/x86.cpp:4138-4143"
 
   - name: "a2088t-bios-4.11.rom"
+    standalone_path: "a2088t-bios-4.11.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4000,6 +4093,7 @@ files:
     source_ref: "source src/rommgr.cpp:899-900, source src/expansion.cpp:6236-6243, source src/x86.cpp:4138-4143"
 
   - name: "a2088t-bios-4.12.rom"
+    standalone_path: "a2088t-bios-4.12.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4015,6 +4109,7 @@ files:
     source_ref: "source src/rommgr.cpp:901-902, source src/expansion.cpp:6236-6243, source src/x86.cpp:4138-4143"
 
   - name: "a2286-bios-3.6.rom"
+    standalone_path: "a2286-bios-3.6.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4031,6 +4126,7 @@ files:
     source_ref: "source src/rommgr.cpp:903-906, source src/expansion.cpp:6244-6251, source src/x86.cpp:4138-4143"
 
   - name: "a2286-bios-4.2.rom"
+    standalone_path: "a2286-bios-4.2.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4047,6 +4143,7 @@ files:
     source_ref: "source src/rommgr.cpp:907-910, source src/expansion.cpp:6244-6251, source src/x86.cpp:4138-4143"
 
   - name: "a2386sx-bios-1.00.rom"
+    standalone_path: "a2386sx-bios-1.00.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4062,6 +4159,7 @@ files:
     source_ref: "source src/rommgr.cpp:911-912, source src/expansion.cpp:6252-6259, source src/x86.cpp:4138-4143"
 
   - name: "a2386sx-bios-1.00.03.rom"
+    standalone_path: "a2386sx-bios-1.00.03.rom"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4094,6 +4192,7 @@ files:
     source_ref: "source src/memory.cpp:1934-1956 (paired existence check), source src/memory.cpp:1958-2013 (load)"
 
   - name: aros-ext.bin
+    standalone_path: "aros-ext.bin"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4123,6 +4222,7 @@ files:
     source_ref: "source src/memory.cpp:1934-1956 (paired existence check), source src/memory.cpp:1958-2013 (load)"
 
   - name: aros-rom.bin
+    standalone_path: "aros-rom.bin"
     mode: standalone
     system: commodore-amiga
     required: false
@@ -4143,6 +4243,7 @@ files:
   # --- Cloanto key ---
 
   - name: rom.key
+    standalone_path: "rom.key"
     system: commodore-amiga
     required: false
     note: "Decryption key for Cloanto Amiga Forever encrypted ROMs"
@@ -4154,6 +4255,7 @@ files:
   # ref: src/kbmcu/keyboard_mcu_*.cpp
 
   - name: "6570-036.rom"
+    standalone_path: "6570-036.rom"
     system: commodore-amiga
     required: false
     size: 2048
@@ -4161,6 +4263,7 @@ files:
     source_ref: "source src/kbmcu/keyboard_mcu_6500_1.cpp:385-408, source src/rommgr.cpp:137-138"
 
   - name: "68HC05.rom"
+    standalone_path: "68HC05.rom"
     system: commodore-amiga
     required: false
     size: 8192
@@ -4168,6 +4271,7 @@ files:
     source_ref: "source src/kbmcu/keyboard_mcu_6805.cpp:544-567, source src/rommgr.cpp:139-140"
 
   - name: "D8039HLC.rom"
+    standalone_path: "D8039HLC.rom"
     system: commodore-amiga
     required: false
     size: 2048
@@ -4181,6 +4285,7 @@ files:
   # ref: src/midiemu.cpp:82-117 load_rom, src/midiemu.cpp:127-165 midi_emu_add_roms
 
   - name: mt32-roms/mt32_control.rom
+    standalone_path: "mt32-roms/mt32_control.rom"
     system: commodore-amiga
     required: false
     aliases:
@@ -4198,6 +4303,7 @@ files:
     source_ref: "source src/midiemu.cpp:38-62, source src/midiemu.cpp:159-164"
 
   - name: mt32-roms/pcm_mt32.rom
+    standalone_path: "mt32-roms/pcm_mt32.rom"
     system: commodore-amiga
     required: false
     aliases: [mt32-roms/mt32_pcm.rom]
@@ -4205,6 +4311,7 @@ files:
     source_ref: "source src/midiemu.cpp:140-148"
 
   - name: mt32-roms/cm32l_control.rom
+    standalone_path: "mt32-roms/cm32l_control.rom"
     system: commodore-amiga
     required: false
     aliases:
@@ -4216,6 +4323,7 @@ files:
     source_ref: "source src/midiemu.cpp:25-37, source src/midiemu.cpp:159-164"
 
   - name: mt32-roms/pcm_cm32l.rom
+    standalone_path: "mt32-roms/pcm_cm32l.rom"
     system: commodore-amiga
     required: false
     aliases: [mt32-roms/cm32l_pcm.rom]

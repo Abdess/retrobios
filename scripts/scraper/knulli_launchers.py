@@ -87,8 +87,8 @@ ES_FEATURES = "package/emulationstation/knulli-es-system/es_features.yml"
 
 # Batocera's extractors that read KNULLI's generators unchanged.
 # The generators of Batocera's config_directories that KNULLI keeps in the
-# same shape: openMSX's filepool lines.
-CONFIG_DIRECTORY_GENERATORS = ("openmsx.openmsxGenerator",)
+# same shape: openMSX's filepool lines and amiberry's rom_path.
+CONFIG_DIRECTORY_GENERATORS = ("openmsx.openmsxGenerator", "amiberry.amiberryGenerator")
 
 
 def knulli_config_directories(cg: Configgen) -> list[Launcher]:
@@ -373,7 +373,6 @@ GENERIC_SITES = (
     GenericSites("gsplus/gsplusGenerator.py", "passes_path"),
     GenericSites("tsugaru/tsugaruGenerator.py", "passes_path"),
     GenericSites("scummvm/scummvmGenerator.py", "passes_path"),
-    GenericSites("amiberry/amiberryGenerator.py", "passes_path"),
     GenericSites("fsuae/fsuaeGenerator.py", "passes_path"),
     GenericSites("mame/mameGenerator.py", "passes_path"),
     GenericSites("fpinball/fpinballGenerator.py", "passes_path"),

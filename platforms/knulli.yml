@@ -5703,6 +5703,14 @@ launchers:
     \ -position 2"
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:96"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/amiga/
+  passes_to: rom_path
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/amiberry/amiberryGenerator.py:40"
 - emulator: lexaloffle
   build: standalone
   kind: fixed_name
@@ -5963,14 +5971,6 @@ launchers:
   passes_to: command line --extrapath
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/scummvm/scummvmGenerator.py:117-123"
-- emulator: amiberry
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/amiga/
-  passes_to: rom_path
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/amiberry/amiberryGenerator.py:40"
 - emulator: fsuae
   build: standalone
   kind: passes_path

@@ -594,3 +594,37 @@ class XroarOnEachPlatform(unittest.TestCase):
                     folder = folders[entry["system"]]
                     expected = f"{folder}/{entry['name']}" if folder else entry["name"]
                     self.assertEqual(entry["standalone_path"], expected)
+
+
+class AmiberryOnEachPlatform(unittest.TestCase):
+    """The standalone Amiberry scans rom_path for its ROMs. Batocera, KNULLI
+    and RetroPie set rom_path to bios/amiga."""
+
+    BOUND = ("batocera", "knulli", "retropie")
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["amiberry"]
+
+    def test_rom_path_is_bios_amiga(self) -> None:
+        for platform in self.BOUND:
+            with self.subTest(platform=platform):
+                cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+                self.assertEqual(
+                    standalone_bindings_for("amiberry", self.profile, standalone_set(cfg)),
+                    {"": ("", "amiga")},
+                )
+
+    def test_every_rom_path_entry_lands_in_bios_amiga(self) -> None:
+        for platform in self.BOUND:
+            cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+            (view, _standalone), = platform_layouts(
+                "amiberry", self.profile, standalone_set(cfg)
+            )
+            for own, entry in zip(self.profile["files"], view["files"]):
+                layout = own.get("standalone_path")
+                if not layout:
+                    continue
+                with self.subTest(platform=platform, name=entry["name"]):
+                    self.assertEqual(entry["standalone_path"], f"amiga/{layout}")
+                    self.assertNotIn("/", layout.removeprefix("mt32-roms/"))
