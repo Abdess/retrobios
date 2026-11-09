@@ -66,8 +66,13 @@ LAUNCHERS = [
     _record("diremu", "passes_path", []),
     {"emulator": "pkg", "build": "standalone", "kind": "package", "names": [],
      "source_ref": "pkg.sh:1"},
-    _record("missemu", "names_searched", ["held.bin", "absent.bin"]),
+    _record("missemu", "names_searched", ["absent.bin"]),
     _record("otheremu", "copies", ["absent.bin"]),
+    _record("altemu", "names_searched", ["alt.bin", "held.bin", "late.bin"]),
+    _record("pkgemu", "copies", ["shipped.bin"], search_dir="$md_inst"),
+    {"emulator": "pkgemu", "build": "standalone", "kind": "copies",
+     "names": ["written.ini"], "source_ref": "pkg.sh:2"},
+    _record("setemu", "fixed_name", ["setname.bin"], passes_to="command line -romslot"),
     _record("caseemu", "fixed_name", ["mixed.rom"]),
     _record("foldemu", "fixed_name", ["MIXED.rom"], case_insensitive=True),
     _record("labelemu", "core_option", ["labelled.rom (CDZ)"]),
@@ -128,6 +133,10 @@ class LauncherGapTest(unittest.TestCase):
                 "emulator": "AliasEmu", "type": "standalone", "systems": ["test-sys"],
                 "files": [{"name": "core.bin", "aliases": ["alias.bin"], "required": True}],
             },
+            "setemu": {
+                "emulator": "SetEmu", "type": "standalone", "systems": ["test-sys"],
+                "files": [{"name": "core.bin", "config_key": "romslot", "required": True}],
+            },
             "missemu": {
                 "emulator": "MissEmu", "type": "standalone", "systems": ["test-sys"],
                 "files": [{"name": "absent.bin", "required": True, "md5": "0" * 32}],
@@ -166,6 +175,19 @@ class LauncherGapTest(unittest.TestCase):
                 self.assertEqual(launcher_file_names(record), [], record)
         reported = {r["emulators"][0] for r in self._rows().values()}
         self.assertFalse(reported & {"tplemu", "diremu", "pkg"})
+
+    def test_a_search_with_one_held_name_reads_nothing_missing(self) -> None:
+        """The launcher keeps the first name it finds, so the held one fills it."""
+        names = {name for _, name in self._rows()}
+        self.assertFalse(names & {"alt.bin", "late.bin"})
+
+    def test_a_copy_from_the_platform_package_is_not_owed(self) -> None:
+        """RetroPie copies lr-vecx's system.bin from $md_inst and writes mame.ini."""
+        names = {name for _, name in self._rows()}
+        self.assertFalse(names & {"shipped.bin", "written.ini"})
+
+    def test_a_name_handed_to_a_held_entry_setting_is_held(self) -> None:
+        self.assertNotIn("setname.bin", {name for _, name in self._rows()})
 
     def test_a_label_after_the_name_is_dropped(self) -> None:
         self.assertEqual(launcher_file_names(LAUNCHERS[-1]), ["labelled.rom"])
@@ -225,7 +247,7 @@ class LauncherGapTest(unittest.TestCase):
         names = {r["name"] for r in report[LAUNCHER_READS_KEY]}
         self.assertEqual(names, {"absent.bin", "mixed.rom", "labelled.rom"})
         # The emulator rows keep their own shape and counts.
-        self.assertEqual(set(report) - {LAUNCHER_READS_KEY}, {"aliasemu", "missemu"})
+        self.assertEqual(set(report) - {LAUNCHER_READS_KEY}, {"aliasemu", "missemu", "setemu"})
 
     def test_verify_counts_and_exit_code_are_unchanged(self) -> None:
         """A launcher name is reported, not judged: nothing else moves."""

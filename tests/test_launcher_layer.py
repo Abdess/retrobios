@@ -252,6 +252,27 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertNotIn("core.bin", {u["name"] for u in self._report()})
         self.assertNotIn("core.bin", self._pack_names())
 
+    def test_a_file_handed_to_an_entry_setting_takes_the_entry_content(self) -> None:
+        """RetroPie runs sdl2trs with -romfile4p $biosdir/level4p.rom and
+        EmuDeck writes a No-Intro name into ares's NeoGeoPocket firmware
+        setting: neither name is the core's, and the held file of the entry
+        that setting reads went in under no name at all."""
+        profile = {
+            "emulator": "FixEmu", "type": "standalone", "systems": ["test-sys"],
+            "files": [{"name": "core.bin", "required": True, "config_key": "romslot"},
+                      {"name": "other.bin", "required": True, "config_key": "otherslot"}],
+        }
+        with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"][2]["names"] = ["launcher.rom"]
+        self.config["launchers"][2]["passes_to"] = "command line -romslot"
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["launcher.rom"]["launcher_of"], "core.bin")
+        self.assertEqual(added["launcher.rom"]["md5"], _md5(CONTENT["core.bin"]))
+        self.assertIn("launcher.rom", self._pack_names())
+
     def test_the_default_name_a_launcher_replaces_is_not_packed(self) -> None:
         """EmuDeck passes Complex_4627v1.03.bin to xemu, which then never
         opens Complex_4627.bin: the pack carried both, one read by nobody."""

@@ -50,7 +50,8 @@ from common import (
     select_emulator_profiles,
 )
 from hashing import parse_hash_list
-from launchers import LauncherLayer, declared_destinations, held_record
+from launchers import LauncherLayer, declared_destinations, held_record, set_by
+from launchers import _directories as launcher_directories
 from launchers import _names as launcher_names
 from validation import (
     case_folded_slots,
@@ -1151,6 +1152,16 @@ def launcher_reads_not_held(
     a copy is reported with `held_as`, since the launcher does not open it
     under the name it asks for. *emulator* keeps the records whose emulator
     name designates that profile.
+
+    Three records ask for nothing the collection lacks. A search keeps the
+    first name it finds, so one held name fills it: RetroBat's Amiberry
+    launcher returns the first of kick34005.A500, kick34005.A500.rom and
+    amiga-os-130.rom that exists (Amiberry.Generator.cs:674-699). A copy
+    whose source lies outside the BIOS directory brings a file the platform
+    installs itself, from its own package or written by its own script
+    (RetroPie's lr-vecx copies $md_inst/system.bin). A file handed to the
+    setting a reader's profile entry is read from is that entry's file,
+    which the pack places under the launcher's name.
     """
     holder = _NameHolder(db, profiles, data_dir_registry)
     every_profile = set(profiles)
@@ -1169,6 +1180,20 @@ def launcher_reads_not_held(
             if emulator and emulator not in readers:
                 continue
             folds = bool(record.get("case_insensitive") or config.get("case_insensitive_fs"))
+            base = str(config.get("base_destination") or "bios")
+            if record.get("kind") == "copies" and not launcher_directories(record, base):
+                continue
+            passes_to = str(record.get("passes_to") or "")
+            if passes_to and any(
+                set_by(entry, passes_to) and holder._entry_held(entry)
+                for key in readers
+                for entry in profiles[key].get("files") or []
+            ):
+                continue
+            if record.get("kind") == "names_searched" and any(
+                (found := holder.held(name)) and (found[1] or folds) for name in names
+            ):
+                continue
             reader = {
                 "emulator": str(record.get("emulator", "")),
                 "build": str(record.get("build", "")),

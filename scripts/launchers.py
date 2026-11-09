@@ -65,6 +65,7 @@ class LauncherPlace:
     anchored: bool
     conditional: bool
     source_ref: str
+    passes_to: str = ""
 
     def fold(self, name: str) -> str:
         return name.lower() if self.case_insensitive else name
@@ -85,6 +86,24 @@ class LauncherPlace:
             self.kind in ("names_searched", "fixed_name", "links")
             and not self.conditional
         )
+
+
+def setting_tokens(passes_to: str) -> set[str]:
+    """The words of a record's ``passes_to``, as an emulator setting is spelled.
+
+    "command line -romfile4p" hands the file to sdltrs's romfile4p option,
+    "settings.bml NeoGeoPocket/Firmware/BIOS.World" to an ares setting.
+    """
+    return {
+        word.strip("()\"',;").lstrip("-")
+        for word in passes_to.split()
+    } - {""}
+
+
+def set_by(entry: dict, passes_to: str) -> bool:
+    """Whether a launcher hands its file to the setting a profile entry is read from."""
+    key = str(entry.get("config_key") or "")
+    return bool(key) and key in setting_tokens(passes_to)
 
 
 def _bios_relative(directory: str, base: str) -> str | None:
@@ -189,6 +208,7 @@ def launcher_places(config: dict) -> list[LauncherPlace]:
             "anchored": anchored,
             "conditional": bool(record.get("depends_on_option")),
             "source_ref": str(record.get("source_ref", "")),
+            "passes_to": str(record.get("passes_to") or ""),
         }
         if kind == "names_searched":
             # Each directory in turn, every name in it.
@@ -461,6 +481,10 @@ class LauncherLayer:
         names = own & basenames
         if names:
             return _Candidate(entry, names, False)
+        # RetroPie runs sdl2trs with -romfile4p $biosdir/level4p.rom: the
+        # file under that name is the one the romfile4p slot reads.
+        if set_by(entry, place.passes_to):
+            return _Candidate(entry, basenames, False)
         content = {
             place.fold(path.rsplit("/", 1)[-1])
             for path in place.paths
