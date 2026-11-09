@@ -1,11 +1,12 @@
 platform: rocknix
 source: https://github.com/ROCKNIX/distribution/tree/20261101/projects/ROCKNIX/packages/virtual/emulators/package.mk
-scraped_at: '2026-11-09T16:01:58Z'
+scraped_at: '2026-11-09T20:12:32Z'
 targets:
   amd64:
     architecture: x86_64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -32,11 +33,12 @@ targets:
     - bk
     - bluemsx
     - boom3
+    - boom3_xp
     - bsnes
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -49,7 +51,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - duckstation
     - duckstation-sa
     - easyrpg
@@ -92,9 +93,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -102,7 +103,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -134,7 +135,7 @@ targets:
     - scummvm-sa
     - skyemu
     - skyemu-sa
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -154,6 +155,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -162,15 +168,16 @@ targets:
     - vitaquake3
     - wasm4
     - wine
+    - x1
     - xemu
     - xemu-sa
-    - xmil
     - yabasanshiro
     - yabasanshiro-sa
   h700:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -202,7 +209,6 @@ targets:
     - desmume
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -248,9 +254,9 @@ targets:
     - mame2015
     - mednafen
     - melonds
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -258,7 +264,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - neocd
     - nestopia
     - np2kai
@@ -267,6 +273,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -288,7 +295,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -309,12 +316,17 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -322,6 +334,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -353,7 +366,6 @@ targets:
     - desmume
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -399,9 +411,9 @@ targets:
     - mame2015
     - mednafen
     - melonds
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -409,7 +421,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - neocd
     - nestopia
     - np2kai
@@ -418,6 +430,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -439,7 +452,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -460,12 +473,17 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -473,6 +491,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -499,7 +518,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -511,7 +530,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -558,9 +576,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -568,7 +586,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -579,6 +597,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -600,7 +619,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -621,12 +640,17 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -634,6 +658,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -671,7 +696,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -718,9 +742,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -728,7 +752,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - neocd
     - nestopia
     - np2kai
@@ -737,6 +761,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -758,7 +783,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -779,6 +804,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -786,7 +816,7 @@ targets:
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -794,6 +824,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -831,7 +862,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -878,9 +908,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -888,7 +918,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - neocd
     - nestopia
     - np2kai
@@ -897,6 +927,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -918,7 +949,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -939,6 +970,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -946,7 +982,7 @@ targets:
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -954,6 +990,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -983,7 +1020,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -995,7 +1032,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -1042,9 +1078,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -1052,7 +1088,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - neocd
     - nestopia
     - np2kai
@@ -1061,6 +1097,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -1082,7 +1119,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -1105,6 +1142,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -1112,7 +1154,7 @@ targets:
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -1120,6 +1162,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -1151,7 +1194,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -1162,7 +1205,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -1207,9 +1249,9 @@ targets:
     - mame2015
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -1217,7 +1259,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - neocd
     - nestopia
     - np2kai
@@ -1226,6 +1268,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -1247,7 +1290,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -1268,6 +1311,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -1275,13 +1323,14 @@ targets:
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabasanshiro
     - yabasanshiro-sa
   sdm845:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -1313,7 +1362,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -1329,7 +1378,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - dsperate
     - dsperate-sa
     - duckstation
@@ -1376,9 +1424,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -1386,7 +1434,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -1397,6 +1445,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -1421,7 +1470,7 @@ targets:
     - scummvm-sa
     - skyemu
     - skyemu-sa
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -1445,6 +1494,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -1452,15 +1506,16 @@ targets:
     - vitaquake2
     - wasm4
     - wine
+    - x1
     - xemu
     - xemu-sa
-    - xmil
     - yabasanshiro
     - yabasanshiro-sa
   sm4450:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -1492,7 +1547,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -1508,7 +1563,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - dsperate
     - dsperate-sa
     - duckstation
@@ -1555,9 +1609,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -1565,7 +1619,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -1576,6 +1630,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -1598,7 +1653,7 @@ targets:
     - scummvm-sa
     - skyemu
     - skyemu-sa
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -1622,6 +1677,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -1629,9 +1689,9 @@ targets:
     - vitaquake2
     - wasm4
     - wine
+    - x1
     - xemu
     - xemu-sa
-    - xmil
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -1639,6 +1699,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -1668,7 +1729,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -1680,7 +1741,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -1727,9 +1787,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -1737,7 +1797,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - neocd
     - nestopia
     - np2kai
@@ -1746,6 +1806,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -1767,7 +1828,7 @@ targets:
     - scummvm
     - scummvm-sa
     - skyemu
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -1790,6 +1851,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -1797,7 +1863,7 @@ targets:
     - vitaquake2
     - wasm4
     - wine
-    - xmil
+    - x1
     - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
@@ -1805,6 +1871,7 @@ targets:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -1836,7 +1903,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -1852,7 +1919,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - dsperate
     - dsperate-sa
     - duckstation
@@ -1899,9 +1965,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -1909,7 +1975,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -1920,6 +1986,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -1944,7 +2011,7 @@ targets:
     - scummvm-sa
     - skyemu
     - skyemu-sa
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -1968,6 +2035,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -1975,15 +2047,16 @@ targets:
     - vitaquake2
     - wasm4
     - wine
+    - x1
     - xemu
     - xemu-sa
-    - xmil
     - yabasanshiro
     - yabasanshiro-sa
   sm8550:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -2017,7 +2090,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -2033,7 +2106,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - drastic
     - drastic-sa
     - dsperate
@@ -2084,9 +2156,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -2094,7 +2166,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -2105,6 +2177,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -2129,7 +2202,7 @@ targets:
     - scummvm-sa
     - skyemu
     - skyemu-sa
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -2153,6 +2226,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -2160,15 +2238,16 @@ targets:
     - vitaquake2
     - wasm4
     - wine
+    - x1
     - xemu
     - xemu-sa
-    - xmil
     - yabasanshiro
     - yabasanshiro-sa
   sm8650:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -2201,7 +2280,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -2214,7 +2293,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - dsperate
     - dsperate-sa
     - duckstation
@@ -2262,9 +2340,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -2272,7 +2350,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -2283,6 +2361,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -2307,7 +2386,7 @@ targets:
     - scummvm-sa
     - skyemu
     - skyemu-sa
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -2331,6 +2410,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -2338,15 +2422,16 @@ targets:
     - vitaquake2
     - wasm4
     - wine
+    - x1
     - xemu
     - xemu-sa
-    - xmil
     - yabasanshiro
     - yabasanshiro-sa
   sm8750:
     architecture: aarch64
     cores:
     - '81'
+    - DoubleCherryGB
     - a5200
     - amiberry
     - arduous
@@ -2379,7 +2464,7 @@ targets:
     - bsnes2014_accuracy
     - bsnes2014_balanced
     - bsnes2014_performance
-    - bsnes_hd
+    - bsnes_hd_beta
     - bsnes_mercury_accuracy
     - bsnes_mercury_balanced
     - bsnes_mercury_performance
@@ -2392,7 +2477,6 @@ targets:
     - dolphin-sa
     - dosbox_core
     - dosbox_pure
-    - doublecherrygb
     - dsperate
     - dsperate-sa
     - duckstation
@@ -2440,9 +2524,9 @@ targets:
     - mednafen
     - melonds
     - melonds-sa
-    - melonds_ds
+    - melondsds
     - mesen
-    - mesen_s
+    - mesen-s
     - mgba
     - minivmac
     - mojozork
@@ -2450,7 +2534,7 @@ targets:
     - mu
     - mupen64plus
     - mupen64plus-sa
-    - mupen64plus_nx
+    - mupen64plus_next
     - nanoboyadvance
     - nanoboyadvance-sa
     - neocd
@@ -2461,6 +2545,7 @@ targets:
     - opera
     - parallel_n64
     - pcsx_rearmed
+    - pcsx_rearmed32
     - pico-8
     - picodrive
     - pokemini
@@ -2485,7 +2570,7 @@ targets:
     - scummvm-sa
     - skyemu
     - skyemu-sa
-    - smsplus_gx
+    - smsplus
     - snes9x
     - snes9x2002
     - snes9x2005_plus
@@ -2509,6 +2594,11 @@ targets:
     - vecx
     - vice
     - vice-sa
+    - vice_x128
+    - vice_x64
+    - vice_xpet
+    - vice_xplus4
+    - vice_xvic
     - vircon32
     - virtualjaguar
     - vita3k
@@ -2516,8 +2606,8 @@ targets:
     - vitaquake2
     - wasm4
     - wine
+    - x1
     - xemu
     - xemu-sa
-    - xmil
     - yabasanshiro
     - yabasanshiro-sa

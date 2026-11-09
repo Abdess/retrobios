@@ -610,7 +610,12 @@ class Scraper(BaseTargetScraper):
         return fetch_bytes(RAW.format(ref=self.ref, path=path)).decode("utf-8")
 
     def fetch_targets(self) -> dict:
-        self.ref = self.pinned_revision(PLATFORM_NAME)
+        return self.device_targets()
+
+    def device_targets(self, ref: str | None = None) -> dict:
+        """The targets file, read at `ref`, by default the revision
+        platforms/emuelec.yml was scraped at."""
+        self.ref = ref or self.pinned_revision(PLATFORM_NAME)
         release = json.loads(
             fetch_bytes(RELEASE_API.format(ref=self.ref), headers=github_headers())
         )

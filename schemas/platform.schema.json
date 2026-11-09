@@ -45,6 +45,14 @@
       },
       "uniqueItems": true
     },
+    "installable_cores": {
+      "description": "Buildbot libretro cores the platform's RetroArch core downloader installs on at least one board, from the RetroArch targets entry of that board's architecture.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
     "dual_mode_cores": {
       "type": "array",
       "items": {

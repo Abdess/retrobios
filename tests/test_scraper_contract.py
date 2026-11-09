@@ -480,7 +480,10 @@ class RocknixRunsItsStandaloneEmulators(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         platform = yaml.safe_load((root / "platforms" / "rocknix.yml").read_text())
         self.assertIn(f"/distribution/{platform['version']}/", platform["source"])
-        self.assertIn("retroarch", platform["cores"])
+        # RetroArch runs the libretro cores some device image installs, not
+        # every libretro profile.
+        self.assertNotIn("retroarch", platform["cores"])
+        self.assertIn("beetle_psx", platform["cores"])
         registry = yaml.safe_load((root / "platforms" / "_registry.yml").read_text())
         self.assertNotIn("cores", registry["platforms"]["rocknix"])
 

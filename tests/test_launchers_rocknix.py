@@ -639,8 +639,10 @@ class PlatformRecords(unittest.TestCase):
         cls.config = yaml.safe_load((REPO_ROOT / "platforms" / "rocknix.yml").read_text())
 
     def test_every_emulator_is_one_rocknix_packages(self):
+        # RetroArch itself runs the libretro cores the list names.
         cores = set(self.config["cores"])
-        self.assertEqual(sorted({r["emulator"] for r in self.config["launchers"]} - cores), [])
+        self.assertEqual(sorted({r["emulator"] for r in self.config["launchers"]} - cores),
+                         ["retroarch"])
 
     def test_every_reference_is_in_the_rocknix_project(self):
         for record in self.config["launchers"]:

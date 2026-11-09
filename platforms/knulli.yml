@@ -12,55 +12,36 @@ cores:
 - advanced_drastic
 - aethersx2
 - amiberry
-- applewin
 - arduous
 - atari800
 - azahar
 - beetle-saturn
 - bennugd
-- bigpemu
-- blastem
 - bluemsx
-- boom3
 - bsnes
-- bsnes_hd
 - bstone
 - cannonball
 - cap32
-- catacombgl
 - cdogs
 - cemu
 - cgenius
-- citra
-- citron
 - clk
 - corsixth
-- demul
-- desmume
 - devilutionx
 - dhewm3
-- dice
 - dolphin
-- dolphin_triforce
-- dosbox
 - dosbox-x
 - dosbox_pure
 - dosbox_staging
 - dosboxx
-- drastic
-- duckstation
-- duckstation-legacy
 - dxx-rebirth
 - easyrpg
-- ecwolf
 - eduke32
-- eka2l1
 - emuscv
 - etlegacy
 - fake08
 - fallout1-ce
 - fallout2-ce
-- fba2x
 - fbalpha
 - fbneo
 - fceumm
@@ -68,20 +49,15 @@ cores:
 - flycast-xtreme
 - flycastvl
 - fmsx
-- fpinball
 - freechaf
 - freeintv
-- freej2me
-- fsuae
 - fury
 - fuse
 - gambatte
 - gearsystem
 - genesisplusgx
-- genesisplusgx-expanded
 - genesisplusgx-wide
 - geolith
-- gong
 - gpsp
 - gsplus
 - gw
@@ -92,15 +68,9 @@ cores:
 - hcl
 - holani
 - hurrican
-- hypseus-singe
-- ikemen
-- imame4all
 - ioquake3
 - iortcw
-- jazz2-native
-- kronos
 - lightspark
-- lindbergh-loader
 - lowresnx
 - lutro
 - mame
@@ -117,7 +87,6 @@ cores:
 - mesen-s
 - mgba
 - minivmac
-- model2emu
 - moonlight
 - mpv
 - mrboom
@@ -134,21 +103,14 @@ cores:
 - openbor7142
 - openbor7530
 - openjazz
-- openjk
-- openjkdf2
-- openlara
-- openmohaa
-- openmsx
 - opera
 - parallel_n64
 - pce
 - pce_fast
 - pcfx
-- pcsx2
 - pcsx_rearmed
 - picodrive
 - play
-- pocketsnes
 - pokemini
 - potator
 - ppsspp
@@ -158,20 +120,15 @@ cores:
 - puae2021
 - px68k
 - pygame
-- pyxel
 - quasi88
 - raze
-- redream
 - reminiscence
 - rpcs3
-- ruffle
-- ryujinx
 - samcoupe
 - same_cdi
 - sameduck
 - scummvm
 - sdlpop
-- shadps4
 - smsplus
 - snes9x
 - snes9x_next
@@ -180,31 +137,21 @@ cores:
 - sonic2013
 - sonic3-air
 - soniccd
-- squirreljme
 - stella
-- stella2014
 - superbroswar
-- supermodel
-- supermodel-legacy
 - swanstation
 - taradino
 - tgbdual
-- theforceengine
 - theodore
 - thextech
 - tic80
-- tr1x
-- tr2x
-- tsugaru
 - tyrian
 - tyrquake
 - uae4arm
-- uqm
 - uzem
 - vb
 - vba-m
 - vecx
-- vemulator
 - vice
 - vice_x128
 - vice_x64
@@ -221,24 +168,18 @@ cores:
 - vkquake2
 - vkquake3
 - vox_official
-- vpinball
-- wasm4
 - x1
 - x128
 - x16emu
 - x64
 - x64dtv
-- xash3d_fwgs
 - xemu
-- xenia
-- xenia-canary
 - xpet
 - xplus4
 - xrick
 - xscpu64
 - xvic
 - yabasanshiro
-- ymir
 - zc210
 systems:
   atari-400-800:
@@ -4879,61 +4820,39 @@ standalone_cores:
 - advanced_drastic
 - aethersx2
 - amiberry
-- applewin
 - azahar
-- bigpemu
 - bstone
 - cannonball
-- catacombgl
 - cdogs
 - cemu
 - cgenius
-- citra
-- citron
 - clk
 - corsixth
-- demul
 - devilutionx
 - dhewm3
 - dolphin
-- dolphin_triforce
-- dosbox
 - dosbox-x
 - dosbox_staging
 - dosboxx
-- drastic
-- duckstation
-- duckstation-legacy
 - dxx-rebirth
 - easyrpg
-- ecwolf
 - eduke32
-- eka2l1
 - etlegacy
 - fallout1-ce
 - fallout2-ce
-- fba2x
 - flycast
-- fpinball
-- fsuae
 - fury
 - gsplus
 - gzdoom
 - hatari
 - hcl
 - hurrican
-- hypseus-singe
-- ikemen
 - ioquake3
 - iortcw
-- jazz2-native
-- kodi
 - lexaloffle
 - lightspark
-- lindbergh-loader
 - mame
 - melonds
-- model2emu
 - moonlight
 - mpv
 - mupen64plus
@@ -4943,76 +4862,102 @@ standalone_cores:
 - openbor7142
 - openbor7530
 - openjazz
-- openjk
-- openjkdf2
-- openmohaa
-- openmsx
-- pcsx2
 - play
 - ppsspp
 - pygame
-- pyxel
 - raze
-- redream
 - rpcs3
-- ruffle
-- ryujinx
 - samcoupe
 - scummvm
 - sdlpop
-- shadps4
 - solarus
 - sonic-mania
 - sonic2013
 - sonic3-air
 - soniccd
 - stella
-- supermodel
-- supermodel-legacy
 - taradino
-- theforceengine
 - thextech
-- tr1x
-- tr2x
-- tsugaru
 - tyrian
-- uqm
 - vice
 - vita3k
 - vkquake
 - vkquake2
 - vkquake3
 - vox_official
-- vpinball
 - x128
 - x16emu
 - x64
 - x64dtv
-- xash3d_fwgs
 - xemu
-- xenia
-- xenia-canary
 - xpet
 - xplus4
 - xscpu64
 - xvic
 - yabasanshiro
-- ymir
 dual_mode_cores:
-- applewin
-- citra
 - dolphin
 - easyrpg
 - flycast
 - hatari
 - mame
 - melonds
-- pcsx2
 - play
 - ppsspp
 - scummvm
 - stella
 - yabasanshiro
+installable_cores:
+- "2048"
+- bk
+- bsnes_cplusplus98
+- bsnes_mercury_accuracy
+- bsnes_mercury_balanced
+- bsnes_mercury_performance
+- chailove
+- crocods
+- dinothawr
+- dosbox_core
+- dosbox_svn
+- dosbox_svn_ce
+- ecwolf
+- fbalpha2012
+- fbalpha2012_cps1
+- fbalpha2012_cps2
+- fbalpha2012_neogeo
+- gearboy
+- genesis_plus_gx
+- gme
+- higan_sfc
+- higan_sfc_balanced
+- mame2000
+- mame2003
+- mame2003_plus
+- mednafen_gba
+- mednafen_pce
+- mednafen_pce_fast
+- mednafen_snes
+- mednafen_vb
+- mu
+- nekop2
+- oberon
+- pocketcdg
+- quicknes
+- remotejoy
+- sameboy
+- snes9x2002
+- snes9x2005
+- snes9x2005_plus
+- snes9x2010
+- squirreljme
+- stella2014
+- test
+- thepowdertoy
+- vba_next
+- vbam
+- vemulator
+- vice_xcbm2
+- vice_xcbm5x0
 libretro_systems:
   "81":
   - zx81
@@ -5393,129 +5338,6 @@ libretro_systems:
   zc210:
   - zc210
 launchers:
-- emulator: duckstation
-  build: standalone
-  kind: names_searched
-  slot: NTSCU
-  names:
-  - scph101.bin
-  - scph1001.bin
-  - scph5501.bin
-  - scph7001.bin
-  - scph7501.bin
-  case_insensitive: true
-  search_dir: /userdata/bios
-  passes_to: "[BIOS] PathNTSCU"
-  fails_when_missing: No PSX1 BIOS found
-  fails_scope: emulator
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/duckstation/duckstationGenerator.py:119-143,\
-    \ 589-611"
-- emulator: duckstation
-  build: standalone
-  kind: names_searched
-  slot: PAL
-  names:
-  - scph1002.bin
-  - scph5502.bin
-  - scph5552.bin
-  - scph7002.bin
-  - scph7502.bin
-  - scph9002.bin
-  - scph102a.bin
-  - scph102b.bin
-  case_insensitive: true
-  search_dir: /userdata/bios
-  passes_to: "[BIOS] PathPAL"
-  fails_when_missing: No PSX1 BIOS found
-  fails_scope: emulator
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/duckstation/duckstationGenerator.py:119-143,\
-    \ 589-611"
-- emulator: duckstation
-  build: standalone
-  kind: names_searched
-  slot: NTSCJ
-  names:
-  - scph100.bin
-  - scph1000.bin
-  - scph3000.bin
-  - scph3500.bin
-  - scph5500.bin
-  - scph7000.bin
-  - scph7003.bin
-  case_insensitive: true
-  search_dir: /userdata/bios
-  passes_to: "[BIOS] PathNTSCJ"
-  fails_when_missing: No PSX1 BIOS found
-  fails_scope: emulator
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/duckstation/duckstationGenerator.py:119-143,\
-    \ 589-611"
-- emulator: duckstation
-  build: standalone
-  kind: names_searched
-  slot: Uni
-  names:
-  - psxonpsp660.bin
-  - ps1_rom.bin
-  case_insensitive: true
-  search_dir: /userdata/bios
-  passes_to: "[BIOS] PathNTSCU, PathPAL, PathNTSCJ"
-  fails_when_missing: No PSX1 BIOS found
-  fails_scope: emulator
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/duckstation/duckstationGenerator.py:119-143,\
-    \ 589-611"
-- emulator: duckstation-legacy
-  build: standalone
-  kind: names_searched
-  slot: NTSCU
-  names:
-  - scph101.bin
-  - scph1001.bin
-  - scph5501.bin
-  - scph7001.bin
-  - scph7501.bin
-  case_insensitive: false
-  search_dir: /userdata/bios
-  passes_to: "[BIOS] PathNTSCU"
-  fails_when_missing: No PSX1 BIOS found
-  fails_scope: emulator
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/duckstation_legacy/duckstationLegacyGenerator.py:116-153"
-- emulator: duckstation-legacy
-  build: standalone
-  kind: names_searched
-  slot: PAL
-  names:
-  - scph1002.bin
-  - scph5502.bin
-  - scph5552.bin
-  - scph7002.bin
-  - scph7502.bin
-  - scph9002.bin
-  - scph102a.bin
-  - scph102b.bin
-  case_insensitive: false
-  search_dir: /userdata/bios
-  passes_to: "[BIOS] PathPAL"
-  fails_when_missing: No PSX1 BIOS found
-  fails_scope: emulator
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/duckstation_legacy/duckstationLegacyGenerator.py:116-153"
-- emulator: duckstation-legacy
-  build: standalone
-  kind: names_searched
-  slot: NTSCJ
-  names:
-  - scph100.bin
-  - scph1000.bin
-  - scph3000.bin
-  - scph3500.bin
-  - scph5500.bin
-  - scph7000.bin
-  - scph7003.bin
-  case_insensitive: false
-  search_dir: /userdata/bios
-  passes_to: "[BIOS] PathNTSCJ"
-  fails_when_missing: No PSX1 BIOS found
-  fails_scope: emulator
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/duckstation_legacy/duckstationLegacyGenerator.py:116-153"
 - emulator: hatari
   build: standalone
   kind: names_searched
@@ -5683,33 +5505,6 @@ launchers:
   passes_to: environment FLYCAST_BIOS_PATH
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/flycast/flycastGenerator.py:239"
-- emulator: shadps4
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/system/configs/shadps4
-  passes_to: working directory of shadps4Generator.py
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/shadps4/shadps4Generator.py:33,\
-    \ 164"
-- emulator: openmsx
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/Machines
-  passes_to: "written: filepool add -path /userdata/bios/Machines -types system_rom\
-    \ -position 1"
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:95"
-- emulator: openmsx
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/openmsx
-  passes_to: "written: filepool add -path /userdata/bios/openmsx -types system_rom\
-    \ -position 2"
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:96"
 - emulator: amiberry
   build: standalone
   kind: passes_path
@@ -5765,15 +5560,6 @@ launchers:
   depends_on_option: neocd_bios
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroOptions.py:2558-2559,\
     \ 2566-2569"
-- emulator: pcsx2
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/ps2
-  passes_to: "inis/PCSX2.ini [Folders] Bios = ../../../bios/ps2, relative to /userdata/system/configs/PCSX2"
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/pcsx2/pcsx2Generator.py:92,\
-    \ 176, 213"
 - emulator: aethersx2
   build: standalone
   kind: passes_path
@@ -5919,29 +5705,6 @@ launchers:
   fails_when_missing: false
   depends_on_option: "Rpcs3Generator.getFirmwareVersion() is None"
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/rpcs3/rpcs3Generator.py:355-358"
-- emulator: ryujinx
-  build: standalone
-  kind: copies
-  names:
-  - switch/prod.keys
-  case_insensitive: false
-  search_dir: /userdata/bios
-  passes_to: /userdata/system/configs/Ryujinx/system/prod.keys
-  fails_when_missing: false
-  depends_on_option: "ryujinxKeys.exists()"
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/ryujinx/ryujinxGenerator.py:107-109"
-- emulator: pcsx2
-  build: standalone
-  kind: copies
-  names:
-  - patches.zip
-  case_insensitive: false
-  search_dir: /usr/share/knulli/datainit/bios/ps2
-  passes_to: /userdata/bios/ps2/patches.zip
-  fails_when_missing: false
-  depends_on_option: "not pcsx2Patches.exists()"
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/pcsx2/pcsx2Generator.py:78,\
-    \ 121-122"
 - emulator: aethersx2
   build: standalone
   kind: copies
@@ -5962,14 +5725,6 @@ launchers:
   passes_to: g_cfg_rom_path
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/gsplus/gsplusGenerator.py:106"
-- emulator: tsugaru
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/fmtowns
-  passes_to: command line argument 1
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/tsugaru/tsugaruGenerator.py:18-19"
 - emulator: scummvm
   build: standalone
   kind: passes_path
@@ -5978,14 +5733,6 @@ launchers:
   passes_to: command line --extrapath
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/scummvm/scummvmGenerator.py:117-123"
-- emulator: fsuae
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/amiga
-  passes_to: command line --kickstarts_dir
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/fsuae/fsuaeGenerator.py:63-69"
 - emulator: mame
   build: standalone
   kind: passes_path
@@ -6039,16 +5786,6 @@ launchers:
   passes_to: command line -crosshairpath
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:180"
-- emulator: fpinball
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios
-  passes_to: environment W_CACHE
-  fails_when_missing: false
-  depends_on_option: "not wsh57_done.exists()"
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/fpinball/fpinballGenerator.py:37,\
-    \ 39-43"
 - emulator: retroarch
   build: libretro
   kind: passes_path
@@ -6142,15 +5879,6 @@ launchers:
   depends_on_option: not system.name == 'ti99'
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:431-432,\
     \ 435"
-- emulator: citron
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/switch
-  passes_to: "CitronPath::KeysDir in src/common/fs/path_util.cpp returns it, in place\
-    \ of citron_path / KEYS_DIR"
-  fails_when_missing: false
-  source_ref: "batocera/package/batocera/emulators/citron/002-adjust-paths.patch:9-10"
 configs_root:
   path: /userdata/system/configs
   from_bios: ../system/configs

@@ -231,15 +231,20 @@ class APortableUserFolder(unittest.TestCase):
 
 
 
-class ADefaultTheBuildLacksIsNotRun(unittest.TestCase):
-    """KNULLI's configgen-defaults.yml picks suyu for the Switch, which its
-    es_systems.yml does not offer and no package builds."""
+class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
+    """KNULLI's es_systems.yml lists citron and shadps4, which its Config.in
+    selects only on x86_64 boards (it has none), and its
+    configgen-defaults.yml picks suyu, which no package builds."""
 
     ES = textwrap.dedent("""\
         switch:
           emulators:
             citron:
               citron: { requireAnyOf: [BR2_PACKAGE_CITRON] }
+        gba:
+          emulators:
+            libretro:
+              mgba: { requireAnyOf: [BR2_PACKAGE_LIBRETRO_MGBA] }
         voxatron:
           emulators: {}
         """)
@@ -253,31 +258,67 @@ class ADefaultTheBuildLacksIsNotRun(unittest.TestCase):
         kodi:
           emulator: kodi
           core: kodi
+        mpv:
+          emulator: mpv
+          core: mpv
         """)
     LAUNCHERS = [{"emulator": "lexaloffle", "kind": "fixed_name", "passes_to": "exec",
                   "search_dir": "/userdata/bios"}]
 
-    def test_only_what_a_package_or_the_user_supplies_is_run(self):
+    def selection(self, symbols: set[str]):
+        from scraper.targets.batocera_targets_scraper import BuildSelection
+
+        return BuildSelection(
+            targets={}, emulators=frozenset({"mgba"}),
+            listed=frozenset({"citron", "mgba"}), symbols=frozenset(symbols),
+            packages={"kodi": "BR2_PACKAGE_KODI"},
+        )
+
+    def test_only_what_a_board_builds_or_the_user_supplies_is_run(self):
         from scraper import batocera_scraper as bs
 
-        paths = ["package/batocera/emulators/citron/Config.in", "package/kodi/Config.in"]
-        built = bs.packages_and_programs(bs.package_names(paths), self.LAUNCHERS)
+        # A board selects kodi's package and buildroot's mpv; citron is
+        # listed by es_systems, so the symbol of a folder of that name does
+        # not count for it.
+        built = bs.boards_build(
+            self.selection({"BR2_PACKAGE_KODI", "BR2_PACKAGE_MPV", "BR2_PACKAGE_CITRON_X"}),
+            self.LAUNCHERS,
+        )
         cores, standalone, _dual = bs.configgen_cores(self.DEFAULTS, self.ES, set(), built)
-        self.assertEqual(sorted(cores), ["citron", "kodi", "vox_official"])
-        self.assertIn("lexaloffle", standalone)
-        self.assertNotIn("suyu", standalone)
+        self.assertEqual(sorted(cores), ["kodi", "mgba", "mpv", "vox_official"])
+        self.assertEqual(sorted(standalone), ["kodi", "lexaloffle", "mpv", "vox_official"])
+        # Each system keeps the list es_systems.yml writes (whose files its
+        # entries ask for), less a default no package builds.
         by_system = bs.es_systems_by_system(self.ES, self.DEFAULTS, set(), built)
         self.assertEqual(by_system["switch"], ["citron"])
-        # Without the packages, every default counts, as before.
+        self.assertEqual(by_system["voxatron"], ["lexaloffle", "vox_official"])
+        self.assertEqual(by_system["gba"], ["mgba"])
+
+    def test_a_listed_name_is_built_only_through_its_packages(self):
+        from scraper import batocera_scraper as bs
+
+        built = bs.boards_build(self.selection({"BR2_PACKAGE_CITRON"}), [])
+        self.assertFalse(built("citron"))
+        self.assertTrue(built("mgba"))
+        self.assertFalse(built("lexaloffle"))
+        # Without a selection, every name counts, as before.
         self.assertIn("suyu", bs.configgen_cores(self.DEFAULTS, self.ES, set())[0])
 
-    def test_the_real_knulli_list_names_no_suyu(self):
+    def test_the_real_lists_name_only_what_a_board_builds(self):
         import yaml
 
-        config = yaml.safe_load((REPO_ROOT / "platforms" / "knulli.yml").read_text())
-        self.assertNotIn("suyu", config["cores"])
-        self.assertNotIn("suyu", config.get("standalone_cores") or [])
-
+        for platform, absent in (("knulli", ("suyu", "citron", "shadps4", "pcsx2")),
+                                 ("batocera", ("citron", "ryujinx", "applewin"))):
+            config = yaml.safe_load((REPO_ROOT / "platforms" / f"{platform}.yml").read_text())
+            names = set(config["cores"]) | set(config.get("standalone_cores") or [])
+            targets = yaml.safe_load(
+                (REPO_ROOT / "platforms" / "targets" / f"{platform}.yml").read_text())["targets"]
+            boards = {c for entry in targets.values() for c in entry["cores"]}
+            with self.subTest(platform=platform):
+                self.assertFalse(names & set(absent))
+                # What a board builds and the list once named is still there,
+                # and what no board builds is a program the user supplies.
+                self.assertLessEqual(names - boards, {"kodi", "lexaloffle", "mpv", "vox_official"})
 
 
 class AUserFolderInTheConfigsFolder(unittest.TestCase):
@@ -289,7 +330,8 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
         from common import standalone_set
 
         profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["shadps4"]
-        for platform in ("batocera", "knulli"):
+        # KNULLI's generator does the same, but no KNULLI board builds shadps4.
+        for platform in ("batocera",):
             config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
             ((view, _standalone),) = platform_layouts("shadps4", profile, standalone_set(config))
             with self.subTest(platform=platform):

@@ -209,7 +209,18 @@ class Scraper(BaseScraper):
         )
         not_cores = _not_cores(PLATFORM_NAME)
         cores, standalone, dual = es_cores(es_systems, RUNNERS, BUILDS_OF, not_cores)
+        # Each system keeps the list es_systems.json gives it: it says whose
+        # files a platform entry asks for. What runs is what an image carries.
         attach_system_cores(systems, system_cores(es_systems, RUNNERS, not_cores))
+        built = self._built()
+        unbuilt = {n for n in cores if n not in built}
+        cores, standalone, dual = ([n for n in names if n in built] for names in (cores, standalone, dual))
+        # Runners (retroarch, retrorun) and the launcher's own spellings are
+        # no ES core name: only a record of an emulator no image carries goes.
+        launchers = [
+            r for r in extract_launchers(RepoTree.github(REPO, launcher_revision(self.url)))
+            if not set(str(r["emulator"]).split(", ")) <= unbuilt
+        ]
         return {
             "platform": "EmuELEC",
             "version": self.tag.removeprefix("v"),
@@ -225,11 +236,25 @@ class Scraper(BaseScraper):
             "standalone_cores": standalone,
             "dual_mode_cores": dual,
             "systems": systems,
-            # Read at the revision the BIOS list comes from.
-            "launchers": extract_launchers(
-                RepoTree.github(REPO, launcher_revision(self.url))
-            ),
+            # Read at the revision the BIOS list comes from, for the
+            # emulators an image carries.
+            "launchers": launchers,
         }
+
+    def _built(self) -> set[str]:
+        """The cores at least one released device image carries.
+
+        Read by the targets scraper: a device keeps a core when a package it
+        builds installs it and its es_systems.cfg still offers it. The port
+        engines depend on emuelec-ports, which no package of an image
+        depends on, and flycast-dojo is in no device list (UNBUILT there).
+        """
+        try:
+            from .targets.emuelec_targets_scraper import Scraper as DeviceTargets
+        except ImportError:
+            from scraper.targets.emuelec_targets_scraper import Scraper as DeviceTargets
+        targets = DeviceTargets().device_targets(self.tag)["targets"]
+        return {name for entry in targets.values() for name in entry["cores"]}
 
 
 def main() -> None:

@@ -869,11 +869,24 @@ def load_target_config(
             )
         )
 
-    declared = (targets[canonical] or {}).get("cores")
+    return _target_core_set(targets[canonical] or {}, overrides, canonical, platforms_dir)
+
+
+def _target_core_set(
+    entry: dict, overrides: dict, target: str, platforms_dir: str
+) -> set[str] | None:
+    """A target's cores: what the board builds, overrides applied, and the
+    buildbot cores its RetroArch core downloader installs (`downloads`, a
+    RetroArch targets entry), which a Batocera x86_64 or armv7 board can
+    fetch from its menu."""
+    declared = entry.get("cores")
     if declared is None:
         return None
-    cores = set(str(c) for c in declared)
-    return apply_target_overrides(cores, overrides, canonical)
+    cores = apply_target_overrides({str(c) for c in declared}, overrides, target)
+    downloads = entry.get("downloads")
+    if downloads:
+        cores |= load_target_config("retroarch", str(downloads), platforms_dir) or set()
+    return cores
 
 
 def apply_target_overrides(
@@ -917,12 +930,9 @@ def list_available_targets(
     result = []
     for tname, tdata in sorted(data.get("targets", {}).items()):
         aliases = (overrides.get(tname) or {}).get("aliases", [])
-        declared = (tdata or {}).get("cores")
         # None: the target runs every core the platform declares.
-        count = (
-            None if declared is None
-            else len(apply_target_overrides({str(c) for c in declared}, overrides, tname))
-        )
+        found = _target_core_set(tdata or {}, overrides, tname, platforms_dir)
+        count = None if found is None else len(found)
         result.append(
             {
                 "name": tname,
@@ -2533,6 +2543,7 @@ def group_identical_platforms(
             cores if isinstance(cores, str) else sorted(map(str, cores or [])),
             sorted(map(str, config.get("standalone_cores") or [])),
             sorted(map(str, config.get("dual_mode_cores") or [])),
+            sorted(map(str, config.get("installable_cores") or [])),
             # One archive cannot serve a filesystem that folds case and one
             # that does not: Lakka keeps bios.col beside BIOS.col.
             bool(config.get("case_insensitive_fs")),
@@ -3226,9 +3237,11 @@ def resolve_platform_cores(
         # An emulator the platform launches standalone runs there even when
         # its own list names only the cores: Batocera's es_systems.yml files
         # lexaloffle and gsplus as standalone emulators and nowhere else.
+        # A core the platform's RetroArch installs from the buildbot runs
+        # there as well (installable_cores, Batocera x86_64 and armv7).
         core_set = {str(c) for c in cores_config} | {
             str(c) for c in config.get("standalone_cores") or []
-        }
+        } | {str(c) for c in config.get("installable_cores") or []}
         index = upstream_profile_index(profiles)
         platform = str(config.get("_key") or "")
 
