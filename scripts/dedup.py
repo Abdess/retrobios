@@ -43,6 +43,9 @@ NODEDUP_DIRS = {
     # share one keymap, C64 and CBM-II one palette. With the copies removed
     # the name step served the C128 keymap to all of them.
     "c64-emu",
+    # SplitWolf reads lwmp/ by path, one sprites/dirN folder per rotation:
+    # 435 of its 2308 files are equal to another one in the tree.
+    "lwmp",
     # PinMAME reads a sound-only parent (gts80s) as its own archive, equal
     # byte for byte to the base set. Folding them into the clone map would
     # key gts1.zip twice, once for MAME's set and once for PinMAME's.
