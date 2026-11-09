@@ -23,8 +23,7 @@ notes: |
   (h2demo.zip from archive.org) when data/HEROES2.AGG is absent. No package,
   options file or Makefile of a v4.8 image pulls emuelec-ports in, so no
   platform ships fheroes2.
-  ref: version.txt:1,
-       EmuELEC packages/sx05re/emuelec-ports/fheroes2/package.mk:4-7,15-23,
+  ref: EmuELEC packages/sx05re/emuelec-ports/fheroes2/package.mk:4-7,15-23,
        EmuELEC packages/sx05re/emuelec-ports/fheroes2/scripts/fheroes2.sh:9-40
 
   Every resource is looked up under each root directory in turn: the
