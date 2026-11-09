@@ -95,8 +95,7 @@ notes: |
        src/emu/system/src/software.cpp:396-408,
        src/emu/system/src/installation/rpkg.cpp:132-199,
        src/emu/system/src/installation/rpkg.cpp:208-255,
-       src/emu/system/src/installation/rpkg.cpp:257-259,
-       src/emu/system/src/installation/firmware.cpp:290-303,
+       src/emu/system/src/installation/rpkg.cpp:257-259, src/emu/system/src/installation/firmware.cpp:290-303,
        src/emu/system/src/installation/firmware.cpp:381-406,
        src/emu/system/src/installation/firmware.cpp:438-441,
        src/emu/system/src/installation/firmware.cpp:480-515
