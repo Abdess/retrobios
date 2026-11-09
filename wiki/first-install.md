@@ -5,7 +5,7 @@ order: 30
 
 # First install, step by step
 
-From an empty BIOS folder to games that start.
+From an empty BIOS folder to every BIOS file the setup's list names.
 
 **Needed:** internet and some free space.
 
@@ -102,7 +102,8 @@ Esc or Ctrl+C stops, B on a handheld. Run again to resume.
 
 ## 5. Read the result
 
-- **Done**: all files are in place.
+- **Done**: every file the collection holds for this setup is in place. The
+  screen names any file it does not hold.
 - **Finished with errors**: run it again. It retries only those.
 - **Finished with files missing**: run it again online.
 - **Nothing installed**: the screen says why. See [If it stops](#if-it-stops).

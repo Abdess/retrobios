@@ -6,8 +6,8 @@ terms: privacy, cookies, analytics, tracking
 
 # What is counted
 
-No cookies. No account. Nothing is stored on the device, and nothing
-links a visit to a person.
+No cookies. No account. The browser keeps the chosen setup, tab and theme in
+its own storage, which is never sent. Nothing links a visit to a person.
 
 ## On this site
 
@@ -35,7 +35,9 @@ These actions are counted the same way, with the page they happened on:
   as "other", without its words;
 - the answer to "Did this page help?".
 
-Not sent: the screen size, the language, a search that found results.
+The script adds neither the screen size nor the language, and nothing for a
+search that found results. GoatCounter reads the headers a browser sends with
+any request.
 
 The totals are kept two years and are public:
 [retrobios.goatcounter.com](https://retrobios.goatcounter.com).
@@ -46,8 +48,9 @@ stops GoatCounter changes nothing on the site.
 
 ## The installer
 
-The installer sends nothing back. It downloads files from GitHub, which sees
-those requests as it sees any download.
+The installer sends no report of its own. It downloads files from GitHub,
+which sees those requests as it sees any download, with the Python or
+PowerShell version in their header.
 
 ## Search engines
 

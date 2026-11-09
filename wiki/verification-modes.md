@@ -19,9 +19,11 @@ Example: `scph5501.bin`, MD5 `490f666e1afb15b7362b406ed1cea246`. Any file named
 
 This project's `verify.py` reproduces each setup's own check, so its report
 says what the setup itself would say. A missing file is then ranked by
-**severity**: CRITICAL when the setup cannot start that console, WARNING when
-it runs degraded or the file's version is in doubt, INFO when nothing visible
-changes ([severity matrix](#severity-matrix)).
+**severity**, from the setup's check mode and the `required` flag of its list:
+CRITICAL for a required file missing where the setup checks hashes, WARNING
+for a required file missing where it checks names, or a hash in doubt, INFO
+for an optional file or one the core replaces with a built-in fallback
+([severity matrix](#severity-matrix)).
 
 <!-- image: verification-modes -->
 

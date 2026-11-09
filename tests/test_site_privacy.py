@@ -87,7 +87,7 @@ class ThePageSaysWhatIsCounted(unittest.TestCase):
         page = PRIVACY.read_text(encoding="utf-8")
         for said in ("No cookies", "Do Not Track", "Global Privacy Control",
                      "copy button", "found nothing", "Did this page help?",
-                     "The installer sends nothing back", "retrobios.goatcounter.com"):
+                     "The installer sends no report of its own", "retrobios.goatcounter.com"):
             with self.subTest(said=said):
                 self.assertIn(said, page)
 
