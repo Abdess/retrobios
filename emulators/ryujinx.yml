@@ -16,6 +16,9 @@ systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 mode: standalone
 
+standalone_directories:
+  - "$XDG_CONFIG_HOME/Ryujinx"
+  - "$HOME/.config/Ryujinx"
 data_root:
   windows:
     path: "%APPDATA%/Ryujinx"
