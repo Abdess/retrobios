@@ -349,10 +349,10 @@ def describe(variant: str, facts: dict) -> str:
     if variant == "handheld":
         return (f"Recording of the full-screen installer on the {facts['width']} by "
                 f"{facts['height']} screen of a handheld, started from the Tools menu of "
-                f"{facts['setup']}. It finds the {facts['games']} games on the card, {plan} The "
-                "A button chooses, and the bottom line names the buttons.")
-    return (f"Recording of the one-line command in a terminal. The installer finds an "
-            f"{facts['setup']} SD card with {facts['games']} games, {plan}")
+                f"{facts['setup']}, on a demonstration card. It finds the {facts['games']} games "
+                f"on the card, {plan} The A button chooses, and the bottom line names the buttons.")
+    return (f"Recording of the one-line command in a terminal, on a demonstration card. The "
+            f"installer finds an {facts['setup']} SD card with {facts['games']} games, {plan}")
 
 
 def measure(session: Path, env: dict[str, str], variant: Variant = VARIANTS["default"]) -> dict:

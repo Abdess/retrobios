@@ -38,7 +38,8 @@ Read the count line:
 
 ## 2. Fix the files
 
-Without `--check`, it adds missing files and replaces wrong ones.
+Without `--check`, it adds the missing files the collection holds and
+replaces wrong ones.
 
 ## 3. Check the folder and the names
 

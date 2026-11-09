@@ -54,7 +54,9 @@ file under the BIOS name: zeros, half the file, or another region's BIOS.
 Each result is a full record in the
 [`measurements/`](https://github.com/Abdess/retrobios/tree/main/measurements)
 folder of this project. It names its method, the computer and the exact build
-of the emulator. A record is never changed once added.
+of the emulator. Records are added, not edited. A change to an existing record (scratch paths
+removed on 2026-11-05 and 2026-11-06) is a commit of its own, visible in the
+folder's history.
 
 The results so far ran on these computers:
 

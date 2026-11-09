@@ -13,7 +13,7 @@ Some consoles need a small program, the **BIOS**, to start their games: PlayStat
 
 ## Install in one line
 
-**Windows**: open the Start menu, type **PowerShell** and open it. Paste this line (right-click in the window) and press Enter.
+**Windows**: open the Start menu, type **PowerShell** and open it. Paste this line (Ctrl+V or right-click in the window) and press Enter.
 
 ```powershell
 irm https://abdess.github.io/retrobios/i.ps1 | iex
@@ -27,9 +27,9 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh
 
 **A handheld, an SD card, or not sure?** [Pick the device](https://abdess.github.io/retrobios/which-pack/): its page gives the folder and the command. A muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka or MiSTer SD card plugged into the computer is found by itself.
 
-![Recording of the one-line command in a terminal. The installer finds an ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary.](docs_assets/demo/install.gif)
+![Recording of the one-line command in a terminal, on a demonstration card. The installer finds an ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary.](docs_assets/demo/install.gif)
 
-The installer finds the setup and its BIOS folder, installs the files it needs (only what the games need when it finds them on the card) and checks each one. Its screen installs everything, or fewer under **Choose systems**. Arrow keys and Enter drive it, or a controller on a handheld. It sends nothing back ([what is counted](https://abdess.github.io/retrobios/wiki/privacy/)). Options go after the line in the form the [installer page](https://abdess.github.io/retrobios/wiki/installer/#passing-options) gives.
+The installer finds the setup and its BIOS folder, installs the files it needs (only what the games need when it finds them on the card) and checks each one. Its screen installs everything, or fewer under **Choose systems**. Arrow keys and Enter drive it, or a controller on a handheld. It sends no report of its own ([what is counted](https://abdess.github.io/retrobios/wiki/privacy/)). Options go after the line in the form the [installer page](https://abdess.github.io/retrobios/wiki/installer/#passing-options) gives.
 
 First time? [The first install, step by step](https://abdess.github.io/retrobios/wiki/first-install/). A game does not start: [what to check](https://abdess.github.io/retrobios/wiki/troubleshooting/). Other questions: [FAQ](https://abdess.github.io/retrobios/wiki/faq/).
 
@@ -57,12 +57,12 @@ Unzip into the BIOS folder, files straight in it. A big pack comes in parts (`Pa
 - Every console and the files it needs: [systems](https://abdess.github.io/retrobios/systems/)
 - Asking an AI assistant: it reads the site best from [llms.txt](https://abdess.github.io/retrobios/llms.txt)
 
-## What makes it different
+## How it is built
 
-- **635 emulators profiled from their source code**: each file an emulator loads, its hash and the line of code that reads it
+- **623 emulators profiled**, 589 from their source code and 34 closed-source builds from their binaries: 93% of the files they load cite the file and line that reads them
 - **18 setups**, each checked its own way: MD5 for Batocera and Recalbox, the file name for RetroArch, as their own code does
-- **535 systems**, 19,987 files in the collection, [what is still missing](https://abdess.github.io/retrobios/gaps/) named file by file
-- Public data: [JSON, CSV and SQLite](https://abdess.github.io/retrobios/data/), MIT licensed
+- **532 systems**, 19,947 files in the collection, [what is still missing](https://abdess.github.io/retrobios/gaps/) named file by file
+- Public data: [JSON, CSV and SQLite](https://abdess.github.io/retrobios/data/), the metadata under MIT
 
 <details>
 <summary><strong>For developers: build a pack</strong></summary>
@@ -105,4 +105,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-09T08:27:47Z*
+*Auto-generated on 2026-11-09T07:40:17Z*

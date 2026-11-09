@@ -8,7 +8,9 @@ terms: ios, iphone, ipad
 
 ## Are BIOS files needed? { #do-i-need-bios-files }
 
-- **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.
+- **Yes** for PlayStation 2 and Neo Geo.
+- **Most emulators** for PlayStation 1 and Saturn. Some start games without
+  it, with a built-in replacement.
 - **Better with it** for Dreamcast. Some games need it.
 - **Usually not** for NES or Super Nintendo.
 
@@ -63,7 +65,7 @@ Game sets must match the emulator's version:
 - It stops if the installer does not match its expected fingerprint, and
   checks each file.
 - It fills the BIOS folder, some save folders and a games cache.
-- It never touches games or saves.
+- It never touches games or save files.
 - It keeps each file it replaces in `retrobios-backup`, for `--restore`.
 
 Read them: [install.sh](https://github.com/Abdess/retrobios/blob/main/install.sh),
@@ -78,7 +80,7 @@ and download their files.
 ## Why is there no ZIP for a setup? { #why-is-there-no-zip-for-my-setup }
 
 ZIPs are made for the setups most people download. The command installs every
-setup's files and checks each one. `--dry-run` shows the list first.
+file the collection holds for each setup and checks each one. `--dry-run` shows the list first.
 
 ## Fill an SD card from a computer?
 
@@ -110,7 +112,8 @@ Fill it from a computer or point `--from-pack` at the ZIP: [Without a network](i
 
 ## Why is a file missing from the ZIP?
 
-Some come with the emulator.
+Some come with the emulator. Others are not in the collection yet:
+[what is still missing](../gaps.md) names each one.
 
 ## A game shows a black screen { #my-game-shows-a-black-screen }
 

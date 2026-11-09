@@ -52,9 +52,9 @@ in its `--json` output. Not all missing files are equally important:
 
 | Severity | Meaning | Action needed |
 |----------|---------|---------------|
-| CRITICAL | Required file missing on an MD5 or SHA1 platform | Must fix. Core won't function. |
-| WARNING | Optional file missing on an MD5 or SHA1 platform, hash mismatch (UNTESTED) on any hash platform, or a required file missing on an existence platform | Core works but with reduced functionality, or runs on content nobody verified. |
-| INFO | Optional file missing on an existence-only platform, or a missing file the core covers with an HLE fallback | Core works fine, BIOS improves accuracy. |
+| CRITICAL | Required file missing on an MD5 or SHA1 platform | The setup's own check fails. Whether the core starts without it is on the emulator's page. |
+| WARNING | Optional file missing on an MD5 or SHA1 platform, hash mismatch (UNTESTED) on any hash platform, or a required file missing on an existence platform | The setup's check warns, or a file it does not read is absent. The emulator's page says what the core does without it. |
+| INFO | Optional file missing on an existence-only platform, or a missing file the core covers with an HLE fallback | The profile records that the core runs without it. |
 | OK | File present and verified | No action needed. |
 
 The full mapping, including how `hle_fallback` overrides the platform mode, is
