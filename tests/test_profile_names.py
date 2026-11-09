@@ -70,6 +70,7 @@ STEM_NAMED = {
     "simple64": "window title simple64",
     "sixtyforce": "site title sixtyforce",
     "veesem": "README title veesem",
+    "zcdi": "README title zcdi",
 }
 
 
