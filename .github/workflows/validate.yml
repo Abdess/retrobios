@@ -19,6 +19,8 @@ on:
       - "install.ps1"
       # The handheld port bundles install.py and its tests read both.
       - "ports/**"
+      # The PyPI package is built from install.py and its tests build it.
+      - "packaging/**"
       # Every input of the site build, so a page that would fail the deploy
       # fails here first (tests/test_workflow_paths.py).
       - "wiki/**"
@@ -50,6 +52,7 @@ on:
       - "install.sh"
       - "install.ps1"
       - "ports/**"
+      - "packaging/**"
       - "wiki/**"
       - "docs_assets/**"
       - "provenance/**"

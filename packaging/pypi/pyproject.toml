@@ -1,0 +1,37 @@
+# The package PyPI serves as `retrobios`: install.py and the command that
+# runs it, nothing else. The root pyproject.toml is the contributors'
+# environment. scripts/build_pypi.py writes the wheel and the sdist from this
+# file, README.md, LICENSE and install.py, and writes retrobios/__init__.py
+# with the version. This file is the one a build from the sdist reads.
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "retrobios"
+dynamic = ["version"]
+description = "Install the BIOS files your emulators need"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = []
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Emulators",
+]
+
+[project.urls]
+Homepage = "https://abdess.github.io/retrobios/"
+Source = "https://github.com/Abdess/retrobios"
+
+[project.scripts]
+retrobios = "retrobios:main"
+
+[tool.setuptools]
+packages = ["retrobios"]
+
+[tool.setuptools.dynamic]
+version = { attr = "retrobios.__version__" }

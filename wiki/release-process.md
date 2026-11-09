@@ -110,8 +110,8 @@ scripts stay Python.
 `platforms/**`, `emulators/**`, `schemas/**`, `scripts/**`, `tests/**`,
 `install.py`, `install.sh` or `install.ps1` (the bootstraps pin the
 installer's SHA-256, so editing one without the other fails the run),
-`ports/**` (the handheld port bundles the installer), or any input of the site
-build. The path lists are spelled out once per event because the workflow
+`ports/**` (the handheld port bundles the installer), `packaging/**` (the PyPI
+package is built from it), or any input of the site build. The path lists are spelled out once per event because the workflow
 parser reads no YAML anchor, and a test holds the two equal.
 
 **Concurrency.** Per-PR group on a pull request, per-ref on a push. A pull
@@ -311,6 +311,17 @@ python scripts/check_release.py --tag "v${DATE}" --sums dist/SHA256SUMS.txt \
 git status --short
 git add release.json README.md install/*.json install/targets/*.json
 git commit -m "chore: record release v${DATE}" && git push
+
+# 5b. The PyPI package, `uvx retrobios`: install.py and its command. The
+#     version is the date of the tag release.json now names (v2026.10.04
+#     gives 2026.10.4), so a release is what bumps it. The build replaces
+#     any earlier one in tmp/pypi-dist. Build, run the wheel, then upload
+#     the two files. The token stays in its file: never in the
+#     repository, a script or a log.
+python scripts/build_pypi.py --output-dir tmp/pypi-dist
+python -m unittest tests.test_pypi_package
+uvx --from tmp/pypi-dist/retrobios-*.whl retrobios --help
+uv publish --token "$(cat ~/.config/retrobios/pypi-token)" tmp/pypi-dist/*
 
 # 6. Keep only the new release plus large-files: an older pack carries hashes
 #    the platforms no longer check, so it misleads more than it helps
