@@ -6,6 +6,7 @@ upstream: "https://github.com/xemu-project/xemu"
 author: "izzy2lost"
 profiled_date: "2026-10-26"
 source_commit: "57bc6d6840daeb80e6454511aa097aa89760d49c"
+prose_written_at: "57bc6d6840daeb80e6454511aa097aa89760d49c"
 upstream_commit: "26fcbe54f17e496bdf530dad9f237e74e2f943fc"
 core_version: "1.3.3"
 version_basis:
