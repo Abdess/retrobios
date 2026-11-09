@@ -6,7 +6,7 @@ cores: [opera]
 source: "https://github.com/libretro/opera-libretro"
 upstream: "https://sourceforge.net/projects/freedo/"
 profiled_date: "2026-10-18"
-source_commit: "370d9a25c030bb9de4aade371b31045691c40a95"
+source_commit: "595fd1db7d5bf0d3ca63d2292854d587ddcfa94b"
 core_version: "1.0.0"
 version_basis:
   kind: file
@@ -35,7 +35,7 @@ notes: |
   3do_arcade_saot.bin (512 KB) and panafz1-kanji.bin (933636 bytes).
 
   BIOS definitions: BIOSES[] at libopera/opera_bios.c:9-164, built-in inflate
-  opera_bios_load_builtin() at libopera/opera_bios.c:234-267.
+  opera_bios_load_builtin() at libopera/opera_bios.c:234-273.
   BIOS selection and loading: opera_lr_opts.c:276-359 (get_bios, _load_bios_rom,
   set_bios). Font loading: opera_lr_opts.c:361-415.
   Core option: libretro_core_options.c:752-783 (set_bios_values) lists the
@@ -219,4 +219,4 @@ platform_details:
     font_selection: "core option opera_font, optional"
     byteswap: "rom1 is byteswapped on little-endian (opera_mem_rom1_byteswap32_if_le)"
     hle_available: true
-    source_ref: "opera_lr_opts.c:276-359, libopera/opera_bios.c:9-267"
+    source_ref: "opera_lr_opts.c:276-359, libopera/opera_bios.c:9-273"
