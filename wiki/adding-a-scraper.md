@@ -456,7 +456,7 @@ manipulation rather than load-dump to maintain human-readable formatting.
 
 The scrape and the export are two directions of the same transcription, so
 run them against each other: scrape upstream, export it back, and diff the
-result against the file you started from. Nothing the platform declares may
+result against the original file. Nothing the platform declares may
 be missing from the round trip.
 
 ```bash

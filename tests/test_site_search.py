@@ -228,7 +228,7 @@ class Descriptions(unittest.TestCase):
         self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
         gs.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
         body = ("# DuckStation\n\nDuckStation emulates Sony PlayStation. It picks the BIOS for "
-                "your game's region.\n\n<details>\n\nThe installer finds your platform.\n")
+                "the game's region.\n\n<details>\n\nThe installer finds the platform.\n")
         text = gs._page_description(body, Path("emulators/duckstation.md"), "DuckStation")
         self.assertTrue(text.startswith("DuckStation emulates Sony PlayStation."))
         self.assertNotIn("source-pinned", text)
@@ -308,10 +308,10 @@ class Descriptions(unittest.TestCase):
         self.assertEqual(text, "Dreamcast BIOS files (Sega). Start with dc_boot.bin, dc_flash.bin.")
 
     def test_the_faq_is_described_by_its_questions(self) -> None:
-        body = ("# Common questions\n\n## Do I need BIOS files?\n\nYes.\n\n## Which one?\n\n"
+        body = ("# Common questions\n\n## Are BIOS files needed?\n\nYes.\n\n## Which one?\n\n"
                 "Run the command with --dry-run.\n\n## Zip or not?\n\nZip.\n")
         text = gs._page_description(body, Path("wiki/faq.md"), "Common questions")
-        self.assertTrue(text.startswith("Common questions: Do I need BIOS files?"))
+        self.assertTrue(text.startswith("Common questions: Are BIOS files needed?"))
 
     def test_a_written_description_wins(self) -> None:
         source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
@@ -359,7 +359,7 @@ class GetPagesSitInYourSetup(unittest.TestCase):
     def test_every_get_page_joins_your_setup(self):
         side, get_pages = _sidebar_with_get_pages()
         self.assertEqual(side["options"]["exclude"], [])
-        setup = set(side["options"]["topics"].get("your-setup", []))
+        setup = set(side["options"]["topics"].get("setups", []))
         for rel in get_pages:
             with self.subTest(page=rel):
                 self.assertIn("/" + sitestarlight._sidebar_link(rel).strip("/"), setup)

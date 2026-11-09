@@ -16,10 +16,10 @@ order: 60
     console.
 
 **Setup**
-:   What you play with: RetroArch, Batocera, EmuDeck and others.
+:   What plays the games: RetroArch, Batocera, EmuDeck and others.
 
 **BIOS folder**
-:   The folder where your setup looks for BIOS files.
+:   The folder where the setup looks for BIOS files.
 
 **Pack**
 :   The ZIP, sometimes in parts, with one setup's BIOS files. Made for the
@@ -29,13 +29,13 @@ order: 60
 :   A setup, as the project's data calls it.
 
 **ZIP**
-:   One file that holds many files. You unzip it to get them out.
+:   One file that holds many files. Unzip it to get them out.
 
 **Terminal**
-:   A window where you type commands.
+:   A window for typing commands.
 
 **Installer**
-:   The small program the command starts. It fills your BIOS folder.
+:   The small program the command starts. It fills the BIOS folder.
 
 **Hash**
 :   A fingerprint of a file's contents. A different file gets a different hash.
@@ -50,11 +50,11 @@ order: 60
 :   Required: games do not start without it. Optional: games start anyway.
 
 **Game data**
-:   Files from your own copy of a PC game, like Doom. Not a BIOS.
+:   Files from an owned copy of a PC game, like Doom. Not a BIOS.
 
 ## Next steps
 
 - [What is a BIOS?](what-are-bios-files.md)
-- [Get your files](../which-pack.md)
+- [Get the files](../which-pack.md)
 - For contributors: [Terms of the reference pages](reference-terms.md)
 

@@ -190,7 +190,7 @@ class GetYourFilesOrder(unittest.TestCase):
     def test_choice_then_tables_then_picker_then_command(self):
         text = _page("which-pack.md")
         order = [text.index(mark) for mark in (
-            "## Pick your setup", "| Setup | Runs on | BIOS folder | ZIP |", "<FilePicker",
+            "## Pick the setup { #pick-your-setup }", "| Setup | Runs on | BIOS folder | ZIP |", "<FilePicker",
             "## Not in the list? One command finds it", "It asks **",
             "<summary>Is it safe?</summary>",
         )]
@@ -221,7 +221,7 @@ class GetYourFilesOrder(unittest.TestCase):
 class GuideRoutes(unittest.TestCase):
     def test_a_device_system_opens_on_the_computer_route(self):
         text = _page("platforms/batocera.md")
-        self.assertLess(text.index("## From your computer"), text.index("## On the device"))
+        self.assertLess(text.index("## From a computer"), text.index("## On the device"))
         self.assertIn("{ #install }", "\n".join(generate_site._guide_install(
             "batocera", siteguides.GUIDES["batocera"], "## On the device { #install }")))
         self.assertIn("Unzip them all into the network folder above", text)
@@ -347,7 +347,7 @@ class HomeLinksTheOtherTasks(unittest.TestCase):
         for target in ("/retrobios/wiki/troubleshooting/", "/retrobios/files/",
                        "/retrobios/wiki/legal/"):
             self.assertIn(f"]({target})", home)
-        self.assertLess(home.index("/retrobios/wiki/troubleshooting/"), home.index("## Do I need it?"))
+        self.assertLess(home.index("/retrobios/wiki/troubleshooting/"), home.index("## Is it needed? { #do-i-need-it }"))
 
 
 GUIDE = siteguides.HANDHELD_GUIDE
@@ -425,7 +425,7 @@ class HandheldWayIn(unittest.TestCase):
     def test_the_guide_is_in_the_handheld_group_of_the_navigation(self):
         coverages = {key: {"platform": _display(key)} for key in REGISTRY}
         nav = generate_site.generate_nav(coverages, {}, {}, REGISTRY)
-        setup = next(tab["Your setup"] for tab in nav if "Your setup" in tab)
+        setup = next(tab["Setups"] for tab in nav if "Setups" in tab)
         groups = {next(iter(item)): next(iter(item.values()))
                   for item in setup if isinstance(item, dict)}
         label = siteguides.DEVICE_GROUPS["handheld"][0]
@@ -526,7 +526,7 @@ class SafetyListIsLinked(unittest.TestCase):
 class OfflineLine(unittest.TestCase):
     def test_under_from_your_computer(self):
         text = _page("platforms/batocera.md")
-        start = text.index("## From your computer")
+        start = text.index("## From a computer")
         line = text.index("No internet on the device?")
         self.assertLess(start, line)
         self.assertLess(line, text.index("## On the device"))
@@ -682,24 +682,24 @@ class NoZipNoUnzipText(unittest.TestCase):
     def test_the_minui_family_makes_each_folder(self):
         for name in ("minui", "myminui", "nextui"):
             with self.subTest(setup=name):
-                self.assertIn("The command makes each console's folder for you.",
+                self.assertIn("The command makes each console's folder.",
                               _plain_page(f"platforms/{name}.md"))
 
     def test_knulli_is_filled_over_the_network_with_the_samba_switch_cited(self):
         text = _guide_part(_plain_page("platforms/knulli.md"))
-        self.assertIn("## From your computer { #from-your-computer }", text)
+        self.assertIn("## From a computer { #from-your-computer }", text)
         self.assertIn("--platform knulli --dest \\\\KNULLI\\share\\bios\n", text)
         self.assertRegex(text, r"turn on \*\*SAMBA\*\* in \*\*System Settings > Services\*\*\s*"
                                r"\(\[KNULLI docs\]\(https://github\.com/knulli-cfw/knulli\.org/blob/"
                                r"[0-9a-f]{40}/docs/play/add-games/network-transfer\.md")
         # The computer route comes before the SSH one.
-        self.assertLess(text.index("## From your computer"), text.index("## On the device"))
+        self.assertLess(text.index("## From a computer"), text.index("## On the device"))
 
     def test_the_elec_systems_say_they_need_the_network(self):
         for name, share in (("amberelec", "\\\\AmberELEC\\roms"), ("emuelec", "\\\\EMUELEC\\roms")):
             text = _guide_part(_plain_page(f"platforms/{name}.md"))
             with self.subTest(setup=name):
-                self.assertIn("Needs the device on your network.", text)
+                self.assertIn("Needs the device on the same network.", text)
                 self.assertIn(f"--platform {name} --dest {share}\n", text)
 
     def test_a_mac_and_a_linux_desktop_reach_the_share_too(self):
@@ -935,14 +935,14 @@ class ARouteWithoutANetwork(unittest.TestCase):
             for page in (f"platforms/{name}.md", f"get/{name}.md"):
                 text = _plain_page(page)
                 with self.subTest(page=page):
-                    self.assertIn("## From your computer { #from-your-computer }", text)
+                    self.assertIn("## From a computer { #from-your-computer }", text)
                     self.assertIn(CARD_FAQ, text)
                     self.assertIn(f"the folder the device calls `{extract_to}`", text)
                     self.assertIn(f"--platform {name} --dest /path/to/", text)
 
     def test_rocknix_has_a_computer_route(self):
         text = _guide_part(_plain_page("platforms/rocknix.md"))
-        self.assertLess(text.index("## From your computer"), text.index("## On the device"))
+        self.assertLess(text.index("## From a computer"), text.index("## On the device"))
 
     def test_retropie_card_is_read_from_linux_only(self):
         self.assertEqual(siteguides.GUIDES["retropie"].card_run, ("linux",))

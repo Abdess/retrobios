@@ -67,7 +67,7 @@ class TheIntroSaysWhatIsNeeded(unittest.TestCase):
         profile = _profile("duckstation")
         intro = gs._emulator_intro("DuckStation", profile)
         self.assertIn(
-            "It picks the BIOS for your game's region: scph5500.bin (Japan), "
+            "It picks the BIOS for the game's region: scph5500.bin (Japan), "
             "scph5501.bin (North America and Latin America) or scph5502.bin "
             "(Europe and Oceania).", intro)
         others = len(profile["files"]) - 3
@@ -417,7 +417,7 @@ class AnAppThatReadsAnyBios(unittest.TestCase):
         # LRPS2 runs in RetroArch, whose BIOS folder the installer finds.
         page = _pages("lrps2")["lrps2"]
         self.assertIn("--emulator lrps2", page)
-        self.assertIn("2. Put it in `pcsx2/bios/`, inside your BIOS folder.", page)
+        self.assertIn("2. Put it in `pcsx2/bios/`, inside the BIOS folder.", page)
         self.assertIn("a Sony PlayStation 2 BIOS, any file name", page)
 
     def test_only_found_by_content_with_one_bios(self):
@@ -752,7 +752,7 @@ class SmallFixes(unittest.TestCase):
 
     def test_region_choice_summary(self) -> None:
         lines = gs._emulator_file_summary(_profile("duckstation")["files"])
-        self.assertIn("One of 3 is required, for your games' region.", lines[0])
+        self.assertIn("One of 3 is required, for the games' region.", lines[0])
         self.assertNotIn("3 required", lines[0])
 
     def test_no_emulator_part_says_where_it_sits(self) -> None:

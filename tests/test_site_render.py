@@ -534,7 +534,7 @@ class NoTooltipInsideAName(unittest.TestCase):
         import sitestarlight
 
         terms = {"Emulator": "An app that acts like a console.",
-                 "Terminal": "A window where you type commands.",
+                 "Terminal": "A window for typing commands.",
                  "BIOS": "The console's built-in software."}
         for line in ("Fuse (Free Unix Spectrum Emulator) reads it.",
                      "Open Windows Terminal (WSL).",

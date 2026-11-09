@@ -6,20 +6,20 @@ terms: manifest, events, exit code, schema, packager, pin, reproducible
 
 # All installer options
 
-The one-line command finds your setup and its BIOS folder. It downloads only
+The one-line command finds the setup and its BIOS folder. It downloads only
 the files that are missing or wrong, and checks each one against its
 fingerprint before writing it. The options below are for anything else: fewer
-files (one console, one region, only the cores you have), another folder, an
+files (one console, one region, only the cores installed), another folder, an
 SD card, a check without download, or a run from a script.
 
 Example: `--platform retroarch --system sony-playstation --region north-america`
 installs only the PlayStation files, and the North American version where
 there is one per region.
 
-How the command protects your machine is under
+How the command protects the machine is under
 [What the bootstrap does](#what-the-bootstrap-does) and
 [Trust boundary](#trust-boundary). The BIOS folder of each setup is on
-[Get your files](../which-pack.md).
+[Get the files](../which-pack.md).
 
 ## Options at a glance
 
@@ -160,13 +160,13 @@ Enter checks the BIOS folder when nothing can be copied.
 ## The full-screen interface { #the-full-screen-interface }
 
 Run at a terminal, the installer opens a full screen that a keyboard or a
-controller drives. Three presses of A or Enter install everything your setup
+controller drives. Three presses of A or Enter install everything the setup
 reads: the setup found here, the plan, then the result. The plan screen says
 how many files are missing, how much they weigh, how many are in place and how
 much space is free, before anything is written.
 
-The other choices sit one press away. **Choose systems** ticks the consoles you
-play, with the total to download under the list. A long list opens on **None**:
+The other choices sit one press away. **Choose systems** ticks the consoles to
+keep, with the total to download under the list. A long list opens on **None**:
 A or Enter there unticks every system, and A on a system then takes that one alone. A
 on a system (**Continue**) always opens the confirm screen, which counts the choice
 before **Install**: it never installs by itself. Back with nothing ticked keeps the ticks
@@ -356,7 +356,7 @@ file list is downloaded once and handed to each run.
    (`.<ref>.archive.part`), asking with `If-Range` so that a server whose
    archive changed sends it whole. A second run into the same folder finds
    that archive in use and downloads its own copy. A file already there with other contents
-   is moved aside first, see [Files you already had](#files-you-already-had).
+   is moved aside first, see [Files already in the folder](#files-you-already-had).
 8. Copies into standalone emulator directories, only with `--standalone-copies`.
 
 The file list names the version of the platform it was built for (Batocera
@@ -581,7 +581,7 @@ and `--check` exits with code 3. The files the collection does not hold are
 listed after it again, as long as they are absent from the folder. A number before `wrong copies` means a file is
 in place with contents the platform does not accept. Running the install again
 replaces it and keeps the old one, see
-[Files you already had](#files-you-already-had).
+[Files already in the folder](#files-you-already-had).
 
 ### Why a file is refused { #why-a-file-is-refused }
 
@@ -640,7 +640,7 @@ a part that was not extracted, or one extracted into a folder of its own:
     Download it and extract into /home/me/.config/retroarch/system, beside the other parts.
 ```
 
-## Files you already had
+## Files already in the folder { #files-you-already-had }
 
 A file in the BIOS folder whose contents differ from the expected one (another
 revision, a personal dump) is replaced, but never lost. Just before the
@@ -724,7 +724,7 @@ member locked by a password.
 The folder is only read: each file is copied, checked against the list's
 hashes once written, and the original stays where it is. A file in place with
 other contents is kept aside first, as a download would replace it (see
-[Files you already had](#files-you-already-had)). What no folder holds is
+[Files already in the folder](#files-you-already-had)). What no folder holds is
 downloaded as usual, or taken from the pack with `--from-pack`. Several
 `--from` are read in the order given, and the end of the run says where each
 file came from. A run of a list of four files, two of them in `old`:
@@ -826,7 +826,7 @@ answer is not asked.
   Asked only when the chosen systems have such files. Every core is kept
   until numbers name some, and the head then says how many of how many
   (`1 of 2 cores`). The full screen's **Cores** opens with every core
-  ticked, as Choose systems does: untick the ones you do not use, **All**
+  ticked, as Choose systems does: untick the unused ones, **All**
   and **None** tick or untick them all.
 - **Regions.** Asked only when a chosen system has one BIOS per region. The
   numbers give an order of preference: `2,1` keeps the second region where a
@@ -1465,7 +1465,7 @@ python install.py --platform retroarch --dest /storage/emulated/0/RetroArch/syst
 
 RetroBIOS also runs on the handheld itself, in the
 [full-screen interface](#the-full-screen-interface), with the controller.
-Copy the file for your system to the SD card, then start RetroBIOS from the
+Copy the file for the system to the SD card, then start RetroBIOS from the
 menu.
 
 The files below ship with the next release. Until then, build them from a
@@ -1556,7 +1556,7 @@ On a Miyoo, B, X, Y and Select are Left Ctrl, Shift, Alt and Right Ctrl:
 pressed alone, a modifier sends nothing to a terminal, so the interface goes
 back with R2 instead, and the bottom line says so.
 
-**Without Wi-Fi.** On a computer, download the BIOS pack that serves your
+**Without Wi-Fi.** On a computer, download the BIOS pack that serves the
 system (every part, for a pack in parts): RetroArch's on muOS, ArkOS,
 dArkOS and JELOS, Batocera's on Batocera. Copy it next to RetroBIOS: into
 `ports/retrobios` for the PortMaster port and on Batocera, to the root of

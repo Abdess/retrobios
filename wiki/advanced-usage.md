@@ -3,7 +3,7 @@ level: contribute
 order: 80
 ---
 
-# Build your own packs
+# Build custom packs
 
 Fine-grained control over pack generation, hardware filtering, truth analysis (the file
 list a platform would have if it were written from the emulators' code) and
@@ -23,7 +23,7 @@ A clone carries the whole collection, several gigabytes, and `git clone
 --depth 1` leaves its history out. From that clone, `python scripts/generate_pack.py --platform
 retroarch --region us` builds a narrower pack, `--required-only` the bare
 minimum each core needs to start, and `--no-game-data` keeps the firmware and
-leaves out the files a game reads. `--help` lists every way to build your own,
+leaves out the files a game reads. `--help` lists every way to build one,
 and the sections below describe each one.
 
 ## Custom packs
@@ -47,8 +47,8 @@ carries one hash (MD5, SHA-1 or CRC32), alone or beside a file name as
 python scripts/generate_pack.py --platform batocera --from-md5-file missing.txt
 ```
 
-This is useful when a platform reports missing files and you want to generate a targeted pack
-rather than re-downloading the full archive.
+This builds a targeted pack when a platform reports missing files, rather than
+downloading the full archive again.
 
 ### Split packs
 
@@ -79,7 +79,7 @@ python scripts/verify.py --platform batocera --system psx
 ```
 
 Beside `--platform`, `--system` accepts the platform's own name for a system
-as well as our id: `psx` is what Batocera calls `sony-playstation`, and both
+as well as the collection's id: `psx` is what Batocera calls `sony-playstation`, and both
 build the same pack. The names come from `native_system` in the platform
 YAML, the mapping the installer reads as `system_names`, and
 `--platform batocera --list-systems` shows them after each id. A comma-separated
@@ -527,7 +527,7 @@ README, site generation) run normally using cached data.
 
 ### Partial runs
 
-Skip pack generation when you only need verification results:
+Skip pack generation when only verification results are needed:
 
 ```bash
 python scripts/pipeline.py --offline --skip-packs

@@ -32,7 +32,7 @@ QUOTING = (f"A folder goes in single quotes, attached to its option. One that ho
            "command and refuses such a folder.")
 
 START_PAGES = (
-    ("Which pack do I need", "which-pack/", "pick a device or setup, get the folder its BIOS files go in, "
+    ("Which pack is needed", "which-pack/", "pick a device or setup, get the folder its BIOS files go in, "
                                             "one command that installs and checks them, or a ZIP pack"),
     ("First install", "wiki/first-install/", "the steps from nothing to a working BIOS folder"),
     ("What are BIOS files", "wiki/what-are-bios-files/", "why emulators need them and where they come from"),
@@ -57,7 +57,7 @@ MORE = (
     ("Emulators", "emulators/", "one page per emulator"),
     ("Systems", "systems/", "one page per console maker, every file with its hashes"),
     ("Installer", "wiki/installer/", "every option of install.py"),
-    ("What we count", "wiki/privacy/", "the site's cookie-free counting"),
+    ("What is counted", "wiki/privacy/", "the site's cookie-free counting"),
     ("Is it legal?", "wiki/legal/", "the project's position"),
     ("Contributing", "contributing/", "add a missing file or an emulator profile"),
 )
@@ -142,7 +142,7 @@ ANSWER_RULES = (
     f"up: {SITE}files/?hash=<value> (the page) or api/v1/lookup/<first two hex>.json (the data).",
     "Prefer the installer to a manual copy: it puts each file in its folder and checks its hash. "
     "Give the command the setup's page gives, with `--for-games --required-only` for the fewest files.",
-    "Say where an answer comes from: link the page you read.",
+    "Say where an answer comes from: link the source page.",
     "On a page of the site, the WebMCP tools answer from the data: setup_bios_files (folder and "
     "files of a setup), emulator_bios_files, lookup_bios_hash, device_setup_command, search_retrobios.",
     f"Whether sharing BIOS files is legal depends on the country: point to [Is it legal?]({SITE}wiki/legal/), "
@@ -173,7 +173,7 @@ def skill_md() -> str:
         "",
         "## Steps",
         "",
-        "1. Ask where the games are: on the device itself (you have its terminal or SSH), or on "
+        "1. Ask where the games are: on the device itself (with its terminal or SSH), or on "
         "its card plugged into this computer.",
         f"2. Preview, nothing is written: `{SH} --for-games --required-only --dry-run` "
         f"(Windows PowerShell: `{PS} --for-games --required-only --dry-run`).",
@@ -221,9 +221,9 @@ def ard_manifest() -> dict:
                 "description": "An agent skill that installs the BIOS files a device needs, only "
                                "what the games on its card need to start.",
                 "representativeQueries": [
-                    "install the minimum BIOS files for the games on my R36S running dArkOS",
-                    "set up BIOS files for RetroArch on my Steam Deck",
-                    "my emulator says BIOS missing, fix it",
+                    "install the minimum BIOS files for the games on an R36S running dArkOS",
+                    "set up BIOS files for RetroArch on a Steam Deck",
+                    "the emulator says BIOS missing, fix it",
                 ],
                 "capabilities": ["SetupBios"],
                 "tags": ["bios", "firmware", "emulation", "retrogaming"],
