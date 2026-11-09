@@ -311,7 +311,8 @@ files:
     sha256: "0293555b21c4fac516d25199df7809b26beeae150e1d4504a050db32264a6ad7"
     validation: [sha256]
     description: "Neo Geo Pocket BIOS"
-    source_ref: "desktop-ui/emulator/neo-geo-pocket.cpp:12"
+    config_key: "NeoGeoPocket/Firmware/BIOS.World"
+    source_ref: "desktop-ui/emulator/neo-geo-pocket.cpp:12, desktop-ui/settings/settings.cpp:263-264, 280-283"
 
   # --- Neo Geo Pocket Color ---
   - name: ngpc_bios.rom
@@ -320,7 +321,8 @@ files:
     sha256: "8fb845a2f71514cec20728e2f0fecfade69444f8d50898b92c2259f1ba63e10d"
     validation: [sha256]
     description: "Neo Geo Pocket Color BIOS"
-    source_ref: "desktop-ui/emulator/neo-geo-pocket-color.cpp:12"
+    config_key: "NeoGeoPocketColor/Firmware/BIOS.World"
+    source_ref: "desktop-ui/emulator/neo-geo-pocket-color.cpp:12, desktop-ui/settings/settings.cpp:263-264, 280-283"
 
   # --- Nintendo 64DD ---
   - name: 64dd_ipl_J.bin
