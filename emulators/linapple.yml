@@ -77,7 +77,7 @@ files:
       from ~/.linapple when the file exists there, otherwise from the
       working directory. A missing file leaves the drive empty. No hash is
       checked. The hashes are those of the copy in the repository, which
-      RetroPie installs.
+      make install copies beside the binary (src/Makefile:24, 54).
 
   - name: "icon.bmp"
     required: false
@@ -91,5 +91,6 @@ files:
     note: >
       Loaded with SDL_LoadBMP from the working directory. A missing file
       costs the window its icon and nothing else. The hashes are those of
-      the copy in the repository. The RetroPie scriptmodule does not
-      install it.
+      the copy at the root of the repository, where the build copies the
+      binary (src/Makefile:37). make install leaves it out
+      (src/Makefile:24, 54), and so does the RetroPie scriptmodule.

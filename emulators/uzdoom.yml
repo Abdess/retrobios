@@ -105,7 +105,7 @@ files:
     md5: "fee855c33d28648ea5e54f224decb7d2"
     sha1: "6eb2c1775651752944a6782d08d129b1d37d2fdf"
     source_ref: "src/version.h:85, src/d_main.cpp:4148-4151, wadsrc/CMakeLists.txt:1"
-    note: "Fonts, menus, zscript, textures. Fatal if absent. Shipped with the engine resources below in the Windows zip, the AppImage and RetroBat's uzdoom.7z."
+    note: "Fonts, menus, zscript, textures. Fatal if absent. Built from wadsrc/ and shipped beside the binary with the engine resources below."
 
   - name: "game_support.pk3"
     category: game_data

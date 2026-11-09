@@ -74,10 +74,14 @@ notes: |
   `--kartusho-rom`), and each falls back to the bundled default named here.
 
   ES-DE drives ZEsarUX for its `zxnext` system with `--machine tbblue
-  --tbblue-fast-boot-mode --enable-esxdos-handler`. Fast boot swaps
-  `tbblue_loader.rom` for `48.rom` (src/cpu.c:3593-3594), and the esxdos handler needs
-  the divMMC firmware `esxmmc085.rom`, so that path loads `48.rom`, `esxmmc085.rom`
-  and the `tbblue.mmc` card image rather than a dedicated Next ROM.
+  --tbblue-fast-boot-mode --enable-esxdos-handler`. Fast boot reads `48.rom`
+  in place of `tbblue_loader.rom` and mirrors it four times
+  (src/cpu.c:3593-3594, 3939-3943). The esxdos handler answers esxdos calls
+  from a host directory (src/storage/esxdos_handler.c:2723-2747), and divMMC
+  on TBBlue pages Next memory instead of reading a firmware file
+  (src/storage/diviface.c:840-846). That path opens neither `esxmmc085.rom` nor
+  `tbblue.mmc`, which is mounted only from the menu or with `--mmc-file`
+  (src/menu/menu_items_storage.c:12448-12466, src/start.c:5848-5853).
 
   ZEsarUX also loads UI and bundled-software resources through the same
   `find_sharedfile` path: `keyboards/*.bmp` on-screen keyboard art
@@ -744,7 +748,7 @@ files:
     bundled: true
     system: sinclair-zx-spectrum
     source_ref: "src/storage/divmmc.c:45, src/storage/divmmc.c:95-103, src/storage/diviface.h:27, src/storage/diviface.c:778-800"
-    note: "divMMC esxdos firmware, the default when --divmmc-rom is unset. Needed by --enable-esxdos-handler, which the ES-DE zxnext command line sets."
+    note: "divMMC esxdos firmware, the default when --divmmc-rom is unset. Read when divMMC is enabled on a machine other than ZX-Uno, TBBlue and Chloe. The esxdos handler does not read it."
 
   - name: "esxide085.rom"
     sha1: "178bae9e9209c43282e12c09884562e4ddf07e68"

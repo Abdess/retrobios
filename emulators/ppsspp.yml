@@ -105,7 +105,7 @@ files:
     sha1: "30a33f3651f8e1b0967a5dfe6ff714baebcce41a"
     bundled: true
     source_ref: "Core/Util/PPGeDraw.cpp:249-252"
-    note: "Shipped in assets/ of the PPSSPP 1.20.4 Windows zip, which the standalone reads it from."
+    note: "Hashes of assets/ppge_atlas.zim in the tree at the pin, the copy the releases ship in assets/."
 
   - name: "ppge_atlas.meta"
     mode: standalone
@@ -116,4 +116,4 @@ files:
     sha1: "ab398f667d6fd778859307c105fe16388b8fdf63"
     bundled: true
     source_ref: "Core/Util/PPGeDraw.cpp:254-260"
-    note: "Shipped in assets/ of the PPSSPP 1.20.4 Windows zip, beside ppge_atlas.zim."
+    note: "Hashes of assets/ppge_atlas.meta in the tree at the pin, shipped beside ppge_atlas.zim."

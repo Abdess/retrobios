@@ -46,13 +46,9 @@ notes: |
   (id_lwmp.cpp:1831-1868, 2086-2105, id_sd.cpp:556-572). When a file is
   missing the engine falls back to the sprite or picture of the game data
   (id_lwmp.cpp:3301-3313, 3412-3445), so the directory is optional. The
-  project publishes it as lwmp.zip in its downloads, which RetroPie
-  extracts beside the binaries.
+  project publishes it as lwmp.zip in its downloads.
 
-  The shareware Wolfenstein 3D v1.4 and Spear of Destiny demo files carry
-  hashes of the archives RetroPie downloads. The retail files carry none:
-  the engine checks no hash, and the md5 table in RetroPie's launcher
-  script only picks which binary to start.
+  The engine checks no hash, so no game data entry carries one.
 
   Written by the engine, not read as data: config.<ext> and savegames in
   ~/.splitwolf.
@@ -64,14 +60,15 @@ files:
     category: game_data
     description: "Split screen sprites, pictures and sounds"
     required: false
-    bundled: true
+    installed_on: [retropie]
     source_ref: "id_lwmp.cpp:21, 1831-1868, 2064-2149, id_sd.cpp:556-572, wl_main.cpp:2127-2137"
     note: >
-      lwmp.zip (sha1 1145464c5adf84ffd692b46a97cafaddc2153734) from
+      Read relative to the working directory. lwmp.zip (sha1
+      1145464c5adf84ffd692b46a97cafaddc2153734) from
       bitbucket.org/linuxwolf6/splitwolf/downloads holds sprites/ with one
-      dir1 to dir8 folder per rotation, pics/ and sounds/.
-      RetroPie downloads and extracts it into the install directory during
-      installation, with no user action.
+      dir1 to dir8 folder per rotation, pics/ and sounds/. The Makefile
+      install target copies only the binary (Makefile:248-251).
+      RetroPie extracts the archive beside the binaries.
 
   - name: "gamecontrollerdb.txt"
     category: game_data
@@ -93,88 +90,60 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware page file: wall textures, sprites and digitized sounds"
     required: false
-    size: 742912
-    sha1: "63134a2e3165b5291ece7b8a4145d2bd67d4f787"
-    md5: "6efa079414b817c97db779cecfb081c9"
     source_ref: "id_pm.cpp:20-25, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgadict.wl1"
     category: game_data
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware Huffman dictionary of the graphics file"
     required: false
-    size: 1024
-    sha1: "10ae325f5ce124d2536a63805023c56a4e438ea1"
-    md5: "76a6128f3c0dd9b77939ce8313992746"
     source_ref: "id_ca.cpp:464-468, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgahead.wl1"
     category: game_data
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware graphics chunk offsets"
     required: false
-    size: 471
-    sha1: "a9ba5551f54f88d810b9aa82a15caae623509a4c"
-    md5: "61bf1616e78367853c91f2c04e2c1cb7"
+    min_size: 471
+    max_size: 473
+    validation: [size]
     source_ref: "id_ca.cpp:475-497, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
+    note: "Must hold 157 three byte offsets, the NUMCHUNKS + 1 = 162 of gfxv_apo.h (id_ca.cpp:97) less five missing episodes, or the engine quits. The shareware and Apogee builds expect that count, the VERSION_WOLF3D build expects 145. --ignorenumchunks skips the check."
 
   - name: "vgagraph.wl1"
     category: game_data
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware graphics chunks: pictures, fonts and text articles"
     required: false
-    size: 326568
-    sha1: "3ad077aca0e775bd6a241515c8b2874d4fa4099a"
-    md5: "74decb641b1a4faed173e10ab744bff0"
     source_ref: "id_ca.cpp:514-518, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "maphead.wl1"
     category: game_data
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware map offsets and tile info"
     required: false
-    size: 402
-    sha1: "b3942ddb4f6bb671b026a3f85611bf314acefce7"
-    md5: "7b6dd4e55c33c33a41d1600be5df3228"
     source_ref: "id_ca.cpp:556-560, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "gamemaps.wl1"
     category: game_data
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware level maps"
     required: false
-    size: 27425
-    sha1: "d49fc8a7887d7e73be7c813177307b68206f8147"
-    md5: "30fecd7cce6bc70402651ec922d2da3d"
     source_ref: "id_ca.cpp:575-580, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiohed.wl1"
     category: game_data
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware audio chunk offsets"
     required: false
-    size: 1156
-    sha1: "732460795d77cab19c8018d879f5c27a3cbd5f84"
-    md5: "58aa1b9892d5adfa725fab343d9446f8"
     source_ref: "id_ca.cpp:636-641, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiot.wl1"
     category: game_data
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware AdLib sound effects and music"
     required: false
-    size: 132613
-    sha1: "0254cc09b7a8ab0b884766b5dcd0e8555c424937"
-    md5: "4b6109e957b584e4ad7f376961f3887e"
     source_ref: "id_ca.cpp:647-651, wl_menu.cpp:5260-5267, 5354-5355"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   # Wolfenstein 3D, three episode release (.wl3)
   - name: "vswap.wl3"
@@ -400,85 +369,57 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo page file: wall textures, sprites and digitized sounds"
     required: false
-    size: 730624
-    sha1: "90158daca3d629b388b96f688e6084c11762f680"
-    md5: "35afda760bea840b547d686a930322dc"
     source_ref: "id_pm.cpp:20-25, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgadict.sdm"
     category: game_data
     system: wolfenstein3d
     description: "Spear of Destiny demo Huffman dictionary of the graphics file"
     required: false
-    size: 1024
-    sha1: "c28f04668180386f42009eb3a3910437c893c8c0"
-    md5: "2f85b6763a582df19e6a35dd9634c736"
     source_ref: "id_ca.cpp:464-468, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgahead.sdm"
     category: game_data
     system: wolfenstein3d
     description: "Spear of Destiny demo graphics chunk offsets"
     required: false
-    size: 402
-    sha1: "5765612af995804854d34696d152a7ee6f20dd18"
-    md5: "18c03cb401ed274bc0b659e951140e64"
+    min_size: 402
+    max_size: 404
+    validation: [size]
     source_ref: "id_ca.cpp:475-497, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
+    note: "Must hold 134 three byte offsets, NUMCHUNKS + 1 of gfxv_sod.h built with SPEARDEMO (id_ca.cpp:97), or the engine quits. --ignorenumchunks skips the check."
 
   - name: "vgagraph.sdm"
     category: game_data
     system: wolfenstein3d
     description: "Spear of Destiny demo graphics chunks: pictures, fonts and text articles"
     required: false
-    size: 305891
-    sha1: "9da7d00d1d68c0b24bf120f9927df53ff663a64f"
-    md5: "1cc5ceb8e43c0c0030cf552fc8ae9d0d"
     source_ref: "id_ca.cpp:514-518, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "maphead.sdm"
     category: game_data
     system: wolfenstein3d
     description: "Spear of Destiny demo map offsets and tile info"
     required: false
-    size: 402
-    sha1: "f6271baf01c3fb88b4979fd0e124a8b2c66d4e34"
-    md5: "40fa03caf7a1a4dbd22da4321c6e10d4"
     source_ref: "id_ca.cpp:556-560, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "gamemaps.sdm"
     category: game_data
     system: wolfenstein3d
     description: "Spear of Destiny demo level maps"
     required: false
-    size: 5534
-    sha1: "66a3e2c12dfc374c414543885a213073c72772bb"
-    md5: "4eb2f538aab6e4061dadbc3b73837762"
     source_ref: "id_ca.cpp:575-580, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiohed.sdm"
     category: game_data
     system: wolfenstein3d
     description: "Spear of Destiny demo audio chunk offsets"
     required: false
-    size: 1072
-    sha1: "a6519b58bcaac5e8a866cebaf268e74afe2f1778"
-    md5: "f0022742f86c214872bd72f03aaf1529"
     source_ref: "id_ca.cpp:636-641, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiot.sdm"
     category: game_data
     system: wolfenstein3d
     description: "Spear of Destiny demo AdLib sound effects and music"
     required: false
-    size: 93412
-    sha1: "0ce47169695698cd41580b4e3f9dfec393b4886b"
-    md5: "fcde1333c941229f4dd6ca099fcfe616"
     source_ref: "id_ca.cpp:647-651, wl_menu.cpp:5344-5351"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."

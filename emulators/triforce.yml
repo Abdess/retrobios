@@ -103,16 +103,22 @@ files:
     system: sega-triforce
     size: 2097152
     sha1: "87918619c632ac9de270d4fdf396a57eb57fc620"
-    required: true
+    required: false
     bundled: true
     not_bundled_on: [retrobat]
-    source_ref: "source Source/Core/Core/HW/DVD/AMMediaboard.cpp:215-233, source Source/Core/Core/HW/DVD/DVDInterface.cpp:289-294"
+    source_ref: "source Source/Core/Core/HW/DVD/AMMediaboard.cpp:215-233, source Source/Core/Core/HW/DVD/AMMediaboard.cpp:464-476, source Source/Core/Core/HW/DVD/DVDInterface.cpp:289-294, source Source/Core/Core/Boot/Boot_BS2Emu.cpp:336-347, source Source/Core/Core/Boot/Boot.cpp:482-489"
     note: >
       Read on every Triforce launch, Sys/Triforce only with no User fallback.
       Nothing is validated, min(file size, 2 MiB) is copied into the firmware
-      buffer. The hash is the copy the fork's own Data/Sys tree carries, SegaBoot
-      v3.11. A build installs it with the rest of Data/Sys (CMakeLists.txt:1039).
-      The older build RetroBat ships as dolphin-triforce has no Sys/Triforce.
+      buffer. A missing file raises "required for test menus" and emulation
+      goes on. The default SkipIPL boot (Source/Core/Core/Config/MainSettings.cpp:37)
+      copies the disc into DIMM memory with the firmware unmapped, so games run
+      without it. Lost without it: the test menus, mapped when a reset requests
+      test mode, and booting through a real IPL_TRI.bin, which maps SegaBoot
+      to chain into it. The hash is the copy the fork's own Data/Sys tree
+      carries, SegaBoot v3.11. A build installs it with the rest of Data/Sys
+      (CMakeLists.txt:1039). The older build RetroBat ships as
+      dolphin-triforce has no Sys/Triforce.
 
   # -- Triforce GameCube boot ROM --
   # Region-specific directory, User/GC/<region>/ then Sys/GC/<region>/.

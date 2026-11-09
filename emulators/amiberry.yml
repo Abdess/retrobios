@@ -3442,7 +3442,7 @@ files:
       AROS extended ROM replacement, used when no Kickstart ROM is found. Looked
       up in the configured ROM directories, and only in a directory that also
       holds aros-rom.bin. The core zip carries the library alone.
-    source_ref: "source src/memory.cpp:1964 (paired existence check), source src/memory.cpp:1964 (load)"
+    source_ref: "source src/memory.cpp:1934-1956 (paired existence check), source src/memory.cpp:1958-2013 (load)"
 
   - name: aros-ext.bin
     mode: standalone
@@ -3457,9 +3457,10 @@ files:
     note: >
       AROS extended ROM replacement, used when no Kickstart ROM is found. Looked
       up in the configured ROM directories, and only in a directory that also
-      holds aros-rom.bin. Shipped in roms/ of the 8.4.2 installs. The Recalbox
-      and ROCKNIX packages leave it out.
-    source_ref: "source src/memory.cpp:1964 (paired existence check), source src/memory.cpp:1964 (load)"
+      holds aros-rom.bin. The tree ships it in roms/, installed beside the
+      binary (cmake/linux/install.cmake:193). The Recalbox and ROCKNIX
+      packages leave it out.
+    source_ref: "source src/memory.cpp:1934-1956 (paired existence check), source src/memory.cpp:1958-2013 (load)"
 
   - name: aros-rom.bin
     mode: libretro
@@ -3470,7 +3471,7 @@ files:
       AROS main ROM replacement, used with aros-ext.bin as Kickstart fallback.
       Looked up in the configured ROM directories, and only in a directory that
       also holds aros-ext.bin. The core zip carries the library alone.
-    source_ref: "source src/memory.cpp:1964 (paired existence check), source src/memory.cpp:1964 (load)"
+    source_ref: "source src/memory.cpp:1934-1956 (paired existence check), source src/memory.cpp:1958-2013 (load)"
 
   - name: aros-rom.bin
     mode: standalone
@@ -3485,9 +3486,10 @@ files:
     note: >
       AROS main ROM replacement, used with aros-ext.bin as Kickstart fallback.
       Looked up in the configured ROM directories, and only in a directory that
-      also holds aros-ext.bin. Shipped in roms/ of the 8.4.2 installs. The
-      Recalbox and ROCKNIX packages leave it out.
-    source_ref: "source src/memory.cpp:1964 (paired existence check), source src/memory.cpp:1964 (load)"
+      also holds aros-ext.bin. The tree ships it in roms/, installed beside
+      the binary (cmake/linux/install.cmake:193). The Recalbox and ROCKNIX
+      packages leave it out.
+    source_ref: "source src/memory.cpp:1934-1956 (paired existence check), source src/memory.cpp:1958-2013 (load)"
 
   # --- Cloanto key ---
 
