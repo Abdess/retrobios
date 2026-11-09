@@ -143,7 +143,7 @@ files:
     validation: [size]
     found_by: content
     description: "DSi console data blob"
-    note: "Read only by dsperate-headless, through --dsi-boot, which has no default, so the name is a label. A file of any size other than 0x154 bytes stops the run. The blob is TWLCFG bytes 0x88-0x1AF, HWINFO_N bytes 0x88-0x9B and HWINFO_S bytes 0x88-0x9F, copied to 0x02000400, 0x02000600 and 0x02FFFD68 when a DSi title starts. Without it the same bytes are read from shared1/TWLCFG0.dat or TWLCFG1.dat (the higher save count at byte 0x81) and sys/HWINFO_N.dat and sys/HWINFO_S.dat of an attached NAND, generated for DSiWare run without a NAND, and left zero in card mode."
+    note: "Read only by dsperate-headless, through --dsi-boot, which has no default, so the name is a label. A file of any size other than 0x154 bytes stops the run. The blob is TWLCFG bytes 0x88-0x1AF, HWINFO_N bytes 0x88-0x9B and HWINFO_S bytes 0x88-0x9F, copied to 0x02000400, 0x02000600 and 0x02FFFD68 when a DSi title starts. Without it the same bytes are read from shared1/TWLCFG0.dat or TWLCFG1.dat (the higher save count at byte 0x81) and sys/HWINFO_N.dat and sys/HWINFO_S.dat of an attached NAND, generated for DSiWare run without a NAND, and left zero in card mode. Cut from a retail NAND's TWLCFG and HWINFO files, the blob differs per console."
     source_ref: "src/frontend/headless/main.cpp:304, src/frontend/headless/main.cpp:386, src/frontend/headless/main.cpp:508, src/core/nds_dsi.cpp:107-111, src/core/nds_dsi.cpp:294, src/core/nds_dsi.cpp:340-343, src/core/nds_dsi.cpp:454-464, src/core/io/dsi_nand_launch.cpp:147-167, src/core/io/dsi_nand_synth.cpp:114-120"
 
   - name: "TWLFontTable.dat"
