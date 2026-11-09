@@ -864,14 +864,14 @@
   "src/memory.cpp",
   "src/rommgr.cpp"
  ],
- "github.com/FrodeSolheim/fs-uae@f362278ccd4c60991caac3b4d240d4a3f751bea2": [
+ "github.com/FrodeSolheim/fs-uae@79ac88e3727ee4d35d964aa07ad78894b844da27": [
   "cfgfile.cpp",
   "configure.ac",
+  "od-fs/Python/app/app_init.py",
+  "od-fs/Python/fsuae/roms/romservice.py",
+  "od-fs/Python/fsuae/services/pathservice.py",
   "od-fs/fsuae/fsuae-init.c",
   "od-fs/fsuae/fsuae-messages.cpp",
-  "od-fs/python/app/app_init.py",
-  "od-fs/python/fsuae/roms/romservice.py",
-  "od-fs/python/fsuae/services/pathservice.py",
   "rommgr.cpp"
  ],
  "github.com/HarbourMasters/Ghostship@deb091c29caff57dd986398087b058f16b11911e": [
@@ -6683,7 +6683,8 @@
   "src/launcher.cpp",
   "src/main.cpp",
   "src/parsing/textfile.cpp",
-  "src/platforms/engineutils.cpp"
+  "src/platforms/engineutils.cpp",
+  "tools/errorgen"
  ],
  "github.com/linappleii/linapple@7f4b60898d91bfecd6f4d8683a374f38b0564962": [
   "CMakeLists.txt",
