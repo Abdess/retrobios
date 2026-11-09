@@ -200,6 +200,18 @@ files:
       the drive is lost. oricutron.cfg:44-45 gives roms/8dos as the other
       value for this key, and roms/8dos.sym ships for it.
 
+  - name: 8dos.rom
+    description: "Pravetz 8D floppy controller boot PROM, earlier 8-DOS revision"
+    required: false
+    min_size: 512
+    validation: [size]
+    sha1: 8aa28471c04d4e249c7da94ab6b54482d3fff2ed
+    md5: 4a1ff5f8719d67dafcf85ac61959cdb6
+    source_ref: "oricutron.cfg:44 (pravetz8drom = 'roms/8dos'), main.c:559 (pravetz8drom), machine.c:1254, machine.c:1092 (<path>.rom, 512 bytes read)"
+    note: >
+      Read in place of 8dos2.rom when pravetz8drom names roms/8dos. Hashes of
+      the copy in roms/ of the 1.2 Windows archive from petergordon.org.uk.
+
   - name: kernel.rom
     description: "Orix kernel, Twilighte board ROM bank 7"
     required: false
@@ -328,7 +340,7 @@ analysis:
         - filename: pravetzt-1.0.sym
           implies: "Pravetz BASIC revision 1.0, as a pravetzrom value"
         - filename: 8dos.sym
-          implies: "the earlier Pravetz 8-DOS boot PROM, offered as pravetz8drom in oricutron.cfg:44"
+          implies: "8dos.rom, the earlier Pravetz 8-DOS boot PROM, offered as pravetz8drom in oricutron.cfg:44"
         - filename: cumana.sym
           implies: "a Cumana controller ROM, whose symbols run from $F800, the window jasminrom feeds"
         - filename: sedoric.sym
