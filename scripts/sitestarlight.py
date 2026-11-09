@@ -842,7 +842,8 @@ def redirects(profiles: dict, present: set[str],
 
     A page that moved, once its source is gone, and each name a profile's
     `cores:` gives the emulator (the buildbot's `mednafen_psx` for
-    beetle_psx), to the profile's page. A name two profiles claim, or one
+    beetle_psx), to the profile's page, and an alias profile's own name to
+    the page of the profile it is an alias of. A name two profiles claim, or one
     that is already a page's address, is left out. Addresses are written
     under the site root, without its base. ``moved`` adds pages that moved
     by generation, old page to new page, the new one with an optional
@@ -863,6 +864,13 @@ def redirects(profiles: dict, present: set[str],
             name = str(name)
             if _CORE_NAME.fullmatch(name) and name != key:
                 claims.setdefault(name, set()).add(key)
+    # An alias profile has no page of its own: its name is the address of
+    # the profile it designates (emulators/vba_m/ is VBA-M's, under vbam).
+    for key, profile in profiles.items():
+        target = str(profile.get("alias_of") or "")
+        if (profile.get("type") == "alias" and _CORE_NAME.fullmatch(key)
+                and f"emulators/{target}.md" in present):
+            claims.setdefault(key, set()).add(target)
     for name, keys in sorted(claims.items()):
         if len(keys) == 1 and f"emulators/{name}.md".casefold() not in pages:
             out[address(f"emulators/{name}.md")] = address(f"emulators/{next(iter(keys))}.md")
