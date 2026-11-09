@@ -5,6 +5,7 @@ source: "https://github.com/gopher64/gopher64"
 upstream: "https://github.com/gopher64/gopher64"
 profiled_date: "2026-10-23"
 source_commit: "87385e77432cd278ac8588c7ed3d5014fc0d6bab"
+prose_written_at: "87385e77432cd278ac8588c7ed3d5014fc0d6bab"
 core_version: "1.1.42"
 version_basis:
   kind: file
