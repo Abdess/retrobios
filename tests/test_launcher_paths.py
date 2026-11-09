@@ -295,7 +295,8 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
             with self.subTest(platform=platform):
                 self.assertEqual(
                     {(f.get("root"), f["standalone_path"].rsplit("/", 1)[0]) for f in view["files"]},
-                    {("configs", "shadps4/user/sys_modules"), ("configs", "shadps4/user/fonts/font")},
+                    {("configs", "shadps4/user/sys_modules"), ("configs", "shadps4/user/fonts/font"),
+                     ("configs", "shadps4/user/fonts/font2")},
                 )
 
     def test_the_installer_follows_from_bios_to_the_configs_folder(self):
