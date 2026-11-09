@@ -6,7 +6,7 @@
   "platform": "myminui",
   "display_name": "MyMinUI",
   "version": "2026-08-09",
-  "generated": "2026-11-06T13:49:27Z",
+  "generated": "2026-11-09T08:00:53Z",
   "base_destination": "",
   "detect": [
     {
@@ -17,11 +17,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 474,
-  "total_size": 1484111603,
-  "pack_files": 7420,
-  "pack_size": 1655762183,
-  "total_omitted": 6,
+  "total_files": 479,
+  "total_size": 1484645031,
+  "pack_files": 7425,
+  "pack_size": 1656295611,
+  "total_omitted": 4,
   "omitted_files": [
     {
       "dest": "Bios/DOOM/doomu.wad",
@@ -46,30 +46,10 @@
       "category": "game_data"
     },
     {
-      "dest": "Bios/FBN/sfiii2a.zip",
-      "name": "sfiii2a.zip",
-      "system": "capcom-cps3",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
       "dest": "Bios/FBN/svgpcb.zip",
       "name": "svgpcb.zip",
       "system": "igs-pgm",
       "required": false,
-      "reason": "not_found",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
-      "dest": "Bios/NG/sfiii2a.zip",
-      "name": "sfiii2a.zip",
-      "system": "capcom-cps3",
-      "required": true,
       "reason": "not_found",
       "cores": [
         "fbneo"
@@ -1440,6 +1420,16 @@
       "sha256": "6791156b4602e06a2649ebe3216b6ede0cedb2e17ba35a3c99105f6e25819320",
       "size": 9579,
       "repo_path": "bios/Arcade/Arcade/namcoc76.zip",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/namcoc74.zip",
+      "sha1": "493acecff671496212f2de7d0b6ca6561f3b6d8a",
+      "sha256": "3dc2f39b09e05bead85321c46f91424bba5a574513c5e21c496560c0080b5f1d",
+      "size": 6936,
+      "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
       "cores": [
         "mame2003_plus"
       ]
@@ -3633,6 +3623,26 @@
       ]
     },
     {
+      "dest": "Bios/FBN/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "Bios/NG/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "Bios/FBN/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -4453,6 +4463,16 @@
       ]
     },
     {
+      "dest": "Bios/FBN/fbneo/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "Bios/FBN/fbneo/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -5048,6 +5068,16 @@
       "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
       "size": 131904,
       "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "Bios/NG/fbneo/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
       "cores": [
         "fbneo"
       ]

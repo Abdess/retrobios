@@ -6,7 +6,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "v1.22.2",
-  "generated": "2026-11-06T13:49:27Z",
+  "generated": "2026-11-09T08:00:53Z",
   "base_destination": "system",
   "detect": [
     {
@@ -2546,7 +2546,35 @@
       }
     },
     {
-      "file": "xbox_eeprom.bin",
+      "file": "xemu/mcpx_1.0.bin",
+      "targets": {
+        "windows": [
+          "%APPDATA%\\xemu\\xemu"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/xemu/xemu"
+        ],
+        "linux": [
+          "$HOME/.local/share/xemu/xemu"
+        ]
+      }
+    },
+    {
+      "file": "xemu/Complex_4627.bin",
+      "targets": {
+        "windows": [
+          "%APPDATA%\\xemu\\xemu"
+        ],
+        "darwin": [
+          "$HOME/Library/Application Support/xemu/xemu"
+        ],
+        "linux": [
+          "$HOME/.local/share/xemu/xemu"
+        ]
+      }
+    },
+    {
+      "file": "xemu/xbox_eeprom.bin",
       "targets": {
         "windows": [
           "%APPDATA%\\xemu\\xemu"
@@ -2597,12 +2625,89 @@
       }
     }
   ],
-  "total_files": 8338,
-  "total_size": 7080104487,
-  "pack_files": 14921,
-  "pack_size": 7222137851,
-  "total_omitted": 37,
+  "total_files": 8393,
+  "total_size": 8035988536,
+  "pack_files": 14976,
+  "pack_size": 8178130285,
+  "total_omitted": 77,
   "omitted_files": [
+    {
+      "dest": "doom2bfg.wad",
+      "name": "doom2bfg.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "doom2kex.wad",
+      "name": "doom2kex.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "doom2unity.wad",
+      "name": "doom2unity.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "doom2xbox.wad",
+      "name": "doom2xbox.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "doom_complete.pk3",
+      "name": "doom_complete.pk3",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "doombfg.wad",
+      "name": "doombfg.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "doomkex.wad",
+      "name": "doomkex.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
     {
       "dest": "doomu.wad",
       "name": "doomu.wad",
@@ -2615,6 +2720,39 @@
       "category": "game_data"
     },
     {
+      "dest": "doomunity.wad",
+      "name": "doomunity.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "doomxbox.wad",
+      "name": "doomxbox.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "extras.wad",
+      "name": "extras.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "freedoom.wad",
       "name": "freedoom.wad",
       "system": "doom",
@@ -2622,6 +2760,27 @@
       "reason": "not_found",
       "cores": [
         "prboom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "geartowns/fmtownsmx.zip",
+      "name": "fmtownsmx.zip",
+      "system": "fmtowns",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "geartowns"
+      ]
+    },
+    {
+      "dest": "id24res.wad",
+      "name": "id24res.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
       ],
       "category": "game_data"
     },
@@ -2714,14 +2873,48 @@
       "category": "game_data"
     },
     {
-      "dest": "keropi/cgrom.tmp",
-      "name": "cgrom.tmp",
-      "system": "sharp-x68000",
+      "dest": "nerve.wad",
+      "name": "nerve.wad",
+      "system": "doom",
       "required": false,
       "reason": "not_found",
       "cores": [
-        "px68k"
-      ]
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "nerveunity.wad",
+      "name": "nerveunity.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "plutoniakex.wad",
+      "name": "plutoniakex.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "plutoniaunity.wad",
+      "name": "plutoniaunity.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
     },
     {
       "dest": "roms/apollo-630.rom",
@@ -2754,28 +2947,8 @@
       ]
     },
     {
-      "dest": "roms/blizzard-ppc-68040-v44.71.rom",
-      "name": "blizzard-ppc-68040-v44.71.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
       "dest": "roms/blizzard-ppc-68060-v44.69.rom",
       "name": "blizzard-ppc-68060-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/blizzard-ppc-68060-v44.71.rom",
-      "name": "blizzard-ppc-68060-v44.71.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -2814,28 +2987,8 @@
       ]
     },
     {
-      "dest": "roms/cyberstorm-mk-iii-v44.71.rom",
-      "name": "cyberstorm-mk-iii-v44.71.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
       "dest": "roms/cyberstorm-ppc-v44.69.rom",
       "name": "cyberstorm-ppc-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/cyberstorm-ppc-v44.71.rom",
-      "name": "cyberstorm-ppc-v44.71.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -2954,14 +3107,48 @@
       ]
     },
     {
-      "dest": "sfiii2a.zip",
-      "name": "sfiii2a.zip",
-      "system": "capcom-cps3",
-      "required": true,
+      "dest": "soundfonts/uzdoom.sf2",
+      "name": "uzdoom.sf2",
+      "system": "doom",
+      "required": false,
       "reason": "not_found",
       "cores": [
-        "fbneo"
-      ]
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "soundtrack",
+      "name": "soundtrack",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "square.pk3",
+      "name": "square.pk3",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "sve.wad",
+      "name": "sve.wad",
+      "system": "strife",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
     },
     {
       "dest": "svgpcb.zip",
@@ -2974,6 +3161,28 @@
       ]
     },
     {
+      "dest": "tntkex.wad",
+      "name": "tntkex.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "tntunity.wad",
+      "name": "tntunity.wad",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "verite.rom",
       "name": "verite.rom",
       "system": "dos",
@@ -2982,15 +3191,263 @@
       "cores": [
         "rust_dos"
       ]
+    },
+    {
+      "dest": "vita3k/font.pup",
+      "name": "font.pup",
+      "system": "sony-playstation-vita",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "vita3k"
+      ]
+    },
+    {
+      "dest": "vita3k/preinst.pup",
+      "name": "preinst.pup",
+      "system": "sony-playstation-vita",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "vita3k"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/68040.library",
+      "name": "68040.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/680x0.library",
+      "name": "680x0.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkCBR0.library",
+      "name": "Compressors/xpkCBR0.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkDLTA.library",
+      "name": "Compressors/xpkDLTA.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkDUKE.library",
+      "name": "Compressors/xpkDUKE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkFAST.library",
+      "name": "Compressors/xpkFAST.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkFRLE.library",
+      "name": "Compressors/xpkFRLE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkHFMN.library",
+      "name": "Compressors/xpkHFMN.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkHUFF.library",
+      "name": "Compressors/xpkHUFF.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkIMPL.library",
+      "name": "Compressors/xpkIMPL.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkMASH.library",
+      "name": "Compressors/xpkMASH.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkNONE.library",
+      "name": "Compressors/xpkNONE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkNUKE.library",
+      "name": "Compressors/xpkNUKE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkRAKE.library",
+      "name": "Compressors/xpkRAKE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkRLEN.library",
+      "name": "Compressors/xpkRLEN.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSHRI.library",
+      "name": "Compressors/xpkSHRI.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSMPL.library",
+      "name": "Compressors/xpkSMPL.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSQSH.library",
+      "name": "Compressors/xpkSQSH.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/explode.library",
+      "name": "explode.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/medplayer.library",
+      "name": "medplayer.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/mmu.library",
+      "name": "mmu.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/xpkmaster.library",
+      "name": "xpkmaster.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
     }
   ],
   "core_names": {
+    "3dengine": [],
     "3dsen": [
       "3dsen-windows"
     ],
+    "81": [],
+    "a5200": [],
     "ace-dl": [
       "acedl"
     ],
+    "advanced_drastic": [
+      "DraStic-original",
+      "drastic - standalone"
+    ],
+    "advanced_tests": [],
     "advancemame": [
       "AdvanceMame",
       "advmame"
@@ -2998,9 +3455,18 @@
     "aethersx2": [
       "aethersx2-sa"
     ],
+    "amiarcadia": [
+      "winarcadia"
+    ],
     "amiberry": [
       "AMIBERRY"
     ],
+    "anarch": [],
+    "anybor": [],
+    "anygm": [],
+    "applewin": [],
+    "ardens": [],
+    "arduous": [],
     "ares": [
       "ares-sa"
     ],
@@ -3008,18 +3474,27 @@
       "armsx2-sa",
       "armsx2_libretro"
     ],
+    "atari800": [],
     "azahar": [
+      "azahar - standalone",
       "azahar-sa"
     ],
+    "b2": [],
     "basiliskii": [
-      "basilisk"
+      "basilisk",
+      "basilisk2"
     ],
+    "bbkemu": [],
     "beetle_gba": [
       "mednafen_gba"
     ],
     "beetle_lynx": [
       "beetle-lynx",
       "mednafen_lynx"
+    ],
+    "beetle_ngp": [
+      "beetle-ngp",
+      "mednafen_ngp"
     ],
     "beetle_pce": [
       "beetle-pce",
@@ -3040,6 +3515,25 @@
       "beetle-saturn",
       "mednafen_saturn"
     ],
+    "beetle_vb": [
+      "beetle-vb",
+      "mednafen_vb",
+      "vb"
+    ],
+    "beetle_wswan": [
+      "beetle-wswan",
+      "mednafen_wswan"
+    ],
+    "bennugd": [],
+    "bk": [],
+    "blastem": [],
+    "bluemsx": [],
+    "bnes": [],
+    "boom3": [
+      "boom3_xp"
+    ],
+    "boytacean": [],
+    "bsnes": [],
     "bsnes-jg": [
       "bsnes_jg"
     ],
@@ -3048,6 +3542,7 @@
       "bsnes2014_balanced",
       "bsnes2014_performance"
     ],
+    "bsnes_cplusplus98": [],
     "bsnes_hd_beta": [
       "bsnes_hd",
       "bsneshd"
@@ -3061,22 +3556,48 @@
       "C64-EMU",
       "C64.emu"
     ],
+    "cannonball": [],
     "cap32": [
       "caprice32"
     ],
+    "cdi2015": [],
     "cemu": [
       "cemu-sa"
     ],
+    "chailove": [],
+    "chimerasnes": [],
     "chocolate-doom": [
       "Chocolate-Doom"
     ],
+    "citra": [],
+    "citra2018": [],
+    "citra_canary": [],
+    "clownmdemu": [],
+    "coolbaremu": [],
+    "craft": [],
+    "crocods": [],
+    "cruzes": [],
+    "daphne": [
+      "km_daphne_xtreme"
+    ],
+    "desmume": [],
     "desmume2015": [
       "desmume_2015"
     ],
+    "dice": [],
+    "dingooemu": [],
+    "dinothawr": [],
+    "directxbox": [],
+    "dirksimple": [],
     "dolphin": [
       "dolphin-gui",
-      "dolphin-sa"
+      "dolphin-qt-gc",
+      "dolphin-qt-wii",
+      "dolphin-sa",
+      "dolphin-sa-gc",
+      "dolphin-sa-wii"
     ],
+    "dosbox": [],
     "dosbox-pure-unleashed": [
       "dosbox-pure",
       "dosboxpure"
@@ -3090,11 +3611,17 @@
     "dosbox-x": [
       "dosboxx"
     ],
+    "dosbox_core": [],
+    "dosbox_pure": [],
+    "dosbox_svn": [],
+    "dosbox_svn_ce": [],
     "doublecherrygb": [
       "DoubleCherryGB"
     ],
+    "doukutsu_rs": [],
     "drastic": [
-      "drastic-sa"
+      "drastic-sa",
+      "drastic_standalone"
     ],
     "droidarcadia": [
       "com.amigan.droidarcadia"
@@ -3106,12 +3633,25 @@
       "Duckstation",
       "duckstation-sa"
     ],
+    "easyrpg": [],
     "ecwolf": [
       "ECWolf"
     ],
+    "eduke32": [],
+    "eka2l1": [],
+    "emucv": [],
+    "emuscv": [],
+    "emux_chip8": [],
+    "emux_gb": [],
+    "emux_nes": [],
+    "emux_sms": [],
     "ep128emu_core": [
       "ep128emu",
       "ep128emu-core"
+    ],
+    "eternal": [],
+    "fake08": [
+      "fake_08"
     ],
     "fba2x": [
       "pifba"
@@ -3119,15 +3659,32 @@
     "fbalpha2012": [
       "fbalpha"
     ],
+    "fbalpha2012_cps1": [],
+    "fbalpha2012_cps2": [],
+    "fbalpha2012_cps3": [],
+    "fbalpha2012_neogeo": [],
+    "fbalpha2019": [],
     "fbneo": [
-      "FBNEOSA"
+      "FBNEOSA",
+      "fbneo_32b",
+      "fbneo_plus",
+      "km_fbneo_xtreme_amped"
     ],
+    "fbneo_cps12": [],
+    "fbneo_neogeo": [],
+    "fceumm": [],
+    "fceumm_mod": [],
+    "ffmpeg": [],
+    "fixgb": [],
+    "fixnes": [],
     "flycast": [
       "flycast-dev",
       "flycast-next",
       "flycast-sa",
+      "flycast32_rumble",
       "flycast_32b",
       "flycast_dev",
+      "flycast_rumble",
       "flycastsa",
       "flycastvl"
     ],
@@ -3137,16 +3694,26 @@
     "flycast2021": [
       "flycast-xtreme"
     ],
+    "fmsx": [],
     "fpse-ng": [
       "fpse64",
       "fpseng"
     ],
+    "freechaf": [],
+    "freeintv": [],
+    "freej2me": [],
     "freej2me_plus": [
       "freej2me-plus"
     ],
+    "frodo": [],
+    "fsuae": [],
     "fuse": [
       "fuse_libretro"
     ],
+    "galaksija": [],
+    "gam4980": [],
+    "gambatte": [],
+    "gametank": [],
     "gba-emu": [
       "GBA-EMU",
       "GBA.emu"
@@ -3155,6 +3722,12 @@
       "GBC-EMU",
       "GBC.emu"
     ],
+    "gearboy": [],
+    "gearcoleco": [],
+    "geargrafx": [],
+    "gearlynx": [],
+    "gearsystem": [],
+    "geartowns": [],
     "genesis_plus_gx": [
       "genesis-plus-gx",
       "genesis_plus_gx_cart_special",
@@ -3169,41 +3742,71 @@
       "genesisplusgx-wide",
       "genesisplusgxwide"
     ],
+    "geolith": [],
+    "gme": [],
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
+    ],
+    "gw": [
+      "gw_libretro"
+    ],
     "gzdoom": [
       "GZDoom",
       "gzdoom-sa"
     ],
+    "handy": [],
     "hatari": [
       "HATARISA",
+      "hatari-fast",
       "hatarisa"
     ],
+    "hatari2014": [],
+    "hatarib": [],
+    "hbmame": [],
+    "higan_sfc": [],
     "higan_sfc_balanced": [
       "nside_sfc_balanced"
     ],
+    "holani": [],
+    "hyperscanemu": [],
+    "hypseushw": [],
     "idtech4a++": [
       "diii4a",
       "idtech4amm"
     ],
+    "imageviewer": [],
+    "irogb": [],
+    "ishiiruka": [],
     "j2me-loader": [
       "J2ME-LOADER"
     ],
+    "jaxe": [],
     "jazz2-native": [
       "jazz2"
     ],
+    "jgenesis": [],
     "jl-mod": [
       "JL-MOD"
     ],
+    "jollycv": [],
+    "jumpnbump": [],
     "kemulator": [
       "KEMULATOR"
     ],
+    "kronos": [],
     "linkboy": [
       "LINKBOY",
       "Linkboy"
+    ],
+    "lowresnx": [
+      "lowres_nx"
     ],
     "lrps2": [
       "pcsx2",
       "ps2"
     ],
+    "lutro": [],
     "lynx-emu": [
       "LYNX-EMU",
       "Lynx.emu"
@@ -3211,6 +3814,7 @@
     "lzdoom": [
       "LZDoom"
     ],
+    "m2000": [],
     "m64plus-fz": [
       "M64PLUS-FZ",
       "org.mupen64plusae.v3.fzurita",
@@ -3223,13 +3827,17 @@
     "mame2000": [
       "imame4all"
     ],
+    "mame2003": [],
+    "mame2003_midway": [],
     "mame2003_plus": [
       "mame078plus",
       "mame2003-plus"
     ],
+    "mame2009": [],
     "mame2010": [
       "mame0139"
     ],
+    "mame2015": [],
     "mame2016": [
       "mess2016"
     ],
@@ -3242,10 +3850,13 @@
       "MAME4DROID-CURRENT",
       "com.seleuco.mame4d2024"
     ],
+    "mamearcade": [],
+    "mamemess": [],
     "mastergear": [
       "MASTERGEAR",
       "com.fms.mg"
     ],
+    "mcsoftserve": [],
     "md-emu": [
       "MD-EMU",
       "MD.emu"
@@ -3260,6 +3871,7 @@
       "beetle_bsnes",
       "beetle_snes"
     ],
+    "mednafen_stv": [],
     "mednafen_supafaust": [
       "beetle_supafaust",
       "supafaust"
@@ -3286,17 +3898,31 @@
     "mess2015": [
       "mess"
     ],
+    "meteor": [],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
+    "mgba_splitscreen": [],
+    "minivmac": [],
     "mkxp_z": [
       "mkxp-z"
     ],
+    "mojozork": [],
+    "moonlight": [
+      "lr_moonlight"
+    ],
+    "mpv": [],
+    "mrboom": [],
     "msx-emu": [
       "MSX-EMU",
       "MSX.emu"
     ],
+    "mu": [],
     "mupen64plus": [
+      "mupen64plus - standalone - glidemk2 - full",
+      "mupen64plus-auto",
       "mupen64plus-sa",
       "mupen64plussa"
     ],
@@ -3320,12 +3946,16 @@
       "MY-OLDBOY",
       "My OldBoy!"
     ],
+    "n64emu": [],
     "nanoboyadvance": [
       "nanoboyadvance-sa"
     ],
+    "native32emu": [],
     "nekop2": [
       "meowpc98"
     ],
+    "neocd": [],
+    "nes": [],
     "nes-emu": [
       "NES-EMU",
       "NES.emu"
@@ -3334,6 +3964,7 @@
       "NESOID",
       "Nesoid"
     ],
+    "nestopia": [],
     "nethersx2": [
       "NETHERSX2",
       "NetherSX2"
@@ -3346,41 +3977,71 @@
       "NETHERSX2-TURNIP-CLASSIC",
       "NetherSX2-Turnip-Classic"
     ],
+    "nicaiemu": [],
+    "noods": [],
+    "np2kai": [],
+    "nuance": [],
+    "numero": [],
     "nxengine": [
       "nx"
     ],
     "o2em": [
       "o2em_libretro"
     ],
+    "oberon": [],
+    "odin": [],
+    "omicron": [],
+    "onscripter": [],
+    "onsyuri": [],
+    "openlara": [],
+    "openmsx": [
+      "openmsx-ld"
+    ],
     "opentyrian": [
       "tyrian"
     ],
+    "opera": [],
+    "panda3ds": [],
     "parallel-launcher": [
       "ca.parallel_launcher.ParallelLauncher"
     ],
+    "parallel_dc": [],
     "parallel_n64": [
       "parallel-n64",
       "parallel_n64_32b",
       "parallel_n64_debug"
     ],
+    "pascal_pong": [],
     "pce-emu": [
       "PCE-EMU",
       "PCE.emu",
       "com.PceEmu",
       "pceemu"
     ],
+    "pcee2": [],
+    "pcem": [],
+    "pcsx1": [],
+    "pcsx2": [
+      "pcsx2-sa"
+    ],
     "pcsx2-legacy": [
       "PCSX2-LEGACY",
       "pcsx2-16"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ],
     "pcsx_rearmed_standalone": [
-      "pcsx-rearmed"
+      "pcsx-rearmed",
+      "pcsx_standalone"
     ],
+    "pd777": [],
+    "picodrive": [],
+    "piece": [],
     "pizza-boy-gba": [
       "PIZZA-BOY-GBA",
       "Pizza Boy GBA"
@@ -3398,43 +4059,83 @@
     "play": [
       "play!"
     ],
+    "playdiaemu": [],
+    "pocketcdg": [],
+    "pokemini": [],
     "pokketstation": [
       "pokket"
     ],
+    "potator": [],
     "ppsspp": [
       "PPSSPPSDL",
       "ppsspp-sa"
     ],
+    "prboom": [],
+    "prosystem": [],
     "puae": [
       "uae"
     ],
+    "puae2021": [],
+    "puzzlescript": [
+      "pzretro"
+    ],
+    "px68k": [],
     "px68k-sdl": [
       "px68k"
     ],
+    "qemu": [],
+    "quasi88": [],
     "quasi88kai": [
       "quasi88"
     ],
+    "quicknes": [],
+    "race": [],
+    "rb5000": [],
     "real3doplayer": [
       "REAL3DOPLAYER",
       "Real3DOPlayer"
     ],
+    "redbook": [],
+    "redream": [],
+    "reminiscence": [],
+    "remotejoy": [],
+    "retro8": [
+      "picante8"
+    ],
+    "retrodream": [],
+    "romcleaner": [],
     "rosalies-mupen-gui": [
       "RMG",
       "com.github.Rosalie241.RMG",
       "mupen64"
     ],
+    "rp6502": [],
+    "rpcs3": [
+      "rpcs3-sa"
+    ],
+    "rust_dos": [],
+    "rustation": [],
+    "rustynes": [],
+    "rvvm": [],
+    "same_cdi": [],
+    "sameboy": [],
+    "sameduck": [],
     "saturn-emu": [
       "SATURN-EMU",
       "Saturn.emu",
       "saturnemu"
     ],
+    "scummvm": [],
     "scummvm-standalone": [
       "SCUMMVMSA",
       "scummvm-sa"
     ],
+    "sdlpal": [],
+    "simcp": [],
     "skyemu": [
       "skyemu-sa"
     ],
+    "sm2": [],
     "smsplus": [
       "smsplus-gx",
       "smsplus_gx"
@@ -3448,36 +4149,80 @@
       "Snes9x EX+",
       "Snes9xEXPlus"
     ],
+    "snes9x2002": [],
+    "snes9x2005": [],
+    "snes9x2005_plus": [],
+    "snes9x2010": [],
     "speccy": [
       "SPECCY",
       "com.fms.speccy",
       "com.fms.speccy.deluxe"
     ],
+    "spmp8000emu": [],
+    "squirreljme": [],
     "stella": [
       "STELLASA"
     ],
+    "stella2014": [],
+    "stella2023": [],
+    "stonesoup": [],
+    "superbroswar": [
+      "km_superbroswar"
+    ],
+    "supermodel": [],
+    "supersnes9x": [],
     "superzsnes": [
       "SUPERZSNES"
     ],
+    "swanstation": [],
+    "syobonaction": [],
+    "tamalibretro": [],
+    "tempgba": [],
+    "test_netplay": [],
+    "testaudio_callback": [],
+    "testaudio_no_callback": [],
+    "testaudio_playback_wav": [],
+    "testgl_compute_shaders": [],
+    "testgl_ff": [],
+    "testinput_buttontest": [],
+    "testretroluxury": [],
+    "testsw": [],
+    "testsw_vram": [],
+    "testvulkan_async_compute": [],
     "tgbdual": [
       "TGB Dual"
     ],
+    "tgpulse_next_m1": [],
+    "theodore": [],
+    "thepowdertoy": [],
+    "tia": [],
+    "tic80": [],
+    "trident": [],
     "triforce": [
       "dolphin-triforce",
       "dolphin_triforce"
     ],
+    "tyrquake": [],
     "uae4all-rpi": [
       "uae4all"
     ],
     "uae4arm": [
       "uae4arm_32b"
     ],
+    "ume2015": [],
+    "uw8": [],
+    "uxn": [],
+    "uzdoom": [],
+    "uzem": [],
+    "vaporspec": [],
     "vba_next": [
       "vba-next"
     ],
     "vbam": [
       "vba-m"
     ],
+    "vecx": [],
+    "vemulator": [],
     "vice": [
       "vice_x128",
       "vice_x64",
@@ -3505,15 +4250,43 @@
     "vice_x64sc": [
       "x64sx"
     ],
+    "vice_xcbm2": [
+      "xcbm2"
+    ],
+    "vice_xcbm5x0": [
+      "xcbm5x0"
+    ],
+    "vice_xpet": [
+      "xpet"
+    ],
+    "vice_xplus4": [
+      "xplus4"
+    ],
     "vice_xscpu64": [
       "xscpu64"
     ],
     "vice_xvic": [
       "xvic"
     ],
+    "vircon32": [],
+    "virtualjaguar": [],
+    "virtualxt": [],
+    "vita3k": [
+      "vita3k-sa"
+    ],
+    "vitaquake2": [
+      "vitaquake2-rogue",
+      "vitaquake2-xatrix",
+      "vitaquake2-zaero"
+    ],
+    "vitaquake3": [],
+    "vitavoyager": [],
+    "wasm4": [],
+    "wqxemu": [],
     "x1": [
       "xmil"
     ],
+    "x64sdl": [],
     "xemu": [
       "xemu-sa"
     ],
@@ -3529,11 +4302,21 @@
       "XM6TYPEG",
       "XM6TYPEG-WINDOWS"
     ],
+    "xrick": [],
     "yabasanshiro": [
       "yabasanshiro-2",
+      "yabasanshiro-libretro",
       "yabasanshiro-sa",
-      "yabasanshiroSA"
-    ]
+      "yabasanshiroSA",
+      "yabasanshiroSA1_5"
+    ],
+    "yabause": [],
+    "yaps2": [],
+    "ymir": [],
+    "zc210": [],
+    "zc255": [],
+    "zcdi": [],
+    "zesarpcw": []
   },
   "system_cores": {
     "3do": [
@@ -3782,6 +4565,7 @@
       "mupen64plus",
       "mupen64plus-ae",
       "mupen64plus_next",
+      "n64emu",
       "parallel-launcher",
       "parallel_n64",
       "project64",
@@ -3952,6 +4736,7 @@
       "bsnes2014",
       "bsnes_hd_beta",
       "bsnes_mercury",
+      "gearboy",
       "higan_sfc",
       "higan_sfc_balanced",
       "linkboy",
@@ -4024,7 +4809,8 @@
       "mame4droid-2024",
       "mamearcade",
       "same_cdi",
-      "ume2015"
+      "ume2015",
+      "zcdi"
     ],
     "philips-videopac": [
       "bizhawk",
@@ -4041,6 +4827,7 @@
       "flycast-dojo",
       "flycast2021",
       "flycast2021le",
+      "parallel_dc",
       "redream",
       "reicast",
       "retrodream"
@@ -8496,6 +9283,7 @@
           "cores": [
             "beetle_pce",
             "geargrafx",
+            "jgenesis",
             "mednafen_pce_fast",
             "mednafen_supergrafx"
           ]
@@ -9372,6 +10160,7 @@
           "cores": [
             "beetle_gba",
             "gpsp",
+            "jgenesis",
             "mesence",
             "mgba",
             "mgba_splitscreen",
@@ -9595,7 +10384,24 @@
           "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
           "cores": [
             "bsnes",
-            "bsnes_hd_beta",
+            "bsnes_hd_beta"
+          ]
+        },
+        {
+          "sha1": "6ed55c4368333b57f6a2f8bbd70ccd87ed48058e",
+          "sha256": "bba9c269273bedb9b38bd5eb23bfaa6e509b8decc7cb80bb5513905af04f4ceb",
+          "size": 262144,
+          "repo_path": "bios/Nintendo/SNES/SNES_SGB_(JU).sfc",
+          "cores": [
+            "gearboy"
+          ]
+        },
+        {
+          "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
+          "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
+          "size": 262144,
+          "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
+          "cores": [
             "mesen-s"
           ]
         }
@@ -9627,6 +10433,7 @@
           "cores": [
             "bsnes",
             "bsnes_hd_beta",
+            "gearboy",
             "mesen-s",
             "mesence"
           ]
@@ -10518,6 +11325,72 @@
           "repo_path": "bios/Palm/Palm/palmos60-en-t3.rom",
           "cores": [
             "mu"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "cdi200.rom",
+      "sha1": "d961de803c89b3d1902d656ceb9ce7c02dccb40a",
+      "sha256": "24e388c72df21237a89d8d775d41a90208af24c4112c61429b8e47f190ac18c6",
+      "size": 524288,
+      "repo_path": "bios/Philips/CD-i/cdi200.rom",
+      "cores": null,
+      "systems": [
+        "philips-cdi"
+      ],
+      "alternatives": [
+        {
+          "sha1": "d961de803c89b3d1902d656ceb9ce7c02dccb40a",
+          "sha256": "24e388c72df21237a89d8d775d41a90208af24c4112c61429b8e47f190ac18c6",
+          "size": 524288,
+          "repo_path": "bios/Philips/CD-i/cdi200.rom",
+          "cores": [
+            "zcdi"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "cdi220b.rom",
+      "sha1": "53360a1f21ddac952e95306ced64186a3fc0b93e",
+      "sha256": "fd123e66beadaf844cb220a44166ea33f9fd0d64bafb9e6399febff445429db2",
+      "size": 524288,
+      "repo_path": "bios/Philips/CD-i/cdi220b.rom",
+      "cores": null,
+      "systems": [
+        "philips-cdi"
+      ],
+      "alternatives": [
+        {
+          "sha1": "53360a1f21ddac952e95306ced64186a3fc0b93e",
+          "sha256": "fd123e66beadaf844cb220a44166ea33f9fd0d64bafb9e6399febff445429db2",
+          "size": 524288,
+          "repo_path": "bios/Philips/CD-i/cdi220b.rom",
+          "cores": [
+            "zcdi"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "vmpega.rom",
+      "sha1": "be407fbc102f1731a0862554855e963e5a47c17b",
+      "sha256": "4aed8f33a557cec13f4267acfd9f969eafd9cccf6270f16f389a16e89eb5c6f6",
+      "size": 262144,
+      "repo_path": "bios/Philips/CD-i/vmpega.rom",
+      "cores": null,
+      "systems": [
+        "philips-cdi"
+      ],
+      "alternatives": [
+        {
+          "sha1": "be407fbc102f1731a0862554855e963e5a47c17b",
+          "sha256": "4aed8f33a557cec13f4267acfd9f969eafd9cccf6270f16f389a16e89eb5c6f6",
+          "size": 262144,
+          "repo_path": "bios/Philips/CD-i/vmpega.rom",
+          "cores": [
+            "zcdi"
           ]
         }
       ]
@@ -11992,7 +12865,8 @@
           "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
           "cores": [
             "flycast",
-            "flycast2021"
+            "flycast2021",
+            "parallel_dc"
           ]
         }
       ]
@@ -12081,7 +12955,8 @@
           "repo_path": "bios/Arcade/Arcade/awbios.zip",
           "cores": [
             "flycast",
-            "flycast2021"
+            "flycast2021",
+            "parallel_dc"
           ]
         }
       ]
@@ -12104,7 +12979,8 @@
           "repo_path": "bios/Arcade/Arcade/f355bios.zip",
           "cores": [
             "flycast",
-            "flycast2021"
+            "flycast2021",
+            "parallel_dc"
           ]
         }
       ]
@@ -12127,7 +13003,8 @@
           "repo_path": "bios/Arcade/Arcade/f355dlx.zip",
           "cores": [
             "flycast",
-            "flycast2021"
+            "flycast2021",
+            "parallel_dc"
           ]
         }
       ]
@@ -12150,7 +13027,8 @@
           "repo_path": "bios/Arcade/MAME/hod2bios.zip",
           "cores": [
             "flycast",
-            "flycast2021"
+            "flycast2021",
+            "parallel_dc"
           ]
         }
       ]
@@ -12173,7 +13051,8 @@
           "repo_path": "bios/Arcade/Arcade/naomi.zip",
           "cores": [
             "flycast",
-            "flycast2021"
+            "flycast2021",
+            "parallel_dc"
           ]
         }
       ]
@@ -12195,7 +13074,8 @@
           "size": 7038226,
           "repo_path": "bios/Arcade/Arcade/naomi2.zip",
           "cores": [
-            "flycast"
+            "flycast",
+            "parallel_dc"
           ]
         }
       ]
@@ -12217,7 +13097,8 @@
           "size": 1281424,
           "repo_path": "bios/Arcade/Arcade/segasp.zip",
           "cores": [
-            "flycast"
+            "flycast",
+            "parallel_dc"
           ]
         }
       ]
@@ -12392,6 +13273,7 @@
             "blastem",
             "genesis_plus_gx",
             "genesis_plus_gx_wide",
+            "jgenesis",
             "picodrive"
           ]
         }
@@ -12426,6 +13308,7 @@
             "blastem",
             "genesis_plus_gx",
             "genesis_plus_gx_wide",
+            "jgenesis",
             "picodrive"
           ]
         }
@@ -12441,16 +13324,6 @@
       "systems": [
         "sega-mega-cd"
       ],
-      "regions": [
-        "latin-america",
-        "north-america"
-      ],
-      "region_groups": [
-        "sega-mega-cd"
-      ],
-      "region_system_groups": [
-        "sega-mega-cd"
-      ],
       "alternatives": [
         {
           "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
@@ -12461,6 +13334,7 @@
             "blastem",
             "genesis_plus_gx",
             "genesis_plus_gx_wide",
+            "jgenesis",
             "picodrive"
           ]
         }
@@ -38321,6 +39195,104 @@
       "category": "game_data"
     },
     {
+      "dest": "dsp1.rom",
+      "sha1": "188d471fefea71eb53f0ee7064697ff0971b1014",
+      "sha256": "91e87d11e1c30d172556bed2211cce2efa94ba595f58c5d264809ef4d363a97b",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp1.rom",
+      "cores": [
+        "mesence",
+        "jgenesis"
+      ],
+      "systems": [
+        "nintendo-snes"
+      ]
+    },
+    {
+      "dest": "dsp2.rom",
+      "sha1": "198c4b1c3bfc6d69e734c5957af3dbfa26238dfb",
+      "sha256": "03ef4ef26c9f701346708cb5d07847b5203cf1b0818bf2930acd34510ffdd717",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp2.rom",
+      "cores": [
+        "mesence",
+        "jgenesis"
+      ],
+      "systems": [
+        "nintendo-snes"
+      ]
+    },
+    {
+      "dest": "dsp3.rom",
+      "sha1": "558da7cb3bd3876a6ca693661ffc6c110e948cf9",
+      "sha256": "0971b08f396c32e61989d1067dddf8e4b14649d548b2188f7c541b03d7c69e4e",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp3.rom",
+      "cores": [
+        "mesence",
+        "jgenesis"
+      ],
+      "systems": [
+        "nintendo-snes"
+      ]
+    },
+    {
+      "dest": "dsp4.rom",
+      "sha1": "af6478aecb6f1b67177e79c82ca04c56250a8c72",
+      "sha256": "752d03b2d74441e430b7f713001fa241f8bbcfc1a0d890ed4143f174dbe031da",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp4.rom",
+      "cores": [
+        "mesence",
+        "jgenesis"
+      ],
+      "systems": [
+        "nintendo-snes"
+      ]
+    },
+    {
+      "dest": "st010.rom",
+      "sha1": "6472828403de3589433a906e2c3f3d274c0ff008",
+      "sha256": "fa9bced838fedea11c6f6ace33d1878024bdd0d02cc9485899d0bdd4015ec24c",
+      "size": 53248,
+      "repo_path": "bios/Nintendo/SNES/SNES_st010.rom",
+      "cores": [
+        "mesence",
+        "jgenesis"
+      ],
+      "systems": [
+        "nintendo-snes"
+      ]
+    },
+    {
+      "dest": "st011.rom",
+      "sha1": "fecbae2cec76c710422486baa186ffa7ca1cf925",
+      "sha256": "8b2b3f3f3e6e29f4d21d8bc736b400bc988b7d2214ebee15643f01c1fee2f364",
+      "size": 53248,
+      "repo_path": "bios/Nintendo/SNES/SNES_st011.rom",
+      "cores": [
+        "mesence",
+        "jgenesis"
+      ],
+      "systems": [
+        "nintendo-snes"
+      ]
+    },
+    {
+      "dest": "st018.rom",
+      "sha1": "91383b92745cc7cc4f15409ac5bc2c2f699a43f1",
+      "sha256": "6df209ab5d2524d1839c038be400ae5eb20dafc14a3771a3239cd9e8acd53806",
+      "size": 163840,
+      "repo_path": "bios/Nintendo/SNES/SNES_st018.rom",
+      "cores": [
+        "mesence",
+        "jgenesis"
+      ],
+      "systems": [
+        "nintendo-snes"
+      ]
+    },
+    {
       "dest": "mame/hash/32x.xml",
       "sha1": "f3cd10df51112ee3ea0fd8dcb04cf34674a40c8c",
       "sha256": "4f813da377d1a3b1098b9509446b392a728ea0556e659ad7a8a77d54fe7083b6",
@@ -56812,102 +57784,11 @@
       ]
     },
     {
-      "dest": "dsp1.rom",
-      "sha1": "188d471fefea71eb53f0ee7064697ff0971b1014",
-      "sha256": "91e87d11e1c30d172556bed2211cce2efa94ba595f58c5d264809ef4d363a97b",
-      "size": 8192,
-      "repo_path": "bios/Nintendo/SNES/SNES_dsp1.rom",
-      "cores": [
-        "mesence"
-      ],
-      "systems": [
-        "nintendo-snes"
-      ]
-    },
-    {
       "dest": "dsp1b.rom",
       "sha1": "78b724811f5f18d8c67669d9390397eb1a47a5e2",
       "sha256": "d789cb3c36b05c0b23b6c6f23be7aa37c6e78b6ee9ceac8d2d2aa9d8c4d35fa9",
       "size": 8192,
       "repo_path": "bios/Nintendo/SNES/SNES_dsp1b.rom",
-      "cores": [
-        "mesence"
-      ],
-      "systems": [
-        "nintendo-snes"
-      ]
-    },
-    {
-      "dest": "dsp2.rom",
-      "sha1": "198c4b1c3bfc6d69e734c5957af3dbfa26238dfb",
-      "sha256": "03ef4ef26c9f701346708cb5d07847b5203cf1b0818bf2930acd34510ffdd717",
-      "size": 8192,
-      "repo_path": "bios/Nintendo/SNES/SNES_dsp2.rom",
-      "cores": [
-        "mesence"
-      ],
-      "systems": [
-        "nintendo-snes"
-      ]
-    },
-    {
-      "dest": "dsp3.rom",
-      "sha1": "558da7cb3bd3876a6ca693661ffc6c110e948cf9",
-      "sha256": "0971b08f396c32e61989d1067dddf8e4b14649d548b2188f7c541b03d7c69e4e",
-      "size": 8192,
-      "repo_path": "bios/Nintendo/SNES/SNES_dsp3.rom",
-      "cores": [
-        "mesence"
-      ],
-      "systems": [
-        "nintendo-snes"
-      ]
-    },
-    {
-      "dest": "dsp4.rom",
-      "sha1": "af6478aecb6f1b67177e79c82ca04c56250a8c72",
-      "sha256": "752d03b2d74441e430b7f713001fa241f8bbcfc1a0d890ed4143f174dbe031da",
-      "size": 8192,
-      "repo_path": "bios/Nintendo/SNES/SNES_dsp4.rom",
-      "cores": [
-        "mesence"
-      ],
-      "systems": [
-        "nintendo-snes"
-      ]
-    },
-    {
-      "dest": "st010.rom",
-      "sha1": "6472828403de3589433a906e2c3f3d274c0ff008",
-      "sha256": "fa9bced838fedea11c6f6ace33d1878024bdd0d02cc9485899d0bdd4015ec24c",
-      "size": 53248,
-      "repo_path": "bios/Nintendo/SNES/SNES_st010.rom",
-      "cores": [
-        "mesence"
-      ],
-      "systems": [
-        "nintendo-snes"
-      ]
-    },
-    {
-      "dest": "st011.rom",
-      "sha1": "fecbae2cec76c710422486baa186ffa7ca1cf925",
-      "sha256": "8b2b3f3f3e6e29f4d21d8bc736b400bc988b7d2214ebee15643f01c1fee2f364",
-      "size": 53248,
-      "repo_path": "bios/Nintendo/SNES/SNES_st011.rom",
-      "cores": [
-        "mesence"
-      ],
-      "systems": [
-        "nintendo-snes"
-      ]
-    },
-    {
-      "dest": "st018.rom",
-      "sha1": "91383b92745cc7cc4f15409ac5bc2c2f699a43f1",
-      "sha256": "6df209ab5d2524d1839c038be400ae5eb20dafc14a3771a3239cd9e8acd53806",
-      "size": 163840,
-      "repo_path": "bios/Nintendo/SNES/SNES_st018.rom",
       "cores": [
         "mesence"
       ],
@@ -87638,6 +88519,16 @@
       ]
     },
     {
+      "dest": "xemu/Chihiro/chihiro_xbox_bios.bin",
+      "sha1": "b700b0041af8f84835e45d1d1250247bf7077188",
+      "sha256": "8a2ff4ef627ed4cffd4546ac6b99e39e32ea39041dc188fe785d8caed0458631",
+      "size": 524288,
+      "repo_path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Chihiro/chihiro_xbox_bios.bin",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
       "dest": "Xenia-Edge/xefu/dash/fonts/Xbox Book.xtf",
       "sha1": "4cc817432b81b7bd3b9f782b678bd69e3d4d5715",
       "sha256": "dea8f97d13668de5bca3ccf8a318d727ce29422c2da898cbc4e9acfd13f05cbe",
@@ -87876,6 +88767,58 @@
       ]
     },
     {
+      "dest": "roms/cyberstorm-mk-iii-v44.71.rom",
+      "sha1": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
+      "sha256": "af53c1e327d88a075da9d9aeca6823b61b42e47b76eb5b0cc5a14e37812d61e9",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/cyberstorm-ppc-v44.71.rom",
+      "sha1": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
+      "sha256": "b6bda28c52cd2766731a3f475d092e2bddcdd240582f995b055abfff9046cdb3",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/blizzard-ppc-68040-v44.71.rom",
+      "sha1": "25d2cc5bf44997b04870187720f8411c4b60f7d7",
+      "sha256": "fa69d6a67ac949c1cb2482aeff80f8eb73e641bd4244622fe6b2184a55505fbb",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68040-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/blizzard-ppc-68060-v44.71.rom",
+      "sha1": "d206ada7edb18664fbead3e38dd6232297df20b1",
+      "sha256": "d1f6b42898834f9e0c44c994f67be6d43a5ec00f8bfa881bfeb38fcc4d0ab3ae",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68060-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "aros-ext.bin",
       "sha1": "af84797f89eb906350e82c718dddbf7c96695cc1",
       "sha256": "29f8e1ffa0a72c14e1fa0c4bc61c491dc4cefb696016ff4b2640d80895cbedbe",
@@ -88107,7 +89050,7 @@
       "core_folder": "Azahar"
     },
     {
-      "dest": "BBKEmu/A4980/8.BIN",
+      "dest": "bbkemu/a4980/8.BIN",
       "sha1": "062067e6d661c3d3e10d910435be4a59db1bee9f",
       "sha256": "1c8f0b75f478cc42b1cc4292ff6c3b022b11384f0b6fc1b9601873a9da656d6f",
       "size": 2097152,
@@ -88117,11 +89060,31 @@
       ]
     },
     {
-      "dest": "BBKEmu/A4980/E.BIN",
+      "dest": "bbkemu/a4980/E.BIN",
       "sha1": "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724",
       "sha256": "9d13aa4593d97b790afc37d73da8be985e7a3aa7f3dcfe6b91c798671067aa5e",
       "size": 2097152,
       "repo_path": "bios/BBK/A4980/BBKEmu/A4980/E.BIN",
+      "cores": [
+        "bbkemu"
+      ]
+    },
+    {
+      "dest": "bbkemu/a4988/8.BIN",
+      "sha1": "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06",
+      "sha256": "d59c588faf4b15c6bb4a4c3b63269df5edd0d9a3ee2d024159f2c68a4dcecf2b",
+      "size": 2097152,
+      "repo_path": "bios/BBK/A4988/BBKEmu/A4988/8.BIN",
+      "cores": [
+        "bbkemu"
+      ]
+    },
+    {
+      "dest": "bbkemu/a4988/E.BIN",
+      "sha1": "159b7e65f3f3dd67f435085be1e154316ba139e0",
+      "sha256": "3e12d40948fd50710cef8c6d14acea26ad69f47312125a61bd1003912893fcad",
+      "size": 2097152,
+      "repo_path": "bios/BBK/A4988/BBKEmu/A4988/E.BIN",
       "cores": [
         "bbkemu"
       ]
@@ -88134,7 +89097,8 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx",
-        "duckstation"
+        "duckstation",
+        "swanstation"
       ],
       "systems": [
         "sony-playstation"
@@ -89995,8 +90959,7 @@
       "size": 512,
       "repo_path": "bios/Microsoft/Xbox/mcpx_1.0.bin",
       "cores": [
-        "directxbox",
-        "xemu"
+        "directxbox"
       ]
     },
     {
@@ -90558,7 +91521,8 @@
       "repo_path": "bios/Sega/Dreamcast/dc_nvmem.bin",
       "cores": [
         "flycast",
-        "flycast2021"
+        "flycast2021",
+        "parallel_dc"
       ],
       "systems": [
         "sega-dreamcast"
@@ -90571,7 +91535,8 @@
       "size": 519984,
       "repo_path": "bios/Sega/Dreamcast/font.bin",
       "cores": [
-        "flycast2021"
+        "flycast2021",
+        "parallel_dc"
       ],
       "systems": [
         "sega-dreamcast"
@@ -90882,6 +91847,26 @@
       ],
       "systems": [
         "atari-st"
+      ]
+    },
+    {
+      "dest": "hyperscanemu/spg290.bin",
+      "sha1": "3f65f8e88b1c5e9cbc8b39bb3228ebf616aced5a",
+      "sha256": "c8526c41487b65250b24386bff5d58d5212b24450680b628f1de2a2b1c0a24e5",
+      "size": 32768,
+      "repo_path": "bios/Mattel/HyperScan/spg290.bin",
+      "cores": [
+        "hyperscanemu"
+      ]
+    },
+    {
+      "dest": "hyperscanemu/hyperscan.bin",
+      "sha1": "560cb747e7193e6781d4b8b0bd4d7b45d3d28690",
+      "sha256": "9b94dc01e0de788ccff8238caf85327badfb3a6880ab98480a4806c352fc6b9b",
+      "size": 1048576,
+      "repo_path": "bios/Mattel/HyperScan/hyperscan.bin",
+      "cores": [
+        "hyperscanemu"
       ]
     },
     {
@@ -91307,6 +92292,7 @@
       "size": 1049493,
       "repo_path": "bios/Sega/Hikaru/hikaru.zip",
       "cores": [
+        "odin",
         "mame",
         "mame2009",
         "mame2010",
@@ -101353,7 +102339,8 @@
       "size": 965,
       "repo_path": "bios/Arcade/MAME/bbc_lcd.zip",
       "cores": [
-        "mame"
+        "mame",
+        "tgpulse_next_m1"
       ],
       "systems": [
         "arcade"
@@ -102246,12 +103233,23 @@
     },
     {
       "dest": "jvs13551.zip",
-      "sha1": "2c79934afdbcfc15684de9b75a520ac196ca75d5",
-      "sha256": "ecaa2e254c5200ec1a136d06dec3e3d18314f6dc7d26918ebc62296a59051d1e",
-      "size": 15088,
-      "repo_path": "bios/Sega/Hikaru/jvs13551.zip",
+      "sha1": "05723a49f8f79507742cb4461743d531f580f677",
+      "sha256": "0fdcf0b50617cd5efa51b542805b2f119678e399f24416e8698e46d8d63e9ea3",
+      "size": 12456,
+      "repo_path": "bios/Arcade/Arcade/jvs13551.zip",
       "cores": [
-        "mame"
+        "odin"
+      ],
+      "alternatives": [
+        {
+          "sha1": "2c79934afdbcfc15684de9b75a520ac196ca75d5",
+          "sha256": "ecaa2e254c5200ec1a136d06dec3e3d18314f6dc7d26918ebc62296a59051d1e",
+          "size": 15088,
+          "repo_path": "bios/Sega/Hikaru/jvs13551.zip",
+          "cores": [
+            "mame"
+          ]
+        }
       ]
     },
     {
@@ -103247,6 +104245,7 @@
       "size": 725,
       "repo_path": "bios/Arcade/Arcade/mie.zip",
       "cores": [
+        "odin",
         "mame"
       ]
     },
@@ -103342,7 +104341,8 @@
       "repo_path": "bios/Arcade/Arcade/model1io.zip",
       "cores": [
         "mame",
-        "mame2003_plus"
+        "mame2003_plus",
+        "tgpulse_next_m1"
       ],
       "systems": [
         "arcade"
@@ -103356,7 +104356,8 @@
       "repo_path": "bios/Arcade/Arcade/model1io2.zip",
       "cores": [
         "mame",
-        "mame2003_plus"
+        "mame2003_plus",
+        "tgpulse_next_m1"
       ],
       "systems": [
         "arcade"
@@ -104417,7 +105418,8 @@
       "size": 6936,
       "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
       "cores": [
-        "mame"
+        "mame",
+        "mame2003_plus"
       ],
       "systems": [
         "arcade"
@@ -111083,6 +112085,56 @@
       "category": "game_data"
     },
     {
+      "dest": "odin/hikaru.zip",
+      "sha1": "8ce366388c9e09c5d218d639f19d1d816b59395d",
+      "sha256": "806a236b5665bbcc4f204e8e877e8c9416d150353a34d469849244bbaa138dbf",
+      "size": 1049493,
+      "repo_path": "bios/Sega/Hikaru/hikaru.zip",
+      "cores": [
+        "odin"
+      ]
+    },
+    {
+      "dest": "odin/mie.zip",
+      "sha1": "00f43f5bf58dd79135565d52c4eea7e314ebc810",
+      "sha256": "98ec06b938a17f65fa4b0ad0439b410ed5e0f11b823320d3ce46b7268932fb8e",
+      "size": 725,
+      "repo_path": "bios/Arcade/Arcade/mie.zip",
+      "cores": [
+        "odin"
+      ]
+    },
+    {
+      "dest": "odin/jvs13551.zip",
+      "sha1": "05723a49f8f79507742cb4461743d531f580f677",
+      "sha256": "0fdcf0b50617cd5efa51b542805b2f119678e399f24416e8698e46d8d63e9ea3",
+      "size": 12456,
+      "repo_path": "bios/Arcade/Arcade/jvs13551.zip",
+      "cores": [
+        "odin"
+      ]
+    },
+    {
+      "dest": "odin/18wheelr.zip",
+      "sha1": "3cfbb770fb5e7f86713274eb64522988b0a2e868",
+      "sha256": "6c738e51062c2917d33774dc240541382acfb77dfeee463c7896d5829d590c17",
+      "size": 8898,
+      "repo_path": "bios/Sega/Hikaru/18wheelr.zip",
+      "cores": [
+        "odin"
+      ]
+    },
+    {
+      "dest": "odin/srally2.zip",
+      "sha1": "e07546e2ebc18c9da9f9e9e2973ec30af0062129",
+      "sha256": "fbd28d4399df7a62ef5d11b75ae2e9846811c85424936cc4d8eb8c4f16f2a7d0",
+      "size": 7506,
+      "repo_path": "bios/Sega/Hikaru/srally2.zip",
+      "cores": [
+        "odin"
+      ]
+    },
+    {
       "dest": "omicron/omicron.jar",
       "sha1": "f64654e8a5275fdd35a18c576167715143ca3316",
       "sha256": "d0abbb714dfbacf54d88fa0af941016e23f6c9d8b26c9c75ebe56c944ed3698b",
@@ -113520,7 +114572,8 @@
       "size": 11159840,
       "repo_path": "bios/Id Software/Doom/DOOM.WAD",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "systems": [
         "doom"
@@ -113534,7 +114587,8 @@
       "size": 28795076,
       "repo_path": "bios/Id Software/Doom/freedoom1.wad",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "systems": [
         "doom"
@@ -113562,7 +114616,8 @@
       "size": 14943400,
       "repo_path": "bios/Id Software/Doom/v1.666/doom2.wad",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "systems": [
         "doom"
@@ -113576,7 +114631,8 @@
       "size": 14607420,
       "repo_path": "bios/Id Software/Doom/DOOM2F.WAD",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "systems": [
         "doom"
@@ -113590,7 +114646,8 @@
       "size": 17420824,
       "repo_path": "bios/Id Software/Doom/PLUTONIA.WAD",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "systems": [
         "doom"
@@ -113604,7 +114661,8 @@
       "size": 18195736,
       "repo_path": "bios/Id Software/Doom/TNT.WAD",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "systems": [
         "doom"
@@ -113618,7 +114676,8 @@
       "size": 28787748,
       "repo_path": "bios/Id Software/Doom/freedoom2.wad",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "systems": [
         "doom"
@@ -113632,7 +114691,8 @@
       "size": 14189976,
       "repo_path": "bios/Id Software/Doom/HERETIC.WAD",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "category": "game_data"
     },
@@ -113654,7 +114714,8 @@
       "size": 20417448,
       "repo_path": "bios/Id Software/Doom/blasphem.wad",
       "cores": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "category": "game_data"
     },
@@ -113812,7 +114873,7 @@
       "sha1": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "sha256": "05ad753fb594e656cf078023ec189e09e2a7655a780de993b75b8c51ed6b09ca",
       "size": 1048576,
-      "repo_path": "bios/QEMU/QEMU/MacROM.bin",
+      "repo_path": "bios/Apple/Macintosh/BasiliskII/ROM",
       "cores": [
         "qemu"
       ]
@@ -113875,6 +114936,18 @@
       "systems": [
         "nec-pc-88"
       ]
+    },
+    {
+      "dest": "rpcs3/PS3UPDAT.PUP",
+      "sha1": "093f8698b54b78dcb701de2043f82639de51d63b",
+      "sha256": "69070a95780f59fc9e0d82bcf53eb9b28fd4ed4a7d54d0a40045f80422fd98d6",
+      "size": 206126236,
+      "repo_path": "bios/Sony/PlayStation 3/PS3UPDAT.PUP",
+      "cores": [
+        "rpcs3"
+      ],
+      "storage": "release",
+      "release_asset": "PS3UPDAT.PUP"
     },
     {
       "dest": "rvvm/fw_payload.bin",
@@ -114255,6 +115328,36 @@
         "sdlpal"
       ],
       "category": "game_data"
+    },
+    {
+      "dest": "sm2-emu/games.xml",
+      "sha1": "e21c396bf7eb540ede7b7c76dd44c0fea8a6d630",
+      "sha256": "0dc8e68cd5ef7f83e581a1d454791d781cc8c7f8d7461e343700b9522ff6e16b",
+      "size": 326528,
+      "repo_path": "bios/Sega/Model 2/sm2-emu/games.xml",
+      "cores": [
+        "sm2"
+      ]
+    },
+    {
+      "dest": "sm2-emu/model1io.zip",
+      "sha1": "1587dcdbe3faf79d4dfa8c7248fc88698cac6ae8",
+      "sha256": "4d595b927d9c20de4064638327375d380ced62c42d3d91b658524662afd42185",
+      "size": 4700,
+      "repo_path": "bios/Arcade/Arcade/model1io.zip",
+      "cores": [
+        "sm2"
+      ]
+    },
+    {
+      "dest": "sm2-emu/model1io2.zip",
+      "sha1": "18666368c9ff86bf06ec9f7ff8641c0779a59244",
+      "sha256": "1bcb201866ae36a32c73e1413a36b65b5eb25da50ed2996e1381d666a1fb6121",
+      "size": 17058,
+      "repo_path": "bios/Arcade/Arcade/model1io2.zip",
+      "cores": [
+        "sm2"
+      ]
     },
     {
       "dest": "squirreljme-0.3.0-test.jar",
@@ -114746,6 +115849,36 @@
       "category": "game_data"
     },
     {
+      "dest": "tgpulse-next/model1io.zip",
+      "sha1": "1587dcdbe3faf79d4dfa8c7248fc88698cac6ae8",
+      "sha256": "4d595b927d9c20de4064638327375d380ced62c42d3d91b658524662afd42185",
+      "size": 4700,
+      "repo_path": "bios/Arcade/Arcade/model1io.zip",
+      "cores": [
+        "tgpulse_next_m1"
+      ]
+    },
+    {
+      "dest": "tgpulse-next/model1io2.zip",
+      "sha1": "18666368c9ff86bf06ec9f7ff8641c0779a59244",
+      "sha256": "1bcb201866ae36a32c73e1413a36b65b5eb25da50ed2996e1381d666a1fb6121",
+      "size": 17058,
+      "repo_path": "bios/Arcade/Arcade/model1io2.zip",
+      "cores": [
+        "tgpulse_next_m1"
+      ]
+    },
+    {
+      "dest": "tgpulse-next/hd44780.zip",
+      "sha1": "1b3e7285b59ee52972115e223d000fb93413eb0b",
+      "sha256": "dfa1e4b925b025242d4e82870f01098bbf5f3b998dc9009cfef28a29790395cf",
+      "size": 965,
+      "repo_path": "bios/Arcade/MAME/bbc_lcd.zip",
+      "cores": [
+        "tgpulse_next_m1"
+      ]
+    },
+    {
       "dest": "Trident/Emulator Files/sysdata/aes_keys.txt",
       "sha1": "29556640b022cbfaf427874695838b43a5e8aff4",
       "sha256": "0d866e062cf62275fbb291ba44af253e67fdc5bd76c7640b6c4a9dfe742510d9",
@@ -114777,6 +115910,260 @@
       "repo_path": "bios/Id Software/Quake/id1/pak0.pak",
       "cores": [
         "tyrquake"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "lights.pk3",
+      "sha1": "be3e3c3024ded9ceb53f9322abb35b1fc1d18e15",
+      "sha256": "4afd4a39a19adc826b96aed563df2496db0caa265b18fd82db39dd58727ca349",
+      "size": 24179,
+      "repo_path": "bios/Game Engines/GZDoom/lights.pk3",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "brightmaps.pk3",
+      "sha1": "d87823a7d2f4bf3935ab0b3d20fe8a533a4afeb5",
+      "sha256": "c8a75ff8a26ca532e72903cbf5367335446e13c0b91bb2aa0f53e4078191489b",
+      "size": 246598,
+      "repo_path": "bios/Game Engines/GZDoom/brightmaps.pk3",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "game_widescreen_gfx.pk3",
+      "sha1": "97936990801a287443dce75a7b3ee74b201dd698",
+      "sha256": "180c109fd5794baeb9cf99ccc0a2b2a1826ddfc87fc55614bb1a2dc5f32770b6",
+      "size": 5565936,
+      "repo_path": "bios/Game Engines/GZDoom/game_widescreen_gfx.pk3",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "fm_banks/GENMIDI.GS.wopl",
+      "sha1": "538d220d87b86b997f539265eb12a6c319e17a1c",
+      "sha256": "3e90b1e13007fb97c29d4a6f819519f1065892495c259961913317402a779514",
+      "size": 118767,
+      "repo_path": "bios/Other/idtech4a++/uzdoom/fm_banks/GENMIDI.GS.wopl",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "fm_banks/gs-by-papiezak-and-sneakernets.wopn",
+      "sha1": "12e77c61ae107b7dbcebb230fe45ec7791a07877",
+      "sha256": "6d7719d3637d9ceac842e167bf37c656f825c20add332a1fba4d38aa149a4998",
+      "size": 274864,
+      "repo_path": "bios/Game Engines/LZDoom/fm_banks/gs-by-papiezak-and-sneakernets.wopn",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "freedm.wad",
+      "sha1": "42c36e9d0610bf70c710ca79c7098ef3b1b00059",
+      "sha256": "d9adc4d792627e7fc47b09067b15486da724010c71dd12831e1cf8e0755b68ad",
+      "size": 22218796,
+      "repo_path": "bios/Id Software/Doom/freedm.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "hexen.wad",
+      "sha1": "4b53832f0733c1e29e5f1de2428e5475e891af29",
+      "sha256": "f74b857076b3ffe2597d0e05bdecc687496e6e8a9582d7a47db681e0e78e4001",
+      "size": 20083672,
+      "repo_path": "bios/Id Software/Doom/HEXEN.WAD",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "hexdd.wad",
+      "sha1": "081f6a2024643b54ef4a436a85508539b6d20a1e",
+      "sha256": "ea5e34c9f7eb677c593f125a0c45db2aaf2d98b8f6e9d50bd683a655aeec531f",
+      "size": 4440584,
+      "repo_path": "bios/Id Software/Doom/HEXDD.WAD",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "strife1.wad",
+      "sha1": "64c13b951a845ca7f8081f68138a6181557458d1",
+      "sha256": "81e4d4402853392fbf2ebf52f9c19cf97754a84f6dd3e5919036241de1ffe52a",
+      "size": 28377364,
+      "repo_path": "bios/Id Software/Doom/STRIFE1.WAD",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "voices.wad",
+      "sha1": "ec6883100d807b894a98f426d024d22c77b63e7f",
+      "sha256": "3f7a9c37a23dc30bb3b8415e782ea6c78d59e6b2ed4b50ae255ff0365349110c",
+      "size": 27319149,
+      "repo_path": "bios/Id Software/Doom/VOICES.WAD",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "chex.wad",
+      "sha1": "eca9cff1014ce5081804e193588d96c6ddb35432",
+      "sha256": "d8eb5277918883f490fb1a4be3c9a8588df2dbaee6dc4beb8df4929148bbffb1",
+      "size": 12361532,
+      "repo_path": "bios/Id Software/Doom/CHEX.WAD",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "chex3.wad",
+      "sha1": "f0581563604543060c1dce2f148fd74412adb8b8",
+      "sha256": "81662798c479458a1b2a2071a223e09501386157be5679fa9ec511c437471dd2",
+      "size": 19191031,
+      "repo_path": "bios/Id Software/Doom/chex3.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "hacx.wad",
+      "sha1": "9fd331b9d53006af1884e89eaeb97b17b8572b71",
+      "sha256": "b838dc9a394fe708df7239994b37c14c21e34f81d4cc921e060fc9c16b8ba240",
+      "size": 19321722,
+      "repo_path": "bios/Id Software/Doom/hacx.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "hacx2.wad",
+      "sha1": "f9ce49ed020f560cb1963634b529bc450e598a65",
+      "sha256": "7f63d58b4e360825a09ee086e8d733b2cd37cea882d785d2658cbc77ba7b1b74",
+      "size": 20504847,
+      "repo_path": "bios/Id Software/Doom/hacx2.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "action2.wad",
+      "sha1": "0da97921963442f2b22959ab941744d815c4f50d",
+      "sha256": "519844764bdf262b71f8ebefe48726e1b15077908ad4055cb8e07834c1596f1c",
+      "size": 209908382,
+      "repo_path": "bios/Id Software/Doom/action2.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "storage": "release",
+      "release_asset": "action2.wad",
+      "category": "game_data"
+    },
+    {
+      "dest": "harm1.wad",
+      "sha1": "d7c5f9095fd5f1ebfe14ecd97ca31503e2a02964",
+      "sha256": "b98b74422479f865c12251965f8e69e112c93095fc622d6ca24510b7e3de45fb",
+      "size": 58396393,
+      "repo_path": "bios/Id Software/Doom/harm1.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "storage": "release",
+      "release_asset": "harm1.wad",
+      "category": "game_data"
+    },
+    {
+      "dest": "square1.pk3",
+      "sha1": "cf1f2f508766666a88af165968001dcb6680141e",
+      "sha256": "d076ed44f8d4ec11b2d68f95bd851192e8c7b4a103417e2558825d51447b6901",
+      "size": 45202919,
+      "repo_path": "bios/Id Software/Doom/square1.pk3",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "delaweare.wad",
+      "sha1": "b1319702b200d95adf8da277fa237c7c0318a1b6",
+      "sha256": "43eebe953c0c0f5b3147cad49d9e43f038018f1a2defa99e529e4e5537783977",
+      "size": 83219726,
+      "repo_path": "bios/Id Software/Doom/delaweare.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
+      ],
+      "storage": "release",
+      "release_asset": "delaweare.wad",
+      "category": "game_data"
+    },
+    {
+      "dest": "rotwb.wad",
+      "sha1": "a9cc79f7383dffb5447da109b0bd9e283424cff2",
+      "sha256": "657edbf16ec17b4baf59e9e9469ed90f9f386f391f24ca80200171af2e878feb",
+      "size": 20592999,
+      "repo_path": "bios/Id Software/Doom/rotwb.wad",
+      "cores": [
+        "uzdoom"
+      ],
+      "systems": [
+        "doom"
       ],
       "category": "game_data"
     },
@@ -114910,7 +116297,19 @@
       ]
     },
     {
-      "dest": "WQXEmu/nc1020/obj_lu.bin",
+      "dest": "vita3k/PSVUPDAT.PUP",
+      "sha1": "cc72dfcc964577cc29112ef368c28f55277c237c",
+      "sha256": "6ef6dc8da6db026f28647713e473486d770087a605c52a8d751bfca7478386cf",
+      "size": 133834240,
+      "repo_path": "bios/Sony/PlayStation Vita/PSVUPDAT.PUP",
+      "cores": [
+        "vita3k"
+      ],
+      "storage": "release",
+      "release_asset": "PSVUPDAT.PUP"
+    },
+    {
+      "dest": "wqxemu/nc1020/obj_lu.bin",
       "sha1": "64b8a315ecbc420ae594ccced43498392988669e",
       "sha256": "d3bdc7847f3de1f7b58f12a07e51b3ca7f6d136d5f00ba626e39c591ea246c97",
       "size": 25165824,
@@ -114920,7 +116319,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/nc1020/nc1020.fls",
+      "dest": "wqxemu/nc1020/nc1020.fls",
       "sha1": "a5124a6873f5803f380103a40855c0f56a25bbe4",
       "sha256": "a1314d3cc5e2b1ccad10469407f10e0c8c7040c6b4095669427310e15ffeb657",
       "size": 1048576,
@@ -114930,7 +116329,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/pc1000/pc1000.rom",
+      "dest": "wqxemu/pc1000/pc1000.rom",
       "sha1": "0acf61e559cd6aa288c5a638b65fe9c81ddadd60",
       "sha256": "97c89dc94228e898e4dd639df97d480b0dd370ff153b4e3eca87637198b7aa12",
       "size": 12582912,
@@ -114940,7 +116339,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/pc1000/pc1000.nor",
+      "dest": "wqxemu/pc1000/pc1000.nor",
       "sha1": "e8e418fc92d8846111719cb12a0584703c3bdd0b",
       "sha256": "0bf7dd2889233c9c4469f75ce58968d4b83fa0615e397defd3b3365517bf3d91",
       "size": 524288,
@@ -114950,7 +116349,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/cc800/obj.bin",
+      "dest": "wqxemu/cc800/obj.bin",
       "sha1": "83f2bdc9278aa09aee90aa8842ab7bcc37701c57",
       "sha256": "6f4d9b88886741fe53bf08196bbbe2152b462938a2492f350b1bae866c7f7194",
       "size": 16777216,
@@ -114960,7 +116359,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/cc800/cc800.fls",
+      "dest": "wqxemu/cc800/cc800.fls",
       "sha1": "6f1e7f88a8d38cece76a6b27d38d8be537ea5f16",
       "sha256": "a7961403edf18e14c220b5a69102b9b8d420525bad05c8cc024ff27263f6a492",
       "size": 524288,
@@ -114970,7 +116369,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/nc2000/nc2000.nor",
+      "dest": "wqxemu/nc2000/nc2000.nor",
       "sha1": "9c402c01bf06f486604e93edfd948b7599d6a787",
       "sha256": "8dce225541735b26e610b790eda79bb60a0628e95134f3f092f7efd7ce30205c",
       "size": 524288,
@@ -114980,7 +116379,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/nc2000/nc2000.nand",
+      "dest": "wqxemu/nc2000/nc2000.nand",
       "sha1": "3dbadf2933c2caced96cedd331adaae6f6de97a4",
       "sha256": "01532faa0bca66235436020600cb622e72044b24c7a61427a5a38f4fb2029599",
       "size": 34603008,
@@ -114990,7 +116389,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/nc2000/nc2000.nand0",
+      "dest": "wqxemu/nc2000/nc2000.nand0",
       "sha1": "50ac3b08240ea86e4d83104e296238638bfb35fc",
       "sha256": "179a801f66329d676b68cbbf08e9d79a818e1d3cd95d6e2672f9d5a73b08d202",
       "size": 33792,
@@ -115000,7 +116399,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/nc3000/nc3000.nor",
+      "dest": "wqxemu/nc3000/nc3000.nor",
       "sha1": "81b0343daafc4cccd129cf7b12407cd0ad47cf3a",
       "sha256": "fa5ad4ef0d01e7c0777b158e610ea51f64435dc0b32425d25f9f7799fe1b30c2",
       "size": 1048576,
@@ -115010,7 +116409,7 @@
       ]
     },
     {
-      "dest": "WQXEmu/nc3000/nc3000.nand",
+      "dest": "wqxemu/nc3000/nc3000.nand",
       "sha1": "94c7593c2094ce755a01eba866c0b7f5960c0be0",
       "sha256": "0f86464c5bb083a6e2962b709e3952b2fa1b0ce6ab86169e3ea52b258f3ca32e",
       "size": 69206016,
@@ -115022,7 +116421,7 @@
       "release_asset": "nc3000.nand"
     },
     {
-      "dest": "WQXEmu/nc3000/nc3000.nand0",
+      "dest": "wqxemu/nc3000/nc3000.nand0",
       "sha1": "a6fdab5bf0b54a2576097757c7fae3b2cb71ea5a",
       "sha256": "fa8b4a5341cb7d60f7c805ea4fec127ee95edb5029f20defb56ea42a42cf6103",
       "size": 33792,
@@ -115301,7 +116700,17 @@
       ]
     },
     {
-      "dest": "Complex_4627.bin",
+      "dest": "xemu/mcpx_1.0.bin",
+      "sha1": "5d270675b54eb8071b480e42d22a3015ac211cef",
+      "sha256": "e99e3a772bf5f5d262786aee895664eb96136196e37732fe66e14ae062f20335",
+      "size": 512,
+      "repo_path": "bios/Microsoft/Xbox/mcpx_1.0.bin",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Complex_4627.bin",
       "sha1": "3944392c954cfb176d4210544e88353b3c5d36b1",
       "sha256": "3d5fae186cb31b5a6331155e532ef63e493afd85d7af8576fb52c95d0ce0362c",
       "size": 1048576,
@@ -115311,7 +116720,7 @@
       ]
     },
     {
-      "dest": "xbox_eeprom.bin",
+      "dest": "xemu/xbox_eeprom.bin",
       "sha1": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "sha256": "e652203e6d91140729c29588b18ff8838896cdeb9a3100fbf8d20763af27c9d2",
       "size": 256,
@@ -115321,11 +116730,61 @@
       ]
     },
     {
-      "dest": "xbox_hdd.qcow2",
+      "dest": "xemu/xbox_hdd.qcow2",
       "sha1": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "sha256": "c5ec3e0fbc4f31d36c13211ded7f070f3b5f04e99a367fbe5d8c2d8c6e4f925d",
       "size": 1638400,
       "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/fpr21042_m29w160et.bin",
+      "sha1": "77197fba2781ed1d81402c48bd743adb26d3161a",
+      "sha256": "44c6f9a25a133d38d719a9adf08c914f7e64736f26446d8c84555b983a95e5b7",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Chihiro/fpr-23887_29lv160te.ic4",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/ic10_g24lc64.bin",
+      "sha1": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
+      "sha256": "df9c57cc2ad43c4563609b75d3a3be40dd844fcc69e8b3a368616b9811dc776f",
+      "size": 8192,
+      "repo_path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Chihiro/ic10_g24lc64",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/ic11_24lc024.bin",
+      "sha1": "cc03a0650bfac4bf6cb66e414bbef121cba53efe",
+      "sha256": "11dfa28d710a347313c7894d25e5ffb2f585d607c7f782b2a9970025c2bf0b7f",
+      "size": 128,
+      "repo_path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Chihiro/ic11_24lc024.bin",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/pc20_g24lc64.bin",
+      "sha1": "82dad6e2a75bab4a4840dc6939462f1fb9b95101",
+      "sha256": "be03d198e95f4359833056f387261b904a6f16d21032fda74407d1747aa32d60",
+      "size": 8192,
+      "repo_path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Chihiro/pc20_g24lc64.bin",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/ver1305.bin",
+      "sha1": "45d94d0c39be1cb3db9fab6610a88a550adda4e9",
+      "sha256": "e0be3fc086fd478c9879f983af743bada512dedab144667039e8c147e502ce6d",
+      "size": 2097152,
+      "repo_path": "bios/Sega/Chihiro/ver1305.bin",
       "cores": [
         "xemu"
       ]
@@ -115564,6 +117023,16 @@
       ]
     },
     {
+      "dest": "18wheelr.zip",
+      "sha1": "3cfbb770fb5e7f86713274eb64522988b0a2e868",
+      "sha256": "6c738e51062c2917d33774dc240541382acfb77dfeee463c7896d5829d590c17",
+      "size": 8898,
+      "repo_path": "bios/Sega/Hikaru/18wheelr.zip",
+      "cores": [
+        "odin"
+      ]
+    },
+    {
       "dest": "dsp1.zip",
       "sha1": "c720161b382fbc6b36e58b9df67f4a872d9bebc1",
       "sha256": "3443129eecb19be2bc3f7df34bd8fc476388adea323ee8b6a8cadaff99b283b0",
@@ -115759,6 +117228,16 @@
       ]
     },
     {
+      "dest": "sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -115886,6 +117365,16 @@
       "repo_path": "bios/Arcade/Arcade/sfiiiu.zip",
       "cores": [
         "fbneo"
+      ]
+    },
+    {
+      "dest": "srally2.zip",
+      "sha1": "e07546e2ebc18c9da9f9e9e2973ec30af0062129",
+      "sha256": "fbd28d4399df7a62ef5d11b75ae2e9846811c85424936cc4d8eb8c4f16f2a7d0",
+      "size": 7506,
+      "repo_path": "bios/Sega/Hikaru/srally2.zip",
+      "cores": [
+        "odin"
       ]
     },
     {
@@ -116633,6 +118122,19 @@
       "category": "game_data"
     },
     {
+      "dest": "IPL.n64",
+      "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
+      "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
+      "size": 4194304,
+      "repo_path": "bios/Nintendo/Nintendo 64DD/64DD_IPL.bin",
+      "cores": [
+        "n64emu"
+      ],
+      "systems": [
+        "nintendo-64dd"
+      ]
+    },
+    {
       "dest": "np2/bios.rom",
       "sha1": "76a7360502fa0296ea93b4c537174610a834d367",
       "sha256": "d0f5b6d96a01295ab5436d7852d2c9eea1faa87fcf016b7e6599cdd689266cd2",
@@ -117172,6 +118674,16 @@
       "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
       "size": 131904,
       "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
       "cores": [
         "fbneo"
       ]
@@ -143367,8 +144879,8 @@
       ],
       "files": {
         "adhoc-servers.json": {
-          "sha1": "a77c56a3516a32138d1197a73cacd68473b4ec87",
-          "size": 8601
+          "sha1": "5558662d3f9a9d23d3b7dbd5ed162d395d1a60d5",
+          "size": 8662
         },
         "langregion.ini": {
           "sha1": "7c5ef48a557dc06fa79c83eb178835cc47b302ad",
@@ -143387,8 +144899,8 @@
           "size": 32420
         },
         "compat.ini": {
-          "sha1": "93a96a00f3b97bcd2a0816e70eaf0a67417ed751",
-          "size": 55418
+          "sha1": "10f5fa01eefc68710606ea251f958deb2b531106",
+          "size": 55591
         },
         "sfx_select.wav": {
           "sha1": "0bd3eabc432b6119507e4fc43354113b68bdbf66",
@@ -143639,192 +145151,192 @@
           "size": 27664
         },
         "lang/hu_HU.ini": {
-          "sha1": "62bc464115cb6f7c7f16ccbc0a3e268f1313f892",
-          "size": 95289
+          "sha1": "de278e87250e8b2c3a06756964dfa51b7cbb84f4",
+          "size": 97245
         },
         "lang/cz_CZ.ini": {
-          "sha1": "075b139746162c7f0b95d1c1bd5bf1caa6075aa2",
-          "size": 103111
+          "sha1": "334d5e4c10a935f54800c633b86e735f8e68565d",
+          "size": 105532
         },
         "lang/pl_PL.ini": {
-          "sha1": "81af60cb8e415001bfbba7da7b2bac7f5563fff7",
-          "size": 90593
+          "sha1": "4aedd2d7df3df1fb39cfa209b97310a8a8f1742b",
+          "size": 92694
         },
         "lang/pt_PT.ini": {
-          "sha1": "4e7f24647541d964eec0ffe3fd94921a3c61ea27",
-          "size": 93363
+          "sha1": "f4d5a7889978fd26ec56718ed7d992a736baa858",
+          "size": 95555
         },
         "lang/bg_BG.ini": {
-          "sha1": "c92465c9028e224521b45a5fcb3355e6da091661",
-          "size": 137180
+          "sha1": "7618153390daca2a3a74fc67d90203549a79662f",
+          "size": 140520
         },
         "lang/nl_NL.ini": {
-          "sha1": "489c29c689a24e874f0c444f748d9d83c5a3c78b",
-          "size": 99128
+          "sha1": "c3ade196aecb760b80727a7ada1ae478bed67ce0",
+          "size": 101733
         },
         "lang/lo_LA.ini": {
-          "sha1": "e45a149a19c180a1d6fcf5ad391e9f7597018fe4",
-          "size": 99892
+          "sha1": "30d8f415ddef2d6148d7042855c5c485bd6f06df",
+          "size": 97653
         },
         "lang/jv_ID.ini": {
-          "sha1": "a9d1919a690bd786646f0c2e69f5857a02a77f13",
-          "size": 77186
+          "sha1": "68e3bde3dae96528c8995d2d7d3aede4814c0a87",
+          "size": 78604
         },
         "lang/pt_BR.ini": {
-          "sha1": "f599e419c30306a32654775cb84837383ec5f142",
-          "size": 92406
+          "sha1": "ea7054c7788989363af7ce2e19a867013e7debf6",
+          "size": 94624
         },
         "lang/es_ES.ini": {
-          "sha1": "0aa4b7f34e60ae79faa75756341d90e3e081a1bc",
-          "size": 91327
+          "sha1": "f4d2af0baa3cd437c5db04e750ec9487093bd775",
+          "size": 93874
         },
         "lang/es_LA.ini": {
-          "sha1": "723d89947af2b6b7afaf1609379f254a185d1ef6",
-          "size": 92790
+          "sha1": "24567fffb9d3029e2dbbeec207dcf6b3dd98cbea",
+          "size": 95739
         },
         "lang/lt-LT.ini": {
-          "sha1": "ad9d1f354774a9dd60183772c6234cf4164f3591",
-          "size": 108767
+          "sha1": "fbe30addf48ed576d2ef0547549dd124574f6024",
+          "size": 111520
         },
         "lang/ms_MY.ini": {
-          "sha1": "e01787788f6cf2fbe4bcfbbf8e34c32c52e355dc",
-          "size": 86676
+          "sha1": "ab399bdf9505a14534b00c4ca6f5a6635405d76e",
+          "size": 88956
         },
         "lang/sv_SE.ini": {
-          "sha1": "515fed64ba7990fee811eb78fcd75e9e211fe6ec",
-          "size": 86080
+          "sha1": "b0ad76fa19a1a0c63466de6b6d7f134512fc30b8",
+          "size": 87901
         },
         "lang/th_TH.ini": {
-          "sha1": "0bff1bb57a2d328e886dc4f7cad3b7a1b00f1050",
-          "size": 160447
+          "sha1": "a91e93c9b55b21c3d3e3b8bf58adb2d50509a820",
+          "size": 163986
         },
         "lang/README.md": {
           "sha1": "5105feaabb525902ecc92eb6cb4bc969943926d5",
           "size": 1060
         },
         "lang/be_BY.ini": {
-          "sha1": "daaaf31d9894c0d394655a191ab3204ac8e9e744",
-          "size": 131605
+          "sha1": "18f590e15845b1b554ad4bb260a019e990cf1207",
+          "size": 134854
         },
         "lang/fr_FR.ini": {
-          "sha1": "546b3f273fdec54490bf728e639d0a773bc99fc2",
-          "size": 96608
+          "sha1": "c13b20dc0f086bf820f0176582010c2fe045289e",
+          "size": 98779
         },
         "lang/ja_JP.ini": {
-          "sha1": "3b38de8657c4248a8eb13c2a1ea51613ff879592",
-          "size": 106883
+          "sha1": "65ea9260430651536dedcda5502887e550e04e93",
+          "size": 109178
         },
         "lang/tg_PH.ini": {
-          "sha1": "f4e86168f5fb3a4f5f4b6c73e31b579ad3db2db7",
-          "size": 98338
+          "sha1": "93e980984c0b9127ea9d5ed4cdb72d2a404a9a3c",
+          "size": 100172
         },
         "lang/da_DK.ini": {
-          "sha1": "1e1679774291a20c81566c4acd6b8b5ce2c0f510",
-          "size": 99181
+          "sha1": "b7583e0bd34dedfc192ed7ea135bf3ab28d15a32",
+          "size": 101642
         },
         "lang/ko_KR.ini": {
-          "sha1": "a476a990efc0d6b5c644803110431dcacf8dcbd2",
-          "size": 92219
+          "sha1": "e1b23267d05416a0a35337e76a14857f4b38cb35",
+          "size": 94613
         },
         "lang/he_IL.ini": {
-          "sha1": "41d24b8e5ca0d2da94669b797159b74753ac547d",
-          "size": 117842
+          "sha1": "9d20de9a8f9f8b4fac2bc9a9c274a3942bae8abf",
+          "size": 120629
         },
         "lang/zh_CN.ini": {
-          "sha1": "45b36bf675a47e35573e7cdd1db1e91d3565dde0",
-          "size": 80158
+          "sha1": "316db031e93e12199c30d8ea6b6405d38b85ee96",
+          "size": 81965
         },
         "lang/zh_TW.ini": {
-          "sha1": "b5c3a2dd4e56d868cc754f1342f76e8b43a7b74c",
-          "size": 80027
+          "sha1": "9bc0cc0963d18214d7b6edb841003148641820e6",
+          "size": 82871
         },
         "lang/tr_TR.ini": {
-          "sha1": "ea447a56ead24e638f133dfb6b0bc92bdcfe025c",
-          "size": 88198
+          "sha1": "fdd4440864699e84f5bc3fef529bb68987a77c00",
+          "size": 90427
         },
         "lang/it_IT.ini": {
-          "sha1": "50071e54348e5b158cec9b15f720383345c4f746",
-          "size": 90788
+          "sha1": "f2528a82f6018154ceb18891a75631de58dfdcff",
+          "size": 92993
         },
         "lang/en_US.ini": {
-          "sha1": "44f70c40289fc9ccc1fcb62abea9ad93b602c043",
-          "size": 76193
+          "sha1": "cf42fb5d206aeb82502af676153cb4c3a2c312ea",
+          "size": 77458
         },
         "lang/fi_FI.ini": {
-          "sha1": "4e979c0f07655b03f49d3382b705e2134fc6ede1",
-          "size": 95320
+          "sha1": "e99b235dcd394fcc097e9e0c23901eaf33b334b1",
+          "size": 97516
         },
         "lang/id_ID.ini": {
-          "sha1": "05e27a2b9d1065656dd5846da42dc25da24344c7",
-          "size": 86812
+          "sha1": "85a2918aff481202ee6ced2718e34a0da25ff287",
+          "size": 89377
         },
         "lang/dr_ID.ini": {
-          "sha1": "114bf46d89c31b8119c29d11df47edae2c59cbd3",
-          "size": 76337
+          "sha1": "f3baa3ec031b11c883cbfd3b642745b831c79a29",
+          "size": 77653
         },
         "lang/no_NO.ini": {
-          "sha1": "b08963c505ef61052bff42c3c2729e5835cc0e6c",
-          "size": 86524
+          "sha1": "c7bdf6783c5bcef23e43e7fde831a1265af7f312",
+          "size": 88521
         },
         "lang/nn_NO.ini": {
-          "sha1": "f530ada278c6d34ed3d685ea32f79a765630e674",
-          "size": 85688
+          "sha1": "8cf53f68593d35bcd3d30cde32d511ef255c3c21",
+          "size": 87266
         },
         "lang/fa_IR.ini": {
-          "sha1": "8adf23b9da03b4a4a776fbe81b5e95200c2880b1",
-          "size": 123617
+          "sha1": "52e6559c1c3ee2d5c5c6fb73bba28c3b144d3518",
+          "size": 126654
         },
         "lang/km_KH.ini": {
-          "sha1": "686e819031b30f7b9a84e44eec9914f426fe91b6",
-          "size": 133479
+          "sha1": "e602d44e971cd64a3df8c0c7f9ef9390dc898bf8",
+          "size": 134413
         },
         "lang/ru_RU.ini": {
-          "sha1": "eba5d6a73085898f618aa4431ae5d586d8e05fc5",
-          "size": 120323
+          "sha1": "16c4f3accb92b23d7ae457b794dbde89cb678f1f",
+          "size": 122897
         },
         "lang/gl_ES.ini": {
-          "sha1": "a2702c2d700e0bdd5afc36d570ad411247b98c7c",
-          "size": 104430
+          "sha1": "b5d9fbd461a39ad885654227ec408601fd703705",
+          "size": 107723
         },
         "lang/az_AZ.ini": {
-          "sha1": "8cd66c0fb0fa15ef5eb72934dea41584a4c1c04d",
-          "size": 90580
+          "sha1": "de76d658cd5246c4179a6d7bd4e27653446e1a0b",
+          "size": 92982
         },
         "lang/ar_AE.ini": {
-          "sha1": "ce1a1ce3ac023e98d71367419c03d658ddef0295",
-          "size": 118966
+          "sha1": "1afa4df95fb907ada51316f5193f23d70c90ded6",
+          "size": 121633
         },
         "lang/ca_ES.ini": {
-          "sha1": "cc8f48bce5a0f36264d4e736112a900f44d75ac2",
-          "size": 103450
+          "sha1": "8069d0d089e33c91c2c7f0c354af1f4337367fd3",
+          "size": 106395
         },
         "lang/uk_UA.ini": {
-          "sha1": "f99dfc697f1421dbdaf3e63f90b7445616b6eeb4",
-          "size": 121974
+          "sha1": "372602e7ac8932b996d5e45efd933407d4c71142",
+          "size": 125365
         },
         "lang/hr_HR.ini": {
-          "sha1": "2a1683617b15fc87d5c65ee10643678cc7a6942b",
-          "size": 97390
+          "sha1": "d3087379bdd667114e9274249bc1aee28130149c",
+          "size": 101780
         },
         "lang/gr_EL.ini": {
-          "sha1": "3e3af34b6e0f4bdc5fd0104eca2fd8ece34cff81",
-          "size": 141184
+          "sha1": "1a4f5228ed8e3e8fdf9439a19e8bfda60778bb72",
+          "size": 145351
         },
         "lang/ro_RO.ini": {
-          "sha1": "2008bd5d76358254241e8068166d451576afa146",
-          "size": 105331
+          "sha1": "2a4766c10247e2d70ff788e4bd8dc68299fffb84",
+          "size": 108277
         },
         "lang/vi_VN.ini": {
-          "sha1": "50eac6e6d13ca73e66d360f48c04f82a354f57a9",
-          "size": 107309
+          "sha1": "e541f118ca8d2892684295362ea612f31d5a05a1",
+          "size": 110950
         },
         "lang/ku_SO.ini": {
-          "sha1": "3441400f9fce479f08461e067eeb6cb115b5fbdf",
-          "size": 82657
+          "sha1": "6a8e59a115b90afbc84d1f186d465d5affeada71",
+          "size": 83141
         },
         "lang/de_DE.ini": {
-          "sha1": "9503d714683d9136308969ffc214a4055ef39db6",
-          "size": 89702
+          "sha1": "70257269898a93d531862ef99958758a6d3a0ac5",
+          "size": 91888
         },
         "shaders/naturalA.vsh": {
           "sha1": "f758f44549d685db9e9fb386b2f8bb14c3cee9c6",
@@ -144044,7 +145556,7 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 9844388
+      "archive_size": 9863645
     },
     {
       "ref": "yaps2-resources",

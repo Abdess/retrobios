@@ -6,7 +6,7 @@
   "platform": "nextui",
   "display_name": "NextUI",
   "version": "2026-10-20",
-  "generated": "2026-11-06T13:49:27Z",
+  "generated": "2026-11-09T08:00:53Z",
   "base_destination": "",
   "detect": [
     {
@@ -17,22 +17,12 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 402,
-  "total_size": 708030045,
-  "pack_files": 4094,
-  "pack_size": 794457274,
-  "total_omitted": 4,
+  "total_files": 404,
+  "total_size": 708293291,
+  "pack_files": 4096,
+  "pack_size": 794720520,
+  "total_omitted": 3,
   "omitted_files": [
-    {
-      "dest": "Bios/FBN/sfiii2a.zip",
-      "name": "sfiii2a.zip",
-      "system": "capcom-cps3",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "fbneo"
-      ]
-    },
     {
       "dest": "Bios/FBN/svgpcb.zip",
       "name": "svgpcb.zip",
@@ -3969,6 +3959,16 @@
       ]
     },
     {
+      "dest": "Bios/FBN/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "Bios/FBN/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -4564,6 +4564,16 @@
       "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
       "size": 131904,
       "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "Bios/FBN/fbneo/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
       "cores": [
         "fbneo"
       ]

@@ -6,7 +6,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "43.1",
-  "generated": "2026-11-06T13:49:27Z",
+  "generated": "2026-11-09T08:00:53Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1641,21 +1641,13 @@
         ]
       },
       "as": "dsisd.bin"
-    },
-    {
-      "file": "Config/Music.xml",
-      "targets": {
-        "linux": [
-          "$HOME/.local/share/supermodel/Config"
-        ]
-      }
     }
   ],
-  "total_files": 14703,
-  "total_size": 9844910032,
-  "pack_files": 18177,
-  "pack_size": 9930735322,
-  "total_omitted": 426,
+  "total_files": 14708,
+  "total_size": 9846474774,
+  "pack_files": 18182,
+  "pack_size": 9932300064,
+  "total_omitted": 445,
   "omitted_files": [
     {
       "dest": "AUDIO.APC",
@@ -1733,6 +1725,16 @@
         "raze"
       ],
       "category": "game_data"
+    },
+    {
+      "dest": "Config/Music.xml",
+      "name": "Music.xml",
+      "system": "sega-model3",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "supermodel"
+      ]
     },
     {
       "dest": "DARK.GOB",
@@ -1874,6 +1876,17 @@
       "reason": "not_found",
       "cores": [
         "catacombgl"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "GAME66.CON",
+      "name": "GAME66.CON",
+      "system": "redneck",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "raze"
       ],
       "category": "game_data"
     },
@@ -2450,18 +2463,19 @@
       "category": "game_data"
     },
     {
-      "dest": "System BIOS image",
-      "name": "System BIOS image",
-      "system": "dos",
+      "dest": "TD.GRP",
+      "name": "TD.GRP",
+      "system": "shadow-warrior",
       "required": false,
       "reason": "not_found",
       "cores": [
-        "dosbox-x"
-      ]
+        "raze"
+      ],
+      "category": "game_data"
     },
     {
-      "dest": "TD.GRP",
-      "name": "TD.GRP",
+      "dest": "TDRAGON.EXE",
+      "name": "TDRAGON.EXE",
       "system": "shadow-warrior",
       "required": false,
       "reason": "not_found",
@@ -2786,28 +2800,8 @@
       ]
     },
     {
-      "dest": "blizzard-ppc-68040-v44.71.rom",
-      "name": "blizzard-ppc-68040-v44.71.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
       "dest": "blizzard-ppc-68060-v44.69.rom",
       "name": "blizzard-ppc-68060-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "blizzard-ppc-68060-v44.71.rom",
-      "name": "blizzard-ppc-68060-v44.71.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -2846,28 +2840,8 @@
       ]
     },
     {
-      "dest": "cyberstorm-mk-iii-v44.71.rom",
-      "name": "cyberstorm-mk-iii-v44.71.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
       "dest": "cyberstorm-ppc-v44.69.rom",
       "name": "cyberstorm-ppc-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "cyberstorm-ppc-v44.71.rom",
-      "name": "cyberstorm-ppc-v44.71.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -3154,6 +3128,17 @@
       "reason": "not_found",
       "cores": [
         "gzdoom"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "dragon/TDRAGON.EXE",
+      "name": "TDRAGON.EXE",
+      "system": "shadow-warrior",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "raze"
       ],
       "category": "game_data"
     },
@@ -5927,16 +5912,6 @@
       "category": "game_data"
     },
     {
-      "dest": "keropi/cgrom.tmp",
-      "name": "cgrom.tmp",
-      "system": "sharp-x68000",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "px68k"
-      ]
-    },
-    {
       "dest": "main/mp_pak0.pk3",
       "name": "mp_pak0.pk3",
       "system": "return-to-castle-wolfenstein",
@@ -6228,16 +6203,6 @@
       "category": "game_data"
     },
     {
-      "dest": "sfiii2a.zip",
-      "name": "sfiii2a.zip",
-      "system": "capcom-cps3",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
       "dest": "soundtrack",
       "name": "soundtrack",
       "system": "doom",
@@ -6312,6 +6277,226 @@
         "dxx-rebirth"
       ],
       "category": "game_data"
+    },
+    {
+      "dest": "whdboot/Libs/68040.library",
+      "name": "68040.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/680x0.library",
+      "name": "680x0.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkCBR0.library",
+      "name": "Compressors/xpkCBR0.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkDLTA.library",
+      "name": "Compressors/xpkDLTA.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkDUKE.library",
+      "name": "Compressors/xpkDUKE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkFAST.library",
+      "name": "Compressors/xpkFAST.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkFRLE.library",
+      "name": "Compressors/xpkFRLE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkHFMN.library",
+      "name": "Compressors/xpkHFMN.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkHUFF.library",
+      "name": "Compressors/xpkHUFF.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkIMPL.library",
+      "name": "Compressors/xpkIMPL.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkMASH.library",
+      "name": "Compressors/xpkMASH.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkNONE.library",
+      "name": "Compressors/xpkNONE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkNUKE.library",
+      "name": "Compressors/xpkNUKE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkRAKE.library",
+      "name": "Compressors/xpkRAKE.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkRLEN.library",
+      "name": "Compressors/xpkRLEN.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSHRI.library",
+      "name": "Compressors/xpkSHRI.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSMPL.library",
+      "name": "Compressors/xpkSMPL.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSQSH.library",
+      "name": "Compressors/xpkSQSH.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/explode.library",
+      "name": "explode.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/medplayer.library",
+      "name": "medplayer.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/mmu.library",
+      "name": "mmu.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/xpkmaster.library",
+      "name": "xpkmaster.library",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
     }
   ],
   "core_names": {
@@ -7133,6 +7318,7 @@
       "izapple2",
       "kegs",
       "linapple",
+      "linappleii",
       "mariani",
       "mednafen",
       "pom2"
@@ -7222,7 +7408,8 @@
       "mame4droid-2024",
       "mamearcade",
       "same_cdi",
-      "ume2015"
+      "ume2015",
+      "zcdi"
     ],
     "chihiro": [
       "chihiro-ds",
@@ -7242,6 +7429,7 @@
       "teknoparrot",
       "ume2015",
       "x1-box",
+      "xemu",
       "xemu-chihiro"
     ],
     "coco": [
@@ -7558,6 +7746,7 @@
       "bsnes2014",
       "bsnes_hd_beta",
       "bsnes_mercury",
+      "gearboy",
       "higan_sfc",
       "higan_sfc_balanced",
       "linkboy",
@@ -7597,6 +7786,7 @@
       "mame",
       "mame0258",
       "mame0278",
+      "zesarpcw",
       "zesarux"
     ],
     "philips-videopac": [
@@ -13129,16 +13319,6 @@
       "systems": [
         "sega-mega-cd"
       ],
-      "regions": [
-        "latin-america",
-        "north-america"
-      ],
-      "region_groups": [
-        "sega-mega-cd"
-      ],
-      "region_system_groups": [
-        "sega-mega-cd"
-      ],
       "alternatives": [
         {
           "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
@@ -14417,6 +14597,10 @@
       "repo_path": "bios/Microsoft/Xbox/Complex_4627.bin",
       "cores": null,
       "systems": [
+        "chihiro",
+        "xbox"
+      ],
+      "declared_in": [
         "xbox"
       ],
       "alternatives": [
@@ -143850,16 +144034,6 @@
       ]
     },
     {
-      "dest": "Config/Music.xml",
-      "sha1": "b44ed959fe2948a03d81b98e67ca32f2b4c37e78",
-      "sha256": "cf7555ca86e8640ee5bbb8e0c0897b073fc86647a93eda10b05065227610478c",
-      "size": 9224,
-      "repo_path": "bios/Sega/Model 3/Config/Music.xml",
-      "cores": [
-        "supermodel"
-      ]
-    },
-    {
       "dest": "TheXTech/assets/thextech-adventure-of-demo-assets-full-xta.xta",
       "sha1": "6258a77e478a57cf7e265792c9a1d13deda15719",
       "sha256": "ce724e5b3c63d54e0e15ea1d8038bdf7f05d1d660179ae3218fa242c8e555311",
@@ -181041,6 +181215,58 @@
       ]
     },
     {
+      "dest": "cyberstorm-mk-iii-v44.71.rom",
+      "sha1": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
+      "sha256": "af53c1e327d88a075da9d9aeca6823b61b42e47b76eb5b0cc5a14e37812d61e9",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "cyberstorm-ppc-v44.71.rom",
+      "sha1": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
+      "sha256": "b6bda28c52cd2766731a3f475d092e2bddcdd240582f995b055abfff9046cdb3",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "blizzard-ppc-68040-v44.71.rom",
+      "sha1": "25d2cc5bf44997b04870187720f8411c4b60f7d7",
+      "sha256": "fa69d6a67ac949c1cb2482aeff80f8eb73e641bd4244622fe6b2184a55505fbb",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68040-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "blizzard-ppc-68060-v44.71.rom",
+      "sha1": "d206ada7edb18664fbead3e38dd6232297df20b1",
+      "sha256": "d1f6b42898834f9e0c44c994f67be6d43a5ec00f8bfa881bfeb38fcc4d0ab3ae",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68060-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "rom.key",
       "sha1": "801bbab32e3d37386dd1636d4f1d6fa7e21d5874",
       "sha256": "baf2366ae04337d37e7b37ebfb5cd7af7e4ffddeb6b017bf2e5fec43d87764e0",
@@ -181288,7 +181514,8 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx",
-        "duckstation"
+        "duckstation",
+        "swanstation"
       ],
       "systems": [
         "sony-playstation"
@@ -200167,7 +200394,8 @@
       "size": 6936,
       "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
       "cores": [
-        "mame"
+        "mame",
+        "mame2003_plus"
       ]
     },
     {
@@ -209498,6 +209726,7 @@
         "xemu"
       ],
       "systems": [
+        "chihiro",
         "xbox"
       ]
     },
@@ -209511,6 +209740,7 @@
         "xemu"
       ],
       "systems": [
+        "chihiro",
         "xbox"
       ]
     },
@@ -210051,6 +210281,16 @@
       "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
       "size": 131904,
       "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
       "cores": [
         "fbneo"
       ]
@@ -211515,6 +211755,16 @@
       "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
       "size": 131904,
       "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "fbneo/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
       "cores": [
         "fbneo"
       ]

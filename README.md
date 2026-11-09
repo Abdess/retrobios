@@ -59,9 +59,9 @@ Unzip into the BIOS folder, files straight in it. A big pack comes in parts (`Pa
 
 ## What makes it different
 
-- **623 emulators profiled from their source code**: each file an emulator loads, its hash and the line of code that reads it
+- **635 emulators profiled from their source code**: each file an emulator loads, its hash and the line of code that reads it
 - **18 setups**, each checked its own way: MD5 for Batocera and Recalbox, the file name for RetroArch, as their own code does
-- **532 systems**, 19,947 files in the collection, [what is still missing](https://abdess.github.io/retrobios/gaps/) named file by file
+- **535 systems**, 19,987 files in the collection, [what is still missing](https://abdess.github.io/retrobios/gaps/) named file by file
 - Public data: [JSON, CSV and SQLite](https://abdess.github.io/retrobios/data/), MIT licensed
 
 <details>
@@ -105,4 +105,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-09T06:27:53Z*
+*Auto-generated on 2026-11-09T08:27:47Z*
