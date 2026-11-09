@@ -26,6 +26,8 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from typing import Any
 
+import yaml
+
 try:
     from .batocera_launchers import (
         Configgen,
@@ -79,6 +81,7 @@ CONFIGGEN = "package/system/knulli-configgen/configgen/configgen"
 GENERATORS = f"{CONFIGGEN}/generators"
 LIBRETRO_OPTIONS = f"{GENERATORS}/libretro/libretroOptions.py"
 PICO8_INSTALLER = "board/fsoverlay/usr/bin/knulli-install-pico8"
+ES_FEATURES = "package/emulationstation/knulli-es-system/es_features.yml"
 
 # Batocera's extractors that read KNULLI's generators unchanged.
 SHARED = (
@@ -909,6 +912,143 @@ def relative_folders(
     return launchers
 
 
+def _yaml_node(root: yaml.Node, keys: tuple[str, ...], path: str) -> yaml.Node:
+    node = root
+    for key in keys:
+        if not isinstance(node, yaml.MappingNode):
+            raise LauncherShapeError(f"{path}: {key} is not under a mapping")
+        found = [v for k, v in node.value if isinstance(k, yaml.ScalarNode) and k.value == key]
+        if len(found) != 1:
+            raise LauncherShapeError(f"{path}: no {'/'.join(keys)}")
+        node = found[0]
+    return node
+
+
+def option_choices(read: Callable[[str], str], keys: tuple[str, ...]) -> tuple[list[str], tuple[int, int]]:
+    """The values es_features.yml offers for an option, and their lines."""
+    node = _yaml_node(yaml.compose(read(ES_FEATURES)), (*keys, "choices"), ES_FEATURES)
+    if not isinstance(node, yaml.MappingNode) or not node.value:
+        raise LauncherShapeError(f"{ES_FEATURES}: {'/'.join(keys)} has no choices")
+    values = [str(v.value) for _k, v in node.value if isinstance(v, yaml.ScalarNode)]
+    return values, (node.start_mark.line + 1, node.end_mark.line)
+
+
+@dataclass(frozen=True)
+class BootDisk:
+    """A generator that names a BIOS file from an option value, and the ES feature offering it."""
+
+    path: str
+    feature: tuple[str, ...]
+    build: str = "standalone"
+    caller: tuple[str, str] | None = None
+
+
+BOOT_DISKS = (
+    BootDisk("mame/mameGenerator.py", ("mame", "systems", "macintosh", "cfeatures")),
+    BootDisk(
+        "libretro/libretroMAMEConfig.py",
+        ("libretro", "cores", "mame", "systems", "macintosh", "cfeatures"), "libretro",
+        ("libretro/libretroConfig.py", "generateMAMEConfigs"),
+    ),
+)
+
+
+def _option_template(reader: _Reader, node: ast.AST) -> tuple[str, str] | None:
+    """(option, name) for '<bios>/' + system.config[option] + '<suffix>'."""
+    if not (isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add)):
+        return None
+    left, suffix = node.left, node.right
+    if not (
+        isinstance(left, ast.BinOp) and isinstance(left.op, ast.Add)
+        and isinstance(left.left, ast.Constant) and isinstance(suffix, ast.Constant)
+        and isinstance(left.right, ast.Subscript)
+        and ast.unparse(left.right.value) == "system.config"
+        and isinstance(left.right.slice, ast.Constant)
+    ):
+        return None
+    prefix = str(left.left.value).strip('"')
+    if not prefix.startswith(reader.bios + "/"):
+        return None
+    option = str(left.right.slice.value)
+    name = prefix[len(reader.bios) + 1:] + "{" + option + "}" + str(suffix.value).strip('"')
+    return option, name
+
+
+def boot_disks(
+    cg: Configgen, read: Callable[[str], str], specs: tuple[BootDisk, ...] = BOOT_DISKS
+) -> list[Launcher]:
+    """`if system.config[o] in [...]: X = bios + o + ext else: X = bios + o + ext2`."""
+    launchers = []
+    for spec in specs:
+        src = cg.source(f"{cg.generators}/{spec.path}")
+        reader = _Reader(cg, src)
+        module = spec.path.removesuffix(".py").replace("/", ".")
+        emulator = (
+            ", ".join(_caller_cores(cg, spec.caller)) if spec.caller else cg.emulator(module)
+        )
+        found = 0
+        for chain in ast.walk(src.tree):
+            if not (
+                isinstance(chain, ast.If) and isinstance(chain.test, ast.Compare)
+                and isinstance(chain.test.ops[0], ast.In)
+                and isinstance(chain.test.comparators[0], ast.List)
+                and ast.unparse(chain.test.left).startswith("system.config[")
+            ):
+                continue
+            branches = [(chain.body, True), (chain.orelse, False)]
+            templates = []
+            for body, listed in branches:
+                flag = next(
+                    (str(s.value.value) for s in body if isinstance(s, ast.Assign)
+                     and isinstance(s.value, ast.Constant) and str(s.value.value).startswith("-")),
+                    None,
+                )
+                named = [
+                    (s, t) for s in body if isinstance(s, ast.Assign)
+                    and (t := _option_template(reader, s.value)) is not None
+                ]
+                if flag is None or len(named) != 1:
+                    break
+                templates.append((listed, flag, *named[0]))
+            if len(templates) != 2:
+                continue
+            option = templates[0][3][0]
+            if option != templates[1][3][0] or ast.unparse(chain.test.left) != f"system.config[{option!r}]":
+                src.fail(f"line {chain.lineno} names a file from two options")
+            listed_values = [
+                str(e.value) for e in chain.test.comparators[0].elts if isinstance(e, ast.Constant)
+            ]
+            offered, lines = option_choices(read, (*spec.feature, option))
+            holder = reader.parents.get(id(chain))
+            body = getattr(holder, "body", [])
+            index = next(i for i, stmt in enumerate(body) if stmt is chain)
+            added = body[index + 1] if index + 1 < len(body) else None
+            if not (
+                isinstance(added, ast.AugAssign) and isinstance(added.value, ast.List)
+                and ast.unparse(added.target) in COMMAND_NAMES
+            ):
+                src.fail(f"the file chosen at line {chain.lineno} is not put on the command line")
+            for listed, flag, statement, (_, name) in templates:
+                values = listed_values if listed else [v for v in offered if v not in listed_values]
+                if not values:
+                    src.fail(f"no {option} value reaches the branch at line {statement.lineno}")
+                tests, spans = reader.conditions(statement)
+                found += 1
+                launchers.append(Launcher(
+                    emulator=emulator, build=spec.build, kind="fixed_name", names=[name],
+                    expands={option: values}, case_insensitive=False, search_dir=cg.bios,
+                    passes_to=f"command line {flag}", fails_when_missing=False,
+                    depends_on_option=f"{option} ({' and '.join(tests)})",
+                    source_ref=", ".join([
+                        src.ref([*spans, src.span(statement), _lines(added)]),
+                        f"{ES_FEATURES}:{lines[0]}-{lines[1]}" if not listed else "",
+                    ]).rstrip(", "),
+                ))
+        if not found:
+            src.fail("names no BIOS file from an option value")
+    return launchers
+
+
 EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     *SHARED, lexaloffle, core_file_options, relative_folders,
 )
@@ -919,6 +1059,7 @@ def extract_launchers(read: Callable[[str], str]) -> list[dict[str, Any]]:
     cg = configgen(read)
     launchers = [launcher for extractor in EXTRACTORS for launcher in extractor(cg)]
     launchers += pico8_installer(read, cg.bios)
+    launchers += boot_disks(cg, read)
     for spec in GENERIC_SITES:
         launchers += bios_sites(cg, spec)
     return [launcher.entry() for launcher in launchers]

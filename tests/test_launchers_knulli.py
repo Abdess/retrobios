@@ -60,6 +60,7 @@ IMPORTER = text(
         'hatari': ('hatari.hatariGenerator', 'HatariGenerator'),
         'melonds': ('melonds.melondsGenerator', 'MelonDSGenerator'),
         'pcsx2': ('pcsx2.pcsx2Generator', 'Pcsx2Generator'),
+        'mame': ('mame.mameGenerator', 'MameGenerator'),
     }
     """
 )
@@ -329,6 +330,38 @@ PCSX2 = text(
     """
 )
 
+# mameGenerator.py: the Macintosh boot disk named from the bootdisk option.
+MAME = text(
+    """
+    class MameGenerator(Generator):
+        def generate(self, system, rom, playersControllers, metadata, guns, wheels, gameResolution):
+            if system.name == "macintosh" and system.isOptSet("bootdisk"):
+                if system.config["bootdisk"] in [ "macos30", "macos608" ]:
+                    bootType = "-flop1"
+                    bootDisk = "/userdata/bios/" + system.config["bootdisk"] + ".img"
+                else:
+                    bootType = "-hard"
+                    bootDisk = "/userdata/bios/" + system.config["bootdisk"] + ".chd"
+                commandArray += [ bootType, bootDisk ]
+    """
+)
+
+FEATURES = text(
+    """
+    mame:
+        systems:
+            macintosh:
+                cfeatures:
+                    bootdisk:
+                        prompt: BOOT DISK
+                        choices:
+                            "System 3.0 (LD Floppy)":    macos3
+                            "System 6.0.8 (LD Floppy)":  macos608
+                            "System 7.5.5 (Hard Drive)": mac755
+    """
+)
+
+
 def tree(**overrides: str) -> dict[str, str]:
     files = {
         f"{kl.CONFIGGEN}/batoceraPaths.py": PATHS,
@@ -347,6 +380,8 @@ def tree(**overrides: str) -> dict[str, str]:
         f"{G}/hatari/hatariGenerator.py": HATARI,
         f"{G}/melonds/melondsGenerator.py": MELONDS,
         f"{G}/pcsx2/pcsx2Generator.py": PCSX2,
+        f"{G}/mame/mameGenerator.py": MAME,
+        kl.ES_FEATURES: FEATURES,
     }
     files.update(overrides)
     return files
@@ -548,6 +583,34 @@ class CopiesAndFolders(unittest.TestCase):
             kl.relative_folders(
                 configgen(**{f"{G}/pcsx2/pcsx2Generator.py": broken}), kl.RELATIVE_FOLDERS[:1]
             )
+
+
+class BootDisks(unittest.TestCase):
+    def records(self, **overrides: str) -> list:
+        files = tree(**overrides)
+        return kl.boot_disks(kl.configgen(files.__getitem__), files.__getitem__, kl.BOOT_DISKS[:1])
+
+    def test_each_branch_is_a_template_over_the_values_that_reach_it(self):
+        floppy, hard = self.records()
+        self.assertEqual((floppy.names, floppy.passes_to), (["{bootdisk}.img"], "command line -flop1"))
+        self.assertEqual(floppy.expands, {"bootdisk": ["macos30", "macos608"]})
+        # The values the menu offers that the code's list does not take.
+        self.assertEqual((hard.names, hard.passes_to), (["{bootdisk}.chd"], "command line -hard"))
+        self.assertEqual(hard.expands, {"bootdisk": ["macos3", "mac755"]})
+        self.assertTrue(hard.depends_on_option.startswith("bootdisk (system.name == 'macintosh'"))
+        self.assertEqual(
+            hard.source_ref,
+            f"{G}/mame/mameGenerator.py:3-4, 9-10, {kl.ES_FEATURES}:8-10",
+        )
+
+    def test_a_name_built_another_way_raises(self):
+        broken = MAME.replace('"/userdata/bios/" + system.config["bootdisk"] + ".chd"', "disk")
+        with self.assertRaises(LauncherShapeError):
+            self.records(**{f"{G}/mame/mameGenerator.py": broken})
+
+    def test_an_option_the_menu_no_longer_offers_raises(self):
+        with self.assertRaises(LauncherShapeError):
+            self.records(**{kl.ES_FEATURES: FEATURES.replace("bootdisk:", "other:")})
 
 
 class PlatformFile(unittest.TestCase):
