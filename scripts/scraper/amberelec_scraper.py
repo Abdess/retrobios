@@ -23,6 +23,9 @@ Verification (batocera-systems at that commit):
   (packages/amberelec/profile.d/99-distribution.conf:320) passes
   `--strictfilter`, which the script's argument switch (lines 665-687) does
   not handle: that call prints nothing and exits 0.
+
+The launcher layer is read at the same commit (amberelec_launchers): runemu.py,
+the scripts its standalone table runs and the configs their packages install.
 """
 
 from __future__ import annotations
@@ -32,6 +35,7 @@ import re
 import urllib.error
 import urllib.request
 
+from .amberelec_launchers import extract_launchers
 from .base_scraper import BaseScraper, BiosRequirement, github_headers
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
@@ -155,6 +159,9 @@ class Scraper(BaseScraper):
             "standalone_cores": standalone,
             "dual_mode_cores": dual,
             "systems": systems,
+            "launchers": extract_launchers(
+                lambda path: self._fetch_text(_RAW.format(ref=self.commit) + path)
+            ),
         }
 
 
