@@ -19,9 +19,10 @@ Verification (knulli-systems at the release tag):
   10834d00, es-app/src/ApiSystem.cpp:764-774) and by knulli-support:69.
 
 es_systems.yml and configgen-defaults.yml have Batocera's shape, so the cores
-are read with Batocera's code. The configgen generators do not: the hatari,
-melonds and gsplus generators and libretroOptions.py are older forms than the
-ones batocera_launchers reads, so no launcher layer is written.
+are read with Batocera's code. The launcher layer comes from KNULLI's own
+configgen package and board scripts at the same tag (knulli_launchers):
+Batocera's extractors where a generator is still Batocera's code, KNULLI's
+where it is older or its own.
 """
 
 from __future__ import annotations
@@ -44,6 +45,7 @@ from .batocera_scraper import (
     requirements_from_systems,
 )
 from .es_emulators import attach_system_cores
+from .knulli_launchers import extract_launchers
 
 PLATFORM_NAME = "knulli"
 
@@ -124,6 +126,9 @@ class Scraper(BaseScraper):
         # configgen hands a libretro core /userdata/saves/<system>, as
         # Batocera's does: the systems each core runs for are its save folders.
         result["libretro_systems"] = es_systems_libretro_systems(es_systems, dropped)
+        result["launchers"] = extract_launchers(
+            lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path)
+        )
         return result
 
 
