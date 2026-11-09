@@ -55,7 +55,7 @@ notes: |
   The core performs no hash or size validation on System ROMs. CD BIOS family
   detection and the optional CD speed hack patches use byte patterns and
   apply only when the 68K BIOS is at least 512 KiB (src/geo_cd.c:1888-1910,
-  1904-1924). Upstream declares the expected archive MD5s through the Jolly
+  1913-1941, 1959-1980). Upstream declares the expected archive MD5s through the Jolly
   Good API BIOS list (jg.c:220-231), and the md5 fields on the archives below
   are copied from it.
 

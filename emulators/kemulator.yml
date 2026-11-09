@@ -5,7 +5,8 @@ source: "https://github.com/shinovon/KEmulator"
 upstream: "https://github.com/shinovon/KEmulator"
 author: "shinovon"
 profiled_date: "2026-08-11"
-source_commit: "1ab219907cfcac0e6313d1b6ccba13ad74015d08"
+source_commit: "4dfdfe31243c9bdbcffa987101e27421618e79e8"
+prose_written_at: "1ab219907cfcac0e6313d1b6ccba13ad74015d08"
 core_version: "2.22"
 version_basis:
   kind: file

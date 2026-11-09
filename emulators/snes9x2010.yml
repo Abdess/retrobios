@@ -5,6 +5,7 @@ source: "https://github.com/libretro/snes9x2010"
 upstream: "https://github.com/snes9xgit/snes9x"
 profiled_date: "2026-03-25"
 source_commit: "fe690dd321fa5a46b5234a2bde089d2518c62b0e"
+prose_written_at: "fe690dd321fa5a46b5234a2bde089d2518c62b0e"
 upstream_commit: "1bcc369e89f08243e0a462882fb1f3e42e51de3a"
 core_version: "1.52.4"
 version_basis:
