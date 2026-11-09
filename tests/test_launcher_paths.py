@@ -197,6 +197,7 @@ class APortableUserFolder(unittest.TestCase):
             f"{rl.GENERATORS}/Eden.Generator.cs": source("e", yuzu_like("eden.exe")),
             f"{rl.GENERATORS}/Ryujinx.Generator.cs": source("r", self.RYUJINX),
             f"{rl.GENERATORS}/ShadPS4.Generator.cs": source("s", self.SHADPS4),
+            f"{rl.GENERATORS}/Sudachi.Generator.cs": source("u", yuzu_like("sudachi.exe")),
             f"{rl.GENERATORS}/Yuzu.Generator.cs": source("y", yuzu_like("yuzu.exe")),
         }
 
@@ -208,6 +209,7 @@ class APortableUserFolder(unittest.TestCase):
              ("eden", '<AppConfig.GetFullPath("eden")>/user', "e:3, 7-8"),
              ("ryujinx", '<AppConfig.GetFullPath("ryujinx")>/portable', "r:3-5"),
              ("shadps4", '<AppConfig.GetFullPath("shadps4")>/user', "s:3, 8-10"),
+             ("sudachi", '<AppConfig.GetFullPath("sudachi")>/user', "u:3, 7-8"),
              ("yuzu", '<AppConfig.GetFullPath("yuzu")>/user', "y:3, 7-8")],
         )
         ryujinx = found[2]
@@ -293,7 +295,8 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
             with self.subTest(platform=platform):
                 self.assertEqual(
                     {(f.get("root"), f["standalone_path"].rsplit("/", 1)[0]) for f in view["files"]},
-                    {("configs", "shadps4/user/sys_modules"), ("configs", "shadps4/user/fonts/font")},
+                    {("configs", "shadps4/user/sys_modules"), ("configs", "shadps4/user/fonts/font"),
+                     ("configs", "shadps4/user/fonts/font2")},
                 )
 
     def test_the_installer_follows_from_bios_to_the_configs_folder(self):
