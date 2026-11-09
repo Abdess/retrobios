@@ -10,7 +10,10 @@ packages = []
 py-modules = []
 
 [project]
-name = "retrobios"
+# Not the package PyPI serves (packaging/pypi/ builds that one, named
+# retrobios): a contributor's `pip install -e ".[dev]"` and `pip install
+# retrobios` in one environment would otherwise replace each other.
+name = "retrobios-dev"
 version = "1.0.0"
 description = "BIOS collection manager for retrogaming platforms"
 # install.py is the only entry point a user runs before cloning, and both
