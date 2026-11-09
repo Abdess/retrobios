@@ -6409,7 +6409,7 @@
   "nxengine/main.cpp",
   "nxengine/map.cpp"
  ],
- "github.com/libretro/opera-libretro@370d9a25c030bb9de4aade371b31045691c40a95": [
+ "github.com/libretro/opera-libretro@595fd1db7d5bf0d3ca63d2292854d587ddcfa94b": [
   "libopera/opera_bios.c",
   "libretro.c",
   "libretro_core_options.c",
