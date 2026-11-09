@@ -326,7 +326,7 @@ class CommandLineChoices(unittest.TestCase):
                              ("genesis", "sega-mega-drive"), ("gb", "nintendo-gb")):
             with self.subTest(typed=typed), self.assertRaises(ValueError) as ctx:
                 install.resolve_choices([typed], known, "system")
-            self.assertIn(f"Did you mean: {meant}", str(ctx.exception))
+            self.assertIn(f"Close matches: {meant}", str(ctx.exception))
 
     def test_a_short_name_for_a_system_the_list_lacks_is_not_suggested(self):
         with self.assertRaises(ValueError) as ctx:
@@ -1345,7 +1345,7 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
             self.assertIn("nintendo-gba (gba)", listing.stdout)
             typo = repo.run("--system", "psxx", "--no-input")
             self.assertEqual(typo.returncode, 2)
-            self.assertIn("Did you mean: sony-playstation", typo.stderr)
+            self.assertIn("Close matches: sony-playstation", typo.stderr)
 
 
 
@@ -1484,7 +1484,7 @@ class SystemNamesResolveOneWay(unittest.TestCase):
         with self.assertRaises(ValueError) as caught:
             self._resolve("psx,psxx")
         self.assertIn("unknown system psxx", str(caught.exception))
-        self.assertIn("Did you mean: psx?", str(caught.exception))
+        self.assertIn("Close matches: psx.", str(caught.exception))
 
 
 class AnUnknownNativeNameIsRefusedBeforeAnyWork(unittest.TestCase):
@@ -1504,7 +1504,7 @@ class AnUnknownNativeNameIsRefusedBeforeAnyWork(unittest.TestCase):
                     cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
                 )
                 self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
-                self.assertIn("unknown system psxx. Did you mean: psx?", proc.stderr)
+                self.assertIn("unknown system psxx. Close matches: psx.", proc.stderr)
                 self.assertNotIn("Traceback", proc.stderr)
         self.assertFalse((REPO_ROOT / "tmp" / "never").exists())
 
@@ -1634,7 +1634,7 @@ class ThePlatformsOwnListAlone(unittest.TestCase):
 
 class AnIdAnotherSetupUses(unittest.TestCase):
     """The Neo Geo card offers `--system snk-neogeo`, and RetroArch, which
-    files neogeo.zip under arcade, answered "Did you mean: snk-neogeo-cd?"."""
+    files neogeo.zip under arcade, answered "Close matches: snk-neogeo-cd."."""
 
     KNOWN = ["arcade", "snk-neogeo-cd", "sony-playstation"]
     HOLDERS = {"snk-neogeo": ["arcade"]}
@@ -1649,12 +1649,12 @@ class AnIdAnotherSetupUses(unittest.TestCase):
         for typed in ("snk-neogeo", "SNK-NeoGeo", "neogeo", "mvs", "aes"):
             with self.subTest(typed=typed):
                 text = self._refusal(typed)
-                self.assertIn("Did you mean: arcade?", text)
+                self.assertIn("Close matches: arcade.", text)
                 self.assertIn("neogeo.zip", text)
                 self.assertNotIn("snk-neogeo-cd", text)
 
     def test_a_typo_still_gets_the_closest_names(self):
-        self.assertIn("Did you mean: snk-neogeo-cd", self._refusal("snk-neogeo-dc", {}))
+        self.assertIn("Close matches: snk-neogeo-cd", self._refusal("snk-neogeo-dc", {}))
 
     def test_holders_are_read_from_the_file_list(self):
         files = [
@@ -1676,7 +1676,7 @@ class AnIdAnotherSetupUses(unittest.TestCase):
             capture_output=True, text=True, timeout=120, check=False,
             stdin=subprocess.DEVNULL)
         self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
-        self.assertIn("Did you mean: arcade?", proc.stderr)
+        self.assertIn("Close matches: arcade.", proc.stderr)
         self.assertNotIn("snk-neogeo-cd", proc.stderr)
         self.assertFalse(never.exists())
 

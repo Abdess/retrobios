@@ -67,18 +67,9 @@ NAMES: dict[str, str] = {
 }
 
 # Program output quoted word for word. INSTALLER holds install.py's own
-# messages, which the pass over the installer's wording rewrites, and empties
-# this list with it. SOURCE holds what an emulator prints, quoted in its
+# messages, empty since the installer speaks without pronouns. SOURCE holds what an emulator prints, quoted in its
 # profile from the emulator's code, which this project does not write.
-INSTALLER: dict[str, str] = {
-    "Where do you play?": "title of the installer's first screen",
-    "Copy the BIOS files from your old card or a folder": "installer menu row",
-    "copy the BIOS files from your other card": "installer menu row on a two-card handheld",
-    "if your files go there.": "installer hint for a card with no handheld system folder",
-    "See [Files you already had]": (
-        "link label in the generated options table of wiki/installer.md, "
-        "kept by generate_installer_doc"),
-}
+INSTALLER: dict[str, str] = {}
 SOURCE: dict[str, str] = {
     "You do not have a ROM image installed for Model": "sdltrs message, emulators/sdl2trs.yml",
     "You might not get sound because": "lindbergh-loader message, emulators/lindbergh-loader.yml",

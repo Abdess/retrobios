@@ -112,7 +112,7 @@ def load_database(db_path: str) -> dict:
         )
         if close:
             raise DatabaseUnreadable(
-                f"{db_path} not found. Did you mean {typed.with_name(close[0])}?"
+                f"{db_path} not found. Close match: {typed.with_name(close[0])}"
             ) from None
         raise DatabaseUnreadable(
             f"{db_path} not found. Build it with: python scripts/generate_db.py "
@@ -665,7 +665,7 @@ def suggest_names(
     close = sorted({m for name in typed
                     for m in difflib.get_close_matches(name, available, n=3, cutoff=0.6)})
     if close:
-        return f"Did you mean: {', '.join(close)}? {listing_flag} lists all {total}."
+        return f"Close matches: {', '.join(close)}. {listing_flag} lists all {total}."
     if len(available) <= SHORT_LIST:
         return f"Known: {', '.join(available)}."
     return f"{listing_flag} lists all {total}."
@@ -733,7 +733,7 @@ def require_platform(name: str, platforms_dir: str = "platforms") -> None:
 
     known = list_registered_platforms(platforms_dir)
     close = difflib.get_close_matches(name, known, n=1)
-    hint = f" Did you mean '{close[0]}'?" if close else ""
+    hint = f" Close match: '{close[0]}'." if close else ""
     raise SystemExit(
         f"ERROR: unknown platform '{name}'.{hint}\nKnown platforms: {', '.join(known)}"
     )
@@ -3661,7 +3661,7 @@ def _unknown_target_message(target: str, platforms: list[str], platforms_dir: st
     close = difflib.get_close_matches(target, sorted(owners), n=3, cutoff=0.6)
     if close:
         named = ", ".join(f"{n} ({', '.join(sorted(owners[n]))})" for n in close)
-        return f"{message} Did you mean: {named}?"
+        return f"{message} Close matches: {named}."
     return (f"{message} python scripts/verify.py --platform <name> --list-targets "
             "lists the targets of one platform.")
 

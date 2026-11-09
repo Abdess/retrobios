@@ -863,7 +863,7 @@ rb_here() {
       return 1
     fi
     other=$(rb_other_card)
-    if [ -n "$other" ] && rb_ask "Copy the BIOS files from your other card? $other holds files. RetroBIOS copies the ones this system needs, each checked by its hash, and leaves that card as it is."; then
+    if [ -n "$other" ] && rb_ask "Copy the BIOS files from the other card? $other holds files. RetroBIOS copies the ones this system needs, each checked by its hash, and leaves that card as it is."; then
       args=(--from "$other")
     fi
     pack=$(rb_find_pack)
@@ -874,7 +874,7 @@ rb_here() {
     if [ -z "$pack" ]; then
       if [ "${#args[@]}" -gt 0 ]; then
         # --from needs the list of files, which comes from the network or a pack.
-        rb_message "$(rb_pack_text) The pack carries the list of files: with it, the files on your other card are copied too."
+        rb_message "$(rb_pack_text) The pack carries the list of files: with it, the files on the other card are copied too."
       else
         rb_message "$(rb_pack_text)"
       fi

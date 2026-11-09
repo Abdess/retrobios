@@ -6221,7 +6221,7 @@ class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
             with self.assertRaises(DatabaseUnreadable) as caught:
                 load_database(str(typo))
         message = str(caught.exception)
-        self.assertIn(f"Did you mean {typo.with_name('database.json')}?", message)
+        self.assertIn(f"Close match: {typo.with_name('database.json')}", message)
         self.assertNotIn("generate_db.py", message)
 
 
@@ -7123,7 +7123,7 @@ class PlatformSystemTypoGetsTheClosestNames(unittest.TestCase):
             )
         self.assertIsNone(result)
         printed = out.getvalue()
-        self.assertIn("Did you mean: sony-playstation", printed)
+        self.assertIn("Close matches: sony-playstation", printed)
         self.assertIn("--platform retroarch --list-systems", printed)
         self.assertNotIn("3do", printed)
 
@@ -7423,7 +7423,7 @@ class ATargetTypoIsAnErrorInEveryTool(unittest.TestCase):
                 output = proc.stdout + proc.stderr
                 self.assertNotEqual(proc.returncode, 0)
                 self.assertNotIn("Traceback", output)
-                self.assertIn("Did you mean: switch?", output)
+                self.assertIn("Close matches: switch.", output)
                 self.assertIn("verify.py --platform retroarch --list-targets", output)
 
 

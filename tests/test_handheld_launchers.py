@@ -1782,7 +1782,7 @@ class TheMuosApp(unittest.TestCase):
         proc = device.run([str(app / "mux_launch.sh"), str(app)], keys="\r", FAKE_CURL="7",
                           RB_CONSOLE=device.console, RB_BIOS_DEST=str(sd2))
         self.assertEqual(proc.returncode, 0, proc.stderr.decode())
-        self.assertIn("Copy the BIOS files from your other card?", device.screen)
+        self.assertIn("Copy the BIOS files from the other card?", device.screen)
         self.assertIn(str(sd1), device.screen)
         [call] = device.tui_calls()
         self.assertEqual(call["args"], ["--tui", "--from", str(sd1), "--from-pack", str(pack),
@@ -1899,8 +1899,8 @@ class TheToolsEntry(unittest.TestCase):
                           RB_CONSOLE=device.console, RB_OTHER_CARDS=f"{roms}:{roms2}")
         self.assertEqual(proc.returncode, 1)
         screen = " ".join(device.screen.split())
-        self.assertIn(f"Copy the BIOS files from your other card? {roms} holds files", screen)
-        self.assertIn("with it, the files on your other card are copied too", screen)
+        self.assertIn(f"Copy the BIOS files from the other card? {roms} holds files", screen)
+        self.assertIn("with it, the files on the other card are copied too", screen)
         self.assertEqual(device.tui_calls(), [])
 
     def test_amberelec_console(self):

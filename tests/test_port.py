@@ -440,7 +440,7 @@ class TheScreens(unittest.TestCase):
         ])
         summary = [s for s in shown if s[:2] == ("list", "summary")][0][2]
         self.assertEqual(summary["info:result"][0], "Installed: 2 files")
-        self.assertEqual(summary["info:kept:1"][0], "Kept 1 file you had (100 B)")
+        self.assertEqual(summary["info:kept:1"][0], "Kept 1 file already there (100 B)")
         self.assertIn("/roms/retrobios-backup/20261022-153000", summary["info:kept:1"][1])
         self.assertEqual(self.calls(), [
             "--check --events",

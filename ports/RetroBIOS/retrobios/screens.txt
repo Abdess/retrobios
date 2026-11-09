@@ -353,7 +353,7 @@ rb_screen_summary() {
         ;;
       kept)
         kept=$((kept + 1))
-        rb_entry "summary" "info:kept:$kept" "Kept $(rb_plural "$b" file) you had ($c)" "The collection's copies replaced them. Yours are in $a. Copy what that folder holds into the folder above retrobios-backup to put them back."
+        rb_entry "summary" "info:kept:$kept" "Kept $(rb_plural "$b" file) already there ($c)" "The collection's copies replaced them. Yours are in $a. Copy what that folder holds into the folder above retrobios-backup to put them back."
         ;;
       skipped)
         rb_entry "summary" "info:skipped:$a" "Not in the collection ($a): $(rb_plural "$b" file)" "Required: $c. The RetroBIOS collection does not hold these files, so they cannot be downloaded."

@@ -1,5 +1,5 @@
 === setup
-^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Where do you play?^[[0m
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Where to install?^[[0m
 
  Found on this machine:
  
@@ -138,7 +138,7 @@
  
 ^[[0;7;35m > Install^[[0m
    Choose systems
-   Copy from your old card or a folder
+   Copy from an old card or a folder
    Options
    Quit
  ^[[0;1;35mA^[[0m Install  ^[[0;2mB^[[0m Back  ^[[0;2mY^[[0m Options  ^[[0;2m?^[[0m Help
@@ -209,7 +209,7 @@
 === cores
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Cores^[[0m
 
- Untick the cores you do not use: the
+ Untick the cores not in use: the
    platform's own files are always
    kept, and a core with no extra file
    reads only those.
@@ -257,7 +257,7 @@
 === confirm
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Confirm^[[0m
 
- Counted again for your choices.
+ Counted again for these choices.
    Nothing is written before Install.
 ^[[0;1m ^[[0;1;35m1^[[0;1m file to download, ^[[0;1;35m16.0 KB^[[0m
  BIOS folder: ^[[0;1m~/.co.../retroarch/system^[[0m
@@ -362,7 +362,7 @@
    Only what starts: no
    Show the games
    Choose systems
-   Copy from your old card or a folder
+   Copy from an old card or a folder
    Options
    Quit
  ^[[0;1;35mA^[[0m Install  ^[[0;2mB^[[0m Back  ^[[0;2mY^[[0m Options  ^[[0;2m?^[[0m Help
