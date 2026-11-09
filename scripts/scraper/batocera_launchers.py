@@ -58,6 +58,29 @@ def _config_option(node: ast.AST) -> tuple[str, Any] | None:
     return node.args[0].value, default
 
 
+def _option_names(node: ast.AST) -> list[str]:
+    """Options a node reads: system.config.get*(o), system.config[o], system.isOptSet(o)."""
+    found: list[str] = []
+    for child in ast.walk(node):
+        option = _config_option(child)
+        if option is None and (
+            isinstance(child, ast.Subscript)
+            and ast.unparse(child.value) == "system.config"
+            and isinstance(child.slice, ast.Constant)
+        ):
+            option = (str(child.slice.value), None)
+        if option is None and (
+            isinstance(child, ast.Call)
+            and ast.unparse(child.func) == "system.isOptSet"
+            and child.args
+            and isinstance(child.args[0], ast.Constant)
+        ):
+            option = (str(child.args[0].value), None)
+        if option is not None and option[0] not in found:
+            found.append(option[0])
+    return found
+
+
 def path_constants(source: Source) -> dict[str, str]:
     """batoceraPaths' module constants that are plain paths."""
     constants: dict[str, str] = {}
@@ -92,12 +115,18 @@ def _path_value(node: ast.AST | None, constants: dict[str, str]) -> str | None:
     return None
 
 
-def generator_names(source: Source) -> dict[str, list[str]]:
-    """Generator module -> the emulator or core names configgen loads it for."""
+def generator_names(source: Source, legacy_map: bool = True) -> dict[str, list[str]]:
+    """Generator module -> the emulator or core names configgen loads it for.
+
+    legacy_map is false for a configgen written before _LEGACY_GENERATOR_MAP
+    (KNULLI's), whose importer has the plain map only.
+    """
     names: dict[str, list[str]] = {}
     plain = source.literal(source.assignment("_GENERATOR_MAP").value, "_GENERATOR_MAP")
     for emulator, (module, _cls) in plain.items():
         names.setdefault(module, []).append(emulator)
+    if not legacy_map:
+        return names
     legacy = source.literal(
         source.assignment("_LEGACY_GENERATOR_MAP").value, "_LEGACY_GENERATOR_MAP"
     )
@@ -108,14 +137,23 @@ def generator_names(source: Source) -> dict[str, list[str]]:
 
 
 class Configgen:
-    """The configgen tree at one revision, read through `read(path)`."""
+    """The configgen tree at one revision, read through `read(path)`.
 
-    def __init__(self, read: Callable[[str], str]) -> None:
+    root is the configgen package in the repository: Batocera's by default,
+    KNULLI keeps the same package under its own path.
+    """
+
+    def __init__(
+        self, read: Callable[[str], str], root: str = CONFIGGEN, legacy_map: bool = True
+    ) -> None:
         self._read = read
         self._sources: dict[str, Source] = {}
-        self.paths = path_constants(self.source(PATHS_MODULE))
+        self.generators = f"{root}/generators"
+        self.importer = f"{self.generators}/importer.py"
+        self.libretro_options = f"{self.generators}/libretro/libretroOptions.py"
+        self.paths = path_constants(self.source(f"{root}/batoceraPaths.py"))
         self.bios = self.paths["BIOS"]
-        self._generators = generator_names(self.source(IMPORTER))
+        self._generators = generator_names(self.source(self.importer), legacy_map)
 
     def source(self, path: str) -> Source:
         if path not in self._sources:
@@ -123,7 +161,7 @@ class Configgen:
         return self._sources[path]
 
     def generator(self, module: str) -> Source:
-        return self.source(f"{GENERATORS}/{module.replace('.', '/')}.py")
+        return self.source(f"{self.generators}/{module.replace('.', '/')}.py")
 
     def helper(self, module: str, helper: str) -> Source:
         """A module the generator imports with `from . import helper`."""
@@ -137,7 +175,7 @@ class Configgen:
         )
         if not imported:
             generator.fail(f"does not import {helper}")
-        return self.source(f"{GENERATORS}/{module.split('.')[0]}/{helper}.py")
+        return self.source(f"{self.generators}/{module.split('.')[0]}/{helper}.py")
 
     def emulator(self, module: str) -> str:
         """The name configgen loads `module` for (importer.get_generator)."""
@@ -146,7 +184,7 @@ class Configgen:
         package, _, leaf = module.partition(".")
         if leaf == f"{package}Generator":
             return package
-        raise LauncherShapeError(f"{IMPORTER}: no emulator loads {module}")
+        raise LauncherShapeError(f"{self.importer}: no emulator loads {module}")
 
     def bios_name(self, node: ast.AST) -> str | None:
         """The name under /userdata/bios that an expression spells, if any."""
@@ -386,15 +424,28 @@ def _loaded(stmt: ast.stmt) -> set[str]:
     return {n.id for n in ast.walk(value) if isinstance(n, ast.Name)} if value else set()
 
 
+def _branch_assigns(stmt: ast.stmt, needed: set[str]) -> bool:
+    """Whether an if statement assigns one of the names in any branch."""
+    return isinstance(stmt, ast.If) and any(
+        _assigned_name(node) in needed for node in ast.walk(stmt)
+    )
+
+
 def _trace(body: list[ast.stmt], index: int) -> list[ast.stmt]:
     """body[index], the assignments before it that bind what it reads, and
-    the command-line additions that read any of those names."""
+    the command-line additions that read any of those names.
+
+    An if statement that assigns a name read is kept with what its test
+    reads (KNULLI's `if system.isOptSet("model") ...: machine = ...`)."""
     kept = [body[index]]
     needed = _loaded(body[index])
     for stmt in reversed(body[:index]):
         if _assigned_name(stmt) in needed:
             kept.append(stmt)
             needed |= _loaded(stmt)
+        elif _branch_assigns(stmt, needed):
+            kept.append(stmt)
+            needed |= {n.id for n in ast.walk(stmt) if isinstance(n, ast.Name)}
     produced = {name for stmt in kept if (name := _assigned_name(stmt)) is not None}
     kept += [
         stmt for stmt in body
@@ -435,15 +486,23 @@ def hatari(cg: Configgen) -> list[Launcher]:
                 and isinstance(parts[1], ast.FormattedValue)
             ):
                 marker, prefix = node.test.left.value, parts[0].value
-    tos_path = src.assignment("tos_path", finder).value
-    if isinstance(tos_path, ast.BinOp) and isinstance(tos_path.right, ast.JoinedStr):
-        parts = tos_path.right.values
-        if (
-            len(parts) == 3
-            and all(isinstance(p, ast.FormattedValue) for p in parts[:2])
-            and isinstance(parts[2], ast.Constant)
-        ):
-            suffix = parts[2].value
+    # Batocera: tos_path = biosdir / f"{biosversion}{v_language}.img".
+    # KNULLI: filename = f"{biosversion}{v_language}.img".
+    names_built = []
+    for node in ast.walk(finder):
+        value = node.value if isinstance(node, ast.Assign) else None
+        if isinstance(value, ast.BinOp) and isinstance(value.op, ast.Div):
+            value = value.right
+        if isinstance(value, ast.JoinedStr):
+            parts = value.values
+            if (
+                len(parts) == 3
+                and all(isinstance(p, ast.FormattedValue) for p in parts[:2])
+                and isinstance(parts[2], ast.Constant)
+            ):
+                names_built.append(parts[2].value)
+    if len(names_built) == 1:
+        suffix = names_built[0]
     if marker is None or prefix is None or suffix is None:
         src.fail("findBestTos no longer builds <tos{version} or etos*><language>.img")
     raised = [node for node in ast.walk(finder) if isinstance(node, ast.Raise)]
@@ -466,10 +525,7 @@ def hatari(cg: Configgen) -> list[Launcher]:
         src.fail("findBestTos is not given a batoceraPaths directory")
     search_dir = cg.paths[call.args[0].id]
     kept = _trace(body, index)
-    options = [
-        option[0] for stmt in kept for node in ast.walk(stmt)
-        if (option := _config_option(node)) is not None
-    ]
+    options = list(dict.fromkeys(name for stmt in kept for name in _option_names(stmt)))
     spans = [src.span(stmt) for stmt in kept] + [(finder.lineno, finder.end_lineno)]
     args: list[str] = []
     second = call.args[1] if len(call.args) > 1 else None
@@ -483,6 +539,14 @@ def hatari(cg: Configgen) -> list[Launcher]:
                 elif isinstance(element, ast.Name) and element.id == machine_var:
                     args.append("{machine}")
                 elif isinstance(element, ast.Name) and element.id == tos_var:
+                    args.append("<file>")
+                elif (
+                    isinstance(element, ast.BinOp)
+                    and isinstance(element.right, ast.Name)
+                    and element.right.id == tos_var
+                    and _path_value(element.left, cg.paths) == search_dir
+                ):
+                    # KNULLI returns the bare name and joins it: BIOS / tos.
                     args.append("<file>")
     if "<file>" not in args:
         src.fail("the TOS findBestTos returns is not put on the command line")
@@ -563,7 +627,7 @@ def melonds(cg: Configgen) -> list[Launcher]:
         node for node in ast.walk(generate)
         if isinstance(node, ast.Assign)
         and ast.unparse(node.targets[0]).startswith("base_config['Emu']['ConsoleType']")
-        and _config_option(node.value) is not None
+        and _option_names(node.value)
     ]
     enabled = [
         (key, value) for key, value in zip(base.value.keys, base.value.values)
@@ -574,7 +638,7 @@ def melonds(cg: Configgen) -> list[Launcher]:
     ]
     if len(console) != 1 or len(enabled) != 1:
         src.fail("generate no longer sets Emu.ConsoleType from an option with external BIOS on")
-    option = _config_option(console[0].value)[0]  # type: ignore[index]
+    option = _option_names(console[0].value)[0]  # type: ignore[attr-defined]
     launchers = []
     for key, value in zip(base.value.keys, base.value.values):
         if not isinstance(value, ast.Dict) or not isinstance(key, ast.Constant):
@@ -805,7 +869,7 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
     for module, paths_module in ENVIRONMENT_GENERATORS:
         src = cg.generator(module)
         constants = dict(cg.paths)
-        for node in cg.source(f"{GENERATORS}/{paths_module}").tree.body:
+        for node in cg.source(f"{cg.generators}/{paths_module}").tree.body:
             name = _assigned_name(node)
             value = _path_value(getattr(node, "value", None), constants)
             if name is not None and value is not None:
@@ -840,7 +904,7 @@ FILE_OPTIONS = (("_o2em_options", "o2em_bios"), ("_neocd_options", "neocd_bios")
 
 def core_file_options(cg: Configgen) -> list[Launcher]:
     """_set_from_system(settings, option, system, [name], default=...)."""
-    src = cg.source(LIBRETRO_OPTIONS)
+    src = cg.source(cg.libretro_options)
     table = src.assignment("_option_functions").value
     if not isinstance(table, ast.Dict):
         src.fail("_option_functions is not a dict display")
