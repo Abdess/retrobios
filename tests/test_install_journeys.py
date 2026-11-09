@@ -166,7 +166,7 @@ class Journeys(unittest.TestCase):
         repo = Repository(self)
         dest = repo.retroarch_here()
         term = self.start(repo)
-        screen = term.wait("Where do you play?", timeout=40)
+        screen = term.wait("Where to install?", timeout=40)
         self.assertIn("> RetroArch", screen)
         self.press(term, "\r")
         term.wait("files to download", timeout=40)
@@ -186,7 +186,7 @@ class Journeys(unittest.TestCase):
         (card / "ROMS" / "GBA").mkdir(parents=True)
         (card / "ROMS" / "GBA" / "unknown.gba").write_bytes(b"not in any catalog")
         term = self.start(repo, env={"JOURNEY_CARD": str(card)})
-        term.wait("Where do you play?", timeout=40)
+        term.wait("Where to install?", timeout=40)
         self.press(term, "\r")
         screen = term.wait("For the games on this card: yes", timeout=60)
         self.assertIn("For the 1 game on this card.", screen)
@@ -210,7 +210,7 @@ class Journeys(unittest.TestCase):
         changed["size"] += 1
         repo.write_list()
         term = self.start(repo)
-        term.wait("Where do you play?", timeout=40)
+        term.wait("Where to install?", timeout=40)
         self.press(term, "\r")
         term.wait("1 file to download", timeout=40)
         self.press(term, "\r")
@@ -223,7 +223,7 @@ class Journeys(unittest.TestCase):
         repo = Repository(self)
         dest = repo.retroarch_here()
         term = self.start(repo)
-        term.wait("Where do you play?", timeout=40)
+        term.wait("Where to install?", timeout=40)
         self.press(term, "\r")
         term.wait("files to download", timeout=40)
         for _step in range(12):
@@ -237,7 +237,7 @@ class Journeys(unittest.TestCase):
         self.press(term, "n", "/", "gba", "\r", "\r", ESC, ESC)
         term.wait("for 1 of", timeout=20)
         self.press(term, "\r")
-        term.wait("Counted again for your choices", timeout=40)
+        term.wait("Counted again for these choices", timeout=40)
         self.press(term, "\r")
         started = self.keys
         self.assertEqual(self.finish(term), 0)
@@ -246,7 +246,7 @@ class Journeys(unittest.TestCase):
         # The next release: the earlier choice is not kept, and two keys
         # install the whole list.
         term = self.start(repo)
-        term.wait("Where do you play?", timeout=40)
+        term.wait("Where to install?", timeout=40)
         self.press(term, "\r")
         term.wait("files to download", timeout=40)
         self.press(term, "\r")
@@ -259,7 +259,7 @@ class Journeys(unittest.TestCase):
         repo = Repository(self)
         repo.retroarch_here()
         term = self.start(repo)
-        term.wait("Where do you play?", timeout=40)
+        term.wait("Where to install?", timeout=40)
         self.press(term, "\r")
         term.wait("files to download", timeout=40)
         self.press(term, "o")
@@ -277,7 +277,7 @@ class Journeys(unittest.TestCase):
         repo = Repository(self)
         repo.retroarch_here()
         term = self.start(repo)
-        term.wait("Where do you play?", timeout=40)
+        term.wait("Where to install?", timeout=40)
         for _step in range(12):
             if "> Another setup or folder" in term.settle():
                 break
