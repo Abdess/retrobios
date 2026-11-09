@@ -12,8 +12,8 @@ upstream_frozen: "The fork is rebased on trzy's tree at 1481545, the revision it
 core_version: "0.3a-1481545-mm DirtBagXon (Sinden)"
 version_basis:
   kind: file
-  path: "Src/Version.h"
-  pattern: '#define\s+SUPERMODEL_VERSION\s+"([^"]+)'
+  path: "Src/Version.cpp"
+  pattern: 'series_version\s*=\s*"([^"]+)"'
 display_name: "Sega - Model 3 (Supermodel, Sinden fork)"
 verification: existence
 cores:
