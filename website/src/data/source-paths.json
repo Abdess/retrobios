@@ -355,7 +355,7 @@
   "crates/nicaiemu-libretro/src/libretro/api.rs",
   "crates/nicaiemu/src/main.rs"
  ],
- "github.com/AloysHF/CoolbarEmu@88e90440daab0bdc7bc141728b51841e0c730528": [
+ "github.com/AloysHF/CoolbarEmu@aa6df0ec289ffc4f89f4c03f748d0b121fb4323f": [
   "Cargo.toml",
   "crates/coolbaremu-core/src/cbe/archive.rs",
   "crates/coolbaremu-core/src/machine/drawing.rs",
@@ -2817,6 +2817,7 @@
   "src/copy_interfaces/transtape.h",
   "src/cpu.c",
   "src/cpu.h",
+  "src/machines/atmturbo.c",
   "src/machines/pcw.c",
   "src/machines/prism.c",
   "src/machines/prism.h",
@@ -3684,7 +3685,7 @@
   "META-INF/freej2me-build.version",
   "src/libretro/freej2me_libretro.c"
  ],
- "github.com/hrydgard/ppsspp@43a69b1c84dfe29e82b46bd3797a1106cbd65c5b": [
+ "github.com/hrydgard/ppsspp@4a9fa00e5ab1a63572dfb429149b1d34bba95093": [
   "Core/ConfigValues.h",
   "Core/HLE/HLE.cpp",
   "Core/HLE/sceFont.cpp",
@@ -8811,7 +8812,7 @@
   "src/NDS.cpp",
   "src/NDSCart.cpp"
  ],
- "github.com/rafaelvcaetano/melonDS-android@c42995caff0144f37ad9791dc9bc96d82e8a6f65": [
+ "github.com/rafaelvcaetano/melonDS-android@aaf263d233e65c348d5830db32c593f8b7a8e4c9": [
   "app/CMakeLists.txt",
   "app/build.gradle.kts",
   "app/src/gitHubNightly/java/me/magnum/melonds/github/repositories/GitHubNightlyUpdatesRepository.kt",
