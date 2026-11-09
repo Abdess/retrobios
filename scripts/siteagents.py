@@ -19,6 +19,8 @@ import json
 from collections.abc import Callable
 from pathlib import Path
 
+from siteguides import PACKAGE_COMMAND
+
 SITE = "https://abdess.github.io/retrobios/"
 PUBLISHER = "abdess.github.io"
 SH = "curl -fsSL https://abdess.github.io/retrobios/i | sh -s --"
@@ -30,6 +32,22 @@ QUOTING = (f"A folder goes in single quotes, attached to its option. One that ho
            "or starts with `-`, is a question for the user, never a value to escape into the "
            "command. On a page of the site, the `device_setup_command` WebMCP tool writes the "
            "command and refuses such a folder.")
+
+UVX = PACKAGE_COMMAND
+# EVENT_SCHEMA of install.py, and the schema generate_event_schema.py writes
+# from EVENT_KEYS, as the site publishes it. tests/test_site_agents.py holds
+# both to install.py.
+EVENT_SCHEMA = 1
+EVENTS_SCHEMA_PATH = "api/v1/schemas/install-events.schema.json"
+# Every code of the Exit status table of wiki/installer.md, in short.
+EXIT_CODES = (
+    (0, "everything asked for is installed or already in place"),
+    (1, "a failure: a download, a file list or a folder that cannot be used"),
+    (2, "nothing was done: an option refused, every file failed, or the user quit"),
+    (3, "`--check` found files missing or wrong, nothing having failed"),
+    (130, "stopped with Ctrl+C"),
+    (141, "the output went to a reader that closed early"),
+)
 
 START_PAGES = (
     ("Which pack is needed", "which-pack/", "pick a device or setup, get the folder its BIOS files go in, "
@@ -107,6 +125,23 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "`--events` (JSON lines, one per event, documented on the installer page).",
         "- A game the installer cannot identify gets every BIOS of its system, and the run names it.",
         f"- The same steps as an Agent Skill: [SKILL.md]({SITE}{SKILL_PATH}).",
+        "",
+        "## Driving the installer for a user",
+        "",
+        f"With Python 3.8 or newer, the installer is also a package: `{UVX} --for-games "
+        f"--required-only --dry-run`, or `pipx run retrobios` with the same options.",
+        "",
+        "1. Plan: add `--dry-run --events`. Nothing is written, and standard output carries "
+        f"one JSON object per line, event schema {EVENT_SCHEMA} "
+        f"([JSON Schema]({SITE}{EVENTS_SCHEMA_PATH})): a `file` event per file with its "
+        "`state`, `check` with the totals and `bytes_needed`, then `summary` with `pending`.",
+        "2. Consent: show the user what will be installed, where, and the size, and ask.",
+        "3. Act, only on a yes: the same command with `--yes` in place of `--dry-run`.",
+        "",
+        "- `--yes` asks nothing: use it in a run without a terminal. A run that needs an "
+        "answer (two setups found, none found) stops and names the option to give.",
+        "- The exit code, also the `code` of the last `end` event:",
+        *(f"  - `{code}`: {meaning}" for code, meaning in EXIT_CODES),
         "",
         "## Start",
         "",
