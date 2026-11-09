@@ -6,7 +6,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "v6.1",
-  "generated": "2026-11-09T08:00:53Z",
+  "generated": "2026-11-09T09:30:52Z",
   "base_destination": "system",
   "detect": [
     {
@@ -111849,7 +111849,7 @@
       "sha1": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "sha256": "05ad753fb594e656cf078023ec189e09e2a7655a780de993b75b8c51ed6b09ca",
       "size": 1048576,
-      "repo_path": "bios/Apple/Macintosh/BasiliskII/ROM",
+      "repo_path": "bios/QEMU/QEMU/MacROM.bin",
       "cores": [
         "qemu"
       ]

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-09T08:00:53Z",
+  "generated_at": "2026-11-09T09:30:52Z",
   "total_files": 19987,
   "total_size": 17173278940,
   "bios_dir": "bios",
@@ -1780,16 +1780,6 @@
       "sha256": "a9a828987b872186cfe6666cbae4e53c48a7997fd1877d2a9395ab08037b4a04",
       "crc32": "1cc952f6",
       "adler32": "56c425cc"
-    },
-    "f2a9ce387019bf272c6e3459d961b30f28942ac5": {
-      "path": "bios/Apple/Macintosh/BasiliskII/ROM",
-      "name": "ROM",
-      "size": 1048576,
-      "sha1": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
-      "md5": "69489153dde910a69d5ae6de5dd65323",
-      "sha256": "05ad753fb594e656cf078023ec189e09e2a7655a780de993b75b8c51ed6b09ca",
-      "crc32": "4e70e3c0",
-      "adler32": "e6360545"
     },
     "134eab28dcb54854013f348078fb69bfb6329a8b": {
       "path": "bios/Apple/Macintosh/disk.img",
@@ -167733,6 +167723,16 @@
       "crc32": "3d6f6ed3",
       "adler32": "9f865ebb"
     },
+    "f2a9ce387019bf272c6e3459d961b30f28942ac5": {
+      "path": "bios/QEMU/QEMU/MacROM.bin",
+      "name": "MacROM.bin",
+      "size": 1048576,
+      "sha1": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
+      "md5": "69489153dde910a69d5ae6de5dd65323",
+      "sha256": "05ad753fb594e656cf078023ec189e09e2a7655a780de993b75b8c51ed6b09ca",
+      "crc32": "4e70e3c0",
+      "adler32": "e6360545"
+    },
     "619b86fb02faf8f682474be3f0653b58015008ba": {
       "path": "bios/QEMU/QEMU/QEMU,cgthree.bin",
       "name": "QEMU,cgthree.bin",
@@ -205386,7 +205386,6 @@
       "0d4b090d85e995ae8ce724b910c8cc15": "9c27bba32c0c7c70a87512282acd6729744a36f9",
       "cc480c35c9e946b98ba73777c45ab59d": "d2b9531a4c1a9f50fe636264950bccf8375eb2b0",
       "08fd735f8183014b63060af2331a9e5e": "ff49f73d2641024c7ec9a787ecadc7f4890ab60e",
-      "69489153dde910a69d5ae6de5dd65323": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "64c507ce3395f96e5bbb09a13834fbba": "134eab28dcb54854013f348078fb69bfb6329a8b",
       "e2db7b7d1cf1420c7903206815d529d1": "601460f725cbe21711b4e7bc627614a0667caf05",
       "af343f3f1362bf29cefd630687efaa25": "47cd505b6a7c46e5c0ffa29f0d5037c83e94a02f",
@@ -221707,6 +221706,7 @@
       "691c3fd368211280d268645c0efd2eff": "8af162223bb12fc19b414f126022910372790103",
       "761fea207d0eafd4cfd78da7c44cac88": "c1b9202cbe072db12114b223a9ba5374b30718fb",
       "d6ccd1da5c4a1b22c64e6eec899e0daf": "b1e48d1f5e494a6cbece61cfca4469dea33fba4b",
+      "69489153dde910a69d5ae6de5dd65323": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "99133378a8a9e141e133773f6d2480b0": "619b86fb02faf8f682474be3f0653b58015008ba",
       "cc4d512c65fb42a0ac5d0fa38747d310": "5f1792a73ee47d78b2160191ecb2c92f353f93ad",
       "3fd0d13282b031f4c017cd6bf6597183": "9dda4cbcc1d3f6d38c10fee3de53b9abd5e47ec0",
@@ -225680,8 +225680,7 @@
         "a57f14469867ce0d0865995a645b69f41a0ea718"
       ],
       "ROM": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
-        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
       ],
       "parallel.rom": [
         "c75c751589cbcc1ad4ab4f63676af7abadd86f5b"
@@ -266658,6 +266657,9 @@
       "laseractive_dyw_1322a.bin": [
         "b1e48d1f5e494a6cbece61cfca4469dea33fba4b"
       ],
+      "MacROM.bin": [
+        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
+      ],
       "QEMU,cgthree.bin": [
         "619b86fb02faf8f682474be3f0653b58015008ba"
       ],
@@ -279282,9 +279284,6 @@
       "LA_jp_102.bin": [
         "26237b333db4a4c6770297fa5e655ea95840d5d9"
       ],
-      "MacROM.bin": [
-        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
-      ],
       "Battle 1.mid": [
         "dc5cc32fafa442b09ab2d814ed32074d02597234"
       ],
@@ -280865,6 +280864,36 @@
         "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
       ],
       "APPLE2GS.ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "ROM3": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "ROM01": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "ROM03": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "ROM.01": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "ROM.03": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "APPLE2GS.ROM2": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "xgs.rom": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "XGS.ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "Rom03gd": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "342-0077-b": [
         "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
       ],
       "MSXR2.ROM": [
@@ -283471,7 +283500,6 @@
       "516164c0": "9c27bba32c0c7c70a87512282acd6729744a36f9",
       "6f3f026e": "d2b9531a4c1a9f50fe636264950bccf8375eb2b0",
       "1cc952f6": "ff49f73d2641024c7ec9a787ecadc7f4890ab60e",
-      "4e70e3c0": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "30f5d7a6": "134eab28dcb54854013f348078fb69bfb6329a8b",
       "4a5258ae": "601460f725cbe21711b4e7bc627614a0667caf05",
       "1735e7a5": "47cd505b6a7c46e5c0ffa29f0d5037c83e94a02f",
@@ -299792,6 +299820,7 @@
       "3b10cf41": "8af162223bb12fc19b414f126022910372790103",
       "76116a02": "c1b9202cbe072db12114b223a9ba5374b30718fb",
       "3d6f6ed3": "b1e48d1f5e494a6cbece61cfca4469dea33fba4b",
+      "4e70e3c0": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "8c24bcc6": "619b86fb02faf8f682474be3f0653b58015008ba",
       "791a8b08": "5f1792a73ee47d78b2160191ecb2c92f353f93ad",
       "92bcc762": "9dda4cbcc1d3f6d38c10fee3de53b9abd5e47ec0",
@@ -303459,7 +303488,6 @@
       "2e9751fb87d0057e3e47ce9cd4eb3115f739d19206a01179b973a6430f9b4a79": "9c27bba32c0c7c70a87512282acd6729744a36f9",
       "fd1a78635b99aa77905b8f8ab1f280a072a8ab37192f083023cc8796d394b790": "d2b9531a4c1a9f50fe636264950bccf8375eb2b0",
       "a9a828987b872186cfe6666cbae4e53c48a7997fd1877d2a9395ab08037b4a04": "ff49f73d2641024c7ec9a787ecadc7f4890ab60e",
-      "05ad753fb594e656cf078023ec189e09e2a7655a780de993b75b8c51ed6b09ca": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "dd20f48b54b6ecf072b9ead9dd02d881857e37c4d761e3b63aab0341b303ccdf": "134eab28dcb54854013f348078fb69bfb6329a8b",
       "d355290b06816da9861c9c4ce2e1627460edb0de5c8b9c72240d381e3684f332": "601460f725cbe21711b4e7bc627614a0667caf05",
       "c1098a03786667c8bf888792590ce53b47f65bf44a75e11c24718983e1d25af8": "47cd505b6a7c46e5c0ffa29f0d5037c83e94a02f",
@@ -319780,6 +319808,7 @@
       "62da6ad0b45ad6bec8bbcbf805d73017751fd674e9da266a6c357879fd95fbee": "8af162223bb12fc19b414f126022910372790103",
       "3f43b3b577117d84002e99cb0baeb97b0d65b1d70b4adadc68817185c6a687f0": "c1b9202cbe072db12114b223a9ba5374b30718fb",
       "02a4a82c4f5abfe2c7e15d3682be9590be96607cb9213ce88e335f34db95d76f": "b1e48d1f5e494a6cbece61cfca4469dea33fba4b",
+      "05ad753fb594e656cf078023ec189e09e2a7655a780de993b75b8c51ed6b09ca": "f2a9ce387019bf272c6e3459d961b30f28942ac5",
       "a99f3a06fdac5cf5d72bd0fd24647d897302c3ff8e918add65168185f8cbdf4d": "619b86fb02faf8f682474be3f0653b58015008ba",
       "92da99a770ab24f96c33c78382940cac8b25e88cb110634c1b32aa2d8cb852e7": "5f1792a73ee47d78b2160191ecb2c92f353f93ad",
       "f46fbeb7adbc300d65aef4862fc4566208aae9b34be3eceecb5aa5ae4ea3c535": "9dda4cbcc1d3f6d38c10fee3de53b9abd5e47ec0",
@@ -324370,15 +324399,6 @@
       ],
       ".variants/macos75.img.1cc952f6": [
         "ff49f73d2641024c7ec9a787ecadc7f4890ab60e"
-      ],
-      "Apple/Macintosh/BasiliskII/ROM": [
-        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
-      ],
-      "Macintosh/BasiliskII/ROM": [
-        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
-      ],
-      "BasiliskII/ROM": [
-        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
       ],
       "Apple/Macintosh/disk.img": [
         "134eab28dcb54854013f348078fb69bfb6329a8b"
@@ -519803,6 +519823,12 @@
       "LaserActive/laseractive_dyw_1322a.bin": [
         "b1e48d1f5e494a6cbece61cfca4469dea33fba4b"
       ],
+      "QEMU/QEMU/MacROM.bin": [
+        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
+      ],
+      "QEMU/MacROM.bin": [
+        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
+      ],
       "QEMU/QEMU/QEMU,cgthree.bin": [
         "619b86fb02faf8f682474be3f0653b58015008ba"
       ],
@@ -591385,12 +591411,6 @@
       "LaserActive/mega_ld_bios_J.bin": [
         "26237b333db4a4c6770297fa5e655ea95840d5d9"
       ],
-      "QEMU/QEMU/MacROM.bin": [
-        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
-      ],
-      "QEMU/MacROM.bin": [
-        "f2a9ce387019bf272c6e3459d961b30f28942ac5"
-      ],
       "RPG Maker/easyrpg/rtp/2003/Battle/Arrow.png": [
         "7aa8d4c377efcea1c9fad01924da1ba7b8575e1e"
       ],
@@ -601414,6 +601434,12 @@
         "bb7103a0818850a039c67ff666a31ce49a8d516f",
         "d4181c9f046aafc3fb326b381baac809d9e38d16"
       ],
+      "Mac OS ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "MacROM.bin": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
       "N88EXT1.ROM": [
         "4ae4d37409ff99411a623da9f6a44192170a854e"
       ],
@@ -601422,6 +601448,9 @@
       ],
       "N88EXT3.ROM": [
         "af452aed79b072c4d17985830b7c5dca64d4b412"
+      ],
+      "ROM1": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
       ],
       "basic10.rom": [
         "af7eae90c398ec12942a408fa5ac2722e331738c"
