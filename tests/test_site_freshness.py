@@ -6,13 +6,13 @@ the pages whose words changed for IndexNow."""
 
 from __future__ import annotations
 
+import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+
 import json
 import sys
 import tempfile
 import unittest
 from pathlib import Path
-
-import tests  # noqa: F401
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
