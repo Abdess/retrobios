@@ -99,19 +99,19 @@ systems:
       default_region: north-america
       region_free: [openbios.bin]
       fallback_across_regions: true
-      source_ref: "stenzek/duckstation@526b4a12 src/core/system.cpp:939-1009, src/core/system.cpp:664-680, src/core/bios.cpp:34-139, src/core/bios.cpp:397-460"
+      source_ref: "stenzek/duckstation@c9dc2254 src/core/system.cpp:1002-1072, src/core/system.cpp:706-722, src/core/bios.cpp:34-139, src/core/bios.cpp:397-460"
       keep_all_regions:
         - case: user-region-option
           condition: option
           option: Console/Region
           default: Auto
           keeps: all-regions
-          source_ref: "stenzek/duckstation@526b4a12 src/core/system.cpp:1739-1771, src/core/settings.h:608"
+          source_ref: "stenzek/duckstation@c9dc2254 src/core/system.cpp:1803-1835, src/core/settings.h:622"
         - case: duckstation-custom-region
           condition: user-state
           when: the user set a custom region for the game in the game list
           keeps: all-regions
-          source_ref: "stenzek/duckstation@526b4a12 src/core/bios.cpp:397-460"
+          source_ref: "stenzek/duckstation@c9dc2254 src/core/bios.cpp:397-460"
     pcsx_rearmed:
       default_region: north-america
       fallback_across_regions: true
@@ -161,13 +161,13 @@ systems:
   mega-cd:
     ares:
       preference: [north-america]
-      source_ref: "ares-emulator/ares@d400eee9 mia/medium/mega-cd.cpp:40-58, desktop-ui/emulator/mega-cd.cpp:17-19, desktop-ui/emulator/mega-cd.cpp:70-81, desktop-ui/emulator/emulator.cpp:86-106"
+      source_ref: "ares-emulator/ares@dd737665 mia/medium/mega-cd.cpp:40-58, desktop-ui/emulator/mega-cd.cpp:17-19, desktop-ui/emulator/mega-cd.cpp:70-81, desktop-ui/emulator/emulator.cpp:97-117"
       keep_all_regions:
         - case: multi-area-disc
           condition: disc
           when: the security code matches none of the three known CRC32s, so the disc lists every region
           keeps: listed-areas
-          source_ref: "ares-emulator/ares@d400eee9 mia/medium/mega-cd.cpp:40-58, desktop-ui/settings/settings.hpp:71"
+          source_ref: "ares-emulator/ares@dd737665 mia/medium/mega-cd.cpp:40-58, desktop-ui/settings/settings.hpp:72"
 
   sega-mastersystem:
     genesis_plus_gx:
@@ -187,7 +187,7 @@ systems:
 
   master-system:
     ares:
-      source_ref: "ares-emulator/ares@d400eee9 mia/medium/master-system.cpp:50-104, desktop-ui/emulator/master-system.cpp:14-16, desktop-ui/emulator/master-system.cpp:100-107"
+      source_ref: "ares-emulator/ares@dd737665 mia/medium/master-system.cpp:50-104, desktop-ui/emulator/master-system.cpp:14-16, desktop-ui/emulator/master-system.cpp:100-107"
 
   sega-saturn:
     beetle_saturn:
@@ -215,18 +215,18 @@ systems:
           source_ref: "beudbeud/libretro-stv@e6571347 libretro/libretro.cpp:428-437, libretro/libretro_core_options.h:36-37"
     ymir:
       fallback_across_regions: true
-      source_ref: "ymir-emu/Ymir@fe439e98 libs/ymir-core/src/ymir/media/saturn_header.cpp:29-40, libs/ymir-core/src/ymir/sys/saturn.cpp:308-350, apps/ymir-sdl3/src/app/services/rom_service.cpp:127-200"
+      source_ref: "ymir-emu/Ymir@ff935379 libs/ymir-core/src/ymir/media/saturn_header.cpp:29-40, libs/ymir-core/src/ymir/sys/saturn.cpp:308-350, apps/ymir-sdl3/src/app/services/rom_service.cpp:127-200"
       keep_all_regions:
         - case: multi-area-disc
           condition: disc
           when: the disc lists more than one area, picked by a user-configurable order
           keeps: listed-areas
-          source_ref: "ymir-emu/Ymir@fe439e98 apps/ymir-sdl3/src/app/settings.cpp:1052-1055, libs/ymir-core/src/ymir/sys/saturn.cpp:308-350"
+          source_ref: "ymir-emu/Ymir@ff935379 apps/ymir-sdl3/src/app/settings.cpp:1052-1055, libs/ymir-core/src/ymir/sys/saturn.cpp:308-350"
         - case: saturn-kr-ipl
           condition: disc
           when: area T (Asia NTSC) or K (Korea)
           keeps: all-regions
-          source_ref: "ymir-emu/Ymir@fe439e98 apps/ymir-sdl3/src/app/services/rom_service.cpp:127-200"
+          source_ref: "ymir-emu/Ymir@ff935379 apps/ymir-sdl3/src/app/services/rom_service.cpp:127-200"
     kronos:
       region_free: [saturn_bios.bin, sega_101.bin, mpr-17933.bin]
       source_ref: "libretro/yabause@3791ffb2 yabause/src/libretro/libretro.c:1618-1636"
@@ -285,7 +285,7 @@ systems:
   nintendo-64dd:
     ares:
       default_region: north-america
-      source_ref: "ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:17-19, desktop-ui/emulator/nintendo-64dd.cpp:64-80"
+      source_ref: "ares-emulator/ares@dd737665 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:17-19, desktop-ui/emulator/nintendo-64dd.cpp:64-80"
     project64:
       source_ref: "project64/project64@24376e86 Source/Project64-core/N64System/N64Disk.cpp:828-840, Source/Project64-core/N64System/N64System.cpp:641-662"
     rosalies-mupen-gui:
