@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/StillJC/ArcadeDuck"
 upstream: "https://github.com/stenzek/duckstation"
 source_commit: "4a9313cacab2f396a87736a43907a70894e2c40f"
+prose_written_at: "4a9313cacab2f396a87736a43907a70894e2c40f"
 pin_frozen: "RetroBat, the only platform that ships it, packages this build: the ArcadeDuck.exe of its beta arcadeduck.7z (repo/win64/beta, 7 November 2026) reports 0.6.5-dev-buildD0014-g4a9313cac, the bump its changelog records (RetroBat CHANGELOG.md:7). The stable 8.3.1 package carries 0.5.3 build R0004 (26caf9cd). Later commits are not part of that package."
 upstream_commit: "526b4a128827ecaef037134095cd95f431b52d06"
 profiled_date: "2026-10-26"
