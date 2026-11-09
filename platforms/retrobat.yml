@@ -3668,6 +3668,190 @@ launchers:
   fails_when_missing: warning, kickstart_ext_rom_file not written
   source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-154, 541-545,\
     \ 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs"
+  passes_to: "written: rom_path in amiberry.conf"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:185, 309-311, 341"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"amiberry\")>/WHDBoot"
+  passes_to: "written: whdboot_path in amiberry.conf"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:185, 326, 341"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick34005.A500
+  - kick34005.A500.rom
+  - amiga-os-130.rom
+  - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom"
+  - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick34005.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:69-74, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick33180.A500
+  - kick33180.A500.rom
+  - amiga-os-120.rom
+  - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A2000)[!].rom"
+  - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A1000-A2000).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick33180.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:76-81, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick37175.A500
+  - kick37175.A500.rom
+  - amiga-os-204.rom
+  - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+)[!].rom"
+  - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick37175.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:83-88, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40063.A600
+  - kick40063.A600.rom
+  - amiga-os-310-a600.rom
+  - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000)[!].rom"
+  - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40063.A600"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:90-95, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40068.A1200
+  - kick40068.A1200.rom
+  - amiga-os-310-a1200.rom
+  - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200)[!].rom"
+  - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40068.A1200"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:97-111, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40068.A4000
+  - kick40068.A4000.rom
+  - amiga-os-310-a4000.rom
+  - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A4000).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40068.A4000"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:113-127, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40060.CD32
+  - kick40060.CD32.rom
+  - amiga-os-310-cd32.rom
+  - "Kickstart v3.1 rev 40.60 (1993)(Commodore)(CD32).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40060.CD32"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:129-134, 138-143,\
+    \ 185, 309-311, 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40060.CD32.ext
+  - kick40060.CD32.ext.rom
+  - amiga-os-310-cd32-ext.rom
+  - "CD32 Extended-ROM rev 40.60 (1993)(Commodore)(CD32).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40060.CD32.ext"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:129-145, 185, 309-311,\
+    \ 541, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick34005.A500
+  - kick34005.A500.rom
+  - amiga-os-130.rom
+  - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick34005.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-151, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick34005.CDTV
+  - kick34005.CDTV.rom
+  - amiga-os-130-cdtv-ext.rom
+  - "CDTV Extended-ROM v1.0 (1991)(Commodore)(CDTV)[!].rom"
+  - "CDTV Extended-ROM v1.0 (1992)(Commodore)(CDTV).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick34005.CDTV"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-154, 185, 309-311,\
+    \ 541, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - rom.key
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/rom.key"
+  fails_when_missing: false
+  depends_on_option: the target is absent or its size differs
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:185, 309-311, 616-637,\
+    \ 674-699"
 - emulator: arcadeduck
   build: standalone
   kind: names_searched

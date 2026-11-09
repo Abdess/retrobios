@@ -92,6 +92,38 @@ AMIBERRY = """
         var searchDirs = new List<string> { biosPath, Path.Combine(biosPath, "amiga"), Path.Combine(biosPath, "Amiga") };
         return null;
     }
+
+    public override ProcessStartInfo Generate(string system, string emulator, string core, string rom)
+    {
+        if (!GetEmulatorPathAndExe(emulator, out string path, out string exe, "Amiberry.exe", "amiberry.exe"))
+            return null;
+    }
+
+    private void SetupAmiberrySettings(string path, string system)
+    {
+        _amiberryRomsPath = Path.Combine(path, "ROMs");
+        FileTools.TryCreateDirectory(_amiberryRomsPath);
+        overrides["rom_path"] = _amiberryRomsPath;
+        overrides["whdboot_path"] = Path.Combine(path, "WHDBoot");
+        MergeConfLines(confFile, overrides);
+    }
+
+    private void StageRomKey()
+    {
+        string source = FindBios(new[] { "rom.key" });
+        string dest = Path.Combine(_amiberryRomsPath, "rom.key");
+        if (!File.Exists(dest) || new FileInfo(dest).Length != new FileInfo(source).Length)
+            File.Copy(source, dest, true);
+    }
+
+    private string StageKickstart(string[] candidates)
+    {
+        string source = FindBios(candidates);
+        string dest = Path.Combine(_amiberryRomsPath, candidates[0]);
+        if (!dst.Exists || dst.Length != src.Length || dst.LastWriteTimeUtc < src.LastWriteTimeUtc)
+            File.Copy(source, dest, true);
+        return dest;
+    }
 """
 
 MEDNAFEN = """
@@ -353,6 +385,7 @@ class NamesInLauncherOrder(unittest.TestCase):
 
     def test_amiberry_identical_lists_are_one_record(self):
         records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = [r for r in records if r["kind"] == "names_searched"]
         self.assertEqual(
             [r["names"] for r in records],
             [
@@ -368,6 +401,46 @@ class NamesInLauncherOrder(unittest.TestCase):
             records[1]["passes_to"],
             "copied to <amiberry roms>/kick40060.CD32.ext, kickstart_ext_rom_file",
         )
+
+    def test_amiberry_folders_are_below_its_emulator_folder(self):
+        records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        folders = [r for r in records if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in folders],
+            [
+                ('<AppConfig.GetFullPath("amiberry")>/ROMs', "written: rom_path in amiberry.conf",
+                 f"{G}/Amiberry.Generator.cs:31, 37-41"),
+                ('<AppConfig.GetFullPath("amiberry")>/WHDBoot',
+                 "written: whdboot_path in amiberry.conf", f"{G}/Amiberry.Generator.cs:31, 40-41"),
+            ],
+        )
+
+    def test_amiberry_copies_each_kickstart_into_its_roms_folder(self):
+        records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        copies = [r for r in records if r["kind"] == "copies"]
+        self.assertEqual(
+            [(r["names"], r["passes_to"], r["depends_on_option"]) for r in copies],
+            [
+                (["kick40060.CD32", "kick40060.CD32.rom"],
+                 '<AppConfig.GetFullPath("amiberry")>/ROMs/kick40060.CD32',
+                 "first name found, the target is absent, smaller or older"),
+                (["kick40060.CD32.ext", "amiga-os-310-cd32-ext.rom"],
+                 '<AppConfig.GetFullPath("amiberry")>/ROMs/kick40060.CD32.ext',
+                 "first name found, the target is absent, smaller or older"),
+                (["rom.key"], '<AppConfig.GetFullPath("amiberry")>/ROMs/rom.key',
+                 "the target is absent or its size differs"),
+            ],
+        )
+        self.assertEqual(copies[0]["search_dir"], "bios, bios/amiga, bios/Amiga")
+        self.assertEqual(
+            copies[0]["source_ref"],
+            f"{G}/Amiberry.Generator.cs:3-5, 8-10, 15, 23-27, 31, 37-39, 52-59",
+        )
+
+    def test_amiberry_copy_without_its_staleness_test_raises(self):
+        broken = AMIBERRY.replace(" || dst.LastWriteTimeUtc < src.LastWriteTimeUtc", "")
+        with self.assertRaises(rl.LauncherPatternMissing):
+            rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": broken}))
 
     def test_psx_cascade_splits_searched_from_fallback(self):
         records = rl.psx_cascades(_psx_sources())

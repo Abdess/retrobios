@@ -747,7 +747,12 @@ def _kickstart_table(
     )
 
 
+AMIBERRY_KEY = "amiberry"
+
+
 def amiberry(sources: dict[str, Source]) -> list[Record]:
+    """Kickstarts searched in bios and copied into the folders the generator
+    writes to amiberry.conf, both below the amiberry emulator folder."""
     src = sources[f"{GENERATORS}/Amiberry.Generator.cs"]
     lists, search, method_span = _kickstart_table(
         src, "AmigaModel", r"private string FindBios\(string\[\] candidates\)"
@@ -782,6 +787,87 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
                 fails_when_missing=f"warning, {keys[field]} not written",
             )
         )
+    folder = src.find(
+        r'GetEmulatorPathAndExe\(emulator, out string path, out string exe(?:, "[^"]+")+\)',
+        "amiberry folder",
+    )
+    home = f'<AppConfig.GetFullPath("{AMIBERRY_KEY}")>'
+    roms = src.find(
+        r'(\w+) = Path\.Combine\(path, "(\w+)"\);\s*'
+        r'FileTools\.TryCreateDirectory\(\1\);\s*overrides\["rom_path"\] = \1;',
+        "rom_path folder",
+    )
+    whdboot = src.find(
+        r'overrides\["whdboot_path"\] = Path\.Combine\(path, "(\w+)"\);', "whdboot_path folder"
+    )
+    write = src.find(r"MergeConfLines\(confFile, overrides\);", "amiberry.conf write")
+    head = src.lines(folder.start(), folder.end())
+    written = src.lines(write.start(), write.end())
+    for directory, match, key in ((roms.group(2), roms, "rom_path"),
+                                  (whdboot.group(1), whdboot, "whdboot_path")):
+        records.append(
+            _record(
+                "amiberry",
+                "standalone",
+                "passes_path",
+                [],
+                source_ref((src.path, [head, src.lines(match.start(), match.end()), written])),
+                search_dir=f"{home}/{directory}",
+                passes_to=f"written: {key} in amiberry.conf",
+                fails_when_missing=False,
+            )
+        )
+    stage = src.find(r"private string StageKickstart\(string\[\] candidates\)", "StageKickstart")
+    stage_body = src.block_at(stage.end())
+    stage_text = src.text[stage_body[0]:stage_body[1]]
+    if not re.search(r"Path\.Combine\(_amiberryRomsPath, candidates\[0\]\)", stage_text) or not re.search(
+        r"!dst\.Exists \|\| dst\.Length != src\.Length \|\| dst\.LastWriteTimeUtc < src\.LastWriteTimeUtc",
+        stage_text,
+    ):
+        raise LauncherPatternMissing(src.path, "StageKickstart copy to candidates[0] when stale")
+    stage_span = (src.line(stage.start()), src.lines(*stage_body)[1])
+    for field, names, spans in lists:
+        call = src.find(rf"StageKickstart\(_model\.{field}\)", f"StageKickstart({field})")
+        records.append(
+            _record(
+                "amiberry",
+                "standalone",
+                "copies",
+                names,
+                source_ref((src.path, [*spans, head, src.lines(roms.start(), roms.end()),
+                                       src.lines(call.start(), call.end()),
+                                       stage_span, method_span])),
+                case_insensitive=True,
+                search_dir=search,
+                passes_to=f"{home}/{roms.group(2)}/{names[0]}",
+                fails_when_missing=False,
+                depends_on_option="first name found, the target is absent, smaller or older",
+            )
+        )
+    key = src.find(r"private void StageRomKey\(\)", "StageRomKey")
+    key_body = src.block_at(key.end())
+    key_text = src.text[key_body[0]:key_body[1]]
+    named = re.search(r'FindBios\(new\[\] \{ "([^"]+)" \}\)', key_text)
+    if not named or not re.search(
+        r"!File\.Exists\(dest\) \|\| new FileInfo\(dest\)\.Length != new FileInfo\(source\)\.Length",
+        key_text,
+    ):
+        raise LauncherPatternMissing(src.path, "StageRomKey copy when absent or resized")
+    records.append(
+        _record(
+            "amiberry",
+            "standalone",
+            "copies",
+            [named.group(1)],
+            source_ref((src.path, [head, src.lines(roms.start(), roms.end()),
+                                   (src.line(key.start()), src.lines(*key_body)[1]), method_span])),
+            case_insensitive=True,
+            search_dir=search,
+            passes_to=f"{home}/{roms.group(2)}/{named.group(1)}",
+            fails_when_missing=False,
+            depends_on_option="the target is absent or its size differs",
+        )
+    )
     return records
 
 

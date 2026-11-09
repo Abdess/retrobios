@@ -658,6 +658,27 @@ class AmiberryOnEachPlatform(unittest.TestCase):
                     self.assertEqual(entry["standalone_path"], f"{folder}/{layout}")
 
 
+    def test_retrobat_reads_its_folders_below_the_amiberry_emulator_folder(self) -> None:
+        # RetroBat writes rom_path and whdboot_path below the amiberry
+        # folder of its install and copies the kickstarts it finds in bios
+        # into that ROMs folder.
+        name = "amiberry-8.3.0"
+        profile = self.profiles[name]
+        cfg = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
+        self.assertEqual(
+            standalone_bindings_for(name, profile, standalone_set(cfg)),
+            {"": ("emulators", "amiberry/ROMs"), "WHDBoot": ("emulators", "amiberry/WHDBoot")},
+        )
+        ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg))
+        for own, entry in zip(profile["files"], view["files"]):
+            layout = own.get("standalone_path") or own.get("path") or own["name"]
+            folder = "amiberry" if layout.startswith("WHDBoot/") else "amiberry/ROMs"
+            with self.subTest(name=entry["name"]):
+                self.assertNotIn("unplaced", entry)
+                self.assertEqual(entry.get("root"), "emulators")
+                self.assertEqual(entry["standalone_path"], f"{folder}/{layout}")
+
+
 class AmiberryBuildEachPlatformShips(unittest.TestCase):
     """Each platform resolves the name amiberry to the build its own package
     compiles. RetroBat keeps the 8.5.0 libretro core beside its standalone."""
