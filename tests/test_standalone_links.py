@@ -540,10 +540,6 @@ class Scrapers(unittest.TestCase):
         self.assertIn("Dreamcast.BiosPath", records[0]["passes_to"])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class OpenmsxOnEachPlatform(unittest.TestCase):
     """openMSX finds system ROMs by SHA1 in share/systemroms below its user
     directory and in every filepool entry. RetroBat sets OPENMSX_HOME to
@@ -775,3 +771,7 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
                     self.assertEqual(entry["standalone_path"], entry["path"][len("kickstarts/"):])
                 else:
                     self.assertEqual(entry.get("unplaced"), "outside_bios_folder")
+
+
+if __name__ == "__main__":
+    unittest.main()

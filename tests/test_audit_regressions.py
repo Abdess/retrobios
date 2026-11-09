@@ -6362,6 +6362,8 @@ class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
             "share/machines/ColecoVision_SGM.xml:56 names it, tried beside the machine XML",
         ("openmsx", "fmpac.rom"):
             "share/machines/Boosted_MSX2_EN.xml:83 names it, tried beside the machine XML",
+        ("openmsx-libretro", "rs232.rom"):
+            "share/extensions/rs232.xml:18-22 names it, tried beside the extension XML",
     }
 
     @staticmethod
