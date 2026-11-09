@@ -320,6 +320,16 @@ def feature_choices(
     return values, src.lines(feature.start(), close + len("</feature>"))
 
 
+# A copy record reads `names` from `search_dir` and hands them to the path in
+# `passes_to`. When the copy is skipped is a condition of the record.
+TARGET_ABSENT = "the target does not exist"
+
+
+def _joined(*parts: str | None) -> str | None:
+    """Conditions of a record, joined, None when there are none."""
+    return ", ".join(part for part in parts if part) or None
+
+
 def _record(
     emulator: str, build: str, kind: str, names: list[str], ref: str, **fields: object
 ) -> Record:
@@ -611,9 +621,9 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
             source_ref((src.path, [head, src.lines(shared.start(), copy.end())])),
             case_insensitive=True,
             search_dir="/".join(["bios", *folders]),
-            passes_to=f"copied to bios/{own.group(2)}/<value>, only when the target does not exist",
+            passes_to=f"bios/{own.group(2)}/<value>",
             fails_when_missing=False,
-            depends_on_option=key,
+            depends_on_option=_joined(key, TARGET_ABSENT),
         )
     )
     return records
@@ -661,10 +671,9 @@ def mesen(sources: dict[str, Source]) -> list[Record]:
                 source_ref((src.path, [src.statement_span(block)])),
                 case_insensitive=True,
                 search_dir="bios",
-                passes_to="copied to <mesen>/Firmware/"
-                + ", ".join(destinations)
-                + ", only when the target does not exist",
+                passes_to=", ".join(f"<mesen>/Firmware/{d}" for d in destinations),
                 fails_when_missing=fails,
+                depends_on_option=TARGET_ABSENT,
             )
         )
     return records
@@ -804,11 +813,9 @@ def winuae(sources: dict[str, Source]) -> list[Record]:
             ),
             case_insensitive=True,
             search_dir=search,
-            passes_to=(
-                f"copied to <WHDBoot>/{'/'.join(_strings(folder.group(1)))}/<name>"
-                " from the system's Kickstart candidates"
-            ),
+            passes_to=f"<WHDBoot>/{'/'.join(_strings(folder.group(1)))}/<name>",
             fails_when_missing=False,
+            depends_on_option="the system's Kickstart candidates",
         )
     )
     return records
@@ -2480,10 +2487,12 @@ def dolphin(sources: dict[str, Source]) -> list[Record]:
             ),
             case_insensitive=True,
             search_dir="bios",
-            passes_to=f"first found copied to {destination[0] if destination else target.group(1)},"
-            " skipped when the target is as large and not older",
+            passes_to=destination[0] if destination else target.group(1),
             fails_when_missing=f"warning '{_unescape(warning.group(1))}' when the target is absent too",
-            depends_on_option=", ".join(conditions) or None,
+            depends_on_option=_joined(
+                *conditions, "first name found",
+                "the target is absent, smaller or older",
+            ),
         )
     )
     return _covered(src, records, skip=(r"DolphinTool\.exe",))
@@ -2578,9 +2587,9 @@ def _copies_if_absent(
                 _path_parts(src, *returns, *[s for c in copies for s in c[3]]),
                 case_insensitive=True,
                 search_dir=folders.pop(),
-                passes_to=f"copied to {destination}/<name>, only when the target does not exist",
+                passes_to=f"{destination}/<name>",
                 fails_when_missing=False,
-                depends_on_option=", ".join(conditions) or None,
+                depends_on_option=_joined(*conditions, TARGET_ABSENT),
             )
         )
     if not records:
@@ -2619,7 +2628,9 @@ def capsimg(sources: dict[str, Source]) -> list[Record]:
     record["source_ref"] = source_ref(
         (src.path, [(src.line(cores.start()), core_lines[1]), src.statement_span(block)])
     )
-    record["depends_on_option"] = f'core in {cores.group(1)}, rom extension "{gate.group(1)}"'
+    record["depends_on_option"] = _joined(
+        f'core in {cores.group(1)}, rom extension "{gate.group(1)}"', TARGET_ABSENT
+    )
     return [record]
 
 
@@ -3108,9 +3119,9 @@ def xm6pro(sources: dict[str, Source]) -> list[Record]:
         _path_parts(src, (src.line(table.start()), lines[1]), src.lines(method.start(), body[1])),
         case_insensitive=True,
         search_dir=folder[0],
-        passes_to="copied to <emulator>/<name>, only when the target does not exist",
+        passes_to="<emulator>/<name>",
         fails_when_missing=False,
-        depends_on_option=", ".join(conditions) or None,
+        depends_on_option=_joined(*conditions, TARGET_ABSENT),
     )
     return _covered(src, [record])
 

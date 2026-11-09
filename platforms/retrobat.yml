@@ -3880,9 +3880,10 @@ launchers:
   - capsimg.dll
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <retroarch>/<name>, only when the target does not exist
+  passes_to: <retroarch>/<name>
   fails_when_missing: false
-  depends_on_option: core in capsimgCore, rom extension ".ipf"
+  depends_on_option: core in capsimgCore, rom extension ".ipf", the target does not
+    exist
   source_ref: "emulatorLauncher/Generators/LibRetro.Generator.cs:1018-1027, 2750"
 - emulator: demul
   build: standalone
@@ -3943,11 +3944,11 @@ launchers:
   - segaboot.gcm
   case_insensitive: true
   search_dir: bios
-  passes_to: first found copied to <emulator>/User/Triforce/segaboot.gcm, skipped
-    when the target is as large and not older
+  passes_to: <emulator>/User/Triforce/segaboot.gcm
   fails_when_missing: "warning '[WARNING] Triforce: segaboot.gcm not found in bios\\\
     triforce, test menu will not be available.' when the target is absent too"
-  depends_on_option: _triforce, !_crediar
+  depends_on_option: _triforce, !_crediar, first name found, the target is absent,
+    smaller or older
   source_ref: "emulatorLauncher/Generators/Dolphin.Generator.cs:782-783, 1048-1083"
 - emulator: dosbox-pure
   build: standalone
@@ -3959,8 +3960,9 @@ launchers:
   - Roland_SC-88.sf2
   case_insensitive: true
   search_dir: bios/scummvm/extra
-  passes_to: copied to <emulator>/system/<name>, only when the target does not exist
+  passes_to: <emulator>/system/<name>
   fails_when_missing: false
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/DosBoxPure.Generator.cs:125, 130-148"
 - emulator: dosbox-staging
   build: standalone
@@ -3970,9 +3972,9 @@ launchers:
   - MT32_PCM.ROM
   case_insensitive: true
   search_dir: bios/scummvm/extra
-  passes_to: copied to <emulator>/mt32-roms/<name>, only when the target does not
-    exist
+  passes_to: <emulator>/mt32-roms/<name>
   fails_when_missing: false
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/DosBoxStaging.Generator.cs:321, 326-334"
 - emulator: dosbox-staging
   build: standalone
@@ -3982,9 +3984,9 @@ launchers:
   - Roland_SC-88.sf2
   case_insensitive: true
   search_dir: bios/scummvm/extra
-  passes_to: copied to <emulator>/soundfonts/<name>, only when the target does not
-    exist
+  passes_to: <emulator>/soundfonts/<name>
   fails_when_missing: false
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/DosBoxStaging.Generator.cs:318, 336-344"
 - emulator: duckstation
   build: standalone
@@ -4426,9 +4428,9 @@ launchers:
   names: *id001
   case_insensitive: true
   search_dir: bios/hatari/tos
-  passes_to: copied to bios/hatarib/<value>, only when the target does not exist
+  passes_to: bios/hatarib/<value>
   fails_when_missing: false
-  depends_on_option: hatarib_tos
+  depends_on_option: hatarib_tos, the target does not exist
   source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3434-3435, 3457-3460"
 - emulator: jzintv
   build: standalone
@@ -4620,9 +4622,9 @@ launchers:
   - syscard3.pce
   case_insensitive: true
   search_dir: bios
-  passes_to: "copied to <mesen>/Firmware/[BIOS] Super CD-ROM System (Japan) (v3.0).pce,\
-    \ only when the target does not exist"
+  passes_to: "<mesen>/Firmware/[BIOS] Super CD-ROM System (Japan) (v3.0).pce"
   fails_when_missing: "ApplicationException 'PCE CD firmware is missing (syscard3.pce)'"
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:254-269"
 - emulator: mesen
   build: standalone
@@ -4632,10 +4634,10 @@ launchers:
   - SGB2.sfc
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <mesen>/Firmware/SGB1.sfc, SGB2.sfc, only when the target does
-    not exist
+  passes_to: <mesen>/Firmware/SGB1.sfc, <mesen>/Firmware/SGB2.sfc
   fails_when_missing: "ApplicationException 'Super Gameboy firmware is missing (SGB1.sfc\
     \ and/or SGB2.sfc)'"
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:281-304"
 - emulator: mesen
   build: standalone
@@ -4644,9 +4646,9 @@ launchers:
   - gba_bios.bin
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <mesen>/Firmware/gba_bios.bin, only when the target does not
-    exist
+  passes_to: <mesen>/Firmware/gba_bios.bin
   fails_when_missing: false
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:307-324"
 - emulator: mesen
   build: standalone
@@ -4655,8 +4657,9 @@ launchers:
   - colecovision.rom
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <mesen>/Firmware/bios.col, only when the target does not exist
+  passes_to: <mesen>/Firmware/bios.col
   fails_when_missing: "ApplicationException 'Colecovision firmware is missing (colecovision.rom)'"
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:326-346"
 - emulator: openmsx
   build: standalone
@@ -5269,9 +5272,9 @@ launchers:
   - kick40068.A4000
   case_insensitive: true
   search_dir: bios, bios/amiga, bios/Amiga
-  passes_to: copied to <WHDBoot>/Devs/Kickstarts/<name> from the system's Kickstart
-    candidates
+  passes_to: <WHDBoot>/Devs/Kickstarts/<name>
   fails_when_missing: false
+  depends_on_option: the system's Kickstart candidates
   source_ref: "emulatorLauncher/Generators/Uae.Generator.cs:1002-1011, 1026-1032"
 - emulator: xemu
   build: standalone
@@ -5343,9 +5346,10 @@ launchers:
   - IPLROM30.DAT
   case_insensitive: true
   search_dir: bios/keropi
-  passes_to: copied to <emulator>/<name>, only when the target does not exist
+  passes_to: <emulator>/<name>
   fails_when_missing: false
-  depends_on_option: "!string.IsNullOrEmpty(biosRoot), Directory.Exists(biosPath)"
+  depends_on_option: "!string.IsNullOrEmpty(biosRoot), Directory.Exists(biosPath),\
+    \ the target does not exist"
   source_ref: "emulatorLauncher/Generators/Xm6pro.Generator.cs:118-141"
 - emulator: xroar
   build: standalone

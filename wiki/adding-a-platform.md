@@ -491,7 +491,8 @@ the launcher's name, a file the core accepts: the file the collection knows
 under that name when the core takes its content, otherwise the copy held for
 the core entry read under that name. Records that only hand over a directory
 (`passes_path`, `scans_dir`, a `links` record with no names) or copy a file
-the platform already names (`copies`) place nothing, and a `search_dir` the
+the platform already names (`copies`, its `names` under the `search_dir` it
+copies from, the target in `passes_to`) place nothing, and a `search_dir` the
 code describes rather than names ("directory of the Chihiro BIOS found") is
 skipped. `$biosdir`, `${biosPath}` and `$bios_path` are the BIOS directory as
 RetroPie, EmuDeck and RetroDECK spell it, and a path from a root

@@ -451,8 +451,9 @@ class BiosSites(unittest.TestCase):
         (record,) = sites("ryujinx/ryujinxGenerator.py", "fixed_name")
         self.assertEqual(record["kind"], "copies")
         self.assertEqual(record["names"], ["switch/prod.keys"])
-        self.assertEqual(record["passes_to"], "copied to /userdata/system/configs/Ryujinx/system/prod.keys")
-        self.assertNotIn("depends_on_option", record)
+        self.assertEqual(record["search_dir"], "/userdata/bios")
+        self.assertEqual(record["passes_to"], "/userdata/system/configs/Ryujinx/system/prod.keys")
+        self.assertEqual(record["depends_on_option"], "ryujinxKeys.exists()")
 
     def test_a_presence_test_over_a_literal_list(self):
         (record,) = sites("dolphin/dolphinGenerator.py", "fixed_name")

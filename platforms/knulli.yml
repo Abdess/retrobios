@@ -5793,29 +5793,32 @@ launchers:
   - switch/prod.keys
   case_insensitive: false
   search_dir: /userdata/bios
-  passes_to: copied to /userdata/system/configs/Ryujinx/system/prod.keys
+  passes_to: /userdata/system/configs/Ryujinx/system/prod.keys
   fails_when_missing: false
+  depends_on_option: "ryujinxKeys.exists()"
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/ryujinx/ryujinxGenerator.py:107-109"
 - emulator: pcsx2
   build: standalone
   kind: copies
   names:
-  - ps2/patches.zip
+  - patches.zip
   case_insensitive: false
-  search_dir: /userdata/bios
-  passes_to: copied from /usr/share/knulli/datainit/bios/ps2/patches.zip
+  search_dir: /usr/share/knulli/datainit/bios/ps2
+  passes_to: /userdata/bios/ps2/patches.zip
   fails_when_missing: false
+  depends_on_option: "not pcsx2Patches.exists()"
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/pcsx2/pcsx2Generator.py:78,\
     \ 121-122"
 - emulator: aethersx2
   build: standalone
   kind: copies
   names:
-  - ps2/patches.zip
+  - patches.zip
   case_insensitive: false
-  search_dir: /userdata/bios
-  passes_to: copied from /usr/share/knulli/datainit/bios/ps2/patches.zip
+  search_dir: /usr/share/knulli/datainit/bios/ps2
+  passes_to: /userdata/bios/ps2/patches.zip
   fails_when_missing: false
+  depends_on_option: "not pcsx2Patches.exists()"
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/aethersx2/aethersx2Generator.py:59,\
     \ 93-94"
 - emulator: gsplus

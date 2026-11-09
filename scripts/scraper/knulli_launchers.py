@@ -332,7 +332,8 @@ class GenericSites:
     """A generator module whose BIOS path uses bios_sites() reads.
 
     kind is fixed_name when the path names a file, passes_path when it names
-    a directory. A copy is recorded as `copies` whatever the kind. caller
+    a directory. A copy is recorded as `copies` whatever the kind, its names
+    read from the folder the code copies from and passes_to the target. caller
     names the module and function whose core test selects the cores this
     helper module runs for, emulator the name when no core test does.
     """
@@ -384,6 +385,8 @@ class _Site:
     conditions: list[str]
     cores: list[str]
     expands: dict[str, list[str]] = field(default_factory=dict)
+    # A copy reads its file from `source` and hands it to `passes_to`.
+    source: str | None = None
 
 
 class _Reader:
@@ -394,6 +397,7 @@ class _Reader:
         self.src = src
         self.bios = cg.bios.rstrip("/")
         self.parents: dict[int, ast.AST] = {}
+        self.copy_sources: dict[int, str] = {}
         for parent in ast.walk(src.tree):
             for child in ast.iter_child_nodes(parent):
                 self.parents[id(child)] = parent
@@ -523,10 +527,14 @@ class _Reader:
                 continue
             yield node, value  # type: ignore[misc]
 
-    def conditions(self, node: ast.AST) -> tuple[list[str], list[tuple[int, int]]]:
+    def conditions(
+        self, node: ast.AST, guards: bool = False
+    ) -> tuple[list[str], list[tuple[int, int]]]:
         """Tests of the ifs a node sits in, outermost first, and their lines.
 
-        A presence test of a BIOS path is a guard, kept for its lines only.
+        A presence test of a BIOS path is a guard, kept for its lines only,
+        unless guards is set: a copy made only when its source or its target
+        is there carries the test as a condition.
         """
         tests: list[str] = []
         spans: list[tuple[int, int]] = []
@@ -535,7 +543,7 @@ class _Reader:
             if isinstance(parent, ast.If) and child is not parent.test:
                 spans.append(self.src.span(parent.test))
                 text = ast.unparse(parent.test)
-                if not self._is_guard(parent.test):
+                if guards or not self._is_guard(parent.test):
                     in_else = any(child is stmt for stmt in parent.orelse)
                     tests.append(f"not ({text})" if in_else else text)
             child, parent = parent, self.parents.get(id(parent))
@@ -660,9 +668,10 @@ class _Reader:
             receiver = func.value if isinstance(func, ast.Attribute) else None
             if attr in ("copy", "copyfile", "copy2") and receiver is not None and ast.unparse(receiver) == "shutil":
                 source, target = parent.args[0], parent.args[1]
-                if source is node:
-                    return f"copied to {self.resolve(target) or ast.unparse(target)}", "copies"
-                return f"copied from {self.resolve(source) or ast.unparse(source)}", "copies"
+                self.copy_sources[id(node)] = value if source is node else (
+                    self.resolve(source) or ast.unparse(source)
+                )
+                return (value if target is node else self.resolve(target) or ast.unparse(target)), "copies"
             if (
                 attr == "append"
                 and isinstance(receiver, ast.Name)
@@ -718,7 +727,7 @@ class _Reader:
     def _site(
         self, read: ast.AST, value: str, passes_to: str, kind: str | None, defined: ast.AST
     ) -> _Site:
-        tests, spans = self.conditions(read)
+        tests, spans = self.conditions(read, guards=kind == "copies")
         lines = [self.src.span(self.statement_of(read)), *spans]
         if defined is not read:
             # A path bound in one branch and read after the if: the branch
@@ -726,7 +735,10 @@ class _Reader:
             bound_tests, bound_spans = self.conditions(defined)
             tests = list(dict.fromkeys([*bound_tests, *tests]))
             lines += [self.src.span(self.statement_of(defined)), *bound_spans]
-        return _Site(value, passes_to, kind, lines, tests, self.cores(read), self._expands(read))
+        return _Site(
+            value, passes_to, kind, lines, tests, self.cores(read), self._expands(read),
+            self.copy_sources.get(id(read)),
+        )
 
     def _guard_site(self, read: ast.AST, value: str) -> _Site:
         """A presence test whose if body is the only consumer of the path."""
@@ -802,7 +814,12 @@ def bios_sites(cg: Configgen, spec: GenericSites) -> list[Launcher]:
         expands = {k: v for site in group for k, v in site.expands.items()}
         names: list[str] = []
         search_dir = path
-        if kind in ("fixed_name", "copies"):
+        source = group[0].source
+        if kind == "copies" and source is not None and not source.startswith(prefix):
+            # Copied into BIOS: the file is read from the folder it comes from.
+            search_dir, _, name = source.rpartition("/")
+            names = [name]
+        elif kind in ("fixed_name", "copies"):
             if not path.startswith(prefix):
                 src.fail(f"{path} names no file under {cg.bios}")
             names, search_dir = [path[len(prefix):]], cg.bios
