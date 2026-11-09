@@ -9944,6 +9944,13 @@ def games_setups(index: dict, plat: str, bios_path: Path, os_type: str = "") -> 
         above = card_root_above(bios_path)
         named = above[0] if above else ""
     if not named:
+        # --platform names the list, not the card: the full screen passes
+        # --platform=retroarch for a muOS card, detection never runs in that
+        # run, and the card's ROMS/ was never read. The card's own files
+        # name its system, as card_app reads them for the app.
+        card = card_app(bios_path)
+        named = card.system if card else ""
+    if not named:
         # --dest on a handheld's games part from a computer (ArkOS's
         # EASYROMS/bios): detection never ran there, and the card's own rom
         # folders sit beside the BIOS folder.
