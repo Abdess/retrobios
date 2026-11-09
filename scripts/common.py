@@ -2729,33 +2729,48 @@ def _handed(standalone_cores: Iterable[str]) -> list:
     return found
 
 
-def standalone_destination(entry: dict, root: str | None) -> str:
-    """Where a standalone build reads an entry, relative to the BIOS root.
+def standalone_layout_path(entry: dict, profile: dict) -> str | None:
+    """The path of an entry relative to the directories its standalone build declares.
 
-    ``standalone_path`` is relative to the directories the build resolves
-    it against (``standalone_directories``). A platform that hands one of
-    them a folder of its BIOS tree puts the file under that folder:
-    RetroPie and ROCKNIX give Flycast bios/dc, EmuDeck bios/flycast/bios.
-    An entry with no ``standalone_path`` keeps ``path``, the layout both
-    builds share.
+    ``standalone_path`` when the entry has one. A profile with no libretro
+    build has one layout, so its ``path`` is that layout: UAE4All2 reads
+    kickstarts/kick13.rom below its working directory.
     """
     own = entry.get("standalone_path")
-    if own and root:
-        return f"{root}/{own}"
-    return own or entry.get("path") or entry.get("name", "")
+    if own:
+        return own
+    if "libretro" in str(profile.get("type", "")):
+        return None
+    return entry.get("path") or None
 
 
-def standalone_root_for(
+def standalone_destination(entry: dict, profile: dict, bindings: dict[str, str]) -> str | None:
+    """Where a platform puts a standalone entry, relative to the BIOS root.
+
+    ``bindings`` are the folders the platform's launchers give the layout
+    (launchers.standalone_bindings): RetroPie and ROCKNIX give Flycast bios/dc,
+    EmuDeck bios/flycast/bios, RetroPie gives UAE4All2's kickstarts/ bios/amiga.
+    None when no binding covers the entry: it keeps the profile's layout.
+    """
+    layout = standalone_layout_path(entry, profile)
+    if layout is None or not bindings:
+        return None
+    from launchers import bound_path  # noqa: PLC0415
+
+    return bound_path(layout, bindings)
+
+
+def standalone_bindings_for(
     emu_name: str, profile: dict, standalone_cores: Iterable[str]
-) -> str | None:
-    """The folder a platform gives this emulator's standalone layout, or None."""
+) -> dict[str, str]:
+    """The folders a platform gives this emulator's standalone layout, by subfolder."""
     declared = profile.get("standalone_directories") or []
     if not declared:
-        return None
-    from launchers import standalone_root  # noqa: PLC0415
+        return {}
+    from launchers import standalone_bindings  # noqa: PLC0415
 
     names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
-    return standalone_root(names, declared, _handed(standalone_cores))
+    return standalone_bindings(names, declared, _handed(standalone_cores))
 
 
 def platform_layouts(
@@ -2774,19 +2789,16 @@ def platform_layouts(
             return [(profile, False)]
         return [(system_dir_view(profile, d), False) for d in directories]
     standalone = profile
-    root = standalone_root_for(emu_name, profile, standalone_cores)
-    if root:
+    bindings = standalone_bindings_for(emu_name, profile, standalone_cores)
+    if bindings:
         # The standalone view carries the platform's destination, so every
         # reader of standalone_path (builder, manifest, verify, slots) places
         # the file in the folder the platform hands the emulator.
-        standalone = {
-            **profile,
-            "files": [
-                {**f, "standalone_path": standalone_destination(f, root)}
-                if isinstance(f, dict) and f.get("standalone_path") else f
-                for f in profile.get("files") or []
-            ],
-        }
+        files = []
+        for f in profile.get("files") or []:
+            placed = standalone_destination(f, profile, bindings) if isinstance(f, dict) else None
+            files.append({**f, "standalone_path": placed} if placed else f)
+        standalone = {**profile, "files": files}
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
             if c.startswith(DUAL_MODE_PREFIX)}
     if "libretro" in str(profile.get("type", "")) and dual & {

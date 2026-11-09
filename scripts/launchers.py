@@ -211,6 +211,12 @@ BIOS_ROOT_VARIABLES = ("$biosdir", "$home/RetroPie/BIOS", "${biosPath}", "$bios_
 # The kinds that hand an emulator a whole directory.
 HANDED_KINDS = ("links", "passes_path")
 
+# How a launcher record says the platform starts the emulator in a directory
+# (retropie_launchers._working_directory), and the handle a profile gives
+# that directory in standalone_directories: the call its code reads it with.
+WORKING_DIRECTORY_PASSED = "working directory of "
+WORKING_DIRECTORY = "getcwd"
+
 _HOME = re.compile(r"^(?:\$\{HOME\}|\$HOME|\$home|~)(?=/|$)")
 # Flatpak sets XDG_DATA_HOME to ~/.var/app/<id>/data inside the sandbox.
 _FLATPAK_DATA = re.compile(r"^~/\.var/app/[^/]+/data(?=/|$)")
@@ -278,11 +284,17 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
         if not raw or re.search(r"[\s,:;]", raw):
             continue
         directory = normalize_handle(raw)
-        handles = frozenset(
-            handle
-            for token in str(record.get("passes_to") or "").split()
-            if (handle := normalize_handle(token)) and handle != directory
-        )
+        passes_to = str(record.get("passes_to") or "")
+        if passes_to.startswith(WORKING_DIRECTORY_PASSED):
+            # The program runs from the directory: what its code reads
+            # through getcwd(), or relative to it, is below it.
+            handles = frozenset({WORKING_DIRECTORY})
+        else:
+            handles = frozenset(
+                handle
+                for token in passes_to.split()
+                if (handle := normalize_handle(token)) and handle != directory
+            )
         for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
             found.append(HandedDirectory(
                 emulator=emulator,
@@ -294,40 +306,75 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
     return found
 
 
-def standalone_root(
+def standalone_bindings(
     names: Iterable[str], declared: Iterable[str], handed: Iterable[HandedDirectory]
-) -> str | None:
-    """The folder of the BIOS tree a platform gives a standalone build's layout.
+) -> dict[str, str]:
+    """The folders of the BIOS tree a platform gives a standalone build's layout.
 
-    ``declared`` are the directories the build resolves ``standalone_path``
-    against, as its profile names them (``standalone_directories``). A
-    record handing a folder of the BIOS tree under one of them gives it
-    directly: RetroPie points Flycast's ~/.local/share/flycast at bios/dc. A
-    record handing a directory outside the tree under one of them is
-    followed through a link to the tree: ROCKNIX's patched Flycast uses
-    /storage/roms/dreamcast/data, which its start script links to bios/dc.
+    ``declared`` are the directories the build resolves its paths against,
+    as its profile names them (``standalone_directories``). The result maps
+    a subfolder of that layout ("" for the whole of it) to the folder of the
+    BIOS tree the emulator reads it from.
 
-    None when nothing gives a folder, or when two records give two: the
-    layout is then the profile's, relative to the BIOS root.
+    A record handing a folder of the tree under a declared directory gives
+    it directly: RetroPie points Flycast's ~/.local/share/flycast at bios/dc.
+    A record handing a directory outside the tree is followed through the
+    links that put a folder of the tree at it or below it: ROCKNIX's patched
+    Flycast uses /storage/roms/dreamcast/data, which its start script links
+    to bios/dc, and RetroPie starts UAE4All2 in $md_inst, whose kickstarts
+    folder it links to bios/amiga.
+
+    A subfolder two records give two folders is left out: its files keep
+    the profile's layout, relative to the BIOS root.
     """
     names = set(names)
     wanted = {normalize_handle(d) for d in declared}
     if not wanted:
-        return None
+        return {}
     records = [h for h in handed if h.emulator in names]
-    folders: set[str] = set()
+
+    def below(handle: str, directory: str) -> str | None:
+        if handle == directory:
+            return ""
+        if handle.startswith(directory + "/"):
+            return handle[len(directory) + 1:]
+        return None
+
+    found: dict[str, set[str]] = {}
     for record in records:
-        if not record.handles & wanted:
+        subs = {
+            sub for handle in record.handles for directory in wanted
+            if (sub := below(handle, directory)) is not None
+        }
+        for sub in subs:
+            if record.folder is not None:
+                found.setdefault(sub, set()).add(record.folder)
+                continue
+            for link in records:
+                if link.folder is None:
+                    continue
+                for handle in link.handles:
+                    rest = below(handle, record.directory)
+                    if rest is not None:
+                        key = "/".join(p for p in (sub, rest) if p)
+                        found.setdefault(key, set()).add(link.folder)
+    return {sub: next(iter(folders)) for sub, folders in found.items() if len(folders) == 1}
+
+
+def bound_path(path: str, bindings: dict[str, str]) -> str | None:
+    """Where the BIOS tree holds a layout path, None when no binding covers it.
+
+    The longest subfolder that contains the path wins: a link of
+    kickstarts/ places kickstarts/kick13.rom even when the whole layout is
+    bound elsewhere.
+    """
+    for sub in sorted(bindings, key=len, reverse=True):
+        if sub and not path.startswith(sub + "/"):
             continue
-        if record.folder is not None:
-            folders.add(record.folder)
-            continue
-        folders.update(
-            link.folder
-            for link in records
-            if link.folder is not None and record.directory in link.handles
-        )
-    return next(iter(folders)) if len(folders) == 1 else None
+        rest = path[len(sub) + 1:] if sub else path
+        folder = bindings[sub]
+        return f"{folder}/{rest}" if folder else rest
+    return None
 
 
 def held_record(report: dict, db: dict) -> dict | None:
