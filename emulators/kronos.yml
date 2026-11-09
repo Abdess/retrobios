@@ -6,6 +6,7 @@ source_branch: kronos
 upstream: "https://github.com/FCare/Kronos"
 profiled_date: "2026-03-24"
 source_commit: "3791ffb2221fda61d70aec5cca376418caf05669"
+prose_written_at: "3791ffb2221fda61d70aec5cca376418caf05669"
 upstream_commit: "d0384bc33aad06bfa9cf5cd308c4bd7ae6cfc814"
 core_version: "2.7.0"
 version_basis:
