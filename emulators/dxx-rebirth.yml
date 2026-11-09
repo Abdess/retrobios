@@ -82,7 +82,7 @@ files:
     validation: [size]
     description: "Descent 1 PC shareware v1.4 HOG"
     note: "freely redistributable (icculus.org/d2x/data/desc14sw.tar.gz)"
-    source_ref: "similar/main/mission.cpp:80; common/main/mission.h:67"
+    source_ref: "similar/main/mission.cpp:80; common/main/mission.h:67; similar/main/inferno.cpp:472, 500-512"
 
   - name: descent.pig
     installed_on: [retropie]
@@ -103,7 +103,7 @@ files:
     validation: [size]
     description: "Descent 1 PC retail v1.5 HOG (GOG)"
     note: "commercial, alternative sizes 6856183 (v1.5 alt), 7261423 (v1.0), 7456179 (Mac retail)"
-    source_ref: "common/main/mission.h:61-64"
+    source_ref: "common/main/mission.h:61-64; similar/main/inferno.cpp:472, 500-512"
 
   - name: descent.pig
     path: descent.pig
@@ -125,7 +125,7 @@ files:
     validation: [size]
     description: "Descent 2 PC shareware HOG"
     note: "freely redistributable (icculus.org/d2x/data/d2shar10.tar.gz)"
-    source_ref: "similar/main/mission.cpp:107-108; common/main/mission.h:71"
+    source_ref: "similar/main/mission.cpp:107-108; common/main/mission.h:71; similar/main/inferno.cpp:476, 500-512"
 
   - name: d2demo.pig
     installed_on: [retropie]
@@ -156,7 +156,7 @@ files:
     validation: [size]
     description: "Descent 2 PC full v1.1-1.2 HOG (GOG)"
     note: "commercial, alternative sizes 7107354 (v1.0), 7110007 (Mac full), 6132957 (OEM v1.1), 4292746 (Mac shareware)"
-    source_ref: "common/main/mission.h:73-76"
+    source_ref: "common/main/mission.h:73-76; similar/main/inferno.cpp:476, 500-512"
 
   - name: descent2.ham
     path: descent2.ham
