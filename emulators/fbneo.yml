@@ -17,6 +17,9 @@ display_name: "Arcade (FinalBurn Neo)"
 cores:
   - fbneo
   - "FBNEOSA"
+  - "fbneo_plus"
+  - "fbneo_32b"
+  - "km_fbneo_xtreme_amped"
 systems:
   - snk-neogeo-mvs
   - snk-neogeo-aes

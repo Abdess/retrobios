@@ -313,6 +313,78 @@ class CommittedData(unittest.TestCase):
         self.assertEqual(lcd.systems, [])
 
 
+# The cores the setups name that resolve to no profile, each with why. A
+# folder of one of these keeps the files of every core of its systems. ArkOS
+# ran the GBA with gpsp_ezode_mod, which resolved to nothing: the card got
+# the files of every GBA core, FBNeo's 3,472 data files among them.
+KNOWN_UNRESOLVED = {
+    # Not an emulator: a frontend, a shell, a player, a launcher, a store.
+    **dict.fromkeys(["crisp game lib", "exodos", "external", "ffplay", "flatpak", "gmloader",
+                     "heroic", "idtech", "libretro", "mplayer", "mreader landscape", "mugen",
+                     "native", "odcommander", "os-shell", "port", "portmaster", "ports",
+                     "powerbomberman", "quiverlauncher", "sh", "steam", "vaixterm", "wasabi",
+                     "windows", "wine", "wine-tkg"], "not an emulator"),
+    # A launcher mode or an argument: the program depends on the folder.
+    **dict.fromkeys(["standalone", "standalone-2021", "standalone-nobios",
+                     "standalone-pirry-nobios", "standalone-r7", "standalone-vulkan", "Normal",
+                     "coco3", "dragon32"], "launcher mode, the program depends on the folder"),
+    # An emulator no profile documents yet.
+    **dict.fromkeys(["exa", "gloopy", "gp32emu", "km_ludicrousn64_2k22_xtreme_amped",
+                     "libgametank", "ludicrousn64_xtreme32", "mametiger", "memu", "onscripter-sa",
+                     "ryubing", "zc250x"], "no profile yet"),
+    # The program's profile declares no system of the folder, or the folder
+    # has none: MAME documents no GameKing ROM.
+    **dict.fromkeys(["gameking", "gamekin3", "ctvboy", "gaelco", "namco3xx"],
+                    "the program's profile lacks the system"),
+    # Not settled: two builds by host, a binary the OS tree lacks, a fork
+    # whose required files differ, a shell variable the scraper kept.
+    **dict.fromkeys(["pcsx2-nogui", "zx81", "yabadabadoo", "reicast-audio-${backend}"],
+                    "not proven"),
+}
+
+
+class EveryCoreResolvesOrIsExplained(unittest.TestCase):
+    def setUp(self) -> None:
+        from common import load_emulator_profiles
+        from romfolders import ProfileResolver
+
+        self.resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
+        self.cores = ProfileResolver.from_repo(str(ROOT / "emulators"))
+        self.profiles = gi.Profiles(load_emulator_profiles(str(ROOT / "emulators")), self.resolver)
+
+    def profile(self, row: dict, platform: str) -> str | None:
+        return (self.cores.resolve(row.get("core"))
+                or gi.emulator_profile(row, platform, self.cores, self.resolver, self.profiles))
+
+    def test_either_separator_resolves(self) -> None:
+        self.assertEqual(self.cores.resolve("flycast_xtreme"), "flycast2021")
+
+    def test_a_mode_resolves_by_its_program_when_it_runs_the_system(self) -> None:
+        hikaru = {"folder": "hikaru", "core": "hikaru", "emulator": "demul", "systems": ["sega-hikaru"]}
+        self.assertEqual(self.profile(hikaru, "retrobat"), "demul")
+        # MAME runs the GameKing, but its profile documents no GameKing ROM:
+        # answering MAME would leave the ROM out.
+        gameking = {"folder": "gameking", "core": "gameking", "emulator": "mame"}
+        self.assertIsNone(self.profile(gameking, "amberelec"))
+        launcher = {"folder": "doom", "core": "standalone", "emulator": "standalone"}
+        self.assertIsNone(self.profile(launcher, "arkos"))
+
+    def test_no_core_is_left_unexplained(self) -> None:
+        setups = load_setups(ROOT / "platforms" / "romfolders")
+        if not setups:
+            self.skipTest("no setup scraped")
+        unexplained = sorted({
+            str(row["core"]) for doc in setups.values() for row in doc["folders"]
+            if row.get("core") and not self.profile(row, doc["platform"])
+            and str(row["core"]) not in KNOWN_UNRESOLVED
+        })
+        self.assertEqual(unexplained, [], "map each to its profile (cores:) or record why it has none")
+        # And no reason outlives its row: a core mapped since leaves the list.
+        still = {str(row["core"]) for doc in setups.values() for row in doc["folders"]
+                 if row.get("core") and not self.profile(row, doc["platform"])}
+        self.assertEqual(sorted(set(KNOWN_UNRESOLVED) - still), [])
+
+
 class OneNarrowingPerCoreList(unittest.TestCase):
     """Each (platform, system, core) key narrowed the whole install list:
     2,357 narrowings for 1,289 distinct core lists."""
