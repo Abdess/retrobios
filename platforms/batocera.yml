@@ -6508,6 +6508,52 @@ launchers:
   fails_when_missing: false
   depends_on_option: gsplus_bios_filename
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/gsplus/gsplusGenerator.py:105"
+- emulator: lexaloffle
+  build: standalone
+  kind: fixed_name
+  slot: pico8
+  names:
+  - pico-8/pico8
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: exec
+  fails_when_missing: Lexaloffle official binary not found at /userdata/bios/pico-8/pico8,
+    /userdata/bios/pico-8/pico8 is not set as executable
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:17,\
+    \ 35, 37, 48-55"
+- emulator: lexaloffle
+  build: standalone
+  kind: passes_path
+  slot: pico8
+  names: []
+  search_dir: /userdata/bios/pico-8
+  passes_to: environment LD_LIBRARY_PATH
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:35-36,\
+    \ 89"
+- emulator: lexaloffle
+  build: standalone
+  kind: fixed_name
+  slot: voxatron
+  names:
+  - voxatron/vox
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: exec
+  fails_when_missing: Lexaloffle official binary not found at /userdata/bios/voxatron/vox,
+    /userdata/bios/voxatron/vox is not set as executable
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:20,\
+    \ 40, 42, 48-55"
+- emulator: lexaloffle
+  build: standalone
+  kind: passes_path
+  slot: voxatron
+  names: []
+  search_dir: /userdata/bios/voxatron
+  passes_to: environment LD_LIBRARY_PATH
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:40-41,\
+    \ 89"
 - emulator: flycast
   build: standalone
   kind: passes_path
