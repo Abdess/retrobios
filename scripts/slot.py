@@ -29,6 +29,8 @@ rank: the second core reads it by its own rule, which no rank expresses.
 
 from __future__ import annotations
 
+from alternatives import set_keys
+
 BIOS_CATEGORY = "bios"
 
 
@@ -65,9 +67,11 @@ def build_slot_index(profiles: dict) -> dict[str, dict]:
                 entry = index.setdefault(
                     key,
                     {"rank": None, "conflict": False, "regions": set(),
-                     "emulators": [], "ranked_by": set(), "unranked_by": set()},
+                     "emulators": [], "ranked_by": set(), "unranked_by": set(),
+                     "sets": set()},
                 )
                 entry["regions"] |= {str(r) for r in (f.get("region") or [])}
+                entry["sets"] |= set(set_keys(emu_name, f))
                 rank = f.get("priority")
                 entry["unranked_by" if rank is None else "ranked_by"].add(emu_name)
                 if rank is not None:
@@ -123,7 +127,7 @@ def resolve_slot_drops(
     # A slot is a system AND a declared region: the Japanese and American
     # PlayStation BIOS are not alternatives to each other, and comparing their
     # ranks across regions would pick one territory's file for another's.
-    tiers: dict[tuple[str, tuple[str, ...]], list[tuple[str, int | None]]] = {}
+    bucketed: dict[tuple[str, tuple[str, ...]], list[tuple[str, int | None, frozenset]]] = {}
     for group_id, members in groups.items():
         for destination, name in members:
             if held is not None and destination not in held:
@@ -134,9 +138,18 @@ def resolve_slot_drops(
                 continue
             tier = tuple(sorted(entry["regions"]))
             rank = None if entry.get("conflict") else entry["rank"]
-            tiers.setdefault((group_id, tier), []).append((destination, rank))
+            bucketed.setdefault((group_id, tier), []).append(
+                (destination, rank, frozenset(entry.get("sets") or ()))
+            )
+    # A rank orders the members of one set: px68k-sdl ranks its IPL and its
+    # font ROM lists each from 1, and the two never compete. Candidates are
+    # compared when they share a set, and those in no set among themselves.
+    tiers: dict[tuple[str, tuple[str, ...], int], list[tuple[str, int | None]]] = {}
+    for (group_id, tier), found in bucketed.items():
+        for part, component in enumerate(_by_shared_set(found)):
+            tiers[(group_id, tier, part)] = component
 
-    for (group_id, tier), candidates in tiers.items():
+    for (group_id, tier, _part), candidates in tiers.items():
         if len(candidates) < 2:
             keep.update(dest for dest, _p in candidates)
             continue
@@ -160,3 +173,28 @@ def resolve_slot_drops(
         drop.update(dest for dest, _p in candidates if dest != winners[0])
 
     return drop - keep, sorted(undecidable)
+
+
+def _by_shared_set(
+    found: list[tuple[str, int | None, frozenset]],
+) -> list[list[tuple[str, int | None]]]:
+    """The candidates of one tier split where no set links them."""
+    parent = list(range(len(found)))
+
+    def root(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    first_of: dict[object, int] = {}
+    for i, (_dest, _rank, sets) in enumerate(found):
+        for key in sets or {None}:
+            if key in first_of:
+                parent[root(i)] = root(first_of[key])
+            else:
+                first_of[key] = i
+    parts: dict[int, list[tuple[str, int | None]]] = {}
+    for i, (dest, rank, _sets) in enumerate(found):
+        parts.setdefault(root(i), []).append((dest, rank))
+    return list(parts.values())

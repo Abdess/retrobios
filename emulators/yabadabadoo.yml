@@ -58,10 +58,14 @@ notes: |
   or MPEG ROM path is passed, so no other firmware is read.
   ref: yabause/src/libretro/libretro.c:1078-1087, yabause/src/libretro/libretro.c:1898-1902
 
+groups:
+  saturn-bios:
+    required: true
+
 files:
   - name: "saturn_bios.bin"
     system: sega-saturn
-    required: true
+    group: saturn-bios
     max_size: 524288
     validation: [max_size]
     note: "Any region. Second choice for every disc region."
@@ -69,7 +73,7 @@ files:
 
   - name: "sega_101.bin"
     system: sega-saturn
-    required: false
+    group: saturn-bios
     region: [japan, asia-ntsc, south-korea]
     max_size: 524288
     validation: [max_size]
@@ -78,7 +82,7 @@ files:
 
   - name: "mpr-17933.bin"
     system: sega-saturn
-    required: false
+    group: saturn-bios
     region: [north-america, europe, oceania, asia-pal, brazil, latin-america]
     max_size: 524288
     validation: [max_size]

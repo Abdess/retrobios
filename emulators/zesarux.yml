@@ -1158,7 +1158,6 @@ files:
     required: false
     bundled: true
     system: jupiter-ace
-    variant_group: "jupiter-ace-rom"
     source_ref: "src/ALTERNATEROMS:11-12, src/start.c:4877-4881"
     note: "Jupiter Ace ROM patched by Dutra Lacerda, distinct from the root ace.rom."
 

@@ -23,6 +23,7 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
+from alternatives import set_keys, set_requirements, settle_sets
 from common import (
     platform_arg,
     ProfileSelectionError,
@@ -707,7 +708,7 @@ def slot_key(f: dict, standalone: bool = False) -> tuple:
         f.get("archive"),
         system_dir_path(f, where or fname),
         f.get("system"),
-        f.get("variant_group"),
+        f.get("selection_slot"),
         f.get("mode", "both"),
         read_from_save_dir(f, standalone),
     )
@@ -808,6 +809,10 @@ def _cross_reference_profile(
     # the profile's entries in their order, so a position names one entry.
     position = {id(f): i for view, _ in layouts for i, f in enumerate(view.get("files", []))}
     fates: dict[int, str] = {}
+    # Grouped entries met, as (set keys, entry, fills, the list holding
+    # its row, the row): settled once the profile is read.
+    set_records: list[tuple[tuple, dict, bool, list | None, dict | None]] = []
+    archive_rows: list[dict] = []
 
     def fate(f: dict, what: str) -> None:
         key = position[id(f)]
@@ -845,15 +850,18 @@ def _cross_reference_profile(
 
         # Collect unsourceable files separately (documented, not a gap)
         unsourceable_reason = f.get("unsourceable", "")
+        keys = set_keys((emu_name, is_standalone), f)
         if unsourceable_reason:
             seen_files.add(seen_key)
             fate(f, "unsourceable")
-            unsourceable_list.append({
+            row = {
                 "name": fname,
                 "required": f.get("required", False),
                 "reason": unsourceable_reason,
                 "source_ref": f.get("source_ref", ""),
-            })
+            }
+            unsourceable_list.append(row)
+            set_records.append((keys, f, False, unsourceable_list, row))
             continue
 
         if outside_gap_scope(f, is_standalone):
@@ -875,6 +883,7 @@ def _cross_reference_profile(
         if in_platform:
             seen_files.add(seen_key)
             fate(f, "declared")
+            set_records.append((keys, f, True, None, None))
             covered.append({
                 "name": fname,
                 "path": effective_path,
@@ -890,7 +899,7 @@ def _cross_reference_profile(
             archive_key = (
                 archive,
                 f.get("system"),
-                f.get("variant_group"),
+                f.get("selection_slot"),
                 f.get("mode", "both"),
             )
             if archive_key not in archive_gaps:
@@ -912,6 +921,15 @@ def _cross_reference_profile(
                     "archive_required_count": 0,
                 }
             entry = archive_gaps[archive_key]
+            if entry["archive_file_count"] == 0:
+                # The archive's own declaration names its sets: an archive
+                # is a member like a loose file (Kronos' stvbios.zip).
+                own = archive_entry(archive, emu_files)
+                set_records.append((
+                    set_keys((emu_name, is_standalone), own), own,
+                    entry["in_repo"], archive_rows, entry,
+                ))
+                archive_rows.append(entry)
             entry["archive_file_count"] += 1
             if f.get("required", False):
                 entry["archive_required_count"] += 1
@@ -971,9 +989,34 @@ def _cross_reference_profile(
                 (emu_name, is_standalone, f, probe, entry)
             )
         gaps.append(entry)
+        set_records.append((keys, f, in_repo, gaps, entry))
+
+    # One need per set: a member another one fills is not a gap, and a set
+    # nobody holds is one gap under its first member (alternatives.py), as
+    # verify and the packs count it.
+    # Archive units rank first among equals, as the builder orders them.
+    grouped = sorted(
+        (r for r in set_records if r[0]), key=lambda r: r[3] is not archive_rows
+    )
+    requirements = set_requirements(profile)
+    excused, standing = settle_sets(
+        [(keys, f, fills) for keys, f, fills, _l, _r in grouped],
+        lambda key: requirements.get(key[1], True),
+    )
+    for at, (_keys, member, _fills, rows, set_row) in enumerate(grouped):
+        if set_row is None or rows is None:
+            continue
+        if at in standing:
+            set_row["alternatives"] = standing[at].others
+            set_row["required"] = standing[at].required
+        if at in excused:
+            rows.remove(set_row)
+            if id(member) in position:
+                fates[position[id(member)]] = "other_versions"
 
     for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
-        gaps.append(ag)
+        if any(ag is row for row in archive_rows):
+            gaps.append(ag)
 
     tally = Counter(fates.values())
     report[emu_name] = {
@@ -1432,6 +1475,8 @@ def print_report(
                 fc = g.get("archive_file_count", 0)
                 rc = g.get("archive_required_count", 0)
                 archive_info = f" ({fc} files, {rc} required)"
+            if g.get("alternatives") and not g.get("in_repo"):
+                archive_info += f" (or {', '.join(g['alternatives'])})"
             print(f"    {req} {g['name']} [{src}]{archive_info}{note}")
 
         total_gaps += gaps

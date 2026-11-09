@@ -1003,7 +1003,7 @@ def _launcher_entry(
     entry = {
         key: report.get(key)
         for key in (
-            "profile", "emulator", "systems", "system", "region", "variant_group",
+            "profile", "emulator", "systems", "system", "region", "selection_slot",
             "required", "hle_fallback", "category",
         )
     }

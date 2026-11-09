@@ -497,6 +497,19 @@
         "type": "string"
       }
     },
+    "groups": {
+      "description": "The sets of entries the code takes one of, by name, with the requirement of each. A member names its sets with group and writes no required of its own: it is required when one of its sets is.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["required"],
+        "properties": {
+          "required": {"type": "boolean"}
+        }
+      }
+    },
     "files": {
       "type": "array",
       "items": {
@@ -674,9 +687,17 @@
             ]
           },
           "priority": {
-            "description": "Preference order among the BIOS a system accepts, lowest first. DuckStation's FindBIOSImageInDirectory keeps the image whose priority is lower. A search list the code walks in order maps onto it as 1, 2, 3.",
+            "description": "Preference order among the BIOS a system accepts, lowest first. DuckStation's FindBIOSImageInDirectory keeps the image whose priority is lower. A search list the code walks in order maps onto it as 1, 2, 3. The order only: which entries stand in for one another is group.",
             "type": "integer",
             "minimum": 0
+          },
+          "group": {
+            "description": "The sets of the profile's groups map this entry belongs to. A set is one need: the code loads one member (the first it finds, in priority order where the source states one) and holding any member fills it. A list puts a file in several sets, a fallback two machine models share, and a map from set to rank gives its place in each when the places differ (priority otherwise). The entry writes no required: it is derived from its sets.",
+            "oneOf": [
+              {"type": "string", "minLength": 1},
+              {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+              {"type": "object", "minProperties": 1, "additionalProperties": {"type": ["integer", "null"], "minimum": 0}}
+            ]
           },
           "region_check": {
             "type": "boolean"
@@ -694,7 +715,8 @@
               "directory"
             ]
           },
-          "variant_group": {
+          "selection_slot": {
+            "description": "Files one core chooses between by a rule other than first found: the disc's territory, a core option, a feature probe. They fill one slot of the core whatever system each is filed under, region filtering compares them together, and same-named entries in different slots stay apart. A member does not stand in for another: entries that do are a group.",
             "type": "string",
             "minLength": 1
           },
@@ -933,6 +955,9 @@
                 "systems"
               ]
             }
+          },
+          {
+            "not": {"required": ["group", "required"]}
           },
           {
             "if": {

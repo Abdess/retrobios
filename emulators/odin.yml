@@ -71,6 +71,10 @@ notes: |
 
 archive_prefix: "odin"
 
+groups:
+  boot-rom:
+    required: true
+
 files:
   - name: "hikaru.zip"
     path: "odin/hikaru.zip"
@@ -83,8 +87,7 @@ files:
   - name: "epr-23400a.ic94"
     archive: hikaru.zip
     system: sega-hikaru
-    required: false
-    variant_group: "hikaru-bootrom"
+    group: boot-rom
     priority: 1
     size: 2097152
     crc32: "2aa906a7"
@@ -95,8 +98,7 @@ files:
   - name: "epr-23400.ic94"
     archive: hikaru.zip
     system: sega-hikaru
-    required: false
-    variant_group: "hikaru-bootrom"
+    group: boot-rom
     priority: 2
     size: 2097152
     crc32: "3d557104"
@@ -107,8 +109,7 @@ files:
   - name: "epr-21904.ic94"
     archive: hikaru.zip
     system: sega-hikaru
-    required: false
-    variant_group: "hikaru-bootrom"
+    group: boot-rom
     priority: 3
     size: 2097152
     crc32: "d96298b6"

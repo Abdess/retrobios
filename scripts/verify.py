@@ -37,6 +37,14 @@ import slots
 
 sys.path.insert(0, os.path.dirname(__file__))
 from hashing import parse_md5_list
+from alternatives import (
+    core_file_spares,
+    set_fields,
+    set_keys,
+    set_requirements,
+    settle_sets,
+    slot_set_keys,
+)
 from common import (
     _foreign_tree,
     _owner_tokens,
@@ -537,6 +545,9 @@ def find_undeclared_files(
         config, profiles, relevant, db, declared_destinations(config)
     )
     launcher_candidates: list[tuple[str, bool, dict, dict]] = []
+    # Each grouped requirement met, as (set keys, entry, fills, (reported
+    # entry, the entry it is a claim on)): settled once every core is read.
+    set_records: list[tuple[tuple, dict, bool, tuple[dict, dict | None] | None]] = []
     undeclared = []
     seen_files: set[tuple] = set()
     # Key -> the entry reported for it. A later profile reading the same
@@ -590,7 +601,7 @@ def find_undeclared_files(
                     f.get("archive"),
                     dest,
                     f.get("system"),
-                    f.get("variant_group"),
+                    f.get("selection_slot"),
                     region_key,
                     # Below the save directory each core is handed a folder
                     # of its own: two cores reading hiscore.dat there read
@@ -615,6 +626,9 @@ def find_undeclared_files(
                 )
                 if verdict == "settled":
                     seen_files.add(seen_key)
+                    # Answered by the platform's own declaration, which its
+                    # report covers: the set it belongs to is spoken for.
+                    set_records.append((set_keys((emu_name, is_standalone), f), f, True, None))
                     continue
                 if verdict == "skip":
                     continue
@@ -627,7 +641,7 @@ def find_undeclared_files(
                         archive,
                         f.get("system_dir"),
                         f.get("system"),
-                        f.get("variant_group"),
+                        f.get("selection_slot"),
                         region_key,
                         is_standalone,
                     )
@@ -642,7 +656,7 @@ def find_undeclared_files(
                             "systems": entry_system_ids(f, profile),
                             "system": f.get("system"),
                             "region": f.get("region"),
-                            "variant_group": f.get("variant_group"),
+                            "selection_slot": f.get("selection_slot"),
                             "name": archive,
                             "archive": archive,
                             "path": system_dir_path(f, archive),
@@ -660,6 +674,14 @@ def find_undeclared_files(
                         }
                         if f.get("system_dir"):
                             archive_entries[archive_key]["system_dir"] = f["system_dir"]
+                        # The archive's own declaration names its sets: an
+                        # archive is a member like a loose file.
+                        own = archive_entry(archive, profile.get("files", []))
+                        archive_entries[archive_key].update(set_fields(own, profile))
+                        set_records.append((
+                            set_keys((emu_name, is_standalone), own), own, in_repo,
+                            (archive_entries[archive_key], None),
+                        ))
                     entry = archive_entries[archive_key]
                     entry["archive_file_count"] += 1
                     if f.get("required", False):
@@ -740,7 +762,7 @@ def find_undeclared_files(
                     "systems": entry_system_ids(f, profile),
                     "system": f.get("system"),
                     "region": f.get("region"),
-                    "variant_group": f.get("variant_group"),
+                    "selection_slot": f.get("selection_slot"),
                     "name": fname,
                     "path": dest,
                     "required": f.get("required", False),
@@ -750,6 +772,7 @@ def find_undeclared_files(
                     "in_repo": in_repo,
                     "note": f.get("note", ""),
                     "checks": sorted(checks) if checks else [],
+                    **set_fields(f, profile),
                     "source_ref": f.get("source_ref"),
                     "expected": _build_expected(f, checks),
                     **_identity_of(f),
@@ -777,12 +800,16 @@ def find_undeclared_files(
                     entry["root"] = "roms"
                 elif launcher_layer and not save_root:
                     launcher_candidates.append((emu_name, is_standalone, f, entry))
+                keys = set_keys((emu_name, is_standalone), f)
                 if duplicate:
                     first.setdefault("other_claims", []).append(entry)
+                    set_records.append((keys, f, in_repo, (entry, first)))
                     continue
                 reported[seen_key] = entry
                 undeclared.append(entry)
+                set_records.append((keys, f, in_repo, (entry, None)))
 
+    settled: set[int] = set()
     if launcher_layer:
         added, settled = launcher_layer.settle(
             launcher_candidates, lambda report: held_record(report, db)
@@ -793,7 +820,70 @@ def find_undeclared_files(
     for entry in sorted(archive_entries.values(), key=lambda e: e["name"]):
         undeclared.append(entry)
 
-    return undeclared
+    return _settle_core_sets(undeclared, set_records, settled, profiles)
+
+
+def _settle_core_sets(
+    undeclared: list[dict],
+    records: list[tuple[tuple, dict, bool, tuple[dict, dict | None] | None]],
+    launcher_settled: set[int],
+    profiles: dict[str, dict],
+) -> list[dict]:
+    """The core complement with each set of alternatives settled.
+
+    A member the collection lacks is dropped when another member is held,
+    declared by the platform or placed by its launcher, and a set nobody
+    holds keeps one entry, its first member, naming the others. A claim
+    another profile shares stays: its own core may need that very file.
+    """
+    # Archive units rank first among equals, as the builder orders them.
+    grouped = sorted(
+        (r for r in records if r[0]),
+        key=lambda r: not (r[3] is not None and r[3][0].get("archive")),
+    )
+    if not grouped:
+        return undeclared
+    excused, standing = settle_sets([
+        (keys, f, fills or (ref is not None and id(ref[0]) in launcher_settled))
+        for keys, f, fills, ref in grouped
+    ], lambda key: set_requirements(profiles.get(key[0][0], {})).get(key[1], True))
+    declared_sets = {
+        key for keys, _f, _fills, ref in grouped if ref is None for key in keys
+    }
+    dropped: set[int] = set()
+    for position, (keys, _f, _fills, ref) in enumerate(grouped):
+        if ref is None:
+            continue
+        entry, host = ref
+        required_keys = [k for k in keys if k[1] in entry.get("required_groups", ())]
+        if required_keys and all(k in declared_sets for k in required_keys):
+            # The platform declares a member of each of its required sets:
+            # under --required-only that declaration carries them.
+            entry["set_declared"] = True
+        if position in standing:
+            entry["alternatives"] = standing[position].others
+            entry["required"] = standing[position].required
+        if position not in excused:
+            continue
+        if host is not None:
+            host["other_claims"] = [c for c in host.get("other_claims", []) if c is not entry]
+            if not host["other_claims"]:
+                del host["other_claims"]
+        else:
+            dropped.add(id(entry))
+    out: list[dict] = []
+    for entry in undeclared:
+        if id(entry) not in dropped:
+            out.append(entry)
+            continue
+        # Another core reading the same requirement still needs it.
+        claims = entry.get("other_claims") or []
+        if claims:
+            promoted = dict(claims[0])
+            if claims[1:]:
+                promoted["other_claims"] = claims[1:]
+            out.append(promoted)
+    return out
 
 
 def find_exclusion_notes(
@@ -1510,6 +1600,10 @@ def verify_platform(
             )
             not in region_drops
         ]
+    if required_only:
+        # One member of a required set, as the builder keeps it.
+        spares = core_file_spares(undeclared)
+        undeclared = [u for u in undeclared if id(u) not in spares]
     _mark_unplaced(config, undeclared, profiles)
     from packextras import ExtraResolver
 
@@ -1826,6 +1920,8 @@ def _print_undeclared_entry(
         name_label = f"{name} ({arc_count} file{'s' if arc_count != 1 else ''})"
     else:
         name_label = name
+    if u.get("alternatives") and not u.get("in_repo"):
+        name_label += f" (or {', '.join(u['alternatives'])})"
     print(f"    {prefix}: {u['emulator']} needs {name_label}")
     checks = u.get("checks", [])
     if checks:
@@ -2200,6 +2296,9 @@ def verify_emulator(
         return local_path, status
 
     details = []
+    # Members of a set another member fills, or that the set's first member
+    # stands for: not missing, and out of every count.
+    set_members: list[dict] = []
     file_status: dict[str, str] = {}
     file_severity: dict[str, str] = {}
     dest_to_name: dict[str, str] = {}
@@ -2305,6 +2404,18 @@ def verify_emulator(
                 if fe.get("archive")
                 or _resolve_destination(fe, standalone) not in region_drops
             ]
+        spares: set[str] = set()
+        if required_only:
+            from packextras import emulator_required_spares
+
+            spares = emulator_required_spares(
+                emu_name, profile, files, standalone, region_drops, db,
+                validation_index, zip_contents, data_registry,
+            )
+            files = [
+                fe for fe in files
+                if fe.get("archive") or _resolve_destination(fe, standalone) not in spares
+            ]
 
         # Check data directories (only notice if not cached)
         for dd in deliverable(
@@ -2335,6 +2446,12 @@ def verify_emulator(
             occupy_trees(emu_name, profile)
             continue
 
+        # Each destination's outcome, settled by set once the profile is
+        # read: an archive unit is a member like a loose file (Kronos reads
+        # kronos/stvbios.zip, else stvbios.zip).
+        placed_results: list[tuple[str, dict, bool, bool, list[dict]]] = []
+        fallback_reason = "declared hash contradicted by the local file"
+
         # Verify archives as units (e.g., neogeo.zip, aes.zip)
         seen_archives: set[str] = set()
         for file_entry in files:
@@ -2342,6 +2459,11 @@ def verify_emulator(
             if archive and archive not in seen_archives:
                 seen_archives.add(archive)
                 own_entry = archive_entry(archive, files)
+                if _archive_destination(
+                    archive, profile.get("archive_prefix", ""),
+                    profile.get("pack_structure"), standalone,
+                ) in spares:
+                    continue
                 local_path, resolve_status = pending(own_entry, *resolve_file(
                     own_entry,
                     db,
@@ -2384,7 +2506,6 @@ def verify_emulator(
                 result["system"] = file_entry.get("system", "")
                 result["hle_fallback"] = False
                 result["ground_truth"] = build_ground_truth(archive, validation_index)
-                details.append(result)
                 # Where the pack puts it: an archive_prefix or pack_structure
                 # moves it, and a loose same-named entry is another file.
                 dest = _archive_destination(
@@ -2408,25 +2529,13 @@ def verify_emulator(
                 elif local_path:
                     occupy(dest, local_path, emu_name)
                     packed_dests.add(dest)
-                dest_to_name[dest] = archive
-                cur = result["status"]
-                prev = file_status.get(dest)
-                if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
-                    prev, 0
-                ):
-                    file_status[dest] = cur
-                sev = _emulator_severity(cur, required, False)
-                prev_sev = file_severity.get(dest)
-                if prev_sev is None or _SEVERITY_ORDER.get(
-                    sev, 0
-                ) > _SEVERITY_ORDER.get(prev_sev, 0):
-                    file_severity[dest] = sev
+                placed_results.append((dest, result, required, False, [own_entry]))
 
         # Results of this emulator, by destination. Several entries of one
         # profile on one destination are the releases the code accepts
         # there (a shareware and a retail HOG, each GRP in a size table):
         # holding one of them fills the slot, and the others are not gaps.
-        emu_results: dict[str, list[tuple[dict, bool, bool]]] = {}
+        emu_results: dict[str, list[tuple[dict, bool, bool, dict]]] = {}
 
         for file_entry in files:
             # Skip archive members (verified as archive units above)
@@ -2526,13 +2635,13 @@ def verify_emulator(
             # The slot the emulator pack places this entry in: standalone_path
             # under --standalone, the sanitised path.
             dest = _resolve_destination(file_entry, standalone) or name
-            emu_results.setdefault(dest, []).append((result, required, hle))
+            emu_results.setdefault(dest, []).append((result, required, hle, file_entry))
 
         for dest, alternatives in emu_results.items():
             # What the emulator pack places here: an accepted file, else a
             # file whose hash the profile contradicts. A refused copy is held
             # but never packed.
-            fallback_reason = "declared hash contradicted by the local file"
+            slot_entries = [a[3] for a in alternatives]
             if len(alternatives) > 1:
                 # Reduced in the order generate_emulator_pack chooses, so the
                 # destination's status is the one the pack reports: a slot it
@@ -2585,27 +2694,50 @@ def verify_emulator(
             elif not block and packed is not None:
                 occupy(dest, packed, emu_name)
                 packed_dests.add(dest)
-            for result, required, hle in alternatives:
+            for result, required, hle, file_entry in alternatives:
                 if block_reason and result["status"] != Status.MISSING:
                     result["status"] = Status.MISSING
                     result["reason"] = block_reason
                 result["destination"] = dest
-                details.append(result)
+                placed_results.append((dest, result, required, hle, slot_entries))
 
-                # Aggregate by destination (path if available, else name)
-                dest_to_name[dest] = result["name"]
-                cur = result["status"]
-                prev = file_status.get(dest)
-                if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
-                    prev, 0
-                ):
-                    file_status[dest] = cur
-                sev = _emulator_severity(cur, required, hle)
-                prev_sev = file_severity.get(dest)
-                if prev_sev is None or _SEVERITY_ORDER.get(
-                    sev, 0
-                ) > _SEVERITY_ORDER.get(prev_sev, 0):
-                    file_severity[dest] = sev
+        # A set the code takes one member of is one need: once a member is
+        # in the pack the others are not missing, and a set nobody holds is
+        # one gap under its first member. Settled per profile, before the
+        # destinations of several profiles are merged.
+        excused, standing = settle_sets([
+            (
+                slot_set_keys(emu_name, entries),
+                entries[0],
+                result["status"] == Status.OK
+                or (result["status"] == Status.UNTESTED
+                    and result.get("reason") == fallback_reason),
+            )
+            for _dest, result, _required, _hle, entries in placed_results
+        ], lambda key: set_requirements(profile).get(key[1], True))
+        for position, (dest, result, required, hle, _fe) in enumerate(placed_results):
+            if position in excused and result["status"] == Status.MISSING:
+                set_members.append(result)
+                continue
+            if position in standing:
+                result["alternatives"] = standing[position].others
+                result["required"] = required = standing[position].required
+            details.append(result)
+
+            # Aggregate by destination (path if available, else name)
+            dest_to_name[dest] = result["name"]
+            cur = result["status"]
+            prev = file_status.get(dest)
+            if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
+                prev, 0
+            ):
+                file_status[dest] = cur
+            sev = _emulator_severity(cur, required, hle)
+            prev_sev = file_severity.get(dest)
+            if prev_sev is None or _SEVERITY_ORDER.get(
+                sev, 0
+            ) > _SEVERITY_ORDER.get(prev_sev, 0):
+                file_severity[dest] = sev
 
         occupy_trees(emu_name, profile)
 
@@ -2639,6 +2771,7 @@ def verify_emulator(
         "severity_counts": counts,
         "status_counts": status_counts,
         "details": details,
+        "set_members": set_members,
         "data_dir_notices": sorted(set(data_dir_notices)),
         "ground_truth_coverage": {
             "with_validation": with_validation,
@@ -2744,7 +2877,9 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
             seen.add(d["name"])
             req = "required" if d.get("required", True) else "optional"
             hle = ", HLE available" if d.get("hle_fallback") else ""
-            print(f"  MISSING ({req}{hle}): {d['name']}")
+            others = d.get("alternatives")
+            either = f" (or {', '.join(others)})" if others else ""
+            print(f"  MISSING ({req}{hle}): {d['name']}{either}")
             gt = d.get("ground_truth", [])
             if gt:
                 if verbose:

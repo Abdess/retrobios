@@ -133,20 +133,23 @@ notes: |
        Main.java:11014, Main.java:12555-12585, Main.java:15415-15430,
        Main.java:15489
 
+groups:
+  ps-bios:
+    required: false
+
 files:
   - name: scph1001.bin
+    group: ps-bios
     path: bios/scph1001.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "com.emulator.fpse64.biospath"
     size: 524288
     validation: [size]
     md5: 924e392ed05558ffdb115408c263dccf
     sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
     description: "SCPH-1001, DTL-H1201, DTL-H3001 (v2.2 12-04-95 A)"
-    note: "The only image the code identifies, and it identifies it by a checksum of its own rather than by a hash it spells out: the 524288 bytes summed as signed bytes, accepted at 85958. The md5 and sha1 here are the dump that reproduces that sum. Selecting a BIOS by hand takes any .bin of exactly 524288 bytes, so the other images of the group fill the slot without being recognised by name or by sum."
+    note: "The only image the code identifies, and it identifies it by a checksum of its own rather than by a hash it spells out: the 524288 bytes summed as signed bytes, accepted at 85958. The md5 and sha1 here are the dump that reproduces that sum. Selecting a BIOS by hand takes any .bin of exactly 524288 bytes, so any other PlayStation image of that size fills the slot without being recognised by name or by sum."
     source_ref: "Main.java:24466-24487, Main.java:9945-9952, Main.java:30177-30192, Main.java:5392-5396, libfpse.so 0x70e20-0x70ed0"
 
   - name: kanji.rom

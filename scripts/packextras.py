@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 from common import PROFILE_IDENTITY_FIELDS, _norm_system_id, entry_system_ids
+from alternatives import core_file_spares, required_only_spares, set_fields
 from common import archive_members, holds_required_members
 from common import declared_root, expand_platform_declared_names, platform_declarations
 from common import load_emulator_profiles
@@ -403,8 +404,12 @@ def hidden_extras(
     )
     if system_ids:
         extras = extras_for_systems(extras, system_ids)
+    spares = core_file_spares(
+        extras,
+        lambda fe: extra_region_key(fe, region_prefix) in (region_drops or set()),
+    ) if required_only else set()
     for fe in extras:
-        if required_only and fe.get("required") is False:
+        if required_only and (fe.get("required") is False or id(fe) in spares):
             continue
         dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
         if not dest or (region_drops and extra_region_key(fe, region_prefix) in region_drops):
@@ -657,7 +662,7 @@ def _agnostic_scan_extras(
                         "source_system": f.get("system"),
                         "source_systems": entry_system_ids(f, profile),
                         "region": f.get("region"),
-                        "variant_group": f.get("variant_group"),
+                        "selection_slot": f.get("selection_slot"),
                         "agnostic_scan": True,
                     }
                     extra["claim_order"] = (4, 0, emu_name)
@@ -813,7 +818,7 @@ def _companion_extras(
             "source_system": seed.get("system"),
             "source_systems": entry_system_ids(seed, profile),
             "region": seed.get("region"),
-            "variant_group": seed.get("variant_group"),
+            "selection_slot": seed.get("selection_slot"),
             "agnostic_scan": True,
         }
         extra["claim_order"] = (4, 0, emu_name)
@@ -987,7 +992,7 @@ def _archive_prefix_copies(
             "source_system": archive_entry.get("system"),
             "source_systems": entry_system_ids(archive_entry, profile),
             "region": archive_entry.get("region"),
-            "variant_group": archive_entry.get("variant_group"),
+            "selection_slot": archive_entry.get("selection_slot"),
         }
         members = archive_members(archive_name, profile.get("files", []))
         if members:
@@ -1392,7 +1397,8 @@ def _collect_emulator_extras(
                     "source_system": f.get("system"),
                     "source_systems": entry_system_ids(f, profile),
                     "region": f.get("region"),
-                    "variant_group": f.get("variant_group"),
+                    "selection_slot": f.get("selection_slot"),
+                    **set_fields(f, profile),
                 }
                 # The same identity the first pass carries: without it the copy
                 # resolves on its name alone and a same-named file of another
@@ -1560,7 +1566,8 @@ def _report_extra(u: dict, name: str, dest: str) -> dict:
         "source_system": u.get("system"),
         "source_systems": u.get("systems", []),
         "region": u.get("region"),
-        "variant_group": u.get("variant_group"),
+        "selection_slot": u.get("selection_slot"),
+        **{k: u[k] for k in ("required_groups", "set_declared") if k in u},
     }
     if u.get("members"):
         extra["members"] = u["members"]
@@ -1837,9 +1844,9 @@ def extra_region_groups(
         return (spellings or {}).get(_norm_system_id(sys_id), sys_id)
 
     emulator = extra.get("source_emulator", "")
-    variant = extra.get("variant_group")
+    variant = extra.get("selection_slot")
     if variant:
-        # A variant group is one slot of one core, whatever system each
+        # A selection slot is one slot of one core, whatever system each
         # member is filed under: PicoDrive files its US Mega CD BIOS under
         # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
         # picks one of the twelve. Keyed as emulator mode keys it.
@@ -1868,7 +1875,7 @@ def emulator_region_drops(
 ) -> set[str]:
     """Destinations an emulator-mode `--region` withdraws.
 
-    One group per system (or explicit variant_group) inside each profile, so
+    One group per system (or explicit selection_slot) inside each profile, so
     a multi-system core such as O2EM keeps a fallback BIOS for every system
     instead of letting one matching system empty another. The emulator pack
     and `verify --emulator` both read this, keyed by pack destination.
@@ -1904,6 +1911,55 @@ def emulator_region_drops(
                 ):
                     held.add(dest)
     return region_mod.resolve_region_drops(region_groups, region_index, regions, held)
+
+
+def emulator_required_spares(
+    emu_name: str,
+    profile: dict,
+    files: list[dict],
+    standalone: bool,
+    region_drops: set[str],
+    db: dict,
+    validation_index: dict,
+    zip_contents: dict | None,
+    data_registry: dict | None,
+) -> set[str]:
+    """The destinations an emulator --required-only pack leaves out: of each
+    required set, one held member stays, the first the code loads among
+    those the pack still carries after the region filter. An archive unit
+    is a member like a loose file: Kronos reads kronos/stvbios.zip, else
+    stvbios.zip. The pack and verify --emulator both read this."""
+    from alternatives import groups_of, rank_in, required_groups
+    from common import archive_entry
+    from packpaths import _archive_destination, _resolve_destination
+
+    candidates: list[dict] = []
+    archives: list[str] = []
+    for fe in files:
+        archive = fe.get("archive")
+        if archive and archive not in archives:
+            archives.append(archive)
+            own = archive_entry(archive, files)
+            if groups_of(own):
+                candidates.append({"dest": _archive_destination(
+                    archive, profile.get("archive_prefix", ""),
+                    profile.get("pack_structure"), standalone,
+                ), "entry": own})
+    for fe in files:
+        if not fe.get("archive") and groups_of(fe):
+            candidates.append({"dest": _resolve_destination(fe, standalone), "entry": fe})
+    if not candidates:
+        return set()
+    spares = required_only_spares(
+        candidates,
+        owner=lambda _c: emu_name,
+        held=lambda c: _emulator_ships(
+            c["entry"], emu_name, profile, db, validation_index, zip_contents, data_registry,
+        ),
+        gone=lambda c: c["dest"] in region_drops,
+        sets=lambda c: {g: rank_in(c["entry"], g) for g in required_groups(c["entry"], profile)},
+    )
+    return {c["dest"] for c in candidates if id(c) in spares}
 
 
 def _emulator_ships(
@@ -1946,7 +2002,7 @@ def _emulator_region_group(
     Grouped together, geargrafx's LaserActive pac-n1.bin was dropped by
     --emulator --region us and kept by --platform --region us.
     """
-    variant = file_entry.get("variant_group")
+    variant = file_entry.get("selection_slot")
     if variant:
         return f"{emu_name}:variant:{variant}"
     system = file_entry.get("system")

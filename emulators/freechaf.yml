@@ -37,11 +37,15 @@ notes: |
   The .info file declares all three firmware files as required (opt=false),
   but the core does not abort on a missing BIOS. It falls back to HLE.
 
+groups:
+  psu1:
+    required: false
+
 files:
   - name: "sl31253.bin"
     system: fairchild-channelf
+    group: psu1
     priority: 2
-    required: false
     hle_fallback: true
     note: "Channel F PSU1 ROM (original). Fallback if sl90025.bin is missing."
     source_ref: "src/libretro.c:192"
@@ -55,8 +59,8 @@ files:
 
   - name: "sl90025.bin"
     system: fairchild-channelf
+    group: psu1
     priority: 1
-    required: false
     hle_fallback: true
     note: "Channel F II PSU1 ROM. Tried first, preferred over sl31253.bin."
     source_ref: "src/libretro.c:186"

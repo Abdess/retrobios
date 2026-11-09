@@ -1116,7 +1116,7 @@ def _platform_export_rows(
                     ),
                     "required": bool(entry.get("required", True)),
                     "region": _json_text(entry.get("region")),
-                    "variant_group": _json_text(entry.get("variant_group")),
+                    "selection_slot": _json_text(entry.get("selection_slot")),
                     "size": entry.get("size"),
                     "sha1": _json_text(entry.get("sha1")),
                     "sha256": _json_text(entry.get("sha256")),
@@ -1372,7 +1372,7 @@ def _write_sqlite_export(
             CREATE TABLE platform_files (
                 platform_id TEXT NOT NULL, system TEXT NOT NULL, name TEXT NOT NULL,
                 destination TEXT NOT NULL, required INTEGER NOT NULL,
-                region TEXT, variant_group TEXT, size INTEGER,
+                region TEXT, selection_slot TEXT, size INTEGER,
                 sha1 TEXT, sha256 TEXT, md5 TEXT, crc32 TEXT,
                 status TEXT, category TEXT, collection_path TEXT, resolved_sha1 TEXT,
                 zipped_file TEXT, hash_match_mandatory INTEGER, mandatory_declared INTEGER,
@@ -1455,7 +1455,7 @@ def _write_sqlite_export(
         connection.executemany(
             "INSERT INTO platform_files VALUES "
             "(:platform_id, :system, :name, :destination, :required, :region, "
-            ":variant_group, :size, :sha1, :sha256, :md5, :crc32, :status, :category, "
+            ":selection_slot, :size, :sha1, :sha256, :md5, :crc32, :status, :category, "
             ":collection_path, :resolved_sha1, :zipped_file, :hash_match_mandatory, "
             ":mandatory_declared, :curated, :shared_group, :mirror_of, :zip_digest)",
             platform_files,
@@ -1699,7 +1699,7 @@ def generate_data_exports(
         _csv_document(
             [
                 "platform_id", "platform", "system", "name", "destination",
-                "required", "region", "variant_group", "size", "sha1",
+                "required", "region", "selection_slot", "size", "sha1",
                 "sha256", "md5", "crc32", "status", "category",
                 "collection_path", "resolved_sha1", *ENTRY_EXPORT_FIELDS,
             ],

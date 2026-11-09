@@ -36,6 +36,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, os.path.dirname(__file__))
+from alternatives import core_file_spares, settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
     ROMS_ROOT,
@@ -1295,8 +1296,13 @@ def generate_pack(
           db, bios_dir, zip_contents, data_registry, validation_index,
           validation_owners, offline, profiles=emu_profiles,
       )
+      spares = core_file_spares(
+          core_files,
+          lambda fe: bool(region_drops)
+          and extra_region_key(fe, declared_root(config)) in region_drops,
+      ) if required_only else set()
       for fe in core_files:
-          if required_only and fe.get("required") is False:
+          if required_only and (fe.get("required") is False or id(fe) in spares):
               continue
           dest = sanitize_pack_path(fe.get("destination", fe["name"]))
           if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
@@ -1438,8 +1444,13 @@ def generate_pack(
           if system_filter:
               unfolded = _extras_for_systems(unfolded, system_filter)
           prefix = _detect_extras_prefix(config, base_dest)
+          unfolded_spares = core_file_spares(
+              unfolded,
+              lambda fe: bool(region_drops)
+              and extra_region_key(fe, declared_root(config)) in region_drops,
+          ) if required_only else set()
           for fe in unfolded:
-              if required_only and fe.get("required") is False:
+              if required_only and (fe.get("required") is False or id(fe) in unfolded_spares):
                   continue
               if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
                   continue
@@ -1780,6 +1791,16 @@ def generate_emulator_pack(
                 if archive:
                     archives.add(archive)
 
+            # What each destination came to, settled by set once the
+            # profile is read: a member another member fills is not missing,
+            # and a set nobody holds is reported once (alternatives.py). An
+            # archive unit is a member like a loose file.
+            outcomes: list[tuple[list[dict], bool, Callable[[], None] | None]] = []
+            spares = emulator_required_spares(
+                emu_name, profile, files, standalone, region_drops, db,
+                validation_index, zip_contents, data_registry,
+            ) if required_only else set()
+
             # Pack archives as units
             archive_prefix = profile.get("archive_prefix", "")
             for archive_name in sorted(archives):
@@ -1789,6 +1810,8 @@ def generate_emulator_pack(
 
                 own_entry = archive_entry(archive_name, files)
                 if required_only and archive_is_optional(own_entry, archive_name, files):
+                    continue
+                if archive_dest in spares:
                     continue
                 local_path, status = resolve_file(
                     own_entry,
@@ -1808,7 +1831,11 @@ def generate_emulator_pack(
                     if not (taken and local_path and _same_bytes(
                         local_path, packed_at.get(archive_dest.lower())
                     )):
-                        report_missing(archive_name, archive_dest)
+                        outcomes.append(([own_entry], False, functools.partial(
+                            report_missing, archive_name, archive_dest
+                        )))
+                    else:
+                        outcomes.append(([own_entry], True, None))
                     continue
                 if local_path and status not in ("not_found",):
                     if local_path.endswith(".zip"):
@@ -1822,8 +1849,11 @@ def generate_emulator_pack(
                     total_files += 1
                     if record is not None:
                         record.files.append(archive_dest)
+                    outcomes.append(([own_entry], True, None))
                 else:
-                    report_missing(archive_name, archive_dest)
+                    outcomes.append(([own_entry], False, functools.partial(
+                        report_missing, archive_name, archive_dest
+                    )))
 
             # Pack individual files (skip archive members). The entries of one
             # profile on one destination are the releases the code accepts
@@ -1837,7 +1867,7 @@ def generate_emulator_pack(
                 if fe.get("archive"):
                     continue
                 dest = _resolve_destination(fe, standalone)
-                if not dest:
+                if not dest or dest in spares:
                     continue
                 if region_drops and dest in region_drops:
                     continue
@@ -1928,17 +1958,25 @@ def generate_emulator_pack(
                             held, packed_at.get(dest.lower())
                         ):
                             # The file already at this path, asked for twice.
+                            outcomes.append((alternatives, True, None))
                             continue
-                        report_missing(alternatives[0]["name"], dest)
+                        outcomes.append((alternatives, False, functools.partial(
+                            report_missing, alternatives[0]["name"], dest
+                        )))
                         continue
 
                 if chosen is None:
                     if refusal:
                         rejected_files.append(refusal)
+                        outcomes.append((alternatives, False, None))
                     elif all(fe.get("unsourceable") for fe in alternatives):
-                        unsourceable_files.append(alternatives[0]["name"])
+                        outcomes.append((alternatives, False, functools.partial(
+                            unsourceable_files.append, alternatives[0]["name"]
+                        )))
                     else:
-                        report_missing(alternatives[0]["name"], dest)
+                        outcomes.append((alternatives, False, functools.partial(
+                            report_missing, alternatives[0]["name"], dest
+                        )))
                     continue
 
                 fe, local_path, how = chosen
@@ -1959,8 +1997,11 @@ def generate_emulator_pack(
                             total_files += 1
                             if record is not None:
                                 record.files.append(dest)
+                            outcomes.append((alternatives, True, None))
                         else:
-                            missing_files.append(fe["name"])
+                            outcomes.append((alternatives, False, functools.partial(
+                                missing_files.append, fe["name"]
+                            )))
                     finally:
                         if os.path.exists(tmp_path):
                             os.unlink(tmp_path)
@@ -1974,6 +2015,7 @@ def generate_emulator_pack(
                 # (but allow same file to be packed under different destinations,
                 # e.g., IPL.bin in GC/USA/ and GC/EUR/ from same source)
                 dedup_key_hash = f"{os.path.realpath(local_path)}:{dest}"
+                outcomes.append((alternatives, True, None))
                 if dedup_key_hash in seen_hashes:
                     continue
                 seen_hashes.add(dedup_key_hash)
@@ -1989,6 +2031,14 @@ def generate_emulator_pack(
                 total_files += 1
                 if record is not None:
                     record.files.append(dest)
+
+            excused, _standing = settle_sets([
+                (slot_set_keys(emu_name, entries), entries[0], fills)
+                for entries, fills, _report in outcomes
+            ])
+            for position, (_entries, _fills, report) in enumerate(outcomes):
+                if report is not None and position not in excused:
+                    report()
 
             # The trees after the files, as in a platform pack: a dump the
             # profile declares wins over the copy a tree bundles at the same
@@ -4379,8 +4429,13 @@ def _manifest_core_entries(
         db, bios_dir, zip_contents, data_registry, validation_index or {},
         owners, offline, profiles=profiles,
     )
+    spares = core_file_spares(
+        core_files,
+        lambda fe: bool(region_drops)
+        and extra_region_key(fe, declared_root(config)) in region_drops,
+    ) if required_only else set()
     for fe in core_files:
-        if required_only and fe.get("required") is False:
+        if required_only and (fe.get("required") is False or id(fe) in spares):
             continue
         dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
@@ -5782,6 +5837,7 @@ from packextras import (  # noqa: E402,F401
     extras_for_systems as _extras_for_systems,
     platform_region_groups,
     emulator_region_drops,
+    emulator_required_spares,
     _emulator_region_group,
     expand_agnostic_entries,
     undeclared_report,
