@@ -1397,11 +1397,14 @@ const notFound = () => {
 	}
 	if (lines.length) show(...lines);
 	// A section below a page: the nearest page above it that exists.
-	const parts = rest.replace(/\/$/, '').split('/');
+	// Empty segments dropped: "//host/x" would read as another site's address.
+	const parts = rest.split('/').filter((part) => part && part !== '.' && part !== '..');
 	const parents = parts.slice(0, -1).map((_, index) => parts.slice(0, parts.length - 1 - index).join('/'));
 	(async () => {
 		for (const parent of parents) {
 			const url = new URL(`${parent}/`, siteRoot());
+			// Only a page of this site, under its base, is fetched or linked.
+			if (url.origin !== siteRoot().origin || !url.pathname.startsWith(siteRoot().pathname)) return;
 			try {
 				if ((await fetch(url, { method: 'HEAD' })).ok) {
 					const link = document.createElement('a');
