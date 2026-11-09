@@ -756,7 +756,7 @@
   "src/patch/vibractrl/group/vibractrl.dll.map",
   "src/scripts/aq_crash_fix.lua"
  ],
- "github.com/EKA2L1/EKA2L1@cc30b451eaab3b73930ce0fbf2dabcfc31476e28": [
+ "github.com/EKA2L1/EKA2L1@6ad873a07ee3d745cd17179026dca247f6d11f6b": [
   ".gitmodules",
   "CMakeLists.txt",
   "README.md",
@@ -2262,7 +2262,7 @@
   "app/src/main/java/aenu/aps3e/Utils.java",
   "app/src/main/res/values/strings.xml"
  ],
- "github.com/aenu1/ax360e@b8c1838f21761ac463724e24105eda97b990e704": [
+ "github.com/aenu1/ax360e@1df063dfabd363bd082cff8501c8c78ee35851d4": [
   "app/build.gradle.bak",
   "app/src/main/AndroidManifest.xml",
   "app/src/main/assets/config/default_config.toml",
