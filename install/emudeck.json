@@ -2950,6 +2950,7 @@
     ],
     "nintendo-nes": [
       "3dsen",
+      "ares",
       "bizhawk",
       "bnes",
       "emux_nes",
@@ -21498,6 +21499,19 @@
       ]
     },
     {
+      "dest": "bios.sms",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "cores": [
+        "mesence",
+        "emux_sms",
+        "gearsystem",
+        "smsplus"
+      ]
+    },
+    {
       "dest": "ep128emu/roms/exos21.rom",
       "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
       "sha256": "ff370bb0bb0ae85f87861d837d82071d64257b129731c5e549ef5da8ade4356b",
@@ -22357,19 +22371,6 @@
       ],
       "region_groups": [
         "laseractive"
-      ]
-    },
-    {
-      "dest": "bios.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
-      "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
-      "cores": [
-        "mesence",
-        "emux_sms",
-        "gearsystem",
-        "smsplus"
       ]
     },
     {
@@ -111426,12 +111427,12 @@
         "snk-neogeo-mvs",
         "snk-neogeo-aes",
         "snk-neogeo-cd",
-        "snk-neogeo-pocket",
+        "snk-ngp",
         "capcom-cps3",
         "igs-pgm",
         "fairchild-channelf",
         "coleco-colecovision",
-        "sinclair-spectrum",
+        "sinclair-zx-spectrum",
         "msx",
         "nintendo-fds",
         "super-kaneko-nova",
@@ -125160,12 +125161,12 @@
         "snk-neogeo-mvs",
         "snk-neogeo-aes",
         "snk-neogeo-cd",
-        "snk-neogeo-pocket",
+        "snk-ngp",
         "capcom-cps3",
         "igs-pgm",
         "fairchild-channelf",
         "coleco-colecovision",
-        "sinclair-spectrum",
+        "sinclair-zx-spectrum",
         "msx",
         "nintendo-fds",
         "super-kaneko-nova",

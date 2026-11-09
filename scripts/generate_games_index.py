@@ -282,9 +282,19 @@ def resolve_folder(
     An arcade core is the exception: the arcade index names each set's
     files, and its hundred machines would make any unknown file a fallback
     for all of them.
+
+    A name that spells a machine its core does not run adds the core's
+    machines to it: the games run on that core. Mednafen's PC Engine core
+    lists nec-pc-engine, the CD folder resolved to nec-pc-engine-cd alone,
+    and an unrecognised CD game got no System Card.
     """
     resolution = resolver.resolve(folder_names(row), platform)
     own = [str(s) for s in profiles.profiles.get(profile or "", {}).get("systems") or []]
+    if resolution.systems and own and profile not in arcade:
+        runs = {sid for s in own for sid in resolver.equivalents(s)}
+        if not runs & set(resolution.systems):
+            systems = set(resolution.systems) | {resolver.canonical(s) for s in own}
+            return Resolution(sorted(systems), f"{resolution.basis}, and systems of {profile}")
     if resolution.systems or not own:
         return resolution
     if len(own) == 1:

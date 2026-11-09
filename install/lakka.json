@@ -1233,6 +1233,7 @@
       "nosgba"
     ],
     "nintendo-fds": [
+      "ares",
       "fbneo",
       "fceumm",
       "fceumm_mod",
@@ -1257,6 +1258,7 @@
       "triforce"
     ],
     "nintendo-gb": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -1280,6 +1282,7 @@
       "vbam"
     ],
     "nintendo-gba": [
+      "ares",
       "beetle_gba",
       "bizhawk",
       "fbneo",
@@ -1303,6 +1306,7 @@
       "vbam"
     ],
     "nintendo-gbc": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -1327,6 +1331,7 @@
     ],
     "nintendo-nes": [
       "3dsen",
+      "ares",
       "bizhawk",
       "bnes",
       "emux_nes",
@@ -1387,6 +1392,7 @@
       "supersnes9x"
     ],
     "nintendo-snes": [
+      "ares",
       "bizhawk",
       "bsnes",
       "bsnes-jg",
@@ -1491,6 +1497,7 @@
       "bizhawk",
       "blastem",
       "clk",
+      "emux_sms",
       "gearsystem",
       "genesis_plus_gx",
       "genesis_plus_gx_expanded",
@@ -1567,6 +1574,8 @@
       "cspect",
       "eightyone",
       "ep128emu_core",
+      "fbalpha2019",
+      "fbneo",
       "fbzx",
       "fuse",
       "speccy",
@@ -2857,6 +2866,10 @@
       "repo_path": "bios/Arcade/Arcade/.variants/spec128.zip.1a524bfa",
       "cores": null,
       "systems": [
+        "arcade",
+        "sinclair-zx-spectrum"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -2879,6 +2892,10 @@
       "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "sinclair-zx-spectrum"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -2901,6 +2918,10 @@
       "repo_path": "bios/Arcade/FBNeo/spec1282a.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "sinclair-zx-spectrum"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -113109,6 +113130,9 @@
       "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbalpha2019"
+      ],
+      "systems": [
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -113119,6 +113143,9 @@
       "repo_path": "bios/Arcade/Arcade/spec128.zip",
       "cores": [
         "fbalpha2019"
+      ],
+      "systems": [
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -116951,12 +116978,12 @@
         "snk-neogeo-mvs",
         "snk-neogeo-aes",
         "snk-neogeo-cd",
-        "snk-neogeo-pocket",
+        "snk-ngp",
         "capcom-cps3",
         "igs-pgm",
         "fairchild-channelf",
         "coleco-colecovision",
-        "sinclair-spectrum",
+        "sinclair-zx-spectrum",
         "msx",
         "nintendo-fds",
         "super-kaneko-nova",
@@ -130685,12 +130712,12 @@
         "snk-neogeo-mvs",
         "snk-neogeo-aes",
         "snk-neogeo-cd",
-        "snk-neogeo-pocket",
+        "snk-ngp",
         "capcom-cps3",
         "igs-pgm",
         "fairchild-channelf",
         "coleco-colecovision",
-        "sinclair-spectrum",
+        "sinclair-zx-spectrum",
         "msx",
         "nintendo-fds",
         "super-kaneko-nova",

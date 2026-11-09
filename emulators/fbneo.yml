@@ -21,12 +21,12 @@ systems:
   - snk-neogeo-mvs
   - snk-neogeo-aes
   - snk-neogeo-cd
-  - snk-neogeo-pocket
+  - snk-ngp
   - capcom-cps3
   - igs-pgm
   - fairchild-channelf
   - coleco-colecovision
-  - sinclair-spectrum
+  - sinclair-zx-spectrum
   - msx
   - nintendo-fds
   - super-kaneko-nova
@@ -990,7 +990,7 @@ files:
   # -------------------------------------------------------
   - name: "spectrum.rom"
     archive: spectrum.zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     required: true
     size: 16384  # 0x4000
     crc32: "ddee531f"
@@ -999,7 +999,7 @@ files:
 
   - name: "zx128_0.rom"
     archive: spec128.zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     required: true
     size: 16384
     crc32: "e76799d2"
@@ -1008,7 +1008,7 @@ files:
 
   - name: "zx128_1.rom"
     archive: spec128.zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     required: true
     size: 16384
     crc32: "b96a36be"
@@ -1017,7 +1017,7 @@ files:
 
   - name: "zx128_2a_0.rom"
     archive: spec1282a.zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     required: false
     size: 16384
     crc32: "30c9f490"
@@ -1026,7 +1026,7 @@ files:
 
   - name: "zx128_2a_1.rom"
     archive: spec1282a.zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     required: false
     size: 16384
     crc32: "a7916b3f"
@@ -1035,7 +1035,7 @@ files:
 
   - name: "zx128_2a_2.rom"
     archive: spec1282a.zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     required: false
     size: 16384
     crc32: "c9a0b748"
@@ -1044,7 +1044,7 @@ files:
 
   - name: "zx128_2a_3.rom"
     archive: spec1282a.zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     required: false
     size: 16384
     crc32: "b88fd6e3"
@@ -1098,7 +1098,7 @@ files:
   # -------------------------------------------------------
   - name: "SNK Neo-Geo Pocket BIOS (1998)(SNK)(en-ja).bin"
     archive: ngp.zip
-    system: snk-neogeo-pocket
+    system: snk-ngp
     required: true
     size: 65536  # 0x10000
     crc32: "6232df8d"
@@ -1107,7 +1107,7 @@ files:
 
   - name: "SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin"
     archive: ngp.zip
-    system: snk-neogeo-pocket
+    system: snk-ngp
     required: true
     size: 65536
     crc32: "6eeb6f40"
