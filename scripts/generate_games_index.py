@@ -294,6 +294,36 @@ def resolve_folder(
     return Resolution(sorted({resolver.canonical(s) for s in own}), f"systems of {profile}")
 
 
+# The emulator column of a row names the frontend or a launch mode, never
+# a program whose files are read: these never answer for a core.
+_NOT_PROGRAMS = frozenset({"retroarch", "retroarch32", "libretro", "external", "standalone",
+                           "port", "ports", "native", "sh", "os-shell", "none"})
+
+
+def emulator_profile(row: dict, platform: str, cores: ProfileResolver,
+                     resolver: SystemResolver, profiles: Profiles) -> str | None:
+    """The profile of the program a row's emulator column names, when its
+    core column names a mode, a machine or a plugin of that program: RetroBat
+    runs demul for core hikaru, AmberELEC MAME for core gamate, Batocera
+    mupen64plus for core glide64mk2.
+
+    Kept only when that profile declares a system of the folder: MAME's
+    profile has no GameKing, and answering MAME for its folder would leave
+    out the ROM the core needs. Unresolved, the folder keeps the files of
+    every core of its systems, as it did.
+    """
+    emulator = str(row.get("emulator") or "").strip()
+    if not emulator or emulator.lower() in _NOT_PROGRAMS or emulator.lower().startswith("standalone"):
+        return None
+    candidate = cores.resolve(emulator)
+    if not candidate:
+        return None
+    systems = resolver.resolve(folder_names(row), platform).systems
+    own = {str(s) for s in profiles.profiles.get(candidate, {}).get("systems") or []}
+    declared = {spelling for sid in own for spelling in resolver.equivalents(sid)}
+    return candidate if any(resolver.equivalents(sid) & declared for sid in systems) else None
+
+
 def build_setups(
     setups: dict[str, dict],
     resolver: SystemResolver,
@@ -321,7 +351,8 @@ def build_setups(
         counts = {"folders": 0, "resolved": 0, "profile": 0, "fallback": 0}
         for row in doc.get("folders", []):
             counts["folders"] += 1
-            profile = cores.resolve(row.get("core"))
+            profile = (cores.resolve(row.get("core"))
+                       or emulator_profile(row, platform, cores, resolver, profiles))
             resolution = resolve_folder(row, platform, profile, resolver, profiles, arcade)
             published: dict = {
                 "folder": row["folder"],

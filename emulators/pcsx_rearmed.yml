@@ -12,7 +12,7 @@ version_basis:
   path: "frontend/libretro.c"
   pattern: 'library_version\s*=\s*"([^"]+)"'
 display_name: "Sony - PlayStation (PCSX ReARMed)"
-cores: [pcsx_rearmed, pcsx_rearmed_neon, pcsx_rearmed_interpreter, "pcsx_rearmed_32b"]
+cores: [pcsx_rearmed, pcsx_rearmed_neon, pcsx_rearmed_interpreter, "pcsx_rearmed_32b", "pcsx_rearmed_rumble", "pcsx_rearmed32"]
 systems: [sony-playstation]
 notes: >
   HLE BIOS built-in: core option pcsx_rearmed_bios = "HLE" bypasses real BIOS entirely.

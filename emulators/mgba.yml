@@ -17,6 +17,8 @@ display_name: "Nintendo - Game Boy Advance (mGBA)"
 cores:
   - mgba
   - mgba_fork
+  - "mgba_rumble"
+  - "msgb"
 systems:
   - nintendo-gba
   - nintendo-gb

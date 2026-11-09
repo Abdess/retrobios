@@ -504,6 +504,21 @@ body:has(.rb-sys-file, .rb-file-entry) { --sl-content-width: var(--rb-grid-width
 	vertical-align: middle;
 }
 .rb-download:hover { background: var(--sl-color-accent-low); }
+/* The download beside a "Start with" file (site.ts startDownloads): the
+   card's button, at the size of the line it sits in. */
+.sl-markdown-content a.rb-start-download {
+	display: inline-flex;
+	align-items: center;
+	min-height: 24px;
+	padding: 0 0.6rem;
+	border: 1px solid var(--rb-link);
+	border-radius: 4px;
+	font-size: 0.8em;
+	font-weight: 600;
+	color: var(--rb-link);
+	text-decoration: none;
+}
+.sl-markdown-content a.rb-start-download:hover { background: var(--sl-color-accent-low); }
 
 /* The facts of a file card: label column, value column, one column on a phone. */
 .sl-markdown-content dl.rb-facts {

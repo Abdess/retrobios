@@ -117,6 +117,68 @@ const searchSite: Tool = {
 	},
 };
 
+// What a setup reads, from the data the file picker reads
+// (data/picker/<setup>.json, written by scripts/generate_site.py): the BIOS
+// folder and, per system, each file's exact name and size. An assistant
+// that answers from it names no file and no folder the data does not hold.
+type PickerIndex = { platform: string; name: string; files: number }[];
+type PickerSystem = { id: string; title: string; native: string[] };
+type PickerData = { platform: string; name: string; folder: string; systems: PickerSystem[]; files: [string, number, number[]][] };
+
+const words = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
+const setupFiles: Tool = {
+	name: 'setup_bios_files',
+	description:
+		'The BIOS folder of a setup (RetroArch, Batocera, EmuDeck, RetroBat, Recalbox, KNULLI, ROCKNIX, AmberELEC, MiSTer and others) '
+		+ 'and the exact file names it reads for a system, from the site\'s data. Use it instead of guessing a folder or a file name: names '
+		+ 'are case-sensitive and must not be renamed.',
+	inputSchema: {
+		type: 'object',
+		properties: {
+			setup: { type: 'string', description: 'The setup, for example "batocera", "RetroArch" or "EmuDeck".' },
+			system: { type: 'string', description: 'A system, for example "PlayStation 2", "psx" or "gba". Without it, the systems are listed.' },
+		},
+		required: ['setup'],
+	},
+	annotations: { readOnlyHint: true },
+	async execute({ setup, system }) {
+		const asked = words(String(setup ?? ''));
+		const index = await json<PickerIndex>('data/picker/index.json');
+		const found = index.find((item) => item.platform === asked.replace(/ /g, '') || words(item.name) === asked);
+		if (!found) return `No setup named "${String(setup)}". Setups: ${index.map((item) => item.name).join(', ')}.`;
+		const data = await json<PickerData>(`data/picker/${found.platform}.json`);
+		const page = absolute(`${BASE}platforms/${found.platform}/`);
+		// RetroArch and EmuDeck keep no single folder: it depends on the device.
+		const folder = data.folder || `Depends on the device and its system: ${page}#where-the-files-go`;
+		const wanted = words(String(system ?? ''));
+		if (!wanted) {
+			return JSON.stringify({ setup: data.name, bios_folder: folder, page,
+				systems: data.systems.map((item) => ({ id: item.id, title: item.title })) }, null, 1);
+		}
+		const matches = data.systems
+			.map((item, position) => ({ item, position }))
+			.filter(({ item }) => [item.id, item.title, ...item.native].some((name) => {
+				const said = words(name);
+				return said === wanted || said.split(' ').includes(wanted) || said.includes(wanted);
+			}));
+		if (!matches.length) return `${data.name} lists no system matching "${String(system)}". Call again without system to list them.`;
+		const positions = new Set(matches.map(({ position }) => position));
+		const files = data.files.filter(([, , systems]) => systems.some((position) => positions.has(position)));
+		return JSON.stringify({
+			setup: data.name,
+			bios_folder: folder,
+			systems: matches.map(({ item }) => item.title),
+			note: 'Every file the emulators of this setup read for these systems: an emulator reads only some of them '
+				+ '(its page names them, emulator_bios_files lists them). Keep each name exactly as written.',
+			files: files.slice(0, 200).map(([name, bytes]) => ({ name, bytes })),
+			more: Math.max(files.length - 200, 0),
+			page,
+			install: 'device_setup_command gives the command that installs and checks these files.',
+		}, null, 1);
+	},
+};
+
 // The command an agent runs to set up its user's device, from the same
 // options wiki/installer.md documents: the fewest files the games on the
 // card need, unless the user asks for everything.
@@ -177,7 +239,7 @@ const setupCommand: Tool = {
 
 const context = (document as Document & { modelContext?: ModelContext }).modelContext;
 if (context?.registerTool) {
-	for (const tool of [setupCommand, lookupHash, emulatorFiles, searchSite]) {
+	for (const tool of [setupCommand, setupFiles, lookupHash, emulatorFiles, searchSite]) {
 		Promise.resolve(context.registerTool(tool)).catch((error) => console.warn(`WebMCP: ${tool.name}:`, error));
 	}
 }

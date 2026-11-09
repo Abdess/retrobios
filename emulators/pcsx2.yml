@@ -6,6 +6,7 @@ source: "https://github.com/PCSX2/pcsx2"
 upstream: "https://github.com/PCSX2/pcsx2"
 cores:
   - pcsx2
+  - "pcsx2-sa"
 profiled_date: "2026-03-30"
 source_commit: "f0523f8acb1d3a765ee73b74cffec63093569199"
 core_version: "v2.9.146-1-gf0523f8"
