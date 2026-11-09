@@ -15,17 +15,17 @@
   "Makefile",
   "main.cpp"
  ],
+ "codeberg.org/schelling/dosbox-pure@519226d15dea41c146048ae43e40bac772b923c4": [
+  "dosbox_pure_libretro.cpp",
+  "src/gui/midi_mt32.h",
+  "src/gui/midi_sc55.h",
+  "src/gui/mt32emu.h"
+ ],
  "codeberg.org/schelling/dosbox-pure@7f6e8fb7385fa446d1444d671063268520bf9b54": [
   "Makefile",
   "dosbox_pure_libretro.cpp",
   "dosbox_pure_run.h",
   "include/config.h",
-  "src/gui/mt32emu.h"
- ],
- "codeberg.org/schelling/dosbox-pure@cdaea10ce8cac231bc341ca05d4c5e4e5fe0fbd5": [
-  "dosbox_pure_libretro.cpp",
-  "src/gui/midi_mt32.h",
-  "src/gui/midi_sc55.h",
   "src/gui/mt32emu.h"
  ],
  "codeberg.org/virtualxt/virtualxt@a400adb0abf242c2fecbe926618338a00dc557c5": [
@@ -50,7 +50,7 @@
   "crates/hyperscanemu-core/src/firmware.rs",
   "crates/hyperscanemu-libretro/src/lib.rs"
  ],
- "git.libretro.com/libretro/Libretro-Supermodel@84bc106b45b279bf868a53b9232897c8dc10ca17": [
+ "git.libretro.com/libretro/Libretro-Supermodel@20dfc573e005b0933b07a749db15a693d50db1dd": [
   "Config/Games.xml",
   "Docs/README.md",
   "Makefile",
@@ -69,7 +69,7 @@
   "Src/Sound/MPEG/MpegAudio.cpp",
   "Src/Version.h"
  ],
- "git.libretro.com/libretro/cemu-libretro@14f56b569b3668db01a4972225993abd3e8f2096": [
+ "git.libretro.com/libretro/cemu-libretro@91fb753ab8f8fcd35a6ae16ecdb1a750a9240d6b": [
   ".gitlab-ci.yml",
   "CMakeLists.txt",
   "bin/resources/sharedFonts/CafeCn.ttf",
@@ -98,6 +98,13 @@
   "src/main.cpp",
   "src/resource/CafeDefaultFont.cpp"
  ],
+ "git.libretro.com/libretro/eduke32-libretro@b5918d5cf3fc698700c86693fce3ce5200c28b96": [
+  "platform/Libretro/core.cpp",
+  "platform/Libretro/vfs_libretro.cpp",
+  "source/duke3d/src/common.cpp",
+  "source/duke3d/src/grpscan.cpp",
+  "source/duke3d/src/grpscan.h"
+ ],
  "git.libretro.com/libretro/hypseushw@cb4de9f9b3e8264e71b25b5552dfa1e26121c636": [
   "core/src/io/homedir.cpp",
   "core/src/io/homedir.h",
@@ -106,6 +113,12 @@
   "libretro/CMakeLists.txt",
   "libretro/hypseushw_libretro.info",
   "libretro/lr_core.cpp"
+ ],
+ "git.libretro.com/libretro/libretro-emuscv@33900ce24f45c429b533fdae7844e04d64a9a1b9": [
+  "src/emuscv.cpp",
+  "src/emuscv.h",
+  "src/vm/scv/memory.cpp",
+  "src/vm/scv/memory.h"
  ],
  "git.libretro.com/libretro/libretro-radio@5d7d786ad1d8703a52184ff2ee39712c46ed67c9": [
   ".gitlab-ci.yml",
@@ -126,6 +139,21 @@
   "src/odin/machine/boards/hikaru/hikaru.cpp",
   "src/odin/machine/boards/hikaru/mie_board.cpp"
  ],
+ "git.libretro.com/libretro/rpcs3-libretro@8bafcb27ae9cbb708ed05b89d5b1a62fe87cd0ce": [
+  "rpcs3/Crypto/key_vault.h",
+  "rpcs3/Emu/Cell/Modules/cellFont.cpp",
+  "rpcs3/Emu/Cell/Modules/cellSsl.cpp",
+  "rpcs3/Emu/Cell/PPUModule.cpp",
+  "rpcs3/Emu/Cell/lv2/sys_fs.cpp",
+  "rpcs3/Emu/Cell/lv2/sys_prx.cpp",
+  "rpcs3/Emu/System.cpp",
+  "rpcs3/Loader/PUP.cpp",
+  "rpcs3/libretro/CMakeLists.txt",
+  "rpcs3/libretro/libretro_core.cpp",
+  "rpcs3/libretro/libretro_firmware.cpp",
+  "rpcs3/libretro/upstream.version",
+  "rpcs3/rpcs3_version.cpp"
+ ],
  "git.libretro.com/libretro/rust-dos@152d9bca7820f0d9a5d1ca820a2d20855698a211": [
   "Cargo.toml",
   "crates/gus/build.rs",
@@ -143,6 +171,17 @@
   "src/verite/lle/loader.rs",
   "src/verite/mod.rs"
  ],
+ "git.libretro.com/libretro/uzdoom@829f29959d01203c1971f75ee784912edc2297e8": [],
+ "git.libretro.com/libretro/vita3k-libretro@87666afd9e84e1a59ec07d495bab4dc114f0798a": [
+  "vita3k/CMakeLists.txt",
+  "vita3k/app/src/app.cpp",
+  "vita3k/libretro/embed_system_files.cmake",
+  "vita3k/libretro/libretro_installer.cpp",
+  "vita3k/libretro/libretro_vita3k.cpp",
+  "vita3k/module/src/load_module.cpp",
+  "vita3k/packages/src/pup.cpp",
+  "vita3k/renderer/src/renderer.cpp"
+ ],
  "git.libretro.com/libretro/wqxemu@44f492cfac4c47e9e2470144c972264779c5f9bf": [
   "Cargo.toml",
   "crates/wqxemu-core/src/machine.rs",
@@ -157,7 +196,8 @@
   "crates/wqxemu/src/keypad.rs",
   "crates/wqxemu/src/main.rs"
  ],
- "git.libretro.com/libretro/xenia-edge-libretro@f23c14c717ef274516f29c9b5e97d6a9db28643d": [
+ "git.libretro.com/libretro/xemu-libretro@50fc538657f44704e0d1d0906bdc9ef6e435dffe": [],
+ "git.libretro.com/libretro/xenia-edge-libretro@9637f45c480c711de0dd8a041d1ba754192ec73b": [
   ".ci/build-windows-cross.sh",
   "libretro/CMakeLists.txt",
   "libretro/libretro.cpp",
@@ -169,6 +209,7 @@
   "src/xenia/config.cc",
   "src/xenia/cpu/xex_module.cc",
   "src/xenia/emulator.cc",
+  "src/xenia/emulator.h",
   "src/xenia/gpu/d3d12/pipeline_cache.cc",
   "src/xenia/kernel/xconfig.cc",
   "src/xenia/patcher/patch_db.cc",
@@ -184,7 +225,7 @@
   "src/Ryujinx.Common/Configuration/AppDataManager.cs",
   "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs"
  ],
- "git.ryujinx.app/projects/Kenji-NX@53d32a761e61dc8e9b5c0744199a890fc8d934d5": [
+ "git.ryujinx.app/projects/Kenji-NX@280c427c550c5fe3bcc46b378e06a9b90a7e6b09": [
   "README.md",
   "src/KenjinxAndroid/app/build.gradle",
   "src/KenjinxAndroid/app/src/main/AndroidManifest.xml",
@@ -243,26 +284,25 @@
   "koyote_bin.h",
   "memory.cpp"
  ],
- "github.com/ARMSX2/ARMSX1@d96a5b8ad6ccccb40a431488aa89b06f0318c217": [
-  "SWANSTATION-DEV.md",
+ "github.com/ARMSX2/ARMSX1@61ae0d0797d1d11de00a0b64c116205cb910af77": [
+  "PSXLAB-BACKEND.md",
   "android/app/build.gradle",
-  "android/app/src/main/java/com/armsx2/config/Ps1Settings.kt",
   "android/app/src/main/java/com/armsx2/config/Ps1SettingsStore.kt",
   "android/app/src/main/java/com/armsx2/core/Ps1BiosProbe.java",
-  "android/app/src/main/java/com/armsx2/core/Ps1BiosSelection.java",
+  "android/app/src/main/java/com/armsx2/runtime/MainActivityRuntime.kt",
   "android/app/src/main/java/com/armsx2/ui/bios/BiosManagerViewModel.kt",
   "android/app/src/main/java/com/armsx2/ui/onboarding/OnboardingViewModel.kt",
   "android/app/src/main/java/com/armsx2/ui/settings/Ps1AdvancedTab.kt",
   "android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java",
   "frontend/config.c",
   "frontend/main.cpp",
-  "native/swanstation/runtime.cpp",
   "psx/dev/bios.c",
   "psx/dev/exp1.c",
   "psx/dev/exp1.h",
-  "psx/psx.c"
+  "psx/psx.c",
+  "psxlab/app/src/main/java/dev/psxlab/ArmSxBackend.java"
  ],
- "github.com/ARMSX2/ARMSX2@7f9144189c74edcf5a7ab3ba2aa2247635d24047": [
+ "github.com/ARMSX2/ARMSX2@fc4ab0b8b4f386617773cf1916e9bc6911dba59b": [
   ".github/workflows/build-all.yml",
   ".github/workflows/linux_build_qt.yml",
   "README.md",
@@ -309,7 +349,7 @@
   "platforms/android/app/src/main/java/com/armsx2/arcade/ArcadeLibrary.kt",
   "platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/MainActivity.java",
   "platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java",
-  "platforms/ios/app/src/main/cpp/IOS/AppDelegate.mm"
+  "platforms/ios/Runtime/AppDelegate.mm"
  ],
  "github.com/AZO234/NP2kai@5d47f3a04b0b8ea78f625eeec354ac132c80df06": [
   "bios/bios.c",
@@ -363,9 +403,10 @@
   "src/menu/mainmenu.cpp",
   "src/util.cpp"
  ],
- "github.com/AloysHF/BBKEmu@6641863f6ec59a74635753766e3f9d34adf92b05": [
+ "github.com/AloysHF/BBKEmu@0b698480d93b1bbf0717c658d89b551559a2ae3f": [
   "Cargo.toml",
   "crates/bbkemu-core/src/emulator.rs",
+  "crates/bbkemu-core/src/firmware.rs",
   "crates/bbkemu-core/src/memory.rs",
   "crates/bbkemu-core/src/model.rs",
   "crates/bbkemu-libretro/src/lib.rs",
@@ -382,7 +423,7 @@
   "crates/nicaiemu-libretro/src/libretro/api.rs",
   "crates/nicaiemu/src/main.rs"
  ],
- "github.com/AloysHF/CoolbarEmu@88e90440daab0bdc7bc141728b51841e0c730528": [
+ "github.com/AloysHF/CoolbarEmu@aa6df0ec289ffc4f89f4c03f748d0b121fb4323f": [
   "Cargo.toml",
   "crates/coolbaremu-core/src/cbe/archive.rs",
   "crates/coolbaremu-core/src/machine/drawing.rs",
@@ -413,9 +454,10 @@
   "crates/hyperscanemu-core/src/firmware.rs",
   "crates/hyperscanemu-libretro/src/lib.rs"
  ],
- "github.com/AloysHF/Native32Emu@059fa33c658caa4dbbad140ebf2af1197f9dd778": [
+ "github.com/AloysHF/Native32Emu@c9111273f97c67471358c8d9507a19c7cceb70f5": [
   "Cargo.toml",
   "crates/native32emu-core/src/archive_loader.rs",
+  "crates/native32emu-core/src/content_entry.rs",
   "crates/native32emu-core/src/content_loader.rs",
   "crates/native32emu-core/src/emulator.rs",
   "crates/native32emu-core/src/file_browser.rs",
@@ -494,7 +536,7 @@
  "github.com/AppleWin/AppleWin@9970ef6b668a7cf057ce6d82f100dde6a751f4d3": [
   "README.md"
  ],
- "github.com/ArnoAnsems/CatacombGL@d11ba549382278cbc67ba6171faf8af338e29f77": [
+ "github.com/ArnoAnsems/CatacombGL@6f243e42fc99b830982cf58bc19bd8a369fe9e6a": [
   "src/Abyss/GameAbyss.cpp",
   "src/Abyss/GameDetectionAbyss.h",
   "src/Abyss/IntroViewAbyss.cpp",
@@ -538,7 +580,7 @@
   "core/loadrom.c",
   "libretro/libretro.c"
  ],
- "github.com/BlitterStudio/amiberry@49dbd1f027ef2afc12862b30c0c31ac8efa66221": [
+ "github.com/BlitterStudio/amiberry@3f8f505af9fa85d61ab9dffd6cae871118ad0585": [
   "CMakeLists.txt",
   "android/app/build.gradle",
   "libretro/libretro.cpp",
@@ -707,7 +749,7 @@
   "src/video/video.cpp",
   "src/video/video.h"
  ],
- "github.com/DirtBagXon/model3emu-code-sinden@11726c4bad3696a50a8b834eaba6aee3fa08a590": [
+ "github.com/DirtBagXon/model3emu-code-sinden@03318d26826e725338576a74945b3ea3fc7ebe5c": [
   "Config/Games.xml",
   "Src/GameLoader.cpp",
   "Src/OSD/SDL/Crosshair.cpp",
@@ -716,7 +758,7 @@
   "Src/Pro1000/Pro1000.cpp",
   "Src/Pro1000/SyntheticSCSIROM.cpp",
   "Src/Sound/MPEG/MpegAudio.cpp",
-  "Src/Version.h"
+  "Src/Version.cpp"
  ],
  "github.com/DrGlaucous/doukutsu-rs-nm@51e64c2e9615bcd476034c69b58927877fe73494": [
   "Cargo.toml",
@@ -785,7 +827,7 @@
   "src/patch/vibractrl/group/vibractrl.dll.map",
   "src/scripts/aq_crash_fix.lua"
  ],
- "github.com/EKA2L1/EKA2L1@cc30b451eaab3b73930ce0fbf2dabcfc31476e28": [
+ "github.com/EKA2L1/EKA2L1@6ad873a07ee3d745cd17179026dca247f6d11f6b": [
   ".gitmodules",
   "CMakeLists.txt",
   "README.md",
@@ -895,14 +937,14 @@
   "src/memory.cpp",
   "src/rommgr.cpp"
  ],
- "github.com/FrodeSolheim/fs-uae@f362278ccd4c60991caac3b4d240d4a3f751bea2": [
+ "github.com/FrodeSolheim/fs-uae@79ac88e3727ee4d35d964aa07ad78894b844da27": [
   "cfgfile.cpp",
   "configure.ac",
+  "od-fs/Python/app/app_init.py",
+  "od-fs/Python/fsuae/roms/romservice.py",
+  "od-fs/Python/fsuae/services/pathservice.py",
   "od-fs/fsuae/fsuae-init.c",
   "od-fs/fsuae/fsuae-messages.cpp",
-  "od-fs/python/app/app_init.py",
-  "od-fs/python/fsuae/roms/romservice.py",
-  "od-fs/python/fsuae/services/pathservice.py",
   "rommgr.cpp"
  ],
  "github.com/HarbourMasters/Ghostship@deb091c29caff57dd986398087b058f16b11911e": [
@@ -957,7 +999,7 @@
  "github.com/JesseTG/rom-cleaner@f75e2b58733de180f28a73286c6a82505be7bbb2": [
   "libretro.cpp"
  ],
- "github.com/JetSetIlly/Gopher2600@295b9e1c08203453677ea4184e284c0664f5949a": [
+ "github.com/JetSetIlly/Gopher2600@e84bd84d4f4824c4965fd1ab278e37866fa60392": [
   "Makefile",
   "cartridgeloader/loader.go",
   "debugger/debugger.go",
@@ -1006,21 +1048,6 @@
   "src/core/rvvm.c",
   "src/main.c"
  ],
- "github.com/LibretroAdmin/xemu-libretro@d9804db79f87f6a6a5548b14ca4a8d5164390338": [
-  "config_spec.yml",
-  "hw/xbox/eeprom_generation.c",
-  "hw/xbox/smbus_storage.c",
-  "hw/xbox/xbox.c",
-  "meson_options.txt",
-  "system/vl.c",
-  "ui/xemu-libretro.c",
-  "ui/xemu-net.c",
-  "ui/xemu-settings.cc",
-  "ui/xemu-snapshots.c",
-  "ui/xemu.c",
-  "ui/xui/main-menu.cc",
-  "winpcap-loader/loader.c"
- ],
  "github.com/Lime3DS/lime3ds-archive@c9dbb5bb40d90dfa6a2b085d152ae6ecf915b2f9": [
   "src/common/common_paths.h",
   "src/common/file_util.cpp",
@@ -1052,22 +1079,15 @@
   "tools/installer/TRX_Installer/InstallComponentFactory.cs",
   "tools/installer/TRX_Installer/InstallMappings.cs"
  ],
- "github.com/LostArtefacts/TRX@4d55f7d3130f9d04bdc1fefb85bf4d8fa93a22d3": [
-  "data/trx/ship/games/tr2-gm/gameflow.json5",
-  "data/trx/ship/games/tr2/gameflow.json5",
-  "src/trx/game/game_flow/reader.c",
-  "src/trx/game/level/pipeline.c",
-  "src/trx/game/music/backend_files.c",
-  "src/trx/game/paths.c",
-  "tools/download_assets",
-  "tools/installer/TRX_Installer/InstallMappings.cs"
- ],
  "github.com/LostArtefacts/TRX@7d1f0e8cbad9e9c3d55248188184384aa6e0f5b5": [
   "data/trx/ship/games/tr1-demo-pc/gameflow.json5",
   "data/trx/ship/games/tr1-ub/gameflow.json5",
   "data/trx/ship/games/tr1/gameflow.json5",
+  "data/trx/ship/games/tr2-gm/gameflow.json5",
+  "data/trx/ship/games/tr2/gameflow.json5",
   "src/trx/game/game_flow/reader.c",
   "src/trx/game/level/format/format_tr1.c",
+  "src/trx/game/level/pipeline.c",
   "src/trx/game/locale/chain.h",
   "src/trx/game/music/backend_files.c",
   "src/trx/game/paths.c",
@@ -1079,7 +1099,7 @@
   "src/config.h",
   "src/seg009.c"
  ],
- "github.com/Novum/vkQuake@a6cfba6904e0743dae4235f9dad9711bb5bd27f1": [
+ "github.com/Novum/vkQuake@308ff19d881c2eab7e5e4a21b98847847525eef9": [
   "Quake/bgmusic.c",
   "Quake/common.c",
   "Quake/host.c",
@@ -1239,6 +1259,7 @@
   "common/FileSystem.cpp",
   "pcsx2/CDVD/CDVD.cpp",
   "pcsx2/DEV9/DEV9.cpp",
+  "pcsx2/DEV9/flash.cpp",
   "pcsx2/GameDatabase.cpp",
   "pcsx2/Patch.cpp",
   "pcsx2/VMManager.cpp",
@@ -1296,7 +1317,7 @@
   "Source/Core/DolphinQt/MenuBar.cpp"
  ],
  "github.com/RPCS3/rpcs3@1f080485b95db2700c5cf244b1314f73b6cf564e": [],
- "github.com/RPCS3/rpcs3@c365ea76a552961ff078ea1a46da9d4b07729674": [
+ "github.com/RPCS3/rpcs3@47599599a4cea37f350eb0936d7c5e4de6f7bf57": [
   "rpcs3/Crypto/key_vault.h",
   "rpcs3/Emu/Cell/Modules/cellFont.cpp",
   "rpcs3/Emu/Cell/Modules/cellSsl.cpp",
@@ -1307,6 +1328,21 @@
   "rpcs3/Loader/PUP.cpp",
   "rpcs3/rpcs3_version.cpp",
   "rpcs3/rpcs3qt/main_window.cpp"
+ ],
+ "github.com/RPCS3/rpcs3@8bafcb27ae9cbb708ed05b89d5b1a62fe87cd0ce": [
+  "rpcs3/Crypto/key_vault.h",
+  "rpcs3/Emu/Cell/Modules/cellFont.cpp",
+  "rpcs3/Emu/Cell/Modules/cellSsl.cpp",
+  "rpcs3/Emu/Cell/PPUModule.cpp",
+  "rpcs3/Emu/Cell/lv2/sys_fs.cpp",
+  "rpcs3/Emu/Cell/lv2/sys_prx.cpp",
+  "rpcs3/Emu/System.cpp",
+  "rpcs3/Loader/PUP.cpp",
+  "rpcs3/libretro/CMakeLists.txt",
+  "rpcs3/libretro/libretro_core.cpp",
+  "rpcs3/libretro/libretro_firmware.cpp",
+  "rpcs3/libretro/upstream.version",
+  "rpcs3/rpcs3_version.cpp"
  ],
  "github.com/RSDKModding/RSDKv3-Decompilation@2a7fd8b70f1b33553e0d6c67491d07e8290b80c1": [
   "CMakeLists.txt",
@@ -1629,6 +1665,7 @@
  ],
  "github.com/RetroPie/RetroPie-Setup@46128cd252cdecae852a4d0bafa2aaf9d03ab563": [
   "scriptmodules/emulators/advmame-1.4.sh",
+  "scriptmodules/emulators/linapple.sh",
   "scriptmodules/emulators/ppsspp-1.5.4.sh",
   "scriptmodules/ports/alephone.sh",
   "scriptmodules/ports/love-0.10.2.sh",
@@ -1673,6 +1710,10 @@
   "src/main.cpp",
   "src/memory.cpp",
   "src/menu_guichan/menu_guichan.cpp"
+ ],
+ "github.com/RobLoach/libretro-jgenesis@c92ff9269594b44e2f9ecfca5ff943e5bea49fb7": [
+  "Cargo.toml",
+  "src/load.rs"
  ],
  "github.com/Rosalie241/RMG@4777ed3f1fb7f1e4a0e70438a27dc4a5e9fb1927": [
   ".github/workflows/build.yml",
@@ -1768,7 +1809,7 @@
   "nanocoat/src/boot.c",
   "squirreljme-version"
  ],
- "github.com/StillJC/ArcadeDuck@80cdb6da6b51d687192a6346efe4499b10fe4faf": [
+ "github.com/StillJC/ArcadeDuck@4a9313cacab2f396a87736a43907a70894e2c40f": [
   "data/resources/arcadedb.yaml",
   "src/arcadeduck-qt/qthost.cpp",
   "src/core/arcade/arcade_database.cpp",
@@ -1848,7 +1889,7 @@
   "desmume/src/NDSSystem.h"
  ],
  "github.com/TASEmulators/fceux@d339f1fa0cd8b69cc637a0de3fb3f04cb28748ea": [],
- "github.com/TASEmulators/freej2me-plus@3933e75ef927a95eab9f5e065f0b76dabf336069": [
+ "github.com/TASEmulators/freej2me-plus@869a16b28ffd366722f419f8bac4a7cfe60d69a3": [
   "build.xml",
   "src/javax/microedition/media/Manager.java",
   "src/javax/microedition/rms/RecordStore.java",
@@ -1982,6 +2023,7 @@
   "src/common/audio/music/i_soundfont.cpp",
   "src/common/audio/music/music_config.cpp",
   "src/common/filesystem/source/resourcefile.cpp",
+  "src/common/utility/findfile.cpp",
   "src/d_iwad.cpp",
   "src/d_main.cpp",
   "src/gameconfigfile.cpp",
@@ -2061,6 +2103,16 @@
  "github.com/Vita3K/Vita3K@6ec8e6ce31f3d6099b14eb9dd0320c09ef6386b6": [
   "vita3k/CMakeLists.txt",
   "vita3k/app/src/app.cpp",
+  "vita3k/module/src/load_module.cpp",
+  "vita3k/packages/src/pup.cpp",
+  "vita3k/renderer/src/renderer.cpp"
+ ],
+ "github.com/Vita3K/Vita3K@87666afd9e84e1a59ec07d495bab4dc114f0798a": [
+  "vita3k/CMakeLists.txt",
+  "vita3k/app/src/app.cpp",
+  "vita3k/libretro/embed_system_files.cmake",
+  "vita3k/libretro/libretro_installer.cpp",
+  "vita3k/libretro/libretro_vita3k.cpp",
   "vita3k/module/src/load_module.cpp",
   "vita3k/packages/src/pup.cpp",
   "vita3k/renderer/src/renderer.cpp"
@@ -2180,7 +2232,7 @@
   "src/loader2.cpp",
   "src/netcfg.cpp"
  ],
- "github.com/ZDoom/Raze@76fe82f5eb318fdeb30ba9fb27093a9a10bc3821": [
+ "github.com/ZDoom/Raze@fa99ac62924d5b2cbb67f46b932bd6acf8952b63": [
   "source/CMakeLists.txt",
   "source/common/audio/music/i_soundfont.cpp",
   "source/core/gamecontrol.cpp",
@@ -2218,6 +2270,25 @@
   "src/zc/zelda.cpp",
   "src/zconfig.cpp",
   "src/zq/zquest.cpp"
+ ],
+ "github.com/Zer0one/TGPulse-Next@3c75f9b2b155e8bb50a225c69520948ef72ecd48": [],
+ "github.com/Zer0one/sm2-emu-libretro@6b282b94e781e20b2b6d522d0dcef5974b7a5d84": [
+  "data/games.xml",
+  "src/libretro/core.cpp",
+  "src/libretro/core_options.h",
+  "src/libretro/crosshair.cpp",
+  "src/rom/game_db.cpp",
+  "src/rom/rom_loader.cpp"
+ ],
+ "github.com/Zer0one/tgpulse-next-libretro@ef21af3921f3f3914ed698ff8962c88b5b1322cd": [
+  "crates/tgpulse-core/src/config.rs",
+  "crates/tgpulse-core/src/loader.rs",
+  "crates/tgpulse-core/src/loader/audio_donor.rs",
+  "crates/tgpulse-core/src/loader/model1_bios.rs",
+  "crates/tgpulse-core/src/roms_db.dat",
+  "crates/tgpulse-core/src/roms_db.rs",
+  "crates/tgpulse-libretro/src/diagnostic_overlay.rs",
+  "crates/tgpulse-libretro/src/lib.rs"
  ],
  "github.com/acidtech/Dolphin-MMJR@1b095b64857c2eabb49a42cc56ffd9d7881bc263": [
   "CMakeLists.txt",
@@ -2305,7 +2376,7 @@
   "app/src/main/java/aenu/aps3e/Utils.java",
   "app/src/main/res/values/strings.xml"
  ],
- "github.com/aenu1/ax360e@b8c1838f21761ac463724e24105eda97b990e704": [
+ "github.com/aenu1/ax360e@1df063dfabd363bd082cff8501c8c78ee35851d4": [
   "app/build.gradle.bak",
   "app/src/main/AndroidManifest.xml",
   "app/src/main/assets/config/default_config.toml",
@@ -2392,7 +2463,7 @@
   "src/ui_text.c",
   "src/version.c"
  ],
- "github.com/amadvance/advancemame@81670476672b59f430518a63e9a116db58ed6232": [
+ "github.com/amadvance/advancemame@e29103266ebf2debde456c4a21193baf4a0192c8": [
   "advance/advance.mak",
   "advance/linux/file.c",
   "advance/osd/emu.c",
@@ -2402,15 +2473,17 @@
   "advance/osd/ui.c",
   "advance/osd/video.c",
   "doc/advmame.d",
-  "src/artwork.c",
+  "src/artwork_lay.c",
+  "src/artwork_package.c",
   "src/cheat.c",
   "src/driver.h",
   "src/drivers/aleck64.c",
-  "src/drivers/arcadia.c",
+  "src/drivers/arsystems.c",
+  "src/drivers/atarisy1.c",
+  "src/drivers/cedar_magnet.c",
   "src/drivers/crystal.c",
   "src/drivers/cvs.c",
   "src/drivers/decocass.c",
-  "src/drivers/hng64.c",
   "src/drivers/konamigv.c",
   "src/drivers/konamigx.c",
   "src/drivers/macs.c",
@@ -2707,7 +2780,7 @@
   "hatari/src/tos.c",
   "makefile.libretro"
  ],
- "github.com/beebono/DSperate@81b73832c2e68e2b10cb5850f0a6d393ffc6fbb7": [
+ "github.com/beebono/DSperate@ddf2910e6d80220c6b22b4df61f0786ac9879cda": [
   "src/core/io/dsi_aes.cpp",
   "src/core/io/dsi_font.cpp",
   "src/core/io/dsi_nand_fs.cpp",
@@ -2776,7 +2849,7 @@
   "bsnes/sfc/coprocessor/hitachidsp/hitachidsp.hpp",
   "bsnes/target-libretro/libretro.cpp"
  ],
- "github.com/bvschaik/julius@34d1ecd54befb845c0139b371fa8a0438210dac1": [
+ "github.com/bvschaik/julius@33c777019b2640b847b73815c3b4344cf7bd9576": [
   "CMakeLists.txt",
   "src/building/model.c",
   "src/core/image.c",
@@ -2801,7 +2874,7 @@
  "github.com/celerizer/tamalibretro@ea8dd612eaab375a04f976149dc693cb5d208b27": [
   "main.c"
  ],
- "github.com/cemu-project/Cemu@42876aa86d2b92f9c620a76959a792bf392b89d3": [
+ "github.com/cemu-project/Cemu@3b1031612eb21302a8032e2f7a6db31549bd269b": [
   "CMakeLists.txt",
   "bin/resources/sharedFonts/CafeCn.ttf",
   "bin/resources/sharedFonts/CafeKr.ttf",
@@ -2839,7 +2912,12 @@
   "Source/zx81/zx81.cpp",
   "Source/zx81config.cpp"
  ],
- "github.com/chernandezba/zesarux@fd354296d851edc24ad1411b8f9342a66d07d460": [
+ "github.com/chernandezba/zesarux@0bb4277d714128311d78bc0625fb12ae8308899a": [
+  "src/cpu.c",
+  "src/dsk.c",
+  "src/machines/pcw.c"
+ ],
+ "github.com/chernandezba/zesarux@9977a8aeccc6eaeea3de4515d841454710a151f3": [
   "src/ALTERNATEROMS",
   "src/configure",
   "src/copy_interfaces/defcon.c",
@@ -2863,6 +2941,7 @@
   "src/copy_interfaces/transtape.h",
   "src/cpu.c",
   "src/cpu.h",
+  "src/machines/atmturbo.c",
   "src/machines/pcw.c",
   "src/machines/prism.c",
   "src/machines/prism.h",
@@ -2991,7 +3070,23 @@
   "main_libretro.cpp",
   "resource.cpp"
  ],
- "github.com/deathkiller/jazz2-native@ff9ddb7be9c84bdcf71b22d9380da06135edeb62": [
+ "github.com/dabonetn/linapple-pie@c22ba0c3ad6c317b4f13486b7ff06a340c831122": [
+  "CHANGELOG",
+  "README.md",
+  "src/Applewin.cpp",
+  "src/Disk.cpp",
+  "src/DiskImage.cpp",
+  "src/Frame.cpp",
+  "src/Harddisk.cpp",
+  "src/Memory.cpp",
+  "src/MouseInterface.cpp",
+  "src/ParallelPrinter.cpp",
+  "src/Registry.cpp",
+  "src/SerialComms.cpp",
+  "src/Video.cpp",
+  "src/stretch.cpp"
+ ],
+ "github.com/deathkiller/jazz2-native@d436ec62052339527887909a6e0fa2db405749d8": [
   "CMakeLists.txt",
   "Sources/Jazz2/Compatibility/AssetConverter.cpp",
   "Sources/Jazz2/Compatibility/EventConverter.cpp",
@@ -3064,6 +3159,11 @@
  ],
  "github.com/djyt/cannonball@27493ebf62be3498dff93ed6a45e8e2db819bae1": [
   "src/main/roms.cpp"
+ ],
+ "github.com/dmanlfc/sm2-emu@8bb80c157b294c1229bd8c1054d13f87daab52c0": [
+  "data/games.xml",
+  "src/rom/game_db.cpp",
+  "src/rom/rom_loader.cpp"
  ],
  "github.com/dolphin-emu/dolphin@0d93fc035539f25790deca638d06ee3b3b45ee64": [
   "Source/Android/app/build.gradle.kts",
@@ -3171,7 +3271,7 @@
   "Source/Core/DiscIO/NANDImporter.cpp",
   "Source/Core/DolphinQt/MenuBar.cpp"
  ],
- "github.com/dosbox-staging/dosbox-staging@fa1856c057902be3e08856675d6cc1e7ffe43db6": [
+ "github.com/dosbox-staging/dosbox-staging@27b1b7ca719c21ef3444f7ad1cf2d9cd439527cc": [
   "CMakeLists.txt",
   "src/audio/disk_noise.cpp",
   "src/dos/CMakeLists.txt",
@@ -3223,8 +3323,9 @@
   "wadsrc_extra/static/iwadinfo.txt",
   "wadsrc_lights/CMakeLists.txt"
  ],
- "github.com/drhelius/Gearboy@b0a5fcaf68009c288d6b8016164a21af452d81b5": [
-  "platforms/libretro/libretro.cpp"
+ "github.com/drhelius/Gearboy@c2beeea6e202a41f796c4026fa0caaee1b904662": [
+  "platforms/libretro/libretro.cpp",
+  "src/SGB.cpp"
  ],
  "github.com/drhelius/Gearcoleco@be1a3716d2db312c1add1639753258e365f2dfd4": [
   "platforms/libretro/libretro.cpp",
@@ -3250,7 +3351,7 @@
   "platforms/libretro/libretro.cpp",
   "src/Memory.cpp"
  ],
- "github.com/drhelius/Geartowns@996d42b098bd572ba66a8246bfe56cee39e5ff6e": [
+ "github.com/drhelius/Geartowns@0b3ee180c3d0405cac29f6b2587bc9e458664504": [
   "platforms/libretro/Makefile",
   "platforms/libretro/libretro.cpp",
   "src/common/defines.h",
@@ -3356,6 +3457,11 @@
   "rott/rt_ted.c"
  ],
  "github.com/finalburnneo/FBNeo@697e385c8285bfc528343b96d948ee3a4f9e24c5": [
+  "src/burn/burn.cpp",
+  "src/burn/hiscore.cpp",
+  "src/burn/version.h"
+ ],
+ "github.com/finalburnneo/FBNeo@bc813f4664b5412c8353458bfc7174b71c61a221": [
   "src/burn/burn.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
   "src/burn/hiscore.cpp",
@@ -3517,7 +3623,7 @@
   "idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/ChooseGameModFunc.java",
   "idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/SetupControlsThemeFunc.java"
  ],
- "github.com/gopher64/gopher64@87385e77432cd278ac8588c7ed3d5014fc0d6bab": [
+ "github.com/gopher64/gopher64@c8078773eb468c38b60c5a9d17cf9baa617ee988": [
   "Cargo.toml",
   "build.rs",
   "parallel-rdp/interface.cpp",
@@ -3540,7 +3646,7 @@
   "src/ui/storage.rs",
   "src/ui/video.rs"
  ],
- "github.com/habib256/pom2@de86e8e35df96fe6ffced56dfb727bbd567f8568": [
+ "github.com/habib256/pom2@06dd03a08674c67fda3e8d44d314aeeda04fda19": [
   "CMakeLists.txt",
   "packaging/bundle.manifest",
   "packaging/fujinet/stage.py",
@@ -3595,15 +3701,18 @@
   "src/WorkstationCard.cpp",
   "src/main.cpp",
   "src/pom2_headless.cpp",
+  "tools/install_drive_extras.py",
   "wasm/shell.html"
  ],
- "github.com/has207/xenia-edge@07021f019cf55105bc26c0474e0b0835808353e2": [
+ "github.com/has207/xenia-edge@3ff76c9696f3f350c1eb61bd7523ddc209ac4682": [
   "src/xenia/app/CMakeLists.txt",
+  "src/xenia/app/emulator_window.cc",
   "src/xenia/app/game_compat_db.cc",
   "src/xenia/app/xenia_main.cc",
   "src/xenia/config.cc",
   "src/xenia/cpu/xex_module.cc",
   "src/xenia/emulator.cc",
+  "src/xenia/gpu/metal/metal_shader_converter.cc",
   "src/xenia/hid/sdl/sdl_input_driver.cc",
   "src/xenia/kernel/xam/content_manager.cc",
   "src/xenia/kernel/xconfig.cc",
@@ -3612,36 +3721,12 @@
   "src/xenia/ui/CMakeLists.txt",
   "src/xenia/ui/audio_helper.cc",
   "src/xenia/ui/imgui_drawer.cc",
+  "src/xenia/ui/system_files_installer_wx.cc",
   "src/xenia/ui/vulkan/vulkan_instance.cc",
   "src/xenia/ui/wx_locale.cc",
   "third_party/CMakeLists.txt"
  ],
- "github.com/has207/xenia-edge@71804222514022ce80b757ca79c4ddb2dcf4a06c": [
-  ".github/workflows/build.yml",
-  "src/xenia/app/emulator_window.cc",
-  "src/xenia/app/game_compat_db.cc",
-  "src/xenia/app/game_title_db.cc",
-  "src/xenia/app/xenia_main.cc",
-  "src/xenia/base/filesystem_posix.cc",
-  "src/xenia/base/filesystem_win.cc",
-  "src/xenia/config.cc",
-  "src/xenia/cpu/xex_module.cc",
-  "src/xenia/emulator.cc",
-  "src/xenia/gpu/d3d12/pipeline_cache.cc",
-  "src/xenia/hid/sdl/sdl_input_driver.cc",
-  "src/xenia/kernel/xconfig.cc",
-  "src/xenia/patcher/patch_db.cc",
-  "src/xenia/patcher/plugin_loader.cc",
-  "src/xenia/ui/CMakeLists.txt",
-  "src/xenia/ui/audio_helper.cc",
-  "src/xenia/ui/d3d12/d3d12_provider.cc",
-  "src/xenia/ui/imgui_drawer.cc",
-  "src/xenia/ui/redist_installer_wx.cc",
-  "src/xenia/ui/vulkan/vulkan_instance.cc",
-  "src/xenia/ui/windowed_app_main_win.cc"
- ],
- "github.com/has207/xenia-edge@d881a29125978b4eea6bf44f6ed8c33f8aea8c33": [],
- "github.com/has207/xenia-edge@f23c14c717ef274516f29c9b5e97d6a9db28643d": [
+ "github.com/has207/xenia-edge@9637f45c480c711de0dd8a041d1ba754192ec73b": [
   ".ci/build-windows-cross.sh",
   "libretro/CMakeLists.txt",
   "libretro/libretro.cpp",
@@ -3653,6 +3738,7 @@
   "src/xenia/config.cc",
   "src/xenia/cpu/xex_module.cc",
   "src/xenia/emulator.cc",
+  "src/xenia/emulator.h",
   "src/xenia/gpu/d3d12/pipeline_cache.cc",
   "src/xenia/kernel/xconfig.cc",
   "src/xenia/patcher/patch_db.cc",
@@ -3664,6 +3750,33 @@
   "src/xenia/ui/vulkan/vulkan_instance.cc",
   "upstream.version"
  ],
+ "github.com/has207/xenia-edge@c519cb405d3247a5d92e7b520d6c72705efa62f5": [
+  ".github/workflows/build.yml",
+  "src/xenia/app/emulator_window.cc",
+  "src/xenia/app/game_compat_db.cc",
+  "src/xenia/app/game_title_db.cc",
+  "src/xenia/app/xenia_main.cc",
+  "src/xenia/base/filesystem_posix.cc",
+  "src/xenia/base/filesystem_win.cc",
+  "src/xenia/config.cc",
+  "src/xenia/cpu/xex_module.cc",
+  "src/xenia/emulator.cc",
+  "src/xenia/emulator.h",
+  "src/xenia/gpu/d3d12/pipeline_cache.cc",
+  "src/xenia/hid/sdl/sdl_input_driver.cc",
+  "src/xenia/kernel/xconfig.cc",
+  "src/xenia/patcher/patch_db.cc",
+  "src/xenia/patcher/plugin_loader.cc",
+  "src/xenia/ui/CMakeLists.txt",
+  "src/xenia/ui/audio_helper.cc",
+  "src/xenia/ui/d3d12/d3d12_provider.cc",
+  "src/xenia/ui/imgui_drawer.cc",
+  "src/xenia/ui/redist_installer_wx.cc",
+  "src/xenia/ui/system_files_installer_wx.cc",
+  "src/xenia/ui/vulkan/vulkan_instance.cc",
+  "src/xenia/ui/windowed_app_main_win.cc"
+ ],
+ "github.com/has207/xenia-edge@d881a29125978b4eea6bf44f6ed8c33f8aea8c33": [],
  "github.com/hatari/hatari@23bc3060ebf0da348cc842e358c102ba88002b56": [],
  "github.com/hatari/hatari@c1a5c88bc06e56778b6b7f8483becfd58a7da2b4": [
   "src/cart.c",
@@ -3729,8 +3842,9 @@
   "META-INF/freej2me-build.version",
   "src/libretro/freej2me_libretro.c"
  ],
- "github.com/hrydgard/ppsspp@43a69b1c84dfe29e82b46bd3797a1106cbd65c5b": [
+ "github.com/hrydgard/ppsspp@4a9fa00e5ab1a63572dfb429149b1d34bba95093": [
   "Core/ConfigValues.h",
+  "Core/HDRemaster.cpp",
   "Core/HLE/HLE.cpp",
   "Core/HLE/sceFont.cpp",
   "Core/System.cpp",
@@ -3772,7 +3886,7 @@
   "src/fheroes2/system/settings.cpp",
   "version.txt"
  ],
- "github.com/ikemen-engine/Ikemen-GO@e9bfe1125dea88769b265e57bcfaefdb22fa4322": [
+ "github.com/ikemen-engine/Ikemen-GO@063a060e597b13d52dbe29b9cbd9b467b4c4bd4a": [
   ".github/workflows/releases.yml",
   "external/script/main.lua",
   "external/script/options.lua",
@@ -3878,7 +3992,8 @@
   "platform/common/version.h",
   "platform/libretro/libretro.c"
  ],
- "github.com/ivanizag/izapple2@4e773baf9f1f3fb692e3f3444eb5f42fddb205ef": [
+ "github.com/ivanizag/izapple2@9d8aafa596bb04aedebbe7af95b9564fbe3de331": [
+  "boardApple2c.go",
   "boardBase64a.go",
   "boardBasis108.go",
   "cardBuilder.go",
@@ -3915,13 +4030,14 @@
   "android/app/src/main/java/com/izzy2lost/super3/Super3Activity.kt",
   "android/app/src/main/java/com/izzy2lost/super3/UserDataSync.kt"
  ],
- "github.com/izzy2lost/xemu@e092175b9196438ee2712bf6f45398fe2970b5fe": [
+ "github.com/izzy2lost/xemu@57bc6d6840daeb80e6454511aa097aa89760d49c": [
   "android/app/build.gradle.kts",
   "android/app/src/main/AndroidManifest.xml",
   "android/app/src/main/cpp/CMakeLists.txt",
   "android/app/src/main/cpp/xemu_android.cpp",
   "android/app/src/main/cpp/xemu_fatx_import.c",
   "android/app/src/main/cpp/xemu_settings_android.cc",
+  "android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/GpuDriverHelper.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt",
@@ -3932,6 +4048,7 @@
   "android/app/src/main/java/com/izzy2lost/x1box/XboxHddFormatter.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt",
   "android/app/src/main/res/values/strings.xml",
+  "android/hakux/core/native/dev/chihiro.c",
   "android/hakux/core/native/kernel/ex.c",
   "hw/xbox/chihiro/chihiro-firmware.h",
   "hw/xbox/chihiro/chihiro.c",
@@ -4035,6 +4152,7 @@
   "frontend/jgenesis-native-driver/src/mainloop/pce.rs",
   "frontend/jgenesis-native-driver/src/mainloop/smsgg.rs"
  ],
+ "github.com/jsgroth/jgenesis@c92ff9269594b44e2f9ecfca5ff943e5bea49fb7": [],
  "github.com/jtothebell/fake-08@814991a2571ad3970e386cef48f3b148aa1c27b9": [
   "Makefile",
   "platform/libretro/libretro.cpp",
@@ -4092,6 +4210,11 @@
   "libretro.c"
  ],
  "github.com/libretro/FBNeo@32958a89abd645ed20387c8d31d21ede3bc48161": [
+  "src/burn/burn.cpp",
+  "src/burn/hiscore.cpp",
+  "src/burn/version.h"
+ ],
+ "github.com/libretro/FBNeo@77016b4dff6c76beba08d24ea1c61ed2750bc0a7": [
   "src/burn/burn.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
   "src/burn/hiscore.cpp",
@@ -4174,7 +4297,7 @@
   "Core/StudyBoxLoader.cpp",
   "Libretro/libretro.cpp"
  ],
- "github.com/libretro/MesenCE@4c4e069f16a8ad6ed79e046046c56d51558c7daf": [
+ "github.com/libretro/MesenCE@a449fdc19580b86edcfc2a4c84eeb5e99462225b": [
   ".github/workflows/build.yml",
   "Core/GBA/GbaConsole.cpp",
   "Core/Gameboy/Gameboy.cpp",
@@ -4386,6 +4509,7 @@
   "Makefile",
   "coleco.c",
   "coleco.h",
+  "default.cfg",
   "genesis.c",
   "jaguar.c",
   "laseractive.c",
@@ -4558,7 +4682,7 @@
   "src/gui/midi_mt32.cpp",
   "src/gui/midi_sc55.h"
  ],
- "github.com/libretro/dosbox-pure@cdaea10ce8cac231bc341ca05d4c5e4e5fe0fbd5": [
+ "github.com/libretro/dosbox-pure@e39497e7c2a32c67c26e6598dd14f6d58c384bfd": [
   "dosbox_pure_libretro.cpp",
   "src/gui/midi_mt32.h",
   "src/gui/midi_sc55.h",
@@ -4960,14 +5084,14 @@
  "github.com/libretro/libretro-simcoupe@c28046241ac6a4d79e55326b6e354dc02f92fa34": [
   "SimCoupe/Base/GUIDlg.cpp"
  ],
- "github.com/libretro/libretro-uae@151828f14d43bb2b0651327ee19a23b36a7081b2": [
+ "github.com/libretro/libretro-uae@5dbac2bf90b2dddf9d3f8d5b2ccad0651f798c1d": [
   "libretro/libretro-core.c",
   "libretro/libretro-core.h",
   "retrodep/sysconfig.h",
   "sources/src/caps/caps.c",
   "sources/src/driveclick.c"
  ],
- "github.com/libretro/libretro-uae@7387937066b1b693816c3b4e2b7a0c601d41363d": [
+ "github.com/libretro/libretro-uae@d366f77c60e5a5f059f129cc3773d3048306083b": [
   "libretro/libretro-core.c",
   "libretro/libretro-core.h",
   "retrodep/sysconfig.h",
@@ -5016,7 +5140,7 @@
   "src/hiscore.c",
   "src/mame2003/mame2003.c"
  ],
- "github.com/libretro/mame2003-plus-libretro@993403d0332946b8aa6abab56fbd9864498790a1": [
+ "github.com/libretro/mame2003-plus-libretro@dff0ba63654f4e93a24182e8aa018b174357a3e8": [
   "src/artwork.c",
   "src/cheat.c",
   "src/cpuexec.c",
@@ -5024,13 +5148,15 @@
   "src/drivers/cvs.c",
   "src/drivers/decocass.c",
   "src/drivers/konamigx.c",
+  "src/drivers/megaplay.c",
+  "src/drivers/megatech.c",
   "src/drivers/model2.c",
   "src/drivers/namcos11.c",
+  "src/drivers/namcos22.c",
   "src/drivers/neogeo.c",
   "src/drivers/nss.c",
   "src/drivers/pgm.c",
   "src/drivers/playch10.c",
-  "src/drivers/segac2.c",
   "src/drivers/stv.c",
   "src/drivers/suprnova.c",
   "src/drivers/zn.c",
@@ -6452,7 +6578,7 @@
   "nxengine/main.cpp",
   "nxengine/map.cpp"
  ],
- "github.com/libretro/opera-libretro@370d9a25c030bb9de4aade371b31045691c40a95": [
+ "github.com/libretro/opera-libretro@595fd1db7d5bf0d3ca63d2292854d587ddcfa94b": [
   "libopera/opera_bios.c",
   "libretro.c",
   "libretro_core_options.c",
@@ -6486,10 +6612,15 @@
   "libretro/libretro.c",
   "mupen64plus-core/src/device/pif/bootrom_hle.c"
  ],
- "github.com/libretro/parallel-ps2@8c2b679622d602fe656ceba646b2f1f3a981c717": [
+ "github.com/libretro/parallel-ps2@87bcc96bbc3b4da7318fd1c2a7450f0c78bdc09e": [
+  "libretro/libretro_core_options.h",
   "libretro/main.cpp",
-  "pcsx2/CDVD/CDVD.cpp",
+  "pcsx2/CDVD/CDVD.c",
+  "pcsx2/CDVD/MechaMg.c",
+  "pcsx2/CDVD/MechaMg.h",
+  "pcsx2/DEV9/flash.cpp",
   "pcsx2/GameDatabase.cpp",
+  "pcsx2/USB/usb-python2/py2desc.h",
   "pcsx2/VMManager.cpp",
   "pcsx2/ps2/BiosTools.cpp"
  ],
@@ -6706,7 +6837,8 @@
  ],
  "github.com/libretro/xrick-libretro@fcfde3623a04b4e986548e06d46630fcd0bd1e18": [
   "include/config.h",
-  "libretro/core/libretro-core.c"
+  "libretro/core/libretro-core.c",
+  "src/xrick.c"
  ],
  "github.com/libretro/yabause@09ed8e5b2e97e7a848ea2514545c34c7b809e399": [
   "yabause/CMakeLists.txt",
@@ -6731,7 +6863,7 @@
   "yabause/src/memory.c",
   "yabause/src/memory.h"
  ],
- "github.com/lightspark/lightspark@6f07fd65cb95b88ff73e905bf78a1a8b1ddf6049": [
+ "github.com/lightspark/lightspark@c24accae28d677406bc5047ad7e0778a39bfd27b": [
   "CMakeLists.txt",
   "README.md",
   "src/backends/cachedsurface.cpp",
@@ -8227,7 +8359,7 @@
   "src/frontend/qt_sdl/Config.cpp",
   "src/frontend/qt_sdl/main.cpp"
  ],
- "github.com/mentalfoundry/Pokket@37c022ce46eb578de5b57d7b488ffda9e3b7d9f1": [
+ "github.com/mentalfoundry/Pokket@4bf542953909c4efee926b9a344831f331b7de45": [
   "CMakeLists.txt",
   "core/include/psemu/psemu.h",
   "core/src/psemu.c",
@@ -8626,6 +8758,13 @@
   "src/emulator.cpp",
   "src/libretro_core.cpp"
  ],
+ "github.com/pastisme/zcdi@b7481411e6939b2c1745067a646bfd43479e2a3c": [
+  "CMakeLists.txt",
+  "src/core/bus.cpp",
+  "src/libretro/core_options.cpp",
+  "src/libretro/helpers.cpp",
+  "src/libretro/libretro_core.cpp"
+ ],
  "github.com/pepone42/gngeo@ed06739a7202a87cd0992006628e4748aacd1ce5": [
   "src/resfile.c",
   "src/roms.c"
@@ -8868,7 +9007,7 @@
   "src/NDS.cpp",
   "src/NDSCart.cpp"
  ],
- "github.com/rafaelvcaetano/melonDS-android@c42995caff0144f37ad9791dc9bc96d82e8a6f65": [
+ "github.com/rafaelvcaetano/melonDS-android@aaf263d233e65c348d5830db32c593f8b7a8e4c9": [
   "app/CMakeLists.txt",
   "app/build.gradle.kts",
   "app/src/gitHubNightly/java/me/magnum/melonds/github/repositories/GitHubNightlyUpdatesRepository.kt",
@@ -8906,6 +9045,27 @@
   "burn/version.h",
   "rpi/bzip.cpp",
   "rpi/main.cpp"
+ ],
+ "github.com/retrodiv/AnyBOR-libretro@6ffe33bc980046e9c8422a54a3554479501f6e50": [
+  "src/glue/libretro.cpp",
+  "src/glue/obor_engines.h",
+  "src/glue/obor_packed_prepare.h",
+  "src/glue/obor_transform.h",
+  "src/pin.json"
+ ],
+ "github.com/retrodiv/AnyGM-libretro@12c024740e2982db65e2dbe304dbb66744513572": [
+  "src/adapters/libretro/libretro_entry.c",
+  "src/api/anygm.h",
+  "src/content/container/content_router.c"
+ ],
+ "github.com/retrodiv/ZEsarPCW-libretro@23af8913c0ff22b9d89646ca9f98660db17f0057": [
+  "src/cpu.c",
+  "src/dsk.c",
+  "src/libretro/libretro.c",
+  "src/libretro/pcw_boot.c",
+  "src/libretro/pcw_version.h",
+  "src/machines/pcw.c",
+  "src/pin.json"
  ],
  "github.com/rfandango/XenDroid@779680ade075d2d2a4c589c6a8d57a8e26c116c0": [
   ".github/workflows/XenDroid.yml",
@@ -8978,7 +9138,7 @@
   "system/vl.c",
   "thirdparty/SDL2/src/joystick/SDL_gamecontroller.c"
  ],
- "github.com/ruffle-rs/ruffle@fe6cfc545405b888ebb478ce1c211d63147ca49b": [
+ "github.com/ruffle-rs/ruffle@5701ce3223704e29a98cc636ada73b9d416197d1": [
   "Cargo.toml",
   "core/Cargo.toml",
   "core/src/avm1/globals.rs",
@@ -9425,7 +9585,7 @@
   "win/src/main/emulator/EmulatorPlatform.java",
   "x64/src/main/emulator/EmulatorPlatform.java"
  ],
- "github.com/shinyquagsire23/OpenJKDF2@798f930402525a23b94671d85b97b00390342fa0": [
+ "github.com/shinyquagsire23/OpenJKDF2@ae6ed8a81b316421f08a46719b12a4fa9e2fbed9": [
   "cmake_modules/version.cmake",
   "src/Dw/dwInits.cpp",
   "src/Main/InstallHelper.c",
@@ -9561,17 +9721,23 @@
  "github.com/stenzek/duckstation@526b4a128827ecaef037134095cd95f431b52d06": [
   "src/core/bios.cpp",
   "src/core/bios.h",
+  "src/core/settings.cpp",
+  "src/core/system.cpp"
+ ],
+ "github.com/stenzek/duckstation@56ac3d6c324ec4520dac433b071ecab6227fb459": [
+  "src/core/bios.cpp",
+  "src/core/bios.h",
+  "src/core/system.cpp"
+ ],
+ "github.com/stenzek/duckstation@c9dc225498e901908b2f3822a3875d1c508e2ccd": [
+  "src/core/bios.cpp",
+  "src/core/bios.h",
   "src/core/core.cpp",
   "src/core/fullscreenui_settings.cpp",
   "src/core/settings.cpp",
   "src/core/settings.h",
   "src/core/system.cpp",
   "src/duckstation-qt/biossettingswidget.cpp"
- ],
- "github.com/stenzek/duckstation@56ac3d6c324ec4520dac433b071ecab6227fb459": [
-  "src/core/bios.cpp",
-  "src/core/bios.h",
-  "src/core/system.cpp"
  ],
  "github.com/suijingfeng/vkQuake3@650bd625eb725446279c6176804b554e2e1c98f3": [
   "Makefile",
@@ -9621,7 +9787,7 @@
   "src/b2/load_save.cpp",
   "src/b2/roms.cpp"
  ],
- "github.com/tonioni/WinUAE@15110cf6606d1188800ea7ad86bf1cbd9c688741": [
+ "github.com/tonioni/WinUAE@16c85313c39685d24cfb676b1f5d279e40923004": [
   "CMakeLists.txt",
   "cfgfile.cpp",
   "include/winuae_version.h",
@@ -9669,23 +9835,6 @@
   "Src/Util/ConfigBuilders.cpp",
   "Src/Version.h"
  ],
- "github.com/trzy/Supermodel@14815455dc28fca2c8662fb1ed99d447ecf8f364": [
-  "Assets/DIR.txt",
-  "Config/Games.xml",
-  "Src/GameLoader.cpp",
-  "Src/Graphics/Shader.cpp",
-  "Src/OSD/OSX/FileSystemPath.cpp",
-  "Src/OSD/SDL/Crosshair.cpp",
-  "Src/OSD/SDL/Gui.cpp",
-  "Src/OSD/SDL/Main.cpp",
-  "Src/OSD/Unix/FileSystemPath.cpp",
-  "Src/OSD/Windows/FileSystemPath.cpp",
-  "Src/OSD/Windows/wnaspi32/wnaspi32.cpp",
-  "Src/Pro1000/Pro1000.cpp",
-  "Src/Pro1000/SyntheticSCSIROM.cpp",
-  "Src/Sound/MPEG/MpegAudio.cpp",
-  "Src/Version.h"
- ],
  "github.com/trzy/Supermodel@98fcbff223e23b1530c8f899aca2fc4fd5663ab4": [
   ".github/workflows/release.yml",
   "Assets/DIR.txt",
@@ -9702,6 +9851,24 @@
   "Src/Pro1000/Pro1000.cpp",
   "Src/Pro1000/SyntheticSCSIROM.cpp",
   "Src/Sound/MPEG/MpegAudio.cpp",
+  "Src/Version.h"
+ ],
+ "github.com/trzy/Supermodel@efbdc866fcddc9bff23da00b1722d17e52115567": [
+  "Assets/DIR.txt",
+  "Config/Games.xml",
+  "Src/GameLoader.cpp",
+  "Src/Graphics/Shader.cpp",
+  "Src/OSD/OSX/FileSystemPath.cpp",
+  "Src/OSD/SDL/Crosshair.cpp",
+  "Src/OSD/SDL/Gui.cpp",
+  "Src/OSD/SDL/Main.cpp",
+  "Src/OSD/Unix/FileSystemPath.cpp",
+  "Src/OSD/Windows/FileSystemPath.cpp",
+  "Src/OSD/Windows/wnaspi32/wnaspi32.cpp",
+  "Src/Pro1000/Pro1000.cpp",
+  "Src/Pro1000/SyntheticSCSIROM.cpp",
+  "Src/Sound/MPEG/MpegAudio.cpp",
+  "Src/Version.cpp",
   "Src/Version.h"
  ],
  "github.com/usineur/hode@59f3c466923c6b8d49e29176ff697a91165e7efc": [
@@ -9726,7 +9893,7 @@
   "src/core/gba/gba.cpp",
   "src/libretro/libretro.cpp"
  ],
- "github.com/vpinball/vpinball@63770cd66eee66c84c10ba2f4d2edff918ab85d3": [
+ "github.com/vpinball/vpinball@375b2d0a30d8f574489abb9ffd592b055522e8e6": [
   "lib/src/WebServer.cpp",
   "make/CMakeLists_app.txt",
   "make/CMakeLists_plugin_FlexDMD.txt",
@@ -9775,7 +9942,6 @@
   "src/renderer/TextRenderer.cpp",
   "src/renderer/Window.cpp",
   "src/ui/live/EditorUI.cpp",
-  "src/ui/live/editor/EditorChrome.cpp",
   "src/ui/win/codeview.cpp",
   "src/ui/win/dialogs/AboutDialog.cpp",
   "src/utils/JSONSerializer.cpp",
@@ -9930,17 +10096,11 @@
   "code/qcommon/q_shared.h",
   "code/sys/sys_win32.c"
  ],
- "github.com/wzcwzc/emuscv@6d6e4594d79862dd5c2ff7f725c109e4266f0b03": [
-  "Makefile.libretro",
-  "src/vm/scv/memory.cpp",
-  "src/vm/scv/memory.h"
- ],
  "github.com/xemu-project/xemu@25e1ee2fd59a451f2ab57e825b4f8a5414220c8b": [
   "config_spec.yml",
   "hw/xbox/eeprom_generation.c",
   "hw/xbox/smbus_storage.c",
   "hw/xbox/xbox.c",
-  "meson_options.txt",
   "system/vl.c",
   "ui/xemu-net.c",
   "ui/xemu-settings.cc",
@@ -9954,34 +10114,32 @@
   "hw/xbox/xbox.c",
   "system/vl.c"
  ],
- "github.com/xemu-project/xemu@d9804db79f87f6a6a5548b14ca4a8d5164390338": [
+ "github.com/xemu-project/xemu@50fc538657f44704e0d1d0906bdc9ef6e435dffe": [
   "config_spec.yml",
+  "hw/xbox/chihiro/chihiro.c",
   "hw/xbox/eeprom_generation.c",
   "hw/xbox/smbus_storage.c",
   "hw/xbox/xbox.c",
-  "meson_options.txt",
   "system/vl.c",
-  "ui/xemu-libretro.c",
+  "ui/libretro.c",
   "ui/xemu-net.c",
-  "ui/xemu-settings.cc",
-  "ui/xemu-snapshots.c",
-  "ui/xemu.c",
-  "ui/xui/main-menu.cc",
+  "upstream.version",
   "winpcap-loader/loader.c"
  ],
+ "github.com/xenia-canary/xenia-canary@2372a54105d9d598ab5bc7ba94a72ef1bea4b271": [],
  "github.com/xenia-canary/xenia-canary@72c2afa3ba2b1b232f89de71577251d6edafb1bd": [
   "src/xenia/emulator.cc"
  ],
- "github.com/xenia-canary/xenia-canary@dc561e4df578c903087f9bdf56ff61d9ef9f2a93": [],
- "github.com/xenios-jp/XeniOS@87b176a078c316fde3adf67a217f0c44615b0e0d": [
+ "github.com/xenios-jp/XeniOS@cf7c7ee452314913124d205e41e325b33891aacb": [
+  "cmake/ios/App.cmake",
   "src/xenia/app/CMakeLists.txt",
+  "src/xenia/app/emulator_window.cc",
   "src/xenia/app/game_compat_db.cc",
   "src/xenia/app/xenia_main.cc",
   "src/xenia/app/xenia_main_ios.mm",
   "src/xenia/config.cc",
   "src/xenia/cpu/xex_module.cc",
   "src/xenia/emulator.cc",
-  "src/xenia/gpu/metal/dxbc_to_dxil_converter.cc",
   "src/xenia/gpu/metal/metal_shader_converter.cc",
   "src/xenia/hid/sdl/sdl_input_driver.cc",
   "src/xenia/kernel/xam/content_manager.cc",
@@ -9991,10 +10149,13 @@
   "src/xenia/ui/CMakeLists.txt",
   "src/xenia/ui/audio_helper.cc",
   "src/xenia/ui/imgui_drawer.cc",
+  "src/xenia/ui/ios/settings/ios_config_catalog.mm",
   "src/xenia/ui/ios/touch/touch_layout_store_ios.mm",
+  "src/xenia/ui/system_files_installer_wx.cc",
   "src/xenia/ui/vulkan/vulkan_instance.cc",
   "src/xenia/ui/wx_locale.cc",
-  "third_party/CMakeLists.txt"
+  "third_party/CMakeLists.txt",
+  "tools/build_apple_release.sh"
  ],
  "github.com/xonotic/darkplaces@ddabe55ae766087df0b82d214ca4b6d79a443345": [
   "common.c",
@@ -10078,7 +10239,7 @@
   "libs/ymir-core/include/ymir/sys/memory_defs.hpp",
   "libs/ymir-core/src/ymir/db/ipl_db.cpp"
  ],
- "github.com/ymir-emu/Ymir@fe439e98abc555c243a8a197850c71777ff664f4": [
+ "github.com/ymir-emu/Ymir@ff9353790c191752a4d3dc19b9056c666acaf70a": [
   ".github/workflows/build.yaml",
   "CMakeLists.txt",
   "apps/ymir-sdl3/CMakeLists.txt",
@@ -10331,6 +10492,7 @@
   "src/graphics/SpriteAnimationSet.cpp"
  ],
  "sourceforge.net/dgen/dgen@1c196e63d3e35704a97a2cef60def9df3c9fd1ce": [],
+ "voidpoint.io/terminx/eduke32@b5918d5cf3fc698700c86693fce3ce5200c28b96": [],
  "voidpoint.io/terminx/eduke32@ec5824db81817866f70da326d3811bb0f52b3517": [
   "GNUmakefile",
   "source/duke3d/src/common.cpp",

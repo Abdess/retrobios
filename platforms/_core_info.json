@@ -12,6 +12,8 @@
     "amiarcadia": "73e48e85824950f30df26673219cd5ca4548496a",
     "amiberry": "ae545d85c06f011be5befc07487db3131d492c05",
     "anarch": "b8fa81cda3b6e08423b27c2a919493a43dfd69e1",
+    "anybor": "5e4a4a55afd6d664269a20c381d80a2b90f77c46",
+    "anygm": "9293f6e43f86c596f941fa7ad0df1615a4fa7475",
     "applewin": "c999c4b73ff48409acecb0239214c74f3464bcd1",
     "ardens": "938877e6a867441fbab2edfd19acc3d85f4b0277",
     "arduous": "cb6f0917fa4454126fdb93714eadb6d6cfab1a9f",
@@ -94,7 +96,7 @@
     "ffmpeg": "653c039661e9c564bce6b6325e5cc956296cf096",
     "fixgb": "3335f3fee37e1843fc8060a7d58317a7fb61efef",
     "fixnes": "1b1e191debbda3b45f51b20a2819a477fc7407cb",
-    "flycast": "47894ac43adc8876a630a69848e755cc34b7ad68",
+    "flycast": "2fbe16d7bc27cb72ca5d129d693e1ed96f720019",
     "flycast_gles2": "7699704ac889ac17c6d0953b5518d3f0bfa4a6c5",
     "fmsx": "2ba0cdc82c92a1625723e818b14fdf450ae532e1",
     "freechaf": "43b80752c21ca2c26b610e5890a5d8edf08d8c45",
@@ -260,6 +262,7 @@
     "sdlpal": "66b1f82a9de6ebc8d924ff82d4b37951d6fcc5f9",
     "simcp": "7bf05971cd0545aa22e9145547d30c2cbda19b08",
     "skyemu": "1d82dca4afeab74bed4be85445b1538b9bf28a70",
+    "sm2": "7045a8caafb0889a4519adf0942f5174699130ca",
     "smsplus": "ea86bf40b6ce50c84dd9dc0905972f1c2a6e2222",
     "snes9x": "aad2e41f7a6f9663bf93e080f9b75068c204dcb3",
     "snes9x2002": "1535b62e6098a7c8f3890f2687bae215a4268900",
@@ -293,6 +296,7 @@
     "testvulkan": "7b6e9a630201cc3303223f8f907e54546e75a93b",
     "testvulkan_async_compute": "5bab2d38b89555ef0dd2659b6fcc57208f1c2f30",
     "tgbdual": "db1f5af20a973dd2ad28ac3a4e235ee5073be46b",
+    "tgpulse_next_m1": "a8a90d99996ed99e131c1cb1b99c526c77fc8a73",
     "theodore": "7829b8f95b223baa5fde439a40105143636183f5",
     "thepowdertoy": "e54f44c6c8bd8507932fa05714c1691cebbea9e1",
     "tia": "e9604c40852f8a02b0ea3ed487810d0071ccc6b9",
@@ -342,6 +346,8 @@
     "yabasanshiro": "bc1d40f813591ab89fb3c69af143976b636a6d89",
     "yabause": "3b4247a760bff675b05f8436ce0b648cf4ea9e21",
     "yaps2": "809a88a9100d3021461aba03ffdae5d09a7036f9",
-    "ymir": "13f216fa1b836ac742e907d65fb5f5d462307d95"
+    "ymir": "13f216fa1b836ac742e907d65fb5f5d462307d95",
+    "zcdi": "aa04fed69dd8c8ec1bdda6567e6aa617753e5b21",
+    "zesarpcw": "4d2c6b39b88029d82d19dd50066df3e949b92c1f"
   }
 }

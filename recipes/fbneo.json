@@ -1,6 +1,6 @@
 {
   "source": "fbneo",
-  "imported_at": "2026-11-06",
+  "imported_at": "2026-11-09",
   "dats": {
     "FinalBurn Neo - Arcade Games": "1.0.0.03",
     "FinalBurn Neo - Astrocade Home Computer Games": "1.0.0.03",
@@ -10485,6 +10485,29 @@
     },
     {
       "dat": "FinalBurn Neo - ZX Spectrum Games",
+      "name": "nemesis.zip",
+      "set": "nemesis",
+      "description": "Nemesis: The Final Challenge (48K)",
+      "members": [
+        {
+          "name": "Nemesis - The Final Challenge 48K (1987)(Konami).tzx",
+          "size": 47948,
+          "crc32": "dd5e7ca0",
+          "sha1": ""
+        },
+        {
+          "name": "spectrum.rom",
+          "size": 16384,
+          "crc32": "ddee531f",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - ZX Spectrum Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - ZX Spectrum Games",
       "name": "spec128.zip",
       "set": "spec128",
       "description": "ZX Spectrum 128 BIOS",
@@ -10578,7 +10601,7 @@
   ],
   "upstream": {
     "blobs": {
-      "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat": "653348431e89ef42c149710dc6b0ec8fa3786d7b",
+      "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat": "07033a52f64f51532675f2d3845654b2b05e93cd",
       "FinalBurn Neo (ClrMame Pro XML, Bally Astrocade Games only).dat": "7acfd6d42e70c751c858ef069a62c77c4048a0ec",
       "FinalBurn Neo (ClrMame Pro XML, ColecoVision only).dat": "414430a8569c650e5f2ea8e726bce3050aa8ef25",
       "FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat": "3876d4e8edceb12afc31ea8ed15d4d2034a7e7d9",
@@ -10587,7 +10610,7 @@
       "FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat": "5a6731571154d2f0f2cb2b0cd27fe40cb7875043",
       "FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat": "ad53c313f23f2da392228421b181803629ddcbff",
       "FinalBurn Neo (ClrMame Pro XML, Master System only).dat": "3f9881c9bf7c62fd4a1b58eaa324b40b0ef9cbd9",
-      "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat": "12c083528b133f58f5d88d09fbacead3e274d263",
+      "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat": "400edc165ecbae49ca6aabc5e4c89adf2e65ae62",
       "FinalBurn Neo (ClrMame Pro XML, NES Games only).dat": "6bed4f118cc7d049f85c18590599e636370eec6a",
       "FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat": "d69197d2f9a5d69b122759e9a8c04c4102ba32e1",
       "FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat": "88c6e65f9feff46edf7e079cac8dac9f16eea155",
@@ -10596,7 +10619,7 @@
       "FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat": "0ce025fee6d578668329f1c35142889c061da2bf",
       "FinalBurn Neo (ClrMame Pro XML, SuprGrafx only).dat": "bbdb2e89a5a278133ed8ea71b2c29ae92a27db85",
       "FinalBurn Neo (ClrMame Pro XML, TurboGrafx16 only).dat": "01be51eaf3ee6cb4c0cfe4b499c4086f3400000a",
-      "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat": "2e90de08e12a7381cfc5c27e07768887852a1391"
+      "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat": "8e7dfbdf294e66f0cf2610b371c63d87107dc99f"
     }
   }
 }
