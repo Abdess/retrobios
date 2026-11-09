@@ -37,7 +37,9 @@ notes: |
   system libSDL2). pico-8_0.2.7_i386.zip holds pico8_32bit and
   pico8_32bit_dyn, pico-8_0.2.7_windows.zip holds pico8.exe and
   pico-8_0.2.7_osx.zip holds PICO-8.app. Each binary opens pico8.dat from its
-  own folder, and pico8.dat is the same file in every archive of one version.
+  own folder and quits when it is absent, and pico8.dat is the same file in
+  every archive of one version. The binaries name no other file of the
+  archive: which binary runs, and from which folder, is the launcher's choice.
   The amd64 and raspi archives carry pico8.dat 10b39730, byte for byte.
 
   Launchers by platform, each read at the revision the platform file pins:
@@ -175,8 +177,8 @@ files:
     md5: 10b397305093c80109096319a538ba56
     sha1: 0f92093752bddb12210c7db6d93af3ba2413cfce
     description: "PICO-8 0.2.7 data file (boot sequence, themes, demo carts)"
-    note: "Opened from the folder of the binary that runs, and paired with the binary's own version. Identical in pico-8_0.2.7_amd64.zip and pico-8_0.2.7_raspi.zip. AmberELEC and ArkOS refuse to start PICO-8 without it. KNULLI's installer stops when the archive lacks it."
-    source_ref: "amberelec packages/amberelec/sources/pico-8.sh:51-52, dArkOS pico8/pico8.sh:136-142, knulli board/fsoverlay/usr/bin/knulli-install-pico8:11, 48-51, 69"
+    note: "PICO-8 opens it from its own folder and quits with \"couldn't load <folder>/pico8.dat\" when it is absent (the amd64 pico8, run without it). Paired with the binary's own version, identical in pico-8_0.2.7_amd64.zip and pico-8_0.2.7_raspi.zip. AmberELEC and ArkOS check for it before starting PICO-8, and KNULLI's installer stops when the archive lacks it."
+    source_ref: "pico-8 0.2.7 amd64 pico8, string pico8.dat at 0x231bc0, pico-8 0.2.7 raspi pico8_64, string pico8.dat at 0x110138, amberelec packages/amberelec/sources/pico-8.sh:51-52, dArkOS pico8/pico8.sh:136-142, knulli board/fsoverlay/usr/bin/knulli-install-pico8:11, 48-51, 69"
 
   # -------------------------------------------------------
   # Voxatron
