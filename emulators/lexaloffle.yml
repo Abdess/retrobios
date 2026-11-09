@@ -1,5 +1,6 @@
 emulator: Lexaloffle
 type: standalone
+core_classification: other
 upstream: "https://www.lexaloffle.com/"
 profiled_date: "2026-11-09"
 core_version: "0.2.7"
@@ -129,8 +130,8 @@ files:
     md5: 70ab37eab4e7d162d36d9b2d91b84867
     sha1: 4ed23b6578a2d93d67aa856791dc70e95d68a3f4
     description: "PICO-8 0.2.7 aarch64 executable, system libSDL2"
-    note: "Only in pico-8_0.2.7_raspi.zip. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
-    source_ref: "amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
+    note: "Only in pico-8_0.2.7_raspi.zip, the build for 64-bit Raspberry Pi OS, linked against the system SDL2. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
+    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
@@ -141,8 +142,8 @@ files:
     md5: 724435a9e6f3ef8a55c648fc88651826
     sha1: 9b2e573250c70382b4071709a85c8d56c0371d59
     description: "PICO-8 0.2.7 x86_64 executable, system libSDL2"
-    note: "The pico8_dyn of pico-8_0.2.7_amd64.zip. RetroDECK lists it as required in its manifest, but its launcher executes pico8 only. Batocera never runs it."
-    source_ref: "RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3"
+    note: "The pico8_dyn of pico-8_0.2.7_amd64.zip, the same program linked against the system SDL2. RetroDECK lists it as required in its manifest, but its launcher executes pico8 only. Batocera never runs it."
+    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, NEEDED libSDL2-2.0.so.0, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
@@ -153,8 +154,8 @@ files:
     md5: 867701eff7e82a91985ae1fbe90dbc4a
     sha1: 87ef68e70c53ba209e697bb51de45826e982d92d
     description: "PICO-8 0.2.7 armhf executable, system libSDL2"
-    note: "The pico8_dyn of pico-8_0.2.7_raspi.zip. EmuELEC copies bios/pico-8 to /emuelec/bin/pico-8 and runs pico8_dyn with no existence check. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, and the RG35XX simplermenu launcher runs it. ROCKNIX runs a pico8_dyn from roms/pico-8/ on a HW_ARCH other than aarch64, and ArkOS falls back to it when pico8_64 is absent."
-    source_ref: "emuelec packages/sx05re/emuelec/bin/pico8.sh:9-14, 39-43, knulli board/fsoverlay/usr/bin/knulli-install-pico8:9, 38-41, 67, knulli board/actions/atm7039/rg35xx/fsoverlay/usr/share/knulli/datainit/system/configs/simplermenu_plus/launchers/pico8_sa:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:14-16, dArkOS pico8/pico8.sh:49-50"
+    note: "The pico8_dyn of pico-8_0.2.7_raspi.zip, 32-bit, linked against the system SDL2. EmuELEC copies bios/pico-8 to /emuelec/bin/pico-8 and runs pico8_dyn with no existence check. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, and the RG35XX simplermenu launcher runs it. ROCKNIX runs a pico8_dyn from roms/pico-8/ on a HW_ARCH other than aarch64, and ArkOS falls back to it when pico8_64 is absent."
+    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, emuelec packages/sx05re/emuelec/bin/pico8.sh:9-14, 39-43, knulli board/fsoverlay/usr/bin/knulli-install-pico8:9, 38-41, 67, knulli board/actions/atm7039/rg35xx/fsoverlay/usr/share/knulli/datainit/system/configs/simplermenu_plus/launchers/pico8_sa:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:14-16, dArkOS pico8/pico8.sh:49-50"
 
   - name: pico8_gpio
     path: pico-8/pico8_gpio
@@ -165,8 +166,8 @@ files:
     md5: 286ab30756dfc40749ecd72221f0d063
     sha1: df77c64c95695710d23b451277325e0c37e7416e
     description: "PICO-8 0.2.7 armhf executable with GPIO access (wiringPi)"
-    note: "Only in pico-8_0.2.7_raspi.zip. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, but no launcher runs it."
-    source_ref: "knulli board/fsoverlay/usr/bin/knulli-install-pico8:10, 43-46, 68"
+    note: "Only in pico-8_0.2.7_raspi.zip. The 32-bit build that maps the GPIO pins to 0x5f80..0x5fff, linked against libbcm_host.so and libwiringPi.so. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, but no launcher runs it."
+    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, knulli board/fsoverlay/usr/bin/knulli-install-pico8:10, 43-46, 68"
 
   - name: pico8.dat
     path: pico-8/pico8.dat
@@ -179,6 +180,30 @@ files:
     description: "PICO-8 0.2.7 data file (boot sequence, themes, demo carts)"
     note: "PICO-8 opens it from its own folder and quits with \"couldn't load <folder>/pico8.dat\" when it is absent (the amd64 pico8, run without it). Paired with the binary's own version, identical in pico-8_0.2.7_amd64.zip and pico-8_0.2.7_raspi.zip. AmberELEC and ArkOS check for it before starting PICO-8, and KNULLI's installer stops when the archive lacks it."
     source_ref: "pico-8 0.2.7 amd64 pico8, string pico8.dat at 0x231bc0, pico-8 0.2.7 raspi pico8_64, string pico8.dat at 0x110138, amberelec packages/amberelec/sources/pico-8.sh:51-52, dArkOS pico8/pico8.sh:136-142, knulli board/fsoverlay/usr/bin/knulli-install-pico8:11, 48-51, 69"
+
+  - name: config.txt
+    unsourceable: "written by the emulator on exit, no canonical file"
+    system: pico8
+    required: false
+    description: "PICO-8 settings"
+    source_ref: "pico-8 0.2.7 amd64 pico8, string config.txt at 0x244739, pico-8 0.2.7 pico-8_manual.txt:250-259, 284"
+    note: "Read beside the binary, then from the -home folder (~/.lexaloffle/pico-8 on Linux), and written there on exit when absent."
+
+  - name: sdl_controllers.txt
+    unsourceable: "user supplied, no canonical file"
+    system: pico8
+    required: false
+    description: "Custom SDL controller mappings, one per line"
+    source_ref: "pico-8 0.2.7 amd64 pico8, string sdl_controllers.txt at 0x24c896, pico-8 0.2.7 pico-8_manual.txt:301-302, 4053"
+    note: "Processed first when present beside the binary, then read from the -home folder, where PICO-8 writes it when absent."
+
+  - name: favourites.txt
+    unsourceable: "written by the emulator, no canonical file"
+    system: pico8
+    required: false
+    description: "SPLORE favourites list"
+    source_ref: "pico-8 0.2.7 amd64 pico8, string favourites.txt at 0x242346"
+    note: "Read from the -home folder. The bbs/<listing>.pip.png images beside it are downloaded from the BBS."
 
   # -------------------------------------------------------
   # Voxatron
@@ -214,3 +239,44 @@ files:
     description: "Looking Glass holographic display support library"
     source_ref: "voxatron vox, voxatron vox_dyn, batocera lexaloffleGenerator.py:41, 87-90"
     note: "Neither binary links it or names it, and neither opens it in a run (strace, with and without the file). Batocera's generator sets LD_LIBRARY_PATH to bios/voxatron, where it keeps the library."
+
+  - name: config.txt
+    unsourceable: "written by the emulator on exit, no canonical file"
+    system: voxatron
+    required: false
+    description: "Voxatron settings"
+    source_ref: "voxatron vox, string config.txt at 0x27bea0"
+    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, and written there when absent."
+
+  - name: sdl_controllers.txt
+    unsourceable: "user supplied, no canonical file"
+    system: voxatron
+    required: false
+    description: "Custom SDL controller mappings"
+    source_ref: "voxatron vox, string sdl_controllers.txt at 0x2847f7"
+    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, where Voxatron writes it when absent."
+
+  - name: favourites.txt
+    unsourceable: "written by the emulator, no canonical file"
+    system: voxatron
+    required: false
+    description: "Cart browser favourites list"
+    source_ref: "voxatron vox, string favourites.txt at 0x27a39e"
+    note: "Read from ~/.lexaloffle/Voxatron."
+
+  - name: internal_carts.txt
+    unsourceable: "written by the emulator, no canonical file"
+    system: voxatron
+    required: false
+    description: "Voxatron internal cart list"
+    source_ref: "voxatron vox, string internal_carts.txt at 0x27a446"
+    note: "Read from ~/.lexaloffle/Voxatron and written there at startup."
+
+  - name: player_1.vpp
+    path: player/player_1.vpp
+    unsourceable: "written by the emulator, no canonical file"
+    system: voxatron
+    required: false
+    description: "Voxatron player profile"
+    source_ref: "voxatron vox, string player/player_%d.vpp at 0x273f90"
+    note: "Read from ~/.lexaloffle/Voxatron/player, and written there when absent."
