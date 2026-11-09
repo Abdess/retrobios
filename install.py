@@ -143,6 +143,7 @@ OMISSION_REASONS = {
     "no_save_system": "no system runs the core",
     "outside_bios_folder": "read outside the BIOS folder",
     "no_roms_directory": "no roms folder",
+    "no_emulators_directory": "no emulator folder",
 }
 # What a file is when it is not firmware, as the manifest's category field
 # says, and as the installer words it. Firmware carries no category.
@@ -3594,6 +3595,9 @@ class SavePlace(NamedTuple):
 _SAVE_DIRS: dict[Path, SavePlace] = {}
 # BIOS folder -> the platform's roms folder, set by place_roms_entries.
 _ROMS_DIRS: dict[Path, Path] = {}
+# (BIOS folder, emulator key) -> the emulator folder, set by
+# place_emulator_entries.
+_EMULATOR_DIRS: dict[tuple[Path, str], Path] = {}
 
 
 def _entry_place(root: Path, entry: dict) -> tuple[Path, object]:
@@ -3609,6 +3613,12 @@ def _entry_place(root: Path, entry: dict) -> tuple[Path, object]:
         if roms is None:
             raise ValueError(f"no roms folder known for {entry.get('dest')}")
         return roms, entry.get("dest")
+    if entry.get("root") == "emulators":
+        key, _, rest = str(entry.get("dest")).partition("/")
+        folder = _EMULATOR_DIRS.get((root, key))
+        if folder is None:
+            raise ValueError(f"no emulator folder known for {entry.get('dest')}")
+        return folder, rest
     if entry.get("root") != "save":
         return root, entry.get("dest")
     place = _SAVE_DIRS.get(root)
@@ -3643,7 +3653,7 @@ def _entry_key(entry: dict) -> str:
     if root == "emulator":
         # A path in one emulator's own folder: two emulators read two files.
         return f"emulator\0{','.join(entry.get('cores') or [])}\0{dest}"
-    return f"{root}\0{dest}" if root in ("save", "roms") else dest
+    return f"{root}\0{dest}" if root in ("save", "roms", "emulators") else dest
 
 
 def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
@@ -3651,8 +3661,10 @@ def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
     the emulator's own folder, outside the BIOS tree), and core_folder one
     folder name of a save entry."""
     root = entry.get("root")
-    if root not in (None, "save", "roms") and not (omitted and root == "emulator"):
+    if root not in (None, "save", "roms", "emulators") and not (omitted and root == "emulator"):
         raise ValueError(f"invalid root for {dest}")
+    if root == "emulators" and len(PurePosixPath(dest).parts) < 2:
+        raise ValueError(f"an emulators entry names its folder first: {dest}")
     folder = entry.get("core_folder")
     if folder is None:
         return
@@ -3679,6 +3691,32 @@ def _check_roms_directory(data: dict) -> None:
         or len(_safe_relative_path(layout["bios_folder"], "roms_directory.bios_folder").parts) != 1
     ):
         raise ValueError("invalid roms_directory")
+
+
+def _check_emulators_directory(data: dict) -> None:
+    """The manifest's emulators_directory, which every installable root: emulators entry needs."""
+    layout = data.get("emulators_directory")
+    installable = [
+        entry for field in ("files", "case_variants")
+        for entry in data.get(field) or [] if isinstance(entry, dict)
+    ]
+    if layout is None:
+        if any(entry.get("root") == "emulators" for entry in installable):
+            raise ValueError("entries in emulator folders and no emulators_directory")
+        return
+    if not isinstance(layout, dict) or set(layout) != {"bios_folder", "searched", "default", "config"}:
+        raise ValueError("invalid emulators_directory")
+    searched = layout["searched"]
+    if (
+        not isinstance(searched, list) or not searched or layout["default"] not in searched
+        or len(_safe_relative_path(layout["bios_folder"], "emulators_directory.bios_folder").parts) != 1
+    ):
+        raise ValueError("invalid emulators_directory")
+    for template in searched:
+        if not isinstance(template, str) or template.count("{key}") != 1:
+            raise ValueError("invalid emulators_directory.searched")
+        _safe_relative_path(template.replace("{key}", "key"), "emulators_directory.searched")
+    _safe_relative_path(layout["config"], "emulators_directory.config")
 
 
 def _check_save_directory(data: dict) -> None:
@@ -3985,6 +4023,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
         _check_data_directory(entry, f"data_directories[{index}]")
     _check_save_directory(data)
     _check_roms_directory(data)
+    _check_emulators_directory(data)
 
     declared_total_files = data.get("total_files")
     if declared_total_files is not None and declared_total_files != len(files):
@@ -5277,6 +5316,67 @@ def place_roms_entries(
          "reason": "no_roms_directory", "cores": entry.get("cores"), "root": "roms"}
         for entry in below
     ]
+    return kept, unplaced
+
+
+def _config_keys(path: Path) -> set[str]:
+    """The keys an emulatorLauncher-style key=value file sets, lowercased."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return set()
+    return {
+        line.split("=", 1)[0].strip().lower()
+        for line in text.splitlines() if "=" in line and line.split("=", 1)[1].strip()
+    }
+
+
+def place_emulator_entries(
+    files: list[dict], bios_path: Path, manifest: dict, display: str, say: bool = True,
+) -> tuple[list[dict], list[dict]]:
+    """Find the emulator folder each entry a launcher runs from one goes to.
+
+    The platform keeps its BIOS folder beside its own folder holding the
+    launcher config (RetroBat's bios beside emulationstation): a BIOS
+    folder of that name whose parent holds the config is the platform's.
+    A key the config sets moves the folder somewhere this run does not
+    follow, so its files are left out. Otherwise the folder is the first of
+    the searched places that exists, the default one when none does, as the
+    launcher searches them.
+    """
+    inside = [entry for entry in files if entry.get("root") == "emulators"]
+    if not inside:
+        return files, []
+    layout = manifest.get("emulators_directory") or {}
+    home = bios_path.parent
+    config = home / layout["config"] if layout else None
+    matches = bool(layout) and bios_path.name == layout.get("bios_folder") and config.is_file()
+    moved = _config_keys(config) if matches else set()
+    kept: list[dict] = []
+    unplaced: list[dict] = []
+    for entry in files:
+        if entry.get("root") != "emulators":
+            kept.append(entry)
+            continue
+        key = str(entry["dest"]).split("/", 1)[0]
+        if matches and key.lower() not in moved:
+            places = [home / t.replace("{key}", key) for t in layout["searched"]]
+            found = next((place for place in places if place.is_dir()), None)
+            _EMULATOR_DIRS[(bios_path, key)] = found or home / layout["default"].replace("{key}", key)
+            kept.append(entry)
+            continue
+        unplaced.append({
+            "dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
+            "system": "", "systems": list(entry.get("systems") or []), "required": False,
+            "reason": "no_emulators_directory", "cores": entry.get("cores"),
+            "root": "emulators",
+        })
+    if unplaced and say:
+        why = (f"{config} sets their folder" if matches
+               else f"{bios_path} is not the {layout.get('bios_folder') or 'BIOS'} folder "
+                    f"beside {layout.get('config') or 'its config'}")
+        print(f"  {_plural(len(unplaced), 'file')} read from {display}'s emulator folders "
+              f"left out: {why}.")
     return kept, unplaced
 
 
@@ -15894,7 +15994,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         files, unplaced = place_save_entries(
             files, bios_path, manifest, args.save_dir, display, say=False)
         files, beyond = place_roms_entries(files, bios_path, manifest, display, say=not listing)
-        unplaced = [*unplaced, *beyond]
+        files, elsewhere = place_emulator_entries(
+            files, bios_path, manifest, display, say=not listing)
+        unplaced = [*unplaced, *beyond, *elsewhere]
         if not manifest.get("save_directory"):
             # Its own list leaves these files out: naming the folder with
             # --save-dir installs none of them, and was advised in a loop.

@@ -262,6 +262,7 @@ class AProgramRunFromItsFolder(unittest.TestCase):
             "biosplat": [{**run, "names": ["prog/prog"], "search_dir": "/userdata/bios"}],
             "romsplat": [{**run, "names": ["prog"], "search_dir": "/storage/roms/prog"}],
             "exeplat": [{**run, "names": ["prog"], "search_dir": "<emulator folder>"}],
+            "emuplat": [{**run, "names": ["prog"], "search_dir": '<GetPath("prog")>'}],
             "plainplat": [],
         }
         for name, records in launchers.items():
@@ -275,6 +276,10 @@ class AProgramRunFromItsFolder(unittest.TestCase):
             **{name: {"config": f"{name}.yml"} for name in launchers},
             "romsplat": {"config": "romsplat.yml",
                          "roms_directory": {"path": "/storage/roms", "bios_folder": "bios"}},
+            "emuplat": {"config": "emuplat.yml", "emulators_directory": {
+                "launcher_spelling": '<GetPath("{key}")>', "bios_folder": "bios",
+                "searched": ["frontend/{key}", "emulators/{key}"],
+                "default": "emulators/{key}", "config": "frontend/launcher.cfg"}},
         }}))
         (self.emulators / "prog.yml").write_text(yaml.safe_dump({
             "emulator": "Prog", "type": "standalone", "cores": ["prog"],
@@ -362,6 +367,43 @@ class AProgramRunFromItsFolder(unittest.TestCase):
         self.assertEqual({o["reason"] for o in left}, {"no_roms_directory"})
         with self.assertRaises(ValueError):
             install._check_roms_directory({"files": files})
+
+    def test_run_from_an_emulator_folder_the_registry_describes(self) -> None:
+        self.assertEqual(self.pack("emuplat"), [])
+        manifest = self.manifest("emuplat")
+        self.assertEqual(
+            sorted((f["dest"], f.get("root")) for f in manifest["files"]),
+            [("prog/prog", "emulators"), ("prog/prog.dat", "emulators")],
+        )
+        self.assertEqual(manifest["emulators_directory"]["default"], "emulators/{key}")
+        self.assertTrue(all(u["in_pack"] is False for u in self.verify("emuplat")))
+
+    def test_the_installer_follows_the_launcher_search(self) -> None:
+        import install
+
+        manifest = self.manifest("emuplat")
+        install._check_emulators_directory(manifest)
+        files = list(manifest["files"])
+        home = self.root / "Frontend"
+        bios = home / "bios"
+        bios.mkdir(parents=True)
+        # Not the platform's folder: no launcher config beside it.
+        kept, left = install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        self.assertEqual((kept, {o["reason"] for o in left}), ([], {"no_emulators_directory"}))
+        (home / "frontend").mkdir()
+        (home / "frontend" / "launcher.cfg").write_text("other=x\n")
+        kept, left = install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        self.assertEqual((len(kept), left), (2, []))
+        entry = next(f for f in kept if f["dest"] == "prog/prog")
+        self.assertEqual(install._entry_place(bios, entry), (home / "emulators" / "prog", "prog"))
+        # The first searched place that exists wins.
+        (home / "frontend" / "prog").mkdir()
+        install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        self.assertEqual(install._entry_place(bios, entry)[0], home / "frontend" / "prog")
+        # A key the launcher config sets moves the folder: left out.
+        (home / "frontend" / "launcher.cfg").write_text("prog=D:\\Prog\n")
+        kept, left = install.place_emulator_entries(files, bios, manifest, "emuplat", say=False)
+        self.assertEqual((kept, len(left)), ([], 2))
 
 
 class EachProgramItsOwnProfile(unittest.TestCase):

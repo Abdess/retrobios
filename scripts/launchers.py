@@ -329,6 +329,8 @@ EXECUTABLE_DIRECTORY = "executable directory"
 # relative to, and the roms directory of a platform whose registry names it.
 BIOS_TREE = ""
 ROMS_TREE = "roms"
+# The emulator folders of a platform whose registry describes them.
+EMULATORS_TREE = "emulators"
 # A folder of neither tree, which no pack and no installer can fill.
 OUTSIDE_TREE = "outside"
 Place = tuple[str, str]
@@ -448,6 +450,22 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
     return None if re.search(r"[\s<>$:;]", rest) else rest
 
 
+def folder_in_emulators(directory: str, config: dict) -> str | None:
+    """The emulator folder a launcher names by its key, None for any other.
+
+    Only a platform whose registry describes its emulator folders has one
+    (``emulators_directory.launcher_spelling``): RetroBat's generators take
+    each from AppConfig.GetFullPath("<key>"), a folder of the RetroBat
+    install named after the key.
+    """
+    spelling = str((config.get("emulators_directory") or {}).get("launcher_spelling") or "")
+    if "{key}" not in spelling:
+        return None
+    pattern = re.escape(spelling).replace(re.escape("{key}"), r"([\w.-]+)")
+    found = re.fullmatch(pattern, directory.strip())
+    return found.group(1) if found else None
+
+
 @dataclass(frozen=True)
 class ExecutedFile:
     """A file a platform's launcher executes, and where it lies.
@@ -474,6 +492,7 @@ def executed_files(config: dict) -> list[ExecutedFile]:
         raw = str(record.get("search_dir") or "").strip()
         directories = _directories(record, base)
         roms = folder_in_roms(raw, config) if raw and not directories else None
+        emulator_folder = folder_in_emulators(raw, config) if raw and not directories else None
         # A program file needs no extension (pico8, vox): the names are
         # taken as written, placeholders left out.
         for name in (str(n).strip() for n in record.get("names") or []):
@@ -485,6 +504,8 @@ def executed_files(config: dict) -> list[ExecutedFile]:
                 ))
             elif roms is not None:
                 place = (ROMS_TREE, sanitize_pack_path(f"{roms}/{name}" if roms else name))
+            elif emulator_folder is not None:
+                place = (EMULATORS_TREE, sanitize_pack_path(f"{emulator_folder}/{name}"))
             else:
                 place = None
             for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):

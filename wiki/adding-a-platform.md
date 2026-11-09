@@ -222,7 +222,11 @@ directory: RetroPie starts UAE4All2 in `$md_inst`, whose `kickstarts` it links t
 `BIOS/amiga`. A profile declaring `executable directory` is bound where a record
 executes one of its files: Batocera runs `pico-8/pico8` from `bios`, ROCKNIX
 `pico8_64` from `/storage/roms/pico-8`, below the `roms_directory` its registry entry
-names, which the manifest writes as `root: roms`. Two records giving two folders
+names, which the manifest writes as `root: roms`. RetroBat runs `pico8.exe` from an
+emulator folder its generators name by key: the registry's `emulators_directory`
+spells that key and lists the places the launcher searches, and the manifest writes
+`root: emulators`, which the installer places only beside RetroBat's own launcher
+config. Two records giving two folders
 leave the profile's layout. Once a platform binds part of a layout, an entry no
 binding covers is read in a folder outside the BIOS tree: it is never packed, and
 the manifest names it (`root: emulator`, `outside_bios_folder`).
