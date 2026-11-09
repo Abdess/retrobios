@@ -3729,7 +3729,7 @@
   "src/fheroes2/system/settings.cpp",
   "version.txt"
  ],
- "github.com/ikemen-engine/Ikemen-GO@e9bfe1125dea88769b265e57bcfaefdb22fa4322": [
+ "github.com/ikemen-engine/Ikemen-GO@063a060e597b13d52dbe29b9cbd9b467b4c4bd4a": [
   ".github/workflows/releases.yml",
   "external/script/main.lua",
   "external/script/options.lua",
