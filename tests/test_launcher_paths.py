@@ -176,12 +176,28 @@ class APortableUserFolder(unittest.TestCase):
         }
     """
 
+    RYUJINX = """
+        public override System.Diagnostics.ProcessStartInfo Generate(string system, string emulator, string core, string rom, string playersControllers, ScreenResolution resolution)
+        {
+            string path = AppConfig.GetFullPath("ryujinx");
+            string portablePath = Path.Combine(AppConfig.GetFullPath("saves"), "switch", "ryujinx", "portable");
+            string setupPath = Path.Combine(path, "portable");
+        }
+    """
+
     def sources(self) -> dict[str, rl.Source]:
+        def source(ref: str, text: str) -> rl.Source:
+            return rl.Source(ref, textwrap.dedent(text).lstrip("\n"))
+
+        def yuzu_like(exe: str) -> str:
+            return self.CITRON.replace("citron.exe", exe)
+
         return {
-            f"{rl.GENERATORS}/Citron.Generator.cs": rl.Source(
-                "c", textwrap.dedent(self.CITRON).lstrip("\n")),
-            f"{rl.GENERATORS}/ShadPS4.Generator.cs": rl.Source(
-                "s", textwrap.dedent(self.SHADPS4).lstrip("\n")),
+            f"{rl.GENERATORS}/Citron.Generator.cs": source("c", self.CITRON),
+            f"{rl.GENERATORS}/Eden.Generator.cs": source("e", yuzu_like("eden.exe")),
+            f"{rl.GENERATORS}/Ryujinx.Generator.cs": source("r", self.RYUJINX),
+            f"{rl.GENERATORS}/ShadPS4.Generator.cs": source("s", self.SHADPS4),
+            f"{rl.GENERATORS}/Yuzu.Generator.cs": source("y", yuzu_like("yuzu.exe")),
         }
 
     def test_each_generator_gives_its_user_folder(self):
@@ -189,7 +205,15 @@ class APortableUserFolder(unittest.TestCase):
         self.assertEqual(
             [(r["emulator"], r["search_dir"], r["source_ref"]) for r in found],
             [("citron", '<AppConfig.GetFullPath("citron")>/user', "c:3, 7-8"),
-             ("shadps4", '<AppConfig.GetFullPath("shadps4")>/user', "s:3, 8-10")],
+             ("eden", '<AppConfig.GetFullPath("eden")>/user', "e:3, 7-8"),
+             ("ryujinx", '<AppConfig.GetFullPath("ryujinx")>/portable', "r:3-5"),
+             ("shadps4", '<AppConfig.GetFullPath("shadps4")>/user', "s:3, 8-10"),
+             ("yuzu", '<AppConfig.GetFullPath("yuzu")>/user', "y:3, 7-8")],
+        )
+        ryujinx = found[2]
+        self.assertEqual(ryujinx["passes_to"], "DefaultPortableDir, the portable folder beside Ryujinx.exe")
+        self.assertEqual(
+            ryujinx["depends_on_option"], "unless saves/switch/ryujinx/portable exists, passed with -r"
         )
 
     def test_the_user_folder_binds_below_the_emulator_folder(self):

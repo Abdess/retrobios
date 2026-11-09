@@ -32,6 +32,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/DosBoxPure.Generator.cs",
     f"{GENERATORS}/DosBoxStaging.Generator.cs",
     f"{GENERATORS}/Duckstation.Generator.cs",
+    f"{GENERATORS}/Eden.Generator.cs",
     f"{GENERATORS}/Eka2l1.Generator.cs",
     f"{GENERATORS}/Fbneo.Generator.cs",
     f"{GENERATORS}/Flycast.Generator.cs",
@@ -57,6 +58,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/Project64.Generator.cs",
     f"{GENERATORS}/Raine.Generator.cs",
     f"{GENERATORS}/Rpcs3.Generator.cs",
+    f"{GENERATORS}/Ryujinx.Generator.cs",
     f"{GENERATORS}/SSF.Generator.cs",
     f"{GENERATORS}/ScummVm.Generator.cs",
     f"{GENERATORS}/ShadPS4.Generator.cs",
@@ -68,6 +70,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/Xroar.Generator.cs",
     f"{GENERATORS}/Yabasanshiro.Generator.cs",
     f"{GENERATORS}/Ymir.Generator.cs",
+    f"{GENERATORS}/Yuzu.Generator.cs",
     f"{GENERATORS}/mGBA.Generator.cs",
     FEATURES,
 )
@@ -2982,44 +2985,63 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
     return _covered(src, records)
 
 
-# Generators that create a portable user folder beside the emulator's binary,
-# and the emulator each one starts: the folder AppConfig.GetFullPath gives.
+# Generators that start an emulator with a portable data folder beside its
+# binary: (generator, emulator key, binary, the code's name for the folder).
 PORTABLE_USERS = (
-    ("Citron.Generator.cs", "citron", "citron.exe"),
-    ("ShadPS4.Generator.cs", "shadps4", "shadPS4.exe"),
+    ("Citron.Generator.cs", "citron", "citron.exe", "PORTABLE_DIR"),
+    ("Eden.Generator.cs", "eden", "eden.exe", "PORTABLE_DIR"),
+    ("Ryujinx.Generator.cs", "ryujinx", "Ryujinx.exe", "DefaultPortableDir"),
+    ("ShadPS4.Generator.cs", "shadps4", "shadPS4.exe", "PORTABLE_DIR"),
+    ("Yuzu.Generator.cs", "yuzu", "yuzu.exe", "PORTABLE_DIR"),
 )
 _EMULATOR_FOLDER = (
     r"GetEmulatorPathAndExe\(emulator, out string path, out string exe, \"[^\"]+\"\)"
-    r"|string path = AppConfig\.GetFullPath\(emulator\);"
+    r"|string path = AppConfig\.GetFullPath\((?:emulator(?:\.Replace\(\"-\", \" \"\))?"
+    r"|\"\w+\")\);"
+)
+_PORTABLE_FOLDER = r'string (userFolder|setupPath) = Path\.Combine\(path, "(\w+)"\);'
+# Ryujinx's generator hands --root-data-dir saves/switch/ryujinx/portable
+# instead when that folder exists.
+_ALTERNATE_ROOT = (
+    r'string portablePath = Path\.Combine\(AppConfig\.GetFullPath\("saves"\), "switch", '
+    r'"ryujinx", "portable"\);'
 )
 
 
 def portable_users(sources: dict[str, Source]) -> list[Record]:
-    """The portable user folder a generator creates beside the binary.
+    """The portable data folder a generator gives an emulator beside its binary.
 
-    The emulator folder comes from AppConfig.GetFullPath(emulator), and the
-    generator creates <folder>/user before launching: the emulator then
-    keeps its data there (keys/, sys_modules/) in place of %APPDATA%.
+    The emulator folder comes from AppConfig.GetFullPath, and the generator
+    creates or configures <folder>/user (<folder>/portable for Ryujinx)
+    before launching: the emulator then keeps its data there (keys/,
+    sys_modules/, system/) in place of %APPDATA%.
     """
     records = []
-    for name, emulator, binary in PORTABLE_USERS:
+    for name, emulator, binary, handle in PORTABLE_USERS:
         src = sources[f"{GENERATORS}/{name}"]
         found = src.find(_EMULATOR_FOLDER, f"{emulator} folder")
-        user = src.find(r'string userFolder = Path\.Combine\(path, "(\w+)"\);', "user folder")
-        create = src.find(
-            r"Directory\.CreateDirectory\(userFolder\)", "user folder creation", user.end()
-        )
+        folder = src.find(_PORTABLE_FOLDER, "portable folder")
+        spans = [src.lines(found.start(), found.end()), src.lines(folder.start(), folder.end())]
+        if folder.group(1) == "userFolder":
+            create = src.find(
+                r"Directory\.CreateDirectory\(userFolder\)", "user folder creation", folder.end()
+            )
+            spans[-1] = src.lines(folder.start(), create.end())
+        depends = None
+        alternate = re.search(_ALTERNATE_ROOT, src.text)
+        if alternate:
+            spans.append(src.lines(alternate.start(), alternate.end()))
+            depends = "unless saves/switch/ryujinx/portable exists, passed with -r"
         records.append(_record(
             emulator,
             "standalone",
             "passes_path",
             [],
-            source_ref((src.path, [
-                src.lines(found.start(), found.end()), src.lines(user.start(), create.end()),
-            ])),
-            search_dir=f'<AppConfig.GetFullPath("{emulator}")>/{user.group(1)}',
-            passes_to=f"PORTABLE_DIR, the user folder beside {binary}",
+            source_ref((src.path, spans)),
+            search_dir=f'<AppConfig.GetFullPath("{emulator}")>/{folder.group(2)}',
+            passes_to=f"{handle}, the portable folder beside {binary}",
             fails_when_missing=False,
+            depends_on_option=depends,
         ))
     return records
 
