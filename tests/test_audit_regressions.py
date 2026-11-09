@@ -4223,11 +4223,21 @@ class VerifyStrictAppliesInEveryMode(unittest.TestCase):
 
 class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
     """openMSX entries had no path and landed at the BIOS root, where no
-    frontend points FilePool. RetroBat declares its ROMs under
-    openMSX/share/systemroms, and the profile's paths must agree."""
+    frontend points FilePool. The profile writes share/systemroms below
+    openMSX's user folder, the pool's first place (src/file/FilePool.cc,
+    FileOperations.cc), and RetroBat, which sets OPENMSX_HOME to
+    bios/openmsx and declares its ROMs under openMSX/share/systemroms, gets
+    them there."""
 
     def test_every_entry_is_under_share_systemroms(self):
-        profile = yaml.safe_load((ROOT / "emulators" / "openmsx.yml").read_text())
+        from scripts.common import (  # noqa: PLC0415
+            load_emulator_profiles,
+            load_platform_config,
+            platform_layouts,
+            standalone_set,
+        )
+
+        profile = load_emulator_profiles(str(ROOT / "emulators"))["openmsx"]
         retrobat = yaml.safe_load((ROOT / "platforms" / "retrobat.yml").read_text())
         declared_dirs = {
             fe["destination"].rsplit("/", 1)[0].lower()
@@ -4236,12 +4246,15 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
             if "systemroms" in fe.get("destination", "")
         }
         self.assertEqual(declared_dirs, {"openmsx/share/systemroms"})
+        config = load_platform_config("retrobat", str(ROOT / "platforms"))
+        ((view, _standalone),) = platform_layouts("openmsx", profile, standalone_set(config))
+        placed = {f["name"]: f for f in view["files"]}
         for entry in profile["files"]:
             with self.subTest(name=entry["name"]):
-                self.assertEqual(
-                    entry.get("path", "").lower(),
-                    f"openmsx/share/systemroms/{entry['name']}".lower(),
-                )
+                self.assertEqual(entry.get("path", "").lower(),
+                                 f"share/systemroms/{entry['name']}".lower())
+                self.assertEqual(placed[entry["name"]].get("standalone_path", "").lower(),
+                                 f"openmsx/share/systemroms/{entry['name']}".lower())
 
 
 class ASameNamedMemberIsNotTheFile(unittest.TestCase):
