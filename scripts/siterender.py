@@ -1266,7 +1266,6 @@ SYSTEM_PARENTS: dict[str, tuple[str, str]] = {
     # SNK
     "ngpc": ("SNK", "Neo Geo Pocket"),
     "snk-ngpc": ("SNK", "Neo Geo Pocket"),
-    "neo-geo-pocket-color": ("SNK", "Neo Geo Pocket"),
     "snk-neogeo-aes": ("SNK", "Neo Geo"),
     "snk-neogeo-mvs": ("SNK", "Neo Geo"),
     # Sega. The VMU is the Dreamcast's memory card, its images sit there.
