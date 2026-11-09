@@ -4956,6 +4956,16 @@ launchers:
   fails_when_missing: ApplicationException 'No valid PS2 BIOS file found in '<ps2BiosFolder>'.'
   depends_on_option: lrps2_bios unset
   source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3662-3683, 3708-3713"
+- emulator: pico8
+  build: standalone
+  kind: fixed_name
+  names:
+  - pico8.exe
+  case_insensitive: true
+  search_dir: "<AppConfig.GetFullPath(\"pico8\")>"
+  passes_to: exec
+  fails_when_missing: returns no process when the binary is absent
+  source_ref: "emulatorLauncher/Generators/Pico8.Generator.cs:14-18, 56-57"
 - emulator: bizhawk
   build: standalone
   kind: names_searched

@@ -211,6 +211,24 @@ BIOS_ROOT_VARIABLES = ("$biosdir", "$home/RetroPie/BIOS", "${biosPath}", "$bios_
 # The kinds that hand an emulator a whole directory.
 HANDED_KINDS = ("links", "passes_path")
 
+# How a launcher record says the platform starts the emulator in a directory
+# (retropie_launchers._working_directory), and the handle a profile gives
+# that directory in standalone_directories: the call its code reads it with.
+WORKING_DIRECTORY_PASSED = "working directory of "
+WORKING_DIRECTORY = "getcwd"
+# The handle a profile declares when its program reads its files beside its
+# own executable: a launcher record executing one of the profile's files
+# places the folder holding that file where the launcher runs it from.
+EXECUTABLE_DIRECTORY = "executable directory"
+
+# The trees a placed folder belongs to: the BIOS tree every destination is
+# relative to, and the roms directory of a platform whose registry names it.
+BIOS_TREE = ""
+ROMS_TREE = "roms"
+# A folder of neither tree, which no pack and no installer can fill.
+OUTSIDE_TREE = "outside"
+Place = tuple[str, str]
+
 _HOME = re.compile(r"^(?:\$\{HOME\}|\$HOME|\$home|~)(?=/|$)")
 # Flatpak sets XDG_DATA_HOME to ~/.var/app/<id>/data inside the sandbox.
 _FLATPAK_DATA = re.compile(r"^~/\.var/app/[^/]+/data(?=/|$)")
@@ -258,6 +276,15 @@ class HandedDirectory:
     directory: str
     handles: frozenset[str]
     source_ref: str
+    roms_folder: str | None = None
+
+    def place(self) -> Place | None:
+        """The folder as a place, None when it lies outside both roots."""
+        if self.folder is not None:
+            return (BIOS_TREE, self.folder)
+        if self.roms_folder is not None:
+            return (ROMS_TREE, self.roms_folder)
+        return None
 
 
 def handed_directories(config: dict) -> list[HandedDirectory]:
@@ -278,56 +305,190 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
         if not raw or re.search(r"[\s,:;]", raw):
             continue
         directory = normalize_handle(raw)
-        handles = frozenset(
-            handle
-            for token in str(record.get("passes_to") or "").split()
-            if (handle := normalize_handle(token)) and handle != directory
-        )
+        passes_to = str(record.get("passes_to") or "")
+        if passes_to.startswith(WORKING_DIRECTORY_PASSED):
+            # The program runs from the directory: what its code reads
+            # through getcwd(), or relative to it, is below it.
+            handles = frozenset({WORKING_DIRECTORY})
+        else:
+            handles = frozenset(
+                handle
+                for token in passes_to.split()
+                if (handle := normalize_handle(token)) and handle != directory
+            )
+        folder = _folder_in_bios(raw, base)
         for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
             found.append(HandedDirectory(
                 emulator=emulator,
-                folder=_folder_in_bios(raw, base),
+                folder=folder,
                 directory=directory,
                 handles=handles,
                 source_ref=str(record.get("source_ref", "")),
+                roms_folder=None if folder is not None else folder_in_roms(raw, config),
             ))
     return found
 
 
-def standalone_root(
-    names: Iterable[str], declared: Iterable[str], handed: Iterable[HandedDirectory]
-) -> str | None:
-    """The folder of the BIOS tree a platform gives a standalone build's layout.
+def folder_in_roms(directory: str, config: dict) -> str | None:
+    """A directory relative to the platform's roms directory, None outside it.
 
-    ``declared`` are the directories the build resolves ``standalone_path``
-    against, as its profile names them (``standalone_directories``). A
-    record handing a folder of the BIOS tree under one of them gives it
-    directly: RetroPie points Flycast's ~/.local/share/flycast at bios/dc. A
-    record handing a directory outside the tree under one of them is
-    followed through a link to the tree: ROCKNIX's patched Flycast uses
-    /storage/roms/dreamcast/data, which its start script links to bios/dc.
+    Only a platform whose registry names the roms directory has one
+    (``roms_directory.path``): ROCKNIX's /storage/roms, which holds its BIOS
+    folder and the folders its launchers run programs from.
+    """
+    roms = str((config.get("roms_directory") or {}).get("path") or "").rstrip("/")
+    directory = directory.strip().rstrip("/")
+    if not roms or not directory.startswith(roms + "/"):
+        return None
+    rest = directory[len(roms) + 1:]
+    return None if re.search(r"[\s<>$:;]", rest) else rest
 
-    None when nothing gives a folder, or when two records give two: the
-    layout is then the profile's, relative to the BIOS root.
+
+@dataclass(frozen=True)
+class ExecutedFile:
+    """A file a platform's launcher executes, and where it lies.
+
+    ``place`` is (root, path): the BIOS tree or the roms directory, None
+    when the file lies outside both (RetroBat's emulator folders).
+    """
+
+    emulator: str
+    name: str
+    place: Place | None
+    source_ref: str
+
+
+def executed_files(config: dict) -> list[ExecutedFile]:
+    """Every file a platform's launchers execute, from records passing it to exec."""
+    base = str(config.get("base_destination") or "bios")
+    found: list[ExecutedFile] = []
+    for record in config.get("launchers") or []:
+        if record.get("kind") not in ("fixed_name", "names_searched"):
+            continue
+        if str(record.get("passes_to") or "").strip() != "exec":
+            continue
+        raw = str(record.get("search_dir") or "").strip()
+        directories = _directories(record, base)
+        roms = folder_in_roms(raw, config) if raw and not directories else None
+        # A program file needs no extension (pico8, vox): the names are
+        # taken as written, placeholders left out.
+        for name in (str(n).strip() for n in record.get("names") or []):
+            if not name or re.search(r"[<>{}]", name):
+                continue
+            if directories:
+                place: Place | None = (BIOS_TREE, sanitize_pack_path(
+                    f"{directories[0]}/{name}" if directories[0] else name
+                ))
+            elif roms is not None:
+                place = (ROMS_TREE, sanitize_pack_path(f"{roms}/{name}" if roms else name))
+            else:
+                place = None
+            for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
+                found.append(ExecutedFile(
+                    emulator, name.rsplit("/", 1)[-1], place, str(record.get("source_ref", ""))
+                ))
+    return found
+
+
+def standalone_bindings(
+    names: Iterable[str],
+    declared: Iterable[str],
+    handed: Iterable[HandedDirectory],
+    executed: Iterable[ExecutedFile] = (),
+    layout: Iterable[str] = (),
+) -> dict[str, Place]:
+    """The folders a platform gives a standalone build's layout.
+
+    ``declared`` are the directories the build resolves its paths against,
+    as its profile names them (``standalone_directories``). The result maps
+    a subfolder of that layout ("" for the whole of it) to the place, a
+    folder of the BIOS tree or of the roms directory, the emulator reads it
+    from.
+
+    A record handing a folder under a declared directory gives it directly:
+    RetroPie points Flycast's ~/.local/share/flycast at bios/dc. A record
+    handing a directory outside the trees is followed through the links that
+    put a folder at it or below it: ROCKNIX's patched Flycast uses
+    /storage/roms/dreamcast/data, which its start script links to bios/dc,
+    and RetroPie starts UAE4All2 in $md_inst, whose kickstarts folder it
+    links to bios/amiga.
+
+    A profile whose program reads its files beside its executable declares
+    EXECUTABLE_DIRECTORY, and ``layout`` holds its paths: a launcher that
+    executes one of them gives the folder holding it. Batocera runs
+    pico-8/pico8 from its BIOS folder, ROCKNIX pico8_64 from
+    /storage/roms/pico-8.
+
+    A subfolder two records give two places is left out.
     """
     names = set(names)
     wanted = {normalize_handle(d) for d in declared}
     if not wanted:
-        return None
+        return {}
     records = [h for h in handed if h.emulator in names]
-    folders: set[str] = set()
+
+    def below(handle: str, directory: str) -> str | None:
+        if handle == directory:
+            return ""
+        if handle.startswith(directory + "/"):
+            return handle[len(directory) + 1:]
+        return None
+
+    found: dict[str, set[Place]] = {}
     for record in records:
-        if not record.handles & wanted:
+        subs = {
+            sub for handle in record.handles for directory in wanted
+            if (sub := below(handle, directory)) is not None
+        }
+        for sub in subs:
+            if record.folder is not None:
+                found.setdefault(sub, set()).add((BIOS_TREE, record.folder))
+                continue
+            # A link into the BIOS tree comes first: the pack fills that.
+            linked = False
+            for link in records:
+                target = link.place()
+                if target is None:
+                    continue
+                for handle in link.handles:
+                    rest = below(handle, record.directory)
+                    if rest is not None:
+                        key = "/".join(p for p in (sub, rest) if p)
+                        found.setdefault(key, set()).add(target)
+                        linked = True
+            if not linked and record.roms_folder is not None:
+                found.setdefault(sub, set()).add((ROMS_TREE, record.roms_folder))
+    if EXECUTABLE_DIRECTORY in wanted:
+        paths = list(layout)
+        for run in executed:
+            if run.emulator not in names:
+                continue
+            # A program run from a folder outside both trees (RetroBat's
+            # emulators/pico8) binds its folder to no place a pack fills.
+            root, path = run.place or (OUTSIDE_TREE, run.name)
+            folder = path.rsplit("/", 1)[0] if "/" in path else ""
+            for entry_path in paths:
+                if entry_path.rsplit("/", 1)[-1] != run.name:
+                    continue
+                sub = entry_path.rsplit("/", 1)[0] if "/" in entry_path else ""
+                found.setdefault(sub, set()).add((root, folder))
+    return {sub: next(iter(places)) for sub, places in found.items() if len(places) == 1}
+
+
+def bound_path(path: str, bindings: dict[str, Place]) -> Place | None:
+    """Where a platform holds a layout path, None when no binding covers it.
+
+    The longest subfolder that contains the path wins: a link of
+    kickstarts/ places kickstarts/kick13.rom even when the whole layout is
+    bound elsewhere.
+    """
+    for sub in sorted(bindings, key=len, reverse=True):
+        if sub and not path.startswith(sub + "/"):
             continue
-        if record.folder is not None:
-            folders.add(record.folder)
-            continue
-        folders.update(
-            link.folder
-            for link in records
-            if link.folder is not None and record.directory in link.handles
-        )
-    return next(iter(folders)) if len(folders) == 1 else None
+        rest = path[len(sub) + 1:] if sub else path
+        root, folder = bindings[sub]
+        return (root, f"{folder}/{rest}" if folder else rest)
+    return None
 
 
 def held_record(report: dict, db: dict) -> dict | None:

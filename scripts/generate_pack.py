@@ -38,6 +38,7 @@ from pathlib import Path, PurePosixPath
 sys.path.insert(0, os.path.dirname(__file__))
 from common import resolve_platform_cores as _platform_cores
 from common import (
+    ROMS_ROOT,
     installed_data_refs,
     platform_arg,
     require_directory,
@@ -1301,6 +1302,10 @@ def generate_pack(
           if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
               continue
           if not dest:
+              continue
+          if fe.get("root") == ROMS_ROOT:
+              # Read below the roms directory: the pack is extracted into
+              # the BIOS folder and cannot reach it, the installer places it.
               continue
           # Core extras: _collect_emulator_extras already adjusted
           # destinations for slug-based platforms.  Apply the effective
@@ -4256,7 +4261,8 @@ def _attach_claims(
             })
             continue
         claim_path, _ = validated_choice(
-            claim, claim_path, db, validation_index or {}, bios_dir, None, dest, owners,
+            claim, claim_path, db, validation_index or {}, bios_dir, None,
+            claim.get("layout_path") or dest, owners,
         )
         copy, _size = _manifest_entry(
             claim_path, manifest_dest, [claim_emu], db, repo_root, {}
@@ -4447,9 +4453,14 @@ def _manifest_core_entries(
         # extras prefix when it is an internal layout dir (RetroDECK bios/).
         # A file read below the save directory is written relative to the
         # directory the core is handed, and says so (save_entry_fields).
-        manifest_dest = (
-            save_manifest_dest(fe) if save_root else _manifest_dest_of(full_dest, base_dest)
-        )
+        roms_root = fe.get("root") == ROMS_ROOT
+        if save_root:
+            manifest_dest = save_manifest_dest(fe)
+        elif roms_root:
+            # Relative to the roms directory, which the entry names.
+            manifest_dest = dest
+        else:
+            manifest_dest = _manifest_dest_of(full_dest, base_dest)
 
         entry, file_size = _manifest_entry(
             local_path, manifest_dest, [source_emu] if source_emu else [],
@@ -4458,6 +4469,8 @@ def _manifest_core_entries(
         )
         if entry is not None and save_root:
             entry.update(save_entry_fields(fe))
+        elif entry is not None and roms_root:
+            entry["root"] = ROMS_ROOT
         if entry is None:
             if not _claim_platform_omission(
                 omitted_by_destination.get(full_dest), source_emu
@@ -4624,10 +4637,18 @@ def _record_unplaceable(unplaceable: list[dict], record_omission: Callable[..., 
     """
     for u in unplaceable:
         where = u.get("path") or u.get("name", "")
+        if u.get("unplaced"):
+            key = f"emulator:{u.get('profile') or u.get('emulator', '')}:{where}"
+        elif u.get("root") == ROMS_ROOT:
+            key = f"roms:{where}"
+        elif u.get("root") == "save":
+            key = f"save:{save_manifest_dest(u)}"
+        else:
+            key = where
         record_omission(
             # Keyed apart from the BIOS tree's paths, which a file read below
-            # the save directory can repeat.
-            f"save:{save_manifest_dest(u)}" if u.get("root") == "save" else where,
+            # the save directory or in the emulator's folder can repeat.
+            key,
             u, u.get("system") or "",
             # The profile key, the name a target's core list and the
             # installer's narrowing match: the display name matched none.
@@ -4805,12 +4826,22 @@ def generate_manifest(
             if cores is None else extra_region_key(file_entry, declared_root(config))
         )
         save_root = file_entry.get("root") == "save"
+        # Read in the emulator's own folder, outside the BIOS tree: dest is
+        # the path the emulator reads, relative to that folder.
+        outside = bool(file_entry.get("unplaced"))
+        if outside:
+            dest_fields: dict = {"dest": sanitize_pack_path(file_entry.get("path") or ""),
+                                 "root": "emulator"}
+        elif file_entry.get("root") == ROMS_ROOT:
+            dest_fields = {"dest": sanitize_pack_path(
+                file_entry.get("destination") or file_entry.get("path") or ""
+            ), "root": ROMS_ROOT}
+        elif save_root:
+            dest_fields = {"dest": save_manifest_dest(file_entry), **save_entry_fields(file_entry)}
+        else:
+            dest_fields = {"dest": manifest_destination(full_destination)}
         omitted_by_destination[full_destination] = {
-            "dest": (
-                save_manifest_dest(file_entry) if save_root
-                else manifest_destination(full_destination)
-            ),
-            **(save_entry_fields(file_entry) if save_root else {}),
+            **dest_fields,
             "name": str(file_entry.get("name") or ""),
             "system": system_id,
             "required": bool(file_entry.get("required", True)),
@@ -5164,6 +5195,12 @@ def generate_manifest(
     }
     if data_directories:
         result["data_directories"] = data_directories
+    roms = config.get("roms_directory") or {}
+    if any(entry.get("root") == ROMS_ROOT
+           for entry in [*manifest_files, *result["omitted_files"]]) and roms:
+        # Where the installer finds the roms directory: the folder holding
+        # the BIOS folder, which the platform names bios_folder.
+        result["roms_directory"] = {"bios_folder": str(roms.get("bios_folder") or "")}
     saved = [entry for entry in manifest_files if entry.get("root") == "save"]
     if saved:
         layout = save_layout(config)

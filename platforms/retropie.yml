@@ -1181,6 +1181,15 @@ launchers:
   fails_when_missing: false
   depends_on_option: "[[ ! -f \"$biosdir/aros-amiga-m68k-ext.bin\" ]]"
   source_ref: "scriptmodules/emulators/uae4all.sh:85"
+- emulator: uae4all
+  package: uae4all
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $md_inst
+  passes_to: working directory of $romdir/amiga/+Start UAE4All.sh
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/uae4all.sh:90"
 - emulator: uae4arm
   package: uae4arm
   repo: "git https://github.com/Chips-fr/uae4arm-rpi.git master"

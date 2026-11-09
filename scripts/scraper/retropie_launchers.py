@@ -49,9 +49,10 @@ OUTSIDE_BIOS: dict[str, tuple[str, ...]] = {
 }
 
 # Packages whose emulator reads its system files below the working directory
-# the generated launch script enters with pushd, a folder outside $biosdir:
-# DraStic opens system/<name> under it. Each must still pushd.
-WORKING_DIRECTORY: tuple[str, ...] = ("drastic",)
+# the generated launch script enters with pushd: DraStic opens system/<name>
+# under it, UAE4All2 kickstarts/<name> (its launchDir is getcwd()). Each must
+# still pushd.
+WORKING_DIRECTORY: tuple[str, ...] = ("drastic", "uae4all")
 
 _FUNCTION = re.compile(r"^function\s+([\w.+-]+)\s*\(\)\s*\{\s*$")
 _ASSIGN = re.compile(r"^(?:local\s+)?([A-Za-z_]\w*)=(.*)$")

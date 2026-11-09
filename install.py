@@ -141,6 +141,8 @@ OMISSION_REASONS = {
     "no_save_directory": "no save directory",
     "no_core_folder": "no core folder",
     "no_save_system": "no system runs the core",
+    "outside_bios_folder": "read outside the BIOS folder",
+    "no_roms_directory": "no roms folder",
 }
 # What a file is when it is not firmware, as the manifest's category field
 # says, and as the installer words it. Firmware carries no category.
@@ -3590,6 +3592,8 @@ class SavePlace(NamedTuple):
 # BIOS folder -> where the files read below its frontend's save directory go,
 # set once the save directory is known (save_directory_for).
 _SAVE_DIRS: dict[Path, SavePlace] = {}
+# BIOS folder -> the platform's roms folder, set by place_roms_entries.
+_ROMS_DIRS: dict[Path, Path] = {}
 
 
 def _entry_place(root: Path, entry: dict) -> tuple[Path, object]:
@@ -3600,6 +3604,11 @@ def _entry_place(root: Path, entry: dict) -> tuple[Path, object]:
     core's own folder where the frontend sorts saves by core. Any other is
     relative to the BIOS folder.
     """
+    if entry.get("root") == "roms":
+        roms = _ROMS_DIRS.get(root)
+        if roms is None:
+            raise ValueError(f"no roms folder known for {entry.get('dest')}")
+        return roms, entry.get("dest")
     if entry.get("root") != "save":
         return root, entry.get("dest")
     place = _SAVE_DIRS.get(root)
@@ -3625,17 +3634,24 @@ def _entry_path(root: Path, entry: dict) -> Path:
 
 def _entry_key(entry: dict) -> str:
     """What tells one entry of the list from another: its dest, below the
-    BIOS folder or below the save directory. KNULLI lists its own
-    fbneo/hiscore.dat in the BIOS tree and FB Alpha 2012's below the save
-    directory, two files under one dest. NUL never appears in a dest."""
+    BIOS folder, below the save directory or in an emulator's own folder.
+    KNULLI lists its own fbneo/hiscore.dat in the BIOS tree and FB Alpha
+    2012's below the save directory, two files under one dest. NUL never
+    appears in a dest."""
     dest = str(entry.get("dest"))
-    return f"save\0{dest}" if entry.get("root") == "save" else dest
-
-
-def _check_root(entry: dict, dest: str) -> None:
-    """root is absent or save, and core_folder one folder name of a save entry."""
     root = entry.get("root")
-    if root is not None and root != "save":
+    if root == "emulator":
+        # A path in one emulator's own folder: two emulators read two files.
+        return f"emulator\0{','.join(entry.get('cores') or [])}\0{dest}"
+    return f"{root}\0{dest}" if root in ("save", "roms") else dest
+
+
+def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
+    """root is absent or save, emulator only on a file left out (a path in
+    the emulator's own folder, outside the BIOS tree), and core_folder one
+    folder name of a save entry."""
+    root = entry.get("root")
+    if root not in (None, "save", "roms") and not (omitted and root == "emulator"):
         raise ValueError(f"invalid root for {dest}")
     folder = entry.get("core_folder")
     if folder is None:
@@ -3644,6 +3660,25 @@ def _check_root(entry: dict, dest: str) -> None:
         raise ValueError(f"core_folder outside root: save for {dest}")
     if len(_safe_relative_path(folder, f"core_folder of {dest}").parts) != 1:
         raise ValueError(f"core_folder must be one folder name for {dest}")
+
+
+def _check_roms_directory(data: dict) -> None:
+    """The manifest's roms_directory, which every installable root: roms entry needs."""
+    layout = data.get("roms_directory")
+    installable = [
+        entry for field in ("files", "case_variants")
+        for entry in data.get(field) or [] if isinstance(entry, dict)
+    ]
+    if layout is None:
+        if any(entry.get("root") == "roms" for entry in installable):
+            raise ValueError("entries below the roms folder and no roms_directory")
+        return
+    if (
+        not isinstance(layout, dict)
+        or set(layout) != {"bios_folder"}
+        or len(_safe_relative_path(layout["bios_folder"], "roms_directory.bios_folder").parts) != 1
+    ):
+        raise ValueError("invalid roms_directory")
 
 
 def _check_save_directory(data: dict) -> None:
@@ -3949,6 +3984,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
     for index, entry in enumerate(data_dirs):
         _check_data_directory(entry, f"data_directories[{index}]")
     _check_save_directory(data)
+    _check_roms_directory(data)
 
     declared_total_files = data.get("total_files")
     if declared_total_files is not None and declared_total_files != len(files):
@@ -3974,7 +4010,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
             raise ValueError(f"duplicate or conflicting omitted destination: {dest}")
         seen_omitted.add(key)
         _check_omission(entry, dest)
-        _check_root(entry, dest)
+        _check_root(entry, dest, omitted=True)
         claims = entry.get("alternatives", [])
         if not isinstance(claims, list) or len(claims) > MAX_SELECTION_TAGS:
             raise ValueError(f"invalid omitted alternatives for {dest}")
@@ -5210,6 +5246,36 @@ def place_save_entries(
          "cores": entry.get("cores"), "root": "save",
          **({"core_folder": entry["core_folder"]} if entry.get("core_folder") else {})}
         for entry in saved
+    ]
+    return kept, unplaced
+
+
+def place_roms_entries(
+    files: list[dict], bios_path: Path, manifest: dict, display: str, say: bool = True,
+) -> tuple[list[dict], list[dict]]:
+    """Find the roms folder for the entries a launcher reads below it.
+
+    The platform keeps its BIOS folder in its roms folder under the name the
+    list gives (ROCKNIX's /storage/roms/bios): a BIOS folder of that name
+    puts the roms folder above it. Any other is a folder this run cannot
+    relate to the roms, and the entries are left out with the reason.
+    """
+    below = [entry for entry in files if entry.get("root") == "roms"]
+    if not below:
+        return files, []
+    layout = manifest.get("roms_directory") or {}
+    if layout and bios_path.name == layout.get("bios_folder"):
+        _ROMS_DIRS[bios_path] = bios_path.parent
+        return files, []
+    if say:
+        print(f"  {_plural(len(below), 'file')} read from {display}'s roms folder left out: "
+              f"{bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder.")
+    kept = [entry for entry in files if entry.get("root") != "roms"]
+    unplaced = [
+        {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
+         "system": "", "systems": list(entry.get("systems") or []), "required": False,
+         "reason": "no_roms_directory", "cores": entry.get("cores"), "root": "roms"}
+        for entry in below
     ]
     return kept, unplaced
 
@@ -15827,6 +15893,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         display = display_name(plat_name, manifest)
         files, unplaced = place_save_entries(
             files, bios_path, manifest, args.save_dir, display, say=False)
+        files, beyond = place_roms_entries(files, bios_path, manifest, display, say=not listing)
+        unplaced = [*unplaced, *beyond]
         if not manifest.get("save_directory"):
             # Its own list leaves these files out: naming the folder with
             # --save-dir installs none of them, and was advised in a loop.

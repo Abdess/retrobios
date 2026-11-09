@@ -736,6 +736,19 @@ launchers:
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/config/S922X/ARMSX2/inis/PCSX2.ini:21,\
     \ 475, projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/config/inputplumber/ARMSX2/inis/PCSX2.ini:21,\
     \ 473, projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/package.mk:117-118"
+- emulator: pico-8
+  build: standalone
+  kind: fixed_name
+  names:
+  - pico8_64
+  - pico8_dyn
+  search_dir: /storage/roms/pico-8
+  passes_to: exec
+  fails_when_missing: false
+  depends_on_option: "HW_ARCH aarch64 runs pico8_64, any other pico8_dyn, from /storage/roms/pico-8/${HW_ARCH}\
+    \ when that folder exists"
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-15,\
+    \ 35-40, 48"
 - emulator: flycast
   build: standalone
   kind: passes_path

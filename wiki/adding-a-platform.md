@@ -210,14 +210,22 @@ resolved. Three strategies exist:
 - **Omitted**: fallback to system ID intersection, `built_by` profiles excluded.
 
 Two lists say how each resolved emulator is laid out. `standalone_cores` names the
-ones the platform launches as standalone apps: their files go to `standalone_path`,
-under the folder the platform hands the emulator when its `launchers:` say so. A
-`links` or `passes_path` record of a whole directory that names one of the profile's
-`standalone_directories` gives that folder (`launchers.standalone_root`): RetroPie
-links Flycast's `~/.local/share/flycast` to `BIOS/dc`, EmuDeck the Flatpak's data
-directory to `bios/flycast/bios`, and ROCKNIX's patched data directory is followed
-through the link its start script makes. Two records giving two folders leave the
-profile's layout.
+ones the platform launches as standalone apps: their files go to `standalone_path`
+(`path` for a profile with no libretro build), under the folder the platform hands
+the emulator when its `launchers:` say so. A `links` or `passes_path` record of a
+directory at or below one of the profile's `standalone_directories` binds that
+subfolder of the layout to a folder (`launchers.standalone_bindings`): RetroPie
+links Flycast's `~/.local/share/flycast` to `BIOS/dc`, EmuDeck yuzu's `keys` to
+`bios/yuzu/keys`, and ROCKNIX's patched data directory is followed through the link
+its start script makes. A launch script that enters a folder hands the `getcwd`
+directory: RetroPie starts UAE4All2 in `$md_inst`, whose `kickstarts` it links to
+`BIOS/amiga`. A profile declaring `executable directory` is bound where a record
+executes one of its files: Batocera runs `pico-8/pico8` from `bios`, ROCKNIX
+`pico8_64` from `/storage/roms/pico-8`, below the `roms_directory` its registry entry
+names, which the manifest writes as `root: roms`. Two records giving two folders
+leave the profile's layout. Once a platform binds part of a layout, an entry no
+binding covers is read in a folder outside the BIOS tree: it is never packed, and
+the manifest names it (`root: emulator`, `outside_bios_folder`).
 `dual_mode_cores` names those it launches both ways (RetroPie packages `lr-hatari`
 and `hatari`): both layouts are packed. A profile without a standalone build keeps
 its libretro layout whatever the platform calls it.

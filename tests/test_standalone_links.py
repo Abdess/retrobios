@@ -26,11 +26,16 @@ from common import (  # noqa: E402
     load_emulator_profiles,
     load_platform_config,
     platform_layouts,
+    standalone_bindings_for,
     standalone_destination,
-    standalone_root_for,
     standalone_set,
 )
-from launchers import handed_directories, normalize_handle, standalone_root  # noqa: E402
+from launchers import (  # noqa: E402
+    bound_path,
+    handed_directories,
+    normalize_handle,
+    standalone_bindings,
+)
 
 
 def link(emulator: str, search_dir: str, passes_to: str, **fields: object) -> dict:
@@ -101,7 +106,11 @@ class HandedDirectories(unittest.TestCase):
 
 class Root(unittest.TestCase):
     def root(self, *launchers: dict, base: str = "bios") -> str | None:
-        return standalone_root(
+        found = self.bindings(*launchers, base=base).get("")
+        return found[1] if found else None
+
+    def bindings(self, *launchers: dict, base: str = "bios") -> dict[str, tuple[str, str]]:
+        return standalone_bindings(
             {"emu"}, PROFILE["standalone_directories"], handed_directories(config(*launchers, base=base))
         )
 
@@ -130,12 +139,15 @@ class Root(unittest.TestCase):
             "dc",
         )
 
-    def test_link_of_another_directory_gives_nothing(self) -> None:
+    def test_link_of_a_subfolder_binds_that_subfolder_only(self) -> None:
         # A subfolder of the emulator's tree (Dolphin's Triforce) is not the
-        # directory standalone_path is relative to.
-        self.assertIsNone(self.root(
+        # directory standalone_path is relative to, only the files below it move.
+        found = self.bindings(
             link("emu", "$bios_path/Triforce", "$XDG_DATA_HOME/emu/Triforce is a symlink to it"),
-        ))
+        )
+        self.assertEqual(found, {"Triforce": ("", "Triforce")})
+        self.assertEqual(bound_path("Triforce/segaboot.gcm", found), ("", "Triforce/segaboot.gcm"))
+        self.assertIsNone(bound_path("boot.bin", found))
 
     def test_two_folders_give_nothing(self) -> None:
         self.assertIsNone(self.root(
@@ -186,13 +198,14 @@ class Layout(unittest.TestCase):
         union = standalone_set(config(self.LINKED, base="BIOS")) | standalone_set(config(
             link("emu", "${biosPath}/emu/bios", "symlink ${biosPath}/emu/bios -> ${HOME}/.local/share/emu"),
         ))
-        self.assertIsNone(standalone_root_for("emu", PROFILE, union))
+        self.assertEqual(standalone_bindings_for("emu", PROFILE, union), {})
 
     def test_destination_function(self) -> None:
         entry = PROFILE["files"][0]
-        self.assertEqual(standalone_destination(entry, "dc"), "dc/boot.bin")
-        self.assertEqual(standalone_destination(entry, None), "boot.bin")
-        self.assertEqual(standalone_destination(PROFILE["files"][2], "dc"), "dc/shared.bin")
+        self.assertEqual(standalone_destination(entry, PROFILE, {"": ("", "dc")}), ("", "dc/boot.bin"))
+        self.assertIsNone(standalone_destination(entry, PROFILE, {}))
+        # The entry both builds share keeps path in a dual-build profile.
+        self.assertIsNone(standalone_destination(PROFILE["files"][2], PROFILE, {"": ("", "dc")}))
 
 
 class FlycastOnEachPlatform(unittest.TestCase):
@@ -215,7 +228,8 @@ class FlycastOnEachPlatform(unittest.TestCase):
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 self.assertEqual(
-                    standalone_root_for("flycast", self.profile, standalone_set(cfg)), folder
+                    standalone_bindings_for("flycast", self.profile, standalone_set(cfg)),
+                    {"": ("", folder)},
                 )
 
     def test_no_standalone_file_lands_at_the_bios_root(self) -> None:

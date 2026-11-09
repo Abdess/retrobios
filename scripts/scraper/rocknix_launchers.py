@@ -575,6 +575,47 @@ def armsx2(tree: RepoTree) -> list[Launcher]:
 
 
 # Start scripts whose ln -s commands put a BIOS path where the emulator reads.
+def pico8(tree: RepoTree) -> list[Launcher]:
+    """The PICO-8 binary start_pico8.sh executes, outside /storage/roms/bios.
+
+    The script picks the binary by HW_ARCH, pico8_64 on aarch64 and
+    pico8_dyn on any other, and runs it from GAME_DIR, or from
+    GAME_DIR/${HW_ARCH} when that folder exists.
+    """
+    path = f"{STANDALONE}/pico-8/scripts/start_pico8.sh"
+    script = Script(path, tree.read(path))
+    game_line, game = script.find(r'^\s*GAME_DIR="([^"$]+)"', "GAME_DIR assignment")
+    case_line, _ = script.find(r"^\s*case \$\{HW_ARCH\} in", "case on HW_ARCH")
+    arch_line, arch = script.find(r"^\s*(\w+)\)", "HW_ARCH branch", case_line + 1)
+    first_line, first = script.find(r'STATIC_BIN="([^"$]+)"', "binary of the first branch", arch_line)
+    other_line, _ = script.find(r"^\s*\*\)", "default HW_ARCH branch", first_line)
+    rest_line, rest = script.find(r'STATIC_BIN="([^"$]+)"', "binary of the default branch", other_line)
+    sub_line, _ = script.find(
+        r'if \[ -d "\$\{GAME_DIR\}/\$\{HW_ARCH\}" \]', "per-architecture launch folder"
+    )
+    end_line, _ = script.find(r"^\s*fi\b", "end of the launch folder test", sub_line)
+    run_line, _ = script.find(r"^\s*\$\{LAUNCH_DIR\}/\$\{STATIC_BIN\} ", "binary run")
+    return [
+        Launcher(
+            emulator="pico-8",
+            build="standalone",
+            kind="fixed_name",
+            names=[first.group(1), rest.group(1)],
+            source_ref=source_ref([(path, {
+                game_line, case_line, arch_line, first_line, other_line, rest_line,
+                *range(sub_line, end_line + 1), run_line,
+            })]),
+            search_dir=game.group(1).rstrip("/"),
+            passes_to="exec",
+            fails_when_missing=False,
+            depends_on_option=(
+                f"HW_ARCH {arch.group(1)} runs {first.group(1)}, any other {rest.group(1)}, "
+                f"from {game.group(1).rstrip('/')}/${{HW_ARCH}} when that folder exists"
+            ),
+        )
+    ]
+
+
 LINK_SCRIPTS = (
     ("drastic", f"{STANDALONE}/drastic-sa/scripts/start_drastic.sh"),
     ("dolphin", f"{STANDALONE}/dolphin-sa/scripts/start_dolphin_gc.sh"),
@@ -679,6 +720,7 @@ EXTRACTORS: tuple[Callable[[RepoTree], list[Launcher]], ...] = (
     yabasanshiro,
     duckstation,
     armsx2,
+    pico8,
     patched_directories,
     links,
 )
