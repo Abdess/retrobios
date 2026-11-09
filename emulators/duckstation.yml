@@ -6,6 +6,7 @@ upstream: "https://github.com/stenzek/duckstation"
 logo: "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/images/duck.png"
 profiled_date: "2026-03-23"
 source_commit: "526b4a128827ecaef037134095cd95f431b52d06"
+prose_written_at: "526b4a128827ecaef037134095cd95f431b52d06"
 core_version: "v0.1-12083-406-g526b4a1"
 version_basis:
   kind: tag
@@ -34,7 +35,7 @@ data_root:
 
 notes: |
   DuckStation auto-detects BIOS by MD5 hash from a flat scan of the BIOS directory.
-  ref: src/core/bios.cpp:460-482 (FindBIOSImagesInDirectory, scans all files by size)
+  ref: src/core/bios.cpp:458-479 (FindBIOSImagesInDirectory, scans all files by size)
   ref: src/core/bios.cpp:208 (MD5Digest::HashData identification)
 
   Accepts PS1 (512 KB), PS2 (4 MB), and PS3 (0x3E66F0) BIOS images.
