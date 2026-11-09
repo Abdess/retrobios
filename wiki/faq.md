@@ -17,7 +17,7 @@ terms: ios, iphone, ipad
 
 ## How to tell which BIOS is needed? { #how-do-i-know-which-bios-i-need }
 
-`--dry-run` lists them and changes nothing.
+`--dry-run` lists them, changing nothing.
 
 <!-- os-tabs -->
 ```sh
@@ -61,7 +61,7 @@ Game sets must match the emulator's version:
 
 ## Is the command safe? { #is-piping-the-installer-into-a-shell-safe }
 
-- It stops if the installer does not match its fingerprint, and
+- It stops if the installer does not match its expected fingerprint, and
   checks each file.
 - It fills the BIOS folder, some save folders and a games cache.
 - It never touches games or save files.
