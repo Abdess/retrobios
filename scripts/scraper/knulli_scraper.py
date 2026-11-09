@@ -42,6 +42,7 @@ from .batocera_scraper import (
     es_systems_by_system,
     es_systems_libretro_systems,
     extract_systems_dict,
+    installable_cores,
     platform_systems,
     records_run,
     requirements_from_systems,
@@ -136,9 +137,11 @@ class Scraper(BaseScraper):
         # What runs is what at least one board builds, read by the targets
         # scraper from the Kconfig of KNULLI's tree and its batocera and
         # buildroot submodules (boards_build).
-        built = boards_build(BoardTargets().build_selection(self.tag), launchers)
+        selection = BoardTargets().build_selection(self.tag)
+        built = boards_build(selection, launchers)
         launchers = records_run(launchers, built)
         cores, standalone, dual = configgen_cores(defaults, es_systems, dropped, built)
+        installable = installable_cores(selection, cores)
         # Each system's own list (psx, es_systems.yml:640-653: libretro
         # pcsx_rearmed, swanstation, mednafen_psx, then duckstation and
         # duckstation-legacy).
@@ -160,6 +163,8 @@ class Scraper(BaseScraper):
             result["standalone_cores"] = standalone
         if dual:
             result["dual_mode_cores"] = dual
+        if installable:
+            result["installable_cores"] = installable
         # configgen hands a libretro core /userdata/saves/<system>, as
         # Batocera's does: the systems each core runs for are its save folders.
         result["libretro_systems"] = es_systems_libretro_systems(es_systems, dropped)

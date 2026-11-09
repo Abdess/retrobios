@@ -280,6 +280,7 @@ class CoreDownloaderReach(unittest.TestCase):
         self.assertLessEqual(x86, set(load_target_config("batocera", "x86_64", root) or ()))
         self.assertLessEqual(armhf, set(load_target_config("batocera", "rk3288", root) or ()))
         self.assertFalse(x86 <= set(load_target_config("batocera", "bcm2711", root) or ()))
+        self.assertLessEqual(armhf, set(load_target_config("knulli", "r16", root) or ()))
 
     def test_the_platform_names_what_its_boards_install(self):
         import yaml  # noqa: PLC0415
@@ -287,7 +288,7 @@ class CoreDownloaderReach(unittest.TestCase):
         from common import load_target_config  # noqa: PLC0415
 
         root = str(REPO_ROOT / "platforms")
-        for platform in ("batocera",):
+        for platform in ("batocera", "knulli"):
             config = yaml.safe_load((REPO_ROOT / "platforms" / f"{platform}.yml").read_text())
             targets = yaml.safe_load(
                 (REPO_ROOT / "platforms" / "targets" / f"{platform}.yml").read_text())["targets"]

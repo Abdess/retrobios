@@ -1,6 +1,6 @@
 platform: knulli
 source: https://github.com/knulli-cfw/knulli-linux/tree/20260511
-scraped_at: '2026-11-06T02:19:00Z'
+scraped_at: '2026-11-09T20:38:23Z'
 targets:
   a133:
     architecture: aarch64
@@ -472,6 +472,7 @@ targets:
     - zc210
     images:
     - rg35xx
+    downloads: linux-armhf
   h700:
     architecture: aarch64
     cores:
@@ -787,6 +788,7 @@ targets:
     - zc210
     images:
     - miyoo-a30
+    downloads: linux-armhf
   rk3128:
     architecture: arm
     cores:
@@ -930,6 +932,7 @@ targets:
     - powkiddy_a13
     - ps5000
     - ps7000
+    downloads: linux-armhf
   rk3326:
     architecture: aarch64
     cores:
