@@ -5,6 +5,7 @@ source: "https://github.com/libretro/citra"
 upstream: "https://github.com/citra-emu/citra"
 profiled_date: "2026-03-23"
 source_commit: "5401990a9be46e4497abc92db3d5f2042674303d"
+prose_written_at: "5401990a9be46e4497abc92db3d5f2042674303d"
 source_branch: canary
 core_version: "canary-82-6-g5401990"
 version_basis:
@@ -43,7 +44,9 @@ notes: |
   ref: src/citra_libretro/environment.cpp:131
 
   Embedded open-source replacements for shared font, country list, bad word list.
-  ref: src/core/file_sys/archive_ncch.cpp:142-147
+  The Mii data archive has none: when it is missing the core reports
+  ErrorSystemFiles "Mii Data".
+  ref: src/core/file_sys/archive_ncch.cpp:132-156
 
   firmware_count absent in .info (= 0).
 
