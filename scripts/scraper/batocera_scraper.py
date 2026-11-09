@@ -29,7 +29,7 @@ from .base_scraper import (
     md5_field,
     requirement_entry,
 )
-from .batocera_launchers import extract_launchers
+from .batocera_launchers import Configgen, configs_root, extract_launchers
 
 PLATFORM_NAME = "batocera"
 
@@ -656,6 +656,9 @@ class Scraper(BaseScraper):
         # The systems each libretro core runs for: its save folders.
         result["libretro_systems"] = libretro_systems
         result["launchers"] = launchers
+        result["configs_root"] = configs_root(
+            Configgen(lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}"))
+        )
         return result
 
 

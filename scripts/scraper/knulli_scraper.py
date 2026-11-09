@@ -49,7 +49,9 @@ from .batocera_scraper import (
     submodule_revision,
 )
 from .es_emulators import attach_system_cores
+from .batocera_launchers import configs_root
 from .knulli_launchers import BATOCERA_SUBMODULE, extract_launchers
+from .knulli_launchers import configgen as knulli_configgen
 
 PLATFORM_NAME = "knulli"
 
@@ -167,6 +169,9 @@ class Scraper(BaseScraper):
         # Batocera's does: the systems each core runs for are its save folders.
         result["libretro_systems"] = es_systems_libretro_systems(es_systems, dropped)
         result["launchers"] = launchers
+        result["configs_root"] = configs_root(
+            knulli_configgen(lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path))
+        )
         return result
 
 

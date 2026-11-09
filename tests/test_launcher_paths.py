@@ -253,5 +253,45 @@ class ADefaultTheBuildLacksIsNotRun(unittest.TestCase):
         self.assertNotIn("suyu", config.get("standalone_cores") or [])
 
 
+
+class AUserFolderInTheConfigsFolder(unittest.TestCase):
+    """Batocera starts shadPS4 from /userdata/system/configs/shadps4, a folder
+    of the configs root its batoceraPaths builds (../system/configs)."""
+
+    def test_the_sys_modules_go_below_the_configs_root(self):
+        from common import load_emulator_profiles, load_platform_config, platform_layouts
+        from common import standalone_set
+
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["shadps4"]
+        for platform in ("batocera", "knulli"):
+            config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+            ((view, _standalone),) = platform_layouts("shadps4", profile, standalone_set(config))
+            with self.subTest(platform=platform):
+                self.assertEqual(
+                    {(f.get("root"), f["standalone_path"].rsplit("/", 1)[0]) for f in view["files"]},
+                    {("configs", "shadps4/user/sys_modules"), ("configs", "shadps4/user/fonts/font")},
+                )
+
+    def test_the_installer_follows_from_bios_to_the_configs_folder(self):
+        import install
+
+        manifest = {"configs_directory": {"bios_folder": "bios", "from_bios": "../system/configs"}}
+        install._check_relative_directories(manifest)
+        files = [{"dest": "shadps4/user/sys_modules/libSceNgs2.sprx", "root": "configs"}]
+        bios = Path("/userdata/bios")
+        kept, left = install.place_relative_entries(files, bios, manifest, "x", say=False)
+        self.assertEqual((len(kept), left), (1, []))
+        self.assertEqual(
+            install._entry_place(bios, kept[0])[0], Path("/userdata/system/configs")
+        )
+        kept, left = install.place_relative_entries(
+            files, Path("/elsewhere/firmware"), manifest, "x", say=False)
+        self.assertEqual((kept, [o["reason"] for o in left]), ([], ["no_configs_directory"]))
+        for value in ("../C:x", "../../../x", "../system/../x"):
+            with self.subTest(from_bios=value), self.assertRaises(ValueError):
+                install._check_relative_directories(
+                    {"configs_directory": {"bios_folder": "bios", "from_bios": value}})
+
+
 if __name__ == "__main__":
     unittest.main()

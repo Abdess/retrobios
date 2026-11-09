@@ -1150,7 +1150,7 @@ class OuterRootsAreUntrusted(unittest.TestCase):
     def test_unsafe_from_bios_is_refused(self):
         for value in (*self.UNSAFE, "../../../x", "../x/..", "x", "./x", "/x", "..x", None):
             with self.subTest(from_bios=value), self.assertRaises(ValueError):
-                install._check_roms_directory({"roms_directory": {**self.ROMS, "from_bios": value}})
+                install._check_relative_directories({"roms_directory": {**self.ROMS, "from_bios": value}})
 
     def test_the_relations_the_rom_folders_files_use_are_accepted(self):
         bios = Path("/card/system/bios")
@@ -1161,13 +1161,13 @@ class OuterRootsAreUntrusted(unittest.TestCase):
         }
         for value, root in expected.items():
             with self.subTest(from_bios=value):
-                install._check_roms_directory({"roms_directory": {**self.ROMS, "from_bios": value}})
-                self.assertEqual(install._roms_root(bios, value), root)
+                install._check_relative_directories({"roms_directory": {**self.ROMS, "from_bios": value}})
+                self.assertEqual(install._relative_root(bios, value), root)
         self.assertEqual(install.MAX_ROMS_UPS, 2)
 
     def test_a_list_without_a_roms_root_leaves_the_files_out(self):
         files = [{"dest": "pico-8/pico8_64", "root": "roms", "cores": ["x"]}]
-        kept, left = install.place_roms_entries(files, Path("/card/roms/bios"), {}, "x", say=False)
+        kept, left = install.place_relative_entries(files, Path("/card/roms/bios"), {}, "x", say=False)
         self.assertEqual((kept, [o["reason"] for o in left]), ([], ["no_roms_directory"]))
 
     def test_unsafe_emulator_folders_are_refused(self):
@@ -1192,7 +1192,7 @@ class OuterRootsAreUntrusted(unittest.TestCase):
             with unittest.mock.patch.object(install.os, "name", host):
                 for value in ("../C:x", "..\\x", "../x:", "../Roms:x"):
                     with self.subTest(host=host, from_bios=value), self.assertRaises(ValueError):
-                        install._check_roms_directory(
+                        install._check_relative_directories(
                             {"roms_directory": {**self.ROMS, "from_bios": value}})
                 for value in ("C:x/{key}", "x:/{key}", "emu:x/{key}"):
                     layout = {**self.EMULATORS, "searched": [value], "default": value}

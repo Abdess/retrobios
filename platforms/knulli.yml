@@ -6150,3 +6150,7 @@ launchers:
     \ / KEYS_DIR"
   fails_when_missing: false
   source_ref: "batocera/package/batocera/emulators/citron/002-adjust-paths.patch:9-10"
+configs_root:
+  path: /userdata/system/configs
+  from_bios: ../system/configs
+  source_ref: "package/system/knulli-configgen/configgen/configgen/batoceraPaths.py:14, 19-20, 25"

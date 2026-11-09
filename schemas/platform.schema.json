@@ -188,6 +188,30 @@
           }
         }
       }
+    },
+    "configs_root": {
+      "description": "Where the frontend keeps its emulators' configs, as its own path code builds it (Batocera's batoceraPaths CONFIGS): path as the OS spells it, from_bios relative to the BIOS folder. A launcher that starts an emulator from a folder below it (shadPS4's configs/shadps4) places that emulator's user folder there, and the install manifest writes such a file as root: configs.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "from_bios",
+        "source_ref"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "from_bios": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   },
   "$defs": {

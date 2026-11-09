@@ -143,6 +143,7 @@ OMISSION_REASONS = {
     "no_save_system": "no system runs the core",
     "outside_bios_folder": "read outside the BIOS folder",
     "no_roms_directory": "no roms folder",
+    "no_configs_directory": "no configs folder",
     "no_emulators_directory": "no emulator folder",
 }
 # What a file is when it is not firmware, as the manifest's category field
@@ -3528,14 +3529,20 @@ def _roms_relation(value: object, field: str) -> tuple[int, PurePosixPath]:
     return ups, PurePosixPath(*names)
 
 
-def _roms_root(bios_path: Path, from_bios: str) -> Path | None:
-    """The roms root of a BIOS folder, on the host's own path type.
+# The roots a list places files below by their place relative to the BIOS
+# folder: the roms root (ROCKNIX's /storage/roms) and the frontend's
+# configs folder (Batocera's /userdata/system/configs).
+RELATIVE_ROOTS = ("roms", "configs")
+
+
+def _relative_root(bios_path: Path, from_bios: str, root: str = "roms") -> Path | None:
+    """A relative root of a BIOS folder, on the host's own path type.
 
     The BIOS folder's ancestor at the depth the relation climbs, then the
     named folders below it. None when the joined and normalized path is
     anything else.
     """
-    ups, names = _roms_relation(from_bios, "roms_directory.from_bios")
+    ups, names = _roms_relation(from_bios, f"{root}_directory.from_bios")
     if ups > len(bios_path.parents):
         return None
     ancestor = bios_path if not ups else bios_path.parents[ups - 1]
@@ -3671,8 +3678,9 @@ class SavePlace(NamedTuple):
 # BIOS folder -> where the files read below its frontend's save directory go,
 # set once the save directory is known (save_directory_for).
 _SAVE_DIRS: dict[Path, SavePlace] = {}
-# BIOS folder -> the platform's roms folder, set by place_roms_entries.
-_ROMS_DIRS: dict[Path, Path] = {}
+# (BIOS folder, root) -> the platform's roms or configs folder, set by
+# place_relative_entries.
+_RELATIVE_DIRS: dict[tuple[Path, str], Path] = {}
 # (BIOS folder, emulator key) -> the emulator folder, set by
 # place_emulator_entries.
 _EMULATOR_DIRS: dict[tuple[Path, str], Path] = {}
@@ -3686,11 +3694,11 @@ def _entry_place(root: Path, entry: dict) -> tuple[Path, object]:
     core's own folder where the frontend sorts saves by core. Any other is
     relative to the BIOS folder.
     """
-    if entry.get("root") == "roms":
-        roms = _ROMS_DIRS.get(root)
-        if roms is None:
-            raise ValueError(f"no roms folder known for {entry.get('dest')}")
-        return roms, entry.get("dest")
+    if entry.get("root") in RELATIVE_ROOTS:
+        folder = _RELATIVE_DIRS.get((root, entry["root"]))
+        if folder is None:
+            raise ValueError(f"no {entry['root']} folder known for {entry.get('dest')}")
+        return folder, entry.get("dest")
     if entry.get("root") == "emulators":
         key, _, rest = str(entry.get("dest")).partition("/")
         folder = _EMULATOR_DIRS.get((root, key))
@@ -3731,7 +3739,7 @@ def _entry_key(entry: dict) -> str:
     if root == "emulator":
         # A path in one emulator's own folder: two emulators read two files.
         return f"emulator\0{','.join(entry.get('cores') or [])}\0{dest}"
-    return f"{root}\0{dest}" if root in ("save", "roms", "emulators") else dest
+    return f"{root}\0{dest}" if root in ("save", "emulators", *RELATIVE_ROOTS) else dest
 
 
 def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
@@ -3739,7 +3747,8 @@ def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
     the emulator's own folder, outside the BIOS tree), and core_folder one
     folder name of a save entry."""
     root = entry.get("root")
-    if root not in (None, "save", "roms", "emulators") and not (omitted and root == "emulator"):
+    if root not in (None, "save", "emulators", *RELATIVE_ROOTS) and not (
+            omitted and root == "emulator"):
         raise ValueError(f"invalid root for {dest}")
     if root == "emulators" and len(PurePosixPath(dest).parts) < 2:
         raise ValueError(f"an emulators entry names its folder first: {dest}")
@@ -3752,24 +3761,27 @@ def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
         raise ValueError(f"core_folder must be one folder name for {dest}")
 
 
-def _check_roms_directory(data: dict) -> None:
-    """The manifest's roms_directory, which every installable root: roms entry needs."""
-    layout = data.get("roms_directory")
+def _check_relative_directories(data: dict) -> None:
+    """The manifest's roms_directory and configs_directory, which every
+    installable root: roms or root: configs entry needs."""
     installable = [
         entry for field in ("files", "case_variants")
         for entry in data.get(field) or [] if isinstance(entry, dict)
     ]
-    if layout is None:
-        if any(entry.get("root") == "roms" for entry in installable):
-            raise ValueError("entries below the roms folder and no roms_directory")
-        return
-    if (
-        not isinstance(layout, dict)
-        or set(layout) != {"bios_folder", "from_bios"}
-        or len(_safe_relative_path(layout["bios_folder"], "roms_directory.bios_folder").parts) != 1
-    ):
-        raise ValueError("invalid roms_directory")
-    _roms_relation(layout["from_bios"], "roms_directory.from_bios")
+    for root in RELATIVE_ROOTS:
+        field = f"{root}_directory"
+        layout = data.get(field)
+        if layout is None:
+            if any(entry.get("root") == root for entry in installable):
+                raise ValueError(f"entries below the {root} folder and no {field}")
+            continue
+        if (
+            not isinstance(layout, dict)
+            or set(layout) != {"bios_folder", "from_bios"}
+            or len(_safe_relative_path(layout["bios_folder"], f"{field}.bios_folder").parts) != 1
+        ):
+            raise ValueError(f"invalid {field}")
+        _roms_relation(layout["from_bios"], f"{field}.from_bios")
 
 
 def _check_emulators_directory(data: dict) -> None:
@@ -3969,7 +3981,7 @@ def _check_entry(
     # Below a roms or emulator folder a colon has no use: refused outright.
     dest = str(_safe_relative_path(
         entry.get("dest"), f"{where}.dest",
-        colons=entry.get("root") not in ("roms", "emulators"),
+        colons=entry.get("root") not in ("emulators", *RELATIVE_ROOTS),
     ))
     key = _entry_key({**entry, "dest": dest})
     if key in seen_destinations:
@@ -4109,7 +4121,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
     for index, entry in enumerate(data_dirs):
         _check_data_directory(entry, f"data_directories[{index}]")
     _check_save_directory(data)
-    _check_roms_directory(data)
+    _check_relative_directories(data)
     _check_emulators_directory(data)
 
     declared_total_files = data.get("total_files")
@@ -5376,39 +5388,41 @@ def place_save_entries(
     return kept, unplaced
 
 
-def place_roms_entries(
+def place_relative_entries(
     files: list[dict], bios_path: Path, manifest: dict, display: str, say: bool = True,
 ) -> tuple[list[dict], list[dict]]:
-    """Find the roms folder for the entries a launcher reads below it.
+    """Find the roms and configs folders for the entries read below them.
 
-    The list gives the roms root relative to the BIOS folder, as the OS's
-    own source places them (ROCKNIX's /storage/roms holds bios/): a BIOS
-    folder of the platform's name puts the roms root there. Any other is a
-    folder this run cannot relate to the roms, and the entries are left out
-    with the reason.
+    The list gives each root relative to the BIOS folder, as the OS's own
+    source places them (ROCKNIX's /storage/roms holds bios/, Batocera's
+    configs folder is ../system/configs): a BIOS folder of the platform's
+    name puts the root there. Any other is a folder this run cannot relate
+    to the root, and the entries are left out with the reason.
     """
-    below = [entry for entry in files if entry.get("root") == "roms"]
-    if not below:
-        return files, []
-    layout = manifest.get("roms_directory") or {}
-    roms = (
-        _roms_root(bios_path, layout["from_bios"])
-        if layout and bios_path.name == layout.get("bios_folder") else None
-    )
-    if roms is not None:
-        _ROMS_DIRS[bios_path] = roms
-        return files, []
-    if say:
-        print(f"  {_plural(len(below), 'file')} read from {display}'s roms folder left out: "
-              f"{bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder.")
-    kept = [entry for entry in files if entry.get("root") != "roms"]
-    unplaced = [
-        {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
-         "system": "", "systems": list(entry.get("systems") or []), "required": False,
-         "reason": "no_roms_directory", "cores": entry.get("cores"), "root": "roms"}
-        for entry in below
-    ]
-    return kept, unplaced
+    unplaced: list[dict] = []
+    for root in RELATIVE_ROOTS:
+        below = [entry for entry in files if entry.get("root") == root]
+        if not below:
+            continue
+        layout = manifest.get(f"{root}_directory") or {}
+        folder = (
+            _relative_root(bios_path, layout["from_bios"], root)
+            if layout and bios_path.name == layout.get("bios_folder") else None
+        )
+        if folder is not None:
+            _RELATIVE_DIRS[(bios_path, root)] = folder
+            continue
+        if say:
+            print(f"  {_plural(len(below), 'file')} read from {display}'s {root} folder left "
+                  f"out: {bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder.")
+        files = [entry for entry in files if entry.get("root") != root]
+        unplaced += [
+            {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
+             "system": "", "systems": list(entry.get("systems") or []), "required": False,
+             "reason": f"no_{root}_directory", "cores": entry.get("cores"), "root": root}
+            for entry in below
+        ]
+    return files, unplaced
 
 
 def _config_keys(path: Path) -> set[str]:
@@ -16098,7 +16112,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         display = display_name(plat_name, manifest)
         files, unplaced = place_save_entries(
             files, bios_path, manifest, args.save_dir, display, say=False)
-        files, beyond = place_roms_entries(files, bios_path, manifest, display, say=not listing)
+        files, beyond = place_relative_entries(
+            files, bios_path, manifest, display, say=not listing)
         files, elsewhere = place_emulator_entries(
             files, bios_path, manifest, display, say=not listing)
         unplaced = [*unplaced, *beyond, *elsewhere]
