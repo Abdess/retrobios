@@ -299,6 +299,12 @@ def convert_site(dist: Path) -> int:
         text = page_markdown(html_path.read_text(encoding="utf-8"), url)
         (html_path.parent / "index.md").write_text(text, encoding="utf-8")
         written += 1
+    write_full(dist)
+    return written
+
+
+def write_full(dist: Path) -> None:
+    """llms-full.txt from the pages' Markdown copies."""
     parts = ["# RetroBIOS: the guides in one file", "",
              "> The pages a setup is done with, in reading order. Every page of the site also has "
              "its own Markdown copy at `<page>/index.md`.", ""]
@@ -306,11 +312,21 @@ def convert_site(dist: Path) -> int:
         md = dist / page / "index.md"
         if md.is_file():
             parts += [md.read_text(encoding="utf-8").rstrip(), "", "---", ""]
-    platforms = sorted(p for p in (dist / "platforms").glob("*/index.md")
-                       if not re.search(r"-(files|part)-\d+$", p.parent.name))
-    parts += [p.read_text(encoding="utf-8").rstrip() + "\n\n---\n" for p in platforms]
+    # Each setup's own page (the setups the picker lists, not the parts a
+    # long page is cut into), up to its reference of every file: what to
+    # do and where, not the full lists, which its own copy keeps. All of
+    # them was 6.9 MB, past what an assistant reads at once.
+    import json  # noqa: PLC0415
+
+    index = dist / "data" / "picker" / "index.json"
+    setups = [str(item["platform"]) for item in json.loads(index.read_text(encoding="utf-8"))] \
+        if index.is_file() else []
+    for setup in [*setups, "linux-handhelds"]:
+        md = dist / "platforms" / setup / "index.md"
+        if md.is_file():
+            text = md.read_text(encoding="utf-8")
+            parts += [text.split("\n## Reference", 1)[0].rstrip(), "", "---", ""]
     (dist / "llms-full.txt").write_text("\n".join(parts).rstrip() + "\n", encoding="utf-8")
-    return written
 
 
 def main() -> int:
