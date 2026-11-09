@@ -1323,7 +1323,7 @@ their systems`), and its `bios` folder comes first at the folder question,
 under Enter, before this computer's usual folder. A drive with a `bios` folder
 and none of those folders, a data drive or a stick, is numbered with a note
 (`DATA has a bios folder but no folder a handheld system writes. Pick it below
-if your files go there.`) and never taken under Enter. Another system's card or SHARE drive, and a
+if the BIOS files go there.`) and never taken under Enter. Another system's card or SHARE drive, and a
 drive two systems fit, are left out, and a line names them: each is reached
 through its own setup. A folder typed is read from the current
 one when it is not a full path, and named in full after. `q` quits there too

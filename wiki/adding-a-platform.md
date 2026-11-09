@@ -198,7 +198,9 @@ resolved. Three strategies exist:
   platform, that profile answers for the name. Used by Batocera, Recalbox, RetroBat,
   RomM, KNULLI, AmberELEC, EmuELEC, MinUI, NextUI, MyMinUI, RetroPie, EmuDeck,
   RetroDECK, ROCKNIX. A list that names `retroarch` (the last
-  four) also takes every libretro profile, as `all_libretro` does. An empty list
+  four) also takes every libretro profile, as `all_libretro` does, plus the
+  libretro builds whose `built_by` names this platform (ROCKNIX's
+  `yabadabadoo`). An empty list
   (BizHawk, MiSTer FPGA) resolves no profile, and the pack holds the platform's own
   files.
 - **all_libretro**: `cores: all_libretro` - every profile whose `type` contains

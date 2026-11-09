@@ -2891,15 +2891,21 @@ def resolve_platform_cores(
     If target_cores is provided, result is intersected with it.
     """
     cores_config = config.get("cores")
+    platform_key = str(config.get("_key") or "")
 
     def every_libretro() -> set[str]:
-        # A build only some platforms compile (built_by) is reached by name:
-        # the buildbot RetroArch installs from does not publish it.
+        # A build only some platforms compile (built_by) is absent from the
+        # buildbot RetroArch installs from, so it is reached by name, or as one
+        # of the libretro cores of a platform that compiles it: ROCKNIX ships
+        # yabadabadoo with its RetroArch and names it nowhere else.
         return {
             name
             for name, p in profiles.items()
             if "libretro" in p.get("type", "") and p.get("type") != "alias"
-            and not p.get("built_by")
+            and (
+                not p.get("built_by")
+                or (platform_key and platform_key in p["built_by"])
+            )
         }
 
     if cores_config == "all_libretro":
