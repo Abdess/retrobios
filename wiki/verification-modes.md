@@ -154,7 +154,7 @@ If the inner file is not found inside the ZIP, the status is UNTESTED with a rea
 
 ### RomM verification
 
-**Source**: RomM 5.4.0 [`backend/models/firmware.py:58-76`](https://github.com/rommapp/romm/blob/5.4.0/backend/models/firmware.py#L58-L76), `Firmware.verify_file_hashes`
+**Source**: RomM 5.4.1 [`backend/models/firmware.py:58-76`](https://github.com/rommapp/romm/blob/5.4.1/backend/models/firmware.py#L58-L76), `Firmware.verify_file_hashes`
 
 RomM reads the file's bytes (`verification_mode: md5`) but does not compare one
 digest. Its platform YAML carries `hash_rule: size_and_any_hash`: the file's
@@ -170,7 +170,7 @@ not a single digest gets a new `hash_rule` value, never a new mode.
 
 ### ROCKNIX verification
 
-**Source**: ROCKNIX 20261001 [`rocknix-systems:137-197`](https://github.com/ROCKNIX/distribution/blob/20261001/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems#L137-L197), function `checkBios`
+**Source**: ROCKNIX 20261101 [`rocknix-systems:137-197`](https://github.com/ROCKNIX/distribution/blob/20261101/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems#L137-L197), function `checkBios`
 
 ROCKNIX derives its BIOS checker from Batocera's, so the logic has the same
 shape: `md5sum()` on the file, `checkInsideZip()` for archive entries, and an
