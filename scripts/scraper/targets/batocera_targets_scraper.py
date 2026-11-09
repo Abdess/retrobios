@@ -3,6 +3,8 @@
 Sources (batocera-linux/batocera.linux):
   - configs/batocera-*.board  -- board definitions, each sets BR2_PACKAGE_BATOCERA_TARGET_*
   - package/batocera/core/batocera-system/Config.in -- select PACKAGE if CONDITION lines
+  - Config.in and every Kconfig file it sources -- the selects a package
+    declares itself (advanced_drastic selects drastic)
   - package/batocera/emulationstation/batocera-es-system/es_systems.yml
     -- emulator requireAnyOf flag mapping
 Sources (batocera-linux/buildroot, at the submodule commit the tag pins):
@@ -19,6 +21,8 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from datetime import datetime, timezone
 
 import yaml
@@ -77,6 +81,16 @@ def _fetch(url: str, headers: dict | None = None) -> str:
             return resp.read().decode("utf-8")
     except urllib.error.URLError as e:
         raise RuntimeError(f"cannot fetch {url}: {e}") from e
+
+
+def _fetch_present(url: str) -> str | None:
+    """A file's text, or None when the server answers that it does not exist."""
+    try:
+        return _fetch(url)
+    except RuntimeError as e:
+        if isinstance(e.__cause__, urllib.error.HTTPError) and e.__cause__.code == 404:
+            return None
+        raise
 
 
 def _fetch_json(url: str) -> list | dict:
@@ -210,6 +224,7 @@ BUILDROOT_KCONFIG = (
 )
 
 _CONFIG_LINE_RE = re.compile(r"^\s*(?:menu)?config\s+(BR2_\w+)")
+_SOURCE_RE = re.compile(r'^\s*source\s+"\$BR2_EXTERNAL_\w+_PATH/([^"]+)"')
 _OWNED_SELECT_RE = re.compile(r"^\s+select\s+(BR2_\w+)(?:\s+if\s+([^#]+))?")
 _BOARD_FLAG_RE = re.compile(r"^(BR2_\w+)=y\s*$", re.MULTILINE)
 _BOARD_INCLUDE_RE = re.compile(r"^(-?)include\s+(\S+)", re.MULTILINE)
@@ -342,6 +357,43 @@ def _arch_from_flag(flag: str, board_flags: set[str] | frozenset[str] = frozense
     return "aarch64"
 
 
+@dataclass(frozen=True)
+class BuildSelection:
+    """What the boards of a build turn on, read once from its Kconfig.
+
+    `targets` is each board's entry of the targets file. `emulators` holds
+    every es_systems name some board builds and `listed` every name
+    es_systems ties to a package, `symbols` every symbol some board ends up
+    with, and `packages` the config symbol each package folder of the tree
+    defines.
+    """
+
+    targets: dict[str, dict]
+    emulators: frozenset[str]
+    listed: frozenset[str]
+    symbols: frozenset[str]
+    packages: dict[str, str]
+
+
+def _sourced(text: str) -> list[str]:
+    """The files a Kconfig file sources, relative to the external tree."""
+    return [m.group(1) for line in text.splitlines() if (m := _SOURCE_RE.match(line))]
+
+
+def _package_symbols(files: dict[str, str]) -> dict[str, str]:
+    """package folder -> the first config symbol its Config.in defines."""
+    found: dict[str, str] = {}
+    for path, text in files.items():
+        parts = path.split("/")
+        if len(parts) < 3 or parts[-1] != "Config.in" or "package" not in parts:
+            continue
+        config = next((m.group(1) for line in text.splitlines()
+                       if (m := _CONFIG_LINE_RE.match(line))), None)
+        if config:
+            found.setdefault(parts[-2], config)
+    return found
+
+
 class Scraper(BaseTargetScraper):
     """Cross-references Batocera boards, Config.in, and es_systems to build target lists.
 
@@ -357,6 +409,9 @@ class Scraper(BaseTargetScraper):
     ES_SYSTEMS_PATH = "package/batocera/emulationstation/batocera-es-system/es_systems.yml"
     SYSTEM_SYMBOL = "BR2_PACKAGE_BATOCERA_SYSTEM"
     BUILDROOT_REPO = "batocera-linux/buildroot"
+    # Path prefix -> repository of a submodule the root Config.in sources
+    # from: KNULLI reads Batocera's packages as batocera/package/...
+    SUBMODULES: dict[str, str] = {}
 
     def __init__(self, url: str = "") -> None:
         super().__init__(url=url or f"https://github.com/{self.REPO}")
@@ -411,6 +466,45 @@ class Scraper(BaseTargetScraper):
             pending += [(inc, bool(dash)) for dash, inc in _BOARD_INCLUDE_RE.findall(text)]
         return target, flags
 
+    def _kconfig_files(self) -> dict[str, str]:
+        """The root Config.in and every file it sources, recursively.
+
+        The build reads these and nothing else: a package's own Config.in
+        can select another package (advanced_drastic selects drastic), and
+        such a select sits in no system Config.in. A sourced file absent at
+        the pin defines nothing and is named: KNULLI 20260511 sources
+        package/utils/vtree/Config.in, a package its tree gained later.
+        """
+        bases: list[tuple[str, str]] = []
+        for prefix, repo in self.SUBMODULES.items():
+            pin = _fetch_json(self._api(prefix.rstrip("/")))
+            sha = pin.get("sha") if isinstance(pin, dict) else None
+            if not sha:
+                raise RuntimeError(f"no {prefix.rstrip('/')} submodule commit at {self.tag}")
+            bases.append((prefix, f"https://raw.githubusercontent.com/{repo}/{sha}/"))
+
+        def url(path: str) -> str:
+            for prefix, base in bases:
+                if path.startswith(prefix):
+                    return base + path.removeprefix(prefix)
+            return self._raw(path)
+
+        files: dict[str, str] = {}
+        absent: list[str] = []
+        pending = ["Config.in"]
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            while pending:
+                found = dict(zip(pending, pool.map(lambda path: _fetch_present(url(path)), pending)))
+                absent += [path for path, text in found.items() if text is None]
+                files.update((path, text or "") for path, text in found.items())
+                pending = sorted({src for text in found.values() if text
+                                  for src in _sourced(text)} - set(files))
+        if "Config.in" in absent or len(files) - len(absent) < 2:
+            raise RuntimeError(f"Config.in at {self.tag} sources no readable Kconfig file")
+        for path in absent:
+            print(f"  sourced but absent at {self.tag}: {path}", file=sys.stderr)
+        return files
+
     def _buildroot_rules(self) -> list[tuple[str, str, str]]:
         """Buildroot's selects for the symbols the tree tests, at its pin."""
         pin = _fetch_json(self._api("buildroot"))
@@ -423,26 +517,32 @@ class Scraper(BaseTargetScraper):
             rules += _parse_owned_selects(_fetch(f"{raw}/{path}"))
         return rules
 
-    def fetch_targets(self) -> dict:
-        """Build per-board emulator availability map."""
-        self.tag = self.pinned_revision(self.PLATFORM)
+    def build_selection(self, tag: str | None = None) -> BuildSelection:
+        """Each board's selection, from the Kconfig the build reads.
+
+        `tag` is the revision to read, by default the one the platform's
+        YAML was scraped at: a platform scraper moving to a new release
+        passes its own.
+        """
+        self.tag = tag or self.pinned_revision(self.PLATFORM)
         print("  fetching board list...", file=sys.stderr)
         boards = self._list_boards()
 
-        print("  fetching Config.in...", file=sys.stderr)
-        config_in_url = self._raw(self.CONFIG_IN_PATH)
-        config_in_text = _fetch(config_in_url)
+        print("  fetching Kconfig files...", file=sys.stderr)
+        files = self._kconfig_files()
+        config_in_text = files.get(self.CONFIG_IN_PATH)
         if not config_in_text:
-            raise RuntimeError(f"empty Config.in from {config_in_url}")
+            raise RuntimeError(f"Config.in at {self.tag} does not source {self.CONFIG_IN_PATH}")
 
         meta_rules = _parse_meta_flags(config_in_text)
-        rules = _parse_owned_selects(config_in_text)
+        rules = [rule for text in files.values() for rule in _parse_owned_selects(text)]
         print(
-            f"  parsed {len(meta_rules)} meta-flag rules, {len(rules)} select lines",
+            f"  parsed {len(meta_rules)} meta-flag rules, {len(rules)} select lines "
+            f"in {len(files)} Kconfig files",
             file=sys.stderr,
         )
-        if not rules:
-            raise RuntimeError(f"no 'select BR2_PACKAGE_*' lines parsed from {config_in_url}")
+        if not _parse_owned_selects(config_in_text):
+            raise RuntimeError(f"no 'select BR2_PACKAGE_*' lines parsed from {self.CONFIG_IN_PATH}")
         rules += self._buildroot_rules()
 
         print("  fetching es_systems.yml...", file=sys.stderr)
@@ -459,9 +559,10 @@ class Scraper(BaseTargetScraper):
             raise RuntimeError(f"no package->emulator mappings parsed from {es_systems_url}")
         images_by_flag = _parse_images(config_in_text)
         if not images_by_flag:
-            raise RuntimeError(f"no target image list parsed from {config_in_url}")
+            raise RuntimeError(f"no target image list parsed from {self.CONFIG_IN_PATH}")
 
         targets: dict[str, dict] = {}
+        symbols: set[str] = set()
         for board_name in sorted(boards):
             target_key = board_name.removeprefix(self.BOARD_PREFIX).removesuffix(".board")
             print(f"  processing {target_key}...", file=sys.stderr)
@@ -476,6 +577,7 @@ class Scraper(BaseTargetScraper):
             if self.SYSTEM_SYMBOL not in selected_packages:
                 print(f"    {board_name} builds no system image", file=sys.stderr)
                 continue
+            symbols |= selected_packages
 
             # Map selected packages to emulator names via es_systems.yml
             emulators: set[str] = set()
@@ -496,11 +598,22 @@ class Scraper(BaseTargetScraper):
                 file=sys.stderr,
             )
 
+        return BuildSelection(
+            targets=targets,
+            emulators=frozenset(c for entry in targets.values() for c in entry["cores"]),
+            listed=frozenset(n for names in package_to_emulators.values() for n in names),
+            symbols=frozenset(symbols),
+            packages=_package_symbols(files),
+        )
+
+    def fetch_targets(self) -> dict:
+        """Build per-board emulator availability map."""
+        selection = self.build_selection()
         return {
             "platform": self.PLATFORM,
             "source": f"{self.url}/tree/{self.tag}",
             "scraped_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "targets": targets,
+            "targets": selection.targets,
         }
 
 

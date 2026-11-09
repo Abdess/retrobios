@@ -14,7 +14,7 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from collections.abc import Callable, Iterable
+from collections.abc import Callable
 from pathlib import Path
 
 
@@ -30,6 +30,8 @@ from .base_scraper import (
     requirement_entry,
 )
 from .batocera_launchers import Configgen, configs_root, extract_launchers
+from .targets.batocera_targets_scraper import BuildSelection
+from .targets.batocera_targets_scraper import Scraper as BoardTargets
 
 PLATFORM_NAME = "batocera"
 
@@ -489,76 +491,51 @@ def configgen_cores(
     for GameCube). `dropped` names what es_systems.yml files under an
     emulator without being one.
 
-    A default es_systems.yml does not offer names an emulator the build may
-    lack: KNULLI's defaults pick suyu for the Switch, and no package of its
-    tree, its batocera submodule or its buildroot builds suyu. `built` says
-    whether the build has a standalone emulator (packages_and_programs); a
-    default it answers no for is not run, nor its core.
+    `built` says whether some board builds a name (boards_build). What it
+    answers no for is not run: KNULLI's es_systems lists citron and shadps4,
+    which no KNULLI board selects, and its defaults pick suyu, which no
+    package builds. A default's core follows a standalone emulator the
+    build runs (vox_official is lexaloffle's Voxatron build).
     """
     data = yaml_load_upstream(defaults_text)
     cores, standalone = es_systems_emulators(es_systems_text)
-    offered = set(cores)
     libretro = es_systems_libretro(es_systems_text)
     if not cores:
         raise RuntimeError("es_systems.yml names no emulator")
+    if built is not None:
+        cores = {name for name in cores if built(name)}
+        standalone &= cores
     for system, cfg in data.items():
         if system == "default" or not isinstance(cfg, dict):
             continue
         emulator = cfg.get("emulator", "")
         core = cfg.get("core", "")
-        if (built is not None and emulator and emulator != "libretro"
-                and emulator not in offered and not built(emulator)):
-            continue
-        if core:
-            cores.add(core)
         if emulator and emulator != "libretro":
+            if built is not None and not built(emulator):
+                continue
             standalone.add(emulator)
             if core and core != emulator:
                 standalone.add(core)
+        elif built is not None and core and not built(core):
+            continue
+        if core:
+            cores.add(core)
     dual = (standalone & libretro) - dropped
     return sorted(cores - dropped), sorted(standalone - dropped), sorted(dual)
 
 
-BATOCERA_REPO = "batocera-linux/batocera.linux"
+def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[str], bool]:
+    """Whether some board of a build runs an emulator.
 
-
-def package_names(paths: Iterable[str]) -> set[str]:
-    """The buildroot packages a tree defines: each folder holding a Config.in."""
-    return {
-        path.rsplit("/", 2)[-2]
-        for path in paths
-        if path.endswith("/Config.in") and path.count("/") >= 1
-    }
-
-
-def repo_tree(repo: str, ref: str) -> list[str]:
-    """Every path of a GitHub repository at a revision."""
-    url = f"https://api.github.com/repos/{repo}/git/trees/{ref}?recursive=1"
-    req = urllib.request.Request(url, headers=github_headers())
-    with urllib.request.urlopen(req, timeout=60) as resp:
-        found = json.loads(resp.read().decode("utf-8"))
-    if found.get("truncated"):
-        raise RuntimeError(f"{url}: tree truncated")
-    return [entry["path"] for entry in found.get("tree", [])]
-
-
-def submodule_revision(repo: str, path: str, ref: str) -> str:
-    """The commit a repository's submodule at `path` pins at a revision."""
-    url = f"https://api.github.com/repos/{repo}/contents/{path}?ref={ref}"
-    req = urllib.request.Request(url, headers=github_headers())
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        found = json.loads(resp.read().decode("utf-8"))
-    if not isinstance(found, dict) or found.get("type") != "submodule" or not found.get("sha"):
-        raise RuntimeError(f"{url}: {path} is not a submodule")
-    return str(found["sha"])
-
-
-def packages_and_programs(packages: set[str], launchers: list[dict]) -> Callable[[str], bool]:
-    """Whether a build has a standalone emulator.
-
-    It does when a package of that name exists, or when its launcher runs a
-    program the user puts in the BIOS folder (Batocera's lexaloffle runs
-    /userdata/bios/pico-8/pico8), which no package builds.
+    es_systems.yml ties each name to the packages that build it
+    (requireAnyOf), and a name it lists is built when a board selects one of
+    them: KNULLI lists citron and shadps4, and its Config.in selects them
+    only on x86_64 boards, which it has none of. A name only
+    configgen-defaults.yml gives is built when a board selects the package
+    of that name: the symbol its Config.in defines, else the one Buildroot
+    derives from the folder (BR2_PACKAGE_<NAME>, package/pkg-generic.mk). A
+    program the launcher runs from the BIOS folder (lexaloffle,
+    /userdata/bios/pico-8/pico8) needs no package.
     """
     supplied = {
         name.strip()
@@ -567,7 +544,27 @@ def packages_and_programs(packages: set[str], launchers: list[dict]) -> Callable
         and str(record.get("search_dir") or "").startswith("/userdata/bios")
         for name in str(record.get("emulator", "")).split(",")
     }
-    return lambda emulator: emulator in packages or emulator in supplied
+
+    def built(name: str) -> bool:
+        if name in selection.emulators or name in supplied:
+            return True
+        if name in selection.listed:
+            return False
+        symbol = selection.packages.get(name) or (
+            "BR2_PACKAGE_" + name.upper().replace("-", "_"))
+        return symbol in selection.symbols
+
+    return built
+
+
+def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dict]:
+    """The launcher records of emulators the build runs.
+
+    configgen keeps the generators of emulators a build does not select
+    (KNULLI's citron, pcsx2, shadps4): what they read is never read on the
+    device, so the records do not describe the platform.
+    """
+    return [r for r in launchers if any(built(n) for n in str(r["emulator"]).split(", "))]
 
 
 class Scraper(BaseScraper):
@@ -578,20 +575,13 @@ class Scraper(BaseScraper):
         super().__init__(url=SOURCE_URL.format(tag=self.tag))
 
     def _fetch_cores(
-        self, launchers: list[dict] | None = None
+        self, built: Callable[[str], bool] | None = None
     ) -> tuple[list[str], list[str], list[str]]:
         """Core names, standalone cores and dual-mode cores at the pinned tag.
 
-        A default es_systems.yml does not offer counts when a package of
-        Batocera's tree or its buildroot builds it, or when its launcher
-        runs a program from the BIOS folder.
+        With `built` (boards_build), a name counts when some board builds
+        it or its launcher runs a program from the BIOS folder.
         """
-        built = None
-        if launchers is not None:
-            paths = repo_tree(BATOCERA_REPO, self.tag)
-            buildroot = submodule_revision(BATOCERA_REPO, "buildroot", self.tag)
-            paths += repo_tree("batocera-linux/buildroot", buildroot)
-            built = packages_and_programs(package_names(paths), launchers)
         return configgen_cores(
             self._fetch_text(CONFIGGEN_DEFAULTS_URL.format(tag=self.tag)),
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)),
@@ -633,7 +623,9 @@ class Scraper(BaseScraper):
         launchers = extract_launchers(
             lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
         )
-        cores, standalone, dual = self._fetch_cores(launchers)
+        built = boards_build(BoardTargets().build_selection(self.tag), launchers)
+        launchers = records_run(launchers, built)
+        cores, standalone, dual = self._fetch_cores(built)
         libretro_systems = es_systems_libretro_systems(
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
         )

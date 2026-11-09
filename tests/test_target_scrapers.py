@@ -97,6 +97,9 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
                         _refuse()
                     return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86_64=y\n"
                                  b"BR2_PACKAGE_BATOCERA_SYSTEM=y\n")
+                if url.startswith("https://raw.githubusercontent.com/") and url.count("/") == 6:
+                    return _Body(b'source "$BR2_EXTERNAL_BATOCERA_PATH/'
+                                 b'package/batocera/core/batocera-system/Config.in"\n')
                 if url.endswith("Config.in"):
                     return _Body(b"config BR2_PACKAGE_BATOCERA_SYSTEM\n"
                                  b"\tselect BR2_PACKAGE_MGBA\n\n"
@@ -262,6 +265,15 @@ class KnulliPerBoard(unittest.TestCase):
             "BR2_arm=y\nBR2_PACKAGE_BATOCERA_TARGET_H700=y\n"
         ),
         "configs/knulli-h700_armhf_libs.packages": "BR2_PACKAGE_SDL2=y\n",
+        # The root Config.in sources KNULLI's system and Batocera's packages
+        # from the batocera submodule, where a package selects another.
+        "Config.in": (
+            'source "$BR2_EXTERNAL_KNULLI_PATH/package/system/knulli-system/Config.in"\n'
+            'source "$BR2_EXTERNAL_KNULLI_PATH/batocera/package/batocera/emulators/'
+            'ppsspp/Config.in"\n'
+            '#source "$BR2_EXTERNAL_KNULLI_PATH/package/utils/off/Config.in"\n'
+            'source "$BR2_EXTERNAL_KNULLI_PATH/package/utils/vtree/Config.in"\n'
+        ),
         "package/system/knulli-system/Config.in": (
             "if BR2_PACKAGE_BATOCERA_TARGET_H700 || \\\n"
             "   BR2_PACKAGE_BATOCERA_TARGET_A133\n"
@@ -282,6 +294,8 @@ class KnulliPerBoard(unittest.TestCase):
             "      mgba: {requireAnyOf: [BR2_PACKAGE_LIBRETRO_MGBA]}\n"
             "psp:\n  emulators:\n    ppsspp:\n"
             "      ppsspp: {requireAnyOf: [BR2_PACKAGE_PPSSPP]}\n"
+            "pspassets:\n  emulators:\n    libretro:\n"
+            "      assets: {requireAnyOf: [BR2_PACKAGE_PPSSPP_ASSETS]}\n"
         ),
     }
 
@@ -314,6 +328,13 @@ class KnulliPerBoard(unittest.TestCase):
                 return _Body(json.dumps([{"name": n} for n in names]))
             if url == f"{api}buildroot?ref={pin}":
                 return _Body('{"sha": "c2d7985b"}')
+            if url == f"{api}batocera?ref={pin}":
+                return _Body('{"sha": "487014d9"}')
+            if url == ("https://raw.githubusercontent.com/batocera-linux/batocera.linux/"
+                       "487014d9/package/batocera/emulators/ppsspp/Config.in"):
+                return _Body("config BR2_PACKAGE_PPSSPP\n\tselect BR2_PACKAGE_PPSSPP_ASSETS\n")
+            if url == f"{raw}package/utils/vtree/Config.in":
+                raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
             if url.startswith("https://raw.githubusercontent.com/knulli-cfw/buildroot/c2d7985b/"):
                 return _Body("config BR2_aarch64\n\tselect BR2_ARCH_IS_64\n")
             path = url.removeprefix(raw)
@@ -330,11 +351,12 @@ class KnulliPerBoard(unittest.TestCase):
         self.assertEqual(sorted(data["targets"]), ["h700", "r16"])
         # The images name what a card's boot/knulli.board holds.
         self.assertEqual(data["targets"]["h700"],
-                         {"architecture": "aarch64", "cores": ["mgba", "ppsspp"],
+                         {"architecture": "aarch64", "cores": ["assets", "mgba", "ppsspp"],
                           "images": ["rg35xx-plus", "rg35xx-sp"]})
         self.assertEqual(data["targets"]["r16"],
                          {"architecture": "arm", "cores": ["mgba"], "images": ["miyoo-a30"]})
-        self.assertTrue(all(pin in url or "buildroot/c2d7985b" in url for url in seen), seen)
+        self.assertTrue(all(pin in url or "buildroot/c2d7985b" in url
+                            or "batocera.linux/487014d9" in url for url in seen), seen)
 
 
 class RocknixPerDevice(unittest.TestCase):

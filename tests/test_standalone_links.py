@@ -548,12 +548,12 @@ class OpenmsxOnEachPlatform(unittest.TestCase):
     """openMSX finds system ROMs by SHA1 in share/systemroms below its user
     directory and in every filepool entry. RetroBat sets OPENMSX_HOME to
     bios/openmsx, RetroPie links share/systemroms of its user directory to
-    BIOS/openmsx, Batocera and KNULLI add bios/Machines and bios/openmsx to
-    the filepool and list their own files in bios/openmsx."""
+    BIOS/openmsx, Batocera adds bios/Machines and bios/openmsx to the
+    filepool and lists its own files in bios/openmsx. KNULLI's generator
+    does the same, but no KNULLI board builds openmsx."""
 
     EXPECTED = {
         "batocera": {"share/systemroms": ("", "openmsx")},
-        "knulli": {"share/systemroms": ("", "openmsx")},
         "retrobat": {"": ("", "openmsx")},
         "retropie": {"share/systemroms": ("", "openmsx")},
     }

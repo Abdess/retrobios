@@ -37,18 +37,17 @@ from .batocera_scraper import (
 )
 from .batocera_scraper import (
     _not_cores,
+    boards_build,
     configgen_cores,
     es_systems_by_system,
     es_systems_libretro_systems,
     extract_systems_dict,
-    package_names,
-    packages_and_programs,
     platform_systems,
-    repo_tree,
+    records_run,
     requirements_from_systems,
-    submodule_revision,
 )
 from .es_emulators import attach_system_cores
+from .targets.knulli_targets_scraper import Scraper as BoardTargets
 from .batocera_launchers import configs_root
 from .knulli_launchers import BATOCERA_SUBMODULE, extract_launchers
 from .knulli_launchers import configgen as knulli_configgen
@@ -134,15 +133,11 @@ class Scraper(BaseScraper):
             lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path),
             lambda path: self._fetch_text(_BATOCERA_RAW.format(ref=revision) + path),
         )
-        # The packages KNULLI builds come from its own tree, its batocera
-        # submodule and its buildroot submodule: a default no package of
-        # them builds (suyu) is not run.
-        paths = repo_tree(REPO, self.tag)
-        paths += repo_tree("batocera-linux/batocera.linux", revision)
-        paths += repo_tree(
-            "knulli-cfw/buildroot", submodule_revision(REPO, "buildroot", self.tag)
-        )
-        built = packages_and_programs(package_names(paths), launchers)
+        # What runs is what at least one board builds, read by the targets
+        # scraper from the Kconfig of KNULLI's tree and its batocera and
+        # buildroot submodules (boards_build).
+        built = boards_build(BoardTargets().build_selection(self.tag), launchers)
+        launchers = records_run(launchers, built)
         cores, standalone, dual = configgen_cores(defaults, es_systems, dropped, built)
         # Each system's own list (psx, es_systems.yml:640-653: libretro
         # pcsx_rearmed, swanstation, mednafen_psx, then duckstation and
