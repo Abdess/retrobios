@@ -114,8 +114,8 @@ files:
     validation: [size]
     required: false
     hle_fallback: true
-    note: "Read for the ANK glyphs still missing, 0x1800 bytes."
-    source_ref: "font/font.c:181, font/fontdata.c:8, font/fontpc88.c:154-187"
+    note: "Read for the ANK glyphs still missing, 0x1800 bytes. A readable KANJI1.ROM supplies all three ANK blocks first, so the file is opened only without it."
+    source_ref: "font/font.c:181, font/fontdata.c:8, font/fontpc88.c:94-123, font/fontpc88.c:154-187"
 
   - name: "sound.rom"
     path: "pc98/sound.rom"
