@@ -551,6 +551,53 @@ class Links(unittest.TestCase):
             rl.links(tree)
 
 
+START_PICO8 = text(
+    """
+    #!/bin/bash
+    . /etc/profile
+
+    GAME_DIR="/storage/roms/pico-8/"
+
+    case ${HW_ARCH} in
+      aarch64)
+        STATIC_BIN="pico8_64"
+      ;;
+      *)
+        STATIC_BIN="pico8_dyn"
+      ;;
+    esac
+
+    if [ -d "${GAME_DIR}/${HW_ARCH}" ]
+    then
+      LAUNCH_DIR="${GAME_DIR}/${HW_ARCH}"
+    else
+      LAUNCH_DIR="${GAME_DIR}"
+    fi
+
+    ${LAUNCH_DIR}/${STATIC_BIN} -home -root_path ${GAME_DIR} -joystick 0 ${OPTIONS} "${CART}"
+"""
+)
+
+
+class ProgramsRunOutsideTheBiosFolder(unittest.TestCase):
+    PATH = f"{SA}/pico-8/scripts/start_pico8.sh"
+
+    def test_pico8_runs_its_binary_from_roms(self):
+        (record,) = [r.entry() for r in rl.pico8(RepoTree.from_files({self.PATH: START_PICO8}))]
+        self.assertEqual(
+            (record["emulator"], record["kind"], record["names"], record["search_dir"],
+             record["passes_to"]),
+            ("pico-8", "fixed_name", ["pico8_64", "pico8_dyn"], "/storage/roms/pico-8", "exec"),
+        )
+        self.assertIn("HW_ARCH aarch64 runs pico8_64", record["depends_on_option"])
+        self.assertEqual(record["source_ref"], f"{self.PATH}:4-11, 15-22")
+
+    def test_a_script_without_its_binary_choice_raises(self):
+        broken = START_PICO8.replace('STATIC_BIN="pico8_dyn"', "STATIC_BIN=$OTHER")
+        with self.assertRaises(LauncherPatternMissing):
+            rl.pico8(RepoTree.from_files({self.PATH: broken}))
+
+
 class Revision(unittest.TestCase):
     def test_the_revision_is_the_one_the_bios_list_is_read_at(self):
         url = (

@@ -293,6 +293,28 @@ DRASTIC = module("drastic", """
 """, 36)
 
 
+UAE4ALL = module("uae4all", """
+    function configure_uae4all() {
+        mkRomDir "amiga"
+
+        moveConfigDir "$md_inst/kickstarts" "$biosdir/amiga"
+
+        rm -f "$romdir/amiga/+Start UAE4All.sh"
+        if [[ "$md_mode" == "install" ]]; then
+            cat > "$romdir/amiga/+Start UAE4All.sh" << _EOF_
+    #!/bin/bash
+    pushd "$md_inst"
+    ./uae4all
+    popd
+    _EOF_
+        fi
+
+        addEmulator 1 "$md_id" "amiga" "bash $romdir/amiga/+Start\\ UAE4All.sh"
+        addSystem "amiga"
+    }
+""", 60)
+
+
 class WorkingDirectory(unittest.TestCase):
     def test_drastic_reads_below_the_folder_its_script_enters(self):
         found = records({f"{EMULATORS}/drastic.sh": DRASTIC}, "drastic")
@@ -303,6 +325,18 @@ class WorkingDirectory(unittest.TestCase):
                 "$md_conf_root/nds/drastic",
                 "working directory of $md_inst/drastic.sh",
                 f"{EMULATORS}/drastic.sh:48",
+            )],
+        )
+
+    def test_uae4all_runs_from_its_install_directory(self):
+        found = records({f"{EMULATORS}/uae4all.sh": UAE4ALL}, "uae4all")
+        entered = [r for r in found if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in entered],
+            [(
+                "$md_inst",
+                "working directory of $romdir/amiga/+Start UAE4All.sh",
+                f"{EMULATORS}/uae4all.sh:69",
             )],
         )
 

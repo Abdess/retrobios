@@ -1141,6 +1141,36 @@ class FolderArguments(unittest.TestCase):
         )
 
 
+PICO8 = """
+    public override System.Diagnostics.ProcessStartInfo Generate(string system, string emulator, string core, string rom, string playersControllers, ScreenResolution resolution)
+    {
+        string path = AppConfig.GetFullPath("pico8");
+
+        string exe = Path.Combine(path, "pico8.exe");
+        if (!File.Exists(exe))
+            return null;
+
+        return new ProcessStartInfo()
+        {
+            FileName = exe,
+            WorkingDirectory = path,
+            Arguments = args,
+        };
+    }
+"""
+
+
+class ProgramsRunFromEmulatorFolders(unittest.TestCase):
+    def test_pico8_runs_its_binary_from_its_emulator_folder(self):
+        (record,) = rl.pico8(_sources(**{f"{G}/Pico8.Generator.cs": PICO8}))
+        self.assertEqual(
+            (record["emulator"], record["kind"], record["names"], record["search_dir"],
+             record["passes_to"], record["source_ref"]),
+            ("pico8", "fixed_name", ["pico8.exe"], '<AppConfig.GetFullPath("pico8")>', "exec",
+             f"{G}/Pico8.Generator.cs:3-7, 11-12"),
+        )
+
+
 class EveryBiosReferenceIsRead(unittest.TestCase):
     def test_unread_reference_stops_the_scrape(self):
         extra = EKA2L1 + (

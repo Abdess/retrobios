@@ -51,6 +51,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/OpenMSX.Generator.cs",
     f"{GENERATORS}/PSXMame.Generator.cs",
     f"{GENERATORS}/Pcsx2.Generator.cs",
+    f"{GENERATORS}/Pico8.Generator.cs",
     f"{GENERATORS}/PortsLauncher.Configuration.cs",
     f"{GENERATORS}/Project64.Generator.cs",
     f"{GENERATORS}/Raine.Generator.cs",
@@ -2968,6 +2969,44 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
     return _covered(src, records)
 
 
+def pico8(sources: dict[str, Source]) -> list[Record]:
+    """The PICO-8 binary the generator runs, from an emulator folder.
+
+    AppConfig.GetFullPath names a folder of the RetroBat install
+    (emulatorLauncher.cfg, else emulators/<key>): the binary is never
+    looked up in the BIOS tree.
+    """
+    src = sources[f"{GENERATORS}/Pico8.Generator.cs"]
+    folder = src.find(r'string path = AppConfig\.GetFullPath\("(\w+)"\);', "pico8 folder")
+    exe = src.find(
+        r'string exe = Path\.Combine\(path, "([^"]+)"\);', "binary path", folder.end()
+    )
+    check = src.find(r"if \(!File\.Exists\(exe\)\)\s*return null;", "binary check", exe.end())
+    run = src.find(r"FileName = exe,\s*WorkingDirectory = path,", "binary run", check.end())
+    return [
+        _record(
+            "pico8",
+            "standalone",
+            "fixed_name",
+            [exe.group(1)],
+            source_ref(
+                (
+                    src.path,
+                    [
+                        src.lines(folder.start(), folder.end()),
+                        src.lines(exe.start(), check.end()),
+                        src.lines(run.start(), run.end()),
+                    ],
+                )
+            ),
+            case_insensitive=True,
+            search_dir=f"<AppConfig.GetFullPath(\"{folder.group(1)}\")>",
+            passes_to="exec",
+            fails_when_missing="returns no process when the binary is absent",
+        )
+    ]
+
+
 def snes9x(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/Snes9x.Generator.cs"]
     entry = src.find(rf'\{{ "([^"]+)", (Path\.Combine\({_BIOS_ROOT}\)) \}}', "bios folder entry")
@@ -3236,6 +3275,7 @@ EXTRACTORS: tuple[Callable[[dict[str, Source]], list[Record]], ...] = (
     option_paths,
     pcsx2,
     pcsx2_libretro,
+    pico8,
     psx_cascades,
     psxmame,
     raine,
