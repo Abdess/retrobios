@@ -5,6 +5,7 @@ source: "https://github.com/libretro/swanstation"
 upstream: "https://github.com/stenzek/duckstation"
 profiled_date: "2026-03-25"
 source_commit: "631f0fb31b809e0f889d7c551fe695788e39c1d3"
+prose_written_at: "631f0fb31b809e0f889d7c551fe695788e39c1d3"
 upstream_commit: "526b4a128827ecaef037134095cd95f431b52d06"
 core_version: "1.0.0"
 version_basis:
@@ -128,4 +129,16 @@ files:
     validation: [size]
     note: "Only the first 512 KB are read and hashed. Their md5 c02a6fbb1b27359f84e92fae8bc21316 is the first PS3 entry of the table."
     source_ref: "source src/core/bios.h:9, source src/core/bios.cpp:70, source src/core/bios.cpp:82-99, source src/core/bios.cpp:129"
+    aliases: []
+
+  - name: "openbios.bin"
+    found_by: "name"
+    description: "OpenBIOS"
+    region: [world]
+    required: false
+    hle_fallback: true
+    size: [524288, 4194304, 4089584]
+    validation: [size]
+    note: "OpenBIOS choice of the three region BIOS options, opened from the system directory by this name with a size check only. When the file is absent or of another size the directory scan runs, and with no image found the built-in OpenBIOS copy boots (system.cpp:678-682)."
+    source_ref: "source src/libretro/libretro_core_options.h:106, source src/libretro/libretro_core_options.h:120, source src/libretro/libretro_core_options.h:134, source src/core/host_interface.cpp:100-133, source src/core/bios.cpp:82-105, source src/core/system.cpp:678-682"
     aliases: []
