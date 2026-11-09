@@ -305,7 +305,7 @@ files:
     sha256: "08f5d22230481019844492dde0a29a018cb193712a9e4a43770a3870608f28de"
     sha1: "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659"
     validation: [size, sha256]
-    source_ref: "src/SystemProfile.cpp:39, src/SystemProfile.cpp:55, src/CharRomCatalog.cpp:42-43, src/RomFetch.cpp:132-135, src/Memory.cpp:343-376"
+    source_ref: "src/SystemProfile.cpp:37-39, src/SystemProfile.cpp:53-55, src/CharRomCatalog.cpp:42-43, src/RomFetch.cpp:132-135, src/Memory.cpp:343-376"
     note: "Sole candidate of the ][ and ][+ profiles and the last fallback of every //e-class chain."
   - name: "apple2e_char.rom"
     path: "roms/apple2e_char.rom"
