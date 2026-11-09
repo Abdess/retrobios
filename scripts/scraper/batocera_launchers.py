@@ -97,6 +97,32 @@ def path_constants(source: Source) -> dict[str, str]:
     return constants
 
 
+def configs_root(cg: Configgen) -> dict[str, str]:
+    """Where configgen keeps the emulators' configs, relative to the BIOS folder.
+
+    batoceraPaths' CONFIGS (/userdata/system/configs), the folder a generator
+    starts an emulator from (shadPS4's configs/shadps4), with the lines that
+    build it and BIOS.
+    """
+    import posixpath  # noqa: PLC0415
+
+    src = cg.source(f"{cg.generators.rsplit('/', 1)[0]}/batoceraPaths.py")
+    if "CONFIGS" not in cg.paths:
+        src.fail("no CONFIGS path constant")
+    wanted: set[str] = {"CONFIGS", "BIOS"}
+    spans = []
+    for node in reversed(src.tree.body):
+        name = _assigned_name(node)
+        if name in wanted:
+            spans.append((node.lineno, node.end_lineno or node.lineno))
+            wanted |= {n.id for n in ast.walk(node.value) if isinstance(n, ast.Name)}  # type: ignore[union-attr]
+    return {
+        "path": cg.paths["CONFIGS"],
+        "from_bios": posixpath.relpath(cg.paths["CONFIGS"], cg.bios),
+        "source_ref": src.ref(spans),
+    }
+
+
 def _path_value(node: ast.AST | None, constants: dict[str, str]) -> str | None:
     if isinstance(node, ast.Name):
         return constants.get(node.id)

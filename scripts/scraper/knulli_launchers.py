@@ -48,7 +48,6 @@ try:
     )
     from .configgen_launchers import (
         Launcher,
-        _calls,
         LauncherShapeError,
         Source,
         _assigned_name,
@@ -74,7 +73,6 @@ except ImportError:
     )
     from configgen_launchers import (  # type: ignore[no-redef]
         Launcher,
-        _calls,
         LauncherShapeError,
         Source,
         _assigned_name,
@@ -1062,39 +1060,6 @@ EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
 )
 
 
-# Generators whose command sets the emulator's XDG data folder, the parent
-# of every user folder a yuzu-family emulator derives.
-DATA_HOME_GENERATORS = ("suyu.suyuGenerator",)
-
-
-def data_homes(cg: Configgen) -> list[Launcher]:
-    """Command(..., env={"XDG_DATA_HOME": <path>}) in the generators above.
-
-    The path need not lie in /userdata/bios: KNULLI's suyu keeps its data
-    in /userdata/saves/switch, which tells where its keys are not.
-    """
-    launchers = []
-    for module in DATA_HOME_GENERATORS:
-        src = cg.generator(module)
-        found = [
-            (_path_value(item, cg.paths), key)
-            for call in _calls(src.tree, attr="Command")
-            for keyword in call.keywords
-            if keyword.arg == "env" and isinstance(keyword.value, ast.Dict)
-            for key, item in zip(keyword.value.keys, keyword.value.values)
-            if isinstance(key, ast.Constant) and key.value == "XDG_DATA_HOME"
-        ]
-        if not found or found[0][0] is None:
-            src.fail("the command environment sets no XDG_DATA_HOME path")
-        value, node = found[0]
-        launchers.append(Launcher(
-            emulator=cg.emulator(module), build="standalone", kind="passes_path", names=[],
-            search_dir=value, passes_to="environment XDG_DATA_HOME",
-            source_ref=src.ref([(node.lineno, node.end_lineno)]),
-        ))
-    return launchers
-
-
 # KNULLI builds Batocera's emulator packages from this submodule, at the
 # batocera.linux commit it pins: Citron's path patch is there.
 BATOCERA_SUBMODULE = "batocera"
@@ -1114,7 +1079,6 @@ def extract_launchers(
     launchers += boot_disks(cg, read)
     for spec in GENERIC_SITES:
         launchers += bios_sites(cg, spec)
-    launchers += data_homes(cg)
     if batocera is not None:
         prefix = f"{BATOCERA_SUBMODULE}/"
         launchers += patched_paths(

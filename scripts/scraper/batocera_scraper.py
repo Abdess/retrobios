@@ -14,6 +14,7 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from collections.abc import Callable, Iterable
 from pathlib import Path
 
 
@@ -28,7 +29,7 @@ from .base_scraper import (
     md5_field,
     requirement_entry,
 )
-from .batocera_launchers import extract_launchers
+from .batocera_launchers import Configgen, configs_root, extract_launchers
 
 PLATFORM_NAME = "batocera"
 
@@ -168,7 +169,8 @@ def es_systems_libretro_systems(text: str, dropped: set[str]) -> dict[str, list[
 
 
 def es_systems_by_system(
-    es_systems_text: str, defaults_text: str, dropped: set[str]
+    es_systems_text: str, defaults_text: str, dropped: set[str],
+    built: Callable[[str], bool] | None = None,
 ) -> dict[str, list[str]]:
     """system -> the cores es_systems.yml offers it, in the file's order.
 
@@ -195,6 +197,10 @@ def es_systems_by_system(
         default = defaults.get(system)
         if isinstance(default, dict):
             emulator, core = default.get("emulator"), default.get("core")
+            if (built is not None and emulator and emulator != "libretro"
+                    and str(emulator) not in names and not built(str(emulator))):
+                # A default the build lacks (configgen_cores).
+                emulator = core = None
             if emulator and emulator != "libretro":
                 names.append(str(emulator))
             if core:
@@ -472,7 +478,8 @@ def platform_systems(
 
 
 def configgen_cores(
-    defaults_text: str, es_systems_text: str, dropped: set[str]
+    defaults_text: str, es_systems_text: str, dropped: set[str],
+    built: Callable[[str], bool] | None = None,
 ) -> tuple[list[str], list[str], list[str]]:
     """Core names, standalone cores and dual-mode cores of a configgen build.
 
@@ -481,9 +488,16 @@ def configgen_cores(
     dual-mode ones those es_systems.yml also offers under libretro (dolphin
     for GameCube). `dropped` names what es_systems.yml files under an
     emulator without being one.
+
+    A default es_systems.yml does not offer names an emulator the build may
+    lack: KNULLI's defaults pick suyu for the Switch, and no package of its
+    tree, its batocera submodule or its buildroot builds suyu. `built` says
+    whether the build has a standalone emulator (packages_and_programs); a
+    default it answers no for is not run, nor its core.
     """
     data = yaml_load_upstream(defaults_text)
     cores, standalone = es_systems_emulators(es_systems_text)
+    offered = set(cores)
     libretro = es_systems_libretro(es_systems_text)
     if not cores:
         raise RuntimeError("es_systems.yml names no emulator")
@@ -492,6 +506,9 @@ def configgen_cores(
             continue
         emulator = cfg.get("emulator", "")
         core = cfg.get("core", "")
+        if (built is not None and emulator and emulator != "libretro"
+                and emulator not in offered and not built(emulator)):
+            continue
         if core:
             cores.add(core)
         if emulator and emulator != "libretro":
@@ -502,6 +519,57 @@ def configgen_cores(
     return sorted(cores - dropped), sorted(standalone - dropped), sorted(dual)
 
 
+BATOCERA_REPO = "batocera-linux/batocera.linux"
+
+
+def package_names(paths: Iterable[str]) -> set[str]:
+    """The buildroot packages a tree defines: each folder holding a Config.in."""
+    return {
+        path.rsplit("/", 2)[-2]
+        for path in paths
+        if path.endswith("/Config.in") and path.count("/") >= 1
+    }
+
+
+def repo_tree(repo: str, ref: str) -> list[str]:
+    """Every path of a GitHub repository at a revision."""
+    url = f"https://api.github.com/repos/{repo}/git/trees/{ref}?recursive=1"
+    req = urllib.request.Request(url, headers=github_headers())
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        found = json.loads(resp.read().decode("utf-8"))
+    if found.get("truncated"):
+        raise RuntimeError(f"{url}: tree truncated")
+    return [entry["path"] for entry in found.get("tree", [])]
+
+
+def submodule_revision(repo: str, path: str, ref: str) -> str:
+    """The commit a repository's submodule at `path` pins at a revision."""
+    url = f"https://api.github.com/repos/{repo}/contents/{path}?ref={ref}"
+    req = urllib.request.Request(url, headers=github_headers())
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        found = json.loads(resp.read().decode("utf-8"))
+    if not isinstance(found, dict) or found.get("type") != "submodule" or not found.get("sha"):
+        raise RuntimeError(f"{url}: {path} is not a submodule")
+    return str(found["sha"])
+
+
+def packages_and_programs(packages: set[str], launchers: list[dict]) -> Callable[[str], bool]:
+    """Whether a build has a standalone emulator.
+
+    It does when a package of that name exists, or when its launcher runs a
+    program the user puts in the BIOS folder (Batocera's lexaloffle runs
+    /userdata/bios/pico-8/pico8), which no package builds.
+    """
+    supplied = {
+        name.strip()
+        for record in launchers
+        if record.get("passes_to") == "exec"
+        and str(record.get("search_dir") or "").startswith("/userdata/bios")
+        for name in str(record.get("emulator", "")).split(",")
+    }
+    return lambda emulator: emulator in packages or emulator in supplied
+
+
 class Scraper(BaseScraper):
     """Scraper for batocera-systems Python dict."""
 
@@ -509,12 +577,26 @@ class Scraper(BaseScraper):
         self.tag = fetch_stable_tag()
         super().__init__(url=SOURCE_URL.format(tag=self.tag))
 
-    def _fetch_cores(self) -> tuple[list[str], list[str], list[str]]:
-        """Core names, standalone cores and dual-mode cores at the pinned tag."""
+    def _fetch_cores(
+        self, launchers: list[dict] | None = None
+    ) -> tuple[list[str], list[str], list[str]]:
+        """Core names, standalone cores and dual-mode cores at the pinned tag.
+
+        A default es_systems.yml does not offer counts when a package of
+        Batocera's tree or its buildroot builds it, or when its launcher
+        runs a program from the BIOS folder.
+        """
+        built = None
+        if launchers is not None:
+            paths = repo_tree(BATOCERA_REPO, self.tag)
+            buildroot = submodule_revision(BATOCERA_REPO, "buildroot", self.tag)
+            paths += repo_tree("batocera-linux/buildroot", buildroot)
+            built = packages_and_programs(package_names(paths), launchers)
         return configgen_cores(
             self._fetch_text(CONFIGGEN_DEFAULTS_URL.format(tag=self.tag)),
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)),
             _not_cores(),
+            built,
         )
 
     def _fetch_text(self, url: str) -> str:
@@ -548,7 +630,10 @@ class Scraper(BaseScraper):
             SYSTEM_SLUG_MAP,
         )
 
-        cores, standalone, dual = self._fetch_cores()
+        launchers = extract_launchers(
+            lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
+        )
+        cores, standalone, dual = self._fetch_cores(launchers)
         libretro_systems = es_systems_libretro_systems(
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
         )
@@ -570,8 +655,9 @@ class Scraper(BaseScraper):
             result["dual_mode_cores"] = dual
         # The systems each libretro core runs for: its save folders.
         result["libretro_systems"] = libretro_systems
-        result["launchers"] = extract_launchers(
-            lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
+        result["launchers"] = launchers
+        result["configs_root"] = configs_root(
+            Configgen(lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}"))
         )
         return result
 

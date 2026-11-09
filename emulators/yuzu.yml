@@ -59,6 +59,7 @@ files:
 standalone_directories:
   - "$XDG_DATA_HOME/yuzu"
   - "$HOME/.local/share/yuzu"
+  - "PORTABLE_DIR"
 data_root:
   windows:
     path: "%APPDATA%/yuzu"

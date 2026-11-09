@@ -186,7 +186,6 @@ cores:
 - superbroswar
 - supermodel
 - supermodel-legacy
-- suyu
 - swanstation
 - taradino
 - tgbdual
@@ -4970,7 +4969,6 @@ standalone_cores:
 - stella
 - supermodel
 - supermodel-legacy
-- suyu
 - taradino
 - theforceengine
 - thextech
@@ -6143,14 +6141,6 @@ launchers:
   depends_on_option: not system.name == 'ti99'
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:431-432,\
     \ 435"
-- emulator: suyu
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/saves/switch
-  passes_to: environment XDG_DATA_HOME
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/suyu/suyuGenerator.py:41"
 - emulator: citron
   build: standalone
   kind: passes_path
@@ -6160,3 +6150,7 @@ launchers:
     \ / KEYS_DIR"
   fails_when_missing: false
   source_ref: "batocera/package/batocera/emulators/citron/002-adjust-paths.patch:9-10"
+configs_root:
+  path: /userdata/system/configs
+  from_bios: ../system/configs
+  source_ref: "package/system/knulli-configgen/configgen/configgen/batoceraPaths.py:14, 19-20, 25"
