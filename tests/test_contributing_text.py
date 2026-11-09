@@ -216,6 +216,24 @@ class TheGuideRebuildsWhenItsPinsMove(unittest.TestCase):
         self.assertIn(".github/workflows/validate.yml", paths)
 
 
+class TheDevPinsAreTheOnesCiInstalls(unittest.TestCase):
+    """Dependabot bumped uv in pyproject.toml alone, while validate.yml and
+    CONTRIBUTING kept the older pin: a contributor and CI ran two builds."""
+
+    PIN = re.compile(r'"([A-Za-z0-9_.-]+)(?:\[[^\]]*\])?==([^"]+)"')
+
+    def test_a_package_both_pin_has_one_version(self):
+        workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+        project = (REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        ci = {name.lower(): version for name, version in self.PIN.findall(workflow)}
+        dev = {name.lower(): version for name, version in self.PIN.findall(project)}
+        shared = sorted(set(ci) & set(dev))
+        self.assertIn("uv", shared)
+        for name in shared:
+            with self.subTest(package=name):
+                self.assertEqual(dev[name], ci[name])
+
+
 class OneCommandRunsTheChecks(unittest.TestCase):
     """A contributor copied ten commands by hand before a pull request, and
     skipping one (refresh_data_dirs) failed the pack tests with no hint."""

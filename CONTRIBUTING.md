@@ -72,7 +72,7 @@ validation above is its check. For code, profiles or platform files, these are
 the checks CI runs on a pull request (Python 3.12 or newer):
 
 ```bash
-pip install pyyaml "jsonschema[format-nongpl]==4.26.0" "markdown==3.10.2" "pyte==0.8.2" "hypothesis==6.170.8" "vermin==1.9.2" "setuptools==80.9.0" "uv==0.12.9"
+pip install pyyaml "jsonschema[format-nongpl]==4.26.0" "markdown==3.10.2" "pyte==0.8.2" "hypothesis==6.170.8" "vermin==1.9.2" "setuptools==80.9.0" "uv==0.13.4"
 python scripts/pr_checks.py
 ```
 
