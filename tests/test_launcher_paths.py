@@ -21,7 +21,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from launchers import handed_directories, standalone_bindings  # noqa: E402
-from scraper import knulli_launchers as kl  # noqa: E402
 from scraper import retrobat_launchers as rl  # noqa: E402
 from scraper.batocera_launchers import (  # noqa: E402
     GENERATORS,
@@ -128,34 +127,26 @@ class AFolderTheGeneratorEnters(unittest.TestCase):
         self.assertEqual(found, {"": ("outside", "")})
 
 
-class ADataFolderTheEnvironmentSets(unittest.TestCase):
-    SUYU = f"{kl.GENERATORS}/suyu/suyuGenerator.py"
-    TEXT = textwrap.dedent("""\
-        from ...batoceraPaths import CACHE, CONFIGS, SAVES
-
-        class SuyuGenerator:
-            def generate(self, system, rom):
-                commandArray = ["/usr/bin/suyu", "-f", "-g", rom]
-                return Command.Command(array=commandArray, env={
-                    "XDG_CONFIG_HOME": CONFIGS,
-                    "XDG_DATA_HOME": SAVES / "switch",
-                })
-        """)
-
-    def test_the_data_folder_is_a_record_and_binds_outside(self):
-        files = {f"{kl.CONFIGGEN}/batoceraPaths.py": PATHS,
-                 f"{kl.GENERATORS}/importer.py": IMPORTER_TEXT, self.SUYU: self.TEXT}
-        (record,) = records(kl.data_homes(kl.configgen(files.__getitem__)))
-        self.assertEqual(
-            (record["emulator"], record["search_dir"], record["passes_to"], record["source_ref"]),
-            ("suyu", "/userdata/saves/switch", "environment XDG_DATA_HOME", f"{self.SUYU}:8"),
-        )
-        config = {"base_destination": "bios", "standalone_cores": ["suyu"], "launchers": [record]}
+class AVariableADeclaredFolderIsSpelledFrom(unittest.TestCase):
+    def test_a_data_folder_outside_the_tree_binds_outside(self):
+        record = {"emulator": "emu", "build": "standalone", "kind": "passes_path",
+                  "names": [], "search_dir": "/userdata/saves/switch",
+                  "passes_to": "environment XDG_DATA_HOME", "source_ref": "x.py:1"}
+        config = {"base_destination": "bios", "standalone_cores": ["emu"], "launchers": [record]}
         found = standalone_bindings(
-            {"suyu"}, ["$XDG_DATA_HOME/suyu", "SuyuPath::KeysDir = keys"],
-            handed_directories(config),
+            {"emu"}, ["$XDG_DATA_HOME/emu"], handed_directories(config)
         )
         self.assertEqual(found, {"": ("outside", "")})
+
+    def test_a_data_folder_in_the_tree_binds_below_it(self):
+        record = {"emulator": "emu", "build": "standalone", "kind": "passes_path",
+                  "names": [], "search_dir": "/userdata/bios/data",
+                  "passes_to": "environment XDG_DATA_HOME", "source_ref": "x.py:1"}
+        config = {"base_destination": "bios", "standalone_cores": ["emu"], "launchers": [record]}
+        found = standalone_bindings(
+            {"emu"}, ["$XDG_DATA_HOME/emu"], handed_directories(config)
+        )
+        self.assertEqual(found, {"": ("", "data/emu")})
 
 
 class APortableUserFolder(unittest.TestCase):
@@ -211,6 +202,55 @@ class APortableUserFolder(unittest.TestCase):
             {"citron"}, ["$XDG_DATA_HOME/citron", "PORTABLE_DIR"], handed_directories(config)
         )
         self.assertEqual(found, {"": ("emulators", "citron/user")})
+
+
+
+class ADefaultTheBuildLacksIsNotRun(unittest.TestCase):
+    """KNULLI's configgen-defaults.yml picks suyu for the Switch, which its
+    es_systems.yml does not offer and no package builds."""
+
+    ES = textwrap.dedent("""\
+        switch:
+          emulators:
+            citron:
+              citron: { requireAnyOf: [BR2_PACKAGE_CITRON] }
+        voxatron:
+          emulators: {}
+        """)
+    DEFAULTS = textwrap.dedent("""\
+        switch:
+          emulator: suyu
+          core: suyu
+        voxatron:
+          emulator: lexaloffle
+          core: vox_official
+        kodi:
+          emulator: kodi
+          core: kodi
+        """)
+    LAUNCHERS = [{"emulator": "lexaloffle", "kind": "fixed_name", "passes_to": "exec",
+                  "search_dir": "/userdata/bios"}]
+
+    def test_only_what_a_package_or_the_user_supplies_is_run(self):
+        from scraper import batocera_scraper as bs
+
+        paths = ["package/batocera/emulators/citron/Config.in", "package/kodi/Config.in"]
+        built = bs.packages_and_programs(bs.package_names(paths), self.LAUNCHERS)
+        cores, standalone, _dual = bs.configgen_cores(self.DEFAULTS, self.ES, set(), built)
+        self.assertEqual(sorted(cores), ["citron", "kodi", "vox_official"])
+        self.assertIn("lexaloffle", standalone)
+        self.assertNotIn("suyu", standalone)
+        by_system = bs.es_systems_by_system(self.ES, self.DEFAULTS, set(), built)
+        self.assertEqual(by_system["switch"], ["citron"])
+        # Without the packages, every default counts, as before.
+        self.assertIn("suyu", bs.configgen_cores(self.DEFAULTS, self.ES, set())[0])
+
+    def test_the_real_knulli_list_names_no_suyu(self):
+        import yaml
+
+        config = yaml.safe_load((REPO_ROOT / "platforms" / "knulli.yml").read_text())
+        self.assertNotIn("suyu", config["cores"])
+        self.assertNotIn("suyu", config.get("standalone_cores") or [])
 
 
 if __name__ == "__main__":
