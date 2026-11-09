@@ -17,7 +17,9 @@
     # the site's build rewrites this line there (scripts/sitebootstrap.py).
     $mismatchAdvice = "The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
     $defaultInstallSha256 = "eb617bc1d0a220cc887e7763611a95cac9d3abd33acc1f115f7c048e51f218c7"
-    $maximumInstallerBytes = 2MB
+    # The pin above refuses any changed byte: this cap only stops a body that
+    # cannot be the installer (a sign-in portal's page) before it is hashed.
+    $maximumInstallerBytes = 8MB
     $installerExit = 0
     $installer = if ($PSScriptRoot) { Join-Path $PSScriptRoot "install.py" } else { $null }
     $temporary = $null

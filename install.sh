@@ -24,7 +24,9 @@ DEFAULT_INSTALL_URL="https://raw.githubusercontent.com/Abdess/retrobios/main/ins
 # build rewrites this line there (scripts/sitebootstrap.py).
 MISMATCH_ADVICE="The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
 DEFAULT_INSTALL_SHA256="eb617bc1d0a220cc887e7763611a95cac9d3abd33acc1f115f7c048e51f218c7"
-MAX_INSTALLER_BYTES=2097152
+# The pin above refuses any changed byte: this cap only stops a body that
+# cannot be the installer (a sign-in portal's page) before it is hashed.
+MAX_INSTALLER_BYTES=8388608
 
 cleanup() {
   if [ -n "$TEMP_INSTALLER" ] && [ -f "$TEMP_INSTALLER" ]; then
