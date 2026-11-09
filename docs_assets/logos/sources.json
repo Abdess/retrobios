@@ -9,6 +9,13 @@
       "licence": "GitHub organisation avatar of AmberELEC"
     },
     {
+      "file": "android.svg",
+      "platform": "android",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/7185d367013b99211c2728d5007833a922ec12c7/icons/android.svg",
+      "owner": "Google",
+      "licence": "Android robot, file from simple-icons, CC0-1.0"
+    },
+    {
       "file": "batocera.svg",
       "platform": "batocera",
       "source": "https://raw.githubusercontent.com/batocera-linux/batocera-emulationstation/master/resources/splash_batocera.svg",
@@ -37,6 +44,13 @@
       "licence": "GitHub organisation avatar of EmuELEC"
     },
     {
+      "file": "iphone-and-ipad.svg",
+      "platform": "iphone-and-ipad",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/a1b2ce5b7b6a09da2f2f61f682b299f69effb057/icons/tablet-smartphone.svg",
+      "owner": "Lucide",
+      "licence": "icon from lucide-icons, ISC"
+    },
+    {
       "file": "knulli.webp",
       "platform": "knulli",
       "source": "https://avatars.githubusercontent.com/u/166268572",
@@ -51,11 +65,32 @@
       "licence": "file from libretro/retroarch-assets, CC-BY-4.0"
     },
     {
+      "file": "linux-handhelds.svg",
+      "platform": "linux-handhelds",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/521c96fd04b0ea93034db8715eda5a4de27a58bb/icons/linux.svg",
+      "owner": "Larry Ewing",
+      "licence": "Tux, file from simple-icons, CC0-1.0"
+    },
+    {
+      "file": "minui.webp",
+      "platform": "minui",
+      "source": "https://raw.githubusercontent.com/shauninman/MinUI/7c8b818e869302780c4083b8a9d6309b6d4a9ccd/skeleton/EXTRAS/Tools/m17/Bootlogo.pak/logo.bmp",
+      "owner": "Shaun Inman",
+      "licence": "MinUI boot logo, repository states no licence"
+    },
+    {
       "file": "misterfpga.webp",
       "platform": "misterfpga",
       "source": "https://avatars.githubusercontent.com/u/29345272",
       "owner": "MiSTer FPGA",
       "licence": "GitHub organisation avatar of MiSTer-devel"
+    },
+    {
+      "file": "myminui.webp",
+      "platform": "myminui",
+      "source": "https://raw.githubusercontent.com/Turro75/MyMinUI/d5ab4f9f83280f4316cb070c529299cb81ccc473/workspace/h700/boot/bootlogo.png",
+      "owner": "Turro75",
+      "licence": "MyMinUI boot screen, repository states no licence"
     },
     {
       "file": "nextui.webp",

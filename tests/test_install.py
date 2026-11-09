@@ -5674,7 +5674,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
                             "--system", "sony-psp", "--check", "--no-input")
         self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
-        self.assertNotIn("Everything is in place", proc.stdout)
+        self.assertNotIn("Every file on the list is in place", proc.stdout)
         found = re.search(r"(\d+) in place, (\d+) missing", proc.stdout)
         self.assertIsNotNone(found, proc.stdout)
         self.assertIn(f"\n  {found.group(2)} data files to fetch\n", proc.stdout)
@@ -5949,7 +5949,7 @@ class StandaloneEmulatorsWithoutAPlatformAreServed(unittest.TestCase, _LoopbackR
                           if name not in named and not name.startswith("scph")], [])
         proc = _install_run(self.env, "--no-input", "--check")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
-        self.assertIn("Everything is in place.", proc.stdout)
+        self.assertIn("Every file on the list is in place.", proc.stdout)
 
     def test_no_emulator_folder_keeps_the_hint(self):
         self.duckstation.rmdir()

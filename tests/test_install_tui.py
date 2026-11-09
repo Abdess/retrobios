@@ -13230,7 +13230,7 @@ class OneVocabularyOneCount(unittest.TestCase):
             with self.subTest(**given):
                 text = self.run_line(listing, dest, [""], offline=True, **given)
                 self.assertIn("2 in place, 0 missing, 0 wrong copies", text)
-                self.assertIn("Everything is in place", text)
+                self.assertIn("Every file on the list is in place", text)
                 self.assertNotIn("up to date", text)
                 self.assertNotIn("0 files installed", text)
         state = checked_state()
@@ -13239,7 +13239,7 @@ class OneVocabularyOneCount(unittest.TestCase):
                          "failed": []}
         state.code = 0
         _title, lines = install.tui_outcome(state)
-        self.assertEqual(lines[0], "Everything is in place.")
+        self.assertEqual(lines[0], "Every file on the list is in place.")
 
     def test_check_names_a_wrong_copy_as_such(self):
         listing, dest, _old = self.two_files()

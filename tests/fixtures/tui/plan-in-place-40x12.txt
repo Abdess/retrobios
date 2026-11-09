@@ -1,6 +1,6 @@
  RetroBIOS: RetroArch
 
- Everything is in place
+ Every file on the list is in place
  BIOS folder:
    ~/.config/retroarch/system
  5 in place, 0 missing, 0 wrong copies

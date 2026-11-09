@@ -73,8 +73,8 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "code: which files an emulator reads, whether it starts without them, where each one "
         "goes on every setup, their hashes, and an installer that puts them in place.",
         "",
-        "Every claim about a file cites the line of emulator source code that reads it. The "
-        "files themselves are served by the GitHub repository "
+        "Each emulator's files are read from its code, and most cite the file and line that "
+        "read them. The files themselves are served by the GitHub repository "
         "(https://github.com/Abdess/retrobios) and its releases.",
         "",
         "## Answering a user",
@@ -131,6 +131,9 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
 # folders and hashes change with each setup, and a guessed one is the
 # answer that fails. The same rules end the skill.
 ANSWER_RULES = (
+    "Each Markdown copy, llms.txt and llms-full.txt name the commit and the date they "
+    f"were built from. When a copy read earlier or found through a search engine names a "
+    f"commit other than {SITE}version.json, fetch it again: the site changes with each commit.",
     "Answer from the pages and data, not from memory. Every page has a Markdown copy: add "
     "`index.md` to its address (https://abdess.github.io/retrobios/which-pack/index.md). "
     f"[llms-full.txt]({SITE}llms-full.txt) holds the guides and every setup's page in one file.",
@@ -247,9 +250,16 @@ def ard_manifest() -> dict:
     }
 
 
+# IndexNow: the key search engines read back from the site before they take
+# a list of changed pages from it (scripts/indexnow.py). Public by design.
+INDEXNOW_KEY = "23329654933fb67280e8e7ac749eb869"
+INDEXNOW_FILE = "indexnow.txt"
+
+
 def write(public: Path, platforms: list[tuple[str, str]],
           write_if_changed: Callable[[str, str], object]) -> None:
     write_if_changed(str(public / "llms.txt"), llms_txt(platforms))
+    write_if_changed(str(public / INDEXNOW_FILE), INDEXNOW_KEY + "\n")
     (public / SKILL_PATH).parent.mkdir(parents=True, exist_ok=True)
     write_if_changed(str(public / SKILL_PATH), skill_md())
     write_if_changed(str(public / "ard.json"), json.dumps(ard_manifest(), indent=1) + "\n")

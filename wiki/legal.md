@@ -8,9 +8,8 @@ terms: license
 
 It depends on the country. Nothing here is legal advice.
 
-- US courts held that copying code to build a compatible emulator can be fair
-  use (*Sega v. Accolade*, *Sony v. Connectix*). EU law allows it under
-  conditions.
+- US courts have held that building an emulator can be fair use. EU law allows
+  it under conditions.
 - Sharing BIOS files is not settled law. The strongest case is old consoles no
   longer sold. The weakest is encryption keys (Switch, 3DS, Wii U).
 - The files are here for personal backup and preservation.

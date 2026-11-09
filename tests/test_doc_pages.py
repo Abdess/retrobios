@@ -1665,7 +1665,7 @@ class InstallerPagesFollowTheCode(unittest.TestCase):
 
     def test_a_message_the_installer_does_not_print_fails(self):
         corpus = _literals()
-        self.assertEqual(unprinted_messages("It ends `Everything is in place.` here.\n", corpus), [])
+        self.assertEqual(unprinted_messages("It ends `Every file on the list is in place.` here.\n", corpus), [])
         self.assertEqual(len(unprinted_messages("It says `All BIOS files are present.`\n", corpus)), 1)
         self.assertEqual(unprinted_messages(
             "`E:\\ holds 38 of these files: a run without --check copies them.`\n", corpus), [])

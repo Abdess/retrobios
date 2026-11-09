@@ -81,6 +81,10 @@ class Tile:
     name: str
     text: str
     link: str
+    # A logo naming the kind of device, credited like a setup's.
+    logo: str = ""
+    logo_owner: str = ""
+    logo_licence: str = ""
 
 
 @dataclass(frozen=True)
@@ -129,6 +133,7 @@ _TOP_KEYS = {"install_base", "trust_items", "device_groups", "terminals", "guide
 _GROUP_KEYS = {"label", "description", "anchor", "also_runs", "tiles"}
 _ALSO_KEYS = ("setup", "summary", "uses", "runs_on", "folder")
 _TILE_KEYS = ("name", "text", "link")
+_TILE_LOGO_KEYS = ("logo", "logo_owner", "logo_licence")
 _HANDHELD_KEYS = {"page", "title", "summary", "uses", "systems"}
 _SYSTEM_KEYS = {"name", "folder", "folder_source", "devices", "devices_source", "linux_only"}
 _SOURCE = re.compile(r"https://\S+")
@@ -342,8 +347,12 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
             row_at = f"{at}.tiles[{i}]"
             if not isinstance(row, dict):
                 raise GuideError(f"{row_at}: expected a mapping")
-            _unknown(row, _TILE_KEYS, row_at)
-            group_tiles.append(Tile(*(_text(row.get(k), f"{row_at}.{k}") for k in _TILE_KEYS)))
+            _unknown(row, _TILE_KEYS + _TILE_LOGO_KEYS, row_at)
+            if row.get("logo") and not all(row.get(k) for k in _TILE_LOGO_KEYS):
+                raise GuideError(f"{row_at}: a logo needs logo_owner and logo_licence")
+            group_tiles.append(Tile(
+                *(_text(row.get(k), f"{row_at}.{k}") for k in _TILE_KEYS),
+                *(_text(row[k], f"{row_at}.{k}") if row.get(k) else "" for k in _TILE_LOGO_KEYS)))
         if group_tiles:
             tiles[key] = tuple(group_tiles)
 

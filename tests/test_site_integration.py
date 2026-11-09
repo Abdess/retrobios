@@ -82,15 +82,22 @@ class PlatformLogos(unittest.TestCase):
         self.assertTrue(self.registry["bizhawk"]["logo"].endswith(
             "/src/BizHawk.Client.EmuHawk/images/logo.ico"))
 
-    def test_minui_has_no_logo_and_no_stale_copy(self):
-        self.assertNotIn("logo", self.registry["minui"])
-        self.assertEqual(list((REPO_ROOT / "docs_assets" / "logos").glob("minui.*")), [])
+    def test_minui_shows_its_boot_logo_not_its_author(self):
+        # The author's GitHub avatar is a face, not the project's mark.
+        self.assertIn("/Bootlogo.pak/", self.registry["minui"]["logo"])
+        self.assertTrue(self.registry["minui"]["logo_flip"])
 
-    def test_every_logo_copy_has_a_registry_logo(self):
+    def test_every_logo_copy_has_a_registry_or_tile_logo(self):
+        from siteguides import GROUP_TILES  # noqa: PLC0415
+
+        tiles = {re.sub(r"[^a-z0-9]+", "-", tile.name.lower()).strip("-"): tile.logo
+                 for group in GROUP_TILES.values() for tile in group}
         sources = json.loads((REPO_ROOT / "docs_assets" / "logos" / "sources.json").read_text())
         for entry in sources["images"]:
             with self.subTest(platform=entry["platform"]):
-                self.assertEqual(self.registry[entry["platform"]].get("logo"), entry["source"])
+                logo = (self.registry[entry["platform"]].get("logo")
+                        if entry["platform"] in self.registry else tiles.get(entry["platform"]))
+                self.assertEqual(logo, entry["source"])
 
 
 class NodeCompileCache(unittest.TestCase):

@@ -5,7 +5,7 @@ order: 30
 
 # First install, step by step
 
-From an empty BIOS folder to every BIOS file the setup's list names.
+From an empty BIOS folder to a checked one.
 
 **Needed:** internet and some free space.
 
@@ -102,13 +102,12 @@ Esc or Ctrl+C stops, B on a handheld. Run again to resume.
 
 ## 5. Read the result
 
-- **Done**: every file the collection holds for this setup is in place. The
-  screen names any file it does not hold.
+- **Done**: every file on the list is in place.
 - **Finished with errors**: run it again. It retries only those.
 - **Finished with files missing**: run it again online.
 - **Nothing installed**: the screen says why. See [If it stops](#if-it-stops).
 
-For line-by-line questions (screen readers), add `--plain`.
+Screen readers: add `--plain`.
 
 ## What the command does
 
@@ -123,16 +122,17 @@ Add `--check` to the same command. It changes nothing.
 curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --check
 ```
 
-All good:
+Result:
 
 ```
-  Everything is in place.
+  Every file on the list is in place.
 ```
+
+Missing required files are named below it.
 
 ## Undo
 
-Replaced files go to `retrobios-backup` beside the BIOS folder. The result
-says how to restore them.
+Replaced files go to `retrobios-backup`, and `--restore` puts them back.
 
 ## If it stops
 

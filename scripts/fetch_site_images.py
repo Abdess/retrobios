@@ -52,14 +52,33 @@ def fetch(url: str) -> bytes:
         return response.read()
 
 
-def square_image(data: bytes, size: int, kind: str = "PNG") -> bytes:
+def square_image(data: bytes, size: int, kind: str = "PNG", flip: bool = False,
+                 trim: bool = False) -> bytes:
+    """*flip* mirrors the image top to bottom, for a boot logo stored in the
+    row order a device's screen reads (MinUI's). *trim* cuts the plain
+    background around the mark, the corner pixel's colour, and keeps that
+    colour around it: a 640 x 480 boot screen became a dot."""
     try:
-        from PIL import Image
+        from PIL import Image, ImageChops
     except ImportError as exc:
         raise SystemExit("Pillow is needed to normalise raster images: pip install Pillow") from exc
     image = Image.open(io.BytesIO(data)).convert("RGBA")
+    if flip:
+        image = image.transpose(Image.Transpose.FLIP_TOP_BOTTOM)
+    background = (0, 0, 0, 0)
+    if trim:
+        background = image.getpixel((0, 0))
+        # Faint noise in the background is no part of the mark.
+        box = (ImageChops.difference(image, Image.new("RGBA", image.size, background))
+               .convert("L").point(lambda value: 255 if value > 48 else 0).getbbox())
+        if box:
+            image = image.crop(box)
+        side = round(max(image.size) * 1.2)
+        framed = Image.new("RGBA", (side, side), background)
+        framed.paste(image, ((side - image.width) // 2, (side - image.height) // 2))
+        image = framed
     image.thumbnail((size, size), Image.LANCZOS)
-    tile = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    tile = Image.new("RGBA", (size, size), background)
     tile.paste(image, ((size - image.width) // 2, (size - image.height) // 2), image)
     out = io.BytesIO()
     if kind == "WEBP":
@@ -130,14 +149,19 @@ def write_manifest(directory: Path, note: str, entries: list[dict]) -> None:
 
 
 def fetch_logos() -> None:
-    from siteguides import GUIDES
+    from siteguides import GROUP_TILES, GUIDES
 
     with open(ROOT / "platforms" / "_registry.yml", encoding="utf-8") as handle:
         platforms = yaml.safe_load(handle)["platforms"]
     LOGO_DIR.mkdir(parents=True, exist_ok=True)
     entries = []
-    for name, entry in sorted(platforms.items()):
-        url = entry.get("logo")
+    # The tiles of a kind of device (Android handhelds) beside the setups
+    # carry a logo too, named after the tile.
+    sources = [(name, entry.get("logo"), entry, GUIDES.get(name))
+               for name, entry in sorted(platforms.items())]
+    sources += [(re.sub(r"[^a-z0-9]+", "-", tile.name.lower()).strip("-"), tile.logo, {}, tile)
+                for tiles in GROUP_TILES.values() for tile in tiles]
+    for name, url, entry, guide in sources:
         if not url:
             # No logo of its own: the tile shows initials, and an old copy
             # would still be served.
@@ -149,13 +173,14 @@ def fetch_logos() -> None:
         if is_svg(data):
             file_name, payload = f"{name}.svg", minify_svg(shrink_embedded(safe_svg(data, url)))
         else:
-            file_name, payload = f"{name}.webp", square_image(data, LOGO_SIZE, "WEBP")
+            file_name, payload = f"{name}.webp", square_image(
+                data, LOGO_SIZE, "WEBP", flip=bool(entry.get("logo_flip")),
+                trim=bool(entry.get("logo_trim")))
         for stale in LOGO_DIR.glob(f"{name}.*"):
             if stale.name != file_name:
                 stale.unlink()
         (LOGO_DIR / file_name).write_bytes(payload)
         # Who owns each mark: logo_owner and logo_licence in the guides.
-        guide = GUIDES.get(name)
         owner = (guide and guide.logo_owner) or name
         licence = (guide and guide.logo_licence) or "ownership not recorded"
         entries.append({

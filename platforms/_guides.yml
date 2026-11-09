@@ -29,7 +29,7 @@ install_base: https://abdess.github.io/retrobios
 trust_items:
 - It checks each file before saving it.
 - It writes in the BIOS folder. For some emulators it also adds files to the save folder.
-- It never changes or deletes a game or a save.
+- It never changes or deletes a game or save file.
 - >-
   It keeps any file it replaces in a `retrobios-backup` folder, next to the BIOS folder.
   `--restore` puts it back.
@@ -73,14 +73,24 @@ device_groups:
       # ayntec.com/products/ayn-odin-3: "Android 15".
       text: Retroid, AYN Odin and other Android handhelds
       link: platforms/retroarch.md#where-the-files-go
+      logo: https://raw.githubusercontent.com/simple-icons/simple-icons/7185d367013b99211c2728d5007833a922ec12c7/icons/android.svg
+      logo_owner: Google
+      logo_licence: Android robot, file from simple-icons, CC0-1.0
     - name: Linux handhelds
       text: ArkOS, muOS, Onion, spruceOS
       link: platforms/linux-handhelds.md
+      logo: https://raw.githubusercontent.com/simple-icons/simple-icons/521c96fd04b0ea93034db8715eda5a4de27a58bb/icons/linux.svg
+      logo_owner: Larry Ewing
+      logo_licence: Tux, file from simple-icons, CC0-1.0
     # No terminal runs there: the files are copied in, each app its own way
     # (which-pack.md, section iPhone and iPad, each step cited).
     - name: iPhone and iPad
       text: RetroArch, Delta, Provenance
       link: which-pack.md#iphone-and-ipad
+      # A phone and a tablet, no brand: Apple's guidelines allow no use of its logo.
+      logo: https://raw.githubusercontent.com/lucide-icons/lucide/a1b2ce5b7b6a09da2f2f61f682b299f69effb057/icons/tablet-smartphone.svg
+      logo_owner: Lucide
+      logo_licence: icon from lucide-icons, ISC
   fpga:
     label: MiSTer FPGA
     description: >-
@@ -746,7 +756,7 @@ guides:
       on the card. A console started by a standalone program instead of a libretro core
       (DraStic for NDS, native PICO-8) is not covered.
     logo_owner: Shaun Inman
-    logo_licence: GitHub avatar of shauninman, the author of MinUI
+    logo_licence: MinUI boot logo, repository states no licence
   nextui:
     summary: A game menu for TrimUI handhelds, based on MinUI, on the SD card.
     # LoveRetro/NextUI README (5291344b) lines 37, 89-94.
@@ -771,6 +781,8 @@ guides:
     summary: A game menu for Anbernic and Miyoo handhelds, based on MinUI, on the SD card.
     # Turro75/MyMinUI README (72ed4f3d) lines 9-35.
     runs_on: Anbernic, Miyoo handhelds
+    logo_owner: Turro75
+    logo_licence: MyMinUI boot screen, repository states no licence
     folders:
     - where: On the SD card
       path: '`Bios/<TAG>/`, one folder per console'
