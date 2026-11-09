@@ -636,5 +636,74 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
         self.assertIn("export_native.py --all --fetch", _read("wiki/testing-guide.md"))
 
 
+class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
+    """Every archive has a recipe in recipes/archives.json: the README and
+    the site's page say how many rebuild exact and canonical, counted from
+    that file, never typed."""
+
+    def setUp(self) -> None:
+        import archive_build  # noqa: PLC0415
+
+        records = archive_build.load_ledger().values()
+        self.counts = {
+            "total": len(records),
+            "exact": sum(r["rebuild"] == "exact" for r in records),
+            "canonical": sum(r["rebuild"] == "canonical" for r in records),
+        }
+        self.assertEqual(archive_build.rebuild_counts(), self.counts)
+        self.assertEqual(self.counts["exact"] + self.counts["canonical"], self.counts["total"])
+
+    def test_the_readme_line(self) -> None:
+        from generate_readme import archive_line  # noqa: PLC0415
+
+        line = archive_line(self.counts)
+        self.assertIn(line, _read("README.md").splitlines())
+        self.assertIn(f"**{self.counts['total']:,} archives**", line)
+        self.assertIn(f"{self.counts['exact']:,} byte for byte", line)
+        self.assertIn(f"{self.counts['canonical']:,} with the same files inside", line)
+        self.assertIn(f"({SITE_URL}wiki/archive-recipes/)", line)
+
+    def test_the_page_counts(self) -> None:
+        import generate_site  # noqa: PLC0415
+
+        page = _read("wiki/archive-recipes.md")
+        self.assertEqual(generate_site.with_archive_counts(page, self.counts), page,
+                         "wiki/archive-recipes.md counts are stale: run scripts/generate_site.py")
+        for line in generate_site.archive_recipe_lines(self.counts):
+            self.assertIn(line, page)
+
+    def test_the_page_command_is_the_tools(self) -> None:
+        command = re.search(r"python scripts/romset_recipes.py (.+)", _read("wiki/archive-recipes.md"))
+        source = _read("scripts/romset_recipes.py")
+        for flag in re.findall(r"--[a-z-]+", command.group(1)):
+            with self.subTest(flag=flag):
+                self.assertIn(f'"{flag}"', source)
+
+
+class TheReadmeBadges(unittest.TestCase):
+    """One row of four badges under the links, each linking its source."""
+
+    EXPECTED = (
+        '<p align="center">'
+        '<a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/v/retrobios" alt="PyPI version"></a> '
+        '<a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/pyversions/retrobios" alt="Python versions"></a> '
+        f'<a href="{REPO}/actions/workflows/validate.yml"><img src="{REPO}/actions/workflows/validate.yml/badge.svg?branch=main" alt="Validation"></a> '
+        '<a href="LICENSE"><img src="https://img.shields.io/github/license/Abdess/retrobios" alt="License"></a>'
+        "</p>"
+    )
+
+    def test_exactly_these_four(self) -> None:
+        readme = _read("README.md")
+        self.assertEqual(len(re.findall(r"<img src=\"https://(?:img\.shields\.io|github\.com)/", readme)), 4)
+        lines = readme.splitlines()
+        self.assertIn(self.EXPECTED, lines)
+        links = next(i for i, line in enumerate(lines) if ">Get the files</a>" in line)
+        self.assertEqual(lines[links + 2], self.EXPECTED)
+
+    def test_the_workflow_and_the_license_exist(self) -> None:
+        self.assertTrue((REPO_ROOT / ".github" / "workflows" / "validate.yml").is_file())
+        self.assertTrue((REPO_ROOT / "LICENSE").is_file())
+
+
 if __name__ == "__main__":
     unittest.main()

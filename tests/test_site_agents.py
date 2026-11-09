@@ -50,6 +50,55 @@ class TheGuideLeadsToTheFewestFiles(unittest.TestCase):
                 self.assertTrue(target.is_file() or (target / "index.html").is_file(), url)
 
 
+class TheGuideDrivesTheInstaller(unittest.TestCase):
+    """What an agent needs to run the installer for a user: the package
+    command, the plan as JSON, the exit codes, and plan, consent, act. Each
+    fact is held to install.py, so the guide cannot drift from it."""
+
+    def setUp(self) -> None:
+        import generate_installer_doc  # noqa: PLC0415
+
+        self.doc = generate_installer_doc
+        self.text = siteagents.llms_txt([("retroarch", "RetroArch")])
+        self.section = self.text.split("\n## Driving the installer for a user\n", 1)[1].split("\n## ", 1)[0]
+
+    def test_the_exit_codes_are_the_installer_page_table(self) -> None:
+        page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
+        table = page.split("<!-- generated: exit-codes -->", 1)[1].split("<!-- /generated: exit-codes -->")[0]
+        in_table = [int(code) for code in re.findall(r"^\| `(\d+)` \|", table, re.M)]
+        self.assertEqual(in_table, self.doc.exit_codes())
+        self.assertEqual([code for code, _ in siteagents.EXIT_CODES], in_table)
+        listed = [int(code) for code in re.findall(r"^  - `(\d+)`: ", self.section, re.M)]
+        self.assertEqual(listed, in_table)
+
+    def test_the_event_schema_is_the_installers(self) -> None:
+        import json  # noqa: PLC0415
+
+        self.assertEqual(siteagents.EVENT_SCHEMA, self.doc._install.EVENT_SCHEMA)
+        schema = json.loads((REPO_ROOT / "schemas" / "install-events.schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(schema["$id"], siteagents.SITE + siteagents.EVENTS_SCHEMA_PATH)
+        self.assertIn(f"event schema {siteagents.EVENT_SCHEMA} ", self.section)
+
+    def test_every_option_and_event_named_exists(self) -> None:
+        options = {flag for action in self.doc._install.build_parser()._actions
+                   for flag in action.option_strings}
+        for flag in set(re.findall(r"(?<![\w-])(--[a-z][a-z-]*)", self.section)):
+            with self.subTest(flag=flag):
+                self.assertIn(flag, options)
+        keys = self.doc._install.EVENT_KEYS
+        self.assertIn("state", keys["file"])
+        self.assertIn("bytes_needed", keys["check"])
+        self.assertIn("pending", keys["summary"])
+        self.assertEqual(tuple(keys["end"]), ("code",))
+
+    def test_the_package_commands_and_the_pattern(self) -> None:
+        self.assertIn("`uvx retrobios --for-games --required-only --dry-run`", self.section)
+        self.assertIn("`pipx run retrobios`", self.section)
+        self.assertIn("`--dry-run --events`", self.section)
+        steps = re.findall(r"^\d\. (\w+)", self.section, re.M)
+        self.assertEqual(steps, ["Plan", "Consent", "Act"])
+
+
 class TheSkillIsAnAgentSkill(unittest.TestCase):
     """ARD reserves text/markdown for agent skills (Lighthouse warns on a
     plain Markdown entry): the setup steps are published as one."""

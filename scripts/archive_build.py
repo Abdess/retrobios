@@ -83,6 +83,17 @@ def load_ledger(path: Path = ARCHIVES_FILE) -> dict[str, dict]:
     return {record["path"]: record for record in data.get("archives", [])}
 
 
+def rebuild_counts(path: Path = ARCHIVES_FILE) -> dict[str, int]:
+    """How many recipes rebuild ``exact`` and ``canonical``, and ``total``:
+    the figures the README and the site print."""
+    records = load_ledger(path).values()
+    return {
+        "total": len(records),
+        **{kind: sum(1 for r in records if r.get("rebuild") == kind)
+           for kind in ("exact", "canonical")},
+    }
+
+
 def ledger_text(records: dict[str, dict]) -> str:
     """One record per line, so a diff names the archive that changed."""
     lines = [
