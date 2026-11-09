@@ -63,6 +63,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/ScummVm.Generator.cs",
     f"{GENERATORS}/ShadPS4.Generator.cs",
     f"{GENERATORS}/Snes9x.Generator.cs",
+    f"{GENERATORS}/Sudachi.Generator.cs",
     f"{GENERATORS}/Tsugaru.Generator.cs",
     f"{GENERATORS}/Uae.Generator.cs",
     f"{GENERATORS}/Xemu.Generator.cs",
@@ -2992,6 +2993,7 @@ PORTABLE_USERS = (
     ("Eden.Generator.cs", "eden", "eden.exe", "PORTABLE_DIR"),
     ("Ryujinx.Generator.cs", "ryujinx", "Ryujinx.exe", "DefaultPortableDir"),
     ("ShadPS4.Generator.cs", "shadps4", "shadPS4.exe", "PORTABLE_DIR"),
+    ("Sudachi.Generator.cs", "sudachi", "sudachi.exe", "PORTABLE_DIR"),
     ("Yuzu.Generator.cs", "yuzu", "yuzu.exe", "PORTABLE_DIR"),
 )
 _EMULATOR_FOLDER = (

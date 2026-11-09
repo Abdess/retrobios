@@ -4999,6 +4999,14 @@ launchers:
   passes_to: PORTABLE_DIR, the portable folder beside shadPS4.exe
   fails_when_missing: false
   source_ref: "emulatorLauncher/Generators/ShadPS4.Generator.cs:29, 158-160"
+- emulator: sudachi
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"sudachi\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside sudachi.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Sudachi.Generator.cs:20, 29-30"
 - emulator: yuzu
   build: standalone
   kind: passes_path
