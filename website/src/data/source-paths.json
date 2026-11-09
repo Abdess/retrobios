@@ -336,9 +336,10 @@
   "src/menu/mainmenu.cpp",
   "src/util.cpp"
  ],
- "github.com/AloysHF/BBKEmu@6641863f6ec59a74635753766e3f9d34adf92b05": [
+ "github.com/AloysHF/BBKEmu@0b698480d93b1bbf0717c658d89b551559a2ae3f": [
   "Cargo.toml",
   "crates/bbkemu-core/src/emulator.rs",
+  "crates/bbkemu-core/src/firmware.rs",
   "crates/bbkemu-core/src/memory.rs",
   "crates/bbkemu-core/src/model.rs",
   "crates/bbkemu-libretro/src/lib.rs",
@@ -384,6 +385,7 @@
  "github.com/AloysHF/Native32Emu@c9111273f97c67471358c8d9507a19c7cceb70f5": [
   "Cargo.toml",
   "crates/native32emu-core/src/archive_loader.rs",
+  "crates/native32emu-core/src/content_entry.rs",
   "crates/native32emu-core/src/content_loader.rs",
   "crates/native32emu-core/src/emulator.rs",
   "crates/native32emu-core/src/file_browser.rs",
@@ -463,7 +465,7 @@
  "github.com/AppleWin/AppleWin@9970ef6b668a7cf057ce6d82f100dde6a751f4d3": [
   "README.md"
  ],
- "github.com/ArnoAnsems/CatacombGL@d11ba549382278cbc67ba6171faf8af338e29f77": [
+ "github.com/ArnoAnsems/CatacombGL@6f243e42fc99b830982cf58bc19bd8a369fe9e6a": [
   "src/Abyss/GameAbyss.cpp",
   "src/Abyss/GameDetectionAbyss.h",
   "src/Abyss/IntroViewAbyss.cpp",
@@ -4914,7 +4916,7 @@
  "github.com/libretro/libretro-simcoupe@c28046241ac6a4d79e55326b6e354dc02f92fa34": [
   "SimCoupe/Base/GUIDlg.cpp"
  ],
- "github.com/libretro/libretro-uae@151828f14d43bb2b0651327ee19a23b36a7081b2": [
+ "github.com/libretro/libretro-uae@5dbac2bf90b2dddf9d3f8d5b2ccad0651f798c1d": [
   "libretro/libretro-core.c",
   "libretro/libretro-core.h",
   "retrodep/sysconfig.h",
@@ -8920,7 +8922,7 @@
   "system/vl.c",
   "thirdparty/SDL2/src/joystick/SDL_gamecontroller.c"
  ],
- "github.com/ruffle-rs/ruffle@fe6cfc545405b888ebb478ce1c211d63147ca49b": [
+ "github.com/ruffle-rs/ruffle@5701ce3223704e29a98cc636ada73b9d416197d1": [
   "Cargo.toml",
   "core/Cargo.toml",
   "core/src/avm1/globals.rs",
