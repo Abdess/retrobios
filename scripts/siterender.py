@@ -1021,6 +1021,7 @@ SYSTEM_NAMES: dict[str, str] = {
     "m68k": "Motorola 68000",
     "magnetic-scrolls": "Magnetic Scrolls",
     "marty": "Fujitsu FM Towns Marty",
+    "mattel-hyperscan": "Mattel HyperScan",
     "mega-cd-32x": "Sega Mega-CD 32X",
     "mega-duck": "Welback Mega Duck",
     "mega-ld": "Sega Mega LD",

@@ -64,6 +64,7 @@ STEM_NAMED = {
     "ioquake3": "the project writes ioquake3",
     "izapple2": "README title izapple2",
     "jgenesis": "README title jgenesis",
+    "n64emu": "README title n64emu",
     "np2pi": "repository and binary np2pi, no title in the source",
     "rpix86": "the author writes rpix86",
     "simple64": "window title simple64",

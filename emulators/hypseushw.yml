@@ -1,0 +1,56 @@
+emulator: "HypseusHW"
+type: libretro
+core_classification: community_fork
+source: "https://git.libretro.com/libretro/hypseushw"
+upstream: "https://github.com/DirtBagXon/hypseus-singe"
+profiled_date: "2026-11-09"
+source_commit: "cb4de9f9b3e8264e71b25b5552dfa1e26121c636"
+upstream_commit: "a16e2521ee3233ef20c44e562008c47f4b4293df"
+upstream_frozen: "Hypseus Singe is vendored in core/ at this commit, named in UPSTREAM.md, with local changes under __LIBRETRO__."
+core_version: "0.2.0"
+version_basis:
+  kind: file
+  path: "libretro/hypseushw_libretro.info"
+  pattern: 'display_version\s*=\s*"([^"]+)"'
+display_name: "Arcade (Daphne HypseusHW)"
+cores:
+  - "hypseushw"
+systems:
+  - "arcade-laserdisc"
+
+notes: |
+  Libretro port of Hypseus Singe, vendored in core/. The same core also runs
+  inside the project's Android app through its own libretro host
+  (host/lr_host.cpp), which passes an app-private folder as the system
+  directory.
+
+  Content is the Daphne folder: roms/<game>.zip, framefile/<game>.txt, vldp/,
+  or a RocketLauncher <game>.bat for Singe games. The ROM directory and the
+  game root are derived from the loaded path (libretro/lr_core.cpp:1418-1454)
+  and passed as -romdir. ROM members are read and checked by the engine as in
+  the standalone build.
+
+  The engine's pics/ and sound/ trees are compiled into the core
+  (libretro/CMakeLists.txt:215-223). At load the core uses
+  <system>/daphne/ as the asset folder when <system>/daphne/pics exists,
+  otherwise it writes the embedded copies to <saves>/daphne/assets/ and uses
+  those (libretro/lr_core.cpp:555-573, 1472-1487). Pictures and samples
+  resolve through find_file(): <saves>/daphne, then the asset folder, then the
+  game root (core/src/io/homedir.h:66-73, core/src/io/homedir.cpp:137-156).
+  The system folder only overrides files the core already carries.
+
+  fonts/ is never read: init_display() returns from lr_init_display() before
+  load_fonts() can run (core/src/video/video.cpp:550-554). hypinput.ini and
+  gamecontrollerdb.txt are skipped, input comes from the frontend
+  (core/src/io/input.cpp:1063-1068).
+
+  An optional <system>/daphne/<game>.commands file adds engine arguments,
+  read after roms/<game>.commands and <root>/<game>.commands
+  (libretro/lr_core.cpp:575-600, 1543-1549). It is user configuration.
+
+files: []
+
+exclusion_note: >
+  .info declares firmware_count = 0. Code confirmed: the system directory
+  holds only optional overrides of the pics/ and sound/ assets compiled into
+  the core, and optional .commands argument files.
