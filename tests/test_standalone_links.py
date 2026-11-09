@@ -106,9 +106,10 @@ class HandedDirectories(unittest.TestCase):
 
 class Root(unittest.TestCase):
     def root(self, *launchers: dict, base: str = "bios") -> str | None:
-        return self.bindings(*launchers, base=base).get("")
+        found = self.bindings(*launchers, base=base).get("")
+        return found[1] if found else None
 
-    def bindings(self, *launchers: dict, base: str = "bios") -> dict[str, str]:
+    def bindings(self, *launchers: dict, base: str = "bios") -> dict[str, tuple[str, str]]:
         return standalone_bindings(
             {"emu"}, PROFILE["standalone_directories"], handed_directories(config(*launchers, base=base))
         )
@@ -144,8 +145,8 @@ class Root(unittest.TestCase):
         found = self.bindings(
             link("emu", "$bios_path/Triforce", "$XDG_DATA_HOME/emu/Triforce is a symlink to it"),
         )
-        self.assertEqual(found, {"Triforce": "Triforce"})
-        self.assertEqual(bound_path("Triforce/segaboot.gcm", found), "Triforce/segaboot.gcm")
+        self.assertEqual(found, {"Triforce": ("", "Triforce")})
+        self.assertEqual(bound_path("Triforce/segaboot.gcm", found), ("", "Triforce/segaboot.gcm"))
         self.assertIsNone(bound_path("boot.bin", found))
 
     def test_two_folders_give_nothing(self) -> None:
@@ -201,10 +202,10 @@ class Layout(unittest.TestCase):
 
     def test_destination_function(self) -> None:
         entry = PROFILE["files"][0]
-        self.assertEqual(standalone_destination(entry, PROFILE, {"": "dc"}), "dc/boot.bin")
+        self.assertEqual(standalone_destination(entry, PROFILE, {"": ("", "dc")}), ("", "dc/boot.bin"))
         self.assertIsNone(standalone_destination(entry, PROFILE, {}))
         # The entry both builds share keeps path in a dual-build profile.
-        self.assertIsNone(standalone_destination(PROFILE["files"][2], PROFILE, {"": "dc"}))
+        self.assertIsNone(standalone_destination(PROFILE["files"][2], PROFILE, {"": ("", "dc")}))
 
 
 class FlycastOnEachPlatform(unittest.TestCase):
@@ -228,7 +229,7 @@ class FlycastOnEachPlatform(unittest.TestCase):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 self.assertEqual(
                     standalone_bindings_for("flycast", self.profile, standalone_set(cfg)),
-                    {"": folder},
+                    {"": ("", folder)},
                 )
 
     def test_no_standalone_file_lands_at_the_bios_root(self) -> None:

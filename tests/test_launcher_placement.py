@@ -56,20 +56,21 @@ class ALinkMovesTheDestination(unittest.TestCase):
         self.addCleanup(shutil.rmtree, self.root, True)
         bios = self.root / "bios" / "Commodore" / "Amiga"
         bios.mkdir(parents=True)
-        data = b"KICKSTART 1.3"
-        (bios / "kick13.rom").write_bytes(data)
-        sha1 = hashlib.sha1(data).hexdigest()
-        md5 = hashlib.md5(data).hexdigest()
+        files, by_md5, by_name = {}, {}, {}
+        for name, data in (("kick13.rom", b"KICKSTART 1.3"), ("kick.rom", b"CUSTOM KICKSTART")):
+            (bios / name).write_bytes(data)
+            sha1 = hashlib.sha1(data).hexdigest()
+            md5 = hashlib.md5(data).hexdigest()
+            files[sha1] = {"path": str(bios / name), "name": name, "sha1": sha1,
+                           "md5": md5, "crc32": "", "size": len(data)}
+            by_md5[md5] = sha1
+            by_name[name] = [sha1]
         self.db = {
-            "files": {sha1: {
-                "path": str(bios / "kick13.rom"), "name": "kick13.rom", "sha1": sha1,
-                "md5": md5, "crc32": "", "size": len(data),
-            }},
-            "indexes": {
-                "by_md5": {md5: sha1}, "by_name": {"kick13.rom": [sha1]},
-                "by_crc32": {}, "by_path_suffix": {},
-            },
+            "files": files,
+            "indexes": {"by_md5": by_md5, "by_name": by_name, "by_crc32": {},
+                        "by_path_suffix": {}},
         }
+        kick13 = by_name["kick13.rom"][0]
         self.platforms = self.root / "platforms"
         self.emulators = self.root / "emulators"
         self.platforms.mkdir()
@@ -88,11 +89,16 @@ class ALinkMovesTheDestination(unittest.TestCase):
             "emulator": "Kick", "type": "standalone", "cores": ["kick"],
             "systems": ["commodore-amiga"],
             "standalone_directories": ["getcwd"],
-            "files": [{"name": "kick13.rom", "path": "kickstarts/kick13.rom",
-                       "sha1": sha1, "required": False}],
+            "files": [
+                {"name": "kick13.rom", "path": "kickstarts/kick13.rom",
+                 "sha1": kick13, "required": False},
+                # Read in the working directory itself, which the platform
+                # links nowhere in the BIOS tree.
+                {"name": "kick.rom", "path": "kick.rom", "required": False},
+            ],
         }))
 
-    def pack_names(self, platform: str) -> list[str]:
+    def pack_names(self, platform: str, name: str = "kick13.rom") -> list[str]:
         with redirect_stdout(io.StringIO()):
             zip_path = generate_pack(
                 platform, str(self.platforms), self.db, str(self.root / "bios"),
@@ -100,21 +106,27 @@ class ALinkMovesTheDestination(unittest.TestCase):
                 offline=True,
             )
         with zipfile.ZipFile(zip_path) as zf:
-            return [n for n in zf.namelist() if n.endswith("kick13.rom")]
+            return [n for n in zf.namelist() if n.rsplit("/", 1)[-1] == name]
 
-    def manifest_dests(self, platform: str) -> list[str]:
+    def manifest(self, platform: str) -> dict:
         with redirect_stdout(io.StringIO()):
-            manifest = generate_manifest(
+            return generate_manifest(
                 platform, str(self.platforms), self.db, str(self.root / "bios"),
                 str(self.platforms / "_registry.yml"),
                 emulators_dir=str(self.emulators), offline=True,
             )
-        return [f["dest"] for f in manifest["files"] if f["dest"].endswith("kick13.rom")]
 
-    def verify_paths(self, platform: str) -> list[str]:
+    def manifest_dests(self, platform: str, name: str = "kick13.rom") -> list[str]:
+        return [f["dest"] for f in self.manifest(platform)["files"]
+                if f["dest"].rsplit("/", 1)[-1] == name]
+
+    def verify_entries(self, platform: str, name: str = "kick13.rom") -> list[dict]:
         config = load_platform_config(platform, str(self.platforms))
         result = verify_platform(config, self.db, str(self.emulators))
-        return [u["path"] for u in result["undeclared_files"] if u["name"] == "kick13.rom"]
+        return [u for u in result["undeclared_files"] if u["name"] == name]
+
+    def verify_paths(self, platform: str) -> list[str]:
+        return [u["path"] for u in self.verify_entries(platform)]
 
     def test_the_link_moves_it_in_pack_manifest_and_verify(self) -> None:
         self.assertEqual(self.pack_names("linkplat"), ["amiga/kick13.rom"])
@@ -125,6 +137,59 @@ class ALinkMovesTheDestination(unittest.TestCase):
         self.assertEqual(self.pack_names("plainplat"), ["kickstarts/kick13.rom"])
         self.assertEqual(self.manifest_dests("plainplat"), ["kickstarts/kick13.rom"])
         self.assertEqual(self.verify_paths("plainplat"), ["kickstarts/kick13.rom"])
+
+    def test_a_file_outside_every_binding_is_named_never_placed(self) -> None:
+        self.assertEqual(self.pack_names("linkplat", "kick.rom"), [])
+        manifest = self.manifest("linkplat")
+        self.assertEqual(self.manifest_dests("linkplat", "kick.rom"), [])
+        omitted = [o for o in manifest["omitted_files"] if o["name"] == "kick.rom"]
+        self.assertEqual(len(omitted), 1)
+        self.assertEqual(
+            (omitted[0]["dest"], omitted[0]["root"], omitted[0]["reason"], omitted[0]["cores"]),
+            ("kick.rom", "emulator", "outside_bios_folder", ["kick"]),
+        )
+        (entry,) = self.verify_entries("linkplat", "kick.rom")
+        self.assertFalse(entry["in_pack"])
+        self.assertIn("outside the BIOS tree", entry["omitted"])
+
+    def test_a_root_file_of_another_core_is_not_claimed_by_it(self) -> None:
+        # Another core reads kick.rom at the BIOS root: kick's own kick.rom,
+        # in its working directory, is a different place.
+        for name in ("linkplat", "plainplat"):
+            path = self.platforms / f"{name}.yml"
+            data = yaml.safe_load(path.read_text())
+            data["cores"] = ["kick", "other"]
+            path.write_text(yaml.safe_dump(data))
+        (self.emulators / "other.yml").write_text(yaml.safe_dump({
+            "emulator": "Other", "type": "libretro", "cores": ["other"],
+            "systems": ["commodore-amiga"],
+            "files": [{"name": "kick.rom", "path": "kick.rom", "required": False}],
+        }))
+        _emulator_profiles_cache.clear()
+        manifest = self.manifest("linkplat")
+        (held,) = [f for f in manifest["files"] if f["dest"] == "kick.rom"]
+        self.assertEqual(held["cores"], ["other"])
+        omitted = [o for o in manifest["omitted_files"] if o["name"] == "kick.rom"]
+        self.assertEqual([(o["root"], o["cores"]) for o in omitted], [("emulator", ["kick"])])
+
+    def test_the_installer_accepts_the_omission(self) -> None:
+        import install
+
+        manifest = self.manifest("linkplat")
+        omitted = next(o for o in manifest["omitted_files"] if o["name"] == "kick.rom")
+        install._check_omission(omitted, omitted["dest"])
+        # Two emulators reading kick.rom in their own folders read two files.
+        self.assertNotEqual(
+            install._entry_key(omitted), install._entry_key({**omitted, "cores": ["other"]})
+        )
+        self.assertNotEqual(install._entry_key(omitted), install._entry_key({"dest": "kick.rom"}))
+        self.assertEqual(install.OMISSION_REASONS[omitted["reason"]], "read outside the BIOS folder")
+        with self.assertRaises(ValueError):
+            install._check_root({"root": "emulator"}, "kick.rom")
+        install._check_root(omitted, "kick.rom", omitted=True)
+
+    def test_without_relocation_the_root_file_stays_at_the_root(self) -> None:
+        self.assertEqual(self.pack_names("plainplat", "kick.rom"), ["kick.rom"])
 
     def test_the_link_alone_binds_nothing(self) -> None:
         # Without the working directory the link's $md_inst is not the
@@ -145,9 +210,158 @@ class UAE4AllOnRetroPie(unittest.TestCase):
         (view, standalone), = platform_layouts("uae4all", profile, standalone_set(config))
         self.assertTrue(standalone)
         for entry in view["files"]:
-            self.assertEqual(
-                entry["standalone_path"], "amiga/" + entry["path"].removeprefix("kickstarts/")
+            if entry["path"].startswith("kickstarts/"):
+                self.assertEqual(
+                    entry["standalone_path"], "amiga/" + entry["path"].removeprefix("kickstarts/")
+                )
+            else:
+                # kick.rom and rom.key in the working directory, $md_inst
+                self.assertEqual(entry.get("unplaced"), "outside_bios_folder", entry["path"])
+
+
+
+PROGRAM = b"PROGRAM BINARY"
+PROGRAM_DATA = b"PROGRAM DATA"
+
+
+class AProgramRunFromItsFolder(unittest.TestCase):
+    """A program that reads its files beside its executable.
+
+    The profile gives the layout of the program's archive (prog/prog,
+    prog/prog.dat) and declares the executable directory. A platform that
+    runs prog/prog from its BIOS folder keeps that layout, one that runs it
+    from roms/prog places the program folder below its roms folder, and one
+    that runs it from an emulator folder names its files as not placeable.
+    """
+
+    def setUp(self) -> None:
+        _emulator_profiles_cache.clear()
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        bios = self.root / "bios" / "Maker" / "Prog"
+        bios.mkdir(parents=True)
+        files, by_md5, by_name = {}, {}, {}
+        for name, data in (("prog", PROGRAM), ("prog.dat", PROGRAM_DATA)):
+            (bios / name).write_bytes(data)
+            sha1 = hashlib.sha1(data).hexdigest()
+            md5 = hashlib.md5(data).hexdigest()
+            files[sha1] = {"path": str(bios / name), "name": name, "sha1": sha1,
+                           "md5": md5, "crc32": "", "size": len(data)}
+            by_md5[md5] = sha1
+            by_name[name] = [sha1]
+        self.db = {"files": files, "indexes": {
+            "by_md5": by_md5, "by_name": by_name, "by_crc32": {}, "by_path_suffix": {}}}
+        self.platforms = self.root / "platforms"
+        self.emulators = self.root / "emulators"
+        self.platforms.mkdir()
+        self.emulators.mkdir()
+        run = {"emulator": "prog", "build": "standalone", "kind": "fixed_name",
+               "passes_to": "exec", "source_ref": "start_prog.sh:9"}
+        launchers = {
+            "biosplat": [{**run, "names": ["prog/prog"], "search_dir": "/userdata/bios"}],
+            "romsplat": [{**run, "names": ["prog"], "search_dir": "/storage/roms/prog"}],
+            "exeplat": [{**run, "names": ["prog"], "search_dir": "<emulator folder>"}],
+            "plainplat": [],
+        }
+        for name, records in launchers.items():
+            (self.platforms / f"{name}.yml").write_text(yaml.safe_dump({
+                "platform": name, "version": "1", "verification_mode": "existence",
+                "base_destination": "bios", "cores": ["prog"], "standalone_cores": ["prog"],
+                "launchers": records,
+                "systems": {"prog-system": {"files": []}},
+            }))
+        (self.platforms / "_registry.yml").write_text(yaml.safe_dump({"platforms": {
+            **{name: {"config": f"{name}.yml"} for name in launchers},
+            "romsplat": {"config": "romsplat.yml",
+                         "roms_directory": {"path": "/storage/roms", "bios_folder": "bios"}},
+        }}))
+        (self.emulators / "prog.yml").write_text(yaml.safe_dump({
+            "emulator": "Prog", "type": "standalone", "cores": ["prog"],
+            "systems": ["prog-system"],
+            "standalone_directories": ["executable directory"],
+            "files": [
+                {"name": "prog", "path": "prog/prog", "sha1": by_name["prog"][0],
+                 "required": True},
+                {"name": "prog.dat", "path": "prog/prog.dat",
+                 "sha1": by_name["prog.dat"][0], "required": True},
+            ],
+        }))
+
+    def pack(self, platform: str) -> list[str]:
+        with redirect_stdout(io.StringIO()):
+            zip_path = generate_pack(
+                platform, str(self.platforms), self.db, str(self.root / "bios"),
+                str(self.root / "out" / platform), emulators_dir=str(self.emulators),
+                offline=True,
             )
+        with zipfile.ZipFile(zip_path) as zf:
+            return sorted(n for n in zf.namelist() if n.split("/")[-1].startswith("prog"))
+
+    def manifest(self, platform: str) -> dict:
+        with redirect_stdout(io.StringIO()):
+            return generate_manifest(
+                platform, str(self.platforms), self.db, str(self.root / "bios"),
+                str(self.platforms / "_registry.yml"),
+                emulators_dir=str(self.emulators), offline=True,
+            )
+
+    def verify(self, platform: str) -> list[dict]:
+        config = load_platform_config(platform, str(self.platforms))
+        result = verify_platform(config, self.db, str(self.emulators))
+        return [u for u in result["undeclared_files"] if u["name"].startswith("prog")]
+
+    def test_run_from_the_bios_folder_keeps_the_layout(self) -> None:
+        for platform in ("biosplat", "plainplat"):
+            with self.subTest(platform=platform):
+                self.assertEqual(self.pack(platform), ["prog/prog", "prog/prog.dat"])
+                self.assertEqual(
+                    sorted(f["dest"] for f in self.manifest(platform)["files"]),
+                    ["prog/prog", "prog/prog.dat"],
+                )
+
+    def test_run_from_the_roms_folder_is_installed_there(self) -> None:
+        self.assertEqual(self.pack("romsplat"), [])
+        manifest = self.manifest("romsplat")
+        self.assertEqual(
+            sorted((f["dest"], f.get("root")) for f in manifest["files"]),
+            [("prog/prog", "roms"), ("prog/prog.dat", "roms")],
+        )
+        self.assertEqual(manifest["roms_directory"], {"bios_folder": "bios"})
+        entries = self.verify("romsplat")
+        self.assertEqual(sorted(u["path"] for u in entries), ["prog/prog", "prog/prog.dat"])
+        self.assertTrue(all(u["in_pack"] is False for u in entries))
+
+    def test_run_from_an_emulator_folder_is_named(self) -> None:
+        self.assertEqual(self.pack("exeplat"), [])
+        manifest = self.manifest("exeplat")
+        self.assertEqual([f["dest"] for f in manifest["files"]], [])
+        self.assertEqual(
+            sorted((o["dest"], o["root"], o["reason"]) for o in manifest["omitted_files"]),
+            [("prog/prog", "emulator", "outside_bios_folder"),
+             ("prog/prog.dat", "emulator", "outside_bios_folder")],
+        )
+
+    def test_the_installer_finds_the_roms_folder_above_the_bios_folder(self) -> None:
+        import install
+
+        manifest = self.manifest("romsplat")
+        install._check_roms_directory(manifest)
+        files = list(manifest["files"])
+        card = self.root / "card" / "roms" / "bios"
+        kept, left = install.place_roms_entries(files, card, manifest, "romsplat", say=False)
+        self.assertEqual((len(kept), left), (2, []))
+        self.assertEqual(
+            install._entry_path(card, kept[0]),
+            (card.parent / kept[0]["dest"]).resolve()
+            if install._entry_path(card, kept[0]).is_absolute() else card.parent / kept[0]["dest"],
+        )
+        other = self.root / "elsewhere"
+        kept, left = install.place_roms_entries(files, other, manifest, "romsplat", say=False)
+        self.assertEqual(kept, [])
+        self.assertEqual({o["reason"] for o in left}, {"no_roms_directory"})
+        with self.assertRaises(ValueError):
+            install._check_roms_directory({"files": files})
 
 
 if __name__ == "__main__":

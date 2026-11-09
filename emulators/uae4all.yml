@@ -88,7 +88,6 @@ files:
   - name: "aros-amiga-m68k-rom.bin"
     path: "kickstarts/aros-amiga-m68k-rom.bin"
     bundled: true
-    not_bundled_on: [recalbox]
     system: commodore-amiga
     description: "AROS Kickstart replacement, main ROM (build of 2014-01-10)"
     required: false
@@ -102,7 +101,6 @@ files:
   - name: "aros-amiga-m68k-ext.bin"
     path: "kickstarts/aros-amiga-m68k-ext.bin"
     bundled: true
-    not_bundled_on: [recalbox]
     system: commodore-amiga
     description: "AROS Kickstart replacement, extended ROM (build of 2014-01-10)"
     required: false
@@ -119,3 +117,18 @@ files:
     description: "Cloanto key for AMIROMTYPE1 encrypted Kickstarts"
     required: false
     source_ref: "upstream src/main.cpp:106-111, source src/memory.cpp:732-776"
+
+  - name: "kick.rom"
+    path: "kick.rom"
+    system: commodore-amiga
+    description: "Custom Kickstart, the file the custom choice opens until the user picks another"
+    required: false
+    source_ref: "source src/gp2x/menu/menu_config.cpp:139, source src/gp2x/menu/menu_config.cpp:1243-1246, source src/menu_guichan/menu_guichan.cpp:91-99, source src/menu_guichan/menu_guichan.cpp:1004-1006, source src/main.cpp:100-104"
+    note: "Read from the working directory. default_prefs also falls back to it when the selected Kickstart is missing from kickstarts/."
+
+  - name: "rom.key"
+    path: "rom.key"
+    system: commodore-amiga
+    description: "Cloanto key, read from the working directory when kickstarts/rom.key is absent"
+    required: false
+    source_ref: "source src/main.cpp:106-111, source src/memory.cpp:732-776"

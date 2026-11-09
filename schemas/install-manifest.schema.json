@@ -179,7 +179,7 @@
           "dest": {
             "type": "string",
             "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
-            "description": "Where the file would go, below base_destination, or below the save directory when root is save."
+            "description": "Where the file would go, below base_destination, below the save directory when root is save, below the roms folder when root is roms, or in the emulator's own folder when root is emulator."
           },
           "name": {
             "type": "string",
@@ -204,7 +204,9 @@
               "below_platform_folder",
               "no_save_directory",
               "no_core_folder",
-              "no_save_system"
+              "no_save_system",
+              "outside_bios_folder",
+              "no_roms_directory"
             ],
             "description": "Why the file is left out, as a code. enumDescriptions gives the meaning of each code, in the order of enum.",
             "enumDescriptions": [
@@ -216,7 +218,9 @@
               "The platform lists each system folder flat (firmware_folder_flat) and the file would sit in a subfolder it does not read.",
               "The core reads the file below the save directory and the platform has no save directory a pack can fill.",
               "The frontend sorts saves by core and the core's profile does not name its folder (core_folder).",
-              "The launcher gives each system its own save folder and no system of the platform runs the core."
+              "The launcher gives each system its own save folder and no system of the platform runs the core.",
+              "The platform runs the emulator from a folder outside the BIOS tree and links none of the BIOS tree where the emulator reads this file (root: emulator).",
+              "The platform's launcher runs the file from its roms folder (root: roms) and the run cannot tell where that folder is: the BIOS folder is not the one the platform keeps in it."
             ]
           },
           "category": {
@@ -361,8 +365,12 @@
             }
           },
           "root": {
-            "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. Absent for a file of the BIOS tree.",
-            "const": "save"
+            "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. emulator: dest is the path the emulator reads in its own folder, which the platform keeps outside the BIOS tree (reason outside_bios_folder). roms: dest is relative to the platform's roms folder (roms_directory). Absent for a file of the BIOS tree.",
+            "enum": [
+              "save",
+              "emulator",
+              "roms"
+            ]
           },
           "core_folder": {
             "description": "The core's library_name, the folder a frontend sorting saves by core (RetroArch's sort_savefiles_enable) inserts between its save directory and dest. Only with root: save. Absent on a save entry when the core reads the same place sorted or not.",
@@ -515,6 +523,21 @@
           "const": true
         }
       }
+    },
+    "roms_directory": {
+      "description": "Where the platform keeps its roms folder, present when an entry carries root: roms. bios_folder is the name of the BIOS folder inside it: a BIOS folder of that name has the roms folder as its parent, any other leaves root: roms entries out (no_roms_directory).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bios_folder"
+      ],
+      "properties": {
+        "bios_folder": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^/\\\\]+$"
+        }
+      }
     }
   },
   "$defs": {
@@ -533,7 +556,7 @@
         "dest": {
           "type": "string",
           "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
-          "description": "Path below base_destination, or below the save directory when root is save."
+          "description": "Path below base_destination, below the save directory when root is save, or below the roms folder when root is roms."
         },
         "sha1": {
           "type": "string",
@@ -1016,8 +1039,11 @@
           }
         },
         "root": {
-          "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. Absent for a file of the BIOS tree.",
-          "const": "save"
+          "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. roms: dest is relative to the platform's roms folder, which roms_directory locates (a file its launcher runs from there, ROCKNIX's roms/pico-8). Absent for a file of the BIOS tree.",
+          "enum": [
+            "save",
+            "roms"
+          ]
         },
         "core_folder": {
           "description": "The core's library_name, the folder a frontend sorting saves by core (RetroArch's sort_savefiles_enable) inserts between its save directory and dest. Only with root: save. Absent on a save entry when the core reads the same place sorted or not.",

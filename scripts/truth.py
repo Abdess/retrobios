@@ -427,13 +427,15 @@ def _has_exploitable_data(entry: dict) -> bool:
 
 
 def _system_dir_files(profile: dict, standalone: bool) -> list[dict]:
-    """Entries of the build the platform runs, read from the system directory."""
-    return list(
-        filter(
-            read_from_system_dir,
-            filter_files_by_mode(profile.get("files", []), standalone=standalone),
-        )
-    )
+    """Entries of the build the platform runs, read from the system directory.
+
+    An entry the platform's launchers leave outside the BIOS tree
+    (``unplaced``) is not: the platform has no file of its own there.
+    """
+    return [
+        f for f in filter_files_by_mode(profile.get("files", []), standalone=standalone)
+        if read_from_system_dir(f) and not f.get("unplaced")
+    ]
 
 
 def _archives_not_members(files: list[dict]) -> list[dict]:

@@ -17,7 +17,7 @@ from common import resolve_local_file
 from common import resolve_platform_cores
 from common import core_system_dirs, platform_layouts, system_dir_path
 from common import standalone_set as platform_standalone_set
-from common import sanitize_pack_path
+from common import ROMS_ROOT, sanitize_pack_path
 from common import size_fits
 from validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
@@ -43,9 +43,22 @@ def extra_full_destination(fe: dict, prefix: str) -> str:
     """
     if fe.get("root") == "save":
         return str(fe.get("pack_path") or "")
+    if fe.get("root") == ROMS_ROOT:
+        return roms_destination(sanitize_pack_path(fe.get("destination", fe.get("name", ""))))
     return prefixed_destination(
         sanitize_pack_path(fe.get("destination", fe.get("name", ""))), prefix
     )
+
+
+# Keys a destination below the roms directory apart from the BIOS tree's
+# paths. Never written into a pack: the pack is extracted into the BIOS
+# folder, and the installer places these files (``root: roms``).
+ROMS_KEY = "roms:"
+
+
+def roms_destination(dest: str) -> str:
+    """The key of a destination below the roms directory."""
+    return f"{ROMS_KEY}{dest}"
 
 
 def prefixed_destination(dest: str, prefix: str) -> str:
@@ -309,9 +322,11 @@ class ExtraResolver:
                 return asset, "release_asset", ""
         if status in ("not_found", "external", "user_provided") or not local_path:
             return None, status, ""
+        # The cores reading a moved layout's file are found under the
+        # emulator's own path, not the folder the platform put it in.
         local_path, disagreement = validated_choice(
             fe, local_path, self.db, self.validation_index, self.bios_dir, None,
-            dest, self.validation_owners,
+            fe.get("layout_path") or dest, self.validation_owners,
         )
         # The platform never reads the bytes, the core does: a copy it turns
         # away by its own size check is not its file, on any platform.
@@ -462,9 +477,10 @@ def unplaceable_extras(
     placement = ExtraPlacement(config, "", profiles)
     unplaced: dict[tuple[str, str, str], str] = {}
     for u in undeclared:
-        if not u.get("in_repo"):
+        if not u.get("in_repo") and not u.get("unplaced"):
             continue
-        if not placement.slug_based and u.get("root") != "save":
+        if (not placement.slug_based and u.get("root") not in ("save", ROMS_ROOT)
+                and not u.get("unplaced")):
             continue
         dest = _extra_dest(u)
         if not placement.places(u, dest):
@@ -550,7 +566,8 @@ def _agnostic_scan_extras(
                     continue
                 # The scan walks the BIOS tree: a file read below the save
                 # directory is placed by the gap report's pass.
-                if read_from_save_dir(f, standalone):
+                if (read_from_save_dir(f, standalone) or f.get("unplaced")
+                        or f.get("root") == ROMS_ROOT):
                     continue
                 # An agnostic BIOS mode says the BIOS filename is free, not that
                 # every file the emulator loads is.  A free filename still has a
@@ -1001,6 +1018,9 @@ class ExtraPlacement:
         self.native_systems = native_slug_systems(config)
         self.flat = bool(config.get("firmware_folder_flat"))
         self.save = save_layout(config)
+        # The roms directory the registry names, for a file a launcher runs
+        # from it (ROCKNIX's roms/pico-8).
+        self.roms = bool((config.get("roms_directory") or {}).get("path"))
         self.config = config
         self.norm_map = (
             {_norm_system_id(sid): sid for sid in self.platform_systems}
@@ -1019,6 +1039,10 @@ class ExtraPlacement:
         directory and goes below the platform's save folder, which a
         platform keeping saves beside the content does not have.
         """
+        if entry.get("unplaced"):
+            return None
+        if entry.get("root") == ROMS_ROOT:
+            return (dest, roms_destination(dest)) if self.roms else None
         if entry.get("root") == "save":
             placed = self.save_places(entry, dest)
             return placed[0] if placed else None
@@ -1039,6 +1063,8 @@ class ExtraPlacement:
         platform that hands each system a save folder of its own goes once
         below each system that runs the core.
         """
+        if entry.get("unplaced"):
+            return []
         if entry.get("root") == "save":
             return self.save_places(entry, dest)
         placed = self.place(entry, dest)
@@ -1075,6 +1101,10 @@ class ExtraPlacement:
 
     def unplaced_reason(self, entry: dict, dest: str) -> str:
         """Why ``place`` returned None for this entry."""
+        if entry.get("unplaced"):
+            return str(entry["unplaced"])
+        if entry.get("root") == ROMS_ROOT:
+            return "no_roms_directory"
         if entry.get("root") == "save":
             if self.save is None:
                 return "no_save_directory"
@@ -1196,6 +1226,12 @@ def _collect_emulator_extras(
             # user's machine. The mode a file is bundled for was settled
             # upstream, an entry scoped to another build never gets here.
             continue
+        if u.get("unplaced"):
+            # Read in a folder outside the BIOS tree: named, held or not,
+            # never written where the emulator does not read it.
+            if unplaceable is not None:
+                unplaceable.append({**u, "unplaceable": u["unplaced"]})
+            continue
         if not u["in_repo"] and absent is None:
             continue
         # For archive entries, use the archive name for resolution
@@ -1291,7 +1327,9 @@ def _collect_emulator_extras(
                 # Only duplicate files already covered at another destination.
                 # An unsourceable entry is a file no collection holds: the name
                 # covered elsewhere belongs to another program's file.
-                if fname not in covered_names or f.get("unsourceable"):
+                # Nor is one placed outside the BIOS tree by the layout.
+                if (fname not in covered_names or f.get("unsourceable") or f.get("unplaced")
+                        or f.get("root") == ROMS_ROOT):
                     continue
                 # Installed with the emulator or by the platform's package,
                 # as the first pass already decided for the same entry.
@@ -1530,8 +1568,12 @@ def _report_extra(u: dict, name: str, dest: str) -> dict:
         extra["root"] = "save"
         if u.get("core_folder") is not None:
             extra["core_folder"] = u["core_folder"]
+    elif u.get("root") == ROMS_ROOT:
+        extra["root"] = ROMS_ROOT
     if u.get("system_dir"):
         extra["system_dir"] = u["system_dir"]
+    if u.get("layout_path"):
+        extra["layout_path"] = u["layout_path"]
     # The archive layout the core opens ranks same-named copies by what
     # they hold. Without it the first copy indexed won.
     if u.get("contents"):

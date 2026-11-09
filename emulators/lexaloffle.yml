@@ -24,11 +24,18 @@ cores:
 systems:
   - pico8
   - voxatron
+standalone_directories:
+  - "executable directory"
 
 notes: |
   Commercial fantasy consoles by Lexaloffle Games LLP, sold as ZIP archives
   per platform. Nothing in either program checks a hash of its own files:
   the hashes below are those of the files in the official 0.2.7 archives.
+
+  Each program finds its own folder through /proc/self/exe and reads its
+  .dat beside itself. The paths below are the layout of the archives, whose
+  top folders are pico-8/ and voxatron/: a launcher that runs one of these
+  files from a folder places the program folder there.
 
   PICO-8 0.2.7 ships five archives. pico-8_0.2.7_amd64.zip holds pico8
   (x86_64, SDL2 linked in) and pico8_dyn (x86_64, system libSDL2).
@@ -67,7 +74,7 @@ notes: |
     component_manifest.json lists pico8, pico8.dat and pico8_dyn as required.
   - RetroBat Pico8.Generator.cs runs pico8.exe from the folder its config
     names pico8 and returns nothing when pico8.exe is absent. That folder is
-    an emulator install, outside the BIOS tree, so no entry below targets it.
+    an emulator install, outside the BIOS tree.
   - ArkOS (dArkOS pico8/pico8.sh) prefers roms/pico-8/pico8_64, then
     roms/pico-8/pico8_dyn, then extracts pico8_64 and pico8.dat from a
     *raspi.zip in that folder, and starts Fake08 when the binary or
@@ -137,13 +144,13 @@ files:
     path: pico-8/pico8_dyn
     system: pico8
     required: false
-    unread_on: [amberelec, emuelec, knulli, recalbox, retrobat, rocknix]
+    unread_on: [amberelec, emuelec, knulli, recalbox, retrobat]
     size: 1805928
     md5: 724435a9e6f3ef8a55c648fc88651826
     sha1: 9b2e573250c70382b4071709a85c8d56c0371d59
     description: "PICO-8 0.2.7 x86_64 executable, system libSDL2"
-    note: "The pico8_dyn of pico-8_0.2.7_amd64.zip, the same program linked against the system SDL2. RetroDECK lists it as required in its manifest, but its launcher executes pico8 only. Batocera never runs it."
-    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, NEEDED libSDL2-2.0.so.0, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3"
+    note: "The pico8_dyn of pico-8_0.2.7_amd64.zip, the same program linked against the system SDL2. RetroDECK lists it as required in its manifest, but its launcher executes pico8 only. Batocera never runs it. ROCKNIX runs it from roms/pico-8/ on x86_64, its HW_ARCH other than aarch64."
+    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, NEEDED libSDL2-2.0.so.0, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:10-17, 48"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
@@ -173,13 +180,36 @@ files:
     path: pico-8/pico8.dat
     system: pico8
     required: true
-    unread_on: [retrobat]
     size: 11243101
     md5: 10b397305093c80109096319a538ba56
     sha1: 0f92093752bddb12210c7db6d93af3ba2413cfce
     description: "PICO-8 0.2.7 data file (boot sequence, themes, demo carts)"
-    note: "PICO-8 opens it from its own folder and quits with \"couldn't load <folder>/pico8.dat\" when it is absent (the amd64 pico8, run without it). Paired with the binary's own version, identical in pico-8_0.2.7_amd64.zip and pico-8_0.2.7_raspi.zip. AmberELEC and ArkOS check for it before starting PICO-8, and KNULLI's installer stops when the archive lacks it."
+    note: "PICO-8 opens it from its own folder and quits with \"couldn't load <folder>/pico8.dat\" when it is absent (the amd64 pico8, run without it). Paired with the binary's own version, identical in pico-8_0.2.7_amd64.zip, pico-8_0.2.7_raspi.zip and pico-8_0.2.7_windows.zip. AmberELEC and ArkOS check for it before starting PICO-8, and KNULLI's installer stops when the archive lacks it."
     source_ref: "pico-8 0.2.7 amd64 pico8, string pico8.dat at 0x231bc0, pico-8 0.2.7 raspi pico8_64, string pico8.dat at 0x110138, amberelec packages/amberelec/sources/pico-8.sh:51-52, dArkOS pico8/pico8.sh:136-142, knulli board/fsoverlay/usr/bin/knulli-install-pico8:11, 48-51, 69"
+
+  - name: pico8.exe
+    path: pico-8/pico8.exe
+    system: pico8
+    required: true
+    unread_on: [amberelec, batocera, emuelec, knulli, recalbox, retrodeck, rocknix]
+    size: 2171788
+    md5: 55b1b9db521ffd0cea0995174bd12a2b
+    sha1: 1d1b504d3283d750869a93ed9befa1e49928d68e
+    description: "PICO-8 0.2.7 Windows executable"
+    note: "The pico8.exe of pico-8_0.2.7_windows.zip. RetroBat runs it from its pico8 emulator folder and starts nothing when it is absent."
+    source_ref: "retrobat emulatorLauncher/Generators/Pico8.Generator.cs:14-18, 56-57"
+
+  - name: SDL2.dll
+    path: pico-8/SDL2.dll
+    system: pico8
+    required: true
+    unread_on: [amberelec, batocera, emuelec, knulli, recalbox, retrodeck, rocknix]
+    size: 1088000
+    md5: 098c661f98cd7fd85a82ebc34db5be15
+    sha1: 9174251921d675c204e683cdea65a8c906fcba28
+    description: "SDL2 library of the PICO-8 0.2.7 Windows build"
+    note: "pico8.exe imports SDL2.dll, which Windows loads from the executable's folder. Shipped beside it in pico-8_0.2.7_windows.zip."
+    source_ref: "pico-8 0.2.7 windows pico8.exe, import table"
 
   - name: config.txt
     unsourceable: "written by the emulator on exit, no canonical file"

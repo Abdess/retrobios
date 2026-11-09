@@ -843,6 +843,13 @@ platforms:
     # sources/RK3566/retroarch.cfg:664-665 at 20261001) and setsettings.sh
     # leaves it: saves sit beside each game, no single place.
     save_directory: null
+    # The BIOS folder sits in the roms directory (/storage/roms/bios, the
+    # detect entry below), where start_pico8.sh also runs PICO-8 from
+    # /storage/roms/pico-8. A launcher path below path is placed there, and
+    # the installer finds that directory as the folder holding bios_folder.
+    roms_directory:
+      path: /storage/roms
+      bios_folder: bios
     schedule: weekly
     target_scraper: rocknix_targets
     target_source: https://github.com/ROCKNIX/distribution/blob/next/projects/ROCKNIX/packages/virtual/emulators/package.mk

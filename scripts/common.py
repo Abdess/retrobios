@@ -1482,6 +1482,29 @@ def resolve_local_file(
     system_dir = file_entry.get("system_dir")
     if system_dir and dest_hint.startswith(f"{system_dir}/"):
         dest_hint = dest_hint[len(system_dir) + 1:]
+    # A launcher that moves the layout (EmuDeck links azahar's sysdata to
+    # bios/azahar/keys) changes where the file goes, not the tail the
+    # collection indexes it under. Both are asked, and the stronger proof
+    # wins: a content or path match over a name, the destination on a tie.
+    layout = file_entry.get("layout_path")
+    if layout and layout != dest_hint:
+        plain = {k: v for k, v in file_entry.items() if k != "layout_path"}
+        answers = [
+            resolve_local_file(
+                plain, db, zip_contents, dest_hint=hint, _depth=_depth,
+                data_dir_registry=data_dir_registry,
+            )
+            for hint in (dest_hint, str(layout))
+        ]
+        for found in answers:
+            if found[0] is not None and (
+                resolution_is_hash_exact(found[1]) or found[1] == "path_exact"
+            ):
+                return found
+        for found in answers:
+            if found[0] is not None and found[1] not in ("not_found", "hash_mismatch"):
+                return found
+        return next((found for found in answers if found[0] is not None), answers[0])
     # A name written with its directory is the destination when no path is
     # given: gam4980/E.BIN resolved by its basename took another model's OS
     # in verify --emulator and the emulator pack, while the platform pack,
@@ -2624,6 +2647,9 @@ HANDED_PREFIX = "handed:"
 # Marks, in the same set, a libretro core and the system directory the
 # platform hands it (``core_system_dirs``), as JSON.
 CORE_DIR_PREFIX = "coredir:"
+# Marks, in the same set, a file the platform's launcher executes
+# (launchers.executed_files), as JSON.
+EXECUTED_PREFIX = "exec:"
 
 
 def core_system_dirs(
@@ -2689,13 +2715,18 @@ def standalone_set(config: dict) -> set[str]:
         for core in entry.get("cores") or []
     }
     if names - {n for n in names if n.startswith(CORE_DIR_PREFIX)}:
-        from launchers import handed_directories  # noqa: PLC0415
+        from launchers import executed_files, handed_directories  # noqa: PLC0415
 
         names |= {
             HANDED_PREFIX + json.dumps(
-                [h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref]
+                [h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref,
+                 h.roms_folder]
             )
             for h in handed_directories(config)
+        }
+        names |= {
+            EXECUTED_PREFIX + json.dumps([run.emulator, run.name, run.place, run.source_ref])
+            for run in executed_files(config)
         }
     return names
 
@@ -2724,9 +2755,28 @@ def _handed(standalone_cores: Iterable[str]) -> list:
     for tag in standalone_cores:
         if not tag.startswith(HANDED_PREFIX):
             continue
-        emulator, folder, directory, handles, ref = json.loads(tag[len(HANDED_PREFIX):])
-        found.append(HandedDirectory(emulator, folder, directory, frozenset(handles), ref))
+        emulator, folder, directory, handles, ref, roms = json.loads(tag[len(HANDED_PREFIX):])
+        found.append(HandedDirectory(emulator, folder, directory, frozenset(handles), ref, roms))
     return found
+
+
+def _executed(standalone_cores: Iterable[str]) -> list:
+    """The files a standalone set's launchers execute, as launchers read them."""
+    from launchers import ExecutedFile  # noqa: PLC0415
+
+    found = []
+    for tag in standalone_cores:
+        if tag.startswith(EXECUTED_PREFIX):
+            emulator, name, place, ref = json.loads(tag[len(EXECUTED_PREFIX):])
+            found.append(ExecutedFile(emulator, name, tuple(place) if place else None, ref))
+    return found
+
+
+# Why a standalone entry has no destination on a platform that relocates its
+# layout: the manifest's omission reason, named as the installer words it.
+OUTSIDE_BIOS_FOLDER = "outside_bios_folder"
+# The entry root of a file read below the platform's roms directory.
+ROMS_ROOT = "roms"
 
 
 def standalone_layout_path(entry: dict, profile: dict) -> str | None:
@@ -2744,13 +2794,16 @@ def standalone_layout_path(entry: dict, profile: dict) -> str | None:
     return entry.get("path") or None
 
 
-def standalone_destination(entry: dict, profile: dict, bindings: dict[str, str]) -> str | None:
-    """Where a platform puts a standalone entry, relative to the BIOS root.
+def standalone_destination(
+    entry: dict, profile: dict, bindings: dict[str, tuple[str, str]]
+) -> tuple[str, str] | None:
+    """Where a platform puts a standalone entry: (tree, path).
 
-    ``bindings`` are the folders the platform's launchers give the layout
+    ``bindings`` are the places the platform's launchers give the layout
     (launchers.standalone_bindings): RetroPie and ROCKNIX give Flycast bios/dc,
-    EmuDeck bios/flycast/bios, RetroPie gives UAE4All2's kickstarts/ bios/amiga.
-    None when no binding covers the entry: it keeps the profile's layout.
+    EmuDeck bios/flycast/bios, RetroPie gives UAE4All2's kickstarts/ bios/amiga,
+    ROCKNIX runs PICO-8 from roms/pico-8. The tree is launchers.BIOS_TREE or
+    launchers.ROMS_TREE. None when no binding covers the entry.
     """
     layout = standalone_layout_path(entry, profile)
     if layout is None or not bindings:
@@ -2762,15 +2815,21 @@ def standalone_destination(entry: dict, profile: dict, bindings: dict[str, str])
 
 def standalone_bindings_for(
     emu_name: str, profile: dict, standalone_cores: Iterable[str]
-) -> dict[str, str]:
-    """The folders a platform gives this emulator's standalone layout, by subfolder."""
+) -> dict[str, tuple[str, str]]:
+    """The places a platform gives this emulator's standalone layout, by subfolder."""
     declared = profile.get("standalone_directories") or []
     if not declared:
         return {}
     from launchers import standalone_bindings  # noqa: PLC0415
 
     names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
-    return standalone_bindings(names, declared, _handed(standalone_cores))
+    layout = [
+        path for f in profile.get("files") or []
+        if isinstance(f, dict) and (path := standalone_layout_path(f, profile))
+    ]
+    return standalone_bindings(
+        names, declared, _handed(standalone_cores), _executed(standalone_cores), layout
+    )
 
 
 def platform_layouts(
@@ -2794,10 +2853,25 @@ def platform_layouts(
         # The standalone view carries the platform's destination, so every
         # reader of standalone_path (builder, manifest, verify, slots) places
         # the file in the folder the platform hands the emulator.
+        # An entry of the layout no binding covers is read in a folder the
+        # platform keeps outside the BIOS tree: UAE4All2's kick.rom in
+        # RetroPie's $md_inst. It is marked, never left at the BIOS root
+        # where the emulator does not read it.
         files = []
         for f in profile.get("files") or []:
-            placed = standalone_destination(f, profile, bindings) if isinstance(f, dict) else None
-            files.append({**f, "standalone_path": placed} if placed else f)
+            if not isinstance(f, dict) or standalone_layout_path(f, profile) is None:
+                files.append(f)
+                continue
+            placed = standalone_destination(f, profile, bindings)
+            if placed is None or placed[0] == "outside":
+                files.append({**f, "unplaced": OUTSIDE_BIOS_FOLDER})
+                continue
+            tree, path = placed
+            moved = {**f, "standalone_path": path,
+                     "layout_path": standalone_layout_path(f, profile)}
+            # A file the launcher runs from the roms directory (ROCKNIX's
+            # roms/pico-8) is relative to it, and says so.
+            files.append({**moved, "root": ROMS_ROOT} if tree else moved)
         standalone = {**profile, "files": files}
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
             if c.startswith(DUAL_MODE_PREFIX)}
