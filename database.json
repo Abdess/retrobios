@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-09T09:30:52Z",
-  "total_files": 19987,
-  "total_size": 17173278940,
+  "generated_at": "2026-11-09T11:29:16Z",
+  "total_files": 19989,
+  "total_size": 17174225735,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -33011,7 +33011,7 @@
       "adler32": "eb96caab"
     },
     "062067e6d661c3d3e10d910435be4a59db1bee9f": {
-      "path": "bios/BBK/A4980/BBKEmu/A4980/8.BIN",
+      "path": "bios/BBK/A4980/bbkemu/a4980/8.BIN",
       "name": "8.BIN",
       "size": 2097152,
       "sha1": "062067e6d661c3d3e10d910435be4a59db1bee9f",
@@ -33021,7 +33021,7 @@
       "adler32": "3dbd8f90"
     },
     "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724": {
-      "path": "bios/BBK/A4980/BBKEmu/A4980/E.BIN",
+      "path": "bios/BBK/A4980/bbkemu/a4980/E.BIN",
       "name": "E.BIN",
       "size": 2097152,
       "sha1": "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724",
@@ -33031,7 +33031,7 @@
       "adler32": "1ac5f9d1"
     },
     "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06": {
-      "path": "bios/BBK/A4988/BBKEmu/A4988/8.BIN",
+      "path": "bios/BBK/A4988/bbkemu/a4988/8.BIN",
       "name": "8.BIN",
       "size": 2097152,
       "sha1": "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06",
@@ -33041,7 +33041,7 @@
       "adler32": "6493e72b"
     },
     "159b7e65f3f3dd67f435085be1e154316ba139e0": {
-      "path": "bios/BBK/A4988/BBKEmu/A4988/E.BIN",
+      "path": "bios/BBK/A4988/bbkemu/a4988/E.BIN",
       "name": "E.BIN",
       "size": 2097152,
       "sha1": "159b7e65f3f3dd67f435085be1e154316ba139e0",
@@ -46755,6 +46755,16 @@
       "sha256": "34a693f1543a6cbb714eddc94fcd4772614abc7814510365e0bfc7a653d37bc4",
       "crc32": "70d3571b",
       "adler32": "58977ab5"
+    },
+    "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5": {
+      "path": "bios/Fujitsu/FM Towns/fmtownsmx.zip",
+      "name": "fmtownsmx.zip",
+      "size": 937566,
+      "sha1": "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5",
+      "md5": "b76030ad7ab04ed7b172cbbdf557b677",
+      "sha256": "c17ae7e4401237eba332592080c4b8f9b843215c72b5c2167ae72e8beed1726b",
+      "crc32": "cc740dc2",
+      "adler32": "3e7890e8"
     },
     "803023b68b8f8b03a245082d4acddc0e5708c222": {
       "path": "bios/Fujitsu/FM Towns/fmtownsux.zip",
@@ -197419,6 +197429,16 @@
       "crc32": "4e53269d",
       "adler32": "a180ae2a"
     },
+    "5c86508cb337b604eecb9b881b4fc111d826f604": {
+      "path": "bios/Sega/Model 3/Config/.variants/Music.xml.6eeb3e30",
+      "name": "Music.xml",
+      "size": 9229,
+      "sha1": "5c86508cb337b604eecb9b881b4fc111d826f604",
+      "md5": "6eeb3e30200e14aa28f958b8d34c2ded",
+      "sha256": "02d517cdedf2c98a78b5fb0034f974608308090fd88dd01314bed84d695a1eba",
+      "crc32": "f5efea3c",
+      "adler32": "21182ce0"
+    },
     "b44ed959fe2948a03d81b98e67ca32f2b4c37e78": {
       "path": "bios/Sega/Model 3/Config/Music.xml",
       "name": "Music.xml",
@@ -209744,6 +209764,7 @@
       "f76521f8e7c5bc104a8614c8aead1192": "8ba3bf533b0b75685f03d8759a7a34c32bfaf896",
       "a15964726d9ce9625a843282ef7619ca": "027ac214a55fc808a9e76302d62542cd7e3ddc69",
       "5e94d2c67c0adb34f41b69e44c26b6cd": "239c1ade320fc7e09e426e80aee8f05deddc5a50",
+      "b76030ad7ab04ed7b172cbbdf557b677": "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5",
       "443eeab819ebfb9ef39e928aabbb5567": "803023b68b8f8b03a245082d4acddc0e5708c222",
       "2ea2d6e18a6ec4cae998be5599fa69de": "ee44bb11ce65086e9a982a375d23b3a50e9c4517",
       "609d6356ac4b950238339772199266ce": "0f2ccf38a5e1b8d96251d66b61a953a3617546b4",
@@ -224618,6 +224639,7 @@
       "4ea493ea4e9f6c9ebfccbdb15110367e": "88d6499d874dcb5721ff58d76fe1b9af811192e3",
       "b4e76e416b887f4e7413ba76fa735f16": "70429f1d80503a0632f603bf762fe0bbaa881d22",
       "312d87a97c2ddefbf2452df0a3791e03": "e21c396bf7eb540ede7b7c76dd44c0fea8a6d630",
+      "6eeb3e30200e14aa28f958b8d34c2ded": "5c86508cb337b604eecb9b881b4fc111d826f604",
       "ddb4e23db15dda67539eee24de23de4b": "b44ed959fe2948a03d81b98e67ca32f2b4c37e78",
       "48e8821fb9087ab60a2a3b1465ee5124": "12de390be2595ad17015310085eaec57ad2b953f",
       "52adbcbef759756a5b97cafda75b922c": "c983bfa2f4c6d077e70e6ff9c7ed59b72368e355",
@@ -238550,6 +238572,9 @@
       ],
       "fmtownshr.zip": [
         "239c1ade320fc7e09e426e80aee8f05deddc5a50"
+      ],
+      "fmtownsmx.zip": [
+        "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5"
       ],
       "mrom.m36": [
         "ee44bb11ce65086e9a982a375d23b3a50e9c4517"
@@ -274526,6 +274551,7 @@
         "e21c396bf7eb540ede7b7c76dd44c0fea8a6d630"
       ],
       "Music.xml": [
+        "5c86508cb337b604eecb9b881b4fc111d826f604",
         "b44ed959fe2948a03d81b98e67ca32f2b4c37e78"
       ],
       "sc3000.zip": [
@@ -287858,6 +287884,7 @@
       "2338792b": "8ba3bf533b0b75685f03d8759a7a34c32bfaf896",
       "a5a3e38b": "027ac214a55fc808a9e76302d62542cd7e3ddc69",
       "70d3571b": "239c1ade320fc7e09e426e80aee8f05deddc5a50",
+      "cc740dc2": "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5",
       "472af5d8": "803023b68b8f8b03a245082d4acddc0e5708c222",
       "08a73af7": "ee44bb11ce65086e9a982a375d23b3a50e9c4517",
       "2fbc0e41": "0f2ccf38a5e1b8d96251d66b61a953a3617546b4",
@@ -302731,6 +302758,7 @@
       "0658f691": "88d6499d874dcb5721ff58d76fe1b9af811192e3",
       "4dcfd55c": "70429f1d80503a0632f603bf762fe0bbaa881d22",
       "4e53269d": "e21c396bf7eb540ede7b7c76dd44c0fea8a6d630",
+      "f5efea3c": "5c86508cb337b604eecb9b881b4fc111d826f604",
       "76b28f83": "b44ed959fe2948a03d81b98e67ca32f2b4c37e78",
       "62fb7d82": "12de390be2595ad17015310085eaec57ad2b953f",
       "48decddc": "c983bfa2f4c6d077e70e6ff9c7ed59b72368e355",
@@ -307846,6 +307874,7 @@
       "ba55901960866fc4f24aef95bfaefe17e5c6706faa012416cafce6ead352b4c5": "8ba3bf533b0b75685f03d8759a7a34c32bfaf896",
       "17139509e1847c3bd54d4fa65f4d0f62d0e5d0a1439f55cc2f64b77e6fe68d41": "027ac214a55fc808a9e76302d62542cd7e3ddc69",
       "34a693f1543a6cbb714eddc94fcd4772614abc7814510365e0bfc7a653d37bc4": "239c1ade320fc7e09e426e80aee8f05deddc5a50",
+      "c17ae7e4401237eba332592080c4b8f9b843215c72b5c2167ae72e8beed1726b": "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5",
       "1a6ca13972db380960b7759c6ee2ddc7f5f8a63a5456ed1c00c5bafa155ba499": "803023b68b8f8b03a245082d4acddc0e5708c222",
       "2cd7466183ba965259df35ff078b7b057a99086feea0050ddf87aebc6932f429": "ee44bb11ce65086e9a982a375d23b3a50e9c4517",
       "10fc6d984d0a440c3410d805f4bea247fb5dd5a509befff481164923f883797d": "0f2ccf38a5e1b8d96251d66b61a953a3617546b4",
@@ -322720,6 +322749,7 @@
       "6e12e6b33c26ebfcd0be433251d21cf6284eafe9f71b027bda3767ae59affec1": "88d6499d874dcb5721ff58d76fe1b9af811192e3",
       "e184f5982a99c6ebf7799383f16a8624221755786056a3573944598283a4b8cf": "70429f1d80503a0632f603bf762fe0bbaa881d22",
       "0dc8e68cd5ef7f83e581a1d454791d781cc8c7f8d7461e343700b9522ff6e16b": "e21c396bf7eb540ede7b7c76dd44c0fea8a6d630",
+      "02d517cdedf2c98a78b5fb0034f974608308090fd88dd01314bed84d695a1eba": "5c86508cb337b604eecb9b881b4fc111d826f604",
       "cf7555ca86e8640ee5bbb8e0c0897b073fc86647a93eda10b05065227610478c": "b44ed959fe2948a03d81b98e67ca32f2b4c37e78",
       "942ca934f6d43bc81677d3355cf8c795322661c8784b58e78d62951b6a033c2b": "12de390be2595ad17015310085eaec57ad2b953f",
       "258b08eafabed889970445adadcc483f91c31205e8c9a75dfa2efceab2f1c43f": "c983bfa2f4c6d077e70e6ff9c7ed59b72368e355",
@@ -347943,52 +347973,52 @@
       "XEGS/xegs.zip": [
         "54a12c7aa78696ed310aca04faef642bc332c72d"
       ],
-      "BBK/A4980/BBKEmu/A4980/8.BIN": [
+      "BBK/A4980/bbkemu/a4980/8.BIN": [
         "062067e6d661c3d3e10d910435be4a59db1bee9f"
       ],
-      "A4980/BBKEmu/A4980/8.BIN": [
+      "A4980/bbkemu/a4980/8.BIN": [
         "062067e6d661c3d3e10d910435be4a59db1bee9f"
       ],
-      "BBKEmu/A4980/8.BIN": [
+      "bbkemu/a4980/8.BIN": [
         "062067e6d661c3d3e10d910435be4a59db1bee9f"
       ],
-      "A4980/8.BIN": [
+      "a4980/8.BIN": [
         "062067e6d661c3d3e10d910435be4a59db1bee9f"
       ],
-      "BBK/A4980/BBKEmu/A4980/E.BIN": [
+      "BBK/A4980/bbkemu/a4980/E.BIN": [
         "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724"
       ],
-      "A4980/BBKEmu/A4980/E.BIN": [
+      "A4980/bbkemu/a4980/E.BIN": [
         "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724"
       ],
-      "BBKEmu/A4980/E.BIN": [
+      "bbkemu/a4980/E.BIN": [
         "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724"
       ],
-      "A4980/E.BIN": [
+      "a4980/E.BIN": [
         "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724"
       ],
-      "BBK/A4988/BBKEmu/A4988/8.BIN": [
+      "BBK/A4988/bbkemu/a4988/8.BIN": [
         "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06"
       ],
-      "A4988/BBKEmu/A4988/8.BIN": [
+      "A4988/bbkemu/a4988/8.BIN": [
         "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06"
       ],
-      "BBKEmu/A4988/8.BIN": [
+      "bbkemu/a4988/8.BIN": [
         "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06"
       ],
-      "A4988/8.BIN": [
+      "a4988/8.BIN": [
         "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06"
       ],
-      "BBK/A4988/BBKEmu/A4988/E.BIN": [
+      "BBK/A4988/bbkemu/a4988/E.BIN": [
         "159b7e65f3f3dd67f435085be1e154316ba139e0"
       ],
-      "A4988/BBKEmu/A4988/E.BIN": [
+      "A4988/bbkemu/a4988/E.BIN": [
         "159b7e65f3f3dd67f435085be1e154316ba139e0"
       ],
-      "BBKEmu/A4988/E.BIN": [
+      "bbkemu/a4988/E.BIN": [
         "159b7e65f3f3dd67f435085be1e154316ba139e0"
       ],
-      "A4988/E.BIN": [
+      "a4988/E.BIN": [
         "159b7e65f3f3dd67f435085be1e154316ba139e0"
       ],
       "BBK/GAM4980/gam4980/8.BIN": [
@@ -363626,6 +363656,12 @@
       ],
       "FM Towns/fmtownshr.zip": [
         "239c1ade320fc7e09e426e80aee8f05deddc5a50"
+      ],
+      "Fujitsu/FM Towns/fmtownsmx.zip": [
+        "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5"
+      ],
+      "FM Towns/fmtownsmx.zip": [
+        "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5"
       ],
       "Fujitsu/FM Towns/fmtownsux.zip": [
         "803023b68b8f8b03a245082d4acddc0e5708c222"
@@ -565398,6 +565434,18 @@
       ],
       "sm2-emu/games.xml": [
         "e21c396bf7eb540ede7b7c76dd44c0fea8a6d630"
+      ],
+      "Sega/Model 3/Config/.variants/Music.xml.6eeb3e30": [
+        "5c86508cb337b604eecb9b881b4fc111d826f604"
+      ],
+      "Model 3/Config/.variants/Music.xml.6eeb3e30": [
+        "5c86508cb337b604eecb9b881b4fc111d826f604"
+      ],
+      "Config/.variants/Music.xml.6eeb3e30": [
+        "5c86508cb337b604eecb9b881b4fc111d826f604"
+      ],
+      ".variants/Music.xml.6eeb3e30": [
+        "5c86508cb337b604eecb9b881b4fc111d826f604"
       ],
       "Sega/Model 3/Config/Music.xml": [
         "b44ed959fe2948a03d81b98e67ca32f2b4c37e78"

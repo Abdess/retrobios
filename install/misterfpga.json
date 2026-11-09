@@ -6,7 +6,7 @@
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
   "version": "2026-11-04",
-  "generated": "2026-11-09T09:30:52Z",
+  "generated": "2026-11-09T11:29:16Z",
   "base_destination": "games",
   "detect": [
     {
@@ -125,7 +125,7 @@
     "pocket-challenge-v2": "Benesse Pocket Challenge V2",
     "sega-mega-cd": "Sega Mega CD",
     "sega-saturn": "Sega Saturn",
-    "sharpx1": "Sharp X1",
+    "sharp-x1": "Sharp X1",
     "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
@@ -751,7 +751,7 @@
       "repo_path": "bios/Sharp/X1/boot.rom",
       "cores": null,
       "systems": [
-        "sharpx1"
+        "sharp-x1"
       ]
     },
     {
@@ -762,7 +762,7 @@
       "repo_path": "bios/Sharp/X1/boot1.rom",
       "cores": null,
       "systems": [
-        "sharpx1"
+        "sharp-x1"
       ]
     },
     {
@@ -773,7 +773,7 @@
       "repo_path": "bios/Sharp/X1/iplrom.x1",
       "cores": null,
       "systems": [
-        "sharpx1"
+        "sharp-x1"
       ]
     },
     {
@@ -784,7 +784,7 @@
       "repo_path": "bios/Sharp/X1/boot3.rom",
       "cores": null,
       "systems": [
-        "sharpx1"
+        "sharp-x1"
       ]
     },
     {

@@ -80,20 +80,20 @@ python scripts/pr_checks.py
 does, and names at the end each check that failed or could not run:
 
 ```bash
-python scripts/validate_pr.py --changed                                # the BIOS files the branch adds
-python scripts/validate_schemas.py --source-only                       # profiles and platform files
-mypy | mypy-baseline filter --no-colors                                # no type error beyond mypy-baseline.txt
-python scripts/profile_sync.py --added --strict                        # each profile the branch adds
-vermin --no-tips -t=3.8- --violations install.py                       # install.py stays on Python 3.8
-shellcheck --version                                                   # the launcher test runs shellcheck
-python scripts/export_native.py --all --fetch --output-dir tmp/native  # files the exporter tests compare with
-python scripts/refresh_data_dirs.py                                    # data directories the pack-building tests read
-python scripts/generate_site.py                                        # the pages the site tests read
-npm ci --prefix website                                                # the site's packages, Node 24
-npm run build --prefix website                                         # the built site
-python -m unittest discover -s tests -t .                              # the suite
-python3.8 -m unittest tests.test_install_tui                           # the full screen on the installer's floor
-python scripts/validate_site.py --site-dir website/dist                # links and page budgets
+python scripts/validate_pr.py --changed                  # the BIOS files the branch adds
+python scripts/validate_schemas.py --source-only         # profiles and platform files
+mypy | mypy-baseline filter --no-colors                  # no type error beyond mypy-baseline.txt
+python scripts/profile_sync.py --added --strict          # each profile the branch adds
+vermin --no-tips -t=3.8- --violations install.py         # install.py stays on Python 3.8
+shellcheck --version                                     # the launcher test runs shellcheck
+python scripts/export_native.py --all --refresh-cache    # files the exporter tests compare with
+python scripts/refresh_data_dirs.py                      # data directories the pack-building tests read
+python scripts/generate_site.py                          # the pages the site tests read
+npm ci --prefix website                                  # the site's packages, Node 24
+npm run build --prefix website                           # the built site
+python -m unittest discover -s tests -t .                # the suite
+python3.8 -m unittest tests.test_install_tui             # the full screen on the installer's floor
+python scripts/validate_site.py --site-dir website/dist  # links and page budgets
 ```
 
 The versions are the ones CI pins. Three tools come from the system, not from

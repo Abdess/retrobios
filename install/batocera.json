@@ -6,7 +6,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "43.1",
-  "generated": "2026-11-09T08:00:53Z",
+  "generated": "2026-11-09T11:29:16Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1641,13 +1641,21 @@
         ]
       },
       "as": "dsisd.bin"
+    },
+    {
+      "file": "Config/Music.xml",
+      "targets": {
+        "linux": [
+          "$HOME/.local/share/supermodel/Config"
+        ]
+      }
     }
   ],
-  "total_files": 14708,
-  "total_size": 9846474774,
-  "pack_files": 18182,
-  "pack_size": 9932300064,
-  "total_omitted": 445,
+  "total_files": 14709,
+  "total_size": 9846484003,
+  "pack_files": 18183,
+  "pack_size": 9932309293,
+  "total_omitted": 444,
   "omitted_files": [
     {
       "dest": "AUDIO.APC",
@@ -1725,16 +1733,6 @@
         "raze"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "Config/Music.xml",
-      "name": "Music.xml",
-      "system": "sega-model3",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "supermodel"
-      ]
     },
     {
       "dest": "DARK.GOB",
@@ -144031,6 +144029,16 @@
       ],
       "systems": [
         "scummvm"
+      ]
+    },
+    {
+      "dest": "Config/Music.xml",
+      "sha1": "5c86508cb337b604eecb9b881b4fc111d826f604",
+      "sha256": "02d517cdedf2c98a78b5fb0034f974608308090fd88dd01314bed84d695a1eba",
+      "size": 9229,
+      "repo_path": "bios/Sega/Model 3/Config/.variants/Music.xml.6eeb3e30",
+      "cores": [
+        "supermodel"
       ]
     },
     {

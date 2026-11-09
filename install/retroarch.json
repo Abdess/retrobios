@@ -6,7 +6,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "v1.22.2",
-  "generated": "2026-11-09T09:30:52Z",
+  "generated": "2026-11-09T11:29:16Z",
   "base_destination": "system",
   "detect": [
     {
@@ -2625,11 +2625,11 @@
       }
     }
   ],
-  "total_files": 8393,
-  "total_size": 8035988536,
-  "pack_files": 14976,
-  "pack_size": 8178130285,
-  "total_omitted": 77,
+  "total_files": 8394,
+  "total_size": 8036926102,
+  "pack_files": 14977,
+  "pack_size": 8179067851,
+  "total_omitted": 76,
   "omitted_files": [
     {
       "dest": "doom2bfg.wad",
@@ -2762,16 +2762,6 @@
         "prboom"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "geartowns/fmtownsmx.zip",
-      "name": "fmtownsmx.zip",
-      "system": "fmtowns",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "geartowns"
-      ]
     },
     {
       "dest": "id24res.wad",
@@ -89054,7 +89044,7 @@
       "sha1": "062067e6d661c3d3e10d910435be4a59db1bee9f",
       "sha256": "1c8f0b75f478cc42b1cc4292ff6c3b022b11384f0b6fc1b9601873a9da656d6f",
       "size": 2097152,
-      "repo_path": "bios/BBK/A4980/BBKEmu/A4980/8.BIN",
+      "repo_path": "bios/BBK/A4980/bbkemu/a4980/8.BIN",
       "cores": [
         "bbkemu"
       ]
@@ -89064,7 +89054,7 @@
       "sha1": "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724",
       "sha256": "9d13aa4593d97b790afc37d73da8be985e7a3aa7f3dcfe6b91c798671067aa5e",
       "size": 2097152,
-      "repo_path": "bios/BBK/A4980/BBKEmu/A4980/E.BIN",
+      "repo_path": "bios/BBK/A4980/bbkemu/a4980/E.BIN",
       "cores": [
         "bbkemu"
       ]
@@ -89074,7 +89064,7 @@
       "sha1": "3dcecdb4c25910a1c8ced5b8017fab7f0bc62b06",
       "sha256": "d59c588faf4b15c6bb4a4c3b63269df5edd0d9a3ee2d024159f2c68a4dcecf2b",
       "size": 2097152,
-      "repo_path": "bios/BBK/A4988/BBKEmu/A4988/8.BIN",
+      "repo_path": "bios/BBK/A4988/bbkemu/a4988/8.BIN",
       "cores": [
         "bbkemu"
       ]
@@ -89084,7 +89074,7 @@
       "sha1": "159b7e65f3f3dd67f435085be1e154316ba139e0",
       "sha256": "3e12d40948fd50710cef8c6d14acea26ad69f47312125a61bd1003912893fcad",
       "size": 2097152,
-      "repo_path": "bios/BBK/A4988/BBKEmu/A4988/E.BIN",
+      "repo_path": "bios/BBK/A4988/bbkemu/a4988/E.BIN",
       "cores": [
         "bbkemu"
       ]
@@ -91767,7 +91757,7 @@
       "sha1": "159b7e65f3f3dd67f435085be1e154316ba139e0",
       "sha256": "3e12d40948fd50710cef8c6d14acea26ad69f47312125a61bd1003912893fcad",
       "size": 2097152,
-      "repo_path": "bios/BBK/A4988/BBKEmu/A4988/E.BIN",
+      "repo_path": "bios/BBK/A4988/bbkemu/a4988/E.BIN",
       "cores": [
         "gam4980"
       ]
@@ -91818,6 +91808,16 @@
       "sha256": "17139509e1847c3bd54d4fa65f4d0f62d0e5d0a1439f55cc2f64b77e6fe68d41",
       "size": 935345,
       "repo_path": "bios/Fujitsu/FM Towns/fmtownsftv.zip",
+      "cores": [
+        "geartowns"
+      ]
+    },
+    {
+      "dest": "geartowns/fmtownsmx.zip",
+      "sha1": "da6bfb4149c33b0e77d9923356bb9b4f878dd8a5",
+      "sha256": "c17ae7e4401237eba332592080c4b8f9b843215c72b5c2167ae72e8beed1726b",
+      "size": 937566,
+      "repo_path": "bios/Fujitsu/FM Towns/fmtownsmx.zip",
       "cores": [
         "geartowns"
       ]
