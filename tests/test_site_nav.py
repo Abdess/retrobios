@@ -281,6 +281,14 @@ class Redirects(unittest.TestCase):
             "/wiki/getting-started/": "/which-pack/",
         })
 
+    def test_an_alias_profile_leads_to_the_profile_it_names(self):
+        # Search Console found emulators/vba_m/ gone: vba_m is an alias of vbam.
+        profiles = {"vba_m": {"type": "alias", "alias_of": "vbam"}, "vbam": {"cores": []},
+                    "orphan": {"type": "alias", "alias_of": "nowhere"}}
+        present = {"emulators/vbam.md", "which-pack.md", "wiki/getting-started.md"}
+        self.assertEqual(sitestarlight.redirects(profiles, present),
+                         {"/emulators/vba_m/": "/emulators/vbam/"})
+
     def test_a_moved_page_redirects_only_once_its_source_is_gone(self):
         present = {"wiki/getting-started.md", "which-pack.md"}
         self.assertEqual(sitestarlight.redirects({}, present), {})
