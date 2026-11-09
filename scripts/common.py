@@ -3180,17 +3180,29 @@ def resolve_platform_cores(
     """
     cores_config = config.get("cores")
     platform_key = str(config.get("_key") or "")
-    # The names a build the platform compiles itself answers to: there the
-    # name means that build, and a standalone + libretro profile of another
-    # revision under the same name is not what the platform runs (ROCKNIX's
-    # amiberry is 5.6.5). A libretro-only profile of the name stays: RetroPie
-    # builds minivmac37 standalone beside the minivmac core.
-    own_names = {
-        n
-        for name, p in profiles.items()
+    # The builds the platform compiles itself, by the names they answer to.
+    # Such a name means that build there, and another revision of the same
+    # project is not what the platform runs: ROCKNIX and RetroPie build only
+    # standalone Amiberry, Recalbox its standalone and libretro Amiberry 8.2.2.
+    # Only a platform listing the name both ways (dual_mode_cores) beside a
+    # standalone-only build of its own runs the buildbot core too (RetroBat).
+    # A core of another project under the name stays: RetroPie builds
+    # minivmac37 standalone beside the minivmac core.
+    own_builds = {
+        name: p for name, p in profiles.items()
         if platform_key and platform_key in (p.get("built_by") or [])
-        for n in (name, *(str(c) for c in p.get("cores") or []))
     }
+
+    def replaced_by_own(name: str, p: dict, libretro_only: bool = False) -> bool:
+        if platform_key in (p.get("built_by") or []):
+            return False
+        names = {name, *(str(c) for c in p.get("cores") or [])}
+        return any(
+            (not libretro_only or "libretro" in str(q.get("type", "")))
+            and q.get("source") == p.get("source")
+            and names & {key, *(str(c) for c in q.get("cores") or [])}
+            for key, q in own_builds.items()
+        )
 
     def every_libretro() -> set[str]:
         # A build only some platforms compile (built_by) is absent from the
@@ -3205,11 +3217,7 @@ def resolve_platform_cores(
                 not p.get("built_by")
                 or (platform_key and platform_key in p["built_by"])
             )
-            and (
-                platform_key in (p.get("built_by") or [])
-                or "standalone" not in p.get("type", "")
-                or not own_names & {name, *(str(c) for c in p.get("cores") or [])}
-            )
+            and not replaced_by_own(name, p)
         }
 
     if cores_config == "all_libretro":
@@ -3224,21 +3232,22 @@ def resolve_platform_cores(
         index = upstream_profile_index(profiles)
         platform = str(config.get("_key") or "")
 
-        def designated(name: str) -> str | None:
+        def designated(name: str) -> set[str]:
             # A build the platform compiles itself (built_by) is what its
             # name means there: Recalbox's uae4all is Chips-fr/uae4all-rpi,
-            # RetroPie's the standalone uae4all2 under the same name.
-            own = sorted(
+            # RetroPie's the standalone uae4all2 under the same name. A
+            # platform building one name in several revisions, one per board,
+            # runs all of them: RetroPie's amiberry is 5.7.2 and 6.3.3 on x86.
+            own = {
                 p for p in index.get(name, ())
                 if platform and platform in (profiles[p].get("built_by") or [])
-            )
-            return own[0] if own else preferred_profile(index, name)
+            }
+            if own:
+                return own
+            preferred = preferred_profile(index, name)
+            return {preferred} if preferred is not None else set()
 
-        result = {
-            profile
-            for c in core_set
-            if (profile := designated(c)) is not None
-        }
+        result = {profile for c in core_set for profile in designated(c)}
         # A name the platform launches both ways designates its libretro
         # build too. Batocera, Recalbox and RetroBat run pcsx2 standalone and
         # as LRPS2, two profiles: the key match kept the standalone one and
@@ -3249,6 +3258,7 @@ def resolve_platform_cores(
             for profile in index.get(str(c), set())
             if "libretro" in str(profiles[profile].get("type", ""))
             and not profiles[profile].get("built_by")
+            and not replaced_by_own(profile, profiles[profile], libretro_only=True)
         }
         # Support "all_libretro" as a list element: combines all libretro
         # profiles with explicitly listed standalone cores (e.g. RetroDECK

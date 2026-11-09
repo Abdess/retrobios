@@ -1,5 +1,5 @@
 emulator: Amiberry
-type: standalone + libretro
+type: libretro
 core_classification: official_port
 source: "https://github.com/BlitterStudio/amiberry"
 upstream: "https://github.com/tonioni/WinUAE"
@@ -1551,10 +1551,12 @@ files:
     crc32: "f53a0fca"
     sha1: "efe17ca588c44a7f0f8c62be20f23278cfe06727"
     validation: [sha1]
+    aliases: ["blizzard_scsi_kit_iv.rom"]
     found_by: content
     note: >
       Blizzard SCSI Kit IV, ROM id 94. SCSI module ROM of the Blizzard 1230-IV
       and 1260 board, read when the module is enabled.
+      The table names blizzard_scsi_kit_iv.rom as its file name.
     source_ref: "source src/rommgr.cpp:543-544, source src/expansion.cpp:5587-5592, source src/cpuboard.cpp:2882, source src/cpuboard.cpp:2645-2660"
 
   - name: "warp-engine.rom"
@@ -2229,6 +2231,18 @@ files:
       so the table SHA-1 is not the hash of the file.
     source_ref: "source src/rommgr.cpp:860-861, source src/expansion.cpp:6856-6858, source src/cpuboard.cpp:2927-2983, source src/rommgr.cpp:3152-3184, source src/cfgfile.cpp:10132-10142, source src/rommgr.cpp:1797-1810"
 
+  - name: "menu500.aca"
+    path: "roms/menu500.aca"
+    standalone_path: "menu500.aca"
+    system: commodore-amiga
+    required: false
+    min_size: 524288
+    found_by: name
+    note: >
+      ACA 500, ROM id 137. The table gives it no hash: the ROM scan names it by
+      its file name, menu500.aca, and the ACA 500 board opens it by that name.
+    source_ref: "source src/rommgr.cpp:875-876, source src/rommgr.cpp:1656-1665, source src/rommgr.cpp:3241-3244, source src/cpuboard.cpp:2937-2942"
+
   - name: "blizzardppc_040.rom"
     path: "roms/blizzardppc_040.rom"
     standalone_path: "blizzardppc_040.rom"
@@ -2671,10 +2685,12 @@ files:
     crc32: "00447765"
     sha1: "2644e7cbba5cc54e880b4b4249fd1dd12eb4a3bc"
     validation: [sha1]
+    aliases: ["fastlanez3.rom"]
     found_by: content
     note: >
       Fastlane, ROM id 102. Boot ROM of the Fastlane controller. Without it the
       controller has no boot ROM.
+      The table names fastlanez3.rom as its file name.
     source_ref: "source src/rommgr.cpp:545-546, source src/expansion.cpp:5993-5999, source src/ncr9x_scsi.cpp:2003"
 
   - name: "oktagon-2008.rom"
@@ -2686,10 +2702,12 @@ files:
     crc32: "bb0d2f6a"
     sha1: "56c441fa37d193393081b2e8ceae823bc7e97e49"
     validation: [sha1]
+    aliases: ["oktagon2008.rom"]
     found_by: content
     note: >
       Oktagon 2008, ROM id 103. Boot ROM of the Oktagon 2008 controller. Without
       it the controller has no boot ROM.
+      The table names oktagon2008.rom as its file name.
     source_ref: "source src/rommgr.cpp:547-548, source src/expansion.cpp:5609-5614, source src/ncr9x_scsi.cpp:2093"
 
   - name: "dkb-rapidfire-spitfire-v1.31.rom"
@@ -4259,6 +4277,10 @@ files:
     system: commodore-amiga
     required: false
     size: 2048
+    crc32: "4a3fc332"
+    sha1: "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2"
+    validation: [sha1]
+    found_by: content
     note: "6500-1/6570-036 keyboard MCU ROM for A500/A600/A1000 models"
     source_ref: "source src/kbmcu/keyboard_mcu_6500_1.cpp:385-408, source src/rommgr.cpp:137-138"
 
@@ -4267,6 +4289,10 @@ files:
     system: commodore-amiga
     required: false
     size: 8192
+    crc32: "2a77eec4"
+    sha1: "301ec6a69404457d912c89e3fc54095eda9f0e93"
+    validation: [sha1]
+    found_by: content
     note: "68HC05 keyboard MCU ROM for A1200"
     source_ref: "source src/kbmcu/keyboard_mcu_6805.cpp:544-567, source src/rommgr.cpp:139-140"
 
@@ -4275,6 +4301,10 @@ files:
     system: commodore-amiga
     required: false
     size: 2048
+    crc32: "c23d280e"
+    sha1: "b5c4b8c38b9e4a864abc871d048bd1c3a02c8432"
+    validation: [sha1]
+    found_by: content
     note: "D8039HLC keyboard MCU ROM for A2000"
     source_ref: "source src/kbmcu/keyboard_mcu_d8039hlc.cpp:250-273, source src/rommgr.cpp:141-142"
 

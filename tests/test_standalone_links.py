@@ -621,44 +621,59 @@ class XroarOnEachPlatform(unittest.TestCase):
 
 
 class AmiberryOnEachPlatform(unittest.TestCase):
-    """The standalone Amiberry scans rom_path for its ROMs. Batocera, KNULLI
-    and RetroPie set rom_path to bios/amiga."""
+    """The standalone Amiberry scans rom_path for its ROMs. Batocera and KNULLI
+    set it to bios/amiga, Recalbox to bios/amiga/bios."""
 
-    BOUND = ("batocera", "knulli", "retropie")
+    BOUND = {
+        "batocera": ("amiberry-7.1.1-332", "amiga"),
+        "knulli": ("amiberry-7.1.1", "amiga"),
+        "recalbox": ("amiberry-8.2.2", "amiga/bios"),
+    }
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["amiberry"]
+        cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
-    def test_rom_path_is_bios_amiga(self) -> None:
-        for platform in self.BOUND:
+    def test_rom_path_is_the_platform_folder(self) -> None:
+        for platform, (name, folder) in self.BOUND.items():
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 self.assertEqual(
-                    standalone_bindings_for("amiberry", self.profile, standalone_set(cfg)),
-                    {"": ("", "amiga")},
+                    standalone_bindings_for(name, self.profiles[name], standalone_set(cfg)),
+                    {"": ("", folder)},
                 )
 
-    def test_every_rom_path_entry_lands_in_bios_amiga(self) -> None:
-        for platform in self.BOUND:
+    def test_every_rom_path_entry_lands_in_that_folder(self) -> None:
+        for platform, (name, folder) in self.BOUND.items():
+            profile = self.profiles[name]
             cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
-            (view, _standalone), = platform_layouts(
-                "amiberry", self.profile, standalone_set(cfg)
-            )
-            for own, entry in zip(self.profile["files"], view["files"]):
-                layout = own.get("standalone_path")
-                if not layout:
+            views = platform_layouts(name, profile, standalone_set(cfg))
+            ((view, _standalone),) = [(v, s) for v, s in views if s]
+            for own, entry in zip(profile["files"], view["files"]):
+                if own.get("mode") == "libretro":
                     continue
+                layout = own.get("standalone_path") or own.get("path") or own["name"]
                 with self.subTest(platform=platform, name=entry["name"]):
-                    self.assertEqual(entry["standalone_path"], f"amiga/{layout}")
-                    self.assertNotIn("/", layout.removeprefix("mt32-roms/"))
+                    self.assertNotIn("unplaced", entry)
+                    self.assertEqual(entry["standalone_path"], f"{folder}/{layout}")
 
 
 class AmiberryBuildEachPlatformShips(unittest.TestCase):
-    """ROCKNIX, AmberELEC and EmuELEC compile older Amiberry revisions: on each
-    the name amiberry is that build, never the 8.5.0 profile."""
+    """Each platform resolves the name amiberry to the build its own package
+    compiles. RetroBat keeps the 8.5.0 libretro core beside its standalone."""
 
-    OWN = {"rocknix": "amiberry-5.6.5", "amberelec": "amiberry-7.1.1", "emuelec": "amiberry-8.0.0"}
+    OWN = {
+        "rocknix": {"amiberry-5.6.5"},
+        "amberelec": {"amiberry-7.1.1"},
+        "emuelec": {"amiberry-8.0.0"},
+        "batocera": {"amiberry-7.1.1-332"},
+        "knulli": {"amiberry-7.1.1"},
+        "recalbox": {"amiberry-8.2.2"},
+        "retrobat": {"amiberry", "amiberry-8.3.0"},
+        "retropie": {"amiberry-5.7.2", "amiberry-6.3.3"},
+        "emudeck": {"amiberry"},
+        "retrodeck": {"amiberry"},
+    }
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -673,12 +688,26 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
     def test_each_platform_resolves_its_own_build(self) -> None:
         for platform, own in self.OWN.items():
             with self.subTest(platform=platform):
-                self.assertEqual(self.resolved(platform), {own})
+                self.assertEqual(self.resolved(platform), own)
 
-    def test_the_others_keep_the_main_profile(self) -> None:
-        for platform in ("batocera", "knulli", "retrobat", "retropie", "recalbox"):
-            with self.subTest(platform=platform):
-                self.assertEqual(self.resolved(platform), {"amiberry"})
+    def test_retropie_reads_kickstarts_below_its_start_folder(self) -> None:
+        # amiberry 5.7 and 6.3 read <start path>/kickstarts, which RetroPie
+        # links to bios/amiga. Its whdboot and roms folders stay below it.
+        cfg = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
+        for name in ("amiberry-5.7.2", "amiberry-6.3.3"):
+            profile = self.profiles[name]
+            self.assertEqual(
+                standalone_bindings_for(name, profile, standalone_set(cfg)),
+                {"kickstarts": ("", "amiga")},
+            )
+            ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg))
+            for entry in view["files"]:
+                with self.subTest(name=name, file=entry["name"]):
+                    if entry["path"].startswith("kickstarts/"):
+                        self.assertEqual(entry["standalone_path"],
+                                         "amiga/" + entry["path"][len("kickstarts/"):])
+                    else:
+                        self.assertEqual(entry.get("unplaced"), "outside_bios_folder")
 
     def test_rocknix_reads_kickstarts_through_the_copied_link(self) -> None:
         # amiberry 5.6.5 reads <cwd>/kickstarts. ROCKNIX runs it in
