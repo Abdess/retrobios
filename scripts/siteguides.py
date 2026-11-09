@@ -460,11 +460,14 @@ PLACES = ("device", "server")
 def terminal_tabs(
     tabs: tuple[str, ...], args: dict[str, str], indent: str = "", steps: bool = True,
     how: dict[str, str] | None = None,
+    under_steps: dict[str, list[str]] | None = None,
+    under_command: dict[str, list[str]] | None = None,
 ) -> list[str]:
     """Content tabs, one per place the command runs, each with how to open
     the terminal there. Tab labels are shared across the site, so the reader's
     choice carries from page to page. *how* replaces the shared text of a tab
-    for one setup."""
+    for one setup. *under_steps* and *under_command* add lines to a tab
+    after its text and after its command (sitesteps.install_box)."""
     items = []
     for key in tabs:
         label, shared, shell = TERMINALS[key]
@@ -472,7 +475,9 @@ def terminal_tabs(
             label = ""  # one place, which the text around already names
         text = (how or {}).get(key) or shared
         body = [text, ""] if steps else []
-        items.append((label, body + fence(shell, install_command(shell, args.get(key, "")))))
+        body += (under_steps or {}).get(key, [])
+        items.append((label, body + fence(shell, install_command(shell, args.get(key, "")))
+                      + [""] + (under_command or {}).get(key, [])))
     return markup.tabs(items, indent)
 
 
