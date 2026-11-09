@@ -63,6 +63,7 @@ NAMES: dict[str, str] = {
         "a roman numeral in a machine or game name (Model I, Ultima I)",
     r"\bI(?= \([A-Z])": "a model letter, I (Palladium)",
     r"Java ME": "Java ME, the mobile Java platform",
+    r"\bME(?=,? (?:and )?MA\b)": "FM Towns ME, a model name beside the MA (geartowns)",
     r"laseractive us(?=:)": "the LaserActive region key of geargrafx's BIOS list",
 }
 
