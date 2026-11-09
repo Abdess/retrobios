@@ -31,4 +31,4 @@ files:
     required: true
     installed_on: [retrobat, rocknix]
     source_ref: "src/libretro/freej2me_libretro.c:487-490 (GET_SYSTEM_DIRECTORY + fill_pathname_join + java -jar)"
-    note: "Not a BIOS dump. Java emulator loaded by the native core at startup via execvp('java', '-jar', path). Built from source via 'ant'. Must be in the system directory root. ROCKNIX builds the core and the jar from freej2me-plus 1.52, which keeps the freej2me-lr.jar name, and copies the jar into its BIOS folder before each launch when it is missing."
+    note: "Not a BIOS dump. Java emulator the native core joins to the system directory as freej2me-lr.jar and starts via execvp('java', '-jar', path). Built from source via 'ant'. Must be in the system directory root. ROCKNIX builds the core and the jar from freej2me-plus 1.52, which keeps the freej2me-lr.jar name, and copies the jar into its BIOS folder before each launch when it is missing."

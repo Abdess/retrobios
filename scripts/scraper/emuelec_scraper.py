@@ -43,6 +43,7 @@ from .batocera_scraper import (
     platform_systems,
     requirements_from_systems,
 )
+from .emuelec_launchers import extract_launchers
 from .es_emulators import (
     SystemEmulators,
     attach_system_cores,
@@ -50,6 +51,7 @@ from .es_emulators import (
     json_systems,
     system_cores,
 )
+from .shell_launchers import RepoTree
 
 PLATFORM_NAME = "emuelec"
 
@@ -118,6 +120,14 @@ BUILDS_OF = {
 # emuelecRunEmu.sh with -C (lines 367-369 load <core>_libretro.so), or the
 # program `port_exe` names.
 PORTS_SYSTEM = "ports"
+
+
+def launcher_revision(url: str) -> str:
+    """The tag or commit a batocera-systems URL is read at."""
+    found = re.search(rf"/{REPO}/([^/]+)/packages/", url)
+    if found is None:
+        raise ValueError(f"{url} names no {REPO} revision")
+    return found.group(1)
 
 
 def port_engines(text: str) -> list[tuple[str, str, str | None, bool]]:
@@ -215,6 +225,10 @@ class Scraper(BaseScraper):
             "standalone_cores": standalone,
             "dual_mode_cores": dual,
             "systems": systems,
+            # Read at the revision the BIOS list comes from.
+            "launchers": extract_launchers(
+                RepoTree.github(REPO, launcher_revision(self.url))
+            ),
         }
 
 
