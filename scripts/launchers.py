@@ -331,6 +331,9 @@ BIOS_TREE = ""
 ROMS_TREE = "roms"
 # The emulator folders of a platform whose registry describes them.
 EMULATORS_TREE = "emulators"
+# The tree a platform's list installs into when it starts above the BIOS
+# folder: a plain dest, with no prefix.
+INSTALL_TREE = "install"
 # A folder of neither tree, which no pack and no installer can fill.
 OUTSIDE_TREE = "outside"
 Place = tuple[str, str]
@@ -382,15 +385,13 @@ class HandedDirectory:
     directory: str
     handles: frozenset[str]
     source_ref: str
-    roms_folder: str | None = None
+    roms_place: Place | None = None
 
     def place(self) -> Place | None:
         """The folder as a place, None when it lies outside both roots."""
         if self.folder is not None:
             return (BIOS_TREE, self.folder)
-        if self.roms_folder is not None:
-            return (ROMS_TREE, self.roms_folder)
-        return None
+        return self.roms_place
 
 
 def handed_directories(config: dict) -> list[HandedDirectory]:
@@ -430,19 +431,37 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                 directory=directory,
                 handles=handles,
                 source_ref=str(record.get("source_ref", "")),
-                roms_folder=None if folder is not None else folder_in_roms(raw, config),
+                roms_place=None if folder is not None else _roms_place(
+                    config, folder_in_roms(raw, config)
+                ),
             ))
     return found
+
+
+def _roms_place(config: dict, path: str | None) -> Place | None:
+    """A path below the roms root as a place: in the install tree when the
+    platform installs above its BIOS folder (AmberELEC), else the roms tree."""
+    if path is None:
+        return None
+    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+
+    layout = outer_layout(config, ROMS_ROOT) or {}
+    if "install_prefix" in layout:
+        prefix = layout["install_prefix"]
+        return (INSTALL_TREE, sanitize_pack_path(f"{prefix}/{path}" if prefix else path))
+    return (ROMS_TREE, path)
 
 
 def folder_in_roms(directory: str, config: dict) -> str | None:
     """A directory relative to the platform's roms directory, None outside it.
 
-    Only a platform whose registry names the roms directory has one
-    (``roms_directory.path``): ROCKNIX's /storage/roms, which holds its BIOS
+    Only a platform whose rom folders file records its roms root has one
+    (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
     folder and the folders its launchers run programs from.
     """
-    roms = str((config.get("roms_directory") or {}).get("path") or "").rstrip("/")
+    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+
+    roms = str((outer_layout(config, ROMS_ROOT) or {}).get("path") or "").rstrip("/")
     directory = directory.strip().rstrip("/")
     if not roms or not directory.startswith(roms + "/"):
         return None
@@ -503,7 +522,7 @@ def executed_files(config: dict) -> list[ExecutedFile]:
                     f"{directories[0]}/{name}" if directories[0] else name
                 ))
             elif roms is not None:
-                place = (ROMS_TREE, sanitize_pack_path(f"{roms}/{name}" if roms else name))
+                place = _roms_place(config, sanitize_pack_path(f"{roms}/{name}" if roms else name))
             elif emulator_folder is not None:
                 place = (EMULATORS_TREE, sanitize_pack_path(f"{emulator_folder}/{name}"))
             else:
@@ -581,8 +600,8 @@ def standalone_bindings(
                         key = "/".join(p for p in (sub, rest) if p)
                         found.setdefault(key, set()).add(target)
                         linked = True
-            if not linked and record.roms_folder is not None:
-                found.setdefault(sub, set()).add((ROMS_TREE, record.roms_folder))
+            if not linked and record.roms_place is not None:
+                found.setdefault(sub, set()).add(record.roms_place)
     if EXECUTABLE_DIRECTORY in wanted:
         paths = list(layout)
         for run in executed:

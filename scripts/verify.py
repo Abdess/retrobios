@@ -794,6 +794,8 @@ def find_undeclared_files(
                     entry["members"] = members
                 if f.get("layout_path"):
                     entry["layout_path"] = f["layout_path"]
+                if f.get("unprefixed"):
+                    entry["unprefixed"] = True
                 if f.get("unplaced"):
                     entry["unplaced"] = f["unplaced"]
                 elif f.get("root") in OUTER_ROOTS:

@@ -18,7 +18,7 @@ from common import resolve_local_file
 from common import resolve_platform_cores
 from common import core_system_dirs, platform_layouts, system_dir_path
 from common import standalone_set as platform_standalone_set
-from common import OUTER_ROOTS, sanitize_pack_path
+from common import OUTER_ROOTS, outer_layout, sanitize_pack_path
 from common import size_fits
 from validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
@@ -44,6 +44,10 @@ def extra_full_destination(fe: dict, prefix: str) -> str:
     """
     if fe.get("root") == "save":
         return str(fe.get("pack_path") or "")
+    if fe.get("unprefixed"):
+        # A path of the install tree outside the BIOS folder (AmberELEC's
+        # pico-8/ beside bios/): no platform prefix in front.
+        return sanitize_pack_path(fe.get("destination", fe.get("name", "")))
     if fe.get("root") in OUTER_ROOTS:
         return outer_destination(
             fe["root"], sanitize_pack_path(fe.get("destination", fe.get("name", "")))
@@ -573,7 +577,7 @@ def _agnostic_scan_extras(
                 # The scan walks the BIOS tree: a file read below the save
                 # directory is placed by the gap report's pass.
                 if (read_from_save_dir(f, standalone) or f.get("unplaced")
-                        or f.get("root") in OUTER_ROOTS):
+                        or f.get("root") in OUTER_ROOTS or f.get("unprefixed")):
                     continue
                 # An agnostic BIOS mode says the BIOS filename is free, not that
                 # every file the emulator loads is.  A free filename still has a
@@ -1024,12 +1028,10 @@ class ExtraPlacement:
         self.native_systems = native_slug_systems(config)
         self.flat = bool(config.get("firmware_folder_flat"))
         self.save = save_layout(config)
-        # The roms directory and emulator folders the registry describes,
+        # The roms root and emulator folders the platform's files describe,
         # for a file a launcher runs from them (ROCKNIX's roms/pico-8,
         # RetroBat's emulators/pico8).
-        self.outer = {
-            root for root in OUTER_ROOTS if config.get(f"{root}_directory")
-        }
+        self.outer = {root for root in OUTER_ROOTS if outer_layout(config, root)}
         self.config = config
         self.norm_map = (
             {_norm_system_id(sid): sid for sid in self.platform_systems}
@@ -1050,6 +1052,8 @@ class ExtraPlacement:
         """
         if entry.get("unplaced"):
             return None
+        if entry.get("unprefixed"):
+            return dest, dest
         if entry.get("root") in OUTER_ROOTS:
             root = entry["root"]
             return (dest, outer_destination(root, dest)) if root in self.outer else None
@@ -1339,7 +1343,7 @@ def _collect_emulator_extras(
                 # covered elsewhere belongs to another program's file.
                 # Nor is one placed outside the BIOS tree by the layout.
                 if (fname not in covered_names or f.get("unsourceable") or f.get("unplaced")
-                        or f.get("root") in OUTER_ROOTS):
+                        or f.get("root") in OUTER_ROOTS or f.get("unprefixed")):
                     continue
                 # Installed with the emulator or by the platform's package,
                 # as the first pass already decided for the same entry.
@@ -1586,6 +1590,8 @@ def _report_extra(u: dict, name: str, dest: str) -> dict:
         extra["system_dir"] = u["system_dir"]
     if u.get("layout_path"):
         extra["layout_path"] = u["layout_path"]
+    if u.get("unprefixed"):
+        extra["unprefixed"] = True
     # The archive layout the core opens ranks same-named copies by what
     # they hold. Without it the first copy indexed won.
     if u.get("contents"):

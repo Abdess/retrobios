@@ -3687,10 +3687,17 @@ def _check_roms_directory(data: dict) -> None:
         return
     if (
         not isinstance(layout, dict)
-        or set(layout) != {"bios_folder"}
+        or set(layout) != {"bios_folder", "from_bios"}
         or len(_safe_relative_path(layout["bios_folder"], "roms_directory.bios_folder").parts) != 1
+        or not isinstance(layout["from_bios"], str)
     ):
         raise ValueError("invalid roms_directory")
+    # The roms root relative to the BIOS folder: up some levels, then down
+    # into named folders. Nothing climbs again once it went down.
+    parts = PurePosixPath(layout["from_bios"]).parts
+    ups = next((i for i, part in enumerate(parts) if part != ".."), len(parts))
+    if not ups or any(part in ("..", ".", "/") or _CONTROLS.search(part) for part in parts[ups:]):
+        raise ValueError("invalid roms_directory.from_bios")
 
 
 def _check_emulators_directory(data: dict) -> None:
@@ -5294,17 +5301,18 @@ def place_roms_entries(
 ) -> tuple[list[dict], list[dict]]:
     """Find the roms folder for the entries a launcher reads below it.
 
-    The platform keeps its BIOS folder in its roms folder under the name the
-    list gives (ROCKNIX's /storage/roms/bios): a BIOS folder of that name
-    puts the roms folder above it. Any other is a folder this run cannot
-    relate to the roms, and the entries are left out with the reason.
+    The list gives the roms root relative to the BIOS folder, as the OS's
+    own source places them (ROCKNIX's /storage/roms holds bios/): a BIOS
+    folder of the platform's name puts the roms root there. Any other is a
+    folder this run cannot relate to the roms, and the entries are left out
+    with the reason.
     """
     below = [entry for entry in files if entry.get("root") == "roms"]
     if not below:
         return files, []
     layout = manifest.get("roms_directory") or {}
     if layout and bios_path.name == layout.get("bios_folder"):
-        _ROMS_DIRS[bios_path] = bios_path.parent
+        _ROMS_DIRS[bios_path] = Path(os.path.normpath(bios_path / layout["from_bios"]))
         return files, []
     if say:
         print(f"  {_plural(len(below), 'file')} read from {display}'s roms folder left out: "
