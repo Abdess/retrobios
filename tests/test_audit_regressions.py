@@ -6934,6 +6934,10 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
             }
             rows = bundled_only.bundled_only(db, profiles, tmp, Path(tmp))
             self.assertEqual([row["path"] for row in rows], [str(Path(tmp, "icon.png"))])
+            # A platform whose package leaves the file out brings it from the
+            # collection: the copy stays.
+            profiles["app"]["files"][0]["not_bundled_on"] = ["someplatform"]
+            self.assertEqual(bundled_only.bundled_only(db, profiles, tmp, Path(tmp)), [])
 
     def test_every_copy_of_the_listed_bytes_is_listed(self):
         """The database keeps one path per content: splitwolf's sprite
