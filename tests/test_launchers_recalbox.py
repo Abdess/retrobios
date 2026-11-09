@@ -26,6 +26,7 @@ from scraper import recalbox_scraper  # noqa: E402
 from scraper.recalbox_launchers import (  # noqa: E402
     ALL_CORES,
     AMIBERRY_CONFIG,
+    AMIBERRY_GLOBAL,
     AMIBERRY_KICKSTARTS,
     AMIBERRY_SUBSYSTEMS,
     CONFIGGEN,
@@ -865,6 +866,34 @@ class ConfigGenerator:''',
             self.settings.setString("kickstart_ext_rom_file", extended)''',
 }
 
+# amiberryGlobalConfig.py:1-10, 30-43
+AMIBERRY_GLOBAL_BLOCKS = {
+    1: '''#!/usr/bin/env python
+
+
+class AmiberryGlobalConfig:
+
+    def __init__(self, userGlobalSettingsFile, finalGlobalSettingsFile):
+        self.globalSettingsFile = finalGlobalSettingsFile
+        self.userSettingsFile = userGlobalSettingsFile
+
+    def createGlobalSettings(self, verbose: bool, scanline: bool):''',
+    30: '''        # Forced values
+        import configgen.recalboxFiles as recalboxFiles
+        mount = recalboxFiles.amiberryMountPoint
+        settings.setBool("Quickstart", True)
+        # Host paths (Amiberry 8.x reads them from amiberry.conf, overriding the
+        # ones derived from AMIBERRY_HOME_DIR)
+        settings.setString("config_path", mount + "/conf/")
+        settings.setString("controllers_path", mount + "/conf/")
+        settings.setString("retroarch_config", recalboxFiles.retroarchCustom)
+        settings.setString("whdboot_path", mount + "/whdboot/")
+        settings.setString("rp9_path", mount + "/conf/")
+        # Kickstarts: Amiberry scans this folder on startup to build its ROM list
+        settings.setString("rom_path", recalboxFiles.BIOS + "/amiga/bios/")
+        settings.setString("logfile_path", mount + "/amiberry.log")''',
+}
+
 # pcsx2Generator.py:1-166
 PCSX2_BLOCKS = {
     1: r'''#!/usr/bin/env python
@@ -1216,6 +1245,7 @@ BLOCKS = {
     AMIBERRY_KICKSTARTS: AMIBERRY_KICKSTARTS_BLOCKS,
     AMIBERRY_SUBSYSTEMS: AMIBERRY_SUBSYSTEMS_BLOCKS,
     AMIBERRY_CONFIG: AMIBERRY_CONFIG_BLOCKS,
+    AMIBERRY_GLOBAL: AMIBERRY_GLOBAL_BLOCKS,
     PCSX2: PCSX2_BLOCKS,
     DOLPHIN: DOLPHIN_BLOCKS,
     XEMU: XEMU_BLOCKS,
@@ -1442,17 +1472,38 @@ class AmiberryKickstarts(unittest.TestCase):
                  "No BIOS found, Extended BIOS not found"),
                 ("amiga600, amiga1200", "fixed_name", ["kick02019.AROS", "kick02019.AROS.ext"],
                  False),
+                (None, "passes_path", [], False),
             ],
         )
         self.assertEqual(records[1].depends_on_option, "rom type DISK")
         self.assertEqual(records[0].search_dir, "/recalbox/share/bios/amiga/bios")
         self.assertEqual(records[0].passes_to, "kickstart_rom_file")
-        self.assertEqual(records[-1].passes_to,
+        self.assertEqual(records[-2].passes_to,
                          "kickstart_rom_file, kickstart_ext_rom_file "
                          "(:AROS built in when either is missing)")
         self.assertEqual(records[0].source_ref,
                          f"{ref(AMIBERRY_KICKSTARTS, '9-10, 50-53, 94-142')}, "
                          f"{ref(AMIBERRY_CONFIG, '337-345')}")
+
+    def test_rom_path_is_the_amiga_bios_folder(self):
+        record = amiberry(configgen())[-1]
+        self.assertEqual(
+            (record.emulator, record.build, record.search_dir, record.passes_to,
+             record.source_ref),
+            ("amiberry", "standalone", "/recalbox/share/bios/amiga/bios",
+             "written: rom_path in amiberry.conf", ref(AMIBERRY_GLOBAL, "42")),
+        )
+
+    def test_a_rom_path_outside_the_bios_folder_raises(self):
+        tree = configgen(AMIBERRY_GLOBAL, 'recalboxFiles.BIOS + "/amiga/bios/"',
+                         'mount + "/roms/"')
+        with self.assertRaises(LauncherShapeError):
+            amiberry(tree)
+
+    def test_a_missing_rom_path_raises(self):
+        tree = configgen(AMIBERRY_GLOBAL, '"rom_path"', '"rom_dir"')
+        with self.assertRaises(LauncherShapeError):
+            amiberry(tree)
 
     def test_several_pairs_for_one_rom_type_raise(self):
         tree = configgen(AMIBERRY_KICKSTARTS, '["kick40060.CD32|kick40060.CD32.ext"]',
@@ -1548,7 +1599,7 @@ class ExtractionNeverEmpty(unittest.TestCase):
 
         records = extract_launchers(reader)
         self.assertEqual(sorted(set(read)), sorted(SOURCE_FILES))
-        self.assertEqual(len(records), 86)
+        self.assertEqual(len(records), 87)
 
     def test_records_fit_the_schema(self):
         schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())

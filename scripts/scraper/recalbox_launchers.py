@@ -44,6 +44,7 @@ AMIBERRY_GENERATOR = f"{GENERATORS}/amiberry/amiberryGenerator.py"
 AMIBERRY_KICKSTARTS = f"{GENERATORS}/amiberry/amiberryKickstarts.py"
 AMIBERRY_SUBSYSTEMS = f"{GENERATORS}/amiberry/amiberrySubSystems.py"
 AMIBERRY_CONFIG = f"{GENERATORS}/amiberry/amiberryConfig.py"
+AMIBERRY_GLOBAL = f"{GENERATORS}/amiberry/amiberryGlobalConfig.py"
 PCSX2 = f"{GENERATORS}/pcsx2/pcsx2Generator.py"
 DOLPHIN = f"{GENERATORS}/dolphin/dolphinGenerator.py"
 XEMU = f"{GENERATORS}/xemu/xemuGenerator.py"
@@ -52,7 +53,7 @@ MUPEN_CONFIG = f"{GENERATORS}/mupen/mupenConfig.py"
 
 SOURCE_FILES = (
     FILES_MODULE, LAUNCHER, RETROARCH, CORES, LIBRETRO_GENERATOR, HATARI, GSPLUS,
-    AMIBERRY_KICKSTARTS, AMIBERRY_SUBSYSTEMS, AMIBERRY_CONFIG, PCSX2, DOLPHIN, XEMU,
+    AMIBERRY_KICKSTARTS, AMIBERRY_SUBSYSTEMS, AMIBERRY_CONFIG, AMIBERRY_GLOBAL, PCSX2, DOLPHIN, XEMU,
     MUPEN_CONFIG, XROAR,
 )
 
@@ -872,7 +873,24 @@ def amiberry(cg: Configgen) -> list[Launcher]:
         fails_when_missing=False, depends_on_option="none of the listed kickstarts found",
         source_ref=f"{kick.ref(tail)}, {config_ref}",
     ))
+    launchers.append(_amiberry_rom_path(cg, emulator))
     return launchers
+
+
+def _amiberry_rom_path(cg: Configgen, emulator: str) -> Launcher:
+    """amiberry.conf rom_path, the folder Amiberry scans for every ROM."""
+    src = cg.source(AMIBERRY_GLOBAL)
+    create = src.function("createGlobalSettings")
+    found = [c for c in _calls(create, attr="setString") if _setter(c, "rom_path")]
+    if len(found) != 1 or len(found[0].args) != 2:
+        src.fail(f"expected one rom_path setter, found {len(found)}")
+    call = found[0]
+    directory = cg.bios_dir(spell(call.args[1], cg.env(src, create)), src, "rom_path")
+    return Launcher(
+        emulator=emulator, build="standalone", kind="passes_path", names=[],
+        search_dir=directory, passes_to="written: rom_path in amiberry.conf",
+        source_ref=src.ref([(call.lineno, call.end_lineno)]),
+    )
 
 
 def pcsx2(cg: Configgen) -> list[Launcher]:
