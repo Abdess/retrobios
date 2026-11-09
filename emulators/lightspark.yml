@@ -5,6 +5,7 @@ source: "https://github.com/lightspark/lightspark"
 upstream: "https://github.com/lightspark/lightspark"
 profiled_date: "2026-08-08"
 source_commit: "c24accae28d677406bc5047ad7e0778a39bfd27b"
+prose_written_at: "c24accae28d677406bc5047ad7e0778a39bfd27b"
 core_version: "0.10.0"
 version_basis:
   kind: file

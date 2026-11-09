@@ -4,6 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/dosbox-staging/dosbox-staging"
 upstream: "https://github.com/dosbox-staging/dosbox-staging"
 source_commit: "27b1b7ca719c21ef3444f7ad1cf2d9cd439527cc"
+prose_written_at: "27b1b7ca719c21ef3444f7ad1cf2d9cd439527cc"
 profiled_date: "2026-10-26"
 core_version: "0.84.0-alpha"
 version_basis:
