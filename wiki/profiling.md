@@ -603,7 +603,7 @@ look.
 | Field | Description |
 |-------|-------------|
 | `name` | filename as the core expects it |
-| `required` | true if the core needs this file to function |
+| `required` | true if the core needs this file to function. On a member of a `group`, the requirement of the set |
 | `system` | system ID this file belongs to (for multi-system profiles) |
 | `systems` | the systems of the profile this file serves, when it serves several but not all (a MAME device set the machines of two systems load). Never written with `system` |
 | `archive` | ROM set the file lives inside, for arcade entries (e.g. `neogeo.zip`) |
@@ -621,7 +621,8 @@ look.
 | `region` | always a list of territory slugs from the schema enum (`[north-america]`, `[japan, asia-ntsc]`). The region the code selects the file **for**, never the region of the dump. See step 3b |
 | `region_check` | true if the core refuses to boot a game whose region does not match the BIOS |
 | `fast_boot` | BIOS generation label the core uses to decide whether fast boot is available |
-| `priority` | preference order when several BIOS satisfy the same slot, **lowest wins**. DuckStation's `FindBIOSImageInDirectory` keeps the image whose priority is lower, and its table de-prioritizes by raising the number: the buggy launch console sits at 50 and PS2 images at 100, while `scph5501` sits at 5. A core that walks an ordered search list, as PicoDrive does with `biosfiles_us/eu/jp`, maps onto the same field as 1, 2, 3. Only set it from the source. `--one-per-slot` reads it |
+| `priority` | preference order when several BIOS satisfy the same slot, **lowest wins**. DuckStation's `FindBIOSImageInDirectory` keeps the image whose priority is lower, and its table de-prioritizes by raising the number: the buggy launch console sits at 50 and PS2 images at 100, while `scph5501` sits at 5. A core that walks an ordered search list, as PicoDrive does with `biosfiles_us/eu/jp`, maps onto the same field as 1, 2, 3. Only set it from the source. `--one-per-slot` reads it, comparing the members of one `group` |
+| `group` | entries the code takes one of: it loads the first it finds (Yabause tries `saturn_bios.bin`, `sega_101.bin`, `mpr-17933.bin`), and holding any member fills the need. Verify, the gap report and the packs report a set nobody holds as one gap under its first member, and no member of a held set as missing. `required` is the same on every member, the order stays in `priority`. A list puts a file in several sets. Where the code keeps a list per region, each list is its own group (PicoDrive's `mega-cd-us`, `mega-cd-eu`, `mega-cd-jp`) |
 | `embedded` | true if the data is compiled into the binary and the external file is optional |
 | `bundled` | true if the emulator's own release installs the file where it reads it, for the build `mode` names (all builds when `mode` is absent). Packs and the installer leave it out: the user already has it. A file the standalone release ships but the libretro core does not (PPSSPP's assets, Dolphin's Sys) is bundled with `mode: standalone` only |
 | `not_bundled_on` | platforms (registry keys) whose package leaves out a file the release bundles: their packs bring it (Batocera installs hcl without its data) |

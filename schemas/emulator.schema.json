@@ -674,9 +674,16 @@
             ]
           },
           "priority": {
-            "description": "Preference order among the BIOS a system accepts, lowest first. DuckStation's FindBIOSImageInDirectory keeps the image whose priority is lower. A search list the code walks in order maps onto it as 1, 2, 3.",
+            "description": "Preference order among the BIOS a system accepts, lowest first. DuckStation's FindBIOSImageInDirectory keeps the image whose priority is lower. A search list the code walks in order maps onto it as 1, 2, 3. The order only: which entries stand in for one another is group.",
             "type": "integer",
             "minimum": 0
+          },
+          "group": {
+            "description": "Entries of one profile sharing a group are one need: the code loads one of them (the first it finds, in priority order where the source states one) and holding any member fills it. required states the set's requirement and is the same on every member. A list puts a file in several sets, a fallback two machine models share.",
+            "oneOf": [
+              {"type": "string", "minLength": 1},
+              {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+            ]
           },
           "region_check": {
             "type": "boolean"

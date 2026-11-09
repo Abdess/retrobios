@@ -6765,5 +6765,219 @@ class StandaloneModeRequiresAStandaloneBuild(unittest.TestCase):
         self.assertFalse(runs_standalone("dolphin", dual, {"pcsx2"}))
 
 
+
+class OneOfASearchList(unittest.TestCase):
+    """Entries a core takes the first of are one need (``group:``).
+
+    Yabause tries saturn_bios.bin, sega_101.bin, mpr-17933.bin and loads the
+    first it finds. Written as required on the first name only, verify and
+    the gap report called saturn_bios.bin a missing required file while
+    sega_101.bin was held, and a set held through an optional-looking name
+    passed for the wrong reason. Synthetic: set ``first`` holds only its
+    second member, set ``none`` holds nothing.
+    """
+
+    def setUp(self):
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+        repo = Path(__file__).resolve().parent.parent
+        (repo / "tmp").mkdir(exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        previous = os.getcwd()
+        os.chdir(self.root)
+        self.addCleanup(os.chdir, previous)
+        self.db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {},
+                                            "by_crc32": {}, "by_path_suffix": {}}}
+        for name in ("second.bin", "plain.bin"):
+            data = name.encode() * 8
+            rel = f"bios/Test/Console/{name}"
+            Path(rel).parent.mkdir(parents=True, exist_ok=True)
+            Path(rel).write_bytes(data)
+            sha1 = hashlib.sha1(data).hexdigest()
+            self.db["files"][sha1] = {"path": rel, "name": name, "size": len(data),
+                                      "md5": hashlib.md5(data).hexdigest(), "crc32": ""}
+            self.db["indexes"]["by_name"][name] = [sha1]
+        Path("emulators").mkdir()
+        Path("platforms").mkdir()
+
+        def member(name: str, group: str, rank: int) -> dict:
+            return {"name": name, "system": "console-a", "group": group,
+                    "priority": rank, "required": True}
+
+        self.profile = {
+            "emulator": "Seq", "type": "libretro", "cores": ["seq"],
+            "systems": ["console-a"],
+            "files": [
+                member("first.bin", "first", 1),
+                member("second.bin", "first", 2),
+                member("third.bin", "first", 3),
+                member("none_a.bin", "none", 1),
+                member("none_b.bin", "none", 2),
+                {"name": "plain.bin", "system": "console-a", "required": True},
+            ],
+        }
+        Path("emulators/seq.yml").write_text(yaml.safe_dump(self.profile))
+        self.config = {
+            "platform": "Seqs", "verification_mode": "existence",
+            "base_destination": "system", "cores": ["seq"],
+            "systems": {"console-a": {"files": []}},
+        }
+
+    def _verify(self) -> dict:
+        return verify_emulator(["seq"], "emulators", self.db, platforms_dir="platforms")
+
+    def test_one_member_held_leaves_no_missing_report_for_its_set(self):
+        result = self._verify()
+        reported = {d["name"]: d["status"] for d in result["details"]}
+        self.assertEqual(reported["second.bin"], "ok")
+        self.assertNotIn("first.bin", reported)
+        self.assertNotIn("third.bin", reported)
+        self.assertEqual(
+            sorted(d["name"] for d in result["set_members"]),
+            ["first.bin", "none_b.bin", "third.bin"],
+        )
+
+    def test_a_set_none_holds_is_one_gap(self):
+        result = self._verify()
+        missing = [d for d in result["details"] if d["status"] == "missing"]
+        self.assertEqual([d["name"] for d in missing], ["none_a.bin"])
+        self.assertEqual(missing[0]["alternatives"], ["none_b.bin"])
+        # Required and missing, judged as the core judges: one warning.
+        self.assertEqual(result["severity_counts"][Severity.WARNING], 1)
+        self.assertEqual(result["severity_counts"][Severity.INFO], 0)
+        self.assertEqual(result["status_counts"].get("missing"), 1)
+        self.assertEqual(result["total_files"], 3)
+
+    def test_a_required_set_held_through_a_later_member_is_satisfied(self):
+        """second.bin used to read required: false beside a required
+        first.bin: the set is required and held, so nothing is critical
+        for it, and the strict exit names only the set nobody holds."""
+        from verify import _exit_if_strict_emulator
+
+        result = self._verify()
+        critical = [d["name"] for d in result["details"]
+                    if d["status"] == "missing" and d["required"]]
+        self.assertEqual(critical, ["none_a.bin"])
+        with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()) as err:
+            _exit_if_strict_emulator(True, result)
+        self.assertIn("1 required file(s) missing: none_a.bin", err.getvalue())
+
+    def test_pack_and_verify_agree(self):
+        from generate_pack import generate_emulator_pack
+
+        result = self._verify()
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            zip_path = generate_emulator_pack(
+                ["seq"], "emulators", self.db, "bios", "out", offline=True,
+                platforms_dir="platforms",
+            )
+        with zipfile.ZipFile(zip_path) as zf:
+            packed = sorted(n for n in zf.namelist() if n != "README.txt")
+        self.assertEqual(packed, ["plain.bin", "second.bin"])
+        self.assertEqual(result["severity_counts"]["ok"], len(packed))
+        lines = out.getvalue().splitlines()
+        self.assertEqual(
+            [line.split(": ", 1)[1] for line in lines if line.strip().startswith("MISSING:")],
+            ["none_a.bin"],
+        )
+        self.assertIn("2 files packed, 1 missing", out.getvalue())
+
+    def test_core_complement_reports_one_gap_per_set(self):
+        undeclared = find_undeclared_files(
+            self.config, "emulators", self.db, {"seq": self.profile}
+        )
+        by_name = {u["name"]: u for u in undeclared}
+        self.assertEqual(sorted(by_name), ["none_a.bin", "plain.bin", "second.bin"])
+        self.assertTrue(by_name["second.bin"]["in_repo"])
+        self.assertFalse(by_name["none_a.bin"]["in_repo"])
+        self.assertEqual(by_name["none_a.bin"]["alternatives"], ["none_b.bin"])
+
+    def test_a_platform_declaration_speaks_for_the_set(self):
+        """The platform declares first.bin and reports it in its own check:
+        the core's other names are not gaps on top of it."""
+        config = {**self.config, "systems": {"console-a": {"files": [
+            {"name": "first.bin", "destination": "first.bin", "required": True},
+            {"name": "none_b.bin", "destination": "none_b.bin", "required": True},
+        ]}}}
+        undeclared = find_undeclared_files(
+            config, "emulators", self.db, {"seq": self.profile}
+        )
+        self.assertEqual(sorted(u["name"] for u in undeclared), ["plain.bin", "second.bin"])
+
+    def test_gap_report_counts_the_set_once(self):
+        import cross_reference
+
+        index = {
+            "by_name": self.db["indexes"]["by_name"],
+            "by_name_lower": {k.lower(): k for k in self.db["indexes"]["by_name"]},
+            "by_path_suffix": {}, "by_md5": {}, "by_sha256": {}, "by_crc32": {},
+            "data_names": set(), "all_declared": set(), "db_files": self.db["files"],
+        }
+        report: dict = {}
+        cross_reference._cross_reference_profile("seq", self.profile, {}, report, index)
+        gaps = {g["name"]: g for g in report["seq"]["gap_details"]}
+        self.assertEqual(sorted(gaps), ["none_a.bin", "plain.bin", "second.bin"])
+        self.assertEqual(gaps["none_a.bin"]["alternatives"], ["none_b.bin"])
+        self.assertEqual(report["seq"]["set_aside"]["other_versions"], 3)
+
+    def test_truth_names_no_member_required_on_its_own(self):
+        from truth import _fold_into, _new_truth_entry
+
+        entry = _new_truth_entry(self.profile["files"][0], "seq", None)
+        self.assertNotIn("required", entry)
+        self.assertEqual(entry["_required_by"], set())
+        self.assertTrue(entry["one_of_required"])
+        _fold_into(entry, {"name": "first.bin", "required": True}, "other")
+        self.assertTrue(entry["required"])
+        self.assertEqual(entry["_required_by"], {"other"})
+
+    def test_ranks_order_one_set_and_never_two(self):
+        """px68k-sdl ranks its IPL list and its font list each from 1:
+        --one-per-slot keeps the first of each, not one file of the two."""
+        from slot import build_slot_index, resolve_slot_drops
+
+        profile = {"type": "standalone", "files": [
+            {"name": "ipl_a.dat", "group": "ipl", "priority": 1},
+            {"name": "ipl_b.dat", "group": "ipl", "priority": 2},
+            {"name": "font_a.dat", "group": "font", "priority": 1},
+            {"name": "font_b.dat", "group": "font", "priority": 2},
+        ]}
+        index = build_slot_index({"x68": profile})
+        groups = {"sharp-x68000": [(n, n) for n in
+                                   ("ipl_a.dat", "ipl_b.dat", "font_a.dat", "font_b.dat")]}
+        drops, undecidable = resolve_slot_drops(groups, index)
+        self.assertEqual(drops, {"ipl_b.dat", "font_b.dat"})
+        self.assertEqual(undecidable, [])
+
+    def test_an_archive_needs_one_member_of_a_set(self):
+        import zlib
+
+        from common import holds_required_members
+
+        path = self.root / "set.zip"
+        with zipfile.ZipFile(path, "w") as zf:
+            zf.writestr("boot_b.ic94", b"B")
+            zf.writestr("eeprom.ic1", b"E")
+        crc = {n: f"{zlib.crc32(d):08x}" for n, d in (("a", b"A"), ("b", b"B"), ("e", b"E"))}
+        members = [
+            {"crc32": crc["a"], "required": True, "group": "boot"},
+            {"crc32": crc["b"], "required": True, "group": "boot"},
+            {"crc32": crc["e"], "required": True},
+        ]
+        self.assertTrue(holds_required_members(str(path), members))
+        self.assertFalse(holds_required_members(str(path), members[:1] + members[2:]))
+
+    def test_schema_refuses_a_set_split_on_required(self):
+        from validate_schemas import _group_requirement_split, ROOT
+
+        path = ROOT / "emulators" / "seq.yml"
+        split = {"files": [{"name": "a", "group": "g", "required": True},
+                           {"name": "b", "group": "g", "required": False}]}
+        self.assertEqual(len(_group_requirement_split(path, split)), 1)
+        self.assertEqual(_group_requirement_split(path, {"files": self.profile["files"]}), [])
+
 if __name__ == "__main__":
     unittest.main()

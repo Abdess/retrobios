@@ -189,16 +189,21 @@ class Exporter(BaseExporter):
         } - {""}
         readers: set[str] = set()
         requirers: set[str] = set()
+        set_readers: set[str] = set()
         for entry in entries:
             cores = set(entry.get("_cores") or ()) & named
             readers |= cores
+            if entry.get("one_of_required"):
+                set_readers |= cores & set(entry.get("one_of") or ())
             required_by = entry.get("_required_by")
             if required_by is None:
                 if entry.get("required") is not False:
                     requirers |= cores
             else:
                 requirers |= cores & set(required_by)
-        if not readers:
+        # A core that needs one file of a set needs none of them on its own,
+        # which a mandatory flag cannot say: the line keeps its value.
+        if not readers or (not requirers and set_readers):
             if fe.platform is not None and fe.platform.get("required") is not None:
                 return bool(fe.platform["required"])
             return fe.required

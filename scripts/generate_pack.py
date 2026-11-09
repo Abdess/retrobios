@@ -36,6 +36,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, os.path.dirname(__file__))
+from alternatives import settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
     installed_data_refs,
@@ -1838,6 +1839,10 @@ def generate_emulator_pack(
                     continue
                 slots.setdefault(dest, []).append(fe)
 
+            # What each destination came to, settled by set once the loop
+            # is over: a member another member fills is not missing, and a
+            # set nobody holds is reported once (alternatives.py).
+            outcomes: list[tuple[list[dict], bool, Callable[[], None] | None]] = []
             for dest, alternatives in slots.items():
                 # Name order, first file wins, case folded: verify replays
                 # the rule and reports a later profile's file as missing.
@@ -1923,17 +1928,25 @@ def generate_emulator_pack(
                             held, packed_at.get(dest.lower())
                         ):
                             # The file already at this path, asked for twice.
+                            outcomes.append((alternatives, True, None))
                             continue
-                        report_missing(alternatives[0]["name"], dest)
+                        outcomes.append((alternatives, False, functools.partial(
+                            report_missing, alternatives[0]["name"], dest
+                        )))
                         continue
 
                 if chosen is None:
                     if refusal:
                         rejected_files.append(refusal)
+                        outcomes.append((alternatives, False, None))
                     elif all(fe.get("unsourceable") for fe in alternatives):
-                        unsourceable_files.append(alternatives[0]["name"])
+                        outcomes.append((alternatives, False, functools.partial(
+                            unsourceable_files.append, alternatives[0]["name"]
+                        )))
                     else:
-                        report_missing(alternatives[0]["name"], dest)
+                        outcomes.append((alternatives, False, functools.partial(
+                            report_missing, alternatives[0]["name"], dest
+                        )))
                     continue
 
                 fe, local_path, how = chosen
@@ -1954,8 +1967,11 @@ def generate_emulator_pack(
                             total_files += 1
                             if record is not None:
                                 record.files.append(dest)
+                            outcomes.append((alternatives, True, None))
                         else:
-                            missing_files.append(fe["name"])
+                            outcomes.append((alternatives, False, functools.partial(
+                                missing_files.append, fe["name"]
+                            )))
                     finally:
                         if os.path.exists(tmp_path):
                             os.unlink(tmp_path)
@@ -1969,6 +1985,7 @@ def generate_emulator_pack(
                 # (but allow same file to be packed under different destinations,
                 # e.g., IPL.bin in GC/USA/ and GC/EUR/ from same source)
                 dedup_key_hash = f"{os.path.realpath(local_path)}:{dest}"
+                outcomes.append((alternatives, True, None))
                 if dedup_key_hash in seen_hashes:
                     continue
                 seen_hashes.add(dedup_key_hash)
@@ -1984,6 +2001,14 @@ def generate_emulator_pack(
                 total_files += 1
                 if record is not None:
                     record.files.append(dest)
+
+            excused, _standing = settle_sets([
+                (slot_set_keys(emu_name, entries), entries[0], fills)
+                for entries, fills, _report in outcomes
+            ])
+            for position, (_entries, _fills, report) in enumerate(outcomes):
+                if report is not None and position not in excused:
+                    report()
 
             # The trees after the files, as in a platform pack: a dump the
             # profile declares wins over the copy a tree bundles at the same

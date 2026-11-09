@@ -86,6 +86,7 @@ def _validate_yaml_directory(
             out.extend(_save_dir_without_library_name(path, data))
             out.extend(_systems_outside_profile(path, data))
             out.extend(_doubled_paths(path))
+            out.extend(_group_requirement_split(path, data))
     return out
 
 
@@ -120,6 +121,30 @@ def _systems_outside_profile(path: Path, document: object) -> list[str]:
                 f"system {', '.join(unknown)} not in the profile's systems"
             )
     return out
+
+
+def _group_requirement_split(path: Path, document: object) -> list[str]:
+    """A group whose members disagree on required.
+
+    The members of a group are one need, so required states the set's and
+    reads the same on each. A true on the first name only wrote the search
+    order into required, and the other names read as optional files.
+    """
+    from alternatives import groups_of
+
+    if not isinstance(document, dict):
+        return []
+    seen: dict[str, set[bool]] = {}
+    for entry in document.get("files") or []:
+        if not isinstance(entry, dict):
+            continue
+        for group in groups_of(entry):
+            seen.setdefault(group, set()).add(bool(entry.get("required", True)))
+    return [
+        f"{path.relative_to(ROOT)}: group {group} mixes required true and false"
+        for group, values in sorted(seen.items())
+        if len(values) > 1
+    ]
 
 
 def _checks_without_values(path: Path, document: object) -> list[str]:

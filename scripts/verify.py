@@ -37,6 +37,7 @@ import slots
 
 sys.path.insert(0, os.path.dirname(__file__))
 from hashing import parse_md5_list
+from alternatives import set_keys, settle_sets, slot_set_keys
 from common import (
     _foreign_tree,
     _owner_tokens,
@@ -534,6 +535,9 @@ def find_undeclared_files(
         config, profiles, relevant, db, declared_destinations(config)
     )
     launcher_candidates: list[tuple[str, bool, dict, dict]] = []
+    # Each grouped requirement met, as (set keys, entry, fills, (reported
+    # entry, the entry it is a claim on)): settled once every core is read.
+    set_records: list[tuple[tuple, dict, bool, tuple[dict, dict | None] | None]] = []
     undeclared = []
     seen_files: set[tuple] = set()
     # Key -> the entry reported for it. A later profile reading the same
@@ -606,6 +610,9 @@ def find_undeclared_files(
                 )
                 if verdict == "settled":
                     seen_files.add(seen_key)
+                    # Answered by the platform's own declaration, which its
+                    # report covers: the set it belongs to is spoken for.
+                    set_records.append((set_keys((emu_name, is_standalone), f), f, True, None))
                     continue
                 if verdict == "skip":
                     continue
@@ -761,12 +768,16 @@ def find_undeclared_files(
                     entry["members"] = members
                 if launcher_layer and not save_root:
                     launcher_candidates.append((emu_name, is_standalone, f, entry))
+                keys = set_keys((emu_name, is_standalone), f)
                 if duplicate:
                     first.setdefault("other_claims", []).append(entry)
+                    set_records.append((keys, f, in_repo, (entry, first)))
                     continue
                 reported[seen_key] = entry
                 undeclared.append(entry)
+                set_records.append((keys, f, in_repo, (entry, None)))
 
+    settled: set[int] = set()
     if launcher_layer:
         added, settled = launcher_layer.settle(
             launcher_candidates, lambda report: held_record(report, db)
@@ -774,10 +785,61 @@ def find_undeclared_files(
         undeclared = [u for u in undeclared if id(u) not in settled]
         undeclared.extend(added)
 
+    undeclared = _settle_core_sets(undeclared, set_records, settled)
+
     for entry in sorted(archive_entries.values(), key=lambda e: e["name"]):
         undeclared.append(entry)
 
     return undeclared
+
+
+def _settle_core_sets(
+    undeclared: list[dict],
+    records: list[tuple[tuple, dict, bool, tuple[dict, dict | None] | None]],
+    launcher_settled: set[int],
+) -> list[dict]:
+    """The core complement with each set of alternatives settled.
+
+    A member the collection lacks is dropped when another member is held,
+    declared by the platform or placed by its launcher, and a set nobody
+    holds keeps one entry, its first member, naming the others. A claim
+    another profile shares stays: its own core may need that very file.
+    """
+    grouped = [r for r in records if r[0]]
+    if not grouped:
+        return undeclared
+    excused, standing = settle_sets([
+        (keys, f, fills or (ref is not None and id(ref[0]) in launcher_settled))
+        for keys, f, fills, ref in grouped
+    ])
+    dropped: set[int] = set()
+    for position, (_keys, _f, _fills, ref) in enumerate(grouped):
+        if ref is None:
+            continue
+        entry, host = ref
+        if position in standing:
+            entry["alternatives"] = standing[position]
+        if position not in excused:
+            continue
+        if host is not None:
+            host["other_claims"] = [c for c in host.get("other_claims", []) if c is not entry]
+            if not host["other_claims"]:
+                del host["other_claims"]
+        else:
+            dropped.add(id(entry))
+    out: list[dict] = []
+    for entry in undeclared:
+        if id(entry) not in dropped:
+            out.append(entry)
+            continue
+        # Another core reading the same requirement still needs it.
+        claims = entry.get("other_claims") or []
+        if claims:
+            promoted = dict(claims[0])
+            if claims[1:]:
+                promoted["other_claims"] = claims[1:]
+            out.append(promoted)
+    return out
 
 
 def find_exclusion_notes(
@@ -1802,6 +1864,8 @@ def _print_undeclared_entry(
         name_label = f"{name} ({arc_count} file{'s' if arc_count != 1 else ''})"
     else:
         name_label = name
+    if u.get("alternatives") and not u.get("in_repo"):
+        name_label += f" (or {', '.join(u['alternatives'])})"
     print(f"    {prefix}: {u['emulator']} needs {name_label}")
     checks = u.get("checks", [])
     if checks:
@@ -2171,6 +2235,9 @@ def verify_emulator(
         return local_path, status
 
     details = []
+    # Members of a set another member fills, or that the set's first member
+    # stands for: not missing, and out of every count.
+    set_members: list[dict] = []
     file_status: dict[str, str] = {}
     file_severity: dict[str, str] = {}
     dest_to_name: dict[str, str] = {}
@@ -2397,7 +2464,9 @@ def verify_emulator(
         # profile on one destination are the releases the code accepts
         # there (a shareware and a retail HOG, each GRP in a size table):
         # holding one of them fills the slot, and the others are not gaps.
-        emu_results: dict[str, list[tuple[dict, bool, bool]]] = {}
+        emu_results: dict[str, list[tuple[dict, bool, bool, dict]]] = {}
+        placed_results: list[tuple[str, dict, bool, bool, list[dict]]] = []
+        fallback_reason = "declared hash contradicted by the local file"
 
         for file_entry in files:
             # Skip archive members (verified as archive units above)
@@ -2497,13 +2566,13 @@ def verify_emulator(
             # The slot the emulator pack places this entry in: standalone_path
             # under --standalone, the sanitised path.
             dest = _resolve_destination(file_entry, standalone) or name
-            emu_results.setdefault(dest, []).append((result, required, hle))
+            emu_results.setdefault(dest, []).append((result, required, hle, file_entry))
 
         for dest, alternatives in emu_results.items():
             # What the emulator pack places here: an accepted file, else a
             # file whose hash the profile contradicts. A refused copy is held
             # but never packed.
-            fallback_reason = "declared hash contradicted by the local file"
+            slot_entries = [a[3] for a in alternatives]
             if len(alternatives) > 1:
                 # Reduced in the order generate_emulator_pack chooses, so the
                 # destination's status is the one the pack reports: a slot it
@@ -2556,27 +2625,49 @@ def verify_emulator(
             elif not block and packed is not None:
                 occupy(dest, packed, emu_name)
                 packed_dests.add(dest)
-            for result, required, hle in alternatives:
+            for result, required, hle, file_entry in alternatives:
                 if block_reason and result["status"] != Status.MISSING:
                     result["status"] = Status.MISSING
                     result["reason"] = block_reason
                 result["destination"] = dest
-                details.append(result)
+                placed_results.append((dest, result, required, hle, slot_entries))
 
-                # Aggregate by destination (path if available, else name)
-                dest_to_name[dest] = result["name"]
-                cur = result["status"]
-                prev = file_status.get(dest)
-                if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
-                    prev, 0
-                ):
-                    file_status[dest] = cur
-                sev = _emulator_severity(cur, required, hle)
-                prev_sev = file_severity.get(dest)
-                if prev_sev is None or _SEVERITY_ORDER.get(
-                    sev, 0
-                ) > _SEVERITY_ORDER.get(prev_sev, 0):
-                    file_severity[dest] = sev
+        # A set the code takes one member of is one need: once a member is
+        # in the pack the others are not missing, and a set nobody holds is
+        # one gap under its first member. Settled per profile, before the
+        # destinations of several profiles are merged.
+        excused, standing = settle_sets([
+            (
+                slot_set_keys(emu_name, entries),
+                entries[0],
+                result["status"] == Status.OK
+                or (result["status"] == Status.UNTESTED
+                    and result.get("reason") == fallback_reason),
+            )
+            for _dest, result, _required, _hle, entries in placed_results
+        ])
+        for position, (dest, result, required, hle, _fe) in enumerate(placed_results):
+            if position in excused and result["status"] == Status.MISSING:
+                set_members.append(result)
+                continue
+            if position in standing:
+                result["alternatives"] = standing[position]
+            details.append(result)
+
+            # Aggregate by destination (path if available, else name)
+            dest_to_name[dest] = result["name"]
+            cur = result["status"]
+            prev = file_status.get(dest)
+            if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
+                prev, 0
+            ):
+                file_status[dest] = cur
+            sev = _emulator_severity(cur, required, hle)
+            prev_sev = file_severity.get(dest)
+            if prev_sev is None or _SEVERITY_ORDER.get(
+                sev, 0
+            ) > _SEVERITY_ORDER.get(prev_sev, 0):
+                file_severity[dest] = sev
 
         occupy_trees(emu_name, profile)
 
@@ -2610,6 +2701,7 @@ def verify_emulator(
         "severity_counts": counts,
         "status_counts": status_counts,
         "details": details,
+        "set_members": set_members,
         "data_dir_notices": sorted(set(data_dir_notices)),
         "ground_truth_coverage": {
             "with_validation": with_validation,
@@ -2715,7 +2807,9 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
             seen.add(d["name"])
             req = "required" if d.get("required", True) else "optional"
             hle = ", HLE available" if d.get("hle_fallback") else ""
-            print(f"  MISSING ({req}{hle}): {d['name']}")
+            others = d.get("alternatives")
+            either = f" (or {', '.join(others)})" if others else ""
+            print(f"  MISSING ({req}{hle}): {d['name']}{either}")
             gt = d.get("ground_truth", [])
             if gt:
                 if verbose:

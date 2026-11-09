@@ -29,6 +29,8 @@ rank: the second core reads it by its own rule, which no rank expresses.
 
 from __future__ import annotations
 
+from alternatives import set_keys
+
 BIOS_CATEGORY = "bios"
 
 
@@ -65,9 +67,11 @@ def build_slot_index(profiles: dict) -> dict[str, dict]:
                 entry = index.setdefault(
                     key,
                     {"rank": None, "conflict": False, "regions": set(),
-                     "emulators": [], "ranked_by": set(), "unranked_by": set()},
+                     "emulators": [], "ranked_by": set(), "unranked_by": set(),
+                     "sets": set()},
                 )
                 entry["regions"] |= {str(r) for r in (f.get("region") or [])}
+                entry["sets"] |= set(set_keys(emu_name, f))
                 rank = f.get("priority")
                 entry["unranked_by" if rank is None else "ranked_by"].add(emu_name)
                 if rank is not None:
@@ -123,7 +127,7 @@ def resolve_slot_drops(
     # A slot is a system AND a declared region: the Japanese and American
     # PlayStation BIOS are not alternatives to each other, and comparing their
     # ranks across regions would pick one territory's file for another's.
-    tiers: dict[tuple[str, tuple[str, ...]], list[tuple[str, int | None]]] = {}
+    tiers: dict[tuple[str, tuple[str, ...], tuple], list[tuple[str, int | None]]] = {}
     for group_id, members in groups.items():
         for destination, name in members:
             if held is not None and destination not in held:
@@ -132,11 +136,14 @@ def resolve_slot_drops(
             if entry is None:
                 keep.add(destination)
                 continue
+            # A rank orders the members of one set: px68k-sdl ranks its IPL
+            # and its font ROM lists each from 1, and the two never compete.
             tier = tuple(sorted(entry["regions"]))
+            sets = tuple(sorted(entry.get("sets") or ()))
             rank = None if entry.get("conflict") else entry["rank"]
-            tiers.setdefault((group_id, tier), []).append((destination, rank))
+            tiers.setdefault((group_id, tier, sets), []).append((destination, rank))
 
-    for (group_id, tier), candidates in tiers.items():
+    for (group_id, tier, _sets), candidates in tiers.items():
         if len(candidates) < 2:
             keep.update(dest for dest, _p in candidates)
             continue

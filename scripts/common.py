@@ -1267,7 +1267,39 @@ _archive_index: dict[int, tuple[list[dict], int, dict[str | None, list[dict]]]] 
 
 
 def _member(f: dict) -> dict:
-    return {"crc32": str(f["crc32"]).lower(), "required": bool(f.get("required", True))}
+    member = {"crc32": str(f["crc32"]).lower(), "required": bool(f.get("required", True))}
+    if f.get("group"):
+        # One of the members sharing it is enough (alternatives.py).
+        member["group"] = f["group"]
+    return member
+
+
+def _required_met(members: list[dict], held: Callable[[dict], bool]) -> tuple[int, bool]:
+    """How many requirements an archive meets, and whether it meets all.
+
+    A required member is one requirement, and so is a required set of
+    alternatives, met when one of its members is held: Odin reads the
+    first of three Hikaru boot ROMs it finds in hikaru.zip.
+    """
+    from alternatives import groups_of
+
+    met = 0
+    complete = True
+    sets: dict[str, bool] = {}
+    for m in members:
+        if not m["required"]:
+            continue
+        names = groups_of(m)
+        if names:
+            for name in names:
+                sets[name] = sets.get(name, False) or held(m)
+            continue
+        if held(m):
+            met += 1
+        else:
+            complete = False
+    met += sum(sets.values())
+    return met, complete and all(sets.values())
 
 
 def archive_members(archive: str, files: list[dict]) -> list[dict]:
@@ -1316,7 +1348,7 @@ def holds_required_members(path: str, members: list[dict]) -> bool:
     """Whether an archive holds every member a profile requires inside it."""
     crcs = zip_member_crcs(path)
     names = zip_member_names(path)
-    return all(_member_held(m, crcs, names) for m in members if m["required"])
+    return _required_met(members, lambda m: _member_held(m, crcs, names))[1]
 
 
 def contents_members(file_entry: dict) -> list[dict]:
@@ -1360,8 +1392,8 @@ def _holding_members(paths: list[str], members: list[dict]) -> list[str]:
     def held(path: str) -> tuple[int, int]:
         crcs = zip_member_crcs(path)
         names = zip_member_names(path)
-        found = [m for m in members if _member_held(m, crcs, names)]
-        return sum(1 for m in found if m["required"]), len(found)
+        found = {id(m) for m in members if _member_held(m, crcs, names)}
+        return _required_met(members, lambda m: id(m) in found)[0], len(found)
 
     scores = {path: held(path) for path in paths}
     best = max(scores.values(), default=(0, 0))
