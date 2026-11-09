@@ -6,8 +6,8 @@ source_mirror: "https://github.com/WizzardSK/cemu-libretro"
 upstream: "https://github.com/cemu-project/Cemu"
 logo: "https://raw.githubusercontent.com/cemu-project/Cemu/main/dist/linux/info.cemu.Cemu.png"
 profiled_date: "2026-10-23"
-source_commit: "14f56b569b3668db01a4972225993abd3e8f2096"
-upstream_commit: "42876aa86d2b92f9c620a76959a792bf392b89d3"
+source_commit: "91fb753ab8f8fcd35a6ae16ecdb1a750a9240d6b"
+upstream_commit: "3b1031612eb21302a8032e2f7a6db31549bd269b"
 core_version: "2.6-372-g29f2f1fa"
 version_basis:
   kind: file
@@ -57,7 +57,7 @@ notes: |
   gameProfiles/default/) comes with the core. The community graphic packs,
   which standalone downloads, are compiled into it.
   ref: CMakeLists.txt:4-7, src/CMakeLists.txt:75-90,
-       .gitlab-ci.yml:123, 129, 152, 414, 435, 440, 448, 478, 564, 583
+       .gitlab-ci.yml:123, 129, 152, 410, 431, 436, 444, 474, 560, 579
 
   Path model. Cemu resolves every file through four roots: the user data
   path (keys.txt, otp.bin, seeprom.bin, cafeLibs/, graphicPacks/,
@@ -79,7 +79,7 @@ notes: |
   (src/libretro/CemuLibretro.cpp:4173).
   ref: src/libretro/CemuLibretro.cpp:2110-2170,
        src/libretro/CemuLibretro.cpp:4083-4091,
-       src/gui/wxgui/CemuApp.cpp:90-123, src/gui/wxgui/CemuApp.cpp:127-171,
+       src/gui/wxgui/CemuApp.cpp:89-124, src/gui/wxgui/CemuApp.cpp:126-172,
        src/config/ActiveSettings.cpp:295-321
 
   keys.txt is read once from the user data path. A missing file is created
@@ -93,7 +93,7 @@ notes: |
   disc image does not start without it. .wua archives, .rpx and NUS
   directories are not encrypted with a disc key and load without the file.
   ref: src/Cafe/Filesystem/FST/KeyCache.cpp:65-137,
-       src/Cafe/Filesystem/FST/FST.cpp:192-246,
+       src/Cafe/Filesystem/FST/FST.cpp:192-239,
        src/libretro/CemuLibretro.cpp:6094-6142
 
   Shared fonts. LoadSharedData runs at every title start and looks for the
@@ -159,8 +159,8 @@ notes: |
   under the user data path when the Nintendo network service is selected.
   ref: src/Cafe/GameProfile/GameProfile.cpp:181-195,
        src/Cafe/GraphicPack/GraphicPack2.cpp:96-111,
-       src/gui/wxgui/DownloadGraphicPacksWindow.cpp:133,
-       src/gui/wxgui/DownloadGraphicPacksWindow.cpp:234-238,
+       src/gui/wxgui/DownloadGraphicPacksWindow.cpp:131-133,
+       src/gui/wxgui/DownloadGraphicPacksWindow.cpp:234, 238,
        src/libretro/embed_graphic_packs.cmake:8-54,
        src/libretro/LibretroGraphicPacks.cpp:30-103,
        src/libretro/CemuLibretro.cpp:6355,
@@ -181,8 +181,8 @@ notes: |
   The core writes account_name.txt under <system_dir>/Cemu with a
   "<persistent id> = <name>" line per account and names the accounts from
   it when a title starts.
-  ref: src/main.cpp:117-141, src/config/NetworkSettings.cpp:10-14,
-       src/gui/wxgui/CemuApp.cpp:580-606,
+  ref: src/main.cpp:127-142, src/config/NetworkSettings.cpp:10-14,
+       src/gui/wxgui/CemuApp.cpp:590-620,
        src/libretro/CemuLibretro.cpp:2072-2108,
        src/libretro/CemuLibretro.cpp:4108-4114,
        src/libretro/CemuLibretro.cpp:4906-4918,
@@ -199,7 +199,7 @@ files:
       or .wux image, with a 16-byte <image>.key beside the image as the last
       resort. Created with a template when absent. The libretro core
       refuses to load an encrypted image whose key is not in it.
-    source_ref: "source src/Cafe/Filesystem/FST/KeyCache.cpp:65-137, upstream src/Cafe/Filesystem/FST/FST.cpp:192-246, source src/libretro/CemuLibretro.cpp:6094-6142"
+    source_ref: "source src/Cafe/Filesystem/FST/KeyCache.cpp:65-137, upstream src/Cafe/Filesystem/FST/FST.cpp:192-239, source src/libretro/CemuLibretro.cpp:6094-6142"
 
   - name: otp.bin
     path: Cemu/otp.bin
@@ -885,7 +885,7 @@ firmware_titles:
     content: ["language.txt", "country.txt"]
     required: false
     note: "Written when absent, by the wx frontend on first run and by the libretro core at init."
-    source_ref: "upstream src/gui/wxgui/CemuApp.cpp:580-606, source src/libretro/CemuLibretro.cpp:2072-2108"
+    source_ref: "upstream src/gui/wxgui/CemuApp.cpp:590-620, source src/libretro/CemuLibretro.cpp:2072-2108"
 
 mlc_structure:
   - "mlc01/sys/title/0005001b/10042400/content/"
