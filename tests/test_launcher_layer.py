@@ -289,6 +289,24 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
         self.assertIsNone(suffixed_stem("scph1001.bin"))
 
+    def test_an_entry_the_platform_declares_still_fills_the_launcher_name(self) -> None:
+        """AmberELEC declares kick34005.A500, so the report never offers
+        Amiberry's entry, and its config still passes kick34005.A500.rom."""
+        profile = {
+            "emulator": "FixEmu", "type": "standalone", "systems": ["test-sys"],
+            "files": [{"name": "core.bin", "aliases": ["kick.A500"], "required": True}],
+        }
+        with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"][2]["names"] = ["kick.A500.rom"]
+        self.config["systems"]["test-sys"]["files"].append(
+            {"name": "core.bin", "destination": "core.bin", "required": True}
+        )
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
+
     def test_each_name_of_a_config_takes_its_own_key(self) -> None:
         """AmberELEC's atari800.cfg names eight ROMs under eight keys, and
         one record describes them in order: 5200a.rom is ROM_5200_A's file,

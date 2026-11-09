@@ -490,6 +490,8 @@ class _Candidate:
     by_content: bool
     # Matched by the size the code checks, the entry naming no hash.
     by_shape: bool = False
+    # Matched through the setting the launcher writes or the name it extends.
+    by_setting_or_stem: bool = False
 
 
 class LauncherLayer:
@@ -519,7 +521,7 @@ class LauncherLayer:
             self._by_name_folded.setdefault(name.lower(), []).extend(sha1s)
         self._files = db.get("files", {})
         self._owners: dict[tuple[str, bool], list[LauncherPlace]] = {}
-        self._placeholders: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
+        self._unoffered: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         relevant = set(relevant)
         for place in self.places:
             standalone = place.build == "standalone"
@@ -534,14 +536,14 @@ class LauncherLayer:
                 owners = set(setting_readers(place.passes_to, profiles, relevant))
             for key in sorted(owners):
                 self._owners.setdefault((key, standalone), []).append(place)
-                # A placeholder entry stands for every file a scan finds and
-                # is no gap, so the report never offers it: the setting a
-                # launcher writes still reads one file of it.
-                for entry in profiles[key].get("files") or []:
-                    if "<" in str(entry.get("name", "")) and set_by(entry, place.passes_to):
-                        self._placeholders.setdefault((key, standalone), []).append(
-                            (entry, _placeholder_report(key, profiles[key], entry))
-                        )
+                # The report never offers a placeholder, which stands for every
+                # file a scan finds, nor an entry the platform's list settles
+                # (AmberELEC declares kick34005.A500): the launcher still reads
+                # its file under its own name.
+                self._unoffered.setdefault((key, standalone), [
+                    (entry, _placeholder_report(key, profiles[key], entry))
+                    for entry in profiles[key].get("files") or []
+                ])
         self._db = db
 
     @staticmethod
@@ -582,14 +584,14 @@ class LauncherLayer:
         # RetroPie runs sdl2trs with -romfile4p $biosdir/level4p.rom: the
         # file under that name is the one the romfile4p slot reads.
         if set_by(entry, place.passes_to):
-            return _Candidate(entry, basenames, False)
+            return _Candidate(entry, basenames, False, by_setting_or_stem=True)
         if place.kind == "fixed_name":
             stems = {
                 base for base in basenames
                 if (stem := suffixed_stem(base)) is not None and place.fold(stem) in own
             }
             if stems:
-                return _Candidate(entry, stems, False)
+                return _Candidate(entry, stems, False, by_setting_or_stem=True)
         content = {
             place.fold(path.rsplit("/", 1)[-1])
             for path in place.paths
@@ -654,15 +656,26 @@ class LauncherLayer:
         by_layout: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         for emulator, standalone, entry, report in candidates:
             by_layout.setdefault((emulator, standalone), []).append((entry, report))
-        for layout, members in self._placeholders.items():
-            by_layout.setdefault(layout, []).extend(members)
+        offered = {id(entry) for _e, _s, entry, _r in candidates}
+        for layout, members in self._unoffered.items():
+            for entry, report in members:
+                if id(entry) in offered:
+                    continue
+                if "<" not in str(entry.get("name", "")):
+                    report["in_repo"] = resolve_held(report) is not None
+                report["unoffered"] = True
+                by_layout.setdefault(layout, []).append((entry, report))
         placed: set[str] = set()
         for (emulator, standalone), members in sorted(by_layout.items()):
             for place in self.places_for(emulator, standalone):
+                # An entry the report left out answers only through the
+                # setting or the extended name: by its own name it was left
+                # out for a reason (a region variant, a settled duplicate).
                 matched = [
                     (candidate, report)
                     for entry, report in members
                     if (candidate := self.match(place, entry)) is not None
+                    and (candidate.by_setting_or_stem or not report.get("unoffered"))
                 ]
                 # A size names one entry only when no other of the core's
                 # entries takes that size too.
@@ -798,8 +811,14 @@ class LauncherLayer:
 
 
 def _placeholder_report(key: str, profile: dict, entry: dict) -> dict:
-    """The report entry of a placeholder, which the gap report never builds."""
+    """The report entry of an entry the gap report never builds."""
+    identity = {
+        field: entry[field]
+        for field in ("aliases", "md5", "sha1", "sha256", "crc32", "size", "min_size", "max_size")
+        if entry.get(field) is not None
+    }
     return {
+        **identity,
         "profile": key,
         "emulator": profile.get("emulator", key),
         "name": entry.get("name", ""),
