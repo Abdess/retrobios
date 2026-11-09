@@ -111,6 +111,8 @@ notes: |
 files:
   # CMD drive ROMs. Named by the drive resources, not part of the release.
   - name: "dos2000-cs-33cc6f.bin"
+    aliases:
+      - "dos2000"
     path: "DRIVES/dos2000-cs-33cc6f.bin"
     required: false
     min_size: 32768
@@ -119,6 +121,8 @@ files:
     source_ref: "vice/src/drive/driverom.h:47, vice/src/drive/driverom.h:95, vice/src/drive/iec/iec-resources.c:331, vice/src/drive/iec/iecrom.c:136-137"
 
   - name: "dos4000-fd-350022.bin"
+    aliases:
+      - "dos4000"
     path: "DRIVES/dos4000-fd-350022.bin"
     required: false
     min_size: 32768
