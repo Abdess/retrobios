@@ -647,6 +647,153 @@ def gsplus(cg: Configgen) -> list[Launcher]:
     )]
 
 
+def _system_branches(scope: ast.FunctionDef) -> list[tuple[str, ast.If]]:
+    """(system, branch) for each `if system.name == "<name>":` of an if/elif chain."""
+    branches: list[tuple[str, ast.If]] = []
+    for node in ast.walk(scope):
+        if not isinstance(node, ast.If):
+            continue
+        test = node.test
+        if (
+            isinstance(test, ast.Compare)
+            and ast.unparse(test.left) == "system.name"
+            and len(test.ops) == 1
+            and isinstance(test.ops[0], ast.Eq)
+            and isinstance(test.comparators[0], ast.Constant)
+        ):
+            branches.append((str(test.comparators[0].value), node))
+    return sorted(branches, key=lambda item: item[1].lineno)
+
+
+def _guard_message(
+    src: Source, scope: ast.FunctionDef, test: Callable[[ast.expr], bool], what: str
+) -> tuple[ast.If, ast.JoinedStr]:
+    """The `if not <test>: raise X(f"...")` statement and its message."""
+    found = [
+        node for node in ast.walk(scope)
+        if isinstance(node, ast.If)
+        and isinstance(node.test, ast.UnaryOp)
+        and isinstance(node.test.op, ast.Not)
+        and test(node.test.operand)
+        and isinstance(node.body[0], ast.Raise)
+        and isinstance(node.body[0].exc, ast.Call)
+        and node.body[0].exc.args
+        and isinstance(node.body[0].exc.args[0], ast.JoinedStr)
+    ]
+    if len(found) != 1:
+        src.fail(f"expected one `if not {what}: raise` with a message, found {len(found)}")
+    return found[0], found[0].body[0].exc.args[0]  # type: ignore[attr-defined, no-any-return]
+
+
+def _render(message: ast.JoinedStr, var: str, value: str) -> str:
+    parts = []
+    for part in message.values:
+        if isinstance(part, ast.Constant):
+            parts.append(str(part.value))
+        elif isinstance(part.value, ast.Name) and part.value.id == var:  # type: ignore[attr-defined]
+            parts.append(value)
+        else:
+            parts.append(f"{{{ast.unparse(part.value)}}}")  # type: ignore[attr-defined]
+    return "".join(parts)
+
+
+def lexaloffle(cg: Configgen) -> list[Launcher]:
+    """Per system, a binary under BIOS run as the command, its folder on LD_LIBRARY_PATH."""
+    module = "lexaloffle.lexaloffleGenerator"
+    src = cg.generator(module)
+    constants = dict(cg.paths)
+    defined: dict[str, ast.stmt] = {}
+    for node in src.tree.body:
+        name = _assigned_name(node)
+        value = _path_value(getattr(node, "value", None), constants)
+        if name is not None and value is not None:
+            constants[name] = value
+            defined[name] = node
+    generate = src.function("generate")
+
+    command = [
+        node for node in ast.walk(generate)
+        if _assigned_name(node) == "commandArray"
+        and isinstance(node.value, ast.List)  # type: ignore[attr-defined]
+        and node.value.elts  # type: ignore[attr-defined]
+        and isinstance(node.value.elts[0], ast.Name)  # type: ignore[attr-defined]
+    ]
+    if len(command) != 1:
+        src.fail("generate no longer starts commandArray with the binary it runs")
+    binary = command[0].value.elts[0].id  # type: ignore[attr-defined]
+
+    exists, missing = _guard_message(src, generate, lambda test: (
+        isinstance(test, ast.Call)
+        and isinstance(test.func, ast.Attribute)
+        and test.func.attr == "exists"
+        and ast.unparse(test.func.value) == binary
+    ), f"{binary}.exists()")
+    access, not_executable = _guard_message(src, generate, lambda test: (
+        isinstance(test, ast.Call)
+        and ast.unparse(test.func) == "os.access"
+        and [ast.unparse(a) for a in test.args] == [binary, "os.X_OK"]
+    ), f"os.access({binary}, os.X_OK)")
+
+    env = [
+        (key, value)
+        for call in _calls(generate, attr="Command")
+        for keyword in call.keywords
+        if keyword.arg == "env" and isinstance(keyword.value, ast.Dict)
+        for key, value in zip(keyword.value.keys, keyword.value.values)
+        if isinstance(key, ast.Constant) and key.value == "LD_LIBRARY_PATH"
+    ]
+    if len(env) != 1:
+        src.fail("the command environment no longer sets LD_LIBRARY_PATH once")
+    env_key, env_value = env[0]
+
+    prefix = cg.bios.rstrip("/") + "/"
+    launchers = []
+    for system, branch in _system_branches(generate):
+        bound = {
+            name: (stmt, _path_value(stmt.value, constants))  # type: ignore[attr-defined]
+            for stmt in branch.body if (name := _assigned_name(stmt)) is not None
+        }
+        if binary not in bound or not (bound[binary][1] or "").startswith(prefix):
+            src.fail(f"the {system} branch binds {binary} to no path under {cg.bios}")
+        library = [
+            name for name in bound
+            if name != binary and _mentions(env_value, set(), {name})
+        ]
+        if len(library) != 1 or not (bound[library[0]][1] or "").startswith(prefix):
+            src.fail(f"the {system} branch puts no /userdata/bios folder on LD_LIBRARY_PATH")
+        binary_stmt, path = bound[binary]
+        library_stmt, folder = bound[library[0]]
+        test_line = src.span(branch.test)
+        constant = next(
+            (defined[n.id] for n in ast.walk(binary_stmt.value)  # type: ignore[attr-defined]
+             if isinstance(n, ast.Name) and n.id in defined),
+            None,
+        )
+        spans = [test_line, src.span(binary_stmt), src.span(exists), src.span(access),
+                 src.span(command[0])]
+        if constant is not None:
+            spans.append(src.span(constant))
+        launchers.append(Launcher(
+            emulator=cg.emulator(module), build="standalone", kind="fixed_name",
+            slot=system, names=[path[len(prefix):]],  # type: ignore[index]
+            case_insensitive=False, search_dir=cg.bios, passes_to="exec",
+            fails_when_missing=", ".join(
+                _render(message, binary, path) for message in (missing, not_executable)  # type: ignore[arg-type]
+            ),
+            source_ref=src.ref(spans),
+        ))
+        launchers.append(Launcher(
+            emulator=cg.emulator(module), build="standalone", kind="passes_path",
+            slot=system, names=[], search_dir=folder,
+            passes_to="environment LD_LIBRARY_PATH",
+            source_ref=src.ref([test_line, src.span(library_stmt),
+                                (src.span(env_key)[0], src.span(env_value)[1])]),
+        ))
+    if not launchers:
+        src.fail("generate no longer branches on system.name")
+    return launchers
+
+
 # Generators that hand a directory of /userdata/bios to the emulator through
 # its environment, with the module holding their path constants.
 ENVIRONMENT_GENERATORS = (("flycast.flycastGenerator", "flycast/flycastPaths.py"),)
@@ -741,7 +888,7 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
 
 EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     duckstation, duckstation_legacy, hatari, xemu, melonds, mupen64plus,
-    x16emu, gsplus, environment_directories, core_file_options,
+    x16emu, gsplus, lexaloffle, environment_directories, core_file_options,
 )
 
 
