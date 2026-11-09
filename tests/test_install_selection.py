@@ -913,6 +913,57 @@ class InstallMatchesASystemPack(unittest.TestCase):
                 )
 
 
+class DataTreesFollowTheSystemsTheyServe(InstallMatchesASystemPack):
+    """The data trees a system choice keeps, installer against pack. GBA
+    alone took FBNeo's cheats and samples, 3,472 files, because the trees
+    listed every FBNeo system. The Mega Drive took no cheat: the tree said
+    sega-megadrive where RetroArch's list says sega-mega-drive."""
+
+    CASES = ((["nintendo-gba"], []), (["sega-mega-drive"], []), (["arcade"], []))
+
+    def _packed(self, systems, regions) -> set[str]:
+        import zipfile
+
+        from common import load_data_dir_registry
+
+        # The trees come from the registry the manifest reads by itself.
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
+            zip_path = self.gp.generate_pack(
+                self.PLATFORM, str(REPO_ROOT / "platforms"), self.db,
+                str(REPO_ROOT / "bios"), out,
+                emulators_dir=str(REPO_ROOT / "emulators"),
+                emu_profiles=self.profiles, system_filter=systems,
+                regions=regions or None, offline=True,
+                data_registry=load_data_dir_registry(str(REPO_ROOT / "platforms")),
+            )
+            with zipfile.ZipFile(zip_path) as zf:
+                names = set(zf.namelist())
+        prefix = f"{self.base}/" if self.base else ""
+        return {n[len(prefix):] if prefix and n.startswith(prefix) else n for n in names}
+
+    def _members(self, trees) -> set[str]:
+        return {f"{tree['dest']}/{rel}" if tree["dest"] else rel
+                for tree in trees for rel in tree["files"]}
+
+    def test_each_case(self):
+        everything = self._members(self.full.get("data_directories") or [])
+        for systems, regions in self.CASES:
+            with self.subTest(systems=systems):
+                files, _omitted = install.narrow(
+                    self.full["files"], self.full["omitted_files"], systems, [], regions)
+                trees = install.select_data_directories(self.full, files, True, systems=systems)
+                refs = {tree["ref"] for tree in trees}
+                if systems == ["nintendo-gba"]:
+                    self.assertFalse({"fbneo-cheats", "fbneo-samples"} & refs)
+                if systems == ["sega-mega-drive"]:
+                    self.assertIn("fbneo-cheats", refs)
+                    self.assertNotIn("fbneo-samples", refs)
+                if systems == ["arcade"]:
+                    self.assertTrue({"fbneo-cheats", "fbneo-samples"} <= refs)
+                self.assertEqual(self._members(trees),
+                                 self._packed(systems, regions) & everything)
+
+
 class InstallMatchesATargetManifest(unittest.TestCase):
     """`install.py --target T` against the manifest the builder writes for T.
 

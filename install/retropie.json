@@ -123126,9 +123126,7 @@
       "dest": "Cemu/gameProfiles/default",
       "url": "https://github.com/cemu-project/Cemu/archive/3310f3b8b184d64a62b89fd59088c799432badf5.tar.gz",
       "type": "tarball",
-      "systems": [
-        "nintendo-wiiu"
-      ],
+      "systems": [],
       "files": {
         "000500001012BD00.ini": {
           "sha1": "8aff44d69915d20266fee368fd1e3e4efa3f5b59",
@@ -132759,32 +132757,11 @@
       "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
       "type": "zip",
       "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-ngp",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-zx-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
         "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
+        "sega-mega-drive",
+        "nec-pc-engine",
+        "nintendo-nes",
+        "nintendo-snes"
       ],
       "files": {
         "README.md": {
@@ -146493,32 +146470,7 @@
       "url": "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip",
       "type": "zip",
       "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-ngp",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-zx-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
+        "arcade"
       ],
       "files": {
         "samples/seawolf.zip": {

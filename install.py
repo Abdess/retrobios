@@ -7556,8 +7556,13 @@ def _install_data_member(
 
 def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
                             required_only: bool = False,
-                            games: GamesPlan | None = None) -> list[dict]:
+                            games: GamesPlan | None = None,
+                            systems: list[str] | None = None) -> list[dict]:
     """The data trees this install keeps: all, or those of a kept system.
+    systems, the systems chosen by name, decide when given: a file several
+    systems share named them all, and the arcade choice took blueMSX's
+    machines through FBNeo's msx.zip, which the pack built with --system
+    arcade leaves out.
     --required-only leaves out a tree every core reading it runs without
     (`optional`): a GBA and a SNES game took FBNeo's cheats and samples,
     3,472 files no game opened. For the games of a card, a tree only cores
@@ -7571,8 +7576,14 @@ def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
                    or set(e.get("systems") or []) & games.any_core]
     if not narrowed:
         return entries
-    kept = {system for f in files for system in entry_systems(f)}
-    return [e for e in entries if kept & set(e.get("systems") or [])]
+    kept = (set(systems) if systems else
+            {system for f in files for system in entry_systems(f)})
+    # A tree no platform system serves goes with the files of none, as the
+    # pack built with --system puts it in the part of its own.
+    other = (OTHER_SYSTEMS in kept if systems else
+             any(not entry_systems(f) for f in files))
+    return [e for e in entries if kept & set(e.get("systems") or [])
+            or (other and not e.get("systems"))]
 
 
 def _copy_targets(
@@ -9001,7 +9012,8 @@ def _prompt_custom_selection(
         kept_trees = select_data_directories({"data_directories": trees}, kept,
                                              narrowed or current is not None,
                                              isinstance(current, GamesChoice) and current.required,
-                                             current.plan if isinstance(current, GamesChoice) else None)
+                                             current.plan if isinstance(current, GamesChoice) else None,
+                                             chosen_systems(current))
         if kept and all_in_place(kept, kept_trees, bios_path):
             # Read before the menu, as the screen reads before it asks: a
             # rerun was offered an install that installs nothing, then told
@@ -9132,7 +9144,8 @@ def _print_menu_head(
     kept_trees = select_data_directories({"data_directories": trees}, shown,
                                          narrowed or current is not None,
                                          isinstance(current, GamesChoice) and current.required,
-                                         current.plan if isinstance(current, GamesChoice) else None)
+                                         current.plan if isinstance(current, GamesChoice) else None,
+                                         chosen_systems(current))
     data = sum(len(entry.get("files") or {}) for entry in kept_trees)
     data_size = sum(meta.get("size", 0) for entry in kept_trees
                     for meta in (entry.get("files") or {}).values())
@@ -9316,6 +9329,11 @@ def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
     if live:
         print("\r\033[K", end="", flush=True)
     return verdicts
+
+
+def chosen_systems(choice: object) -> list[str] | None:
+    """The systems a choice names, None for one that names none."""
+    return list(choice[0]) or None if isinstance(choice, tuple) else None
 
 
 def menu_choice(
@@ -15900,7 +15918,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         )
         data_dirs = select_data_directories(manifest, files, narrowed,
                                             bool(args.required_only),
-                                            games_plan if games_applied else None)
+                                            games_plan if games_applied else None,
+                                            chosen_systems(selection))
         # The kinds as the plan and the menu head say them (parts_words),
         # the data files of the folders kept among them: this head said
         # BIOS files and game data beside a plan of three kinds, neither
@@ -22054,7 +22073,10 @@ def _plan_data(state: TuiState, check: dict) -> tuple[int, int | None]:
         data = check.get("data_missing", 0)
         return data, check.get("data_bytes") if data else None
     required = any(flag == "--required-only" for flag, _value in tui_flags(state))
-    trees = select_data_directories(state.manifest or {}, _choice_entries(state), True, required)
+    named = [name for _flag, name in _tui_system_flags(state) if name]
+    known = {row["system"] for row in state.systems}
+    trees = select_data_directories(state.manifest or {}, _choice_entries(state), True, required,
+                                    systems=named if named and set(named) <= known else None)
     sizes = [meta.get("size", 0) for entry in trees for meta in (entry.get("files") or {}).values()]
     return len(sizes), sum(sizes)
 

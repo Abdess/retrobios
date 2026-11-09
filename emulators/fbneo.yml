@@ -52,12 +52,19 @@ data_directories:
     unread_on: [romm]
     destination: fbneo/cheats
     required: false
-    source_ref: "source src/burner/conc.cpp:167"
+    # The running driver's <name>.ini and .dat, and cheat.dat, cheatnes.dat
+    # (NES drivers) or cheatsnes.dat (SNES drivers), which name drivers:
+    # the tree holds arcade sets and md_, pce_, tg_ and sgx_ drivers.
+    systems: [arcade, sega-megadrive, nec-pc-engine, nec-supergrafx, nintendo-nes, nintendo-snes]
+    source_ref: "source src/burner/conc.cpp:167, src/burner/conc.cpp:815-828, src/burner/conc.cpp:1059-1083, src/burn/drv/megadrive/d_megadrive.cpp:495-498, src/burn/drv/pce/d_pce.cpp:204-207, src/burn/drv/pce/d_pce.cpp:280, src/burn/drv/pce/d_pce.cpp:9203"
   - ref: fbneo-samples
     unread_on: [romm]
     destination: fbneo
     required: false
-    source_ref: "source src/burn/snd/samples.cpp:21-35"
+    # A driver's sample names, read when it declares any: the 49 sets are
+    # arcade boards (tr606drumkit is Irem M62's).
+    systems: [arcade]
+    source_ref: "source src/burn/snd/samples.cpp:21-35, src/burn/snd/samples.cpp:886-899"
 
 notes: |
   FinalBurn Neo is a multi-system arcade and console emulator. BIOS files are
