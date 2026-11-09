@@ -121,7 +121,7 @@ files:
     md5: 924e392ed05558ffdb115408c263dccf
     sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
     description: "SCPH-1001, DTL-H1201, DTL-H3001 (v2.2 12-04-95 A)"
-    note: "The only image the code identifies, and it identifies it by a checksum of its own rather than by a hash it spells out: the 524288 bytes summed as signed bytes, accepted at 85958. The md5 and sha1 here are the dump that reproduces that sum. Selecting a BIOS by hand takes any file ending in .bin that is exactly 524288 bytes, so the other images of the group fill the slot without being recognised by name or by sum."
+    note: "The only image the code identifies, and it identifies it by a checksum of its own rather than by a hash it spells out: the 524288 bytes summed as signed bytes, accepted at 85958. The md5 and sha1 here are the dump that reproduces that sum. Selecting a BIOS by hand takes any file ending in .bin that is exactly 524288 bytes, so any other PlayStation image of that size fills the slot without being recognised by name or by sum."
     source_ref: "Main.java:4159-4175, Main.java:5919, Main.java:25217, res/raw/fpse.ini BiosName"
 
   - name: LibPS.exe
