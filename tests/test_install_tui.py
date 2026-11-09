@@ -366,6 +366,13 @@ HOME = Path("/home/user")
 SYSTEM_DIR = HOME / ".config" / "retroarch" / "system"
 
 
+def screen_text(lines) -> str:
+    """The screen as one line of words, a path broken after a separator
+    joined again: a folder under the checkout is as long as the checkout's
+    own path, and a deep clone wrapped it across two lines."""
+    return re.sub(r"(?<=[/\\]) ", "", " ".join(" ".join(lines).split()))
+
+
 def fresh_state() -> install.TuiState:
     state = install.TuiState(os_type="linux", home=HOME)
     state.setups = [("retroarch", SYSTEM_DIR, "RetroArch"),
@@ -1856,7 +1863,7 @@ class TicksBarAndPaths(unittest.TestCase):
         state.stack = ["folder"]
         self.assertEqual(install._choose(state, "minui", card / "Bios"), [])
         self.assertEqual(state.screen, "cardroot")
-        text = " ".join(line.strip() for line in install.tui_view(state, 120, 40))
+        text = screen_text(install.tui_view(state, 120, 40))
         self.assertIn(f"under the card's root: {card}", text)
         self.assertEqual(press(state, "enter"), [("fetch", "minui")])
         self.assertEqual(state.dest, card)
@@ -2343,7 +2350,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
             state, effects = install.tui_start(_args(), "linux")
         label = f"muOS SD card ({root.name})"
         self.assertEqual(state.setups, [("retroarch", root / "MUOS" / "bios", label)])
-        text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
+        text = screen_text(install.tui_view(state, 120, 40))
         self.assertIn(f"> {label}", text)
         self.assertIn(f"BIOS folder: {root / 'MUOS' / 'bios'}", text)
         (root / "MUOS" / "bios").mkdir()
@@ -4135,7 +4142,7 @@ class AFolderThisUserCannotOpen(unittest.TestCase):
         self.dest = self.lock / "system"
 
     def said(self, state: install.TuiState) -> str:
-        return " ".join(" ".join(install.tui_view(state, 200, 40)).split())
+        return screen_text(install.tui_view(state, 200, 40))
 
     def test_typed_it_stays_on_the_path_screen(self):
         state = fresh_state()
@@ -6507,7 +6514,7 @@ class OneCardReading(unittest.TestCase):
                 self.assertEqual(state.screen, "checking" if one else "create")
                 if not one:
                     self.assertIn(note.split(":")[0],
-                                  " ".join(" ".join(install.tui_view(state, 120, 40)).split()))
+                                  screen_text(install.tui_view(state, 120, 40)))
                     install.tui_update(state, Key("enter"))
                 self.assertEqual(state.card_note, note)
 
@@ -11117,7 +11124,7 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         _title, lines = install.tui_outcome(state)
         self.assertIn(f"BIOS folder: {card / 'Bios'}", lines)
         state.stack = ["checking"]
-        self.assertIn(str(card / "Bios"), " ".join(install.tui_view(state, 120, 40)))
+        self.assertIn(str(card / "Bios"), screen_text(install.tui_view(state, 120, 40)))
 
     # Root cause 7: colour roles read the words.
 
@@ -11263,7 +11270,7 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
         folder = next(i for i, line in enumerate(lines) if line.startswith("BIOS folder:"))
         named = next(i for i, line in enumerate(lines) if line.startswith("Named by"))
         # Nothing between the folder, wrapped or not, and what named it.
-        self.assertTrue(all(line.startswith("/") for line in lines[folder + 1:named]), lines)
+        self.assertEqual("".join(lines[folder:named]), f"BIOS folder: {state.dest}", lines)
         self.assertLess(named, next(i for i, line in enumerate(lines)
                                     if line.startswith(("For ", "Copy them"))))
 

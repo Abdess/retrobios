@@ -185,7 +185,7 @@ downloads, the folder and, for a list with files read from the frontend's save
 directory, that directory. Each row names the option it sets, and **Show the
 command line** gives the same choice as one command for a script. **Preview the
 file list** shows what would be downloaded and writes nothing. **Copy the BIOS
-files from your old card or a folder** opens the folder browser on the first
+files from an old card or a folder** opens the folder browser on the first
 mounted card, and adds [`--from`](#copy-from-an-old-card): the plan then says how
 many files that folder holds and how many are left to download, or that it
 holds none of them. After an install
@@ -662,7 +662,7 @@ nothing is replaced. The end of the run says how many files were kept, their
 size, the folder, and the command that puts them back:
 
 ```
-Kept 1 file you had (512.0 KB), which the collection's copies replaced, in /home/me/.config/retroarch/retrobios-backup/20261022-153000
+Kept 1 file already there (512.0 KB), which the collection's copies replaced, in /home/me/.config/retroarch/retrobios-backup/20261022-153000
   To put them back: python3 install.py --restore /home/me/.config/retroarch/retrobios-backup/20261022-153000
 ```
 
@@ -1007,7 +1007,7 @@ what the options name, everything by default.
 | <span id="option-from-pack"></span>`--from-pack PATH` | Install from a pack already downloaded: its ZIP, one of its parts (the others are found in the same folder), or the folder holding them. Makes no network request and checks every file's hash. See [Without a network](#without-a-network-offline-install) |
 | <span id="option-offline"></span>`--offline` | Make no network request. `--check`, `--from`, `--from-pack` and `--manifest` work without one, the file list stops the run at once when none of them gives it, and a file the run would download fails at once. `RETROBIOS_INSTALL_OFFLINE=1` does the same. `--target` and `--list-targets` read the core list per board a pack carries, or `targets/<platform>.json` beside `--manifest`, and are refused when neither gives one |
 | <span id="option-manifest"></span>`--manifest FILE` | Read the file list from FILE, a copy of `install/<platform>.json`, instead of downloading it. See [Without a network](#without-a-network-offline-install) |
-| <span id="option-restore"></span>`--restore FOLDER` | Put back the files a run replaced and kept in FOLDER, a dated folder inside `retrobios-backup`. Takes no other option but `--dry-run` and `--no-input`. See [Files you already had](#files-you-already-had) |
+| <span id="option-restore"></span>`--restore FOLDER` | Put back the files a run replaced and kept in FOLDER, a dated folder inside `retrobios-backup`. Takes no other option but `--dry-run` and `--no-input`. See [Files already in the folder](#files-you-already-had) |
 | <span id="option-tui"></span>`--tui` | Open the full-screen interface, or stop with the reason it cannot open here (code 2) instead of falling back to the questions. Wins over `RETROBIOS_PLAIN` and `ACCESSIBLE`. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-plain"></span>`--plain` | Ask the questions line by line instead of the full-screen interface, the mode for a screen reader. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-version"></span>`--version` | Print the installer's identity, the first 12 hex digits of the SHA-256 the bootstraps pin |
@@ -1323,7 +1323,7 @@ their systems`), and its `bios` folder comes first at the folder question,
 under Enter, before this computer's usual folder. A drive with a `bios` folder
 and none of those folders, a data drive or a stick, is numbered with a note
 (`DATA has a bios folder but no folder a handheld system writes. Pick it below
-if your files go there.`) and never taken under Enter. Another system's card or SHARE drive, and a
+if the BIOS files go there.`) and never taken under Enter. Another system's card or SHARE drive, and a
 drive two systems fit, are left out, and a line names them: each is reached
 through its own setup. A folder typed is read from the current
 one when it is not a full path, and named in full after. `q` quits there too
@@ -1573,7 +1573,7 @@ it names the pack and the folder. The releases carry no pack for ROCKNIX,
 Knulli or AmberELEC: there RetroBIOS needs Wi-Fi, or the computer route.
 
 On a two-card device, RetroBIOS without Wi-Fi first asks to **copy the BIOS
-files from your other card**: muOS's `MUOS/bios` on the card the system does
+files from the other card**: muOS's `MUOS/bios` on the card the system does
 not read, or the other of `/roms/bios` and `/roms2/bios` on ArkOS and dArkOS.
 A says yes, as [`--from`](#copy-from-an-old-card) does. The list of files
 still comes from the pack, so the pack is needed too.
@@ -1872,7 +1872,7 @@ RetroArch folder that holds only `scph5501.bin`, in the order written:
 {"event": "file", "platform": "retroarch", "dest": "scph5501.bin", "systems": ["sony-playstation"], "size": 524288, "state": "present"}
 {"event": "check", "platform": "retroarch", "name": "RetroArch", "bios_dir": "system", "files": 118, "present": 1, "missing": 117, "wrong_hash": 0, "bytes_needed": 344457216, "data_missing": 0, "not_installable": 0}
 {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 1, "pending": 117, "failed": [], "skipped": [], "left_out": [], "kept": [], "interrupted": false}
-{"event": "end", "code": 1}
+{"event": "end", "code": 3}
 ```
 
 ## Environment overrides

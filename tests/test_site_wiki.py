@@ -956,7 +956,8 @@ class EventsTranscript(unittest.TestCase):
                 self.assertEqual(list(event), ["event", *keys[event["event"]]])
         self.assertEqual(events[0]["event"], "start")
         self.assertEqual(events[0]["mode"], "check")
-        self.assertEqual(events[-1], {"event": "end", "code": 1})
+        # --check that finds files missing ends on 3 (the Exit status table).
+        self.assertEqual(events[-1], {"event": "end", "code": 3})
 
 
 class OneOptionsTable(unittest.TestCase):

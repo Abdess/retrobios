@@ -1183,6 +1183,23 @@ class TestE2E(unittest.TestCase):
         recalbox = {"cores": ["mame0278"], "systems": {}}
         self.assertEqual(resolve_platform_cores(recalbox, profiles), {"mame0278"})
 
+    def test_a_platform_s_own_libretro_build_comes_with_its_retroarch(self):
+        """ROCKNIX ships yabadabadoo with its RetroArch and names it nowhere
+        else: a list naming retroarch takes the libretro builds whose
+        built_by names that platform, and no other platform's."""
+        profiles = {
+            "yabause": {"type": "libretro", "systems": ["saturn"], "files": []},
+            "yabadabadoo": {"type": "libretro", "built_by": ["rocknix"],
+                            "systems": ["saturn"], "files": []},
+        }
+        rocknix = {"_key": "rocknix", "cores": ["retroarch"], "systems": {}}
+        self.assertEqual(resolve_platform_cores(rocknix, profiles),
+                         {"yabause", "yabadabadoo"})
+        other = {"_key": "batocera", "cores": ["retroarch"], "systems": {}}
+        self.assertEqual(resolve_platform_cores(other, profiles), {"yabause"})
+        everyone = {"_key": "retroarch", "cores": "all_libretro", "systems": {}}
+        self.assertEqual(resolve_platform_cores(everyone, profiles), {"yabause"})
+
     def test_resolve_cores_explicit_list(self):
         """Explicit cores list matches against profile dict keys."""
         config = {"cores": ["fbneo", "opera"], "systems": {"arcade": {"files": []}}}
