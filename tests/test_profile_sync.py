@@ -3304,30 +3304,32 @@ class TestBumpCommit(unittest.TestCase):
         self.assertNotIn("uphead", text)
 
     def test_a_profile_one_platform_ships_waits_for_its_build(self):
-        """EmuELEC alone ships RigelEngine and builds its package.mk
-        PKG_VERSION. A bulk advance moved fheroes2 and supertux past that
-        build, and rigelengine is a commit ahead of it already."""
+        """KNULLI alone ships advanced_drastic and builds its
+        advanced_drastic.mk version. A bulk advance moved fheroes2 and
+        supertux past the build EmuELEC then pinned, and a pin ahead of the
+        one build a platform ships describes nothing anyone runs."""
         root = Path(__file__).resolve().parents[1]
-        path = Path(self.tmp.name) / "rigelengine.yml"
+        path = Path(self.tmp.name) / "advanced_drastic.yml"
         path.write_text(
-            SAMPLE.replace("\nnotes:", "\ntype: standalone\ncores: [rigelengine, RigelEngine]\n\nnotes:", 1),
+            SAMPLE.replace(
+                "\nnotes:", "\ntype: standalone\ncores: [advanced_drastic]\n\nnotes:", 1),
             encoding="utf-8",
         )
         report = ProfileReport(
-            name="rigelengine", repo="o/n", pin="pin", head="newhead", entries=[],
+            name="advanced_drastic", repo="o/n", pin="pin", head="newhead", entries=[],
             counts={}, skipped=profile_sync.NO_SOURCE_REF,
         )
         platforms = str(root / "platforms")
         self.assertEqual(
-            profile_sync.shipping_platforms("rigelengine", self.tmp.name, platforms),
-            ["emuelec"],
+            profile_sync.shipping_platforms("advanced_drastic", self.tmp.name, platforms),
+            ["knulli"],
         )
         with contextlib.redirect_stderr(io.StringIO()) as err:
             self.assertFalse(bump_commit(path, report, platforms_dir=platforms))
-        self.assertIn("only emuelec ships it", err.getvalue())
+        self.assertIn("only knulli ships it", err.getvalue())
         path.write_text(
             path.read_text(encoding="utf-8")
-            + 'pin_follows: "EmuELEC builds the branch tip"\n',
+            + 'pin_follows: "KNULLI builds the branch tip"\n',
             encoding="utf-8",
         )
         self.assertTrue(bump_commit(path, report, platforms_dir=platforms))

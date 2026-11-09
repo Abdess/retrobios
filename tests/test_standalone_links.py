@@ -657,7 +657,6 @@ class AmiberryOnEachPlatform(unittest.TestCase):
                     self.assertNotIn("unplaced", entry)
                     self.assertEqual(entry["standalone_path"], f"{folder}/{layout}")
 
-
     def test_retrobat_reads_its_folders_below_the_amiberry_emulator_folder(self) -> None:
         # RetroBat writes rom_path and whdboot_path below the amiberry
         # folder of its install and copies the kickstarts it finds in bios
@@ -681,7 +680,9 @@ class AmiberryOnEachPlatform(unittest.TestCase):
 
 class AmiberryBuildEachPlatformShips(unittest.TestCase):
     """Each platform resolves the name amiberry to the build its own package
-    compiles. RetroBat keeps the 8.5.0 libretro core beside its standalone."""
+    compiles. RetroBat keeps the 8.5.0 libretro core beside its standalone,
+    and Batocera's x86_64 boards fetch it with RetroArch's core downloader
+    (installable_cores)."""
 
     OWN = {
         "rocknix": {"amiberry-5.6.5"},

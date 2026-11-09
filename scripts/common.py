@@ -2771,19 +2771,6 @@ def system_dir_path(entry: dict, path: str) -> str:
     return f"{directory}/{path}" if directory else path
 
 
-def launched_both_ways(config: dict) -> set[str]:
-    """The names a platform runs as a standalone emulator and as a core.
-
-    ``dual_mode_cores`` names those its frontend offers both ways. A name it
-    gives a standalone emulator only, whose buildbot core its RetroArch can
-    download (``installable_cores``), runs both ways too: Batocera's x86_64
-    RetroArch installs the amiberry core beside its own standalone Amiberry.
-    """
-    standalone = {str(c) for c in config.get("standalone_cores") or []}
-    installable = {str(c) for c in config.get("installable_cores") or []}
-    return {str(c) for c in config.get("dual_mode_cores") or []} | (standalone & installable)
-
-
 def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
     """The standalone names the platform's own builds answer to, tagged.
 
@@ -2810,7 +2797,16 @@ def standalone_set(config: dict) -> set[str]:
     same set, tagged, so every reader of standalone_cores sees them.
     """
     names = {str(c) for c in config.get("standalone_cores") or []}
-    names |= {DUAL_MODE_PREFIX + c for c in launched_both_ways(config)}
+    names |= {DUAL_MODE_PREFIX + str(c) for c in config.get("dual_mode_cores") or []}
+    # A buildbot core the platform's RetroArch installs under the name of an
+    # emulator it runs standalone is that emulator's libretro build: run
+    # both ways, as Batocera runs amiberry standalone and can fetch
+    # amiberry_libretro.
+    names |= {
+        DUAL_MODE_PREFIX + str(c)
+        for c in set(map(str, config.get("installable_cores") or []))
+        & set(map(str, config.get("standalone_cores") or []))
+    }
     names |= own_build_tags(config, names)
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
@@ -3310,24 +3306,26 @@ def resolve_platform_cores(
         # A name the platform launches both ways designates its libretro
         # build too. Batocera, Recalbox and RetroBat run pcsx2 standalone and
         # as LRPS2, two profiles: the key match kept the standalone one and
-        # LRPS2's files never reached their packs.
-        dual_names = {str(c) for c in config.get("dual_mode_cores") or []}
-        both_ways = {
-            profile: c
-            for c in sorted(launched_both_ways(config))
-            for profile in index.get(c, set())
-            if "libretro" in str(profiles[profile].get("type", ""))
-            and not profiles[profile].get("built_by")
-            and not replaced_by_own(profile, profiles[profile], libretro_only=True)
-        }
+        # LRPS2's files never reached their packs. A core its RetroArch
+        # installs is a libretro build as well (amiberry's buildbot core
+        # beside Batocera's standalone amiberry).
+        def libretro_builds(name: object) -> set[str]:
+            return {
+                profile
+                for profile in index.get(str(name), set())
+                if "libretro" in str(profiles[profile].get("type", ""))
+                and not profiles[profile].get("built_by")
+                and not replaced_by_own(profile, profiles[profile], libretro_only=True)
+            }
+
+        dual = {p for c in config.get("dual_mode_cores") or [] for p in libretro_builds(c)}
         # A core reached only through the RetroArch downloader runs on the
         # boards whose downloader offers it: Batocera's x86_64 RetroArch
         # installs the amiberry core, its armv7 and aarch64 boards cannot.
-        downloaded_only = {
-            profile: c for profile, c in both_ways.items()
-            if c not in dual_names and profile not in result
-        }
-        result |= set(both_ways)
+        for c in config.get("installable_cores") or []:
+            for profile in libretro_builds(c) - dual - result:
+                downloaded_only.setdefault(profile, str(c))
+        result |= dual | set(downloaded_only)
         # Support "all_libretro" as a list element: combines all libretro
         # profiles with explicitly listed standalone cores (e.g. RetroDECK
         # ships RetroArch + standalone emulators)

@@ -14,7 +14,7 @@ import re
 import sys
 import urllib.error
 import urllib.request
-from collections.abc import Callable, Iterable
+from collections.abc import Callable
 from pathlib import Path
 
 
@@ -558,26 +558,23 @@ def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[
 
 
 def installable_cores(
-    selection: BuildSelection,
-    cores: list[str],
-    standalone: Iterable[str] = (),
-    dual: Iterable[str] = (),
+    selection: BuildSelection, cores: list[str], standalone: list[str], dual: list[str],
 ) -> list[str]:
     """Buildbot cores a board's RetroArch core downloader installs, beyond
-    the cores the image builds.
+    the libretro cores the image builds.
 
     The targets scraper names, per board, the RetroArch targets entry its
     downloader reads (`downloads`): a Batocera x86_64 board installs any
-    core of linux-x86_64, an armv7 one any of linux-armhf. A name the image
-    gives a standalone emulator only (Batocera's amiberry, cemu, xemu) is
-    not that core: the buildbot one stays installable.
+    core of linux-x86_64, an armv7 one any of linux-armhf. A name compares
+    within its build mode: amiberry built standalone is another program
+    than amiberry_libretro, which the buildbot serves.
     """
     found: set[str] = set()
     for entry in selection.targets.values():
         if entry.get("downloads"):
             found |= load_target_config("retroarch", entry["downloads"]) or set()
-    standalone_only = set(standalone) - set(dual)
-    return sorted(found - (set(cores) - standalone_only))
+    built_libretro = (set(cores) - set(standalone)) | set(dual)
+    return sorted(found - built_libretro)
 
 
 def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dict]:
