@@ -5,7 +5,7 @@ source: "https://github.com/libretro/mame2003-plus-libretro"
 upstream: "https://www.mamedev.org"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-03-24"
-source_commit: "993403d0332946b8aa6abab56fbd9864498790a1"
+source_commit: "dff0ba63654f4e93a24182e8aa018b174357a3e8"
 core_version: null
 version_basis:
   kind: none
@@ -64,7 +64,8 @@ notes: |
   Neo Geo uses mame.sm1, mamelo.lo, sfix.sfx naming. PGM uses pgm_p01s.rom naming.
   ZN-1/ZN-2 sets are named after the board BIOS (coh1000c, coh3002c, ...) and
   each BIOS set carries the CAT702 key of the main board. Namco System 11 games
-  run the C76 BIOS from namcoc76.zip. PGM and ST-V have partial support.
+  run the C76 BIOS from namcoc76.zip, Namco System 22 games the C74 BIOS
+  from namcoc74.zip. PGM and ST-V have partial support.
 
   Data files go in {system_dir}/mame2003-plus/. Samples in samples/ subfolder,
   artwork in artwork/ subfolder (both per-game ZIPs). hiscore.dat is compiled
@@ -81,7 +82,7 @@ files:
     sha1: "b48347a133ab8f28b9875ab300fea2ffa2f37ebc"
     md5: "f870afb431df16526e28cd9029b9d949"
     size: 131926
-    source_ref: "src/hiscore.c:15, 102-116, 248, src/cpuexec.c:396-398"
+    source_ref: "src/hiscore.c:15, 102-116, 248, src/cpuexec.c:402-404"
     note: >-
       high score definitions, compiled into binary and spawned on first run.
       metadata/hiscore.dat of the core repository. The compiled copy
@@ -313,7 +314,7 @@ files:
     category: bios_zip
     system: sega-stv
     note: "ST-V (Saturn-based arcade) BIOS, 6 region variants"
-    source_ref: "src/drivers/stv.c:3742-3768"
+    source_ref: "src/drivers/stv.c:4186-4210"
     contents:
       - name: epr19730.ic8
         description: Japan
@@ -342,12 +343,12 @@ files:
     category: bios_zip
     system: sega-megaplay
     note: "Mega Play BIOS, 2 versions"
-    source_ref: "src/drivers/segac2.c:5996-6006"
+    source_ref: "src/drivers/megaplay.c:981-988, 1210"
     contents:
       - name: ep15294.ic2
         description: Mega Play BIOS v1
         crc32: "aa8dc2d8"
-      - name: megaplay.bin
+      - name: epr-a15294.ic2
         description: Mega Play BIOS v2
         crc32: "f97c68aa"
 
@@ -359,9 +360,9 @@ files:
     category: bios_zip
     system: sega-megatech
     note: "Mega Tech BIOS - menu/instruction screen processor"
-    source_ref: "src/drivers/segac2.c:5636-5639"
+    source_ref: "src/drivers/megatech.c:1286-1292, 1591"
     contents:
-      - name: epr12664.20
+      - name: epr-12664.20
         description: Mega Tech BIOS
         size: 32768
         crc32: "f71e9526"
@@ -508,7 +509,7 @@ files:
     category: bios_zip
     system: zn1-capcom
     note: "Capcom ZN-1 BIOS"
-    source_ref: "src/drivers/zn.c:4354-4359, 4368-4381, 7240"
+    source_ref: "src/drivers/zn.c:3859-3864, src/drivers/zn.c:3873-3886, src/drivers/zn.c:6745"
     contents:
       - name: "m534002c-13.ic353"
         description: BIOS
@@ -526,7 +527,7 @@ files:
     category: bios_zip
     system: zn2-capcom
     note: "Capcom ZN-2 BIOS"
-    source_ref: "src/drivers/zn.c:4361-4366, 4802-4815, 7261"
+    source_ref: "src/drivers/zn.c:3866-3871, src/drivers/zn.c:4307-4320, src/drivers/zn.c:6766"
     contents:
       - name: "m534002c-59.ic353"
         description: BIOS
@@ -544,7 +545,7 @@ files:
     category: bios_zip
     system: zn1-taito
     note: "Taito FX-1 BIOS"
-    source_ref: "src/drivers/zn.c:6008-6013, 6015-6017, 7348"
+    source_ref: "src/drivers/zn.c:5513-5518, src/drivers/zn.c:5520-5522, src/drivers/zn.c:6853"
     contents:
       - name: "m534002c-14.ic353"
         description: BIOS
@@ -562,7 +563,7 @@ files:
     category: bios_zip
     system: zn1-tecmo
     note: "Tecmo TPS BIOS"
-    source_ref: "src/drivers/zn.c:5543-5548, 5553-5555, 7313"
+    source_ref: "src/drivers/zn.c:5048-5053, src/drivers/zn.c:5058-5060, src/drivers/zn.c:6818"
     contents:
       - name: "m534002c-61.ic353"
         description: BIOS
@@ -580,7 +581,7 @@ files:
     category: bios_zip
     system: zn1-video-system
     note: "Video System ZN-1 BIOS"
-    source_ref: "src/drivers/zn.c:5907-5912, 5925-5927, 7336"
+    source_ref: "src/drivers/zn.c:5412-5417, src/drivers/zn.c:5430-5432, src/drivers/zn.c:6841"
     contents:
       - name: "coh-1002v.ic353"
         description: BIOS
@@ -598,7 +599,7 @@ files:
     category: bios_zip
     system: zn1-acclaim
     note: "Acclaim ZN-1 BIOS"
-    source_ref: "src/drivers/zn.c:6769-6774, 6776-6778, 7304"
+    source_ref: "src/drivers/zn.c:6274-6279, src/drivers/zn.c:6281-6283, src/drivers/zn.c:6809"
     contents:
       - name: "m534002c-15.ic353"
         description: BIOS
@@ -616,7 +617,7 @@ files:
     category: bios_zip
     system: zn1-atlus
     note: "Atlus ZN-1 BIOS"
-    source_ref: "src/drivers/zn.c:5971-5976, 5978-5980, 7343"
+    source_ref: "src/drivers/zn.c:5476-5481, src/drivers/zn.c:5483-5485, src/drivers/zn.c:6848"
     contents:
       - name: "m534002c-17.ic353"
         description: BIOS
@@ -634,7 +635,7 @@ files:
     category: bios_zip
     system: atari-zn1
     note: "Time Warner ZN-1 BIOS"
-    source_ref: "src/drivers/zn.c:6739-6744, 6746-6748, 7293"
+    source_ref: "src/drivers/zn.c:6244-6249, src/drivers/zn.c:6251-6253, src/drivers/zn.c:6798"
     contents:
       - name: "msm27c402zb.ic353"
         description: BIOS
@@ -652,7 +653,7 @@ files:
     category: bios_zip
     system: eighting-zn1
     note: "Eighting / Raizing ZN-1 BIOS"
-    source_ref: "src/drivers/zn.c:6447-6452, 6454-6456, 7377"
+    source_ref: "src/drivers/zn.c:5952-5957, src/drivers/zn.c:5959-5961, src/drivers/zn.c:6882"
     contents:
       - name: "m27c402cz-54.ic353"
         description: BIOS
@@ -674,7 +675,7 @@ files:
       board ROMs and one BIOS EPROM revision from this set: v1 for most, v2
       for the Compact Flash games, the MB2011 mod BIOS for the bootlegs. No
       game loads the MB2009 mod BIOS, only this set does.
-    source_ref: "src/drivers/zn.c:6877-6899, 6913-6919, 7392"
+    source_ref: "src/drivers/zn.c:6382-6404, src/drivers/zn.c:6418-6424, src/drivers/zn.c:6897"
     contents:
       - name: "m534002c-60.ic353"
         description: BIOS
@@ -722,7 +723,7 @@ files:
     category: bios_zip
     system: taito-gnet
     note: "Taito G-NET (COH-1002T) BIOS, parent of Mawasunda"
-    source_ref: "src/drivers/zn.c:6900-6911, 6922-6924, 7393"
+    source_ref: "src/drivers/zn.c:6405-6416, src/drivers/zn.c:6427-6429, src/drivers/zn.c:6898"
     contents:
       - name: "m534002c-14.ic353"
         description: BIOS
@@ -754,7 +755,7 @@ files:
     category: bios_zip
     system: sega-model2
     note: "Model 1 I/O board BIOS, read by Daytona USA and Desert Tank"
-    source_ref: "src/drivers/model2.c:3321-3324, 3432-3433, 3479-3480, 7030, 7033-7034"
+    source_ref: "src/drivers/model2.c:3362-3365, src/drivers/model2.c:3473-3474, src/drivers/model2.c:3520-3521, src/drivers/model2.c:7071, src/drivers/model2.c:7074-7075"
     contents:
       - name: "epr-14869c.25"
         description: I/O board Z80 program
@@ -767,7 +768,7 @@ files:
     category: bios_zip
     system: sega-model2
     note: "Model 1 I/O board 2 BIOS, read by Virtua Cop"
-    source_ref: "src/drivers/model2.c:3326-3329, 3372-3373, 7031-7032"
+    source_ref: "src/drivers/model2.c:3367-3370, src/drivers/model2.c:3413-3414, src/drivers/model2.c:7072-7073"
     contents:
       - name: "epr-17181.6"
         description: I/O board Z80 program
@@ -790,6 +791,22 @@ files:
         size: 16384
         crc32: "399faac7"
         sha1: "ceb184ef0486caf715dd997101999785f67a40b8"
+
+  # ---------------------------------------------------------
+  # Namco System 22 (namcoc74.zip)
+  # ---------------------------------------------------------
+  - name: namcoc74.zip
+    required: true
+    category: bios_zip
+    system: arcade
+    note: "Namco C74 (M37702) internal BIOS, parent of the System 22 and Super System 22 sets"
+    source_ref: "src/drivers/namcos22.c:2069-2075, 3724"
+    contents:
+      - name: "c74.bin"
+        description: C74 internal BIOS
+        size: 16384
+        crc32: "a3dce360"
+        sha1: "8f3248b1890abb2e649927240ae46f73bb171e3b"
 
   # Century Electronics CVS
   - name: cvs.zip
