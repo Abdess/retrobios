@@ -280,12 +280,14 @@ class TheScriptWiresBoth(unittest.TestCase):
 
 
 # Visible words of each built page: measured before the round and after it,
-# the ceiling being the after value with 5 % of room.
+# the ceiling being the after value with 5 % of room. A page whose content
+# grew is measured again on the same layout: Sega on 2026-11-09, with Model 2
+# and new Chihiro and Hikaru files.
 WORD_CEILINGS = {
     "systems/sony": (2012, 1407),
     "systems/sony-playstation": (2709, 2130),
     "systems/nintendo": (3598, 2941),
-    "systems/sega": (4151, 3370),
+    "systems/sega": (4151, 3545),
     "emulators/duckstation": (1188, 1117),
     "emulators/yaps2": (3159, 2655),
 }

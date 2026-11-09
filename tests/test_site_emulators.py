@@ -511,8 +511,9 @@ class TheBuiltEmulatorPages(unittest.TestCase):
         page = self._html("emulators/aethersx2")
         self.assertRegex(page, r'Download <a href="[^"]*/systems/sony[^"]*#sha1-[0-9a-f]{12}"')
         # The command only where a setup launches AetherSX2 itself (KNULLI,
-        # ROCKNIX), never through RetroArch's folder, which the app never reads.
-        self.assertIn("With ROCKNIX or KNULLI:", page)
+        # ROCKNIX dropped the package in 20261101), never through RetroArch's
+        # folder, which the app never reads.
+        self.assertIn("With KNULLI:", page)
         self.assertNotIn("RetroArch", page.split("Install this emulator", 1)[1].split("</details>", 1)[0])
 
     def test_the_index_leaves_the_template_out(self):
