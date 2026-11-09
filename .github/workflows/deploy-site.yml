@@ -11,6 +11,7 @@ on:
       - "exports/**"
       # Every script the build runs or imports, and no other
       # (tests/test_workflow_paths.py).
+      - "scripts/archive_build.py"
       - "scripts/artifacts.py"
       - "scripts/auto_fetch.py"
       - "scripts/common.py"
@@ -60,6 +61,7 @@ on:
       - "scripts/siteexports.py"
       - "scripts/siterender.py"
       - "scripts/retired_files.py"
+      - "scripts/romset_recipes.py"
       - "scripts/sitesources.py"
       - "scripts/sitesteps.py"
       - "scripts/sitestarlight.py"
@@ -68,6 +70,7 @@ on:
       - "scripts/slots.py"
       - "scripts/sourceref.py"
       - "scripts/split_pack.py"
+      - "scripts/torrentzip.py"
       - "scripts/truth.py"
       - "scripts/upstream.py"
       - "scripts/validate_pr.py"
@@ -88,6 +91,8 @@ on:
       - "release.json"
       - "derivable.json"
       - "retired.json"
+      # The README and the archive recipes page count the recipes.
+      - "recipes/archives.json"
       - "measurements/**"
       # The Proof lines of the emulator pages read what an issue's runs showed.
       - "tests/campaign/observations.yml"

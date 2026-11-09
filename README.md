@@ -9,6 +9,8 @@
 
 <p align="center"><a href="https://abdess.github.io/retrobios/">Website</a> · <a href="https://abdess.github.io/retrobios/which-pack/">Get the files</a> · <a href="https://abdess.github.io/retrobios/wiki/troubleshooting/">A game does not start</a> · <a href="https://abdess.github.io/retrobios/wiki/faq/">Questions</a></p>
 
+<p align="center"><a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/v/retrobios" alt="PyPI version"></a> <a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/pyversions/retrobios" alt="Python versions"></a> <a href="https://github.com/Abdess/retrobios/actions/workflows/validate.yml"><img src="https://github.com/Abdess/retrobios/actions/workflows/validate.yml/badge.svg?branch=main" alt="Validation"></a> <a href="LICENSE"><img src="https://img.shields.io/github/license/Abdess/retrobios" alt="License"></a></p>
+
 Some consoles need a small program, the **BIOS**, to start their games: PlayStation 1 and 2, Saturn, Neo Geo, Dreamcast and more. RetroBIOS installs the BIOS and firmware files for AmberELEC, Batocera, BizHawk, EmuDeck, EmuELEC, KNULLI, Lakka, MiSTer FPGA, MinUI, MyMinUI, NextUI, ROCKNIX, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM, checked the way each one checks them.
 
 ## Install in one line
@@ -64,6 +66,7 @@ Unzip into the BIOS folder, files straight in it. A big pack comes in parts (`Pa
 - **623 emulators profiled**, 589 from their source code and 34 closed-source builds from their binaries: 93% of the files they load cite the file and line that reads them
 - **18 setups**, each checked its own way: MD5 for Batocera and Recalbox, the file name for RetroArch, as their own code does
 - **532 systems**, 19,947 files in the collection, [what is still missing](https://abdess.github.io/retrobios/gaps/) named file by file
+- **2,222 archives**, each with a recipe that rebuilds it from the ROMs the collection holds: 1,790 byte for byte, 432 with the same files inside ([rebuilding an archive](https://abdess.github.io/retrobios/wiki/archive-recipes/))
 - Public data: [JSON, CSV and SQLite](https://abdess.github.io/retrobios/data/), the metadata under MIT
 
 <details>
@@ -107,4 +110,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-09T07:40:17Z*
+*Auto-generated on 2026-11-09T13:12:14Z*

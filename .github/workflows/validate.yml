@@ -32,6 +32,7 @@ on:
       - "release.json"
       - "derivable.json"
       - "retired.json"
+      - "recipes/**"
       - "measurements/**"
       - "website/**"
       # The type check's configuration and baseline.
@@ -62,6 +63,7 @@ on:
       - "release.json"
       - "derivable.json"
       - "retired.json"
+      - "recipes/**"
       - "measurements/**"
       - "website/**"
       - "pyproject.toml"
