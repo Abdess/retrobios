@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-09T07:15:21Z",
-  "total_files": 19986,
-  "total_size": 17057286752,
+  "generated_at": "2026-11-09T08:00:53Z",
+  "total_files": 19987,
+  "total_size": 17173278940,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -131916,6 +131916,16 @@
       "crc32": "1e896af6",
       "adler32": "038fd3f6"
     },
+    "3e3cf2908656adf666ddc771aceefc3496e39195": {
+      "path": "bios/Microsoft/Xbox 360/SystemUpdate_17559_USB.zip",
+      "name": "SystemUpdate_17559_USB.zip",
+      "size": 115992188,
+      "sha1": "3e3cf2908656adf666ddc771aceefc3496e39195",
+      "md5": "dae8d4c690304c23da5d62508eeeb373",
+      "sha256": "38885a3ab6b9854fb4fa31d5ddf21a4fddfd4cfb25e219060cfb0c2fb31f208f",
+      "crc32": "0131a183",
+      "adler32": "f9eac98a"
+    },
     "4cc817432b81b7bd3b9f782b678bd69e3d4d5715": {
       "path": "bios/Microsoft/Xbox 360/Xenia-Edge/xefu/dash/fonts/Xbox Book.xtf",
       "name": "Xbox Book.xtf",
@@ -218191,6 +218201,7 @@
       "3e647719d47e4a3992fc8bc5a7e56fce": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "cf15087fd5fd7593e293faaa7281cff8": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "21e0cf5cd195cd19ca8d41663297d251": "543ff840043256e648ca5b9990f41b48e0136599",
+      "dae8d4c690304c23da5d62508eeeb373": "3e3cf2908656adf666ddc771aceefc3496e39195",
       "8f5b7cee650f389f1c5c7bb5f70386bb": "4cc817432b81b7bd3b9f782b678bd69e3d4d5715",
       "de4a26c39de8001b95c749f8d3d22128": "df0cadf1a4a080992ef0459c413a841bc3906cc7",
       "1a4d640b5780ffd021a40355c0496117": "1c577b7495d3d119f5a584b328e837901c537a28",
@@ -259091,6 +259102,9 @@
       "tu20075c00_00000000": [
         "543ff840043256e648ca5b9990f41b48e0136599"
       ],
+      "SystemUpdate_17559_USB.zip": [
+        "3e3cf2908656adf666ddc771aceefc3496e39195"
+      ],
       "Xbox Book.xtf": [
         "4cc817432b81b7bd3b9f782b678bd69e3d4d5715"
       ],
@@ -296272,6 +296286,7 @@
       "151aca4c": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "150b160b": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "1e896af6": "543ff840043256e648ca5b9990f41b48e0136599",
+      "0131a183": "3e3cf2908656adf666ddc771aceefc3496e39195",
       "c895c21a": "4cc817432b81b7bd3b9f782b678bd69e3d4d5715",
       "513df3cd": "df0cadf1a4a080992ef0459c413a841bc3906cc7",
       "4037d08b": "1c577b7495d3d119f5a584b328e837901c537a28",
@@ -316259,6 +316274,7 @@
       "e652203e6d91140729c29588b18ff8838896cdeb9a3100fbf8d20763af27c9d2": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "c5ec3e0fbc4f31d36c13211ded7f070f3b5f04e99a367fbe5d8c2d8c6e4f925d": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
       "6aabcdb33fb401f7ac0c252281fdb8cdca2b8e44689c2df3f40e1f9d2941d773": "543ff840043256e648ca5b9990f41b48e0136599",
+      "38885a3ab6b9854fb4fa31d5ddf21a4fddfd4cfb25e219060cfb0c2fb31f208f": "3e3cf2908656adf666ddc771aceefc3496e39195",
       "dea8f97d13668de5bca3ccf8a318d727ce29422c2da898cbc4e9acfd13f05cbe": "4cc817432b81b7bd3b9f782b678bd69e3d4d5715",
       "531f7ad06cac7177ffd679ec797046d68b2af46204e9b9562d381380690ee108": "df0cadf1a4a080992ef0459c413a841bc3906cc7",
       "c73c48c7eec019d77ede18fa0b7ca8e012086662c2886f4dcbc98aa0dd57da0c": "1c577b7495d3d119f5a584b328e837901c537a28",
@@ -484985,6 +485001,12 @@
       ],
       "000B0000/tu20075c00_00000000": [
         "543ff840043256e648ca5b9990f41b48e0136599"
+      ],
+      "Microsoft/Xbox 360/SystemUpdate_17559_USB.zip": [
+        "3e3cf2908656adf666ddc771aceefc3496e39195"
+      ],
+      "Xbox 360/SystemUpdate_17559_USB.zip": [
+        "3e3cf2908656adf666ddc771aceefc3496e39195"
       ],
       "Microsoft/Xbox 360/Xenia-Edge/xefu/dash/fonts/Xbox Book.xtf": [
         "4cc817432b81b7bd3b9f782b678bd69e3d4d5715"
