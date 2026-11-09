@@ -429,6 +429,7 @@ launchers:
 | `repo` | What the package fetches and builds, as the script writes it (`rp_module_repo`: method, URL, branch or commit) |
 | `systems` | Systems the package registers, under the platform's names (`addSystem`, `addPort` for ports) |
 | `slot` | The key the code files the list under: a region, a machine |
+| `machines` | On a record naming systems, the machines the platform offers the emulator under them (RetroBat's `xroar_machine` choices for coco) |
 | `names` | In the order the code tries or writes them, relative to `search_dir` |
 | `expands` | Values a `{X}` placeholder in `names` takes, in the order tried (Hatari tries each TOS in ten languages) |
 | `case_insensitive` | Whether the launcher matches names regardless of case |

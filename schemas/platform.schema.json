@@ -243,6 +243,13 @@
           },
           "description": "Systems the package registers, under the platform's own names, in the order the script adds them. On a record handing a directory, the systems it is written for: the record applies to an emulator launched for one of them, and replaces there what the records naming no system hand"
         },
+        "machines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "On a record naming systems, the machines the platform offers the emulator under them, as the emulator names them: an entry of a profile system spelled like one of them is launched for those systems"
+        },
         "slot": {
           "type": "string",
           "description": "The key the launcher files this list under, such as a region or a machine"

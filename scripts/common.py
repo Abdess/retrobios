@@ -2697,6 +2697,8 @@ EXECUTED_PREFIX = "exec:"
 # systems a launcher record is written for, as JSON [system, name]: it says
 # which launch reads a profile entry of that name.
 SYSTEM_FILE_PREFIX = "sysfile:"
+# The key, in that index, of a machine a launcher record offers.
+MACHINE_KEY = "machine:"
 
 
 def core_system_dirs(
@@ -2780,6 +2782,18 @@ def standalone_set(config: dict) -> set[str]:
             if slug in named
             for f in system.get("files") or []
             if f.get("name")
+        }
+        # The machines a record offers under its systems, by normalized id.
+        from launchers import native_systems  # noqa: PLC0415
+
+        natives = native_systems(config)
+        names |= {
+            SYSTEM_FILE_PREFIX + json.dumps(
+                [natives.get(str(native), str(native)), MACHINE_KEY + _norm_system_id(str(m))]
+            )
+            for record in config.get("launchers") or []
+            for native in record.get("systems") or []
+            for m in record.get("machines") or []
         }
         names |= {
             EXECUTED_PREFIX + json.dumps([run.emulator, run.name, run.place, run.source_ref])
@@ -3000,9 +3014,17 @@ def platform_layouts(
     def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
         systems = frozenset()
         if per_system:
+            own = entry_launch_systems(entry, {})
             systems = entry_launch_systems(entry, index)
-            if systems == entry_launch_systems(entry, {}):
-                systems = systems.union(*(family.get(s, set()) for s in systems))
+            if systems == own:
+                systems = systems.union(*(family.get(s, set()) for s in own))
+            if systems == own:
+                # The platform's list names none of the entry's names: its
+                # own system selects the launch that offers it as a machine
+                # (RetroBat runs XRoar's coco3 under coco).
+                systems = systems.union(*(
+                    index.get(MACHINE_KEY + _norm_system_id(s), set()) for s in own
+                ))
         if systems not in by_systems:
             by_systems[systems] = standalone_bindings_for(
                 emu_name, profile, standalone_cores, systems

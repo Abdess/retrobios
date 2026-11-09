@@ -308,6 +308,29 @@ class SystemFamily(unittest.TestCase):
         )
 
 
+class OfferedMachine(unittest.TestCase):
+    def test_an_entry_system_offered_as_a_machine_selects_that_launch(self) -> None:
+        profile = {
+            "emulator": "Emu", "type": "standalone", "standalone_pools": {"-rompath": ""},
+            "files": [
+                {"name": "coco3.rom", "path": "coco3.rom", "system": "coco3"},
+                {"name": "mc10.rom", "path": "mc10.rom", "system": "mc10"},
+            ],
+        }
+        cfg = {
+            **config(
+                passes("emu", "bios/dragon", "-rompath"),
+                {**passes("emu", "bios/coco", "-rompath"), "systems": ["coco"],
+                 "machines": ["coco", "coco3"]},
+            ),
+            "systems": {"coco": {"files": [{"name": "x.zip", "native_system": "coco"}]}},
+        }
+        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg))
+        self.assertEqual(
+            [f.get("standalone_path") for f in view["files"]], ["coco/coco3.rom", "dragon/mc10.rom"]
+        )
+
+
 class Layout(unittest.TestCase):
     LINKED = link("emu", "$biosdir/dc", "$home/.local/share/emu is a symlink to it")
 
@@ -574,8 +597,9 @@ class XroarOnEachPlatform(unittest.TestCase):
         "batocera": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), "xroar"),
         "retrodeck": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), ""),
         "retropie": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), ""),
-        "retrobat": {**dict.fromkeys(("dragon32", "dragon64", "coco3", "mc10"), "dragon"),
-                     "coco": "coco"},
+        # RetroBat offers XRoar's CoCo 3 machines under coco and no MC-10.
+        "retrobat": {**dict.fromkeys(("dragon32", "dragon64", "mc10"), "dragon"),
+                     **dict.fromkeys(("coco", "coco3"), "coco")},
         "recalbox": {**dict.fromkeys(("dragon32", "dragon64"), "dragon"),
                      **dict.fromkeys(("coco", "coco3", "mc10"), "trs80coco")},
     }

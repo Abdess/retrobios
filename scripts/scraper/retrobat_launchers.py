@@ -292,6 +292,33 @@ def _throw_message(src: Source, start: int, end: int) -> tuple[str, int]:
     return f"ApplicationException '{message}'", src.line(found.start())
 
 
+def system_feature_choices(
+    src: Source, emulator: str, option: str, system: str
+) -> tuple[list[str], tuple[int, int]]:
+    """Values es_features.cfg offers for an option of an emulator under one system."""
+    text = src.text
+    for found in re.finditer(r'<emulator name="([^"]*)"', text):
+        if emulator in [name.strip() for name in found.group(1).split(",")]:
+            start, end = found.start(), text.find("</emulator>", found.start())
+            break
+    else:
+        raise LauncherPatternMissing(src.path, f"emulator {emulator}")
+    for block in re.finditer(r'<system name="([^"]*)">', text[start:end]):
+        if system not in [name.strip() for name in block.group(1).split(",")]:
+            continue
+        scope = start + block.start()
+        close = text.find("</system>", scope)
+        feature = src.find(
+            rf'<feature [^>]*value="{re.escape(option)}"', f"{option} of {system}", scope, close
+        )
+        stop = text.find("</feature>", feature.end())
+        values = re.findall(r'<choice [^>]*value="([^"]*)"', text[feature.end():stop])
+        if not values:
+            raise LauncherPatternMissing(src.path, f"choices of {option} for {system}")
+        return values, src.lines(feature.start(), stop + len("</feature>"))
+    raise LauncherPatternMissing(src.path, f"system {system} of {emulator}")
+
+
 def feature_choices(
     src: Source, emulator: str, option: str, core: str | None = None
 ) -> tuple[list[str], tuple[int, int]]:
@@ -2983,6 +3010,21 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
         for record, conditions in found
         for split in _per_system(src, _with_conditions(record, conditions))
     ]
+    # The machines ES offers under a system the folder is chosen for: XRoar
+    # runs a CoCo 3 for coco, so its ROMs are read from that system's folder.
+    features = sources[FEATURES]
+    for record in records:
+        if not record.get("systems"):
+            continue
+        machines: list[str] = []
+        lines = []
+        for system in record["systems"]:
+            choices, span = system_feature_choices(features, "xroar", "xroar_machine", system)
+            machines += [m for m in choices if m not in machines]
+            lines.append(span)
+        record["machines"] = machines
+        ref = record.pop("source_ref")
+        record["source_ref"] = f"{ref}, {source_ref((features.path, lines))}"
     line = src.find(r'string (\w+) = ("rompath (?:[^"\\\n]|\\.)*");', "config rompath line")
     written = _unescape(line.group(2)[1:-1])
     relative = re.fullmatch(r'rompath "(.*)"', written)

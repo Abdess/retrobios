@@ -5402,7 +5402,16 @@ launchers:
   fails_when_missing: false
   systems:
   - coco
-  source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80"
+  machines:
+  - coco
+  - cocous
+  - coco2b
+  - coco2bus
+  - coco3
+  - coco3h
+  - coco3p
+  - coco3ph
+  source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80, .emulationstation/es_features.cfg:22650-22659"
 - emulator: xroar
   build: standalone
   kind: passes_path

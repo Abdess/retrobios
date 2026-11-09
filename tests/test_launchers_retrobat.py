@@ -1150,7 +1150,9 @@ class FolderArguments(unittest.TestCase):
 
     def test_xroar_reassigned_folder_and_config_line(self):
         # romPath is bios/dragon, rewritten to bios/coco for the coco system.
-        default, coco, config = rl.xroar(_sources(**{f"{G}/Xroar.Generator.cs": XROAR}))
+        default, coco, config = rl.xroar(_sources(**{
+            f"{G}/Xroar.Generator.cs": XROAR, rl.FEATURES: XROAR_FEATURES,
+        }))
         self.assertEqual(
             (default["search_dir"], default["passes_to"], default.get("systems")),
             ("bios/dragon", "command line -rompath bios/dragon", None),
@@ -1159,11 +1161,32 @@ class FolderArguments(unittest.TestCase):
             (coco["search_dir"], coco["passes_to"], coco["systems"]),
             ("bios/coco", "command line -rompath bios/coco", ["coco"]),
         )
-        self.assertEqual(coco["source_ref"], default["source_ref"])
+        self.assertEqual(coco["machines"], ["coco", "coco3"])
+        self.assertNotIn("machines", default)
+        self.assertEqual(
+            coco["source_ref"], f"{default['source_ref']}, {rl.FEATURES}:3-6"
+        )
         self.assertEqual(config["search_dir"], "bios/dragon")
         self.assertEqual(
             config["passes_to"], 'xroar.conf rompath ".\\\\..\\\\..\\\\bios\\\\dragon"'
         )
+
+
+XROAR_FEATURES = """
+    <emulator name="xroar">
+      <system name="coco">
+        <feature submenu="EMULATION" name="MACHINE" value="xroar_machine" order="100">
+          <choice name="TANDY COCO(PAL)" value="coco"/>
+          <choice name="TANDY COCO 3(NTSC)" value="coco3"/>
+        </feature>
+      </system>
+      <system name="dragon32,dragon64,dragon">
+        <feature submenu="EMULATION" name="MACHINE" value="xroar_machine" order="100">
+          <choice name="DRAGON64" value="dragon64"/>
+        </feature>
+      </system>
+    </emulator>
+"""
 
 
 PICO8 = """
