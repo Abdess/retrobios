@@ -410,13 +410,13 @@ A RetroArch dry run into an empty folder, with the list of 2026-11-06, printed t
 ```
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
-  14930 files (6.7 GB)
-    3260 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.5 MB).
+  14934 files (6.8 GB)
+    3264 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.6 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
-  Not installable: 37 files are not in the collection, 2 of them required.
+  Not installable: 43 files are not in the collection, 4 of them required.
 
 Checking existing files...
-  0 in place, 14930 missing, 0 wrong copies
+  0 in place, 14934 missing, 0 wrong copies
 ```
 <!-- /generated: dry-run -->
 
@@ -760,11 +760,11 @@ by `scripts/generate_installer_doc.py`):
 <!-- generated: line-menu -->
 
 ```
-RetroArch: 14930 files, 6.7 GB.
-  3260 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.5 MB).
+RetroArch: 14934 files, 6.8 GB.
+  3264 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.6 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
-  Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
+  Not available here, and needed to start their emulators: hyperscanemu/hyperscan.bin (Mattel Hyperscan), hyperscanemu/spg290.bin (Mattel Hyperscan), sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
   Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game data its game reads. Copy it from your own copy of the game into /home/me/.config/retroarch/system/jazz2/Source/.
   Enter) install everything
   c) choose systems, cores and regions
@@ -775,11 +775,11 @@ RetroArch: 14930 files, 6.7 GB.
 
   Counted again for your choices. Nothing is written before Enter.
 
-RetroArch: 9841 files, 4.2 GB.
-  3260 BIOS files (4.1 GB) and 6581 data files (135.5 MB). 5089 game data files left out.
+RetroArch: 9845 files, 4.2 GB.
+  3264 BIOS files (4.1 GB) and 6581 data files (135.6 MB). 5089 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
-  Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
+  Not available here, and needed to start their emulators: hyperscanemu/hyperscan.bin (Mattel Hyperscan), hyperscanemu/spg290.bin (Mattel Hyperscan), sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
   Same choice without questions: python3 install.py --platform retroarch --dest /home/me/.config/retroarch/system --no-game-data
   Enter) install everything
   c) choose systems, cores and regions
@@ -1808,6 +1808,7 @@ other schemas under `api/v1/schemas/`.
 | `scanned` | `folder`, `files`, `truncated`, `other_drives` | Each folder named with `--from`, once read and before `detect`. `files` counts the files found, `truncated` is true when the search stopped at 200,000 of them, and `other_drives` lists the folders below it on another drive, which were not entered |
 | `version` | `platform`, `list_version`, `installed_version`, `message` | Before `choices`, when the system here runs another version than the one the list was built for: `list_version` is the list's, `installed_version` the one the system's version file states, and `message` says it and what it means. Not written when either version is unknown. The run goes on |
 | `board` | `platform`, `board`, `applied`, `message` | Before `choices`, with no `--target` and no `--every-board`, when the system names its board or a Batocera or KNULLI card mounted here does (`boot/batocera.board` or `boot/knulli.board` on its boot partition, `board` then being the board its image maps to): `applied` is true when the run keeps that board's files only, false for a board the platform's list does not name, which keeps every board's files. `message` says it |
+| `unknown_core` | `platform`, `core`, `info`, `dests`, `message` | With `--installed-cores`, before `choices`, once for each installed core the list has no profile for. `info` is true when its RetroArch `.info` was found, and `dests` are the `firmware<N>_path` values it declares, kept whatever the narrowing drops. A core without a `.info` keeps nothing it alone reads, and `message` says so |
 | `choices` | `platform`, `systems` | Before `checking`: the systems the run's list lets one choose among, sorted by id, `other` last for the files no system names. The run's other options apply (`--core`, `--region`, `--no-game-data`, the files left out for an unknown save directory), `--system` does not: these are the systems a screen lists to choose from, and the count a `--system` is out of |
 | `set_aside` | `platform`, `dests` | Right after `choices`: the files of the list the run sets aside before any choice, in list order, those read from a save directory whose place is not known among them. A screen chooses its cores among the rest, the cores `--core` accepts |
 | `file` | `platform`, `dest`, `systems`, `size`, `state` | Each file of the list after the check. `state` is `present` (hash verified), `wrong_hash` or `missing` |

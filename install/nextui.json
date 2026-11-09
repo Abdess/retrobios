@@ -67,31 +67,76 @@
     }
   ],
   "core_names": {
-    "fbneo": [
-      "FBNEOSA"
+    "a5200": [],
+    "beetle_vb": [
+      "beetle-vb",
+      "mednafen_vb",
+      "vb"
     ],
+    "bluemsx": [],
+    "cap32": [
+      "caprice32"
+    ],
+    "fake08": [
+      "fake_08"
+    ],
+    "fbneo": [
+      "FBNEOSA",
+      "fbneo_32b",
+      "fbneo_plus",
+      "km_fbneo_xtreme_amped"
+    ],
+    "fceumm": [],
+    "gambatte": [],
+    "gearcoleco": [],
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
+    ],
+    "handy": [],
     "mednafen_pce_fast": [
       "beetle-pce-fast",
       "beetle_pce_fast",
       "pce_fast"
     ],
+    "mednafen_supafaust": [
+      "beetle_supafaust",
+      "supafaust"
+    ],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ],
+    "picodrive": [],
+    "pokemini": [],
+    "prboom": [],
+    "prosystem": [],
+    "puae2021": [],
+    "race": [],
     "snes9x": [
       "pocketsnes",
       "snes9x_next"
     ],
+    "stella2014": [],
     "vice_x128": [
       "x128"
     ],
     "vice_x64": [
       "x64"
+    ],
+    "vice_xpet": [
+      "xpet"
+    ],
+    "vice_xplus4": [
+      "xplus4"
     ],
     "vice_xvic": [
       "xvic"

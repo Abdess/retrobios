@@ -2204,6 +2204,10 @@
     }
   ],
   "core_names": {
+    "2048": [],
+    "81": [],
+    "a5200": [],
+    "abuse": [],
     "advancemame": [
       "AdvanceMame",
       "advmame"
@@ -2214,12 +2218,17 @@
     "ares": [
       "ares-sa"
     ],
+    "atari800": [],
     "beetle_gba": [
       "mednafen_gba"
     ],
     "beetle_lynx": [
       "beetle-lynx",
       "mednafen_lynx"
+    ],
+    "beetle_ngp": [
+      "beetle-ngp",
+      "mednafen_ngp"
     ],
     "beetle_pce": [
       "beetle-pce",
@@ -2240,9 +2249,23 @@
       "beetle-saturn",
       "mednafen_saturn"
     ],
+    "beetle_vb": [
+      "beetle-vb",
+      "mednafen_vb",
+      "vb"
+    ],
+    "beetle_wswan": [
+      "beetle-wswan",
+      "mednafen_wswan"
+    ],
+    "bennugd-monolithic": [
+      "bgdi"
+    ],
     "bermuda": [
       "bs"
     ],
+    "bk": [],
+    "bluemsx": [],
     "bsnes-jg": [
       "bsnes_jg"
     ],
@@ -2260,6 +2283,15 @@
       "bsnes_mercury_balanced",
       "bsnes_mercury_performance"
     ],
+    "bstone": [],
+    "cannonball": [],
+    "cap32": [
+      "caprice32"
+    ],
+    "ccleste": [],
+    "cdogs": [
+      "cdogs-sdl"
+    ],
     "cgenius": [
       "CGeniusExe"
     ],
@@ -2269,13 +2301,27 @@
     "daedalusx64": [
       "daedalusx64-sa"
     ],
+    "daphne": [
+      "km_daphne_xtreme"
+    ],
     "darkplaces": [
       "darkplaces-quake"
     ],
+    "devilutionx": [],
+    "dinothawr": [],
     "dolphin": [
       "dolphin-gui",
-      "dolphin-sa"
+      "dolphin-qt-gc",
+      "dolphin-qt-wii",
+      "dolphin-sa",
+      "dolphin-sa-gc",
+      "dolphin-sa-wii"
     ],
+    "dosbox-sdl2": [
+      "DOSBOXSDL2"
+    ],
+    "dosbox_pure": [],
+    "dosbox_svn": [],
     "doublecherrygb": [
       "DoubleCherryGB"
     ],
@@ -2283,21 +2329,38 @@
       "Duckstation",
       "duckstation-sa"
     ],
+    "easyrpg": [],
+    "ecwolf": [
+      "ECWolf"
+    ],
+    "eduke32": [],
+    "fake08": [
+      "fake_08"
+    ],
     "fallout1-ce": [
       "fallout-ce"
     ],
+    "fallout2-ce": [],
     "fbalpha2012": [
       "fbalpha"
     ],
     "fbneo": [
-      "FBNEOSA"
+      "FBNEOSA",
+      "fbneo_32b",
+      "fbneo_plus",
+      "km_fbneo_xtreme_amped"
     ],
+    "fceumm": [],
+    "fceumm_mod": [],
+    "fheroes2": [],
     "flycast": [
       "flycast-dev",
       "flycast-next",
       "flycast-sa",
+      "flycast32_rumble",
       "flycast_32b",
       "flycast_dev",
+      "flycast_rumble",
       "flycastsa",
       "flycastvl"
     ],
@@ -2307,13 +2370,17 @@
     "flycast2021": [
       "flycast-xtreme"
     ],
+    "fmsx": [],
     "fpse-ng": [
       "fpse64",
       "fpseng"
     ],
+    "freeintv": [],
+    "freej2me": [],
     "fuse": [
       "fuse_libretro"
     ],
+    "gambatte": [],
     "gba-emu": [
       "GBA-EMU",
       "GBA.emu"
@@ -2322,6 +2389,11 @@
       "GBC-EMU",
       "GBC.emu"
     ],
+    "gearboy": [],
+    "gearcoleco": [],
+    "geargrafx": [],
+    "gearlynx": [],
+    "gearsystem": [],
     "genesis_plus_gx": [
       "genesis-plus-gx",
       "genesis_plus_gx_cart_special",
@@ -2336,17 +2408,30 @@
       "genesisplusgx-wide",
       "genesisplusgxwide"
     ],
+    "geolith": [],
     "gopher64": [
       "gopher64-sa"
+    ],
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
+    ],
+    "gw": [
+      "gw_libretro"
     ],
     "gzdoom": [
       "GZDoom",
       "gzdoom-sa"
     ],
+    "handy": [],
     "hatari": [
       "HATARISA",
+      "hatari-fast",
       "hatarisa"
     ],
+    "hcl": [],
+    "hode": [],
+    "hurrican": [],
     "hypseus-singe": [
       "HYPSEUS",
       "hypseus",
@@ -2356,10 +2441,14 @@
       "diii4a",
       "idtech4amm"
     ],
+    "ikemen": [],
+    "jzintv": [],
     "lexaloffle": [
       "Pico-8",
+      "float-scaled",
       "pico-8",
       "pico8",
+      "pico_standalone",
       "vox_official"
     ],
     "linkboy": [
@@ -2414,6 +2503,10 @@
       "beetle_pce_fast",
       "pce_fast"
     ],
+    "mednafen_supafaust": [
+      "beetle_supafaust",
+      "supafaust"
+    ],
     "mednafen_supergrafx": [
       "beetle-supergrafx",
       "beetle_supergrafx"
@@ -2428,13 +2521,18 @@
       "mesen2"
     ],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
+    "mrboom": [],
     "msx-emu": [
       "MSX-EMU",
       "MSX.emu"
     ],
     "mupen64plus": [
+      "mupen64plus - standalone - glidemk2 - full",
+      "mupen64plus-auto",
       "mupen64plus-sa",
       "mupen64plussa"
     ],
@@ -2467,6 +2565,7 @@
     "nekop2": [
       "meowpc98"
     ],
+    "neocd": [],
     "nes-emu": [
       "NES-EMU",
       "NES.emu"
@@ -2475,18 +2574,35 @@
       "NESOID",
       "Nesoid"
     ],
+    "nestopia": [],
+    "np2kai": [],
     "nxengine": [
       "nx"
     ],
     "o2em": [
       "o2em_libretro"
     ],
+    "openbor": [
+      "OPENBOR",
+      "openbor v7530 - standalone",
+      "openbor4432",
+      "openbor6330",
+      "openbor6412",
+      "openbor6510",
+      "openbor7142",
+      "openbor7530",
+      "openbor_standalone_plus"
+    ],
     "openjazz": [
       "OpenJazz"
+    ],
+    "openmsx": [
+      "openmsx-ld"
     ],
     "opentyrian": [
       "tyrian"
     ],
+    "opera": [],
     "parallel-launcher": [
       "ca.parallel_launcher.ParallelLauncher"
     ],
@@ -2502,13 +2618,17 @@
       "pceemu"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ],
     "pcsx_rearmed_standalone": [
-      "pcsx-rearmed"
+      "pcsx-rearmed",
+      "pcsx_standalone"
     ],
+    "picodrive": [],
     "pizza-boy-gba": [
       "PIZZA-BOY-GBA",
       "Pizza Boy GBA"
@@ -2523,9 +2643,20 @@
       "it.dbtecno.pizzaboyscbasic",
       "it.dbtecno.pizzaboyscpro"
     ],
+    "pocketcdg": [],
+    "pokemini": [],
+    "potator": [],
+    "ppsspp": [
+      "PPSSPPSDL",
+      "ppsspp-sa"
+    ],
+    "prboom": [],
+    "prosystem": [],
     "puae": [
       "uae"
     ],
+    "puae2021": [],
+    "px68k": [],
     "px68k-sdl": [
       "px68k"
     ],
@@ -2533,6 +2664,7 @@
       "REAL3DOPLAYER",
       "Real3DOPlayer"
     ],
+    "reminiscence": [],
     "rigelengine": [
       "RigelEngine"
     ],
@@ -2541,14 +2673,21 @@
       "com.github.Rosalie241.RMG",
       "mupen64"
     ],
+    "same_cdi": [],
+    "sameboy": [],
+    "sameduck": [],
     "saturn-emu": [
       "SATURN-EMU",
       "Saturn.emu",
       "saturnemu"
     ],
+    "scummvm": [],
     "scummvm-standalone": [
       "SCUMMVMSA",
       "scummvm-sa"
+    ],
+    "sdlpop": [
+      "prince"
     ],
     "simple64": [
       "io.github.simple64.simple64",
@@ -2570,6 +2709,12 @@
       "Snes9x EX+",
       "Snes9xEXPlus"
     ],
+    "snes9x2002": [],
+    "snes9x2005_plus": [],
+    "snes9x2010": [],
+    "solarus": [
+      "Solarus"
+    ],
     "sonic-mania": [
       "sonicmania"
     ],
@@ -2582,21 +2727,33 @@
     "stella": [
       "STELLASA"
     ],
+    "supermariowar": [
+      "smw"
+    ],
+    "supertux": [
+      "supertux2"
+    ],
+    "supertuxkart": [],
+    "swanstation": [],
     "tgbdual": [
       "TGB Dual"
     ],
+    "tic80": [],
+    "tyrquake": [],
     "uae4all-rpi": [
       "uae4all"
     ],
     "uae4arm": [
       "uae4arm_32b"
     ],
+    "uzem": [],
     "vba_next": [
       "vba-next"
     ],
     "vbam": [
       "vba-m"
     ],
+    "vecx": [],
     "vice_x128": [
       "x128"
     ],
@@ -2606,9 +2763,13 @@
     "vice_x64sc": [
       "x64sx"
     ],
+    "vice_xplus4": [
+      "xplus4"
+    ],
     "vice_xvic": [
       "xvic"
     ],
+    "virtualjaguar": [],
     "vvvvvv": [
       "VVVVVV"
     ],
@@ -2627,10 +2788,13 @@
       "XM6TYPEG",
       "XM6TYPEG-WINDOWS"
     ],
+    "xrick": [],
     "yabasanshiro": [
       "yabasanshiro-2",
+      "yabasanshiro-libretro",
       "yabasanshiro-sa",
-      "yabasanshiroSA"
+      "yabasanshiroSA",
+      "yabasanshiroSA1_5"
     ]
   },
   "system_cores": {
@@ -2803,6 +2967,7 @@
       "mupen64plus-ae",
       "mupen64plus-libretro",
       "mupen64plus_next",
+      "n64emu",
       "parallel-launcher",
       "parallel_n64",
       "project64",
@@ -2948,6 +3113,7 @@
       "flycast-dojo",
       "flycast2021",
       "flycast2021le",
+      "parallel_dc",
       "redream",
       "reicast",
       "retrodream"

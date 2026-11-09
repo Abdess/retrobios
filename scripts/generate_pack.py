@@ -5128,14 +5128,15 @@ def _manifest_core_index(
 
     A target list, or the cores found installed, names cores the way the
     buildbot does, and a file names the profile that reads it: `core_names`
-    gives each profile the other names it goes by. `system_cores` gives each
-    platform system the cores whose presence keeps it, as
+    gives each profile the other names it goes by, and names every core the
+    platform runs, one that reads no file included: a core found installed
+    that the list does not name is one it has no profile for. `system_cores`
+    gives each platform system the cores whose presence keeps it, as
     `filter_systems_by_target` decides. A system absent from it is kept
     whatever is available.
     """
-    reach = system_core_reach(
-        config.get("systems", {}), profiles, _platform_cores(config, profiles)
-    )
+    runs = _platform_cores(config, profiles)
+    reach = system_core_reach(config.get("systems", {}), profiles, runs)
     system_cores = {
         sys_id: sorted(cores) for sys_id, cores in sorted(reach.items())
         if cores is not None
@@ -5146,7 +5147,8 @@ def _manifest_core_index(
         for c in copy.get("cores") or []
     }
     named |= {c for cores in system_cores.values() for c in cores}
-    aliases: dict[str, set[str]] = {}
+    named |= set(runs)
+    aliases: dict[str, set[str]] = {profile: set() for profile in named & set(runs)}
     for name, claimants in upstream_profile_index(profiles, include_aliases=True).items():
         for profile in claimants & named:
             if name != profile:

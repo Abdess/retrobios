@@ -113,6 +113,51 @@ class NarrowToCores(unittest.TestCase):
         )
 
 
+class ACoreTheListDoesNotKnow(unittest.TestCase):
+    """A core newer than the list (parallel_dc, issue 87) loses nothing its .info declares."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+
+    def test_only_names_no_profile_answers_for(self):
+        self.assertEqual(
+            install.unknown_cores(MANIFEST, ["mednafen_psx", "pcsx_rearmed", "mgba",
+                                             "parallel_dc"]),
+            ["parallel_dc"],
+        )
+
+    def test_the_info_paths_retroarch_reads(self):
+        (self.tmp / "parallel_dc_libretro.info").write_text(
+            'firmware_count = 3\n'
+            'firmware0_desc = "dc/dc_boot.bin (Dreamcast BIOS)"\n'
+            'firmware0_path = "dc/dc_boot.bin"\n'
+            'firmware1_path = dc\\naomi.zip\n'
+            'firmware2 = "ignored.bin"\n'
+        )
+        self.assertEqual(
+            install.info_firmware([self.tmp / "missing", self.tmp], "parallel_dc"),
+            ["dc/dc_boot.bin", "dc/naomi.zip"],
+        )
+        self.assertIsNone(install.info_firmware([self.tmp], "odin"))
+
+    def test_the_config_names_the_info_folder(self):
+        (self.tmp / "retroarch.cfg").write_text('libretro_info_path = "default"\n')
+        self.assertEqual(
+            install.info_dirs("retroarch", self.tmp / "system", [self.tmp / "cores"]),
+            [self.tmp / "info", self.tmp / "cores"],
+        )
+
+    def test_its_declared_files_survive_the_narrowing(self):
+        files, _ = install.narrow_to_cores(
+            MANIFEST, ["mednafen_psx"], declared_by_info=["GBA_BIOS.bin", "mgba/extra.bin"])
+        self.assertEqual(
+            [f["dest"] for f in files],
+            ["scph5501.bin", "gba_bios.bin", "unlisted.bin", "psx/extra.bin",
+             "mgba/extra.bin"],
+        )
+
+
 class TheBuildersOrder(unittest.TestCase):
     """RetroPie reads megaplay.zip as advancemame (copy A), mame (copy B),
     then mame2003 (copy A). Without advancemame the builder ships mame's
@@ -488,6 +533,24 @@ class TheOneLinerReadsInstalledCores(unittest.TestCase):
             self.assertIn("1 core installed", proc.stdout)
             self.assertEqual(
                 repo.installed(), ["pcsx/extra.bin", "scph5500.bin", "scph5501.bin"]
+            )
+
+    def test_a_core_the_list_does_not_know_keeps_its_info_files(self):
+        with _CoreRepository() as repo:
+            repo.install_core("pcsx_rearmed_neon")
+            repo.install_core("newgba")
+            (repo.root / "cores" / "newgba_libretro.info").write_text(
+                'firmware0_path = "gba_bios.bin"\n')
+            repo.install_core("noinfo")
+            proc = repo.run("--installed-cores")
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertIn("newgba: a core this list does not know, 1 file its .info "
+                          "declares kept", proc.stdout)
+            self.assertIn("noinfo: a core this list does not know, with no .info",
+                          proc.stdout)
+            self.assertEqual(
+                repo.installed(),
+                ["gba_bios.bin", "pcsx/extra.bin", "scph5500.bin", "scph5501.bin"],
             )
 
     def test_no_core_found_is_an_error_not_everything(self):

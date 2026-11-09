@@ -918,6 +918,13 @@
     }
   ],
   "core_names": {
+    "2048": [],
+    "81": [],
+    "a5200": [],
+    "advanced_drastic": [
+      "DraStic-original",
+      "drastic - standalone"
+    ],
     "advancemame": [
       "AdvanceMame",
       "advmame"
@@ -928,6 +935,8 @@
     "amiberry": [
       "AMIBERRY"
     ],
+    "applewin": [],
+    "arduous": [],
     "ares": [
       "ares-sa"
     ],
@@ -935,12 +944,19 @@
       "armsx2-sa",
       "armsx2_libretro"
     ],
+    "atari800": [],
+    "b2": [],
+    "beebem": [],
     "beetle_gba": [
       "mednafen_gba"
     ],
     "beetle_lynx": [
       "beetle-lynx",
       "mednafen_lynx"
+    ],
+    "beetle_ngp": [
+      "beetle-ngp",
+      "mednafen_ngp"
     ],
     "beetle_pce": [
       "beetle-pce",
@@ -961,6 +977,21 @@
       "beetle-saturn",
       "mednafen_saturn"
     ],
+    "beetle_vb": [
+      "beetle-vb",
+      "mednafen_vb",
+      "vb"
+    ],
+    "beetle_wswan": [
+      "beetle-wswan",
+      "mednafen_wswan"
+    ],
+    "bk": [],
+    "bluemsx": [],
+    "boom3": [
+      "boom3_xp"
+    ],
+    "bsnes": [],
     "bsnes-jg": [
       "bsnes_jg"
     ],
@@ -982,30 +1013,52 @@
       "C64-EMU",
       "C64.emu"
     ],
+    "cannonball": [],
+    "cap32": [
+      "caprice32"
+    ],
+    "cdi2015": [],
     "chihiro-ds": [
       "chihiro-gun"
     ],
+    "corsixth": [],
+    "craft": [],
+    "crocods": [],
     "cxbx-reloaded": [
       "cxbx"
     ],
     "cxbx-reloaded-2023": [
       "chihiro"
     ],
+    "daphne": [
+      "km_daphne_xtreme"
+    ],
+    "desmume": [],
     "desmume2015": [
       "desmume_2015"
     ],
+    "dice": [],
+    "dinothawr": [],
+    "dirksimple": [],
     "dolphin": [
       "dolphin-gui",
-      "dolphin-sa"
+      "dolphin-qt-gc",
+      "dolphin-qt-wii",
+      "dolphin-sa",
+      "dolphin-sa-gc",
+      "dolphin-sa-wii"
     ],
+    "dosbox": [],
     "dosbox-x": [
       "dosboxx"
     ],
+    "dosbox_pure": [],
     "doublecherrygb": [
       "DoubleCherryGB"
     ],
     "drastic": [
-      "drastic-sa"
+      "drastic-sa",
+      "drastic_standalone"
     ],
     "dsperate": [
       "dsperate-sa"
@@ -1014,22 +1067,38 @@
       "Duckstation",
       "duckstation-sa"
     ],
+    "easyrpg": [],
+    "ecwolf": [
+      "ECWolf"
+    ],
+    "eightyone": [],
+    "emuscv": [],
     "ep128emu_core": [
       "ep128emu",
       "ep128emu-core"
+    ],
+    "exel-hence": [],
+    "fake08": [
+      "fake_08"
     ],
     "fba2x": [
       "pifba"
     ],
     "fbneo": [
-      "FBNEOSA"
+      "FBNEOSA",
+      "fbneo_32b",
+      "fbneo_plus",
+      "km_fbneo_xtreme_amped"
     ],
+    "fceumm": [],
     "flycast": [
       "flycast-dev",
       "flycast-next",
       "flycast-sa",
+      "flycast32_rumble",
       "flycast_32b",
       "flycast_dev",
+      "flycast_rumble",
       "flycastsa",
       "flycastvl"
     ],
@@ -1039,13 +1108,18 @@
     "flycast2021": [
       "flycast-xtreme"
     ],
+    "fmsx": [],
     "fpse-ng": [
       "fpse64",
       "fpseng"
     ],
+    "freechaf": [],
+    "freeintv": [],
+    "frotz": [],
     "fuse": [
       "fuse_libretro"
     ],
+    "gambatte": [],
     "gba-emu": [
       "GBA-EMU",
       "GBA.emu"
@@ -1054,6 +1128,9 @@
       "GBC-EMU",
       "GBC.emu"
     ],
+    "gearcoleco": [],
+    "geargrafx": [],
+    "gearsystem": [],
     "genesis_plus_gx": [
       "genesis-plus-gx",
       "genesis_plus_gx_cart_special",
@@ -1068,36 +1145,59 @@
       "genesisplusgx-wide",
       "genesisplusgxwide"
     ],
+    "geolith": [],
+    "gong": [],
+    "gpsp": [
+      "gpsp_ezode_mod",
+      "gpsp_plus"
+    ],
     "gsplus-legacy": [
       "gsplus"
     ],
+    "gw": [
+      "gw_libretro"
+    ],
+    "handy": [],
     "hatari": [
       "HATARISA",
+      "hatari-fast",
       "hatarisa"
     ],
+    "hatarib": [],
+    "holani": [],
     "hypseus-singe": [
       "HYPSEUS",
       "hypseus",
       "hypseus_singe"
     ],
+    "imageviewer": [],
+    "julius": [],
+    "kronos": [],
     "lexaloffle": [
       "Pico-8",
+      "float-scaled",
       "pico-8",
       "pico8",
+      "pico_standalone",
       "vox_official"
     ],
     "linkboy": [
       "LINKBOY",
       "Linkboy"
     ],
+    "lowresnx": [
+      "lowres_nx"
+    ],
     "lrps2": [
       "pcsx2",
       "ps2"
     ],
+    "lutro": [],
     "lynx-emu": [
       "LYNX-EMU",
       "Lynx.emu"
     ],
+    "m2000": [],
     "m64plus-fz": [
       "M64PLUS-FZ",
       "org.mupen64plusae.v3.fzurita",
@@ -1107,9 +1207,12 @@
     "mame": [
       "mame64"
     ],
+    "mame0258": [],
+    "mame0278": [],
     "mame2000": [
       "imame4all"
     ],
+    "mame2003": [],
     "mame2003_plus": [
       "mame078plus",
       "mame2003-plus"
@@ -1117,6 +1220,7 @@
     "mame2010": [
       "mame0139"
     ],
+    "mame2015": [],
     "mame2016": [
       "mess2016"
     ],
@@ -1142,6 +1246,11 @@
       "beetle_pce_fast",
       "pce_fast"
     ],
+    "mednafen_stv": [],
+    "mednafen_supafaust": [
+      "beetle_supafaust",
+      "supafaust"
+    ],
     "mednafen_supergrafx": [
       "beetle-supergrafx",
       "beetle_supergrafx"
@@ -1161,14 +1270,26 @@
     "mesence": [
       "mesen2"
     ],
+    "meteor": [],
     "mgba": [
-      "mgba_fork"
+      "mgba_fork",
+      "mgba_rumble",
+      "msgb"
     ],
+    "minivmac": [],
+    "mojozork": [],
+    "moonlight": [
+      "lr_moonlight"
+    ],
+    "mrboom": [],
     "msx-emu": [
       "MSX-EMU",
       "MSX.emu"
     ],
+    "mu": [],
     "mupen64plus": [
+      "mupen64plus - standalone - glidemk2 - full",
+      "mupen64plus-auto",
       "mupen64plus-sa",
       "mupen64plussa"
     ],
@@ -1198,6 +1319,7 @@
     "nekop2": [
       "meowpc98"
     ],
+    "neocd": [],
     "nes-emu": [
       "NES-EMU",
       "NES.emu"
@@ -1206,6 +1328,7 @@
       "NESOID",
       "Nesoid"
     ],
+    "nestopia": [],
     "nethersx2": [
       "NETHERSX2",
       "NetherSX2"
@@ -1218,12 +1341,30 @@
       "NETHERSX2-TURNIP-CLASSIC",
       "NetherSX2-Turnip-Classic"
     ],
+    "np2kai": [],
     "nxengine": [
       "nx"
     ],
     "o2em": [
       "o2em_libretro"
     ],
+    "openbor": [
+      "OPENBOR",
+      "openbor v7530 - standalone",
+      "openbor4432",
+      "openbor6330",
+      "openbor6412",
+      "openbor6510",
+      "openbor7142",
+      "openbor7530",
+      "openbor_standalone_plus"
+    ],
+    "openlara": [],
+    "openmsx": [
+      "openmsx-ld"
+    ],
+    "opera": [],
+    "oricutron": [],
     "parallel-launcher": [
       "ca.parallel_launcher.ParallelLauncher"
     ],
@@ -1238,18 +1379,27 @@
       "com.PceEmu",
       "pceemu"
     ],
+    "pcsx2": [
+      "pcsx2-sa"
+    ],
     "pcsx2-legacy": [
       "PCSX2-LEGACY",
       "pcsx2-16"
     ],
     "pcsx_rearmed": [
+      "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
-      "pcsx_rearmed_neon"
+      "pcsx_rearmed_neon",
+      "pcsx_rearmed_rumble"
     ],
     "pcsx_rearmed_standalone": [
-      "pcsx-rearmed"
+      "pcsx-rearmed",
+      "pcsx_standalone"
     ],
+    "pd777": [],
+    "picodrive": [],
+    "pisnes": [],
     "pizza-boy-gba": [
       "PIZZA-BOY-GBA",
       "Pizza Boy GBA"
@@ -1267,32 +1417,62 @@
     "play": [
       "play!"
     ],
+    "pokemini": [],
+    "potator": [],
+    "ppsspp": [
+      "PPSSPPSDL",
+      "ppsspp-sa"
+    ],
+    "prboom": [],
+    "prosystem": [],
     "puae": [
       "uae"
     ],
+    "puae2021": [],
+    "px68k": [],
     "px68k-sdl": [
       "px68k"
     ],
+    "quasi88": [],
     "quasi88kai": [
       "quasi88"
     ],
+    "quicknes": [],
+    "race": [],
+    "rb5000": [],
     "real3doplayer": [
       "REAL3DOPLAYER",
       "Real3DOPlayer"
     ],
+    "reicast": [],
+    "reminiscence": [],
+    "retro8": [
+      "picante8"
+    ],
+    "retrodream": [],
     "rosalies-mupen-gui": [
       "RMG",
       "com.github.Rosalie241.RMG",
       "mupen64"
     ],
+    "samcoupe": [
+      "simcoupe"
+    ],
+    "same_cdi": [],
+    "sameboy": [],
+    "sameduck": [],
     "saturn-emu": [
       "SATURN-EMU",
       "Saturn.emu",
       "saturnemu"
     ],
+    "scummvm": [],
     "scummvm-standalone": [
       "SCUMMVMSA",
       "scummvm-sa"
+    ],
+    "sdlpop": [
+      "prince"
     ],
     "skyemu": [
       "skyemu-sa"
@@ -1310,6 +1490,12 @@
       "Snes9x EX+",
       "Snes9xEXPlus"
     ],
+    "snes9x2002": [],
+    "snes9x2005": [],
+    "snes9x2010": [],
+    "solarus": [
+      "Solarus"
+    ],
     "speccy": [
       "SPECCY",
       "com.fms.speccy",
@@ -1318,25 +1504,38 @@
     "stella": [
       "STELLASA"
     ],
+    "stella2014": [],
+    "stonesoup": [],
+    "sugarbox2": [],
+    "supermodel": [],
+    "swanstation": [],
+    "tamalibretro": [],
     "tgbdual": [
       "TGB Dual"
     ],
+    "theodore": [],
+    "thepowdertoy": [],
+    "ti99sim": [],
+    "tic80": [],
     "triforce": [
       "dolphin-triforce",
       "dolphin_triforce"
     ],
+    "tyrquake": [],
     "uae4all-rpi": [
       "uae4all"
     ],
     "uae4arm": [
       "uae4arm_32b"
     ],
+    "uzem": [],
     "vba_next": [
       "vba-next"
     ],
     "vbam": [
       "vba-m"
     ],
+    "vecx": [],
     "vice": [
       "vice_x128",
       "vice_x64",
@@ -1361,18 +1560,40 @@
     "vice_x64sc": [
       "x64sx"
     ],
+    "vice_xcbm2": [
+      "xcbm2"
+    ],
+    "vice_xcbm5x0": [
+      "xcbm5x0"
+    ],
+    "vice_xpet": [
+      "xpet"
+    ],
+    "vice_xplus4": [
+      "xplus4"
+    ],
     "vice_xscpu64": [
       "xscpu64"
     ],
     "vice_xvic": [
       "xvic"
     ],
+    "vircon32": [],
+    "virtualjaguar": [],
     "visual-pinball": [
       "vpinball"
     ],
+    "vitaquake2": [
+      "vitaquake2-rogue",
+      "vitaquake2-xatrix",
+      "vitaquake2-zaero"
+    ],
+    "vitaquake3": [],
+    "vitavoyager": [],
     "vvvvvv": [
       "VVVVVV"
     ],
+    "wasm4": [],
     "x1": [
       "xmil"
     ],
@@ -1394,11 +1615,20 @@
       "XM6TYPEG",
       "XM6TYPEG-WINDOWS"
     ],
+    "xrick": [],
+    "xroar": [
+      "xroar-cocous",
+      "xroar-dragon32"
+    ],
     "yabasanshiro": [
       "yabasanshiro-2",
+      "yabasanshiro-libretro",
       "yabasanshiro-sa",
-      "yabasanshiroSA"
-    ]
+      "yabasanshiroSA",
+      "yabasanshiroSA1_5"
+    ],
+    "yabause": [],
+    "ymir": []
   },
   "system_cores": {
     "3do": [
@@ -1423,6 +1653,7 @@
       "mupen64plus",
       "mupen64plus-ae",
       "mupen64plus_next",
+      "n64emu",
       "parallel-launcher",
       "parallel_n64",
       "project64",
@@ -1586,6 +1817,7 @@
       "mame4droid",
       "mame4droid-2024",
       "mamearcade",
+      "parallel_dc",
       "teknoparrot",
       "ume2015"
     ],
@@ -1791,6 +2023,7 @@
       "flycast-dojo",
       "flycast2021",
       "flycast2021le",
+      "parallel_dc",
       "redream",
       "reicast",
       "retrodream"
