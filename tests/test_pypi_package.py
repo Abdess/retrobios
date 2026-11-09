@@ -186,8 +186,10 @@ class TheInstalledCommandIsTheInstaller(Built):
 
     def _same_answers(self, python: str, name: str) -> None:
         command = self._installed(python, name)
-        # `retrobios` and `python -m retrobios` both run install.py.
+        # `retrobios` and `python -m retrobios` both run install.py, whose
+        # examples then name the package command.
         launchers = ([str(command)], [str(command.with_name("python")), "-m", "retrobios"])
+        as_package = {**os.environ, "RETROBIOS_BOOTSTRAP": "pypi"}
         for launcher in launchers:
             for args in (["--help"], ["--version"], ["--no-such-option"]):
                 with self.subTest(python=name, launcher=launcher[-1], args=args):
@@ -195,13 +197,27 @@ class TheInstalledCommandIsTheInstaller(Built):
                                               text=True, check=False, cwd=self.scratch)
                     script = subprocess.run([python, str(REPO_ROOT / "install.py"), *args],
                                             capture_output=True, text=True, check=False,
-                                            cwd=self.scratch)
+                                            cwd=self.scratch, env=as_package)
                     self.assertEqual(
                         (packaged.returncode, packaged.stdout, packaged.stderr),
                         (script.returncode, script.stdout, script.stderr))
 
     def test_this_python(self):
         self._same_answers(sys.executable, "venv-current")
+
+    def test_a_hint_gives_back_the_package_command(self):
+        """Nothing detected, the example said `python3 install.py`."""
+        command = self._installed(sys.executable, "venv-hint")
+        home = self.scratch / "empty-home"
+        home.mkdir()
+        env = {**os.environ, "HOME": str(home), "USERPROFILE": str(home),
+               "RETROBIOS_INSTALL_OFFLINE": "1"}
+        env.pop("RETROBIOS_BOOTSTRAP", None)
+        run = subprocess.run([str(command), "--yes"], capture_output=True, text=True,
+                             check=False, cwd=self.scratch, env=env)
+        out = run.stdout + run.stderr
+        self.assertIn("retrobios --platform retroarch --dest", out)
+        self.assertNotIn("install.py --platform", out)
 
     def test_python_38(self):
         python = _python38()

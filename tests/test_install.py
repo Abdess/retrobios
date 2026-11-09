@@ -7721,5 +7721,32 @@ class TheListVersionIsSaidBeforeAndAfter(unittest.TestCase):
         self.assertNotIn("This list was built for", proc.stdout)
 
 
+class APackageHintNamesThePackageCommand(unittest.TestCase):
+    """Run from the retrobios package, a hint said `python3 install.py`,
+    a file the user does not have."""
+
+    def test_the_environment_names_the_command(self):
+        for prefix, command in (
+            ("/home/me/.cache/uv/archive-v0/UwL4i3xOlCEYSTnw", "uvx retrobios"),
+            ("C:\\Users\\me\\AppData\\Local\\uv\\cache\\archive-v0\\x1", "uvx retrobios"),
+            ("/home/me/.cache/pipx/539b8243c11ee7c", "pipx run retrobios"),
+            ("/home/me/.local/pipx/.cache/539b8243c11ee7c", "pipx run retrobios"),
+            ("/home/me/.local/share/pipx/venvs/retrobios", "retrobios"),
+            ("/home/me/.local/share/uv/tools/retrobios", "retrobios"),
+            ("/home/me/venv", "retrobios"),
+        ):
+            with self.subTest(prefix=prefix):
+                self.assertEqual(install.package_command(prefix), command)
+
+    def test_the_launcher_is_the_package_command(self):
+        hint = install.Invocation()
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_BOOTSTRAP": "pypi"}), \
+                unittest.mock.patch.object(install.sys, "prefix", "/home/me/.cache/uv/archive-v0/a"):
+            self.assertEqual(hint.launcher(), "uvx retrobios")
+            self.assertEqual(hint.launcher(elevated=True), "sudo uvx retrobios")
+            self.assertTrue(hint.command("retroarch", "DIR").startswith(
+                "uvx retrobios --platform retroarch --dest DIR"))
+
+
 if __name__ == "__main__":
     unittest.main()
