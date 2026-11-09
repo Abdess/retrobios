@@ -497,3 +497,43 @@ class Scrapers(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
+
+class OpenmsxOnEachPlatform(unittest.TestCase):
+    """openMSX finds system ROMs by SHA1 in share/systemroms below its user
+    directory and in every filepool entry. RetroBat sets OPENMSX_HOME to
+    bios/openmsx, RetroPie links share/systemroms of its user directory to
+    BIOS/openmsx, Batocera and KNULLI add bios/Machines and bios/openmsx to
+    the filepool and list their own files in bios/openmsx."""
+
+    EXPECTED = {
+        "batocera": {"share/systemroms": ("", "openmsx")},
+        "knulli": {"share/systemroms": ("", "openmsx")},
+        "retrobat": {"": ("", "openmsx")},
+        "retropie": {"share/systemroms": ("", "openmsx")},
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["openmsx"]
+
+    def test_each_platform_hands_openmsx_its_folder(self) -> None:
+        for platform, expected in self.EXPECTED.items():
+            with self.subTest(platform=platform):
+                cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+                self.assertEqual(
+                    standalone_bindings_for("openmsx", self.profile, standalone_set(cfg)),
+                    expected,
+                )
+
+    def test_every_system_rom_lands_in_bios_openmsx(self) -> None:
+        for platform in self.EXPECTED:
+            with self.subTest(platform=platform):
+                cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+                (view, _standalone), = platform_layouts(
+                    "openmsx", self.profile, standalone_set(cfg)
+                )
+                for entry in view["files"]:
+                    self.assertNotIn("unplaced", entry)
+                    self.assertTrue(
+                        entry["standalone_path"].startswith("openmsx/"), entry["standalone_path"]
+                    )

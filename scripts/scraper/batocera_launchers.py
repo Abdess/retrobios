@@ -15,7 +15,8 @@ launcher looks for nothing".
 from __future__ import annotations
 
 import ast
-from collections.abc import Callable
+import re
+from collections.abc import Callable, Iterable
 from typing import Any
 
 from .configgen_launchers import (
@@ -898,6 +899,56 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
     return launchers
 
 
+# Generators that hand the emulator a /userdata/bios directory through its
+# configuration: a line written to the file it reads (openMSX's script.tcl
+# filepool entries) or a key saved to it.
+CONFIG_DIRECTORY_GENERATORS = ("openmsx.openmsxGenerator",)
+
+
+def config_directories(
+    cg: Configgen, modules: Iterable[str] = CONFIG_DIRECTORY_GENERATORS
+) -> list[Launcher]:
+    """file.write("<line naming a BIOS directory>") and settings.save(key, <BIOS directory>)."""
+    prefix = cg.bios.rstrip("/")
+    inside = re.compile(rf"{re.escape(prefix)}(?:/[^\s\"';]*)?")
+    launchers = []
+    for module in modules:
+        src = cg.generator(module)
+        constants = dict(cg.paths)
+        for node in src.tree.body:
+            name = _assigned_name(node)
+            value = _path_value(getattr(node, "value", None), constants)
+            if name is not None and value is not None:
+                constants[name] = value
+        found: list[tuple[str, str, ast.Call]] = []
+        for call in _calls(src.tree, attr="write"):
+            text = call.args[0] if len(call.args) == 1 else None
+            if isinstance(text, ast.Constant) and isinstance(text.value, str):
+                line = text.value.strip()
+                named = inside.search(line)
+                if named:
+                    found.append((named.group(0), f"written: {line}", call))
+        for call in _calls(src.tree, attr="save"):
+            if len(call.args) != 2 or not isinstance(call.args[0], ast.Constant):
+                continue
+            value = _path_value(call.args[1], constants)
+            if value is None and isinstance(call.args[1], ast.Constant):
+                value = str(call.args[1].value)
+            if value is not None and (value.rstrip("/") == prefix or value.startswith(prefix + "/")):
+                found.append((value, str(call.args[0].value), call))
+        if not found:
+            src.fail("hands no /userdata/bios directory through its config")
+        launchers.extend(
+            Launcher(
+                emulator=cg.emulator(module), build="standalone", kind="passes_path",
+                names=[], search_dir=directory, passes_to=passes_to,
+                source_ref=src.ref([src.span(call)]),
+            )
+            for directory, passes_to, call in found
+        )
+    return launchers
+
+
 # libretro core options whose value names the BIOS file the core opens.
 FILE_OPTIONS = (("_o2em_options", "o2em_bios"), ("_neocd_options", "neocd_bios"))
 
@@ -952,7 +1003,8 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
 
 EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     duckstation, duckstation_legacy, hatari, xemu, melonds, mupen64plus,
-    x16emu, gsplus, lexaloffle, environment_directories, core_file_options,
+    x16emu, gsplus, lexaloffle, environment_directories, config_directories,
+    core_file_options,
 )
 
 

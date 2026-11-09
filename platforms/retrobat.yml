@@ -4779,6 +4779,14 @@ launchers:
   fails_when_missing: ApplicationException '<machine> machine has missing BIOS file
     '<c>' in 'bios\openmsx\share\systemroms' folder.'
   source_ref: "emulatorLauncher/Generators/OpenMSX.Generator.cs:156-159, 467"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/openmsx
+  passes_to: environment OPENMSX_HOME
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/OpenMSX.Generator.cs:51, 255"
 - emulator: kronos
   build: standalone
   kind: fixed_name

@@ -29,6 +29,7 @@ from scraper.batocera_launchers import (  # noqa: E402
     Configgen,
     Launcher,
     LauncherShapeError,
+    config_directories,
     duckstation,
     extract_launchers,
     hatari,
@@ -519,6 +520,49 @@ class LexaloffleBinaries(unittest.TestCase):
         text = LEXALOFFLE_GENERATOR.replace("system.name ==", "system.emulator ==")
         with self.assertRaises(LauncherShapeError):
             lexaloffle(lexaloffle_tree(text))
+
+
+OPENMSX = f"{GENERATORS}/openmsx/openmsxGenerator.py"
+OPENMSX_FILEPOOL = '''    def generate(self, system, rom):
+        with settings_tcl.open("a") as file:
+            file.write("filepool add -path /userdata/bios/Machines -types system_rom -position 1\\n")
+            file.write("filepool add -path /userdata/bios/openmsx -types system_rom -position 2\\n")'''
+
+
+class ConfigDirectories(unittest.TestCase):
+    """A BIOS directory written into the emulator's config, at batocera-43.1."""
+
+    def test_each_filepool_line_hands_its_directory(self):
+        cg = configgen({OPENMSX: placed({1: "class OpenmsxGenerator:", 86: OPENMSX_FILEPOOL})})
+        records = [r.entry() for r in config_directories(cg, ("openmsx.openmsxGenerator",))]
+        self.assertEqual(
+            [(r["emulator"], r["kind"], r["search_dir"], r["source_ref"]) for r in records],
+            [
+                ("openmsx", "passes_path", "/userdata/bios/Machines", f"{OPENMSX}:88"),
+                ("openmsx", "passes_path", "/userdata/bios/openmsx", f"{OPENMSX}:89"),
+            ],
+        )
+        self.assertEqual(
+            records[1]["passes_to"],
+            "written: filepool add -path /userdata/bios/openmsx -types system_rom -position 2",
+        )
+
+    def test_a_saved_setting_hands_its_directory(self):
+        amiberry = f"{GENERATORS}/amiberry/amiberryGenerator.py"
+        text = placed({
+            1: "from pathlib import Path\n_BIOS_DIR = Path('/userdata/bios/amiga')",
+            10: "def generate():\n    amiberryconf.save('rom_path', _BIOS_DIR)",
+        })
+        (record,) = config_directories(configgen({amiberry: text}), ("amiberry.amiberryGenerator",))
+        self.assertEqual(
+            (record.search_dir, record.passes_to, record.source_ref),
+            ("/userdata/bios/amiga", "rom_path", f"{amiberry}:11"),
+        )
+
+    def test_a_generator_handing_no_bios_directory_raises(self):
+        cg = configgen({OPENMSX: "def generate():\n    file.write('savestate x')\n"})
+        with self.assertRaises(LauncherShapeError):
+            config_directories(cg, ("openmsx.openmsxGenerator",))
 
 
 class ExtractionNeverEmpty(unittest.TestCase):

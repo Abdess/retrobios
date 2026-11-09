@@ -5685,6 +5685,24 @@ launchers:
   passes_to: environment FLYCAST_BIOS_PATH
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/flycast/flycastGenerator.py:239"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/Machines
+  passes_to: "written: filepool add -path /userdata/bios/Machines -types system_rom\
+    \ -position 1"
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:95"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/openmsx
+  passes_to: "written: filepool add -path /userdata/bios/openmsx -types system_rom\
+    \ -position 2"
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:96"
 - emulator: lexaloffle
   build: standalone
   kind: fixed_name
@@ -6014,24 +6032,6 @@ launchers:
   passes_to: command line -crosshairpath
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:180"
-- emulator: openmsx
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/Machines
-  passes_to: "written: filepool add -path /userdata/bios/Machines -types system_rom\
-    \ -position 1"
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:95"
-- emulator: openmsx
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/openmsx
-  passes_to: "written: filepool add -path /userdata/bios/openmsx -types system_rom\
-    \ -position 2"
-  fails_when_missing: false
-  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:96"
 - emulator: fpinball
   build: standalone
   kind: passes_path

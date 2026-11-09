@@ -6562,6 +6562,24 @@ launchers:
   passes_to: environment FLYCAST_BIOS_PATH
   fails_when_missing: false
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/flycast/flycastGenerator.py:199"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/Machines
+  passes_to: "written: filepool add -path /userdata/bios/Machines -types system_rom\
+    \ -position 1"
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:88"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/openmsx
+  passes_to: "written: filepool add -path /userdata/bios/openmsx -types system_rom\
+    \ -position 2"
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:89"
 - emulator: o2em
   build: libretro
   kind: core_option

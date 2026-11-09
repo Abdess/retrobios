@@ -145,6 +145,9 @@ OPENMSX = """
         { "Philips_VG_8020", new string[] { "vg8020_basic-bios1.rom" } },
         { "Pioneer_PX-7", new string[] { "px-7_basic-bios1.rom", "px-7_pbasic.rom" } }
     };
+
+    string sharePath = Path.Combine(AppConfig.GetFullPath("bios"), "openmsx");
+    ret.EnvironmentVariables["OPENMSX_HOME"] = sharePath;
 """
 
 DUCKSTATION = """
@@ -390,11 +393,20 @@ class NamesInLauncherOrder(unittest.TestCase):
             [
                 ("-machine Philips_VG_8020", ["vg8020_basic-bios1.rom"]),
                 ("-machine Pioneer_PX-7", ["px-7_basic-bios1.rom", "px-7_pbasic.rom"]),
+                ("environment OPENMSX_HOME", []),
             ],
         )
         self.assertEqual(records[0]["search_dir"], "bios/openmsx/share/systemroms")
         self.assertFalse(records[0]["case_insensitive"])
         self.assertEqual(records[1]["source_ref"], f"{G}/OpenMSX.Generator.cs:1-4, 10")
+
+    def test_openmsx_home_is_handed_as_a_directory(self):
+        # OPENMSX_HOME is the user directory openMSX reads share/systemroms below.
+        records = rl.openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
+        home = records[-1]
+        self.assertEqual(home["kind"], "passes_path")
+        self.assertEqual(home["search_dir"], "bios/openmsx")
+        self.assertEqual(home["source_ref"], f"{G}/OpenMSX.Generator.cs:13-14")
 
     def test_duckstation_reads_the_standalone_feature_not_the_core(self):
         search, option = rl.duckstation(

@@ -1279,6 +1279,29 @@ def openmsx(sources: dict[str, Source]) -> list[Record]:
         )
     if not records:
         raise LauncherPatternMissing(src.path, "biosFiles entries")
+    # OPENMSX_HOME is the user directory: openMSX reads share/systemroms below it.
+    home = src.find(
+        rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)"\);', "OPENMSX_HOME folder"
+    )
+    handed = src.find(
+        rf'ret\.EnvironmentVariables\["(OPENMSX_HOME)"\] = {home.group(1)};',
+        "OPENMSX_HOME environment", home.end(),
+    )
+    records.append(
+        _record(
+            "openmsx",
+            "standalone",
+            "passes_path",
+            [],
+            source_ref(
+                (src.path, [src.lines(home.start(), home.end()),
+                            src.lines(handed.start(), handed.end())])
+            ),
+            search_dir=f"bios/{home.group(2)}",
+            passes_to=f"environment {handed.group(1)}",
+            fails_when_missing=False,
+        )
+    )
     return records
 
 

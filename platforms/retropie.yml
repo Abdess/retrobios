@@ -778,6 +778,15 @@ launchers:
   passes_to: $configdir/msx/openmsx/share/systemroms is a symlink to it
   fails_when_missing: false
   source_ref: "scriptmodules/emulators/openmsx.sh:77"
+- emulator: openmsx
+  package: openmsx
+  build: standalone
+  kind: links
+  names: []
+  search_dir: $configdir/msx/openmsx
+  passes_to: $home/.openMSX is a symlink to it
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/openmsx.sh:76"
 - emulator: oricutron
   package: oricutron
   repo: "git https://github.com/HerbFargus/oricutron.git extras"
@@ -1269,6 +1278,15 @@ launchers:
   passes_to: $md_inst/share/xroar/roms is a symlink to it
   fails_when_missing: false
   source_ref: "scriptmodules/emulators/xroar.sh:52"
+- emulator: xroar
+  package: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $md_inst
+  passes_to: "${prefix} of configure --prefix"
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/xroar.sh:37"
 - emulator: yabasanshiro
   package: yabasanshiro
   repo: "git https://github.com/retropie/yabause.git pi4-1-9-0"

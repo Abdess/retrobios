@@ -31,6 +31,7 @@ import yaml
 try:
     from .batocera_launchers import (
         Configgen,
+        config_directories,
         _path_value,
         _render,
         _system_branches,
@@ -53,6 +54,7 @@ try:
 except ImportError:
     from batocera_launchers import (  # type: ignore[no-redef]
         Configgen,
+        config_directories,
         _path_value,
         _render,
         _system_branches,
@@ -84,9 +86,18 @@ PICO8_INSTALLER = "board/fsoverlay/usr/bin/knulli-install-pico8"
 ES_FEATURES = "package/emulationstation/knulli-es-system/es_features.yml"
 
 # Batocera's extractors that read KNULLI's generators unchanged.
+# The generators of Batocera's config_directories that KNULLI keeps in the
+# same shape: openMSX's filepool lines.
+CONFIG_DIRECTORY_GENERATORS = ("openmsx.openmsxGenerator",)
+
+
+def knulli_config_directories(cg: Configgen) -> list[Launcher]:
+    return config_directories(cg, CONFIG_DIRECTORY_GENERATORS)
+
+
 SHARED = (
     duckstation, duckstation_legacy, hatari, xemu, melonds, mupen64plus, x16emu,
-    environment_directories,
+    environment_directories, knulli_config_directories,
 )
 
 
@@ -365,7 +376,6 @@ GENERIC_SITES = (
     GenericSites("amiberry/amiberryGenerator.py", "passes_path"),
     GenericSites("fsuae/fsuaeGenerator.py", "passes_path"),
     GenericSites("mame/mameGenerator.py", "passes_path"),
-    GenericSites("openmsx/openmsxGenerator.py", "passes_path"),
     GenericSites("fpinball/fpinballGenerator.py", "passes_path"),
     GenericSites(
         "libretro/libretroRetroarchCustom.py", "passes_path", "libretro", emulator="retroarch"

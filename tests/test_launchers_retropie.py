@@ -315,6 +315,59 @@ UAE4ALL = module("uae4all", """
 """, 60)
 
 
+OPENMSX = module("openmsx", """
+    function configure_openmsx() {
+        mkUserDir "$home/.openMSX/share/systemroms"
+        moveConfigDir "$home/.openMSX" "$configdir/msx/openmsx"
+        moveConfigDir "$configdir/msx/openmsx/share/systemroms" "$home/RetroPie/BIOS/openmsx"
+        moveConfigDir "$home/.unrelated" "$configdir/msx/other"
+    }
+""", 74)
+
+
+XROAR = module("xroar", """
+    function build_xroar() {
+        ./configure --prefix="$md_inst" "${params[@]}"
+    }
+
+    function configure_xroar() {
+        mkdir -p "$md_inst/share/xroar"
+        ln -snf "$biosdir" "$md_inst/share/xroar/roms"
+    }
+""", 36)
+
+
+class ReachingLinks(unittest.TestCase):
+    """The directory outside BIOS that a whole-directory link is read from."""
+
+    def test_openmsx_user_directory_holds_the_systemroms_link(self):
+        found = records({f"{EMULATORS}/openmsx.sh": OPENMSX}, "openmsx")
+        links = [r for r in found if r["kind"] == "links"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in links],
+            [
+                (
+                    "$home/RetroPie/BIOS/openmsx",
+                    "$configdir/msx/openmsx/share/systemroms is a symlink to it",
+                    f"{EMULATORS}/openmsx.sh:77",
+                ),
+                (
+                    "$configdir/msx/openmsx",
+                    "$home/.openMSX is a symlink to it",
+                    f"{EMULATORS}/openmsx.sh:76",
+                ),
+            ],
+        )
+
+    def test_xroar_install_prefix_holds_the_roms_link(self):
+        found = records({f"{EMULATORS}/xroar.sh": XROAR}, "xroar")
+        prefix = [r for r in found if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in prefix],
+            [("$md_inst", "${prefix} of configure --prefix", f"{EMULATORS}/xroar.sh:37")],
+        )
+
+
 class WorkingDirectory(unittest.TestCase):
     def test_drastic_reads_below_the_folder_its_script_enters(self):
         found = records({f"{EMULATORS}/drastic.sh": DRASTIC}, "drastic")
