@@ -11584,7 +11584,7 @@ def generate_not_found() -> str:
         "- Browse [platforms](platforms/index.md), [systems](systems/index.md) "
         "or [emulators](emulators/index.md)",
         "",
-        '<p id="rb-notfound-hint" hidden></p>',
+        '<div id="rb-notfound-hint" hidden></div>',
         "",
     ])
 
