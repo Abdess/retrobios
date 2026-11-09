@@ -1041,7 +1041,7 @@
   "src/config.h",
   "src/seg009.c"
  ],
- "github.com/Novum/vkQuake@a6cfba6904e0743dae4235f9dad9711bb5bd27f1": [
+ "github.com/Novum/vkQuake@308ff19d881c2eab7e5e4a21b98847847525eef9": [
   "Quake/bgmusic.c",
   "Quake/common.c",
   "Quake/host.c",
