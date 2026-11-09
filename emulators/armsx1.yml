@@ -5,8 +5,8 @@ source: "https://github.com/ARMSX2/ARMSX1"
 source_branch: "android-compose"
 upstream: "https://github.com/allkern/psxe"
 profiled_date: "2026-10-26"
-source_commit: "d96a5b8ad6ccccb40a431488aa89b06f0318c217"
-core_version: "0.3.6"
+source_commit: "61ae0d0797d1d11de00a0b64c116205cb910af77"
+core_version: "0.3.18-dma"
 version_basis:
   kind: file
   path: "android/app/build.gradle"
@@ -23,53 +23,43 @@ systems:
 
 notes: |
   PlayStation emulator forked from psxe. The released application is the
-  Android build, com.nanodata.armsx, version 0.3.6 at this revision. That
-  build runs libretro SwanStation, checked out as the core/swanstation
-  submodule at dd4805619bbbfc6e0d1776372cb16377088b448e and driven by an
-  in-process adapter, and no longer the psxe engine. The SDL desktop, iOS,
-  UWP, web and PSVita frontends in the same tree still build on psxe. The
-  release tags 0.1.5 to 0.3.6 all sit on 99b3081 of the main branch, a
-  2026-09-05 tree that carries none of this code. The version is the
-  versionName android-compose builds.
-  ref: android/app/build.gradle:72-75, SWANSTATION-DEV.md:10-19
+  Android build, com.nanodata.armsx, versionName 0.3.18-dma at this revision.
+  That build runs the PSX Lab engine from the psxlab tree, through the
+  ArmSxBackend adapter. The SDL desktop, iOS, UWP, web and PSVita frontends
+  in the same tree still build on psxe. The release tags 0.1.5 to 0.3.6 all
+  sit on 99b3081 of the main branch, a 2026-09-05 tree that carries none of
+  this code. The version is the versionName android-compose builds.
+  ref: android/app/build.gradle:87-90, PSXLAB-BACKEND.md:1-6
 
   Android accepts a BIOS only through its importer. The setup wizard, the
   BIOS manager and its folder scan all ask getBiosInfoFromFd, which requires
   exactly 512 KB and then either the OpenBIOS signature at 0x78 or one of 25
-  MD5 values taken from SwanStation's table. A recognised file is copied into
-  <external files>/bios under its own name. The wizard does not leave the
-  BIOS page until one is recognised.
-  ref: android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java:1252-1262,
+  MD5 values. A recognised file is copied into <external files>/bios under
+  its own name. The wizard does not leave the BIOS page until one is
+  recognised.
+  ref: android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java:1297-1307,
        android/app/src/main/java/com/armsx2/core/Ps1BiosProbe.java:16-79,
        android/app/src/main/java/com/armsx2/ui/onboarding/OnboardingViewModel.kt:183-203,
        android/app/src/main/java/com/armsx2/ui/onboarding/OnboardingViewModel.kt:250-255,
        android/app/src/main/java/com/armsx2/ui/bios/BiosManagerViewModel.kt:172-187
 
-  Before each launch the settings store walks the BIOS folder, the search
-  folder and the selected file's folder, each sorted by path, then the older
-  user_bios.bin and bios.bin imports, and keeps the first 512 KB file whose
-  MD5 entry names the preferred_model console, SCPH-1001 by default. It writes
-  that path as [bios].resolved_file, and the adapter hands it to SwanStation
-  as the BIOS path of all three regions, relative to the system directory,
-  which is the folder of the selected BIOS or <external files>/bios.
-  ref: android/app/src/main/java/com/armsx2/config/Ps1SettingsStore.kt:176-195,
-       android/app/src/main/java/com/armsx2/core/Ps1BiosSelection.java:17-64,
-       android/app/src/main/java/com/armsx2/config/Ps1Settings.kt:32-33,
-       android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java:108-123,
-       native/swanstation/runtime.cpp:243-247, native/swanstation/runtime.cpp:255
-
-  No match leaves the path empty, and SwanStation scans the system directory
-  itself: files of 512 KB, 4 MB or 0x3E66F0 bytes, the first 512 KB hashed
-  against its 27-entry table, the first image of the console region returned,
-  otherwise the first known image of another region. An unknown image is
-  never used, and with nothing found the core boots its built-in OpenBIOS.
-  The region is Auto unless console.region says pal or ntsc, and Auto follows
-  the disc, NTSC-U without one.
-  ref: swanstation src/core/host_interface.cpp:100-194,
-       swanstation src/core/bios.cpp:28-104,
-       swanstation src/core/system.cpp:592-645,
-       swanstation src/core/system.cpp:677-682,
-       native/swanstation/runtime.cpp:209
+  At launch the adapter lists the 512 KB files of the BIOS folder, the folder
+  of the BIOS the wizard selected or <external files>/bios, sorted by name.
+  It loads the file named by Filenames/BIOS, which the host sets to the
+  per-game BIOS or the wizard's file, else the first of the list, and refuses
+  anything but 512 KB. No hash is checked at that point, and with no file the
+  launch stops with "A 512 KiB PlayStation BIOS is required". The settings
+  store still writes the MD5 match for preferred_model as [bios].resolved_file
+  and an empty override_file, and the adapter reads neither for the choice.
+  ref: psxlab/app/src/main/java/dev/psxlab/ArmSxBackend.java:149-168,
+       psxlab/app/src/main/java/dev/psxlab/ArmSxBackend.java:338,
+       android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java:124-151,
+       android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java:225,
+       android/app/src/main/java/com/armsx2/runtime/MainActivityRuntime.kt:268-269,
+       android/app/src/main/java/com/armsx2/runtime/MainActivityRuntime.kt:1027-1038,
+       android/app/src/main/java/com/armsx2/runtime/MainActivityRuntime.kt:2850-2856,
+       android/app/src/main/java/com/armsx2/config/Ps1SettingsStore.kt:178-197,
+       android/app/src/main/java/com/armsx2/config/Ps1SettingsStore.kt:416-419
 
   The psxe frontends take [bios].override_file or -b, by default bios.bin
   under SDL_GetPrefPath("nanodata", "armsx"), when that file exists.
@@ -78,7 +68,7 @@ notes: |
   one named bios.bin, else the override path unchanged. psx_bios_load refuses
   anything but 512 KB or the 1 MB SCPH-5903 image and checks no hash.
   ref: frontend/config.c:54-57, frontend/config.c:279-352,
-       frontend/config.c:1378-1399, frontend/config.c:1535-1554,
+       frontend/config.c:1384-1405, frontend/config.c:1541-1560,
        frontend/main.cpp:2555-2561, psx/dev/bios.c:22-75
 
 files:
@@ -345,5 +335,5 @@ files:
       Read by the psxe frontends into the 512 KB region at 0x1f000000, which
       is filled with 0xff when no path is set. A path that is set and cannot be
       opened fails psx_init. The Android settings only display the key, and
-      the SwanStation adapter never reads it.
+      the PSX Lab adapter never reads it.
     source_ref: "psx/dev/exp1.c:12-44, psx/dev/exp1.h:9, psx/psx.c:312-313, frontend/config.c:93, frontend/main.cpp:2569-2570, android/app/src/main/java/com/armsx2/ui/settings/Ps1AdvancedTab.kt:102-108"
