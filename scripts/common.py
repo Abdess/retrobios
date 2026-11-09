@@ -3278,12 +3278,13 @@ def resolve_platform_cores(
     elif isinstance(cores_config, list):
         # An emulator the platform launches standalone runs there even when
         # its own list names only the cores: Batocera's es_systems.yml files
-        # lexaloffle and gsplus as standalone emulators and nowhere else.
-        # A core the platform's RetroArch installs from the buildbot runs
-        # there as well (installable_cores, Batocera x86_64 and armv7).
+        # lexaloffle and gsplus as standalone emulators and nowhere else. A
+        # core its RetroArch installs from the buildbot is a libretro build
+        # and designates libretro profiles only (below): Batocera downloads
+        # the linuxloader core and runs no standalone Linux Loader.
         core_set = {str(c) for c in cores_config} | {
             str(c) for c in config.get("standalone_cores") or []
-        } | {str(c) for c in config.get("installable_cores") or []}
+        }
         index = upstream_profile_index(profiles)
         platform = str(config.get("_key") or "")
 
