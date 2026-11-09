@@ -15,6 +15,7 @@ launcher looks for nothing".
 from __future__ import annotations
 
 import ast
+import re
 from collections.abc import Callable
 from typing import Any
 
@@ -104,9 +105,10 @@ def _path_value(node: ast.AST | None, constants: dict[str, str]) -> str | None:
         and isinstance(node.func, ast.Name)
         and node.func.id == "Path"
         and len(node.args) == 1
-        and isinstance(node.args[0], ast.Constant)
     ):
-        return str(node.args[0].value)
+        if isinstance(node.args[0], ast.Constant):
+            return str(node.args[0].value)
+        return _path_value(node.args[0], constants)
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
         left = _path_value(node.left, constants)
         right = node.right.value if isinstance(node.right, ast.Constant) else None
@@ -898,6 +900,44 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
     return launchers
 
 
+# Generators that start the emulator from a folder they enter with os.chdir.
+WORKING_DIRECTORY_GENERATORS = ("shadps4.shadps4Generator",)
+
+
+def working_directories(cg: Configgen) -> list[Launcher]:
+    """os.chdir(<folder>) in the generators above, before the command runs.
+
+    shadPS4 reads its user folder below the working directory first
+    (std::filesystem::current_path() / "user"): Batocera enters
+    /userdata/system/configs/shadps4.
+    """
+    launchers = []
+    for module in WORKING_DIRECTORY_GENERATORS:
+        src = cg.generator(module)
+        calls = _calls(src.tree, attr="chdir")
+        if len(calls) != 1 or len(calls[0].args) != 1:
+            src.fail("one os.chdir(folder) call")
+        call = calls[0]
+        argument = call.args[0]
+        constants = dict(cg.paths)
+        spans = [(call.lineno, call.end_lineno or call.lineno)]
+        if isinstance(argument, ast.Name):
+            scope = _innermost_function(src, call)
+            assigned = src.assignment(argument.id, scope)
+            spans.append((assigned.lineno, assigned.end_lineno or assigned.lineno))
+            folder = _path_value(assigned.value, constants)
+        else:
+            folder = _path_value(argument, constants)
+        if folder is None:
+            src.fail("os.chdir names no folder")
+        launchers.append(Launcher(
+            emulator=cg.emulator(module), build="standalone", kind="passes_path", names=[],
+            search_dir=folder, passes_to=f"working directory of {src.path.rsplit('/', 1)[-1]}",
+            source_ref=src.ref(spans),
+        ))
+    return launchers
+
+
 # libretro core options whose value names the BIOS file the core opens.
 FILE_OPTIONS = (("_o2em_options", "o2em_bios"), ("_neocd_options", "neocd_bios"))
 
@@ -950,13 +990,64 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
     return launchers
 
 
+# Batocera's patches to an emulator's own path code. Each rewrites one of
+# the folders the emulator derives (yuzu's family generates every user
+# folder through Generate<Name>Path) to a fixed folder of /userdata.
+PATH_PATCHES = ("package/batocera/emulators/citron/002-adjust-paths.patch",)
+_PATH_REMOVED = re.compile(r"^-\s*Generate\w+Path\((\w+Path::\w+),\s*(.+?)\);\s*$")
+_PATH_ADDED = re.compile(r'^\+\s*Generate\w+Path\((\w+Path::\w+),\s*"(/userdata/bios[^"]*)"\);\s*$')
+
+
+def patched_paths(read: Callable[[str], str], patches: tuple[str, ...] = PATH_PATCHES) -> list[Launcher]:
+    """The emulator folders a path patch points at the BIOS tree.
+
+    A patch line replacing `GenerateCitronPath(CitronPath::KeysDir,
+    citron_path / KEYS_DIR)` with a literal /userdata/bios folder hands
+    that folder to the emulator under the handle the code names it by.
+    The emulator is the package the patch belongs to.
+    """
+    launchers: list[Launcher] = []
+    for path in patches:
+        lines = read(path).splitlines()
+        target = ""
+        removed: dict[str, tuple[int, str]] = {}
+        found = 0
+        for number, line in enumerate(lines, 1):
+            if line.startswith("+++ b/"):
+                target = line[len("+++ b/"):]
+                continue
+            if (old := _PATH_REMOVED.match(line)):
+                removed[old.group(1)] = (number, old.group(2))
+                continue
+            if not (new := _PATH_ADDED.match(line)):
+                continue
+            handle, folder = new.groups()
+            if handle not in removed or not target:
+                raise LauncherShapeError(f"{path}:{number}: {handle} added with no line it replaces")
+            first, original = removed[handle]
+            found += 1
+            launchers.append(Launcher(
+                emulator=path.split("/")[-2], build="standalone", kind="passes_path", names=[],
+                search_dir=folder,
+                passes_to=f"{handle} in {target} returns it, in place of {original}",
+                fails_when_missing=False,
+                source_ref=f"{path}:{first}-{number}",
+            ))
+        if not found:
+            raise LauncherShapeError(f"{path}: no path rewritten to /userdata/bios")
+    return launchers
+
+
 EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     duckstation, duckstation_legacy, hatari, xemu, melonds, mupen64plus,
     x16emu, gsplus, lexaloffle, environment_directories, core_file_options,
+    working_directories,
 )
 
 
 def extract_launchers(read: Callable[[str], str]) -> list[dict[str, Any]]:
     """Every launcher record, read through `read(repo-relative path)`."""
     cg = Configgen(read)
-    return [launcher.entry() for extractor in EXTRACTORS for launcher in extractor(cg)]
+    launchers = [launcher for extractor in EXTRACTORS for launcher in extractor(cg)]
+    launchers += patched_paths(read)
+    return [launcher.entry() for launcher in launchers]

@@ -5685,6 +5685,14 @@ launchers:
   passes_to: environment FLYCAST_BIOS_PATH
   fails_when_missing: false
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/flycast/flycastGenerator.py:239"
+- emulator: shadps4
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/system/configs/shadps4
+  passes_to: working directory of shadps4Generator.py
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/shadps4/shadps4Generator.py:33, 164"
 - emulator: lexaloffle
   build: standalone
   kind: fixed_name
@@ -6135,3 +6143,20 @@ launchers:
   depends_on_option: not system.name == 'ti99'
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:431-432,\
     \ 435"
+- emulator: suyu
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/saves/switch
+  passes_to: environment XDG_DATA_HOME
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/suyu/suyuGenerator.py:41"
+- emulator: citron
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/switch
+  passes_to: "CitronPath::KeysDir in src/common/fs/path_util.cpp returns it, in place of citron_path\
+    \ / KEYS_DIR"
+  fails_when_missing: false
+  source_ref: "batocera/package/batocera/emulators/citron/002-adjust-paths.patch:9-10"

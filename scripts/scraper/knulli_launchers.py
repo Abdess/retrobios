@@ -30,6 +30,7 @@ import yaml
 
 try:
     from .batocera_launchers import (
+        PATH_PATCHES,
         Configgen,
         _path_value,
         _render,
@@ -40,11 +41,14 @@ try:
         hatari,
         melonds,
         mupen64plus,
+        patched_paths,
         x16emu,
+        working_directories,
         xemu,
     )
     from .configgen_launchers import (
         Launcher,
+        _calls,
         LauncherShapeError,
         Source,
         _assigned_name,
@@ -52,6 +56,7 @@ try:
     from .shell_launchers import LauncherPatternMissing, Script, source_ref
 except ImportError:
     from batocera_launchers import (  # type: ignore[no-redef]
+        PATH_PATCHES,
         Configgen,
         _path_value,
         _render,
@@ -62,11 +67,14 @@ except ImportError:
         hatari,
         melonds,
         mupen64plus,
+        patched_paths,
         x16emu,
+        working_directories,
         xemu,
     )
     from configgen_launchers import (  # type: ignore[no-redef]
         Launcher,
+        _calls,
         LauncherShapeError,
         Source,
         _assigned_name,
@@ -86,7 +94,7 @@ ES_FEATURES = "package/emulationstation/knulli-es-system/es_features.yml"
 # Batocera's extractors that read KNULLI's generators unchanged.
 SHARED = (
     duckstation, duckstation_legacy, hatari, xemu, melonds, mupen64plus, x16emu,
-    environment_directories,
+    environment_directories, working_directories,
 )
 
 
@@ -1054,14 +1062,65 @@ EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
 )
 
 
-def extract_launchers(read: Callable[[str], str]) -> list[dict[str, Any]]:
-    """Every launcher record, read through `read(repo-relative path)`."""
+# Generators whose command sets the emulator's XDG data folder, the parent
+# of every user folder a yuzu-family emulator derives.
+DATA_HOME_GENERATORS = ("suyu.suyuGenerator",)
+
+
+def data_homes(cg: Configgen) -> list[Launcher]:
+    """Command(..., env={"XDG_DATA_HOME": <path>}) in the generators above.
+
+    The path need not lie in /userdata/bios: KNULLI's suyu keeps its data
+    in /userdata/saves/switch, which tells where its keys are not.
+    """
+    launchers = []
+    for module in DATA_HOME_GENERATORS:
+        src = cg.generator(module)
+        found = [
+            (_path_value(item, cg.paths), key)
+            for call in _calls(src.tree, attr="Command")
+            for keyword in call.keywords
+            if keyword.arg == "env" and isinstance(keyword.value, ast.Dict)
+            for key, item in zip(keyword.value.keys, keyword.value.values)
+            if isinstance(key, ast.Constant) and key.value == "XDG_DATA_HOME"
+        ]
+        if not found or found[0][0] is None:
+            src.fail("the command environment sets no XDG_DATA_HOME path")
+        value, node = found[0]
+        launchers.append(Launcher(
+            emulator=cg.emulator(module), build="standalone", kind="passes_path", names=[],
+            search_dir=value, passes_to="environment XDG_DATA_HOME",
+            source_ref=src.ref([(node.lineno, node.end_lineno)]),
+        ))
+    return launchers
+
+
+# KNULLI builds Batocera's emulator packages from this submodule, at the
+# batocera.linux commit it pins: Citron's path patch is there.
+BATOCERA_SUBMODULE = "batocera"
+
+
+def extract_launchers(
+    read: Callable[[str], str], batocera: Callable[[str], str] | None = None
+) -> list[dict[str, Any]]:
+    """Every launcher record, read through `read(repo-relative path)`.
+
+    `batocera` reads the batocera submodule at its pinned commit. The
+    records it gives name the file by its path in KNULLI's repository.
+    """
     cg = configgen(read)
     launchers = [launcher for extractor in EXTRACTORS for launcher in extractor(cg)]
     launchers += pico8_installer(read, cg.bios)
     launchers += boot_disks(cg, read)
     for spec in GENERIC_SITES:
         launchers += bios_sites(cg, spec)
+    launchers += data_homes(cg)
+    if batocera is not None:
+        prefix = f"{BATOCERA_SUBMODULE}/"
+        launchers += patched_paths(
+            lambda path: batocera(path.removeprefix(prefix)),
+            tuple(prefix + patch for patch in PATH_PATCHES),
+        )
     return [launcher.entry() for launcher in launchers]
 
 

@@ -431,11 +431,17 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                 directory=directory,
                 handles=handles,
                 source_ref=str(record.get("source_ref", "")),
-                roms_place=None if folder is not None else _roms_place(
-                    config, folder_in_roms(raw, config)
+                roms_place=None if folder is not None else (
+                    _roms_place(config, folder_in_roms(raw, config))
+                    or _emulators_place(folder_in_emulators(raw, config))
                 ),
             ))
     return found
+
+
+def _emulators_place(path: str | None) -> Place | None:
+    """A folder an emulator key names, as a place of the emulators tree."""
+    return None if path is None else (EMULATORS_TREE, path)
 
 
 def _roms_place(config: dict, path: str | None) -> Place | None:
@@ -480,9 +486,11 @@ def folder_in_emulators(directory: str, config: dict) -> str | None:
     spelling = str((config.get("emulators_directory") or {}).get("launcher_spelling") or "")
     if "{key}" not in spelling:
         return None
-    pattern = re.escape(spelling).replace(re.escape("{key}"), r"([\w.-]+)")
+    # The key, then any folder below it: Citron's generator creates
+    # <folder>/user, its portable data folder.
+    pattern = re.escape(spelling).replace(re.escape("{key}"), r"([\w.-]+)") + r"((?:/[\w.-]+)*)"
     found = re.fullmatch(pattern, directory.strip())
-    return found.group(1) if found else None
+    return found.group(1) + found.group(2) if found else None
 
 
 @dataclass(frozen=True)
@@ -566,8 +574,18 @@ def standalone_bindings(
     A subfolder two records give two places is left out.
     """
     names = set(names)
-    wanted = {normalize_handle(d) for d in declared}
-    if not wanted:
+    # "<handle> = <subfolder>" names the code's handle for one folder of the
+    # layout: Citron's CitronPath::KeysDir is its keys/ folder, and a patch
+    # that rewrites the handle moves that folder alone.
+    named: dict[str, str] = {}
+    wanted: set[str] = set()
+    for raw in declared:
+        handle, sep, sub = str(raw).partition(" = ")
+        if sep:
+            named[normalize_handle(handle)] = sanitize_pack_path(sub.strip())
+        else:
+            wanted.add(normalize_handle(handle))
+    if not wanted and not named:
         return {}
     records = [h for h in handed if h.emulator in names]
 
@@ -583,7 +601,23 @@ def standalone_bindings(
         subs = {
             sub for handle in record.handles for directory in wanted
             if (sub := below(handle, directory)) is not None
+        } | {named[handle] for handle in record.handles if handle in named}
+        # A record setting an environment variable the declared directory is
+        # spelled from ($XDG_DATA_HOME/suyu) puts the whole layout below it.
+        variables = {
+            directory: rest for handle in record.handles for directory in wanted
+            for spelled in (f"${handle}", handle)
+            if (rest := below(directory, spelled)) is not None and handle != directory
         }
+        for rest in variables.values():
+            place = record.place()
+            if place is None:
+                found.setdefault("", set()).add((OUTSIDE_TREE, ""))
+            else:
+                root, folder = place
+                found.setdefault("", set()).add(
+                    (root, "/".join(p for p in (folder, rest) if p))
+                )
         for sub in subs:
             if record.folder is not None:
                 found.setdefault(sub, set()).add((BIOS_TREE, record.folder))

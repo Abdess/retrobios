@@ -45,12 +45,15 @@ from .batocera_scraper import (
     requirements_from_systems,
 )
 from .es_emulators import attach_system_cores
-from .knulli_launchers import extract_launchers
+from .knulli_launchers import BATOCERA_SUBMODULE, extract_launchers
 
 PLATFORM_NAME = "knulli"
 
 REPO = "knulli-cfw/knulli-linux"
 _RAW = "https://raw.githubusercontent.com/knulli-cfw/knulli-linux/{ref}/"
+# The batocera.linux revision KNULLI's submodule pins, and its files.
+_SUBMODULE = "https://api.github.com/repos/knulli-cfw/knulli-linux/contents/{path}?ref={ref}"
+_BATOCERA_RAW = "https://raw.githubusercontent.com/batocera-linux/batocera.linux/{ref}/"
 SOURCE_TEMPLATE = _RAW + "package/system/knulli-scripts/scripts/knulli-systems"
 CONFIGGEN_DEFAULTS_TEMPLATE = (
     _RAW + "package/system/knulli-configgen/configs/configgen-defaults.yml"
@@ -82,6 +85,23 @@ class Scraper(BaseScraper):
                 return resp.read().decode("utf-8")
         except urllib.error.URLError as e:
             raise ConnectionError(f"Failed to fetch {url}: {e}") from e
+
+    def submodule_revision(self) -> str:
+        """The batocera.linux commit KNULLI's batocera submodule pins at the tag."""
+        import json  # noqa: PLC0415
+
+        from .base_scraper import github_headers  # noqa: PLC0415
+
+        url = _SUBMODULE.format(path=BATOCERA_SUBMODULE, ref=self.tag)
+        req = urllib.request.Request(url, headers=github_headers())
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                found = json.loads(resp.read().decode("utf-8"))
+        except urllib.error.URLError as e:
+            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
+        if not isinstance(found, dict) or found.get("type") != "submodule" or not found.get("sha"):
+            raise RuntimeError(f"{url}: {BATOCERA_SUBMODULE} is not a submodule")
+        return str(found["sha"])
 
     def validate_format(self, raw_data: str) -> bool:
         has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
@@ -126,8 +146,10 @@ class Scraper(BaseScraper):
         # configgen hands a libretro core /userdata/saves/<system>, as
         # Batocera's does: the systems each core runs for are its save folders.
         result["libretro_systems"] = es_systems_libretro_systems(es_systems, dropped)
+        revision = self.submodule_revision()
         result["launchers"] = extract_launchers(
-            lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path)
+            lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path),
+            lambda path: self._fetch_text(_BATOCERA_RAW.format(ref=revision) + path),
         )
         return result
 

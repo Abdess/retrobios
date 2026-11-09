@@ -4966,6 +4966,22 @@ launchers:
   passes_to: exec
   fails_when_missing: returns no process when the binary is absent
   source_ref: "emulatorLauncher/Generators/Pico8.Generator.cs:14-18, 56-57"
+- emulator: citron
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"citron\")>/user"
+  passes_to: PORTABLE_DIR, the user folder beside citron.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Citron.Generator.cs:25, 29-30"
+- emulator: shadps4
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"shadps4\")>/user"
+  passes_to: PORTABLE_DIR, the user folder beside shadPS4.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/ShadPS4.Generator.cs:29, 158-160"
 - emulator: bizhawk
   build: standalone
   kind: names_searched
