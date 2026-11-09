@@ -5,33 +5,37 @@ source: "https://github.com/DirtBagXon/model3emu-code-sinden"
 upstream: "https://github.com/trzy/Supermodel"
 author: "DirtBagXon"
 profiled_date: "2026-10-23"
-source_commit: "11726c4bad3696a50a8b834eaba6aee3fa08a590"
-prose_written_at: "11726c4bad3696a50a8b834eaba6aee3fa08a590"
-upstream_commit: "14815455dc28fca2c8662fb1ed99d447ecf8f364"
-upstream_frozen: "The fork is rebased on trzy's tree at 1481545, the revision its version string names. Later trzy commits are not in the fork."
-core_version: "0.3a-1481545-mm DirtBagXon (Sinden)"
+source_commit: "03318d26826e725338576a74945b3ea3fc7ebe5c"
+prose_written_at: "03318d26826e725338576a74945b3ea3fc7ebe5c"
+upstream_commit: "efbdc866fcddc9bff23da00b1722d17e52115567"
+upstream_frozen: "The fork is rebased on trzy's tree at efbdc86, the revision its release names. Later trzy commits are not in the fork."
+core_version: "0.4"
 version_basis:
   kind: file
-  path: "Src/Version.h"
-  pattern: '#define\s+SUPERMODEL_VERSION\s+"([^"]+)'
+  path: "Src/Version.cpp"
+  pattern: 'const std::string series_version = "([^"]+)"'
 display_name: "Sega - Model 3 (Supermodel, Sinden fork)"
 verification: existence
 cores:
   - "supermodel3"
   - "supermodel-sa"
 systems:
+  - "sega-model1"
+  - "sega-model2"
   - "sega-model3"
   - "real3d-pro1000"
 
 notes: |
   DirtBagXon's Supermodel fork with Sinden light gun support, rebased on
-  trzy's tree at 1481545, the revision its version string names. RetroPie
+  trzy's tree at efbdc86, the revision its release 0.4-efbdc86-dbx names.
+  The version string is the series 0.4 followed by the git revision a build
+  passes, or by the build date and "-mm DirtBagXon (Sinden)". RetroPie
   builds the main branch on x86 and the arm branch everywhere else, the arm
   branch at commit 454ed3f when the system SDL2 is 2.0.22 or older. The arm
   branch is a separate, older line (revision
   6ae0cf2f237586c4a3cc791514ec1b0f3cd4c56c, "0.3a-8c6af68-arm-mm") and is
   described in its own paragraph below. Entries carry the main branch.
-  ref: Src/Version.h:32
+  ref: Src/Version.cpp:39-55
 
   RetroPie copies Config/Games.xml, and on x86 the Assets directory, into
   $md_conf_root/arcade/supermodel3 and starts the emulator from there. On
@@ -39,15 +43,19 @@ notes: |
   relative to the working directory when Config/ exists there, otherwise
   under ~/.supermodel/ when present, otherwise under the XDG config and data
   homes.
-  ref: Src/OSD/Unix/FileSystemPath.cpp:99-157, Src/OSD/SDL/Main.cpp:121-123
+  ref: Src/OSD/Unix/FileSystemPath.cpp:99-157, Src/OSD/SDL/Main.cpp:124-126
 
   ROM sets are MAME format archives described by Games.xml. The game is
   chosen by the archive's own file name, which must match a game name, and
   the parent archive <parent>.zip is opened from the same directory. ROMs
-  inside are matched by CRC32. Model 3 boards carry their own program,
-  video, sound and drive board ROMs, so a Model 3 game reads nothing outside
-  its archives.
-  ref: Src/GameLoader.cpp:1044-1101
+  inside are matched by CRC32. The main branch also runs Sega Model 1
+  and Model 2 boards: Games.xml holds 10 Model 1, 90 Model 2 and 63 Model 3
+  sets. Every board ROM of these sets, the Model 1 TGP program and
+  coprocessor tables included, is a region of the game's own set,
+  and a parent is another game, so a game reads nothing outside its
+  archives.
+  ref: Src/GameLoader.cpp:1145-1202, Src/GameLoader.cpp:277,
+       Src/OSD/SDL/Main.cpp:2703-2710
 
   The main branch also emulates the Real3D Pro-1000 image generator, the
   hardware the Model 3 graphics derive from. Games.xml declares it as the
@@ -55,15 +63,15 @@ notes: |
   update: p1_p4.bin (boot stub and loop code) and p2.bin (INIT ROM). The
   machine refuses to start without either region. A scsi_rom region is
   optional, a synthetic image is built when it is absent.
-  ref: Config/Games.xml:1404-1428, Src/Pro1000/Pro1000.cpp:2111-2143,
+  ref: Config/Games.xml:10030-10054, Src/Pro1000/Pro1000.cpp:1999-2031,
        Src/Pro1000/Pro1000.cpp:165-181
 
   Supermodel.ini is optional. It is written from compiled-in defaults when
   absent. NVRAM/<game>.nv is loaded when present and written on exit.
   External GLSL shaders are read only when VertexShader or FragmentShader
   names a file, both default to empty.
-  ref: Src/OSD/SDL/Main.cpp:1416-1436, Src/OSD/SDL/Main.cpp:2365,
-       Src/OSD/SDL/Main.cpp:807-838, Src/OSD/SDL/Main.cpp:1554-1555
+  ref: Src/OSD/SDL/Main.cpp:1476-1496, Src/OSD/SDL/Main.cpp:2433,
+       Src/OSD/SDL/Main.cpp:816-847, Src/OSD/SDL/Main.cpp:1606-1607
 
   The arm branch has no Pro-1000 emulation and no path resolution: the
   paths Config/Supermodel.ini, Config/Games.xml, NVRAM/<game>.nv and
@@ -82,12 +90,12 @@ files:
     path: "Config/Games.xml"
     required: true
     bundled: true
-    size: 152608
-    sha1: "79fa74742f4b18e250c11c1dea5837fdf57cd54c"
-    md5: "f2f5f09ca0a275696319176b4f41b8d6"
+    size: 498145
+    sha1: "c2bbcd686862fc5f14e80a5dee4eec504affa77f"
+    md5: "4b6145439a95d1a3cdee6f9367773562"
     description: "ROM set definitions"
-    note: "Parsed by the GameLoader constructor. Without it no game is defined, the archive name matches nothing and main returns 1. The path is the GameXMLFile key, so -game-xml-file moves it. The hash is that of Config/Games.xml at the pinned revision, 64 sets, which RetroPie copies on every install. Shipped in the 11726c4 Linux, macOS and Windows release archives."
-    source_ref: "upstream Src/OSD/SDL/Main.cpp:122, source Src/OSD/SDL/Main.cpp:1543, source Src/OSD/SDL/Main.cpp:2453-2458, source Src/GameLoader.cpp:601-610, source Src/GameLoader.cpp:1066-1071, source Src/GameLoader.cpp:1111-1113"
+    note: "Parsed by the GameLoader constructor. Without it no game is defined, the archive name matches nothing and main returns 1. The path is the GameXMLFile key, so -game-xml-file moves it. The hash is that of Config/Games.xml at the pinned revision, 164 sets, which RetroPie copies on every install. Shipped in the 0.4-efbdc86 Linux, macOS and Windows release archives."
+    source_ref: "source Src/OSD/SDL/Main.cpp:125, source Src/OSD/SDL/Main.cpp:1588, source Src/OSD/SDL/Main.cpp:2532-2537, source Src/GameLoader.cpp:658-667, source Src/GameLoader.cpp:1167-1172, source Src/GameLoader.cpp:1212-1214"
 
   - name: "p1crosshair.bmp"
     path: "Assets/p1crosshair.bmp"
@@ -98,7 +106,7 @@ files:
     md5: "9012018f50f707c1707009346eb5d18b"
     description: "Player 1 light gun crosshair texture"
     note: "Both bitmaps are loaded whatever CrosshairStyle holds, and a failed load aborts startup before the machine is created."
-    source_ref: "upstream Src/OSD/SDL/Crosshair.cpp:34-51, source Src/OSD/SDL/Main.cpp:2509-2516"
+    source_ref: "source Src/OSD/SDL/Crosshair.cpp:34-51, source Src/OSD/SDL/Main.cpp:2588-2595"
 
   - name: "p2crosshair.bmp"
     path: "Assets/p2crosshair.bmp"
@@ -108,19 +116,19 @@ files:
     sha1: "13c5e692c7acf2ec8243ac421d58fdf69c6c2370"
     md5: "866dbf59a0e2d849de2365e1c953cc97"
     description: "Player 2 light gun crosshair texture"
-    note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load. Both bitmaps are shipped in the 11726c4 release archives."
-    source_ref: "upstream Src/OSD/SDL/Crosshair.cpp:35, source Src/OSD/SDL/Crosshair.cpp:48-51"
+    note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load. Both bitmaps are shipped in the 0.4-efbdc86 release archives."
+    source_ref: "source Src/OSD/SDL/Crosshair.cpp:35, source Src/OSD/SDL/Crosshair.cpp:48-51"
 
   - name: "Music.xml"
     path: "Config/Music.xml"
     required: false
     bundled: true
-    size: 9224
-    sha1: "b44ed959fe2948a03d81b98e67ca32f2b4c37e78"
-    md5: "ddb4e23db15dda67539eee24de23de4b"
+    size: 9229
+    sha1: "5c86508cb337b604eecb9b881b4fc111d826f604"
+    md5: "6eeb3e30200e14aa28f958b8d34c2ded"
     description: "Custom MPEG music track map"
-    note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when absent. RetroPie does not copy it. Shipped in the 11726c4 release archives, the Windows zip with CRLF line endings (sha1 4c556c3a848ef61205a53a9a73ba5e46970d445f)."
-    source_ref: "upstream Src/OSD/SDL/Main.cpp:123, source Src/OSD/SDL/Main.cpp:963, source Src/Sound/MPEG/MpegAudio.cpp:88-102"
+    note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when absent. RetroPie does not copy it. Shipped in the 0.4-efbdc86 release archives, the Windows zip with CRLF line endings (sha1 311d762fab940658466cf223bc441b0f5fda372b)."
+    source_ref: "source Src/OSD/SDL/Main.cpp:126, source Src/OSD/SDL/Main.cpp:975, source Src/Sound/MPEG/MpegAudio.cpp:89-103"
 
   - name: "pro1000.zip"
     required: true
@@ -128,7 +136,7 @@ files:
     system: real3d-pro1000
     description: "Real3D Pro-1000 firmware set (SDK flash update, loop code 5.4, INIT ROM 54)"
     note: "Loaded as the content of the pro1000 machine, named after the set. Required to run the Pro-1000 only, Model 3 games never read it."
-    source_ref: "upstream Config/Games.xml:1404-1428, source Src/Pro1000/Pro1000.cpp:2111-2122, source Src/GameLoader.cpp:1066-1071"
+    source_ref: "source Config/Games.xml:10030-10054, source Src/Pro1000/Pro1000.cpp:1999-2010, source Src/GameLoader.cpp:1167-1172"
     contents:
       - name: "p1_p4.bin"
         description: "Flash parts 1 and 4, boot stub and loop code, loaded at 0xFFF00000"
