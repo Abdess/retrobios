@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/etlegacy/etlegacy"
 upstream: "https://github.com/etlegacy/etlegacy"
 profiled_date: "2026-10-04"
-source_commit: "add16a92f4b10c2955136e3ab7868bfc9bff8fad"
+source_commit: "13d8bea7b484f4eec993d2c8723b8756c6300963"
 core_version: "2.86.2"
 version_basis:
   kind: file
@@ -17,26 +17,26 @@ systems: [enemyterritory]
 
 notes: |
   Wolfenstein: Enemy Territory source port. BASEGAME = "etmain"
-  (src/qcommon/qcommon.h:783). FS_InitFilesystem
-  (src/qcommon/files.c:5066-5094) refuses to start if pak0.pk3 is not reachable under etmain
+  (src/qcommon/qcommon.h:785). FS_InitFilesystem
+  (src/qcommon/files.c:5104-5132) refuses to start if pak0.pk3 is not reachable under etmain
   and prints "Please copy pak0.pk3 from the 'etmain' path of your
   Wolfenstein: Enemy Territory installation to <path>". pak1.pk3 and
   pak2.pk3 are checked against the server's requested pak list in
-  FS_ComparePaks (src/qcommon/files.c:4011-4018) but neither is a
+  FS_ComparePaks (src/qcommon/files.c:4049-4056) but neither is a
   startup gate. Third-party mods pull them in as needed (see README.md
   "In addition, third party mods might also require pak1.pk3 and
   pak2.pk3"). mp_bin.pk3 ships in the retail release and holds the
   stock multiplayer binaries.
 
-  NUM_ID_PAKS = 9 (src/qcommon/qcommon.h:811) counts the names recognised
+  NUM_ID_PAKS = 9 (src/qcommon/qcommon.h:813) counts the names recognised
   by FS_idPak. Retail Enemy Territory 2.60b publishes only pak0, pak1,
   pak2 and mp_bin, so the extra slots are reserved for forward compatible
   server lists, never filled by id.
 
-  fs_game defaults to the legacy mod (src/qcommon/files.c:5141-5148). The
+  fs_game defaults to the legacy mod (src/qcommon/files.c:5179-5186). The
   build packs the cgame and ui libraries with the source tree's etmain/
   assets (configs, presets, locale files) into legacy/legacy_<version>.pk3
-  and installs it with the engine (cmake/ETLBuildMod.cmake:281-296). The
+  and installs it with the engine (cmake/ETLBuildMod.cmake:281-298). The
   client extracts its cgame and ui libraries from that pk3 at load
   (src/sys/sys_main.c:935-947). The user still has to supply the retail
   pak0.pk3 from the free Enemy Territory 2.60b download. pak0.pk3 holds
@@ -48,7 +48,7 @@ files:
     system: enemyterritory
     path: "etmain/pak0.pk3"
     required: true
-    source_ref: "src/qcommon/files.c:5066-5094 (fatal if absent), 5076 (FS_FOpenFileRead \"pak0.pk3\"), src/qcommon/qcommon.h:783 (BASEGAME \"etmain\")"
+    source_ref: "src/qcommon/files.c:5104-5132 (fatal if absent), src/qcommon/files.c:5114 (FS_FOpenFileRead \"pak0.pk3\"), src/qcommon/qcommon.h:785 (BASEGAME \"etmain\")"
     note: "Retail Wolfenstein: Enemy Territory 2.60b data pak. Startup gate."
 
   - name: "pak1.pk3"
@@ -56,7 +56,7 @@ files:
     system: enemyterritory
     path: "etmain/pak1.pk3"
     required: false
-    source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak, NUM_ID_PAKS=9), README.md"
+    source_ref: "src/qcommon/files.c:4049-4056 (FS_idPak, NUM_ID_PAKS=9), README.md"
     note: "Retail content update pak. Required by servers running 2.60b, pulled in by FS_ComparePaks."
 
   - name: "pak2.pk3"
@@ -64,7 +64,7 @@ files:
     system: enemyterritory
     path: "etmain/pak2.pk3"
     required: false
-    source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak), README.md"
+    source_ref: "src/qcommon/files.c:4049-4056 (FS_idPak), README.md"
     note: "Retail content update pak."
 
   - name: "mp_bin.pk3"
@@ -72,7 +72,7 @@ files:
     system: enemyterritory
     path: "etmain/mp_bin.pk3"
     required: false
-    source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak)"
+    source_ref: "src/qcommon/files.c:4049-4056 (FS_idPak)"
     note: "Retail multiplayer QVM binaries. ET Legacy ships its own cgame/ui binaries, and the retail pack is for pure clients joining stock servers."
 
 exclusion_note: >
@@ -81,4 +81,4 @@ exclusion_note: >
   ui libraries compiled for the host, so every release and architecture
   ships different bytes under a different name. It arrives with every
   install of the engine.
-  ref: cmake/ETLBuildMod.cmake:281-296, cmake/ETLVersion.cmake:120-131
+  ref: cmake/ETLBuildMod.cmake:281-298, cmake/ETLVersion.cmake:120-131
