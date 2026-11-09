@@ -130,7 +130,7 @@ files:
     md5: 70ab37eab4e7d162d36d9b2d91b84867
     sha1: 4ed23b6578a2d93d67aa856791dc70e95d68a3f4
     description: "PICO-8 0.2.7 aarch64 executable, system libSDL2"
-    note: "Only in pico-8_0.2.7_raspi.zip, the build for 64-bit Raspberry Pi OS, linked against the system SDL2. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
+    note: "pico8_64 is only in pico-8_0.2.7_raspi.zip, the build for 64-bit Raspberry Pi OS, linked against the system SDL2. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
     source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
 
   - name: pico8_dyn
