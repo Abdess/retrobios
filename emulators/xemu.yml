@@ -70,7 +70,7 @@ notes: |
 
   The core has no option for these paths. It looks for each file in
   system/xemu/, then at the root of the system directory, and keeps the
-  first it opens; when none is there the path stays in system/xemu/. The
+  first it opens. When none is there the path stays in system/xemu/. The
   flash ROM is tried as Complex_4627v1.03.bin, then Complex_4627.bin. A
   missing boot ROM or flash ROM fails the load. A missing hard disk image
   is written there from the formatted image the core carries
@@ -223,7 +223,7 @@ files:
     max_size: 4194304
     validation: [size]
     description: "Chihiro media board flash"
-    note: "Read beside the BIOS, then in its parent folder, under these three names in turn. Up to 4 MiB is accepted. Without it the machine stays paused."
+    note: "Read beside the BIOS, then in its parent folder, as fpr21042_m29w160et.bin, fpr-23887_29lv160te.ic4 and fpr-23887.bin in turn (chihiro.c:2321-2323). Up to 4 MiB is accepted. Without it the machine stays paused."
     source_ref:
       libretro: "hw/xbox/chihiro/chihiro.c:2259-2278, hw/xbox/chihiro/chihiro.c:2294-2334, system/vl.c:3325-3398"
 

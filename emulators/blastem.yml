@@ -160,7 +160,7 @@ files:
     unread_on: [retrobat]
     size: 8192
     aliases: ["colecovision.rom"]
-    note: "Default name of the ColecoVision BIOS key when the config sets none. Read beside the executable, truncated to 8 KiB, with no hash check (coleco.c:496-505). The libretro core fills the same key with colecovision.rom (libblastem.c:504), and RetroBat points it there too (emulatorlauncher Blastem.Generator.cs:256-269)."
+    note: "Default name of the ColecoVision BIOS key when the config sets none. Read beside the executable, truncated to 8 KiB, with no hash check (coleco.c:496-505). The libretro core fills the same key with colecovision.rom (libblastem.c:504). RetroBat points it there too (emulatorlauncher Blastem.Generator.cs:256-269)."
     source_ref: "source coleco.c:485, source coleco.c:496-505, source libblastem.c:504"
 
   # -------------------------------------------------------
