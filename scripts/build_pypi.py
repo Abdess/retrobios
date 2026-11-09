@@ -6,9 +6,11 @@ bootstraps pin, a two-line launcher that runs it as a script, the metadata,
 README.md and LICENSE. Nothing of the collection. The metadata comes from
 packaging/pypi/pyproject.toml.
 
-The version is the date of the release in release.json: v2026.10.10 gives
-2026.10.10. A release writes release.json first, so the package published
-with it carries its date.
+The version is the UTC date of the last commit that changed install.py,
+with the zeros PEP 440 drops left out: 2026-11-09 gives 2026.11.9. When
+install.py changed several times that day, the newest gets .N, its rank in
+the day: the third change gives 2026.11.9.3. The same install.py always
+gives the same version, so PyPI refuses a republish of unchanged code.
 
 Both archives are written here with the standard library rather than by a
 build backend: the bytes then depend on the inputs alone, on any machine and
@@ -25,11 +27,13 @@ from __future__ import annotations
 import argparse
 import base64
 import calendar
+import datetime
 import gzip
 import hashlib
 import io
 import json
 import re
+import subprocess
 import tarfile
 import zipfile
 from pathlib import Path
@@ -63,13 +67,22 @@ PROJECT_KEYS = frozenset({
 })
 
 
-def package_version(release: dict) -> str:
-    """The release date as a version, without the zeros PEP 440 drops."""
-    tag = str(release.get("tag", ""))
-    match = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", tag)
-    if match is None:
-        raise ValueError(f"release.json names no dated release tag: {tag!r}")
-    return ".".join(str(int(part)) for part in match.groups())
+def package_version(stamps: list[int]) -> str:
+    """The version of install.py from its commit times, newest first (UTC)."""
+    if not stamps:
+        raise ValueError("install.py has no commit to date the package by")
+    day = datetime.datetime.fromtimestamp(stamps[0], datetime.timezone.utc).date()
+    rank = sum(1 for stamp in stamps
+               if datetime.datetime.fromtimestamp(stamp, datetime.timezone.utc).date() == day)
+    base = f"{day.year}.{day.month}.{day.day}"
+    return base if rank == 1 else f"{base}.{rank}"
+
+
+def install_py_commits() -> list[int]:
+    """Commit times of install.py, newest first, from git."""
+    out = subprocess.run(["git", "log", "--format=%ct", "--", "install.py"], cwd=ROOT,
+                         capture_output=True, text=True, check=True).stdout
+    return [int(line) for line in out.split()]
 
 
 def load_project() -> dict:
@@ -181,8 +194,8 @@ def write_sdist(path: Path, project: dict, files: dict[str, bytes], version: str
 
 def build(output_dir: Path) -> tuple[Path, Path]:
     """The wheel and the sdist in output_dir, replacing earlier builds there."""
-    version = package_version(json.loads((ROOT / "release.json").read_text(encoding="utf-8")))
-    year, month, day = (int(part) for part in version.split("."))
+    version = package_version(install_py_commits())
+    year, month, day = (int(part) for part in version.split(".")[:3])
     stamp = (year, month, day)
     project, files = package_files(version)
     output_dir.mkdir(parents=True, exist_ok=True)

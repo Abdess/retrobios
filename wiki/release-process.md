@@ -313,11 +313,13 @@ git add release.json README.md install/*.json install/targets/*.json
 git commit -m "chore: record release v${DATE}" && git push
 
 # 5b. The PyPI package, `uvx retrobios`: install.py and its command. The
-#     version is the date of the tag release.json now names (v2026.10.04
-#     gives 2026.10.4), so a release is what bumps it. The build replaces
-#     any earlier one in tmp/pypi-dist. Build, run the wheel, then upload
-#     the two files. The token stays in its file: never in the
-#     repository, a script or a log.
+#     version is the UTC date of the last commit that changed install.py
+#     (2026-11-09 gives 2026.11.9, the third change that day 2026.11.9.3),
+#     so an unchanged install.py keeps its version and PyPI refuses it
+#     again. Publishing is not tied to a release: any push that changes
+#     install.py can be published. The build replaces any earlier one in
+#     tmp/pypi-dist. Build, run the wheel, then upload the two files. The
+#     token stays in its file: never in the repository, a script or a log.
 python scripts/build_pypi.py --output-dir tmp/pypi-dist
 python -m unittest tests.test_pypi_package
 uvx --from tmp/pypi-dist/retrobios-*.whl retrobios --help

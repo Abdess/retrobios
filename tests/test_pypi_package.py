@@ -96,15 +96,21 @@ class TheArchivesHoldTheInstallerAndNothingElse(Built):
                          [self.wheel.read_bytes(), self.sdist.read_bytes()])
 
 
-class TheVersionIsTheReleaseDate(unittest.TestCase):
+class TheVersionIsInstallPyCommitDate(unittest.TestCase):
+    """The release date put November code under an October version: the
+    version now follows the commits of install.py itself."""
 
-    def test_dated_tag(self):
-        self.assertEqual(build_pypi.package_version({"tag": "v2026.10.04"}), "2026.10.4")
+    def test_one_change_that_day(self):
+        # 2026-11-09 12:00 UTC, then a change the day before.
+        self.assertEqual(build_pypi.package_version([1794225600, 1794139200]), "2026.11.9")
 
-    def test_other_tag_refused(self):
-        for tag in ("large-files", "2026.10.04", "v2026.10"):
-            with self.assertRaises(ValueError):
-                build_pypi.package_version({"tag": tag})
+    def test_the_rank_in_the_day(self):
+        self.assertEqual(build_pypi.package_version([1794229200, 1794225600, 1794222000]),
+                         "2026.11.9.3")
+
+    def test_no_commit_refused(self):
+        with self.assertRaises(ValueError):
+            build_pypi.package_version([])
 
 
 def _python38() -> str | None:
