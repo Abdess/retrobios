@@ -21,6 +21,7 @@ display_name: "Nintendo - DS / DSi (DSperate)"
 cores:
   - "dsperate"
   - "dsperate-sa"
+found_by: content
 systems:
   - nintendo-ds
   - nintendo-dsi
@@ -38,8 +39,8 @@ notes: |
 
   No file name is built in: every system file is a [paths] key of the ini (or
   the matching command-line flag), and a key that is unset or names no file
-  counts as absent. The names below are the ones ROCKNIX's dsperate.ini gives,
-  all in /storage/roms/bios/.
+  counts as absent. The names below are labels for the dumps. ROCKNIX's
+  dsperate.ini gives the same ones, all in /storage/roms/bios/.
   ref: src/frontend/sdl/config.cpp:177-217, src/frontend/sdl/main.cpp:1175-1181
 
   DS BIOS: both halves or neither, the ARM9 image 4 KB and the ARM7 image 16 KB
