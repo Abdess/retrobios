@@ -3,7 +3,7 @@
 
 An assistant asked to help with BIOS files reads a page and answers from
 it. The HTML carries navigation, icons, buttons and scripts around the
-words; the Markdown copy carries the words, the tables, the commands and
+words. The Markdown copy carries the words, the tables, the commands and
 the links, at `<page>/index.md` beside `<page>/index.html`. Every page's
 head names it (`<link rel="alternate" type="text/markdown">`, set in
 website/astro.config.mjs), and llms.txt says the convention.
