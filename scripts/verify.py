@@ -60,6 +60,7 @@ from common import (
     compute_hashes,
     expand_directory_entries,
     platform_declarations,
+    platform_declared_contents,
     group_identical_platforms,
     list_emulator_profiles,
     list_system_ids,
@@ -454,6 +455,7 @@ def _candidate_verdict(
     declared_names: Mapping[str, list[tuple[int | None, str]]] | set[str],
     dest: str = "",
     folded_slots: frozenset[str] = frozenset(),
+    declared_contents: Mapping[str, set[str]] | None = None,
 ) -> str:
     """Whether a profile entry can be a gap, and whether it is settled.
 
@@ -469,7 +471,7 @@ def _candidate_verdict(
     if outside_gap_scope(file_entry, is_standalone):
         return "skip"
     if not include_all and declaration_settles(
-        file_entry, fname, declared_names, dest, folded_slots
+        file_entry, fname, declared_names, dest, folded_slots, declared_contents
     ):
         return "settled"
     return "keep"
@@ -503,6 +505,7 @@ def find_undeclared_files(
     if declared_names is None:
         declared_names = platform_declarations(config, db)
     folded_slots = case_folded_slots(config, declared_names)
+    declared_contents = platform_declared_contents(config, db)
 
     # Whether the builder drops a file whose local copy contradicts its
     # declared hash, which decides if such a copy counts as held here.
@@ -608,6 +611,7 @@ def find_undeclared_files(
                     f, fname, is_standalone, include_all,
                     {} if save_root or f.get("root") == "roms" else declared_names,
                     dest, folded_slots,
+                    None if save_root or f.get("root") == "roms" else declared_contents,
                 )
                 if verdict == "settled":
                     seen_files.add(seen_key)
@@ -1986,13 +1990,18 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
 
 def _print_launcher_reads(result: dict, verbose: bool) -> None:
     """Names the platform's launch code reads that the collection lacks."""
-    rows = result.get("launcher_reads_not_held") or []
-    if not rows:
-        return
+    every = result.get("launcher_reads_not_held") or []
+    rows = [r for r in every if not r.get("unsourceable")]
+    unsourceable = [r for r in every if r.get("unsourceable")]
     listed = "" if verbose else " (--verbose lists them)"
-    print(f"  Launcher reads, not held: {len(rows)}{listed}")
+    if rows:
+        print(f"  Launcher reads, not held: {len(rows)}{listed}")
+    if unsourceable:
+        print(f"  Launcher reads, unsourceable: {len(unsourceable)}{listed}")
     if not verbose:
         return
+    for row in unsourceable:
+        print(f"    {row['name']} [{', '.join(row['emulators'])}]: {row['unsourceable']}")
     for row in rows:
         kinds = ", ".join(sorted({r["kind"] for r in row["readers"]}))
         casing = f", held as {row['held_as']}" if row.get("held_as") else ""

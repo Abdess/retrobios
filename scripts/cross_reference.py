@@ -35,6 +35,7 @@ from common import (
     get_mame_clone_map,
     list_emulator_profiles,
     list_registered_platforms,
+    merged_platform_declared_contents,
     load_data_dir_registry,
     load_database,
     load_emulator_profiles,
@@ -50,7 +51,17 @@ from common import (
     select_emulator_profiles,
 )
 from hashing import parse_hash_list
-from launchers import LauncherLayer, declared_destinations, held_record
+from launchers import (
+    LauncherLayer,
+    catalogued_model_files,
+    declared_destinations,
+    held_record,
+    name_settings,
+    set_by,
+    setting_readers,
+    suffixed_stem,
+)
+from launchers import _directories as launcher_directories
 from launchers import _names as launcher_names
 from validation import (
     case_folded_slots,
@@ -857,7 +868,8 @@ def _cross_reference_profile(
         # A platform declares files of its BIOS tree: none answers for one
         # the core reads below the save directory.
         in_platform = not save_root and f.get("root") != "roms" and declaration_settles(
-            f, fname, platform_names, effective_path, index.get("folded_slots", frozenset())
+            f, fname, platform_names, effective_path, index.get("folded_slots", frozenset()),
+            index.get("declared_contents"),
         )
 
         if in_platform:
@@ -1119,7 +1131,10 @@ class _NameHolder:
             return self._cache[name]
         base = name.rsplit("/", 1)[-1]
         found: tuple[str, bool] | None = None
+        stem = suffixed_stem(base)
         if base in self.by_name or any(map(self._entry_held, self.exact.get(base, []))):
+            found = (base, True)
+        elif stem is not None and any(map(self._entry_held, self.exact.get(stem, []))):
             found = (base, True)
         else:
             path, _status = resolve_local_file(
@@ -1155,6 +1170,16 @@ def launcher_reads_not_held(
     a copy is reported with `held_as`, since the launcher does not open it
     under the name it asks for. *emulator* keeps the records whose emulator
     name designates that profile.
+
+    Three records ask for nothing the collection lacks. A search keeps the
+    first name it finds, so one held name fills it: RetroBat's Amiberry
+    launcher returns the first of kick34005.A500, kick34005.A500.rom and
+    amiga-os-130.rom that exists (Amiberry.Generator.cs:674-699). A copy
+    whose source lies outside the BIOS directory brings a file the platform
+    installs itself, from its own package or written by its own script
+    (RetroPie's lr-vecx copies $md_inst/system.bin). A file handed to the
+    setting a reader's profile entry is read from is that entry's file,
+    which the pack places under the launcher's name.
     """
     holder = _NameHolder(db, profiles, data_dir_registry)
     every_profile = set(profiles)
@@ -1170,9 +1195,45 @@ def launcher_reads_not_held(
                 for part in str(record.get("emulator", "")).split(",")
                 for key in LauncherLayer._profiles_named(part.strip(), profiles, every_profile)
             })
+            if not readers:
+                # RetroDECK names its frontend and the core option names the core.
+                readers = setting_readers(
+                    str(record.get("passes_to") or ""), profiles, every_profile
+                )
             if emulator and emulator not in readers:
                 continue
             folds = bool(record.get("case_insensitive") or config.get("case_insensitive_fs"))
+            base = str(config.get("base_destination") or "bios")
+            if record.get("kind") == "copies" and not launcher_directories(record, base):
+                continue
+            settings = name_settings(record, names)
+
+            def by_setting(name: str) -> bool:
+                """Whether the setting the name is written to reads a held file.
+
+                A placeholder read from the setting takes the held dump the
+                catalogues name after the model the launcher's name spells.
+                """
+                entries = [
+                    entry
+                    for key in readers
+                    for entry in profiles[key].get("files") or []
+                    if settings[name] and set_by(entry, settings[name])
+                ]
+                return any(holder._entry_held(entry) for entry in entries) or any(
+                    "<" in str(entry.get("name", ""))
+                    and any(
+                        name_match_size_ok(entry, found.get("size"))
+                        for found in catalogued_model_files(name, db)
+                    )
+                    for entry in entries
+                )
+
+            by_model = {name for name in names if by_setting(name)}
+            if record.get("kind") == "names_searched" and any(
+                (found := holder.held(name)) and (found[1] or folds) for name in names
+            ):
+                continue
             reader = {
                 "emulator": str(record.get("emulator", "")),
                 "build": str(record.get("build", "")),
@@ -1180,9 +1241,19 @@ def launcher_reads_not_held(
                 "source_ref": str(record.get("source_ref", "")),
                 "profiles": readers,
             }
+            # A name a reader's entry declares unsourceable is no gap: its
+            # row carries the reason and is counted apart.
+            unsourceable = {
+                str(n).rsplit("/", 1)[-1]: str(entry["unsourceable"])
+                for key in readers
+                for entry in profiles[key].get("files") or []
+                if entry.get("unsourceable")
+                for n in (entry.get("name"), *(entry.get("aliases") or []))
+                if n
+            }
             for name in names:
                 found = holder.held(name)
-                if found and (found[1] or folds):
+                if found and (found[1] or folds) or name in by_model:
                     continue
                 key = name.casefold() if folds else name
                 row = by_key.get(key)
@@ -1195,6 +1266,9 @@ def launcher_reads_not_held(
                     }
                     if found:
                         row["held_as"] = found[0]
+                reason = unsourceable.get(name.rsplit("/", 1)[-1])
+                if reason and "unsourceable" not in row:
+                    row["unsourceable"] = reason
                 if reader["emulator"] not in row["emulators"]:
                     row["emulators"].append(reader["emulator"])
                 if reader not in row["readers"]:
@@ -1204,7 +1278,13 @@ def launcher_reads_not_held(
 
 
 def print_launcher_reads(rows: list[dict]) -> None:
-    """The launcher reads gap category, after the profile gaps."""
+    """The launcher reads gap category, after the profile gaps.
+
+    A name its reader declares unsourceable is listed apart, with the
+    reason: it is no file left to find.
+    """
+    unsourceable = [r for r in rows if r.get("unsourceable")]
+    rows = [r for r in rows if not r.get("unsourceable")]
     platforms = sorted({r["platform"] for r in rows})
     noun = "platform" if len(platforms) == 1 else "platforms"
     print(f"\nLauncher reads, not held: {len(rows)} names across {len(platforms)} {noun}")
@@ -1218,6 +1298,19 @@ def print_launcher_reads(rows: list[dict]) -> None:
                 f"    {row['name']} [{', '.join(row['emulators'])}, {first['kind']}, "
                 f"{first['source_ref']}]{more}{casing}"
             )
+    if not unsourceable:
+        return
+    platforms = sorted({r["platform"] for r in unsourceable})
+    noun = "platform" if len(platforms) == 1 else "platforms"
+    print(
+        f"\nLauncher reads, unsourceable: {len(unsourceable)} names "
+        f"across {len(platforms)} {noun}"
+    )
+    for row in unsourceable:
+        print(
+            f"    {row['platform']}: {row['name']} [{', '.join(row['emulators'])}, "
+            f"{row['readers'][0]['source_ref']}]: {row['unsourceable']}"
+        )
 
 
 def cross_reference(
@@ -1231,6 +1324,7 @@ def cross_reference(
     folded_slots: frozenset[str] = frozenset(),
     platform: str = "",
     launcher_layer: LauncherLayer | None = None,
+    declared_contents: dict[str, set[str]] | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
@@ -1268,6 +1362,7 @@ def cross_reference(
         "data_names": data_names,
         "all_declared": all_declared,
         "folded_slots": folded_slots,
+        "declared_contents": declared_contents,
         "bios_dir": db.get("bios_dir"),
         "launcher_candidates": [] if launcher_layer else None,
     }
@@ -1474,6 +1569,13 @@ def main() -> None:
         all_declared=declared_names(args.platforms_dir, selected, db),
         standalone_cores=standalone_cores,
         folded_slots=folded_declared_slots(args.platforms_dir, selected, db),
+        declared_contents=merged_platform_declared_contents(
+            [
+                load_platform_config(name, args.platforms_dir)
+                for name in selected or list_registered_platforms(args.platforms_dir)
+            ],
+            db,
+        ),
         platform=config.get("_key", args.platform) if args.platform else "",
         # What the platform's launchers open, as verify and the builder read it.
         launcher_layer=LauncherLayer(

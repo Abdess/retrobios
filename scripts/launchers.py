@@ -65,6 +65,7 @@ class LauncherPlace:
     anchored: bool
     conditional: bool
     source_ref: str
+    passes_to: str = ""
 
     def fold(self, name: str) -> str:
         return name.lower() if self.case_insensitive else name
@@ -85,6 +86,103 @@ class LauncherPlace:
             self.kind in ("names_searched", "fixed_name", "links")
             and not self.conditional
         )
+
+
+def setting_tokens(passes_to: str) -> set[str]:
+    """The words of a record's ``passes_to``, as an emulator setting is spelled.
+
+    "command line -romfile4p" hands the file to sdltrs's romfile4p option,
+    "settings.bml NeoGeoPocket/Firmware/BIOS.World" to an ares setting.
+    """
+    return {
+        word.strip("()\"',;").lstrip("-")
+        for word in passes_to.split()
+    } - {""}
+
+
+def suffixed_stem(name: str) -> str | None:
+    """The file name a launcher name carries before an extension it appended.
+
+    ROCKNIX's Amiberry config passes kick34005.A500.rom, the name Amiberry
+    gives Kickstart 1.3 (amiberry_whdbooter.cpp:370) followed by ".rom". A
+    stem that is no file name itself (scph1001 of scph1001.bin) is none.
+    """
+    base = name.rsplit("/", 1)[-1]
+    stem = base.rsplit(".", 1)[0]
+    return stem if "." in stem else None
+
+
+_MODEL = re.compile(r"\b([A-Z]{2,5})-?(\d{3,6}[A-Z]?)\b")
+
+
+def catalogued_model_files(name: str, db: dict) -> list[dict]:
+    """Held files a dump catalogue describes as the model a launcher name spells.
+
+    RetroDECK sets LRPS2's pcsx2_bios option to scph10000.bin, a name no code
+    hashes: the SCPH-10000 is the model whose BIOS it means. Redump and TOSEC
+    describe two revisions for it. Primaries come before .variants copies,
+    then the Redump name, which carries the version (ps2-0100j before
+    ps2-0101j), then the No-Intro and TOSEC names.
+    """
+    stem = name.rsplit("/", 1)[-1].rsplit(".", 1)[0].casefold()
+    if not re.fullmatch(r"[a-z]{2,5}\d{3,6}[a-z]?", stem):
+        return []
+    found = []
+    for record in db.get("files", {}).values():
+        catalogues = record.get("provenance") or {}
+        models = {
+            (a + b).casefold()
+            for entry in catalogues.values()
+            for a, b in _MODEL.findall(str(entry.get("description") or ""))
+        }
+        if stem in models:
+            names = [
+                str((catalogues.get(source) or {}).get("name") or "")
+                for source in ("redump", "no-intro", "tosec")
+            ]
+            found.append(("/.variants/" in str(record.get("path", "")), names, record))
+    # The core accepts every revision of the model, and neither priority nor
+    # region separates two primaries. The pick must still be the same on
+    # every run, so it goes to the original revision: the Redump name carries
+    # the version, and ps2-0100j sorts before ps2-0101j.
+    return [record for *_key, record in sorted(found, key=lambda f: (f[0], f[1]))]
+
+
+def name_settings(record: dict, names: list[str]) -> dict[str, str]:
+    """The setting each name of a record is written to.
+
+    A record naming several files of one config spells passes_to as
+    describe_keys does (shell_launchers.py), "atari800.cfg ROM_OS_A_PAL,
+    ROM_5200_A, ...", one key per name and in the order of the names. When
+    the counts differ, each name keeps the whole description.
+    """
+    passes_to = str(record.get("passes_to") or "")
+    head, _, rest = passes_to.partition(" ")
+    keys = [
+        key.strip()
+        for key in re.sub(r"\[[^\]]*\]", ",", rest).split(",")
+        if key.strip()
+    ]
+    if len(names) > 1 and len(keys) == len(names) and all(" " not in k for k in keys):
+        return {name: f"{head} {key}" for name, key in zip(names, keys)}
+    return {name: passes_to for name in names}
+
+
+def setting_readers(passes_to: str, profiles: dict, keys: Iterable[str]) -> list[str]:
+    """The profiles with an entry read from the setting a launcher writes."""
+    if not passes_to:
+        return []
+    return sorted(
+        key for key in keys
+        if (profile := profiles.get(key)) is not None
+        and any(set_by(entry, passes_to) for entry in profile.get("files") or [])
+    )
+
+
+def set_by(entry: dict, passes_to: str) -> bool:
+    """Whether a launcher hands its file to the setting a profile entry is read from."""
+    key = str(entry.get("config_key") or "")
+    return bool(key) and key in setting_tokens(passes_to)
 
 
 def _bios_relative(directory: str, base: str) -> str | None:
@@ -190,15 +288,21 @@ def launcher_places(config: dict) -> list[LauncherPlace]:
             "conditional": bool(record.get("depends_on_option")),
             "source_ref": str(record.get("source_ref", "")),
         }
+        settings = name_settings(record, names)
         if kind == "names_searched":
             # Each directory in turn, every name in it.
             depth = len(directories) if anchored else 1
             ordered = tuple(paths_of(name)[i] for i in range(depth) for name in names)
-            places.append(LauncherPlace(paths=ordered, **common))
+            places.append(LauncherPlace(
+                paths=ordered, passes_to=str(record.get("passes_to") or ""), **common
+            ))
             continue
         # A fixed name is the one file passed, and a core option offers
         # each value as the file the user picks: one place per name.
-        places.extend(LauncherPlace(paths=paths_of(name), **common) for name in names)
+        places.extend(
+            LauncherPlace(paths=paths_of(name), passes_to=settings[name], **common)
+            for name in names
+        )
     return places
 
 
@@ -551,6 +655,8 @@ class _Candidate:
     by_content: bool
     # Matched by the size the code checks, the entry naming no hash.
     by_shape: bool = False
+    # Matched through the setting the launcher writes or the name it extends.
+    by_setting_or_stem: bool = False
 
 
 class LauncherLayer:
@@ -580,12 +686,30 @@ class LauncherLayer:
             self._by_name_folded.setdefault(name.lower(), []).extend(sha1s)
         self._files = db.get("files", {})
         self._owners: dict[tuple[str, bool], list[LauncherPlace]] = {}
+        self._unoffered: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         relevant = set(relevant)
         for place in self.places:
             standalone = place.build == "standalone"
-            for emulator in (e.strip() for e in place.emulator.split(",")):
-                for key in self._profiles_named(emulator, profiles, relevant):
-                    self._owners.setdefault((key, standalone), []).append(place)
+            owners = {
+                key
+                for emulator in (e.strip() for e in place.emulator.split(","))
+                for key in self._profiles_named(emulator, profiles, relevant)
+            }
+            # RetroDECK names its frontend, retroarch, and the core option it
+            # writes, pcsx2_bios, names the core.
+            if not owners:
+                owners = set(setting_readers(place.passes_to, profiles, relevant))
+            for key in sorted(owners):
+                self._owners.setdefault((key, standalone), []).append(place)
+                # The report never offers a placeholder, which stands for every
+                # file a scan finds, nor an entry the platform's list settles
+                # (AmberELEC declares kick34005.A500): the launcher still reads
+                # its file under its own name.
+                self._unoffered.setdefault((key, standalone), [
+                    (entry, _placeholder_report(key, profiles[key], entry))
+                    for entry in profiles[key].get("files") or []
+                ])
+        self._db = db
 
     @staticmethod
     def _profiles_named(name: str, profiles: dict, relevant: set[str]) -> list[str]:
@@ -622,6 +746,17 @@ class LauncherLayer:
         names = own & basenames
         if names:
             return _Candidate(entry, names, False)
+        # RetroPie runs sdl2trs with -romfile4p $biosdir/level4p.rom: the
+        # file under that name is the one the romfile4p slot reads.
+        if set_by(entry, place.passes_to):
+            return _Candidate(entry, basenames, False, by_setting_or_stem=True)
+        if place.kind == "fixed_name":
+            stems = {
+                base for base in basenames
+                if (stem := suffixed_stem(base)) is not None and place.fold(stem) in own
+            }
+            if stems:
+                return _Candidate(entry, stems, False, by_setting_or_stem=True)
         content = {
             place.fold(path.rsplit("/", 1)[-1])
             for path in place.paths
@@ -686,13 +821,26 @@ class LauncherLayer:
         by_layout: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         for emulator, standalone, entry, report in candidates:
             by_layout.setdefault((emulator, standalone), []).append((entry, report))
+        offered = {id(entry) for _e, _s, entry, _r in candidates}
+        for layout, members in self._unoffered.items():
+            for entry, report in members:
+                if id(entry) in offered:
+                    continue
+                if "<" not in str(entry.get("name", "")):
+                    report["in_repo"] = resolve_held(report) is not None
+                report["unoffered"] = True
+                by_layout.setdefault(layout, []).append((entry, report))
         placed: set[str] = set()
         for (emulator, standalone), members in sorted(by_layout.items()):
             for place in self.places_for(emulator, standalone):
+                # An entry the report left out answers only through the
+                # setting or the extended name: by its own name it was left
+                # out for a reason (a region variant, a settled duplicate).
                 matched = [
                     (candidate, report)
                     for entry, report in members
                     if (candidate := self.match(place, entry)) is not None
+                    and (candidate.by_setting_or_stem or not report.get("unoffered"))
                 ]
                 # A size names one entry only when no other of the core's
                 # entries takes that size too.
@@ -745,7 +893,31 @@ class LauncherLayer:
             ):
                 return True
             if not place.anchored:
-                continue
+                # A setting holds a name the core resolves in the directory
+                # of the entry read from it: LRPS2 joins pcsx2_bios under
+                # pcsx2/bios.
+                setting = [
+                    (candidate, report) for candidate, report in matched
+                    if set_by(candidate.entry, place.passes_to)
+                ]
+                directory = next(
+                    (
+                        str(c.entry.get("path") or "").rpartition("/")[0]
+                        for c, _report in setting
+                        if "/" in str(c.entry.get("path") or "")
+                    ),
+                    None,
+                )
+                if directory is None:
+                    continue
+                path = f"{directory}/{name}"
+                if place.fold(path) in folded_reported:
+                    return True
+                source = self._content_for(place, name, key, setting, resolve_held)
+                if source is None or place.fold(path) in placed:
+                    continue
+                placed.add(place.fold(path))
+                return _launcher_entry(source[0], name, path, source[1], place)
             # The emulator as this platform installs it brings the file: the
             # place is filled, nothing is packed (ROCKNIX's xemu hdd image).
             if any(key in candidate.names and report.get("bundled")
@@ -794,7 +966,34 @@ class LauncherLayer:
             record = resolve_held(report)
             if record is not None:
                 return report, record
+        for candidate, report in matched:
+            if key not in candidate.names or not set_by(candidate.entry, place.passes_to):
+                continue
+            for record in catalogued_model_files(name, self._db):
+                if name_match_size_ok(candidate.entry, record.get("size")):
+                    return report, record
         return None
+
+
+def _placeholder_report(key: str, profile: dict, entry: dict) -> dict:
+    """The report entry of an entry the gap report never builds."""
+    identity = {
+        field: entry[field]
+        for field in ("aliases", "md5", "sha1", "sha256", "crc32", "size", "min_size", "max_size")
+        if entry.get(field) is not None
+    }
+    return {
+        **identity,
+        "profile": key,
+        "emulator": profile.get("emulator", key),
+        "name": entry.get("name", ""),
+        "path": entry.get("path") or entry.get("name", ""),
+        "system": entry.get("system"),
+        "systems": profile.get("systems"),
+        "required": entry.get("required", False),
+        "category": entry.get("category"),
+        "in_repo": False,
+    }
 
 
 def _launcher_entry(

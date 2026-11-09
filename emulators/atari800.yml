@@ -49,11 +49,12 @@ files:
     note: >
       Atari 5200 BIOS (original). Mapped at $F800-$FFFF.
       Altirra 5200 OS is used when this file is absent.
-    source_ref: "source atari800/src/sysrom.c:103-104, source atari800/src/sysrom.c:290"
+    config_key: "ROM_5200"
+    source_ref: "source atari800/src/sysrom.c:103-104, source atari800/src/sysrom.c:290, source atari800/src/sysrom.c:138, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-5200-os-2port.rom"
+    found_by: content
     path: "atari-5200-os-2port.rom"
-    aliases: [ROM_5200_A]
     required: false
     hle_fallback: true
     size: 2048
@@ -65,7 +66,8 @@ files:
       as SYSROM_5200A, and the automatic choice for the 5200 tries it after
       the original OS and before the Altirra 5200 OS. ROM_5200_A is the
       configuration key this ROM is stored under in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:104, source atari800/src/sysrom.c:139, source atari800/src/sysrom.c:317-420, source atari800/src/sysrom.c:473, source atari800/src/sysrom.c:674, source atari800/src/atari.c:537"
+    config_key: "ROM_5200_A"
+    source_ref: "source atari800/src/sysrom.c:104, source atari800/src/sysrom.c:139, source atari800/src/sysrom.c:317-420, source atari800/src/sysrom.c:473, source atari800/src/sysrom.c:674, source atari800/src/atari.c:537, source atari800/src/sysrom.c:139, source atari800/src/sysrom.c:616-623"
 
   # -- Atari BASIC ROM --
   # Atari BASIC interpreter (8 KB). Three known revisions:
@@ -85,7 +87,8 @@ files:
     note: >
       Atari BASIC Rev C. Required for 400/800 software that needs BASIC.
       Altirra BASIC is used as fallback. Enable via core option atari800_opt2.
-    source_ref: "source atari800/src/sysrom.c:105-107, source atari800/src/sysrom.c:292"
+    config_key: "ROM_BASIC_C"
+    source_ref: "source atari800/src/sysrom.c:105-107, source atari800/src/sysrom.c:292, source atari800/src/sysrom.c:142, source atari800/src/sysrom.c:616-623"
 
   # -- Atari 400/800 OS A --
   # Original Atari 400/800 OS (10 KB). Two known CRC32 values:
@@ -103,7 +106,8 @@ files:
     note: >
       Atari 400/800 OS Rev A. Altirra OS 800 is used as fallback.
       Auto-select order: OS B NTSC, OS A NTSC, OS A PAL, custom, Altirra.
-    source_ref: "source atari800/src/sysrom.c:89-90, source atari800/src/sysrom.c:285"
+    config_key: "ROM_OS_A_PAL"
+    source_ref: "source atari800/src/sysrom.c:89-90, source atari800/src/sysrom.c:285, source atari800/src/sysrom.c:125, source atari800/src/sysrom.c:616-623"
 
   # -- Atari 400/800 OS B --
   # OS revision B (10 KB), NTSC: CRC32 0x0e86d61d
@@ -123,7 +127,8 @@ files:
       SYSROM_B_NTSC. Preferred over Rev A for 400/800 mode.
       The .info lists md5 a3e8d617c95d08031fe1b20d541434b2, a different
       dump (crc32 3e28a1fe). sysrom.c detects the CRC32-matched one.
-    source_ref: "source atari800/src/sysrom.c:91, source atari800/src/sysrom.c:286"
+    config_key: "ROM_OS_B_NTSC"
+    source_ref: "source atari800/src/sysrom.c:91, source atari800/src/sysrom.c:286, source atari800/src/sysrom.c:126, source atari800/src/sysrom.c:616-623"
 
   # -- Atari XL/XE OS --
   # XL/XE OS (16 KB). Many revisions known by CRC32 in sysrom.c:
@@ -144,7 +149,8 @@ files:
     note: >
       Atari XL/XE OS. Used for 800XL, 130XE, and XEGS modes.
       Altirra XL OS is used as fallback.
-    source_ref: "source atari800/src/sysrom.c:92-101, source atari800/src/sysrom.c:288"
+    config_key: "ROM_OS_BB01R2"
+    source_ref: "source atari800/src/sysrom.c:92-101, source atari800/src/sysrom.c:288, source atari800/src/sysrom.c:130, source atari800/src/sysrom.c:616-623"
 
   # -- Atari XL/XE/XEGS OS v4 (BB01R4) --
   # XEGS-specific OS revision BB01R4 (16 KB), CRC32: 0x1eaf4002
@@ -160,7 +166,8 @@ files:
     validation: [size, crc32]
     note: >
       Atari XEGS OS Rev 4 (BB01R4). Preferred OS for XEGS machine mode.
-    source_ref: "source atari800/src/sysrom.c:100"
+    config_key: "ROM_OS_BB01R4"
+    source_ref: "source atari800/src/sysrom.c:100, source atari800/src/sysrom.c:135, source atari800/src/sysrom.c:616-623"
 
   # -- XEGS Missile Command built-in game --
   # The XEGS had Missile Command in ROM (8 KB), CRC32: 0xbdca01fb
@@ -176,13 +183,14 @@ files:
     note: >
       XEGS built-in Missile Command ROM. Only used in XEGS machine mode.
       No built-in replacement exists for this ROM.
-    source_ref: "source atari800/src/sysrom.c:108"
+    config_key: "ROM_XEGAME"
+    source_ref: "source atari800/src/sysrom.c:108, source atari800/src/sysrom.c:143, source atari800/src/sysrom.c:616-623"
 
   # -- Further revisions identified by CRC32 in the system directory scan --
 
   - name: "atari-800-os-a-ntsc.rom"
+    found_by: content
     path: "atari-800-os-a-ntsc.rom"
-    aliases: [ROM_OS_A_NTSC]
     required: false
     hle_fallback: true
     size: 10240
@@ -194,11 +202,12 @@ files:
       10240 bytes whose CRC32 is c1b3bb02 is taken for this slot.
       ROM_OS_A_NTSC is the configuration key this ROM is stored under
       in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:89, source atari800/src/sysrom.c:124, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_A_NTSC"
+    source_ref: "source atari800/src/sysrom.c:89, source atari800/src/sysrom.c:124, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:124, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-1200xl-os-rev-10.rom"
+    found_by: content
     path: "atari-1200xl-os-rev-10.rom"
-    aliases: [ROM_OS_AA00R10]
     required: false
     hle_fallback: true
     size: 16384
@@ -210,11 +219,12 @@ files:
       16384 bytes whose CRC32 is c5c11546 is taken for this slot.
       ROM_OS_AA00R10 is the configuration key this ROM is stored under
       in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:92, source atari800/src/sysrom.c:127, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_AA00R10"
+    source_ref: "source atari800/src/sysrom.c:92, source atari800/src/sysrom.c:127, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:127, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-1200xl-os-rev-11.rom"
+    found_by: content
     path: "atari-1200xl-os-rev-11.rom"
-    aliases: [ROM_OS_AA00R11]
     required: false
     hle_fallback: true
     size: 16384
@@ -226,11 +236,12 @@ files:
       16384 bytes whose CRC32 is 1a1d7b1b is taken for this slot.
       ROM_OS_AA00R11 is the configuration key this ROM is stored under
       in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:93, source atari800/src/sysrom.c:128, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_AA00R11"
+    source_ref: "source atari800/src/sysrom.c:93, source atari800/src/sysrom.c:128, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:128, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-xl-os-ver-1.rom"
+    found_by: content
     path: "atari-xl-os-ver-1.rom"
-    aliases: [ROM_OS_BB00R1]
     required: false
     hle_fallback: true
     size: 16384
@@ -242,9 +253,11 @@ files:
       16384 bytes whose CRC32 is 643bcc98 is taken for this slot.
       ROM_OS_BB00R1 is the configuration key this ROM is stored under
       in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:94, source atari800/src/sysrom.c:129, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_BB00R1"
+    source_ref: "source atari800/src/sysrom.c:94, source atari800/src/sysrom.c:129, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:129, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_BB02R3V4"
+    found_by: content
     path: "ROM_OS_BB02R3V4"
     required: false
     hle_fallback: true
@@ -257,9 +270,11 @@ files:
       16384 bytes whose CRC32 is d425a9cf is taken for this slot.
       The name is the configuration key this ROM is stored under in
       .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:97, source atari800/src/sysrom.c:132, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_BB02R3V4"
+    source_ref: "source atari800/src/sysrom.c:97, source atari800/src/sysrom.c:132, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:132, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_CC01R4"
+    found_by: content
     path: "ROM_OS_CC01R4"
     required: false
     hle_fallback: true
@@ -272,11 +287,12 @@ files:
       16384 bytes whose CRC32 is 0e000b99 is taken for this slot.
       The name is the configuration key this ROM is stored under in
       .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:98, source atari800/src/sysrom.c:133, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_CC01R4"
+    source_ref: "source atari800/src/sysrom.c:98, source atari800/src/sysrom.c:133, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:133, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-xl-os-ver-3.rom"
+    found_by: content
     path: "atari-xl-os-ver-3.rom"
-    aliases: [ROM_OS_BB01R3]
     required: false
     hle_fallback: true
     size: 16384
@@ -288,9 +304,11 @@ files:
       16384 bytes whose CRC32 is 29f133f7 is taken for this slot.
       ROM_OS_BB01R3 is the configuration key this ROM is stored under
       in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:99, source atari800/src/sysrom.c:134, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_BB01R3"
+    source_ref: "source atari800/src/sysrom.c:99, source atari800/src/sysrom.c:134, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:134, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_BB01R59"
+    found_by: content
     path: "ROM_OS_BB01R59"
     required: false
     hle_fallback: true
@@ -303,9 +321,11 @@ files:
       16384 bytes whose CRC32 is 45f47988 is taken for this slot.
       The name is the configuration key this ROM is stored under in
       .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:101, source atari800/src/sysrom.c:136, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_BB01R59"
+    source_ref: "source atari800/src/sysrom.c:101, source atari800/src/sysrom.c:136, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:136, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_BB01R59A"
+    found_by: content
     path: "ROM_OS_BB01R59A"
     required: false
     hle_fallback: true
@@ -318,11 +338,12 @@ files:
       16384 bytes whose CRC32 is f0a236d3 is taken for this slot.
       The name is the configuration key this ROM is stored under in
       .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:102, source atari800/src/sysrom.c:137, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_OS_BB01R59A"
+    source_ref: "source atari800/src/sysrom.c:102, source atari800/src/sysrom.c:137, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:137, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-basic-rev-a.rom"
+    found_by: content
     path: "atari-basic-rev-a.rom"
-    aliases: [ROM_BASIC_A]
     required: false
     hle_fallback: true
     size: 8192
@@ -334,11 +355,12 @@ files:
       8192 bytes whose CRC32 is 4bec4de2 is taken for this slot.
       ROM_BASIC_A is the configuration key this ROM is stored under
       in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:105, source atari800/src/sysrom.c:140, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_BASIC_A"
+    source_ref: "source atari800/src/sysrom.c:105, source atari800/src/sysrom.c:140, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:140, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-basic-rev-b.rom"
+    found_by: content
     path: "atari-basic-rev-b.rom"
-    aliases: [ROM_BASIC_B]
     required: false
     hle_fallback: true
     size: 8192
@@ -350,7 +372,8 @@ files:
       8192 bytes whose CRC32 is f0202fb3 is taken for this slot.
       ROM_BASIC_B is the configuration key this ROM is stored under
       in .atari800.cfg.
-    source_ref: "source atari800/src/sysrom.c:106, source atari800/src/sysrom.c:141, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537"
+    config_key: "ROM_BASIC_B"
+    source_ref: "source atari800/src/sysrom.c:106, source atari800/src/sysrom.c:141, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:141, source atari800/src/sysrom.c:616-623"
 
 # Known ROM revisions from sysrom.c (CRC32 identifiers):
 #

@@ -109,30 +109,34 @@ files:
     system: commodore-amiga
     required: true
     size: 262144
+    crc32: "c4f0f55f"
     note: "A500 Kickstart v1.3 rev 34.005, default for A500 model"
-    source_ref: "source libretro/libretro.cpp:1818 (candidates_a500)"
+    source_ref: "source libretro/libretro.cpp:1818 (candidates_a500), source src/rommgr.cpp:161-162"
 
   - name: kick12.rom
     system: commodore-amiga
     required: false
     size: 262144
+    crc32: "a6ce1636"
     note: "A500 Kickstart v1.2 rev 33.180, for A500OG model"
-    source_ref: "source libretro/libretro.cpp:1817 (candidates_a500og)"
+    source_ref: "source libretro/libretro.cpp:1817 (candidates_a500og), source src/rommgr.cpp:159-160"
 
   - name: kick20.rom
     system: commodore-amiga
     required: false
     size: 524288
     aliases: [kick204.rom]
+    crc32: "c3bdb240"
     note: "A500+ Kickstart v2.04 rev 37.175"
-    source_ref: "source libretro/libretro.cpp:1819 (candidates_a500p)"
+    source_ref: "source libretro/libretro.cpp:1819 (candidates_a500p), source src/rommgr.cpp:169-170"
 
   - name: kick205.rom
     system: commodore-amiga
     required: false
     size: 524288
+    crc32: "43b0df7b"
     note: "A600 Kickstart v2.05 rev 37.350, also used for WHDLoad"
-    source_ref: "source libretro/libretro.cpp:1820 (candidates_a600)"
+    source_ref: "source libretro/libretro.cpp:1820 (candidates_a600), source src/rommgr.cpp:175-176"
 
   - name: kick31.rom
     system: commodore-amiga
@@ -145,15 +149,17 @@ files:
     system: commodore-amiga
     required: false
     size: 524288
+    crc32: "1483a091"
     note: "A1200 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "source libretro/libretro.cpp:775 (option label), source libretro/libretro.cpp:1821 (candidates_a1200)"
+    source_ref: "source libretro/libretro.cpp:775 (option label), source libretro/libretro.cpp:1821 (candidates_a1200), source src/rommgr.cpp:196-197"
 
   - name: kick40068.A4000
     system: commodore-amiga
     required: false
     size: 524288
+    crc32: "d6bae334"
     note: "A4000 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "source libretro/libretro.cpp:776 (option label), source libretro/libretro.cpp:1822 (candidates_a4000)"
+    source_ref: "source libretro/libretro.cpp:776 (option label), source libretro/libretro.cpp:1822 (candidates_a4000), source src/rommgr.cpp:206-207"
 
   - name: kick.rom
     system: commodore-amiga
@@ -165,41 +171,49 @@ files:
 
   - name: cd32.rom
     system: commodore-cd32
+    min_size: 524288
+    max_size: 1048576
     required: false
-    size: 524288
     aliases: [amiga-os-310-cd32.rom, kick40060.CD32]
+    crc32: ["1e62d4a5", "f5d4f3c8"]
     note: "CD32 Kickstart v3.1 rev 40.60. candidates_cd32 tries cd32.rom, amiga-os-310-cd32.rom, kick40060.CD32, kick31.rom, then kick.rom."
-    source_ref: "source libretro/libretro.cpp:1823 (candidates_cd32)"
+    source_ref: "source libretro/libretro.cpp:1823 (candidates_cd32), source src/rommgr.cpp:334-335, source src/rommgr.cpp:340-341"
 
   - name: cd32ext.rom
     system: commodore-cd32
     required: false
     size: 524288
     aliases: [amiga-ext-310-cd32.rom, "CD32 Extended.ROM"]
+    crc32: "87746be2"
     note: "CD32 extended ROM rev 40.60. Not needed if using a combined 1MB ROM."
-    source_ref: "source libretro/libretro.cpp:1881 (candidates_cd32 in find_ext_rom_in_system_dir)"
+    source_ref: "source libretro/libretro.cpp:1881 (candidates_cd32 in find_ext_rom_in_system_dir), source src/rommgr.cpp:336-337"
 
   # --- CDTV ROMs ---
 
   - name: cdtv.rom
     system: commodore-cdtv
+    size: 262144
     required: false
     aliases: [kick34005.CDTV]
+    crc32: "42baa124"
     note: "CDTV extended ROM v1.00, used as kickstart candidate. candidates_cdtv tries cdtv.rom, kick34005.CDTV, kick13.rom, then kick.rom."
-    source_ref: "source libretro/libretro.cpp:1824 (candidates_cdtv)"
+    source_ref: "source libretro/libretro.cpp:1824 (candidates_cdtv), source src/rommgr.cpp:350-351"
 
   - name: cdtvext.rom
     system: commodore-cdtv
+    size: 262144
     required: false
     aliases: ["CDTV Extended.ROM"]
+    crc32: ["42baa124", "30b54232", "ceae68d2"]
     note: "CDTV extended ROM file"
-    source_ref: "source libretro/libretro.cpp:1883 (candidates_cdtv in find_ext_rom_in_system_dir)"
+    source_ref: "source libretro/libretro.cpp:1883 (candidates_cdtv in find_ext_rom_in_system_dir), source src/rommgr.cpp:350-351, source src/rommgr.cpp:354-355, source src/rommgr.cpp:358-359"
 
   # --- Kickstart ROMs found by the standalone ROM scan ---
   # The scan opens every file under the ROM path whose extension is rom, bin,
   # a1000, a500, a600, a1200, a3000, a4000, cdtv, cd32, roz or U followed by a
   # digit and names it by the SHA-1 the ROM database lists. A model then takes
-  # the first ROM id on its list that the scan found.
+  # the first ROM id on its list that the scan found. Split chip dumps the
+  # table lists for an image are identified one by one and merged.
   # ref: src/osdep/amiberry_gui.cpp:228-254, src/osdep/amiberry_gui.cpp:285-307,
   #      src/osdep/amiberry_gui.cpp:431-469, src/rommgr.cpp:3186-3256,
   #      src/rommgr.cpp:1668-1681
@@ -216,6 +230,641 @@ files:
       Identified as KS ROM v3.1 (A4000)(Cloanto), ROM id 31, whatever the file
       is called. The A4000 model takes id 16 first and id 31 after it.
     source_ref: "source src/rommgr.cpp:204-205, source src/cfgfile.cpp:10099-10107, source src/cfgfile.cpp:10160-10161"
+
+  - name: "KS ROM v23.93 (Velvet).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 131072
+    crc32: "adcb44c9"
+    sha1: "7c36b2ba298da3dace60d0ba8511d47076a40d5c"
+    found_by: content
+    note: "Identified as KS ROM v23.93 (Velvet), ROM id 125."
+    source_ref: "source src/rommgr.cpp:144-145, source src/cfgfile.cpp:10244"
+
+  - name: "KS ROM v1.0 (A1000)(NTSC).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: "299790ff"
+    sha1: "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79"
+    found_by: content
+    note: "Identified as KS ROM v1.0 (A1000)(NTSC), ROM id 1."
+    source_ref: "source src/rommgr.cpp:151-152, source src/cfgfile.cpp:9436"
+
+  - name: "KS ROM v1.1 (A1000)(NTSC).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: "d060572a"
+    sha1: "4192c505d130f446b2ada6bdc91dae730acafb4c"
+    found_by: content
+    aliases: ["kick31034.A1000"]
+    note: "Identified as KS ROM v1.1 (A1000)(NTSC), ROM id 2. WHDLoad booting links it into its Kickstarts folder as kick31034.A1000, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:153-154, source src/cfgfile.cpp:9436, source src/osdep/amiberry_whdbooter.cpp:368, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "KS ROM v1.1 (A1000)(PAL).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: "ec86dae2"
+    sha1: "16df8b5fd524c5a1c7584b2457ac15aff9e3ad6d"
+    found_by: content
+    note: "Identified as KS ROM v1.1 (A1000)(PAL), ROM id 3."
+    source_ref: "source src/rommgr.cpp:155-156, source src/cfgfile.cpp:9436"
+
+  - name: "KS ROM v1.2 (A1000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: "9ed783d0"
+    sha1: "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b"
+    found_by: content
+    note: "Identified as KS ROM v1.2 (A1000), ROM id 4."
+    source_ref: "source src/rommgr.cpp:157-158, source src/cfgfile.cpp:9436, 10557, 10565"
+
+  - name: "amiga-os-120.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: "a6ce1636"
+    sha1: "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+    found_by: content
+    aliases: ["kick33180.A500"]
+    note: "Identified as KS ROM v1.2 (A500,A1000,A2000), ROM id 5. WHDLoad booting links it into its Kickstarts folder as kick33180.A500, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:159-160, source src/cfgfile.cpp:9436, 10556, 10564, source src/osdep/amiberry_whdbooter.cpp:369, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "amiga-os-130.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: "c4f0f55f"
+    sha1: "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
+    found_by: content
+    aliases: ["kick34005.A500"]
+    note: "Identified as KS ROM v1.3 (A500,A1000,A2000), ROM id 6. WHDLoad booting links it into its Kickstarts folder as kick34005.A500, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:161-162, source src/cfgfile.cpp:9436, 10311, 10533, 10538, 10542, 10548, source src/osdep/amiberry_whdbooter.cpp:370, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "KS ROM v1.3 (A3000)(SK).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 262144
+    crc32: "e0f37258"
+    sha1: "c39bd9094d4e5f4e28c1411f3086950406062e87"
+    found_by: content
+    note: "Identified as KS ROM v1.3 (A3000)(SK), ROM id 32."
+    source_ref: "source src/rommgr.cpp:163-164, source src/cfgfile.cpp:10312, 10534, 10539, 10543, 10549"
+
+  - name: "KS ROM v1.4 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "bc0ec13f"
+    sha1: "f76316bf36dff14b20fa349ed02e4b11dd932b07"
+    found_by: content
+    note: "Identified as KS ROM v1.4 (A3000), ROM id 59."
+    source_ref: "source src/rommgr.cpp:165-166, source src/cfgfile.cpp:10069"
+
+  - name: "amiga-os-204.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "c3bdb240"
+    sha1: "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
+    found_by: content
+    aliases: ["kick37175.A500"]
+    note: "Identified as KS ROM v2.04 (A500+), ROM id 7. WHDLoad booting links it into its Kickstarts folder as kick37175.A500, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:169-170, source src/cfgfile.cpp:9436, 10509, source src/osdep/amiberry_whdbooter.cpp:371, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "KS ROM v2.05 (A600).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "83028fb5"
+    sha1: "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+    found_by: content
+    note: "Identified as KS ROM v2.05 (A600), ROM id 8."
+    source_ref: "source src/rommgr.cpp:171-172, source src/cfgfile.cpp:9436, 10474"
+
+  - name: "KS ROM v2.05 (A600HD).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "64466c2a"
+    sha1: "f72d89148dac39c696e30b10859ebc859226637b"
+    found_by: content
+    note: "Identified as KS ROM v2.05 (A600HD), ROM id 9."
+    source_ref: "source src/rommgr.cpp:173-174, source src/cfgfile.cpp:9436, 10272, 10473"
+
+  - name: "amiga-os-205-a600.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "43b0df7b"
+    sha1: "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
+    found_by: content
+    note: "Identified as KS ROM v2.05 (A600HD), ROM id 10."
+    source_ref: "source src/rommgr.cpp:175-176, source src/cfgfile.cpp:9436, 10273, 10472"
+
+  - name: "KS ROM v2.04 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "234a7233"
+    sha1: "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
+    found_by: content
+    note: "Identified as KS ROM v2.04 (A3000), ROM id 71."
+    source_ref: "source src/rommgr.cpp:177-178, source src/cfgfile.cpp:10067"
+
+  - name: "amiga-os-300-a1200.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "6c9b07d2"
+    sha1: "70033828182fffc7ed106e5373a8b89dda76faa5"
+    found_by: content
+    aliases: ["kick39106.A1200"]
+    note: "Identified as KS ROM v3.0 (A1200), ROM id 11. WHDLoad booting links it into its Kickstarts folder as kick39106.A1200, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:182-183, source src/cfgfile.cpp:10387, 10447, 10585, source src/osdep/amiberry_whdbooter.cpp:372, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "amiga-os-300-a4000.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "9e6ac152"
+    sha1: "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
+    found_by: content
+    note: "Identified as KS ROM v3.0 (A4000), ROM id 12."
+    source_ref: "source src/rommgr.cpp:186-187, source src/cfgfile.cpp:10109, 10584"
+
+  - name: "KS ROM v3.1 (A4000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "2b4566f1"
+    sha1: "81c631dd096bbb31d2af90299c76b774db74076c"
+    found_by: content
+    note: "Identified as KS ROM v3.1 (A4000), ROM id 13."
+    source_ref: "source src/rommgr.cpp:190-191, source src/cfgfile.cpp:10108"
+
+  - name: "amiga-os-310-a600.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "fc24ae0d"
+    sha1: "3b7f1493b27e212830f989f26ca76c02049f09ca"
+    found_by: content
+    aliases: ["kick40063.A600"]
+    note: "Identified as KS ROM v3.1 (A500,A600,A2000), ROM id 14. WHDLoad booting links it into its Kickstarts folder as kick40063.A600, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:194-195, source src/cfgfile.cpp:9436, 10583, source src/osdep/amiberry_whdbooter.cpp:373, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "amiga-os-310-a1200.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "1483a091"
+    sha1: "e21545723fe8374e91342617604f1b3d703094f1"
+    found_by: content
+    aliases: ["kick40068.A1200"]
+    note: "Identified as KS ROM v3.1 (A1200), ROM id 15. WHDLoad booting links it into its Kickstarts folder as kick40068.A1200, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:196-197, source src/cfgfile.cpp:10388, 10446, 10582, source src/osdep/amiberry_whdbooter.cpp:374, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "amiga-os-310-a3000.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "efb239cc"
+    sha1: "f8e210d72b4c4853e0c9b85d223ba20e3d1b36ee"
+    found_by: content
+    note: "Identified as KS ROM v3.1 (A3000), ROM id 61."
+    source_ref: "source src/rommgr.cpp:200-201, source src/cfgfile.cpp:10065"
+
+  - name: "amiga-os-310-a4000.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "d6bae334"
+    sha1: "5fe04842d04a489720f0f4bb0e46948199406f49"
+    found_by: content
+    aliases: ["kick40068.A4000"]
+    note: "Identified as KS ROM v3.1 (A4000), ROM id 16. WHDLoad booting links it into its Kickstarts folder as kick40068.A4000, unless a file of that name is there."
+    source_ref: "source src/rommgr.cpp:206-207, source src/cfgfile.cpp:10106, 10580, source src/osdep/amiberry_whdbooter.cpp:375, source src/osdep/amiberry_whdbooter.cpp:297-342"
+
+  - name: "amiga-os-310-a4000t.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "75932c3a"
+    sha1: "b0ec8b84d6768321e01209f11e6248f2f5281a21"
+    found_by: content
+    note: "Identified as KS ROM v3.1 (A4000T), ROM id 17."
+    source_ref: "source src/rommgr.cpp:210-211, source src/cfgfile.cpp:10168"
+
+  - name: "KS ROM v3.X (A4000)(Cloanto).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "3ac99edc"
+    sha1: "3cbfc9e1fe396360157bd161de74fc901abee7ec"
+    found_by: content
+    note: "Identified as KS ROM v3.X (A4000)(Cloanto), ROM id 46."
+    source_ref: "source src/rommgr.cpp:214-215, source src/cfgfile.cpp:10111"
+
+  - name: "KS ROM v3.1.4-1 (A1200).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "f17fa97f"
+    sha1: "6355a9ed5dc840422f9b73308a91be0d0bb506bd"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-1 (A1200), ROM id 276."
+    source_ref: "source src/rommgr.cpp:217-218, source src/cfgfile.cpp:10390"
+
+  - name: "KS ROM v3.1.4-1 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "50c3529c"
+    sha1: "1a34b25a25e260e38e879172850143c80b461a64"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-1 (A3000), ROM id 277."
+    source_ref: "source src/rommgr.cpp:221-222"
+
+  - name: "KS ROM v3.1.4-1 (A4000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "d47e18fd"
+    sha1: "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-1 (A4000), ROM id 278."
+    source_ref: "source src/rommgr.cpp:225-226, source src/cfgfile.cpp:10112"
+
+  - name: "KS ROM v3.1.4-1 (A4000T).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "75a2b2a5"
+    sha1: "938a60a1d2c0d411f64bb27e5af40258b8decbf3"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-1 (A4000T), ROM id 279."
+    source_ref: "source src/rommgr.cpp:229-230, source src/cfgfile.cpp:10169"
+
+  - name: "KS ROM v3.1.4-1 (A500).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "d52b52fd"
+    sha1: "8a2405087ce182225656dd0b93069c45743f9e34"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-1 (A500), ROM id 280."
+    source_ref: "source src/rommgr.cpp:233-234"
+
+  - name: "KS ROM v3.1.4-2 (A1200).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "b87506a7"
+    sha1: "ef36c4638ee45de6bb93701761216c958cd0d57b"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-2 (A1200), ROM id 281."
+    source_ref: "source src/rommgr.cpp:236-237, source src/cfgfile.cpp:10391"
+
+  - name: "KS ROM v3.1.4-2 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "ba35f8eb"
+    sha1: "d73ae3a36f12bb49bbf6ba04a890ff7aac419015"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-2 (A3000), ROM id 282."
+    source_ref: "source src/rommgr.cpp:240-241"
+
+  - name: "KS ROM v3.1.4-2 (A4000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "1b84cb33"
+    sha1: "aab44cd651e6b6f81a3effd8e0ba6b37ab322f32"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-2 (A4000), ROM id 283."
+    source_ref: "source src/rommgr.cpp:244-245, source src/cfgfile.cpp:10113"
+
+  - name: "KS ROM v3.1.4-2 (A4000T).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "d6d0ef3e"
+    sha1: "cd73aefe9cbfc258e7966cd14a7b2f4647c9ba45"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-2 (A4000T), ROM id 284."
+    source_ref: "source src/rommgr.cpp:248-249, source src/cfgfile.cpp:10170"
+
+  - name: "KS ROM v3.1.4-2 (A500).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "568f8786"
+    sha1: "d81cd6f131040895843d9dfa95a45bc95edd9704"
+    found_by: content
+    note: "Identified as KS ROM v3.1.4-2 (A500), ROM id 285."
+    source_ref: "source src/rommgr.cpp:252-253"
+
+  - name: "KS ROM v3.2 (A1200).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "bd1ff75e"
+    sha1: "5b2982876fec2166673be447643881262c84090e"
+    found_by: content
+    note: "Identified as KS ROM v3.2 (A1200), ROM id 286."
+    source_ref: "source src/rommgr.cpp:255-256, source src/cfgfile.cpp:10392"
+
+  - name: "KS ROM v3.2 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "f3af46cc"
+    sha1: "7bc0e75622d7254e11ea708e5d149007866c93ab"
+    found_by: content
+    note: "Identified as KS ROM v3.2 (A3000), ROM id 287."
+    source_ref: "source src/rommgr.cpp:259-260"
+
+  - name: "KS ROM v3.2 (A4000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "9bb8fc93"
+    sha1: "37a8aa0b83782d75ce0b4a80631ff3459e91dc63"
+    found_by: content
+    note: "Identified as KS ROM v3.2 (A4000), ROM id 288."
+    source_ref: "source src/rommgr.cpp:263-264, source src/cfgfile.cpp:10114"
+
+  - name: "KS ROM v3.2 (A4000T).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "9188a509"
+    sha1: "ede1748eb2cbb1e86ac5bf7dc9b97246a4a54358"
+    found_by: content
+    note: "Identified as KS ROM v3.2 (A4000T), ROM id 289."
+    source_ref: "source src/rommgr.cpp:267-268, source src/cfgfile.cpp:10171"
+
+  - name: "KS ROM v3.2 (A500/A600/A2000/A1000/CDTV).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "8173d7b6"
+    sha1: "b88e364daf23c9c9920e548b0d3d944e65b1031d"
+    found_by: content
+    note: "Identified as KS ROM v3.2 (A500/A600/A2000/A1000/CDTV), ROM id 290."
+    source_ref: "source src/rommgr.cpp:271-272"
+
+  - name: "KS ROM v3.2.1 (A1200).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "2b653371"
+    sha1: "0984fc0df07dc0585db0923d580629f70fca420d"
+    found_by: content
+    note: "Identified as KS ROM v3.2.1 (A1200), ROM id 291."
+    source_ref: "source src/rommgr.cpp:274-275, source src/cfgfile.cpp:10393"
+
+  - name: "KS ROM v3.2.1 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "0078f607"
+    sha1: "eb93508f0bb0cde81d88bf22d05045565d66ef74"
+    found_by: content
+    note: "Identified as KS ROM v3.2.1 (A3000), ROM id 292."
+    source_ref: "source src/rommgr.cpp:278-279"
+
+  - name: "KS ROM v3.2.1 (A4000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "f3ced3b8"
+    sha1: "7db3c3226acc0bfe548c788cf1bc7c4c8774d66f"
+    found_by: content
+    note: "Identified as KS ROM v3.2.1 (A4000), ROM id 293."
+    source_ref: "source src/rommgr.cpp:282-283, source src/cfgfile.cpp:10115"
+
+  - name: "KS ROM v3.2.1 (A4000T).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "af3452ec"
+    sha1: "a75fcd349680cedeab06e496c6338394e81788d7"
+    found_by: content
+    note: "Identified as KS ROM v3.2.1 (A4000T), ROM id 294."
+    source_ref: "source src/rommgr.cpp:286-287, source src/cfgfile.cpp:10172"
+
+  - name: "KS ROM v3.2.1 (A500/A600/A2000/A1000/CDTV).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "4f078456"
+    sha1: "8f64ada68a7f128ba782e8dc9fa583344171590a"
+    found_by: content
+    note: "Identified as KS ROM v3.2.1 (A500/A600/A2000/A1000/CDTV), ROM id 295."
+    source_ref: "source src/rommgr.cpp:290-291"
+
+  - name: "KS ROM v3.2.2 (A1200).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "5c40328a"
+    sha1: "d9622547d84741b52c5472607f9aca75565cbba3"
+    found_by: content
+    note: "Identified as KS ROM v3.2.2 (A1200), ROM id 304."
+    source_ref: "source src/rommgr.cpp:293-294, source src/cfgfile.cpp:10394"
+
+  - name: "KS ROM v3.2.2 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "46335b57"
+    sha1: "443d98369aca3ba51ab2d4789d14fa9a26379c0b"
+    found_by: content
+    note: "Identified as KS ROM v3.2.2 (A3000), ROM id 305."
+    source_ref: "source src/rommgr.cpp:297-298"
+
+  - name: "KS ROM v3.2.2 (A4000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "4bea9798"
+    sha1: "a3207bd5b5a3ca629010f3159ac793040fa813ef"
+    found_by: content
+    note: "Identified as KS ROM v3.2.2 (A4000), ROM id 306."
+    source_ref: "source src/rommgr.cpp:301-302, source src/cfgfile.cpp:10116"
+
+  - name: "KS ROM v3.2.2 (A4000T).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "36bbcd8a"
+    sha1: "8e3fff2675cc1b97b4f072b63fd4de7093f7c627"
+    found_by: content
+    note: "Identified as KS ROM v3.2.2 (A4000T), ROM id 307."
+    source_ref: "source src/rommgr.cpp:305-306, source src/cfgfile.cpp:10173"
+
+  - name: "KS ROM v3.2.2 (A500/A600/A2000/A1000/CDTV).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "e4458462"
+    sha1: "7d5ebe686b69d59a863cc77a36b2cd60359a9ed2"
+    found_by: content
+    note: "Identified as KS ROM v3.2.2 (A500/A600/A2000/A1000/CDTV), ROM id 308."
+    source_ref: "source src/rommgr.cpp:309-310"
+
+  - name: "KS ROM v3.2.3 (A1200).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "b18d3b67"
+    sha1: "3f48ef0eca607855d7872796ba886d7889451fad"
+    found_by: content
+    note: "Identified as KS ROM v3.2.3 (A1200), ROM id 333."
+    source_ref: "source src/rommgr.cpp:312-313"
+
+  - name: "KS ROM v3.2.3 (A3000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "74c0b23f"
+    sha1: "76222baa6d5654dbba4a769bb86c1f39322d1c1c"
+    found_by: content
+    note: "Identified as KS ROM v3.2.3 (A3000), ROM id 334."
+    source_ref: "source src/rommgr.cpp:314-315"
+
+  - name: "KS ROM v3.2.3 (A4000).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "b6a4698e"
+    sha1: "81902f41cbf6fc6b7d18c691a4ada6245d174bde"
+    found_by: content
+    note: "Identified as KS ROM v3.2.3 (A4000), ROM id 335."
+    source_ref: "source src/rommgr.cpp:316-317"
+
+  - name: "KS ROM v3.2.3 (A4000T).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "588a5e6d"
+    sha1: "8eeb6c2b282e589bd1589ebba3a78a41722499ec"
+    found_by: content
+    note: "Identified as KS ROM v3.2.3 (A4000T), ROM id 336."
+    source_ref: "source src/rommgr.cpp:318-319"
+
+  - name: "KS ROM v3.2.3 (A500/A600/A2000/A1000/CDTV).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "e1f50b0b"
+    sha1: "a9d51491d4b1356673621b61f789aed979bd01be"
+    found_by: content
+    note: "Identified as KS ROM v3.2.3 (A500/A600/A2000/A1000/CDTV), ROM id 337."
+    source_ref: "source src/rommgr.cpp:320-321"
+
+  - name: "KS ROM v3.2 (Walker).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "261339f8"
+    sha1: "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
+    found_by: content
+    note: "Identified as KS ROM v3.2 (Walker), ROM id 296."
+    source_ref: "source src/rommgr.cpp:323-324"
+
+  - name: "Casablanca 74095 - 00 717 - 02.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 1048576
+    crc32: "2ec384e3"
+    sha1: "47f9ee6d0f8ac5a65c6eddc30bcd47c8574d8725"
+    found_by: content
+    note: "Identified as Casablanca 74095 - 00 717 - 02, ROM id 231."
+    source_ref: "source src/rommgr.cpp:325-326"
+
+  - name: "A1000 bootstrap ROM.rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 65536
+    crc32: "0b1ad2d0"
+    sha1: "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
+    found_by: content
+    note: "Identified as A1000 bootstrap ROM, ROM id 24."
+    source_ref: "source src/rommgr.cpp:372-373, source src/cfgfile.cpp:10227"
+
+  - name: "The Diagnostic 2.0 (Logica).rom"
+    mode: standalone
+    system: commodore-amiga
+    required: false
+    size: 524288
+    crc32: "8484f426"
+    sha1: "ba10d16166b2e2d6177c979c99edf8462b21651e"
+    found_by: content
+    note: "Identified as The Diagnostic 2.0 (Logica), ROM id 72."
+    source_ref: "source src/rommgr.cpp:378-379"
 
   # --- CD32 and CDTV ROMs found by the standalone ROM scan ---
   # configure_rom() writes a CD32 Kickstart to the Kickstart setting and a

@@ -3581,6 +3581,50 @@ def declared_root(config: dict) -> str:
     return root if count / len(roots) > 0.9 else ""
 
 
+def platform_declared_contents(config: dict, db: dict) -> dict[str, set[str]]:
+    """The folders each declared file's content sits in, keyed by its hashes.
+
+    A core that scans a folder and identifies a ROM by its checksum reads a
+    declared file whatever its name: RetroDECK lists atari800's Atari BASIC
+    Rev A as ROM_BASIC_A, and the core takes it by CRC32. Keys are
+    "md5:", "sha1:" and "crc32:" values of the database file the
+    declaration resolves to, each with the declared slot's folder.
+    """
+    prefix = declared_root(config).lower()
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    files_db = db.get("files", {})
+    contents: dict[str, set[str]] = {}
+    for system in config.get("systems", {}).values():
+        for fe in system.get("files", []):
+            if fe.get("zipped_file"):
+                continue
+            record = files_db.get((fe.get("sha1") or "").lower())
+            md5 = (fe.get("md5") or "").lower()
+            if record is None and md5 and "," not in md5:
+                sha1 = by_md5.get(md5, "")
+                record = files_db.get(sha1[0] if isinstance(sha1, list) else sha1)
+            if not record:
+                continue
+            slot = sanitize_pack_path(fe.get("destination") or fe.get("name", "")).lower()
+            if prefix and slot.startswith(prefix + "/"):
+                slot = slot[len(prefix) + 1:]
+            folder = slot.rpartition("/")[0]
+            for field in ("md5", "sha1", "crc32"):
+                value = str(record.get(field) or "").lower()
+                if value:
+                    contents.setdefault(f"{field}:{value}", set()).add(folder)
+    return contents
+
+
+def merged_platform_declared_contents(configs: list[dict], db: dict) -> dict[str, set[str]]:
+    """`platform_declared_contents` of several platforms, one index."""
+    merged: dict[str, set[str]] = {}
+    for config in configs:
+        for key, folders in platform_declared_contents(config, db).items():
+            merged.setdefault(key, set()).update(folders)
+    return merged
+
+
 def merged_platform_declarations(
     configs: list[dict], db: dict
 ) -> dict[str, list[tuple[int | None, str]]]:
