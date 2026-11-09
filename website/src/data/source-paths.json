@@ -676,7 +676,7 @@
   "src/video/video.cpp",
   "src/video/video.h"
  ],
- "github.com/DirtBagXon/model3emu-code-sinden@11726c4bad3696a50a8b834eaba6aee3fa08a590": [
+ "github.com/DirtBagXon/model3emu-code-sinden@03318d26826e725338576a74945b3ea3fc7ebe5c": [
   "Config/Games.xml",
   "Src/GameLoader.cpp",
   "Src/OSD/SDL/Crosshair.cpp",
@@ -685,7 +685,7 @@
   "Src/Pro1000/Pro1000.cpp",
   "Src/Pro1000/SyntheticSCSIROM.cpp",
   "Src/Sound/MPEG/MpegAudio.cpp",
-  "Src/Version.h"
+  "Src/Version.cpp"
  ],
  "github.com/DrGlaucous/doukutsu-rs-nm@51e64c2e9615bcd476034c69b58927877fe73494": [
   "Cargo.toml",
@@ -2793,7 +2793,7 @@
   "Source/zx81/zx81.cpp",
   "Source/zx81config.cpp"
  ],
- "github.com/chernandezba/zesarux@fd354296d851edc24ad1411b8f9342a66d07d460": [
+ "github.com/chernandezba/zesarux@9977a8aeccc6eaeea3de4515d841454710a151f3": [
   "src/ALTERNATEROMS",
   "src/configure",
   "src/copy_interfaces/defcon.c",
@@ -3494,7 +3494,7 @@
   "src/ui/storage.rs",
   "src/ui/video.rs"
  ],
- "github.com/habib256/pom2@de86e8e35df96fe6ffced56dfb727bbd567f8568": [
+ "github.com/habib256/pom2@06dd03a08674c67fda3e8d44d314aeeda04fda19": [
   "CMakeLists.txt",
   "packaging/bundle.manifest",
   "packaging/fujinet/stage.py",
@@ -3549,6 +3549,7 @@
   "src/WorkstationCard.cpp",
   "src/main.cpp",
   "src/pom2_headless.cpp",
+  "tools/install_drive_extras.py",
   "wasm/shell.html"
  ],
  "github.com/has207/xenia-edge@07021f019cf55105bc26c0474e0b0835808353e2": [
@@ -6683,7 +6684,8 @@
   "src/launcher.cpp",
   "src/main.cpp",
   "src/parsing/textfile.cpp",
-  "src/platforms/engineutils.cpp"
+  "src/platforms/engineutils.cpp",
+  "tools/errorgen"
  ],
  "github.com/linappleii/linapple@7f4b60898d91bfecd6f4d8683a374f38b0564962": [
   "CMakeLists.txt",
@@ -9622,8 +9624,6 @@
   "Src/OSD/Unix/FileSystemPath.cpp",
   "Src/OSD/Windows/FileSystemPath.cpp",
   "Src/OSD/Windows/wnaspi32/wnaspi32.cpp",
-  "Src/Pro1000/Pro1000.cpp",
-  "Src/Pro1000/SyntheticSCSIROM.cpp",
   "Src/Sound/MPEG/MpegAudio.cpp",
   "Src/Version.h"
  ],
@@ -9644,6 +9644,17 @@
   "Src/Pro1000/SyntheticSCSIROM.cpp",
   "Src/Sound/MPEG/MpegAudio.cpp",
   "Src/Version.h"
+ ],
+ "github.com/trzy/Supermodel@efbdc866fcddc9bff23da00b1722d17e52115567": [
+  "Config/Games.xml",
+  "Src/GameLoader.cpp",
+  "Src/OSD/SDL/Crosshair.cpp",
+  "Src/OSD/SDL/Main.cpp",
+  "Src/OSD/Unix/FileSystemPath.cpp",
+  "Src/Pro1000/Pro1000.cpp",
+  "Src/Pro1000/SyntheticSCSIROM.cpp",
+  "Src/Sound/MPEG/MpegAudio.cpp",
+  "Src/Version.cpp"
  ],
  "github.com/usineur/hode@59f3c466923c6b8d49e29176ff697a91165e7efc": [
   "CMakeLists.txt",
