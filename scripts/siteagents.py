@@ -131,7 +131,7 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         f"With Python 3.8 or newer, the installer is also a package: `{UVX} --for-games "
         f"--required-only --dry-run`, or `pipx run retrobios` with the same options.",
         "",
-        "1. Plan: add `--dry-run --events`. Nothing is written, and standard output carries "
+        "1. Plan: run it with `--dry-run --events`. Nothing is written, and standard output carries "
         f"one JSON object per line, event schema {EVENT_SCHEMA} "
         f"([JSON Schema]({SITE}{EVENTS_SCHEMA_PATH})): a `file` event per file with its "
         "`state`, `check` with the totals and `bytes_needed`, then `summary` with `pending`.",
@@ -140,7 +140,8 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "",
         "- `--yes` asks nothing: use it in a run without a terminal. A run that needs an "
         "answer (two setups found, none found) stops and names the option to give.",
-        "- The exit code, also the `code` of the last `end` event:",
+        "- The exit code, also the `code` of the last `end` event. An option refused at once "
+        "writes no event at all:",
         *(f"  - `{code}`: {meaning}" for code, meaning in EXIT_CODES),
         "",
         "## Start",
