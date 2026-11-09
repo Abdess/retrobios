@@ -308,6 +308,30 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
     if not links:
         raise mk.missing(f"ln -s of {BIOS_ROOT}")
     records.extend(link_record("amiberry", mk, link) for link in links)
+    # The script copies the installed folder, links included, to the one it
+    # enters before it runs amiberry: the kickstarts link is read there.
+    copy_line, copy = script.find(r"cp -rf? (\S+) \$\{?(\w+)\}?\s*$", "copy of the installed folder")
+    cd_line, cd = script.find(r"^\s*cd \$\{?(\w+)\}?\s*$", "working directory")
+    if cd.group(1) != copy.group(2):
+        raise LauncherPatternMissing(script.path, "cd into the copied folder")
+    entered: set[int] = {cd_line}
+    folder = script.expand("${" + cd.group(1) + "}", cd_line, entered)
+    records.append(Launcher(
+        emulator="amiberry", build="standalone", kind="passes_path", names=[],
+        source_ref=source_ref([(script.path, entered)]),
+        search_dir=folder, passes_to=f"working directory of {script.path.rsplit('/', 1)[-1]}",
+    ))
+    installed = copy.group(1).rstrip("/")
+    for link in links:
+        if not link.link.startswith(installed + "/"):
+            continue
+        copied = folder + link.link[len(installed):]
+        records.append(Launcher(
+            emulator="amiberry", build="standalone", kind="links", names=list(link.names),
+            source_ref=source_ref([(mk.path, link.lines), (script.path, {copy_line} | entered)]),
+            search_dir=link.bios_side,
+            passes_to=f"symlink {copied} -> {link.target}, copied with {installed}",
+        ))
     return records
 
 

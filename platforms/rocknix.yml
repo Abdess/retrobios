@@ -492,6 +492,26 @@ launchers:
   passes_to: symlink /usr/config/amiberry/kickstarts -> /storage/roms/bios
   fails_when_missing: false
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/package.mk:36"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/.config/amiberry
+  passes_to: working directory of start_amiberry.sh
+  fails_when_missing: false
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:12,\
+    \ 51"
+- emulator: amiberry
+  build: standalone
+  kind: links
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: symlink /storage/.config/amiberry/kickstarts -> /storage/roms/bios, copied
+    with /usr/config/amiberry
+  fails_when_missing: false
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/package.mk:36,\
+    \ projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:12,\
+    \ 30, 51"
 - emulator: hatari
   build: standalone
   kind: fixed_name

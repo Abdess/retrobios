@@ -3180,6 +3180,17 @@ def resolve_platform_cores(
     """
     cores_config = config.get("cores")
     platform_key = str(config.get("_key") or "")
+    # The names a build the platform compiles itself answers to: there the
+    # name means that build, and a standalone + libretro profile of another
+    # revision under the same name is not what the platform runs (ROCKNIX's
+    # amiberry is 5.6.5). A libretro-only profile of the name stays: RetroPie
+    # builds minivmac37 standalone beside the minivmac core.
+    own_names = {
+        n
+        for name, p in profiles.items()
+        if platform_key and platform_key in (p.get("built_by") or [])
+        for n in (name, *(str(c) for c in p.get("cores") or []))
+    }
 
     def every_libretro() -> set[str]:
         # A build only some platforms compile (built_by) is absent from the
@@ -3193,6 +3204,11 @@ def resolve_platform_cores(
             and (
                 not p.get("built_by")
                 or (platform_key and platform_key in p["built_by"])
+            )
+            and (
+                platform_key in (p.get("built_by") or [])
+                or "standalone" not in p.get("type", "")
+                or not own_names & {name, *(str(c) for c in p.get("cores") or [])}
             )
         }
 

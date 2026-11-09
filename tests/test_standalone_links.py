@@ -652,3 +652,48 @@ class AmiberryOnEachPlatform(unittest.TestCase):
                 with self.subTest(platform=platform, name=entry["name"]):
                     self.assertEqual(entry["standalone_path"], f"amiga/{layout}")
                     self.assertNotIn("/", layout.removeprefix("mt32-roms/"))
+
+
+class AmiberryBuildEachPlatformShips(unittest.TestCase):
+    """ROCKNIX, AmberELEC and EmuELEC compile older Amiberry revisions: on each
+    the name amiberry is that build, never the 8.5.0 profile."""
+
+    OWN = {"rocknix": "amiberry-5.6.5", "amberelec": "amiberry-7.1.1", "emuelec": "amiberry-8.0.0"}
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+
+    def resolved(self, platform: str) -> set[str]:
+        from common import resolve_platform_cores
+
+        cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+        return {p for p in resolve_platform_cores(cfg, self.profiles) if p.startswith("amiberry")}
+
+    def test_each_platform_resolves_its_own_build(self) -> None:
+        for platform, own in self.OWN.items():
+            with self.subTest(platform=platform):
+                self.assertEqual(self.resolved(platform), {own})
+
+    def test_the_others_keep_the_main_profile(self) -> None:
+        for platform in ("batocera", "knulli", "retrobat", "retropie", "recalbox"):
+            with self.subTest(platform=platform):
+                self.assertEqual(self.resolved(platform), {"amiberry"})
+
+    def test_rocknix_reads_kickstarts_through_the_copied_link(self) -> None:
+        # amiberry 5.6.5 reads <cwd>/kickstarts. ROCKNIX runs it in
+        # /storage/.config/amiberry, the copy of /usr/config/amiberry whose
+        # kickstarts link points at the BIOS root.
+        profile = self.profiles["amiberry-5.6.5"]
+        cfg = load_platform_config("rocknix", str(REPO_ROOT / "platforms"))
+        self.assertEqual(
+            standalone_bindings_for("amiberry-5.6.5", profile, standalone_set(cfg)),
+            {"kickstarts": ("", "")},
+        )
+        ((view, _standalone),) = platform_layouts("amiberry-5.6.5", profile, standalone_set(cfg))
+        for entry in view["files"]:
+            with self.subTest(name=entry["name"]):
+                if entry["path"].startswith("kickstarts/"):
+                    self.assertEqual(entry["standalone_path"], entry["path"][len("kickstarts/"):])
+                else:
+                    self.assertEqual(entry.get("unplaced"), "outside_bios_folder")

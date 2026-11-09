@@ -143,6 +143,11 @@ AMIBERRY_SH = text(
       fi
       sed -i "s#@BIOS_PATH@#${BIOS_PATH}#g" ${AMIBERRY_TMP_CONFIG}
     }
+    if [ ! -d "${AMIBERRY_DIR}" ]
+    then
+      cp -rf /usr/config/amiberry ${AMIBERRY_DIR}
+    fi
+    cd ${AMIBERRY_DIR}
 """
 )
 
@@ -405,7 +410,7 @@ class NamesTheConfigsFix(unittest.TestCase):
                 f"{pkg}/config/conf/AmigaA500-default.uae": uae.format("kick34005.A500.rom"),
             }
         )
-        a1200, a500, link = (r.entry() for r in rl.amiberry(tree))
+        a1200, a500, link, entered, copied = (r.entry() for r in rl.amiberry(tree))
         self.assertEqual((a1200["slot"], a1200["names"]), ("A1200", ["kick40068.A1200.rom"]))
         self.assertEqual(a1200["depends_on_option"], "game name matches AGA|CD32")
         self.assertEqual((a500["slot"], a500["names"]), ("A500", ["kick34005.A500.rom"]))
@@ -420,6 +425,21 @@ class NamesTheConfigsFix(unittest.TestCase):
             link["passes_to"], "symlink /usr/config/amiberry/kickstarts -> /storage/roms/bios"
         )
         self.assertEqual(link["source_ref"], f"{pkg}/package.mk:4")
+        # The script runs amiberry in the copy of /usr/config/amiberry, which
+        # carries the kickstarts link.
+        self.assertEqual(
+            (entered["kind"], entered["search_dir"], entered["passes_to"]),
+            ("passes_path", "/storage/.config/amiberry", "working directory of start_amiberry.sh"),
+        )
+        self.assertEqual(entered["source_ref"], f"{pkg}/scripts/start_amiberry.sh:1, 16")
+        self.assertEqual(
+            copied["passes_to"],
+            "symlink /storage/.config/amiberry/kickstarts -> /storage/roms/bios,"
+            " copied with /usr/config/amiberry",
+        )
+        self.assertEqual(
+            copied["source_ref"], f"{pkg}/package.mk:4, {pkg}/scripts/start_amiberry.sh:1, 14-16"
+        )
 
     def test_mednafen_one_record_per_module(self):
         pkg = f"{SA}/mednafen"
