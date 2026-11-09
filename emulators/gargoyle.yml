@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/garglk/garglk"
 upstream: "https://github.com/garglk/garglk"
 profiled_date: "2026-08-08"
-source_commit: "9e06211c20bee35026744424a57f50375cdc29db"
+source_commit: "f15b43dc9448ac14480310a64301bf859faf999d"
 core_version: "2026.1"
 version_basis:
   kind: file
@@ -76,7 +76,7 @@ notes: |
   in Resources/Fonts and Unifont in Resources, and the Windows installer also
   registers the eight faces as system fonts.
   ref: garglk/sysqt.cpp:960-1004, garglk/sysmac.mm:1013-1030, garglk/CMakeLists.txt:137,145,
-       510-534, gargoyle_osx.sh:124-125,211-213, installer.nsi:89-90,208-215
+       519-543, gargoyle_osx.sh:124-125,211-213, installer.nsi:89-90,208-215
 
   Themes are read from every *.json in the theme directories, which are the
   Qt application data locations plus the executable directory on Windows and
@@ -96,7 +96,7 @@ notes: |
   garglk.ini or the build hardcodes one, and the fallback is whatever
   FluidSynth reports as its own default.
   ref: garglk/config.cpp:294-298,864-872, garglk/snddecode.cpp:373-395,
-       garglk/CMakeLists.txt:58 (DEFAULT_SOUNDFONT), INSTALL.md:153-157
+       garglk/CMakeLists.txt:58 (DEFAULT_SOUNDFONT), INSTALL.md:155-159
 
   Story files are content. Formats that carry companion data read it from the
   story file's own name or directory, so it travels with the game: Level 9
@@ -105,7 +105,7 @@ notes: |
   sides the Scott Adams, Plus and TaylorMade interpreters read from C64,
   Atari 8-bit and Apple II images.
   ref: terps/level9/Glk/glk.c:6415-6450, terps/magnetic/Glk/glk.c:5758-5855,
-       terps/CMakeLists.txt:69,73,359,469,565 (c64diskimage, unp64)
+       terps/CMakeLists.txt:69,73,376,527,625 (c64diskimage, unp64)
 
 exclusion_note: >
   TADS character mapping files are not loaded by this build. The Glk port
@@ -115,7 +115,7 @@ exclusion_note: >
   with -ctab. The agil.cfg read by AGiliTy lives in os_dos.c and os_dos16.c,
   while the build compiles os_glk.c.
   ref: terps/tads/glk/osmisc.c:69-72,316-334, terps/tads/tads2/cmap.c:290-315,
-  terps/tads/tads2/trd.c:513-517, terps/CMakeLists.txt:111-119
+  terps/tads/tads2/trd.c:513-517, terps/CMakeLists.txt:126-134
 
 files:
   # -- Text fonts, data directory root --
@@ -226,7 +226,7 @@ files:
     size: 358
     sha1: "6b47d1e68e79c258d8b733d0525beee7e567a776"
     md5: "4a2fc2266fb1c4139617e88722b5c6f9"
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:564"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:573"
 
   - name: "Breeze Darker.json"
     path: "themes/Breeze Darker.json"
@@ -236,7 +236,7 @@ files:
     size: 367
     sha1: "6c389838c66c13397cc3c7096b31fca994bbb34c"
     md5: "597f5b89772b9660d732a5122d159d6b"
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:565"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:574"
 
   - name: "Lectrote Dark.json"
     path: "themes/Lectrote Dark.json"
@@ -246,7 +246,7 @@ files:
     size: 474
     sha1: "225049ddfa6ce2c4b7198ca6c889c81d65b7946f"
     md5: "83b81c33ec97dbc100c850de7b04a694"
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:566"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:575"
 
   - name: "Lectrote Sepia.json"
     path: "themes/Lectrote Sepia.json"
@@ -256,7 +256,7 @@ files:
     size: 474
     sha1: "813f91ff7f0a0b95fcd37e541414cdc29bbc2968"
     md5: "d766895891ccec110e15a044af6194c7"
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:567"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:576"
 
   - name: "Lectrote Slate.json"
     path: "themes/Lectrote Slate.json"
@@ -266,7 +266,7 @@ files:
     size: 474
     sha1: "8032208eab8f10874f448c39bdc5a85b83d539b3"
     md5: "3a06a19b8441d931ddef2359116e405a"
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:568"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:577"
 
   - name: "Pencil.json"
     path: "themes/Pencil.json"
@@ -276,7 +276,7 @@ files:
     size: 360
     sha1: "976b37a0451fb3cbed9a85ccf3c242ae768a4bc5"
     md5: "6e1743b8b40eaf3a85015013dcea7701"
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:569"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:578"
 
   - name: "Zoom.json"
     path: "themes/Zoom.json"
@@ -286,7 +286,7 @@ files:
     size: 358
     sha1: "d312b25c5f3a92178a185de122aeb222a32d4096"
     md5: "641c88ce7f5e1a9a7ac4c18b90a9f38d"
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:570"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:579"
 
   - name: "dark.json"
     path: "themes/dark.json"
@@ -296,7 +296,7 @@ files:
     size: 358
     sha1: "3757750cd3052b8d23f379aba22d7ee3d9353bc9"
     md5: "2614becc041fc813cf87397aa47e8210"
-    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:81-86, garglk/CMakeLists.txt:571"
+    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:81-86, garglk/CMakeLists.txt:580"
     note: "Also compiled in as the built-in dark theme."
 
   - name: "light.json"
@@ -307,5 +307,5 @@ files:
     size: 412
     sha1: "049412d56a41865539faadcd86408d5107a1dbef"
     md5: "37c78cb6e0105b946627038dcbfc8c64"
-    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:88-93, garglk/CMakeLists.txt:572"
+    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:88-93, garglk/CMakeLists.txt:581"
     note: "Also compiled in as the built-in light theme."
