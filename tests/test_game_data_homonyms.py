@@ -207,6 +207,8 @@ class APlatformEntryTakesNoOtherEmulatorsTree(unittest.TestCase):
 
         config = load_platform_config("emuelec", str(REPO_ROOT / "platforms"))
         entry = config["systems"]["vvvvvv"]["files"][0]
+        # No image builds the VVVVVV port engine, but es_systems.json still
+        # names it for the system: its tree is the one the entry asks for.
         self.assertEqual(entry["platform_cores"], ["VVVVVV"])
         db = load_database(str(REPO_ROOT / "database.json"))
         path, _status = resolve_local_file(

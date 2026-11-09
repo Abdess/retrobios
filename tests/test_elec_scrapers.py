@@ -302,6 +302,7 @@ class TheCommittedListsAgree(unittest.TestCase):
                 listed = {str(c) for s in config["systems"].values() for c in s.get("cores", [])}
                 self.assertTrue(listed, "no system carries its cores")
                 self.assertEqual(listed - platform - (listed - built), set())
+                self.assertEqual(platform - built - {"lexaloffle", "mpv", "vox_official"}, set())
 
 
 if __name__ == "__main__":
