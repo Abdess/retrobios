@@ -633,7 +633,7 @@ files:
     required: true
     bundled: true
     description: "Fragment shader of the pen program"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:288, src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:299, src/emu/drivers/src/graphics/backend/ogl/shader_ogl.cpp:184-189"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:287-288, src/emu/drivers/src/graphics/backend/ogl/shader_ogl.cpp:184-189"
 
   - name: 2xBR.frag
     size: 2457
