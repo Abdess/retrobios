@@ -57,7 +57,8 @@ NAMED_FOR_A_LAUNCHER = {
 # Profiles whose entries still rest on a launcher, with the fact that blocks
 # reading the emulator itself.
 LAUNCHER_SOURCED = {
-    "lexaloffle": "PICO-8 and Voxatron are sold binaries, and no copy of either is held to read",
+    "lexaloffle": "PICO-8 is a sold binary, and no copy is held to read",
+    "voxatron": "Voxatron is a sold binary, and no copy is held to read",
 }
 
 _SENTENCE = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9(\"'])")

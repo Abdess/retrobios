@@ -12,30 +12,30 @@ version_basis:
 version_source:
   url: "https://www.lexaloffle.com/dl/docs/pico-8_changelog.txt"
   pattern: '^\s*v(0\.\d+\.\d+[a-z]?)\s*$'
-display_name: "Lexaloffle - PICO-8 / Voxatron"
+display_name: "Lexaloffle - PICO-8"
 cores:
   - lexaloffle
   - "pico-8"
-  - vox_official
   - "pico8"
   - "Pico-8"
   - "pico_standalone"
   - "float-scaled"
 systems:
   - pico8
-  - voxatron
 standalone_directories:
   - "executable directory"
 
 notes: |
-  Commercial fantasy consoles by Lexaloffle Games LLP, sold as ZIP archives
-  per platform. Nothing in either program checks a hash of its own files:
-  the hashes below are those of the files in the official 0.2.7 archives.
+  Commercial fantasy console by Lexaloffle Games LLP, sold as ZIP archives
+  per platform. Nothing in the program checks a hash of its own files: the
+  hashes below are those of the files in the official 0.2.7 archives.
+  Voxatron, the same publisher's other program, is profiled apart
+  (voxatron.yml).
 
-  Each program finds its own folder through /proc/self/exe and reads its
+  The program finds its own folder through /proc/self/exe and reads its
   .dat beside itself. The paths below are the layout of the archives, whose
-  top folders are pico-8/ and voxatron/: a launcher that runs one of these
-  files from a folder places the program folder there.
+  top folder is pico-8/: a launcher that runs one of these files from a
+  folder places the program folder there.
 
   PICO-8 0.2.7 ships five archives. pico-8_0.2.7_amd64.zip holds pico8
   (x86_64, SDL2 linked in) and pico8_dyn (x86_64, system libSDL2).
@@ -82,11 +82,6 @@ notes: |
   - ES-DE es_find_rules.xml looks for pico8_64 under ~/Applications/pico-8
     and three other home folders on linuxarm, pico8 on linux and unix, and
     pico8.exe on Windows.
-
-  Voxatron: Batocera's generator runs bios/voxatron/vox with
-  LD_LIBRARY_PATH set to bios/voxatron. x86_64 only. vox_dyn is the
-  variant linked against the system SDL2. libHoloPlayCore.so is the Looking
-  Glass SDK the binary links against.
 
 files:
   # -------------------------------------------------------
@@ -234,79 +229,3 @@ files:
     description: "SPLORE favourites list"
     source_ref: "pico-8 0.2.7 amd64 pico8, string favourites.txt at 0x242346"
     note: "Read from the -home folder. The bbs/<listing>.pip.png images beside it are downloaded from the BBS."
-
-  # -------------------------------------------------------
-  # Voxatron
-  # -------------------------------------------------------
-  - name: vox
-    path: voxatron/vox
-    system: voxatron
-    required: true
-    description: "Voxatron main executable"
-    source_ref: "batocera lexaloffleGenerator.py:20, 42, 48-52"
-    note: "The Voxatron program vox, an x86_64 ELF with SDL2 linked in. Batocera's generator runs bios/voxatron/vox and raises when it is missing or not executable."
-
-  - name: vox_dyn
-    path: voxatron/vox_dyn
-    system: voxatron
-    required: false
-    description: "Voxatron dynamically linked executable"
-    source_ref: "voxatron vox_dyn, NEEDED libSDL2-2.0.so.0, batocera lexaloffleGenerator.py:20, 42"
-    note: "The same program linked against the system SDL2 (its only extra NEEDED library). Batocera's generator never runs it."
-
-  - name: vox.dat
-    path: voxatron/vox.dat
-    system: voxatron
-    required: true
-    description: "Voxatron data file"
-    source_ref: "voxatron vox, string vox.dat at 0x2a58f, voxatron vox_dyn, string vox.dat at 0x1f1af"
-    note: "Opened from the folder of the binary that runs. Absent, vox stops with \"FATAL ERROR: could not load vox.dat\"."
-
-  - name: libHoloPlayCore.so
-    path: voxatron/libHoloPlayCore.so
-    system: voxatron
-    required: false
-    description: "Looking Glass holographic display support library"
-    source_ref: "voxatron vox, voxatron vox_dyn, batocera lexaloffleGenerator.py:41, 87-90"
-    note: "Neither binary links it or names it, and neither opens it in a run (strace, with and without the file). Batocera's generator sets LD_LIBRARY_PATH to bios/voxatron, where it keeps the library."
-
-  - name: config.txt
-    unsourceable: "written by the emulator on exit, no canonical file"
-    system: voxatron
-    required: false
-    description: "Voxatron settings"
-    source_ref: "voxatron vox, string config.txt at 0x27bea0"
-    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, and written there when absent."
-
-  - name: sdl_controllers.txt
-    unsourceable: "user supplied, no canonical file"
-    system: voxatron
-    required: false
-    description: "Custom SDL controller mappings"
-    source_ref: "voxatron vox, string sdl_controllers.txt at 0x2847f7"
-    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, where Voxatron writes it when absent."
-
-  - name: favourites.txt
-    unsourceable: "written by the emulator, no canonical file"
-    system: voxatron
-    required: false
-    description: "Cart browser favourites list"
-    source_ref: "voxatron vox, string favourites.txt at 0x27a39e"
-    note: "Read from ~/.lexaloffle/Voxatron."
-
-  - name: internal_carts.txt
-    unsourceable: "written by the emulator, no canonical file"
-    system: voxatron
-    required: false
-    description: "Voxatron internal cart list"
-    source_ref: "voxatron vox, string internal_carts.txt at 0x27a446"
-    note: "Read from ~/.lexaloffle/Voxatron and written there at startup."
-
-  - name: player_1.vpp
-    path: player/player_1.vpp
-    unsourceable: "written by the emulator, no canonical file"
-    system: voxatron
-    required: false
-    description: "Voxatron player profile"
-    source_ref: "voxatron vox, string player/player_%d.vpp at 0x273f90"
-    note: "Read from ~/.lexaloffle/Voxatron/player, and written there when absent."

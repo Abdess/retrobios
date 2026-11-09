@@ -2997,7 +2997,12 @@ def resolve_platform_cores(
     if cores_config == "all_libretro":
         result = every_libretro()
     elif isinstance(cores_config, list):
-        core_set = {str(c) for c in cores_config}
+        # An emulator the platform launches standalone runs there even when
+        # its own list names only the cores: Batocera's es_systems.yml files
+        # lexaloffle and gsplus as standalone emulators and nowhere else.
+        core_set = {str(c) for c in cores_config} | {
+            str(c) for c in config.get("standalone_cores") or []
+        }
         index = upstream_profile_index(profiles)
         platform = str(config.get("_key") or "")
 

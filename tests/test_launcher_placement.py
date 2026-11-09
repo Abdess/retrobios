@@ -364,5 +364,33 @@ class AProgramRunFromItsFolder(unittest.TestCase):
             install._check_roms_directory({"files": files})
 
 
+class EachProgramItsOwnProfile(unittest.TestCase):
+    """PICO-8 and Voxatron are two programs: a platform running one gets its files only."""
+
+    def test_only_the_platforms_that_run_voxatron_get_it(self) -> None:
+        from common import list_registered_platforms, resolve_platform_cores
+
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        runs = {
+            name: {k for k in ("lexaloffle", "voxatron")
+                   if k in resolve_platform_cores(
+                       load_platform_config(name, str(REPO_ROOT / "platforms")), profiles)}
+            for name in list_registered_platforms(str(REPO_ROOT / "platforms"))
+        }
+        self.assertEqual(
+            {name for name, found in runs.items() if "voxatron" in found}, {"batocera", "knulli"}
+        )
+        self.assertTrue(all("lexaloffle" in runs[name] for name in (
+            "batocera", "knulli", "rocknix", "retrodeck", "retrobat", "recalbox")))
+
+    def test_a_standalone_emulator_is_run(self) -> None:
+        from common import resolve_platform_cores
+
+        profiles = {"emu": {"emulator": "Emu", "type": "standalone", "cores": ["emu"],
+                            "systems": ["sys"], "files": []}}
+        config = {"cores": ["other"], "standalone_cores": ["emu"], "systems": {}}
+        self.assertEqual(resolve_platform_cores(config, profiles), {"emu"})
+
+
 if __name__ == "__main__":
     unittest.main()
