@@ -109,30 +109,34 @@ files:
     system: commodore-amiga
     required: true
     size: 262144
+    crc32: "c4f0f55f"
     note: "A500 Kickstart v1.3 rev 34.005, default for A500 model"
-    source_ref: "source libretro/libretro.cpp:1818 (candidates_a500)"
+    source_ref: "source libretro/libretro.cpp:1818 (candidates_a500), source src/rommgr.cpp:161-162"
 
   - name: kick12.rom
     system: commodore-amiga
     required: false
     size: 262144
+    crc32: "a6ce1636"
     note: "A500 Kickstart v1.2 rev 33.180, for A500OG model"
-    source_ref: "source libretro/libretro.cpp:1817 (candidates_a500og)"
+    source_ref: "source libretro/libretro.cpp:1817 (candidates_a500og), source src/rommgr.cpp:159-160"
 
   - name: kick20.rom
     system: commodore-amiga
     required: false
     size: 524288
     aliases: [kick204.rom]
+    crc32: "c3bdb240"
     note: "A500+ Kickstart v2.04 rev 37.175"
-    source_ref: "source libretro/libretro.cpp:1819 (candidates_a500p)"
+    source_ref: "source libretro/libretro.cpp:1819 (candidates_a500p), source src/rommgr.cpp:169-170"
 
   - name: kick205.rom
     system: commodore-amiga
     required: false
     size: 524288
+    crc32: "43b0df7b"
     note: "A600 Kickstart v2.05 rev 37.350, also used for WHDLoad"
-    source_ref: "source libretro/libretro.cpp:1820 (candidates_a600)"
+    source_ref: "source libretro/libretro.cpp:1820 (candidates_a600), source src/rommgr.cpp:175-176"
 
   - name: kick31.rom
     system: commodore-amiga
@@ -145,15 +149,17 @@ files:
     system: commodore-amiga
     required: false
     size: 524288
+    crc32: "1483a091"
     note: "A1200 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "source libretro/libretro.cpp:775 (option label), source libretro/libretro.cpp:1821 (candidates_a1200)"
+    source_ref: "source libretro/libretro.cpp:775 (option label), source libretro/libretro.cpp:1821 (candidates_a1200), source src/rommgr.cpp:196-197"
 
   - name: kick40068.A4000
     system: commodore-amiga
     required: false
     size: 524288
+    crc32: "d6bae334"
     note: "A4000 Kickstart v3.1 rev 40.68, fallback after kick31.rom"
-    source_ref: "source libretro/libretro.cpp:776 (option label), source libretro/libretro.cpp:1822 (candidates_a4000)"
+    source_ref: "source libretro/libretro.cpp:776 (option label), source libretro/libretro.cpp:1822 (candidates_a4000), source src/rommgr.cpp:206-207"
 
   - name: kick.rom
     system: commodore-amiga
@@ -165,35 +171,42 @@ files:
 
   - name: cd32.rom
     system: commodore-cd32
+    min_size: 524288
+    max_size: 1048576
     required: false
-    size: 524288
     aliases: [amiga-os-310-cd32.rom, kick40060.CD32]
+    crc32: ["1e62d4a5", "f5d4f3c8"]
     note: "CD32 Kickstart v3.1 rev 40.60. candidates_cd32 tries cd32.rom, amiga-os-310-cd32.rom, kick40060.CD32, kick31.rom, then kick.rom."
-    source_ref: "source libretro/libretro.cpp:1823 (candidates_cd32)"
+    source_ref: "source libretro/libretro.cpp:1823 (candidates_cd32), source src/rommgr.cpp:334-335, source src/rommgr.cpp:340-341"
 
   - name: cd32ext.rom
     system: commodore-cd32
     required: false
     size: 524288
     aliases: [amiga-ext-310-cd32.rom, "CD32 Extended.ROM"]
+    crc32: "87746be2"
     note: "CD32 extended ROM rev 40.60. Not needed if using a combined 1MB ROM."
-    source_ref: "source libretro/libretro.cpp:1881 (candidates_cd32 in find_ext_rom_in_system_dir)"
+    source_ref: "source libretro/libretro.cpp:1881 (candidates_cd32 in find_ext_rom_in_system_dir), source src/rommgr.cpp:336-337"
 
   # --- CDTV ROMs ---
 
   - name: cdtv.rom
     system: commodore-cdtv
+    size: 262144
     required: false
     aliases: [kick34005.CDTV]
+    crc32: "42baa124"
     note: "CDTV extended ROM v1.00, used as kickstart candidate. candidates_cdtv tries cdtv.rom, kick34005.CDTV, kick13.rom, then kick.rom."
-    source_ref: "source libretro/libretro.cpp:1824 (candidates_cdtv)"
+    source_ref: "source libretro/libretro.cpp:1824 (candidates_cdtv), source src/rommgr.cpp:350-351"
 
   - name: cdtvext.rom
     system: commodore-cdtv
+    size: 262144
     required: false
     aliases: ["CDTV Extended.ROM"]
+    crc32: ["42baa124", "30b54232", "ceae68d2"]
     note: "CDTV extended ROM file"
-    source_ref: "source libretro/libretro.cpp:1883 (candidates_cdtv in find_ext_rom_in_system_dir)"
+    source_ref: "source libretro/libretro.cpp:1883 (candidates_cdtv in find_ext_rom_in_system_dir), source src/rommgr.cpp:350-351, source src/rommgr.cpp:354-355, source src/rommgr.cpp:358-359"
 
   # --- Kickstart ROMs found by the standalone ROM scan ---
   # The scan opens every file under the ROM path whose extension is rom, bin,
