@@ -8753,15 +8753,6 @@
    "sha256": "fa69db779e6583190e9b781404f505b9a18a39adf9c57e36186aab037f92855a",
    "size": 5174
   },
-  "3a9d881a8a8d30f55b9719aceebbcf717f829d6f": {
-   "crc32": "0bcd1e8e",
-   "left": "2026-10-20",
-   "md5": "22563ab338024dac7b03510371d49c57",
-   "name": "MouseInterface.rom",
-   "path": "bios/Other/mariani/MouseInterface.rom",
-   "sha256": "7f8e50c0e8a409991264201f9300f109b872b68e09c43f3e6c26af35fd8b89af",
-   "size": 2048
-  },
   "3abedcb7454ef76ee84b978b05e666fe12229d0a": {
    "crc32": "700cbf88",
    "left": "2026-10-20",
