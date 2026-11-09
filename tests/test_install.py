@@ -4313,9 +4313,16 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
         dirs = manifest.get("data_directories") or []
         files = sum(len(d["files"]) for d in dirs)
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import generate_pack
+
+        written = generate_pack.PACK_DOCUMENTS + generate_pack.pack_markers(
+            "retroarch", None, str(REPO_ROOT / "platforms"))
+        self.assertEqual(written, ("README.txt", "manifest.json", ".nomedia"))
         self.assertEqual(
-            manifest["pack_files"] - manifest["total_files"] - files,
-            2, "the pack's two documents are the only files the installer lacks",
+            manifest["pack_files"] - manifest["total_files"] - files, len(written),
+            "the pack's two documents and its .nomedia are the only files the "
+            "installer lacks",
         )
 
 

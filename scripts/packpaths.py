@@ -192,6 +192,23 @@ def _register_path(dest: str, seen_files: set[str], seen_parents: set[str]) -> N
     for parent in _path_parents(dest):
         seen_parents.add(parent)
 
+# Android's media scanner hides a folder holding a .nomedia file, and every
+# folder below it (MediaProvider a183e2b9, FileUtils.java:1587-1629
+# isDirectoryHidden, ModernMediaScanner.java:845-846). RetroArch writes none
+# (libretro-common/file/file_path_io.c:194 only skips one), so a pack
+# unzipped into RetroArch Android's system folder put its samples, overlays
+# and videos in the gallery and music apps.
+MEDIA_MARKER = ".nomedia"
+
+
+def lands_on_android(target_names: Iterable[str], target: str | None) -> bool:
+    """Whether a pack can be unzipped on Android: its target is an Android
+    one, or, unfiltered, the platform files one."""
+    if target:
+        return target.startswith("android")
+    return any(name.startswith("android") for name in target_names)
+
+
 def _flat(arcname: str, prefix: str, flatten: bool) -> str:
     """Strip base_destination prefix from ZIP arcname when flattening."""
     if flatten and prefix and arcname.startswith(prefix + "/"):

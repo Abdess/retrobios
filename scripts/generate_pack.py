@@ -416,6 +416,17 @@ def platform_list_version(config: dict, platform: str) -> str:
 PACK_DOCUMENTS = ("README.txt", "manifest.json")
 
 
+def pack_markers(
+    platform_name: str, target_name: str | None, platforms_dir: str
+) -> tuple[str, ...]:
+    """The empty files a pack carries for the systems it is unzipped on,
+    as named before flattening: the .nomedia of a pack for Android."""
+    from common import list_available_targets
+
+    names = [t["name"] for t in list_available_targets(platform_name, platforms_dir)]
+    return (MEDIA_MARKER,) if lands_on_android(names, target_name) else ()
+
+
 def core_data_trees(
     config: dict,
     profiles: dict[str, dict],
@@ -1477,6 +1488,10 @@ def generate_pack(
           ),
       )
       _write_generated_member(zf, "README.txt", readme_text)
+      for marker in pack_markers(platform_name, target_name, platforms_dir):
+          _write_generated_member(
+              zf, _flat(f"{base_dest}/{marker}" if base_dest else marker, base_dest, flatten), ""
+          )
 
     _report_pack_counts(
         zip_path, file_status, total_files, core_count, source,
@@ -5147,7 +5162,7 @@ def generate_manifest(
         "total_size": total_size,
         "pack_files": (
             len(manifest_files) + len(data_sizes) + len(PACK_DOCUMENTS)
-            + len(rename_notes)
+            + len(rename_notes) + len(pack_markers(platform_name, target_name, platforms_dir))
         ),
         "pack_size": total_size + sum(data_sizes),
         "total_omitted": len(omitted_by_destination),
@@ -5719,6 +5734,8 @@ def verify_and_finalize_packs(
     return all_ok
 
 from packpaths import (  # noqa: E402,F401
+    MEDIA_MARKER,
+    lands_on_android,
     _archive_destination,
     _path_parents,
     _has_path_conflict,

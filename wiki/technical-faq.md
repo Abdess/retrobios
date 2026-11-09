@@ -169,6 +169,22 @@ Running `verify.py --emulator <core> --verbose` shows the emulator-level ground 
 
 It reaches only as far as the profiles do. Files no profile states a value for are platform-only, and nothing can be said about their content. The footer of the platform report gives that ratio as `Ground truth: N/M files have emulator validation`.
 
+## Why do BIOS pictures and sounds show in a phone's gallery?
+
+Android's media scanner indexes every image, sound and video in shared
+storage, and the RetroArch BIOS folder holds 3,842 of them (FBNeo samples,
+overlays, PPSSPP assets, sdlpal's videos). An empty file named `.nomedia` in
+the BIOS folder hides it and every folder below it. The installer writes one
+on Android and the RetroArch pack carries one: see [Android](installer.md#android).
+Copied by hand without either, the folder needs that empty file created by hand.
+
+## Why were files left out on an exFAT card?
+
+FAT, exFAT and Windows refuse `< > : " | ? *` in a name, and RetroDECK's list
+names three files with a colon, like `zxs:48.rom`. The installer leaves those
+out on such a card and names them. An ext4 card holds them. See
+[Upper and lower case](installer.md#upper-and-lower-case).
+
 ## Next steps
 
 - [Reference](index.md), every reference page in one list
