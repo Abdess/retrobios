@@ -607,7 +607,7 @@ class YourSetupIndexInPlainWords(unittest.TestCase):
 class HomeCopy(unittest.TestCase):
     def test_dreamcast_and_the_check_link(self):
         home = re.sub(r"</?abbr[^>]*>", "", _page("index.md"))
-        self.assertIn("- **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.", home)
+        self.assertIn("- **Yes** for PlayStation 2 and Neo Geo.", home)
         self.assertIn("- **Better with it** for Dreamcast: some games need it.", home)
         # A question and the link that answers it: no level label, which
         # read as a broken crumb beside the Reference tab.

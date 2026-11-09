@@ -28,6 +28,7 @@ on:
       - "scripts/generate_readme.py"
       - "scripts/generate_site.py"
       - "scripts/hashing.py"
+      - "scripts/indexnow.py"
       - "scripts/largefiles.py"
       - "scripts/launchers.py"
       - "scripts/manifestselect.py"
@@ -113,6 +114,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      indexnow: ${{ steps.indexnow.outputs.payload }}
     # Node's compile cache writes under /tmp on every node run, the build
     # and the search gate alike.
     env:
@@ -185,6 +188,14 @@ jobs:
       - name: Require committed README and CONTRIBUTING to be current
         run: git diff --exit-code -- README.md CONTRIBUTING.md
 
+      # The pages whose words this deploy changes, read against the
+      # digests the live site still serves. A failure here only loses the
+      # notice: search engines find the pages on their next visit.
+      - name: List the pages this deploy changes
+        id: indexnow
+        continue-on-error: true
+        run: python scripts/indexnow.py --dist website/dist --output "$GITHUB_OUTPUT"
+
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6
 
@@ -203,3 +214,17 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1
+
+      # IndexNow: Bing, Yandex, Seznam and Naver fetch the listed pages
+      # soon after, so an assistant searching through them reads this build.
+      - name: Tell search engines which pages changed
+        if: needs.build.outputs.indexnow != ''
+        continue-on-error: true
+        env:
+          PAYLOAD: ${{ needs.build.outputs.indexnow }}
+        run: |
+          code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data "$PAYLOAD" https://api.indexnow.org/indexnow)
+          echo "IndexNow answered $code"
+          case "$code" in 200|202) ;; *) echo "::warning::IndexNow answered $code"; exit 1 ;; esac

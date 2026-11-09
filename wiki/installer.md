@@ -579,11 +579,11 @@ The same command with `--check` reads the folder and writes nothing:
 Checking existing files...
   18175 in place, 0 missing, 0 wrong copies
 
-  Everything is in place.
+  Every file on the list is in place.
 ```
 <!-- /generated: run-check -->
 
-`Everything is in place.` is said only when the data folders are complete
+`Every file on the list is in place.` is said only when the data folders are complete
 too. With the BIOS files in place and data files missing (PPSSPP's assets,
 Dolphin's `Sys`), the line counts those instead (`169 data files to fetch`),
 and `--check` exits with code 3. The files the collection does not hold are

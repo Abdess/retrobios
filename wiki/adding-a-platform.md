@@ -295,6 +295,8 @@ that text belongs in a guide field.
 
 ```yaml
     logo: https://...                # SVG or PNG for UI/docs
+    logo_flip: true                  # a raster stored bottom row first (a boot logo)
+    logo_trim: true                  # cut the plain background around the mark
     inherits_from: retroarch         # the parent, for readers: the merge reads
                                      # inherits: in the platform YAML
     case_insensitive_fs: true        # if the platform runs on case-insensitive filesystems

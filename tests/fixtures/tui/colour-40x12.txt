@@ -118,7 +118,7 @@
 === plan-in-place
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: RetroArch^[[0m
 
-^[[0;1m ^[[0;1;32mEverything is in place^[[0m
+^[[0;1m ^[[0;1;32mEvery file on the list is in place^[[0m
  BIOS folder:
    ^[[0;1m~/.config/retroarch/system^[[0m
  ^[[0;32m5 in place^[[0m, 0 missing, 0 wrong copies

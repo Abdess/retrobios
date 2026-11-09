@@ -9,9 +9,8 @@ terms: ios, iphone, ipad
 ## Are BIOS files needed? { #do-i-need-bios-files }
 
 - **Yes** for PlayStation 2 and Neo Geo.
-- **Most emulators** for PlayStation 1 and Saturn. Some start games without
-  it, with a built-in replacement.
-- **Better with it** for Dreamcast. Some games need it.
+- **Most emulators** for PlayStation 1 and Saturn.
+- **Better with it** for Dreamcast.
 - **Usually not** for NES or Super Nintendo.
 
 [What is a BIOS?](what-are-bios-files.md)
@@ -36,8 +35,8 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh -s -- --system sony-playsta
 
 ## Does the BIOS set the game's language?
 
-Rarely. It comes from the game. Some follow the console's setting, like Flycast's **Language**
-option.
+It mostly comes from the game. Some follow the console's setting, like Flycast's
+**Language** option.
 
 ## Zip or unzip? { #zip-or-unzip }
 
@@ -62,7 +61,7 @@ Game sets must match the emulator's version:
 
 ## Is the command safe? { #is-piping-the-installer-into-a-shell-safe }
 
-- It stops if the installer does not match its expected fingerprint, and
+- It stops if the installer does not match its fingerprint, and
   checks each file.
 - It fills the BIOS folder, some save folders and a games cache.
 - It never touches games or save files.
@@ -79,13 +78,13 @@ and download their files.
 
 ## Why is there no ZIP for a setup? { #why-is-there-no-zip-for-my-setup }
 
-ZIPs are made for the setups most people download. The command installs every
-file the collection holds for each setup and checks each one. `--dry-run` shows the list first.
+ZIPs are made for the setups most people download. The command installs each
+setup's listed files and checks each one. `--dry-run` shows the list first.
 
 ## Fill an SD card from a computer?
 
 The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka or
-MiSTer card. Else name the setup and its BIOS folder. For RetroArch on a Switch,
+MiSTer card. Else name its setup and BIOS folder. For RetroArch on a Switch,
 with the card in drive `E:`, run:
 
 <!-- os-tabs windows: --platform retroarch --dest E:\retroarch\cores\system -->
@@ -112,12 +111,11 @@ Fill it from a computer or point `--from-pack` at the ZIP: [Without a network](i
 
 ## Why is a file missing from the ZIP?
 
-Some come with the emulator. Others are not in the collection yet:
-[what is still missing](../gaps.md) names each one.
+Some come with the emulator. Others are still missing.
 
 ## A game shows a black screen { #my-game-shows-a-black-screen }
 
-Often a missing BIOS: [When a game does not start](troubleshooting.md).
+Maybe a missing BIOS: [When a game does not start](troubleshooting.md).
 
 ## Can an owned console's BIOS be copied? { #copy-your-own-bios }
 

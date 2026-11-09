@@ -586,7 +586,8 @@ def sample_writers(box: Sandbox) -> dict[str, Callable[[str], str]]:
             f"{list_date('retroarch')}:\n\n"
             + _fenced([_bulk_line(box)])),
         "run-check": lambda _body: _fenced(
-            _lines_from(check_run(), "Checking existing files", "  Everything is in place")),
+            _lines_from(check_run(), "Checking existing files",
+                        "  Every file on the list is in place")),
         "check-refused": lambda _body: _fenced(_refused_lines(box.small("refused"))),
         "from-run": lambda _body: _fenced(
             _lines_from(box.small("from"), "Done.", count=2)),
