@@ -92,7 +92,8 @@ class TrustItemsSayWhereItWrites(unittest.TestCase):
         self.assertIn("--restore", text)
 
     def test_home_shows_the_same_items(self):
-        home = _page("index.md")
+        # A term's first use on the page carries its gloss.
+        home = re.sub(r"</?abbr[^>]*>", "", _page("index.md"))
         for item in siteguides.TRUST_ITEMS:
             self.assertIn(f"- {item}", home)
         self.assertNotIn("only in your BIOS folder", home)
@@ -1036,7 +1037,7 @@ class GetIndex(unittest.TestCase):
 class HomeAndWhichPack(unittest.TestCase):
     def test_the_home_step_does_not_promise_a_zip(self):
         text = _plain_page("index.md")
-        self.assertIn("**Run one command.** Some setups have a ZIP.", text)
+        self.assertIn("**Paste it, press Enter.** Some setups have a ZIP.", text)
         self.assertNotIn("or download a ZIP file", text)
 
     def test_which_pack_answers_ios(self):

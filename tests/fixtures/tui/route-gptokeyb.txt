@@ -1,5 +1,5 @@
 === setup 40x12
- RetroBIOS: Where do you play?
+ RetroBIOS: Where to install?
 
  Found on this machine:
 
@@ -12,7 +12,7 @@
  ES-DE: files go to each emulator.
  A Continue  B Quit
 === setup 40x15
- RetroBIOS: Where do you play?
+ RetroBIOS: Where to install?
 
  Found on this machine:
 
@@ -28,7 +28,7 @@
 
  A Continue  B Quit
 === setup 80x24
- RetroBIOS: Where do you play?
+ RetroBIOS: Where to install?
 
  Found on this machine:
 
@@ -410,7 +410,7 @@
  1 wrong copy: backed up, replaced.
  > Install
    Choose systems
-   Copy from your old card or a folder
+   Copy from an old card or a folder
    Options
    Quit
  A Install  B Back  Y Options
@@ -426,7 +426,7 @@
 
  > Install
    Choose systems
-   Copy from your old card or a folder
+   Copy from an old card or a folder
    Options
    Quit
  A Install  B Back  Y Options
@@ -441,7 +441,7 @@
 
  > Install
    Choose systems
-   Copy the BIOS files from your old card or a folder
+   Copy the BIOS files from an old card or a folder
    Options
    Quit
 
@@ -674,7 +674,7 @@
 === cores 40x12
  RetroBIOS: Cores
 
- Untick the cores you do not use: the
+ Untick the cores not in use: the
    platform's own files are always
    kept, and a core with no extra file
    reads only those.
@@ -687,7 +687,7 @@
 === cores 40x15
  RetroBIOS: Cores
 
- Untick the cores you do not use: the
+ Untick the cores not in use: the
    platform's own files are always
    kept, and a core with no extra file
    reads only those.
@@ -703,8 +703,8 @@
 === cores 80x24
  RetroBIOS: Cores
 
- Untick the cores you do not use: the platform's own files are always kept, and
-   a core with no extra file reads only those.
+ Untick the cores not in use: the platform's own files are always kept, and a
+   core with no extra file reads only those.
 
  > Filter (with a keyboard)
    [ ] mesen                                                     1 file, 8.0 KB
@@ -778,7 +778,7 @@
 === confirm 40x12
  RetroBIOS: Confirm
 
- Counted again for your choices.
+ Counted again for these choices.
    Nothing is written before Install.
  1 file to download, 16.0 KB
  BIOS folder: ~/.co.../retroarch/system
@@ -791,7 +791,7 @@
 === confirm 40x15
  RetroBIOS: Confirm
 
- Counted again for your choices.
+ Counted again for these choices.
    Nothing is written before Install.
  1 file to download, 16.0 KB
  BIOS folder: ~/.co.../retroarch/system
@@ -807,7 +807,7 @@
 === confirm 80x24
  RetroBIOS: Confirm
 
- Counted again for your choices. Nothing is written before Install.
+ Counted again for these choices. Nothing is written before Install.
  1 file to download, 16.0 KB
  BIOS folder: ~/.config/retroarch/system
  0 in place, 1 missing, 0 wrong copies
@@ -1079,7 +1079,7 @@
    Only what starts: no
    Show the games
    Choose systems
-   Copy from your old card or a folder
+   Copy from an old card or a folder
    Options
    Quit
  A Install  B Back  Y Options
@@ -1100,7 +1100,7 @@
    Only what starts: no
    Show the games
    Choose systems
-   Copy the BIOS files from your old card or a folder
+   Copy the BIOS files from an old card or a folder
    Options
    Quit
 

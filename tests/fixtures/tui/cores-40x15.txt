@@ -1,6 +1,6 @@
  RetroBIOS: Cores
 
- Untick the cores you do not use: the
+ Untick the cores not in use: the
    platform's own files are always
    kept, and a core with no extra file
    reads only those.

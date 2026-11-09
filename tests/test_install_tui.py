@@ -815,7 +815,7 @@ class PlanWarnings(unittest.TestCase):
         state = checked_state({"free": 1024, "writable": False, "cores": []})
         text = " ".join(install.tui_view(state, 120, 40))
         self.assertIn("Not enough free space: 1.0 MB needed.", text)
-        self.assertIn("You cannot write to this folder: choose another one.", text)
+        self.assertIn("This folder cannot be written to: choose another one.", text)
         # sudo changes the home folder: the advice names this one.
         self.assertIn("Or run it as root, this folder named: sudo python3 install.py "
                       f"--platform retroarch --dest {SYSTEM_DIR}",
@@ -1549,10 +1549,10 @@ class SmallFixes(unittest.TestCase):
     def test_numbers_from_before_the_options_say_so(self):
         state = checked_state()
         state.stack.append("systems")
-        self.assertNotIn("before your options", "\n".join(install.tui_view(state, 80, 24)))
+        self.assertNotIn("before the options", "\n".join(install.tui_view(state, 80, 24)))
         state.regions = ["japan"]
         footer = "\n".join(install.tui_view(state, 80, 24)[-3:])
-        self.assertIn("before your options", footer)
+        self.assertIn("before the options", footer)
 
     def test_a_cores_folder_implies_the_installed_cores(self):
         state = checked_state()
@@ -2156,7 +2156,7 @@ class CopyFromAnOldCard(unittest.TestCase):
         state = checked_state()
         row = next(i for i, r in enumerate(install.tui_rows(state)) if r.action == "fromcard")
         self.assertEqual(install.tui_rows(state)[row].label,
-                         "Copy the BIOS files from your old card or a folder")
+                         "Copy the BIOS files from an old card or a folder")
         state.focus["plan"] = row
         state.home = old
         with mock.patch.object(install, "_mounted_cards", return_value=[]):
@@ -2224,7 +2224,7 @@ class CopyFromAnOldCard(unittest.TestCase):
         # a fix copies, and the screen says the user's
         # copy stays.
         self.assertIn("1 file is in the wrong place, it will be copied where the emulators "
-                      "read it, your copy left as it is.", text)
+                      "read it, the copy left as it is.", text)
         row = next(i for i, r in enumerate(install.tui_rows(state)) if r.action == "misplaced")
         state.focus["plan"] = row
         press(state, "enter")
@@ -2245,7 +2245,7 @@ class CopyFromAnOldCard(unittest.TestCase):
         state.finished = [("scph5500.bin", True, ""), ("gba_bios.bin", True, "")]
         text = " ".join(" ".join(install.tui_outcome(state)[1]).split())
         self.assertIn("1 file copied from the wrong place in the BIOS folder, 1 downloaded. "
-                      "Your copies in the wrong place were left as they are.", text)
+                      "The copies in the wrong place were left as they are.", text)
 
     def test_a_local_copy_is_no_download_speed(self):
         state = checked_state()
@@ -2681,7 +2681,7 @@ class CardsSpaceAndConfirm(unittest.TestCase):
         state = self.unavailable_state()
         _title, lines = install.tui_outcome(state)
         self.assertIn("Not available here, and needed to start its emulator: gba_extra.bin "
-                      "(Game Boy Advance). Your own copy goes in the BIOS folder.", lines)
+                      "(Game Boy Advance). An owned copy goes in the BIOS folder.", lines)
         self.assertNotIn("collection", " ".join(lines))
 
     def test_it_is_left_out_when_it_does_not_concern_the_run(self):
@@ -3812,7 +3812,7 @@ class BackTicksAndSaveFolder(unittest.TestCase):
             rows = [row.action for row in install.tui_rows(state)]
             text = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
             self.assertEqual(rows, ["back"])
-            self.assertIn("Copy them from your old card or a folder", text)
+            self.assertIn("Copy them from an old card or a folder", text)
             state.found = [{"event": "found", "platform": "retroarch",
                             "dest": FILES[0]["dest"], "folder": "/media/old",
                             "path": "/media/old/x", "member": "", "reason": ""}]
@@ -3843,7 +3843,7 @@ class BackTicksAndSaveFolder(unittest.TestCase):
         state = checked_state()
         state.stack.append("misplaced")
         self.assertEqual(install._pager_items(state)[0],
-                         "They are copied where the emulators read them. Your copies stay "
+                         "They are copied where the emulators read them. The copies found stay "
                          "where they are.")
 
     def test_the_save_folder_is_a_line_of_its_own(self):
@@ -4273,9 +4273,9 @@ class AGoesIntoASubfolder(unittest.TestCase):
         with mock.patch.object(install, "_mounted_cards", return_value=[self.card]):
             install._browse_to(self.state, self.home)
         self.assertEqual(self.focused().label, ".cache/")
-        self.assertIn("No setup reads BIOS files in your home folder", self.state.status)
+        self.assertIn("No setup reads BIOS files in the home folder", self.state.status)
         screen = " ".join(" ".join(install.tui_view(self.state, 80, 24)).split())
-        self.assertIn("No setup reads BIOS files in your home folder.", screen)
+        self.assertIn("No setup reads BIOS files in the home folder.", screen)
 
     def test_on_windows_the_other_drives_are_passed_over(self):
         """The card rows are drive roots there (E:\\): at D:\\ the first
@@ -4850,7 +4850,7 @@ class EndToEnd(unittest.TestCase):
     def test_three_presses_install_everything(self):
         repo = self.repo()
         term = self.start()
-        screen = term.wait("Where do you play?")
+        screen = term.wait("Where to install?")
         self.assertIn("> RetroArch", screen)
         term.send("\r")
         screen = term.wait("files to download")
@@ -4899,7 +4899,7 @@ class EndToEnd(unittest.TestCase):
                     self.assertIn("6 files installed", proc.stdout)
                 else:
                     term = self.start()
-                    term.wait("Where do you play?")
+                    term.wait("Where to install?")
                     term.send("\r")
                     screen = term.wait("files to download")
                     self.assertIn("6 files to download", screen)
@@ -5058,7 +5058,7 @@ class EndToEnd(unittest.TestCase):
     def test_ctrl_c_on_the_first_screen(self):
         self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\x03")
         self.assertEqual(term.close(), 130)
         self.assertIn(b"\x1b[?2004l\x1b[0m\x1b[?25h\x1b[?1049l", term.raw)
@@ -5068,7 +5068,7 @@ class EndToEnd(unittest.TestCase):
 
         self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         mark = len(term.raw)
         os.kill(term.pid, signal.SIGTSTP)
         end = time.monotonic() + 10
@@ -5093,11 +5093,11 @@ class EndToEnd(unittest.TestCase):
         """The terminal gone, the farewell has nowhere to go: the code is
         129 (SIGHUP), not 120 from the flush failing at exit."""
         self.repo()
-        for screen_name, keys_first in (("Where do you play?", ()),
+        for screen_name, keys_first in (("Where to install?", ()),
                                         ("files to download", ("\r",))):
             with self.subTest(screen=screen_name):
                 term = self.start()
-                term.wait("Where do you play?")
+                term.wait("Where to install?")
                 term.send(*keys_first)
                 term.wait(screen_name)
                 os.close(term.fd)
@@ -5146,12 +5146,12 @@ class EndToEnd(unittest.TestCase):
         self.repo()
         self.env[install.TUI_IDLE_ENV] = "1"
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         self.assertEqual(term.close(), install.QUIT_CODE)
         self.assertIn("No button pressed, closing.", term.after())
         # A key pressed, the screen stays: the person is there.
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send(DOWN)
         end = time.monotonic() + 2.5
         while time.monotonic() < end:
@@ -5181,7 +5181,7 @@ class EndToEnd(unittest.TestCase):
             with self.subTest(env=env):
                 self.env.update(env)
                 term = self.start(cols=40, rows=12)
-                term.wait("Where do you play?")
+                term.wait("Where to install?")
                 screen = term.wait(bar)
                 self.assertEqual(screen.splitlines()[-1].strip(), bar)
                 term.send("q")
@@ -5192,7 +5192,7 @@ class EndToEnd(unittest.TestCase):
     def test_resize_redraws(self):
         self.repo()
         term = self.start(cols=40, rows=15)
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.resize(100, 30)
         term.send(DOWN)
         screen = term.wait("> Another setup or folder")
@@ -5200,7 +5200,7 @@ class EndToEnd(unittest.TestCase):
         term.resize(30, 10)
         term.wait("40x12 or more, now 30x10")
         term.resize(40, 12)
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("q")
         self.assertEqual(term.close(), install.QUIT_CODE)
 
@@ -5278,7 +5278,7 @@ class EndToEnd(unittest.TestCase):
                 self.env.pop("NO_COLOR", None)
                 self.env.update({"TERM": "xterm", **env})
                 term = self.start()
-                screen = term.wait("Where do you play?")
+                screen = term.wait("Where to install?")
                 self.assertIn("> RetroArch", screen)
                 screens[name] = screen
                 # pyte reads the colours drawn: RetroBIOS in the accent.
@@ -5511,7 +5511,7 @@ class TheTerminalComesBack(unittest.TestCase):
     def ended(self, how) -> Pty:
         self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         # Every way out below starts with the clicks asked for, written
         # right after the frame.
         term.settle()
@@ -5571,7 +5571,7 @@ class TheTerminalComesBack(unittest.TestCase):
         job control it stops, and fg brings the screen back."""
         term = self.shell()
         self.typed(term, f"{shlex.quote(sys.executable)} {REPO_ROOT / 'install.py'} --tui")
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         mark = len(term.raw)
         term.send("\x1a")
         end = time.monotonic() + 10
@@ -5586,7 +5586,7 @@ class TheTerminalComesBack(unittest.TestCase):
         while b"\x1b[?1049h" not in term.raw[mark:] and time.monotonic() < end:
             term._pump(0.05)
         self.assertIn(b"\x1b[?1049h", term.raw[mark:])
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         self.assertFalse(termios.tcgetattr(term.fd)[3] & termios.ECHO)
         # The clicks come back with the screen.
         term.settle()
@@ -5608,7 +5608,7 @@ class TheTerminalComesBack(unittest.TestCase):
                 term = Pty(["--tui"], self.env, program=program)
                 self.addCleanup(lambda term=term: term.status is None
                                 and os.killpg(term.pid, 9))
-                term.wait("Where do you play?")
+                term.wait("Where to install?")
                 term.send("\x1a")
                 screen = term.wait("Ctrl-Z is ignored")
                 self.assertIn("no shell started this installer", " ".join(screen.split()))
@@ -5664,7 +5664,7 @@ class TheTerminalComesBack(unittest.TestCase):
         self.addCleanup(lambda: term.status is None and os.killpg(term.pid, 9))
         term.wait("PROMPT$")
         self.typed(term, f"sh {REPO_ROOT / 'install.sh'} --jobs 1")
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("to download")
         term.send("\r")
@@ -6231,7 +6231,7 @@ class ConfirmRefusalsAndCardRows(unittest.TestCase):
         # Back alone, no word of an Install.
         self.assertNotIn("before Install", text)
         self.assertNotIn("backup folder", text)
-        self.assertIn("Copy them from your old card", text)
+        self.assertIn("Copy them from an old card", text)
         # The short names at 40 columns, as every screen of that width.
         self.assertEqual(view[-1].strip(), "A Back  ? Help")
 
@@ -6756,7 +6756,7 @@ class WhatEachScreenOffers(unittest.TestCase):
         self.assertIn("handhelds come after RetroArch", " ".join(text.split()))
         state.pad = "keys"
         text = " ".join(" ".join(install.tui_view(state, 80, 24)).split())
-        self.assertIn("type your device's name (/)", text)
+        self.assertIn("type the device's name (/)", text)
         self.assertIn("Filter by setup or device name",
                       [what for _key, what in install._help_lines(state)])
         # Something found here: the list keeps its order.
@@ -6769,7 +6769,7 @@ class WhatEachScreenOffers(unittest.TestCase):
         with mock.patch.object(install, "_ask", side_effect=["bittboy"]), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             self.assertEqual(install._choose_platform("Which?"), "MiyooCFW")
-        self.assertIn("your device's name", out.getvalue())
+        self.assertIn("the device's name", out.getvalue())
         choices = install._line_setups()
         onion = [name for name, _label in choices].index("Onion") + 1
         with mock.patch.object(install, "_ask", side_effect=["miyoo mini+", str(onion)]), \
@@ -6841,7 +6841,7 @@ class WhatEachScreenOffers(unittest.TestCase):
         self.assertIn("Not in from1: ", text)
         self.assertIn("Run the installer again with a pack (--from-pack)", text)
         self.assertNotIn("They are not in", text)
-        self.assertNotIn("Copy them from your old card", text)
+        self.assertNotIn("Copy them from an old card", text)
 
     def test_the_card_browser_focuses_the_card_asked_for(self):
         """The muOS card, listed first, was focused for Onion."""
@@ -7317,7 +7317,7 @@ class _LineModeFindings(_CardFixtures):
         with mock.patch.object(install, "_folder_writable", return_value=False), \
                 mock.patch.object(install, "_on_read_only_mount", return_value=False):
             lines = install.folder_warnings("retroarch", self.root, [], hint, True, False)
-        self.assertIn("You cannot write to this folder: run it again with another --dest.",
+        self.assertIn("This folder cannot be written to: run it again with another --dest.",
                       lines)
         self.assertNotIn("choose another one", " ".join(lines))
         with mock.patch.object(install, "_folder_writable", return_value=False), \
@@ -8184,7 +8184,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         listing = self.listing("retroarch", files)
         args = _args(manifest=listing, dest=self.here, declared_only=False)
         text, asked = self.line_run(args, ["c", "1"])
-        self.assertIn("Counted again for your choices. Nothing is written before Enter.", text)
+        self.assertIn("Counted again for these choices. Nothing is written before Enter.", text)
         self.assertIn("RetroArch: 1 file, 3 B, for 1 of 2 systems.", text)
         self.assertIn("Enter) install these", text)
         self.assertEqual(asked[-1], "> ")
@@ -8517,7 +8517,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         self.assertNotRegex(text, r"Narrowed (\d+) to \1 files")
         text, _asked = self.line_run(_args(**args), ["c", "1", ""])
         # The menu counted the choice again before Enter: said once.
-        self.assertIn("Counted again for your choices", text)
+        self.assertIn("Counted again for these choices", text)
         self.assertNotIn("Narrowed", text)
         args = _args(manifest=self.counted_list(), dest=self.here, declared_only=False,
                      dry_run=True, no_input=True, system=["doom"])
@@ -8857,7 +8857,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         state.dest = state.home
         lines = " ".join(str(line) for line in install._plan_lines(state.check, state.dest,
                                                                      state))
-        self.assertIn("No setup reads BIOS files in your home folder.", lines)
+        self.assertIn("No setup reads BIOS files in the home folder.", lines)
 
     def test_systems_seen_and_left_unchanged_keep_the_exact_plan(self):
         """Opening Choose systems on a --system plan and
@@ -10688,14 +10688,14 @@ class MouseOnAPty(unittest.TestCase):
     def test_taps_choose_a_row_and_press_the_bar(self):
         self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.settle()
         self.assertIn(install._MOUSE_ON.encode(), term.raw)
         row = self.line_of(term, "Another setup")
         self.click(term, 60, row)
         term.settle()
         self.assertTrue(term.screen.buffer[row][3].reverse, term.text())
-        self.assertIn("Where do you play?", term.text())
+        self.assertIn("Where to install?", term.text())
         self.click(term, 60, row)
         term.wait("Which setup?")
         # The bar's ? Help, pressed by a click.
@@ -11333,7 +11333,7 @@ class TapsOnAPty(unittest.TestCase):
     def test_taps_on_systems_tick_and_write_nothing(self):
         repo = self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("> Install")
         row = self.line_of(term, "Choose systems")
@@ -11360,7 +11360,7 @@ class TapsOnAPty(unittest.TestCase):
     def test_the_result_is_left_by_a_tap_on_exit(self):
         self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("files to download")
         row = self.line_of(term, "> Install")
@@ -12238,7 +12238,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
     def test_one_tap_on_the_bar_install_installs_nothing(self):
         repo = self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("> Install")
         term.settle()
@@ -12253,7 +12253,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
     def test_a_double_tap_on_continue_neither_quits_nor_installs(self):
         repo = self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.settle()
         col, line = self.bar_entry(term, "Continue")
         report = sgr(col + 1, line + 1) + sgr(col + 1, line + 1, release=True)
@@ -12275,7 +12275,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
             with self.subTest(gap=gap):
                 repo = self.repo()
                 term = self.start()
-                term.wait("Where do you play?")
+                term.wait("Where to install?")
                 term.settle()
                 time.sleep(install.TUI_TAP_SETTLE)
                 col, line = self.bar_entry(term, "Continue")
@@ -12285,7 +12285,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
                 time.sleep(gap)
                 os.write(term.fd, (press + release).encode())
                 screen = term.settle(0.8)
-                self.assertNotIn("Where do you play?", screen)
+                self.assertNotIn("Where to install?", screen)
                 self.assertNotIn("Quit?", screen)
                 term.wait("> Install")
                 self.assertEqual(repo.installed(), [])
@@ -12295,7 +12295,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
     def test_continue_then_install_in_one_cell_stops_on_confirm(self):
         repo = self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("> Install")
         row = self.line_of(term, "Choose systems")
@@ -12321,7 +12321,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         report = sgr(col + 1, line + 1) + sgr(col + 1, line + 1, release=True)
         time.sleep(install.TUI_TAP_SETTLE)
         term.send(report + report)
-        term.wait("Counted again for your choices")
+        term.wait("Counted again for these choices")
         screen = term.settle(0.6)
         self.assertIn("RetroBIOS: Confirm", screen)
         self.assertEqual(repo.installed(), [])
@@ -12338,7 +12338,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
 
         repo = self.repo(GameDataRepository)
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("> Install")
         for _step in range(8):
@@ -12381,7 +12381,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
     def test_two_taps_on_a_region_untick_it_where_it_was(self):
         self.repo()
         term = self.start()
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("> Install")
         term.send("o")
@@ -12465,7 +12465,7 @@ class ChoiceStateInBothModes(unittest.TestCase):
         text, asked = self.line_run(_args(manifest=self.game_listing(), dest=self.here,
                                           declared_only=False),
                                     ["c", "2", "g", ""])
-        menu = text.rsplit("Counted again for your choices", 1)[1]
+        menu = text.rsplit("Counted again for these choices", 1)[1]
         self.assertIn("RetroArch: sega-dreamcast holds only game data: nothing is left to "
                       "install.", menu)
         self.assertNotIn("0 files, 0 B", menu)
@@ -12887,9 +12887,9 @@ class DriveIsACardByItsFiles(unittest.TestCase):
 
     # The note on drives with a bios folder and no handheld's folder.
     UNPROVEN_TWO = ("DATA and STICK have a bios folder but no folder a handheld system "
-                    "writes. Pick one below if your files go there.")
+                    "writes. Pick one below if the BIOS files go there.")
     UNPROVEN_ONE = ("DATA has a bios folder but no folder a handheld system writes. Pick "
-                    "it below if your files go there.")
+                    "it below if the BIOS files go there.")
 
     def test_the_layouts_handhelds_write_are_cards(self):
         """ArkOS's EASYROMS, AmberELEC's GAMES and EmuELEC's EEROMS, each
@@ -13047,7 +13047,7 @@ class TheSettleRunsFromTheFrameShown(unittest.TestCase):
         env = {**self.env, "SLOW": "0.5"}
         term = Pty([], env, 80, 24, program=[sys.executable, str(wrapper)])
         self.addCleanup(lambda: term.status is None and os.kill(term.pid, 9))
-        term.wait("Where do you play?")
+        term.wait("Where to install?")
         term.send("\r")
         term.wait("> Install")
         term.settle()
@@ -13816,7 +13816,7 @@ class ProvenCardsAndCounts(unittest.TestCase):
         text, _asked = self.line_run(_args(manifest=listing, dest=dest, platform="retroarch",
                                            declared_only=False, dry_run=True), [])
         self.assertIn("Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game "
-                      "data its game reads. Copy it from your own copy of the game into "
+                      "data its game reads. Copy it from an owned copy of the game into "
                       f"{dest / 'jazz2' / 'Source'}{os.sep}.", text)
         self.assertEqual(install.not_installable_words(37, 1, {"not_found": 37}),
                          "Not installable: 37 files are not in the collection, 1 of them "
@@ -14012,7 +14012,7 @@ class ProvenCardsAndCounts(unittest.TestCase):
         mounts = [data, stick]
         state, text, rows = self.folder_screen(mounts)
         self.assertIn("DATA and STICK have a bios folder but no folder a handheld system "
-                      "writes. Pick one below if your files go there.", text)
+                      "writes. Pick one below if the BIOS files go there.", text)
         labels = [row.label for row in rows]
         self.assertIn("DATA: bios (drive)", labels)
         self.assertIn("STICK: bios (drive)", labels)
@@ -14167,7 +14167,7 @@ class ProvenCardsAndCounts(unittest.TestCase):
                                            declared_only=False, dry_run=True),
                                      ["c", "", "2"])
         self.assertIn("Every core's extra files are kept: Enter keeps them all", text)
-        head = text.rsplit("Counted again for your choices", 1)[1]
+        head = text.rsplit("Counted again for these choices", 1)[1]
         self.assertIn("1 of 2 cores", head)
         self.assertEqual(install.cores_words(0, 2), "0 of 2 cores")
         self.assertEqual(install.cores_words(2, 2), "all cores")
@@ -14287,7 +14287,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
                 text, _asked = self.line_run(
                     _args(manifest=listing, dest=self.root / "dest", declared_only=False,
                           dry_run=True, no_game_data=no_game_data), ["c", "", "1"])
-                head = text.rsplit("Counted again for your choices", 1)[1]
+                head = text.rsplit("Counted again for these choices", 1)[1]
                 self.assertIn(f"1 of {len(expected)} cores", head)
                 state.cores = ["mesen"]
                 self.assertIn(f"1 of {len(expected)}",
@@ -14443,7 +14443,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
         state.os_type = "android"
         for cols, rows in ((40, 12), (80, 24)):
             text = self.text(state, cols, rows)
-            self.assertIn("You cannot write to this folder", text)
+            self.assertIn("This folder cannot be written to", text)
             self.assertNotIn("sudo", text)
 
     # Root cause 4: every proven card named, the real marker said.
@@ -14552,7 +14552,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
         state = checked_state()
         state.regions = ["japan"]
         text = self.text(state, 100, 30)
-        self.assertIn("For your choice: regions ranked.", text)
+        self.assertIn("For this choice: regions ranked.", text)
         self.assertNotIn(" --region.", text)
 
     def test_offline_choice_of_systems_is_never_about_0_files(self):

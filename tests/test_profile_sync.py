@@ -5654,7 +5654,7 @@ class TestSelectionNamesWhatMatchedNothing(unittest.TestCase):
     def test_a_misspelt_emulator_suggests(self):
         with self.assertRaises(SystemExit) as caught:
             profile_sync.select_profiles(self.PROFILES, self._args(emulator="handyy"))
-        self.assertIn("Did you mean: handy", str(caught.exception.code))
+        self.assertIn("Close matches: handy", str(caught.exception.code))
 
     def test_a_matching_filter_selects(self):
         selected = profile_sync.select_profiles(self.PROFILES, self._args(system="atari-lynx"))

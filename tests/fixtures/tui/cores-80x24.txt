@@ -1,7 +1,7 @@
  RetroBIOS: Cores
 
- Untick the cores you do not use: the platform's own files are always kept, and
-   a core with no extra file reads only those.
+ Untick the cores not in use: the platform's own files are always kept, and a
+   core with no extra file reads only those.
 
  > Filter (/ to type)
    [ ] mesen                                                     1 file, 8.0 KB

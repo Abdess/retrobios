@@ -526,7 +526,7 @@ Done. 18181 files installed.
   Installed: 3165 BIOS files, 11544 game data files and 3472 data files.
 BIOS folder: /userdata/bios
 444 files were not installed: the collection does not hold them, or its copy fails their check.
-  Not available here: DARK.GOB, DARKWAR.RTL, DARKWAR.WAD and 76 more, game data their games read. Copy them from your own copy of the game into /userdata/bios/, /userdata/bios/Source/, /userdata/bios/base/ and 10 more folders.
+  Not available here: DARK.GOB, DARKWAR.RTL, DARKWAR.WAD and 76 more, game data their games read. Copy them from an owned copy of the game into /userdata/bios/, /userdata/bios/Source/, /userdata/bios/base/ and 10 more folders.
   Game data: files a game or a game engine reads, of no use to the other cores.
 To check this later, run the same command with --check.
 ```
@@ -598,7 +598,7 @@ against a list of four files:
 
 ```
   3 files to download:
-  2 of these files are in the BIOS folder in the wrong place: a run without --check copies them where the cores open them, and leaves your copies as they are.
+  2 of these files are in the BIOS folder in the wrong place: a run without --check copies them where the cores open them, and leaves the copies found as they are.
     wrong copy: scph5501.bin
       another region: the contents of scph5500.bin (japan)
       read by beetle_psx, pcsx_rearmed at /home/me/.config/retroarch/system/scph5501.bin
@@ -771,7 +771,7 @@ RetroArch: 14985 files, 7.6 GB.
   3296 BIOS files (4.4 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
-  Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game data its game reads. Copy it from your own copy of the game into /home/me/.config/retroarch/system/jazz2/Source/.
+  Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game data its game reads. Copy it from an owned copy of the game into /home/me/.config/retroarch/system/jazz2/Source/.
   Enter) install everything
   c) choose systems, cores and regions
   f) copy from a folder or an old card
@@ -779,7 +779,7 @@ RetroArch: 14985 files, 7.6 GB.
   q) quit
 > g
 
-  Counted again for your choices. Nothing is written before Enter.
+  Counted again for these choices. Nothing is written before Enter.
 
 RetroArch: 9877 files, 4.5 GB.
   3296 BIOS files (4.4 GB) and 6581 data files (135.6 MB). 5108 game data files left out.

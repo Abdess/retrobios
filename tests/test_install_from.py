@@ -442,7 +442,7 @@ class MisplacedInTheBiosFolder(Scratch):
         out = self.check()
         self.assertIn("4 of these files are in the BIOS folder in the wrong place: a run "
                       "without --check copies them where the cores open them, and leaves "
-                      "your copies as they are.", out)
+                      "the copies found as they are.", out)
         self.assertFalse((self.dest / "scph5501.bin").exists())
 
     def test_dry_run_counts_them_and_writes_nothing(self):

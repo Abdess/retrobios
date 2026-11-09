@@ -129,7 +129,7 @@ def unknown_region_message(raw: str, aliases: dict[str, str], regions: frozenset
 
     spelled = raw.strip()
     close = difflib.get_close_matches(spelled.lower(), [*aliases, *regions], n=3, cutoff=0.5)
-    hint = f" Did you mean: {', '.join(close)}?" if close else ""
+    hint = f" Close matches: {', '.join(close)}." if close else ""
     return (
         f"unknown region: {spelled}.{hint} Short forms: {', '.join(aliases)}; "
         f"regions: {', '.join(sorted(regions))}"

@@ -3344,7 +3344,7 @@ def did_you_mean(
             if by_key[k] not in close:
                 close.append(by_key[k])
     if close:
-        return f"Did you mean: {', '.join(close[:3])}? {listing} lists all {len(known)}."
+        return f"Close matches: {', '.join(close[:3])}. {listing} lists all {len(known)}."
     if len(known) <= SHORT_LIST:
         return f"Known: {', '.join(known)}."
     return f"{listing} lists all {len(known)}."
@@ -4678,7 +4678,7 @@ def canonical_region(raw: str) -> str:
         import difflib  # noqa: PLC0415
 
         close = difflib.get_close_matches(key, [*REGION_ALIASES, *REGIONS], n=3, cutoff=0.5)
-        hint = f" Did you mean: {', '.join(close)}?" if close else ""
+        hint = f" Close matches: {', '.join(close)}." if close else ""
         raise ValueError(
             f"unknown region: {raw.strip()}.{hint} "
             f"Short forms: {', '.join(REGION_ALIASES)}. Regions: "
@@ -5705,7 +5705,7 @@ def _kept_lines() -> list[str]:
     lines = []
     for item in KEPT.summary():
         folder = Path(item["folder"])
-        lines.append(f"Kept {_plural(item['files'], 'file')} you had "
+        lines.append(f"Kept {_plural(item['files'], 'file')} already there "
                      f"({format_size(item['bytes'])}), which the collection's "
                      f"copies replaced, in {folder}")
         lines.append(f"  To put them back: {_INVOCATION.launcher()} --restore "
@@ -5768,7 +5768,7 @@ def restore_kept(run: Path, dry_run: bool = False) -> int:
     print(f"\nPut back {_plural(restored, 'file')} ({format_size(size)}) under {root}.")
     if failed:
         print(f"{_plural(failed, 'file')} could not be put back.", file=sys.stderr)
-    print(f"The copies are still in {run}. Delete that folder once you no longer need it.")
+    print(f"The copies are still in {run}. That folder can be deleted once it is no longer needed.")
     return 1 if failed else 0
 
 
@@ -6392,7 +6392,7 @@ TUI_INSTALL_ROW = "Install"
 TUI_SYSTEMS_ROW = "Choose systems"
 # The first screen's title: a setup found here, or none, and the list.
 # which-pack names them from here.
-TUI_FOUND_TITLE = "Where do you play?"
+TUI_FOUND_TITLE = "Where to install?"
 TUI_CHOOSE_TITLE = "Which setup?"
 # Asked after Which setup? where nothing was found, and on a card.
 TUI_FOLDER_TITLE = "Which folder?"
@@ -6854,7 +6854,7 @@ def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> st
         named = ", ".join(screen_text(shown_path(label)) for label in labels)
         return (f"They are not in {named}: run the installer again with a pack "
                 f"(--from-pack) or {offline_undo()}.")
-    return ("Copy them from your old card or a folder (--from), or run the installer "
+    return ("Copy them from an old card or a folder (--from), or run the installer "
             f"again with a pack (--from-pack) or {offline_undo()}.")
 
 
@@ -6930,7 +6930,7 @@ def game_data_missing(names: str, count: int, folders: list[Path]) -> str:
     # spliced into this sentence, and said again on its own line.
     return (f"Not available here: {names}, game data "
             f"{'its game reads' if one else 'their games read'}. Copy "
-            f"{'it' if one else 'them'} from your own copy of the game{where}.")
+            f"{'it' if one else 'them'} from an owned copy of the game{where}.")
 
 
 def not_installable_words(count: int, required: int, reasons: dict[str, int]) -> str:
@@ -7174,7 +7174,7 @@ def _print_plan(
         print(f"  {term.bold(entry['ref'] + ' data')}  {_sized(list(needed.values()))}, "
               f"from {source}{archive}")
     for folder, (count, size) in sorted((kept or {}).items()):
-        print(f"\n  Would keep {_plural(count, 'file')} you have ({format_size(size)}), "
+        print(f"\n  Would keep {_plural(count, 'file')} already there ({format_size(size)}), "
               f"whose contents differ, in {folder}")
     print("\n  Nothing was written. Run without --dry-run to install.")
 
@@ -8035,8 +8035,8 @@ def _choose_platform(title: str, default: str = "", setups: list | None = None,
         for piece in pieces[1:]:
             print(" " * len(number) + piece)
     print("  q) quit")
-    print("Type a number, a setup's name, or your device's name (Miyoo Mini, R36S).")
-    usage = (f"  Type a number from 1 to {len(choices)}, a setup name or your "
+    print("Type a number, a setup's name, or the device's name (Miyoo Mini, R36S).")
+    usage = (f"  Type a number from 1 to {len(choices)}, a setup name or the "
              "device's name, or q to quit.")
     while True:
         prompt = f"> [Enter for {display_name(default)}] " if default else "> "
@@ -8065,7 +8065,7 @@ def _choose_platform(title: str, default: str = "", setups: list | None = None,
             print(f"  {len(found)} setups run on '{choice.strip()}':")
             for index, label in found:
                 print(f"  {index + 1}) {label}")
-            print("  Type the number of yours.")
+            print("  Type the number of the right one.")
             default = ""
             continue
         hint = android_hint(choice, os_type)
@@ -8300,7 +8300,7 @@ def unproven_words() -> str:
     names = _names_and([_mount_name(mount) for mount in drives])
     has, it = ("has", "it") if len(drives) == 1 else ("have", "one")
     return (f"{names} {has} a bios folder but no folder a handheld system writes. "
-            f"Pick {it} below if your files go there.")
+            f"Pick {it} below if the BIOS files go there.")
 
 
 def _said_with(label: str, words: str) -> str:
@@ -8565,7 +8565,7 @@ def _prompt_platform_choice(
     labels: dict | None = None,
     other: Callable[[], list[tuple[str, Path]]] | None = None,
 ) -> list[tuple[str, Path]]:
-    """One of the setups found here, as the screen's Where do you play?
+    """One of the setups found here, as the screen's Where to install?
     lists them: its labels, Enter taking the first as A does there, and o
     for another setup or folder (other). Line mode had no Enter default, an
     All the screen lacks, and no way to another setup once one was found."""
@@ -8936,7 +8936,7 @@ def folder_warnings(plat: str, bios_path: Path, files: list[dict], hint: Invocat
     return lines
 
 
-CANNOT_WRITE = "You cannot write to this folder"
+CANNOT_WRITE = "This folder cannot be written to"
 
 
 def cannot_write_words(bios_path: Path, plat: str, hint: Invocation, commands: bool,
@@ -9149,7 +9149,7 @@ def _prompt_custom_selection(
         choosable = bool(axes)
         if choosable:
             print(f"  c) choose {axes}" + (" again" if current is not given else ""))
-        # The screen's "Copy the BIOS files from your old card or a folder".
+        # The screen's "Copy the BIOS files from an old card or a folder".
         copying = not dry_run
         if copying:
             print("  f) copy from a folder or an old card")
@@ -9235,7 +9235,7 @@ def _print_menu_head(
             "regions ranked" + (" (--region)" if flag else "") if regions else ""]))
         named = "" if named == ", " else named
     if current is not given:
-        print("\n  Counted again for your choices. Nothing is written before Enter.")
+        print("\n  Counted again for these choices. Nothing is written before Enter.")
     counts = tally(shown)
     if emptied:
         # The screen's headline for a choice that keeps no file.
@@ -12896,7 +12896,7 @@ def _check_copy_lines(
         them = "it" if fixed == 1 else "them"
         lines.append(f"  {fixed} of these files {verb} in the BIOS folder in the wrong place: "
                      f"a run without --check copies {them} where the cores open {them}, and "
-                     f"leaves your {'copy' if fixed == 1 else 'copies'} as "
+                     f"leaves the {'copy' if fixed == 1 else 'copies'} found as "
                      f"{'it is' if fixed == 1 else 'they are'}.")
     for label, count in _counts_by_folder(entries, copies, bios_index):
         them = "it" if count == 1 else "them"
@@ -12941,7 +12941,7 @@ def copy_plan_lines(
             head = (f"Would fix {sized} misplaced in the BIOS folder, copied where the "
                     "cores open them:" if planned else
                     f"Fixing {sized} misplaced in the BIOS folder: copied where the cores "
-                    "open them, your copies left as they are.")
+                    "open them, the copies found left as they are.")
         elif key == "=":
             head = (f"Would copy {sized} the BIOS folder already holds at another "
                     "place of the list:" if planned else
@@ -13099,7 +13099,7 @@ def bulk_hint(
                 return [
                     f"  {heavy} pulls {format_size(alone[heavy])} of this "
                     f"{format_size(total)} download. --system naming the systems "
-                    f"you play leaves it out and saves {format_size(alone[heavy])} "
+                    f"played leaves it out and saves {format_size(alone[heavy])} "
                     f"({alone[heavy] * 100 // total}%), --list-systems names them."
                 ]
     return []
@@ -15366,7 +15366,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     assumed_dests: set[Path] = set()
     named = args.platform or ""
     # What detection found, with the screen's labels, and whether the setups
-    # found are offered as its Where do you play? offers them: always when
+    # found are offered as its Where to install? screen offers them: always when
     # detection chose, and when a file list named the platform.
     setups: list = []
     mounted: set = set()
@@ -18442,7 +18442,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
                 *([TuiRow("install", "Install anyway")] if rows else [])]
     # --system given: the choice stays offered, the list widened when it is
     # opened. With one system named it was neither shown nor changeable.
-    copy = TuiRow("fromcard", "Copy the BIOS files from your old card or a folder")
+    copy = TuiRow("fromcard", "Copy the BIOS files from an old card or a folder")
     if not rows:
         # Nothing can be installed: the remedy the plan names comes first,
         # in focus. Choose systems was, whose systems need the internet
@@ -19379,7 +19379,7 @@ def _no_setup_reads(state: TuiState, folder: Path | None) -> str:
     if folder is None:
         return ""
     if folder == state.home:
-        return "No setup reads BIOS files in your home folder."
+        return "No setup reads BIOS files in the home folder."
     if folder == Path(folder.anchor):
         return "No setup reads BIOS files at a drive's root."
     return ""
@@ -21537,7 +21537,7 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
                      f"{'is' if len(misplaced) == 1 else 'are'} in the wrong place, "
                      f"{'it' if len(misplaced) == 1 else 'they'} will be copied where the "
                      "emulators read "
-                     f"{'it' if len(misplaced) == 1 else 'them'}, your "
+                     f"{'it' if len(misplaced) == 1 else 'them'}, the "
                      f"{'copy' if len(misplaced) == 1 else 'copies'} left as "
                      f"{'it is' if len(misplaced) == 1 else 'they are'}.")
     if backup:
@@ -21726,7 +21726,7 @@ def _view_platforms(state: TuiState, width: int, height: int) -> tuple:
         # A handheld's owner knows its device, not its system's name: the
         # filter finds it, and a pad that cannot type finds the cards right
         # after RetroArch (_cards_first).
-        pinned.append("Nothing was found here. Choose the setup, or type your device's "
+        pinned.append("Nothing was found here. Choose the setup, or type the device's "
                       "name (/)." if state.pad in ("both", "keys") else
                       "Nothing was found here. Choose the setup: handhelds come after "
                       "RetroArch.")
@@ -21931,7 +21931,7 @@ def _choice_line(state: TuiState) -> list[str]:
     again by a check of their own, so only ticked systems are left here."""
     if tui_flags(state) == state.checked_flags:
         return []
-    return [f"For your {len(state.ticked)} of {len(state.systems)} systems, the exact "
+    return [f"For the {len(state.ticked)} of {len(state.systems)} systems chosen, the exact "
             "count comes before the install."]
 
 
@@ -22013,7 +22013,7 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
                                     else "")] if state.regions else [])]
     said = ", ".join(named)
     if said and not said.startswith("for "):
-        said = f"for your choice: {said}"
+        said = f"for this choice: {said}"
     # A system --system named that --no-game-data left empty, in line mode's
     # words.
     listed = {row["system"] for row in state.systems}
@@ -22087,7 +22087,7 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
         else [line])]
     rows = tui_rows(state)
     if width < 54:
-        rows = [row._replace(label="Copy from your old card or a folder")
+        rows = [row._replace(label="Copy from an old card or a folder")
                 if row.action == "fromcard" else row for row in rows]
         # One line: in two, a 40x12 plan dropped it, "1 wrong copy" left
         # alone to say a file would be replaced.
@@ -22236,7 +22236,7 @@ def _view_systems(state: TuiState, width: int, height: int) -> tuple:
     chosen = _ticked_files(state)
     total = (f"{len(state.ticked)} of {len(state.systems)} systems: "
              f"{_plural(len(chosen), 'file')}, {format_size(sum(e['size'] for e in chosen))}"
-             + (" before your options" if _counts_predate_options(state) else ""))
+             + (" before the options" if _counts_predate_options(state) else ""))
     footer = [_styled(total, "title")]
     focused = rows[min(state.focus.get("systems", 0), len(rows) - 1)]
     drawn = str(_row_line(focused, True, width))
@@ -22320,7 +22320,7 @@ def _status_footer(state: TuiState) -> list:
 def _view_cores(state: TuiState, width: int, height: int) -> tuple:
     # Kept above a list that scrolls: dropped once the rows filled the
     # screen, 189 cores never said what unticking does.
-    pinned = ["Untick the cores you do not use: the platform's own files are always kept, "
+    pinned = ["Untick the cores not in use: the platform's own files are always kept, "
               "and a core with no extra file reads only those."]
     return ("Cores", _compose(state, width, height, [], tui_rows(state), (),
                               _status_footer(state), pinned),
@@ -22333,7 +22333,7 @@ _STATE_WORDS = {"missing": "missing", "wrong_hash": "wrong copy"}
 def _pager_items(state: TuiState) -> list:
     """The text of a screen that scrolls, the same for its view and its keys."""
     if state.screen == "misplaced":
-        return ["They are copied where the emulators read them. Your copies stay where "
+        return ["They are copied where the emulators read them. The copies found stay where "
                 "they are.", ""] + [f"{event['dest']}: {event['reason']}"
                                     for event in _tui_misplaced(state)]
     if state.screen == "unreadable":
@@ -22421,7 +22421,7 @@ def _view_confirm(state: TuiState, width: int, height: int) -> tuple:
                        if str(line).startswith(_FOLDER_LABEL)), len(lines))
             lines.insert(at, parts)
         if any(row.action == "install" for row in tui_rows(state)):
-            lines.insert(0, "Counted again for your choices. Nothing is written before "
+            lines.insert(0, "Counted again for these choices. Nothing is written before "
                          "Install.")
     if not any(row.action == "install" for row in tui_rows(state)) and state.dry is not None:
         # Back alone: one Back on the bar, and no word of an Install. Titled
@@ -22582,7 +22582,7 @@ def unavailable_lines(needed: list[dict], manifest: dict | None, dest: Path | No
     if firmware:
         lines.append(f"Not available here, and needed to start "
                      f"{'its emulator' if len(firmware) == 1 else 'their emulators'}: "
-                     f"{named(firmware)}. Your own copy goes in the BIOS folder.")
+                     f"{named(firmware)}. An owned copy goes in the BIOS folder.")
     if games:
         lines.append(game_data_missing(named(games), len(games), [
             (dest / entry["dest"]).parent for entry in games] if dest else []))
@@ -22684,7 +22684,7 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
     ok = {dest for dest, good, _why in state.finished if good}
     if any(reason and dest in ok for dest, (_folder, reason) in state.local_dests.items()):
         # A fix copies: the misplaced files are the user's, never moved.
-        lines.append("Your copies in the wrong place were left as they are.")
+        lines.append("The copies in the wrong place were left as they are.")
     if _tui_categories(state) and title != "Stopped" and installed:
         # As the plan counted them, and as line mode ends, on every result:
         # the old card's said "6 files copied" and no kind. The data tree

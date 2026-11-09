@@ -27,8 +27,8 @@
         {
           "dest": "roms/ports/retrobios/install.py",
           "repo_path": "install.py",
-          "size": 1130224,
-          "sha256": "494c71b780bf174e7caf64b08f0b3ec8295c5fcee1daae8f1779dfa6a0ab6367",
+          "size": 1130265,
+          "sha256": "c2265e2ff8fae9b485f195aa47c4a487f16a287ab6ad2f8f8a133bfede96c983",
           "executable": false
         },
         {
@@ -62,8 +62,8 @@
         {
           "dest": "roms/ports/retrobios/tui.txt",
           "repo_path": "ports/shared/tui.txt",
-          "size": 36434,
-          "sha256": "fa05432a9a4325f3fd3220eec0548ad932dffc1888b93a08af2047cc78aa4d0c",
+          "size": 36432,
+          "sha256": "daa51e746e7930863b6e746d3beadfba615c0ad4017fee8413269a15c93ecb92",
           "executable": false
         }
       ]
@@ -71,8 +71,8 @@
     "muos": {
       "archive": {
         "dest": "ARCHIVE/RetroBIOS.muxapp",
-        "size": 1183851,
-        "sha256": "a957e080b749916cd2ecba36d35bc3c19e6c4eb1c5d726a7e94643c7c3583d05"
+        "size": 1183890,
+        "sha256": "0d0b07197b3dd080ee41d67fe055881ab7c549f769861ada39e58ed8dda04e5a"
       },
       "members": [
         {
@@ -92,8 +92,8 @@
         {
           "name": "RetroBIOS/install.py",
           "repo_path": "install.py",
-          "size": 1130224,
-          "sha256": "494c71b780bf174e7caf64b08f0b3ec8295c5fcee1daae8f1779dfa6a0ab6367",
+          "size": 1130265,
+          "sha256": "c2265e2ff8fae9b485f195aa47c4a487f16a287ab6ad2f8f8a133bfede96c983",
           "executable": false
         },
         {
@@ -141,8 +141,8 @@
         {
           "name": "RetroBIOS/tui.txt",
           "repo_path": "ports/shared/tui.txt",
-          "size": 36434,
-          "sha256": "fa05432a9a4325f3fd3220eec0548ad932dffc1888b93a08af2047cc78aa4d0c",
+          "size": 36432,
+          "sha256": "daa51e746e7930863b6e746d3beadfba615c0ad4017fee8413269a15c93ecb92",
           "executable": false
         }
       ]
@@ -166,8 +166,8 @@
         {
           "dest": ".config/modules/retrobios/install.py",
           "repo_path": "install.py",
-          "size": 1130224,
-          "sha256": "494c71b780bf174e7caf64b08f0b3ec8295c5fcee1daae8f1779dfa6a0ab6367",
+          "size": 1130265,
+          "sha256": "c2265e2ff8fae9b485f195aa47c4a487f16a287ab6ad2f8f8a133bfede96c983",
           "executable": false
         },
         {
@@ -208,8 +208,8 @@
         {
           "dest": ".config/modules/retrobios/tui.txt",
           "repo_path": "ports/shared/tui.txt",
-          "size": 36434,
-          "sha256": "fa05432a9a4325f3fd3220eec0548ad932dffc1888b93a08af2047cc78aa4d0c",
+          "size": 36432,
+          "sha256": "daa51e746e7930863b6e746d3beadfba615c0ad4017fee8413269a15c93ecb92",
           "executable": false
         }
       ]
