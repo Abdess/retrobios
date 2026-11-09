@@ -702,6 +702,11 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # says it. A kind of its own: the full-screen interface always gives
     # --dest, and the board was never applied there.
     "board": ("platform", "board", "applied", "message"),
+    # --installed-cores, before choices, once per installed core the list
+    # has no profile for: info is whether its .info was found, dests the
+    # firmware paths it declares, kept whatever the narrowing drops. A
+    # core with no .info keeps nothing it alone reads, and message says so.
+    "unknown_core": ("platform", "core", "info", "dests", "message"),
     # Before the file events of a check: the systems the run's list lets
     # one choose among, --system aside, in id order (other for the files
     # no system names). What Choose systems lists, and what the plan counts
@@ -3158,6 +3163,67 @@ def installed_cores(dirs: list[Path]) -> list[str]:
     return sorted(names)
 
 
+def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
+    """The directories RetroArch reads core .info files from.
+
+    libretro_info_path in retroarch.cfg, info/ beside RetroArch by default,
+    then the cores folders: Linux builds and Lakka keep each .info beside
+    its core.
+    """
+    found = _retroarch_config_for(bios_path)
+    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
+        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    dirs: list[Path] = []
+    if found is not None:
+        cfg, app_dir = found
+        dirs.append(_retroarch_cfg_dir(cfg, "libretro_info_path", app_dir, "info")
+                    or app_dir / "info")
+    dirs.extend(searched)
+    return list(dict.fromkeys(dirs))
+
+
+_INFO_FIRMWARE_RE = re.compile(r'^\s*firmware\d+_path\s*=\s*"?([^"\r\n]*?)"?\s*$')
+
+
+def info_firmware(dirs: list[Path], core: str) -> list[str] | None:
+    """The firmware paths a core's .info declares, None without a .info.
+
+    RetroArch reads firmware<N>_path, relative to the system directory
+    (core_info.c), and so does this.
+    """
+    for directory in dirs:
+        info = directory / f"{core}_libretro.info"
+        try:
+            text = info.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        paths = (m.group(1).strip().replace("\\", "/")
+                 for m in map(_INFO_FIRMWARE_RE.match, text.splitlines()) if m)
+        return list(dict.fromkeys(p for p in paths if p))
+    return None
+
+
+def known_core_names(manifest: dict) -> set[str]:
+    """Every core name a file list answers for: profiles and their other names."""
+    names: set[str] = set()
+    for profile, aliases in (manifest.get("core_names") or {}).items():
+        names.add(profile)
+        names.update(aliases)
+    for cores in (manifest.get("system_cores") or {}).values():
+        names.update(cores)
+    for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
+        names.update(entry.get("cores") or [])
+        for alternative in entry.get("alternatives", []):
+            names.update(alternative.get("cores") or [])
+    return names
+
+
+def unknown_cores(manifest: dict, names: list[str]) -> list[str]:
+    """The installed cores the file list has no profile for, in name order."""
+    known = known_core_names(manifest)
+    return sorted(name for name in names if name not in known)
+
+
 def display_name(plat: str, manifest: dict | None = None) -> str:
     """A platform's name as the frontend writes it, the manifest's when it has one."""
     named = (manifest or {}).get("display_name")
@@ -4542,6 +4608,7 @@ def narrow_to_cores(
     names: list[str],
     files: list[dict] | None = None,
     omitted: list[dict] | None = None,
+    declared_by_info: Collection[str] = (),
 ) -> tuple[list[dict], list[dict]]:
     """Keep what the named cores read, as a pack built for them carries.
 
@@ -4551,9 +4618,12 @@ def narrow_to_cores(
     it does not list stays whatever is named. A dropped system's file gives
     way to the first named core claiming its destination. A manifest without
     the two maps keeps the platform's list whole and matches cores by name.
+    A destination in `declared_by_info`, what the .info of an installed core
+    no profile describes declares, stays whatever is named.
     """
     cores = designated_cores(manifest, names)
     reach = manifest.get("system_cores") or {}
+    info_dests = {dest.casefold() for dest in declared_by_info}
 
     def kept_system(system: str) -> bool:
         return system not in reach or bool(cores.intersection(reach[system]))
@@ -4563,6 +4633,9 @@ def narrow_to_cores(
     def kept(entries: list[dict]) -> list[dict]:
         result: list[dict] = []
         for entry in entries:
+            if str(entry.get("dest", "")).casefold() in info_dests:
+                result.append(_for_cores(entry, cores) or _settle_slot(entry, cores))
+                continue
             if entry.get("cores") is not None:
                 copy = _for_cores(entry, cores)
                 if copy is not None:
@@ -14199,6 +14272,37 @@ def _check_cores_dir(folder: Path) -> None:
     sys.exit(1)
 
 
+def _unprofiled_cores_firmware(
+    plat: str, bios_path: Path, manifest: dict, found: list[str], searched: list[Path],
+) -> list[str]:
+    """What the installed cores the list has no profile for declare, each said.
+
+    Such a core reads systems the list cannot name, and narrowing to the
+    installed cores dropped its BIOS without a word (issue 87, parallel_dc
+    before its profile). Its .info is what RetroArch itself checks, so the
+    files it declares are kept. A core without one is named.
+    """
+    unknown = unknown_cores(manifest, found)
+    if not unknown:
+        return []
+    dirs = info_dirs(plat, bios_path, searched)
+    dests: list[str] = []
+    for core in unknown:
+        declared = info_firmware(dirs, core)
+        if declared is None:
+            message = (f"{core}: a core this list does not know, with no .info to read: "
+                       "its files may be missing. Run without --installed-cores "
+                       "to install every file.")
+        else:
+            message = (f"{core}: a core this list does not know, "
+                       f"{_plural(len(declared), 'file')} its .info declares kept")
+        print(f"  {message}")
+        EVENTS.emit("unknown_core", platform=plat, core=core,
+                    info=declared is not None, dests=declared or [], message=message)
+        dests.extend(declared or [])
+    return dests
+
+
 def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
     """Refuse --installed-cores with no core, and say how to point at them.
 
@@ -15547,12 +15651,14 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     # Every check --installed-cores makes before anything is written: a
     # refusal for the second platform must not follow an install of the first.
     cores_found: dict[tuple[str, Path], list[str]] = {}
+    cores_searched: dict[tuple[str, Path], list[Path]] = {}
     for plat_name, bios_path in platforms:
         if plat_name in CORE_PLATFORMS:
             if args.cores_dir:
                 _check_cores_dir(args.cores_dir)
             searched = [args.cores_dir] if args.cores_dir else core_dirs(plat_name, bios_path)
             cores_found[(plat_name, bios_path)] = installed_cores(searched)
+            cores_searched[(plat_name, bios_path)] = searched
         elif args.installed_cores:
             print(
                 f"Error: {plat_name} ships its cores with the system. "
@@ -15687,8 +15793,12 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(_older_list_advice(plat_name), file=sys.stderr)
                 sys.exit(1)
             before = len(files)
+            info_dests = _unprofiled_cores_firmware(
+                plat_name, bios_path, manifest, found_cores,
+                cores_searched.get((plat_name, bios_path), []),
+            )
             files, omitted_files = narrow_to_cores(
-                manifest, found_cores, files, omitted_files
+                manifest, found_cores, files, omitted_files, info_dests
             )
             print(f"  Narrowed {before} to {len(files)} files to the installed cores")
 

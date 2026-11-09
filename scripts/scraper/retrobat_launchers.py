@@ -147,12 +147,14 @@ class Source:
         return max(holding)
 
     def header(self, block: tuple[int, int]) -> str:
-        """The statement that owns a block's opening brace, comments removed."""
+        """The statement that owns a block's opening brace, comments and
+        preprocessor lines (#region, #if) removed."""
         if self._ends is None:
             self._ends = [o for o, c in _code_chars(self.text) if c in ";{}"]
         previous = bisect.bisect_left(self._ends, block[0]) - 1
         start = self._ends[previous] + 1 if previous >= 0 else 0
-        text = re.sub(r"//[^\n]*|/\*.*?\*/", "", self.text[start : block[0]], flags=re.S)
+        text = re.sub(r"//[^\n]*|/\*.*?\*/|^[ \t]*#[^\n]*", "", self.text[start : block[0]],
+                      flags=re.S | re.M)
         return " ".join(text.split())
 
     def statement_span(self, block: tuple[int, int]) -> tuple[int, int]:
@@ -381,34 +383,65 @@ def ares(sources: dict[str, Source]) -> list[Record]:
 
 
 def hatari(sources: dict[str, Source]) -> list[Record]:
+    """tos.img in bios, a TOS chosen in bios/hatari/tos, and EmuTOS from there
+    for a hard disk image, for a missing tos.img, or after a TOS too old for
+    autostart or GEMDOS."""
     src = sources[f"{GENERATORS}/Hatari.Generator.cs"]
     features = sources[FEATURES]
-    default = src.find(rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)"\);', "default TOS path")
+    folder = src.find(
+        rf'string (\w+) = Path\.Combine\({BIOS}, ((?:"[^"]+"(?:, )?)+)\);', "TOS folder"
+    )
+    tos_dir, folders = folder.group(1), _strings(folder.group(2))
+    default = src.find(
+        rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)"\);', "default TOS path", folder.end()
+    )
     var, name = default.group(1), default.group(2)
+    emutos = src.find(
+        rf'string (\w+) = Path\.Combine\({tos_dir}, "([^"]+)"\);', "EmuTOS path", default.end()
+    )
     override = src.find(
-        rf'isOptSet\("(\w+)"\)[^\n]*\n\s*{var} = Path\.Combine\({BIOS}, ((?:"[^"]+", )+)SystemConfig\["\1"\]\);',
+        rf'isOptSet\("(\w+)"\)[^\n]*\n\s*{var} = Path\.Combine\({tos_dir}, SystemConfig\["\1"\]\);',
         "TOS option override",
-        default.end(),
+        emutos.end(),
     )
-    option, folders = override.group(1), _strings(override.group(2))
+    option = override.group(1)
+    disk = src.find(
+        rf"else if \(media\.HasHardDiskImage && File\.Exists\({emutos.group(1)}\)\)",
+        "EmuTOS for a hard disk image",
+        override.end(),
+    )
+    absent = src.find(
+        rf"if \(!File\.Exists\({var}\) && File\.Exists\({emutos.group(1)}\)\)\s*{var} = {emutos.group(1)};",
+        "EmuTOS without tos.img",
+        disk.end(),
+    )
+    newer = src.find(
+        r"new string\[\] \{ ((?:\"[^\"]+\"(?:, )?)+) \}\s*"
+        rf"\.Select\(t => Path\.Combine\({tos_dir}, t\)\)\s*\.FirstOrDefault\(t => File\.Exists\(t\)\);",
+        "TOS for autostart and GEMDOS",
+        absent.end(),
+    )
     write = src.find(
-        rf'ini\.WriteValue\("(\w+)", "(\w+)", {var}\);', "TOS ini write", override.end()
+        rf'ini\.WriteValue\("(\w+)", "(\w+)", {var}\);', "TOS ini write", newer.end()
     )
-    message, _ = _throw_message(src, override.end(), write.start())
+    message, _ = _throw_message(src, newer.end(), write.start())
     passes = f"hatari.cfg [{write.group(1)}] {write.group(2)}"
+    tos_folder = "/".join(["bios", *folders])
     choices, choice_lines = feature_choices(features, "hatari", option)
+    head = src.lines(folder.start(), emutos.end())
+    tail = src.lines(write.start(), write.end())
     return [
         _record(
             "hatari",
             "standalone",
             "fixed_name",
             [name],
-            source_ref((src.path, [src.lines(default.start(), write.end())])),
+            source_ref((src.path, [head, src.lines(absent.start(), absent.end()), tail])),
             case_insensitive=True,
             search_dir="bios",
             passes_to=f"{passes}=<bios>/{name}",
-            fails_when_missing=message,
-            depends_on_option=f"{option} unset",
+            fails_when_missing=f"{tos_folder}/{emutos.group(2)} instead, else {message}",
+            depends_on_option=f"{option} unset, no hard disk image",
         ),
         _record(
             "hatari",
@@ -416,14 +449,38 @@ def hatari(sources: dict[str, Source]) -> list[Record]:
             "core_option",
             choices,
             source_ref(
-                (src.path, [src.lines(override.start(), write.end())]),
+                (src.path, [head, src.lines(override.start(), override.end()), tail]),
                 (features.path, [choice_lines]),
             ),
             case_insensitive=True,
-            search_dir="/".join(["bios", *folders]),
+            search_dir=tos_folder,
             passes_to=f"{passes}=<bios>/{'/'.join(folders)}/<value>",
             fails_when_missing=message,
             depends_on_option=option,
+        ),
+        _record(
+            "hatari",
+            "standalone",
+            "fixed_name",
+            [emutos.group(2)],
+            source_ref((src.path, [head, src.lines(disk.start(), absent.end()), tail])),
+            case_insensitive=True,
+            search_dir=tos_folder,
+            passes_to=f"{passes}=<bios>/{'/'.join(folders)}/{emutos.group(2)}",
+            fails_when_missing=f"{name} is used, as without a hard disk image",
+            depends_on_option=f"{option} unset, a hard disk image mounted or no {name}",
+        ),
+        _record(
+            "hatari",
+            "standalone",
+            "names_searched",
+            _strings(newer.group(1)),
+            source_ref((src.path, [head, src.lines(newer.start(), newer.end()), tail])),
+            case_insensitive=True,
+            search_dir=tos_folder,
+            passes_to=f"{passes}=<first found>",
+            fails_when_missing="the TOS older than 1.04 is kept",
+            depends_on_option=f"{option} unset, autostart or GEMDOS folder, TOS older than 1.04",
         ),
     ]
 
@@ -434,70 +491,100 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
     records = []
 
     tosimage = src.find(
-        r'if \(SystemConfig\.isOptSet\("(\w+)"\)[^\n]*\n\s*coreSettings\["(hatari_tosimage)"\] = SystemConfig\["\1"\];'
-        r'\s*else\s*coreSettings\["\2"\] = "(\w+)";',
+        r'string (\w+) = SystemConfig\["(\w+)"\];\s*'
+        rf'if \(!string\.IsNullOrEmpty\(\1\) && \1 != "(\w+)" && File\.Exists\(Path\.Combine\({BIOS}, '
+        r'((?:"[^"]+", )+)\1\)\)\)\s*coreSettings\["(hatari_tosimage)"\] = \1;'
+        r'\s*else\s*coreSettings\["\5"\] = "\3";',
         "hatari_tosimage",
     )
-    choices, choice_lines = feature_choices(features, "libretro", tosimage.group(1), core="hatari")
+    guard = src.find(r'if \(core != "(hatari2014)"\)', "hatari2014 guard")
+    folders = _strings(tosimage.group(4).rstrip(", "))
+    choices, choice_lines = feature_choices(
+        features, "libretro", tosimage.group(2), core=guard.group(1)
+    )
     records.append(
         _record(
-            "hatari",
+            guard.group(1),
             "libretro",
             "core_option",
             choices,
             source_ref(
-                (src.path, [src.lines(tosimage.start(), tosimage.end())]),
+                (src.path, [src.lines(guard.start(), tosimage.end())]),
                 (features.path, [choice_lines]),
             ),
-            search_dir="bios",
-            passes_to=f"{tosimage.group(2)} = <value> | {tosimage.group(3)}",
-            fails_when_missing="not checked by the launcher",
-            depends_on_option=tosimage.group(1),
+            search_dir="/".join(["bios", *folders]),
+            passes_to=f"{tosimage.group(5)} = <value>, if the file is there | {tosimage.group(3)}",
+            fails_when_missing=f"{tosimage.group(5)} = {tosimage.group(3)}",
+            depends_on_option=tosimage.group(2),
         )
     )
 
     guard = src.find(r'if \(core != "hatarib"\)', "hatarib guard")
     method = src.enclosing(guard.start())
-    found = src.find(
-        rf'else if \(File\.Exists\(Path\.Combine\({BIOS}, "([^"]+)"\)\)\)\s*'
-        r'coreSettings\["(hatarib_tos)"\] = "([^"]+)";\s*else\s*coreSettings\["hatarib_tos"\] = "([^"]+)";',
-        "hatarib tos.img fallback",
-        method[0],
+    tos_img = src.find(
+        rf'string (\w+) = Path\.Combine\((\w+), "([^"]+)"\);', "hatarib tos.img path",
+        method[0], method[1],
+    )
+    own = src.find(
+        rf'string (\w+) = Path\.Combine\({tos_img.group(2)}, "([^"]+)"\);', "hatarib folder",
+        tos_img.end(), method[1],
+    )
+    option = src.find(
+        r'string (\w+) = SystemConfig\["(hatarib_tos)"\];', "hatarib option", own.end(), method[1]
+    )
+    tos_var, key = option.group(1), option.group(2)
+    named = src.find(
+        rf'if \({tos_var} == "(\w+)"\)\s*\{{\s*if \(File\.Exists\({tos_img.group(1)}\)\)\s*'
+        r'(\w+) = "([^"]+)";',
+        "tos.img choice", option.end(), method[1],
+    )
+    builtin = src.find(
+        rf'else if \({tos_var}\.StartsWith\("(\w+)"\)\)', "EmuTOS choices", named.end(), method[1]
+    )
+    shared = src.find(
+        rf'string (\w+) = Path\.Combine\({own.group(1)}, {tos_var}\);\s*'
+        rf'string (\w+) = Path\.Combine\({tos_img.group(2)}, ((?:"[^"]+", )+){tos_var}\);',
+        "shared TOS folder", builtin.end(), method[1],
+    )
+    copy = src.find(
+        rf"if \(!File\.Exists\({shared.group(1)}\) && File\.Exists\({shared.group(2)}\)\)",
+        "copy from the shared folder", shared.end(), method[1],
+    )
+    chosen = src.find(
+        rf'if \(File\.Exists\({shared.group(1)}\)\)\s*{named.group(2)} = "([^"/]+)/" \+ {tos_var};',
+        "chosen TOS write", copy.end(), method[1],
+    )
+    fallback = src.find(
+        rf'if \({named.group(2)} == null\)\s*\{{\s*{named.group(2)} = "([^"]+)";\s*'
+        rf'if \(File\.Exists\({tos_img.group(1)}\)\)\s*\{{\s*{named.group(2)} = "([^"]+)";',
+        "default TOS", chosen.end(), method[1],
+    )
+    emutos = src.find(
+        rf'{named.group(2)} = "{re.escape(fallback.group(1))}";', "EmuTOS for a disk", fallback.end(),
         method[1],
     )
+    folders = _strings(shared.group(3).rstrip(", "))
+    choices, choice_lines = feature_choices(features, "libretro", key, core="hatarib")
+    files = [c for c in choices if c != named.group(1) and not c.startswith(builtin.group(1))]
+    head = src.lines(tos_img.start(), own.end())
     records.append(
         _record(
             "hatarib",
             "libretro",
             "fixed_name",
-            [found.group(1)],
-            source_ref((src.path, [src.lines(found.start(), found.end())])),
+            [tos_img.group(3)],
+            source_ref((src.path, [head, src.lines(named.start(), named.end()),
+                                   src.lines(fallback.start(), emutos.end())])),
             case_insensitive=True,
             search_dir="bios",
-            passes_to=f"{found.group(2)} = {found.group(3)}",
-            fails_when_missing=f"falls back to {found.group(2)} = {found.group(4)}",
-            depends_on_option=f"{found.group(2)} unset",
+            passes_to=f"{key} = {fallback.group(2)}",
+            fails_when_missing=f"falls back to {key} = {fallback.group(1)}",
+            depends_on_option=(
+                f"{key} unset or {named.group(1)}; {fallback.group(1)} instead for a hard disk image "
+                "under a TOS other than EmuTOS, or for autostart or GEMDOS under TOS older than 1.04"
+            ),
         )
     )
-
-    picked = src.find(
-        rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)", SystemConfig\["(hatarib_tos)"\]\);',
-        "hatarib option path",
-        method[0],
-        method[1],
-    )
-    write = src.find(
-        r'coreSettings\["hatarib_tos"\] = (\w+);', "hatarib option write", picked.end()
-    )
-    skipped = re.findall(
-        r'SystemConfig\["hatarib_tos"\] == "(\w+)"', src.text[method[0] : picked.start()]
-    )
-    prefixes = re.findall(
-        r'SystemConfig\["hatarib_tos"\]\.StartsWith\("(\w+)"\)',
-        src.text[method[0] : picked.start()],
-    )
-    choices, choice_lines = feature_choices(features, "libretro", picked.group(3), core="hatarib")
-    files = [c for c in choices if c not in skipped and not c.startswith(tuple(prefixes))]
     records.append(
         _record(
             "hatarib",
@@ -505,14 +592,28 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
             "core_option",
             files,
             source_ref(
-                (src.path, [src.lines(picked.start(), write.end())]),
+                (src.path, [head, src.lines(shared.start(), chosen.end())]),
                 (features.path, [choice_lines]),
             ),
             case_insensitive=True,
-            search_dir=f"bios/{picked.group(2)}",
-            passes_to=f"hatarib_tos = {picked.group(2)}/<value>",
-            fails_when_missing="option not written when the file is absent",
-            depends_on_option=picked.group(3),
+            search_dir=f"bios/{own.group(2)}",
+            passes_to=f"{key} = {chosen.group(1)}/<value>",
+            fails_when_missing=f"{key} = {fallback.group(1)}, or {fallback.group(2)} when bios holds it",
+            depends_on_option=key,
+        )
+    )
+    records.append(
+        _record(
+            "hatarib",
+            "libretro",
+            "copies",
+            files,
+            source_ref((src.path, [head, src.lines(shared.start(), copy.end())])),
+            case_insensitive=True,
+            search_dir="/".join(["bios", *folders]),
+            passes_to=f"copied to bios/{own.group(2)}/<value>, only when the target does not exist",
+            fails_when_missing=False,
+            depends_on_option=key,
         )
     )
     return records
@@ -2397,11 +2498,46 @@ def raine(sources: dict[str, Source]) -> list[Record]:
 
 
 def gsplus(sources: dict[str, Source]) -> list[Record]:
+    """The first of the names GSplus accepts that the bios folder holds, written
+    as its ROM path. Without one the key is left alone and GSplus searches
+    beside its executable."""
     src = sources[f"{GENERATORS}/GsPlus.Generator.cs"]
-    records = _value_writes(src, "gsplus", "standalone")
-    if not records:
-        raise LauncherPatternMissing(src.path, "ROM path write")
-    return _covered(src, records)
+    listed = src.find(
+        r"static readonly string\[\] (\w+) = new string\[\] \{ ((?:\"[^\"]+\"(?:, )?)+) \};",
+        "ROM names",
+    )
+    root = src.find(r"string (\w+) = AppConfig\.GetFullPath\(\"bios\"\);", "bios folder")
+    first = src.find(
+        rf"string (\w+) = {listed.group(1)}\s*\.Select\(n => Path\.Combine\({root.group(1)}, n\)\)"
+        r"\s*\.FirstOrDefault\(File\.Exists\);",
+        "first name present",
+    )
+    write = src.find(
+        rf'(\w+)\.WriteValue\(null, "(\w+)", {first.group(1)}\);', "ROM path write"
+    )
+    conditions, returns = _when(src, write.start())
+    # The test on the name found is the selection itself, not a condition.
+    conditions = [c for c in conditions if first.group(1) not in c]
+    target = f"{_config_label(src, write.start(), write.group(1))} {write.group(2)}"
+    record = _record(
+        "gsplus",
+        "standalone",
+        "names_searched",
+        _strings(listed.group(2)),
+        _path_parts(
+            src,
+            *returns,
+            src.lines(listed.start(), listed.end()),
+            src.lines(root.start(), root.end()),
+            src.lines(first.start(), write.end()),
+        ),
+        case_insensitive=True,
+        search_dir="bios",
+        passes_to=f"{target} = <first found>",
+        fails_when_missing=False,
+        depends_on_option=", ".join(conditions) or None,
+    )
+    return _covered(src, [record])
 
 
 def _copies_if_absent(
@@ -2994,15 +3130,25 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
         lookup_body[0],
         lookup_body[1],
     )
-    method = src.find(r"private string GetBiosPath\(string rom, string biosRoot\)", "GetBiosPath")
+    method = src.find(
+        r"private string GetBiosPath\(string rom, string biosRoot, bool isChd\)", "GetBiosPath"
+    )
     body = src.block_at(method.end())
     src.find(
-        r"var candidates = new List<string> \{ Path\.GetDirectoryName\(Path\.GetFullPath\(rom\)\) \};",
+        r"string romDir = Path\.GetDirectoryName\(Path\.GetFullPath\(rom\)\);\s*"
+        r"var candidates = new List<string> \{ romDir \};",
         "game folder first",
         body[0],
         body[1],
     )
-    src.find(r"candidates\.Add\(biosRoot\);", "bios folder second", body[0], body[1])
+    src.find(
+        r"if \(isChd && Directory\.GetParent\(romDir\) != null\)\s*"
+        r"candidates\.Add\(Directory\.GetParent\(romDir\)\.FullName\);",
+        "folder above a CHD-only set second",
+        body[0],
+        body[1],
+    )
+    src.find(r"candidates\.Add\(biosRoot\);", "bios folder last", body[0], body[1])
     message, _ = _throw_message(src, body[0], body[1])
     root = src.find(rf"string biosPath = {_BIOS_ROOT};", "bios root")
     write = src.find(r'ini\.WriteValue\("(\w+)", "(\w+)", biosPath\);', "SearchDirectory write")
@@ -3031,7 +3177,7 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
             [f"<bios archive of the game's system in {database_file}>"],
             ref,
             case_insensitive=False,
-            search_dir="<rom directory>, then bios",
+            search_dir="<rom directory>, then the folder above it for a CHD-only set, then bios",
             passes_to=f"{target} = <folder found>",
             fails_when_missing=message,
         ),
@@ -3043,7 +3189,7 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
             ref,
             slot=fixed.group(1),
             case_insensitive=False,
-            search_dir="<rom directory>, then bios",
+            search_dir="<rom directory>, then the folder above it for a CHD-only set, then bios",
             passes_to=f"{target} = <folder found>",
             fails_when_missing=message,
             depends_on_option=f"{database_file} names no archive for {fixed.group(1)}",

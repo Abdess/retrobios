@@ -1,6 +1,6 @@
 platform: emudeck
 source: https://github.com/dragoonDorise/EmuDeck/tree/dddb30229adbbd54d5ff7283cfd70e11c4322c26
-scraped_at: '2026-11-06T13:46:57Z'
+scraped_at: '2026-11-09T06:02:29Z'
 targets:
   steamos:
     architecture: x86_64
@@ -66,6 +66,7 @@ targets:
     - easyrpg
     - ecwolf
     - eden
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha
@@ -108,11 +109,14 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
+    - hypseushw
     - irogb
     - jaxe
     - jollycv
     - jumpnbump
     - kronos
+    - linuxloader
     - lowresnx
     - lutro
     - m2000
@@ -152,6 +156,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - n64emu
     - native32emu
     - nekop2
     - neocd
@@ -165,10 +170,13 @@ targets:
     - nxengine
     - o2em
     - oberon
+    - odin
     - omicron
     - openlara
+    - openmsx
     - opera
     - panda3ds
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcem
@@ -176,6 +184,7 @@ targets:
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -232,6 +241,7 @@ targets:
     - tic80
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -331,6 +341,7 @@ targets:
     - easyrpg
     - ecwolf
     - eden
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha
@@ -372,11 +383,14 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
+    - hypseushw
     - irogb
     - jaxe
     - jollycv
     - jumpnbump
     - kronos
+    - linuxloader
     - lowresnx
     - lutro
     - m2000
@@ -416,6 +430,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - n64emu
     - native32emu
     - nekop2
     - neocd
@@ -429,9 +444,12 @@ targets:
     - nxengine
     - o2em
     - oberon
+    - odin
     - openlara
+    - openmsx
     - opera
     - panda3ds
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcem
@@ -439,6 +457,7 @@ targets:
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -494,6 +513,7 @@ targets:
     - tic80
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next

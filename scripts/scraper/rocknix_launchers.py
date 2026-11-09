@@ -327,9 +327,15 @@ def link_record(emulator: str, script: Script, link: Link, **fields: object) -> 
 
 def hatari(tree: RepoTree) -> list[Launcher]:
     package = f"{STANDALONE}/hatarisa"
-    script = Script(
-        f"{package}/scripts/start_hatari.sh", tree.read(f"{package}/scripts/start_hatari.sh")
+    # The script is named after the package's binary: start_hatari.sh became
+    # start_hatarisa.sh (2e7041d273), so it is found, not spelled.
+    starts = sorted(
+        name for name in tree.listdir(f"{package}/scripts")
+        if name.startswith("start_") and name.endswith(".sh")
     )
+    if len(starts) != 1:
+        raise LauncherPatternMissing(f"{package}/scripts", "one start script")
+    script = Script(f"{package}/scripts/{starts[0]}", tree.read(f"{package}/scripts/{starts[0]}"))
     copy_line, copy = script.find(r"cp \S+/([\w-]+\.cfg) ", "default config copy")
     run_line, _ = script.find(r"--configfile", "--configfile", copy_line)
     path = f"{package}/config/conf/{copy.group(1)}"
@@ -557,17 +563,6 @@ def duckstation(tree: RepoTree) -> list[Launcher]:
     )
 
 
-def aethersx2(tree: RepoTree) -> list[Launcher]:
-    return directory_records(
-        tree,
-        "aethersx2",
-        f"{STANDALONE}/aethersx2-sa",
-        "aethersx2/inis/PCSX2.ini",
-        ("Folders", "Bios"),
-        (("Filenames", "BIOS"),),
-    )
-
-
 def armsx2(tree: RepoTree) -> list[Launcher]:
     return directory_records(
         tree,
@@ -683,7 +678,6 @@ EXTRACTORS: tuple[Callable[[RepoTree], list[Launcher]], ...] = (
     mednafen,
     yabasanshiro,
     duckstation,
-    aethersx2,
     armsx2,
     patched_directories,
     links,

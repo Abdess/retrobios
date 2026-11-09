@@ -1,6 +1,6 @@
 platform: retroarch
 source: https://buildbot.libretro.com/nightly/
-scraped_at: '2026-10-20T00:25:51Z'
+scraped_at: '2026-11-09T04:38:04Z'
 targets:
   linux-x86_64:
     architecture: x86_64
@@ -60,6 +60,7 @@ targets:
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha
@@ -102,11 +103,14 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
+    - hypseushw
     - irogb
     - jaxe
     - jollycv
     - jumpnbump
     - kronos
+    - linuxloader
     - lowresnx
     - lutro
     - m2000
@@ -145,6 +149,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - n64emu
     - native32emu
     - nekop2
     - neocd
@@ -158,10 +163,13 @@ targets:
     - nxengine
     - o2em
     - oberon
+    - odin
     - omicron
     - openlara
+    - openmsx
     - opera
     - panda3ds
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcem
@@ -169,6 +177,7 @@ targets:
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -221,6 +230,7 @@ targets:
     - tic80
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -345,6 +355,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - jaxe
     - jollycv
     - jumpnbump
@@ -386,6 +397,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - n64emu
     - native32emu
     - nekop2
     - neocd
@@ -401,11 +413,13 @@ targets:
     - omicron
     - openlara
     - opera
+    - parallel_dc
     - parallel_n64
     - pcem
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -535,6 +549,7 @@ targets:
     - dosbox_svn
     - easyrpg
     - ecwolf
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha2012
@@ -576,13 +591,16 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - irogb
     - jaxe
     - jollycv
     - jumpnbump
     - kronos
+    - linuxloader
     - lowresnx
     - lutro
+    - m2000
     - mame
     - mame2000
     - mame2003
@@ -616,6 +634,7 @@ targets:
     - mojozork
     - mrboom
     - mu
+    - mupen64plus_next
     - native32emu
     - nekop2
     - neocd
@@ -628,15 +647,19 @@ targets:
     - nxengine
     - o2em
     - oberon
+    - odin
     - omicron
     - openlara
+    - openmsx
     - opera
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -686,6 +709,7 @@ targets:
     - tic80
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -979,6 +1003,7 @@ targets:
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha
@@ -1020,11 +1045,14 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
+    - hypseushw
     - irogb
     - jaxe
     - jollycv
     - jumpnbump
     - kronos
+    - linuxloader
     - lowresnx
     - lutro
     - m2000
@@ -1063,6 +1091,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - n64emu
     - native32emu
     - nekop2
     - neocd
@@ -1076,9 +1105,12 @@ targets:
     - nxengine
     - o2em
     - oberon
+    - odin
     - openlara
+    - openmsx
     - opera
     - panda3ds
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcem
@@ -1086,6 +1118,7 @@ targets:
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -1138,6 +1171,7 @@ targets:
     - tic80
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -1261,6 +1295,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - jaxe
     - jollycv
     - jumpnbump
@@ -1300,6 +1335,7 @@ targets:
     - mrboom
     - mu
     - mupen64plus_next
+    - n64emu
     - native32emu
     - nekop2
     - neocd
@@ -1312,11 +1348,13 @@ targets:
     - o2em
     - oberon
     - opera
+    - parallel_dc
     - parallel_n64
     - pcem
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -1452,6 +1490,7 @@ targets:
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha
@@ -1494,6 +1533,8 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
+    - hypseushw
     - irogb
     - jaxe
     - jollycv
@@ -1551,14 +1592,17 @@ targets:
     - o2em
     - oberon
     - openlara
+    - openmsx
     - opera
     - panda3ds
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -1611,6 +1655,7 @@ targets:
     - tic80
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -1736,6 +1781,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - jaxe
     - jollycv
     - jumpnbump
@@ -1792,10 +1838,12 @@ targets:
     - oberon
     - openlara
     - opera
+    - parallel_dc
     - parallel_n64
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -1973,6 +2021,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - jaxe
     - jollycv
     - jumpnbump
@@ -2031,12 +2080,14 @@ targets:
     - oberon
     - openlara
     - opera
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -2194,6 +2245,7 @@ targets:
     - galaksija
     - gam4980
     - gambatte
+    - gametank
     - gearboy
     - gearcoleco
     - geargrafx
@@ -2213,6 +2265,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - jaxe
     - jollycv
     - jumpnbump
@@ -2268,10 +2321,12 @@ targets:
     - oberon
     - openlara
     - opera
+    - parallel_dc
     - parallel_n64
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -2446,6 +2501,7 @@ targets:
     - hbmame
     - higan_sfc
     - holani
+    - hyperscanemu
     - irogb
     - ishiiruka
     - jaxe
@@ -2500,14 +2556,17 @@ targets:
     - o2em
     - oberon
     - openlara
+    - openmsx
     - opera
     - panda3ds
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -2646,6 +2705,7 @@ targets:
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha2012
@@ -2686,6 +2746,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - irogb
     - jaxe
     - jollycv
@@ -2739,14 +2800,17 @@ targets:
     - nxengine
     - o2em
     - oberon
+    - openmsx
     - opera
     - panda3ds
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -2799,6 +2863,7 @@ targets:
     - tic80
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -2920,6 +2985,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - irogb
     - jaxe
     - jollycv
@@ -2973,12 +3039,14 @@ targets:
     - o2em
     - oberon
     - opera
+    - parallel_dc
     - parallel_n64
     - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -3025,6 +3093,7 @@ targets:
     - tia
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -3105,6 +3174,7 @@ targets:
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha2012
@@ -3145,6 +3215,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - irogb
     - jaxe
     - jollycv
@@ -3198,11 +3269,13 @@ targets:
     - o2em
     - oberon
     - opera
+    - parallel_dc
     - pcee2
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
+    - piece
     - play
     - playdiaemu
     - pocketcdg
@@ -3248,6 +3321,7 @@ targets:
     - tia
     - tyrquake
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -3337,6 +3411,7 @@ targets:
     - gpsp
     - gw
     - handy
+    - hatari
     - hatarib
     - jaxe
     - jumpnbump
@@ -3373,6 +3448,7 @@ targets:
     - nxengine
     - o2em
     - opera
+    - parallel_dc
     - pcsx_rearmed
     - pd777
     - picodrive
@@ -4490,6 +4566,7 @@ targets:
     - dosbox_pure
     - dosbox_svn
     - ecwolf
+    - eduke32
     - emuscv
     - ep128emu_core
     - fbalpha2012
@@ -4529,6 +4606,7 @@ targets:
     - hatarib
     - hbmame
     - holani
+    - hyperscanemu
     - jaxe
     - jollycv
     - jumpnbump
@@ -4578,6 +4656,7 @@ targets:
     - oberon
     - openlara
     - opera
+    - parallel_dc
     - parallel_n64
     - pcsx_rearmed
     - pd777
@@ -4628,6 +4707,7 @@ targets:
     - tyrquake
     - uae4arm
     - uw8
+    - uzdoom
     - uzem
     - vaporspec
     - vba_next
@@ -4659,10 +4739,12 @@ targets:
     - blastem
     - cemu
     - dolphin
+    - eduke32
     - emuscv
     - pcee2
     - pcsx2
     - rustynes
+    - uzdoom
   playstation-vita:
     architecture: armv7
     cores:

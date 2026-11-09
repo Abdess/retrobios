@@ -119,7 +119,7 @@
       "description": "Number of entries in omitted_files."
     },
     "core_names": {
-      "description": "Each core a file names, with the other names it goes by upstream (the buildbot's mednafen_psx for beetle_psx).",
+      "description": "Each core the platform runs or a file names, with the other names it goes by upstream (the buildbot's mednafen_psx for beetle_psx), empty when it has none.",
       "type": "object",
       "additionalProperties": {
         "type": "array",

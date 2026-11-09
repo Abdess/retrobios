@@ -45,6 +45,11 @@
   "src/common/scm_rev.cpp.in",
   "src/frontend_common/update_checker.cpp"
  ],
+ "git.libretro.com/libretro/HyperScanEmu@44509de141c7b9adf947b3130500e552cfa98f56": [
+  "Cargo.toml",
+  "crates/hyperscanemu-core/src/firmware.rs",
+  "crates/hyperscanemu-libretro/src/lib.rs"
+ ],
  "git.libretro.com/libretro/Libretro-Supermodel@84bc106b45b279bf868a53b9232897c8dc10ca17": [
   "Config/Games.xml",
   "Docs/README.md",
@@ -93,10 +98,33 @@
   "src/main.cpp",
   "src/resource/CafeDefaultFont.cpp"
  ],
+ "git.libretro.com/libretro/hypseushw@cb4de9f9b3e8264e71b25b5552dfa1e26121c636": [
+  "core/src/io/homedir.cpp",
+  "core/src/io/homedir.h",
+  "core/src/io/input.cpp",
+  "core/src/video/video.cpp",
+  "libretro/CMakeLists.txt",
+  "libretro/hypseushw_libretro.info",
+  "libretro/lr_core.cpp"
+ ],
  "git.libretro.com/libretro/libretro-radio@5d7d786ad1d8703a52184ff2ee39712c46ed67c9": [
   ".gitlab-ci.yml",
   "Makefile",
   "libretro-radio.c"
+ ],
+ "git.libretro.com/libretro/n64emu@c9da0acadaebe9bbfa4cf2b5662f2af7252988a3": [
+  "src/device/pif.c",
+  "src/libretro.c",
+  "src/main/main.c"
+ ],
+ "git.libretro.com/libretro/odin-libretro@7cc427e4cc048e86753275f664bf0e59bbd002bf": [
+  "odin-games.json",
+  "src/odin/host/app/games.cpp",
+  "src/odin/host/app/rom_files.cpp",
+  "src/odin/libretro/games_json.S",
+  "src/odin/libretro/libretro_odin.cpp",
+  "src/odin/machine/boards/hikaru/hikaru.cpp",
+  "src/odin/machine/boards/hikaru/mie_board.cpp"
  ],
  "git.libretro.com/libretro/rust-dos@152d9bca7820f0d9a5d1ca820a2d20855698a211": [
   "Cargo.toml",
@@ -380,6 +408,11 @@
   "crates/dingooemu-libretro/src/constants.rs",
   "crates/dingooemu-libretro/src/diagnostics.rs",
   "crates/dingooemu/src/main.rs"
+ ],
+ "github.com/AloysHF/HyperScanEmu@44509de141c7b9adf947b3130500e552cfa98f56": [
+  "Cargo.toml",
+  "crates/hyperscanemu-core/src/firmware.rs",
+  "crates/hyperscanemu-libretro/src/lib.rs"
  ],
  "github.com/AloysHF/Native32Emu@059fa33c658caa4dbbad140ebf2af1197f9dd778": [
   "Cargo.toml",
@@ -1890,6 +1923,13 @@
   "Machines/Utility/ROMCatalogue.cpp",
   "Machines/Utility/ROMLibrary.cpp",
   "OSBindings/SDL/main.cpp"
+ ],
+ "github.com/Tovarichtch/Odin@6ebf2b40ccbca9534d1a0e58b7602db11e4485d9": [
+  "odin-games.json",
+  "src/odin/host/app/games.cpp",
+  "src/odin/host/app/rom_files.cpp",
+  "src/odin/machine/boards/hikaru/hikaru.cpp",
+  "src/odin/machine/boards/hikaru/mie_board.cpp"
  ],
  "github.com/Tovarichtch/xemu@98fbd75dd0f3088a4988abc1698feb37b844a41a": [
   "config_spec.yml",
@@ -6424,6 +6464,18 @@
   "core/nullDC.cpp",
   "core/reios/reios.cpp"
  ],
+ "github.com/libretro/parallel-dc@6f315dd55a66cb2299dd2282b24d2fd84fe7f390": [
+  "core/archive/archive.c",
+  "core/hw/flashrom/flashrom.h",
+  "core/hw/holly/sb_mem.cpp",
+  "core/hw/naomi/naomi_cart.cpp",
+  "core/hw/naomi/naomi_roms.h",
+  "core/libretro/libretro.cpp",
+  "core/libretro/libretro_core_options.h",
+  "core/nullDC.cpp",
+  "core/reios/reios.cpp",
+  "core/stdclass.cpp"
+ ],
  "github.com/libretro/parallel-n64@f87550d9ad70cb320870e2b5fd960235287abb89": [
   "libretro/libretro.c",
   "mupen64plus-core/src/device/pif/bootrom_hle.c"
@@ -6683,7 +6735,8 @@
   "src/launcher.cpp",
   "src/main.cpp",
   "src/parsing/textfile.cpp",
-  "src/platforms/engineutils.cpp"
+  "src/platforms/engineutils.cpp",
+  "tools/errorgen"
  ],
  "github.com/linappleii/linapple@7f4b60898d91bfecd6f4d8683a374f38b0564962": [
   "CMakeLists.txt",

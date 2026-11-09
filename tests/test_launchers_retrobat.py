@@ -182,10 +182,28 @@ FEATURES = """
 """
 
 HATARI = """
+    string tosDir = Path.Combine(AppConfig.GetFullPath("bios"), "hatari", "tos");
     string tosfile = Path.Combine(AppConfig.GetFullPath("bios"), "tos.img");
+    string emutos = Path.Combine(tosDir, "emutos.img");
 
-    if (SystemConfig.isOptSet("hatari_tos") && !string.IsNullOrEmpty(SystemConfig["hatari_tos"]))
-        tosfile = Path.Combine(AppConfig.GetFullPath("bios"), "hatari", "tos", SystemConfig["hatari_tos"]);
+    if (SystemConfig.isOptSet("hatari_tos") && SystemConfig["hatari_tos"] != "default")
+        tosfile = Path.Combine(tosDir, SystemConfig["hatari_tos"]);
+    else if (media.HasHardDiskImage && File.Exists(emutos))
+    {
+        tosfile = emutos;
+    }
+    else
+    {
+        if (!File.Exists(tosfile) && File.Exists(emutos))
+            tosfile = emutos;
+
+        if (old)
+        {
+            string newTos = new string[] { "tos104.img", "tos206.img", "emutos.img" }
+                .Select(t => Path.Combine(tosDir, t))
+                .FirstOrDefault(t => File.Exists(t));
+        }
+    }
 
     if (!File.Exists(tosfile))
         throw new ApplicationException("Missing TOS file " + tosName + " in 'bios' folder.");
@@ -391,17 +409,21 @@ class NamesInLauncherOrder(unittest.TestCase):
         )
 
     def test_hatari_default_and_option(self):
-        fixed, option = rl.hatari(
+        fixed, option, emutos, newer = rl.hatari(
             _sources(**{f"{G}/Hatari.Generator.cs": HATARI, rl.FEATURES: HATARI_FEATURES})
         )
+        message = "ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'"
         self.assertEqual(fixed["names"], ["tos.img"])
-        self.assertEqual(
-            fixed["fails_when_missing"],
-            "ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'",
-        )
-        self.assertEqual(fixed["source_ref"], f"{G}/Hatari.Generator.cs:1-9")
+        self.assertEqual(fixed["search_dir"], "bios")
+        self.assertEqual(fixed["fails_when_missing"], f"bios/hatari/tos/emutos.img instead, else {message}")
+        self.assertEqual(fixed["source_ref"], f"{G}/Hatari.Generator.cs:1-3, 13-14, 27")
         self.assertEqual(option["names"], ["tos206.img", "tos102.img"])
         self.assertEqual(option["search_dir"], "bios/hatari/tos")
+        self.assertEqual(option["fails_when_missing"], message)
+        self.assertEqual(emutos["names"], ["emutos.img"])
+        self.assertEqual(emutos["search_dir"], "bios/hatari/tos")
+        self.assertEqual(newer["kind"], "names_searched")
+        self.assertEqual(newer["names"], ["tos104.img", "tos206.img", "emutos.img"])
 
 
 def _one(text: str, emulator: str, path: str = f"{G}/X.Generator.cs") -> list[dict]:

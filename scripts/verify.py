@@ -1429,6 +1429,25 @@ def verify_platform(
             ):
                 file_severity[dest] = sev
 
+    # RetroBat's group: one file of it held is enough, and the others are
+    # reported OPTIONAL (batocera-systems/Program.cs). None held, each stays
+    # required.
+    members: dict[tuple[str, str], list[str]] = {}
+    for sys_id, system in config.get("systems", {}).items():
+        for file_entry in system.get("files", []):
+            if file_entry.get("group"):
+                dest = _dest_key(file_entry, sys_id)
+                if dest in file_status:
+                    members.setdefault((sys_id, file_entry["group"]), []).append(dest)
+    for dests in members.values():
+        if any(file_status[d] == Status.OK for d in dests):
+            for dest in dests:
+                if file_status[dest] == Status.MISSING:
+                    file_required[dest] = False
+                    file_severity[dest] = compute_severity(Status.MISSING, False, mode)
+                    for result in results_at.get(dest, []):
+                        result["required"] = False
+
     shipped, occupied = _builder_placement(
         packed_order, bool(config.get("case_insensitive_fs", False))
     )

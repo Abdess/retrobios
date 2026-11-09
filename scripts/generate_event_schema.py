@@ -37,7 +37,7 @@ KEY_TYPES: dict[str, dict] = {
     **dict.fromkeys((
         "installer", "os", "os_name", "stage", "reason", "platform", "message",
         "folder", "dest", "system", "name", "bios_dir", "path", "member",
-        "list_version", "installed_version", "board",
+        "list_version", "installed_version", "board", "core",
     ), _TEXT),
     "mode": {"enum": ["install", "check", "dry-run", "list"]},
     "state": {"enum": ["present", "wrong_hash", "missing"]},
@@ -47,7 +47,7 @@ KEY_TYPES: dict[str, dict] = {
         "bytes_needed", "data_missing", "not_installable", "installed", "up_to_date",
         "pending", "code", "games", "recognised", "not_games",
     ), _COUNT),
-    **dict.fromkeys(("truncated", "ok", "interrupted", "required_only", "applied"), _FLAG),
+    **dict.fromkeys(("truncated", "ok", "interrupted", "required_only", "applied", "info"), _FLAG),
     **dict.fromkeys(("systems", "other_drives", "dests", "written"), _NAMES),
     **dict.fromkeys(("platforms", "failed", "skipped", "left_out", "kept", "found",
                      "fallback"), _RECORDS),
