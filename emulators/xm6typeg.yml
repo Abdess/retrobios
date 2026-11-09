@@ -232,6 +232,7 @@ files:
   - name: CGROM.TMP
     system: sharp-x68000
     required: false
+    unsourceable: "synthesised from the fonts installed on the host, no canonical file"
     min_size: 786432
     validation: [size]
     description: "Synthesised font ROM, fallback when no CG ROM is present"
@@ -289,6 +290,7 @@ files:
   - name: SRAMXVI.DAT
     system: sharp-x68000
     required: false
+    unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for XVI"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 15"
@@ -299,6 +301,7 @@ files:
   - name: SRAMCMP.DAT
     system: sharp-x68000
     required: false
+    unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for Compact"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 16"
@@ -308,6 +311,7 @@ files:
   - name: SRAM030.DAT
     system: sharp-x68000
     required: false
+    unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for X68030, 040turbo and 060turbo"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 17"
@@ -318,6 +322,7 @@ files:
   - name: RTC.DAT
     system: sharp-x68000
     required: false
+    unsourceable: "written by the emulator on exit, no canonical file"
     description: "RTC alarm settings for timer start"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 18"
     note: >-

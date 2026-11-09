@@ -141,6 +141,7 @@ files:
     path: "EmuMediaBoard/Chihiro/backup_ram.bin"
     system: sega-chihiro
     required: false
+    unsourceable: "written by the emulator as 128 KB of zeros, no canonical file"
     has_builtin: true
     size_note: "Created as 128 KB of zeros when absent, then memory mapped"
     description: "Base board backup memory"

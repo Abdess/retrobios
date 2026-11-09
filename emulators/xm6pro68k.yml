@@ -190,6 +190,7 @@ files:
   - name: CGROM.TMP
     system: sharp-x68000
     required: false
+    unsourceable: "synthesised from the fonts installed on the host, no canonical file"
     min_size: 786432
     validation: [size]
     description: "Synthesised font ROM, fallback when CGROM.DAT is absent"
