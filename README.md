@@ -86,14 +86,14 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 - **1,087 files** the platforms' emulators load are still to be found, and 138 more the collection does not hold and does not serve by name (retail data, per-user keys, user-filled slots), each with its reason. Both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **18 platforms** supported with platform-specific verification
 - **623 emulators** profiled from source (RetroArch cores + standalone)
-- **532 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
+- **519 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
 - **19,947 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,744 system files, 2,975 arcade ROM sets, 11,228 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
 - **566 of 5,744 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC). Arcade sets and engine data fall outside what those catalogs index
 - **15.8 GB** for the whole collection
 
 ## Supported systems
 
-NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 498+ more.
+NES, SNES, Nintendo 64, GameCube, Wii, Game Boy, Game Boy Advance, Nintendo DS, Nintendo 3DS, Switch, PlayStation, PlayStation 2, PlayStation 3, PSP, PS Vita, Mega Drive, Saturn, Dreamcast, Game Gear, Master System, Neo Geo, Atari 2600, Atari 7800, Atari Lynx, Atari ST, MSX, PC Engine, TurboGrafx-16, ColecoVision, Intellivision, Commodore 64, Amiga, ZX Spectrum, Arcade (MAME), and 485+ more.
 
 Full list with per-file details: **[https://abdess.github.io/retrobios/](https://abdess.github.io/retrobios/)**
 
@@ -104,7 +104,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | AmberELEC | 414/434 | 4,754/4,937 | MD5 |
 | Batocera | 353/353 | 14,171/15,291 | MD5 |
 | BizHawk | 118/118 | - | SHA-1 |
-| EmuDeck | 168/168 | 8,426/8,528 | MD5 |
+| EmuDeck | 168/168 | 8,424/8,526 | MD5 |
 | EmuELEC | 543/572 | 4,788/10,217 | MD5 |
 | KNULLI | 290/290 | 9,126/15,350 | MD5 |
 | Lakka | 532/532 | 7,909/7,994 | name only |
@@ -118,7 +118,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | RetroBat | 348/348 | 5,135/9,659 | MD5 |
 | RetroDECK | 2,007/2,008 | 6,705/6,992 | MD5 |
 | RetroPie | 532/532 | 8,117/12,771 | name only |
-| RomM | 383/383 | 83/874 | size, then any hash |
+| RomM | 383/383 | 86/874 | size, then any hash |
 
 Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
 That second number is a floor, not a ceiling: an emulator that accepts any file handed to it names none in its code, so nothing there can be counted.
@@ -208,4 +208,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-06T23:09:06Z*
+*Auto-generated on 2026-11-09T06:06:58Z*
