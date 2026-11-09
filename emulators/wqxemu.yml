@@ -3,9 +3,9 @@ type: standalone + libretro
 core_classification: official_port
 source: "https://git.libretro.com/libretro/wqxemu"
 upstream: "https://github.com/AloysHF/WQXEmu"
-profiled_date: "2026-10-18"
-source_commit: "caf0998989446e3d6659f67c1b8aabd708a0379d"
-upstream_commit: "caf0998989446e3d6659f67c1b8aabd708a0379d"
+profiled_date: "2026-11-09"
+source_commit: "44f492cfac4c47e9e2470144c972264779c5f9bf"
+upstream_commit: "44f492cfac4c47e9e2470144c972264779c5f9bf"
 core_version: "0.1.0"
 version_basis:
   kind: file
@@ -29,230 +29,235 @@ notes: |
   git.libretro.com repository is a mirror of the GitHub one at the same
   commit, and the buildbot consumes its .gitlab-ci.yml.
 
-  The core takes no content. retro_load_game refuses a non-null game
-  info (crates/wqxemu-libretro/src/lib.rs:596-599) and the machine is
-  started through Start Core, supports_no_game being set
-  (crates/wqxemu-libretro/src/lib.rs:440-446). The model comes from the
+  The core takes no content. retro_load_game ignores the game info it
+  is given and starts the machine, supports_no_game being set
+  (crates/wqxemu-libretro/src/lib.rs:776-793,
+  crates/wqxemu-libretro/src/lib.rs:608-612). The model comes from the
   wqxemu_model core option, NC1020 when unset
-  (crates/wqxemu-libretro/src/lib.rs:227-246,
-  crates/wqxemu-libretro/src/lib.rs:920-937).
+  (crates/wqxemu-libretro/src/lib.rs:325-345,
+  crates/wqxemu-libretro/src/lib.rs:1111-1129).
 
-  The firmware set is whatever {system}/WQXEmu/<model>/ holds
-  (crates/wqxemu-libretro/src/lib.rs:216-221, model names in
-  crates/wqxemu-core/src/machine.rs:35-43). File names are free: each
-  regular file is assigned to a slot by its extension, case-insensitive,
-  .rom or .bin to the system ROM, .fls or .nor to NOR, .nand to NAND and
-  .nand0 to the first NAND plane. Anything else is ignored
-  (crates/wqxemu-core/src/machine.rs:94-126). A slot matched by two files
-  fails the start with "Multiple <slot> dumps", and so does a directory
-  with no dump at all (crates/wqxemu-core/src/machine.rs:128-161). The
-  set is then checked against the model: NC1020, PC1000 and CC800 need a
-  ROM and a NOR and refuse NAND files. NC2000 needs NOR, NAND and NAND0
-  and refuses a ROM. NC3000 needs NOR and NAND, NAND0 optional, and
-  refuses a ROM (crates/wqxemu-core/src/machine.rs:164-207). Any failure
-  is shown and retro_load_game returns false
-  (crates/wqxemu-libretro/src/lib.rs:608-622). Only the directory of the
-  selected model is read.
+  The firmware set is read from {system}/wqxemu/<model>/
+  (crates/wqxemu-libretro/src/lib.rs:310-323,
+  crates/wqxemu-libretro/src/lib.rs:389-407). The folder names and file
+  names are fixed and compared byte for byte against the directory
+  entries, so a folder or file that differs only in case is not found
+  (crates/wqxemu-core/src/machine.rs:111-131, model names in
+  crates/wqxemu-core/src/machine.rs:33-44). Each model reads only its own
+  files: obj_lu.bin and nc1020.fls for the NC1020, pc1000.rom and
+  pc1000.nor for the PC1000, obj.bin and cc800.fls for the CC800,
+  nc2000.nor, nc2000.nand and nc2000.nand0 for the NC2000, nc3000.nor,
+  nc3000.nand and an optional nc3000.nand0 for the NC3000
+  (crates/wqxemu-core/src/machine.rs:63-84,
+  crates/wqxemu-core/src/machine.rs:176-194). A missing folder or any
+  missing required file fails the start with a message listing every
+  missing name (crates/wqxemu-core/src/machine.rs:153-175,
+  crates/wqxemu-core/src/machine.rs:196-204), shown by the core before
+  retro_load_game returns false (crates/wqxemu-libretro/src/lib.rs:787-793).
+  Other files in the folder are ignored.
+
+  The Emscripten build used by EmulatorJS reads the same layout from the
+  root of the extracted firmware archive, and there the model is the only
+  wqxemu/<model>/ folder the archive holds. Several model folders stop
+  the start (crates/wqxemu-libretro/src/lib.rs:347-387).
 
   Each machine reads its files whole with std::fs::read and checks their
   size only: a ROM or NOR image must be at least as large as the window
   it fills, the PC1000 ROM must be exactly 12 MiB or 16 MiB, and NAND
   images are copied without any check. A file that fails the check makes
   Emulator::new fail and retro_load_game returns false with the loader's
-  message (crates/wqxemu-libretro/src/lib.rs:635-641). No hash is
+  message (crates/wqxemu-libretro/src/lib.rs:806-812). No hash is
   verified.
 
-  The firmware files are never written. Neither frontend calls save_nor;
-  the writable flash, NAND, RAM and peripheral state of a session is
-  serialized to {save}/<model>/<fingerprint>.wqxs, a gzip file the core
-  creates on unload and reloads at the next start of the same model and
-  firmware set (crates/wqxemu-libretro/src/lib.rs:280-304,
-  crates/wqxemu-libretro/src/lib.rs:643-660,
-  crates/wqxemu-core/src/save.rs:43-88). The fingerprint is an FNV-1a
-  over the slot layout and the content of every file of the set
-  (crates/wqxemu-core/src/machine.rs:209-233). That file is created by
+  The firmware files are never written. The writable flash, NAND, RAM
+  and peripheral state of a session is serialized to
+  {save}/<model>/<fingerprint>.wqxs, a gzip file the core creates on
+  unload and reloads at the next start of the same model and firmware
+  set (crates/wqxemu-libretro/src/lib.rs:441-467,
+  crates/wqxemu-libretro/src/lib.rs:814-842,
+  crates/wqxemu-core/src/save.rs:46-96). The Emscripten build writes no
+  session file. The fingerprint is an FNV-1a over the slot layout and
+  the content of every file of the set
+  (crates/wqxemu-core/src/machine.rs:252-276). That file is created by
   the core. retro_get_memory_data returns null for every memory id
-  (crates/wqxemu-libretro/src/lib.rs:839-842).
+  (crates/wqxemu-libretro/src/lib.rs:1025-1032).
 
-  The standalone binary takes the same directory as --rom-dir, with the
-  same extension rules; --model selects the machine, otherwise
-  detect_model guesses it from the file sizes
-  (crates/wqxemu/src/main.rs:27-34, crates/wqxemu/src/main.rs:239-261,
-  crates/wqxemu-core/src/machines/mod.rs:38-87). Its device skin is drawn
-  by code by default, or taken from include_bytes! PNGs with --skin image
-  (crates/wqxemu/src/main.rs:57-59, crates/wqxemu/src/keypad.rs:72-91).
-
-  The libretro-core-info file names the PC1000 NOR image pc1000.fls. Any
-  single .fls or .nor file in WQXEmu/pc1000/ is read, but pc1000.fls and
-  pc1000.nor side by side stop the PC1000 from starting.
+  The standalone binary reads the same wqxemu/<model>/ layout below
+  --system-dir, ./system by default, and --model selects the machine,
+  nc1020 by default (crates/wqxemu/src/main.rs:27-42,
+  crates/wqxemu/src/main.rs:235-249). It keeps a session only in the file
+  named by --state-file (crates/wqxemu/src/main.rs:179-233). Its device
+  skin is drawn by code by default, or taken from include_bytes! PNGs
+  with --skin image (crates/wqxemu/src/main.rs:53-55,
+  crates/wqxemu/src/keypad.rs:72-91).
 
 files:
   - name: obj_lu.bin
-    path: WQXEmu/nc1020/obj_lu.bin
+    path: wqxemu/nc1020/obj_lu.bin
     system: wenquxing-nc1020
     required: true
     min_size: 25165824
     validation: [size]
     description: "NC1020 system ROM, three 8 MiB volumes"
     note: >-
-      The .rom/.bin file of {system}/WQXEmu/nc1020/, read whole. The image must
+      Read whole from {system}/wqxemu/nc1020/obj_lu.bin. The image must
       be at least 0x8000 * 0x300 bytes or the loader fails, and a larger file
       is kept whole. Each 32 KiB bank is stored with its 16 KiB halves
       swapped and is swapped back on load, and the BBS pages are mapped
       from it.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/nc1020.rs:61-98, source crates/wqxemu-core/src/memory.rs:24"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:65-72, source crates/wqxemu-core/src/machine.rs:178-183, source crates/wqxemu-core/src/machines/nc1020.rs:61-98, source crates/wqxemu-core/src/memory.rs:24"
 
   - name: nc1020.fls
-    path: WQXEmu/nc1020/nc1020.fls
+    path: wqxemu/nc1020/nc1020.fls
     system: wenquxing-nc1020
     required: true
     min_size: 1048576
     validation: [size]
     description: "NC1020 NOR flash, 32 banks of 32 KiB"
     note: >-
-      The .fls/.nor file of {system}/WQXEmu/nc1020/, read whole. The image must
+      Read whole from {system}/wqxemu/nc1020/nc1020.fls. The image must
       be at least 0x8000 * 0x20 bytes or the loader fails. Only the first
       1 MiB is used, with the same 16 KiB half swap as the ROM. Writes go
       to the in-memory copy and are persisted in the .wqxs session file,
       never to this file.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/nc1020.rs:101-122, source crates/wqxemu-core/src/memory.rs:26"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:76-84, source crates/wqxemu-core/src/machine.rs:178-183, source crates/wqxemu-core/src/machines/nc1020.rs:101-122, source crates/wqxemu-core/src/memory.rs:26"
 
   - name: pc1000.rom
-    path: WQXEmu/pc1000/pc1000.rom
+    path: wqxemu/pc1000/pc1000.rom
     system: wenquxing-pc1000
     required: true
     size: [12582912, 16777216]
     validation: [size]
     description: "PC1000 system ROM, obj1 + obj2 + obj3"
     note: >-
-      The .rom/.bin file of {system}/WQXEmu/pc1000/, read whole and stored
+      Read whole from {system}/wqxemu/pc1000/pc1000.rom and stored
       linearly. Exactly 12 MiB (obj1, obj2, obj3 back to back) or 16 MiB
       (the PC1000EMUX and Android layout, obj3 at 12 MiB with 8 to 12 MiB
       unused) is accepted. Any other size fails the loader. The volume
       tables are rebuilt for the layout found.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/pc1000.rs:38-40, source crates/wqxemu-core/src/machines/pc1000.rs:236-283"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:65-72, source crates/wqxemu-core/src/machine.rs:178-183, source crates/wqxemu-core/src/machines/pc1000.rs:38-40, source crates/wqxemu-core/src/machines/pc1000.rs:236-283"
 
   - name: pc1000.nor
-    path: WQXEmu/pc1000/pc1000.nor
+    path: wqxemu/pc1000/pc1000.nor
     system: wenquxing-pc1000
     required: true
     min_size: 524288
     validation: [size]
     description: "PC1000 NOR flash, 16 banks of 32 KiB"
     note: >-
-      The .fls/.nor file of {system}/WQXEmu/pc1000/, read whole. The image must
+      Read whole from {system}/wqxemu/pc1000/pc1000.nor. The image must
       be at least 0x80000 bytes or the loader fails. Only the first
       512 KiB is used. A dump stored with swapped 16 KiB halves is
       recognised by the info-block signature at bank 0 offset 0x4000 and
-      unswapped. The libretro-core-info file names it pc1000.fls.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/pc1000.rs:42, source crates/wqxemu-core/src/machines/pc1000.rs:284-313"
+      unswapped.
+    source_ref: "source crates/wqxemu-core/src/machine.rs:76-84, source crates/wqxemu-core/src/machine.rs:178-183, source crates/wqxemu-core/src/machines/pc1000.rs:42, source crates/wqxemu-core/src/machines/pc1000.rs:284-313"
 
   - name: obj.bin
-    path: WQXEmu/cc800/obj.bin
+    path: wqxemu/cc800/obj.bin
     system: wenquxing-cc800
     required: true
     min_size: 16777216
     validation: [size]
     description: "CC800 system ROM, two volumes of 256 banks"
     note: >-
-      The .rom/.bin file of {system}/WQXEmu/cc800/, read whole. The image must be at
+      Read whole from {system}/wqxemu/cc800/obj.bin. The image must be at
       least 0x1000000 bytes or the loader fails. Only the first 16 MiB is
       used. Each 32 KiB bank is stored with its 16 KiB halves swapped and
       is swapped back on load. Volume 0 is banks 0 to 255, volume 1 banks
       256 to 511.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/cc800.rs:38, source crates/wqxemu-core/src/machines/cc800.rs:229-251"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:65-72, source crates/wqxemu-core/src/machine.rs:178-183, source crates/wqxemu-core/src/machines/cc800.rs:38, source crates/wqxemu-core/src/machines/cc800.rs:229-251"
 
   - name: cc800.fls
-    path: WQXEmu/cc800/cc800.fls
+    path: wqxemu/cc800/cc800.fls
     system: wenquxing-cc800
     required: true
     min_size: 524288
     validation: [size]
     description: "CC800 NOR flash, 16 banks of 32 KiB"
     note: >-
-      The .fls/.nor file of {system}/WQXEmu/cc800/, read whole. The image must be
+      Read whole from {system}/wqxemu/cc800/cc800.fls. The image must be
       at least 0x80000 bytes or the loader fails. Only the first 512 KiB
       is used, with the same 16 KiB half swap as the ROM.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/cc800.rs:40, source crates/wqxemu-core/src/machines/cc800.rs:252-267"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:76-84, source crates/wqxemu-core/src/machine.rs:178-183, source crates/wqxemu-core/src/machines/cc800.rs:40, source crates/wqxemu-core/src/machines/cc800.rs:252-267"
 
   - name: nc2000.nor
-    path: WQXEmu/nc2000/nc2000.nor
+    path: wqxemu/nc2000/nc2000.nor
     system: wenquxing-nc2000
     required: true
     min_size: 524288
     validation: [size]
     description: "NC2000 NOR flash, 16 banks of 32 KiB"
     note: >-
-      The .fls/.nor file of {system}/WQXEmu/nc2000/, read whole in physical order,
-      no bank swap. The image must be at least 16 * 0x8000 bytes or the
+      Read whole from {system}/wqxemu/nc2000/nc2000.nor in physical
+      order, no bank swap. The image must be at least 16 * 0x8000 bytes or the
       loader fails. Only the first 512 KiB is used. Bank 0 is the fixed
       BIOS page at 0xE000.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/nc2000.rs:20, source crates/wqxemu-core/src/machines/nc2000.rs:28, source crates/wqxemu-core/src/machines/nc2000.rs:265-277"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:76-84, source crates/wqxemu-core/src/machine.rs:184-188, source crates/wqxemu-core/src/machines/nc2000.rs:20, source crates/wqxemu-core/src/machines/nc2000.rs:28, source crates/wqxemu-core/src/machines/nc2000.rs:265-277"
 
   - name: nc2000.nand
-    path: WQXEmu/nc2000/nc2000.nand
+    path: wqxemu/nc2000/nc2000.nand
     system: wenquxing-nc2000
     required: true
     size: 34603008
     description: "NC2000 NAND flash main area, 65536 pages of 528 bytes"
     note: >-
-      The .nand file of {system}/WQXEmu/nc2000/, read whole and copied after
+      Read whole from {system}/wqxemu/nc2000/nc2000.nand and copied after
       the 64-page first plane, up to 65536 pages of 512 data plus 16
       spare bytes. No size check: bytes beyond that are ignored and a
       shorter file leaves the remainder erased at 0xFF.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/nc2000.rs:22-26, source crates/wqxemu-core/src/machines/nc2000.rs:278-282, source crates/wqxemu-core/src/machines/nc2000.rs:292-296"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:184-188, source crates/wqxemu-core/src/machines/nc2000.rs:22-26, source crates/wqxemu-core/src/machines/nc2000.rs:278-282, source crates/wqxemu-core/src/machines/nc2000.rs:292-296"
 
   - name: nc2000.nand0
-    path: WQXEmu/nc2000/nc2000.nand0
+    path: wqxemu/nc2000/nc2000.nand0
     system: wenquxing-nc2000
     required: true
     size: 33792
     description: "NC2000 NAND flash first plane, 64 pages of 528 bytes"
     note: >-
-      The .nand0 file of {system}/WQXEmu/nc2000/, read whole into the first
-      64 pages of the NAND array. No size check. validate_for_model
-      requires a NAND0 dump for this model in both frontends, so a missing
-      file stops the start.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, upstream crates/wqxemu-core/src/machine.rs:193-198, source crates/wqxemu-core/src/machines/nc2000.rs:24, source crates/wqxemu-core/src/machines/nc2000.rs:283-288, source crates/wqxemu-core/src/machines/nc2000.rs:298-301"
+      Read whole from {system}/wqxemu/nc2000/nc2000.nand0 into the first
+      64 pages of the NAND array. No size check. The firmware set of this
+      model requires it in both frontends, so a missing file stops the
+      start.
+    source_ref: "source crates/wqxemu-core/src/machine.rs:184-188, source crates/wqxemu-core/src/machines/nc2000.rs:24, source crates/wqxemu-core/src/machines/nc2000.rs:283-288, source crates/wqxemu-core/src/machines/nc2000.rs:298-301"
 
   - name: nc3000.nor
-    path: WQXEmu/nc3000/nc3000.nor
+    path: wqxemu/nc3000/nc3000.nor
     system: wenquxing-nc3000
     required: true
     min_size: 1048576
     validation: [size]
     description: "NC3000 NOR flash, 32 banks of 32 KiB"
     note: >-
-      The .fls/.nor file of {system}/WQXEmu/nc3000/, read whole in physical order,
-      no bank swap. The image must be at least 32 * 0x8000 bytes or the
+      Read whole from {system}/wqxemu/nc3000/nc3000.nor in physical
+      order, no bank swap. The image must be at least 32 * 0x8000 bytes or the
       loader fails. Only the first 1 MiB is used. Bank 0 is the fixed
       BIOS page at 0xE000.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/nc3000.rs:23, source crates/wqxemu-core/src/machines/nc3000.rs:33, source crates/wqxemu-core/src/machines/nc3000.rs:272-284"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:76-84, source crates/wqxemu-core/src/machine.rs:189-193, source crates/wqxemu-core/src/machines/nc3000.rs:23, source crates/wqxemu-core/src/machines/nc3000.rs:33, source crates/wqxemu-core/src/machines/nc3000.rs:272-284"
 
   - name: nc3000.nand
-    path: WQXEmu/nc3000/nc3000.nand
+    path: wqxemu/nc3000/nc3000.nand
     system: wenquxing-nc3000
     required: true
     size: 69206016
     storage: large_file
     description: "NC3000 NAND flash, two planes of 65536 pages of 528 bytes"
     note: >-
-      The .nand file of {system}/WQXEmu/nc3000/, read whole and copied after
+      Read whole from {system}/wqxemu/nc3000/nc3000.nand and copied after
       the 64-page first plane, up to 131072 pages of 512 data plus 16
       spare bytes. No size check: bytes beyond that are ignored and a
       shorter file leaves the remainder erased at 0xFF.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, source crates/wqxemu-core/src/machines/nc3000.rs:25-29, source crates/wqxemu-core/src/machines/nc3000.rs:285-289, source crates/wqxemu-core/src/machines/nc3000.rs:336-340"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:189-193, source crates/wqxemu-core/src/machines/nc3000.rs:25-29, source crates/wqxemu-core/src/machines/nc3000.rs:285-289, source crates/wqxemu-core/src/machines/nc3000.rs:336-340"
 
   - name: nc3000.nand0
-    path: WQXEmu/nc3000/nc3000.nand0
+    path: wqxemu/nc3000/nc3000.nand0
     system: wenquxing-nc3000
     required: false
     size: 33792
     description: "NC3000 NAND flash first plane, 64 pages of 528 bytes"
     note: >-
-      The .nand0 file of {system}/WQXEmu/nc3000/, read whole into the first
-      64 pages of the NAND array when the file exists, and validate_for_model
-      does not require it for this model. Without it the core writes the
+      Read whole from {system}/wqxemu/nc3000/nc3000.nand0 into the first
+      64 pages of the NAND array when the file exists. The firmware set of
+      this model does not require it. Without it the core writes the
       marker "ggv nc3000" at offset 528 of an erased first plane and the
       machine boots the same way.
-    source_ref: "source crates/wqxemu-core/src/machine.rs:119-123, upstream crates/wqxemu-core/src/machine.rs:199-203, source crates/wqxemu-core/src/machines/nc3000.rs:27-31, source crates/wqxemu-core/src/machines/nc3000.rs:290-297, source crates/wqxemu-core/src/machines/nc3000.rs:342-350"
+    source_ref: "source crates/wqxemu-core/src/machine.rs:189-193, source crates/wqxemu-core/src/machines/nc3000.rs:27-31, source crates/wqxemu-core/src/machines/nc3000.rs:290-297, source crates/wqxemu-core/src/machines/nc3000.rs:342-350"
