@@ -487,7 +487,7 @@ systems:
     native_id: Saturn
     name: Sega Saturn
     docs: "https://github.com/MiSTer-devel/Saturn_MiSTer"
-  sharpx1:
+  sharp-x1:
     files:
     - name: boot.rom
       destination: SharpX1/boot.rom
@@ -514,7 +514,8 @@ systems:
       size: 262144
       native_system: SharpX1
     native_id: SharpX1
-    name: sharpx1
+    name: Sharp X1
+    docs: "https://github.com/MiSTer-devel/SharpX1_Mister"
   snk-neogeo:
     files:
     - name: 000-lo.lo
