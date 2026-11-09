@@ -476,17 +476,17 @@ def clone_line(db: dict) -> str:
     )
 
 
-def demo_facts() -> dict:
-    """What the installer demo shows, as make_demo.py measured it."""
-    return json.loads((DEMO_DIR / "demo.json").read_text(encoding="utf-8"))
+def demo_facts(variant: str = "default") -> dict:
+    """What an installer demo shows, as make_demo.py measured it: one entry
+    per variant (default, handheld)."""
+    facts = json.loads((DEMO_DIR / "demo.json").read_text(encoding="utf-8"))
+    return facts[variant]
 
 
 def demo_description(facts: dict | None = None) -> str:
-    """The demo in words, for a reader who cannot see it."""
-    facts = facts or demo_facts()
-    return (f"Recording of the one-line command in a terminal. The installer finds an "
-            f"{facts['setup']} SD card with {facts['games']} games, plans {facts['files']} "
-            f"BIOS files ({facts['size']}) for them, installs them and shows the summary.")
+    """The demo in words, for a reader who cannot see it: the alt text
+    make_demo.py wrote from what it measured."""
+    return str((facts or demo_facts())["alt"])
 
 
 def _existing_contributor_block(readme_path: str = "README.md") -> list[str]:
@@ -594,6 +594,15 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
 
     system_ids = system_index(profiles)
 
+    # The README is the repository's front page and its most read page: a
+    # visitor from a search lands here, often new to terminals. It says what
+    # the project does, gives the one line that installs, shows it, and leads
+    # on to the site, where every detail lives. The figures and the lists it
+    # once carried (coverage, collection, build commands) are the site's.
+    record = release_record.load_advertised(platforms_dir=platforms_dir)
+    extract_paths = _extract_cells(platforms_dir)
+    released = [name for name in sorted(coverages, key=lambda n: coverages[n]["platform"])
+                if release_totals(name, record)[0]]
     lines = [
         '<p align="center">',
         "  <picture>",
@@ -602,281 +611,118 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "  </picture>",
         "</p>",
         "",
-        '<p align="center">',
-        '  <a href="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml">'
-        '<img src="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml/badge.svg" alt="Site"></a>',
+        '<p align="center"><strong>The BIOS files emulators need, put in the right folder and checked.</strong></p>',
+        "",
+        '<p align="center">'
+        f'<a href="{SITE_URL}">Website</a> · '
+        f'<a href="{SITE_URL}which-pack/">Get the files</a> · '
+        f'<a href="{SITE_URL}wiki/troubleshooting/">A game does not start</a> · '
+        f'<a href="{SITE_URL}wiki/faq/">Questions</a>'
         "</p>",
         "",
-        f"BIOS and firmware files for {_names_list(coverages)}.",
+        "Some consoles need a small program, the **BIOS**, to start their games: PlayStation 1"
+        " and 2, Saturn, Neo Geo, Dreamcast and more. RetroBIOS installs the BIOS and firmware"
+        f" files for {_names_list(coverages)}, checked the way each one checks them.",
         "",
-        "A pack holds the files its emulators read, as their source code names"
-        " them, and leaves out what the emulators install themselves.",
+        "## Install in one line",
         "",
-        "## Quick install",
+        "**Windows**: open the Start menu, type **PowerShell** and open it. Paste this line"
+        " (right-click in the window) and press Enter.",
         "",
-        "Copy one command into your terminal:",
+        "```powershell",
+        install_command("powershell"),
+        "```",
+        "",
+        "**Linux, macOS, Steam Deck, Android (Termux)**: open a terminal, paste this line"
+        " and press Enter.",
         "",
         "```bash",
-        "# Linux / macOS / Steam Deck",
         install_command("sh"),
-        "",
-        "# Windows (PowerShell)",
-        install_command("powershell"),
-        "",
-        "# Android (Termux: it installs Python and asks for storage access)",
-        install_command("sh"),
-        "",
-        "# SD card mounted on a PC: a muOS, KNULLI, ROCKNIX, Lakka, MiSTer, Onion, spruceOS or MinUI card",
-        "# is found by itself. For another card, --dest is its BIOS folder",
-        "# (RetroArch on Switch: retroarch/cores/system, on Android: RetroArch/system)",
-        install_command("sh", "--platform retroarch --dest /path/to/sdcard/retroarch/cores/system"),
-        "",
-        "# Options in PowerShell: anything after | iex goes to iex, so the script runs as a block",
-        install_command("powershell", "--check"),
         "```",
+        "",
+        f"**A handheld, an SD card, or not sure?** [Pick the device]({SITE_URL}which-pack/):"
+        " its page gives the folder and the command. A muOS, Onion, spruceOS, MinUI, KNULLI,"
+        " ROCKNIX, Lakka or MiSTer SD card plugged into the computer is found by itself.",
         "",
         f"![{demo_description()}]({DEMO_GIF})",
         "",
-        "The script opens a full-screen installer, driven with the arrow keys and Enter, or with a"
-        " controller on a handheld. It finds your setup and its BIOS folder, downloads only the missing"
-        " files and checks each one. It can also copy the BIOS files from your old SD card.",
-        f"Every option, and what the installer detects and writes, is on the [installer page]({SITE_URL}wiki/installer/#passing-options).",
+        "The installer finds the setup and its BIOS folder, installs the files it needs (only"
+        " what the games need when it finds them on the card) and checks each one. Its screen"
+        " installs everything, or fewer under **" + _installer_words().TUI_SYSTEMS_ROW + "**."
+        " Arrow keys and Enter drive it, or a controller on a handheld. It sends nothing back"
+        f" ([what is counted]({SITE_URL}wiki/privacy/)). Options go after the line in the"
+        f" form the [installer page]({SITE_URL}wiki/installer/#passing-options) gives.",
         "",
-        f"First time? Follow the [first install, step by step]({SITE_URL}wiki/first-install/)."
+        f"First time? [The first install, step by step]({SITE_URL}wiki/first-install/)."
         f" A game does not start: [what to check]({SITE_URL}wiki/troubleshooting/)."
-        f" Other questions: the [FAQ]({SITE_URL}wiki/faq/).",
+        f" Other questions: [FAQ]({SITE_URL}wiki/faq/).",
         "",
-        "## Download BIOS packs",
+        "## Or download a ZIP",
         "",
-        f"A pack holds its platform's own BIOS list plus the files its emulator cores load. What no pack carries yet is in the [gap analysis]({SITE_URL}gaps/). Pick your platform, download the ZIP, extract to the BIOS path. Each Download link is a page that keeps its address from one release to the next. The installer above does the same file by file: its screen installs everything, or fewer under **" + _installer_words().TUI_SYSTEMS_ROW + "**, and `--system`, `--core`, `--region` and `--target` make the same choice without questions. For a bare minimum, build your own pack below.",
+        "The Files column counts what a pack holds once unzipped.",
         "",
-        "A pack over 2 GB comes in several parts (`Pack.part1of2.zip`,"
-        " `Pack.part2of2.zip`), and every part is needed. Each part is an"
-        " ordinary ZIP: extract them all into the same folder.",
-        "",
-        "Every release ships `SHA256SUMS.txt` and a detached signature of it,"
-        " checkable against `allowed_signers` in this repository:"
-        " [verifying a release]"
-        "(https://abdess.github.io/retrobios/wiki/release-process/"
-        "#verifying-a-release).",
-        "",
-        "The Files column counts what a pack holds once extracted, the figure a"
-        " file manager shows for the folder. It differs from one platform to"
-        " the next because a pack carries only what that platform's emulators"
-        " load. The size is what the files occupy once extracted, and the ZIP"
-        " itself downloads smaller.",
-        "",
+        "| Setup | Files | Size | Unzip into | Download |",
+        "|-------|------:|-----:|------------|----------|",
     ]
-
-    # Where the pack itself is extracted, which is not always the BIOS folder:
-    # a pack whose entries already carry their own root (RetroDECK) extracts
-    # one level above it.
-    extract_paths = _extract_cells(platforms_dir)
-
-    lines.extend(
-        download_table(
-            coverages, extract_paths,
-            release_record.load_advertised(platforms_dir=platforms_dir),
-        )
-    )
-    lines.extend(["", no_pack_line()])
-
-    lines.extend(_paragraphs(extract_notes(platforms_dir, released_only=True)))
-
-    lines.extend(
-        [
-            "",
-            "## What's included",
-            "",
-            "BIOS, firmware, and system files for consoles from Atari to PlayStation 3.",
-            "These are the files an emulator loads from disk instead of"
-            " carrying inside itself. Some are required to boot a system,"
-            " others improve accuracy or unlock a feature, and the packs carry"
-            " both.",
-            "",
-            "Each file is checked the way your platform checks it. Most compare"
-            " a checksum, the fingerprint of a file's contents, which catches a"
-            " corrupt or unexpected copy. RetroArch, Lakka and RetroPie check"
-            " that the file is present under its name without reading its"
-            " contents (`path_is_valid` in RetroArch's `core_info.c`), and"
-            " MinUI, NextUI and MyMinUI hand each core its folder without"
-            " opening a file in it: the"
-            " Coverage table says which applies to you. Independently of that,"
-            " the collection records five fingerprints per file, and wherever"
-            " an emulator's code states an expected size or hash, that value is"
-            " read from its source and rechecked here.",
-            "",
-            (
-                f"- **{acquirable_total:,} files** the platforms' emulators load"
-                f" are still to be found, and {unsourceable_total:,} more the"
-                f" collection does not hold and does not serve by name (retail"
-                f" data, per-user keys, user-filled slots), each with its reason."
-                f" Both are named in the"
-                f" [gap analysis]({SITE_URL}gaps/)"
-                if missing_total
-                else "- **Nothing missing**: every file the platforms'"
-                " emulators load is in the collection"
-            ),
-            f"- **{len(coverages)} platforms** supported with platform-specific verification",
-            f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
-            f"- **{len(system_ids)} systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
-            collection_line(total_files, comp),
-            *_catalog_matched_line(db),
-            f"- **{format_size(total_size)}** for the whole collection",
-            "",
-            "## Supported systems",
-            "",
-        ]
-    )
-
-    # Show well-known systems for SEO, link to full list
-    well_known = [
-        "NES",
-        "SNES",
-        "Nintendo 64",
-        "GameCube",
-        "Wii",
-        "Game Boy",
-        "Game Boy Advance",
-        "Nintendo DS",
-        "Nintendo 3DS",
-        "Switch",
-        "PlayStation",
-        "PlayStation 2",
-        "PlayStation 3",
-        "PSP",
-        "PS Vita",
-        "Mega Drive",
-        "Saturn",
-        "Dreamcast",
-        "Game Gear",
-        "Master System",
-        "Neo Geo",
-        "Atari 2600",
-        "Atari 7800",
-        "Atari Lynx",
-        "Atari ST",
-        "MSX",
-        "PC Engine",
-        "TurboGrafx-16",
-        "ColecoVision",
-        "Intellivision",
-        "Commodore 64",
-        "Amiga",
-        "ZX Spectrum",
-        "Arcade (MAME)",
-    ]
-    lines.extend(
-        [
-            ", ".join(well_known) + f", and {len(system_ids) - len(well_known)}+ more.",
-            "",
-            f"Full list with per-file details: **[{SITE_URL}]({SITE_URL})**",
-            "",
-            "## Coverage",
-            "",
-            "| Platform | On its BIOS list | Files its emulators load | Checked by |",
-            "|----------|-----------------:|-------------------------:|------------|",
-        ]
-    )
-
-    for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
-        display = cov["platform"]
-        checked = check_label(cov["mode"], cov["config"].get("hash_rule"))
-        core_total = (
-            cov["core_present"] + cov["core_missing"] + cov["core_unsourceable"]
-        )
-        core_cell = f"{cov['core_present']:,}/{core_total:,}" if core_total else "-"
+    for name in released:
+        files, size = release_totals(name, record)
+        display = coverages[name]["platform"]
         lines.append(
-            f"| {display} | {cov['present']:,}/{cov['total']:,} |"
-            f" {core_cell} | {checked} |"
+            f"| {display} | {files:,} | {format_size(size) if size else '-'} |"
+            f" {extract_paths.get(display, '')} |"
+            f" {download_links(name, record, 'Download', site=SITE_URL)} |"
         )
-
-    lines.extend(
-        [
-            "",
-            "Each fraction is what the pack has over what is needed, counting"
-            " required and optional files alike since both ship. The first"
-            " column is the BIOS list the platform publishes. The second counts"
-            " files its emulators load that this list never mentions, found by"
-            " reading their source code, and it is routinely several times"
-            " larger. A short fraction means files are still missing, and they"
-            " are named in the"
-            f" [gap analysis]({SITE_URL}gaps/).",
-            "That second number is a floor, not a ceiling: an emulator that"
-            " accepts any file handed to it names none in its code, so nothing"
-            " there can be counted.",
-            "Checked by is the test your platform runs on its own, replicated"
-            " here from its source code, so the result matches what you would"
-            f" see in the frontend ([how each one works]({SITE_URL}wiki/verification-modes/)).",
-            "",
-            "## Build your own pack",
-            "",
-            clone_line(db),
-            "",
-            "```bash",
-            "# The pack of a platform, as released",
-            "python scripts/generate_pack.py --platform retroarch --output-dir dist/",
-            "python scripts/generate_pack.py --platform batocera --output-dir dist/",
-            "",
-            "# Single emulator or system",
-            "python scripts/generate_pack.py --emulator dolphin",
-            "python scripts/generate_pack.py --system sony-playstation-2",
-            "",
-            "# One region, best first, one file per system and region",
-            "python scripts/generate_pack.py --platform retroarch --region us,eu,jp",
-            "python scripts/generate_pack.py --platform retroarch --region us --one-per-slot",
-            "",
-            "# Firmware only: the game data a list or a core names is left out, each file named",
-            "python scripts/generate_pack.py --platform emuelec --no-game-data",
-            "",
-            "# The bare minimum: only the files each core needs to start",
-            "python scripts/generate_pack.py --platform batocera --required-only",
-            "",
-            "# List available emulators and systems",
-            "python scripts/generate_pack.py --list-emulators",
-            "python scripts/generate_pack.py --list-systems",
-            "",
-            "# Coverage of this repository's collection per platform, emulator or system",
-            "# (it reads database.json and bios/: for your own BIOS folder, run the installer with --check)",
-            "python scripts/verify.py --all",
-            "python scripts/verify.py --platform batocera",
-            "python scripts/verify.py --emulator flycast",
-            "python scripts/verify.py --platform retroarch --verbose  # emulator ground truth",
-            "```",
-            "",
-            "Requires Python 3.9 or newer and `pyyaml`. The one-line installer alone runs on Python 3.8.",
-            "",
-            "## Documentation site",
-            "",
-            f"The [documentation site]({SITE_URL}) provides:",
-            "",
-            "- **Per-platform pages** with file-by-file verification status and hashes",
-            "- **Per-emulator profiles** with source code references for every file",
-            "- **Per-system pages** showing which emulators and platforms cover each console",
-            "- **Gap analysis** identifying missing files and undeclared core requirements",
-            f"- **Cross-reference** mapping files across {len(coverages)} platforms and {emulator_count} emulators",
-            "- **Versioned data access** through JSON, CSV and SQLite exports with published SHA-256 checksums",
-            "",
-            "## How it works",
-            "",
-            "A platform's BIOS list and an emulator's code are maintained"
-            " separately. Each list is compared with the emulator source code,"
-            " file by file where a profile exists, and where the two differ the"
-            " code decides.",
-            "",
-            "Hashes document what emulator code loads and accepts, not dump"
-            " provenance. That boundary, and how it relates to preservation"
-            " catalogs such as No-Intro, is drawn in the"
-            f" [technical questions]({SITE_URL}wiki/technical-faq/"
-            "#are-these-files-verified-against-original-hardware-dumps).",
-            "",
-            "1. **Read emulator source code**: trace every file the code loads, its expected hash and size",
-            "2. **Cross-reference with platforms**: match against what each platform declares",
-            "3. **Build packs**: include baseline files plus what each platform's cores need",
-            "4. **Verify**: run platform-native checks and emulator-level validation",
-            "",
-        ]
-    )
+    others = [name for name in sorted(coverages, key=lambda n: coverages[n]["platform"])
+              if name not in released]
+    lines.extend([
+        "",
+        "ZIPs are made for the setups most people download. The others install with the line"
+        " above, and each page gives the command: "
+        + ", ".join(f"[{coverages[name]['platform']}]({SITE_URL}get/{name}/)" for name in others)
+        + ".",
+        "",
+        "Unzip into the BIOS folder, files straight in it. A big pack comes in parts"
+        " (`Pack.part1of2.zip`): download every part"
+        f" ([why some setups have no ZIP]({SITE_URL}wiki/faq/#why-is-there-no-zip-for-my-setup))."
+        " Each release lists its files' SHA-256 with a signature"
+        f" ([verifying a release]({SITE_URL}wiki/release-process/#verifying-a-release)).",
+        "",
+        "## Help",
+        "",
+        f"- \"BIOS missing\" or a game does not start: [what to check]({SITE_URL}wiki/troubleshooting/)",
+        f"- Have a file? [Check it by its hash]({SITE_URL}files/)",
+        f"- Every console and the files it needs: [systems]({SITE_URL}systems/)",
+        f"- Asking an AI assistant: it reads the site best from [llms.txt]({SITE_URL}llms.txt)",
+        "",
+        "## What makes it different",
+        "",
+        f"- **{emulator_count} emulators profiled from their source code**: each file an emulator"
+        " loads, its hash and the line of code that reads it",
+        f"- **{len(coverages)} setups**, each checked its own way: MD5 for Batocera and Recalbox,"
+        " the file name for RetroArch, as their own code does",
+        f"- **{len(system_ids)} systems**, {total_files:,} files in the collection,"
+        f" [what is still missing]({SITE_URL}gaps/) named file by file",
+        f"- Public data: [JSON, CSV and SQLite]({SITE_URL}data/), MIT licensed",
+        "",
+        "<details>",
+        "<summary><strong>For developers: build a pack</strong></summary>",
+        "",
+        clone_line(db),
+        "",
+        "```bash",
+        "python scripts/generate_pack.py --platform retroarch --output-dir dist/",
+        "python scripts/generate_pack.py --emulator dolphin",
+        "python scripts/generate_pack.py --platform batocera --required-only",
+        "python scripts/verify.py --platform batocera",
+        "```",
+        "",
+        "Requires Python 3.9 or newer and `pyyaml`. The one-line installer alone runs on Python 3.8."
+        f" Every tool and option: [tools]({SITE_URL}wiki/tools/). How the lists are built:"
+        f" [architecture]({SITE_URL}wiki/architecture/).",
+        "",
+        "</details>",
+        "",
+    ])
 
     contributors = fetch_contributors()
     if not contributors:
@@ -910,7 +756,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
             "",
             "- [BIOS Preservation Tool](https://github.com/monster-penguin/BIOS-Preservation-Tool)"
             " by [monster-penguin](https://github.com/monster-penguin)"
-            " - scan, verify, and stage your own BIOS collection"
+            " - scans, verifies and stages a BIOS collection"
             " using RetroBIOS hash metadata",
             "",
             "## Contributing",
@@ -1053,7 +899,7 @@ handheld launchers, `bwrap` (bubblewrap) for the probe sandbox, and a Python 3.8
 with pyte (`{floor_line}`) for the full screen. CI has all three.
 
 `profile_sync.py` compares the branch with this repository's `main`, and
-fetches it in a fork's clone. A profile you only edit is not held to
+fetches it in a fork's clone. An edited profile is not held to
 `--strict`: its older refs are reviewed by hand.
 
 The full pipeline is not needed for a contribution: it rebuilds every pack

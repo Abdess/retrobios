@@ -340,7 +340,7 @@ class FilesColumnParagraph(unittest.TestCase):
         paragraph = next(p for p in readme.split("\n\n") if "The Files column" in p)
         self.assertNotIn("\n", paragraph.strip())
         after = readme.split(paragraph, 1)[1].lstrip("\n")
-        self.assertTrue(after.startswith("| Platform | Files |"))
+        self.assertTrue(after.startswith("| Setup | Files |"))
 
 
 class PageOpenings(unittest.TestCase):
@@ -769,14 +769,12 @@ class ReadmeInstallerOptions(unittest.TestCase):
         import generate_readme
 
         source = inspect.getsource(generate_readme.generate_readme)
-        self.assertIn('install_command("powershell", "--check")', source)
         self.assertIn("wiki/installer/#passing-options", source)
         self.assertIn("## Passing options", _page("installer.md"))
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        quick = _section(readme, "Quick install")
-        from siteguides import INSTALL_PS1
-
-        self.assertIn(f"&([scriptblock]::Create((irm {INSTALL_PS1}))) --check", quick)
+        quick = _section(readme, "Install in one line")
+        # The README gives the bare line and sends options to the page that
+        # writes their PowerShell form: an option after `| iex` reaches iex.
         self.assertIn("wiki/installer/#passing-options", quick)
         self.assertNotRegex(readme, r"(?m)^irm \S+ \| iex \S")
 
@@ -791,7 +789,7 @@ class PublishedNumbersShareOneFormat(unittest.TestCase):
 
         readme_source = inspect.getsource(generate_readme.generate_readme)
         self.assertNotIn("size_mb", readme_source)
-        self.assertIn("format_size(total_size)", readme_source)
+        self.assertIn("format_size(size)", readme_source)
         self.assertIn("{total_files:,}", inspect.getsource(generate_site))
         self.assertEqual(generate_readme.format_size(16011 * 1024 * 1024), "15.6 GB")
 
@@ -1713,9 +1711,7 @@ class ReadmeKeepsItsPointers(unittest.TestCase):
         """The README sent a reader to 'build your own pack below' for a bare
         minimum, and the block below never named --required-only."""
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("For a bare minimum, build your own pack below.", readme)
-        block = readme[readme.index("## Build your own pack"):]
-        block = block[:block.index("\n## ", 1)]
+        block = readme[readme.index("<summary><strong>For developers"):readme.index("</details>")]
         self.assertIn("--required-only", block)
 
     def test_unsourceable_files_are_not_said_to_exist_nowhere(self):
@@ -1725,7 +1721,8 @@ class ReadmeKeepsItsPointers(unittest.TestCase):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertNotIn("sourced at all", readme)
         self.assertNotIn("nobody has made", readme)
-        self.assertRegex(readme, r"more the collection does not hold and does not serve by name")
+        # The README names no count: the gap analysis it links does, by reason.
+        self.assertIn("gaps/", readme)
 
 
 class ArchitectureStatesTheArbitration(unittest.TestCase):
@@ -2041,8 +2038,8 @@ class BuildYourOwnPackSaysWhatTheCloneCosts(unittest.TestCase):
         line = generate_readme.clone_line(db)
         self.assertIn("git clone --depth 1", line)
         self.assertRegex(line, r"over \d+(\.\d)? GB")
-        section = _section((ROOT / "README.md").read_text(encoding="utf-8"),
-                           "Build your own pack")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        section = readme[readme.index("<summary><strong>For developers"):readme.index("</details>")]
         self.assertIn("git clone --depth 1", section)
 
     def test_advanced_usage_names_the_shallow_clone(self):

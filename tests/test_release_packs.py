@@ -284,9 +284,9 @@ class EverySurfaceSaysWhy(unittest.TestCase):
 
     def test_the_readme_rows_read_use_the_command(self):
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-        row = next(line for line in readme.splitlines() if line.startswith("| KNULLI |"))
-        self.assertIn(f"[Use the command]({SITE}get/knulli/)", row)
-        self.assertIn("ZIPs are made for the setups most people download.", readme)
+        line = next(text for text in readme.split("\n\n") if "ZIPs are made for the setups most people download." in text)
+        self.assertIn(f"[KNULLI]({SITE}get/knulli/)", line)
+        self.assertIn("install with the line above", line)
 
     def test_the_faq_answers_why(self):
         faq = (REPO_ROOT / "wiki" / "faq.md").read_text(encoding="utf-8")

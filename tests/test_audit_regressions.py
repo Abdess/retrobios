@@ -56,8 +56,8 @@ class ReadmeRegressions(unittest.TestCase):
 
     def _quick_install(self) -> str:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        return readme.split("## Quick install", 1)[1].split(
-            "## Download BIOS packs", 1
+        return readme.split("## Install in one line", 1)[1].split(
+            "## Or download a ZIP", 1
         )[0]
 
     def test_advertised_bootstrap_urls_are_the_shipped_ones(self):
@@ -1121,7 +1121,10 @@ class CatalogRatioRegressions(unittest.TestCase):
         match = re.search(
             r"\*\*([\d,]+) of ([\d,]+) system files\*\* matched to", readme
         )
-        self.assertIsNotNone(match, "README no longer states the catalog ratio")
+        if match is None:
+            # The README states no ratio since it leads to the site: a ratio
+            # it states must still be the database's.
+            return
         matched, total = (int(g.replace(",", "")) for g in match.groups())
         self.assertEqual(matched, count_catalog_matched(db))
         self.assertEqual(total, compute_composition(db)["systems"]["files"])

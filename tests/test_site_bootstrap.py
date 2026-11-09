@@ -271,7 +271,7 @@ class GeneratedSurfaces(unittest.TestCase):
 
     def test_the_readme_shows_the_short_form(self):
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-        quick = readme.split("## Quick install", 1)[1].split("\n## ", 1)[0]
+        quick = readme.split("## Install in one line", 1)[1].split("\n## ", 1)[0]
         self.assertIn(f"\n{install_command('sh')}\n", quick)
         self.assertIn(f"\n{install_command('powershell')}\n", quick)
         self.assertNotIn("raw.githubusercontent.com", quick)

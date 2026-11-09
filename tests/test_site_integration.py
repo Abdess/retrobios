@@ -237,7 +237,7 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
             word = rule.name.split()[0]
             with self.subTest(share=rule.name):
                 self.assertIn(word, section)
-                self.assertRegex(readme, rf"# SD card mounted on a PC: .*\b{word}\b")
+                self.assertRegex(readme, rf"\b{word}\b[^.]*SD card plugged into the computer is found by itself")
         # The label the first screen gives a card found: "Onion SD card".
         self.assertEqual(install._card_word(("retroarch", Path("/x/BIOS"), "Onion")), "SD card")
         self.assertEqual(install._card_word(("batocera", Path("/x/bios"), "Batocera")),
