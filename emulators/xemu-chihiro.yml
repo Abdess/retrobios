@@ -65,18 +65,16 @@ notes: |
 
 files:
   - name: chihiro_xbox_bios.bin
-    path: "chihiro/chihiro_xbox_bios.bin"
     system: sega-chihiro
     required: true
     size: 524288
     sha1: "b700b0041af8f84835e45d1d1250247bf7077188"
     validation: [size, sha1]
     description: "Chihiro BIOS"
-    note: "RetroBat also looks for it at the root of the bios folder. The other Chihiro files are then read from the same folder."
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2280-2292, source system/vl.c:3169-3190"
+    note: "Opened from chihiro.roms.bios_path, empty by default, and accepted under any name when it has this size and SHA-1. chihiro_xbox_bios.bin is the MAME name the code comment gives. The media board flash and the EEPROMs are then read from the folder that holds it. RetroBat sets the path to bios/chihiro/chihiro_xbox_bios.bin, else bios/chihiro_xbox_bios.bin."
+    source_ref: "source hw/xbox/chihiro/chihiro.c:2280-2292, source system/vl.c:3169-3190, source config_spec.yml:893-895"
 
   - name: fpr21042_m29w160et.bin
-    path: "chihiro/fpr21042_m29w160et.bin"
     system: sega-chihiro
     required: true
     max_size: 4194304
@@ -86,7 +84,6 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2259-2333, 485-489, source system/vl.c:3201-3214"
 
   - name: fpr-23887_29lv160te.ic4
-    path: "chihiro/fpr-23887_29lv160te.ic4"
     system: sega-chihiro
     required: false
     max_size: 4194304
@@ -97,7 +94,6 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2320-2332"
 
   - name: ic10_g24lc64.bin
-    path: "chihiro/ic10_g24lc64.bin"
     system: sega-chihiro
     required: true
     size: 8192
@@ -106,7 +102,6 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2336-2401, source system/vl.c:3215-3217"
 
   - name: pc20_g24lc64.bin
-    path: "chihiro/pc20_g24lc64.bin"
     system: sega-chihiro
     required: true
     size: 8192
@@ -115,7 +110,6 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2336-2401, source system/vl.c:3218-3220"
 
   - name: ic11_24lc024.bin
-    path: "chihiro/ic11_24lc024.bin"
     system: sega-chihiro
     required: true
     size: 128
