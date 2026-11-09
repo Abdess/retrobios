@@ -619,7 +619,7 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
     def test_the_pr_checklist_fetches_them_before_the_tests(self):
         workflow = _read(".github/workflows/validate.yml")
         self.assertLess(
-            workflow.index("python scripts/export_native.py --all --fetch"),
+            workflow.index("python scripts/export_native.py --all --refresh-cache"),
             workflow.index("python -m unittest discover"),
         )
         for text in (
@@ -627,13 +627,13 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
             _read("CONTRIBUTING.md"),
         ):
             block = _section(text, "## Before opening a PR")
-            self.assertIn("python scripts/export_native.py --all --fetch", block)
+            self.assertIn("python scripts/export_native.py --all --refresh-cache", block)
             self.assertLess(
                 block.index("export_native.py"), block.index("unittest discover")
             )
 
     def test_the_testing_guide_names_the_command(self):
-        self.assertIn("export_native.py --all --fetch", _read("wiki/testing-guide.md"))
+        self.assertIn("export_native.py --all --refresh-cache", _read("wiki/testing-guide.md"))
 
 
 if __name__ == "__main__":
