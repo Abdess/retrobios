@@ -1,6 +1,6 @@
 platform: retropie
-source: https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules
-scraped_at: '2026-10-06T03:33:14Z'
+source: https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules?ref=427e76216633591861791cfb28807ac1039c5ea8
+scraped_at: '2026-11-09T16:03:30Z'
 targets:
   rpi1:
     architecture: armv6
@@ -44,6 +44,7 @@ targets:
     - dxx-rebirth
     - eduke32
     - ep128emu
+    - fake08
     - fbalpha2012
     - fbneo
     - fbzx
@@ -210,6 +211,7 @@ targets:
     - dxx-rebirth
     - eduke32
     - ep128emu
+    - fake08
     - fbalpha2012
     - fbneo
     - fbzx
@@ -383,6 +385,7 @@ targets:
     - dxx-rebirth
     - eduke32
     - ep128emu
+    - fake08
     - fbalpha2012
     - fbneo
     - fbzx
@@ -554,6 +557,7 @@ targets:
     - dxx-rebirth
     - eduke32
     - ep128emu
+    - fake08
     - fbalpha2012
     - fbneo
     - fbzx
@@ -715,6 +719,7 @@ targets:
     - dxx-rebirth
     - eduke32
     - ep128emu
+    - fake08
     - fbalpha2012
     - fbneo
     - fbzx
@@ -878,6 +883,7 @@ targets:
     - dxx-rebirth
     - eduke32
     - ep128emu
+    - fake08
     - fbalpha2012
     - fbneo
     - fbzx
@@ -1041,6 +1047,7 @@ targets:
     - dxx-rebirth
     - eduke32
     - ep128emu
+    - fake08
     - fbalpha2012
     - fbneo
     - fbzx

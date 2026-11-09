@@ -1,6 +1,6 @@
 platform: rocknix
-source: https://github.com/ROCKNIX/distribution/tree/20261001/projects/ROCKNIX/packages/virtual/emulators/package.mk
-scraped_at: '2026-11-06T03:04:24Z'
+source: https://github.com/ROCKNIX/distribution/tree/20261101/projects/ROCKNIX/packages/virtual/emulators/package.mk
+scraped_at: '2026-11-09T16:01:58Z'
 targets:
   amd64:
     architecture: x86_64
@@ -63,7 +63,6 @@ targets:
     - flycast
     - flycast-sa
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -222,7 +221,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -317,6 +315,7 @@ targets:
     - wasm4
     - wine
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   rk3326:
@@ -373,7 +372,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -468,6 +466,7 @@ targets:
     - wasm4
     - wine
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   rk3399:
@@ -475,8 +474,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -533,7 +530,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -631,6 +627,7 @@ targets:
     - wasm4
     - wine
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   rk3566:
@@ -638,8 +635,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -695,7 +690,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -793,6 +787,7 @@ targets:
     - wasm4
     - wine
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   rk3576:
@@ -800,8 +795,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -857,7 +850,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -955,6 +947,7 @@ targets:
     - wasm4
     - wine
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   rk3588:
@@ -962,8 +955,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -1023,7 +1014,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -1123,6 +1113,7 @@ targets:
     - wasm4
     - wine
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   s922x:
@@ -1130,8 +1121,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -1192,7 +1181,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -1290,13 +1278,11 @@ targets:
     - xmil
     - yabasanshiro
     - yabasanshiro-sa
-  sm4450:
+  sdm845:
     architecture: aarch64
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -1360,7 +1346,185 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
+    - freeintv
+    - freej2me
+    - fuse
+    - gambatte
+    - gearboy
+    - gearcoleco
+    - geargrafx
+    - gearlynx
+    - gearsystem
+    - genesis_plus_gx
+    - genesis_plus_gx_wide
+    - geolith
+    - gpsp
+    - gw
+    - gzdoom
+    - gzdoom-sa
+    - handy
+    - hatari
+    - hatarisa
+    - heroic
+    - hypseus-singe
+    - jaxe
+    - kronos
+    - mame
+    - mame2003_plus
+    - mame2010
+    - mame2015
+    - mednafen
+    - melonds
+    - melonds-sa
+    - melonds_ds
+    - mesen
+    - mesen_s
+    - mgba
+    - minivmac
+    - mojozork
+    - moonlight
+    - mu
+    - mupen64plus
+    - mupen64plus-sa
+    - mupen64plus_nx
+    - nanoboyadvance
+    - nanoboyadvance-sa
+    - neocd
+    - nestopia
+    - np2kai
+    - o2em
+    - openbor
+    - opera
+    - parallel_n64
+    - pcsx_rearmed
+    - pico-8
+    - picodrive
+    - pokemini
+    - portmaster
+    - potator
+    - ppsspp
+    - ppsspp-sa
+    - prboom
+    - prosystem
+    - puae
+    - puae2021
+    - px68k
+    - quasi88
+    - quicknes
+    - race
+    - rpcs3
+    - rpcs3-sa
+    - same_cdi
+    - sameboy
+    - sameduck
+    - scummvm
+    - scummvm-sa
+    - skyemu
+    - skyemu-sa
+    - smsplus_gx
+    - snes9x
+    - snes9x2002
+    - snes9x2005_plus
+    - snes9x2010
+    - steam
+    - stella
+    - supermodel
+    - supermodel-sa
+    - supersnes9x
+    - swanstation
+    - tgbdual
+    - theodore
+    - tic80
+    - touchhle
+    - touchhle-sa
+    - tyrquake
+    - uae4arm
+    - uzem
+    - vba_next
+    - vbam
+    - vecx
+    - vice
+    - vice-sa
+    - vircon32
+    - virtualjaguar
+    - vita3k
+    - vita3k-sa
+    - vitaquake2
+    - wasm4
+    - wine
+    - xemu
+    - xemu-sa
+    - xmil
+    - yabasanshiro
+    - yabasanshiro-sa
+  sm4450:
+    architecture: aarch64
+    cores:
+    - '81'
+    - a5200
+    - amiberry
+    - arduous
+    - armsx2
+    - armsx2-sa
+    - atari800
+    - azahar
+    - azahar-sa
+    - b2
+    - beetle_gba
+    - beetle_lynx
+    - beetle_ngp
+    - beetle_pce
+    - beetle_pce_fast
+    - beetle_pcfx
+    - beetle_psx
+    - beetle_saturn
+    - beetle_supafaust
+    - beetle_supergrafx
+    - beetle_vb
+    - beetle_wswan
+    - bigpemu
+    - bigpemu-sa
+    - bk
+    - bluemsx
+    - box64
+    - box86
+    - bsnes
+    - bsnes2014_accuracy
+    - bsnes2014_balanced
+    - bsnes2014_performance
+    - bsnes_hd
+    - bsnes_mercury_accuracy
+    - bsnes_mercury_balanced
+    - bsnes_mercury_performance
+    - cap32
+    - cemu
+    - cemu-sa
+    - crocods
+    - daedalusx64
+    - daedalusx64-sa
+    - daphne
+    - desmume
+    - dolphin
+    - dolphin-sa
+    - dosbox_core
+    - dosbox_pure
+    - doublecherrygb
+    - dsperate
+    - dsperate-sa
+    - duckstation
+    - duckstation-sa
+    - easyrpg
+    - ecwolf
+    - emuscv
+    - fake08
+    - fbalpha2012
+    - fbalpha2019
+    - fbneo
+    - fceumm
+    - flycast
+    - flycast-sa
+    - flycast2021
+    - fmsx
     - freeintv
     - freej2me
     - fuse
@@ -1468,6 +1632,7 @@ targets:
     - xemu
     - xemu-sa
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   sm6115:
@@ -1475,8 +1640,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -1536,7 +1699,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -1636,6 +1798,7 @@ targets:
     - wasm4
     - wine
     - xmil
+    - yabadabadoo
     - yabasanshiro
     - yabasanshiro-sa
   sm8250:
@@ -1643,8 +1806,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - armsx2
@@ -1708,7 +1869,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -1825,8 +1985,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - ares
@@ -1894,7 +2052,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -2013,8 +2170,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - ares
@@ -2076,7 +2231,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
@@ -2194,8 +2348,6 @@ targets:
     cores:
     - '81'
     - a5200
-    - aethersx2
-    - aethersx2-sa
     - amiberry
     - arduous
     - ares
@@ -2257,7 +2409,6 @@ targets:
     - flycast-sa
     - flycast2021
     - fmsx
-    - freechaf
     - freeintv
     - freej2me
     - fuse
