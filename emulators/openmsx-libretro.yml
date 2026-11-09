@@ -1,0 +1,908 @@
+emulator: "openMSX (libretro)"
+type: libretro
+core_classification: community_fork
+source: "https://git.libretro.com/libretro/openmsx-libretro"
+upstream: "https://github.com/openMSX/openMSX"
+source_branch: libretro
+profiled_date: "2026-11-09"
+source_commit: "c7e5a36530950fb6ad446827fda5fe6595c0c3f4"
+core_version: "21.0"
+version_basis:
+  kind: file
+  path: "build/version.py"
+  pattern: "packageVersionNumber = '([^']+)'"
+display_name: "Microsoft - MSX/MSX2/MSX2+/turbo R (openMSX)"
+found_by: content
+cores:
+  - openmsx
+systems:
+  - msx
+  - msx1
+  - msx2
+  - msx2+
+  - msxturbor
+
+notes: |
+  The buildbot's openmsx core: openMSX 21.0 with a libretro frontend
+  (src/libretro/), built from its own repository and branch. openMSX's data
+  folder is <system>/openmsx/share and its user folder <saves>/openmsx
+  (src/libretro/LibretroCore.cc:146-157). The core carries openMSX's share
+  folder with the C-BIOS machines and ROMs and writes it there when it is
+  new or differs (build/libretro_share.py, LibretroCore.cc:159-160), so a
+  game starts on C-BIOS MSX2+ with nothing else (LibretroCore.cc:332).
+
+  The Machine core option offers nine C-BIOS machines and twelve real ones,
+  and each extension option every extension in share/extensions
+  (LibretroCore.cc:633-640, 763-788). A real machine or an extension reads
+  its system ROMs from the file pool, which holds share/systemroms below
+  both folders and searches it recursively by sha1, whatever a file is
+  named (src/file/FilePool.cc:21-33, src/file/FilePoolCore.cc:385,
+  src/memory/Rom.cc:168-197). When the chosen machine or extension cannot
+  start, the core starts C-BIOS without extensions (LibretroCore.cc:1044-1050).
+
+  The Philips NMS 8245 reads two contents both named
+  NMS8245SystemROM1.05.bin (share/machines/Philips_NMS_8245.xml:72-73,
+  145-146): the second sits in a subfolder of share/systemroms, which the
+  pool searches too. The MegaFlashROM SCC and SCC+ initial content is the
+  flash the user writes, and the Lascom Kanji dummy ships in share.
+
+files:
+  - name: "vg8020_basic-bios1.rom"
+    path: "openmsx/share/systemroms/vg8020_basic-bios1.rom"
+    sha1: "829c00c3114f25b3dae5157c0a238b52a3ac37db"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_VG_8020"
+    source_ref: "share/machines/Philips_VG_8020.xml:52-55"
+
+  - name: "hb-75p_basic-bios1.rom"
+    aliases: ["cx5m_basic-bios1.rom"]
+    path: "openmsx/share/systemroms/hb-75p_basic-bios1.rom"
+    sha1: "8963fc041975f31dc2ab1019cfdd4967999de53e"
+    required: false
+    validation: [sha1]
+    description: "Read by machines Sony_HB-75P, Yamaha_CX5M"
+    source_ref: "share/machines/Sony_HB-75P.xml:59-62, share/machines/Yamaha_CX5M.xml:54-57"
+    note: "share/machines/Yamaha_CX5M.xml names it cx5m_basic-bios1.rom."
+
+  - name: "hb-75p_firmware.rom"
+    path: "openmsx/share/systemroms/hb-75p_firmware.rom"
+    sha1: "b262aedc71b445303f84efe5e865cbb71fd7d952"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-75P"
+    source_ref: "share/machines/Sony_HB-75P.xml:66-69"
+
+  - name: "hx-10_basic-bios1.rom"
+    path: "openmsx/share/systemroms/hx-10_basic-bios1.rom"
+    sha1: "4dad9de7c28b452351cc12910849b51bd9a37ab3"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Toshiba_HX-10"
+    source_ref: "share/machines/Toshiba_HX-10.xml:58-61"
+
+  - name: "sfg-01.rom"
+    path: "openmsx/share/systemroms/sfg-01.rom"
+    sha1: "49a1750c10e407293af6bce27a02e99307ceba12"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Yamaha_CX5M; extension Yamaha_SFG-01"
+    source_ref: "share/machines/Yamaha_CX5M.xml:80-83, share/extensions/Yamaha_SFG-01.xml:31-34"
+
+  - name: "NMS8245SystemROM1.08.bin"
+    path: "openmsx/share/systemroms/NMS8245SystemROM1.08.bin"
+    sha1: "cc57c1dcd7249ea9f8e2547244592e7d97308ed0"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8245"
+    source_ref: "share/machines/Philips_NMS_8245.xml:61-65, share/machines/Philips_NMS_8245.xml:92-96, share/machines/Philips_NMS_8245.xml:134-138"
+
+  - name: "NMS8245SystemROM1.06.bin"
+    path: "openmsx/share/systemroms/NMS8245SystemROM1.06.bin"
+    sha1: "b746192dc333eaf2a725a44777303808a3649d63"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8245"
+    source_ref: "share/machines/Philips_NMS_8245.xml:66-70, share/machines/Philips_NMS_8245.xml:97-101, share/machines/Philips_NMS_8245.xml:139-143"
+
+  - name: "NMS8245SystemROM1.05.bin"
+    path: "openmsx/share/systemroms/NMS8245SystemROM1.05.bin"
+    sha1: "816ceb21088b116ec34be0ff869d02222b525e58"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8245"
+    source_ref: "share/machines/Philips_NMS_8245.xml:71-75, share/machines/Philips_NMS_8245.xml:102-106"
+
+  - name: "nms8245_basic-bios2.rom"
+    aliases: ["nms8250_basic-bios2.rom"]
+    path: "openmsx/share/systemroms/nms8245_basic-bios2.rom"
+    sha1: "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+    required: false
+    validation: [sha1]
+    description: "Read by machines Philips_NMS_8245, Philips_NMS_8250"
+    source_ref: "share/machines/Philips_NMS_8245.xml:76-79, share/machines/Philips_NMS_8250.xml:23-26"
+    note: "share/machines/Philips_NMS_8250.xml names it nms8250_basic-bios2.rom."
+
+  - name: "nms8245_msx2sub.rom"
+    path: "openmsx/share/systemroms/nms8245_msx2sub.rom"
+    sha1: ["5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02", "e7905d16d2ccd57a013c122dc432106cd59ef52c"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8245"
+    source_ref: "share/machines/Philips_NMS_8245.xml:107-111"
+
+  - name: "NMS8245SystemROM1.05.bin"
+    path: "openmsx/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin"
+    sha1: "7e6a267e1a3e075dcdad3669b651b1050f6375ac"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8245"
+    source_ref: "share/machines/Philips_NMS_8245.xml:144-148"
+
+  - name: "nms8245_disk.rom"
+    path: "openmsx/share/systemroms/nms8245_disk.rom"
+    sha1: ["58ba1887e8fd21c912b6859cae6514bd874ffcca", "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8245"
+    source_ref: "share/machines/Philips_NMS_8245.xml:149-153"
+
+  - name: "nms8250_msx2sub.rom"
+    path: "openmsx/share/systemroms/nms8250_msx2sub.rom"
+    sha1: "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8250"
+    source_ref: "share/machines/Philips_NMS_8250.xml:39-42"
+
+  - name: "nms8250_disk.rom"
+    path: "openmsx/share/systemroms/nms8250_disk.rom"
+    sha1: ["8625c6b633d9cca2875e4dc33404fb98653379d7", "c3efedda7ab947a06d9345f7b8261076fa7ceeef", "dab3e6f36843392665b71b04178aadd8762c6589"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Philips_NMS_8250"
+    source_ref: "share/machines/Philips_NMS_8250.xml:62-67"
+
+  - name: "hb-f700p_basic-bios2.rom"
+    path: "openmsx/share/systemroms/hb-f700p_basic-bios2.rom"
+    sha1: "0de3c802057560560a03d7965fcc4cff69f8575c"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F700P"
+    source_ref: "share/machines/Sony_HB-F700P.xml:65-68"
+
+  - name: "hb-f700p_msx2sub.rom"
+    path: "openmsx/share/systemroms/hb-f700p_msx2sub.rom"
+    sha1: ["24624c5fa3a8069b1d865cdea8a029f15c1955ea", "3288894e1be6af705871499b23c85732dbc40993"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F700P"
+    source_ref: "share/machines/Sony_HB-F700P.xml:83-87"
+
+  - name: "hb-f700p_disk.rom"
+    path: "openmsx/share/systemroms/hb-f700p_disk.rom"
+    sha1: ["3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5", "7dcd434d9a244e23afd212d3fea4c3bf3fe2a300"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F700P"
+    source_ref: "share/machines/Sony_HB-F700P.xml:94-98"
+
+  - name: "hb-f1xd_basic-bios2.rom"
+    path: "openmsx/share/systemroms/hb-f1xd_basic-bios2.rom"
+    sha1: "4ce41fcc1a603411ec4e99556409c442078f0ecf"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XD"
+    source_ref: "share/machines/Sony_HB-F1XD.xml:69-72"
+
+  - name: "hb-f1xd_msx2sub.rom"
+    path: "openmsx/share/systemroms/hb-f1xd_msx2sub.rom"
+    sha1: "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XD"
+    source_ref: "share/machines/Sony_HB-F1XD.xml:85-88"
+
+  - name: "hb-f1xd_disk.rom"
+    aliases: ["hbd-20w.rom", "hbd-f1.rom"]
+    path: "openmsx/share/systemroms/hb-f1xd_disk.rom"
+    sha1: "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XD; extensions Sony_HBD-20W, Sony_HBD-F1"
+    source_ref: "share/machines/Sony_HB-F1XD.xml:95-98, share/extensions/Sony_HBD-20W.xml:21-24, share/extensions/Sony_HBD-F1.xml:21-24"
+    note: "share/extensions/Sony_HBD-20W.xml names it hbd-20w.rom; share/extensions/Sony_HBD-F1.xml names it hbd-f1.rom."
+
+  - name: "hb-f1xv_kanjifont.rom"
+    aliases: ["hbi-j1_kanjifont.rom"]
+    path: "openmsx/share/systemroms/hb-f1xv_kanjifont.rom"
+    sha1: "218d91eb6df2823c924d3774a9f455492a10aecb"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XV; extension Sony_HBI-J1"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:30-33, share/extensions/Sony_HBI-J1.xml:15-18"
+    note: "share/extensions/Sony_HBI-J1.xml names it hbi-j1_kanjifont.rom."
+
+  - name: "Sony_HB-F1XV.rom"
+    path: "openmsx/share/systemroms/Sony_HB-F1XV.rom"
+    sha1: "f2a1d326d72d4c70ea214d7883838de8847a82b7"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XV"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:89-93, share/machines/Sony_HB-F1XV.xml:136-140, share/machines/Sony_HB-F1XV.xml:148-152, share/machines/Sony_HB-F1XV.xml:166-170, share/machines/Sony_HB-F1XV.xml:182-186"
+
+  - name: "hb-f1xv_basic-bios2p.rom"
+    path: "openmsx/share/systemroms/hb-f1xv_basic-bios2p.rom"
+    sha1: "174c9254f09d99361ff7607630248ff9d7d8d4d6"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XV"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:94-97"
+
+  - name: "hb-f1xv.rom"
+    aliases: ["hbi-j1_msx-je.rom"]
+    path: "openmsx/share/systemroms/hb-f1xv.rom"
+    sha1: "ade0c5ba5574f8114d7079050317099b4519e88f"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XV; extension Sony_HBI-J1"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:108-111, share/extensions/Sony_HBI-J1.xml:27-30"
+    note: "share/extensions/Sony_HBI-J1.xml names it hbi-j1_msx-je.rom."
+
+  - name: "hb-f1xv_msx2sub.rom"
+    aliases: ["fs-a1wsx_msx2psub.rom"]
+    path: "openmsx/share/systemroms/hb-f1xv_msx2sub.rom"
+    sha1: "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+    required: false
+    validation: [sha1]
+    description: "Read by machines Sony_HB-F1XV, Panasonic_FS-A1WSX"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:141-144, share/machines/Panasonic_FS-A1WSX.xml:158-161"
+    note: "share/machines/Panasonic_FS-A1WSX.xml names it fs-a1wsx_msx2psub.rom."
+
+  - name: "hb-f1xv_kanjibasic.rom"
+    aliases: ["fs-a1wsx_kanjibasic.rom"]
+    path: "openmsx/share/systemroms/hb-f1xv_kanjibasic.rom"
+    sha1: "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06"
+    required: false
+    validation: [sha1]
+    description: "Read by machines Sony_HB-F1XV, Panasonic_FS-A1WSX"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:153-156, share/machines/Panasonic_FS-A1WSX.xml:165-168"
+    note: "share/machines/Panasonic_FS-A1WSX.xml names it fs-a1wsx_kanjibasic.rom."
+
+  - name: "hb-f1xv_disk.rom"
+    path: "openmsx/share/systemroms/hb-f1xv_disk.rom"
+    sha1: "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XV"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:171-174"
+
+  - name: "hb-f1xv_fmbasic.rom"
+    path: "openmsx/share/systemroms/hb-f1xv_fmbasic.rom"
+    sha1: "aad42ba4289b33d8eed225d42cea930b7fc5c228"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Sony_HB-F1XV"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:187-190"
+
+  - name: "fs-a1wsx_kanjifont.rom"
+    aliases: ["fs-a1st_kanjifont.rom", "fs-a1gt_kanjifont.rom"]
+    path: "openmsx/share/systemroms/fs-a1wsx_kanjifont.rom"
+    sha1: "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49"
+    required: false
+    validation: [sha1]
+    description: "Read by machines Panasonic_FS-A1WSX, Panasonic_FS-A1ST, Panasonic_FS-A1GT"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:28-31, share/machines/Panasonic_FS-A1ST.xml:32-35, share/machines/Panasonic_FS-A1GT.xml:140-143"
+    note: "share/machines/Panasonic_FS-A1ST.xml names it fs-a1st_kanjifont.rom; share/machines/Panasonic_FS-A1GT.xml names it fs-a1gt_kanjifont.rom."
+
+  - name: "fs-a1wsx_IC18.rom"
+    path: "openmsx/share/systemroms/fs-a1wsx_IC18.rom"
+    sha1: "28cc0fbab62d9b4ff5d16971795ebb8a4e02f1f6"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Panasonic_FS-A1WSX"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:97-101, share/machines/Panasonic_FS-A1WSX.xml:114-118, share/machines/Panasonic_FS-A1WSX.xml:153-157, share/machines/Panasonic_FS-A1WSX.xml:177-181"
+
+  - name: "fs-a1wsx_basic-bios2p.rom"
+    path: "openmsx/share/systemroms/fs-a1wsx_basic-bios2p.rom"
+    sha1: "f4433752d3bf876bfefb363c749d4d2e08a218b6"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Panasonic_FS-A1WSX"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:102-105"
+
+  - name: "fs-a1wsx_fmbasic.rom"
+    path: "openmsx/share/systemroms/fs-a1wsx_fmbasic.rom"
+    sha1: ["6354ccc5c100b1c558c9395fa8c00784d2e9b0a3", "aad42ba4289b33d8eed225d42cea930b7fc5c228"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Panasonic_FS-A1WSX"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:119-123"
+
+  - name: "fs-a1wsx_disk.rom"
+    path: "openmsx/share/systemroms/fs-a1wsx_disk.rom"
+    sha1: "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Panasonic_FS-A1WSX"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:182-185"
+
+  - name: "fs-a1wsx_firmware.rom"
+    path: "openmsx/share/systemroms/fs-a1wsx_firmware.rom"
+    sha1: "3330d9b6b76e3c4ccb7cf252496ed15d08b95d3f"
+    required: false
+    validation: [sha1]
+    description: "Read by machine Panasonic_FS-A1WSX"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:211-214"
+
+  - name: "fs-a1st_firmware.rom"
+    path: "openmsx/share/systemroms/fs-a1st_firmware.rom"
+    sha1: ["4b84465c2faa802bfd5f772118c4d31f993f29d0", "c212b11fda13f83dafed688c54d098e7e47ab225"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Panasonic_FS-A1ST"
+    source_ref: "share/machines/Panasonic_FS-A1ST.xml:22-26"
+
+  - name: "fs-a1gt_firmware.rom"
+    path: "openmsx/share/systemroms/fs-a1gt_firmware.rom"
+    sha1: ["5fa3aa79aeba2c0441f349e78e9a16d9d64422ea", "e779c338eb91a7dea3ff75f3fde76b8af22c4a3a"]
+    required: false
+    validation: [sha1]
+    description: "Read by machine Panasonic_FS-A1GT"
+    source_ref: "share/machines/Panasonic_FS-A1GT.xml:22-26"
+
+  - name: "ascii_msxdos22.rom"
+    path: "openmsx/share/systemroms/ascii_msxdos22.rom"
+    sha1: "42f4e3360eb134857b0efa82c1abedf342680124"
+    required: false
+    validation: [sha1]
+    description: "Read by extension ASCII_MSX-DOS2"
+    source_ref: "share/extensions/ASCII_MSX-DOS2.xml:18-21, share/extensions/ASCII_MSX-DOS2.xml:36-40"
+
+  - name: "msx-write_kanjifont.rom"
+    aliases: ["ec-702_kanjifont.rom"]
+    path: "openmsx/share/systemroms/msx-write_kanjifont.rom"
+    sha1: "fc71561a64f73da0e0043d256f67fd18d7fc3a7f"
+    required: false
+    validation: [sha1]
+    description: "Read by extensions ASCII_Japanese_MSX-Write, Konami_EC-702"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write.xml:15-18, share/extensions/Konami_EC-702.xml:14-17"
+    note: "share/extensions/Konami_EC-702.xml names it ec-702_kanjifont.rom."
+
+  - name: "Japanese MSX-Write (1986) (Ascii) (J).rom"
+    path: "openmsx/share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom"
+    sha1: "4180544158a57c99162269e33e4f2c77c9fce84e"
+    required: false
+    validation: [sha1]
+    description: "Read by extension ASCII_Japanese_MSX-Write"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write.xml:26-29"
+
+  - name: "msx-write_ii_kanjifont.rom"
+    path: "openmsx/share/systemroms/msx-write_ii_kanjifont.rom"
+    sha1: "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4"
+    required: false
+    validation: [sha1]
+    description: "Read by extension ASCII_Japanese_MSX-Write_II"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write_II.xml:15-18"
+
+  - name: "Japanese MSX-Write II (1988) (Ascii) (J).rom"
+    path: "openmsx/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom"
+    sha1: "9afdee40e7b243f99cc50dd1ad710ab0928dd820"
+    required: false
+    validation: [sha1]
+    description: "Read by extension ASCII_Japanese_MSX-Write_II"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write_II.xml:28-31"
+
+  - name: "msxdos22.rom"
+    path: "openmsx/share/systemroms/msxdos22.rom"
+    sha1: ["0e253ee076eff37f7ee450c0b10c71763fac990b", "51a1467d73d26c91aab7923e3be66490daaffdee", "c36c9e0f96738a340381e23b4f97245388801a46"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension msxdos2"
+    source_ref: "share/extensions/msxdos2.xml:17-22"
+
+  - name: "avt_dpf-550_disk.rom"
+    path: "openmsx/share/systemroms/avt_dpf-550_disk.rom"
+    sha1: "633ad62599361bbb8ba6803cdcfaa14c54521c43"
+    required: false
+    validation: [sha1]
+    description: "Read by extension AVT_DPF-550"
+    source_ref: "share/extensions/AVT_DPF-550.xml:20-23"
+
+  - name: "mu-pack.rom"
+    path: "openmsx/share/systemroms/mu-pack.rom"
+    sha1: "e88ca790ab58e7709cd99cbbb23ff7d33631b71f"
+    required: false
+    validation: [sha1]
+    description: "Read by extension mu-PACK"
+    source_ref: "share/extensions/mu-PACK.xml:26-29"
+
+  - name: "fmpak.rom"
+    path: "openmsx/share/systemroms/fmpak.rom"
+    sha1: "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Checkmark_FM_Stereo_PAK"
+    source_ref: "share/extensions/Checkmark_FM_Stereo_PAK.xml:25-28"
+
+  - name: "computer_mates_disk_interface.rom"
+    path: "openmsx/share/systemroms/computer_mates_disk_interface.rom"
+    sha1: "06d44926ab82ac697a939c0f2a1a7642b5f68dce"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Computer_Mates_Disk_Interface"
+    source_ref: "share/extensions/Computer_Mates_Disk_Interface.xml:44-47"
+
+  - name: "ROM_Hunter_Mk2.rom"
+    path: "openmsx/share/systemroms/ROM_Hunter_Mk2.rom"
+    sha1: "77b886b3ed4048a099099d6b9b0d4cca3a05dce1"
+    required: false
+    validation: [sha1]
+    description: "Read by extension ROM_Hunter_Mk2"
+    source_ref: "share/extensions/ROM_Hunter_Mk2.xml:17-20"
+
+  - name: "ddx_3.0.rom"
+    path: "openmsx/share/systemroms/ddx_3.0.rom"
+    sha1: ["124126cee840e43c7668c11c2bec2f34b3d00c68", "a363015286341ffabcdc38ef0d890897ed51e322"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension DDX_3.0"
+    source_ref: "share/extensions/DDX_3.0.xml:20-25"
+
+  - name: "mr512.rom"
+    path: "openmsx/share/systemroms/mr512.rom"
+    sha1: "f0abc38f345c05e2112079239d09f25fb08a7c56"
+    required: false
+    validation: [sha1]
+    description: "Read by extension MegaRAM_Disk"
+    source_ref: "share/extensions/MegaRAM_Disk.xml:19-22"
+
+  - name: "ESPUNAPI_IO.rom"
+    path: "openmsx/share/systemroms/ESPUNAPI_IO.rom"
+    sha1: "8ef4c1777db8a913fa4694204228c4af44077ffe"
+    required: false
+    validation: [sha1]
+    description: "Read by extension smxwifi"
+    source_ref: "share/extensions/smxwifi.xml:18-21"
+
+  - name: "chakkari.rom"
+    path: "openmsx/share/systemroms/chakkari.rom"
+    sha1: ["aa45362b4ea7c7274e4988966bd08e114e56d04a", "aa98b0822d768acb73ab729d736c8fb682685492"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Epson_Chakkari_Copy"
+    source_ref: "share/extensions/Epson_Chakkari_Copy.xml:18-22"
+
+  - name: "rs232.rom"
+    path: "openmsx/share/systemroms/rs232.rom"
+    sha1: ["47c78981b5ffbb9e8d9c2145f9c2e642ff0e8193", "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension rs232"
+    source_ref: "share/extensions/rs232.xml:18-22"
+
+  - name: "ct-80e.rom"
+    path: "openmsx/share/systemroms/ct-80e.rom"
+    sha1: "e89eb87f295a2c93688265c4f6f25a9ccb4e3697"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Gradiente_CT-80E"
+    source_ref: "share/extensions/Gradiente_CT-80E.xml:26-29"
+
+  - name: "mpc-310h.rom"
+    path: "openmsx/share/systemroms/mpc-310h.rom"
+    sha1: "4880977a441ee6ee8bf089fdc1a54f028f00a15e"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Hitachi_MPC-310H"
+    source_ref: "share/extensions/Hitachi_MPC-310H.xml:20-23"
+
+  - name: "yrw801.rom"
+    path: "openmsx/share/systemroms/yrw801.rom"
+    sha1: "32760893ce06dbe3930627755ba065cc3d8ec6ca"
+    required: false
+    validation: [sha1]
+    description: "Read by extensions Jun_Soft_DalSoRi_R2, moonsound"
+    source_ref: "share/extensions/Jun_Soft_DalSoRi_R2.xml:22-25, share/extensions/moonsound.xml:16-19"
+
+  - name: "Konami EC-701 program.rom"
+    path: "openmsx/share/systemroms/Konami EC-701 program.rom"
+    sha1: ["4cc5be7536c11a89b5ec736a62a2b832361cd23d", "bad9ae862957b6fe7752647e0799537448a8568e"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Konami_EC-701"
+    source_ref: "share/extensions/Konami_EC-701.xml:17-21"
+
+  - name: "Konami EC-701 dictionary.rom"
+    path: "openmsx/share/systemroms/Konami EC-701 dictionary.rom"
+    sha1: "661c7261dc261e9ef2106755946f95d8b9b699b4"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Konami_EC-701"
+    source_ref: "share/extensions/Konami_EC-701.xml:22-25"
+
+  - name: "megaflashrom_scc+_sd.rom"
+    path: "openmsx/share/systemroms/megaflashrom_scc+_sd.rom"
+    sha1: "1621f623b834dc57cb2983f30b36bcc3ac56cafd"
+    required: false
+    validation: [sha1]
+    description: "Flash content read by extension MegaFlashROM_SCC+_SD, found by its sha1 alone: the XML names no file"
+    source_ref: "share/extensions/MegaFlashROM_SCC+_SD.xml:20-22"
+
+  - name: "cdx-2.rom"
+    path: "openmsx/share/systemroms/cdx-2.rom"
+    sha1: "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Microsol_CDX-2"
+    source_ref: "share/extensions/Microsol_CDX-2.xml:20-23"
+
+  - name: "ml-30dc.rom"
+    path: "openmsx/share/systemroms/ml-30dc.rom"
+    sha1: "658bc7cd4b19bd5face14f09e4e2904157a5c298"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Mitsubishi_ML-30DC_ML-30FD"
+    source_ref: "share/extensions/Mitsubishi_ML-30DC_ML-30FD.xml:19-22"
+
+  - name: "fmpac.rom"
+    path: "openmsx/share/systemroms/fmpac.rom"
+    sha1: ["9d789166e3caf28e4742fe933d962e99618c633d", "fec451b9256570a0e4869355a40329c57f40705f"]
+    required: false
+    validation: [sha1]
+    description: "Read by extensions mbstereo, fmpac"
+    source_ref: "share/extensions/mbstereo.xml:23-27, share/extensions/fmpac.xml:22-26"
+
+  - name: "novaxis.rom"
+    path: "openmsx/share/systemroms/novaxis.rom"
+    sha1: "352ec8c99fe1397a88ecb3aee6dbb4d121c818e9"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Gouda_SCSI"
+    source_ref: "share/extensions/Gouda_SCSI.xml:18-21"
+
+  - name: "msxpibios.rom"
+    path: "openmsx/share/systemroms/msxpibios.rom"
+    sha1: ["3cfffa59afef160439085a8a496953edcaeb0662", "45b204426039c909ddc142c12c2aa5738cbbbb50", "6be08eeba5412502c5aeb7e4ac78a4d02c9cce0a", "a0c2775e25b6214e9df3673092caf3534be7314a", "c429077a5f58b006125247a67783ea4ea6fb7389"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension MSXPi"
+    source_ref: "share/extensions/MSXPi.xml:28-35"
+
+  - name: "msxaudio13.OPL3_mono.rom"
+    path: "openmsx/share/systemroms/msxaudio13.OPL3_mono.rom"
+    sha1: "b344b5b7988f459354a2db49d7d339ceeee7d864"
+    required: false
+    validation: [sha1]
+    description: "Read by extension OPL3Cartridge2_mono"
+    source_ref: "share/extensions/OPL3Cartridge2_mono.xml:29-34"
+
+  - name: "msxaudio13.OPL3_stereo.rom"
+    path: "openmsx/share/systemroms/msxaudio13.OPL3_stereo.rom"
+    sha1: "9c924cc79b17cfe468fc7c969868be86ccbe9d46"
+    required: false
+    validation: [sha1]
+    description: "Read by extension OPL3Cartridge2_stereo"
+    source_ref: "share/extensions/OPL3Cartridge2_stereo.xml:29-34"
+
+  - name: "cf-sm003_main.rom"
+    path: "openmsx/share/systemroms/cf-sm003_main.rom"
+    sha1: "807fdd760db6a01d7eddc6bb67c2cc20cff6960f"
+    required: false
+    validation: [sha1]
+    description: "Read by extension National_CF-SM003"
+    source_ref: "share/extensions/National_CF-SM003.xml:18-21"
+
+  - name: "cf-sm003_kanjifont.rom"
+    path: "openmsx/share/systemroms/cf-sm003_kanjifont.rom"
+    sha1: "b3a9219485ff258c8b24e9b7d0fa4471c2272edb"
+    required: false
+    validation: [sha1]
+    description: "Read by extension National_CF-SM003"
+    source_ref: "share/extensions/National_CF-SM003.xml:22-25"
+
+  - name: "cf-sm003_data.rom"
+    aliases: ["skw-01_data.rom"]
+    path: "openmsx/share/systemroms/cf-sm003_data.rom"
+    sha1: "82f2ecd9f3135a8602d54cc6322216b3b15ae8b3"
+    required: false
+    validation: [sha1]
+    description: "Read by extensions National_CF-SM003, Yamaha_SKW-01"
+    source_ref: "share/extensions/National_CF-SM003.xml:26-29, share/extensions/Yamaha_SKW-01.xml:26-29"
+    note: "share/extensions/Yamaha_SKW-01.xml names it skw-01_data.rom."
+
+  - name: "NEOSC.ROM"
+    path: "openmsx/share/systemroms/NEOSC.ROM"
+    sha1: "2a3d953a423fa513f0d26a8bf0bd50664688868c"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Neos_MA-20R"
+    source_ref: "share/extensions/Neos_MA-20R.xml:21-24"
+
+  - name: "NEOSV.ROM"
+    path: "openmsx/share/systemroms/NEOSV.ROM"
+    sha1: "20100697cc10c3a1e49d371bf647fed9c47c4d04"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Neos_MA-20V"
+    source_ref: "share/extensions/Neos_MA-20V.xml:22-25"
+
+  - name: "fs-fd1a.rom"
+    path: "openmsx/share/systemroms/fs-fd1a.rom"
+    sha1: "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Panasonic_FS-FD1A"
+    source_ref: "share/extensions/Panasonic_FS-FD1A.xml:17-20"
+
+  - name: "fs-ca1.rom"
+    path: "openmsx/share/systemroms/fs-ca1.rom"
+    sha1: ["36d47cf70618fdb460f97a8ceb75013ec4529063", "930eae7057af1652abae794072b296a59decd61b", "a45692849acf29ddb653707a62747985439f6d4f"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Panasonic_FS-CA1"
+    source_ref: "share/extensions/Panasonic_FS-CA1.xml:25-30"
+
+  - name: "fs-pw1_kanjifont.rom"
+    path: "openmsx/share/systemroms/fs-pw1_kanjifont.rom"
+    sha1: "5e872d5853698731a0ed22fb72dbcdfd59cd19c3"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Panasonic_FS-PW1"
+    source_ref: "share/extensions/Panasonic_FS-PW1.xml:15-18"
+
+  - name: "fs-pw1_msxword.rom"
+    path: "openmsx/share/systemroms/fs-pw1_msxword.rom"
+    sha1: "74ca23c2ced63d348018ebd3fdcf784565486808"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Panasonic_FS-PW1"
+    source_ref: "share/extensions/Panasonic_FS-PW1.xml:26-29"
+
+  - name: "nms1200_6.rom"
+    path: "openmsx/share/systemroms/nms1200_6.rom"
+    sha1: ["0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d", "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Philips_NMS_1200"
+    source_ref: "share/extensions/Philips_NMS_1200.xml:19-23"
+
+  - name: "nms1205.rom"
+    path: "openmsx/share/systemroms/nms1205.rom"
+    sha1: "c7463e1fd0433c5d41b70670d6c10fd781b66426"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Philips_NMS_1205"
+    source_ref: "share/extensions/Philips_NMS_1205.xml:39-42"
+
+  - name: "msxaudio12pre4a.rom"
+    path: "openmsx/share/systemroms/msxaudio12pre4a.rom"
+    sha1: ["05e9f40bb7bdc46b557d445c717cb84ad75252f6", "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a", "7f115ff923a1cc0d1944cf280168add946fde854", "dde213b6d9324b94e78ed8df753042469bd31ef0"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Boosted_audio"
+    source_ref: "share/extensions/Boosted_audio.xml:36-42"
+
+  - name: "carnivore2.rom"
+    path: "openmsx/share/systemroms/carnivore2.rom"
+    sha1: ["1b315d4168ee3a6452589aaa50463193e438760a", "28b617abe15bfa07c0e33ef7382c62eca862830f", "3e46f003b5eeb514a40b1c02884f2b653e34b937"]
+    required: false
+    validation: [sha1]
+    description: "Flash content read by extension Carnivore2, found by its sha1 alone: the XML names no file"
+    source_ref: "share/extensions/Carnivore2.xml:19-23"
+
+  - name: "mfd-001_disk.rom"
+    path: "openmsx/share/systemroms/mfd-001_disk.rom"
+    sha1: "bb72819da1160bc375fa3623f2d0a5424d08c89b"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Sanyo_MFD-001"
+    source_ref: "share/extensions/Sanyo_MFD-001.xml:18-21"
+
+  - name: "mrs-001.rom"
+    path: "openmsx/share/systemroms/mrs-001.rom"
+    sha1: "41c4810ec56ed0f61e0fc8b355d2aae91de12d99"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Sanyo_MRS-001"
+    source_ref: "share/extensions/Sanyo_MRS-001.xml:19-22"
+
+  - name: "hb3600_disk.rom"
+    path: "openmsx/share/systemroms/hb3600_disk.rom"
+    sha1: "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Sharp_HB-3600"
+    source_ref: "share/extensions/Sharp_HB-3600.xml:18-21"
+
+  - name: "hddrom.rom"
+    path: "openmsx/share/systemroms/hddrom.rom"
+    sha1: ["11bd12a95142185d18659ccf74748fc1bb20c60d", "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755", "e92f47bd8320f94b8f7ae1943b31316002075ffb"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Beer_IDE"
+    source_ref: "share/extensions/Beer_IDE.xml:18-23"
+
+  - name: "hbi-j1_kanjibasic.rom"
+    path: "openmsx/share/systemroms/hbi-j1_kanjibasic.rom"
+    sha1: "1ef3956f7f918873fb9b031339bba45d1e5e5878"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Sony_HBI-J1"
+    source_ref: "share/extensions/Sony_HBI-J1.xml:38-41"
+
+  - name: "hbd-50.rom"
+    path: "openmsx/share/systemroms/hbd-50.rom"
+    sha1: ["2144036d6573d666143e890e5413956bfe8f66c5", "ab57b4c8e5d47c2a39031c2057b97d2d10546582"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Sony_HBD-50"
+    source_ref: "share/extensions/Sony_HBD-50.xml:24-28"
+
+  - name: "hbk-30.rom"
+    path: "openmsx/share/systemroms/hbk-30.rom"
+    sha1: "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Sony_HBK-30"
+    source_ref: "share/extensions/Sony_HBK-30.xml:19-22"
+
+  - name: "hbi-232.rom"
+    path: "openmsx/share/systemroms/hbi-232.rom"
+    sha1: "b2776159a7b92d74308b434a6b3e5feba161e2b7"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Sony_HBI-232"
+    source_ref: "share/extensions/Sony_HBI-232.xml:18-21"
+
+  - name: "sensor-kid.rom"
+    path: "openmsx/share/systemroms/sensor-kid.rom"
+    sha1: "794aca3c2136933f1fe6405e56e0ce7fdbb10385"
+    required: false
+    validation: [sha1]
+    description: "Read by extension SensorKid"
+    source_ref: "share/extensions/SensorKid.xml:20-23"
+
+  - name: "svi-707_disk.rom"
+    path: "openmsx/share/systemroms/svi-707_disk.rom"
+    sha1: "a337c9aede83cf684339f61a80468e73af31ebeb"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Spectravideo_SVI-707"
+    source_ref: "share/extensions/Spectravideo_SVI-707.xml:19-22"
+
+  - name: "svi-707_cpm.rom"
+    path: "openmsx/share/systemroms/svi-707_cpm.rom"
+    sha1: "2cb1c373753d792b75609d81d57719d545c63c41"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Spectravideo_SVI-707"
+    source_ref: "share/extensions/Spectravideo_SVI-707.xml:23-26"
+
+  - name: "Nextor-2.1.1.SunriseIDE.ROM"
+    path: "openmsx/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM"
+    sha1: ["61cba1680ac6cb448dc3e8c710a43f4e7ab49457", "d3a4375ff5f58cf59cc609dd41c90af285f033c2", "dca824d7b0ddf25c6e87a8098e97ab7489725f57"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension SunriseIDE_Nextor"
+    source_ref: "share/extensions/SunriseIDE_Nextor.xml:17-22"
+
+  - name: "ide250.dat"
+    path: "openmsx/share/systemroms/ide250.dat"
+    sha1: ["1c79c8fcfd661394f91be94b218955c84cabd742", "51a1467d73d26c91aab7923e3be66490daaffdee", "93e41c7d479bc90c1d1f6d081af20fd9924b8ada"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension ide"
+    source_ref: "share/extensions/ide.xml:17-22"
+
+  - name: "nowindDos2.rom"
+    path: "openmsx/share/systemroms/nowindDos2.rom"
+    sha1: ["1d4c09166755c6569ff0ed3878bbf1b22d7e3864", "2c359c979fbfe5c7c3cce90b4593dba4b7cbcd92", "7f49675940b9a4ffff4e8abc0b410c7b1fe22b87", "8afd1ec5843ecfdcbff11497fa8c55b870c0c6f5"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension nowind"
+    source_ref: "share/extensions/nowind.xml:17-23"
+
+  - name: "ym2608_adpcm_rom.bin"
+    path: "openmsx/share/systemroms/ym2608_adpcm_rom.bin"
+    sha1: "50b6c3e288eaa12ad275d4f323267bb72b0445df"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Makoto"
+    source_ref: "share/extensions/Makoto.xml:15-18"
+
+  - name: "TDC600.rom"
+    path: "openmsx/share/systemroms/TDC600.rom"
+    sha1: "29cacf13e45447a9e6d336483935ccb44b3b2d5d"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Talent_TDC-600"
+    source_ref: "share/extensions/Talent_TDC-600.xml:18-21"
+
+  - name: "dpf-550_disk.rom"
+    path: "openmsx/share/systemroms/dpf-550_disk.rom"
+    sha1: "d9c82e091b5fa1b5ee9b7f012f0084611762eb93"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Talent_DPF-550"
+    source_ref: "share/extensions/Talent_DPF-550.xml:18-21"
+
+  - name: "Tecall_MSX_RAMFILE_TM220.rom"
+    path: "openmsx/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom"
+    sha1: "2ba40f6520e3045326a985956f7d32ff6d7cd99a"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Tecall_MSX_RAMFILE_TM220"
+    source_ref: "share/extensions/Tecall_MSX_RAMFILE_TM220.xml:17-20"
+
+  - name: "hx-f101pe.rom"
+    path: "openmsx/share/systemroms/hx-f101pe.rom"
+    sha1: "b88c507720a0617a27141c329755de1a48b89deb"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Toshiba_HX-F101PE"
+    source_ref: "share/extensions/Toshiba_HX-F101PE.xml:20-23"
+
+  - name: "hx-mu900.rom"
+    path: "openmsx/share/systemroms/hx-mu900.rom"
+    sha1: "0d246b0e3edc63803fcce861ea07eadf29dc488c"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Toshiba_HX-MU900"
+    source_ref: "share/extensions/Toshiba_HX-MU900.xml:26-29"
+
+  - name: "fd-03.rom"
+    path: "openmsx/share/systemroms/fd-03.rom"
+    sha1: ["5a5cc35ffb7f78ef440df9548c7360ab56719c5a", "9ac588d5f820daadf251a7984f6f80faa44d045d", "e7cf9f5505d48a2ed442742133725ee20aef07e3", "ea3c1d20310e7fbaacfdede839be0118ecea015e"]
+    required: false
+    validation: [sha1]
+    description: "Read by extension Yamaha_FD-03"
+    source_ref: "share/extensions/Yamaha_FD-03.xml:20-26"
+
+  - name: "FD-051.BIN"
+    path: "openmsx/share/systemroms/FD-051.BIN"
+    sha1: "4b08a057e5863ade179dcf8bc9377e90940e6d61"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Yamaha_FD-05"
+    source_ref: "share/extensions/Yamaha_FD-05.xml:22-25"
+
+  - name: "sfg-05.rom"
+    path: "openmsx/share/systemroms/sfg-05.rom"
+    sha1: "6680d7118d85418813f1db9449bf3e20942b16da"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Yamaha_SFG-05"
+    source_ref: "share/extensions/Yamaha_SFG-05.xml:31-34"
+
+  - name: "skw-05_main.rom"
+    path: "openmsx/share/systemroms/skw-05_main.rom"
+    sha1: "e1fbe1bdc76b0c81d5652655731fe9007cf600f6"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Yamaha_SKW-05_embedded"
+    source_ref: "share/extensions/Yamaha_SKW-05_embedded.xml:32-36"
+
+  - name: "skw-05_data.rom"
+    path: "openmsx/share/systemroms/skw-05_data.rom"
+    sha1: "0247d1ea0e757255f4470e032655509172c2af21"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Yamaha_SKW-05_embedded"
+    source_ref: "share/extensions/Yamaha_SKW-05_embedded.xml:37-40"
+
+  - name: "skw-01_main.rom"
+    path: "openmsx/share/systemroms/skw-01_main.rom"
+    sha1: "6a7f41d89f9d50f4ff648233670660cfb07a41ee"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Yamaha_SKW-01"
+    source_ref: "share/extensions/Yamaha_SKW-01.xml:18-21"
+
+  - name: "skw-01_kanjifont.rom"
+    path: "openmsx/share/systemroms/skw-01_kanjifont.rom"
+    sha1: "f0901a63de6c95a42ce6ad82dd5e6bfba4bcf180"
+    required: false
+    validation: [sha1]
+    description: "Read by extension Yamaha_SKW-01"
+    source_ref: "share/extensions/Yamaha_SKW-01.xml:22-25"

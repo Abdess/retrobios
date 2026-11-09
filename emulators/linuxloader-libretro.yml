@@ -1,0 +1,273 @@
+emulator: "Linux Loader (libretro)"
+type: libretro
+core_classification: community_fork
+source: "https://git.libretro.com/libretro/linuxloader-libretro"
+upstream: "https://github.com/lindbergh-loader/linuxloader"
+source_branch: libretro
+profiled_date: "2026-11-09"
+source_commit: "1cd5dbd279ac4b39433c956ff174b398d441418a"
+core_version: "v3.0.14"
+version_basis:
+  kind: file
+  path: "linuxloader_libretro.info"
+  pattern: 'display_version = "([^"]+)"'
+display_name: "Sega - Lindbergh (linuxloader)"
+cores:
+  - linuxloader
+systems:
+  - sega-lindbergh
+
+notes: |
+  The buildbot's linuxloader core: Linux Loader v3.0.14 with a libretro
+  frontend that runs the loader as a process of its own and trades input,
+  frames and audio with it through shared memory
+  (src/libretro/linuxloader_libretro.c:1-11, src/loader/libretro/libretroBridge.c).
+  The loader comes from <system>/linuxloader (linuxloader_libretro.c:1155):
+  its AppDir, run through AppRun on x86_64 and through FEX-Emu with an i386
+  root file system on aarch64, or linuxloader.exe and ll-deps/ on Windows
+  (linuxloader_libretro.c:964-1100). The buildbot builds the core with
+  SYSTEM_ZIP, so it carries that folder and writes it there when it is from
+  another build or missing (.gitlab-ci.yml:1-15, 51-68,
+  Makefile.libretro:31-35, linuxloader_libretro.c:821-900): the runtime
+  libraries below come with the core.
+
+  The loader starts in the game folder (chdir before AppRun,
+  linuxloader_libretro.c:1061), so the files it opens by a relative
+  name are read there. The core starts it with the game's ELF and, in test
+  mode, -t, never -s: segaboot is not run unless it is the content. The
+  Zink path for Primeval Hunt is compiled out (src/loader/mainW.cpp:144-150),
+  and the Windows loader takes the system's opengl32.dll.
+
+files:
+  - name: "libCg2.so"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libCg2.so"
+    required: true
+    bundled: true
+    size: 3314624
+    sha1: "23b85ca78122d862553c1b54200158cbccf30d65"
+    validation: [signature]
+    description: "NVIDIA Cg 2.0.0.12 runtime used to recompile the game shaders, Linux build"
+    source_ref: "src/loader/graphics/shaderPatches.c:1215-1343, scripts/appimage/make-appimage.sh:133"
+
+  - name: "cg2.dll"
+    system: sega-lindbergh
+    path: "linuxloader/ll-deps/cg2.dll"
+    required: true
+    bundled: true
+    size: 2445312
+    sha1: "44459da64df180900a483fecc1128e775634de1e"
+    description: "NVIDIA Cg 2.0 runtime used to recompile the game shaders, Windows build"
+    source_ref: "src/loader/graphics/shaderPatches.c:1324-1343, libs/win32/ll-deps/cg2.dll"
+
+  - name: "libCg.so"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libCg.so"
+    required: true
+    bundled: true
+    size: 11841940
+    sha1: "9637cd9d774db008018851ab0889701d3dd74df4"
+    description: "NVIDIA Cg 3.1 runtime linked by the game binaries, Linux build"
+    source_ref: "src/loader/mainShared.c:500-616, scripts/appimage/make-appimage.sh:132"
+
+  - name: "libCgGL.so"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libCgGL.so"
+    required: true
+    bundled: true
+    size: 465532
+    sha1: "b2ca278a7c4dd446ce1b16d90e24648b9d2b819e"
+    description: "NVIDIA Cg 3.1 OpenGL runtime linked by the game binaries, Linux build"
+    source_ref: "src/loader/mainShared.c:500-616, scripts/appimage/make-appimage.sh:132"
+
+  - name: "cg.dll"
+    system: sega-lindbergh
+    path: "linuxloader/ll-deps/cg.dll"
+    required: true
+    bundled: true
+    size: 8531264
+    sha1: "e7da9515c4b2cd3894f018e3ff63d2ce7f4a094c"
+    description: "NVIDIA Cg runtime answering libCg.so on Windows"
+    source_ref: "src/loader/elfLoader/elfLoader.cpp:362, src/loader/elfLoader/symbolResolver.cpp:268-306"
+
+  - name: "cgGL.dll"
+    system: sega-lindbergh
+    path: "linuxloader/ll-deps/cgGL.dll"
+    required: true
+    bundled: true
+    size: 359232
+    sha1: "5b98e1e973873ef47b337161e67b590286410dbb"
+    description: "NVIDIA Cg OpenGL runtime answering libCgGL.so on Windows"
+    source_ref: "src/loader/elfLoader/elfLoader.cpp:363, src/loader/elfLoader/symbolResolver.cpp:268-306"
+
+  - name: "libstdc++.so.5"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libstdc++.so.5"
+    required: true
+    bundled: true
+    sha1: "c3480f87336de0407490f4776d78c2baf9d3d965"
+    description: "GNU C++ runtime 5 linked by the older game binaries"
+    source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:30"
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+
+  - name: "libstdc++.so.6"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libstdc++.so.6"
+    required: true
+    bundled: true
+    sha1: "5ccc8d96d9de310a597a98cc57947b0bcdcbe238"
+    description: "GNU C++ runtime 6 linked by the newer game binaries"
+    source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:37"
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+
+  - name: "libncurses.so.5"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libncurses.so.5"
+    required: false
+    bundled: true
+    sha1: "1dd354eb156031d848e947df070d0b436647bfef"
+    description: "ncurses 5 linked by some game binaries"
+    source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:28"
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+
+  - name: "libpcsclite.so.1"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libpcsclite.so.1"
+    required: false
+    bundled: true
+    sha1: "152c306568e1761981ffaa31f030859fe6eb3ec5"
+    description: "PC/SC smart card library linked by the card reader titles"
+    source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:29"
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+
+  - name: "libcrypto.so.0.9.7"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libcrypto.so.0.9.7"
+    required: false
+    bundled: true
+    size: 1043780
+    sha1: "0ee8ed2a8fb49926b96f1e5237f573dcfb8ed67e"
+    description: "OpenSSL 0.9.7 crypto library linked by the networked games"
+    source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:135"
+    note: "The same file sits in ll-deps/ for the Windows loader."
+
+  - name: "libssl.so.0.9.7"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libssl.so.0.9.7"
+    required: false
+    bundled: true
+    size: 852432
+    sha1: "60c2838da6cd97810ff11c5c7e7fdc203a4c2762"
+    description: "OpenSSL 0.9.7 TLS library linked by the networked games"
+    source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:136"
+    note: "The same file sits in ll-deps/ for the Windows loader."
+
+  - name: "libopenal.so.0"
+    system: sega-lindbergh
+    path: "linuxloader/usr/lib32/libopenal.so.0"
+    required: false
+    bundled: true
+    size: 649860
+    sha1: "91d69bba438f321d6e3ebb60b3e89b1edd63de17"
+    description: "OpenAL runtime preloaded for Quiz Answer x Answer, Linux build"
+    source_ref: "src/loader/mainShared.c:32, src/loader/mainShared.c:1172-1178, scripts/appimage/make-appimage.sh:134"
+
+  - name: "openal32.dll"
+    system: sega-lindbergh
+    path: "linuxloader/ll-deps/openal32.dll"
+    required: false
+    bundled: true
+    size: 845045
+    sha1: "b33c59e506e44c8d79e812794bcde858772bc6d2"
+    description: "OpenAL runtime answering libopenal.so.0 and .1 on Windows"
+    source_ref: "src/loader/elfLoader/elfLoader.cpp:360-361, libs/win32/ll-deps/openal32.dll"
+
+  - name: "zlib1.dll"
+    system: sega-lindbergh
+    path: "linuxloader/ll-deps/zlib1.dll"
+    required: false
+    bundled: true
+    size: 85504
+    sha1: "4861e064669c9c9c8f910431a7812feb32b32c63"
+    description: "zlib answering libz.so.1 on Windows"
+    source_ref: "src/loader/elfLoader/elfLoader.cpp:365, libs/win32/ll-deps/zlib1.dll"
+
+  - name: "libgcc_s_dw2-1.dll"
+    system: sega-lindbergh
+    path: "linuxloader/ll-deps/libgcc_s_dw2-1.dll"
+    required: false
+    description: "MinGW GCC runtime answering libgcc_s.so.1 and libgcc.so on Windows"
+    source_ref: "src/loader/elfLoader/elfLoader.cpp:373-374, scripts/windows/windows-build.sh:6-10, .gitlab-ci.yml:51-68"
+    note: "The buildbot builds the Windows loader with MXE's static toolchain, which links libgcc in and has no such DLL, so the carried ll-deps/ lacks it. A game linking libgcc_s.so.1 then runs with those symbols unresolved."
+
+  - name: "logo.tga"
+    system: sega-lindbergh
+    load_from: content_dir
+    path: "logo.tga"
+    required: false
+    description: "Lindbergh boot logo, read from /usr/lib/boot on the original system"
+    source_ref: "src/loader/redirections/filesystemShared.c:407-419"
+    note: "Compiled in. Read from the game folder only with DISABLE_BUILTIN_LOGOS or DISABLE_BUILTIN_FONT."
+
+  - name: "logo_red.tga"
+    system: sega-lindbergh
+    load_from: content_dir
+    path: "logo_red.tga"
+    required: false
+    description: "Lindbergh Red boot logo, read from /usr/lib/boot on the original system"
+    source_ref: "src/loader/redirections/filesystemShared.c:421-433"
+    note: "Compiled in. Read from the game folder only with DISABLE_BUILTIN_LOGOS or DISABLE_BUILTIN_FONT."
+
+  - name: "LucidaConsole_12.tga"
+    system: sega-lindbergh
+    load_from: content_dir
+    path: "LucidaConsole_12.tga"
+    required: false
+    description: "Lucida Console font texture"
+    source_ref: "src/loader/redirections/filesystemShared.c:435-447"
+    note: "Compiled in. Read from the game folder only with DISABLE_BUILTIN_LOGOS or DISABLE_BUILTIN_FONT."
+
+  - name: "LucidaConsole_12.abc"
+    system: sega-lindbergh
+    load_from: content_dir
+    path: "LucidaConsole_12.abc"
+    required: false
+    description: "Lucida Console font metrics"
+    source_ref: "src/loader/redirections/filesystemShared.c:449-461"
+    note: "Compiled in. Read from the game folder only with DISABLE_BUILTIN_LOGOS or DISABLE_BUILTIN_FONT."
+
+  - name: "SEGA_KakuGothic-DB-Roman_12.tga"
+    system: sega-lindbergh
+    load_from: content_dir
+    path: "SEGA_KakuGothic-DB-Roman_12.tga"
+    required: false
+    description: "Sega Kaku Gothic console font texture"
+    source_ref: "src/loader/redirections/filesystemShared.c:470-482"
+    note: "Compiled in. Read from the game folder only with DISABLE_BUILTIN_LOGOS or DISABLE_BUILTIN_FONT."
+
+  - name: "SEGA_KakuGothic-DB-Roman_12.abc"
+    system: sega-lindbergh
+    load_from: content_dir
+    path: "SEGA_KakuGothic-DB-Roman_12.abc"
+    required: false
+    description: "Sega Kaku Gothic console font metrics"
+    source_ref: "src/loader/redirections/filesystemShared.c:484-496"
+    note: "Compiled in. Read from the game folder only with DISABLE_BUILTIN_LOGOS or DISABLE_BUILTIN_FONT."
+
+  - name: "lindbergrc"
+    system: sega-lindbergh
+    load_from: content_dir
+    path: "lindbergrc"
+    required: false
+    description: "Lindbergh development configuration read by Sega's lxmaster and segaboot"
+    source_ref: "src/loader/redirections/filesystemShared.c:402-405"
+
+  - name: "gamecontrollerdb.txt"
+    system: sega-lindbergh
+    category: game_data
+    load_from: content_dir
+    path: "gamecontrollerdb.txt"
+    required: false
+    description: "SDL gamepad mappings added on top of SDL's own table"
+    source_ref: "src/loader/mainShared.c:42, 468-489, src/loader/input/sdlInput.c:222-230"
+    note: "The core starts the launcher without -d, so the default name is opened in the game folder, the loader's working directory."
