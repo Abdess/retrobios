@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/shinyquagsire23/OpenJKDF2"
 upstream: "https://github.com/shinyquagsire23/OpenJKDF2"
 profiled_date: "2026-10-04"
-source_commit: "798f930402525a23b94671d85b97b00390342fa0"
+source_commit: "ae6ed8a81b316421f08a46719b12a4fa9e2fbed9"
 core_version: "0.9.9.0"
 version_basis:
   kind: file
@@ -80,7 +80,7 @@ files:
     category: game_data
     required: true
     source_ref: "src/Main/InstallHelper.c:36 (aRequiredAssets)"
-    note: "Multiplayer deathmatch episode. Default -episode value in src/Main/Main.c:121."
+    note: "Multiplayer deathmatch episode. Default -episode value in src/Main/Main.c:133."
 
   - name: "Res1hi.gob"
     path: "openjkdf2/resource/Res1hi.gob"

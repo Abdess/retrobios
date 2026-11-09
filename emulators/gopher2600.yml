@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/JetSetIlly/Gopher2600"
 upstream: "https://github.com/JetSetIlly/Gopher2600"
 profiled_date: "2026-08-08"
-source_commit: "295b9e1c08203453677ea4184e284c0664f5949a"
+source_commit: "e84bd84d4f4824c4965fd1ab278e37866fa60392"
 core_version: "v0.58.0"
 version_basis:
   kind: file
@@ -71,9 +71,9 @@ notes: |
   are read from a project build tree beside the ROM. AtariVox speech uses the
   SpeakJet emulation compiled in, on by default
   (hardware/peripherals/atarivox/atarivox.go:152-170,
-  hardware/preferences/atarivox_preferences.go:78-83). With it off, the
+  hardware/preferences/atarivox_preferences.go:84-90). With it off, the
   festival binary is called as a process, its path taken from preferences
-  (hardware/preferences/atarivox_preferences.go:59).
+  (hardware/preferences/atarivox_preferences.go:65).
 
 files:
   - name: "Supercharger BIOS.bin"
