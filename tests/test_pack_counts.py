@@ -301,6 +301,60 @@ RECORD = {
 }
 
 
+class APackForAndroidHidesItsMedia(PackCountFixture):
+    """RetroArch Android writes no .nomedia, and its system folder held the
+    samples, overlays and videos the gallery and music apps then showed."""
+
+    def _pack(self, target: str | None) -> dict[str, int]:
+        targets = self.platforms / "targets"
+        targets.mkdir(exist_ok=True)
+        (targets / "demo.yml").write_text(yaml.dump({"platform": "demo", "targets": {
+            "android-arm64-v8a": {"architecture": "aarch64", "cores": ["demo"]},
+            "linux-x86_64": {"architecture": "x86_64", "cores": ["demo"]},
+        }}))
+        out = self.root / f"dist-{target}"
+        out.mkdir()
+        zip_path = builder.generate_pack(
+            "demo", str(self.platforms), self.db, str(self.bios), str(out),
+            emulators_dir=str(self.emulators), emu_profiles=self.profiles,
+            data_registry=self.registry, offline=True, target_name=target,
+        )
+        with zipfile.ZipFile(zip_path) as archive:
+            return {m.filename: m.file_size for m in archive.infolist()}
+
+    def test_the_whole_pack_and_an_android_one_carry_it(self):
+        for target in (None, "android-arm64-v8a"):
+            with self.subTest(target=target):
+                self.assertEqual(self._pack(target).get(".nomedia"), 0)
+
+    def test_a_pack_for_another_target_does_not(self):
+        self.assertNotIn(".nomedia", self._pack("linux-x86_64"))
+
+    def test_the_manifest_counts_it(self):
+        members = self._pack(None)
+        manifest = builder.generate_manifest(
+            "demo", str(self.platforms), self.db, str(self.bios),
+            str(self.platforms / "_registry.yml"),
+            emulators_dir=str(self.emulators), emu_profiles=self.profiles,
+            offline=True, data_registry=self.registry,
+        )
+        self.assertEqual(manifest["pack_files"], len(set(members) | {"manifest.json"}))
+
+    def test_the_integrity_check_takes_it_for_a_marker(self):
+        import packverify
+
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w") as archive:
+            archive.writestr(".nomedia", b"")
+            archive.writestr("empty.bin", b"")
+        with zipfile.ZipFile(buffer) as archive:
+            errors = packverify._structural_errors(archive, set(archive.namelist()))
+        self.assertEqual(errors, ["zero-byte: empty.bin"])
+
+    def test_a_platform_without_android_gets_none(self):
+        self.assertEqual(builder.pack_markers("demo", None, str(self.platforms)), ())
+
+
 class TheTableDescribesTheRelease(unittest.TestCase):
     """The Download link gives the last release, not what main would build.
 

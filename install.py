@@ -3132,6 +3132,72 @@ def fold_case_twins(files: list[dict]) -> tuple[list[dict], list[str]]:
     return kept, folded
 
 
+# The characters FAT and exFAT refuse in a name, as Windows does on any drive
+# (Linux 7475ea8b, fs/fat/namei_vfat.c:201-207 and fs/exfat/nls.c:396-403;
+# "Naming Files, Paths, and Namespaces" in the Win32 documentation). The
+# slash, the backslash and the controls never reach a destination
+# (_safe_relative_path). RetroDECK names three files zxs:48.rom,
+# zxs:if1-2.rom and snes:st018.data.rom (its retroarch component manifest):
+# on an exFAT card each write failed, on every run.
+FAT_REFUSED = re.compile(r'[<>:"|?*]')
+FAT_REFUSED_SHOWN = '< > : " | ? *'
+
+
+def holds_fat_refused_names(directory: Path) -> bool:
+    """Whether a name holding a colon can be created there.
+
+    Probed on the nearest existing directory, as keeps_case is: an ext4
+    card on a Steam Deck holds one, an exFAT card refuses it with EINVAL.
+    Windows refuses it on every drive. A probe refused for another cause
+    (a folder this user cannot write) decides nothing.
+    """
+    if os.name == "nt":
+        return False
+    probe_dir = directory
+    while not probe_dir.is_dir() and probe_dir != probe_dir.parent:
+        probe_dir = probe_dir.parent
+    try:
+        handle, name = tempfile.mkstemp(prefix=".retrobios-name-", suffix=":",
+                                        dir=str(probe_dir))
+    except OSError as exc:
+        return exc.errno != errno.EINVAL
+    os.close(handle)
+    os.unlink(name)
+    return True
+
+
+def split_fat_refused(files: list[dict]) -> tuple[list[dict], list[str]]:
+    """The entries whose destination a FAT, exFAT or Windows folder can
+    hold, and the destinations it cannot."""
+    kept = [entry for entry in files if not FAT_REFUSED.search(str(entry.get("dest", "")))]
+    refused = [str(entry.get("dest", "")) for entry in files
+               if FAT_REFUSED.search(str(entry.get("dest", "")))]
+    return kept, refused
+
+
+# Android's media scanner marks a folder holding a .nomedia file hidden, and
+# every folder below it (MediaProvider a183e2b9, FileUtils.java:1587-1629
+# isDirectoryHidden, ModernMediaScanner.java:845-846 and 1017-1020). Without
+# one, the samples, overlays and videos of a BIOS folder in shared storage
+# showed in the phone's gallery and music apps. RetroArch writes none
+# (libretro-common/file/file_path_io.c:194 only skips one).
+NOMEDIA = ".nomedia"
+
+
+def hide_from_media_scanner(folder: Path) -> bool:
+    """Leave an empty .nomedia in folder, True when this call wrote it."""
+    marker = folder / NOMEDIA
+    if not _is_dir(folder) or _exists(marker):
+        return False
+    try:
+        marker.touch()
+    except OSError as exc:
+        print(f"  {NOMEDIA} not written in {shown_path(folder)}: {exc.strerror}",
+              file=sys.stderr)
+        return False
+    return True
+
+
 def installed_cores(dirs: list[Path]) -> list[str]:
     """The cores present in these directories, by the name the buildbot uses.
 
@@ -15634,6 +15700,15 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     f"  {_plural(len(folded), 'file')} left out: {bios_path} does not keep "
                     f"case and holds another file under the same name ({shown})"
                 )
+        if any(FAT_REFUSED.search(str(entry.get("dest", ""))) for entry in files) \
+                and not holds_fat_refused_names(bios_path):
+            files, refused = split_fat_refused(files)
+            shown = ", ".join(refused[:3]) + (" ..." if len(refused) > 3 else "")
+            print(
+                f"  {_plural(len(refused), 'file')} left out: the file system of "
+                f"{shown_path(bios_path)} cannot hold a name with any of "
+                f"{FAT_REFUSED_SHOWN} ({screen_text(shown)})"
+            )
 
         game_data_cut = 0
         if args.no_game_data and not manifest.get("categorized"):
@@ -16384,6 +16459,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     where = f"{entry['dest']}/{rel}" if entry.get("dest") else rel
                     failures.append((where, f"{NOT_KEPT} ({reason})"))
                     total_errors += 1
+
+        if os_type == "android" and not args.check and hide_from_media_scanner(bios_path):
+            print(f"  Added {NOMEDIA} to {shown_path(bios_path)}: the gallery and music "
+                  "apps leave its images, sounds and videos out")
 
         # Standalone copies
         if (

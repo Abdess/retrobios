@@ -10,7 +10,7 @@ from collections import Counter
 
 from auto_fetch import DEFAULT_BIOS_DIR
 from artifacts import _build_timestamp
-from packpaths import _has_path_conflict
+from packpaths import MEDIA_MARKER, _has_path_conflict
 from ziptools import build_zip_contents_index
 from ziptools import check_inside_zip
 from nativemode import digest_algorithm
@@ -170,7 +170,7 @@ def verify_pack(
             # (bios/INSTRUCTIONS_x.txt, games/keen6/INSTRUCTIONS_y.txt), so
             # they are told by their own name, not by a root prefix.
             base = name.rsplit("/", 1)[-1]
-            if base.startswith(("INSTRUCTIONS_", "RENAMED_")) or name in (
+            if base.startswith(("INSTRUCTIONS_", "RENAMED_")) or base == MEDIA_MARKER or name in (
                 "manifest.json",
                 "README.txt",
             ):
@@ -539,7 +539,7 @@ def _structural_errors(zf: zipfile.ZipFile, zip_set: set) -> list[str]:
             if "GraphicMods" not in info.filename and info.filename not in (
                 "manifest.json",
                 "README.txt",
-            ):
+            ) and info.filename.rsplit("/", 1)[-1] != MEDIA_MARKER:
                 errors.append(f"zero-byte: {info.filename}")
 
     return errors
@@ -746,7 +746,7 @@ def verify_pack_against_platform(
         is_flat = bool(base_dest) and not any(
             n.startswith(base_dest + "/")
             for n in zip_set
-            if n not in ("README.txt", "manifest.json") and not n.endswith("/")
+            if n not in ("README.txt", "manifest.json", MEDIA_MARKER) and not n.endswith("/")
         )
 
         errors.extend(_structural_errors(zf, zip_set))
