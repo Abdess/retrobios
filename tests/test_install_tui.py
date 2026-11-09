@@ -11269,8 +11269,10 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
             lines = [str(line).strip() for line in install.tui_view(state, 120, 40)]
         folder = next(i for i, line in enumerate(lines) if line.startswith("BIOS folder:"))
         named = next(i for i, line in enumerate(lines) if line.startswith("Named by"))
-        # Nothing between the folder, wrapped or not, and what named it.
-        self.assertEqual("".join(lines[folder:named]), f"BIOS folder: {state.dest}", lines)
+        # Nothing between the folder, wrapped or not, and what named it. A
+        # long path wraps after the label, a longer one inside the path.
+        self.assertEqual("".join(lines[folder:named]).replace(" ", ""),
+                         f"BIOS folder: {state.dest}".replace(" ", ""), lines)
         self.assertLess(named, next(i for i, line in enumerate(lines)
                                     if line.startswith(("For ", "Copy them"))))
 
