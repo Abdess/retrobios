@@ -6314,16 +6314,17 @@ class NoProfileHashFromASecondarySource(unittest.TestCase):
         self.assertEqual(found, [])
 
 
-class XeniosFollowsThePreviewBranch(unittest.TestCase):
-    """The xenios pin 87b176a0 and tag v2.0.1 are ancestors of `preview`
-    (compare: ahead 129, behind 0) and diverged from the default `xenios`
-    branch (ahead 1784, behind 24). Without source_branch, profile_sync read
-    the pin as orphaned and 19 refs as moved by the branch divergence."""
+class XeniosFollowsItsReleaseBranch(unittest.TestCase):
+    """The xenios pin 87b176a0 sat on `preview`, which diverged from the
+    default `xenios` branch, and without source_branch profile_sync read the
+    pin as orphaned. Since November 2026 the releases (2.2 to 2.3.1) come from
+    `xenios` and `preview` stopped in June: the pin is release 2.3.1 on the
+    default branch, so the profile names no other branch."""
 
-    def test_the_profile_names_the_branch_its_pin_is_on(self):
+    def test_the_profile_follows_the_branch_its_pin_is_on(self):
         profile = yaml.safe_load((ROOT / "emulators" / "xenios.yml").read_text(encoding="utf-8"))
-        self.assertEqual(profile.get("source_branch"), "preview")
-        self.assertNotIn("from the xenios branch", profile.get("notes", ""))
+        self.assertIn(profile.get("source_branch"), (None, "xenios"))
+        self.assertEqual(profile["source_commit"][:7], "cf7c7ee")
 
 
 class PcemUpstreamPinIsTheLastSync(unittest.TestCase):
