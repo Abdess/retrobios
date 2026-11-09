@@ -96,6 +96,7 @@ import siteinputs
 import retired_files
 import siteagents
 import sitestarlight
+import sitesteps
 from siteexports import generate_exports_page, load_export_reports
 from siteguides import (
     ALSO_RUNS,
@@ -4180,16 +4181,19 @@ def first_screen_words() -> list[str]:
 
 # The demo files the site serves (docs_assets/demo/, scripts/make_demo.py):
 # the GIF is the README's, the tape and demo.json are inputs.
-DEMO_ASSETS = ("install.webm", "install.mp4", "install.png")
+DEMO_ASSETS = tuple(f"{stem}.{ext}" for stem in ("install", "install-handheld")
+                    for ext in ("webm", "mp4", "png"))
 
 
-def install_demo() -> list[str]:
-    """The installer demo: a video that loads once it is on screen, its
-    description for screen readers."""
-    facts = demo_facts()
+def install_demo(variant: str = "default", name: str = "") -> list[str]:
+    """An installer demo (default, or handheld): a video that loads once it
+    is on screen, its description for screen readers. *name* tells two
+    demos of one page apart (the tab each sits in)."""
+    facts = demo_facts(variant)
     text = html.escape(demo_description(facts), quote=True)
+    own = f' variant="{variant}" name="{name}"' if name else ""
     return [f'<InstallDemo description="{text}" width="{facts["width"]}" '
-            f'height="{facts["height"]}" />', ""]
+            f'height="{facts["height"]}"{own} />', ""]
 
 
 def check_pass_line() -> str:
@@ -11942,6 +11946,10 @@ def generate_which_pack() -> str:
     display = {key: load_platform_config(key, str(siteinputs.current().platforms)).get("platform", key)
                for key in registry}
     all_tabs = ("windows", "macos", "linux", "steamdeck", "android")
+    # The quick install box also runs on a game system: its tab shows the
+    # handheld recording (sitesteps).
+    box_tabs = (*all_tabs, "device")
+    box_steps, box_demos = sitesteps.install_box(box_tabs)
     lines = [
         "---",
         f"terms: {', '.join(IOS_TERMS)}",
@@ -11988,13 +11996,12 @@ def generate_which_pack() -> str:
         "",
         "A **terminal** is a window where you type commands.",
         "",
-        *terminal_tabs(all_tabs, {}),
+        *terminal_tabs(box_tabs, {}, under_steps=box_steps, under_command=box_demos),
         "On Batocera, Recalbox and other game systems, run it on the device. "
         "Your setup's page shows how.",
         "",
         *first_screen_words(),
         "",
-        *install_demo(),
         *trust_box(""),
         "**Check your folder later.** Add `--check`. It changes nothing.",
         "",

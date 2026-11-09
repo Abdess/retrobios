@@ -97,21 +97,25 @@ terminals:
   windows:
     label: Windows
     how: >-
-      Open the Start menu. Type **PowerShell** and open it. Paste the line. Press Enter.
+      Open Start. Type **PowerShell**, press Enter. Click Copy. Right-click to paste. Press
+      Enter.
     shell: powershell
   macos:
     label: macOS
     how: >-
-      Open **Terminal**, in Applications, then Utilities. Paste the line. Press Return.
+      Press Cmd+Space. Type **Terminal**, press Return. Click Copy. Press Cmd+V. Press
+      Return.
     shell: sh
   linux:
     label: Linux
-    how: Open a terminal. Paste the line. Press Enter.
+    how: >-
+      Open a terminal, often with Ctrl+Alt+T. Click Copy. Press Ctrl+Shift+V. Press Enter.
     shell: sh
   steamdeck:
     label: Steam Deck
     how: >-
-      Switch to Desktop Mode. Open **Konsole**. Paste with Ctrl+Shift+V. Press Enter.
+      Hold power, pick **Switch to Desktop**. Open **Konsole**. Click Copy. Press
+      Ctrl+Shift+V. Press Enter.
     shell: sh
   android:
     label: Android (Termux)

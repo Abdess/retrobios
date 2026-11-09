@@ -20,10 +20,14 @@ on the built site:
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
+
+sys.path.insert(0, os.path.dirname(__file__))
+from common import run_cli  # noqa: E402
 
 SITE = "https://abdess.github.io"
 BASE = "/retrobios/"
@@ -342,6 +346,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
-
     run_cli(main)
