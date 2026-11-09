@@ -274,13 +274,36 @@ class AProgramRunFromItsFolder(unittest.TestCase):
             }))
         (self.platforms / "_registry.yml").write_text(yaml.safe_dump({"platforms": {
             **{name: {"config": f"{name}.yml"} for name in launchers},
-            "romsplat": {"config": "romsplat.yml",
-                         "roms_directory": {"path": "/storage/roms", "bios_folder": "bios"}},
             "emuplat": {"config": "emuplat.yml", "emulators_directory": {
                 "launcher_spelling": '<GetPath("{key}")>', "bios_folder": "bios",
                 "searched": ["frontend/{key}", "emulators/{key}"],
                 "default": "emulators/{key}", "config": "frontend/launcher.cfg"}},
         }}))
+        # The roms root as the OS's own source records it (romfolders).
+        (self.platforms / "romfolders").mkdir()
+        (self.platforms / "romfolders" / "romsplat.yml").write_text(yaml.safe_dump({
+            "setup": "romsplat", "platform": "romsplat",
+            "roms_root": {"path": "/storage/roms", "from_bios": "..", "source_ref": "os x.mk:1"},
+            "folders": [],
+        }))
+        # A list that installs into the roms root itself, its BIOS folder
+        # one of the folders there (AmberELEC's /storage/roms).
+        (self.platforms / "rootplat.yml").write_text(yaml.safe_dump({
+            "platform": "rootplat", "version": "1", "verification_mode": "existence",
+            "base_destination": "", "cores": ["prog"], "standalone_cores": ["prog"],
+            "launchers": [{**run, "names": ["prog"], "search_dir": "/storage/roms/prog"}],
+            "systems": {"prog-system": {"files": [
+                {"name": "own.bin", "destination": "bios/own.bin", "required": False},
+            ]}},
+        }))
+        registry = yaml.safe_load((self.platforms / "_registry.yml").read_text())
+        registry["platforms"]["rootplat"] = {"config": "rootplat.yml"}
+        (self.platforms / "_registry.yml").write_text(yaml.safe_dump(registry))
+        (self.platforms / "romfolders" / "rootplat.yml").write_text(yaml.safe_dump({
+            "setup": "rootplat", "platform": "rootplat",
+            "roms_root": {"path": "/storage/roms", "from_bios": "..", "source_ref": "os x.mk:1"},
+            "folders": [],
+        }))
         (self.emulators / "prog.yml").write_text(yaml.safe_dump({
             "emulator": "Prog", "type": "standalone", "cores": ["prog"],
             "systems": ["prog-system"],
@@ -332,10 +355,19 @@ class AProgramRunFromItsFolder(unittest.TestCase):
             sorted((f["dest"], f.get("root")) for f in manifest["files"]),
             [("prog/prog", "roms"), ("prog/prog.dat", "roms")],
         )
-        self.assertEqual(manifest["roms_directory"], {"bios_folder": "bios"})
+        self.assertEqual(manifest["roms_directory"], {"bios_folder": "bios", "from_bios": ".."})
         entries = self.verify("romsplat")
         self.assertEqual(sorted(u["path"] for u in entries), ["prog/prog", "prog/prog.dat"])
         self.assertTrue(all(u["in_pack"] is False for u in entries))
+
+    def test_a_roms_root_inside_the_install_tree_is_a_plain_dest(self) -> None:
+        self.assertEqual(self.pack("rootplat"), ["prog/prog", "prog/prog.dat"])
+        manifest = self.manifest("rootplat")
+        self.assertEqual(
+            sorted((f["dest"], f.get("root")) for f in manifest["files"] if "prog" in f["dest"]),
+            [("prog/prog", None), ("prog/prog.dat", None)],
+        )
+        self.assertNotIn("roms_directory", manifest)
 
     def test_run_from_an_emulator_folder_is_named(self) -> None:
         self.assertEqual(self.pack("exeplat"), [])
@@ -367,6 +399,19 @@ class AProgramRunFromItsFolder(unittest.TestCase):
         self.assertEqual({o["reason"] for o in left}, {"no_roms_directory"})
         with self.assertRaises(ValueError):
             install._check_roms_directory({"files": files})
+        # A roms root beside the BIOS folder (Batocera's ../roms).
+        beside = {**manifest, "roms_directory": {"bios_folder": "bios", "from_bios": "../roms"}}
+        install._check_roms_directory(beside)
+        disk = self.root / "userdata" / "bios"
+        install.place_roms_entries(files, disk, beside, "romsplat", say=False)
+        self.assertEqual(install._entry_place(disk, kept_entry := files[0])[0],
+                         self.root / "userdata" / "roms")
+        self.assertEqual(kept_entry["root"], "roms")
+        for climbing in ("roms", "../roms/..", "/storage/roms"):
+            with self.subTest(from_bios=climbing), self.assertRaises(ValueError):
+                install._check_roms_directory(
+                    {**manifest, "roms_directory": {"bios_folder": "bios", "from_bios": climbing}}
+                )
 
     def test_run_from_an_emulator_folder_the_registry_describes(self) -> None:
         self.assertEqual(self.pack("emuplat"), [])

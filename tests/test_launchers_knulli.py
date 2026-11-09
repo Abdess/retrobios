@@ -623,8 +623,12 @@ class PlatformFile(unittest.TestCase):
 
     def test_every_reference_is_in_knulli_code(self):
         for record in self.config["launchers"]:
+            # Or in Batocera's patches, read from KNULLI's batocera submodule.
             self.assertTrue(
-                record["source_ref"].startswith((f"{kl.CONFIGGEN}/", kl.PICO8_INSTALLER)), record
+                record["source_ref"].startswith((
+                    f"{kl.CONFIGGEN}/", kl.PICO8_INSTALLER,
+                    *(f"{kl.BATOCERA_SUBMODULE}/{patch}" for patch in kl.PATH_PATCHES),
+                )), record
             )
 
     def test_every_emulator_is_one_knulli_names(self):

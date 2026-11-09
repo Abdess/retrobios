@@ -6615,3 +6615,21 @@ launchers:
   fails_when_missing: false
   depends_on_option: neocd_bios
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/libretro/libretroOptions.py:2040-2041"
+- emulator: shadps4
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/system/configs/shadps4
+  passes_to: working directory of shadps4Generator.py
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/shadps4/shadps4Generator.py:46,\
+    \ 228"
+- emulator: citron
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/switch
+  passes_to: "CitronPath::KeysDir in src/common/fs/path_util.cpp returns it, in place\
+    \ of citron_path / KEYS_DIR"
+  fails_when_missing: false
+  source_ref: "package/batocera/emulators/citron/002-adjust-paths.patch:9-10"

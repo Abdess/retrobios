@@ -595,8 +595,13 @@ class PlatformRecords(unittest.TestCase):
         self.assertEqual(sorted(named - cores), [])
 
     def test_every_reference_is_in_configgen(self):
+        # Or in a patch Batocera applies to an emulator's own path code.
+        from scraper.batocera_launchers import PATH_PATCHES
+
         for record in self.config["launchers"]:
-            self.assertTrue(record["source_ref"].startswith(f"{CONFIGGEN}/"), record)
+            self.assertTrue(
+                record["source_ref"].startswith((f"{CONFIGGEN}/", *PATH_PATCHES)), record
+            )
 
     def test_the_schema_describes_what_the_scraper_writes(self):
         fields = {f.name for f in dataclasses.fields(Launcher)}

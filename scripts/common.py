@@ -509,6 +509,14 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
     # The registry key, which per-platform profile fields (installed_on,
     # not_bundled_on) name: the display name differs (MiSTer FPGA).
     config["_key"] = platform_name
+    # Where the platform's games live, as its rom folders file records it
+    # from the OS's own source (platforms/romfolders/<key>.yml, roms_root).
+    romfolders = os.path.join(platforms_dir, "romfolders", f"{platform_name}.yml")
+    if os.path.exists(romfolders):
+        with open(romfolders) as f:
+            roms_root = (source_yaml(f) or {}).get("roms_root")
+        if isinstance(roms_root, dict):
+            config["_roms_root"] = roms_root
     _platform_config_cache[cache_key] = config
     return config
 
@@ -2761,7 +2769,7 @@ def standalone_set(config: dict) -> set[str]:
         names |= {
             HANDED_PREFIX + json.dumps(
                 [position, h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref,
-                 h.roms_folder, sorted(h.systems), h.holds_declared]
+                 h.roms_place, sorted(h.systems), h.holds_declared]
             )
             for position, h in enumerate(handed)
         }
@@ -2808,7 +2816,8 @@ def _handed(standalone_cores: Iterable[str]) -> list:
             tag[len(HANDED_PREFIX):]
         )
         found.append(((position, tag), HandedDirectory(
-            emulator, folder, directory, frozenset(handles), ref, roms, frozenset(systems), held
+            emulator, folder, directory, frozenset(handles), ref,
+            tuple(roms) if roms else None, frozenset(systems), held,
         )))
     return [h for _key, h in sorted(found, key=lambda pair: pair[0])]
 
@@ -2860,6 +2869,39 @@ OUTSIDE_BIOS_FOLDER = "outside_bios_folder"
 ROMS_ROOT = "roms"
 EMULATORS_ROOT = "emulators"
 OUTER_ROOTS = (ROMS_ROOT, EMULATORS_ROOT)
+
+
+def outer_layout(config: dict, root: str) -> dict | None:
+    """Where a platform keeps the folder an outer root names, or None.
+
+    roms: the roms root its rom folders file records (``path``, the OS's
+    spelling, and ``from_bios``, relative to the BIOS folder), with the
+    BIOS folder's own name, base_destination, that a run's folder must
+    carry before ``from_bios`` is followed from it. emulators: the
+    registry's ``emulators_directory``, the folders a launcher searches
+    for an emulator by key, which no rom folders file describes.
+    """
+    if root == ROMS_ROOT:
+        found = config.get("_roms_root") or {}
+        base = str(config.get("base_destination") or "")
+        path, relation = found.get("path"), found.get("from_bios")
+        if not (path and relation) or "<" in str(path):
+            return None
+        if base:
+            return {"path": str(path), "from_bios": str(relation), "bios_folder": base}
+        # A list whose dests start above the BIOS folder (AmberELEC's
+        # bios/...) installs into the folder holding it: a roms root there
+        # or below is part of the install tree, written as a plain dest.
+        declared = declared_root(config)
+        if not declared:
+            return None
+        inside = os.path.normpath(f"{declared}/{relation}")
+        if inside == ".." or inside.startswith("../"):
+            return None
+        return {"path": str(path), "install_prefix": "" if inside == "." else inside}
+    if root == EMULATORS_ROOT:
+        return config.get("emulators_directory") or None
+    return None
 
 
 def standalone_layout_path(entry: dict, profile: dict) -> str | None:
@@ -2991,6 +3033,11 @@ def platform_layouts(
             tree, path = placed
             moved = {**f, "standalone_path": path,
                      "layout_path": standalone_layout_path(f, profile)}
+            if tree == "install":
+                # Below the roms root inside the install tree (AmberELEC's
+                # /storage/roms): a plain dest the platform prefix skips.
+                files.append({**moved, "unprefixed": True})
+                continue
             # A file the launcher runs from the roms directory (ROCKNIX's
             # roms/pico-8) or an emulator folder (RetroBat's emulators/pico8)
             # is relative to it, and says so.

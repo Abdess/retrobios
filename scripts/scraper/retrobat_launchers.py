@@ -25,6 +25,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/Bizhawk.CoreOptions.cs",
     f"{GENERATORS}/Bizhawk.Generator.cs",
     f"{GENERATORS}/Blastem.Generator.cs",
+    f"{GENERATORS}/Citron.Generator.cs",
     f"{GENERATORS}/Demul.Generator.cs",
     f"{GENERATORS}/Desmume.Generator.cs",
     f"{GENERATORS}/Dolphin.Generator.cs",
@@ -58,6 +59,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/Rpcs3.Generator.cs",
     f"{GENERATORS}/SSF.Generator.cs",
     f"{GENERATORS}/ScummVm.Generator.cs",
+    f"{GENERATORS}/ShadPS4.Generator.cs",
     f"{GENERATORS}/Snes9x.Generator.cs",
     f"{GENERATORS}/Tsugaru.Generator.cs",
     f"{GENERATORS}/Uae.Generator.cs",
@@ -3038,6 +3040,48 @@ def _per_system(src: Source, record: Record) -> list[Record]:
     return out
 
 
+# Generators that create a portable user folder beside the emulator's binary,
+# and the emulator each one starts: the folder AppConfig.GetFullPath gives.
+PORTABLE_USERS = (
+    ("Citron.Generator.cs", "citron", "citron.exe"),
+    ("ShadPS4.Generator.cs", "shadps4", "shadPS4.exe"),
+)
+_EMULATOR_FOLDER = (
+    r"GetEmulatorPathAndExe\(emulator, out string path, out string exe, \"[^\"]+\"\)"
+    r"|string path = AppConfig\.GetFullPath\(emulator\);"
+)
+
+
+def portable_users(sources: dict[str, Source]) -> list[Record]:
+    """The portable user folder a generator creates beside the binary.
+
+    The emulator folder comes from AppConfig.GetFullPath(emulator), and the
+    generator creates <folder>/user before launching: the emulator then
+    keeps its data there (keys/, sys_modules/) in place of %APPDATA%.
+    """
+    records = []
+    for name, emulator, binary in PORTABLE_USERS:
+        src = sources[f"{GENERATORS}/{name}"]
+        found = src.find(_EMULATOR_FOLDER, f"{emulator} folder")
+        user = src.find(r'string userFolder = Path\.Combine\(path, "(\w+)"\);', "user folder")
+        create = src.find(
+            r"Directory\.CreateDirectory\(userFolder\)", "user folder creation", user.end()
+        )
+        records.append(_record(
+            emulator,
+            "standalone",
+            "passes_path",
+            [],
+            source_ref((src.path, [
+                src.lines(found.start(), found.end()), src.lines(user.start(), create.end()),
+            ])),
+            search_dir=f'<AppConfig.GetFullPath("{emulator}")>/{user.group(1)}',
+            passes_to=f"PORTABLE_DIR, the user folder beside {binary}",
+            fails_when_missing=False,
+        ))
+    return records
+
+
 def pico8(sources: dict[str, Source]) -> list[Record]:
     """The PICO-8 binary the generator runs, from an emulator folder.
 
@@ -3345,6 +3389,7 @@ EXTRACTORS: tuple[Callable[[dict[str, Source]], list[Record]], ...] = (
     pcsx2,
     pcsx2_libretro,
     pico8,
+    portable_users,
     psx_cascades,
     psxmame,
     raine,

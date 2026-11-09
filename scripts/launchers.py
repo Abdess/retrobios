@@ -331,6 +331,9 @@ BIOS_TREE = ""
 ROMS_TREE = "roms"
 # The emulator folders of a platform whose registry describes them.
 EMULATORS_TREE = "emulators"
+# The tree a platform's list installs into when it starts above the BIOS
+# folder: a plain dest, with no prefix.
+INSTALL_TREE = "install"
 # A folder of neither tree, which no pack and no installer can fill.
 OUTSIDE_TREE = "outside"
 Place = tuple[str, str]
@@ -382,7 +385,7 @@ class HandedDirectory:
     directory: str
     handles: frozenset[str]
     source_ref: str
-    roms_folder: str | None = None
+    roms_place: Place | None = None
     # The platform systems, by our ids, the record applies to. Empty when
     # the launcher hands the directory whatever the system.
     systems: frozenset[str] = frozenset()
@@ -393,9 +396,7 @@ class HandedDirectory:
         """The folder as a place, None when it lies outside both roots."""
         if self.folder is not None:
             return (BIOS_TREE, self.folder)
-        if self.roms_folder is not None:
-            return (ROMS_TREE, self.roms_folder)
-        return None
+        return self.roms_place
 
 
 # The placeholder a launcher record writes for the system it is launched
@@ -491,7 +492,10 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                         directory=directory,
                         handles=handles,
                         source_ref=str(record.get("source_ref", "")),
-                        roms_folder=None if folder is not None else folder_in_roms(part, config),
+                        roms_place=None if folder is not None else (
+                            _roms_place(config, folder_in_roms(part, config))
+                            or _emulators_place(folder_in_emulators(part, config))
+                        ),
                         systems=systems,
                         holds_declared=bool(folder) and any(
                             d.startswith(f"{folder.lower()}/") for d in declared
@@ -500,14 +504,35 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
     return found
 
 
+def _emulators_place(path: str | None) -> Place | None:
+    """A folder an emulator key names, as a place of the emulators tree."""
+    return None if path is None else (EMULATORS_TREE, path)
+
+
+def _roms_place(config: dict, path: str | None) -> Place | None:
+    """A path below the roms root as a place: in the install tree when the
+    platform installs above its BIOS folder (AmberELEC), else the roms tree."""
+    if path is None:
+        return None
+    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+
+    layout = outer_layout(config, ROMS_ROOT) or {}
+    if "install_prefix" in layout:
+        prefix = layout["install_prefix"]
+        return (INSTALL_TREE, sanitize_pack_path(f"{prefix}/{path}" if prefix else path))
+    return (ROMS_TREE, path)
+
+
 def folder_in_roms(directory: str, config: dict) -> str | None:
     """A directory relative to the platform's roms directory, None outside it.
 
-    Only a platform whose registry names the roms directory has one
-    (``roms_directory.path``): ROCKNIX's /storage/roms, which holds its BIOS
+    Only a platform whose rom folders file records its roms root has one
+    (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
     folder and the folders its launchers run programs from.
     """
-    roms = str((config.get("roms_directory") or {}).get("path") or "").rstrip("/")
+    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+
+    roms = str((outer_layout(config, ROMS_ROOT) or {}).get("path") or "").rstrip("/")
     directory = directory.strip().rstrip("/")
     if not roms or not directory.startswith(roms + "/"):
         return None
@@ -526,9 +551,11 @@ def folder_in_emulators(directory: str, config: dict) -> str | None:
     spelling = str((config.get("emulators_directory") or {}).get("launcher_spelling") or "")
     if "{key}" not in spelling:
         return None
-    pattern = re.escape(spelling).replace(re.escape("{key}"), r"([\w.-]+)")
+    # The key, then any folder below it: Citron's generator creates
+    # <folder>/user, its portable data folder.
+    pattern = re.escape(spelling).replace(re.escape("{key}"), r"([\w.-]+)") + r"((?:/[\w.-]+)*)"
     found = re.fullmatch(pattern, directory.strip())
-    return found.group(1) if found else None
+    return found.group(1) + found.group(2) if found else None
 
 
 @dataclass(frozen=True)
@@ -568,7 +595,7 @@ def executed_files(config: dict) -> list[ExecutedFile]:
                     f"{directories[0]}/{name}" if directories[0] else name
                 ))
             elif roms is not None:
-                place = (ROMS_TREE, sanitize_pack_path(f"{roms}/{name}" if roms else name))
+                place = _roms_place(config, sanitize_pack_path(f"{roms}/{name}" if roms else name))
             elif emulator_folder is not None:
                 place = (EMULATORS_TREE, sanitize_pack_path(f"{emulator_folder}/{name}"))
             else:
@@ -618,8 +645,9 @@ def _record_places(
             up = _below(base, handle) if inner else None
             if up:
                 found.append(("", (target[0], _join(target[1], up))))
-    if not found and record.roms_folder is not None:
-        found.append(("", (ROMS_TREE, _join(record.roms_folder, inner))))
+    if not found and record.roms_place is not None:
+        root, folder = record.roms_place
+        found.append(("", (root, _join(folder, inner))))
     return found
 
 
@@ -627,14 +655,19 @@ def _bind(
     records: list[HandedDirectory],
     links: list[HandedDirectory],
     wanted: set[str],
+    named: Mapping[str, str],
     pools: Mapping[str, str],
 ) -> dict[str, set[Place]]:
     """The places each subfolder of the layout is given by ``records``.
 
     A record whose handle is a declared directory, or lies below one, gives
-    that subfolder. One whose handle lies above a declared directory gives
-    the declared directory where it lands: RetroPie configures XRoar with
-    --prefix=$md_inst, so ${prefix}/share/xroar/roms is $md_inst/share/xroar/roms.
+    that subfolder, and a handle ``named`` gives the one folder it stands
+    for. One whose handle lies above a declared directory, or is the
+    environment variable the declared directory is spelled from
+    ($XDG_DATA_HOME/suyu), gives the declared directory where it lands:
+    RetroPie configures XRoar with --prefix=$md_inst, so
+    ${prefix}/share/xroar/roms is $md_inst/share/xroar/roms. When it lands
+    in no folder a pack fills, the layout is read outside the trees.
     ``links`` are the records followed from a directory outside the trees.
 
     A handle in ``pools`` names a list of directories the program searches
@@ -653,16 +686,27 @@ def _bind(
                         (record.holds_declared, place)
                     )
                 continue
+            if handle in named:
+                for rest, place in _record_places(record, "", links):
+                    found.setdefault(_join(named[handle], rest), set()).add(place)
             for directory in wanted:
                 sub = _below(handle, directory)
-                inner = ""
-                if sub is None:
-                    up = _below(directory, handle)
-                    if not up:
-                        continue
-                    sub, inner = "", up
-                for rest, place in _record_places(record, inner, links):
-                    found.setdefault(_join(sub, rest), set()).add(place)
+                if sub is not None:
+                    for rest, place in _record_places(record, "", links):
+                        found.setdefault(_join(sub, rest), set()).add(place)
+                    continue
+                if handle == directory:
+                    continue
+                inner = next(
+                    (up for spelled in (f"${handle}", handle)
+                     if (up := _below(directory, spelled)) is not None),
+                    None,
+                )
+                if inner is None:
+                    continue
+                places = _record_places(record, inner, links)
+                for rest, place in places or [("", (OUTSIDE_TREE, ""))]:
+                    found.setdefault(rest, set()).add(place)
     for sub, entries in pooled.items():
         # The directory the platform's own list fills, else the first of the
         # BIOS tree, else the first a pack fills.
@@ -714,17 +758,28 @@ def standalone_bindings(
     """
     names = set(names)
     pools = {normalize_handle(k): str(v).strip("/") for k, v in (pools or {}).items()}
-    wanted = {normalize_handle(d) for d in declared} - set(pools)
-    if not wanted and not pools:
+    # "<handle> = <subfolder>" names the code's handle for one folder of the
+    # layout: Citron's CitronPath::KeysDir is its keys/ folder, and a patch
+    # that rewrites the handle moves that folder alone.
+    named: dict[str, str] = {}
+    wanted: set[str] = set()
+    for raw in declared:
+        handle, sep, sub = str(raw).partition(" = ")
+        if sep:
+            named[normalize_handle(handle)] = sanitize_pack_path(sub.strip())
+        else:
+            wanted.add(normalize_handle(handle))
+    wanted -= set(pools)
+    if not wanted and not named and not pools:
         return {}
     systems = set(systems)
     records = [h for h in handed if h.emulator in names]
     generic = [h for h in records if not h.systems]
     specific = [h for h in records if h.systems & systems]
 
-    found = _bind(generic, generic, wanted, pools)
+    found = _bind(generic, generic, wanted, named, pools)
     # A link is followed whatever system it was written for.
-    found.update(_bind(specific, specific + generic, wanted, pools))
+    found.update(_bind(specific, specific + generic, wanted, named, pools))
     if EXECUTABLE_DIRECTORY in wanted:
         paths = list(layout)
         for run in executed:

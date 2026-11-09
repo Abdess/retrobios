@@ -40,6 +40,7 @@ from alternatives import core_file_spares, settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
     OUTER_ROOTS,
+    outer_layout,
     installed_data_refs,
     platform_arg,
     require_directory,
@@ -4686,11 +4687,12 @@ def _record_absent(
         )
 
 
-# What a manifest's roms_directory and emulators_directory carry from the
-# registry: the BIOS folder's name, and for emulator folders the places the
+# What a manifest's roms_directory and emulators_directory carry: the BIOS
+# folder's name, for the roms root its place relative to the BIOS folder
+# (romfolders roms_root.from_bios), and for emulator folders the places the
 # launcher searches, the one a missing folder is created at, and the config
 # file whose key moves a folder.
-MANIFEST_OUTER_FIELDS = ("bios_folder", "searched", "default", "config")
+MANIFEST_OUTER_FIELDS = ("bios_folder", "from_bios", "searched", "default", "config")
 
 
 def _record_unplaceable(unplaceable: list[dict], record_omission: Callable[..., None]) -> None:
@@ -5259,7 +5261,7 @@ def generate_manifest(
     if data_directories:
         result["data_directories"] = data_directories
     for root in OUTER_ROOTS:
-        layout = config.get(f"{root}_directory") or {}
+        layout = outer_layout(config, root) or {}
         if layout and any(entry.get("root") == root
                           for entry in [*manifest_files, *result["omitted_files"]]):
             # Where the installer finds the folder: relative to the folder
