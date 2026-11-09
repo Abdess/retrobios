@@ -54,7 +54,8 @@ class TheEmulatorContextIsChecked(unittest.TestCase):
 
     def test_the_standalone_layout_reaches_a_profile_without_structure(self):
         """BBKEmu has no pack_structure, and its A4980 8.BIN goes to
-        system/BBKEmu/A4980/ standalone. The hash pack kept the bare name,
+        system/bbkemu/a4980/ standalone, the lowercase folder its code
+        matches exactly. The hash pack kept the bare name,
         then, once laid out, sent it to the A4988 folder whose entry shares
         the name."""
         md5 = "ddfc001a6859d63ed46368ea7fe9f20c"
@@ -62,7 +63,7 @@ class TheEmulatorContextIsChecked(unittest.TestCase):
             self.skipTest("the A4980 8.BIN is not collected")
         proc, names = _pack("--from-md5", md5, "--emulator", "bbkemu", "--standalone")
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertEqual(names, ["system/BBKEmu/A4980/8.BIN"])
+        self.assertEqual(names, ["system/bbkemu/a4980/8.BIN"])
 
 
 class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
