@@ -687,7 +687,7 @@ files:
     md5: "20e22cddfb4b796e58c0a2b9fc8b1268"
     category: game_data
     source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:39, src/trx/game/game_flow/reader.c:903-909, src/trx/game/paths.c:123-132, tools/download_assets:67, tools/installer/TRX_Installer/InstallComponentFactory.cs:83-87"
-    note: "Title level of the PC demo. A title level is also looked up in the levels directory of the game it extends, so games/tr1/levels/title.phd is used when this one is absent. Shipped in the TRX 1.11.1 Windows and Linux zips, not in the Batocera TR1X package."
+    note: "Title level of the PC demo. A title level is also looked up in the levels directory of the game it extends, so games/tr1/levels/title.phd is used when this one is absent. Shipped in the TRX 1.12 Windows and Linux zips and in tr1-demo-pc.zip, same bytes. The Batocera TR1X package leaves it out."
 
   - name: "level2.phd"
     path: "games/tr1-demo-pc/levels/level2.phd"
@@ -699,4 +699,4 @@ files:
     md5: "3c41eefbd43d477991bee10e4568322b"
     category: game_data
     source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:58, src/trx/game/level/format/format_tr1.c:74-99, 186-191, tools/download_assets:67, tools/installer/TRX_Installer/InstallComponentFactory.cs:83-87"
-    note: "City of Vilcabamba in the PC demo layout, which stores the palette before the cameras. The demo game does not load without it. Shipped in the TRX 1.11.1 Windows and Linux zips, not in the Batocera TR1X package."
+    note: "City of Vilcabamba in the PC demo layout, which stores the palette before the cameras. The demo game does not load without it. Shipped in the TRX 1.12 Windows and Linux zips and in tr1-demo-pc.zip, same bytes. The Batocera TR1X package leaves it out."
