@@ -483,7 +483,7 @@ class TheOneLinerReadsInstalledCores(unittest.TestCase):
     def test_only_what_the_installed_cores_read(self):
         with _CoreRepository() as repo:
             repo.install_core("pcsx_rearmed_neon")
-            proc = repo.run("--installed-cores")
+            proc = repo.run("--installed-cores", "--verbose")
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertIn("1 core installed", proc.stdout)
             self.assertEqual(
@@ -562,7 +562,7 @@ class TheInterfaceFindsTheCoresLineModeFinds(unittest.TestCase):
             found = []
             for given in ((), ("--dest", str(repo.dest))):
                 command = [sys.executable, str(REPO_ROOT / "install.py"), "--platform",
-                           "retroarch", *given, "--installed-cores", "--check"]
+                           "retroarch", *given, "--installed-cores", "--check", "--verbose"]
                 proc = subprocess.run(command, env=env, capture_output=True, text=True,
                                       timeout=60, check=False, stdin=subprocess.DEVNULL)
                 self.assertNotIn("no installed core found", proc.stderr)

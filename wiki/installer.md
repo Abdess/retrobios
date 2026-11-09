@@ -449,6 +449,23 @@ Batocera install into an empty folder, from the list of 2026-11-06.
 The figures change with each release.
 <!-- /generated: run-date -->
 
+By default a run says five things: what it installs, where, a progress line
+at a terminal, the result and the next step.
+
+<!-- generated: run-default -->
+
+```
+Installing 18175 files (9.2 GB) for Batocera.
+BIOS folder: /userdata/bios
+
+Done. 18175 files installed.
+Next: start Batocera and play.
+```
+<!-- /generated: run-default -->
+
+With `--verbose` (`-v`) it says each step, the lists and the reasons too.
+The lines below are those of the same run with `--verbose`.
+
 ### Before the run
 
 The size depends on the platform and changes with each release. The run prints
@@ -473,8 +490,8 @@ Looking for setups here...
 <!-- /generated: run-first-lines -->
 
 A line above them, `RetroBIOS` and a code, identifies the installer: the
-code is the start of the SHA-256 the command checked before running it. The
-path is the folder it will write to.
+code is the start of the SHA-256 the command checked before running it.
+`--version` prints it too. The path is the folder it will write to.
 
 ### The file index and the download
 
@@ -501,8 +518,8 @@ is already there, and only the rest is downloaded. A download of 1 GB or more
 is confirmed first, the size and the folder in the question.
 
 The second phase downloads what is missing. At a terminal one progress line
-moves with the count and the size. A pipe or a log gets one line per file,
-as the log of the run below:
+moves with the count and the size. With `--verbose` a pipe or a log gets one
+line per file, as the log of the run below:
 
 <!-- generated: run-download -->
 
@@ -537,8 +554,8 @@ To check this later, run the same command with --check.
 <!-- /generated: run-end -->
 
 When most of a download of 100 MB or more comes from one system, or from
-one core of a single system, the end of the run says so and what narrowing
-would save, once that saving is over half.
+one core of a single system, the end of a `--verbose` run says so and what
+narrowing would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 

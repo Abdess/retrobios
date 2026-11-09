@@ -594,7 +594,7 @@ class FakeRepository:
 class TheOneLinerNarrows(unittest.TestCase):
     def test_options_install_only_the_choice(self):
         with FakeRepository() as repo:
-            proc = repo.run("--system", "sony-playstation", "--region", "us")
+            proc = repo.run("--system", "sony-playstation", "--region", "us", "--verbose")
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertIn("Narrowed 5 to 2 files", proc.stdout)
             self.assertEqual(repo.installed(), ["pcsx/extra.bin", "scph5501.bin"])
@@ -1606,14 +1606,14 @@ class ThePlatformsOwnListAlone(unittest.TestCase):
 
     def test_install_check_and_dry_run_apply_it(self):
         with FakeRepository() as repo:
-            proc = repo.run("--declared-only")
+            proc = repo.run("--declared-only", "--verbose")
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertIn("5 to 3 files", proc.stdout)
             self.assertEqual(repo.installed(),
                              ["gba_bios.bin", "scph5500.bin", "scph5501.bin"])
         for mode in ("--check", "--dry-run"):
             with self.subTest(mode=mode), FakeRepository() as repo:
-                proc = repo.run("--declared-only", mode)
+                proc = repo.run("--declared-only", mode, "--verbose")
                 self.assertIn("5 to 3 files", proc.stdout, proc.stderr)
                 self.assertIn("0 in place, 3 missing", proc.stdout)
                 self.assertEqual(repo.installed(), [])
@@ -1633,7 +1633,7 @@ class ThePlatformsOwnListAlone(unittest.TestCase):
 
     def test_a_local_file_list_applies_it(self):
         with FakeRepository() as repo:
-            proc = repo.run("--declared-only", "--dry-run", "--manifest",
+            proc = repo.run("--declared-only", "--dry-run", "--verbose", "--manifest",
                             str(repo.root / "install" / "retroarch.json"))
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertIn("5 to 3 files", proc.stdout)
@@ -1778,7 +1778,7 @@ class SomethingElseAtADestination(unittest.TestCase):
     def test_each_says_why_in_the_check_and_the_install(self):
         with FakeRepository() as repo:
             self.prepare(repo)
-            proc = repo.run("--check")
+            proc = repo.run("--check", "--verbose")
             self.assertEqual(proc.returncode, 3, proc.stderr)
             self.assertNotIn("Traceback", proc.stderr)
             self.assertIn("    wrong copy: scph5500.bin\n      a folder sits where this "

@@ -833,7 +833,7 @@ class CommandLine(unittest.TestCase):
         return [json.loads(line) for line in proc.stdout.splitlines() if line.startswith("{")]
 
     def test_check_narrows_to_what_the_games_need(self):
-        proc = run_cli(self.card, "--for-games", "--check", "--events")
+        proc = run_cli(self.card, "--for-games", "--check", "--events", "--verbose")
         events = self.events(proc)
         games = next(e for e in events if e["event"] == "games")
         self.assertEqual(games["games"], 2)
@@ -973,7 +973,8 @@ class ARunThatAsksNothing(unittest.TestCase):
     def test_it_installs_what_the_games_need(self):
         unasked, said = self.install("--yes")
         self.assertEqual(unasked, self.install("--for-games", "--yes")[0])
-        self.assertIn("--all-files installs the whole list", said)
+        self.assertIn("what the games need", said)
+        self.assertIn("--all-files installs the whole list", self.install("--yes", "--verbose")[1])
 
     def test_all_files_installs_the_whole_list(self):
         everything, said = self.install("--all-files", "--yes")

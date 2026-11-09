@@ -494,6 +494,25 @@ class Terminal:
         return self.paint(text, "strong")
 
 
+class _Output:
+    """What a run's text says. By default: what will happen, where, the
+    progress, the result and the next step. --verbose adds every step, list
+    and reason, the lines a beginner lost the result among. where_said is
+    set once the BIOS folder was named before the result."""
+
+    verbose = False
+    where_said = False
+
+
+OUTPUT = _Output()
+
+
+def detail(*args: Any, **kwargs: Any) -> None:
+    """Print a line only --verbose shows."""
+    if OUTPUT.verbose:
+        print(*args, **kwargs)
+
+
 def format_duration(seconds: float) -> str:
     """0:42, 3:05 or 1:02:09."""
     seconds = max(0, int(seconds + 0.5))
@@ -521,8 +540,8 @@ class Progress:
     """Bytes and files across the parallel downloads, shown as they move.
 
     On a terminal one line redraws in place: a bar, the bytes, the speed and
-    the time left. Elsewhere each finished file gets its line, as a log
-    wants it. Failures are always printed, quiet or not.
+    the time left. Elsewhere each finished file gets its line with --verbose,
+    as a log wants it. Failures are always printed, quiet or not.
     """
 
     BAR = 24
@@ -601,7 +620,7 @@ class Progress:
                 why = f" ({reason})" if reason else ""
                 line = f"  {self.term.bad('FAILED')} {dest}{why}"
                 SAID_FAILED.add(dest)
-            elif not self.term.live and not self.term.quiet:
+            elif not self.term.live and not self.term.quiet and OUTPUT.verbose:
                 line = f"  [{self.files}/{self.total_files}] {dest} {self.term.ok('ok')}"
             if line is not None:
                 self._clear()
@@ -5228,7 +5247,7 @@ def say_saves(plat: str, files: list[dict], omitted: list[dict], bios_path: Path
     if printed:
         return
     for line in save_lines([], omitted, bios_path, display):
-        print(f"  {line}")
+        detail(f"  {line}")
 
 
 # The digests the line menu's head read of the files in place, by path and
@@ -5701,8 +5720,9 @@ def _kept_lines() -> list[str]:
         lines.append(f"Kept {_plural(item['files'], 'file')} already there "
                      f"({format_size(item['bytes'])}), which the collection's "
                      f"copies replaced, in {folder}")
-        lines.append(f"  To put them back: {_INVOCATION.launcher()} --restore "
-                     f"{_INVOCATION.word(str(folder))}")
+        if OUTPUT.verbose:
+            lines.append(f"  To put them back: {_INVOCATION.launcher()} --restore "
+                         f"{_INVOCATION.word(str(folder))}")
     return lines
 
 
@@ -6634,7 +6654,7 @@ def _report_outcome(
     # The command making the same choice ends every result the screen ends
     # with it: "Finished with files missing" gave none.
     same_lines = ([f"Same choice without questions: {screen_text(same_choice)}"]
-                  if same_choice else [])
+                  if same_choice and OUTPUT.verbose else [])
     # A file --offline left out is not a failure, whether the run asked or
     # not: without questions it was "14698 files failed", and "Run the same
     # command again to retry only those", which cannot fetch them.
@@ -6644,7 +6664,7 @@ def _report_outcome(
                     if not isinstance(failure[1], OfflineReason)]
         errors = max(0, errors - len(left))
         offline += len(left)
-    if transferred and seconds > 0:
+    if transferred and seconds > 0 and OUTPUT.verbose:
         verb = "copied from the pack" if LOCAL.pack is not None else "downloaded"
         say(f"\n{format_size(transferred)} {verb} in "
             f"{format_duration(seconds)} ({format_size(int(transferred / seconds))}/s).")
@@ -6723,7 +6743,7 @@ def _report_outcome(
     # The kinds installed, on every end that installed some, under where
     # they came from: as the screen's result says them.
     installed_kinds = (f"  Installed: {installed_words(kinds[0].bios, kinds[0].games, kinds[1])}."
-                       if kinds and kinds[0].files and downloaded else "")
+                       if kinds and kinds[0].files and downloaded and OUTPUT.verbose else "")
     if offline:
         remedy = _offline_remedy()
         if not downloaded and not errors:
@@ -6829,25 +6849,43 @@ def _report_outcome(
         say(f"  {sources}")
     if installed_kinds:
         say(installed_kinds)
-    say(f"BIOS folder: {_locations(paths)}")
+    if OUTPUT.verbose or not OUTPUT.where_said:
+        say(f"BIOS folder: {_locations(paths)}")
     for line in kept:
         say(line)
-    if omitted > len(unplaced):
+    if omitted > len(unplaced) and OUTPUT.verbose:
         for line in _omission_lines(omitted - len(unplaced),
                                     [entry for entry in omitted_entries or []
                                      if entry.get("reason") != "no_save_directory"],
                                     Path(paths[0]) if len(paths) == 1 else None):
             say(line)
+    # RomM's scan is the step after the install: the other hints say how to
+    # install less, a detail.
     for line in hints or []:
-        say(line)
-    if same_choice:
+        if OUTPUT.verbose or line == ROMM_SCAN_WORDS:
+            say(line)
+    if same_choice and OUTPUT.verbose:
         # After the questions, as the screen's result ends: "the same
         # command" was one that asked them.
         for line in same_lines:
             say(line)
         say("To check this later, run that command with --check.")
-        return
-    say("To check this later, run the same command with --check.")
+    elif OUTPUT.verbose:
+        say("To check this later, run the same command with --check.")
+    say(next_step_words(platform_of or {}, paths))
+
+
+def next_step_words(platform_of: dict[Path, str], paths: list[Path]) -> str:
+    """The step after an install that ended well: a card goes back in its
+    device, a setup on this machine is started."""
+    setups = [(platform_of.get(path, ""), path) for path in paths]
+    if setups and all(plat and on_its_card(plat, path) for plat, path in setups):
+        return "Next: put the card back in the device and start a game."
+    names = list(dict.fromkeys(detected_os(plat, path) or display_name(plat)
+                               for plat, path in setups if plat))
+    if len(names) == 1:
+        return f"Next: start {names[0]} and play."
+    return "Next: start your emulators and play."
 
 
 def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> str:
@@ -6904,8 +6942,10 @@ def _check_fetch_line(fetch: int, beside: str, lacking: int = 0) -> str:
             return "  Run the same command without --check to copy them into place."
         return (f"  {agree(fetch, 'file needs', 'files need')} the "
                 f"internet, which {offline_named()} does not use. {_offline_remedy()}")
-    return ("  Run the same command without --check to fetch them. A wrong copy is "
-            f"replaced, and the one in place kept in {BACKUP_DIR} beside {beside}.")
+    # Why nothing is lost goes with the details: the remedy is the line.
+    return ("  Run the same command without --check to fetch them."
+            + (f" A wrong copy is replaced, and the one in place kept in {BACKUP_DIR} "
+               f"beside {beside}." if OUTPUT.verbose else ""))
 
 
 def _offline_failure(reason: str) -> bool:
@@ -11335,7 +11375,7 @@ def read_games(args: argparse.Namespace, plat: str, bios_path: Path, manifest: d
                                                        os_type=os_type):
         return None
     where = "on the card" if folder is None else f"in {folder}"
-    print(f"\nReading the games {where}...")
+    detail(f"\nReading the games {where}...")
     try:
         plan = plan_games(plat, bios_path, manifest, folder, term, os_type=os_type,
                           network=network)
@@ -11356,7 +11396,7 @@ def read_games(args: argparse.Namespace, plat: str, bios_path: Path, manifest: d
         return None
     emit_games(plat, plan, bool(args.required_only))
     for line in games_lines(plan, manifest, bool(args.verbose)):
-        print(fold_line(line if line.startswith("  ") else f"  {line}"))
+        detail(fold_line(line if line.startswith("  ") else f"  {line}"))
     return plan
 
 
@@ -14017,6 +14057,9 @@ def _run(args: argparse.Namespace) -> None:
         raise
     finally:
         LOCAL.close_indexes()
+        # A caller running the installer in its own process gets the next
+        # run's text as quiet as any first run.
+        OUTPUT.verbose = OUTPUT.where_said = False
 
 
 def _run_text(args: argparse.Namespace) -> None:
@@ -14268,8 +14311,10 @@ def _missing_dest(dest: Path, ask: bool, named: str = "named with --dest",
     while not nearest.exists() and nearest.parent != nearest:
         nearest = nearest.parent
     missing = len(dest.absolute().relative_to(nearest).parts)
-    print(f"  {shown_path(dest)} does not exist. The nearest folder that does: "
-          f"{shown_path(nearest)}")
+    # Said where it comes before a question: elsewhere the folder is made.
+    (print if missing > 1 and ask else detail)(
+        f"  {shown_path(dest)} does not exist. The nearest folder that does: "
+        f"{shown_path(nearest)}")
     if missing > 1 and ask:
         answer = _ask(f"  Create {_plural(missing, 'folder')} under {shown_path(nearest)}? [y/N] ")
         if not answer.strip().lower().startswith("y"):
@@ -15334,7 +15379,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             print(f"{where}, so nothing is asked: the run goes on as with --no-input. "
                   f"Add --no-input to say so, or run it without {undo} to answer.",
                   file=sys.stderr)
-    print(f"{term.bold('RetroBIOS')} {term.dim(installer_id())}\n")
+    OUTPUT.verbose = bool(getattr(args, "verbose", False))
+    OUTPUT.where_said = False
+    detail(f"{term.bold('RetroBIOS')} {term.dim(installer_id())}\n")
 
     os_type = detect_os()
     if os_type == "wsl":
@@ -15382,7 +15429,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     if args.platform and args.dest:
         platforms = [(args.platform, args.dest)]
     elif args.platform:
-        print("Looking for setups here...")
+        detail("Looking for setups here...")
         if not listing:
             # The cards mounted here too, as the screen finds them, with or
             # without questions: a pack's RetroArch list went to this
@@ -15401,7 +15448,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             platforms = matched
             offer = getattr(args, "platform_from_list", False)
             for name, path in matched:
-                print(fold_line(f"  Found {found_label(name, path)}"))
+                detail(fold_line(f"  Found {found_label(name, path)}"))
         elif listing:
             # A listing reads the manifest and writes nothing: no folder is
             # needed, and asking BizHawk's for one refused a question asked
@@ -15501,16 +15548,16 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             platforms = [(args.platform, default_dest)]
             assumed_dests.add(default_dest)
     elif args.dest:
-        print(f"  Using destination: {args.dest}")
+        detail(f"  Using destination: {args.dest}")
         plat, args.dest = _platform_for_dest(os_type, args.dest, interactive and not listing)
         platforms = [(plat, args.dest)]
     else:
-        print("Looking for setups here...")
+        detail("Looking for setups here...")
         frontends = detect_frontends(os_type)
         if "esde" in frontends:
-            print("  Found ES-DE (BIOS files go to each emulator, not to ES-DE itself)")
+            detail("  Found ES-DE (BIOS files go to each emulator, not to ES-DE itself)")
         if "launchbox" in frontends:
-            print("  Found LaunchBox")
+            detail("  Found LaunchBox")
         if not listing:
             # A card mounted here is found as the screen finds it, in every
             # mode: line mode said "No supported platform detected" beside
@@ -15553,7 +15600,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             offer = False
         else:
             for name, path in platforms:
-                print(fold_line(f"  Found {found_label(name, path)}"))
+                detail(fold_line(f"  Found {found_label(name, path)}"))
 
     if len(platforms) > 1 and not interactive and not listing:
         # A run without questions installs for one setup, the one a person
@@ -15674,11 +15721,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         if bios_path not in installed_paths:
             installed_paths.append(bios_path)
         if LOCAL.manifest is not None:
-            print(f"\nReading the file index for {plat_name} from {LOCAL.manifest}...")
+            detail(f"\nReading the file index for {plat_name} from {LOCAL.manifest}...")
         elif LOCAL.pack is not None:
-            print(f"\nReading the file index for {plat_name} from {LOCAL.pack.name}...")
+            detail(f"\nReading the file index for {plat_name} from {LOCAL.pack.name}...")
         else:
-            print(f"\nFetching file index for {plat_name}...")
+            detail(f"\nFetching file index for {plat_name}...")
         manifest = fetch_manifest(plat_name)
         categorized = categorized or bool(manifest.get("categorized"))
         files = manifest.get("files", [])
@@ -15696,7 +15743,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # spelling overwrote the first, and every --check found one
                 # of them wrong and fetched it again.
                 shown = ", ".join(folded[:3]) + (" ..." if len(folded) > 3 else "")
-                print(
+                detail(
                     f"  {_plural(len(folded), 'file')} left out: {bios_path} does not keep "
                     f"case and holds another file under the same name ({shown})"
                 )
@@ -15704,7 +15751,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 and not holds_fat_refused_names(bios_path):
             files, refused = split_fat_refused(files)
             shown = ", ".join(refused[:3]) + (" ..." if len(refused) > 3 else "")
-            print(
+            detail(
                 f"  {_plural(len(refused), 'file')} left out: the file system of "
                 f"{shown_path(bios_path)} cannot hold a name with any of "
                 f"{FAT_REFUSED_SHOWN} ({screen_text(shown)})"
@@ -15722,7 +15769,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         if args.declared_only:
             before = len(files)
             files, omitted_files = keep_declared(files, omitted_files)
-            print(f"  The platform's own list: {before} to {len(files)} files "
+            detail(f"  The platform's own list: {before} to {len(files)} files "
                   "(--declared-only)")
 
         if args.list_targets:
@@ -15761,7 +15808,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     words = (f"Board {board} {where} has no "
                              f"{PLATFORM_NAMES.get(plat_name, plat_name)} core list: "
                              "installing the files of every board")
-                print(f"  {words}")
+                detail(f"  {words}")
                 EVENTS.emit("board", platform=plat_name, board=board,
                             applied=target == board, message=words)
         if target:
@@ -15777,7 +15824,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # the subset the target needs. Refuse rather than ignore.
                 _unknown_target(target, plat_name, targets)
             elif target_info.get("cores") is None:
-                print(
+                detail(
                     f"  Target '{target}' publishes no core list: "
                     "installing every file"
                 )
@@ -15786,13 +15833,13 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 files, omitted_files = narrow_to_cores(
                     manifest, target_info["cores"], files, omitted_files
                 )
-                print(f"  Filtered {before} to {len(files)} files for target {target}")
+                detail(f"  Filtered {before} to {len(files)} files for target {target}")
 
         found_cores = cores_found.get((plat_name, bios_path), [])
         if "system_cores" not in manifest:
             found_cores = []
         elif found_cores:
-            print(f"  {_plural(len(found_cores), 'core')} installed")
+            detail(f"  {_plural(len(found_cores), 'core')} installed")
         if args.installed_cores:
             if "system_cores" not in manifest:
                 print(
@@ -15806,7 +15853,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             files, omitted_files = narrow_to_cores(
                 manifest, found_cores, files, omitted_files
             )
-            print(f"  Narrowed {before} to {len(files)} files to the installed cores")
+            detail(f"  Narrowed {before} to {len(files)} files to the installed cores")
 
         if args.list_emulators:
             _print_emulators(plat_name, manifest, *(
@@ -15863,10 +15910,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             files, omitted_files = games_plan.apply(files, omitted_files, args.required_only)
             unplaced = games_plan.apply([], unplaced, args.required_only)[1]
             games_applied = True
-            print(f"  For the games: {_plural(len(files), 'file')} of the list"
-                  + (f", {GAMES_REQUIRED_WORDS}" if args.required_only else ""))
+            detail(f"  For the games: {_plural(len(files), 'file')} of the list"
+                   + (f", {GAMES_REQUIRED_WORDS}" if args.required_only else ""))
             if args.for_games is None:
-                print("  The card holds games, so only what they need is installed. "
+                detail("  The card holds games, so only what they need is installed. "
                       "--all-files installs the whole list.")
             version_notes += [line.strip() for line in fallback_lines(games_plan)]
         # --no-game-data leaves the game data out once the list is narrowed
@@ -15934,6 +15981,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 if args.no_game_data else "",
                 None if games_applied else games_plan,
             )
+            # Its head named the BIOS folder: the result does not again.
+            OUTPUT.where_said = True
             if selection is None and LOCAL.pack is not None:
                 smaller = "  Nothing copied."
             elif selection is None:
@@ -15972,7 +16021,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             if len(files) != before and not menu:
                 # Enter for every system narrows nothing: "Narrowed 23 to 23".
                 # The menu counted the choice again before Enter.
-                print(f"  Narrowed {before} to {len(files)} files")
+                detail(f"  Narrowed {before} to {len(files)} files")
         if (cut and cut[0]) or args.no_game_data:
             # Left out at g or by --no-game-data, from what the choice kept:
             # g offered the game data of the systems chosen, and the line
@@ -15985,7 +16034,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 _INVOCATION.chosen[plat_name] = (_INVOCATION.chosen.get(plat_name, [])
                                                  + [("--no-game-data", None)])
             for line in _left_out_lines(left_out, args.verbose):
-                print(line)
+                detail(line)
         if unplaced:
             total_omitted += len(unplaced)
             omitted_seen.extend(unplaced)
@@ -16022,18 +16071,18 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         if not menu:
             # An answered menu said these lines right above: the run head
             # repeated them under it.
-            print(f"  {_plural(run_counts.files + head_data, 'file')} "
-                  f"({format_size(run_counts.size + head_bytes)})")
+            detail(f"  {_plural(run_counts.files + head_data, 'file')} "
+                   f"({format_size(run_counts.size + head_bytes)})")
             categorized_list = bool(manifest.get("categorized"))
             kinds = run_counts if categorized_list else tally(
                 {"size": entry.get("size")} for entry in files)
             parts = parts_words(kinds, head_data, head_bytes, game_data_cut)
             if parts:
-                print(f"    {parts}.")
+                detail(f"    {parts}.")
             defined = kinds_definition(
                 categorized_list and bool(run_counts.games or game_data_cut), bool(head_data))
             if defined:
-                print(f"    {defined}")
+                detail(f"    {defined}")
         # A choice that keeps no file says so where "All files up to date"
         # was said of it.
         empty_choice = "" if run_counts.files or not (selection or game_data_cut) else (
@@ -16051,7 +16100,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             for entry in omitted_files:
                 reason = entry.get("reason", "unknown")
                 reasons[reason] = reasons.get(reason, 0) + 1
-            print(f"  {not_installable_words(len(omitted_files), required_omitted, reasons)}")
+            detail(f"  {not_installable_words(len(omitted_files), required_omitted, reasons)}")
             total_omitted += len(omitted_files)
             # Named for the end of the run: ROCKNIX's own list leaves them out,
             # and the end said "the frontend's save directory".
@@ -16071,11 +16120,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 files, library = romm_relayout(files, bios_path, *layout)
                 if library != bios_path:
                     installed_paths[installed_paths.index(bios_path)] = library
-                    print(f"  Firmware laid out as {'/'.join(layout[0] + ('{platform}',) + layout[1])} "
-                          f"under {library}")
+                    detail(f"  Firmware laid out as {'/'.join(layout[0] + ('{platform}',) + layout[1])} "
+                           f"under {library}")
                     bios_path = library
 
-        print("\nChecking existing files...")
+        detail("\nChecking existing files...")
         to_download, up_to_date, mismatched = check_local(
             files, bios_path, jobs=args.jobs, term=term
         )
@@ -16090,9 +16139,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         head_reads_done()
         trees_missing = sum(len(state[1]) for _entry, state in data_states)
         trees_held = head_data - trees_missing
-        print(f"  {len(up_to_date) + trees_held} in place, "
-              f"{run_counts.files - present + trees_missing} missing, "
-              f"{_plural(wrong, 'wrong copy')}")
+        detail(f"  {len(up_to_date) + trees_held} in place, "
+               f"{run_counts.files - present + trees_missing} missing, "
+               f"{_plural(wrong, 'wrong copy')}")
 
         # A partial copy left by an interrupted run is useless once the file
         # is in place: it goes.
@@ -16157,14 +16206,18 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # One total with the count above it, the data files among
                 # them as the screen counts them: "0 in place, 10805 missing"
                 # stood over "8164 files to download".
+                # The count and the folder by default, each file with
+                # --verbose: 20 paths hid the line saying what to do.
                 print(f"\n  {_plural(len(to_download) + trees_missing, 'file')} "
-                      + ("not in place:" if offline or LOCAL.pack is not None
-                         else "to download:"))
+                      + ("not in place" if offline or LOCAL.pack is not None
+                         else "to download") + (":" if OUTPUT.verbose else "."))
                 for line in check_lines(missing, mismatched, files, manifest, bios_path,
                                         args.verbose, up_to_date, bios_index, copies):
-                    print(line)
+                    detail(line)
                 for line in unreadable_lines(unread, args.verbose):
                     print(line)
+                if not OUTPUT.verbose:
+                    print(f"  BIOS folder: {shown_path(bios_path)}")
                 # The data files need the internet too: offline, "8164 files
                 # need the internet" stood under "10805 files not in place".
                 trees_fetched = trees_missing if LOCAL.pack is None else 0
@@ -16177,6 +16230,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(f"\n  {_plural(trees_missing, 'data file')} to fetch")
             else:
                 print(f"\n  {EVERYTHING_IN_PLACE}")
+                print(f"  BIOS folder: {shown_path(bios_path)}")
             absent = _absent_required(omitted_files, bios_path)
             # The collection cannot supply these, so they leave the exit
             # code alone, but a user asking why a game will not start needs
@@ -16185,11 +16239,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 absent, "Not in the collection and absent here, needed to start an emulator",
                 every=args.verbose,
             ):
-                print(line)
+                detail(line)
             for entry, (_root, needed, present) in data_states:
                 if needed:
-                    print(f"  {entry['ref']}: {present}/{len(entry['files'])} data files "
-                          f"present, {len(needed)} to fetch")
+                    detail(f"  {entry['ref']}: {present}/{len(entry['files'])} data files "
+                           f"present, {len(needed)} to fetch")
                     check_pending += len(needed)
             continue
 
@@ -16280,15 +16334,28 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 files_pending += len(to_download)
                 continue
             EVENTS.emit("download", platform=plat_name, files=len(to_download), bytes=dl_size)
+            if not menu:
+                # What happens and where, the two lines a run without questions
+                # opens on: the menu's head said them where it was asked.
+                coming = len(to_download) - len(lacking) + trees_missing
+                weight = dl_size + sum(data_fetch_bytes(entry, state[1])
+                                       for entry, state in data_states)
+                print(f"\nInstalling {_plural(coming, 'file')} ({format_size(weight)}) for "
+                      f"{detected_os(plat_name, bios_path) or display}"
+                      + (", what the games need" if games_applied else "") + ".")
+                print(f"BIOS folder: {shown_path(bios_path)}")
+                OUTPUT.where_said = True
             if unread:
+                # A file of the user's that could not be read is said in
+                # every mode: it was expected to be copied.
                 print()
                 for line in unreadable_lines(unread, args.verbose):
                     print(line)
             if copies:
-                print()
+                detail()
                 for line in copy_plan_lines(to_download, copies, bios_index, bios_path,
                                             files, args.verbose, False):
-                    print(line)
+                    detail(line)
                 held = len(fetched) - len(lacking)
                 rest = (f" and {'copying' if LOCAL.pack is not None else 'downloading'} "
                         f"{held}" if held else "")
@@ -16303,17 +16370,17 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # The size beside what it weighs: after "and downloading
                 # 19" it read as theirs alone.
                 sized = f" ({format_size(dl_size)})"
-                print(f"\nCopying {_plural(len(copies), 'file')}{'' if rest else sized} "
-                      f"{origin}{rest}{where}{sized if rest else ''}...")
+                detail(f"\nCopying {_plural(len(copies), 'file')}{'' if rest else sized} "
+                       f"{origin}{rest}{where}{sized if rest else ''}...")
             elif LOCAL.pack is not None:
                 # The files the pack holds: "Copying 23 files (85.0 KB)" sat
                 # beside the size of 20.
-                print(f"\nCopying {_plural(len(to_download) - len(lacking), 'file')} "
-                      f"({format_size(dl_size)}) from {LOCAL.pack.name}...")
+                detail(f"\nCopying {_plural(len(to_download) - len(lacking), 'file')} "
+                       f"({format_size(dl_size)}) from {LOCAL.pack.name}...")
             else:
-                print(f"\nDownloading {len(to_download)} files ({format_size(dl_size)})...")
-            print("  Press Ctrl+C to stop. Running the same command again "
-                  "carries on from here.")
+                detail(f"\nDownloading {len(to_download)} files ({format_size(dl_size)})...")
+            detail("  Press Ctrl+C to stop. Running the same command again "
+                   "carries on from here.")
             # Checked before the folder is created: a run stopped for space
             # left an empty BIOS folder behind. The data trees count too,
             # written after the files on the same drive.
@@ -16345,7 +16412,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # of the run installed something.
                 sys.exit(1 if total_downloaded else 2)
             if created:
-                print(f"  Created {shown_path(bios_path)}")
+                detail(f"  Created {shown_path(bios_path)}")
             progress = Progress(len(to_download), dl_size, term)
             failed, interrupted = download_files(
                 to_download, bios_path, jobs=args.jobs, verbose=args.verbose,
@@ -16404,7 +16471,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                                   1 if total_downloaded else 2,
                                   on_its_card(plat_name, bios_path))
             if writable:
-                print("\nData directories:")
+                detail("\nData directories:")
             for entry, state in writable:
                 # Its archive is drawn as the BIOS files were, and counted
                 # in the bytes and time the run ends on: 82 MB came in
@@ -16424,9 +16491,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 if isinstance(counts["error"], OfflineReason):
                     # Left out as the BIOS files above are: counted missing,
                     # not as one failure per tree.
-                    print(f"  {entry['ref']}: {counts['present']} already in place, "
-                          f"{agree(counts['absent'], 'needs', 'need')} the internet "
-                          f"({offline_named()})")
+                    detail(f"  {entry['ref']}: {counts['present']} already in place, "
+                           f"{agree(counts['absent'], 'needs', 'need')} the internet "
+                           f"({offline_named()})")
                     total_offline += counts["absent"]
                     files_pending += counts["absent"]
                     continue
@@ -16442,7 +16509,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                                  f"{LOCAL.pack.name}" if LOCAL.pack is not None else
                                  f", {counts['changed'] + counts['absent']} no longer in "
                                  "the source (the pack has them)")
-                    print(line)
+                    detail(line)
                 if counts["error"] in (NOT_WRITABLE, DRIVE_FULL):
                     if counts["error"] == DRIVE_FULL:
                         print(f"  {entry['ref']}: {DRIVE_FULL} ({shown_path(bios_path)})",
@@ -16461,8 +16528,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     total_errors += 1
 
         if os_type == "android" and not args.check and hide_from_media_scanner(bios_path):
-            print(f"  Added {NOMEDIA} to {shown_path(bios_path)}: the gallery and music "
-                  "apps leave its images, sounds and videos out")
+            detail(f"  Added {NOMEDIA} to {shown_path(bios_path)}: the gallery and music "
+                   "apps leave its images, sounds and videos out")
 
         # Standalone copies
         if (
@@ -16490,11 +16557,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 manifest, os_type, launchbox_bios_dirs(lb_root) if lb_root else None
             )
             if folders:
-                print("\nStandalone emulator folders found here:")
+                detail("\nStandalone emulator folders found here:")
                 for folder in folders:
-                    print(f"  {folder}")
-                print("  --standalone-copies also copies the BIOS files and keys "
-                      "they read into them.")
+                    detail(f"  {folder}")
+                detail("  --standalone-copies also copies the BIOS files and keys "
+                       "they read into them.")
 
     sys.stdout = real_stdout
     if not listing:

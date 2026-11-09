@@ -7017,6 +7017,8 @@ def line_decision(args: argparse.Namespace, answer) -> tuple[list, str]:
     def stop(_args, platforms):
         raise _Decided(platforms)
 
+    # --verbose's text, which names what detection found.
+    args.verbose = True
     install.LOCAL.reset()
     with mock.patch.object(install, "app_refusal", side_effect=stop), \
             mock.patch.object(install, "detect_os", return_value="linux"), \
@@ -7798,7 +7800,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         (backup / "gba_bios.bin").write_bytes(b"gba")
         (backup / "doom" / "doom1.wad").write_bytes(b"wad" * 10)
         args = _args(manifest=listing, dest=self.here, offline=True, declared_only=False,
-                     no_input=True)
+                     no_input=True, verbose=True)
         setattr(args, "from", [backup])
         real = io.StringIO()
         install.LOCAL.reset()
@@ -7965,7 +7967,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         old = self.root / "OLD"
         old.mkdir()
         (old / "gba_bios.bin").write_bytes(payload)
-        args = _args(manifest=listing, declared_only=False, offline=True)
+        args = _args(manifest=listing, declared_only=False, offline=True, verbose=True)
         setattr(args, "from", [old])
         real = io.StringIO()
         install.LOCAL.reset()
@@ -8047,7 +8049,10 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
     def line_run(self, args: argparse.Namespace, answers: list, mounts: list = (),
                  found: list = ()) -> tuple[str, list]:
         """(text, prompts) of line mode at a terminal for args, the answers
-        given in turn: the run stops at the first question left unanswered."""
+        given in turn: the run stops at the first question left unanswered.
+        Its text is --verbose's: these findings read the lines the default
+        leaves out."""
+        args.verbose = True
         given, asked = iter(answers), []
 
         def answer(prompt: str) -> str:
@@ -12619,7 +12624,7 @@ class ChoiceStateInBothModes(unittest.TestCase):
         self.assertNotIn("to fetch them", text)
         self.assertIn("to copy 1 of them from RetroArch_BIOS_Pack.zip", text)
         options = ("--platform", "retroarch", "--manifest", str(listing), "--dest", str(dest),
-                   "--yes")
+                   "--yes", "--verbose")
         proc = install_run(*options, "--from-pack", str(pack))
         text = proc.stdout + proc.stderr
         self.assertIn("Copying 1 file (1 B) from RetroArch_BIOS_Pack.zip...", text)
@@ -12774,7 +12779,7 @@ class ChoiceStateInBothModes(unittest.TestCase):
         files = [self.entry("gba_bios.bin", b"gba", ["nintendo-gba"])]
         listing = self.listing("retroarch", files)
         proc = install_run("--platform", "retroarch", "--manifest", str(listing),
-                           "--dest", str(self.here), "--check", "--offline")
+                           "--dest", str(self.here), "--check", "--offline", "--verbose")
         self.assertIn("0 in place, 1 missing, 0 wrong copies", proc.stdout)
         self.assertNotIn("present (", proc.stdout)
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
@@ -13232,6 +13237,8 @@ class OneVocabularyOneCount(unittest.TestCase):
         return listing, dest, old
 
     def run_line(self, listing: Path, dest: Path, answers: list, **given) -> str:
+        # --verbose's text: the counts compared are lines the default leaves out.
+        given.setdefault("verbose", True)
         from_ = given.pop("from_", None)
         args = _args(manifest=listing, dest=dest, declared_only=False, **given)
         if from_:
@@ -13626,7 +13633,9 @@ class ProvenCardsAndCounts(unittest.TestCase):
     def line_from(self, args: argparse.Namespace, answers: list,
                   folders: list[Path] = ()) -> tuple[str, list]:
         """(text, prompts) of line mode at a terminal, the result included,
-        the folders --from names read first, as main() reads them."""
+        the folders --from names read first, as main() reads them: --verbose's
+        text."""
+        args.verbose = True
         given, asked = iter(answers), []
 
         def answer(prompt: str) -> str:
