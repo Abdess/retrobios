@@ -35,6 +35,7 @@ from common import (
     get_mame_clone_map,
     list_emulator_profiles,
     list_registered_platforms,
+    merged_platform_declared_contents,
     load_data_dir_registry,
     load_database,
     load_emulator_profiles,
@@ -867,7 +868,8 @@ def _cross_reference_profile(
         # A platform declares files of its BIOS tree: none answers for one
         # the core reads below the save directory.
         in_platform = not save_root and declaration_settles(
-            f, fname, platform_names, effective_path, index.get("folded_slots", frozenset())
+            f, fname, platform_names, effective_path, index.get("folded_slots", frozenset()),
+            index.get("declared_contents"),
         )
 
         if in_platform:
@@ -1318,6 +1320,7 @@ def cross_reference(
     folded_slots: frozenset[str] = frozenset(),
     platform: str = "",
     launcher_layer: LauncherLayer | None = None,
+    declared_contents: dict[str, set[str]] | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
@@ -1355,6 +1358,7 @@ def cross_reference(
         "data_names": data_names,
         "all_declared": all_declared,
         "folded_slots": folded_slots,
+        "declared_contents": declared_contents,
         "bios_dir": db.get("bios_dir"),
         "launcher_candidates": [] if launcher_layer else None,
     }
@@ -1561,6 +1565,13 @@ def main() -> None:
         all_declared=declared_names(args.platforms_dir, selected, db),
         standalone_cores=standalone_cores,
         folded_slots=folded_declared_slots(args.platforms_dir, selected, db),
+        declared_contents=merged_platform_declared_contents(
+            [
+                load_platform_config(name, args.platforms_dir)
+                for name in selected or list_registered_platforms(args.platforms_dir)
+            ],
+            db,
+        ),
         platform=config.get("_key", args.platform) if args.platform else "",
         # What the platform's launchers open, as verify and the builder read it.
         launcher_layer=LauncherLayer(

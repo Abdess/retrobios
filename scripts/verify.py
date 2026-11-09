@@ -60,6 +60,7 @@ from common import (
     compute_hashes,
     expand_directory_entries,
     platform_declarations,
+    platform_declared_contents,
     group_identical_platforms,
     list_emulator_profiles,
     list_system_ids,
@@ -454,6 +455,7 @@ def _candidate_verdict(
     declared_names: Mapping[str, list[tuple[int | None, str]]] | set[str],
     dest: str = "",
     folded_slots: frozenset[str] = frozenset(),
+    declared_contents: Mapping[str, set[str]] | None = None,
 ) -> str:
     """Whether a profile entry can be a gap, and whether it is settled.
 
@@ -469,7 +471,7 @@ def _candidate_verdict(
     if outside_gap_scope(file_entry, is_standalone):
         return "skip"
     if not include_all and declaration_settles(
-        file_entry, fname, declared_names, dest, folded_slots
+        file_entry, fname, declared_names, dest, folded_slots, declared_contents
     ):
         return "settled"
     return "keep"
@@ -503,6 +505,7 @@ def find_undeclared_files(
     if declared_names is None:
         declared_names = platform_declarations(config, db)
     folded_slots = case_folded_slots(config, declared_names)
+    declared_contents = platform_declared_contents(config, db)
 
     # Whether the builder drops a file whose local copy contradicts its
     # declared hash, which decides if such a copy counts as held here.
@@ -603,6 +606,7 @@ def find_undeclared_files(
                 verdict = _candidate_verdict(
                     f, fname, is_standalone, include_all,
                     {} if save_root else declared_names, dest, folded_slots,
+                    None if save_root else declared_contents,
                 )
                 if verdict == "settled":
                     seen_files.add(seen_key)

@@ -53,8 +53,8 @@ files:
     source_ref: "source atari800/src/sysrom.c:103-104, source atari800/src/sysrom.c:290, source atari800/src/sysrom.c:138, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-5200-os-2port.rom"
+    found_by: content
     path: "atari-5200-os-2port.rom"
-    aliases: [ROM_5200_A]
     required: false
     hle_fallback: true
     size: 2048
@@ -189,8 +189,8 @@ files:
   # -- Further revisions identified by CRC32 in the system directory scan --
 
   - name: "atari-800-os-a-ntsc.rom"
+    found_by: content
     path: "atari-800-os-a-ntsc.rom"
-    aliases: [ROM_OS_A_NTSC]
     required: false
     hle_fallback: true
     size: 10240
@@ -206,8 +206,8 @@ files:
     source_ref: "source atari800/src/sysrom.c:89, source atari800/src/sysrom.c:124, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:124, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-1200xl-os-rev-10.rom"
+    found_by: content
     path: "atari-1200xl-os-rev-10.rom"
-    aliases: [ROM_OS_AA00R10]
     required: false
     hle_fallback: true
     size: 16384
@@ -223,8 +223,8 @@ files:
     source_ref: "source atari800/src/sysrom.c:92, source atari800/src/sysrom.c:127, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:127, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-1200xl-os-rev-11.rom"
+    found_by: content
     path: "atari-1200xl-os-rev-11.rom"
-    aliases: [ROM_OS_AA00R11]
     required: false
     hle_fallback: true
     size: 16384
@@ -240,8 +240,8 @@ files:
     source_ref: "source atari800/src/sysrom.c:93, source atari800/src/sysrom.c:128, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:128, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-xl-os-ver-1.rom"
+    found_by: content
     path: "atari-xl-os-ver-1.rom"
-    aliases: [ROM_OS_BB00R1]
     required: false
     hle_fallback: true
     size: 16384
@@ -257,6 +257,7 @@ files:
     source_ref: "source atari800/src/sysrom.c:94, source atari800/src/sysrom.c:129, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:129, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_BB02R3V4"
+    found_by: content
     path: "ROM_OS_BB02R3V4"
     required: false
     hle_fallback: true
@@ -273,6 +274,7 @@ files:
     source_ref: "source atari800/src/sysrom.c:97, source atari800/src/sysrom.c:132, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:132, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_CC01R4"
+    found_by: content
     path: "ROM_OS_CC01R4"
     required: false
     hle_fallback: true
@@ -289,8 +291,8 @@ files:
     source_ref: "source atari800/src/sysrom.c:98, source atari800/src/sysrom.c:133, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:133, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-xl-os-ver-3.rom"
+    found_by: content
     path: "atari-xl-os-ver-3.rom"
-    aliases: [ROM_OS_BB01R3]
     required: false
     hle_fallback: true
     size: 16384
@@ -306,6 +308,7 @@ files:
     source_ref: "source atari800/src/sysrom.c:99, source atari800/src/sysrom.c:134, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:134, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_BB01R59"
+    found_by: content
     path: "ROM_OS_BB01R59"
     required: false
     hle_fallback: true
@@ -322,6 +325,7 @@ files:
     source_ref: "source atari800/src/sysrom.c:101, source atari800/src/sysrom.c:136, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:136, source atari800/src/sysrom.c:616-623"
 
   - name: "ROM_OS_BB01R59A"
+    found_by: content
     path: "ROM_OS_BB01R59A"
     required: false
     hle_fallback: true
@@ -338,8 +342,8 @@ files:
     source_ref: "source atari800/src/sysrom.c:102, source atari800/src/sysrom.c:137, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:137, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-basic-rev-a.rom"
+    found_by: content
     path: "atari-basic-rev-a.rom"
-    aliases: [ROM_BASIC_A]
     required: false
     hle_fallback: true
     size: 8192
@@ -355,8 +359,8 @@ files:
     source_ref: "source atari800/src/sysrom.c:105, source atari800/src/sysrom.c:140, source atari800/src/sysrom.c:317-427, source atari800/src/atari.c:537, source atari800/src/sysrom.c:140, source atari800/src/sysrom.c:616-623"
 
   - name: "atari-basic-rev-b.rom"
+    found_by: content
     path: "atari-basic-rev-b.rom"
-    aliases: [ROM_BASIC_B]
     required: false
     hle_fallback: true
     size: 8192
