@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "retrobios"
 dynamic = ["version"]
-description = "Install the BIOS files your emulators need"
+description = "Install the BIOS files emulators need, checked"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"

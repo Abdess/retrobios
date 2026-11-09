@@ -1,8 +1,8 @@
 # RetroBIOS
 
-Puts the BIOS files your emulators need in the right folder.
+Puts the BIOS files emulators need in the right folder, and checks them.
 
-It finds your setup and its BIOS folder, downloads only the missing files and
+It finds the setup and its BIOS folder, downloads only the missing files and
 checks each one. It works with RetroArch, Batocera, EmuDeck, RetroBat,
 Recalbox, RetroDECK, RomM and more.
 
