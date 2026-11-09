@@ -235,7 +235,7 @@
   "psx/dev/exp1.h",
   "psx/psx.c"
  ],
- "github.com/ARMSX2/ARMSX2@7f9144189c74edcf5a7ab3ba2aa2247635d24047": [
+ "github.com/ARMSX2/ARMSX2@fc4ab0b8b4f386617773cf1916e9bc6911dba59b": [
   ".github/workflows/build-all.yml",
   ".github/workflows/linux_build_qt.yml",
   "README.md",
@@ -282,7 +282,7 @@
   "platforms/android/app/src/main/java/com/armsx2/arcade/ArcadeLibrary.kt",
   "platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/MainActivity.java",
   "platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java",
-  "platforms/ios/app/src/main/cpp/IOS/AppDelegate.mm"
+  "platforms/ios/Runtime/AppDelegate.mm"
  ],
  "github.com/AZO234/NP2kai@5d47f3a04b0b8ea78f625eeec354ac132c80df06": [
   "bios/bios.c",
@@ -3871,13 +3871,14 @@
   "android/app/src/main/java/com/izzy2lost/super3/Super3Activity.kt",
   "android/app/src/main/java/com/izzy2lost/super3/UserDataSync.kt"
  ],
- "github.com/izzy2lost/xemu@e092175b9196438ee2712bf6f45398fe2970b5fe": [
+ "github.com/izzy2lost/xemu@57bc6d6840daeb80e6454511aa097aa89760d49c": [
   "android/app/build.gradle.kts",
   "android/app/src/main/AndroidManifest.xml",
   "android/app/src/main/cpp/CMakeLists.txt",
   "android/app/src/main/cpp/xemu_android.cpp",
   "android/app/src/main/cpp/xemu_fatx_import.c",
   "android/app/src/main/cpp/xemu_settings_android.cc",
+  "android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/GpuDriverHelper.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt",
@@ -3888,6 +3889,7 @@
   "android/app/src/main/java/com/izzy2lost/x1box/XboxHddFormatter.kt",
   "android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt",
   "android/app/src/main/res/values/strings.xml",
+  "android/hakux/core/native/dev/chihiro.c",
   "android/hakux/core/native/kernel/ex.c",
   "hw/xbox/chihiro/chihiro-firmware.h",
   "hw/xbox/chihiro/chihiro.c",
@@ -4972,7 +4974,7 @@
   "src/hiscore.c",
   "src/mame2003/mame2003.c"
  ],
- "github.com/libretro/mame2003-plus-libretro@993403d0332946b8aa6abab56fbd9864498790a1": [
+ "github.com/libretro/mame2003-plus-libretro@dff0ba63654f4e93a24182e8aa018b174357a3e8": [
   "src/artwork.c",
   "src/cheat.c",
   "src/cpuexec.c",
@@ -9913,10 +9915,10 @@
   "ui/xui/main-menu.cc",
   "winpcap-loader/loader.c"
  ],
+ "github.com/xenia-canary/xenia-canary@2372a54105d9d598ab5bc7ba94a72ef1bea4b271": [],
  "github.com/xenia-canary/xenia-canary@72c2afa3ba2b1b232f89de71577251d6edafb1bd": [
   "src/xenia/emulator.cc"
  ],
- "github.com/xenia-canary/xenia-canary@dc561e4df578c903087f9bdf56ff61d9ef9f2a93": [],
  "github.com/xenios-jp/XeniOS@87b176a078c316fde3adf67a217f0c44615b0e0d": [
   "src/xenia/app/CMakeLists.txt",
   "src/xenia/app/game_compat_db.cc",
