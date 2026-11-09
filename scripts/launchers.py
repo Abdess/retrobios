@@ -141,6 +141,10 @@ def catalogued_model_files(name: str, db: dict) -> list[dict]:
                 for source in ("redump", "no-intro", "tosec")
             ]
             found.append(("/.variants/" in str(record.get("path", "")), names, record))
+    # The core accepts every revision of the model, and neither priority nor
+    # region separates two primaries. The pick must still be the same on
+    # every run, so it goes to the original revision: the Redump name carries
+    # the version, and ps2-0100j sorts before ps2-0101j.
     return [record for *_key, record in sorted(found, key=lambda f: (f[0], f[1]))]
 
 
