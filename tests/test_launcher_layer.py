@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import yaml  # noqa: E402
 
 from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config  # noqa: E402
-from launchers import LauncherLayer, launcher_places  # noqa: E402
+from launchers import LauncherLayer, launcher_places, suffixed_stem  # noqa: E402
 from verify import find_undeclared_files, verify_platform  # noqa: E402
 
 CONTENT = {
@@ -272,6 +272,22 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertEqual(added["launcher.rom"]["launcher_of"], "core.bin")
         self.assertEqual(added["launcher.rom"]["md5"], _md5(CONTENT["core.bin"]))
         self.assertIn("launcher.rom", self._pack_names())
+
+    def test_a_fixed_name_with_an_appended_extension_takes_the_entry(self) -> None:
+        """ROCKNIX passes kick34005.A500.rom to Amiberry, which names
+        Kickstart 1.3 kick34005.A500: the pack shipped nothing under it."""
+        profile = {
+            "emulator": "FixEmu", "type": "standalone", "systems": ["test-sys"],
+            "files": [{"name": "core.bin", "aliases": ["kick.A500"], "required": True}],
+        }
+        with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"][2]["names"] = ["kick.A500.rom"]
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
+        self.assertIsNone(suffixed_stem("scph1001.bin"))
 
     def test_the_default_name_a_launcher_replaces_is_not_packed(self) -> None:
         """EmuDeck passes Complex_4627v1.03.bin to xemu, which then never

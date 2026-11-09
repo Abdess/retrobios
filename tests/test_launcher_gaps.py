@@ -73,6 +73,7 @@ LAUNCHERS = [
     {"emulator": "pkgemu", "build": "standalone", "kind": "copies",
      "names": ["written.ini"], "source_ref": "pkg.sh:2"},
     _record("setemu", "fixed_name", ["setname.bin"], passes_to="command line -romslot"),
+    _record("aliasemu", "fixed_name", ["alias.bin.rom"]),
     _record("caseemu", "fixed_name", ["mixed.rom"]),
     _record("foldemu", "fixed_name", ["MIXED.rom"], case_insensitive=True),
     _record("labelemu", "core_option", ["labelled.rom (CDZ)"]),
@@ -185,6 +186,10 @@ class LauncherGapTest(unittest.TestCase):
         """RetroPie copies lr-vecx's system.bin from $md_inst and writes mame.ini."""
         names = {name for _, name in self._rows()}
         self.assertFalse(names & {"shipped.bin", "written.ini"})
+
+    def test_a_name_with_an_appended_extension_is_held(self) -> None:
+        """ROCKNIX's kick34005.A500.rom is Amiberry's kick34005.A500."""
+        self.assertNotIn("alias.bin.rom", {name for _, name in self._rows()})
 
     def test_a_name_handed_to_a_held_entry_setting_is_held(self) -> None:
         self.assertNotIn("setname.bin", {name for _, name in self._rows()})

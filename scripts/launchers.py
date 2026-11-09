@@ -100,6 +100,18 @@ def setting_tokens(passes_to: str) -> set[str]:
     } - {""}
 
 
+def suffixed_stem(name: str) -> str | None:
+    """The file name a launcher name carries before an extension it appended.
+
+    ROCKNIX's Amiberry config passes kick34005.A500.rom, the name Amiberry
+    gives Kickstart 1.3 (amiberry_whdbooter.cpp:370) followed by ".rom". A
+    stem that is no file name itself (scph1001 of scph1001.bin) is none.
+    """
+    base = name.rsplit("/", 1)[-1]
+    stem = base.rsplit(".", 1)[0]
+    return stem if "." in stem else None
+
+
 def set_by(entry: dict, passes_to: str) -> bool:
     """Whether a launcher hands its file to the setting a profile entry is read from."""
     key = str(entry.get("config_key") or "")
@@ -485,6 +497,13 @@ class LauncherLayer:
         # file under that name is the one the romfile4p slot reads.
         if set_by(entry, place.passes_to):
             return _Candidate(entry, basenames, False)
+        if place.kind == "fixed_name":
+            stems = {
+                base for base in basenames
+                if (stem := suffixed_stem(base)) is not None and place.fold(stem) in own
+            }
+            if stems:
+                return _Candidate(entry, stems, False)
         content = {
             place.fold(path.rsplit("/", 1)[-1])
             for path in place.paths

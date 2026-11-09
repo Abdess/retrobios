@@ -50,7 +50,7 @@ from common import (
     select_emulator_profiles,
 )
 from hashing import parse_hash_list
-from launchers import LauncherLayer, declared_destinations, held_record, set_by
+from launchers import LauncherLayer, declared_destinations, held_record, set_by, suffixed_stem
 from launchers import _directories as launcher_directories
 from launchers import _names as launcher_names
 from validation import (
@@ -1116,7 +1116,10 @@ class _NameHolder:
             return self._cache[name]
         base = name.rsplit("/", 1)[-1]
         found: tuple[str, bool] | None = None
+        stem = suffixed_stem(base)
         if base in self.by_name or any(map(self._entry_held, self.exact.get(base, []))):
+            found = (base, True)
+        elif stem is not None and any(map(self._entry_held, self.exact.get(stem, []))):
             found = (base, True)
         else:
             path, _status = resolve_local_file(
