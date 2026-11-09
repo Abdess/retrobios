@@ -381,7 +381,7 @@
   "crates/dingooemu-libretro/src/diagnostics.rs",
   "crates/dingooemu/src/main.rs"
  ],
- "github.com/AloysHF/Native32Emu@059fa33c658caa4dbbad140ebf2af1197f9dd778": [
+ "github.com/AloysHF/Native32Emu@c9111273f97c67471358c8d9507a19c7cceb70f5": [
   "Cargo.toml",
   "crates/native32emu-core/src/archive_loader.rs",
   "crates/native32emu-core/src/content_loader.rs",
@@ -2730,7 +2730,7 @@
   "bsnes/sfc/coprocessor/hitachidsp/hitachidsp.hpp",
   "bsnes/target-libretro/libretro.cpp"
  ],
- "github.com/bvschaik/julius@34d1ecd54befb845c0139b371fa8a0438210dac1": [
+ "github.com/bvschaik/julius@33c777019b2640b847b73815c3b4344cf7bd9576": [
   "CMakeLists.txt",
   "src/building/model.c",
   "src/core/image.c",
