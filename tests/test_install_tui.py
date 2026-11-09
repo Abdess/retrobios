@@ -12367,12 +12367,14 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
                 break
             term.send("\x1b[A")
         term.send("\r")
-        screen = term.wait("RetroBIOS:")
-        if "Confirm" in term.settle():
-            term.send("\r")
+        # The changed choices are counted again on Confirm. Waiting on the
+        # bare title matched the screen before it, and a runner that drew
+        # Confirm after one settle never pressed Enter there.
+        term.wait("RetroBIOS: Confirm")
+        term.settle()
+        term.send("\r")
         term.wait("files installed")
         self.assertEqual(repo.installed(), ["gba_bios.bin", "mgba/extra.bin"])
-        del screen
         term.send("q")
         term.close()
 
