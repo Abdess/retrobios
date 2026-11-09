@@ -711,6 +711,17 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
             with self.subTest(platform=platform):
                 self.assertEqual(self.resolved(platform), own)
 
+    def test_no_standalone_amiberry_is_the_buildbot_revision(self) -> None:
+        from common import list_registered_platforms
+
+        for platform in list_registered_platforms(str(REPO_ROOT / "platforms")):
+            cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+            if "amiberry" not in self.resolved(platform):
+                continue
+            layouts = platform_layouts("amiberry", self.profiles["amiberry"], standalone_set(cfg))
+            with self.subTest(platform=platform):
+                self.assertEqual([standalone for _view, standalone in layouts], [False])
+
     def test_the_buildbot_core_runs_where_retroarch_installs_it(self) -> None:
         from common import load_target_config, resolve_platform_cores
 

@@ -1,5 +1,5 @@
 emulator: Amiberry
-type: libretro
+type: standalone + libretro
 core_classification: official_port
 source: "https://github.com/BlitterStudio/amiberry"
 upstream: "https://github.com/tonioni/WinUAE"

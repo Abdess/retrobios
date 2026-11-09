@@ -2687,9 +2687,19 @@ def runs_standalone(
         return False
     if "standalone" not in str(profile.get("type", "")):
         return False
-    return emu_name in standalone_cores or bool(
-        standalone_cores & {str(c) for c in profile.get("cores", [])}
-    )
+    names = {emu_name, *(str(c) for c in profile.get("cores", []))}
+    # A name a build the platform compiles itself answers to means that
+    # build there: RetroBat's standalone amiberry is 8.3.0, and the 8.5.0
+    # profile, run there as the buildbot core, keeps its libretro layout.
+    owners: dict[str, set[str]] = {}
+    for tag in standalone_cores:
+        if tag.startswith(OWN_BUILD_PREFIX):
+            name, owner, source = json.loads(tag[len(OWN_BUILD_PREFIX):])
+            if source == profile.get("source"):
+                owners.setdefault(name, set()).add(owner)
+    if any(emu_name not in owners[n] for n in names & owners.keys()):
+        return False
+    return emu_name in standalone_cores or bool(standalone_cores & names)
 
 
 # Marks, in a platform's standalone set, an emulator it also launches as a
@@ -2704,6 +2714,9 @@ CORE_DIR_PREFIX = "coredir:"
 # Marks, in the same set, a file the platform's launcher executes
 # (launchers.executed_files), as JSON.
 EXECUTED_PREFIX = "exec:"
+# Marks, in the same set, a standalone name a build the platform compiles
+# itself (built_by) answers to, as JSON [name, profile, source].
+OWN_BUILD_PREFIX = "ownbuild:"
 # Marks, in the same set, a file name the platform declares under one of the
 # systems a launcher record is written for, as JSON [system, name]: it says
 # which launch reads a profile entry of that name.
@@ -2771,6 +2784,24 @@ def launched_both_ways(config: dict) -> set[str]:
     return {str(c) for c in config.get("dual_mode_cores") or []} | (standalone & installable)
 
 
+def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
+    """The standalone names the platform's own builds answer to, tagged.
+
+    Read from the profiles of this repository, the ones every pack, manifest
+    and report is built from.
+    """
+    platform = str(config.get("_key") or "")
+    if not platform or not standalone:
+        return set()
+    profiles = load_emulator_profiles(str(Path(__file__).resolve().parent.parent / "emulators"))
+    return {
+        OWN_BUILD_PREFIX + json.dumps([n, key, p.get("source")])
+        for key, p in profiles.items()
+        if platform in (p.get("built_by") or []) and "standalone" in str(p.get("type", ""))
+        for n in {key, *(str(c) for c in p.get("cores") or [])} & standalone
+    }
+
+
 def standalone_set(config: dict) -> set[str]:
     """The emulators a platform launches standalone, with its dual-mode ones.
 
@@ -2780,6 +2811,7 @@ def standalone_set(config: dict) -> set[str]:
     """
     names = {str(c) for c in config.get("standalone_cores") or []}
     names |= {DUAL_MODE_PREFIX + c for c in launched_both_ways(config)}
+    names |= own_build_tags(config, names)
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
     names |= {
