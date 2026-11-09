@@ -603,7 +603,7 @@ look.
 | Field | Description |
 |-------|-------------|
 | `name` | filename as the core expects it |
-| `required` | true if the core needs this file to function. On a member of a `group`, the requirement of the set |
+| `required` | true if the core needs this file to function. Not written on a member of a `group`: derived from the sets in `groups` |
 | `system` | system ID this file belongs to (for multi-system profiles) |
 | `systems` | the systems of the profile this file serves, when it serves several but not all (a MAME device set the machines of two systems load). Never written with `system` |
 | `archive` | ROM set the file lives inside, for arcade entries (e.g. `neogeo.zip`) |
@@ -622,7 +622,8 @@ look.
 | `region_check` | true if the core refuses to boot a game whose region does not match the BIOS |
 | `fast_boot` | BIOS generation label the core uses to decide whether fast boot is available |
 | `priority` | preference order when several BIOS satisfy the same slot, **lowest wins**. DuckStation's `FindBIOSImageInDirectory` keeps the image whose priority is lower, and its table de-prioritizes by raising the number: the buggy launch console sits at 50 and PS2 images at 100, while `scph5501` sits at 5. A core that walks an ordered search list, as PicoDrive does with `biosfiles_us/eu/jp`, maps onto the same field as 1, 2, 3. Only set it from the source. `--one-per-slot` reads it, comparing the members of one `group` |
-| `group` | entries the code takes one of: it loads the first it finds (Yabause tries `saturn_bios.bin`, `sega_101.bin`, `mpr-17933.bin`), and holding any member fills the need. Verify, the gap report and the packs report a set nobody holds as one gap under its first member, and no member of a held set as missing. `required` is the same on every member, the order stays in `priority`. A list puts a file in several sets. Where the code keeps a list per region, each list is its own group (PicoDrive's `mega-cd-us`, `mega-cd-eu`, `mega-cd-jp`) |
+| `group` | the sets of the profile's `groups:` map an entry belongs to. A set is one need: the code loads one member (the first it finds, as Yabause tries `saturn_bios.bin`, `sega_101.bin`, `mpr-17933.bin`) and holding any member fills it. Verify, the gap report and the packs report a set nobody holds as one gap under its first member, and no member of a held set as missing. A `--required-only` build keeps one member per required set, the first the code reads among those held. A list puts a file in several sets, a map from set to rank gives its place in each when it differs (pom2's `apple2.rom` is second for the ][ and third at boot). Where the code keeps a list per region, each list is its own set (PicoDrive's `mega-cd-us`, `mega-cd-eu`, `mega-cd-jp`) |
+| `groups` (profile) | the requirement of each set, `{name: {required: bool}}`. A member writes no `required`: it is required when one of its sets is, so a fallback shared by a required set and an optional one needs no value of its own |
 | `embedded` | true if the data is compiled into the binary and the external file is optional |
 | `bundled` | true if the emulator's own release installs the file where it reads it, for the build `mode` names (all builds when `mode` is absent). Packs and the installer leave it out: the user already has it. A file the standalone release ships but the libretro core does not (PPSSPP's assets, Dolphin's Sys) is bundled with `mode: standalone` only |
 | `not_bundled_on` | platforms (registry keys) whose package leaves out a file the release bundles: their packs bring it (Batocera installs hcl without its data) |
@@ -636,7 +637,7 @@ look.
 | `path` | destination path relative to the system directory, or to the save directory under `load_from: save_dir` |
 | `standalone_path` | where the standalone build reads the file, under its own data folder, when it differs from `path` (the libretro destination). Packs for a platform running the emulator standalone use it |
 | `on_mismatch` | what the code does when a declared check fails: `reject` (default) or `warn` and run with it, for every check or check by check (`{size: warn, md5: reject}`) |
-| `variant_group` | one slot of one core that several entries fill, whatever system each is filed under (PicoDrive's twelve Mega CD BIOS). Region selection keeps one per group |
+| `selection_slot` | files one core chooses between by a rule other than first found (the disc's territory, a core option, a feature probe), one slot of the core whatever system each is filed under: PicoDrive's twelve Mega CD BIOS, picked by disc region, O2EM's four BIOS, picked by a core option. Region selection compares them together and keeps one per slot. A member does not stand in for another: entries that do are a `group` |
 | `size_note` | how the code treats the file's size when no size field can say it (a read capped at 32 bytes, a file created empty when absent) |
 | `type` | `directory` when the code reads a whole tree (an RTP, a folder of speech samples). `path` is then the directory, written with its trailing slash, and the entry stands for every file the collection holds under it. A name ending in `/` requires it |
 | `description` | what this file is |

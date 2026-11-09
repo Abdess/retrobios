@@ -22,6 +22,8 @@ import zipfile
 from pathlib import Path
 from typing import Any, TextIO
 
+from alternatives import derive_member_requirements
+
 # Every build script imports this module. verify.py, slots.py, validate_pr.py
 # and cross_reference.py started under 3.8 and stopped halfway on a
 # str.removeprefix AttributeError, which named no version.
@@ -2346,6 +2348,7 @@ def load_emulator_profiles(
         if "emulator" not in profile:
             continue
         _normalize_hash_fields(profile)
+        derive_member_requirements(profile)
         profiles[f.stem] = profile
     _emulator_profiles_cache[cache_key] = profiles
     return profiles

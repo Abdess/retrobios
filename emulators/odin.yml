@@ -71,6 +71,10 @@ notes: |
 
 archive_prefix: "odin"
 
+groups:
+  boot-rom:
+    required: true
+
 files:
   - name: "hikaru.zip"
     path: "odin/hikaru.zip"
@@ -84,8 +88,6 @@ files:
     archive: hikaru.zip
     system: sega-hikaru
     group: boot-rom
-    required: true
-    variant_group: "hikaru-bootrom"
     priority: 1
     size: 2097152
     crc32: "2aa906a7"
@@ -97,8 +99,6 @@ files:
     archive: hikaru.zip
     system: sega-hikaru
     group: boot-rom
-    required: true
-    variant_group: "hikaru-bootrom"
     priority: 2
     size: 2097152
     crc32: "3d557104"
@@ -110,8 +110,6 @@ files:
     archive: hikaru.zip
     system: sega-hikaru
     group: boot-rom
-    required: true
-    variant_group: "hikaru-bootrom"
     priority: 3
     size: 2097152
     crc32: "d96298b6"

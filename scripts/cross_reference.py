@@ -23,7 +23,7 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from alternatives import set_keys, settle_sets
+from alternatives import set_keys, set_requirements, settle_sets
 from common import (
     platform_arg,
     ProfileSelectionError,
@@ -697,7 +697,7 @@ def slot_key(f: dict, standalone: bool = False) -> tuple:
         f.get("archive"),
         system_dir_path(f, where or fname),
         f.get("system"),
-        f.get("variant_group"),
+        f.get("selection_slot"),
         f.get("mode", "both"),
         read_from_save_dir(f, standalone),
     )
@@ -886,7 +886,7 @@ def _cross_reference_profile(
             archive_key = (
                 archive,
                 f.get("system"),
-                f.get("variant_group"),
+                f.get("selection_slot"),
                 f.get("mode", "both"),
             )
             if archive_key not in archive_gaps:
@@ -969,12 +969,17 @@ def _cross_reference_profile(
     # nobody holds is one gap under its first member (alternatives.py), as
     # verify and the packs count it.
     grouped = [r for r in set_records if r[0]]
-    excused, standing = settle_sets([(keys, f, fills) for keys, f, fills, _l, _r in grouped])
+    requirements = set_requirements(profile)
+    excused, standing = settle_sets(
+        [(keys, f, fills) for keys, f, fills, _l, _r in grouped],
+        lambda key: requirements.get(key[1], True),
+    )
     for at, (_keys, member, _fills, rows, set_row) in enumerate(grouped):
         if set_row is None or rows is None:
             continue
         if at in standing:
-            set_row["alternatives"] = standing[at]
+            set_row["alternatives"] = standing[at].others
+            set_row["required"] = standing[at].required
         if at in excused:
             rows.remove(set_row)
             fates[position[id(member)]] = "other_versions"

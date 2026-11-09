@@ -105,13 +105,16 @@ notes: |
   ref: Main.java:26892-26895, Main.java:26956-26957, Main.java:29721,
        Main.java:29755-29758, Main.java:30046
 
+groups:
+  ps-bios:
+    required: false
+
 files:
   - name: scph1001.bin
+    group: ps-bios
     path: bios/scph1001.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosName"
     size: 524288
     validation: [size]

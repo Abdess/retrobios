@@ -36,9 +36,9 @@ class TheGroupFollowsWhatTheProfileSays(unittest.TestCase):
         })
         self.assertEqual(groups, ["clk:file:MSX/msx-american.rom"])
 
-    def test_a_variant_group_stays_one_slot(self):
+    def test_a_selection_slot_stays_one_slot(self):
         self.assertEqual(
-            extra_region_groups({"source_emulator": "picodrive", "variant_group": "mcd",
+            extra_region_groups({"source_emulator": "picodrive", "selection_slot": "mcd",
                                  "source_systems": ["sega-segacd", "sega-mega-cd"]}),
             ["picodrive:variant:mcd"],
         )
@@ -91,10 +91,10 @@ class TheGroupTakesThePlatformSpelling(unittest.TestCase):
             ["sega-saturn"],
         )
 
-    def test_file_and_variant_groups_are_untouched(self):
+    def test_file_and_selection_slots_are_untouched(self):
         spellings = system_spellings(["sega-megacd"])
         self.assertEqual(
-            extra_region_groups({"source_emulator": "picodrive", "variant_group": "mcd",
+            extra_region_groups({"source_emulator": "picodrive", "selection_slot": "mcd",
                                  "source_system": "sega-megacd"}, spellings),
             ["picodrive:variant:mcd"],
         )

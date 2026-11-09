@@ -133,13 +133,16 @@ notes: |
        Main.java:11014, Main.java:12555-12585, Main.java:15415-15430,
        Main.java:15489
 
+groups:
+  ps-bios:
+    required: false
+
 files:
   - name: scph1001.bin
+    group: ps-bios
     path: bios/scph1001.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "com.emulator.fpse64.biospath"
     size: 524288
     validation: [size]

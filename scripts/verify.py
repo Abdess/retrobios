@@ -37,7 +37,14 @@ import slots
 
 sys.path.insert(0, os.path.dirname(__file__))
 from hashing import parse_md5_list
-from alternatives import set_keys, settle_sets, slot_set_keys
+from alternatives import (
+    core_file_spares,
+    set_fields,
+    set_keys,
+    set_requirements,
+    settle_sets,
+    slot_set_keys,
+)
 from common import (
     _foreign_tree,
     _owner_tokens,
@@ -591,7 +598,7 @@ def find_undeclared_files(
                     f.get("archive"),
                     dest,
                     f.get("system"),
-                    f.get("variant_group"),
+                    f.get("selection_slot"),
                     region_key,
                     # Below the save directory each core is handed a folder
                     # of its own: two cores reading hiscore.dat there read
@@ -625,7 +632,7 @@ def find_undeclared_files(
                         archive,
                         f.get("system_dir"),
                         f.get("system"),
-                        f.get("variant_group"),
+                        f.get("selection_slot"),
                         region_key,
                         is_standalone,
                     )
@@ -640,7 +647,7 @@ def find_undeclared_files(
                             "systems": entry_system_ids(f, profile),
                             "system": f.get("system"),
                             "region": f.get("region"),
-                            "variant_group": f.get("variant_group"),
+                            "selection_slot": f.get("selection_slot"),
                             "name": archive,
                             "archive": archive,
                             "path": system_dir_path(f, archive),
@@ -738,7 +745,7 @@ def find_undeclared_files(
                     "systems": entry_system_ids(f, profile),
                     "system": f.get("system"),
                     "region": f.get("region"),
-                    "variant_group": f.get("variant_group"),
+                    "selection_slot": f.get("selection_slot"),
                     "name": fname,
                     "path": dest,
                     "required": f.get("required", False),
@@ -748,6 +755,7 @@ def find_undeclared_files(
                     "in_repo": in_repo,
                     "note": f.get("note", ""),
                     "checks": sorted(checks) if checks else [],
+                    **set_fields(f, profile),
                     "source_ref": f.get("source_ref"),
                     "expected": _build_expected(f, checks),
                     **_identity_of(f),
@@ -785,7 +793,7 @@ def find_undeclared_files(
         undeclared = [u for u in undeclared if id(u) not in settled]
         undeclared.extend(added)
 
-    undeclared = _settle_core_sets(undeclared, set_records, settled)
+    undeclared = _settle_core_sets(undeclared, set_records, settled, profiles)
 
     for entry in sorted(archive_entries.values(), key=lambda e: e["name"]):
         undeclared.append(entry)
@@ -797,6 +805,7 @@ def _settle_core_sets(
     undeclared: list[dict],
     records: list[tuple[tuple, dict, bool, tuple[dict, dict | None] | None]],
     launcher_settled: set[int],
+    profiles: dict[str, dict],
 ) -> list[dict]:
     """The core complement with each set of alternatives settled.
 
@@ -811,14 +820,23 @@ def _settle_core_sets(
     excused, standing = settle_sets([
         (keys, f, fills or (ref is not None and id(ref[0]) in launcher_settled))
         for keys, f, fills, ref in grouped
-    ])
+    ], lambda key: set_requirements(profiles.get(key[0][0], {})).get(key[1], True))
+    declared_sets = {
+        key for keys, _f, _fills, ref in grouped if ref is None for key in keys
+    }
     dropped: set[int] = set()
-    for position, (_keys, _f, _fills, ref) in enumerate(grouped):
+    for position, (keys, _f, _fills, ref) in enumerate(grouped):
         if ref is None:
             continue
         entry, host = ref
+        required_keys = [k for k in keys if k[1] in entry.get("required_groups", ())]
+        if required_keys and all(k in declared_sets for k in required_keys):
+            # The platform declares a member of each of its required sets:
+            # under --required-only that declaration carries them.
+            entry["set_declared"] = True
         if position in standing:
-            entry["alternatives"] = standing[position]
+            entry["alternatives"] = standing[position].others
+            entry["required"] = standing[position].required
         if position not in excused:
             continue
         if host is not None:
@@ -1548,6 +1566,10 @@ def verify_platform(
             )
             not in region_drops
         ]
+    if required_only:
+        # One member of a required set, as the builder keeps it.
+        spares = core_file_spares(undeclared)
+        undeclared = [u for u in undeclared if id(u) not in spares]
     _mark_unplaced(config, undeclared, profiles)
     from packextras import ExtraResolver
 
@@ -2343,6 +2365,14 @@ def verify_emulator(
                 if fe.get("archive")
                 or _resolve_destination(fe, standalone) not in region_drops
             ]
+        if required_only:
+            from packextras import emulator_required_spares
+
+            spares = emulator_required_spares(
+                emu_name, profile, files, standalone, region_drops, db,
+                validation_index, zip_contents, data_registry,
+            )
+            files = [fe for fe in files if id(fe) not in spares]
 
         # Check data directories (only notice if not cached)
         for dd in deliverable(
@@ -2645,13 +2675,14 @@ def verify_emulator(
                     and result.get("reason") == fallback_reason),
             )
             for _dest, result, _required, _hle, entries in placed_results
-        ])
+        ], lambda key: set_requirements(profile).get(key[1], True))
         for position, (dest, result, required, hle, _fe) in enumerate(placed_results):
             if position in excused and result["status"] == Status.MISSING:
                 set_members.append(result)
                 continue
             if position in standing:
-                result["alternatives"] = standing[position]
+                result["alternatives"] = standing[position].others
+                result["required"] = required = standing[position].required
             details.append(result)
 
             # Aggregate by destination (path if available, else name)

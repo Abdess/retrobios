@@ -78,6 +78,10 @@ notes: |
   XXH128 hashes used for ROM identification only, not validation.
   All file loading validates size only.
 
+groups:
+  ipl:
+    required: true
+
 files:
   - name: "sega_101.bin"
     system: sega-saturn
@@ -98,7 +102,6 @@ files:
     region: [japan]
     group: ipl
     priority: 1
-    required: true
     mode: libretro
     size: 524288
     validation: [size]
@@ -113,7 +116,6 @@ files:
     region: [north-america, europe, asia-ntsc, asia-pal, brazil, latin-america]
     group: ipl
     priority: 2
-    required: true
     mode: libretro
     size: 524288
     validation: [size]
@@ -127,7 +129,6 @@ files:
     system: sega-saturn
     group: ipl
     priority: 3
-    required: true
     mode: libretro
     size: 524288
     validation: [size]

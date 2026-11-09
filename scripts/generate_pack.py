@@ -36,7 +36,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, os.path.dirname(__file__))
-from alternatives import settle_sets, slot_set_keys
+from alternatives import core_file_spares, settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
     installed_data_refs,
@@ -1295,8 +1295,13 @@ def generate_pack(
           db, bios_dir, zip_contents, data_registry, validation_index,
           validation_owners, offline, profiles=emu_profiles,
       )
+      spares = core_file_spares(
+          core_files,
+          lambda fe: bool(region_drops)
+          and extra_region_key(fe, declared_root(config)) in region_drops,
+      ) if required_only else set()
       for fe in core_files:
-          if required_only and fe.get("required") is False:
+          if required_only and (fe.get("required") is False or id(fe) in spares):
               continue
           dest = sanitize_pack_path(fe.get("destination", fe["name"]))
           if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
@@ -1434,8 +1439,13 @@ def generate_pack(
           if system_filter:
               unfolded = _extras_for_systems(unfolded, system_filter)
           prefix = _detect_extras_prefix(config, base_dest)
+          unfolded_spares = core_file_spares(
+              unfolded,
+              lambda fe: bool(region_drops)
+              and extra_region_key(fe, declared_root(config)) in region_drops,
+          ) if required_only else set()
           for fe in unfolded:
-              if required_only and fe.get("required") is False:
+              if required_only and (fe.get("required") is False or id(fe) in unfolded_spares):
                   continue
               if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
                   continue
@@ -1826,9 +1836,13 @@ def generate_emulator_pack(
             # there (raze's seven SW.GRP): the first one the core accepts
             # fills the slot, as verify --emulator credits it, and the slot
             # has one outcome however many alternatives it lists.
+            spares = emulator_required_spares(
+                emu_name, profile, files, standalone, region_drops, db,
+                validation_index, zip_contents, data_registry,
+            ) if required_only else set()
             slots: dict[str, list[dict]] = {}
             for fe in files:
-                if required_only and fe.get("required") is False:
+                if required_only and (fe.get("required") is False or id(fe) in spares):
                     continue
                 if fe.get("archive"):
                     continue
@@ -4398,8 +4412,13 @@ def _manifest_core_entries(
         db, bios_dir, zip_contents, data_registry, validation_index or {},
         owners, offline, profiles=profiles,
     )
+    spares = core_file_spares(
+        core_files,
+        lambda fe: bool(region_drops)
+        and extra_region_key(fe, declared_root(config)) in region_drops,
+    ) if required_only else set()
     for fe in core_files:
-        if required_only and fe.get("required") is False:
+        if required_only and (fe.get("required") is False or id(fe) in spares):
             continue
         dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
@@ -5770,6 +5789,7 @@ from packextras import (  # noqa: E402,F401
     extras_for_systems as _extras_for_systems,
     platform_region_groups,
     emulator_region_drops,
+    emulator_required_spares,
     _emulator_region_group,
     expand_agnostic_entries,
     undeclared_report,

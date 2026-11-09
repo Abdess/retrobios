@@ -124,27 +124,33 @@ def _systems_outside_profile(path: Path, document: object) -> list[str]:
 
 
 def _group_requirement_split(path: Path, document: object) -> list[str]:
-    """A group whose members disagree on required.
+    """A set named by a member and not declared, declared and never used,
+    or a member that writes a required of its own.
 
-    The members of a group are one need, so required states the set's and
-    reads the same on each. A true on the first name only wrote the search
-    order into required, and the other names read as optional files.
+    The requirement belongs to the set, in the profile's groups map, and a
+    member's is derived from it. A value on the member is a second source
+    that can contradict the first: a true on the first name only wrote the
+    search order into required, and the other names read as optional.
     """
     from alternatives import groups_of
 
     if not isinstance(document, dict):
         return []
-    seen: dict[str, set[bool]] = {}
-    for entry in document.get("files") or []:
+    label = path.relative_to(ROOT)
+    declared = set((document.get("groups") or {}).keys())
+    used: set[str] = set()
+    out: list[str] = []
+    for index, entry in enumerate(document.get("files") or []):
         if not isinstance(entry, dict):
             continue
-        for group in groups_of(entry):
-            seen.setdefault(group, set()).add(bool(entry.get("required", True)))
-    return [
-        f"{path.relative_to(ROOT)}: group {group} mixes required true and false"
-        for group, values in sorted(seen.items())
-        if len(values) > 1
-    ]
+        names = groups_of(entry)
+        used.update(names)
+        if names and "required" in entry:
+            out.append(f"{label}: files[{index}] ({entry.get('name')}) is in a group "
+                       "and writes required: the set's requirement is in groups")
+    out.extend(f"{label}: group {g} has no entry in groups" for g in sorted(used - declared))
+    out.extend(f"{label}: groups declares {g}, which no entry names" for g in sorted(declared - used))
+    return out
 
 
 def _checks_without_values(path: Path, document: object) -> list[str]:

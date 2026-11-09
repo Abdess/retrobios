@@ -6790,7 +6790,7 @@ class OneOfASearchList(unittest.TestCase):
         self.addCleanup(os.chdir, previous)
         self.db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {},
                                             "by_crc32": {}, "by_path_suffix": {}}}
-        for name in ("second.bin", "plain.bin"):
+        for name in ("second.bin", "third.bin", "plain.bin"):
             data = name.encode() * 8
             rel = f"bios/Test/Console/{name}"
             Path(rel).parent.mkdir(parents=True, exist_ok=True)
@@ -6804,11 +6804,12 @@ class OneOfASearchList(unittest.TestCase):
 
         def member(name: str, group: str, rank: int) -> dict:
             return {"name": name, "system": "console-a", "group": group,
-                    "priority": rank, "required": True}
+                    "priority": rank}
 
-        self.profile = {
+        raw = {
             "emulator": "Seq", "type": "libretro", "cores": ["seq"],
             "systems": ["console-a"],
+            "groups": {"first": {"required": True}, "none": {"required": True}},
             "files": [
                 member("first.bin", "first", 1),
                 member("second.bin", "first", 2),
@@ -6818,7 +6819,10 @@ class OneOfASearchList(unittest.TestCase):
                 {"name": "plain.bin", "system": "console-a", "required": True},
             ],
         }
-        Path("emulators/seq.yml").write_text(yaml.safe_dump(self.profile))
+        Path("emulators/seq.yml").write_text(yaml.safe_dump(raw))
+        self.raw = raw
+        # What every reader sees: the profile as load_emulator_profiles gives it.
+        self.profile = load_emulator_profiles("emulators")["seq"]
         self.config = {
             "platform": "Seqs", "verification_mode": "existence",
             "base_destination": "system", "cores": ["seq"],
@@ -6832,11 +6836,11 @@ class OneOfASearchList(unittest.TestCase):
         result = self._verify()
         reported = {d["name"]: d["status"] for d in result["details"]}
         self.assertEqual(reported["second.bin"], "ok")
+        self.assertEqual(reported["third.bin"], "ok")
         self.assertNotIn("first.bin", reported)
-        self.assertNotIn("third.bin", reported)
         self.assertEqual(
             sorted(d["name"] for d in result["set_members"]),
-            ["first.bin", "none_b.bin", "third.bin"],
+            ["first.bin", "none_b.bin"],
         )
 
     def test_a_set_none_holds_is_one_gap(self):
@@ -6848,7 +6852,7 @@ class OneOfASearchList(unittest.TestCase):
         self.assertEqual(result["severity_counts"][Severity.WARNING], 1)
         self.assertEqual(result["severity_counts"][Severity.INFO], 0)
         self.assertEqual(result["status_counts"].get("missing"), 1)
-        self.assertEqual(result["total_files"], 3)
+        self.assertEqual(result["total_files"], 4)
 
     def test_a_required_set_held_through_a_later_member_is_satisfied(self):
         """second.bin used to read required: false beside a required
@@ -6876,21 +6880,23 @@ class OneOfASearchList(unittest.TestCase):
             )
         with zipfile.ZipFile(zip_path) as zf:
             packed = sorted(n for n in zf.namelist() if n != "README.txt")
-        self.assertEqual(packed, ["plain.bin", "second.bin"])
+        self.assertEqual(packed, ["plain.bin", "second.bin", "third.bin"])
         self.assertEqual(result["severity_counts"]["ok"], len(packed))
         lines = out.getvalue().splitlines()
         self.assertEqual(
             [line.split(": ", 1)[1] for line in lines if line.strip().startswith("MISSING:")],
             ["none_a.bin"],
         )
-        self.assertIn("2 files packed, 1 missing", out.getvalue())
+        self.assertIn("3 files packed, 1 missing", out.getvalue())
 
     def test_core_complement_reports_one_gap_per_set(self):
         undeclared = find_undeclared_files(
             self.config, "emulators", self.db, {"seq": self.profile}
         )
         by_name = {u["name"]: u for u in undeclared}
-        self.assertEqual(sorted(by_name), ["none_a.bin", "plain.bin", "second.bin"])
+        self.assertEqual(
+            sorted(by_name), ["none_a.bin", "plain.bin", "second.bin", "third.bin"]
+        )
         self.assertTrue(by_name["second.bin"]["in_repo"])
         self.assertFalse(by_name["none_a.bin"]["in_repo"])
         self.assertEqual(by_name["none_a.bin"]["alternatives"], ["none_b.bin"])
@@ -6905,7 +6911,9 @@ class OneOfASearchList(unittest.TestCase):
         undeclared = find_undeclared_files(
             config, "emulators", self.db, {"seq": self.profile}
         )
-        self.assertEqual(sorted(u["name"] for u in undeclared), ["plain.bin", "second.bin"])
+        self.assertEqual(
+            sorted(u["name"] for u in undeclared), ["plain.bin", "second.bin", "third.bin"]
+        )
 
     def test_gap_report_counts_the_set_once(self):
         import cross_reference
@@ -6919,14 +6927,14 @@ class OneOfASearchList(unittest.TestCase):
         report: dict = {}
         cross_reference._cross_reference_profile("seq", self.profile, {}, report, index)
         gaps = {g["name"]: g for g in report["seq"]["gap_details"]}
-        self.assertEqual(sorted(gaps), ["none_a.bin", "plain.bin", "second.bin"])
+        self.assertEqual(sorted(gaps), ["none_a.bin", "plain.bin", "second.bin", "third.bin"])
         self.assertEqual(gaps["none_a.bin"]["alternatives"], ["none_b.bin"])
-        self.assertEqual(report["seq"]["set_aside"]["other_versions"], 3)
+        self.assertEqual(report["seq"]["set_aside"]["other_versions"], 2)
 
     def test_truth_names_no_member_required_on_its_own(self):
         from truth import _fold_into, _new_truth_entry
 
-        entry = _new_truth_entry(self.profile["files"][0], "seq", None)
+        entry = _new_truth_entry(dict(self.profile["files"][0]), "seq", None)
         self.assertNotIn("required", entry)
         self.assertEqual(entry["_required_by"], set())
         self.assertTrue(entry["one_of_required"])
@@ -6974,10 +6982,56 @@ class OneOfASearchList(unittest.TestCase):
         from validate_schemas import _group_requirement_split, ROOT
 
         path = ROOT / "emulators" / "seq.yml"
-        split = {"files": [{"name": "a", "group": "g", "required": True},
-                           {"name": "b", "group": "g", "required": False}]}
-        self.assertEqual(len(_group_requirement_split(path, split)), 1)
-        self.assertEqual(_group_requirement_split(path, {"files": self.profile["files"]}), [])
+        own_value = {"groups": {"g": {"required": True}},
+                     "files": [{"name": "a", "group": "g", "required": False},
+                               {"name": "b", "group": "g"}]}
+        self.assertEqual(len(_group_requirement_split(path, own_value)), 1)
+        undeclared_set = {"files": [{"name": "a", "group": "g"}]}
+        self.assertEqual(len(_group_requirement_split(path, undeclared_set)), 1)
+        unused = {"groups": {"g": {"required": True}}, "files": [{"name": "a"}]}
+        self.assertEqual(len(_group_requirement_split(path, unused)), 1)
+        self.assertEqual(_group_requirement_split(path, self.raw), [])
+
+    def test_a_shared_fallback_takes_its_requirement_from_its_sets(self):
+        """pom2 falls back on apple2e.rom for the //e it boots by default
+        and for the unenhanced //e it may be switched to. One value on the
+        file cannot say both: the sets carry it."""
+        from alternatives import derive_member_requirements
+
+        profile = {"groups": {"iie": {"required": True}, "iie-u": {"required": False}},
+                   "files": [{"name": "apple2e_unenh.rom", "group": "iie-u"},
+                             {"name": "apple2e.rom", "group": ["iie", "iie-u"]}]}
+        derive_member_requirements(profile)
+        self.assertEqual([f["required"] for f in profile["files"]], [False, True])
+
+    def test_required_only_keeps_one_held_member_per_required_set(self):
+        """second.bin and third.bin are both held: a --required-only pack
+        carries second.bin, the first the code reads among those held, and
+        verify reports the same single file."""
+        from generate_pack import generate_emulator_pack
+
+        result = verify_emulator(["seq"], "emulators", self.db,
+                                 platforms_dir="platforms", required_only=True)
+        held = sorted(d["name"] for d in result["details"] if d["status"] == "ok")
+        self.assertEqual(held, ["plain.bin", "second.bin"])
+        with contextlib.redirect_stdout(io.StringIO()):
+            zip_path = generate_emulator_pack(
+                ["seq"], "emulators", self.db, "bios", "out", offline=True,
+                platforms_dir="platforms", required_only=True,
+            )
+        with zipfile.ZipFile(zip_path) as zf:
+            packed = sorted(n for n in zf.namelist() if n != "README.txt")
+        self.assertEqual(packed, held)
+
+    def test_required_only_core_files_keep_one_member(self):
+        from alternatives import core_file_spares
+
+        undeclared = find_undeclared_files(
+            self.config, "emulators", self.db, {"seq": self.profile}
+        )
+        spares = core_file_spares(undeclared)
+        kept = sorted(u["name"] for u in undeclared if id(u) not in spares)
+        self.assertEqual(kept, ["none_a.bin", "plain.bin", "second.bin"])
 
 if __name__ == "__main__":
     unittest.main()

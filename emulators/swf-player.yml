@@ -104,7 +104,7 @@ files:
     system: flash
     required: true
     bundled: true
-    variant_group: "ruffle-core"
+    selection_slot: "ruffle-core"
     size: 90386
     md5: 5b1d64812875a1341ebd2a611e9324a1
     sha1: 0eabbed786f3b8e5656d123e9f4573f918ba63d8
@@ -119,7 +119,7 @@ files:
     system: flash
     required: true
     bundled: true
-    variant_group: "ruffle-core"
+    selection_slot: "ruffle-core"
     size: 13107470
     md5: 834f85979115fd740943a782887d0ab0
     sha1: d27da38e4d37727a44bf04d7690a09135fad7115
@@ -134,7 +134,7 @@ files:
     system: flash
     required: true
     bundled: true
-    variant_group: "ruffle-core"
+    selection_slot: "ruffle-core"
     size: 94169
     md5: 5aee868a91c066cc15f8b06999af690b
     sha1: 45815723a1bdf4229e289906bf4e52dbfd78da56
@@ -149,7 +149,7 @@ files:
     system: flash
     required: true
     bundled: true
-    variant_group: "ruffle-core"
+    selection_slot: "ruffle-core"
     size: 13323601
     md5: fe843bd0152c714f0449493b0193108f
     sha1: fea8e60e86cba7a63258626b13e6adb69ed110f9

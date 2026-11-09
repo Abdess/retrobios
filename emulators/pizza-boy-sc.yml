@@ -90,7 +90,7 @@ files:
     system: sega-megacd
     required: true
     agnostic: true
-    variant_group: "megacd-boot-rom"
+    selection_slot: "megacd-boot-rom"
     size: 131072
     validation: [size]
     description: "Sega CD boot ROM"
@@ -116,7 +116,7 @@ files:
     system: sega-megacd
     required: true
     agnostic: true
-    variant_group: "megacd-boot-rom"
+    selection_slot: "megacd-boot-rom"
     size: 131072
     validation: [size]
     description: "Mega CD boot ROM"
@@ -129,7 +129,7 @@ files:
     system: sega-megacd
     required: true
     agnostic: true
-    variant_group: "megacd-boot-rom"
+    selection_slot: "megacd-boot-rom"
     size: 131072
     validation: [size]
     description: "Mega CD boot ROM (Japan)"
@@ -142,7 +142,7 @@ files:
     system: sega-mastersystem
     required: false
     agnostic: true
-    variant_group: "mastersystem-boot-rom"
+    selection_slot: "mastersystem-boot-rom"
     description: "Master System boot ROM"
     note: >-
       Picked and stored like the Mega CD image and handed to the machine as a path.
@@ -157,7 +157,7 @@ files:
     system: sega-mastersystem
     required: false
     agnostic: true
-    variant_group: "mastersystem-boot-rom"
+    selection_slot: "mastersystem-boot-rom"
     description: "Master System boot ROM (Europe)"
     note: "Same slot and same absence of tests as the other Master System boot ROMs."
     source_ref: "Pizza Boy SC Basic 1.2.14 libsc.so frontend/android/src/lib.rs:590,
@@ -167,7 +167,7 @@ files:
     system: sega-mastersystem
     required: false
     agnostic: true
-    variant_group: "mastersystem-boot-rom"
+    selection_slot: "mastersystem-boot-rom"
     description: "Master System boot ROM (Japan)"
     note: "Same slot and same absence of tests as the other Master System boot ROMs."
     source_ref: "Pizza Boy SC Basic 1.2.14 libsc.so frontend/android/src/lib.rs:590,

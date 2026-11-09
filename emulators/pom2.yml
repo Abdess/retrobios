@@ -61,8 +61,10 @@ notes: |
     //c             apple2c-32Kv0.rom, apple2c-16K.rom, 3420033a.256
     //c Plus        apple2cp.rom, apple2c-plus.rom, apple2c-32Kv0.rom
   With no candidate the machine runs on a $D000-$FFFF stub and the Welcome
-  panel opens (src/MainWindow.cpp:357-364). A first run with no //e image
-  falls back to the ][+ chain (src/MainWindow.cpp:246-259).
+  panel opens (src/MainWindow.cpp:357-364). A first run boots the //e on
+  apple2e.rom, else the ][+ chain, else the //c chain
+  (src/MainWindow.cpp:246-296): one of these is the set the machine needs,
+  each model's chain is a set of its own.
   Memory::loadAppleIIRom (src/Memory.cpp:177-264) maps 12 KB at $D000,
   16 KB at $C000, skips the 4 KB pad of a 20 KB ][+ dump, and slices a
   32 KB dump by profile: //e images carry the firmware in the upper half,
@@ -190,13 +192,32 @@ notes: |
   browsed from disks_5.4/, disks_3.5/, hdv/, floppyemu/, bundled_disks/,
   cassettes/ and prodos_folder/ next to the executable.
 
+groups:
+  boot:
+    required: true
+  ii:
+    required: false
+  ii-plus:
+    required: false
+  iie-unenhanced:
+    required: false
+  iic:
+    required: false
+  iic-plus:
+    required: false
+  char:
+    required: false
+  char-iie-unenhanced:
+    required: false
+  videoterm:
+    required: false
+
 files:
   - name: "apple2o.rom"
     path: "roms/apple2o.rom"
+    group: {ii: 1}
     description: "Apple ][ Original monitor and Integer BASIC, $D000-$FFFF"
-    required: false
     bundled: false
-    priority: 1
     size: 12288
     sha256: "68d9db6bb4c305d40c3fa89fa0f2d7b7f71516a9431e3138859f23bc5bddb2d1"
     sha1: "78008be557f643e956a106121bcc182c0fb9ea6d"
@@ -205,10 +226,9 @@ files:
     note: "First candidate of the Apple ][ Original profile. apple2.rom is probed next."
   - name: "apple2.rom"
     path: "roms/apple2.rom"
+    group: {ii: 2, ii-plus: 2, boot: 3}
     description: "Apple ][ generic 12 KB fallback, Autostart monitor and Applesoft"
-    required: false
     bundled: false
-    priority: 2
     size: 12288
     sha256: "fc3e9d41e9428534a883df5aa10eb55b73ea53d2fcbb3ee4f39bed1b07a82905"
     sha1: "33a24f5489ba9195b44be77d9afb2252594cb5c7"
@@ -217,10 +237,9 @@ files:
     note: "Probed after the profile image for the ][ and ][+ profiles. When it resolves in place of that image the loader logs that the ROM identity may not match the machine."
   - name: "apple2p.rom"
     path: "roms/apple2p.rom"
+    group: {ii-plus: 1, boot: 2}
     description: "Apple ][+ Autostart monitor and Applesoft, 4 KB pad then $C000-$FFFF"
-    required: false
     bundled: false
-    priority: 1
     size: [12288, 20480]
     sha256: "92c4bef609920842ea472d21b661a0d35dbda6cd90963b8b734a205e22d84108"
     sha1: "29a53f3bb158b160433369e8e4a1d7cd5bf68ac6"
@@ -229,10 +248,9 @@ files:
     note: "First candidate of the ][+ profile and of the first-run fallback (src/MainWindow.cpp:255-259). The loader drops the leading 4 KB of the 20 KB dump. The fetch gate names that dump, but a 12 KB six-chip image already on disk is kept as present without a digest check."
   - name: "apple2e.rom"
     path: "roms/apple2e.rom"
+    group: {boot: 1, iie-unenhanced: 3}
     description: "Apple //e Enhanced firmware, 32 KB dump with the 16 KB firmware in the upper half"
-    required: true
     bundled: false
-    priority: 1
     size: 32768
     sha256: "c17bc38c75ba96c33a30c688a1efd60144811073423533fe7f8453cdd9457aab"
     sha1: "d756eba578a6c5a4807510dfee30ee585c63755e"
@@ -241,10 +259,9 @@ files:
     note: "Sole candidate of the //e Enhanced profiles, NTSC and PAL, PAL being the default machine. Also the last fallback of the //e Unenhanced chain."
   - name: "apple2e_unenh.rom"
     path: "roms/apple2e_unenh.rom"
+    group: {iie-unenhanced: 1}
     description: "Apple //e Unenhanced firmware, 4 KB internal $Cx00 ROM then $D000-$FFFF"
-    required: false
     bundled: false
-    priority: 1
     aliases: ["342-0135-b.64.rom"]
     size: 16384
     sha256: "1fb812584c6633fa16b77b20915986ed1178d1e6fc07a647f7ee8d4e6ab9d40b"
@@ -254,10 +271,9 @@ files:
     note: "First candidate of the //e Unenhanced profiles. 342-0135-b.64.rom is probed second, apple2e.rom third. The fetcher assembles it from the two 8 KB chips of the MAME apple2e set, 342-0135-b.64 then 342-0134-a.64."
   - name: "apple2c-32Kv0.rom"
     path: "roms/apple2c-32Kv0.rom"
+    group: {iic: 1, iic-plus: 3, boot: 4}
     description: "Apple //c two-bank firmware, bank 0 in the lower 16 KB"
-    required: false
     bundled: false
-    priority: 1
     size: 32768
     crc32: "323952d1"
     sha256: "d65bbf97058b9cdce8eaebf74124048e3b4e42dca1bd42be316747bbc27dc124"
@@ -267,10 +283,9 @@ files:
     note: "First candidate of the //c and //c PAL profiles, third of the //c Plus chain. Bank 0 is mapped at reset, the $C028 ROMBANK switch selects the other. Identical to 3420033a.256 with its first 256 bytes zeroed."
   - name: "apple2c-16K.rom"
     path: "roms/apple2c-16K.rom"
+    group: {iic: 2, boot: 5}
     description: "Apple //c ROM 255, 16 KB, MAME apple2c a2c.128"
-    required: false
     bundled: false
-    priority: 2
     size: 16384
     crc32: "f0edaa1b"
     sha256: "3ca1c8a27bf111aa0f4dc9372c5e6404457adb9a458ce32ae4b03a7e989e0c76"
@@ -280,10 +295,9 @@ files:
     note: "Second candidate of the //c chain, loaded at $C000."
   - name: "3420033a.256"
     path: "roms/3420033a.256"
+    group: {iic: 3, boot: 6}
     description: "Apple //c ROM 0, UniDisk 3.5 firmware, MAME apple2c0 342-0033-A"
-    required: false
     bundled: false
-    priority: 3
     size: 32768
     crc32: "c8b979b3"
     sha256: "678d5c9d374664d2ee94ba9c9564d26a917b31116b07c46df30a3e82c640885b"
@@ -293,10 +307,9 @@ files:
     note: "Third candidate of the //c chain."
   - name: "apple2cp.rom"
     path: "roms/apple2cp.rom"
+    group: {iic-plus: 1}
     description: "Apple //c Plus two-bank firmware, MAME apple2cp 341-0625-a.256"
-    required: false
     bundled: false
-    priority: 1
     aliases: ["apple2c-plus.rom"]
     size: 32768
     crc32: "0b996420"
@@ -307,10 +320,9 @@ files:
     note: "First candidate of the //c Plus profile. apple2c-plus.rom is probed second and apple2c-32Kv0.rom third."
   - name: "apple2_char.rom"
     path: "roms/apple2_char.rom"
+    group: {char: 2, char-iie-unenhanced: 3}
     description: "Apple ][ and ][+ character generator, 2 KB uppercase set"
-    required: false
     bundled: false
-    priority: 1
     size: 2048
     sha256: "08f5d22230481019844492dde0a29a018cb193712a9e4a43770a3870608f28de"
     sha1: "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659"
@@ -319,10 +331,9 @@ files:
     note: "Sole candidate of the ][ and ][+ profiles and the last fallback of every //e-class chain."
   - name: "apple2e_char.rom"
     path: "roms/apple2e_char.rom"
+    group: {char: 1}
     description: "Apple //e Enhanced character generator 342-0265-A, 4 KB with MouseText"
-    required: false
     bundled: false
-    priority: 1
     aliases: ["apple2e_char_us.rom"]
     size: 4096
     sha256: "52c3b87900ac939f6525402cab1ccfd8f8259290fc6df54da48fb4c98ae3ed0f"
@@ -332,10 +343,9 @@ files:
     note: "First candidate of the //e Enhanced, //c and //c Plus profiles. The same dump answers to apple2e_char_us.rom in the locale picker, and the fetcher writes both names."
   - name: "apple2e_char_us_unenh.rom"
     path: "roms/apple2e_char_us_unenh.rom"
+    group: {char-iie-unenhanced: 1}
     description: "Apple //e Unenhanced character generator 342-0133-A, 4 KB"
-    required: false
     bundled: false
-    priority: 1
     aliases: ["apple2e_char_2k.rom", "342-0133-a.chr.rom"]
     size: 4096
     sha256: "ed5bdd4afa509134e85f1d020685af7ff50e279226eb869a17825b471cc1634c"
@@ -629,9 +639,8 @@ files:
     note: "The Apple Parallel Interface leaves its slot empty without it. The fetcher extracts it from the MAME a2pic set as 341-0057.7b."
   - name: "videx_videoterm_v24_60hz.bin"
     path: "roms/videx_videoterm_v24_60hz.bin"
+    group: {videoterm: 1}
     description: "Videx Videoterm firmware v2.4 with the 60 Hz CRTC table, 2 KB, MAME a2videoterm 6.ic6.bin"
-    required: false
-    priority: 1
     size: 2048
     crc32: "5776fa24"
     sha256: "420da3867e489824f5fc0377c287c48a125296f19e1306df764e8f63bd23b00a"
@@ -641,9 +650,8 @@ files:
     note: "First firmware candidate of the Videoterm card. The 50 Hz dump is probed second. With neither the slot stays empty. The fetcher extracts it from the MAME a2vidtrm set."
   - name: "videx_videoterm_v24_50hz.bin"
     path: "roms/videx_videoterm_v24_50hz.bin"
+    group: {videoterm: 2}
     description: "Videx Videoterm firmware v2.4 with the 50 Hz CRTC table, 1 KB, MAME a2videoterm videx videoterm rom 2.4.bin"
-    required: false
-    priority: 2
     size: 1024
     crc32: "bbe3bb28"
     sha256: "616f4d9f81a7a4ea0fa918842a05dfb3b503927776d2bfe97e6950b5431b562e"

@@ -80,13 +80,16 @@ notes: |
   Both build the pi4-update tip and patch the home directory to
   /storage/.config/yabasanshiro.
 
+groups:
+  saturn-bios:
+    required: true
+
 files:
   - name: "saturn_bios.bin"
     system: sega-saturn
     mode: libretro
     group: saturn-bios
     priority: 1
-    required: true
     note: "Primary Saturn BIOS. Any region accepted."
     source_ref: "yabause/src/libretro/libretro.c:1048"
 
@@ -95,7 +98,6 @@ files:
     mode: libretro
     group: saturn-bios
     priority: 2
-    required: true
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
     source_ref: "yabause/src/libretro/libretro.c:1052"
 
@@ -104,6 +106,5 @@ files:
     mode: libretro
     group: saturn-bios
     priority: 3
-    required: true
     note: "Saturn BIOS v1.003 (NA/EU). Last fallback."
     source_ref: "yabause/src/libretro/libretro.c:1056"

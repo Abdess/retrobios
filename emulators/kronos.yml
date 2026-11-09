@@ -48,6 +48,10 @@ notes: |
 
 archive_prefix: kronos
 
+groups:
+  saturn-bios:
+    required: true
+
 files:
   # -----------------------------------------------------------
   # Saturn BIOS - primary (any region)
@@ -57,7 +61,6 @@ files:
     system: sega-saturn
     group: saturn-bios
     priority: 1
-    required: true
     size: 524288
     validation: [size]
     note: "Primary Saturn BIOS. Any region accepted. Searched in kronos/ subdir first."
@@ -67,7 +70,6 @@ files:
     system: sega-saturn
     group: saturn-bios
     priority: 2
-    required: true
     size: 524288
     validation: [size]
     note: "The same name in the system directory, read when kronos/ holds none."
@@ -80,7 +82,6 @@ files:
     system: sega-saturn
     group: saturn-bios
     priority: 3
-    required: true
     size: 524288
     validation: [size]
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
@@ -93,7 +94,6 @@ files:
     system: sega-saturn
     group: saturn-bios
     priority: 4
-    required: true
     size: 524288
     validation: [size]
     note: "Saturn BIOS (NA/EU). Last fallback for Saturn mode."
