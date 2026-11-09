@@ -459,7 +459,7 @@ systems:
         frames: 3600
         frame_hash_every: 10
 
-  snk-neogeo-pocket:
+  snk-ngp:
     romfetch: ngp
     content:
       - name: "King of Fighters R-1 - Pocket Fighting Series (Japan, Europe) (En,Ja)"

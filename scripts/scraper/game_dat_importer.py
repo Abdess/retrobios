@@ -92,8 +92,8 @@ NOINTRO_DATS: dict[str, tuple[str, int]] = {
     "Sega - 32X": ("sega-32x", 202),
     "Bandai - WonderSwan": ("wonderswan", 244),
     "Bandai - WonderSwan Color": ("wonderswan-color", 229),
-    "SNK - NeoGeo Pocket": ("snk-neogeo-pocket", 12),
-    "SNK - NeoGeo Pocket Color": ("neo-geo-pocket-color", 121),
+    "SNK - NeoGeo Pocket": ("snk-ngp", 12),
+    "SNK - NeoGeo Pocket Color": ("snk-ngpc", 121),
 }
 
 # redump.info datfile code -> (DAT header name, repository system id, floor).
