@@ -880,8 +880,9 @@ computer, one subfolder per system. A run that asks nothing (`--yes`,
 the card, and says so. `--all-files` installs the whole list instead, as does
 a run narrowed by name (`--system`, `--core`, `--region`, `--emulator`).
 
-The rule is that every game must start. Per system, the run keeps what the
-system's default core reads. One region is kept only where the game's own
+Per system, the run keeps what the system's default core reads for the games
+found. Another core can need more files: **Install everything** covers every
+core. One region is kept only where the game's own
 content proves it: a cartridge's crc32 found in No-Intro, a disc serial found
 in Redump, or a header the core reads. A file name such as `(Europe)` proves
 nothing. Where a core forces a region by an option, falls back to another
@@ -1030,7 +1031,8 @@ what the options name, everything by default.
 when every one does, and 1 when the check itself failed. What it lists is under
 [Why a file is refused](#why-a-file-is-refused). An install leaves a file with
 the expected hash untouched and replaces any other, the old one kept beside
-the BIOS folder. Files the list does not name are never read, moved or deleted.
+the BIOS folder. Files the list does not name are never moved or deleted. A file whose size
+matches a listed one is read, to find a misplaced copy.
 
 ## Platform detection
 
@@ -1347,8 +1349,9 @@ exits 1.
 
 Some files are read by a standalone emulator from its own data directory
 rather than from the platform's BIOS tree. `--standalone-copies` copies them
-there after the install, and only then: without the flag nothing is written
-outside the selected tree, apart from the files kept in `retrobios-backup`.
+there after the install, and only then: without the flag a run writes only to the BIOS
+folder, the save folders its list names, `retrobios-backup` and the
+installer's cache folder.
 
 The manifest carries the list on the six platforms that declare one
 (Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK). It has two

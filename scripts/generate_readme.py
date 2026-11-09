@@ -581,6 +581,15 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         load_emulator_profiles("emulators", skip_aliases=False)
     )
     emulator_count = len(profiles)
+    profile_files = [f for prof in profiles.values() for f in prof.get("files") or []
+                     if isinstance(f, dict)]
+    # A citation counts when it names a line, `file.c:120`: a bare file name
+    # or a binary offset does not point at the code that reads the file.
+    cited_share = (round(100 * sum(1 for f in profile_files
+                                   if re.search(r"\.\w+:\d", str(f.get("source_ref") or "")))
+                         / len(profile_files)) if profile_files else 0)
+    closed_count = sum(1 for prof in profiles.values()
+                       if str(prof.get("upstream") or "").startswith("closed"))
     comp = compute_composition(db)
     missing_total = len(set().union(*(c["missing_names"] for c in coverages.values())))
     # The entries marked `unsourceable:` are never served by name, so a
@@ -627,7 +636,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "## Install in one line",
         "",
         "**Windows**: open the Start menu, type **PowerShell** and open it. Paste this line"
-        " (right-click in the window) and press Enter.",
+        " (Ctrl+V or right-click in the window) and press Enter.",
         "",
         "```powershell",
         install_command("powershell"),
@@ -652,8 +661,8 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "The installer finds the setup and its BIOS folder, installs the files it needs (only"
         " what the games need when it finds them on the card) and checks each one. Its screen"
         " installs everything, or fewer under **" + _installer_words().TUI_SYSTEMS_ROW + "**."
-        " Arrow keys and Enter drive it, or a controller on a handheld. It sends nothing back"
-        f" ([what is counted]({SITE_URL}wiki/privacy/)). Options go after the line in the"
+        " Arrow keys and Enter drive it, or a controller on a handheld. It sends no report of"
+        f" its own ([what is counted]({SITE_URL}wiki/privacy/)). Options go after the line in the"
         f" form the [installer page]({SITE_URL}wiki/installer/#passing-options) gives.",
         "",
         f"First time? [The first install, step by step]({SITE_URL}wiki/first-install/)."
@@ -697,15 +706,16 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         f"- Every console and the files it needs: [systems]({SITE_URL}systems/)",
         f"- Asking an AI assistant: it reads the site best from [llms.txt]({SITE_URL}llms.txt)",
         "",
-        "## What makes it different",
+        "## How it is built",
         "",
-        f"- **{emulator_count} emulators profiled from their source code**: each file an emulator"
-        " loads, its hash and the line of code that reads it",
+        f"- **{emulator_count} emulators profiled**, {emulator_count - closed_count} from their"
+        f" source code and {closed_count} closed-source builds from their binaries:"
+        f" {cited_share}% of the files they load cite the file and line that reads them",
         f"- **{len(coverages)} setups**, each checked its own way: MD5 for Batocera and Recalbox,"
         " the file name for RetroArch, as their own code does",
         f"- **{len(system_ids)} systems**, {total_files:,} files in the collection,"
         f" [what is still missing]({SITE_URL}gaps/) named file by file",
-        f"- Public data: [JSON, CSV and SQLite]({SITE_URL}data/), MIT licensed",
+        f"- Public data: [JSON, CSV and SQLite]({SITE_URL}data/), the metadata under MIT",
         "",
         "<details>",
         "<summary><strong>For developers: build a pack</strong></summary>",
