@@ -212,7 +212,7 @@ files:
       whenever the device is selected. Every other phone model needs its own
       dump, an EKA2 image with its RPKG, or a VPL with its .fpsx images.
     source_ref:
-      standalone: "src/emu/system/src/epoc.cpp:1486-1494, src/emu/system/src/epoc.cpp:824-848, src/emu/system/include/system/consts.h:23-25, src/emu/system/src/installation/rpkg.cpp:44-68, src/emu/system/src/installation/rpkg.cpp:196-199, src/emu/qt/src/device_install_dialog.cpp:162-172"
+      standalone: "src/emu/system/src/epoc.cpp:824-848, src/emu/system/include/system/consts.h:23-25, src/emu/system/src/installation/rpkg.cpp:44-68, src/emu/system/src/installation/rpkg.cpp:196-199, src/emu/qt/src/device_install_dialog.cpp:162-172"
       libretro: "src/emu/libretro/src/main.cpp:92-110, src/emu/libretro/src/content.cpp:129-195, src/emu/libretro/src/main.cpp:173-181, src/emu/system/src/installation/rpkg.cpp:208-255"
 
   - name: audiooutputrouting.dll.map
