@@ -276,6 +276,7 @@ files:
   # -- Battery-backed images, read at startup, written on exit when changed --
 
   - name: SRAM.DAT
+    unsourceable: "written by the emulator on exit, no canonical file"
     system: sharp-x68000
     required: false
     size: [16384, 65536]

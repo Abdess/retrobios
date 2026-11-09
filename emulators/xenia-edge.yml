@@ -277,6 +277,7 @@ files:
 
   - name: "system/flash/"
     type: directory
+    unsourceable: "written by the emulator when it installs SystemUpdate_17559_USB.zip, no canonical file"
     path: "Xenia-Edge/system/flash/"
     standalone_path: "system/flash/"
     system: microsoft-xbox-360
@@ -290,6 +291,7 @@ files:
 
   - name: "system/sysext/"
     type: directory
+    unsourceable: "written by the emulator when it installs SystemUpdate_17559_USB.zip, no canonical file"
     path: "Xenia-Edge/system/sysext/"
     standalone_path: "system/sysext/"
     system: microsoft-xbox-360
