@@ -5,14 +5,6 @@ source: "https://github.com/dabonetn/linapple-pie"
 upstream: "https://sourceforge.net/projects/linapple/"
 profiled_date: "2026-11-09"
 source_commit: "c22ba0c3ad6c317b4f13486b7ff06a340c831122"
-pin_frozen: "RetroPie, the only platform that ships it, builds the master branch (RetroPie scriptmodules/emulators/linapple.sh:16), whose tip has been this commit since 2018-10-22."
-pin_build:
-  - platform: retropie
-    repo: "https://github.com/RetroPie/RetroPie-Setup"
-    revision: "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
-    path: "scriptmodules/emulators/linapple.sh"
-    variable: rp_module_repo
-    value: "git https://github.com/dabonetn/linapple-pie.git master"
 core_version: "2b.1"
 version_basis:
   kind: file
@@ -60,6 +52,9 @@ files:
   - name: "linapple.conf"
     required: false
     bundled: true
+    size: 11271
+    md5: "37111109ab7ae0a9ce408f8ef6e6307d"
+    sha1: "65369dbb1d98332269b50efcc6cda97c3a1b735c"
     description: "Configuration file"
     source_ref: "src/Applewin.cpp:816-828, src/Registry.cpp:179-233"
     note: >
