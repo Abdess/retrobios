@@ -2810,8 +2810,12 @@ def _executed(standalone_cores: Iterable[str]) -> list:
 # Why a standalone entry has no destination on a platform that relocates its
 # layout: the manifest's omission reason, named as the installer words it.
 OUTSIDE_BIOS_FOLDER = "outside_bios_folder"
-# The entry root of a file read below the platform's roms directory.
+# The entry root of a file read below the platform's roms directory, and of
+# one read in an emulator's folder outside the BIOS tree that the registry
+# describes. Each is located by the registry entry <root>_directory.
 ROMS_ROOT = "roms"
+EMULATORS_ROOT = "emulators"
+OUTER_ROOTS = (ROMS_ROOT, EMULATORS_ROOT)
 
 
 def standalone_layout_path(entry: dict, profile: dict) -> str | None:
@@ -2905,8 +2909,9 @@ def platform_layouts(
             moved = {**f, "standalone_path": path,
                      "layout_path": standalone_layout_path(f, profile)}
             # A file the launcher runs from the roms directory (ROCKNIX's
-            # roms/pico-8) is relative to it, and says so.
-            files.append({**moved, "root": ROMS_ROOT} if tree else moved)
+            # roms/pico-8) or an emulator folder (RetroBat's emulators/pico8)
+            # is relative to it, and says so.
+            files.append({**moved, "root": tree} if tree else moved)
         standalone = {**profile, "files": files}
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
             if c.startswith(DUAL_MODE_PREFIX)}
@@ -3032,7 +3037,12 @@ def resolve_platform_cores(
     if cores_config == "all_libretro":
         result = every_libretro()
     elif isinstance(cores_config, list):
-        core_set = {str(c) for c in cores_config}
+        # An emulator the platform launches standalone runs there even when
+        # its own list names only the cores: Batocera's es_systems.yml files
+        # lexaloffle and gsplus as standalone emulators and nowhere else.
+        core_set = {str(c) for c in cores_config} | {
+            str(c) for c in config.get("standalone_cores") or []
+        }
         index = upstream_profile_index(profiles)
         platform = str(config.get("_key") or "")
 

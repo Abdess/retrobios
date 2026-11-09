@@ -46,6 +46,7 @@ from alternatives import (
     slot_set_keys,
 )
 from common import (
+    OUTER_ROOTS,
     _foreign_tree,
     _owner_tokens,
     platform_arg,
@@ -607,7 +608,7 @@ def find_undeclared_files(
                     # of its own: two cores reading hiscore.dat there read
                     # two files.
                     ("save", core_save_folder(profile)) if save_root
-                    else ("roms",) if f.get("root") == "roms"
+                    else (f["root"],) if f.get("root") in OUTER_ROOTS
                     # In the emulator's own folder: no other core reads it.
                     else ("emulator", emu_name) if f.get("unplaced") else None,
                 )
@@ -620,9 +621,9 @@ def find_undeclared_files(
                 # Nor does it answer for one read below the roms directory.
                 verdict = _candidate_verdict(
                     f, fname, is_standalone, include_all,
-                    {} if save_root or f.get("root") == "roms" else declared_names,
+                    {} if save_root or f.get("root") in OUTER_ROOTS else declared_names,
                     dest, folded_slots,
-                    None if save_root or f.get("root") == "roms" else declared_contents,
+                    None if save_root or f.get("root") in OUTER_ROOTS else declared_contents,
                 )
                 if verdict == "settled":
                     seen_files.add(seen_key)
@@ -795,9 +796,10 @@ def find_undeclared_files(
                     entry["layout_path"] = f["layout_path"]
                 if f.get("unplaced"):
                     entry["unplaced"] = f["unplaced"]
-                elif f.get("root") == "roms":
-                    # Read below the roms directory (ROCKNIX's roms/pico-8).
-                    entry["root"] = "roms"
+                elif f.get("root") in OUTER_ROOTS:
+                    # Read below the roms directory (ROCKNIX's roms/pico-8)
+                    # or in an emulator folder (RetroBat's emulators/pico8).
+                    entry["root"] = f["root"]
                 elif launcher_layer and not save_root:
                     launcher_candidates.append((emu_name, is_standalone, f, entry))
                 keys = set_keys((emu_name, is_standalone), f)
@@ -975,6 +977,7 @@ def find_exclusion_notes(
 _UNPLACED_REASONS = {
     "outside_bios_folder": "read in a folder the platform keeps outside the BIOS tree",
     "no_roms_directory": "read below a roms folder the platform's registry does not name",
+    "no_emulators_directory": "read in an emulator folder the platform's registry does not describe",
     "no_platform_slug": "no platform slug for its system",
     "below_platform_folder": "below the folder the platform lists",
     "no_save_directory": "read below a save directory the platform keeps in no fixed place",
@@ -998,11 +1001,12 @@ def _mark_unplaced(config: dict, undeclared: list[dict], profiles: dict) -> None
         reason = unplaced.get(
             (u.get("emulator", ""), u.get("name", ""), u.get("path") or "")
         )
-        if not reason and u.get("root") == "roms":
+        if not reason and u.get("root") in OUTER_ROOTS:
             # The pack is extracted into the BIOS folder: the installer
-            # writes this file into the roms folder, the pack cannot.
+            # writes this file into the roms or emulator folder, the pack
+            # cannot.
             u["in_pack"] = False
-            u["omitted"] = "read below the roms folder, which only the installer reaches"
+            u["omitted"] = f"read below the {u['root']} folder, which only the installer reaches"
             continue
         if reason:
             u["in_pack"] = False

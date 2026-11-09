@@ -179,7 +179,7 @@
           "dest": {
             "type": "string",
             "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
-            "description": "Where the file would go, below base_destination, below the save directory when root is save, below the roms folder when root is roms, or in the emulator's own folder when root is emulator."
+            "description": "Where the file would go, below base_destination, below the save directory when root is save, below the roms folder when root is roms, in an emulator folder when root is emulators (its key first), or in the emulator's own folder when root is emulator."
           },
           "name": {
             "type": "string",
@@ -206,7 +206,8 @@
               "no_core_folder",
               "no_save_system",
               "outside_bios_folder",
-              "no_roms_directory"
+              "no_roms_directory",
+              "no_emulators_directory"
             ],
             "description": "Why the file is left out, as a code. enumDescriptions gives the meaning of each code, in the order of enum.",
             "enumDescriptions": [
@@ -220,7 +221,8 @@
               "The frontend sorts saves by core and the core's profile does not name its folder (core_folder).",
               "The launcher gives each system its own save folder and no system of the platform runs the core.",
               "The platform runs the emulator from a folder outside the BIOS tree and links none of the BIOS tree where the emulator reads this file (root: emulator).",
-              "The platform's launcher runs the file from its roms folder (root: roms) and the run cannot tell where that folder is: the BIOS folder is not the one the platform keeps in it."
+              "The platform's launcher runs the file from its roms folder (root: roms) and the run cannot tell where that folder is: the BIOS folder is not the one the platform keeps in it.",
+              "The platform's launcher runs the file from one of its emulator folders (root: emulators) and the run cannot place it there: the BIOS folder is not the one beside the platform's launcher config, or that config sets the folder."
             ]
           },
           "category": {
@@ -365,11 +367,12 @@
             }
           },
           "root": {
-            "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. emulator: dest is the path the emulator reads in its own folder, which the platform keeps outside the BIOS tree (reason outside_bios_folder). roms: dest is relative to the platform's roms folder (roms_directory). Absent for a file of the BIOS tree.",
+            "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. emulator: dest is the path the emulator reads in its own folder, which the platform keeps outside the BIOS tree (reason outside_bios_folder). roms: dest is relative to the platform's roms folder (roms_directory). emulators: dest is the emulator folder's key then the path in it (emulators_directory). Absent for a file of the BIOS tree.",
             "enum": [
               "save",
               "emulator",
-              "roms"
+              "roms",
+              "emulators"
             ]
           },
           "core_folder": {
@@ -538,6 +541,40 @@
           "pattern": "^[^/\\\\]+$"
         }
       }
+    },
+    "emulators_directory": {
+      "description": "Where the platform keeps its emulator folders, present when an entry carries root: emulators. Paths are relative to the folder holding the BIOS folder, which is named bios_folder. searched are the places the launcher tries for a key, in order, default the one the installer creates when none exists, and config the launcher's key=value file: a key it sets moves the folder, and its files are left out (no_emulators_directory).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bios_folder",
+        "searched",
+        "default",
+        "config"
+      ],
+      "properties": {
+        "bios_folder": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^/\\\\]+$"
+        },
+        "searched": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).*\\{key\\}.*$"
+          }
+        },
+        "default": {
+          "type": "string",
+          "pattern": "\\{key\\}"
+        },
+        "config": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        }
+      }
     }
   },
   "$defs": {
@@ -556,7 +593,7 @@
         "dest": {
           "type": "string",
           "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
-          "description": "Path below base_destination, below the save directory when root is save, or below the roms folder when root is roms."
+          "description": "Path below base_destination, below the save directory when root is save, below the roms folder when root is roms, or in an emulator folder when root is emulators (its key first)."
         },
         "sha1": {
           "type": "string",
@@ -1039,10 +1076,11 @@
           }
         },
         "root": {
-          "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. roms: dest is relative to the platform's roms folder, which roms_directory locates (a file its launcher runs from there, ROCKNIX's roms/pico-8). Absent for a file of the BIOS tree.",
+          "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. roms: dest is relative to the platform's roms folder, which roms_directory locates (a file its launcher runs from there, ROCKNIX's roms/pico-8). emulators: dest is the key of an emulator folder of the platform, then the path in it, located by emulators_directory (RetroBat's emulators/pico8). Absent for a file of the BIOS tree.",
           "enum": [
             "save",
-            "roms"
+            "roms",
+            "emulators"
           ]
         },
         "core_folder": {

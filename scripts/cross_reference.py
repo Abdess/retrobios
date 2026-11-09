@@ -25,6 +25,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from alternatives import set_keys, set_requirements, settle_sets
 from common import (
+    OUTER_ROOTS,
     platform_arg,
     ProfileSelectionError,
     _foreign_tree,
@@ -875,7 +876,7 @@ def _cross_reference_profile(
         # archive.
         # A platform declares files of its BIOS tree: none answers for one
         # the core reads below the save directory.
-        in_platform = not save_root and f.get("root") != "roms" and declaration_settles(
+        in_platform = not save_root and f.get("root") not in OUTER_ROOTS and declaration_settles(
             f, fname, platform_names, effective_path, index.get("folded_slots", frozenset()),
             index.get("declared_contents"),
         )
@@ -973,8 +974,8 @@ def _cross_reference_profile(
             entry["root"] = "save"
         elif f.get("unplaced"):
             entry["unplaced"] = f["unplaced"]
-        elif f.get("root") == "roms":
-            entry["root"] = "roms"
+        elif f.get("root") in OUTER_ROOTS:
+            entry["root"] = f["root"]
         elif index.get("launcher_candidates") is not None:
             # What verify hands the launcher layer for the same entry.
             probe = {
