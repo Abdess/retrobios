@@ -55,6 +55,7 @@ from launchers import (
     catalogued_model_files,
     declared_destinations,
     held_record,
+    name_settings,
     set_by,
     setting_readers,
     suffixed_stem,
@@ -1199,27 +1200,30 @@ def launcher_reads_not_held(
             base = str(config.get("base_destination") or "bios")
             if record.get("kind") == "copies" and not launcher_directories(record, base):
                 continue
-            passes_to = str(record.get("passes_to") or "")
-            setting_entries = [
-                entry
-                for key in readers
-                for entry in profiles[key].get("files") or []
-                if passes_to and set_by(entry, passes_to)
-            ]
-            if any(holder._entry_held(entry) for entry in setting_entries):
-                continue
-            # A placeholder read from the setting takes the held dump the
-            # catalogues name after the model the launcher's name spells.
-            by_model = {
-                name
-                for name in names
-                for entry in setting_entries
-                if "<" in str(entry.get("name", ""))
-                and any(
-                    name_match_size_ok(entry, record_.get("size"))
-                    for record_ in catalogued_model_files(name, db)
+            settings = name_settings(record, names)
+
+            def by_setting(name: str) -> bool:
+                """Whether the setting the name is written to reads a held file.
+
+                A placeholder read from the setting takes the held dump the
+                catalogues name after the model the launcher's name spells.
+                """
+                entries = [
+                    entry
+                    for key in readers
+                    for entry in profiles[key].get("files") or []
+                    if settings[name] and set_by(entry, settings[name])
+                ]
+                return any(holder._entry_held(entry) for entry in entries) or any(
+                    "<" in str(entry.get("name", ""))
+                    and any(
+                        name_match_size_ok(entry, found.get("size"))
+                        for found in catalogued_model_files(name, db)
+                    )
+                    for entry in entries
                 )
-            }
+
+            by_model = {name for name in names if by_setting(name)}
             if record.get("kind") == "names_searched" and any(
                 (found := holder.held(name)) and (found[1] or folds) for name in names
             ):

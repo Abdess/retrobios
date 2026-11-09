@@ -289,6 +289,18 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
         self.assertIsNone(suffixed_stem("scph1001.bin"))
 
+    def test_each_name_of_a_config_takes_its_own_key(self) -> None:
+        """AmberELEC's atari800.cfg names eight ROMs under eight keys, and
+        one record describes them in order: 5200a.rom is ROM_5200_A's file,
+        not every key's."""
+        config = {"base_destination": "bios", "launchers": [{
+            "emulator": "e", "build": "libretro", "kind": "fixed_name",
+            "names": ["a.rom", "b.rom"], "search_dir": "/storage/roms/bios",
+            "passes_to": "e.cfg ROM_A, ROM_B", "source_ref": "e.cfg:1",
+        }]}
+        places = {p.paths[0]: p.passes_to for p in launcher_places(config)}
+        self.assertEqual(places, {"a.rom": "e.cfg ROM_A", "b.rom": "e.cfg ROM_B"})
+
     def test_a_core_option_names_the_dump_of_a_model(self) -> None:
         """RetroDECK sets LRPS2's pcsx2_bios to scph10000.bin. LRPS2's entry
         is a placeholder for every BIOS its scan finds, and the catalogues

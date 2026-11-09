@@ -144,6 +144,26 @@ def catalogued_model_files(name: str, db: dict) -> list[dict]:
     return [record for *_key, record in sorted(found, key=lambda f: (f[0], f[1]))]
 
 
+def name_settings(record: dict, names: list[str]) -> dict[str, str]:
+    """The setting each name of a record is written to.
+
+    A record naming several files of one config spells passes_to as
+    describe_keys does (shell_launchers.py), "atari800.cfg ROM_OS_A_PAL,
+    ROM_5200_A, ...", one key per name and in the order of the names. When
+    the counts differ, each name keeps the whole description.
+    """
+    passes_to = str(record.get("passes_to") or "")
+    head, _, rest = passes_to.partition(" ")
+    keys = [
+        key.strip()
+        for key in re.sub(r"\[[^\]]*\]", ",", rest).split(",")
+        if key.strip()
+    ]
+    if len(names) > 1 and len(keys) == len(names) and all(" " not in k for k in keys):
+        return {name: f"{head} {key}" for name, key in zip(names, keys)}
+    return {name: passes_to for name in names}
+
+
 def setting_readers(passes_to: str, profiles: dict, keys: Iterable[str]) -> list[str]:
     """The profiles with an entry read from the setting a launcher writes."""
     if not passes_to:
@@ -263,17 +283,22 @@ def launcher_places(config: dict) -> list[LauncherPlace]:
             "anchored": anchored,
             "conditional": bool(record.get("depends_on_option")),
             "source_ref": str(record.get("source_ref", "")),
-            "passes_to": str(record.get("passes_to") or ""),
         }
+        settings = name_settings(record, names)
         if kind == "names_searched":
             # Each directory in turn, every name in it.
             depth = len(directories) if anchored else 1
             ordered = tuple(paths_of(name)[i] for i in range(depth) for name in names)
-            places.append(LauncherPlace(paths=ordered, **common))
+            places.append(LauncherPlace(
+                paths=ordered, passes_to=str(record.get("passes_to") or ""), **common
+            ))
             continue
         # A fixed name is the one file passed, and a core option offers
         # each value as the file the user picks: one place per name.
-        places.extend(LauncherPlace(paths=paths_of(name), **common) for name in names)
+        places.extend(
+            LauncherPlace(paths=paths_of(name), passes_to=settings[name], **common)
+            for name in names
+        )
     return places
 
 
