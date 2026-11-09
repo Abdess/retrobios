@@ -11269,8 +11269,10 @@ class TapsGameDataAndExitCodes(_CardFixtures, unittest.TestCase):
             lines = [str(line).strip() for line in install.tui_view(state, 120, 40)]
         folder = next(i for i, line in enumerate(lines) if line.startswith("BIOS folder:"))
         named = next(i for i, line in enumerate(lines) if line.startswith("Named by"))
-        # Nothing between the folder, wrapped or not, and what named it.
-        self.assertEqual("".join(lines[folder:named]), f"BIOS folder: {state.dest}", lines)
+        # Nothing between the folder, wrapped or not, and what named it. A
+        # long path wraps after the label, a longer one inside the path.
+        self.assertEqual("".join(lines[folder:named]).replace(" ", ""),
+                         f"BIOS folder: {state.dest}".replace(" ", ""), lines)
         self.assertLess(named, next(i for i, line in enumerate(lines)
                                     if line.startswith(("For ", "Copy them"))))
 
@@ -12374,10 +12376,10 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
                 break
             term.send("\x1b[A")
         term.send("\r")
-        # The changed choices are counted again on Confirm. Waiting on the
-        # bare title matched the screen before it, and a runner that drew
-        # Confirm after one settle never pressed Enter there.
-        term.wait("RetroBIOS: Confirm")
+        # The changed choices are counted again on Confirm, which has no
+        # Install row until its dry run ends: Enter sent on the title alone
+        # fell on "Counting the files" and did nothing on a slow runner.
+        term.wait("Counted again for these choices")
         term.settle()
         term.send("\r")
         term.wait("files installed")
