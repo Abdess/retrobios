@@ -801,6 +801,7 @@ def _cross_reference_profile(
     # Grouped entries met, as (set keys, entry, fills, the list holding
     # its row, the row): settled once the profile is read.
     set_records: list[tuple[tuple, dict, bool, list | None, dict | None]] = []
+    archive_rows: list[dict] = []
 
     def fate(f: dict, what: str) -> None:
         key = position[id(f)]
@@ -908,6 +909,15 @@ def _cross_reference_profile(
                     "archive_required_count": 0,
                 }
             entry = archive_gaps[archive_key]
+            if entry["archive_file_count"] == 0:
+                # The archive's own declaration names its sets: an archive
+                # is a member like a loose file (Kronos' stvbios.zip).
+                own = archive_entry(archive, emu_files)
+                set_records.append((
+                    set_keys((emu_name, is_standalone), own), own,
+                    entry["in_repo"], archive_rows, entry,
+                ))
+                archive_rows.append(entry)
             entry["archive_file_count"] += 1
             if f.get("required", False):
                 entry["archive_required_count"] += 1
@@ -968,7 +978,10 @@ def _cross_reference_profile(
     # One need per set: a member another one fills is not a gap, and a set
     # nobody holds is one gap under its first member (alternatives.py), as
     # verify and the packs count it.
-    grouped = [r for r in set_records if r[0]]
+    # Archive units rank first among equals, as the builder orders them.
+    grouped = sorted(
+        (r for r in set_records if r[0]), key=lambda r: r[3] is not archive_rows
+    )
     requirements = set_requirements(profile)
     excused, standing = settle_sets(
         [(keys, f, fills) for keys, f, fills, _l, _r in grouped],
@@ -982,10 +995,12 @@ def _cross_reference_profile(
             set_row["required"] = standing[at].required
         if at in excused:
             rows.remove(set_row)
-            fates[position[id(member)]] = "other_versions"
+            if id(member) in position:
+                fates[position[id(member)]] = "other_versions"
 
     for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
-        gaps.append(ag)
+        if any(ag is row for row in archive_rows):
+            gaps.append(ag)
 
     tally = Counter(fates.values())
     report[emu_name] = {

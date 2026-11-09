@@ -51,6 +51,8 @@ archive_prefix: kronos
 groups:
   saturn-bios:
     required: true
+  stv-bios:
+    required: true
 
 files:
   # -----------------------------------------------------------
@@ -104,8 +106,8 @@ files:
   # -----------------------------------------------------------
   - name: "stvbios.zip"
     system: sega-stv
-    required: true
-    note: "MAME-style ZIP containing ST-V region BIOS EPROMs. Searched in kronos/ subdir first."
+    group: stv-bios
+    note: "MAME-style ZIP containing ST-V region BIOS EPROMs. Read as kronos/stvbios.zip, else at the root of the system directory, and a ST-V game stops without either (libretro.c:1676-1681)."
     source_ref: "source yabause/src/libretro/libretro.c:1608-1617, source yabause/src/ctrl/src/stv.c:112-136"
 
   # -----------------------------------------------------------

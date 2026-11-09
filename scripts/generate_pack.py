@@ -1786,6 +1786,16 @@ def generate_emulator_pack(
                 if archive:
                     archives.add(archive)
 
+            # What each destination came to, settled by set once the
+            # profile is read: a member another member fills is not missing,
+            # and a set nobody holds is reported once (alternatives.py). An
+            # archive unit is a member like a loose file.
+            outcomes: list[tuple[list[dict], bool, Callable[[], None] | None]] = []
+            spares = emulator_required_spares(
+                emu_name, profile, files, standalone, region_drops, db,
+                validation_index, zip_contents, data_registry,
+            ) if required_only else set()
+
             # Pack archives as units
             archive_prefix = profile.get("archive_prefix", "")
             for archive_name in sorted(archives):
@@ -1795,6 +1805,8 @@ def generate_emulator_pack(
 
                 own_entry = archive_entry(archive_name, files)
                 if required_only and archive_is_optional(own_entry, archive_name, files):
+                    continue
+                if archive_dest in spares:
                     continue
                 local_path, status = resolve_file(
                     own_entry,
@@ -1814,7 +1826,11 @@ def generate_emulator_pack(
                     if not (taken and local_path and _same_bytes(
                         local_path, packed_at.get(archive_dest.lower())
                     )):
-                        report_missing(archive_name, archive_dest)
+                        outcomes.append(([own_entry], False, functools.partial(
+                            report_missing, archive_name, archive_dest
+                        )))
+                    else:
+                        outcomes.append(([own_entry], True, None))
                     continue
                 if local_path and status not in ("not_found",):
                     if local_path.endswith(".zip"):
@@ -1828,35 +1844,30 @@ def generate_emulator_pack(
                     total_files += 1
                     if record is not None:
                         record.files.append(archive_dest)
+                    outcomes.append(([own_entry], True, None))
                 else:
-                    report_missing(archive_name, archive_dest)
+                    outcomes.append(([own_entry], False, functools.partial(
+                        report_missing, archive_name, archive_dest
+                    )))
 
             # Pack individual files (skip archive members). The entries of one
             # profile on one destination are the releases the code accepts
             # there (raze's seven SW.GRP): the first one the core accepts
             # fills the slot, as verify --emulator credits it, and the slot
             # has one outcome however many alternatives it lists.
-            spares = emulator_required_spares(
-                emu_name, profile, files, standalone, region_drops, db,
-                validation_index, zip_contents, data_registry,
-            ) if required_only else set()
             slots: dict[str, list[dict]] = {}
             for fe in files:
-                if required_only and (fe.get("required") is False or id(fe) in spares):
+                if required_only and fe.get("required") is False:
                     continue
                 if fe.get("archive"):
                     continue
                 dest = _resolve_destination(fe, standalone)
-                if not dest:
+                if not dest or dest in spares:
                     continue
                 if region_drops and dest in region_drops:
                     continue
                 slots.setdefault(dest, []).append(fe)
 
-            # What each destination came to, settled by set once the loop
-            # is over: a member another member fills is not missing, and a
-            # set nobody holds is reported once (alternatives.py).
-            outcomes: list[tuple[list[dict], bool, Callable[[], None] | None]] = []
             for dest, alternatives in slots.items():
                 # Name order, first file wins, case folded: verify replays
                 # the rule and reports a later profile's file as missing.

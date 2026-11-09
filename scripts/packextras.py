@@ -1881,26 +1881,43 @@ def emulator_required_spares(
     validation_index: dict,
     zip_contents: dict | None,
     data_registry: dict | None,
-) -> set[int]:
-    """The members of required sets an emulator --required-only pack leaves
-    out: one held member stays per set, the first the code loads among those
-    the pack still carries after the region filter. The pack and
-    verify --emulator both read this."""
+) -> set[str]:
+    """The destinations an emulator --required-only pack leaves out: of each
+    required set, one held member stays, the first the code loads among
+    those the pack still carries after the region filter. An archive unit
+    is a member like a loose file: Kronos reads kronos/stvbios.zip, else
+    stvbios.zip. The pack and verify --emulator both read this."""
     from alternatives import groups_of, rank_in, required_groups
-    from packpaths import _resolve_destination
+    from common import archive_entry
+    from packpaths import _archive_destination, _resolve_destination
 
-    loose = [fe for fe in files if not fe.get("archive") and groups_of(fe)]
-    if not loose:
+    candidates: list[dict] = []
+    archives: list[str] = []
+    for fe in files:
+        archive = fe.get("archive")
+        if archive and archive not in archives:
+            archives.append(archive)
+            own = archive_entry(archive, files)
+            if groups_of(own):
+                candidates.append({"dest": _archive_destination(
+                    archive, profile.get("archive_prefix", ""),
+                    profile.get("pack_structure"), standalone,
+                ), "entry": own})
+    for fe in files:
+        if not fe.get("archive") and groups_of(fe):
+            candidates.append({"dest": _resolve_destination(fe, standalone), "entry": fe})
+    if not candidates:
         return set()
-    return required_only_spares(
-        loose,
-        owner=lambda _fe: emu_name,
-        held=lambda fe: _emulator_ships(
-            fe, emu_name, profile, db, validation_index, zip_contents, data_registry,
+    spares = required_only_spares(
+        candidates,
+        owner=lambda _c: emu_name,
+        held=lambda c: _emulator_ships(
+            c["entry"], emu_name, profile, db, validation_index, zip_contents, data_registry,
         ),
-        gone=lambda fe: _resolve_destination(fe, standalone) in region_drops,
-        sets=lambda fe: {g: rank_in(fe, g) for g in required_groups(fe, profile)},
+        gone=lambda c: c["dest"] in region_drops,
+        sets=lambda c: {g: rank_in(c["entry"], g) for g in required_groups(c["entry"], profile)},
     )
+    return {c["dest"] for c in candidates if id(c) in spares}
 
 
 def _emulator_ships(

@@ -197,7 +197,12 @@ def core_file_spares(
     and verify alike.
     """
     answered = {id(e) for e in entries if e.get("set_declared")}
-    rest = [e for e in entries if id(e) not in answered]
+    # An archive under the core's own folder is read before the same name
+    # at the root (Kronos), so archive units rank first among equals.
+    rest = sorted(
+        (e for e in entries if id(e) not in answered),
+        key=lambda e: not e.get("archive"),
+    )
     return answered | required_only_spares(
         rest,
         owner=lambda e: e.get("source_profile") or e.get("profile") or "",

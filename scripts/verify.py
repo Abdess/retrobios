@@ -665,6 +665,14 @@ def find_undeclared_files(
                         }
                         if f.get("system_dir"):
                             archive_entries[archive_key]["system_dir"] = f["system_dir"]
+                        # The archive's own declaration names its sets: an
+                        # archive is a member like a loose file.
+                        own = archive_entry(archive, profile.get("files", []))
+                        archive_entries[archive_key].update(set_fields(own, profile))
+                        set_records.append((
+                            set_keys((emu_name, is_standalone), own), own, in_repo,
+                            (archive_entries[archive_key], None),
+                        ))
                     entry = archive_entries[archive_key]
                     entry["archive_file_count"] += 1
                     if f.get("required", False):
@@ -793,12 +801,10 @@ def find_undeclared_files(
         undeclared = [u for u in undeclared if id(u) not in settled]
         undeclared.extend(added)
 
-    undeclared = _settle_core_sets(undeclared, set_records, settled, profiles)
-
     for entry in sorted(archive_entries.values(), key=lambda e: e["name"]):
         undeclared.append(entry)
 
-    return undeclared
+    return _settle_core_sets(undeclared, set_records, settled, profiles)
 
 
 def _settle_core_sets(
@@ -814,7 +820,11 @@ def _settle_core_sets(
     holds keeps one entry, its first member, naming the others. A claim
     another profile shares stays: its own core may need that very file.
     """
-    grouped = [r for r in records if r[0]]
+    # Archive units rank first among equals, as the builder orders them.
+    grouped = sorted(
+        (r for r in records if r[0]),
+        key=lambda r: not (r[3] is not None and r[3][0].get("archive")),
+    )
     if not grouped:
         return undeclared
     excused, standing = settle_sets([
@@ -2365,6 +2375,7 @@ def verify_emulator(
                 if fe.get("archive")
                 or _resolve_destination(fe, standalone) not in region_drops
             ]
+        spares: set[str] = set()
         if required_only:
             from packextras import emulator_required_spares
 
@@ -2372,7 +2383,10 @@ def verify_emulator(
                 emu_name, profile, files, standalone, region_drops, db,
                 validation_index, zip_contents, data_registry,
             )
-            files = [fe for fe in files if id(fe) not in spares]
+            files = [
+                fe for fe in files
+                if fe.get("archive") or _resolve_destination(fe, standalone) not in spares
+            ]
 
         # Check data directories (only notice if not cached)
         for dd in deliverable(
@@ -2403,6 +2417,12 @@ def verify_emulator(
             occupy_trees(emu_name, profile)
             continue
 
+        # Each destination's outcome, settled by set once the profile is
+        # read: an archive unit is a member like a loose file (Kronos reads
+        # kronos/stvbios.zip, else stvbios.zip).
+        placed_results: list[tuple[str, dict, bool, bool, list[dict]]] = []
+        fallback_reason = "declared hash contradicted by the local file"
+
         # Verify archives as units (e.g., neogeo.zip, aes.zip)
         seen_archives: set[str] = set()
         for file_entry in files:
@@ -2410,6 +2430,11 @@ def verify_emulator(
             if archive and archive not in seen_archives:
                 seen_archives.add(archive)
                 own_entry = archive_entry(archive, files)
+                if _archive_destination(
+                    archive, profile.get("archive_prefix", ""),
+                    profile.get("pack_structure"), standalone,
+                ) in spares:
+                    continue
                 local_path, resolve_status = pending(own_entry, *resolve_file(
                     own_entry,
                     db,
@@ -2452,7 +2477,6 @@ def verify_emulator(
                 result["system"] = file_entry.get("system", "")
                 result["hle_fallback"] = False
                 result["ground_truth"] = build_ground_truth(archive, validation_index)
-                details.append(result)
                 # Where the pack puts it: an archive_prefix or pack_structure
                 # moves it, and a loose same-named entry is another file.
                 dest = _archive_destination(
@@ -2476,27 +2500,13 @@ def verify_emulator(
                 elif local_path:
                     occupy(dest, local_path, emu_name)
                     packed_dests.add(dest)
-                dest_to_name[dest] = archive
-                cur = result["status"]
-                prev = file_status.get(dest)
-                if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
-                    prev, 0
-                ):
-                    file_status[dest] = cur
-                sev = _emulator_severity(cur, required, False)
-                prev_sev = file_severity.get(dest)
-                if prev_sev is None or _SEVERITY_ORDER.get(
-                    sev, 0
-                ) > _SEVERITY_ORDER.get(prev_sev, 0):
-                    file_severity[dest] = sev
+                placed_results.append((dest, result, required, False, [own_entry]))
 
         # Results of this emulator, by destination. Several entries of one
         # profile on one destination are the releases the code accepts
         # there (a shareware and a retail HOG, each GRP in a size table):
         # holding one of them fills the slot, and the others are not gaps.
         emu_results: dict[str, list[tuple[dict, bool, bool, dict]]] = {}
-        placed_results: list[tuple[str, dict, bool, bool, list[dict]]] = []
-        fallback_reason = "declared hash contradicted by the local file"
 
         for file_entry in files:
             # Skip archive members (verified as archive units above)

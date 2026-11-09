@@ -7033,5 +7033,91 @@ class OneOfASearchList(unittest.TestCase):
         kept = sorted(u["name"] for u in undeclared if id(u) not in spares)
         self.assertEqual(kept, ["none_a.bin", "plain.bin", "second.bin"])
 
+class AnArchiveIsAMemberOfASet(unittest.TestCase):
+    """Kronos reads kronos/stvbios.zip, else stvbios.zip at the root: one
+    archive under two paths, a first-found pair. The archive unit and the
+    root copy settle as members of one set, and a --required-only pack
+    carries the first, while the members inside still settle the archive
+    by its contents."""
+
+    def _fixture(self, held: bool) -> dict:
+        import zlib
+
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+        repo = Path(__file__).resolve().parent.parent
+        (repo / "tmp").mkdir(exist_ok=True)
+        root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        previous = os.getcwd()
+        os.chdir(root)
+        self.addCleanup(os.chdir, previous)
+        self.db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {},
+                                            "by_crc32": {}, "by_path_suffix": {}}}
+        rom = b"STV" * 64
+        if held:
+            rel = "bios/Sega/STV/set.zip"
+            Path(rel).parent.mkdir(parents=True)
+            with zipfile.ZipFile(rel, "w") as zf:
+                zf.writestr("epr.ic8", rom)
+            data = Path(rel).read_bytes()
+            sha1 = hashlib.sha1(data).hexdigest()
+            self.db["files"][sha1] = {"path": rel, "name": "set.zip", "size": len(data),
+                                      "md5": hashlib.md5(data).hexdigest(), "crc32": ""}
+            self.db["indexes"]["by_name"]["set.zip"] = [sha1]
+        Path("emulators").mkdir()
+        Path("platforms").mkdir()
+        Path("emulators/stv.yml").write_text(yaml.safe_dump({
+            "emulator": "Stv", "type": "libretro", "cores": ["stv"],
+            "systems": ["sega-stv"], "archive_prefix": "stv",
+            "groups": {"stv-bios": {"required": True}},
+            "files": [
+                {"name": "set.zip", "system": "sega-stv", "group": "stv-bios"},
+                {"name": "epr.ic8", "archive": "set.zip", "system": "sega-stv",
+                 "required": True, "crc32": f"{zlib.crc32(rom):08x}"},
+            ],
+        }))
+        return load_emulator_profiles("emulators")["stv"]
+
+    def test_the_archive_and_its_root_copy_are_one_need(self):
+        self._fixture(held=False)
+        result = verify_emulator(["stv"], "emulators", self.db, platforms_dir="platforms")
+        missing = [d for d in result["details"] if d["status"] == "missing"]
+        self.assertEqual([d["destination"] for d in missing], ["stv/set.zip"])
+        self.assertEqual(missing[0]["alternatives"], ["set.zip"])
+        self.assertEqual(result["status_counts"].get("missing"), 1)
+
+    def test_required_only_carries_the_archive_the_code_reads_first(self):
+        from generate_pack import generate_emulator_pack
+
+        self._fixture(held=True)
+        full = verify_emulator(["stv"], "emulators", self.db, platforms_dir="platforms")
+        self.assertEqual(
+            sorted(d["destination"] for d in full["details"] if d["status"] == "ok"),
+            ["set.zip", "stv/set.zip"],
+        )
+        result = verify_emulator(["stv"], "emulators", self.db,
+                                 platforms_dir="platforms", required_only=True)
+        held = sorted(d["destination"] for d in result["details"] if d["status"] == "ok")
+        self.assertEqual(held, ["stv/set.zip"])
+        with contextlib.redirect_stdout(io.StringIO()):
+            zip_path = generate_emulator_pack(
+                ["stv"], "emulators", self.db, "bios", "out", offline=True,
+                platforms_dir="platforms", required_only=True,
+            )
+        with zipfile.ZipFile(zip_path) as zf:
+            packed = sorted(n for n in zf.namelist() if n != "README.txt")
+        self.assertEqual(packed, held)
+
+    def test_core_files_report_the_pair_once(self):
+        profile = self._fixture(held=False)
+        config = {"platform": "Stvs", "verification_mode": "existence",
+                  "base_destination": "system", "cores": ["stv"],
+                  "systems": {"sega-stv": {"files": []}}}
+        undeclared = find_undeclared_files(config, "emulators", self.db, {"stv": profile})
+        self.assertEqual([u["name"] for u in undeclared], ["set.zip"])
+        self.assertTrue(undeclared[0].get("archive"))
+
 if __name__ == "__main__":
     unittest.main()
