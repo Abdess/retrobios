@@ -84,8 +84,8 @@ class TheReadmeShowsTheGif(unittest.TestCase):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         line = f"![{generate_readme.demo_description()}]({generate_readme.DEMO_GIF})"
         self.assertIn(line, readme)
-        self.assertLess(readme.index("## Quick install"), readme.index(line))
-        self.assertLess(readme.index(line), readme.index("## Download BIOS packs"))
+        self.assertLess(readme.index("## Install in one line"), readme.index(line))
+        self.assertLess(readme.index(line), readme.index("## Or download a ZIP"))
 
     def test_the_description_names_what_the_recording_measured(self):
         facts = _facts()

@@ -102,7 +102,7 @@ handheld launchers, `bwrap` (bubblewrap) for the probe sandbox, and a Python 3.8
 with pyte (`python3.8 -m pip install "pyte==0.8.2"`) for the full screen. CI has all three.
 
 `profile_sync.py` compares the branch with this repository's `main`, and
-fetches it in a fork's clone. A profile you only edit is not held to
+fetches it in a fork's clone. An edited profile is not held to
 `--strict`: its older refs are reviewed by hand.
 
 The full pipeline is not needed for a contribution: it rebuilds every pack

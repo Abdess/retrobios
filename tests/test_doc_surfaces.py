@@ -191,16 +191,17 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
         from common import list_registered_platforms, list_release_pack_platforms
 
         readme = _read("README.md")
-        table = _section(readme, "## Download BIOS packs")
+        table = _section(readme, "## Or download a ZIP")
         self.assertNotIn("/releases/download/", table)
         released = set(list_release_pack_platforms("platforms"))
+        rows = [line for line in table.splitlines() if line.startswith("| ")]
         for key in list_registered_platforms("platforms"):
             with self.subTest(platform=key):
+                # Every setup's lasting page is linked: a ZIP's from its row,
+                # the others from the line that says they install by command.
                 self.assertIn(f"]({SITE_URL}get/{key}/)", table)
-                row = next(line for line in table.splitlines()
-                           if f"get/{key}/)" in line)
-                if key not in released:
-                    self.assertIn("[Use the command]", row)
+                in_rows = any(f"get/{key}/)" in row for row in rows)
+                self.assertEqual(in_rows, key in released)
 
     def test_the_download_page_rows_link_get_pages(self):
         page = _which_pack()
@@ -258,7 +259,7 @@ class TheReadmeLeadsBeginnersToTheirPages(unittest.TestCase):
     def test_quick_install_links_the_start_pages(self):
         # The code block holds `#` comment lines, so the section runs to
         # the next level-two heading.
-        section = _read("README.md").split("## Quick install", 1)[1].split("\n## ", 1)[0]
+        section = _read("README.md").split("## Install in one line", 1)[1].split("\n## ", 1)[0]
         for page in ("first-install", "troubleshooting", "faq"):
             with self.subTest(page=page):
                 self.assertIn(f"wiki/{page}/)", section)
