@@ -23,7 +23,7 @@ DEFAULT_INSTALL_URL="https://raw.githubusercontent.com/Abdess/retrobios/main/ins
 # curl or wget stop on a cut transfer before the hash is read: the site's
 # build rewrites this line there (scripts/sitebootstrap.py).
 MISMATCH_ADVICE="The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-DEFAULT_INSTALL_SHA256="7bfcc3b63b3d8c34998e021d84f873a49c91837fc266e593e918ac7871ef78b2"
+DEFAULT_INSTALL_SHA256="1d6c36d12d2cb728020e8a4cf0994e7c1779a5f2903163a83ed4caea6c54cc42"
 MAX_INSTALLER_BYTES=2097152
 
 cleanup() {

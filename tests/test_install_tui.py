@@ -1722,6 +1722,23 @@ class TicksBarAndPaths(unittest.TestCase):
         rows = install.tui_rows(state)
         return rows[state.focus[state.screen]]
 
+    def test_install_says_the_size_the_headline_says(self):
+        """One system ticked: the headline said About 3479 files, 82.2 MB
+        and the row Install 6.6 GB, the whole list's size."""
+        big = 6 * 1024 ** 3
+        state = checked_state()
+        state.files[0] = {**state.files[0], "size": big}
+        state.check = {**state.check, "bytes_needed": state.check["bytes_needed"] + big}
+        self.assertEqual(install.tui_rows(state)[0].label, "Install 6.0 GB")
+        for system, label, head in (("nintendo-gba", "Install", "About 1 file, 16.0 KB"),
+                                    ("sony-playstation", "Install 6.0 GB",
+                                     "About 3 files, 6.0 GB")):
+            with self.subTest(system=system):
+                state.ticked = {system}
+                self.assertTrue(install._tui_estimating(state))
+                self.assertEqual(install.tui_rows(state)[0].label, label)
+                self.assertIn(head, "\n".join(install.tui_view(state, 80, 24)))
+
     def test_the_filter_never_changes_the_ticks(self):
         state = self.systems()
         press(state, "n")
