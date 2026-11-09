@@ -528,7 +528,7 @@
       }
     },
     "roms_directory": {
-      "description": "Where the platform keeps its roms root, present when an entry carries root: roms. from_bios is that root relative to the BIOS folder, as platforms/romfolders/<platform>.yml records it from the OS's own source (roms_root.from_bios). It is followed only from a BIOS folder named bios_folder (the platform's base_destination); any other leaves root: roms entries out (no_roms_directory).",
+      "description": "Where the platform keeps its roms root, present when an entry carries root: roms. from_bios is that root relative to the BIOS folder (\".\" for the folder itself, else one or two \"..\" then plain names), as platforms/romfolders/<platform>.yml records it from the OS's own source (roms_root.from_bios). It is followed only from a BIOS folder named bios_folder (the platform's base_destination); any other leaves root: roms entries out (no_roms_directory).",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -543,7 +543,8 @@
         },
         "from_bios": {
           "type": "string",
-          "pattern": "^\\.\\.(/\\.\\.)*(/[^/.][^/]*)*$"
+          "pattern": "^(\\.|\\.\\.(/\\.\\.)?(/[^/\\\\:.][^/\\\\:]*)*)$",
+          "maxLength": 1024
         }
       }
     },

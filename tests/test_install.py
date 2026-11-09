@@ -1135,6 +1135,75 @@ class StandaloneCopiesReadWhereThePackPutTheFile(unittest.TestCase):
             install._validate_manifest(manifest, "emudeck")
 
 
+class OuterRootsAreUntrusted(unittest.TestCase):
+    """roms_directory and emulators_directory come from a downloaded list: each
+    path in them meets the rules a BIOS destination meets, and each folder
+    they resolve to stays where the platform's layout puts it."""
+
+    ROMS = {"bios_folder": "bios", "from_bios": ".."}
+    EMULATORS = {
+        "bios_folder": "bios", "searched": ["frontend/{key}", "emulators/{key}"],
+        "default": "emulators/{key}", "config": "frontend/launcher.cfg",
+    }
+    UNSAFE = ("..\\x", "C:", "C:/x", "..//x", "../", "../x\x01", "x" * 1025)
+
+    def test_unsafe_from_bios_is_refused(self):
+        for value in (*self.UNSAFE, "../../../x", "../x/..", "x", "./x", "/x", "..x", None):
+            with self.subTest(from_bios=value), self.assertRaises(ValueError):
+                install._check_roms_directory({"roms_directory": {**self.ROMS, "from_bios": value}})
+
+    def test_the_relations_the_rom_folders_files_use_are_accepted(self):
+        bios = Path("/card/system/bios")
+        expected = {
+            ".": bios, "..": Path("/card/system"), "../roms": Path("/card/system/roms"),
+            "../Roms": Path("/card/system/Roms"), "../../Roms": Path("/card/Roms"),
+            "../../ROMS": Path("/card/ROMS"),
+        }
+        for value, root in expected.items():
+            with self.subTest(from_bios=value):
+                install._check_roms_directory({"roms_directory": {**self.ROMS, "from_bios": value}})
+                self.assertEqual(install._roms_root(bios, value), root)
+        self.assertEqual(install.MAX_ROMS_UPS, 2)
+
+    def test_a_list_without_a_roms_root_leaves_the_files_out(self):
+        files = [{"dest": "pico-8/pico8_64", "root": "roms", "cores": ["x"]}]
+        kept, left = install.place_roms_entries(files, Path("/card/roms/bios"), {}, "x", say=False)
+        self.assertEqual((kept, [o["reason"] for o in left]), ([], ["no_roms_directory"]))
+
+    def test_unsafe_emulator_folders_are_refused(self):
+        for field in ("searched", "default", "config"):
+            for value in self.UNSAFE + ("../{key}", "/abs/{key}"):
+                layout = dict(self.EMULATORS)
+                if field == "searched":
+                    layout["searched"] = [value if "{key}" in value else value + "/{key}"]
+                    layout["default"] = layout["searched"][0]
+                elif field == "default":
+                    layout["default"] = value
+                else:
+                    layout["config"] = value
+                with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                    install._check_emulators_directory({"emulators_directory": layout})
+
+    def test_an_emulator_folder_stays_below_the_platform_folder(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            (home / "bios").mkdir()
+            (home / "frontend").mkdir()
+            (home / "frontend" / "launcher.cfg").write_text("")
+            manifest = {"emulators_directory": self.EMULATORS}
+            for dest in ("../x/prog", "C:/prog", "prog\\..\\..\\x/a"):
+                with self.subTest(dest=dest), self.assertRaises(ValueError):
+                    install.place_emulator_entries(
+                        [{"dest": dest, "root": "emulators"}], home / "bios", manifest, "x",
+                        say=False)
+            kept, left = install.place_emulator_entries(
+                [{"dest": "prog/prog.exe", "root": "emulators"}], home / "bios", manifest, "x",
+                say=False)
+            self.assertEqual((len(kept), left), (1, []))
+            folder, rest = install._entry_place(home / "bios", kept[0])
+            self.assertEqual((folder, rest), (home / "emulators" / "prog", "prog.exe"))
+
+
 class DetectionFollowsTheRegistry(unittest.TestCase):
     """The registry declared RetroPie at ~/RetroPie/BIOS and BizHawk at
     ~/.config/BizHawk/Firmware, every manifest published it, and the

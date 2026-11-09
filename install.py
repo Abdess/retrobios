@@ -3456,8 +3456,13 @@ def _read_limited_json(
         raise ValueError(f"invalid {label}: {exc}") from exc
 
 
-def _safe_relative_path(value: object, field: str) -> PurePosixPath:
-    """Validate a manifest-controlled relative POSIX path."""
+def _path_characters(value: object, field: str) -> str:
+    """The character rules every manifest-controlled relative path meets.
+
+    No backslash, control character, empty segment, trailing slash or drive
+    prefix, and at most 1024 characters: on Windows a backslash or a C:
+    segment leaves the folder the path is joined to.
+    """
     if not isinstance(value, str) or not value or len(value) > 1024:
         raise ValueError(f"invalid {field}")
     if (
@@ -3471,10 +3476,67 @@ def _safe_relative_path(value: object, field: str) -> PurePosixPath:
         # x<ESC>]0;PWN<BEL>.bin set the window title in the progress line,
         # and the file was written under that name.
         raise ValueError(f"unsafe {field}: {value!r}")
-    path = PurePosixPath(value)
+    return value
+
+
+def _safe_relative_path(value: object, field: str) -> PurePosixPath:
+    """Validate a manifest-controlled relative POSIX path."""
+    path = PurePosixPath(_path_characters(value, field))
     if path.is_absolute() or any(part in ("", ".", "..") for part in path.parts):
         raise ValueError(f"unsafe {field}: {value!r}")
     return path
+
+
+# The most folders a roms root climbs from the BIOS folder: two, as the rom
+# folders files of MinUI, NextUI, MyMinUI (../../Roms) and muOS (../../ROMS)
+# record it (platforms/romfolders/*.yml, roms_root.from_bios).
+MAX_ROMS_UPS = 2
+
+
+def _roms_relation(value: object, field: str) -> tuple[int, PurePosixPath]:
+    """A roms root relative to the BIOS folder: (folders up, names down).
+
+    "." is the BIOS folder itself. Any other value climbs one to
+    MAX_ROMS_UPS folders, then names plain folders: nothing climbs again
+    once it went down, and nothing goes down without climbing first.
+    """
+    if value == ".":
+        return 0, PurePosixPath()
+    path = PurePosixPath(_path_characters(value, field))
+    parts = path.parts
+    ups = next((i for i, part in enumerate(parts) if part != ".."), len(parts))
+    names = parts[ups:]
+    if (
+        path.is_absolute() or not 1 <= ups <= MAX_ROMS_UPS
+        or any(part in ("", ".", "..") for part in names)
+    ):
+        raise ValueError(f"unsafe {field}: {value!r}")
+    return ups, PurePosixPath(*names)
+
+
+def _roms_root(bios_path: Path, from_bios: str) -> Path | None:
+    """The roms root of a BIOS folder, on the host's own path type.
+
+    The BIOS folder's ancestor at the depth the relation climbs, then the
+    named folders below it. None when the joined and normalized path is
+    anything else.
+    """
+    ups, names = _roms_relation(from_bios, "roms_directory.from_bios")
+    if ups > len(bios_path.parents):
+        return None
+    ancestor = bios_path if not ups else bios_path.parents[ups - 1]
+    expected = ancestor.joinpath(*names.parts)
+    joined = Path(os.path.normpath(bios_path.joinpath(*PurePosixPath(from_bios).parts)))
+    return expected if joined == Path(os.path.normpath(expected)) else None
+
+
+def _lexically_under(candidate: Path, root: Path) -> bool:
+    """Whether a path built from checked parts stays below *root*."""
+    try:
+        Path(os.path.normpath(candidate)).relative_to(Path(os.path.normpath(root)))
+    except ValueError:
+        return False
+    return True
 
 
 def _within(candidate: Path, root: Path) -> bool:
@@ -3689,15 +3751,9 @@ def _check_roms_directory(data: dict) -> None:
         not isinstance(layout, dict)
         or set(layout) != {"bios_folder", "from_bios"}
         or len(_safe_relative_path(layout["bios_folder"], "roms_directory.bios_folder").parts) != 1
-        or not isinstance(layout["from_bios"], str)
     ):
         raise ValueError("invalid roms_directory")
-    # The roms root relative to the BIOS folder: up some levels, then down
-    # into named folders. Nothing climbs again once it went down.
-    parts = PurePosixPath(layout["from_bios"]).parts
-    ups = next((i for i, part in enumerate(parts) if part != ".."), len(parts))
-    if not ups or any(part in ("..", ".", "/") or _CONTROLS.search(part) for part in parts[ups:]):
-        raise ValueError("invalid roms_directory.from_bios")
+    _roms_relation(layout["from_bios"], "roms_directory.from_bios")
 
 
 def _check_emulators_directory(data: dict) -> None:
@@ -5311,8 +5367,12 @@ def place_roms_entries(
     if not below:
         return files, []
     layout = manifest.get("roms_directory") or {}
-    if layout and bios_path.name == layout.get("bios_folder"):
-        _ROMS_DIRS[bios_path] = Path(os.path.normpath(bios_path / layout["from_bios"]))
+    roms = (
+        _roms_root(bios_path, layout["from_bios"])
+        if layout and bios_path.name == layout.get("bios_folder") else None
+    )
+    if roms is not None:
+        _ROMS_DIRS[bios_path] = roms
         return files, []
     if say:
         print(f"  {_plural(len(below), 'file')} read from {display}'s roms folder left out: "
@@ -5357,7 +5417,10 @@ def place_emulator_entries(
         return files, []
     layout = manifest.get("emulators_directory") or {}
     home = bios_path.parent
-    config = home / layout["config"] if layout else None
+    config = (
+        home.joinpath(*_safe_relative_path(layout["config"], "emulators_directory.config").parts)
+        if layout else None
+    )
     matches = bool(layout) and bios_path.name == layout.get("bios_folder") and config.is_file()
     moved = _config_keys(config) if matches else set()
     kept: list[dict] = []
@@ -5366,11 +5429,19 @@ def place_emulator_entries(
         if entry.get("root") != "emulators":
             kept.append(entry)
             continue
-        key = str(entry["dest"]).split("/", 1)[0]
-        if matches and key.lower() not in moved:
-            places = [home / t.replace("{key}", key) for t in layout["searched"]]
+        key = _safe_relative_path(str(entry["dest"]), "emulators dest").parts[0]
+        places = [
+            home.joinpath(*_safe_relative_path(t.replace("{key}", key), "emulators place").parts)
+            for t in layout.get("searched") or []
+        ]
+        default = home.joinpath(
+            *_safe_relative_path(layout.get("default", "").replace("{key}", key),
+                                 "emulators default").parts
+        ) if matches else None
+        if (matches and key.lower() not in moved and default is not None
+                and all(_lexically_under(place, home) for place in [*places, default])):
             found = next((place for place in places if place.is_dir()), None)
-            _EMULATOR_DIRS[(bios_path, key)] = found or home / layout["default"].replace("{key}", key)
+            _EMULATOR_DIRS[(bios_path, key)] = found or default
             kept.append(entry)
             continue
         unplaced.append({
