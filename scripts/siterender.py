@@ -1146,7 +1146,6 @@ SYSTEM_NAMES: dict[str, str] = {
     "sega-vmu": "Sega Dreamcast VMU",
     "serious-sam": "Serious Sam",
     "sg-1000": "Sega SG-1000",
-    "sharpx1": "Sharp X1",
     "sielectronics-y2": "SiElectronics System Y2",
     "sinclair-ql": "Sinclair QL",
     "sinclair-spectrum": "Sinclair ZX Spectrum",
