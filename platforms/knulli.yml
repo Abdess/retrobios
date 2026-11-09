@@ -5732,6 +5732,24 @@ launchers:
   depends_on_option: neocd_bios
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroOptions.py:2558-2559,\
     \ 2566-2569"
+- emulator: pcsx2
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/ps2
+  passes_to: "inis/PCSX2.ini [Folders] Bios = ../../../bios/ps2, relative to /userdata/system/configs/PCSX2"
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/pcsx2/pcsx2Generator.py:92,\
+    \ 176, 213"
+- emulator: aethersx2
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/ps2
+  passes_to: "inis/PCSX2.ini [Folders] Bios = ../../../bios/ps2, relative to /userdata/system/.config/aethersx2"
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/aethersx2/aethersx2Generator.py:71,\
+    \ 182, 219"
 - emulator: lexaloffle
   build: standalone
   kind: moves

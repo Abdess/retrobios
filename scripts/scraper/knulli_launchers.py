@@ -20,6 +20,7 @@ LauncherShapeError, as every other extractor does.
 from __future__ import annotations
 
 import ast
+import posixpath
 import re
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
@@ -834,8 +835,82 @@ def bios_sites(cg: Configgen, spec: GenericSites) -> list[Launcher]:
     return launchers
 
 
+# Generators that write a [Folders] path relative to the config folder they
+# are given. PCSX2 and AetherSX2 resolve those paths against their data root,
+# the folder holding inis/, which configureINI receives as config_directory.
+RELATIVE_FOLDERS = (
+    ("pcsx2/pcsx2Generator.py", "configureINI"),
+    ("aethersx2/aethersx2Generator.py", "configureINI"),
+)
+
+
+def relative_folders(
+    cg: Configgen, specs: tuple[tuple[str, str], ...] = RELATIVE_FOLDERS
+) -> list[Launcher]:
+    """parser.set(section, key, "../<path>") resolved against config_directory."""
+    launchers = []
+    for path, function_name in specs:
+        src = cg.source(f"{cg.generators}/{path}")
+        reader = _Reader(cg, src)
+        function = src.function(function_name)
+        if not function.args.args:
+            src.fail(f"{function_name} takes no config folder")
+        folder = function.args.args[0].arg
+        ini = [
+            node for node in ast.walk(function)
+            if isinstance(node, ast.Assign) and isinstance(node.value, ast.BinOp)
+            and ast.unparse(node.value).startswith(f"{folder} /")
+            and ast.unparse(node.value).endswith(".ini'")
+        ]
+        if len(ini) != 1:
+            src.fail(f"{function_name} builds no one ini path under {folder}")
+        parts = sorted(
+            (n for n in ast.walk(ini[0].value)
+             if isinstance(n, ast.Constant) and isinstance(n.value, str)),
+            key=lambda n: (n.lineno, n.col_offset),
+        )
+        ini_name = posixpath.join(*(str(n.value) for n in parts))
+        calls = [
+            node for node in ast.walk(src.tree)
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+            and node.func.id == function_name and node.args
+        ]
+        if len(calls) != 1:
+            src.fail(f"expected one call of {function_name}, found {len(calls)}")
+        base = reader.resolve(calls[0].args[0])
+        if base is None or not base.startswith("/"):
+            src.fail(f"{function_name} is given a folder that is not a path")
+        found = 0
+        for call in ast.walk(function):
+            if not (
+                isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)
+                and call.func.attr == "set" and len(call.args) == 3
+                and all(isinstance(a, ast.Constant) for a in call.args)
+            ):
+                continue
+            section, key, value = (str(a.value) for a in call.args)  # type: ignore[attr-defined]
+            if not value.startswith("../"):
+                continue
+            resolved = posixpath.normpath(posixpath.join(base, value))
+            if not reader.under_bios(resolved):
+                continue
+            found += 1
+            launchers.append(Launcher(
+                emulator=cg.emulator(path.removesuffix(".py").replace("/", ".")),
+                build="standalone", kind="passes_path", names=[], search_dir=resolved,
+                passes_to=f"{ini_name} [{section}] {key} = {value}, relative to {base}",
+                fails_when_missing=False,
+                source_ref=src.ref([
+                    src.span(reader.statement_of(calls[0])), src.span(ini[0]), _lines(call),
+                ]),
+            ))
+        if not found:
+            src.fail(f"{function_name} writes no relative folder under {cg.bios}")
+    return launchers
+
+
 EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
-    *SHARED, lexaloffle, core_file_options,
+    *SHARED, lexaloffle, core_file_options, relative_folders,
 )
 
 

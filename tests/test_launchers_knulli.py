@@ -59,6 +59,7 @@ IMPORTER = text(
         'openmsx': ('openmsx.openmsxGenerator', 'OpenmsxGenerator'),
         'hatari': ('hatari.hatariGenerator', 'HatariGenerator'),
         'melonds': ('melonds.melondsGenerator', 'MelonDSGenerator'),
+        'pcsx2': ('pcsx2.pcsx2Generator', 'Pcsx2Generator'),
     }
     """
 )
@@ -305,6 +306,29 @@ MELONDS = text(
 )
 
 
+# pcsx2Generator.py: the default patches copied into BIOS when absent, and
+# the BIOS folder written relative to the config folder.
+PCSX2 = text(
+    """
+    from ...batoceraPaths import BIOS, CONFIGS, DATAINIT_DIR
+
+    _PCSX2_CONFIG: Final = CONFIGS / "PCSX2"
+    _PCSX2_BIOS: Final = BIOS / "ps2"
+
+    class Pcsx2Generator(Generator):
+        def generate(self, system, rom, playersControllers, metadata, guns, wheels, gameResolution):
+            pcsx2Patches = _PCSX2_BIOS / "patches.zip"
+            configureINI(_PCSX2_CONFIG, _PCSX2_BIOS, system)
+            if not pcsx2Patches.exists():
+                shutil.copy(DATAINIT_DIR / "bios" / "ps2" / "patches.zip", pcsx2Patches)
+
+    def configureINI(config_directory, bios_directory, system):
+        configFileName = config_directory / 'inis' / "PCSX2.ini"
+        pcsx2INIConfig.set("Folders", "Bios", "../../../bios/ps2")
+        pcsx2INIConfig.set("Folders", "Logs", "../../logs")
+    """
+)
+
 def tree(**overrides: str) -> dict[str, str]:
     files = {
         f"{kl.CONFIGGEN}/batoceraPaths.py": PATHS,
@@ -322,6 +346,7 @@ def tree(**overrides: str) -> dict[str, str]:
         f"{G}/libretro/libretroMAMEConfig.py": MAME_CONFIG,
         f"{G}/hatari/hatariGenerator.py": HATARI,
         f"{G}/melonds/melondsGenerator.py": MELONDS,
+        f"{G}/pcsx2/pcsx2Generator.py": PCSX2,
     }
     files.update(overrides)
     return files
@@ -496,6 +521,33 @@ class BiosSites(unittest.TestCase):
         spec = kl.GenericSites("openmsx/openmsxGenerator.py", "passes_path")
         with self.assertRaises(LauncherShapeError):
             kl.bios_sites(kl.configgen(files.__getitem__), spec)
+
+
+class CopiesAndFolders(unittest.TestCase):
+    def test_a_copy_into_bios_reads_from_the_folder_it_comes_from(self):
+        (record,) = sites("pcsx2/pcsx2Generator.py", "fixed_name")
+        self.assertEqual(record["kind"], "copies")
+        self.assertEqual(record["names"], ["patches.zip"])
+        self.assertEqual(record["search_dir"], "/usr/share/knulli/datainit/bios/ps2")
+        self.assertEqual(record["passes_to"], "/userdata/bios/ps2/patches.zip")
+        self.assertEqual(record["depends_on_option"], "not pcsx2Patches.exists()")
+
+    def test_a_relative_folder_resolved_against_the_config_folder(self):
+        (record,) = kl.relative_folders(configgen(), kl.RELATIVE_FOLDERS[:1])
+        self.assertEqual(record.kind, "passes_path")
+        self.assertEqual(record.search_dir, "/userdata/bios/ps2")
+        self.assertEqual(
+            record.passes_to,
+            "inis/PCSX2.ini [Folders] Bios = ../../../bios/ps2, relative to /userdata/system/configs/PCSX2",
+        )
+        self.assertEqual(record.source_ref, f"{G}/pcsx2/pcsx2Generator.py:9, 14-15")
+
+    def test_a_folder_written_outside_bios_raises(self):
+        broken = PCSX2.replace("../../../bios/ps2", "../../../saves/ps2")
+        with self.assertRaises(LauncherShapeError):
+            kl.relative_folders(
+                configgen(**{f"{G}/pcsx2/pcsx2Generator.py": broken}), kl.RELATIVE_FOLDERS[:1]
+            )
 
 
 class PlatformFile(unittest.TestCase):
