@@ -97,6 +97,10 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
                         _refuse()
                     return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86_64=y\n"
                                  b"BR2_PACKAGE_BATOCERA_SYSTEM=y\n")
+                if "/git/trees/" in url:
+                    return _Body(b'{"tree": [], "truncated": false}')
+                if url.endswith("retroarch.mk"):
+                    return _Body(b"RETROARCH_CONF_OPTS = --enable-networking\n")
                 if url.startswith("https://raw.githubusercontent.com/") and url.count("/") == 6:
                     return _Body(b'source "$BR2_EXTERNAL_BATOCERA_PATH/'
                                  b'package/batocera/core/batocera-system/Config.in"\n')
@@ -243,6 +247,60 @@ class BatoceraDerivedFlags(unittest.TestCase):
         self.assertIn("BR2_PACKAGE_DUCKSTATION_LEGACY", r16)
 
 
+class CoreDownloaderReach(unittest.TestCase):
+    """Batocera and KNULLI build RetroArch with its core downloader, shown in
+    the menu, and its compiled buildbot URL serves Linux x86_64, i386 and
+    armv7 hard-float alone (config.def.h:743-749, 1855-1864): a board of
+    those runs any core of the buildbot list, an aarch64 one none."""
+
+    def test_each_architecture_reads_its_buildbot_list(self):
+        from scraper.targets.batocera_targets_scraper import buildbot_target  # noqa: PLC0415
+
+        self.assertEqual(buildbot_target({"BR2_x86_64"}), "linux-x86_64")
+        self.assertEqual(buildbot_target({"BR2_arm", "BR2_ARM_CPU_ARMV7A"}), "linux-armhf")
+        self.assertIsNone(buildbot_target({"BR2_arm", "BR2_ARM_CPU_ARMV7A", "BR2_ARM_EABI"}))
+        self.assertIsNone(buildbot_target({"BR2_arm", "BR2_arm1176jzf_s"}))
+        self.assertIsNone(buildbot_target({"BR2_aarch64"}))
+
+    def test_a_build_or_a_blank_url_turns_it_off(self):
+        from scraper.targets.batocera_targets_scraper import downloader_disabled  # noqa: PLC0415
+
+        self.assertIsNone(downloader_disabled("--enable-networking", {
+            "a/retroarch.cfg": 'menu_show_core_updater = "false"\n'}))
+        self.assertIn("HAVE_LAKKA=1", downloader_disabled("make HAVE_LAKKA=1", {}))
+        with self.assertRaises(RuntimeError):
+            downloader_disabled("", {"a/retroarch.cfg": 'core_updater_buildbot_cores_url = ""\n'})
+
+    def test_a_board_that_downloads_gets_the_buildbot_list(self):
+        from common import load_target_config  # noqa: PLC0415
+
+        root = str(REPO_ROOT / "platforms")
+        x86 = set(load_target_config("retroarch", "linux-x86_64", root) or ())
+        armhf = set(load_target_config("retroarch", "linux-armhf", root) or ())
+        self.assertLessEqual(x86, set(load_target_config("batocera", "x86_64", root) or ()))
+        self.assertLessEqual(armhf, set(load_target_config("batocera", "rk3288", root) or ()))
+        self.assertFalse(x86 <= set(load_target_config("batocera", "bcm2711", root) or ()))
+
+    def test_the_platform_names_what_its_boards_install(self):
+        import yaml  # noqa: PLC0415
+
+        from common import load_target_config  # noqa: PLC0415
+
+        root = str(REPO_ROOT / "platforms")
+        for platform in ("batocera",):
+            config = yaml.safe_load((REPO_ROOT / "platforms" / f"{platform}.yml").read_text())
+            targets = yaml.safe_load(
+                (REPO_ROOT / "platforms" / "targets" / f"{platform}.yml").read_text())["targets"]
+            fetched = set()
+            for entry in targets.values():
+                if entry.get("downloads"):
+                    fetched |= load_target_config("retroarch", entry["downloads"], root) or set()
+                if entry["architecture"] == "aarch64":
+                    self.assertNotIn("downloads", entry)
+            with self.subTest(platform=platform):
+                self.assertEqual(set(config["installable_cores"]), fetched - set(config["cores"]))
+
+
 class KnulliPerBoard(unittest.TestCase):
     """KNULLI builds per board on Batocera's model from its own tree:
     configs/knulli-*.board, package/system/knulli-system/Config.in and
@@ -257,7 +315,7 @@ class KnulliPerBoard(unittest.TestCase):
             "BR2_PACKAGE_BATOCERA_TARGET_H700=y\n"
         ),
         "configs/knulli-r16.board": (
-            "include knulli-board.common\n\nBR2_arm=y\n"
+            "include knulli-board.common\n\nBR2_arm=y\nBR2_cortex_a7=y\n"
             "BR2_PACKAGE_BATOCERA_TARGET_SUNXI_R16=y\n"
         ),
         "configs/knulli-h700_armhf_libs.board": (
@@ -330,11 +388,21 @@ class KnulliPerBoard(unittest.TestCase):
                 return _Body('{"sha": "c2d7985b"}')
             if url == f"{api}batocera?ref={pin}":
                 return _Body('{"sha": "487014d9"}')
+            if "/git/trees/" in url:
+                # A board config that hides the downloader leaves its URL.
+                cfg = "board/r16/retroarch.cfg" if "knulli-linux" in url else "x"
+                return _Body(json.dumps({"tree": [{"path": cfg}], "truncated": False}))
+            if url == f"{raw}board/r16/retroarch.cfg":
+                return _Body('menu_show_core_updater = "false"\n')
+            if url == f"{raw}package/retroarch/retroarch/retroarch.mk":
+                return _Body("RETROARCH_CONF_OPTS = --enable-networking\n")
             if url == ("https://raw.githubusercontent.com/batocera-linux/batocera.linux/"
                        "487014d9/package/batocera/emulators/ppsspp/Config.in"):
                 return _Body("config BR2_PACKAGE_PPSSPP\n\tselect BR2_PACKAGE_PPSSPP_ASSETS\n")
             if url == f"{raw}package/utils/vtree/Config.in":
                 raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+            if url.endswith("/c2d7985b/arch/Config.in.arm"):
+                return _Body("config BR2_cortex_a7\n\tselect BR2_ARM_CPU_ARMV7A\n")
             if url.startswith("https://raw.githubusercontent.com/knulli-cfw/buildroot/c2d7985b/"):
                 return _Body("config BR2_aarch64\n\tselect BR2_ARCH_IS_64\n")
             path = url.removeprefix(raw)
@@ -353,10 +421,12 @@ class KnulliPerBoard(unittest.TestCase):
         self.assertEqual(data["targets"]["h700"],
                          {"architecture": "aarch64", "cores": ["assets", "mgba", "ppsspp"],
                           "images": ["rg35xx-plus", "rg35xx-sp"]})
+        # An armv7 hard-float board's RetroArch installs the armhf buildbot list.
         self.assertEqual(data["targets"]["r16"],
-                         {"architecture": "arm", "cores": ["mgba"], "images": ["miyoo-a30"]})
+                         {"architecture": "arm", "cores": ["mgba"], "images": ["miyoo-a30"],
+                          "downloads": "linux-armhf"})
         self.assertTrue(all(pin in url or "buildroot/c2d7985b" in url
-                            or "batocera.linux/487014d9" in url for url in seen), seen)
+                            or "487014d9" in url for url in seen), seen)
 
 
 class RocknixPerDevice(unittest.TestCase):

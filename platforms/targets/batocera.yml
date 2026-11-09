@@ -1,6 +1,6 @@
 platform: batocera
 source: https://github.com/batocera-linux/batocera.linux/tree/batocera-43.1
-scraped_at: '2026-11-09T19:49:31Z'
+scraped_at: '2026-11-09T20:38:15Z'
 targets:
   a3gen2:
     architecture: aarch64
@@ -790,6 +790,7 @@ targets:
     - xvic
     - yquake2
     - zc210
+    downloads: linux-armhf
   bcm2837:
     architecture: aarch64
     cores:
@@ -1075,6 +1076,7 @@ targets:
     - orangepi-one
     - orangepi-pc
     - orangepi-plus2e
+    downloads: linux-armhf
   h5:
     architecture: aarch64
     cores:
@@ -2181,6 +2183,7 @@ targets:
     - xvic
     - yquake2
     - zc210
+    downloads: linux-armhf
   qcs6490:
     architecture: aarch64
     cores:
@@ -2516,6 +2519,7 @@ targets:
     - powkiddy_a13
     - ps5000
     - ps7000
+    downloads: linux-armhf
   rk3288:
     architecture: arm
     cores:
@@ -2674,6 +2678,7 @@ targets:
     images:
     - miqi
     - tinkerboard
+    downloads: linux-armhf
   rk3326:
     architecture: aarch64
     cores:
@@ -3887,6 +3892,7 @@ targets:
     - xvic
     - yquake2
     - zc210
+    downloads: linux-armhf
   s905:
     architecture: aarch64
     cores:
@@ -5501,6 +5507,7 @@ targets:
     - ymir
     - yquake2
     - zc210
+    downloads: linux-x86_64
   zen3:
     architecture: x86_64
     cores:
@@ -5732,3 +5739,4 @@ targets:
     - zc210
     images:
     - x86-64-v3
+    downloads: linux-x86_64

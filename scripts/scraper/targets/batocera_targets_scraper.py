@@ -219,6 +219,8 @@ def _parse_meta_flags(text: str) -> list[tuple[str, str]]:
 # ("select BR2_PACKAGE_XROAR if BR2_PACKAGE_HAS_LIBGL") reached no board.
 BUILDROOT_KCONFIG = (
     "arch/Config.in",
+    # Each armv7-A CPU selects BR2_ARM_CPU_ARMV7A (cortex_a15_a7 included).
+    "arch/Config.in.arm",
     "package/mesa3d/Config.in",
     "package/libglvnd/Config.in",
 )
@@ -330,6 +332,51 @@ def _parse_es_systems(text: str) -> dict[str, list[str]]:
     return package_to_emulators
 
 
+# RetroArch's core downloader fetches from DEFAULT_BUILDBOT_SERVER_URL, which
+# Linux sets for x86_64, i386 and armv7 hard-float alone, and leaves empty on
+# aarch64 (config.def.h:1855-1864 at Batocera's 4b74434 and at v1.22.2).
+def buildbot_target(symbols: set[str] | frozenset[str]) -> str | None:
+    """The RetroArch targets entry a board's core downloader installs from.
+
+    `symbols` are the board's active symbols. An armv7-A CPU selects
+    BR2_ARM_CPU_ARMV7A (arch/Config.in.arm) and is hard-float unless the
+    board asks for soft-float (BR2_ARM_EABI): Buildroot picks EABIHF for a
+    CPU with a VFP, which every Cortex-A has. armv6 (bcm2835), aarch64 and
+    riscv64 get no buildbot URL.
+    """
+    if "BR2_x86_64" in symbols:
+        return "linux-x86_64"
+    if "BR2_i386" in symbols:
+        return "linux-x86"
+    if "BR2_ARM_CPU_ARMV7A" in symbols and "BR2_ARM_EABI" not in symbols:
+        return "linux-armhf"
+    return None
+
+
+# configure options and make variables that compile the downloader out.
+_NO_DOWNLOADER = ("--disable-update-cores", "--disable-online-updater", "--disable-networking",
+                  "HAVE_UPDATE_CORES=0", "HAVE_ONLINE_UPDATER=0", "HAVE_LAKKA=1")
+_BLANK_CORES_URL = re.compile(r'^\s*core_updater_buildbot_cores_url\s*=\s*""', re.MULTILINE)
+
+
+def downloader_disabled(retroarch_mk: str, shipped_cfgs: dict[str, str]) -> str | None:
+    """Why RetroArch's core downloader installs nothing, or None.
+
+    Compiled out by its build options, or left without a URL by a shipped
+    retroarch.cfg. A config that hides the menu entry alone does not stop
+    it: without HAVE_LAKKA, Settings > User Interface offers it back
+    (menu_setting.c). A config that blanks the URL for some boards only is
+    a case this reader does not split, and an error.
+    """
+    for option in _NO_DOWNLOADER:
+        if option in retroarch_mk:
+            return f"retroarch.mk sets {option}"
+    blank = sorted(path for path, text in shipped_cfgs.items() if _BLANK_CORES_URL.search(text))
+    if blank:
+        raise RuntimeError(f"{', '.join(blank)} blank the core downloader URL: split per board")
+    return None
+
+
 # Buildroot's architecture choice, as a board sets it (arch/Config.in).
 _ARCH_SYMBOLS = {
     "BR2_aarch64": "aarch64",
@@ -361,7 +408,8 @@ def _arch_from_flag(flag: str, board_flags: set[str] | frozenset[str] = frozense
 class BuildSelection:
     """What the boards of a build turn on, read once from its Kconfig.
 
-    `targets` is each board's entry of the targets file. `emulators` holds
+    `targets` is each board's entry of the targets file, `downloads` naming
+    the RetroArch targets entry its core downloader installs from. `emulators` holds
     every es_systems name some board builds and `listed` every name
     es_systems ties to a package, `symbols` every symbol some board ends up
     with, and `packages` the config symbol each package folder of the tree
@@ -412,6 +460,7 @@ class Scraper(BaseTargetScraper):
     # Path prefix -> repository of a submodule the root Config.in sources
     # from: KNULLI reads Batocera's packages as batocera/package/...
     SUBMODULES: dict[str, str] = {}
+    RETROARCH_MK = "package/batocera/emulators/retroarch/retroarch/retroarch.mk"
 
     def __init__(self, url: str = "") -> None:
         super().__init__(url=url or f"https://github.com/{self.REPO}")
@@ -505,6 +554,23 @@ class Scraper(BaseTargetScraper):
             print(f"  sourced but absent at {self.tag}: {path}", file=sys.stderr)
         return files
 
+    def _shipped_retroarch_cfgs(self) -> dict[str, str]:
+        """Every retroarch.cfg the tree ships, its submodules included."""
+        repos = [("", self.REPO, self.tag)]
+        for prefix, repo in self.SUBMODULES.items():
+            pin = _fetch_json(self._api(prefix.rstrip("/")))
+            repos.append((prefix, repo, pin["sha"]))
+        found: dict[str, str] = {}
+        for prefix, repo, ref in repos:
+            listing = _fetch_json(f"https://api.github.com/repos/{repo}/git/trees/{ref}?recursive=1")
+            if not isinstance(listing, dict) or listing.get("truncated"):
+                raise RuntimeError(f"{repo} tree at {ref} is unreadable or truncated")
+            for entry in listing.get("tree", []):
+                if re.search(r"(^|/)retroarch\.cfg$", entry["path"]):
+                    raw = f"https://raw.githubusercontent.com/{repo}/{ref}/{entry['path']}"
+                    found[prefix + entry["path"]] = _fetch(raw)
+        return found
+
     def _buildroot_rules(self) -> list[tuple[str, str, str]]:
         """Buildroot's selects for the symbols the tree tests, at its pin."""
         pin = _fetch_json(self._api("buildroot"))
@@ -560,6 +626,10 @@ class Scraper(BaseTargetScraper):
         images_by_flag = _parse_images(config_in_text)
         if not images_by_flag:
             raise RuntimeError(f"no target image list parsed from {self.CONFIG_IN_PATH}")
+        disabled = downloader_disabled(_fetch(self._raw(self.RETROARCH_MK)),
+                                       self._shipped_retroarch_cfgs())
+        if disabled:
+            print(f"  core downloader off: {disabled}", file=sys.stderr)
 
         targets: dict[str, dict] = {}
         symbols: set[str] = set()
@@ -593,6 +663,9 @@ class Scraper(BaseTargetScraper):
             images = sorted(set(images_by_flag.get(primary_flag, [])))
             if images and images != [target_key]:
                 targets[target_key]["images"] = images
+            downloads = None if disabled else buildbot_target(selected_packages)
+            if downloads:
+                targets[target_key]["downloads"] = downloads
             print(
                 f"    {len(emulators)} emulators ({len(selected_packages)} packages selected)",
                 file=sys.stderr,

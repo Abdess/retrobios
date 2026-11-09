@@ -18,7 +18,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 
-from common import yaml_load
+from common import load_target_config, yaml_load
 from hashing import cut_md5_owner
 from safeparse import yaml_load_upstream
 
@@ -557,6 +557,21 @@ def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[
     return built
 
 
+def installable_cores(selection: BuildSelection, cores: list[str]) -> list[str]:
+    """Buildbot cores a board's RetroArch core downloader installs, beyond
+    the cores the image builds.
+
+    The targets scraper names, per board, the RetroArch targets entry its
+    downloader reads (`downloads`): a Batocera x86_64 board installs any
+    core of linux-x86_64, an armv7 one any of linux-armhf.
+    """
+    found: set[str] = set()
+    for entry in selection.targets.values():
+        if entry.get("downloads"):
+            found |= load_target_config("retroarch", entry["downloads"]) or set()
+    return sorted(found - set(cores))
+
+
 def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dict]:
     """The launcher records of emulators the build runs.
 
@@ -623,9 +638,11 @@ class Scraper(BaseScraper):
         launchers = extract_launchers(
             lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
         )
-        built = boards_build(BoardTargets().build_selection(self.tag), launchers)
+        selection = BoardTargets().build_selection(self.tag)
+        built = boards_build(selection, launchers)
         launchers = records_run(launchers, built)
         cores, standalone, dual = self._fetch_cores(built)
+        installable = installable_cores(selection, cores)
         libretro_systems = es_systems_libretro_systems(
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
         )
@@ -645,6 +662,8 @@ class Scraper(BaseScraper):
         if dual:
             # Launched both ways: each layout gets its files.
             result["dual_mode_cores"] = dual
+        if installable:
+            result["installable_cores"] = installable
         # The systems each libretro core runs for: its save folders.
         result["libretro_systems"] = libretro_systems
         result["launchers"] = launchers

@@ -35,6 +35,7 @@ class Scraper(BatoceraScraper):
     SYSTEM_SYMBOL = "BR2_PACKAGE_KNULLI_SYSTEM"
     BUILDROOT_REPO = "knulli-cfw/buildroot"
     SUBMODULES = {"batocera/": "batocera-linux/batocera.linux"}
+    RETROARCH_MK = "package/retroarch/retroarch/retroarch.mk"
 
 
 def main() -> None:
