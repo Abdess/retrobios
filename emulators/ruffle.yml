@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/ruffle-rs/ruffle"
 upstream: "https://github.com/ruffle-rs/ruffle"
 profiled_date: "2026-09-17"
-source_commit: "fe6cfc545405b888ebb478ce1c211d63147ca49b"
+source_commit: "5701ce3223704e29a98cc636ada73b9d416197d1"
 core_version: "0.7.1"
 version_basis:
   kind: file
@@ -43,7 +43,7 @@ notes: |
   Linux, then falls back to <cache>/ruffle/video/ and fetches the Cisco binary
   from ciscobinary.openh264.org bz2-compressed into it
   (video/external/src/decoder/openh264.rs:53-56,113-137,177-195,
-  desktop/src/player.rs:234-241). Whether the library was already there or was
+  desktop/src/player.rs:237-244). Whether the library was already there or was
   just downloaded, its SHA-256 is checked before loading and the size is read
   only to format the mismatch message
   (video/external/src/decoder/openh264.rs:139-150), and WelsGetCodecVersion must
@@ -52,13 +52,13 @@ notes: |
   --cache-directory moves it (desktop/src/cli.rs:31-35,148). Without the library
   the player still starts: ExternalVideoBackend wraps SoftwareVideoBackend, so
   H.263, Screen Video and VP6 keep decoding and only H.264 streams fail
-  (video/external/src/backend.rs:41,51-69,73-80).
+  (video/external/src/backend.rs:41,51-70,73-82,117-126).
 
   Text uses system fonts. fontdb::Database::load_system_fonts() fills the
   database at startup (desktop/src/app.rs:459-460), and both the Flash device
   fonts and the egui menu bar resolve family names against it and take whatever
   face the host answers with (desktop/src/backends/ui.rs:321-380,
-  desktop/src/gui/controller.rs:754-800), device font names case-insensitively.
+  desktop/src/gui/controller.rs:758-804), device font names case-insensitively.
   The face is memory-mapped and parsed
   by Ruffle's own rasterizer unless preferences.toml sets device_font_renderer
   to freetype, which routes Linux builds through FreetypeFontRenderer instead;
@@ -67,12 +67,12 @@ notes: |
   desktop/src/preferences/read.rs:74-75, desktop/Cargo.toml:84). The families
   asked for are Times New Roman, Arial, Courier New and their metric-compatible
   substitutes, plus the CJK, Hebrew, Arabic and Thai faces
-  (desktop/src/player.rs:361-414, desktop/src/gui/controller.rs:633-707), and
+  (desktop/src/player.rs:365-418, desktop/src/gui/controller.rs:637-711), and
   on Unix fontconfig sorts the fallback chain
   (desktop/src/backends/ui.rs:383-396,556-648). No name, path, size or hash is
   fixed anywhere. The compiled-in Noto Sans subset sits behind the default_font
   feature, which the web and exporter crates enable and the desktop build does
-  not (core/src/player.rs:84-85, core/Cargo.toml:81,94, web/Cargo.toml:63-65,
+  not (core/src/player.rs:86-87, core/Cargo.toml:81,94, web/Cargo.toml:63-65,
   exporter/Cargo.toml:16, desktop/Cargo.toml:23), so on the desktop an
   unmatched family leaves the run without that face rather than falling back
   to a bundled one.
