@@ -39,7 +39,12 @@ notes: |
   priority over the global sys_modules/ directory.
 
   System fonts are mounted from fonts/font/ (/preinst/common/font on real
-  PS4) and fonts/font2/ (/system/common/font2 on real PS4). These are SST
+  PS4) and fonts/font2/ (/system/common/font2 on real PS4)
+  (src/emulator.cpp:639-661). The font library opens each by its dumped name
+  or its PS4 name in fonts/, then fonts/font/, then fonts/font2/
+  (src/core/libraries/font/font_internal.cpp:391-468), and falls back to the
+  Noto fonts it embeds (font_internal.cpp:119-127). The entries below put
+  each in fonts/font/, which both the mount and the library read. These are SST
   (Sony Standard Text) typeface files in OTF format. The emulator mounts
   the directories wholesale, and games load individual fonts by name. Without
   fonts, the emulator warns "No dumped system fonts, expect missing text
@@ -239,3 +244,270 @@ files:
     description: "PS4 XML parser"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:251"
+
+  - name: "SST-Light.otf"
+    aliases: ["SST-EU-ROMAN-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:419, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SST-Roman.otf"
+    aliases: ["SST-EU-ROMAN.OTF", "SST-EU-ROMAN-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:420, 422, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SST-Medium.otf"
+    aliases: ["SST-EU-ROMAN-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:421, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SST-Italic.otf"
+    aliases: ["SST-EU-ROMAN-I.OTF", "SST-ITALIC-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Italic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:423, 427, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SST-Bold.otf"
+    aliases: ["SST-EU-ROMAN-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:424, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SST-BoldItalic.otf"
+    aliases: ["SST-EU-ROMAN-BI.OTF", "SST-ITALIC-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-BoldItalic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:425, 429, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SST-LightItalic.otf"
+    aliases: ["SST-ITALIC-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-LightItalic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:426, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SST-MediumItalic.otf"
+    aliases: ["SST-ITALIC-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-MediumItalic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:428, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTTypewriter-Roman.otf"
+    aliases: ["SST-TYPEWRITER-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTTypewriter-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:430, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTTypewriter-Bd.otf"
+    aliases: ["SST-TYPEWRITER-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTTypewriter-Bd.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:431, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTJpPro-Regular.otf"
+    aliases: ["SST-JPPRO-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTJpPro-Regular.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:432, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTJpPro-Bold.otf"
+    aliases: ["SST-JPPRO-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTJpPro-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:433, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "DFHEI5-SONY.ttf"
+    aliases: ["SST-CNGB-HEI-R.TTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/DFHEI5-SONY.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:434, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTAribStdB24-Regular.ttf"
+    aliases: ["SST-ARIB-STD-B24-R.TTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTAribStdB24-Regular.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:435, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTArabic-Roman.otf"
+    aliases: ["SST-ARABIC-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:436, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTArabic-Light.otf"
+    aliases: ["SST-ARABIC-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:437, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTArabic-Medium.otf"
+    aliases: ["SST-ARABIC-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:438, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTArabic-Bold.otf"
+    aliases: ["SST-ARABIC-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:439, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SCEPS4Yoongd-Light.otf"
+    aliases: ["SCE-EXT-HANGUL-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCEPS4Yoongd-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:440, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SCEPS4Yoongd-Medium.otf"
+    aliases: ["SCE-EXT-HANGUL-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCEPS4Yoongd-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:441, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SCEPS4Yoongd-Bold.otf"
+    aliases: ["SCE-EXT-HANGUL-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCEPS4Yoongd-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:442, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "e046323ms.ttf"
+    aliases: ["SSTCC-SERIF-MONO.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/e046323ms.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:443, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "e046323ts.ttf"
+    aliases: ["SSTCC-SERIF.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/e046323ts.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:444, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "n023055ms.ttf"
+    aliases: ["SSTCC-SANSSERIF-MONO.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/n023055ms.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:445, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "n023055ts.ttf"
+    aliases: ["SSTCC-SANSSERIF.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/n023055ts.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:446, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "d013013ds.ttf"
+    aliases: ["SSTCC-CUSUAL.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/d013013ds.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:447, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "k006004ds.ttf"
+    aliases: ["SSTCC-CURSIVE.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/k006004ds.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:448, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "c041056ts.ttf"
+    aliases: ["SSTCC-SMALLCAPITAL.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/c041056ts.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:449, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SCE-RDC-R-JPN.otf"
+    aliases: ["SCE-JP-CATTLEYA-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCE-RDC-R-JPN.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:450, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SCE-RDC-B-JPN.otf"
+    aliases: ["SCE-JP-CATTLEYA-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCE-RDC-B-JPN.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:451, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTThai-Light.otf"
+    aliases: ["SST-THAI-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTThai-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:452, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTThai-Roman.otf"
+    aliases: ["SST-THAI-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTThai-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:453, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTThai-Medium.otf"
+    aliases: ["SST-THAI-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTThai-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:454, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTThai-Bold.otf"
+    aliases: ["SST-THAI-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTThai-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:455, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTVietnamese-Light.otf"
+    aliases: ["SST-VIETNAMESE-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTVietnamese-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:456, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTVietnamese-Roman.otf"
+    aliases: ["SST-VIETNAMESE-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTVietnamese-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:457, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTVietnamese-Medium.otf"
+    aliases: ["SST-VIETNAMESE-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTVietnamese-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:458, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
+  - name: "SSTVietnamese-Bold.otf"
+    aliases: ["SST-VIETNAMESE-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTVietnamese-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:459, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:639-661"
