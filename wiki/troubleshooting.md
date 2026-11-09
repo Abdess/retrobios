@@ -50,8 +50,6 @@ Without `--check`, it adds missing files and replaces wrong ones.
   folder. Emulators add their own, like `dc/` for Flycast.
 - **A ZIP in parts, like `Pack.part1of2.zip`?** Unzip all parts into one
   folder.
-- **"left out" on an exFAT card?** The card refuses a `:` in a name. An
-  ext4 card holds these files.
 
 <!-- Flycast's libretro port appends "dc/" to the system directory:
 shell/libretro/libretro.cpp:2252-2253, emulators/flycast.yml. -->

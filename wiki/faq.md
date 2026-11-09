@@ -101,11 +101,6 @@ Fill it from a computer or point `--from-pack` at your ZIP: [Without a network](
 `--from` copies BIOS files from an old card or backup:
 [Copy from an old card](installer.md#copy-from-an-old-card).
 
-## BIOS pictures or sounds in my phone's gallery?
-
-An empty file named `.nomedia` in the BIOS folder hides them. The installer
-adds it on Android: [Android](installer.md#android).
-
 ## My setup is not in the list
 
 - Name your emulator's BIOS folder with `--dest`.
