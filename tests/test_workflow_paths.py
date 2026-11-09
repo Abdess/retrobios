@@ -73,12 +73,17 @@ class DeploySiteTriggers(unittest.TestCase):
         run = "\n".join(
             step.get("run", "") for job in workflow["jobs"].values() for step in job["steps"]
         )
+        # The Astro build runs scripts of its own (site_markdown.py writes
+        # each page's Markdown once the pages are built): they are the
+        # build's entry points as much as a workflow step's.
+        astro = (REPO_ROOT / "website" / "astro.config.mjs").read_text(encoding="utf-8")
         entry_points = sorted(
             {
                 word.removeprefix("scripts/")
                 for word in run.split()
                 if word.startswith("scripts/") and word.endswith(".py")
             }
+            | set(re.findall(r"\.\./scripts/([\w]+\.py)", astro))
         )
         self.assertIn("generate_site.py", entry_points)
         # The Starlight project is an input of its own build.
