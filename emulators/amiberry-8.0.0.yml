@@ -40,13 +40,13 @@ notes: |
   else ~/Amiberry, else the working directory, which an amiberry.portable
   file there makes the home directory. The WHDLoad booter reads whdboot/
   below $XDG_DATA_HOME/amiberry, or below the home directory in portable
-  mode (src/osdep/amiberry.cpp:4115-4154, 4511-4603,
-  4946-4948, 3772).
+  mode (src/osdep/amiberry.cpp:4115-4154, 4511-4603, 4946-4948,
+  3772).
 
   The ROM scan reads the files of the ROM path root and names each one by
-  the ROM database (src/rommgr.cpp roms[]). The 31 American Laser Games and
-  Picmatic arcade ROMs of the database are game content and left out. A
-  Kickstart the configuration names is opened as given, then kick.rom below
+  the ROM database (src/rommgr.cpp roms[]). The American Laser Games and
+  Picmatic arcade ROMs of the database are game content and left out.
+  A Kickstart the configuration names is opened as given, then kick.rom below
   the home directory's roms/ is tried (src/memory.cpp:2030-2065).
 files:
 - name: "6570-036.rom"
@@ -56,9 +56,11 @@ files:
   size: 2048
   crc32: "4a3fc332"
   sha1: "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2"
+  validation:
+  - "sha1"
   found_by: content
   description: "6570-036 Keyboard MCU ROM"
-  source_ref: "source src/rommgr.cpp:126-127, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:126-127, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/kbmcu/keyboard_mcu_6500_1.cpp:385, source src/kbmcu/keyboard_mcu_6805.cpp:544, source\
     \ src/kbmcu/keyboard_mcu_d8039hlc.cpp:235"
 - name: "68HC05.rom"
@@ -68,9 +70,11 @@ files:
   size: 8192
   crc32: "2a77eec4"
   sha1: "301ec6a69404457d912c89e3fc54095eda9f0e93"
+  validation:
+  - "sha1"
   found_by: content
   description: "68HC05 Keyboard MCU ROM"
-  source_ref: "source src/rommgr.cpp:128-129, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:128-129, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/kbmcu/keyboard_mcu_6500_1.cpp:385, source src/kbmcu/keyboard_mcu_6805.cpp:544, source\
     \ src/kbmcu/keyboard_mcu_d8039hlc.cpp:235"
 - name: "D8039HLC.rom"
@@ -80,9 +84,11 @@ files:
   size: 2048
   crc32: "c23d280e"
   sha1: "b5c4b8c38b9e4a864abc871d048bd1c3a02c8432"
+  validation:
+  - "sha1"
   found_by: content
   description: "D8039HLC Keyboard MCU ROM"
-  source_ref: "source src/rommgr.cpp:130-131, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:130-131, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/kbmcu/keyboard_mcu_6500_1.cpp:385, source src/kbmcu/keyboard_mcu_6805.cpp:544, source\
     \ src/kbmcu/keyboard_mcu_d8039hlc.cpp:235"
 - name: "KS ROM v23.93 (Velvet).rom"
@@ -94,7 +100,7 @@ files:
   sha1: "7c36b2ba298da3dace60d0ba8511d47076a40d5c"
   found_by: content
   description: "KS ROM v23.93 (Velvet)"
-  source_ref: "source src/rommgr.cpp:133-134, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:133-134, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v1.0 (A1000)(NTSC).rom"
   path: "KS ROM v1.0 (A1000)(NTSC).rom"
   system: "commodore-amiga"
@@ -104,7 +110,7 @@ files:
   sha1: "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79"
   found_by: content
   description: "KS ROM v1.0 (A1000)(NTSC)"
-  source_ref: "source src/rommgr.cpp:140-141, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:140-141, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v1.1 (A1000)(NTSC).rom"
   path: "KS ROM v1.1 (A1000)(NTSC).rom"
   system: "commodore-amiga"
@@ -114,7 +120,7 @@ files:
   sha1: "4192c505d130f446b2ada6bdc91dae730acafb4c"
   found_by: content
   description: "KS ROM v1.1 (A1000)(NTSC)"
-  source_ref: "source src/rommgr.cpp:142-143, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:142-143, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v1.1 (A1000)(PAL).rom"
   path: "KS ROM v1.1 (A1000)(PAL).rom"
   system: "commodore-amiga"
@@ -124,7 +130,7 @@ files:
   sha1: "16df8b5fd524c5a1c7584b2457ac15aff9e3ad6d"
   found_by: content
   description: "KS ROM v1.1 (A1000)(PAL)"
-  source_ref: "source src/rommgr.cpp:144-145, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:144-145, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v1.2 (A1000).rom"
   path: "KS ROM v1.2 (A1000).rom"
   system: "commodore-amiga"
@@ -134,7 +140,7 @@ files:
   sha1: "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b"
   found_by: content
   description: "KS ROM v1.2 (A1000)"
-  source_ref: "source src/rommgr.cpp:146-147, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:146-147, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-120.rom"
   path: "amiga-os-120.rom"
   system: "commodore-amiga"
@@ -147,7 +153,7 @@ files:
   found_by: content
   description: "KS ROM v1.2 (A500,A1000,A2000)"
   note: "The WHDLoad booter links it into its Kickstarts folder as kick33180.A500."
-  source_ref: "source src/rommgr.cpp:148-149, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:148-149, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/osdep/amiberry_whdbooter.cpp:268"
 - name: "amiga-os-130.rom"
   path: "amiga-os-130.rom"
@@ -161,7 +167,7 @@ files:
   found_by: content
   description: "KS ROM v1.3 (A500,A1000,A2000)"
   note: "The WHDLoad booter links it into its Kickstarts folder as kick34005.A500."
-  source_ref: "source src/rommgr.cpp:150-151, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:150-151, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/osdep/amiberry_whdbooter.cpp:269"
 - name: "KS ROM v1.3 (A3000)(SK).rom"
   path: "KS ROM v1.3 (A3000)(SK).rom"
@@ -172,7 +178,7 @@ files:
   sha1: "c39bd9094d4e5f4e28c1411f3086950406062e87"
   found_by: content
   description: "KS ROM v1.3 (A3000)(SK)"
-  source_ref: "source src/rommgr.cpp:152-153, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:152-153, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v1.4 (A3000).rom"
   path: "KS ROM v1.4 (A3000).rom"
   system: "commodore-amiga"
@@ -182,7 +188,7 @@ files:
   sha1: "f76316bf36dff14b20fa349ed02e4b11dd932b07"
   found_by: content
   description: "KS ROM v1.4 (A3000)"
-  source_ref: "source src/rommgr.cpp:154-155, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:154-155, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-204.rom"
   path: "amiga-os-204.rom"
   system: "commodore-amiga"
@@ -195,7 +201,7 @@ files:
   found_by: content
   description: "KS ROM v2.04 (A500+)"
   note: "The WHDLoad booter links it into its Kickstarts folder as kick37175.A500."
-  source_ref: "source src/rommgr.cpp:158-159, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:158-159, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/osdep/amiberry_whdbooter.cpp:270"
 - name: "KS ROM v2.05 (A600).rom"
   path: "KS ROM v2.05 (A600).rom"
@@ -206,7 +212,7 @@ files:
   sha1: "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
   found_by: content
   description: "KS ROM v2.05 (A600)"
-  source_ref: "source src/rommgr.cpp:160-161, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:160-161, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v2.05 (A600HD).rom"
   path: "KS ROM v2.05 (A600HD).rom"
   system: "commodore-amiga"
@@ -216,7 +222,7 @@ files:
   sha1: "f72d89148dac39c696e30b10859ebc859226637b"
   found_by: content
   description: "KS ROM v2.05 (A600HD)"
-  source_ref: "source src/rommgr.cpp:162-163, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:162-163, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-205-a600.rom"
   path: "amiga-os-205-a600.rom"
   system: "commodore-amiga"
@@ -226,7 +232,7 @@ files:
   sha1: "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
   found_by: content
   description: "KS ROM v2.05 (A600HD)"
-  source_ref: "source src/rommgr.cpp:164-165, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:164-165, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v2.04 (A3000).rom"
   path: "KS ROM v2.04 (A3000).rom"
   system: "commodore-amiga"
@@ -236,7 +242,7 @@ files:
   sha1: "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
   found_by: content
   description: "KS ROM v2.04 (A3000)"
-  source_ref: "source src/rommgr.cpp:166-167, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:166-167, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-300-a1200.rom"
   path: "amiga-os-300-a1200.rom"
   system: "commodore-amiga"
@@ -249,7 +255,7 @@ files:
   found_by: content
   description: "KS ROM v3.0 (A1200)"
   note: "The WHDLoad booter links it into its Kickstarts folder as kick39106.A1200."
-  source_ref: "source src/rommgr.cpp:171-172, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:171-172, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/osdep/amiberry_whdbooter.cpp:271"
 - name: "amiga-os-300-a4000.rom"
   path: "amiga-os-300-a4000.rom"
@@ -260,7 +266,7 @@ files:
   sha1: "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
   found_by: content
   description: "KS ROM v3.0 (A4000)"
-  source_ref: "source src/rommgr.cpp:175-176, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:175-176, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1 (A4000).rom"
   path: "KS ROM v3.1 (A4000).rom"
   system: "commodore-amiga"
@@ -270,7 +276,7 @@ files:
   sha1: "81c631dd096bbb31d2af90299c76b774db74076c"
   found_by: content
   description: "KS ROM v3.1 (A4000)"
-  source_ref: "source src/rommgr.cpp:179-180, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:179-180, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-310-a600.rom"
   path: "amiga-os-310-a600.rom"
   system: "commodore-amiga"
@@ -283,7 +289,7 @@ files:
   found_by: content
   description: "KS ROM v3.1 (A500,A600,A2000)"
   note: "The WHDLoad booter links it into its Kickstarts folder as kick40063.A600."
-  source_ref: "source src/rommgr.cpp:183-184, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:183-184, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/osdep/amiberry_whdbooter.cpp:272"
 - name: "amiga-os-310-a1200.rom"
   path: "amiga-os-310-a1200.rom"
@@ -297,7 +303,7 @@ files:
   found_by: content
   description: "KS ROM v3.1 (A1200)"
   note: "The WHDLoad booter links it into its Kickstarts folder as kick40068.A1200."
-  source_ref: "source src/rommgr.cpp:185-186, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:185-186, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/osdep/amiberry_whdbooter.cpp:273"
 - name: "amiga-os-310-a3000.rom"
   path: "amiga-os-310-a3000.rom"
@@ -308,7 +314,7 @@ files:
   sha1: "f8e210d72b4c4853e0c9b85d223ba20e3d1b36ee"
   found_by: content
   description: "KS ROM v3.1 (A3000)"
-  source_ref: "source src/rommgr.cpp:189-190, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:189-190, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-310.rom"
   path: "amiga-os-310.rom"
   system: "commodore-amiga"
@@ -318,7 +324,7 @@ files:
   sha1: "c3c481160866e60d085e436a24db3617ff60b5f9"
   found_by: content
   description: "KS ROM v3.1 (A4000)(Cloanto)"
-  source_ref: "source src/rommgr.cpp:193-194, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:193-194, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-310-a4000.rom"
   path: "amiga-os-310-a4000.rom"
   system: "commodore-amiga"
@@ -331,7 +337,7 @@ files:
   found_by: content
   description: "KS ROM v3.1 (A4000)"
   note: "The WHDLoad booter links it into its Kickstarts folder as kick40068.A4000."
-  source_ref: "source src/rommgr.cpp:195-196, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  source_ref: "source src/rommgr.cpp:195-196, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/osdep/amiberry_whdbooter.cpp:274"
 - name: "amiga-os-310-a4000t.rom"
   path: "amiga-os-310-a4000t.rom"
@@ -342,7 +348,7 @@ files:
   sha1: "b0ec8b84d6768321e01209f11e6248f2f5281a21"
   found_by: content
   description: "KS ROM v3.1 (A4000T)"
-  source_ref: "source src/rommgr.cpp:199-200, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:199-200, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.X (A4000)(Cloanto).rom"
   path: "KS ROM v3.X (A4000)(Cloanto).rom"
   system: "commodore-amiga"
@@ -352,7 +358,7 @@ files:
   sha1: "3cbfc9e1fe396360157bd161de74fc901abee7ec"
   found_by: content
   description: "KS ROM v3.X (A4000)(Cloanto)"
-  source_ref: "source src/rommgr.cpp:203-204, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:203-204, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-1 (A1200).rom"
   path: "KS ROM v3.1.4-1 (A1200).rom"
   system: "commodore-amiga"
@@ -362,7 +368,7 @@ files:
   sha1: "6355a9ed5dc840422f9b73308a91be0d0bb506bd"
   found_by: content
   description: "KS ROM v3.1.4-1 (A1200)"
-  source_ref: "source src/rommgr.cpp:206-207, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:206-207, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-1 (A3000).rom"
   path: "KS ROM v3.1.4-1 (A3000).rom"
   system: "commodore-amiga"
@@ -372,7 +378,7 @@ files:
   sha1: "1a34b25a25e260e38e879172850143c80b461a64"
   found_by: content
   description: "KS ROM v3.1.4-1 (A3000)"
-  source_ref: "source src/rommgr.cpp:210-211, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:210-211, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-1 (A4000).rom"
   path: "KS ROM v3.1.4-1 (A4000).rom"
   system: "commodore-amiga"
@@ -382,7 +388,7 @@ files:
   sha1: "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
   found_by: content
   description: "KS ROM v3.1.4-1 (A4000)"
-  source_ref: "source src/rommgr.cpp:214-215, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:214-215, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-1 (A4000T).rom"
   path: "KS ROM v3.1.4-1 (A4000T).rom"
   system: "commodore-amiga"
@@ -392,7 +398,7 @@ files:
   sha1: "938a60a1d2c0d411f64bb27e5af40258b8decbf3"
   found_by: content
   description: "KS ROM v3.1.4-1 (A4000T)"
-  source_ref: "source src/rommgr.cpp:218-219, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:218-219, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-1 (A500).rom"
   path: "KS ROM v3.1.4-1 (A500).rom"
   system: "commodore-amiga"
@@ -402,7 +408,7 @@ files:
   sha1: "8a2405087ce182225656dd0b93069c45743f9e34"
   found_by: content
   description: "KS ROM v3.1.4-1 (A500)"
-  source_ref: "source src/rommgr.cpp:222-223, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:222-223, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-2 (A1200).rom"
   path: "KS ROM v3.1.4-2 (A1200).rom"
   system: "commodore-amiga"
@@ -412,7 +418,7 @@ files:
   sha1: "ef36c4638ee45de6bb93701761216c958cd0d57b"
   found_by: content
   description: "KS ROM v3.1.4-2 (A1200)"
-  source_ref: "source src/rommgr.cpp:225-226, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:225-226, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-2 (A3000).rom"
   path: "KS ROM v3.1.4-2 (A3000).rom"
   system: "commodore-amiga"
@@ -422,7 +428,7 @@ files:
   sha1: "d73ae3a36f12bb49bbf6ba04a890ff7aac419015"
   found_by: content
   description: "KS ROM v3.1.4-2 (A3000)"
-  source_ref: "source src/rommgr.cpp:229-230, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:229-230, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-2 (A4000).rom"
   path: "KS ROM v3.1.4-2 (A4000).rom"
   system: "commodore-amiga"
@@ -432,7 +438,7 @@ files:
   sha1: "aab44cd651e6b6f81a3effd8e0ba6b37ab322f32"
   found_by: content
   description: "KS ROM v3.1.4-2 (A4000)"
-  source_ref: "source src/rommgr.cpp:233-234, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:233-234, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-2 (A4000T).rom"
   path: "KS ROM v3.1.4-2 (A4000T).rom"
   system: "commodore-amiga"
@@ -442,7 +448,7 @@ files:
   sha1: "cd73aefe9cbfc258e7966cd14a7b2f4647c9ba45"
   found_by: content
   description: "KS ROM v3.1.4-2 (A4000T)"
-  source_ref: "source src/rommgr.cpp:237-238, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:237-238, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.1.4-2 (A500).rom"
   path: "KS ROM v3.1.4-2 (A500).rom"
   system: "commodore-amiga"
@@ -452,7 +458,7 @@ files:
   sha1: "d81cd6f131040895843d9dfa95a45bc95edd9704"
   found_by: content
   description: "KS ROM v3.1.4-2 (A500)"
-  source_ref: "source src/rommgr.cpp:241-242, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:241-242, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2 (A1200).rom"
   path: "KS ROM v3.2 (A1200).rom"
   system: "commodore-amiga"
@@ -462,7 +468,7 @@ files:
   sha1: "5b2982876fec2166673be447643881262c84090e"
   found_by: content
   description: "KS ROM v3.2 (A1200)"
-  source_ref: "source src/rommgr.cpp:244-245, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:244-245, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2 (A3000).rom"
   path: "KS ROM v3.2 (A3000).rom"
   system: "commodore-amiga"
@@ -472,7 +478,7 @@ files:
   sha1: "7bc0e75622d7254e11ea708e5d149007866c93ab"
   found_by: content
   description: "KS ROM v3.2 (A3000)"
-  source_ref: "source src/rommgr.cpp:248-249, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:248-249, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2 (A4000).rom"
   path: "KS ROM v3.2 (A4000).rom"
   system: "commodore-amiga"
@@ -482,7 +488,7 @@ files:
   sha1: "37a8aa0b83782d75ce0b4a80631ff3459e91dc63"
   found_by: content
   description: "KS ROM v3.2 (A4000)"
-  source_ref: "source src/rommgr.cpp:252-253, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:252-253, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2 (A4000T).rom"
   path: "KS ROM v3.2 (A4000T).rom"
   system: "commodore-amiga"
@@ -492,7 +498,7 @@ files:
   sha1: "ede1748eb2cbb1e86ac5bf7dc9b97246a4a54358"
   found_by: content
   description: "KS ROM v3.2 (A4000T)"
-  source_ref: "source src/rommgr.cpp:256-257, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:256-257, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2 (A500/A600/A2000/A1000/CDTV).rom"
   path: "KS ROM v3.2 (A500-A600-A2000-A1000-CDTV).rom"
   system: "commodore-amiga"
@@ -502,7 +508,7 @@ files:
   sha1: "b88e364daf23c9c9920e548b0d3d944e65b1031d"
   found_by: content
   description: "KS ROM v3.2 (A500/A600/A2000/A1000/CDTV)"
-  source_ref: "source src/rommgr.cpp:260-261, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:260-261, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.1 (A1200).rom"
   path: "KS ROM v3.2.1 (A1200).rom"
   system: "commodore-amiga"
@@ -512,7 +518,7 @@ files:
   sha1: "0984fc0df07dc0585db0923d580629f70fca420d"
   found_by: content
   description: "KS ROM v3.2.1 (A1200)"
-  source_ref: "source src/rommgr.cpp:263-264, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:263-264, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.1 (A3000).rom"
   path: "KS ROM v3.2.1 (A3000).rom"
   system: "commodore-amiga"
@@ -522,7 +528,7 @@ files:
   sha1: "eb93508f0bb0cde81d88bf22d05045565d66ef74"
   found_by: content
   description: "KS ROM v3.2.1 (A3000)"
-  source_ref: "source src/rommgr.cpp:267-268, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:267-268, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.1 (A4000).rom"
   path: "KS ROM v3.2.1 (A4000).rom"
   system: "commodore-amiga"
@@ -532,7 +538,7 @@ files:
   sha1: "7db3c3226acc0bfe548c788cf1bc7c4c8774d66f"
   found_by: content
   description: "KS ROM v3.2.1 (A4000)"
-  source_ref: "source src/rommgr.cpp:271-272, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:271-272, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.1 (A4000T).rom"
   path: "KS ROM v3.2.1 (A4000T).rom"
   system: "commodore-amiga"
@@ -542,7 +548,7 @@ files:
   sha1: "a75fcd349680cedeab06e496c6338394e81788d7"
   found_by: content
   description: "KS ROM v3.2.1 (A4000T)"
-  source_ref: "source src/rommgr.cpp:275-276, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:275-276, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.1 (A500/A600/A2000/A1000/CDTV).rom"
   path: "KS ROM v3.2.1 (A500-A600-A2000-A1000-CDTV).rom"
   system: "commodore-amiga"
@@ -552,7 +558,7 @@ files:
   sha1: "8f64ada68a7f128ba782e8dc9fa583344171590a"
   found_by: content
   description: "KS ROM v3.2.1 (A500/A600/A2000/A1000/CDTV)"
-  source_ref: "source src/rommgr.cpp:279-280, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:279-280, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.2 (A1200).rom"
   path: "KS ROM v3.2.2 (A1200).rom"
   system: "commodore-amiga"
@@ -562,7 +568,7 @@ files:
   sha1: "d9622547d84741b52c5472607f9aca75565cbba3"
   found_by: content
   description: "KS ROM v3.2.2 (A1200)"
-  source_ref: "source src/rommgr.cpp:282-283, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:282-283, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.2 (A3000).rom"
   path: "KS ROM v3.2.2 (A3000).rom"
   system: "commodore-amiga"
@@ -572,7 +578,7 @@ files:
   sha1: "443d98369aca3ba51ab2d4789d14fa9a26379c0b"
   found_by: content
   description: "KS ROM v3.2.2 (A3000)"
-  source_ref: "source src/rommgr.cpp:286-287, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:286-287, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.2 (A4000).rom"
   path: "KS ROM v3.2.2 (A4000).rom"
   system: "commodore-amiga"
@@ -582,7 +588,7 @@ files:
   sha1: "a3207bd5b5a3ca629010f3159ac793040fa813ef"
   found_by: content
   description: "KS ROM v3.2.2 (A4000)"
-  source_ref: "source src/rommgr.cpp:290-291, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:290-291, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.2 (A4000T).rom"
   path: "KS ROM v3.2.2 (A4000T).rom"
   system: "commodore-amiga"
@@ -592,7 +598,7 @@ files:
   sha1: "8e3fff2675cc1b97b4f072b63fd4de7093f7c627"
   found_by: content
   description: "KS ROM v3.2.2 (A4000T)"
-  source_ref: "source src/rommgr.cpp:294-295, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:294-295, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.2 (A500/A600/A2000/A1000/CDTV).rom"
   path: "KS ROM v3.2.2 (A500-A600-A2000-A1000-CDTV).rom"
   system: "commodore-amiga"
@@ -602,7 +608,7 @@ files:
   sha1: "7d5ebe686b69d59a863cc77a36b2cd60359a9ed2"
   found_by: content
   description: "KS ROM v3.2.2 (A500/A600/A2000/A1000/CDTV)"
-  source_ref: "source src/rommgr.cpp:298-299, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:298-299, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.3 (A1200).rom"
   path: "KS ROM v3.2.3 (A1200).rom"
   system: "commodore-amiga"
@@ -612,7 +618,7 @@ files:
   sha1: "3f48ef0eca607855d7872796ba886d7889451fad"
   found_by: content
   description: "KS ROM v3.2.3 (A1200)"
-  source_ref: "source src/rommgr.cpp:301-302, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:301-302, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.3 (A3000).rom"
   path: "KS ROM v3.2.3 (A3000).rom"
   system: "commodore-amiga"
@@ -622,7 +628,7 @@ files:
   sha1: "76222baa6d5654dbba4a769bb86c1f39322d1c1c"
   found_by: content
   description: "KS ROM v3.2.3 (A3000)"
-  source_ref: "source src/rommgr.cpp:303-304, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:303-304, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.3 (A4000).rom"
   path: "KS ROM v3.2.3 (A4000).rom"
   system: "commodore-amiga"
@@ -632,7 +638,7 @@ files:
   sha1: "81902f41cbf6fc6b7d18c691a4ada6245d174bde"
   found_by: content
   description: "KS ROM v3.2.3 (A4000)"
-  source_ref: "source src/rommgr.cpp:305-306, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:305-306, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.3 (A4000T).rom"
   path: "KS ROM v3.2.3 (A4000T).rom"
   system: "commodore-amiga"
@@ -642,7 +648,7 @@ files:
   sha1: "8eeb6c2b282e589bd1589ebba3a78a41722499ec"
   found_by: content
   description: "KS ROM v3.2.3 (A4000T)"
-  source_ref: "source src/rommgr.cpp:307-308, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:307-308, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2.3 (A500/A600/A2000/A1000/CDTV).rom"
   path: "KS ROM v3.2.3 (A500-A600-A2000-A1000-CDTV).rom"
   system: "commodore-amiga"
@@ -652,7 +658,7 @@ files:
   sha1: "a9d51491d4b1356673621b61f789aed979bd01be"
   found_by: content
   description: "KS ROM v3.2.3 (A500/A600/A2000/A1000/CDTV)"
-  source_ref: "source src/rommgr.cpp:309-310, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:309-310, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "KS ROM v3.2 (Walker).rom"
   path: "KS ROM v3.2 (Walker).rom"
   system: "commodore-amiga"
@@ -662,7 +668,7 @@ files:
   sha1: "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
   found_by: content
   description: "KS ROM v3.2 (Walker)"
-  source_ref: "source src/rommgr.cpp:312-313, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:312-313, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "Casablanca 74095 - 00 717 - 02.rom"
   path: "Casablanca 74095 - 00 717 - 02.rom"
   system: "commodore-amiga"
@@ -672,7 +678,7 @@ files:
   sha1: "47f9ee6d0f8ac5a65c6eddc30bcd47c8574d8725"
   found_by: content
   description: "Casablanca 74095 - 00 717 - 02"
-  source_ref: "source src/rommgr.cpp:314-315, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:314-315, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "draco-boot-rom-v1.3.rom"
   path: "draco-boot-rom-v1.3.rom"
   system: "commodore-amiga"
@@ -684,7 +690,7 @@ files:
   - "sha1"
   found_by: content
   description: "DraCo Boot ROM v1.3"
-  source_ref: "source src/rommgr.cpp:318-319, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:318-319, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "draco-boot-rom-v1.5.rom"
   path: "draco-boot-rom-v1.5.rom"
   system: "commodore-amiga"
@@ -696,7 +702,7 @@ files:
   - "sha1"
   found_by: content
   description: "DraCo Boot ROM v1.5"
-  source_ref: "source src/rommgr.cpp:320-321, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:320-321, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-os-310-cd32.rom"
   path: "amiga-os-310-cd32.rom"
   system: "commodore-cd32"
@@ -708,7 +714,7 @@ files:
   - "sha1"
   found_by: content
   description: "CD32 KS ROM v3.1"
-  source_ref: "source src/rommgr.cpp:323-324, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:323-324, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-ext-310-cd32.rom"
   path: "amiga-ext-310-cd32.rom"
   system: "commodore-cd32"
@@ -720,7 +726,7 @@ files:
   - "sha1"
   found_by: content
   description: "CD32 extended ROM"
-  source_ref: "source src/rommgr.cpp:325-326, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:325-326, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cd32-rom-ks-plus-extended.rom"
   path: "cd32-rom-ks-plus-extended.rom"
   system: "commodore-cd32"
@@ -732,7 +738,7 @@ files:
   - "sha1"
   found_by: content
   description: "CD32 ROM (KS + extended)"
-  source_ref: "source src/rommgr.cpp:329-330, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:329-330, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cd32fmv.rom"
   path: "cd32fmv.rom"
   system: "commodore-cd32"
@@ -744,7 +750,7 @@ files:
   - "sha1"
   found_by: content
   description: "CD32 Full Motion Video Cartridge ROM"
-  source_ref: "source src/rommgr.cpp:334-335, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:334-335, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cd32fmv-391777-01.rom"
   path: "cd32fmv-391777-01.rom"
   system: "commodore-cd32"
@@ -756,7 +762,7 @@ files:
   - "sha1"
   found_by: content
   description: "CD32 Full Motion Video Cartridge ROM"
-  source_ref: "source src/rommgr.cpp:336-337, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:336-337, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "amiga-ext-130-cdtv.rom"
   path: "amiga-ext-130-cdtv.rom"
   system: "commodore-cdtv"
@@ -768,7 +774,7 @@ files:
   - "sha1"
   found_by: content
   description: "CDTV extended ROM v1.0"
-  source_ref: "source src/rommgr.cpp:339-340, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:339-340, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cdtv-extended-rom-v2.7.rom"
   path: "cdtv-extended-rom-v2.7.rom"
   system: "commodore-cdtv"
@@ -780,7 +786,7 @@ files:
   - "sha1"
   found_by: content
   description: "CDTV extended ROM v2.7"
-  source_ref: "source src/rommgr.cpp:343-344, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:343-344, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cdtv-a570-extended-rom-v2.30.rom"
   path: "cdtv-a570-extended-rom-v2.30.rom"
   system: "commodore-cdtv"
@@ -792,7 +798,7 @@ files:
   - "sha1"
   found_by: content
   description: "CDTV/A570 extended ROM v2.30"
-  source_ref: "source src/rommgr.cpp:347-348, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:347-348, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cdtv-extended-rom-v47.1.rom"
   path: "cdtv-extended-rom-v47.1.rom"
   system: "commodore-cdtv"
@@ -804,7 +810,7 @@ files:
   - "sha1"
   found_by: content
   description: "CDTV extended ROM v47.1"
-  source_ref: "source src/rommgr.cpp:351-352, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:351-352, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cdtv-cr-extended-rom-v3.32.rom"
   path: "cdtv-cr-extended-rom-v3.32.rom"
   system: "commodore-cdtv"
@@ -816,7 +822,7 @@ files:
   - "sha1"
   found_by: content
   description: "CDTV-CR extended ROM v3.32"
-  source_ref: "source src/rommgr.cpp:356-357, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:356-357, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cdtv-cr-extended-rom-v3.44.rom"
   path: "cdtv-cr-extended-rom-v3.44.rom"
   system: "commodore-cdtv"
@@ -828,7 +834,7 @@ files:
   - "sha1"
   found_by: content
   description: "CDTV-CR extended ROM v3.44"
-  source_ref: "source src/rommgr.cpp:358-359, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:358-359, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "A1000 bootstrap ROM.rom"
   path: "A1000 bootstrap ROM.rom"
   system: "commodore-amiga"
@@ -838,7 +844,7 @@ files:
   sha1: "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
   found_by: content
   description: "A1000 bootstrap ROM"
-  source_ref: "source src/rommgr.cpp:361-362, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:361-362, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "The Diagnostic 2.0 (Logica).rom"
   path: "The Diagnostic 2.0 (Logica).rom"
   system: "commodore-amiga"
@@ -848,7 +854,7 @@ files:
   sha1: "ba10d16166b2e2d6177c979c99edf8462b21651e"
   found_by: content
   description: "The Diagnostic 2.0 (Logica)"
-  source_ref: "source src/rommgr.cpp:367-368, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:367-368, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-mk-i-v1.00.rom"
   path: "action-replay-mk-i-v1.00.rom"
   system: "commodore-amiga"
@@ -860,7 +866,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay Mk I v1.00"
-  source_ref: "source src/rommgr.cpp:370-371, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:370-371, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-mk-i-v1.50.rom"
   path: "action-replay-mk-i-v1.50.rom"
   system: "commodore-amiga"
@@ -872,7 +878,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay Mk I v1.50"
-  source_ref: "source src/rommgr.cpp:374-375, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:374-375, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-mk-ii-v2.05.rom"
   path: "action-replay-mk-ii-v2.05.rom"
   system: "commodore-amiga"
@@ -884,7 +890,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay Mk II v2.05"
-  source_ref: "source src/rommgr.cpp:378-379, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:378-379, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-mk-ii-v2.12.rom"
   path: "action-replay-mk-ii-v2.12.rom"
   system: "commodore-amiga"
@@ -896,7 +902,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay Mk II v2.12"
-  source_ref: "source src/rommgr.cpp:380-381, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:380-381, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-mk-ii-v2.14.rom"
   path: "action-replay-mk-ii-v2.14.rom"
   system: "commodore-amiga"
@@ -908,7 +914,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay Mk II v2.14"
-  source_ref: "source src/rommgr.cpp:382-383, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:382-383, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-mk-iii-v3.09.rom"
   path: "action-replay-mk-iii-v3.09.rom"
   system: "commodore-amiga"
@@ -920,7 +926,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay Mk III v3.09"
-  source_ref: "source src/rommgr.cpp:384-385, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:384-385, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-mk-iii-v3.17.rom"
   path: "action-replay-mk-iii-v3.17.rom"
   system: "commodore-amiga"
@@ -932,7 +938,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay Mk III v3.17"
-  source_ref: "source src/rommgr.cpp:388-389, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:388-389, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-replay-1200.rom"
   path: "action-replay-1200.rom"
   system: "commodore-amiga"
@@ -944,7 +950,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Replay 1200"
-  source_ref: "source src/rommgr.cpp:392-393, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:392-393, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "action-cartridge-super-iv-pro-rom-v4.3.rom"
   path: "action-cartridge-super-iv-pro-rom-v4.3.rom"
   system: "commodore-amiga"
@@ -956,7 +962,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Action Cart. Super IV Pro (+ROM v4.3)"
-  source_ref: "source src/rommgr.cpp:397-398, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:397-398, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "x-power-professional-500-v1.2.rom"
   path: "x-power-professional-500-v1.2.rom"
   system: "commodore-amiga"
@@ -968,7 +974,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: X-Power Professional 500 v1.2"
-  source_ref: "source src/rommgr.cpp:399-400, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:399-400, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "x-power-professional-500-v1.3.rom"
   path: "x-power-professional-500-v1.3.rom"
   system: "commodore-amiga"
@@ -980,7 +986,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: X-Power Professional 500 v1.3"
-  source_ref: "source src/rommgr.cpp:403-404, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:403-404, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "nordic-power-v1.5.rom"
   path: "nordic-power-v1.5.rom"
   system: "commodore-amiga"
@@ -992,7 +998,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Nordic Power v1.5"
-  source_ref: "source src/rommgr.cpp:407-408, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:407-408, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "nordic-power-v2.0.rom"
   path: "nordic-power-v2.0.rom"
   system: "commodore-amiga"
@@ -1004,7 +1010,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Nordic Power v2.0"
-  source_ref: "source src/rommgr.cpp:411-412, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:411-412, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "nordic-power-v3.0.rom"
   path: "nordic-power-v3.0.rom"
   system: "commodore-amiga"
@@ -1016,7 +1022,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Nordic Power v3.0"
-  source_ref: "source src/rommgr.cpp:415-416, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:415-416, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "nordic-power-v3.2.rom"
   path: "nordic-power-v3.2.rom"
   system: "commodore-amiga"
@@ -1028,7 +1034,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Nordic Power v3.2"
-  source_ref: "source src/rommgr.cpp:419-420, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:419-420, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "pro-access-v2.17.rom"
   path: "pro-access-v2.17.rom"
   system: "commodore-amiga"
@@ -1040,7 +1046,7 @@ files:
   - "sha1"
   found_by: content
   description: "Freezer: Pro Access v2.17"
-  source_ref: "source src/rommgr.cpp:423-424, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:423-424, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2090a.rom"
   path: "a2090a.rom"
   system: "commodore-amiga"
@@ -1052,7 +1058,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2090A"
-  source_ref: "source src/rommgr.cpp:431-432, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:431-432, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2090a-combitec-turbo.rom"
   path: "a2090a-combitec-turbo.rom"
   system: "commodore-amiga"
@@ -1064,7 +1070,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2090A Combitec Turbo"
-  source_ref: "source src/rommgr.cpp:435-436, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:435-436, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2090b-combitec.rom"
   path: "a2090b-combitec.rom"
   system: "commodore-amiga"
@@ -1076,7 +1082,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2090B Combitec"
-  source_ref: "source src/rommgr.cpp:439-440, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:439-440, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2090b-combitec-turbo.rom"
   path: "a2090b-combitec-turbo.rom"
   system: "commodore-amiga"
@@ -1088,7 +1094,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2090B Combitec Turbo"
-  source_ref: "source src/rommgr.cpp:443-444, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:443-444, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2090b-macrosystem.rom"
   path: "a2090b-macrosystem.rom"
   system: "commodore-amiga"
@@ -1100,7 +1106,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2090B MacroSystem"
-  source_ref: "source src/rommgr.cpp:447-448, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:447-448, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-v4.4.rom"
   path: "a590-a2091-v4.4.rom"
   system: "commodore-amiga"
@@ -1112,7 +1118,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 v4.4"
-  source_ref: "source src/rommgr.cpp:452-453, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:452-453, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-v4.6.rom"
   path: "a590-a2091-v4.6.rom"
   system: "commodore-amiga"
@@ -1124,7 +1130,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 v4.6"
-  source_ref: "source src/rommgr.cpp:456-457, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:456-457, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-v5.92.rom"
   path: "a590-a2091-v5.92.rom"
   system: "commodore-amiga"
@@ -1136,7 +1142,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 v5.92"
-  source_ref: "source src/rommgr.cpp:460-461, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:460-461, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-v6.0.rom"
   path: "a590-a2091-v6.0.rom"
   system: "commodore-amiga"
@@ -1148,7 +1154,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 v6.0"
-  source_ref: "source src/rommgr.cpp:464-465, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:464-465, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-v6.1.rom"
   path: "a590-a2091-v6.1.rom"
   system: "commodore-amiga"
@@ -1160,7 +1166,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 v6.1"
-  source_ref: "source src/rommgr.cpp:468-469, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:468-469, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-v6.6.rom"
   path: "a590-a2091-v6.6.rom"
   system: "commodore-amiga"
@@ -1172,7 +1178,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 v6.6"
-  source_ref: "source src/rommgr.cpp:472-473, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:472-473, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-v7.0.rom"
   path: "a590-a2091-v7.0.rom"
   system: "commodore-amiga"
@@ -1184,7 +1190,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 v7.0"
-  source_ref: "source src/rommgr.cpp:476-477, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:476-477, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a590-a2091-guru-rom-v6.14.rom"
   path: "a590-a2091-guru-rom-v6.14.rom"
   system: "commodore-amiga"
@@ -1196,7 +1202,7 @@ files:
   - "sha1"
   found_by: content
   description: "A590/A2091 Guru ROM v6.14"
-  source_ref: "source src/rommgr.cpp:481-482, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:481-482, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a4091-v40.4.rom"
   path: "a4091-v40.4.rom"
   system: "commodore-amiga"
@@ -1208,7 +1214,7 @@ files:
   - "sha1"
   found_by: content
   description: "A4091 v40.4"
-  source_ref: "source src/rommgr.cpp:484-485, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:484-485, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a4091-v40.9.rom"
   path: "a4091-v40.9.rom"
   system: "commodore-amiga"
@@ -1220,7 +1226,7 @@ files:
   - "sha1"
   found_by: content
   description: "A4091 v40.9"
-  source_ref: "source src/rommgr.cpp:486-487, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:486-487, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a4091-v40.13.rom"
   path: "a4091-v40.13.rom"
   system: "commodore-amiga"
@@ -1232,7 +1238,7 @@ files:
   - "sha1"
   found_by: content
   description: "A4091 v40.13"
-  source_ref: "source src/rommgr.cpp:488-489, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:488-489, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "supradrive-amab6.rom"
   path: "supradrive-amab6.rom"
   system: "commodore-amiga"
@@ -1244,7 +1250,7 @@ files:
   - "sha1"
   found_by: content
   description: "SupraDrive AMAB6"
-  source_ref: "source src/rommgr.cpp:491-492, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:491-492, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "supradrive-amab5.rom"
   path: "supradrive-amab5.rom"
   system: "commodore-amiga"
@@ -1256,7 +1262,7 @@ files:
   - "sha1"
   found_by: content
   description: "SupraDrive AMAB5"
-  source_ref: "source src/rommgr.cpp:493-494, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:493-494, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "supradrive-amab4.rom"
   path: "supradrive-amab4.rom"
   system: "commodore-amiga"
@@ -1268,7 +1274,7 @@ files:
   - "sha1"
   found_by: content
   description: "SupraDrive AMAB4"
-  source_ref: "source src/rommgr.cpp:495-496, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:495-496, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "supradrive-amab3.rom"
   path: "supradrive-amab3.rom"
   system: "commodore-amiga"
@@ -1280,7 +1286,7 @@ files:
   - "sha1"
   found_by: content
   description: "SupraDrive AMAB3"
-  source_ref: "source src/rommgr.cpp:497-498, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:497-498, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "supradrive-amab2.rom"
   path: "supradrive-amab2.rom"
   system: "commodore-amiga"
@@ -1292,7 +1298,7 @@ files:
   - "sha1"
   found_by: content
   description: "SupraDrive AMAB2"
-  source_ref: "source src/rommgr.cpp:499-500, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:499-500, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "supradrive-2000dma-44-25b.rom"
   path: "supradrive-2000dma-44-25b.rom"
   system: "commodore-amiga"
@@ -1304,7 +1310,7 @@ files:
   - "sha1"
   found_by: content
   description: "SupraDrive 2000DMA (44-25B)"
-  source_ref: "source src/rommgr.cpp:501-502, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:501-502, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-1230-i-ii.rom"
   path: "blizzard-1230-i-ii.rom"
   system: "commodore-amiga"
@@ -1316,7 +1322,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard 1230-I/II"
-  source_ref: "source src/rommgr.cpp:504-505, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:504-505, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-1230-iii.rom"
   path: "blizzard-1230-iii.rom"
   system: "commodore-amiga"
@@ -1328,7 +1334,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard 1230-III"
-  source_ref: "source src/rommgr.cpp:506-507, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:506-507, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-1230-iv.rom"
   path: "blizzard-1230-iv.rom"
   system: "commodore-amiga"
@@ -1340,7 +1346,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard 1230-IV"
-  source_ref: "source src/rommgr.cpp:508-509, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:508-509, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-1240-1260.rom"
   path: "blizzard-1240-1260.rom"
   system: "commodore-amiga"
@@ -1352,7 +1358,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard 1240/1260"
-  source_ref: "source src/rommgr.cpp:510-511, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:510-511, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-2060-v7.25.rom"
   path: "blizzard-2060-v7.25.rom"
   system: "commodore-amiga"
@@ -1364,7 +1370,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard 2060 v7.25"
-  source_ref: "source src/rommgr.cpp:513-514, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:513-514, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-2060-v8.2.rom"
   path: "blizzard-2060-v8.2.rom"
   system: "commodore-amiga"
@@ -1376,7 +1382,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard 2060 v8.2"
-  source_ref: "source src/rommgr.cpp:517-518, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:517-518, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-2060-v8.5.rom"
   path: "blizzard-2060-v8.5.rom"
   system: "commodore-amiga"
@@ -1388,7 +1394,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard 2060 v8.5"
-  source_ref: "source src/rommgr.cpp:521-522, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:521-522, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-scsi-kit-iii.rom"
   path: "blizzard-scsi-kit-iii.rom"
   system: "commodore-amiga"
@@ -1400,7 +1406,7 @@ files:
   - "sha1"
   found_by: content
   description: "Blizzard SCSI Kit III"
-  source_ref: "source src/rommgr.cpp:526-527, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:526-527, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "blizzard-scsi-kit-iv.rom"
   path: "blizzard-scsi-kit-iv.rom"
   system: "commodore-amiga"
@@ -1408,11 +1414,14 @@ files:
   size: 32768
   crc32: "f53a0fca"
   sha1: "efe17ca588c44a7f0f8c62be20f23278cfe06727"
+  aliases:
+  - "blizzard_scsi_kit_iv.rom"
   validation:
   - "sha1"
   found_by: content
   description: "Blizzard SCSI Kit IV"
-  source_ref: "source src/rommgr.cpp:528-529, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  note: "The table names blizzard_scsi_kit_iv.rom as its file name."
+  source_ref: "source src/rommgr.cpp:528-529, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "fastlane.rom"
   path: "fastlane.rom"
   system: "commodore-amiga"
@@ -1420,11 +1429,14 @@ files:
   size: 32768
   crc32: "00447765"
   sha1: "2644e7cbba5cc54e880b4b4249fd1dd12eb4a3bc"
+  aliases:
+  - "fastlanez3.rom"
   validation:
   - "sha1"
   found_by: content
   description: "Fastlane"
-  source_ref: "source src/rommgr.cpp:530-531, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  note: "The table names fastlanez3.rom as its file name."
+  source_ref: "source src/rommgr.cpp:530-531, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "oktagon-2008.rom"
   path: "oktagon-2008.rom"
   system: "commodore-amiga"
@@ -1432,11 +1444,14 @@ files:
   size: 32768
   crc32: "bb0d2f6a"
   sha1: "56c441fa37d193393081b2e8ceae823bc7e97e49"
+  aliases:
+  - "oktagon2008.rom"
   validation:
   - "sha1"
   found_by: content
   description: "Oktagon 2008"
-  source_ref: "source src/rommgr.cpp:532-533, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  note: "The table names oktagon2008.rom as its file name."
+  source_ref: "source src/rommgr.cpp:532-533, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "warp-engine.rom"
   path: "warp-engine.rom"
   system: "commodore-amiga"
@@ -1448,7 +1463,7 @@ files:
   - "sha1"
   found_by: content
   description: "Warp Engine"
-  source_ref: "source src/rommgr.cpp:534-535, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:534-535, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "tekmagic2060.rom"
   path: "tekmagic2060.rom"
   system: "commodore-amiga"
@@ -1460,7 +1475,8 @@ files:
   - "sha1"
   found_by: content
   description: "TekMagic 2060 v1.0"
-  source_ref: "source src/rommgr.cpp:537-538, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  note: "The table names tekmagic2060.rom as its file name."
+  source_ref: "source src/rommgr.cpp:537-538, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "tekmagic2040.rom"
   path: "tekmagic2040.rom"
   system: "commodore-amiga"
@@ -1472,7 +1488,8 @@ files:
   - "sha1"
   found_by: content
   description: "TekMagic 2040 v1.1"
-  source_ref: "source src/rommgr.cpp:541-542, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  note: "The table names tekmagic2040.rom as its file name."
+  source_ref: "source src/rommgr.cpp:541-542, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-t-rex-ii-v1.0.rom"
   path: "gvp-t-rex-ii-v1.0.rom"
   system: "commodore-amiga"
@@ -1484,7 +1501,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP T-Rex II v1.0"
-  source_ref: "source src/rommgr.cpp:545-546, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:545-546, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "zeus-040.rom"
   path: "zeus-040.rom"
   system: "commodore-amiga"
@@ -1496,7 +1513,7 @@ files:
   - "sha1"
   found_by: content
   description: "Zeus 040"
-  source_ref: "source src/rommgr.cpp:548-549, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:548-549, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "csa-magnum-040.rom"
   path: "csa-magnum-040.rom"
   system: "commodore-amiga"
@@ -1508,7 +1525,7 @@ files:
   - "sha1"
   found_by: content
   description: "CSA Magnum 040"
-  source_ref: "source src/rommgr.cpp:552-553, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:552-553, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "csa-twelve-gauge.rom"
   path: "csa-twelve-gauge.rom"
   system: "commodore-amiga"
@@ -1520,7 +1537,7 @@ files:
   - "sha1"
   found_by: content
   description: "CSA Twelve Gauge"
-  source_ref: "source src/rommgr.cpp:554-555, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:554-555, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "hardital-tqm.rom"
   path: "hardital-tqm.rom"
   system: "commodore-amiga"
@@ -1532,7 +1549,7 @@ files:
   - "sha1"
   found_by: content
   description: "Hardital TQM"
-  source_ref: "source src/rommgr.cpp:556-557, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:556-557, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "macrosystem-falcon-040-no-scsi.rom"
   path: "macrosystem-falcon-040-no-scsi.rom"
   system: "commodore-amiga"
@@ -1544,7 +1561,7 @@ files:
   - "sha1"
   found_by: content
   description: "MacroSystem Falcon 040 (No SCSI)"
-  source_ref: "source src/rommgr.cpp:558-559, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:558-559, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-a1230-turboplus-series-ii-v5.0.rom"
   path: "gvp-a1230-turboplus-series-ii-v5.0.rom"
   system: "commodore-amiga"
@@ -1556,7 +1573,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP A1230 Turbo+ Series II v5.0"
-  source_ref: "source src/rommgr.cpp:560-561, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:560-561, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-a1230-turboplus-series-ii-v5.3.rom"
   path: "gvp-a1230-turboplus-series-ii-v5.3.rom"
   system: "commodore-amiga"
@@ -1568,7 +1585,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP A1230 Turbo+ Series II v5.3"
-  source_ref: "source src/rommgr.cpp:562-563, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:562-563, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-a1230-turboplus.rom"
   path: "gvp-a1230-turboplus.rom"
   system: "commodore-amiga"
@@ -1580,7 +1597,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP A1230 Turbo+"
-  source_ref: "source src/rommgr.cpp:564-565, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:564-565, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "harms-3000-professional.rom"
   path: "harms-3000-professional.rom"
   system: "commodore-amiga"
@@ -1592,7 +1609,7 @@ files:
   - "sha1"
   found_by: content
   description: "Harms 3000 Professional"
-  source_ref: "source src/rommgr.cpp:566-567, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:566-567, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2620-a2630-07.rom"
   path: "a2620-a2630-07.rom"
   system: "commodore-amiga"
@@ -1604,7 +1621,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2620/A2630 -07"
-  source_ref: "source src/rommgr.cpp:571-572, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:571-572, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2620-a2630-06.rom"
   path: "a2620-a2630-06.rom"
   system: "commodore-amiga"
@@ -1616,7 +1633,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2620/A2630 -06"
-  source_ref: "source src/rommgr.cpp:575-576, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:575-576, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2620-a2630-04.rom"
   path: "a2620-a2630-04.rom"
   system: "commodore-amiga"
@@ -1628,7 +1645,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2620/A2630 -04"
-  source_ref: "source src/rommgr.cpp:579-580, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:579-580, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2620-a2630-03.rom"
   path: "a2620-a2630-03.rom"
   system: "commodore-amiga"
@@ -1640,7 +1657,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2620/A2630 -03"
-  source_ref: "source src/rommgr.cpp:583-584, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:583-584, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2620-a2630-02.rom"
   path: "a2620-a2630-02.rom"
   system: "commodore-amiga"
@@ -1652,7 +1669,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2620/A2630 -02"
-  source_ref: "source src/rommgr.cpp:587-588, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:587-588, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2620-a2630-01.rom"
   path: "a2620-a2630-01.rom"
   system: "commodore-amiga"
@@ -1664,7 +1681,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2620/A2630 -01"
-  source_ref: "source src/rommgr.cpp:591-592, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:591-592, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "dkb-1230-1240-cobra.rom"
   path: "dkb-1230-1240-cobra.rom"
   system: "commodore-amiga"
@@ -1676,7 +1693,7 @@ files:
   - "sha1"
   found_by: content
   description: "DKB 1230/1240/Cobra"
-  source_ref: "source src/rommgr.cpp:595-596, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:595-596, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "dkb-1230-1240-cobra-plus-ferret-v1.23.rom"
   path: "dkb-1230-1240-cobra-plus-ferret-v1.23.rom"
   system: "commodore-amiga"
@@ -1688,7 +1705,7 @@ files:
   - "sha1"
   found_by: content
   description: "DKB 1230/1240/Cobra + Ferret v1.23"
-  source_ref: "source src/rommgr.cpp:597-598, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:597-598, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "dkb-rapidfire-spitfire-v1.31.rom"
   path: "dkb-rapidfire-spitfire-v1.31.rom"
   system: "commodore-amiga"
@@ -1700,7 +1717,7 @@ files:
   - "sha1"
   found_by: content
   description: "DKB Rapidfire/Spitfire v1.31"
-  source_ref: "source src/rommgr.cpp:599-600, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:599-600, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "fusion-forty.rom"
   path: "fusion-forty.rom"
   system: "commodore-amiga"
@@ -1712,7 +1729,7 @@ files:
   - "sha1"
   found_by: content
   description: "Fusion Forty"
-  source_ref: "source src/rommgr.cpp:601-602, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:601-602, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "apollo-1240-1260.rom"
   path: "apollo-1240-1260.rom"
   system: "commodore-amiga"
@@ -1724,7 +1741,7 @@ files:
   - "sha1"
   found_by: content
   description: "Apollo 1240/1260"
-  source_ref: "source src/rommgr.cpp:607-608, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:607-608, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "apollo-630.rom"
   path: "apollo-630.rom"
   system: "commodore-amiga"
@@ -1736,7 +1753,7 @@ files:
   - "sha1"
   found_by: content
   description: "Apollo 630"
-  source_ref: "source src/rommgr.cpp:609-610, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:609-610, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-a3001-series-i.rom"
   path: "gvp-a3001-series-i.rom"
   system: "commodore-amiga"
@@ -1748,7 +1765,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP A3001 Series I"
-  source_ref: "source src/rommgr.cpp:611-612, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:611-612, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "kupke-golem-030.rom"
   path: "kupke-golem-030.rom"
   system: "commodore-amiga"
@@ -1760,7 +1777,7 @@ files:
   - "sha1"
   found_by: content
   description: "Kupke Golem 030"
-  source_ref: "source src/rommgr.cpp:613-614, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:613-614, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "dkb-wildfire-v1.0.rom"
   path: "dkb-wildfire-v1.0.rom"
   system: "commodore-amiga"
@@ -1772,7 +1789,7 @@ files:
   - "sha1"
   found_by: content
   description: "DKB WildFire v1.0"
-  source_ref: "source src/rommgr.cpp:615-616, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:615-616, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "dkb-wildfire-v1.1.rom"
   path: "dkb-wildfire-v1.1.rom"
   system: "commodore-amiga"
@@ -1784,7 +1801,7 @@ files:
   - "sha1"
   found_by: content
   description: "DKB WildFire v1.1"
-  source_ref: "source src/rommgr.cpp:617-618, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:617-618, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "m-tec-e-matrix-530.rom"
   path: "m-tec-e-matrix-530.rom"
   system: "commodore-amiga"
@@ -1796,7 +1813,7 @@ files:
   - "sha1"
   found_by: content
   description: "M-Tec E-Matrix 530"
-  source_ref: "source src/rommgr.cpp:619-620, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:619-620, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "typhoon-mk2.rom"
   path: "typhoon-mk2.rom"
   system: "commodore-amiga"
@@ -1808,7 +1825,7 @@ files:
   - "sha1"
   found_by: content
   description: "Typhoon MK2"
-  source_ref: "source src/rommgr.cpp:621-622, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:621-622, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "sx32-pro.rom"
   path: "sx32-pro.rom"
   system: "commodore-amiga"
@@ -1820,7 +1837,7 @@ files:
   - "sha1"
   found_by: content
   description: "SX32 Pro"
-  source_ref: "source src/rommgr.cpp:623-624, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:623-624, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "ivs-vector-4.14.rom"
   path: "ivs-vector-4.14.rom"
   system: "commodore-amiga"
@@ -1832,7 +1849,7 @@ files:
   - "sha1"
   found_by: content
   description: "IVS Vector 4.14"
-  source_ref: "source src/rommgr.cpp:625-626, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:625-626, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "quikpak-4060-xp-v2.1.rom"
   path: "quikpak-4060-xp-v2.1.rom"
   system: "commodore-amiga"
@@ -1844,7 +1861,7 @@ files:
   - "sha1"
   found_by: content
   description: "QuikPak 4060 XP v2.1"
-  source_ref: "source src/rommgr.cpp:629-630, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:629-630, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "quikpak-4060-xp-v2.2.rom"
   path: "quikpak-4060-xp-v2.2.rom"
   system: "commodore-amiga"
@@ -1856,7 +1873,7 @@ files:
   - "sha1"
   found_by: content
   description: "QuikPak 4060 XP v2.2"
-  source_ref: "source src/rommgr.cpp:631-632, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:631-632, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "quikpak-4060.rom"
   path: "quikpak-4060.rom"
   system: "commodore-amiga"
@@ -1868,7 +1885,7 @@ files:
   - "sha1"
   found_by: content
   description: "QuikPak 4060"
-  source_ref: "source src/rommgr.cpp:633-634, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:633-634, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "preferred-technologies-nexus.rom"
   path: "preferred-technologies-nexus.rom"
   system: "commodore-amiga"
@@ -1880,7 +1897,7 @@ files:
   - "sha1"
   found_by: content
   description: "Preferred Technologies Nexus"
-  source_ref: "source src/rommgr.cpp:636-637, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:636-637, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "icd-adscsi-2000-v1.6-icddisk-v1.0.rom"
   path: "icd-adscsi-2000-v1.6-icddisk-v1.0.rom"
   system: "commodore-amiga"
@@ -1892,7 +1909,7 @@ files:
   - "sha1"
   found_by: content
   description: "ICD AdSCSI 2000 v1.6 (icddisk v1.0)"
-  source_ref: "source src/rommgr.cpp:638-639, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:638-639, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "icd-adscsi-2000-v2.01-icddisk-v32.1.rom"
   path: "icd-adscsi-2000-v2.01-icddisk-v32.1.rom"
   system: "commodore-amiga"
@@ -1904,7 +1921,7 @@ files:
   - "sha1"
   found_by: content
   description: "ICD AdSCSI 2000 v2.01 (icddisk v32.1)"
-  source_ref: "source src/rommgr.cpp:640-641, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:640-641, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "icd-adscsi-2000-v2.1-icddisk-v33.0.rom"
   path: "icd-adscsi-2000-v2.1-icddisk-v33.0.rom"
   system: "commodore-amiga"
@@ -1916,7 +1933,7 @@ files:
   - "sha1"
   found_by: content
   description: "ICD AdSCSI 2000 v2.1 (icddisk v33.0)"
-  source_ref: "source src/rommgr.cpp:642-643, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:642-643, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "icd-adscsi-2000-v2.2-icddisk-v34.0.rom"
   path: "icd-adscsi-2000-v2.2-icddisk-v34.0.rom"
   system: "commodore-amiga"
@@ -1928,7 +1945,7 @@ files:
   - "sha1"
   found_by: content
   description: "ICD AdSCSI 2000 v2.2 (icddisk v34.0)"
-  source_ref: "source src/rommgr.cpp:644-645, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:644-645, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "archos-add-500.rom"
   path: "archos-add-500.rom"
   system: "commodore-amiga"
@@ -1940,7 +1957,7 @@ files:
   - "sha1"
   found_by: content
   description: "Archos ADD-500"
-  source_ref: "source src/rommgr.cpp:646-647, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:646-647, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "protar-a500hd.rom"
   path: "protar-a500hd.rom"
   system: "commodore-amiga"
@@ -1952,7 +1969,7 @@ files:
   - "sha1"
   found_by: content
   description: "Protar A500HD"
-  source_ref: "source src/rommgr.cpp:648-649, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:648-649, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "m-tec-at500-v1.33w.rom"
   path: "m-tec-at500-v1.33w.rom"
   system: "commodore-amiga"
@@ -1964,7 +1981,7 @@ files:
   - "sha1"
   found_by: content
   description: "M-Tec AT500 v1.33w"
-  source_ref: "source src/rommgr.cpp:650-651, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:650-651, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "adide-40-44-v33.rom"
   path: "adide-40-44-v33.rom"
   system: "commodore-amiga"
@@ -1976,7 +1993,7 @@ files:
   - "sha1"
   found_by: content
   description: "AdIDE 40/44 v33"
-  source_ref: "source src/rommgr.cpp:652-653, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:652-653, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "adide-40-44-v34.rom"
   path: "adide-40-44-v34.rom"
   system: "commodore-amiga"
@@ -1988,7 +2005,7 @@ files:
   - "sha1"
   found_by: content
   description: "AdIDE 40/44 v34"
-  source_ref: "source src/rommgr.cpp:654-655, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:654-655, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "vector-falcon-8000-v7.1.rom"
   path: "vector-falcon-8000-v7.1.rom"
   system: "commodore-amiga"
@@ -2000,7 +2017,7 @@ files:
   - "sha1"
   found_by: content
   description: "Vector Falcon 8000 v7.1"
-  source_ref: "source src/rommgr.cpp:656-657, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:656-657, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "vector-falcon-8000-v7.6.rom"
   path: "vector-falcon-8000-v7.6.rom"
   system: "commodore-amiga"
@@ -2012,7 +2029,7 @@ files:
   - "sha1"
   found_by: content
   description: "Vector Falcon 8000 v7.6"
-  source_ref: "source src/rommgr.cpp:660-661, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:660-661, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "kommos-a500-a2000-v1.8.rom"
   path: "kommos-a500-a2000-v1.8.rom"
   system: "commodore-amiga"
@@ -2024,7 +2041,7 @@ files:
   - "sha1"
   found_by: content
   description: "Kommos A500/A2000 v1.8"
-  source_ref: "source src/rommgr.cpp:664-665, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:664-665, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "kommos-a500-a2000-v1.7.rom"
   path: "kommos-a500-a2000-v1.7.rom"
   system: "commodore-amiga"
@@ -2036,7 +2053,7 @@ files:
   - "sha1"
   found_by: content
   description: "Kommos A500/A2000 v1.7"
-  source_ref: "source src/rommgr.cpp:668-669, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:668-669, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "kupke-golem-v3.9.rom"
   path: "kupke-golem-v3.9.rom"
   system: "commodore-amiga"
@@ -2048,7 +2065,7 @@ files:
   - "sha1"
   found_by: content
   description: "Kupke Golem v3.9"
-  source_ref: "source src/rommgr.cpp:672-673, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:672-673, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-series-i-v1.0.rom"
   path: "gvp-series-i-v1.0.rom"
   system: "commodore-amiga"
@@ -2060,7 +2077,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP Series I v1.0"
-  source_ref: "source src/rommgr.cpp:676-677, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:676-677, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-series-i-v3.7.rom"
   path: "gvp-series-i-v3.7.rom"
   system: "commodore-amiga"
@@ -2072,7 +2089,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP Series I v3.7"
-  source_ref: "source src/rommgr.cpp:680-681, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:680-681, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-series-i-ii-v3.15.rom"
   path: "gvp-series-i-ii-v3.15.rom"
   system: "commodore-amiga"
@@ -2084,7 +2101,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP Series I/II v3.15"
-  source_ref: "source src/rommgr.cpp:685-686, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:685-686, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-series-i-ii-v3.7.rom"
   path: "gvp-series-i-ii-v3.7.rom"
   system: "commodore-amiga"
@@ -2096,7 +2113,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP Series I/II v3.7"
-  source_ref: "source src/rommgr.cpp:687-688, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:687-688, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-series-ii-v4.13.rom"
   path: "gvp-series-ii-v4.13.rom"
   system: "commodore-amiga"
@@ -2108,7 +2125,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP Series II v4.13"
-  source_ref: "source src/rommgr.cpp:689-690, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:689-690, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-series-ii-v4.15.rom"
   path: "gvp-series-ii-v4.15.rom"
   system: "commodore-amiga"
@@ -2120,7 +2137,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP Series II v4.15"
-  source_ref: "source src/rommgr.cpp:691-692, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:691-692, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "gvp-series-ii-guru-rom.rom"
   path: "gvp-series-ii-guru-rom.rom"
   system: "commodore-amiga"
@@ -2132,7 +2149,7 @@ files:
   - "sha1"
   found_by: content
   description: "GVP Series II Guru ROM"
-  source_ref: "source src/rommgr.cpp:693-694, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:693-694, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "alfapower-v6.10.rom"
   path: "alfapower-v6.10.rom"
   system: "commodore-amiga"
@@ -2144,7 +2161,7 @@ files:
   - "sha1"
   found_by: content
   description: "AlfaPower v6.10"
-  source_ref: "source src/rommgr.cpp:695-696, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:695-696, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "alfapower-v8.2.rom"
   path: "alfapower-v8.2.rom"
   system: "commodore-amiga"
@@ -2156,7 +2173,7 @@ files:
   - "sha1"
   found_by: content
   description: "AlfaPower v8.2"
-  source_ref: "source src/rommgr.cpp:697-698, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:697-698, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "alfapower-v8.3.rom"
   path: "alfapower-v8.3.rom"
   system: "commodore-amiga"
@@ -2168,7 +2185,7 @@ files:
   - "sha1"
   found_by: content
   description: "AlfaPower v8.3"
-  source_ref: "source src/rommgr.cpp:699-700, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:699-700, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "masoboshi-mc-702-v2.201.rom"
   path: "masoboshi-mc-702-v2.201.rom"
   system: "commodore-amiga"
@@ -2180,7 +2197,7 @@ files:
   - "sha1"
   found_by: content
   description: "Masoboshi MC-702 v2.201"
-  source_ref: "source src/rommgr.cpp:701-702, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:701-702, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "masoboshi-mc-702-v2.197.rom"
   path: "masoboshi-mc-702-v2.197.rom"
   system: "commodore-amiga"
@@ -2192,7 +2209,7 @@ files:
   - "sha1"
   found_by: content
   description: "Masoboshi MC-702 v2.197"
-  source_ref: "source src/rommgr.cpp:703-704, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:703-704, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "roctec-rochard-rh800c-v1.rom"
   path: "roctec-rochard-rh800c-v1.rom"
   system: "commodore-amiga"
@@ -2204,7 +2221,7 @@ files:
   - "sha1"
   found_by: content
   description: "Roctec RocHard RH800C v1"
-  source_ref: "source src/rommgr.cpp:705-706, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:705-706, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "roctec-rochard-rh800c-v2.rom"
   path: "roctec-rochard-rh800c-v2.rom"
   system: "commodore-amiga"
@@ -2216,7 +2233,7 @@ files:
   - "sha1"
   found_by: content
   description: "Roctec RocHard RH800C v2"
-  source_ref: "source src/rommgr.cpp:709-710, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:709-710, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "apollo-500-2000.rom"
   path: "apollo-500-2000.rom"
   system: "commodore-amiga"
@@ -2228,7 +2245,7 @@ files:
   - "sha1"
   found_by: content
   description: "Apollo 500/2000"
-  source_ref: "source src/rommgr.cpp:713-714, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:713-714, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "multi-evolution-500-2000-v2.2.rom"
   path: "multi-evolution-500-2000-v2.2.rom"
   system: "commodore-amiga"
@@ -2240,7 +2257,7 @@ files:
   - "sha1"
   found_by: content
   description: "Multi Evolution 500/2000 v2.2"
-  source_ref: "source src/rommgr.cpp:715-716, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:715-716, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "multi-evolution-500-2000-v3.0.rom"
   path: "multi-evolution-500-2000-v3.0.rom"
   system: "commodore-amiga"
@@ -2252,7 +2269,7 @@ files:
   - "sha1"
   found_by: content
   description: "Multi Evolution 500/2000 v3.0"
-  source_ref: "source src/rommgr.cpp:719-720, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:719-720, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "multi-evolution-500-2000-v3.4.rom"
   path: "multi-evolution-500-2000-v3.4.rom"
   system: "commodore-amiga"
@@ -2264,7 +2281,7 @@ files:
   - "sha1"
   found_by: content
   description: "Multi Evolution 500/2000 v3.4"
-  source_ref: "source src/rommgr.cpp:723-724, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:723-724, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "kupke-golem-v4.2.rom"
   path: "kupke-golem-v4.2.rom"
   system: "commodore-amiga"
@@ -2276,7 +2293,7 @@ files:
   - "sha1"
   found_by: content
   description: "Kupke Golem v4.2"
-  source_ref: "source src/rommgr.cpp:727-728, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:727-728, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "phoenix-board-scsi-vj.rom"
   path: "phoenix-board-scsi-vj.rom"
   system: "commodore-amiga"
@@ -2288,7 +2305,7 @@ files:
   - "sha1"
   found_by: content
   description: "Phoenix Board SCSI v.J"
-  source_ref: "source src/rommgr.cpp:731-732, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:731-732, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "ivs-grandslam-trumpcard-pro-v4.9.rom"
   path: "ivs-grandslam-trumpcard-pro-v4.9.rom"
   system: "commodore-amiga"
@@ -2300,7 +2317,7 @@ files:
   - "sha1"
   found_by: content
   description: "IVS GrandSlam/Trumpcard Pro v4.9"
-  source_ref: "source src/rommgr.cpp:733-734, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:733-734, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "ivs-trumpcard-v4.9.rom"
   path: "ivs-trumpcard-v4.9.rom"
   system: "commodore-amiga"
@@ -2312,7 +2329,7 @@ files:
   - "sha1"
   found_by: content
   description: "IVS Trumpcard v4.9"
-  source_ref: "source src/rommgr.cpp:735-736, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:735-736, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "ivs-trumpcard-v3.1.rom"
   path: "ivs-trumpcard-v3.1.rom"
   system: "commodore-amiga"
@@ -2324,7 +2341,7 @@ files:
   - "sha1"
   found_by: content
   description: "IVS Trumpcard v3.1"
-  source_ref: "source src/rommgr.cpp:737-738, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:737-738, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "ivs-trumpcard-v1.5.rom"
   path: "ivs-trumpcard-v1.5.rom"
   system: "commodore-amiga"
@@ -2336,7 +2353,7 @@ files:
   - "sha1"
   found_by: content
   description: "IVS Trumpcard v1.5"
-  source_ref: "source src/rommgr.cpp:739-740, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:739-740, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "expansion-systems-dataflyerplus-v1.5.rom"
   path: "expansion-systems-dataflyerplus-v1.5.rom"
   system: "commodore-amiga"
@@ -2348,7 +2365,7 @@ files:
   - "sha1"
   found_by: content
   description: "Expansion Systems Dataflyer+ v1.5"
-  source_ref: "source src/rommgr.cpp:741-742, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:741-742, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "expansion-systems-dataflyerplus-v1.7.rom"
   path: "expansion-systems-dataflyerplus-v1.7.rom"
   system: "commodore-amiga"
@@ -2360,7 +2377,7 @@ files:
   - "sha1"
   found_by: content
   description: "Expansion Systems Dataflyer+ v1.7"
-  source_ref: "source src/rommgr.cpp:743-744, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:743-744, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "expansion-systems-dataflyerplus-v2.0.rom"
   path: "expansion-systems-dataflyerplus-v2.0.rom"
   system: "commodore-amiga"
@@ -2372,7 +2389,7 @@ files:
   - "sha1"
   found_by: content
   description: "Expansion Systems Dataflyer+ v2.0"
-  source_ref: "source src/rommgr.cpp:745-746, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:745-746, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "expansion-systems-dataflyerplus-v2.1.rom"
   path: "expansion-systems-dataflyerplus-v2.1.rom"
   system: "commodore-amiga"
@@ -2384,7 +2401,7 @@ files:
   - "sha1"
   found_by: content
   description: "Expansion Systems Dataflyer+ v2.1"
-  source_ref: "source src/rommgr.cpp:747-748, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:747-748, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "microbotics-hardframe-v1.5.rom"
   path: "microbotics-hardframe-v1.5.rom"
   system: "commodore-amiga"
@@ -2396,7 +2413,7 @@ files:
   - "sha1"
   found_by: content
   description: "Microbotics HardFrame v1.5"
-  source_ref: "source src/rommgr.cpp:749-750, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:749-750, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "microbotics-hardframe-v1.8.rom"
   path: "microbotics-hardframe-v1.8.rom"
   system: "commodore-amiga"
@@ -2408,7 +2425,7 @@ files:
   - "sha1"
   found_by: content
   description: "Microbotics HardFrame v1.8"
-  source_ref: "source src/rommgr.cpp:751-752, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:751-752, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "microbotics-hardframe-v1.9.rom"
   path: "microbotics-hardframe-v1.9.rom"
   system: "commodore-amiga"
@@ -2420,7 +2437,7 @@ files:
   - "sha1"
   found_by: content
   description: "Microbotics HardFrame v1.9"
-  source_ref: "source src/rommgr.cpp:753-754, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:753-754, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "mainhattan-data-a-team-v1.8.rom"
   path: "mainhattan-data-a-team-v1.8.rom"
   system: "commodore-amiga"
@@ -2432,7 +2449,7 @@ files:
   - "sha1"
   found_by: content
   description: "Mainhattan Data A-Team v1.8"
-  source_ref: "source src/rommgr.cpp:755-756, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:755-756, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "m-tec-at500-megabody-v1.33.rom"
   path: "m-tec-at500-megabody-v1.33.rom"
   system: "commodore-amiga"
@@ -2444,7 +2461,7 @@ files:
   - "sha1"
   found_by: content
   description: "M-Tec AT500 Megabody v1.33"
-  source_ref: "source src/rommgr.cpp:757-758, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:757-758, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "comspec-sa-series-v34.805.rom"
   path: "comspec-sa-series-v34.805.rom"
   system: "commodore-amiga"
@@ -2456,7 +2473,7 @@ files:
   - "sha1"
   found_by: content
   description: "Comspec SA series v34.805"
-  source_ref: "source src/rommgr.cpp:759-760, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:759-760, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "california-access-malibu-v1.0.rom"
   path: "california-access-malibu-v1.0.rom"
   system: "commodore-amiga"
@@ -2468,7 +2485,7 @@ files:
   - "sha1"
   found_by: content
   description: "California Access Malibu v1.0"
-  source_ref: "source src/rommgr.cpp:763-764, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:763-764, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "ashcom-design-addhard-v2.0.rom"
   path: "ashcom-design-addhard-v2.0.rom"
   system: "commodore-amiga"
@@ -2480,7 +2497,7 @@ files:
   - "sha1"
   found_by: content
   description: "Ashcom Design AddHard v2.0"
-  source_ref: "source src/rommgr.cpp:765-766, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:765-766, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "spirit-technology-inmate.rom"
   path: "spirit-technology-inmate.rom"
   system: "commodore-amiga"
@@ -2492,7 +2509,7 @@ files:
   - "sha1"
   found_by: content
   description: "Spirit Technology InMate"
-  source_ref: "source src/rommgr.cpp:767-768, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:767-768, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "vortex-system-2000.rom"
   path: "vortex-system-2000.rom"
   system: "commodore-amiga"
@@ -2504,7 +2521,7 @@ files:
   - "sha1"
   found_by: content
   description: "Vortex System 2000"
-  source_ref: "source src/rommgr.cpp:769-770, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:769-770, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "kupke-golem-hd3000-v1.4.rom"
   path: "kupke-golem-hd3000-v1.4.rom"
   system: "commodore-amiga"
@@ -2516,7 +2533,7 @@ files:
   - "sha1"
   found_by: content
   description: "Kupke Golem HD3000 v1.4"
-  source_ref: "source src/rommgr.cpp:771-772, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:771-772, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "evesham-micros-reference.rom"
   path: "evesham-micros-reference.rom"
   system: "commodore-amiga"
@@ -2528,7 +2545,7 @@ files:
   - "sha1"
   found_by: content
   description: "Evesham Micros Reference"
-  source_ref: "source src/rommgr.cpp:775-776, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:775-776, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "profex-electronics-hd-3300.rom"
   path: "profex-electronics-hd-3300.rom"
   system: "commodore-amiga"
@@ -2540,7 +2557,7 @@ files:
   - "sha1"
   found_by: content
   description: "Profex Electronics HD 3300"
-  source_ref: "source src/rommgr.cpp:777-778, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:777-778, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "elsat-mega-ram-hd.rom"
   path: "elsat-mega-ram-hd.rom"
   system: "commodore-amiga"
@@ -2552,7 +2569,7 @@ files:
   - "sha1"
   found_by: content
   description: "Elsat Mega Ram HD"
-  source_ref: "source src/rommgr.cpp:779-780, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:779-780, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "xetec-fasttrak.rom"
   path: "xetec-fasttrak.rom"
   system: "commodore-amiga"
@@ -2564,7 +2581,7 @@ files:
   - "sha1"
   found_by: content
   description: "Xetec FastTrak"
-  source_ref: "source src/rommgr.cpp:783-784, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:783-784, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "c-ltd-kronos.rom"
   path: "c-ltd-kronos.rom"
   system: "commodore-amiga"
@@ -2576,7 +2593,7 @@ files:
   - "sha1"
   found_by: content
   description: "C-Ltd Kronos"
-  source_ref: "source src/rommgr.cpp:785-786, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:785-786, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "accessx-500-v2.1.rom"
   path: "accessx-500-v2.1.rom"
   system: "commodore-amiga"
@@ -2588,7 +2605,7 @@ files:
   - "sha1"
   found_by: content
   description: "AccessX 500 v2.1"
-  source_ref: "source src/rommgr.cpp:787-788, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:787-788, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "accessx-2000-v2.1.rom"
   path: "accessx-2000-v2.1.rom"
   system: "commodore-amiga"
@@ -2600,7 +2617,7 @@ files:
   - "sha1"
   found_by: content
   description: "AccessX 2000 v2.1"
-  source_ref: "source src/rommgr.cpp:789-790, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:789-790, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "accessx-500-2000-v2.1-descrambled.rom"
   path: "accessx-500-2000-v2.1-descrambled.rom"
   system: "commodore-amiga"
@@ -2612,7 +2629,7 @@ files:
   - "sha1"
   found_by: content
   description: "AccessX 500/2000 v2.1 (descrambled)"
-  source_ref: "source src/rommgr.cpp:791-792, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:791-792, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "pacific-peripherals-overdrive-v1.5.rom"
   path: "pacific-peripherals-overdrive-v1.5.rom"
   system: "commodore-amiga"
@@ -2624,7 +2641,7 @@ files:
   - "sha1"
   found_by: content
   description: "Pacific Peripherals Overdrive v1.5"
-  source_ref: "source src/rommgr.cpp:793-794, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:793-794, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "pacific-peripherals-overdrive-v2.0.rom"
   path: "pacific-peripherals-overdrive-v2.0.rom"
   system: "commodore-amiga"
@@ -2636,7 +2653,7 @@ files:
   - "sha1"
   found_by: content
   description: "Pacific Peripherals Overdrive v2.0"
-  source_ref: "source src/rommgr.cpp:795-796, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:795-796, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "archos-overdrive-hd-v5.0.rom"
   path: "archos-overdrive-hd-v5.0.rom"
   system: "commodore-amiga"
@@ -2648,7 +2665,7 @@ files:
   - "sha1"
   found_by: content
   description: "Archos Overdrive HD v5.0"
-  source_ref: "source src/rommgr.cpp:797-798, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:797-798, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "archos-overdrive-hd-v3.0.rom"
   path: "archos-overdrive-hd-v3.0.rom"
   system: "commodore-amiga"
@@ -2660,7 +2677,7 @@ files:
   - "sha1"
   found_by: content
   description: "Archos Overdrive HD v3.0"
-  source_ref: "source src/rommgr.cpp:799-800, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:799-800, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "trumpcard-500at-v1.1.rom"
   path: "trumpcard-500at-v1.1.rom"
   system: "commodore-amiga"
@@ -2672,7 +2689,7 @@ files:
   - "sha1"
   found_by: content
   description: "Trumpcard 500AT v1.1"
-  source_ref: "source src/rommgr.cpp:801-802, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:801-802, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "trumpcard-500at-v1.2.rom"
   path: "trumpcard-500at-v1.2.rom"
   system: "commodore-amiga"
@@ -2684,7 +2701,7 @@ files:
   - "sha1"
   found_by: content
   description: "Trumpcard 500AT v1.2"
-  source_ref: "source src/rommgr.cpp:803-804, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:803-804, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "trifecta-v4.31.rom"
   path: "trifecta-v4.31.rom"
   system: "commodore-amiga"
@@ -2696,7 +2713,7 @@ files:
   - "sha1"
   found_by: content
   description: "Trifecta v4.31"
-  source_ref: "source src/rommgr.cpp:805-806, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:805-806, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "mastercard-v2.3.rom"
   path: "mastercard-v2.3.rom"
   system: "commodore-amiga"
@@ -2708,7 +2725,7 @@ files:
   - "sha1"
   found_by: content
   description: "Mastercard v2.3"
-  source_ref: "source src/rommgr.cpp:807-808, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:807-808, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "hardital-dotto.rom"
   path: "hardital-dotto.rom"
   system: "commodore-amiga"
@@ -2720,7 +2737,7 @@ files:
   - "sha1"
   found_by: content
   description: "Hardital Dotto"
-  source_ref: "source src/rommgr.cpp:809-810, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:809-810, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "alf-2.rom"
   path: "alf-2.rom"
   system: "commodore-amiga"
@@ -2732,7 +2749,7 @@ files:
   - "sha1"
   found_by: content
   description: "A.L.F. 2"
-  source_ref: "source src/rommgr.cpp:811-812, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:811-812, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "mast-fireball.rom"
   path: "mast-fireball.rom"
   system: "commodore-amiga"
@@ -2744,7 +2761,7 @@ files:
   - "sha1"
   found_by: content
   description: "M.A.S.T. Fireball"
-  source_ref: "source src/rommgr.cpp:813-814, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:813-814, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "hardital-synthesis-v48.5.rom"
   path: "hardital-synthesis-v48.5.rom"
   system: "commodore-amiga"
@@ -2756,7 +2773,7 @@ files:
   - "sha1"
   found_by: content
   description: "Hardital Synthesis v48.5"
-  source_ref: "source src/rommgr.cpp:815-816, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:815-816, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "hardital-synthesis-v53.1.rom"
   path: "hardital-synthesis-v53.1.rom"
   system: "commodore-amiga"
@@ -2768,7 +2785,7 @@ files:
   - "sha1"
   found_by: content
   description: "Hardital Synthesis v53.1"
-  source_ref: "source src/rommgr.cpp:817-818, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:817-818, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "combitec-hd20a-hd40a.rom"
   path: "combitec-hd20a-hd40a.rom"
   system: "commodore-amiga"
@@ -2780,7 +2797,7 @@ files:
   - "sha1"
   found_by: content
   description: "Combitec HD20A/HD40A"
-  source_ref: "source src/rommgr.cpp:819-820, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:819-820, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cyberstorm-mk-i-68060-support.rom"
   path: "cyberstorm-mk-i-68060-support.rom"
   system: "commodore-amiga"
@@ -2792,7 +2809,7 @@ files:
   - "sha1"
   found_by: content
   description: "CyberStorm MK I 68060 Support"
-  source_ref: "source src/rommgr.cpp:822-823, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:822-823, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "cyberstorm-mk-i-cyberscsi-module.rom"
   path: "cyberstorm-mk-i-cyberscsi-module.rom"
   system: "commodore-amiga"
@@ -2804,15 +2821,29 @@ files:
   - "sha1"
   found_by: content
   description: "CyberStorm MK I CyberSCSI Module"
-  source_ref: "source src/rommgr.cpp:824-825, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:824-825, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
+- name: "cyberstormmk2.rom"
+  path: "cyberstormmk2.rom"
+  system: "commodore-amiga"
+  required: false
+  size: 131072
+  found_by: name
+  description: "CyberStorm MK II"
+  note: "The table gives it no file hash: the scan names it by its file name, cyberstormmk2.rom. A flash\
+    \ image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes, so the table\
+    \ SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:826-827, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
+    \ source src/rommgr.cpp:1621-1631, source src/rommgr.cpp:1762-1777"
 - name: "cyberstormmk3.rom"
   path: "cyberstormmk3.rom"
   system: "commodore-amiga"
   required: false
   size: 131072
-  found_by: content
+  found_by: name
   description: "CyberStorm MK III v44.67"
-  source_ref: "source src/rommgr.cpp:829-830, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "The table names cyberstormmk3.rom as its file name. A flash image is hashed with its config\
+    \ bytes cleared over its first 0x1c000 or 0x50000 bytes, so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:829-830, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "cyberstorm-mk-iii-v44.69.rom"
   path: "cyberstorm-mk-iii-v44.69.rom"
@@ -2821,7 +2852,9 @@ files:
   size: 131072
   found_by: content
   description: "CyberStorm MK III v44.69"
-  source_ref: "source src/rommgr.cpp:831-832, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:831-832, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "cyberstorm-mk-iii-v44.71.rom"
   path: "cyberstorm-mk-iii-v44.71.rom"
@@ -2830,16 +2863,20 @@ files:
   size: 131072
   found_by: content
   description: "CyberStorm MK III v44.71"
-  source_ref: "source src/rommgr.cpp:833-834, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:833-834, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "cyberstormppc.rom"
   path: "cyberstormppc.rom"
   system: "commodore-amiga"
   required: false
   size: 131072
-  found_by: content
+  found_by: name
   description: "CyberStorm PPC v44.67"
-  source_ref: "source src/rommgr.cpp:835-836, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "The table names cyberstormppc.rom as its file name. A flash image is hashed with its config\
+    \ bytes cleared over its first 0x1c000 or 0x50000 bytes, so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:835-836, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "cyberstorm-ppc-v44.69.rom"
   path: "cyberstorm-ppc-v44.69.rom"
@@ -2848,7 +2885,9 @@ files:
   size: 131072
   found_by: content
   description: "CyberStorm PPC v44.69"
-  source_ref: "source src/rommgr.cpp:837-838, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:837-838, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "cyberstorm-ppc-v44.71.rom"
   path: "cyberstorm-ppc-v44.71.rom"
@@ -2857,25 +2896,31 @@ files:
   size: 131072
   found_by: content
   description: "CyberStorm PPC v44.71"
-  source_ref: "source src/rommgr.cpp:839-840, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:839-840, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "blizzardppc_040.rom"
   path: "blizzardppc_040.rom"
   system: "commodore-amiga"
   required: false
   size: 524288
-  found_by: content
+  found_by: name
   description: "Blizzard PPC 68040 v44.67"
-  source_ref: "source src/rommgr.cpp:841-842, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "The table names blizzardppc_040.rom as its file name. A flash image is hashed with its config\
+    \ bytes cleared over its first 0x1c000 or 0x50000 bytes, so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:841-842, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "blizzardppc_060.rom"
   path: "blizzardppc_060.rom"
   system: "commodore-amiga"
   required: false
   size: 524288
-  found_by: content
+  found_by: name
   description: "Blizzard PPC 68060 v44.67"
-  source_ref: "source src/rommgr.cpp:843-844, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "The table names blizzardppc_060.rom as its file name. A flash image is hashed with its config\
+    \ bytes cleared over its first 0x1c000 or 0x50000 bytes, so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:843-844, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "blizzard-ppc-68040-v44.69.rom"
   path: "blizzard-ppc-68040-v44.69.rom"
@@ -2884,7 +2929,9 @@ files:
   size: 524288
   found_by: content
   description: "Blizzard PPC 68040 v44.69"
-  source_ref: "source src/rommgr.cpp:845-846, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:845-846, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "blizzard-ppc-68060-v44.69.rom"
   path: "blizzard-ppc-68060-v44.69.rom"
@@ -2893,7 +2940,9 @@ files:
   size: 524288
   found_by: content
   description: "Blizzard PPC 68060 v44.69"
-  source_ref: "source src/rommgr.cpp:847-848, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:847-848, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "blizzard-ppc-68040-v44.71.rom"
   path: "blizzard-ppc-68040-v44.71.rom"
@@ -2902,7 +2951,9 @@ files:
   size: 524288
   found_by: content
   description: "Blizzard PPC 68040 v44.71"
-  source_ref: "source src/rommgr.cpp:849-850, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:849-850, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
 - name: "blizzard-ppc-68060-v44.71.rom"
   path: "blizzard-ppc-68060-v44.71.rom"
@@ -2911,8 +2962,22 @@ files:
   size: 524288
   found_by: content
   description: "Blizzard PPC 68060 v44.71"
-  source_ref: "source src/rommgr.cpp:851-852, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604,\
+  note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
+    \ so the table SHA-1 is not the file's."
+  source_ref: "source src/rommgr.cpp:851-852, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
     \ source src/rommgr.cpp:1762-1777"
+- name: "menu500.aca"
+  path: "menu500.aca"
+  system: "commodore-amiga"
+  required: false
+  min_size: 524288
+  found_by: name
+  description: "ACA 500"
+  note: "The table gives it no file hash: the scan names it by its file name, menu500.aca. A flash image\
+    \ is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes, so the table SHA-1\
+    \ is not the file's."
+  source_ref: "source src/rommgr.cpp:854-855, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646,\
+    \ source src/rommgr.cpp:1621-1631, source src/rommgr.cpp:1762-1777"
 - name: "picasso_iv_flash.rom"
   path: "picasso_iv_flash.rom"
   system: "commodore-amiga"
@@ -2924,7 +2989,7 @@ files:
   - "sha1"
   found_by: content
   description: "Picasso IV"
-  source_ref: "source src/rommgr.cpp:857-858, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:857-858, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a1060-bios-2.05.rom"
   path: "a1060-bios-2.05.rom"
   system: "commodore-amiga"
@@ -2936,7 +3001,7 @@ files:
   - "sha1"
   found_by: content
   description: "A1060 BIOS 2.05"
-  source_ref: "source src/rommgr.cpp:860-861, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:860-861, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a1060-bios-2.06.rom"
   path: "a1060-bios-2.06.rom"
   system: "commodore-amiga"
@@ -2948,7 +3013,7 @@ files:
   - "sha1"
   found_by: content
   description: "A1060 BIOS 2.06"
-  source_ref: "source src/rommgr.cpp:862-863, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:862-863, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088-bios-3.4.rom"
   path: "a2088-bios-3.4.rom"
   system: "commodore-amiga"
@@ -2960,7 +3025,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088 BIOS 3.4"
-  source_ref: "source src/rommgr.cpp:864-865, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:864-865, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088-bios-3.5.rom"
   path: "a2088-bios-3.5.rom"
   system: "commodore-amiga"
@@ -2972,7 +3037,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088 BIOS 3.5"
-  source_ref: "source src/rommgr.cpp:866-867, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:866-867, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088-bios-3.6.1.rom"
   path: "a2088-bios-3.6.1.rom"
   system: "commodore-amiga"
@@ -2984,7 +3049,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088 BIOS 3.6.1"
-  source_ref: "source src/rommgr.cpp:868-869, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:868-869, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088t-bios-4.0-09-11-89.rom"
   path: "a2088t-bios-4.0-09-11-89.rom"
   system: "commodore-amiga"
@@ -2996,7 +3061,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088T BIOS 4.0 (09/11/89)"
-  source_ref: "source src/rommgr.cpp:870-871, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:870-871, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088t-bios-4.0-14-11-89.rom"
   path: "a2088t-bios-4.0-14-11-89.rom"
   system: "commodore-amiga"
@@ -3008,7 +3073,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088T BIOS 4.0 (14/11/89)"
-  source_ref: "source src/rommgr.cpp:872-873, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:872-873, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088t-bios-4.10.rom"
   path: "a2088t-bios-4.10.rom"
   system: "commodore-amiga"
@@ -3020,7 +3085,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088T BIOS 4.10"
-  source_ref: "source src/rommgr.cpp:874-875, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:874-875, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088t-bios-4.11.rom"
   path: "a2088t-bios-4.11.rom"
   system: "commodore-amiga"
@@ -3032,7 +3097,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088T BIOS 4.11"
-  source_ref: "source src/rommgr.cpp:876-877, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:876-877, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2088t-bios-4.12.rom"
   path: "a2088t-bios-4.12.rom"
   system: "commodore-amiga"
@@ -3044,7 +3109,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2088T BIOS 4.12"
-  source_ref: "source src/rommgr.cpp:878-879, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:878-879, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2286-bios-3.6.rom"
   path: "a2286-bios-3.6.rom"
   system: "commodore-amiga"
@@ -3056,7 +3121,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2286 BIOS 3.6"
-  source_ref: "source src/rommgr.cpp:880-881, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:880-881, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2286-bios-4.2.rom"
   path: "a2286-bios-4.2.rom"
   system: "commodore-amiga"
@@ -3068,7 +3133,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2286 BIOS 4.2"
-  source_ref: "source src/rommgr.cpp:884-885, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:884-885, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2386sx-bios-1.00.rom"
   path: "a2386sx-bios-1.00.rom"
   system: "commodore-amiga"
@@ -3080,7 +3145,7 @@ files:
   - "sha1"
   found_by: content
   description: "A2386SX BIOS 1.00"
-  source_ref: "source src/rommgr.cpp:888-889, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:888-889, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "a2386sx-bios-1.00.03.rom"
   path: "a2386sx-bios-1.00.03.rom"
   system: "commodore-amiga"
@@ -3092,39 +3157,40 @@ files:
   - "sha1"
   found_by: content
   description: "A2386SX BIOS 1.00.03"
-  source_ref: "source src/rommgr.cpp:890-891, source src/osdep/amiberry_gui.cpp:500-540, 542-568, 570-604"
+  source_ref: "source src/rommgr.cpp:890-891, source src/osdep/amiberry_gui.cpp:500-538, 542-568, 570-646"
 - name: "aros-ext.bin"
   path: "aros-ext.bin"
   system: "commodore-amiga"
   required: false
-  bundled: true
   size: 524288
   sha1: "e8b274faca7ffa4c064706ba15318885d8645695"
   md5: "d2ce6748e8e42222662e14359f68dad5"
+  bundled: true
   note: "AROS replacement Kickstart, read from the ROM path when the Kickstart is :AROS."
   source_ref: "source src/memory.cpp:1875-1882"
 - name: "aros-rom.bin"
   path: "aros-rom.bin"
   system: "commodore-amiga"
   required: false
-  bundled: true
   size: 524288
   sha1: "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e"
   md5: "48d38fc3fcf2ad7bca5ec5191d02e451"
+  bundled: true
   note: "AROS replacement Kickstart, read from the ROM path when the Kickstart is :AROS."
   source_ref: "source src/memory.cpp:1908-1915"
 - name: "kick.rom"
   path: "kick.rom"
   system: "commodore-amiga"
   required: false
+  found_by: name
   note: "Tried as <home>/roms/kick.rom when the configured Kickstart cannot be opened."
-  source_ref: "source src/memory.cpp:2030-2065"
+  source_ref: "source src/memory.cpp:2048-2059"
 - name: "rom.key"
   path: "rom.key"
   system: "commodore-amiga"
   required: false
   note: "Decryption key for Cloanto Amiga Forever encrypted ROMs, read beside the Kickstart."
-  source_ref: "source src/rommgr.cpp:119-120, 121-122, 123-124, source src/rommgr.cpp:1410-1437, 1438-1464,\
+  source_ref: "source src/rommgr.cpp:119-120, 121-122, 123-124, source src/rommgr.cpp:1410-1426, 1438-1519,\
     \ source src/memory.cpp:2088"
 - name: "mt32-roms/mt32_control.rom"
   path: "mt32-roms/mt32_control.rom"
@@ -3142,7 +3208,7 @@ files:
   - "mt32-roms/ctrl_mt32_2_06.rom"
   - "mt32-roms/ctrl_mt32_2_03.rom"
   note: "Roland MT-32 control ROM for Munt MIDI emulation"
-  source_ref: "source src/midiemu.cpp:38-62, source src/midiemu.cpp:82-150"
+  source_ref: "source src/midiemu.cpp:38-62, 82-117, 120-157"
 - name: "mt32-roms/pcm_mt32.rom"
   path: "mt32-roms/pcm_mt32.rom"
   system: "commodore-amiga"
@@ -3150,7 +3216,7 @@ files:
   aliases:
   - "mt32-roms/mt32_pcm.rom"
   note: "Roland MT-32 PCM ROM for Munt MIDI emulation"
-  source_ref: "source src/midiemu.cpp:82-150"
+  source_ref: "source src/midiemu.cpp:82-117, 120-157"
 - name: "mt32-roms/cm32l_control.rom"
   path: "mt32-roms/cm32l_control.rom"
   system: "commodore-amiga"
@@ -3161,7 +3227,7 @@ files:
   - "mt32-roms/ctrl_cm32l_1_02.rom"
   - "mt32-roms/ctrl_cm32l_1_00.rom"
   note: "Roland CM-32L control ROM for Munt MIDI emulation"
-  source_ref: "source src/midiemu.cpp:25-37, source src/midiemu.cpp:82-150"
+  source_ref: "source src/midiemu.cpp:25-37, 82-117, 120-157"
 - name: "mt32-roms/pcm_cm32l.rom"
   path: "mt32-roms/pcm_cm32l.rom"
   system: "commodore-amiga"
@@ -3169,25 +3235,7 @@ files:
   aliases:
   - "mt32-roms/cm32l_pcm.rom"
   note: "Roland CM-32L PCM ROM for Munt MIDI emulation"
-  source_ref: "source src/midiemu.cpp:82-150"
-- name: "WHDLoad"
-  path: "whdboot/WHDLoad"
-  system: "commodore-amiga"
-  required: false
-  size: 156867
-  sha1: "d81a777fcc40c119ab4509008495125b99999b4b"
-  md5: "5d06f5972b95f55549dfbfa8e45ae090"
-  bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1296-1299"
-- name: "JST"
-  path: "whdboot/JST"
-  system: "commodore-amiga"
-  required: false
-  size: 89108
-  sha1: "55dd3ecd5086528fa984e82db6474b954fc54ad5"
-  md5: "2a3a61bbd7c351751506e22a4354b76a"
-  bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1287-1290"
+  source_ref: "source src/midiemu.cpp:82-117, 120-157"
 - name: "AmiQuit"
   path: "whdboot/AmiQuit"
   system: "commodore-amiga"
@@ -3196,7 +3244,25 @@ files:
   sha1: "faaaa08b29b391381771222f10b7b22c3b99f4ca"
   md5: "36ab26d3b855e634fdda062c052cd52b"
   bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1303-1307"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1304"
+- name: "JST"
+  path: "whdboot/JST"
+  system: "commodore-amiga"
+  required: false
+  size: 89108
+  sha1: "55dd3ecd5086528fa984e82db6474b954fc54ad5"
+  md5: "2a3a61bbd7c351751506e22a4354b76a"
+  bundled: true
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1287"
+- name: "WHDLoad"
+  path: "whdboot/WHDLoad"
+  system: "commodore-amiga"
+  required: false
+  size: 156867
+  sha1: "d81a777fcc40c119ab4509008495125b99999b4b"
+  md5: "5d06f5972b95f55549dfbfa8e45ae090"
+  bundled: true
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1296"
 - name: "boot-data.zip"
   path: "whdboot/boot-data.zip"
   system: "commodore-amiga"
@@ -3205,8 +3271,7 @@ files:
   sha1: "9be90107289dde099e78f699bb1f1498f77b22f4"
   md5: "84695c3adc3fe06c158cf7907a2f84a1"
   bundled: true
-  note: "Mounted as the boot volume of a WHDLoad launch, else the boot-data folder beside it."
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1170-1172, 1182-1184"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1170, 1182"
 - name: "whdload_db.xml"
   path: "whdboot/game-data/whdload_db.xml"
   system: "commodore-amiga"
@@ -3215,8 +3280,7 @@ files:
   sha1: "0ca586301ce26ab152a807dbc9b21c403291ea7f"
   md5: "925812a2055f2b1e13ac81652489faf4"
   bundled: true
-  note: "Per-game settings of the WHDLoad booter. Without it a game boots with the defaults."
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1252-1262"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:916, 1254, 1262"
 - name: "kick33180.A500.RTB"
   path: "whdboot/save-data/Kickstarts/kick33180.A500.RTB"
   system: "commodore-amiga"
@@ -3227,7 +3291,7 @@ files:
   aliases:
   - "kick33192.A500.RTB"
   bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1249, 1311-1313, source src/osdep/amiberry.cpp:4044-4053"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:256, 261, 1249, 1311"
 - name: "kick34005.A500.RTB"
   path: "whdboot/save-data/Kickstarts/kick34005.A500.RTB"
   system: "commodore-amiga"
@@ -3236,7 +3300,7 @@ files:
   sha1: "209c109855f94c935439b60950d049527d2f2484"
   md5: "7eb13d974af0992d672b67c317a7e0a1"
   bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1249, 1311-1313, source src/osdep/amiberry.cpp:4044-4053"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:256, 261, 1249, 1311"
 - name: "kick40063.A600.RTB"
   path: "whdboot/save-data/Kickstarts/kick40063.A600.RTB"
   system: "commodore-amiga"
@@ -3245,7 +3309,7 @@ files:
   sha1: "ca2d6e1e2b4883929447a05e29418533723a419c"
   md5: "3f97c1963d82c808ef29e7c984c4c688"
   bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1249, 1311-1313, source src/osdep/amiberry.cpp:4044-4053"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:256, 261, 1249, 1311"
 - name: "kick40068.A1200.RTB"
   path: "whdboot/save-data/Kickstarts/kick40068.A1200.RTB"
   system: "commodore-amiga"
@@ -3254,7 +3318,7 @@ files:
   sha1: "1ad1b55e7226bd5cd66def8370a69f19244da796"
   md5: "547b42b7b070c7f227ea45e0986d57a1"
   bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1249, 1311-1313, source src/osdep/amiberry.cpp:4044-4053"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:256, 261, 1249, 1311"
 - name: "kick40068.A4000.RTB"
   path: "whdboot/save-data/Kickstarts/kick40068.A4000.RTB"
   system: "commodore-amiga"
@@ -3263,4 +3327,4 @@ files:
   sha1: "973b42dcaf8d6cb111484b3c4d3b719b15f6792d"
   md5: "f89f19b858ea6b1a04327c6f71ee1600"
   bundled: true
-  source_ref: "source src/osdep/amiberry_whdbooter.cpp:1249, 1311-1313, source src/osdep/amiberry.cpp:4044-4053"
+  source_ref: "source src/osdep/amiberry_whdbooter.cpp:256, 261, 1249, 1311"
