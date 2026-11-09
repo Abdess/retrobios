@@ -10,7 +10,6 @@ cores:
 - a5200
 - abuse
 - amiberry
-- applewin
 - arduous
 - atari800
 - azahar
@@ -30,7 +29,6 @@ cores:
 - cdogs
 - cemu
 - cgenius
-- citron
 - clk
 - corsixth
 - demul
@@ -50,7 +48,6 @@ cores:
 - easyrpg
 - ecwolf
 - eduke32
-- eka2l1
 - emuscv
 - ep128emu-core
 - etlegacy
@@ -66,7 +63,6 @@ cores:
 - fmsx
 - freechaf
 - freeintv
-- freej2me
 - fsuae
 - fury
 - fuse
@@ -76,7 +72,6 @@ cores:
 - genesisplusgx
 - genesisplusgx-expanded
 - genesisplusgx-wide
-- gong
 - gpsp
 - gsplus
 - gw
@@ -158,7 +153,6 @@ cores:
 - reminiscence
 - rpcs3
 - ruffle
-- ryujinx
 - samcoupe
 - same_cdi
 - sameduck
@@ -173,7 +167,6 @@ cores:
 - sonic2013
 - sonic3-air
 - soniccd
-- squirreljme
 - stella
 - stella2014
 - superbroswar
@@ -192,12 +185,10 @@ cores:
 - tyrian
 - tyrquake
 - uae4arm
-- uqm
 - uzem
 - vb
 - vba-m
 - vecx
-- vemulator
 - vice
 - vice_x128
 - vice_x64
@@ -5683,7 +5674,6 @@ systems:
 standalone_cores:
 - abuse
 - amiberry
-- applewin
 - azahar
 - bigpemu
 - bstone
@@ -5692,7 +5682,6 @@ standalone_cores:
 - cdogs
 - cemu
 - cgenius
-- citron
 - clk
 - corsixth
 - demul
@@ -5709,7 +5698,6 @@ standalone_cores:
 - easyrpg
 - ecwolf
 - eduke32
-- eka2l1
 - etlegacy
 - fallout1-ce
 - fallout2-ce
@@ -5755,7 +5743,6 @@ standalone_cores:
 - redream
 - rpcs3
 - ruffle
-- ryujinx
 - samcoupe
 - scummvm
 - sdlpop
@@ -5776,7 +5763,6 @@ standalone_cores:
 - tr2x
 - tsugaru
 - tyrian
-- uqm
 - vice
 - vita3k
 - vkquake
@@ -5800,7 +5786,6 @@ standalone_cores:
 - ymir
 - yquake2
 dual_mode_cores:
-- applewin
 - dolphin
 - easyrpg
 - flycast
@@ -6624,15 +6609,6 @@ launchers:
   fails_when_missing: false
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/shadps4/shadps4Generator.py:46,\
     \ 228"
-- emulator: citron
-  build: standalone
-  kind: passes_path
-  names: []
-  search_dir: /userdata/bios/switch
-  passes_to: "CitronPath::KeysDir in src/common/fs/path_util.cpp returns it, in place\
-    \ of citron_path / KEYS_DIR"
-  fails_when_missing: false
-  source_ref: "package/batocera/emulators/citron/002-adjust-paths.patch:9-10"
 configs_root:
   path: /userdata/system/configs
   from_bios: ../system/configs

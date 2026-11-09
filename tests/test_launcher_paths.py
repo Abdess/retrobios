@@ -307,7 +307,8 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
     def test_the_real_lists_name_only_what_a_board_builds(self):
         import yaml
 
-        for platform, absent in (("knulli", ("suyu", "citron", "shadps4", "pcsx2")),):
+        for platform, absent in (("knulli", ("suyu", "citron", "shadps4", "pcsx2")),
+                                 ("batocera", ("citron", "ryujinx", "applewin"))):
             config = yaml.safe_load((REPO_ROOT / "platforms" / f"{platform}.yml").read_text())
             names = set(config["cores"]) | set(config.get("standalone_cores") or [])
             targets = yaml.safe_load(

@@ -1,6 +1,6 @@
 platform: batocera
 source: https://github.com/batocera-linux/batocera.linux/tree/batocera-43.1
-scraped_at: '2026-11-06T02:18:59Z'
+scraped_at: '2026-11-09T19:49:31Z'
 targets:
   a3gen2:
     architecture: aarch64
@@ -203,6 +203,7 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - dxx-rebirth
     - easyrpg
     - ecwolf
     - eduke32
@@ -300,7 +301,9 @@ targets:
     - snes9x_next
     - solarus
     - sonic-mania
+    - sonic2013
     - sonic3-air
+    - soniccd
     - stella
     - superbroswar
     - supermodel
@@ -342,6 +345,7 @@ targets:
     - xpet
     - xplus4
     - xrick
+    - xroar
     - xscpu64
     - xvic
     - yabasanshiro
@@ -5379,6 +5383,7 @@ targets:
     - model2emu
     - moonlight
     - mrboom
+    - mugen
     - mupen64plus
     - mupen64plus-next
     - neocd
@@ -5475,6 +5480,8 @@ targets:
     - vkquake3
     - vpinball
     - wasm4
+    - wine
+    - wine-tkg
     - x1
     - x128
     - x16emu
@@ -5605,6 +5612,7 @@ targets:
     - model2emu
     - moonlight
     - mrboom
+    - mugen
     - mupen64plus
     - mupen64plus-next
     - neocd
@@ -5701,6 +5709,8 @@ targets:
     - vkquake3
     - vpinball
     - wasm4
+    - wine
+    - wine-tkg
     - x1
     - x128
     - x16emu
