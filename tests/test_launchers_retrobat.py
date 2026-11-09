@@ -1149,8 +1149,17 @@ class FolderArguments(unittest.TestCase):
         )
 
     def test_xroar_reassigned_folder_and_config_line(self):
-        argument, config = rl.xroar(_sources(**{f"{G}/Xroar.Generator.cs": XROAR}))
-        self.assertEqual(argument["search_dir"], 'bios/dragon, or bios/coco when system == "coco"')
+        # romPath is bios/dragon, rewritten to bios/coco for the coco system.
+        default, coco, config = rl.xroar(_sources(**{f"{G}/Xroar.Generator.cs": XROAR}))
+        self.assertEqual(
+            (default["search_dir"], default["passes_to"], default.get("systems")),
+            ("bios/dragon", "command line -rompath bios/dragon", None),
+        )
+        self.assertEqual(
+            (coco["search_dir"], coco["passes_to"], coco["systems"]),
+            ("bios/coco", "command line -rompath bios/coco", ["coco"]),
+        )
+        self.assertEqual(coco["source_ref"], default["source_ref"])
         self.assertEqual(config["search_dir"], "bios/dragon")
         self.assertEqual(
             config["passes_to"], 'xroar.conf rompath ".\\\\..\\\\..\\\\bios\\\\dragon"'

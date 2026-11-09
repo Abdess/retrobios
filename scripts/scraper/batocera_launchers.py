@@ -901,8 +901,8 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
 
 # Generators that hand the emulator a /userdata/bios directory through its
 # configuration: a line written to the file it reads (openMSX's script.tcl
-# filepool entries) or a key saved to it.
-CONFIG_DIRECTORY_GENERATORS = ("openmsx.openmsxGenerator",)
+# filepool entries, xroar.conf rompath) or a key saved to it.
+CONFIG_DIRECTORY_GENERATORS = ("openmsx.openmsxGenerator", "xroar.xroarGenerator")
 
 
 def config_directories(

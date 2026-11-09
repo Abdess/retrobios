@@ -2976,7 +2976,11 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
     found = _argument_paths(src, "xroar", "standalone")
     if not found:
         raise LauncherPatternMissing(src.path, "rompath argument")
-    records = [_with_conditions(record, conditions) for record, conditions in found]
+    records = [
+        split
+        for record, conditions in found
+        for split in _per_system(src, _with_conditions(record, conditions))
+    ]
     line = src.find(r'string (\w+) = ("rompath (?:[^"\\\n]|\\.)*");', "config rompath line")
     written = _unescape(line.group(2)[1:-1])
     relative = re.fullmatch(r'rompath "(.*)"', written)
@@ -3001,6 +3005,37 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
         )
     )
     return _covered(src, records)
+
+
+_SYSTEM_BRANCH = re.compile(r'(\S+), or (\S+) when system == "([\w.-]+)"')
+
+
+def _per_system(src: Source, record: Record) -> list[Record]:
+    """A directory chosen by the system, one record per choice.
+
+    `romPath = <a>; if (system == "coco") romPath = <b>;` renders as "<a>, or
+    <b> when system == "coco"": <b> is passed for that system, <a> for every
+    other one.
+    """
+    rendered = str(record.get("search_dir", ""))
+    branch = _SYSTEM_BRANCH.fullmatch(rendered)
+    if branch is None:
+        if " or " in rendered:
+            raise LauncherPatternMissing(src.path, f"directory choice {rendered!r}")
+        return [record]
+    default, chosen, system = branch.groups()
+    flag = str(record["passes_to"]).removesuffix(rendered).strip()
+    out = []
+    for directory, systems in ((default, None), (chosen, [system])):
+        split = {k: v for k, v in record.items() if k != "source_ref"}
+        split.update(
+            names=list(record["names"]), search_dir=directory, passes_to=f"{flag} {directory}"
+        )
+        if systems:
+            split["systems"] = systems
+        split["source_ref"] = record["source_ref"]
+        out.append(split)
+    return out
 
 
 def pico8(sources: dict[str, Source]) -> list[Record]:

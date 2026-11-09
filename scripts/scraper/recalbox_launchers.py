@@ -39,6 +39,7 @@ CORES = f"{GENERATORS}/libretro/libretroCores.py"
 LIBRETRO_GENERATOR = f"{GENERATORS}/libretro/libretroGenerator.py"
 HATARI = f"{GENERATORS}/hatari/hatariGenerator.py"
 GSPLUS = f"{GENERATORS}/gsplus/gsplusGenerator.py"
+XROAR = f"{GENERATORS}/xroar/xroarGenerator.py"
 AMIBERRY_GENERATOR = f"{GENERATORS}/amiberry/amiberryGenerator.py"
 AMIBERRY_KICKSTARTS = f"{GENERATORS}/amiberry/amiberryKickstarts.py"
 AMIBERRY_SUBSYSTEMS = f"{GENERATORS}/amiberry/amiberrySubSystems.py"
@@ -52,7 +53,7 @@ MUPEN_CONFIG = f"{GENERATORS}/mupen/mupenConfig.py"
 SOURCE_FILES = (
     FILES_MODULE, LAUNCHER, RETROARCH, CORES, LIBRETRO_GENERATOR, HATARI, GSPLUS,
     AMIBERRY_KICKSTARTS, AMIBERRY_SUBSYSTEMS, AMIBERRY_CONFIG, PCSX2, DOLPHIN, XEMU,
-    MUPEN_CONFIG,
+    MUPEN_CONFIG, XROAR,
 )
 
 # Recalbox's system.ini runs every libretro core as `emulator = libretro`:
@@ -1171,8 +1172,32 @@ def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launch
     return launchers
 
 
+def xroar(cg: Configgen) -> list[Launcher]:
+    """-rompath os.path.join(recalboxFiles.BIOS, args.system) on the command line."""
+    src = cg.source(XROAR)
+    generate = src.function("generate")
+    # args.system is the ES system name, as self.system.Name is elsewhere.
+    env = {**cg.env(src, generate), "args.system": SYSTEM_PLACEHOLDER}
+    found = [
+        (flag, value)
+        for node in ast.walk(generate)
+        if isinstance(node, ast.List)
+        for flag, value in zip(node.elts, node.elts[1:])
+        if isinstance(flag, ast.Constant) and flag.value == "-rompath"
+    ]
+    if len(found) != 1:
+        src.fail(f"expected one -rompath on the command line, found {len(found)}")
+    flag, value = found[0]
+    directory = cg.bios_dir(spell(value, env), src, "-rompath")
+    return [Launcher(
+        emulator=cg.emulator(XROAR), build="standalone", kind="passes_path", names=[],
+        search_dir=directory, passes_to="command line -rompath",
+        source_ref=src.ref([(flag.lineno, value.end_lineno)]),
+    )]
+
+
 STANDALONE: tuple[Callable[[Configgen], list[Launcher]], ...] = (
-    hatari, gsplus, amiberry, pcsx2, xemu, mupen64plus,
+    hatari, gsplus, amiberry, pcsx2, xemu, mupen64plus, xroar,
 )
 LIBRETRO: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     core_assets, hatari_libretro, content_files,

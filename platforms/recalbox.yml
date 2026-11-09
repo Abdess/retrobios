@@ -4171,6 +4171,14 @@ launchers:
   fails_when_missing: false
   depends_on_option: system 64dd
   source_ref: "projects/configgen/configgen/generators/mupen/mupenConfig.py:118-121"
+- emulator: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /recalbox/share/bios/<system>
+  passes_to: command line -rompath
+  fails_when_missing: false
+  source_ref: "projects/configgen/configgen/generators/xroar/xroarGenerator.py:25"
 - emulator: dolphin, dolphin-gui
   build: standalone
   kind: fixed_name

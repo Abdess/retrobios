@@ -399,8 +399,9 @@ class HandedDirectory:
 
 
 # The placeholder a launcher record writes for the system it is launched
-# for: Recalbox passes -rompath os.path.join(BIOS, args.system) to XRoar.
-SYSTEM_PLACEHOLDER = "{system}"
+# for, as Recalbox's extractor spells it: Recalbox passes XRoar -rompath
+# os.path.join(BIOS, args.system).
+SYSTEM_PLACEHOLDER = "<system>"
 
 
 def native_systems(config: dict) -> dict[str, str]:
@@ -442,7 +443,7 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
     describing several directories in prose names no single one. A search
     path (XRoar's rompath) gives each of its directories, in order. A record
     naming systems applies to those systems only, and one whose search_dir
-    holds {system} gives one directory per system the platform declares.
+    holds <system> gives one directory per system the platform declares.
     """
     base = str(config.get("base_destination") or "bios")
     natives = native_systems(config)

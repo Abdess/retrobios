@@ -270,7 +270,7 @@
         },
         "search_dir": {
           "type": "string",
-          "description": "Directory the launcher looks in, as the code resolves it. {system} stands for the platform system the emulator is launched for"
+          "description": "Directory the launcher looks in, as the code resolves it. <system> stands for the platform system the emulator is launched for"
         },
         "passes_to": {
           "type": "string",

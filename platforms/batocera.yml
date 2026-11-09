@@ -6580,6 +6580,14 @@ launchers:
     \ -position 2"
   fails_when_missing: false
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:89"
+- emulator: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/xroar
+  passes_to: "written: rompath /userdata/bios/xroar"
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/xroar/xroarGenerator.py:31-32"
 - emulator: o2em
   build: libretro
   kind: core_option

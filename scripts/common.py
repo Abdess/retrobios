@@ -2945,9 +2945,22 @@ def platform_layouts(
         profile.get("standalone_directories") or profile.get("standalone_pools")
     ) and any(h.systems and h.emulator in names for h in _handed(standalone_cores))
     index = system_file_index(standalone_cores) if per_system else {}
+    # A profile system the platform launches under a system of its own, as
+    # its list says for one entry, is launched there for every entry:
+    # Recalbox lists mc10.rom under trs80coco, so alice.rom is read there.
+    family: dict[str, set[str]] = {}
+    for f in (profile.get("files") or []) if per_system else []:
+        if isinstance(f, dict):
+            own = entry_launch_systems(f, {})
+            for system in own:
+                family.setdefault(system, set()).update(entry_launch_systems(f, index) - own)
 
     def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
-        systems = entry_launch_systems(entry, index) if per_system else frozenset()
+        systems = frozenset()
+        if per_system:
+            systems = entry_launch_systems(entry, index)
+            if systems == entry_launch_systems(entry, {}):
+                systems = systems.union(*(family.get(s, set()) for s in systems))
         if systems not in by_systems:
             by_systems[systems] = standalone_bindings_for(
                 emu_name, profile, standalone_cores, systems

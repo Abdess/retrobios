@@ -41,6 +41,7 @@ from scraper.recalbox_launchers import (  # noqa: E402
     RETROARCH,
     SOURCE_FILES,
     XEMU,
+    XROAR,
     Configgen,
     Launcher,
     LauncherShapeError,
@@ -57,6 +58,7 @@ from scraper.recalbox_launchers import (  # noqa: E402
     pcsx2,
     system_directories,
     xemu,
+    xroar,
 )
 
 from tests.test_launchers import placed  # noqa: E402
@@ -109,6 +111,9 @@ LAUNCHER_BLOCKS = {
     80: '''    elif emulator == "pcsx2":
         module = __import__("configgen.generators.pcsx2.pcsx2Generator", fromlist=["Pcsx2Generator"])
         generatorClass = getattr(module, "Pcsx2Generator")''',
+    122: '''    elif emulator == "xroar":
+        module = __import__("configgen.generators.xroar.xroarGenerator", fromlist=["XroarGenerator"])
+        generatorClass = getattr(module, "XroarGenerator")''',
     125: '''    elif emulator == "xemu":
         module = __import__("configgen.generators.xemu.xemuGenerator", fromlist=["XemuGenerator"])
         generatorClass = getattr(module, "XemuGenerator")''',
@@ -1184,6 +1189,22 @@ from configgen.controllers.controller import InputItem, ControllerPerPlayer, Con
         mupenSettings.setString(section, "IPL-ROM", "")''',
 }
 
+# xroarGenerator.py:1-26 at 10.1.1
+XROAR_BLOCKS = {
+    8: '''class XroarGenerator(Generator):
+
+    def generate(self, system: Emulator, playersControllers: ControllerPerPlayer, recalboxOptions: keyValueSettings, args) -> Command:
+
+        # Make save dir
+        import os
+        import configgen.recalboxFiles as recalboxFiles''',
+    22: '''        snapFile: str = os.path.basename(args.rom) + ".sna"
+        commandArray: List[str] = [recalboxFiles.recalboxBins[system.Emulator],
+                                   "-vo", "sdl", "-ui", "sdl", "-ao", "pulse",
+                                   "-rompath", os.path.join(recalboxFiles.BIOS, args.system),
+                                   "-snappath", os.path.join(snapshotFolder, snapFile)]''',
+}
+
 BLOCKS = {
     FILES_MODULE: FILES_MODULE_BLOCKS,
     LAUNCHER: LAUNCHER_BLOCKS,
@@ -1199,6 +1220,7 @@ BLOCKS = {
     DOLPHIN: DOLPHIN_BLOCKS,
     XEMU: XEMU_BLOCKS,
     MUPEN_CONFIG: MUPEN_CONFIG_BLOCKS,
+    XROAR: XROAR_BLOCKS,
 }
 
 
@@ -1218,6 +1240,21 @@ def configgen(path: str | None = None, old: str = "", new: str = "") -> Configge
 
 def ref(path: str, lines: str) -> str:
     return f"{path}:{lines}"
+
+
+class XroarRomPath(unittest.TestCase):
+    def test_the_rom_path_is_the_bios_folder_of_the_system(self):
+        (record,) = xroar(configgen())
+        self.assertEqual(
+            (record.emulator, record.kind, record.search_dir, record.passes_to, record.source_ref),
+            ("xroar", "passes_path", "/recalbox/share/bios/<system>", "command line -rompath",
+             ref(XROAR, "25")),
+        )
+
+    def test_a_rom_path_built_another_way_raises(self):
+        cg = configgen(XROAR, "os.path.join(recalboxFiles.BIOS, args.system)", "args.rompath")
+        with self.assertRaises(LauncherShapeError):
+            xroar(cg)
 
 
 class SystemDirectoryPerCore(unittest.TestCase):
@@ -1511,7 +1548,7 @@ class ExtractionNeverEmpty(unittest.TestCase):
 
         records = extract_launchers(reader)
         self.assertEqual(sorted(set(read)), sorted(SOURCE_FILES))
-        self.assertEqual(len(records), 85)
+        self.assertEqual(len(records), 86)
 
     def test_records_fit_the_schema(self):
         schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())

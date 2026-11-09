@@ -259,7 +259,7 @@ class PerSystem(unittest.TestCase):
     def test_a_system_placeholder_gives_one_directory_per_system(self) -> None:
         # Recalbox passes -rompath os.path.join(BIOS, args.system).
         cfg = {
-            **config(passes("emu", "/recalbox/share/bios/{system}", "command line -rompath")),
+            **config(passes("emu", "/recalbox/share/bios/<system>", "command line -rompath")),
             "systems": {
                 "coco": {"native_id": "trs80coco", "files": []},
                 "dragon64": {"native_id": "dragon", "files": []},
@@ -282,6 +282,29 @@ class PerSystem(unittest.TestCase):
         self.assertEqual(
             entry_launch_systems({"name": "COCO3.ROM", "system": "coco3"}, index),
             frozenset({"coco3", "coco"}),
+        )
+
+
+class SystemFamily(unittest.TestCase):
+    def test_an_entry_follows_the_launch_its_system_is_listed_under(self) -> None:
+        # Recalbox lists mc10.rom under trs80coco: alice.rom, of the same
+        # profile system, is read there too.
+        profile = {
+            "emulator": "Emu", "type": "standalone", "standalone_pools": {"-rompath": ""},
+            "files": [
+                {"name": "mc10.rom", "path": "mc10.rom", "system": "mc10"},
+                {"name": "alice.rom", "path": "alice.rom", "system": "mc10"},
+            ],
+        }
+        cfg = {
+            **config(passes("emu", "/recalbox/share/bios/<system>", "-rompath")),
+            "systems": {"coco": {"native_id": "trs80coco",
+                                 "files": [{"name": "mc10.rom"}]}},
+        }
+        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg))
+        self.assertEqual(
+            [f.get("standalone_path") for f in view["files"]],
+            ["trs80coco/mc10.rom", "trs80coco/alice.rom"],
         )
 
 
@@ -537,3 +560,37 @@ class OpenmsxOnEachPlatform(unittest.TestCase):
                     self.assertTrue(
                         entry["standalone_path"].startswith("openmsx/"), entry["standalone_path"]
                     )
+
+
+class XroarOnEachPlatform(unittest.TestCase):
+    """XRoar reads each ROM from a directory of rompath. Batocera writes
+    rompath bios/xroar, RetroDECK lists $bios_path in it, RetroPie links
+    the build's ${prefix}/share/xroar/roms to $biosdir, RetroBat passes
+    -rompath bios/coco for coco and bios/dragon otherwise, Recalbox
+    -rompath bios/<system>."""
+
+    # Platform -> profile system -> folder, "" for the BIOS root.
+    EXPECTED = {
+        "batocera": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), "xroar"),
+        "retrodeck": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), ""),
+        "retropie": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), ""),
+        "retrobat": {**dict.fromkeys(("dragon32", "dragon64", "coco3", "mc10"), "dragon"),
+                     "coco": "coco"},
+        "recalbox": {**dict.fromkeys(("dragon32", "dragon64"), "dragon"),
+                     **dict.fromkeys(("coco", "coco3", "mc10"), "trs80coco")},
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["xroar"]
+
+    def test_each_rom_lands_where_its_launch_reads_it(self) -> None:
+        for platform, folders in self.EXPECTED.items():
+            cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+            (view, _standalone), = platform_layouts("xroar", self.profile, standalone_set(cfg))
+            for entry in view["files"]:
+                with self.subTest(platform=platform, name=entry["name"]):
+                    self.assertNotIn("unplaced", entry)
+                    folder = folders[entry["system"]]
+                    expected = f"{folder}/{entry['name']}" if folder else entry["name"]
+                    self.assertEqual(entry["standalone_path"], expected)

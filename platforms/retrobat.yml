@@ -5373,9 +5373,19 @@ launchers:
   build: standalone
   kind: passes_path
   names: []
-  search_dir: bios/dragon, or bios/coco when system == "coco"
-  passes_to: command line -rompath bios/dragon, or bios/coco when system == "coco"
+  search_dir: bios/dragon
+  passes_to: command line -rompath bios/dragon
   fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80"
+- emulator: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/coco
+  passes_to: command line -rompath bios/coco
+  fails_when_missing: false
+  systems:
+  - coco
   source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80"
 - emulator: xroar
   build: standalone
