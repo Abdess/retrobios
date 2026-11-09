@@ -3812,6 +3812,22 @@ class BackTicksAndSaveFolder(unittest.TestCase):
         text = " ".join(install.tui_view(state, 80, 24))
         self.assertNotIn("No system is ticked", text)
 
+    def test_the_page_says_where_the_list_opens(self):
+        """wiki/installer.md said a long list opens on None, where A
+        unticked every system as the first press: the focus moved to the
+        first system, and the page kept the old words."""
+        state = self.long_list()
+        self.assertGreater(len(state.systems), install.TUI_LONG_LIST)
+        press(state, "down", "enter")
+        rows = install.tui_rows(state)
+        self.assertEqual(state.focus["systems"],
+                         next(i for i, row in enumerate(rows) if row.action == "system"))
+        self.assertEqual([row.action for row in rows][-3:], ["all", "none", "done"])
+        page = " ".join((REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8").split())
+        self.assertNotIn("opens on **None**", page)
+        self.assertIn("It opens on its first system, every system ticked", page)
+        self.assertIn("**None** (`a` and `n`) sit at the end of the list", page)
+
     def test_back_after_a_choice_keeps_the_choice(self):
         state = self.long_list()
         press(state, "down", "enter", "enter")
