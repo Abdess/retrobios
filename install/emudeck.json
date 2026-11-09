@@ -2950,6 +2950,7 @@
     ],
     "nintendo-nes": [
       "3dsen",
+      "ares",
       "bizhawk",
       "bnes",
       "emux_nes",
@@ -21498,6 +21499,19 @@
       ]
     },
     {
+      "dest": "bios.sms",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "cores": [
+        "mesence",
+        "emux_sms",
+        "gearsystem",
+        "smsplus"
+      ]
+    },
+    {
       "dest": "ep128emu/roms/exos21.rom",
       "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
       "sha256": "ff370bb0bb0ae85f87861d837d82071d64257b129731c5e549ef5da8ade4356b",
@@ -22357,19 +22371,6 @@
       ],
       "region_groups": [
         "laseractive"
-      ]
-    },
-    {
-      "dest": "bios.sms",
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
-      "size": 8192,
-      "repo_path": "bios/Sega/Master System/SMS_us_1.3.sms",
-      "cores": [
-        "mesence",
-        "emux_sms",
-        "gearsystem",
-        "smsplus"
       ]
     },
     {
@@ -101335,15 +101336,7 @@
       "url": "https://buildbot.libretro.com/assets/system/blueMSX.zip",
       "type": "zip",
       "systems": [
-        "msx",
-        "msx2",
-        "msx2plus",
-        "msxturboR",
-        "colecovision",
-        "sega-sg1000",
-        "sega-sc3000",
-        "sega-sf7000",
-        "spectravideo"
+        "coleco-colecovision"
       ],
       "files": {
         "Machines/MSX - Canon V-10/config.ini": {
@@ -102230,9 +102223,7 @@
       "dest": "",
       "url": "https://buildbot.libretro.com/assets/system/Dinothawr.zip",
       "type": "zip",
-      "systems": [
-        "dinothawr"
-      ],
+      "systems": [],
       "files": {
         "dinothawr/level_7-1.tmx": {
           "sha1": "4c1a17e027714cb686ed6a296aa4634dd3668da5",
@@ -102682,9 +102673,7 @@
       "dest": "",
       "url": "https://buildbot.libretro.com/assets/system/DirkSimple.zip",
       "type": "zip",
-      "systems": [
-        "laserdisc-arcade"
-      ],
+      "systems": [],
       "files": {
         "DirkSimple/LICENSE.txt": {
           "sha1": "212b5eb5026a76a73408fcf58df635fa4dbeabd1",
@@ -102743,8 +102732,7 @@
       "url": "https://buildbot.libretro.com/assets/system/Dolphin.zip",
       "type": "zip",
       "systems": [
-        "nintendo-gamecube",
-        "nintendo-wii"
+        "nintendo-gamecube"
       ],
       "files": {
         "wiitdb-pt.txt": {
@@ -111423,32 +111411,7 @@
       "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
       "type": "zip",
       "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
+        "nintendo-nes"
       ],
       "files": {
         "README.md": {
@@ -125156,34 +125119,7 @@
       "dest": "fbneo",
       "url": "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip",
       "type": "zip",
-      "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
-      ],
+      "systems": [],
       "files": {
         "samples/seawolf.zip": {
           "sha1": "1a27515c480192b7337f720ece2c159264dd4804",
@@ -125394,9 +125330,7 @@
       "dest": "freeintv_overlays",
       "url": "https://github.com/libretro/FreeIntv/raw/master/Assets/Overlays.zip",
       "type": "zip",
-      "systems": [
-        "intellivision"
-      ],
+      "systems": [],
       "files": {
         "B-17 Bomber (USA, Europe).png": {
           "sha1": "e9c55f64ab9c92b1ffda4ed0228cc29be19b834a",

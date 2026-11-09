@@ -175,11 +175,11 @@ how many files are missing, how much they weigh, how many are in place and how
 much space is free, before anything is written.
 
 The other choices sit one press away. **Choose systems** ticks the consoles to
-keep, with the total to download under the list. A long list opens on **None**:
-A or Enter there unticks every system, and A on a system then takes that one alone. A
-on a system (**Continue**) always opens the confirm screen, which counts the choice
-before **Install**: it never installs by itself. Back with nothing ticked keeps the ticks
-the list opened with. **Options** sets the
+keep, with the total to download under the list. It opens on its first system,
+every system ticked: A or Enter ticks or unticks the one in focus, and **All** and
+**None** (`a` and `n`) sit at the end of the list. B or Esc (**Done**) takes the
+choice back to the plan, which counts it before **Install**: the list never installs
+by itself, and Done with nothing ticked is refused. **Options** sets the
 preferred regions, game data, the installed cores only, the cores, the parallel
 downloads, the folder and, for a list with files read from the frontend's save
 directory, that directory. Each row names the option it sets, and **Show the

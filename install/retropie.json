@@ -4719,6 +4719,7 @@
       "nosgba"
     ],
     "nintendo-fds": [
+      "ares",
       "fbneo",
       "fceumm",
       "fceumm_mod",
@@ -4743,6 +4744,7 @@
       "triforce"
     ],
     "nintendo-gb": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -4766,6 +4768,7 @@
       "vbam"
     ],
     "nintendo-gba": [
+      "ares",
       "beetle_gba",
       "bizhawk",
       "fbneo",
@@ -4789,6 +4792,7 @@
       "vbam"
     ],
     "nintendo-gbc": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -4813,6 +4817,7 @@
     ],
     "nintendo-nes": [
       "3dsen",
+      "ares",
       "bizhawk",
       "bnes",
       "emux_nes",
@@ -4873,6 +4878,7 @@
       "supersnes9x"
     ],
     "nintendo-snes": [
+      "ares",
       "bizhawk",
       "bsnes",
       "bsnes-jg",
@@ -4977,6 +4983,7 @@
       "bizhawk",
       "blastem",
       "clk",
+      "emux_sms",
       "gearsystem",
       "genesis_plus_gx",
       "genesis_plus_gx_expanded",
@@ -5053,6 +5060,8 @@
       "cspect",
       "eightyone",
       "ep128emu_core",
+      "fbalpha2019",
+      "fbneo",
       "fbzx",
       "fuse",
       "speccy",
@@ -6365,6 +6374,10 @@
       "repo_path": "bios/Arcade/Arcade/.variants/spec128.zip.1a524bfa",
       "cores": null,
       "systems": [
+        "arcade",
+        "sinclair-zx-spectrum"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6387,6 +6400,10 @@
       "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "sinclair-zx-spectrum"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -6409,6 +6426,10 @@
       "repo_path": "bios/Arcade/FBNeo/spec1282a.zip",
       "cores": null,
       "systems": [
+        "arcade",
+        "sinclair-zx-spectrum"
+      ],
+      "declared_in": [
         "arcade"
       ],
       "alternatives": [
@@ -119364,6 +119385,9 @@
       "repo_path": "bios/Arcade/Arcade/spec48k.zip",
       "cores": [
         "fbalpha2019"
+      ],
+      "systems": [
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -119374,6 +119398,9 @@
       "repo_path": "bios/Arcade/Arcade/spec128.zip",
       "cores": [
         "fbalpha2019"
+      ],
+      "systems": [
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -123099,9 +123126,7 @@
       "dest": "Cemu/gameProfiles/default",
       "url": "https://github.com/cemu-project/Cemu/archive/3310f3b8b184d64a62b89fd59088c799432badf5.tar.gz",
       "type": "tarball",
-      "systems": [
-        "nintendo-wiiu"
-      ],
+      "systems": [],
       "files": {
         "000500001012BD00.ini": {
           "sha1": "8aff44d69915d20266fee368fd1e3e4efa3f5b59",
@@ -132732,32 +132757,11 @@
       "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
       "type": "zip",
       "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
         "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
+        "sega-mega-drive",
+        "nec-pc-engine",
+        "nintendo-nes",
+        "nintendo-snes"
       ],
       "files": {
         "README.md": {
@@ -146466,32 +146470,7 @@
       "url": "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip",
       "type": "zip",
       "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
+        "arcade"
       ],
       "files": {
         "samples/seawolf.zip": {

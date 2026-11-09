@@ -22,11 +22,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 465,
-  "total_size": 872654387,
-  "pack_files": 467,
-  "pack_size": 872654387,
-  "total_omitted": 776,
+  "total_files": 468,
+  "total_size": 872741451,
+  "pack_files": 470,
+  "pack_size": 872741451,
+  "total_omitted": 773,
   "omitted_files": [
     {
       "dest": "32X_G_BIOS.BIN",
@@ -4055,7 +4055,7 @@
     {
       "dest": "ngp.zip",
       "name": "ngp.zip",
-      "system": "snk-neogeo-pocket",
+      "system": "snk-ngp",
       "required": true,
       "reason": "no_platform_slug",
       "cores": [
@@ -4990,36 +4990,6 @@
       "reason": "no_platform_slug",
       "cores": [
         "mame2003"
-      ]
-    },
-    {
-      "dest": "spec128.zip",
-      "name": "spec128.zip",
-      "system": "sinclair-spectrum",
-      "required": true,
-      "reason": "no_platform_slug",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
-      "dest": "spec1282a.zip",
-      "name": "spec1282a.zip",
-      "system": "sinclair-spectrum",
-      "required": false,
-      "reason": "no_platform_slug",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
-      "dest": "spectrum.zip",
-      "name": "spectrum.zip",
-      "system": "sinclair-spectrum",
-      "required": true,
-      "reason": "no_platform_slug",
-      "cores": [
-        "fbneo"
       ]
     },
     {
@@ -8915,6 +8885,7 @@
       "skyemu"
     ],
     "nintendo-fds": [
+      "ares",
       "fbneo",
       "fceumm",
       "fceumm_mod",
@@ -8939,6 +8910,7 @@
       "triforce"
     ],
     "nintendo-gb": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -8962,6 +8934,7 @@
       "vbam"
     ],
     "nintendo-gba": [
+      "ares",
       "beetle_gba",
       "bizhawk",
       "dolphin",
@@ -8988,6 +8961,7 @@
       "vbam"
     ],
     "nintendo-gbc": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -9012,6 +8986,7 @@
     ],
     "nintendo-nes": [
       "3dsen",
+      "ares",
       "bizhawk",
       "bnes",
       "emux_nes",
@@ -9072,6 +9047,7 @@
       "supersnes9x"
     ],
     "nintendo-snes": [
+      "ares",
       "bizhawk",
       "bsnes",
       "bsnes-jg",
@@ -9147,6 +9123,7 @@
       "bizhawk",
       "blastem",
       "clk",
+      "emux_sms",
       "gearsystem",
       "genesis_plus_gx",
       "genesis_plus_gx_expanded",
@@ -9223,6 +9200,8 @@
       "cspect",
       "eightyone",
       "ep128emu_core",
+      "fbalpha2019",
+      "fbneo",
       "fbzx",
       "fuse",
       "speccy",
@@ -14952,6 +14931,45 @@
       ],
       "systems": [
         "nintendo-fds"
+      ]
+    },
+    {
+      "dest": "zxs/spec128.zip",
+      "sha1": "e56f7be80abcf2c298310e8d2af66b9f29a6db31",
+      "sha256": "0bcee9273982e6f4d1ef9708c3cdabde8a1f14e1c9acad7317e1834c33b6af47",
+      "size": 32986,
+      "repo_path": "bios/Arcade/Arcade/spec128.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "sinclair-zx-spectrum"
+      ]
+    },
+    {
+      "dest": "zxs/spec1282a.zip",
+      "sha1": "a20dfda5804a9624e35baaf2fad2ac2011e70d9d",
+      "sha256": "d725a3cd214e61d0c44a978875d3a457101f8f2cdc621ccad3c984b5a8b3efa0",
+      "size": 41646,
+      "repo_path": "bios/Arcade/FBNeo/spec1282a.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "sinclair-zx-spectrum"
+      ]
+    },
+    {
+      "dest": "zxs/spectrum.zip",
+      "sha1": "9428d8b7c6d4db78f00a58915dccdf33f3b5d98b",
+      "sha256": "5be93f9bc5a16d2fac29da18e9021ee3c86c0acab57022dbe6c0722ce8d18eac",
+      "size": 12432,
+      "repo_path": "bios/Arcade/Arcade/spec48k.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "sinclair-zx-spectrum"
       ]
     },
     {

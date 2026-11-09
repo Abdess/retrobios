@@ -2811,6 +2811,7 @@
       "sixtyforce"
     ],
     "nintendo-fds": [
+      "ares",
       "fbneo",
       "fceumm",
       "fceumm_mod",
@@ -2826,6 +2827,7 @@
       "rustynes"
     ],
     "nintendo-gb": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -2849,6 +2851,7 @@
       "vbam"
     ],
     "nintendo-gba": [
+      "ares",
       "beetle_gba",
       "bizhawk",
       "fbneo",
@@ -2872,6 +2875,7 @@
       "vbam"
     ],
     "nintendo-gbc": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -2975,6 +2979,7 @@
       "bizhawk",
       "blastem",
       "clk",
+      "emux_sms",
       "gearsystem",
       "genesis_plus_gx",
       "genesis_plus_gx_expanded",
@@ -68651,15 +68656,9 @@
       "url": "https://buildbot.libretro.com/assets/system/blueMSX.zip",
       "type": "zip",
       "systems": [
-        "msx",
-        "msx2",
-        "msx2plus",
-        "msxturboR",
-        "colecovision",
-        "sega-sg1000",
-        "sega-sc3000",
-        "sega-sf7000",
-        "spectravideo"
+        "microsoft-msx",
+        "coleco-colecovision",
+        "sc-3000"
       ],
       "files": {
         "Machines/MSX - Canon V-10/config.ini": {
@@ -69923,32 +69922,7 @@
       "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
       "type": "zip",
       "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
+        "nec-pc-engine"
       ],
       "files": {
         "README.md": {
@@ -83656,34 +83630,7 @@
       "dest": "bios/fbneo",
       "url": "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip",
       "type": "zip",
-      "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
-      ],
+      "systems": [],
       "files": {
         "samples/seawolf.zip": {
           "sha1": "1a27515c480192b7337f720ece2c159264dd4804",
@@ -83895,7 +83842,7 @@
       "url": "https://github.com/libretro/FreeIntv/raw/master/Assets/Overlays.zip",
       "type": "zip",
       "systems": [
-        "intellivision"
+        "mattel-intellivision"
       ],
       "files": {
         "B-17 Bomber (USA, Europe).png": {

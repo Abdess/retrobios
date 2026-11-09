@@ -78,6 +78,7 @@ from common import (
     load_platform_config,
     without_profile_blind,
     MANUFACTURER_PREFIXES,
+    _norm_system_id,
     require_yaml,
     ProfileSelectionError,
     core_system_dirs,
@@ -5113,7 +5114,7 @@ def generate_manifest(
     data_sizes = pack_only_sizes + [os.path.getsize(src) for src, _dest in data_members]
     data_directories = _manifest_data_directories(
         data_members, data_refs, data_registry or {}, base_dest,
-        tree_readers(pack_systems, core_trees),
+        tree_readers(pack_systems, core_trees), pack_systems,
     )
 
     now = _build_timestamp(db)
@@ -5219,6 +5220,7 @@ def _manifest_data_directories(
     registry: dict,
     base_dest: str,
     readers: dict[str, list[str]] | None = None,
+    platform_systems: Iterable[str] | None = None,
 ) -> list[dict]:
     """Each data directory the pack carries, as the installer rebuilds it.
 
@@ -5229,6 +5231,11 @@ def _manifest_data_directories(
     changed since is refused rather than installed. archive_size is the
     size of the archive refresh_data_dirs last downloaded, what fetching
     the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
+    ``systems`` are the platform's ids (``platform_systems``) the tree's
+    systems normalize to, as a core extra's are: a tree no platform system
+    serves has none, and goes with the files of no system, as the pack
+    built with --system puts it in the part of its own. FBNeo's cheats
+    carried sega-megadrive where RetroArch's list says sega-mega-drive.
     ``optional`` marks a tree every core reading it runs without
     (``required: false``): install.py --required-only leaves it out, as the
     pack built with --required-only does. ``cores`` names the cores that
@@ -5237,8 +5244,13 @@ def _manifest_data_directories(
     """
     grouped: dict[tuple[str, str], dict] = {}
     versions: dict[str, dict[str, dict]] = {}
+    by_norm: dict[str, list[str]] = {}
+    for sys_id in sorted(platform_systems or ()):
+        by_norm.setdefault(_norm_system_id(sys_id), []).append(sys_id)
     for src, full in members:
         ref, systems, prefix, needed = refs[full]
+        if platform_systems is not None:
+            systems = tuple(own for sid in systems for own in by_norm.get(_norm_system_id(sid), ()))
         entry = registry.get(ref, {})
         key = (ref, prefix)
         group = grouped.get(key)

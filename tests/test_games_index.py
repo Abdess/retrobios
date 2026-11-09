@@ -252,6 +252,55 @@ class CommittedData(unittest.TestCase):
                     unresolved += 1
         self.assertGreaterEqual((total - unresolved) / total, gi.FLOORS["folders_resolved_share"])
 
+    def test_a_folder_holds_a_machine_its_core_runs(self) -> None:
+        """muOS names its GBA folder gameboyadvance first: it resolved to
+        ares's game-boy-advance, which mgba does not list, and an
+        unrecognised GBA game got none of the nintendo-gba files. A CD
+        folder run by mednafen_pce_fast, which lists nec-pc-engine, got no
+        System Card."""
+        from common import load_emulator_profiles
+        from romfolders import ProfileResolver, folder_names
+
+        setups = load_setups(ROOT / "platforms" / "romfolders")
+        if not setups:
+            self.skipTest("no setup scraped")
+        resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
+        cores = ProfileResolver.from_repo(str(ROOT / "emulators"))
+        loaded = load_emulator_profiles(str(ROOT / "emulators"))
+        profiles = gi.Profiles(loaded, resolver)
+        arcade = gi._arcade_profiles(ROOT / "games" / "arcade")
+        apart = []
+        for key, doc in sorted(setups.items()):
+            for row in doc["folders"]:
+                profile = cores.resolve(row.get("core"))
+                if not profile or profile in arcade:
+                    continue
+                runs = {sid for s in loaded[profile].get("systems") or []
+                        for sid in resolver.equivalents(str(s))}
+                systems = gi.resolve_folder(row, doc["platform"], profile, resolver,
+                                            profiles, arcade).systems
+                if runs and systems and not runs & set(systems):
+                    apart.append(f"{key}/{row['folder']} {systems} by {profile}")
+        self.assertEqual(apart, [])
+        muos = next(row for row in setups["muos"]["folders"]
+                    if row["folder"] == "nintendogameboyadvance")
+        self.assertIn("gameboyadvance", folder_names(muos))
+        self.assertEqual(
+            gi.resolve_folder(muos, "retroarch", "mgba", resolver, profiles, arcade).systems,
+            ["nintendo-gba"])
+
+    def test_an_unrecognised_gba_game_on_muos_gets_the_gba_bios(self) -> None:
+        index = ROOT / "install" / "games"
+        if not (index / "index.json").exists():
+            self.skipTest("install/games/ not generated")
+        setup = json.loads((index / "setups" / "muos.json").read_text())
+        row = next(r for r in setup["folders"] if r["folder"] == "nintendogameboyadvance")
+        self.assertEqual(row["systems"], ["nintendo-gba"])
+        table = json.loads((index / "fallback" / "retroarch.json").read_text())
+        dests = {table["files"][i][0] for key in row["fallback"]
+                 for i in table["sets"][key]["files"]}
+        self.assertIn("gba_bios.bin", dests)
+
     def test_a_folder_of_a_several_machine_core_holds_its_machines(self) -> None:
         from common import load_emulator_profiles
 

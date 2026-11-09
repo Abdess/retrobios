@@ -1729,6 +1729,23 @@ class TicksBarAndPaths(unittest.TestCase):
         rows = install.tui_rows(state)
         return rows[state.focus[state.screen]]
 
+    def test_install_says_the_size_the_headline_says(self):
+        """One system ticked: the headline said About 3479 files, 82.2 MB
+        and the row Install 6.6 GB, the whole list's size."""
+        big = 6 * 1024 ** 3
+        state = checked_state()
+        state.files[0] = {**state.files[0], "size": big}
+        state.check = {**state.check, "bytes_needed": state.check["bytes_needed"] + big}
+        self.assertEqual(install.tui_rows(state)[0].label, "Install 6.0 GB")
+        for system, label, head in (("nintendo-gba", "Install", "About 1 file, 16.0 KB"),
+                                    ("sony-playstation", "Install 6.0 GB",
+                                     "About 3 files, 6.0 GB")):
+            with self.subTest(system=system):
+                state.ticked = {system}
+                self.assertTrue(install._tui_estimating(state))
+                self.assertEqual(install.tui_rows(state)[0].label, label)
+                self.assertIn(head, "\n".join(install.tui_view(state, 80, 24)))
+
     def test_the_filter_never_changes_the_ticks(self):
         state = self.systems()
         press(state, "n")
@@ -3801,6 +3818,22 @@ class BackTicksAndSaveFolder(unittest.TestCase):
         self.assertEqual(state.ticked, everything)
         text = " ".join(install.tui_view(state, 80, 24))
         self.assertNotIn("No system is ticked", text)
+
+    def test_the_page_says_where_the_list_opens(self):
+        """wiki/installer.md said a long list opens on None, where A
+        unticked every system as the first press: the focus moved to the
+        first system, and the page kept the old words."""
+        state = self.long_list()
+        self.assertGreater(len(state.systems), install.TUI_LONG_LIST)
+        press(state, "down", "enter")
+        rows = install.tui_rows(state)
+        self.assertEqual(state.focus["systems"],
+                         next(i for i, row in enumerate(rows) if row.action == "system"))
+        self.assertEqual([row.action for row in rows][-3:], ["all", "none", "done"])
+        page = " ".join((REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8").split())
+        self.assertNotIn("opens on **None**", page)
+        self.assertIn("It opens on its first system, every system ticked", page)
+        self.assertIn("**None** (`a` and `n`) sit at the end of the list", page)
 
     def test_back_after_a_choice_keeps_the_choice(self):
         state = self.long_list()

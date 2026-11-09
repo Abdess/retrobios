@@ -15,7 +15,6 @@ display_name: "Sega - MS/GG/MD/CD/32X (PicoDrive)"
 cores: [picodrive]
 systems:
   - sega-megadrive
-  - sega-genesis
   - sega-megacd
   - sega-megacd
   - sega-32x

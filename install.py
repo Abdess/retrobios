@@ -7572,8 +7572,13 @@ def _install_data_member(
 
 def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
                             required_only: bool = False,
-                            games: GamesPlan | None = None) -> list[dict]:
+                            games: GamesPlan | None = None,
+                            systems: list[str] | None = None) -> list[dict]:
     """The data trees this install keeps: all, or those of a kept system.
+    systems, the systems chosen by name, decide when given: a file several
+    systems share named them all, and the arcade choice took blueMSX's
+    machines through FBNeo's msx.zip, which the pack built with --system
+    arcade leaves out.
     --required-only leaves out a tree every core reading it runs without
     (`optional`): a GBA and a SNES game took FBNeo's cheats and samples,
     3,472 files no game opened. For the games of a card, a tree only cores
@@ -7587,8 +7592,14 @@ def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
                    or set(e.get("systems") or []) & games.any_core]
     if not narrowed:
         return entries
-    kept = {system for f in files for system in entry_systems(f)}
-    return [e for e in entries if kept & set(e.get("systems") or [])]
+    kept = (set(systems) if systems else
+            {system for f in files for system in entry_systems(f)})
+    # A tree no platform system serves goes with the files of none, as the
+    # pack built with --system puts it in the part of its own.
+    other = (OTHER_SYSTEMS in kept if systems else
+             any(not entry_systems(f) for f in files))
+    return [e for e in entries if kept & set(e.get("systems") or [])
+            or (other and not e.get("systems"))]
 
 
 def _copy_targets(
@@ -9017,7 +9028,8 @@ def _prompt_custom_selection(
         kept_trees = select_data_directories({"data_directories": trees}, kept,
                                              narrowed or current is not None,
                                              isinstance(current, GamesChoice) and current.required,
-                                             current.plan if isinstance(current, GamesChoice) else None)
+                                             current.plan if isinstance(current, GamesChoice) else None,
+                                             chosen_systems(current))
         if kept and all_in_place(kept, kept_trees, bios_path):
             # Read before the menu, as the screen reads before it asks: a
             # rerun was offered an install that installs nothing, then told
@@ -9148,7 +9160,8 @@ def _print_menu_head(
     kept_trees = select_data_directories({"data_directories": trees}, shown,
                                          narrowed or current is not None,
                                          isinstance(current, GamesChoice) and current.required,
-                                         current.plan if isinstance(current, GamesChoice) else None)
+                                         current.plan if isinstance(current, GamesChoice) else None,
+                                         chosen_systems(current))
     data = sum(len(entry.get("files") or {}) for entry in kept_trees)
     data_size = sum(meta.get("size", 0) for entry in kept_trees
                     for meta in (entry.get("files") or {}).values())
@@ -9332,6 +9345,11 @@ def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
     if live:
         print("\r\033[K", end="", flush=True)
     return verdicts
+
+
+def chosen_systems(choice: object) -> list[str] | None:
+    """The systems a choice names, None for one that names none."""
+    return list(choice[0]) or None if isinstance(choice, tuple) else None
 
 
 def menu_choice(
@@ -9959,6 +9977,13 @@ def games_setups(index: dict, plat: str, bios_path: Path, os_type: str = "") -> 
     if not named:
         above = card_root_above(bios_path)
         named = above[0] if above else ""
+    if not named:
+        # --platform names the list, not the card: the full screen passes
+        # --platform=retroarch for a muOS card, detection never runs in that
+        # run, and the card's ROMS/ was never read. The card's own files
+        # name its system, as card_app reads them for the app.
+        card = card_app(bios_path)
+        named = card.system if card else ""
     if not named:
         # --dest on a handheld's games part from a computer (ArkOS's
         # EASYROMS/bios): detection never ran there, and the card's own rom
@@ -15909,7 +15934,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         )
         data_dirs = select_data_directories(manifest, files, narrowed,
                                             bool(args.required_only),
-                                            games_plan if games_applied else None)
+                                            games_plan if games_applied else None,
+                                            chosen_systems(selection))
         # The kinds as the plan and the menu head say them (parts_words),
         # the data files of the folders kept among them: this head said
         # BIOS files and game data beside a plan of three kinds, neither
@@ -18317,8 +18343,9 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     # The size the pack can give: "Install 6.6 GB" from a pack holding
     # none of the files.
     lacking = set(_tui_pack_lacks(state, [event["dest"] for event in state.files]))
-    size = check.get("bytes_needed", 0) - sum(event["size"] for event in state.files
-                                              if event["dest"] in lacking)
+    size = (_ticked_estimate(state)[1] if _tui_estimating(state)
+            else check.get("bytes_needed", 0) - sum(event["size"] for event in state.files
+                                                    if event["dest"] in lacking))
     label = (f"{TUI_INSTALL_ROW} {format_size(size)}" if size >= CONFIRM_FROM_BYTES
              else TUI_INSTALL_ROW)
     rows = [TuiRow("install", label)]
@@ -21858,20 +21885,17 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
         # The headline counts the systems ticked, as the list just did: at
         # 40x12 the line below it was dropped, and the plan showed the
         # total of all of them. Their data files too, as line mode's head.
-        chosen = _ticked_files(state)
         # One total, the data files in it, the kinds under the folder
         # adding up to it.
-        lines[0] = _styled(f"About {_plural(len(chosen) + data, 'file')}, "
-                           f"{format_size(sum(e['size'] for e in chosen) + (data_size or 0))}"
+        count, size = _ticked_estimate(state)
+        lines[0] = _styled(f"About {_plural(count, 'file')}, {format_size(size)}"
                            f", for {len(state.ticked)} of {len(state.systems)} systems", "title")
         if _offline_only():
             # Offline, what the folders copied from hold of the systems
             # ticked: the plan counted the whole list beside "For your 1 of
             # 11 systems".
-            took = {event["dest"] for events in _tui_found_elsewhere(state).values()
-                    for event in events}
-            held = [event for event in chosen if event["dest"] in took]
-            rest = len(chosen) - len(held) + data
+            held = _ticked_held(state)
+            rest = len(_ticked_files(state)) - len(held) + data
             # Nothing at hand: the head the whole list's plan says, for the
             # systems ticked. "About 0 files, 0 B" stood over 20 files the
             # internet would bring.
@@ -21879,8 +21903,8 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
                 f"{agree(rest, 'file needs', 'files need')} the internet, which "
                 f"{offline_named()} does not use, for {len(state.ticked)} of "
                 f"{len(state.systems)} systems", "title") if not held else _styled(
-                f"About {_plural(len(held), 'file')}, "
-                f"{format_size(sum(e['size'] for e in held))}, for {len(state.ticked)} of "
+                f"About {_plural(count, 'file')}, "
+                f"{format_size(size)}, for {len(state.ticked)} of "
                 f"{len(state.systems)} systems"
                 + (f", {agree(rest, 'needs', 'need')} the internet "
                    f"({offline_named()})" if rest else ""), "title")
@@ -22065,7 +22089,10 @@ def _plan_data(state: TuiState, check: dict) -> tuple[int, int | None]:
         data = check.get("data_missing", 0)
         return data, check.get("data_bytes") if data else None
     required = any(flag == "--required-only" for flag, _value in tui_flags(state))
-    trees = select_data_directories(state.manifest or {}, _choice_entries(state), True, required)
+    named = [name for _flag, name in _tui_system_flags(state) if name]
+    known = {row["system"] for row in state.systems}
+    trees = select_data_directories(state.manifest or {}, _choice_entries(state), True, required,
+                                    systems=named if named and set(named) <= known else None)
     sizes = [meta.get("size", 0) for entry in trees for meta in (entry.get("files") or {}).values()]
     return len(sizes), sum(sizes)
 
@@ -22123,6 +22150,27 @@ def _ticked_files(state: TuiState) -> list[dict]:
     return [event for event in state.files
             if set(event["systems"]) & state.ticked
             or (not event["systems"] and OTHER_SYSTEMS in state.ticked)]
+
+
+def _ticked_held(state: TuiState) -> list[dict]:
+    """Offline, the files of the systems ticked that the folders copied
+    from hold: all an install without the internet brings."""
+    took = {event["dest"] for events in _tui_found_elsewhere(state).values()
+            for event in events}
+    return [event for event in _ticked_files(state) if event["dest"] in took]
+
+
+def _ticked_estimate(state: TuiState) -> tuple[int, int]:
+    """The files and bytes the systems ticked since the check bring, their
+    data files in them, or offline what the folders copied from hold: the
+    plan's headline and its Install row both say it. One system ticked,
+    the headline said 82.2 MB and Install 6.6 GB, the whole list's size."""
+    if _offline_only():
+        held = _ticked_held(state)
+        return len(held), sum(event["size"] for event in held)
+    chosen = _ticked_files(state)
+    data, data_size = _plan_data(state, state.check or {})
+    return len(chosen) + data, sum(event["size"] for event in chosen) + (data_size or 0)
 
 
 def _view_systems(state: TuiState, width: int, height: int) -> tuple:
