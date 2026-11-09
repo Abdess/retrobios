@@ -39,7 +39,7 @@ from common import (
 )
 from nativemode import check_label
 import release_record
-from siteguides import install_command
+from siteguides import PACKAGE_COMMAND, install_command
 from validate_pr import LARGE_FILE_ISSUE_URL
 from largefiles import load_registered_paths
 import pr_checks
@@ -648,6 +648,9 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         "```bash",
         install_command("sh"),
         "```",
+        "",
+        f"**With Python 3.8 or newer**: `{PACKAGE_COMMAND}` runs the same installer, and so"
+        " does `pipx run retrobios`.",
         "",
         f"**A handheld, an SD card, or not sure?** [Pick the device]({SITE_URL}which-pack/):"
         " its page gives the folder and the command. A muOS, Onion, spruceOS, MinUI, KNULLI,"

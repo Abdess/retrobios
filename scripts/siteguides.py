@@ -393,6 +393,8 @@ INSTALL_BASE: str = _LOADED["install_base"]
 # The bootstraps the site serves (sitebootstrap.py writes them).
 INSTALL_SH: str = f"{INSTALL_BASE}/{SH_NAME}"
 INSTALL_PS1: str = f"{INSTALL_BASE}/{PS1_NAME}"
+# The same installer from PyPI (scripts/build_pypi.py builds the package).
+PACKAGE_COMMAND = "uvx retrobios"
 DEVICE_GROUPS: dict[str, tuple[str, str]] = _LOADED["device_groups"]
 GROUP_ANCHORS: dict[str, str] = _LOADED["group_anchors"]
 ALSO_RUNS: dict[str, tuple[tuple[str, str, str, str, str], ...]] = _LOADED["also_runs"]

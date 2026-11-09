@@ -112,6 +112,7 @@ from siteguides import (
     INSTALL_BASE,
     INSTALL_PS1,
     INSTALL_SH,
+    PACKAGE_COMMAND,
     TERMINALS,
     TRUST_ITEMS,
     detected_systems as _detected_systems,
@@ -11951,6 +11952,11 @@ def generate_which_pack() -> str:
     # handheld recording (sitesteps).
     box_tabs = (*all_tabs, "device")
     box_steps, box_demos = sitesteps.install_box(box_tabs)
+    # Python is on most Linux and macOS machines: the package runs the same
+    # installer there without the bootstrap.
+    for tab in ("macos", "linux"):
+        box_demos[tab] = [*box_demos[tab],
+                          f"With Python 3.8 or newer, `{PACKAGE_COMMAND}` does the same.", ""]
     lines = [
         "---",
         f"terms: {', '.join(IOS_TERMS)}",

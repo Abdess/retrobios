@@ -25,6 +25,8 @@ irm https://abdess.github.io/retrobios/i.ps1 | iex
 curl -fsSL https://abdess.github.io/retrobios/i | sh
 ```
 
+**With Python 3.8 or newer**: `uvx retrobios` runs the same installer, and so does `pipx run retrobios`.
+
 **A handheld, an SD card, or not sure?** [Pick the device](https://abdess.github.io/retrobios/which-pack/): its page gives the folder and the command. A muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka or MiSTer SD card plugged into the computer is found by itself.
 
 ![Recording of the one-line command in a terminal, on a demonstration card. The installer finds an ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary.](docs_assets/demo/install.gif)

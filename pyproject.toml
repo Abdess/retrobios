@@ -10,7 +10,10 @@ packages = []
 py-modules = []
 
 [project]
-name = "retrobios"
+# Not the package PyPI serves (packaging/pypi/ builds that one, named
+# retrobios): a contributor's `pip install -e ".[dev]"` and `pip install
+# retrobios` in one environment would otherwise replace each other.
+name = "retrobios-dev"
 version = "1.0.0"
 description = "BIOS collection manager for retrogaming platforms"
 # install.py is the only entry point a user runs before cloning, and both
@@ -38,6 +41,8 @@ dev = [
     # installs only in its isolated build environment and 3.12 no longer
     # bundles: without it the guard skipped on every CI run.
     "setuptools>=61",
+    # scripts/build_pypi.py runs `uv build` for the PyPI package and its test.
+    "uv==0.12.9",
     # The type check CI runs, pinned: another mypy reports other errors
     # than the ones mypy-baseline.txt holds.
     "mypy==1.18.2",

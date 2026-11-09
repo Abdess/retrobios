@@ -1,0 +1,51 @@
+# The package PyPI serves as `retrobios`: install.py and the command that
+# runs it, nothing else. The root pyproject.toml is the contributors'
+# environment. scripts/build_pypi.py stages this file, README.md, LICENSE,
+# retrobios/__main__.py and install.py into a build folder, writes
+# retrobios/__init__.py with the version, and runs `uv build` there.
+[build-system]
+# Pinned: the same backend writes the same bytes from the same files. 3.12
+# writes core metadata 2.4, the version this package was checked under
+# (twine check --strict). 4.x writes 2.5.
+requires = ["flit_core==3.12.0"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "retrobios"
+dynamic = ["version"]
+description = "Install the BIOS files emulators need, checked"
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = []
+keywords = [
+    "bios", "firmware", "emulation", "emulator", "retrogaming", "installer",
+    "retroarch", "batocera", "emudeck", "retrobat", "recalbox", "retrodeck",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Emulators",
+]
+
+[project.urls]
+Homepage = "https://abdess.github.io/retrobios/"
+Documentation = "https://abdess.github.io/retrobios/wiki/installer/"
+Source = "https://github.com/Abdess/retrobios"
+Issues = "https://github.com/Abdess/retrobios/issues"
+Releases = "https://github.com/Abdess/retrobios/releases"
+
+[project.scripts]
+retrobios = "retrobios:main"
