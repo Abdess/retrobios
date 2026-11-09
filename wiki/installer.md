@@ -1466,7 +1466,9 @@ media scanner hides a folder holding one, and every folder below it
 (MediaProvider, `FileUtils.java` `isDirectoryHidden`), so the samples,
 overlays and videos of the BIOS folder stay out of the gallery and music
 apps. RetroArch writes none. A run that finds one already there leaves it,
-and `--check` and `--dry-run` write nothing.
+and `--check` and `--dry-run` write nothing. The RetroArch pack, unzipped on
+Android as on other systems, carries the same empty `.nomedia` beside
+`README.txt`. A pack built for a target other than Android does not.
 
 ## On a handheld { #on-a-handheld-the-retrobios-port }
 
