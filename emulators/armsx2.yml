@@ -6,6 +6,7 @@ source: "https://github.com/ARMSX2/ARMSX2"
 upstream: "https://github.com/PCSX2/pcsx2"
 profiled_date: "2026-10-26"
 source_commit: "fc4ab0b8b4f386617773cf1916e9bc6911dba59b"
+prose_written_at: "fc4ab0b8b4f386617773cf1916e9bc6911dba59b"
 upstream_commit: "36907f4b70d149b05c2700acae687bedb720a7af"
 core_version: "2.9-5-g7f91441"
 version_basis:
@@ -53,13 +54,15 @@ notes: |
   ref: README.md:1-18, platforms/android/app/build.gradle.kts:43, platforms/android/app/build.gradle.kts:143-158,
        .github/workflows/build-all.yml:79-85
 
-  A BIOS image is required and boot stops without one: LoadBIOS returning false
-  makes VMManager report that a PlayStation 2 BIOS is needed and return a startup
-  failure. Only a GS dump replay skips the load. The folder is Bios under the data
+  A BIOS image is required and boot stops without one: LoadBIOS finding none
+  makes VMManager report that a PlayStation 2 BIOS is needed and fail the boot.
+  A file it cannot read, one without a PS2 ROM directory and a PS1 BIOS each
+  stop the boot with a message of their own. Only a GS dump replay skips the
+  load. The folder is Bios under the data
   directory, bios by default, and on Android the setup wizard keeps it in
   app-private storage because the native file APIs cannot reliably open a dump off
   a SAF volume.
-  ref: pcsx2/ps2/BiosTools.cpp:571-602, pcsx2/VMManager.cpp:2120-2140,
+  ref: pcsx2/ps2/BiosTools.cpp:571-602, pcsx2/VMManager.cpp:2166-2206,
        pcsx2/Pcsx2Config.cpp:2627,
        platforms/android/app/src/main/java/kr/co/iefriends/pcsx2/NativeApp.java:80-92
 
@@ -67,15 +70,18 @@ notes: |
   and 8 MB, and accepts an image whose romdir carries a RESET entry followed by a
   readable ROMVER. The fifth ROMVER character gives the zone among Japan, USA,
   Europe, Asia, China, T10K, COH-H, Test and Free, and an EXTINFO entry supplies
-  the serial. The console scan passes over a COH-H image. An image named in the
-  configuration is opened at its own path, without the size filter. No name and
-  no hash is matched anywhere. The image is read into the 4 MB ROM region and
+  the serial. The console scan passes over a COH-H image. An image whose EXTINFO
+  stamp is 20111012-094243, a PS2-format ROM that is no PS2 BIOS, is refused. An
+  image named in the configuration is opened at its own path, without the size
+  filter, and still has to pass the romdir test. When the scan finds nothing, a
+  512 KB file or a refused image is reported as a PS1 BIOS that does not run PS2
+  games. No name and no hash is matched anywhere. The image is read into the 4 MB ROM region and
   truncated to it, and one shorter than 2465792 bytes turns off the OSDSys
   parameter HLE. IsBIOSFromFd runs the same romdir test on a file descriptor,
   which is how the Android picker identifies a dump handed over by the storage
   framework.
-  ref: pcsx2/ps2/BiosTools.cpp:17-18, pcsx2/ps2/BiosTools.cpp:81-211,
-       pcsx2/ps2/BiosTools.cpp:448-515, pcsx2/ps2/BiosTools.cpp:604-651
+  ref: pcsx2/ps2/BiosTools.cpp:18-39, pcsx2/ps2/BiosTools.cpp:101-240,
+       pcsx2/ps2/BiosTools.cpp:448-548, pcsx2/ps2/BiosTools.cpp:604-651
 
   An arcade session, opened from an .acgame manifest carrying an NM game id,
   takes a Namco board BIOS instead, a COH-H image between 2 and 8 MB in the
@@ -91,8 +97,8 @@ notes: |
   manifest names are per-title content resolved beside it, and its dongle and
   second card are looked up in the memory cards folder.
   ref: pcsx2/ps2/BiosTools.cpp:309-446, pcsx2/ps2/BiosTools.cpp:571-602,
-       pcsx2/VMManager.cpp:893-899, pcsx2/VMManager.cpp:1692-1928,
-       pcsx2/VMManager.cpp:2123-2130
+       pcsx2/VMManager.cpp:943-949, pcsx2/VMManager.cpp:1741-1974,
+       pcsx2/VMManager.cpp:2190-2197
 
   Companions derive from the selected image. rom1 and rom2 are appended to the
   full name first, then substituted for the existing extension, so an image at
@@ -102,7 +108,7 @@ notes: |
   the nvm is rebuilt in memory with region and language defaults when it is
   missing or its config block is blank, and the mec is written back to disk as
   0x00020603, or 0x0104020a in an arcade session, when it cannot be read.
-  ref: pcsx2/ps2/BiosTools.cpp:228-255, pcsx2/ps2/BiosTools.cpp:659-675,
+  ref: pcsx2/ps2/BiosTools.cpp:257-284, pcsx2/ps2/BiosTools.cpp:659-675,
        pcsx2/MemoryTypes.h:12-14, pcsx2/CDVD/CDVD.cpp:49-65,
        pcsx2/CDVD/CDVD.cpp:151-222
 
@@ -117,7 +123,7 @@ notes: |
   An IRX named in the configuration is read into the ROM region at 0x3C0000 once
   the IOP reaches 0x1630. The field is empty by default and names no file of its
   own.
-  ref: pcsx2/ps2/BiosTools.cpp:257-270, pcsx2/ps2/BiosTools.cpp:677-678,
+  ref: pcsx2/ps2/BiosTools.cpp:286-299, pcsx2/ps2/BiosTools.cpp:677-678,
        pcsx2/R3000AInterpreter.cpp:223, pcsx2/arm64/iR3000A-arm64.cpp:1674
 
   Everything under the resources folder is read at its own name from
@@ -149,10 +155,10 @@ notes: |
   are the three Vulkan compute pipelines, sharpening, FSR1 and SGSR, which turn
   themselves off. The databases, the patch archive, the controller mappings, the
   sounds and the interface artwork degrade instead.
-  ref: pcsx2/ImGui/ImGuiManager.cpp:156-161, pcsx2/ImGui/ImGuiManager.cpp:512-528,
-       pcsx2/ImGui/ImGuiManager.cpp:530-573,
-       pcsx2/GS/GS.cpp:110-146, pcsx2/GS/GS.cpp:188-208,
-       pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:3113-3151
+  ref: pcsx2/ImGui/ImGuiManager.cpp:156-161, pcsx2/ImGui/ImGuiManager.cpp:520-536,
+       pcsx2/ImGui/ImGuiManager.cpp:538-581,
+       pcsx2/GS/GS.cpp:114-150, pcsx2/GS/GS.cpp:193-215,
+       pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:3174-3212
 
   The Qt builds resolve a per-script interface font by filename, first under
   UserResources then under the resources folder, and download the first entry of
@@ -175,7 +181,8 @@ files:
     description: "PS2 BIOS image"
     note: >-
       Any image whose romdir holds RESET and ROMVER is accepted, whatever its
-      name. The 4 to 8 MB range gates the folder scan, while an image named in the
+      name, except the EXTINFO stamp 20111012-094243 of a PS2-format ROM that is
+      no PS2 BIOS. The 4 to 8 MB range gates the folder scan, while an image named in the
       configuration skips that range. Read into the 4 MB ROM region and truncated
       to it. Shorter than 2465792 bytes disables the OSDSys parameter HLE. A
       COH-H image is passed over by the console scan.
