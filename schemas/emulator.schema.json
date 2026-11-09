@@ -1035,6 +1035,13 @@
       },
       "description": "What the standalone build resolves standalone_path against, as its code names it: a directory ($XDG_DATA_HOME/flycast), a setting (Dreamcast.BiosPath), an environment variable or the function returning the directory. A platform launcher record that links or passes a folder of its BIOS tree under one of these puts the standalone files in that folder."
     },
+    "standalone_pools": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Settings the standalone build reads as a list of directories it searches one after the other, each mapped to the subfolder of the layout (relative to standalone_directories, empty for the whole of it) its directories stand for: openMSX's filepool entries are searched like share/systemroms, XRoar's rompath entries hold the ROMs themselves. A file in any entry is read, so several platform records naming entries give the first one a pack can fill."
+    },
     "prose_written_at": {
       "type": "string",
       "pattern": "^[0-9a-f]{40}$",

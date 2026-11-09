@@ -23,12 +23,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from common import (  # noqa: E402
+    entry_launch_systems,
     load_emulator_profiles,
     load_platform_config,
     platform_layouts,
     standalone_bindings_for,
     standalone_destination,
     standalone_set,
+    system_file_index,
 )
 from launchers import (  # noqa: E402
     bound_path,
@@ -154,6 +156,133 @@ class Root(unittest.TestCase):
             link("emu", "$biosdir/dc", "$home/.local/share/emu is a symlink to it"),
             link("emu", "$biosdir/other", "$XDG_DATA_HOME/emu is a symlink to it"),
         ))
+
+
+def bind(cfg: dict, declared: list[str], pools: dict[str, str] | None = None,
+         systems: tuple[str, ...] = ()) -> dict[str, tuple[str, str]]:
+    return standalone_bindings(
+        {"emu"}, declared, handed_directories(cfg), pools=pools, systems=systems
+    )
+
+
+class SearchLists(unittest.TestCase):
+    """A setting read as a list of directories, every one searched."""
+
+    POOLS = {"filepool": "share/systemroms"}
+
+    def filepool(self, folder: str, position: int) -> dict:
+        return passes(
+            "emu", f"/userdata/bios/{folder}",
+            f"written: filepool add -path /userdata/bios/{folder} -types system_rom -position {position}",
+        )
+
+    def test_two_pool_entries_give_the_first_one(self) -> None:
+        # Batocera adds bios/Machines and bios/openmsx to openMSX's filepool.
+        cfg = config(self.filepool("Machines", 1), self.filepool("openmsx", 2))
+        self.assertEqual(
+            bind(cfg, ["~/.openMSX"], self.POOLS), {"share/systemroms": ("", "Machines")}
+        )
+
+    def test_the_entry_the_platform_list_fills_comes_first(self) -> None:
+        cfg = config(self.filepool("Machines", 1), self.filepool("openmsx", 2))
+        cfg["systems"] = {"msx": {"files": [{"name": "a.rom", "destination": "openmsx/a.rom"}]}}
+        self.assertEqual(
+            bind(cfg, ["~/.openMSX"], self.POOLS), {"share/systemroms": ("", "openmsx")}
+        )
+
+    def test_without_the_pool_two_folders_give_nothing(self) -> None:
+        cfg = config(self.filepool("Machines", 1), self.filepool("openmsx", 2))
+        self.assertEqual(bind(cfg, ["~/.openMSX", "filepool"]), {})
+
+    def test_a_colon_list_gives_each_directory_in_order(self) -> None:
+        # RetroDECK writes XRoar's rompath as four directories.
+        found = handed_directories(config(passes(
+            "emu", "$roms_path/coco:$roms_path/dragon32:$bios_path", "xroar.conf rompath",
+        )))
+        self.assertEqual(
+            [h.directory for h in found], ["$roms_path/coco", "$roms_path/dragon32", "$bios_path"]
+        )
+        self.assertEqual(
+            bind(config(passes("emu", "$roms_path/coco:$bios_path/xroar", "xroar.conf rompath")),
+                 [], {"rompath": ""}),
+            {"": ("", "xroar")},
+        )
+
+    def test_a_drive_letter_is_one_directory(self) -> None:
+        self.assertEqual(handed_directories(config(passes("emu", "C:/bios", "rompath"))), [])
+
+
+class AboveTheDeclaredDirectory(unittest.TestCase):
+    def test_a_prefix_lands_the_declared_directory_where_its_link_is(self) -> None:
+        # RetroPie builds XRoar with --prefix=$md_inst and links
+        # $md_inst/share/xroar/roms to $biosdir.
+        cfg = config(
+            passes("emu", "$md_inst", "${prefix} of configure --prefix"),
+            link("emu", "$biosdir", "$md_inst/share/xroar/roms is a symlink to it"),
+            base="BIOS",
+        )
+        self.assertEqual(bind(cfg, ["${prefix}/share/xroar/roms"]), {"": ("", "")})
+
+    def test_a_folder_of_the_tree_takes_the_rest_of_the_path(self) -> None:
+        cfg = config(passes("emu", "$biosdir/emu", "EMU_HOME"), base="BIOS")
+        self.assertEqual(bind(cfg, ["EMU_HOME/share/roms"]), {"": ("", "emu/share/roms")})
+
+
+class PerSystem(unittest.TestCase):
+    """A record written for some systems replaces, there, the others."""
+
+    CFG = {
+        **config(
+            passes("emu", "bios/dragon", "command line -rompath"),
+            {**passes("emu", "bios/coco", "command line -rompath"), "systems": ["coco"]},
+        ),
+        "systems": {"coco": {"files": [{"name": "x.zip", "native_system": "coco"}]}},
+    }
+    POOLS = {"-rompath": ""}
+
+    def test_the_system_record_wins_for_its_system(self) -> None:
+        self.assertEqual(bind(self.CFG, [], self.POOLS, ("coco",)), {"": ("", "coco")})
+
+    def test_another_system_keeps_the_generic_record(self) -> None:
+        self.assertEqual(bind(self.CFG, [], self.POOLS, ("dragon32",)), {"": ("", "dragon")})
+        self.assertEqual(bind(self.CFG, [], self.POOLS), {"": ("", "dragon")})
+
+    def test_native_names_are_read_as_our_ids(self) -> None:
+        cfg = {
+            **config({**passes("emu", "bios/trs80coco", "-rompath"), "systems": ["trs80coco"]}),
+            "systems": {"coco": {"native_id": "trs80coco", "files": []}},
+        }
+        self.assertEqual(
+            [sorted(h.systems) for h in handed_directories(cfg)], [["coco"]]
+        )
+
+    def test_a_system_placeholder_gives_one_directory_per_system(self) -> None:
+        # Recalbox passes -rompath os.path.join(BIOS, args.system).
+        cfg = {
+            **config(passes("emu", "/recalbox/share/bios/{system}", "command line -rompath")),
+            "systems": {
+                "coco": {"native_id": "trs80coco", "files": []},
+                "dragon64": {"native_id": "dragon", "files": []},
+            },
+        }
+        self.assertEqual(
+            [(h.folder, sorted(h.systems)) for h in handed_directories(cfg)],
+            [("dragon", ["dragon64"]), ("trs80coco", ["coco"])],
+        )
+        self.assertEqual(bind(cfg, [], self.POOLS | {"-rompath": ""}, ("coco",)),
+                         {"": ("", "trs80coco")})
+        self.assertEqual(bind(cfg, [], {"-rompath": ""}, ("dragon32",)), {})
+
+    def test_an_entry_is_launched_for_the_system_that_declares_its_name(self) -> None:
+        cfg = {
+            **config({**passes("emu", "bios/coco", "-rompath"), "systems": ["coco"]}),
+            "systems": {"coco": {"files": [{"name": "coco3.rom", "native_system": "coco"}]}},
+        }
+        index = system_file_index(standalone_set(cfg))
+        self.assertEqual(
+            entry_launch_systems({"name": "COCO3.ROM", "system": "coco3"}, index),
+            frozenset({"coco3", "coco"}),
+        )
 
 
 class Layout(unittest.TestCase):
@@ -367,3 +496,4 @@ class Scrapers(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -241,7 +241,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Systems the package registers, under the platform's own names, in the order the script adds them"
+          "description": "Systems the package registers, under the platform's own names, in the order the script adds them. On a record handing a directory, the systems it is written for: the record applies to an emulator launched for one of them, and replaces there what the records naming no system hand"
         },
         "slot": {
           "type": "string",
@@ -270,7 +270,7 @@
         },
         "search_dir": {
           "type": "string",
-          "description": "Directory the launcher looks in, as the code resolves it"
+          "description": "Directory the launcher looks in, as the code resolves it. {system} stands for the platform system the emulator is launched for"
         },
         "passes_to": {
           "type": "string",

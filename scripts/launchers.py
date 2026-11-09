@@ -17,7 +17,7 @@ under the launcher's name, a file the core accepts by content.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
 from common import declared_root, name_match_size_ok, resolve_local_file, sanitize_pack_path
@@ -383,6 +383,11 @@ class HandedDirectory:
     handles: frozenset[str]
     source_ref: str
     roms_folder: str | None = None
+    # The platform systems, by our ids, the record applies to. Empty when
+    # the launcher hands the directory whatever the system.
+    systems: frozenset[str] = frozenset()
+    # Whether the platform's own list declares files in the folder.
+    holds_declared: bool = False
 
     def place(self) -> Place | None:
         """The folder as a place, None when it lies outside both roots."""
@@ -393,14 +398,55 @@ class HandedDirectory:
         return None
 
 
+# The placeholder a launcher record writes for the system it is launched
+# for: Recalbox passes -rompath os.path.join(BIOS, args.system) to XRoar.
+SYSTEM_PLACEHOLDER = "{system}"
+
+
+def native_systems(config: dict) -> dict[str, str]:
+    """The platform's own system names, each to our id for it.
+
+    A system states its name (native_id) or its files do (native_system).
+    Without either, our id is the platform's name.
+    """
+    found: dict[str, str] = {}
+    for slug, system in (config.get("systems") or {}).items():
+        names = {str(system["native_id"])} if system.get("native_id") else {
+            str(f["native_system"]) for f in system.get("files") or [] if f.get("native_system")
+        }
+        for name in names or {slug}:
+            found.setdefault(name, slug)
+    return found
+
+
+def _listed_directories(raw: str) -> list[str] | None:
+    """The directories of a colon-separated search path, None for one directory.
+
+    XRoar's rompath is such a list (RetroDECK writes four directories), each
+    entry a path or a variable spelling one. A Windows drive letter or a
+    backslash means a single path.
+    """
+    if ":" not in raw or "\\" in raw or re.match(r"^[A-Za-z]:", raw):
+        return None
+    parts = [p.strip() for p in raw.split(":")]
+    if all(p and p[0] in "/$~" and not re.search(r"[\s,;]", p) for p in parts):
+        return parts
+    return None
+
+
 def handed_directories(config: dict) -> list[HandedDirectory]:
     """Every whole directory a platform links or passes to a standalone build.
 
     A record naming files (gpsp's gba_bios.bin) or one slot of a directory
     (RetroDECK's GC/EUR) hands over no whole directory, and a search_dir
-    holding several directories names no single one.
+    describing several directories in prose names no single one. A search
+    path (XRoar's rompath) gives each of its directories, in order. A record
+    naming systems applies to those systems only, and one whose search_dir
+    holds {system} gives one directory per system the platform declares.
     """
     base = str(config.get("base_destination") or "bios")
+    natives = native_systems(config)
+    declared = {d.lower() for d in declared_destinations(config)}
     found: list[HandedDirectory] = []
     for record in config.get("launchers") or []:
         if record.get("build") != "standalone" or record.get("kind") not in HANDED_KINDS:
@@ -408,30 +454,48 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
         if record.get("names") or record.get("slot"):
             continue
         raw = str(record.get("search_dir") or "").strip()
-        if not raw or re.search(r"[\s,:;]", raw):
+        if not raw:
             continue
-        directory = normalize_handle(raw)
-        passes_to = str(record.get("passes_to") or "")
-        if passes_to.startswith(WORKING_DIRECTORY_PASSED):
-            # The program runs from the directory: what its code reads
-            # through getcwd(), or relative to it, is below it.
-            handles = frozenset({WORKING_DIRECTORY})
+        named = frozenset(natives.get(str(s), str(s)) for s in record.get("systems") or [])
+        if SYSTEM_PLACEHOLDER in raw:
+            variants = [
+                (raw.replace(SYSTEM_PLACEHOLDER, native), frozenset({slug}))
+                for native, slug in sorted(natives.items())
+                if not named or slug in named
+            ]
         else:
-            handles = frozenset(
-                handle
-                for token in passes_to.split()
-                if (handle := normalize_handle(token)) and handle != directory
-            )
-        folder = _folder_in_bios(raw, base)
-        for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
-            found.append(HandedDirectory(
-                emulator=emulator,
-                folder=folder,
-                directory=directory,
-                handles=handles,
-                source_ref=str(record.get("source_ref", "")),
-                roms_folder=None if folder is not None else folder_in_roms(raw, config),
-            ))
+            variants = [(raw, named)]
+        passes_to = str(record.get("passes_to") or "")
+        for spelled, systems in variants:
+            parts = _listed_directories(spelled) or [spelled]
+            if any(re.search(r"[\s,:;]", part) for part in parts):
+                continue
+            for part in parts:
+                directory = normalize_handle(part)
+                if passes_to.startswith(WORKING_DIRECTORY_PASSED):
+                    # The program runs from the directory: what its code
+                    # reads through getcwd(), or relative to it, is below it.
+                    handles = frozenset({WORKING_DIRECTORY})
+                else:
+                    handles = frozenset(
+                        handle
+                        for token in passes_to.split()
+                        if (handle := normalize_handle(token)) and handle != directory
+                    )
+                folder = _folder_in_bios(part, base)
+                for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
+                    found.append(HandedDirectory(
+                        emulator=emulator,
+                        folder=folder,
+                        directory=directory,
+                        handles=handles,
+                        source_ref=str(record.get("source_ref", "")),
+                        roms_folder=None if folder is not None else folder_in_roms(part, config),
+                        systems=systems,
+                        holds_declared=bool(folder) and any(
+                            d.startswith(f"{folder.lower()}/") for d in declared
+                        ),
+                    ))
     return found
 
 
@@ -515,17 +579,113 @@ def executed_files(config: dict) -> list[ExecutedFile]:
     return found
 
 
+def _below(handle: str, directory: str) -> str | None:
+    """``handle`` relative to ``directory``, None when it is not inside it."""
+    if handle == directory:
+        return ""
+    if handle.startswith(directory + "/"):
+        return handle[len(directory) + 1:]
+    return None
+
+
+def _join(*parts: str) -> str:
+    return "/".join(p for p in parts if p)
+
+
+def _record_places(
+    record: HandedDirectory, inner: str, records: list[HandedDirectory]
+) -> list[tuple[str, Place]]:
+    """(subfolder, place) for the directory ``inner`` below what a record hands.
+
+    A record handing a folder of a tree gives it directly. One handing a
+    directory outside the trees is followed through the links that put a
+    folder at that directory, below it or above it.
+    """
+    if record.folder is not None:
+        return [("", (BIOS_TREE, _join(record.folder, inner)))]
+    base = _join(record.directory, inner)
+    found: list[tuple[str, Place]] = []
+    for link in records:
+        target = link.place()
+        if target is None:
+            continue
+        for handle in link.handles:
+            rest = _below(handle, base)
+            if rest is not None:
+                found.append((rest, target))
+                continue
+            up = _below(base, handle) if inner else None
+            if up:
+                found.append(("", (target[0], _join(target[1], up))))
+    if not found and record.roms_folder is not None:
+        found.append(("", (ROMS_TREE, _join(record.roms_folder, inner))))
+    return found
+
+
+def _bind(
+    records: list[HandedDirectory],
+    links: list[HandedDirectory],
+    wanted: set[str],
+    pools: Mapping[str, str],
+) -> dict[str, set[Place]]:
+    """The places each subfolder of the layout is given by ``records``.
+
+    A record whose handle is a declared directory, or lies below one, gives
+    that subfolder. One whose handle lies above a declared directory gives
+    the declared directory where it lands: RetroPie configures XRoar with
+    --prefix=$md_inst, so ${prefix}/share/xroar/roms is $md_inst/share/xroar/roms.
+    ``links`` are the records followed from a directory outside the trees.
+
+    A handle in ``pools`` names a list of directories the program searches
+    one after the other: openMSX's filepool, XRoar's rompath. A file in any
+    of them is read, so the pool gives one: the directory the platform's own
+    list already fills (Batocera's bios/openmsx beside bios/Machines), else
+    the first of the BIOS tree, else the first a pack can fill.
+    """
+    found: dict[str, set[Place]] = {}
+    pooled: dict[str, list[tuple[bool, Place]]] = {}
+    for record in records:
+        for handle in record.handles:
+            if handle in pools:
+                for rest, place in _record_places(record, "", links):
+                    pooled.setdefault(_join(pools[handle], rest), []).append(
+                        (record.holds_declared, place)
+                    )
+                continue
+            for directory in wanted:
+                sub = _below(handle, directory)
+                inner = ""
+                if sub is None:
+                    up = _below(directory, handle)
+                    if not up:
+                        continue
+                    sub, inner = "", up
+                for rest, place in _record_places(record, inner, links):
+                    found.setdefault(_join(sub, rest), set()).add(place)
+    for sub, entries in pooled.items():
+        # The directory the platform's own list fills, else the first of the
+        # BIOS tree, else the first a pack fills.
+        filled = [p for held, p in entries if held]
+        in_bios = [p for _held, p in entries if p[0] == BIOS_TREE]
+        found.setdefault(sub, set()).add((filled or in_bios or [p for _h, p in entries])[0])
+    return found
+
+
 def standalone_bindings(
     names: Iterable[str],
     declared: Iterable[str],
     handed: Iterable[HandedDirectory],
     executed: Iterable[ExecutedFile] = (),
     layout: Iterable[str] = (),
+    pools: Mapping[str, str] | None = None,
+    systems: Iterable[str] = (),
 ) -> dict[str, Place]:
     """The folders a platform gives a standalone build's layout.
 
     ``declared`` are the directories the build resolves its paths against,
-    as its profile names them (``standalone_directories``). The result maps
+    as its profile names them (``standalone_directories``), and ``pools``
+    the settings it reads as search lists, each to the subfolder of the
+    layout its directories stand for (``standalone_pools``). The result maps
     a subfolder of that layout ("" for the whole of it) to the place, a
     folder of the BIOS tree or of the roms directory, the emulator reads it
     from.
@@ -538,6 +698,11 @@ def standalone_bindings(
     and RetroPie starts UAE4All2 in $md_inst, whose kickstarts folder it
     links to bios/amiga.
 
+    ``systems`` are the platform systems, by our ids, an entry is launched
+    for. A record naming systems replaces, for those systems, what the
+    records naming none give: RetroBat passes XRoar -rompath bios/coco for
+    coco and bios/dragon for every other system.
+
     A profile whose program reads its files beside its executable declares
     EXECUTABLE_DIRECTORY, and ``layout`` holds its paths: a launcher that
     executes one of them gives the folder holding it. Batocera runs
@@ -547,42 +712,18 @@ def standalone_bindings(
     A subfolder two records give two places is left out.
     """
     names = set(names)
-    wanted = {normalize_handle(d) for d in declared}
-    if not wanted:
+    pools = {normalize_handle(k): str(v).strip("/") for k, v in (pools or {}).items()}
+    wanted = {normalize_handle(d) for d in declared} - set(pools)
+    if not wanted and not pools:
         return {}
+    systems = set(systems)
     records = [h for h in handed if h.emulator in names]
+    generic = [h for h in records if not h.systems]
+    specific = [h for h in records if h.systems & systems]
 
-    def below(handle: str, directory: str) -> str | None:
-        if handle == directory:
-            return ""
-        if handle.startswith(directory + "/"):
-            return handle[len(directory) + 1:]
-        return None
-
-    found: dict[str, set[Place]] = {}
-    for record in records:
-        subs = {
-            sub for handle in record.handles for directory in wanted
-            if (sub := below(handle, directory)) is not None
-        }
-        for sub in subs:
-            if record.folder is not None:
-                found.setdefault(sub, set()).add((BIOS_TREE, record.folder))
-                continue
-            # A link into the BIOS tree comes first: the pack fills that.
-            linked = False
-            for link in records:
-                target = link.place()
-                if target is None:
-                    continue
-                for handle in link.handles:
-                    rest = below(handle, record.directory)
-                    if rest is not None:
-                        key = "/".join(p for p in (sub, rest) if p)
-                        found.setdefault(key, set()).add(target)
-                        linked = True
-            if not linked and record.roms_folder is not None:
-                found.setdefault(sub, set()).add((ROMS_TREE, record.roms_folder))
+    found = _bind(generic, generic, wanted, pools)
+    # A link is followed whatever system it was written for.
+    found.update(_bind(specific, specific + generic, wanted, pools))
     if EXECUTABLE_DIRECTORY in wanted:
         paths = list(layout)
         for run in executed:

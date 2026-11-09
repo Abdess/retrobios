@@ -6,7 +6,7 @@ and file resolution - eliminates DRY violations across scripts.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from collections import Counter
 
 import argparse
@@ -2685,6 +2685,10 @@ CORE_DIR_PREFIX = "coredir:"
 # Marks, in the same set, a file the platform's launcher executes
 # (launchers.executed_files), as JSON.
 EXECUTED_PREFIX = "exec:"
+# Marks, in the same set, a file name the platform declares under one of the
+# systems a launcher record is written for, as JSON [system, name]: it says
+# which launch reads a profile entry of that name.
+SYSTEM_FILE_PREFIX = "sysfile:"
 
 
 def core_system_dirs(
@@ -2752,12 +2756,22 @@ def standalone_set(config: dict) -> set[str]:
     if names - {n for n in names if n.startswith(CORE_DIR_PREFIX)}:
         from launchers import executed_files, handed_directories  # noqa: PLC0415
 
+        handed = handed_directories(config)
+        # The record's position travels too: a search list is read in order.
         names |= {
             HANDED_PREFIX + json.dumps(
-                [h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref,
-                 h.roms_folder]
+                [position, h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref,
+                 h.roms_folder, sorted(h.systems), h.holds_declared]
             )
-            for h in handed_directories(config)
+            for position, h in enumerate(handed)
+        }
+        named = {system for h in handed for system in h.systems}
+        names |= {
+            SYSTEM_FILE_PREFIX + json.dumps([slug, str(f["name"]).lower()])
+            for slug, system in (config.get("systems") or {}).items()
+            if slug in named
+            for f in system.get("files") or []
+            if f.get("name")
         }
         names |= {
             EXECUTED_PREFIX + json.dumps([run.emulator, run.name, run.place, run.source_ref])
@@ -2790,9 +2804,39 @@ def _handed(standalone_cores: Iterable[str]) -> list:
     for tag in standalone_cores:
         if not tag.startswith(HANDED_PREFIX):
             continue
-        emulator, folder, directory, handles, ref, roms = json.loads(tag[len(HANDED_PREFIX):])
-        found.append(HandedDirectory(emulator, folder, directory, frozenset(handles), ref, roms))
-    return found
+        position, emulator, folder, directory, handles, ref, roms, systems, held = json.loads(
+            tag[len(HANDED_PREFIX):]
+        )
+        found.append(((position, tag), HandedDirectory(
+            emulator, folder, directory, frozenset(handles), ref, roms, frozenset(systems), held
+        )))
+    return [h for _key, h in sorted(found, key=lambda pair: pair[0])]
+
+
+def system_file_index(standalone_cores: Iterable[str]) -> dict[str, set[str]]:
+    """File name, lower case -> the platform systems declaring it (SYSTEM_FILE_PREFIX)."""
+    index: dict[str, set[str]] = {}
+    for tag in standalone_cores:
+        if tag.startswith(SYSTEM_FILE_PREFIX):
+            slug, name = json.loads(tag[len(SYSTEM_FILE_PREFIX):])
+            index.setdefault(name, set()).add(slug)
+    return index
+
+
+def entry_launch_systems(entry: dict, index: Mapping[str, set[str]]) -> frozenset[str]:
+    """The platform systems, by our ids, that launch the emulator for an entry.
+
+    The systems the entry names, and those under which the platform declares
+    a file of one of its names (``index``, system_file_index): Recalbox lists
+    XRoar's coco3.rom under trs80coco, which our coco is.
+    """
+    systems = {str(s) for s in entry.get("systems") or []}
+    if entry.get("system"):
+        systems.add(str(entry["system"]))
+    for name in [entry.get("name"), *(entry.get("aliases") or [])]:
+        if name:
+            systems |= index.get(str(name).lower(), set())
+    return frozenset(systems)
 
 
 def _executed(standalone_cores: Iterable[str]) -> list:
@@ -2853,11 +2897,16 @@ def standalone_destination(
 
 
 def standalone_bindings_for(
-    emu_name: str, profile: dict, standalone_cores: Iterable[str]
+    emu_name: str, profile: dict, standalone_cores: Iterable[str],
+    systems: Iterable[str] = (),
 ) -> dict[str, tuple[str, str]]:
-    """The places a platform gives this emulator's standalone layout, by subfolder."""
+    """The places a platform gives this emulator's standalone layout, by subfolder.
+
+    ``systems`` are those the entry is launched for (entry_launch_systems).
+    """
     declared = profile.get("standalone_directories") or []
-    if not declared:
+    pools = profile.get("standalone_pools") or {}
+    if not declared and not pools:
         return {}
     from launchers import standalone_bindings  # noqa: PLC0415
 
@@ -2867,7 +2916,8 @@ def standalone_bindings_for(
         if isinstance(f, dict) and (path := standalone_layout_path(f, profile))
     ]
     return standalone_bindings(
-        names, declared, _handed(standalone_cores), _executed(standalone_cores), layout
+        names, declared, _handed(standalone_cores), _executed(standalone_cores), layout,
+        pools, systems,
     )
 
 
@@ -2887,8 +2937,28 @@ def platform_layouts(
             return [(profile, False)]
         return [(system_dir_view(profile, d), False) for d in directories]
     standalone = profile
-    bindings = standalone_bindings_for(emu_name, profile, standalone_cores)
-    if bindings:
+    # Bindings can depend on the system an entry is launched for, so each
+    # set of launch systems gets its own.
+    by_systems: dict[frozenset[str], dict[str, tuple[str, str]]] = {}
+    names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
+    per_system = bool(
+        profile.get("standalone_directories") or profile.get("standalone_pools")
+    ) and any(h.systems and h.emulator in names for h in _handed(standalone_cores))
+    index = system_file_index(standalone_cores) if per_system else {}
+
+    def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
+        systems = entry_launch_systems(entry, index) if per_system else frozenset()
+        if systems not in by_systems:
+            by_systems[systems] = standalone_bindings_for(
+                emu_name, profile, standalone_cores, systems
+            )
+        return by_systems[systems]
+
+    layout_entries = [
+        f for f in profile.get("files") or []
+        if isinstance(f, dict) and standalone_layout_path(f, profile) is not None
+    ]
+    if any(bindings_of(f) for f in layout_entries):
         # The standalone view carries the platform's destination, so every
         # reader of standalone_path (builder, manifest, verify, slots) places
         # the file in the folder the platform hands the emulator.
@@ -2901,7 +2971,7 @@ def platform_layouts(
             if not isinstance(f, dict) or standalone_layout_path(f, profile) is None:
                 files.append(f)
                 continue
-            placed = standalone_destination(f, profile, bindings)
+            placed = standalone_destination(f, profile, bindings_of(f))
             if placed is None or placed[0] == "outside":
                 files.append({**f, "unplaced": OUTSIDE_BIOS_FOLDER})
                 continue
