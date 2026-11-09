@@ -9517,18 +9517,65 @@ def _emulator_slots(files: list[dict]) -> list[list[dict]]:
     return [group for group in slots.values() if not all(comes_with_app(f) for f in group)]
 
 
-def _emulator_file_summary(files: list[dict]) -> list[str]:
+def _set_names(value: object) -> list[str]:
+    """The sets an entry belongs to: group takes a name, a list or a map."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, (list, dict)):
+        return [str(name) for name in value]
+    return []
+
+
+def _requirements(files: list[dict], groups: dict | None) -> list[list[dict]]:
+    """Each thing the emulator needs: the members of a required set, any one
+    of which fills it (DuckStation's ps-bios, 105 images), or a required
+    file of its own. load_emulator_profiles marks every member of a
+    required set required, so counted per file DuckStation read "105
+    required" for one BIOS."""
+    required_sets = {name for name, spec in (groups or {}).items()
+                     if isinstance(spec, dict) and spec.get("required")}
+    sets: dict[str, list[dict]] = {}
+    alone: list[list[dict]] = []
+    for f in files:
+        if f.get("required") is not True or comes_with_app(f):
+            continue
+        names = [name for name in _set_names(f.get("group")) if name in required_sets]
+        if names:
+            for name in names:
+                sets.setdefault(name, []).append(f)
+        else:
+            alone.append([f])
+    return [*sets.values(), *alone]
+
+
+def _regional_set(requirements: list[list[dict]]) -> list[dict]:
+    """The one requirement, a set whose members the code picks by the game's
+    region, or [] when there is no such single choice."""
+    if len(requirements) != 1 or len(requirements[0]) < 2:
+        return []
+    members = requirements[0]
+    if not all(f.get("region") for f in members):
+        return []
+    return members if len({_region_words(f["region"]) for f in members}) >= 2 else []
+
+
+def _emulator_file_summary(files: list[dict], groups: dict | None = None) -> list[str]:
     """What the emulator reads, above its file table, and its categories.
 
     Counted by slot, as verify --emulator and the gaps page count: raze
     lists every GRP its code accepts under one name, and holding one fills
     the slot. Counted per entry, the page announced 46 missing where 12
     slots are empty. The files the app ships are counted apart: NetherSX2
-    said "4 required" for one BIOS and three fonts in its package.
+    said "4 required" for one BIOS and three fonts in its package. A
+    required set counts once (`groups`).
     """
     slots = _emulator_slots(files)
     shipped = sum(1 for f in files if comes_with_app(f))
-    req_count = sum(1 for group in slots if any(f.get("required") for f in group))
+    requirements = _requirements(files, groups)
+    in_sets = {id(f) for members in requirements for f in members}
+    req_slots = sum(1 for group in slots if any(id(f) in in_sets for f in group))
+    req_count = len(requirements)
+    optional = len(slots) - req_slots
     hle_count = sum(1 for group in slots if any(f.get("hle_fallback") for f in group))
 
     # Sentences, one number format: the line read "1,563 files | 164
@@ -9536,13 +9583,18 @@ def _emulator_file_summary(files: list[dict]) -> list[str]:
     total = f"**{_count(len(slots), 'file')}**"
     if sum(len(group) for group in slots) != len(slots):
         total += f" ({sum(len(group) for group in slots):,} accepted versions)"
-    line = f"{total}: {req_count:,} required, {len(slots) - req_count:,} optional."
-    if _regional_choice([f for f in files if f.get("required") is True and not comes_with_app(f)]):
+    line = f"{total}: {req_count:,} required, {optional:,} optional."
+    if any(len(members) > 1 for members in requirements):
+        line += " Any one file of a required set fills it."
+    regional = _regional_set(requirements) or (
+        [f for members in requirements for f in members]
+        if _regional_choice([f for members in requirements for f in members]) else [])
+    if regional:
         # DuckStation takes the BIOS of the game's region: "3 required"
         # read as "get all three".
-        line = (f"{total}. One of {req_count:,} is required, for the games' region. "
-                f"{len(slots) - req_count:,} {'is' if len(slots) - req_count == 1 else 'are'} "
-                "optional.")
+        line = f"{total}. One of {len(regional):,} is required, for the games' region."
+        if optional:
+            line += f" {optional:,} {'is' if optional == 1 else 'are'} optional."
     if hle_count:
         line += f" {hle_count:,} {'has' if hle_count == 1 else 'have'} an HLE fallback."
     if shipped:
@@ -10023,28 +10075,41 @@ def _emulator_intro(emu_name: str, profile: dict, href: str = "", name: str = ""
             names.append(label)
     # What the app installs itself is no file for the reader to get.
     files = [f for f in profile.get("files") or [] if isinstance(f, dict) and not comes_with_app(f)]
-    required = [f for f in files if f.get("required") is True]
+    requirements = _requirements(files, profile.get("groups"))
+    required = [f for members in requirements for f in members]
     sentences = []
     if names:
         shown = names if len(names) <= 4 else names[:3] + [f"{len(names) - 3} more systems"]
         sentences.append(f"{emu_name} emulates {_said_as_list(shown)}.")
-    by_region = _regional_choice(required)
-    if by_region:
-        # DuckStation needs the BIOS of the game's region, not all three: the
-        # page said "3 of them required" and read as "get all of these".
-        others = len(files) - len(required)
+    regional = _regional_set(requirements)
+    by_region = "" if regional else _regional_choice(required)
+    others = len(files) - len(required)
+    if regional:
+        # DuckStation needs one BIOS of the game's region and accepts 105
+        # images: every member of its ps-bios set is marked required, and
+        # the page said "105 of them required".
+        sentences.append(
+            f"It needs one BIOS for the game's region, among the {len(regional):,} it accepts.")
+        if others:
+            sentences.append(
+                f"The {_count(others, 'other file')} {'is' if others == 1 else 'are'} optional.")
+    elif by_region:
+        # Three required BIOS of three regions: the page said "3 of them
+        # required" and read as "get all of these".
         sentences.append(f"It picks the BIOS for the game's region: {by_region}.")
         if others:
             sentences.append(
                 f"The {_count(others, 'other file')} {'is' if others == 1 else 'are'} optional.")
     elif files:
         sentences.append(
-            f"It reads {_count(len(files), 'file')}, {len(required):,} of them required: "
+            f"It reads {_count(len(files), 'file')}, {len(requirements):,} of them required: "
             "without a required file it does not start games."
-            if required else
+            if requirements else
             f"It reads {_count(len(files), 'file')}, none of them required: it starts "
             "games without them."
         )
+        if any(len(members) > 1 for members in requirements):
+            sentences.append("Any one file of a required set fills it.")
     if required and len(names) > 1:
         sentences.append("A required file is needed only by the machines that use it.")
         if profile.get("found_by") == "content":
@@ -10237,7 +10302,7 @@ def emulator_pages(
         _file_available = _availability_check(db, data_names, name)
 
         lines.extend(["## Files", ""])
-        lines.extend(_emulator_file_summary(files))
+        lines.extend(_emulator_file_summary(files, profile.get("groups")))
         held = _emulator_held_line(files, _file_available)
 
         anchors = emulator_file_anchors(files)
