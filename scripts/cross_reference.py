@@ -1204,6 +1204,16 @@ def launcher_reads_not_held(
                 "source_ref": str(record.get("source_ref", "")),
                 "profiles": readers,
             }
+            # A name a reader's entry declares unsourceable is no gap: its
+            # row carries the reason and is counted apart.
+            unsourceable = {
+                str(n).rsplit("/", 1)[-1]: str(entry["unsourceable"])
+                for key in readers
+                for entry in profiles[key].get("files") or []
+                if entry.get("unsourceable")
+                for n in (entry.get("name"), *(entry.get("aliases") or []))
+                if n
+            }
             for name in names:
                 found = holder.held(name)
                 if found and (found[1] or folds):
@@ -1219,6 +1229,9 @@ def launcher_reads_not_held(
                     }
                     if found:
                         row["held_as"] = found[0]
+                reason = unsourceable.get(name.rsplit("/", 1)[-1])
+                if reason and "unsourceable" not in row:
+                    row["unsourceable"] = reason
                 if reader["emulator"] not in row["emulators"]:
                     row["emulators"].append(reader["emulator"])
                 if reader not in row["readers"]:
@@ -1228,7 +1241,13 @@ def launcher_reads_not_held(
 
 
 def print_launcher_reads(rows: list[dict]) -> None:
-    """The launcher reads gap category, after the profile gaps."""
+    """The launcher reads gap category, after the profile gaps.
+
+    A name its reader declares unsourceable is listed apart, with the
+    reason: it is no file left to find.
+    """
+    unsourceable = [r for r in rows if r.get("unsourceable")]
+    rows = [r for r in rows if not r.get("unsourceable")]
     platforms = sorted({r["platform"] for r in rows})
     noun = "platform" if len(platforms) == 1 else "platforms"
     print(f"\nLauncher reads, not held: {len(rows)} names across {len(platforms)} {noun}")
@@ -1242,6 +1261,19 @@ def print_launcher_reads(rows: list[dict]) -> None:
                 f"    {row['name']} [{', '.join(row['emulators'])}, {first['kind']}, "
                 f"{first['source_ref']}]{more}{casing}"
             )
+    if not unsourceable:
+        return
+    platforms = sorted({r["platform"] for r in unsourceable})
+    noun = "platform" if len(platforms) == 1 else "platforms"
+    print(
+        f"\nLauncher reads, unsourceable: {len(unsourceable)} names "
+        f"across {len(platforms)} {noun}"
+    )
+    for row in unsourceable:
+        print(
+            f"    {row['platform']}: {row['name']} [{', '.join(row['emulators'])}, "
+            f"{row['readers'][0]['source_ref']}]: {row['unsourceable']}"
+        )
 
 
 def cross_reference(

@@ -74,6 +74,7 @@ LAUNCHERS = [
      "names": ["written.ini"], "source_ref": "pkg.sh:2"},
     _record("setemu", "fixed_name", ["setname.bin"], passes_to="command line -romslot"),
     _record("aliasemu", "fixed_name", ["alias.bin.rom"]),
+    _record("setemu", "copies", ["user.sf2"]),
     _record("caseemu", "fixed_name", ["mixed.rom"]),
     _record("foldemu", "fixed_name", ["MIXED.rom"], case_insensitive=True),
     _record("labelemu", "core_option", ["labelled.rom (CDZ)"]),
@@ -136,7 +137,9 @@ class LauncherGapTest(unittest.TestCase):
             },
             "setemu": {
                 "emulator": "SetEmu", "type": "standalone", "systems": ["test-sys"],
-                "files": [{"name": "core.bin", "config_key": "romslot", "required": True}],
+                "files": [{"name": "core.bin", "config_key": "romslot", "required": True},
+                          {"name": "user.sf2", "required": False,
+                           "unsourceable": "user supplied, no canonical file"}],
             },
             "missemu": {
                 "emulator": "MissEmu", "type": "standalone", "systems": ["test-sys"],
@@ -190,6 +193,22 @@ class LauncherGapTest(unittest.TestCase):
     def test_a_name_with_an_appended_extension_is_held(self) -> None:
         """ROCKNIX's kick34005.A500.rom is Amiberry's kick34005.A500."""
         self.assertNotIn("alias.bin.rom", {name for _, name in self._rows()})
+
+    def test_a_name_its_reader_declares_unsourceable_is_counted_apart(self) -> None:
+        """RetroBat copies any SoundFont saved as Roland_SC-88.sf2: not a
+        file to find, yet never dropped silently."""
+        row = self._rows()[("gaptest", "user.sf2")]
+        self.assertEqual(row["unsourceable"], "user supplied, no canonical file")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            print_launcher_reads(list(self._rows().values()))
+        text = out.getvalue()
+        self.assertIn("Launcher reads, not held: 3 names", text)
+        self.assertIn("Launcher reads, unsourceable: 1 names across 1 platform", text)
+        self.assertIn("gaptest: user.sf2 [setemu, gen/setemu.py:1]: user supplied, no canonical file",
+                      text)
+        held_part = text.split("Launcher reads, unsourceable")[0]
+        self.assertNotIn("user.sf2", held_part)
 
     def test_a_name_handed_to_a_held_entry_setting_is_held(self) -> None:
         self.assertNotIn("setname.bin", {name for _, name in self._rows()})
@@ -250,7 +269,7 @@ class LauncherGapTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         report = json.loads(result.stdout)
         names = {r["name"] for r in report[LAUNCHER_READS_KEY]}
-        self.assertEqual(names, {"absent.bin", "mixed.rom", "labelled.rom"})
+        self.assertEqual(names, {"absent.bin", "mixed.rom", "labelled.rom", "user.sf2"})
         # The emulator rows keep their own shape and counts.
         self.assertEqual(set(report) - {LAUNCHER_READS_KEY}, {"aliasemu", "missemu", "setemu"})
 
@@ -266,7 +285,8 @@ class LauncherGapTest(unittest.TestCase):
             )
         rows = with_rows.pop("launcher_reads_not_held")
         without.pop("launcher_reads_not_held")
-        self.assertEqual({r["name"] for r in rows}, {"absent.bin", "mixed.rom", "labelled.rom"})
+        self.assertEqual({r["name"] for r in rows},
+                         {"absent.bin", "mixed.rom", "labelled.rom", "user.sf2"})
         self.assertEqual(with_rows, without)
 
         def exit_code(result: dict) -> int:

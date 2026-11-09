@@ -1966,13 +1966,18 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
 
 def _print_launcher_reads(result: dict, verbose: bool) -> None:
     """Names the platform's launch code reads that the collection lacks."""
-    rows = result.get("launcher_reads_not_held") or []
-    if not rows:
-        return
+    every = result.get("launcher_reads_not_held") or []
+    rows = [r for r in every if not r.get("unsourceable")]
+    unsourceable = [r for r in every if r.get("unsourceable")]
     listed = "" if verbose else " (--verbose lists them)"
-    print(f"  Launcher reads, not held: {len(rows)}{listed}")
+    if rows:
+        print(f"  Launcher reads, not held: {len(rows)}{listed}")
+    if unsourceable:
+        print(f"  Launcher reads, unsourceable: {len(unsourceable)}{listed}")
     if not verbose:
         return
+    for row in unsourceable:
+        print(f"    {row['name']} [{', '.join(row['emulators'])}]: {row['unsourceable']}")
     for row in rows:
         kinds = ", ".join(sorted({r["kind"] for r in row["readers"]}))
         casing = f", held as {row['held_as']}" if row.get("held_as") else ""
