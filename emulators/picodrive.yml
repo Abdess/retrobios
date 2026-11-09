@@ -71,6 +71,7 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america, latin-america]
+    group: mega-cd-us
     priority: 1
     required: true
     size: 131072  # 128 KB (0x20000)
@@ -81,8 +82,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america, latin-america]
+    group: mega-cd-us
     priority: 2
-    required: false
+    required: true
     size: 131072
     note: "US Sega CD BIOS (March 1993). Second in US search order."
     source_ref: "source platform/libretro/libretro.c:1273"
@@ -91,8 +93,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america, latin-america]
+    group: mega-cd-us
     priority: 3
-    required: false
+    required: true
     size: 131072
     note: "US Sega CD Model 1 BIOS (October 1992). Third in US search order."
     source_ref: "source platform/libretro/libretro.c:1273"
@@ -101,8 +104,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america, latin-america]
+    group: mega-cd-us
     priority: 4
-    required: false
+    required: true
     size: 131072
     note: "US Sega CD BIOS (generic name). Last in US search order."
     source_ref: "source platform/libretro/libretro.c:1273"
@@ -114,6 +118,7 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [europe, oceania]
+    group: mega-cd-eu
     priority: 1
     required: true
     size: 131072
@@ -124,8 +129,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [europe, oceania]
+    group: mega-cd-eu
     priority: 2
-    required: false
+    required: true
     size: 131072
     note: "EU Mega CD Model 2 BIOS (March 1993). Second in EU search order."
     source_ref: "source platform/libretro/libretro.c:1276"
@@ -134,8 +140,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [europe, oceania]
+    group: mega-cd-eu
     priority: 3
-    required: false
+    required: true
     size: 131072
     note: "EU Mega CD Model 1 BIOS (October 1992). Third in EU search order."
     source_ref: "source platform/libretro/libretro.c:1276"
@@ -144,8 +151,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [europe, oceania]
+    group: mega-cd-eu
     priority: 4
-    required: false
+    required: true
     size: 131072
     note: "EU Mega CD BIOS (generic name). Last in EU search order."
     source_ref: "source platform/libretro/libretro.c:1276"
@@ -157,6 +165,7 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [japan]
+    group: mega-cd-jp
     priority: 1
     required: true
     size: 131072
@@ -167,8 +176,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [japan]
+    group: mega-cd-jp
     priority: 2
-    required: false
+    required: true
     size: 131072
     note: "JP Mega CD Model 1 BIOS (December 1991). Second in JP search order."
     source_ref: "source platform/libretro/libretro.c:1279"
@@ -177,8 +187,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [japan]
+    group: mega-cd-jp
     priority: 3
-    required: false
+    required: true
     size: 131072
     note: "JP Mega CD Model 1 BIOS (November 1991). Third in JP search order."
     source_ref: "source platform/libretro/libretro.c:1279"
@@ -187,8 +198,9 @@ files:
     system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [japan]
+    group: mega-cd-jp
     priority: 4
-    required: false
+    required: true
     size: 131072
     note: "JP Mega CD BIOS (generic name). Last in JP search order."
     source_ref: "source platform/libretro/libretro.c:1279"

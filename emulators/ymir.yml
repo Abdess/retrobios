@@ -96,6 +96,7 @@ files:
   - name: "sega_101.bin"
     system: sega-saturn
     region: [japan]
+    group: ipl
     priority: 1
     required: true
     mode: libretro
@@ -110,6 +111,7 @@ files:
   - name: "mpr-17933.bin"
     system: sega-saturn
     region: [north-america, europe, asia-ntsc, asia-pal, brazil, latin-america]
+    group: ipl
     priority: 2
     required: true
     mode: libretro
@@ -123,8 +125,9 @@ files:
 
   - name: "saturn_bios.bin"
     system: sega-saturn
+    group: ipl
     priority: 3
-    required: false
+    required: true
     mode: libretro
     size: 524288
     validation: [size]

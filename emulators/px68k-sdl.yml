@@ -51,6 +51,7 @@ files:
   - name: "iplrom.dat"
     system: sharp-x68000
     path: "iplrom.dat"
+    group: ipl
     priority: 1
     required: true
     size: 131072
@@ -64,8 +65,9 @@ files:
   - name: "iplromxv.dat"
     system: sharp-x68000
     path: "iplromxv.dat"
+    group: ipl
     priority: 2
-    required: false
+    required: true
     size: 131072
     source_ref: "SDL/SDL2/winx68k.cpp:277-279,288-307"
     note: "X68000 XVI IPL ROM, read when iplrom.dat is absent."
@@ -73,8 +75,9 @@ files:
   - name: "iplromco.dat"
     system: sharp-x68000
     path: "iplromco.dat"
+    group: ipl
     priority: 3
-    required: false
+    required: true
     size: 131072
     source_ref: "SDL/SDL2/winx68k.cpp:277-279,288-307"
     note: "X68000 Compact IPL ROM, read when the first two names are absent."
@@ -82,8 +85,9 @@ files:
   - name: "iplrom30.dat"
     system: sharp-x68000
     path: "iplrom30.dat"
+    group: ipl
     priority: 4
-    required: false
+    required: true
     size: 131072
     source_ref: "SDL/SDL2/winx68k.cpp:277-279,288-307"
     note: "X68030 IPL ROM, read when the three other names are absent."
@@ -91,8 +95,9 @@ files:
   - name: "cgrom30.dat"
     system: sharp-x68000
     path: "cgrom30.dat"
+    group: font
     priority: 1
-    required: false
+    required: true
     size: 786432
     source_ref: "SDL/SDL2/winx68k.cpp:280-282,317-331"
     note: >
@@ -103,8 +108,9 @@ files:
   - name: "cgrom30.tmp"
     system: sharp-x68000
     path: "cgrom30.tmp"
+    group: font
     priority: 2
-    required: false
+    required: true
     unsourceable: "rendered from TrueType fonts by the font generator, no canonical file"
     size: 786432
     source_ref: "SDL/SDL2/winx68k.cpp:280-282,317-331"
@@ -113,6 +119,7 @@ files:
   - name: "cgrom.dat"
     system: sharp-x68000
     path: "cgrom.dat"
+    group: font
     priority: 3
     required: true
     size: 786432
@@ -122,8 +129,9 @@ files:
   - name: "cgrom.tmp"
     system: sharp-x68000
     path: "cgrom.tmp"
+    group: font
     priority: 4
-    required: false
+    required: true
     unsourceable: "rendered from TrueType fonts by the font generator, no canonical file"
     size: 786432
     source_ref: "SDL/SDL2/winx68k.cpp:280-282,317-331, SDL/tool/create_cgrom.c:20"

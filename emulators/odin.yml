@@ -83,7 +83,8 @@ files:
   - name: "epr-23400a.ic94"
     archive: hikaru.zip
     system: sega-hikaru
-    required: false
+    group: boot-rom
+    required: true
     variant_group: "hikaru-bootrom"
     priority: 1
     size: 2097152
@@ -95,7 +96,8 @@ files:
   - name: "epr-23400.ic94"
     archive: hikaru.zip
     system: sega-hikaru
-    required: false
+    group: boot-rom
+    required: true
     variant_group: "hikaru-bootrom"
     priority: 2
     size: 2097152
@@ -107,7 +109,8 @@ files:
   - name: "epr-21904.ic94"
     archive: hikaru.zip
     system: sega-hikaru
-    required: false
+    group: boot-rom
+    required: true
     variant_group: "hikaru-bootrom"
     priority: 3
     size: 2097152

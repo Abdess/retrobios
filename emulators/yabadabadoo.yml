@@ -61,6 +61,7 @@ notes: |
 files:
   - name: "saturn_bios.bin"
     system: sega-saturn
+    group: saturn-bios
     required: true
     max_size: 524288
     validation: [max_size]
@@ -69,7 +70,8 @@ files:
 
   - name: "sega_101.bin"
     system: sega-saturn
-    required: false
+    group: saturn-bios
+    required: true
     region: [japan, asia-ntsc, south-korea]
     max_size: 524288
     validation: [max_size]
@@ -78,7 +80,8 @@ files:
 
   - name: "mpr-17933.bin"
     system: sega-saturn
-    required: false
+    group: saturn-bios
+    required: true
     region: [north-america, europe, oceania, asia-pal, brazil, latin-america]
     max_size: 524288
     validation: [max_size]
