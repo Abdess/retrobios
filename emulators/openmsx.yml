@@ -329,3 +329,41 @@ files:
     description: "Philips VG 8020 MSX1 BIOS and BASIC ROM (also used by AVT DPC-200, Goldstar FC-200, Toshiba HX-20E, HX-22I, HX-51I)"
     validation: [sha1]
     source_ref: "share/machines/Philips_VG_8020.xml:53-54"
+
+  - name: svi-738_basic-bios1.rom
+    path: "openmsx/share/systemroms/svi-738_basic-bios1.rom"
+    sha1: c53b3f2c00f31683914f7452f3f4d94ae2929c0d
+    required: false
+    size: 32768
+    description: "Spectravideo SVI-738 MSX1 BIOS and BASIC ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:53-54"
+
+  - name: svi-738_se_basic-bios1.rom
+    path: "openmsx/share/systemroms/svi-738_se_basic-bios1.rom"
+    sha1: 87f4d0fa58cfe9cef818a3185df2735e6da6168c
+    required: false
+    size: 32768
+    description: "Spectravideo SVI-738 (Sweden) MSX1 BIOS and BASIC ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738_SE.xml:53-54"
+
+  - name: svi-738_rs232.rom
+    path: "openmsx/share/systemroms/svi-738_rs232.rom"
+    sha1: 4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7
+    required: false
+    size: 8192
+    description: "Spectravideo SVI-738 RS-232 interface ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:76-77, share/machines/Spectravideo_SVI-738_SE.xml:76-77"
+
+  - name: svi-738_disk.rom
+    path: "openmsx/share/systemroms/svi-738_disk.rom"
+    sha1:
+      - 99a40266bc296cef1d432cb0caa8df1a7e570be4
+      - 55d5d1fd57d35384b821af62083f2a23d85580e6
+      - 465fab904a22b3e29f0c00daaf326dc4a6862088
+    required: false
+    description: "Spectravideo SVI-738 disk controller ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:90-93, share/machines/Spectravideo_SVI-738_SE.xml:90-93"
