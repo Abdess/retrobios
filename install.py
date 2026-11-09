@@ -379,7 +379,7 @@ COLOUR_ROLES = {
 # zero is no news and stays plain: "0 missing" is not a warning.
 _STATUS_WORDS = tuple((re.compile(pattern), role) for pattern, role in (
     (r"(?<!of )\b[1-9][\d,]* (?:files? )?(?:installed|in place|already in place"
-     r"|ok|copied|downloaded)\b|\bDone\b|\bEverything is in place\b|^ *ok\b", "success"),
+     r"|ok|copied|downloaded)\b|\bDone\b|\bEvery file on the list is in place\b|^ *ok\b", "success"),
     (r"(?<!of )\b[1-9][\d,]* (?:files? )?(?:failed|refused)\b|\bFAILED\b|\bfailed:"
      r"|\bFinished with errors\b|\bNothing was installed\b|\bSomething went wrong\b",
      "failure"),
@@ -6385,7 +6385,7 @@ _INVOCATION = Invocation()
 
 # What a run says when every file is in place, on the screen and in line
 # mode: the site's "How to check" quotes it (scripts/generate_site.py).
-EVERYTHING_IN_PLACE = "Everything is in place."
+EVERYTHING_IN_PLACE = "Every file on the list is in place."
 # The plan's two rows a beginner reads first: the README and the site name
 # them from here, so they say what the screen shows.
 TUI_INSTALL_ROW = "Install"
@@ -21461,7 +21461,7 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
                  else "")
     if not need:
         headline = (f"{_plural(data, 'data file')} to fetch{data_size}" if data
-                    else "Everything is in place")
+                    else EVERYTHING_IN_PLACE.rstrip("."))
     elif lacking and not fetch and not copied:
         # The data files too, when the pack holds none of them: "8252
         # files" said nothing of the 2636 it cannot give either.

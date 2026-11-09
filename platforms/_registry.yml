@@ -1069,6 +1069,10 @@ platforms:
     # The card root: minarch hands each core SDCARD_PATH/Bios/<TAG>
     # (workspace/all/minarch/minarch.c:2943).
     extract_to: <SD card>/
+    # The boot logo MinUI writes to the m17's screen, rows stored bottom up.
+    logo: https://raw.githubusercontent.com/shauninman/MinUI/7c8b818e869302780c4083b8a9d6309b6d4a9ccd/skeleton/EXTRAS/Tools/m17/Bootlogo.pak/logo.bmp
+    logo_flip: true
+    logo_trim: true
     scraper: minui
     # minarch hands each core a folder and names no file (workspace/all/minarch/minarch.c:2943):
     # there is no BIOS list of its own to export corrected.
@@ -1124,6 +1128,9 @@ platforms:
     # minarch hands each core SDCARD_PATH/Bios/<TAG>
     # (workspace/all/minarch/minarch.c:3532).
     extract_to: <SD card>/
+    # The boot screen MyMinUI shows on H700 handhelds.
+    logo: https://raw.githubusercontent.com/Turro75/MyMinUI/d5ab4f9f83280f4316cb070c529299cb81ccc473/workspace/h700/boot/bootlogo.png
+    logo_trim: true
     scraper: myminui
     # minarch hands each core a folder and names no file (workspace/all/minarch/minarch.c:3532):
     # there is no BIOS list of its own to export corrected.

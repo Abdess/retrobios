@@ -458,7 +458,7 @@
 === plan-in-place 40x12
  RetroBIOS: RetroArch
 
- Everything is in place
+ Every file on the list is in place
  BIOS folder:
    ~/.config/retroarch/system
  5 in place, 0 missing, 0 wrong copies
@@ -471,7 +471,7 @@
 === plan-in-place 40x15
  RetroBIOS: RetroArch
 
- Everything is in place
+ Every file on the list is in place
  BIOS folder:
    ~/.config/retroarch/system
  5 in place, 0 missing, 0 wrong copies
@@ -487,7 +487,7 @@
 === plan-in-place 80x24
  RetroBIOS: RetroArch
 
- Everything is in place
+ Every file on the list is in place
  BIOS folder: ~/.config/retroarch/system
  5 in place, 0 missing, 0 wrong copies
  1 of the 0 wrong copies is replaced, the old one kept in a backup folder.

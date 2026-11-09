@@ -11,6 +11,13 @@ website/astro.config.mjs), and llms.txt says the convention.
 `llms-full.txt` joins the Markdown of the pages a setup is done with:
 the start pages, the guides and each setup's page.
 
+An assistant often reads a copy fetched long before, by itself or by a
+search engine. Each copy, llms.txt and llms-full.txt name the commit and
+the date they were built from, and `version.json` names the current one,
+so a stale copy can be told apart. `digests.json` gives each page's
+SHA-256 before that line: the next deploy compares it with its own and
+tells search engines which pages changed (scripts/indexnow.py).
+
 Run by the Astro build once the pages are written (astro.config.mjs),
 on the built site:
 
@@ -20,8 +27,11 @@ on the built site:
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import os
 import re
+import subprocess
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -293,42 +303,86 @@ def page_markdown(html: str, page_url: str) -> str:
     return converter.markdown()
 
 
-def convert_site(dist: Path) -> int:
-    """Write index.md beside every page's index.html, then llms-full.txt."""
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def build_stamp() -> dict[str, str]:
+    """The commit the site is built from and its date. CI names the commit
+    in GITHUB_SHA. The date is the commit's, so two builds of one commit
+    write the same bytes."""
+    commit = os.environ.get("GITHUB_SHA") or subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True,
+        check=True).stdout.strip()
+    date = subprocess.run(["git", "log", "-1", "--format=%cI", commit], cwd=ROOT,
+                          capture_output=True, text=True, check=True).stdout.strip()
+    return {"commit": commit, "date": date}
+
+
+def stamp_line(stamp: dict[str, str]) -> str:
+    return (f"> Built from commit {stamp['commit'][:12]} on {stamp['date'][:10]}. "
+            f"The current build: {SITE}{BASE}version.json")
+
+
+def stamped(text: str, stamp: dict[str, str]) -> str:
+    """*text* with the build line under its first line, the title."""
+    first, _, rest = text.partition("\n")
+    return f"{first}\n\n{stamp_line(stamp)}\n{rest}"
+
+
+def convert_site(dist: Path, stamp: dict[str, str] | None = None) -> int:
+    """Write index.md beside every page's index.html, then llms-full.txt,
+    version.json and digests.json, and stamp llms.txt."""
+    stamp = stamp or build_stamp()
     written = 0
+    digests: dict[str, str] = {}
     for html_path in sorted(dist.rglob("index.html")):
         relative = html_path.parent.relative_to(dist).as_posix()
         page = "" if relative == "." else f"{relative}/"
         url = f"{SITE}{BASE}{page}"
         text = page_markdown(html_path.read_text(encoding="utf-8"), url)
-        (html_path.parent / "index.md").write_text(text, encoding="utf-8")
+        digests[url] = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        (html_path.parent / "index.md").write_text(stamped(text, stamp), encoding="utf-8")
         written += 1
-    write_full(dist)
+    write_full(dist, stamp)
+    llms = dist / "llms.txt"
+    if llms.is_file():
+        text = llms.read_text(encoding="utf-8")
+        digests[f"{SITE}{BASE}llms.txt"] = hashlib.sha256(text.encode("utf-8")).hexdigest()
+        # Under the summary, which llms.txt keeps as the quote after its title.
+        title, summary, rest = text.split("\n\n", 2)
+        line = stamp_line(stamp).removeprefix("> ")
+        llms.write_text(f"{title}\n\n{summary}\n\n{line}\n\n{rest}", encoding="utf-8")
+    (dist / "version.json").write_text(json.dumps(stamp, indent=1) + "\n", encoding="utf-8")
+    (dist / "digests.json").write_text(
+        json.dumps(dict(sorted(digests.items())), indent=0) + "\n", encoding="utf-8")
     return written
 
 
-def write_full(dist: Path) -> None:
+def _unstamped(text: str, stamp: dict[str, str]) -> str:
+    """A page's copy without its build line: llms-full.txt says it once."""
+    return text.replace(f"\n\n{stamp_line(stamp)}\n", "\n", 1)
+
+
+def write_full(dist: Path, stamp: dict[str, str]) -> None:
     """llms-full.txt from the pages' Markdown copies."""
-    parts = ["# RetroBIOS: the guides in one file", "",
+    parts = ["# RetroBIOS: the guides in one file", "", stamp_line(stamp), "",
              "> The pages a setup is done with, in reading order. Every page of the site also has "
              "its own Markdown copy at `<page>/index.md`.", ""]
     for page in FULL_PAGES:
         md = dist / page / "index.md"
         if md.is_file():
-            parts += [md.read_text(encoding="utf-8").rstrip(), "", "---", ""]
+            parts += [_unstamped(md.read_text(encoding="utf-8"), stamp).rstrip(), "", "---", ""]
     # Each setup's own page (the setups the picker lists, not the parts a
     # long page is cut into), up to its reference of every file: what to
     # do and where, not the full lists, which its own copy keeps. All of
     # them was 6.9 MB, past what an assistant reads at once.
-    import json  # noqa: PLC0415
-
     index = dist / "data" / "picker" / "index.json"
     setups = [str(item["platform"]) for item in json.loads(index.read_text(encoding="utf-8"))] \
         if index.is_file() else []
     for setup in [*setups, "linux-handhelds"]:
         md = dist / "platforms" / setup / "index.md"
         if md.is_file():
-            text = md.read_text(encoding="utf-8")
+            text = _unstamped(md.read_text(encoding="utf-8"), stamp)
             parts += [text.split("\n## Reference", 1)[0].rstrip(), "", "---", ""]
     (dist / "llms-full.txt").write_text("\n".join(parts).rstrip() + "\n", encoding="utf-8")
 

@@ -324,9 +324,17 @@ class TitleLogoOnAPlate(unittest.TestCase):
                     self.assertIn('height="40"', image)
 
     def test_a_setup_with_no_logo_gets_its_initials(self):
+        # Every setup has a logo today: the fallback is read where it is
+        # written, the tile's and the title's.
+        import sitemarkup  # noqa: PLC0415
+
+        self.assertRegex(sitemarkup._tile_mark("MyMinUI", ""), r"<svg[^>]*>.*>MM</text></svg>")
+        component = _read(REPO_ROOT / "website" / "src" / "components" / "PageTitle.astro")
+        self.assertIn("{initials(setup.name)}", component)
+
+    def test_myminui_shows_its_logo(self):
         block = _title_through_heading(_built("platforms/myminui"))
-        self.assertNotIn("<img", block)
-        self.assertRegex(block, r"<svg class=\"rb-title-mark[^>]*>.*?>MM</text>")
+        self.assertIn('src="/retrobios/assets/logos/myminui.webp"', block)
 
 
 class NoLevelBadgeOnATabRoot(unittest.TestCase):
@@ -616,7 +624,7 @@ class LogosAtTheirDisplaySize(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in LOGOS.glob("*.png")), [])
         script = _read(REPO_ROOT / "scripts" / "fetch_site_images.py")
         self.assertIn(f"LOGO_SIZE = {LOGO_PIXELS}", script)
-        self.assertIn('square_image(data, LOGO_SIZE, "WEBP")', script)
+        self.assertIn('square_image(\n                data, LOGO_SIZE, "WEBP"', script)
 
     def test_pages_point_at_the_copies(self):
         html = _built("platforms/emudeck")

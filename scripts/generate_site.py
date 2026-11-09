@@ -441,7 +441,8 @@ def _tiles(registry: dict, members: list[str], display: dict[str, str], prefix: 
            str(registry.get(name, {}).get("logo") or ""),
            GUIDES[name].runs_on or _runs_on(registry.get(name, {}), GUIDES[name]))
           for name in members),
-        *((tile.name, f"{prefix}{tile.link}", "", tile.text) for tile in GROUP_TILES.get(group, ())),
+        *((tile.name, f"{prefix}{tile.link}", tile.logo, tile.text)
+          for tile in GROUP_TILES.get(group, ())),
     ], eager=eager)
 
 
@@ -506,7 +507,7 @@ def generate_home(
         "## Is it needed? { #do-i-need-it }",
         "",
         "- **Yes**, if the emulator says a BIOS is missing.",
-        "- **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.",
+        "- **Yes** for PlayStation 2 and Neo Geo.",
         "- **Better with it** for Dreamcast: some games need it.",
         "- **Usually not** for NES, Super Nintendo, Mega Drive and Game Boy.",
         "",
@@ -4201,7 +4202,7 @@ def check_pass_line() -> str:
     no file is missing or wrong (install.py EVERYTHING_IN_PLACE), read from
     the installer. Typed here, it kept "All files up to date." after the
     installer said "Everything is in place."."""
-    return f"All good when it says `{_installer().EVERYTHING_IN_PLACE}`"
+    return f"Good result: `{_installer().EVERYTHING_IN_PLACE}`"
 
 # Under "From your computer": a device with no network installs from the ZIP
 # (`--from-pack`). The id is the one wiki/installer.md gives its section.

@@ -27,8 +27,7 @@ If step 3 fails, the screen says "BIOS missing" or stays black.
 ## Which consoles need one? { #do-i-need-one }
 
 - **Yes:** PlayStation 2, Neo Geo, PC Engine CD and many home computers.
-- **Most emulators:** PlayStation 1 and Saturn. Some start games without it,
-  with a built-in replacement. The emulator's page says which.
+- **Most emulators:** PlayStation 1 and Saturn.
 - **Better with it:** Dreamcast. Some games need it.
 - **Usually not:** NES, Super Nintendo, Mega Drive, Game Boy and Game Boy
   Advance.
@@ -50,13 +49,10 @@ another for Europe.
 Some setups check each file's **hash**, a fingerprint of its contents.
 Batocera, Recalbox and EmuDeck report a version they do not expect.
 
-Where the collection holds a file, it is the version each setup expects.
-[What is still missing](../gaps.md) names the rest.
-
 ## Can a game start without it?
 
 Sometimes. Some emulators carry their own code in place of the BIOS. Some games
-then glitch or do not start. The real file works best, so the packs include it.
+then glitch or do not start.
 
 ## Is it legal?
 
