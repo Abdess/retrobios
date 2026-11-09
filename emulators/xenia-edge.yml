@@ -10,12 +10,12 @@ source_commit:
   libretro: "9637f45c480c711de0dd8a041d1ba754192ec73b"
 profiled_date: "2026-11-09"
 core_version:
-  standalone: "7180422"
-  libretro: "8dc77b0"
+  standalone: "c519cb4"
+  libretro: "074d3f0"
 version_basis:
   standalone:
     kind: tag
-    tag: "7180422"
+    tag: "c519cb4"
     distance: 0
   libretro:
     kind: file
@@ -54,7 +54,7 @@ notes: |
   The libretro core xenia_edge_libretro is built from libretro/xenia-edge-libretro
   on git.libretro.com (branch libretro, CORENAME xenia_edge in .gitlab-ci.yml),
   mirrored as WizzardSK/xenia-libretro on GitHub. It carries the xenia-edge
-  tree merged from edge at 8dc77b09, the release named in upstream.version and
+  tree merged from edge at 074d3f08, the release named in upstream.version and
   reported as library_version (libretro/CMakeLists.txt:74-78,
   libretro/libretro.cpp:2027-2030). The core is one shared library linked from
   the emulator's static libraries, without the wxWidgets app
