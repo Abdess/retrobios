@@ -2005,6 +2005,12 @@ opened from Windows, an exFAT card), one overwrites the other. The installer
 checks the folder first, keeps one file per name there and lists the ones it
 left out.
 
+FAT, exFAT and every Windows drive also refuse `< > : " | ? *` in a name
+(Linux `fs/fat/namei_vfat.c:201-207`, `fs/exfat/nls.c:396-403`). RetroDECK's
+list names three files with a colon, like `zxs:48.rom`. Before writing such a
+name, the installer creates one in the BIOS folder: on an ext4 card it goes
+in, on an exFAT card the installer leaves those files out and names them.
+
 ### Packs and their parts
 
 `scripts/download.py --list` and `scripts/download.sh --list` print the packs of
