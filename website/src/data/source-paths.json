@@ -3687,6 +3687,7 @@
  ],
  "github.com/hrydgard/ppsspp@4a9fa00e5ab1a63572dfb429149b1d34bba95093": [
   "Core/ConfigValues.h",
+  "Core/HDRemaster.cpp",
   "Core/HLE/HLE.cpp",
   "Core/HLE/sceFont.cpp",
   "Core/System.cpp",
@@ -9505,17 +9506,23 @@
  "github.com/stenzek/duckstation@526b4a128827ecaef037134095cd95f431b52d06": [
   "src/core/bios.cpp",
   "src/core/bios.h",
+  "src/core/settings.cpp",
+  "src/core/system.cpp"
+ ],
+ "github.com/stenzek/duckstation@56ac3d6c324ec4520dac433b071ecab6227fb459": [
+  "src/core/bios.cpp",
+  "src/core/bios.h",
+  "src/core/system.cpp"
+ ],
+ "github.com/stenzek/duckstation@c9dc225498e901908b2f3822a3875d1c508e2ccd": [
+  "src/core/bios.cpp",
+  "src/core/bios.h",
   "src/core/core.cpp",
   "src/core/fullscreenui_settings.cpp",
   "src/core/settings.cpp",
   "src/core/settings.h",
   "src/core/system.cpp",
   "src/duckstation-qt/biossettingswidget.cpp"
- ],
- "github.com/stenzek/duckstation@56ac3d6c324ec4520dac433b071ecab6227fb459": [
-  "src/core/bios.cpp",
-  "src/core/bios.h",
-  "src/core/system.cpp"
  ],
  "github.com/suijingfeng/vkQuake3@650bd625eb725446279c6176804b554e2e1c98f3": [
   "Makefile",
