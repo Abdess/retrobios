@@ -2135,7 +2135,7 @@
   "src/loader2.cpp",
   "src/netcfg.cpp"
  ],
- "github.com/ZDoom/Raze@76fe82f5eb318fdeb30ba9fb27093a9a10bc3821": [
+ "github.com/ZDoom/Raze@fa99ac62924d5b2cbb67f46b932bd6acf8952b63": [
   "source/CMakeLists.txt",
   "source/common/audio/music/i_soundfont.cpp",
   "source/core/gamecontrol.cpp",
