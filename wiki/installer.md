@@ -1872,7 +1872,7 @@ RetroArch folder that holds only `scph5501.bin`, in the order written:
 {"event": "file", "platform": "retroarch", "dest": "scph5501.bin", "systems": ["sony-playstation"], "size": 524288, "state": "present"}
 {"event": "check", "platform": "retroarch", "name": "RetroArch", "bios_dir": "system", "files": 118, "present": 1, "missing": 117, "wrong_hash": 0, "bytes_needed": 344457216, "data_missing": 0, "not_installable": 0}
 {"event": "summary", "mode": "check", "installed": 0, "up_to_date": 1, "pending": 117, "failed": [], "skipped": [], "left_out": [], "kept": [], "interrupted": false}
-{"event": "end", "code": 1}
+{"event": "end", "code": 3}
 ```
 
 ## Environment overrides
