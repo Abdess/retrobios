@@ -41,6 +41,7 @@ START_PAGES = {
 # Reference pages written for anyone, held to the Start here budgets.
 START_LEVEL_PAGES = {
     "wiki/measurements.md": 300,
+    "wiki/archive-recipes.md": 160,
 }
 # Level 1: the guide part of each setup page, above its Reference heading.
 SETUP_CEILING = 220

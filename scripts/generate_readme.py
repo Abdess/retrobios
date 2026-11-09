@@ -38,6 +38,7 @@ from common import (
     write_if_changed,
 )
 from nativemode import check_label
+import archive_build
 import release_record
 from siteguides import PACKAGE_COMMAND, install_command
 from validate_pr import LARGE_FILE_ISSUE_URL
@@ -563,6 +564,32 @@ def _catalog_matched_line(db: dict) -> list[str]:
     ]
 
 
+# The badge row under the links: (alt text, image, link).
+BADGES = (
+    ("PyPI version", "https://img.shields.io/pypi/v/retrobios", "https://pypi.org/project/retrobios/"),
+    ("Python versions", "https://img.shields.io/pypi/pyversions/retrobios",
+     "https://pypi.org/project/retrobios/"),
+    ("Validation",
+     "https://github.com/Abdess/retrobios/actions/workflows/validate.yml/badge.svg?branch=main",
+     "https://github.com/Abdess/retrobios/actions/workflows/validate.yml"),
+    ("License", "https://img.shields.io/github/license/Abdess/retrobios", "LICENSE"),
+)
+
+
+def badge_row() -> str:
+    badges = " ".join(f'<a href="{link}"><img src="{image}" alt="{alt}"></a>'
+                      for alt, image, link in BADGES)
+    return f'<p align="center">{badges}</p>'
+
+
+def archive_line(counts: dict[str, int]) -> str:
+    """The README's line on archive recipes, counted from recipes/archives.json."""
+    return (f"- **{counts['total']:,} archives**, each with a recipe that rebuilds it from the"
+            f" ROMs the collection holds: {counts['exact']:,} byte for byte,"
+            f" {counts['canonical']:,} with the same files inside"
+            f" ([rebuilding an archive]({SITE_URL}wiki/archive-recipes/))")
+
+
 def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json") -> str:
     total_files = db.get("total_files", 0)
     total_size = db.get("total_size", 0)
@@ -628,6 +655,8 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         f'<a href="{SITE_URL}wiki/troubleshooting/">A game does not start</a> · '
         f'<a href="{SITE_URL}wiki/faq/">Questions</a>'
         "</p>",
+        "",
+        badge_row(),
         "",
         "Some consoles need a small program, the **BIOS**, to start their games: PlayStation 1"
         " and 2, Saturn, Neo Geo, Dreamcast and more. RetroBIOS installs the BIOS and firmware"
@@ -715,6 +744,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         " the file name for RetroArch, as their own code does",
         f"- **{len(system_ids)} systems**, {total_files:,} files in the collection,"
         f" [what is still missing]({SITE_URL}gaps/) named file by file",
+        archive_line(archive_build.rebuild_counts()),
         f"- Public data: [JSON, CSV and SQLite]({SITE_URL}data/), the metadata under MIT",
         "",
         "<details>",

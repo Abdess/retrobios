@@ -124,6 +124,7 @@ from siteguides import (
     terminal_tabs,
     trust_box,
 )
+import archive_build
 import release_record
 import sitebootstrap
 import sitemeasurements
@@ -8784,6 +8785,30 @@ def with_romset_table(page: str, profiles: dict) -> str:
     return _ROMSET_BLOCK.sub(lambda m: f"{m.group(1)}{table}{m.group(3)}", page, count=1)
 
 
+ARCHIVE_RECIPES_PAGE = Path(WIKI_SRC_DIR) / "archive-recipes.md"
+_ARCHIVE_BLOCK = re.compile(
+    r"(<!-- generated: archive-recipes -->\n)(.*?)(<!-- /generated: archive-recipes -->)", re.S)
+
+
+def archive_recipe_lines(counts: dict[str, int]) -> list[str]:
+    """What an exact and a canonical rebuild are, each with its count."""
+    total = f"{counts['total']:,}"
+    return [
+        f"- **Exact**: the same bytes as the archive in the collection."
+        f" {counts['exact']:,} of {total} archives.",
+        f"- **Canonical**: the same files inside, packed another way."
+        f" {counts['canonical']:,} of {total} archives.",
+    ]
+
+
+def with_archive_counts(page: str, counts: dict[str, int]) -> str:
+    """The archive recipes page with its counts read from recipes/archives.json."""
+    block = "\n".join(archive_recipe_lines(counts)) + "\n"
+    if not _ARCHIVE_BLOCK.search(page):
+        raise ValueError(f"{ARCHIVE_RECIPES_PAGE}: no archive-recipes block to write the counts in")
+    return _ARCHIVE_BLOCK.sub(lambda m: f"{m.group(1)}{block}{m.group(3)}", page, count=1)
+
+
 def _render_metadata_rows(profile: dict) -> list[str]:
     """Scalar profile fields, one table row each.
 
@@ -12673,6 +12698,10 @@ def _generate(args: argparse.Namespace) -> None:
     faq = _REPO_ROOT / ROMSET_FAQ_PAGE
     if faq.is_file():
         write_if_changed(str(faq), with_romset_table(faq.read_text(encoding="utf-8"), profiles))
+    recipes_page = _REPO_ROOT / ARCHIVE_RECIPES_PAGE
+    if recipes_page.is_file():
+        write_if_changed(str(recipes_page), with_archive_counts(
+            recipes_page.read_text(encoding="utf-8"), archive_build.rebuild_counts()))
     if wiki_src.is_dir():
         for src_file in wiki_src.glob("*.md"):
             shutil.copy2(src_file, wiki_dest / src_file.name)
