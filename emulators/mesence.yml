@@ -89,8 +89,8 @@ notes: |
   (Core/Gameboy/GbBootRom.h:8,49,99), and the external files override them.
   Super Game Boy mode falls back to the plain GB core when the SNES-side
   ROM is missing (Core/SNES/BaseCartridge.cpp:698-716). GameboyConfig
-  keeps UseSgb2 at true (Core/Shared/SettingTypes.h:433 in the libretro
-  tree) and no core option changes it, so the libretro build only ever asks
+  keeps UseSgb2 at true (Core/Shared/SettingTypes.h:455, line 433 in the
+  libretro tree) and no core option changes it, so the libretro build only ever asks
   for SGB2.sfc and sgb2_boot.bin. SGB1.sfc and sgb_boot.bin are standalone
   reads. The libretro port also offers a "Super Game Boy" subsystem taking
   a GB ROM plus an SNES-side ROM (Libretro/libretro.cpp:1041-1052): the
