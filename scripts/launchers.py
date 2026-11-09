@@ -112,6 +112,49 @@ def suffixed_stem(name: str) -> str | None:
     return stem if "." in stem else None
 
 
+_MODEL = re.compile(r"\b([A-Z]{2,5})-?(\d{3,6}[A-Z]?)\b")
+
+
+def catalogued_model_files(name: str, db: dict) -> list[dict]:
+    """Held files a dump catalogue describes as the model a launcher name spells.
+
+    RetroDECK sets LRPS2's pcsx2_bios option to scph10000.bin, a name no code
+    hashes: the SCPH-10000 is the model whose BIOS it means. Redump and TOSEC
+    describe two revisions for it. Primaries come before .variants copies,
+    then the Redump name, which carries the version (ps2-0100j before
+    ps2-0101j), then the No-Intro and TOSEC names.
+    """
+    stem = name.rsplit("/", 1)[-1].rsplit(".", 1)[0].casefold()
+    if not re.fullmatch(r"[a-z]{2,5}\d{3,6}[a-z]?", stem):
+        return []
+    found = []
+    for record in db.get("files", {}).values():
+        catalogues = record.get("provenance") or {}
+        models = {
+            (a + b).casefold()
+            for entry in catalogues.values()
+            for a, b in _MODEL.findall(str(entry.get("description") or ""))
+        }
+        if stem in models:
+            names = [
+                str((catalogues.get(source) or {}).get("name") or "")
+                for source in ("redump", "no-intro", "tosec")
+            ]
+            found.append(("/.variants/" in str(record.get("path", "")), names, record))
+    return [record for *_key, record in sorted(found, key=lambda f: (f[0], f[1]))]
+
+
+def setting_readers(passes_to: str, profiles: dict, keys: Iterable[str]) -> list[str]:
+    """The profiles with an entry read from the setting a launcher writes."""
+    if not passes_to:
+        return []
+    return sorted(
+        key for key in keys
+        if (profile := profiles.get(key)) is not None
+        and any(set_by(entry, passes_to) for entry in profile.get("files") or [])
+    )
+
+
 def set_by(entry: dict, passes_to: str) -> bool:
     """Whether a launcher hands its file to the setting a profile entry is read from."""
     key = str(entry.get("config_key") or "")
@@ -451,12 +494,30 @@ class LauncherLayer:
             self._by_name_folded.setdefault(name.lower(), []).extend(sha1s)
         self._files = db.get("files", {})
         self._owners: dict[tuple[str, bool], list[LauncherPlace]] = {}
+        self._placeholders: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         relevant = set(relevant)
         for place in self.places:
             standalone = place.build == "standalone"
-            for emulator in (e.strip() for e in place.emulator.split(",")):
-                for key in self._profiles_named(emulator, profiles, relevant):
-                    self._owners.setdefault((key, standalone), []).append(place)
+            owners = {
+                key
+                for emulator in (e.strip() for e in place.emulator.split(","))
+                for key in self._profiles_named(emulator, profiles, relevant)
+            }
+            # RetroDECK names its frontend, retroarch, and the core option it
+            # writes, pcsx2_bios, names the core.
+            if not owners:
+                owners = set(setting_readers(place.passes_to, profiles, relevant))
+            for key in sorted(owners):
+                self._owners.setdefault((key, standalone), []).append(place)
+                # A placeholder entry stands for every file a scan finds and
+                # is no gap, so the report never offers it: the setting a
+                # launcher writes still reads one file of it.
+                for entry in profiles[key].get("files") or []:
+                    if "<" in str(entry.get("name", "")) and set_by(entry, place.passes_to):
+                        self._placeholders.setdefault((key, standalone), []).append(
+                            (entry, _placeholder_report(key, profiles[key], entry))
+                        )
+        self._db = db
 
     @staticmethod
     def _profiles_named(name: str, profiles: dict, relevant: set[str]) -> list[str]:
@@ -568,6 +629,8 @@ class LauncherLayer:
         by_layout: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         for emulator, standalone, entry, report in candidates:
             by_layout.setdefault((emulator, standalone), []).append((entry, report))
+        for layout, members in self._placeholders.items():
+            by_layout.setdefault(layout, []).extend(members)
         placed: set[str] = set()
         for (emulator, standalone), members in sorted(by_layout.items()):
             for place in self.places_for(emulator, standalone):
@@ -627,7 +690,31 @@ class LauncherLayer:
             ):
                 return True
             if not place.anchored:
-                continue
+                # A setting holds a name the core resolves in the directory
+                # of the entry read from it: LRPS2 joins pcsx2_bios under
+                # pcsx2/bios.
+                setting = [
+                    (candidate, report) for candidate, report in matched
+                    if set_by(candidate.entry, place.passes_to)
+                ]
+                directory = next(
+                    (
+                        str(c.entry.get("path") or "").rpartition("/")[0]
+                        for c, _report in setting
+                        if "/" in str(c.entry.get("path") or "")
+                    ),
+                    None,
+                )
+                if directory is None:
+                    continue
+                path = f"{directory}/{name}"
+                if place.fold(path) in folded_reported:
+                    return True
+                source = self._content_for(place, name, key, setting, resolve_held)
+                if source is None or place.fold(path) in placed:
+                    continue
+                placed.add(place.fold(path))
+                return _launcher_entry(source[0], name, path, source[1], place)
             # The emulator as this platform installs it brings the file: the
             # place is filled, nothing is packed (ROCKNIX's xemu hdd image).
             if any(key in candidate.names and report.get("bundled")
@@ -676,7 +763,28 @@ class LauncherLayer:
             record = resolve_held(report)
             if record is not None:
                 return report, record
+        for candidate, report in matched:
+            if key not in candidate.names or not set_by(candidate.entry, place.passes_to):
+                continue
+            for record in catalogued_model_files(name, self._db):
+                if name_match_size_ok(candidate.entry, record.get("size")):
+                    return report, record
         return None
+
+
+def _placeholder_report(key: str, profile: dict, entry: dict) -> dict:
+    """The report entry of a placeholder, which the gap report never builds."""
+    return {
+        "profile": key,
+        "emulator": profile.get("emulator", key),
+        "name": entry.get("name", ""),
+        "path": entry.get("path") or entry.get("name", ""),
+        "system": entry.get("system"),
+        "systems": profile.get("systems"),
+        "required": entry.get("required", False),
+        "category": entry.get("category"),
+        "in_repo": False,
+    }
 
 
 def _launcher_entry(

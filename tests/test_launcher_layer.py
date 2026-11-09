@@ -289,6 +289,41 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
         self.assertIsNone(suffixed_stem("scph1001.bin"))
 
+    def test_a_core_option_names_the_dump_of_a_model(self) -> None:
+        """RetroDECK sets LRPS2's pcsx2_bios to scph10000.bin. LRPS2's entry
+        is a placeholder for every BIOS its scan finds, and the catalogues
+        name two revisions of the SCPH-10000: the earlier goes in."""
+        older, newer = b"S" * 64, b"T" * 64
+        for data, catalogue in ((newer, "ps2-0101j-20000217.bin"),
+                                (older, "ps2-0100j-20000117.bin")):
+            sha1 = hashlib.sha1(data).hexdigest()
+            path = os.path.join(self.bios_dir, catalogue)
+            with open(path, "wb") as fh:
+                fh.write(data)
+            self.db["files"][sha1] = {
+                "path": path, "name": catalogue, "md5": _md5(data), "sha1": sha1,
+                "size": len(data), "crc32": "",
+                "provenance": {"redump": {"name": catalogue,
+                                          "description": "SCPH-10000 (Version 5.0)"}},
+            }
+        profile = {
+            "emulator": "OptEmu", "type": "libretro", "systems": ["test-sys"],
+            "files": [{"name": "<bios>.bin", "path": "ps2/bios/<bios>.bin", "required": True,
+                       "min_size": 32, "max_size": 64, "validation": ["size"],
+                       "config_key": "emu_bios"}],
+        }
+        with open(os.path.join(self.emulators_dir, "optemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"].append({
+            "emulator": "retroarch", "build": "libretro", "kind": "core_option",
+            "names": ["scph10000.bin"], "passes_to": "core option emu_bios",
+            "source_ref": "core-options.cfg:515",
+        })
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["ps2/bios/scph10000.bin"]["md5"], _md5(older))
+
     def test_the_default_name_a_launcher_replaces_is_not_packed(self) -> None:
         """EmuDeck passes Complex_4627v1.03.bin to xemu, which then never
         opens Complex_4627.bin: the pack carried both, one read by nobody."""

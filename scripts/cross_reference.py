@@ -50,7 +50,15 @@ from common import (
     select_emulator_profiles,
 )
 from hashing import parse_hash_list
-from launchers import LauncherLayer, declared_destinations, held_record, set_by, suffixed_stem
+from launchers import (
+    LauncherLayer,
+    catalogued_model_files,
+    declared_destinations,
+    held_record,
+    set_by,
+    setting_readers,
+    suffixed_stem,
+)
 from launchers import _directories as launcher_directories
 from launchers import _names as launcher_names
 from validation import (
@@ -1180,6 +1188,11 @@ def launcher_reads_not_held(
                 for part in str(record.get("emulator", "")).split(",")
                 for key in LauncherLayer._profiles_named(part.strip(), profiles, every_profile)
             })
+            if not readers:
+                # RetroDECK names its frontend and the core option names the core.
+                readers = setting_readers(
+                    str(record.get("passes_to") or ""), profiles, every_profile
+                )
             if emulator and emulator not in readers:
                 continue
             folds = bool(record.get("case_insensitive") or config.get("case_insensitive_fs"))
@@ -1187,12 +1200,26 @@ def launcher_reads_not_held(
             if record.get("kind") == "copies" and not launcher_directories(record, base):
                 continue
             passes_to = str(record.get("passes_to") or "")
-            if passes_to and any(
-                set_by(entry, passes_to) and holder._entry_held(entry)
+            setting_entries = [
+                entry
                 for key in readers
                 for entry in profiles[key].get("files") or []
-            ):
+                if passes_to and set_by(entry, passes_to)
+            ]
+            if any(holder._entry_held(entry) for entry in setting_entries):
                 continue
+            # A placeholder read from the setting takes the held dump the
+            # catalogues name after the model the launcher's name spells.
+            by_model = {
+                name
+                for name in names
+                for entry in setting_entries
+                if "<" in str(entry.get("name", ""))
+                and any(
+                    name_match_size_ok(entry, record_.get("size"))
+                    for record_ in catalogued_model_files(name, db)
+                )
+            }
             if record.get("kind") == "names_searched" and any(
                 (found := holder.held(name)) and (found[1] or folds) for name in names
             ):
@@ -1216,7 +1243,7 @@ def launcher_reads_not_held(
             }
             for name in names:
                 found = holder.held(name)
-                if found and (found[1] or folds):
+                if found and (found[1] or folds) or name in by_model:
                     continue
                 key = name.casefold() if folds else name
                 row = by_key.get(key)
