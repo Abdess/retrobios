@@ -398,6 +398,11 @@
             "items": {"type": "string"},
             "description": "Platforms (registry keys) whose launcher points the emulator at other files, so this entry is never opened there."
           },
+          "systems": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "The systems whose games the tree serves, when fewer than the profile's: an install for some systems keeps the tree only with one of them."
+          },
           "load_from": {
             "description": "Where the emulator reads the tree when not below the system directory, keyed by build when the builds differ (content_dir: beside the content). A platform pack carries only a tree read from the system directory.",
             "oneOf": [

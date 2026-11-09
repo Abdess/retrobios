@@ -6,7 +6,7 @@
   "platform": "emuelec",
   "display_name": "EmuELEC",
   "version": "4.8",
-  "generated": "2026-11-09T08:00:53Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "",
   "detect": [
     {
@@ -20,11 +20,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5302,
-  "total_size": 4142921037,
-  "pack_files": 9174,
-  "pack_size": 4257089452,
-  "total_omitted": 214,
+  "total_files": 5296,
+  "total_size": 4141346689,
+  "pack_files": 9168,
+  "pack_size": 4255515104,
+  "total_omitted": 198,
   "omitted_files": [
     {
       "dest": "FB Alpha 2012/hiscore.dat",
@@ -775,8 +775,28 @@
       ]
     },
     {
+      "dest": "bios/blizzard-ppc-68040-v44.71.rom",
+      "name": "blizzard-ppc-68040-v44.71.rom",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
       "dest": "bios/blizzard-ppc-68060-v44.69.rom",
       "name": "blizzard-ppc-68060-v44.69.rom",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "bios/blizzard-ppc-68060-v44.71.rom",
+      "name": "blizzard-ppc-68060-v44.71.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -815,8 +835,28 @@
       ]
     },
     {
+      "dest": "bios/cyberstorm-mk-iii-v44.71.rom",
+      "name": "cyberstorm-mk-iii-v44.71.rom",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
       "dest": "bios/cyberstorm-ppc-v44.69.rom",
       "name": "cyberstorm-ppc-v44.69.rom",
+      "system": "commodore-amiga",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "bios/cyberstorm-ppc-v44.71.rom",
+      "name": "cyberstorm-ppc-v44.71.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -1753,6 +1793,16 @@
       ]
     },
     {
+      "dest": "bios/keropi/cgrom.tmp",
+      "name": "cgrom.tmp",
+      "system": "sharp-x68000",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "px68k"
+      ]
+    },
+    {
       "dest": "bios/lar1_hod.lvl",
       "name": "lar1_hod.lvl",
       "system": "heart-of-darkness",
@@ -1924,6 +1974,16 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "bios/sigil_shreds.wad",
       "name": "sigil_shreds.wad",
       "system": "doom",
@@ -2009,226 +2069,6 @@
         "gzdoom"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "bios/whdboot/Libs/68040.library",
-      "name": "68040.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/680x0.library",
-      "name": "680x0.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkCBR0.library",
-      "name": "Compressors/xpkCBR0.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkDLTA.library",
-      "name": "Compressors/xpkDLTA.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkDUKE.library",
-      "name": "Compressors/xpkDUKE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkFAST.library",
-      "name": "Compressors/xpkFAST.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkFRLE.library",
-      "name": "Compressors/xpkFRLE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkHFMN.library",
-      "name": "Compressors/xpkHFMN.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkHUFF.library",
-      "name": "Compressors/xpkHUFF.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkIMPL.library",
-      "name": "Compressors/xpkIMPL.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkMASH.library",
-      "name": "Compressors/xpkMASH.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkNONE.library",
-      "name": "Compressors/xpkNONE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkNUKE.library",
-      "name": "Compressors/xpkNUKE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkRAKE.library",
-      "name": "Compressors/xpkRAKE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkRLEN.library",
-      "name": "Compressors/xpkRLEN.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkSHRI.library",
-      "name": "Compressors/xpkSHRI.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkSMPL.library",
-      "name": "Compressors/xpkSMPL.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/Compressors/xpkSQSH.library",
-      "name": "Compressors/xpkSQSH.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/explode.library",
-      "name": "explode.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/medplayer.library",
-      "name": "medplayer.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/mmu.library",
-      "name": "mmu.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/whdboot/Libs/xpkmaster.library",
-      "name": "xpkmaster.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
     },
     {
       "dest": "ports/VVVVVV/data.zip",
@@ -2364,10 +2204,6 @@
     }
   ],
   "core_names": {
-    "2048": [],
-    "81": [],
-    "a5200": [],
-    "abuse": [],
     "advancemame": [
       "AdvanceMame",
       "advmame"
@@ -2378,17 +2214,12 @@
     "ares": [
       "ares-sa"
     ],
-    "atari800": [],
     "beetle_gba": [
       "mednafen_gba"
     ],
     "beetle_lynx": [
       "beetle-lynx",
       "mednafen_lynx"
-    ],
-    "beetle_ngp": [
-      "beetle-ngp",
-      "mednafen_ngp"
     ],
     "beetle_pce": [
       "beetle-pce",
@@ -2409,23 +2240,9 @@
       "beetle-saturn",
       "mednafen_saturn"
     ],
-    "beetle_vb": [
-      "beetle-vb",
-      "mednafen_vb",
-      "vb"
-    ],
-    "beetle_wswan": [
-      "beetle-wswan",
-      "mednafen_wswan"
-    ],
-    "bennugd-monolithic": [
-      "bgdi"
-    ],
     "bermuda": [
       "bs"
     ],
-    "bk": [],
-    "bluemsx": [],
     "bsnes-jg": [
       "bsnes_jg"
     ],
@@ -2443,15 +2260,6 @@
       "bsnes_mercury_balanced",
       "bsnes_mercury_performance"
     ],
-    "bstone": [],
-    "cannonball": [],
-    "cap32": [
-      "caprice32"
-    ],
-    "ccleste": [],
-    "cdogs": [
-      "cdogs-sdl"
-    ],
     "cgenius": [
       "CGeniusExe"
     ],
@@ -2461,14 +2269,9 @@
     "daedalusx64": [
       "daedalusx64-sa"
     ],
-    "daphne": [
-      "km_daphne_xtreme"
-    ],
     "darkplaces": [
       "darkplaces-quake"
     ],
-    "devilutionx": [],
-    "dinothawr": [],
     "dolphin": [
       "dolphin-gui",
       "dolphin-qt-gc",
@@ -2477,11 +2280,6 @@
       "dolphin-sa-gc",
       "dolphin-sa-wii"
     ],
-    "dosbox-sdl2": [
-      "DOSBOXSDL2"
-    ],
-    "dosbox_pure": [],
-    "dosbox_svn": [],
     "doublecherrygb": [
       "DoubleCherryGB"
     ],
@@ -2489,18 +2287,9 @@
       "Duckstation",
       "duckstation-sa"
     ],
-    "easyrpg": [],
-    "ecwolf": [
-      "ECWolf"
-    ],
-    "eduke32": [],
-    "fake08": [
-      "fake_08"
-    ],
     "fallout1-ce": [
       "fallout-ce"
     ],
-    "fallout2-ce": [],
     "fbalpha2012": [
       "fbalpha"
     ],
@@ -2510,9 +2299,6 @@
       "fbneo_plus",
       "km_fbneo_xtreme_amped"
     ],
-    "fceumm": [],
-    "fceumm_mod": [],
-    "fheroes2": [],
     "flycast": [
       "flycast-dev",
       "flycast-next",
@@ -2530,17 +2316,13 @@
     "flycast2021": [
       "flycast-xtreme"
     ],
-    "fmsx": [],
     "fpse-ng": [
       "fpse64",
       "fpseng"
     ],
-    "freeintv": [],
-    "freej2me": [],
     "fuse": [
       "fuse_libretro"
     ],
-    "gambatte": [],
     "gba-emu": [
       "GBA-EMU",
       "GBA.emu"
@@ -2549,11 +2331,6 @@
       "GBC-EMU",
       "GBC.emu"
     ],
-    "gearboy": [],
-    "gearcoleco": [],
-    "geargrafx": [],
-    "gearlynx": [],
-    "gearsystem": [],
     "genesis_plus_gx": [
       "genesis-plus-gx",
       "genesis_plus_gx_cart_special",
@@ -2568,7 +2345,6 @@
       "genesisplusgx-wide",
       "genesisplusgxwide"
     ],
-    "geolith": [],
     "gopher64": [
       "gopher64-sa"
     ],
@@ -2576,22 +2352,15 @@
       "gpsp_ezode_mod",
       "gpsp_plus"
     ],
-    "gw": [
-      "gw_libretro"
-    ],
     "gzdoom": [
       "GZDoom",
       "gzdoom-sa"
     ],
-    "handy": [],
     "hatari": [
       "HATARISA",
       "hatari-fast",
       "hatarisa"
     ],
-    "hcl": [],
-    "hode": [],
-    "hurrican": [],
     "hypseus-singe": [
       "HYPSEUS",
       "hypseus",
@@ -2601,8 +2370,6 @@
       "diii4a",
       "idtech4amm"
     ],
-    "ikemen": [],
-    "jzintv": [],
     "lexaloffle": [
       "Pico-8",
       "float-scaled",
@@ -2663,10 +2430,6 @@
       "beetle_pce_fast",
       "pce_fast"
     ],
-    "mednafen_supafaust": [
-      "beetle_supafaust",
-      "supafaust"
-    ],
     "mednafen_supergrafx": [
       "beetle-supergrafx",
       "beetle_supergrafx"
@@ -2685,7 +2448,6 @@
       "mgba_rumble",
       "msgb"
     ],
-    "mrboom": [],
     "msx-emu": [
       "MSX-EMU",
       "MSX.emu"
@@ -2725,7 +2487,6 @@
     "nekop2": [
       "meowpc98"
     ],
-    "neocd": [],
     "nes-emu": [
       "NES-EMU",
       "NES.emu"
@@ -2734,24 +2495,11 @@
       "NESOID",
       "Nesoid"
     ],
-    "nestopia": [],
-    "np2kai": [],
     "nxengine": [
       "nx"
     ],
     "o2em": [
       "o2em_libretro"
-    ],
-    "openbor": [
-      "OPENBOR",
-      "openbor v7530 - standalone",
-      "openbor4432",
-      "openbor6330",
-      "openbor6412",
-      "openbor6510",
-      "openbor7142",
-      "openbor7530",
-      "openbor_standalone_plus"
     ],
     "openjazz": [
       "OpenJazz"
@@ -2762,7 +2510,6 @@
     "opentyrian": [
       "tyrian"
     ],
-    "opera": [],
     "parallel-launcher": [
       "ca.parallel_launcher.ParallelLauncher"
     ],
@@ -2788,7 +2535,6 @@
       "pcsx-rearmed",
       "pcsx_standalone"
     ],
-    "picodrive": [],
     "pizza-boy-gba": [
       "PIZZA-BOY-GBA",
       "Pizza Boy GBA"
@@ -2803,20 +2549,9 @@
       "it.dbtecno.pizzaboyscbasic",
       "it.dbtecno.pizzaboyscpro"
     ],
-    "pocketcdg": [],
-    "pokemini": [],
-    "potator": [],
-    "ppsspp": [
-      "PPSSPPSDL",
-      "ppsspp-sa"
-    ],
-    "prboom": [],
-    "prosystem": [],
     "puae": [
       "uae"
     ],
-    "puae2021": [],
-    "px68k": [],
     "px68k-sdl": [
       "px68k"
     ],
@@ -2824,7 +2559,6 @@
       "REAL3DOPLAYER",
       "Real3DOPlayer"
     ],
-    "reminiscence": [],
     "rigelengine": [
       "RigelEngine"
     ],
@@ -2833,21 +2567,14 @@
       "com.github.Rosalie241.RMG",
       "mupen64"
     ],
-    "same_cdi": [],
-    "sameboy": [],
-    "sameduck": [],
     "saturn-emu": [
       "SATURN-EMU",
       "Saturn.emu",
       "saturnemu"
     ],
-    "scummvm": [],
     "scummvm-standalone": [
       "SCUMMVMSA",
       "scummvm-sa"
-    ],
-    "sdlpop": [
-      "prince"
     ],
     "simple64": [
       "io.github.simple64.simple64",
@@ -2869,12 +2596,6 @@
       "Snes9x EX+",
       "Snes9xEXPlus"
     ],
-    "snes9x2002": [],
-    "snes9x2005_plus": [],
-    "snes9x2010": [],
-    "solarus": [
-      "Solarus"
-    ],
     "sonic-mania": [
       "sonicmania"
     ],
@@ -2887,33 +2608,21 @@
     "stella": [
       "STELLASA"
     ],
-    "supermariowar": [
-      "smw"
-    ],
-    "supertux": [
-      "supertux2"
-    ],
-    "supertuxkart": [],
-    "swanstation": [],
     "tgbdual": [
       "TGB Dual"
     ],
-    "tic80": [],
-    "tyrquake": [],
     "uae4all-rpi": [
       "uae4all"
     ],
     "uae4arm": [
       "uae4arm_32b"
     ],
-    "uzem": [],
     "vba_next": [
       "vba-next"
     ],
     "vbam": [
       "vba-m"
     ],
-    "vecx": [],
     "vice_x128": [
       "x128"
     ],
@@ -2923,13 +2632,9 @@
     "vice_x64sc": [
       "x64sx"
     ],
-    "vice_xplus4": [
-      "xplus4"
-    ],
     "vice_xvic": [
       "xvic"
     ],
-    "virtualjaguar": [],
     "vvvvvv": [
       "VVVVVV"
     ],
@@ -2948,7 +2653,6 @@
       "XM6TYPEG",
       "XM6TYPEG-WINDOWS"
     ],
-    "xrick": [],
     "yabasanshiro": [
       "yabasanshiro-2",
       "yabasanshiro-libretro",
@@ -3021,8 +2725,7 @@
       "mame4droid-2024",
       "mamearcade",
       "same_cdi",
-      "ume2015",
-      "zcdi"
+      "ume2015"
     ],
     "coleco-colecovision": [
       "ares",
@@ -3128,7 +2831,6 @@
       "mupen64plus-ae",
       "mupen64plus-libretro",
       "mupen64plus_next",
-      "n64emu",
       "parallel-launcher",
       "parallel_n64",
       "project64",
@@ -3137,6 +2839,7 @@
       "sixtyforce"
     ],
     "nintendo-fds": [
+      "ares",
       "fbneo",
       "fceumm",
       "fceumm_mod",
@@ -3152,6 +2855,7 @@
       "rustynes"
     ],
     "nintendo-gb": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -3175,6 +2879,7 @@
       "vbam"
     ],
     "nintendo-gba": [
+      "ares",
       "beetle_gba",
       "bizhawk",
       "fbneo",
@@ -3198,6 +2903,7 @@
       "vbam"
     ],
     "nintendo-gbc": [
+      "ares",
       "bizhawk",
       "boytacean",
       "doublecherrygb",
@@ -3274,7 +2980,6 @@
       "flycast-dojo",
       "flycast2021",
       "flycast2021le",
-      "parallel_dc",
       "redream",
       "reicast",
       "retrodream"
@@ -3302,6 +3007,7 @@
       "bizhawk",
       "blastem",
       "clk",
+      "emux_sms",
       "gearsystem",
       "genesis_plus_gx",
       "genesis_plus_gx_expanded",
@@ -27402,48 +27108,6 @@
       ]
     },
     {
-      "dest": "bios/SGB1.sfc",
-      "sha1": "6ed55c4368333b57f6a2f8bbd70ccd87ed48058e",
-      "sha256": "bba9c269273bedb9b38bd5eb23bfaa6e509b8decc7cb80bb5513905af04f4ceb",
-      "size": 262144,
-      "repo_path": "bios/Nintendo/SNES/SNES_SGB_(JU).sfc",
-      "cores": [
-        "gearboy"
-      ],
-      "systems": [
-        "nintendo-gb",
-        "nintendo-gbc",
-        "nintendo-satellaview"
-      ],
-      "alternatives": [
-        {
-          "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
-          "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
-          "size": 262144,
-          "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
-          "cores": [
-            "mesen-s"
-          ]
-        }
-      ]
-    },
-    {
-      "dest": "bios/SGB2.sfc",
-      "sha1": "e5b2922ca137051059e4269b236d07a22c07bc84",
-      "sha256": "c172498a23d1176672931bab33b629c7d28f914a43dca9e540b8af1b37ccf2c6",
-      "size": 524288,
-      "repo_path": "bios/Nintendo/Super Game Boy/SGB2.sfc/program.rom",
-      "cores": [
-        "gearboy",
-        "mesen-s"
-      ],
-      "systems": [
-        "nintendo-gb",
-        "nintendo-gbc",
-        "nintendo-satellaview"
-      ]
-    },
-    {
       "dest": "bios/colecovision.rom",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "sha256": "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad",
@@ -44568,53 +44232,25 @@
       ]
     },
     {
-      "dest": "bios/atarisy1.zip",
-      "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
-      "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
-      "size": 57375,
-      "repo_path": "bios/Arcade/MAME/atarisy1.zip",
+      "dest": "bios/hng64.zip",
+      "sha1": "98b92ece93d3e160c446a56ac859a8311333e36c",
+      "sha256": "6c5a6332a6dc48832e505a8ed2ed9946753ed2d7dc96a7b40e5efd2bb720de4e",
+      "size": 41210,
+      "repo_path": "bios/Arcade/Arcade/hng64.zip",
       "cores": [
-        "fbneo"
+        "advancemame"
       ],
       "alternatives": [
         {
-          "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
-          "sha256": "1cf61e6b54589ed9bf2b5f319c2b56de205384d6726b7a0fae79213071f3cfb5",
-          "size": 49385,
-          "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
+          "sha1": "fb0c36d69f66f4b10a895aa708ae37f826755257",
+          "sha256": "f10a8a309f0547cc09cb5aec92d740ca7ad35db4aa6bb50b5241743851a51f69",
+          "size": 41592,
+          "repo_path": "bios/Arcade/MAME/hng64.zip",
           "cores": [
-            "advancemame"
-          ]
-        },
-        {
-          "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
-          "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
-          "size": 57375,
-          "repo_path": "bios/Arcade/MAME/atarisy1.zip",
-          "cores": [
-            "mame"
-          ]
-        },
-        {
-          "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
-          "sha256": "1cf61e6b54589ed9bf2b5f319c2b56de205384d6726b7a0fae79213071f3cfb5",
-          "size": 49385,
-          "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
-          "cores": [
+            "mame",
             "mame2010"
           ]
         }
-      ]
-    },
-    {
-      "dest": "bios/cedmag.zip",
-      "sha1": "66ac875b32dc9bf03b1eeb500ff4651279386951",
-      "sha256": "11e3489f372949d5c95c976336d8490d399bbec8afe872bc61788ed38522b446",
-      "size": 1264,
-      "repo_path": "bios/Arcade/Arcade/cedmag.zip",
-      "cores": [
-        "advancemame",
-        "mame"
       ]
     },
     {
@@ -44828,58 +44464,6 @@
       "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
       "cores": [
         "amiberry"
-      ]
-    },
-    {
-      "dest": "bios/cyberstorm-mk-iii-v44.71.rom",
-      "sha1": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
-      "sha256": "af53c1e327d88a075da9d9aeca6823b61b42e47b76eb5b0cc5a14e37812d61e9",
-      "size": 131072,
-      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.71.rom",
-      "cores": [
-        "amiberry"
-      ],
-      "systems": [
-        "commodore-amiga"
-      ]
-    },
-    {
-      "dest": "bios/cyberstorm-ppc-v44.71.rom",
-      "sha1": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
-      "sha256": "b6bda28c52cd2766731a3f475d092e2bddcdd240582f995b055abfff9046cdb3",
-      "size": 131072,
-      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.71.rom",
-      "cores": [
-        "amiberry"
-      ],
-      "systems": [
-        "commodore-amiga"
-      ]
-    },
-    {
-      "dest": "bios/blizzard-ppc-68040-v44.71.rom",
-      "sha1": "25d2cc5bf44997b04870187720f8411c4b60f7d7",
-      "sha256": "fa69d6a67ac949c1cb2482aeff80f8eb73e641bd4244622fe6b2184a55505fbb",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68040-v44.71.rom",
-      "cores": [
-        "amiberry"
-      ],
-      "systems": [
-        "commodore-amiga"
-      ]
-    },
-    {
-      "dest": "bios/blizzard-ppc-68060-v44.71.rom",
-      "sha1": "d206ada7edb18664fbead3e38dd6232297df20b1",
-      "sha256": "d1f6b42898834f9e0c44c994f67be6d43a5ec00f8bfa881bfeb38fcc4d0ab3ae",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68060-v44.71.rom",
-      "cores": [
-        "amiberry"
-      ],
-      "systems": [
-        "commodore-amiga"
       ]
     },
     {
@@ -46485,8 +46069,7 @@
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
-        "duckstation",
-        "swanstation"
+        "duckstation"
       ],
       "systems": [
         "sony-playstation"
@@ -48772,17 +48355,6 @@
       ]
     },
     {
-      "dest": "bios/hng64.zip",
-      "sha1": "fb0c36d69f66f4b10a895aa708ae37f826755257",
-      "sha256": "f10a8a309f0547cc09cb5aec92d740ca7ad35db4aa6bb50b5241743851a51f69",
-      "size": 41592,
-      "repo_path": "bios/Arcade/MAME/hng64.zip",
-      "cores": [
-        "mame",
-        "mame2010"
-      ]
-    },
-    {
       "dest": "bios/alg_bios.zip",
       "sha1": "1344452b4b29aacc9fdffc83f5cd14c028e32cc7",
       "sha256": "adc925cdd66a25b4168d7a6569bc7feed97f7a6ecc79df0a246f3fc34f072de0",
@@ -48797,6 +48369,28 @@
           "sha256": "c0c48b9718bffac3ce64dc5e393306c4571d6a148c34249f70ffe9282996b804",
           "size": 143125,
           "repo_path": "bios/Arcade/Arcade/alg_bios.zip",
+          "cores": [
+            "mame2010"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "bios/atarisy1.zip",
+      "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
+      "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
+      "size": 57375,
+      "repo_path": "bios/Arcade/MAME/atarisy1.zip",
+      "cores": [
+        "fbneo",
+        "mame"
+      ],
+      "alternatives": [
+        {
+          "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
+          "sha256": "1cf61e6b54589ed9bf2b5f319c2b56de205384d6726b7a0fae79213071f3cfb5",
+          "size": 49385,
+          "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
           "cores": [
             "mame2010"
           ]
@@ -48889,6 +48483,16 @@
       "sha256": "ccce3930a34753dc4452cba6a66dd7c6d8916902851fcc31b266afd7cd09c7fa",
       "size": 49667,
       "repo_path": "bios/Arcade/Arcade/nichidvd.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "bios/cedmag.zip",
+      "sha1": "66ac875b32dc9bf03b1eeb500ff4651279386951",
+      "sha256": "11e3489f372949d5c95c976336d8490d399bbec8afe872bc61788ed38522b446",
+      "size": 1264,
+      "repo_path": "bios/Arcade/Arcade/cedmag.zip",
       "cores": [
         "mame"
       ]
@@ -59776,8 +59380,7 @@
       "size": 6936,
       "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
       "cores": [
-        "mame",
-        "mame2003_plus"
+        "mame"
       ]
     },
     {
@@ -64457,6 +64060,36 @@
       ]
     },
     {
+      "dest": "bios/SGB1.sfc",
+      "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
+      "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
+      "cores": [
+        "mesen-s"
+      ],
+      "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-satellaview"
+      ]
+    },
+    {
+      "dest": "bios/SGB2.sfc",
+      "sha1": "e5b2922ca137051059e4269b236d07a22c07bc84",
+      "sha256": "c172498a23d1176672931bab33b629c7d28f914a43dca9e540b8af1b37ccf2c6",
+      "size": 524288,
+      "repo_path": "bios/Nintendo/Super Game Boy/SGB2.sfc/program.rom",
+      "cores": [
+        "mesen-s"
+      ],
+      "systems": [
+        "nintendo-gb",
+        "nintendo-gbc",
+        "nintendo-satellaview"
+      ]
+    },
+    {
       "dest": "bios/64DD_IPL_JP.n64",
       "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
@@ -66347,16 +65980,6 @@
       "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
       "size": 131904,
       "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
-      "dest": "bios/sfiii2a.zip",
-      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
-      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
-      "size": 131623,
-      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
       "cores": [
         "fbneo"
       ]
@@ -68834,16 +68457,6 @@
       ]
     },
     {
-      "dest": "bios/fbneo/sfiii2a.zip",
-      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
-      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
-      "size": 131623,
-      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
       "dest": "bios/fbneo/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -69071,15 +68684,9 @@
       "url": "https://buildbot.libretro.com/assets/system/blueMSX.zip",
       "type": "zip",
       "systems": [
-        "msx",
-        "msx2",
-        "msx2plus",
-        "msxturboR",
-        "colecovision",
-        "sega-sg1000",
-        "sega-sc3000",
-        "sega-sf7000",
-        "spectravideo"
+        "microsoft-msx",
+        "coleco-colecovision",
+        "sc-3000"
       ],
       "files": {
         "Machines/MSX - Canon V-10/config.ini": {
@@ -70343,32 +69950,7 @@
       "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
       "type": "zip",
       "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
+        "nec-pc-engine"
       ],
       "files": {
         "README.md": {
@@ -84076,34 +83658,7 @@
       "dest": "bios/fbneo",
       "url": "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip",
       "type": "zip",
-      "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
-      ],
+      "systems": [],
       "files": {
         "samples/seawolf.zip": {
           "sha1": "1a27515c480192b7337f720ece2c159264dd4804",
@@ -84315,7 +83870,7 @@
       "url": "https://github.com/libretro/FreeIntv/raw/master/Assets/Overlays.zip",
       "type": "zip",
       "systems": [
-        "intellivision"
+        "mattel-intellivision"
       ],
       "files": {
         "B-17 Bomber (USA, Europe).png": {

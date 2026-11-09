@@ -6,7 +6,7 @@
   "platform": "minui",
   "display_name": "MinUI",
   "version": "2025-11-27",
-  "generated": "2026-11-06T07:21:27Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "",
   "detect": [
     {
@@ -24,16 +24,6 @@
   "total_omitted": 0,
   "omitted_files": [],
   "core_names": {
-    "beetle_vb": [
-      "beetle-vb",
-      "mednafen_vb",
-      "vb"
-    ],
-    "fake08": [
-      "fake_08"
-    ],
-    "fceumm": [],
-    "gambatte": [],
     "gpsp": [
       "gpsp_ezode_mod",
       "gpsp_plus"
@@ -42,10 +32,6 @@
       "beetle-pce-fast",
       "beetle_pce_fast",
       "pce_fast"
-    ],
-    "mednafen_supafaust": [
-      "beetle_supafaust",
-      "supafaust"
     ],
     "mgba": [
       "mgba_fork",
@@ -58,11 +44,7 @@
       "pcsx_rearmed_interpreter",
       "pcsx_rearmed_neon",
       "pcsx_rearmed_rumble"
-    ],
-    "picodrive": [],
-    "pokemini": [],
-    "race": [],
-    "snes9x2005_plus": []
+    ]
   },
   "system_cores": {},
   "system_names": {},

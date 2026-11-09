@@ -3560,6 +3560,25 @@ SYSTEM_ALIASES: dict[str, str] = {
     "snesmsu": "nintendo-snes",
     "megadrivemsu": "sega-megadrive",
     "sgb-msu1": "nintendo-sgb",
+    # Spellings profiles gave a machine the others call by another id:
+    # ares's own system names, dgen and picodrive's sega-genesis beside
+    # sega-megadrive, fbneo's sinclair-spectrum and snk-neogeo-pocket,
+    # emux_sms's sms. muOS names its GBA folder gameboyadvance first, the
+    # folder resolved to ares's game-boy-advance, and an unrecognised GBA
+    # game got no file of the nintendo-gba list.
+    "famicom": "nintendo-nes",
+    "famicom-disk-system": "nintendo-fds",
+    "super-famicom": "nintendo-snes",
+    "game-boy-advance": "nintendo-gba",
+    "neo-geo-pocket": "snk-ngp",
+    "snk-neogeo-pocket": "snk-ngp",
+    "neo-geo-pocket-color": "snk-ngpc",
+    "wonderswan": "bandai-wswan",
+    "wonderswan-color": "bandai-wswanc",
+    "sega-genesis": "sega-megadrive",
+    "genesis": "sega-megadrive",
+    "sinclair-spectrum": "sinclair-zx-spectrum",
+    "sms": "sega-mastersystem",
 }
 
 

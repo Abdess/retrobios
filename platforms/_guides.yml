@@ -511,7 +511,7 @@ guides:
     logo_licence: repository licence GPL-3.0
   romm:
     summary: >-
-      A game library on a self-hosted server. It plays games in the web browser.
+      A self-hosted game library that plays games in the web browser.
     folders:
     - where: In the RomM library
       path: '`bios/`, one subfolder per platform'

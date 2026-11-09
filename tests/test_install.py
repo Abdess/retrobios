@@ -4410,9 +4410,16 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
         dirs = manifest.get("data_directories") or []
         files = sum(len(d["files"]) for d in dirs)
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import generate_pack
+
+        written = generate_pack.PACK_DOCUMENTS + generate_pack.pack_markers(
+            "retroarch", None, str(REPO_ROOT / "platforms"))
+        self.assertEqual(written, ("README.txt", "manifest.json", ".nomedia"))
         self.assertEqual(
-            manifest["pack_files"] - manifest["total_files"] - files,
-            2, "the pack's two documents are the only files the installer lacks",
+            manifest["pack_files"] - manifest["total_files"] - files, len(written),
+            "the pack's two documents and its .nomedia are the only files the "
+            "installer lacks",
         )
 
 
@@ -4896,9 +4903,13 @@ class TheBoardSystemsAreNamedFromTheCode(unittest.TestCase):
 
 
 class TheInstallerFitsTheOneLiners(unittest.TestCase):
-    """install.sh and install.ps1 refuse an installer over 2 MiB, and
-    install.py grew from 596 KB to 1.1 MB in twelve days with nothing
-    holding it under that: past it, every one-line install would stop."""
+    """install.sh and install.ps1 refuse an installer over their cap, 8 MiB:
+    the SHA-256 pin refuses any changed byte, and the cap only stops a page
+    served in its place. install.py grew from 596 KB to 1.1 MB in twelve
+    days: past REVIEW_BYTES its growth is looked at before it goes on."""
+
+    # The size past which install.py's growth is reviewed, well below the cap.
+    REVIEW_BYTES = 3 * 1024 ** 2
 
     def _caps(self) -> dict[str, int]:
         import re
@@ -4910,14 +4921,16 @@ class TheInstallerFitsTheOneLiners(unittest.TestCase):
         return {"install.sh": int(re.search(r"^MAX_INSTALLER_BYTES=(\d+)$", shell, re.M)[1]),
                 "install.ps1": int(number) * units[unit or ""]}
 
-    def test_a_quarter_of_each_cap_stays_free(self):
+    def test_both_one_liners_accept_the_same_size(self):
+        self.assertEqual(set(self._caps().values()), {8 * 1024 ** 2})
+
+    def test_install_py_stays_below_the_review_size(self):
         size = (REPO_ROOT / "install.py").stat().st_size
-        for script, cap in self._caps().items():
-            with self.subTest(script=script):
-                self.assertLessEqual(
-                    size, cap * 3 // 4,
-                    f"install.py is {size} bytes, past three quarters of the {cap} {script} "
-                    "accepts: shrink it or raise the cap in both one-liners")
+        self.assertLess(self.REVIEW_BYTES, min(self._caps().values()))
+        self.assertLess(
+            size, self.REVIEW_BYTES,
+            f"install.py is {size} bytes, past the {self.REVIEW_BYTES} that call for a "
+            "look at its growth: shrink it, or raise REVIEW_BYTES once reviewed")
 
     def test_the_refusal_names_a_cause_and_a_way_out(self):
         for script in ("install.sh", "install.ps1"):

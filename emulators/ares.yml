@@ -20,11 +20,11 @@ systems:
   - atari-5200
   - colecovision
   - myvision
-  - famicom
-  - famicom-disk-system
-  - game-boy
-  - game-boy-color
-  - game-boy-advance
+  - nintendo-nes
+  - nintendo-fds
+  - nintendo-gb
+  - nintendo-gbc
+  - nintendo-gba
   - master-system
   - game-gear
   - sg-1000
@@ -38,8 +38,8 @@ systems:
   - msx
   - msx2
   - neo-geo
-  - neo-geo-pocket
-  - neo-geo-pocket-color
+  - snk-ngp
+  - snk-ngpc
   - nintendo-64
   - nintendo-64dd
   - pc-engine
@@ -49,9 +49,9 @@ systems:
   - supergrafx-cd
   - sony-playstation
   - saturn
-  - super-famicom
-  - wonderswan
-  - wonderswan-color
+  - nintendo-snes
+  - bandai-wswan
+  - bandai-wswanc
   - pocket-challenge-v2
   - zx-spectrum
   - zx-spectrum-128
@@ -136,7 +136,7 @@ files:
 
   # --- Famicom Disk System ---
   - name: rp2c33-01.bin
-    system: famicom-disk-system
+    system: nintendo-fds
     required: true
     sha256: "fdc1a76e654feea993fcb38366e05ee5f4eb641f86fe6bebaeefd412e112dd72"
     validation: [sha256]
@@ -145,7 +145,7 @@ files:
 
   # --- Game Boy Advance ---
   - name: gba_bios.bin
-    system: game-boy-advance
+    system: nintendo-gba
     required: true
     sha256: "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570"
     validation: [sha256]
@@ -306,7 +306,7 @@ files:
 
   # --- Neo Geo Pocket ---
   - name: ngp_bios.rom
-    system: neo-geo-pocket
+    system: snk-ngp
     required: true
     sha256: "0293555b21c4fac516d25199df7809b26beeae150e1d4504a050db32264a6ad7"
     validation: [sha256]
@@ -316,7 +316,7 @@ files:
 
   # --- Neo Geo Pocket Color ---
   - name: ngpc_bios.rom
-    system: neo-geo-pocket-color
+    system: snk-ngpc
     required: true
     sha256: "8fb845a2f71514cec20728e2f0fecfade69444f8d50898b92c2259f1ba63e10d"
     validation: [sha256]
@@ -462,7 +462,7 @@ files:
 
   # --- SFC subsystem ROMs (loaded as game cartridges, not firmware) ---
   - name: SGB1.sfc
-    system: super-famicom
+    system: nintendo-snes
     required: false
     category: game_data
     description: "Super Game Boy cartridge ROM, opened as the Super Famicom game. The SGB1 boot ROM is embedded and appended when the image lacks it."
@@ -471,7 +471,7 @@ files:
     source_ref: "desktop-ui/emulator/super-famicom.cpp:179-187, mia/medium/super-famicom.cpp:42-62, mia/medium/super-famicom.cpp:88-95, mia/medium/super-famicom.cpp:891-895"
 
   - name: SGB2.sfc
-    system: super-famicom
+    system: nintendo-snes
     required: false
     category: game_data
     description: "Super Game Boy 2 cartridge ROM, opened as the Super Famicom game. The SGB2 boot ROM is embedded and appended when the image lacks it."
@@ -480,7 +480,7 @@ files:
     source_ref: "desktop-ui/emulator/super-famicom.cpp:179-187, mia/medium/super-famicom.cpp:42-62, mia/medium/super-famicom.cpp:88-95, mia/medium/super-famicom.cpp:590-592, mia/medium/super-famicom.cpp:891-895"
 
   - name: STBIOS.bin
-    system: super-famicom
+    system: nintendo-snes
     required: false
     category: game_data
     description: "Sufami Turbo base cartridge ROM, opened as the Super Famicom game. Its two slots then ask for Sufami Turbo cartridges."
@@ -489,7 +489,7 @@ files:
     source_ref: "desktop-ui/emulator/super-famicom.cpp:199-217, mia/medium/super-famicom.cpp:570-576"
 
   - name: BS-X.bin
-    system: super-famicom
+    system: nintendo-snes
     required: false
     category: game_data
     description: "Satellaview BS-X cartridge ROM, opened as the Super Famicom game. Its slot then asks for a BS Memory pack."

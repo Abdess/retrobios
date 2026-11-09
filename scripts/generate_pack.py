@@ -81,6 +81,7 @@ from common import (
     load_platform_config,
     without_profile_blind,
     MANUFACTURER_PREFIXES,
+    _norm_system_id,
     require_yaml,
     ProfileSelectionError,
     core_system_dirs,
@@ -417,6 +418,17 @@ def platform_list_version(config: dict, platform: str) -> str:
 
 # What the builder writes into a platform pack beside the files it carries.
 PACK_DOCUMENTS = ("README.txt", "manifest.json")
+
+
+def pack_markers(
+    platform_name: str, target_name: str | None, platforms_dir: str
+) -> tuple[str, ...]:
+    """The empty files a pack carries for the systems it is unzipped on,
+    as named before flattening: the .nomedia of a pack for Android."""
+    from common import list_available_targets
+
+    names = [t["name"] for t in list_available_targets(platform_name, platforms_dir)]
+    return (MEDIA_MARKER,) if lands_on_android(names, target_name) else ()
 
 
 def core_data_trees(
@@ -1495,6 +1507,10 @@ def generate_pack(
           ),
       )
       _write_generated_member(zf, "README.txt", readme_text)
+      for marker in pack_markers(platform_name, target_name, platforms_dir):
+          _write_generated_member(
+              zf, _flat(f"{base_dest}/{marker}" if base_dest else marker, base_dest, flatten), ""
+          )
 
     _report_pack_counts(
         zip_path, file_status, total_files, core_count, source,
@@ -5209,7 +5225,7 @@ def generate_manifest(
     data_sizes = pack_only_sizes + [os.path.getsize(src) for src, _dest in data_members]
     data_directories = _manifest_data_directories(
         data_members, data_refs, data_registry or {}, base_dest,
-        tree_readers(pack_systems, core_trees),
+        tree_readers(pack_systems, core_trees), pack_systems,
     )
 
     now = _build_timestamp(db)
@@ -5243,7 +5259,7 @@ def generate_manifest(
         "total_size": total_size,
         "pack_files": (
             len(manifest_files) + len(data_sizes) + len(PACK_DOCUMENTS)
-            + len(rename_notes)
+            + len(rename_notes) + len(pack_markers(platform_name, target_name, platforms_dir))
         ),
         "pack_size": total_size + sum(data_sizes),
         "total_omitted": len(omitted_by_destination),
@@ -5324,6 +5340,7 @@ def _manifest_data_directories(
     registry: dict,
     base_dest: str,
     readers: dict[str, list[str]] | None = None,
+    platform_systems: Iterable[str] | None = None,
 ) -> list[dict]:
     """Each data directory the pack carries, as the installer rebuilds it.
 
@@ -5334,6 +5351,11 @@ def _manifest_data_directories(
     changed since is refused rather than installed. archive_size is the
     size of the archive refresh_data_dirs last downloaded, what fetching
     the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
+    ``systems`` are the platform's ids (``platform_systems``) the tree's
+    systems normalize to, as a core extra's are: a tree no platform system
+    serves has none, and goes with the files of no system, as the pack
+    built with --system puts it in the part of its own. FBNeo's cheats
+    carried sega-megadrive where RetroArch's list says sega-mega-drive.
     ``optional`` marks a tree every core reading it runs without
     (``required: false``): install.py --required-only leaves it out, as the
     pack built with --required-only does. ``cores`` names the cores that
@@ -5342,8 +5364,13 @@ def _manifest_data_directories(
     """
     grouped: dict[tuple[str, str], dict] = {}
     versions: dict[str, dict[str, dict]] = {}
+    by_norm: dict[str, list[str]] = {}
+    for sys_id in sorted(platform_systems or ()):
+        by_norm.setdefault(_norm_system_id(sys_id), []).append(sys_id)
     for src, full in members:
         ref, systems, prefix, needed = refs[full]
+        if platform_systems is not None:
+            systems = tuple(own for sid in systems for own in by_norm.get(_norm_system_id(sid), ()))
         entry = registry.get(ref, {})
         key = (ref, prefix)
         group = grouped.get(key)
@@ -5826,6 +5853,8 @@ def verify_and_finalize_packs(
     return all_ok
 
 from packpaths import (  # noqa: E402,F401
+    MEDIA_MARKER,
+    lands_on_android,
     _archive_destination,
     _path_parents,
     _has_path_conflict,

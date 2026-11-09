@@ -175,11 +175,11 @@ how many files are missing, how much they weigh, how many are in place and how
 much space is free, before anything is written.
 
 The other choices sit one press away. **Choose systems** ticks the consoles to
-keep, with the total to download under the list. A long list opens on **None**:
-A or Enter there unticks every system, and A on a system then takes that one alone. A
-on a system (**Continue**) always opens the confirm screen, which counts the choice
-before **Install**: it never installs by itself. Back with nothing ticked keeps the ticks
-the list opened with. **Options** sets the
+keep, with the total to download under the list. It opens on its first system,
+every system ticked: A or Enter ticks or unticks the one in focus, and **All** and
+**None** (`a` and `n`) sit at the end of the list. B or Esc (**Done**) takes the
+choice back to the plan, which counts it before **Install**: the list never installs
+by itself, and Done with nothing ticked is refused. **Options** sets the
 preferred regions, game data, the installed cores only, the cores, the parallel
 downloads, the folder and, for a list with files read from the frontend's save
 directory, that directory. Each row names the option it sets, and **Show the
@@ -1467,6 +1467,15 @@ elsewhere. A custom BIOS directory is still named directly:
 python install.py --platform retroarch --dest /storage/emulated/0/RetroArch/system
 ```
 
+An install on Android leaves an empty `.nomedia` in the BIOS folder. Android's
+media scanner hides a folder holding one, and every folder below it
+(MediaProvider, `FileUtils.java` `isDirectoryHidden`), so the samples,
+overlays and videos of the BIOS folder stay out of the gallery and music
+apps. RetroArch writes none. A run that finds one already there leaves it,
+and `--check` and `--dry-run` write nothing. The RetroArch pack, unzipped on
+Android as on other systems, carries the same empty `.nomedia` beside
+`README.txt`. A pack built for a target other than Android does not.
+
 ## On a handheld { #on-a-handheld-the-retrobios-port }
 
 RetroBIOS also runs on the handheld itself, in the
@@ -2004,6 +2013,12 @@ because their systems keep case: NP2kai reads `np2kai/bios.rom` and
 opened from Windows, an exFAT card), one overwrites the other. The installer
 checks the folder first, keeps one file per name there and lists the ones it
 left out.
+
+FAT, exFAT and every Windows drive also refuse `< > : " | ? *` in a name
+(Linux `fs/fat/namei_vfat.c:201-207`, `fs/exfat/nls.c:396-403`). RetroDECK's
+list names three files with a colon, like `zxs:48.rom`. Before writing such a
+name, the installer creates one in the BIOS folder: on an ext4 card it goes
+in, on an exFAT card the installer leaves those files out and names them.
 
 ### Packs and their parts
 

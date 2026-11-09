@@ -14,7 +14,6 @@ cores:
   - dgen
 systems:
   - sega-megadrive
-  - sega-genesis
 
 notes: |
   Mega Drive emulator for SDL by Joe Groff and Phil K. Hornung, carried on by

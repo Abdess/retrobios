@@ -202,7 +202,8 @@ def _dumps(doc: object) -> bytes:
 
 
 def write_index(folder: Path, systems: dict | None = None, arcade: dict | None = None,
-                setup: dict | None = None, extra_sets: dict | None = None) -> None:
+                setup: dict | None = None, extra_sets: dict | None = None,
+                more_setups: dict | None = None) -> None:
     """install/games/ as the generator lays it out, every digest right."""
     rows = sorted({(dest, FILES[dest][0], "bios") for files, _o in SETS.values()
                    for dest in files})
@@ -213,7 +214,7 @@ def write_index(folder: Path, systems: dict | None = None, arcade: dict | None =
                                "optional": [position[d] for d in optional],
                                "bytes": 0, "required_bytes": 0}
                          for key, (files, optional) in sets.items()}}
-    docs = {"setups": {"retroarch": setup or SETUP}, "fallback": {"retroarch": fallback},
+    docs = {"setups": {"retroarch": setup or SETUP, **(more_setups or {})}, "fallback": {"retroarch": fallback},
             "systems": {key: {"format_version": 1, "system": key, **value}
                         for key, value in (systems or SYSTEMS).items()},
             "arcade": {"fbneo": {"profile": "fbneo", **(arcade or ARCADE)}}}
@@ -910,6 +911,34 @@ class CommandLine(unittest.TestCase):
         # Cached for the next run, offline.
         self.assertTrue((self.card.cache / "games" / "index.json").is_file())
         self.assertTrue((self.card.cache / install.GAMES_SCAN_FILE).is_file())
+
+
+class AMuosCardNamedByItsList(unittest.TestCase):
+    """The full screen passes --platform=retroarch for a muOS card, and the
+    run said no games folder was found beside MUOS/bios, where line mode,
+    which had detected the card, read ROMS/."""
+
+    def test_the_card_its_bios_folder_is_on_names_its_rom_folders(self):
+        card = Card()
+        self.addCleanup(card.close)
+        root = card.root / "MUOSCARD"
+        card.bios = root / "MUOS" / "bios"
+        card.bios.mkdir(parents=True)
+        game = root / "ROMS" / "MD" / "eu.md"
+        game.parent.mkdir(parents=True)
+        game.write_bytes(MD_EU)
+        muos = dict(SETUP, setup="muos", name="muOS",
+                    roms_root={"path": "/mnt/mmc/ROMS", "from_bios": "../../ROMS"})
+        # RetroArch's own setup names no rom folder (configuration.c).
+        retroarch = dict(SETUP, roms_root={"path": None, "from_bios": None})
+        write_index(card.lists / "games", setup=retroarch, more_setups={"muos": muos})
+        proc = run_cli(card, "--for-games", "--check", "--events")
+        events = [json.loads(line) for line in proc.stdout.splitlines()
+                  if line.startswith("{")]
+        self.assertEqual([e for e in events if e["event"] == "games_unavailable"], [])
+        games = next(e for e in events if e["event"] == "games")
+        self.assertEqual(games["folder"], str(root / "ROMS"))
+        self.assertEqual(games["games"], 1)
 
 
 class ARunThatAsksNothing(unittest.TestCase):

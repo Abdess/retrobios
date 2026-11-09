@@ -6,7 +6,7 @@
   "platform": "myminui",
   "display_name": "MyMinUI",
   "version": "2026-08-09",
-  "generated": "2026-11-09T08:00:53Z",
+  "generated": "2026-11-06T13:49:27Z",
   "base_destination": "",
   "detect": [
     {
@@ -17,11 +17,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 479,
-  "total_size": 1484645031,
-  "pack_files": 7425,
-  "pack_size": 1656295611,
-  "total_omitted": 4,
+  "total_files": 474,
+  "total_size": 1484111603,
+  "pack_files": 7420,
+  "pack_size": 1655762183,
+  "total_omitted": 6,
   "omitted_files": [
     {
       "dest": "Bios/DOOM/doomu.wad",
@@ -46,10 +46,30 @@
       "category": "game_data"
     },
     {
+      "dest": "Bios/FBN/sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "Bios/FBN/svgpcb.zip",
       "name": "svgpcb.zip",
       "system": "igs-pgm",
       "required": false,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "Bios/NG/sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
       "reason": "not_found",
       "cores": [
         "fbneo"
@@ -67,35 +87,15 @@
     }
   ],
   "core_names": {
-    "a5200": [],
-    "beetle_ngp": [
-      "beetle-ngp",
-      "mednafen_ngp"
-    ],
-    "beetle_vb": [
-      "beetle-vb",
-      "mednafen_vb",
-      "vb"
-    ],
-    "beetle_wswan": [
-      "beetle-wswan",
-      "mednafen_wswan"
-    ],
-    "dosbox_pure": [],
-    "fake08": [
-      "fake_08"
-    ],
     "fbneo": [
       "FBNEOSA",
       "fbneo_32b",
       "fbneo_plus",
       "km_fbneo_xtreme_amped"
     ],
-    "fceumm": [],
     "fuse": [
       "fuse_libretro"
     ],
-    "gambatte": [],
     "gpsp": [
       "gpsp_ezode_mod",
       "gpsp_plus"
@@ -109,31 +109,18 @@
       "beetle_pce_fast",
       "pce_fast"
     ],
-    "mednafen_supafaust": [
-      "beetle_supafaust",
-      "supafaust"
-    ],
     "mgba": [
       "mgba_fork",
       "mgba_rumble",
       "msgb"
     ],
-    "neocd": [],
     "pcsx_rearmed": [
       "pcsx_rearmed32",
       "pcsx_rearmed_32b",
       "pcsx_rearmed_interpreter",
       "pcsx_rearmed_neon",
       "pcsx_rearmed_rumble"
-    ],
-    "picodrive": [],
-    "pokemini": [],
-    "prboom": [],
-    "prosystem": [],
-    "puae2021": [],
-    "snes9x2005_plus": [],
-    "stella2014": [],
-    "tyrquake": []
+    ]
   },
   "system_cores": {},
   "system_names": {},
@@ -1420,16 +1407,6 @@
       "sha256": "6791156b4602e06a2649ebe3216b6ede0cedb2e17ba35a3c99105f6e25819320",
       "size": 9579,
       "repo_path": "bios/Arcade/Arcade/namcoc76.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/namcoc74.zip",
-      "sha1": "493acecff671496212f2de7d0b6ca6561f3b6d8a",
-      "sha256": "3dc2f39b09e05bead85321c46f91424bba5a574513c5e21c496560c0080b5f1d",
-      "size": 6936,
-      "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
       "cores": [
         "mame2003_plus"
       ]
@@ -3623,26 +3600,6 @@
       ]
     },
     {
-      "dest": "Bios/FBN/sfiii2a.zip",
-      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
-      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
-      "size": 131623,
-      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
-      "dest": "Bios/NG/sfiii2a.zip",
-      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
-      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
-      "size": 131623,
-      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
       "dest": "Bios/FBN/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -4463,16 +4420,6 @@
       ]
     },
     {
-      "dest": "Bios/FBN/fbneo/sfiii2a.zip",
-      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
-      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
-      "size": 131623,
-      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
       "dest": "Bios/FBN/fbneo/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -5073,16 +5020,6 @@
       ]
     },
     {
-      "dest": "Bios/NG/fbneo/sfiii2a.zip",
-      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
-      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
-      "size": 131623,
-      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
-      "cores": [
-        "fbneo"
-      ]
-    },
-    {
       "dest": "Bios/NG/fbneo/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -5309,34 +5246,7 @@
       "dest": "Bios/FBN/fbneo/cheats",
       "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
       "type": "zip",
-      "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
-      ],
+      "systems": [],
       "files": {
         "README.md": {
           "sha1": "b1ae986964da09a1c026867745f4681b09d4c69e",
@@ -19043,34 +18953,7 @@
       "dest": "Bios/NG/fbneo/cheats",
       "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
       "type": "zip",
-      "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
-      ],
+      "systems": [],
       "files": {
         "README.md": {
           "sha1": "b1ae986964da09a1c026867745f4681b09d4c69e",
@@ -32777,34 +32660,7 @@
       "dest": "Bios/FBN/fbneo",
       "url": "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip",
       "type": "zip",
-      "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
-      ],
+      "systems": [],
       "files": {
         "samples/seawolf.zip": {
           "sha1": "1a27515c480192b7337f720ece2c159264dd4804",
@@ -33015,34 +32871,7 @@
       "dest": "Bios/NG/fbneo",
       "url": "https://github.com/Abdess/retrobios/releases/download/large-files/fbneo-samples.zip",
       "type": "zip",
-      "systems": [
-        "snk-neogeo-mvs",
-        "snk-neogeo-aes",
-        "snk-neogeo-cd",
-        "snk-neogeo-pocket",
-        "capcom-cps3",
-        "igs-pgm",
-        "fairchild-channelf",
-        "coleco-colecovision",
-        "sinclair-spectrum",
-        "msx",
-        "nintendo-fds",
-        "super-kaneko-nova",
-        "deco-cassette",
-        "namco-na1",
-        "namco-nb1",
-        "sega-system16b",
-        "konami-bubsys",
-        "nmk16",
-        "midway-mcr",
-        "snes",
-        "taito-cchip",
-        "ym2608",
-        "arcade",
-        "nintendo-gba",
-        "atari-system1",
-        "bally-astrocade"
-      ],
+      "systems": [],
       "files": {
         "samples/seawolf.zip": {
           "sha1": "1a27515c480192b7337f720ece2c159264dd4804",

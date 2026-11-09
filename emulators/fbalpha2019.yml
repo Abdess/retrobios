@@ -30,7 +30,7 @@ systems:
   - super-kaneko-nova
   - midway-mcr
   - coleco-colecovision
-  - sinclair-spectrum
+  - sinclair-zx-spectrum
   - msx
   - nmk16
   - deco-cassette
@@ -334,7 +334,7 @@ files:
 
   - name: "spectrum.zip"
     category: bios_zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     description: "ZX Spectrum 48K ROM set"
     required: true
     note: "Archive name from SpectrumGetZipName, which drops the spec_ prefix of spec_spectrum."
@@ -346,7 +346,7 @@ files:
 
   - name: "spec128.zip"
     category: bios_zip
-    system: sinclair-spectrum
+    system: sinclair-zx-spectrum
     description: "ZX Spectrum 128 ROM set"
     required: true
     note: "Opened by the 128K games. Archive name from SpectrumGetZipName, which drops the spec_ prefix of spec_spec128."

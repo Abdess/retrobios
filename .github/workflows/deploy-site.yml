@@ -65,6 +65,7 @@ on:
       - "scripts/sitesources.py"
       - "scripts/sitesteps.py"
       - "scripts/sitestarlight.py"
+      - "scripts/sitesteps.py"
       - "scripts/sitewrite.py"
       - "scripts/slot.py"
       - "scripts/slots.py"
