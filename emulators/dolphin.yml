@@ -18,6 +18,10 @@ cores:
   - dolphin
   - "dolphin-gui"
   - "dolphin-sa"
+  - "dolphin-sa-gc"
+  - "dolphin-sa-wii"
+  - "dolphin-qt-gc"
+  - "dolphin-qt-wii"
 systems: [nintendo-gamecube, nintendo-wii, sega-triforce]
 data_root:
   android:

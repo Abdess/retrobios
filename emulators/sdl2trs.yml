@@ -14,6 +14,7 @@ display_name: "Tandy - TRS-80 (SDL2TRS)"
 cores:
   - sdl2trs
   - sdltrs
+  - "sdltrs-model1"
 systems:
   - trs80
 mode: standalone

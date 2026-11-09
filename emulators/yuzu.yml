@@ -15,6 +15,7 @@ version_basis:
 display_name: "Yuzu (Nintendo Switch)"
 cores:
   - yuzu
+  - "yuzu-sa"
 systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "15e6e48 (yuzu-emu-mirror, depth=1)"

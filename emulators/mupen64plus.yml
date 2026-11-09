@@ -18,6 +18,8 @@ cores:
   - "mupen64plus"
   - "mupen64plussa"
   - "mupen64plus-sa"
+  - "mupen64plus - standalone - glidemk2 - full"
+  - "mupen64plus-auto"
 systems:
   - nintendo-64
   - nintendo-64dd
