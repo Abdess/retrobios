@@ -1184,6 +1184,34 @@ class OuterRootsAreUntrusted(unittest.TestCase):
                 with self.subTest(field=field, value=value), self.assertRaises(ValueError):
                     install._check_emulators_directory({"emulators_directory": layout})
 
+    def test_a_drive_or_colon_segment_is_refused_on_either_host(self):
+        from pathlib import PureWindowsPath
+
+        bios = PureWindowsPath("C:/RetroBat/bios")
+        for host in ("posix", "nt"):
+            with unittest.mock.patch.object(install.os, "name", host):
+                for value in ("../C:x", "..\\x", "../x:", "../Roms:x"):
+                    with self.subTest(host=host, from_bios=value), self.assertRaises(ValueError):
+                        install._check_roms_directory(
+                            {"roms_directory": {**self.ROMS, "from_bios": value}})
+                for value in ("C:x/{key}", "x:/{key}", "emu:x/{key}"):
+                    layout = {**self.EMULATORS, "searched": [value], "default": value}
+                    with self.subTest(host=host, searched=value), self.assertRaises(ValueError):
+                        install._check_emulators_directory({"emulators_directory": layout})
+                for dest in ("bios/C:x.bin", "bios/x:", "a:b/c.bin"):
+                    with self.subTest(host=host, dest=dest), self.assertRaises(ValueError):
+                        install._safe_relative_path(dest, "dest")
+                with self.subTest(host=host), self.assertRaises(ValueError):
+                    install._safe_relative_path("pico8/x:y", "dest", colons=False)
+        # Each of these leaves the folder on Windows once joined.
+        self.assertEqual(PureWindowsPath(bios, "..", "D:x"), PureWindowsPath("D:x"))
+        self.assertEqual(PureWindowsPath("C:x").drive, "C:")
+        # RetroDECK's ares names are kept where the host is not Windows.
+        with unittest.mock.patch.object(install.os, "name", "posix"):
+            install._safe_relative_path("bios/snes:st018.data.rom", "dest")
+        with unittest.mock.patch.object(install.os, "name", "nt"), self.assertRaises(ValueError):
+            install._safe_relative_path("bios/snes:st018.data.rom", "dest")
+
     def test_an_emulator_folder_stays_below_the_platform_folder(self):
         with tempfile.TemporaryDirectory() as tmp:
             home = Path(tmp)

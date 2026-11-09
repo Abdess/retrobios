@@ -50,7 +50,7 @@ import weakref
 import xml.etree.ElementTree as ET
 import zipfile
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
-from pathlib import Path, PurePosixPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
 
 # Built as C extensions that a Python compiled without their libraries
@@ -3456,12 +3456,18 @@ def _read_limited_json(
         raise ValueError(f"invalid {label}: {exc}") from exc
 
 
-def _path_characters(value: object, field: str) -> str:
+def _path_characters(value: object, field: str, colons: bool = True) -> str:
     """The character rules every manifest-controlled relative path meets.
 
     No backslash, control character, empty segment, trailing slash or drive
     prefix, and at most 1024 characters: on Windows a backslash or a C:
-    segment leaves the folder the path is joined to.
+    segment leaves the folder the path is joined to. A segment that Windows
+    reads as a drive (C:x, any segment of one letter and a colon in front)
+    or that ends with a colon is refused wherever it stands, since a later
+    segment is joined as a drive-relative path. ``colons`` keeps a colon
+    inside a name: RetroDECK's ares reads bios/snes:st018.data.rom on Linux.
+    A Windows host refuses it all the same, as an alternate data stream of
+    the file before the colon.
     """
     if not isinstance(value, str) or not value or len(value) > 1024:
         raise ValueError(f"invalid {field}")
@@ -3476,12 +3482,20 @@ def _path_characters(value: object, field: str) -> str:
         # x<ESC>]0;PWN<BEL>.bin set the window title in the progress line,
         # and the file was written under that name.
         raise ValueError(f"unsafe {field}: {value!r}")
+    for part in value.split("/"):
+        if ":" not in part:
+            continue
+        if (
+            PureWindowsPath(part).drive or part.endswith(":")
+            or not colons or os.name == "nt"
+        ):
+            raise ValueError(f"unsafe {field}: {value!r}")
     return value
 
 
-def _safe_relative_path(value: object, field: str) -> PurePosixPath:
+def _safe_relative_path(value: object, field: str, colons: bool = True) -> PurePosixPath:
     """Validate a manifest-controlled relative POSIX path."""
-    path = PurePosixPath(_path_characters(value, field))
+    path = PurePosixPath(_path_characters(value, field, colons))
     if path.is_absolute() or any(part in ("", ".", "..") for part in path.parts):
         raise ValueError(f"unsafe {field}: {value!r}")
     return path
@@ -3502,7 +3516,7 @@ def _roms_relation(value: object, field: str) -> tuple[int, PurePosixPath]:
     """
     if value == ".":
         return 0, PurePosixPath()
-    path = PurePosixPath(_path_characters(value, field))
+    path = PurePosixPath(_path_characters(value, field, colons=False))
     parts = path.parts
     ups = next((i for i, part in enumerate(parts) if part != ".."), len(parts))
     names = parts[ups:]
@@ -3527,7 +3541,9 @@ def _roms_root(bios_path: Path, from_bios: str) -> Path | None:
     ancestor = bios_path if not ups else bios_path.parents[ups - 1]
     expected = ancestor.joinpath(*names.parts)
     joined = Path(os.path.normpath(bios_path.joinpath(*PurePosixPath(from_bios).parts)))
-    return expected if joined == Path(os.path.normpath(expected)) else None
+    if joined != Path(os.path.normpath(expected)) or not _lexically_under(joined, ancestor):
+        return None
+    return expected
 
 
 def _lexically_under(candidate: Path, root: Path) -> bool:
@@ -3778,8 +3794,12 @@ def _check_emulators_directory(data: dict) -> None:
     for template in searched:
         if not isinstance(template, str) or template.count("{key}") != 1:
             raise ValueError("invalid emulators_directory.searched")
-        _safe_relative_path(template.replace("{key}", "key"), "emulators_directory.searched")
-    _safe_relative_path(layout["config"], "emulators_directory.config")
+        _safe_relative_path(
+            template.replace("{key}", "key"), "emulators_directory.searched", colons=False
+        )
+    _safe_relative_path(layout["default"].replace("{key}", "key"), "emulators_directory.default",
+                        colons=False)
+    _safe_relative_path(layout["config"], "emulators_directory.config", colons=False)
 
 
 def _check_save_directory(data: dict) -> None:
@@ -3946,7 +3966,11 @@ def _check_entry(
     """Check one file entry, return its size and the largest copy it may fetch."""
     if not isinstance(entry, dict):
         raise ValueError(f"{where} must be an object")
-    dest = str(_safe_relative_path(entry.get("dest"), f"{where}.dest"))
+    # Below a roms or emulator folder a colon has no use: refused outright.
+    dest = str(_safe_relative_path(
+        entry.get("dest"), f"{where}.dest",
+        colons=entry.get("root") not in ("roms", "emulators"),
+    ))
     key = _entry_key({**entry, "dest": dest})
     if key in seen_destinations:
         raise ValueError(f"duplicate manifest destination: {dest}")
@@ -5418,7 +5442,8 @@ def place_emulator_entries(
     layout = manifest.get("emulators_directory") or {}
     home = bios_path.parent
     config = (
-        home.joinpath(*_safe_relative_path(layout["config"], "emulators_directory.config").parts)
+        home.joinpath(*_safe_relative_path(
+            layout["config"], "emulators_directory.config", colons=False).parts)
         if layout else None
     )
     matches = bool(layout) and bios_path.name == layout.get("bios_folder") and config.is_file()
@@ -5429,14 +5454,15 @@ def place_emulator_entries(
         if entry.get("root") != "emulators":
             kept.append(entry)
             continue
-        key = _safe_relative_path(str(entry["dest"]), "emulators dest").parts[0]
+        key = _safe_relative_path(str(entry["dest"]), "emulators dest", colons=False).parts[0]
         places = [
-            home.joinpath(*_safe_relative_path(t.replace("{key}", key), "emulators place").parts)
+            home.joinpath(*_safe_relative_path(
+                t.replace("{key}", key), "emulators place", colons=False).parts)
             for t in layout.get("searched") or []
         ]
         default = home.joinpath(
             *_safe_relative_path(layout.get("default", "").replace("{key}", key),
-                                 "emulators default").parts
+                                 "emulators default", colons=False).parts
         ) if matches else None
         if (matches and key.lower() not in moved and default is not None
                 and all(_lexically_under(place, home) for place in [*places, default])):
