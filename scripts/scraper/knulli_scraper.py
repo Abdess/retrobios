@@ -141,7 +141,7 @@ class Scraper(BaseScraper):
         built = boards_build(selection, launchers)
         launchers = records_run(launchers, built)
         cores, standalone, dual = configgen_cores(defaults, es_systems, dropped, built)
-        installable = installable_cores(selection, cores)
+        installable = installable_cores(selection, cores, standalone, dual)
         # Each system's own list (psx, es_systems.yml:640-653: libretro
         # pcsx_rearmed, swanstation, mednafen_psx, then duckstation and
         # duckstation-legacy).

@@ -557,19 +557,24 @@ def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[
     return built
 
 
-def installable_cores(selection: BuildSelection, cores: list[str]) -> list[str]:
+def installable_cores(
+    selection: BuildSelection, cores: list[str], standalone: list[str], dual: list[str],
+) -> list[str]:
     """Buildbot cores a board's RetroArch core downloader installs, beyond
-    the cores the image builds.
+    the libretro cores the image builds.
 
     The targets scraper names, per board, the RetroArch targets entry its
     downloader reads (`downloads`): a Batocera x86_64 board installs any
-    core of linux-x86_64, an armv7 one any of linux-armhf.
+    core of linux-x86_64, an armv7 one any of linux-armhf. A name compares
+    within its build mode: amiberry built standalone is another program
+    than amiberry_libretro, which the buildbot serves.
     """
     found: set[str] = set()
     for entry in selection.targets.values():
         if entry.get("downloads"):
             found |= load_target_config("retroarch", entry["downloads"]) or set()
-    return sorted(found - set(cores))
+    built_libretro = (set(cores) - set(standalone)) | set(dual)
+    return sorted(found - built_libretro)
 
 
 def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dict]:
@@ -642,7 +647,7 @@ class Scraper(BaseScraper):
         built = boards_build(selection, launchers)
         launchers = records_run(launchers, built)
         cores, standalone, dual = self._fetch_cores(built)
-        installable = installable_cores(selection, cores)
+        installable = installable_cores(selection, cores, standalone, dual)
         libretro_systems = es_systems_libretro_systems(
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
         )

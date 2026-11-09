@@ -299,7 +299,40 @@ class CoreDownloaderReach(unittest.TestCase):
                 if entry["architecture"] == "aarch64":
                     self.assertNotIn("downloads", entry)
             with self.subTest(platform=platform):
-                self.assertEqual(set(config["installable_cores"]), fetched - set(config["cores"]))
+                built = ((set(config["cores"]) - set(config.get("standalone_cores") or []))
+                         | set(config.get("dual_mode_cores") or []))
+                self.assertEqual(set(config["installable_cores"]), fetched - built)
+
+    def test_a_standalone_name_keeps_its_buildbot_core(self):
+        """Batocera runs amiberry standalone, and its x86_64 boards fetch
+        amiberry_libretro: removing every name the image builds lost the
+        libretro core to the name it shares with the standalone package."""
+        from common import DUAL_MODE_PREFIX, resolve_platform_cores, standalone_set  # noqa: PLC0415
+        from scraper.batocera_scraper import installable_cores  # noqa: PLC0415
+        from scraper.targets.batocera_targets_scraper import BuildSelection  # noqa: PLC0415
+
+        selection = BuildSelection(
+            targets={"x86_64": {"architecture": "x86_64", "cores": [],
+                                "downloads": "linux-x86_64"}},
+            emulators=frozenset(), listed=frozenset(), symbols=frozenset(), packages={},
+        )
+        found = installable_cores(selection, ["amiberry", "mgba", "dolphin"],
+                                  ["amiberry", "dolphin"], ["dolphin"])
+        self.assertIn("amiberry", found)
+        self.assertNotIn("mgba", found)
+        self.assertNotIn("dolphin", found)
+
+        profiles = {
+            "amiberry": {"type": "libretro", "cores": ["amiberry"], "systems": ["amiga"]},
+            "amiberry-7": {"type": "standalone", "cores": ["amiberry"], "systems": ["amiga"],
+                           "built_by": ["demo"], "source": "https://x/amiberry"},
+        }
+        config = {"_key": "demo", "cores": ["amiberry"], "standalone_cores": ["amiberry"],
+                  "installable_cores": ["amiberry"]}
+        self.assertEqual(resolve_platform_cores(config, profiles), {"amiberry", "amiberry-7"})
+        self.assertEqual(resolve_platform_cores({**config, "installable_cores": []}, profiles),
+                         {"amiberry-7"})
+        self.assertIn(DUAL_MODE_PREFIX + "amiberry", standalone_set(config))
 
 
 class KnulliPerBoard(unittest.TestCase):

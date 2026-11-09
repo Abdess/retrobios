@@ -5803,9 +5803,11 @@ installable_cores:
 - 3dengine
 - DoubleCherryGB
 - amiarcadia
+- amiberry
 - anarch
 - applewin
 - ardens
+- azahar
 - b2
 - bbkemu
 - boom3_xp
@@ -5818,7 +5820,9 @@ installable_cores:
 - bsnes_mercury_accuracy
 - bsnes_mercury_balanced
 - bsnes_mercury_performance
+- cannonball
 - cdi2015
+- cemu
 - chailove
 - citra
 - citra2018
@@ -5830,10 +5834,13 @@ installable_cores:
 - dingooemu
 - dinothawr
 - dirksimple
+- dosbox
 - dosbox_core
 - dosbox_svn
 - dosbox_svn_ce
 - doukutsu_rs
+- ecwolf
+- eduke32
 - ep128emu_core
 - fbalpha2012
 - fbalpha2012_cps1
@@ -5843,6 +5850,7 @@ installable_cores:
 - fixgb
 - fixnes
 - frodo
+- fsuae
 - galaksija
 - gam4980
 - gametank
@@ -5901,6 +5909,7 @@ installable_cores:
 - odin
 - omicron
 - openlara
+- openmsx
 - panda3ds
 - parallel_dc
 - pcee2
@@ -5917,6 +5926,7 @@ installable_cores:
 - remotejoy
 - retro8
 - romcleaner
+- rpcs3
 - rust_dos
 - rustynes
 - sameboy
@@ -5928,6 +5938,7 @@ installable_cores:
 - spmp8000emu
 - squirreljme
 - stella2023
+- supermodel
 - tamalibretro
 - test
 - thepowdertoy
@@ -5942,13 +5953,16 @@ installable_cores:
 - vice_xcbm5x0
 - video_processor
 - virtualxt
+- vita3k
 - vitaquake2-rogue
 - vitaquake2-xatrix
 - vitaquake2-zaero
 - vitaquake3
 - wqxemu
+- xemu
 - xenia_edge
 - yabause
+- ymir
 libretro_systems:
   "81":
   - zx81

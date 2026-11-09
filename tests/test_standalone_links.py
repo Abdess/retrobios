@@ -660,13 +660,15 @@ class AmiberryOnEachPlatform(unittest.TestCase):
 
 class AmiberryBuildEachPlatformShips(unittest.TestCase):
     """Each platform resolves the name amiberry to the build its own package
-    compiles. RetroBat keeps the 8.5.0 libretro core beside its standalone."""
+    compiles. RetroBat keeps the 8.5.0 libretro core beside its standalone,
+    and Batocera's x86_64 boards fetch it with RetroArch's core downloader
+    (installable_cores)."""
 
     OWN = {
         "rocknix": {"amiberry-5.6.5"},
         "amberelec": {"amiberry-7.1.1"},
         "emuelec": {"amiberry-8.0.0"},
-        "batocera": {"amiberry-7.1.1-332"},
+        "batocera": {"amiberry", "amiberry-7.1.1-332"},
         "knulli": {"amiberry-7.1.1"},
         "recalbox": {"amiberry-8.2.2"},
         "retrobat": {"amiberry", "amiberry-8.3.0"},

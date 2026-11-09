@@ -2767,6 +2767,15 @@ def standalone_set(config: dict) -> set[str]:
     """
     names = {str(c) for c in config.get("standalone_cores") or []}
     names |= {DUAL_MODE_PREFIX + str(c) for c in config.get("dual_mode_cores") or []}
+    # A buildbot core the platform's RetroArch installs under the name of an
+    # emulator it runs standalone is that emulator's libretro build: run
+    # both ways, as Batocera runs amiberry standalone and can fetch
+    # amiberry_libretro.
+    names |= {
+        DUAL_MODE_PREFIX + str(c)
+        for c in set(map(str, config.get("installable_cores") or []))
+        & set(map(str, config.get("standalone_cores") or []))
+    }
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
     names |= {
@@ -3264,10 +3273,13 @@ def resolve_platform_cores(
         # A name the platform launches both ways designates its libretro
         # build too. Batocera, Recalbox and RetroBat run pcsx2 standalone and
         # as LRPS2, two profiles: the key match kept the standalone one and
-        # LRPS2's files never reached their packs.
+        # LRPS2's files never reached their packs. A core its RetroArch
+        # installs is a libretro build as well (amiberry's buildbot core
+        # beside Batocera's standalone amiberry).
         result |= {
             profile
-            for c in config.get("dual_mode_cores") or []
+            for c in [*(config.get("dual_mode_cores") or []),
+                      *(config.get("installable_cores") or [])]
             for profile in index.get(str(c), set())
             if "libretro" in str(profiles[profile].get("type", ""))
             and not profiles[profile].get("built_by")
