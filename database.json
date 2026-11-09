@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "generated_at": "2026-11-09T11:29:16Z",
-  "total_files": 19989,
-  "total_size": 17174225735,
+  "total_files": 20005,
+  "total_size": 17218807994,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -205230,6 +205230,166 @@
       "sha256": "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40",
       "crc32": "5ea6b7fc",
       "adler32": "27df2df0"
+    },
+    "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa": {
+      "path": "bios/Commodore/Amiga/.variants/whdload_db.json.b6012c4c",
+      "name": "whdload_db.json",
+      "size": 6621404,
+      "sha1": "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
+      "md5": "b6012c4c6a6c82bbcdd208e4ee47a143",
+      "sha256": "a20a48eea0ec31522f3f97b5cb8cf70bddac5c60897759f6bbb8f6850b00e025",
+      "crc32": "9712274c",
+      "adler32": "3bc173e2"
+    },
+    "525262e15d720ddd056c803bfbe1dda8365bcc24": {
+      "path": "bios/Commodore/Amiga/.variants/whdload_db.xml.d97aaced",
+      "name": "whdload_db.xml",
+      "size": 8530799,
+      "sha1": "525262e15d720ddd056c803bfbe1dda8365bcc24",
+      "md5": "d97aacedc050c77f1f66a6e83bb71beb",
+      "sha256": "ffd497274bc9960f50ba466e06ffce36f48f57a1bc65b79bd44e8f7df7e65a91",
+      "crc32": "d2ad7c81",
+      "adler32": "6318ba85"
+    },
+    "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e": {
+      "path": "bios/Commodore/Amiga/.variants/aros-rom.bin.48d38fc3",
+      "name": "aros-rom.bin",
+      "size": 524288,
+      "sha1": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
+      "md5": "48d38fc3fcf2ad7bca5ec5191d02e451",
+      "sha256": "d583ff8f40c73b1584a1395bb0869a909a96d2366a4ae9f4c15ab6a3d868ea62",
+      "crc32": "7fe47845",
+      "adler32": "dba312fd"
+    },
+    "e8b274faca7ffa4c064706ba15318885d8645695": {
+      "path": "bios/Commodore/Amiga/.variants/aros-ext.bin.d2ce6748",
+      "name": "aros-ext.bin",
+      "size": 524288,
+      "sha1": "e8b274faca7ffa4c064706ba15318885d8645695",
+      "md5": "d2ce6748e8e42222662e14359f68dad5",
+      "sha256": "874a9275ff7b39723921eac223a5f461f4eb03bd9ba1976b228ad0f4cfa74505",
+      "crc32": "20ca1219",
+      "adler32": "a11f40e0"
+    },
+    "9be90107289dde099e78f699bb1f1498f77b22f4": {
+      "path": "bios/Commodore/Amiga/.variants/boot-data.zip.84695c3a",
+      "name": "boot-data.zip",
+      "size": 703471,
+      "sha1": "9be90107289dde099e78f699bb1f1498f77b22f4",
+      "md5": "84695c3adc3fe06c158cf7907a2f84a1",
+      "sha256": "768dee54addc60a1fb99635d665b8faa9220bf7570dd65a5f9c55eb07a8cae11",
+      "crc32": "09f5b5a1",
+      "adler32": "0df914ed"
+    },
+    "4f2964408c49dceebae4e7fa4b9b30eec94aac99": {
+      "path": "bios/Commodore/Amiga/.variants/whdload_db.xml.97f01181",
+      "name": "whdload_db.xml",
+      "size": 8026952,
+      "sha1": "4f2964408c49dceebae4e7fa4b9b30eec94aac99",
+      "md5": "97f0118162822ebe5ade49cbaf3a11cb",
+      "sha256": "eac6b12d534704da23bfbafdec5d363ac202ea55d54e3b346f2dd72f7e61bf06",
+      "crc32": "d24f362d",
+      "adler32": "975b4e61"
+    },
+    "0ca586301ce26ab152a807dbc9b21c403291ea7f": {
+      "path": "bios/Commodore/Amiga/.variants/whdload_db.xml.925812a2",
+      "name": "whdload_db.xml",
+      "size": 8304326,
+      "sha1": "0ca586301ce26ab152a807dbc9b21c403291ea7f",
+      "md5": "925812a2055f2b1e13ac81652489faf4",
+      "sha256": "4e34fcc1516299e48bb4115a0224675c1616e885b71a1f41626ec85672d1dfd1",
+      "crc32": "726cc790",
+      "adler32": "3e6dbfae"
+    },
+    "fe5e0fd40ed35a9f8aebdc554eb19540bd438842": {
+      "path": "bios/Commodore/Amiga/.variants/whdload_db.xml.d83a7b65",
+      "name": "whdload_db.xml",
+      "size": 8078822,
+      "sha1": "fe5e0fd40ed35a9f8aebdc554eb19540bd438842",
+      "md5": "d83a7b650f5d180e3496551052aa85b5",
+      "sha256": "6fa9ca4d7e1d06b86da85b416fb331eeeb5742c81e75bddd6a3eb1f1481e71b9",
+      "crc32": "21b12414",
+      "adler32": "b19117e4"
+    },
+    "d81a777fcc40c119ab4509008495125b99999b4b": {
+      "path": "bios/Commodore/Amiga/.variants/WHDLoad.5d06f597",
+      "name": "WHDLoad",
+      "size": 156867,
+      "sha1": "d81a777fcc40c119ab4509008495125b99999b4b",
+      "md5": "5d06f5972b95f55549dfbfa8e45ae090",
+      "sha256": "81072d557d69d4b5a69169b50a67d86dd680864b28508a56328a91886a54e090",
+      "crc32": "177db29e",
+      "adler32": "5763ff29"
+    },
+    "7062b45b23ab34006f6fbb96bd78829b10b5c40c": {
+      "path": "bios/Commodore/Amiga/.variants/aros-rom.bin.617dea67",
+      "name": "aros-rom.bin",
+      "size": 524288,
+      "sha1": "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
+      "md5": "617dea67233bdce742b96f4c7e54dd89",
+      "sha256": "1ec08a1691d8eb78a87d00a716ec69be3b1dd282864d9fb4d4ca62e5f386a986",
+      "crc32": "0b30240a",
+      "adler32": "17afc721"
+    },
+    "c467e6d1cf1e9f1bca80932728413fc9a49dac44": {
+      "path": "bios/Commodore/Amiga/.variants/boot-data.zip.72319710",
+      "name": "boot-data.zip",
+      "size": 701526,
+      "sha1": "c467e6d1cf1e9f1bca80932728413fc9a49dac44",
+      "md5": "7231971028cba2bd2e5c4d16535b518a",
+      "sha256": "f681af6ee603002b36ceee2b993afaa0c9d5eacd1526f3610078ca701de4514d",
+      "crc32": "97b4460f",
+      "adler32": "60119130"
+    },
+    "2cf6334e4c5d904132b9dc9195f7457d898e9d3e": {
+      "path": "bios/Commodore/Amiga/.variants/boot-data.zip.f2e4f805",
+      "name": "boot-data.zip",
+      "size": 702843,
+      "sha1": "2cf6334e4c5d904132b9dc9195f7457d898e9d3e",
+      "md5": "f2e4f80599f6f0c9e258aa587ba07ce7",
+      "sha256": "3a241bbb835cf6c89139ad19c02024096bb6da3f2f02d29dd06af860723f4c30",
+      "crc32": "e5ca6ef7",
+      "adler32": "f67b420e"
+    },
+    "0885579a36a774ec35f79b63520e63b75c6706ae": {
+      "path": "bios/Commodore/Amiga/.variants/WHDLoad.05927cf0",
+      "name": "WHDLoad",
+      "size": 151390,
+      "sha1": "0885579a36a774ec35f79b63520e63b75c6706ae",
+      "md5": "05927cf07ea2affcbb97bfc207415166",
+      "sha256": "852657ff1304ee3ce5cc0f98e9fd259945af6a1d021b89cc524e92ad370bafac",
+      "crc32": "5a408d08",
+      "adler32": "96bb3c5c"
+    },
+    "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a": {
+      "path": "bios/Commodore/Amiga/.variants/aros-ext.bin.42cd8253",
+      "name": "aros-ext.bin",
+      "size": 524288,
+      "sha1": "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a",
+      "md5": "42cd82539642332c784ce2318515f498",
+      "sha256": "8b8135bbc235ba3f7cc47307c992802831a76a59123978903b9d0d2dd22100d6",
+      "crc32": "4d697b9f",
+      "adler32": "6f0d1f91"
+    },
+    "c6d5bb001ed01f3f2b4f097d732c7aebdc723627": {
+      "path": "bios/Commodore/Amiga/.variants/boot-data.zip.4a36c9d0",
+      "name": "boot-data.zip",
+      "size": 354578,
+      "sha1": "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
+      "md5": "4a36c9d0cecb54025fd189db497412b6",
+      "sha256": "74e57eddccec91f51b9f64aed711887542b27a0c59ce1ec24ca863d0643ef0be",
+      "crc32": "ebf4e118",
+      "adler32": "d898b83c"
+    },
+    "6fb7099d3f85e437bc7ef48f75d5460395b9260b": {
+      "path": "bios/Commodore/Amiga/.variants/WHDLoad.40bebdd3",
+      "name": "WHDLoad",
+      "size": 152129,
+      "sha1": "6fb7099d3f85e437bc7ef48f75d5460395b9260b",
+      "md5": "40bebdd39e792abb0ff86ccbb183f56d",
+      "sha256": "1731cb1b0dd5109545bbe36b3a40585e2aa3c1c1f9f1247ee821f2701b1f1871",
+      "crc32": "7abb4a27",
+      "adler32": "41be2b9f"
     }
   },
   "indexes": {
@@ -225222,7 +225382,23 @@
       "8d4abc7dd31a64f2ddd811c19ae8c09e": "b3730071e789877bea3373ffa59ca673a4b1f4c9",
       "6e7e391c629332cc9d29902b98e52f94": "48024e2f5943ed86cb1b8e9443603991cdb05808",
       "bbd27768c16e6077b1a90dc0eb8558a3": "24a487f22f3da292e179b3edd6c30222a8ff933d",
-      "084b6bc9804710a89a542335a3e4b1e0": "8c20ff26ebfefbf9b050b67af8083704003595ba"
+      "084b6bc9804710a89a542335a3e4b1e0": "8c20ff26ebfefbf9b050b67af8083704003595ba",
+      "05927cf07ea2affcbb97bfc207415166": "0885579a36a774ec35f79b63520e63b75c6706ae",
+      "40bebdd39e792abb0ff86ccbb183f56d": "6fb7099d3f85e437bc7ef48f75d5460395b9260b",
+      "5d06f5972b95f55549dfbfa8e45ae090": "d81a777fcc40c119ab4509008495125b99999b4b",
+      "42cd82539642332c784ce2318515f498": "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a",
+      "d2ce6748e8e42222662e14359f68dad5": "e8b274faca7ffa4c064706ba15318885d8645695",
+      "48d38fc3fcf2ad7bca5ec5191d02e451": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
+      "617dea67233bdce742b96f4c7e54dd89": "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
+      "4a36c9d0cecb54025fd189db497412b6": "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
+      "7231971028cba2bd2e5c4d16535b518a": "c467e6d1cf1e9f1bca80932728413fc9a49dac44",
+      "84695c3adc3fe06c158cf7907a2f84a1": "9be90107289dde099e78f699bb1f1498f77b22f4",
+      "f2e4f80599f6f0c9e258aa587ba07ce7": "2cf6334e4c5d904132b9dc9195f7457d898e9d3e",
+      "b6012c4c6a6c82bbcdd208e4ee47a143": "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
+      "925812a2055f2b1e13ac81652489faf4": "0ca586301ce26ab152a807dbc9b21c403291ea7f",
+      "97f0118162822ebe5ade49cbaf3a11cb": "4f2964408c49dceebae4e7fa4b9b30eec94aac99",
+      "d83a7b650f5d180e3496551052aa85b5": "fe5e0fd40ed35a9f8aebdc554eb19540bd438842",
+      "d97aacedc050c77f1f66a6e83bb71beb": "525262e15d720ddd056c803bfbe1dda8365bcc24"
     },
     "by_name": {
       "DUKE.RTS": [
@@ -235941,6 +236117,10 @@
       ],
       "boot-data.zip": [
         "18a9dba5cfe2f375f111dd5148691ecaecc6293b",
+        "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
+        "c467e6d1cf1e9f1bca80932728413fc9a49dac44",
+        "9be90107289dde099e78f699bb1f1498f77b22f4",
+        "2cf6334e4c5d904132b9dc9195f7457d898e9d3e",
         "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
       ],
       "capsimg.dll": [
@@ -236022,9 +236202,13 @@
         "c3c481160866e60d085e436a24db3617ff60b5f9"
       ],
       "aros-ext.bin": [
+        "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a",
+        "e8b274faca7ffa4c064706ba15318885d8645695",
         "af84797f89eb906350e82c718dddbf7c96695cc1"
       ],
       "aros-rom.bin": [
+        "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
+        "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
         "a11d51c995610d9028c8958279e602a37fa76050"
       ],
       "cd32fmv.rom": [
@@ -236670,9 +236854,13 @@
         "55dd3ecd5086528fa984e82db6474b954fc54ad5"
       ],
       "WHDLoad": [
+        "0885579a36a774ec35f79b63520e63b75c6706ae",
+        "6fb7099d3f85e437bc7ef48f75d5460395b9260b",
+        "d81a777fcc40c119ab4509008495125b99999b4b",
         "c3ecdaf43cc554026c8ef1c440a08c81144f810b"
       ],
       "whdload_db.json": [
+        "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
         "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
       ],
       "host-quit": [
@@ -283351,6 +283539,12 @@
       ],
       "fbneo/spectrum.zip": [
         "e5403cb209cf0df473bf1251cade7e70f94644fb"
+      ],
+      "whdload_db.xml": [
+        "0ca586301ce26ab152a807dbc9b21c403291ea7f",
+        "4f2964408c49dceebae4e7fa4b9b30eec94aac99",
+        "fe5e0fd40ed35a9f8aebdc554eb19540bd438842",
+        "525262e15d720ddd056c803bfbe1dda8365bcc24"
       ]
     },
     "by_crc32": {
@@ -303341,7 +303535,23 @@
       "bf1e4b9b": "b3730071e789877bea3373ffa59ca673a4b1f4c9",
       "e6b9ebfb": "48024e2f5943ed86cb1b8e9443603991cdb05808",
       "a42ef0fd": "24a487f22f3da292e179b3edd6c30222a8ff933d",
-      "5ea6b7fc": "8c20ff26ebfefbf9b050b67af8083704003595ba"
+      "5ea6b7fc": "8c20ff26ebfefbf9b050b67af8083704003595ba",
+      "5a408d08": "0885579a36a774ec35f79b63520e63b75c6706ae",
+      "7abb4a27": "6fb7099d3f85e437bc7ef48f75d5460395b9260b",
+      "177db29e": "d81a777fcc40c119ab4509008495125b99999b4b",
+      "4d697b9f": "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a",
+      "20ca1219": "e8b274faca7ffa4c064706ba15318885d8645695",
+      "7fe47845": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
+      "0b30240a": "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
+      "ebf4e118": "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
+      "97b4460f": "c467e6d1cf1e9f1bca80932728413fc9a49dac44",
+      "09f5b5a1": "9be90107289dde099e78f699bb1f1498f77b22f4",
+      "e5ca6ef7": "2cf6334e4c5d904132b9dc9195f7457d898e9d3e",
+      "9712274c": "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
+      "726cc790": "0ca586301ce26ab152a807dbc9b21c403291ea7f",
+      "d24f362d": "4f2964408c49dceebae4e7fa4b9b30eec94aac99",
+      "21b12414": "fe5e0fd40ed35a9f8aebdc554eb19540bd438842",
+      "d2ad7c81": "525262e15d720ddd056c803bfbe1dda8365bcc24"
     },
     "by_sha256": {
       "3fbc1d9b221f2a6952825a511ed63756f8eac4f98001eb094a81f17cb0fd05e5": "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07",
@@ -323332,7 +323542,23 @@
       "c06a6ae0804b20ded47b9ab9101ffe3a6438382b9ec664a2ec0fcd010f8566f4": "b3730071e789877bea3373ffa59ca673a4b1f4c9",
       "37ed55d89afe24a013de30feecf21fb0d75c58f3f0ff9a8449098eaaabe75aac": "48024e2f5943ed86cb1b8e9443603991cdb05808",
       "7dc407fbccbf684dc677bed81120f45f0d3406ff7945eaf207a5c38b036c30e0": "24a487f22f3da292e179b3edd6c30222a8ff933d",
-      "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40": "8c20ff26ebfefbf9b050b67af8083704003595ba"
+      "0d6487d6832488130bc94b1ec5ee71766717b929c249693327089e461460ae40": "8c20ff26ebfefbf9b050b67af8083704003595ba",
+      "852657ff1304ee3ce5cc0f98e9fd259945af6a1d021b89cc524e92ad370bafac": "0885579a36a774ec35f79b63520e63b75c6706ae",
+      "1731cb1b0dd5109545bbe36b3a40585e2aa3c1c1f9f1247ee821f2701b1f1871": "6fb7099d3f85e437bc7ef48f75d5460395b9260b",
+      "81072d557d69d4b5a69169b50a67d86dd680864b28508a56328a91886a54e090": "d81a777fcc40c119ab4509008495125b99999b4b",
+      "8b8135bbc235ba3f7cc47307c992802831a76a59123978903b9d0d2dd22100d6": "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a",
+      "874a9275ff7b39723921eac223a5f461f4eb03bd9ba1976b228ad0f4cfa74505": "e8b274faca7ffa4c064706ba15318885d8645695",
+      "d583ff8f40c73b1584a1395bb0869a909a96d2366a4ae9f4c15ab6a3d868ea62": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
+      "1ec08a1691d8eb78a87d00a716ec69be3b1dd282864d9fb4d4ca62e5f386a986": "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
+      "74e57eddccec91f51b9f64aed711887542b27a0c59ce1ec24ca863d0643ef0be": "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
+      "f681af6ee603002b36ceee2b993afaa0c9d5eacd1526f3610078ca701de4514d": "c467e6d1cf1e9f1bca80932728413fc9a49dac44",
+      "768dee54addc60a1fb99635d665b8faa9220bf7570dd65a5f9c55eb07a8cae11": "9be90107289dde099e78f699bb1f1498f77b22f4",
+      "3a241bbb835cf6c89139ad19c02024096bb6da3f2f02d29dd06af860723f4c30": "2cf6334e4c5d904132b9dc9195f7457d898e9d3e",
+      "a20a48eea0ec31522f3f97b5cb8cf70bddac5c60897759f6bbb8f6850b00e025": "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
+      "4e34fcc1516299e48bb4115a0224675c1616e885b71a1f41626ec85672d1dfd1": "0ca586301ce26ab152a807dbc9b21c403291ea7f",
+      "eac6b12d534704da23bfbafdec5d363ac202ea55d54e3b346f2dd72f7e61bf06": "4f2964408c49dceebae4e7fa4b9b30eec94aac99",
+      "6fa9ca4d7e1d06b86da85b416fb331eeeb5742c81e75bddd6a3eb1f1481e71b9": "fe5e0fd40ed35a9f8aebdc554eb19540bd438842",
+      "ffd497274bc9960f50ba466e06ffce36f48f57a1bc65b79bd44e8f7df7e65a91": "525262e15d720ddd056c803bfbe1dda8365bcc24"
     },
     "by_path_suffix": {
       "3D Realms/Duke Nukem 3D/DUKE.RTS": [
@@ -601475,6 +601701,150 @@
       ],
       "sf2/custom0.sf2": [
         "286b2e1fb21cc79851da01666db6c0b0e88f25e3"
+      ],
+      "Commodore/Amiga/.variants/WHDLoad.05927cf0": [
+        "0885579a36a774ec35f79b63520e63b75c6706ae"
+      ],
+      "Amiga/.variants/WHDLoad.05927cf0": [
+        "0885579a36a774ec35f79b63520e63b75c6706ae"
+      ],
+      ".variants/WHDLoad.05927cf0": [
+        "0885579a36a774ec35f79b63520e63b75c6706ae"
+      ],
+      "Commodore/Amiga/.variants/WHDLoad.40bebdd3": [
+        "6fb7099d3f85e437bc7ef48f75d5460395b9260b"
+      ],
+      "Amiga/.variants/WHDLoad.40bebdd3": [
+        "6fb7099d3f85e437bc7ef48f75d5460395b9260b"
+      ],
+      ".variants/WHDLoad.40bebdd3": [
+        "6fb7099d3f85e437bc7ef48f75d5460395b9260b"
+      ],
+      "Commodore/Amiga/.variants/WHDLoad.5d06f597": [
+        "d81a777fcc40c119ab4509008495125b99999b4b"
+      ],
+      "Amiga/.variants/WHDLoad.5d06f597": [
+        "d81a777fcc40c119ab4509008495125b99999b4b"
+      ],
+      ".variants/WHDLoad.5d06f597": [
+        "d81a777fcc40c119ab4509008495125b99999b4b"
+      ],
+      "Commodore/Amiga/.variants/aros-ext.bin.42cd8253": [
+        "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a"
+      ],
+      "Amiga/.variants/aros-ext.bin.42cd8253": [
+        "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a"
+      ],
+      ".variants/aros-ext.bin.42cd8253": [
+        "613f431d30a6e5ba15bb0dbc5bfaa9c9419b954a"
+      ],
+      "Commodore/Amiga/.variants/aros-ext.bin.d2ce6748": [
+        "e8b274faca7ffa4c064706ba15318885d8645695"
+      ],
+      "Amiga/.variants/aros-ext.bin.d2ce6748": [
+        "e8b274faca7ffa4c064706ba15318885d8645695"
+      ],
+      ".variants/aros-ext.bin.d2ce6748": [
+        "e8b274faca7ffa4c064706ba15318885d8645695"
+      ],
+      "Commodore/Amiga/.variants/aros-rom.bin.48d38fc3": [
+        "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e"
+      ],
+      "Amiga/.variants/aros-rom.bin.48d38fc3": [
+        "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e"
+      ],
+      ".variants/aros-rom.bin.48d38fc3": [
+        "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e"
+      ],
+      "Commodore/Amiga/.variants/aros-rom.bin.617dea67": [
+        "7062b45b23ab34006f6fbb96bd78829b10b5c40c"
+      ],
+      "Amiga/.variants/aros-rom.bin.617dea67": [
+        "7062b45b23ab34006f6fbb96bd78829b10b5c40c"
+      ],
+      ".variants/aros-rom.bin.617dea67": [
+        "7062b45b23ab34006f6fbb96bd78829b10b5c40c"
+      ],
+      "Commodore/Amiga/.variants/boot-data.zip.4a36c9d0": [
+        "c6d5bb001ed01f3f2b4f097d732c7aebdc723627"
+      ],
+      "Amiga/.variants/boot-data.zip.4a36c9d0": [
+        "c6d5bb001ed01f3f2b4f097d732c7aebdc723627"
+      ],
+      ".variants/boot-data.zip.4a36c9d0": [
+        "c6d5bb001ed01f3f2b4f097d732c7aebdc723627"
+      ],
+      "Commodore/Amiga/.variants/boot-data.zip.72319710": [
+        "c467e6d1cf1e9f1bca80932728413fc9a49dac44"
+      ],
+      "Amiga/.variants/boot-data.zip.72319710": [
+        "c467e6d1cf1e9f1bca80932728413fc9a49dac44"
+      ],
+      ".variants/boot-data.zip.72319710": [
+        "c467e6d1cf1e9f1bca80932728413fc9a49dac44"
+      ],
+      "Commodore/Amiga/.variants/boot-data.zip.84695c3a": [
+        "9be90107289dde099e78f699bb1f1498f77b22f4"
+      ],
+      "Amiga/.variants/boot-data.zip.84695c3a": [
+        "9be90107289dde099e78f699bb1f1498f77b22f4"
+      ],
+      ".variants/boot-data.zip.84695c3a": [
+        "9be90107289dde099e78f699bb1f1498f77b22f4"
+      ],
+      "Commodore/Amiga/.variants/boot-data.zip.f2e4f805": [
+        "2cf6334e4c5d904132b9dc9195f7457d898e9d3e"
+      ],
+      "Amiga/.variants/boot-data.zip.f2e4f805": [
+        "2cf6334e4c5d904132b9dc9195f7457d898e9d3e"
+      ],
+      ".variants/boot-data.zip.f2e4f805": [
+        "2cf6334e4c5d904132b9dc9195f7457d898e9d3e"
+      ],
+      "Commodore/Amiga/.variants/whdload_db.json.b6012c4c": [
+        "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa"
+      ],
+      "Amiga/.variants/whdload_db.json.b6012c4c": [
+        "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa"
+      ],
+      ".variants/whdload_db.json.b6012c4c": [
+        "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa"
+      ],
+      "Commodore/Amiga/.variants/whdload_db.xml.925812a2": [
+        "0ca586301ce26ab152a807dbc9b21c403291ea7f"
+      ],
+      "Amiga/.variants/whdload_db.xml.925812a2": [
+        "0ca586301ce26ab152a807dbc9b21c403291ea7f"
+      ],
+      ".variants/whdload_db.xml.925812a2": [
+        "0ca586301ce26ab152a807dbc9b21c403291ea7f"
+      ],
+      "Commodore/Amiga/.variants/whdload_db.xml.97f01181": [
+        "4f2964408c49dceebae4e7fa4b9b30eec94aac99"
+      ],
+      "Amiga/.variants/whdload_db.xml.97f01181": [
+        "4f2964408c49dceebae4e7fa4b9b30eec94aac99"
+      ],
+      ".variants/whdload_db.xml.97f01181": [
+        "4f2964408c49dceebae4e7fa4b9b30eec94aac99"
+      ],
+      "Commodore/Amiga/.variants/whdload_db.xml.d83a7b65": [
+        "fe5e0fd40ed35a9f8aebdc554eb19540bd438842"
+      ],
+      "Amiga/.variants/whdload_db.xml.d83a7b65": [
+        "fe5e0fd40ed35a9f8aebdc554eb19540bd438842"
+      ],
+      ".variants/whdload_db.xml.d83a7b65": [
+        "fe5e0fd40ed35a9f8aebdc554eb19540bd438842"
+      ],
+      "Commodore/Amiga/.variants/whdload_db.xml.d97aaced": [
+        "525262e15d720ddd056c803bfbe1dda8365bcc24"
+      ],
+      "Amiga/.variants/whdload_db.xml.d97aaced": [
+        "525262e15d720ddd056c803bfbe1dda8365bcc24"
+      ],
+      ".variants/whdload_db.xml.d97aaced": [
+        "525262e15d720ddd056c803bfbe1dda8365bcc24"
       ]
     },
     "by_shadowed_alias": {
