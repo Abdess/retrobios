@@ -50,7 +50,7 @@ files:
     system: voxatron
     required: false
     description: "Voxatron dynamically linked executable"
-    source_ref: "voxatron 0.3.5b vox_dyn, NEEDED libSDL2-2.0.so.0 (dynamic section, loader-resolved), codo_system_init 0x15f810 call SDL_Init@plt at 0x15f831, batocera lexaloffleGenerator.py:20, 42"
+    source_ref: "voxatron 0.3.5b vox_dyn, DT_NEEDED libSDL2-2.0.so.0 at 0x3b2780 (loader-resolved), codo_system_init 0x15f810 call SDL_Init@plt at 0x15f831, batocera lexaloffleGenerator.py:20, 42"
     note: "The same program linked against the system SDL2 (its only extra NEEDED library). Batocera's generator never runs it."
 
   - name: vox.dat

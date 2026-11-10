@@ -116,7 +116,7 @@ files:
     sha1: 946db0633966afecf81d2b33957c7db8fb3a2356
     description: "PICO-8 0.2.7 armhf executable, SDL2 linked in"
     note: "The pico8 of pico-8_0.2.7_raspi.zip, a 32-bit ARM ELF that needs libbcm_host.so, so it runs on Raspberry Pi firmware only. Batocera's fixed path is the one a 32-bit Raspberry Pi board (bcm2835, bcm2836) can run."
-    source_ref: "pico-8 0.2.7 raspi pico8, NEEDED libbcm_host.so (dynamic section, loader-resolved), RPI_VideoInit 0x1741ac bl bcm_host_init at 0x1741b8, batocera lexaloffleGenerator.py:17, 48-52"
+    source_ref: "pico-8 0.2.7 raspi pico8, DT_NEEDED libbcm_host.so at 0x27647c (loader-resolved), RPI_VideoInit 0x1741ac bl bcm_host_init at 0x1741b8, batocera lexaloffleGenerator.py:17, 48-52"
 
   - name: pico8
     path: pico-8/pico8
@@ -140,7 +140,7 @@ files:
     sha1: 4ed23b6578a2d93d67aa856791dc70e95d68a3f4
     description: "PICO-8 0.2.7 aarch64 executable, system libSDL2"
     note: "pico8_64 is only in pico-8_0.2.7_raspi.zip, an aarch64 ELF linked against the system SDL2. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
-    source_ref: "pico-8 0.2.7 raspi pico8_64, NEEDED libSDL2-2.0.so.0 (dynamic section, loader-resolved), codo_system_init 0xefd20 bl SDL_Init at 0xefd7c, amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
+    source_ref: "pico-8 0.2.7 raspi pico8_64, DT_NEEDED libSDL2-2.0.so.0 at 0x17cb08 (loader-resolved), codo_system_init 0xefd20 bl SDL_Init at 0xefd7c, amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
@@ -152,7 +152,7 @@ files:
     sha1: 9b2e573250c70382b4071709a85c8d56c0371d59
     description: "PICO-8 0.2.7 x86_64 executable, system libSDL2"
     note: "The pico8_dyn of pico-8_0.2.7_amd64.zip, the same program linked against the system SDL2. RetroDECK lists it as required in its manifest, but its launcher executes pico8 only. Batocera never runs it. ROCKNIX runs it from roms/pico-8/ on x86_64, its HW_ARCH other than aarch64."
-    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, NEEDED libSDL2-2.0.so.0 (dynamic section, loader-resolved), codo_system_init 0x519b50 call SDL_Init@plt at 0x519bb3, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:10-17, 48"
+    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, DT_NEEDED libSDL2-2.0.so.0 at 0x796da0 (loader-resolved), codo_system_init 0x519b50 call SDL_Init@plt at 0x519bb3, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:10-17, 48"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
@@ -164,7 +164,7 @@ files:
     sha1: 87ef68e70c53ba209e697bb51de45826e982d92d
     description: "PICO-8 0.2.7 armhf executable, system libSDL2"
     note: "The pico8_dyn of pico-8_0.2.7_raspi.zip, 32-bit, linked against the system SDL2. EmuELEC copies bios/pico-8 to /emuelec/bin/pico-8 and runs pico8_dyn with no existence check. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, and the RG35XX simplermenu launcher runs it. ROCKNIX runs a pico8_dyn from roms/pico-8/ on a HW_ARCH other than aarch64, and ArkOS falls back to it when pico8_64 is absent."
-    source_ref: "pico-8 0.2.7 raspi pico8_dyn, NEEDED libSDL2-2.0.so.0 (dynamic section, loader-resolved), codo_system_init 0xf2660 bl SDL_Init at 0xf26a8, emuelec packages/sx05re/emuelec/bin/pico8.sh:9-14, 39-43, knulli board/fsoverlay/usr/bin/knulli-install-pico8:9, 38-41, 67, knulli board/actions/atm7039/rg35xx/fsoverlay/usr/share/knulli/datainit/system/configs/simplermenu_plus/launchers/pico8_sa:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:14-16, dArkOS pico8/pico8.sh:49-50"
+    source_ref: "pico-8 0.2.7 raspi pico8_dyn, DT_NEEDED libSDL2-2.0.so.0 at 0x15b00c (loader-resolved), codo_system_init 0xf2660 bl SDL_Init at 0xf26a8, emuelec packages/sx05re/emuelec/bin/pico8.sh:9-14, 39-43, knulli board/fsoverlay/usr/bin/knulli-install-pico8:9, 38-41, 67, knulli board/actions/atm7039/rg35xx/fsoverlay/usr/share/knulli/datainit/system/configs/simplermenu_plus/launchers/pico8_sa:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:14-16, dArkOS pico8/pico8.sh:49-50"
 
   - name: pico8_gpio
     path: pico-8/pico8_gpio
@@ -176,7 +176,7 @@ files:
     sha1: df77c64c95695710d23b451277325e0c37e7416e
     description: "PICO-8 0.2.7 armhf executable with GPIO access (wiringPi)"
     note: "Only in pico-8_0.2.7_raspi.zip. The 32-bit build linked against libbcm_host.so and libwiringPi.so: a peek of 0x5f80+n reads GPIO pin n through wiringPi, pins 0 to 31. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, but no launcher runs it."
-    source_ref: "pico-8 0.2.7 raspi pico8_gpio, NEEDED libbcm_host.so and libwiringPi.so (dynamic section, loader-resolved), pico8_peek_1 0x860ac 0x863ac-0x863b4 (address minus 0x5f80 passed to gpio_read), gpio_read 0xae6c0 0xae70c (wiringPiSetup), 0xae730 (pin above 31 reads 0), 0xae750 (pinMode), 0xae75c (digitalRead), knulli board/fsoverlay/usr/bin/knulli-install-pico8:10, 43-46, 68"
+    source_ref: "pico-8 0.2.7 raspi pico8_gpio, DT_NEEDED libbcm_host.so at 0x27702c and libwiringPi.so at 0x277034 (loader-resolved), pico8_peek_1 0x860ac 0x863ac-0x863b4 (address minus 0x5f80 passed to gpio_read), gpio_read 0xae6c0 0xae70c (wiringPiSetup), 0xae730 (pin above 31 reads 0), 0xae750 (pinMode), 0xae75c (digitalRead), knulli board/fsoverlay/usr/bin/knulli-install-pico8:10, 43-46, 68"
 
   - name: pico8.dat
     path: pico-8/pico8.dat
@@ -211,7 +211,7 @@ files:
     sha1: 9174251921d675c204e683cdea65a8c906fcba28
     description: "SDL2 library of the PICO-8 0.2.7 Windows build"
     note: "pico8.exe imports SDL2.dll, which Windows loads from the executable's folder. Shipped beside it in pico-8_0.2.7_windows.zip."
-    source_ref: "pico-8 0.2.7 windows pico8.exe, import directory SDL2.dll (93 functions, loader-resolved), _codo_system_init 0x4f9840 call _SDL_Init at 0x4f988e, thunk 0x521890 jmp [0x91285c] (SDL2.dll IAT slot)"
+    source_ref: "pico-8 0.2.7 windows pico8.exe import descriptor 0x912064 for SDL2.dll (93 functions from IAT 0x91277c, loader-resolved), _codo_system_init 0x4f9840 call _SDL_Init at 0x4f988e, thunk 0x521890 jmp [0x91285c] (SDL2.dll IAT slot)"
 
   - name: config.txt
     unsourceable: "written by the emulator on exit, no canonical file"
