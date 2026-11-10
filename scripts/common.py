@@ -2760,27 +2760,49 @@ def expand_directory_entries(
 
     if not any(entry.get("type") == "directory" for entry in files):
         return files
+    # A file the profile names itself is left to that entry, in the same
+    # build and below the same root: MAME's libretro floppy samples share
+    # their path with the standalone tree RetroPie reads below roms/.
+    other_build = "libretro" if standalone else "standalone"
     named = {
-        destination(entry) for entry in files if entry.get("type") != "directory"
+        (entry.get("root") or "", destination(entry)) for entry in files
+        if entry.get("type") != "directory" and entry.get("mode") != other_build
     }
     expanded: list[dict] = []
     for entry in files:
         if entry.get("type") != "directory":
             expanded.append(entry)
             continue
-        members = directory_members(db, destination(entry))
+        target = destination(entry)
+        # A directory a platform moved (platform_layouts) is the profile's
+        # tree at the platform's place: the collection holds it under the
+        # layout path, and the platform's folder proves nothing (RetroDECK
+        # hands MAME samplepath $bios_path/mame-sa/samples).
+        layout = str(entry.get("layout_path") or "") if standalone else ""
+        members = directory_members(db, layout) if layout else {}
+        if not members:
+            # A layout tail two trees answer (MAME's hash/) leaves the
+            # platform's own tail.
+            layout = ""
+            members = directory_members(db, target)
+        if layout and layout.strip("/") != target.strip("/"):
+            source, place = layout.strip("/") + "/", target.strip("/") + "/"
+            members = {
+                place + dest[len(source):]: sha1
+                for dest, sha1 in members.items() if dest.startswith(source)
+            }
         if not members:
             expanded.append(entry)
             continue
         inherited = {
             key: value
             for key, value in entry.items()
-            if key not in ("type", "standalone_path")
+            if key not in ("type", "standalone_path", "layout_path")
         }
         expanded.extend(
             {**inherited, "name": dest, "path": dest, "sha1": sha1}
             for dest, sha1 in members.items()
-            if dest not in named
+            if (entry.get("root") or "", dest) not in named
         )
     return expanded
 
@@ -3274,6 +3296,20 @@ def platform_layouts(
     def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
         return bindings_for(launch_systems(entry))
 
+    # The layout folders a search setting stands for (standalone_pools):
+    # bound, the launcher passes the setting and the default is not read.
+    pool_folders = {
+        str(v).strip("/") for v in (profile.get("standalone_pools") or {}).values()
+    } - {""}
+
+    def passed_setting(entry: dict) -> bool:
+        layout = str(standalone_layout_path(entry, profile) or "")
+        bindings = bindings_of(entry)
+        return any(
+            folder in bindings and (layout == folder or layout.startswith(folder + "/"))
+            for folder in pool_folders
+        )
+
     def destinations(entry: dict) -> list[tuple[str, str] | None]:
         """Each place the entry's launches read it from, in launch order.
 
@@ -3316,7 +3352,14 @@ def platform_layouts(
             if not places:
                 files.append({**f, "unplaced": OUTSIDE_BIOS_FOLDER})
                 continue
-            files.extend(_placed_entry(f, profile, placed) for placed in places)
+            moved = f
+            if f.get("bundled") and passed_setting(f):
+                # The copy installed with the emulator sits where the setting
+                # pointed before the launcher moved it: RetroBat passes MAME
+                # -hash bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
+                # the hash/ beside mame.exe is no longer read.
+                moved = {k: v for k, v in f.items() if k != "bundled"}
+            files.extend(_placed_entry(moved, profile, placed) for placed in places)
         standalone = {**profile, "files": files}
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
             if c.startswith(DUAL_MODE_PREFIX)}

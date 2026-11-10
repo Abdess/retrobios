@@ -851,6 +851,40 @@ class MameSearchPaths(unittest.TestCase):
             e.get("unplaced") == "outside_bios_folder" for e in self.sets(view)
         ))
 
+    def test_a_passed_search_setting_leaves_the_bundled_tree_unread(self) -> None:
+        # RetroBat passes -hash bios/mame/hash and -sp bios/mame/samples
+        # (Mame64.Generator.cs:30, 101, 106-107, 172, 177-178), RetroDECK
+        # writes samplepath $bios_path/mame-sa/samples (component_prepare.sh:94):
+        # the trees beside the executable are not read, the pack brings them.
+        for platform, tree, place in (
+            ("retrobat", "hash/", "mame/hash/"),
+            ("retrobat", "floppy/", "mame/samples/floppy/"),
+            ("knulli", "floppy/", "mame/samples/floppy/"),
+            ("retrodeck", "floppy/", "mame-sa/samples/floppy/"),
+        ):
+            view = standalone_view("mame", platform)
+            (entry,) = [e for e in view["files"]
+                        if e["name"] == tree and e.get("mode") == "standalone"]
+            self.assertEqual(entry["standalone_path"], place, platform)
+            self.assertNotIn("bundled", entry, platform)
+        # Where no launcher passes the setting, the bundled copy is read.
+        view = standalone_view("mame", "emudeck")
+        (entry,) = [e for e in view["files"]
+                    if e["name"] == "hash/" and e.get("mode") == "standalone"]
+        self.assertTrue(entry.get("bundled"))
+
+    def test_a_moved_tree_is_found_by_its_layout_path(self) -> None:
+        from common import expand_directory_entries, load_database
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        view = standalone_view("mame", "retrodeck")
+        (tree,) = [e for e in view["files"]
+                   if e["name"] == "floppy/" and e.get("mode") == "standalone"]
+        members = expand_directory_entries([tree], db, standalone=True)
+        self.assertEqual(len(members), 19)
+        for member in members:
+            self.assertTrue(member["path"].startswith("mame-sa/samples/floppy/"))
+
     def test_psxmame_reads_bios_psxmame_bios(self) -> None:
         # -rompath bios/psxmame/bios;<rom directory> (PSXMame.Generator.cs:38-48).
         view = standalone_view("psxmame", "retrobat")
