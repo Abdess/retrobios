@@ -4237,7 +4237,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
     ):
         raise ValueError("manifest total_omitted does not match omitted_files")
 
-    for field in ("core_names", "system_cores", "system_names"):
+    for field in ("core_names", "downloaded_cores", "system_cores", "system_names"):
         mapping = data.get(field)
         if mapping is None:
             continue
@@ -4828,18 +4828,28 @@ def _filter_by_target(
     return result
 
 
-def designated_cores(manifest: dict, names: list[str]) -> set[str]:
+def designated_cores(
+    manifest: dict, names: list[str], target: str | None = None
+) -> set[str]:
     """The cores a list of names designates, the way the pack builder reads it.
 
     A target list, or a core found installed, names a core the buildbot's
     way (`mednafen_psx`), and a file names the profile that reads it
-    (`beetle_psx`). `core_names` gives each profile its other names.
+    (`beetle_psx`). `core_names` gives each profile its other names. A core
+    only the platform's RetroArch downloader brings runs on the boards
+    `downloaded_cores` gives it: Batocera's bcm2711 list names its own
+    amiberry, and the buildbot's amiberry core is no download there.
     """
     wanted = set(names)
     chosen = set(wanted)
     for profile, aliases in (manifest.get("core_names") or {}).items():
         if wanted.intersection(aliases):
             chosen.add(profile)
+    if target is not None:
+        chosen -= {
+            profile for profile, boards in (manifest.get("downloaded_cores") or {}).items()
+            if target not in boards
+        }
     return chosen
 
 
@@ -4849,6 +4859,7 @@ def narrow_to_cores(
     files: list[dict] | None = None,
     omitted: list[dict] | None = None,
     declared_by_info: Collection[str] = (),
+    target: str | None = None,
 ) -> tuple[list[dict], list[dict]]:
     """Keep what the named cores read, as a pack built for them carries.
 
@@ -4859,9 +4870,10 @@ def narrow_to_cores(
     way to the first named core claiming its destination. A manifest without
     the two maps keeps the platform's list whole and matches cores by name.
     A destination in `declared_by_info`, what the .info of an installed core
-    no profile describes declares, stays whatever is named.
+    no profile describes declares, stays whatever is named. `target` is the
+    board the names are the list of.
     """
-    cores = designated_cores(manifest, names)
+    cores = designated_cores(manifest, names, target)
     reach = manifest.get("system_cores") or {}
     info_dests = {dest.casefold() for dest in declared_by_info}
 
@@ -16175,7 +16187,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             else:
                 before = len(files)
                 files, omitted_files = narrow_to_cores(
-                    manifest, target_info["cores"], files, omitted_files
+                    manifest, target_info["cores"], files, omitted_files,
+                    target=target,
                 )
                 print(f"  Filtered {before} to {len(files)} files for target {target}")
 

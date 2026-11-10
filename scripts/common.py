@@ -6,7 +6,7 @@ and file resolution - eliminates DRY violations across scripts.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Collection, Iterable, Mapping
 from collections import Counter
 
 import argparse
@@ -3230,9 +3230,30 @@ def resolve_platform_cores(
     Alias profiles are always excluded (they point to another profile).
     If target_cores is provided, result is intersected with it.
     """
+    result, downloaded_only = _platform_profiles(config, profiles)
+    if target_cores is not None:
+        result = result & designated_profiles(profiles, target_cores)
+        result -= {
+            profile for profile, names in downloaded_only.items()
+            if not downloadable_on(target_cores, names)
+        }
+    return result
+
+
+def downloaded_only_profiles(
+    config: dict, profiles: dict[str, dict]
+) -> dict[str, frozenset[str]]:
+    """The profiles a platform reaches only through its RetroArch core
+    downloader, each with the installable names that reach it."""
+    return _platform_profiles(config, profiles)[1]
+
+
+def _platform_profiles(
+    config: dict, profiles: dict[str, dict]
+) -> tuple[set[str], dict[str, frozenset[str]]]:
     cores_config = config.get("cores")
     platform_key = str(config.get("_key") or "")
-    downloaded_only: dict[str, str] = {}
+    downloaded_only: dict[str, set[str]] = {}
     # The builds the platform compiles itself, by the names they answer to.
     # Such a name means that build there, and another revision of the same
     # project is not what the platform runs: ROCKNIX and RetroPie build only
@@ -3323,9 +3344,11 @@ def resolve_platform_cores(
         # A core reached only through the RetroArch downloader runs on the
         # boards whose downloader offers it: Batocera's x86_64 RetroArch
         # installs the amiberry core, its armv7 and aarch64 boards cannot.
+        # Every installable name counts: Batocera's x86_64 downloader offers
+        # nside_sfc_balanced, not the higan_sfc_balanced it also lists.
         for c in config.get("installable_cores") or []:
             for profile in libretro_builds(c) - dual - result:
-                downloaded_only.setdefault(profile, str(c))
+                downloaded_only.setdefault(profile, set()).add(str(c))
         result |= dual | set(downloaded_only)
         # Support "all_libretro" as a list element: combines all libretro
         # profiles with explicitly listed standalone cores (e.g. RetroDECK
@@ -3343,13 +3366,7 @@ def resolve_platform_cores(
             and not p.get("built_by")
         }
 
-    if target_cores is not None:
-        result = result & designated_profiles(profiles, target_cores)
-        result -= {
-            profile for profile, c in downloaded_only.items()
-            if not downloadable_on(target_cores, c)
-        }
-    return result
+    return result, {p: frozenset(names) for p, names in downloaded_only.items()}
 
 
 @functools.lru_cache(maxsize=1)
@@ -3362,14 +3379,18 @@ def _retroarch_target_sets() -> tuple[frozenset[str], ...]:
     )
 
 
-def downloadable_on(target_cores: set[str], name: str) -> bool:
-    """Whether a board's core set holds a RetroArch download list offering `name`.
+def downloadable_on(target_cores: set[str], names: Collection[str]) -> bool:
+    """Whether a board's core set holds a RetroArch download list offering
+    one of `names`.
 
     A board with a downloader carries a whole RetroArch targets entry in its
     set (load_target_config, `downloads`), a board without one only what it
     builds.
     """
-    return any(name in found and found <= target_cores for found in _retroarch_target_sets())
+    return any(
+        found <= target_cores and not found.isdisjoint(names)
+        for found in _retroarch_target_sets()
+    )
 
 
 def unresolved_platform_cores(config: dict, profiles: dict[str, dict]) -> set[str]:

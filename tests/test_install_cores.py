@@ -113,6 +113,38 @@ class NarrowToCores(unittest.TestCase):
         )
 
 
+class ACoreOnlyTheDownloaderBrings(unittest.TestCase):
+    """Batocera builds amiberry standalone on every board, and only its
+    x86_64 RetroArch downloads the amiberry core: both answer to amiberry
+    in a board's core list. The builder reads the downloader's reach
+    (resolve_platform_cores) and the list carries it in downloaded_cores."""
+
+    MANIFEST = {
+        "core_names": {"amiberry": [], "amiberry-7": ["amiberry"]},
+        "downloaded_cores": {"amiberry": ["x86_64", "pc"]},
+        "system_cores": {"commodore-amiga": ["amiberry", "amiberry-7"]},
+        "files": [
+            {"dest": "kick31.rom", "cores": ["amiberry-7"], "systems": ["commodore-amiga"]},
+            {"dest": "roms/a4091.rom", "cores": ["amiberry"], "systems": ["commodore-amiga"]},
+        ],
+        "omitted_files": [],
+    }
+
+    def test_a_board_without_the_download_keeps_its_own_build(self):
+        files, _ = install.narrow_to_cores(self.MANIFEST, ["amiberry"], target="bcm2711")
+        self.assertEqual([f["dest"] for f in files], ["kick31.rom"])
+
+    def test_a_board_or_its_alias_with_the_download_keeps_both(self):
+        for target in ("x86_64", "pc"):
+            with self.subTest(target=target):
+                files, _ = install.narrow_to_cores(self.MANIFEST, ["amiberry"], target=target)
+                self.assertEqual([f["dest"] for f in files], ["kick31.rom", "roms/a4091.rom"])
+
+    def test_an_installed_core_is_no_board(self):
+        files, _ = install.narrow_to_cores(self.MANIFEST, ["amiberry"])
+        self.assertEqual([f["dest"] for f in files], ["kick31.rom", "roms/a4091.rom"])
+
+
 class ACoreTheListDoesNotKnow(unittest.TestCase):
     """A core newer than the list (parallel_dc, issue 87) loses nothing its .info declares."""
 

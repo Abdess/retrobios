@@ -16,7 +16,7 @@
     # and Invoke-WebRequest throws on a cut transfer before the hash is read:
     # the site's build rewrites this line there (scripts/sitebootstrap.py).
     $mismatchAdvice = "The download was most likely cut short: try again. Within minutes of an update of this project the two files can come from caches of different ages. Waiting five minutes settles that."
-    $defaultInstallSha256 = "9dcac77739d3cf609879117fb16bcf798c4b6432b8647cf49dbef52d6650adeb"
+    $defaultInstallSha256 = "68d93a9905c324bc378ead0c0a7cbbecaf47a3c113265cb9f7c40ad40338b9a3"
     # The pin above refuses any changed byte: this cap only stops a body that
     # cannot be the installer (a sign-in portal's page) before it is hashed.
     $maximumInstallerBytes = 8MB

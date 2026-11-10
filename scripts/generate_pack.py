@@ -86,6 +86,9 @@ from common import (
     ProfileSelectionError,
     core_system_dirs,
     declared_root,
+    downloadable_on,
+    downloaded_only_profiles,
+    list_available_targets,
     entry_serves_systems,
     entry_system_ids,
     platform_layouts,
@@ -5291,6 +5294,9 @@ def generate_manifest(
             omitted_by_destination.values(), key=lambda entry: entry["dest"]
         ),
         "core_names": core_names,
+        **({"downloaded_cores": downloaded} if (downloaded := _downloaded_cores(
+            config, emu_profiles, core_names, platforms_dir,
+        )) else {}),
         "system_cores": system_cores,
         # The names the platform itself gives its systems (Batocera's psx),
         # which --system accepts beside the ids.
@@ -5443,6 +5449,39 @@ def _manifest_data_directories(
             group["cores"] = readers[group["ref"]]
         trees.append(group)
     return trees
+
+
+def _downloaded_cores(
+    config: dict,
+    profiles: dict[str, dict],
+    core_names: dict[str, list[str]],
+    platforms_dir: str,
+) -> dict[str, list[str]]:
+    """The cores only the platform's RetroArch downloader brings, each with
+    the boards, aliases included, whose downloader offers it.
+
+    A target list names the board's standalone amiberry and the buildbot's
+    amiberry core alike, so the installer cannot tell from the name whether
+    the board reaches the core. `resolve_platform_cores` decides it, and
+    `install.py --target` reads its answer here.
+    """
+    reached = {
+        profile: names
+        for profile, names in downloaded_only_profiles(config, profiles).items()
+        if profile in core_names
+    }
+    if not reached:
+        return {}
+    platform = str(config.get("_key") or "")
+    boards: dict[str, list[str]] = {profile: [] for profile in reached}
+    for target in list_available_targets(platform, platforms_dir):
+        cores = load_target_config(platform, target["name"], platforms_dir)
+        if cores is None:
+            continue
+        for profile, names in reached.items():
+            if downloadable_on(cores, names):
+                boards[profile] += [target["name"], *target.get("aliases", [])]
+    return {profile: sorted(names) for profile, names in sorted(boards.items())}
 
 
 def _manifest_core_index(

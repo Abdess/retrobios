@@ -130,6 +130,18 @@
         "uniqueItems": true
       }
     },
+    "downloaded_cores": {
+      "description": "Each core only the platform's RetroArch core downloader brings, with the boards and board aliases whose downloader offers it. install.py --target keeps the files of such a core on those boards only.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      }
+    },
     "system_cores": {
       "description": "Each platform system with the cores whose presence keeps it. A system absent here is kept whatever cores are available.",
       "type": "object",

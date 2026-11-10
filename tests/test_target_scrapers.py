@@ -335,6 +335,42 @@ class CoreDownloaderReach(unittest.TestCase):
         self.assertIn(DUAL_MODE_PREFIX + "amiberry", standalone_set(config))
 
 
+class DownloadedCoresReachTheirBoards(unittest.TestCase):
+    """A core only the downloader brings runs where the board's downloader
+    offers one of its names, and the install list says on which boards."""
+
+    @classmethod
+    def setUpClass(cls):
+        from common import load_emulator_profiles, load_platform_config  # noqa: PLC0415
+
+        cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        cls.config = load_platform_config("batocera", str(REPO_ROOT / "platforms"))
+
+    def test_every_installable_name_counts(self):
+        """Batocera lists higan_sfc_balanced and nside_sfc_balanced, and the
+        buildbot offers the second: reading the first alone dropped the
+        core from x86_64."""
+        from common import load_target_config, resolve_platform_cores  # noqa: PLC0415
+
+        root = str(REPO_ROOT / "platforms")
+        x86 = load_target_config("batocera", "x86_64", root)
+        self.assertIn("higan_sfc_balanced", resolve_platform_cores(self.config, self.profiles, x86))
+        rpi4 = load_target_config("batocera", "bcm2711", root)
+        resolved = resolve_platform_cores(self.config, self.profiles, rpi4)
+        self.assertNotIn("amiberry", resolved)
+        self.assertIn("amiberry-7.1.1-332", resolved)
+
+    def test_the_list_names_the_boards_of_each_downloaded_core(self):
+        import generate_pack  # noqa: PLC0415
+
+        core_names = {"amiberry": [], "higan_sfc_balanced": ["nside_sfc_balanced"]}
+        boards = generate_pack._downloaded_cores(
+            self.config, self.profiles, core_names, str(REPO_ROOT / "platforms"))
+        self.assertEqual(set(boards), {"amiberry", "higan_sfc_balanced"})
+        self.assertIn("x86_64", boards["amiberry"])
+        self.assertNotIn("bcm2711", boards["amiberry"])
+
+
 class KnulliPerBoard(unittest.TestCase):
     """KNULLI builds per board on Batocera's model from its own tree:
     configs/knulli-*.board, package/system/knulli-system/Config.in and

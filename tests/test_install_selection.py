@@ -1015,7 +1015,7 @@ class InstallMatchesATargetManifest(unittest.TestCase):
                 ))
                 full = self._manifest(platform)
                 built = self._manifest(platform, set(cores), target)
-                files, omitted = install.narrow_to_cores(full, cores)
+                files, omitted = install.narrow_to_cores(full, cores, target=target)
                 # A case-insensitive platform reads one file under both
                 # spellings (BlastEm's 32X_M_BIOS.bin, PicoDrive's .BIN).
                 from common import load_platform_config
