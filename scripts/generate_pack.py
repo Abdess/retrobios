@@ -5819,7 +5819,7 @@ def _pack_archives(output_dir: str) -> list[str]:
     fail conformance, and injecting a manifest would change published bytes.
     Every name the builder gives holds `_BIOS_Pack`, then the system tag of
     a --system platform pack (`_BIOS_Pack_Playstation.zip`): build_port.py
-    writes its launcher archives (RetroBIOS.zip) to the same dist/, and
+    wrote its launcher archives (RetroBIOS.zip) to the same dist/, and
     taking every ZIP rewrote them with a manifest after build_port had
     printed their hashes.
     """

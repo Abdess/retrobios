@@ -248,25 +248,18 @@ python scripts/pipeline.py
 #    which install.py --check reads to name a part missing from a folder.
 python scripts/split_pack.py dist/
 
-# 2b. The handheld launchers, each carrying the installer the bootstraps pin:
-#     RetroBIOS.zip (the PortMaster port), RetroBIOS-batocera.zip (Batocera
-#     and Knulli Ports), RetroBIOS.muxapp (muOS Applications) and
-#     RetroBIOS-tools.zip (the Tools menu of ArkOS, dArkOS, ROCKNIX, JELOS,
-#     AmberELEC). They are release files, listed in the checksums below, and
-#     check_release.py compares each asset with its line there.
-python scripts/build_port.py
-
-# 2c. The release carries the packs, the handheld launchers and the signed
-#     checksum list, and nothing else: a beginner reads that page to pick one
-#     file. A package pins install.py and its file list from the tag
-#     (installer page, "For packagers"), and check_release.py refuses an
-#     installer or a file list attached to the release.
+# 2b. The release carries the packs and the signed checksum list, and
+#     nothing else: a beginner reads that page to pick one file. A package
+#     pins install.py and its file list from the tag (installer page, "For
+#     packagers"). The handheld launchers carry install.py too, so the site
+#     builds and serves them from its own commit. check_release.py refuses an
+#     installer, a file list or a launcher attached to the release.
 
 # 3. Checksums of the files as published, then sign the list. The checksums
 #    answer corruption, and the signature answers a rewritten release, which is
 #    the one thing a checksum published beside its own artifacts cannot
 #    answer.
-(cd dist && sha256sum *.zip RetroBIOS.muxapp > SHA256SUMS.txt)
+(cd dist && sha256sum *_BIOS_Pack*.zip > SHA256SUMS.txt)
 ssh-keygen -Y sign -f ~/.ssh/retrobios_signing -n file dist/SHA256SUMS.txt
 
 # 4. Record what each pack holds, read from the archives just checked:
@@ -284,14 +277,16 @@ python scripts/generate_site.py
 #    maintainer's own text in tmp/whats-new.md, appended as written. The
 #    script refuses a text that judges another project ("forum list") or
 #    promises what the gap analysis contradicts ("never stops"): it says
-#    what changed and how it was checked.
+#    what changed and how it was checked. The notes end with everyone who
+#    helped since the start, read with gh (--thanks FILE passes a checked
+#    list), and the full changelog from the previous release's record.
 python scripts/release_notes.py --whats-new tmp/whats-new.md --output tmp/notes.md
 
 #    Create the release as a DRAFT, upload every asset, and only then publish it.
 #    A public release with half its assets is a broken download for everyone
 #    during the whole upload.
 gh release create "v${DATE}" --draft --title "BIOS Pack v${DATE}" --notes-file tmp/notes.md
-for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*.zip dist/RetroBIOS.muxapp; do
+for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*_BIOS_Pack*.zip; do
   [ -f "$f" ] && gh release upload "v${DATE}" "$f#$(basename "$f")" --clobber
 done
 #    A count does not see a failed upload beside a stray file, nor a part

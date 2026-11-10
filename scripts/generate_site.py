@@ -127,6 +127,7 @@ from siteguides import (
 import archive_build
 import release_record
 import sitebootstrap
+import sitehandheld
 import sitemeasurements
 
 # The Starlight project, and where its pages go inside it.
@@ -859,6 +860,7 @@ def generate_get_page(platform_name: str) -> str:
             f"[Why no ZIP?](../{NO_ZIP_FAQ})",
             "",
         ]
+    lines += sitehandheld.platform_block(platform_name, _REPO_ROOT)
     lines += _next_block([
         f"[{display}](../platforms/{platform_name}.md#install): the folder, "
         "and how to run the command on the device",
@@ -886,6 +888,11 @@ def generate_get_index() -> str:
         for name in names:
             display = load_platform_config(name, str(siteinputs.current().platforms)).get("platform", name)
             lines.append(f"- [{get_page_title(name, display)}]({name}.md)")
+        # The handheld app sits with the group whose tile leads to the
+        # handheld guide.
+        if any(HANDHELD_GUIDE and tile.link == HANDHELD_GUIDE.path
+               for tile in GROUP_TILES.get(group, ())):
+            lines.append(f"- [{sitehandheld.GROUP_TITLE}]({sitehandheld.GROUP_PAGE}.md)")
         lines.append("")
     return "\n".join(lines)
 
@@ -4512,6 +4519,10 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
         "",
         *_guide_download(guide.uses, display, uses, None, "## Download { #download }"),
         *_offline_line(guide.uses),
+        f"On {sitehandheld.joined(sitehandheld.group_systems(), 'or')}: "
+        f"[{sitehandheld.GROUP_TITLE}]"
+        f"(../get/{sitehandheld.GROUP_PAGE}.md).",
+        "",
         "## Fill the card from a computer { #install }",
         "",
         "On Windows, note the card's letter, like **E:**. Put its BIOS folder after "
@@ -12472,6 +12483,8 @@ def _generate(args: argparse.Namespace) -> None:
     (public / "robots.txt").unlink(missing_ok=True)
     # The one-line commands' bootstraps, at the site's root.
     sitebootstrap.write_bootstraps(public, _REPO_ROOT)
+    # The handheld launchers, built from the same commit (sitehandheld).
+    sitehandheld.write_launchers(public, _REPO_ROOT)
 
     images_dest = public / "assets" / "images"
     images_dest.mkdir(parents=True, exist_ok=True)
@@ -12820,6 +12833,8 @@ def _generate(args: argparse.Namespace) -> None:
     get_dir.mkdir(parents=True, exist_ok=True)
     for name in platform_names:
         write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))
+    write_if_changed(str(get_dir / f"{sitehandheld.GROUP_PAGE}.md"),
+                     sitehandheld.group_page(_REPO_ROOT))
     write_if_changed(str(get_dir / "index.md"), generate_get_index())
 
     print("Generating contributing page...")
