@@ -807,5 +807,57 @@ class DolphinUserDirectory(unittest.TestCase):
         self.assertEqual(ipl.get("unplaced"), "outside_bios_folder")
 
 
+class MameSearchPaths(unittest.TestCase):
+    """MAME reads each semicolon-separated search path in turn
+    (src/emu/fileio.cpp:53-58, 330-392)."""
+
+    def sets(self, view: dict) -> list[dict]:
+        return [e for e in view["files"] if e.get("category") == "bios_zip"]
+
+    def test_retrobat_keeps_the_sets_at_the_bios_root(self) -> None:
+        # -rp bios;<rom directory> (Mame64.Generator.cs:93-96).
+        view = standalone_view("mame", "retrobat")
+        sets = self.sets(view)
+        self.assertGreater(len(sets), 1000)
+        for entry in sets:
+            self.assertEqual(entry["standalone_path"], entry["name"])
+            self.assertNotIn("unplaced", entry)
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        # -sp bios/mame/samples, hbmame's folder being another record
+        # (Mame64.Generator.cs:30, 101, 106-107).
+        self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
+
+    def test_knulli_keeps_the_root_listed_after_bios_mame(self) -> None:
+        # -rompath <romDirname>;/userdata/bios/mame;/userdata/bios (mameGenerator.py:116-122).
+        view = standalone_view("mame", "knulli")
+        self.assertTrue(all(e["standalone_path"] == e["name"] for e in self.sets(view)))
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
+
+    def test_retropie_moves_the_sets_to_bios_mame(self) -> None:
+        # rompath $romdir/mame;$romdir/arcade;$biosdir/mame (mame.sh:133).
+        view = standalone_view("mame", "retropie")
+        self.assertTrue(all(
+            e["standalone_path"] == "mame/" + e["name"] for e in self.sets(view)
+        ))
+
+    def test_retrodeck_reads_samples_in_mame_sa(self) -> None:
+        # samplepath $bios_path/mame-sa/samples (mame/component_prepare.sh:94, 117).
+        view = standalone_view("mame", "retrodeck")
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual(bbc["standalone_path"], "mame-sa/samples/bbc.zip")
+        # ES-DE hands -rompath %GAMEDIR%;%ROMPATH%/<system>: no BIOS folder.
+        self.assertTrue(all(
+            e.get("unplaced") == "outside_bios_folder" for e in self.sets(view)
+        ))
+
+    def test_psxmame_reads_bios_psxmame_bios(self) -> None:
+        # -rompath bios/psxmame/bios;<rom directory> (PSXMame.Generator.cs:38-48).
+        view = standalone_view("psxmame", "retrobat")
+        self.assertTrue(view["files"])
+        for entry in view["files"]:
+            self.assertEqual(entry["standalone_path"], "psxmame/bios/" + entry["name"])
+
+
 if __name__ == "__main__":
     unittest.main()

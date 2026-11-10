@@ -341,6 +341,10 @@ INSTALL_TREE = "install"
 # A folder of neither tree, which no pack and no installer can fill.
 OUTSIDE_TREE = "outside"
 Place = tuple[str, str]
+# The binding key of a search list standing for the whole layout: the
+# directories hold the layout's files themselves (XRoar's ROMs, MAME's sets),
+# never its subfolders.
+SEARCHED_FILES = "*"
 
 _HOME = re.compile(r"^(?:\$\{HOME\}|\$HOME|\$home|~)(?=/|$)")
 # Flatpak sets XDG_DATA_HOME to ~/.var/app/<id>/data inside the sandbox.
@@ -443,13 +447,29 @@ def native_systems(config: dict) -> dict[str, str]:
     return found
 
 
-def _listed_directories(raw: str) -> list[str] | None:
-    """The directories of a colon-separated search path, None for one directory.
+# How the launcher extractors spell the folder holding the launched game:
+# RetroBat's Path.GetDirectoryName(rom) (retrobat_launchers._KNOWN), KNULLI's
+# os.path.dirname(rom) and its software list folder (mameGenerator.py:113-116).
+GAME_FOLDERS = ("<rom directory>", "<romDirname>", "<softDir>")
 
-    XRoar's rompath is such a list (RetroDECK writes four directories), each
-    entry a path or a variable spelling one. A Windows drive letter or a
-    backslash means a single path.
+
+def _listed_directories(raw: str) -> list[str] | None:
+    """The directories of a search path, None for one directory.
+
+    XRoar's rompath is a colon-separated list (RetroDECK writes four
+    directories), each entry a path or a variable spelling one. A Windows
+    drive letter or a backslash means a single path. MAME splits its search
+    paths on semicolons whatever the system (src/emu/fileio.cpp:53-58):
+    RetroBat passes `-rp bios;<rom directory>`, KNULLI `-rompath
+    <romDirname>;/userdata/bios/mame;/userdata/bios`. The game's own folder
+    is no folder a pack fills, so it gives no directory.
     """
+    if ";" in raw:
+        parts = [p.strip() for p in raw.split(";") if p.strip()]
+        kept = [p for p in parts if p not in GAME_FOLDERS]
+        if kept and all(not re.search(r"[\s,<>]", p) for p in kept):
+            return kept
+        return None
     if ":" not in raw or "\\" in raw or re.match(r"^[A-Za-z]:", raw):
         return None
     parts = [p.strip() for p in raw.split(":")]
@@ -722,7 +742,13 @@ def _bind(
     one after the other: openMSX's filepool, XRoar's rompath. A file in any
     of them is read, so the pool gives one: the directory the platform's own
     list already fills (Batocera's bios/openmsx beside bios/Machines), else
-    the first of the BIOS tree, else the first a pack can fill.
+    the first of the BIOS tree, else the first a pack can fill. A list that
+    already holds the folder the layout's files take without the launcher
+    keeps them there: KNULLI starts MAME with -rompath
+    <romDirname>;/userdata/bios/mame;/userdata/bios, and the sets at the BIOS
+    root stay. A pool standing for the whole layout holds its files
+    directly, not its folders (SEARCHED_FILES): MAME reads hash/ and
+    samples/ through other settings.
     """
     found: dict[str, set[Place]] = {}
     pooled: dict[str, list[tuple[bool, Place]]] = {}
@@ -756,11 +782,14 @@ def _bind(
                 for rest, place in places or [("", (OUTSIDE_TREE, ""))]:
                     found.setdefault(rest, set()).add(place)
     for sub, entries in pooled.items():
-        # The directory the platform's own list fills, else the first of the
-        # BIOS tree, else the first a pack fills.
+        # The folder the files already take, else the directory the
+        # platform's own list fills, else the first of the BIOS tree, else
+        # the first a pack fills.
+        unmoved = [p for _held, p in entries if p == (BIOS_TREE, sub)]
         filled = [p for held, p in entries if held]
         in_bios = [p for _held, p in entries if p[0] == BIOS_TREE]
-        found.setdefault(sub, set()).add((filled or in_bios or [p for _h, p in entries])[0])
+        chosen = (unmoved or filled or in_bios or [p for _h, p in entries])[0]
+        found.setdefault(sub or SEARCHED_FILES, set()).add(chosen)
     return found
 
 
@@ -850,9 +879,15 @@ def bound_path(path: str, bindings: dict[str, Place]) -> Place | None:
 
     The longest subfolder that contains the path wins: a link of
     kickstarts/ places kickstarts/kick13.rom even when the whole layout is
-    bound elsewhere.
+    bound elsewhere. SEARCHED_FILES covers the files at the root of the
+    layout alone.
     """
     for sub in sorted(bindings, key=len, reverse=True):
+        if sub == SEARCHED_FILES:
+            if "/" in path:
+                continue
+            root, folder = bindings[sub]
+            return (root, f"{folder}/{path}" if folder else path)
         if sub and not path.startswith(sub + "/"):
             continue
         rest = path[len(sub) + 1:] if sub else path

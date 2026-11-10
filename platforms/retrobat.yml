@@ -4718,16 +4718,26 @@ launchers:
     \ == \"hbmame\", !string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig[\"\
     bios\"])"
   source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:93-96"
+- emulator: hbmame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/hbmame/samples
+  passes_to: command line -sp bios/hbmame/samples
+  fails_when_missing: false
+  depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
+    \ == \"hbmame\", !string.IsNullOrEmpty(samplePath) && Directory.Exists(samplePath)"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 101, 106-107"
 - emulator: mame64
   build: standalone
   kind: passes_path
   names: []
-  search_dir: bios/hbmame/samples when hbmame, else bios/mame/samples
-  passes_to: command line -sp bios/hbmame/samples when hbmame, else bios/mame/samples
+  search_dir: bios/mame/samples
+  passes_to: command line -sp bios/mame/samples
   fails_when_missing: false
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(samplePath) && Directory.Exists(samplePath)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:101, 106-107"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 101, 106-107"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4764,16 +4774,26 @@ launchers:
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(iniPath) && Directory.Exists(iniPath)"
   source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:74-76, 167-168"
+- emulator: hbmame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/hbmame/hash
+  passes_to: command line -hash bios/hbmame/hash
+  fails_when_missing: false
+  depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
+    \ == \"hbmame\", !string.IsNullOrEmpty(hashPath) && Directory.Exists(hashPath)"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 172, 177-178"
 - emulator: mame64
   build: standalone
   kind: passes_path
   names: []
-  search_dir: bios/hbmame/hash when hbmame, else bios/mame/hash
-  passes_to: command line -hash bios/hbmame/hash when hbmame, else bios/mame/hash
+  search_dir: bios/mame/hash
+  passes_to: command line -hash bios/mame/hash
   fails_when_missing: false
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(hashPath) && Directory.Exists(hashPath)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:172, 177-178"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 172, 177-178"
 - emulator: mame64
   build: standalone
   kind: passes_path
