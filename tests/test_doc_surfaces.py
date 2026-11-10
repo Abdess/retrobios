@@ -450,7 +450,9 @@ class CoreCountsReadFromTheData(unittest.TestCase):
         sitepages.require()
         text = sitepages.page("cross-reference.md").read_text(encoding="utf-8")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
+        # A test core says so in role, its type staying operational.
+        unique = {k: v for k, v in profiles.items()
+                  if v.get("type") != "alias" and v.get("role") != "test"}
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text(
             encoding="utf-8"))["platforms"]
         run = set()
