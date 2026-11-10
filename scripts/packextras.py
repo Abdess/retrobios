@@ -567,7 +567,15 @@ def _agnostic_scan_extras(
                 agnostic_votes.get(directory + "/", 0) + 1
             )
 
-        for profile, standalone in platform_layouts(emu_name, profile, standalone_set or set()):
+        own = profile
+        for profile, standalone in platform_layouts(emu_name, own, standalone_set or set()):
+            # A layout copies each entry in order (a launcher's folder, a
+            # system directory): its files are looked up as the profile's
+            # own, or a bound layout scans nothing (KNULLI's bios/ps2).
+            origin = {
+                id(view): entry
+                for view, entry in zip(profile.get("files", []), own.get("files", []))
+            }
             for f in profile.get("files", []):
                 if not is_profile_agnostic and not f.get("agnostic"):
                     continue
@@ -617,8 +625,8 @@ def _agnostic_scan_extras(
                 companion_ext, image = _companion_of(profile, fname)
 
                 path_prefix = (
-                    resolved_dirs.get(id(image), "") if image
-                    else resolved_dirs.get(id(f), "")
+                    resolved_dirs.get(id(origin.get(id(image), image)), "") if image
+                    else resolved_dirs.get(id(origin.get(id(f), f)), "")
                 )
                 # A placeholder (<bios>.bin) resolves to nothing and anchors no
                 # directory. The folders where the system's other profiles
@@ -639,7 +647,10 @@ def _agnostic_scan_extras(
                 # A name matching one file identifies it. A name matching several
                 # identifies nothing on its own, so the profile's other files have
                 # to agree on the directory before the scan walks it.
-                ambiguous = id(f) in named_only and len(by_name.get(fname, [])) > 1
+                ambiguous = (
+                    id(origin.get(id(f), f)) in named_only
+                    and len(by_name.get(fname, [])) > 1
+                )
                 if ambiguous and agnostic_votes.get(path_prefix, 0) < 2:
                     continue
 
