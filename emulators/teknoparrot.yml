@@ -249,8 +249,8 @@ files:
     size: 2097152
     validation: [size]
     description: "Chihiro media board flash ROM"
-    note: "Opened for a Chihiro XBE started directly (boot.id beside it). The emulator aborts when it is missing or not 2 MB, then writes the two SEGABOOT halves out of it when they are absent."
-    source_ref: "cxbxr 1.0.0.20 cxbxr-emu.dll (sha256 4396e61e874359c9) FUN_100c2dc0 0x100c2dc0-0x100c2dfa (static std::string fpr21042_m29w160et.bin), FUN_103deed0 0x103df6a7-0x103df72d (EmuMediaBoard path plus that name, exists check, CxbxrAbort Chihiro Media Board ROM could not be found), 0x103df744-0x103df769 (fopen, abort when it fails), 0x103df777-0x103df7b2 (fseek end, ftell, abort unless 0x200000), 0x103df83a-0x103df92e (SEGABOOT halves written when absent)"
+    note: "Opened when a title is started directly (boot flags zero), the system is Chihiro and a boot.id sits beside the XBE. The emulator aborts when it is missing or not 2 MB, then writes the two SEGABOOT halves out of it when they are absent."
+    source_ref: "cxbxr 1.0.0.20 cxbxr-emu.dll (sha256 4396e61e874359c9) FUN_100c2dc0 0x100c2dc0-0x100c2dfa (static std::string fpr21042_m29w160et.bin), FUN_103deed0 0x103df12c-0x103df16c (xbeDirectory, parent_path FUN_10200420 of the XBE path), 0x103df408-0x103df4d4 (auto detect: XbeType 0, 1 or other gives system 2, 4 or 8, then filesystem::exists FUN_100cbc80 of xbeDirectory / boot.id, string 0x10652c54, sets 8 Chihiro), 0x103df572-0x103df646 (BootFlags zero, system 8 and a second exists of xbeDirectory / boot.id, otherwise jump to 0x103dfa07 past the ROM block), 0x103df6a7-0x103df72d (EmuMediaBoard path plus that name, exists check, CxbxrAbort Chihiro Media Board ROM could not be found), 0x103df744-0x103df769 (fopen, abort when it fails), 0x103df777-0x103df7b2 (fseek end, ftell, abort unless 0x200000), 0x103df83a-0x103df92e (SEGABOOT halves written when absent)"
 
   - name: ic10_g24lc64.bin
     path: "EmuMediaBoard/Chihiro/ic10_g24lc64.bin"
