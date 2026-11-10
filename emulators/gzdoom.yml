@@ -30,6 +30,14 @@ notes: |
   The last three are skipped for shareware IWADs and with -noextras.
   ref: src/d_main.cpp:2050-2071
 
+  BaseFileSearch tries the program directory first for these resources, then
+  the name as given, then each FileSearch.Directories path. The same search
+  serves -file, -deh and -bex arguments and zvox.wad. IWADs are not looked up
+  there: candidates come from the IWADSearch.Directories paths, and the Load
+  files of an IWAD block from the IWAD's own directory.
+  ref: src/common/utility/findfile.cpp:106-115, 224-296,
+       src/d_main.cpp:1802-1803, 2083, src/d_iwad.cpp:456-476, 613-624, 877-901
+
   Game data is a user-supplied IWAD. iwadinfo.txt declares each known
   IWAD with its IWADName, MustContain lumps and support files. The
   search directories are scanned for the file names of its Names block
