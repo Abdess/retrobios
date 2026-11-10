@@ -7824,6 +7824,15 @@ class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
             {"profile": "drastic-legacy", "bundled": True}]}
         self.assertEqual(_split_bundled_claims([alone]), [alone])
 
+    def test_a_held_file_out_of_reach_names_every_core_reading_it(self):
+        """harm1.wad is a release asset: a checkout without it omits the file,
+        and the omission named gzdoom alone where lzdoom reads it too."""
+        from generate_pack import _claim_cores
+
+        extra = {"source_profile": "gzdoom", "other_claims": [
+            {"source_profile": "uzdoom"}, {"source_profile": "lzdoom"}]}
+        self.assertEqual(_claim_cores(extra), ["gzdoom", "lzdoom", "uzdoom"])
+
     def test_a_missing_file_names_every_core_reading_it(self):
         from generate_pack import _record_absent
 

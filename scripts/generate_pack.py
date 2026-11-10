@@ -4515,11 +4515,7 @@ def _manifest_core_entries(
             ):
                 systems = _extra_system_ids(fe)
                 record_omission(
-                    full_dest,
-                    fe,
-                    systems[0] if systems else "",
-                    status,
-                    [source_emu] if source_emu else [],
+                    full_dest, fe, systems[0] if systems else "", status, _claim_cores(fe),
                 )
             continue
 
@@ -4554,7 +4550,7 @@ def _manifest_core_entries(
                 systems = _extra_system_ids(fe)
                 record_omission(
                     full_dest, fe, systems[0] if systems else "", "not_found",
-                    [source_emu] if source_emu else [],
+                    _claim_cores(fe),
                 )
             if file_size:
                 pack_only_sizes.append(file_size)
@@ -4666,6 +4662,17 @@ def _manifest_selection(
         region_groups, region_index, pack_systems, extras, required_only,
         extras_prefix=declared_root(config),
     ), held
+
+
+def _claim_cores(fe: dict) -> list[str]:
+    """The cores an extra and the claims folded onto it name: an omission
+    names every core reading the file, as a list built for one of them
+    would."""
+    names = {
+        claim.get("source_profile") or claim.get("source_emulator", "")
+        for claim in (fe, *fe.get("other_claims", []))
+    }
+    return sorted(name for name in names if name)
 
 
 def _record_absent(
