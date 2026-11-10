@@ -501,7 +501,7 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                         ),
                         systems=systems,
                         holds_declared=bool(folder) and any(
-                            d.startswith(f"{folder.lower()}/") for d in declared
+                            d.startswith(f"{(folder or '').lower()}/") for d in declared
                         ),
                     ))
     return found

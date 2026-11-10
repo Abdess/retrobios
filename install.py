@@ -5538,8 +5538,11 @@ def place_emulator_entries(
             layout["config"], "emulators_directory.config", colons=False).parts)
         if layout else None
     )
-    matches = bool(layout) and bios_path.name == layout.get("bios_folder") and config.is_file()
-    moved = _config_keys(config) if matches else set()
+    if config is not None and bios_path.name == layout.get("bios_folder") and config.is_file():
+        moved = _config_keys(config)
+        matches = True
+    else:
+        moved, matches = set(), False
     kept: list[dict] = []
     unplaced: list[dict] = []
     for entry in files:

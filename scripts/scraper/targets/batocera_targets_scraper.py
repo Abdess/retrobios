@@ -559,6 +559,8 @@ class Scraper(BaseTargetScraper):
         repos = [("", self.REPO, self.tag)]
         for prefix, repo in self.SUBMODULES.items():
             pin = _fetch_json(self._api(prefix.rstrip("/")))
+            if not isinstance(pin, dict) or not isinstance(pin.get("sha"), str):
+                raise RuntimeError(f"no submodule commit for {prefix} at {self.tag}")
             repos.append((prefix, repo, pin["sha"]))
         found: dict[str, str] = {}
         for prefix, repo, ref in repos:

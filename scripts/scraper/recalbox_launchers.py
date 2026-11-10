@@ -17,6 +17,7 @@ import ast
 import posixpath
 import re
 from collections.abc import Callable, Mapping
+from functools import partial
 from typing import Any
 
 from .configgen_launchers import (
@@ -849,22 +850,21 @@ def amiberry(cg: Configgen) -> list[Launcher]:
             types = ", ".join(ast.unparse(t).removeprefix("RomType.") for t in entry.elts[0].elts)
             names = kick.literal(entry.elts[1], "kickstart names")
             ref = f"{kick.ref([kick.span(entry), *tail])}, {config_ref}"
-            common = dict(emulator=emulator, build="standalone", slot=system,
-                          case_insensitive=False, search_dir=search_dir,
-                          depends_on_option=f"rom type {types}", source_ref=ref)
+            make = partial(Launcher, emulator=emulator, build="standalone", slot=system,
+                           case_insensitive=False, search_dir=search_dir,
+                           depends_on_option=f"rom type {types}", source_ref=ref)
             if any("|" in name for name in names):
                 if len(names) != 1:
                     kick.fail(f"line {entry.lineno}: several kickstart pairs are not read")
-                launchers.append(Launcher(
+                launchers.append(make(
                     kind="fixed_name", names=names[0].split("|"),
                     passes_to=f"{rom_key}, {ext_key}",
-                    fails_when_missing=", ".join(messages), **common,
+                    fails_when_missing=", ".join(messages),
                 ))
             else:
-                launchers.append(Launcher(
+                launchers.append(make(
                     kind="names_searched", names=names, passes_to=rom_key,
                     fails_when_missing=False if system in computers else messages[0],
-                    **common,
                 ))
     launchers.append(Launcher(
         emulator=emulator, build="standalone", kind="fixed_name", slot=", ".join(computers),
@@ -956,30 +956,28 @@ def pcsx2(cg: Configgen) -> list[Launcher]:
                    if _assigned_name(n) in {c for c in constants.values()}]
     ref = src.ref([(min(names_lines), max(names_lines)), (chooser.lineno, chooser.end_lineno),
                    (writes[0].lineno, writes[0].end_lineno)])
-    common = dict(emulator=cg.emulator(PCSX2), build="standalone", case_insensitive=False,
-                  search_dir=search_dir, passes_to=f"[{section}] {key}",
-                  fails_when_missing=False, source_ref=ref)
+    make = partial(Launcher, emulator=cg.emulator(PCSX2), build="standalone",
+                   case_insensitive=False, search_dir=search_dir,
+                   passes_to=f"[{section}] {key}", fails_when_missing=False, source_ref=ref)
     launchers = []
     for (given, tested), tokens in groups.items():
         slot = constants.get(given, given).removeprefix("BIOS_")
         depends = f"rom name contains {', '.join(tokens)}"
         if tested == given:
-            launchers.append(Launcher(
+            launchers.append(make(
                 kind="names_searched", slot=slot,
                 names=list(dict.fromkeys([given, *fallback])),
-                depends_on_option=depends, **common,
+                depends_on_option=depends,
             ))
         else:
             # The name written is not the one tested: no search, one name.
-            launchers.append(Launcher(
+            launchers.append(make(
                 kind="fixed_name", slot=slot, names=[given],
                 depends_on_option=f"{depends} and {tested} is present",
-                **common,
             ))
-    launchers.append(Launcher(
+    launchers.append(make(
         kind="names_searched", slot="default", names=fallback,
         depends_on_option="rom name with no region token, or its BIOS absent",
-        **common,
     ))
     return launchers
 
@@ -1180,7 +1178,7 @@ def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launch
                 names=[call.args[1].value.strip('"')], search_dir=directory.search_dir,
                 passes_to=f"core option {option}",
                 depends_on_option=f"system {', '.join(systems)}",
-                source_ref=f"{src.ref([(function.lineno, function.end_lineno), *spans])}, "
+                source_ref=f"{src.ref([(function.lineno, function.end_lineno or function.lineno), *spans])}, "
                            f"{directory.source_ref}",
             ))
     found = {str(launcher.passes_to).split()[-1] for launcher in launchers}
@@ -1210,7 +1208,7 @@ def xroar(cg: Configgen) -> list[Launcher]:
     return [Launcher(
         emulator=cg.emulator(XROAR), build="standalone", kind="passes_path", names=[],
         search_dir=directory, passes_to="command line -rompath",
-        source_ref=src.ref([(flag.lineno, value.end_lineno)]),
+        source_ref=src.ref([(flag.lineno, value.end_lineno or value.lineno)]),
     )]
 
 

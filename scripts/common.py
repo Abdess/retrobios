@@ -1686,20 +1686,20 @@ def resolve_local_file(
         and not sha256_candidates
     ):
         by_crc32 = db.get("indexes", {}).get("by_crc32", {})
-        found: list[tuple[str, str]] = []
+        crc_matches: list[tuple[str, str]] = []
         for crc in crc_candidates:
             match = by_crc32.get(crc)
             if match and match in files_db:
                 path = files_db[match]["path"]
                 status = _record_match_status(match)
                 if status and os.path.exists(path):
-                    found.append((path, status))
+                    crc_matches.append((path, status))
         # A primary copy over a .variants/ one, as everywhere else.
-        for path, status in found:
+        for path, status in crc_matches:
             if "/.variants/" not in path:
                 return path, status
-        if found:
-            return found[0]
+        if crc_matches:
+            return crc_matches[0]
 
     # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
     # Guard: only accept if the found file's name matches the requested name
@@ -3074,7 +3074,7 @@ def platform_layouts(
                 family.setdefault(system, set()).update(entry_launch_systems(f, index) - own)
 
     def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
-        systems = frozenset()
+        systems: frozenset[str] = frozenset()
         if per_system:
             own = entry_launch_systems(entry, {})
             systems = entry_launch_systems(entry, index)

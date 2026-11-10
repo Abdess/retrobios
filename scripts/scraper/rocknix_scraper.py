@@ -199,10 +199,7 @@ class Scraper(BaseScraper):
         the targets scraper, where every libretro profile counted before. A
         standalone package no device carries is not run either.
         """
-        try:
-            from .targets.rocknix_targets_scraper import Scraper as DeviceTargets
-        except ImportError:
-            from scraper.targets.rocknix_targets_scraper import Scraper as DeviceTargets
+        from .targets.rocknix_targets_scraper import Scraper as DeviceTargets
         builds = DeviceTargets().device_builds(self.tag or launcher_revision(self.url))
         libretro = sorted({core for _arch, lr, _sa in builds.values() for core in lr})
         carried = set(standalone_emulators(sorted({p for *_rest, sa in builds.values() for p in sa})))

@@ -845,8 +845,8 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
                 depends_on_option="first name found, the target is absent, smaller or older",
             )
         )
-    key = src.find(r"private void StageRomKey\(\)", "StageRomKey")
-    key_body = src.block_at(key.end())
+    stage_key = src.find(r"private void StageRomKey\(\)", "StageRomKey")
+    key_body = src.block_at(stage_key.end())
     key_text = src.text[key_body[0]:key_body[1]]
     named = re.search(r'FindBios\(new\[\] \{ "([^"]+)" \}\)', key_text)
     if not named or not re.search(
@@ -861,7 +861,7 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
             "copies",
             [named.group(1)],
             source_ref((src.path, [head, src.lines(roms.start(), roms.end()),
-                                   (src.line(key.start()), src.lines(*key_body)[1]), method_span])),
+                                   (src.line(stage_key.start()), src.lines(*key_body)[1]), method_span])),
             case_insensitive=True,
             search_dir=search,
             passes_to=f"{home}/{roms.group(2)}/{named.group(1)}",
@@ -3386,11 +3386,12 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
     # runs a CoCo 3 for coco, so its ROMs are read from that system's folder.
     features = sources[FEATURES]
     for record in records:
-        if not record.get("systems"):
+        systems = record.get("systems")
+        if not isinstance(systems, list) or not systems:
             continue
         machines: list[str] = []
         lines = []
-        for system in record["systems"]:
+        for system in systems:
             choices, span = system_feature_choices(features, "xroar", "xroar_machine", system)
             machines += [m for m in choices if m not in machines]
             lines.append(span)
@@ -3441,11 +3442,14 @@ def _per_system(src: Source, record: Record) -> list[Record]:
         return [record]
     default, chosen, system = branch.groups()
     flag = str(record["passes_to"]).removesuffix(rendered).strip()
+    names = record["names"]
+    if not isinstance(names, list):
+        raise LauncherPatternMissing(src.path, "names of a directory choice")
     out = []
     for directory, systems in ((default, None), (chosen, [system])):
         split = {k: v for k, v in record.items() if k != "source_ref"}
         split.update(
-            names=list(record["names"]), search_dir=directory, passes_to=f"{flag} {directory}"
+            names=list(names), search_dir=directory, passes_to=f"{flag} {directory}"
         )
         if systems:
             split["systems"] = systems

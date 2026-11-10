@@ -249,10 +249,7 @@ class Scraper(BaseScraper):
         engines depend on emuelec-ports, which no package of an image
         depends on, and flycast-dojo is in no device list (UNBUILT there).
         """
-        try:
-            from .targets.emuelec_targets_scraper import Scraper as DeviceTargets
-        except ImportError:
-            from scraper.targets.emuelec_targets_scraper import Scraper as DeviceTargets
+        from .targets.emuelec_targets_scraper import Scraper as DeviceTargets
         targets = DeviceTargets().device_targets(self.tag)["targets"]
         return {name for entry in targets.values() for name in entry["cores"]}
 

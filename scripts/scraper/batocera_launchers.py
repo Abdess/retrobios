@@ -113,9 +113,9 @@ def configs_root(cg: Configgen) -> dict[str, str]:
     spans = []
     for node in reversed(src.tree.body):
         name = _assigned_name(node)
-        if name in wanted:
+        if name in wanted and isinstance(node, (ast.Assign, ast.AnnAssign)) and node.value:
             spans.append((node.lineno, node.end_lineno or node.lineno))
-            wanted |= {n.id for n in ast.walk(node.value) if isinstance(n, ast.Name)}  # type: ignore[union-attr]
+            wanted |= {n.id for n in ast.walk(node.value) if isinstance(n, ast.Name)}
     return {
         "path": cg.paths["CONFIGS"],
         "from_bios": posixpath.relpath(cg.paths["CONFIGS"], cg.bios),
@@ -943,7 +943,7 @@ def config_directories(
     """file.write("<line naming a BIOS directory>") and settings.save(key, <BIOS directory>)."""
     prefix = cg.bios.rstrip("/")
     inside = re.compile(rf"{re.escape(prefix)}(?:/[^\s\"';]*)?")
-    launchers = []
+    launchers: list[Launcher] = []
     for module in modules:
         src = cg.generator(module)
         constants = dict(cg.paths)

@@ -840,7 +840,7 @@ class PackageReader:
         """
         suffix = " is a symlink to it"
         linked = [
-            record.passes_to.removesuffix(suffix).rstrip("/")
+            (record.passes_to or "").removesuffix(suffix).rstrip("/")
             for record in self.records
             if record.kind == "links" and not record.names
             and (record.passes_to or "").endswith(suffix)

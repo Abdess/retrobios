@@ -17,32 +17,18 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-try:
-    from .configgen_launchers import Launcher
-    from .rocknix_launchers import fixed_paths
-    from .shell_launchers import (
-        LauncherPatternMissing,
-        Link,
-        RepoTree,
-        Script,
-        describe_keys,
-        settings,
-        source_ref,
-        words,
-    )
-except ImportError:
-    from configgen_launchers import Launcher
-    from rocknix_launchers import fixed_paths
-    from shell_launchers import (
-        LauncherPatternMissing,
-        Link,
-        RepoTree,
-        Script,
-        describe_keys,
-        settings,
-        source_ref,
-        words,
-    )
+from .configgen_launchers import Launcher
+from .rocknix_launchers import fixed_paths
+from .shell_launchers import (
+    LauncherPatternMissing,
+    Link,
+    RepoTree,
+    Script,
+    describe_keys,
+    settings,
+    source_ref,
+    words,
+)
 
 SX05RE = "packages/sx05re"
 BIN = f"{SX05RE}/emuelec/bin"
@@ -515,11 +501,11 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     by_value: dict[tuple[tuple[str, str], ...], list[tuple[str, set[int], int]]] = {}
     for mk_line, file in installs:
         path = f"{package}/config/{file}"
-        found = [s for s in settings(tree.read(path), separator=" ") if _under(s.value)]
-        if not found:
+        keys = [s for s in settings(tree.read(path), separator=" ") if _under(s.value)]
+        if not keys:
             raise LauncherPatternMissing(path, f"key naming a folder under {BIOS_ROOT}")
-        value = tuple((s.key, s.value) for s in found)
-        by_value.setdefault(value, []).append((path, {s.line for s in found}, mk_line))
+        value = tuple((s.key, s.value) for s in keys)
+        by_value.setdefault(value, []).append((path, {s.line for s in keys}, mk_line))
     if len(by_value) != 1:
         raise mk.missing("one set of BIOS folders for every device")
     ((value, configs),) = by_value.items()

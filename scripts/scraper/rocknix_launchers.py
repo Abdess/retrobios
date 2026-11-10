@@ -192,7 +192,7 @@ def config_records(
     package: str,
     file: str,
     passes_to_suffix: str = "",
-    **fields: object,
+    depends_on_option: str | None = None,
 ) -> list[Launcher]:
     """fixed_name records for the bios paths of a config installed per device."""
     configs = device_configs(tree, package, file)
@@ -218,7 +218,7 @@ def config_records(
                     (described + passes_to_suffix) if value.names else f"{described} left empty"
                 ),
                 device=device,
-                **fields,
+                depends_on_option=depends_on_option,
             )
         )
     return records
@@ -335,7 +335,13 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
     return records
 
 
-def link_record(emulator: str, script: Script, link: Link, **fields: object) -> Launcher:
+def link_record(
+    emulator: str,
+    script: Script,
+    link: Link,
+    case_insensitive: bool | None = None,
+    fails_when_missing: bool | str = False,
+) -> Launcher:
     return Launcher(
         emulator=emulator,
         build="standalone",
@@ -345,7 +351,8 @@ def link_record(emulator: str, script: Script, link: Link, **fields: object) -> 
         expands=link.expands or None,
         search_dir=link.bios_side,
         passes_to=f"symlink {link.link} -> {link.target}",
-        **fields,
+        case_insensitive=case_insensitive,
+        fails_when_missing=fails_when_missing,
     )
 
 
