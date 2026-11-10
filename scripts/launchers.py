@@ -312,6 +312,11 @@ def launcher_places(config: dict) -> list[LauncherPlace]:
 # component scripts $bios_path.
 BIOS_ROOT_VARIABLES = ("$biosdir", "$home/RetroPie/BIOS", "${biosPath}", "$bios_path")
 
+# The name a platform's launch code gives its roms root: RetroDECK's
+# component scripts write $roms_path (retrodeck_launchers), the setting whose
+# default is the roms root (config/retrodeck/retrodeck.json:5).
+ROMS_ROOT_VARIABLES = ("$roms_path", "${roms_path}")
+
 # The kinds that hand an emulator a whole directory. A scans_dir record sets
 # the directory the emulator picks its file from: ROCKNIX writes ARMSX2's
 # [Folders] Bios, EmuDeck PCSX2's.
@@ -591,8 +596,15 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
     (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
     folder and the folders its launchers run programs from.
     """
-    from common import ROMS_ROOT  # noqa: PLC0415
+    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
 
+    spelled = directory.strip().rstrip("/")
+    for variable in ROMS_ROOT_VARIABLES:
+        if outer_layout(config, ROMS_ROOT) and (
+            spelled == variable or spelled.startswith(variable + "/")
+        ):
+            rest = spelled[len(variable) + 1:]
+            return None if re.search(r"[\s<>$:;]", rest) else rest
     return folder_in_root(directory, config, ROMS_ROOT)
 
 

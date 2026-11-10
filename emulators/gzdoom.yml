@@ -13,6 +13,9 @@ version_basis:
 display_name: "GZDoom"
 cores: ["GZDoom", "gzdoom-sa"]
 systems: [doom, heretic, hexen, strife, chex]
+standalone_pools:
+  "[IWADSearch.Directories] Path": ""
+  "[IWADSearch.Directories] RecursivePath": ""
 
 notes: |
   Doom-engine source port by Christoph Oelckers. Supports Doom, Heretic,
@@ -161,6 +164,7 @@ files:
   - name: "doom.wad"
     category: game_data
     system: doom
+    path: "doom.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:420, 437, 659"
     note: "The Ultimate DOOM and DOOM Registered both use this name and are told apart by their lumps."
@@ -168,108 +172,126 @@ files:
   - name: "doom2.wad"
     category: game_data
     system: doom
+    path: "doom2.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:640, 653"
 
   - name: "doom2f.wad"
     category: game_data
     system: doom
+    path: "doom2f.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:625, 657"
 
   - name: "doombfg.wad"
     category: game_data
     system: doom
+    path: "doombfg.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:332, 666"
 
   - name: "doom2bfg.wad"
     category: game_data
     system: doom
+    path: "doom2bfg.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:560, 667"
 
   - name: "doomunity.wad"
     category: game_data
     system: doom
+    path: "doomunity.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:369, 661"
 
   - name: "doom2unity.wad"
     category: game_data
     system: doom
+    path: "doom2unity.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:592, 655"
 
   - name: "doomkex.wad"
     category: game_data
     system: doom
+    path: "doomkex.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:350, 662"
 
   - name: "doom2kex.wad"
     category: game_data
     system: doom
+    path: "doom2kex.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:576, 656"
 
   - name: "doomxbox.wad"
     category: game_data
     system: doom
+    path: "doomxbox.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:403, 660"
 
   - name: "doom2xbox.wad"
     category: game_data
     system: doom
+    path: "doom2xbox.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:608, 654"
 
   - name: "doom_complete.pk3"
     category: game_data
     system: doom
+    path: "doom_complete.pk3"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:389, 652"
 
   - name: "plutonia.wad"
     category: game_data
     system: doom
+    path: "plutonia.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:545, 670"
 
   - name: "plutoniaunity.wad"
     category: game_data
     system: doom
+    path: "plutoniaunity.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:514, 671"
 
   - name: "plutoniakex.wad"
     category: game_data
     system: doom
+    path: "plutoniakex.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:529, 672"
 
   - name: "tnt.wad"
     category: game_data
     system: doom
+    path: "tnt.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:499, 673"
 
   - name: "tntunity.wad"
     category: game_data
     system: doom
+    path: "tntunity.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:468, 674"
 
   - name: "tntkex.wad"
     category: game_data
     system: doom
+    path: "tntkex.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:483, 675"
 
   - name: "nerve.wad"
     category: game_data
     system: doom
+    path: "nerve.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:565, 614, src/d_iwad.cpp:877-895"
     note: "No Rest for the Living. Autoloaded by Doom 2 BFG and Xbox editions."
@@ -277,6 +299,7 @@ files:
   - name: "nerveunity.wad"
     category: game_data
     system: doom
+    path: "nerveunity.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:598, src/d_iwad.cpp:877-895"
     note: "Loaded from the IWAD directory by DOOM 2: Unity Edition."
@@ -284,6 +307,7 @@ files:
   - name: "extras.wad"
     category: game_data
     system: doom
+    path: "extras.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:357, 376, 488, 534, 582, 598"
     note: "Loaded from the IWAD directory by the KEX and Unity editions."
@@ -291,6 +315,7 @@ files:
   - name: "soundtrack"
     category: game_data
     system: doom
+    path: "soundtrack"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:376, 598, src/d_iwad.cpp:877-895"
     note: "Loaded from the IWAD directory by the DOOM and DOOM 2 Unity editions."
@@ -298,6 +323,7 @@ files:
   - name: "id24res.wad"
     category: game_data
     system: doom
+    path: "id24res.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:341, 360, 379, src/d_iwad.cpp:862-875"
     note: "id24 resource WAD. SupportWAD of every id IWAD block, loaded when found and i_loadsupportwad is set."
@@ -307,6 +333,7 @@ files:
   - name: "freedoom1.wad"
     category: game_data
     system: doom
+    path: "freedoom1.wad"
     required: false
     installed_on: [retropie]
     source_ref: "wadsrc_extra/static/iwadinfo.txt:307, 676"
@@ -314,6 +341,7 @@ files:
   - name: "freedoom2.wad"
     category: game_data
     system: doom
+    path: "freedoom2.wad"
     required: false
     installed_on: [retropie]
     source_ref: "wadsrc_extra/static/iwadinfo.txt:294, 677"
@@ -321,6 +349,7 @@ files:
   - name: "freedm.wad"
     category: game_data
     system: doom
+    path: "freedm.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:281, 680"
 
@@ -329,6 +358,7 @@ files:
   - name: "heretic.wad"
     category: game_data
     system: heretic
+    path: "heretic.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:241, 244, 254, 257, 681"
     note: "Both Heretic and Shadow of the Serpent Riders use this name and are told apart by the EXTENDED lump."
@@ -337,6 +367,7 @@ files:
     aliases: ["blasphemer.wad"]
     category: game_data
     system: heretic
+    path: "blasphem.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:228, 692-693"
 
@@ -345,12 +376,14 @@ files:
   - name: "hexen.wad"
     category: game_data
     system: hexen
+    path: "hexen.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:188, 684"
 
   - name: "hexdd.wad"
     category: game_data
     system: hexen
+    path: "hexdd.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:196-207, 685"
     note: "Deathkings expansion. Requires hexen.wad (Required = Hexen: Beyond Heretic)."
@@ -360,12 +393,14 @@ files:
   - name: "strife1.wad"
     category: game_data
     system: strife
+    path: "strife1.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:151, 688"
 
   - name: "sve.wad"
     category: game_data
     system: strife
+    path: "sve.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:136, 140, 689"
     note: "Veteran Edition. Required = Strife: Quest for the Sigil (loads voices.wad)."
@@ -373,6 +408,7 @@ files:
   - name: "voices.wad"
     category: game_data
     system: strife
+    path: "voices.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:142, 155"
 
@@ -381,12 +417,14 @@ files:
   - name: "chex.wad"
     category: game_data
     system: chex
+    path: "chex.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:123, 694"
 
   - name: "chex3.wad"
     category: game_data
     system: chex
+    path: "chex3.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:109, 695"
 
@@ -395,12 +433,14 @@ files:
   - name: "hacx.wad"
     category: game_data
     system: doom
+    path: "hacx.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:83, 698"
 
   - name: "hacx2.wad"
     category: game_data
     system: doom
+    path: "hacx2.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:65-75, 699, src/d_iwad.cpp:351-394, src/common/filesystem/source/resourcefile.cpp:156-174"
     note: "Identified by the MAP01 map and the HACX-E lump, whatever the container: every candidate is opened by its magic, so a zip under this name is read as a pk3. The Hacx 2.0 repository builds that zip from src/, where hacx-e.txt is the HACX-E lump and maps/MAP01.wad the first map."
@@ -408,18 +448,21 @@ files:
   - name: "action2.wad"
     category: game_data
     system: doom
+    path: "action2.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:97, 696"
 
   - name: "harm1.wad"
     category: game_data
     system: doom
+    path: "harm1.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:57, 697"
 
   - name: "square.pk3"
     category: game_data
     system: doom
+    path: "square.pk3"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:33"
     note: "Absent from the Names block: picked up only when named with -iwad."
@@ -427,17 +470,20 @@ files:
   - name: "square1.pk3"
     category: game_data
     system: doom
+    path: "square1.pk3"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:45, 700"
 
   - name: "delaweare.wad"
     category: game_data
     system: doom
+    path: "delaweare.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:22, 701"
 
   - name: "rotwb.wad"
     category: game_data
     system: doom
+    path: "rotwb.wad"
     required: false
     source_ref: "wadsrc_extra/static/iwadinfo.txt:9, 702"

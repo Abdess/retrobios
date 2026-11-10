@@ -859,5 +859,25 @@ class MameSearchPaths(unittest.TestCase):
             self.assertEqual(entry["standalone_path"], "psxmame/bios/" + entry["name"])
 
 
+class GzdoomOnRetroDECK(unittest.TestCase):
+    """RetroDECK writes RETRODECKROMSDIR/doom into [IWADSearch.Directories]
+    (gzdoom.ini:9, component_prepare.sh:27)."""
+
+    def test_the_iwads_land_in_roms_doom(self) -> None:
+        view = standalone_view("gzdoom", "retrodeck")
+        iwads = [e for e in view["files"] if e.get("system")]
+        self.assertEqual(len(iwads), 43)
+        for entry in iwads:
+            self.assertEqual(entry["standalone_path"], "roms/doom/" + entry["name"])
+            self.assertTrue(entry.get("unprefixed"))
+        # The engine pk3s are read beside the executable first.
+        (pk3,) = [e for e in view["files"] if e["name"] == "gzdoom.pk3"]
+        self.assertNotIn("standalone_path", pk3)
+
+    def test_another_platform_keeps_them(self) -> None:
+        view = standalone_view("gzdoom", "batocera")
+        self.assertFalse(any(e.get("standalone_path") for e in view["files"]))
+
+
 if __name__ == "__main__":
     unittest.main()
