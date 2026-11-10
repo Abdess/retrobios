@@ -1268,7 +1268,14 @@ class EachFileDownloadsFromItsCard(unittest.TestCase):
             self.skipTest("site not generated")
         section = page.read_text(encoding="utf-8").split("## Apple II {", 1)[1]
         start = section.split("<section", 1)[0]
-        self.assertIn("[`apple2e.rom`](#sha1-d756eba578a6)", start)
+        line = next(row for row in start.splitlines() if row.startswith("- **Apple II**: "))
+        # The files to start with come before the first sentence ("MAME MESS
+        # reads ... instead"), which names what other emulators read.
+        named = line.removeprefix("- **Apple II**: ").split(". ", 1)[0].rstrip(".")
+        names = [part.strip() for part in named.split(", ")]
+        self.assertTrue(names)
+        for name in names:
+            self.assertRegex(name, r"^\[`[^`]+`\]\(#sha1-[0-9a-f]{12}\)$")
 
 
 if __name__ == "__main__":

@@ -6599,11 +6599,16 @@ START_WITH_NAMES = 6
 
 
 def _region_order() -> dict[str, int]:
+    """The regions a start line lists, the territories first. A file read
+    for every region is a region-free stand-in for the BIOS of each one:
+    the PlayStation section opened on psxonpsp660.bin, which one emulator
+    requires among the BIOS it accepts, above the scph files most read."""
     from region import REGION_TREE, WORLD  # noqa: PLC0415
 
-    ordered = [WORLD]
+    ordered = []
     for parent, members in REGION_TREE.items():
         ordered += [parent, *sorted(members)]
+    ordered.append(WORLD)
     return {region: index for index, region in enumerate(ordered)}
 
 
