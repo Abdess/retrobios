@@ -16,7 +16,7 @@ Example, one entry of `emulators/duckstation.yml`:
 ```yaml
 - name: "scph5501.bin"
   region: [north-america, latin-america]
-  required: true
+  group: ps-bios
   md5: "490f666e1afb15b7362b406ed1cea246"
   priority: 5
   source_ref: "src/core/bios.cpp:47"
@@ -164,8 +164,8 @@ When a core has HLE (high-level emulation), code of its own that stands
 in for the file, mark the entry `hle_fallback: true`. The flag records the
 stand-in. It does not decide `required`, which still comes from what the
 code does without the file: most entries that carry the flag are optional,
-and a few are required, among them Yabause's `saturn_bios.bin`
-(`emulators/yabause.yml`). The file still ships in packs, and
+and a few are required, among them QUASI88's `n88.rom`
+(`emulators/quasi88.yml`). The file still ships in packs, and
 verification reports its absence at INFO whatever `required` says.
 
 MAME is read the same way. A missing ROM is fatal only when it is neither
