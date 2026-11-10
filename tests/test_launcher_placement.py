@@ -172,6 +172,19 @@ class ALinkMovesTheDestination(unittest.TestCase):
         omitted = [o for o in manifest["omitted_files"] if o["name"] == "kick.rom"]
         self.assertEqual([(o["root"], o["cores"]) for o in omitted], [("emulator", ["kick"])])
 
+    def test_two_builds_in_one_folder_are_one_omission(self) -> None:
+        # RetroPie builds amiberry 5.7.2 and 6.3.3, one per board, both in
+        # $md_inst of its amiberry package: one place, read by both.
+        data = yaml.safe_load((self.emulators / "kick.yml").read_text())
+        for key in ("kick-1", "kick-2"):
+            (self.emulators / f"{key}.yml").write_text(
+                yaml.safe_dump({**data, "built_by": ["linkplat"]}))
+        _emulator_profiles_cache.clear()
+        omitted = [o for o in self.manifest("linkplat")["omitted_files"]
+                   if o["name"] == "kick.rom"]
+        self.assertEqual([(o["root"], o["cores"]) for o in omitted],
+                         [("emulator", ["kick-1", "kick-2"])])
+
     def test_the_installer_accepts_the_omission(self) -> None:
         import install
 

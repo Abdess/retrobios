@@ -4711,30 +4711,54 @@ def _record_absent(
 MANIFEST_OUTER_FIELDS = ("bios_folder", "from_bios", "searched", "default", "config")
 
 
-def _record_unplaceable(unplaceable: list[dict], record_omission: Callable[..., None]) -> None:
+def _record_unplaceable(
+    unplaceable: list[dict],
+    record_omission: Callable[..., None],
+    config: dict,
+    profiles: dict[str, dict],
+) -> None:
     """Held by the collection, nowhere to put it on this platform.
 
     Said in the manifest, where RomM's DOSBox Pure ROMs were simply absent.
+    One place read by several cores is one omission naming them all.
     """
+    # The emulator's own folder is the one the platform installs the name
+    # it lists into: RetroPie puts amiberry 5.7.2 and 6.3.3, one per board,
+    # both in $md_inst of its amiberry package.
+    platform_names = {
+        str(c) for key in ("cores", "standalone_cores")
+        if isinstance(config.get(key), list) for c in config[key]
+    }
+
+    def folder(profile: str) -> str:
+        names = {profile, *map(str, (profiles.get(profile) or {}).get("cores") or [])}
+        return min(names & platform_names, default=profile)
+
+    grouped: dict[str, tuple[dict, list[str]]] = {}
     for u in unplaceable:
         where = u.get("path") or u.get("name", "")
+        # The profile key, the name a target's core list and the
+        # installer's narrowing match: the display name matched none.
+        core = u.get("profile") or u.get("emulator", "")
         if u.get("unplaced"):
-            key = f"emulator:{u.get('profile') or u.get('emulator', '')}:{where}"
+            key = f"emulator:{folder(core)}:{where}"
         elif u.get("root") in OUTER_ROOTS:
             key = f"{u['root']}:{where}"
         elif u.get("root") == "save":
             key = f"save:{save_manifest_dest(u)}"
         else:
             key = where
+        held, cores = grouped.setdefault(key, (u, []))
+        if core and core not in cores:
+            cores.append(core)
+        if u.get("required", True) and not held.get("required", True):
+            grouped[key] = ({**held, "required": True}, cores)
+    for key, (u, cores) in grouped.items():
         record_omission(
             # Keyed apart from the BIOS tree's paths, which a file read below
             # the save directory or in the emulator's folder can repeat.
-            key,
-            u, u.get("system") or "",
-            # The profile key, the name a target's core list and the
-            # installer's narrowing match: the display name matched none.
-            u.get("unplaceable", "no_platform_slug"),
-            [u.get("profile") or u.get("emulator", "")],
+            key, u, u.get("system") or "",
+            u.get("unplaceable", "no_platform_slug"), sorted(cores),
         )
 
 
@@ -5160,7 +5184,7 @@ def generate_manifest(
         )
     else:
         core_files = []
-    _record_unplaceable(unplaceable, record_omission)
+    _record_unplaceable(unplaceable, record_omission, config, emu_profiles)
     _record_absent(
         absent, config, base_dest, region_drops, required_only,
         seen_destinations, omitted_by_destination, record_omission,
