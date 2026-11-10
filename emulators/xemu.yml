@@ -295,6 +295,7 @@ files:
 
   - name: wpcap.dll
     required: false
+    unsourceable: "installed by the Npcap driver, which the user installs"
     description: "Npcap packet capture library"
     note: >-
       Loaded by name on Windows, with every entry point resolved individually,

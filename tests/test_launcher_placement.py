@@ -284,8 +284,10 @@ class XboxOnRetroBat(unittest.TestCase):
         at_root = {f["dest"].lower() for f in manifest["files"] if not f.get("root")}
         # The launcher writes the two EEPROMs and the disk image, mounts an
         # .iso with its own tool, and each Cxbx build reads keys.bin from
-        # its own folder.
-        self.assertFalse(at_root & {"eeprom.bin", "xbox_hdd.qcow2", "dokan2.dll", "keys.bin"})
+        # its own folder. wpcap.dll comes with the Npcap driver.
+        self.assertFalse(at_root & {
+            "eeprom.bin", "xbox_hdd.qcow2", "dokan2.dll", "keys.bin", "wpcap.dll",
+        })
         placed = {(f.get("root"), f["dest"]) for f in manifest["files"]}
         self.assertIn(("emulators", "cxbx-reloaded/keys.bin"), placed)
         self.assertIn(("emulators", "chihiro/EEPROM.bin"), placed)
