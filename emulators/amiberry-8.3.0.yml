@@ -3077,6 +3077,12 @@ files:
   system: "commodore-amiga"
   required: false
   size: 131072
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+    sha1: "fa033a771c9174f4f91a595cbcc46416fbba84af"
   found_by: content
   description: "CyberStorm MK III v44.69"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
@@ -3088,6 +3094,12 @@ files:
   system: "commodore-amiga"
   required: false
   size: 131072
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+    sha1: "8f902c862cb1792f789b2cf8ec1016d962e029c5"
   found_by: content
   description: "CyberStorm MK III v44.71"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
@@ -3110,6 +3122,12 @@ files:
   system: "commodore-amiga"
   required: false
   size: 131072
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+    sha1: "34807066e2b7694e856a3031387f40f2be75aad9"
   found_by: content
   description: "CyberStorm PPC v44.69"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
@@ -3121,6 +3139,12 @@ files:
   system: "commodore-amiga"
   required: false
   size: 131072
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+    sha1: "c7cb3c4fa66e260f43bff7044049a264a729e590"
   found_by: content
   description: "CyberStorm PPC v44.71"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
@@ -3154,6 +3178,13 @@ files:
   system: "commodore-amiga"
   required: false
   size: 524288
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+      - {size: 524288, lengths: [114688, 327680]}
+    sha1: "c8a63707be89c54925f99e6b6c1b8ca4605b2e57"
   found_by: content
   description: "Blizzard PPC 68040 v44.69"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
@@ -3165,6 +3196,13 @@ files:
   system: "commodore-amiga"
   required: false
   size: 524288
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+      - {size: 524288, lengths: [114688, 327680]}
+    sha1: "acc30e57ed900be387f466d057600791316b0af5"
   found_by: content
   description: "Blizzard PPC 68060 v44.69"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
@@ -3176,6 +3214,13 @@ files:
   system: "commodore-amiga"
   required: false
   size: 524288
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+      - {size: 524288, lengths: [114688, 327680]}
+    sha1: "9d0e3e2cd5ca81b0322f265c83198aeec81ee336"
   found_by: content
   description: "Blizzard PPC 68040 v44.71"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
@@ -3187,6 +3232,13 @@ files:
   system: "commodore-amiga"
   required: false
   size: 524288
+  validation: [masked_sha1]
+  masked_sha1:
+    zeroed: [16, 48]
+    reads:
+      - {size: 131072, lengths: [114688]}
+      - {size: 524288, lengths: [114688, 327680]}
+    sha1: "33fd6090c54114bfdb73618aaf19cc437ebdee3f"
   found_by: content
   description: "Blizzard PPC 68060 v44.71"
   note: "A flash image is hashed with its config bytes cleared over its first 0x1c000 or 0x50000 bytes,\
