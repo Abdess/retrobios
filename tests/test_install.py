@@ -428,7 +428,11 @@ class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
 
         member = os.urandom(4096)
         results = []
-        with FakeRepository() as repo, unittest.mock.patch.dict(os.environ):
+        # The run is a Linux one whatever the host: under WSL main() reads
+        # the Windows side and keeps that in the module, where the Windows
+        # detection tests run after it found D:\ turned into /mnt/d.
+        with FakeRepository() as repo, unittest.mock.patch.dict(os.environ, RETROBIOS_OS="linux"), \
+                unittest.mock.patch.dict(install._WSL):
             listed = json.loads((repo.root / "install" / "retroarch.json").read_text())
             listed["data_directories"] = [{
                 "ref": "tree", "dest": "tree", "type": "zip", "archive_size": 50_000_000,
