@@ -338,7 +338,7 @@ KNOWN_UNRESOLVED = {
                     "the program's profile lacks the system"),
     # Not settled: two builds by host, a binary the OS tree lacks, a fork
     # whose required files differ, a shell variable the scraper kept.
-    **dict.fromkeys(["pcsx2-nogui", "zx81", "yabadabadoo", "reicast-audio-${backend}"],
+    **dict.fromkeys(["pcsx2-nogui", "zx81", "reicast-audio-${backend}"],
                     "not proven"),
 }
 
