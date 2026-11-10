@@ -42,6 +42,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    content_fits,
     name_match_size_ok,
     parse_md5_list,
     require_platform,
@@ -247,6 +248,7 @@ def _resolve_source(
             sha1s = [sha1s]
         return any(
             name_match_size_ok(file_entry, db_files.get(sha1, {}).get("size"))
+            and content_fits(file_entry, db_files.get(sha1, {}).get("path", ""))
             and _record_carries(sha1, db_files.get(sha1, {}), declared)
             for sha1 in sha1s
         )

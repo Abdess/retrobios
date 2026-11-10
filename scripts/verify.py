@@ -400,7 +400,7 @@ def _build_expected(file_entry: dict, checks: list[str]) -> dict:
     if not checks:
         return expected
     if "size" in checks:
-        for key in ("size", "min_size", "max_size"):
+        for key in ("size", "min_size", "max_size", "size_multiple"):
             if file_entry.get(key) is not None:
                 expected[key] = file_entry[key]
     for hash_type in ("crc32", "md5", "sha1", "sha256"):

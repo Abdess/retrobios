@@ -79,7 +79,9 @@ class Companions(unittest.TestCase):
         }
         stored = {
             "ps2-0230a-20080220.bin": b"I" * 8,
+            "SCPH-70004.BIN": b"B" * 8,
             "SCPH-70004.ROM1": b"R" * 6,
+            "246C.ROM1": b"N" * 3,
             "cheats_ws.zip": b"Z",
             "GameIndex.yaml": b"Y",
         }
@@ -107,6 +109,8 @@ class Companions(unittest.TestCase):
         names = {e["destination"] for e in extras}
         self.assertIn("SCPH-70004.rom1", names)
         self.assertFalse({"SCPH-70004.ROM1", "cheats_ws.zip", "GameIndex.yaml"} & names)
+        # Read beside the image the core selected only: no 246C image here.
+        self.assertNotIn("246C.rom1", names)
 
     def test_a_shared_image_brings_each_cores_companions(self):
         """Recalbox runs LRPS2 and the old libretro PCSX2 on one ps2/ folder.

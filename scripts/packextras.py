@@ -19,7 +19,7 @@ from common import resolve_platform_cores
 from common import core_system_dirs, platform_layouts, system_dir_path
 from common import standalone_set as platform_standalone_set
 from common import OUTER_ROOTS, outer_layout, sanitize_pack_path
-from common import size_fits
+from common import declares_shape, shape_fits, size_fits
 from validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
 from region import FILE_GROUP
@@ -602,7 +602,7 @@ def _agnostic_scan_extras(
                 # the flag icons of an Android package walked into a PS2 pack.
                 if f.get("category", "bios") != "bios":
                     continue
-                if not (f.get("size") or f.get("min_size") or f.get("max_size")):
+                if not declares_shape(f):
                     continue
                 # The free name is the BIOS directory's: a shader, a sound or a
                 # font the emulator reads from its resources tree has a fixed
@@ -663,7 +663,7 @@ def _agnostic_scan_extras(
                             continue
                     elif not path.startswith(path_prefix):
                         continue
-                    if not companion_ext and not size_fits(f, entry.get("size", 0)):
+                    if not companion_ext and not shape_fits(f, path, entry.get("size", 0)):
                         continue
                     scan_name = entry.get("name", "")
                     if not scan_name:
@@ -671,6 +671,12 @@ def _agnostic_scan_extras(
                     if companion_ext:
                         stem, _, ext = scan_name.rpartition(".")
                         if not stem or ext.lower() != companion_ext.lower():
+                            continue
+                        # Read only beside the image the core selected, so a
+                        # companion counts only next to an image the image's
+                        # own test accepts: Namco System 246 .nvm and .mec
+                        # dumps sit beside no PS2 BIOS.
+                        if not _image_beside(path, stem, image, files_db):
                             continue
                         scan_name = f"{stem}.{companion_ext}"
                     # Into the directory the seed entry names, not the root:
@@ -745,7 +751,8 @@ def placeholder_directories(
             if f.get("size") and not size_fits(seed, f["size"]):
                 continue
             local, status = resolve_local_file({**f, "source_profile": other_name}, db)
-            if local and "/" in local and resolution_is_hash_exact(status):
+            if (local and "/" in local and resolution_is_hash_exact(status)
+                    and shape_fits(seed, local)):
                 directories.add(local.rsplit("/", 1)[0])
     return frozenset(directories)
 
@@ -768,7 +775,11 @@ def _placeholder_scan(
         name = str(seed.get("name", ""))
         if "<" not in name or seed.get("category", "bios") != "bios":
             continue
-        if not (seed.get("size") or seed.get("min_size") or seed.get("max_size")):
+        if not declares_shape(seed):
+            continue
+        # <bios>.nvm is read beside the image the core selected, never on
+        # its own: its files come with each scanned image (_companions).
+        if _companion_of(profile, name)[1] is not None:
             continue
         directories = placeholder_directories(
             seed, emu_name, profile, db,
@@ -780,7 +791,7 @@ def _placeholder_scan(
             path = entry.get("path", "")
             if "/" not in path or path.rsplit("/", 1)[0] not in directories:
                 continue
-            if "/.variants/" in path or not size_fits(seed, entry.get("size", 0)):
+            if "/.variants/" in path or not shape_fits(seed, path, entry.get("size", 0)):
                 continue
             scan_name = entry.get("name", "")
             dest = f"{folder}/{scan_name}" if folder else scan_name
@@ -788,6 +799,7 @@ def _placeholder_scan(
                 "name": scan_name,
                 "destination": dest,
                 "sha1": sha1,
+                "source_name": name,
                 "source_system": seed.get("system"),
                 "region": seed.get("region"),
             })
@@ -821,16 +833,34 @@ def expand_agnostic_entries(
         db.get("indexes", {}).get("by_name", {}), set(), "",
         {emu_name} if standalone else set(),
     )
-    # A placeholder is answered by files found in its own folder: PCEE2's
-    # eeprom.dat, scanned at the root, said nothing about pcsx2/bios/.
-    covered = {e["destination"].rsplit("/", 1)[0] if "/" in e["destination"] else "" for e in scanned}
+
+    # A placeholder is answered by the files its own scan found in its own
+    # folder: PCEE2's eeprom.dat, scanned at the root, said nothing about
+    # pcsx2/bios/, and its COH-H images, scanned into pcsx2/bios/, say
+    # nothing about the console <bios>.bin beside them.
+    def answered(extras: list[dict]) -> set[tuple[str, str]]:
+        return {
+            (str(e.get("source_name", "")),
+             e["destination"].rsplit("/", 1)[0] if "/" in e["destination"] else "")
+            for e in extras
+        }
+
+    def is_answered(f: dict, covered: set[tuple[str, str]]) -> bool:
+        # A companion placeholder (<bios>.rom1) is read beside its image, so
+        # it is answered wherever the image placeholder is.
+        _ext, image = _companion_of(profile, str(f.get("name", "")))
+        names = {f.get("name", "")} | ({image.get("name", "")} if image else set())
+        return any((n, folder(f)) in covered for n in names)
+
+    covered = answered(scanned)
     open_seeds = [
-        f for f in files if "<" in str(f.get("name", "")) and folder(f) not in covered
+        f for f in files
+        if "<" in str(f.get("name", "")) and not is_answered(f, covered)
     ]
     scanned += _placeholder_scan(
         open_seeds, emu_name, profile, db, standalone, all_profiles
     )
-    covered = {e["destination"].rsplit("/", 1)[0] if "/" in e["destination"] else "" for e in scanned}
+    covered = answered(scanned)
     if not scanned:
         return files
     concrete = [
@@ -848,7 +878,7 @@ def expand_agnostic_entries(
     ]
     return [
         f for f in files
-        if "<" not in str(f.get("name", "")) or folder(f) not in covered
+        if "<" not in str(f.get("name", "")) or not is_answered(f, covered)
     ] + concrete
 
 
@@ -911,6 +941,32 @@ def _companion_of(profile: dict, name: str) -> tuple[str, dict | None]:
         ):
             return ext, entry
     return "", None
+
+
+def _image_beside(
+    companion_path: str, stem: str, image: dict | None, files_db: dict
+) -> bool:
+    """Whether the folder of a companion holds an image it is read beside.
+
+    PCSX2 opens `<bios>.rom1`, then the BIOS path with its extension
+    replaced (BiosTools.cpp LoadExtraRom, CDVD.cpp cdvdLoadNVRAM): the
+    companion's stem is the image's name or the image's own stem. The
+    image has to pass the image entry's test, its size and its ROM
+    directory, as the scan that selected it does.
+    """
+    if image is None:
+        return False
+    directory = companion_path.rsplit("/", 1)[0] + "/"
+    wanted = stem.lower()
+    for _sha1, entry in _files_by_directory(files_db).get(directory, ()):
+        name = str(entry.get("name", ""))
+        if name.lower() != wanted and name.rpartition(".")[0].lower() != wanted:
+            continue
+        if name.lower() == companion_path.rsplit("/", 1)[-1].lower():
+            continue
+        if shape_fits(image, entry.get("path", ""), entry.get("size", 0)):
+            return True
+    return False
 
 
 def _companion_extensions(profile: dict, seed_name: str) -> set[str]:

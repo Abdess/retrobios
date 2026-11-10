@@ -15,10 +15,14 @@ from collections.abc import Callable, Iterator, Mapping, Sequence
 from common import (
     adler32_of,
     archive_members,
+    CONTENT_CHECKS,
     compute_hashes,
+    content_fits,
+    declared_content_checks,
     entry_system_ids,
     name_match_size_ok,
     sanitize_pack_path,
+    shape_fits,
     size_fits,
 )
 from hashing import md5_composite, parse_hash_list, parse_md5_list
@@ -34,6 +38,11 @@ def _adler32_byteswapped(path: str) -> str:
     """Adler-32 over 16-bit byte-swapped data, as Dolphin hashes its DSP ROMs."""
     return adler32_of(path, byteswap=True)
 
+
+_CONTENT_REASONS = {
+    "romdir": "romdir mismatch: no RESET and ROMVER the code accepts",
+    "masked_sha1": "masked_sha1 mismatch: the cleared image is not the one the code names",
+}
 
 # All reproducible validation types.
 _HASH_CHECKS = frozenset({"crc32", "md5", "sha1", "adler32"})
@@ -75,6 +84,7 @@ def _entry_rule(emu_name: str, f: dict, checks: set[str]) -> dict:
         - {None},
         "min_size": f.get("min_size") if "size" in checks else None,
         "max_size": f.get("max_size") if "size" in checks else None,
+        "size_multiple": f.get("size_multiple") if "size" in checks else None,
         "crc32": values("crc32"),
         "md5": values("md5"),
         "sha1": values("sha1"),
@@ -84,6 +94,9 @@ def _entry_rule(emu_name: str, f: dict, checks: set[str]) -> dict:
         },
         "adler32_byteswap": bool(f.get("adler32_byteswap")),
         "crypto": {c for c in checks if c in _CRYPTO_CHECKS},
+        "content": {
+            check: f.get(check) or {} for check in sorted(CONTENT_CHECKS & set(checks))
+        },
         # The checks whose failure the code only warns about: the file runs.
         "warn": warned_checks(f, checks),
     }
@@ -122,6 +135,8 @@ def _rule_failure(
             return f"size too small: min {rule['min_size']}, got {actual_size}"
         if rule["max_size"] is not None and actual_size > rule["max_size"]:
             return f"size too large: max {rule['max_size']}, got {actual_size}"
+        if rule.get("size_multiple") and actual_size % int(rule["size_multiple"]):
+            return f"size mismatch: got {actual_size}, accepted multiples of {rule['size_multiple']}"
     for hash_type in ("crc32", "md5", "sha1", "sha256"):
         if rule[hash_type] and hash_type not in skip:
             if not hashes:
@@ -139,6 +154,9 @@ def _rule_failure(
         if actual not in rule["adler32"]:
             accepted = ",".join(sorted(rule["adler32"]))
             return f"adler32 mismatch: got 0x{actual}, accepted [{accepted}]"
+    for check, spec in rule.get("content", {}).items():
+        if check not in skip and not content_fits({"validation": [check], check: spec}, local_path):
+            return _CONTENT_REASONS[check]
     if rule["crypto"] - skip:
         from crypto_verify import check_crypto_validation
 
@@ -253,6 +271,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     "sizes": set(),
                     "min_size": None,
                     "max_size": None,
+                    "size_multiples": set(),
                     "crc32": set(),
                     "md5": set(),
                     "sha1": set(),
@@ -288,6 +307,8 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     index[fname]["min_size"] = (
                         min(cur, f["min_size"]) if cur is not None else f["min_size"]
                     )
+                if f.get("size_multiple"):
+                    index[fname]["size_multiples"].add(int(f["size_multiple"]))
                 if f.get("max_size") is not None:
                     cur = index[fname]["max_size"]
                     index[fname]["max_size"] = (
@@ -325,7 +346,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             # Per-emulator ground truth detail
             expected: dict = {}
             if "size" in checks:
-                for key in ("size", "min_size", "max_size"):
+                for key in ("size", "min_size", "max_size", "size_multiple"):
                     if f.get(key) is not None:
                         expected[key] = f[key]
             for hash_type in ("crc32", "md5", "sha1", "sha256"):
@@ -334,6 +355,8 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             adler_val_pe = f.get("known_hash_adler32") or f.get("adler32")
             if adler_val_pe:
                 expected["adler32"] = adler_val_pe
+            for check in sorted(CONTENT_CHECKS & set(checks)):
+                expected[check] = f.get(check) or {}
             pe_entry = {
                 "checks": sorted(checks),
                 "source_ref": f.get("source_ref"),
@@ -479,6 +502,20 @@ def check_file_validation(
         if entry["max_size"] is not None and actual_size > entry["max_size"]:
             emus = _emulators_for_check("size", pe)
             return f"size too large: max {entry['max_size']}, got {actual_size}", emus
+        multiples = entry.get("size_multiples") or set()
+        if multiples and all(actual_size % m for m in multiples):
+            emus = _emulators_for_check("size", pe)
+            accepted = ",".join(str(m) for m in sorted(multiples))
+            return f"size mismatch: got {actual_size}, accepted multiples of [{accepted}]", emus
+
+    # A content test passes when one of the entries declaring it accepts
+    # the file, each read as its own code reads it.
+    for check in sorted(CONTENT_CHECKS & set(checks)):
+        specs = [r["content"][check] for r in entry.get("rules", []) if check in r.get("content", {})]
+        if specs and not any(
+            content_fits({"validation": [check], check: spec}, local_path) for spec in specs
+        ):
+            return _CONTENT_REASONS[check], _emulators_for_check(check, pe)
 
     # Hash checks: compute once, reuse for all hash types.
     # Each hash field is a set of accepted values (multiple valid ROM versions).
@@ -855,8 +892,8 @@ def agnostic_substitute(
                     held = candidate.get("path", "")
                     if (
                         held.startswith(prefix)
-                        and size_fits(entry, candidate.get("size", 0))
                         and os.path.exists(held)
+                        and shape_fits(entry, held, candidate.get("size", 0))
                     ):
                         return held, prefix
                 break
@@ -1148,8 +1185,12 @@ def core_size_refusal(
     if not local_path or not os.path.isfile(local_path):
         return None
     size = os.path.getsize(local_path)
-    if any(name_match_size_ok(entry, size) for entry in (file_entry, *alternatives)):
+    sized = [entry for entry in (file_entry, *alternatives) if name_match_size_ok(entry, size)]
+    if any(content_fits(entry, local_path) for entry in sized):
         return None
+    if sized:
+        tests = sorted({check for entry in sized for check in declared_content_checks(entry)})
+        return f"the core's {', '.join(tests)} test turns it away"
     bounds = (
         f"{file_entry['size']}" if file_entry.get("size") is not None
         else f"{file_entry.get('min_size', 0)} to {file_entry.get('max_size', 'any')}"

@@ -316,11 +316,110 @@ def adler32_fits(file_entry: dict, path: str, db: dict | None = None) -> bool:
     return chosen is None or actual == chosen
 
 
+# The content tests a profile can declare in ``validation:``, each run by
+# reading the candidate the way the emulator does.
+CONTENT_CHECKS = frozenset({"romdir", "masked_sha1"})
+
+
+def _core_checks(file_entry: dict) -> list:
+    validation = file_entry.get("validation")
+    if isinstance(validation, dict):
+        validation = validation.get("core", [])
+    return list(validation or [])
+
+
+def declared_content_checks(file_entry: dict) -> set[str]:
+    """The content tests the entry's code runs on a candidate."""
+    return set(CONTENT_CHECKS.intersection(_core_checks(file_entry)))
+
+
+@functools.lru_cache(maxsize=4096)
+def _romdir_verdict(path: str, size: int, mtime_ns: int, spec: str) -> bool:
+    from romdir import romdir_accepts  # noqa: PLC0415
+
+    with open(path, "rb") as f:
+        data = f.read()
+    return romdir_accepts(data, json.loads(spec))
+
+
+@functools.lru_cache(maxsize=4096)
+def _masked_sha1_verdict(path: str, size: int, mtime_ns: int, spec: str) -> bool:
+    """Amiberry's flash image identification (getromdatabydata, rommgr.cpp).
+
+    A CyberStorm or Blizzard PPC image carries its board configuration in
+    bytes 0x10-0x2f, so the table SHA-1 is taken with those bytes cleared,
+    over the first 0x1c000 bytes, and for a 512 KB file also over the
+    first 0x50000. ``reads`` lists the file sizes the code tries the
+    transform on and the lengths it hashes for each.
+    """
+    rules = json.loads(spec)
+    reads = {int(r["size"]): [int(n) for n in r["lengths"]] for r in rules.get("reads", [])}
+    if size not in reads:
+        return False
+    with open(path, "rb") as f:
+        data = bytearray(f.read())
+    start, end = (int(v) for v in rules.get("zeroed", [0, 0]))
+    data[start:end] = bytes(max(0, min(end, len(data)) - start))
+    wanted = str(rules.get("sha1", "")).lower()
+    return any(hashlib.sha1(data[:length]).hexdigest() == wanted for length in reads[size])
+
+
+def content_fits(file_entry: dict, path: str) -> bool:
+    """Whether a candidate passes the content tests its entry declares.
+
+    The PCSX2 family lists any file of its BIOS folder whose ROM directory
+    holds RESET and ROMVER (LoadBiosVersion, pcsx2/ps2/BiosTools.cpp), with
+    no name and, in most forks, no size: ``validation: [romdir]`` and the
+    ``romdir:`` spec of how that fork reads the table (romdir.py). Amiberry
+    names a flash image by the SHA-1 of its bytes with the configuration
+    cleared (``masked_sha1``). A file that cannot be read fails. An entry
+    declaring no content test accepts every candidate.
+    """
+    checks = declared_content_checks(file_entry)
+    if not checks:
+        return True
+    try:
+        stat = os.stat(path)
+    except OSError:
+        return False
+    verdicts = {"romdir": _romdir_verdict, "masked_sha1": _masked_sha1_verdict}
+    for check in sorted(checks):
+        spec = json.dumps(file_entry.get(check) or {}, sort_keys=True)
+        try:
+            if not verdicts[check](path, stat.st_size, stat.st_mtime_ns, spec):
+                return False
+        except OSError:
+            return False
+    return True
+
+
+def shape_fits(file_entry: dict, path: str, size: int | None = None) -> bool:
+    """Size and content together: what a scan by shape checks per candidate."""
+    if size is None:
+        try:
+            size = os.path.getsize(path)
+        except OSError:
+            return False
+    return size_fits(file_entry, size) and content_fits(file_entry, path)
+
+
+def declares_shape(file_entry: dict) -> bool:
+    """Whether the entry says anything that tells one candidate from another."""
+    return bool(
+        file_entry.get("size") or file_entry.get("min_size")
+        or file_entry.get("max_size") or file_entry.get("size_multiple")
+        or declared_content_checks(file_entry)
+    )
+
+
 def size_fits(file_entry: dict, candidate_size: int) -> bool:
     """Whether a size is one the entry declares.
 
     ``size`` is an exact size or the list of sizes the code accepts, and it
-    outranks a ``min_size``/``max_size`` range. Nothing declared fits all.
+    outranks a ``min_size``/``max_size`` range. ``size_multiple`` is a
+    granule the size must be a whole number of, as xemu maps any flash
+    image whose size is a positive multiple of 64 KiB (hw/xbox/xbox.c).
+    Nothing declared fits all.
     """
     declared = file_entry.get("size")
     if declared is not None:
@@ -330,7 +429,10 @@ def size_fits(file_entry: dict, candidate_size: int) -> bool:
     high = file_entry.get("max_size")
     if low is not None and candidate_size < low:
         return False
-    return not (high is not None and candidate_size > high)
+    if high is not None and candidate_size > high:
+        return False
+    multiple = file_entry.get("size_multiple")
+    return not (multiple and candidate_size % int(multiple))
 
 
 
@@ -993,6 +1095,7 @@ def declared_hash_verdict(
         if file_entry is not None and not (
             name_match_size_ok(file_entry, os.path.getsize(candidate))
             and adler32_fits(file_entry, candidate, db)
+            and content_fits(file_entry, candidate)
         ):
             return "hash_mismatch"
         return "data_dir"
@@ -1100,7 +1203,9 @@ def _data_dir_tail(
         for candidate in hits:
             if name_match_size_ok(
                 file_entry, os.path.getsize(candidate)
-            ) and adler32_fits(file_entry, candidate, db):
+            ) and adler32_fits(file_entry, candidate, db) and content_fits(
+                file_entry, candidate
+            ):
                 return candidate
     return None
 
@@ -1156,7 +1261,7 @@ def _resolve_agnostic(
         path = entry.get("path", "")
         if not path.startswith(prefix):
             continue
-        if size_fits(file_entry, entry.get("size", 0)) and os.path.exists(path):
+        if os.path.exists(path) and shape_fits(file_entry, path, entry.get("size", 0)):
             return path, "agnostic_fallback"
     return None
 
@@ -1465,12 +1570,12 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
     hint = dest_hint or file_entry.get("path") or file_entry.get("destination") or ""
     wanted = _affinity_tokens(hint.rsplit("/", 1)[0] if "/" in hint else "")
     owners = _owner_tokens(file_entry)
-    sized = any(file_entry.get(k) for k in ("size", "min_size", "max_size"))
+    sized = declares_shape(file_entry)
 
     def score(path: str) -> tuple[int, bool, bool, bool, int]:
         fits = 0
         if sized and os.path.exists(path):
-            fits = int(size_fits(file_entry, os.path.getsize(path)))
+            fits = int(shape_fits(file_entry, path))
         tokens = _affinity_tokens(path.rsplit("/", 1)[0])
         # The owner's own copy ranks above any shared tree segment: NetherSX2's
         # shaders/common/ beat armsx2's own fxaa.fx on two directory tokens.
@@ -1797,7 +1902,9 @@ def resolve_local_file(
                     # cpc6128.rom is not cap32's 32 KB one at the same tail.
                     if not name_match_size_ok(
                         file_entry, files_db[match_sha1].get("size")
-                    ) or not adler32_fits(file_entry, path, db):
+                    ) or not adler32_fits(file_entry, path, db) or not content_fits(
+                        file_entry, path
+                    ):
                         continue
                     return path, "path_exact"
                 status = _record_match_status(match_sha1)
@@ -1830,7 +1937,7 @@ def resolve_local_file(
         record = files_db.get(match_sha1, {})
         return name_match_size_ok(file_entry, record.get("size")) and adler32_fits(
             file_entry, record.get("path", ""), db
-        )
+        ) and content_fits(file_entry, record.get("path", ""))
 
     # An entry the profile documents as unsourceable is one the collection
     # cannot hold: a font that only exists inside a paid package, cheat codes
@@ -2030,7 +2137,10 @@ def resolve_local_file(
     # both an Apple IIgs image and a Macintosh one. It ranks rather than
     # excludes, because a present file of the wrong size is reported as
     # present and untested, and dropping it would report it as absent.
-    sized = [c for c in named if name_match_size_ok(file_entry, c[2])]
+    sized = [
+        c for c in named
+        if name_match_size_ok(file_entry, c[2]) and content_fits(file_entry, c[0])
+    ]
     if sized:
         named = sized
 
@@ -2107,7 +2217,10 @@ def resolve_local_file(
         if canonical and canonical != name:
             canonical_entry = {
                 field: file_entry[field]
-                for field in ("size", "min_size", "max_size", "validation")
+                for field in (
+                    "size", "min_size", "max_size", "size_multiple", "validation",
+                    *sorted(CONTENT_CHECKS),
+                )
                 if field in file_entry
             }
             canonical_entry["name"] = canonical
@@ -3142,7 +3255,7 @@ def platform_layouts(
 # validation on the way and resolved to an IBM PCjr ROM of the same name.
 PROFILE_IDENTITY_FIELDS = (
     "sha1", "md5", "sha256", "crc32", "size", "min_size", "max_size",
-    "validation", "aliases", "unsourceable",
+    "size_multiple", "validation", *sorted(CONTENT_CHECKS), "aliases", "unsourceable",
 )
 
 

@@ -752,6 +752,11 @@
           "max_size": {
             "type": "integer"
           },
+          "size_multiple": {
+            "description": "Granule the file size must be a whole number of, the bounds still applying.",
+            "type": "integer",
+            "minimum": 1
+          },
           "md5": {
             "oneOf": [
               {
@@ -826,6 +831,35 @@
                 "minItems": 1
               }
             ]
+          },
+          "masked_sha1": {
+            "description": "SHA-1 the code takes over a file with a byte range cleared (validation: masked_sha1), for each file size it tries.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "zeroed": {"description": "Start and end offsets of the bytes cleared before hashing.", "type": "array", "items": {"type": "integer", "minimum": 0}, "minItems": 2, "maxItems": 2},
+              "reads": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "properties": {"size": {"type": "integer"}, "lengths": {"type": "array", "items": {"type": "integer"}, "minItems": 1}}, "required": ["size", "lengths"]}},
+              "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+            },
+            "required": ["zeroed", "reads", "sha1"]
+          },
+          "romdir": {
+            "description": "How the code reads a PS2 ROM directory (validation: romdir): the RESET search, the walk to ROMVER, and the serial and zone tests after it.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "reset_compare": {"description": "Bytes of the entry name strncmp compares with RESET: 5 takes any name starting RESET, 10 wants RESET and a NUL.", "enum": [5, 10]},
+              "missing_reset": {"description": "What 512 Ki entries without RESET do.", "enum": ["rejects", "ends_walk"]},
+              "terminated_names": {"description": "The walk stops at a name with no NUL in its 10 bytes.", "type": "boolean"},
+              "extinfo": {"description": "EXTINFO is read 0x10 past its offset, and an unreadable one ends the walk.", "type": "boolean"},
+              "unreadable_romver": {"description": "What ROMVER bytes past the end of the file do.", "enum": ["rejects", "ends_walk", "ignored"]},
+              "truncated_walk": {"description": "What a next entry past the end of the file does.", "enum": ["rejects", "ends_walk"]},
+              "offset_width": {"description": "Bit width of the file offset sum.", "enum": [32, 64]},
+              "refused_serials": {"description": "EXTINFO serials the code turns away.", "type": "array", "items": {"type": "string"}},
+              "zones": {"description": "ROMVER zone codes the scan keeps, ROMVER[4] then [5] where the code reads it.", "type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 2}},
+              "refused_zones": {"description": "ROMVER zone codes the scan passes over.", "type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 2}}
+            },
+            "required": ["reset_compare", "missing_reset", "terminated_names", "extinfo", "unreadable_romver", "truncated_walk"]
           },
           "validation": {
             "description": "Checks the code performs. A dict splits core from upstream when they diverge.",

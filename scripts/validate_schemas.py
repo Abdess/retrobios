@@ -95,7 +95,9 @@ _CHECK_FIELDS = {
     "md5": ("md5",),
     "sha1": ("sha1",),
     "sha256": ("sha256",),
-    "size": ("size", "min_size", "max_size"),
+    "size": ("size", "min_size", "max_size", "size_multiple"),
+    "romdir": ("romdir",),
+    "masked_sha1": ("masked_sha1",),
 }
 
 

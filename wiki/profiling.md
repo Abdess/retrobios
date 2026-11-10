@@ -615,10 +615,13 @@ look.
 | `archive` | ROM set the file lives inside, for arcade entries (e.g. `neogeo.zip`) |
 | `size` | expected size in bytes, or a list when the code accepts several exact sizes |
 | `min_size`, `max_size` | size range when the code accepts a range |
+| `size_multiple` | granule the size must be a whole number of, the bounds still applying (xemu maps any flash image of a positive multiple of 64 KiB) |
 | `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
 | `known_hash_adler32`, `adler32_byteswap` | expected Adler-32 hash (Dolphin's DSP ROMs). Pair with `adler32_byteswap` when the code hashes 16-bit byte-swapped data |
 | `adler32_pairs_with`, `adler32_pairs` | the file hashed together with this one and the combinations the code accepts, this file's value first, in table order: Dolphin warns on a DSP ROM pair outside its `known_roms` even when each file passes alone |
-| `validation` | checks the code performs: `size`, `crc32`, `md5`, `sha1`, `adler32`, `signature`, `crypto`. Can be a list or dict `{core: [...], upstream: [...]}` for divergent checks |
+| `validation` | checks the code performs: `size`, `crc32`, `md5`, `sha1`, `adler32`, `romdir`, `masked_sha1`, `signature`, `crypto`. Can be a list or dict `{core: [...], upstream: [...]}` for divergent checks |
+| `romdir` | how the code reads a PS2 ROM directory for `validation: [romdir]`: `reset_compare` (5 or 10 bytes compared with RESET), `missing_reset`, `terminated_names`, `extinfo`, `unreadable_romver`, `truncated_walk`, `offset_width`, and `refused_serials`, `zones`, `refused_zones` for the tests after the walk. Each is read in the fork's `LoadBiosVersion` |
+| `masked_sha1` | for `validation: [masked_sha1]`: the bytes the code clears (`zeroed`), the lengths it hashes for each file size it tries (`reads`) and the SHA-1 it compares (Amiberry's CyberStorm and Blizzard PPC flash images) |
 | `aliases` | alternate filenames for the same file |
 | `mode` | `libretro`, `standalone`, or `both` |
 | `hle_fallback` | true if a high-level emulation path exists |
