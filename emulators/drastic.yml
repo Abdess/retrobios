@@ -26,15 +26,17 @@ notes: |
   Nintendo DS emulator by Exophase, closed source and distributed as a binary.
   Two releases are read here and they name the same files: the Android build
   r2.6.0.4a build 109, package com.dsemu.drastic, apk md5
-  7df979ef9420c5053b27c838e6a7e20c, whose loader is
-  lib/arm64-v8a/libdrastic_arm64.so and whose installer is the smali of
-  DraSticActivity. The second is the Linux AArch64 build r2.5.2.2, md5
-  17550db727f3b59d36b57746ad1944be, which ships unstripped with 2731 named
-  functions and is cited by function name. r2.5.2.2 predates the firmware editor
-  and the user database, and that is the whole of the divergence. Every
-  reference below is an address in one of the two binaries or a line in the
-  apktool decode of the Android one.
-  ref: libdrastic_arm64.so, drastic r2.5.2.2 (DWARF comp_dir
+  7df979ef9420c5053b27c838e6a7e20c (sha256 d3a45b9bfd5a68cc), v1 signed by
+  CN=Gilead Kutnick over every entry, whose loader is
+  lib/arm64-v8a/libdrastic_arm64.so (sha256 3b27eee0c480df81) and whose
+  installer is the smali of DraSticActivity. The second is the Linux AArch64
+  build r2.5.2.2, md5 17550db727f3b59d36b57746ad1944be (sha256
+  dab3275ef772451b), which ships unstripped with 2731 named functions and is
+  cited by function name. r2.5.2.2 predates the firmware editor and the user
+  database, and that is the whole of the divergence. Every reference below is
+  an address in one of the two binaries, a line in the apktool decode of the
+  Android one or a line of an asset it ships.
+  ref: libdrastic_arm64.so r2.6.0.4a, drastic r2.5.2.2 (DWARF comp_dir
        /home/odroid/nds_emu/src/linux_odroid64), DraSticActivity.smali
 
   One root holds everything. On Android it is a directory named DraStic at the
@@ -43,8 +45,8 @@ notes: |
   microphone and scripts below it, and the Android build adds backgrounds,
   icon_cache, users, shaders and virtual_controller. Paths below are relative to
   that root.
-  ref: drastic r2.5.2.2 initialize_system_directories 0xf780,
-       drastic r2.5.2.2 0x11ac08-0x11ac80, drastic r2.5.2.2 initialize_system 0xf9e8,
+  ref: drastic r2.5.2.2 initialize_system_directories 0xf784-0xf838,
+       drastic r2.5.2.2 initialize_system 0xf9e8,
        DraSticPathCache.smali:44-56, DraSticActivity.smali:4373-4429,
        DraSticActivity.smali:4187, DraSticActivity.smali:4482
 
@@ -53,7 +55,7 @@ notes: |
   for with "System file %s is the wrong size (should be %d bytes, is %d)", then
   reads it whole. Size is the only test: no hash is computed on any file.
   ref: drastic r2.5.2.2 load_system_file 0xea80-0xebe4,
-       libdrastic_arm64.so 0x1b4d4-0x1b510
+       libdrastic_arm64.so r2.6.0.4a 0x1b4d4-0x1b510
 
   Each BIOS slot has two candidates. The ARM9 slot takes nds_bios_arm9.bin, and
   on failure logs "Can't find Nintendo ARM9 BIOS. Trying free DraStic ARM9
@@ -70,7 +72,7 @@ notes: |
        drastic r2.5.2.2 initialize_system 0xf940-0xf944,
        drastic r2.5.2.2 initialize_system 0xf9f8-0xfa10,
        drastic r2.5.2.2 menu_bios_warning 0x801e0-0x80238,
-       libdrastic_arm64.so 0x2b6d0-0x2b764
+       libdrastic_arm64.so r2.6.0.4a 0x2b6d0-0x2b764
 
   Firmware is answered in code when no file loads: the 256 KB region is zeroed
   and patch_firmware_header_data writes the header, the console identity and the
@@ -80,7 +82,7 @@ notes: |
   ref: drastic r2.5.2.2 initialize_memory 0x1c3e0-0x1c3f8,
        drastic r2.5.2.2 initialize_memory 0x1c560-0x1c578,
        drastic r2.5.2.2 patch_firmware_header_data 0x1b920,
-       libdrastic_arm64.so 0x2b768-0x2b7c4, libdrastic_arm64.so 0x774e0-0x7751c
+       libdrastic_arm64.so r2.6.0.4a 0x2b768-0x2b7c4, libdrastic_arm64.so r2.6.0.4a 0x774e0-0x7751c
 
   The Nintendo ARM7 image still decides one thing. gamecard_load_program passes
   the 0x1048 bytes at ARM7 BIOS offset 0x30 to gamecard_decrypt_secure_region as
@@ -98,7 +100,7 @@ notes: |
   ref: drastic r2.5.2.2 initialize_gamecard 0x709bc-0x70a30,
        drastic r2.5.2.2 initialize_game_database 0x73180,
        drastic r2.5.2.2 initialize_game_database 0x73d24-0x73d38,
-       libdrastic_arm64.so 0x76ab8-0x76b58
+       libdrastic_arm64.so r2.6.0.4a 0x76ab8-0x76b58
 
   The Android package carries its own copies of the files it needs and lays them
   down on first run: the two free BIOS images into system, the default layout
@@ -110,11 +112,22 @@ notes: |
        DraSticActivity.smali:5645, DraSticActivity.smali:5834,
        DraSticActivity.smali:5974
 
-  A .dfx names the passes of a post-processing chain and pulls its GLSL stages,
-  its included headers and its lookup textures from paths relative to itself.
-  Nine chains ship: None, Linear, Quilez, Scale2X, Scanline, HQ2X, FXAA, FXAA HQ
-  and SMAA, the last two reading .raw lookup textures.
-  ref: assets/shaders/_shader_format_.txt:12-58, assets/shaders/SMAA.dfx:1-6
+  fxLoad hands the path of the chosen .dfx to the chain loader, which opens it,
+  keeps its directory and reads it line by line. An <include> reads its file=
+  whole, a <texture> whose input= is neither null nor framebuffer reads that
+  file whole as a lookup texture, and the shader= of each <pass> opens a .dsd
+  and splits its <vertex> and <fragment> blocks, all three relative to the
+  .dfx. A stage that fails to compile has its log written to <path>.log beside
+  the .dsd. A .dfx that does not open or parse leaves a built-in pass-through
+  shader. Nine chains ship: None, Linear, Quilez, Scale2X, Scanline, HQ2X,
+  FXAA, FXAA HQ and SMAA, and SMAA is the only one naming .raw textures.
+  ref: libdrastic_arm64.so r2.6.0.4a Java_com_dsemu_drastic_DraSticJNI_fxLoad 0x18eec,
+       libdrastic_arm64.so r2.6.0.4a FUN_1ff78 0x1ffd4-0x20214,
+       libdrastic_arm64.so r2.6.0.4a FUN_1f0a0 0x1f17c-0x1f1c8,
+       libdrastic_arm64.so r2.6.0.4a FUN_1f260 0x1f464-0x1f52c,
+       libdrastic_arm64.so r2.6.0.4a FUN_1f734 0x1f850-0x1f894,
+       libdrastic_arm64.so r2.6.0.4a FUN_1ebfc 0x1ec20-0x1ecec,
+       assets/shaders/SMAA.dfx:108-122
 
   Per-title inputs are read beside the ROM name. reset_spu answers the
   microphone with microphone/<game>.wav then microphone/microphone.wav, load_nds
@@ -144,7 +157,7 @@ files:
     validation: [size]
     description: "Nintendo DS ARM9 BIOS"
     note: "First candidate for the ARM9 slot. Booting continues on the free replacement when it is absent, and the slot ending empty is fatal."
-    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c398-0x1c3b0, drastic r2.5.2.2 load_system_file 0xea80-0xebe4, libdrastic_arm64.so 0x2b6d0-0x2b6ec"
+    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c398-0x1c3b0, drastic r2.5.2.2 load_system_file 0xea80-0xebe4, libdrastic_arm64.so r2.6.0.4a 0x2b6d0-0x2b6ec"
 
   - name: drastic_bios_arm9.bin
     sha1: 4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a
@@ -156,8 +169,8 @@ files:
     size: 4096
     validation: [size]
     description: "DraStic free ARM9 BIOS replacement"
-    note: "Second candidate for the ARM9 slot, written by Exophase from public documentation and released under a BSD licence. Installed from the package assets on first run."
-    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c4b0-0x1c4d4, libdrastic_arm64.so 0x2b6f0-0x2b708, DraSticActivity.smali:4084-4090, drastic_bios_readme.txt:1-31"
+    note: "Second candidate for the ARM9 slot. Installed from the package assets on first run."
+    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c4b0-0x1c4d4, libdrastic_arm64.so r2.6.0.4a 0x2b6f0-0x2b708, DraSticActivity.smali:4084-4090"
 
   - name: nds_bios_arm7.bin
     path: system/nds_bios_arm7.bin
@@ -167,7 +180,7 @@ files:
     validation: [size]
     description: "Nintendo DS ARM7 BIOS"
     note: "First candidate for the ARM7 slot, and the only image carrying the Blowfish key table at offset 0x30 that the card secure area is decrypted with."
-    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c3bc-0x1c3d4, drastic r2.5.2.2 gamecard_load_program 0x6fb98-0x6fbac, libdrastic_arm64.so 0x2b724-0x2b73c"
+    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c3bc-0x1c3d4, drastic r2.5.2.2 gamecard_load_program 0x6fb98-0x6fbac, libdrastic_arm64.so r2.6.0.4a 0x2b724-0x2b73c"
 
   - name: drastic_bios_arm7.bin
     sha1: 31ae916c85d012582c7cdf47de6943ac6778253b
@@ -180,7 +193,7 @@ files:
     validation: [size]
     description: "DraStic free ARM7 BIOS replacement"
     note: "Second candidate for the ARM7 slot. Offset 0x30 is zero filled, so cards whose secure area is encrypted do not decrypt under it."
-    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c508-0x1c52c, libdrastic_arm64.so 0x2b740-0x2b758, DraSticActivity.smali:4078-4083"
+    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c508-0x1c52c, libdrastic_arm64.so r2.6.0.4a 0x2b740-0x2b758, DraSticActivity.smali:4078-4083"
 
   - name: nds_firmware.bin
     path: system/nds_firmware.bin
@@ -191,7 +204,7 @@ files:
     validation: [size]
     description: "Nintendo DS firmware"
     note: "Absent, the region is zeroed and patch_firmware_header_data writes a header, a console identity and a user settings block into it, so the emulator boots either way. r2.6.0.4a reads nds_firmware_modified.bin before this."
-    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c3e0-0x1c3f8, drastic r2.5.2.2 initialize_memory 0x1c560-0x1c578, drastic r2.5.2.2 patch_firmware_header_data 0x1b920, libdrastic_arm64.so 0x2b794-0x2b7c4"
+    source_ref: "drastic r2.5.2.2 initialize_memory 0x1c3e0-0x1c3f8, drastic r2.5.2.2 initialize_memory 0x1c560-0x1c578, drastic r2.5.2.2 patch_firmware_header_data 0x1b920, libdrastic_arm64.so r2.6.0.4a 0x2b794-0x2b7c4"
 
   - name: nds_firmware_modified.bin
     path: system/nds_firmware_modified.bin
@@ -203,7 +216,7 @@ files:
     unsourceable: "written by the firmware editor of r2.6.0.4a from the emulated user settings, so no dump of it exists"
     description: "firmware image edited in the emulator"
     note: "Read before nds_firmware.bin in r2.6.0.4a and absent from r2.5.2.2."
-    source_ref: "libdrastic_arm64.so 0x2b768-0x2b790, libdrastic_arm64.so 0x774e0-0x7751c"
+    source_ref: "libdrastic_arm64.so r2.6.0.4a 0x2b768-0x2b790, libdrastic_arm64.so r2.6.0.4a 0x774e0-0x7751c"
 
   - name: game_database.xml
     size: 1686069
@@ -225,7 +238,7 @@ files:
     unsourceable: "user overlay of the save type database, authored per collection"
     description: "user save type database"
     note: "Read after game_database.xml in r2.6.0.4a and absent from r2.5.2.2."
-    source_ref: "libdrastic_arm64.so 0x76af8-0x76b28"
+    source_ref: "libdrastic_arm64.so r2.6.0.4a 0x76af8-0x76b28"
 
   - name: usrcheat.dat
     path: usrcheat.dat
@@ -235,7 +248,7 @@ files:
     category: game_data
     description: "Action Replay cheat library"
     note: "Read from the root of the data directory and written back when a cheat is toggled, so the file carries the enabled state. Installed from the package assets on first run."
-    source_ref: "drastic r2.5.2.2 initialize_gamecard 0x70a0c-0x70a30, libdrastic_arm64.so 0x76b34-0x76b58, DraSticActivity.smali:5974"
+    source_ref: "drastic r2.5.2.2 initialize_gamecard 0x70a0c-0x70a30, libdrastic_arm64.so r2.6.0.4a 0x76b34-0x76b58, DraSticActivity.smali:5974"
 
   - name: drastic_bios.zip
     size: 15583
@@ -245,8 +258,8 @@ files:
     bundled: true
     category: game_data
     description: "source archive of the free BIOS replacement"
-    note: "Copied to the root of the data directory on first run and never read back. Holds bios_common.S, a Makefile, the BSD licence notice and the two built images."
-    source_ref: "DraSticActivity.smali:5189-5200, drastic_bios_readme.txt:1-31"
+    note: "Copied to the root of the data directory on first run and never read back. Holds bios_common.S, a Makefile, drastic_bios_readme.txt and the two built images."
+    source_ref: "DraSticActivity.smali:5189-5200"
 
   - name: LC_default.dat
     size: 76
@@ -266,7 +279,7 @@ files:
     category: game_data
     description: "post-processing chain definition"
     note: "Android only. Names the passes, the texture inputs and the headers of one chain, all resolved relative to its own path. The package ships None, Linear, Quilez, Scale2X, Scanline, HQ2X, FXAA, FXAA HQ and SMAA."
-    source_ref: "DraSticActivity.smali:5619-5624, assets/shaders/_shader_format_.txt:11-21"
+    source_ref: "DraSticActivity.smali:5619-5624, libdrastic_arm64.so r2.6.0.4a Java_com_dsemu_drastic_DraSticJNI_fxLoad 0x18ea8-0x18f20 (path string handed to FUN_1d198, which tail-calls FUN_1ff78), FUN_1ff78 0x1ffd4-0x1ffe0 (open rb), 0x1fff4-0x20024 (strrchr '/' then '\\', directory kept for relative names), 0x20040-0x201d0 (fgets loop dispatching <options>, <header>, <vheader>, <fheader>, <include>, <texture and <pass>), 0x201ec-0x20214 (built-in pass-through shader when the file fails)"
 
   - name: "<name>.dsd"
     path: "shaders/<name>.dsd"
@@ -274,8 +287,8 @@ files:
     bundled: true
     category: game_data
     description: "GLSL stage source named by a chain"
-    note: "Android only. Named by the shader entry of a pass, and carrying the vertex and fragment code for it, together with the .h and .hlsl files the include tags pull in. A stage that fails to compile leaves a <name>dsd.log beside it."
-    source_ref: "assets/shaders/_shader_format_.txt:8-9, assets/shaders/_shader_format_.txt:36-40, assets/shaders/_shader_format_.txt:59-72, assets/shaders/_shader_format_.txt:75-98"
+    note: "Android only. Named by the shader entry of a pass relative to the .dfx, and carrying the vertex and fragment code for it. The .h and .hlsl headers an <include> of the .dfx names are read whole the same way. A stage that fails to compile has its log written to <name>.dsd.log beside it, and the chain falls back to the built-in shader."
+    source_ref: "libdrastic_arm64.so r2.6.0.4a FUN_1f734 0x1f850-0x1f894 (shader= value joined to the .dfx directory with %s/%s and passed to FUN_1ebfc), FUN_1ebfc 0x1ec20-0x1ec60 (open rb, FUN_1eaa4 splits <vertex> and <fragment> at 0x1eb10-0x1eb90, close), 0x1eca0-0x1ecec (compile, on failure FUN_1ed3c formats %s.log on the .dsd path and the log is written wb), FUN_1f0a0 0x1f17c-0x1f1c8 (<include> file= opened rb relative to the .dfx), 0x1f138 (read whole)"
 
   - name: "<name>.raw"
     path: "shaders/<name>.raw"
@@ -283,8 +296,8 @@ files:
     bundled: true
     category: game_data
     description: "lookup texture named by a chain"
-    note: "Android only. Loaded when a texture tag names a file instead of the framebuffer or an FBO, with the dimensions and the format taken from the tag. SMAA is the one shipped chain that names any, taking smaa/AreaTexRGB.raw and smaa/SearchTexRGB.raw. The package also carries the non-RGB pair of the same two tables, which no shipped chain names."
-    source_ref: "assets/shaders/_shader_format_.txt:42-56, assets/shaders/SMAA.dfx:1-6"
+    note: "Android only. Loaded when a texture tag names a file instead of the framebuffer or an FBO, read whole with no length check and uploaded with the dimensions and the format taken from the tag. An absent file leaves the texture unloaded. SMAA is the one shipped chain that names any, taking smaa/AreaTexRGB.raw and smaa/SearchTexRGB.raw. The package also carries the non-RGB pair of the same two tables, which no shipped chain names."
+    source_ref: "libdrastic_arm64.so r2.6.0.4a FUN_1f260 0x1f464-0x1f49c (input= compared to null and framebuffer), 0x1f4c4-0x1f4d8 (any other name joined to the .dfx directory with %s/%s and opened rb), 0x1f4e0-0x1f52c (length by fseek and ftell, read whole), 0x1f628-0x1f638 (no upload when the open fails), 0x1f690 (glTexImage2D with the width, height, format and type of the tag), assets/shaders/SMAA.dfx:108-122"
 
   - name: "<name>.zip"
     path: "virtual_controller/<name>.zip"
@@ -339,7 +352,7 @@ files:
     category: game_data
     description: "custom cheat file"
     note: "Plain text, one bracketed cheat name per block followed by its codes, a trailing plus marking the cheat active. Read on top of the entries usrcheat.dat holds and written back when a cheat is toggled."
-    source_ref: "drastic r2.5.2.2 load_custom_cheats 0x817b4, drastic r2.5.2.2 save_custom_cheats 0x81d24, drastic_readme.txt:789-812"
+    source_ref: "drastic r2.5.2.2 load_custom_cheats 0x817b4-0x817d8 (sprintf %s%ccheats%c%s.cht, fopen rb), 0x81888 (line opening with [), 0x818b4-0x818d4 (code words parsed by strtoul), 0x819cc-0x81a04 (strrchr ], then + marks the cheat active), drastic r2.5.2.2 save_custom_cheats 0x81d24"
 
   - name: "<game>.gba"
     path: "slot2/<game>.gba"
@@ -397,8 +410,10 @@ exclusion_note: >
   unzipped_rom.nds, crash_dump.txt, the profiler dumps under profiles, and the
   drastic_mapped_memory.dat and drastic_mapped_memory_vram.dat scratch files of
   the memory mapper.
-  ref: official apk classes dex, libdrastic_arm64.so, drastic r2.5.2.2 0x11a938,
-       drastic r2.5.2.2 0x11aca8, drastic r2.5.2.2 0x11b440, drastic r2.5.2.2 0x11b650,
-       drastic r2.5.2.2 0x11edd8, drastic r2.5.2.2 0x120190, drastic r2.5.2.2 0x1201b0,
-       drastic r2.5.2.2 0x1202d0, drastic r2.5.2.2 0x1217f0, drastic r2.5.2.2 0x121868,
-       drastic r2.5.2.2 0x1249f8, drastic r2.5.2.2 0x124b08
+  ref: official apk classes dex, libdrastic_arm64.so r2.6.0.4a,
+       drastic r2.5.2.2 initialize_system 0xf8b4-0xf8d4, drastic r2.5.2.2 quit 0xea08,
+       drastic r2.5.2.2 reset_system 0xfdac, drastic r2.5.2.2 select_delete_config_local 0x7a7b0,
+       drastic r2.5.2.2 initialize_memory 0x1bfa4, drastic r2.5.2.2 initialize_memory 0x1c1bc,
+       drastic r2.5.2.2 gamecard_load_program 0x6f6a8, drastic r2.5.2.2 savestate_index_to_path 0x75138,
+       drastic r2.5.2.2 nds_file_open 0x75688-0x757c0, drastic r2.5.2.2 icon_cache_load 0x7af60,
+       drastic r2.5.2.2 update_input 0x88b00, drastic r2.5.2.2 reset_input 0x89028
