@@ -402,8 +402,11 @@ def data_as_of(moment: datetime | None = None) -> str:
 
 
 def _date_line() -> str:
-    """The date a page closes on, in the words of data_as_of()."""
-    return f'<div class="rb-timestamp">{data_as_of()}.</div>'
+    """The date a page closes on, in the words of data_as_of(). The search
+    does not read it: a query word such as the "2" of "playstation 2 bios"
+    also matches the start of "2026", and every page closing on the date
+    then held every word of the query."""
+    return f'<div class="rb-timestamp" data-pagefind-ignore>{data_as_of()}.</div>'
 
 
 # Home page
@@ -5523,7 +5526,8 @@ def generate_provenance_page(
     lines = [
         "# Dump provenance",
         "",
-        *([f'<p class="rb-timestamp">Catalogs as of: {as_of}.</p>', ""] if as_of else []),
+        *([f'<p class="rb-timestamp" data-pagefind-ignore>Catalogs as of: {as_of}.</p>', ""]
+          if as_of else []),
         "Provenance says whether a file is, byte for byte, a dump that Redump, "
         "No-Intro or TOSEC catalogues. It says where a dump is known from, "
         "not whether an emulator accepts it: that is the emulator's code, read "
