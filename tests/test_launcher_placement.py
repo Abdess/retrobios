@@ -851,12 +851,95 @@ class MameSearchPaths(unittest.TestCase):
             e.get("unplaced") == "outside_bios_folder" for e in self.sets(view)
         ))
 
+    def test_a_passed_search_setting_leaves_the_bundled_tree_unread(self) -> None:
+        # RetroBat passes -hash bios/mame/hash and -sp bios/mame/samples
+        # (Mame64.Generator.cs:30, 101, 106-107, 172, 177-178), RetroDECK
+        # writes samplepath $bios_path/mame-sa/samples (component_prepare.sh:94):
+        # the trees beside the executable are not read, the pack brings them.
+        for platform, tree, place in (
+            ("retrobat", "hash/", "mame/hash/"),
+            ("retrobat", "floppy/", "mame/samples/floppy/"),
+            ("knulli", "floppy/", "mame/samples/floppy/"),
+            ("retrodeck", "floppy/", "mame-sa/samples/floppy/"),
+        ):
+            view = standalone_view("mame", platform)
+            (entry,) = [e for e in view["files"]
+                        if e["name"] == tree and e.get("mode") == "standalone"]
+            self.assertEqual(entry["standalone_path"], place, platform)
+            self.assertNotIn("bundled", entry, platform)
+        # Where no launcher passes the setting, the bundled copy is read.
+        view = standalone_view("mame", "emudeck")
+        (entry,) = [e for e in view["files"]
+                    if e["name"] == "hash/" and e.get("mode") == "standalone"]
+        self.assertTrue(entry.get("bundled"))
+
+    def test_retropie_reads_samples_below_its_roms(self) -> None:
+        # samplepath $romdir/mame/samples;$romdir/arcade/samples (mame.sh:135).
+        view = standalone_view("mame", "retropie")
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual((bbc["standalone_path"], bbc.get("root")),
+                         ("mame/samples/bbc.zip", "roms"))
+        (tree,) = [e for e in view["files"]
+                   if e["name"] == "floppy/" and e.get("mode") == "standalone"]
+        self.assertEqual((tree["standalone_path"], tree.get("root")),
+                         ("mame/samples/floppy/", "roms"))
+        self.assertNotIn("bundled", tree)
+
+    def test_batocera_keeps_the_sets_at_the_root_and_samples_in_bios_mame(self) -> None:
+        # -rompath <romDirname>;/userdata/bios/mame;/userdata/bios and
+        # -samplepath /userdata/bios/mame/samples (mameGenerator.py:129-142).
+        view = standalone_view("mame", "batocera")
+        self.assertTrue(all(e["standalone_path"] == e["name"] for e in self.sets(view)))
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
+
+    def test_a_moved_tree_is_found_by_its_layout_path(self) -> None:
+        from common import expand_directory_entries, load_database
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        view = standalone_view("mame", "retrodeck")
+        (tree,) = [e for e in view["files"]
+                   if e["name"] == "floppy/" and e.get("mode") == "standalone"]
+        members = expand_directory_entries([tree], db, standalone=True)
+        self.assertEqual(len(members), 19)
+        for member in members:
+            self.assertTrue(member["path"].startswith("mame-sa/samples/floppy/"))
+
     def test_psxmame_reads_bios_psxmame_bios(self) -> None:
         # -rompath bios/psxmame/bios;<rom directory> (PSXMame.Generator.cs:38-48).
         view = standalone_view("psxmame", "retrobat")
         self.assertTrue(view["files"])
         for entry in view["files"]:
             self.assertEqual(entry["standalone_path"], "psxmame/bios/" + entry["name"])
+
+
+class LibretroMameSetsInMameBios(unittest.TestCase):
+    """libretro/mame searches the content folder, then <system>/mame/bios and
+    <system>/mame/roms, never the system folder itself
+    (src/osd/libretro/libretro-internal/retro_init.cpp:580-597)."""
+
+    def test_every_libretro_mame_set_is_read_in_mame_bios(self) -> None:
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        for key in ("mame", "mame0258", "mame0278", "mamearcade", "mamemess"):
+            sets = [f for f in profiles[key]["files"] if f.get("category") == "bios_zip"
+                    and f.get("mode") != "standalone" and f["name"] != "bbc.zip"]
+            self.assertTrue(sets, key)
+            for entry in sets:
+                self.assertEqual(entry.get("path"), "mame/bios/" + entry["name"], key)
+
+    def test_the_standalone_build_keeps_its_rompath_layout(self) -> None:
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["mame"]
+        for entry in profile["files"]:
+            if str(entry.get("path", "")).startswith("mame/bios/"):
+                self.assertEqual(entry.get("standalone_path"), entry["name"])
+
+    def test_retrobat_lays_out_both_builds(self) -> None:
+        # es_systems.cfg offers the libretro core mame and the standalone
+        # mame64, two names of one profile.
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["mame"]
+        config = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
+        builds = sorted(s for _v, s in platform_layouts("mame", profile, standalone_set(config)))
+        self.assertEqual(builds, [False, True])
 
 
 class GzdoomOnRetroDECK(unittest.TestCase):
@@ -883,13 +966,38 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
     """advmame.rc sets dir_rom /storage/roms/mame, /storage/roms/arcade for
     the arcade system (advmame.rc:11, advmame.sh:26-30)."""
 
-    def test_the_sets_land_in_roms_mame(self) -> None:
+    def test_the_sets_land_in_roms_mame_and_roms_arcade(self) -> None:
+        # Started for arcade it reads roms/arcade, for mame and cps1-3
+        # roms/mame (es_systems.json, advmame.sh:26-30): an arcade set is
+        # read in both.
         view = standalone_view("advancemame", "emuelec")
         sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
-        self.assertEqual(len(sets), 29)
+        self.assertEqual(len(sets), 58)
+        places: dict[str, set[str]] = {}
         for entry in sets:
-            self.assertEqual(entry["standalone_path"], "mame/" + entry["name"])
             self.assertTrue(entry.get("unprefixed"))
+            places.setdefault(entry["name"], set()).add(entry["standalone_path"])
+        self.assertEqual(len(places), 29)
+        for name, paths in places.items():
+            self.assertEqual(paths, {"mame/" + name, "arcade/" + name})
+
+    def test_both_copies_are_one_file(self) -> None:
+        # Outside the BIOS tree the folder is no proof of content: each copy
+        # resolves by its layout path, so both folders hold the same file.
+        from common import load_database
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        with redirect_stdout(io.StringIO()):
+            manifest = generate_manifest(
+                "emuelec", str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
+                str(REPO_ROOT / "platforms" / "_registry.yml"),
+                emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
+            )
+        by_dest = {f["dest"]: f["sha1"] for f in manifest["files"]}
+        sets = [d.removeprefix("arcade/") for d in by_dest if d.startswith("arcade/")]
+        self.assertEqual(len(sets), 29)
+        for name in sets:
+            self.assertEqual(by_dest["arcade/" + name], by_dest["mame/" + name], name)
 
     def test_the_roms_folder_is_no_proof_of_content(self) -> None:
         # bios/Arcade/MAME/konamigv.zip is MAME 0.289's set, not AdvanceMAME's.
@@ -897,7 +1005,8 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
 
         db = load_database(str(REPO_ROOT / "database.json"))
         view = standalone_view("advancemame", "emuelec")
-        (entry,) = [e for e in view["files"] if e["name"] == "konamigv.zip"]
+        entry = next(e for e in view["files"]
+                     if e["name"] == "konamigv.zip" and e["standalone_path"].startswith("mame/"))
         moved, _status = resolve_local_file(entry, db, dest_hint=entry["standalone_path"])
         plain = {k: v for k, v in entry.items()
                  if k not in ("layout_path", "standalone_path", "unprefixed")}

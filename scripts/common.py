@@ -2760,27 +2760,49 @@ def expand_directory_entries(
 
     if not any(entry.get("type") == "directory" for entry in files):
         return files
+    # A file the profile names itself is left to that entry, in the same
+    # build and below the same root: MAME's libretro floppy samples share
+    # their path with the standalone tree RetroPie reads below roms/.
+    other_build = "libretro" if standalone else "standalone"
     named = {
-        destination(entry) for entry in files if entry.get("type") != "directory"
+        (entry.get("root") or "", destination(entry)) for entry in files
+        if entry.get("type") != "directory" and entry.get("mode") != other_build
     }
     expanded: list[dict] = []
     for entry in files:
         if entry.get("type") != "directory":
             expanded.append(entry)
             continue
-        members = directory_members(db, destination(entry))
+        target = destination(entry)
+        # A directory a platform moved (platform_layouts) is the profile's
+        # tree at the platform's place: the collection holds it under the
+        # layout path, and the platform's folder proves nothing (RetroDECK
+        # hands MAME samplepath $bios_path/mame-sa/samples).
+        layout = str(entry.get("layout_path") or "") if standalone else ""
+        members = directory_members(db, layout) if layout else {}
+        if not members:
+            # A layout tail two trees answer (MAME's hash/) leaves the
+            # platform's own tail.
+            layout = ""
+            members = directory_members(db, target)
+        if layout and layout.strip("/") != target.strip("/"):
+            source, place = layout.strip("/") + "/", target.strip("/") + "/"
+            members = {
+                place + dest[len(source):]: sha1
+                for dest, sha1 in members.items() if dest.startswith(source)
+            }
         if not members:
             expanded.append(entry)
             continue
         inherited = {
             key: value
             for key, value in entry.items()
-            if key not in ("type", "standalone_path")
+            if key not in ("type", "standalone_path", "layout_path")
         }
         expanded.extend(
             {**inherited, "name": dest, "path": dest, "sha1": sha1}
             for dest, sha1 in members.items()
-            if dest not in named
+            if (entry.get("root") or "", dest) not in named
         )
     return expanded
 
@@ -2905,6 +2927,32 @@ def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
     }
 
 
+def twin_build_names(config: dict) -> set[str]:
+    """The libretro core names of emulators a platform also runs standalone
+    under another name.
+
+    RetroBat's es_systems.cfg offers MAME as the libretro core mame and as
+    the standalone mame64, two names of one profile: the platform runs it
+    both ways, and each build reads its own layout.
+    """
+    standalone = {str(c) for c in config.get("standalone_cores") or []}
+    libretro = {str(c) for c in config.get("cores") or []} - standalone if isinstance(
+        config.get("cores"), list
+    ) else set()
+    if not standalone or not libretro:
+        return set()
+    profiles = load_emulator_profiles(str(Path(__file__).resolve().parent.parent / "emulators"))
+    found: set[str] = set()
+    for key, profile in profiles.items():
+        kind = str(profile.get("type", ""))
+        if "libretro" not in kind or "standalone" not in kind:
+            continue
+        names = {key, *(str(c) for c in profile.get("cores") or [])}
+        if names & standalone:
+            found |= names & libretro
+    return found
+
+
 def standalone_set(config: dict) -> set[str]:
     """The emulators a platform launches standalone, with its dual-mode ones.
 
@@ -2924,6 +2972,7 @@ def standalone_set(config: dict) -> set[str]:
         & set(map(str, config.get("standalone_cores") or []))
     }
     names |= own_build_tags(config, names)
+    names |= {DUAL_MODE_PREFIX + n for n in twin_build_names(config)}
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
     names |= {
@@ -3157,6 +3206,29 @@ def standalone_bindings_for(
     )
 
 
+def _placed_entry(entry: dict, profile: dict, placed: tuple[str, str]) -> dict:
+    """A standalone entry moved to the (tree, path) a platform reads it from."""
+    tree, path = placed
+    moved = {**entry, "standalone_path": path,
+             "layout_path": standalone_layout_path(entry, profile)}
+    if entry.get("load_from"):
+        # The build's own root no longer applies: RetroDECK hands
+        # Cemu's MLC, read from its data directory, to bios/cemu.
+        load_from = entry["load_from"]
+        moved["load_from"] = {
+            **(load_from if isinstance(load_from, dict) else {"libretro": load_from}),
+            "standalone": "system_dir",
+        }
+    if tree == "install":
+        # Below the roms root inside the install tree (AmberELEC's
+        # /storage/roms): a plain dest the platform prefix skips.
+        return {**moved, "unprefixed": True}
+    # A file the launcher runs from the roms directory (ROCKNIX's
+    # roms/pico-8) or an emulator folder (RetroBat's emulators/pico8)
+    # is relative to it, and says so.
+    return {**moved, "root": tree} if tree else moved
+
+
 def platform_layouts(
     emu_name: str, profile: dict, standalone_cores: set[str]
 ) -> list[tuple[dict, bool]]:
@@ -3191,7 +3263,14 @@ def platform_layouts(
             for system in own:
                 family.setdefault(system, set()).update(entry_launch_systems(f, index) - own)
 
-    def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
+    # The systems the launcher records name: a launch for one of them reads
+    # the folder its record gives, every other launch the folder the records
+    # naming none give.
+    named_systems = frozenset().union(*(
+        h.systems for h in _handed(standalone_cores) if h.emulator in names
+    )) if per_system else frozenset()
+
+    def launch_systems(entry: dict) -> frozenset[str]:
         systems: frozenset[str] = frozenset()
         if per_system:
             own = entry_launch_systems(entry, {})
@@ -3205,11 +3284,52 @@ def platform_layouts(
                 systems = systems.union(*(
                     index.get(MACHINE_KEY + _norm_system_id(s), set()) for s in own
                 ))
+        return systems
+
+    def bindings_for(systems: frozenset[str]) -> dict[str, tuple[str, str]]:
         if systems not in by_systems:
             by_systems[systems] = standalone_bindings_for(
                 emu_name, profile, standalone_cores, systems
             )
         return by_systems[systems]
+
+    def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
+        return bindings_for(launch_systems(entry))
+
+    # The layout folders a search setting stands for (standalone_pools):
+    # bound, the launcher passes the setting and the default is not read.
+    pool_folders = {
+        str(v).strip("/") for v in (profile.get("standalone_pools") or {}).values()
+    } - {""}
+
+    def passed_setting(entry: dict) -> bool:
+        layout = str(standalone_layout_path(entry, profile) or "")
+        bindings = bindings_of(entry)
+        return any(
+            folder in bindings and (layout == folder or layout.startswith(folder + "/"))
+            for folder in pool_folders
+        )
+
+    def destinations(entry: dict) -> list[tuple[str, str] | None]:
+        """Each place the entry's launches read it from, in launch order.
+
+        An entry of a system a record names is read where that record puts
+        it. One also launched for systems no record names is read, for those
+        launches, where the records naming none put it: EmuELEC starts
+        AdvanceMAME with dir_rom roms/arcade for arcade and roms/mame for
+        mame and cps1-3 (advmame.sh:26-30), and an arcade set is read in both.
+        """
+        systems = launch_systems(entry)
+        found = [standalone_destination(entry, profile, bindings_for(systems))]
+        # A system the platform's list or machines put the entry under
+        # stands for the entry's own ids: XRoar's coco3 is launched as coco.
+        own = entry_launch_systems(entry, {})
+        launched = (systems - own) | (own & named_systems) if systems != own else systems
+        if launched & named_systems and launched - named_systems:
+            generic = standalone_destination(entry, profile, bindings_for(frozenset()))
+            if generic not in found:
+                found.append(generic)
+        return found
 
     layout_entries = [
         f for f in profile.get("files") or []
@@ -3228,30 +3348,18 @@ def platform_layouts(
             if not isinstance(f, dict) or standalone_layout_path(f, profile) is None:
                 files.append(f)
                 continue
-            placed = standalone_destination(f, profile, bindings_of(f))
-            if placed is None or placed[0] == "outside":
+            places = [p for p in destinations(f) if p is not None and p[0] != "outside"]
+            if not places:
                 files.append({**f, "unplaced": OUTSIDE_BIOS_FOLDER})
                 continue
-            tree, path = placed
-            moved = {**f, "standalone_path": path,
-                     "layout_path": standalone_layout_path(f, profile)}
-            if f.get("load_from"):
-                # The build's own root no longer applies: RetroDECK hands
-                # Cemu's MLC, read from its data directory, to bios/cemu.
-                load_from = f["load_from"]
-                moved["load_from"] = {
-                    **(load_from if isinstance(load_from, dict) else {"libretro": load_from}),
-                    "standalone": "system_dir",
-                }
-            if tree == "install":
-                # Below the roms root inside the install tree (AmberELEC's
-                # /storage/roms): a plain dest the platform prefix skips.
-                files.append({**moved, "unprefixed": True})
-                continue
-            # A file the launcher runs from the roms directory (ROCKNIX's
-            # roms/pico-8) or an emulator folder (RetroBat's emulators/pico8)
-            # is relative to it, and says so.
-            files.append({**moved, "root": tree} if tree else moved)
+            moved = f
+            if f.get("bundled") and passed_setting(f):
+                # The copy installed with the emulator sits where the setting
+                # pointed before the launcher moved it: RetroBat passes MAME
+                # -hash bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
+                # the hash/ beside mame.exe is no longer read.
+                moved = {k: v for k, v in f.items() if k != "bundled"}
+            files.extend(_placed_entry(moved, profile, placed) for placed in places)
         standalone = {**profile, "files": files}
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
             if c.startswith(DUAL_MODE_PREFIX)}

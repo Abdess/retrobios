@@ -1119,10 +1119,32 @@ def patched_paths(read: Callable[[str], str], patches: tuple[str, ...] = PATH_PA
     return launchers
 
 
+# Generators whose command line hands the emulator /userdata/bios folders as
+# search paths: MAME's -rompath and -samplepath (mame/mameGenerator.py).
+SEARCH_PATH_GENERATORS = ("mame/mameGenerator.py",)
+
+
+def search_paths(cg: Configgen) -> list[Launcher]:
+    """Every /userdata/bios path a generator's command line names, read as
+    KNULLI's generic reader reads its fork of the same generator."""
+    try:
+        from .knulli_launchers import GenericSites, bios_sites  # noqa: PLC0415
+    except ImportError:
+        from knulli_launchers import GenericSites, bios_sites  # type: ignore[no-redef]  # noqa: PLC0415
+    # A boot disk image the command line names (the Macintosh's
+    # /userdata/bios/<boot_disk>.img) is a file, no search path.
+    return [
+        launcher
+        for path in SEARCH_PATH_GENERATORS
+        for launcher in bios_sites(cg, GenericSites(path, "passes_path"))
+        if re.match(r"command line -\w", launcher.passes_to or "")
+    ]
+
+
 EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     duckstation, duckstation_legacy, hatari, xemu, melonds, mupen64plus,
     x16emu, gsplus, lexaloffle, environment_directories, config_directories,
-    core_file_options, working_directories,
+    core_file_options, working_directories, search_paths,
 )
 
 

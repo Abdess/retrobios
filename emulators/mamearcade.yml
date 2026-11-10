@@ -67,7 +67,9 @@ notes: |
   selection via src/mame/arcade.flt: 1130 arcade drivers from the full set.
   Excludes console/computer/pinball/fruit machine drivers.
   50 BIOS root sets (vs 99 in full MAME). romload.cpp unmodified.
-  ROM search: content_dir + system_dir/mame/bios + system_dir/mame/roms.
+  ROM search: content_dir + system_dir/mame/bios + system_dir/mame/roms, never
+  system_dir itself (src/osd/libretro/libretro-internal/retro_init.cpp:580-597),
+  so the sets are read in mame/bios.
 
 files:
   # Support trees under system_dir/mame/, the paths Set_Path_Option passes
@@ -104,6 +106,7 @@ files:
 
   # SNK Neo Geo MVS (AES excluded via arcade.flt)
   - name: neogeo.zip
+    path: "mame/bios/neogeo.zip"
     required: true
     category: bios_zip
     system: snk-neogeo-mvs
@@ -252,6 +255,7 @@ files:
 
   # IGS PGM
   - name: pgm.zip
+    path: "mame/bios/pgm.zip"
     required: true
     category: bios_zip
     system: igs-pgm
@@ -276,6 +280,7 @@ files:
 
   # Sega NAOMI / NAOMI 2 / GD-ROM / Atomiswave
   - name: naomi.zip
+    path: "mame/bios/naomi.zip"
     required: true
     category: bios_zip
     system: sega-naomi
@@ -413,6 +418,7 @@ files:
         sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: naomi2.zip
+    path: "mame/bios/naomi2.zip"
     required: true
     category: bios_zip
     system: sega-naomi2
@@ -484,6 +490,7 @@ files:
         sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: naomigd.zip
+    path: "mame/bios/naomigd.zip"
     required: true
     category: bios_zip
     system: sega-naomigd
@@ -535,6 +542,7 @@ files:
         sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: awbios.zip
+    path: "mame/bios/awbios.zip"
     required: true
     category: bios_zip
     system: sammy-atomiswave
@@ -554,6 +562,7 @@ files:
         sha1: "5128fe2ddcced77332bdcab691c09958051fa564"
 
   - name: hod2bios.zip
+    path: "mame/bios/hod2bios.zip"
     required: false
     category: bios_zip
     system: sega-naomi
@@ -590,6 +599,7 @@ files:
         sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: f355dlx.zip
+    path: "mame/bios/f355dlx.zip"
     required: false
     category: bios_zip
     system: sega-naomi
@@ -625,6 +635,7 @@ files:
         sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: f355bios.zip
+    path: "mame/bios/f355bios.zip"
     required: false
     category: bios_zip
     system: sega-naomi
@@ -652,6 +663,7 @@ files:
         sha1: "3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc"
 
   - name: airlbios.zip
+    path: "mame/bios/airlbios.zip"
     required: false
     category: bios_zip
     system: sega-naomi
@@ -676,6 +688,7 @@ files:
 
   # Sega ST-V
   - name: stvbios.zip
+    path: "mame/bios/stvbios.zip"
     required: true
     category: bios_zip
     system: sega-stv
@@ -743,6 +756,7 @@ files:
         sha1: "7d9364d546f3d3f839ec36be148076f8d26a65a6"
 
   - name: sammymdl.zip
+    path: "mame/bios/sammymdl.zip"
     required: true
     category: bios_zip
     system: sammy-medal
@@ -766,6 +780,7 @@ files:
 
   # Sega Mega Drive arcade
   - name: megaplay.zip
+    path: "mame/bios/megaplay.zip"
     required: true
     category: bios_zip
     system: sega-megaplay
@@ -806,6 +821,7 @@ files:
         bad_dump: true
 
   - name: megatech.zip
+    path: "mame/bios/megatech.zip"
     required: true
     category: bios_zip
     system: sega-megatech
@@ -833,6 +849,7 @@ files:
         sha1: "c9008c431a937c084fb475273093ca0b434b5f47"
 
   - name: isgsm.zip
+    path: "mame/bios/isgsm.zip"
     required: true
     category: bios_zip
     system: sega-isgsm
@@ -845,6 +862,7 @@ files:
 
   # DECO Cassette
   - name: decocass.zip
+    path: "mame/bios/decocass.zip"
     required: true
     category: bios_zip
     system: deco-cassette
@@ -1033,6 +1051,7 @@ files:
 
   # Nintendo arcade
   - name: playch10.zip
+    path: "mame/bios/playch10.zip"
     required: true
     category: bios_zip
     system: nintendo-playch10
@@ -1124,6 +1143,7 @@ files:
         sha1: "d10acafc8da9ff479c270ec01180cca61efe62f5"
 
   - name: nss.zip
+    path: "mame/bios/nss.zip"
     required: true
     category: bios_zip
     system: nintendo-nss
@@ -1146,6 +1166,7 @@ files:
         sha1: "e3942f9d508c3c8074c3c3941376c37ca68b8e54"
 
   - name: aleck64.zip
+    path: "mame/bios/aleck64.zip"
     required: true
     category: bios_zip
     system: nintendo-aleck64
@@ -1166,6 +1187,7 @@ files:
 
   # Philips CD-i
   - name: cdibios.zip
+    path: "mame/bios/cdibios.zip"
     required: true
     category: bios_zip
     system: philips-cdi
@@ -1189,6 +1211,7 @@ files:
 
   # Commodore Cubo (CD32-based)
   - name: cubo.zip
+    path: "mame/bios/cubo.zip"
     required: true
     category: bios_zip
     system: commodore-cubo
@@ -1201,6 +1224,7 @@ files:
 
   # Namco
   - name: sys573.zip
+    path: "mame/bios/sys573.zip"
     required: true
     category: bios_zip
     system: namco-system573
@@ -1239,6 +1263,7 @@ files:
 
   # Konami
   - name: konamigx.zip
+    path: "mame/bios/konamigx.zip"
     required: true
     category: bios_zip
     system: konami-gx
@@ -1250,6 +1275,7 @@ files:
         sha1: "c483aa98ff8ef40cdac359c19ad23fea5ecc1906"
 
   - name: konamigv.zip
+    path: "mame/bios/konamigv.zip"
     required: true
     category: bios_zip
     system: konami-gv
@@ -1261,6 +1287,7 @@ files:
         sha1: "02a82a2fe1fba0404517c3602324bfa64e23e478"
 
   - name: kviper.zip
+    path: "mame/bios/kviper.zip"
     required: true
     category: bios_zip
     system: konami-viper
@@ -1280,6 +1307,7 @@ files:
         sha1: "ed7cd9b2763b3e377df9663943160f9871f65105"
 
   - name: gq863.zip
+    path: "mame/bios/gq863.zip"
     required: true
     category: bios_zip
     system: konami-twinkle
@@ -1295,6 +1323,7 @@ files:
         sha1: "cab5209f90f47b9ee6e721479913ad74e3ba84b1"
 
   - name: bubsys.zip
+    path: "mame/bios/bubsys.zip"
     required: true
     category: bios_zip
     system: konami-bubble-system
@@ -1319,6 +1348,7 @@ files:
 
   # Sony ZN-based (PSX arcade)
   - name: coh1000c.zip
+    path: "mame/bios/coh1000c.zip"
     required: true
     category: bios_zip
     system: capcom-zn1
@@ -1340,6 +1370,7 @@ files:
         sha1: "966f3aee5d00e1312c455f855915d621e6cb0672"
 
   - name: coh3002c.zip
+    path: "mame/bios/coh3002c.zip"
     required: true
     category: bios_zip
     system: capcom-zn2
@@ -1355,6 +1386,7 @@ files:
         sha1: "3c3fb8227b05dace042dc1429b9f2355b1a15638"
 
   - name: coh1000t.zip
+    path: "mame/bios/coh1000t.zip"
     required: true
     category: bios_zip
     system: taito-fx1
@@ -1370,6 +1402,7 @@ files:
         sha1: "96d94f2b06fb7ecd91454969f4959a583ffb9d5a"
 
   - name: coh1000a.zip
+    path: "mame/bios/coh1000a.zip"
     required: true
     category: bios_zip
     system: acclaim-zn1
@@ -1385,6 +1418,7 @@ files:
         sha1: "decf77ab50f7f58c641c3214a11647924f3a8998"
 
   - name: coh1000w.zip
+    path: "mame/bios/coh1000w.zip"
     required: true
     category: bios_zip
     system: atari-zn1
@@ -1400,6 +1434,7 @@ files:
         sha1: "8e87941bfb374172628c8a37647e3a66b7166aa8"
 
   - name: coh1001l.zip
+    path: "mame/bios/coh1001l.zip"
     required: true
     category: bios_zip
     system: atlus-zn1
@@ -1415,6 +1450,7 @@ files:
         sha1: "8d2fe1facb4473cc20b4b477aaf881f9280939cf"
 
   - name: coh1002v.zip
+    path: "mame/bios/coh1002v.zip"
     required: true
     category: bios_zip
     system: videosystem-zn1
@@ -1430,6 +1466,7 @@ files:
         sha1: "b01479dc75a4a8a86bee7ac7cd10af2bda332544"
 
   - name: coh1002e.zip
+    path: "mame/bios/coh1002e.zip"
     required: true
     category: bios_zip
     system: eighting-zn1
@@ -1445,6 +1482,7 @@ files:
         sha1: "1069c1d9015028a51a1b314cfacb014ea90aa425"
 
   - name: coh1002m.zip
+    path: "mame/bios/coh1002m.zip"
     required: true
     category: bios_zip
     system: tecmo-tps
@@ -1461,6 +1499,7 @@ files:
 
   # Taito
   - name: coh3002t.zip
+    path: "mame/bios/coh3002t.zip"
     required: true
     category: bios_zip
     system: taito-gnet
@@ -1504,6 +1543,7 @@ files:
         sha1: "c6918dfbb6fcf686dde4b731e84f740177ab31f0"
 
   - name: coh1002t.zip
+    path: "mame/bios/coh1002t.zip"
     required: true
     category: bios_zip
     system: taito-gnet
@@ -1528,6 +1568,7 @@ files:
 
   # Super Kaneko Nova System
   - name: skns.zip
+    path: "mame/bios/skns.zip"
     required: true
     category: bios_zip
     system: super-kaneko-nova
@@ -1563,6 +1604,7 @@ files:
         sha1: "463962ffe19880135f0d95a7beda79e27448e872"
 
   - name: mac2bios.zip
+    path: "mame/bios/mac2bios.zip"
     required: false
     category: bios_zip
     system: imax-macs
@@ -1570,6 +1612,7 @@ files:
     note: "macs2os_l.bin and macs2os_h.bin are both NO_DUMP (src/mame/seta/macs.cpp:532-535). handle_missing_file (src/emu/romload.cpp:529-571) counts a missing NO_DUMP ROM as known bad, not an error, so the machine runs without the set."
 
   - name: macsbios.zip
+    path: "mame/bios/macsbios.zip"
     required: true
     category: bios_zip
     system: imax-macs
@@ -1590,6 +1633,7 @@ files:
 
   # Hyper Neo-Geo 64
   - name: hng64.zip
+    path: "mame/bios/hng64.zip"
     required: true
     category: bios_zip
     system: hyper-neogeo64
@@ -1638,6 +1682,7 @@ files:
 
   # Amiga-based
   - name: ar_bios.zip
+    path: "mame/bios/ar_bios.zip"
     required: true
     category: bios_zip
     system: arcadia-systems
@@ -1730,6 +1775,7 @@ files:
 
   # Atari
   - name: atarisy1.zip
+    path: "mame/bios/atarisy1.zip"
     required: true
     category: bios_zip
     system: atari-system1
@@ -1797,6 +1843,7 @@ files:
         sha1: "0a42a4816c89447b16e1f3245409591efea98a4a"
 
   - name: maxaflex.zip
+    path: "mame/bios/maxaflex.zip"
     required: true
     category: bios_zip
     system: exidy-maxaflex
@@ -1817,6 +1864,7 @@ files:
 
   # Crystal System
   - name: crysbios.zip
+    path: "mame/bios/crysbios.zip"
     required: true
     category: bios_zip
     system: brezzasoft-crystal
@@ -1835,6 +1883,7 @@ files:
 
   # Galaxy Games
   - name: galgames.zip
+    path: "mame/bios/galgames.zip"
     required: true
     category: bios_zip
     system: ces-galaxy-games
@@ -1867,6 +1916,7 @@ files:
 
   # EFO Cedar Magnet
   - name: cedmag.zip
+    path: "mame/bios/cedmag.zip"
     required: true
     category: bios_zip
     system: efo-cedar-magnet
@@ -1879,6 +1929,7 @@ files:
 
   # Misc
   - name: iteagle.zip
+    path: "mame/bios/iteagle.zip"
     required: true
     category: bios_zip
     system: itech-eagle
@@ -1966,6 +2017,7 @@ files:
         sha1: "213cbdd6cd37ad9b5bfc9545084892a68d29f5ff"
 
   - name: pumpitup.zip
+    path: "mame/bios/pumpitup.zip"
     required: true
     category: bios_zip
     system: andamiro-pumpitup
