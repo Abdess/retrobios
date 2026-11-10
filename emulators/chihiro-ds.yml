@@ -54,15 +54,18 @@ notes: |
        JVS_Init 0x102c128a (data path plus EmuDisk Chihiro folder)
 
   A title is Chihiro when its XBE type says so or a boot.id sits beside it.
-  Launched directly, such a title needs the media board ROM: a missing file,
-  an unreadable one or one that is not 2 MB ends the run. When either SEGABOOT
+  Launched directly with a boot.id beside its XBE, a title needs the media
+  board ROM: a missing file, an unreadable one or one that is not 2 MB ends
+  the run. When either SEGABOOT
   file is missing both are rewritten from the two 1 MB halves of the ROM, then
   SEGABOOT_MBROM1.XBE is launched and boots the title. boot.id is read again by
   the media board for the region flags, and its absence ends the run.
   ref: CI-6f32d89 src/core/kernel/init/CxbxKrnl.cpp:517-586,
        CI-6f32d89 src/devices/chihiro/MediaBoard.cpp:46-57,
        cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxrKrnlXbeSystemSelector 0x103e0fe9-0x103e105b (boot
-       flags zero and boot.id beside the XBE), 0x103e14c6-0x103e14cc
+       flags zero and boot.id beside the XBE), 0x103e178f-0x103e1855 (XbeType
+       gives system 2, 4 or 8, filesystem::exists of xbeDirectory / boot.id
+       sets 8), 0x103e14c6-0x103e14cc
        (CxbxLaunchNewXbe of SEGABOOT_MBROM1.XBE), MediaBoard::SetMountPath
        0x1041a468-0x1041a490 (fopen of the title path plus /boot.id),
        0x1041a56d (CxbxrAbortEx Could not open Chihiro boot.id)
