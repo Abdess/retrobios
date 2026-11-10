@@ -7677,5 +7677,34 @@ class APackageHintNamesThePackageCommand(unittest.TestCase):
                 "uvx retrobios --platform retroarch --dest DIR"))
 
 
+class AnErrorIsOneShortSentence(unittest.TestCase):
+    """A message on stderr says what to do in a few words: one of 35 words
+    asked a beginner to read a paragraph to find the option to give."""
+
+    BUDGET = 25
+
+    def test_every_stderr_message_is_short(self):
+        import ast
+
+        tree = ast.parse((REPO_ROOT / "install.py").read_text(encoding="utf-8"))
+        long = []
+        for node in ast.walk(tree):
+            if not isinstance(node, ast.Call):
+                continue
+            name = getattr(node.func, "id", getattr(node.func, "attr", ""))
+            to_err = any(k.arg == "file" and "stderr" in ast.unparse(k.value)
+                         for k in node.keywords)
+            if not (to_err or name == "error"):
+                continue
+            text = " ".join(ast.unparse(a) for a in node.args)
+            if ".command(" in text:
+                continue
+            prose = re.sub(r"\{[^}]*\}", "X", text)
+            words = len(re.findall(r"[A-Za-z']+", prose))
+            if words > self.BUDGET:
+                long.append((node.lineno, words))
+        self.assertEqual(long, [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4423,9 +4423,9 @@ def fetch_manifest(plat: str) -> dict:
             # request, so the revision is what has no such list.
             print(f"  No file list for {plat} at {RELEASE_REF}.", file=sys.stderr)
             if RELEASE_REF != DEFAULT_RELEASE_REF:
-                print(f"  RETROBIOS_REF={RELEASE_REF} names a tag that does not exist or "
-                      f"predates {plat}: unset RETROBIOS_REF, or pick a tag from "
-                      "https://github.com/Abdess/retrobios/releases.", file=sys.stderr)
+                print(f"  RETROBIOS_REF={RELEASE_REF} has no list for {plat}: unset it, or "
+                      "pick a newer tag from https://github.com/Abdess/retrobios/releases.",
+                      file=sys.stderr)
             else:
                 print("  The repository may be moving its files: run the same command "
                       "again in a few minutes.", file=sys.stderr)
@@ -4441,9 +4441,9 @@ def fetch_manifest(plat: str) -> dict:
                     message=words if code != "network"
                     else f"the file list could not be fetched: {words}")
         if code == "offline":
-            print(f"  No file list for {plat}: {offline_words()}. Give it with "
-                  f"--manifest FILE (a copy of install/{plat}.json) or "
-                  f"--from-pack PACK, or run {offline_undo()}.", file=sys.stderr)
+            print(f"  No file list for {plat}: {offline_words()}. Give --manifest FILE "
+                  f"(a copy of install/{plat}.json) or --from-pack PACK, or run "
+                  f"{offline_undo()}.", file=sys.stderr)
             sys.exit(1)
         if code != "network":
             print(f"  Could not fetch the file list for {plat}.", file=sys.stderr)
@@ -4502,9 +4502,9 @@ def fetch_targets(plat: str) -> "dict | None":
     if LOCAL.offline:
         source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
                   else f"{offline_named()} makes no request")
-        print(f"Error: --target reads the cores of each {display_name(plat)} board from a "
-              f"list, and {source}. Put install/targets/{plat}.json beside the file list "
-              "named with --manifest, or run with the network.", file=sys.stderr)
+        print(f"Error: no {display_name(plat)} board list here ({source}). Put "
+              f"install/targets/{plat}.json beside the --manifest file, or go online.",
+              file=sys.stderr)
         sys.exit(2)
     url = TARGETS_URL.format(platform=plat)
     try:
@@ -14011,9 +14011,8 @@ def main() -> None:
             and not (named and named not in TARGET_PLATFORMS)):
         # No list can be at hand: a pack carries one, and so can the folder
         # of a --manifest (targets/<platform>.json).
-        parser.error("--target and --list-targets read a core list from the network, "
-                     f"which {offline_named()} does not use: name a pack with --from-pack, "
-                     "or a file list with --manifest and targets/<platform>.json beside it")
+        parser.error(f"--target needs a core list, which {offline_named()} does not fetch: "
+                     "give --from-pack, or --manifest with targets/<platform>.json beside it")
     install_bounded_opener()
     if getattr(args, "from") and (
         args.list_platforms or args.list_targets or args.list_systems
@@ -15207,8 +15206,7 @@ def card_install_dest(named: str, plat: str, interactive: bool, ask: bool = True
                     message=f"{system} keeps its BIOS files on its SD card, and no "
                     "card was named with --dest")
         print(f"  {system} keeps its BIOS files on its SD card, not on this machine. "
-              f"Mount the card and name its root with --dest, for example: {example}",
-              file=sys.stderr)
+              f"Mount it and give its root with --dest: {example}", file=sys.stderr)
         sys.exit(1)
     print(f"  {system} keeps its BIOS files {card_where(system, setup.below)}, not on "
           "this machine. "
@@ -15393,9 +15391,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             kind = _output_kind(real_stdout)
             where = f"Output goes to a {kind}" if kind else "Output is not a terminal"
             undo = "the pipe" if kind == "pipe" else "the redirection"
-            print(f"{where}, so nothing is asked: the run goes on as with --no-input. "
-                  f"Add --no-input to say so, or run it without {undo} to answer.",
-                  file=sys.stderr)
+            print(f"{where}, so nothing is asked. Add --no-input to say so, or run it "
+                  f"without {undo} to answer.", file=sys.stderr)
     OUTPUT.verbose = bool(getattr(args, "verbose", False))
     OUTPUT.where_said = False
     detail(f"{term.bold('RetroBIOS')} {term.dim(installer_id())}\n")
