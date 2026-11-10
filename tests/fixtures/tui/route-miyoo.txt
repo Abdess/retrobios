@@ -918,12 +918,12 @@
  3 installed, 1 failed.
  BIOS folder:
    /home/user/.config/retroarch/system
+   failed: scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
  Log: /tmp/retrobios-x/install.log
-
  A Exit  L2 Details
 === result 40x15
  RetroBIOS: Finished with errors
@@ -931,12 +931,12 @@
  3 installed, 1 failed.
  BIOS folder:
    /home/user/.config/retroarch/system
+   failed: scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
  Log: /tmp/retrobios-x/install.log
-
 
 
 
@@ -946,11 +946,11 @@
 
  3 installed, 1 failed.
  BIOS folder: /home/user/.config/retroarch/system
+   failed: scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  Log: /tmp/retrobios-x/install.log
-
 
 
 
@@ -1235,7 +1235,7 @@
 === result-details 40x12
  RetroBIOS: Details
 
-   failed: scph5500.bin (HTTP 404)
+ Nothing more to say here.
 
 
 
@@ -1248,7 +1248,7 @@
 === result-details 40x15
  RetroBIOS: Details
 
-   failed: scph5500.bin (HTTP 404)
+ Nothing more to say here.
 
 
 
@@ -1264,7 +1264,7 @@
 === result-details 80x24
  RetroBIOS: Details
 
-   failed: scph5500.bin (HTTP 404)
+ Nothing more to say here.
 
 
 

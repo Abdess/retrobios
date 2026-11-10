@@ -454,7 +454,8 @@ The figures change with each release.
 <!-- /generated: run-date -->
 
 By default a run says five things: what it installs, where, a progress line
-at a terminal, the result and the next step.
+at a terminal, the result and the next step. A failure, a wrong copy or a file
+an emulator needs that is not available is said too.
 
 <!-- generated: run-default -->
 
@@ -463,6 +464,7 @@ Installing 18175 files (9.2 GB) for Batocera.
 BIOS folder: /userdata/bios
 
 Done. 18175 files installed.
+80 files an emulator needs are not available here (--verbose names them).
 Next: start Batocera and play.
 ```
 <!-- /generated: run-default -->

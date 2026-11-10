@@ -3038,16 +3038,19 @@ class SaveDirectoryLeftOut(unittest.TestCase):
         """RetroPie's list leaves its save files out with no hash or address:
         --save-dir installs none of them, and was advised again each run."""
         state, summary = self._ended(MANIFEST)
-        line = ("2 files read from RetroArch's save directory left out: RetroArch keeps "
-                "it in no fixed place, and its file list holds none of them.")
+        # The count on the screen, why on Details.
+        lines = ["2 files read from RetroArch's save directory left out.",
+                 "RetroArch keeps it in no fixed place, and its file list holds none of them."]
         plan = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
-        self.assertIn(line, plan)
+        self.assertIn(" ".join(lines), plan)
         self.assertNotIn("--save-dir", plan)
         state.stack.append("result")
         state.code = 0
         state.summary = {**summary, "mode": "install", "installed": 5}
-        self.assertEqual([text for text in install.tui_outcome(state)[1] if "save" in text],
-                         [line])
+        outcome = install.tui_outcome(state)[1]
+        self.assertEqual([text for text in outcome if "save" in text or "place" in text],
+                         lines)
+        self.assertTrue(install._is_detail(outcome[outcome.index(lines[1])]))
 
     @in_full
     def test_files_left_out_of_the_save_directory_are_said(self):
@@ -3065,12 +3068,12 @@ class SaveDirectoryLeftOut(unittest.TestCase):
         with mock.patch.object(install, "_tui_folder_facts", return_value={
                 "free": 50 * 1024 ** 3, "writable": True, "cores": []}):
             install.tui_receive(state, ("ended", state.run_id, 1, []))
-        line = ("2 files read from RetroArch's save directory left out: its place is "
-                "not known. ")
+        line = "2 files read from RetroArch's save directory left out. "
         plan = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         # The plan names the row that sets it, the result the option a
         # command carries.
-        self.assertIn(line + "Choose it in Options, Save folder (--save-dir).", plan)
+        self.assertIn(line + "Choose it in Options, Save folder (--save-dir). Its place is "
+                      "not known.", plan)
         state.stack.append("result")
         state.code = 0
         state.summary = {**summary, "mode": "install", "installed": 5}
@@ -14933,7 +14936,8 @@ class GamesEndToEnd(unittest.TestCase):
 # path is no word. The plan, Confirm and the result say what happens, where
 # and what next; their counts, notes and commands wait on Details. A list
 # shows more rows on a taller window. A change that adds words to a screen
-# raises its numbers here and says why.
+# raises its numbers here and says why: the result names its failed files
+# (review of 2026-11-10), what the user acts on.
 SCREEN_WORDS = {
     "setup": (29, 36, 34, 34), "platforms": (23, 27, 89, 225), "folder": (27, 27, 25, 25),
     "folder-card": (52, 52, 50, 50), "browse": (17, 17, 15, 15), "path": (23, 23, 25, 25),
@@ -14941,10 +14945,10 @@ SCREEN_WORDS = {
     "plan-in-place": (22, 22, 19, 19), "systems": (36, 37, 36, 36),
     "options": (40, 42, 59, 59), "regions": (45, 44, 42, 42), "cores": (47, 47, 45, 45),
     "preview": (29, 29, 28, 28), "command": (22, 22, 16, 16), "confirm": (22, 22, 20, 20),
-    "installing": (32, 32, 31, 31), "result": (29, 29, 27, 27), "error": (37, 34, 32, 31),
+    "installing": (32, 32, 31, 31), "result": (33, 33, 31, 31), "error": (37, 34, 32, 31),
     "quit": (14, 14, 12, 12), "help": (24, 26, 26, 26), "plan-games": (36, 46, 54, 54),
     "games": (36, 45, 44, 44), "plan-details": (30, 30, 29, 29),
-    "result-details": (34, 34, 23, 23),
+    "result-details": (30, 30, 19, 19),
 }
 
 
@@ -15070,6 +15074,90 @@ class DetailsScreen(unittest.TestCase):
         self.assertIn("FAILED scph5500.bin (HTTP 404)", self.text(state))
         state.passthrough = [("--verbose", None)]
         self.assertIn("ok     gba_bios.bin", self.text(state))
+
+
+class WhatToActOnStaysOnTheScreen(unittest.TestCase):
+    """A failure, a file an emulator needs that the collection lacks, a
+    remedy to choose: on the screen by default, never only on Details
+    (review of 2026-11-10)."""
+
+    def setUp(self):
+        patcher = mock.patch.object(install, "_mounted_cards", return_value=[])
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def text(self, state: install.TuiState) -> str:
+        return " ".join(" ".join(install.tui_view(state, 80, 24)).split())
+
+    def test_a_failed_file_is_named_on_the_result_and_after_exit(self):
+        state = golden_states_result()
+        self.assertIn("failed: scph5500.bin (HTTP 404)", self.text(state))
+        press(state, "enter")
+        self.assertIn("failed: scph5500.bin (HTTP 404)", "\n".join(install.tui_farewell(state)))
+
+    def needs(self, state: install.TuiState) -> install.TuiState:
+        state.manifest = {**MANIFEST, "omitted_files": [
+            {"dest": "lost.bin", "system": "sony-playstation", "required": True},
+            {"dest": "spare.bin", "system": "sony-playstation", "required": False}]}
+        return state
+
+    def test_a_file_an_emulator_needs_is_counted_on_the_plan(self):
+        state = self.needs(checked_state())
+        said = "1 file an emulator needs is not available here (Details names it)."
+        self.assertIn(said, self.text(state))
+        press(state, "d")
+        self.assertIn("lost.bin", self.text(state))
+        # With --verbose the names are on the plan, and the count not again.
+        state = self.needs(checked_state())
+        state.passthrough = [("--verbose", None)]
+        self.assertNotIn(said, self.text(state))
+        self.assertIn("lost.bin", self.text(state))
+
+    def test_a_file_an_emulator_needs_is_counted_on_the_result(self):
+        state = self.needs(result_states()["done"])
+        self.assertIn("1 file an emulator needs is not available here (Details names it).",
+                      self.text(state))
+
+    def test_the_save_folder_remedy_is_on_the_result(self):
+        state = result_states()["done"]
+        state.manifest = {**MANIFEST, "save_directory": {"folder": "saves", "by_core": True}}
+        state.summary["skipped"] = [{"reason": "no_save_directory", "files": 2}]
+        text = self.text(state)
+        self.assertIn("2 files read from RetroArch's save directory left out. "
+                      f"{install.TUI_SAVE_REMEDY}", text)
+        self.assertNotIn("Its place is not known.", text)
+        press(state, "o")
+        self.assertIn("Its place is not known.", self.text(state))
+
+    def test_the_save_folder_remedy_is_on_the_plan(self):
+        state = checked_state()
+        state.manifest = {**MANIFEST, "save_directory": {"folder": "saves", "by_core": True}}
+        state.check_summary = {"skipped": [{"reason": "no_save_directory", "files": 2}]}
+        self.assertIn("Choose it in Options, Save folder (--save-dir).", self.text(state))
+
+    def test_files_that_could_not_be_read_are_counted_where_no_row_says_so(self):
+        unread = [{"event": "unreadable", "platform": "retroarch", "folder": "/media/OLD",
+                   "path": "/media/OLD/scph5501.bin", "member": "",
+                   "reason": "Permission denied"}]
+        state = checked_state()
+        state.unreadable = list(unread)
+        # The plan's row names them: the count waits on Details.
+        self.assertIn("Show the files that could not be read", self.text(state))
+        # Everything in place: no row, the count on the plan.
+        done = checked_state()
+        done.check = {**CHECK, "present": 5, "missing": 0, "wrong_hash": 0,
+                      "bytes_needed": 0, "not_installable": 0}
+        done.unreadable = list(unread)
+        self.assertNotIn("unreadable", [row.action for row in install.tui_rows(done)])
+        self.assertIn("1 file in OLD could not be read.", self.text(done))
+
+    def test_another_drive_to_add_is_said_on_the_plan(self):
+        state = checked_state()
+        state.scanned = [{"event": "scanned", "folder": "E:\\", "files": 200000,
+                          "truncated": True, "other_drives": ["E:\\D"]}]
+        text = self.text(state)
+        self.assertIn("E:\\D is another drive: add it to copy from it too.", text)
+        self.assertNotIn("Read the first", text)
 
 
 if __name__ == "__main__":

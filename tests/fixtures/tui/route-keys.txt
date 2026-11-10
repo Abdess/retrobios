@@ -922,12 +922,12 @@
  3 installed, 1 failed.
  BIOS folder:
    /home/user/.config/retroarch/system
+   failed: scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
  Log: /tmp/retrobios-x/install.log
-
  Enter Exit  o Details
 === result 40x15
  RetroBIOS: Finished with errors
@@ -935,12 +935,12 @@
  3 installed, 1 failed.
  BIOS folder:
    /home/user/.config/retroarch/system
+   failed: scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
  Log: /tmp/retrobios-x/install.log
-
 
 
 
@@ -950,11 +950,11 @@
 
  3 installed, 1 failed.
  BIOS folder: /home/user/.config/retroarch/system
+   failed: scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  Log: /tmp/retrobios-x/install.log
-
 
 
 
@@ -1297,7 +1297,6 @@
 === result-details 40x12
  RetroBIOS: Details
 
-   failed: scph5500.bin (HTTP 404)
  To put them back: python3 install.py \
    --restore .../2026-10-23_1200
  Shortened to fit this window.
@@ -1306,11 +1305,11 @@
      --platform retroarch \
      --dest .../retroarch/system
  Shortened to fit this window.
+
  Enter Back
 === result-details 40x15
  RetroBIOS: Details
 
-   failed: scph5500.bin (HTTP 404)
  To put them back: python3 install.py \
    --restore .../2026-10-23_1200
  Shortened to fit this window.
@@ -1319,6 +1318,7 @@
      --platform retroarch \
      --dest .../retroarch/system
  Shortened to fit this window.
+
 
 
 
@@ -1326,12 +1326,12 @@
 === result-details 80x24
  RetroBIOS: Details
 
-   failed: scph5500.bin (HTTP 404)
  To put them back: python3 install.py \
    --restore /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  Same choice without questions:
    python3 install.py --platform retroarch \
      --dest /home/user/.config/retroarch/system
+
 
 
 

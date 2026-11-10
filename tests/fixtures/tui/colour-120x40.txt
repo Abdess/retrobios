@@ -741,10 +741,10 @@
 
 ^[[0;1m ^[[0;1;32m3 installed^[[0;1m, ^[[0;1;31m1 failed^[[0;1m.^[[0m
  BIOS folder: ^[[0;1m/home/user/.config/retroarch/system^[[0m
+   ^[[0;1;31mfailed:^[[0m scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  Log: /tmp/retrobios-x/install.log
-
 
 
 
@@ -1026,11 +1026,11 @@
 === result-details
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Details^[[0m
 
-   ^[[0;1;31mfailed:^[[0m scph5500.bin (HTTP 404)
  To put them back: python3 install.py \
    --restore /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  Same choice without questions:
    python3 install.py --platform retroarch --dest /home/user/.config/retroarch/system
+
 
 
 

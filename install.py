@@ -6853,12 +6853,16 @@ def _report_outcome(
         say(f"BIOS folder: {_locations(paths)}")
     for line in kept:
         say(line)
+    left = [entry for entry in omitted_entries or []
+            if entry.get("reason") != "no_save_directory"]
     if omitted > len(unplaced) and OUTPUT.verbose:
-        for line in _omission_lines(omitted - len(unplaced),
-                                    [entry for entry in omitted_entries or []
-                                     if entry.get("reason") != "no_save_directory"],
+        for line in _omission_lines(omitted - len(unplaced), left,
                                     Path(paths[0]) if len(paths) == 1 else None):
             say(line)
+    elif omitted > len(unplaced) and any(entry.get("required") for entry in left):
+        # A file an emulator cannot start without is no detail: counted.
+        say(needed_absent_words(sum(1 for entry in left if entry.get("required")),
+                                "--verbose"))
     # RomM's scan is the step after the install: the other hints say how to
     # install less, a detail.
     for line in hints or []:
@@ -6927,7 +6931,7 @@ def _retry_words(failures: list | None) -> str:
             f"{'it' if len(lacking) == 1 else 'them'}.")
 
 
-def _check_fetch_line(fetch: int, beside: str, lacking: int = 0) -> str:
+def _check_fetch_line(fetch: int, beside: str, lacking: int = 0, wrong: bool = False) -> str:
     """What --check says a run without it does with the files not in place:
     offline, those it cannot fetch are said so, not "run it to fetch them".
     With a pack, those it holds are copied and those it lacks are said lacking
@@ -6945,10 +6949,10 @@ def _check_fetch_line(fetch: int, beside: str, lacking: int = 0) -> str:
             return "  Run the same command without --check to copy them into place."
         return (f"  {agree(fetch, 'file needs', 'files need')} the "
                 f"internet, which {offline_named()} does not use. {_offline_remedy()}")
-    # Why nothing is lost goes with the details: the remedy is the line.
+    # What becomes of a wrong copy is said where there is one.
     return ("  Run the same command without --check to fetch them."
             + (f"\n  A wrong copy is replaced, and the one in place kept in {BACKUP_DIR} "
-               f"beside {beside}." if OUTPUT.verbose else ""))
+               f"beside {beside}." if OUTPUT.verbose or wrong else ""))
 
 
 def _offline_failure(reason: str) -> bool:
@@ -7026,6 +7030,15 @@ def _omission_lines(count: int, entries: list[dict], bios_path: Path | None = No
         # Defined on a line of its own, the sentence above naming the files.
         lines.append("  " + kinds_definition(True, False))
     return lines
+
+
+def needed_absent_words(count: int, where: str) -> str:
+    """The count of files an emulator cannot start without that the
+    collection does not hold, said in every mode: where names what lists
+    them, --verbose in line mode, Details on the screen."""
+    return (f"{_plural(count, 'file')} an emulator needs {'is' if count == 1 else 'are'} "
+            f"not available here ({where} names "
+            f"{'it' if count == 1 else 'them'}).")
 
 
 def _absent_required(omitted: list[dict], bios_path: Path) -> list[dict]:
@@ -12846,7 +12859,8 @@ def check_lines(
     lines += _check_copy_lines(missing + mismatched, copies, index)
     explained = [e for e in missing if id(e) in found.reasons or id(e) in copies]
     plain = [e for e in missing if id(e) not in found.reasons and id(e) not in copies]
-    shown = plain if every else plain[:10]
+    # A missing file with no more to say is a list: --verbose names each.
+    shown = plain if every else []
 
     def block(label: str, entry: dict) -> list[str]:
         game = " (game data)" if entry.get("category") == GAME_DATA else ""
@@ -12872,7 +12886,7 @@ def check_lines(
         lines += block("missing", entry)
     for entry in shown:
         lines += block("missing", entry)
-    if len(shown) < len(plain):
+    if len(shown) < len(plain) and lines:
         lines.append(f"    ... and {len(plain) - len(shown)} more missing "
                      "(--verbose lists them all)")
     return shown_lines(lines)
@@ -16216,7 +16230,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                          else "to download."))
                 for line in check_lines(missing, mismatched, files, manifest, bios_path,
                                         args.verbose, up_to_date, bios_index, copies):
-                    detail(line)
+                    print(line)
                 for line in unreadable_lines(unread, args.verbose):
                     print(line)
                 print(f"  BIOS folder: {shown_path(bios_path)}")
@@ -16224,7 +16238,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # need the internet" stood under "10805 files not in place".
                 trees_fetched = trees_missing if LOCAL.pack is None else 0
                 print(_check_fetch_line(len(to_download) - len(copies) + trees_fetched,
-                                        "the BIOS folder", len(lacking)))
+                                        "the BIOS folder", len(lacking), bool(mismatched)))
                 check_pending += len(to_download)
             elif trees_missing:
                 # The screen's headline: "Everything is in place." stood
@@ -16236,7 +16250,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             absent = _absent_required(omitted_files, bios_path)
             # The collection cannot supply these, so they leave the exit
             # code alone, but a user asking why a game will not start needs
-            # their names, and which system and emulator each one is for.
+            # their count, and with --verbose their names, and which system
+            # and emulator each one is for.
+            if absent and not OUTPUT.verbose:
+                print(f"  {needed_absent_words(len(absent), '--verbose')}")
             for line in _needed_lines(
                 absent, "Not in the collection and absent here, needed to start an emulator",
                 every=args.verbose,
@@ -17200,6 +17217,8 @@ class TuiLine(str):
     powershell: bool | None = None
     # Shown on the Details screen, not on the screen it explains.
     detail = False
+    # A count standing for Details lines: left out where they are shown.
+    brief = False
 
 
 def _styled(text: str, style: str = "") -> TuiLine:
@@ -21503,12 +21522,25 @@ def _tui_found_elsewhere(state: TuiState, dests: set | None = None) -> dict[str,
 
 def _scan_lines(state: TuiState) -> list[str]:
     """What the reading of the --from folders left out, one line each."""
-    lines = []
+    lines: list = []
     for scan in state.scanned:
         if scan["truncated"]:
-            lines.append(f"Read the first {MAX_SCANNED_FILES:,} files of {scan['folder']}.")
+            lines.append(_detail(f"Read the first {MAX_SCANNED_FILES:,} files of "
+                                 f"{scan['folder']}."))
         lines += [f"{drive} is another drive: add it to copy from it too."
                   for drive in scan["other_drives"]]
+    # The count, which line mode always says, stays where no row names
+    # these files: the plan's Show row does.
+    if state.unreadable and any(row.action == "unreadable" for row in _plan_rows(state)):
+        lines += _details(_unreadable_count(state))
+    elif state.unreadable:
+        lines += _unreadable_count(state)
+    return lines
+
+
+def _unreadable_count(state: TuiState) -> list[str]:
+    """How many files the --from folders hold that could not be read."""
+    lines = []
     if state.unreadable:
         count = len(state.unreadable)
         # Named as it was given: "your old card" was said of a folder.
@@ -21686,12 +21718,12 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
         lines += _commands(state, write_remedy(dest, state.platform, tui_hint(state),
                                                state.pad not in TUI_PAD_ROUTES))
     if check is state.check:
-        lines += _details(_scan_lines(state))
+        lines += _scan_lines(state)
     if check.get("not_installable"):
-        lines += _details(_unavailable_lines(state))
+        lines += _unavailable_brief(state) + _details(_unavailable_lines(state))
     if check is state.check:
-        lines += _details(_unplaced_lines(_choice_summary(state), state,
-                                          "Choose it in Options, Save folder (--save-dir)."))
+        lines += _unplaced_lines(_choice_summary(state), state,
+                                 "Choose it in Options, Save folder (--save-dir).")
     if check is state.check and state.from_folders:
         # A folder copied from that holds none of them: the plan came back
         # the same, still saying to copy from a folder.
@@ -21813,11 +21845,10 @@ def _unplaced_lines(summary: dict | None, state: TuiState,
     if not count:
         return []
     name = display_name(state.platform) if state.platform else "the frontend"
+    left = f"{_plural(count, 'file')} read from {name}'s save directory left out"
     if state.manifest and not state.manifest.get("save_directory"):
-        return [f"{_plural(count, 'file')} read from {name}'s save directory left out: "
-                f"{unlisted_saves_words(name)}."]
-    return [f"{_plural(count, 'file')} read from {name}'s save directory left out: "
-            f"its place is not known. {remedy or TUI_SAVE_REMEDY}"]
+        return [f"{left}.", _detail(f"{unlisted_saves_words(name)}.")]
+    return [f"{left}. {remedy or TUI_SAVE_REMEDY}", _detail("Its place is not known.")]
 
 
 # Said when ES-DE is found, and in fewer words where the long form would
@@ -22218,9 +22249,11 @@ def tui_verbose(state: TuiState) -> bool:
 
 
 def _shown(state: TuiState, lines: list) -> list:
-    """The lines a screen shows: all with --verbose, else all but Details."""
-    return list(lines) if tui_verbose(state) else [
-        line for line in lines if not _is_detail(line)]
+    """The lines a screen shows: with --verbose every line but the counts
+    standing for them, else every line but Details."""
+    if tui_verbose(state):
+        return [line for line in lines if not getattr(line, "brief", False)]
+    return [line for line in lines if not _is_detail(line)]
 
 
 def _view_plan(state: TuiState, width: int, height: int) -> tuple:
@@ -22721,6 +22754,18 @@ def _unavailable(state: TuiState) -> tuple[list[dict], int]:
     return needed, others
 
 
+def _unavailable_brief(state: TuiState) -> list[TuiLine]:
+    """The count of the files an emulator needs that cannot be supplied, on
+    the screen itself: their names are on Details, and in place with
+    --verbose, where the count is not said again."""
+    needed, _others = _unavailable(state)
+    if not needed:
+        return []
+    line = _styled(needed_absent_words(len(needed), "Details"))
+    line.brief = True
+    return [line]
+
+
 def _unavailable_lines(state: TuiState) -> list[str]:
     """The files that cannot be supplied and stop an emulator, by name and
     system: "1 file ... an emulator needs it" named neither."""
@@ -22913,10 +22958,10 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
             continue
         for dest in dests:
             if shown < 20:
-                lines.append(_detail(f"  failed: {dest}" + (f" ({reason})" if reason else "")))
+                lines.append(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
             shown += 1
     if shown > 20:
-        lines.append(_detail(f"  ... and {shown - 20} more"))
+        lines.append(f"  ... and {shown - 20} more")
     if title == "Finished with errors":
         # What a rerun does, as line mode and the first install page say
         # it: the screen never did.
@@ -22957,10 +23002,10 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
             lines += _details([_command_line(f"To put them back: {run.launcher()} --restore "
                                              f"{run.word(str(kept['folder']))}", run)])
     if summary and not summary.get("interrupted") and installed + up_to_date:
-        lines += _details(_unavailable_lines(state))
+        lines += _unavailable_brief(state) + _details(_unavailable_lines(state))
     for group in summary.get("left_out") or []:
         lines.append(_detail(f"{left_out_words(group)}."))
-    lines += _details(_unplaced_lines(summary, state))
+    lines += _unplaced_lines(summary, state)
     lines += _tui_app_lines(state)
     if title == "Done" and not (state.platform == "romm" and installed):
         # Last of what the result says by default: RomM's scan is its step.

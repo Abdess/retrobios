@@ -452,6 +452,33 @@ class LineModeJourneys(unittest.TestCase):
                 self.assertLessEqual(shown, said, sorted(shown - said))
                 self.assertGreater(len(said), len(shown))
 
+    def test_what_to_act_on_is_said_by_default(self):
+        """A file an emulator needs that the collection lacks, a wrong copy
+        and what becomes of it: said without --verbose (review of
+        2026-11-10). The plain missing files wait on --verbose."""
+        repo = Repository(self)
+        repo.listed["omitted_files"] = [{"dest": "lost.bin", "name": "lost.bin",
+                                         "system": "nintendo-gba", "systems": ["nintendo-gba"],
+                                         "required": True, "reason": "not_found"}]
+        repo.write_list()
+        folder = repo.root / "dest"
+        base = ["--platform", "retroarch", "--dest", str(folder)]
+        needs = "1 file an emulator needs is not available here (--verbose names it)."
+        proc = self.run_line(repo, *base, "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(needs, proc.stdout)
+        (folder / "md_eu.bin").write_bytes(b"changed")
+        (folder / "gba_bios.bin").unlink()
+        proc = self.run_line(repo, *base, "--check")
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
+        self.assertIn("wrong copy: md_eu.bin", proc.stdout)
+        self.assertIn("A wrong copy is replaced, and the one in place kept in "
+                      "retrobios-backup", proc.stdout)
+        self.assertIn(needs, proc.stdout)
+        self.assertNotIn("missing: gba_bios.bin", proc.stdout)
+        self.assertIn("missing: gba_bios.bin",
+                      self.run_line(repo, *base, "--check", "--verbose").stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

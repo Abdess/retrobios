@@ -4979,9 +4979,8 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
         (dest / "lynxboot.img").write_bytes(b"corrupt")
         proc = self._run("--dest", str(dest), "--system", "atari-lynx", "--check")
         self.assertEqual(proc.returncode, 3)
+        # A wrong copy is named in every mode: it is what the user acts on.
         self.assertIn("1 file to download.", proc.stdout)
-        self.assertNotIn("lynxboot.img", proc.stdout)
-        proc = self._run("--dest", str(dest), "--system", "atari-lynx", "--check", "--verbose")
         self.assertIn("wrong copy: lynxboot.img", proc.stdout)
         self.assertIn("without --check", proc.stdout)
 
