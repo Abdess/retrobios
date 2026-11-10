@@ -564,15 +564,19 @@ def find_undeclared_files(
         if emu_name not in relevant:
             continue
 
-        # Skip agnostic profiles entirely (filename-agnostic BIOS detection)
-        if profile.get("bios_mode") == "agnostic":
-            continue
+        # A filename-agnostic profile is served by the scan (packextras), all
+        # but the entries its layout reads outside the BIOS tree: those are
+        # named here, or a launcher folder drops them without a word
+        # (ARMSX2's arcade/proverb.zip once ROCKNIX binds bios/armsx2).
+        agnostic = profile.get("bios_mode") == "agnostic"
 
         for profile, is_standalone in platform_layouts(emu_name, profile, standalone_set):
 
             for f in expand_directory_entries(
                 profile.get("files", []), db, is_standalone
             ):
+                if agnostic and not f.get("unplaced"):
+                    continue
                 fname = f.get("name", "")
                 # One destination rule for the dedup key and for the entry: a
                 # standalone build without standalone_path falls back on path.

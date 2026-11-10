@@ -312,8 +312,10 @@ def launcher_places(config: dict) -> list[LauncherPlace]:
 # component scripts $bios_path.
 BIOS_ROOT_VARIABLES = ("$biosdir", "$home/RetroPie/BIOS", "${biosPath}", "$bios_path")
 
-# The kinds that hand an emulator a whole directory.
-HANDED_KINDS = ("links", "passes_path")
+# The kinds that hand an emulator a whole directory. A scans_dir record sets
+# the directory the emulator picks its file from: ROCKNIX writes ARMSX2's
+# [Folders] Bios, EmuDeck PCSX2's.
+HANDED_KINDS = ("links", "passes_path", "scans_dir")
 
 # How a launcher record says the platform starts the emulator in a directory
 # (retropie_launchers._working_directory), and the handle a profile gives
@@ -355,6 +357,19 @@ def normalize_handle(token: str) -> str:
     token = token.removesuffix("()")
     token = _HOME.sub("~", token)
     return _FLATPAK_DATA.sub("$XDG_DATA_HOME", token)
+
+
+_INI_KEY = re.compile(r"(\[[^\]\s]+\])\s+([^\s,;=()]+)")
+
+
+def ini_keys(passes_to: str) -> frozenset[str]:
+    """The INI keys a record's ``passes_to`` writes, as "[Section] Key".
+
+    A key alone is ambiguous: PCSX2 reads its BIOS folder from [Folders]
+    Bios and the image name from [Filenames] BIOS. A profile declares the
+    key it resolves a folder from in that spelling ("[Folders] Bios = bios").
+    """
+    return frozenset(f"{section} {key}" for section, key in _INI_KEY.findall(passes_to))
 
 
 def _folder_in_bios(directory: str, base: str) -> str | None:
@@ -485,7 +500,7 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                         handle
                         for token in passes_to.split()
                         if (handle := normalize_handle(token)) and handle != directory
-                    )
+                    ) | ini_keys(passes_to)
                 folder = _folder_in_bios(part, base)
                 for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
                     found.append(HandedDirectory(

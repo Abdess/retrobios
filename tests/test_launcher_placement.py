@@ -553,5 +553,173 @@ class EachProgramItsOwnProfile(unittest.TestCase):
         self.assertEqual(resolve_platform_cores(config, profiles), {"emu"})
 
 
+BIOS_SETTING = {
+    "emulator": "ps2emu", "build": "standalone", "kind": "passes_path", "names": [],
+    "search_dir": "/userdata/bios/ps2",
+    "passes_to": "inis/PCSX2.ini [Folders] Bios = ../../../bios/ps2, relative to the data root",
+    "source_ref": "ps2emuGenerator.py:219",
+}
+# The same folder through a scans_dir record, and a record setting the image
+# name alone, which hands no folder.
+BIOS_SCAN = {**BIOS_SETTING, "kind": "scans_dir", "passes_to": "PCSX2.ini [Folders] Bios"}
+BIOS_NAME = {**BIOS_SETTING, "passes_to": "PCSX2.ini [Filenames] BIOS"}
+
+
+class ASettingSetsTheBiosFolder(unittest.TestCase):
+    """KNULLI sets AetherSX2's [Folders] Bios to bios/ps2.
+
+    The profile reads its BIOS images by content from bios/ under its data
+    root, and names that setting in standalone_directories. Every image the
+    scan finds goes to ps2/ in the pack, the manifest and verify, and a file
+    the layout keeps outside its bios/ folder is named, never packed.
+    """
+
+    def setUp(self) -> None:
+        _emulator_profiles_cache.clear()
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        files, by_md5, by_name = {}, {}, {}
+        for folder, name, data in (
+            ("Sony/PlayStation 2", "img-a.bin", b"PS2 IMAGE A....."),
+            ("Sony/PlayStation 2", "img-b.bin", b"PS2 IMAGE B....."),
+            ("Other/ps2emu/arcade", "boot.zip", b"BOOT PROGRAMS"),
+        ):
+            where = self.root / "bios" / folder
+            where.mkdir(parents=True, exist_ok=True)
+            (where / name).write_bytes(data)
+            sha1 = hashlib.sha1(data).hexdigest()
+            md5 = hashlib.md5(data).hexdigest()
+            files[sha1] = {"path": str(where / name), "name": name, "sha1": sha1,
+                           "md5": md5, "crc32": "", "size": len(data)}
+            by_md5[md5] = sha1
+            by_name[name] = [sha1]
+        self.db = {
+            "files": files,
+            "indexes": {"by_md5": by_md5, "by_name": by_name, "by_crc32": {},
+                        "by_path_suffix": {}},
+        }
+        self.platforms = self.root / "platforms"
+        self.emulators = self.root / "emulators"
+        self.platforms.mkdir()
+        self.emulators.mkdir()
+        platforms = {"setplat": [BIOS_SETTING], "scanplat": [BIOS_SCAN],
+                     "nameplat": [BIOS_NAME], "plainplat": []}
+        for name, launchers in platforms.items():
+            (self.platforms / f"{name}.yml").write_text(yaml.safe_dump({
+                "platform": name, "version": "1", "verification_mode": "existence",
+                "base_destination": "bios", "cores": ["ps2emu"],
+                "standalone_cores": ["ps2emu"], "launchers": launchers,
+                "systems": {"sony-playstation-2": {"files": []}},
+            }))
+        (self.platforms / "_registry.yml").write_text(yaml.safe_dump({"platforms": {
+            name: {"config": f"{name}.yml"} for name in platforms
+        }}))
+        (self.emulators / "ps2emu.yml").write_text(yaml.safe_dump({
+            "emulator": "PS2Emu", "type": "standalone", "bios_mode": "agnostic",
+            "cores": ["ps2emu"], "systems": ["sony-playstation-2"],
+            "bios_directory": "bios/",
+            "standalone_directories": ["[Folders] Bios = bios"],
+            "files": [
+                {"name": "img-a.bin", "path": "bios/img-a.bin", "required": True,
+                 "min_size": 16, "max_size": 16, "validation": ["size"]},
+                # Read below the data root, never below its bios/ folder.
+                {"name": "boot.zip", "standalone_path": "arcade/boot.zip",
+                 "mode": "standalone", "required": False},
+            ],
+        }))
+
+    def pack_names(self, platform: str) -> list[str]:
+        with redirect_stdout(io.StringIO()):
+            zip_path = generate_pack(
+                platform, str(self.platforms), self.db, str(self.root / "bios"),
+                str(self.root / "out" / platform), emulators_dir=str(self.emulators),
+                offline=True,
+            )
+        with zipfile.ZipFile(zip_path) as zf:
+            return sorted(n for n in zf.namelist() if n.endswith((".bin", ".zip")))
+
+    def manifest(self, platform: str) -> dict:
+        with redirect_stdout(io.StringIO()):
+            return generate_manifest(
+                platform, str(self.platforms), self.db, str(self.root / "bios"),
+                str(self.platforms / "_registry.yml"),
+                emulators_dir=str(self.emulators), offline=True,
+            )
+
+    def verify_dests(self, platform: str) -> list[str]:
+        config = load_platform_config(platform, str(self.platforms))
+        result = verify_platform(config, self.db, str(self.emulators))
+        return sorted(d for d in result["pack_destinations"] if d.endswith((".bin", ".zip")))
+
+    def assert_placed(self, platform: str, expected: list[str]) -> None:
+        self.assertEqual(self.pack_names(platform), expected)
+        self.assertEqual(
+            sorted(f["dest"] for f in self.manifest(platform)["files"]), expected
+        )
+        self.assertEqual(self.verify_dests(platform), expected)
+
+    def test_every_scanned_image_lands_in_the_folder_set(self) -> None:
+        self.assert_placed("setplat", ["ps2/img-a.bin", "ps2/img-b.bin"])
+
+    def test_a_scans_dir_record_sets_it_too(self) -> None:
+        self.assert_placed("scanplat", ["ps2/img-a.bin", "ps2/img-b.bin"])
+
+    def test_the_image_name_setting_hands_no_folder(self) -> None:
+        self.assert_placed("nameplat", ["img-a.bin", "img-b.bin"])
+
+    def test_a_platform_without_the_record_keeps_the_layout(self) -> None:
+        self.assert_placed("plainplat", ["img-a.bin", "img-b.bin"])
+
+    def test_a_file_outside_the_bios_folder_is_named(self) -> None:
+        omitted = [o for o in self.manifest("setplat")["omitted_files"]
+                   if o["name"] == "boot.zip"]
+        self.assertEqual(
+            [(o["dest"], o["root"], o["reason"], o["cores"]) for o in omitted],
+            [("arcade/boot.zip", "emulator", "outside_bios_folder", ["ps2emu"])],
+        )
+
+    def test_the_ini_key_carries_its_section(self) -> None:
+        from launchers import ini_keys
+
+        self.assertEqual(
+            ini_keys("PCSX2.ini [Folders] Bios = /storage/roms/bios/armsx2, [Filenames] BIOS"),
+            {"[Folders] Bios", "[Filenames] BIOS"},
+        )
+        self.assertEqual(ini_keys("command line -rompath"), frozenset())
+
+
+class AetherSX2OnKnulli(unittest.TestCase):
+    """The real profile against KNULLI's aethersx2Generator.py:219 record."""
+
+    def test_the_bios_images_land_in_ps2(self) -> None:
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["aethersx2"]
+        config = load_platform_config("knulli", str(REPO_ROOT / "platforms"))
+        (view, standalone), = platform_layouts("aethersx2", profile, standalone_set(config))
+        self.assertTrue(standalone)
+        for entry in view["files"]:
+            path = entry.get("path") or ""
+            if path.startswith("bios/"):
+                self.assertEqual(entry["standalone_path"], "ps2/" + path.removeprefix("bios/"))
+            elif path:
+                self.assertEqual(entry.get("unplaced"), "outside_bios_folder", path)
+
+
+class Quasi88OnRetroPie(unittest.TestCase):
+    """RetroPie writes -romdir $biosdir/pc88 into quasi88.ini (quasi88.sh:67)."""
+
+    def test_the_roms_land_in_pc88(self) -> None:
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["quasi88kai"]
+        config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
+        (view, standalone), = platform_layouts("quasi88kai", profile, standalone_set(config))
+        self.assertTrue(standalone)
+        paths = [e["path"] for e in view["files"]]
+        self.assertTrue(paths and all(p.startswith("rom/") for p in paths))
+        self.assertEqual(
+            [e["standalone_path"] for e in view["files"]],
+            ["pc88/" + p.removeprefix("rom/") for p in paths],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
