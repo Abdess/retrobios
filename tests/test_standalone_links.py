@@ -257,7 +257,7 @@ class PerSystem(unittest.TestCase):
         )
 
     def test_a_system_placeholder_gives_one_directory_per_system(self) -> None:
-        # Recalbox passes -rompath os.path.join(BIOS, args.system).
+        # Recalbox passes `-rompath os.path.join(BIOS, args.system)`.
         cfg = {
             **config(passes("emu", "/recalbox/share/bios/<system>", "command line -rompath")),
             "systems": {

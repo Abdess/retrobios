@@ -108,7 +108,7 @@ files:
     sha1: "c3480f87336de0407490f4776d78c2baf9d3d965"
     description: "GNU C++ runtime 5 linked by the older game binaries"
     source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:30"
-    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned. The sha1 is that of the copy in ll-deps/, which the Windows loader reads."
 
   - name: "libstdc++.so.6"
     system: sega-lindbergh
@@ -118,7 +118,7 @@ files:
     sha1: "5ccc8d96d9de310a597a98cc57947b0bcdcbe238"
     description: "GNU C++ runtime 6 linked by the newer game binaries"
     source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:37"
-    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned. The sha1 is that of the copy in ll-deps/, which the Windows loader reads."
 
   - name: "libncurses.so.5"
     system: sega-lindbergh
@@ -128,7 +128,7 @@ files:
     sha1: "1dd354eb156031d848e947df070d0b436647bfef"
     description: "ncurses 5 linked by some game binaries"
     source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:28"
-    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned. The sha1 is that of the copy in ll-deps/, which the Windows loader reads."
 
   - name: "libpcsclite.so.1"
     system: sega-lindbergh
@@ -138,7 +138,7 @@ files:
     sha1: "152c306568e1761981ffaa31f030859fe6eb3ec5"
     description: "PC/SC smart card library linked by the card reader titles"
     source_ref: "src/loader/elfLoader/symbolResolver.cpp:308-377, scripts/appimage/make-appimage.sh:29"
-    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned; the sha1 is that of the copy in ll-deps/, which the Windows loader reads."
+    note: "The Linux AppDir takes it from the build image's i386 packages, unpinned. The sha1 is that of the copy in ll-deps/, which the Windows loader reads."
 
   - name: "libcrypto.so.0.9.7"
     system: sega-lindbergh

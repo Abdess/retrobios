@@ -402,8 +402,8 @@ class HandedDirectory:
 
 
 # The placeholder a launcher record writes for the system it is launched
-# for, as Recalbox's extractor spells it: Recalbox passes XRoar -rompath
-# os.path.join(BIOS, args.system).
+# for, as Recalbox's extractor spells it: Recalbox passes XRoar `-rompath`
+# `os.path.join(BIOS, args.system)`.
 SYSTEM_PLACEHOLDER = "<system>"
 
 
@@ -772,7 +772,7 @@ def standalone_bindings(
 
     ``systems`` are the platform systems, by our ids, an entry is launched
     for. A record naming systems replaces, for those systems, what the
-    records naming none give: RetroBat passes XRoar -rompath bios/coco for
+    records naming none give: RetroBat passes XRoar `-rompath bios/coco` for
     coco and bios/dragon for every other system.
 
     A profile whose program reads its files beside its executable declares
@@ -1003,7 +1003,7 @@ class LauncherLayer:
         names = own & basenames
         if names:
             return _Candidate(entry, names, False)
-        # RetroPie runs sdl2trs with -romfile4p $biosdir/level4p.rom: the
+        # RetroPie runs sdl2trs with `-romfile4p $biosdir/level4p.rom`: the
         # file under that name is the one the romfile4p slot reads.
         if set_by(entry, place.passes_to):
             return _Candidate(entry, basenames, False, by_setting_or_stem=True)

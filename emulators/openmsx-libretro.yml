@@ -86,7 +86,7 @@ files:
     sha1: "49a1750c10e407293af6bce27a02e99307ceba12"
     required: false
     validation: [sha1]
-    description: "Read by machine Yamaha_CX5M; extension Yamaha_SFG-01"
+    description: "Read by machine Yamaha_CX5M and extension Yamaha_SFG-01"
     source_ref: "share/machines/Yamaha_CX5M.xml:80-83, share/extensions/Yamaha_SFG-01.xml:31-34"
 
   - name: "NMS8245SystemROM1.08.bin"
@@ -209,9 +209,9 @@ files:
     sha1: "12f2cc79b3d09723840bae774be48c0d721ec1c6"
     required: false
     validation: [sha1]
-    description: "Read by machine Sony_HB-F1XD; extensions Sony_HBD-20W, Sony_HBD-F1"
+    description: "Read by machine Sony_HB-F1XD and extensions Sony_HBD-20W, Sony_HBD-F1"
     source_ref: "share/machines/Sony_HB-F1XD.xml:95-98, share/extensions/Sony_HBD-20W.xml:21-24, share/extensions/Sony_HBD-F1.xml:21-24"
-    note: "share/extensions/Sony_HBD-20W.xml names it hbd-20w.rom; share/extensions/Sony_HBD-F1.xml names it hbd-f1.rom."
+    note: "share/extensions/Sony_HBD-20W.xml names it hbd-20w.rom, and share/extensions/Sony_HBD-F1.xml names it hbd-f1.rom."
 
   - name: "hb-f1xv_kanjifont.rom"
     aliases: ["hbi-j1_kanjifont.rom"]
@@ -219,7 +219,7 @@ files:
     sha1: "218d91eb6df2823c924d3774a9f455492a10aecb"
     required: false
     validation: [sha1]
-    description: "Read by machine Sony_HB-F1XV; extension Sony_HBI-J1"
+    description: "Read by machine Sony_HB-F1XV and extension Sony_HBI-J1"
     source_ref: "share/machines/Sony_HB-F1XV.xml:30-33, share/extensions/Sony_HBI-J1.xml:15-18"
     note: "share/extensions/Sony_HBI-J1.xml names it hbi-j1_kanjifont.rom."
 
@@ -245,7 +245,7 @@ files:
     sha1: "ade0c5ba5574f8114d7079050317099b4519e88f"
     required: false
     validation: [sha1]
-    description: "Read by machine Sony_HB-F1XV; extension Sony_HBI-J1"
+    description: "Read by machine Sony_HB-F1XV and extension Sony_HBI-J1"
     source_ref: "share/machines/Sony_HB-F1XV.xml:108-111, share/extensions/Sony_HBI-J1.xml:27-30"
     note: "share/extensions/Sony_HBI-J1.xml names it hbi-j1_msx-je.rom."
 
@@ -293,7 +293,7 @@ files:
     validation: [sha1]
     description: "Read by machines Panasonic_FS-A1WSX, Panasonic_FS-A1ST, Panasonic_FS-A1GT"
     source_ref: "share/machines/Panasonic_FS-A1WSX.xml:28-31, share/machines/Panasonic_FS-A1ST.xml:32-35, share/machines/Panasonic_FS-A1GT.xml:140-143"
-    note: "share/machines/Panasonic_FS-A1ST.xml names it fs-a1st_kanjifont.rom; share/machines/Panasonic_FS-A1GT.xml names it fs-a1gt_kanjifont.rom."
+    note: "share/machines/Panasonic_FS-A1ST.xml names it fs-a1st_kanjifont.rom, and share/machines/Panasonic_FS-A1GT.xml names it fs-a1gt_kanjifont.rom."
 
   - name: "fs-a1wsx_IC18.rom"
     path: "openmsx/share/systemroms/fs-a1wsx_IC18.rom"
