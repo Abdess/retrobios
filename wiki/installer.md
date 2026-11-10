@@ -1506,7 +1506,7 @@ RetroBIOS also runs on the handheld itself, in the
 Copy the file for the system to the SD card, then start RetroBIOS from the
 menu.
 
-Download the file for your system from the
+Download that file from the
 [latest release](https://github.com/Abdess/retrobios/releases/latest).
 
 | System | File | Copy it to | Start it from |
