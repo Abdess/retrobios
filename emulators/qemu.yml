@@ -387,44 +387,12 @@ files:
   # ========================================================
   # EDK2 UEFI FIRMWARE
   # ========================================================
-  - name: "EDK2 x86_64 UEFI"
-    path: "qemu/edk2-x86_64-code.fd"
-    sha1: "eac1a94b8e0d7c53fd5df001c36794ec34c7c724"
-    size: 3653632
-    required: false
-    note: "TianoCore UEFI firmware for x86_64. Built from edk2-stable202302."
-    source_ref: "source pc-bios/meson.build:12, source hw/i386/x86-common.c:993-994"
-
-  - name: "EDK2 x86_64 Secure Boot UEFI"
-    path: "qemu/edk2-x86_64-secure-code.fd"
-    sha1: "617abe2746696bb4a309d72cecb446dc76a2a61e"
-    size: 3653632
-    required: false
-    note: "TianoCore UEFI firmware for x86_64 with Secure Boot support."
-    source_ref: "source pc-bios/meson.build:13, source hw/i386/x86-common.c:993-994"
-
-  - name: "EDK2 i386 UEFI"
-    path: "qemu/edk2-i386-code.fd"
-    sha1: "45b8faebdfaaf19d16e3a7c5f60d69214685071c"
-    size: 3653632
-    required: false
-    note: "TianoCore UEFI firmware for i386."
-    source_ref: "source pc-bios/meson.build:9, source hw/i386/x86-common.c:993-994"
-
-  - name: "EDK2 i386 Secure Boot UEFI"
-    path: "qemu/edk2-i386-secure-code.fd"
-    sha1: "6982abec8ef2ed7c8293163d5a0bd69a01a2126f"
-    size: 3653632
-    required: false
-    note: "TianoCore UEFI firmware for i386 with Secure Boot support."
-    source_ref: "source pc-bios/meson.build:10, source hw/i386/x86-common.c:993-994"
-
   - name: "EDK2 AArch64 UEFI"
     path: "qemu/edk2-aarch64-code.fd"
     sha1: "514edbce58bfa877170673c1799351a7dab3b6df"
     size: 67108864
     required: false
-    note: "TianoCore UEFI firmware for AArch64 (ARM 64-bit)."
+    note: "TianoCore UEFI firmware for AArch64 (ARM 64-bit). Starts with -bios on the virt machine."
     source_ref: "source pc-bios/meson.build:4, source hw/arm/virt.c:1331"
 
   - name: "EDK2 ARM UEFI"
@@ -432,16 +400,8 @@ files:
     sha1: "c20f01c28b59b388abb9d0febeec45d801a632f0"
     size: 67108864
     required: false
-    note: "TianoCore UEFI firmware for ARM (32-bit)."
+    note: "TianoCore UEFI firmware for ARM (32-bit). Starts with -bios on the virt machine."
     source_ref: "source pc-bios/meson.build:5, source hw/arm/virt.c:1331"
-
-  - name: "EDK2 RISC-V UEFI"
-    path: "qemu/edk2-riscv-code.fd"
-    sha1: "2c8633d881ece0c4794d740138a318f7e9af480c"
-    size: 33554432
-    required: false
-    note: "TianoCore UEFI firmware for RISC-V 64-bit."
-    source_ref: "source pc-bios/meson.build:7, source hw/riscv/boot.c:89-92"
 
   # ========================================================
   # POWERPC FIRMWARE
@@ -719,6 +679,11 @@ notes:
     names them: a .qemu_cmd_line names a code image with -bios, which is
     looked up in the data directory. pflash drives, the variable store
     templates included, are opened by path from the content folder
-    (ui/libretro.c:697).
+    (ui/libretro.c:697). The ARM and AArch64 code images boot through
+    -bios on the virt machine. The x86 images are 3653632 bytes, not a
+    multiple of 64 KiB, so x86_bios_rom_init refuses them
+    (hw/i386/x86-common.c:1000-1002), and the RISC-V image is S-mode code
+    for pflash0 that -bios does not start: those are read only as pflash
+    drives, never from the system directory.
   experimental: "This core is marked is_experimental=true in its .info file."
   version: "Based on QEMU 9.0.50 (io12/qemu-libretro)"
