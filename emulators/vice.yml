@@ -469,7 +469,7 @@ files:
     md5: 57af4ae21d4b705c2991d98ed5c1f7b8
     crc32: f833d117
     note: "C64 BASIC V2 ROM (DTV copy). Embedded in core."
-    source_ref: "vice/data/C64DTV/basic-901226-01.bin"
+    source_ref: "vice/data/C64DTV/basic-901226-01.bin, vice/src/c64/c64rom.h:31, vice/src/c64dtv/c64dtv-resources.c:92, 157, retrodep/embedded/c64dtvembedded.c:43-48"
 
   - name: "vice/C64DTV/chargen-901225-01.bin"
     system: commodore-c64dtv
@@ -481,7 +481,7 @@ files:
     md5: 12a4202f5331d45af846af6c58fba946
     crc32: ec4272ee
     note: "C64 Character Generator (DTV copy). Embedded in core."
-    source_ref: "vice/data/C64DTV/chargen-901225-01.bin"
+    source_ref: "vice/data/C64DTV/chargen-901225-01.bin, vice/src/c64/c64rom.h:60, vice/src/c64dtv/c64dtv-resources.c:74, 151, retrodep/embedded/c64dtvembedded.c:43-48"
 
   - name: "vice/C64DTV/kernal-901227-03.bin"
     system: commodore-c64dtv
@@ -493,7 +493,7 @@ files:
     md5: 39065497630802346bce17963f13c092
     crc32: dbe3e7c7
     note: "C64 Kernal Rev 3 (DTV copy). Embedded in core."
-    source_ref: "vice/data/C64DTV/kernal-901227-03.bin"
+    source_ref: "vice/data/C64DTV/kernal-901227-03.bin, vice/src/c64/c64rom.h:52, vice/src/c64dtv/c64dtv-resources.c:83, 154, retrodep/embedded/c64dtvembedded.c:43-48"
 
   # -------------------------------------------------------
   # VIC-20 ROMs (vice_xvic)

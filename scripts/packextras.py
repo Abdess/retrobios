@@ -1545,6 +1545,11 @@ def _collect_emulator_extras(
                     extra["system_dir"] = f["system_dir"]
                 if f.get("unprefixed"):
                     extra["unprefixed"] = True
+                # A copy placed outside the BIOS tree resolves by its layout
+                # path alone, as the first pass does: EmuELEC's
+                # roms/mame/stvbios.zip took bios/Arcade/MAME's set by that tail.
+                if f.get("layout_path"):
+                    extra["layout_path"] = f["layout_path"]
                 extra["claim_order"] = (2, 0, emu_name)
                 if _take(extra, full_dest, seen_dests, taken):
                     extras.append(extra)

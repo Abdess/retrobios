@@ -239,6 +239,45 @@ class LinksAndCopies(unittest.TestCase):
         self.assertEqual(base[0]["names"], ["hiscore.dat", "cheat.dat"])
 
 
+MAME = module("mame", """
+    function configure_mame() {
+        local system="mame"
+        local temp_ini_mame="$(mktemp)"
+        iniConfig " " "" "$temp_ini_mame"
+        iniSet "rompath"            "$romdir/$system;$romdir/arcade;$biosdir/$system"
+        iniSet "hashpath"           "$md_inst/hash"
+        iniSet "samplepath"         "$romdir/$system/samples;$romdir/arcade/samples"
+        iniSet "cfg_directory"      "$romdir/$system/cfg"
+        copyDefaultConfig "$temp_ini_mame" "$md_conf_root/$system/mame.ini"
+        addEmulator 0 "$md_id" "arcade" "$md_inst/mame %BASENAME%"
+        addSystem "arcade"
+    }
+""", 109)
+
+
+class IniSearchLists(unittest.TestCase):
+    """MAME's mame.ini lists folders below $romdir (mame.sh:133-136)."""
+
+    def test_a_list_below_the_roms_root_is_a_search_path(self):
+        found = [r for r in records({f"{EMULATORS}/mame.sh": MAME}, "mame")
+                 if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"].split(" in ")[0]) for r in found],
+            [
+                ("$romdir/mame;$romdir/arcade;$biosdir/mame", "rompath"),
+                ("$romdir/mame/samples;$romdir/arcade/samples", "samplepath"),
+            ],
+        )
+        self.assertEqual(found[1]["source_ref"], f"{EMULATORS}/mame.sh:115")
+
+    def test_one_folder_written_to_is_no_search_path(self):
+        # cfg_directory is where MAME writes, $md_inst/hash a folder of the
+        # package itself.
+        found = records({f"{EMULATORS}/mame.sh": MAME}, "mame")
+        self.assertFalse([r for r in found if "cfg" in str(r.get("search_dir"))])
+        self.assertFalse([r for r in found if "hash" in str(r.get("search_dir"))])
+
+
 class CommandLines(unittest.TestCase):
     def test_sdltrs_passes_one_rom_per_machine(self):
         found = records({f"{EMULATORS}/sdltrs.sh": SDLTRS}, "sdltrs")

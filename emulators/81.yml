@@ -275,7 +275,8 @@ files:
     mode: standalone
     size: 8192
     md5: 5c11c61a2dd2ca4bf39328d9ff42d289
-    source_ref: "upstream Source/ROMs/FDCs/interface1.edition1.rom"
+    note: "Listed for ZX Interface 1, but ConfigureFDCRom has no Interface 1 branch, so the choice is not applied. Read when the configuration file names it as ROMINTERFACE1."
+    source_ref: "upstream Source/ROMs/FDCs/interface1.edition1.rom, upstream Source/HW_.cpp:2618-2622, 3732, 4957-4980, upstream Source/Spectrum/spec48.cpp:332-334"
   - name: "+d.g+dos.v1-a.rom"
     system: sinclair-zx-spectrum
     required: false
@@ -487,7 +488,8 @@ files:
     mode: standalone
     size: 16384
     md5: 9f6f56003307b9d55be96f406fdbf2b1
-    source_ref: "upstream Source/ROMs/spectrum48.arabic.rom"
+    note: "In no ROM list: read when chosen with the Browse button."
+    source_ref: "upstream Source/ROMs/spectrum48.arabic.rom, upstream Source/HW_.cpp:252, 3794-3797, 3806-3835, upstream Source/Spectrum/spec48.cpp:354"
   - name: spectrum48.arabic.version1.rom
     system: sinclair-zx-spectrum
     required: false
@@ -603,8 +605,8 @@ files:
     mode: standalone
     size: 16384
     md5: b7893ad25728fbf6410f08eddd4a1cad
-    note: "Microdigital TK90X (Spectrum clone)."
-    source_ref: "upstream Source/ROMs/tk90.rom"
+    note: "Microdigital TK90X (Spectrum clone). In no ROM list: read when chosen with the Browse button."
+    source_ref: "upstream Source/ROMs/tk90.rom, upstream Source/HW_.cpp:252, 3794-3797, 3806-3835, upstream Source/Spectrum/spec48.cpp:354"
   - name: tk95.rom
     system: sinclair-zx-spectrum
     required: false
@@ -612,5 +614,5 @@ files:
     mode: standalone
     size: 16384
     md5: b7893ad25728fbf6410f08eddd4a1cad
-    note: "Microdigital TK95 (Spectrum clone)."
-    source_ref: "upstream Source/ROMs/tk95.rom"
+    note: "Microdigital TK95 (Spectrum clone). In no ROM list: read when chosen with the Browse button."
+    source_ref: "upstream Source/ROMs/tk95.rom, upstream Source/HW_.cpp:252, 3794-3797, 3806-3835, upstream Source/Spectrum/spec48.cpp:354"

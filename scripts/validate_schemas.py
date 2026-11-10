@@ -87,6 +87,7 @@ def _validate_yaml_directory(
             out.extend(_systems_outside_profile(path, data))
             out.extend(_doubled_paths(path))
             out.extend(_group_requirement_split(path, data))
+            out.extend(_data_only_source_refs(path, data))
     return out
 
 
@@ -152,6 +153,65 @@ def _group_requirement_split(path: Path, document: object) -> list[str]:
                        "and writes required: the set's requirement is in groups")
     out.extend(f"{label}: group {g} has no entry in groups" for g in sorted(used - declared))
     out.extend(f"{label}: groups declares {g}, which no entry names" for g in sorted(declared - used))
+    return out
+
+
+_CODE_SUFFIXES = frozenset(
+    "c cc cpp cxx c++ h hh hpp hxx inc inl ipp m mm mjs cjs js jsx ts tsx py cs java kt "
+    "go rs lua pas pp asm s sh bash zsh ps1 bat cmd vbs swift d zig nim qml qc rb pl php "
+    "scala ml hs dart vue ino z80 smali".split()
+)
+_CODE_FILE = re.compile(r"[\w+.-]\.([A-Za-z0-9+]+)\b")
+_BINARY_EVIDENCE = re.compile(
+    r"\b0x[0-9a-fA-F]+\b|\bFUN_[0-9a-fA-F]+\b|\.(?:so|dll|exe|dylib|dex|apk|jar|elf|nro|xex)\b",
+    re.IGNORECASE,
+)
+
+# Profiles whose files cite no published code. Each reason says why the
+# check cannot apply yet.
+DATA_ONLY_REF_EXCEPTIONS: dict[str, str] = {
+    "ace-dl": "closed source: the refs describe what the shipped binary opens",
+    "cpcemu": "closed source: the refs describe what the shipped binary opens",
+    "drastic": "closed source: the shader format files are read by the shipped binary",
+    "lexaloffle": "closed source: PICO-8 reads pico8_gpio, the refs are its readme and the KNULLI install script",
+    "mfme": "closed source: the refs are the release notes of the shipped binary",
+}
+
+
+def _ref_cites_code(ref: str) -> bool:
+    """A source_ref part names a source file, or a binary with an address."""
+    from sourceref import split_source_ref
+
+    if _BINARY_EVIDENCE.search(ref):
+        return True
+    for part in split_source_ref(ref):
+        for suffix in _CODE_FILE.findall(part.raw):
+            if suffix.lower() in _CODE_SUFFIXES:
+                return True
+    return False
+
+
+def _data_only_source_refs(path: Path, document: object) -> list[str]:
+    """A files[] source_ref that cites only data or build files.
+
+    A data file is evidence that the emulator reads a file only once the
+    code that ships and parses it is cited too: iwadinfo.txt names the
+    IWADs, d_iwad.cpp is what reads it. 655 entries in 27 profiles cited
+    the table alone, and six of them named a file no code opens.
+    """
+    if not isinstance(document, dict) or path.stem in DATA_ONLY_REF_EXCEPTIONS:
+        return []
+    out: list[str] = []
+    for index, entry in enumerate(document.get("files") or []):
+        if not isinstance(entry, dict) or not entry.get("source_ref"):
+            continue
+        refs = entry["source_ref"]
+        for ref in refs.values() if isinstance(refs, dict) else [refs]:
+            if ref and not _ref_cites_code(str(ref)):
+                out.append(
+                    f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
+                    f"source_ref cites no code that reads the file: {ref}"
+                )
     return out
 
 

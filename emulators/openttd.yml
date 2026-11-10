@@ -75,7 +75,7 @@ files:
     description: "Transport Tycoon Deluxe DOS graphics, base"
     required: false
     md5: "9311676280e5b14077a8ee41c1b42192"
-    source_ref: "media/baseset/orig_dos.obg:20, media/baseset/orig_dos_de.obg:20"
+    source_ref: "media/baseset/orig_dos.obg:20, media/baseset/orig_dos_de.obg:20, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGI.GRF"
     path: "baseset/TRGI.GRF"
@@ -84,7 +84,7 @@ files:
     description: "Transport Tycoon Deluxe DOS graphics, logos"
     required: false
     md5: "da6a6c9dcc451eec88d79211437b76a8"
-    source_ref: "media/baseset/orig_dos.obg:21, media/baseset/orig_dos_de.obg:21"
+    source_ref: "media/baseset/orig_dos.obg:21, media/baseset/orig_dos_de.obg:21, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGC.GRF"
     path: "baseset/TRGC.GRF"
@@ -93,7 +93,7 @@ files:
     description: "Transport Tycoon Deluxe DOS graphics, sub-arctic climate"
     required: false
     md5: "ed446637e034104c5559b32c18afe78d"
-    source_ref: "media/baseset/orig_dos.obg:22, media/baseset/orig_dos_de.obg:22"
+    source_ref: "media/baseset/orig_dos.obg:22, media/baseset/orig_dos_de.obg:22, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGH.GRF"
     path: "baseset/TRGH.GRF"
@@ -102,7 +102,7 @@ files:
     description: "Transport Tycoon Deluxe DOS graphics, sub-tropical climate"
     required: false
     md5: "ee6616fb0e6ef6b24892c58c93d86fc9"
-    source_ref: "media/baseset/orig_dos.obg:23, media/baseset/orig_dos_de.obg:23"
+    source_ref: "media/baseset/orig_dos.obg:23, media/baseset/orig_dos_de.obg:23, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGT.GRF"
     path: "baseset/TRGT.GRF"
@@ -111,7 +111,7 @@ files:
     description: "Transport Tycoon Deluxe DOS graphics, toyland"
     required: false
     md5: "e30e8a398ae86c03dc534a8ac7dfb3b6"
-    source_ref: "media/baseset/orig_dos.obg:24"
+    source_ref: "media/baseset/orig_dos.obg:24, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGT.GRF"
     path: "baseset/TRGT.GRF"
@@ -121,7 +121,7 @@ files:
     required: false
     md5: "fcde1d7e8a74197d72a62695884b909e"
     note: "The German DOS CD differs from the other DOS releases only in this file."
-    source_ref: "media/baseset/orig_dos_de.obg:24"
+    source_ref: "media/baseset/orig_dos_de.obg:24, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRG1R.GRF"
     path: "baseset/TRG1R.GRF"
@@ -130,7 +130,7 @@ files:
     description: "Transport Tycoon Deluxe Windows graphics, base"
     required: false
     md5: "b04ce593d8c5016e07473a743d7d3358"
-    source_ref: "media/baseset/orig_win.obg:20"
+    source_ref: "media/baseset/orig_win.obg:20, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGIR.GRF"
     path: "baseset/TRGIR.GRF"
@@ -139,7 +139,7 @@ files:
     description: "Transport Tycoon Deluxe Windows graphics, logos"
     required: false
     md5: "0c2484ff6be49fc63a83be6ab5c38f32"
-    source_ref: "media/baseset/orig_win.obg:21"
+    source_ref: "media/baseset/orig_win.obg:21, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGCR.GRF"
     path: "baseset/TRGCR.GRF"
@@ -148,7 +148,7 @@ files:
     description: "Transport Tycoon Deluxe Windows graphics, sub-arctic climate"
     required: false
     md5: "3668f410c761a050b5e7095a2b14879b"
-    source_ref: "media/baseset/orig_win.obg:22"
+    source_ref: "media/baseset/orig_win.obg:22, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGHR.GRF"
     path: "baseset/TRGHR.GRF"
@@ -157,7 +157,7 @@ files:
     description: "Transport Tycoon Deluxe Windows graphics, sub-tropical climate"
     required: false
     md5: "06bf2b7a31766f048baac2ebe43457b1"
-    source_ref: "media/baseset/orig_win.obg:23"
+    source_ref: "media/baseset/orig_win.obg:23, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "TRGTR.GRF"
     path: "baseset/TRGTR.GRF"
@@ -166,7 +166,7 @@ files:
     description: "Transport Tycoon Deluxe Windows graphics, toyland"
     required: false
     md5: "de53650517fe661ceaa3138c6edb0eb8"
-    source_ref: "media/baseset/orig_win.obg:24"
+    source_ref: "media/baseset/orig_win.obg:24, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:717, src/gfxinit.cpp:352-354"
 
   - name: "SAMPLE.CAT"
     path: "baseset/SAMPLE.CAT"
@@ -175,7 +175,7 @@ files:
     description: "Transport Tycoon Deluxe DOS sound samples"
     required: false
     md5: "422ea3dd074d2859bb51639a6e0e85da"
-    source_ref: "media/baseset/orig_dos.obs:14"
+    source_ref: "media/baseset/orig_dos.obs:14, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:791"
 
   - name: "SAMPLE.CAT"
     path: "baseset/SAMPLE.CAT"
@@ -184,7 +184,7 @@ files:
     description: "Transport Tycoon Deluxe Windows sound samples"
     required: false
     md5: "9212e81e72badd4bbe1eaeae66458e10"
-    source_ref: "media/baseset/orig_win.obs:14"
+    source_ref: "media/baseset/orig_win.obs:14, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:791"
 
   - name: "GM.CAT"
     path: "baseset/GM.CAT"
@@ -193,7 +193,7 @@ files:
     description: "Transport Tycoon Deluxe DOS music catalogue"
     required: false
     md5: "7a29d2d0c4f7d2e03091ffa9b2bdfffb"
-    source_ref: "media/baseset/orig_dos.obm:44"
+    source_ref: "media/baseset/orig_dos.obm:44, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM-TTO.CAT"
     path: "baseset/GM-TTO.CAT"
@@ -202,7 +202,7 @@ files:
     description: "Transport Tycoon Original music catalogue"
     required: false
     md5: "26e85ff84b0063aa5da05dd4698fc76e"
-    source_ref: "media/baseset/orig_tto.obm:63"
+    source_ref: "media/baseset/orig_tto.obm:63, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT00.GM"
     path: "baseset/GM_TT00.GM"
@@ -211,7 +211,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Tycoon DELUXE Theme"
     required: false
     md5: "45cfec1b9d8c7a0ad45e755833cbf221"
-    source_ref: "media/baseset/orig_win.obm:44, media/baseset/orig_win.obm:68"
+    source_ref: "media/baseset/orig_win.obm:44, media/baseset/orig_win.obm:68, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT01.GM"
     path: "baseset/GM_TT01.GM"
@@ -220,7 +220,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Snarl Up"
     required: false
     md5: "ab14ed3392d848abd2a2e90a9d75d121"
-    source_ref: "media/baseset/orig_win.obm:45, media/baseset/orig_win.obm:69"
+    source_ref: "media/baseset/orig_win.obm:45, media/baseset/orig_win.obm:69, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT02.GM"
     path: "baseset/GM_TT02.GM"
@@ -229,7 +229,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Easy Driver"
     required: false
     md5: "dd4f696e4be5987ce738257b08b50171"
-    source_ref: "media/baseset/orig_win.obm:46, media/baseset/orig_win.obm:70"
+    source_ref: "media/baseset/orig_win.obm:46, media/baseset/orig_win.obm:70, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT03.GM"
     path: "baseset/GM_TT03.GM"
@@ -238,7 +238,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Little Red Diesel"
     required: false
     md5: "a1bfde23343df9e4063419bf29c166b8"
-    source_ref: "media/baseset/orig_win.obm:47, media/baseset/orig_win.obm:71"
+    source_ref: "media/baseset/orig_win.obm:47, media/baseset/orig_win.obm:71, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT04.GM"
     path: "baseset/GM_TT04.GM"
@@ -247,7 +247,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, City Groove"
     required: false
     md5: "4e6943aa0c455203d76c79389054747d"
-    source_ref: "media/baseset/orig_win.obm:48, media/baseset/orig_win.obm:72"
+    source_ref: "media/baseset/orig_win.obm:48, media/baseset/orig_win.obm:72, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT05.GM"
     path: "baseset/GM_TT05.GM"
@@ -256,7 +256,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Aliens Ate My Railway"
     required: false
     md5: "cee281cb85a2e2343552d97640545a47"
-    source_ref: "media/baseset/orig_win.obm:49, media/baseset/orig_win.obm:73"
+    source_ref: "media/baseset/orig_win.obm:49, media/baseset/orig_win.obm:73, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT06.GM"
     path: "baseset/GM_TT06.GM"
@@ -265,7 +265,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Stoke It"
     required: false
     md5: "26d1de5efa8675f94065784e9d539e49"
-    source_ref: "media/baseset/orig_win.obm:50, media/baseset/orig_win.obm:74"
+    source_ref: "media/baseset/orig_win.obm:50, media/baseset/orig_win.obm:74, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT07.GM"
     path: "baseset/GM_TT07.GM"
@@ -274,7 +274,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Don't Walk!"
     required: false
     md5: "6f2691e17558f552ec4c565e4ab7139c"
-    source_ref: "media/baseset/orig_win.obm:51, media/baseset/orig_win.obm:75"
+    source_ref: "media/baseset/orig_win.obm:51, media/baseset/orig_win.obm:75, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT08.GM"
     path: "baseset/GM_TT08.GM"
@@ -283,7 +283,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Sawyer's Tune"
     required: false
     md5: "a42bf2cb3340a822f1a69646fc7a487d"
-    source_ref: "media/baseset/orig_win.obm:52, media/baseset/orig_win.obm:76"
+    source_ref: "media/baseset/orig_win.obm:52, media/baseset/orig_win.obm:76, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT09.GM"
     path: "baseset/GM_TT09.GM"
@@ -292,7 +292,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Fell Apart On Me"
     required: false
     md5: "eb35761a58a8df3c59ed8929cce13916"
-    source_ref: "media/baseset/orig_win.obm:53, media/baseset/orig_win.obm:77"
+    source_ref: "media/baseset/orig_win.obm:53, media/baseset/orig_win.obm:77, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT10.GM"
     path: "baseset/GM_TT10.GM"
@@ -301,7 +301,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Can't Get There From Here"
     required: false
     md5: "42fecd686720a785d20a78590c466a82"
-    source_ref: "media/baseset/orig_win.obm:54, media/baseset/orig_win.obm:78"
+    source_ref: "media/baseset/orig_win.obm:54, media/baseset/orig_win.obm:78, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT11.GM"
     path: "baseset/GM_TT11.GM"
@@ -310,7 +310,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Hard Drivin'"
     required: false
     md5: "50ef1ef02e49d2112786dd45e69dc3ee"
-    source_ref: "media/baseset/orig_win.obm:55, media/baseset/orig_win.obm:79"
+    source_ref: "media/baseset/orig_win.obm:55, media/baseset/orig_win.obm:79, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT12.GM"
     path: "baseset/GM_TT12.GM"
@@ -319,7 +319,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Road Hog"
     required: false
     md5: "4ce707a0e0e72419f0681dd9bd95271b"
-    source_ref: "media/baseset/orig_win.obm:56, media/baseset/orig_win.obm:80"
+    source_ref: "media/baseset/orig_win.obm:56, media/baseset/orig_win.obm:80, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT13.GM"
     path: "baseset/GM_TT13.GM"
@@ -328,7 +328,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Hold That Train!"
     required: false
     md5: "e765753be29d889ec818f38009103619"
-    source_ref: "media/baseset/orig_win.obm:57, media/baseset/orig_win.obm:81"
+    source_ref: "media/baseset/orig_win.obm:57, media/baseset/orig_win.obm:81, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT14.GM"
     path: "baseset/GM_TT14.GM"
@@ -337,7 +337,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Broomer's Oil Rag"
     required: false
     md5: "270e2d63bd32b95a4d007ce15a6ce45f"
-    source_ref: "media/baseset/orig_win.obm:58, media/baseset/orig_win.obm:82"
+    source_ref: "media/baseset/orig_win.obm:58, media/baseset/orig_win.obm:82, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT15.GM"
     path: "baseset/GM_TT15.GM"
@@ -346,7 +346,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Goss Groove"
     required: false
     md5: "89e116a1c0c69f1845cc903a9bfbe460"
-    source_ref: "media/baseset/orig_win.obm:59, media/baseset/orig_win.obm:83"
+    source_ref: "media/baseset/orig_win.obm:59, media/baseset/orig_win.obm:83, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT16.GM"
     path: "baseset/GM_TT16.GM"
@@ -355,7 +355,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Small Town"
     required: false
     md5: "f824e2371b3bedfe61aad4b9c62dd6be"
-    source_ref: "media/baseset/orig_win.obm:60, media/baseset/orig_win.obm:84"
+    source_ref: "media/baseset/orig_win.obm:60, media/baseset/orig_win.obm:84, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT17.GM"
     path: "baseset/GM_TT17.GM"
@@ -364,7 +364,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Cruise Control"
     required: false
     md5: "1b23eebb0796c1ab99cd97fa7082cf7b"
-    source_ref: "media/baseset/orig_win.obm:61, media/baseset/orig_win.obm:85"
+    source_ref: "media/baseset/orig_win.obm:61, media/baseset/orig_win.obm:85, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT18.GM"
     path: "baseset/GM_TT18.GM"
@@ -373,7 +373,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Stroll On"
     required: false
     md5: "15650de3bad645d0e88c4f5c7a2df92a"
-    source_ref: "media/baseset/orig_win.obm:62, media/baseset/orig_win.obm:86"
+    source_ref: "media/baseset/orig_win.obm:62, media/baseset/orig_win.obm:86, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT19.GM"
     path: "baseset/GM_TT19.GM"
@@ -382,7 +382,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Funk Central"
     required: false
     md5: "7aec079e15bd09588660b85545ac4dfc"
-    source_ref: "media/baseset/orig_win.obm:63, media/baseset/orig_win.obm:87"
+    source_ref: "media/baseset/orig_win.obm:63, media/baseset/orig_win.obm:87, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT20.GM"
     path: "baseset/GM_TT20.GM"
@@ -391,7 +391,7 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Jammit"
     required: false
     md5: "1509097889dee617aa1e9a1738a5a930"
-    source_ref: "media/baseset/orig_win.obm:64, media/baseset/orig_win.obm:88"
+    source_ref: "media/baseset/orig_win.obm:64, media/baseset/orig_win.obm:88, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"
 
   - name: "GM_TT21.GM"
     path: "baseset/GM_TT21.GM"
@@ -400,4 +400,4 @@ files:
     description: "Transport Tycoon Deluxe Windows music, Movin' On"
     required: false
     md5: "a8d0aaad02e1a762d8d54cf81da56bab"
-    source_ref: "media/baseset/orig_win.obm:65, media/baseset/orig_win.obm:89"
+    source_ref: "media/baseset/orig_win.obm:65, media/baseset/orig_win.obm:89, media/baseset/CMakeLists.txt:4-15, 38-62, cmake/InstallAndPackage.cmake:28-34, src/base_media_base.h:198-204, src/base_media_func.h:42-139, 164-181, src/openttd.cpp:803, src/music.cpp:119-175"

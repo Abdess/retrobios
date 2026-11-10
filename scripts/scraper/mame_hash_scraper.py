@@ -453,6 +453,10 @@ def release_profile(
         name = f"{set_name}.zip"
         entry: dict[str, Any] = {
             "name": name,
+            # The libretro build searches the content folder, then
+            # <system>/mame/bios and <system>/mame/roms (retro_init.cpp,
+            # Set_Path_Option): the system folder itself is not read.
+            "path": f"mame/bios/{name}",
             "required": settled_required(known.get(name, {}), data),
             "category": "bios_zip",
         }

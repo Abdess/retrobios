@@ -1697,7 +1697,7 @@ class InstallerVariablesAreDocumented(unittest.TestCase):
     --dry-run, and no page named it or the folder it defaults to."""
 
     # Set by the full-screen interface for the runs it starts, never by a user.
-    INTERNAL = {"RETROBIOS_TUI_LIST"}
+    INTERNAL = {"RETROBIOS_TUI_LIST", "RETROBIOS_TUI_RECORDED"}
 
     def test_every_variable_install_py_reads_is_in_the_table(self):
         source = (ROOT / "install.py").read_text(encoding="utf-8")

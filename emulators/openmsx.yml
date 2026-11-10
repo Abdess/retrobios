@@ -80,7 +80,7 @@ files:
     size: 65536
     description: "NMS 8245 combined system ROM (BIOS+BASIC 0x0000-0x7FFF, Sub ROM 0x8000-0xBFFF, FDC 0xC000-0xFFFF)"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2_EN.xml:24,65,111"
+    source_ref: "share/machines/Boosted_MSX2_EN.xml:24,65,111, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fmpac.rom
     path: "share/systemroms/fmpac.rom"
@@ -88,7 +88,7 @@ files:
     required: true
     description: "Panasonic SW-M004 FMPAC (FM-PAC) sound cartridge ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2_EN.xml:83"
+    source_ref: "share/machines/Boosted_MSX2_EN.xml:83, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: phc-70fd2_basickun.rom
     path: "share/systemroms/phc-70fd2_basickun.rom"
@@ -96,7 +96,7 @@ files:
     required: true
     description: "Sanyo PHC-70FD2 MSX-BASIC Kun compiler ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2_EN.xml:89, share/machines/Boosted_MSX2+_JP.xml:167, share/machines/Boosted_MSXturboR_with_IDE.xml:79"
+    source_ref: "share/machines/Boosted_MSX2_EN.xml:89, share/machines/Boosted_MSX2+_JP.xml:167, share/machines/Boosted_MSXturboR_with_IDE.xml:79, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: yrw801.rom
     path: "share/systemroms/yrw801.rom"
@@ -104,7 +104,7 @@ files:
     required: true
     description: "Yamaha YRW801 MoonSound wavetable ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2_EN.xml:186, share/machines/Boosted_MSX2+_JP.xml:120, share/machines/Boosted_MSXturboR_with_IDE.xml:203"
+    source_ref: "share/machines/Boosted_MSX2_EN.xml:186, share/machines/Boosted_MSX2+_JP.xml:120, share/machines/Boosted_MSXturboR_with_IDE.xml:203, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   # -------------------------------------------------------
   # Boosted_MSX2+_JP (msx2+)
@@ -116,7 +116,7 @@ files:
     required: true
     description: "FS-A1WSX MSX2+ BIOS and BASIC ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:143"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:143, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-a1wsx_fmbasic.rom
     path: "share/systemroms/fs-a1wsx_fmbasic.rom"
@@ -124,7 +124,7 @@ files:
     required: true
     description: "FS-A1WSX MSX-MUSIC (OPLL) ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:155"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:155, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-a1wsx_msx2psub.rom
     installed_on: [retropie]
@@ -133,7 +133,7 @@ files:
     required: true
     description: "FS-A1WSX MSX2+ Sub ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:218"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:218, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
     note: "RetroPie unpacks openmsxroms.tar.gz into the installed share/systemroms, which the file pool scans. This ROM is in it as MSX2PEXT.ROM and is found by its SHA1."
 
   - name: fs-a1wsx_kanjibasic.rom
@@ -142,7 +142,7 @@ files:
     required: true
     description: "FS-A1WSX Kanji Driver with BASIC ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:225"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:225, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-a1wsx_disk.rom
     path: "share/systemroms/fs-a1wsx_disk.rom"
@@ -150,7 +150,7 @@ files:
     required: true
     description: "FS-A1WSX FDC (TC8566AF) disk controller ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:237"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:237, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-a1wsx_firmware.rom
     path: "share/systemroms/fs-a1wsx_firmware.rom"
@@ -158,7 +158,7 @@ files:
     required: true
     description: "FS-A1WSX Panasonic firmware ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:251"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:251, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-a1wsx_kanjifont.rom
     path: "share/systemroms/fs-a1wsx_kanjifont.rom"
@@ -167,7 +167,7 @@ files:
     required: true
     description: "Kanji font ROM (shared by FS-A1WSX and FS-A1GT machines)"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSX2+_JP.xml:27-28, share/machines/Panasonic_FS-A1WSX.xml:29-30, share/machines/Boosted_MSXturboR_with_IDE.xml:215-216, share/machines/Panasonic_FS-A1GT.xml:141-142"
+    source_ref: "share/machines/Boosted_MSX2+_JP.xml:27-28, share/machines/Panasonic_FS-A1WSX.xml:29-30, share/machines/Boosted_MSXturboR_with_IDE.xml:215-216, share/machines/Panasonic_FS-A1GT.xml:141-142, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
     note: "Panasonic_FS-A1WSX.xml and Boosted_MSX2+_JP.xml name it fs-a1wsx_kanjifont.rom, Panasonic_FS-A1GT.xml and Boosted_MSXturboR_with_IDE.xml name it fs-a1gt_kanjifont.rom, all four with the same sha1."
 
   # -------------------------------------------------------
@@ -182,7 +182,7 @@ files:
     required: true
     description: "FS-A1GT turboR combined firmware (512KB, contains BIOS, Sub ROM, Kanji, FDC, MSX-MUSIC, Opening ROM)"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSXturboR_with_IDE.xml:23"
+    source_ref: "share/machines/Boosted_MSXturboR_with_IDE.xml:23, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: ide250.dat
     path: "share/systemroms/ide250.dat"
@@ -190,7 +190,7 @@ files:
     required: true
     description: "Sunrise IDE 2.50 interface ROM"
     validation: [sha1]
-    source_ref: "share/machines/Boosted_MSXturboR_with_IDE.xml:49"
+    source_ref: "share/machines/Boosted_MSXturboR_with_IDE.xml:49, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: ide250.zip
     path: "share/systemroms/ide250.zip"
@@ -213,7 +213,7 @@ files:
     required: true
     description: "ColecoVision system BIOS ROM"
     validation: [sha1]
-    source_ref: "share/machines/ColecoVision_SGM.xml:57"
+    source_ref: "share/machines/ColecoVision_SGM.xml:57, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   # -------------------------------------------------------
   # Spectravideo_SVI-328 (spectravideo)
@@ -224,7 +224,7 @@ files:
     required: true
     description: "SVI-328 BASIC v1.11 ROM"
     validation: [sha1]
-    source_ref: "share/machines/Spectravideo_SVI-328.xml:52"
+    source_ref: "share/machines/Spectravideo_SVI-328.xml:52, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   # -------------------------------------------------------
   # Pioneer_PX-7 (laserdisc)
@@ -236,7 +236,7 @@ files:
     required: true
     description: "Pioneer PX-7 MSX1 BIOS and BASIC ROM"
     validation: [sha1]
-    source_ref: "share/machines/Pioneer_PX-7.xml:67"
+    source_ref: "share/machines/Pioneer_PX-7.xml:67, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: px-7_pbasic.rom
     path: "share/systemroms/px-7_pbasic.rom"
@@ -244,7 +244,7 @@ files:
     required: true
     description: "Pioneer PX-7 LaserDisc PBASIC controller ROM"
     validation: [sha1]
-    source_ref: "share/machines/Pioneer_PX-7.xml:82"
+    source_ref: "share/machines/Pioneer_PX-7.xml:82, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   # -------------------------------------------------------
   # Machines whose ROMs RetroBat lists. Each ROM is found in the
@@ -261,7 +261,7 @@ files:
     size: 32768
     description: "National CF-3300 MSX1 BIOS and BASIC ROM (also used by CF-1200, CF-2700, CF-3000, FS-1300)"
     validation: [sha1]
-    source_ref: "share/machines/National_CF-3300.xml:51-52"
+    source_ref: "share/machines/National_CF-3300.xml:51-52, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: cf-3300_disk.rom
     path: "share/systemroms/cf-3300_disk.rom"
@@ -270,7 +270,7 @@ files:
     size: 16384
     description: "National CF-3300 disk controller ROM (also used by Gradiente Expert DD Plus)"
     validation: [sha1]
-    source_ref: "share/machines/National_CF-3300.xml:75-76"
+    source_ref: "share/machines/National_CF-3300.xml:75-76, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-5500_basic-bios2.rom
     path: "share/systemroms/fs-5500_basic-bios2.rom"
@@ -279,7 +279,7 @@ files:
     size: 32768
     description: "National FS-5500 MSX2 BIOS and BASIC ROM"
     validation: [sha1]
-    source_ref: "share/machines/National_FS-5500F2.xml:76-77, share/machines/National_FS-5500F1.xml:78"
+    source_ref: "share/machines/National_FS-5500F2.xml:76-77, share/machines/National_FS-5500F1.xml:78, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-5500_msx2sub.rom
     path: "share/systemroms/fs-5500_msx2sub.rom"
@@ -288,7 +288,7 @@ files:
     size: 16384
     description: "National FS-5500 MSX2 Sub ROM"
     validation: [sha1]
-    source_ref: "share/machines/National_FS-5500F2.xml:100-101, share/machines/National_FS-5500F1.xml:102"
+    source_ref: "share/machines/National_FS-5500F2.xml:100-101, share/machines/National_FS-5500F1.xml:102, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-5500_kanjibasic.rom
     path: "share/systemroms/fs-5500_kanjibasic.rom"
@@ -297,7 +297,7 @@ files:
     size: 32768
     description: "National FS-5500 Kanji Driver ROM (also used by FS-4600F and FS-5000F2)"
     validation: [sha1]
-    source_ref: "share/machines/National_FS-5500F2.xml:107-108, share/machines/National_FS-5500F1.xml:109"
+    source_ref: "share/machines/National_FS-5500F2.xml:107-108, share/machines/National_FS-5500F1.xml:109, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-5500_kanjifont.rom
     path: "share/systemroms/fs-5500_kanjifont.rom"
@@ -306,7 +306,7 @@ files:
     size: 131072
     description: "National FS-5500 Kanji font ROM (also used by FS-4000, FS-4500 and FS-4700F)"
     validation: [sha1]
-    source_ref: "share/machines/National_FS-5500F2.xml:20-21, share/machines/National_FS-5500F1.xml:22"
+    source_ref: "share/machines/National_FS-5500F2.xml:20-21, share/machines/National_FS-5500F1.xml:22, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: fs-5500_superimp.rom
     path: "share/systemroms/fs-5500_superimp.rom"
@@ -315,7 +315,7 @@ files:
     size: 32768
     description: "National FS-5500 Super Impose ROM"
     validation: [sha1]
-    source_ref: "share/machines/National_FS-5500F2.xml:117-118, share/machines/National_FS-5500F1.xml:119"
+    source_ref: "share/machines/National_FS-5500F2.xml:117-118, share/machines/National_FS-5500F1.xml:119, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: nms8245_msx2sub.rom
     path: "share/systemroms/nms8245_msx2sub.rom"
@@ -326,7 +326,7 @@ files:
     size: 16384
     description: "Philips NMS 8245 MSX2 Sub ROM (1.05/1.06 and 1.08 revisions)"
     validation: [sha1]
-    source_ref: "share/machines/Philips_NMS_8245.xml:108-110"
+    source_ref: "share/machines/Philips_NMS_8245.xml:108-110, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: vg8020_basic-bios1.rom
     path: "share/systemroms/vg8020_basic-bios1.rom"
@@ -335,7 +335,7 @@ files:
     size: 32768
     description: "Philips VG 8020 MSX1 BIOS and BASIC ROM (also used by AVT DPC-200, Goldstar FC-200, Toshiba HX-20E, HX-22I, HX-51I)"
     validation: [sha1]
-    source_ref: "share/machines/Philips_VG_8020.xml:53-54"
+    source_ref: "share/machines/Philips_VG_8020.xml:53-54, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: svi-738_basic-bios1.rom
     path: "share/systemroms/svi-738_basic-bios1.rom"
@@ -344,7 +344,7 @@ files:
     size: 32768
     description: "Spectravideo SVI-738 MSX1 BIOS and BASIC ROM"
     validation: [sha1]
-    source_ref: "share/machines/Spectravideo_SVI-738.xml:53-54"
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:53-54, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: svi-738_se_basic-bios1.rom
     path: "share/systemroms/svi-738_se_basic-bios1.rom"
@@ -353,7 +353,7 @@ files:
     size: 32768
     description: "Spectravideo SVI-738 (Sweden) MSX1 BIOS and BASIC ROM"
     validation: [sha1]
-    source_ref: "share/machines/Spectravideo_SVI-738_SE.xml:53-54"
+    source_ref: "share/machines/Spectravideo_SVI-738_SE.xml:53-54, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: svi-738_rs232.rom
     path: "share/systemroms/svi-738_rs232.rom"
@@ -362,7 +362,7 @@ files:
     size: 8192
     description: "Spectravideo SVI-738 RS-232 interface ROM"
     validation: [sha1]
-    source_ref: "share/machines/Spectravideo_SVI-738.xml:76-77, share/machines/Spectravideo_SVI-738_SE.xml:76-77"
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:76-77, share/machines/Spectravideo_SVI-738_SE.xml:76-77, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: svi-738_disk.rom
     path: "share/systemroms/svi-738_disk.rom"
@@ -373,4 +373,4 @@ files:
     required: false
     description: "Spectravideo SVI-738 disk controller ROM"
     validation: [sha1]
-    source_ref: "share/machines/Spectravideo_SVI-738.xml:90-93, share/machines/Spectravideo_SVI-738_SE.xml:90-93"
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:90-93, share/machines/Spectravideo_SVI-738_SE.xml:90-93, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"

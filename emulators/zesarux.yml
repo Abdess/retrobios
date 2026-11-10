@@ -1027,15 +1027,6 @@ files:
     source_ref: "src/soundchips/gs.h:34, src/soundchips/gs.h:29, src/soundchips/gs.c:525-545"
     note: "General Sound firmware v1.05a. GS_ROM_SIZE is in KB and the read is GS_ROM_SIZE*1024."
 
-  - name: "gs104.rom"
-    sha1: "c865121306eb3a7d811d82fbcc653b4dc1d6fa3d"
-    size: 32768
-    required: false
-    bundled: true
-    system: sinclair-zx-spectrum
-    source_ref: "src/configure:1933"
-    note: "General Sound firmware v1.04. Shipped alongside gs105a.rom, but GS_ROM_NAME is fixed and there is no option to point the loader elsewhere, so it is usable only in place of gs105a.rom."
-
   # ============================================================
   # Alternate machine ROMs, selectable with --romfile (src/start.c:4877-4881,
   # loaded at src/cpu.c:3776-3779). Documented in the shipped src/ALTERNATEROMS.
