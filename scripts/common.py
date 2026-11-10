@@ -2985,12 +2985,14 @@ def standalone_layout_path(entry: dict, profile: dict) -> str | None:
 
     ``standalone_path`` when the entry has one. A profile with no libretro
     build has one layout, so its ``path`` is that layout: UAE4All2 reads
-    kickstarts/kick13.rom below its working directory.
+    kickstarts/kick13.rom below its working directory. So does an entry only
+    the standalone build reads (``mode: standalone``), whose destination is
+    its ``path``: Dolphin's Load/Firmware/rtl_bt/ under its User directory.
     """
     own = entry.get("standalone_path")
     if own:
         return own
-    if "libretro" in str(profile.get("type", "")):
+    if "libretro" in str(profile.get("type", "")) and entry.get("mode") != "standalone":
         return None
     return entry.get("path") or None
 

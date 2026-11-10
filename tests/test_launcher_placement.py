@@ -784,5 +784,28 @@ class CemuOnRetroDECK(unittest.TestCase):
         self.assertEqual(otp.get("unplaced"), "outside_bios_folder")
 
 
+class DolphinUserDirectory(unittest.TestCase):
+    """EmuELEC runs Dolphin with XDG_DATA_HOME=/storage/roms/dolphin (dolphin.sh:28),
+    RetroDECK links $XDG_DATA_HOME/dolphin-emu/Triforce to bios/Triforce
+    (dolphin/component_prepare.sh:30, 49)."""
+
+    def test_emuelec_installs_the_user_directory_below_its_roms(self) -> None:
+        view = standalone_view("dolphin", "emuelec")
+        placed = {e["name"]: e["standalone_path"] for e in view["files"] if e.get("layout_path")}
+        self.assertEqual(placed["segaboot.gcm"], "dolphin/dolphin-emu/Triforce/segaboot.gcm")
+        # A standalone-only entry's path is its place in the User directory.
+        self.assertEqual(
+            placed["rtl8723a_fw.bin"], "dolphin/dolphin-emu/Load/Firmware/rtl_bt/rtl8723a_fw.bin"
+        )
+        self.assertTrue(all(e.get("unprefixed") for e in view["files"] if e.get("layout_path")))
+
+    def test_retrodeck_places_triforce_alone(self) -> None:
+        view = standalone_view("dolphin", "retrodeck")
+        placed = {e["name"]: e["standalone_path"] for e in view["files"] if e.get("layout_path")}
+        self.assertEqual(placed, {"segaboot.gcm": "Triforce/segaboot.gcm"})
+        (ipl, *_) = [e for e in view["files"] if e["name"] == "IPL.bin"]
+        self.assertEqual(ipl.get("unplaced"), "outside_bios_folder")
+
+
 if __name__ == "__main__":
     unittest.main()
