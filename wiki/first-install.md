@@ -68,8 +68,7 @@ On Batocera, Recalbox and similar setups, see
 
 ## 2. Check the setup it found
 
-With one setup found, it opens on step 3, its folder on the second line.
-With none or several, it asks:
+With one setup, it opens on **Install**. Otherwise:
 
 ```
  RetroBIOS: Where to install?
@@ -81,8 +80,8 @@ With none or several, it asks:
 
 - **Right folder?** Press Enter.
 - **Wrong folder, or a handheld's SD card?** Choose
-  **Another setup or folder** (**Change where** from step 3).
-  Press / and type the device (Miyoo Mini), or browse.
+  **Another setup or folder**. Press / and type the device (Miyoo Mini),
+  or browse.
 
 Arrows move, Enter chooses, Esc goes back (A and B on a handheld). On a
 touch screen, tap a row twice to open it, once to tick a box.
@@ -90,9 +89,9 @@ touch screen, tap a row twice to open it, once to tick a box.
 ## 3. Install
 
 Press Enter on **Install**. **Choose systems** picks the consoles to
-keep. Run it again later: it keeps that choice, one press.
+keep.
 
-**Game data** (only a game reads it) has its own row.
+**Game data** has its own row.
 
 **Old card?** In a card reader, choose **Copy the BIOS files from an old
 card or a folder**, then the card.
