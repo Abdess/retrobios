@@ -115,6 +115,36 @@ class AgnosticScan(unittest.TestCase):
                 _agnostic_scan_extras({"l": placeholders}, {"l"}, db, by_name, set(), ""), [])
 
 
+class OneContentTwoPaths(unittest.TestCase):
+    """A standalone copy reads one file the manifest carries at two paths.
+
+    The libretro PS2 cores put DuckStation's ps2_scph50006.bin under
+    pcsx2/bios/ beside the BIOS root copy, and the copy into DuckStation's
+    folder was dropped as ambiguous on Batocera, Recalbox and RetroBat.
+    """
+
+    DUCK = {"data_root": {"linux": {"path": "~/.local/share/duckstation", "source_ref": "x"}},
+            "files": [{"name": "ps2_scph50006.bin", "standalone_path": "bios/ps2_scph50006.bin"}]}
+
+    def _copies(self, entries):
+        from generate_pack import _profile_copies
+
+        return _profile_copies({"duckstation": self.DUCK}, list(entries), [], entries)
+
+    def test_same_bytes_take_the_copy_that_serves_the_emulator(self):
+        (copy,) = self._copies({
+            "pcsx2/bios/ps2_scph50006.bin": {"sha1": "a", "cores": ["lrps2"]},
+            "ps2_scph50006.bin": {"sha1": "a", "cores": ["duckstation", "pcsx2"]},
+        })
+        self.assertEqual(copy["file"], "ps2_scph50006.bin")
+
+    def test_other_bytes_under_one_name_designate_nothing(self):
+        self.assertEqual(self._copies({
+            "pcsx2/bios/ps2_scph50006.bin": {"sha1": "a", "cores": ["lrps2"]},
+            "ps2_scph50006.bin": {"sha1": "b", "cores": ["duckstation"]},
+        }), [])
+
+
 class BundledHashIsProof(unittest.TestCase):
     """A bundled file with a declared hash is served by those bytes or flagged.
 
