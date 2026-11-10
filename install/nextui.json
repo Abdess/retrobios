@@ -6,7 +6,7 @@
   "platform": "nextui",
   "display_name": "NextUI",
   "version": "2026-10-20",
-  "generated": "2026-11-06T13:49:27Z",
+  "generated": "2026-11-09T23:51:30Z",
   "base_destination": "",
   "detect": [
     {
@@ -17,22 +17,12 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 402,
-  "total_size": 708030045,
-  "pack_files": 4094,
-  "pack_size": 794457274,
-  "total_omitted": 4,
+  "total_files": 404,
+  "total_size": 708293291,
+  "pack_files": 4096,
+  "pack_size": 794720520,
+  "total_omitted": 3,
   "omitted_files": [
-    {
-      "dest": "Bios/FBN/sfiii2a.zip",
-      "name": "sfiii2a.zip",
-      "system": "capcom-cps3",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "fbneo"
-      ]
-    },
     {
       "dest": "Bios/FBN/svgpcb.zip",
       "name": "svgpcb.zip",
@@ -67,20 +57,41 @@
     }
   ],
   "core_names": {
+    "a5200": [],
+    "beetle_vb": [
+      "beetle-vb",
+      "mednafen_vb",
+      "vb"
+    ],
+    "bluemsx": [],
+    "cap32": [
+      "caprice32"
+    ],
+    "fake08": [
+      "fake_08"
+    ],
     "fbneo": [
       "FBNEOSA",
       "fbneo_32b",
       "fbneo_plus",
       "km_fbneo_xtreme_amped"
     ],
+    "fceumm": [],
+    "gambatte": [],
+    "gearcoleco": [],
     "gpsp": [
       "gpsp_ezode_mod",
       "gpsp_plus"
     ],
+    "handy": [],
     "mednafen_pce_fast": [
       "beetle-pce-fast",
       "beetle_pce_fast",
       "pce_fast"
+    ],
+    "mednafen_supafaust": [
+      "beetle_supafaust",
+      "supafaust"
     ],
     "mgba": [
       "mgba_fork",
@@ -94,15 +105,28 @@
       "pcsx_rearmed_neon",
       "pcsx_rearmed_rumble"
     ],
+    "picodrive": [],
+    "pokemini": [],
+    "prboom": [],
+    "prosystem": [],
+    "puae2021": [],
+    "race": [],
     "snes9x": [
       "pocketsnes",
       "snes9x_next"
     ],
+    "stella2014": [],
     "vice_x128": [
       "x128"
     ],
     "vice_x64": [
       "x64"
+    ],
+    "vice_xpet": [
+      "xpet"
+    ],
+    "vice_xplus4": [
+      "xplus4"
     ],
     "vice_xvic": [
       "xvic"
@@ -1572,7 +1596,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/32X/us_scd1_9210.bin",
@@ -1590,7 +1614,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/32X/bios_CD_U.bin",
@@ -1608,7 +1632,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/32X/eu_mcd2_9306.bin",
@@ -1644,7 +1668,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/32X/eu_mcd1_9210.bin",
@@ -1662,7 +1686,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/32X/bios_CD_E.bin",
@@ -1680,7 +1704,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/32X/jp_mcd2_921222.bin",
@@ -1714,7 +1738,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/32X/jp_mcd1_9111.bin",
@@ -1731,7 +1755,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/32X/bios_CD_J.bin",
@@ -1748,7 +1772,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/32X/32X_G_BIOS.BIN",
@@ -1824,7 +1848,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/GG/us_scd1_9210.bin",
@@ -1842,7 +1866,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/GG/bios_CD_U.bin",
@@ -1860,7 +1884,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/GG/eu_mcd2_9306.bin",
@@ -1896,7 +1920,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/GG/eu_mcd1_9210.bin",
@@ -1914,7 +1938,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/GG/bios_CD_E.bin",
@@ -1932,7 +1956,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/GG/jp_mcd2_921222.bin",
@@ -1966,7 +1990,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/GG/jp_mcd1_9111.bin",
@@ -1983,7 +2007,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/GG/bios_CD_J.bin",
@@ -2000,7 +2024,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/GG/32X_G_BIOS.BIN",
@@ -2076,7 +2100,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/MD/us_scd1_9210.bin",
@@ -2094,7 +2118,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/MD/bios_CD_U.bin",
@@ -2112,7 +2136,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/MD/eu_mcd2_9306.bin",
@@ -2148,7 +2172,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/MD/eu_mcd1_9210.bin",
@@ -2166,7 +2190,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/MD/bios_CD_E.bin",
@@ -2184,7 +2208,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/MD/jp_mcd2_921222.bin",
@@ -2218,7 +2242,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/MD/jp_mcd1_9111.bin",
@@ -2235,7 +2259,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/MD/bios_CD_J.bin",
@@ -2252,7 +2276,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/MD/32X_G_BIOS.BIN",
@@ -2328,7 +2352,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SEGACD/us_scd1_9210.bin",
@@ -2346,7 +2370,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SEGACD/bios_CD_U.bin",
@@ -2364,7 +2388,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SEGACD/eu_mcd2_9306.bin",
@@ -2400,7 +2424,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SEGACD/eu_mcd1_9210.bin",
@@ -2418,7 +2442,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SEGACD/bios_CD_E.bin",
@@ -2436,7 +2460,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SEGACD/jp_mcd2_921222.bin",
@@ -2470,7 +2494,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SEGACD/jp_mcd1_9111.bin",
@@ -2487,7 +2511,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SEGACD/bios_CD_J.bin",
@@ -2504,7 +2528,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SEGACD/32X_G_BIOS.BIN",
@@ -2580,7 +2604,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SG1000/us_scd1_9210.bin",
@@ -2598,7 +2622,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SG1000/bios_CD_U.bin",
@@ -2616,7 +2640,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SG1000/eu_mcd2_9306.bin",
@@ -2652,7 +2676,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SG1000/eu_mcd1_9210.bin",
@@ -2670,7 +2694,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SG1000/bios_CD_E.bin",
@@ -2688,7 +2712,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SG1000/jp_mcd2_921222.bin",
@@ -2722,7 +2746,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SG1000/jp_mcd1_9111.bin",
@@ -2739,7 +2763,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SG1000/bios_CD_J.bin",
@@ -2756,7 +2780,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SG1000/32X_G_BIOS.BIN",
@@ -2832,7 +2856,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SMS/us_scd1_9210.bin",
@@ -2850,7 +2874,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SMS/bios_CD_U.bin",
@@ -2868,7 +2892,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SMS/eu_mcd2_9306.bin",
@@ -2904,7 +2928,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SMS/eu_mcd1_9210.bin",
@@ -2922,7 +2946,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SMS/bios_CD_E.bin",
@@ -2940,7 +2964,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SMS/jp_mcd2_921222.bin",
@@ -2974,7 +2998,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "Bios/SMS/jp_mcd1_9111.bin",
@@ -2991,7 +3015,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "Bios/SMS/bios_CD_J.bin",
@@ -3008,7 +3032,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 4
+      "priority": 7
     },
     {
       "dest": "Bios/SMS/32X_G_BIOS.BIN",
@@ -3935,6 +3959,16 @@
       ]
     },
     {
+      "dest": "Bios/FBN/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "Bios/FBN/sfiii2h.zip",
       "sha1": "5e74fb0a1fab8a85a941e932049cb2ef79e64e9c",
       "sha256": "1cd62567e4e032b6c91dd1796eec072e6b2bfa1de4ca0b75b7f83291dd815e22",
@@ -4530,6 +4564,16 @@
       "sha256": "0764a77f66b78fefb7f5e283c72dfcce57761cc94a0da9b6f9d390277241bc1b",
       "size": 131904,
       "repo_path": "bios/Arcade/Arcade/sfiii2.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "Bios/FBN/fbneo/sfiii2a.zip",
+      "sha1": "e524c5f0214d59048c592f9fca194a3d7519e92f",
+      "sha256": "1b3da789141e5865f7bebe7657fdb01949f7485cb1e422c5c9c6ae3331318751",
+      "size": 131623,
+      "repo_path": "bios/Arcade/Arcade/sfiii2a.zip",
       "cores": [
         "fbneo"
       ]

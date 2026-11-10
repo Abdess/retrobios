@@ -344,12 +344,47 @@
         "description": "Dragon Professional (Alpha) boot ROM v0.4"
       },
       {
+        "filename": "cdos20.rom",
+        "system": "tanodragon",
+        "description": "Cumana DOS 2.0 (Dragon compatible DOS)"
+      },
+      {
+        "filename": "sdbdos.rom",
+        "system": "tanodragon",
+        "description": "SDBDOS (MOOH memory cartridge ROM)"
+      },
+      {
+        "filename": "dragonfly-2.3.rom",
+        "system": "tanodragon",
+        "description": "Ikon Ultra Drive Dragonfly ROM 2.3"
+      },
+      {
+        "filename": "dragonfly-1.3.rom",
+        "system": "tanodragon",
+        "description": "Ikon Ultra Drive Dragonfly ROM 1.3"
+      },
+      {
         "filename": "deluxe.rom",
         "md5": "e27c02fd766e8710240c59ef5424a6ef",
         "sha256": "04183f5d658b6f9860c51c4c4778b3325a4c1529b66cc6c7a53cd1ff5e8c5676",
         "system": "coco",
         "description": "Tandy Deluxe CoCo Advanced BASIC (bank 0)",
         "required": "Required"
+      },
+      {
+        "filename": "adv071_u24.rom",
+        "system": "coco",
+        "description": "Tandy Deluxe CoCo ROM bank 1"
+      },
+      {
+        "filename": "adv072_u24.rom",
+        "system": "coco",
+        "description": "Tandy Deluxe CoCo ROM bank 2"
+      },
+      {
+        "filename": "adv073-2_u24.rom",
+        "system": "coco",
+        "description": "Tandy Deluxe CoCo ROM bank 3"
       },
       {
         "filename": "mx1600bas.rom",
@@ -368,11 +403,26 @@
         "required": "Required"
       },
       {
+        "filename": "hdbdw3bck.rom",
+        "system": "coco",
+        "description": "RS-DOS with Becker port (DriveWire)"
+      },
+      {
+        "filename": "cp450dsk.rom",
+        "system": "coco",
+        "description": "Prologica CP-450 DOS cartridge"
+      },
+      {
         "filename": "orch90.rom",
         "md5": "171fb7a5d3b808565295b45c773abaaf",
         "sha256": "1a5a3e95522296f66a192e9a7ca0725ecc88862f9bb31f50ef37ae789404692f",
         "system": "coco",
         "description": "Orchestra-90 CC sound cartridge ROM"
+      },
+      {
+        "filename": "yados.rom",
+        "system": "coco",
+        "description": "YADOS (Glenside IDE interface ROM)"
       }
     ]
   }

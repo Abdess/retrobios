@@ -1,15 +1,15 @@
 {
   "platform": "misterfpga",
   "originals": {
-    "bios_db.json.zip": "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/7cfa7a3e84af078d0efba74fa46c50357c4f567c/bios_db.json.zip"
+    "bios_db.json.zip": "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/06aad7b223950c974dcccc48498ab57f6477cfd7/bios_db.json.zip"
   },
   "files": [
     "bios_db.json",
     "bios_db.json.zip"
   ],
-  "summary": "81 kept",
+  "summary": "88 kept",
   "counts": {
-    "kept": 81,
+    "kept": 88,
     "added": 0,
     "not_added": 0,
     "not_kept": 0
@@ -23,6 +23,8 @@
   "required_aligned": 0,
   "withheld": [],
   "found_by_content": 0,
+  "unattributed": [],
   "removal_candidates": [],
+  "doubled": [],
   "invalid": []
 }

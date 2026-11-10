@@ -415,18 +415,18 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-11-09, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-10, printed this:
 
 ```
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
-  15013 files (7.6 GB)
-    3324 BIOS files (4.4 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
+  15012 files (7.6 GB)
+    3323 BIOS files (4.4 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 156 files are not in the collection, 1 of them required.
 
 Checking existing files...
-  0 in place, 15013 missing, 0 wrong copies
+  0 in place, 15012 missing, 0 wrong copies
 ```
 <!-- /generated: dry-run -->
 
@@ -445,7 +445,7 @@ the installer can fetch them.
 <!-- generated: run-date -->
 
 Each line a first install prints, and what it means. The run below is a
-Batocera install into an empty folder, from the list of 2026-11-09.
+Batocera install into an empty folder, from the list of 2026-11-10.
 The figures change with each release.
 <!-- /generated: run-date -->
 
@@ -486,13 +486,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  19062 files (10.0 GB)
-    3804 BIOS files (5.3 GB), 11550 game data files (4.6 GB) and 3708 data files (81.9 MB).
+  19074 files (10.1 GB)
+    3804 BIOS files (5.3 GB), 11562 game data files (4.7 GB) and 3708 data files (81.9 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   Not installable: 675 files, 79 of them required. Why: no system runs the core (83), not found (592).
 
 Checking existing files...
-  0 in place, 19062 missing, 0 wrong copies
+  0 in place, 19074 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -507,10 +507,10 @@ as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 15354 files (9.9 GB)...
+Downloading 15366 files (10.0 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/15354] panafz1.bin ok
-  [2/15354] panafz10.bin ok
+  [1/15366] panafz1.bin ok
+  [2/15366] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -522,8 +522,8 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 19062 files installed.
-  Installed: 3804 BIOS files, 11550 game data files and 3708 data files.
+Done. 19074 files installed.
+  Installed: 3804 BIOS files, 11562 game data files and 3708 data files.
 BIOS folder: /userdata/bios
 675 files were not installed: the collection does not hold them, or its copy fails their check.
   Not available here: DARK.GOB, DARKWAR.RTL, DARKWAR.WAD and 76 more, game data their games read. Copy them from an owned copy of the game into /userdata/bios/, /userdata/bios/Source/, /userdata/bios/base/ and 10 more folders.
@@ -538,7 +538,7 @@ would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-11-09:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-10:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).
@@ -573,7 +573,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  19062 in place, 0 missing, 0 wrong copies
+  19074 in place, 0 missing, 0 wrong copies
 
   Every file on the list is in place.
 ```
@@ -767,8 +767,8 @@ by `scripts/generate_installer_doc.py`):
 <!-- generated: line-menu -->
 
 ```
-RetroArch: 15013 files, 7.6 GB.
-  3324 BIOS files (4.4 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
+RetroArch: 15012 files, 7.6 GB.
+  3323 BIOS files (4.4 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game data its game reads. Copy it from an owned copy of the game into /home/me/.config/retroarch/system/jazz2/Source/.
@@ -781,8 +781,8 @@ RetroArch: 15013 files, 7.6 GB.
 
   Counted again for these choices. Nothing is written before Enter.
 
-RetroArch: 9905 files, 4.6 GB.
-  3324 BIOS files (4.4 GB) and 6581 data files (135.6 MB). 5108 game data files left out.
+RetroArch: 9904 files, 4.6 GB.
+  3323 BIOS files (4.4 GB) and 6581 data files (135.6 MB). 5108 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
   Same choice without questions: python3 install.py --platform retroarch --dest /home/me/.config/retroarch/system --no-game-data

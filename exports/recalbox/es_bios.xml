@@ -7,18 +7,21 @@
     <bios path="amiga/bios/kick40063.A600"     md5="e40a5dfb3d017ba8779faba30cbd1c8e" mandatory="false" core="amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm" />
     <bios path="amiga/bios/kick02019.AROS.ext" md5="4fa7042d73d0f77bf5723cf8430989bf" mandatory="false" core="amiberry,libretro/uae,libretro/uae4arm" note="AROS Free bios" />
     <bios path="amiga/bios/kick02019.AROS"     md5="186d23cccd9fbd6336d0f988b39dce4d" mandatory="false" core="amiberry,libretro/uae,libretro/uae4arm" note="AROS Free bios" />
-    <bios path="aros-ext.bin" md5="945c364bb9b5f28a04e1003f8b7a469c" core="libretro/amiberry,amiberry" mandatory="false" />
-    <bios path="aros-rom.bin" md5="69179a8479d1ba279c786094ce343386" core="libretro/amiberry,amiberry" mandatory="false" />
-    <bios path="whdboot/WHDLoad" md5="6670a9571f235ec31b8bbd48fc18f428" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/JST" md5="2a3a61bbd7c351751506e22a4354b76a" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/AmiQuit" md5="36ab26d3b855e634fdda062c052cd52b" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/game-data/whdload_db.json" md5="51d44cd24e16fbb395b1bfefbaacd375" core="libretro/amiberry" mandatory="false" />
+    <bios path="kick13.rom" md5="82a21c1890cae844b3df741f2762d48d" core="libretro/amiberry" />
+    <bios path="kick12.rom" md5="85ad74194e87c08904327de1a9443b7a" core="libretro/amiberry" mandatory="false" />
+    <bios path="kick20.rom" md5="dc10d7bdd1b6f450773dfb558477c230" core="libretro/amiberry" mandatory="false" />
+    <bios path="kick205.rom" md5="465646c9b6729f77eea5314d1f057951" core="libretro/amiberry" mandatory="false" />
+    <bios path="whdboot/game-data/whdload_db.json" md5="b6012c4c6a6c82bbcdd208e4ee47a143" core="libretro/amiberry" mandatory="false" />
     <bios path="whdboot/save-data/Kickstarts/kick33180.A500.RTB" md5="c993feb1eeddec1d2e687aa514231028" core="libretro/amiberry" mandatory="false" />
     <bios path="whdboot/save-data/Kickstarts/kick34005.A500.RTB" md5="7eb13d974af0992d672b67c317a7e0a1" core="libretro/amiberry" mandatory="false" />
     <bios path="whdboot/save-data/Kickstarts/kick40063.A600.RTB" md5="3f97c1963d82c808ef29e7c984c4c688" core="libretro/amiberry" mandatory="false" />
     <bios path="whdboot/save-data/Kickstarts/kick40068.A1200.RTB" md5="547b42b7b070c7f227ea45e0986d57a1" core="libretro/amiberry" mandatory="false" />
     <bios path="whdboot/save-data/Kickstarts/kick40068.A4000.RTB" md5="f89f19b858ea6b1a04327c6f71ee1600" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/save-data/Kickstarts/kick31034.A1000.RTB" md5="c5ba6165df42fc69b32942b248fca725" core="libretro/amiberry" mandatory="false" />
+    <bios path="whdboot/WHDLoad" md5="6670a9571f235ec31b8bbd48fc18f428" core="libretro/amiberry" mandatory="false" />
+    <bios path="whdboot/JST" md5="2a3a61bbd7c351751506e22a4354b76a" core="libretro/amiberry" mandatory="false" />
+    <bios path="whdboot/AmiQuit" md5="36ab26d3b855e634fdda062c052cd52b" core="libretro/amiberry" mandatory="false" />
+    <bios path="aros-ext.bin" md5="d2ce6748e8e42222662e14359f68dad5" core="amiberry" mandatory="false" />
+    <bios path="aros-rom.bin" md5="48d38fc3fcf2ad7bca5ec5191d02e451" core="amiberry" mandatory="false" />
     <bios path="uae_data/drive_click_A500.wav" md5="6c5b44c1a2bcee664129f850bfe4ed8a" core="libretro/puae,libretro/puae2021" mandatory="false" />
     <bios path="uae_data/drive_spin_A500.wav" md5="7401f854a75f9ede18769168ab896a2a" core="libretro/puae,libretro/puae2021" mandatory="false" />
     <bios path="uae_data/drive_spinnd_A500.wav" md5="f9d954879fee8e96baa93d6139077cdb" core="libretro/puae,libretro/puae2021" mandatory="false" />
@@ -49,7 +52,7 @@
   </system>
   <system fullname="Apple Macintosh" platform="macintosh">
     <bios path="macintosh/MacII.ROM" md5="66223be1497460f1e60885eeb35e03cc" core="libretro/minivmac" />
-    <bios path="macintosh/MinivMacBootv2.dsk" md5="16ddb8838d48be26e471a2f2bb85a961,e66dc7952c8b9673868ad2faba3c0d20" hashMatchMandatory="false" core="libretro/minivmac" mandatory="false" />
+    <bios path="macintosh/MinivMacBootv2.dsk" md5="16ddb8838d48be26e471a2f2bb85a961,e66dc7952c8b9673868ad2faba3c0d20" hashMatchMandatory="false" core="libretro/minivmac" />
   </system>
   <system fullname="Atari 8Bits" platform="atari800">
     <bios path="atari800/ATARIBAS.ROM" md5="0bac0c6a50104045d902df4503a4c30b" core="libretro/atari800" mandatory="false" />
@@ -150,7 +153,7 @@
     <bios path="np2kai/font.rom"       md5="38d32748ae49d1815b0614970849fd40,fd0b856899aec843cbe69d2940df547f,
                                             4133b0be0d470920da60b9ed28d2614f,693fd1da3239d4bbeafc77d211718fc5,
                                             829b963e21334e0fc2092ebd58f2ab4a,add4a225048c85ca2bc588696c6ecdc5,
-                                            ca87908a99ea423093f6d497fc367f7d" hashMatchMandatory="false" core="libretro/np2kai" />
+                                            ca87908a99ea423093f6d497fc367f7d" hashMatchMandatory="false" core="libretro/np2kai" mandatory="false" />
     <bios path="np2kai/itf.rom"        md5="1d295699ffeab0f0e24e09381299259d,72ea51443070f0e9212bfc9b793ee28e,
                                             a13d96da03a28af8418d7f86ab951f1a,b49ea39a1f730f1c966babc11961dc9a,
                                             e9fc3890963b12cf15d0a2eea5815b72" hashMatchMandatory="false" core="libretro/np2kai" />
@@ -384,6 +387,7 @@
     <bios path="oricutron/teleass.rom"  md5="2324c9cc227c1327a72a667c97ed2990" core="oricutron" />
     <bios path="oricutron/hyperbas.rom" md5="364bf095e0dc4222d75354d50b8cddfc" core="oricutron" />
     <bios path="oricutron/telmon24.rom" md5="9a432244d9ee4a49e8ddcde64af94e05" core="oricutron" />
+    <bios path="8dos.rom" md5="4a1ff5f8719d67dafcf85ac61959cdb6" core="oricutron" mandatory="false" />
   </system>
   <system fullname="Spectravideo" platform="spectravideo">
     <bios path="Machines/SVI - Spectravideo SVI-318/svi318.rom"              md5="ee6ad7ea29e791b03a28a9443e622648" core="libretro/bluemsx" note="Get from http://bluemsx.msxblue.com/rel_download/blueMSXv282full.zip" />
@@ -695,7 +699,7 @@
   </system>
   <system fullname="Microsoft Xbox" platform="xbox">
     <bios path="xbox/Complex_4627.bin" md5="39cee882148a87f93cb440b99dde3ceb" core="xemu" mandatory="true" hashMatchMandatory="true" />
-    <bios path="xbox/mcpx_1.0.bin" md5="d49c52a4102f6df7bcf8d0617ac475ed" core="xemu" mandatory="true" hashMatchMandatory="true" />
+    <bios path="xbox/mcpx_1.0.bin" md5="d49c52a4102f6df7bcf8d0617ac475ed" core="xemu" mandatory="false" hashMatchMandatory="true" />
   </system>
   <system fullname="ScummVM" platform="scummvm">
     <bios path="scummvm/MT32_CONTROL.ROM" md5="5626206284b22c2734f3e9efefcd2675" mandatory="false" hashMatchMandatory="true" core="libretro/scummvm,scummvm" />

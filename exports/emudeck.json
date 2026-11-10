@@ -10,7 +10,7 @@
   "counts": {
     "kept": 170,
     "added": 0,
-    "not_added": 2745,
+    "not_added": 2809,
     "not_kept": 0
   },
   "changes": [],
@@ -21,7 +21,8 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 107,
+  "found_by_content": 301,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "sony-playstation",
@@ -84,6 +85,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -101,6 +103,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -118,6 +121,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -135,6 +139,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -152,6 +157,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -169,6 +175,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -186,6 +193,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -203,6 +211,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -220,6 +229,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -237,6 +247,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -254,6 +265,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -271,6 +283,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -288,6 +301,7 @@
         "clownmdemu",
         "genesis_plus_gx",
         "genesis_plus_gx_wide",
+        "jgenesis",
         "picodrive",
         "picodrive"
       ],
@@ -302,6 +316,7 @@
       "cores_examined": [
         "flycast",
         "flycast2021",
+        "parallel_dc",
         "redream",
         "retrodream"
       ],
@@ -316,6 +331,22 @@
       "cores_examined": [
         "flycast",
         "flycast2021",
+        "parallel_dc",
+        "redream",
+        "retrodream"
+      ],
+      "unresolved_cores": []
+    },
+    {
+      "system": "sega-dreamcast",
+      "name": "sega-dreamcast:0a93f7940c455905bea6e392dfde92a4",
+      "destination": "sega-dreamcast:0a93f7940c455905bea6e392dfde92a4",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [
+        "flycast",
+        "flycast2021",
+        "parallel_dc",
         "redream",
         "retrodream"
       ],
@@ -381,5 +412,6 @@
       "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }

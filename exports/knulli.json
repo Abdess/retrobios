@@ -6,11 +6,11 @@
   "files": [
     "knulli-systems"
   ],
-  "summary": "566 kept, 122 files added, 4 hashes updated to the emulator source",
+  "summary": "566 kept, 104 files added, 3 hashes updated to the emulator source",
   "counts": {
     "kept": 566,
-    "added": 122,
-    "not_added": 1868,
+    "added": 104,
+    "not_added": 2006,
     "not_kept": 0
   },
   "changes": [
@@ -46,15 +46,6 @@
       "new": {
         "md5": "796f62574413bc59ca767063b3184f90"
       }
-    },
-    {
-      "kind": "hash_updated",
-      "system": "neogeo",
-      "name": "neogeo.zip",
-      "destination": "neogeo.zip",
-      "field": "md5",
-      "old": "dffb72f116d36d025068b23970a4f6df",
-      "new": "00dad01abdbf8ea9e79ad2fe11bdb182"
     },
     {
       "kind": "added",
@@ -201,17 +192,6 @@
     },
     {
       "kind": "added",
-      "system": "dreamcast",
-      "name": "dc_bios.bin",
-      "destination": "dc/boot.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "e10c53c2f8b90bab96ead2d368858623"
-      }
-    },
-    {
-      "kind": "added",
       "system": "psx",
       "name": "scph5903.bin",
       "destination": "scph5903.bin",
@@ -249,39 +229,6 @@
       "field": "md5",
       "old": "87b665fce118f76251271c3732532777",
       "new": "23031f25602a52c2df32c39554b0c55e"
-    },
-    {
-      "kind": "added",
-      "system": "nds",
-      "name": "nds_bios_arm9.bin",
-      "destination": "system/nds_bios_arm9.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "a392174eb3e572fed6447e956bde4b25"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "nds",
-      "name": "nds_bios_arm7.bin",
-      "destination": "system/nds_bios_arm7.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "df692a80a5b1bc90728bc3dfc76cd948"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "nds",
-      "name": "nds_firmware.bin",
-      "destination": "system/nds_firmware.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "3c704824663ce26b6a1ed4d85238ae5b"
-      }
     },
     {
       "kind": "hash_updated",
@@ -433,160 +380,6 @@
       "old": null,
       "new": {
         "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "NMS8245SystemROM1.08.bin",
-      "destination": "openmsx/share/systemroms/NMS8245SystemROM1.08.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "ee02cf1a80bab82c3b19a7dbaa1c0d25"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fmpac.rom",
-      "destination": "openmsx/share/systemroms/fmpac.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "398856474188363d68d5744d2a867e90"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "ide250.dat",
-      "destination": "openmsx/share/systemroms/ide250.dat",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "26befc02fc1313b1c1609c74bdb4cac3"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "COLECO.ROM",
-      "destination": "openmsx/share/systemroms/COLECO.ROM",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "2c66f5911e5b42b8ebe113403548eee7"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "svi-3x8_v111.rom",
-      "destination": "openmsx/share/systemroms/svi-3x8_v111.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "352f054ab09605070bdff49d73f335cc"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "px-7_basic-bios1.rom",
-      "destination": "openmsx/share/systemroms/px-7_basic-bios1.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "9218f6dd89f7ba01e3090d44721b4260"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "cf-3300_basic-bios1.rom",
-      "destination": "openmsx/share/systemroms/cf-3300_basic-bios1.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "f873f1260b14f1468fa118778ae1c3d2"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "cf-3300_disk.rom",
-      "destination": "openmsx/share/systemroms/cf-3300_disk.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "318b6aa76da71c54ccad7734356e1902"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_basic-bios2.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_basic-bios2.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "5bf4fdfd3c3ffea3e573b386550cb3fa"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_msx2sub.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_msx2sub.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "dcd5e2388115172f2fb48875b2089dbf"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_kanjibasic.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_kanjibasic.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "afbe6ba903453902540ae988cc89dc7b"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_kanjifont.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_kanjifont.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "090539674630c1338a90a1df943a93e2"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_superimp.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_superimp.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "7eb6ae0fbe9736b20dda8dcbd5064f67"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "vg8020_basic-bios1.rom",
-      "destination": "openmsx/share/systemroms/vg8020_basic-bios1.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "a0452dbf5ace7d2e49d0a8029efed09a"
       }
     },
     {
@@ -1385,7 +1178,7 @@
       "kind": "added",
       "system": "gamecube",
       "name": "codehandler.bin",
-      "destination": "Sys/codehandler.bin",
+      "destination": "codehandler.bin",
       "field": null,
       "old": null,
       "new": {
@@ -1394,7 +1187,6 @@
     }
   ],
   "hashes_updated": [
-    "neogeo/neogeo.zip md5",
     "nds/dsi_bios7.bin md5",
     "nds/dsi_bios9.bin md5",
     "msx/MSX.ROM md5"
@@ -1405,448 +1197,164 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 114,
+  "found_by_content": 241,
+  "unattributed": [],
   "removal_candidates": [
     {
-      "system": "atarist",
-      "name": "tos100fr.img",
-      "destination": "tos100fr.img",
+      "system": "msx2+",
+      "name": "fs-a1wsx_basic-bios2p.rom",
+      "destination": "openmsx/fs-a1wsx_basic-bios2p.rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos100us.img",
-      "destination": "tos100us.img",
+      "system": "msx2+",
+      "name": "fs-a1wsx_fmbasic.rom",
+      "destination": "openmsx/fs-a1wsx_fmbasic.rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos102de.img",
-      "destination": "tos102de.img",
+      "system": "msx2+",
+      "name": "fs-a1wsx_firmware.rom",
+      "destination": "openmsx/fs-a1wsx_firmware.rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos102fr.img",
-      "destination": "tos102fr.img",
+      "system": "msx2+",
+      "name": "phc-70fd2_basickun.rom",
+      "destination": "openmsx/phc-70fd2_basickun.rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos102uk.img",
-      "destination": "tos102uk.img",
+      "system": "msx1",
+      "name": "px-7_pbasic.rom",
+      "destination": "openmsx/px-7_pbasic.rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos104de.img",
-      "destination": "tos104de.img",
+      "system": "msxturbor",
+      "name": "fs-a1gt_firmware.rom",
+      "destination": "openmsx/fs-a1gt_firmware.rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos104es.img",
-      "destination": "tos104es.img",
+      "system": "msxturbor",
+      "name": "ide250.zip",
+      "destination": "openmsx/ide250.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos104fr.img",
-      "destination": "tos104fr.img",
+      "system": "msxturbor",
+      "name": "phc-70fd2_basickun.rom",
+      "destination": "openmsx/phc-70fd2_basickun.rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bluemsx",
         "clk",
-        "hatari",
-        "hatarib"
+        "fbneo",
+        "fmsx"
       ],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos104uk.img",
-      "destination": "tos104uk.img",
+      "system": "fmtowns",
+      "name": "FMT_DIC.ROM",
+      "destination": "fmtowns/FMT_DIC.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos104us.img",
-      "destination": "tos104us.img",
+      "system": "fmtowns",
+      "name": "FMT_DOS.ROM",
+      "destination": "fmtowns/FMT_DOS.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos106de.img",
-      "destination": "tos106de.img",
+      "system": "fmtowns",
+      "name": "FMT_F20.ROM",
+      "destination": "fmtowns/FMT_F20.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos106es.img",
-      "destination": "tos106es.img",
+      "system": "fmtowns",
+      "name": "FMT_FNT.ROM",
+      "destination": "fmtowns/FMT_FNT.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
-      "system": "atarist",
-      "name": "tos106fr.img",
-      "destination": "tos106fr.img",
+      "system": "fmtowns",
+      "name": "FMT_SYS.ROM",
+      "destination": "fmtowns/FMT_SYS.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos106uk.img",
-      "destination": "tos106uk.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos106us.img",
-      "destination": "tos106us.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos162de.img",
-      "destination": "tos162de.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos162fr.img",
-      "destination": "tos162fr.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos162uk.img",
-      "destination": "tos162uk.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos162us.img",
-      "destination": "tos162us.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos205de.img",
-      "destination": "tos205de.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos205es.img",
-      "destination": "tos205es.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos205fr.img",
-      "destination": "tos205fr.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos205it.img",
-      "destination": "tos205it.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos205us.img",
-      "destination": "tos205us.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos206de.img",
-      "destination": "tos206de.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos206fr.img",
-      "destination": "tos206fr.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos206.img",
-      "destination": "tos206.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos206uk.img",
-      "destination": "tos206uk.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos206us.img",
-      "destination": "tos206us.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos306de.img",
-      "destination": "tos306de.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos306uk.img",
-      "destination": "tos306uk.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos400.img",
-      "destination": "tos400.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos402.img",
-      "destination": "tos402.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "atarist",
-      "name": "tos404.img",
-      "destination": "tos404.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk",
-        "hatari",
-        "hatarib"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1855,9 +1363,7 @@
       "destination": "fmtmarty.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1866,9 +1372,7 @@
       "destination": "fmtmarty.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1877,9 +1381,7 @@
       "destination": "fmtmarty.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1888,9 +1390,7 @@
       "destination": "fmtowns.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1899,9 +1399,7 @@
       "destination": "fmtowns.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1910,9 +1408,7 @@
       "destination": "fmtowns.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1921,9 +1417,7 @@
       "destination": "fmtowns.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1932,9 +1426,7 @@
       "destination": "fmtowns.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1943,9 +1435,7 @@
       "destination": "fmtownsux.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1954,9 +1444,7 @@
       "destination": "fmtownsux.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1965,9 +1453,7 @@
       "destination": "fmtownsux.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1976,9 +1462,7 @@
       "destination": "fmtownsux.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1987,9 +1471,7 @@
       "destination": "fmtownsux.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -1998,9 +1480,7 @@
       "destination": "fmtownsux.zip",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "tsugaru"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -2009,9 +1489,7 @@
       "destination": "wsh57/scripten.exe",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "future-pinball"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -2038,78 +1516,6 @@
       "unresolved_cores": []
     },
     {
-      "system": "macintosh",
-      "name": "macos608.img",
-      "destination": "macos608.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "mame",
-        "minivmac"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "macintosh",
-      "name": "macos701.img",
-      "destination": "macos701.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "mame",
-        "minivmac"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "macintosh",
-      "name": "macos75.img",
-      "destination": "macos75.img",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "mame",
-        "minivmac"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "macintosh",
-      "name": "mac608.chd",
-      "destination": "mac608.chd",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "mame",
-        "minivmac"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "macintosh",
-      "name": "mac701.chd",
-      "destination": "mac701.chd",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "mame",
-        "minivmac"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "macintosh",
-      "name": "mac755.chd",
-      "destination": "mac755.chd",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "mame",
-        "minivmac"
-      ],
-      "unresolved_cores": []
-    },
-    {
       "system": "coco",
       "name": "coco2.zip",
       "destination": "coco2.zip",
@@ -2302,7 +1708,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2314,7 +1719,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2326,7 +1730,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2338,7 +1741,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2350,7 +1752,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2362,7 +1763,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2374,7 +1774,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2386,7 +1785,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2398,7 +1796,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2410,7 +1807,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2422,7 +1818,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2434,7 +1829,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2446,7 +1840,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2458,7 +1851,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2470,7 +1862,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2482,7 +1873,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2494,7 +1884,6 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "applewin",
         "clk"
       ],
       "unresolved_cores": []
@@ -2518,5 +1907,6 @@
       "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }

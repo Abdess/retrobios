@@ -417,13 +417,6 @@
           "required": "At least one BIOS file required"
         },
         {
-          "filename": "ps2-0230a-20080220.bin",
-          "system": "ps2",
-          "description": "PS2 BIOS image",
-          "required": "Required",
-          "paths": "$bios_path/pcsx2/bios"
-        },
-        {
           "filename": "ps2-0230a-20080220.rom1",
           "system": "ps2",
           "description": "DVD player ROM",
@@ -446,11 +439,6 @@
           "system": "ps2",
           "description": "Mechacon version",
           "paths": "$bios_path/pcsx2/bios"
-        },
-        {
-          "filename": "eeprom.dat",
-          "system": "ps2",
-          "description": "DEV9 EEPROM"
         }
       ]
     }

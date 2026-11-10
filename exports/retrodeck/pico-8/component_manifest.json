@@ -14,21 +14,27 @@
         "system": "pico8",
         "description": "PICO-8 executable",
         "required": "Required",
-        "paths": "$bios_path/pico-8"
+        "paths": "$bios_path/pico-8",
+        "md5": "0d127838e79459da4ae36bb8b2e576ca",
+        "sha256": "b07e76cd6a0336508200be75d67cd893ef90a0a00408163fd33af43ba006eab0"
       },
       {
         "filename": "pico8.dat",
         "system": "pico8",
         "description": "PICO-8 system data file",
         "required": "Required",
-        "paths": "$bios_path/pico-8"
+        "paths": "$bios_path/pico-8",
+        "md5": "10b397305093c80109096319a538ba56",
+        "sha256": "91212d55b540ef2abf9d5df7bb46fb87f41c35f3e9d108ebd8680debab020be2"
       },
       {
         "filename": "pico8_dyn",
         "system": "pico8",
         "description": "Dynamic library for PICO-8",
         "required": "Optional",
-        "paths": "$bios_path/pico-8"
+        "paths": "$bios_path/pico-8",
+        "md5": "724435a9e6f3ef8a55c648fc88651826",
+        "sha256": "ca4e55eda8933a83315d9012de268c4d7dc3d204ba65d19905dccdb882b7a416"
       }
     ]
   }

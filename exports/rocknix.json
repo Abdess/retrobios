@@ -1,17 +1,17 @@
 {
   "platform": "rocknix",
   "originals": {
-    "rocknix-systems": "https://raw.githubusercontent.com/ROCKNIX/distribution/20261001/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems",
-    "emulators/package.mk": "https://raw.githubusercontent.com/ROCKNIX/distribution/20261001/projects/ROCKNIX/packages/virtual/emulators/package.mk"
+    "rocknix-systems": "https://raw.githubusercontent.com/ROCKNIX/distribution/20261101/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems",
+    "emulators/package.mk": "https://raw.githubusercontent.com/ROCKNIX/distribution/20261101/projects/ROCKNIX/packages/virtual/emulators/package.mk"
   },
   "files": [
     "rocknix-systems"
   ],
-  "summary": "38 kept, 1 file added",
+  "summary": "38 kept, 3 files added, 2 hashes updated to the emulator source",
   "counts": {
     "kept": 38,
-    "added": 1,
-    "not_added": 1727,
+    "added": 3,
+    "not_added": 1829,
     "not_kept": 0
   },
   "changes": [
@@ -25,16 +25,60 @@
       "new": {
         "md5": "1f118b8735fcf40c20b38c3184eebfd9"
       }
+    },
+    {
+      "kind": "hash_updated",
+      "system": "nds",
+      "name": "dsi_bios7.bin",
+      "destination": "dsi_bios7.bin",
+      "field": "md5",
+      "old": "559dae4ea78eb9d67702c56c1d791e81",
+      "new": "322ceeafb77b0cc96a1fcc6271e0e0ae"
+    },
+    {
+      "kind": "hash_updated",
+      "system": "nds",
+      "name": "dsi_bios9.bin",
+      "destination": "dsi_bios9.bin",
+      "field": "md5",
+      "old": "87b665fce118f76251271c3732532777",
+      "new": "23031f25602a52c2df32c39554b0c55e"
+    },
+    {
+      "kind": "added",
+      "system": "psx",
+      "name": "scph5903.bin",
+      "destination": "scph5903.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "81328b966e6dcf7ea1e32e55e1c104bb"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "psx",
+      "name": "ps1_rom.bin",
+      "destination": "ps1_rom.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b"
+      }
     }
   ],
-  "hashes_updated": [],
+  "hashes_updated": [
+    "nds/dsi_bios7.bin md5",
+    "nds/dsi_bios9.bin md5"
+  ],
   "hashes_filled": [],
   "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 132,
+  "found_by_content": 377,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "dreamcast",
@@ -44,37 +88,14 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "flycast",
-        "flycast2021",
-        "redream",
-        "retrodream"
+        "flycast2021"
       ],
       "unresolved_cores": [
-        "ares-sa",
-        "armsx2-sa",
-        "bigpemu-sa",
-        "cemu-sa",
-        "dolphin-sa",
-        "drastic-sa",
-        "duckstation-sa",
-        "flycast-sa",
-        "gopher64-sa",
-        "gzdoom-sa",
-        "hatarisa",
         "heroic",
-        "melonds-sa",
-        "mupen64plus-sa",
-        "ppsspp-sa",
-        "rpcs3-sa",
-        "scummvm-sa",
-        "skyemu-sa",
-        "steam",
-        "supermodel-sa",
-        "vice-sa",
-        "vita3k-sa",
-        "xemu-sa",
-        "yabasanshiro-sa"
+        "steam"
       ]
     }
   ],
+  "doubled": [],
   "invalid": []
 }

@@ -5,8 +5,8 @@
   "categorized": true,
   "platform": "romm",
   "display_name": "RomM",
-  "version": "5.4.0",
-  "generated": "2026-11-06T13:49:27Z",
+  "version": "5.4.1",
+  "generated": "2026-11-10T01:52:59Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -22,11 +22,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 468,
-  "total_size": 872741451,
-  "pack_files": 470,
-  "pack_size": 872741451,
-  "total_omitted": 773,
+  "total_files": 466,
+  "total_size": 870610603,
+  "pack_files": 468,
+  "pack_size": 870610603,
+  "total_omitted": 782,
   "omitted_files": [
     {
       "dest": "32X_G_BIOS.BIN",
@@ -4853,6 +4853,16 @@
       ]
     },
     {
+      "dest": "sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "sfiii2h.zip",
       "name": "sfiii2h.zip",
       "system": "capcom-cps3",
@@ -8113,6 +8123,86 @@
       ]
     },
     {
+      "dest": "xemu/Chihiro/chihiro_xbox_bios.bin",
+      "name": "chihiro_xbox_bios.bin",
+      "system": "sega-chihiro",
+      "required": true,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/fpr21042_m29w160et.bin",
+      "name": "fpr21042_m29w160et.bin",
+      "system": "sega-chihiro",
+      "required": true,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/ic10_g24lc64.bin",
+      "name": "ic10_g24lc64.bin",
+      "system": "sega-chihiro",
+      "required": true,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/ic11_24lc024.bin",
+      "name": "ic11_24lc024.bin",
+      "system": "sega-chihiro",
+      "required": true,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/pc20_g24lc64.bin",
+      "name": "pc20_g24lc64.bin",
+      "system": "sega-chihiro",
+      "required": true,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/Chihiro/ver1305.bin",
+      "name": "ver1305.bin",
+      "system": "sega-chihiro",
+      "required": false,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/xbox_eeprom.bin",
+      "name": "xbox_eeprom.bin",
+      "system": "",
+      "required": false,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xemu/xbox_hdd.qcow2",
+      "name": "xbox_hdd.qcow2",
+      "system": "",
+      "required": false,
+      "reason": "below_platform_folder",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
       "dest": "xmil/FNT0808.X1",
       "name": "FNT0808.X1",
       "system": "",
@@ -8167,6 +8257,7 @@
     "3dsen": [
       "3dsen-windows"
     ],
+    "a5200": [],
     "ace-dl": [
       "acedl"
     ],
@@ -8184,6 +8275,38 @@
     "amiberry": [
       "AMIBERRY"
     ],
+    "amiberry-5.6.5": [
+      "AMIBERRY",
+      "amiberry"
+    ],
+    "amiberry-5.7.2": [
+      "AMIBERRY",
+      "amiberry"
+    ],
+    "amiberry-6.3.3": [
+      "AMIBERRY",
+      "amiberry"
+    ],
+    "amiberry-7.1.1": [
+      "AMIBERRY",
+      "amiberry"
+    ],
+    "amiberry-7.1.1-332": [
+      "AMIBERRY",
+      "amiberry"
+    ],
+    "amiberry-8.0.0": [
+      "AMIBERRY",
+      "amiberry"
+    ],
+    "amiberry-8.2.2": [
+      "AMIBERRY",
+      "amiberry"
+    ],
+    "amiberry-8.3.0": [
+      "AMIBERRY",
+      "amiberry"
+    ],
     "ares": [
       "ares-sa"
     ],
@@ -8191,6 +8314,7 @@
       "armsx2-sa",
       "armsx2_libretro"
     ],
+    "atari800": [],
     "azahar": [
       "azahar - standalone",
       "azahar-sa"
@@ -8205,6 +8329,10 @@
     "beetle_lynx": [
       "beetle-lynx",
       "mednafen_lynx"
+    ],
+    "beetle_ngp": [
+      "beetle-ngp",
+      "mednafen_ngp"
     ],
     "beetle_pce": [
       "beetle-pce",
@@ -8225,6 +8353,16 @@
       "beetle-saturn",
       "mednafen_saturn"
     ],
+    "beetle_vb": [
+      "beetle-vb",
+      "mednafen_vb",
+      "vb"
+    ],
+    "beetle_wswan": [
+      "beetle-wswan",
+      "mednafen_wswan"
+    ],
+    "bsnes": [],
     "bsnes-jg": [
       "bsnes_jg"
     ],
@@ -8251,15 +8389,19 @@
     "chocolate-doom": [
       "Chocolate-Doom"
     ],
+    "clk": [],
+    "crocods": [],
     "cxbx-reloaded": [
       "cxbx"
     ],
     "cxbx-reloaded-2023": [
       "chihiro"
     ],
+    "desmume": [],
     "desmume2015": [
       "desmume_2015"
     ],
+    "directxbox": [],
     "dolphin": [
       "dolphin-gui",
       "dolphin-qt-gc",
@@ -8268,9 +8410,11 @@
       "dolphin-sa-gc",
       "dolphin-sa-wii"
     ],
+    "dolphin_launcher": [],
     "dosbox-x": [
       "dosboxx"
     ],
+    "dosbox_pure": [],
     "doublecherrygb": [
       "DoubleCherryGB"
     ],
@@ -8301,22 +8445,28 @@
     "fbalpha2012": [
       "fbalpha"
     ],
+    "fbalpha2012_cps1": [],
+    "fbalpha2012_cps2": [],
     "fbneo": [
       "FBNEOSA",
       "fbneo_32b",
       "fbneo_plus",
       "km_fbneo_xtreme_amped"
     ],
+    "fceumm": [],
     "fpse-ng": [
       "fpse64",
       "fpseng"
     ],
+    "freeintv": [],
+    "freej2me": [],
     "freej2me_plus": [
       "freej2me-plus"
     ],
     "fuse": [
       "fuse_libretro"
     ],
+    "gambatte": [],
     "gba-emu": [
       "GBA-EMU",
       "GBA.emu"
@@ -8325,6 +8475,7 @@
       "GBC-EMU",
       "GBC.emu"
     ],
+    "gearcoleco": [],
     "genesis_plus_gx": [
       "genesis-plus-gx",
       "genesis_plus_gx_cart_special",
@@ -8347,6 +8498,7 @@
       "GZDoom",
       "gzdoom-sa"
     ],
+    "handy": [],
     "hatari": [
       "HATARISA",
       "hatari-fast",
@@ -8359,6 +8511,7 @@
       "diii4a",
       "idtech4amm"
     ],
+    "ishiiruka": [],
     "j2me-loader": [
       "J2ME-LOADER"
     ],
@@ -8395,6 +8548,7 @@
     "mame2000": [
       "imame4all"
     ],
+    "mame2003": [],
     "mame2003_plus": [
       "mame078plus",
       "mame2003-plus"
@@ -8460,6 +8614,7 @@
       "mgba_rumble",
       "msgb"
     ],
+    "minivmac": [],
     "msx-emu": [
       "MSX-EMU",
       "MSX.emu"
@@ -8508,6 +8663,7 @@
       "NESOID",
       "Nesoid"
     ],
+    "nestopia": [],
     "nethersx2": [
       "NETHERSX2",
       "NetherSX2"
@@ -8520,12 +8676,17 @@
       "NETHERSX2-TURNIP-CLASSIC",
       "NetherSX2-Turnip-Classic"
     ],
+    "np2kai": [],
     "o2em": [
       "o2em_libretro"
     ],
     "openmsx": [
       "openmsx-ld"
     ],
+    "openmsx-libretro": [
+      "openmsx"
+    ],
+    "opera": [],
     "parallel-launcher": [
       "ca.parallel_launcher.ParallelLauncher"
     ],
@@ -8558,6 +8719,7 @@
       "pcsx-rearmed",
       "pcsx_standalone"
     ],
+    "picodrive": [],
     "pizza-boy-gba": [
       "PIZZA-BOY-GBA",
       "Pizza Boy GBA"
@@ -8575,13 +8737,18 @@
     "play": [
       "play!"
     ],
+    "pokemini": [],
     "ppsspp": [
       "PPSSPPSDL",
       "ppsspp-sa"
     ],
+    "prboom": [],
+    "primehack": [],
+    "prosystem": [],
     "puae": [
       "uae"
     ],
+    "px68k": [],
     "px68k-sdl": [
       "px68k"
     ],
@@ -8594,11 +8761,13 @@
       "com.github.Rosalie241.RMG",
       "mupen64"
     ],
+    "same_cdi": [],
     "saturn-emu": [
       "SATURN-EMU",
       "Saturn.emu",
       "saturnemu"
     ],
+    "scummvm": [],
     "scummvm-standalone": [
       "SCUMMVMSA",
       "scummvm-sa"
@@ -8624,6 +8793,8 @@
       "com.fms.speccy",
       "com.fms.speccy.deluxe"
     ],
+    "squirreljme": [],
+    "stella2014": [],
     "superzsnes": [
       "SUPERZSNES"
     ],
@@ -8652,9 +8823,19 @@
     "vice_x64": [
       "x64"
     ],
+    "vice_x64sc": [
+      "x64sx"
+    ],
+    "vice_xpet": [
+      "xpet"
+    ],
+    "vice_xplus4": [
+      "xplus4"
+    ],
     "vice_xvic": [
       "xvic"
     ],
+    "virtualjaguar": [],
     "x1": [
       "xmil"
     ],
@@ -8682,7 +8863,8 @@
       "yabasanshiro-sa",
       "yabasanshiroSA",
       "yabasanshiroSA1_5"
-    ]
+    ],
+    "yabause": []
   },
   "system_cores": {
     "3do": [
@@ -8797,6 +8979,14 @@
     ],
     "commodore-amiga": [
       "amiberry",
+      "amiberry-5.6.5",
+      "amiberry-5.7.2",
+      "amiberry-6.3.3",
+      "amiberry-7.1.1",
+      "amiberry-7.1.1-332",
+      "amiberry-8.0.0",
+      "amiberry-8.2.2",
+      "amiberry-8.3.0",
       "bizhawk",
       "clk",
       "fs-uae",
@@ -8856,6 +9046,7 @@
       "fmsx",
       "msx-emu",
       "openmsx",
+      "openmsx-libretro",
       "zesarux"
     ],
     "microsoft-xbox": [
@@ -8898,6 +9089,7 @@
       "mupen64plus",
       "mupen64plus-ae",
       "mupen64plus_next",
+      "n64emu",
       "parallel-launcher",
       "parallel_n64",
       "project64",
@@ -9069,6 +9261,7 @@
       "bsnes2014",
       "bsnes_hd_beta",
       "bsnes_mercury",
+      "gearboy",
       "higan_sfc",
       "higan_sfc_balanced",
       "linkboy",
@@ -9213,6 +9406,7 @@
       "mednafen_stv",
       "saturn-emu",
       "ssf",
+      "yabadabadoo",
       "yabasanshiro",
       "yabause",
       "ymir"
@@ -14157,6 +14351,19 @@
       ]
     },
     {
+      "dest": "arcade/namcoc74.zip",
+      "sha1": "493acecff671496212f2de7d0b6ca6561f3b6d8a",
+      "sha256": "3dc2f39b09e05bead85321c46f91424bba5a574513c5e21c496560c0080b5f1d",
+      "size": 6936,
+      "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
+      "cores": [
+        "mame2003_plus"
+      ],
+      "systems": [
+        "arcade"
+      ]
+    },
+    {
       "dest": "mac/MacIIx.ROM",
       "sha1": "753b94351d94c369616c2c87b19d568dc5e2764e",
       "sha256": "79fae48e2d5cfde68520e46616503963f8c16430903f410514b62c1379af20cb",
@@ -14238,7 +14445,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "segacd/us_scd1_9210.bin",
@@ -14259,7 +14466,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "segacd/eu_mcd2_9306.bin",
@@ -14301,7 +14508,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "segacd/eu_mcd1_9210.bin",
@@ -14322,7 +14529,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "segacd/jp_mcd2_921222.bin",
@@ -14362,7 +14569,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 2
+      "priority": 3
     },
     {
       "dest": "segacd/jp_mcd1_9111.bin",
@@ -14382,7 +14589,7 @@
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
       ],
-      "priority": 3
+      "priority": 5
     },
     {
       "dest": "doom/doom.wad",
@@ -14822,45 +15029,6 @@
       ],
       "systems": [
         "j2me"
-      ]
-    },
-    {
-      "dest": "xbox/xbox_eeprom.bin",
-      "sha1": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
-      "sha256": "e652203e6d91140729c29588b18ff8838896cdeb9a3100fbf8d20763af27c9d2",
-      "size": 256,
-      "repo_path": "bios/Microsoft/Xbox/xbox_eeprom.bin",
-      "cores": [
-        "xemu"
-      ],
-      "systems": [
-        "microsoft-xbox"
-      ]
-    },
-    {
-      "dest": "xbox/xbox_hdd.qcow2",
-      "sha1": "9da5f9ecfb1c9c32efa616f0300d02e8f702244d",
-      "sha256": "c5ec3e0fbc4f31d36c13211ded7f070f3b5f04e99a367fbe5d8c2d8c6e4f925d",
-      "size": 1638400,
-      "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
-      "cores": [
-        "xemu"
-      ],
-      "systems": [
-        "microsoft-xbox"
-      ]
-    },
-    {
-      "dest": "xbox/wpcap.dll",
-      "sha1": "c2a606a0151b4ba55fa204cf5e013afc9dcc89a6",
-      "sha256": "160efaeb4bea94e7a12b24da0414c88d7fff7db9531104b93d6ae7b01ab858ea",
-      "size": 499128,
-      "repo_path": "bios/Other/xemu/wpcap.dll",
-      "cores": [
-        "xemu"
-      ],
-      "systems": [
-        "microsoft-xbox"
       ]
     },
     {

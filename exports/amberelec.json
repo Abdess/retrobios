@@ -6,14 +6,36 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "440 kept, 69 files added, 10 hashes added to an existing entry",
+  "summary": "440 kept, 73 files added, 10 hashes added to an existing entry",
   "counts": {
     "kept": 440,
-    "added": 69,
-    "not_added": 2002,
+    "added": 73,
+    "not_added": 2027,
     "not_kept": 0
   },
   "changes": [
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "aros-ext.bin",
+      "destination": "aros-ext.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "d2ce6748e8e42222662e14359f68dad5"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga",
+      "name": "aros-rom.bin",
+      "destination": "aros-rom.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "48d38fc3fcf2ad7bca5ec5191d02e451"
+      }
+    },
     {
       "kind": "added",
       "system": "amiga",
@@ -635,6 +657,28 @@
     {
       "kind": "added",
       "system": "zxspectrum",
+      "name": "zx128.rom",
+      "destination": "ep128emu/roms/zx128.rom",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "85fede415f4294cc777517d7eada482e"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "zxspectrum",
+      "name": "zx48.rom",
+      "destination": "ep128emu/roms/zx48.rom",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "4c42a2f075212361c3117015b107ff68"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "zxspectrum",
       "name": "fuse/48.rom",
       "destination": "fuse/48.rom",
       "field": null,
@@ -882,7 +926,8 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 107,
+  "found_by_content": 346,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "colecovision",
@@ -976,82 +1021,12 @@
     },
     {
       "system": "amiga",
-      "name": "Kickstart v1.2 r33.180 (1986)(Commodore)(A500-A1000-A2000)[!].rom",
-      "destination": "bios/Kickstart v1.2 r33.180 (1986)(Commodore)(A500-A1000-A2000)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom",
-      "destination": "bios/Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
       "name": "Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[o].rom",
       "destination": "bios/Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[o].rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom",
-      "destination": "bios/Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v2.04 r37.175 (1991)(Commodore)(A500+)[!].rom",
-      "destination": "bios/Kickstart v2.04 r37.175 (1991)(Commodore)(A500+)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v2.05 r37.350 (1992)(Commodore)(A600HD)[!].rom",
-      "destination": "bios/Kickstart v2.05 r37.350 (1992)(Commodore)(A600HD)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
+        "amiberry-7.1.1",
         "puae",
         "puae2021",
         "uae4arm"
@@ -1065,49 +1040,7 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v3.1 r40.68 (1993)(Commodore)(A1200)[!].rom",
-      "destination": "bios/Kickstart v3.1 r40.68 (1993)(Commodore)(A1200)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v3.1 r40.68 (1993)(Commodore)(A3000).rom",
-      "destination": "bios/Kickstart v3.1 r40.68 (1993)(Commodore)(A3000).rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v3.1 r40.68 (1993)(Commodore)(A4000).rom",
-      "destination": "bios/Kickstart v3.1 r40.68 (1993)(Commodore)(A4000).rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
+        "amiberry-7.1.1",
         "puae",
         "puae2021",
         "uae4arm"
@@ -1121,7 +1054,7 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "amiberry",
+        "amiberry-7.1.1",
         "puae",
         "puae2021",
         "uae4arm"
@@ -4276,6 +4209,8 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -4289,6 +4224,8 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -4302,6 +4239,8 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -4315,6 +4254,8 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -4328,6 +4269,8 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -4341,6 +4284,8 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -4354,6 +4299,8 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -4367,10 +4314,13 @@
       "cores_examined": [
         "81",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }
