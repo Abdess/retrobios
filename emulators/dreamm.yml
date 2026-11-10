@@ -127,7 +127,7 @@ files:
     crc32: "4c91fa96"
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafc8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafc8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_04_a.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_04_a.rom"
@@ -137,7 +137,7 @@ files:
     crc32: "a93b65f2"
     sha1: "9cd4858014c4e8a9dff96053f784bfaac1092a2e"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafd8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafd8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_04_b.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_04_b.rom"
@@ -147,7 +147,7 @@ files:
     crc32: "b5ee2192"
     sha1: "fe8db469b5bfeb37edb269fd47e3ce6d91014652"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafe8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafe8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_05.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_05.rom"
@@ -157,7 +157,7 @@ files:
     crc32: "e6bb2b77"
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daff8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daff8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_05_a.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_05_a.rom"
@@ -167,7 +167,7 @@ files:
     crc32: "3281216c"
     sha1: "57a09d80d2f7ca5b9734edbe9645e6e700f83701"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db008 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db008 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_05_b.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_05_b.rom"
@@ -177,7 +177,7 @@ files:
     crc32: "e06d8020"
     sha1: "52e3c6666db9ef962591a8ee99be0cde17f3a6b6"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db018 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db018 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_06.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_06.rom"
@@ -187,7 +187,7 @@ files:
     crc32: "d63319e8"
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db028 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db028 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_06_a.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_06_a.rom"
@@ -197,7 +197,7 @@ files:
     crc32: "29369ae1"
     sha1: "cc83bf23cee533097fb4c7e2c116e43b50ebacc8"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db038 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db038 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_06_b.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_06_b.rom"
@@ -207,7 +207,7 @@ files:
     crc32: "4d495d98"
     sha1: "bf4f15666bc46679579498386704893b630c1171"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db048 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db048 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_07.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_07.rom"
@@ -217,7 +217,7 @@ files:
     crc32: "a7c1531b"
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db058 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db058 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_07_a.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_07_a.rom"
@@ -227,7 +227,7 @@ files:
     crc32: "67fd8968"
     sha1: "13f06b38f0d9e0fc050b6503ab777bb938603260"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db068 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db068 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_1_07_b.rom
     path: "sounddata/mt32emu/mt32_ctrl_1_07_b.rom"
@@ -237,7 +237,7 @@ files:
     crc32: "60f45882"
     sha1: "c55e165487d71fa88bd8c5e9c083bc456c1a89aa"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db078 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db078 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_bluer.rom
     path: "sounddata/mt32emu/mt32_ctrl_bluer.rom"
@@ -247,7 +247,7 @@ files:
     crc32: "627b9a51"
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0b8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0b8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_bluer_a.rom
     path: "sounddata/mt32emu/mt32_ctrl_bluer_a.rom"
@@ -257,7 +257,7 @@ files:
     crc32: "d75fc3d9"
     sha1: "11a6ae5d8b6ee328b371af7f1e40b82125aa6b4d"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0c8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0c8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_bluer_b.rom
     path: "sounddata/mt32emu/mt32_ctrl_bluer_b.rom"
@@ -267,7 +267,7 @@ files:
     crc32: "5816476f"
     sha1: "e0934320d7cbb5edfaa29e0d01ae835ef620085b"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0d8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0d8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_2_03.rom
     path: "sounddata/mt32emu/mt32_ctrl_2_03.rom"
@@ -276,7 +276,7 @@ files:
     size: 131072
     sha1: "5837064c9df4741a55f7c4d8787ac158dff2d3ce"
     validation: [size, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: set record 0x23db5a8 read by 0x164d050 (record picked at 0x164d28f, its file names read from 0x164d2a8), no manifest entry; sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: set record 0x23db5a8 read by 0x164d050 (record picked at 0x164d28f, its file names read from 0x164d2a8), no manifest entry; munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_2_04.rom
     path: "sounddata/mt32emu/mt32_ctrl_2_04.rom"
@@ -286,7 +286,7 @@ files:
     crc32: "59a49d5c"
     sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db088 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db088 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_2_06.rom
     path: "sounddata/mt32emu/mt32_ctrl_2_06.rom"
@@ -296,7 +296,7 @@ files:
     crc32: "94815415"
     sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db098 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db098 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_ctrl_2_07.rom
     path: "sounddata/mt32emu/mt32_ctrl_2_07.rom"
@@ -306,7 +306,7 @@ files:
     crc32: "a016b607"
     sha1: "47b52adefedaec475c925e54340e37673c11707c"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0a8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0a8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: cm32l_ctrl_1_00.rom
     path: "sounddata/mt32emu/cm32l_ctrl_1_00.rom"
@@ -316,7 +316,7 @@ files:
     crc32: "ee62022f"
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daf88 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daf88 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: cm32l_ctrl_1_02.rom
     path: "sounddata/mt32emu/cm32l_ctrl_1_02.rom"
@@ -326,7 +326,7 @@ files:
     crc32: "b998047e"
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daf98 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daf98 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: cm32ln_ctrl_1_00.rom
     path: "sounddata/mt32emu/cm32ln_ctrl_1_00.rom"
@@ -336,7 +336,7 @@ files:
     crc32: "4a3bb4ef"
     sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daf78 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23daf78 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   # -- MT-32 and CM-32L PCM ROMs --
   - name: mt32_pcm.rom
@@ -347,7 +347,7 @@ files:
     crc32: "573e31cc"
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0e8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0e8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_pcm_l.rom
     path: "sounddata/mt32emu/mt32_pcm_l.rom"
@@ -357,7 +357,7 @@ files:
     crc32: "dd9deac3"
     sha1: "3a1e19b0cd4036623fd1d1d11f5f25995585962b"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db108 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db108 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: mt32_pcm_h.rom
     path: "sounddata/mt32emu/mt32_pcm_h.rom"
@@ -367,7 +367,7 @@ files:
     crc32: "4ee6506c"
     sha1: "2cadb99d21a6a4a6f5b61b6218d16e9b43f61d01"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0f8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23db0f8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: cm32l_pcm.rom
     path: "sounddata/mt32emu/cm32l_pcm.rom"
@@ -377,7 +377,7 @@ files:
     crc32: "4b961eba"
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafa8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafa8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   - name: cm32l_pcm_h.rom
     path: "sounddata/mt32emu/cm32l_pcm_h.rom"
@@ -387,7 +387,7 @@ files:
     crc32: "8e9ea06e"
     sha1: "3ad889fde5db5b6437cbc2eb6e305312fec3df93"
     validation: [size, crc32, sha1]
-    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafb8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); sounddata/mt32emu-dreamm.so ROM table"
+    source_ref: "DREAMM 4.0 linux-x64: ROM manifest entry 0x23dafb8 {crc32, size, path} read through the pointer at 0x242e9f0 by the name, size and CRC32 match 0x16456a0 and the size and CRC32 to path lookup 0x1645880; set record table 0x23db4a8 read by 0x164d050 (record picked at 0x164d165-0x164d2a1, its file names read from 0x164d2a8); munt ROMInfo.cpp:206-214 ROMInfo::getROMInfo, built into sounddata/mt32emu-dreamm.so"
 
   # -- Roland SC-55, sounddata/Nuked-SC55-Resources/ROMs --
   # One complete set per model directory, the plugin loads a single directory.
