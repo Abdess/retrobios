@@ -230,6 +230,12 @@ def _validate_pack_manifests(dist: Path) -> list[str]:
 
 def _scan_pack_manifests(dist: Path) -> list[str]:
     validator = _validator("pack-manifest.schema.json")
+    # The lists a pack carries for the installer, each under its own
+    # contract: the schemas name no other file, so they are checked here.
+    carried = {
+        "install_list": _validator("install-manifest.schema.json"),
+        "targets": _validator("target-manifest.schema.json"),
+    }
 
     def _label(path: Path) -> str:
         resolved = path.resolve()
@@ -255,6 +261,9 @@ def _scan_pack_manifests(dist: Path) -> list[str]:
                         out.append(f"{label}: {exc}")
                         continue
                     out.extend(_errors(validator, document, label))
+                    for key, inner in carried.items():
+                        if isinstance(document, dict) and key in document:
+                            out.extend(_errors(inner, document[key], f"{label}:{key}"))
         except (OSError, zipfile.BadZipFile) as exc:
             out.append(f"{_label(archive)}: {exc}")
     return out

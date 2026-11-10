@@ -2139,6 +2139,42 @@ class InstallerBoundaryRegressions(unittest.TestCase):
             self.assertTrue(errors, "an invalid in-archive manifest must be reported")
             self.assertTrue(any("sha1" in message for message in errors), errors)
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
+    def test_a_pack_carries_its_install_list_and_board_lists(self):
+        """pack_systems puts the install list and the per-board core lists
+        in the pack's manifest.json, which install.py reads with the pack
+        alone. The pack schema refused both keys, and each is checked under
+        its own contract."""
+        import generate_pack
+        import validate_schemas
+
+        install_list = json.loads((ROOT / "install" / "romm.json").read_text(encoding="utf-8"))
+        targets = {"browser": None, "rpi4": {"cores": ["mgba"], "images": ["rpi4"]}}
+        document = {
+            "schema_version": 1, "version": 1,
+            "generator": "retrobios generate_pack.py",
+            "generated": "2026-08-10T00:00:00Z", "files": [],
+            "summary": {"total_files": 0, "verified": 0, "untracked": 0, "errors": 0},
+            "errors": [],
+        }
+        generate_pack.annotate_pack_systems(
+            document, generate_pack.pack_systems(install_list, targets))
+        self.assertIn("install_list", document)
+        self.assertIn("targets", document)
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            dist = Path(directory)
+            with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
+                archive.writestr("manifest.json", json.dumps(document))
+            self.assertEqual(validate_schemas._validate_pack_manifests(dist), [])
+
+            broken = {**document, "targets": {"rpi4": [1]},
+                      "install_list": {**install_list, "files": "none"}}
+            with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
+                archive.writestr("manifest.json", json.dumps(broken))
+            errors = validate_schemas._validate_pack_manifests(dist)
+            self.assertTrue(any(":targets:" in message for message in errors), errors)
+            self.assertTrue(any(":install_list:" in message for message in errors), errors)
+
     def test_null_core_list_keeps_the_other_targets(self):
         """A target without a core inventory must not void the manifest.
 
