@@ -131,7 +131,7 @@ files:
     note: >-
       Drawn behind the movie by the page's bg div. The same image is compiled
       into the binary for the QML side, so only this copy is read from disk.
-    source_ref: "ArcadeFlashWeb-release flash/flash.html:110, src/qml.qrc:23"
+    source_ref: "src/main.qml:327, 334, ArcadeFlashWeb-release flash/flash.html:110, src/qml.qrc:23, src/main.qml:457"
 
   - name: swfdump.exe
     size: 541095

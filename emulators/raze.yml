@@ -95,7 +95,7 @@ files:
     size: 26524524
     crc32: "bbc9ce44"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:3, 48-59"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:3, 48-59, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKE3D.GRP"
     description: "Duke Nukem 3D (South Korean Censored)"
@@ -106,7 +106,7 @@ files:
     size: 26385383
     crc32: "aa4f6a40"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:4, 61-72"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:4, 61-72, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKE3D.GRP"
     description: "Duke Nukem 3D: Atomic Edition"
@@ -117,7 +117,7 @@ files:
     size: 44356548
     crc32: "fd3dcff1"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:5, 74-85"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:5, 74-85, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKE3D.GRP"
     description: "Duke Nukem 3D: Plutonium Pak"
@@ -128,7 +128,7 @@ files:
     size: 44348015
     crc32: "f514a6ac"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:6, 113-124"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:6, 113-124, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKE3D.GRP"
     description: "Duke Nukem 3D: Atomic Edition (WT)"
@@ -139,7 +139,7 @@ files:
     size: 44356548
     crc32: "982afe4a"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:7, 87-98"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:7, 87-98, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "World Tour release."
 
   - name: "DUKE3D.GRP"
@@ -151,7 +151,7 @@ files:
     size: 44486702
     crc32: "89792e05"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:100-111"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:100-111, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "World Tour release, second known build."
 
   - name: "DUKE3D.GRP"
@@ -163,7 +163,7 @@ files:
     size: 9690241
     crc32: "02f18900"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:8, 126-136"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:8, 126-136, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKE3D.GRP"
     description: "Duke Nukem 3D Shareware 1.0"
@@ -174,7 +174,7 @@ files:
     size: 10429258
     crc32: "a28aa589"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:9, 138-148"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:9, 138-148, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKE3D.GRP"
     description: "Duke Nukem 3D Shareware 1.1"
@@ -185,7 +185,7 @@ files:
     size: 10442980
     crc32: "912e1e8d"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:10, 150-160"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:10, 150-160, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKE3D.GRP"
     description: "Duke Nukem 3D Shareware 1.3D"
@@ -196,7 +196,7 @@ files:
     size: 11035779
     crc32: "983ad923"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:11, 162-172"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:11, 162-172, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKEDC.GRP"
     description: "Duke it out in D.C. (1.3D)"
@@ -207,7 +207,7 @@ files:
     size: 7926624
     crc32: "a9242158"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:14, 198-208"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:14, 198-208, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the 1.3D release (dependency DUKE13_CRC)."
 
   - name: "DUKEDC.GRP"
@@ -219,7 +219,7 @@ files:
     size: 8225517
     crc32: "b79d997f"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:15, 210-220"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:15, 210-220, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
 
   - name: "DUKEDC.GRP"
@@ -231,7 +231,7 @@ files:
     size: 8410183
     crc32: "a8cf80da"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:16, 222-232"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:16, 222-232, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKEDC.GRP"
     description: "Duke it out in D.C."
@@ -242,7 +242,7 @@ files:
     size: 8410187
     crc32: "39a692bf"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:234-245"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:234-245, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKEDC.GRP"
     description: "Duke it out in D.C."
@@ -253,7 +253,7 @@ files:
     size: 8410183
     crc32: "777c77b1"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:247-258"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:247-258, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "DUKEDC.GRP"
     description: "Duke it out in D.C."
@@ -264,7 +264,7 @@ files:
     size: 8410149
     crc32: "c63b6a8b"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:260-271"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:260-271, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "VACATION.GRP"
     description: "Duke Caribbean: Life's a Beach (1.3)"
@@ -275,7 +275,7 @@ files:
     size: 23559381
     crc32: "4a2dbb62"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:17, 273-285"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:17, 273-285, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the 1.3D release (dependency DUKE13_CRC)."
 
   - name: "VACATION.GRP"
@@ -287,7 +287,7 @@ files:
     size: 22551333
     crc32: "2f4fccee"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:18, 287-299"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:18, 287-299, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
 
   - name: "VACATION.GRP"
@@ -299,7 +299,7 @@ files:
     size: 22521880
     crc32: "b62b42fd"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:19, 301-313"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:19, 301-313, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "VACATION.GRP"
     description: "Duke Caribbean: Life's a Beach"
@@ -310,7 +310,7 @@ files:
     size: 22213819
     crc32: "18f01c5b"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:20, 316-328"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:20, 316-328, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "VACATION.GRP"
     description: "Duke Caribbean: Life's a Beach"
@@ -321,7 +321,7 @@ files:
     size: 22397273
     crc32: "65b5f690"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:330-343"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:330-343, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "VACATION.GRP"
     description: "Duke Caribbean: Life's a Beach"
@@ -332,7 +332,7 @@ files:
     size: 22201375
     crc32: "b28e883c"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:345-358"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:345-358, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "VACATION.GRP"
     description: "Duke Caribbean: Life's a Beach"
@@ -343,7 +343,7 @@ files:
     size: 22213795
     crc32: "64cf2351"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:360-373"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:360-373, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "NWINTER.GRP"
     description: "Duke: Nuclear Winter"
@@ -354,7 +354,7 @@ files:
     size: 16169365
     crc32: "f1cae8e4"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:21, 375-388"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:21, 375-388, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
 
   - name: "NWINTER.GRP"
@@ -366,7 +366,7 @@ files:
     size: 10965909
     crc32: "c7efbfa9"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:390-402"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:390-402, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
 
   - name: "penthous.zip"
@@ -378,7 +378,7 @@ files:
     size: 2112419
     crc32: "7cd82a3b"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:459-470"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:459-470, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "The original ZIP release, identified as a whole file. Addon of the Atomic Edition (dependency DUKE15_CRC)."
 
   # ================================================================
@@ -394,7 +394,7 @@ files:
     size: 8200353
     crc32: "b291418f"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:32, 485-499"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:32, 485-499, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "BLOOD.RFF"
     description: "BLOOD: 1.1"
@@ -405,7 +405,7 @@ files:
     size: 8231173
     crc32: "c3a99936"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:33, 501-515"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:33, 501-515, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "BLOOD.RFF"
     description: "BLOOD: One Unit Whole Blood"
@@ -416,7 +416,7 @@ files:
     size: 9570681
     crc32: "a8fdda84"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:34, 517-531"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:34, 517-531, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "BLOOD.RFF"
     description: "BLOOD: Unknown Version"
@@ -432,7 +432,7 @@ files:
     system: blood
     path: "SOUNDS.RFF"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 772-828, 696-704, 830-875"
     note: "Named by loadgrp in every Blood block and loaded with the main resource."
 
   - name: "GUI.RFF"
@@ -440,7 +440,7 @@ files:
     system: blood
     path: "GUI.RFF"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 772-828, 696-704, 830-875"
     note: "Named by loadgrp in every Blood block and loaded with the main resource."
 
   - name: "BLOOD.GRP"
@@ -448,7 +448,7 @@ files:
     system: blood
     path: "BLOOD.GRP"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 772-828, 696-704, 830-875"
     note: "Named by loadgrp in every Blood block and loaded with the main resource."
 
   - name: "SURFACE.DAT"
@@ -496,7 +496,7 @@ files:
     size: 47536148
     crc32: "7545319f"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:36, 614-625"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:36, 614-625, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "SW.GRP"
     description: "Shadow Warrior (Europe)"
@@ -507,7 +507,7 @@ files:
     size: 47536148
     crc32: "d4a1e153"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:627-638"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:627-638, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "SW.GRP"
     description: "Shadow Warrior (UK)"
@@ -518,7 +518,7 @@ files:
     size: 47536148
     crc32: "3ee68767"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:640-651"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:640-651, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "SW.GRP"
     description: "Shadow Warrior (Censored)"
@@ -529,7 +529,7 @@ files:
     size: 47537951
     crc32: "1a8776d2"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:653-664"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:653-664, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "SW.GRP"
     description: "Shadow Warrior Shareware 1.0"
@@ -540,7 +540,7 @@ files:
     size: 25702245
     crc32: "daa6bece"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:666-676"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:666-676, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "SW.GRP"
     description: "Shadow Warrior Shareware 1.1"
@@ -551,7 +551,7 @@ files:
     size: 25833456
     crc32: "f21a6b35"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:678-688"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:678-688, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "SW.GRP"
     description: "Shadow Warrior Shareware 1.2"
@@ -562,7 +562,7 @@ files:
     size: 26056769
     crc32: "08a7fa1f"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:690-700"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:690-700, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "WT.GRP"
     description: "Shadow Warrior: Wanton Destruction"
@@ -573,7 +573,7 @@ files:
     size: 48698128
     crc32: "a9aaa7b7"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:37, 714-724"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:37, 714-724, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the registered game (dependency SWREG12_CRC)."
 
   - name: "WT.GRP"
@@ -585,7 +585,7 @@ files:
     size: 48698128
     crc32: "8b6e8011"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:726-736"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:726-736, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "TD.GRP"
     description: "Shadow Warrior: Twin Dragon"
@@ -596,7 +596,7 @@ files:
     size: 12499012
     crc32: "a1a65be8"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:38, 751-762"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:38, 751-762, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
     note: "Addon of the registered game (dependency SWREG12_CRC)."
 
   - name: "TD.GRP"
@@ -608,7 +608,7 @@ files:
     size: 6236287
     crc32: "b5b71277"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:764-774"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:764-774, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "TD.GRP"
     description: "Shadow Warrior: Twin Dragon"
@@ -619,7 +619,7 @@ files:
     size: 6235578
     crc32: "acc8dcde"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:776-786"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:776-786, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "TDRAGON.EXE"
     description: "Shadow Warrior: Twin Dragon, loose files"
@@ -652,7 +652,7 @@ files:
     size: 27020745
     crc32: "303cbd89"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:40, wadsrc/static/engine/grpinfo.txt:927-938"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:40, wadsrc/static/engine/grpinfo.txt:927-938, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "STUFF.DAT"
     description: "Exhumed"
@@ -663,7 +663,7 @@ files:
     size: 27108170
     crc32: "e3b172f1"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:41, wadsrc/static/engine/grpinfo.txt:940-951"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:41, wadsrc/static/engine/grpinfo.txt:940-951, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "STUFF.DAT"
     description: "Powerslave Demo"
@@ -674,7 +674,7 @@ files:
     size: 27020745
     crc32: "1d8c7645"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:42, wadsrc/static/engine/grpinfo.txt:953-963"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:42, wadsrc/static/engine/grpinfo.txt:953-963, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   # ================================================================
   # Redneck Rampage
@@ -689,7 +689,7 @@ files:
     size: 141174222
     crc32: "19d9bc79"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:28, wadsrc/static/engine/grpinfo.txt:814-827"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:28, wadsrc/static/engine/grpinfo.txt:814-827, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "REDNECK.GRP"
     description: "Redneck Rampage Rides Again"
@@ -700,7 +700,7 @@ files:
     size: 191798609
     crc32: "958018c6"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:29, wadsrc/static/engine/grpinfo.txt:829-842"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:29, wadsrc/static/engine/grpinfo.txt:829-842, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "GAME66.CON"
     description: "Redneck Rampage: Suckin' Grits on Route 66"
@@ -724,7 +724,7 @@ files:
     size: 43448927
     crc32: "75c1f07b"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:24, wadsrc/static/engine/grpinfo.txt:872-884"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:24, wadsrc/static/engine/grpinfo.txt:872-884, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "NAPALM.GRP"
     description: "NAPALM"
@@ -735,7 +735,7 @@ files:
     size: 44365728
     crc32: "3de1589a"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:25, wadsrc/static/engine/grpinfo.txt:886-898"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:25, wadsrc/static/engine/grpinfo.txt:886-898, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
 
   - name: "WW2GI.GRP"
     description: "WWII GI"
@@ -746,4 +746,4 @@ files:
     size: 77939508
     crc32: "907b82bf"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:26, wadsrc/static/engine/grpinfo.txt:900-912"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:26, wadsrc/static/engine/grpinfo.txt:900-912, wadsrc/CMakeLists.txt:2, source/core/version.h:66, source/core/searchpaths.cpp:393-613, 621-660, 696-704, 830-875"
