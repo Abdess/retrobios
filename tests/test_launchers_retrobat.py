@@ -1103,6 +1103,150 @@ class FilesNeededTogether(unittest.TestCase):
         )
 
 
+XEMU_SAVES = """
+    public override ProcessStartInfo Generate(string system, string emulator, string core, string rom)
+    {
+        _chihiro = (emulator == "xemu-chihiro" || system == "chihiro");
+        if (!string.IsNullOrEmpty(AppConfig["saves"]) && Directory.Exists(AppConfig.GetFullPath("saves")))
+        {
+            string savePath = Path.Combine(AppConfig.GetFullPath("saves"), system);
+            if (!_chihiro)
+            {
+                if (!File.Exists(Path.Combine(savePath, "eeprom.bin")))
+                {
+                    File.WriteAllBytes(Path.Combine(savePath, "eeprom.bin"), Properties.Resources.eeprom);
+                }
+                if (!File.Exists(Path.Combine(savePath, "xbox_hdd.qcow2")))
+                {
+                    string zipFile = Path.Combine(savePath, "xbox_hdd.qcow2.zip");
+                    File.WriteAllBytes(zipFile, Properties.Resources.xbox_hdd_qcow2);
+                    Zip.Extract(zipFile, savePath);
+                    File.Delete(zipFile);
+                }
+            }
+        }
+    }
+
+    private void SetupTOMLConfiguration(string eepromPath, string hddPath)
+    {
+        if (!string.IsNullOrEmpty(eepromPath))
+            ini.WriteValue("sys.files", "eeprom_path", "'" + eepromPath + "'");
+        if (!string.IsNullOrEmpty(hddPath))
+            ini.WriteValue("sys.files", "hdd_path", "'" + hddPath + "'");
+    }
+
+    private void SetupChihiroConfiguration()
+    {
+        string savePath = Path.Combine(AppConfig.GetFullPath("saves"), "chihiro");
+        if (!Directory.Exists(savePath)) try { Directory.CreateDirectory(savePath); } catch { }
+        if (Directory.Exists(savePath))
+            ini.WriteValue("chihiro.roms", "snapshot_store_path", "'" + Path.Combine(savePath, "chihiro_snapshots.qcow2") + "'");
+    }
+
+    private void SetupChihiroEeprom(string path)
+    {
+        string savePath = Path.Combine(AppConfig.GetFullPath("saves"), "chihiro");
+        _chihiroEeprom = Path.Combine(path, "chihiro_eeprom.bin");
+        _chihiroEepromSave = Path.Combine(savePath, "chihiro_eeprom.bin");
+    }
+
+    private void SaveChihiroEeprom()
+    {
+        if (File.Exists(_chihiroEeprom))
+            File.Copy(_chihiroEeprom, _chihiroEepromSave, true);
+    }
+"""
+
+CXBX = """
+    private string MountIso(string rom)
+    {
+        if (Path.GetExtension(rom).ToLowerInvariant() != ".iso")
+            return rom;
+        string xboxIsoVfsPath = Path.Combine(Path.GetDirectoryName(typeof(Installer).Assembly.Location), "xbox-iso-vfs.exe");
+        if (!File.Exists(xboxIsoVfsPath))
+            throw new ApplicationException("xbox-iso-vfs is required and is not installed");
+        string dokan = Environment.GetEnvironmentVariable("DokanLibrary2");
+        dokan = Path.Combine(dokan, "dokan2.dll");
+        if (!File.Exists(dokan))
+        {
+            throw new ApplicationException("Dokan 2 is required and is not installed");
+        }
+    }
+
+    public override ProcessStartInfo Generate(string system, string emulator, string core, string rom)
+    {
+        string path = null;
+        if ((core != null && core == "chihiro") || (emulator != null && emulator == "chihiro"))
+        {
+            path = AppConfig.GetFullPath("chihiro");
+        }
+        else if ((core != null && core == "chihiro-gun") || (emulator != null && emulator == "chihiro-gun"))
+        {
+            path = AppConfig.GetFullPath("chihiro-ds");
+        }
+        if (string.IsNullOrEmpty(path))
+            path = AppConfig.GetFullPath("cxbx-reloaded");
+        if (string.IsNullOrEmpty(path))
+            path = AppConfig.GetFullPath("cxbx-r");
+        using (var ini = IniFile.FromFile(Path.Combine(path, "settings.ini"), IniOptions.KeepEmptyValues))
+        {
+        }
+        if (system == "xbox")
+        {
+            string eeprom = Path.Combine(AppConfig.GetFullPath("cxbx-reloaded"), "EEPROM.bin");
+            if (!File.Exists(eeprom))
+                File.WriteAllBytes(eeprom, Properties.Resources.eeprom);
+
+            WriteXboxEEPROM(eeprom);
+        }
+    }
+"""
+
+
+class XboxFilesTheLauncherWrites(unittest.TestCase):
+    def test_xemu_keeps_its_eeprom_and_disk_below_saves(self):
+        records = rl.xemu_saves(_sources(**{f"{G}/Xemu.Generator.cs": XEMU_SAVES}))
+        self.assertEqual(
+            [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
+             for r in records],
+            [
+                ("xemu", "fixed_name", ["eeprom.bin", "xbox_hdd.qcow2"], "saves/<system>",
+                 f"{G}/Xemu.Generator.cs:3-19, 27-29"),
+                ("xemu, xemu-chihiro", "copies", ["chihiro_eeprom.bin"], "saves/chihiro",
+                 f"{G}/Xemu.Generator.cs:3, 40-51"),
+                ("xemu, xemu-chihiro", "fixed_name", ["chihiro_snapshots.qcow2"], "saves/chihiro",
+                 f"{G}/Xemu.Generator.cs:3, 34-37"),
+            ],
+        )
+        self.assertIn("eeprom_path, hdd_path", records[0]["passes_to"])
+        self.assertIn('not (emulator == "xemu-chihiro" or system == "chihiro")',
+                      records[0]["depends_on_option"])
+
+    def test_cxbx_runs_from_its_folder_and_gets_the_eeprom_there(self):
+        records = rl.cxbx(_sources(**{f"{G}/Cxbx.Generator.cs": CXBX}))
+        self.assertEqual(
+            [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
+             for r in records],
+            [
+                ("chihiro", "passes_path", [], '<AppConfig.GetFullPath("chihiro")>',
+                 f"{G}/Cxbx.Generator.cs:19-21, 31"),
+                ("chihiro-gun", "passes_path", [], '<AppConfig.GetFullPath("chihiro-ds")>',
+                 f"{G}/Cxbx.Generator.cs:23-25, 31"),
+                ("cxbx-reloaded", "passes_path", [], '<AppConfig.GetFullPath("cxbx-reloaded")>',
+                 f"{G}/Cxbx.Generator.cs:27-31"),
+                ("chihiro, chihiro-gun, cxbx-reloaded", "fixed_name", ["xbox-iso-vfs.exe"],
+                 "<emulatorLauncher folder>", f"{G}/Cxbx.Generator.cs:3-7"),
+                ("chihiro, chihiro-gun, cxbx-reloaded", "fixed_name", ["dokan2.dll"],
+                 "%DokanLibrary2%", f"{G}/Cxbx.Generator.cs:3-4, 8-13"),
+                ("cxbx-reloaded", "fixed_name", ["EEPROM.bin"],
+                 '<AppConfig.GetFullPath("cxbx-reloaded")>', f"{G}/Cxbx.Generator.cs:34-41"),
+            ],
+        )
+        self.assertTrue(all(r["passes_to"].startswith(rl.CXBX_DATA_FOLDER) for r in records[:3]))
+        self.assertEqual(records[3]["passes_to"], "exec")
+        self.assertEqual(records[5]["depends_on_option"], 'system == "xbox"')
+
+
 class HelpersAndCopies(unittest.TestCase):
     def test_blastem_one_record_per_helper_call(self):
         records = rl.blastem(_sources(**{f"{G}/Blastem.Generator.cs": BLASTEM}))

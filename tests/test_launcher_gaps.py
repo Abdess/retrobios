@@ -77,6 +77,8 @@ LAUNCHERS = [
     _record("setemu", "copies", ["user.sf2"]),
     _record("caseemu", "fixed_name", ["mixed.rom"]),
     _record("foldemu", "fixed_name", ["MIXED.rom"], case_insensitive=True),
+    _record("toolemu", "fixed_name", ["tool.exe"], search_dir="<emulatorLauncher folder>",
+            passes_to="exec"),
     _record("labelemu", "core_option", ["labelled.rom (CDZ)"]),
 ]
 
@@ -159,6 +161,11 @@ class LauncherGapTest(unittest.TestCase):
             configs or {"gaptest": self.config}, self.db, self.profiles, {}, emulator
         )
         return {(r["platform"], r["name"]): r for r in rows}
+
+    def test_a_program_of_the_launcher_itself_is_not_reported(self) -> None:
+        """RetroBat runs its own xbox-iso-vfs.exe to mount an Xbox disc
+        image: part of the platform, no file to collect."""
+        self.assertNotIn("tool.exe", {name for _, name in self._rows()})
 
     def test_a_held_name_is_not_reported(self) -> None:
         names = {name for _, name in self._rows()}

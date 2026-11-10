@@ -1097,6 +1097,11 @@ LAUNCHER_READS_KEY = "_launcher_reads_not_held"
 # A package record names no file: it records what a package builds.
 _NAMELESS_KINDS = frozenset({"package"})
 
+# The folder of the platform's own launcher, as its scraper spells it: a
+# program the launcher runs from there (RetroBat's xbox-iso-vfs.exe) is part
+# of the platform, never a file to collect.
+PLATFORM_OWN_FOLDERS = frozenset({"<emulatorLauncher folder>"})
+
 
 def launcher_file_names(record: dict) -> list[str]:
     """The concrete file names a launcher record reads, in code order.
@@ -1221,7 +1226,8 @@ def launcher_reads_not_held(
     amiga-os-130.rom that exists (Amiberry.Generator.cs:674-699). A copy
     whose source lies outside the BIOS directory brings a file the platform
     installs itself, from its own package or written by its own script
-    (RetroPie's lr-vecx copies $md_inst/system.bin). A file handed to the
+    (RetroPie's lr-vecx copies $md_inst/system.bin), and so does a program
+    the launcher runs from its own folder. A file handed to the
     setting a reader's profile entry is read from is that entry's file,
     which the pack places under the launcher's name.
     """
@@ -1249,6 +1255,8 @@ def launcher_reads_not_held(
             folds = bool(record.get("case_insensitive") or config.get("case_insensitive_fs"))
             base = str(config.get("base_destination") or "bios")
             if record.get("kind") == "copies" and not launcher_directories(record, base):
+                continue
+            if str(record.get("search_dir") or "") in PLATFORM_OWN_FOLDERS:
                 continue
             settings = name_settings(record, names)
 

@@ -4069,6 +4069,69 @@ launchers:
   depends_on_option: core in capsimgCore, rom extension ".ipf", the target does not
     exist
   source_ref: "emulatorLauncher/Generators/LibRetro.Generator.cs:1018-1027, 2750"
+- emulator: chihiro
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"chihiro\")>"
+  passes_to: "Settings::GetDataLocation, the folder holding settings.ini, which the\
+    \ launcher writes beside the binary"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:99-101, 158"
+- emulator: chihiro-gun
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"chihiro-ds\")>"
+  passes_to: "Settings::GetDataLocation, the folder holding settings.ini, which the\
+    \ launcher writes beside the binary"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:104-106, 158"
+- emulator: cxbx-reloaded
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"cxbx-reloaded\")>"
+  passes_to: "Settings::GetDataLocation, the folder holding settings.ini, which the\
+    \ launcher writes beside the binary"
+  fails_when_missing: false
+  depends_on_option: "neither core nor emulator is \"chihiro\" or \"chihiro-gun\"\
+    , <AppConfig.GetFullPath(\"cxbx-r\")> when \"cxbx-reloaded\" is not set"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:111-115, 158"
+- emulator: chihiro, chihiro-gun, cxbx-reloaded
+  build: standalone
+  kind: fixed_name
+  names:
+  - xbox-iso-vfs.exe
+  case_insensitive: true
+  search_dir: <emulatorLauncher folder>
+  passes_to: exec
+  fails_when_missing: xbox-iso-vfs is required and is not installed
+  depends_on_option: rom extension ".iso"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:25-30"
+- emulator: chihiro, chihiro-gun, cxbx-reloaded
+  build: standalone
+  kind: fixed_name
+  names:
+  - dokan2.dll
+  case_insensitive: true
+  search_dir: '%DokanLibrary2%'
+  passes_to: "nothing passed: checked before xbox-iso-vfs.exe mounts the image"
+  fails_when_missing: Dokan 2 is required and is not installed
+  depends_on_option: rom extension ".iso"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:25-26, 33-45"
+- emulator: cxbx-reloaded
+  build: standalone
+  kind: fixed_name
+  names:
+  - EEPROM.bin
+  case_insensitive: true
+  search_dir: "<AppConfig.GetFullPath(\"cxbx-reloaded\")>"
+  passes_to: "written from the launcher's eeprom resource when absent, then its language\
+    \ set: the emulator reads it from its data folder"
+  fails_when_missing: "never missing: the launcher writes it"
+  depends_on_option: system == "xbox"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:216-223"
 - emulator: demul
   build: standalone
   kind: passes_path
@@ -5590,6 +5653,43 @@ launchers:
   fails_when_missing: "warning '[Generator] Chihiro media board flash missing next\
     \ to the BIOS.'"
   source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:438-441"
+- emulator: xemu
+  build: standalone
+  kind: fixed_name
+  names:
+  - eeprom.bin
+  - xbox_hdd.qcow2
+  case_insensitive: true
+  search_dir: saves/<system>
+  passes_to: "xemu.toml [sys.files] eeprom_path, hdd_path; written from the launcher's\
+    \ eeprom and xbox_hdd_qcow2 resources when absent, the disk image unzipped"
+  fails_when_missing: "never missing: the launcher writes both"
+  depends_on_option: "the saves folder is set and exists, not (emulator == \"xemu-chihiro\"\
+    \ or system == \"chihiro\")"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:48, 82-106, 278, 281"
+- emulator: xemu, xemu-chihiro
+  build: standalone
+  kind: copies
+  names:
+  - chihiro_eeprom.bin
+  case_insensitive: true
+  search_dir: saves/chihiro
+  passes_to: <emulator>/chihiro_eeprom.bin, restored when the saved copy is newer
+    or the emulator folder holds none, copied back after the run
+  fails_when_missing: false
+  depends_on_option: emulator == "xemu-chihiro" or system == "chihiro"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:48, 480-520"
+- emulator: xemu, xemu-chihiro
+  build: standalone
+  kind: fixed_name
+  names:
+  - chihiro_snapshots.qcow2
+  case_insensitive: true
+  search_dir: saves/chihiro
+  passes_to: "xemu.toml [chihiro.roms] snapshot_store_path, created by the emulator"
+  fails_when_missing: false
+  depends_on_option: emulator == "xemu-chihiro" or system == "chihiro"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:48, 446-449"
 - emulator: xm6pro
   build: standalone
   kind: copies
