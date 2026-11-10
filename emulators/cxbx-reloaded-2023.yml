@@ -16,6 +16,8 @@ systems:
   - sega-chihiro
   - microsoft-xbox
 mode: standalone
+standalone_directories:
+  - "Settings::GetDataLocation"
 
 notes: |
   The Cxbx-Reloaded build RetroBat installs as its "chihiro" emulator

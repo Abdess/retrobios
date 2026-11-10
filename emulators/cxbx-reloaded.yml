@@ -18,6 +18,8 @@ systems:
   - microsoft-xbox
   - sega-chihiro
 mode: standalone
+standalone_directories:
+  - "Settings::GetDataLocation"
 
 data_root:
   windows:
@@ -193,6 +195,7 @@ files:
     path: "EEPROM.bin"
     system: microsoft-xbox
     required: false
+    installed_on: [retrobat]
     has_builtin: true
     size: 256
     validation: [size]
@@ -337,6 +340,7 @@ files:
 
   - name: dokan2.dll
     required: false
+    unread_on: [retrobat]
     description: "Dokany user mode library"
     note: >-
       Loaded by name with every entry point resolved individually, and the

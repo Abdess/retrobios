@@ -262,6 +262,36 @@ class FsUaeOnRetroPie(unittest.TestCase):
         self.assertEqual(held, [("kick13.rom", ["fs-uae"])])
 
 
+class XboxOnRetroBat(unittest.TestCase):
+    """RetroBat's launcher writes xemu's eeprom.bin and disk image into
+    saves/<system> and cxbx-reloaded's EEPROM.bin into its emulator folder,
+    and each Cxbx build reads its data from the folder it runs from
+    (Xemu.Generator.cs:82-113, Cxbx.Generator.cs:99-115, 158, 216-223)."""
+
+    def test_nothing_lands_at_the_bios_root(self) -> None:
+        import json
+
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("database.json is not built")
+        db = json.loads(db_path.read_text(encoding="utf-8"))
+        with redirect_stdout(io.StringIO()):
+            manifest = generate_manifest(
+                "retrobat", str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
+                str(REPO_ROOT / "platforms" / "_registry.yml"),
+                emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
+            )
+        at_root = {f["dest"].lower() for f in manifest["files"] if not f.get("root")}
+        # The launcher writes the two EEPROMs and the disk image, mounts an
+        # .iso with its own tool, and each Cxbx build reads keys.bin from
+        # its own folder.
+        self.assertFalse(at_root & {"eeprom.bin", "xbox_hdd.qcow2", "dokan2.dll", "keys.bin"})
+        placed = {(f.get("root"), f["dest"]) for f in manifest["files"]}
+        self.assertIn(("emulators", "cxbx-reloaded/keys.bin"), placed)
+        self.assertIn(("emulators", "chihiro/EEPROM.bin"), placed)
+        self.assertNotIn(("emulators", "cxbx-reloaded/EEPROM.bin"), placed)
+
+
 PROGRAM = b"PROGRAM BINARY"
 PROGRAM_DATA = b"PROGRAM DATA"
 

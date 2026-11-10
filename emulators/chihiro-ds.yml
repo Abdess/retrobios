@@ -17,6 +17,8 @@ systems:
   - sega-chihiro
   - microsoft-xbox
 mode: standalone
+standalone_directories:
+  - "Settings::GetDataLocation"
 
 notes: |
   Cxbx-Reloaded derivative built for the Chihiro light gun games, used by

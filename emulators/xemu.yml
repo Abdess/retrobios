@@ -166,6 +166,7 @@ files:
     standalone_path: eeprom.bin
     aliases: [eeprom.bin]
     required: false
+    installed_on: [retrobat]
     has_builtin: true
     size: 256
     validation: [size]
@@ -188,7 +189,7 @@ files:
   - name: xbox_hdd.qcow2
     mode: standalone
     required: false
-    installed_on: [batocera, emudeck, recalbox, retrodeck, rocknix]
+    installed_on: [batocera, emudeck, recalbox, retrobat, retrodeck, rocknix]
     config_key: sys.files.hdd_path
     found_by: content
     description: "Xbox hard disk image, 8 GB with the retail partition layout"
@@ -201,7 +202,8 @@ files:
       (xemu-hdd-image 1.0, xbox_hdd.qcow2.zip), which carries its own
       unsigned dashboard and empty TDATA and UDATA folders. Batocera,
       Recalbox, RetroDECK, EmuDeck and ROCKNIX install that image themselves
-      and point hdd_path at it.
+      and point hdd_path at it. RetroBat's launcher writes the image it
+      carries when the save folder holds none.
     source_ref: "system/vl.c:3060-3074, ui/xemu-snapshots.c:156, config_spec.yml:362-366"
 
   - name: xbox_hdd.qcow2
