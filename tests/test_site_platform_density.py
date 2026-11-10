@@ -268,8 +268,10 @@ BEFORE_WEIGHT = {
     # Elektronika BK, FM Towns and Nintendo DS moved to part pages. Built
     # site of 27c33b966: 13 pages, 15,662 elements, 1,356,360 bytes, and 40
     # bytes more where its Amiberry build is named "Amiberry 8.0.0
-    # (facaaeb, Batocera)" (twice).
-    "batocera": (13, 18_854, 1_356_400),
+    # (facaaeb, Batocera)" (twice). The search stopped reading the date
+    # line and "Next steps" on 2026-11-10 (data-pagefind-ignore, about 68
+    # bytes a page): 1,357,282 bytes on the built site of 25057ee3a.
+    "batocera": (13, 18_854, 1_357_282),
     "amberelec": (1, 7_928, 473_388),
     "romm": (2, 9_561, 572_487),
     "retroarch": (14, 21_503, 1_430_802),

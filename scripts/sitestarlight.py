@@ -577,6 +577,11 @@ def finalize_page(
     # is a name, and stays: it is how "neogeo.zip" finds the cores reading it.
     body = re.sub(r'<span class="(rb-badge(?![^"]*rb-badge-archive)[^"]*)"',
                   r'<span data-pagefind-ignore class="\1"', body)
+    # "Next steps" closes most pages with the same links ("for the setup in
+    # use"): the "u" of "wii u bios" matched the start of "use" there, and
+    # the Nintendo page came before the Wii U page.
+    body = _NEXT_STEPS.sub(
+        lambda match: f"<div data-pagefind-ignore>\n\n{match[0].rstrip()}\n\n</div>\n\n", body, count=1)
     if rel.startswith("systems/"):
         body += file_names_meta(body) + search_field("aliases", page_aliases(rel))
     consoles = field_words(authored.get("consoles"))
