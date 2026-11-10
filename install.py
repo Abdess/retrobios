@@ -4742,7 +4742,7 @@ def fetch_targets(plat: str) -> "dict | None":
     if LOCAL.offline:
         source = (f"{LOCAL.pack.name} carries none" if LOCAL.pack is not None
                   else f"{offline_named()} makes no request")
-        print(f"Error: no {display_name(plat)} board list here ({source}). Put "
+        print(f"Error: --target needs the {display_name(plat)} board list ({source}). Put "
               f"install/targets/{plat}.json beside the --manifest file, or go online.",
               file=sys.stderr)
         sys.exit(2)
@@ -7226,15 +7226,15 @@ def _report_outcome(
         say(f"BIOS folder: {_locations(paths)}")
     for line in kept:
         say(line)
-    left = [entry for entry in omitted_entries or []
-            if entry.get("reason") != "no_save_directory"]
+    skipped = [entry for entry in omitted_entries or []
+               if entry.get("reason") != "no_save_directory"]
     if omitted > len(unplaced) and OUTPUT.verbose:
-        for line in _omission_lines(omitted - len(unplaced), left,
+        for line in _omission_lines(omitted - len(unplaced), skipped,
                                     Path(paths[0]) if len(paths) == 1 else None):
             say(line)
-    elif omitted > len(unplaced) and any(entry.get("required") for entry in left):
+    elif omitted > len(unplaced) and any(entry.get("required") for entry in skipped):
         # A file an emulator cannot start without is no detail: counted.
-        say(needed_absent_words(sum(1 for entry in left if entry.get("required")),
+        say(needed_absent_words(sum(1 for entry in skipped if entry.get("required")),
                                 "--verbose"))
     # RomM's scan is the step after the install: the other hints say how to
     # install less, a detail.
@@ -11347,9 +11347,9 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
             continue
         setup = setup or candidate
         if folder is None:
-            found = games_root(candidate, bios_path)
-            if found is not None:
-                setup, root = candidate, found
+            found_root = games_root(candidate, bios_path)
+            if found_root is not None:
+                setup, root = candidate, found_root
                 break
     if root is None:
         return None
@@ -14250,8 +14250,12 @@ def main() -> None:
     _INVOCATION.os_type = detect_os()
     parser = build_parser()
     args = parser.parse_args()
+    # Each run says it from its own options: a run with --verbose before it
+    # in the same process left every later message with its raw cause.
     if args.verbose:
         _RAW_ERRORS.set()
+    else:
+        _RAW_ERRORS.clear()
     if args.cores_dir:
         args.installed_cores = True
     if args.yes:
@@ -23783,7 +23787,7 @@ def tui_view(state: TuiState, cols: int, rows: int) -> list[str]:
     if cols < TUI_MIN_COLS or rows < TUI_MIN_ROWS:
         # How large, and how large it is now: "larger" alone left the
         # reader resizing by guess.
-        lines = [_styled("")] * rows
+        lines: list[str] = [_styled("")] * rows
         said = [fit(text, cols) for text in (
             "Make the window larger:",
             f"{TUI_MIN_COLS}x{TUI_MIN_ROWS} or more, now {cols}x{rows}")][:rows]

@@ -55,10 +55,8 @@ JOURNEY_KEYS = {
 # Words each journey's screens show by default, summed over the screens it
 # stops on, and the most one screen of the default path may show (owner,
 # 2026-11-09: a beginner lost the important line in text). A path is no
-# word: its length is the machine's. The counts from before the Details
-# screen took the plan's and the result's notes are in claudedocs/
-# user_research/installer_ux/phase1_measure.md. A change that adds words
-# raises a number here and says why.
+# word: its length is the machine's. A change that adds words raises a
+# number here and says why.
 JOURNEY_WORDS = {
     "first_install": 63,
     "card_with_games": 106,

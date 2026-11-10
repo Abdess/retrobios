@@ -7834,5 +7834,23 @@ class TheNextStepFitsWhereTheInstallerRuns(unittest.TestCase):
                              install.NEXT_ON_CARD)
 
 
+class EachRunSaysErrorsFromItsOwnOptions(unittest.TestCase):
+    """--verbose set the raw-cause flag and nothing cleared it: a later run
+    in the same process ended its clock message with the raw SSL text."""
+
+    def test_a_run_without_verbose_clears_it(self):
+        install._RAW_ERRORS.set()
+        self.addCleanup(install._RAW_ERRORS.clear)
+        with unittest.mock.patch.object(sys, "argv",
+                                        ["install.py", "--list-platforms", "--offline"]), \
+                contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            try:
+                install.main()
+            except SystemExit:
+                pass
+        self.assertFalse(install._RAW_ERRORS.is_set())
+
+
 if __name__ == "__main__":
     unittest.main()

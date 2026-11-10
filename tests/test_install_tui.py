@@ -14934,7 +14934,7 @@ class GamesEndToEnd(unittest.TestCase):
 # The most words each screen may show by default, one count per size of
 # SIZES (owner, 2026-11-09: a beginner lost the important line in text). A
 # path is no word. The plan, Confirm and the result say what happens, where
-# and what next; their counts, notes and commands wait on Details. A list
+# and what next, and their counts, notes and commands wait on Details. A list
 # shows more rows on a taller window. A change that adds words to a screen
 # raises its numbers here and says why: the result names its failed files
 # (review of 2026-11-10), what the user acts on.
