@@ -5668,7 +5668,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
                             "--check", "--no-input", "--verbose")
         self.assertEqual(proc.returncode, 3, proc.stderr)
-        listing = proc.stdout.split("to download:\n", 1)[1].splitlines()
+        listing = proc.stdout.split("to download.\n", 1)[1].splitlines()
         self.assertEqual(listing[0].strip(), "wrong copy: scph5501.bin")
 
     def test_a_dry_run_counts_the_data_trees_and_ends_on_its_last_line(self):
@@ -5716,7 +5716,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
                             "--manifest", str(REPO_ROOT / "install" / "retroarch.json"))
         self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         missing = re.search(r"0 in place, (\d+) missing", proc.stdout).group(1)
-        self.assertIn(f"\n  {missing} files not in place:\n", proc.stdout)
+        self.assertIn(f"\n  {missing} files not in place.\n", proc.stdout)
         self.assertIn(f"  {missing} files need the internet", proc.stdout)
 
     def test_a_cores_folder_can_be_named(self):

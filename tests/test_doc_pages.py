@@ -187,7 +187,7 @@ class InstallerSamplesSayWhatTheCodePrints(unittest.TestCase):
 
         page = _page("installer.md")
         refused = _generated(page, "check-refused")
-        self.assertRegex(refused, r"\n  \d+ files? [a-z ]+:\n")
+        self.assertRegex(refused, r"\n  \d+ files? [a-z ]+\.\n")
         self.assertIn("read by beetle_psx, pcsx_rearmed at", refused)
         self.assertNotRegex(page, r"opened at /\S+ by ")
         self.assertIn('"read by ', inspect.getsource(install.opened_line))

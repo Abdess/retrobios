@@ -3,13 +3,13 @@
  3 installed, 1 failed.
  BIOS folder:
    /home/user/.config/retroarch/system
-   failed: scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
- To put them back: python3 install.py \
-   --restore .../2026-10-23_1200
- Shortened to fit this window.
- 1-11 of 17
- A Exit  ^v Scroll
+ Log: /tmp/retrobios-x/install.log
+
+
+
+
+ A Exit  Y Details

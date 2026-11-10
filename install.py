@@ -6875,12 +6875,15 @@ def _report_outcome(
     say(next_step_words(platform_of or {}, paths))
 
 
+NEXT_ON_CARD = "Next: put the card back in the device and start a game."
+
+
 def next_step_words(platform_of: dict[Path, str], paths: list[Path]) -> str:
     """The step after an install that ended well: a card goes back in its
     device, a setup on this machine is started."""
     setups = [(platform_of.get(path, ""), path) for path in paths]
     if setups and all(plat and on_its_card(plat, path) for plat, path in setups):
-        return "Next: put the card back in the device and start a game."
+        return NEXT_ON_CARD
     names = list(dict.fromkeys(detected_os(plat, path) or display_name(plat)
                                for plat, path in setups if plat))
     if len(names) == 1:
@@ -6944,7 +6947,7 @@ def _check_fetch_line(fetch: int, beside: str, lacking: int = 0) -> str:
                 f"internet, which {offline_named()} does not use. {_offline_remedy()}")
     # Why nothing is lost goes with the details: the remedy is the line.
     return ("  Run the same command without --check to fetch them."
-            + (f" A wrong copy is replaced, and the one in place kept in {BACKUP_DIR} "
+            + (f"\n  A wrong copy is replaced, and the one in place kept in {BACKUP_DIR} "
                f"beside {beside}." if OUTPUT.verbose else ""))
 
 
@@ -16209,15 +16212,14 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # The count and the folder by default, each file with
                 # --verbose: 20 paths hid the line saying what to do.
                 print(f"\n  {_plural(len(to_download) + trees_missing, 'file')} "
-                      + ("not in place" if offline or LOCAL.pack is not None
-                         else "to download") + (":" if OUTPUT.verbose else "."))
+                      + ("not in place." if offline or LOCAL.pack is not None
+                         else "to download."))
                 for line in check_lines(missing, mismatched, files, manifest, bios_path,
                                         args.verbose, up_to_date, bios_index, copies):
                     detail(line)
                 for line in unreadable_lines(unread, args.verbose):
                     print(line)
-                if not OUTPUT.verbose:
-                    print(f"  BIOS folder: {shown_path(bios_path)}")
+                print(f"  BIOS folder: {shown_path(bios_path)}")
                 # The data files need the internet too: offline, "8164 files
                 # need the internet" stood under "10805 files not in place".
                 trees_fetched = trees_missing if LOCAL.pack is None else 0
@@ -17196,12 +17198,38 @@ class TuiLine(str):
     # Whether the command it holds is typed into PowerShell, from the
     # Invocation that made it: its line ends follow its words.
     powershell: bool | None = None
+    # Shown on the Details screen, not on the screen it explains.
+    detail = False
 
 
 def _styled(text: str, style: str = "") -> TuiLine:
     line = TuiLine(screen_text(text))
     line.style = style
     return line
+
+
+def _detail(text: str, style: str = "") -> TuiLine:
+    """A line of the Details screen: an explanation, a list, a reason."""
+    line = _styled(text, style)
+    line.detail = True
+    return line
+
+
+def _details(lines: Iterable[str]) -> list[TuiLine]:
+    """lines as Details lines, each keeping how it is drawn."""
+    marked = []
+    for line in lines:
+        copy = TuiLine(str(line))
+        for name in ("style", "mark", "command", "powershell"):
+            if hasattr(line, name):
+                setattr(copy, name, getattr(line, name))
+        copy.detail = True
+        marked.append(copy)
+    return marked
+
+
+def _is_detail(line: object) -> bool:
+    return bool(getattr(line, "detail", False))
 
 
 def _command_line(text: str, hint: Invocation) -> TuiLine:
@@ -17504,6 +17532,9 @@ class TuiState:
         self.installed_only: bool = False
         self.jobs: int = 8
         self.passthrough: list = []
+        # Whether Details were opened on the result: the terminal keeps
+        # them after Exit too.
+        self.details_seen = False
         # The install.
         self.download: dict | None = None
         self.progress: dict | None = None
@@ -18104,7 +18135,7 @@ class TuiRow(NamedTuple):
 
 
 # Screens that scroll text instead of listing rows.
-_PAGERS = ("preview", "command", "result", "misplaced", "unreadable", "games")
+_PAGERS = ("preview", "command", "result", "misplaced", "unreadable", "games", "details")
 _CHECKLISTS = ("systems", "cores")
 
 
@@ -18483,9 +18514,10 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         rows = [TuiRow("systems", TUI_SYSTEMS_ROW)]
         game_data = _game_data_row(state)
         return rows + ([game_data] if game_data is not None else []) + [
-            TuiRow("options", "Options"), TuiRow("quit", "Quit")]
+            *_details_row(state), TuiRow("options", "Options"), TuiRow("quit", "Quit")]
     if not (_needed(check) if check else 0) and not check.get("data_missing"):
-        return [TuiRow("close", "Close"), *_games_rows(state), TuiRow("options", "Options")]
+        return [TuiRow("close", "Close"), *_games_rows(state), *_details_row(state),
+                TuiRow("options", "Options")]
     # The size the pack can give: "Install 6.6 GB" from a pack holding
     # none of the files.
     lacking = set(_tui_pack_lacks(state, [event["dest"] for event in state.files]))
@@ -18542,7 +18574,18 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         rows.append(TuiRow("misplaced", "Show the files in the wrong place"))
     if state.unreadable:
         rows.append(TuiRow("unreadable", "Show the files that could not be read"))
-    return rows + [TuiRow("options", "Options"), TuiRow("quit", "Quit")]
+    return rows + [*_details_row(state), TuiRow("options", "Options"), TuiRow("quit", "Quit")]
+
+
+# The plan's explanations, counts and reasons, one press away: a pad has
+# no d key.
+TUI_DETAILS_ROW = TuiRow("details", "Details")
+
+
+def _details_row(state: TuiState) -> list[TuiRow]:
+    """The Details row, where the plan leaves lines out: --verbose shows
+    them all on the plan itself."""
+    return [] if tui_verbose(state) else [TUI_DETAILS_ROW]
 
 
 def games_where(state: TuiState) -> str:
@@ -18604,11 +18647,11 @@ def games_plan_words(state: TuiState) -> list[str]:
                 f"{', '.join(region_title(str(r)) for r in row['regions'])}"
                 for row in games.get("found") or [] if row.get("regions")]
     if narrowed:
-        words.append(f"One region where the games prove it: {'; '.join(narrowed)}.")
+        words.append(_detail(f"One region where the games prove it: {'; '.join(narrowed)}."))
     fallback = len(games.get("fallback") or [])
     if fallback:
-        words.append(f"{agree(fallback, 'game gets', 'games get')} every BIOS of "
-                     f"{'its' if fallback == 1 else 'their'} system: Show the games.")
+        words.append(_detail(f"{agree(fallback, 'game gets', 'games get')} every BIOS of "
+                             f"{'its' if fallback == 1 else 'their'} system: Show the games."))
     return words
 
 
@@ -19495,6 +19538,8 @@ def _tui_folder_facts(state: TuiState) -> dict:
 
 def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
     screen, action = state.screen, row.action
+    if action == "details":
+        return _open_details(state)
     if action == "filter":
         only = _only_match(state)
         if only is not None:
@@ -20438,6 +20483,10 @@ def _pager_key(state: TuiState, key: TuiKey) -> list[tuple]:
     elif name in ("enter", "esc", "backspace") or char == " ":
         if screen == "result":
             return tui_quit(state)
+        if screen == "details":
+            # Never _back: a run counting under the plan goes on.
+            state.stack.pop()
+            return []
         return _back(state)
     state.focus[screen] = max(0, min(top, _pager_last(state, _pager_items(state))))
     return []
@@ -20517,6 +20566,11 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
         state.focus["error_text"] = max(0, state.focus.get("error_text", 0)
                                         + (step if key.name == "pgdn" else -step))
         return []
+    if char == "d" and screen in ("plan", "confirm", "result") and not (
+            screen == "confirm" and (state.running or state.dry is None)):
+        return _open_details(state)
+    if screen == "result" and not rows and (char == "o" or key.name == "tab"):
+        return _open_details(state)
     if screen in _PAGERS and not rows:
         return _pager_key(state, key)
     if not rows:
@@ -21173,7 +21227,7 @@ _ROW_VERBS = {
     "unreadable": "Show", "exit": "Exit", "addapp": "Put it on the card",
     "cardsystem": "Choose", "rescan": "Look again", "elsewhere": "Choose", "drive": "Choose",
     "recheck": "Check again", "gamedata": "Change", "share": "Choose", "morecores": "Show",
-    "games": "Change", "startonly": "Change", "gameslist": "Show",
+    "games": "Change", "startonly": "Change", "gameslist": "Show", "details": "Show",
 }
 
 
@@ -21564,7 +21618,7 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     if found_in:
         # Right under the folder it names: after the save lines it read as
         # naming them.
-        lines.append(_styled(f"Named by {_short_path(Path(found_in[0]), state.home)}", "path"))
+        lines.append(_detail(f"Named by {_short_path(Path(found_in[0]), state.home)}", "path"))
     if state.facts.get("writable") is False:
         # The remedy itself comes below, after the counts.
         lines += cannot_write_words(dest, state.platform, tui_hint(state),
@@ -21578,27 +21632,27 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     counts = (f"{check['present']} in place, {check['missing'] + data} missing, "
               f"{_plural(wrong, 'wrong copy')}")
     # A first install's missing files are its normal state, not a warning.
-    lines.append(_styled(counts, "quiet") if not check["present"] and not wrong else counts)
+    lines.append(_detail(counts, "quiet" if not check["present"] and not wrong else ""))
     # The backup line goes right under the count it explains, before the
     # pack and copy split: at 40x12 and 40x15 it came after it, and was cut.
     count_at = len(lines)
     if copied and fetch and LOCAL.pack is not None:
-        lines.append(f"{fetch} from the pack, {len(copied)} copied from this machine")
+        lines.append(_detail(f"{fetch} from the pack, {len(copied)} copied from this machine"))
     elif copied and fetch and not offline:
         # 47 to download above 49 missing and 1 wrong copy: the 3 found on
         # this machine are the difference, on a line of its own ("0 wrong
         # copies: 2 of them" read as two of the zero). Offline the headline
         # says it: "3 downloaded" sat under "3 need the internet".
-        lines.append(f"{need} to install: {len(copied)} copied from this machine, "
-                     f"{fetch} downloaded")
+        lines.append(_detail(f"{need} to install: {len(copied)} copied from this machine, "
+                             f"{fetch} downloaded"))
     after_counts = len(lines)
     saves = (_choice_saves(state) if check is state.check
              else state.dry_saves if check is state.dry else None)
     saves_lines = _saves_lines(state, saves)
-    lines += [_styled(line, "path" if index else "") for index, line in enumerate(saves_lines)]
+    lines += [_detail(line, "path" if index else "") for index, line in enumerate(saves_lines)]
     free = state.facts.get("free")
     if free is not None:
-        lines.append(f"Free space: {format_size(free)}")
+        lines.append(_detail(f"Free space: {format_size(free)}"))
         if check["bytes_needed"] > free:
             lines.append(space_words(check["bytes_needed"], free, _on_its_card(state)))
     # The wrong copies something replaces: offline, those a folder copied
@@ -21612,30 +21666,32 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
               if wrong_dests else wrong)
     misplaced = _tui_misplaced(state) if check is state.check else []
     if misplaced:
-        lines.insert(after_counts, f"{_plural(len(misplaced), 'file')} "
-                     f"{'is' if len(misplaced) == 1 else 'are'} in the wrong place, "
-                     f"{'it' if len(misplaced) == 1 else 'they'} will be copied where the "
-                     "emulators read "
-                     f"{'it' if len(misplaced) == 1 else 'them'}, the "
-                     f"{'copy' if len(misplaced) == 1 else 'copies'} left as "
-                     f"{'it is' if len(misplaced) == 1 else 'they are'}.")
+        lines.insert(after_counts, _detail(
+            f"{_plural(len(misplaced), 'file')} "
+            f"{'is' if len(misplaced) == 1 else 'are'} in the wrong place, "
+            f"{'it' if len(misplaced) == 1 else 'they'} will be copied where the "
+            "emulators read "
+            f"{'it' if len(misplaced) == 1 else 'them'}, the "
+            f"{'copy' if len(misplaced) == 1 else 'copies'} left as "
+            f"{'it is' if len(misplaced) == 1 else 'they are'}."))
     if backup:
         # With its subject: "They are replaced" sat lines under the count.
         # Not where nothing can be installed: nothing is replaced then.
-        lines.insert(count_at, (f"The {_plural(wrong, 'wrong copy')} " if backup == wrong
-                                else f"{backup} of the {_plural(wrong, 'wrong copy')} ")
-                     + f"{'is' if backup == 1 else 'are'} replaced, the old "
-                     f"{'one' if backup == 1 else 'ones'} kept in a backup folder.")
+        lines.insert(count_at, _detail(
+            (f"The {_plural(wrong, 'wrong copy')} " if backup == wrong
+             else f"{backup} of the {_plural(wrong, 'wrong copy')} ")
+            + f"{'is' if backup == 1 else 'are'} replaced, the old "
+            f"{'one' if backup == 1 else 'ones'} kept in a backup folder."))
     if state.facts.get("writable") is False and dest is not None:
         lines += _commands(state, write_remedy(dest, state.platform, tui_hint(state),
                                                state.pad not in TUI_PAD_ROUTES))
     if check is state.check:
-        lines += _scan_lines(state)
+        lines += _details(_scan_lines(state))
     if check.get("not_installable"):
-        lines += _unavailable_lines(state)
+        lines += _details(_unavailable_lines(state))
     if check is state.check:
-        lines += _unplaced_lines(_choice_summary(state), state,
-                                 "Choose it in Options, Save folder (--save-dir).")
+        lines += _details(_unplaced_lines(_choice_summary(state), state,
+                                          "Choose it in Options, Save folder (--save-dir)."))
     if check is state.check and state.from_folders:
         # A folder copied from that holds none of them: the plan came back
         # the same, still saying to copy from a folder.
@@ -22014,7 +22070,8 @@ def _choice_line(state: TuiState) -> list[str]:
             "count comes before the install."]
 
 
-def _view_plan(state: TuiState, width: int, height: int) -> tuple:
+def _plan_text(state: TuiState) -> list:
+    """Every line of the plan, the Details lines among them."""
     check = state.check or {}
     lines = _plan_lines(check, state.dest, state)
     choice = _choice_line(state)
@@ -22126,11 +22183,11 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
     if found and parts:
         parts = (f"Not in {', '.join(_last_name(str(folder)) for folder in found)}: "
                  f"{parts}")
-    lines[at:at] = [*([state.card_note] if state.card_note
+    lines[at:at] = [*([_detail(state.card_note)] if state.card_note
                       and state.card_note != state.status else []),
                     *([f"{said[0].upper()}{said[1:]}."] if said else []),
                     *([emptied_named] if emptied_named else []), *choice,
-                    *([parts] if parts else []), *games_plan_words(state)]
+                    *([_detail(parts)] if parts else []), *games_plan_words(state)]
     if state.version:
         # Before the free space, which gives way first: appended last, the
         # note was cut from the 40x12 plan with no sign.
@@ -22140,7 +22197,7 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
     if state.board:
         free = next((index for index, line in enumerate(lines)
                      if str(line).startswith("Free space:")), len(lines))
-        lines.insert(free, state.board)
+        lines.insert(free, _detail(state.board))
     if state.status:
         lines.append(state.status)
     if defined:
@@ -22150,7 +22207,25 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
         # where the screen has no room.
         saves = next((index for index, line in enumerate(lines)
                       if "'s save directory" in str(line)), len(lines))
-        lines.insert(saves, defined)
+        lines.insert(saves, _detail(defined))
+    return lines
+
+
+def tui_verbose(state: TuiState) -> bool:
+    """Whether the screen was opened with --verbose: every line is shown
+    where it belongs, as before the Details screen held them."""
+    return any(flag == "--verbose" for flag, _value in state.passthrough)
+
+
+def _shown(state: TuiState, lines: list) -> list:
+    """The lines a screen shows: all with --verbose, else all but Details."""
+    return list(lines) if tui_verbose(state) else [
+        line for line in lines if not _is_detail(line)]
+
+
+def _view_plan(state: TuiState, width: int, height: int) -> tuple:
+    check = state.check or {}
+    lines = _shown(state, _plan_text(state))
     # A folder that does not fit is wrapped, as the first screen wraps it:
     # cut in its middle, the plan hid the part being checked before Install.
     # At 40 columns too, broken after a separator: cut there, it was spelled
@@ -22442,7 +22517,9 @@ def _pager_items(state: TuiState) -> list:
     if state.screen == "games":
         return games_pager_lines(state)
     if state.screen == "result":
-        return tui_outcome(state)[1]
+        return _shown(state, tui_outcome(state)[1])
+    if state.screen == "details":
+        return details_lines(state)
     if state.screen == "command":
         return ["The same choice without questions:", "",
                 _command_line(tui_command(state), tui_hint(state))]
@@ -22511,18 +22588,7 @@ def _view_confirm(state: TuiState, width: int, height: int) -> tuple:
         # Why this screen: the numbers above are counted again for the
         # systems and options chosen, the last look before anything is
         # written.
-        lines = _plan_lines(state.dry, state.dest, state)
-        # The kinds apart, as the plan counts them, under the folder.
-        data = state.dry.get("data_missing", 0)
-        parts, _defined = _kinds_lines(state, state.dry_files, data,
-                                       state.dry.get("data_bytes") if data else None)
-        if parts:
-            at = next((index + 1 for index, line in enumerate(lines)
-                       if str(line).startswith(_FOLDER_LABEL)), len(lines))
-            lines.insert(at, parts)
-        if any(row.action == "install" for row in tui_rows(state)):
-            lines.insert(0, "Counted again for these choices. Nothing is written before "
-                         "Install.")
+        lines = _shown(state, _confirm_text(state))
     if not any(row.action == "install" for row in tui_rows(state)) and state.dry is not None:
         # Back alone: one Back on the bar, and no word of an Install. Titled
         # for what it is: "Confirm" over nothing to confirm.
@@ -22531,6 +22597,23 @@ def _view_confirm(state: TuiState, width: int, height: int) -> tuple:
                 if tui_rows(state)[0].action == "close" else ("A/Enter Back", "? Help"))
     return ("Confirm", _compose(state, width, height, lines, tui_rows(state)),
             ("A/Enter Install", "B/Esc Back", "? Help"))
+
+
+def _confirm_text(state: TuiState) -> list:
+    """Every line of Confirm, the Details lines among them."""
+    lines = _plan_lines(state.dry or {}, state.dest, state)
+    # The kinds apart, as the plan counts them, under the folder.
+    data = (state.dry or {}).get("data_missing", 0)
+    parts, _defined = _kinds_lines(state, state.dry_files, data,
+                                   (state.dry or {}).get("data_bytes") if data else None)
+    if parts:
+        at = next((index + 1 for index, line in enumerate(lines)
+                   if str(line).startswith(_FOLDER_LABEL)), len(lines))
+        lines.insert(at, _detail(parts))
+    if any(row.action == "install" for row in tui_rows(state)):
+        lines.insert(0, "Counted again for these choices.")
+        lines.insert(1, _detail("Nothing is written before Install."))
+    return lines
 
 
 def _bar(share: float, width: int) -> str:
@@ -22568,7 +22651,7 @@ def _view_installing(state: TuiState, width: int, height: int) -> tuple:
                  else f"{stops[1]} stops. What is done stays done.")
     room = height - len(lines) - 1
     failed = [item for item in reversed(state.finished) if not item[1]]
-    good = [item for item in reversed(state.finished) if item[1]]
+    good = [item for item in reversed(state.finished) if item[1]] if tui_verbose(state) else []
     shown = (failed + good)[:max(0, room)]
     if shown:
         lines.append("")
@@ -22778,13 +22861,13 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         apart = _tui_tally(state, [{"dest": dest, "size": 0} for dest in missing
                                    if dest not in wrong_dests])
         if _tui_categories(state) and apart.bios and apart.games:
-            lines.append(f"Still missing: {installed_words(apart.bios, apart.games)}.")
+            lines.append(_detail(f"Still missing: {installed_words(apart.bios, apart.games)}."))
         # Each folder spelled in full, as the result names its others.
         lines.append(_offline_remedy([shown_path(folder) for folder in state.from_folders]))
     ok = {dest for dest, good, _why in state.finished if good}
     if any(reason and dest in ok for dest, (_folder, reason) in state.local_dests.items()):
         # A fix copies: the misplaced files are the user's, never moved.
-        lines.append("The copies in the wrong place were left as they are.")
+        lines.append(_detail("The copies in the wrong place were left as they are."))
     if _tui_categories(state) and title != "Stopped" and installed:
         # As the plan counted them, and as line mode ends, on every result:
         # the old card's said "6 files copied" and no kind. The data tree
@@ -22792,14 +22875,14 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         done = _tui_tally(state, [{"dest": dest, "size": 0}
                                   for dest, good, _why in state.finished if good])
         if done.files and not (title == "Done" and _one_kind(state, installed)):
-            lines.append("Installed: " + installed_words(
-                done.bios, done.games, max(0, installed - done.files)) + ".")
+            lines.append(_detail("Installed: " + installed_words(
+                done.bios, done.games, max(0, installed - done.files)) + "."))
     # The folder the plan named: MinUI's Bios, not the card's root.
     lines.append(f"BIOS folder: {shown_path(_plan_folder(state, state.dest))}")
     if installed + up_to_date:
         # Spelled as the BIOS folder above it is, whole: "~/" beside a full
         # path was two spellings on one screen.
-        lines += _saves_lines(state, state.done_saves, whole=True)
+        lines += _details(_saves_lines(state, state.done_saves, whole=True))
     if state.version:
         # Said again with the result, as line mode ends: the system's own
         # BIOS check may mark the files just put in place.
@@ -22813,7 +22896,8 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         names = ", ".join(str(item.get("name")) for item in fallback[:3])
         more = f" and {len(fallback) - 3} more" if len(fallback) > 3 else ""
         their = "its" if len(fallback) == 1 else "their"
-        lines.append(f"Not recognised, every BIOS of {their} system kept: {names}{more}.")
+        lines.append(_detail(f"Not recognised, every BIOS of {their} system kept: "
+                             f"{names}{more}."))
     if space:
         lines.append("Free some space on the card, then run again." if _on_its_card(state)
                      else "Free some space, or run again and choose another folder.")
@@ -22829,10 +22913,10 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
             continue
         for dest in dests:
             if shown < 20:
-                lines.append(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
+                lines.append(_detail(f"  failed: {dest}" + (f" ({reason})" if reason else "")))
             shown += 1
     if shown > 20:
-        lines.append(f"  ... and {shown - 20} more")
+        lines.append(_detail(f"  ... and {shown - 20} more"))
     if title == "Finished with errors":
         # What a rerun does, as line mode and the first install page say
         # it: the screen never did.
@@ -22848,8 +22932,9 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
     if expected > landed and not left and title != "Stopped" and summary:
         # The data files the plan counted, never named on a result that
         # counted the BIOS files alone.
-        lines.append(f"{_plural(expected - landed, 'data file')} not installed"
-                     + (f": not in {LOCAL.pack.name}." if LOCAL.pack is not None else "."))
+        lines.append(_detail(f"{_plural(expected - landed, 'data file')} not installed"
+                             + (f": not in {LOCAL.pack.name}." if LOCAL.pack is not None
+                                else ".")))
     if state.dest is not None and any(failure["reason"] == NOT_WRITABLE
                                       for failure in failed):
         # The plan's own advice: the result offered nothing after 22 files
@@ -22869,25 +22954,36 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         lines.append(f"The files it replaced are kept in {kept['folder']}")
         if typed:
             # Broken between its words only, never inside one (_wrap).
-            lines.append(_command_line(f"To put them back: {run.launcher()} --restore "
-                                       f"{run.word(str(kept['folder']))}", run))
+            lines += _details([_command_line(f"To put them back: {run.launcher()} --restore "
+                                             f"{run.word(str(kept['folder']))}", run)])
     if summary and not summary.get("interrupted") and installed + up_to_date:
-        lines += _unavailable_lines(state)
+        lines += _details(_unavailable_lines(state))
     for group in summary.get("left_out") or []:
-        lines.append(f"{left_out_words(group)}.")
-    lines += _unplaced_lines(summary, state)
+        lines.append(_detail(f"{left_out_words(group)}."))
+    lines += _details(_unplaced_lines(summary, state))
     lines += _tui_app_lines(state)
+    if title == "Done" and not (state.platform == "romm" and installed):
+        # Last of what the result says by default: RomM's scan is its step.
+        lines.append(tui_next_words(state))
     if typed:
-        lines += ["Same choice without questions:",
-                  _command_line(f"  {tui_command(state)}", tui_hint(state))]
+        lines += _details(["Same choice without questions:",
+                           _command_line(f"  {tui_command(state)}", tui_hint(state))])
     if tui_keeps_log(state):
-        lines.append(f"Details: {state.log}")
+        lines.append(f"Log: {state.log}")
     if state.mouse and typed:
         # A drag over the command selected nothing: the terminal sends the
         # press as a report. Said where it is read.
-        lines.append(_styled(TUI_RESULT_AGAIN if state.os_type == "android"
+        lines.append(_detail(TUI_RESULT_AGAIN if state.os_type == "android"
                              else TUI_RESULT_COPY, "dim"))
     return title, lines
+
+
+def tui_next_words(state: TuiState) -> str:
+    """The step after an install the result says went well."""
+    if _on_its_card(state):
+        return NEXT_ON_CARD
+    name = detected_os(state.platform, state.dest) if state.dest is not None else ""
+    return f"Next: start {name or display_name(state.platform, state.manifest)} and play."
 
 
 def _dest_error_outcome(state: TuiState, installed: int) -> tuple[str, list[str]]:
@@ -22908,10 +23004,10 @@ def _dest_error_outcome(state: TuiState, installed: int) -> tuple[str, list[str]
         lines.append("Run it again and choose another folder.")
     lines += _commands(state, remedy)
     if state.pad not in TUI_PAD_ROUTES:
-        lines += ["Same choice without questions:",
-                  _command_line(f"  {tui_command(state)}", tui_hint(state))]
+        lines += _details(["Same choice without questions:",
+                           _command_line(f"  {tui_command(state)}", tui_hint(state))])
     if tui_keeps_log(state):
-        lines.append(f"Details: {state.log}")
+        lines.append(f"Log: {state.log}")
     return ("Nothing installed" if not installed else "Finished with errors"), lines
 
 
@@ -22957,6 +23053,7 @@ def tui_keeps_log(state: TuiState) -> bool:
 
 def _view_result(state: TuiState, width: int, height: int) -> tuple:
     title, lines = tui_outcome(state)
+    lines = _shown(state, lines)
     # The outcome in bold, its counts in their roles: it led a list of
     # lines drawn alike.
     lines[0] = _styled(lines[0], "title")
@@ -22971,7 +23068,7 @@ def _view_result(state: TuiState, width: int, height: int) -> tuple:
     if state.app_running:
         return (title, _pager(state, width, height, lines), ("Writing to the card...",))
     return (title, _pager(state, width, height, lines),
-            ("A/Enter Exit", *_scroll(state, lines, width, height)))
+            ("A/Enter Exit", "Y/o Details", *_scroll(state, lines, width, height)))
 
 
 def _view_error(state: TuiState, width: int, height: int) -> tuple:
@@ -23006,6 +23103,36 @@ def _view_quit(state: TuiState, width: int, height: int) -> tuple:
                      rows), hint)
 
 
+def details_lines(state: TuiState) -> list:
+    """What the screen under Details leaves out: its explanations, lists
+    and reasons."""
+    if len(state.stack) < 2:
+        return ["Nothing more to say here."]
+    # Read as the screen under it reads itself: its rows, its words.
+    top = state.stack.pop()
+    try:
+        under = state.screen
+        lines = (_plan_text(state) if under == "plan"
+                 else _confirm_text(state) if under == "confirm"
+                 else tui_outcome(state)[1] if under == "result" else [])
+    finally:
+        state.stack.append(top)
+    return [line for line in lines if _is_detail(line)] or ["Nothing more to say here."]
+
+
+def _view_details(state: TuiState, width: int, height: int) -> tuple:
+    items = _pager_items(state)
+    return ("Details", _pager(state, width, height, items),
+            ("A/Enter Back", *_scroll(state, items, width, height)))
+
+
+def _open_details(state: TuiState) -> list[tuple]:
+    if state.screen == "result":
+        # Looked at, they are said again in the terminal after Exit.
+        state.details_seen = True
+    return _push(state, "details")
+
+
 _TUI_VIEWS: dict[str, Callable[[TuiState, int, int], tuple]] = {
     "setup": _view_setup, "platforms": _view_platforms, "folder": _view_folder,
     "browse": _view_browse, "path": _view_path, "create": _view_create,
@@ -23014,7 +23141,7 @@ _TUI_VIEWS: dict[str, Callable[[TuiState, int, int], tuple]] = {
     "preview": _view_preview, "command": _view_command, "confirm": _view_confirm,
     "installing": _view_installing, "result": _view_result, "error": _view_error,
     "quit": _view_quit, "cardroot": _view_cardroot, "misplaced": _view_misplaced,
-    "unreadable": _view_unreadable, "games": _view_games,
+    "unreadable": _view_unreadable, "games": _view_games, "details": _view_details,
 }
 
 
@@ -23078,6 +23205,10 @@ def _help_lines(state: TuiState) -> list[tuple[str, str]]:
         keys.append(("Left/Right", "Change a value"))
     if screen in ("plan", "systems", "confirm"):
         keys.append((names["options"], "Options"))
+    if screen in ("plan", "confirm"):
+        keys.append(("d", "Details"))
+    elif screen == "result" and not tui_rows(state):
+        keys.append((f"{names['options']}, d" if names["options"] else "d", "Details"))
     # The result's bar calls B Exit: the help called it Quit.
     back = "Exit" if screen == "result" else "Quit" if len(state.stack) == 1 else "Back"
     keys += [(names["back"], back), ("q, Ctrl-C", "Quit"), *kill, *_route_extras(state),
@@ -23156,7 +23287,7 @@ def _view_help(state: TuiState, width: int, height: int) -> tuple:
     # Cut from its end at 40x12, the help lost Quit and This help with no
     # sign: what a list's keys also say elsewhere goes first.
     for spare in ("First, last", "All, none", "extra", "Filter by setup or device name",
-                  "Filter", "Options", "This help", "gap", "definitions"):
+                  "Filter", "Options", "Details", "This help", "gap", "definitions"):
         if (len(drawn(keys)) + len(extra) + len(defined)
                 + len(_text_lines(more, width)) <= height):
             break
@@ -23975,15 +24106,15 @@ def _said_lines(state: TuiState) -> list[str]:
 
 
 def _closing_lines(state: TuiState) -> list[str]:
-    if state.screen != "result" and state.download is not None:
+    if state.screen not in ("result", "details") and state.download is not None:
         # An install ran: what it wrote is said, whatever ended it.
         title, lines = tui_outcome(state)
-        return [f"RetroBIOS: {title}", *_terminal_words(lines)]
+        return [f"RetroBIOS: {title}", *_terminal_words(_farewell_shown(state, lines))]
     if state.screen == "crashed":
         return [f"RetroBIOS stopped on an unexpected error. What it was is in {state.log}."]
-    if state.screen == "result":
+    if state.screen == "result" or (state.screen == "details" and "result" in state.stack):
         title, lines = tui_outcome(state)
-        return [f"RetroBIOS: {title}", *_terminal_words(lines)]
+        return [f"RetroBIOS: {title}", *_terminal_words(_farewell_shown(state, lines))]
     if state.screen == "error":
         return [f"RetroBIOS: {state.error_title or 'something went wrong'}",
                 *(line.replace("then choose Try again", "then run the installer again")
@@ -24010,6 +24141,12 @@ ROMM_SCAN_WORDS = ("RomM lists the firmware its library scan has recorded: start
 # Line mode's words.
 TUI_SAVE_REMEDY = "Choose it in Options, Save folder (--save-dir), next time."
 LINE_SAVE_REMEDY = "Name it with --save-dir next time."
+
+
+def _farewell_shown(state: TuiState, lines: list) -> list:
+    """The result as the terminal keeps it: Details too once they were
+    opened, as the result's copy hint says."""
+    return list(lines) if state.details_seen else _shown(state, lines)
 
 
 def _terminal_words(lines: list[str]) -> list[str]:

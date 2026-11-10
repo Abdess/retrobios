@@ -3,10 +3,10 @@
  4 files to download, 1.0 MB
  BIOS folder:
    ~/.config/retroarch/system
- 1 wrong copy: backed up, replaced.
  > Install
    Choose systems
    Copy from an old card or a folder
+   Details
    Options
    Quit
  A Install  B Back  Y Options  ? Help

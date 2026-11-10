@@ -1,0 +1,24 @@
+ RetroBIOS: Details
+
+   failed: scph5500.bin (HTTP 404)
+ To put them back: python3 install.py \
+   --restore /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
+ Same choice without questions:
+   python3 install.py --platform retroarch \
+     --dest /home/user/.config/retroarch/system
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Back

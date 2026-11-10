@@ -1,0 +1,24 @@
+ RetroBIOS: Details
+
+ 1 in place, 3 missing, 1 wrong copy
+ The 1 wrong copy is replaced, the old one kept in a backup folder.
+ Free space: 50.0 GB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Back

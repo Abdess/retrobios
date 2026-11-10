@@ -3,11 +3,6 @@
  4 files to download, 1.0 MB
  BIOS folder: ~/.config/retroarch/system
  For the 412 games on this card.
- One region where the games prove it: nintendo-gba Europe.
- 2 games get every BIOS of their system: Show the games.
- 1 in place, 3 missing, 1 wrong copy
- The 1 wrong copy is replaced, the old one kept in a backup folder.
- Free space: 50.0 GB
 
  > Install
    For the games on this card: yes                                    412 games
@@ -15,8 +10,13 @@
    Show the games
    Choose systems
    Copy the BIOS files from an old card or a folder
+   Details
    Options
    Quit
+
+
+
+
 
 
 

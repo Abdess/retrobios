@@ -287,7 +287,7 @@ class InstallerLeavesGameDataOut(unittest.TestCase):
 
     def test_install_leaves_it_out_and_names_it(self):
         self.serve()
-        proc = self.run_installer("--no-game-data")
+        proc = self.run_installer("--no-game-data", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertTrue((self.bios / "a.bin").exists())
         self.assertFalse((self.bios / "game.wad").exists())
@@ -297,10 +297,10 @@ class InstallerLeavesGameDataOut(unittest.TestCase):
 
     def test_check_and_dry_run_leave_it_out(self):
         self.serve()
-        for mode, listed in (("--check", "1 file to download:"),
+        for mode, listed in (("--check", "1 file to download."),
                              ("--dry-run", "Would download 1 file")):
             with self.subTest(mode=mode):
-                proc = self.run_installer("--no-game-data", mode)
+                proc = self.run_installer("--no-game-data", mode, "--verbose")
                 self.assertIn(
                     "2 game data files left out (--no-game-data), 1 of them not installable: "
                     "game.wad, level.dat",

@@ -171,8 +171,9 @@ Enter checks the BIOS folder when nothing can be copied.
 Run at a terminal, the installer opens a full screen that a keyboard or a
 controller drives. Three presses of A or Enter install everything the setup
 reads: the setup found here, the plan, then the result. The plan screen says
-how many files are missing, how much they weigh, how many are in place and how
-much space is free, before anything is written.
+what it installs, its size and where, before anything is written. **Details**
+(`d`) adds the rest: how many files are in place, the free space, the files
+left out and why.
 
 The other choices sit one press away. **Choose systems** ticks the consoles to
 keep, with the total to download under the list. It opens on its first system,
@@ -207,6 +208,7 @@ install starts.
 | Tick, untick | Space, Right, Left | X, D-pad Right and Left (X alone inside muxterm, Y with muxterm's own keys) |
 | Back | Esc, Backspace | B, Select (B alone with muxterm's own keys, where Select shows its keyboard) |
 | Options | `o`, Tab | Y |
+| Details | `d`, and `o` or Tab on the result | the Details row, Y on the result |
 | Filter a long list | `/` then type, Enter on a lone match chooses it | muxterm: Select shows a keyboard. Elsewhere none (the setup list puts the SD cards after RetroArch) |
 | Keys of the screen | `?`, F1 (F1 alone while typing a filter, where the help lists the keys that do not type) | |
 | Stop an install | Esc, `q`, Ctrl+C | B, Select+Start (B alone with muxterm's own keys) |
@@ -229,11 +231,12 @@ regions screen, Left and Right move the region under the cursor up and down the
 order of preference. During the download, a stop waits for the files in
 progress, and a second one stops at once. Select+Start on a handheld ends the
 installer with a signal (SIGTERM), which stops it the same way. Either way the
-result says how many files were installed, and it stays printed in the terminal
-once the screen closes, with the command that repeats the run. A run that failed
-keeps its log and names it, and every other run leaves nothing behind. A path
-on the result is never split inside a word: one longer than the window takes
-a line of its own, which the terminal folds. A command breaks only between its
+result says how many files were installed and the next step, and it stays
+printed in the terminal once the screen closes. Its **Details** hold the
+command that repeats the run, printed in the terminal too once they were
+opened. A run that failed keeps its log and names it, and every other run
+leaves nothing behind. A path on the result is never split inside a word: one
+longer than the window takes a line of its own, which the terminal folds. A command breaks only between its
 arguments, an option kept with its value, each line but the last ending with
 the continuation its shell reads (a backslash in sh, a backtick in PowerShell), so
 the lines copied run as one command. Where an option and its path do not fit
@@ -315,8 +318,9 @@ them back on every way out, a stop with Ctrl+Z included. On the command line
 screen, any screen showing a command and the screen where a path is typed,
 the terminal keeps the mouse, so text is selected, copied and pasted as usual.
 The result takes taps, so a touch screen can leave it: it is printed again in
-the terminal once the screen closes, its commands with it, and its last line
-says so. Elsewhere, and on the result, hold Shift while selecting. `--plain`
+the terminal once the screen closes, with its commands when its Details were
+opened, and the last line of the Details says so. Elsewhere, and on the
+result, hold Shift while selecting. `--plain`
 never asks for clicks. Clicks and taps were checked on 2026-10-27 in xterm,
 tmux, GNU screen 4.09, Windows Terminal (WSL) and Termux
 on Android 17. macOS Terminal and iTerm2 are not checked yet, nor the key
@@ -618,7 +622,7 @@ against a list of four files:
 <!-- generated: check-refused -->
 
 ```
-  3 files to download:
+  3 files to download.
   2 of these files are in the BIOS folder in the wrong place: a run without --check copies them where the cores open them, and leaves the copies found as they are.
     wrong copy: scph5501.bin
       another region: the contents of scph5500.bin (japan)

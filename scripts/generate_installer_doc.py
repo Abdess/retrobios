@@ -604,7 +604,7 @@ def _refused_lines(text: str) -> list[str]:
     """The files a check flags, each with its reason and where its cores read it."""
     lines = text.splitlines()
     start = next((i for i, line in enumerate(lines)
-                  if re.fullmatch(r"  \d+ files? [a-z ]+:", line)), None)
+                  if re.fullmatch(r"  \d+ files? [a-z ]+\.", line)), None)
     if start is None:
         raise SampleFailed("the check printed no files not in place")
     end = max(i for i, line in enumerate(lines) if line.lstrip().startswith("read by "))
