@@ -693,6 +693,24 @@ launchers:
   passes_to: rompath in $md_conf_root/mame/mame.ini
   fails_when_missing: false
   source_ref: "scriptmodules/emulators/mame.sh:133"
+- emulator: mame
+  package: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $romdir/mame/samples;$romdir/arcade/samples
+  passes_to: samplepath in $md_conf_root/mame/mame.ini
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/mame.sh:135"
+- emulator: mame
+  package: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $romdir/mame/artwork;$romdir/arcade/artwork
+  passes_to: artpath in $md_conf_root/mame/mame.ini
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/mame.sh:136"
 - emulator: mame4all
   package: mame4all
   repo: "git https://github.com/RetroPie/mame4all-pi.git master"
@@ -703,6 +721,24 @@ launchers:
   kind: package
   names: []
   source_ref: "scriptmodules/emulators/mame4all.sh:12, 16, 91-92"
+- emulator: mame4all
+  package: mame4all
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $romdir/mame-mame4all/samples;$romdir/arcade/samples
+  passes_to: samplepath in $md_conf_root/mame-mame4all/mame.cfg
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/mame4all.sh:78"
+- emulator: mame4all
+  package: mame4all
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $romdir/mame-mame4all;$romdir/arcade
+  passes_to: rompath in $md_conf_root/mame-mame4all/mame.cfg
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/mame4all.sh:79"
 - emulator: minivmac
   package: minivmac
   repo: "git https://github.com/minivmac/minivmac.git master"

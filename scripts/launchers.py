@@ -314,8 +314,9 @@ BIOS_ROOT_VARIABLES = ("$biosdir", "$home/RetroPie/BIOS", "${biosPath}", "$bios_
 
 # The name a platform's launch code gives its roms root: RetroDECK's
 # component scripts write $roms_path (retrodeck_launchers), the setting whose
-# default is the roms root (config/retrodeck/retrodeck.json:5).
-ROMS_ROOT_VARIABLES = ("$roms_path", "${roms_path}")
+# default is the roms root (config/retrodeck/retrodeck.json:5), RetroPie's
+# scriptmodules $romdir (retropie_packages.sh:47-49).
+ROMS_ROOT_VARIABLES = ("$roms_path", "${roms_path}", "$romdir", "${romdir}")
 
 # The kinds that hand an emulator a whole directory. A scans_dir record sets
 # the directory the emulator picks its file from: ROCKNIX writes ARMSX2's

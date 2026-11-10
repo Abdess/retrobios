@@ -873,6 +873,18 @@ class MameSearchPaths(unittest.TestCase):
                     if e["name"] == "hash/" and e.get("mode") == "standalone"]
         self.assertTrue(entry.get("bundled"))
 
+    def test_retropie_reads_samples_below_its_roms(self) -> None:
+        # samplepath $romdir/mame/samples;$romdir/arcade/samples (mame.sh:135).
+        view = standalone_view("mame", "retropie")
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual((bbc["standalone_path"], bbc.get("root")),
+                         ("mame/samples/bbc.zip", "roms"))
+        (tree,) = [e for e in view["files"]
+                   if e["name"] == "floppy/" and e.get("mode") == "standalone"]
+        self.assertEqual((tree["standalone_path"], tree.get("root")),
+                         ("mame/samples/floppy/", "roms"))
+        self.assertNotIn("bundled", tree)
+
     def test_a_moved_tree_is_found_by_its_layout_path(self) -> None:
         from common import expand_directory_entries, load_database
 

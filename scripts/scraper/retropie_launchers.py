@@ -32,6 +32,9 @@ SECTIONS = ("emulators", "libretrocores", "ports")
 PACKAGES_SCRIPT = "retropie_packages.sh"
 
 BIOSDIR = "$biosdir"
+# The roms root (retropie_packages.sh:47-49): MAME's mame.ini lists rom,
+# sample and artwork folders below it (scriptmodules/emulators/mame.sh:133-136).
+ROMDIR = "$romdir"
 # The package whose config every lr- core runs under.
 LIBRETRO_FRONTEND = "retroarch"
 # The launch scripts copied next to an emulator spell the directory out.
@@ -464,6 +467,20 @@ class Scripts:
         return results
 
 
+def _search_list_in_roms(event: "Event") -> bool:
+    """An iniSet whose value is a list of folders below the roms root.
+
+    One folder alone is where a program writes (cfg_directory, nvram_directory
+    and the others MAME's mame.ini sets): a list is where it searches.
+    """
+    if len(event.words) < 3 or len(event.words[2]) != 1:
+        return False
+    parts = [p for p in event.words[2][0].split(";") if p]
+    return len(parts) > 1 and all(
+        p.startswith(ROMDIR + "/") or p.startswith("${romdir}/") for p in parts
+    )
+
+
 def _mentions_bios(text: str) -> bool:
     return BIOSDIR in text or "${biosdir}" in text or BIOS_SPELLED in text
 
@@ -540,6 +557,12 @@ class PackageReader:
             return
         if command == "addEmulator":
             self._add_emulator(event)
+            return
+        if command == "iniSet" and not _mentions_bios(event.raw):
+            # A search path below the roms root: MAME reads its samples from
+            # samplepath $romdir/mame/samples;$romdir/arcade/samples.
+            if _search_list_in_roms(event):
+                self._ini_set(event)
             return
         if not _mentions_bios(event.raw):
             return
