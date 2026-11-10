@@ -25,6 +25,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 import unittest
 from pathlib import Path
 
@@ -617,6 +618,145 @@ class InstallRecord(unittest.TestCase):
         self.assertEqual(self.dests(line), self.dests(screen))
         self.assertEqual(events(line, "check")[0]["bytes_needed"],
                          events(screen, "check")[0]["bytes_needed"])
+
+
+def record_text(folder: Path, choice: list[str], **setups: object) -> str:
+    """A record of folder whose retroarch setup chose choice."""
+    setup = {"written": "2026-11-03T12:00:00Z", "list": {}, "choice": choice,
+             "files": [{"dest": "gba_bios.bin", "root": "", "sha1": "0" * 40, "size": 1,
+                        "from": "download"}]}
+    return json.dumps({"schema": install.RECORD_SCHEMA, "installer": "x", "folder": str(folder),
+                       "setups": {"retroarch": setup, **setups}})
+
+
+class RecordReview(unittest.TestCase):
+    """A record is data another program or a person may have written: what
+    it holds is checked before any of it is used or printed."""
+
+    setUp = InstallRecord.setUp
+    run_line = InstallRecord.run_line
+    dests = InstallRecord.dests
+    everything = InstallRecord.everything
+
+    def write(self, choice: list[str], **setups: object) -> None:
+        self.dest.mkdir(parents=True, exist_ok=True)
+        self.record.parent.mkdir(exist_ok=True)
+        self.record.write_text(record_text(self.dest, choice, **setups), encoding="utf-8")
+
+    def test_a_word_outside_the_choice_rejects_the_whole_record(self):
+        for choice in (["--system", "nintendo-gba", "--from", "/mnt/x"],
+                       ["--manifest", "http://example.invalid/list.json"],
+                       ["--system", "nintendo-gba", "--dest", "/etc"],
+                       ["--system", "--yes"], ["--system", "a\nb"], ["nintendo-gba"]):
+            with self.subTest(choice=choice):
+                self.write(choice)
+                proc = self.run_line("--check", "--events")
+                said = events(proc, "record")
+                self.assertEqual([event["status"] for event in said], ["unreadable"], said)
+                self.assertEqual(self.dests(proc), self.everything())
+                text = proc.stdout + proc.stderr
+                for word in ("/mnt/x", "example.invalid", "/etc"):
+                    self.assertNotIn(word, text)
+                # The screen reads it through the same function.
+                state = install.TuiState()
+                state.platform, state.dest = "retroarch", self.dest
+                install._tui_record_load(state)
+                self.assertIsNone(state.record)
+                self.assertEqual(install.tui_flags(state), [])
+
+    def test_a_recorded_games_folder_stays_beside_the_bios_folder(self):
+        parent = self.dest.parent
+        self.assertTrue(install.games_folder_kept(str(parent / "roms"), self.dest))
+        self.assertTrue(install.games_folder_kept(str(parent), self.dest))
+        for value in ("/etc", str(parent.parent / "other"), "roms", "\\\\server\\share",
+                      "//server/share", ""):
+            with self.subTest(value=value):
+                self.assertFalse(install.games_folder_kept(value, self.dest))
+        self.write(["--for-games", "/etc"])
+        proc = self.run_line("--check", "--events")
+        self.assertEqual(events(proc, "record")[0]["status"], "unreadable")
+        self.assertEqual(self.dests(proc), self.everything())
+
+    def test_a_recorded_option_that_cannot_apply_is_left_out(self):
+        """A run nobody typed options for went on failing: the list has no
+        cores, no categories and no board list, and a region is unknown."""
+        for choice, typed in ((["--system", "nintendo-gba", "--region", "atlantis"],
+                               ["--region", "atlantis"]),
+                              (["--system", "nintendo-gba", "--emulator", "nosuch"],
+                               ["--emulator", "nosuch"]),
+                              (["--system", "nintendo-gba", "--installed-cores"],
+                               ["--installed-cores"]),
+                              (["--system", "nintendo-gba", "--target", "nosuch"],
+                               ["--target", "nosuch"]),
+                              (["--system", "nintendo-gba", "--no-game-data"],
+                               ["--no-game-data"])):
+            with self.subTest(choice=choice):
+                self.write(choice)
+                proc = self.run_line("--yes", "--events")
+                self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+                self.assertEqual(proc.stderr.count("Left out of the recorded choice"), 1,
+                                 proc.stderr)
+                self.assertEqual(self.dests(proc), ["gba_bios.bin"])
+                # Written again without it: the next run says nothing.
+                kept = json.loads(self.record.read_text())["setups"]["retroarch"]["choice"]
+                self.assertEqual(kept, ["--system", "nintendo-gba"])
+                # Typed, it is refused as before.
+                self.assertNotEqual(self.run_line(*typed, "--check").returncode, 0)
+
+    def test_a_date_no_clock_can_show_is_an_unknown_day(self):
+        if not hasattr(time, "tzset"):
+            self.skipTest("no tzset")
+        zone = os.environ.get("TZ")
+
+        def back() -> None:
+            if zone is None:
+                os.environ.pop("TZ", None)
+            else:
+                os.environ["TZ"] = zone
+            time.tzset()
+
+        self.addCleanup(back)
+        for tz, written in (("UTC+5", "0001-01-01T00:00:00Z"),
+                            ("UTC-5", "9999-12-31T23:59:59Z")):
+            with self.subTest(written=written):
+                os.environ["TZ"] = tz
+                time.tzset()
+                self.assertEqual(install.record_day({"written": written}), "")
+
+    def test_a_record_that_is_no_file_is_never_read(self):
+        self.dest.mkdir(parents=True)
+        self.record.parent.mkdir()
+        os.mkfifo(self.record)
+        proc = self.run_line("--check", "--events")
+        self.assertIn("it is not a file", events(proc, "record")[0]["message"])
+        self.assertEqual(self.dests(proc), self.everything())
+        self.record.unlink()
+        with open(self.record, "wb") as handle:
+            handle.truncate(install.MAX_RECORD_BYTES + 1)
+        self.assertIn("larger than any record", install.load_record(self.dest).problem)
+
+    def test_a_newer_record_is_left_as_it_is(self):
+        self.dest.mkdir(parents=True)
+        self.record.parent.mkdir()
+        newer = json.dumps({"schema": install.RECORD_SCHEMA + 1, "setups": {"x": {}}})
+        self.record.write_text(newer, encoding="utf-8")
+        proc = self.run_line("--yes", "--events")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertEqual([event["status"] for event in events(proc, "record")],
+                         ["unreadable", "not_written"])
+        self.assertEqual(self.record.read_text(encoding="utf-8"), newer)
+        self.assertEqual(proc.stderr.count("written by a newer installer"), 1)
+
+    def test_a_bad_setup_is_dropped_and_the_others_kept(self):
+        good = {"written": "2026-11-03T12:00:00Z", "list": {}, "choice": ["--all-files"],
+                "files": []}
+        self.write(["--system", "nintendo-gba"], lakka=good, batocera={"choice": 3})
+        path, _setup, problem = install.write_record(self.dest, "retropie", {}, ["--all-files"],
+                                                     [])
+        self.assertEqual((path, problem), (self.record, ""))
+        kept = json.loads(self.record.read_text())["setups"]
+        self.assertEqual(sorted(kept), ["lakka", "retroarch", "retropie"])
+        self.assertEqual(kept["retroarch"]["choice"], ["--system", "nintendo-gba"])
 
 
 if __name__ == "__main__":

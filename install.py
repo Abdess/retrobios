@@ -6136,63 +6136,165 @@ def record_paths(folder: Path) -> list[Path]:
     return [holder / name for holder, _prefix in KeptFiles._holders(folder)]
 
 
-def _valid_setup(setup: object) -> bool:
+# Read whole, never past this: a record of every file of the longest list
+# holds 1.6 MB per setup, and a few setups share one folder.
+MAX_RECORD_BYTES = 16 * 1024 * 1024
+# The choice options that take a value. --for-games takes one or none.
+_RECORD_VALUED = ("--system", "--core", "--emulator", "--region", "--target")
+
+
+def games_folder_kept(value: str, folder: Path) -> bool:
+    """Whether a recorded --for-games folder may be read again: an absolute
+    path under the folder that holds the BIOS folder (a card's root, the
+    setup's own folder), never another drive or a network share."""
+    if not value or value.startswith(("\\\\", "//")) or not os.path.isabs(value):
+        return False
+    parent = os.path.normcase(os.path.normpath(os.path.dirname(os.path.abspath(folder))))
+    games = os.path.normcase(os.path.normpath(value))
+    try:
+        return os.path.commonpath([parent, games]) == parent
+    except ValueError:
+        # Two drives on Windows: no common path.
+        return False
+
+
+def valid_choice(choice: list[str], folder: Path) -> bool:
+    """Whether every word of a recorded choice is an option of the choice or
+    the value right after one: a record naming --dest, --from or --manifest
+    would put them in the commands printed for the user to copy."""
+    words = list(choice)
+    while words:
+        flag = words.pop(0)
+        if flag not in RECORD_CHOICE:
+            return False
+        if flag in _RECORD_VALUED:
+            if not words or words[0].startswith("-") or not words[0].strip():
+                return False
+            value = words.pop(0)
+            if any(ord(char) < 32 or ord(char) == 127 for char in value):
+                return False
+        elif flag == "--for-games" and words and not words[0].startswith("--"):
+            if not games_folder_kept(words.pop(0), folder):
+                return False
+    return True
+
+
+def _valid_setup(setup: object, folder: Path) -> bool:
     if not isinstance(setup, dict):
         return False
     choice, files = setup.get("choice"), setup.get("files")
     return (isinstance(setup.get("written"), str) and isinstance(choice, list)
-            and all(isinstance(word, str) for word in choice) and isinstance(files, list)
+            and all(isinstance(word, str) for word in choice) and valid_choice(choice, folder)
+            and isinstance(files, list)
             and all(isinstance(item, dict) and isinstance(item.get("dest"), str)
                     and isinstance(item.get("sha1"), str) and isinstance(item.get("size"), int)
                     for item in files))
 
 
-def read_record(folder: Path) -> tuple[dict | None, Path | None, str]:
-    """(the record of folder, where it is, why it cannot be used). Neither a
-    record nor a reason where there is none."""
+class RecordRead(NamedTuple):
+    """What reading a record found: the record with its usable setups, where
+    it is, why it cannot be used, whether a newer installer wrote it, and
+    the setups it holds that cannot be used."""
+
+    data: dict | None
+    path: Path | None
+    problem: str
+    newer: bool = False
+    dropped: tuple = ()
+
+
+def _read_record_bytes(path: Path) -> bytes:
+    """The bytes of a record that is a regular file of a record's size. A
+    FIFO, a device or a folder is refused before it is read: reading one
+    waited forever."""
+    info = os.stat(path)
+    if not stat.S_ISREG(info.st_mode):
+        raise OSError(errno.EINVAL, "it is not a file")
+    if info.st_size > MAX_RECORD_BYTES:
+        raise OSError(errno.EFBIG, "it is larger than any record")
+    flags = os.O_RDONLY | getattr(os, "O_NONBLOCK", 0) | getattr(os, "O_BINARY", 0)
+    handle = os.open(path, flags)
+    try:
+        # Opened without waiting, then checked again: what is open now is
+        # what is read, whatever took the name since the stat.
+        if not stat.S_ISREG(os.fstat(handle).st_mode):
+            raise OSError(errno.EINVAL, "it is not a file")
+        chunks, left = [], MAX_RECORD_BYTES + 1
+        while left > 0:
+            chunk = os.read(handle, min(left, 1 << 20))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            left -= len(chunk)
+    finally:
+        os.close(handle)
+    data = b"".join(chunks)
+    if len(data) > MAX_RECORD_BYTES:
+        raise OSError(errno.EFBIG, "it is larger than any record")
+    return data
+
+
+def load_record(folder: Path) -> RecordRead:
+    """The record of folder, read once (RecordRead)."""
     for path in record_paths(folder):
         try:
-            text = path.read_text(encoding="utf-8")
+            text = _read_record_bytes(path).decode("utf-8")
         except (FileNotFoundError, NotADirectoryError):
             continue
         except (OSError, UnicodeDecodeError) as exc:
             reason = getattr(exc, "strerror", None) or str(exc)
-            return None, path, f"The install record {path} cannot be read ({reason})"
+            return RecordRead(None, path, f"The install record {path} cannot be read ({reason})")
         try:
             data = json.loads(text)
         except ValueError:
-            return None, path, f"The install record {path} is damaged"
-        if not isinstance(data, dict) or not isinstance(data.get("setups"), dict):
-            return None, path, f"The install record {path} is damaged"
-        if data.get("schema") != RECORD_SCHEMA:
-            return None, path, (f"The install record {path} was written by another "
-                                "version of the installer")
-        if not all(_valid_setup(setup) for setup in data["setups"].values()):
-            return None, path, f"The install record {path} is damaged"
-        return data, path, ""
-    return None, None, ""
+            return RecordRead(None, path, f"The install record {path} is damaged")
+        schema = data.get("schema") if isinstance(data, dict) else None
+        if isinstance(schema, int) and not isinstance(schema, bool) and schema > RECORD_SCHEMA:
+            # Its shape is the newer installer's: kept for it, never read.
+            return RecordRead(None, path, f"The install record {path} was written by a newer "
+                                          "installer", newer=True)
+        if (not isinstance(data, dict) or not isinstance(data.get("setups"), dict)
+                or not isinstance(data.get("folder"), str) or schema != RECORD_SCHEMA):
+            return RecordRead(None, path, f"The install record {path} is damaged")
+        setups = {name: setup for name, setup in data["setups"].items()
+                  if _valid_setup(setup, folder)}
+        dropped = tuple(sorted(str(name) for name in data["setups"] if name not in setups))
+        return RecordRead({**data, "setups": setups}, path, "", dropped=dropped)
+    return RecordRead(None, None, "")
+
+
+def read_record(folder: Path) -> tuple[dict | None, Path | None, str]:
+    """(the record of folder, where it is, why it cannot be used). Neither a
+    record nor a reason where there is none."""
+    found = load_record(folder)
+    return found.data, found.path, found.problem
 
 
 def setup_record(plat: str, folder: Path) -> tuple[dict | None, Path | None, str]:
     """The record of plat in folder, where it is, and why it cannot be used.
     A record written for a folder of another name (copied, or renamed with
-    it) is not this folder's."""
-    data, path, problem = read_record(folder)
-    if data is None:
-        return None, path, problem
-    written_for = str(data.get("folder") or "")
+    it) is not this folder's. A setup of it that cannot be used (an option
+    the choice has no place for, a games folder elsewhere) is damaged, the
+    others still read."""
+    found = load_record(folder)
+    if found.data is None:
+        return None, found.path, found.problem
+    written_for = str(found.data.get("folder") or "")
     if Path(written_for).name != Path(os.path.abspath(folder)).name:
-        return None, path, ""
-    return data["setups"].get(plat), path, ""
+        return None, found.path, ""
+    if plat in found.dropped:
+        return None, found.path, f"The install record {found.path} is damaged"
+    return found.data["setups"].get(plat), found.path, ""
 
 
 def record_day(setup: dict) -> str:
     """The day a record was written, as the plan says it: 3 Nov."""
     try:
         when = datetime.datetime.fromisoformat(setup["written"].replace("Z", "+00:00"))
-    except (KeyError, ValueError):
+        # Year 1 or 9999 cannot be moved to local time: an unknown day.
+        local = when.astimezone()
+    except (KeyError, TypeError, AttributeError, ValueError, OverflowError, OSError):
         return ""
-    local = when.astimezone()
     day = f"{local.day} {_MONTHS[local.month - 1]}"
     return day if local.year == datetime.datetime.now().year else f"{day} {local.year}"
 
@@ -6265,9 +6367,18 @@ def write_record(
     earlier runs placed: (where, the record of plat, why it was not
     written). A record that cannot be read is replaced."""
     folder = Path(os.path.abspath(folder))
-    data, found, _problem = read_record(folder)
-    if data is None:
-        data = {"setups": {}}
+    read = load_record(folder)
+    if read.newer:
+        # What a newer installer wrote is kept for it: rewritten here, the
+        # other setups' history would go.
+        if str(read.path) not in _RECORD_SAID:
+            _RECORD_SAID.add(str(read.path))
+            print(f"  {read.problem}: left as it is.")
+        return None, {"files": [], "written": ""}, f"{read.problem}: left as it is"
+    found = read.path
+    # A record that cannot be read is replaced, said when it was read. One
+    # with a setup that cannot be used keeps its others.
+    data = read.data if read.data is not None else {"setups": {}}
     previous = data["setups"].get(plat) or {}
     merged = {(str(item.get("root") or ""), item["dest"]): item
               for item in previous.get("files") or []}
@@ -6339,6 +6450,29 @@ def say_record_problem(plat: str, folder: Path, path: Path | None, problem: str)
                 choice=[], date="", files=0, message=message)
 
 
+def by_record(args: argparse.Namespace) -> bool:
+    """Whether the run's choice came from the install record: nothing of
+    it was typed, so a part that cannot apply is left out, never refused."""
+    return bool(getattr(args, "from_record", False))
+
+
+def drop_recorded(args: argparse.Namespace, plat: str, flag: str, why: str,
+                  keep: list[str] | None = None) -> None:
+    """Leave out a recorded option that cannot apply, in one line: the run
+    goes on, and the record written after it no longer holds it. keep, for
+    an option of several names, is the names that still apply."""
+    name = flag[2:].replace("-", "_")
+    chosen = _INVOCATION.chosen.get(plat, [])
+    if keep:
+        setattr(args, name, list(keep))
+        _INVOCATION.chosen[plat] = [option for option in chosen if option[0] != flag] + [
+            (flag, value) for value in keep]
+    else:
+        setattr(args, name, build_parser().get_default(name))
+        _INVOCATION.chosen[plat] = [option for option in chosen if option[0] != flag]
+    print(f"  Left out of the recorded choice: {flag} ({why}).")
+
+
 def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | None:
     """Take the choice recorded for plat in folder as the run's, as if its
     options had been typed: the plan's first choice. Returns the record,
@@ -6365,6 +6499,12 @@ def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | No
         # a person expects, and said nothing new.
         _RECORD_TAKEN[plat] = setup
     _INVOCATION.chosen[plat] = [option for option in options if option[0] != "--all-files"]
+    if isinstance(args.for_games, Path) and not _is_dir(args.for_games):
+        # The games folder recorded is gone: the card's own games are read.
+        _INVOCATION.chosen[plat] = [(flag, None if flag == "--for-games" else value)
+                                    for flag, value in _INVOCATION.chosen[plat]]
+        args.for_games = True
+        print("  Left out of the recorded choice: its games folder (no longer there).")
     message = record_menu_words(setup)
     EVENTS.emit("record", platform=plat, folder=str(folder), path=str(path), status="applied",
                 choice=list(setup["choice"]), date=setup["written"],
@@ -10502,10 +10642,45 @@ def _known_names(values: list[str] | None, known: list[str], label: str,
         try:
             resolve_choices([value], known, label, aliases)
         except ValueError:
-            detail(f"  {value} is no longer on the list: left out of the recorded choice")
             continue
         kept.append(value)
     return kept
+
+
+def _recorded_names(args: argparse.Namespace, plat: str, flag: str, known: list[str],
+                    aliases: dict[str, str] | None = None) -> None:
+    """A recorded --system, --core or --emulator kept to the names the list
+    still holds, the others left out in one line."""
+    name = flag[2:].replace("-", "_")
+    values = list(getattr(args, name) or [])
+    kept = _known_names(values, known, flag[2:], aliases)
+    if kept != values:
+        gone = ", ".join(value for value in values if value not in kept)
+        drop_recorded(args, plat, flag, f"{gone} no longer on the list", kept)
+
+
+def _recorded_emulators(args: argparse.Namespace, plat: str, manifest: dict,
+                        files: list[dict], omitted: list[dict]) -> None:
+    """A recorded --emulator that cannot narrow this list, left out."""
+    if "system_cores" not in manifest:
+        drop_recorded(args, plat, "--emulator", "the list does not say which emulators "
+                      "read which systems")
+        return
+    _recorded_names(args, plat, "--emulator", sorted(emulator_names(manifest, files, omitted)))
+
+
+def _recorded_regions(args: argparse.Namespace, plat: str) -> None:
+    """A recorded --region kept to the regions this installer knows."""
+    values = list(args.region or [])
+    kept = []
+    for value in values:
+        try:
+            resolve_regions([value])
+        except ValueError:
+            continue
+        kept.append(value)
+    if kept != values:
+        drop_recorded(args, plat, "--region", "a region this installer does not know", kept)
 
 
 def _requested_narrowing(
@@ -10524,6 +10699,22 @@ def _requested_narrowing(
     asked = [(flag, axis) for flag, given, axis in (
         ("--system", args.system, "systems"), ("--core", args.core, "cores"),
         ("--region", args.region, "regions")) if given]
+    if getattr(args, "from_record", False):
+        # A recorded option that cannot narrow this list is left out: nobody
+        # typed it, and every run without options would stop on it.
+        for flag, axis in asked:
+            if axis not in recorded:
+                drop_recorded(args, plat, flag, f"the list records no {axis}")
+        asked = [(flag, axis) for flag, axis in asked if axis in recorded]
+        _recorded_regions(args, plat)
+        choices = available_choices(files, omitted)
+        if args.system:
+            _recorded_names(args, plat, "--system", choices["systems"],
+                            system_aliases(manifest))
+        if args.core:
+            _recorded_names(args, plat, "--core", choices["cores"])
+        if not (args.system or args.core or args.region):
+            return None
     for flag, axis in asked:
         if axis in recorded:
             continue
@@ -10536,14 +10727,6 @@ def _requested_narrowing(
         print(_narrowing_advice(plat, axis, flag, recorded, pack_alone), file=sys.stderr)
         sys.exit(1)
     choices = available_choices(files, omitted)
-    if getattr(args, "from_record", False):
-        # A name the list no longer holds is dropped from a recorded choice,
-        # never refused: nobody typed it.
-        args.system = _known_names(args.system, choices["systems"], "system",
-                                   system_aliases(manifest)) or None
-        args.core = _known_names(args.core, choices["cores"], "core") or None
-        if not (args.system or args.core or args.region):
-            return None
     try:
         systems = resolve_choices(
             args.system or [], choices["systems"], "system", system_aliases(manifest),
@@ -14577,6 +14760,8 @@ def main() -> None:
         # the menu. Yes to every question is no question.
         args.no_input = True
     _INVOCATION.record(args)
+    if os.environ.get(TUI_RECORD_ENV):
+        args.from_record = True
     if os.environ.get(TUI_LIST_ENV):
         # The full screen's own copy of the list, deleted when it closes: a
         # command naming it fails once the screen is gone.
@@ -16424,7 +16609,12 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         if not written and setup_record(plat, folder)[0] is None:
             # Nothing of ours is there to record, and no choice to keep.
             return
-        options = _INVOCATION.flags(plat)
+        # A games folder is kept only where the next run reads it from a
+        # record (games_folder_kept): elsewhere the card's own games are.
+        options = [(flag, value if flag != "--for-games" or not value
+                    else os.path.abspath(value)
+                    if games_folder_kept(os.path.abspath(value), folder) else None)
+                   for flag, value in _INVOCATION.flags(plat)]
         if games:
             options += [("--for-games", None),
                         *([("--required-only", None)] if args.required_only else [])]
@@ -16441,16 +16631,23 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     f"Recorded {_plural(count, 'file')} and this choice in {path}.")
 
     if len(platforms) == 1 and not listing and not choice_given(args):
-        if apply_record(args, *platforms[0]) is not None and args.target:
-            known = fetch_targets(platforms[0][0])
-            if known is not None and args.target not in known:
-                # A board the list no longer names: every board's files.
-                args.target = None
+        apply_record(args, *platforms[0])
 
     # --target is checked for every platform before anything is written, as
     # --installed-cores is below: EmuDeck installed 3.2 GB and only then was
     # steamos refused for RetroArch, with no summary of what had landed.
     target_lists: dict[str, dict] = {}
+    if args.target and by_record(args) and len(platforms) == 1:
+        # The screen's runs carry the record's options as typed ones.
+        plat = platforms[0][0]
+        if LOCAL.offline and local_targets(plat) is None and plat in TARGET_PLATFORMS:
+            drop_recorded(args, plat, "--target", "the board list needs the internet")
+        else:
+            with contextlib.redirect_stderr(io.StringIO()):
+                known = fetch_targets(plat)
+            if known is None or args.target not in known:
+                drop_recorded(args, plat, "--target", "the board list does not name it"
+                              if known is not None else "the board list could not be read")
     if args.target:
         for plat_name, _bios_path in platforms:
             targets = fetch_targets(plat_name)
@@ -16485,6 +16682,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             searched = [args.cores_dir] if args.cores_dir else core_dirs(plat_name, bios_path)
             cores_found[(plat_name, bios_path)] = installed_cores(searched)
             cores_searched[(plat_name, bios_path)] = searched
+        elif args.installed_cores and by_record(args):
+            drop_recorded(args, plat_name, "--installed-cores",
+                          f"{plat_name} ships its cores with the system")
         elif args.installed_cores:
             print(
                 f"Error: {plat_name} ships its cores with the system. "
@@ -16493,7 +16693,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             )
             sys.exit(1)
         if args.installed_cores and not cores_found[(plat_name, bios_path)]:
-            _no_core_found(plat_name, bios_path, searched)
+            if by_record(args):
+                drop_recorded(args, plat_name, "--installed-cores", "no core is installed")
+            else:
+                _no_core_found(plat_name, bios_path, searched)
 
     for plat_name, bios_path in platforms:
         if bios_path not in installed_paths:
@@ -16536,6 +16739,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             )
 
         game_data_cut = 0
+        if args.no_game_data and not manifest.get("categorized") and by_record(args):
+            drop_recorded(args, plat_name, "--no-game-data", "the list marks no game data")
         if args.no_game_data and not manifest.get("categorized"):
             # Without the field nothing is marked, and the run would
             # install the game data it was asked to leave out.
@@ -16619,6 +16824,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             found_cores = []
         elif found_cores:
             detail(f"  {_plural(len(found_cores), 'core')} installed")
+        if args.installed_cores and "system_cores" not in manifest and by_record(args):
+            drop_recorded(args, plat_name, "--installed-cores",
+                          "the list does not say which cores read which systems")
         if args.installed_cores:
             if "system_cores" not in manifest:
                 print(
@@ -16644,6 +16852,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 else (files, omitted_files)))
             continue
 
+        if args.emulator and by_record(args):
+            _recorded_emulators(args, plat_name, manifest, files, omitted_files)
         if args.emulator:
             files, omitted_files = _narrow_to_emulators(
                 args.emulator, manifest, plat_name, files, omitted_files
@@ -16756,7 +16966,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 return _INVOCATION.command(plat, folder)
 
             # The record's options, which the menu's commands overwrite.
-            recorded = _INVOCATION.chosen.get(plat_name)
+            record_options_kept = _INVOCATION.chosen.get(plat_name)
             selection = _prompt_custom_selection(
                 plat_name, bare, bare_omitted + unplaced, installed,
                 detected_os(plat_name, bios_path) or display,
@@ -16808,9 +17018,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 _INVOCATION.chosen[plat_name] = []
             else:
                 _INVOCATION.chosen.pop(plat_name, None)
-            if kept_record and recorded is not None:
+            if kept_record and record_options_kept is not None:
                 # Enter on the recorded choice: still the record's options.
-                _INVOCATION.chosen[plat_name] = recorded
+                _INVOCATION.chosen[plat_name] = record_options_kept
             elif selection is None and plat_name in _RECORD_TAKEN and not games_applied:
                 # e: every file, the recorded narrowing given up.
                 args.system = args.core = args.region = None
@@ -17465,6 +17675,10 @@ TUI_ESC_WAIT = 0.04
 TUI_FRAME = 0.1
 # Set for a child run handed the interface's own copy of the file list.
 TUI_LIST_ENV = "RETROBIOS_TUI_LIST"
+# Set for a child run whose choice options are the install record's, kept
+# on the screen: a part of them that cannot apply is left out, as line mode
+# leaves it out of a record it reads, never refused.
+TUI_RECORD_ENV = "RETROBIOS_TUI_RECORDED"
 _PASTE_START = "\x1b[200~"
 _PASTE_END = "\x1b[201~"
 # Turned on by the interface, so a pasted path arrives as one piece and its
@@ -18898,6 +19112,19 @@ def tui_argv(state: TuiState, run: str, python: str, script: str) -> list[str]:
         # Only the install writes: --check and --dry-run refuse it.
         argv.append("--add-app")
     return argv + _TUI_MODES[run]
+
+
+def tui_run_env(state: TuiState, own_list: bool) -> dict | None:
+    """The environment of a child run: None for this one's own, else with
+    the markers the run reads (TUI_LIST_ENV, TUI_RECORD_ENV)."""
+    marks = {TUI_LIST_ENV: "1"} if own_list else {}
+    if tui_record_kept(state):
+        marks[TUI_RECORD_ENV] = "1"
+    if not marks and TUI_RECORD_ENV not in os.environ:
+        return None
+    env = {key: value for key, value in os.environ.items() if key != TUI_RECORD_ENV}
+    env.update(marks)
+    return env
 
 
 def tui_hint(state: TuiState) -> Invocation:
@@ -22675,6 +22902,8 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     if check is state.check:
         lines += _unplaced_lines(_choice_summary(state), state,
                                  "Choose it in Options, Save folder (--save-dir).")
+    if check is state.check:
+        lines += _found_lines(state)
     if check is state.check and state.from_folders:
         # A folder copied from that holds none of them: the plan came back
         # the same, still saying to copy from a folder.
@@ -23720,6 +23949,20 @@ def _unavailable(state: TuiState) -> tuple[list[dict], int]:
         else:
             others += 1
     return needed, others
+
+
+def _found_lines(state: TuiState) -> list[TuiLine]:
+    """What the setups screen said of this machine, on a plan that opened
+    in its place: the setup found by its label, and the notes (ES-DE found,
+    what detection printed) on Details, one line on the plan saying so."""
+    if not state.opened_on_plan or not state.setups:
+        return []
+    lines = _details([f"Found here: {state.setups[0][2]}.", *state.notes])
+    if state.notes:
+        brief = _styled(f"{_plural(len(state.notes), 'note')} on this machine: Details.")
+        brief.brief = True
+        lines.insert(0, brief)
+    return lines
 
 
 def _unavailable_brief(state: TuiState) -> list[TuiLine]:
@@ -25303,7 +25546,7 @@ def run_tui(args: argparse.Namespace) -> int:
                 try:
                     current.append(_EngineRun(
                         tui_argv(state, effect[1], sys.executable, script), log, inbox,
-                        state.run_id, {**os.environ, TUI_LIST_ENV: "1"} if own_list else None))
+                        state.run_id, tui_run_env(state, own_list)))
                 except OSError as exc:
                     inbox.put(("ended", state.run_id, 1,
                                [f"The installer could not be started: {exc}"]))

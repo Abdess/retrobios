@@ -172,7 +172,8 @@ Run at a terminal, the installer opens a full screen that a keyboard or a
 controller drives. With one setup found here, it opens on that setup's plan,
 and two presses of A or Enter install everything it reads: the plan, then the
 result. **Change where** (or B) goes back to the setups, which open first when
-none or several are found. After an install, the plan of the same folder opens
+none or several are found. What that screen would have noted (ES-DE found, the
+setup's name) is under **Details**, one plan line saying so. After an install, the plan of the same folder opens
 on the same choice (**Same choice as on 10 Nov: yes**, the
 [install record](#the-install-record)), and **no** takes the whole list, or the
 games of the card when it holds some. The plan screen says
@@ -489,10 +490,21 @@ the choice (`--system`, `--core`, `--region`, `--for-games`, `--no-game-data`,
 `--target`, `--every-board`, `--emulator`, `--installed-cores`, `--declared-only`)
 replaces it, `--all-files` installs the whole list, and a run over several
 setups or from a file list (`--manifest`) never reads it. `--check` and
-`--dry-run` read it too, and say so. To forget it, delete the file. A record
-that cannot be read, or that another version wrote, is said once and ignored,
-and the next install writes a new one. A record kept for a folder of another
-name (copied or renamed with it) is not applied. With `--events` the record
+`--dry-run` read it too, and say so. To forget it, delete the file.
+
+A record is read only when it is a regular file of at most 16 MiB whose
+choice holds nothing but the options above and their values. A games folder
+(`--for-games FOLDER`) is kept only under the folder that holds the BIOS
+folder, so a record never sends the games scan to another drive or a network
+share: any other folder is recorded as `--for-games` alone, the card's own
+games. A record that breaks any of this, or cannot be read, is said once and
+ignored, and the next install writes a new one, keeping the other setups'
+entries that read. One written by a newer installer is left as it is. A
+recorded option the list can no longer apply (a region, an emulator, a board,
+the installed cores, game data on a list that marks none) is left out in one
+line, `Left out of the recorded choice: --target (...)`, and the run goes on:
+typed on the command line, the same option is refused as before. A record kept
+for a folder of another name (copied or renamed with it) is not applied. With `--events` the record
 gives a `record` event, see [Machine-readable events](#machine-readable-events).
 
 ## Reading a run { #reading-a-run }

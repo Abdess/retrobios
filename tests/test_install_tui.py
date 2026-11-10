@@ -1148,6 +1148,36 @@ class RecordedPlan(unittest.TestCase):
         press(state, "enter")
         self.assertEqual(state.screen, "setup")
 
+    def test_the_notes_of_the_setups_screen_are_on_the_plan(self):
+        """Opened on the plan, the ES-DE note and the setup's label, which
+        only the setups screen showed, were never seen."""
+        setups = fresh_state().setups[:1]
+        with mock.patch.object(install, "found_setups", return_value=(setups, set())), \
+                mock.patch.object(install, "detect_frontends", return_value=["esde"]), \
+                mock.patch.object(install, "_mounted_cards", return_value=[]), \
+                mock.patch.object(install, "_DETECTION_REFUSED", []), \
+                mock.patch.object(install.Path, "exists", return_value=True):
+            state, _effects = install.tui_start(_args(), "linux")
+        self.assertTrue(state.opened_on_plan)
+        install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
+        for event in [*FILES, *SYSTEMS, CHECK]:
+            install.tui_receive(state, ("event", state.run_id, event))
+        with mock.patch.object(install, "_tui_folder_facts", return_value={
+                "free": 50 * 1024 ** 3, "writable": True}):
+            install.tui_receive(state, ("ended", state.run_id, 1, []))
+        state.pad = "both"
+        plan = screen_text(install.tui_view(state, 80, 24))
+        self.assertIn("1 note on this machine: Details.", plan)
+        self.assertNotIn(install.TUI_ESDE_NOTE, plan)
+        # The plan's budget, plus the note line (6 words) and Change where (2).
+        self.assertLessEqual(screen_words(install.tui_view(state, 80, 24)),
+                             SCREEN_WORDS["plan"][2] + 8)
+        state.focus["plan"] = [row.action for row in install.tui_rows(state)].index("details")
+        press(state, "enter")
+        details = screen_text(install.tui_view(state, 120, 40))
+        self.assertIn(screen_text([install.TUI_ESDE_NOTE]), details)
+        self.assertIn("Found here: RetroArch.", details)
+
     def test_several_setups_open_the_list(self):
         with mock.patch.object(install, "found_setups", return_value=(
                 fresh_state().setups, set())), \
