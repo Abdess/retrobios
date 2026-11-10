@@ -4069,7 +4069,10 @@ def _category_evidence_md(evidence: dict, launched: list[str] | None = None) -> 
             text += ", also named by " + ", ".join(bare)
         return text
     examined = evidence.get("cores_examined") or []
-    cores = ("cores examined: " + ", ".join(_emulator_link(c, "../") for c in examined)
+    # A core the site gives no page (a test core) is named, not linked.
+    with_page = _profiles_with_page(str(siteinputs.current().emulators))
+    cores = ("cores examined: " + ", ".join(
+        _emulator_link(c, "../") if c in with_page else c for c in examined)
              if examined else "no core examined")
     if evidence.get("unsettled"):
         return f"No reader found, not settled: {evidence['unsettled']} ({cores})"
@@ -4085,9 +4088,18 @@ def _profiles_by_core_name() -> dict[str, list[str]]:
 
 
 @functools.lru_cache(maxsize=None)
+def _profiles_with_page(emulators_dir: str) -> frozenset[str]:
+    """The profiles the site writes a page for: no alias, no test core."""
+    profiles = _profiles_in(emulators_dir, skip_aliases=True)
+    return frozenset(
+        k for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
+    )
+
+
+@functools.lru_cache(maxsize=None)
 def _core_names_in(emulators_dir: str) -> dict[str, list[str]]:
     profiles = _profiles_in(emulators_dir, skip_aliases=True)
-    with_page = {k for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"}
+    with_page = _profiles_with_page(emulators_dir)
     return {
         core: sorted(k for k in keys if k in with_page)
         for core, keys in upstream_profile_index(profiles).items()
