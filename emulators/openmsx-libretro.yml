@@ -53,7 +53,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_VG_8020"
-    source_ref: "share/machines/Philips_VG_8020.xml:52-55"
+    source_ref: "share/machines/Philips_VG_8020.xml:52-55, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-75p_basic-bios1.rom"
     aliases: ["cx5m_basic-bios1.rom"]
@@ -62,7 +62,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machines Sony_HB-75P, Yamaha_CX5M"
-    source_ref: "share/machines/Sony_HB-75P.xml:59-62, share/machines/Yamaha_CX5M.xml:54-57"
+    source_ref: "share/machines/Sony_HB-75P.xml:59-62, share/machines/Yamaha_CX5M.xml:54-57, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/machines/Yamaha_CX5M.xml names it cx5m_basic-bios1.rom."
 
   - name: "hb-75p_firmware.rom"
@@ -71,7 +71,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-75P"
-    source_ref: "share/machines/Sony_HB-75P.xml:66-69"
+    source_ref: "share/machines/Sony_HB-75P.xml:66-69, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hx-10_basic-bios1.rom"
     path: "openmsx/share/systemroms/hx-10_basic-bios1.rom"
@@ -79,7 +79,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Toshiba_HX-10"
-    source_ref: "share/machines/Toshiba_HX-10.xml:58-61"
+    source_ref: "share/machines/Toshiba_HX-10.xml:58-61, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "sfg-01.rom"
     path: "openmsx/share/systemroms/sfg-01.rom"
@@ -87,7 +87,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Yamaha_CX5M and extension Yamaha_SFG-01"
-    source_ref: "share/machines/Yamaha_CX5M.xml:80-83, share/extensions/Yamaha_SFG-01.xml:31-34"
+    source_ref: "share/machines/Yamaha_CX5M.xml:80-83, share/extensions/Yamaha_SFG-01.xml:31-34, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "NMS8245SystemROM1.08.bin"
     path: "openmsx/share/systemroms/NMS8245SystemROM1.08.bin"
@@ -95,7 +95,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8245"
-    source_ref: "share/machines/Philips_NMS_8245.xml:61-65, share/machines/Philips_NMS_8245.xml:92-96, share/machines/Philips_NMS_8245.xml:134-138"
+    source_ref: "share/machines/Philips_NMS_8245.xml:61-65, share/machines/Philips_NMS_8245.xml:92-96, share/machines/Philips_NMS_8245.xml:134-138, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "NMS8245SystemROM1.06.bin"
     path: "openmsx/share/systemroms/NMS8245SystemROM1.06.bin"
@@ -103,7 +103,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8245"
-    source_ref: "share/machines/Philips_NMS_8245.xml:66-70, share/machines/Philips_NMS_8245.xml:97-101, share/machines/Philips_NMS_8245.xml:139-143"
+    source_ref: "share/machines/Philips_NMS_8245.xml:66-70, share/machines/Philips_NMS_8245.xml:97-101, share/machines/Philips_NMS_8245.xml:139-143, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "NMS8245SystemROM1.05.bin"
     path: "openmsx/share/systemroms/NMS8245SystemROM1.05.bin"
@@ -111,7 +111,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8245"
-    source_ref: "share/machines/Philips_NMS_8245.xml:71-75, share/machines/Philips_NMS_8245.xml:102-106"
+    source_ref: "share/machines/Philips_NMS_8245.xml:71-75, share/machines/Philips_NMS_8245.xml:102-106, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "nms8245_basic-bios2.rom"
     aliases: ["nms8250_basic-bios2.rom"]
@@ -120,7 +120,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machines Philips_NMS_8245, Philips_NMS_8250"
-    source_ref: "share/machines/Philips_NMS_8245.xml:76-79, share/machines/Philips_NMS_8250.xml:23-26"
+    source_ref: "share/machines/Philips_NMS_8245.xml:76-79, share/machines/Philips_NMS_8250.xml:23-26, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/machines/Philips_NMS_8250.xml names it nms8250_basic-bios2.rom."
 
   - name: "nms8245_msx2sub.rom"
@@ -129,7 +129,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8245"
-    source_ref: "share/machines/Philips_NMS_8245.xml:107-111"
+    source_ref: "share/machines/Philips_NMS_8245.xml:107-111, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "NMS8245SystemROM1.05.bin"
     path: "openmsx/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin"
@@ -137,7 +137,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8245"
-    source_ref: "share/machines/Philips_NMS_8245.xml:144-148"
+    source_ref: "share/machines/Philips_NMS_8245.xml:144-148, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "nms8245_disk.rom"
     path: "openmsx/share/systemroms/nms8245_disk.rom"
@@ -145,7 +145,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8245"
-    source_ref: "share/machines/Philips_NMS_8245.xml:149-153"
+    source_ref: "share/machines/Philips_NMS_8245.xml:149-153, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "nms8250_msx2sub.rom"
     path: "openmsx/share/systemroms/nms8250_msx2sub.rom"
@@ -153,7 +153,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8250"
-    source_ref: "share/machines/Philips_NMS_8250.xml:39-42"
+    source_ref: "share/machines/Philips_NMS_8250.xml:39-42, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "nms8250_disk.rom"
     path: "openmsx/share/systemroms/nms8250_disk.rom"
@@ -161,7 +161,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Philips_NMS_8250"
-    source_ref: "share/machines/Philips_NMS_8250.xml:62-67"
+    source_ref: "share/machines/Philips_NMS_8250.xml:62-67, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f700p_basic-bios2.rom"
     path: "openmsx/share/systemroms/hb-f700p_basic-bios2.rom"
@@ -169,7 +169,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F700P"
-    source_ref: "share/machines/Sony_HB-F700P.xml:65-68"
+    source_ref: "share/machines/Sony_HB-F700P.xml:65-68, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f700p_msx2sub.rom"
     path: "openmsx/share/systemroms/hb-f700p_msx2sub.rom"
@@ -177,7 +177,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F700P"
-    source_ref: "share/machines/Sony_HB-F700P.xml:83-87"
+    source_ref: "share/machines/Sony_HB-F700P.xml:83-87, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f700p_disk.rom"
     path: "openmsx/share/systemroms/hb-f700p_disk.rom"
@@ -185,7 +185,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F700P"
-    source_ref: "share/machines/Sony_HB-F700P.xml:94-98"
+    source_ref: "share/machines/Sony_HB-F700P.xml:94-98, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f1xd_basic-bios2.rom"
     path: "openmsx/share/systemroms/hb-f1xd_basic-bios2.rom"
@@ -193,7 +193,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XD"
-    source_ref: "share/machines/Sony_HB-F1XD.xml:69-72"
+    source_ref: "share/machines/Sony_HB-F1XD.xml:69-72, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f1xd_msx2sub.rom"
     path: "openmsx/share/systemroms/hb-f1xd_msx2sub.rom"
@@ -201,7 +201,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XD"
-    source_ref: "share/machines/Sony_HB-F1XD.xml:85-88"
+    source_ref: "share/machines/Sony_HB-F1XD.xml:85-88, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f1xd_disk.rom"
     aliases: ["hbd-20w.rom", "hbd-f1.rom"]
@@ -210,7 +210,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XD and extensions Sony_HBD-20W, Sony_HBD-F1"
-    source_ref: "share/machines/Sony_HB-F1XD.xml:95-98, share/extensions/Sony_HBD-20W.xml:21-24, share/extensions/Sony_HBD-F1.xml:21-24"
+    source_ref: "share/machines/Sony_HB-F1XD.xml:95-98, share/extensions/Sony_HBD-20W.xml:21-24, share/extensions/Sony_HBD-F1.xml:21-24, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/extensions/Sony_HBD-20W.xml names it hbd-20w.rom, and share/extensions/Sony_HBD-F1.xml names it hbd-f1.rom."
 
   - name: "hb-f1xv_kanjifont.rom"
@@ -220,7 +220,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XV and extension Sony_HBI-J1"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:30-33, share/extensions/Sony_HBI-J1.xml:15-18"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:30-33, share/extensions/Sony_HBI-J1.xml:15-18, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/extensions/Sony_HBI-J1.xml names it hbi-j1_kanjifont.rom."
 
   - name: "Sony_HB-F1XV.rom"
@@ -229,7 +229,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XV"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:89-93, share/machines/Sony_HB-F1XV.xml:136-140, share/machines/Sony_HB-F1XV.xml:148-152, share/machines/Sony_HB-F1XV.xml:166-170, share/machines/Sony_HB-F1XV.xml:182-186"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:89-93, share/machines/Sony_HB-F1XV.xml:136-140, share/machines/Sony_HB-F1XV.xml:148-152, share/machines/Sony_HB-F1XV.xml:166-170, share/machines/Sony_HB-F1XV.xml:182-186, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f1xv_basic-bios2p.rom"
     path: "openmsx/share/systemroms/hb-f1xv_basic-bios2p.rom"
@@ -237,7 +237,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XV"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:94-97"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:94-97, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f1xv.rom"
     aliases: ["hbi-j1_msx-je.rom"]
@@ -246,7 +246,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XV and extension Sony_HBI-J1"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:108-111, share/extensions/Sony_HBI-J1.xml:27-30"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:108-111, share/extensions/Sony_HBI-J1.xml:27-30, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/extensions/Sony_HBI-J1.xml names it hbi-j1_msx-je.rom."
 
   - name: "hb-f1xv_msx2sub.rom"
@@ -256,7 +256,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machines Sony_HB-F1XV, Panasonic_FS-A1WSX"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:141-144, share/machines/Panasonic_FS-A1WSX.xml:158-161"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:141-144, share/machines/Panasonic_FS-A1WSX.xml:158-161, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/machines/Panasonic_FS-A1WSX.xml names it fs-a1wsx_msx2psub.rom."
 
   - name: "hb-f1xv_kanjibasic.rom"
@@ -266,7 +266,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machines Sony_HB-F1XV, Panasonic_FS-A1WSX"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:153-156, share/machines/Panasonic_FS-A1WSX.xml:165-168"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:153-156, share/machines/Panasonic_FS-A1WSX.xml:165-168, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/machines/Panasonic_FS-A1WSX.xml names it fs-a1wsx_kanjibasic.rom."
 
   - name: "hb-f1xv_disk.rom"
@@ -275,7 +275,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XV"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:171-174"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:171-174, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb-f1xv_fmbasic.rom"
     path: "openmsx/share/systemroms/hb-f1xv_fmbasic.rom"
@@ -283,7 +283,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Sony_HB-F1XV"
-    source_ref: "share/machines/Sony_HB-F1XV.xml:187-190"
+    source_ref: "share/machines/Sony_HB-F1XV.xml:187-190, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-a1wsx_kanjifont.rom"
     aliases: ["fs-a1st_kanjifont.rom", "fs-a1gt_kanjifont.rom"]
@@ -292,7 +292,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machines Panasonic_FS-A1WSX, Panasonic_FS-A1ST, Panasonic_FS-A1GT"
-    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:28-31, share/machines/Panasonic_FS-A1ST.xml:32-35, share/machines/Panasonic_FS-A1GT.xml:140-143"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:28-31, share/machines/Panasonic_FS-A1ST.xml:32-35, share/machines/Panasonic_FS-A1GT.xml:140-143, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/machines/Panasonic_FS-A1ST.xml names it fs-a1st_kanjifont.rom, and share/machines/Panasonic_FS-A1GT.xml names it fs-a1gt_kanjifont.rom."
 
   - name: "fs-a1wsx_IC18.rom"
@@ -301,7 +301,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Panasonic_FS-A1WSX"
-    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:97-101, share/machines/Panasonic_FS-A1WSX.xml:114-118, share/machines/Panasonic_FS-A1WSX.xml:153-157, share/machines/Panasonic_FS-A1WSX.xml:177-181"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:97-101, share/machines/Panasonic_FS-A1WSX.xml:114-118, share/machines/Panasonic_FS-A1WSX.xml:153-157, share/machines/Panasonic_FS-A1WSX.xml:177-181, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-a1wsx_basic-bios2p.rom"
     path: "openmsx/share/systemroms/fs-a1wsx_basic-bios2p.rom"
@@ -309,7 +309,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Panasonic_FS-A1WSX"
-    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:102-105"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:102-105, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-a1wsx_fmbasic.rom"
     path: "openmsx/share/systemroms/fs-a1wsx_fmbasic.rom"
@@ -317,7 +317,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Panasonic_FS-A1WSX"
-    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:119-123"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:119-123, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-a1wsx_disk.rom"
     path: "openmsx/share/systemroms/fs-a1wsx_disk.rom"
@@ -325,7 +325,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Panasonic_FS-A1WSX"
-    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:182-185"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:182-185, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-a1wsx_firmware.rom"
     path: "openmsx/share/systemroms/fs-a1wsx_firmware.rom"
@@ -333,7 +333,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Panasonic_FS-A1WSX"
-    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:211-214"
+    source_ref: "share/machines/Panasonic_FS-A1WSX.xml:211-214, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-a1st_firmware.rom"
     path: "openmsx/share/systemroms/fs-a1st_firmware.rom"
@@ -341,7 +341,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Panasonic_FS-A1ST"
-    source_ref: "share/machines/Panasonic_FS-A1ST.xml:22-26"
+    source_ref: "share/machines/Panasonic_FS-A1ST.xml:22-26, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-a1gt_firmware.rom"
     path: "openmsx/share/systemroms/fs-a1gt_firmware.rom"
@@ -349,7 +349,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by machine Panasonic_FS-A1GT"
-    source_ref: "share/machines/Panasonic_FS-A1GT.xml:22-26"
+    source_ref: "share/machines/Panasonic_FS-A1GT.xml:22-26, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ascii_msxdos22.rom"
     path: "openmsx/share/systemroms/ascii_msxdos22.rom"
@@ -357,7 +357,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension ASCII_MSX-DOS2"
-    source_ref: "share/extensions/ASCII_MSX-DOS2.xml:18-21, share/extensions/ASCII_MSX-DOS2.xml:36-40"
+    source_ref: "share/extensions/ASCII_MSX-DOS2.xml:18-21, share/extensions/ASCII_MSX-DOS2.xml:36-40, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "msx-write_kanjifont.rom"
     aliases: ["ec-702_kanjifont.rom"]
@@ -366,7 +366,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extensions ASCII_Japanese_MSX-Write, Konami_EC-702"
-    source_ref: "share/extensions/ASCII_Japanese_MSX-Write.xml:15-18, share/extensions/Konami_EC-702.xml:14-17"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write.xml:15-18, share/extensions/Konami_EC-702.xml:14-17, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/extensions/Konami_EC-702.xml names it ec-702_kanjifont.rom."
 
   - name: "Japanese MSX-Write (1986) (Ascii) (J).rom"
@@ -375,7 +375,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension ASCII_Japanese_MSX-Write"
-    source_ref: "share/extensions/ASCII_Japanese_MSX-Write.xml:26-29"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write.xml:26-29, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "msx-write_ii_kanjifont.rom"
     path: "openmsx/share/systemroms/msx-write_ii_kanjifont.rom"
@@ -383,7 +383,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension ASCII_Japanese_MSX-Write_II"
-    source_ref: "share/extensions/ASCII_Japanese_MSX-Write_II.xml:15-18"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write_II.xml:15-18, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "Japanese MSX-Write II (1988) (Ascii) (J).rom"
     path: "openmsx/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom"
@@ -391,7 +391,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension ASCII_Japanese_MSX-Write_II"
-    source_ref: "share/extensions/ASCII_Japanese_MSX-Write_II.xml:28-31"
+    source_ref: "share/extensions/ASCII_Japanese_MSX-Write_II.xml:28-31, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "msxdos22.rom"
     path: "openmsx/share/systemroms/msxdos22.rom"
@@ -399,7 +399,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension msxdos2"
-    source_ref: "share/extensions/msxdos2.xml:17-22"
+    source_ref: "share/extensions/msxdos2.xml:17-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "avt_dpf-550_disk.rom"
     path: "openmsx/share/systemroms/avt_dpf-550_disk.rom"
@@ -407,7 +407,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension AVT_DPF-550"
-    source_ref: "share/extensions/AVT_DPF-550.xml:20-23"
+    source_ref: "share/extensions/AVT_DPF-550.xml:20-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "mu-pack.rom"
     path: "openmsx/share/systemroms/mu-pack.rom"
@@ -415,7 +415,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension mu-PACK"
-    source_ref: "share/extensions/mu-PACK.xml:26-29"
+    source_ref: "share/extensions/mu-PACK.xml:26-29, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fmpak.rom"
     path: "openmsx/share/systemroms/fmpak.rom"
@@ -423,7 +423,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Checkmark_FM_Stereo_PAK"
-    source_ref: "share/extensions/Checkmark_FM_Stereo_PAK.xml:25-28"
+    source_ref: "share/extensions/Checkmark_FM_Stereo_PAK.xml:25-28, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "computer_mates_disk_interface.rom"
     path: "openmsx/share/systemroms/computer_mates_disk_interface.rom"
@@ -431,7 +431,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Computer_Mates_Disk_Interface"
-    source_ref: "share/extensions/Computer_Mates_Disk_Interface.xml:44-47"
+    source_ref: "share/extensions/Computer_Mates_Disk_Interface.xml:44-47, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ROM_Hunter_Mk2.rom"
     path: "openmsx/share/systemroms/ROM_Hunter_Mk2.rom"
@@ -439,7 +439,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension ROM_Hunter_Mk2"
-    source_ref: "share/extensions/ROM_Hunter_Mk2.xml:17-20"
+    source_ref: "share/extensions/ROM_Hunter_Mk2.xml:17-20, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ddx_3.0.rom"
     path: "openmsx/share/systemroms/ddx_3.0.rom"
@@ -447,7 +447,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension DDX_3.0"
-    source_ref: "share/extensions/DDX_3.0.xml:20-25"
+    source_ref: "share/extensions/DDX_3.0.xml:20-25, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "mr512.rom"
     path: "openmsx/share/systemroms/mr512.rom"
@@ -455,7 +455,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension MegaRAM_Disk"
-    source_ref: "share/extensions/MegaRAM_Disk.xml:19-22"
+    source_ref: "share/extensions/MegaRAM_Disk.xml:19-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ESPUNAPI_IO.rom"
     path: "openmsx/share/systemroms/ESPUNAPI_IO.rom"
@@ -463,7 +463,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension smxwifi"
-    source_ref: "share/extensions/smxwifi.xml:18-21"
+    source_ref: "share/extensions/smxwifi.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "chakkari.rom"
     path: "openmsx/share/systemroms/chakkari.rom"
@@ -471,7 +471,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Epson_Chakkari_Copy"
-    source_ref: "share/extensions/Epson_Chakkari_Copy.xml:18-22"
+    source_ref: "share/extensions/Epson_Chakkari_Copy.xml:18-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "rs232.rom"
     path: "openmsx/share/systemroms/rs232.rom"
@@ -479,7 +479,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension rs232"
-    source_ref: "share/extensions/rs232.xml:18-22"
+    source_ref: "share/extensions/rs232.xml:18-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ct-80e.rom"
     path: "openmsx/share/systemroms/ct-80e.rom"
@@ -487,7 +487,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Gradiente_CT-80E"
-    source_ref: "share/extensions/Gradiente_CT-80E.xml:26-29"
+    source_ref: "share/extensions/Gradiente_CT-80E.xml:26-29, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "mpc-310h.rom"
     path: "openmsx/share/systemroms/mpc-310h.rom"
@@ -495,7 +495,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Hitachi_MPC-310H"
-    source_ref: "share/extensions/Hitachi_MPC-310H.xml:20-23"
+    source_ref: "share/extensions/Hitachi_MPC-310H.xml:20-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "yrw801.rom"
     path: "openmsx/share/systemroms/yrw801.rom"
@@ -503,7 +503,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extensions Jun_Soft_DalSoRi_R2, moonsound"
-    source_ref: "share/extensions/Jun_Soft_DalSoRi_R2.xml:22-25, share/extensions/moonsound.xml:16-19"
+    source_ref: "share/extensions/Jun_Soft_DalSoRi_R2.xml:22-25, share/extensions/moonsound.xml:16-19, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "Konami EC-701 program.rom"
     path: "openmsx/share/systemroms/Konami EC-701 program.rom"
@@ -511,7 +511,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Konami_EC-701"
-    source_ref: "share/extensions/Konami_EC-701.xml:17-21"
+    source_ref: "share/extensions/Konami_EC-701.xml:17-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "Konami EC-701 dictionary.rom"
     path: "openmsx/share/systemroms/Konami EC-701 dictionary.rom"
@@ -519,7 +519,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Konami_EC-701"
-    source_ref: "share/extensions/Konami_EC-701.xml:22-25"
+    source_ref: "share/extensions/Konami_EC-701.xml:22-25, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "megaflashrom_scc+_sd.rom"
     path: "openmsx/share/systemroms/megaflashrom_scc+_sd.rom"
@@ -527,7 +527,7 @@ files:
     required: false
     validation: [sha1]
     description: "Flash content read by extension MegaFlashROM_SCC+_SD, found by its sha1 alone: the XML names no file"
-    source_ref: "share/extensions/MegaFlashROM_SCC+_SD.xml:20-22"
+    source_ref: "share/extensions/MegaFlashROM_SCC+_SD.xml:20-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "cdx-2.rom"
     path: "openmsx/share/systemroms/cdx-2.rom"
@@ -535,7 +535,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Microsol_CDX-2"
-    source_ref: "share/extensions/Microsol_CDX-2.xml:20-23"
+    source_ref: "share/extensions/Microsol_CDX-2.xml:20-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ml-30dc.rom"
     path: "openmsx/share/systemroms/ml-30dc.rom"
@@ -543,7 +543,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Mitsubishi_ML-30DC_ML-30FD"
-    source_ref: "share/extensions/Mitsubishi_ML-30DC_ML-30FD.xml:19-22"
+    source_ref: "share/extensions/Mitsubishi_ML-30DC_ML-30FD.xml:19-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fmpac.rom"
     path: "openmsx/share/systemroms/fmpac.rom"
@@ -551,7 +551,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extensions mbstereo, fmpac"
-    source_ref: "share/extensions/mbstereo.xml:23-27, share/extensions/fmpac.xml:22-26"
+    source_ref: "share/extensions/mbstereo.xml:23-27, share/extensions/fmpac.xml:22-26, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "novaxis.rom"
     path: "openmsx/share/systemroms/novaxis.rom"
@@ -559,7 +559,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Gouda_SCSI"
-    source_ref: "share/extensions/Gouda_SCSI.xml:18-21"
+    source_ref: "share/extensions/Gouda_SCSI.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "msxpibios.rom"
     path: "openmsx/share/systemroms/msxpibios.rom"
@@ -567,7 +567,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension MSXPi"
-    source_ref: "share/extensions/MSXPi.xml:28-35"
+    source_ref: "share/extensions/MSXPi.xml:28-35, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "msxaudio13.OPL3_mono.rom"
     path: "openmsx/share/systemroms/msxaudio13.OPL3_mono.rom"
@@ -575,7 +575,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension OPL3Cartridge2_mono"
-    source_ref: "share/extensions/OPL3Cartridge2_mono.xml:29-34"
+    source_ref: "share/extensions/OPL3Cartridge2_mono.xml:29-34, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "msxaudio13.OPL3_stereo.rom"
     path: "openmsx/share/systemroms/msxaudio13.OPL3_stereo.rom"
@@ -583,7 +583,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension OPL3Cartridge2_stereo"
-    source_ref: "share/extensions/OPL3Cartridge2_stereo.xml:29-34"
+    source_ref: "share/extensions/OPL3Cartridge2_stereo.xml:29-34, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "cf-sm003_main.rom"
     path: "openmsx/share/systemroms/cf-sm003_main.rom"
@@ -591,7 +591,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension National_CF-SM003"
-    source_ref: "share/extensions/National_CF-SM003.xml:18-21"
+    source_ref: "share/extensions/National_CF-SM003.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "cf-sm003_kanjifont.rom"
     path: "openmsx/share/systemroms/cf-sm003_kanjifont.rom"
@@ -599,7 +599,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension National_CF-SM003"
-    source_ref: "share/extensions/National_CF-SM003.xml:22-25"
+    source_ref: "share/extensions/National_CF-SM003.xml:22-25, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "cf-sm003_data.rom"
     aliases: ["skw-01_data.rom"]
@@ -608,7 +608,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extensions National_CF-SM003, Yamaha_SKW-01"
-    source_ref: "share/extensions/National_CF-SM003.xml:26-29, share/extensions/Yamaha_SKW-01.xml:26-29"
+    source_ref: "share/extensions/National_CF-SM003.xml:26-29, share/extensions/Yamaha_SKW-01.xml:26-29, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
     note: "share/extensions/Yamaha_SKW-01.xml names it skw-01_data.rom."
 
   - name: "NEOSC.ROM"
@@ -617,7 +617,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Neos_MA-20R"
-    source_ref: "share/extensions/Neos_MA-20R.xml:21-24"
+    source_ref: "share/extensions/Neos_MA-20R.xml:21-24, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "NEOSV.ROM"
     path: "openmsx/share/systemroms/NEOSV.ROM"
@@ -625,7 +625,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Neos_MA-20V"
-    source_ref: "share/extensions/Neos_MA-20V.xml:22-25"
+    source_ref: "share/extensions/Neos_MA-20V.xml:22-25, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-fd1a.rom"
     path: "openmsx/share/systemroms/fs-fd1a.rom"
@@ -633,7 +633,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Panasonic_FS-FD1A"
-    source_ref: "share/extensions/Panasonic_FS-FD1A.xml:17-20"
+    source_ref: "share/extensions/Panasonic_FS-FD1A.xml:17-20, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-ca1.rom"
     path: "openmsx/share/systemroms/fs-ca1.rom"
@@ -641,7 +641,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Panasonic_FS-CA1"
-    source_ref: "share/extensions/Panasonic_FS-CA1.xml:25-30"
+    source_ref: "share/extensions/Panasonic_FS-CA1.xml:25-30, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-pw1_kanjifont.rom"
     path: "openmsx/share/systemroms/fs-pw1_kanjifont.rom"
@@ -649,7 +649,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Panasonic_FS-PW1"
-    source_ref: "share/extensions/Panasonic_FS-PW1.xml:15-18"
+    source_ref: "share/extensions/Panasonic_FS-PW1.xml:15-18, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fs-pw1_msxword.rom"
     path: "openmsx/share/systemroms/fs-pw1_msxword.rom"
@@ -657,7 +657,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Panasonic_FS-PW1"
-    source_ref: "share/extensions/Panasonic_FS-PW1.xml:26-29"
+    source_ref: "share/extensions/Panasonic_FS-PW1.xml:26-29, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "nms1200_6.rom"
     path: "openmsx/share/systemroms/nms1200_6.rom"
@@ -665,7 +665,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Philips_NMS_1200"
-    source_ref: "share/extensions/Philips_NMS_1200.xml:19-23"
+    source_ref: "share/extensions/Philips_NMS_1200.xml:19-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "nms1205.rom"
     path: "openmsx/share/systemroms/nms1205.rom"
@@ -673,7 +673,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Philips_NMS_1205"
-    source_ref: "share/extensions/Philips_NMS_1205.xml:39-42"
+    source_ref: "share/extensions/Philips_NMS_1205.xml:39-42, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "msxaudio12pre4a.rom"
     path: "openmsx/share/systemroms/msxaudio12pre4a.rom"
@@ -681,7 +681,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Boosted_audio"
-    source_ref: "share/extensions/Boosted_audio.xml:36-42"
+    source_ref: "share/extensions/Boosted_audio.xml:36-42, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "carnivore2.rom"
     path: "openmsx/share/systemroms/carnivore2.rom"
@@ -689,7 +689,7 @@ files:
     required: false
     validation: [sha1]
     description: "Flash content read by extension Carnivore2, found by its sha1 alone: the XML names no file"
-    source_ref: "share/extensions/Carnivore2.xml:19-23"
+    source_ref: "share/extensions/Carnivore2.xml:19-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "mfd-001_disk.rom"
     path: "openmsx/share/systemroms/mfd-001_disk.rom"
@@ -697,7 +697,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Sanyo_MFD-001"
-    source_ref: "share/extensions/Sanyo_MFD-001.xml:18-21"
+    source_ref: "share/extensions/Sanyo_MFD-001.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "mrs-001.rom"
     path: "openmsx/share/systemroms/mrs-001.rom"
@@ -705,7 +705,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Sanyo_MRS-001"
-    source_ref: "share/extensions/Sanyo_MRS-001.xml:19-22"
+    source_ref: "share/extensions/Sanyo_MRS-001.xml:19-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hb3600_disk.rom"
     path: "openmsx/share/systemroms/hb3600_disk.rom"
@@ -713,7 +713,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Sharp_HB-3600"
-    source_ref: "share/extensions/Sharp_HB-3600.xml:18-21"
+    source_ref: "share/extensions/Sharp_HB-3600.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hddrom.rom"
     path: "openmsx/share/systemroms/hddrom.rom"
@@ -721,7 +721,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Beer_IDE"
-    source_ref: "share/extensions/Beer_IDE.xml:18-23"
+    source_ref: "share/extensions/Beer_IDE.xml:18-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hbi-j1_kanjibasic.rom"
     path: "openmsx/share/systemroms/hbi-j1_kanjibasic.rom"
@@ -729,7 +729,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Sony_HBI-J1"
-    source_ref: "share/extensions/Sony_HBI-J1.xml:38-41"
+    source_ref: "share/extensions/Sony_HBI-J1.xml:38-41, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hbd-50.rom"
     path: "openmsx/share/systemroms/hbd-50.rom"
@@ -737,7 +737,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Sony_HBD-50"
-    source_ref: "share/extensions/Sony_HBD-50.xml:24-28"
+    source_ref: "share/extensions/Sony_HBD-50.xml:24-28, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hbk-30.rom"
     path: "openmsx/share/systemroms/hbk-30.rom"
@@ -745,7 +745,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Sony_HBK-30"
-    source_ref: "share/extensions/Sony_HBK-30.xml:19-22"
+    source_ref: "share/extensions/Sony_HBK-30.xml:19-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hbi-232.rom"
     path: "openmsx/share/systemroms/hbi-232.rom"
@@ -753,7 +753,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Sony_HBI-232"
-    source_ref: "share/extensions/Sony_HBI-232.xml:18-21"
+    source_ref: "share/extensions/Sony_HBI-232.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "sensor-kid.rom"
     path: "openmsx/share/systemroms/sensor-kid.rom"
@@ -761,7 +761,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension SensorKid"
-    source_ref: "share/extensions/SensorKid.xml:20-23"
+    source_ref: "share/extensions/SensorKid.xml:20-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "svi-707_disk.rom"
     path: "openmsx/share/systemroms/svi-707_disk.rom"
@@ -769,7 +769,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Spectravideo_SVI-707"
-    source_ref: "share/extensions/Spectravideo_SVI-707.xml:19-22"
+    source_ref: "share/extensions/Spectravideo_SVI-707.xml:19-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "svi-707_cpm.rom"
     path: "openmsx/share/systemroms/svi-707_cpm.rom"
@@ -777,7 +777,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Spectravideo_SVI-707"
-    source_ref: "share/extensions/Spectravideo_SVI-707.xml:23-26"
+    source_ref: "share/extensions/Spectravideo_SVI-707.xml:23-26, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "Nextor-2.1.1.SunriseIDE.ROM"
     path: "openmsx/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM"
@@ -785,7 +785,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension SunriseIDE_Nextor"
-    source_ref: "share/extensions/SunriseIDE_Nextor.xml:17-22"
+    source_ref: "share/extensions/SunriseIDE_Nextor.xml:17-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ide250.dat"
     path: "openmsx/share/systemroms/ide250.dat"
@@ -793,7 +793,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension ide"
-    source_ref: "share/extensions/ide.xml:17-22"
+    source_ref: "share/extensions/ide.xml:17-22, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "nowindDos2.rom"
     path: "openmsx/share/systemroms/nowindDos2.rom"
@@ -801,7 +801,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension nowind"
-    source_ref: "share/extensions/nowind.xml:17-23"
+    source_ref: "share/extensions/nowind.xml:17-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "ym2608_adpcm_rom.bin"
     path: "openmsx/share/systemroms/ym2608_adpcm_rom.bin"
@@ -809,7 +809,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Makoto"
-    source_ref: "share/extensions/Makoto.xml:15-18"
+    source_ref: "share/extensions/Makoto.xml:15-18, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "TDC600.rom"
     path: "openmsx/share/systemroms/TDC600.rom"
@@ -817,7 +817,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Talent_TDC-600"
-    source_ref: "share/extensions/Talent_TDC-600.xml:18-21"
+    source_ref: "share/extensions/Talent_TDC-600.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "dpf-550_disk.rom"
     path: "openmsx/share/systemroms/dpf-550_disk.rom"
@@ -825,7 +825,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Talent_DPF-550"
-    source_ref: "share/extensions/Talent_DPF-550.xml:18-21"
+    source_ref: "share/extensions/Talent_DPF-550.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "Tecall_MSX_RAMFILE_TM220.rom"
     path: "openmsx/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom"
@@ -833,7 +833,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Tecall_MSX_RAMFILE_TM220"
-    source_ref: "share/extensions/Tecall_MSX_RAMFILE_TM220.xml:17-20"
+    source_ref: "share/extensions/Tecall_MSX_RAMFILE_TM220.xml:17-20, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hx-f101pe.rom"
     path: "openmsx/share/systemroms/hx-f101pe.rom"
@@ -841,7 +841,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Toshiba_HX-F101PE"
-    source_ref: "share/extensions/Toshiba_HX-F101PE.xml:20-23"
+    source_ref: "share/extensions/Toshiba_HX-F101PE.xml:20-23, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "hx-mu900.rom"
     path: "openmsx/share/systemroms/hx-mu900.rom"
@@ -849,7 +849,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Toshiba_HX-MU900"
-    source_ref: "share/extensions/Toshiba_HX-MU900.xml:26-29"
+    source_ref: "share/extensions/Toshiba_HX-MU900.xml:26-29, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "fd-03.rom"
     path: "openmsx/share/systemroms/fd-03.rom"
@@ -857,7 +857,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Yamaha_FD-03"
-    source_ref: "share/extensions/Yamaha_FD-03.xml:20-26"
+    source_ref: "share/extensions/Yamaha_FD-03.xml:20-26, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "FD-051.BIN"
     path: "openmsx/share/systemroms/FD-051.BIN"
@@ -865,7 +865,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Yamaha_FD-05"
-    source_ref: "share/extensions/Yamaha_FD-05.xml:22-25"
+    source_ref: "share/extensions/Yamaha_FD-05.xml:22-25, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "sfg-05.rom"
     path: "openmsx/share/systemroms/sfg-05.rom"
@@ -873,7 +873,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Yamaha_SFG-05"
-    source_ref: "share/extensions/Yamaha_SFG-05.xml:31-34"
+    source_ref: "share/extensions/Yamaha_SFG-05.xml:31-34, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "skw-05_main.rom"
     path: "openmsx/share/systemroms/skw-05_main.rom"
@@ -881,7 +881,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Yamaha_SKW-05_embedded"
-    source_ref: "share/extensions/Yamaha_SKW-05_embedded.xml:32-36"
+    source_ref: "share/extensions/Yamaha_SKW-05_embedded.xml:32-36, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "skw-05_data.rom"
     path: "openmsx/share/systemroms/skw-05_data.rom"
@@ -889,7 +889,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Yamaha_SKW-05_embedded"
-    source_ref: "share/extensions/Yamaha_SKW-05_embedded.xml:37-40"
+    source_ref: "share/extensions/Yamaha_SKW-05_embedded.xml:37-40, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "skw-01_main.rom"
     path: "openmsx/share/systemroms/skw-01_main.rom"
@@ -897,7 +897,7 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Yamaha_SKW-01"
-    source_ref: "share/extensions/Yamaha_SKW-01.xml:18-21"
+    source_ref: "share/extensions/Yamaha_SKW-01.xml:18-21, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
 
   - name: "skw-01_kanjifont.rom"
     path: "openmsx/share/systemroms/skw-01_kanjifont.rom"
@@ -905,4 +905,4 @@ files:
     required: false
     validation: [sha1]
     description: "Read by extension Yamaha_SKW-01"
-    source_ref: "share/extensions/Yamaha_SKW-01.xml:22-25"
+    source_ref: "share/extensions/Yamaha_SKW-01.xml:22-25, build/libretro_share.py:17-23, src/libretro/LibretroCore.cc:146-160, src/config/HardwareConfig.cc:35-45, 249-277, src/memory/Rom.cc:135-136, 165-218"
