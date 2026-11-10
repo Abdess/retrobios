@@ -1462,7 +1462,7 @@ def _collect_emulator_extras(
                 # covered elsewhere belongs to another program's file.
                 # Nor is one placed outside the BIOS tree by the layout.
                 if (fname not in covered_names or f.get("unsourceable") or f.get("unplaced")
-                        or f.get("root") in OUTER_ROOTS or f.get("unprefixed")):
+                        or f.get("root") in OUTER_ROOTS):
                     continue
                 # Installed with the emulator or by the platform's package,
                 # as the first pass already decided for the same entry.
@@ -1492,7 +1492,12 @@ def _collect_emulator_extras(
                 # of the directory core files go to, which the platform may not
                 # declare (Recalbox has its System Cards under pcenginecd/ only,
                 # geargrafx reads them from the root).
-                full_dest = prefixed_destination(dest, extras_prefix)
+                # A path of the install tree outside the BIOS folder keeps no
+                # prefix: EmuELEC's dolphin/dolphin-emu/GBA/gba_bios.bin.
+                full_dest = (
+                    sanitize_pack_path(dest) if f.get("unprefixed")
+                    else prefixed_destination(dest, extras_prefix)
+                )
                 if full_dest in seen_dests and full_dest not in taken:
                     continue
                 if full_dest in taken and full_dest not in seen and fname not in platform_names:
@@ -1538,6 +1543,8 @@ def _collect_emulator_extras(
                     extra["contents"] = f["contents"]
                 if f.get("system_dir"):
                     extra["system_dir"] = f["system_dir"]
+                if f.get("unprefixed"):
+                    extra["unprefixed"] = True
                 extra["claim_order"] = (2, 0, emu_name)
                 if _take(extra, full_dest, seen_dests, taken):
                     extras.append(extra)

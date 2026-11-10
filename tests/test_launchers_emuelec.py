@@ -313,6 +313,11 @@ ADVMAME_RC = text(
 
 ADVMAME_SH = text(
     """
+    if [[ "${1}" = "arcade" ]]; then
+    sed -i "s|/roms/mame|/roms/arcade|g" ${CONFIG_DIR}/advmame.rc
+     else
+    sed -i "s|/roms/arcade|/roms/mame|g" ${CONFIG_DIR}/advmame.rc
+    fi
     SDL_AUDIODRIVER=alsa advmame ${ARG} -quiet
 """
 )
@@ -580,9 +585,17 @@ class StandaloneRecords(unittest.TestCase):
         )
 
     def test_advancemame_one_record_when_every_device_agrees(self):
-        (record,) = records(el.advancemame)
-        self.assertEqual(record["search_dir"], "/storage/roms/bios/advmame/samples")
-        self.assertNotIn("device", record)
+        roms, arcade, samples = records(el.advancemame)
+        self.assertEqual(samples["search_dir"], "/storage/roms/bios/advmame/samples")
+        self.assertNotIn("device", samples)
+        # advmame.sh rewrites /roms/mame to /roms/arcade for the arcade system.
+        self.assertEqual(
+            (roms["search_dir"], roms["passes_to"], roms["depends_on_option"]),
+            ("/storage/roms/mame", "advmame.rc dir_rom", "system != arcade"),
+        )
+        self.assertNotIn("systems", roms)
+        self.assertEqual((arcade["search_dir"], arcade["systems"]), ("/storage/roms/arcade", ["arcade"]))
+        self.assertTrue(arcade["source_ref"].endswith("bin/advmame.sh:1-2, 6"))
 
     def test_advancemame_devices_that_disagree_raise(self):
         changed = ADVMAME_RC.replace("bios/advmame", "bios/other")
@@ -618,7 +631,7 @@ class StandaloneRecords(unittest.TestCase):
 
     def test_every_extractor_runs_on_the_fixtures(self):
         found = el.extract_launchers(tree())
-        self.assertEqual(len(found), 26)
+        self.assertEqual(len(found), 28)
 
 
 class Revision(unittest.TestCase):

@@ -37,11 +37,13 @@ class Launcher:
     device: str | None = None
     # The machines the platform offers under the record's systems.
     machines: list[str] | None = None
+    # The platform systems the record is written for, none for every one.
+    systems: list[str] | None = None
 
     def entry(self) -> dict[str, Any]:
         """The platform YAML form, in a fixed key order, unset keys left out."""
         order = (
-            "emulator", "build", "kind", "slot", "names", "expands",
+            "emulator", "systems", "build", "kind", "slot", "names", "expands",
             "case_insensitive", "search_dir", "passes_to",
             "fails_when_missing", "fails_scope", "depends_on_option",
             "device", "machines", "source_ref",

@@ -931,6 +931,10 @@ platforms:
     # retroarch/package.mk:115 at v4.8) and setsettings.sh never sets it, so
     # RetroArch saves beside each game: no single place.
     save_directory: null
+    # root's home, which every launcher script gets from /etc/profile
+    # (packages/sysutils/busybox/package.mk:168 and
+    # packages/sysutils/busybox/profile.d/98-busybox.conf:4 at v4.8).
+    home_directory: /storage
     schedule: monthly
     target_scraper: emuelec_targets
     target_source: https://github.com/EmuELEC/EmuELEC/blob/dev/packages/sx05re/emuelec/package.mk

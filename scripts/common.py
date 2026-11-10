@@ -1646,12 +1646,15 @@ def resolve_local_file(
     layout = file_entry.get("layout_path")
     if layout and layout != dest_hint:
         plain = {k: v for k, v in file_entry.items() if k != "layout_path"}
+        # A destination outside the BIOS tree says nothing of the collection:
+        # EmuELEC's roms/mame/konamigv.zip is not bios/Arcade/MAME's set.
+        outside = file_entry.get("unprefixed") or file_entry.get("root")
         answers = [
             resolve_local_file(
                 plain, db, zip_contents, dest_hint=hint, _depth=_depth,
                 data_dir_registry=data_dir_registry,
             )
-            for hint in (dest_hint, str(layout))
+            for hint in ((str(layout),) if outside else (dest_hint, str(layout)))
         ]
         for found in answers:
             if found[0] is not None and (
@@ -3098,12 +3101,14 @@ def standalone_layout_path(entry: dict, profile: dict) -> str | None:
 
     ``standalone_path`` when the entry has one. A profile with no libretro
     build has one layout, so its ``path`` is that layout: UAE4All2 reads
-    kickstarts/kick13.rom below its working directory.
+    kickstarts/kick13.rom below its working directory. So does an entry only
+    the standalone build reads (``mode: standalone``), whose destination is
+    its ``path``: Dolphin's Load/Firmware/rtl_bt/ under its User directory.
     """
     own = entry.get("standalone_path")
     if own:
         return own
-    if "libretro" in str(profile.get("type", "")):
+    if "libretro" in str(profile.get("type", "")) and entry.get("mode") != "standalone":
         return None
     return entry.get("path") or None
 
@@ -3230,6 +3235,14 @@ def platform_layouts(
             tree, path = placed
             moved = {**f, "standalone_path": path,
                      "layout_path": standalone_layout_path(f, profile)}
+            if f.get("load_from"):
+                # The build's own root no longer applies: RetroDECK hands
+                # Cemu's MLC, read from its data directory, to bios/cemu.
+                load_from = f["load_from"]
+                moved["load_from"] = {
+                    **(load_from if isinstance(load_from, dict) else {"libretro": load_from}),
+                    "standalone": "system_dir",
+                }
             if tree == "install":
                 # Below the roms root inside the install tree (AmberELEC's
                 # /storage/roms): a plain dest the platform prefix skips.

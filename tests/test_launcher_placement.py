@@ -721,5 +721,190 @@ class Quasi88OnRetroPie(unittest.TestCase):
         )
 
 
+class FlycastOnEmuELEC(unittest.TestCase):
+    """EmuELEC links /storage/.local/share/flycast to bios/dc (flycast.sh:11-14),
+    and root's home is /storage (busybox profile.d/98-busybox.conf:4)."""
+
+    def test_the_home_directory_is_spelled_as_home(self) -> None:
+        from launchers import normalize_handle
+
+        self.assertEqual(
+            normalize_handle("/storage/.local/share/flycast", "/storage"), "~/.local/share/flycast"
+        )
+        self.assertEqual(normalize_handle("/storage", "/storage/"), "~")
+        self.assertEqual(normalize_handle("/storagex/a", "/storage"), "/storagex/a")
+        self.assertEqual(
+            normalize_handle("/storage/.local/share/flycast"), "/storage/.local/share/flycast"
+        )
+
+    def test_the_bios_lands_in_dc(self) -> None:
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["flycast"]
+        config = load_platform_config("emuelec", str(REPO_ROOT / "platforms"))
+        layouts = platform_layouts("flycast", profile, standalone_set(config))
+        (view,) = [v for v, standalone in layouts if standalone]
+        self.assertTrue(view["files"])
+        for entry in view["files"]:
+            self.assertEqual(entry["standalone_path"], "dc/" + entry["layout_path"])
+
+
+def standalone_view(emulator: str, platform: str) -> dict:
+    profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))[emulator]
+    config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config))
+               if standalone]
+    return view
+
+
+class Eka2l1OnRetroBat(unittest.TestCase):
+    """RetroBat writes data-storage = bios/eka2l1/data (Eka2l1.Generator.cs:153, 156)."""
+
+    def test_the_device_rom_lands_in_eka2l1_data(self) -> None:
+        view = standalone_view("eka2l1", "retrobat")
+        (rom,) = [e for e in view["files"] if e["name"] == "SYM.ROM"]
+        self.assertEqual(rom["standalone_path"], "eka2l1/data/roms/nem-4/SYM.ROM")
+        # Shipped beside the executable, in RetroBat's emulator folder.
+        for entry in view["files"]:
+            if entry.get("mode") == "standalone":
+                self.assertEqual(entry.get("unplaced"), "outside_bios_folder", entry["name"])
+
+
+class CemuOnRetroDECK(unittest.TestCase):
+    """RetroDECK sets mlc_path to $bios_path/cemu (cemu/component_prepare.sh:14, 29)
+    and keeps Cemu's user data in its Flatpak's $XDG_DATA_HOME/Cemu."""
+
+    def test_the_mlc_lands_in_cemu(self) -> None:
+        view = standalone_view("cemu", "retrodeck")
+        mlc = [e for e in view["files"] if (e.get("layout_path") or "").startswith("mlc01/")]
+        self.assertTrue(mlc)
+        for entry in mlc:
+            self.assertEqual(
+                entry["standalone_path"], "cemu/" + entry["layout_path"].removeprefix("mlc01/")
+            )
+        (otp,) = [e for e in view["files"] if e["name"] == "otp.bin"]
+        self.assertEqual(otp.get("unplaced"), "outside_bios_folder")
+
+
+class DolphinUserDirectory(unittest.TestCase):
+    """EmuELEC runs Dolphin with XDG_DATA_HOME=/storage/roms/dolphin (dolphin.sh:28),
+    RetroDECK links $XDG_DATA_HOME/dolphin-emu/Triforce to bios/Triforce
+    (dolphin/component_prepare.sh:30, 49)."""
+
+    def test_emuelec_installs_the_user_directory_below_its_roms(self) -> None:
+        view = standalone_view("dolphin", "emuelec")
+        placed = {e["name"]: e["standalone_path"] for e in view["files"] if e.get("layout_path")}
+        self.assertEqual(placed["segaboot.gcm"], "dolphin/dolphin-emu/Triforce/segaboot.gcm")
+        # A standalone-only entry's path is its place in the User directory.
+        self.assertEqual(
+            placed["rtl8723a_fw.bin"], "dolphin/dolphin-emu/Load/Firmware/rtl_bt/rtl8723a_fw.bin"
+        )
+        self.assertTrue(all(e.get("unprefixed") for e in view["files"] if e.get("layout_path")))
+
+    def test_retrodeck_places_triforce_alone(self) -> None:
+        view = standalone_view("dolphin", "retrodeck")
+        placed = {e["name"]: e["standalone_path"] for e in view["files"] if e.get("layout_path")}
+        self.assertEqual(placed, {"segaboot.gcm": "Triforce/segaboot.gcm"})
+        (ipl, *_) = [e for e in view["files"] if e["name"] == "IPL.bin"]
+        self.assertEqual(ipl.get("unplaced"), "outside_bios_folder")
+
+
+class MameSearchPaths(unittest.TestCase):
+    """MAME reads each semicolon-separated search path in turn
+    (src/emu/fileio.cpp:53-58, 330-392)."""
+
+    def sets(self, view: dict) -> list[dict]:
+        return [e for e in view["files"] if e.get("category") == "bios_zip"]
+
+    def test_retrobat_keeps_the_sets_at_the_bios_root(self) -> None:
+        # -rp bios;<rom directory> (Mame64.Generator.cs:93-96).
+        view = standalone_view("mame", "retrobat")
+        sets = self.sets(view)
+        self.assertGreater(len(sets), 1000)
+        for entry in sets:
+            self.assertEqual(entry["standalone_path"], entry["name"])
+            self.assertNotIn("unplaced", entry)
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        # -sp bios/mame/samples, hbmame's folder being another record
+        # (Mame64.Generator.cs:30, 101, 106-107).
+        self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
+
+    def test_knulli_keeps_the_root_listed_after_bios_mame(self) -> None:
+        # -rompath <romDirname>;/userdata/bios/mame;/userdata/bios (mameGenerator.py:116-122).
+        view = standalone_view("mame", "knulli")
+        self.assertTrue(all(e["standalone_path"] == e["name"] for e in self.sets(view)))
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
+
+    def test_retropie_moves_the_sets_to_bios_mame(self) -> None:
+        # rompath $romdir/mame;$romdir/arcade;$biosdir/mame (mame.sh:133).
+        view = standalone_view("mame", "retropie")
+        self.assertTrue(all(
+            e["standalone_path"] == "mame/" + e["name"] for e in self.sets(view)
+        ))
+
+    def test_retrodeck_reads_samples_in_mame_sa(self) -> None:
+        # samplepath $bios_path/mame-sa/samples (mame/component_prepare.sh:94, 117).
+        view = standalone_view("mame", "retrodeck")
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual(bbc["standalone_path"], "mame-sa/samples/bbc.zip")
+        # ES-DE hands -rompath %GAMEDIR%;%ROMPATH%/<system>: no BIOS folder.
+        self.assertTrue(all(
+            e.get("unplaced") == "outside_bios_folder" for e in self.sets(view)
+        ))
+
+    def test_psxmame_reads_bios_psxmame_bios(self) -> None:
+        # -rompath bios/psxmame/bios;<rom directory> (PSXMame.Generator.cs:38-48).
+        view = standalone_view("psxmame", "retrobat")
+        self.assertTrue(view["files"])
+        for entry in view["files"]:
+            self.assertEqual(entry["standalone_path"], "psxmame/bios/" + entry["name"])
+
+
+class GzdoomOnRetroDECK(unittest.TestCase):
+    """RetroDECK writes RETRODECKROMSDIR/doom into [IWADSearch.Directories]
+    (gzdoom.ini:9, component_prepare.sh:27)."""
+
+    def test_the_iwads_land_in_roms_doom(self) -> None:
+        view = standalone_view("gzdoom", "retrodeck")
+        iwads = [e for e in view["files"] if e.get("system")]
+        self.assertEqual(len(iwads), 43)
+        for entry in iwads:
+            self.assertEqual(entry["standalone_path"], "roms/doom/" + entry["name"])
+            self.assertTrue(entry.get("unprefixed"))
+        # The engine pk3s are read beside the executable first.
+        (pk3,) = [e for e in view["files"] if e["name"] == "gzdoom.pk3"]
+        self.assertNotIn("standalone_path", pk3)
+
+    def test_another_platform_keeps_them(self) -> None:
+        view = standalone_view("gzdoom", "batocera")
+        self.assertFalse(any(e.get("standalone_path") for e in view["files"]))
+
+
+class AdvanceMameOnEmuELEC(unittest.TestCase):
+    """advmame.rc sets dir_rom /storage/roms/mame, /storage/roms/arcade for
+    the arcade system (advmame.rc:11, advmame.sh:26-30)."""
+
+    def test_the_sets_land_in_roms_mame(self) -> None:
+        view = standalone_view("advancemame", "emuelec")
+        sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
+        self.assertEqual(len(sets), 29)
+        for entry in sets:
+            self.assertEqual(entry["standalone_path"], "mame/" + entry["name"])
+            self.assertTrue(entry.get("unprefixed"))
+
+    def test_the_roms_folder_is_no_proof_of_content(self) -> None:
+        # bios/Arcade/MAME/konamigv.zip is MAME 0.289's set, not AdvanceMAME's.
+        from common import load_database, resolve_local_file
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        view = standalone_view("advancemame", "emuelec")
+        (entry,) = [e for e in view["files"] if e["name"] == "konamigv.zip"]
+        moved, _status = resolve_local_file(entry, db, dest_hint=entry["standalone_path"])
+        plain = {k: v for k, v in entry.items()
+                 if k not in ("layout_path", "standalone_path", "unprefixed")}
+        root, _status = resolve_local_file(plain, db, dest_hint=entry["name"])
+        self.assertEqual(moved, root)
+        self.assertNotIn("/MAME/", moved)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -30,6 +30,10 @@ except ImportError:
 
 BIOS = "$bios_path"
 PLACEHOLDER = "RETRODECKBIOSDIR"
+# The roms folder in the same presets: GZDoom's IWADSearch.Directories holds
+# RETRODECKROMSDIR/doom (gzdoom/rd_assets/rd_config/gzdoom.ini:9), which
+# gzdoom/component_prepare.sh:27 rewrites to $roms_path.
+ROMS_PLACEHOLDER = "RETRODECKROMSDIR"
 CORE_OPTIONS = "retroarch/rd_assets/rd_config/retroarch-core-options.cfg"
 # The component that runs libretro cores.
 LIBRETRO_COMPONENT = "retroarch"
@@ -282,7 +286,11 @@ class Component:
         )
 
     def _preset(self, script: Script, number: int, words: list[str]) -> None:
-        """`sed -i "s#RETRODECKBIOSDIR#${bios_path}#g" "$cfg"` on a preset copied just above."""
+        """`sed -i "s#RETRODECKBIOSDIR#${bios_path}#g" "$cfg"` on a preset copied just above.
+
+        Each line naming the BIOS or the roms folder is a record: a search
+        list can mix them (XRoar's rompath, GZDoom's IWAD directories).
+        """
         target = words[-1]
         substitutions = self._substitutions(script, target)
         copied = None
@@ -302,17 +310,25 @@ class Component:
             stripped = line.strip()
             if re.fullmatch(r"\[[^\]]+\]", stripped):
                 section = stripped
-            if PLACEHOLDER not in stripped or stripped.startswith("#"):
+            if stripped.startswith("#") or not any(
+                p in stripped for p in (PLACEHOLDER, ROMS_PLACEHOLDER)
+            ):
                 continue
             setting = re.match(r"^([\w.$()-]+)\s*(?:=|\s)\s*(.+)$", stripped)
             if setting is None:
                 raise LauncherPatternMissing(f"{preset}:{line_no}", f"placeholder in {stripped}")
+            named = [p for p in substitutions if p in stripped]
+            if PLACEHOLDER not in stripped and not named:
+                # A roms placeholder the script leaves as written.
+                continue
             key, value = setting.group(1), _unquote(setting.group(2))
-            for placeholder, variable in substitutions.items():
+            for placeholder, (variable, _line) in substitutions.items():
                 value = value.replace(placeholder, variable)
             where = f"{section} {key}" if section else key
-            found += 1
-            applied = [(script.path, copied[0]), (script.path, number)]
+            found += PLACEHOLDER in stripped
+            applied = [(script.path, copied[0]), (script.path, number)] + [
+                (script.path, substitutions[p][1]) for p in named
+            ]
             self.record(
                 "passes_path", [], [(preset, line_no)] + applied,
                 search_dir=value, passes_to=f"{self.config_name(target)} {where}",
@@ -324,12 +340,13 @@ class Component:
             raise LauncherPatternMissing(preset, f"no {PLACEHOLDER} line")
 
     @staticmethod
-    def _substitutions(script: Script, target: str) -> dict[str, str]:
+    def _substitutions(script: Script, target: str) -> dict[str, tuple[str, int]]:
+        """Each placeholder sed rewrites in ``target``: (variable, line)."""
         found = {}
-        for line in script.lines:
+        for line_no, line in enumerate(script.lines, 1):
             for m in re.finditer(r"s#(RETRODECK\w+)#\$\{?(\w+)\}?#g[\"']?\s+\"([^\"]+)\"", line):
                 if m.group(3) == target:
-                    found[m.group(1)] = f"${m.group(2)}"
+                    found[m.group(1)] = (f"${m.group(2)}", line_no)
         return found
 
     def romlists(

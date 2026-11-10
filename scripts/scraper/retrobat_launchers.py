@@ -3336,7 +3336,11 @@ def mame(sources: dict[str, Source]) -> list[Record]:
         raise LauncherPatternMissing(own.path, "MAME folder arguments")
     records = _covered(
         own,
-        [_with_conditions(record, conditions) for record, conditions in found],
+        [
+            split
+            for record, conditions in found
+            for split in _per_emulator(own, _with_conditions(record, conditions))
+        ],
         # The bezel artwork folder is read by the launcher, not passed.
         skip=(_BIOS_GUARD, r"ConfigureBezels\("),
     )
@@ -3422,6 +3426,42 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
         )
     )
     return _covered(src, records)
+
+
+_EMULATOR_BRANCH = re.compile(r"([^\s;<>]+) when (\w+), else ([^\s;<>]+)")
+
+
+def _per_emulator(src: Source, record: Record) -> list[Record]:
+    """A directory chosen by the emulator the generator runs, one record each.
+
+    Mame64.Generator.cs sets `bool hbmame = emulator == "hbmame";` and passes
+    `-sp bios/hbmame/samples` for it, bios/mame/samples for mame64. A choice
+    on any other condition is left as it reads.
+    """
+    rendered = str(record.get("search_dir", ""))
+    branch = _EMULATOR_BRANCH.fullmatch(rendered)
+    if branch is None:
+        return [record]
+    chosen, flag, default = branch.groups()
+    declared = re.search(rf'bool {flag} = emulator == "([\w.-]+)";', _code(src))
+    if declared is None:
+        return [record]
+    ref = str(record["source_ref"])
+    if not ref.startswith(src.path + ":"):
+        raise LauncherPatternMissing(src.path, f"source of the directory choice {rendered!r}")
+    spans = [
+        (int(first), int(last or first))
+        for first, _, last in (s.partition("-") for s in ref[len(src.path) + 1:].split(", "))
+    ]
+    spans.append(src.lines(declared.start(), declared.end()))
+    prefix = str(record["passes_to"]).removesuffix(rendered).strip()
+    out = []
+    for emulator, directory in ((declared.group(1), chosen), (record["emulator"], default)):
+        split = {k: v for k, v in record.items() if k != "source_ref"}
+        split.update(emulator=emulator, search_dir=directory, passes_to=f"{prefix} {directory}")
+        split["source_ref"] = _path_parts(src, *spans)
+        out.append(split)
+    return out
 
 
 _SYSTEM_BRANCH = re.compile(r'(\S+), or (\S+) when system == "([\w.-]+)"')

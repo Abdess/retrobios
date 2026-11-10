@@ -16760,11 +16760,38 @@ launchers:
   build: standalone
   kind: passes_path
   names: []
+  search_dir: $roms_path/doom
+  passes_to: "gzdoom.ini [IWADSearch.Directories] Path"
+  fails_when_missing: false
+  source_ref: "gzdoom/rd_assets/rd_config/gzdoom.ini:9, gzdoom/component_prepare.sh:23,\
+    \ 27-28"
+- emulator: gzdoom
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $roms_path/doom
+  passes_to: "gzdoom.ini [FileSearch.Directories] Path"
+  fails_when_missing: false
+  source_ref: "gzdoom/rd_assets/rd_config/gzdoom.ini:18, gzdoom/component_prepare.sh:23,\
+    \ 27-28"
+- emulator: gzdoom
+  build: standalone
+  kind: passes_path
+  names: []
   search_dir: $bios_path/gzdoom
   passes_to: "gzdoom.ini [FileSearch.Directories] Path"
   fails_when_missing: false
   source_ref: "gzdoom/rd_assets/rd_config/gzdoom.ini:19, gzdoom/component_prepare.sh:23,\
     \ 28"
+- emulator: gzdoom
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $roms_path/bios/gzdoom
+  passes_to: "gzdoom.ini [SoundfontSearch.Directories] Path"
+  fails_when_missing: false
+  source_ref: "gzdoom/rd_assets/rd_config/gzdoom.ini:31, gzdoom/component_prepare.sh:23,\
+    \ 27-28"
 - emulator: mame
   build: standalone
   kind: passes_path
@@ -16996,8 +17023,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: xroar.conf rompath
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:290, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:290, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17007,8 +17033,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragon
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:291, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:291, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17023,8 +17048,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist d64_1
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:292, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:292, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17038,8 +17062,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist d64_2
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:293, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:293, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17052,8 +17075,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist d32
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:294, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:294, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17065,8 +17087,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist d200e_1
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:295, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:295, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17078,8 +17099,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist d200e_2
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:296, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:296, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17095,8 +17115,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragon64
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:297, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:297, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17110,8 +17129,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragon64_alt
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:298, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:298, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17125,8 +17143,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragon32
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:299, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:299, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17145,8 +17162,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragon200e
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:300, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:300, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17163,8 +17179,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragon200e_alt
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:301, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:301, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17175,8 +17190,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragon200e_charset
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:302, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:302, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17190,8 +17204,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragonpro_boot
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:303, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:303, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17209,8 +17222,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragonpro_basic
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:304, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:304, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17224,8 +17236,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:305, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:305, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17238,8 +17249,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco_ext
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:306, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:306, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17253,8 +17263,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco1
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:307, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:307, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17268,8 +17277,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco1e
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:308, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:308, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17282,8 +17290,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco1e_ext
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:309, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:309, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17297,8 +17304,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco2
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:310, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:310, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17311,8 +17317,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco2_ext
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:311, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:311, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17326,8 +17331,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco2b
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:312, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:312, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17338,8 +17342,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist deluxecoco
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:313, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:313, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17349,8 +17352,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist deluxecoco1
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:314, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:314, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17360,8 +17362,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist deluxecoco2
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:315, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:315, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17372,8 +17373,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist deluxecoco3
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:316, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:316, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17384,8 +17384,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist mx1600
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:317, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:317, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17395,8 +17394,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist mx1600ext
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:318, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:318, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17406,8 +17404,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco3
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:319, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:319, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17417,8 +17414,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist coco3p
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:320, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:320, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17429,8 +17425,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist glenside_ide
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:321, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:321, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17440,8 +17435,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist mc10
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:322, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:322, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17451,8 +17445,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist alice
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:323, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:323, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17467,8 +17460,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragondos
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:324, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:324, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17481,8 +17473,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dosplus
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:325, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:325, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17495,8 +17486,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist superdos
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:326, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:326, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17508,8 +17498,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist cumana
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:327, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:327, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17535,8 +17524,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist dragondos_compat
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:328, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:328, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17547,8 +17535,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist rsdos
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:329, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:329, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17563,8 +17550,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist delta
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:330, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:330, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17574,8 +17560,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist rsdos_becker
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:331, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:331, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17586,8 +17571,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist mcx128
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:332, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:332, xroar/component_prepare.sh:13-15"
 - emulator: xroar
   build: standalone
   kind: names_searched
@@ -17598,8 +17582,7 @@ launchers:
   search_dir: "$roms_path/coco:$roms_path/dragon32:$roms_path/tanodragon:$bios_path"
   passes_to: romlist mcx128_azerty
   fails_when_missing: false
-  source_ref: "xroar/rd_assets/rd_config/xroar.conf:333, xroar/component_prepare.sh:13,\
-    \ 15"
+  source_ref: "xroar/rd_assets/rd_config/xroar.conf:333, xroar/component_prepare.sh:13-15"
 - emulator: retroarch
   build: libretro
   kind: core_option
