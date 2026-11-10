@@ -126,7 +126,7 @@ def render(record: dict, platforms_dir: str, whats_new: str) -> str:
     lines = [
         "### Install in one command",
         "",
-        "It finds your setup and its BIOS folder, then downloads only what is missing.",
+        "It finds the setup and its BIOS folder, then downloads only what is missing.",
         "",
         "**Linux, macOS, Steam Deck**",
         "```sh",
@@ -138,12 +138,12 @@ def render(record: dict, platforms_dir: str, whats_new: str) -> str:
         install_command("powershell"),
         "```",
         "",
-        (f"**On a handheld**: copy the `RetroBIOS` file for your system to the card"
+        (f"**On a handheld**: copy the `RetroBIOS` file for the system to the card"
          f" ([which one]({SITE}wiki/installer/#on-a-handheld-the-retrobios-port))."),
         "",
         "### Or download a pack",
         "",
-        "Extract it into your BIOS folder.",
+        "Extract it into the BIOS folder.",
         "",
     ]
     if any(len(pack["assets"]) > 1 for pack in packs.values()):

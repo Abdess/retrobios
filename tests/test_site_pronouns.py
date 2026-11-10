@@ -186,6 +186,23 @@ class SitePronouns(unittest.TestCase):
         hits = _hits(files)
         self.assertEqual(hits, [], "\n".join(hits))
 
+    def test_release_notes(self):
+        """The release page is public text too. Rendered from the committed
+        record, and once more with a pack in parts, its own paragraph."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import release_notes
+        import release_record
+
+        record = release_record.load_record(ROOT / "release.json")
+        first = next(iter(record["packs"]))
+        parted = {**record, "packs": {**record["packs"], first: {
+            **record["packs"][first], "assets": ["a.part1of2.zip", "a.part2of2.zip"]}}}
+        platforms = str(ROOT / "platforms")
+        hits = [f"release notes:{number}: {line}"
+                for sample in (record, parted)
+                for number, line in pronouns(release_notes.render(sample, platforms, "x"))]
+        self.assertEqual(hits, [], "\n".join(hits))
+
     def test_every_allowed_quote_says_why(self):
         for quoted, reason in {**NAMES, **INSTALLER, **SOURCE}.items():
             with self.subTest(quoted=quoted):
