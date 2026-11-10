@@ -1,0 +1,152 @@
+# LRPS2 at 416291a with Batocera's BIOS directory patch
+# Source: https://github.com/libretro/parallel-ps2
+# Upstream: https://github.com/PCSX2/pcsx2
+
+emulator: "LRPS2 (416291a, Batocera)"
+type: libretro
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/libretro/parallel-ps2"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-11-10"
+source_commit: "416291ad7dc3caf5df4501c9249cbbe30cbef811"
+pin_frozen: "Batocera, the only platform that ships it, builds this revision with package/batocera/emulators/retroarch/libretro/libretro-ps2/001.bios-dir.patch (Batocera package/batocera/emulators/retroarch/libretro/libretro-ps2/libretro-ps2.mk:7 at batocera-43.1). Later commits are not part of that build."
+pin_build:
+  - platform: batocera
+    repo: "https://github.com/batocera-linux/batocera.linux"
+    revision: "batocera-43.1"
+    path: "package/batocera/emulators/retroarch/libretro/libretro-ps2/libretro-ps2.mk"
+    variable: LIBRETRO_PS2_VERSION
+    value: "416291ad7dc3caf5df4501c9249cbbe30cbef811"
+core_version: null
+version_basis:
+  kind: none
+display_name: "Sony - PlayStation 2 (LRPS2 416291a for Batocera)"
+cores: [pcsx2]
+built_by: [batocera]
+systems: [sony-playstation-2]
+
+bios_directory: "ps2/"
+resources_directory: "pcsx2/resources/"
+
+notes: |
+  Batocera installs the build as pcsx2_libretro.so (Batocera
+  package/batocera/emulators/retroarch/libretro/libretro-ps2/libretro-ps2.mk:35-36)
+  and launches it as the libretro core pcsx2 of the ps2 system (Batocera
+  package/batocera/emulationstation/batocera-es-system/es_systems.yml:2293-2294).
+  The library version is the short commit hash git reports at build time
+  (cmake/BuildParameters.cmake:4-9, libretro/main.cpp:1423-1427).
+
+  Its patch moves the BIOS scan from pcsx2/bios to ps2 below the system
+  directory (libretro/main.cpp:1806) and the BIOS folder default to
+  /userdata/bios/ps2, the same folder on Batocera (pcsx2/Pcsx2Config.cpp:1042).
+  The data root stays system/pcsx2, so resources are read from
+  pcsx2/resources and memory cards are written to pcsx2/memcards
+  (libretro/main.cpp:1910-1912).
+
+  BIOS detection is filename-agnostic: ps2/ is scanned for any file between
+  4 and 8 MB with a RESET and a ROMVER romdir entry, no hash is checked, and
+  the list fills the pcsx2_bios core option whose default is the first BIOS
+  found (libretro/main.cpp:1800-1838). retro_load_game refuses to start when
+  no BIOS was found (libretro/main.cpp:1927-1931). The companion files take
+  their path from the selected BIOS.
+
+  The DEV9 hard disk image is user storage the core creates, not a file to
+  obtain.
+
+files:
+  - name: "<bios>.bin"
+    found_by: content
+    path: "ps2/<bios>.bin"
+    required: true
+    description: "PS2 BIOS binary"
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    config_key: "pcsx2_bios"
+    source_ref: "source libretro/main.cpp:1800-1838, source libretro/main.cpp:360-365, source libretro/main.cpp:1927-1931, source pcsx2/ps2/BiosTools.cpp:31-32, 60-187, 231-323, source pcsx2/Pcsx2Config.cpp:994-1000, 1042, 1051-1061"
+    note: >
+      Any file of 4 to 8 MB in ps2/ whose romdir holds RESET and ROMVER. The
+      pcsx2_bios core option picks one, and the first valid image found is used
+      when the configured one is missing.
+
+  - name: "<bios>.rom1"
+    path: "ps2/<bios>.rom1"
+    required: false
+    max_size: 4194304
+    description: "DVD player ROM"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:189-213, 314, source pcsx2/MemoryTypes.h:24"
+    note: "Tries <bios path>.rom1, then the BIOS path with its extension replaced by rom1. Skipped when neither exists."
+
+  - name: "<bios>.rom2"
+    path: "ps2/<bios>.rom2"
+    required: false
+    max_size: 524288
+    description: "Chinese ROM extension"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:189-213, 315, source pcsx2/MemoryTypes.h:25"
+    note: "Same naming as rom1. Present only on Chinese consoles."
+
+  - name: "<bios>.nvm"
+    path: "ps2/<bios>.nvm"
+    required: false
+    hle_fallback: true
+    size: 1024
+    description: "NVRAM / EEPROM data"
+    source_ref: "source pcsx2/CDVD/CDVD.cpp:59-60, source pcsx2/CDVD/CDVD.cpp:160-184"
+    note: >
+      Read at the BIOS path with the extension replaced by nvm. Region and
+      language defaults are filled in when the file is missing, short, or has
+      no language or region parameters.
+
+  - name: "<bios>.mec"
+    path: "ps2/<bios>.mec"
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    source_ref: "source pcsx2/CDVD/CDVD.cpp:62, source pcsx2/CDVD/CDVD.cpp:186-196"
+    note: "Read at the BIOS path with the extension replaced by mec. Written as 0x00020603 when missing."
+
+  - name: "GameIndex.yaml"
+    path: "pcsx2/resources/GameIndex.yaml"
+    required: false
+    installed_on: [batocera]
+    description: "Per-game fixes and settings database"
+    source_ref: "source pcsx2/GameDatabase.cpp:48, source pcsx2/GameDatabase.cpp:880-885, source libretro/main.cpp:2324-2361"
+    note: >
+      Read from pcsx2/resources at the first game lookup. Without it no game
+      fix applies. Batocera installs the copy of the built tree in
+      bios/pcsx2/resources (Batocera
+      package/batocera/emulators/retroarch/libretro/libretro-ps2/libretro-ps2.mk:37-39).
+
+  - name: "cheats_ws.zip"
+    path: "pcsx2/resources/cheats_ws.zip"
+    required: false
+    description: "widescreen patches archive"
+    source_ref: "source pcsx2/VMManager.cpp:333-348, source libretro/main.cpp:2315-2322"
+    note: "Read when widescreen patches are enabled and pcsx2/cheats_ws holds no patch for the game."
+
+  - name: "cheats_ni.zip"
+    path: "pcsx2/resources/cheats_ni.zip"
+    required: false
+    description: "no-interlacing patches archive"
+    source_ref: "source pcsx2/VMManager.cpp:366-383, source libretro/main.cpp:2315-2322"
+    note: "Read when no-interlacing patches are enabled and pcsx2/cheats_ni holds no patch for the game."
+
+  - name: "eeprom.dat"
+    load_from: working_directory
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    source_ref: "source pcsx2/DEV9/DEV9.cpp:107-116, source pcsx2/DEV9/DEV9.cpp:152-167"
+    note: "Opened from the working directory when DEV9 starts and mapped over 64 bytes. A compiled-in image stands in when the file is missing."
+
+  - name: "flash.dat"
+    load_from: working_directory
+    required: false
+    hle_fallback: true
+    size: 8650752
+    description: "DEV9 flash memory with ECC"
+    source_ref: "source pcsx2/DEV9/flash.cpp:21-28, source pcsx2/DEV9/flash.cpp:74-101"
+    note: "Read from the working directory when DEV9 starts. The flash is blank (0xFF) when the file is missing."

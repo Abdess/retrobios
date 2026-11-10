@@ -160,5 +160,50 @@ class APlatformsOwnBuildWinsItsName(unittest.TestCase):
         self.assertEqual(resolve_platform_cores(retropie, profiles), {"uae4all"})
 
 
+class APatchedLibretroBuildTakesItsNameOnly(unittest.TestCase):
+    """Batocera and Recalbox compile LRPS2 with a patch that reads the BIOS
+    from ps2/ instead of pcsx2/bios/. Their own build replaces the buildbot
+    LRPS2 under the name they ship, and Batocera's standalone PCSX2, under
+    the same name, stays."""
+
+    def test_own_libretro_build_keeps_the_standalone_of_a_dual_name(self):
+        from common import resolve_platform_cores
+
+        profiles = {
+            "pcsx2": {"type": "standalone", "source": "s", "cores": ["pcsx2"]},
+            "lrps2": {"type": "libretro", "source": "l", "cores": ["lrps2", "pcsx2"]},
+            "lrps2-own": {"type": "libretro", "source": "l", "cores": ["pcsx2"],
+                          "built_by": ["x"]},
+        }
+        config = {"_key": "x", "cores": ["pcsx2"], "standalone_cores": ["pcsx2"],
+                  "dual_mode_cores": ["pcsx2"]}
+        self.assertEqual(resolve_platform_cores(config, profiles), {"pcsx2", "lrps2-own"})
+        del config["dual_mode_cores"]
+        self.assertEqual(resolve_platform_cores(config, profiles), {"lrps2-own"})
+
+    def test_the_registry_resolves_each_platform_build(self):
+        from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
+
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        platforms = str(REPO_ROOT / "platforms")
+
+        def ps2_cores(platform: str) -> set[str]:
+            config = load_platform_config(platform, platforms)
+            return {
+                c for c in resolve_platform_cores(config, profiles)
+                if c.startswith(("lrps2", "pcsx2", "pcee2"))
+            }
+
+        self.assertEqual(ps2_cores("batocera"), {"lrps2-416291a", "pcsx2", "pcee2"})
+        self.assertEqual(ps2_cores("recalbox"), {"lrps2-9485a53", "pcsx2"})
+        for platform in ("retroarch", "retrobat", "emudeck", "retrodeck"):
+            with self.subTest(platform=platform):
+                cores = ps2_cores(platform)
+                self.assertIn("lrps2", cores)
+                self.assertFalse({"lrps2-416291a", "lrps2-9485a53"} & cores)
+        self.assertEqual(profiles["lrps2-416291a"]["files"][0]["path"], "ps2/<bios>.bin")
+        self.assertEqual(profiles["lrps2-9485a53"]["files"][0]["path"], "ps2/<bios>.bin")
+
+
 if __name__ == "__main__":
     unittest.main()

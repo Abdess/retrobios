@@ -195,7 +195,10 @@ resolved. Three strategies exist:
 
 - **Explicit list**: `cores: [beetle_psx, dolphin, ...]` - match by profile key name
   or by any name in a profile's `cores:`. When a profile's `built_by` names this
-  platform, that profile answers for the name (ROCKNIX's `yabadabadoo`). Used by
+  platform, that profile answers for the name (ROCKNIX's `yabadabadoo`). On a
+  `dual_mode_cores` name it answers for its own build mode only: Batocera's
+  patched LRPS2 (`lrps2-416291a`) takes the libretro `pcsx2` and the standalone
+  PCSX2 stays. Used by
   Batocera, Recalbox, RetroBat, RomM, KNULLI, AmberELEC, EmuELEC, MinUI, NextUI,
   MyMinUI, ROCKNIX, RetroPie, EmuDeck, RetroDECK. A list that names `retroarch`
   (the last three) also takes every libretro profile, as `all_libretro` does,
