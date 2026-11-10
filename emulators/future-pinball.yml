@@ -53,12 +53,9 @@ notes: |
   out of the table file and no external media is opened while a table plays.
   ref: Future Pinball.exe 1.9.1.20101231 .text:0x00457ede,0x00457f6f,0x00457fe6,0x0045805b,0x004417f6
 
-  What a table can pull from outside itself is a resource library. Libraries
-  are .fpl files, also OLE compound documents, holding models, textures, sounds,
-  DMD fonts and scripts under one storage per item. The Texture, Sound, Model
-  and DMD Font managers each offer Import, which copies the item into the table,
-  and Link, which records the library name and the item name instead. A linked
-  library is opened by StgOpenStorage on the name as written, which resolves
+  What a table can pull from outside itself is a resource library, an .fpl
+  file that is also an OLE compound document. A library the table names is
+  opened by StgOpenStorage on the name as written, which resolves
   against the table's own folder, and on failure against the install directory
   plus "Libraries\". Both failing raises "Unabled to Open Library - '<name>'"
   followed by "There will be some functions missing from the game." as a warning
@@ -83,11 +80,20 @@ notes: |
   Settings live in the registry under HKCU\Software\Future Pinball, split into
   GamePlayer, GamePlayer\Joypads and Editor keys. There is no ini file.
   RetroBat writes resolution, aspect ratio, camera, render preset and the whole
-  joypad map there before launching. Per table state is written to
-  fpRAM\<table>.fpRAM beside the program. Nothing in the program verifies a size
-  or a hash on any file it opens, so the figures recorded below are those of the
-  1.9.1.20101231 release and are informative.
-  ref: Future Pinball.exe 1.9.1.20101231 .text:0x0043aa80,0x00475602,0x00475892,
+  joypad map there before launching. Per table state is a compound file,
+  fpRam\<table>.fpRAM under the install directory, holding one nvRam stream.
+  Nothing in the program verifies a size or a hash on any file it opens, so the
+  figures recorded below are those of the 1.9.1.20101231 release and are
+  informative.
+  ref: Future Pinball.exe 1.9.1.20101231 FUN_0046fac0 0x46faf4-0x46fb65 (HKCU
+  0x80000001, Software\Future Pinball\ plus the key, RegOpenKeyExA,
+  RegQueryValueExA), 0x46fbbc-0x46fc32 (the same key, RegCreateKeyExA,
+  RegSetValueExA), FUN_004362e0 0x43639b (GamePlayer), FUN_0043bc40 0x43bc6e
+  (GamePlayer\Joypads), FUN_00431e30 0x431e55 (Editor), FUN_004755a0
+  0x4755da-0x47562f (install directory, fpRam\, table name, .fpRAM),
+  0x475752 (StgOpenStorage read, failure skips the restore at 0x47575a),
+  0x475770 (nvRam stream), FUN_00475830 0x475892-0x475927 (same path,
+  StgCreateDocfile), FUN_00439f60 0x43aa5f-0x43aab7 (same path, DeleteFileA),
   retrobat emulatorLauncher/Generators/Fpinball.Generator.cs:326-491
 
   Front ends drive it with the switches /Open "<table>", /Play, /Exit and
@@ -98,15 +104,13 @@ notes: |
   is a placeholder on its six other platforms. RetroBat maps the emulator keys
   fpinball and bam to one generator, one install folder and the same
   "Future Pinball.exe" presence check, swapping only the launched binary, and
-  optionally starts dmdext against DmdDevice.ini to mirror the DMD. Batocera ran
-  it in a wine bottle on x86_64 and dropped it for Visual Pinball. BAM is
+  optionally starts dmdext against DmdDevice.ini to mirror the DMD. BAM is
   ravarcade's loader: FPLoader.exe starts the same executable with BAM.dll
   injected, and it names none of its own files from inside Future Pinball.
   ref: es-de resources/systems/windows/es_find_rules.xml:438-461,
   es-de resources/systems/windows/es_systems.xml,
   Future Pinball.exe 1.9.1.20101231 WinMain FUN_0042c480 0x42c5f0-0x42c710,
-  retrobat emulatorLauncher/Generators/Fpinball.Generator.cs:109-181,
-  batocera-linux batocera-Changelog.md:214
+  retrobat emulatorLauncher/Generators/Fpinball.Generator.cs:109-181
 
 files:
 
@@ -219,8 +223,7 @@ files:
       and only the script editor is lost.
 
   # -- Resource libraries, resolved against the table's folder then against
-  #    <install>\Libraries. Shipped names all start with fp and the manual asks
-  #    designers not to modify them, because a release replaces them.
+  #    <install>\Libraries.
 
   - name: fpModels.fpl
     sha1: 81f809456ad9fba296eff46f035a607a3d2cfba2
@@ -230,7 +233,7 @@ files:
     bundled: true
     category: game_data
     size: 5166080
-    description: "260 pinball part models, the library the manual tells tables to link"
+    description: "260 pinball part models"
     source_ref: "Future Pinball.exe 1.9.1.20101231 FUN_004e6cf0 0x4e6d66 (StgOpenStorage on the linked name), 0x4e6d8d-0x4e6dd8 (install directory, Libraries\\, name, second StgOpenStorage)"
     note: >-
       A table that links a model from here instead of embedding it loses that
@@ -323,12 +326,11 @@ files:
     bundled: true
     category: game_data
     size: 4096
-    description: "Script library, holding the one sample script the manual quotes"
+    description: "Script library"
     source_ref: "Future Pinball.exe 1.9.1.20101231 FUN_004797c0 0x47985a-0x479881 (a reference whose extension is fpl goes to FUN_00478d20), FUN_004ed9c0 0x4eda31 (FUN_004e6cf0, the library opener)"
     note: >-
-      Reached by LoadExternalScript("fpScripts.fpl\myscript") and any other
-      reference that names a library. What ships is a single storage named
-      testscript.
+      Reached by any LoadExternalScript reference whose library part ends in
+      .fpl. What ships is a single storage named testscript.
 
   # -- Named individually elsewhere in the binary --
 
@@ -371,8 +373,7 @@ files:
       The script editor's help falls to this path for every command id other
       than 0x8043, again through ShellExecuteA against the install directory. No
       Future Pinball release ships it: table scripts are VBScript and this is
-      Microsoft's own reference for the language, expected to be dropped into
-      Help beside the manual.
+      Microsoft's own reference for the language.
 
   - name: fpLatestTables.xml
     sha1: bd9de21def48b65b5382c403971a9062928b9345
@@ -412,7 +413,7 @@ analysis:
       than by a literal in the code, so there is no fixed filename to record.
     entries:
       - what: "Tables\\, four demonstration tables"
-        source_ref: "FuturePinballSetup_v1.9.1.20101231.exe app/Tables"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 FUN_0043ee20 0x43f1d1-0x43f223 (install directory, Tables\\, then the table name, into the table path buffer at +0x18b88)"
         note: >-
           DmdDisplayDemo.fpt, LightSequencerDemo.fpt, Ramp-VUK-Demo.fpt and
           SegmentDisplayDemo.fpt. The directory itself is the default table path
@@ -432,12 +433,12 @@ analysis:
           LoadExternalScript takes whatever name the table's script passes. The
           bare attempt resolves against the working directory, which is the
           table's own folder. No Scripts directory ships.
-      - what: "fpRAM\\<table>.fpRAM, per table persistent state"
-        source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x0043aa80, 0x00475602, 0x00475892"
+      - what: "fpRam\\<table>.fpRAM, per table persistent state"
+        source_ref: "Future Pinball.exe 1.9.1.20101231 FUN_004755a0 0x4755da-0x47562f (install directory, fpRam\\, table name, .fpRAM), 0x475752 (StgOpenStorage, a failure skips the restore), FUN_00475830 0x475892-0x475927 (StgCreateDocfile on the same path), FUN_00439f60 0x43aab7 (DeleteFileA)"
         note: >-
-          Built as the prefix, the table name and the .fpRAM extension. Written
-          from play, so it is save data rather than something to obtain. The
-          installer creates the directory empty.
+          Built as the prefix, the table name and the .fpRAM extension, and
+          created by StgCreateDocfile from play, so it is save data rather than
+          something to obtain. A missing file only skips the restore.
       - what: "DmdFonts\\ and Models\\, editor working directories"
         source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00443595, 0x00443efc, 0x00516ba8, 0x00516d31, 0x00441fc8, 0x004429bb, 0x004317fa"
         note: >-
@@ -455,8 +456,7 @@ analysis:
         note: >-
           Passed to the toolbar builder, which calls CreateToolbarEx with
           hBMInst zero and a bitmap handle held in a global as wBMID. The module
-          has no resource under that name and neither syscall trace shows an open
-          for it, although both traces reach the main window.
+          has no resource under that name.
       - what: "tables\\ in lower case"
         source_ref: "Future Pinball.exe 1.9.1.20101231 .text:0x00439e40-0x00439e79"
         note: >-
