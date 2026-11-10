@@ -7,8 +7,9 @@ profiled_date: "2026-08-11"
 source_commit: "e13007994011ae57dd9d9f48674c1f774183914b"
 core_version: "1.5-408"
 version_basis:
-  kind: unverified
-  why: no_artifact
+  kind: package
+  url: "https://www.ravarcade.pl/files/BAM_v1.5-408.zip"
+  artifact: "BAM_v1.5-408.zip, BAM/BAM.dll fixed file version 1.5.408.0"
 display_name: "Future Pinball (BAM)"
 cores:
   - future-pinball-fploader
@@ -42,7 +43,10 @@ notes: |
   /Open, /Play, /Exit and /ArcadeRender reach it.
   ref: BAM_FPloader FPLoader.cpp:40-48, 87-111, 166-240, 249-257
 
-  BAM.dll is closed source. Its version resource reads 1.5.408 and its debug
+  BAM.dll is closed source. The copy in BAM_v1.5-408.zip, served by
+  ravarcade.pl, has sha256
+  f3163c34adc3423d0b4c1f64399a91d090b4f7d0c54dc35049833466645645f7. Its version
+  resource reads 1.5.408 and its debug
   tags name BAM.cpp, dllmain.cpp, BallManager.cpp, RenderEngine.cpp,
   plugin.cpp, pbo.cpp, stereo3d.cpp and debug.cpp. Twenty five entry points are
   detoured in one pass: CreateFileA, CreateFileW, ReadFile, WriteFile,
@@ -87,24 +91,36 @@ notes: |
   path and is what the presets under XML\ are edited copies of. The 83 GLSL
   programs BAM renders with are
   resources of type TEXT inside BAM.dll, so no shader file is read from disk.
-  ref: BAM.dll 1.5-408 .text:0x1002d4f3-0x1002d52d, 0x100ae8ec-0x100ae990,
+  ref: BAM.dll 1.5-408 FUN_1002d470 0x1002d4ff-0x1002d58b, FUN_1002d0d0 0x1002d2b8-0x1002d33c,
+  FUN_100ae3b0 0x100ae8ec-0x100ae990,
   0x10037130-0x100371de, 0x1007e83b-0x1007e896, .rsrc TEXT,
   Future Pinball.exe 1.9.1.20101231 .rsrc BMP, SHADERS, XML
 
   Plugins are loaded by changing the working directory to plugins\, walking
-  *.dll with FindFirstFileA, calling LoadLibraryA on each and binding
-  BAM_PluginStart and BAM_PluginStop. A plugin keeps its settings by writing a
-  raw structure to <its own name>.cfg in that working directory, which is why
-  the cfg files beside the plugins carry no text.
-  ref: BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c,
-  BAM_Plugins Common/BAM.h:116-157
+  *.dll with FindFirstFileA and calling LoadLibraryA on each under
+  SetErrorMode(SEM_FAILCRITICALERRORS). A module without BAM_load is freed, so a
+  plugin whose own imports are missing is skipped and BAM carries on. The rest
+  get BAM_PluginStart, BAM_PluginStop, BAM_GetCOM and the other entry points
+  bound. BAM_Plugins, published by the same author, holds the source of the
+  OpenVR and PostFX plugins and the common header, read at commit aa27aa3a.
+  A plugin keeps its settings by writing a raw structure to
+  <its own name>.cfg in that working directory, which is why the cfg files
+  beside the plugins carry no text.
+  ref: BAM.dll 1.5-408 FUN_100cf360 0x100cf3d2-0x100cf48c (GetModuleFileNameA,
+  plugins\, *.dll, _getcwd, _chdir, FindFirstFileA), 0x100cf74f-0x100cf767
+  (SetErrorMode, LoadLibraryA), 0x100cf78e-0x100cf7aa (BAM_load, FreeLibrary),
+  0x100cf7cf-0x100cf8c7 (BAM_PluginStart, BAM_PluginStop, BAM_GetCOM),
+  BAM_Plugins Common/BAM.h:117-157
 
   renderingengine.dll is bound in BAM.dll's import directory through
   FindProgram, SetModuleWithResources, LoadFileToMemory and SaveFileFromMemory,
   so the loader resolves it before any BAM code runs. It carries Assimp, zlib,
   libpng and libjpeg, reads the zip packs and writes the per table shadow cache
   under Cache\.
-  ref: BAM.dll 1.5-408 import directory, .text:0x10105c18-0x1010697f
+  ref: BAM.dll 1.5-408 import descriptor renderingengine.dll IAT 0x1055ea0c-0x1055eb1f (69 functions,
+  no delay-load directory), FUN_1007d650 0x1007dccd-0x1007dcd6 (SetModuleWithResources, RE::Init),
+  FUN_101053d0 0x10105c65-0x10105cca (Cache\%s-shadows, %s\%s.%s with zip),
+  0x10105df9 (LoadFileToMemory)
 
   ES-DE declares the emulator as FUTURE-PINBALL-FPLOADER for Windows only,
   finding FPLoader.exe under BAM\, BAM-OpenVR\ or BAM-OpenVR-OC\, and invokes it
@@ -141,10 +157,11 @@ files:
     size: 8791552
     sha1: "b471bb4affb974e0af9874ee6fe28c4417809926"
     description: "Rendering engine and asset loader behind BAM"
-    source_ref: "BAM.dll 1.5-408 import directory, BAM_FPloader FPLoader.cpp:249-257"
+    source_ref: "BAM.dll 1.5-408 import descriptor renderingengine.dll IAT 0x1055ea0c-0x1055eb1f (69 functions, no delay-load directory, so loader-resolved), FUN_1007d650 0x1007dccd (SetModuleWithResources), 0x1007dcd6 (RE::Init), FUN_1002d0d0 0x1002d2b8 (GetZipHandler on a ball zip), BAM_FPloader FPLoader.cpp:249-257"
     note: >-
       Bound statically by BAM.dll, so the injected LoadLibraryA fails without
-      it. The loader adds its own directory to %PATH% for this file alone.
+      it and no BAM code runs. The loader adds its own directory to %PATH% for
+      this file alone.
 
   - name: Future Pinball.exe
     system: fpinball
@@ -166,11 +183,12 @@ files:
     bundled: true
     size: 207104
     description: "Head tracking calibration host"
-    source_ref: "BAM-Tracker.exe import directory, BAM.dll 1.5-408 .text:0x1008320e"
+    source_ref: "BAM-Tracker.exe 1.5-408 (sha256 b2841b993dafde56) import descriptor BAM.dll IAT 0x41702c-0x41703b (BT::GetTrackersList, SetTracker, GetData, Kill, loader-resolved), FUN_00407460 0x407480 (GetTrackersList), 0x40750e (SetTracker), BAM.dll 1.5-408 FUN_100829a0 0x100831f0-0x10083260 (GetCommandLineA, _strlwr, strstr for bam-tracker.exe, flag 0x108009ab)"
     note: >-
-      Imports BAM.dll and runs it outside the game. BAM.dll lowercases the host
-      command line and looks for this name to know it is hosted by the tracker
-      rather than by Future Pinball.
+      A separate program the user starts. It imports BAM.dll and drives its
+      trackers outside the game. BAM.dll lowercases the host command line and
+      looks for this name to know it is hosted by the tracker rather than by
+      Future Pinball. Nothing in the loader or in BAM.dll starts it.
 
   - name: ModelImporter.exe
     sha1: dd3874742bfe5f9c2828cb9c4e249c2f4722bd51
@@ -179,10 +197,11 @@ files:
     bundled: true
     size: 4553472
     description: "Converts models to the .fpm form tables import"
-    source_ref: "ModelImporter.exe import directory, .rdata dialog filter"
+    source_ref: "ModelImporter.exe 1.5-408 (sha256 a693549f20697b02) import descriptor renderingengine.dll IAT 0x71e4bc-0x71e60b (84 functions, loader-resolved), 0x42db53 (lpstrFilter 3D Models *.fpm;*.obj;*.ms3d;*.md5mesh;*.fbx), FUN_0042da70 0x42dae9 (GetOpenFileNameA), FUN_00431d40 0x431dc3 (ImportedModel::Load on the chosen file)"
     note: >-
-      Bound to renderingengine.dll for the Assimp side. Its open dialog accepts
-      .fpm, .obj, .ms3d, .md5mesh and .fbx.
+      A separate program the user starts. It needs renderingengine.dll beside it
+      for the Assimp side. Its open dialog accepts .fpm, .obj, .ms3d, .md5mesh
+      and .fbx.
 
   # -- Settings read from the BAM directory. BAM writes each of them, so a fresh
   #    install has only default.seq and the first save creates the rest.
@@ -294,7 +313,7 @@ files:
     category: game_data
     size: 480842
     description: "Ball texture showing the rotation axes"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Baseball.zip
     sha1: badfe5b7ab16c88f3fe255143546932c09fc2097
@@ -305,7 +324,7 @@ files:
     category: game_data
     size: 248548
     description: "Baseball ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Basketball 1.zip
     sha1: 5aff2d72c317d58a6f1951811a31ec1b99dfdfe4
@@ -316,7 +335,7 @@ files:
     category: game_data
     size: 148883
     description: "Basketball ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Basketball 2.zip
     sha1: 1fa517b848c69c0b2c2f3a32e4097a157fff3aa2
@@ -327,7 +346,7 @@ files:
     category: game_data
     size: 74296
     description: "Second basketball ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Cue Black.zip
     sha1: 9238286e57f346fd9b9ed3d8ffa977083b9d3feb
@@ -338,7 +357,7 @@ files:
     category: game_data
     size: 548084
     description: "Black cue ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Cue White.zip
     sha1: 948eec0af66150dc908622bd48e867e85fb0d6c5
@@ -349,7 +368,7 @@ files:
     category: game_data
     size: 554040
     description: "White cue ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: earth.zip
     sha1: 0b30d717df74d90c26769d58055b507b89fdc1fc
@@ -360,7 +379,7 @@ files:
     category: game_data
     size: 728508
     description: "Globe ball texture, three BMP resources"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: EYETOY.zip
     sha1: 89d8f29048176e8faff89cd48d0eda7b4875bf49
@@ -371,7 +390,7 @@ files:
     category: game_data
     size: 373860
     description: "EyeToy ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Fireball.zip
     sha1: 28a08c3911ef46aca8880587bed56dfa4f99062a
@@ -382,7 +401,7 @@ files:
     category: game_data
     size: 240337
     description: "Fireball ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Knight.zip
     sha1: 969d38e02a6759629cc827501a049c60582d9531
@@ -393,7 +412,7 @@ files:
     category: game_data
     size: 421287
     description: "Knight ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: latlong.zip
     sha1: d2f65f0f32e21dfc65d61a384df525dedbc57a8a
@@ -404,7 +423,7 @@ files:
     category: game_data
     size: 1066167
     description: "Latitude and longitude grid ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   - name: Soccer Ball 1.zip
     sha1: 0a1e886e991d88761502d8434248e986bf9c238f
@@ -415,7 +434,7 @@ files:
     category: game_data
     size: 54397
     description: "Soccer ball texture"
-    source_ref: "BAM.dll 1.5-408 .text:0x1002d513-0x1002d52d"
+    source_ref: "BAM.dll 1.5-408 FUN_1002d470 0x1002d513-0x1002d52b (balls\\*.zip beside BAM.dll, FindFirstFileA), 0x1002d58b (FUN_1002d0d0: GetZipHandler 0x1002d2b8, LoadTexture BMP/452.BMP 0x1002d2e0)"
 
   # -- Physics documents, reached through XML_Presets.txt --
 
@@ -592,7 +611,7 @@ files:
     required: false
     size: 3388680
     description: "Head tracking from any webcam, desktop geometry"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
     note: "Bound to AVICAP32 and MSVFW32 and reads the cascade files below. The 1.5-408 zip moves it to removed_plugins\\, while bam-setup.exe installs it here."
 
   - name: Simple Cam.dll
@@ -601,7 +620,7 @@ files:
     required: false
     size: 3262728
     description: "Head tracking from any webcam, cabinet geometry"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
     note: "The 1.5-408 zip moves it to removed_plugins\\, while bam-setup.exe installs it here."
 
   - name: PS3Eye.dll
@@ -610,7 +629,7 @@ files:
     required: false
     size: 1699080
     description: "Head tracking from a PlayStation Eye"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
     note: "Bound to CLEyeMulticam.dll, which comes from the CL-Eye SDK. The 1.5-408 zip moves it to removed_plugins\\, while bam-setup.exe installs it here."
 
   - name: DesktopPS3Eye.dll
@@ -619,7 +638,7 @@ files:
     required: false
     size: 1813768
     description: "PlayStation Eye tracking with desktop geometry"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
     note: "The 1.5-408 zip moves it to removed_plugins\\, while bam-setup.exe installs it here."
 
   - name: HT-PS3Eyes.dll
@@ -630,7 +649,7 @@ files:
     bundled: true
     size: 1432272
     description: "Two PlayStation Eye cameras tracking an infrared marker"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
     note: >-
       Keeps its calibration in HT-PS3Eyes.dat and HT-PS3Eyes-FixCamExport.dat
       beside itself, both produced by the calibration pass.
@@ -643,7 +662,7 @@ files:
     bundled: true
     size: 2792144
     description: "Head tracking from a Kinect for Xbox 360"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
     note: "Bound to Kinect10.dll and FaceTrackLib.dll."
 
   - name: DesktopKinect.dll
@@ -654,7 +673,7 @@ files:
     bundled: true
     size: 31952
     description: "Kinect tracking with desktop geometry"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
 
   - name: Kinect2.dll
     sha1: 22e32cd595f825b004c10d46746cd28c973f649b
@@ -664,7 +683,7 @@ files:
     bundled: true
     size: 2791632
     description: "Head tracking from a Kinect for Windows v2"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
     note: "Bound to Kinect20.dll."
 
   - name: FaceTrackLib.dll
@@ -675,7 +694,11 @@ files:
     bundled: true
     size: 920272
     description: "Microsoft face tracking library used by the Kinect plugins"
-    source_ref: "DesktopKinect.dll, Kinect.dll import directories"
+    source_ref: "Kinect.dll (sha256 3e3225474bfca5ad) import descriptor FaceTrackLib.dll IAT 0x1021e000-0x1021e007 (FTCreateImage, FTCreateFaceTracker, loader-resolved), 0x10003ae2 (FTCreateFaceTracker), DesktopKinect.dll (sha256 4aa59e24530b739e) import descriptor FaceTrackLib.dll IAT 0x10005000-0x10005007, 0x10002954 (FTCreateFaceTracker)"
+    note: >-
+      A load time dependency of the two Kinect 1 plugins, resolved from the
+      plugins\ working directory. Without it their LoadLibraryA fails and BAM
+      skips them.
 
   - name: FaceTrackData.dll
     sha1: aeb806a4330ce8716feffdd844e71084a86b2f88
@@ -685,7 +708,11 @@ files:
     bundled: true
     size: 10650832
     description: "Model data for the face tracking library"
-    source_ref: "FaceTrackLib.dll .rdata, wide literal FaceTrackData.dll"
+    source_ref: "FaceTrackLib.dll (sha256 381e24c0dc0e8471) FUN_10051fe0 0x10052072-0x100520af (no model path from the caller: GetModuleFileNameW, cut at the last backslash, StringCchCopyW of FaceTrackData.dll), 0x10052408 (FUN_1004d830 on <model>\\AAMModel\\3DModel.txt), FUN_10009460 0x10009520 (the part of the path up to .dll passed to FUN_10009390), FUN_10009390 0x1000940c (LoadLibraryExW with flags 0x22, as a data file), FUN_10009460 0x1000956a (FUN_10008fc0, FindResourceW type RT_RCDATA at 0x10009032 for the rest)"
+    note: >-
+      The face tracker's models are RCDATA resources inside this file, named
+      AAMModel, MouthModel, EvalModel, NeuralNet and ViewModel paths under it.
+      FaceTrackLib looks for it beside itself, so in plugins\.
 
   - name: FreeTrack.dll
     sha1: 8bb00560edc99048cda818cb81afa823e8d1a682
@@ -695,7 +722,7 @@ files:
     bundled: true
     size: 95440
     description: "Head tracking from a FreeTrack server"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
 
   - name: TrackIR.dll
     sha1: 000deaf4533b239cd3c22f250dcbb0d55123dc16
@@ -705,11 +732,12 @@ files:
     bundled: true
     size: 20176
     description: "Head tracking from a NaturalPoint TrackIR"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, TrackIR.dll .text:0x100018c7"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent), TrackIR.dll (sha256 101dc5958e8e3df0) 0x10001970-0x1000198a (detours LoadLibraryA and GetProcAddress, originals kept at 0x100043c4 and 0x100043c8), FUN_100018c0 0x100018c7-0x100018e1 (strstr for NPClient, module handle kept), FUN_10001900 0x10001917-0x10001962 (NP_GetData from that module answered by the plugin's wrapper)"
     note: >-
-      Matches the name NPClient with strstr and pairs LoadLibraryA with
-      GetProcAddress on it. The plugin imports no registry function, so the
-      client library is resolved as a plain module name.
+      Loads nothing itself. It detours LoadLibraryA and GetProcAddress in the
+      game, so when Future Pinball loads NPClient.dll from the TrackIR install
+      the plugin keeps the module handle and puts its own NP_GetData in front of
+      the real one.
 
   - name: PostFX.dll
     sha1: 52a49fdbb9328a54e9add344def6636be3d151e1
@@ -719,13 +747,24 @@ files:
     bundled: true
     size: 39632
     description: "Bloom and the unfinished ambient occlusion pass"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf5ff, BAM_Plugins PostFX/PostFX.cpp:41-45"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent), 0x100cf5ff-0x100cf605 (_stricmp of the file name with PostFX.dll), BAM_Plugins PostFX/PostFX.cpp:41-45"
     note: >-
       Named in BAM.dll and compared against the enumerated file names, so it is
       the one plugin the mod knows by name. Its nine GLSL programs are TEXT
       resources inside the plugin, read with FindResourceA. Two builds circulate
       under this name, the 39632 bytes of bam-setup.exe and 191240 bytes in
       BAM-OpenVR.zip.
+
+  - name: PostFX.cfg
+    sha1: a191e0c95a4ef116d073f18ae7ccb8c0af3f68bb
+    system: fpinball
+    path: "plugins/PostFX.cfg"
+    required: false
+    bundled: true
+    size: 104
+    description: "Settings block of the PostFX plugin"
+    source_ref: "PostFX.dll (sha256 30f9ce9cc725420f) FUN_10001280 0x100012ca-0x100012db (PostFX, .cfg after the working directory), FUN_10001320 0x10001668 (fopen_s rb), 0x10001683 (fread 0x68 bytes), BAM_Plugins PostFX/main.cpp:101, BAM_Plugins PostFX/main.cpp:130, BAM_Plugins Common/BAM.h:117-157"
+    note: "Read as a raw 104 byte structure and written back when a value changes. The OpenVR package carries its own copy for its PostFX build."
 
   - name: PinballHighScore.dll
     sha1: 7734aecaa3cd1d019db365aecfd9df2a5ef8efbe
@@ -735,7 +774,7 @@ files:
     bundled: true
     size: 918224
     description: "Records high scores across tables"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent)"
 
   - name: PinballHighScore.cfg
     sha1: 852b39ba5db64e8a84e4b0612521caa5bd44fe02
@@ -745,7 +784,11 @@ files:
     bundled: true
     size: 1016
     description: "Settings block the high score plugin reads and writes"
-    source_ref: "BAM_Plugins Common/BAM.h:136-157"
+    source_ref: "PinballHighScore.dll (sha256 f6fd7ed1c79302a7) FUN_10086c90 0x10086caa-0x10086cf9 (GetCurrentDirectoryA, backslash, PinballHighScore, .cfg), FUN_10084240 0x100842c5 (fopen_s rb), 0x100842e2 (fread 0x3f8 bytes), FUN_10084310 0x10084367 (fopen_s wb when the block changed)"
+    note: >-
+      Read whole as a 1016 byte block from the working directory, which BAM has
+      set to plugins\. Missing, the defaults stay in memory and the next change
+      writes it.
 
   - name: PinballHighScore.db
     system: fpinball
@@ -753,7 +796,7 @@ files:
     required: false
     size: 45056
     description: "Score database the plugin opens by name"
-    source_ref: "PinballHighScore.dll .rdata"
+    source_ref: "PinballHighScore.dll (sha256 f6fd7ed1c79302a7) FUN_100847e0 0x100847f5-0x100847fa (SQLite open of PinballHighScore.db, FUN_1007f9b0), 0x1008480e, 0x10084825 (CREATE TABLE localPlayerData and config), FUN_10085320 0x10085345-0x1008534a (the same open)"
     note: "Only BAM-OpenVR.zip carries a copy. The plugin creates one otherwise."
 
   - name: PuPPlugin.dll
@@ -764,8 +807,10 @@ files:
     bundled: true
     size: 240216
     description: "PuPCOM script object drawing PinUP Player video onto table textures"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, PuPPlugin.dll .rdata IPuPCOM, PuPPlugin.dll PuPVideo"
-    note: "Takes BAM_GetTextureId and BAM_ReplaceTexture from the plugin API."
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent), 0x100cf8c7 (GetProcAddress BAM_GetCOM), PuPPlugin.dll (sha256 a9b3f1d04621cfc2) FUN_10001f50 0x10002167-0x1000217f (GetProcAddress BAM_GetTextureId, BAM_ReplaceTexture), BAM_GetCOM 0x10002687-0x100026ea (GetModuleFileNameW of itself, LoadTypeLib, GetTypeInfoOfGuid)"
+    note: >-
+      Takes BAM_GetTextureId and BAM_ReplaceTexture from the plugin API and
+      hands BAM the PuPCOM object described by its own embedded type library.
 
   - name: icom.dll
     sha1: 83a3b55b2cc1b29997d50cf38108f6725d9a0df2
@@ -775,11 +820,21 @@ files:
     bundled: true
     size: 67280
     description: "Gives a table script the COM objects the cabinet stack exposes"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, icom.dll .rdata ProgID pattern"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent), icom.dll (sha256 b569f792df2cc10e) FUN_10001670 0x100016d1-0x100016d9 (std::wregex over the ProgID), 0x10001720 (CLSIDFromProgID), 0x1000173b (CoCreateInstance)"
     note: >-
-      Matches created objects against
-      PinUpPlayer, Vpinmame, B2S, PUPDMDControl, UltraDMD, PinSSF and
-      DirectOutput.
+      Creates the object a script asks for when its ProgID matches
+      (PinUpPlayer|Vpinmame|B2S|PUPDMDControl|UltraDMD|PinSSF|DirectOutput)\.(.*).
+
+  - name: iCom.cfg
+    sha1: 0aaf76f425c6e0f43a36197de768e67d9e035abb
+    system: fpinball
+    path: "plugins/iCom.cfg"
+    required: false
+    bundled: true
+    size: 4
+    description: "Security level setting of the icom plugin"
+    source_ref: "icom.dll (sha256 b569f792df2cc10e) FUN_100015f0 0x1000160a-0x10001659 (GetCurrentDirectoryA, backslash, iCom, .cfg), FUN_100019f0 0x10001a74 (fopen_s rb), 0x10001a8e (fread 4 bytes)"
+    note: "The one value behind the menu entry Security Level."
 
   - name: OpenVR.dll
     system: fpinball
@@ -787,7 +842,7 @@ files:
     required: false
     size: 419328
     description: "Renders the table to an OpenVR headset"
-    source_ref: "BAM_Plugins OpenVR/main.cpp, BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c"
+    source_ref: "BAM.dll 1.5-408 FUN_100cf360 (plugins::Load) 0x100cf48c (FindFirstFileA on plugins\\*.dll), 0x100cf75a (LoadLibraryA), 0x100cf794 (GetProcAddress BAM_load, FreeLibrary when absent), OpenVR.dll (sha256 52d598d0c964cd67) exports BAM_load 0x10001b90 and BAM_PluginStart 0x10001bf0, BAM_Plugins Common/BAM_inc.h:67-81, BAM_Plugins OpenVR/main.cpp:106"
     note: "Ships only in BAM-OpenVR.zip, a separate build with its own BAM.dll, which ES-DE also looks for as BAM-OpenVR\\."
 
   - name: openvr_api.dll
@@ -796,7 +851,19 @@ files:
     required: false
     size: 620760
     description: "Valve OpenVR runtime interface"
-    source_ref: "OpenVR.dll import directory"
+    source_ref: "OpenVR.dll (sha256 52d598d0c964cd67) import descriptor openvr_api.dll IAT 0x1003e1cc-0x1003e1e3 (6 functions, loader-resolved), FUN_100066f0 0x1000670e (VR_InitInternal2), BAM_Plugins OpenVR/OpenVR_client.cpp:785"
+    note: "A load time dependency of OpenVR.dll, resolved from the plugins\\ working directory."
+
+  - name: OpenVR.cfg
+    sha1: 21cedece67cf04ee71617462c27b9b4a455e4fd7
+    system: fpinball
+    path: "plugins/OpenVR.cfg"
+    required: false
+    bundled: true
+    size: 128
+    description: "Settings block of the OpenVR plugin"
+    source_ref: "OpenVR.dll (sha256 52d598d0c964cd67) FUN_10001b10 0x10001b23-0x10001b77 (GetCurrentDirectoryA, backslash, OpenVR, .cfg), FUN_10001ef0 0x10002238-0x10002265 (FUN_10001b10, fopen rb, fread 0x90 bytes), reached from BAM_load at 0x10001bdd, BAM_Plugins OpenVR/main.cpp:42, BAM_Plugins OpenVR/main.cpp:106, BAM_Plugins OpenVR/main.cpp:291"
+    note: "The plugin reads up to 144 bytes, the copy in BAM-OpenVR.zip holds 128, and the rest keeps its defaults. Written back whenever the settings change."
 
   - name: haarcascade_frontalface_alt.xml
     sha1: 035eef24478ebf4b16c788dbd02f8b3a3f9b8951
@@ -807,7 +874,8 @@ files:
     category: game_data
     size: 919871
     description: "OpenCV Haar cascade for frontal faces"
-    source_ref: "DesktopCam.dll, PS3Eye.dll, Simple Cam.dll .rdata"
+    source_ref: "PS3Eye.dll (sha256 191996d48372d75f) FUN_10002440 0x10002565-0x100025aa (GetCurrentDirectoryA, backslash), 0x100025af-0x100025ca (the index at 0x1018e360, clamped to 0..2, picks entry 0 of the path table 0x10175008), 0x1000266d (cv::CascadeClassifier::load, FUN_100e2420, cvLoad fallback at 0x100e25a3), DesktopCam.dll (sha256 4928c27ab0ea5bd0) FUN_10001ee0 0x1000200d (entry 0 of 0x1031aee0), 0x10002096 (load), Simple Cam.dll 0x100024aa, DesktopPS3Eye.dll 0x1000236c (their path tables)"
+    note: "One cascade is read at a time, the one the plugin index selects, relative to the plugins\\ working directory."
 
   - name: haarcascade_frontalface_default.xml
     sha1: 85a317ce2fc0415741a41736e99bd281d2437568
@@ -818,7 +886,8 @@ files:
     category: game_data
     size: 1254733
     description: "Second OpenCV Haar cascade for frontal faces"
-    source_ref: "DesktopCam.dll, PS3Eye.dll, Simple Cam.dll .rdata"
+    source_ref: "PS3Eye.dll (sha256 191996d48372d75f) FUN_10002440 0x10002565-0x100025aa (GetCurrentDirectoryA, backslash), 0x100025af-0x100025ca (the index at 0x1018e360, clamped to 0..2, picks entry 1 of the path table 0x10175008), 0x1000266d (cv::CascadeClassifier::load, FUN_100e2420, cvLoad fallback at 0x100e25a3), DesktopCam.dll (sha256 4928c27ab0ea5bd0) FUN_10001ee0 0x1000200d (entry 1 of 0x1031aee0), 0x10002096 (load), Simple Cam.dll 0x100024aa, DesktopPS3Eye.dll 0x1000236c (their path tables)"
+    note: "One cascade is read at a time, the one the plugin index selects, relative to the plugins\\ working directory."
 
   - name: lbpcascade_frontalface.xml
     sha1: d668cbe8712f062bcc6af898ebb2937b73dcfd2d
@@ -829,7 +898,8 @@ files:
     category: game_data
     size: 51856
     description: "OpenCV local binary pattern cascade for frontal faces"
-    source_ref: "DesktopCam.dll, PS3Eye.dll, Simple Cam.dll .rdata"
+    source_ref: "PS3Eye.dll (sha256 191996d48372d75f) FUN_10002440 0x10002565-0x100025aa (GetCurrentDirectoryA, backslash), 0x100025af-0x100025ca (the index at 0x1018e360, clamped to 0..2, picks entry 2 of the path table 0x10175008), 0x1000266d (cv::CascadeClassifier::load, FUN_100e2420, cvLoad fallback at 0x100e25a3), DesktopCam.dll (sha256 4928c27ab0ea5bd0) FUN_10001ee0 0x1000200d (entry 2 of 0x1031aee0), 0x10002096 (load), Simple Cam.dll 0x100024aa, DesktopPS3Eye.dll 0x1000236c (their path tables)"
+    note: "One cascade is read at a time, the one the plugin index selects, relative to the plugins\\ working directory."
 
   # -- Named by the code, absent from both distributions --
 
@@ -847,28 +917,33 @@ files:
     system: fpinball
     required: false
     description: "CL-Eye Platform SDK driver interface for the PlayStation Eye"
-    source_ref: "PS3Eye.dll, DesktopPS3Eye.dll, HT-PS3Eyes.dll import directories"
+    source_ref: "HT-PS3Eyes.dll (sha256 eda430e18e445668) import descriptor CLEyeMulticam.dll IAT 0x10108000-0x10108023 (9 functions, loader-resolved), 0x10004962 (CLEyeGetCameraCount), 0x10004a2f (CLEyeCreateCamera), PS3Eye.dll 0x10002480, 0x10002501, DesktopPS3Eye.dll 0x10002200, 0x1000229a (the same two calls)"
+    note: "A load time dependency of the three PlayStation Eye plugins. Without it their LoadLibraryA fails and BAM skips them."
 
   - name: Kinect10.dll
     system: fpinball
     required: false
     description: "Kinect for Windows SDK 1.x runtime"
-    source_ref: "Kinect.dll, DesktopKinect.dll, FaceTrackLib.dll import directories"
+    source_ref: "Kinect.dll (sha256 3e3225474bfca5ad) import descriptor Kinect10.dll IAT 0x1021e1d8-0x1021e1fb (9 functions by ordinal, loader-resolved), FUN_10006980 0x10006ade (NuiInitialize, ordinal 14), DesktopKinect.dll (sha256 4aa59e24530b739e) FUN_10002e10 0x10002fa1 (NuiInitialize)"
+    note: "A load time dependency of the two Kinect 1 plugins. FaceTrackLib.dll does not import it."
 
   - name: Kinect20.dll
     system: fpinball
     required: false
     description: "Kinect for Windows SDK 2.0 runtime"
-    source_ref: "Kinect2.dll import directory"
+    source_ref: "Kinect2.dll (sha256 3038bd37cfb6abff) import descriptor Kinect20.dll IAT 0x1021c1c8 (GetDefaultKinectSensor, loader-resolved), FUN_100036b0 0x100036c5 (GetDefaultKinectSensor)"
+    note: "A load time dependency of the Kinect 2 plugin. Without it its LoadLibraryA fails and BAM skips it."
 
   - name: NPClient.dll
     system: fpinball
     required: false
     description: "NaturalPoint TrackIR client library"
-    source_ref: "TrackIR.dll .rdata"
+    source_ref: "Future Pinball.exe 1.9.1.20101231 FUN_0045eff0 0x45f01a-0x45f08e (RegOpenKeyExA HKCU Software\\NaturalPoint\\NATURALPOINT\\NPClient Location, RegQueryValueExA Path), FUN_0045f100 0x45f1d9 (LoadLibraryA), TrackIR.dll FUN_100018c0 0x100018c7-0x100018e1 (the detoured LoadLibraryA keeps the handle of a name holding NPClient)"
     note: >-
-      Comes from a TrackIR install rather than from any BAM distribution, which
-      is why no path is given here.
+      Loaded by Future Pinball itself from the TrackIR install directory the
+      registry names, and intercepted by the TrackIR plugin. It comes from a
+      TrackIR install rather than from any BAM distribution, which is why no
+      path is given here.
 
 analysis:
   written_not_read:
