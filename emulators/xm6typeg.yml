@@ -30,7 +30,7 @@ notes: |
   (sha256 71c2b3429163128f...), holding an x64 xm6g.exe (sha256
   3d50aab23ce6c8ae1677b1ca8adaa8b0c6c9dabb1c06b98d0f2ea10fe44ac5de), the Visual
   C++ 2015-2019 runtime it imports (mfc140u.dll, msvcp140.dll, vcruntime140.dll,
-  vcruntime140_1.dll, loader-resolved) and a PDF manual. No source is published.
+  vcruntime140_1.dll, loader-resolved) and xm6g.pdf. No source is published.
   Every address below is a virtual address in that xm6g.exe, function bounds taken
   from its .pdata. ES-DE launches it through the XM6TYPEG and XM6TYPEG-WINDOWS find
   rules with the working directory set to the emulator folder, on Linux under Wine
@@ -49,14 +49,48 @@ notes: |
   external SCSI, 4 is XVI, 5 Compact, 6 X68030 and 7 X68030 with the expansion ROM
   option on. It reads the IPL ROM, then the CG ROM, then the SCSI ROM, and a short
   ReadFile count fails the load, so every min_size below is a floor and a longer
-  file loads with its tail ignored. Memory::Init (0x1404fc5d0) calls LoadROM(1) at
-  0x1404fc669 and returns 0 on failure. VM::Init failing at 0x140471218 sets error
-  state 1 (0x140471221), and the startup handler at 0x1404737a0 then shows string
-  47002 or 42002, "XM6 requires two ROM files, IPLROM.DAT file and CGROM.DAT(or
-  CGROM.TMP) file", with MB_ICONSTOP and posts WM_CLOSE. Memory::Reset (0x1404fd610)
+  file loads with its tail ignored.
+
+  The startup path to LoadROM(1). The CRT calls wWinMain at 0x1405767ad, a thunk
+  at 0x1405776fc to AfxWinMain (mfc140u.dll 14.42.34433.0 ordinal 2370), which
+  calls InitInstance through vtable offset 0xb0 (0x1802b2ba7-0x1802b2bae in that
+  DLL). The application object at 0x14084db20 is built by the static initializer
+  0x140425b90 (initializer table entry 0x14057e990) with vtable 0x14057ec20, whose
+  slot 22 (+0xb0) is InitInstance 0x140425e30. InitInstance allocates the frame
+  window (0x140425fb0), sets its vtable 0x1405aed50 (0x140425fd4) and creates it
+  through slot 91 (+0x2d8, 0x14042614d-0x140426186). WM_CREATE reaches OnCreate
+  0x140470ef0 through the frame message map 0x1405acf78 (GetMessageMap slot 12,
+  0x140470eb0, entry 0x1405acf90). OnCreate allocates the 0x208c0-byte VM
+  (0x140471135), stores it at 0x140822790 (0x14047120e) and calls VM::Init
+  0x140565f60 at 0x140471218. VM::Init constructs the memory device at
+  0x140566443 (constructor 0x1404fc3d0 sets vtable 0x1405c0830 at 0x1404fc3f9, and
+  the device constructor 0x1404c1270 appends it to the device list at VM+0x20040),
+  then walks that list calling vtable slot 1 (+0x8) at 0x14056762a. Slot 1 of the
+  memory vtable (0x1405c0838) is Memory::Init 0x1404fc5d0, which calls LoadROM(1)
+  at 0x1404fc669 and returns 0 on failure (0x1404fc97f). A zero clears the result
+  at 0x140567631, VM::Init returns it at 0x140567640, and OnCreate sets error state
+  1 at 0x140471221 and posts message 0x8000 at 0x14047123b. Message map entry
+  0x1405ad110 routes 0x8000 to 0x1404737a0, which for state 1 (0x1404737d6) loads
+  string 47002 or 42002, "XM6 requires two ROM files, IPLROM.DAT file and
+  CGROM.DAT(or CGROM.TMP) file", shows it with MB_ICONSTOP (0x14047383e) and posts
+  WM_CLOSE (0x140473853).
+
+  Memory::Reset (0x1404fd610)
   loads any other type on demand: type 7 falls back to 6 (0x1404fd682), and any
   failure falls back to type 1 (0x1404fd6bc), so a missing model ROM only loses
   that machine.
+
+  SRAM::Reset picks its file from the machine index at VM+0x2002c (0x1405565f7).
+  The index is the [Basic] ModelType setting of xm6g.ini, 0 to 3 for the base
+  machine, XVI, Compact and X68030: INI table entry 0x140581240 binds that key to
+  configuration offset 0x2bfc (0x14082539c), read by the INI loader 0x1404270a0
+  (0x1404270fe), the field Memory::ApplyCfg reads at 0x1404fe3b8. The configuration apply at 0x140473630 copies it to VM+0x20028
+  (0x14047367f), and VM::Reset 0x140567660 copies VM+0x20028 to VM+0x2002c at
+  0x14056768e. OnCreate runs the two at 0x14047148e and 0x14047149a. When
+  Memory::Reset falls back to the base machine, VM::Reset finds the loaded type at
+  Memory+0xcbc outside the model (0x1405676b2-0x1405676e8) and zeroes the index at
+  0x1405676f3 before the devices reset, so SRAM.DAT is read. A saved state
+  restores the index (0x140567c11).
 
   The options page (0x140428f80) offers XVI, Compact and X68030 only when
   IPLROMXV.DAT, IPLROMCO.DAT and IPLROM30.DAT have GetFileSizeEx exactly 0x20000.
@@ -96,7 +130,7 @@ files:
     size: 131072
     validation: [size]
     description: "X68000 boot ROM version 1.0, base models"
-    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fca8d-0x1404fcb52 (table entry 0 joined to the module directory), 0x1404fcb90 (Fileio::Open), 0x1404fcbb7-0x1404fcbc4 (ReadFile 0x20000, short count exits through 0x1404fd159), 0x1404fcc00 (16-bit swap), Memory::Init 0x1404fc5d0 0x1404fc669 (LoadROM(1), failure returns 0), 0x140471221 and 0x1404737a0 (fatal message 47002, WM_CLOSE), options page 0x140428f80 0x14042920a (GetFileSizeEx == 0x20000)"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fca8d-0x1404fcb52 (table entry 0 joined to the module directory), 0x1404fcb90 (Fileio::Open), 0x1404fcbb7-0x1404fcbc4 (ReadFile 0x20000, short count exits through 0x1404fd159), 0x1404fcc00 (16-bit swap), Memory::Init 0x1404fc5d0 (memory vtable 0x1405c0830 slot 1) 0x1404fc669 (LoadROM(1), failure returns 0 at 0x1404fc97f), VM::Init 0x140565f60 0x14056762a (device Init through vtable slot 1), 0x140567631 (failure kept), OnCreate 0x140470ef0 0x140471218 (VM::Init call), 0x140471221 (error state 1), 0x14047123b (posts 0x8000), handler 0x1404737a0 0x1404737d6, 0x14047383e (MB_ICONSTOP message 47002 or 42002), 0x140473853 (WM_CLOSE), options page 0x140428f80 0x14042920a (GetFileSizeEx == 0x20000)"
     note: >-
       Memory types 1 to 3, the first model, ACE, EXPERT, PRO and SUPER. Memory::Init
       loads it first and the program closes when it fails. The IPL check at
@@ -184,7 +218,7 @@ files:
     min_size: 786432
     validation: [size]
     description: "X68000 character generator ROM"
-    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fcf0e (table entry 5), 0x1404fcfed (Fileio::Open), 0x1404fd013-0x1404fd023 (ReadFile 0xc0000), 0x1404fd03e (falls back to CGROM.TMP), 0x1404fd1a0 (16-bit swap), Memory::Init 0x1404fc5d0 0x1404fc669 (failure returns 0, fatal message at 0x1404737a0), CG check 0x14047296e"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fcf0e (table entry 5), 0x1404fcfed (Fileio::Open), 0x1404fd013-0x1404fd023 (ReadFile 0xc0000), 0x1404fd03e (falls back to CGROM.TMP), 0x1404fd1a0 (16-bit swap), Memory::Init 0x1404fc5d0 (memory vtable 0x1405c0830 slot 1) 0x1404fc669 (LoadROM(1), failure returns 0 at 0x1404fc97f), VM::Init 0x140565f60 0x14056762a (device Init through vtable slot 1), 0x140567631 (failure kept), OnCreate 0x140470ef0 0x140471218 (VM::Init call), 0x140471221 (error state 1), 0x14047123b (posts 0x8000), handler 0x1404737a0 0x1404737d6, 0x14047383e (MB_ICONSTOP message 47002 or 42002), 0x140473853 (WM_CLOSE), CG check 0x14047296e"
     note: >-
       Supplies the glyphs the X68000 renders, mapped at $F00000-$FBFFFF. Used by
       the base models and as the fallback for every machine whose own CG ROM is
@@ -280,7 +314,7 @@ files:
     required: false
     size: [16384, 65536]
     description: "SRAM image for EXPERT and the other base models"
-    source_ref: "xm6g.exe 3.38 SRAM::Init 0x140556320: 0x140556373-0x14055637c (Filepath::SysFile index 14), 0x140556397 (Fileio::Load 0x10000, result ignored), SRAM::Reset 0x140556510 0x14055662a (machine index 0), 0x140556667 (ReadFile 0x10000, count not checked), SRAM cleanup 0x140556420 0x140556498 (writes the configured size in KB)"
+    source_ref: "xm6g.exe 3.38 SRAM::Init 0x140556320: 0x140556373-0x14055637c (Filepath::SysFile index 14), 0x140556397 (Fileio::Load 0x10000, result ignored), SRAM::Reset 0x140556510 (SRAM vtable 0x1405c2728 slot 3) 0x1405565f7 (machine index VM+0x2002c, ModelType copied at 0x14056768e), 0x14055662a (index 0), 0x140556667 (ReadFile 0x10000, count not checked), SRAM cleanup 0x140556420 0x140556498 (writes the configured size in KB)"
     note: >-
       Holds the boot device and memory switch settings for the base models. The
       buffer is filled with 0xff first and up to 64 KB is read with no size
@@ -293,7 +327,7 @@ files:
     unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for XVI"
-    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x1405565f3-0x140556623 (machine index 1 gives Filepath::SysFile index 15), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
+    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x1405565f3-0x140556623 (machine index VM+0x2002c, ModelType 1, gives Filepath::SysFile index 15), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
     note: >-
       Per-model SRAM introduced by XM6 TypeG, which keeps one image per machine
       instead of the single SRAM.DAT of XM6 v2.06.
@@ -304,7 +338,7 @@ files:
     unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for Compact"
-    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x14055661c (machine index 2 gives Filepath::SysFile index 16), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
+    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x1405565f7 (machine index VM+0x2002c), 0x14055661c (ModelType 2 gives Filepath::SysFile index 16), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
     note: >-
       Read when the Compact machine is selected.
 
@@ -314,7 +348,7 @@ files:
     unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for X68030"
-    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x140556615 (machine index 3 gives Filepath::SysFile index 17), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
+    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x1405565f7 (machine index VM+0x2002c), 0x140556615 (ModelType 3 gives Filepath::SysFile index 17), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
     note: >-
       Read when the X68030 machine class is selected, with or without the
       expansion ROM.
