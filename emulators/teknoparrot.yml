@@ -296,4 +296,4 @@ files:
     sha1: "87918619c632ac9de270d4fdf396a57eb57fc620"
     description: "Triforce boot program"
     note: "Shipped in the CrediarDolphin 1.0.0.10 release. User/Triforce/segaboot.gcm is preferred when present. Read into the media board firmware for the test menus, \"Failed to open segaboot.gcm, which is required for test menus\" and no test menu otherwise."
-    source_ref: "CrediarDolphin Source/Core/Core/HW/DVD/AMMediaboard.cpp:498-526 at ReaverTeknoGods/CrediarDolphin 44afbabf7135303e9a29805f4b0bc12080545d3a, the revision Dolphin.exe 1.0.0.10 (sha256 d7e5a7fe2989c7db) reports and whose message it carries"
+    source_ref: "CrediarDolphin Source/Core/Core/HW/DVD/AMMediaboard.cpp:498-526 at ReaverTeknoGods/CrediarDolphin 44afbabf7135303e9a29805f4b0bc12080545d3a (the revision Dolphin.exe 1.0.0.10, sha256 d7e5a7fe2989c7db, reports as its build and whose message it carries)"
