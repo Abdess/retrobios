@@ -11,56 +11,38 @@ cores:
 - "81"
 - AMIBERRY
 - AdvanceMame
-- CGeniusExe
-- Chocolate-Doom
 - DOSBOXSDL2
 - Duckstation
 - ECWolf
 - FBNEOSA
-- GZDoom
 - HATARISA
 - HYPSEUS
-- LZDoom
 - OPENBOR
-- OpenJazz
 - PPSSPPSDL
 - Pico-8
-- RigelEngine
 - SCUMMVMSA
 - STELLASA
 - Solarus
-- VVVVVV
 - a5200
-- abuse
 - atari800
 - bgdi
 - bk
 - bluemsx
-- bs
-- bstone
 - cannonball
 - cap32
-- ccleste
-- cdogs-sdl
 - daphne
-- devilutionx
 - dinothawr
 - dolphin
 - dosbox_pure
 - dosbox_svn
 - easyrpg
-- eduke32
 - fake08
-- fallout-ce
-- fallout2-ce
 - fbalpha2012
 - fbneo
 - fceumm
 - fceumm_mod
-- fheroes2
 - flycast
 - flycast_32b
-- flycast_dojo
 - flycastsa
 - fmsx
 - freeintv
@@ -80,9 +62,6 @@ cores:
 - gw
 - handy
 - hatari
-- hcl
-- hode
-- hurrican
 - ikemen
 - jzintv
 - mame
@@ -111,7 +90,6 @@ cores:
 - np2kai
 - nxengine
 - o2em
-- opentyrian
 - opera
 - parallel_n64_32b
 - pcsx_rearmed
@@ -121,7 +99,6 @@ cores:
 - pokemini
 - potator
 - prboom
-- prince
 - prosystem
 - puae
 - puae2021
@@ -131,17 +108,11 @@ cores:
 - sameboy
 - sameduck
 - scummvm
-- smw
 - snes9x
 - snes9x2002
 - snes9x2005_plus
 - snes9x2010
-- sonic2013
-- soniccd
-- sonicmania
 - stella
-- supertux2
-- supertuxkart
 - swanstation
 - tgbdual
 - tic80
@@ -158,60 +129,29 @@ cores:
 - vice_xvic
 - virtualjaguar
 - x1
-- xash3d
 - xrick
 - yabasanshiro
 standalone_cores:
 - AMIBERRY
 - AdvanceMame
-- CGeniusExe
-- Chocolate-Doom
 - DOSBOXSDL2
 - Duckstation
 - ECWolf
 - FBNEOSA
-- GZDoom
 - HATARISA
 - HYPSEUS
-- LZDoom
 - OPENBOR
-- OpenJazz
 - PPSSPPSDL
 - Pico-8
-- RigelEngine
 - SCUMMVMSA
 - STELLASA
 - Solarus
-- VVVVVV
-- abuse
 - bgdi
-- bs
-- bstone
-- ccleste
-- cdogs-sdl
-- devilutionx
 - dolphin
-- eduke32
-- fallout-ce
-- fallout2-ce
-- fheroes2
-- flycast_dojo
 - flycastsa
-- hcl
-- hode
-- hurrican
 - ikemen
 - jzintv
 - mupen64plussa
-- opentyrian
-- prince
-- smw
-- sonic2013
-- soniccd
-- sonicmania
-- supertux2
-- supertuxkart
-- xash3d
 - yabasanshiro
 dual_mode_cores:
 - FBNEOSA
@@ -4226,3 +4166,352 @@ systems:
       native_name: Phillips CDI
     native_id: cdi
     name: Phillips CDI
+launchers:
+- emulator: retroarch
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: "retroarch.cfg system_directory (--config)"
+  fails_when_missing: false
+  source_ref: "packages/sx05re/libretro_base/retroarch/package.mk:117, packages/sx05re/emuelec/bin/emuelecRunEmu.sh:380"
+- emulator: retrorun
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: retrorun -d
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:110, 466, 476"
+- emulator: freej2me
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/jdk
+  passes_to: environment JAVA_HOME
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:129-133, packages/sx05re/libretro/freej2me/scripts/freej2me.sh:11"
+- emulator: freej2me
+  build: libretro
+  kind: copies
+  names:
+  - freej2me-lr.jar
+  search_dir: /usr/lib/libretro
+  passes_to: "${HOME}/roms/bios"
+  fails_when_missing: false
+  depends_on_option: /storage/roms/bios/jdk/eeversion exists
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:129-130, packages/sx05re/libretro/freej2me/scripts/freej2me.sh:11-12"
+- emulator: mame
+  build: libretro
+  kind: copies
+  names:
+  - fm*
+  search_dir: /usr/config/emuelec/configs/mame/hash
+  passes_to: /storage/roms/bios/mame/hash
+  fails_when_missing: false
+  depends_on_option: /storage/roms/bios/mame/hash/fmtowns_cd.xml absent
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:6-8"
+- emulator: mame
+  build: libretro
+  kind: copies
+  names:
+  - app*
+  search_dir: /usr/config/emuelec/configs/mame/hash
+  passes_to: /storage/roms/bios/mame/hash
+  fails_when_missing: false
+  depends_on_option: /storage/roms/bios/mame/hash/apple2_flop_orig.xml absent
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:11-13"
+- emulator: mame
+  build: libretro
+  kind: copies
+  names:
+  - fm*
+  search_dir: /usr/config/emuelec/configs/mame/ini
+  passes_to: /storage/roms/bios/mame/ini
+  fails_when_missing: false
+  depends_on_option: /storage/roms/bios/mame/ini/fmtownsux.ini absent
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:16-18"
+- emulator: mame
+  build: libretro
+  kind: copies
+  names:
+  - mame*
+  search_dir: /usr/config/emuelec/configs/mame/ini
+  passes_to: /storage/roms/bios/mame/ini
+  fails_when_missing: false
+  depends_on_option: /storage/roms/bios/mame/ini/mame.ini absent
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame
+  passes_to: mame.ini homepath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:10, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/bios
+  passes_to: mame.ini rompath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:11, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/hash
+  passes_to: mame.ini hashpath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:12, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/samples
+  passes_to: mame.ini samplepath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:13, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/artwork
+  passes_to: mame.ini artpath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:14, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/ini
+  passes_to: mame.ini inipath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:16, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/cheat
+  passes_to: mame.ini cheatpath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:18, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/crosshair
+  passes_to: mame.ini crosshairpath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:19, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: mame
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/mame/plugins
+  passes_to: mame.ini pluginspath
+  fails_when_missing: false
+  depends_on_option: mame_read_config = enabled
+  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:20, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
+    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
+- emulator: pico8
+  build: standalone
+  kind: moves
+  names:
+  - pico8_dyn
+  case_insensitive: false
+  search_dir: /storage/roms/bios/pico-8
+  passes_to: /emuelec/bin/pico-8
+  fails_when_missing: false
+  depends_on_option: /storage/roms/bios/pico-8 exists
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:305-307, packages/sx05re/emuelec/bin/pico8.sh:9-13,\
+    \ 40-42"
+- emulator: flycastsa
+  build: standalone
+  kind: links
+  names: []
+  search_dir: /storage/roms/bios/dc
+  passes_to: symlink /storage/.local/share/flycast -> /storage/roms/bios/dc
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:198-200, packages/sx05re/emulators/flycastsa/scripts/flycast.sh:11,\
+    \ 14"
+- emulator: amiberry
+  build: standalone
+  kind: links
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: symlink /usr/config/amiberry/kickstarts -> /storage/roms/bios
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emulators/amiberry/package.mk:36"
+- emulator: amiberry-lite
+  build: standalone
+  kind: links
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: symlink /usr/config/amiberry-lite/kickstarts -> /storage/roms/bios
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emulators/amiberry-lite/package.mk:36"
+- emulator: timidity
+  build: standalone
+  kind: links
+  names: []
+  search_dir: /storage/roms/bios/timidity/freepats
+  passes_to: symlink /usr/config/timidity/freepats -> /storage/roms/bios/timidity/freepats
+  fails_when_missing: false
+  source_ref: "packages/sx05re/tools/sound/timidity/package.mk:38"
+- emulator: duckstation
+  build: standalone
+  kind: scans_dir
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: "settings.ini [BIOS] SearchDirectory (-settings), [BIOS] PathNTSCU, PathNTSCJ,\
+    \ PathPAL unset"
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:207-209, packages/sx05re/emulators/duckstation/config/settings.ini:6-9,\
+    \ packages/sx05re/emulators/duckstation/package.mk:56, packages/sx05re/emulators/duckstation/scripts/duckstation.sh:40"
+- emulator: yabasanshiroSA
+  build: standalone
+  kind: fixed_name
+  names:
+  - saturn_bios.bin
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: yabasanshiro -b
+  fails_when_missing: false
+  depends_on_option: hlebios != 1
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:343-345, packages/sx05re/emulators/yabasanshiroSA_1_11/scripts/yabasanshiro.sh:30-34,\
+    \ 49"
+- emulator: yabasanshiroSA1_5
+  build: standalone
+  kind: fixed_name
+  names:
+  - saturn_bios.bin
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: yabasanshiro1_5 -b
+  fails_when_missing: false
+  depends_on_option: hlebios != 1
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:346-348, packages/sx05re/emulators/yabasanshiroSA_1_5/scripts/yabasanshiro1_5.sh:29-33,\
+    \ 47"
+- emulator: jzintv
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: jzintv -p
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:337-339, packages/sx05re/emulators/jzintv/scripts/jzintv.sh:49"
+- emulator: rice, glide64mk2
+  build: standalone
+  kind: names_searched
+  names:
+  - "N64DD IPLROM (J).n64"
+  - IPL.n64
+  case_insensitive: false
+  search_dir: /storage/roms/bios/Mupen64plus
+  passes_to: mupen64plus --dd-ipl-rom
+  fails_when_missing: false
+  depends_on_option: "-f \"${GAMEDIR}/${GAMENAME}.ndd\""
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:232-237, packages/sx05re/emulators/mupen64plussa/mupen64plussa-core/m64p.sh:16,\
+    \ 65-68, 96-98"
+- emulator: HATARISA
+  build: standalone
+  kind: fixed_name
+  names:
+  - tos.img
+  search_dir: /storage/roms/bios
+  passes_to: "Atari-ST-default.cfg [ROM] szTosImageFileName (--configfile)"
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:172-174, packages/sx05re/emulators/hatarisa/config/conf/Atari-ST-default.cfg:200,\
+    \ packages/sx05re/emulators/hatarisa/package.mk:39, packages/sx05re/emulators/hatarisa/scripts/hatari.start:36,\
+    \ 66, 73"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/bios/advmame/samples
+  passes_to: advmame.rc dir_sample
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:9,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:9, packages/sx05re/emulators/advancemame/config/advmame.rc:12,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:80"
+- emulator: SCUMMVMSA
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/.config/scummvm/extra
+  passes_to: scummvm --extrapath
+  fails_when_missing: false
+  depends_on_option: /storage/.config/scummvm/extra exists
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:251-255, packages/sx05re/emulators/scummvmsa/bin/scummvm.start:38-39,\
+    \ 45"
+- emulator: scummvm
+  build: libretro
+  kind: copies
+  names:
+  - scummvm.ini
+  search_dir: /storage/.config/scummvm
+  passes_to: /storage/roms/bios/scummvm.ini
+  fails_when_missing: false
+  depends_on_option: scummvm.start add
+  source_ref: "packages/sx05re/emulators/scummvmsa/bin/scummvm.start:9, 49-51, 54"
+- emulator: dolphin
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/dolphin
+  passes_to: environment XDG_DATA_HOME
+  fails_when_missing: false
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:270-272, packages/sx05re/emulators/dolphinSA/scripts/dolphin.sh:28"
+- emulator: fluidsynth
+  build: standalone
+  kind: fixed_name
+  slot: fluidsynth
+  names:
+  - sc/SC-55.sf2
+  case_insensitive: false
+  search_dir: /storage/roms/bios
+  passes_to: fluidsynth -is
+  fails_when_missing: false
+  depends_on_option: ra_midi_output = fluidsynth
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:123-125, packages/sx05re/emuelec/bin/emuelec-utils:54,\
+    \ 66-67"
+- emulator: mt32d
+  build: standalone
+  kind: passes_path
+  slot: cm32l
+  names: []
+  search_dir: /roms/bios
+  passes_to: mt32d -f
+  fails_when_missing: false
+  depends_on_option: ra_midi_output = cm32l
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:123-125, packages/sx05re/emuelec/bin/emuelec-utils:54,\
+    \ 75-76"
+- emulator: mt32d
+  build: standalone
+  kind: passes_path
+  slot: mt32
+  names: []
+  search_dir: /roms/bios
+  passes_to: mt32d -f
+  fails_when_missing: false
+  depends_on_option: ra_midi_output = mt32
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:123-125, packages/sx05re/emuelec/bin/emuelec-utils:54,\
+    \ 79-80"

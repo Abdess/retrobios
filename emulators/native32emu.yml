@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/AloysHF/Native32Emu"
 upstream: "https://github.com/AloysHF/Native32Emu"
 profiled_date: "2026-10-26"
-source_commit: "059fa33c658caa4dbbad140ebf2af1197f9dd778"
+source_commit: "c9111273f97c67471358c8d9507a19c7cceb70f5"
 core_version: "1.4.0"
 version_basis:
   kind: file
@@ -19,10 +19,14 @@ systems:
 notes: |
   Emulator for the Sunplus Native32 game format written in Rust by
   AloysHF. The libretro core and the native32emu standalone binary share
-  the native32emu-core crate. Content (.smf, .sgm, .ssl or a .zip
-  package) is read from its full path (need_fullpath = true,
-  crates/native32emu-libretro/src/libretro/api.rs:107;
-  Emulator::from_path, crates/native32emu-core/src/emulator.rs:86-149).
+  the native32emu-core crate. Content (.smf, .sgm or a .zip package,
+  crates/native32emu-core/src/content_entry.rs:7) is read from its full
+  path (need_fullpath = true,
+  crates/native32emu-libretro/src/libretro/api.rs:128;
+  Emulator::from_path, crates/native32emu-core/src/emulator.rs:97-174).
+  An .ssl scene given as content is refused with a message naming the
+  .smf, .sgm or .zip to start instead
+  (crates/native32emu-core/src/content_entry.rs:20-26).
   The header is decrypted with DES keys compiled into the core
   (crates/native32emu-core/src/header_decryptor.rs:136,
   crates/native32emu-core/src/des_constants.rs).
@@ -36,23 +40,24 @@ notes: |
   crates/native32emu-core/src/archive_loader.rs:152-211). The Emscripten
   build receives the archive already extracted by EmulatorJS and switches to
   the root menu when one exists
-  (crates/native32emu-libretro/src/libretro/api.rs:146-159,
+  (crates/native32emu-libretro/src/libretro/api.rs:181-194,
   crates/native32emu-core/src/archive_loader.rs:112-117). Every later file
   is resolved relative to the running content and its parent directories,
   case-insensitively with trailing spaces trimmed
   (crates/native32emu-core/src/content_loader.rs:73-130): child .smf and
-  .ssl content (crates/native32emu-core/src/emulator.rs:617-627), .dat
-  thumbnails for the menu (crates/native32emu-core/src/emulator.rs:565-592),
-  .mpg cutscenes (crates/native32emu-core/src/emulator.rs:464-480) and
-  the menu's game listing (crates/native32emu-core/src/file_browser.rs:75-120).
-  All of them ship inside the game package. Saves are written to
-  <content>.ssl_sav beside the content. The Emscripten build asks for the
-  frontend save directory and writes there instead, under a name flattened
-  from the content path
+  .ssl content (crates/native32emu-core/src/emulator.rs:735-745), .dat
+  thumbnails for the menu (crates/native32emu-core/src/emulator.rs:591-618),
+  .mpg cutscenes (crates/native32emu-core/src/emulator.rs:490-506) and
+  the menu's game listing (crates/native32emu-core/src/file_browser.rs:117-167).
+  All of them ship inside the game package. The standalone binary writes
+  saves to <content>.ssl_sav beside the content. The libretro core asks
+  for the frontend save directory on every target and writes there, under
+  a name flattened from the content path, and falls back to beside the
+  content when the frontend reports none
   (crates/native32emu-core/src/save_manager.rs:6-26,
-  crates/native32emu-core/src/save_manager.rs:33-48,
-  crates/native32emu-libretro/src/libretro/api.rs:194-197,
-  crates/native32emu-libretro/src/libretro/callbacks.rs:205-222).
+  crates/native32emu-core/src/save_manager.rs:41-47,
+  crates/native32emu-libretro/src/libretro/api.rs:228-231,
+  crates/native32emu-libretro/src/libretro/callbacks.rs:223-240).
 
   RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY is defined
   (crates/native32emu-libretro/src/libretro/constants.rs:42) but nothing

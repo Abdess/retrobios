@@ -1,5 +1,6 @@
 emulator: testvulkan
-type: test
+type: libretro
+role: test
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-samples"
 upstream: "https://github.com/libretro/libretro-samples"

@@ -3,12 +3,12 @@ type: standalone + libretro
 core_classification: official_port
 source: "https://github.com/hrydgard/ppsspp"
 profiled_date: "2026-10-21"
-source_commit: "43a69b1c84dfe29e82b46bd3797a1106cbd65c5b"
-core_version: "v1.20.4-3958-g43a69b1"
+source_commit: "4a9fa00e5ab1a63572dfb429149b1d34bba95093"
+core_version: "v1.20.4-4689-g4a9fa00"
 version_basis:
   kind: tag
   tag: "v1.20.4"
-  distance: 3958
+  distance: 4689
 display_name: "Sony - PlayStation Portable (PPSSPP)"
 cores:
   - ppsspp
@@ -24,53 +24,57 @@ data_directories:
     installed_on: [amberelec, batocera, emudeck, lakka, recalbox, retrobat, retrodeck, retropie, romm]
     mode: libretro
     destination: ""
-    source_ref: "libretro/libretro.cpp:1228-1237, libretro/libretro.cpp:1283"
+    source_ref: "libretro/libretro.cpp:1259-1268, libretro/libretro.cpp:1314"
 
 data_root:
   android:
     path: "Android/data/org.ppsspp.ppsspp/files"
-    source_ref: "UI/NativeApp.cpp:651-682, UI/MemStickScreen.cpp:234-240, 371-376, android/src/org/ppsspp/ppsspp/PpssppActivity.java:461-463"
+    source_ref: "UI/NativeApp.cpp:655-686, UI/MemStickScreen.cpp:67-73, UI/MemStickScreen.cpp:256-264, UI/MemStickScreen.cpp:397-398, android/src/org/ppsspp/ppsspp/PpssppActivity.java:464-466"
     note: "With scoped storage the memory stick is the folder picked at first launch, this one when setup is skipped, and memstick_dir.txt keeps the choice. Under legacy storage it is the root of shared storage"
   ios:
     path: "Documents"
-    source_ref: "UI/NativeApp.cpp:709-711, Core/Util/DarwinFileSystemServices.mm:310-316, 328-331"
+    source_ref: "UI/NativeApp.cpp:713-715, Core/Util/DarwinFileSystemServices.mm:347-353, Core/Util/DarwinFileSystemServices.mm:365-368"
     note: "A folder chosen in the settings and kept in the user defaults replaces it"
   windows:
     path: "<folder of PPSSPPWindows64.exe>/memstick"
-    source_ref: "Windows/main.cpp:989-1042, Windows/main.cpp:1221-1222"
+    source_ref: "Windows/main.cpp:991-1044, Windows/main.cpp:1223-1224"
     note: "installed.txt beside the executable switches to the folder it names, else Documents/PPSSPP, which also serves when memstick cannot be created or written"
   macos:
     path: "~/.config/ppsspp"
-    source_ref: "UI/NativeApp.cpp:633-634, UI/NativeApp.cpp:712-713, SDL/SDLMain.cpp:1188-1192, Core/Util/DarwinFileSystemServices.mm:310-316, 332-333"
+    source_ref: "UI/NativeApp.cpp:637-638, UI/NativeApp.cpp:716-717, SDL/SDLMain.cpp:1188-1192, Core/Util/DarwinFileSystemServices.mm:347-353, Core/Util/DarwinFileSystemServices.mm:369-370"
     note: "A folder chosen in the settings and kept in the user defaults replaces it"
   linux:
     path: "$XDG_CONFIG_HOME/ppsspp, else ~/.config/ppsspp"
-    source_ref: "UI/NativeApp.cpp:718-719, Core/Util/PathUtil.cpp:284-300"
+    source_ref: "UI/NativeApp.cpp:722-723, Core/Util/PathUtil.cpp:308-324"
 
 notes: |
   Full HLE emulator. No Sony firmware or BIOS required.
   The libretro core is built from hrydgard/ppsspp, the tree of the
   standalone emulator, with its wrapper in libretro/.
   Libretro core loads assets from system/PPSSPP/ via VFS
-  (libretro/libretro.cpp:1228-1237, 1283) and warns that core system files
-  are missing when compat.ini is absent (libretro/libretro.cpp:1241-1273).
+  (libretro/libretro.cpp:1259-1268, 1314) and warns that core system files
+  are missing when compat.ini is absent (libretro/libretro.cpp:1272-1304).
   Assets include replacement PGF fonts (flash0/font/),
   game compatibility database (compat.ini), language mapping (langregion.ini),
   and post-processing shaders (shaders/).
   Fonts are read from the game disc, then from flash0:/font of the NAND,
-  then from flash0/font/ in system/PPSSPP/ (Core/HLE/sceFont.cpp:1026-1048).
+  then from flash0/font/ in system/PPSSPP/ (Core/HLE/sceFont.cpp:1031-1053).
+  Monster Hunter Portable 3rd HD Ver. (NPJB40001) skips the NAND fonts and
+  keeps the HLE sceFont, so it reads the fonts of system/PPSSPP/flash0/font/
+  (Core/HDRemaster.cpp:27-29, Core/HLE/sceFont.cpp:1005-1012,
+  Core/HLE/HLE.cpp:428-431).
   Without any of them the font library holds no internal font and
   sceFontOpen returns SCE_FONT_ERROR_INVALID_PARAMETER to the game
-  (Core/HLE/sceFont.cpp:1197-1199), so text a game draws with the PSP system
+  (Core/HLE/sceFont.cpp:1202-1204), so text a game draws with the PSP system
   fonts is lost. Without ppge_atlas.zim the system dialogs are not drawn
-  (Core/Util/PPGeDraw.cpp:252-255).
+  (Core/Util/PPGeDraw.cpp:249-252).
   A real firmware is optional. The NAND is <memstick>/PSP/NAND
-  (Core/Util/PathUtil.cpp:146-147), which the libretro core places under
-  the save directory (libretro/libretro.cpp:1277, 1281). On boot, a game
+  (Core/Util/PathUtil.cpp:151-152), which the libretro core places under
+  the save directory (libretro/libretro.cpp:1308, 1312). On boot, a game
   disc carrying a newer firmware updater than the installed one is
-  unpacked into it (Core/System.cpp:603-606). Its flash0:/font,
+  unpacked into it (Core/System.cpp:615-618). Its flash0:/font,
   kd/libmp4.prx, kd/mp4msv.prx and kd/mpeg.prx replace the HLE modules
-  when present (Core/HLE/HLE.cpp:408-446).
+  when present (Core/HLE/HLE.cpp:424-466).
   PSP_DEFAULT_FIRMWARE = 660 (Core/ConfigValues.h:43).
 
 files:
@@ -80,7 +84,7 @@ files:
     path: "PPSSPP/ppge_atlas.zim"
     description: "PPGe dialog texture atlas for save/load dialogs, on-screen keyboard, system UI"
     required: false
-    source_ref: "Core/Util/PPGeDraw.cpp:252-255"
+    source_ref: "Core/Util/PPGeDraw.cpp:249-252"
     note: "Logged as an error if missing. System dialogs render without graphics but core continues running. Batocera, Recalbox, Lakka, RetroPie, RetroBat, EmuDeck and RetroDECK install the assets folder where their core reads it."
 
   - name: "ppge_atlas.meta"
@@ -89,7 +93,7 @@ files:
     path: "PPSSPP/ppge_atlas.meta"
     description: "PPGe atlas metadata (glyph positions, UV coords)"
     required: false
-    source_ref: "Core/Util/PPGeDraw.cpp:257-263"
+    source_ref: "Core/Util/PPGeDraw.cpp:254-260"
     note: "Loaded after ppge_atlas.zim. Without it, dialog UI has no glyph layout. Batocera, Recalbox, Lakka, RetroPie, RetroBat, EmuDeck and RetroDECK install the assets folder where their core reads it."
 
   - name: "ppge_atlas.zim"
@@ -100,8 +104,8 @@ files:
     size: 666530
     sha1: "30a33f3651f8e1b0967a5dfe6ff714baebcce41a"
     bundled: true
-    source_ref: "Core/Util/PPGeDraw.cpp:252-255"
-    note: "Shipped in assets/ of the PPSSPP 1.20.4 Windows zip, which the standalone reads it from."
+    source_ref: "Core/Util/PPGeDraw.cpp:249-252"
+    note: "Hashes of assets/ppge_atlas.zim in the tree at the pin, the copy the releases ship in assets/."
 
   - name: "ppge_atlas.meta"
     mode: standalone
@@ -111,5 +115,5 @@ files:
     size: 50242
     sha1: "ab398f667d6fd778859307c105fe16388b8fdf63"
     bundled: true
-    source_ref: "Core/Util/PPGeDraw.cpp:257-263"
-    note: "Shipped in assets/ of the PPSSPP 1.20.4 Windows zip, beside ppge_atlas.zim."
+    source_ref: "Core/Util/PPGeDraw.cpp:254-260"
+    note: "Hashes of assets/ppge_atlas.meta in the tree at the pin, shipped beside ppge_atlas.zim."

@@ -1469,13 +1469,15 @@
           "md5": "646773759326fbac3b2311fd8c8793ee",
           "system": "amiga",
           "description": "Kickstart 40068 Amiga 1200.",
+          "sha256": "6d43840d4099a74170ea0f0425b6257c3891ebcaa39c4d1840075a9ab22b5707",
           "required": "Required"
         },
         {
           "filename": "kick40068.A4000",
           "md5": "9bdedde6a4f33555b4a270c8ca53297d",
           "system": "amiga",
-          "description": "Kickstart 40068 Amiga 4000."
+          "description": "Kickstart 40068 Amiga 4000.",
+          "sha256": "71236ed62c85394a3ad7d0d8d65405bac7a10083e06ba6b82120dacc7a00fe9a"
         },
         {
           "filename": "kick34005.CDTV",
@@ -1830,7 +1832,8 @@
           "filename": "cdi200.rom",
           "md5": "2969341396aa61e0143dc2351aaa6ef6",
           "system": "cdimono1",
-          "description": "Philips CDi"
+          "description": "Philips CDi",
+          "required": "Required"
         },
         {
           "filename": "cdi220.rom",
@@ -1956,7 +1959,7 @@
         },
         {
           "filename": "neocdz.zip",
-          "md5": "b31a246b69493c35194fe0bac120dc37",
+          "md5": "c733b4b7bd30fa849874d96c591c8639",
           "system": "fbneo",
           "description": "Neo Geo CDZ BIOS",
           "required": "Required"
@@ -3023,7 +3026,8 @@
           "md5": "646773759326fbac3b2311fd8c8793ee",
           "system": "amiga",
           "description": "Kickstart 4.0 ROM for Amiga 1200",
-          "required": "Required"
+          "required": "Required",
+          "sha256": "6d43840d4099a74170ea0f0425b6257c3891ebcaa39c4d1840075a9ab22b5707"
         },
         {
           "filename": "sl31253.bin",
@@ -3303,7 +3307,8 @@
             "supergb"
           ],
           "description": "Super Game Boy BIOS",
-          "required": "Optional, for boot logo"
+          "required": "Optional, for boot logo",
+          "sha256": "c172498a23d1176672931bab33b629c7d28f914a43dca9e540b8af1b37ccf2c6"
         },
         {
           "filename": "sgb1.boot.rom",
@@ -3490,9 +3495,8 @@
           "md5": "0a93f7940c455905bea6e392dfde92a4",
           "system": "dreamcast",
           "description": "Dreamcast flash BIOS (duplicate of dc_flash.bin)",
-          "required": "Required",
-          "paths": "$bios_path/dc",
-          "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3"
+          "required": "Optional",
+          "paths": "$bios_path/dc"
         },
         {
           "filename": "bios_J.sms",
@@ -4102,7 +4106,8 @@
           "filename": "MOONSOUND.rom",
           "md5": "42af93619160ef2116416f74a6cb12f2",
           "system": "msx",
-          "description": "MoonSound sound expansion ROM"
+          "description": "MoonSound sound expansion ROM",
+          "sha256": "0481e861f639fa3d6a64a75b735035a54b0875d57aaae33fdbe400146c80423f"
         },
         {
           "filename": "MSX2AREXT.ROM",
@@ -4174,7 +4179,8 @@
           "md5": "8aabde714a42256bef36ea9b04f6ef59",
           "system": "msx",
           "description": "MSX2 Japanese Extended ROM",
-          "required": "Required for some Japanese games."
+          "required": "Required for some Japanese games.",
+          "sha256": "fb6daa38e31431b81971eb5618241685447e23b1450051008a1deb5023513ce9"
         },
         {
           "filename": "MSX2J.rom",
@@ -4303,7 +4309,8 @@
           "md5": "9dfdebfaa6b547222a40aab8bb2e29f8",
           "system": "msx",
           "description": "MSX Kanji ROM",
-          "required": "Required for some Japanese games."
+          "required": "Required for some Japanese games.",
+          "sha256": "9fb7ef5003fcb953f46ffe5bab399832d8175f53cccb763d8c454a91bc2429fd"
         },
         {
           "filename": "MSXKR.rom",
@@ -4378,7 +4385,8 @@
           "filename": "NOVAXIS.rom",
           "md5": "20989124671593ab04eeb01d52a1e25c",
           "system": "msx",
-          "description": "Novaxis ROM"
+          "description": "Novaxis ROM",
+          "sha256": "9b57b6bfb8958d435ba34bcbbcd44b46710fa7ed7b9d41bcd2485fac05a602ce"
         },
         {
           "filename": "PAINT.rom",
@@ -4390,7 +4398,8 @@
           "filename": "PANASONICDISK.rom",
           "md5": "00aa02b6077de40a0b51d71a3c3e1d5f",
           "system": "msx",
-          "description": "Panasonic Disk ROM"
+          "description": "Panasonic Disk ROM",
+          "sha256": "bbddc2492147a3e1c3585962cae02036ef269dcdc99038e613534cb2b8334460"
         },
         {
           "filename": "PHILIPSDISK.rom",
@@ -4432,13 +4441,15 @@
           "filename": "nms8250_basic-bios2.rom",
           "md5": "ec3a01c91f24fbddcbcab0ad301bc9ef",
           "system": "msx",
-          "description": "BASIC BIOS v2 for NMS8250"
+          "description": "BASIC BIOS v2 for NMS8250",
+          "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919"
         },
         {
           "filename": "nms8250_msx2sub.rom",
           "md5": "2183c2aff17cf4297bdb496de78c2e8a",
           "system": "msx",
-          "description": "MSX2 Sub BIOS for NMS8250"
+          "description": "MSX2 Sub BIOS for NMS8250",
+          "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300"
         },
         {
           "filename": "fmpac.rom",
@@ -4463,25 +4474,29 @@
           "md5": "acf53887c2d2783dc059a9b442c86b90",
           "system": "msx",
           "description": "Kanji font ROM for FS-A1WSX MSX2+",
-          "required": "Required for some Japanese games."
+          "required": "Required for some Japanese games.",
+          "sha256": "d87ce758a7171870a2a3e7893e09cbba2bd68ee70b4d0f0e49dd2ecd60aafdd1"
         },
         {
           "filename": "fs-a1wsx_basic-bios2p.rom",
           "md5": "c5c26c3e8bc6c485424818057f0507b9",
           "system": "msx",
-          "description": "BASIC BIOS 2P for FS-A1WSX MSX2+"
+          "description": "BASIC BIOS 2P for FS-A1WSX MSX2+",
+          "sha256": "cc5b5b461e24be70ebea4dc2762ec98c2e6db850acf646eb88450ab6354d8b26"
         },
         {
           "filename": "fs-a1wsx_fmbasic.rom",
           "md5": "0c40e7db1c1fcc2405e4d0cdd215adb4",
           "system": "msx",
-          "description": "FM-BASIC ROM for FS-A1WSX MSX2+"
+          "description": "FM-BASIC ROM for FS-A1WSX MSX2+",
+          "sha256": "29325437196ec7fc7b39b25a87f6981805bd8cb302acf4708f504fb1fb89108b"
         },
         {
           "filename": "fs-a1wsx_msx2psub.rom",
           "md5": "7c8243c71d8f143b2531f01afa6a05dc",
           "system": "msx",
-          "description": "MSX2+ Sub BIOS for FS-A1WSX"
+          "description": "MSX2+ Sub BIOS for FS-A1WSX",
+          "sha256": "36000685128f95ff515a128973f8d439116c1a1a8e38c1777293a428894434a2"
         },
         {
           "filename": "fs-a1wsx_kanjibasic.rom",
@@ -4499,7 +4514,8 @@
           "filename": "fs-a1wsx_firmware.rom",
           "md5": "fa8e7d4b999af058fe2864a5f2e014ec",
           "system": "msx",
-          "description": "System firmware for FS-A1WSX MSX2+"
+          "description": "System firmware for FS-A1WSX MSX2+",
+          "sha256": "38cde34f03bb7d134acd1d013eccbac3a447f570039ab1c37fa4b222e59cfc61"
         },
         {
           "filename": "fs-a1gt_firmware.rom",
@@ -5191,12 +5207,6 @@
           "description": " V.SMILE TV Learning System BIOS"
         },
         {
-          "filename": "segasp.zip",
-          "system": "fbneo",
-          "required": "Required",
-          "paths": "$bios_path/dc"
-        },
-        {
           "filename": "3do.xml",
           "system": "3do",
           "paths": "$bios_path/mame/hash"
@@ -5232,50 +5242,6 @@
           "paths": "$bios_path/mame/hash"
         },
         {
-          "filename": "a2diskiing.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2focdrv.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2hsscsi.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2memexp.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2mouse.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2parprn.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2pdromdr.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2pic.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "ace80.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "d2fdc.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "ibsap2.zip",
-          "system": "apple2gs"
-        },
-        {
           "filename": "cdi.xml",
           "system": "cdimono1",
           "paths": "$bios_path/mame/hash"
@@ -5303,74 +5269,6 @@
         {
           "filename": "gmaster.xml",
           "system": "gmaster",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac128k.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "mac512k.zip",
-          "system": "mac2"
-        },
-        {
-          "filename": "macplus.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "macse.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "macclasc.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "mac2fdhd.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "maciix.zip",
-          "system": "mac2"
-        },
-        {
-          "filename": "maclc3.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "mac_cdrom.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_flop.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_flop_clcracked.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_flop_orig.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_hdd.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_hdflop.xml",
-          "system": "mac2",
           "paths": "$bios_path/mame/hash"
         },
         {

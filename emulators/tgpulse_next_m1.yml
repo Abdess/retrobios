@@ -1,0 +1,129 @@
+emulator: "TGPulse-Next"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/Zer0one/tgpulse-next-libretro"
+upstream: "https://github.com/Zer0one/TGPulse-Next"
+profiled_date: "2026-11-09"
+source_commit: "ef21af3921f3f3914ed698ff8962c88b5b1322cd"
+upstream_commit: "3c75f9b2b155e8bb50a225c69520948ef72ecd48"
+upstream_frozen: "The port's tree was imported as a snapshot of TGPulse-Next main at this commit, as NOTICE records, with a fresh history."
+core_version: "0.1.0.13"
+version_basis:
+  kind: file
+  path: "crates/tgpulse-libretro/src/lib.rs"
+  pattern: 'library_version: c"([^"]+)"'
+display_name: "Sega - Model 1 (TGPulse-Next)"
+cores:
+  - "tgpulse_next_m1"
+systems:
+  - sega-model1
+
+notes: |
+  A Sega Model 1 libretro core in Rust, built from TGPulse-Next, itself based
+  on deepblueworks/TGPulse. This build compiles the Model 1 machine only. The
+  content is a MAME set in a .zip, recognised by its file names against the
+  game list built into the core, and a Model 2 set is refused.
+  ref: NOTICE:1-3, crates/tgpulse-libretro/src/lib.rs:2490-2500,
+       crates/tgpulse-libretro/src/lib.rs:2040-2054
+
+  Every Model 1 game runs the firmware of its I/O board, which the set does
+  not need to carry. It is read from model1io.zip or model1io2.zip, in
+  <system>/tgpulse-next/, then beside the game, then from the game's own
+  archive. A member counts only at 65536 bytes and the SHA-1 the core
+  hardcodes, and a bad copy passes on to the next place. Without a valid
+  copy the game does not start.
+  ref: crates/tgpulse-libretro/src/lib.rs:720-728, crates/tgpulse-libretro/src/lib.rs:2058-2059,
+       crates/tgpulse-core/src/loader.rs:403-417, crates/tgpulse-core/src/roms_db.rs:324-346,
+       crates/tgpulse-core/src/loader/model1_bios.rs:8-29, crates/tgpulse-core/src/loader/model1_bios.rs:36-48
+
+  The NetMerc diagnostic display draws the cabinet's HD44780 LCD with the
+  character ROM of hd44780.zip, read in the same three places. It is off by
+  default, and without the ROM no LCD is drawn.
+  ref: crates/tgpulse-core/src/loader/model1_bios.rs:6, crates/tgpulse-core/src/loader/model1_bios.rs:31-34,
+       crates/tgpulse-libretro/src/diagnostic_overlay.rs:28-35
+
+  NetMerc's sample ROMs are bad dumps. The Audio Donor option takes the PCM
+  banks of vf, vr, swa or wingwar from that game's set beside the content,
+  vf by default, and a procedural fallback plays without one.
+  ref: crates/tgpulse-libretro/src/lib.rs:475-504, crates/tgpulse-core/src/loader/audio_donor.rs:34-71,
+       crates/tgpulse-core/src/config.rs:6-26
+
+archive_prefix: "tgpulse-next"
+
+files:
+  - name: "model1io.zip"
+    path: "tgpulse-next/model1io.zip"
+    system: sega-model1
+    required: true
+    category: bios_zip
+    description: "Sega Model 1 I/O board device set"
+    note: "I/O firmware of Virtua Racing, Virtua Formula, Virtua Fighter and Star Wars Arcade. Also read beside the game, then from the game's own archive."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:36-48, crates/tgpulse-core/src/loader/model1_bios.rs:8-12"
+
+  - name: "epr-14869.25"
+    archive: model1io.zip
+    system: sega-model1
+    required: true
+    size: 65536
+    sha1: "b65fdd0ad31794a565a0ca4dc67a3f16b329fd71"
+    validation: [size, sha1]
+    note: "Read for vr and vformula."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:40, crates/tgpulse-core/src/roms_db.dat:3605, crates/tgpulse-core/src/roms_db.dat:3788"
+
+  - name: "epr-14869b.25"
+    archive: model1io.zip
+    system: sega-model1
+    required: true
+    size: 65536
+    sha1: "af0fe245eb9fa3c3c60e4b685f1e779f83d894f9"
+    validation: [size, sha1]
+    note: "Read for vf, swa and swaj."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:41, crates/tgpulse-core/src/roms_db.dat:3009, crates/tgpulse-core/src/roms_db.dat:3061, crates/tgpulse-core/src/roms_db.dat:3358"
+
+  - name: "model1io2.zip"
+    path: "tgpulse-next/model1io2.zip"
+    system: sega-model1
+    required: true
+    category: bios_zip
+    description: "Sega Model 1 advanced I/O board device set"
+    note: "I/O firmware of Wing War and NetMerc. Also read beside the game, then from the game's own archive."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:36-48, crates/tgpulse-core/src/loader/model1_bios.rs:8-12"
+
+  - name: "epr-16891.6"
+    archive: model1io2.zip
+    system: sega-model1
+    required: true
+    size: 65536
+    sha1: "3079397c7241c1a6f494fa310faff0989dfa04a0"
+    validation: [size, sha1]
+    note: "Read for wingwar, wingwar360, wingwarj and wingwaru."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:42, crates/tgpulse-core/src/roms_db.dat:3971"
+
+  - name: "epr-18021.6"
+    archive: model1io2.zip
+    system: sega-model1
+    required: true
+    size: 65536
+    sha1: "bf5b9aad99c0f8f5e262e0855796f39119d11a97"
+    validation: [size, sha1]
+    note: "Read for netmerc."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:43, crates/tgpulse-core/src/roms_db.dat:1958"
+
+  - name: "hd44780.zip"
+    path: "tgpulse-next/hd44780.zip"
+    system: sega-model1
+    required: false
+    category: bios_zip
+    description: "HD44780 LCD controller character ROM set"
+    note: "Read only when the NetMerc diagnostic display is switched on. Also read beside the game, then from the game's own archive."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:31-34, crates/tgpulse-libretro/src/diagnostic_overlay.rs:28-35"
+
+  - name: "hd44780_a00.bin"
+    archive: hd44780.zip
+    system: sega-model1
+    required: false
+    size: 4096
+    sha1: "65cf075a988cdcbb316b9afdd0529b374a1a65ec"
+    validation: [size, sha1]
+    note: "HD44780 A00 character ROM, the font of the diagnostic LCD."
+    source_ref: "crates/tgpulse-core/src/loader/model1_bios.rs:6, crates/tgpulse-core/src/loader/model1_bios.rs:31-34"

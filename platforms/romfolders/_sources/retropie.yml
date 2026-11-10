@@ -9,7 +9,7 @@ params:
 sources:
   os:
     repo: https://github.com/RetroPie/RetroPie-Setup
-    commit: 46128cd252cdecae852a4d0bafa2aaf9d03ab563
+    commit: 427e76216633591861791cfb28807ac1039c5ea8
   es:
     repo: https://github.com/RetroPie/EmulationStation
     commit: a31c36a77b385a6ea3f6667e75ef468ff79678a6

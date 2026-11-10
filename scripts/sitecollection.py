@@ -97,7 +97,7 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
     from siterender import _PROGRAM_TOPS, SECTION_LABELS, record_card_move  # noqa: PLC0415
 
     profiles = {key: profile for key, profile in _profiles_on_disk().items()
-                if profile.get("type") not in ("alias", "test")}
+                if profile.get("type") != "alias" and profile.get("role") != "test"}
     readers: dict[str, set[str]] = {}
     for key, profile in profiles.items():
         for entry in profile.get("files") or []:

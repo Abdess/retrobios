@@ -64,20 +64,25 @@ notes: |
   descent2 on install (scriptmodules/ports/dxx-rebirth.sh,
   game_data_dxx-rebirth).
 
+groups:
+  d1-hog:
+    required: true
+  d2-hog:
+    required: true
+
 files:
   # ------ Descent 1 shareware (free) ------
   - name: descent.hog
+    group: d1-hog
     installed_on: [retropie]
     path: descent.hog
     system: descent
     category: game_data
-    required: false
     size: 2339773
     validation: [size]
     description: "Descent 1 PC shareware v1.4 HOG"
-    variant_group: d1-hog
     note: "freely redistributable (icculus.org/d2x/data/desc14sw.tar.gz)"
-    source_ref: "similar/main/mission.cpp:80; common/main/mission.h:67"
+    source_ref: "similar/main/mission.cpp:80; common/main/mission.h:67; similar/main/inferno.cpp:472, 500-512"
 
   - name: descent.pig
     installed_on: [retropie]
@@ -90,16 +95,15 @@ files:
 
   # ------ Descent 1 retail ------
   - name: descent.hog
+    group: d1-hog
     path: descent.hog
     system: descent
     category: game_data
-    required: false
     size: 6856701
     validation: [size]
     description: "Descent 1 PC retail v1.5 HOG (GOG)"
-    variant_group: d1-hog
     note: "commercial, alternative sizes 6856183 (v1.5 alt), 7261423 (v1.0), 7456179 (Mac retail)"
-    source_ref: "common/main/mission.h:61-64"
+    source_ref: "common/main/mission.h:61-64; similar/main/inferno.cpp:472, 500-512"
 
   - name: descent.pig
     path: descent.pig
@@ -111,17 +115,17 @@ files:
 
   # ------ Descent 2 shareware (free) ------
   - name: d2demo.hog
+    group: d2-hog
+    priority: 2
     installed_on: [retropie]
     path: d2demo.hog
     system: descent2
     category: game_data
-    required: false
     size: 2292566
     validation: [size]
     description: "Descent 2 PC shareware HOG"
-    variant_group: d2-hog
     note: "freely redistributable (icculus.org/d2x/data/d2shar10.tar.gz)"
-    source_ref: "similar/main/mission.cpp:107-108; common/main/mission.h:71"
+    source_ref: "similar/main/mission.cpp:107-108; common/main/mission.h:71; similar/main/inferno.cpp:476, 500-512"
 
   - name: d2demo.pig
     installed_on: [retropie]
@@ -143,16 +147,16 @@ files:
 
   # ------ Descent 2 retail ------
   - name: descent2.hog
+    group: d2-hog
+    priority: 1
     path: descent2.hog
     system: descent2
     category: game_data
-    required: false
     size: 7595079
     validation: [size]
     description: "Descent 2 PC full v1.1-1.2 HOG (GOG)"
-    variant_group: d2-hog
     note: "commercial, alternative sizes 7107354 (v1.0), 7110007 (Mac full), 6132957 (OEM v1.1), 4292746 (Mac shareware)"
-    source_ref: "common/main/mission.h:73-76"
+    source_ref: "common/main/mission.h:73-76; similar/main/inferno.cpp:476, 500-512"
 
   - name: descent2.ham
     path: descent2.ham

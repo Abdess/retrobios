@@ -1,14 +1,25 @@
 emulator: UZDoom
-type: standalone
+type: standalone + libretro
 core_classification: game_engine
-source: "https://github.com/UZDoom/UZDoom"
-profiled_date: "2026-10-20"
-source_commit: "7910df7102033fd7754a317f3254f24101135926"
-core_version: "5.0.3"
+source:
+  standalone: "https://github.com/UZDoom/UZDoom"
+  libretro: "https://git.libretro.com/libretro/uzdoom"
+profiled_date: "2026-11-09"
+source_commit:
+  standalone: "7910df7102033fd7754a317f3254f24101135926"
+  libretro: "829f29959d01203c1971f75ee784912edc2297e8"
+core_version:
+  standalone: "5.0.3"
+  libretro: "5.1.0-pre"
 version_basis:
-  kind: tag
-  tag: "5.0.3"
-  distance: 0
+  standalone:
+    kind: tag
+    tag: "5.0.3"
+    distance: 0
+  libretro:
+    kind: file
+    path: "src/version.h"
+    pattern: '#define\s+VERSIONSTR\s+"([^"]+)"'
 display_name: "UZDoom"
 cores:
   - uzdoom
@@ -52,6 +63,34 @@ notes: |
   3a41131845415bc4bb5474f8de301a77736bd858e2ab489926325a2675e8263f,
   built from this commit). They are rebuilt with every release.
 
+  The libretro build lives on the libretro branch of libretro's copy of
+  the project, which carries UZDoom trunk of 2026-10-28 (67bdb4b, after
+  the 5.0.3 branch point) and adds src/common/platform/libretro/. The core
+  takes a .wad or .iwad by full path and starts the engine with -iwad on
+  it, the configuration uzdoom-libretro.ini and the savegames in the save
+  directory, and $PROGDIR set to the system directory. A frontend without
+  a system directory or a save directory gets no game.
+  ref: src/common/platform/libretro/retro_core.cpp:57-66,
+       src/common/platform/libretro/retro_core.cpp:296-299,
+       src/common/platform/libretro/retro_core.cpp:317-331,
+       src/common/platform/libretro/retro_paths.cpp:4-17
+
+  uzdoom.pk3 and game_support.pk3 are compiled into the libretro binary
+  and served under uzdoom-internal:/ whenever BaseFileSearch asks for
+  those names, so no copy on disk is read. The other engine resources
+  are not: lights.pk3, brightmaps.pk3 and game_widescreen_gfx.pk3 are
+  looked for in $PROGDIR first, and the soundfont directories are
+  $PROGDIR/soundfonts and $PROGDIR/fm_banks, both below the system
+  directory.
+  ref: src/common/platform/libretro/embedded_pk3.S.in:1-39,
+       src/common/platform/libretro/retro_resources.h:7-26
+
+  The IWAD is the content, and the files an IWAD entry loads from its own
+  folder (voices.wad, extras.wad, soundtrack, nerve.wad, nerveunity.wad)
+  are read beside it. A Required IWAD (hexen.wad under hexdd.wad,
+  strife1.wad under sve.wad) and id24res.wad are looked for in the IWAD
+  search paths, which hold "." and $PROGDIR and never the content folder.
+
 files:
   # ================================================================
   # Engine resources (shipped with the port, add_pk3 in CMakeLists)
@@ -59,16 +98,18 @@ files:
 
   - name: "uzdoom.pk3"
     category: game_data
+    mode: standalone
     bundled: true
     required: true
     size: 7159816
     md5: "fee855c33d28648ea5e54f224decb7d2"
     sha1: "6eb2c1775651752944a6782d08d129b1d37d2fdf"
     source_ref: "src/version.h:85, src/d_main.cpp:4148-4151, wadsrc/CMakeLists.txt:1"
-    note: "Fonts, menus, zscript, textures. Fatal if absent. Shipped with the engine resources below in the Windows zip, the AppImage and RetroBat's uzdoom.7z."
+    note: "Fonts, menus, zscript, textures. Fatal if absent. Built from wadsrc/ and shipped beside the binary with the engine resources below."
 
   - name: "game_support.pk3"
     category: game_data
+    mode: standalone
     bundled: true
     required: false
     size: 2918075
@@ -79,6 +120,7 @@ files:
 
   - name: "lights.pk3"
     category: game_data
+    mode: standalone
     bundled: true
     required: false
     size: 23637
@@ -86,8 +128,17 @@ files:
     sha1: "aad904eec722503845348fdf9fa47586d58df5df"
     source_ref: "src/d_main.cpp:2394-2399, wadsrc_lights/CMakeLists.txt:1"
 
+  - name: "lights.pk3"
+    category: game_data
+    mode: libretro
+    required: false
+    source_ref:
+      libretro: "src/d_main.cpp:2422-2429, src/common/utility/findfile.cpp:248-262, src/common/platform/libretro/retro_core.cpp:59"
+    note: "Read from the system directory, the core's $PROGDIR. Built from wadsrc_lights/."
+
   - name: "brightmaps.pk3"
     category: game_data
+    mode: standalone
     bundled: true
     required: false
     size: 246507
@@ -95,8 +146,17 @@ files:
     sha1: "b47d9397c4dc00a4ea079053167d317118c26b0a"
     source_ref: "src/d_main.cpp:2400-2405, wadsrc_bm/CMakeLists.txt:1-2"
 
+  - name: "brightmaps.pk3"
+    category: game_data
+    mode: libretro
+    required: false
+    source_ref:
+      libretro: "src/d_main.cpp:2430-2435, src/common/utility/findfile.cpp:248-262, src/common/platform/libretro/retro_core.cpp:59"
+    note: "Read from the system directory, the core's $PROGDIR. Built from wadsrc_bm/."
+
   - name: "game_widescreen_gfx.pk3"
     category: game_data
+    mode: standalone
     bundled: true
     required: false
     size: 5565904
@@ -104,8 +164,17 @@ files:
     sha1: "457494b0d6961773686bf1a3555c0bc595ef8ec4"
     source_ref: "src/d_main.cpp:2406-2411, wadsrc_widepix/CMakeLists.txt:1-2"
 
+  - name: "game_widescreen_gfx.pk3"
+    category: game_data
+    mode: libretro
+    required: false
+    source_ref:
+      libretro: "src/d_main.cpp:2436-2441, src/common/utility/findfile.cpp:248-262, src/common/platform/libretro/retro_core.cpp:59"
+    note: "Read from the system directory, the core's $PROGDIR. Built from wadsrc_widepix/."
+
   - name: "uzdoom.sf2"
     category: game_data
+    mode: standalone
     bundled: true
     path: "soundfonts/uzdoom.sf2"
     required: false
@@ -115,8 +184,18 @@ files:
     source_ref: "src/common/audio/music/i_soundfont.cpp:323-347, 435-439, src/common/audio/music/music_config.cpp:137, src/CMakeLists.txt:1445-1451"
     note: "Default soundfont, used when the soundfont directories hold none. Every file of those directories is taken by its content. fluid_patchset defaults to uzdoom, and when no soundfont carries that name the first SF2 found is used."
 
+  - name: "uzdoom.sf2"
+    category: game_data
+    mode: libretro
+    path: "soundfonts/uzdoom.sf2"
+    required: false
+    source_ref:
+      libretro: "src/common/audio/music/i_soundfont.cpp:435-439, src/gameconfigfile.cpp:226-233, src/common/platform/libretro/retro_core.cpp:59"
+    note: "Read below the system directory, the core's $PROGDIR. Built from soundfont/ in the tree."
+
   - name: "GENMIDI.GS.wopl"
     category: game_data
+    mode: standalone
     bundled: true
     path: "fm_banks/GENMIDI.GS.wopl"
     required: false
@@ -126,8 +205,18 @@ files:
     source_ref: "src/CMakeLists.txt:1453-1455, src/gameconfigfile.cpp:223-230, src/common/audio/music/i_soundfont.cpp:349-354"
     note: "OPL3 bank copied next to the executable. fm_banks is one of the scanned soundfont directories."
 
+  - name: "GENMIDI.GS.wopl"
+    category: game_data
+    mode: libretro
+    path: "fm_banks/GENMIDI.GS.wopl"
+    required: false
+    source_ref:
+      libretro: "src/gameconfigfile.cpp:226-233, src/common/platform/libretro/retro_core.cpp:59"
+    note: "fm_banks below the system directory is one of the scanned soundfont directories."
+
   - name: "gs-by-papiezak-and-sneakernets.wopn"
     category: game_data
+    mode: standalone
     bundled: true
     path: "fm_banks/gs-by-papiezak-and-sneakernets.wopn"
     required: false
@@ -143,6 +232,15 @@ files:
   # ================================================================
 
   # ---- Doom ----
+
+  - name: "gs-by-papiezak-and-sneakernets.wopn"
+    category: game_data
+    mode: libretro
+    path: "fm_banks/gs-by-papiezak-and-sneakernets.wopn"
+    required: false
+    source_ref:
+      libretro: "src/gameconfigfile.cpp:226-233, src/common/platform/libretro/retro_core.cpp:59"
+    note: "fm_banks below the system directory is one of the scanned soundfont directories."
 
   - name: "doom.wad"
     category: game_data

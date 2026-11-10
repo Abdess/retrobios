@@ -108,7 +108,7 @@ extras:
     region_files: true
     required: true
     note: The IPL follows the disk's region word, see games/regions.yml.
-    source_ref: "ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:64-80"
+    source_ref: "ares-emulator/ares@dd737665 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:64-80"
   - system: nintendo-64dd
     profile: project64
     trigger:
@@ -240,7 +240,7 @@ extras:
     files: [kick34005.A500]
     required: true
     filename_override: true
-    source_ref: "libretro/libretro-uae@73879370 libretro/libretro-dc.c:847-882, libretro/libretro-core.c:865-917, libretro/libretro-core.c:6526-6601, libretro/libretro-core.c:5609-5679"
+    source_ref: "libretro/libretro-uae@d366f77c libretro/libretro-dc.c:847-882, libretro/libretro-core.c:866-921, libretro/libretro-core.c:6547-6632, libretro/libretro-core.c:5617-5687"
   - system: commodore-amiga
     profile: puae
     trigger:
@@ -248,7 +248,7 @@ extras:
     files: [kick40068.A1200]
     required: true
     filename_override: true
-    source_ref: "libretro/libretro-uae@73879370 libretro/libretro-dc.c:847-882, libretro/libretro-core.c:865-917, libretro/libretro-core.c:6526-6601, libretro/libretro-core.c:5609-5679"
+    source_ref: "libretro/libretro-uae@d366f77c libretro/libretro-dc.c:847-882, libretro/libretro-core.c:866-921, libretro/libretro-core.c:6547-6632, libretro/libretro-core.c:5617-5687"
   - system: commodore-amiga-cd32
     profile: puae
     trigger:
@@ -256,7 +256,7 @@ extras:
     files: [kick40060.CD32, kick40060.CD32.ext]
     required: true
     filename_override: true
-    source_ref: "libretro/libretro-uae@73879370 libretro/libretro-dc.c:847-882, libretro/libretro-core.c:865-917, libretro/libretro-core.c:6526-6601, libretro/libretro-core.c:5609-5679"
+    source_ref: "libretro/libretro-uae@d366f77c libretro/libretro-dc.c:847-882, libretro/libretro-core.c:866-921, libretro/libretro-core.c:6547-6632, libretro/libretro-core.c:5617-5687"
 
   - system: atari-jaguar
     profile: virtualjaguar

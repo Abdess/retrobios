@@ -79,6 +79,26 @@ class FileShapeChecks(_Fixture):
         self.assertFalse(result.passed)
         self.assertIn("Blocked file extension", result.to_markdown())
 
+    def test_an_executable_a_profile_pins_by_sha1_passes(self):
+        """PICO-8's pico8.exe and SDL2.dll come from the official archive and
+        the lexaloffle profile pins their sha1: known bytes, not a payload."""
+        import hashlib
+        data = b"MZ pinned"
+        rel = self._bios_file("bios/Lexaloffle/PICO-8/pico8.exe", data)
+        pins = {"sha1": {hashlib.sha1(data).hexdigest(): {"lexaloffle"}}}
+        result = validate_pr.validate_file(rel, None, EMPTY_HASHES, pins)
+        self.assertNotIn("Blocked file extension", result.to_markdown())
+        self.assertIn("pins by sha1: lexaloffle", result.to_markdown())
+
+    def test_an_executable_known_only_by_md5_stays_refused(self):
+        import hashlib
+        data = b"MZ weak"
+        rel = self._bios_file("bios/Sony/PS/tool.exe", data)
+        pins = {"md5": {hashlib.md5(data).hexdigest(): {"someemu"}}}
+        result = validate_pr.validate_file(rel, None, EMPTY_HASHES, pins)
+        self.assertFalse(result.passed)
+        self.assertIn("Blocked file extension", result.to_markdown())
+
     def test_oversized_file_is_refused(self):
         rel = self._bios_file("bios/Sony/PS/big.bin")
         original = validate_pr.MAX_FILE_SIZE

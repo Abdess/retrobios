@@ -1,78 +1,199 @@
 platform: ROCKNIX
-version: "20261001"
+version: "20261101"
 homepage: "https://rocknix.org"
-source: "https://raw.githubusercontent.com/ROCKNIX/distribution/20261001/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems"
+source: "https://raw.githubusercontent.com/ROCKNIX/distribution/20261101/projects/ROCKNIX/packages/rocknix/sources/scripts/rocknix-systems"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
 cores:
-- retroarch
-- aethersx2
-- aethersx2-sa
+- "81"
+- DoubleCherryGB
+- a5200
 - amiberry
+- arduous
 - ares
 - ares-sa
 - armsx2
 - armsx2-sa
+- atari800
 - azahar
 - azahar-sa
+- b2
+- beetle_gba
+- beetle_lynx
+- beetle_ngp
+- beetle_pce
+- beetle_pce_fast
+- beetle_pcfx
+- beetle_psx
+- beetle_saturn
+- beetle_supafaust
+- beetle_supergrafx
+- beetle_vb
+- beetle_wswan
 - bigpemu
 - bigpemu-sa
+- bk
+- bluemsx
+- boom3
+- boom3_xp
+- bsnes
+- bsnes2014_accuracy
+- bsnes2014_balanced
+- bsnes2014_performance
+- bsnes_hd_beta
+- bsnes_mercury_accuracy
+- bsnes_mercury_balanced
+- bsnes_mercury_performance
+- cap32
 - cemu
 - cemu-sa
+- crocods
 - daedalusx64
 - daedalusx64-sa
+- daphne
+- desmume
 - dolphin
 - dolphin-sa
+- dosbox_core
+- dosbox_pure
 - drastic
 - drastic-sa
 - dsperate
 - dsperate-sa
 - duckstation
 - duckstation-sa
+- easyrpg
+- ecwolf
+- emuscv
+- fake08
+- fbalpha2012
+- fbalpha2019
+- fbneo
+- fceumm
 - flycast
 - flycast-sa
+- flycast2021
+- fmsx
+- freeintv
+- freej2me
+- fuse
+- gambatte
+- gearboy
+- gearcoleco
+- geargrafx
+- gearlynx
+- gearsystem
+- genesis_plus_gx
+- genesis_plus_gx_wide
+- geolith
 - gopher64
 - gopher64-sa
+- gpsp
+- gw
 - gzdoom
 - gzdoom-sa
+- handy
 - hatari
 - hatarisa
 - heroic
 - hypseus-singe
+- jaxe
+- kronos
+- mame
+- mame2003_plus
+- mame2010
+- mame2015
 - mednafen
 - melonds
 - melonds-sa
+- melondsds
+- mesen
+- mesen-s
+- mgba
+- minivmac
+- mojozork
+- mu
 - mupen64plus
 - mupen64plus-sa
+- mupen64plus_next
 - nanoboyadvance
 - nanoboyadvance-sa
+- neocd
+- nestopia
+- np2kai
+- o2em
 - openbor
+- opera
+- parallel_n64
+- pcsx_rearmed
+- pcsx_rearmed32
 - pico-8
+- picodrive
+- pokemini
+- potator
 - ppsspp
 - ppsspp-sa
+- prboom
+- prosystem
+- puae
+- puae2021
+- px68k
+- quasi88
+- quicknes
+- race
 - rpcs3
 - rpcs3-sa
+- same_cdi
+- sameboy
+- sameduck
 - scummvm
 - scummvm-sa
 - skyemu
 - skyemu-sa
+- smsplus
+- snes9x
+- snes9x2002
+- snes9x2005_plus
+- snes9x2010
 - steam
+- stella
 - supermodel
 - supermodel-sa
+- supersnes9x
+- swanstation
+- tgbdual
+- theodore
+- tic80
 - touchhle
 - touchhle-sa
+- tyrquake
+- uae4arm
+- uzem
+- vba_next
+- vbam
+- vecx
 - vice
 - vice-sa
+- vice_x128
+- vice_x64
+- vice_xpet
+- vice_xplus4
+- vice_xvic
+- vircon32
+- virtualjaguar
 - vita3k
 - vita3k-sa
+- vitaquake2
+- vitaquake3
+- wasm4
+- x1
 - xemu
 - xemu-sa
+- yabadabadoo
 - yabasanshiro
 - yabasanshiro-sa
 standalone_cores:
-- aethersx2
-- aethersx2-sa
 - amiberry
 - ares
 - ares-sa
@@ -423,7 +544,7 @@ systems:
       native_system: ps2
       native_name: PS2
     - name: ps2-0230a-20080220.bin
-      destination: aethersx2/bios/ps2-0230a-20080220.bin
+      destination: armsx2/ps2-0230a-20080220.bin
       required: true
       md5: 21038400dc633070a78ad53090c53017
       native_system: ps2
@@ -496,6 +617,26 @@ launchers:
   passes_to: symlink /usr/config/amiberry/kickstarts -> /storage/roms/bios
   fails_when_missing: false
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/package.mk:36"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/.config/amiberry
+  passes_to: working directory of start_amiberry.sh
+  fails_when_missing: false
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:12,\
+    \ 51"
+- emulator: amiberry
+  build: standalone
+  kind: links
+  names: []
+  search_dir: /storage/roms/bios
+  passes_to: symlink /storage/.config/amiberry/kickstarts -> /storage/roms/bios, copied
+    with /usr/config/amiberry
+  fails_when_missing: false
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/package.mk:36,\
+    \ projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:12,\
+    \ 30, 51"
 - emulator: hatari
   build: standalone
   kind: fixed_name
@@ -505,8 +646,8 @@ launchers:
   passes_to: "Atari-ST-default.cfg [ROM] szTosImageFileName (--configfile)"
   fails_when_missing: false
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/hatarisa/config/conf/Atari-ST-default.cfg:200,\
-    \ projects/ROCKNIX/packages/emulators/standalone/hatarisa/scripts/start_hatari.sh:34,\
-    \ 64"
+    \ projects/ROCKNIX/packages/emulators/standalone/hatarisa/scripts/start_hatarisa.sh:35,\
+    \ 65"
 - emulator: melonds
   build: standalone
   kind: fixed_name
@@ -535,9 +676,9 @@ launchers:
     DSiFirmwarePath, DSiNANDPath
   fails_when_missing: false
   depends_on_option: direct_boot = 0 sets ExternalBIOSEnable=1, otherwise 0
-  device: RK3399, RK3566, RK3576, RK3588, S922X, SM4450, SM6115, SM8250, SM8550, SM8650,
-    SM8750
-  source_ref: "projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/InputPlumber/melonDS.ini:91-97,\
+  device: RK3399, RK3566, RK3576, RK3588, S922X, SDM845, SM4450, SM6115, SM8250, SM8550,
+    SM8650, SM8750
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/InputPlumber/melonDS.ini:94-100,\
     \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3399/melonDS.ini:93-99,\
     \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3566/melonDS.ini:93-99,\
     \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3588/melonDS.ini:93-99,\
@@ -564,11 +705,10 @@ launchers:
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/InputPlumber/dsperate.ini:11-17,\
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/RK3326/dsperate.ini:11-17,\
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/RK3399/dsperate.ini:11-17,\
-    \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/RK3566/dsperate.ini:11-17,\
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/RK3588/dsperate.ini:13-19,\
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/S922X/dsperate.ini:13-19,\
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/package.mk:21-22,\
-    \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/scripts/start_dsperate.sh:163"
+    \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/scripts/start_dsperate.sh:190"
 - emulator: nanoboyadvance
   build: standalone
   kind: fixed_name
@@ -711,8 +851,8 @@ launchers:
   passes_to: yabasanshiro -b <first path found>
   fails_when_missing: false
   depends_on_option: "use_hlebios = 1 (game, then platform)"
-  source_ref: "projects/ROCKNIX/packages/emulators/standalone/yabasanshiro-sa/scripts/start_yabasanshiro.sh:74,\
-    \ 80-90"
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/yabasanshiro-sa/scripts/start_yabasanshiro.sh:76,\
+    \ 82-92"
 - emulator: duckstation
   build: standalone
   kind: scans_dir
@@ -726,26 +866,10 @@ launchers:
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/InputPlumber/settings.ini:29-32,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/RK3326/settings.ini:29-32,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/RK3399/settings.ini:29-32,\
-    \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/RK3566/settings.ini:29-32,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/RK3588/settings.ini:29-32,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/S922X/settings.ini:136-139,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/SM4450/settings.ini:29-32,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/package.mk:33"
-- emulator: aethersx2
-  build: standalone
-  kind: scans_dir
-  names: []
-  search_dir: /storage/roms/bios/aethersx2/bios
-  passes_to: "PCSX2.ini [Folders] Bios = /storage/roms/bios/aethersx2/bios, [Filenames]\
-    \ BIOS unset"
-  fails_when_missing: false
-  source_ref: "projects/ROCKNIX/packages/emulators/standalone/aethersx2-sa/config/InputPlumber/aethersx2/inis/PCSX2.ini:273,\
-    \ 302, projects/ROCKNIX/packages/emulators/standalone/aethersx2-sa/config/RK3399/aethersx2/inis/PCSX2.ini:273,\
-    \ 302, projects/ROCKNIX/packages/emulators/standalone/aethersx2-sa/config/RK3566/aethersx2/inis/PCSX2.ini:273,\
-    \ 302, projects/ROCKNIX/packages/emulators/standalone/aethersx2-sa/config/RK3588/aethersx2/inis/PCSX2.ini:273,\
-    \ 302, projects/ROCKNIX/packages/emulators/standalone/aethersx2-sa/config/S922X/aethersx2/inis/PCSX2.ini:273,\
-    \ 302, projects/ROCKNIX/packages/emulators/standalone/aethersx2-sa/config/SM4450/aethersx2/inis/PCSX2.ini:273,\
-    \ 302, projects/ROCKNIX/packages/emulators/standalone/aethersx2-sa/package.mk:31"
 - emulator: armsx2
   build: standalone
   kind: scans_dir
@@ -757,6 +881,19 @@ launchers:
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/config/S922X/ARMSX2/inis/PCSX2.ini:21,\
     \ 475, projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/config/inputplumber/ARMSX2/inis/PCSX2.ini:21,\
     \ 473, projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/package.mk:117-118"
+- emulator: pico-8
+  build: standalone
+  kind: fixed_name
+  names:
+  - pico8_64
+  - pico8_dyn
+  search_dir: /storage/roms/pico-8
+  passes_to: exec
+  fails_when_missing: false
+  depends_on_option: "HW_ARCH aarch64 runs pico8_64, any other pico8_dyn, from /storage/roms/pico-8/${HW_ARCH}\
+    \ when that folder exists"
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-15,\
+    \ 35-40, 48"
 - emulator: flycast
   build: standalone
   kind: passes_path
@@ -816,7 +953,7 @@ launchers:
   search_dir: /storage/roms/bios/dc
   passes_to: symlink /storage/roms/dreamcast/data -> /storage/roms/bios/dc
   fails_when_missing: false
-  source_ref: "projects/ROCKNIX/packages/emulators/standalone/flycast-sa/scripts/start_flycast.sh:35"
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/flycast-sa/scripts/start_flycast.sh:40"
 - emulator: cemu
   build: standalone
   kind: links

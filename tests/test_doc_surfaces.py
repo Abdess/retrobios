@@ -450,7 +450,9 @@ class CoreCountsReadFromTheData(unittest.TestCase):
         sitepages.require()
         text = sitepages.page("cross-reference.md").read_text(encoding="utf-8")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
+        # A test core says so in role, its type staying operational.
+        unique = {k: v for k, v in profiles.items()
+                  if v.get("type") != "alias" and v.get("role") != "test"}
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text(
             encoding="utf-8"))["platforms"]
         run = set()
@@ -619,7 +621,7 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
     def test_the_pr_checklist_fetches_them_before_the_tests(self):
         workflow = _read(".github/workflows/validate.yml")
         self.assertLess(
-            workflow.index("python scripts/export_native.py --all --fetch"),
+            workflow.index("python scripts/export_native.py --all --refresh-cache"),
             workflow.index("python -m unittest discover"),
         )
         for text in (
@@ -627,13 +629,13 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
             _read("CONTRIBUTING.md"),
         ):
             block = _section(text, "## Before opening a PR")
-            self.assertIn("python scripts/export_native.py --all --fetch", block)
+            self.assertIn("python scripts/export_native.py --all --refresh-cache", block)
             self.assertLess(
                 block.index("export_native.py"), block.index("unittest discover")
             )
 
     def test_the_testing_guide_names_the_command(self):
-        self.assertIn("export_native.py --all --fetch", _read("wiki/testing-guide.md"))
+        self.assertIn("export_native.py --all --refresh-cache", _read("wiki/testing-guide.md"))
 
 
 class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):

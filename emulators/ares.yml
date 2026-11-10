@@ -2,14 +2,14 @@ emulator: ares
 type: standalone
 source: "https://github.com/ares-emulator/ares"
 upstream: "https://github.com/ares-emulator/ares"
-profiled_date: "2026-10-23"
-source_commit: "d400eee9764fe22a8de0247a52757d2021d0539c"
-core_version: "v148-143-gd400eee"
+profiled_date: "2026-11-09"
+source_commit: "dd737665221a6f58c6c4d2547d2f38b0abe3aef0"
+core_version: "v148-166-gdd73766"
 version_basis:
   kind: tag
   match: "v[0-9]*"
   tag: "v148"
-  distance: 143
+  distance: 166
 display_name: "ares"
 cores: [ares, "ares-sa"]
 mode: standalone
@@ -58,7 +58,7 @@ systems:
 
 notes: |
   Multi-system emulator by Near (byuu), successor to higan/bsnes. Focuses on
-  accuracy and preservation. 41 emulators registered at this pin
+  accuracy and preservation. 40 emulators registered at this pin
   (desktop-ui/emulator/emulators.cpp).
 
   Firmware identification uses SHA256 hashes. Filenames are user-defined: ares
@@ -68,7 +68,7 @@ notes: |
   Firmware path resolution: settings.paths.firmware (user override) or
   {userData}/ares/Firmware/ (default). Per-system firmware assigned in
   Settings > Firmware dialog or via scan-by-hash.
-  ref: desktop-ui/settings/settings.hpp:88-100, desktop-ui/desktop-ui.cpp:68-75
+  ref: desktop-ui/settings/settings.hpp:89-101, desktop-ui/desktop-ui.cpp:68-75
 
   Systems with fully embedded firmware (no user files needed):
   Game Boy (boot.rom), Game Boy Color (boot.rom), Mega Drive (TMSS),
@@ -82,10 +82,21 @@ notes: |
   SFC coprocessor firmware auto-injected if missing from ROM image.
   ref: mia/medium/super-famicom.cpp:42-62
 
-  Neo Geo BIOS: accepts ZIP archive (neogeo.zip) or direct binary. AES looks
-  for "neo-epo.bin" inside ZIP, MVS looks for "sp-45.sp1". Both apply byte-swap
-  after loading.
-  ref: mia/system/neo-geo-aes.cpp:12-30, mia/system/neo-geo-mvs.cpp:12-30
+  Neo Geo BIOS is not a firmware slot. Neo Geo AES reads aes.zip and the
+  Arcade emulator, which runs the Neo Geo MVS games, reads neogeo.zip, both
+  beside the game: in the game's folder, or its parent when that folder is
+  named neogeo, then in a neogeo/ subfolder of it. A missing archive or
+  member stops the load with the member and the path it tried. The member is
+  the BIOS chosen in Settings > Cores, neo-po.bin for the AES and
+  vs-bios.rom for the MVS by default, among the bios entries the aes and
+  neogeo sets carry in Database/Arcade.bml. It is byte-swapped on load and no
+  hash is checked.
+  ref: desktop-ui/emulator/emulator.cpp:86-94,
+       desktop-ui/emulator/neo-geo-aes.cpp:43-49,
+       desktop-ui/emulator/arcade.cpp:456-464,
+       desktop-ui/settings/settings.hpp:142-146,
+       desktop-ui/settings/cores.cpp:170-204,
+       mia/system/neo-geo-aes.cpp:12-32, mia/system/neo-geo-mvs.cpp:12-32
 
   SFC base cartridges (Super Game Boy, Satellaview BS-X, Sufami Turbo) are
   games, not firmware: the file opened as the Super Famicom game is the base
@@ -97,11 +108,11 @@ notes: |
   signature makes a Sufami Turbo board, serial ZBSJ a BS-X board, serial 042J
   or cartridge type 0xE3 a Super Game Boy board.
   ref: desktop-ui/emulator/super-famicom.cpp:158-217,
-       desktop-ui/emulator/emulator.cpp:204-235,
+       desktop-ui/emulator/emulator.cpp:216-247,
        mia/medium/super-famicom.cpp:88-95, mia/medium/super-famicom.cpp:570-602
 
-  Systems with no firmware: Arcade, Atari 2600, Famicom, MyVision, PC Engine,
-  SuperGrafx, SG-1000, SC-3000.
+  Systems with no firmware: Arcade (Neo Geo MVS games aside), Atari 2600,
+  Famicom, MyVision, PC Engine, SuperGrafx, SG-1000, SC-3000.
 
 files:
   # --- Atari 5200 ---
@@ -157,7 +168,7 @@ files:
     sha256: "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50"
     validation: [sha256]
     description: "Master System BIOS (US)"
-    note: "Picked for NTSC-U, which the code gives every export cart outside its PAL list through the Boot/Prefer setting. The header does not tell US from Europe (mia/medium/master-system.cpp:54-63, desktop-ui/emulator/emulator.cpp:86-106)."
+    note: "Picked for NTSC-U, which the code gives every export cart outside its PAL list through the Boot/Prefer setting. The header does not tell US from Europe (mia/medium/master-system.cpp:54-63, desktop-ui/emulator/emulator.cpp:97-117)."
     source_ref: "desktop-ui/emulator/master-system.cpp:14, mia/system/master-system.cpp:8 (//optional)"
 
   - name: bios_J.sms
@@ -176,7 +187,7 @@ files:
     sha256: "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50"
     validation: [sha256]
     description: "Master System BIOS (Europe), same binary as US"
-    note: "Picked for PAL, set by a hash list that also holds Korean and Australian releases or by the Boot/Prefer setting (mia/medium/master-system.cpp:54-275, desktop-ui/emulator/emulator.cpp:86-106)."
+    note: "Picked for PAL, set by a hash list that also holds Korean and Australian releases or by the Boot/Prefer setting (mia/medium/master-system.cpp:54-275, desktop-ui/emulator/emulator.cpp:97-117)."
     source_ref: "desktop-ui/emulator/master-system.cpp:16"
 
   # --- Mega CD ---
@@ -258,18 +269,40 @@ files:
     source_ref: "desktop-ui/emulator/msx2.cpp:16"
 
   # --- Neo Geo AES ---
-  - name: neo-epo.bin
+  - name: aes.zip
     system: neo-geo
     required: true
-    description: "Neo Geo AES BIOS. Accepts neogeo.zip (extracts neo-epo.bin) or direct file. Byte-swapped on load."
-    source_ref: "desktop-ui/emulator/neo-geo-aes.cpp:14, mia/system/neo-geo-aes.cpp:16"
+    found_by: name
+    load_from: content_dir
+    category: bios_zip
+    description: "Neo Geo AES BIOS set"
+    contents:
+      - name: neo-po.bin
+        description: "Japan AES, the default BIOS choice"
+    note: >-
+      Read beside the AES game, or in a neogeo/ subfolder of the game's
+      folder. Only the member chosen in Settings > Cores is extracted,
+      neo-po.bin by default, and byte-swapped. A missing archive or member
+      stops the load.
+    source_ref: "desktop-ui/emulator/emulator.cpp:86-94, desktop-ui/emulator/neo-geo-aes.cpp:43-49, desktop-ui/settings/settings.hpp:143, mia/system/neo-geo-aes.cpp:12-32"
 
   # --- Neo Geo MVS ---
-  - name: sp-45.sp1
+  - name: neogeo.zip
     system: neo-geo
     required: true
-    description: "Neo Geo MVS BIOS. Accepts neogeo.zip (extracts sp-45.sp1) or direct file. Byte-swapped on load."
-    source_ref: "desktop-ui/emulator/neo-geo-mvs.cpp:15, mia/system/neo-geo-mvs.cpp:16"
+    found_by: name
+    load_from: content_dir
+    category: bios_zip
+    description: "Neo Geo MVS BIOS set"
+    contents:
+      - name: vs-bios.rom
+        description: "Japan MVS (Ver. 3), the default BIOS choice"
+    note: >-
+      Read by the Arcade emulator for a Neo Geo MVS game, beside the game or
+      in a neogeo/ subfolder of the game's folder. Only the member chosen in
+      Settings > Cores is extracted, vs-bios.rom by default, and byte-swapped.
+      A missing archive or member stops the load.
+    source_ref: "desktop-ui/emulator/emulator.cpp:86-94, desktop-ui/emulator/arcade.cpp:456-464, desktop-ui/settings/settings.hpp:144, mia/system/neo-geo-mvs.cpp:12-32"
 
   # --- Neo Geo Pocket ---
   - name: ngp_bios.rom
@@ -278,7 +311,8 @@ files:
     sha256: "0293555b21c4fac516d25199df7809b26beeae150e1d4504a050db32264a6ad7"
     validation: [sha256]
     description: "Neo Geo Pocket BIOS"
-    source_ref: "desktop-ui/emulator/neo-geo-pocket.cpp:12"
+    config_key: "NeoGeoPocket/Firmware/BIOS.World"
+    source_ref: "desktop-ui/emulator/neo-geo-pocket.cpp:12, desktop-ui/settings/settings.cpp:263-264, 280-283"
 
   # --- Neo Geo Pocket Color ---
   - name: ngpc_bios.rom
@@ -287,7 +321,8 @@ files:
     sha256: "8fb845a2f71514cec20728e2f0fecfade69444f8d50898b92c2259f1ba63e10d"
     validation: [sha256]
     description: "Neo Geo Pocket Color BIOS"
-    source_ref: "desktop-ui/emulator/neo-geo-pocket-color.cpp:12"
+    config_key: "NeoGeoPocketColor/Firmware/BIOS.World"
+    source_ref: "desktop-ui/emulator/neo-geo-pocket-color.cpp:12, desktop-ui/settings/settings.cpp:263-264, 280-283"
 
   # --- Nintendo 64DD ---
   - name: 64dd_ipl_J.bin
@@ -382,7 +417,7 @@ files:
     sha256: "11052b6499e466bbf0a709b1f9cb6834a9418e66680387912451e971cf8a1fef"
     validation: [sha256]
     description: "PlayStation BIOS (US)"
-    note: "Picked for NTSC-U, set by both America licence strings and for an executable. A disc with no recognised licence offers NTSC-U and PAL, and the Boot/Prefer setting picks (mia/medium/playstation.cpp:68-75, 92, desktop-ui/emulator/playstation.cpp:94-101, desktop-ui/emulator/emulator.cpp:86-104)."
+    note: "Picked for NTSC-U, set by both America licence strings and for an executable. A disc with no recognised licence offers NTSC-U and PAL, and the Boot/Prefer setting picks (mia/medium/playstation.cpp:68-75, 92, desktop-ui/emulator/playstation.cpp:94-101, desktop-ui/emulator/emulator.cpp:97-115)."
     source_ref: "desktop-ui/emulator/playstation.cpp:21, desktop-ui/emulator/playstation.cpp:94-101, mia/medium/playstation.cpp:67-75"
 
   - name: scph5500.bin

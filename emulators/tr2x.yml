@@ -4,14 +4,14 @@ type: standalone
 core_classification: game_engine
 source: "https://github.com/LostArtefacts/TRX"
 upstream: "https://github.com/LostArtefacts/TRX"
-source_commit: "4d55f7d3130f9d04bdc1fefb85bf4d8fa93a22d3"
+source_commit: "7d1f0e8cbad9e9c3d55248188184384aa6e0f5b5"
 upstream_commit: "3d39911a1b839c753b6efad236db67d9fb2b273e"
-core_version: "trx-1.11.1-784-g4d55f7d"
+core_version: "trx-1.12-25-g7d1f0e8"
 version_basis:
   kind: tag
   match: "trx-*"
-  tag: "trx-1.11.1"
-  distance: 784
+  tag: "trx-1.12"
+  distance: 25
 profiled_date: "2026-10-23"
 cores: []
 systems:
@@ -237,7 +237,7 @@ files:
     path: "games/tr2/fmv/logo.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:781"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:780"
     note: "Eidos legal screen."
 
   - name: "ANCIENT.AVI"
@@ -245,7 +245,7 @@ files:
     path: "games/tr2/fmv/ancient.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:782"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:781"
     note: "Intro cutscene."
 
   - name: "MODERN.AVI"
@@ -253,42 +253,42 @@ files:
     path: "games/tr2/fmv/modern.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:783"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:782"
 
   - name: "LANDING.AVI"
     aliases: [landing.rpl]
     path: "games/tr2/fmv/landing.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:784"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:783"
 
   - name: "MS.AVI"
     aliases: [ms.rpl]
     path: "games/tr2/fmv/ms.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:785"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:784"
 
   - name: "CRASH.AVI"
     aliases: [crash.rpl]
     path: "games/tr2/fmv/crash.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:786"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:785"
 
   - name: "JEEP.AVI"
     aliases: [jeep.rpl]
     path: "games/tr2/fmv/jeep.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:787"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:786"
 
   - name: "END.AVI"
     aliases: [end.rpl]
     path: "games/tr2/fmv/end.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2/gameflow.json5:788"
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:787"
 
   # Music tracks (retail CD audio, ripped as N.<ext>).
   # Enumerated by the ship tree in docs/trx/INSTALLING.md (TR2 uses the
@@ -677,7 +677,7 @@ files:
     sha1: "9de9423b6f12875b8d02dd783d5c1547f15e36fc"
     md5: "b9045310d16b80638970978a9ce8489e"
     category: game_data
-    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:35, src/trx/game/game_flow/reader.c:198-219, src/trx/game/paths.c:203-212, tools/download_assets:71, tools/installer/TRX_Installer/InstallMappings.cs:35-40"
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:35, src/trx/game/game_flow/reader.c:198-219, src/trx/game/paths.c:203-212, tools/download_assets:71, tools/installer/TRX_Installer/InstallMappings.cs:32-36"
     note: "Sample bank of the expansion. main_gm.sfx is tried first, each name in the expansion directory then in games/tr2."
 
   - name: "title.tr2"
@@ -689,7 +689,7 @@ files:
     sha1: "b7dadcbaf38cefdc89a692e85b290caf6409b163"
     md5: "c5a329491190227bc09ec19317b45f56"
     category: game_data
-    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:16, src/trx/game/game_flow/reader.c:198-219, 903-909, src/trx/game/paths.c:123-132, tools/download_assets:71, tools/installer/TRX_Installer/InstallMappings.cs:35-40"
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:16, src/trx/game/game_flow/reader.c:198-219, 903-909, src/trx/game/paths.c:123-132, tools/download_assets:71, tools/installer/TRX_Installer/InstallMappings.cs:32-36"
     note: "Title level of the expansion. title_gm.tr2 is tried first, each name in the expansion levels directory then in games/tr2/levels."
 
   - name: "level1.tr2"

@@ -6,6 +6,7 @@ source_branch: main4
 upstream: "https://github.com/RPCS3/rpcs3"
 profiled_date: "2026-10-06"
 source_commit: "c6ca18217f2f1563235f83d94df78e35423a1720"
+prose_written_at: "c6ca18217f2f1563235f83d94df78e35423a1720"
 upstream_commit: "1f080485b95db2700c5cf244b1314f73b6cf564e"
 upstream_frozen: "RPCS3 is vendored whole under app/src/main/cpp/rpcs3 at this commit, the tree the 2.43 release reports as 20071-1f080485."
 core_version: "1.37-47-gc6ca182"

@@ -93,8 +93,8 @@ everyday words (BIOS, emulator, core, hash) are in the [glossary](glossary.md).
 **hle_fallback**
 :   A flag on a profile entry: the emulator has HLE for this file, so its
     absence is reported at INFO. It does not make the file optional: a few
-    entries that carry it are `required: true`, among them Yabause's
-    `saturn_bios.bin`.
+    entries that carry it are `required: true`, among them QUASI88's
+    `n88.rom`.
 
 **Variant**
 :   Another version of a BIOS file (a revision, a region or another dump), kept

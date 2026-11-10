@@ -2,25 +2,26 @@ emulator: "DSperate"
 type: standalone
 core_classification: other
 source: "https://github.com/beebono/DSperate"
-profiled_date: "2026-10-17"
-source_commit: "81b73832c2e68e2b10cb5850f0a6d393ffc6fbb7"
-pin_frozen: "ROCKNIX 20261001 ships the v2.0.1 release binaries, built by CI from the v2.0.1 tag at this commit."
+profiled_date: "2026-11-09"
+source_commit: "ddf2910e6d80220c6b22b4df61f0786ac9879cda"
+pin_frozen: "ROCKNIX 20261101 ships the v3.0.5 release binaries, built by CI from the v3.0.5 tag at this commit."
 pin_build:
   - platform: rocknix
     repo: "https://github.com/ROCKNIX/distribution"
-    revision: "20261001"
+    revision: "20261101"
     path: "projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/package.mk"
     variable: PKG_VERSION
-    value: "2.0.1"
-core_version: "v2.0.1"
+    value: "3.0.5"
+core_version: "v3.0.5"
 version_basis:
   kind: tag
-  tag: "v2.0.1"
+  tag: "v3.0.5"
   distance: 0
 display_name: "Nintendo - DS / DSi (DSperate)"
 cores:
   - "dsperate"
   - "dsperate-sa"
+found_by: content
 systems:
   - nintendo-ds
   - nintendo-dsi
@@ -28,7 +29,7 @@ systems:
 data_root:
   linux:
     path: "$XDG_CONFIG_HOME/dsperate"
-    source_ref: "src/frontend/sdl/config.cpp:31-41"
+    source_ref: "src/frontend/sdl/config.cpp:39-49"
     note: "~/.config/dsperate when XDG_CONFIG_HOME is unset. System files are read wherever the [paths] keys of the ini point."
 
 notes: |
@@ -38,9 +39,9 @@ notes: |
 
   No file name is built in: every system file is a [paths] key of the ini (or
   the matching command-line flag), and a key that is unset or names no file
-  counts as absent. The names below are the ones ROCKNIX's dsperate.ini gives,
-  all in /storage/roms/bios/.
-  ref: src/frontend/sdl/config.cpp:184-205, src/frontend/sdl/main.cpp:1289-1303
+  counts as absent. The names below are labels for the dumps. ROCKNIX's
+  dsperate.ini gives the same ones, all in /storage/roms/bios/.
+  ref: src/frontend/sdl/config.cpp:177-217, src/frontend/sdl/main.cpp:1175-1181
 
   DS BIOS: both halves or neither, the ARM9 image 4 KB and the ARM7 image 16 KB
   exactly. Without them the built-in FreeBIOS runs games by direct boot. The
@@ -48,8 +49,8 @@ notes: |
   the [user] settings. Booting the DS menu needs both BIOS dumps and a real
   firmware. No hash is checked: an FNV-1a of the loaded regions only tags save
   states.
-  ref: src/core/nds.cpp:101-133, src/core/mem/bus.h:121-131,
-       src/frontend/sdl/main.cpp:1410, src/frontend/sdl/main.cpp:1440-1447
+  ref: src/core/nds.cpp:114-145, src/core/mem/bus.h:137-138,
+       src/frontend/sdl/main.cpp:1268-1274, src/frontend/sdl/main.cpp:1291-1299
 
   DSi: DSiWare and --dsi-mode need the DSi BIOS pair, 64 KB each, and the DS
   BIOS dumps as well. FreeBIOS cannot run a DSi session. dsi_firmware replaces
@@ -58,14 +59,14 @@ notes: |
   (at the end, or at 0x000FF800). DSiWare without a NAND runs on a generated
   console whose system font is DSperate's own unless dsi_font names a
   TWLFontTable.dat.
-  ref: src/frontend/sdl/main.cpp:1294-1308, src/frontend/sdl/main.cpp:1452-1460,
-       src/core/nds_dsi.cpp:95-112, src/core/nds_dsi.cpp:121-127,
-       src/core/io/dsi_sd.cpp:111-140, src/core/nds_dsi.cpp:356-373,
-       src/frontend/sdl/main.cpp:1915-1919
+  ref: src/frontend/sdl/main.cpp:1153-1186, src/frontend/sdl/main.cpp:1301-1303,
+       src/core/nds_dsi.cpp:88-104, src/core/nds_dsi.cpp:112-118,
+       src/core/io/dsi_sd.cpp:105-138, src/core/nds_dsi.cpp:310-327,
+       src/frontend/sdl/main.cpp:1774-1778
 
   Cheats come from usrcheat.dat: the [paths] cheats entry, else beside the ROM,
   else the config directory.
-  ref: src/frontend/sdl/main.cpp:709-735
+  ref: src/frontend/sdl/main.cpp:635-657
 
 files:
   - name: "bios9.bin"
@@ -77,7 +78,7 @@ files:
     config_key: "paths.bios9"
     description: "DS ARM9 BIOS"
     note: "Loaded only together with bios7.bin. Absent, FreeBIOS runs games by direct boot. Needed to boot the DS menu and for any DSi session."
-    source_ref: "src/core/nds.cpp:105-108, src/core/mem/bus.h:130, src/frontend/sdl/main.cpp:1440-1460"
+    source_ref: "src/core/nds.cpp:119-121, src/core/mem/bus.h:137, src/frontend/sdl/main.cpp:1268-1274, src/frontend/sdl/main.cpp:1291-1303"
 
   - name: "bios7.bin"
     system: nintendo-ds
@@ -88,7 +89,7 @@ files:
     config_key: "paths.bios7"
     description: "DS ARM7 BIOS"
     note: "Loaded only together with bios9.bin. Absent, FreeBIOS runs games by direct boot. Needed to boot the DS menu and for any DSi session."
-    source_ref: "src/core/nds.cpp:105-109, src/core/mem/bus.h:131, src/frontend/sdl/main.cpp:1440-1460"
+    source_ref: "src/core/nds.cpp:119-120, src/core/nds.cpp:122, src/core/mem/bus.h:138, src/frontend/sdl/main.cpp:1268-1274, src/frontend/sdl/main.cpp:1291-1303"
 
   - name: "firmware.bin"
     system: nintendo-ds
@@ -97,7 +98,7 @@ files:
     config_key: "paths.firmware"
     description: "DS firmware"
     note: "Any non-empty file is accepted. Absent, a firmware is generated from [user]. Needed to boot the DS menu."
-    source_ref: "src/core/nds.cpp:110, src/core/nds.cpp:124-125, src/frontend/sdl/main.cpp:1441-1447"
+    source_ref: "src/core/nds.cpp:123, src/core/nds.cpp:133-134, src/frontend/sdl/main.cpp:1178, src/frontend/sdl/main.cpp:1292-1299"
 
   - name: "dsi_bios9.bin"
     system: nintendo-dsi
@@ -107,7 +108,7 @@ files:
     config_key: "paths.bios9i"
     description: "DSi ARM9 BIOS"
     note: "Loaded only together with dsi_bios7.bin. Without the pair DSiWare and --dsi-mode are refused, while DS games do not use it."
-    source_ref: "src/core/nds_dsi.cpp:95-106, src/core/mem/bus.h:121, src/frontend/sdl/main.cpp:1301-1308"
+    source_ref: "src/core/nds_dsi.cpp:88-104, src/core/mem/bus.h:128, src/frontend/sdl/main.cpp:1179-1186"
 
   - name: "dsi_bios7.bin"
     system: nintendo-dsi
@@ -117,7 +118,7 @@ files:
     config_key: "paths.bios7i"
     description: "DSi ARM7 BIOS"
     note: "Loaded only together with dsi_bios9.bin. Without the pair DSiWare and --dsi-mode are refused, while DS games do not use it."
-    source_ref: "src/core/nds_dsi.cpp:95-106, src/core/mem/bus.h:122, src/frontend/sdl/main.cpp:1301-1308"
+    source_ref: "src/core/nds_dsi.cpp:88-104, src/core/mem/bus.h:129, src/frontend/sdl/main.cpp:1179-1186"
 
   - name: "dsi_firmware.bin"
     system: nintendo-dsi
@@ -125,7 +126,7 @@ files:
     config_key: "paths.dsi_firmware"
     description: "DSi firmware"
     note: "Used instead of firmware.bin for a DSi session when no --firmware is given."
-    source_ref: "src/frontend/sdl/main.cpp:1294-1298"
+    source_ref: "src/frontend/sdl/main.cpp:1176-1178"
 
   - name: "dsi_nand.bin"
     system: nintendo-dsi
@@ -133,40 +134,28 @@ files:
     config_key: "paths.dsi_nand"
     description: "DSi NAND image with nocash footer"
     note: "Read only by --dsi-mode and NAND title shortcuts. DSiWare run from the game list does without it. Opened read-only, rejected without the \"DSi eMMC CID/CPU\" footer."
-    source_ref: "src/frontend/sdl/main.cpp:1263-1272, src/core/nds_dsi.cpp:121-127, src/core/io/dsi_sd.cpp:111-140"
+    source_ref: "src/frontend/sdl/main.cpp:1153-1166, src/frontend/sdl/main.cpp:1331-1337, src/core/nds_dsi.cpp:112-118, src/core/io/dsi_sd.cpp:105-138"
+
+  - name: "dsi_boot.bin"
+    system: nintendo-dsi
+    required: false
+    size: 340
+    validation: [size]
+    found_by: content
+    description: "DSi console data blob"
+    note: "Read only by dsperate-headless, through --dsi-boot, which has no default, so the name is a label. A file of any size other than 0x154 bytes stops the run. The blob is TWLCFG bytes 0x88-0x1AF, HWINFO_N bytes 0x88-0x9B and HWINFO_S bytes 0x88-0x9F, copied to 0x02000400, 0x02000600 and 0x02FFFD68 when a DSi title starts. Without it the same bytes are read from shared1/TWLCFG0.dat or TWLCFG1.dat (the higher save count at byte 0x81) and sys/HWINFO_N.dat and sys/HWINFO_S.dat of an attached NAND, generated for DSiWare run without a NAND, and left zero in card mode. Cut from a retail NAND's TWLCFG and HWINFO files, the blob differs per console."
+    source_ref: "src/frontend/headless/main.cpp:304, src/frontend/headless/main.cpp:386, src/frontend/headless/main.cpp:508, src/core/nds_dsi.cpp:107-111, src/core/nds_dsi.cpp:294, src/core/nds_dsi.cpp:340-343, src/core/nds_dsi.cpp:454-464, src/core/io/dsi_nand_launch.cpp:147-167, src/core/io/dsi_nand_synth.cpp:114-120"
 
   - name: "TWLFontTable.dat"
     system: nintendo-dsi
     required: false
     hle_fallback: true
-    size: 863296
-    sha1: "c1101d7c9224acfa0350b5fc62da97d4c6d36141"
+    min_size: 256
+    validation: [size]
     config_key: "paths.dsi_font"
-    description: "DSi system font (Japan, Americas, Europe, Australia)"
-    note: "Used for DSiWare run without a NAND. Absent, DSperate's own font table is generated. ROCKNIX's ini leaves the key unset. A file under 256 bytes is refused. No hash is checked, only the layout bytes 0x84 and 0x86, and a table whose layout differs from the title's region draws a warning. This is the normal layout (0x84 = 3, 0x86 = 0), read from nand:/sys/TWLFontTable.dat of a retail DSi NAND dump. The FAT16 partition is AES-CTR encrypted with the normal key ROL128((KeyX XOR KeyY) + 0xFFFEFB4E295902582A680F5F1A4F3E79, 42), where KeyX is built from the console ID in the nocash footer and KeyY is 0x0AB9DC76 0xBD4DC4D3 0x202DDD1D 0xE1A00005. The counter is the first 16 bytes of SHA-1 of the footer's eMMC CID, and each 16-byte block is byte-reversed before and after AES. The USA, Europe, Japan and Australia consoles, four different console IDs, give the same bytes."
-    source_ref: "src/core/nds_dsi.cpp:356-373, src/core/io/dsi_font.cpp:38-43, src/core/io/dsi_nand_fs.cpp:794-809, src/core/io/dsi_aes.cpp:39-47, src/frontend/sdl/main.cpp:1915-1919"
-
-  - name: "TWLFontTable.dat"
-    system: nintendo-dsi
-    required: false
-    hle_fallback: true
-    size: 581664
-    sha1: "5170aff7e9766baadbbf2943c41f5634e82aaf2d"
-    config_key: "paths.dsi_font"
-    description: "DSi system font (China)"
-    note: "The Chinese layout (0x84 = 9, 0x86 = 4), which Chinese DSiWare needs to find its fonts. Read from nand:/sys/TWLFontTable.dat of a retail Chinese DSi NAND dump, decrypted as for the normal table."
-    source_ref: "src/core/nds_dsi.cpp:360-367, src/core/io/dsi_font.cpp:38-43, src/core/io/dsi_nand_fs.cpp:794-809, src/core/io/dsi_aes.cpp:39-47"
-
-  - name: "TWLFontTable.dat"
-    system: nintendo-dsi
-    required: false
-    hle_fallback: true
-    size: 162688
-    sha1: "f0a37b073eb0208d3a54c9a6bb94292dbec1192a"
-    config_key: "paths.dsi_font"
-    description: "DSi system font (Korea)"
-    note: "The Korean layout (0x84 = 9, 0x86 = 5), which Korean DSiWare needs to find its fonts. Read from nand:/sys/TWLFontTable.dat of a retail Korean DSi NAND dump, decrypted as for the normal table."
-    source_ref: "src/core/nds_dsi.cpp:360-367, src/core/io/dsi_font.cpp:38-43, src/core/io/dsi_nand_fs.cpp:794-809, src/core/io/dsi_aes.cpp:39-47"
+    description: "DSi system font"
+    note: "Used for DSiWare run without a NAND. A path that names no file falls back to DSperate's own tables, linked into the binary. ROCKNIX's ini leaves the key unset. A file under 256 bytes stops the session. No hash is checked. The layout is read from bytes 0x84 and 0x86: 3 and 0 for the normal table (Japan, Americas, Europe, Australia), 9 and 4 for the Chinese one, 9 and 5 for the Korean one. Chinese and Korean titles need their own layout and every other title the normal one. Another layout only draws a warning, and the title does not find its fonts."
+    source_ref: "src/core/nds_dsi.cpp:311-323, src/core/io/dsi_font.cpp:38-43, src/frontend/sdl/main.cpp:1774-1778"
 
   - name: "usrcheat.dat"
     system: nintendo-ds
@@ -175,4 +164,4 @@ files:
     config_key: "paths.cheats"
     description: "Action Replay cheat database"
     note: "Looked up by game code and header checksum. Nothing is enabled by its presence."
-    source_ref: "src/frontend/sdl/main.cpp:709-735"
+    source_ref: "src/frontend/sdl/main.cpp:635-657"

@@ -1,7 +1,7 @@
 platform: MiSTer FPGA
-version: '2026-09-29'
+version: '2026-11-04'
 homepage: "https://misterfpga.org"
-source: "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/7cfa7a3e84af078d0efba74fa46c50357c4f567c/bios_db.json.zip"
+source: "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/06aad7b223950c974dcccc48498ab57f6477cfd7/bios_db.json.zip"
 base_destination: games
 hash_type: md5
 verification_mode: md5
@@ -142,6 +142,22 @@ systems:
     native_id: SCV
     name: Epoch Super Cassette Vision
     docs: "https://github.com/MiSTer-devel/SuperCassetteVision_MiSTer"
+  fm-7:
+    files:
+    - name: boot.rom
+      destination: FM-7/boot.rom
+      required: true
+      md5: a330817f8f7ced752a7bcc8dfba8fd2e
+      size: 131072
+      native_system: FM-7
+    - name: boot1.rom
+      destination: FM-7/boot1.rom
+      required: true
+      md5: 513893d316e2b45493c6306aca657239
+      size: 131072
+      native_system: FM-7
+    native_id: FM-7
+    name: fm-7
   gamate:
     files:
     - name: boot.rom
@@ -251,7 +267,7 @@ systems:
     - name: boot.rom
       destination: PC8801/boot.rom
       required: true
-      md5: f1ce4d5f83717093982e5f75516b8f3c
+      md5: 9f3ec09d19a0768f01fdbf2826ed3253
       size: 393216
       native_system: PC8801
     native_id: PC8801
@@ -471,6 +487,35 @@ systems:
     native_id: Saturn
     name: Sega Saturn
     docs: "https://github.com/MiSTer-devel/Saturn_MiSTer"
+  sharp-x1:
+    files:
+    - name: boot.rom
+      destination: SharpX1/boot.rom
+      required: true
+      md5: a028f990cd1f4dbaa72ed8da771916be
+      size: 36864
+      native_system: SharpX1
+    - name: boot1.rom
+      destination: SharpX1/boot1.rom
+      required: true
+      md5: ba7285001eed1ba235ed6de199cf4cb5
+      size: 8192
+      native_system: SharpX1
+    - name: boot2.rom
+      destination: SharpX1/boot2.rom
+      required: true
+      md5: eeeea1cd29c6e0e8b094790ae969bfa7
+      size: 4096
+      native_system: SharpX1
+    - name: boot3.rom
+      destination: SharpX1/boot3.rom
+      required: true
+      md5: fd90317193bb20c8045bf6eebc921919
+      size: 262144
+      native_system: SharpX1
+    native_id: SharpX1
+    name: Sharp X1
+    docs: "https://github.com/MiSTer-devel/SharpX1_Mister"
   snk-neogeo:
     files:
     - name: 000-lo.lo
@@ -643,11 +688,17 @@ systems:
     name: Tiger Game.com
   videobrain:
     files:
-    - name: boot.rom
-      destination: VideoBrain/boot.rom
+    - name: boot0.rom
+      destination: VideoBrain/boot0.rom
       required: true
       md5: e1e7f6120eb8e23ca5c63b4246f04f18
       size: 4096
+      native_system: VideoBrain
+    - name: boot1.rom
+      destination: VideoBrain/boot1.rom
+      required: true
+      md5: 41de2bceffb8257930a16e03fc431550
+      size: 2048
       native_system: VideoBrain
     native_id: VideoBrain
     name: videobrain

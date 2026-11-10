@@ -17,6 +17,7 @@ import ast
 import posixpath
 import re
 from collections.abc import Callable, Mapping
+from functools import partial
 from typing import Any
 
 from .configgen_launchers import (
@@ -39,10 +40,12 @@ CORES = f"{GENERATORS}/libretro/libretroCores.py"
 LIBRETRO_GENERATOR = f"{GENERATORS}/libretro/libretroGenerator.py"
 HATARI = f"{GENERATORS}/hatari/hatariGenerator.py"
 GSPLUS = f"{GENERATORS}/gsplus/gsplusGenerator.py"
+XROAR = f"{GENERATORS}/xroar/xroarGenerator.py"
 AMIBERRY_GENERATOR = f"{GENERATORS}/amiberry/amiberryGenerator.py"
 AMIBERRY_KICKSTARTS = f"{GENERATORS}/amiberry/amiberryKickstarts.py"
 AMIBERRY_SUBSYSTEMS = f"{GENERATORS}/amiberry/amiberrySubSystems.py"
 AMIBERRY_CONFIG = f"{GENERATORS}/amiberry/amiberryConfig.py"
+AMIBERRY_GLOBAL = f"{GENERATORS}/amiberry/amiberryGlobalConfig.py"
 PCSX2 = f"{GENERATORS}/pcsx2/pcsx2Generator.py"
 DOLPHIN = f"{GENERATORS}/dolphin/dolphinGenerator.py"
 XEMU = f"{GENERATORS}/xemu/xemuGenerator.py"
@@ -51,8 +54,8 @@ MUPEN_CONFIG = f"{GENERATORS}/mupen/mupenConfig.py"
 
 SOURCE_FILES = (
     FILES_MODULE, LAUNCHER, RETROARCH, CORES, LIBRETRO_GENERATOR, HATARI, GSPLUS,
-    AMIBERRY_KICKSTARTS, AMIBERRY_SUBSYSTEMS, AMIBERRY_CONFIG, PCSX2, DOLPHIN, XEMU,
-    MUPEN_CONFIG,
+    AMIBERRY_KICKSTARTS, AMIBERRY_SUBSYSTEMS, AMIBERRY_CONFIG, AMIBERRY_GLOBAL, PCSX2, DOLPHIN, XEMU,
+    MUPEN_CONFIG, XROAR,
 )
 
 # Recalbox's system.ini runs every libretro core as `emulator = libretro`:
@@ -847,22 +850,21 @@ def amiberry(cg: Configgen) -> list[Launcher]:
             types = ", ".join(ast.unparse(t).removeprefix("RomType.") for t in entry.elts[0].elts)
             names = kick.literal(entry.elts[1], "kickstart names")
             ref = f"{kick.ref([kick.span(entry), *tail])}, {config_ref}"
-            common = dict(emulator=emulator, build="standalone", slot=system,
-                          case_insensitive=False, search_dir=search_dir,
-                          depends_on_option=f"rom type {types}", source_ref=ref)
+            make = partial(Launcher, emulator=emulator, build="standalone", slot=system,
+                           case_insensitive=False, search_dir=search_dir,
+                           depends_on_option=f"rom type {types}", source_ref=ref)
             if any("|" in name for name in names):
                 if len(names) != 1:
                     kick.fail(f"line {entry.lineno}: several kickstart pairs are not read")
-                launchers.append(Launcher(
+                launchers.append(make(
                     kind="fixed_name", names=names[0].split("|"),
                     passes_to=f"{rom_key}, {ext_key}",
-                    fails_when_missing=", ".join(messages), **common,
+                    fails_when_missing=", ".join(messages),
                 ))
             else:
-                launchers.append(Launcher(
+                launchers.append(make(
                     kind="names_searched", names=names, passes_to=rom_key,
                     fails_when_missing=False if system in computers else messages[0],
-                    **common,
                 ))
     launchers.append(Launcher(
         emulator=emulator, build="standalone", kind="fixed_name", slot=", ".join(computers),
@@ -871,7 +873,24 @@ def amiberry(cg: Configgen) -> list[Launcher]:
         fails_when_missing=False, depends_on_option="none of the listed kickstarts found",
         source_ref=f"{kick.ref(tail)}, {config_ref}",
     ))
+    launchers.append(_amiberry_rom_path(cg, emulator))
     return launchers
+
+
+def _amiberry_rom_path(cg: Configgen, emulator: str) -> Launcher:
+    """amiberry.conf rom_path, the folder Amiberry scans for every ROM."""
+    src = cg.source(AMIBERRY_GLOBAL)
+    create = src.function("createGlobalSettings")
+    found = [c for c in _calls(create, attr="setString") if _setter(c, "rom_path")]
+    if len(found) != 1 or len(found[0].args) != 2:
+        src.fail(f"expected one rom_path setter, found {len(found)}")
+    call = found[0]
+    directory = cg.bios_dir(spell(call.args[1], cg.env(src, create)), src, "rom_path")
+    return Launcher(
+        emulator=emulator, build="standalone", kind="passes_path", names=[],
+        search_dir=directory, passes_to="written: rom_path in amiberry.conf",
+        source_ref=src.ref([(call.lineno, call.end_lineno)]),
+    )
 
 
 def pcsx2(cg: Configgen) -> list[Launcher]:
@@ -937,30 +956,28 @@ def pcsx2(cg: Configgen) -> list[Launcher]:
                    if _assigned_name(n) in {c for c in constants.values()}]
     ref = src.ref([(min(names_lines), max(names_lines)), (chooser.lineno, chooser.end_lineno),
                    (writes[0].lineno, writes[0].end_lineno)])
-    common = dict(emulator=cg.emulator(PCSX2), build="standalone", case_insensitive=False,
-                  search_dir=search_dir, passes_to=f"[{section}] {key}",
-                  fails_when_missing=False, source_ref=ref)
+    make = partial(Launcher, emulator=cg.emulator(PCSX2), build="standalone",
+                   case_insensitive=False, search_dir=search_dir,
+                   passes_to=f"[{section}] {key}", fails_when_missing=False, source_ref=ref)
     launchers = []
     for (given, tested), tokens in groups.items():
         slot = constants.get(given, given).removeprefix("BIOS_")
         depends = f"rom name contains {', '.join(tokens)}"
         if tested == given:
-            launchers.append(Launcher(
+            launchers.append(make(
                 kind="names_searched", slot=slot,
                 names=list(dict.fromkeys([given, *fallback])),
-                depends_on_option=depends, **common,
+                depends_on_option=depends,
             ))
         else:
             # The name written is not the one tested: no search, one name.
-            launchers.append(Launcher(
+            launchers.append(make(
                 kind="fixed_name", slot=slot, names=[given],
                 depends_on_option=f"{depends} and {tested} is present",
-                **common,
             ))
-    launchers.append(Launcher(
+    launchers.append(make(
         kind="names_searched", slot="default", names=fallback,
         depends_on_option="rom name with no region token, or its BIOS absent",
-        **common,
     ))
     return launchers
 
@@ -1161,7 +1178,7 @@ def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launch
                 names=[call.args[1].value.strip('"')], search_dir=directory.search_dir,
                 passes_to=f"core option {option}",
                 depends_on_option=f"system {', '.join(systems)}",
-                source_ref=f"{src.ref([(function.lineno, function.end_lineno), *spans])}, "
+                source_ref=f"{src.ref([(function.lineno, function.end_lineno or function.lineno), *spans])}, "
                            f"{directory.source_ref}",
             ))
     found = {str(launcher.passes_to).split()[-1] for launcher in launchers}
@@ -1171,8 +1188,32 @@ def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launch
     return launchers
 
 
+def xroar(cg: Configgen) -> list[Launcher]:
+    """-rompath os.path.join(recalboxFiles.BIOS, args.system) on the command line."""
+    src = cg.source(XROAR)
+    generate = src.function("generate")
+    # args.system is the ES system name, as self.system.Name is elsewhere.
+    env = {**cg.env(src, generate), "args.system": SYSTEM_PLACEHOLDER}
+    found = [
+        (flag, value)
+        for node in ast.walk(generate)
+        if isinstance(node, ast.List)
+        for flag, value in zip(node.elts, node.elts[1:])
+        if isinstance(flag, ast.Constant) and flag.value == "-rompath"
+    ]
+    if len(found) != 1:
+        src.fail(f"expected one -rompath on the command line, found {len(found)}")
+    flag, value = found[0]
+    directory = cg.bios_dir(spell(value, env), src, "-rompath")
+    return [Launcher(
+        emulator=cg.emulator(XROAR), build="standalone", kind="passes_path", names=[],
+        search_dir=directory, passes_to="command line -rompath",
+        source_ref=src.ref([(flag.lineno, value.end_lineno or value.lineno)]),
+    )]
+
+
 STANDALONE: tuple[Callable[[Configgen], list[Launcher]], ...] = (
-    hatari, gsplus, amiberry, pcsx2, xemu, mupen64plus,
+    hatari, gsplus, amiberry, pcsx2, xemu, mupen64plus, xroar,
 )
 LIBRETRO: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     core_assets, hatari_libretro, content_files,

@@ -49,9 +49,10 @@ OUTSIDE_BIOS: dict[str, tuple[str, ...]] = {
 }
 
 # Packages whose emulator reads its system files below the working directory
-# the generated launch script enters with pushd, a folder outside $biosdir:
-# DraStic opens system/<name> under it. Each must still pushd.
-WORKING_DIRECTORY: tuple[str, ...] = ("drastic",)
+# the generated launch script enters with pushd: DraStic opens system/<name>
+# under it, UAE4All2 kickstarts/<name> (its launchDir is getcwd()). Each must
+# still pushd.
+WORKING_DIRECTORY: tuple[str, ...] = ("drastic", "uae4all")
 
 _FUNCTION = re.compile(r"^function\s+([\w.+-]+)\s*\(\)\s*\{\s*$")
 _ASSIGN = re.compile(r"^(?:local\s+)?([A-Za-z_]\w*)=(.*)$")
@@ -524,6 +525,7 @@ class PackageReader:
             self._links(links)
         self._outside_bios(events)
         self._working_directory(events)
+        self._reaching_links(events)
         return self.records
 
     @staticmethod
@@ -826,6 +828,54 @@ class PackageReader:
                 self.package.path, f"addEmulator no longer passes {missing}"
             )
 
+
+    def _reaching_links(self, events: list[Event]) -> None:
+        """The directories outside the BIOS one that a whole-directory link lies in.
+
+        openmsx's moveConfigDir "$home/.openMSX" "$configdir/msx/openmsx"
+        puts the emulator's directory where the systemroms link to BIOS/openmsx
+        lies, and xroar's ./configure --prefix="$md_inst" builds the program
+        whose share/xroar/roms links to $biosdir. Neither line names the BIOS
+        directory, and each says where the link is read from.
+        """
+        suffix = " is a symlink to it"
+        linked = [
+            (record.passes_to or "").removesuffix(suffix).rstrip("/")
+            for record in self.records
+            if record.kind == "links" and not record.names
+            and (record.passes_to or "").endswith(suffix)
+        ]
+        if not linked:
+            return
+
+        def holds(directory: str) -> bool:
+            directory = directory.strip("\"'").rstrip("/")
+            return bool(directory) and any(
+                path == directory or path.startswith(directory + "/") for path in linked
+            )
+
+        for event in events:
+            if event.heredoc or not event.words or _mentions_bios(event.raw):
+                continue
+            command = event.words[0][0]
+            if command == "moveConfigDir" and len(event.words) >= 3:
+                link, real = event.words[1][0], event.words[2][0]
+                if holds(real):
+                    self.record(
+                        "links", [], [(event.path, event.line)],
+                        search_dir=real, passes_to=f"{link}{suffix}",
+                        fails_when_missing=False, depends_on_option=self._depends(event),
+                    )
+            elif command.endswith("configure"):
+                for word in event.words[1:]:
+                    prefix = word[0].strip("\"'")
+                    if prefix.startswith("--prefix=") and holds(prefix[len("--prefix="):]):
+                        self.record(
+                            "passes_path", [], [(event.path, event.line)],
+                            search_dir=prefix[len("--prefix="):].strip("\"'"),
+                            passes_to="${prefix} of configure --prefix",
+                            fails_when_missing=False, depends_on_option=self._depends(event),
+                        )
 
     def _working_directory(self, events: list[Event]) -> None:
         """The folder a generated launch script enters before it runs the emulator."""

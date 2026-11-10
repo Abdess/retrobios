@@ -258,7 +258,6 @@ class OneCommandRunsTheChecks(unittest.TestCase):
 
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         tolerated = set(re.findall(r"continue-on-error: true\n\s*run: (\S+ \S+)", workflow))
-        self.assertTrue(tolerated)
         for step in pr_checks.STEPS:
             with self.subTest(step=step.command):
                 self.assertEqual(step.may_fail, " ".join(step.command.split()[:2]) in tolerated)

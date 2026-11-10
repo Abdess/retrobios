@@ -17,6 +17,8 @@ systems:
   - sega-chihiro
   - microsoft-xbox
 mode: standalone
+standalone_directories:
+  - "Settings::GetDataLocation"
 
 notes: |
   Cxbx-Reloaded derivative built for the Chihiro light gun games, used by
@@ -59,7 +61,7 @@ notes: |
   The four JVS base board images are memory mapped read/write when the
   system is Chihiro. Byte 0x1F00 of the QC firmware holds the board region and
   is rewritten in place to one the title's boot.id accepts, which is why the
-  copy RetroBat ships differs from the dump by that byte.
+  copy the package ships differs from the dump by that byte.
   ref: CI-6f32d89 src/core/hle/JVS/JVS.cpp:127-142,
        CI-6f32d89 src/core/hle/JVS/JVS.cpp:169-210,
        CI-6f32d89 src/core/hle/JVS/JVS.cpp:246-262
@@ -99,8 +101,8 @@ files:
     description: "SEGABOOT, old revision"
     note: >-
       Mounted as the mbrom0 device. Written from the first megabyte of the media
-      board ROM when either SEGABOOT file is missing. The copy RetroBat ships is
-      that first megabyte.
+      board ROM when either SEGABOOT file is missing. The copy the package ships
+      is that first megabyte.
     source_ref: "cxbxr-emu.dll 0x10624b98"
 
   - name: SEGABOOT_MBROM1.XBE
@@ -115,9 +117,9 @@ files:
     note: >-
       Mounted as the mbrom1 device and launched as the XBE that boots a Chihiro
       title. Written from the second megabyte of the media board ROM when either
-      SEGABOOT file is missing. The copy RetroBat ships is not that half: it
-      differs in about 660000 bytes from the second megabyte of the ROM it ships
-      beside it. Hashes are those of the shipped copy.
+      SEGABOOT file is missing. The copy the package ships is not that half: it
+      differs in 661005 bytes from the second megabyte of the ROM beside it.
+      Hashes are those of the shipped copy.
     source_ref: "cxbxr-emu.dll 0x10624b7c"
 
   - name: ic10_g24lc64.bin
@@ -133,7 +135,7 @@ files:
       Memory mapped read/write at JVS setup, the run ends when it cannot be
       opened. Byte 0x1F00 is dereferenced right after and rewritten to USA,
       export or Japan when the title's boot.id rejects the stored region.
-      Hashes are those of the copy RetroBat ships.
+      Hashes are those of the copy the package ships.
     source_ref: "cxbxr-emu.dll 0x1061c648, 0x1061c620"
 
   - name: pc20_g24lc64.bin
@@ -196,8 +198,9 @@ files:
     description: "Xbox EEPROM image"
     note: >-
       Opened at startup and mapped read/write, created with defaults when
-      absent, and a file that is not 256 bytes ends the run. RetroBat ships one
-      in the package and writes the language into it only for the xbox system.
+      absent, and a file that is not 256 bytes ends the run. Hashes are those of
+      the copy the package ships. RetroBat writes the language into it only for
+      the xbox system.
     source_ref: "cxbxr-emu.dll 0x105f6084, 0x105f5d84"
 
   - name: keys.bin

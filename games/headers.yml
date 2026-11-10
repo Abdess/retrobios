@@ -24,7 +24,7 @@ containers:
       Mode 2 an 8-byte subheader).
     sector_size: {iso: 2048, raw: 2352}
     user_data_offset: {mode1: 16, mode2: 24}
-    source_ref: stenzek/duckstation@526b4a12 src/util/iso_reader.cpp:157-171, src/util/cd_image.h:28-34
+    source_ref: stenzek/duckstation@c9dc2254 src/util/iso_reader.cpp:157-171, src/util/cd_image.h:28-34
     re_read: true
   iso9660:
     description: >-
@@ -33,7 +33,7 @@ containers:
       the root directory, with the ';1' version suffix.
     pvd_sector: 16
     root_record_offset: 156
-    source_ref: stenzek/duckstation@526b4a12 src/util/iso_reader.cpp:68-90, src/util/iso_reader.h:60-99
+    source_ref: stenzek/duckstation@c9dc2254 src/util/iso_reader.cpp:68-90, src/util/iso_reader.h:60-99
     re_read: true
   chd-v5:
     description: >-
@@ -120,7 +120,7 @@ systems:
             - {value: "          Licensed  by          Sony Computer Entertainment Inc.", regions: [japan]}
             - {value: "          Licensed  by          Sony Computer Entertainment Euro pe", regions: [europe]}
           otherwise: unknown
-        source_ref: stenzek/duckstation@526b4a12 src/core/system.cpp:961-986
+        source_ref: stenzek/duckstation@c9dc2254 src/core/system.cpp:1024-1049
         re_read: true
       psx-licence-text:
         description: >-
@@ -177,7 +177,7 @@ systems:
             - {value: scus, regions: [north-america]}
             - {value: slus, regions: [north-america]}
           otherwise: unknown
-        source_ref: stenzek/duckstation@526b4a12 src/core/system.cpp:940-959, src/core/system.cpp:988-1009, src/core/system.cpp:710-731
+        source_ref: stenzek/duckstation@c9dc2254 src/core/system.cpp:1003-1022, src/core/system.cpp:1051-1072, src/core/system.cpp:755-776
         re_read: true
       psx-serial-letter:
         description: >-
@@ -217,7 +217,7 @@ systems:
         order: [psx-licence-exact, psx-serial-prefix]
         otherwise: [north-america]
         note: A per-game custom region set by the user in the game list wins over both readers.
-        source_ref: stenzek/duckstation@526b4a12 src/core/system.cpp:988-1009, src/core/system.cpp:664-680
+        source_ref: stenzek/duckstation@c9dc2254 src/core/system.cpp:1051-1072, src/core/system.cpp:706-722
         re_read: true
       pcsx_rearmed:
         order: [psx-licence-offset60]
@@ -249,7 +249,7 @@ systems:
         order: []
         selects_bios: false
         note: The pcsx2_bios option lists the files found and defaults to the first.
-        source_ref: libretro/parallel-ps2@8c2b6796 libretro/main.cpp:488-498, libretro/main.cpp:2373-2395
+        source_ref: libretro/parallel-ps2@87bcc96b libretro/main.cpp:525-535, libretro/main.cpp:2381-2403
         re_read: true
 
   sega-saturn:
@@ -302,7 +302,7 @@ systems:
         default_preference: [U, J, E, T]
         otherwise: unknown
         source_ref: >-
-          ymir-emu/Ymir@fe439e98 libs/ymir-core/src/ymir/media/saturn_header.cpp:29-40,
+          ymir-emu/Ymir@ff935379 libs/ymir-core/src/ymir/media/saturn_header.cpp:29-40,
           libs/ymir-core/src/ymir/sys/saturn.cpp:308-350, apps/ymir-sdl3/src/app/settings.cpp:1052-1055
         re_read: true
       kronos:
@@ -736,13 +736,13 @@ systems:
           values:
             - {value: 0xE8, regions: [japan]}
           otherwise: [north-america]
-        source_ref: ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77
+        source_ref: ares-emulator/ares@dd737665 mia/medium/nintendo-64dd.cpp:57-77
         re_read: true
     cores:
       ares:
         order: [n64dd-system-block]
         otherwise: [north-america]
-        source_ref: ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:17-19
+        source_ref: ares-emulator/ares@dd737665 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:17-19
         re_read: true
       project64:
         order: []

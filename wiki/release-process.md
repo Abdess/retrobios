@@ -144,7 +144,7 @@ upstream. An edited profile is not held to it.
 
 **run-tests.** On Python 3.8, 3.9 and 3.12: holds `install.py` to 3.8 with
 `vermin`, sets up bubblewrap for the sandbox tests, fetches the platforms' own
-files (allowed to fail, the fidelity tests then skip) and the data
+files (`export_native.py --all --refresh-cache`, for the fidelity tests) and the data
 directories, generates the site, then runs
 `python -m unittest discover -s tests -t . -v` with `RETROBIOS_OFFLINE=1`, the
 full-screen installer tests again under 3.8, and the site build

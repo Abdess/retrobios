@@ -1,0 +1,81 @@
+emulator: "SM2-Emu"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/Zer0one/sm2-emu-libretro"
+upstream: "https://github.com/dmanlfc/sm2-emu"
+profiled_date: "2026-11-09"
+source_commit: "6b282b94e781e20b2b6d522d0dcef5974b7a5d84"
+upstream_commit: "8bb80c157b294c1229bd8c1054d13f87daab52c0"
+core_version: "0.9.56.1"
+version_basis:
+  kind: file
+  path: "src/libretro/core.cpp"
+  pattern: '\{"SM2-Emu", "([^"]+)"'
+display_name: "Sega - Model 2 (SM2-Emu Libretro)"
+cores:
+  - "sm2"
+systems:
+  - sega-model2
+
+notes: |
+  A libretro port of dmanlfc's SM2-Emu, a Sega Model 2 emulator. The port
+  shares dmanlfc's history up to 8b3a468 (2026-09-09) and has taken later
+  upstream releases by hand, up to 0.9.56.
+  ref: src/libretro/core.cpp:956-959
+
+  The game list is games.xml, read from <system>/sm2-emu/. The core refuses
+  to load any game without it. It names every set, its parent and device
+  sets, the chips of each region and their CRC32. The content is a MAME set
+  in .zip or .7z. Its chips are matched by CRC32, or by name when the ROM CRC
+  Verification core option is off. A clone also reads its parent beside the
+  content.
+  ref: src/libretro/core.cpp:634-641, src/libretro/core.cpp:977-1001,
+       src/rom/rom_loader.cpp:195-206, src/rom/rom_loader.cpp:765-781,
+       src/libretro/core_options.h:196-202
+
+  Daytona USA, its clones and Desert Tank name the model1io device set, Virtua
+  Cop and its clone model1io2. The device archive is looked for in
+  <system>/sm2-emu/ and then beside the content, and its chips win over the
+  copies a game set carries. A game set that holds the I/O board ROM runs
+  without the device archive.
+  ref: data/games.xml:1004-1010, data/games.xml:1442-1448, data/games.xml:5846-5852,
+       src/rom/game_db.cpp:463-475, src/rom/game_db.cpp:813, src/rom/rom_loader.cpp:784-812
+
+  Gun games read custom crosshair images from <system>/sm2-emu/crosshairs/,
+  named after the set, its parent or default, with -p1 or -p2 or without.
+  They are artwork the user adds, and a built-in crosshair is drawn without
+  them.
+  ref: src/libretro/core.cpp:1009, src/libretro/crosshair.cpp:137-146
+
+files:
+  - name: "games.xml"
+    path: "sm2-emu/games.xml"
+    system: sega-model2
+    required: true
+    description: "SM2-Emu game database"
+    note: "The data/games.xml of the core's own tree, at the revision of the build. Without it no game loads."
+    source_ref: "src/libretro/core.cpp:987-998"
+
+  - name: "model1io.zip"
+    path: "sm2-emu/model1io.zip"
+    category: bios_zip
+    system: sega-model2
+    required: true
+    description: "Sega Model 1 I/O board device set"
+    note: "Named by daytona and desert, and by the daytona clones through their parent. Also read as model1io.7z or beside the content. Those games do not start without the chip, unless their own set carries it."
+    source_ref: "data/games.xml:1004-1010, data/games.xml:1027-1029, src/rom/rom_loader.cpp:784-799"
+    contents:
+      - name: "epr-14869c.25"
+        crc32: "24b68e64"
+
+  - name: "model1io2.zip"
+    path: "sm2-emu/model1io2.zip"
+    category: bios_zip
+    system: sega-model2
+    required: true
+    description: "Sega Model 1 advanced I/O board device set"
+    note: "Named by vcop, and by vcopa through its parent. Also read as model1io2.7z or beside the content. Those games do not start without the chip, unless their own set carries it."
+    source_ref: "data/games.xml:5846-5852, data/games.xml:5897-5899, src/rom/rom_loader.cpp:784-799"
+    contents:
+      - name: "epr-17181.6"
+        crc32: "1add2b82"

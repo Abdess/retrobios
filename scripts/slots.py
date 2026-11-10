@@ -228,7 +228,7 @@ def profile_claims(
                 # outside the BIOS tree, where no platform declares a file.
                 if outside_gap_scope(entry, is_standalone) or read_from_save_dir(
                     entry, is_standalone
-                ):
+                ) or entry.get("unplaced"):
                     continue
                 # A member of a romset is not a file at the BIOS root: the archive
                 # holding it occupies the destination (_archive_claims). Claiming
@@ -306,6 +306,7 @@ def _archive_claims(
         if isinstance(entry, dict)
         and not outside_gap_scope(entry, is_standalone)
         and not read_from_save_dir(entry, is_standalone)
+        and not entry.get("unplaced")
     ]
     prefix = profile.get("archive_prefix", "")
     claims: list[Claim] = []

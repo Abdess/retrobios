@@ -2139,6 +2139,42 @@ class InstallerBoundaryRegressions(unittest.TestCase):
             self.assertTrue(errors, "an invalid in-archive manifest must be reported")
             self.assertTrue(any("sha1" in message for message in errors), errors)
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
+    def test_a_pack_carries_its_install_list_and_board_lists(self):
+        """pack_systems puts the install list and the per-board core lists
+        in the pack's manifest.json, which install.py reads with the pack
+        alone. The pack schema refused both keys, and each is checked under
+        its own contract."""
+        import generate_pack
+        import validate_schemas
+
+        install_list = json.loads((ROOT / "install" / "romm.json").read_text(encoding="utf-8"))
+        targets = {"browser": None, "rpi4": {"cores": ["mgba"], "images": ["rpi4"]}}
+        document = {
+            "schema_version": 1, "version": 1,
+            "generator": "retrobios generate_pack.py",
+            "generated": "2026-08-10T00:00:00Z", "files": [],
+            "summary": {"total_files": 0, "verified": 0, "untracked": 0, "errors": 0},
+            "errors": [],
+        }
+        generate_pack.annotate_pack_systems(
+            document, generate_pack.pack_systems(install_list, targets))
+        self.assertIn("install_list", document)
+        self.assertIn("targets", document)
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            dist = Path(directory)
+            with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
+                archive.writestr("manifest.json", json.dumps(document))
+            self.assertEqual(validate_schemas._validate_pack_manifests(dist), [])
+
+            broken = {**document, "targets": {"rpi4": [1]},
+                      "install_list": {**install_list, "files": "none"}}
+            with zipfile.ZipFile(dist / "Pack.zip", "w") as archive:
+                archive.writestr("manifest.json", json.dumps(broken))
+            errors = validate_schemas._validate_pack_manifests(dist)
+            self.assertTrue(any(":targets:" in message for message in errors), errors)
+            self.assertTrue(any(":install_list:" in message for message in errors), errors)
+
     def test_null_core_list_keeps_the_other_targets(self):
         """A target without a core inventory must not void the manifest.
 
@@ -4223,11 +4259,21 @@ class VerifyStrictAppliesInEveryMode(unittest.TestCase):
 
 class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
     """openMSX entries had no path and landed at the BIOS root, where no
-    frontend points FilePool. RetroBat declares its ROMs under
-    openMSX/share/systemroms, and the profile's paths must agree."""
+    frontend points FilePool. The profile writes share/systemroms below
+    openMSX's user folder, the pool's first place (src/file/FilePool.cc,
+    FileOperations.cc), and RetroBat, which sets OPENMSX_HOME to
+    bios/openmsx and declares its ROMs under openMSX/share/systemroms, gets
+    them there."""
 
     def test_every_entry_is_under_share_systemroms(self):
-        profile = yaml.safe_load((ROOT / "emulators" / "openmsx.yml").read_text())
+        from scripts.common import (  # noqa: PLC0415
+            load_emulator_profiles,
+            load_platform_config,
+            platform_layouts,
+            standalone_set,
+        )
+
+        profile = load_emulator_profiles(str(ROOT / "emulators"))["openmsx"]
         retrobat = yaml.safe_load((ROOT / "platforms" / "retrobat.yml").read_text())
         declared_dirs = {
             fe["destination"].rsplit("/", 1)[0].lower()
@@ -4236,12 +4282,15 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
             if "systemroms" in fe.get("destination", "")
         }
         self.assertEqual(declared_dirs, {"openmsx/share/systemroms"})
+        config = load_platform_config("retrobat", str(ROOT / "platforms"))
+        ((view, _standalone),) = platform_layouts("openmsx", profile, standalone_set(config))
+        placed = {f["name"]: f for f in view["files"]}
         for entry in profile["files"]:
             with self.subTest(name=entry["name"]):
-                self.assertEqual(
-                    entry.get("path", "").lower(),
-                    f"openmsx/share/systemroms/{entry['name']}".lower(),
-                )
+                self.assertEqual(entry.get("path", "").lower(),
+                                 f"share/systemroms/{entry['name']}".lower())
+                self.assertEqual(placed[entry["name"]].get("standalone_path", "").lower(),
+                                 f"openmsx/share/systemroms/{entry['name']}".lower())
 
 
 class ASameNamedMemberIsNotTheFile(unittest.TestCase):
@@ -6314,16 +6363,17 @@ class NoProfileHashFromASecondarySource(unittest.TestCase):
         self.assertEqual(found, [])
 
 
-class XeniosFollowsThePreviewBranch(unittest.TestCase):
-    """The xenios pin 87b176a0 and tag v2.0.1 are ancestors of `preview`
-    (compare: ahead 129, behind 0) and diverged from the default `xenios`
-    branch (ahead 1784, behind 24). Without source_branch, profile_sync read
-    the pin as orphaned and 19 refs as moved by the branch divergence."""
+class XeniosFollowsItsReleaseBranch(unittest.TestCase):
+    """The xenios pin 87b176a0 sat on `preview`, which diverged from the
+    default `xenios` branch, and without source_branch profile_sync read the
+    pin as orphaned. Since November 2026 the releases (2.2 to 2.3.1) come from
+    `xenios` and `preview` stopped in June: the pin is release 2.3.1 on the
+    default branch, so the profile names no other branch."""
 
-    def test_the_profile_names_the_branch_its_pin_is_on(self):
+    def test_the_profile_follows_the_branch_its_pin_is_on(self):
         profile = yaml.safe_load((ROOT / "emulators" / "xenios.yml").read_text(encoding="utf-8"))
-        self.assertEqual(profile.get("source_branch"), "preview")
-        self.assertNotIn("from the xenios branch", profile.get("notes", ""))
+        self.assertIn(profile.get("source_branch"), (None, "xenios"))
+        self.assertEqual(profile["source_commit"][:7], "cf7c7ee")
 
 
 class PcemUpstreamPinIsTheLastSync(unittest.TestCase):
@@ -6361,6 +6411,8 @@ class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
             "share/machines/ColecoVision_SGM.xml:56 names it, tried beside the machine XML",
         ("openmsx", "fmpac.rom"):
             "share/machines/Boosted_MSX2_EN.xml:83 names it, tried beside the machine XML",
+        ("openmsx-libretro", "rs232.rom"):
+            "share/extensions/rs232.xml:18-22 names it, tried beside the extension XML",
     }
 
     @staticmethod
@@ -6918,6 +6970,10 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
             }
             rows = bundled_only.bundled_only(db, profiles, tmp, Path(tmp))
             self.assertEqual([row["path"] for row in rows], [str(Path(tmp, "icon.png"))])
+            # A platform whose package leaves the file out brings it from the
+            # collection: the copy stays.
+            profiles["app"]["files"][0]["not_bundled_on"] = ["someplatform"]
+            self.assertEqual(bundled_only.bundled_only(db, profiles, tmp, Path(tmp)), [])
 
     def test_every_copy_of_the_listed_bytes_is_listed(self):
         """The database keeps one path per content: splitwolf's sprite
@@ -7747,6 +7803,57 @@ class AutoFetchIssueBodyReadsAsWritten(unittest.TestCase):
 
         self.assertNotIn("Create GitHub Issue", auto_fetch.__doc__)
         self.assertIn("posts nothing", auto_fetch.__doc__)
+
+
+
+class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
+    """A requirement two cores read is reported once, the first profile
+    hosting the others' claims. Whatever drops the host must not drop the
+    claims with it."""
+
+    def test_a_host_its_emulator_installs_leaves_the_others_in_the_pack(self):
+        from verify import _split_bundled_claims
+
+        dsperate = {"profile": "dsperate", "name": "usrcheat.dat", "in_repo": True}
+        drastic = {"profile": "drastic", "name": "usrcheat.dat", "bundled": True,
+                   "in_repo": True, "other_claims": [dsperate]}
+        out = _split_bundled_claims([drastic])
+        self.assertEqual([(u["profile"], u.get("other_claims")) for u in out],
+                         [("drastic", None), ("dsperate", None)])
+        alone = {"profile": "drastic", "bundled": True, "other_claims": [
+            {"profile": "drastic-legacy", "bundled": True}]}
+        self.assertEqual(_split_bundled_claims([alone]), [alone])
+
+    def test_a_held_file_out_of_reach_names_every_core_reading_it(self):
+        """harm1.wad is a release asset: a checkout without it omits the file,
+        and the omission named gzdoom alone where lzdoom reads it too."""
+        from generate_pack import _claim_cores
+
+        extra = {"source_profile": "gzdoom", "other_claims": [
+            {"source_profile": "uzdoom"}, {"source_profile": "lzdoom"}]}
+        self.assertEqual(_claim_cores(extra), ["gzdoom", "lzdoom", "uzdoom"])
+
+    def test_a_missing_file_names_every_core_reading_it(self):
+        from generate_pack import _record_absent
+
+        omitted: dict[str, dict] = {}
+
+        def record(full_dest, entry, system, reason, cores):
+            omitted[full_dest] = {"dest": full_dest, "reason": reason, "cores": cores}
+
+        absent = [
+            {"name": "NAPALM.GRP", "destination": "NAPALM.GRP", "source_profile": profile,
+             "source_system": system}
+            for profile, system in (("raze", "nam"), ("eduke32", "napalm"))
+        ]
+        platform = {"dest": "SHARED.BIN", "reason": "not_found", "cores": None}
+        omitted["SHARED.BIN"] = platform
+        absent.append({"name": "SHARED.BIN", "destination": "SHARED.BIN",
+                       "source_profile": "raze"})
+        _record_absent(absent, {}, "", set(), False, set(), omitted, record)
+        self.assertEqual(omitted["NAPALM.GRP"]["cores"], ["eduke32", "raze"])
+        # A platform's own omission stays the platform's.
+        self.assertIsNone(omitted["SHARED.BIN"]["cores"])
 
 
 if __name__ == "__main__":

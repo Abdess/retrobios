@@ -44,5 +44,5 @@ files:
     sha1: "a44f65d6318582501d22e27831eb2b1f0df58f79"
     md5: "fc3a0078a13d98e611a62c1d6724f8c5"
     crc32: "8300d4cb"
-    source_ref: "rpix86 0.19 binary, strings C:\\4DOS.COM and C:\\4DOS\\4DOS.COM"
+    source_ref: "rpix86 0.19 binary, file offsets 0x1b2c48 (C:\\4DOS.COM), 0x1b2c34 (C:\\4DOS\\4DOS.COM), 0x1b515c (Unable to find 4DOS.COM), 0x1b504c (wget .../4DOS.COM -O%s/4DOS.COM)"
     note: "Same bytes at rpix86.patrickaalto.com/4DOS.COM, the URL the binary downloads from, and in RetroPie's 4dos.zip. Read from the emulated C: root, not a BIOS directory. The author's rpix86.zip and rpix86.tar.gz hold the binary alone, and RetroPie unpacks 4dos.zip into the install directory."

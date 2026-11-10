@@ -4,7 +4,8 @@ core_classification: game_engine
 source: "https://github.com/ArnoAnsems/CatacombGL"
 upstream: "https://github.com/ArnoAnsems/CatacombGL"
 profiled_date: "2026-10-04"
-source_commit: "d11ba549382278cbc67ba6171faf8af338e29f77"
+source_commit: "6f243e42fc99b830982cf58bc19bd8a369fe9e6a"
+prose_written_at: "6f243e42fc99b830982cf58bc19bd8a369fe9e6a"
 core_version: "0.5.7 Beta"
 version_basis:
   kind: file
@@ -31,7 +32,7 @@ notes: |
   from the table. A release is detected only at score 0, so every file of its
   table must be present with the listed size. A game whose score is not 0
   cannot start: the launch ends in a fatal error naming the offending files
-  (src/System/CatacombGL.cpp:416-451). No hash is computed.
+  (src/System/CatacombGL.cpp:411-446). No hash is computed.
 
   Folders tried for each release, until one scores 0: the working directory
   (src/System/Finder.cpp:139-143), the folder stored in the configuration for
@@ -44,25 +45,24 @@ notes: |
   The selection menu groups the releases as "Catacombs Pack (GOG)" (3-D v1.22,
   Abyss v1.24, Armageddon, Apocalypse), "Shareware" (Abyss v1.12 and v1.13)
   and "Catacomb 3-D Big Box" (3-D v1.00) (src/Engine/GameSelection.cpp:71-73,
-  src/System/CatacombGL.cpp:252-280). Abyss v1.12 is scanned like the others
-  but its menu entry and key are compiled only when CATABYSSV112 is defined;
-  the build files do not define it (src/System/CatacombGL.cpp:266-271, 313-318).
+  src/System/CatacombGL.cpp:252-277). Abyss v1.12 is listed and selected with
+  key 5 like the others (src/System/CatacombGL.cpp:266-268, 310-313).
 
   Once a game starts, EGAGRAPH, GAMEMAPS and AUDIO are read through the
   static tables of each game and a failed open or short read is fatal
   (src/Engine/EgaGraph.cpp:50-70, src/Engine/AudioRepository.cpp:43-58). The
-  SHP files are the intro pictures (src/Abyss/IntroViewAbyss.cpp:48-90,
-  src/Armageddon/IntroViewArmageddon.cpp:27-76,
-  src/Apocalypse/IntroViewApocalypse.cpp:27-76). Abyss v1.12 uses SDLOGO,
+  SHP files are the intro pictures, SHP10.ABS, SHP13.ARM and SHP13.APC
+  being the "back for more" slide (src/Abyss/IntroViewAbyss.cpp:48-94,
+  src/Armageddon/IntroViewArmageddon.cpp:27-80,
+  src/Apocalypse/IntroViewApocalypse.cpp:27-80). Abyss v1.12 uses SDLOGO,
   TITLE, CREDITS, BEGIN and FINALE instead (src/Abyss/IntroViewAbyss.cpp:28-45,
-  src/Abyss/GameAbyss.cpp:53-58). SHP10.ABS, SHP13.ARM and SHP13.APC are
-  never opened but belong to the detection tables.
+  src/Abyss/GameAbyss.cpp:53-58).
 
   Catacomb 3-D also reads CONFIG.C3D (474 bytes, written by the DOS game) from
   the game folder to import its high scores when the port has none of its own
   (src/Catacomb3D/GameCatacomb3D.cpp:52-57, src/Engine/HighScores.cpp:57-72).
   Builds defining SAVEDGAMESINDOSFORMAT also import DOS saved games from the
-  game folder (src/Engine/EngineCore.cpp:123-148). Both are user state.
+  game folder (src/Engine/EngineCore.cpp:124-149). Both are user state.
 
 files:
   # Catacomb 3-D v1.00 (menu group "Catacomb 3-D Big Box")
@@ -127,7 +127,7 @@ files:
     validation: [size]
     source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:38 (catacomb3Dv122Files)"
 
-  # Catacomb Abyss v1.12 (menu group "Shareware", selectable only in builds defining CATABYSSV112)
+  # Catacomb Abyss v1.12 (menu group "Shareware")
   - name: "AUDIO.ABS"
     path: "AUDIO.ABS"
     category: game_data

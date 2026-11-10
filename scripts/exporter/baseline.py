@@ -264,6 +264,8 @@ class NativeFile:
             return bool(self.truth["required"])
         if self.platform is not None and self.platform.get("required") is not None:
             return bool(self.platform["required"])
+        if self.truth is not None and self.truth.get("one_of_required") is not None:
+            return bool(self.truth["one_of_required"])
         return True
 
     @property
@@ -645,10 +647,15 @@ def build_native_model(
                         matched.filled.append(field_name)
                 t_req = truth_entry.get("required")
                 p_req = (matched.platform or {}).get("required")
+                # A file a core takes as one of a set has no requirement of
+                # its own: a platform line cannot say "one of these", so
+                # truth leaves its value as written rather than claim
+                # every member optional or every member needed.
                 if (
                     t_req is not None
                     and p_req is not None
                     and bool(t_req) != bool(p_req)
+                    and not (truth_entry.get("one_of_required") and not t_req)
                 ):
                     matched.corrections.append("required")
                     report.required_corrected.append(

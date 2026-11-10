@@ -3,7 +3,8 @@ type: standalone
 core_classification: enhanced_fork
 source: "https://github.com/dosbox-staging/dosbox-staging"
 upstream: "https://github.com/dosbox-staging/dosbox-staging"
-source_commit: "fa1856c057902be3e08856675d6cc1e7ffe43db6"
+source_commit: "27b1b7ca719c21ef3444f7ad1cf2d9cd439527cc"
+prose_written_at: "27b1b7ca719c21ef3444f7ad1cf2d9cd439527cc"
 profiled_date: "2026-10-26"
 core_version: "0.84.0-alpha"
 version_basis:
@@ -41,7 +42,7 @@ notes: |
   from vcpkg. The machine setting selects a video adapter (hercules, cga,
   cga_mono, ega, svga_s3, svga_et3000, svga_et4000, svga_paradise, vesa_nolfb,
   vesa_oldvbe) or a machine (pcjr, tandy).
-  ref: src/dosbox.cpp:1317-1329, vcpkg.json
+  ref: src/dosbox.cpp:1401-1413, vcpkg.json
 
   No system BIOS: the PC BIOS, video BIOS fonts, keyboard layouts and codepage
   tables are implemented in code.
@@ -114,7 +115,7 @@ notes: |
   shaders and shader presets, CGA colour presets, drive noise samples, the
   mounted Y: drive utilities, the web interface and the manual pages.
   ref: src/misc/support.cpp:300-320, src/dos/dos_code_page.cpp:1828, src/dos/dos_keyboard_layout.cpp:70,
-       src/misc/messages.cpp:1073, src/gui/render/shader_manager.cpp:236,404, src/ints/int10_modes.cpp:2302,
+       src/misc/messages.cpp:1072, src/gui/render/shader_manager.cpp:236,404, src/ints/int10_modes.cpp:2302,
        src/audio/disk_noise.cpp:185, src/shell/autoexec.cpp:764
 
   BIOSTEST.COM loads an arbitrary BIOS image at F000:0 and is compiled only
@@ -694,6 +695,13 @@ files:
       GeneralUser is identified as GeneralUser GS, whatever the rest of the
       name, and gets its own chorus and reverb parameters in auto mode
     source_ref: "src/midi/fluidsynth.cpp:194-230, src/midi/fluidsynth.cpp:802-808, src/midi/fluidsynth.cpp:430-434, src/midi/fluidsynth.cpp:573-577, src/midi/fluidsynth.cpp:962-987"
+
+  - name: "Roland_SC-88.sf2"
+    path: "soundfonts/Roland_SC-88.sf2"
+    description: "SoundFont under a Roland SC-88 name"
+    required: false
+    unsourceable: "user supplied, no canonical file: the soundfont setting opens any SoundFont it names"
+    source_ref: "src/midi/fluidsynth.cpp:194-230"
 
   - name: "FluidR3_GM.sf2"
     path: "soundfonts/FluidR3_GM.sf2"

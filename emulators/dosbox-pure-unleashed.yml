@@ -283,3 +283,10 @@ files:
       Any .SF2 or .SF3 in the system directory is listed in the MIDI option.
       DOSBOX.SF2 is the fixed name looked up on the mounted C: drive as a per
       game override.
+
+  - name: "Roland_SC-88.sf2"
+    path: "system/Roland_SC-88.sf2"
+    description: "General MIDI SoundFont under a Roland SC-88 name"
+    required: false
+    unsourceable: "user supplied, no canonical file: the system directory scan lists any SoundFont by its own name"
+    source_ref: "upstream dosbox_pure_libretro.cpp:1380-1412"

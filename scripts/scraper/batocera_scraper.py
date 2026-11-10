@@ -14,10 +14,11 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from collections.abc import Callable
 from pathlib import Path
 
 
-from common import yaml_load
+from common import load_target_config, yaml_load
 from hashing import cut_md5_owner
 from safeparse import yaml_load_upstream
 
@@ -28,7 +29,9 @@ from .base_scraper import (
     md5_field,
     requirement_entry,
 )
-from .batocera_launchers import extract_launchers
+from .batocera_launchers import Configgen, configs_root, extract_launchers
+from .targets.batocera_targets_scraper import BuildSelection
+from .targets.batocera_targets_scraper import Scraper as BoardTargets
 
 PLATFORM_NAME = "batocera"
 
@@ -168,7 +171,8 @@ def es_systems_libretro_systems(text: str, dropped: set[str]) -> dict[str, list[
 
 
 def es_systems_by_system(
-    es_systems_text: str, defaults_text: str, dropped: set[str]
+    es_systems_text: str, defaults_text: str, dropped: set[str],
+    built: Callable[[str], bool] | None = None,
 ) -> dict[str, list[str]]:
     """system -> the cores es_systems.yml offers it, in the file's order.
 
@@ -195,6 +199,10 @@ def es_systems_by_system(
         default = defaults.get(system)
         if isinstance(default, dict):
             emulator, core = default.get("emulator"), default.get("core")
+            if (built is not None and emulator and emulator != "libretro"
+                    and str(emulator) not in names and not built(str(emulator))):
+                # A default the build lacks (configgen_cores).
+                emulator = core = None
             if emulator and emulator != "libretro":
                 names.append(str(emulator))
             if core:
@@ -472,7 +480,8 @@ def platform_systems(
 
 
 def configgen_cores(
-    defaults_text: str, es_systems_text: str, dropped: set[str]
+    defaults_text: str, es_systems_text: str, dropped: set[str],
+    built: Callable[[str], bool] | None = None,
 ) -> tuple[list[str], list[str], list[str]]:
     """Core names, standalone cores and dual-mode cores of a configgen build.
 
@@ -481,25 +490,101 @@ def configgen_cores(
     dual-mode ones those es_systems.yml also offers under libretro (dolphin
     for GameCube). `dropped` names what es_systems.yml files under an
     emulator without being one.
+
+    `built` says whether some board builds a name (boards_build). What it
+    answers no for is not run: KNULLI's es_systems lists citron and shadps4,
+    which no KNULLI board selects, and its defaults pick suyu, which no
+    package builds. A default's core follows a standalone emulator the
+    build runs (vox_official is lexaloffle's Voxatron build).
     """
     data = yaml_load_upstream(defaults_text)
     cores, standalone = es_systems_emulators(es_systems_text)
     libretro = es_systems_libretro(es_systems_text)
     if not cores:
         raise RuntimeError("es_systems.yml names no emulator")
+    if built is not None:
+        cores = {name for name in cores if built(name)}
+        standalone &= cores
     for system, cfg in data.items():
         if system == "default" or not isinstance(cfg, dict):
             continue
         emulator = cfg.get("emulator", "")
         core = cfg.get("core", "")
-        if core:
-            cores.add(core)
         if emulator and emulator != "libretro":
+            if built is not None and not built(emulator):
+                continue
             standalone.add(emulator)
             if core and core != emulator:
                 standalone.add(core)
+        elif built is not None and core and not built(core):
+            continue
+        if core:
+            cores.add(core)
     dual = (standalone & libretro) - dropped
     return sorted(cores - dropped), sorted(standalone - dropped), sorted(dual)
+
+
+def boards_build(selection: BuildSelection, launchers: list[dict]) -> Callable[[str], bool]:
+    """Whether some board of a build runs an emulator.
+
+    es_systems.yml ties each name to the packages that build it
+    (requireAnyOf), and a name it lists is built when a board selects one of
+    them: KNULLI lists citron and shadps4, and its Config.in selects them
+    only on x86_64 boards, which it has none of. A name only
+    configgen-defaults.yml gives is built when a board selects the package
+    of that name: the symbol its Config.in defines, else the one Buildroot
+    derives from the folder (BR2_PACKAGE_<NAME>, package/pkg-generic.mk). A
+    program the launcher runs from the BIOS folder (lexaloffle,
+    /userdata/bios/pico-8/pico8) needs no package.
+    """
+    supplied = {
+        name.strip()
+        for record in launchers
+        if record.get("passes_to") == "exec"
+        and str(record.get("search_dir") or "").startswith("/userdata/bios")
+        for name in str(record.get("emulator", "")).split(",")
+    }
+
+    def built(name: str) -> bool:
+        if name in selection.emulators or name in supplied:
+            return True
+        if name in selection.listed:
+            return False
+        symbol = selection.packages.get(name) or (
+            "BR2_PACKAGE_" + name.upper().replace("-", "_"))
+        return symbol in selection.symbols
+
+    return built
+
+
+def installable_cores(
+    selection: BuildSelection, cores: list[str], standalone: list[str], dual: list[str],
+) -> list[str]:
+    """Buildbot cores a board's RetroArch core downloader installs, beyond
+    the libretro cores the image builds.
+
+    The targets scraper names, per board, the RetroArch targets entry its
+    downloader reads (`downloads`): a Batocera x86_64 board installs any
+    core of linux-x86_64, an armv7 one any of linux-armhf. A name compares
+    within its build mode: amiberry built standalone is another program
+    than amiberry_libretro, which the buildbot serves.
+    """
+    found: set[str] = set()
+    for entry in selection.targets.values():
+        if entry.get("downloads"):
+            found |= load_target_config("retroarch", entry["downloads"]) or set()
+    built_libretro = (set(cores) - set(standalone)) | set(dual)
+    return sorted(found - built_libretro)
+
+
+def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dict]:
+    """The launcher records of emulators the build runs.
+
+    configgen keeps the generators of emulators a build does not select
+    (KNULLI's citron, pcsx2, shadps4): what they read is never read on the
+    device, so the records do not describe the platform.
+    """
+    return [r for r in launchers if any(built(n) for n in str(r["emulator"]).split(", "))]
 
 
 class Scraper(BaseScraper):
@@ -509,12 +594,19 @@ class Scraper(BaseScraper):
         self.tag = fetch_stable_tag()
         super().__init__(url=SOURCE_URL.format(tag=self.tag))
 
-    def _fetch_cores(self) -> tuple[list[str], list[str], list[str]]:
-        """Core names, standalone cores and dual-mode cores at the pinned tag."""
+    def _fetch_cores(
+        self, built: Callable[[str], bool] | None = None
+    ) -> tuple[list[str], list[str], list[str]]:
+        """Core names, standalone cores and dual-mode cores at the pinned tag.
+
+        With `built` (boards_build), a name counts when some board builds
+        it or its launcher runs a program from the BIOS folder.
+        """
         return configgen_cores(
             self._fetch_text(CONFIGGEN_DEFAULTS_URL.format(tag=self.tag)),
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)),
             _not_cores(),
+            built,
         )
 
     def _fetch_text(self, url: str) -> str:
@@ -548,7 +640,14 @@ class Scraper(BaseScraper):
             SYSTEM_SLUG_MAP,
         )
 
-        cores, standalone, dual = self._fetch_cores()
+        launchers = extract_launchers(
+            lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
+        )
+        selection = BoardTargets().build_selection(self.tag)
+        built = boards_build(selection, launchers)
+        launchers = records_run(launchers, built)
+        cores, standalone, dual = self._fetch_cores(built)
+        installable = installable_cores(selection, cores, standalone, dual)
         libretro_systems = es_systems_libretro_systems(
             self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
         )
@@ -568,10 +667,13 @@ class Scraper(BaseScraper):
         if dual:
             # Launched both ways: each layout gets its files.
             result["dual_mode_cores"] = dual
+        if installable:
+            result["installable_cores"] = installable
         # The systems each libretro core runs for: its save folders.
         result["libretro_systems"] = libretro_systems
-        result["launchers"] = extract_launchers(
-            lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
+        result["launchers"] = launchers
+        result["configs_root"] = configs_root(
+            Configgen(lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}"))
         )
         return result
 

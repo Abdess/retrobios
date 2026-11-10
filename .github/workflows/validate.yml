@@ -284,12 +284,12 @@ jobs:
       - run: npm ci --prefix website
 
       # The exporter fidelity cases compare what we hand back against the
-      # file each platform publishes, so they need those files. They skip
-      # without them rather than fail, which is why an unreachable upstream
-      # must not stop the run: the rest of the suite still has to report.
+      # file each platform publishes, so they need those files. --fetch
+      # exported as well and stopped on the absent dist/truth before any
+      # download, so the cases skipped on every run: --refresh-cache only
+      # downloads them.
       - name: Fetch the platforms' own files
-        continue-on-error: true
-        run: python scripts/export_native.py --all --fetch --output-dir "$RUNNER_TEMP/native"
+        run: python scripts/export_native.py --all --refresh-cache
 
       # A pack built without its data directories exits non-zero: it is not
       # the pack a user gets. Tests that build packs need the same trees a

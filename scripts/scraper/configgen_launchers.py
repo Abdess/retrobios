@@ -35,6 +35,8 @@ class Launcher:
     fails_scope: str | None = None
     depends_on_option: str | None = None
     device: str | None = None
+    # The machines the platform offers under the record's systems.
+    machines: list[str] | None = None
 
     def entry(self) -> dict[str, Any]:
         """The platform YAML form, in a fixed key order, unset keys left out."""
@@ -42,7 +44,7 @@ class Launcher:
             "emulator", "build", "kind", "slot", "names", "expands",
             "case_insensitive", "search_dir", "passes_to",
             "fails_when_missing", "fails_scope", "depends_on_option",
-            "device", "source_ref",
+            "device", "machines", "source_ref",
         )
         return {key: getattr(self, key) for key in order if getattr(self, key) is not None}
 

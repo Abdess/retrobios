@@ -1,0 +1,90 @@
+emulator: "Yabadabadoo"
+type: libretro
+core_classification: community_fork
+source: "https://github.com/ProRapSuperstarOriginalMaster/Yabadabadoo"
+upstream: "https://github.com/libretro/yabause"
+profiled_date: "2026-11-09"
+source_commit: "4c06da9779c485b532f43b3f18c4b81cb93cf11b"
+upstream_commit: "8926b0c6c347f8c5c755911ddb0ac695420ffbf8"
+pin_frozen: "ROCKNIX 20261101 builds this revision, tagged v0.3. Later tags of the fork are not part of that build."
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/libretro/yabadabadoo-lr/package.mk"
+    variable: PKG_VERSION
+    value: "4c06da9779c485b532f43b3f18c4b81cb93cf11b"
+core_version: "0.3"
+version_basis:
+  kind: file
+  path: "yabause/src/libretro/libretro.c"
+  pattern: 'library_name\s+=\s+"Yabadabadoo";\s*\n\s*info->library_version\s+=\s+"([^ "]+)'
+display_name: "Sega - Saturn (Yabadabadoo)"
+cores:
+  - "yabadabadoo"
+built_by: [rocknix]
+systems:
+  - sega-saturn
+
+notes: |
+  Fork of the libretro Yabause core (master), tuned for ARMv7 handhelds.
+  The core is yabadabadoo_libretro.so.
+  ref: yabause/src/libretro/Makefile:69, yabause/src/libretro/Makefile:265-282
+
+  Saturn BIOS, read from the frontend's system directory. retro_load_game
+  first tries saturn_bios.bin, sega_101.bin, then mpr-17933.bin to learn
+  whether any BIOS is present. YabauseInit then reads the disc's area code
+  and asks bios_for_region for the file to load: for J, T and K discs (and
+  discs with no area code) sega_101.bin, saturn_bios.bin, mpr-17933.bin, for
+  every other area mpr-17933.bin, saturn_bios.bin, sega_101.bin. The
+  yabadabadoo_bios option forces the Japanese or the USA/Europe order.
+  ref: yabause/src/libretro/libretro.c:262-284, yabause/src/libretro/libretro.c:1089-1099,
+       yabause/src/libretro/libretro.c:1793-1807, yabause/src/libretro/libretro.c:1870-1871,
+       yabause/src/yabause.c:346-363, yabause/src/smpc.c:92-101, yabause/src/cs2.c:4186-4214
+
+  The image is read by T123Load, which refuses a file above 512 KiB, and a
+  BIOS that fails to load stops YabauseInit. No hash is checked.
+  ref: yabause/src/memory.c:1264-1267, yabause/src/memory.h:196-218
+
+  Builds with the SH-2 recompiler (DYNAREC != 0, the miyoomini platform sets
+  3) refuse to start a game without a BIOS and show a screen naming the
+  files instead. Builds without it run the HLE BIOS. ROCKNIX builds the
+  miyoomini platform for its 32-bit RetroArch.
+  ref: yabause/src/libretro/libretro.c:192-204, yabause/src/libretro/libretro.c:1809-1821,
+       yabause/src/libretro/Makefile:7, yabause/src/libretro/Makefile:281,
+       yabause/src/libretro/Makefile.common:145-146
+
+  The cartridge option offers only the 1M and 4M RAM carts and no cartridge
+  or MPEG ROM path is passed, so no other firmware is read.
+  ref: yabause/src/libretro/libretro.c:1078-1087, yabause/src/libretro/libretro.c:1898-1902
+
+groups:
+  saturn-bios:
+    required: true
+
+files:
+  - name: "saturn_bios.bin"
+    system: sega-saturn
+    group: saturn-bios
+    max_size: 524288
+    validation: [max_size]
+    note: "Any region. Second choice for every disc region."
+    source_ref: "yabause/src/libretro/libretro.c:270-271, yabause/src/libretro/libretro.c:1793"
+
+  - name: "sega_101.bin"
+    system: sega-saturn
+    group: saturn-bios
+    region: [japan, asia-ntsc, south-korea]
+    max_size: 524288
+    validation: [max_size]
+    note: "Saturn BIOS v1.01 (Japan). First choice for J, T and K discs."
+    source_ref: "yabause/src/libretro/libretro.c:270, yabause/src/libretro/libretro.c:1797"
+
+  - name: "mpr-17933.bin"
+    system: sega-saturn
+    group: saturn-bios
+    region: [north-america, europe, oceania, asia-pal, brazil, latin-america]
+    max_size: 524288
+    validation: [max_size]
+    note: "Saturn BIOS v1.00 (USA/Europe). First choice for U, B, A, E and L discs."
+    source_ref: "yabause/src/libretro/libretro.c:271, yabause/src/libretro/libretro.c:1801"

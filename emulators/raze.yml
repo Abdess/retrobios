@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/ZDoom/Raze"
 upstream: "https://github.com/ZDoom/Raze"
 profiled_date: "2026-10-04"
-source_commit: "76fe82f5eb318fdeb30ba9fb27093a9a10bc3821"
+source_commit: "fa99ac62924d5b2cbb67f46b932bd6acf8952b63"
 core_version: "1.12pre"
 version_basis:
   kind: file
@@ -51,7 +51,7 @@ notes: |
   loose files beside it are read by name. Tiles come from
   tiles000.art to tiles199.art, from the `loadart` list of the block and
   from the -art switch. No other ART name is looked up.
-  ref: source/core/initfs.cpp:342-372, source/core/textures/tiletexture.cpp:468-481,
+  ref: source/core/initfs.cpp:342-373, source/core/textures/tiletexture.cpp:468-481,
        source/core/gamecontrol.cpp:424
 
 files:
@@ -456,7 +456,7 @@ files:
     system: blood
     path: "SURFACE.DAT"
     required: false
-    source_ref: "source/games/blood/src/tile.cpp:67-75, source/core/initfs.cpp:351-372"
+    source_ref: "source/games/blood/src/tile.cpp:67-75, source/core/initfs.cpp:352-373"
     note: "Surface type of each tile. Read from the directory of the main resource, skipped when absent."
 
   - name: "VOXEL.DAT"
@@ -464,7 +464,7 @@ files:
     system: blood
     path: "VOXEL.DAT"
     required: false
-    source_ref: "source/games/blood/src/tile.cpp:77-93, source/core/initfs.cpp:351-372"
+    source_ref: "source/games/blood/src/tile.cpp:77-93, source/core/initfs.cpp:352-373"
     note: "Voxel index of each tile. Read from the directory of the main resource, skipped when absent."
 
   - name: "SHADE.DAT"
@@ -472,7 +472,7 @@ files:
     system: blood
     path: "SHADE.DAT"
     required: false
-    source_ref: "source/games/blood/src/tile.cpp:95-103, source/core/initfs.cpp:351-372"
+    source_ref: "source/games/blood/src/tile.cpp:95-103, source/core/initfs.cpp:352-373"
     note: "Shade offset of each tile. Read from the directory of the main resource, skipped when absent."
 
   - name: "CRYPTIC.INI"
@@ -621,6 +621,24 @@ files:
     validation: [size, crc32]
     source_ref: "wadsrc/static/engine/grpinfo.txt:776-786"
 
+  - name: "TDRAGON.EXE"
+    description: "Shadow Warrior: Twin Dragon, loose files"
+    category: game_data
+    system: shadow-warrior
+    path: "dragon/TDRAGON.EXE"
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt:788-799, source/core/searchpaths.cpp:712-730, source/core/searchpaths.cpp:872-882"
+    note: "Twin Dragon as GOG's Classic Complete installs it. Detected next to the registered SW.GRP when dragon/ holds TDRAGON.EXE, $WHIRL.MAP and TILES021.ART to TILES023.ART, and dragon/ is then loaded."
+
+  - name: "TDRAGON.EXE"
+    description: "Shadow Warrior: Twin Dragon, loose files"
+    category: game_data
+    system: shadow-warrior
+    path: "TDRAGON.EXE"
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt:801-812, source/core/searchpaths.cpp:712-730, source/core/searchpaths.cpp:872-882"
+    note: "Same Twin Dragon files found beside the registered SW.GRP itself, when its own directory is the one scanned."
+
   # ================================================================
   # Powerslave / Exhumed
   # ================================================================
@@ -634,7 +652,7 @@ files:
     size: 27020745
     crc32: "303cbd89"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:40, 901-912"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:40, wadsrc/static/engine/grpinfo.txt:927-938"
 
   - name: "STUFF.DAT"
     description: "Exhumed"
@@ -645,7 +663,7 @@ files:
     size: 27108170
     crc32: "e3b172f1"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:41, 914-925"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:41, wadsrc/static/engine/grpinfo.txt:940-951"
 
   - name: "STUFF.DAT"
     description: "Powerslave Demo"
@@ -656,7 +674,7 @@ files:
     size: 27020745
     crc32: "1d8c7645"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:42, 927-937"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:42, wadsrc/static/engine/grpinfo.txt:953-963"
 
   # ================================================================
   # Redneck Rampage
@@ -671,7 +689,7 @@ files:
     size: 141174222
     crc32: "19d9bc79"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:28, 788-801"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:28, wadsrc/static/engine/grpinfo.txt:814-827"
 
   - name: "REDNECK.GRP"
     description: "Redneck Rampage Rides Again"
@@ -682,7 +700,16 @@ files:
     size: 191798609
     crc32: "958018c6"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:29, 803-816"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:29, wadsrc/static/engine/grpinfo.txt:829-842"
+
+  - name: "GAME66.CON"
+    description: "Redneck Rampage: Suckin' Grits on Route 66"
+    category: game_data
+    system: redneck
+    path: "GAME66.CON"
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt:858-870, source/core/gamecontrol.cpp:350-360, source/core/searchpaths.cpp:712-730"
+    note: "Route 66 addon. Detected next to REDNECK.GRP when TILESA66.ART, TILESB66.ART, ROUTE66/CARNIVAL.MAP, ROUTE66/TRUCKSTP.MAP and GAME66.CON are all present. Loads the two ART files and GAME66.CON as its script."
 
   # ================================================================
   # Nam / Napalm / WWII GI
@@ -697,7 +724,7 @@ files:
     size: 43448927
     crc32: "75c1f07b"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:24, 846-858"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:24, wadsrc/static/engine/grpinfo.txt:872-884"
 
   - name: "NAPALM.GRP"
     description: "NAPALM"
@@ -708,7 +735,7 @@ files:
     size: 44365728
     crc32: "3de1589a"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:25, 860-872"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:25, wadsrc/static/engine/grpinfo.txt:886-898"
 
   - name: "WW2GI.GRP"
     description: "WWII GI"
@@ -719,4 +746,4 @@ files:
     size: 77939508
     crc32: "907b82bf"
     validation: [size, crc32]
-    source_ref: "wadsrc/static/engine/grpinfo.txt:26, 874-886"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:26, wadsrc/static/engine/grpinfo.txt:900-912"

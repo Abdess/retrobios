@@ -2,7 +2,7 @@ platform: RetroArch
 version: v1.22.2
 dat_version: v1.19.0
 homepage: "https://www.retroarch.com"
-source: "https://github.com/libretro/libretro-database/blob/12c21cf79f1e20eff6ac68b80875816c717d0a7a/dat/System.dat"
+source: "https://github.com/libretro/libretro-database/blob/c4e17d41ec1bb744fb064f7cefeb61b878fc5d64/dat/System.dat"
 base_destination: system
 hash_type: sha1
 verification_mode: existence
@@ -2385,6 +2385,30 @@ systems:
     native_id: Phillips - Videopac+
   philips-cdi:
     files:
+    - name: cdi200.rom
+      destination: cdi200.rom
+      required: true
+      sha1: d961de803c89b3d1902d656ceb9ce7c02dccb40a
+      md5: 2969341396aa61e0143dc2351aaa6ef6
+      crc32: 40c4e6b9
+      size: 524288
+      native_system: Philips - CD-i
+    - name: cdi220b.rom
+      destination: cdi220b.rom
+      required: true
+      sha1: 53360a1f21ddac952e95306ced64186a3fc0b93e
+      md5: ac0d468be366779c9df633be98da250a
+      crc32: 279683ca
+      size: 524288
+      native_system: Philips - CD-i
+    - name: vmpega.rom
+      destination: vmpega.rom
+      required: true
+      sha1: be407fbc102f1731a0862554855e963e5a47c17b
+      md5: 53ba3bf7443187a657baa272d01d3771
+      crc32: db264e8b
+      size: 262144
+      native_system: Philips - CD-i
     - name: cdimono1.zip
       destination: cdimono1.zip
       required: true

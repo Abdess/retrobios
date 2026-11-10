@@ -782,6 +782,14 @@ def verify_pack_against_platform(
                 baseline_groups.setdefault(expected, []).append(fe)
 
         baseline_checked = len(baseline_groups)
+        # RetroBat's group: one packed file of it is enough, as verify counts it.
+        packed_groups = {
+            (system_of[id(fe)], fe["group"])
+            for expected, declarations in baseline_groups.items()
+            if expected in zip_set or expected.lower() in zip_lower
+            for fe in declarations
+            if fe.get("group")
+        }
         exclusion_index = build_zip_contents_index(db) if db is not None else {}
         categories = EntryCategories(config, emu_profiles, data_registry)
         for expected, declarations in baseline_groups.items():
@@ -802,6 +810,12 @@ def verify_pack_against_platform(
                 hash_rule=config.get("hash_rule", ""),
             ):
                 baseline_excluded += 1
+                continue
+            elif all(
+                fe.get("group") and (system_of[id(fe)], fe["group"]) in packed_groups
+                for fe in declarations
+            ):
+                baseline_absent += 1
                 continue
             elif db is not None and all(
                 categories.category(fe, fe.get("destination", fe.get("name", "")),

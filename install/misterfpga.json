@@ -5,8 +5,8 @@
   "categorized": true,
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
-  "version": "2026-09-29",
-  "generated": "2026-10-27T10:27:58Z",
+  "version": "2026-11-04",
+  "generated": "2026-11-09T11:29:16Z",
   "base_destination": "games",
   "detect": [
     {
@@ -17,10 +17,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 81,
-  "total_size": 29969609,
-  "pack_files": 83,
-  "pack_size": 29969609,
+  "total_files": 88,
+  "total_size": 30545097,
+  "pack_files": 90,
+  "pack_size": 30545097,
   "total_omitted": 0,
   "omitted_files": [],
   "core_names": {},
@@ -103,6 +103,7 @@
     "coco3": "Tandy Color Computer 3",
     "creativision": "VTech CreatiVision",
     "epoch-scv": "Epoch Super Cassette Vision",
+    "fm-7": "Fujitsu FM-7",
     "gamate": "Bit Corporation Gamate",
     "gameking": "TimeTop GameKing",
     "interact": "Interact Home Computer",
@@ -124,6 +125,7 @@
     "pocket-challenge-v2": "Benesse Pocket Challenge V2",
     "sega-mega-cd": "Sega Mega CD",
     "sega-saturn": "Sega Saturn",
+    "sharp-x1": "Sharp X1",
     "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
@@ -302,6 +304,28 @@
       ]
     },
     {
+      "dest": "FM-7/boot.rom",
+      "sha1": "bf52d22b119d54410dad4949b0687bb0edf3e143",
+      "sha256": "0e29081101ae17f78e02914d08a1ab5e0f03324cf4f7e0924d4059d1c7e8476e",
+      "size": 131072,
+      "repo_path": "bios/Fujitsu/FM-7/boot.rom",
+      "cores": null,
+      "systems": [
+        "fm-7"
+      ]
+    },
+    {
+      "dest": "FM-7/boot1.rom",
+      "sha1": "9b88c30fb518f96821e47ac1d4d2b5af3bdfa19a",
+      "sha256": "0a8ee964ac43d80805e4c6081d742bf63f0731691f82b885f9b9cd64eb8f4616",
+      "size": 131072,
+      "repo_path": "bios/Fujitsu/FM-7/boot1.rom",
+      "cores": null,
+      "systems": [
+        "fm-7"
+      ]
+    },
+    {
       "dest": "Gamate/boot.rom",
       "sha1": "ea449dc607601f9a68d855ad6ab53800d2e99297",
       "sha256": "26f206fa4eedbe040f619e3af78efa1d38588535b1d746f6a462da639ced4b1e",
@@ -435,10 +459,10 @@
     },
     {
       "dest": "PC8801/boot.rom",
-      "sha1": "7a6676e352c8d0eaf16e5863c1c98ac65d6f8686",
-      "sha256": "0dc3fcf58c90c1f119a710babd54b57babf81ba8573c070b33f0cc21948b3086",
+      "sha1": "6cc312dbfd1f7babe3cf6b4db24f1ef192646400",
+      "sha256": "6b4e6218da88c482a47292719de4148596ea99e2943143ea9a0999fadaac21e5",
       "size": 393216,
-      "repo_path": "bios/NEC/PC-88/PC8801 MKII SR BIOS.rom",
+      "repo_path": "bios/NEC/PC-88/boot.rom",
       "cores": null,
       "systems": [
         "nec-pc-88"
@@ -720,6 +744,50 @@
       ]
     },
     {
+      "dest": "SharpX1/boot.rom",
+      "sha1": "16bb96d5c07660050156c9939ccb510881825d94",
+      "sha256": "1c73765d0b1a529ddda20c84337ebae684b96bdd3c1c6ae430ea3e18bd2baf25",
+      "size": 36864,
+      "repo_path": "bios/Sharp/X1/boot.rom",
+      "cores": null,
+      "systems": [
+        "sharp-x1"
+      ]
+    },
+    {
+      "dest": "SharpX1/boot1.rom",
+      "sha1": "a81a07c2c070030c40d37e223dc53cef4ee4e6ff",
+      "sha256": "79442263d70cc0648601eefbdbd90ca63feed4b7f1a35e0a456b69f00493eb4b",
+      "size": 8192,
+      "repo_path": "bios/Sharp/X1/boot1.rom",
+      "cores": null,
+      "systems": [
+        "sharp-x1"
+      ]
+    },
+    {
+      "dest": "SharpX1/boot2.rom",
+      "sha1": "d3395e9aeb5b8bbba7654dd471bcd8af228ee69a",
+      "sha256": "e6295a523008688421991b651ab61de392b28c67bec9efbf040b0004e4b70a2a",
+      "size": 4096,
+      "repo_path": "bios/Sharp/X1/iplrom.x1",
+      "cores": null,
+      "systems": [
+        "sharp-x1"
+      ]
+    },
+    {
+      "dest": "SharpX1/boot3.rom",
+      "sha1": "0ba14bd5e5f6b7acfff356711aad818df9a4c492",
+      "sha256": "30540b945f1ae9b4ac623fae7d77eb9068e9774c2e6b7523d0f3629ad79d736b",
+      "size": 262144,
+      "repo_path": "bios/Sharp/X1/boot3.rom",
+      "cores": null,
+      "systems": [
+        "sharp-x1"
+      ]
+    },
+    {
       "dest": "NEOGEO/000-lo.lo",
       "sha1": "5992277debadeb64d1c1c64b0a92d9293eaf7e4a",
       "sha256": "2a76f023dc578804c6bcd58ed514ffc04fcb433b3bd75d4452575ffda57a0707",
@@ -973,11 +1041,22 @@
       ]
     },
     {
-      "dest": "VideoBrain/boot.rom",
+      "dest": "VideoBrain/boot0.rom",
       "sha1": "0364007319dee6106715f4462adee531bfba3d34",
       "sha256": "545b466e7cc0c2cce7e9479857dbedee1476fc56245f0de45f816c1b99b75562",
       "size": 4096,
       "repo_path": "bios/VideoBrain/Family Computer/boot.rom",
+      "cores": null,
+      "systems": [
+        "videobrain"
+      ]
+    },
+    {
+      "dest": "VideoBrain/boot1.rom",
+      "sha1": "e1ac7a9d654c2a70979effc744d98f21d13b4e05",
+      "sha256": "bce3c4b9d5643ae9ee8e5ee08282badc13f3049e88f6824cad97c8c6cee64c82",
+      "size": 2048,
+      "repo_path": "bios/VideoBrain/Family Computer/boot1.rom",
       "cores": null,
       "systems": [
         "videobrain"

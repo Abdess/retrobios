@@ -119,7 +119,19 @@
       "description": "Number of entries in omitted_files."
     },
     "core_names": {
-      "description": "Each core a file names, with the other names it goes by upstream (the buildbot's mednafen_psx for beetle_psx).",
+      "description": "Each core the platform runs or a file names, with the other names it goes by upstream (the buildbot's mednafen_psx for beetle_psx), empty when it has none.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      }
+    },
+    "downloaded_cores": {
+      "description": "Each core only the platform's RetroArch core downloader brings, with the boards and board aliases whose downloader offers it. install.py --target keeps the files of such a core on those boards only.",
       "type": "object",
       "additionalProperties": {
         "type": "array",
@@ -179,7 +191,7 @@
           "dest": {
             "type": "string",
             "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
-            "description": "Where the file would go, below base_destination, or below the save directory when root is save."
+            "description": "Where the file would go, below base_destination, below the save directory when root is save, below the roms folder when root is roms, in an emulator folder when root is emulators (its key first), or in the emulator's own folder when root is emulator."
           },
           "name": {
             "type": "string",
@@ -204,7 +216,11 @@
               "below_platform_folder",
               "no_save_directory",
               "no_core_folder",
-              "no_save_system"
+              "no_save_system",
+              "outside_bios_folder",
+              "no_roms_directory",
+              "no_emulators_directory",
+              "no_configs_directory"
             ],
             "description": "Why the file is left out, as a code. enumDescriptions gives the meaning of each code, in the order of enum.",
             "enumDescriptions": [
@@ -216,7 +232,11 @@
               "The platform lists each system folder flat (firmware_folder_flat) and the file would sit in a subfolder it does not read.",
               "The core reads the file below the save directory and the platform has no save directory a pack can fill.",
               "The frontend sorts saves by core and the core's profile does not name its folder (core_folder).",
-              "The launcher gives each system its own save folder and no system of the platform runs the core."
+              "The launcher gives each system its own save folder and no system of the platform runs the core.",
+              "The platform runs the emulator from a folder outside the BIOS tree and links none of the BIOS tree where the emulator reads this file (root: emulator).",
+              "The platform's launcher runs the file from its roms folder (root: roms) and the run cannot tell where that folder is: the BIOS folder is not the one the platform keeps in it.",
+              "The platform's launcher runs the file from one of its emulator folders (root: emulators) and the run cannot place it there: the BIOS folder is not the one beside the platform's launcher config, or that config sets the folder.",
+              "The platform's launcher starts the emulator from a folder of its configs folder (root: configs) and the run cannot tell where that folder is: the BIOS folder is not the one the platform keeps beside it."
             ]
           },
           "category": {
@@ -361,8 +381,14 @@
             }
           },
           "root": {
-            "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. Absent for a file of the BIOS tree.",
-            "const": "save"
+            "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. emulator: dest is the path the emulator reads in its own folder, which the platform keeps outside the BIOS tree (reason outside_bios_folder). roms: dest is relative to the platform's roms folder (roms_directory). emulators: dest is the emulator folder's key then the path in it (emulators_directory). configs: dest is relative to the frontend's configs folder (configs_directory). Absent for a file of the BIOS tree.",
+            "enum": [
+              "save",
+              "emulator",
+              "roms",
+              "emulators",
+              "configs"
+            ]
           },
           "core_folder": {
             "description": "The core's library_name, the folder a frontend sorting saves by core (RetroArch's sort_savefiles_enable) inserts between its save directory and dest. Only with root: save. Absent on a save entry when the core reads the same place sorted or not.",
@@ -515,6 +541,90 @@
           "const": true
         }
       }
+    },
+    "roms_directory": {
+      "description": "Where the platform keeps its roms root, present when an entry carries root: roms. from_bios is that root relative to the BIOS folder (\".\" for the folder itself, else one or two \"..\" then plain names), as platforms/romfolders/<platform>.yml records it from the OS's own source (roms_root.from_bios). It is followed only from a BIOS folder named bios_folder (the platform's base_destination). Any other leaves root: roms entries out (no_roms_directory).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bios_folder",
+        "from_bios"
+      ],
+      "properties": {
+        "bios_folder": {
+          "description": "Name of the BIOS folder from_bios starts from, the platform's base_destination.",
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^/\\\\]+$"
+        },
+        "from_bios": {
+          "description": "The roms root relative to that BIOS folder.",
+          "type": "string",
+          "pattern": "^(\\.|\\.\\.(/\\.\\.)?(/[^/\\\\:.][^/\\\\:]*)*)$",
+          "maxLength": 1024
+        }
+      }
+    },
+    "emulators_directory": {
+      "description": "Where the platform keeps its emulator folders, present when an entry carries root: emulators. Paths are relative to the folder holding the BIOS folder, which is named bios_folder. searched are the places the launcher tries for a key, in order, default the one the installer creates when none exists, and config the launcher's key=value file: a key it sets moves the folder, and its files are left out (no_emulators_directory).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bios_folder",
+        "searched",
+        "default",
+        "config"
+      ],
+      "properties": {
+        "bios_folder": {
+          "description": "Name of the BIOS folder. The other paths are relative to the folder holding it.",
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^/\\\\]+$"
+        },
+        "searched": {
+          "description": "The places the launcher tries for an emulator key, in order, {key} standing for it.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).*\\{key\\}.*$"
+          }
+        },
+        "default": {
+          "description": "The place the installer creates when none of searched exists.",
+          "type": "string",
+          "pattern": "\\{key\\}"
+        },
+        "config": {
+          "description": "The launcher's key=value file, a key of which moves the folder.",
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        }
+      }
+    },
+    "configs_directory": {
+      "description": "Where the frontend keeps its emulators' configs, present when an entry carries root: configs. from_bios is that folder relative to the BIOS folder, as the platform's own path code builds it (Batocera's batoceraPaths CONFIGS, ../system/configs), with the rules of roms_directory.from_bios. It is followed only from a BIOS folder named bios_folder. Any other leaves root: configs entries out (no_configs_directory).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bios_folder",
+        "from_bios"
+      ],
+      "properties": {
+        "bios_folder": {
+          "description": "Name of the BIOS folder from_bios starts from, the platform's base_destination.",
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^/\\\\]+$"
+        },
+        "from_bios": {
+          "description": "The configs folder relative to that BIOS folder.",
+          "type": "string",
+          "pattern": "^(\\.|\\.\\.(/\\.\\.)?(/[^/\\\\:.][^/\\\\:]*)*)$",
+          "maxLength": 1024
+        }
+      }
     }
   },
   "$defs": {
@@ -533,7 +643,7 @@
         "dest": {
           "type": "string",
           "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
-          "description": "Path below base_destination, or below the save directory when root is save."
+          "description": "Path below base_destination, below the save directory when root is save, below the roms folder when root is roms, below the configs folder when root is configs, or in an emulator folder when root is emulators (its key first)."
         },
         "sha1": {
           "type": "string",
@@ -1016,8 +1126,13 @@
           }
         },
         "root": {
-          "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. Absent for a file of the BIOS tree.",
-          "const": "save"
+          "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. roms: dest is relative to the platform's roms folder, which roms_directory locates (a file its launcher runs from there, ROCKNIX's roms/pico-8). emulators: dest is the key of an emulator folder of the platform, then the path in it, located by emulators_directory (RetroBat's emulators/pico8). configs: dest is relative to the frontend's configs folder, which configs_directory locates (Batocera starts shadPS4 from configs/shadps4). Absent for a file of the BIOS tree.",
+          "enum": [
+            "save",
+            "roms",
+            "emulators",
+            "configs"
+          ]
         },
         "core_folder": {
           "description": "The core's library_name, the folder a frontend sorting saves by core (RetroArch's sort_savefiles_enable) inserts between its save directory and dest. Only with root: save. Absent on a save entry when the core reads the same place sorted or not.",

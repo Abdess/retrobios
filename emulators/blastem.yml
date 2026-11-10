@@ -116,8 +116,8 @@ files:
     required: true
     mode: standalone
     unread_on: [retrobat]
-    note: "Default name of all three regional Sega CD BIOS keys when the config sets none. Read beside the executable, whatever the disc region. Without it a CD image stops with a fatal error (segacd.c:1644-1647). RetroBat writes absolute paths to bios_CD_U/E/J.bin into the config (emulatorlauncher Blastem.Generator.cs:256-269), so this name is never opened there."
-    source_ref: "source segacd.c:1594, source segacd.c:1607-1609"
+    note: "Default name of all three regional Sega CD BIOS keys when the config sets none. Read beside the executable, whatever the disc region, with no hash or size check. Discs with no region, or one that allows it, take the default region U (default.cfg:425-427, segacd.c:1580-1592), the key the libretro core fills with bios_CD_U.bin (libblastem.c:501). Without it a CD image stops with a fatal error (segacd.c:1644-1647). RetroBat writes absolute paths to bios_CD_U/E/J.bin into the config (emulatorlauncher Blastem.Generator.cs:256-269), so this name is never opened there."
+    source_ref: "source segacd.c:1580-1594, source segacd.c:1595-1615, source default.cfg:425-427, source libblastem.c:501"
 
   # -------------------------------------------------------
   # 32X BIOS
@@ -158,8 +158,8 @@ files:
     mode: standalone
     unread_on: [retrobat]
     size: 8192
-    note: "Default name of the ColecoVision BIOS key when the config sets none. Read beside the executable, truncated to 8 KiB (coleco.c:496-505). RetroBat points the key at colecovision.rom (emulatorlauncher Blastem.Generator.cs:256-269)."
-    source_ref: "source coleco.c:485, source coleco.c:496-505"
+    note: "Default name of the ColecoVision BIOS key when the config sets none. Read beside the executable, truncated to 8 KiB, with no hash check (coleco.c:496-505). The libretro core fills the same key with colecovision.rom (libblastem.c:504). RetroBat points it there too (emulatorlauncher Blastem.Generator.cs:256-269)."
+    source_ref: "source coleco.c:485, source coleco.c:496-505, source libblastem.c:504"
 
   # -------------------------------------------------------
   # Pioneer LaserActive player firmware

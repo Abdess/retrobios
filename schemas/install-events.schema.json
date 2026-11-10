@@ -17,6 +17,7 @@
         "scanned",
         "version",
         "board",
+        "unknown_core",
         "choices",
         "set_aside",
         "file",
@@ -62,6 +63,9 @@
     },
     {
       "$ref": "#/$defs/board"
+    },
+    {
+      "$ref": "#/$defs/unknown_core"
     },
     {
       "$ref": "#/$defs/choices"
@@ -318,6 +322,41 @@
         },
         "applied": {
           "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "unknown_core": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "core",
+        "info",
+        "dests",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "unknown_core"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "core": {
+          "type": "string"
+        },
+        "info": {
+          "type": "boolean"
+        },
+        "dests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "message": {
           "type": "string"

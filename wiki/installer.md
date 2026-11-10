@@ -419,18 +419,18 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-11-06, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-10, printed this:
 
 ```
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
-  14929 files (6.7 GB)
-    3259 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.6 MB).
+  15012 files (7.6 GB)
+    3323 BIOS files (4.4 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
-  Not installable: 37 files are not in the collection, 2 of them required.
+  Not installable: 156 files are not in the collection, 1 of them required.
 
 Checking existing files...
-  0 in place, 14929 missing, 0 wrong copies
+  0 in place, 15012 missing, 0 wrong copies
 ```
 <!-- /generated: dry-run -->
 
@@ -449,7 +449,7 @@ the installer can fetch them.
 <!-- generated: run-date -->
 
 Each line a first install prints, and what it means. The run below is a
-Batocera install into an empty folder, from the list of 2026-11-06.
+Batocera install into an empty folder, from the list of 2026-11-10.
 The figures change with each release.
 <!-- /generated: run-date -->
 
@@ -460,11 +460,11 @@ an emulator needs that is not available is said too.
 <!-- generated: run-default -->
 
 ```
-Installing 18175 files (9.2 GB) for Batocera.
+Installing 19074 files (10.1 GB) for Batocera.
 BIOS folder: /userdata/bios
 
-Done. 18175 files installed.
-80 files an emulator needs are not available here (--verbose names them).
+Done. 19074 files installed.
+79 files an emulator needs are not available here (--verbose names them).
 Next: start Batocera and play.
 ```
 <!-- /generated: run-default -->
@@ -509,13 +509,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  18175 files (9.2 GB)
-    3159 BIOS files (4.3 GB), 11544 game data files (4.8 GB) and 3472 data files (81.8 MB).
+  19074 files (10.1 GB)
+    3804 BIOS files (5.3 GB), 11562 game data files (4.7 GB) and 3708 data files (81.9 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
-  Not installable: 426 files are not in the collection, 80 of them required.
+  Not installable: 675 files, 79 of them required. Why: no system runs the core (83), not found (592).
 
 Checking existing files...
-  0 in place, 18175 missing, 0 wrong copies
+  0 in place, 19074 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -530,10 +530,10 @@ line per file, as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 14703 files (9.2 GB)...
+Downloading 15366 files (10.0 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/14703] panafz1.bin ok
-  [2/14703] panafz10.bin ok
+  [1/15366] panafz1.bin ok
+  [2/15366] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -545,14 +545,10 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 18175 files installed.
-  Installed: 3159 BIOS files, 11544 game data files and 3472 data files.
+Done. 19074 files installed.
+  Installed: 3804 BIOS files, 11562 game data files and 3708 data files.
 BIOS folder: /userdata/bios
-426 files were not installed: the collection does not hold them, or its copy fails their check.
-  Needed to start an emulator (1 file):
-    capcom-cps3 (fbneo): sfiii2a.zip
-      https://abdess.github.io/retrobios/emulators/fbneo/
-  Each emulator's page, linked above, says what these files are.
+675 files were not installed: the collection does not hold them, or its copy fails their check.
   Not available here: DARK.GOB, DARKWAR.RTL, DARKWAR.WAD and 76 more, game data their games read. Copy them from an owned copy of the game into /userdata/bios/, /userdata/bios/Source/, /userdata/bios/base/ and 10 more folders.
   Game data: files a game or a game engine reads, of no use to the other cores.
 To check this later, run the same command with --check.
@@ -565,7 +561,7 @@ narrowing would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-11-06:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-10:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).
@@ -600,7 +596,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  18175 in place, 0 missing, 0 wrong copies
+  19074 in place, 0 missing, 0 wrong copies
 
   Every file on the list is in place.
 ```
@@ -794,31 +790,29 @@ by `scripts/generate_installer_doc.py`):
 <!-- generated: line-menu -->
 
 ```
-RetroArch: 14929 files, 6.7 GB.
-  3259 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 6581 data files (135.6 MB).
+RetroArch: 15012 files, 7.6 GB.
+  3323 BIOS files (4.4 GB), 5108 game data files (3.1 GB) and 6581 data files (135.6 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
-  Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). An owned copy goes in the BIOS folder.
   Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game data its game reads. Copy it from an owned copy of the game into /home/me/.config/retroarch/system/jazz2/Source/.
   Enter) install everything
   c) choose systems, cores and regions
   f) copy from a folder or an old card
-  g) Game data: kept (5089 files, 2.5 GB): leave it out
+  g) Game data: kept (5108 files, 3.1 GB): leave it out
   q) quit
 > g
 
   Counted again for these choices. Nothing is written before Enter.
 
-RetroArch: 9840 files, 4.2 GB.
-  3259 BIOS files (4.1 GB) and 6581 data files (135.6 MB). 5089 game data files left out.
+RetroArch: 9904 files, 4.6 GB.
+  3323 BIOS files (4.4 GB) and 6581 data files (135.6 MB). 5108 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
-  Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). An owned copy goes in the BIOS folder.
   Same choice without questions: python3 install.py --platform retroarch --dest /home/me/.config/retroarch/system --no-game-data
   Enter) install everything
   c) choose systems, cores and regions
   f) copy from a folder or an old card
-  g) Game data: left out (5089 files, 2.5 GB): keep it
+  g) Game data: left out (5108 files, 3.1 GB): keep it
   q) quit
 >
 ```
@@ -1870,6 +1864,7 @@ other schemas under `api/v1/schemas/`.
 | `scanned` | `folder`, `files`, `truncated`, `other_drives` | Each folder named with `--from`, once read and before `detect`. `files` counts the files found, `truncated` is true when the search stopped at 200,000 of them, and `other_drives` lists the folders below it on another drive, which were not entered |
 | `version` | `platform`, `list_version`, `installed_version`, `message` | Before `choices`, when the system here runs another version than the one the list was built for: `list_version` is the list's, `installed_version` the one the system's version file states, and `message` says it and what it means. Not written when either version is unknown. The run goes on |
 | `board` | `platform`, `board`, `applied`, `message` | Before `choices`, with no `--target` and no `--every-board`, when the system names its board or a Batocera or KNULLI card mounted here does (`boot/batocera.board` or `boot/knulli.board` on its boot partition, `board` then being the board its image maps to): `applied` is true when the run keeps that board's files only, false for a board the platform's list does not name, which keeps every board's files. `message` says it |
+| `unknown_core` | `platform`, `core`, `info`, `dests`, `message` | With `--installed-cores`, before `choices`, once for each installed core the list has no profile for. `info` is true when its RetroArch `.info` was found, and `dests` are the `firmware<N>_path` values it declares, kept whatever the narrowing drops. A core without a `.info` keeps nothing it alone reads, and `message` says so |
 | `choices` | `platform`, `systems` | Before `checking`: the systems the run's list lets one choose among, sorted by id, `other` last for the files no system names. The run's other options apply (`--core`, `--region`, `--no-game-data`, the files left out for an unknown save directory), `--system` does not: these are the systems a screen lists to choose from, and the count a `--system` is out of |
 | `set_aside` | `platform`, `dests` | Right after `choices`: the files of the list the run sets aside before any choice, in list order, those read from a save directory whose place is not known among them. A screen chooses its cores among the rest, the cores `--core` accepts |
 | `file` | `platform`, `dest`, `systems`, `size`, `state` | Each file of the list after the check. `state` is `present` (hash verified), `wrong_hash` or `missing` |

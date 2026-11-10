@@ -2,17 +2,9 @@ emulator: "fheroes2"
 type: standalone
 core_classification: game_engine
 source: "https://github.com/ihhub/fheroes2"
-profiled_date: "2026-10-22"
-source_commit: "35ca4c915be00098547d5050412a325dd55cfd7f"
-pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/fheroes2/package.mk:5). Later commits are not part of that build."
-pin_build:
-  - platform: emuelec
-    repo: "https://github.com/EmuELEC/EmuELEC"
-    revision: "v4.8"
-    path: "packages/sx05re/emuelec-ports/fheroes2/package.mk"
-    variable: PKG_VERSION
-    value: "35ca4c915be00098547d5050412a325dd55cfd7f"
-core_version: "1.0.11"
+profiled_date: "2026-11-09"
+source_commit: "6c51acfdcbf318032c8a6faf3db9abb5413b07b8"
+core_version: "1.1.18"
 version_basis:
   kind: file
   path: "version.txt"
@@ -24,31 +16,39 @@ systems: [heroes-of-might-and-magic-2]
 
 notes: |
   Free reimplementation of the Heroes of Might and Magic II engine (New World
-  Computing, 1996). It plays the original or demo data. EmuELEC builds this
-  revision, installs the engine's resurrection.h2d under
-  /usr/share/fheroes2/files/data and runs fheroes2 from
-  /storage/roms/ports/fheroes2. When data/HEROES2.AGG is absent there, its
-  fheroes2.sh offers to download the demo (h2demo.zip from archive.org) and
-  unpacks its DATA and MAPS directories in place.
-  ref: version.txt:1,
-       EmuELEC packages/sx05re/emuelec-ports/fheroes2/package.mk:4-7,15-23,
+  Computing, 1996). It plays the original or demo data. EmuELEC's tree builds
+  revision 35ca4c9 in its emuelec-ports package, which installs the engine's
+  resurrection.h2d under /usr/share/fheroes2/files/data and runs fheroes2
+  from /storage/roms/ports/fheroes2, its fheroes2.sh offering the demo
+  (h2demo.zip from archive.org) when data/HEROES2.AGG is absent. No package,
+  options file or Makefile of a v4.8 image pulls emuelec-ports in, so no
+  platform ships fheroes2.
+  ref: EmuELEC packages/sx05re/emuelec-ports/fheroes2/package.mk:4-7,15-23,
        EmuELEC packages/sx05re/emuelec-ports/fheroes2/scripts/fheroes2.sh:9-40
 
   Every resource is looked up under each root directory in turn: the
-  FHEROES2_DATA build path and environment variable, the program's directory,
-  then the OS data directories. The data subdirectory is scanned for .agg
-  files, the one whose lowercased name ends in heroes2.agg is the game
-  resource file, and a heroes2x.agg beside it turns on The Price of Loyalty
-  content. No AGG, no resurrection.h2d, or an AGG without the font stops the
-  start with a missing resource window.
-  ref: src/fheroes2/system/settings.cpp:526-551, src/fheroes2/agg/agg.cpp:53-118,
-       src/fheroes2/h2d/h2d.cpp:35-62, src/fheroes2/game/fheroes2.cpp:220-240
+  FHEROES2_DATA build path and environment variable, the program's
+  directory, the OS data directories, then the user config and data
+  directories. The data subdirectory is scanned for .agg files, the one
+  whose lowercased name ends in heroes2.agg is the game resource file, and a
+  heroes2x.agg beside it turns on The Price of Loyalty content.
+  resurrection.h2d is read from files/data: the reader wants the H2D magic
+  with format version 3, and the start stops when its list of files differs
+  from the one the engine carries. No AGG, no usable resurrection.h2d, or an
+  AGG without the font shows the missing assets image and ends the start.
+  ref: src/fheroes2/system/settings.cpp:651-716, src/fheroes2/agg/agg.cpp:53-123,
+       src/fheroes2/h2d/h2d.cpp:107-145, src/engine/h2d_file.cpp:39-88,
+       src/fheroes2/game/game_init.cpp:149-165
 
-  Maps are the .mp2, .mx2 (with the expansion) and .fh2m files of the maps
-  directories, campaign videos come from anim, anim2, heroes2/anim or data,
-  and CD music from music. All are optional.
-  ref: src/fheroes2/maps/maps_fileinfo.cpp:600-615, src/fheroes2/game/game_video.cpp:47,
-       src/fheroes2/audio/audio_manager.cpp:94-101
+  Maps are the .mp2 and, with the expansion, .mx2 and .fh2m files of the
+  maps directories, campaign videos come from anim, anim2, heroes2/anim or
+  data, and CD music from music. MIDI music is played with the .sf2 and .sf3
+  sound fonts of files/soundfonts and the files/timidity/timidity.cfg the
+  engine ships, translations are files/lang/<language>.mo built from the
+  repository's .po files. All are optional.
+  ref: src/fheroes2/maps/maps_fileinfo.cpp:730-750, src/fheroes2/game/game_video.cpp:52,
+       src/fheroes2/audio/audio_manager.cpp:92-110, src/fheroes2/game/game_init.cpp:292-320,
+       src/fheroes2/system/settings.cpp:607-619
 
 files:
   - name: "heroes2.agg"
@@ -75,7 +75,51 @@ files:
     system: heroes-of-might-and-magic-2
     required: true
     bundled: true
-    size: 30343
-    sha1: "beb7cb43518447a8cd6faae7a697a79de3c31b39"
+    size: 43926
+    sha1: "0a2b2faddd2c88218c5de503f98faa5547ebb732"
+    validation: [signature]
     description: "fheroes2's own resource container, installed with the engine"
-    source_ref: "src/fheroes2/h2d/h2d.cpp:35-62"
+    source_ref: "src/fheroes2/h2d/h2d.cpp:107-145, src/engine/h2d_file.cpp:39-88"
+    note: "The reader wants the H2D magic with format version 3, and the 68 file names the engine carries (h2d.cpp:34, 138): the 1.0.11 container, format 0 with 7 files, stops the start."
+
+  - name: "fheroes2.sf3"
+    path: "files/soundfonts/fheroes2.sf3"
+    category: game_data
+    system: heroes-of-might-and-magic-2
+    required: false
+    bundled: true
+    size: 2610591
+    sha1: "b6de55c303c2507c06693efe5a2b3dceb49dd66e"
+    description: "MIDI sound font the engine ships, one of the .sf2 and .sf3 files of files/soundfonts"
+    source_ref: "src/fheroes2/game/game_init.cpp:292-297, src/fheroes2/audio/audio_manager.cpp:782-796"
+
+  - name: "timidity.cfg"
+    path: "files/timidity/timidity.cfg"
+    category: game_data
+    system: heroes-of-might-and-magic-2
+    required: false
+    bundled: true
+    size: 2649
+    sha1: "94d25279d231e64aa5657606731f39d2258cc681"
+    description: "Timidity configuration for MIDI music, naming the GUS patches of files/timidity/instruments"
+    source_ref: "src/fheroes2/game/game_init.cpp:305-311, src/fheroes2/audio/audio_manager.cpp:782-796"
+
+  - name: "instruments/"
+    path: "files/timidity/instruments/"
+    type: directory
+    category: game_data
+    system: heroes-of-might-and-magic-2
+    required: false
+    bundled: true
+    description: "GUS instrument patches timidity.cfg names, 89 files in the repository"
+    source_ref: "src/fheroes2/game/game_init.cpp:305-311"
+
+  - name: "lang/"
+    path: "files/lang/"
+    type: directory
+    category: game_data
+    system: heroes-of-might-and-magic-2
+    required: false
+    bundled: true
+    description: "Translations, <language>.mo compiled from the repository's .po files at build"
+    source_ref: "src/fheroes2/system/settings.cpp:607-619"

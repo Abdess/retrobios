@@ -1,7 +1,7 @@
 platform: RetroBat
 version: 8.3.1
 homepage: "https://www.retrobat.org"
-source: "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/48cdc61623c5943bb17647b80a60d32d395c3725/batocera-systems/Resources/batocera-systems.json"
+source: "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/ca486005f598551600d04a33b3156a5d764368d6/batocera-systems/Resources/batocera-systems.json"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
@@ -523,7 +523,6 @@ systems:
     - name: advision.zip
       destination: advision.zip
       required: true
-      md5: 1c08606408029751fd30ac91d2bf30d5
       native_system: advision
       native_path: bios/advision.zip
       native_name: Adventure Vision
@@ -605,7 +604,6 @@ systems:
     - name: apfm1000.zip
       destination: apfm1000.zip
       required: true
-      md5: b197db12f7a13827717bbeb7cfd9542a
       native_system: apfm1000
       native_path: bios/apfm1000.zip
       native_name: APF M-1000
@@ -817,7 +815,6 @@ systems:
     - name: ar_bios.zip
       destination: ar_bios.zip
       required: true
-      md5: 37e9746f4491aa2df9a83729d1a93620
       native_system: arcadia
       native_path: bios/ar_bios.zip
       native_name: Arcadia 2001
@@ -854,7 +851,6 @@ systems:
     - name: astrocde.zip
       destination: astrocde.zip
       required: true
-      md5: f58a3823ab308ef0a02b498d126e5d96
       native_system: astrocde
       native_path: bios/astrocde.zip
       native_name: Astrocade
@@ -1037,14 +1033,12 @@ systems:
     - name: awbios.zip
       destination: dc/awbios.zip
       required: true
-      md5: 0ec5ae5b5a5c4959fa8b43fcf8687f7c
       native_system: atomiswave
       native_path: bios/dc/awbios.zip
       native_name: Atomiswave
     - name: naomi.zip
       destination: dc/naomi.zip
       required: true
-      md5: eb4099aeb42ef089cfe94f8fe95e51f6
       native_system: naomi
       native_path: bios/dc/naomi.zip
       native_name: Naomi
@@ -1224,7 +1218,6 @@ systems:
     - name: casloopy.zip
       destination: casloopy.zip
       required: true
-      md5: 0e1d8dc0110ecf8201c0cef11ef4a858
       native_system: loopy
       native_path: bios/casloopy.zip
       native_name: Casio Loopy
@@ -1575,22 +1568,10 @@ systems:
     name: FM-7
   fmtowns:
     files:
-    - name: fmtowns.zip
-      destination: fmtowns.zip
-      required: true
-      native_system: fmtowns
-      native_path: bios/fmtowns.zip
-      native_name: FMTowns
-    - name: fmtownsux.zip
-      destination: fmtownsux.zip
-      required: true
-      native_system: fmtowns
-      native_path: bios/fmtownsux.zip
-      native_name: FMTowns
     - name: FMT_DIC.ROM
       destination: fmtowns/FMT_DIC.ROM
       required: true
-      md5: 8fa4e553f28cfc0c30a0a1e589799942
+      md5: 34847786d7de94b5d1133c956ab1d75d
       native_system: fmtowns
       native_path: bios/fmtowns/FMT_DIC.ROM
       native_name: FMTowns
@@ -1601,50 +1582,19 @@ systems:
       native_system: fmtowns
       native_path: bios/fmtowns/FMT_DOS.ROM
       native_name: FMTowns
-    - name: FMT_F20.ROM
-      destination: fmtowns/FMT_F20.ROM
-      required: true
-      md5: ac0c7021e9bf48ca84b51ab651169a88
-      native_system: fmtowns
-      native_path: bios/fmtowns/FMT_F20.ROM
-      native_name: FMTowns
     - name: FMT_FNT.ROM
       destination: fmtowns/FMT_FNT.ROM
       required: true
-      md5: b91300e55b70227ce98b59c5f02fa8dd
+      md5: eb44f2093f51eb7159f03e170b13af76
       native_system: fmtowns
       native_path: bios/fmtowns/FMT_FNT.ROM
       native_name: FMTowns
     - name: FMT_SYS.ROM
       destination: fmtowns/FMT_SYS.ROM
       required: true
-      md5: 86fb6f7280689259f0ca839dd3dd6cde
+      md5: feaf8c5675151e00cfe3ad27673bff29
       native_system: fmtowns
       native_path: bios/fmtowns/FMT_SYS.ROM
-      native_name: FMTowns
-    - name: fmtowns_cd.xml
-      destination: mame/hash/fmtowns_cd.xml
-      required: true
-      native_system: fmtowns
-      native_path: bios/mame/hash/fmtowns_cd.xml
-      native_name: FMTowns
-    - name: fmtowns_flop_cracked.xml
-      destination: mame/hash/fmtowns_flop_cracked.xml
-      required: true
-      native_system: fmtowns
-      native_path: bios/mame/hash/fmtowns_flop_cracked.xml
-      native_name: FMTowns
-    - name: fmtowns_flop_misc.xml
-      destination: mame/hash/fmtowns_flop_misc.xml
-      required: true
-      native_system: fmtowns
-      native_path: bios/mame/hash/fmtowns_flop_misc.xml
-      native_name: FMTowns
-    - name: fmtowns_flop_orig.xml
-      destination: mame/hash/fmtowns_flop_orig.xml
-      required: true
-      native_system: fmtowns
-      native_path: bios/mame/hash/fmtowns_flop_orig.xml
       native_name: FMTowns
     name: FMTowns
   gamate:
@@ -1652,7 +1602,6 @@ systems:
     - name: gamate.zip
       destination: gamate.zip
       required: true
-      md5: 320bf3d4142fa1043255db7ff87d17c7
       native_system: gamate
       native_path: bios/gamate.zip
       native_name: Gamate
@@ -1668,7 +1617,6 @@ systems:
     - name: gamecom.zip
       destination: gamecom.zip
       required: true
-      md5: f2087ed09f7fa8d8856cfafb20dd00dc
       native_system: gamecom
       native_path: bios/gamecom.zip
       native_name: Game.com
@@ -1684,7 +1632,6 @@ systems:
     - name: gamepock.zip
       destination: gamepock.zip
       required: true
-      md5: 887479fe3c69a0b935c57a7a738e26c4
       native_system: gamepock
       native_path: bios/gamepock.zip
       native_name: Game Pocket
@@ -1730,7 +1677,6 @@ systems:
     - name: gmaster.zip
       destination: gmaster.zip
       required: true
-      md5: 4239d6f44a0d78d27c69f9b95885f48e
       native_system: gmaster
       native_path: bios/gmaster.zip
       native_name: Game Master
@@ -1746,7 +1692,6 @@ systems:
     - name: gp32.zip
       destination: gp32.zip
       required: true
-      md5: 8c392f475834218d88533150d36cc84c
       native_system: gp32
       native_path: bios/gp32.zip
       native_name: Game Park 32
@@ -1762,14 +1707,12 @@ systems:
     - name: hikaru.zip
       destination: hikaru.zip
       required: true
-      md5: aac601811a25d7b31a3d5f3f1f82f338
       native_system: hikaru
       native_path: bios/hikaru.zip
       native_name: Hikaru
     - name: mie.zip
       destination: mie.zip
       required: true
-      md5: e95415b161121bef35ade12367138c63
       native_system: hikaru
       native_path: bios/mie.zip
       native_name: Hikaru
@@ -2323,7 +2266,6 @@ systems:
     - name: neogeo.zip
       destination: neogeo.zip
       required: true
-      md5: dffb72f116d36d025068b23970a4f6df
       native_system: neogeo
       native_path: bios/neogeo.zip
       native_name: NeoGeo
@@ -2333,7 +2275,6 @@ systems:
     - name: neogeo.zip
       destination: neogeo.zip
       required: true
-      md5: dffb72f116d36d025068b23970a4f6df
       native_system: neogeo64
       native_path: bios/neogeo.zip
       native_name: Hyper NeoGeo 64
@@ -2343,14 +2284,12 @@ systems:
     - name: neogeo.zip
       destination: neogeo.zip
       required: true
-      md5: dffb72f116d36d025068b23970a4f6df
       native_system: neogeocd
       native_path: bios/neogeo.zip
       native_name: NeoGeo CD
     - name: neocdz.zip
       destination: neocdz.zip
       required: true
-      md5: c733b4b7bd30fa849874d96c591c8639
       native_system: neogeocd
       native_path: bios/neocdz.zip
       native_name: NeoGeo CD
@@ -2609,7 +2548,6 @@ systems:
     - name: pegasus.zip
       destination: pegasus.zip
       required: true
-      md5: fee37d8140e4fab48aac4fdab2847f7d
       native_system: pegasus
       native_path: bios/pegasus.zip
       native_name: Aamber Pegasus
@@ -2638,6 +2576,75 @@ systems:
       md5: 21038400dc633070a78ad53090c53017
       native_system: ps2
       native_path: bios/pcsx2/bios/ps2-0230a-20080220.bin
+      group: ps2
+      native_name: PS2
+    - name: ps2-0230e-20080220.bin
+      destination: pcsx2/bios/ps2-0230e-20080220.bin
+      required: true
+      md5: dc69f0643a3030aaa4797501b483d6c4
+      native_system: ps2
+      native_path: bios/pcsx2/bios/ps2-0230e-20080220.bin
+      group: ps2
+      native_name: PS2
+    - name: ps2-0230j-20080220.bin
+      destination: pcsx2/bios/ps2-0230j-20080220.bin
+      required: true
+      md5: 80ac46fa7e77b8ab4366e86948e54f83
+      native_system: ps2
+      native_path: bios/pcsx2/bios/ps2-0230j-20080220.bin
+      group: ps2
+      native_name: PS2
+    - name: ps2-0250e-20100415.bin
+      destination: pcsx2/bios/ps2-0250e-20100415.bin
+      required: true
+      md5: 93ea3bcee4252627919175ff1b16a1d9
+      native_system: ps2
+      native_path: bios/pcsx2/bios/ps2-0250e-20100415.bin
+      group: ps2
+      native_name: PS2
+    - name: SCPH30004R.bin
+      destination: pcsx2/bios/SCPH30004R.bin
+      required: true
+      md5: 28922c703cc7d2cf856f177f2985b3a9
+      native_system: ps2
+      native_path: bios/pcsx2/bios/SCPH30004R.bin
+      group: ps2
+      native_name: PS2
+    - name: scph39001.bin
+      destination: pcsx2/bios/scph39001.bin
+      required: true
+      md5: d5ce2c7d119f563ce04bc04dbc3a323e
+      native_system: ps2
+      native_path: bios/pcsx2/bios/scph39001.bin
+      group: ps2
+      native_name: PS2
+    - name: ps3_ps2_emu_bios.bin
+      destination: pcsx2/bios/ps3_ps2_emu_bios.bin
+      required: true
+      native_system: ps2
+      native_path: bios/pcsx2/bios/ps3_ps2_emu_bios.bin
+      group: ps2
+      native_name: PS2
+    - name: SCPH-39004_BIOS_V7_EUR_160.BIN
+      destination: pcsx2/bios/SCPH-39004_BIOS_V7_EUR_160.BIN
+      required: true
+      native_system: ps2
+      native_path: bios/pcsx2/bios/SCPH-39004_BIOS_V7_EUR_160.BIN
+      group: ps2
+      native_name: PS2
+    - name: SCPH-39001_BIOS_V7_USA_160.BIN
+      destination: pcsx2/bios/SCPH-39001_BIOS_V7_USA_160.BIN
+      required: true
+      native_system: ps2
+      native_path: bios/pcsx2/bios/SCPH-39001_BIOS_V7_USA_160.BIN
+      group: ps2
+      native_name: PS2
+    - name: SCPH-70000_BIOS_V12_JAP_200.BIN
+      destination: pcsx2/bios/SCPH-70000_BIOS_V12_JAP_200.BIN
+      required: true
+      native_system: ps2
+      native_path: bios/pcsx2/bios/SCPH-70000_BIOS_V12_JAP_200.BIN
+      group: ps2
       native_name: PS2
     name: PS2
   sony-playstation:
@@ -2736,7 +2743,6 @@ systems:
     - name: scv.zip
       destination: scv.zip
       required: true
-      md5: 33df021613fb12abe2ad14b9eb17c7fe
       native_system: scv
       native_path: bios/scv.zip
       native_name: Super Cassette Vision
@@ -2907,14 +2913,14 @@ systems:
       required: true
       native_system: tutor
       native_path: bios/tutor.zip
-      native_name: APF M-1000
+      native_name: Tomy Tutor
     - name: tutor.xml
       destination: mame/hash/tutor.xml
       required: true
       native_system: tutor
       native_path: bios/mame/hash/tutor.xml
-      native_name: APF M-1000
-    name: APF M-1000
+      native_name: Tomy Tutor
+    name: Tomy Tutor
   vc4000:
     files:
     - name: vc4000.xml
@@ -3533,7 +3539,7 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick34005.A500, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:69-74, 544-548, 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:69-74, 532-536, 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3547,7 +3553,7 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick33180.A500, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:76-81, 544-548, 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:76-81, 532-536, 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3561,7 +3567,7 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick37175.A500, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:83-88, 544-548, 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:83-88, 532-536, 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3575,7 +3581,7 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick40063.A600, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:90-95, 544-548, 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:90-95, 532-536, 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3589,8 +3595,8 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick40068.A1200, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:97-111, 544-548,\
-    \ 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:97-111, 532-536,\
+    \ 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3603,8 +3609,8 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick40068.A4000, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:113-127, 544-548,\
-    \ 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:113-127, 532-536,\
+    \ 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3618,7 +3624,7 @@ launchers:
   passes_to: copied to <amiberry roms>/kick40060.CD32, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
   source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:129-134, 138-143,\
-    \ 544-548, 686-711"
+    \ 532-536, 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3631,8 +3637,8 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick40060.CD32.ext, kickstart_ext_rom_file
   fails_when_missing: warning, kickstart_ext_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:129-145, 553-557,\
-    \ 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:129-145, 541-545,\
+    \ 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3645,8 +3651,8 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick34005.A500, kickstart_rom_file
   fails_when_missing: warning, kickstart_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-151, 544-548,\
-    \ 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-151, 532-536,\
+    \ 674-699"
 - emulator: amiberry
   build: standalone
   kind: names_searched
@@ -3660,20 +3666,204 @@ launchers:
   search_dir: bios, bios/amiga, bios/Amiga
   passes_to: copied to <amiberry roms>/kick34005.CDTV, kickstart_ext_rom_file
   fails_when_missing: warning, kickstart_ext_rom_file not written
-  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-154, 553-557,\
-    \ 686-711"
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-154, 541-545,\
+    \ 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs"
+  passes_to: "written: rom_path in amiberry.conf"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:185, 309-311, 341"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"amiberry\")>/WHDBoot"
+  passes_to: "written: whdboot_path in amiberry.conf"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:185, 326, 341"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick34005.A500
+  - kick34005.A500.rom
+  - amiga-os-130.rom
+  - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom"
+  - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick34005.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:69-74, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick33180.A500
+  - kick33180.A500.rom
+  - amiga-os-120.rom
+  - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A2000)[!].rom"
+  - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A1000-A2000).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick33180.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:76-81, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick37175.A500
+  - kick37175.A500.rom
+  - amiga-os-204.rom
+  - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+)[!].rom"
+  - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick37175.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:83-88, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40063.A600
+  - kick40063.A600.rom
+  - amiga-os-310-a600.rom
+  - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000)[!].rom"
+  - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40063.A600"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:90-95, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40068.A1200
+  - kick40068.A1200.rom
+  - amiga-os-310-a1200.rom
+  - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200)[!].rom"
+  - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40068.A1200"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:97-111, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40068.A4000
+  - kick40068.A4000.rom
+  - amiga-os-310-a4000.rom
+  - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A4000).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40068.A4000"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:113-127, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40060.CD32
+  - kick40060.CD32.rom
+  - amiga-os-310-cd32.rom
+  - "Kickstart v3.1 rev 40.60 (1993)(Commodore)(CD32).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40060.CD32"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:129-134, 138-143,\
+    \ 185, 309-311, 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick40060.CD32.ext
+  - kick40060.CD32.ext.rom
+  - amiga-os-310-cd32-ext.rom
+  - "CD32 Extended-ROM rev 40.60 (1993)(Commodore)(CD32).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick40060.CD32.ext"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:129-145, 185, 309-311,\
+    \ 541, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick34005.A500
+  - kick34005.A500.rom
+  - amiga-os-130.rom
+  - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick34005.A500"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-151, 185, 309-311,\
+    \ 532, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - kick34005.CDTV
+  - kick34005.CDTV.rom
+  - amiga-os-130-cdtv-ext.rom
+  - "CDTV Extended-ROM v1.0 (1991)(Commodore)(CDTV)[!].rom"
+  - "CDTV Extended-ROM v1.0 (1992)(Commodore)(CDTV).rom"
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/kick34005.CDTV"
+  fails_when_missing: false
+  depends_on_option: first name found, the target is absent, smaller or older
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:147-154, 185, 309-311,\
+    \ 541, 639-667, 674-699"
+- emulator: amiberry
+  build: standalone
+  kind: copies
+  names:
+  - rom.key
+  case_insensitive: true
+  search_dir: bios, bios/amiga, bios/Amiga
+  passes_to: "<AppConfig.GetFullPath(\"amiberry\")>/ROMs/rom.key"
+  fails_when_missing: false
+  depends_on_option: the target is absent or its size differs
+  source_ref: "emulatorLauncher/Generators/Amiberry.Generator.cs:185, 309-311, 616-637,\
+    \ 674-699"
 - emulator: arcadeduck
   build: standalone
   kind: names_searched
   names:
   - <bios archive of the game's system in resources/arcadedb.yaml>
   case_insensitive: false
-  search_dir: <rom directory>, then bios
+  search_dir: <rom directory>, then the folder above it for a CHD-only set, then bios
   passes_to: "settings.ini [BIOS] SearchDirectory = <folder found>"
   fails_when_missing: "ApplicationException 'Missing BIOS '<biosArchive>' : place\
     \ it next to the game or in the RetroBat bios folder.'"
-  source_ref: "emulatorLauncher/Generators/ArcadeDuck.Generator.cs:52, 102-122, 219,\
-    \ emulatorLauncher/Generators/ArcadeDuck.Database.cs:62, 221-222"
+  source_ref: "emulatorLauncher/Generators/ArcadeDuck.Generator.cs:42, 144-170, 273,\
+    \ emulatorLauncher/Generators/ArcadeDuck.Database.cs:64, 303-304"
 - emulator: arcadeduck
   build: standalone
   kind: names_searched
@@ -3681,13 +3871,13 @@ launchers:
   - konamigv.zip
   slot: konami_gv
   case_insensitive: false
-  search_dir: <rom directory>, then bios
+  search_dir: <rom directory>, then the folder above it for a CHD-only set, then bios
   passes_to: "settings.ini [BIOS] SearchDirectory = <folder found>"
   fails_when_missing: "ApplicationException 'Missing BIOS '<biosArchive>' : place\
     \ it next to the game or in the RetroBat bios folder.'"
   depends_on_option: resources/arcadedb.yaml names no archive for konami_gv
-  source_ref: "emulatorLauncher/Generators/ArcadeDuck.Generator.cs:52, 102-122, 219,\
-    \ emulatorLauncher/Generators/ArcadeDuck.Database.cs:62, 221-222"
+  source_ref: "emulatorLauncher/Generators/ArcadeDuck.Generator.cs:42, 144-170, 273,\
+    \ emulatorLauncher/Generators/ArcadeDuck.Database.cs:64, 303-304"
 - emulator: arcadeduck
   build: standalone
   kind: passes_path
@@ -3696,8 +3886,8 @@ launchers:
   passes_to: "settings.ini [BIOS] SearchDirectory = bios"
   fails_when_missing: false
   depends_on_option: no bios archive known for the game's system
-  source_ref: "emulatorLauncher/Generators/ArcadeDuck.Generator.cs:52, 102-122, 219,\
-    \ emulatorLauncher/Generators/ArcadeDuck.Database.cs:62, 221-222"
+  source_ref: "emulatorLauncher/Generators/ArcadeDuck.Generator.cs:42, 144-170, 273,\
+    \ emulatorLauncher/Generators/ArcadeDuck.Database.cs:64, 303-304"
 - emulator: ares
   build: standalone
   kind: names_searched
@@ -3709,7 +3899,7 @@ launchers:
   search_dir: bios/laseractive
   passes_to: "settings.bml LaserActiveSEGAPAC/Firmware/BIOS.Japan (first found)"
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/Ares.Generator.cs:518-529"
+  source_ref: "emulatorLauncher/Generators/Ares.Generator.cs:531-542"
 - emulator: ares
   build: standalone
   kind: names_searched
@@ -3720,7 +3910,7 @@ launchers:
   search_dir: bios/laseractive
   passes_to: "settings.bml LaserActiveSEGAPAC/Firmware/BIOS.US (first found)"
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/Ares.Generator.cs:524-531"
+  source_ref: "emulatorLauncher/Generators/Ares.Generator.cs:537-544"
 - emulator: bizhawk
   build: standalone
   kind: fixed_name
@@ -3796,7 +3986,7 @@ launchers:
   search_dir: bios
   passes_to: blastem.cfg system.scd_bios_us, only if the file exists
   fails_when_missing: info log, scd_bios_us left as it is
-  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:258, 262, 272-279"
+  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:251, 255, 265-272"
 - emulator: blastem
   build: standalone
   kind: fixed_name
@@ -3806,7 +3996,7 @@ launchers:
   search_dir: bios
   passes_to: blastem.cfg system.scd_bios_eu, only if the file exists
   fails_when_missing: info log, scd_bios_eu left as it is
-  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:258, 263, 272-279"
+  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:251, 256, 265-272"
 - emulator: blastem
   build: standalone
   kind: fixed_name
@@ -3816,7 +4006,7 @@ launchers:
   search_dir: bios
   passes_to: blastem.cfg system.scd_bios_jp, only if the file exists
   fails_when_missing: info log, scd_bios_jp left as it is
-  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:258, 264, 272-279"
+  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:251, 257, 265-272"
 - emulator: blastem
   build: standalone
   kind: fixed_name
@@ -3826,7 +4016,7 @@ launchers:
   search_dir: bios
   passes_to: blastem.cfg system.coleco_bios_path, only if the file exists
   fails_when_missing: info log, coleco_bios_path left as it is
-  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:258, 265, 272-279"
+  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:251, 258, 265-272"
 - emulator: blastem
   build: standalone
   kind: fixed_name
@@ -3836,7 +4026,7 @@ launchers:
   search_dir: bios
   passes_to: blastem.cfg system.s32x_main_bios, only if the file exists
   fails_when_missing: info log, s32x_main_bios left as it is
-  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:258, 267, 272-279"
+  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:251, 260, 265-272"
 - emulator: blastem
   build: standalone
   kind: fixed_name
@@ -3846,7 +4036,7 @@ launchers:
   search_dir: bios
   passes_to: blastem.cfg system.s32x_sub_bios, only if the file exists
   fails_when_missing: info log, s32x_sub_bios left as it is
-  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:258, 268, 272-279"
+  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:251, 261, 265-272"
 - emulator: blastem
   build: standalone
   kind: fixed_name
@@ -3856,7 +4046,7 @@ launchers:
   search_dir: bios
   passes_to: blastem.cfg system.s32x_68k_bios, only if the file exists
   fails_when_missing: info log, s32x_68k_bios left as it is
-  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:258, 269, 272-279"
+  source_ref: "emulatorLauncher/Generators/Blastem.Generator.cs:251, 262, 265-272"
 - emulator: bsyndrome
   build: standalone
   kind: passes_path
@@ -3865,19 +4055,83 @@ launchers:
   passes_to: command line --musicpath=bios/bsyndrome/MUSIC
   fails_when_missing: false
   depends_on_option: _emulator == "bsyndrome"
-  source_ref: "emulatorLauncher/Generators/PortsLauncher.Configuration.cs:133-134,\
-    \ 153, 157-158"
-- emulator: amiberry, hatari, hatarib, puae
+  source_ref: "emulatorLauncher/Generators/PortsLauncher.Configuration.cs:253-254,\
+    \ 273, 277-278"
+- emulator: amiberry, hatari, hatari2014, hatarib, puae
   build: libretro
   kind: copies
   names:
   - capsimg.dll
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <retroarch>/<name>, only when the target does not exist
+  passes_to: <retroarch>/<name>
   fails_when_missing: false
-  depends_on_option: core in capsimgCore, rom extension ".ipf"
-  source_ref: "emulatorLauncher/Generators/LibRetro.Generator.cs:1008-1017, 2659"
+  depends_on_option: core in capsimgCore, rom extension ".ipf", the target does not
+    exist
+  source_ref: "emulatorLauncher/Generators/LibRetro.Generator.cs:1018-1027, 2750"
+- emulator: chihiro
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"chihiro\")>"
+  passes_to: "Settings::GetDataLocation, the folder holding settings.ini, which the\
+    \ launcher writes beside the binary"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:99-101, 158"
+- emulator: chihiro-gun
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"chihiro-ds\")>"
+  passes_to: "Settings::GetDataLocation, the folder holding settings.ini, which the\
+    \ launcher writes beside the binary"
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:104-106, 158"
+- emulator: cxbx-reloaded
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"cxbx-reloaded\")>"
+  passes_to: "Settings::GetDataLocation, the folder holding settings.ini, which the\
+    \ launcher writes beside the binary"
+  fails_when_missing: false
+  depends_on_option: "neither core nor emulator is \"chihiro\" or \"chihiro-gun\"\
+    , <AppConfig.GetFullPath(\"cxbx-r\")> when \"cxbx-reloaded\" is not set"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:111-115, 158"
+- emulator: chihiro, chihiro-gun, cxbx-reloaded
+  build: standalone
+  kind: fixed_name
+  names:
+  - xbox-iso-vfs.exe
+  case_insensitive: true
+  search_dir: <emulatorLauncher folder>
+  passes_to: exec
+  fails_when_missing: xbox-iso-vfs is required and is not installed
+  depends_on_option: rom extension ".iso"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:25-30"
+- emulator: chihiro, chihiro-gun, cxbx-reloaded
+  build: standalone
+  kind: fixed_name
+  names:
+  - dokan2.dll
+  case_insensitive: true
+  search_dir: '%DokanLibrary2%'
+  passes_to: "nothing passed: checked before xbox-iso-vfs.exe mounts the image"
+  fails_when_missing: Dokan 2 is required and is not installed
+  depends_on_option: rom extension ".iso"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:25-26, 33-45"
+- emulator: cxbx-reloaded
+  build: standalone
+  kind: fixed_name
+  names:
+  - EEPROM.bin
+  case_insensitive: true
+  search_dir: "<AppConfig.GetFullPath(\"cxbx-reloaded\")>"
+  passes_to: "written from the launcher's eeprom resource when absent, then its language\
+    \ set: the emulator reads it from its data folder"
+  fails_when_missing: "never missing: the launcher writes it"
+  depends_on_option: system == "xbox"
+  source_ref: "emulatorLauncher/Generators/Cxbx.Generator.cs:216-223"
 - emulator: demul
   build: standalone
   kind: passes_path
@@ -3906,7 +4160,7 @@ launchers:
     \ file exists"
   fails_when_missing: UseExtBIOS left at 0
   depends_on_option: desmume_UseExtBIOS on
-  source_ref: "emulatorLauncher/Generators/Desmume.Generator.cs:97-105"
+  source_ref: "emulatorLauncher/Generators/Desmume.Generator.cs:92-100"
 - emulator: desmume
   build: standalone
   kind: fixed_name
@@ -3918,7 +4172,7 @@ launchers:
   fails_when_missing: UseExtFirmware left at 0
   depends_on_option: desmume_UseExtFirmware on, desmume_firmwareFile unset or not
     an existing file
-  source_ref: "emulatorLauncher/Generators/Desmume.Generator.cs:111-123"
+  source_ref: "emulatorLauncher/Generators/Desmume.Generator.cs:106-118"
 - emulator: dolphin
   build: standalone
   kind: fixed_name
@@ -3937,11 +4191,11 @@ launchers:
   - segaboot.gcm
   case_insensitive: true
   search_dir: bios
-  passes_to: first found copied to <emulator>/User/Triforce/segaboot.gcm, skipped
-    when the target is as large and not older
+  passes_to: <emulator>/User/Triforce/segaboot.gcm
   fails_when_missing: "warning '[WARNING] Triforce: segaboot.gcm not found in bios\\\
     triforce, test menu will not be available.' when the target is absent too"
-  depends_on_option: _triforce, !_crediar
+  depends_on_option: _triforce, !_crediar, first name found, the target is absent,
+    smaller or older
   source_ref: "emulatorLauncher/Generators/Dolphin.Generator.cs:782-783, 1048-1083"
 - emulator: dosbox-pure
   build: standalone
@@ -3953,9 +4207,10 @@ launchers:
   - Roland_SC-88.sf2
   case_insensitive: true
   search_dir: bios/scummvm/extra
-  passes_to: copied to <emulator>/system/<name>, only when the target does not exist
+  passes_to: <emulator>/system/<name>
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/DosBoxPure.Generator.cs:132, 137-155"
+  depends_on_option: the target does not exist
+  source_ref: "emulatorLauncher/Generators/DosBoxPure.Generator.cs:125, 130-148"
 - emulator: dosbox-staging
   build: standalone
   kind: copies
@@ -3964,10 +4219,10 @@ launchers:
   - MT32_PCM.ROM
   case_insensitive: true
   search_dir: bios/scummvm/extra
-  passes_to: copied to <emulator>/mt32-roms/<name>, only when the target does not
-    exist
+  passes_to: <emulator>/mt32-roms/<name>
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/DosBoxStaging.Generator.cs:328, 333-341"
+  depends_on_option: the target does not exist
+  source_ref: "emulatorLauncher/Generators/DosBoxStaging.Generator.cs:321, 326-334"
 - emulator: dosbox-staging
   build: standalone
   kind: copies
@@ -3976,10 +4231,10 @@ launchers:
   - Roland_SC-88.sf2
   case_insensitive: true
   search_dir: bios/scummvm/extra
-  passes_to: copied to <emulator>/soundfonts/<name>, only when the target does not
-    exist
+  passes_to: <emulator>/soundfonts/<name>
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/DosBoxStaging.Generator.cs:325, 343-351"
+  depends_on_option: the target does not exist
+  source_ref: "emulatorLauncher/Generators/DosBoxStaging.Generator.cs:318, 336-344"
 - emulator: duckstation
   build: standalone
   kind: passes_path
@@ -3988,7 +4243,7 @@ launchers:
   passes_to: "settings.ini [BIOS] SearchDirectory = bios"
   fails_when_missing: false
   depends_on_option: duck_bios unset
-  source_ref: "emulatorLauncher/Generators/Duckstation.Generator.cs:202, 211-215"
+  source_ref: "emulatorLauncher/Generators/Duckstation.Generator.cs:195, 204-208"
 - emulator: duckstation
   build: standalone
   kind: core_option
@@ -4004,7 +4259,7 @@ launchers:
   passes_to: "settings.ini [BIOS] PathNTSCJ = PathNTSCU = PathPAL = <value>"
   fails_when_missing: not checked by the launcher
   depends_on_option: duck_bios
-  source_ref: "emulatorLauncher/Generators/Duckstation.Generator.cs:204-209, .emulationstation/es_features.cfg:11638-11646"
+  source_ref: "emulatorLauncher/Generators/Duckstation.Generator.cs:197-202, .emulationstation/es_features.cfg:12489-12497"
 - emulator: eka2l1
   build: standalone
   kind: passes_path
@@ -4021,7 +4276,7 @@ launchers:
   passes_to: "config/fbneo64.ini szAppRomPaths[1] = bios"
   fails_when_missing: false
   depends_on_option: "File.Exists(iniFile)"
-  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:111"
+  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:125"
 - emulator: fbneo
   build: standalone
   kind: passes_path
@@ -4030,7 +4285,7 @@ launchers:
   passes_to: "config/fbneo64.ini szAppRomPaths[2] = bios/fbneo"
   fails_when_missing: false
   depends_on_option: "File.Exists(iniFile)"
-  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:113, 116"
+  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:127, 130"
 - emulator: fbneo
   build: standalone
   kind: passes_path
@@ -4039,7 +4294,7 @@ launchers:
   passes_to: config/fbneo64.ini szAppCheatsPath = bios/fbneo/cheats
   fails_when_missing: false
   depends_on_option: "File.Exists(iniFile)"
-  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:113, 118, 121"
+  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:127, 132, 135"
 - emulator: fbneo
   build: standalone
   kind: passes_path
@@ -4048,19 +4303,21 @@ launchers:
   passes_to: config/fbneo64.ini szAppSamplesPath = bios/fbneo/samples
   fails_when_missing: false
   depends_on_option: "File.Exists(iniFile)"
-  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:123, 126"
+  source_ref: "emulatorLauncher/Generators/Fbneo.Generator.cs:137, 140"
 - emulator: gsplus
   build: standalone
-  kind: fixed_name
+  kind: names_searched
   names:
+  - ROM
+  - ROM.01
+  - ROM.03
   - APPLE2GS.ROM
   case_insensitive: true
   search_dir: bios
-  passes_to: config.txt g_cfg_rom_path, written without an existence check
-  fails_when_missing: path written without an existence check
-  depends_on_option: "!string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig[\"\
-    bios\"])"
-  source_ref: "emulatorLauncher/Generators/GsPlus.Generator.cs:66-67"
+  passes_to: config.txt g_cfg_rom_path = <first found>
+  fails_when_missing: false
+  depends_on_option: "!string.IsNullOrEmpty(bios) && Directory.Exists(bios)"
+  source_ref: "emulatorLauncher/Generators/GsPlus.Generator.cs:23, 164, 167-172"
 - emulator: jgenesis
   build: standalone
   kind: fixed_name
@@ -4324,9 +4581,10 @@ launchers:
   case_insensitive: true
   search_dir: bios
   passes_to: "hatari.cfg [ROM] szTosImageFileName=<bios>/tos.img"
-  fails_when_missing: ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'
-  depends_on_option: hatari_tos unset
-  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:144-154"
+  fails_when_missing: bios/hatari/tos/emutos.img instead, else ApplicationException
+    'Missing TOS file <tosName> in 'bios' folder.'
+  depends_on_option: hatari_tos unset, no hard disk image
+  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:410-412, 425-426, 454"
 - emulator: hatari
   build: standalone
   kind: core_option
@@ -4341,8 +4599,33 @@ launchers:
   passes_to: "hatari.cfg [ROM] szTosImageFileName=<bios>/hatari/tos/<value>"
   fails_when_missing: ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'
   depends_on_option: hatari_tos
-  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:146-154, .emulationstation/es_features.cfg:12791-12797"
+  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:410-415, 454, .emulationstation/es_features.cfg:13768-13774"
 - emulator: hatari
+  build: standalone
+  kind: fixed_name
+  names:
+  - emutos.img
+  case_insensitive: true
+  search_dir: bios/hatari/tos
+  passes_to: "hatari.cfg [ROM] szTosImageFileName=<bios>/hatari/tos/emutos.img"
+  fails_when_missing: tos.img is used, as without a hard disk image
+  depends_on_option: hatari_tos unset, a hard disk image mounted or no tos.img
+  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:410-412, 416-426, 454"
+- emulator: hatari
+  build: standalone
+  kind: names_searched
+  names:
+  - tos104.img
+  - tos206.img
+  - emutos.img
+  case_insensitive: true
+  search_dir: bios/hatari/tos
+  passes_to: "hatari.cfg [ROM] szTosImageFileName=<first found>"
+  fails_when_missing: the TOS older than 1.04 is kept
+  depends_on_option: hatari_tos unset, autostart or GEMDOS folder, TOS older than
+    1.04
+  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:410-412, 436-438, 454"
+- emulator: hatari2014
   build: libretro
   kind: core_option
   names:
@@ -4352,11 +4635,11 @@ launchers:
   - tos104.img
   - tos102.img
   - emutos.img
-  search_dir: bios
-  passes_to: hatari_tosimage = <value> | default
-  fails_when_missing: not checked by the launcher
-  depends_on_option: hatari_tos
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3148-3151, .emulationstation/es_features.cfg:6610-6617"
+  search_dir: bios/hatari/tos
+  passes_to: hatari_tosimage = <value>, if the file is there | default
+  fails_when_missing: hatari_tosimage = default
+  depends_on_option: hatari2014_tos
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3409-3417, .emulationstation/es_features.cfg:7095-7102"
 - emulator: hatarib
   build: libretro
   kind: fixed_name
@@ -4366,8 +4649,11 @@ launchers:
   search_dir: bios
   passes_to: hatarib_tos = <tos.img>
   fails_when_missing: falls back to hatarib_tos = <etos1024k>
-  depends_on_option: hatarib_tos unset
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3191-3195"
+  depends_on_option: hatarib_tos unset or tosimg; <etos1024k> instead for a hard disk
+    image under a TOS other than EmuTOS, or for autostart or GEMDOS under TOS older
+    than 1.04
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3434-3435, 3447-3450,\
+    \ 3481-3496"
 - emulator: hatarib
   build: libretro
   kind: core_option
@@ -4379,9 +4665,24 @@ launchers:
   case_insensitive: true
   search_dir: bios/hatarib
   passes_to: hatarib_tos = hatarib/<value>
-  fails_when_missing: option not written when the file is absent
+  fails_when_missing: hatarib_tos = <etos1024k>, or <tos.img> when bios holds it
   depends_on_option: hatarib_tos
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3184-3187, .emulationstation/es_features.cfg:6667-6676"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3434-3435, 3457-3474,\
+    \ .emulationstation/es_features.cfg:7125-7134"
+- emulator: hatarib
+  build: libretro
+  kind: copies
+  names:
+  - tos206.img
+  - tos106.img
+  - tos104.img
+  - tos102.img
+  case_insensitive: true
+  search_dir: bios/hatari/tos
+  passes_to: bios/hatarib/<value>
+  fails_when_missing: false
+  depends_on_option: hatarib_tos, the target does not exist
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3434-3435, 3457-3460"
 - emulator: jzintv
   build: standalone
   kind: fixed_name
@@ -4416,7 +4717,7 @@ launchers:
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig[\"\
     bios\"])"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:90-93"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:93-96"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4426,7 +4727,7 @@ launchers:
   fails_when_missing: false
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(samplePath) && Directory.Exists(samplePath)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:98, 103-104"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:101, 106-107"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4437,7 +4738,7 @@ launchers:
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(artPath) && Directory.Exists(artPath),\
     \ disable_artwork on"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:108, 115-117"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:111, 118-120"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4450,7 +4751,7 @@ launchers:
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(artPath) && Directory.Exists(artPath),\
     \ not (disable_artwork on)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:108-109, 115, 118-119"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:111-112, 118, 121-122"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4462,7 +4763,7 @@ launchers:
   fails_when_missing: false
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(iniPath) && Directory.Exists(iniPath)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:71-73, 164-165"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:74-76, 167-168"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4472,7 +4773,7 @@ launchers:
   fails_when_missing: false
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(hashPath) && Directory.Exists(hashPath)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:169, 174-175"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:172, 177-178"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4482,7 +4783,7 @@ launchers:
   fails_when_missing: false
   depends_on_option: "!string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig.GetFullPath(\"\
     bios\")), Directory.Exists(Path.Combine(bios, \"mess\"))"
-  source_ref: "emulatorLauncher/Generators/MessSystem.cs:612, 660, 663-664"
+  source_ref: "emulatorLauncher/Generators/MessSystem.cs:613, 661, 664-665"
 - emulator: mame
   build: libretro
   kind: passes_path
@@ -4492,7 +4793,7 @@ launchers:
   fails_when_missing: false
   depends_on_option: "!string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig.GetFullPath(\"\
     bios\")), Directory.Exists(Path.Combine(bios, \"mess\"))"
-  source_ref: "emulatorLauncher/Generators/MessSystem.cs:612, 660, 663-664"
+  source_ref: "emulatorLauncher/Generators/MessSystem.cs:613, 661, 664-665"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4502,7 +4803,7 @@ launchers:
   fails_when_missing: false
   depends_on_option: "!string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig.GetFullPath(\"\
     bios\")), !Directory.Exists(Path.Combine(bios, \"mess\"))"
-  source_ref: "emulatorLauncher/Generators/MessSystem.cs:612, 660, 665-666"
+  source_ref: "emulatorLauncher/Generators/MessSystem.cs:613, 661, 666-667"
 - emulator: mame
   build: libretro
   kind: passes_path
@@ -4512,7 +4813,7 @@ launchers:
   fails_when_missing: false
   depends_on_option: "!string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig.GetFullPath(\"\
     bios\")), !Directory.Exists(Path.Combine(bios, \"mess\"))"
-  source_ref: "emulatorLauncher/Generators/MessSystem.cs:612, 660, 665-666"
+  source_ref: "emulatorLauncher/Generators/MessSystem.cs:613, 661, 666-667"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4520,7 +4821,7 @@ launchers:
   search_dir: bios/mame/ini
   passes_to: command line -inipath bios/mame/ini
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/MessSystem.cs:612, 702-703"
+  source_ref: "emulatorLauncher/Generators/MessSystem.cs:613, 703-704"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4528,7 +4829,7 @@ launchers:
   search_dir: bios/mame/hash
   passes_to: command line -hash bios/mame/hash
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/MessSystem.cs:612, 705-706"
+  source_ref: "emulatorLauncher/Generators/MessSystem.cs:613, 706-707"
 - emulator: melonds
   build: standalone
   kind: fixed_name
@@ -4564,7 +4865,7 @@ launchers:
   fails_when_missing: falls back to dsi_nand.bin
   depends_on_option: melonds_console == "dsi", melonds_nandregion set, rom extension
     not ".bin"
-  source_ref: "emulatorLauncher/Generators/MelonDS.Generator.cs:193-202, .emulationstation/es_features.cfg:15797-15804"
+  source_ref: "emulatorLauncher/Generators/MelonDS.Generator.cs:193-202, .emulationstation/es_features.cfg:16816-16823"
 - emulator: mesen
   build: standalone
   kind: copies
@@ -4572,9 +4873,9 @@ launchers:
   - syscard3.pce
   case_insensitive: true
   search_dir: bios
-  passes_to: "copied to <mesen>/Firmware/[BIOS] Super CD-ROM System (Japan) (v3.0).pce,\
-    \ only when the target does not exist"
+  passes_to: "<mesen>/Firmware/[BIOS] Super CD-ROM System (Japan) (v3.0).pce"
   fails_when_missing: "ApplicationException 'PCE CD firmware is missing (syscard3.pce)'"
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:254-269"
 - emulator: mesen
   build: standalone
@@ -4584,10 +4885,10 @@ launchers:
   - SGB2.sfc
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <mesen>/Firmware/SGB1.sfc, SGB2.sfc, only when the target does
-    not exist
+  passes_to: <mesen>/Firmware/SGB1.sfc, <mesen>/Firmware/SGB2.sfc
   fails_when_missing: "ApplicationException 'Super Gameboy firmware is missing (SGB1.sfc\
     \ and/or SGB2.sfc)'"
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:281-304"
 - emulator: mesen
   build: standalone
@@ -4596,9 +4897,9 @@ launchers:
   - gba_bios.bin
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <mesen>/Firmware/gba_bios.bin, only when the target does not
-    exist
+  passes_to: <mesen>/Firmware/gba_bios.bin
   fails_when_missing: false
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:307-324"
 - emulator: mesen
   build: standalone
@@ -4607,8 +4908,9 @@ launchers:
   - colecovision.rom
   case_insensitive: true
   search_dir: bios
-  passes_to: copied to <mesen>/Firmware/bios.col, only when the target does not exist
+  passes_to: <mesen>/Firmware/bios.col
   fails_when_missing: "ApplicationException 'Colecovision firmware is missing (colecovision.rom)'"
+  depends_on_option: the target does not exist
   source_ref: "emulatorLauncher/Generators/Mesen.Generator.cs:326-346"
 - emulator: openmsx
   build: standalone
@@ -4728,6 +5030,14 @@ launchers:
   fails_when_missing: ApplicationException '<machine> machine has missing BIOS file
     '<c>' in 'bios\openmsx\share\systemroms' folder.'
   source_ref: "emulatorLauncher/Generators/OpenMSX.Generator.cs:156-159, 467"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/openmsx
+  passes_to: environment OPENMSX_HOME
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/OpenMSX.Generator.cs:51, 255"
 - emulator: kronos
   build: standalone
   kind: fixed_name
@@ -4751,7 +5061,7 @@ launchers:
   passes_to: "kronos.ini [1.0] General\\Bios = <bios>/<value>, only if the file exists"
   fails_when_missing: General\Bios not written
   depends_on_option: kronos_force_bios
-  source_ref: "emulatorLauncher/Generators/Kronos.Generator.cs:162-170, .emulationstation/es_features.cfg:13529-13534"
+  source_ref: "emulatorLauncher/Generators/Kronos.Generator.cs:162-170, .emulationstation/es_features.cfg:14519-14524"
 - emulator: ssf
   build: standalone
   kind: core_option
@@ -4764,7 +5074,7 @@ launchers:
   passes_to: "SSF.ini [Peripheral] SaturnBIOS = <bios>/<value>, only if the file exists"
   fails_when_missing: SaturnBIOS not written
   depends_on_option: use_external_bios
-  source_ref: "emulatorLauncher/Generators/SSF.Generator.cs:76-83, .emulationstation/es_features.cfg:19240-19245"
+  source_ref: "emulatorLauncher/Generators/SSF.Generator.cs:76-83, .emulationstation/es_features.cfg:20762-20767"
 - emulator: yabasanshiro
   build: standalone
   kind: fixed_name
@@ -4789,7 +5099,7 @@ launchers:
     \ exists"
   fails_when_missing: General\Bios not written
   depends_on_option: yabasanshiro_force_bios
-  source_ref: "emulatorLauncher/Generators/Yabasanshiro.Generator.cs:123-131, .emulationstation/es_features.cfg:21111-21116"
+  source_ref: "emulatorLauncher/Generators/Yabasanshiro.Generator.cs:123-131, .emulationstation/es_features.cfg:22724-22729"
 - emulator: ymir
   build: standalone
   kind: fixed_name
@@ -4814,7 +5124,7 @@ launchers:
     \ check"
   fails_when_missing: path written without an existence check
   depends_on_option: ymir_force_bios
-  source_ref: "emulatorLauncher/Generators/Ymir.Generator.cs:120-125, .emulationstation/es_features.cfg:21170-21174"
+  source_ref: "emulatorLauncher/Generators/Ymir.Generator.cs:120-125, .emulationstation/es_features.cfg:22784-22788"
 - emulator: ymir
   build: standalone
   kind: passes_path
@@ -4892,7 +5202,7 @@ launchers:
   fails_when_missing: ApplicationException 'BIOS file <pcsx2Bios> does not exist in
     '<ps2BiosFolder>'.'
   depends_on_option: lrps2_bios
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3340-3349, .emulationstation/es_features.cfg:5459-5465"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3695-3704, .emulationstation/es_features.cfg:5875-5881"
 - emulator: pcsx2
   build: libretro
   kind: scans_dir
@@ -4904,7 +5214,66 @@ launchers:
   passes_to: pcsx2_bios = <chosen name>
   fails_when_missing: ApplicationException 'No valid PS2 BIOS file found in '<ps2BiosFolder>'.'
   depends_on_option: lrps2_bios unset
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3307-3328, 3353-3358"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3662-3683, 3708-3713"
+- emulator: pico8
+  build: standalone
+  kind: fixed_name
+  names:
+  - pico8.exe
+  case_insensitive: true
+  search_dir: "<AppConfig.GetFullPath(\"pico8\")>"
+  passes_to: exec
+  fails_when_missing: returns no process when the binary is absent
+  source_ref: "emulatorLauncher/Generators/Pico8.Generator.cs:14-18, 56-57"
+- emulator: citron
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"citron\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside citron.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Citron.Generator.cs:25, 29-30"
+- emulator: eden
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"eden\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside eden.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Eden.Generator.cs:28, 35-36"
+- emulator: ryujinx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"ryujinx\")>/portable"
+  passes_to: DefaultPortableDir, the portable folder beside Ryujinx.exe
+  fails_when_missing: false
+  depends_on_option: unless saves/switch/ryujinx/portable exists, passed with -r
+  source_ref: "emulatorLauncher/Generators/Ryujinx.Generator.cs:31, 73-75"
+- emulator: shadps4
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"shadps4\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside shadPS4.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/ShadPS4.Generator.cs:29, 158-160"
+- emulator: sudachi
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"sudachi\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside sudachi.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Sudachi.Generator.cs:20, 29-30"
+- emulator: yuzu
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "<AppConfig.GetFullPath(\"yuzu\")>/user"
+  passes_to: PORTABLE_DIR, the portable folder beside yuzu.exe
+  fails_when_missing: false
+  source_ref: "emulatorLauncher/Generators/Yuzu.Generator.cs:24, 33-34"
 - emulator: bizhawk
   build: standalone
   kind: names_searched
@@ -4916,7 +5285,7 @@ launchers:
   passes_to: PSX+U, PSX+J, PSX+E
   fails_when_missing: false
   depends_on_option: bizhawk_psx_original_bios off
-  source_ref: "emulatorLauncher/Generators/Bizhawk.Generator.cs:623-664"
+  source_ref: "emulatorLauncher/Generators/Bizhawk.Generator.cs:612-653"
 - emulator: bizhawk
   build: standalone
   kind: fixed_name
@@ -4928,7 +5297,7 @@ launchers:
   search_dir: bios
   passes_to: PSX+U, PSX+J, PSX+E
   fails_when_missing: false
-  source_ref: "emulatorLauncher/Generators/Bizhawk.Generator.cs:623-664"
+  source_ref: "emulatorLauncher/Generators/Bizhawk.Generator.cs:612-653"
 - emulator: mednafen
   build: standalone
   kind: names_searched
@@ -4940,7 +5309,7 @@ launchers:
   passes_to: psx.bios_eu, psx.bios_jp, psx.bios_na
   fails_when_missing: false
   depends_on_option: mednafen_psx_original_bios off
-  source_ref: "emulatorLauncher/Generators/Mednafen.Generator.cs:414-441"
+  source_ref: "emulatorLauncher/Generators/Mednafen.Generator.cs:443-470"
 - emulator: mednafen
   build: standalone
   kind: fixed_name
@@ -4952,7 +5321,7 @@ launchers:
   search_dir: bios
   passes_to: psx.bios_eu, psx.bios_jp, psx.bios_na
   fails_when_missing: names written without an existence check
-  source_ref: "emulatorLauncher/Generators/Mednafen.Generator.cs:414-441"
+  source_ref: "emulatorLauncher/Generators/Mednafen.Generator.cs:443-470"
 - emulator: mednafen_psx_hw
   build: libretro
   kind: names_searched
@@ -4964,7 +5333,7 @@ launchers:
   passes_to: beetle_psx_hw_override_bios
   fails_when_missing: false
   depends_on_option: beetle_psx_original_bios off
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:4034-4045"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:4389-4400"
 - emulator: swanstation
   build: libretro
   kind: names_searched
@@ -4976,7 +5345,7 @@ launchers:
   passes_to: swanstation_BIOS_PathNTSCJ, swanstation_BIOS_PathNTSCU, swanstation_BIOS_PathPAL
   fails_when_missing: false
   depends_on_option: swanstation_original_bios off
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:5982-6009"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:6310-6337"
 - emulator: swanstation
   build: libretro
   kind: fixed_name
@@ -4988,7 +5357,7 @@ launchers:
   search_dir: bios
   passes_to: swanstation_BIOS_PathNTSCJ, swanstation_BIOS_PathNTSCU, swanstation_BIOS_PathPAL
   fails_when_missing: names written without an existence check
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:5982-6009"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:6310-6337"
 - emulator: psxmame
   build: standalone
   kind: passes_path
@@ -5005,7 +5374,7 @@ launchers:
   passes_to: "config/raine32_sdl.cfg [Directories] rom_dir_1 = bios"
   fails_when_missing: false
   depends_on_option: "!string.IsNullOrEmpty(biosPath)"
-  source_ref: "emulatorLauncher/Generators/Raine.Generator.cs:87, 92"
+  source_ref: "emulatorLauncher/Generators/Raine.Generator.cs:93, 98"
 - emulator: raine
   build: standalone
   kind: fixed_name
@@ -5017,7 +5386,7 @@ launchers:
     \ check"
   fails_when_missing: path written without an existence check
   depends_on_option: "!string.IsNullOrEmpty(biosPath)"
-  source_ref: "emulatorLauncher/Generators/Raine.Generator.cs:87, 93"
+  source_ref: "emulatorLauncher/Generators/Raine.Generator.cs:93, 99"
 - emulator: rpcs3
   build: standalone
   kind: fixed_name
@@ -5068,7 +5437,7 @@ launchers:
   passes_to: "<exe>.ini [scummvm] themepath = bios/scummvm/theme"
   fails_when_missing: false
   depends_on_option: "Directory.Exists(themePath)"
-  source_ref: "emulatorLauncher/Generators/ScummVm.Generator.cs:265-266, 271"
+  source_ref: "emulatorLauncher/Generators/ScummVm.Generator.cs:267-268, 273"
 - emulator: scummvm
   build: standalone
   kind: passes_path
@@ -5077,7 +5446,7 @@ launchers:
   passes_to: "<exe>.ini [scummvm] extrapath = bios/scummvm/extra"
   fails_when_missing: false
   depends_on_option: "Directory.Exists(extraPath)"
-  source_ref: "emulatorLauncher/Generators/ScummVm.Generator.cs:265-267, 275"
+  source_ref: "emulatorLauncher/Generators/ScummVm.Generator.cs:267-269, 277"
 - emulator: winuae
   build: standalone
   kind: names_searched
@@ -5221,9 +5590,9 @@ launchers:
   - kick40068.A4000
   case_insensitive: true
   search_dir: bios, bios/amiga, bios/Amiga
-  passes_to: copied to <WHDBoot>/Devs/Kickstarts/<name> from the system's Kickstart
-    candidates
+  passes_to: <WHDBoot>/Devs/Kickstarts/<name>
   fails_when_missing: false
+  depends_on_option: the system's Kickstart candidates
   source_ref: "emulatorLauncher/Generators/Uae.Generator.cs:1002-1011, 1026-1032"
 - emulator: xemu
   build: standalone
@@ -5247,7 +5616,7 @@ launchers:
   passes_to: "xemu.toml [sys.files] flashrom_path=<bios>/<value>, default Complex_4627.bin"
   fails_when_missing: path written without an existence check
   depends_on_option: xemu_flashrom
-  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:286-289, .emulationstation/es_features.cfg:20472-20476"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:286-289, .emulationstation/es_features.cfg:22081-22085"
 - emulator: xemu
   build: standalone
   kind: names_searched
@@ -5284,6 +5653,43 @@ launchers:
   fails_when_missing: "warning '[Generator] Chihiro media board flash missing next\
     \ to the BIOS.'"
   source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:438-441"
+- emulator: xemu
+  build: standalone
+  kind: fixed_name
+  names:
+  - eeprom.bin
+  - xbox_hdd.qcow2
+  case_insensitive: true
+  search_dir: saves/<system>
+  passes_to: "xemu.toml [sys.files] eeprom_path, hdd_path; written from the launcher's\
+    \ eeprom and xbox_hdd_qcow2 resources when absent, the disk image unzipped"
+  fails_when_missing: "never missing: the launcher writes both"
+  depends_on_option: "the saves folder is set and exists, not (emulator == \"xemu-chihiro\"\
+    \ or system == \"chihiro\")"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:48, 82-106, 278, 281"
+- emulator: xemu, xemu-chihiro
+  build: standalone
+  kind: copies
+  names:
+  - chihiro_eeprom.bin
+  case_insensitive: true
+  search_dir: saves/chihiro
+  passes_to: <emulator>/chihiro_eeprom.bin, restored when the saved copy is newer
+    or the emulator folder holds none, copied back after the run
+  fails_when_missing: false
+  depends_on_option: emulator == "xemu-chihiro" or system == "chihiro"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:48, 480-520"
+- emulator: xemu, xemu-chihiro
+  build: standalone
+  kind: fixed_name
+  names:
+  - chihiro_snapshots.qcow2
+  case_insensitive: true
+  search_dir: saves/chihiro
+  passes_to: "xemu.toml [chihiro.roms] snapshot_store_path, created by the emulator"
+  fails_when_missing: false
+  depends_on_option: emulator == "xemu-chihiro" or system == "chihiro"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:48, 446-449"
 - emulator: xm6pro
   build: standalone
   kind: copies
@@ -5295,18 +5701,38 @@ launchers:
   - IPLROM30.DAT
   case_insensitive: true
   search_dir: bios/keropi
-  passes_to: copied to <emulator>/<name>, only when the target does not exist
+  passes_to: <emulator>/<name>
   fails_when_missing: false
-  depends_on_option: "!string.IsNullOrEmpty(biosRoot), Directory.Exists(biosPath)"
+  depends_on_option: "!string.IsNullOrEmpty(biosRoot), Directory.Exists(biosPath),\
+    \ the target does not exist"
   source_ref: "emulatorLauncher/Generators/Xm6pro.Generator.cs:118-141"
 - emulator: xroar
   build: standalone
   kind: passes_path
   names: []
-  search_dir: bios/dragon, or bios/coco when system == "coco"
-  passes_to: command line -rompath bios/dragon, or bios/coco when system == "coco"
+  search_dir: bios/dragon
+  passes_to: command line -rompath bios/dragon
   fails_when_missing: false
   source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80"
+- emulator: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/coco
+  passes_to: command line -rompath bios/coco
+  fails_when_missing: false
+  systems:
+  - coco
+  machines:
+  - coco
+  - cocous
+  - coco2b
+  - coco2bus
+  - coco3
+  - coco3h
+  - coco3p
+  - coco3ph
+  source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80, .emulationstation/es_features.cfg:22650-22659"
 - emulator: xroar
   build: standalone
   kind: passes_path

@@ -111,7 +111,7 @@
     "name": "Adventure Vision",
     "biosFiles": [
       {
-        "md5": "1c08606408029751fd30ac91d2bf30d5",
+        "md5": "",
         "file": "bios/advision.zip"
       },
       {
@@ -145,98 +145,6 @@
       {
         "md5": "646773759326fbac3b2311fd8c8793ee",
         "file": "bios/kick40068.A1200"
-      },
-      {
-        "md5": "945c364bb9b5f28a04e1003f8b7a469c",
-        "file": "bios/aros-ext.bin"
-      },
-      {
-        "md5": "69179a8479d1ba279c786094ce343386",
-        "file": "bios/aros-rom.bin"
-      },
-      {
-        "md5": "6670a9571f235ec31b8bbd48fc18f428",
-        "file": "bios/whdboot/WHDLoad"
-      },
-      {
-        "md5": "2a3a61bbd7c351751506e22a4354b76a",
-        "file": "bios/whdboot/JST"
-      },
-      {
-        "md5": "36ab26d3b855e634fdda062c052cd52b",
-        "file": "bios/whdboot/AmiQuit"
-      },
-      {
-        "md5": "9e638f3d531eb7cd82594f49a4cf03b7",
-        "file": "bios/whdboot/boot-data.zip"
-      },
-      {
-        "md5": "51d44cd24e16fbb395b1bfefbaacd375",
-        "file": "bios/whdboot/game-data/whdload_db.json"
-      },
-      {
-        "md5": "c993feb1eeddec1d2e687aa514231028",
-        "file": "bios/whdboot/save-data/Kickstarts/kick33180.A500.RTB"
-      },
-      {
-        "md5": "7eb13d974af0992d672b67c317a7e0a1",
-        "file": "bios/whdboot/save-data/Kickstarts/kick34005.A500.RTB"
-      },
-      {
-        "md5": "3f97c1963d82c808ef29e7c984c4c688",
-        "file": "bios/whdboot/save-data/Kickstarts/kick40063.A600.RTB"
-      },
-      {
-        "md5": "547b42b7b070c7f227ea45e0986d57a1",
-        "file": "bios/whdboot/save-data/Kickstarts/kick40068.A1200.RTB"
-      },
-      {
-        "md5": "f89f19b858ea6b1a04327c6f71ee1600",
-        "file": "bios/whdboot/save-data/Kickstarts/kick40068.A4000.RTB"
-      },
-      {
-        "md5": "c5ba6165df42fc69b32942b248fca725",
-        "file": "bios/whdboot/save-data/Kickstarts/kick31034.A1000.RTB"
-      },
-      {
-        "md5": "6c5b44c1a2bcee664129f850bfe4ed8a",
-        "file": "bios/uae_data/drive_click_A500.wav"
-      },
-      {
-        "md5": "7401f854a75f9ede18769168ab896a2a",
-        "file": "bios/uae_data/drive_spin_A500.wav"
-      },
-      {
-        "md5": "f9d954879fee8e96baa93d6139077cdb",
-        "file": "bios/uae_data/drive_spinnd_A500.wav"
-      },
-      {
-        "md5": "aebeacc7e7bc52ef890785c835bec3d0",
-        "file": "bios/uae_data/drive_startup_A500.wav"
-      },
-      {
-        "md5": "1a4b2d6254918ff769f26beeede75655",
-        "file": "bios/uae_data/drive_snatch_A500.wav"
-      },
-      {
-        "md5": "b64bee23f356635f67fb08b543df9797",
-        "file": "bios/uae_data/drive_click_LOUD.wav"
-      },
-      {
-        "md5": "56d8e36a2f04b5e8c5a1f1530cfc886c",
-        "file": "bios/uae_data/drive_spin_LOUD.wav"
-      },
-      {
-        "md5": "43ab05c6d969cb40805970a5b2352875",
-        "file": "bios/uae_data/drive_spinnd_LOUD.wav"
-      },
-      {
-        "md5": "743b4b9f0ca645c4c2a34953b5e01e45",
-        "file": "bios/uae_data/drive_startup_LOUD.wav"
-      },
-      {
-        "md5": "40cdf89f35b68cfefd4df5fb0256e02f",
-        "file": "bios/uae_data/drive_snatch_LOUD.wav"
       }
     ]
   },
@@ -283,7 +191,7 @@
     "name": "APF M-1000",
     "biosFiles": [
       {
-        "md5": "b197db12f7a13827717bbeb7cfd9542a",
+        "md5": "",
         "file": "bios/apfm1000.zip"
       },
       {
@@ -439,7 +347,7 @@
     "name": "Arcadia 2001",
     "biosFiles": [
       {
-        "md5": "37e9746f4491aa2df9a83729d1a93620",
+        "md5": "",
         "file": "bios/ar_bios.zip"
       },
       {
@@ -471,7 +379,7 @@
     "name": "Astrocade",
     "biosFiles": [
       {
-        "md5": "f58a3823ab308ef0a02b498d126e5d96",
+        "md5": "",
         "file": "bios/astrocde.zip"
       },
       {
@@ -623,7 +531,7 @@
     "name": "Atomiswave",
     "biosFiles": [
       {
-        "md5": "0ec5ae5b5a5c4959fa8b43fcf8687f7c",
+        "md5": "",
         "file": "bios/dc/awbios.zip"
       }
     ]
@@ -745,7 +653,7 @@
     "name": "Casio Loopy",
     "biosFiles": [
       {
-        "md5": "0e1d8dc0110ecf8201c0cef11ef4a858",
+        "md5": "",
         "file": "bios/casloopy.zip"
       },
       {
@@ -1011,10 +919,6 @@
       {
         "md5": "",
         "file": "bios/dc/dc.zip"
-      },
-      {
-        "md5": "e10c53c2f8b90bab96ead2d368858623",
-        "file": "bios/dc/boot.bin"
       }
     ]
   },
@@ -1103,15 +1007,7 @@
     "name": "FMTowns",
     "biosFiles": [
       {
-        "md5": "",
-        "file": "bios/fmtowns.zip"
-      },
-      {
-        "md5": "",
-        "file": "bios/fmtownsux.zip"
-      },
-      {
-        "md5": "8fa4e553f28cfc0c30a0a1e589799942",
+        "md5": "34847786d7de94b5d1133c956ab1d75d",
         "file": "bios/fmtowns/FMT_DIC.ROM"
       },
       {
@@ -1119,32 +1015,12 @@
         "file": "bios/fmtowns/FMT_DOS.ROM"
       },
       {
-        "md5": "ac0c7021e9bf48ca84b51ab651169a88",
-        "file": "bios/fmtowns/FMT_F20.ROM"
-      },
-      {
-        "md5": "b91300e55b70227ce98b59c5f02fa8dd",
+        "md5": "eb44f2093f51eb7159f03e170b13af76",
         "file": "bios/fmtowns/FMT_FNT.ROM"
       },
       {
-        "md5": "86fb6f7280689259f0ca839dd3dd6cde",
+        "md5": "feaf8c5675151e00cfe3ad27673bff29",
         "file": "bios/fmtowns/FMT_SYS.ROM"
-      },
-      {
-        "md5": "",
-        "file": "bios/mame/hash/fmtowns_cd.xml"
-      },
-      {
-        "md5": "",
-        "file": "bios/mame/hash/fmtowns_flop_cracked.xml"
-      },
-      {
-        "md5": "",
-        "file": "bios/mame/hash/fmtowns_flop_misc.xml"
-      },
-      {
-        "md5": "",
-        "file": "bios/mame/hash/fmtowns_flop_orig.xml"
       }
     ]
   },
@@ -1153,7 +1029,7 @@
     "name": "Gamate",
     "biosFiles": [
       {
-        "md5": "320bf3d4142fa1043255db7ff87d17c7",
+        "md5": "",
         "file": "bios/gamate.zip"
       },
       {
@@ -1167,7 +1043,7 @@
     "name": "Game.com",
     "biosFiles": [
       {
-        "md5": "f2087ed09f7fa8d8856cfafb20dd00dc",
+        "md5": "",
         "file": "bios/gamecom.zip"
       },
       {
@@ -1181,7 +1057,7 @@
     "name": "Game Pocket",
     "biosFiles": [
       {
-        "md5": "887479fe3c69a0b935c57a7a738e26c4",
+        "md5": "",
         "file": "bios/gamepock.zip"
       },
       {
@@ -1229,7 +1105,7 @@
     "name": "Game Master",
     "biosFiles": [
       {
-        "md5": "4239d6f44a0d78d27c69f9b95885f48e",
+        "md5": "",
         "file": "bios/gmaster.zip"
       },
       {
@@ -1243,7 +1119,7 @@
     "name": "Game Park 32",
     "biosFiles": [
       {
-        "md5": "8c392f475834218d88533150d36cc84c",
+        "md5": "",
         "file": "bios/gp32.zip"
       },
       {
@@ -1257,11 +1133,11 @@
     "name": "Hikaru",
     "biosFiles": [
       {
-        "md5": "aac601811a25d7b31a3d5f3f1f82f338",
+        "md5": "",
         "file": "bios/hikaru.zip"
       },
       {
-        "md5": "e95415b161121bef35ade12367138c63",
+        "md5": "",
         "file": "bios/mie.zip"
       }
     ]
@@ -1641,7 +1517,7 @@
     "name": "Naomi",
     "biosFiles": [
       {
-        "md5": "eb4099aeb42ef089cfe94f8fe95e51f6",
+        "md5": "",
         "file": "bios/dc/naomi.zip"
       }
     ]
@@ -1699,7 +1575,7 @@
     "name": "NeoGeo",
     "biosFiles": [
       {
-        "md5": "dffb72f116d36d025068b23970a4f6df",
+        "md5": "",
         "file": "bios/neogeo.zip"
       }
     ]
@@ -1709,7 +1585,7 @@
     "name": "Hyper NeoGeo 64",
     "biosFiles": [
       {
-        "md5": "dffb72f116d36d025068b23970a4f6df",
+        "md5": "",
         "file": "bios/neogeo.zip"
       }
     ]
@@ -1719,7 +1595,7 @@
     "name": "NeoGeo CD",
     "biosFiles": [
       {
-        "md5": "dffb72f116d36d025068b23970a4f6df",
+        "md5": "",
         "file": "bios/neogeo.zip"
       },
       {
@@ -1923,7 +1799,7 @@
     "name": "Aamber Pegasus",
     "biosFiles": [
       {
-        "md5": "fee37d8140e4fab48aac4fdab2847f7d",
+        "md5": "",
         "file": "bios/pegasus.zip"
       },
       {
@@ -1948,7 +1824,53 @@
     "biosFiles": [
       {
         "md5": "21038400dc633070a78ad53090c53017",
-        "file": "bios/pcsx2/bios/ps2-0230a-20080220.bin"
+        "file": "bios/pcsx2/bios/ps2-0230a-20080220.bin",
+        "group": "ps2"
+      },
+      {
+        "md5": "dc69f0643a3030aaa4797501b483d6c4",
+        "file": "bios/pcsx2/bios/ps2-0230e-20080220.bin",
+        "group": "ps2"
+      },
+      {
+        "md5": "80ac46fa7e77b8ab4366e86948e54f83",
+        "file": "bios/pcsx2/bios/ps2-0230j-20080220.bin",
+        "group": "ps2"
+      },
+      {
+        "md5": "93ea3bcee4252627919175ff1b16a1d9",
+        "file": "bios/pcsx2/bios/ps2-0250e-20100415.bin",
+        "group": "ps2"
+      },
+      {
+        "md5": "28922c703cc7d2cf856f177f2985b3a9",
+        "file": "bios/pcsx2/bios/SCPH30004R.bin",
+        "group": "ps2"
+      },
+      {
+        "md5": "d5ce2c7d119f563ce04bc04dbc3a323e",
+        "file": "bios/pcsx2/bios/scph39001.bin",
+        "group": "ps2"
+      },
+      {
+        "md5": "",
+        "file": "bios/pcsx2/bios/ps3_ps2_emu_bios.bin",
+        "group": "ps2"
+      },
+      {
+        "md5": "",
+        "file": "bios/pcsx2/bios/SCPH-39004_BIOS_V7_EUR_160.BIN",
+        "group": "ps2"
+      },
+      {
+        "md5": "",
+        "file": "bios/pcsx2/bios/SCPH-39001_BIOS_V7_USA_160.BIN",
+        "group": "ps2"
+      },
+      {
+        "md5": "",
+        "file": "bios/pcsx2/bios/SCPH-70000_BIOS_V12_JAP_200.BIN",
+        "group": "ps2"
       }
     ]
   },
@@ -2043,6 +1965,10 @@
       {
         "md5": "89e42e386e82e0cacb4a2704a03706ca",
         "file": "bios/scummvm/extra/MT32_PCM.ROM"
+      },
+      {
+        "md5": "c5233e4594f9b7bc4f773ae6ba5aa87d",
+        "file": "bios/system/MT32_CONTROL.ROM"
       }
     ]
   },
@@ -2051,7 +1977,7 @@
     "name": "Super Cassette Vision",
     "biosFiles": [
       {
-        "md5": "33df021613fb12abe2ad14b9eb17c7fe",
+        "md5": "",
         "file": "bios/scv.zip"
       },
       {
@@ -2212,7 +2138,7 @@
   },
 
   "tutor": {
-    "name": "APF M-1000",
+    "name": "Tomy Tutor",
     "biosFiles": [
       {
         "md5": "",

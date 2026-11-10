@@ -1,0 +1,104 @@
+emulator: Voxatron
+type: standalone
+core_classification: other
+upstream: "https://www.lexaloffle.com/voxatron.php"
+profiled_date: "2026-11-09"
+core_version: "0.3.5b"
+version_basis:
+  kind: unverified
+  why: no_artifact
+display_name: "Lexaloffle - Voxatron"
+cores:
+  - vox_official
+systems:
+  - voxatron
+standalone_directories:
+  - "executable directory"
+
+notes: |
+  Commercial voxel fantasy console by Lexaloffle Games LLP, sold as ZIP
+  archives. The held binaries report voxatron 0.3.5b. Nothing in the
+  program checks a hash of its own files.
+
+  The program finds its own folder through /proc/self/exe and reads vox.dat
+  beside itself. The paths below put the program in voxatron/: a launcher
+  that runs vox from a folder places that folder there.
+
+  Batocera's generator runs bios/voxatron/vox with LD_LIBRARY_PATH set to
+  bios/voxatron. x86_64 only. vox_dyn is the variant linked against the
+  system SDL2. libHoloPlayCore.so is the Looking Glass SDK the binary links
+  against.
+
+files:
+  - name: vox
+    path: voxatron/vox
+    system: voxatron
+    required: true
+    description: "Voxatron main executable"
+    source_ref: "batocera lexaloffleGenerator.py:20, 42, 48-52"
+    note: "The Voxatron program vox, an x86_64 ELF with SDL2 linked in. Batocera's generator runs bios/voxatron/vox and raises when it is missing or not executable."
+
+  - name: vox_dyn
+    path: voxatron/vox_dyn
+    system: voxatron
+    required: false
+    description: "Voxatron dynamically linked executable"
+    source_ref: "voxatron vox_dyn, NEEDED libSDL2-2.0.so.0, batocera lexaloffleGenerator.py:20, 42"
+    note: "The same program linked against the system SDL2 (its only extra NEEDED library). Batocera's generator never runs it."
+
+  - name: vox.dat
+    path: voxatron/vox.dat
+    system: voxatron
+    required: true
+    description: "Voxatron data file"
+    source_ref: "voxatron vox, string vox.dat at 0x2a58f, voxatron vox_dyn, string vox.dat at 0x1f1af"
+    note: "Opened from the folder of the binary that runs. Absent, vox stops with \"FATAL ERROR: could not load vox.dat\"."
+
+  - name: libHoloPlayCore.so
+    path: voxatron/libHoloPlayCore.so
+    system: voxatron
+    required: false
+    description: "Looking Glass holographic display support library"
+    source_ref: "voxatron vox, voxatron vox_dyn, batocera lexaloffleGenerator.py:41, 87-90"
+    note: "Neither binary links it or names it, and neither opens it in a run (strace, with and without the file). Batocera's generator sets LD_LIBRARY_PATH to bios/voxatron, where it keeps the library."
+
+  - name: config.txt
+    unsourceable: "written by the emulator on exit, no canonical file"
+    system: voxatron
+    required: false
+    description: "Voxatron settings"
+    source_ref: "voxatron vox, string config.txt at 0x27bea0"
+    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, and written there when absent."
+
+  - name: sdl_controllers.txt
+    unsourceable: "user supplied, no canonical file"
+    system: voxatron
+    required: false
+    description: "Custom SDL controller mappings"
+    source_ref: "voxatron vox, string sdl_controllers.txt at 0x2847f7"
+    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, where Voxatron writes it when absent."
+
+  - name: favourites.txt
+    unsourceable: "written by the emulator, no canonical file"
+    system: voxatron
+    required: false
+    description: "Cart browser favourites list"
+    source_ref: "voxatron vox, string favourites.txt at 0x27a39e"
+    note: "Read from ~/.lexaloffle/Voxatron."
+
+  - name: internal_carts.txt
+    unsourceable: "written by the emulator, no canonical file"
+    system: voxatron
+    required: false
+    description: "Voxatron internal cart list"
+    source_ref: "voxatron vox, string internal_carts.txt at 0x27a446"
+    note: "Read from ~/.lexaloffle/Voxatron and written there at startup."
+
+  - name: player_1.vpp
+    path: player/player_1.vpp
+    unsourceable: "written by the emulator, no canonical file"
+    system: voxatron
+    required: false
+    description: "Voxatron player profile"
+    source_ref: "voxatron vox, string player/player_%d.vpp at 0x273f90"
+    note: "Read from ~/.lexaloffle/Voxatron/player, and written there when absent."

@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/TASEmulators/freej2me-plus"
 upstream: "https://github.com/hex007/freej2me"
 profiled_date: "2026-10-04"
-source_commit: "3933e75ef927a95eab9f5e065f0b76dabf336069"
+source_commit: "869a16b28ffd366722f419f8bac4a7cfe60d69a3"
 upstream_commit: "8b9bc8a19baf26e3d92f88934a64a32f1cbc2795"
 core_version: "1.53"
 version_basis:
@@ -51,16 +51,17 @@ notes: |
   overridden by the core options the bridge sends), FreeJ2ME.log, and the
   SiemensData/ and XceData/ directories that the Siemens and XCE file APIs
   write to. FreeJ2MEDumps/KDDI/ receives the jar and jad extracted from a
-  .kjx. Saves go to <save_dir>/freej2me/ (rms/<suite>/ and
-  config/<suite>/game.conf), falling back to the system directory when the
-  frontend has no save directory.
+  .kjx. Saves go to <save_dir>/freej2me/ (rms/<suite>/, the suite name with
+  any of \/:*?"<>| replaced by an underscore, and config/<suite>/game.conf),
+  falling back to the system directory when the frontend has no save
+  directory.
   ref: src/org/recompile/freej2me/Config.java:47-48,
-       src/org/recompile/freej2me/Config.java:186-206,
-       src/org/recompile/mobile/Mobile.java:121-123,
-       src/org/recompile/mobile/Mobile.java:135,
+       src/org/recompile/freej2me/Config.java:188-208,
+       src/org/recompile/mobile/Mobile.java:119-121,
+       src/org/recompile/mobile/Mobile.java:133,
        src/libretro/freej2me_libretro.c:937-945,
        src/org/recompile/freej2me/Libretro.java:201-205,
-       src/javax/microedition/rms/RecordStore.java:111
+       src/javax/microedition/rms/RecordStore.java:111-112, 1134
 
   Two files are user supplied and optional. With the freej2me_midifont core
   option on, Manager.checkCustomMidi loads the first .sf2 or .gm listed in
@@ -74,9 +75,9 @@ notes: |
        src/libretro/freej2me_libretro.c:481-486,
        src/org/recompile/freej2me/Libretro.java:240,
        src/org/recompile/freej2me/Libretro.java:254,
-       src/org/recompile/mobile/Mobile.java:1056-1064,
-       src/javax/microedition/media/Manager.java:55,
-       src/javax/microedition/media/Manager.java:329-352,
+       src/org/recompile/mobile/Mobile.java:1048-1056,
+       src/javax/microedition/media/Manager.java:56,
+       src/javax/microedition/media/Manager.java:330-353,
        src/org/recompile/mobile/PlatformFont.java:63,
        src/org/recompile/mobile/PlatformFont.java:133-154
 
@@ -98,7 +99,7 @@ files:
     category: game_data
     description: "MIDI soundbank for J2ME audio"
     note: "First .sf2 or .gm in the directory listing, loaded through MidiSystem.getSoundbank when the freej2me_midifont option is on. A rejected file is logged and the JVM default soundbank stays."
-    source_ref: "source src/javax/microedition/media/Manager.java:55, source src/javax/microedition/media/Manager.java:329-352, source src/org/recompile/mobile/Mobile.java:1056-1058"
+    source_ref: "source src/javax/microedition/media/Manager.java:56, source src/javax/microedition/media/Manager.java:330-353, source src/org/recompile/mobile/Mobile.java:1048-1050"
 
   - name: "<font>.ttf"
     system: j2me
@@ -108,4 +109,4 @@ files:
     category: game_data
     description: "TrueType font for J2ME text"
     note: "First .ttf, .otf or .ttc in the directory listing, loaded through Font.createFont when the freej2me_textfont option is on. A rejected file is logged and the AWT faces stay."
-    source_ref: "source src/org/recompile/mobile/PlatformFont.java:63, source src/org/recompile/mobile/PlatformFont.java:133-154, source src/org/recompile/mobile/Mobile.java:1062-1064"
+    source_ref: "source src/org/recompile/mobile/PlatformFont.java:63, source src/org/recompile/mobile/PlatformFont.java:133-154, source src/org/recompile/mobile/Mobile.java:1054-1056"

@@ -1116,7 +1116,7 @@ def _platform_export_rows(
                     ),
                     "required": bool(entry.get("required", True)),
                     "region": _json_text(entry.get("region")),
-                    "variant_group": _json_text(entry.get("variant_group")),
+                    "selection_slot": _json_text(entry.get("selection_slot")),
                     "size": entry.get("size"),
                     "sha1": _json_text(entry.get("sha1")),
                     "sha256": _json_text(entry.get("sha256")),
@@ -1174,7 +1174,7 @@ def build_emulator_gap_report(
     unique_profiles = {
         k: v
         for k, v in profiles.items()
-        if v.get("type") not in ("alias", "test")
+        if v.get("type") != "alias" and v.get("role") != "test"
     }
     from common import merged_standalone_set, platform_declarations
     from validation import case_folded_slots
@@ -1306,7 +1306,7 @@ def _cross_reference_export_rows(coverages: dict, profiles: dict) -> list[dict]:
     unique = {
         key: value
         for key, value in profiles.items()
-        if value.get("type") not in ("alias", "test")
+        if value.get("type") != "alias" and value.get("role") != "test"
     }
     rows: list[dict] = []
     for platform_id, coverage in sorted(coverages.items()):
@@ -1372,7 +1372,7 @@ def _write_sqlite_export(
             CREATE TABLE platform_files (
                 platform_id TEXT NOT NULL, system TEXT NOT NULL, name TEXT NOT NULL,
                 destination TEXT NOT NULL, required INTEGER NOT NULL,
-                region TEXT, variant_group TEXT, size INTEGER,
+                region TEXT, selection_slot TEXT, size INTEGER,
                 sha1 TEXT, sha256 TEXT, md5 TEXT, crc32 TEXT,
                 status TEXT, category TEXT, collection_path TEXT, resolved_sha1 TEXT,
                 zipped_file TEXT, hash_match_mandatory INTEGER, mandatory_declared INTEGER,
@@ -1455,7 +1455,7 @@ def _write_sqlite_export(
         connection.executemany(
             "INSERT INTO platform_files VALUES "
             "(:platform_id, :system, :name, :destination, :required, :region, "
-            ":variant_group, :size, :sha1, :sha256, :md5, :crc32, :status, :category, "
+            ":selection_slot, :size, :sha1, :sha256, :md5, :crc32, :status, :category, "
             ":collection_path, :resolved_sha1, :zipped_file, :hash_match_mandatory, "
             ":mandatory_declared, :curated, :shared_group, :mirror_of, :zip_digest)",
             platform_files,
@@ -1699,7 +1699,7 @@ def generate_data_exports(
         _csv_document(
             [
                 "platform_id", "platform", "system", "name", "destination",
-                "required", "region", "variant_group", "size", "sha1",
+                "required", "region", "selection_slot", "size", "sha1",
                 "sha256", "md5", "crc32", "status", "category",
                 "collection_path", "resolved_sha1", *ENTRY_EXPORT_FIELDS,
             ],
@@ -1922,7 +1922,7 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
             if sha1:
                 held.setdefault(str(detail.get("system", "")), set()).add(sha1)
     for profile in profiles.values():
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         own = [str(s) for s in profile.get("systems") or []]
         for entry in profile.get("files") or []:
@@ -1973,7 +1973,7 @@ def _first_file_place(
             return parts[1], _site_path(f"systems/{page}.md#sha1-{sha1[:12]}")
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") not in ("alias", "test") and sys_id in (profile.get("systems") or []):
+        if profile.get("type") != "alias" and profile.get("role") != "test" and sys_id in (profile.get("systems") or []):
             return "", _site_path(f"emulators/{key}.md")
     return "", None
 
@@ -1988,7 +1988,7 @@ def core_index_items(profiles: dict) -> list[dict]:
     """
     from common import preferred_profile, upstream_profile_index
 
-    published = {name for name, p in profiles.items() if p.get("type") not in ("alias", "test")}
+    published = {name for name, p in profiles.items() if p.get("type") != "alias" and p.get("role") != "test"}
     index = upstream_profile_index(profiles)
     for name, profile in profiles.items():
         target = str(profile.get("alias_of") or "")
@@ -3602,7 +3602,7 @@ def _emulator_named_link(key: str, prefix: str = "") -> str:
     profile with no page (an alias, a test) is named only."""
     profile = _profiles_on_disk().get(key, {})
     label = _escape_tags(str(profile.get("emulator") or key))
-    if profile.get("type") in ("alias", "test"):
+    if profile.get("type") == "alias" or profile.get("role") == "test":
         return label
     return f"[{label}]({prefix}emulators/{key}.md)"
 
@@ -4069,7 +4069,10 @@ def _category_evidence_md(evidence: dict, launched: list[str] | None = None) -> 
             text += ", also named by " + ", ".join(bare)
         return text
     examined = evidence.get("cores_examined") or []
-    cores = ("cores examined: " + ", ".join(_emulator_link(c, "../") for c in examined)
+    # A core the site gives no page (a test core) is named, not linked.
+    with_page = _profiles_with_page(str(siteinputs.current().emulators))
+    cores = ("cores examined: " + ", ".join(
+        _emulator_link(c, "../") if c in with_page else c for c in examined)
              if examined else "no core examined")
     if evidence.get("unsettled"):
         return f"No reader found, not settled: {evidence['unsettled']} ({cores})"
@@ -4085,9 +4088,18 @@ def _profiles_by_core_name() -> dict[str, list[str]]:
 
 
 @functools.lru_cache(maxsize=None)
+def _profiles_with_page(emulators_dir: str) -> frozenset[str]:
+    """The profiles the site writes a page for: no alias, no test core."""
+    profiles = _profiles_in(emulators_dir, skip_aliases=True)
+    return frozenset(
+        k for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
+    )
+
+
+@functools.lru_cache(maxsize=None)
 def _core_names_in(emulators_dir: str) -> dict[str, list[str]]:
     profiles = _profiles_in(emulators_dir, skip_aliases=True)
-    with_page = {k for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
+    with_page = _profiles_with_page(emulators_dir)
     return {
         core: sorted(k for k in keys if k in with_page)
         for core, keys in upstream_profile_index(profiles).items()
@@ -4920,7 +4932,7 @@ def _data_member_owners(profiles: dict) -> dict[str, str]:
     """
     owners: dict[str, str] = {}
     for name in sorted(profiles):
-        if profiles[name].get("type") in ("alias", "test"):
+        if profiles[name].get("type") == "alias" or profiles[name].get("role") == "test":
             continue
         for tree in page_data_directories(name, profiles):
             owners.setdefault(str(tree.get("ref", "")), name)
@@ -5145,7 +5157,7 @@ def file_lookup_records(
                             **({"sha1": archive} if archive else {}),
                         })
     for key, profile in sorted(profiles.items()):
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         entries = profile.get("files") or []
         own_systems = [str(s) for s in profile.get("systems") or []]
@@ -5396,11 +5408,11 @@ def _folder_emulator(folder: str) -> tuple[str, str]:
     named after, by its profile key or its name, else the folder and "".
     """
     profiles = _profiles_on_disk()
-    if folder in profiles and profiles[folder].get("type") not in ("alias", "test"):
+    if folder in profiles and profiles[folder].get("type") != "alias" and profiles[folder].get("role") != "test":
         return str(profiles[folder].get("emulator") or folder), folder
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         names = {str(profile.get(field) or "").casefold() for field in ("emulator", "display_name")}
         if folder.casefold() in names:
@@ -6587,11 +6599,16 @@ START_WITH_NAMES = 6
 
 
 def _region_order() -> dict[str, int]:
+    """The regions a start line lists, the territories first. A file read
+    for every region is a region-free stand-in for the BIOS of each one:
+    the PlayStation section opened on psxonpsp660.bin, which one emulator
+    requires among the BIOS it accepts, above the scph files most read."""
     from region import REGION_TREE, WORLD  # noqa: PLC0415
 
-    ordered = [WORLD]
+    ordered = []
     for parent, members in REGION_TREE.items():
         ordered += [parent, *sorted(members)]
+    ordered.append(WORLD)
     return {region: index for index, region in enumerate(ordered)}
 
 
@@ -7857,7 +7874,7 @@ def emulator_initial(display: str) -> str:
 def generate_emulators_index(profiles: dict) -> str:
     unique = {
         k: v for k, v in profiles.items()
-        if v.get("type") not in ("alias", "test")
+        if v.get("type") != "alias" and v.get("role") != "test"
     }
     aliases = {k: v for k, v in profiles.items() if v.get("type") == "alias"}
 
@@ -8660,7 +8677,7 @@ def emulator_romset(profile: dict) -> str:
     1.38.1 on MAME 0.289), else the version of a MAME build or of a
     FinalBurn core, whose sets follow its own release.
     """
-    if profile.get("type") in ("alias", "launcher", "test"):
+    if profile.get("type") in ("alias", "launcher") or profile.get("role") == "test":
         return ""
     emulator = str(profile.get("emulator", ""))
     version = str(profile.get("core_version") or "")
@@ -8939,7 +8956,7 @@ def emulator_install_route(name: str, profile: dict) -> tuple[str, list[str], tu
     the systems both run on: RetroArch's list names AetherSX2, and the
     command filled RetroArch's system folder, which the app never reads.
     """
-    if profile.get("type") in ("alias", "launcher", "test"):
+    if profile.get("type") in ("alias", "launcher") or profile.get("role") == "test":
         return "", [], ()
     if not [f for f in profile.get("files") or [] if isinstance(f, dict) and not comes_with_app(f)]:
         return "", [], ()
@@ -9517,18 +9534,65 @@ def _emulator_slots(files: list[dict]) -> list[list[dict]]:
     return [group for group in slots.values() if not all(comes_with_app(f) for f in group)]
 
 
-def _emulator_file_summary(files: list[dict]) -> list[str]:
+def _set_names(value: object) -> list[str]:
+    """The sets an entry belongs to: group takes a name, a list or a map."""
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, (list, dict)):
+        return [str(name) for name in value]
+    return []
+
+
+def _requirements(files: list[dict], groups: dict | None) -> list[list[dict]]:
+    """Each thing the emulator needs: the members of a required set, any one
+    of which fills it (DuckStation's ps-bios, 105 images), or a required
+    file of its own. load_emulator_profiles marks every member of a
+    required set required, so counted per file DuckStation read "105
+    required" for one BIOS."""
+    required_sets = {name for name, spec in (groups or {}).items()
+                     if isinstance(spec, dict) and spec.get("required")}
+    sets: dict[str, list[dict]] = {}
+    alone: list[list[dict]] = []
+    for f in files:
+        if f.get("required") is not True or comes_with_app(f):
+            continue
+        names = [name for name in _set_names(f.get("group")) if name in required_sets]
+        if names:
+            for name in names:
+                sets.setdefault(name, []).append(f)
+        else:
+            alone.append([f])
+    return [*sets.values(), *alone]
+
+
+def _regional_set(requirements: list[list[dict]]) -> list[dict]:
+    """The one requirement, a set whose members the code picks by the game's
+    region, or [] when there is no such single choice."""
+    if len(requirements) != 1 or len(requirements[0]) < 2:
+        return []
+    members = requirements[0]
+    if not all(f.get("region") for f in members):
+        return []
+    return members if len({_region_words(f["region"]) for f in members}) >= 2 else []
+
+
+def _emulator_file_summary(files: list[dict], groups: dict | None = None) -> list[str]:
     """What the emulator reads, above its file table, and its categories.
 
     Counted by slot, as verify --emulator and the gaps page count: raze
     lists every GRP its code accepts under one name, and holding one fills
     the slot. Counted per entry, the page announced 46 missing where 12
     slots are empty. The files the app ships are counted apart: NetherSX2
-    said "4 required" for one BIOS and three fonts in its package.
+    said "4 required" for one BIOS and three fonts in its package. A
+    required set counts once (`groups`).
     """
     slots = _emulator_slots(files)
     shipped = sum(1 for f in files if comes_with_app(f))
-    req_count = sum(1 for group in slots if any(f.get("required") for f in group))
+    requirements = _requirements(files, groups)
+    in_sets = {id(f) for members in requirements for f in members}
+    req_slots = sum(1 for group in slots if any(id(f) in in_sets for f in group))
+    req_count = len(requirements)
+    optional = len(slots) - req_slots
     hle_count = sum(1 for group in slots if any(f.get("hle_fallback") for f in group))
 
     # Sentences, one number format: the line read "1,563 files | 164
@@ -9536,13 +9600,18 @@ def _emulator_file_summary(files: list[dict]) -> list[str]:
     total = f"**{_count(len(slots), 'file')}**"
     if sum(len(group) for group in slots) != len(slots):
         total += f" ({sum(len(group) for group in slots):,} accepted versions)"
-    line = f"{total}: {req_count:,} required, {len(slots) - req_count:,} optional."
-    if _regional_choice([f for f in files if f.get("required") is True and not comes_with_app(f)]):
+    line = f"{total}: {req_count:,} required, {optional:,} optional."
+    if any(len(members) > 1 for members in requirements):
+        line += " Any one file of a required set fills it."
+    regional = _regional_set(requirements) or (
+        [f for members in requirements for f in members]
+        if _regional_choice([f for members in requirements for f in members]) else [])
+    if regional:
         # DuckStation takes the BIOS of the game's region: "3 required"
         # read as "get all three".
-        line = (f"{total}. One of {req_count:,} is required, for the games' region. "
-                f"{len(slots) - req_count:,} {'is' if len(slots) - req_count == 1 else 'are'} "
-                "optional.")
+        line = f"{total}. One of {len(regional):,} is required, for the games' region."
+        if optional:
+            line += f" {optional:,} {'is' if optional == 1 else 'are'} optional."
     if hle_count:
         line += f" {hle_count:,} {'has' if hle_count == 1 else 'have'} an HLE fallback."
     if shipped:
@@ -9873,7 +9942,7 @@ def plan_emulator_pages(profiles: dict,
     ``available`` is the test the pages use for a held file."""
     stems = set()
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         files = profile.get("files") or []
         anchors = emulator_file_anchors(files)
@@ -10023,28 +10092,41 @@ def _emulator_intro(emu_name: str, profile: dict, href: str = "", name: str = ""
             names.append(label)
     # What the app installs itself is no file for the reader to get.
     files = [f for f in profile.get("files") or [] if isinstance(f, dict) and not comes_with_app(f)]
-    required = [f for f in files if f.get("required") is True]
+    requirements = _requirements(files, profile.get("groups"))
+    required = [f for members in requirements for f in members]
     sentences = []
     if names:
         shown = names if len(names) <= 4 else names[:3] + [f"{len(names) - 3} more systems"]
         sentences.append(f"{emu_name} emulates {_said_as_list(shown)}.")
-    by_region = _regional_choice(required)
-    if by_region:
-        # DuckStation needs the BIOS of the game's region, not all three: the
-        # page said "3 of them required" and read as "get all of these".
-        others = len(files) - len(required)
+    regional = _regional_set(requirements)
+    by_region = "" if regional else _regional_choice(required)
+    others = len(files) - len(required)
+    if regional:
+        # DuckStation needs one BIOS of the game's region and accepts 105
+        # images: every member of its ps-bios set is marked required, and
+        # the page said "105 of them required".
+        sentences.append(
+            f"It needs one BIOS for the game's region, among the {len(regional):,} it accepts.")
+        if others:
+            sentences.append(
+                f"The {_count(others, 'other file')} {'is' if others == 1 else 'are'} optional.")
+    elif by_region:
+        # Three required BIOS of three regions: the page said "3 of them
+        # required" and read as "get all of these".
         sentences.append(f"It picks the BIOS for the game's region: {by_region}.")
         if others:
             sentences.append(
                 f"The {_count(others, 'other file')} {'is' if others == 1 else 'are'} optional.")
     elif files:
         sentences.append(
-            f"It reads {_count(len(files), 'file')}, {len(required):,} of them required: "
+            f"It reads {_count(len(files), 'file')}, {len(requirements):,} of them required: "
             "without a required file it does not start games."
-            if required else
+            if requirements else
             f"It reads {_count(len(files), 'file')}, none of them required: it starts "
             "games without them."
         )
+        if any(len(members) > 1 for members in requirements):
+            sentences.append("Any one file of a required set fills it.")
     if required and len(names) > 1:
         sentences.append("A required file is needed only by the machines that use it.")
         if profile.get("found_by") == "content":
@@ -10237,7 +10319,7 @@ def emulator_pages(
         _file_available = _availability_check(db, data_names, name)
 
         lines.extend(["## Files", ""])
-        lines.extend(_emulator_file_summary(files))
+        lines.extend(_emulator_file_summary(files, profile.get("groups")))
         held = _emulator_held_line(files, _file_available)
 
         anchors = emulator_file_anchors(files)
@@ -11046,7 +11128,7 @@ def generate_gap_analysis(
     unique_profiles = {
         k: v
         for k, v in profiles.items()
-        if v.get("type") not in ("alias", "test")
+        if v.get("type") != "alias" and v.get("role") != "test"
     }
     relevant_set: set[str] = set()
     for _name, cov in coverages.items():
@@ -11139,7 +11221,7 @@ def generate_gap_analysis(
         unique_profiles = {
             k: v
             for k, v in profiles.items()
-            if v.get("type") not in ("alias", "test")
+            if v.get("type") != "alias" and v.get("role") != "test"
         }
         for pname in coverages:
             config = coverages[pname]["config"]
@@ -11547,7 +11629,7 @@ def generate_cross_reference(
     ``moved`` collects one page per platform with its core table.
     """
     unique = {
-        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
+        k: v for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
     }
 
     total_cores = len(unique)
@@ -12591,7 +12673,7 @@ def _generate(args: argparse.Namespace) -> None:
     _DATA_MEMBERS.update(data_directory_members())
     _DATA_REVISIONS.update(data_directory_revisions())
     for key in sorted(profiles):
-        if profiles[key].get("type") in ("alias", "test"):
+        if profiles[key].get("type") == "alias" or profiles[key].get("role") == "test":
             continue
         display = str(profiles[key].get("emulator", key))
         for tree in page_data_directories(key, profiles):
@@ -12607,7 +12689,7 @@ def _generate(args: argparse.Namespace) -> None:
     public_profiles = {
         name: profile
         for name, profile in profiles.items()
-        if profile.get("type") not in ("alias", "test")
+        if profile.get("type") != "alias" and profile.get("role") != "test"
     }
     (public / "api" / "v1" / "emulators").mkdir(parents=True, exist_ok=True)
     for name, profile in public_profiles.items():

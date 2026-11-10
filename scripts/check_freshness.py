@@ -1615,6 +1615,17 @@ def check_pin_builds(
                 at = revision or upstream.resolve_head(repo, cache_dir, offline)
                 lines = upstream.fetch_file(repo, at, reference["path"], cache_dir, offline) \
                     if at else None
+                if at and lines is None:
+                    # A file of a submodule is read at the commit the
+                    # platform's tree pins: KNULLI builds Batocera's
+                    # amiberry package through its batocera submodule.
+                    modules = upstream.fetch_file(repo, at, ".gitmodules", cache_dir, offline)
+                    declared = upstream.submodule_urls("\n".join(modules or ()), repo)
+                    if any(reference["path"].startswith(f"{p}/") for p in declared):
+                        linked = upstream.through_gitlink(repo, at, reference["path"],
+                                                          cache_dir, offline)
+                        if linked is not None:
+                            lines = upstream.fetch_file(*linked, cache_dir, offline)
             except upstream.NotCachedError:
                 findings.append(Finding("profiles", subject, SKIPPED, local=recorded[:12],
                                         detail="offline, the build file is not cached"))

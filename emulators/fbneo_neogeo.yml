@@ -4,8 +4,8 @@ core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 profiled_date: "2026-10-23"
-source_commit: "32958a89abd645ed20387c8d31d21ede3bc48161"
-upstream_commit: "697e385c8285bfc528343b96d948ee3a4f9e24c5"
+source_commit: "77016b4dff6c76beba08d24ea1c61ed2750bc0a7"
+upstream_commit: "bc813f4664b5412c8353458bfc7174b71c61a221"
 core_version: "v1.0.0.03"
 version_basis:
   kind: file
@@ -28,16 +28,17 @@ notes: |
 
   Neo Geo games reference "neogeo" as parent ROM set. The BIOS ZIP
   must be alongside game ZIPs or in system_dir/fbneo/.
-  Search order (src/burner/libretro/libretro.cpp:882-950):
-    1. {system_dir}/fbneo/patched/{romName}
-    2. {rom_dir}/{romName}
-    3. {system_dir}/fbneo/{romName}
-    4. {system_dir}/{romName}
-    5. directories listed in rom_path.opt
+  Search order (src/burner/libretro/libretro.cpp:887-972):
+    1. {system_dir}/fbneo/romdata/{romName}, only while a RomData file is
+       being started with patched romsets enabled
+    2. {system_dir}/fbneo/patched/{romName}, with patched romsets enabled
+    3. {rom_dir}/{romName}
+    4. {system_dir}/fbneo/{romName}
+    5. {system_dir}/{romName}
 
   The per-type subdirectories the core used to try under {rom_dir} and
   {system_dir}/fbneo, arcade and consoles, are gone: a BIOS ZIP has to sit
-  directly in one of the four directories above.
+  directly in one of directories 3 to 5 above.
 
   neogeo.zip contains multiple selectable 68K BIOS variants (MVS, AES,
   Universe BIOS). One 68K BIOS active at a time (dipswitch). Z80 BIOS,
@@ -499,4 +500,4 @@ files:
     required: false
     system: arcade
     note: "High score database, enables persistent high scores"
-    source_ref: "source src/burn/hiscore.cpp:154-161, 407, source src/burn/burn.cpp:876"
+    source_ref: "source src/burn/hiscore.cpp:154-161, 407, source src/burn/burn.cpp:893"

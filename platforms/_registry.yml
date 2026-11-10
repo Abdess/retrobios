@@ -590,6 +590,23 @@ platforms:
     hash_type: md5
     # Windows: names differing only by case land on one file.
     case_insensitive_fs: true
+    # A generator takes an emulator folder from AppConfig.GetFullPath(key):
+    # the key in emulatorLauncher.cfg, else the first existing of
+    # emulationstation/<key>, emulators/<key>, system/emulators/<key> and
+    # system/<key> below the RetroBat folder (EmulatorLauncher.Common/
+    # FileFormats/ConfigFile.cs:126-180 at ca486005). emulatorLauncher runs
+    # from emulationstation/, its LocalPath (emulatorLauncher/Program.cs:536-537),
+    # beside bios/.
+    emulators_directory:
+      launcher_spelling: '<AppConfig.GetFullPath("{key}")>'
+      bios_folder: bios
+      searched:
+      - "emulationstation/{key}"
+      - "emulators/{key}"
+      - "system/emulators/{key}"
+      - "system/{key}"
+      default: "emulators/{key}"
+      config: emulationstation/emulatorLauncher.cfg
     # emulatorLauncher hands each libretro core saves\<system> at every
     # launch, saves\ beside bios\ (emulatorLauncher.cfg in retrobat 8.3.1),
     # and sorts saves by core for dolphin alone (CoreSaveSort)

@@ -55,7 +55,7 @@ class EngineIntros(unittest.TestCase):
     def test_every_intro_names_what_it_emulates(self):
         for path in sorted(glob.glob(str(REPO_ROOT / "emulators" / "*.yml"))):
             profile = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
-            if not isinstance(profile, dict) or profile.get("type") in ("alias", "test"):
+            if not isinstance(profile, dict) or profile.get("type") == "alias" or profile.get("role") == "test":
                 continue
             name = Path(path).stem
             with self.subTest(profile=name):

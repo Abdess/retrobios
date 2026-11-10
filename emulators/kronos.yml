@@ -6,6 +6,7 @@ source_branch: kronos
 upstream: "https://github.com/FCare/Kronos"
 profiled_date: "2026-03-24"
 source_commit: "3791ffb2221fda61d70aec5cca376418caf05669"
+prose_written_at: "3791ffb2221fda61d70aec5cca376418caf05669"
 upstream_commit: "d0384bc33aad06bfa9cf5cd308c4bd7ae6cfc814"
 core_version: "2.7.0"
 version_basis:
@@ -47,6 +48,12 @@ notes: |
 
 archive_prefix: kronos
 
+groups:
+  saturn-bios:
+    required: true
+  stv-bios:
+    required: true
+
 files:
   # -----------------------------------------------------------
   # Saturn BIOS - primary (any region)
@@ -54,20 +61,29 @@ files:
   - name: "saturn_bios.bin"
     path: "kronos/saturn_bios.bin"
     system: sega-saturn
+    group: saturn-bios
     priority: 1
-    required: true
     size: 524288
     validation: [size]
     note: "Primary Saturn BIOS. Any region accepted. Searched in kronos/ subdir first."
-    source_ref: "source yabause/src/libretro/libretro.c:1619-1623"
+    source_ref: "source yabause/src/libretro/libretro.c:1619-1620"
+
+  - name: "saturn_bios.bin"
+    system: sega-saturn
+    group: saturn-bios
+    priority: 2
+    size: 524288
+    validation: [size]
+    note: "The same name in the system directory, read when kronos/ holds none."
+    source_ref: "source yabause/src/libretro/libretro.c:1623-1624"
 
   # -----------------------------------------------------------
   # Saturn BIOS - Japan v1.01 (fallback)
   # -----------------------------------------------------------
   - name: "sega_101.bin"
     system: sega-saturn
-    priority: 2
-    required: false
+    group: saturn-bios
+    priority: 3
     size: 524288
     validation: [size]
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
@@ -78,8 +94,8 @@ files:
   # -----------------------------------------------------------
   - name: "mpr-17933.bin"
     system: sega-saturn
-    priority: 3
-    required: false
+    group: saturn-bios
+    priority: 4
     size: 524288
     validation: [size]
     note: "Saturn BIOS (NA/EU). Last fallback for Saturn mode."
@@ -90,8 +106,8 @@ files:
   # -----------------------------------------------------------
   - name: "stvbios.zip"
     system: sega-stv
-    required: true
-    note: "MAME-style ZIP containing ST-V region BIOS EPROMs. Searched in kronos/ subdir first."
+    group: stv-bios
+    note: "MAME-style ZIP containing ST-V region BIOS EPROMs. Read as kronos/stvbios.zip, else at the root of the system directory, and a ST-V game stops without either (libretro.c:1676-1681)."
     source_ref: "source yabause/src/libretro/libretro.c:1608-1617, source yabause/src/ctrl/src/stv.c:112-136"
 
   # -----------------------------------------------------------

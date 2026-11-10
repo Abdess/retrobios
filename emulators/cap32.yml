@@ -4,8 +4,8 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-cap32"
 upstream: "https://github.com/ColinPitrat/caprice32"
 profiled_date: "2026-10-23"
-source_commit: "8e61dd69d948cea16c3bad734f7b9d0c2a018cc8"
-upstream_commit: "8c778bf072a06fb7c23b9cccd179041db7f79a52"
+source_commit: "06ad0da5d003ab8f2359300ebce4cf31d4c55b6e"
+upstream_commit: "a0d78f0f7c6d19a5d3205d1b231bd4da100ec6f3"
 core_version: "4.5.4"
 version_basis:
   kind: file
@@ -25,7 +25,7 @@ notes: |
   All system ROMs are compiled directly into the core binary as C header
   arrays in cap32/rom/*.h. No external BIOS files are required.
 
-  Embedded ROMs (cap32/cap32.c:345-349, cap32/slots.c:33):
+  Embedded ROMs (cap32/cap32.c:345-349, cap32/slots.c:34):
     - cap32/rom/464.h:    OS464_BASIC10[32768]  - CPC 464 OS + BASIC 1.0
     - cap32/rom/664.h:    OS664_BASIC664[32768] - CPC 664 OS + BASIC 1.1
     - cap32/rom/6128.h:   OS_BASIC11[32768]     - CPC 6128 OS + BASIC 1.1
@@ -33,30 +33,30 @@ notes: |
     - cap32/rom/6128p.h:  OS_6128P[65580]       - CPC+ system cartridge
     - cap32/rom/cpm.h:    CPM, CPM_SYS          - CP/M boot memory dumps
 
-  ROM selection in emulator_select_ROM() (cap32/cap32.c:1081-1111):
+  ROM selection in emulator_select_ROM() (cap32/cap32.c:1136-1166):
     - CPC 464:     OS464_BASIC10, AMSDOS in slot 7 when the content is a disc
     - CPC 664:     OS664_BASIC664 + AMSDOS in slot 7
     - CPC 6128:    OS_BASIC11 + AMSDOS in slot 7
     - CPC+:        OS_6128P loaded as system cartridge via cpr_load()
 
-  Core option "cap32_model" lists "464DDI" (libretro/libretro-core.c:501),
+  Core option "cap32_model" lists "464DDI" (libretro/libretro-core.c:407),
   but update_variables() matches only 464, 664, 6128 and 6128+ and leaves any
-  other value on the 6128 default (libretro/libretro-core.c:1035-1039). A 464
-  with disc content (slot SLOT_DSK, libretro/libretro-core.c:1865-1866) gets
-  AMSDOS in slot 7 (cap32/cap32.c:1088-1092).
+  other value on the 6128 default (libretro/libretro-core.c:1060-1064). A 464
+  with disc content (slot SLOT_DSK, libretro/libretro-core.c:1899-1900) gets
+  AMSDOS in slot 7 (cap32/cap32.c:1143-1147).
 
   The array chROMFile names "cpc464.rom", "cpc664.rom", "cpc6128.rom"
   (cap32/cap32.c:353-357) and loadConfiguration() parses the rom_path,
-  slotNN and rom_mf2 keys of ./cap32.cfg (cap32/cap32.c:1842-1859), but no
+  slotNN and rom_mf2 keys of ./cap32.cfg (cap32/cap32.c:1899-1916), but no
   code opens these files. The system directory is resolved in
-  libretro/libretro-core.c:1606-1625 under a "TODO: future use to load
+  libretro/libretro-core.c:1640-1659 under a "TODO: future use to load
   custom bios" comment and no ROM is read from it.
 
   Keyboard layout patches are applied to the ROM in memory for French
-  and Spanish layouts via rom_mods.h (cap32/cap32.c:1113-1137).
+  and Spanish layouts via rom_mods.h (cap32/cap32.c:1168-1192).
 
   CP/M support assembles a 128KB snapshot from the CPM and CPM_SYS arrays
-  and loads it via snapshot_load_mem() in cap32/slots.c:71-90.
+  and loads it via snapshot_load_mem() in cap32/slots.c:74-93.
 
 files:
   # Standalone loads from rom_path/, libretro embeds all as C arrays.
@@ -124,12 +124,12 @@ files:
 
 platform_details:
   bios_mapping:
-    source_ref: "source cap32/cap32.c:1081-1111, source cap32/cap32.c:345-349"
+    source_ref: "source cap32/cap32.c:1136-1166, source cap32/cap32.c:345-349"
     note: |
       All ROMs are embedded. emulator_select_ROM() copies the ROM array for
       CPC.model into pbROM. No filesystem lookup occurs in the libretro
       port. retro_system_bios_directory is set in
-      libretro/libretro-core.c:1606-1625 and no ROM is read from it.
+      libretro/libretro-core.c:1640-1659 and no ROM is read from it.
 
   embedded_roms:
     source_ref: "source cap32/rom/464.h, source cap32/rom/664.h, source cap32/rom/6128.h, source cap32/rom/amsdos.h, source cap32/rom/6128p.h, source cap32/rom/cpm.h"
@@ -143,7 +143,7 @@ platform_details:
       CPM, CPM_SYS          - CP/M memory dumps assembled into a 128KB snapshot
 
   model_rom_map:
-    source_ref: "source cap32/cap32.c:1081-1111"
+    source_ref: "source cap32/cap32.c:1136-1166"
     note: |
       CPC 464:     OS464_BASIC10, AMSDOS in ROM slot 7 when the content is a disc
       CPC 664:     OS664_BASIC664 + AMSDOS in ROM slot 7

@@ -1254,6 +1254,17 @@ class TestSelectRepo(unittest.TestCase):
     def test_none_when_no_supported_host(self):
         self.assertIsNone(select_repo({"source": "https://www.6809.org.uk/"}))
 
+    def test_source_keyed_by_mode_without_upstream(self):
+        repo = select_repo(
+            {
+                "source": {
+                    "standalone": "https://github.com/UZDoom/UZDoom",
+                    "libretro": "https://github.com/libretro/uzdoom",
+                },
+            }
+        )
+        self.assertEqual(repo.name, "UZDoom")
+
 
 class TestBuildReport(unittest.TestCase):
     def setUp(self):
@@ -3065,7 +3076,10 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # builds mame2014, mess2015 and cdi2015, three system sets. And a
         # live build can add a system its frozen revision lacked
         # (advancemame's coh1002v, after advmame-1.4), so the frozen one's
-        # systems are a subset, not an equal set.
+        # systems are a subset, not an equal set. A live build can also drop
+        # a system upstream deleted: advancemame removed its Hyper Neo Geo 64
+        # driver in dff25b6ee7, which advmame-1.4 still carries.
+        removed_upstream = {("advmame-1.4", "advancemame"): {"hyper-neogeo64"}}
         pairs = 0
         for names in by_source.values():
             frozen = [
@@ -3082,7 +3096,8 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
                     pairs += 1
                     with self.subTest(frozen=old, live=new):
                         self.assertLessEqual(
-                            set(profiles[old].get("systems") or []),
+                            set(profiles[old].get("systems") or [])
+                            - removed_upstream.get((old, new), set()),
                             set(profiles[new].get("systems") or []),
                         )
                         if (old, new) not in builds_differ:
@@ -3289,30 +3304,32 @@ class TestBumpCommit(unittest.TestCase):
         self.assertNotIn("uphead", text)
 
     def test_a_profile_one_platform_ships_waits_for_its_build(self):
-        """EmuELEC alone ships RigelEngine and builds its package.mk
-        PKG_VERSION. A bulk advance moved fheroes2 and supertux past that
-        build, and rigelengine is a commit ahead of it already."""
+        """KNULLI alone ships advanced_drastic and builds its
+        advanced_drastic.mk version. A bulk advance moved fheroes2 and
+        supertux past the build EmuELEC then pinned, and a pin ahead of the
+        one build a platform ships describes nothing anyone runs."""
         root = Path(__file__).resolve().parents[1]
-        path = Path(self.tmp.name) / "rigelengine.yml"
+        path = Path(self.tmp.name) / "advanced_drastic.yml"
         path.write_text(
-            SAMPLE.replace("\nnotes:", "\ntype: standalone\ncores: [rigelengine, RigelEngine]\n\nnotes:", 1),
+            SAMPLE.replace(
+                "\nnotes:", "\ntype: standalone\ncores: [advanced_drastic]\n\nnotes:", 1),
             encoding="utf-8",
         )
         report = ProfileReport(
-            name="rigelengine", repo="o/n", pin="pin", head="newhead", entries=[],
+            name="advanced_drastic", repo="o/n", pin="pin", head="newhead", entries=[],
             counts={}, skipped=profile_sync.NO_SOURCE_REF,
         )
         platforms = str(root / "platforms")
         self.assertEqual(
-            profile_sync.shipping_platforms("rigelengine", self.tmp.name, platforms),
-            ["emuelec"],
+            profile_sync.shipping_platforms("advanced_drastic", self.tmp.name, platforms),
+            ["knulli"],
         )
         with contextlib.redirect_stderr(io.StringIO()) as err:
             self.assertFalse(bump_commit(path, report, platforms_dir=platforms))
-        self.assertIn("only emuelec ships it", err.getvalue())
+        self.assertIn("only knulli ships it", err.getvalue())
         path.write_text(
             path.read_text(encoding="utf-8")
-            + 'pin_follows: "EmuELEC builds the branch tip"\n',
+            + 'pin_follows: "KNULLI builds the branch tip"\n',
             encoding="utf-8",
         )
         self.assertTrue(bump_commit(path, report, platforms_dir=platforms))

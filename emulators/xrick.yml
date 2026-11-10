@@ -21,17 +21,17 @@ notes: |
   ported to libretro. It is not a general-purpose emulator: it only plays Rick Dangerous.
 
   The core sets need_fullpath = true, valid_extensions = "*|zip", and supports launching
-  without content (RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME = true, libretro/core/libretro-core.c:93-97).
+  without content (RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME = true, libretro/core/libretro-core.c:79-83).
 
-  Game data handling works in two modes (retro_load_game, libretro/core/libretro-core.c:312-360):
+  Game data handling works in two modes (retro_load_game, libretro/core/libretro-core.c:389-469):
     1. Content provided: the content path is passed directly as the -data argument
-       (line 318: snprintf "xrick" "-data" "%s"). Content can be data.zip or a directory.
+       (line 398: snprintf "xrick" "-data" "%s"). Content can be data.zip or a directory.
     2. No content (standalone): the core builds the path {system_dir}/xrick/data.zip
        using fill_pathname_join_special_ext(RETRO_DIR, "xrick", "data", ".zip") at lines
-       324-326. If this file is missing, a "game files missing" error is displayed (line 337)
+       404-406. If this file is missing, a "game files missing" error is displayed (lines 417 and 430)
        and loading fails.
 
-  The fallback data path at line 359 confirms the expected location:
+  The path passed to the engine at line 441 confirms the expected location:
     snprintf(RPATH, ... "xrick" "-data" "%s/xrick/data.zip", RETRO_DIR)
 
   All game graphics, maps, tile data, entity tables, and screen layouts are compiled directly
@@ -45,10 +45,10 @@ notes: |
   either a .zip archive (via unzip.c) or a flat directory, selected by extension detection
   (data.c:56-73).
 
-  xrick.c:23 shows the hardcoded fallback: data_setpath("data.zip") when no -data argument
+  src/xrick.c:25 shows the hardcoded fallback: data_setpath("data.zip") when no -data argument
   is provided.
 
-  system_dir is obtained via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (libretro/core/libretro-core.c:185-189),
+  system_dir is obtained via RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (libretro/core/libretro-core.c:244-249),
   falling back to "." if unavailable.
 
   The data.zip file ships in the xrick-libretro repository root and is the original xrick
@@ -64,7 +64,7 @@ files:
     size: 1457440
     md5: "a471e64e9f69afbe59c10cc94ed1b184"
     sha1: "ecfc092fe6371dbf38e238a8ba5f90785b5db52d"
-    source_ref: "source libretro/core/libretro-core.c:324-326 (path construction), source libretro/core/libretro-core.c:328-357 (missing file error), source libretro/core/libretro-core.c:441 (final path confirmation)"
+    source_ref: "source libretro/core/libretro-core.c:404-406 (path construction), source libretro/core/libretro-core.c:408-437 (missing file error), source libretro/core/libretro-core.c:441 (final path confirmation)"
     note: "Placed in system/xrick/data.zip. Contains sounds/ directory with 29 WAV files from the original xrick 0.21212 release. Without this file, standalone mode fails with 'XRick game files missing from frontend system directory'. Ships in the libretro repo root."
 
 analysis:

@@ -345,7 +345,14 @@ class _PlatformDumper(yaml.SafeDumper):
 
     Names such as "7800 BIOS (E).rom" or "Bandai - WonderSwan: x" are plain
     text, and a bare "01" would be read back as an integer.
+
+    Two records sharing one list are written out twice, never as an anchor
+    and its alias: RetroBat's amiberry search and copy records share their
+    name list, and the platform file turned into &id001 and *id001.
     """
+
+    def ignore_aliases(self, data: object) -> bool:
+        return True
 
 
 def _quoted_str(dumper: yaml.SafeDumper, data: str) -> yaml.ScalarNode:

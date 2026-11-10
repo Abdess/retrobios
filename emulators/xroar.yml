@@ -1,5 +1,6 @@
 emulator: XRoar
 type: standalone
+core_classification: other
 source: "https://www.6809.org.uk/git/xroar.git"
 upstream: "https://www.6809.org.uk/xroar/"
 version_source:
@@ -21,13 +22,23 @@ systems:
   - coco
   - coco3
   - mc10
+standalone_directories:
+  - "~/.xroar/roms"
+  - "${prefix}/share/xroar/roms"
+standalone_pools:
+  rompath: ""
+  "-rompath": ""
 
 notes: |
   XRoar by Ciaran Anscomb emulates Dragon 32/64, Tandy CoCo 1/2/3,
   MC-10, Alice, and clones (MX-1600, CP-400, Dragon 200-E, Deluxe CoCo).
-  ROM files are searched in a configurable rompath directory with automatic
-  extension appending (.rom, .ROM, .dgn, .DGN). Batocera sets rompath to
-  /userdata/bios/xroar/.
+  A ROM is looked up by name in the directories of rompath, a colon-separated
+  list searched in order: the name as given first, then with .rom, .ROM, .dgn
+  and .DGN appended, and the first file found is read (src/romlist.c:47-49,
+  124-143, src/path.c:158-219). rompath is set in xroar.conf or with
+  -rompath (src/xroar.c:3266). A Unix build defaults to
+  ~/.xroar/roms:$(datadir)/xroar/roms, $(datadir) being ${prefix}/share
+  unless configure is told otherwise (src/Makefile.am:236).
 
   The romlist mechanism defines fallback filenames per ROM slot. Each machine
   type has a default romlist that tries filenames in priority order. CRC32 is
@@ -44,6 +55,7 @@ files:
   # ---- Dragon 32 ----
 
   - name: "d32.rom"
+    path: "d32.rom"
     system: dragon32
     description: "Dragon 32 BASIC ROM"
     required: true
@@ -57,6 +69,7 @@ files:
   # ---- Dragon 64 ----
 
   - name: "d64_1.rom"
+    path: "d64_1.rom"
     system: dragon64
     description: "Dragon 64 32K mode BASIC ROM"
     required: true
@@ -68,6 +81,7 @@ files:
     note: "IC17 ROM. Required for the machine to start. Romlist d64_1 tries d64_1, d64rom1, Dragon Data Ltd - Dragon 64 - IC17, Dragon Data Ltd - TANO IC18, Eurohard S.A. - Dragon 200 IC18, dragrom."
 
   - name: "d64_2.rom"
+    path: "d64_2.rom"
     system: dragon64
     description: "Dragon 64 64K mode BASIC ROM"
     required: false
@@ -81,6 +95,7 @@ files:
   # ---- Dragon 200-E ----
 
   - name: "d200e_1.rom"
+    path: "d200e_1.rom"
     system: dragon64
     description: "Dragon 200-E BASIC IC18 (Spanish)"
     required: true
@@ -92,6 +107,7 @@ files:
     note: "Required for Dragon 200-E. Falls back to d64_1 then generic dragon if not found. Romlist d200e_1 tries d200e_1, d200e_rom1, ic18_v1.4e.ic34."
 
   - name: "d200e_2.rom"
+    path: "d200e_2.rom"
     system: dragon64
     description: "Dragon 200-E BASIC IC17 (Spanish)"
     required: false
@@ -102,6 +118,7 @@ files:
     note: "64K mode alternate. Falls back to d64_2 if not found. Romlist d200e_2 tries d200e_2, d200e_rom2, ic17_v1.4e.ic37."
 
   - name: "d200e_26.rom"
+    path: "d200e_26.rom"
     system: dragon64
     description: "Dragon 200-E external character generator ROM"
     required: false
@@ -114,6 +131,7 @@ files:
   # ---- Dragon Professional (Alpha) ----
 
   - name: "alpha-boot-v1.0.rom"
+    path: "alpha-boot-v1.0.rom"
     system: dragon64
     description: "Dragon Professional (Alpha) boot ROM v1.0"
     required: true
@@ -129,6 +147,7 @@ files:
       Romlist dragonpro_boot tries alpha-boot-v1.0, alpha_bt_10, Dragon Data Ltd - Dragon Alpha Boot v1.0 150584, alpha-boot-v0.4, alpha_bt_04.
 
   - name: "alpha-boot-v0.4.rom"
+    path: "alpha-boot-v0.4.rom"
     system: dragon64
     description: "Dragon Professional (Alpha) boot ROM v0.4"
     required: false
@@ -145,6 +164,7 @@ files:
       Romlist dragonpro_boot tries alpha-boot-v1.0, alpha_bt_10, Dragon Data Ltd - Dragon Alpha Boot v1.0 150584, alpha-boot-v0.4, alpha_bt_04.
 
   - name: "alpha-basic.rom"
+    path: "alpha-basic.rom"
     system: dragon64
     description: "Dragon Professional (Alpha) BASIC ROM"
     required: true
@@ -158,6 +178,7 @@ files:
   # ---- Tandy CoCo (Colour BASIC) ----
 
   - name: "bas13.rom"
+    path: "bas13.rom"
     system: coco
     description: "Tandy CoCo Colour BASIC 1.3"
     required: true
@@ -168,6 +189,7 @@ files:
     note: "Default Colour BASIC. First tried in the @coco romlist. 8K ROM loaded into slot 1 of a 2-slot rombank."
 
   - name: "bas12.rom"
+    path: "bas12.rom"
     system: coco
     description: "Tandy CoCo Colour BASIC 1.2"
     required: false
@@ -179,6 +201,7 @@ files:
     note: "Alternative to bas13. Second in fallback order. Romlist coco tries bas13, bas12, Color Basic v1.2 (1982)(Tandy), bas11, bas10. Romlist coco2 tries bas12, @coco."
 
   - name: "bas11.rom"
+    path: "bas11.rom"
     system: coco
     description: "Tandy CoCo Colour BASIC 1.1"
     required: false
@@ -189,6 +212,7 @@ files:
     note: "Used by CoCo 1E. Third in fallback order."
 
   - name: "bas10.rom"
+    path: "bas10.rom"
     system: coco
     description: "Tandy CoCo Colour BASIC 1.0"
     required: false
@@ -201,6 +225,7 @@ files:
   # ---- Tandy CoCo (Extended Colour BASIC) ----
 
   - name: "extbas11.rom"
+    path: "extbas11.rom"
     system: coco
     description: "Tandy CoCo Extended Colour BASIC 1.1"
     required: true
@@ -211,6 +236,7 @@ files:
     note: "Default Extended BASIC. 8K ROM loaded into slot 0 of a 2-slot rombank."
 
   - name: "extbas10.rom"
+    path: "extbas10.rom"
     system: coco
     description: "Tandy CoCo Extended Colour BASIC 1.0"
     required: false
@@ -223,6 +249,7 @@ files:
   # ---- Tandy CoCo 3 ----
 
   - name: "coco3.rom"
+    path: "coco3.rom"
     system: coco3
     description: "CoCo 3 Super Extended Colour BASIC (NTSC)"
     required: true
@@ -233,6 +260,7 @@ files:
     note: "32K combined ROM. Single required ROM for CoCo 3 NTSC."
 
   - name: "coco3p.rom"
+    path: "coco3p.rom"
     system: coco3
     description: "CoCo 3 Super Extended Colour BASIC (PAL)"
     required: true
@@ -245,6 +273,7 @@ files:
   # ---- Tandy MC-10 ----
 
   - name: "mc10.rom"
+    path: "mc10.rom"
     system: mc10
     description: "Tandy MC-10 Microcolour BASIC"
     required: true
@@ -255,6 +284,7 @@ files:
     note: "Single required ROM for MC-10."
 
   - name: "alice.rom"
+    path: "alice.rom"
     system: mc10
     description: "Matra & Hachette Alice Microcolour BASIC"
     required: true
@@ -267,6 +297,7 @@ files:
   # ---- Deluxe CoCo (prototype) ----
 
   - name: "deluxe.rom"
+    path: "deluxe.rom"
     system: coco
     description: "Tandy Deluxe CoCo Advanced BASIC (bank 0)"
     required: true
@@ -277,18 +308,21 @@ files:
     note: "Primary ROM for the Deluxe CoCo prototype. Loaded as extbas_rom. Romlist deluxecoco tries adv070_u24, deluxe."
 
   - name: "adv071_u24.rom"
+    path: "adv071_u24.rom"
     system: coco
     description: "Tandy Deluxe CoCo ROM bank 1"
     required: false
     source_ref: "src/xroar.c:681 (romlist deluxecoco1), src/dragon/deluxecoco.c:223-226 (load)"
 
   - name: "adv072_u24.rom"
+    path: "adv072_u24.rom"
     system: coco
     description: "Tandy Deluxe CoCo ROM bank 2"
     required: false
     source_ref: "src/xroar.c:682 (romlist deluxecoco2), src/dragon/deluxecoco.c:230-233 (load)"
 
   - name: "adv073-2_u24.rom"
+    path: "adv073-2_u24.rom"
     system: coco
     description: "Tandy Deluxe CoCo ROM bank 3"
     required: false
@@ -299,6 +333,7 @@ files:
   # ---- Dynacom MX-1600 (Brazilian clone) ----
 
   - name: "mx1600bas.rom"
+    path: "mx1600bas.rom"
     system: coco
     description: "Dynacom MX-1600 Colour BASIC"
     required: true
@@ -309,6 +344,7 @@ files:
     note: "Required for MX-1600. Zephyr-patched variant (CRC32 d11b1c96) is an alias. Romlist mx1600 tries mx1600bas, mx1600bas_zephyr."
 
   - name: "mx1600extbas.rom"
+    path: "mx1600extbas.rom"
     system: coco
     description: "Dynacom MX-1600 Extended Colour BASIC"
     required: true
@@ -319,6 +355,7 @@ files:
   # ---- Prologica CP-400 (Brazilian clone) ----
 
   - name: "cp400bas.rom"
+    path: "cp400bas.rom"
     system: coco
     description: "Prologica CP-400 Colour BASIC"
     required: true
@@ -327,6 +364,7 @@ files:
     source_ref: "src/xroar.c:688 (romlist cp400), src/xroar.c:755 (crclist cp400)"
 
   - name: "cp400ext.rom"
+    path: "cp400ext.rom"
     system: coco
     description: "Prologica CP-400 Extended Colour BASIC"
     required: true
@@ -337,6 +375,7 @@ files:
   # ---- DOS cartridge ROMs (all optional) ----
 
   - name: "disk11.rom"
+    path: "disk11.rom"
     system: coco
     description: "Tandy RS-DOS 1.1 (CoCo floppy disk controller)"
     required: false
@@ -346,6 +385,7 @@ files:
     note: "Primary CoCo disk controller ROM. disk10.rom (RS-DOS 1.0) is an earlier version used as fallback."
 
   - name: "disk10.rom"
+    path: "disk10.rom"
     system: coco
     description: "Tandy RS-DOS 1.0 (CoCo floppy disk controller)"
     required: false
@@ -355,6 +395,7 @@ files:
     note: "Second name in the rsdos romlist, opened when disk11.rom is absent."
 
   - name: "hdbdw3bck.rom"
+    path: "hdbdw3bck.rom"
     system: coco
     description: "RS-DOS with Becker port (DriveWire)"
     required: false
@@ -362,6 +403,7 @@ files:
     note: "For CoCo with Becker port hardware. Enables DriveWire connectivity."
 
   - name: "ddos12a.rom"
+    path: "ddos12a.rom"
     system: dragon64
     description: "DragonDOS 1.2a (Dragon floppy disk controller)"
     required: false
@@ -369,6 +411,7 @@ files:
     note: "Latest DragonDOS version. Fallback chain tries DOSPlus -> SuperDOS -> DragonDOS -> Cumana. Older versions: ddos12, ddos40, ddos15, ddos10."
 
   - name: "ddos40.rom"
+    path: "ddos40.rom"
     system: dragon64
     description: "DragonDOS 4.0 (Eurohard S.A.)"
     required: false
@@ -378,6 +421,7 @@ files:
     note: "Third name in the dragondos romlist, which @dragondos_compat tries after the dosplus and superdos lists."
 
   - name: "ddos10.rom"
+    path: "ddos10.rom"
     system: dragon64
     description: "DragonDOS 1.0 (Dragon Data Ltd)"
     required: false
@@ -388,6 +432,7 @@ files:
     note: "Fifth name in the dragondos romlist, which @dragondos_compat tries after the dosplus and superdos lists. Romlist dragondos tries ddos12a, ddos12, ddos40, ddos15, ddos10, Dragon Data Ltd - DragonDOS 1.0."
 
   - name: "dplus49b.rom"
+    path: "dplus49b.rom"
     system: dragon64
     description: "DOSPlus 4.9b (Dragon compatible DOS)"
     required: false
@@ -397,6 +442,7 @@ files:
     note: "First tried in DragonDOS-compatible cartridge. Enhanced Dragon DOS. Older version: dplus48 (alias: dosplus-4.8, DOSPLUS)."
 
   - name: "dplus48.rom"
+    path: "dplus48.rom"
     system: dragon64
     description: "DOSPlus 4.8 (Dragon compatible DOS)"
     required: false
@@ -407,6 +453,7 @@ files:
     note: "Second name in the dosplus romlist, the first list @dragondos_compat tries. Romlist dosplus tries dplus49b, dplus48, dosplus-4.8, DOSPLUS."
 
   - name: "sdose6.rom"
+    path: "sdose6.rom"
     system: dragon64
     description: "SuperDOS E6 (Dragon compatible DOS)"
     required: false
@@ -417,6 +464,7 @@ files:
     note: "Latest SuperDOS. Older versions: sdose5, sdose4. Romlist superdos tries sdose6, PNP - SuperDOS E6, sdose5, sdose4."
 
   - name: "cdos20.rom"
+    path: "cdos20.rom"
     system: dragon64
     description: "Cumana DOS 2.0 (Dragon compatible DOS)"
     required: false
@@ -425,6 +473,7 @@ files:
     note: "Romlist cumana tries cdos20, CDOS20, CumanaDOSv2.0."
 
   - name: "delta2.rom"
+    path: "delta2.rom"
     system: dragon64
     description: "Delta System 2 (Premier Microsystems disk controller)"
     required: false
@@ -435,6 +484,7 @@ files:
     note: "Latest Delta version. Older versions: delta1a, delta19, delta, deltados. Romlist delta tries delta2, delta1a, delta19, delta, deltados, Premier Micros - DeltaDOS."
 
   - name: "cp450dsk.rom"
+    path: "cp450dsk.rom"
     system: coco
     description: "Prologica CP-450 DOS cartridge"
     required: false
@@ -444,6 +494,7 @@ files:
   # ---- Other cartridge ROMs (all optional) ----
 
   - name: "orch90.rom"
+    path: "orch90.rom"
     system: coco
     description: "Orchestra-90 CC sound cartridge ROM"
     required: false
@@ -453,6 +504,7 @@ files:
     note: "Sound synthesis cartridge. Loaded directly (no romlist fallback)."
 
   - name: "mcx128.rom"
+    path: "mcx128.rom"
     system: mc10
     description: "MCX128 memory expansion BASIC ROM"
     required: false
@@ -461,6 +513,7 @@ files:
     note: "128K memory expansion for MC-10. Adds enhanced BASIC. Romlist mcx128 tries mcx128, MCX_Basic_21."
 
   - name: "mcx128a.rom"
+    path: "mcx128a.rom"
     system: mc10
     description: "MCX128 memory expansion BASIC ROM (AZERTY)"
     required: false
@@ -469,6 +522,7 @@ files:
     note: "AZERTY keyboard variant for Alice. Same MCX128 hardware. Romlist mcx128_azerty tries mcx128a, MCX_Basic_21_AZERTY."
 
   - name: "yados.rom"
+    path: "yados.rom"
     system: coco
     description: "YADOS (Glenside IDE interface ROM)"
     required: false
@@ -476,6 +530,7 @@ files:
     note: "IDE hard disk interface. Fallback: hdblba.rom (alternative IDE ROM)."
 
   - name: "sdbdos.rom"
+    path: "sdbdos.rom"
     system: dragon64
     description: "SDBDOS (MOOH memory cartridge ROM)"
     required: false
@@ -483,6 +538,7 @@ files:
     note: "SD card boot DOS for MOOH cartridge. Loaded directly."
 
   - name: "dragonfly-2.3.rom"
+    path: "dragonfly-2.3.rom"
     system: dragon64
     description: "Ikon Ultra Drive Dragonfly ROM 2.3"
     required: false
@@ -490,6 +546,7 @@ files:
     note: "Experimental, compiled only with WANT_EXPERIMENTAL. Ikon Ultra Drive storage interface. First candidate of the ikon romlist. No crclist entry names it."
 
   - name: "dragonfly-1.3.rom"
+    path: "dragonfly-1.3.rom"
     system: dragon64
     description: "Ikon Ultra Drive Dragonfly ROM 1.3"
     required: false

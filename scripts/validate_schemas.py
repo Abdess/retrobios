@@ -86,6 +86,7 @@ def _validate_yaml_directory(
             out.extend(_save_dir_without_library_name(path, data))
             out.extend(_systems_outside_profile(path, data))
             out.extend(_doubled_paths(path))
+            out.extend(_group_requirement_split(path, data))
     return out
 
 
@@ -119,6 +120,36 @@ def _systems_outside_profile(path: Path, document: object) -> list[str]:
                 f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
                 f"system {', '.join(unknown)} not in the profile's systems"
             )
+    return out
+
+
+def _group_requirement_split(path: Path, document: object) -> list[str]:
+    """A set named by a member and not declared, declared and never used,
+    or a member that writes a required of its own.
+
+    The requirement belongs to the set, in the profile's groups map, and a
+    member's is derived from it. A value on the member is a second source
+    that can contradict the first: a true on the first name only wrote the
+    search order into required, and the other names read as optional.
+    """
+    from alternatives import groups_of
+
+    if not isinstance(document, dict):
+        return []
+    label = path.relative_to(ROOT)
+    declared = set((document.get("groups") or {}).keys())
+    used: set[str] = set()
+    out: list[str] = []
+    for index, entry in enumerate(document.get("files") or []):
+        if not isinstance(entry, dict):
+            continue
+        names = groups_of(entry)
+        used.update(names)
+        if names and "required" in entry:
+            out.append(f"{label}: files[{index}] ({entry.get('name')}) is in a group "
+                       "and writes required: the set's requirement is in groups")
+    out.extend(f"{label}: group {g} has no entry in groups" for g in sorted(used - declared))
+    out.extend(f"{label}: groups declares {g}, which no entry names" for g in sorted(declared - used))
     return out
 
 
@@ -199,6 +230,12 @@ def _validate_pack_manifests(dist: Path) -> list[str]:
 
 def _scan_pack_manifests(dist: Path) -> list[str]:
     validator = _validator("pack-manifest.schema.json")
+    # The lists a pack carries for the installer, each under its own
+    # contract: the schemas name no other file, so they are checked here.
+    carried = {
+        "install_list": _validator("install-manifest.schema.json"),
+        "targets": _validator("target-manifest.schema.json"),
+    }
 
     def _label(path: Path) -> str:
         resolved = path.resolve()
@@ -224,6 +261,9 @@ def _scan_pack_manifests(dist: Path) -> list[str]:
                         out.append(f"{label}: {exc}")
                         continue
                     out.extend(_errors(validator, document, label))
+                    for key, inner in carried.items():
+                        if isinstance(document, dict) and key in document:
+                            out.extend(_errors(inner, document[key], f"{label}:{key}"))
         except (OSError, zipfile.BadZipFile) as exc:
             out.append(f"{_label(archive)}: {exc}")
     return out

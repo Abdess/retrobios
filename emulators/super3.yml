@@ -7,6 +7,7 @@ based_on: "Supermodel 0.3a through the arm branch of DirtBagXon/model3emu-code-s
 author: "izzy2lost"
 profiled_date: "2026-10-27"
 source_commit: "c410f82f771b33094b8c1cdbf96ef7c74ec9cff1"
+prose_written_at: "c410f82f771b33094b8c1cdbf96ef7c74ec9cff1"
 core_version: "1.2.2"
 version_basis:
   kind: tag

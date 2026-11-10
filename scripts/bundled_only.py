@@ -66,7 +66,10 @@ def bundled_only(db: dict, profiles: dict, platforms_dir: str, install_dir: Path
             sha1 = consumers.sha1_of(entry, entry.get("path") or "", owner=emulator)
             if not sha1:
                 continue
-            if entry.get("bundled"):
+            # A platform whose package leaves the file out (not_bundled_on:
+            # AmberELEC's amiberry 7.1.1 has no AROS ROMs) brings it from
+            # the collection.
+            if entry.get("bundled") and not entry.get("not_bundled_on"):
                 bundled.setdefault(sha1, set()).add(emulator)
             else:
                 needed.add(sha1)

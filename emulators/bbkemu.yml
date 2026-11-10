@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/AloysHF/BBKEmu"
 upstream: "https://github.com/AloysHF/BBKEmu"
 profiled_date: "2026-10-26"
-source_commit: "6641863f6ec59a74635753766e3f9d34adf92b05"
+source_commit: "0b698480d93b1bbf0717c658d89b551559a2ae3f"
 core_version: "0.1.0"
 version_basis:
   kind: file
@@ -23,103 +23,110 @@ notes: |
   bbkemu-core crate. A .gam game is 6502 code that calls into the
   dictionary's OS ROM for LCD, keyboard, audio, timer and file services.
 
-  Two ROM images are read from the system directory, in one subdirectory
-  per model: {system}/BBKEmu/<model>/8.BIN, the font ROM mapped at
-  physical 0x800000-0x9FFFFF, and E.BIN, the OS ROM mapped at
-  0xE00000-0xFFFFFF (crates/bbkemu-libretro/src/lib.rs:186-219,
-  crates/bbkemu-core/src/memory.rs:377-398). The libretro core always
-  loads content as the A4980 model (crates/bbkemu-libretro/src/lib.rs:491-492),
-  so only BBKEmu/A4980/ is ever read from RetroArch. The core also accepts
-  8.bin, and E.bin or e.bin, when the upper-case name is absent. The
-  Emscripten build used by EmulatorJS looks in the folder of the content
-  and its BBKEmu/<model>/ subfolder as well. Both reads are std::fs::read
-  results taken only when they succeed: a missing file is skipped without
-  any message to the frontend. The image is copied into a 2 MiB
-  zero-filled buffer (crates/bbkemu-core/src/memory.rs:197-209), and nothing
-  checks its size or contents.
+  Two ROM images are read per model from a fixed layout below the system
+  directory: bbkemu/<model>/8.BIN, the font ROM mapped at physical
+  0x800000-0x9FFFFF, and bbkemu/<model>/E.BIN, the OS ROM mapped at
+  0xE00000-0xFFFFFF. The model folder is a4980 or a4988. Every component
+  is matched byte for byte against the directory entries, so 8.bin, e.bin
+  or BBKEmu/ are not found, on Windows as well
+  (crates/bbkemu-core/src/firmware.rs:25-29,
+  crates/bbkemu-core/src/firmware.rs:38-53,
+  crates/bbkemu-core/src/memory.rs:377-398). firmware::load reads both
+  files and fails naming every missing one, and the libretro core then
+  refuses the content with that message
+  (crates/bbkemu-core/src/firmware.rs:56-95,
+  crates/bbkemu-libretro/src/lib.rs:415-427,
+  crates/bbkemu-libretro/src/lib.rs:807-834). Each image is copied into a
+  2 MiB zero-filled buffer (crates/bbkemu-core/src/memory.rs:196-209), and
+  nothing checks its size or contents.
 
-  Without E.BIN, run_os_init (crates/bbkemu-core/src/emulator.rs:231-252)
-  sets PC to 0x350, reads zeros from the ROM window, never sees
-  _MTCT=0xFE and gives up after 10 million cycles. The bank registers
-  stay unmapped and the game exits at its first OS call. Measured by
-  running run_os_init from bbkemu-core against a dump: 1 092 023 cycles
-  to completion with E.BIN, timeout without it. Without 8.BIN the font
-  window reads as 0x00 and every glyph the OS draws is blank, but execution
-  continues.
+  The libretro core reads the system directory from the frontend
+  (crates/bbkemu-libretro/src/lib.rs:233-246) and the model from the
+  bbkemu_model core option, a4980 by default
+  (crates/bbkemu-libretro/src/lib.rs:207-208,
+  crates/bbkemu-libretro/src/lib.rs:430-434). The Emscripten build used by
+  EmulatorJS takes the root of its virtual filesystem, where the firmware
+  archive is extracted, and picks the model from the only
+  bbkemu/<model>/ folder found there
+  (crates/bbkemu-libretro/src/lib.rs:403-412,
+  crates/bbkemu-libretro/src/lib.rs:442-479).
 
-  The standalone binary takes -8/--rom8 and -e/--rome explicit paths and
-  otherwise reads system/BBKEmu/<model>/8.BIN and E.BIN relative to the
-  working directory, --model 4980 (default) or 4988 selecting the
-  subdirectory (crates/bbkemu/src/main.rs:108-117, crates/bbkemu/src/main.rs:146-170).
+  The standalone binary reads the same layout below --system-dir, system
+  relative to the working directory by default, with --model a4980
+  (default) or a4988 (crates/bbkemu/src/main.rs:31-33,
+  crates/bbkemu/src/main.rs:43-45, crates/bbkemu/src/main.rs:135-139).
   The A4988 model differs by its flash save-area offset and key layout
   (crates/bbkemu-core/src/emulator.rs:148-153,
-  crates/bbkemu-libretro/src/lib.rs:640-649).
+  crates/bbkemu-libretro/src/lib.rs:991-1001).
 
   During init the OS maps its own bank at logical bank D: 0xEA8 for the
-  A4980 OS, 0xE88 for the A4988 OS (crates/bbkemu-core/src/model.rs:11-13).
+  A4980 OS, 0xE88 for the A4988 OS (crates/bbkemu-core/src/model.rs:14-16).
   The core never reads that value back: detect_model
-  (crates/bbkemu-core/src/model.rs:37-49) has no caller. The
+  (crates/bbkemu-core/src/model.rs:51-63) has no caller. The
   include_bytes! font in crates/bbkemu-core/src/font.rs is not declared in
-  lib.rs and is not compiled. Content arrives through the frontend buffer
-  (need_fullpath = false, crates/bbkemu-libretro/src/lib.rs:429). Save RAM
-  is the first 0x14000 bytes of the emulated flash
-  (crates/bbkemu-libretro/src/lib.rs:861-863).
+  lib.rs and is not compiled. Content is read from its path
+  (need_fullpath = true, crates/bbkemu-libretro/src/lib.rs:732,
+  crates/bbkemu-libretro/src/lib.rs:485-490). Save RAM is the first
+  0x14000 bytes of the emulated flash
+  (crates/bbkemu-libretro/src/lib.rs:1277-1278).
 
 files:
   - name: 8.BIN
-    path: BBKEmu/A4980/8.BIN
-    standalone_path: system/BBKEmu/A4980/8.BIN
+    path: bbkemu/a4980/8.BIN
+    standalone_path: system/bbkemu/a4980/8.BIN
     system: bbk-longman-4980
     size: 2097152
     required: true
-    description: "BBK A-series font ROM"
+    description: "BBK A-series font ROM, A4980"
     note: >-
-      Read whole from {system}/BBKEmu/A4980/8.BIN, or 8.bin, into the 2 MiB
-      window at physical 0x800000. A missing file is skipped silently, and the window
-      then reads as 0x00 and text drawn through the OS is blank. No size
-      or hash check. Size is the window the image fills.
-    source_ref: "crates/bbkemu-libretro/src/lib.rs:191-215, crates/bbkemu-libretro/src/lib.rs:491-492, crates/bbkemu-core/src/memory.rs:8, crates/bbkemu-core/src/memory.rs:197-202, crates/bbkemu-core/src/memory.rs:384-390, crates/bbkemu/src/main.rs:147-158"
+      Read whole from {system}/bbkemu/a4980/8.BIN, name matched exactly, into
+      the 2 MiB window at physical 0x800000. Without it the content is
+      refused with a missing firmware message. No size or hash check. Size
+      is the window the image fills.
+    source_ref: "crates/bbkemu-core/src/firmware.rs:25-29, crates/bbkemu-core/src/firmware.rs:56-95, crates/bbkemu-core/src/memory.rs:8, crates/bbkemu-core/src/memory.rs:196-201, crates/bbkemu-core/src/memory.rs:384-390, crates/bbkemu-libretro/src/lib.rs:415-427, crates/bbkemu/src/main.rs:135-139"
 
   - name: E.BIN
-    path: BBKEmu/A4980/E.BIN
-    standalone_path: system/BBKEmu/A4980/E.BIN
+    path: bbkemu/a4980/E.BIN
+    standalone_path: system/bbkemu/a4980/E.BIN
     system: bbk-longman-4980
     size: 2097152
     required: true
-    description: "BBK A-series OS ROM"
+    description: "BBK A-series OS ROM, A4980"
     note: >-
-      Read whole from {system}/BBKEmu/A4980/E.BIN, or E.bin or e.bin, into the
-      2 MiB window at physical 0xE00000. The last 256 bytes also serve as the interrupt
-      vector page at 0x0300. A missing file is skipped silently, the OS
-      init loop times out after 10 million cycles and no game runs. No
-      size or hash check. Size is the window the image fills.
-    source_ref: "crates/bbkemu-libretro/src/lib.rs:191-212, crates/bbkemu-libretro/src/lib.rs:216-218, crates/bbkemu-libretro/src/lib.rs:491-492, crates/bbkemu-core/src/memory.rs:9, crates/bbkemu-core/src/memory.rs:204-209, crates/bbkemu-core/src/memory.rs:224-226, crates/bbkemu-core/src/memory.rs:391-397, crates/bbkemu-core/src/emulator.rs:231-252, crates/bbkemu/src/main.rs:159-170"
+      Read whole from {system}/bbkemu/a4980/E.BIN, name matched exactly, into
+      the 2 MiB window at physical 0xE00000. The last 256 bytes also serve
+      as the interrupt vector page at 0x0300. Without it the content is
+      refused with a missing firmware message. No size or hash check. Size
+      is the window the image fills.
+    source_ref: "crates/bbkemu-core/src/firmware.rs:25-29, crates/bbkemu-core/src/firmware.rs:56-95, crates/bbkemu-core/src/memory.rs:9, crates/bbkemu-core/src/memory.rs:204-209, crates/bbkemu-core/src/memory.rs:224-226, crates/bbkemu-core/src/memory.rs:391-397, crates/bbkemu-core/src/emulator.rs:231-252, crates/bbkemu-libretro/src/lib.rs:415-427, crates/bbkemu/src/main.rs:135-139"
 
   - name: 8.BIN
-    standalone_path: system/BBKEmu/A4988/8.BIN
-    mode: standalone
+    path: bbkemu/a4988/8.BIN
+    standalone_path: system/bbkemu/a4988/8.BIN
     system: bbk-longman-4988
     size: 2097152
     required: true
-    description: "BBK A-series font ROM, A4988 slot"
+    description: "BBK A-series font ROM, A4988"
     note: >-
-      Read by the standalone binary with --model 4988 from
-      system/BBKEmu/A4988/8.BIN relative to the working directory. The
-      libretro core has no model option and never opens this directory.
-    source_ref: "crates/bbkemu/src/main.rs:108-117, crates/bbkemu/src/main.rs:147-158, crates/bbkemu-core/src/model.rs:28-34"
+      Read from {system}/bbkemu/a4988/8.BIN when the bbkemu_model core
+      option or --model selects a4988, or when it is the only model folder
+      in an EmulatorJS firmware archive. Without it that model refuses the
+      content.
+    source_ref: "crates/bbkemu-core/src/firmware.rs:48-53, crates/bbkemu-core/src/model.rs:42-48, crates/bbkemu-libretro/src/lib.rs:207-208, crates/bbkemu-libretro/src/lib.rs:430-434, crates/bbkemu-libretro/src/lib.rs:442-479, crates/bbkemu/src/main.rs:43-45"
 
   - name: E.BIN
-    standalone_path: system/BBKEmu/A4988/E.BIN
-    mode: standalone
+    path: bbkemu/a4988/E.BIN
+    standalone_path: system/bbkemu/a4988/E.BIN
     system: bbk-longman-4988
     size: 2097152
     required: true
-    description: "BBK A-series OS ROM, A4988 slot"
+    description: "BBK A-series OS ROM, A4988"
     note: >-
-      Read by the standalone binary with --model 4988 from
-      system/BBKEmu/A4988/E.BIN relative to the working directory. The
-      libretro core has no model option and never opens this directory.
-    source_ref: "crates/bbkemu/src/main.rs:108-117, crates/bbkemu/src/main.rs:159-170, crates/bbkemu-core/src/model.rs:28-34, crates/bbkemu-core/src/emulator.rs:148-153"
+      Read from {system}/bbkemu/a4988/E.BIN when the bbkemu_model core
+      option or --model selects a4988, or when it is the only model folder
+      in an EmulatorJS firmware archive. Without it that model refuses the
+      content.
+    source_ref: "crates/bbkemu-core/src/firmware.rs:48-53, crates/bbkemu-core/src/model.rs:42-48, crates/bbkemu-libretro/src/lib.rs:207-208, crates/bbkemu-libretro/src/lib.rs:430-434, crates/bbkemu-libretro/src/lib.rs:442-479, crates/bbkemu-core/src/emulator.rs:148-153"
 
 platform_details:
   memory_map:

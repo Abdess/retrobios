@@ -171,7 +171,7 @@ files:
     sha1: "e03e68b2929e543a3fac91addb6a57d63825a38b"
     bundled: true
     not_bundled_on: [batocera]
-    note: "VM/binary pak, 1.51c variant. Shipped in main/ of every iortcw 1.51c release zip. The Batocera package installs the binaries and libraries only."
+    note: "VM/binary pak, 1.51c variant. Not opened by name: the client extracts the game dlls from any pak whose checksum binpak_checksums lists, 2925068652 for this one. The sha1 is that of main/mp_bin0.pk3 in the iortcw 1.51c release zips, whose pak checksum is that value. The Batocera package installs the binaries and libraries only."
 
   # ================================================================
   # demomain/ - demo paks, one per build

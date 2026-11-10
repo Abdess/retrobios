@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import yaml  # noqa: E402
 
 from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config  # noqa: E402
-from launchers import LauncherLayer, launcher_places  # noqa: E402
+from launchers import LauncherLayer, launcher_places, suffixed_stem  # noqa: E402
 from verify import find_undeclared_files, verify_platform  # noqa: E402
 
 CONTENT = {
@@ -251,6 +251,108 @@ class LauncherLayerTest(unittest.TestCase):
         self.profiles = load_emulator_profiles(self.emulators_dir)
         self.assertNotIn("core.bin", {u["name"] for u in self._report()})
         self.assertNotIn("core.bin", self._pack_names())
+
+    def test_a_file_handed_to_an_entry_setting_takes_the_entry_content(self) -> None:
+        """RetroPie runs sdl2trs with `-romfile4p $biosdir/level4p.rom` and
+        EmuDeck writes a No-Intro name into ares's NeoGeoPocket firmware
+        setting: neither name is the core's, and the held file of the entry
+        that setting reads went in under no name at all."""
+        profile = {
+            "emulator": "FixEmu", "type": "standalone", "systems": ["test-sys"],
+            "files": [{"name": "core.bin", "required": True, "config_key": "romslot"},
+                      {"name": "other.bin", "required": True, "config_key": "otherslot"}],
+        }
+        with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"][2]["names"] = ["launcher.rom"]
+        self.config["launchers"][2]["passes_to"] = "command line -romslot"
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["launcher.rom"]["launcher_of"], "core.bin")
+        self.assertEqual(added["launcher.rom"]["md5"], _md5(CONTENT["core.bin"]))
+        self.assertIn("launcher.rom", self._pack_names())
+
+    def test_a_fixed_name_with_an_appended_extension_takes_the_entry(self) -> None:
+        """ROCKNIX passes kick34005.A500.rom to Amiberry, which names
+        Kickstart 1.3 kick34005.A500: the pack shipped nothing under it."""
+        profile = {
+            "emulator": "FixEmu", "type": "standalone", "systems": ["test-sys"],
+            "files": [{"name": "core.bin", "aliases": ["kick.A500"], "required": True}],
+        }
+        with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"][2]["names"] = ["kick.A500.rom"]
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
+        self.assertIsNone(suffixed_stem("scph1001.bin"))
+
+    def test_an_entry_the_platform_declares_still_fills_the_launcher_name(self) -> None:
+        """AmberELEC declares kick34005.A500, so the report never offers
+        Amiberry's entry, and its config still passes kick34005.A500.rom."""
+        profile = {
+            "emulator": "FixEmu", "type": "standalone", "systems": ["test-sys"],
+            "files": [{"name": "core.bin", "aliases": ["kick.A500"], "required": True}],
+        }
+        with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"][2]["names"] = ["kick.A500.rom"]
+        self.config["systems"]["test-sys"]["files"].append(
+            {"name": "core.bin", "destination": "core.bin", "required": True}
+        )
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
+
+    def test_each_name_of_a_config_takes_its_own_key(self) -> None:
+        """AmberELEC's atari800.cfg names eight ROMs under eight keys, and
+        one record describes them in order: 5200a.rom is ROM_5200_A's file,
+        not every key's."""
+        config = {"base_destination": "bios", "launchers": [{
+            "emulator": "e", "build": "libretro", "kind": "fixed_name",
+            "names": ["a.rom", "b.rom"], "search_dir": "/storage/roms/bios",
+            "passes_to": "e.cfg ROM_A, ROM_B", "source_ref": "e.cfg:1",
+        }]}
+        places = {p.paths[0]: p.passes_to for p in launcher_places(config)}
+        self.assertEqual(places, {"a.rom": "e.cfg ROM_A", "b.rom": "e.cfg ROM_B"})
+
+    def test_a_core_option_names_the_dump_of_a_model(self) -> None:
+        """RetroDECK sets LRPS2's pcsx2_bios to scph10000.bin. LRPS2's entry
+        is a placeholder for every BIOS its scan finds, and the catalogues
+        name two revisions of the SCPH-10000: the earlier goes in."""
+        older, newer = b"S" * 64, b"T" * 64
+        for data, catalogue in ((newer, "ps2-0101j-20000217.bin"),
+                                (older, "ps2-0100j-20000117.bin")):
+            sha1 = hashlib.sha1(data).hexdigest()
+            path = os.path.join(self.bios_dir, catalogue)
+            with open(path, "wb") as fh:
+                fh.write(data)
+            self.db["files"][sha1] = {
+                "path": path, "name": catalogue, "md5": _md5(data), "sha1": sha1,
+                "size": len(data), "crc32": "",
+                "provenance": {"redump": {"name": catalogue,
+                                          "description": "SCPH-10000 (Version 5.0)"}},
+            }
+        profile = {
+            "emulator": "OptEmu", "type": "libretro", "systems": ["test-sys"],
+            "files": [{"name": "<bios>.bin", "path": "ps2/bios/<bios>.bin", "required": True,
+                       "min_size": 32, "max_size": 64, "validation": ["size"],
+                       "config_key": "emu_bios"}],
+        }
+        with open(os.path.join(self.emulators_dir, "optemu.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        self.config["launchers"].append({
+            "emulator": "retroarch", "build": "libretro", "kind": "core_option",
+            "names": ["scph10000.bin"], "passes_to": "core option emu_bios",
+            "source_ref": "core-options.cfg:515",
+        })
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(self.emulators_dir)
+        added = {u["path"]: u for u in self._report() if u.get("launcher")}
+        self.assertEqual(added["ps2/bios/scph10000.bin"]["md5"], _md5(older))
 
     def test_the_default_name_a_launcher_replaces_is_not_packed(self) -> None:
         """EmuDeck passes Complex_4627v1.03.bin to xemu, which then never

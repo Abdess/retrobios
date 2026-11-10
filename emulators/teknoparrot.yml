@@ -272,6 +272,7 @@ files:
     path: "EmuMediaBoard/Chihiro/backup_ram.bin"
     system: sega-chihiro
     required: false
+    unsourceable: "written by the emulator, no canonical file"
     has_builtin: true
     description: "Base board backup memory"
     note: "Created by the emulator when absent (\"Could not create Backup File\" on failure)."

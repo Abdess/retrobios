@@ -129,7 +129,7 @@ systems:
 notes: |
   MAME fork adding Switchres 2.2.2 for CRT modeline generation, frame delay
   and low latency vsync. Branch groovymame0289, BARE_BUILD_VERSION 0.289
-  (makefile:1513). TARGET := mame with no SUBTARGET override (makefile:274-282),
+  (makefile:1513). TARGET := mame with no SUBTARGET override (makefile:273-284),
   so the build carries the full machine set.
 
   src/mame and src/devices are byte identical to mamedev/mame tag mame0289,
@@ -4753,10 +4753,11 @@ files:
     path: "hiscore.dat"
     required: false
     bundled: true
-    sha1: "6f730abe0d76161336f09229f54e9f9ac7619d63"
+    size: 314161
+    sha1: "579e39c51dc8e72a9389db683802e3dc7de44ab4"
     category: game_data
     source_ref: "upstream plugins/hiscore/init.lua:105, 152-155"
-    note: "high score definitions, read from the working directory then from the plugin directory. The 0288.222d Windows 7z and the RetroBat groovymame package both ship this copy in plugins/hiscore."
+    note: "high score definitions, read from the working directory then from the plugin directory. The hash is that of plugins/hiscore/hiscore.dat at the pinned revision, the same file as in mamedev/mame at upstream_commit. The code checks no hash."
 
   - name: cheat.7z
     aliases: [cheat.zip]

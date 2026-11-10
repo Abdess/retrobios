@@ -3,9 +3,10 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/mentalfoundry/Pokket"
 upstream: "https://github.com/mentalfoundry/Pokket"
-profiled_date: "2026-10-17"
-source_commit: "37c022ce46eb578de5b57d7b488ffda9e3b7d9f1"
-core_version: "1.23"
+profiled_date: "2026-11-09"
+source_commit: "4bf542953909c4efee926b9a344831f331b7de45"
+prose_written_at: "4bf542953909c4efee926b9a344831f331b7de45"
+core_version: "1.24"
 version_basis:
   kind: file
   path: "CMakeLists.txt"
@@ -20,7 +21,7 @@ notes: |
   (frontends/desktop/CMakeLists.txt:1-16), a PS Vita port and an Emscripten build.
   The libretro target is pokket_libretro (frontends/libretro/CMakeLists.txt:10-16).
   Both the libretro core and the desktop application report POKKET_VERSION,
-  v1.23 from the project() line of the root CMakeLists.txt (CMakeLists.txt:4-5,
+  v1.24 from the project() line of the root CMakeLists.txt (CMakeLists.txt:4-5,
   frontends/libretro/libretro.c:189-196).
 
   read_bios opens <system>/pocketstation.bin, reads 16384 bytes and fails when
@@ -46,7 +47,7 @@ notes: |
   are documented: 061, from prototype hardware, and 110, the retail one. The
   ASCII tags at offsets 0x1DFC (C061 or C110) and 0x3FFC (J061 or J110)
   identify them. SWI 0Fh FlashWriteSerial works on 061 and locks the CPU on
-  110 (docs/hardware-notes.md:1056-1066).
+  110 (docs/hardware-notes.md:1058-1068).
 
   The desktop application takes the BIOS path from the command line, then
   from the bios= key of settings.cfg beside the executable, then falls back

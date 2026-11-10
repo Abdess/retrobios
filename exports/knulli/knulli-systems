@@ -109,7 +109,7 @@ systems = {
     "supergrafx": { "name": "Supergrafx", "biosFiles": [ { "md5": "38179df8f4ac870017db21ebcbf53114", "file": "bios/syscard3.pce" } ] },
 
     # ---------- SNK ----------#
-    "neogeo":   { "name": "NeoGeo", "biosFiles":    [  { "md5": "00dad01abdbf8ea9e79ad2fe11bdb182", "file": "bios/neogeo.zip" } ] },
+    "neogeo":   { "name": "NeoGeo", "biosFiles":    [  { "md5": "dffb72f116d36d025068b23970a4f6df", "file": "bios/neogeo.zip" } ] },
     "neogeocd":  { "name": "NeoGeo CD", "biosFiles": [ { "md5": "8834880c33164ccbe6476b559f3e37de", "file": "bios/neocd/neocd_f.rom" },
                                                        { "md5": "043d76d5f0ef836500700c34faef774d", "file": "bios/neocd/neocd_sf.rom" },
                                                        { "md5": "de3cf45d227ad44645b22aa83b49f450", "file": "bios/neocd/neocd_t.rom" },
@@ -149,8 +149,7 @@ systems = {
     # ---------- Sega ---------- #
     # https://docs.libretro.com/library/flycast/#bios
     "dreamcast":    { "name": "Dreamcast", "biosFiles":   [ { "md5": "e10c53c2f8b90bab96ead2d368858623", "file": "bios/dc_boot.bin"  },
-                                                            { "md5": "0a93f7940c455905bea6e392dfde92a4", "file": "bios/dc_flash.bin" },
-                                                            { "md5": "e10c53c2f8b90bab96ead2d368858623", "file": "bios/dc/boot.bin", "emulator": "libretro", "core": "redream" } ] },
+                                                            { "md5": "0a93f7940c455905bea6e392dfde92a4", "file": "bios/dc_flash.bin" } ] },
 
     # https://github.com/libretro/libretro-super/blob/master/dist/info/flycast_libretro.info
     "naomi":        { "name": "Naomi", "biosFiles":       [ { "md5": "eb4099aeb42ef089cfe94f8fe95e51f6", "file": "bios/dc/naomi.zip"   } ] },
@@ -185,7 +184,6 @@ systems = {
                                             { "md5": "1e68c231d0896b7eadcad1d7d8e76129", "file": "bios/scph7001.bin"    },
                                             { "md5": "81328b966e6dcf7ea1e32e55e1c104bb", "file": "bios/scph5903.bin", "emulator": "libretro", "core": "mednafen_psx" },
                                             { "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b", "file": "bios/ps1_rom.bin", "emulator": "libretro", "core": "mednafen_psx" },
-                                            { "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b", "file": "bios/ps1_rom.bin", "emulator": "duckstation-legacy" },
                                             { "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b", "file": "bios/ps1_rom.bin", "emulator": "libretro", "core": "swanstation" } ] },
 
     # https://pcsx2.net/config-guide/official-english-pcsx2-configuration-guide.html#Bios
@@ -206,10 +204,7 @@ systems = {
                                             { "md5": "322ceeafb77b0cc96a1fcc6271e0e0ae", "file": "bios/dsi_bios7.bin" },
                                             { "md5": "23031f25602a52c2df32c39554b0c55e", "file": "bios/dsi_bios9.bin" },
                                             { "md5": "", "file": "bios/dsi_firmware.bin" }, # ideally - 74f23348012d7b3e1cc216c47192ffeb
-                                            { "md5": "", "file": "bios/dsi_nand.bin" },
-                                            { "md5": "a392174eb3e572fed6447e956bde4b25", "file": "bios/system/nds_bios_arm9.bin", "emulator": "drastic" },
-                                            { "md5": "df692a80a5b1bc90728bc3dfc76cd948", "file": "bios/system/nds_bios_arm7.bin", "emulator": "drastic" },
-                                            { "md5": "3c704824663ce26b6a1ed4d85238ae5b", "file": "bios/system/nds_firmware.bin", "emulator": "drastic" } # ideally - d71edf897ddd06bf335feeb68edeb272
+                                            { "md5": "", "file": "bios/dsi_nand.bin" } # ideally - d71edf897ddd06bf335feeb68edeb272
                                             ] },
 
     # https://docs.libretro.com/library/mgba/#bios
@@ -229,7 +224,7 @@ systems = {
                                             { "md5": "8ecd73eb4edf7ed7e81aef1be80031d5", "file": "bios/SGB2.sfc" } ] },
     # ---------- Microsoft ---------- #
     # https://docs.libretro.com/library/fmsx/#bios
-    "msx": { "name": "MSX", "biosFiles": [  { "md5": "aa95aea2563cd5ec0a0919b44cc17d47", "file": "bios/MSX.ROM"      }, { "md5": "6f69cc8b5ed761b03afd78000dfb0e19", "file": "bios/Machines/Shared Roms/FMPAC.rom", "emulator": "libretro", "core": "bluemsx" }, { "md5": "6f69cc8b5ed761b03afd78000dfb0e19", "file": "bios/Machines/Shared Roms/FMPAC.rom", "emulator": "libretro", "core": "fmsx" }, { "md5": "80dcd1ad1a4cf65d64b7ba10504e8190", "file": "bios/DISK.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "febe8782b466d7c3b16de6d104826b34", "file": "bios/KANJI.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "6418d091cd6907bbcf940324339e43bb", "file": "bios/MSXDOS2.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "403cdea1cbd2bb24fae506941f8f655e", "file": "bios/PAINTER.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "279efd1eae0d358eecd4edc7d9adedf3", "file": "bios/RS232.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/DEFAULT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "c83e50e9f33b8dd893c414691822740d", "file": "bios/ITALIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "ac4f4a90c1b1887db48ded39c9d9c847", "file": "bios/INTERNAT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/CYRILLIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "73291e76638a2f5aa2eceb843df468f4", "file": "bios/KOREAN.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "aa28f0703b951a6be8df3e28e20d263d", "file": "bios/JAPANESE.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3", "file": "bios/CARTS.SHA", "emulator": "libretro", "core": "fmsx" }, { "md5": "ee02cf1a80bab82c3b19a7dbaa1c0d25", "file": "bios/openmsx/share/systemroms/NMS8245SystemROM1.08.bin", "emulator": "openmsx" }, { "md5": "398856474188363d68d5744d2a867e90", "file": "bios/openmsx/share/systemroms/fmpac.rom", "emulator": "openmsx" }, { "md5": "26befc02fc1313b1c1609c74bdb4cac3", "file": "bios/openmsx/share/systemroms/ide250.dat", "emulator": "openmsx" }, { "md5": "2c66f5911e5b42b8ebe113403548eee7", "file": "bios/openmsx/share/systemroms/COLECO.ROM", "emulator": "openmsx" }, { "md5": "352f054ab09605070bdff49d73f335cc", "file": "bios/openmsx/share/systemroms/svi-3x8_v111.rom", "emulator": "openmsx" }, { "md5": "9218f6dd89f7ba01e3090d44721b4260", "file": "bios/openmsx/share/systemroms/px-7_basic-bios1.rom", "emulator": "openmsx" }, { "md5": "f873f1260b14f1468fa118778ae1c3d2", "file": "bios/openmsx/share/systemroms/cf-3300_basic-bios1.rom", "emulator": "openmsx" }, { "md5": "318b6aa76da71c54ccad7734356e1902", "file": "bios/openmsx/share/systemroms/cf-3300_disk.rom", "emulator": "openmsx" }, { "md5": "5bf4fdfd3c3ffea3e573b386550cb3fa", "file": "bios/openmsx/share/systemroms/fs-5500_basic-bios2.rom", "emulator": "openmsx" }, { "md5": "dcd5e2388115172f2fb48875b2089dbf", "file": "bios/openmsx/share/systemroms/fs-5500_msx2sub.rom", "emulator": "openmsx" }, { "md5": "afbe6ba903453902540ae988cc89dc7b", "file": "bios/openmsx/share/systemroms/fs-5500_kanjibasic.rom", "emulator": "openmsx" }, { "md5": "090539674630c1338a90a1df943a93e2", "file": "bios/openmsx/share/systemroms/fs-5500_kanjifont.rom", "emulator": "openmsx" }, { "md5": "7eb6ae0fbe9736b20dda8dcbd5064f67", "file": "bios/openmsx/share/systemroms/fs-5500_superimp.rom", "emulator": "openmsx" }, { "md5": "a0452dbf5ace7d2e49d0a8029efed09a", "file": "bios/openmsx/share/systemroms/vg8020_basic-bios1.rom", "emulator": "openmsx" } ] },
+    "msx": { "name": "MSX", "biosFiles": [  { "md5": "aa95aea2563cd5ec0a0919b44cc17d47", "file": "bios/MSX.ROM"      }, { "md5": "6f69cc8b5ed761b03afd78000dfb0e19", "file": "bios/Machines/Shared Roms/FMPAC.rom", "emulator": "libretro", "core": "bluemsx" }, { "md5": "6f69cc8b5ed761b03afd78000dfb0e19", "file": "bios/Machines/Shared Roms/FMPAC.rom", "emulator": "libretro", "core": "fmsx" }, { "md5": "80dcd1ad1a4cf65d64b7ba10504e8190", "file": "bios/DISK.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "febe8782b466d7c3b16de6d104826b34", "file": "bios/KANJI.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "6418d091cd6907bbcf940324339e43bb", "file": "bios/MSXDOS2.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "403cdea1cbd2bb24fae506941f8f655e", "file": "bios/PAINTER.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "279efd1eae0d358eecd4edc7d9adedf3", "file": "bios/RS232.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/DEFAULT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "c83e50e9f33b8dd893c414691822740d", "file": "bios/ITALIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "ac4f4a90c1b1887db48ded39c9d9c847", "file": "bios/INTERNAT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/CYRILLIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "73291e76638a2f5aa2eceb843df468f4", "file": "bios/KOREAN.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "aa28f0703b951a6be8df3e28e20d263d", "file": "bios/JAPANESE.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3", "file": "bios/CARTS.SHA", "emulator": "libretro", "core": "fmsx" } ] },
 
     "msx2": { "name": "MSX2", "biosFiles": [ { "md5": "ec3a01c91f24fbddcbcab0ad301bc9ef", "file": "bios/MSX2.ROM"     },
                                             { "md5": "2183c2aff17cf4297bdb496de78c2e8a", "file": "bios/MSX2EXT.ROM"  } ] },
@@ -900,8 +895,7 @@ systems = {
     "gamecube":   { "name": "Nintendo GameCube", "biosFiles":  [ { "md5": "db92574caab77a7ec99d4605fd6f2450", "file": "bios/GC/EUR/IPL.bin" },
                                                                  { "md5": "b17148254a5799684c7d783206504926", "file": "bios/GC/JAP/IPL.bin" },
                                                                  { "md5": "b17148254a5799684c7d783206504926", "file": "bios/GC/USA/IPL.bin" },
-                                                                 { "md5": "1f118b8735fcf40c20b38c3184eebfd9", "file": "bios/Sys/codehandler.bin", "emulator": "libretro", "core": "dolphin" },
-                                                                 { "md5": "1f118b8735fcf40c20b38c3184eebfd9", "file": "bios/Sys/codehandler.bin", "emulator": "dolphin_triforce" } ] },
+                                                                 { "md5": "1f118b8735fcf40c20b38c3184eebfd9", "file": "bios/codehandler.bin", "emulator": "libretro", "core": "dolphin" } ] },
     
     # ---------- Sega Chihiro ---------- #
     "chihiro": { "name": "Sega Chihiro", "biosFiles": [{ "md5": "d49c52a4102f6df7bcf8d0617ac475ed", "file": "bios/mcpx_1.0.bin" },

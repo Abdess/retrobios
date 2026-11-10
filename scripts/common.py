@@ -6,7 +6,7 @@ and file resolution - eliminates DRY violations across scripts.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Collection, Iterable, Mapping
 from collections import Counter
 
 import argparse
@@ -21,6 +21,8 @@ import sys
 import zipfile
 from pathlib import Path
 from typing import Any, TextIO
+
+from alternatives import derive_member_requirements
 
 # Every build script imports this module. verify.py, slots.py, validate_pr.py
 # and cross_reference.py started under 3.8 and stopped halfway on a
@@ -507,6 +509,14 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
     # The registry key, which per-platform profile fields (installed_on,
     # not_bundled_on) name: the display name differs (MiSTer FPGA).
     config["_key"] = platform_name
+    # Where the platform's games live, as its rom folders file records it
+    # from the OS's own source (platforms/romfolders/<key>.yml, roms_root).
+    romfolders = os.path.join(platforms_dir, "romfolders", f"{platform_name}.yml")
+    if os.path.exists(romfolders):
+        with open(romfolders) as f:
+            roms_root = (source_yaml(f) or {}).get("roms_root")
+        if isinstance(roms_root, dict):
+            config["_roms_root"] = roms_root
     _platform_config_cache[cache_key] = config
     return config
 
@@ -859,11 +869,24 @@ def load_target_config(
             )
         )
 
-    declared = (targets[canonical] or {}).get("cores")
+    return _target_core_set(targets[canonical] or {}, overrides, canonical, platforms_dir)
+
+
+def _target_core_set(
+    entry: dict, overrides: dict, target: str, platforms_dir: str
+) -> set[str] | None:
+    """A target's cores: what the board builds, overrides applied, and the
+    buildbot cores its RetroArch core downloader installs (`downloads`, a
+    RetroArch targets entry), which a Batocera x86_64 or armv7 board can
+    fetch from its menu."""
+    declared = entry.get("cores")
     if declared is None:
         return None
-    cores = set(str(c) for c in declared)
-    return apply_target_overrides(cores, overrides, canonical)
+    cores = apply_target_overrides({str(c) for c in declared}, overrides, target)
+    downloads = entry.get("downloads")
+    if downloads:
+        cores |= load_target_config("retroarch", str(downloads), platforms_dir) or set()
+    return cores
 
 
 def apply_target_overrides(
@@ -907,12 +930,9 @@ def list_available_targets(
     result = []
     for tname, tdata in sorted(data.get("targets", {}).items()):
         aliases = (overrides.get(tname) or {}).get("aliases", [])
-        declared = (tdata or {}).get("cores")
         # None: the target runs every core the platform declares.
-        count = (
-            None if declared is None
-            else len(apply_target_overrides({str(c) for c in declared}, overrides, tname))
-        )
+        found = _target_core_set(tdata or {}, overrides, tname, platforms_dir)
+        count = None if found is None else len(found)
         result.append(
             {
                 "name": tname,
@@ -1267,7 +1287,39 @@ _archive_index: dict[int, tuple[list[dict], int, dict[str | None, list[dict]]]] 
 
 
 def _member(f: dict) -> dict:
-    return {"crc32": str(f["crc32"]).lower(), "required": bool(f.get("required", True))}
+    member = {"crc32": str(f["crc32"]).lower(), "required": bool(f.get("required", True))}
+    if f.get("group"):
+        # One of the members sharing it is enough (alternatives.py).
+        member["group"] = f["group"]
+    return member
+
+
+def _required_met(members: list[dict], held: Callable[[dict], bool]) -> tuple[int, bool]:
+    """How many requirements an archive meets, and whether it meets all.
+
+    A required member is one requirement, and so is a required set of
+    alternatives, met when one of its members is held: Odin reads the
+    first of three Hikaru boot ROMs it finds in hikaru.zip.
+    """
+    from alternatives import groups_of
+
+    met = 0
+    complete = True
+    sets: dict[str, bool] = {}
+    for m in members:
+        if not m["required"]:
+            continue
+        names = groups_of(m)
+        if names:
+            for name in names:
+                sets[name] = sets.get(name, False) or held(m)
+            continue
+        if held(m):
+            met += 1
+        else:
+            complete = False
+    met += sum(sets.values())
+    return met, complete and all(sets.values())
 
 
 def archive_members(archive: str, files: list[dict]) -> list[dict]:
@@ -1316,7 +1368,7 @@ def holds_required_members(path: str, members: list[dict]) -> bool:
     """Whether an archive holds every member a profile requires inside it."""
     crcs = zip_member_crcs(path)
     names = zip_member_names(path)
-    return all(_member_held(m, crcs, names) for m in members if m["required"])
+    return _required_met(members, lambda m: _member_held(m, crcs, names))[1]
 
 
 def contents_members(file_entry: dict) -> list[dict]:
@@ -1360,8 +1412,8 @@ def _holding_members(paths: list[str], members: list[dict]) -> list[str]:
     def held(path: str) -> tuple[int, int]:
         crcs = zip_member_crcs(path)
         names = zip_member_names(path)
-        found = [m for m in members if _member_held(m, crcs, names)]
-        return sum(1 for m in found if m["required"]), len(found)
+        found = {id(m) for m in members if _member_held(m, crcs, names)}
+        return _required_met(members, lambda m: id(m) in found)[0], len(found)
 
     scores = {path: held(path) for path in paths}
     best = max(scores.values(), default=(0, 0))
@@ -1482,6 +1534,29 @@ def resolve_local_file(
     system_dir = file_entry.get("system_dir")
     if system_dir and dest_hint.startswith(f"{system_dir}/"):
         dest_hint = dest_hint[len(system_dir) + 1:]
+    # A launcher that moves the layout (EmuDeck links azahar's sysdata to
+    # bios/azahar/keys) changes where the file goes, not the tail the
+    # collection indexes it under. Both are asked, and the stronger proof
+    # wins: a content or path match over a name, the destination on a tie.
+    layout = file_entry.get("layout_path")
+    if layout and layout != dest_hint:
+        plain = {k: v for k, v in file_entry.items() if k != "layout_path"}
+        answers = [
+            resolve_local_file(
+                plain, db, zip_contents, dest_hint=hint, _depth=_depth,
+                data_dir_registry=data_dir_registry,
+            )
+            for hint in (dest_hint, str(layout))
+        ]
+        for found in answers:
+            if found[0] is not None and (
+                resolution_is_hash_exact(found[1]) or found[1] == "path_exact"
+            ):
+                return found
+        for found in answers:
+            if found[0] is not None and found[1] not in ("not_found", "hash_mismatch"):
+                return found
+        return next((found for found in answers if found[0] is not None), answers[0])
     # A name written with its directory is the destination when no path is
     # given: gam4980/E.BIN resolved by its basename took another model's OS
     # in verify --emulator and the emulator pack, while the platform pack,
@@ -1611,20 +1686,20 @@ def resolve_local_file(
         and not sha256_candidates
     ):
         by_crc32 = db.get("indexes", {}).get("by_crc32", {})
-        found: list[tuple[str, str]] = []
+        crc_matches: list[tuple[str, str]] = []
         for crc in crc_candidates:
             match = by_crc32.get(crc)
             if match and match in files_db:
                 path = files_db[match]["path"]
                 status = _record_match_status(match)
                 if status and os.path.exists(path):
-                    found.append((path, status))
+                    crc_matches.append((path, status))
         # A primary copy over a .variants/ one, as everywhere else.
-        for path, status in found:
+        for path, status in crc_matches:
             if "/.variants/" not in path:
                 return path, status
-        if found:
-            return found[0]
+        if crc_matches:
+            return crc_matches[0]
 
     # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
     # Guard: only accept if the found file's name matches the requested name
@@ -2134,7 +2209,7 @@ def profiles_for_systems(
     wanted = {_norm_system_id(sid) for sid in system_ids}
     matching = []
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias", "test"):
+        if profile.get("type") in ("launcher", "alias") or profile.get("role") == "test":
             continue
         if standalone and "standalone" not in profile.get("type", "libretro"):
             continue
@@ -2188,7 +2263,7 @@ def select_emulator_profiles(
             # and the spelling hints sent pcfx to two PlayStation cores.
             claimants = sorted(
                 key for key in upstream_profile_index(all_profiles).get(name, ())
-                if all_profiles[key].get("type") not in ("launcher", "test")
+                if all_profiles[key].get("type") != "launcher" and all_profiles[key].get("role") != "test"
             )
             if len(claimants) == 1:
                 name = claimants[0]
@@ -2201,7 +2276,7 @@ def select_emulator_profiles(
             available = sorted(
                 key
                 for key, value in all_profiles.items()
-                if value.get("type") not in ("alias", "test")
+                if value.get("type") != "alias" and value.get("role") != "test"
             )
             raise ProfileSelectionError(
                 f"emulator '{name}' not found\n"
@@ -2314,6 +2389,7 @@ def load_emulator_profiles(
         if "emulator" not in profile:
             continue
         _normalize_hash_fields(profile)
+        derive_member_requirements(profile)
         profiles[f.stem] = profile
     _emulator_profiles_cache[cache_key] = profiles
     return profiles
@@ -2345,7 +2421,7 @@ def _normalize_hash_fields(node: object) -> None:
 def unique_emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
     """Profiles counting as distinct emulators (aliases and tests excluded)."""
     return {
-        k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
+        k: v for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
     }
 
 
@@ -2467,6 +2543,7 @@ def group_identical_platforms(
             cores if isinstance(cores, str) else sorted(map(str, cores or [])),
             sorted(map(str, config.get("standalone_cores") or [])),
             sorted(map(str, config.get("dual_mode_cores") or [])),
+            sorted(map(str, config.get("installable_cores") or [])),
             # One archive cannot serve a filesystem that folds case and one
             # that does not: Lakka keeps bios.col beside BIOS.col.
             bool(config.get("case_insensitive_fs")),
@@ -2610,9 +2687,19 @@ def runs_standalone(
         return False
     if "standalone" not in str(profile.get("type", "")):
         return False
-    return emu_name in standalone_cores or bool(
-        standalone_cores & {str(c) for c in profile.get("cores", [])}
-    )
+    names = {emu_name, *(str(c) for c in profile.get("cores", []))}
+    # A name a build the platform compiles itself answers to means that
+    # build there: RetroBat's standalone amiberry is 8.3.0, and the 8.5.0
+    # profile, run there as the buildbot core, keeps its libretro layout.
+    owners: dict[str, set[str]] = {}
+    for tag in standalone_cores:
+        if tag.startswith(OWN_BUILD_PREFIX):
+            name, owner, source = json.loads(tag[len(OWN_BUILD_PREFIX):])
+            if source == profile.get("source"):
+                owners.setdefault(name, set()).add(owner)
+    if any(emu_name not in owners[n] for n in names & owners.keys()):
+        return False
+    return emu_name in standalone_cores or bool(standalone_cores & names)
 
 
 # Marks, in a platform's standalone set, an emulator it also launches as a
@@ -2624,6 +2711,18 @@ HANDED_PREFIX = "handed:"
 # Marks, in the same set, a libretro core and the system directory the
 # platform hands it (``core_system_dirs``), as JSON.
 CORE_DIR_PREFIX = "coredir:"
+# Marks, in the same set, a file the platform's launcher executes
+# (launchers.executed_files), as JSON.
+EXECUTED_PREFIX = "exec:"
+# Marks, in the same set, a standalone name a build the platform compiles
+# itself (built_by) answers to, as JSON [name, profile, source].
+OWN_BUILD_PREFIX = "ownbuild:"
+# Marks, in the same set, a file name the platform declares under one of the
+# systems a launcher record is written for, as JSON [system, name]: it says
+# which launch reads a profile entry of that name.
+SYSTEM_FILE_PREFIX = "sysfile:"
+# The key, in that index, of a machine a launcher record offers.
+MACHINE_KEY = "machine:"
 
 
 def core_system_dirs(
@@ -2672,6 +2771,24 @@ def system_dir_path(entry: dict, path: str) -> str:
     return f"{directory}/{path}" if directory else path
 
 
+def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
+    """The standalone names the platform's own builds answer to, tagged.
+
+    Read from the profiles of this repository, the ones every pack, manifest
+    and report is built from.
+    """
+    platform = str(config.get("_key") or "")
+    if not platform or not standalone:
+        return set()
+    profiles = load_emulator_profiles(str(Path(__file__).resolve().parent.parent / "emulators"))
+    return {
+        OWN_BUILD_PREFIX + json.dumps([n, key, p.get("source")])
+        for key, p in profiles.items()
+        if platform in (p.get("built_by") or []) and "standalone" in str(p.get("type", ""))
+        for n in {key, *(str(c) for c in p.get("cores") or [])} & standalone
+    }
+
+
 def standalone_set(config: dict) -> set[str]:
     """The emulators a platform launches standalone, with its dual-mode ones.
 
@@ -2681,6 +2798,16 @@ def standalone_set(config: dict) -> set[str]:
     """
     names = {str(c) for c in config.get("standalone_cores") or []}
     names |= {DUAL_MODE_PREFIX + str(c) for c in config.get("dual_mode_cores") or []}
+    # A buildbot core the platform's RetroArch installs under the name of an
+    # emulator it runs standalone is that emulator's libretro build: run
+    # both ways, as Batocera runs amiberry standalone and can fetch
+    # amiberry_libretro.
+    names |= {
+        DUAL_MODE_PREFIX + str(c)
+        for c in set(map(str, config.get("installable_cores") or []))
+        & set(map(str, config.get("standalone_cores") or []))
+    }
+    names |= own_build_tags(config, names)
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
     names |= {
@@ -2689,13 +2816,40 @@ def standalone_set(config: dict) -> set[str]:
         for core in entry.get("cores") or []
     }
     if names - {n for n in names if n.startswith(CORE_DIR_PREFIX)}:
-        from launchers import handed_directories  # noqa: PLC0415
+        from launchers import executed_files, handed_directories  # noqa: PLC0415
 
+        handed = handed_directories(config)
+        # The record's position travels too: a search list is read in order.
         names |= {
             HANDED_PREFIX + json.dumps(
-                [h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref]
+                [position, h.emulator, h.folder, h.directory, sorted(h.handles), h.source_ref,
+                 h.roms_place, sorted(h.systems), h.holds_declared]
             )
-            for h in handed_directories(config)
+            for position, h in enumerate(handed)
+        }
+        named = {system for h in handed for system in h.systems}
+        names |= {
+            SYSTEM_FILE_PREFIX + json.dumps([slug, str(f["name"]).lower()])
+            for slug, system in (config.get("systems") or {}).items()
+            if slug in named
+            for f in system.get("files") or []
+            if f.get("name")
+        }
+        # The machines a record offers under its systems, by normalized id.
+        from launchers import native_systems  # noqa: PLC0415
+
+        natives = native_systems(config)
+        names |= {
+            SYSTEM_FILE_PREFIX + json.dumps(
+                [natives.get(str(native), str(native)), MACHINE_KEY + _norm_system_id(str(m))]
+            )
+            for record in config.get("launchers") or []
+            for native in record.get("systems") or []
+            for m in record.get("machines") or []
+        }
+        names |= {
+            EXECUTED_PREFIX + json.dumps([run.emulator, run.name, run.place, run.source_ref])
+            for run in executed_files(config)
         }
     return names
 
@@ -2724,38 +2878,165 @@ def _handed(standalone_cores: Iterable[str]) -> list:
     for tag in standalone_cores:
         if not tag.startswith(HANDED_PREFIX):
             continue
-        emulator, folder, directory, handles, ref = json.loads(tag[len(HANDED_PREFIX):])
-        found.append(HandedDirectory(emulator, folder, directory, frozenset(handles), ref))
+        position, emulator, folder, directory, handles, ref, roms, systems, held = json.loads(
+            tag[len(HANDED_PREFIX):]
+        )
+        found.append(((position, tag), HandedDirectory(
+            emulator, folder, directory, frozenset(handles), ref,
+            tuple(roms) if roms else None, frozenset(systems), held,
+        )))
+    return [h for _key, h in sorted(found, key=lambda pair: pair[0])]
+
+
+def system_file_index(standalone_cores: Iterable[str]) -> dict[str, set[str]]:
+    """File name, lower case -> the platform systems declaring it (SYSTEM_FILE_PREFIX)."""
+    index: dict[str, set[str]] = {}
+    for tag in standalone_cores:
+        if tag.startswith(SYSTEM_FILE_PREFIX):
+            slug, name = json.loads(tag[len(SYSTEM_FILE_PREFIX):])
+            index.setdefault(name, set()).add(slug)
+    return index
+
+
+def entry_launch_systems(entry: dict, index: Mapping[str, set[str]]) -> frozenset[str]:
+    """The platform systems, by our ids, that launch the emulator for an entry.
+
+    The systems the entry names, and those under which the platform declares
+    a file of one of its names (``index``, system_file_index): Recalbox lists
+    XRoar's coco3.rom under trs80coco, which our coco is.
+    """
+    systems = {str(s) for s in entry.get("systems") or []}
+    if entry.get("system"):
+        systems.add(str(entry["system"]))
+    for name in [entry.get("name"), *(entry.get("aliases") or [])]:
+        if name:
+            systems |= index.get(str(name).lower(), set())
+    return frozenset(systems)
+
+
+def _executed(standalone_cores: Iterable[str]) -> list:
+    """The files a standalone set's launchers execute, as launchers read them."""
+    from launchers import ExecutedFile  # noqa: PLC0415
+
+    found = []
+    for tag in standalone_cores:
+        if tag.startswith(EXECUTED_PREFIX):
+            emulator, name, place, ref = json.loads(tag[len(EXECUTED_PREFIX):])
+            found.append(ExecutedFile(emulator, name, tuple(place) if place else None, ref))
     return found
 
 
-def standalone_destination(entry: dict, root: str | None) -> str:
-    """Where a standalone build reads an entry, relative to the BIOS root.
+# Why a standalone entry has no destination on a platform that relocates its
+# layout: the manifest's omission reason, named as the installer words it.
+OUTSIDE_BIOS_FOLDER = "outside_bios_folder"
+# The entry root of a file read below the platform's roms directory, and of
+# one read in an emulator's folder outside the BIOS tree that the registry
+# describes. Each is located by the registry entry <root>_directory.
+ROMS_ROOT = "roms"
+EMULATORS_ROOT = "emulators"
+CONFIGS_ROOT = "configs"
+OUTER_ROOTS = (ROMS_ROOT, EMULATORS_ROOT, CONFIGS_ROOT)
 
-    ``standalone_path`` is relative to the directories the build resolves
-    it against (``standalone_directories``). A platform that hands one of
-    them a folder of its BIOS tree puts the file under that folder:
-    RetroPie and ROCKNIX give Flycast bios/dc, EmuDeck bios/flycast/bios.
-    An entry with no ``standalone_path`` keeps ``path``, the layout both
-    builds share.
+
+def outer_layout(config: dict, root: str) -> dict | None:
+    """Where a platform keeps the folder an outer root names, or None.
+
+    roms: the roms root its rom folders file records (``path``, the OS's
+    spelling, and ``from_bios``, relative to the BIOS folder), with the
+    BIOS folder's own name, base_destination, that a run's folder must
+    carry before ``from_bios`` is followed from it. emulators: the
+    registry's ``emulators_directory``, the folders a launcher searches
+    for an emulator by key, which no rom folders file describes.
+    """
+    if root == ROMS_ROOT:
+        found = config.get("_roms_root") or {}
+        base = str(config.get("base_destination") or "")
+        path, relation = found.get("path"), found.get("from_bios")
+        if not (path and relation) or "<" in str(path):
+            return None
+        if base:
+            return {"path": str(path), "from_bios": str(relation), "bios_folder": base}
+        # A list whose dests start above the BIOS folder (AmberELEC's
+        # bios/...) installs into the folder holding it: a roms root there
+        # or below is part of the install tree, written as a plain dest.
+        declared = declared_root(config)
+        if not declared:
+            return None
+        inside = os.path.normpath(f"{declared}/{relation}")
+        if inside == ".." or inside.startswith("../"):
+            return None
+        return {"path": str(path), "install_prefix": "" if inside == "." else inside}
+    if root == EMULATORS_ROOT:
+        return config.get("emulators_directory") or None
+    if root == CONFIGS_ROOT:
+        # The frontend's configs folder, as its path code builds it
+        # (configs_root, Batocera's batoceraPaths CONFIGS).
+        found = config.get("configs_root") or {}
+        base = str(config.get("base_destination") or "")
+        if not (found.get("path") and found.get("from_bios") and base):
+            return None
+        return {"path": str(found["path"]), "from_bios": str(found["from_bios"]),
+                "bios_folder": base}
+    return None
+
+
+def standalone_layout_path(entry: dict, profile: dict) -> str | None:
+    """The path of an entry relative to the directories its standalone build declares.
+
+    ``standalone_path`` when the entry has one. A profile with no libretro
+    build has one layout, so its ``path`` is that layout: UAE4All2 reads
+    kickstarts/kick13.rom below its working directory.
     """
     own = entry.get("standalone_path")
-    if own and root:
-        return f"{root}/{own}"
-    return own or entry.get("path") or entry.get("name", "")
-
-
-def standalone_root_for(
-    emu_name: str, profile: dict, standalone_cores: Iterable[str]
-) -> str | None:
-    """The folder a platform gives this emulator's standalone layout, or None."""
-    declared = profile.get("standalone_directories") or []
-    if not declared:
+    if own:
+        return own
+    if "libretro" in str(profile.get("type", "")):
         return None
-    from launchers import standalone_root  # noqa: PLC0415
+    return entry.get("path") or None
+
+
+def standalone_destination(
+    entry: dict, profile: dict, bindings: dict[str, tuple[str, str]]
+) -> tuple[str, str] | None:
+    """Where a platform puts a standalone entry: (tree, path).
+
+    ``bindings`` are the places the platform's launchers give the layout
+    (launchers.standalone_bindings): RetroPie and ROCKNIX give Flycast bios/dc,
+    EmuDeck bios/flycast/bios, RetroPie gives UAE4All2's kickstarts/ bios/amiga,
+    ROCKNIX runs PICO-8 from roms/pico-8. The tree is launchers.BIOS_TREE or
+    launchers.ROMS_TREE. None when no binding covers the entry.
+    """
+    layout = standalone_layout_path(entry, profile)
+    if layout is None or not bindings:
+        return None
+    from launchers import bound_path  # noqa: PLC0415
+
+    return bound_path(layout, bindings)
+
+
+def standalone_bindings_for(
+    emu_name: str, profile: dict, standalone_cores: Iterable[str],
+    systems: Iterable[str] = (),
+) -> dict[str, tuple[str, str]]:
+    """The places a platform gives this emulator's standalone layout, by subfolder.
+
+    ``systems`` are those the entry is launched for (entry_launch_systems).
+    """
+    declared = profile.get("standalone_directories") or []
+    pools = profile.get("standalone_pools") or {}
+    if not declared and not pools:
+        return {}
+    from launchers import standalone_bindings  # noqa: PLC0415
 
     names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
-    return standalone_root(names, declared, _handed(standalone_cores))
+    layout = [
+        path for f in profile.get("files") or []
+        if isinstance(f, dict) and (path := standalone_layout_path(f, profile))
+    ]
+    return standalone_bindings(
+        names, declared, _handed(standalone_cores), _executed(standalone_cores), layout,
+        pools, systems,
+    )
 
 
 def platform_layouts(
@@ -2774,19 +3055,78 @@ def platform_layouts(
             return [(profile, False)]
         return [(system_dir_view(profile, d), False) for d in directories]
     standalone = profile
-    root = standalone_root_for(emu_name, profile, standalone_cores)
-    if root:
+    # Bindings can depend on the system an entry is launched for, so each
+    # set of launch systems gets its own.
+    by_systems: dict[frozenset[str], dict[str, tuple[str, str]]] = {}
+    names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
+    per_system = bool(
+        profile.get("standalone_directories") or profile.get("standalone_pools")
+    ) and any(h.systems and h.emulator in names for h in _handed(standalone_cores))
+    index = system_file_index(standalone_cores) if per_system else {}
+    # A profile system the platform launches under a system of its own, as
+    # its list says for one entry, is launched there for every entry:
+    # Recalbox lists mc10.rom under trs80coco, so alice.rom is read there.
+    family: dict[str, set[str]] = {}
+    for f in (profile.get("files") or []) if per_system else []:
+        if isinstance(f, dict):
+            own = entry_launch_systems(f, {})
+            for system in own:
+                family.setdefault(system, set()).update(entry_launch_systems(f, index) - own)
+
+    def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
+        systems: frozenset[str] = frozenset()
+        if per_system:
+            own = entry_launch_systems(entry, {})
+            systems = entry_launch_systems(entry, index)
+            if systems == own:
+                systems = systems.union(*(family.get(s, set()) for s in own))
+            if systems == own:
+                # The platform's list names none of the entry's names: its
+                # own system selects the launch that offers it as a machine
+                # (RetroBat runs XRoar's coco3 under coco).
+                systems = systems.union(*(
+                    index.get(MACHINE_KEY + _norm_system_id(s), set()) for s in own
+                ))
+        if systems not in by_systems:
+            by_systems[systems] = standalone_bindings_for(
+                emu_name, profile, standalone_cores, systems
+            )
+        return by_systems[systems]
+
+    layout_entries = [
+        f for f in profile.get("files") or []
+        if isinstance(f, dict) and standalone_layout_path(f, profile) is not None
+    ]
+    if any(bindings_of(f) for f in layout_entries):
         # The standalone view carries the platform's destination, so every
         # reader of standalone_path (builder, manifest, verify, slots) places
         # the file in the folder the platform hands the emulator.
-        standalone = {
-            **profile,
-            "files": [
-                {**f, "standalone_path": standalone_destination(f, root)}
-                if isinstance(f, dict) and f.get("standalone_path") else f
-                for f in profile.get("files") or []
-            ],
-        }
+        # An entry of the layout no binding covers is read in a folder the
+        # platform keeps outside the BIOS tree: UAE4All2's kick.rom in
+        # RetroPie's $md_inst. It is marked, never left at the BIOS root
+        # where the emulator does not read it.
+        files = []
+        for f in profile.get("files") or []:
+            if not isinstance(f, dict) or standalone_layout_path(f, profile) is None:
+                files.append(f)
+                continue
+            placed = standalone_destination(f, profile, bindings_of(f))
+            if placed is None or placed[0] == "outside":
+                files.append({**f, "unplaced": OUTSIDE_BIOS_FOLDER})
+                continue
+            tree, path = placed
+            moved = {**f, "standalone_path": path,
+                     "layout_path": standalone_layout_path(f, profile)}
+            if tree == "install":
+                # Below the roms root inside the install tree (AmberELEC's
+                # /storage/roms): a plain dest the platform prefix skips.
+                files.append({**moved, "unprefixed": True})
+                continue
+            # A file the launcher runs from the roms directory (ROCKNIX's
+            # roms/pico-8) or an emulator folder (RetroBat's emulators/pico8)
+            # is relative to it, and says so.
+            files.append({**moved, "root": tree} if tree else moved)
+        standalone = {**profile, "files": files}
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
             if c.startswith(DUAL_MODE_PREFIX)}
     if "libretro" in str(profile.get("type", "")) and dual & {
@@ -2890,51 +3230,126 @@ def resolve_platform_cores(
     Alias profiles are always excluded (they point to another profile).
     If target_cores is provided, result is intersected with it.
     """
+    result, downloaded_only = _platform_profiles(config, profiles)
+    if target_cores is not None:
+        result = result & designated_profiles(profiles, target_cores)
+        result -= {
+            profile for profile, names in downloaded_only.items()
+            if not downloadable_on(target_cores, names)
+        }
+    return result
+
+
+def downloaded_only_profiles(
+    config: dict, profiles: dict[str, dict]
+) -> dict[str, frozenset[str]]:
+    """The profiles a platform reaches only through its RetroArch core
+    downloader, each with the installable names that reach it."""
+    return _platform_profiles(config, profiles)[1]
+
+
+def _platform_profiles(
+    config: dict, profiles: dict[str, dict]
+) -> tuple[set[str], dict[str, frozenset[str]]]:
     cores_config = config.get("cores")
+    platform_key = str(config.get("_key") or "")
+    downloaded_only: dict[str, set[str]] = {}
+    # The builds the platform compiles itself, by the names they answer to.
+    # Such a name means that build there, and another revision of the same
+    # project is not what the platform runs: ROCKNIX and RetroPie build only
+    # standalone Amiberry, Recalbox its standalone and libretro Amiberry 8.2.2.
+    # Only a platform listing the name both ways (dual_mode_cores) beside a
+    # standalone-only build of its own runs the buildbot core too (RetroBat).
+    # A core of another project under the name stays: RetroPie builds
+    # minivmac37 standalone beside the minivmac core.
+    own_builds = {
+        name: p for name, p in profiles.items()
+        if platform_key and platform_key in (p.get("built_by") or [])
+    }
+
+    def replaced_by_own(name: str, p: dict, libretro_only: bool = False) -> bool:
+        if platform_key in (p.get("built_by") or []):
+            return False
+        names = {name, *(str(c) for c in p.get("cores") or [])}
+        return any(
+            (not libretro_only or "libretro" in str(q.get("type", "")))
+            and q.get("source") == p.get("source")
+            and names & {key, *(str(c) for c in q.get("cores") or [])}
+            for key, q in own_builds.items()
+        )
 
     def every_libretro() -> set[str]:
-        # A build only some platforms compile (built_by) is reached by name:
-        # the buildbot RetroArch installs from does not publish it.
+        # A build only some platforms compile (built_by) is absent from the
+        # buildbot RetroArch installs from, so it is reached by name, or as one
+        # of the libretro cores of a platform that compiles it: ROCKNIX ships
+        # yabadabadoo with its RetroArch and names it nowhere else.
         return {
             name
             for name, p in profiles.items()
             if "libretro" in p.get("type", "") and p.get("type") != "alias"
-            and not p.get("built_by")
+            and (
+                not p.get("built_by")
+                or (platform_key and platform_key in p["built_by"])
+            )
+            and not replaced_by_own(name, p)
         }
 
     if cores_config == "all_libretro":
         result = every_libretro()
     elif isinstance(cores_config, list):
-        core_set = {str(c) for c in cores_config}
+        # An emulator the platform launches standalone runs there even when
+        # its own list names only the cores: Batocera's es_systems.yml files
+        # lexaloffle and gsplus as standalone emulators and nowhere else. A
+        # core its RetroArch installs from the buildbot is a libretro build
+        # and designates libretro profiles only (below): Batocera downloads
+        # the linuxloader core and runs no standalone Linux Loader.
+        core_set = {str(c) for c in cores_config} | {
+            str(c) for c in config.get("standalone_cores") or []
+        }
         index = upstream_profile_index(profiles)
         platform = str(config.get("_key") or "")
 
-        def designated(name: str) -> str | None:
+        def designated(name: str) -> set[str]:
             # A build the platform compiles itself (built_by) is what its
             # name means there: Recalbox's uae4all is Chips-fr/uae4all-rpi,
-            # RetroPie's the standalone uae4all2 under the same name.
-            own = sorted(
+            # RetroPie's the standalone uae4all2 under the same name. A
+            # platform building one name in several revisions, one per board,
+            # runs all of them: RetroPie's amiberry is 5.7.2 and 6.3.3 on x86.
+            own = {
                 p for p in index.get(name, ())
                 if platform and platform in (profiles[p].get("built_by") or [])
-            )
-            return own[0] if own else preferred_profile(index, name)
+            }
+            if own:
+                return own
+            preferred = preferred_profile(index, name)
+            return {preferred} if preferred is not None else set()
 
-        result = {
-            profile
-            for c in core_set
-            if (profile := designated(c)) is not None
-        }
+        result = {profile for c in core_set for profile in designated(c)}
         # A name the platform launches both ways designates its libretro
         # build too. Batocera, Recalbox and RetroBat run pcsx2 standalone and
         # as LRPS2, two profiles: the key match kept the standalone one and
-        # LRPS2's files never reached their packs.
-        result |= {
-            profile
-            for c in config.get("dual_mode_cores") or []
-            for profile in index.get(str(c), set())
-            if "libretro" in str(profiles[profile].get("type", ""))
-            and not profiles[profile].get("built_by")
-        }
+        # LRPS2's files never reached their packs. A core its RetroArch
+        # installs is a libretro build as well (amiberry's buildbot core
+        # beside Batocera's standalone amiberry).
+        def libretro_builds(name: object) -> set[str]:
+            return {
+                profile
+                for profile in index.get(str(name), set())
+                if "libretro" in str(profiles[profile].get("type", ""))
+                and not profiles[profile].get("built_by")
+                and not replaced_by_own(profile, profiles[profile], libretro_only=True)
+            }
+
+        dual = {p for c in config.get("dual_mode_cores") or [] for p in libretro_builds(c)}
+        # A core reached only through the RetroArch downloader runs on the
+        # boards whose downloader offers it: Batocera's x86_64 RetroArch
+        # installs the amiberry core, its armv7 and aarch64 boards cannot.
+        # Every installable name counts: Batocera's x86_64 downloader offers
+        # nside_sfc_balanced, not the higan_sfc_balanced it also lists.
+        for c in config.get("installable_cores") or []:
+            for profile in libretro_builds(c) - dual - result:
+                downloaded_only.setdefault(profile, set()).add(str(c))
+        result |= dual | set(downloaded_only)
         # Support "all_libretro" as a list element: combines all libretro
         # profiles with explicitly listed standalone cores (e.g. RetroDECK
         # ships RetroArch + standalone emulators)
@@ -2951,9 +3366,31 @@ def resolve_platform_cores(
             and not p.get("built_by")
         }
 
-    if target_cores is not None:
-        result = result & designated_profiles(profiles, target_cores)
-    return result
+    return result, {p: frozenset(names) for p, names in downloaded_only.items()}
+
+
+@functools.lru_cache(maxsize=1)
+def _retroarch_target_sets() -> tuple[frozenset[str], ...]:
+    platforms = str(Path(__file__).resolve().parent.parent / "platforms")
+    return tuple(
+        frozenset(found)
+        for t in list_available_targets("retroarch", platforms)
+        if (found := load_target_config("retroarch", t["name"], platforms))
+    )
+
+
+def downloadable_on(target_cores: set[str], names: Collection[str]) -> bool:
+    """Whether a board's core set holds a RetroArch download list offering
+    one of `names`.
+
+    A board with a downloader carries a whole RetroArch targets entry in its
+    set (load_target_config, `downloads`), a board without one only what it
+    builds.
+    """
+    return any(
+        found <= target_cores and not found.isdisjoint(names)
+        for found in _retroarch_target_sets()
+    )
 
 
 def unresolved_platform_cores(config: dict, profiles: dict[str, dict]) -> set[str]:
@@ -3508,6 +3945,50 @@ def declared_root(config: dict) -> str:
     return root if count / len(roots) > 0.9 else ""
 
 
+def platform_declared_contents(config: dict, db: dict) -> dict[str, set[str]]:
+    """The folders each declared file's content sits in, keyed by its hashes.
+
+    A core that scans a folder and identifies a ROM by its checksum reads a
+    declared file whatever its name: RetroDECK lists atari800's Atari BASIC
+    Rev A as ROM_BASIC_A, and the core takes it by CRC32. Keys are
+    "md5:", "sha1:" and "crc32:" values of the database file the
+    declaration resolves to, each with the declared slot's folder.
+    """
+    prefix = declared_root(config).lower()
+    by_md5 = db.get("indexes", {}).get("by_md5", {})
+    files_db = db.get("files", {})
+    contents: dict[str, set[str]] = {}
+    for system in config.get("systems", {}).values():
+        for fe in system.get("files", []):
+            if fe.get("zipped_file"):
+                continue
+            record = files_db.get((fe.get("sha1") or "").lower())
+            md5 = (fe.get("md5") or "").lower()
+            if record is None and md5 and "," not in md5:
+                sha1 = by_md5.get(md5, "")
+                record = files_db.get(sha1[0] if isinstance(sha1, list) else sha1)
+            if not record:
+                continue
+            slot = sanitize_pack_path(fe.get("destination") or fe.get("name", "")).lower()
+            if prefix and slot.startswith(prefix + "/"):
+                slot = slot[len(prefix) + 1:]
+            folder = slot.rpartition("/")[0]
+            for field in ("md5", "sha1", "crc32"):
+                value = str(record.get(field) or "").lower()
+                if value:
+                    contents.setdefault(f"{field}:{value}", set()).add(folder)
+    return contents
+
+
+def merged_platform_declared_contents(configs: list[dict], db: dict) -> dict[str, set[str]]:
+    """`platform_declared_contents` of several platforms, one index."""
+    merged: dict[str, set[str]] = {}
+    for config in configs:
+        for key, folders in platform_declared_contents(config, db).items():
+            merged.setdefault(key, set()).update(folders)
+    return merged
+
+
 def merged_platform_declarations(
     configs: list[dict], db: dict
 ) -> dict[str, list[tuple[int | None, str]]]:
@@ -3552,7 +4033,7 @@ def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> Non
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
     for name in sorted(profiles):
         p = profiles[name]
-        if p.get("type") in ("alias", "test"):
+        if p.get("type") == "alias" or p.get("role") == "test":
             continue
         display = p.get("emulator", name)
         ptype = p.get("type", "libretro")
@@ -3573,7 +4054,7 @@ def system_index(profiles: dict) -> dict[str, tuple[str, set[str]]]:
     """
     index: dict[str, tuple[str, set[str]]] = {}
     for name, p in sorted(profiles.items()):
-        if p.get("type") in ("alias", "test", "launcher"):
+        if p.get("type") in ("alias", "launcher") or p.get("role") == "test":
             continue
         for sys_id in p.get("systems", []):
             key = _norm_system_id(sys_id)

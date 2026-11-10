@@ -119,7 +119,8 @@ systems = {
                                                        { "md5": "5c2366f25ff92d71788468ca492ebeca", "file": "bios/neocd/front-sp1.bin" },
                                                        { "md5": "122aee210324c72e8a11116e6ef9c0d0", "file": "bios/neocd/top-sp1.bin" },
                                                        { "md5": "f39572af7584cb5b3f70ae8cc848aba2", "file": "bios/neocd/neocd.bin"},
-                                                       { "md5": "08ca8b2dba6662e8024f9e789711c6fc", "file": "bios/neocd/uni-bioscd.rom"} ] },
+                                                       { "md5": "08ca8b2dba6662e8024f9e789711c6fc", "file": "bios/neocd/uni-bioscd.rom"},
+                                                       { "md5": "b31a246b69493c35194fe0bac120dc37", "file": "bios/neocdz.zip", "emulator": "libretro", "core": "fbneo"} ] },
 
     # ---------- Sharp ---------- #
     # https://github.com/libretro/libretro-super/blob/master/dist/info/px68k_libretro.info
@@ -145,7 +146,7 @@ systems = {
 
     # ---------- Sega ---------- #
     # https://docs.libretro.com/library/flycast/#bios
-    "dreamcast":    { "name": "Dreamcast", "biosFiles":   [ { "md5": "e10c53c2f8b90bab96ead2d368858623", "file": "bios/dc/dc_boot.bin" }, { "md5": "0a93f7940c455905bea6e392dfde92a4", "file": "bios/dc/flash.bin", "emulator": "demul" }, { "md5": "0a93f7940c455905bea6e392dfde92a4", "file": "bios/dc/flash.bin", "emulator": "libretro", "core": "redream" }, { "md5": "e10c53c2f8b90bab96ead2d368858623", "file": "bios/dc/boot.bin", "emulator": "libretro", "core": "redream" } ] },
+    "dreamcast":    { "name": "Dreamcast", "biosFiles":   [ { "md5": "e10c53c2f8b90bab96ead2d368858623", "file": "bios/dc/dc_boot.bin" } ] },
 
     # https://github.com/libretro/libretro-super/blob/master/dist/info/flycast_libretro.info
     "naomi":        { "name": "Naomi", "biosFiles":       [ { "md5": "eb4099aeb42ef089cfe94f8fe95e51f6", "file": "bios/dc/naomi.zip"   } ] },
@@ -221,7 +222,7 @@ systems = {
                                             { "md5": "8ecd73eb4edf7ed7e81aef1be80031d5", "file": "bios/SGB2.sfc" } ] },
     # ---------- Microsoft ---------- #
     # https://docs.libretro.com/library/fmsx/#bios
-    "msx": { "name": "MSX", "biosFiles": [  { "md5": "aa95aea2563cd5ec0a0919b44cc17d47", "file": "bios/MSX.ROM"      }, { "md5": "80dcd1ad1a4cf65d64b7ba10504e8190", "file": "bios/DISK.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "6f69cc8b5ed761b03afd78000dfb0e19", "file": "bios/FMPAC.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "febe8782b466d7c3b16de6d104826b34", "file": "bios/KANJI.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "6418d091cd6907bbcf940324339e43bb", "file": "bios/MSXDOS2.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "403cdea1cbd2bb24fae506941f8f655e", "file": "bios/PAINTER.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "279efd1eae0d358eecd4edc7d9adedf3", "file": "bios/RS232.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/DEFAULT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "c83e50e9f33b8dd893c414691822740d", "file": "bios/ITALIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "ac4f4a90c1b1887db48ded39c9d9c847", "file": "bios/INTERNAT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/CYRILLIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "73291e76638a2f5aa2eceb843df468f4", "file": "bios/KOREAN.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "aa28f0703b951a6be8df3e28e20d263d", "file": "bios/JAPANESE.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3", "file": "bios/CARTS.SHA", "emulator": "libretro", "core": "fmsx" }, { "md5": "9218f6dd89f7ba01e3090d44721b4260", "file": "bios/openmsx/share/systemroms/px-7_basic-bios1.rom", "emulator": "openmsx" } ] },
+    "msx": { "name": "MSX", "biosFiles": [  { "md5": "aa95aea2563cd5ec0a0919b44cc17d47", "file": "bios/MSX.ROM"      }, { "md5": "80dcd1ad1a4cf65d64b7ba10504e8190", "file": "bios/DISK.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "6f69cc8b5ed761b03afd78000dfb0e19", "file": "bios/openmsx/share/systemroms/fmpac.rom", "emulator": "libretro", "core": "fmsx" }, { "md5": "6f69cc8b5ed761b03afd78000dfb0e19", "file": "bios/openmsx/share/systemroms/fmpac.rom", "emulator": "libretro", "core": "openmsx" }, { "md5": "febe8782b466d7c3b16de6d104826b34", "file": "bios/KANJI.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "6418d091cd6907bbcf940324339e43bb", "file": "bios/MSXDOS2.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "403cdea1cbd2bb24fae506941f8f655e", "file": "bios/PAINTER.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "279efd1eae0d358eecd4edc7d9adedf3", "file": "bios/RS232.ROM", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/DEFAULT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "c83e50e9f33b8dd893c414691822740d", "file": "bios/ITALIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "ac4f4a90c1b1887db48ded39c9d9c847", "file": "bios/INTERNAT.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "85b38e4128bbc300e675f55b278683a8", "file": "bios/CYRILLIC.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "73291e76638a2f5aa2eceb843df468f4", "file": "bios/KOREAN.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "aa28f0703b951a6be8df3e28e20d263d", "file": "bios/JAPANESE.FNT", "emulator": "libretro", "core": "fmsx" }, { "md5": "74b0f217fa0e2b8bb5a2f8e2ecc69da3", "file": "bios/CARTS.SHA", "emulator": "libretro", "core": "fmsx" } ] },
 
     "msx2": { "name": "MSX2", "biosFiles": [ { "md5": "ec3a01c91f24fbddcbcab0ad301bc9ef", "file": "bios/MSX2.ROM"     },
                                             { "md5": "2183c2aff17cf4297bdb496de78c2e8a", "file": "bios/MSX2EXT.ROM"  } ] },
@@ -248,6 +249,22 @@ systems = {
                                                            { "md5": "dc10d7bdd1b6f450773dfb558477c230", "file": "bios/amiga/amiga-os-204.rom"    },
                                                            { "md5": "465646c9b6729f77eea5314d1f057951", "file": "bios/amiga/amiga-os-205.rom"    },
                                                            { "md5": "e40a5dfb3d017ba8779faba30cbd1c8e", "file": "bios/amiga/amiga-os-310-a600.rom" },
+                                                           { "md5": "d2ce6748e8e42222662e14359f68dad5", "file": "bios/aros-ext.bin", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "48d38fc3fcf2ad7bca5ec5191d02e451", "file": "bios/aros-rom.bin", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "5d06f5972b95f55549dfbfa8e45ae090", "file": "bios/whdboot/WHDLoad", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "2a3a61bbd7c351751506e22a4354b76a", "file": "bios/whdboot/JST", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "a491e6bc79db7e968d35577cee2769a5", "file": "bios/whdboot/host-quit", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "28b7fd41cd5d1b345324aa2571fb1c5d", "file": "bios/whdboot/boot-data.zip", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "51d44cd24e16fbb395b1bfefbaacd375", "file": "bios/whdboot/game-data/whdload_db.json", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "c993feb1eeddec1d2e687aa514231028", "file": "bios/whdboot/save-data/Kickstarts/kick33180.A500.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "7eb13d974af0992d672b67c317a7e0a1", "file": "bios/whdboot/save-data/Kickstarts/kick34005.A500.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "e057054449b5e21591ce27d2eb9ac720", "file": "bios/whdboot/save-data/Kickstarts/kick37175.A500.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "2a2652daba6be3ef1d0bdf5ddd4347c6", "file": "bios/whdboot/save-data/Kickstarts/kick36143.A3000.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "af8b2e2227f01a142e20c8ab463f14ed", "file": "bios/whdboot/save-data/Kickstarts/kick39106.A1200.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "3f97c1963d82c808ef29e7c984c4c688", "file": "bios/whdboot/save-data/Kickstarts/kick40063.A600.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "547b42b7b070c7f227ea45e0986d57a1", "file": "bios/whdboot/save-data/Kickstarts/kick40068.A1200.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "f89f19b858ea6b1a04327c6f71ee1600", "file": "bios/whdboot/save-data/Kickstarts/kick40068.A4000.RTB", "emulator": "libretro", "core": "amiberry" },
+                                                           { "md5": "c5ba6165df42fc69b32942b248fca725", "file": "bios/whdboot/save-data/Kickstarts/kick31034.A1000.RTB", "emulator": "libretro", "core": "amiberry" },
                                                            { "md5": "6c5b44c1a2bcee664129f850bfe4ed8a", "file": "bios/uae_data/drive_click_A500.wav", "emulator": "libretro", "core": "puae" },
                                                            { "md5": "6c5b44c1a2bcee664129f850bfe4ed8a", "file": "bios/uae_data/drive_click_A500.wav", "emulator": "libretro", "core": "puae2021" },
                                                            { "md5": "7401f854a75f9ede18769168ab896a2a", "file": "bios/uae_data/drive_spin_A500.wav", "emulator": "libretro", "core": "puae" },
@@ -574,7 +591,7 @@ systems = {
                                                 { "md5": "01df3140909f09aa9aac4f88890f676c", "file": "bios/eos.rom", "emulator": "libretro", "core": "gearcoleco"}, ] },
 
     # ---------- ColecoVision ---------- #
-    "colecovision": { "name": "ColecoVision", "biosFiles": [ { "md5": "2c66f5911e5b42b8ebe113403548eee7", "file": "bios/colecovision.rom" } ] },
+    "colecovision": { "name": "ColecoVision", "biosFiles": [ { "md5": "2c66f5911e5b42b8ebe113403548eee7", "file": "bios/colecovision.rom" }, { "md5": "2c66f5911e5b42b8ebe113403548eee7", "file": "bios/Machines/COL - ColecoVision/coleco.rom", "emulator": "clk" } ] },
 
      # ---------- BBC Micro ---------- #
     "bbc":   { "name": "BBC Micro", "biosFiles":  [ { "md5": "", "file": "bios/bbcb.zip"  },
@@ -1033,7 +1050,8 @@ systems = {
 
     # ---------- Sega Chihiro ---------- #
     "chihiro": { "name": "Sega Chihiro", "biosFiles": [{ "md5": "d49c52a4102f6df7bcf8d0617ac475ed", "file": "bios/mcpx_1.0.bin" },
-                                                       { "md5": "f23d7e00ae8fbf88908ed1f9165f35eb", "file": "bios/cerbios.bin" }] },
+                                                       { "md5": "f23d7e00ae8fbf88908ed1f9165f35eb", "file": "bios/cerbios.bin" },
+                                                       { "md5": "4bbbda157dcf922619da1046df10e216", "file": "bios/xemu/Chihiro/chihiro_xbox_bios.bin", "emulator": "libretro", "core": "xemu" }] },
 
     # ---------- Oric Atmos ---------- #
     "oricatmos": { "name": "Oric Atmos", "biosFiles": [{ "md5": "a330779c42ad7d0c4ac6ef9e92788ec6", "file": "bios/Oric/basic11.rom" },
@@ -1108,8 +1126,7 @@ systems = {
                     { "md5": "823d35a8c98f70d2d378a2c7568c3b23", "zippedFile": "bk11m_329_basic3.rom", "file": "bios/bk0010.zip", "emulator": "libretro", "core": "mame" },
                     { "md5": "1e6637f32aa7d1de03510030cac40bcf", "zippedFile": "bk11m_327_basic1.rom", "file": "bios/bk0010.zip", "emulator": "libretro", "core": "mame" },
                     { "md5": "dc52f365d56fa1951f5d35b1101b9e3f", "zippedFile": "bk11m_325_ext.rom",    "file": "bios/bk0010.zip", "emulator": "libretro", "core": "mame" },
-                    { "md5": "fe4627d1e3a1535874085050733263e7", "zippedFile": "bk11m_324_bos.rom",    "file": "bios/bk0010.zip", "emulator": "libretro", "core": "mame" },
-                    { "md5": "ebe418ec8a6c85d5ac32956c9a96c179", "file": "bios/Oric/basic10.rom", "emulator": "clk" }] },
+                    { "md5": "fe4627d1e3a1535874085050733263e7", "zippedFile": "bk11m_324_bos.rom",    "file": "bios/bk0010.zip", "emulator": "libretro", "core": "mame" }] },
 }
 
 class BiosStatus:

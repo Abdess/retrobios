@@ -438,6 +438,7 @@ files:
   - name: mios-ipl.map
     path: Maps/mios-ipl.map
     required: false
+    unsourceable: "user authored symbol map, no canonical file"
     description: "MIOS symbol map"
     note: "Read from Maps/ in the user directory when MIOS starts, and a successful load re-applies the HLE function patches against the symbols it names."
     source_ref: "source Source/Core/Core/IOS/MIOS.cpp:67-72"

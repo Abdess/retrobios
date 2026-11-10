@@ -606,8 +606,14 @@ def declaration_settles(
     declared_names: Mapping[str, list[tuple[int | None, str]]] | set[str],
     dest: str = "",
     folded_slots: frozenset[str] = frozenset(),
+    declared_contents: Mapping[str, set[str]] | None = None,
 ) -> bool:
     """Whether a platform declaration meets a core's requirement.
+
+    An entry the core finds by content (``found_by: content`` on the entry)
+    is met by any declaration of a file it accepts by hash, in the folder it
+    scans: atari800 takes RetroDECK's ROM_BASIC_A by its CRC32, so its own
+    label for that ROM is not one more file to ship.
 
     A platform declaring the name the core reads has met the requirement
     where the declaration fills the entry's own slot, whose content the slot
@@ -630,6 +636,13 @@ def declaration_settles(
         return True
     slot = sanitize_pack_path(dest or fname).lower()
     directory = slot if dest.endswith("/") else slot.rpartition("/")[0]
+    if declared_contents and file_entry.get("found_by") == "content":
+        for field in ("md5", "sha1", "crc32"):
+            values = file_entry.get(field) or []
+            for value in values if isinstance(values, list) else str(values).split(","):
+                folders = declared_contents.get(f"{field}:{str(value).strip().lower()}")
+                if folders and directory in folders:
+                    return True
     if not dest.endswith("/") and slot in folded_slots:
         return True
     for name in (fname, *file_entry.get("aliases", [])):

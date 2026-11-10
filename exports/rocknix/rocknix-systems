@@ -23,8 +23,8 @@ systems = {
     "nds":        { "name": "Nintendo DS", "biosFiles": [ { "md5": "94bc5094607c5e6598d50472c52f27f2", "file": "bios/firmware.bin" },
                                                           { "md5": "df692a80a5b1bc90728bc3dfc76cd948", "file": "bios/bios7.bin" },
                                                           { "md5": "a392174eb3e572fed6447e956bde4b25", "file": "bios/bios9.bin" },
-                                                          { "md5": "559dae4ea78eb9d67702c56c1d791e81", "file": "bios/dsi_bios7.bin" },
-                                                          { "md5": "87b665fce118f76251271c3732532777", "file": "bios/dsi_bios9.bin" },
+                                                          { "md5": "322ceeafb77b0cc96a1fcc6271e0e0ae", "file": "bios/dsi_bios7.bin" },
+                                                          { "md5": "23031f25602a52c2df32c39554b0c55e", "file": "bios/dsi_bios9.bin" },
                                                           { "md5": "74f23348012d7b3e1cc216c47192ffeb", "file": "bios/dsi_firmware.bin" },
                                                           { "md5": "d71edf897ddd06bf335feeb68edeb272", "file": "bios/dsi_nand.bin" } ] },
 
@@ -60,10 +60,13 @@ systems = {
                                            { "md5": "8dd7d5296a650fac7319bce665a6a53c", "file": "bios/scph5500.bin" },
                                            { "md5": "490f666e1afb15b7362b406ed1cea246", "file": "bios/scph5501.bin" },
                                            { "md5": "32736f17079d0b2b7024407c39bd3050", "file": "bios/scph5502.bin" },
-                                           { "md5": "1e68c231d0896b7eadcad1d7d8e76129", "file": "bios/scph7001.bin" } ] },
+                                           { "md5": "1e68c231d0896b7eadcad1d7d8e76129", "file": "bios/scph7001.bin" },
+                                           { "md5": "81328b966e6dcf7ea1e32e55e1c104bb", "file": "bios/scph5903.bin", "emulator": "retroarch", "core": "beetle_psx" },
+                                           { "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b", "file": "bios/ps1_rom.bin", "emulator": "retroarch", "core": "beetle_psx" },
+                                           { "md5": "81bbe60ba7a3d1cea1d48c14cbcc647b", "file": "bios/ps1_rom.bin", "emulator": "retroarch", "core": "swanstation" } ] },
 
     "ps2": { "name": "PS2", "biosFiles": [ { "md5": "21038400dc633070a78ad53090c53017", "file": "bios/pcsx2/bios/ps2-0230a-20080220.bin" },
-                                           { "md5": "21038400dc633070a78ad53090c53017", "file": "bios/aethersx2/bios/ps2-0230a-20080220.bin" } ] },
+                                           { "md5": "21038400dc633070a78ad53090c53017", "file": "bios/armsx2/ps2-0230a-20080220.bin" } ] },
 
     "ps3": { "name": "PS3", "biosFiles": [ { "md5": "a2b60b6ac1d2e49e230144345616927c", "file": "bios/PS3UPDAT.PUP" } ] }, #4.93
 

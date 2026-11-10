@@ -14,6 +14,10 @@ cores:
   - sudachi
 systems: [nintendo-switch]
 mode: standalone
+standalone_directories:
+  - "$XDG_DATA_HOME/sudachi"
+  - "$HOME/.local/share/sudachi"
+  - "PORTABLE_DIR"
 
 data_root:
   windows:

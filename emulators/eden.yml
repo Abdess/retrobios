@@ -60,6 +60,10 @@ files:
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:281-302"
 
+standalone_directories:
+  - "$XDG_DATA_HOME/eden"
+  - "$HOME/.local/share/eden"
+  - "PORTABLE_DIR"
 data_root:
   windows:
     path: "%APPDATA%/eden"

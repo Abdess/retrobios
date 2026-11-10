@@ -93,6 +93,7 @@ SYSTEM_MAP = {
     "SGB": ("nintendo-sgb", "Super Game Boy", "SGB_MiSTer"),
     "SNES": ("nintendo-snes", "Super NES / Super Famicom", "SNES_MiSTer"),
     "Saturn": ("sega-saturn", "Sega Saturn", "Saturn_MiSTer"),
+    "SharpX1": ("sharp-x1", "Sharp X1", "SharpX1_Mister"),
     "TGFX16-CD": ("nec-pc-engine-cd", "PC Engine CD / TurboGrafx-CD", "TurboGrafx16_MiSTer"),
     "TI-99_4A": ("ti99", "Texas Instruments TI-99/4A", "TI-99_4A_MiSTer"),
     "WonderSwan": ("wonderswan", "Bandai WonderSwan", "WonderSwan_MiSTer"),

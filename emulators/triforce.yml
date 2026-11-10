@@ -103,16 +103,22 @@ files:
     system: sega-triforce
     size: 2097152
     sha1: "87918619c632ac9de270d4fdf396a57eb57fc620"
-    required: true
+    required: false
     bundled: true
     not_bundled_on: [retrobat]
-    source_ref: "source Source/Core/Core/HW/DVD/AMMediaboard.cpp:215-233, source Source/Core/Core/HW/DVD/DVDInterface.cpp:289-294"
+    source_ref: "source Source/Core/Core/HW/DVD/AMMediaboard.cpp:215-233, source Source/Core/Core/HW/DVD/AMMediaboard.cpp:464-476, source Source/Core/Core/HW/DVD/DVDInterface.cpp:289-294, source Source/Core/Core/Boot/Boot_BS2Emu.cpp:336-347, source Source/Core/Core/Boot/Boot.cpp:482-489"
     note: >
       Read on every Triforce launch, Sys/Triforce only with no User fallback.
       Nothing is validated, min(file size, 2 MiB) is copied into the firmware
-      buffer. The hash is the copy the fork's own Data/Sys tree carries, SegaBoot
-      v3.11. A build installs it with the rest of Data/Sys (CMakeLists.txt:1039).
-      The older build RetroBat ships as dolphin-triforce has no Sys/Triforce.
+      buffer. A missing file raises "required for test menus" and emulation
+      goes on. The default SkipIPL boot (Source/Core/Core/Config/MainSettings.cpp:37)
+      copies the disc into DIMM memory with the firmware unmapped, so games run
+      without it. Lost without it: the test menus, mapped when a reset requests
+      test mode, and booting through a real IPL_TRI.bin, which maps SegaBoot
+      to chain into it. The hash is the copy the fork's own Data/Sys tree
+      carries, SegaBoot v3.11. A build installs it with the rest of Data/Sys
+      (CMakeLists.txt:1039). The older build RetroBat ships as
+      dolphin-triforce has no Sys/Triforce.
 
   # -- Triforce GameCube boot ROM --
   # Region-specific directory, User/GC/<region>/ then Sys/GC/<region>/.
@@ -273,21 +279,23 @@ files:
       the byte-swapped data (Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:100-102).
 
   # -- GameCube fonts --
-  # Sys/GC/ only. Skipped when an IPL dump is available, the fonts are then read
-  # out of the dump at 0x1aff00 and 0x1fcf00 instead.
+  # Sys/GC/ only. With Load IPL dump on and a GC/<region>/IPL.bin found, the
+  # fonts are read out of the dump at 0x1aff00 and 0x1fcf00 instead.
   - name: "font_western.bin"
     path: "Sys/GC/font_western.bin"
     description: "Windows-1252 font used by GameCube and Wii text rendering"
     size: 9589
     required: false
     installed_on: [retrobat]
-    hle_fallback: true
-    source_ref: "source Source/Core/Common/CommonPaths.h:142, source Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:131, 203-247"
+    source_ref: "source Source/Core/Common/CommonPaths.h:142, source Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:131, 161-176, 203-247, 330-344"
     note: >
-      Size is the official font length the code reads from an IPL dump, 0x2575
-      (Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:234-236). A standalone file is
-      read without any check. The fork's tree carries no font, RetroBat's
-      dolphin-triforce package installs the free replacement here.
+      Read without any size check into the IPL image at 0x1fcf00, keeping at
+      most 0x3100 bytes. The size is the IPL dump font's, 0x2575, the length
+      the code reads out of a dump (EXI_DeviceIPL.cpp:234-236). The fork's
+      tree carries no font, and RetroBat's dolphin-triforce package installs
+      Dolphin's free replacement here. Without a font a game that reads it
+      gets an alert that text may be missing or the game may crash, and runs
+      on.
 
   - name: "font_japanese.bin"
     path: "Sys/GC/font_japanese.bin"
@@ -295,9 +303,15 @@ files:
     size: 303693
     required: false
     installed_on: [retrobat]
-    hle_fallback: true
-    source_ref: "source Source/Core/Common/CommonPaths.h:143, source Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:130, 203-247"
-    note: "Size is the official font length read from an IPL dump, 0x4a24d. The fork's tree carries no font, RetroBat's dolphin-triforce package installs the free replacement here."
+    source_ref: "source Source/Core/Common/CommonPaths.h:143, source Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:130, 161-176, 203-247, 330-344"
+    note: >
+      Read without any size check into the IPL image at 0x1aff00, keeping at
+      most 0x50100 bytes. The size is the IPL dump font's, 0x4a24d, the length
+      the code reads out of a dump (EXI_DeviceIPL.cpp:234-236). The fork's
+      tree carries no font, and RetroBat's dolphin-triforce package installs
+      Dolphin's free replacement here. Without a font a game that reads it
+      gets an alert that text may be missing or the game may crash, and runs
+      on.
 
   # -- GBA BIOS --
   - name: "gba_bios.bin"

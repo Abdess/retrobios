@@ -4,14 +4,15 @@ core_classification: enhanced_fork
 source: "https://github.com/blueminder/supermodel-dojo"
 upstream: "https://github.com/trzy/Supermodel"
 author: "blueminder"
-profiled_date: "2026-10-27"
-source_commit: "113a48d567c5d49a40292df386fee4a0acaea486"
+profiled_date: "2026-11-09"
+source_commit: "9bdf7f26a7271cc13b0640487b72fbada0f9dd8b"
+prose_written_at: "113a48d567c5d49a40292df386fee4a0acaea486"
 upstream_commit: "98fcbff223e23b1530c8f899aca2fc4fd5663ab4"
 upstream_frozen: "The dojo branch merged trzy/Supermodel at this commit through merge ab1ecae. Later upstream commits are not in the port."
-core_version: "v0.3a-20261024-git-113a48d"
+core_version: "v0.3a-20261029-git-9bdf7f2"
 version_basis:
   kind: tag
-  tag: "v0.3a-20261024-git-113a48d"
+  tag: "v0.3a-20261029-git-9bdf7f2"
   distance: 0
 display_name: "Sega - Model 3 (Supermodel Dojo)"
 verification: existence
@@ -45,7 +46,7 @@ notes: |
   netplay, replay and release changes. The two repositories are not linked on
   GitHub, so the pin is read from the merge itself, whose second parent 98fcbff
   resolves in both trees.
-  ref: README.md:3-20, Src/OSD/SDL/Main.cpp:2659-2691
+  ref: README.md:3-20, Src/OSD/SDL/Main.cpp:2679-2711
 
   Windows and macOS return relative names, Config/, Assets/, NVRAM/, Saves/,
   Replays/, ROMs/, resolved against the working directory, which is where the
@@ -58,8 +59,8 @@ notes: |
   is absent. ROMs/ is the default ROMDirectory, where the GUI looks for
   <set>.zip.
   ref: Src/OSD/Windows/FileSystemPath.cpp:28-60, Src/OSD/OSX/FileSystemPath.cpp:28-58,
-       Src/OSD/Unix/FileSystemPath.cpp:63-77, 130-141, 144-198, Src/Dojo/Replay.cpp:28-31,
-       Src/OSD/SDL/Main.cpp:1885, es-de resources/systems/windows/es_systems.xml:171
+       Src/OSD/Unix/FileSystemPath.cpp:63-77, 130-141, 144-198, Src/Dojo/Replay.cpp:67-70,
+       Src/OSD/SDL/Main.cpp:1905, es-de resources/systems/windows/es_systems.xml:171
 
   ROM sets are MAME format per game archives identified by the CRC32 values in
   Games.xml, 64 sets at this revision. A parent set holds the ROMs a regional
@@ -75,20 +76,20 @@ notes: |
   is optional, a synthetic image is built when it is absent, and that image takes
   the logo model from Assets/ when both 3dlogo files are there.
   ref: Config/Games.xml:1404-1428, Src/Pro1000/Pro1000.cpp:2128-2160,
-       Src/OSD/SDL/Main.cpp:2831-2834
+       Src/OSD/SDL/Main.cpp:2870-2873
 
   The emulator writes and reads back its own Supermodel.ini, generated from the
   built in Dojo defaults whenever it is absent, plus NVRAM/<game>.nv,
   Saves/<game>.st<slot> and Replays/<game>_<timestamp>.supr with a .st0 sidecar
   when the session starts from a save state.
-  ref: Src/OSD/SDL/Main.cpp:1766-1786, 2662, 724-752, 786-809,
-       Src/OSD/DojoConfigFile.h:31, Src/Dojo/Replay.cpp:23-51
+  ref: Src/OSD/SDL/Main.cpp:1786-1806, 2682, 731-759, 793-816,
+       Src/OSD/DojoConfigFile.h:31, Src/Dojo/Replay.cpp:62-90
 
   Two reads take a path the user chooses and have no fixed name: the MP3 tracks
   named inside Music.xml, and external GLSL vertex and fragment shaders for the
   legacy 3D engine, whose config keys are empty by default so the built in shader
   source is compiled instead.
-  ref: Src/Sound/MPEG/MpegAudio.cpp:71-86, Src/OSD/SDL/Main.cpp:1889-1890,
+  ref: Src/Sound/MPEG/MpegAudio.cpp:71-86, Src/OSD/SDL/Main.cpp:1909-1910,
        Src/Graphics/Shader.cpp:100-106
 
   The v0.3a-<date>-git-<rev> releases are built from the dojo branch and named
@@ -99,7 +100,7 @@ notes: |
   date and short sha, and the tree falls back to 0.3a-WIP. The older dojo-preview
   tags, Preview 6 of 2025-04-27 the last, shipped a separate launcher.
   ref: .github/workflows/release.yml:4-5, .github/workflows/release.yml:21,
-       .github/workflows/release.yml:48-49, Makefiles/Rules.inc:325-327,
+       .github/workflows/release.yml:48-49, Makefiles/Rules.inc:328-330,
        Src/Version.h:32
 
   ES-DE reaches it through the SUPERMODEL-DOJO find rule, present in the Windows
@@ -116,25 +117,25 @@ files:
     bundled: true
     description: "ROM set definitions"
     note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it."
-    source_ref: "source Src/OSD/SDL/Main.cpp:126, Src/OSD/SDL/Main.cpp:1878, Src/OSD/SDL/Main.cpp:2369, Src/OSD/SDL/Main.cpp:2757-2768, source Src/GameLoader.cpp:601-611, Src/GameLoader.cpp:1066-1069, source Src/OSD/Windows/FileSystemPath.cpp:28-32"
+    source_ref: "source Src/OSD/SDL/Main.cpp:126, Src/OSD/SDL/Main.cpp:1898, Src/OSD/SDL/Main.cpp:2389, Src/OSD/SDL/Main.cpp:2792-2803, source Src/GameLoader.cpp:601-611, Src/GameLoader.cpp:1066-1069, source Src/OSD/Windows/FileSystemPath.cpp:28-32"
 
   - name: p1crosshair.bmp
     path: "Assets/p1crosshair.bmp"
     size: 295992
-    required: true
+    required: false
     bundled: true
     description: "Player 1 light gun crosshair texture"
-    note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2."
-    source_ref: "upstream Src/OSD/SDL/Crosshair.cpp:34-51, source Src/OSD/SDL/Main.cpp:2817-2823, source Assets/DIR.txt"
+    note: "Read only for a light gun game with CrosshairStyle set to bmp. The default style is vector, which draws the crosshair without a texture. When the bmp style is set and either bitmap fails to load, the gun game stops before the Model 3 object is built. 32 bit BMP with alpha, sides a multiple of 2."
+    source_ref: "source Src/OSD/SDL/Crosshair.cpp:32-61, source Src/OSD/SDL/Main.cpp:156-161, source Src/OSD/SDL/Main.cpp:1956, source Src/OSD/SDL/Main.cpp:2852-2862, source Assets/DIR.txt"
 
   - name: p2crosshair.bmp
     path: "Assets/p2crosshair.bmp"
     size: 295992
-    required: true
+    required: false
     bundled: true
     description: "Player 2 light gun crosshair texture"
-    note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load."
-    source_ref: "upstream Src/OSD/SDL/Crosshair.cpp:35, 49-51, source Src/OSD/SDL/Main.cpp:2817-2823"
+    note: "Read in the same call as the player 1 bitmap, under the same conditions, and equally fatal when it fails to load."
+    source_ref: "source Src/OSD/SDL/Crosshair.cpp:35, 48-61, source Src/OSD/SDL/Main.cpp:2852-2862"
 
   - name: Music.xml
     path: "Config/Music.xml"
@@ -142,7 +143,7 @@ files:
     bundled: true
     description: "Custom MPEG music track map"
     note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when the file is absent. Maps an MPEG ROM offset to an MP3 the user supplies. Shipped in the v0.3a-20261024-git-113a48d archives, the Windows zip with CRLF line endings (sha1 4c556c3a848ef61205a53a9a73ba5e46970d445f)."
-    source_ref: "source Src/OSD/SDL/Main.cpp:127, Src/OSD/SDL/Main.cpp:1077, source Src/Sound/MPEG/MpegAudio.cpp:88-108"
+    source_ref: "source Src/OSD/SDL/Main.cpp:127, Src/OSD/SDL/Main.cpp:1098, source Src/Sound/MPEG/MpegAudio.cpp:88-108"
 
   - name: "pro1000.zip"
     required: true

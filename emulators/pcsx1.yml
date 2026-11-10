@@ -22,11 +22,15 @@ notes: >
   No region detection, no hash validation. First valid BIOS found is used regardless of region.
   .info declares scph5500/5501/5502 but code explicitly searches scph1001/5501/7001 first.
 
+groups:
+  bios:
+    required: false
+
 files:
   - name: "scph1001.bin"
     description: "SCPH-1001 (v2.2 12-04-95 A)"
+    group: bios
     priority: 1
-    required: false
     hle_fallback: true
     size: 524288
     validation: [size]
@@ -37,8 +41,8 @@ files:
 
   - name: "scph5501.bin"
     description: "SCPH-5501 (v3.0 11-18-96 A)"
+    group: bios
     priority: 2
-    required: false
     hle_fallback: true
     size: 524288
     validation: [size]
@@ -49,8 +53,8 @@ files:
 
   - name: "scph7001.bin"
     description: "SCPH-7001 (v4.1 12-16-97 A)"
+    group: bios
     priority: 3
-    required: false
     hle_fallback: true
     size: 524288
     validation: [size]

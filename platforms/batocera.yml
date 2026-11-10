@@ -10,7 +10,6 @@ cores:
 - a5200
 - abuse
 - amiberry
-- applewin
 - arduous
 - atari800
 - azahar
@@ -30,7 +29,6 @@ cores:
 - cdogs
 - cemu
 - cgenius
-- citron
 - clk
 - corsixth
 - demul
@@ -50,7 +48,6 @@ cores:
 - easyrpg
 - ecwolf
 - eduke32
-- eka2l1
 - emuscv
 - ep128emu-core
 - etlegacy
@@ -66,7 +63,6 @@ cores:
 - fmsx
 - freechaf
 - freeintv
-- freej2me
 - fsuae
 - fury
 - fuse
@@ -76,7 +72,6 @@ cores:
 - genesisplusgx
 - genesisplusgx-expanded
 - genesisplusgx-wide
-- gong
 - gpsp
 - gsplus
 - gw
@@ -158,7 +153,6 @@ cores:
 - reminiscence
 - rpcs3
 - ruffle
-- ryujinx
 - samcoupe
 - same_cdi
 - sameduck
@@ -173,7 +167,6 @@ cores:
 - sonic2013
 - sonic3-air
 - soniccd
-- squirreljme
 - stella
 - stella2014
 - superbroswar
@@ -192,12 +185,10 @@ cores:
 - tyrian
 - tyrquake
 - uae4arm
-- uqm
 - uzem
 - vb
 - vba-m
 - vecx
-- vemulator
 - vice
 - vice_x128
 - vice_x64
@@ -5683,7 +5674,6 @@ systems:
 standalone_cores:
 - abuse
 - amiberry
-- applewin
 - azahar
 - bigpemu
 - bstone
@@ -5692,7 +5682,6 @@ standalone_cores:
 - cdogs
 - cemu
 - cgenius
-- citron
 - clk
 - corsixth
 - demul
@@ -5709,7 +5698,6 @@ standalone_cores:
 - easyrpg
 - ecwolf
 - eduke32
-- eka2l1
 - etlegacy
 - fallout1-ce
 - fallout2-ce
@@ -5755,7 +5743,6 @@ standalone_cores:
 - redream
 - rpcs3
 - ruffle
-- ryujinx
 - samcoupe
 - scummvm
 - sdlpop
@@ -5776,7 +5763,6 @@ standalone_cores:
 - tr2x
 - tsugaru
 - tyrian
-- uqm
 - vice
 - vita3k
 - vkquake
@@ -5800,7 +5786,6 @@ standalone_cores:
 - ymir
 - yquake2
 dual_mode_cores:
-- applewin
 - dolphin
 - easyrpg
 - flycast
@@ -5813,6 +5798,171 @@ dual_mode_cores:
 - scummvm
 - stella
 - tic80
+installable_cores:
+- "2048"
+- 3dengine
+- DoubleCherryGB
+- amiarcadia
+- amiberry
+- anarch
+- applewin
+- ardens
+- azahar
+- b2
+- bbkemu
+- boom3_xp
+- bsnes-jg
+- bsnes2014_accuracy
+- bsnes2014_balanced
+- bsnes2014_performance
+- bsnes_cplusplus98
+- bsnes_hd_beta
+- bsnes_mercury_accuracy
+- bsnes_mercury_balanced
+- bsnes_mercury_performance
+- cannonball
+- cdi2015
+- cemu
+- chailove
+- citra
+- citra2018
+- clownmdemu
+- coolbaremu
+- craft
+- crocods
+- desmume2015
+- dingooemu
+- dinothawr
+- dirksimple
+- dosbox
+- dosbox_core
+- dosbox_svn
+- dosbox_svn_ce
+- doukutsu_rs
+- ecwolf
+- eduke32
+- ep128emu_core
+- fbalpha2012
+- fbalpha2012_cps1
+- fbalpha2012_cps2
+- fbalpha2012_cps3
+- fbalpha2012_neogeo
+- fixgb
+- fixnes
+- frodo
+- fsuae
+- galaksija
+- gam4980
+- gametank
+- gearboy
+- geargrafx
+- gearlynx
+- geartowns
+- genesis_plus_gx
+- genesis_plus_gx_wide
+- geolith
+- gme
+- gong
+- hatari2014
+- hbmame
+- higan_sfc
+- higan_sfc_balanced
+- hyperscanemu
+- hypseushw
+- irogb
+- jaxe
+- jollycv
+- jumpnbump
+- linuxloader
+- m2000
+- mame2000
+- mame2003
+- mame2003_midway
+- mame2003_plus
+- mame2010
+- mame2015
+- mame2016
+- mcsoftserve
+- mednafen_gba
+- mednafen_pce
+- mednafen_pce_fast
+- mednafen_pcfx
+- mednafen_psx_hw
+- mednafen_saturn
+- mednafen_snes
+- mednafen_supafaust
+- mednafen_vb
+- mesen2
+- meteor
+- mojozork
+- mu
+- mupen64plus_next
+- n64emu
+- native32emu
+- nekop2
+- nicaiemu
+- noods
+- nside_sfc_balanced
+- nuance
+- numero
+- oberon
+- odin
+- omicron
+- openlara
+- openmsx
+- panda3ds
+- parallel_dc
+- pcee2
+- pcem
+- piece
+- playdiaemu
+- pocketcdg
+- pokket
+- pokketstation
+- qemu
+- quicknes
+- race
+- radio
+- remotejoy
+- retro8
+- romcleaner
+- rpcs3
+- rust_dos
+- rustynes
+- sameboy
+- skyemu
+- snes9x2002
+- snes9x2005
+- snes9x2005_plus
+- snes9x2010
+- spmp8000emu
+- squirreljme
+- stella2023
+- supermodel
+- tamalibretro
+- test
+- thepowdertoy
+- tia
+- uw8
+- uzdoom
+- vaporspec
+- vba_next
+- vbam
+- vemulator
+- vice_xcbm2
+- vice_xcbm5x0
+- video_processor
+- virtualxt
+- vita3k
+- vitaquake2-rogue
+- vitaquake2-xatrix
+- vitaquake2-zaero
+- vitaquake3
+- wqxemu
+- xemu
+- xenia_edge
+- yabause
+- ymir
 libretro_systems:
   "81":
   - zx81
@@ -6348,7 +6498,7 @@ launchers:
   - "tos102{L}.img"
   - "tos100{L}.img"
   expands:
-    L: &id001
+    L:
     - us
     - uk
     - de
@@ -6375,7 +6525,17 @@ launchers:
   - "tos162{L}.img"
   - "tos106{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine ste --tos <file>
@@ -6392,7 +6552,17 @@ launchers:
   - "tos206{L}.img"
   - "tos205{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine megaste --tos <file>
@@ -6408,7 +6578,17 @@ launchers:
   - "etos512{L}.img"
   - "tos306{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine tt --tos <file>
@@ -6426,7 +6606,17 @@ launchers:
   - "tos402{L}.img"
   - "tos400{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine falcon --tos <file>
@@ -6508,6 +6698,52 @@ launchers:
   fails_when_missing: false
   depends_on_option: gsplus_bios_filename
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/gsplus/gsplusGenerator.py:105"
+- emulator: lexaloffle
+  build: standalone
+  kind: fixed_name
+  slot: pico8
+  names:
+  - pico-8/pico8
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: exec
+  fails_when_missing: Lexaloffle official binary not found at /userdata/bios/pico-8/pico8,
+    /userdata/bios/pico-8/pico8 is not set as executable
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:17,\
+    \ 35, 37, 48-55"
+- emulator: lexaloffle
+  build: standalone
+  kind: passes_path
+  slot: pico8
+  names: []
+  search_dir: /userdata/bios/pico-8
+  passes_to: environment LD_LIBRARY_PATH
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:35-36,\
+    \ 89"
+- emulator: lexaloffle
+  build: standalone
+  kind: fixed_name
+  slot: voxatron
+  names:
+  - voxatron/vox
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: exec
+  fails_when_missing: Lexaloffle official binary not found at /userdata/bios/voxatron/vox,
+    /userdata/bios/voxatron/vox is not set as executable
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:20,\
+    \ 40, 42, 48-55"
+- emulator: lexaloffle
+  build: standalone
+  kind: passes_path
+  slot: voxatron
+  names: []
+  search_dir: /userdata/bios/voxatron
+  passes_to: environment LD_LIBRARY_PATH
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:40-41,\
+    \ 89"
 - emulator: flycast
   build: standalone
   kind: passes_path
@@ -6516,6 +6752,40 @@ launchers:
   passes_to: environment FLYCAST_BIOS_PATH
   fails_when_missing: false
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/flycast/flycastGenerator.py:199"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/Machines
+  passes_to: "written: filepool add -path /userdata/bios/Machines -types system_rom\
+    \ -position 1"
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:88"
+- emulator: openmsx
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/openmsx
+  passes_to: "written: filepool add -path /userdata/bios/openmsx -types system_rom\
+    \ -position 2"
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/openmsx/openmsxGenerator.py:89"
+- emulator: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/xroar
+  passes_to: "written: rompath /userdata/bios/xroar"
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/xroar/xroarGenerator.py:31-32"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/amiga
+  passes_to: rom_path
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/amiberry/amiberryGenerator.py:56"
 - emulator: o2em
   build: libretro
   kind: core_option
@@ -6535,3 +6805,17 @@ launchers:
   fails_when_missing: false
   depends_on_option: neocd_bios
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/libretro/libretroOptions.py:2040-2041"
+- emulator: shadps4
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/system/configs/shadps4
+  passes_to: working directory of shadps4Generator.py
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/shadps4/shadps4Generator.py:46,\
+    \ 228"
+configs_root:
+  path: /userdata/system/configs
+  from_bios: ../system/configs
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/batoceraPaths.py:14,\
+    \ 19-20, 25"

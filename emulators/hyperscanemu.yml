@@ -1,0 +1,57 @@
+emulator: "HyperScanEmu"
+type: libretro
+core_classification: official_port
+source: "https://git.libretro.com/libretro/HyperScanEmu"
+upstream: "https://github.com/AloysHF/HyperScanEmu"
+profiled_date: "2026-11-09"
+source_commit: "44509de141c7b9adf947b3130500e552cfa98f56"
+upstream_commit: "44509de141c7b9adf947b3130500e552cfa98f56"
+core_version: "0.1.0"
+version_basis:
+  kind: file
+  path: "Cargo.toml"
+  pattern: 'version\s+=\s+"([^"]+)'
+display_name: "Mattel - HyperScan (HyperScanEmu)"
+cores:
+  - "hyperscanemu"
+systems:
+  - mattel-hyperscan
+
+notes: |
+  Mattel HyperScan (Sunplus SPG290) emulator written in Rust. The libretro
+  core and the standalone frontend share the same firmware loader.
+  ref: crates/hyperscanemu-core/src/firmware.rs:88-115
+
+  Both firmware files are read from <system>/hyperscanemu/. The folder and
+  file names are compared byte for byte against the directory listing, so a
+  name differing only in case is not found, Windows included. A missing
+  folder or file fails retro_load_game.
+  ref: crates/hyperscanemu-core/src/firmware.rs:10-14,
+       crates/hyperscanemu-core/src/firmware.rs:71-86,
+       crates/hyperscanemu-libretro/src/lib.rs:559-566
+
+  Each file must have its exact size and must not be filled with a single
+  byte value. No hash is checked.
+  ref: crates/hyperscanemu-core/src/firmware.rs:7-8,
+       crates/hyperscanemu-core/src/firmware.rs:160-178
+
+files:
+  - name: "spg290.bin"
+    path: "hyperscanemu/spg290.bin"
+    system: mattel-hyperscan
+    required: true
+    size: 32768
+    validation: [size]
+    description: "SPG290 internal ROM"
+    note: "Rejected unless exactly 32768 bytes and not blank."
+    source_ref: "crates/hyperscanemu-core/src/firmware.rs:7, crates/hyperscanemu-core/src/firmware.rs:13, crates/hyperscanemu-core/src/firmware.rs:103-114, crates/hyperscanemu-core/src/firmware.rs:133"
+
+  - name: "hyperscan.bin"
+    path: "hyperscanemu/hyperscan.bin"
+    system: mattel-hyperscan
+    required: true
+    size: 1048576
+    validation: [size]
+    description: "HyperScan BIOS"
+    note: "Rejected unless exactly 1048576 bytes and not blank."
+    source_ref: "crates/hyperscanemu-core/src/firmware.rs:8, crates/hyperscanemu-core/src/firmware.rs:14, crates/hyperscanemu-core/src/firmware.rs:104-114, crates/hyperscanemu-core/src/firmware.rs:134"

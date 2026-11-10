@@ -1,16 +1,16 @@
 {
   "platform": "retroarch",
   "originals": {
-    "System.dat": "https://raw.githubusercontent.com/libretro/libretro-database/12c21cf79f1e20eff6ac68b80875816c717d0a7a/dat/System.dat"
+    "System.dat": "https://raw.githubusercontent.com/libretro/libretro-database/c4e17d41ec1bb744fb064f7cefeb61b878fc5d64/dat/System.dat"
   },
   "files": [
     "System.dat"
   ],
-  "summary": "516 kept, 152 files added, 79 hashes updated to the emulator source, 24 sizes updated to the emulator source, 1 size removed, 2 hashes removed",
+  "summary": "519 kept, 158 files added, 76 hashes updated to the emulator source, 23 sizes updated to the emulator source, 1 size removed, 2 hashes removed",
   "counts": {
-    "kept": 516,
-    "added": 152,
-    "not_added": 1214,
+    "kept": 519,
+    "added": 158,
+    "not_added": 1851,
     "not_kept": 0
   },
   "changes": [
@@ -27,42 +27,6 @@
         "crc32": "dacb21ad",
         "size": 131072
       }
-    },
-    {
-      "kind": "hash_updated",
-      "system": "Arcade",
-      "name": "aes.zip",
-      "destination": "aes.zip",
-      "field": "sha1",
-      "old": "43c6aa6ba46adbeefb2b014899bcb4b2db7986af",
-      "new": "23c66caa80b93199914fae246a5ea6e84db1be29"
-    },
-    {
-      "kind": "hash_updated",
-      "system": "Arcade",
-      "name": "aes.zip",
-      "destination": "aes.zip",
-      "field": "md5",
-      "old": "9d2ff2333e23910cf56f7f785609d36a",
-      "new": "ad9585c72130c56f04ae26aae87c289d"
-    },
-    {
-      "kind": "hash_updated",
-      "system": "Arcade",
-      "name": "aes.zip",
-      "destination": "aes.zip",
-      "field": "crc32",
-      "old": "91e93107",
-      "new": "12c66621"
-    },
-    {
-      "kind": "size_updated",
-      "system": "Arcade",
-      "name": "aes.zip",
-      "destination": "aes.zip",
-      "field": "size",
-      "old": 850591,
-      "new": 850311
     },
     {
       "kind": "added",
@@ -98,10 +62,10 @@
       "field": null,
       "old": null,
       "new": {
-        "sha1": "c086306096722da7f02f624e7efb447659aca1d3",
-        "md5": "2f60c1ed69c152dea95e734979ca2ecb",
-        "crc32": "14f27ed1",
-        "size": 131878
+        "sha1": "b48347a133ab8f28b9875ab300fea2ffa2f37ebc",
+        "md5": "f870afb431df16526e28cd9029b9d949",
+        "crc32": "500be704",
+        "size": 131926
       }
     },
     {
@@ -116,6 +80,20 @@
         "md5": "4659968035d462be471fdfb46b604696",
         "crc32": "7481c2ea",
         "size": 925914
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Arcade",
+      "name": "dotron.zip",
+      "destination": "mame2003-plus/artwork/dotron.zip",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "c6d6579ffe0f709ff7861747ba17cb2931dce1b5",
+        "md5": "e284ec87c3d7978628c78d8031b7dd98",
+        "crc32": "05fc6c6b",
+        "size": 2010009
       }
     },
     {
@@ -275,43 +253,71 @@
     {
       "kind": "added",
       "system": "Commodore - Amiga",
-      "name": "WHDLoad",
-      "destination": "whdboot/WHDLoad",
+      "name": "kick13.rom",
+      "destination": "kick13.rom",
       "field": null,
       "old": null,
       "new": {
-        "sha1": "c3ecdaf43cc554026c8ef1c440a08c81144f810b",
-        "md5": "6670a9571f235ec31b8bbd48fc18f428",
-        "crc32": "9df148c1",
-        "size": 161031
+        "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+        "md5": "82a21c1890cae844b3df741f2762d48d",
+        "crc32": "c4f0f55f",
+        "size": 262144
       }
     },
     {
       "kind": "added",
       "system": "Commodore - Amiga",
-      "name": "JST",
-      "destination": "whdboot/JST",
+      "name": "kick12.rom",
+      "destination": "kick12.rom",
       "field": null,
       "old": null,
       "new": {
-        "sha1": "55dd3ecd5086528fa984e82db6474b954fc54ad5",
-        "md5": "2a3a61bbd7c351751506e22a4354b76a",
-        "crc32": "8ff26cf8",
-        "size": 89108
+        "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
+        "md5": "85ad74194e87c08904327de1a9443b7a",
+        "crc32": "a6ce1636",
+        "size": 262144
       }
     },
     {
       "kind": "added",
       "system": "Commodore - Amiga",
-      "name": "AmiQuit",
-      "destination": "whdboot/AmiQuit",
+      "name": "kick20.rom",
+      "destination": "kick20.rom",
       "field": null,
       "old": null,
       "new": {
-        "sha1": "faaaa08b29b391381771222f10b7b22c3b99f4ca",
-        "md5": "36ab26d3b855e634fdda062c052cd52b",
-        "crc32": "cc190c8a",
-        "size": 76
+        "sha1": "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1",
+        "md5": "dc10d7bdd1b6f450773dfb558477c230",
+        "crc32": "c3bdb240",
+        "size": 524288
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "kick205.rom",
+      "destination": "kick205.rom",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
+        "md5": "465646c9b6729f77eea5314d1f057951",
+        "crc32": "43b0df7b",
+        "size": 524288
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "host-quit",
+      "destination": "whdboot/host-quit",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
+        "md5": "a491e6bc79db7e968d35577cee2769a5",
+        "crc32": "8ef13553",
+        "size": 3180
       }
     },
     {
@@ -322,10 +328,10 @@
       "field": null,
       "old": null,
       "new": {
-        "sha1": "18a9dba5cfe2f375f111dd5148691ecaecc6293b",
-        "md5": "9e638f3d531eb7cd82594f49a4cf03b7",
-        "crc32": "16433b36",
-        "size": 357265
+        "sha1": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
+        "md5": "28b7fd41cd5d1b345324aa2571fb1c5d",
+        "crc32": "0ea2cf94",
+        "size": 297373
       }
     },
     {
@@ -368,6 +374,48 @@
         "md5": "7eb13d974af0992d672b67c317a7e0a1",
         "crc32": "ae7a9ac7",
         "size": 4020
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "kick37175.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick37175.A500.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "7c1cf9a97b044a0344648709c187a3505bce7b5a",
+        "md5": "e057054449b5e21591ce27d2eb9ac720",
+        "crc32": "17f51321",
+        "size": 5576
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "kick36143.A3000.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick36143.A3000.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "85b691d7c1286cabefda69f61a1e3007d2cc7bca",
+        "md5": "2a2652daba6be3ef1d0bdf5ddd4347c6",
+        "crc32": "9f7f15ed",
+        "size": 5980
+      }
+    },
+    {
+      "kind": "added",
+      "system": "Commodore - Amiga",
+      "name": "kick39106.A1200.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick39106.A1200.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "4da56f51ce88d321c54fee77c1d37df042ad76ec",
+        "md5": "af8b2e2227f01a142e20c8ab463f14ed",
+        "crc32": "863c4cc4",
+        "size": 5002
       }
     },
     {
@@ -971,6 +1019,20 @@
       }
     },
     {
+      "kind": "added",
+      "system": "Nintendo - Super Game Boy",
+      "name": "lr35902.boot.rom",
+      "destination": "Super GameBoy.sfc/lr35902.boot.rom",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "aa2f50a77dfb4823da96ba99309085a3c6278515",
+        "md5": "d574d4f9c12f305074798f54c091a8b4",
+        "crc32": "ec8a83b9",
+        "size": 256
+      }
+    },
+    {
       "kind": "hash_updated",
       "system": "SNK - NeoGeo CD",
       "name": "neocdz.zip",
@@ -1046,20 +1108,6 @@
         "md5": "0525ad1f1381152f20bfb05775cf39cd",
         "crc32": "28709e73",
         "size": 1917242
-      }
-    },
-    {
-      "kind": "added",
-      "system": "Sony - PlayStation 2",
-      "name": "patches.zip",
-      "destination": "pcsx2/resources/patches.zip",
-      "field": null,
-      "old": null,
-      "new": {
-        "sha1": "f7d0f1606c87019f00109ebdf0f260299f0a72da",
-        "md5": "809868f006eebec4e4615dd8bc397ef7",
-        "crc32": "5120eae7",
-        "size": 2007224
       }
     },
     {
@@ -2948,9 +2996,6 @@
     }
   ],
   "hashes_updated": [
-    "Arcade/aes.zip sha1",
-    "Arcade/aes.zip md5",
-    "Arcade/aes.zip crc32",
     "Nintendo - Nintendo DSi/dsi_bios7.bin sha1",
     "Nintendo - Nintendo DSi/dsi_bios7.bin md5",
     "Nintendo - Nintendo DSi/dsi_bios7.bin crc32",
@@ -3030,7 +3075,6 @@
   ],
   "hashes_filled": [],
   "sizes_updated": [
-    "Arcade/aes.zip",
     "ScummVM/access.dat",
     "ScummVM/cryomni3d.dat",
     "ScummVM/drascula.dat",
@@ -3064,7 +3108,8 @@
   ],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 97,
+  "found_by_content": 393,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "Dinothawr",
@@ -3117,7 +3162,8 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "prboom"
+        "prboom",
+        "uzdoom"
       ],
       "unresolved_cores": []
     },
@@ -3157,7 +3203,8 @@
         "bluemsx",
         "fbalpha2019",
         "fbneo",
-        "fmsx"
+        "fmsx",
+        "openmsx-libretro"
       ],
       "unresolved_cores": []
     },
@@ -3400,9 +3447,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3415,9 +3462,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3430,9 +3477,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3445,9 +3492,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3460,9 +3507,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3475,9 +3522,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3490,9 +3537,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3505,9 +3552,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3520,9 +3567,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3535,9 +3582,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3550,9 +3597,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3565,9 +3612,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3580,9 +3627,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3595,9 +3642,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3610,9 +3657,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3625,9 +3672,9 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
+        "fbalpha2019",
+        "fbneo",
         "fuse"
       ],
       "unresolved_cores": []
@@ -3644,5 +3691,6 @@
       "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }

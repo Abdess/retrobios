@@ -6,102 +6,14 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "590 kept, 47 files added, 47 hashes added to an existing entry",
+  "summary": "590 kept, 36 files added, 47 hashes added to an existing entry",
   "counts": {
     "kept": 590,
-    "added": 47,
-    "not_added": 1712,
+    "added": 36,
+    "not_added": 1533,
     "not_kept": 0
   },
   "changes": [
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick33180.A500.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick33180.A500.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "c993feb1eeddec1d2e687aa514231028"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick34005.A500.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick34005.A500.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "7eb13d974af0992d672b67c317a7e0a1"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick37175.A500.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick37175.A500.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "e057054449b5e21591ce27d2eb9ac720"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick36143.A3000.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick36143.A3000.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "2a2652daba6be3ef1d0bdf5ddd4347c6"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick39106.A1200.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick39106.A1200.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "af8b2e2227f01a142e20c8ab463f14ed"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick40063.A600.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick40063.A600.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "3f97c1963d82c808ef29e7c984c4c688"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick40068.A1200.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick40068.A1200.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "547b42b7b070c7f227ea45e0986d57a1"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga",
-      "name": "kick40068.A4000.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick40068.A4000.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "f89f19b858ea6b1a04327c6f71ee1600"
-      }
-    },
     {
       "kind": "added",
       "system": "amiga",
@@ -504,28 +416,6 @@
       "old": null,
       "new": {
         "md5": "006a881532f2caffc3fe9fb5593f2ed5"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "DOOM1",
-      "name": "gzdoom.pk3",
-      "destination": "gzdoom.pk3",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "5772f907fdee4284f6332d89c0c5609c"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "DOOM1",
-      "name": "game_widescreen_gfx.pk3",
-      "destination": "game_widescreen_gfx.pk3",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "094baa608b85fbe636933b4098e7e1f1"
       }
     },
     {
@@ -942,17 +832,6 @@
       "field": "md5",
       "old": null,
       "new": "a471e64e9f69afbe59c10cc94ed1b184"
-    },
-    {
-      "kind": "added",
-      "system": "eduke32",
-      "name": "penthous.zip",
-      "destination": "penthous.zip",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "f8a7f96a84fc0f401abe2b1d617d1c76"
-      }
     }
   ],
   "hashes_updated": [],
@@ -1010,7 +889,7 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 312,
+  "found_by_content": 355,
   "unattributed": [],
   "removal_candidates": [
     {
@@ -1093,82 +972,12 @@
     },
     {
       "system": "amiga",
-      "name": "Kickstart v1.2 r33.180 (1986)(Commodore)(A500-A1000-A2000)[!].rom",
-      "destination": "bios/Kickstart v1.2 r33.180 (1986)(Commodore)(A500-A1000-A2000)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom",
-      "destination": "bios/Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
       "name": "Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[o].rom",
       "destination": "bios/Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[o].rom",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom",
-      "destination": "bios/Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v2.04 r37.175 (1991)(Commodore)(A500+)[!].rom",
-      "destination": "bios/Kickstart v2.04 r37.175 (1991)(Commodore)(A500+)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v2.05 r37.350 (1992)(Commodore)(A600HD)[!].rom",
-      "destination": "bios/Kickstart v2.05 r37.350 (1992)(Commodore)(A600HD)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
+        "amiberry-8.0.0",
         "puae",
         "puae2021",
         "uae4arm"
@@ -1182,49 +991,7 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v3.1 r40.68 (1993)(Commodore)(A1200)[!].rom",
-      "destination": "bios/Kickstart v3.1 r40.68 (1993)(Commodore)(A1200)[!].rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v3.1 r40.68 (1993)(Commodore)(A3000).rom",
-      "destination": "bios/Kickstart v3.1 r40.68 (1993)(Commodore)(A3000).rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
-        "puae",
-        "puae2021",
-        "uae4arm"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "amiga",
-      "name": "Kickstart v3.1 r40.68 (1993)(Commodore)(A4000).rom",
-      "destination": "bios/Kickstart v3.1 r40.68 (1993)(Commodore)(A4000).rom",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "amiberry",
+        "amiberry-8.0.0",
         "puae",
         "puae2021",
         "uae4arm"
@@ -1238,7 +1005,7 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "amiberry",
+        "amiberry-8.0.0",
         "puae",
         "puae2021",
         "uae4arm"
@@ -4277,14 +4044,22 @@
       "unresolved_cores": []
     },
     {
+      "system": "naomi",
+      "name": "naomi_boot.bin",
+      "destination": "bios/dc/naomi_boot.bin",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
       "system": "dreamcast",
       "name": "dc_flash.bin",
       "destination": "bios/dc/dc_flash.bin",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "flycast",
-        "flycast-dojo"
+        "flycast"
       ],
       "unresolved_cores": []
     },
@@ -4301,14 +4076,156 @@
       "unresolved_cores": []
     },
     {
+      "system": "Diablo",
+      "name": "diabdat.mpq",
+      "destination": "ports/diablo/diabdat.mpq",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "Hellfire",
+      "name": "hellfire.mpq",
+      "destination": "ports/diablo/hellfire.mpq",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "Hellfire",
+      "name": "hfmonk.mpq",
+      "destination": "ports/diablo/hfmonk.mpq",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "Hellfire",
+      "name": "hfmusic.mpq",
+      "destination": "ports/diablo/hfmusic.mpq",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "Hellfire",
+      "name": "hfvoice.mpq",
+      "destination": "ports/diablo/hfvoice.mpq",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "Hellfire",
+      "name": "diabdat.mpq",
+      "destination": "ports/diablo/diabdat.mpq",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "cubetxt1.dat",
+      "destination": "ports/opentyrian/cubetxt1.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "cubetxt2.dat",
+      "destination": "ports/opentyrian/cubetxt2.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "cubetxt3.dat",
+      "destination": "ports/opentyrian/cubetxt3.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "cubetxt4.dat",
+      "destination": "ports/opentyrian/cubetxt4.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "demo.1",
+      "destination": "ports/opentyrian/demo.1",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "demo.2",
+      "destination": "ports/opentyrian/demo.2",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "demo.3",
+      "destination": "ports/opentyrian/demo.3",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "demo.4",
+      "destination": "ports/opentyrian/demo.4",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "demo.5",
+      "destination": "ports/opentyrian/demo.5",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
       "system": "OpenTyrian",
       "name": "dpmi16bi.ovl",
       "destination": "ports/opentyrian/dpmi16bi.ovl",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "estsc.shp",
+      "destination": "ports/opentyrian/estsc.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4317,9 +4234,43 @@
       "destination": "ports/opentyrian/exitmsg.bin",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "levels1.dat",
+      "destination": "ports/opentyrian/levels1.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "levels2.dat",
+      "destination": "ports/opentyrian/levels2.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "levels3.dat",
+      "destination": "ports/opentyrian/levels3.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "levels4.dat",
+      "destination": "ports/opentyrian/levels4.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4328,9 +4279,7 @@
       "destination": "ports/opentyrian/loudness.awe",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4339,9 +4288,16 @@
       "destination": "ports/opentyrian/modems.txt",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "music.mus",
+      "destination": "ports/opentyrian/music.mus",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4350,9 +4306,7 @@
       "destination": "ports/opentyrian/netarena.pcx",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4361,9 +4315,7 @@
       "destination": "ports/opentyrian/netfont1.pcx",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4372,9 +4324,7 @@
       "destination": "ports/opentyrian/netfont2.pcx",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4383,9 +4333,7 @@
       "destination": "ports/opentyrian/netmega.pcx",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4394,9 +4342,304 @@
       "destination": "ports/opentyrian/netset.pcx",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh#.shp",
+      "destination": "ports/opentyrian/newsh#.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh0.shp",
+      "destination": "ports/opentyrian/newsh0.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh1.shp",
+      "destination": "ports/opentyrian/newsh1.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh2.shp",
+      "destination": "ports/opentyrian/newsh2.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh3.shp",
+      "destination": "ports/opentyrian/newsh3.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh4.shp",
+      "destination": "ports/opentyrian/newsh4.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh5.shp",
+      "destination": "ports/opentyrian/newsh5.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh6.shp",
+      "destination": "ports/opentyrian/newsh6.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh7.shp",
+      "destination": "ports/opentyrian/newsh7.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh8.shp",
+      "destination": "ports/opentyrian/newsh8.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh9.shp",
+      "destination": "ports/opentyrian/newsh9.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsha.shp",
+      "destination": "ports/opentyrian/newsha.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshb.shp",
+      "destination": "ports/opentyrian/newshb.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshc.shp",
+      "destination": "ports/opentyrian/newshc.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshd.shp",
+      "destination": "ports/opentyrian/newshd.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshe.shp",
+      "destination": "ports/opentyrian/newshe.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshf.shp",
+      "destination": "ports/opentyrian/newshf.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshg.shp",
+      "destination": "ports/opentyrian/newshg.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshh.shp",
+      "destination": "ports/opentyrian/newshh.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshj.shp",
+      "destination": "ports/opentyrian/newshj.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshk.shp",
+      "destination": "ports/opentyrian/newshk.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshl.shp",
+      "destination": "ports/opentyrian/newshl.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshm.shp",
+      "destination": "ports/opentyrian/newshm.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshn.shp",
+      "destination": "ports/opentyrian/newshn.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsho.shp",
+      "destination": "ports/opentyrian/newsho.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshp.shp",
+      "destination": "ports/opentyrian/newshp.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshr.shp",
+      "destination": "ports/opentyrian/newshr.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshs.shp",
+      "destination": "ports/opentyrian/newshs.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsht.shp",
+      "destination": "ports/opentyrian/newsht.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshu.shp",
+      "destination": "ports/opentyrian/newshu.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshv.shp",
+      "destination": "ports/opentyrian/newshv.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh^.shp",
+      "destination": "ports/opentyrian/newsh^.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newsh~.shp",
+      "destination": "ports/opentyrian/newsh~.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4405,9 +4648,16 @@
       "destination": "ports/opentyrian/order.tfp",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "palette.dat",
+      "destination": "ports/opentyrian/palette.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4416,9 +4666,7 @@
       "destination": "ports/opentyrian/setup.box",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4427,9 +4675,7 @@
       "destination": "ports/opentyrian/setup.ini",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4438,9 +4684,43 @@
       "destination": "ports/opentyrian/setup.int",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "shapesw.dat",
+      "destination": "ports/opentyrian/shapesw.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "shapesx.dat",
+      "destination": "ports/opentyrian/shapesx.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "shapesy.dat",
+      "destination": "ports/opentyrian/shapesy.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "shapesz.dat",
+      "destination": "ports/opentyrian/shapesz.dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4449,9 +4729,43 @@
       "destination": "ports/opentyrian/shipedit.pcx",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tshp2.pcx",
+      "destination": "ports/opentyrian/tshp2.pcx",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrend.anm",
+      "destination": "ports/opentyrian/tyrend.anm",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian.cdt",
+      "destination": "ports/opentyrian/tyrian.cdt",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian.hdt",
+      "destination": "ports/opentyrian/tyrian.hdt",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4460,9 +4774,79 @@
       "destination": "ports/opentyrian/tyrian.ico",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian.pic",
+      "destination": "ports/opentyrian/tyrian.pic",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian.shp",
+      "destination": "ports/opentyrian/tyrian.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian.snd",
+      "destination": "ports/opentyrian/tyrian.snd",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian1.lvl",
+      "destination": "ports/opentyrian/tyrian1.lvl",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian2.lvl",
+      "destination": "ports/opentyrian/tyrian2.lvl",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian3.lvl",
+      "destination": "ports/opentyrian/tyrian3.lvl",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrian4.lvl",
+      "destination": "ports/opentyrian/tyrian4.lvl",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "tyrianc.shp",
+      "destination": "ports/opentyrian/tyrianc.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4471,9 +4855,7 @@
       "destination": "ports/opentyrian/tyrset.pcx",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4482,9 +4864,7 @@
       "destination": "ports/opentyrian/user1.shp",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4493,9 +4873,25 @@
       "destination": "ports/opentyrian/user2.shp",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "voices.snd",
+      "destination": "ports/opentyrian/voices.snd",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "voicesc.snd",
+      "destination": "ports/opentyrian/voicesc.snd",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     },
     {
@@ -4504,9 +4900,133 @@
       "destination": "ports/opentyrian/netterm.int",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "opentyrian"
-      ],
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "newshi.shp",
+      "destination": "ports/opentyrian/newshi.shp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "OpenTyrian",
+      "name": "shapes).dat",
+      "destination": "ports/opentyrian/shapes).dat",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "VVVVVV",
+      "name": "data.zip",
+      "destination": "ports/VVVVVV/data.zip",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "eduke32",
+      "name": "duke3d.grp",
+      "destination": "ports/eduke/duke3d.grp",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "sonic1",
+      "name": "Data.rsdk",
+      "destination": "ports/sonic1/Data.rsdk",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "sonic2",
+      "name": "Data.rsdk",
+      "destination": "ports/sonic2/Data.rsdk",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "soniccd",
+      "name": "Data.rsdk",
+      "destination": "ports/soniccd/Data.rsdk",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "sonicmania",
+      "name": "Data.rsdk",
+      "destination": "ports/sonicmania/Data.rsdk",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "RigelEngine",
+      "name": "NUKEM2.CMP",
+      "destination": "ports/rigelengine/NUKEM2.CMP",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "RigelEngine",
+      "name": "NUKEM2.F1",
+      "destination": "ports/rigelengine/NUKEM2.F1",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "RigelEngine",
+      "name": "NUKEM2.F2",
+      "destination": "ports/rigelengine/NUKEM2.F2",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "RigelEngine",
+      "name": "NUKEM2.F3",
+      "destination": "ports/rigelengine/NUKEM2.F3",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "RigelEngine",
+      "name": "NUKEM2.F4",
+      "destination": "ports/rigelengine/NUKEM2.F4",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
+      "unresolved_cores": []
+    },
+    {
+      "system": "RigelEngine",
+      "name": "NUKEM2.F5",
+      "destination": "ports/rigelengine/NUKEM2.F5",
+      "verdict": "candidate",
+      "reason": "no profile of a core the platform runs names it",
+      "cores_examined": [],
       "unresolved_cores": []
     }
   ],

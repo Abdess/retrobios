@@ -245,6 +245,7 @@ files:
   - name: XML_Presets.txt
     system: fpinball
     required: false
+    unsourceable: "written by BAM as presets are added, no canonical file"
     description: "List of physics documents offered in the presets menu"
     source_ref: "BAM.dll 1.5-408 .text:0x100fba6a-0x100fbd8a"
     note: >-

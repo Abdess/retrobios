@@ -1,0 +1,63 @@
+emulator: "FluidSynth"
+type: utility
+core_classification: other
+source: "https://github.com/FluidSynth/fluidsynth"
+upstream: "https://github.com/FluidSynth/fluidsynth"
+profiled_date: "2026-11-09"
+source_commit: "f78486a50bd785200412ea16434b38edc4a45a6c"
+upstream_commit: "f78486a50bd785200412ea16434b38edc4a45a6c"
+pin_frozen: "EmuELEC, the only platform whose launch code starts it, builds this release (EmuELEC packages/sx05re/tools/sound/fluidsynth-git/package.mk:5-9 at tag v4.8, PKG_SHA256 e97e63c1). Later commits are not part of that build."
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/tools/sound/fluidsynth-git/package.mk"
+    variable: PKG_VERSION
+    value: "2.0.6"
+core_version: "v2.0.6"
+version_basis:
+  kind: tag
+  tag: "v2.0.6"
+  distance: 0
+display_name: "FluidSynth (SoundFont MIDI synthesizer)"
+cores:
+  - fluidsynth
+systems: []
+
+notes: |
+  A SoundFont 2 software synthesizer run as a program. -s starts its TCP
+  command server and -i turns off the command shell on the terminal.
+  ref: src/fluidsynth.c:543-544, src/fluidsynth.c:635-637
+
+  The program names no SoundFont. Every non-option argument whose header
+  reads RIFF then sfbk is loaded as a SoundFont, in argument order. An
+  argument that cannot be opened is skipped with a message and the synth
+  keeps running with no instrument loaded.
+  ref: src/fluidsynth.c:764-778, src/sfloader/fluid_sffile.c:335-375
+
+  At start it executes one command file: the -f argument, else
+  $HOME/.fluidsynth, else /etc/fluidsynth.conf. The second name is built
+  whenever HOME is set, so the system file is read only without HOME.
+  ref: src/fluidsynth.c:870-884, src/bindings/fluid_cmd.c:608-648
+
+files:
+  - name: "SC-55.sf2"
+    description: "SoundFont handed on the command line"
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    note: >-
+      The code opens no file by name and accepts any SoundFont 2 file. The
+      entry name is a label for the file EmuELEC names on the command line
+      (EmuELEC packages/sx05re/emuelec/bin/emuelec-utils:67 at v4.8), which
+      no EmuELEC package installs or downloads.
+    source_ref: "src/fluidsynth.c:764-778, src/sfloader/fluid_sffile.c:335-375"
+
+  - name: "default.sf2"
+    description: "SoundFont named by synth.default-soundfont"
+    required: false
+    unsourceable: "a path the build fixes for a SoundFont the system installs. FluidSynth ships none, and a same-named file of another program must not stand in"
+    note: >-
+      DEFAULT_SOUNDFONT is ${CMAKE_INSTALL_PREFIX}/share/soundfonts/default.sf2
+      outside Windows. It is loaded only when MIDI files are played and no
+      SoundFont was loaded from the command line.
+    source_ref: "cmake_admin/DefaultDirs.cmake:4-11, src/synth/fluid_synth.c:212-214, src/fluidsynth.c:837-859"

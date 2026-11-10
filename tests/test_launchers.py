@@ -29,9 +29,11 @@ from scraper.batocera_launchers import (  # noqa: E402
     Configgen,
     Launcher,
     LauncherShapeError,
+    config_directories,
     duckstation,
     extract_launchers,
     hatari,
+    lexaloffle,
 )
 from scraper.retropie_launchers import Launcher as PackageLauncher  # noqa: E402
 
@@ -57,6 +59,7 @@ _GENERATOR_MAP: Final[dict[str, tuple[str, str]]] = {
 
 DUCKSTATION = f"{GENERATORS}/duckstation/duckstationGenerator.py"
 HATARI = f"{GENERATORS}/hatari/hatariGenerator.py"
+LEXALOFFLE = f"{GENERATORS}/lexaloffle/lexaloffleGenerator.py"
 
 DUCKSTATION_HEAD = '''from __future__ import annotations
 
@@ -209,6 +212,102 @@ HATARI_FIND = '''    @staticmethod
         raise BatoceraException(f"No bios found for machine {machine}")'''
 
 
+# lexaloffleGenerator.py, whole file
+LEXALOFFLE_GENERATOR = '''from __future__ import annotations
+
+import os
+from typing import TYPE_CHECKING, Final
+
+from ... import Command
+from ...batoceraPaths import BIOS, HOME, ROMS, SCREENSHOTS, ensure_parents_and_open
+from ...controller import generate_sdl_game_controller_config
+from ...exceptions import BatoceraException
+from ..Generator import Generator
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from ...types import HotkeysContext
+
+PICO8_BIN_PATH: Final = BIOS / "pico-8" / "pico8"
+PICO8_ROOT_PATH: Final = ROMS / "pico8"
+PICO8_CONTROLLERS: Final = HOME / ".lexaloffle" / "pico-8" / "sdl_controllers.txt"
+VOX_BIN_PATH: Final = BIOS / "voxatron" / "vox"
+VOX_ROOT_PATH: Final = ROMS / "voxatron"
+VOX_CONTROLLERS: Final = HOME / ".lexaloffle" / "Voxatron" / "sdl_controllers.txt"
+
+
+# Generator for the official pico8 binary from Lexaloffle
+class LexaloffleGenerator(Generator):
+
+    def getHotkeysContext(self) -> HotkeysContext:
+        return {
+            "name": "lexaloffle",
+            "keys": { "exit": ["KEY_LEFTCTRL", "KEY_Q"], "menu": "KEY_ENTER", "reset": [ "KEY_LEFTCTRL", "KEY_R" ] }
+        }
+
+    def generate(self, system, rom, playersControllers, metadata, guns, wheels, gameResolution):
+        if (system.name == "pico8"):
+            LD_LIB=BIOS / "pico-8"
+            BIN_PATH=PICO8_BIN_PATH
+            CONTROLLERS=PICO8_CONTROLLERS
+            ROOT_PATH=PICO8_ROOT_PATH
+        elif (system.name == "voxatron"):
+            LD_LIB=BIOS / "voxatron"
+            BIN_PATH=VOX_BIN_PATH
+            CONTROLLERS=VOX_CONTROLLERS
+            ROOT_PATH=VOX_ROOT_PATH
+        else:
+            raise BatoceraException(f"The Lexaloffle generator has been called for an unknwon system: {system.name}.")
+
+        if not BIN_PATH.exists():
+            raise BatoceraException(f"Lexaloffle official binary not found at {BIN_PATH}")
+
+        if not os.access(BIN_PATH, os.X_OK):
+            raise BatoceraException(f"{BIN_PATH} is not set as executable")
+
+        # the command to run
+        commandArray: list[str | Path] = [BIN_PATH]
+        commandArray.extend(["-desktop", SCREENSHOTS])  # screenshots
+        commandArray.extend(["-windowed", "0"])                     # full screen
+        # Display FPS
+        if system.config.show_fps:
+                commandArray.extend(["-show_fps", "1"])
+        else:
+                commandArray.extend(["-show_fps", "0"])
+
+        rombase = rom.stem
+
+        # .m3u support for multi-cart pico-8
+        if rom.suffix.lower() == ".m3u":
+            with rom.open() as fpin:
+                lines = fpin.readlines()
+            fullpath = rom.absolute().parent / lines[0].strip()
+            commandArray.extend(["-root_path", fullpath.parent])
+            rom = fullpath
+        else:
+            commandArray.extend(["-root_path", ROOT_PATH]) # store carts from splore
+
+        if (rombase.lower() == "splore" or rombase.lower() == "console"):
+            commandArray.extend(["-splore"])
+        else:
+            commandArray.extend(["-run", rom])
+
+        controllersconfig = generate_sdl_game_controller_config(playersControllers)
+        with ensure_parents_and_open(CONTROLLERS, "w") as file:
+               file.write(controllersconfig)
+
+        existing_library_path = os.environ.get("LD_LIBRARY_PATH")
+
+        return Command.Command(array=commandArray, env={
+            "SDL_AUDIODRIVER": "alsa",
+            "LD_LIBRARY_PATH": f"{LD_LIB}:{existing_library_path}" if existing_library_path else LD_LIB
+        })
+
+    def getInGameRatio(self, config, gameResolution, rom):
+        return 4/3'''
+
+
 def placed(blocks: dict[int, str]) -> str:
     """Each block starting at its line, blank lines between."""
     lines: list[str] = []
@@ -240,6 +339,10 @@ def duckstation_tree(bios: str = DUCKSTATION_BIOS, find: str = DUCKSTATION_FIND)
 
 def hatari_tree(generate: str = HATARI_GENERATE, find: str = HATARI_FIND) -> Configgen:
     return configgen({HATARI: placed({1: HATARI_HEAD, 32: generate, 157: find})})
+
+
+def lexaloffle_tree(text: str = LEXALOFFLE_GENERATOR) -> Configgen:
+    return configgen({LEXALOFFLE: text + "\n"})
 
 
 class DuckStationSearch(unittest.TestCase):
@@ -339,6 +442,129 @@ class HatariTosSearch(unittest.TestCase):
             hatari(hatari_tree(find=find))
 
 
+class LexaloffleBinaries(unittest.TestCase):
+    def setUp(self) -> None:
+        self.records = [r.entry() for r in lexaloffle(lexaloffle_tree())]
+
+    def test_each_system_runs_its_binary_and_loads_its_folder(self):
+        self.assertEqual(
+            [(r["slot"], r["kind"], r["names"], r["search_dir"], r["passes_to"])
+             for r in self.records],
+            [
+                ("pico8", "fixed_name", ["pico-8/pico8"], "/userdata/bios", "exec"),
+                ("pico8", "passes_path", [], "/userdata/bios/pico-8",
+                 "environment LD_LIBRARY_PATH"),
+                ("voxatron", "fixed_name", ["voxatron/vox"], "/userdata/bios", "exec"),
+                ("voxatron", "passes_path", [], "/userdata/bios/voxatron",
+                 "environment LD_LIBRARY_PATH"),
+            ],
+        )
+        for record in self.records:
+            self.assertEqual((record["emulator"], record["build"]), ("lexaloffle", "standalone"))
+
+    def test_a_missing_or_non_executable_binary_stops_the_launch(self):
+        pico8, library, vox, _ = self.records
+        self.assertEqual(
+            pico8["fails_when_missing"],
+            "Lexaloffle official binary not found at /userdata/bios/pico-8/pico8, "
+            "/userdata/bios/pico-8/pico8 is not set as executable",
+        )
+        self.assertEqual(
+            vox["fails_when_missing"],
+            "Lexaloffle official binary not found at /userdata/bios/voxatron/vox, "
+            "/userdata/bios/voxatron/vox is not set as executable",
+        )
+        self.assertFalse(pico8["case_insensitive"])
+        self.assertFalse(library["fails_when_missing"])
+
+    def test_the_lines_cited_are_the_constant_the_branch_the_checks_and_the_command(self):
+        self.assertEqual(
+            [r["source_ref"] for r in self.records],
+            [
+                f"{LEXALOFFLE}:17, 35, 37, 48-55",
+                f"{LEXALOFFLE}:35-36, 89",
+                f"{LEXALOFFLE}:20, 40, 42, 48-55",
+                f"{LEXALOFFLE}:40-41, 89",
+            ],
+        )
+
+    def test_a_binary_without_the_executable_check_raises(self):
+        text = LEXALOFFLE_GENERATOR.replace("os.access(BIN_PATH, os.X_OK)", "True")
+        with self.assertRaises(LauncherShapeError):
+            lexaloffle(lexaloffle_tree(text))
+
+    def test_a_binary_without_the_existence_check_raises(self):
+        text = LEXALOFFLE_GENERATOR.replace("BIN_PATH.exists()", "BIN_PATH")
+        with self.assertRaises(LauncherShapeError):
+            lexaloffle(lexaloffle_tree(text))
+
+    def test_a_command_started_another_way_raises(self):
+        text = LEXALOFFLE_GENERATOR.replace("= [BIN_PATH]", '= ["pico8"]')
+        with self.assertRaises(LauncherShapeError):
+            lexaloffle(lexaloffle_tree(text))
+
+    def test_a_library_path_set_elsewhere_raises(self):
+        text = LEXALOFFLE_GENERATOR.replace('"LD_LIBRARY_PATH": ', '"LIBRARY_PATH": ')
+        with self.assertRaises(LauncherShapeError):
+            lexaloffle(lexaloffle_tree(text))
+
+    def test_a_binary_outside_bios_raises(self):
+        text = LEXALOFFLE_GENERATOR.replace(
+            'VOX_BIN_PATH: Final = BIOS / "voxatron" / "vox"',
+            'VOX_BIN_PATH: Final = Path("/usr/bin/vox")',
+        )
+        with self.assertRaises(LauncherShapeError):
+            lexaloffle(lexaloffle_tree(text))
+
+    def test_a_generator_that_no_longer_branches_on_the_system_raises(self):
+        text = LEXALOFFLE_GENERATOR.replace("system.name ==", "system.emulator ==")
+        with self.assertRaises(LauncherShapeError):
+            lexaloffle(lexaloffle_tree(text))
+
+
+OPENMSX = f"{GENERATORS}/openmsx/openmsxGenerator.py"
+OPENMSX_FILEPOOL = '''    def generate(self, system, rom):
+        with settings_tcl.open("a") as file:
+            file.write("filepool add -path /userdata/bios/Machines -types system_rom -position 1\\n")
+            file.write("filepool add -path /userdata/bios/openmsx -types system_rom -position 2\\n")'''
+
+
+class ConfigDirectories(unittest.TestCase):
+    """A BIOS directory written into the emulator's config, at batocera-43.1."""
+
+    def test_each_filepool_line_hands_its_directory(self):
+        cg = configgen({OPENMSX: placed({1: "class OpenmsxGenerator:", 86: OPENMSX_FILEPOOL})})
+        records = [r.entry() for r in config_directories(cg, ("openmsx.openmsxGenerator",))]
+        self.assertEqual(
+            [(r["emulator"], r["kind"], r["search_dir"], r["source_ref"]) for r in records],
+            [
+                ("openmsx", "passes_path", "/userdata/bios/Machines", f"{OPENMSX}:88"),
+                ("openmsx", "passes_path", "/userdata/bios/openmsx", f"{OPENMSX}:89"),
+            ],
+        )
+        self.assertEqual(
+            records[1]["passes_to"],
+            "written: filepool add -path /userdata/bios/openmsx -types system_rom -position 2",
+        )
+
+    def test_a_saved_setting_hands_its_directory(self):
+        amiberry = f"{GENERATORS}/amiberry/amiberryGenerator.py"
+        text = placed({
+            1: "from pathlib import Path\n_BIOS_DIR = Path('/userdata/bios/amiga')",
+            10: "def generate():\n    amiberryconf.save('rom_path', _BIOS_DIR)",
+        })
+        (record,) = config_directories(configgen({amiberry: text}), ("amiberry.amiberryGenerator",))
+        self.assertEqual(
+            (record.search_dir, record.passes_to, record.source_ref),
+            ("/userdata/bios/amiga", "rom_path", f"{amiberry}:11"),
+        )
+
+    def test_a_generator_handing_no_bios_directory_raises(self):
+        cg = configgen({OPENMSX: "def generate():\n    file.write('savestate x')\n"})
+        with self.assertRaises(LauncherShapeError):
+            config_directories(cg, ("openmsx.openmsxGenerator",))
+
+
 class ExtractionNeverEmpty(unittest.TestCase):
     def test_a_generator_of_unknown_shape_stops_the_whole_scrape(self):
         find = DUCKSTATION_FIND.replace("def find_bios(", "def locate_bios(")
@@ -361,7 +587,7 @@ class PlatformRecords(unittest.TestCase):
         cls.schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())
 
     def test_every_emulator_is_one_batocera_names(self):
-        cores = set(self.config["cores"])
+        cores = {*self.config["cores"], *self.config.get("standalone_cores", [])}
         named = {
             name for record in self.config["launchers"]
             for name in record["emulator"].split(", ")
@@ -369,8 +595,13 @@ class PlatformRecords(unittest.TestCase):
         self.assertEqual(sorted(named - cores), [])
 
     def test_every_reference_is_in_configgen(self):
+        # Or in a patch Batocera applies to an emulator's own path code.
+        from scraper.batocera_launchers import PATH_PATCHES
+
         for record in self.config["launchers"]:
-            self.assertTrue(record["source_ref"].startswith(f"{CONFIGGEN}/"), record)
+            self.assertTrue(
+                record["source_ref"].startswith((f"{CONFIGGEN}/", *PATH_PATCHES)), record
+            )
 
     def test_the_schema_describes_what_the_scraper_writes(self):
         fields = {f.name for f in dataclasses.fields(Launcher)}

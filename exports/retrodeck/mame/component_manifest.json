@@ -10479,6 +10479,306 @@
         "system": "mame",
         "description": "ZXBUS NeoGS module.",
         "required": "Required, for certain Arcade Boards and Games"
+      },
+      {
+        "filename": "segasp.zip",
+        "system": "mame",
+        "description": "Sega System SP BIOS archive",
+        "required": "Required",
+        "paths": "$bios_path/dc"
+      },
+      {
+        "filename": "hikaru.zip",
+        "system": "mame",
+        "required": "Required",
+        "paths": "$bios_path/odin"
+      },
+      {
+        "filename": "a2autokbd.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "a2iwm.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "a2kb200.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "a2sic.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "a2tk10.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "am100kbd.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "dsd5217.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "et532_board.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "exos201.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "gamtor_vga.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "gpl16250va.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "gpl951xx.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "hd44780.zip",
+        "system": "mame",
+        "description": "HD44780 LCD controller character ROM set",
+        "paths": "$bios_path/tgpulse-next"
+      },
+      {
+        "filename": "iris_kbd.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "ivelultrkb.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "jvs13551.zip",
+        "system": "mame",
+        "paths": "$bios_path/odin"
+      },
+      {
+        "filename": "kayproiikbd.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "lha201.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "lisa2fdc.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "lisafdc.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "lisavideo.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "luna_68k_cmc.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "luna_68k_gpu.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "luna_68k_ioc.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "macxlfdc.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "macxlvideo.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "mc_mk4_hopper.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "mdisplay3.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "mie.zip",
+        "system": "mame",
+        "required": "Required",
+        "paths": "$bios_path/odin"
+      },
+      {
+        "filename": "model1io.zip",
+        "system": "mame",
+        "description": "Sega Model 1 I/O board device set",
+        "required": "Required",
+        "paths": "$bios_path/sm2-emu"
+      },
+      {
+        "filename": "model1io2.zip",
+        "system": "mame",
+        "description": "Sega Model 1 advanced I/O board device set",
+        "required": "Required",
+        "paths": "$bios_path/sm2-emu"
+      },
+      {
+        "filename": "mpf1_ssb_ip.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "nokia_crtc186.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "osa_bforce.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "pencil2_coleco.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "prav8ckb.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "s8k_cpu.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "s8k_cpu10.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "s8k_hpcpu.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sgi_ip2.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sgi_pm2.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sis6326_dvd.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sound_orchestra.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "spectred_kbd.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sun1_cpu.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu21.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu21a.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu21b.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu21s.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu21ya.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu21yb.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu30.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu30be.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu30x.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu30xa.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu30za.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_cpu33.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_iscsi1.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "sys68k_isio1.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "tms320c30.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "tms320c31.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "tms320c32.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "uniap2ti.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "videnh2.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "x820iikb.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "xerox820_16_8.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "xerox820_emii_flpy5.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "xerox820_emii_rgd5.zip",
+        "system": "mame"
+      },
+      {
+        "filename": "xetec_c5181.zip",
+        "system": "mame"
       }
     ]
   }

@@ -56,6 +56,10 @@ files:
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:273-294"
 
+standalone_directories:
+  - "$XDG_DATA_HOME/yuzu"
+  - "$HOME/.local/share/yuzu"
+  - "PORTABLE_DIR"
 data_root:
   windows:
     path: "%APPDATA%/yuzu"

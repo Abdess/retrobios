@@ -293,6 +293,81 @@ DRASTIC = module("drastic", """
 """, 36)
 
 
+UAE4ALL = module("uae4all", """
+    function configure_uae4all() {
+        mkRomDir "amiga"
+
+        moveConfigDir "$md_inst/kickstarts" "$biosdir/amiga"
+
+        rm -f "$romdir/amiga/+Start UAE4All.sh"
+        if [[ "$md_mode" == "install" ]]; then
+            cat > "$romdir/amiga/+Start UAE4All.sh" << _EOF_
+    #!/bin/bash
+    pushd "$md_inst"
+    ./uae4all
+    popd
+    _EOF_
+        fi
+
+        addEmulator 1 "$md_id" "amiga" "bash $romdir/amiga/+Start\\ UAE4All.sh"
+        addSystem "amiga"
+    }
+""", 60)
+
+
+OPENMSX = module("openmsx", """
+    function configure_openmsx() {
+        mkUserDir "$home/.openMSX/share/systemroms"
+        moveConfigDir "$home/.openMSX" "$configdir/msx/openmsx"
+        moveConfigDir "$configdir/msx/openmsx/share/systemroms" "$home/RetroPie/BIOS/openmsx"
+        moveConfigDir "$home/.unrelated" "$configdir/msx/other"
+    }
+""", 74)
+
+
+XROAR = module("xroar", """
+    function build_xroar() {
+        ./configure --prefix="$md_inst" "${params[@]}"
+    }
+
+    function configure_xroar() {
+        mkdir -p "$md_inst/share/xroar"
+        ln -snf "$biosdir" "$md_inst/share/xroar/roms"
+    }
+""", 36)
+
+
+class ReachingLinks(unittest.TestCase):
+    """The directory outside BIOS that a whole-directory link is read from."""
+
+    def test_openmsx_user_directory_holds_the_systemroms_link(self):
+        found = records({f"{EMULATORS}/openmsx.sh": OPENMSX}, "openmsx")
+        links = [r for r in found if r["kind"] == "links"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in links],
+            [
+                (
+                    "$home/RetroPie/BIOS/openmsx",
+                    "$configdir/msx/openmsx/share/systemroms is a symlink to it",
+                    f"{EMULATORS}/openmsx.sh:77",
+                ),
+                (
+                    "$configdir/msx/openmsx",
+                    "$home/.openMSX is a symlink to it",
+                    f"{EMULATORS}/openmsx.sh:76",
+                ),
+            ],
+        )
+
+    def test_xroar_install_prefix_holds_the_roms_link(self):
+        found = records({f"{EMULATORS}/xroar.sh": XROAR}, "xroar")
+        prefix = [r for r in found if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in prefix],
+            [("$md_inst", "${prefix} of configure --prefix", f"{EMULATORS}/xroar.sh:37")],
+        )
+
+
 class WorkingDirectory(unittest.TestCase):
     def test_drastic_reads_below_the_folder_its_script_enters(self):
         found = records({f"{EMULATORS}/drastic.sh": DRASTIC}, "drastic")
@@ -303,6 +378,18 @@ class WorkingDirectory(unittest.TestCase):
                 "$md_conf_root/nds/drastic",
                 "working directory of $md_inst/drastic.sh",
                 f"{EMULATORS}/drastic.sh:48",
+            )],
+        )
+
+    def test_uae4all_runs_from_its_install_directory(self):
+        found = records({f"{EMULATORS}/uae4all.sh": UAE4ALL}, "uae4all")
+        entered = [r for r in found if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in entered],
+            [(
+                "$md_inst",
+                "working directory of $romdir/amiga/+Start UAE4All.sh",
+                f"{EMULATORS}/uae4all.sh:69",
             )],
         )
 

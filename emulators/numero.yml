@@ -39,27 +39,31 @@ notes: |
   underlying engine (calc.cpp:rom_load) auto-detects the model from the ROM
   header.
 
+groups:
+  rom:
+    required: true
+
 files:
   - name: "ti83se.rom"
     system: ti-83
     description: "TI-83 Plus Silver Edition ROM dump"
+    group: rom
     priority: 1
-    required: false
     source_ref: "source libnumero/libretro/libretronew.cpp:576-578"
     note: "Checked first. Recommended for largest storage capacity."
 
   - name: "ti83plus.rom"
     system: ti-83
     description: "TI-83 Plus ROM dump"
+    group: rom
     priority: 2
-    required: false
     source_ref: "source libnumero/libretro/libretronew.cpp:583-585"
     note: "Checked second, used if ti83se.rom is missing."
 
   - name: "ti83.rom"
     system: ti-83
     description: "TI-83 ROM dump"
+    group: rom
     priority: 3
-    required: false
     source_ref: "source libnumero/libretro/libretronew.cpp:591-593"
     note: "Checked last. Original TI-83 (non-Plus)."

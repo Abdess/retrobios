@@ -46,7 +46,8 @@ notes: |
   asset set. Every name, path and size below was read from
   the three builds that were distributed: v1.5-3939 for Apple Silicon macOS,
   v1.5-3668 for Android, and v1.5-3606 for AArch64 Linux, which ROCKNIX
-  repackages as aethersx2-sa. The three agree throughout.
+  packaged as aethersx2-sa up to its 20261001 release and dropped in
+  20261101. The three agree throughout.
   ref: aethersx2/pcsx2/CMakeLists.txt:1585, aethersx2/pcsx2/Mdec.cpp:1
 
   A BIOS image is required and boot stops without one. It belongs in the bios
@@ -180,15 +181,13 @@ files:
   - name: cheats_ws.zip
     path: resources/cheats_ws.zip
     required: false
-    installed_on: [rocknix]
     description: "Widescreen patch archive"
-    note: "Per-game pnach entries matched on the disc CRC, loaded when widescreen patches are enabled. The cheats_ws folder takes precedence and the archive is skipped when it holds a match. Shipped by the Linux and Android builds, while the macOS build looks for it without carrying one. ROCKNIX installs the Linux build's resources folder beside the binary."
+    note: "Per-game pnach entries matched on the disc CRC, loaded when widescreen patches are enabled. The cheats_ws folder takes precedence and the archive is skipped when it holds a match. Shipped by the Linux and Android builds, while the macOS build looks for it without carrying one."
     source_ref: "source aethersx2/pcsx2/Patch.cpp:202-231, AetherSX2-release MacOS/AetherSX2"
 
   - name: cheats_ni.zip
     path: resources/cheats_ni.zip
     required: false
-    installed_on: [rocknix]
     description: "No-interlacing patch archive"
     note: "Same form as cheats_ws.zip, loaded when no-interlacing patches are enabled, with the cheats_ni folder taking precedence. Shipped by the Linux and Android builds, while the macOS build looks for it without carrying one."
     source_ref: "source aethersx2/pcsx2/Patch.cpp:202-231, AetherSX2-release MacOS/AetherSX2"

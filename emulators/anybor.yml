@@ -1,0 +1,40 @@
+emulator: "AnyBOR"
+type: libretro
+core_classification: game_engine
+source: "https://github.com/retrodiv/AnyBOR-libretro"
+upstream: "https://github.com/DCurrent/openbor"
+profiled_date: "2026-11-09"
+source_commit: "b3557f6fb2d4ff87133a2a4bea5fba4fc14d148a"
+prose_written_at: "b3557f6fb2d4ff87133a2a4bea5fba4fc14d148a"
+core_version: "0.1.85"
+version_basis:
+  kind: file
+  path: "src/glue/obor_engines.h"
+  pattern: '#define OBOR_CORE_VERSION "([^"]+)"'
+display_name: "OpenBOR (AnyBOR)"
+cores:
+  - "anybor"
+systems:
+  - openbor
+
+notes: |
+  A libretro core for OpenBOR games with 252 build profiles, from 3020 to
+  8023, run on nine engines compiled from DCurrent/openbor revisions that
+  src/pin.json names. A profile is picked per game from build tags and
+  content clues, or set in a core option.
+  ref: src/pin.json:1-20, src/glue/obor_engines.h:6-7, src/glue/libretro.cpp:1283-1292
+
+  The content is a .pak or .spk archive, a .zip holding one game, or the
+  data/models.txt of an unpacked mod. A save directory is required, and the
+  core refuses to load without one.
+  ref: src/glue/libretro.cpp:2678-2690, src/glue/libretro.cpp:2705-2724,
+       src/glue/libretro.cpp:2729-2770
+
+  The only file read from the system directory is AnyBOR.ini, an optional
+  configuration written by the user that selects a transform for packed
+  content with a custom header. Absent, no transform runs. The engines are
+  built into the core and no BIOS or data file is read.
+  ref: src/glue/obor_transform.h:83-104, src/glue/obor_packed_prepare.h:22-37,
+       src/glue/libretro.cpp:2771-2781
+
+files: []

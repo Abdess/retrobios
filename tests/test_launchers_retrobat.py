@@ -92,6 +92,38 @@ AMIBERRY = """
         var searchDirs = new List<string> { biosPath, Path.Combine(biosPath, "amiga"), Path.Combine(biosPath, "Amiga") };
         return null;
     }
+
+    public override ProcessStartInfo Generate(string system, string emulator, string core, string rom)
+    {
+        if (!GetEmulatorPathAndExe(emulator, out string path, out string exe, "Amiberry.exe", "amiberry.exe"))
+            return null;
+    }
+
+    private void SetupAmiberrySettings(string path, string system)
+    {
+        _amiberryRomsPath = Path.Combine(path, "ROMs");
+        FileTools.TryCreateDirectory(_amiberryRomsPath);
+        overrides["rom_path"] = _amiberryRomsPath;
+        overrides["whdboot_path"] = Path.Combine(path, "WHDBoot");
+        MergeConfLines(confFile, overrides);
+    }
+
+    private void StageRomKey()
+    {
+        string source = FindBios(new[] { "rom.key" });
+        string dest = Path.Combine(_amiberryRomsPath, "rom.key");
+        if (!File.Exists(dest) || new FileInfo(dest).Length != new FileInfo(source).Length)
+            File.Copy(source, dest, true);
+    }
+
+    private string StageKickstart(string[] candidates)
+    {
+        string source = FindBios(candidates);
+        string dest = Path.Combine(_amiberryRomsPath, candidates[0]);
+        if (!dst.Exists || dst.Length != src.Length || dst.LastWriteTimeUtc < src.LastWriteTimeUtc)
+            File.Copy(source, dest, true);
+        return dest;
+    }
 """
 
 MEDNAFEN = """
@@ -145,6 +177,9 @@ OPENMSX = """
         { "Philips_VG_8020", new string[] { "vg8020_basic-bios1.rom" } },
         { "Pioneer_PX-7", new string[] { "px-7_basic-bios1.rom", "px-7_pbasic.rom" } }
     };
+
+    string sharePath = Path.Combine(AppConfig.GetFullPath("bios"), "openmsx");
+    ret.EnvironmentVariables["OPENMSX_HOME"] = sharePath;
 """
 
 DUCKSTATION = """
@@ -182,10 +217,28 @@ FEATURES = """
 """
 
 HATARI = """
+    string tosDir = Path.Combine(AppConfig.GetFullPath("bios"), "hatari", "tos");
     string tosfile = Path.Combine(AppConfig.GetFullPath("bios"), "tos.img");
+    string emutos = Path.Combine(tosDir, "emutos.img");
 
-    if (SystemConfig.isOptSet("hatari_tos") && !string.IsNullOrEmpty(SystemConfig["hatari_tos"]))
-        tosfile = Path.Combine(AppConfig.GetFullPath("bios"), "hatari", "tos", SystemConfig["hatari_tos"]);
+    if (SystemConfig.isOptSet("hatari_tos") && SystemConfig["hatari_tos"] != "default")
+        tosfile = Path.Combine(tosDir, SystemConfig["hatari_tos"]);
+    else if (media.HasHardDiskImage && File.Exists(emutos))
+    {
+        tosfile = emutos;
+    }
+    else
+    {
+        if (!File.Exists(tosfile) && File.Exists(emutos))
+            tosfile = emutos;
+
+        if (old)
+        {
+            string newTos = new string[] { "tos104.img", "tos206.img", "emutos.img" }
+                .Select(t => Path.Combine(tosDir, t))
+                .FirstOrDefault(t => File.Exists(t));
+        }
+    }
 
     if (!File.Exists(tosfile))
         throw new ApplicationException("Missing TOS file " + tosName + " in 'bios' folder.");
@@ -332,6 +385,7 @@ class NamesInLauncherOrder(unittest.TestCase):
 
     def test_amiberry_identical_lists_are_one_record(self):
         records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        records = [r for r in records if r["kind"] == "names_searched"]
         self.assertEqual(
             [r["names"] for r in records],
             [
@@ -347,6 +401,46 @@ class NamesInLauncherOrder(unittest.TestCase):
             records[1]["passes_to"],
             "copied to <amiberry roms>/kick40060.CD32.ext, kickstart_ext_rom_file",
         )
+
+    def test_amiberry_folders_are_below_its_emulator_folder(self):
+        records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        folders = [r for r in records if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"], r["source_ref"]) for r in folders],
+            [
+                ('<AppConfig.GetFullPath("amiberry")>/ROMs', "written: rom_path in amiberry.conf",
+                 f"{G}/Amiberry.Generator.cs:31, 37-41"),
+                ('<AppConfig.GetFullPath("amiberry")>/WHDBoot',
+                 "written: whdboot_path in amiberry.conf", f"{G}/Amiberry.Generator.cs:31, 40-41"),
+            ],
+        )
+
+    def test_amiberry_copies_each_kickstart_into_its_roms_folder(self):
+        records = rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": AMIBERRY}))
+        copies = [r for r in records if r["kind"] == "copies"]
+        self.assertEqual(
+            [(r["names"], r["passes_to"], r["depends_on_option"]) for r in copies],
+            [
+                (["kick40060.CD32", "kick40060.CD32.rom"],
+                 '<AppConfig.GetFullPath("amiberry")>/ROMs/kick40060.CD32',
+                 "first name found, the target is absent, smaller or older"),
+                (["kick40060.CD32.ext", "amiga-os-310-cd32-ext.rom"],
+                 '<AppConfig.GetFullPath("amiberry")>/ROMs/kick40060.CD32.ext',
+                 "first name found, the target is absent, smaller or older"),
+                (["rom.key"], '<AppConfig.GetFullPath("amiberry")>/ROMs/rom.key',
+                 "the target is absent or its size differs"),
+            ],
+        )
+        self.assertEqual(copies[0]["search_dir"], "bios, bios/amiga, bios/Amiga")
+        self.assertEqual(
+            copies[0]["source_ref"],
+            f"{G}/Amiberry.Generator.cs:3-5, 8-10, 15, 23-27, 31, 37-39, 52-59",
+        )
+
+    def test_amiberry_copy_without_its_staleness_test_raises(self):
+        broken = AMIBERRY.replace(" || dst.LastWriteTimeUtc < src.LastWriteTimeUtc", "")
+        with self.assertRaises(rl.LauncherPatternMissing):
+            rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": broken}))
 
     def test_psx_cascade_splits_searched_from_fallback(self):
         records = rl.psx_cascades(_psx_sources())
@@ -372,11 +466,20 @@ class NamesInLauncherOrder(unittest.TestCase):
             [
                 ("-machine Philips_VG_8020", ["vg8020_basic-bios1.rom"]),
                 ("-machine Pioneer_PX-7", ["px-7_basic-bios1.rom", "px-7_pbasic.rom"]),
+                ("environment OPENMSX_HOME", []),
             ],
         )
         self.assertEqual(records[0]["search_dir"], "bios/openmsx/share/systemroms")
         self.assertFalse(records[0]["case_insensitive"])
         self.assertEqual(records[1]["source_ref"], f"{G}/OpenMSX.Generator.cs:1-4, 10")
+
+    def test_openmsx_home_is_handed_as_a_directory(self):
+        # OPENMSX_HOME is the user directory openMSX reads share/systemroms below.
+        records = rl.openmsx(_sources(**{f"{G}/OpenMSX.Generator.cs": OPENMSX}))
+        home = records[-1]
+        self.assertEqual(home["kind"], "passes_path")
+        self.assertEqual(home["search_dir"], "bios/openmsx")
+        self.assertEqual(home["source_ref"], f"{G}/OpenMSX.Generator.cs:13-14")
 
     def test_duckstation_reads_the_standalone_feature_not_the_core(self):
         search, option = rl.duckstation(
@@ -391,17 +494,21 @@ class NamesInLauncherOrder(unittest.TestCase):
         )
 
     def test_hatari_default_and_option(self):
-        fixed, option = rl.hatari(
+        fixed, option, emutos, newer = rl.hatari(
             _sources(**{f"{G}/Hatari.Generator.cs": HATARI, rl.FEATURES: HATARI_FEATURES})
         )
+        message = "ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'"
         self.assertEqual(fixed["names"], ["tos.img"])
-        self.assertEqual(
-            fixed["fails_when_missing"],
-            "ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'",
-        )
-        self.assertEqual(fixed["source_ref"], f"{G}/Hatari.Generator.cs:1-9")
+        self.assertEqual(fixed["search_dir"], "bios")
+        self.assertEqual(fixed["fails_when_missing"], f"bios/hatari/tos/emutos.img instead, else {message}")
+        self.assertEqual(fixed["source_ref"], f"{G}/Hatari.Generator.cs:1-3, 13-14, 27")
         self.assertEqual(option["names"], ["tos206.img", "tos102.img"])
         self.assertEqual(option["search_dir"], "bios/hatari/tos")
+        self.assertEqual(option["fails_when_missing"], message)
+        self.assertEqual(emutos["names"], ["emutos.img"])
+        self.assertEqual(emutos["search_dir"], "bios/hatari/tos")
+        self.assertEqual(newer["kind"], "names_searched")
+        self.assertEqual(newer["names"], ["tos104.img", "tos206.img", "emutos.img"])
 
 
 def _one(text: str, emulator: str, path: str = f"{G}/X.Generator.cs") -> list[dict]:
@@ -996,6 +1103,150 @@ class FilesNeededTogether(unittest.TestCase):
         )
 
 
+XEMU_SAVES = """
+    public override ProcessStartInfo Generate(string system, string emulator, string core, string rom)
+    {
+        _chihiro = (emulator == "xemu-chihiro" || system == "chihiro");
+        if (!string.IsNullOrEmpty(AppConfig["saves"]) && Directory.Exists(AppConfig.GetFullPath("saves")))
+        {
+            string savePath = Path.Combine(AppConfig.GetFullPath("saves"), system);
+            if (!_chihiro)
+            {
+                if (!File.Exists(Path.Combine(savePath, "eeprom.bin")))
+                {
+                    File.WriteAllBytes(Path.Combine(savePath, "eeprom.bin"), Properties.Resources.eeprom);
+                }
+                if (!File.Exists(Path.Combine(savePath, "xbox_hdd.qcow2")))
+                {
+                    string zipFile = Path.Combine(savePath, "xbox_hdd.qcow2.zip");
+                    File.WriteAllBytes(zipFile, Properties.Resources.xbox_hdd_qcow2);
+                    Zip.Extract(zipFile, savePath);
+                    File.Delete(zipFile);
+                }
+            }
+        }
+    }
+
+    private void SetupTOMLConfiguration(string eepromPath, string hddPath)
+    {
+        if (!string.IsNullOrEmpty(eepromPath))
+            ini.WriteValue("sys.files", "eeprom_path", "'" + eepromPath + "'");
+        if (!string.IsNullOrEmpty(hddPath))
+            ini.WriteValue("sys.files", "hdd_path", "'" + hddPath + "'");
+    }
+
+    private void SetupChihiroConfiguration()
+    {
+        string savePath = Path.Combine(AppConfig.GetFullPath("saves"), "chihiro");
+        if (!Directory.Exists(savePath)) try { Directory.CreateDirectory(savePath); } catch { }
+        if (Directory.Exists(savePath))
+            ini.WriteValue("chihiro.roms", "snapshot_store_path", "'" + Path.Combine(savePath, "chihiro_snapshots.qcow2") + "'");
+    }
+
+    private void SetupChihiroEeprom(string path)
+    {
+        string savePath = Path.Combine(AppConfig.GetFullPath("saves"), "chihiro");
+        _chihiroEeprom = Path.Combine(path, "chihiro_eeprom.bin");
+        _chihiroEepromSave = Path.Combine(savePath, "chihiro_eeprom.bin");
+    }
+
+    private void SaveChihiroEeprom()
+    {
+        if (File.Exists(_chihiroEeprom))
+            File.Copy(_chihiroEeprom, _chihiroEepromSave, true);
+    }
+"""
+
+CXBX = """
+    private string MountIso(string rom)
+    {
+        if (Path.GetExtension(rom).ToLowerInvariant() != ".iso")
+            return rom;
+        string xboxIsoVfsPath = Path.Combine(Path.GetDirectoryName(typeof(Installer).Assembly.Location), "xbox-iso-vfs.exe");
+        if (!File.Exists(xboxIsoVfsPath))
+            throw new ApplicationException("xbox-iso-vfs is required and is not installed");
+        string dokan = Environment.GetEnvironmentVariable("DokanLibrary2");
+        dokan = Path.Combine(dokan, "dokan2.dll");
+        if (!File.Exists(dokan))
+        {
+            throw new ApplicationException("Dokan 2 is required and is not installed");
+        }
+    }
+
+    public override ProcessStartInfo Generate(string system, string emulator, string core, string rom)
+    {
+        string path = null;
+        if ((core != null && core == "chihiro") || (emulator != null && emulator == "chihiro"))
+        {
+            path = AppConfig.GetFullPath("chihiro");
+        }
+        else if ((core != null && core == "chihiro-gun") || (emulator != null && emulator == "chihiro-gun"))
+        {
+            path = AppConfig.GetFullPath("chihiro-ds");
+        }
+        if (string.IsNullOrEmpty(path))
+            path = AppConfig.GetFullPath("cxbx-reloaded");
+        if (string.IsNullOrEmpty(path))
+            path = AppConfig.GetFullPath("cxbx-r");
+        using (var ini = IniFile.FromFile(Path.Combine(path, "settings.ini"), IniOptions.KeepEmptyValues))
+        {
+        }
+        if (system == "xbox")
+        {
+            string eeprom = Path.Combine(AppConfig.GetFullPath("cxbx-reloaded"), "EEPROM.bin");
+            if (!File.Exists(eeprom))
+                File.WriteAllBytes(eeprom, Properties.Resources.eeprom);
+
+            WriteXboxEEPROM(eeprom);
+        }
+    }
+"""
+
+
+class XboxFilesTheLauncherWrites(unittest.TestCase):
+    def test_xemu_keeps_its_eeprom_and_disk_below_saves(self):
+        records = rl.xemu_saves(_sources(**{f"{G}/Xemu.Generator.cs": XEMU_SAVES}))
+        self.assertEqual(
+            [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
+             for r in records],
+            [
+                ("xemu", "fixed_name", ["eeprom.bin", "xbox_hdd.qcow2"], "saves/<system>",
+                 f"{G}/Xemu.Generator.cs:3-19, 27-29"),
+                ("xemu, xemu-chihiro", "copies", ["chihiro_eeprom.bin"], "saves/chihiro",
+                 f"{G}/Xemu.Generator.cs:3, 40-51"),
+                ("xemu, xemu-chihiro", "fixed_name", ["chihiro_snapshots.qcow2"], "saves/chihiro",
+                 f"{G}/Xemu.Generator.cs:3, 34-37"),
+            ],
+        )
+        self.assertIn("eeprom_path, hdd_path", records[0]["passes_to"])
+        self.assertIn('not (emulator == "xemu-chihiro" or system == "chihiro")',
+                      records[0]["depends_on_option"])
+
+    def test_cxbx_runs_from_its_folder_and_gets_the_eeprom_there(self):
+        records = rl.cxbx(_sources(**{f"{G}/Cxbx.Generator.cs": CXBX}))
+        self.assertEqual(
+            [(r["emulator"], r["kind"], r["names"], r["search_dir"], r["source_ref"])
+             for r in records],
+            [
+                ("chihiro", "passes_path", [], '<AppConfig.GetFullPath("chihiro")>',
+                 f"{G}/Cxbx.Generator.cs:19-21, 31"),
+                ("chihiro-gun", "passes_path", [], '<AppConfig.GetFullPath("chihiro-ds")>',
+                 f"{G}/Cxbx.Generator.cs:23-25, 31"),
+                ("cxbx-reloaded", "passes_path", [], '<AppConfig.GetFullPath("cxbx-reloaded")>',
+                 f"{G}/Cxbx.Generator.cs:27-31"),
+                ("chihiro, chihiro-gun, cxbx-reloaded", "fixed_name", ["xbox-iso-vfs.exe"],
+                 "<emulatorLauncher folder>", f"{G}/Cxbx.Generator.cs:3-7"),
+                ("chihiro, chihiro-gun, cxbx-reloaded", "fixed_name", ["dokan2.dll"],
+                 "%DokanLibrary2%", f"{G}/Cxbx.Generator.cs:3-4, 8-13"),
+                ("cxbx-reloaded", "fixed_name", ["EEPROM.bin"],
+                 '<AppConfig.GetFullPath("cxbx-reloaded")>', f"{G}/Cxbx.Generator.cs:34-41"),
+            ],
+        )
+        self.assertTrue(all(r["passes_to"].startswith(rl.CXBX_DATA_FOLDER) for r in records[:3]))
+        self.assertEqual(records[3]["passes_to"], "exec")
+        self.assertEqual(records[5]["depends_on_option"], 'system == "xbox"')
+
+
 class HelpersAndCopies(unittest.TestCase):
     def test_blastem_one_record_per_helper_call(self):
         records = rl.blastem(_sources(**{f"{G}/Blastem.Generator.cs": BLASTEM}))
@@ -1020,7 +1271,10 @@ class HelpersAndCopies(unittest.TestCase):
         )
         self.assertEqual(segaboot["kind"], "copies")
         self.assertEqual(segaboot["names"], ["triforce/segaboot.gcm", "segaboot.gcm"])
-        self.assertEqual(segaboot["depends_on_option"], "_triforce, !_crediar")
+        self.assertEqual(
+            segaboot["depends_on_option"],
+            "_triforce, !_crediar, first name found, the target is absent, smaller or older",
+        )
 
     def test_dosbox_copies_grouped_by_target_folder(self):
         sources = _sources(
@@ -1033,16 +1287,17 @@ class HelpersAndCopies(unittest.TestCase):
                 (
                     "dosbox-pure",
                     ["MT32_CONTROL.ROM"],
-                    "copied to <emulator>/mt32-roms/<name>, only when the target does not exist",
+                    "<emulator>/mt32-roms/<name>",
                 ),
                 (
                     "dosbox-pure",
                     ["Roland_SC-55.sf2"],
-                    "copied to <emulator>/soundfonts/<name>, only when the target does not exist",
+                    "<emulator>/soundfonts/<name>",
                 ),
             ],
         )
         self.assertEqual(records[0]["search_dir"], "bios/scummvm/extra")
+        self.assertEqual(records[0]["depends_on_option"], "the target does not exist")
 
     def test_tsugaru_folder_chain(self):
         [record] = rl.tsugaru(_sources(**{f"{G}/Tsugaru.Generator.cs": TSUGARU}))
@@ -1111,11 +1366,73 @@ class FolderArguments(unittest.TestCase):
         )
 
     def test_xroar_reassigned_folder_and_config_line(self):
-        argument, config = rl.xroar(_sources(**{f"{G}/Xroar.Generator.cs": XROAR}))
-        self.assertEqual(argument["search_dir"], 'bios/dragon, or bios/coco when system == "coco"')
+        # romPath is bios/dragon, rewritten to bios/coco for the coco system.
+        default, coco, config = rl.xroar(_sources(**{
+            f"{G}/Xroar.Generator.cs": XROAR, rl.FEATURES: XROAR_FEATURES,
+        }))
+        self.assertEqual(
+            (default["search_dir"], default["passes_to"], default.get("systems")),
+            ("bios/dragon", "command line -rompath bios/dragon", None),
+        )
+        self.assertEqual(
+            (coco["search_dir"], coco["passes_to"], coco["systems"]),
+            ("bios/coco", "command line -rompath bios/coco", ["coco"]),
+        )
+        self.assertEqual(coco["machines"], ["coco", "coco3"])
+        self.assertNotIn("machines", default)
+        self.assertEqual(
+            coco["source_ref"], f"{default['source_ref']}, {rl.FEATURES}:3-6"
+        )
         self.assertEqual(config["search_dir"], "bios/dragon")
         self.assertEqual(
             config["passes_to"], 'xroar.conf rompath ".\\\\..\\\\..\\\\bios\\\\dragon"'
+        )
+
+
+XROAR_FEATURES = """
+    <emulator name="xroar">
+      <system name="coco">
+        <feature submenu="EMULATION" name="MACHINE" value="xroar_machine" order="100">
+          <choice name="TANDY COCO(PAL)" value="coco"/>
+          <choice name="TANDY COCO 3(NTSC)" value="coco3"/>
+        </feature>
+      </system>
+      <system name="dragon32,dragon64,dragon">
+        <feature submenu="EMULATION" name="MACHINE" value="xroar_machine" order="100">
+          <choice name="DRAGON64" value="dragon64"/>
+        </feature>
+      </system>
+    </emulator>
+"""
+
+
+PICO8 = """
+    public override System.Diagnostics.ProcessStartInfo Generate(string system, string emulator, string core, string rom, string playersControllers, ScreenResolution resolution)
+    {
+        string path = AppConfig.GetFullPath("pico8");
+
+        string exe = Path.Combine(path, "pico8.exe");
+        if (!File.Exists(exe))
+            return null;
+
+        return new ProcessStartInfo()
+        {
+            FileName = exe,
+            WorkingDirectory = path,
+            Arguments = args,
+        };
+    }
+"""
+
+
+class ProgramsRunFromEmulatorFolders(unittest.TestCase):
+    def test_pico8_runs_its_binary_from_its_emulator_folder(self):
+        (record,) = rl.pico8(_sources(**{f"{G}/Pico8.Generator.cs": PICO8}))
+        self.assertEqual(
+            (record["emulator"], record["kind"], record["names"], record["search_dir"],
+             record["passes_to"], record["source_ref"]),
+            ("pico8", "fixed_name", ["pico8.exe"], '<AppConfig.GetFullPath("pico8")>', "exec",
+             f"{G}/Pico8.Generator.cs:3-7, 11-12"),
         )
 
 

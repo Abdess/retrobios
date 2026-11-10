@@ -9,11 +9,11 @@ params:
 sources:
   os:
     repo: https://github.com/ROCKNIX/distribution
-    commit: c445081a59518f37d9776e5412dd7b14910696f7
-    tag: '20261001'
+    commit: cefc14339a4ae18c02bb69888f27835e50664b60
+    tag: '20261101'
   es:
     repo: https://github.com/ROCKNIX/emulationstation-next
-    commit: cada856d86e3115fbbf0bce09dd761b0ee8fa9fd
+    commit: f6c542872e3850c5f432929ead219547a897cd4a
     note: EmulationStation pinned by the ui/emulationstation package.mk PKG_VERSION
 roms_root:
   path: /storage/roms

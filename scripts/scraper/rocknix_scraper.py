@@ -190,6 +190,22 @@ class Scraper(BaseScraper):
         self.tag = None if url else fetch_github_latest_version(GITHUB_REPO)
         super().__init__(url=url or SOURCE_TEMPLATE.format(ref=self.tag))
 
+    def _built_cores(self, standalone: list[str]) -> tuple[list[str], list[str]]:
+        """(cores, standalone cores) at least one device image carries.
+
+        RetroArch runs the libretro cores the packages of its emulators
+        metapackage install per device
+        (projects/ROCKNIX/packages/virtual/emulators/package.mk), read by
+        the targets scraper, where every libretro profile counted before. A
+        standalone package no device carries is not run either.
+        """
+        from .targets.rocknix_targets_scraper import Scraper as DeviceTargets
+        builds = DeviceTargets().device_builds(self.tag or launcher_revision(self.url))
+        libretro = sorted({core for _arch, lr, _sa in builds.values() for core in lr})
+        carried = set(standalone_emulators(sorted({p for *_rest, sa in builds.values() for p in sa})))
+        standalone = [name for name in standalone if name in carried]
+        return sorted({*libretro, *standalone}), standalone
+
     def _fetch_standalone(self) -> list[str]:
         """The packages of projects/ROCKNIX/packages/emulators/standalone."""
         import json
@@ -281,7 +297,7 @@ class Scraper(BaseScraper):
             )
             entry["files"].append(requirement_entry(req))
 
-        standalone = self._fetch_standalone()
+        cores, standalone = self._built_cores(self._fetch_standalone())
         return {
             "platform": "ROCKNIX",
             "version": self.tag or fetch_github_latest_version(GITHUB_REPO),
@@ -290,9 +306,7 @@ class Scraper(BaseScraper):
             "base_destination": "bios",
             "hash_type": "md5",
             "verification_mode": "md5",
-            # RetroArch with every libretro core, plus the standalone
-            # emulators ROCKNIX packages beside it.
-            "cores": ["retroarch", *standalone],
+            "cores": cores,
             "standalone_cores": standalone,
             # Launched both ways only where package.mk also adds the
             # emulator as a RetroArch core.

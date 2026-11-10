@@ -201,8 +201,8 @@ files:
     sha1: "6f730abe0d76161336f09229f54e9f9ac7619d63"
     category: game_data
     description: "high score memory ranges per game"
-    note: "read_hiscore_dat opens hiscore.dat from the installation root first, then the copy in the plugin's own directory, once per session when the hiscore plugin runs. Same content as MAME 0.289's plugins/hiscore/hiscore.dat, with CRLF line endings. Definitions are keyed to driver names, so another MAME generation's file is a different one."
-    source_ref: "upstream plugins/hiscore/init.lua:105, 151-155, source src/osd/myosd/droid/myosd_droid.cpp:1640-1652"
+    note: "read_hiscore_dat opens hiscore.dat from the installation root first, then the copy in the plugin's own directory, once per session when the hiscore plugin runs. The hash is that of plugins/hiscore/hiscore.dat in android-MAME4droid/app/src/main/res/raw/files.zip at the pinned revision, which copyFiles unpacks into the installation directory on first start. Same content as MAME 0.289's plugins/hiscore/hiscore.dat, with CRLF line endings. Definitions are keyed to driver names, so another MAME generation's file is a different one."
+    source_ref: "upstream plugins/hiscore/init.lua:105, 151-155, source src/osd/myosd/droid/myosd_droid.cpp:1640-1652, source android-MAME4droid/app/src/main/java/com/seleuco/mame4droid/helpers/MainHelper.java:307-345"
 
   - name: history.db
     path: data/history.db

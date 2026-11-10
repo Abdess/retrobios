@@ -90,7 +90,7 @@ def validate_format(self, raw_data: str) -> bool:
 | `alt_md5` | `str \| None` | A second accepted MD5 (Batocera and ROCKNIX `altmd5`) |
 | `native_path` | `str \| None` | The file reference as the platform writes it, kept when it differs from `name`. libretro writes `iplromco.dat` bare although the file lives under `keropi/`, and `ep128emu/roms/cpc464.rom` with its directory |
 | `mirror_of` | `str \| None` | The native system whose entry this one repeats under another system. The platform's own file does not carry the copy, so the export skips it |
-| `native` | `dict` | Fields the platform declares that the model has no place for, written back unchanged by the export: `native_name`, `md5_list` (a Batocera md5 written as a list), `core`, `note`, `description`, `hash_match_mandatory`, `mandatory_declared`, `alt_paths`, `component`, `required_label` |
+| `native` | `dict` | Fields the platform declares that the model has no place for, written back unchanged by the export: `native_name`, `md5_list` (a Batocera md5 written as a list), `core`, `note`, `description`, `hash_match_mandatory`, `mandatory_declared`, `alt_paths`, `component`, `required_label`, `group` (RetroBat: files of one group are alternatives, one held is enough) |
 
 `requirement_entry()` in `base_scraper.py` is the single serializer from a
 requirement to a platform YAML entry, and every scraper goes through it.
@@ -195,10 +195,15 @@ resolved. Three strategies exist:
 
 - **Explicit list**: `cores: [beetle_psx, dolphin, ...]` - match by profile key name
   or by any name in a profile's `cores:`. When a profile's `built_by` names this
-  platform, that profile answers for the name. Used by Batocera, Recalbox, RetroBat,
-  RomM, KNULLI, AmberELEC, EmuELEC, MinUI, NextUI, MyMinUI, RetroPie, EmuDeck,
-  RetroDECK, ROCKNIX. A list that names `retroarch` (the last
-  four) also takes every libretro profile, as `all_libretro` does. An empty list
+  platform, that profile answers for the name (ROCKNIX's `yabadabadoo`). Used by
+  Batocera, Recalbox, RetroBat, RomM, KNULLI, AmberELEC, EmuELEC, MinUI, NextUI,
+  MyMinUI, ROCKNIX, RetroPie, EmuDeck, RetroDECK. A list that names `retroarch`
+  (the last three) also takes every libretro profile, as `all_libretro` does,
+  plus the libretro builds whose `built_by` names this platform. A name in `installable_cores`, a buildbot core the
+  platform's RetroArch downloads, designates libretro builds only. Under
+  `--target` such a core counts only on the boards whose downloader offers one
+  of its names (`downloadable_on`), and the install list gives those boards in
+  `downloaded_cores`. An empty list
   (BizHawk, MiSTer FPGA) resolves no profile, and the pack holds the platform's own
   files.
 - **all_libretro**: `cores: all_libretro` - every profile whose `type` contains
@@ -208,14 +213,26 @@ resolved. Three strategies exist:
 - **Omitted**: fallback to system ID intersection, `built_by` profiles excluded.
 
 Two lists say how each resolved emulator is laid out. `standalone_cores` names the
-ones the platform launches as standalone apps: their files go to `standalone_path`,
-under the folder the platform hands the emulator when its `launchers:` say so. A
-`links` or `passes_path` record of a whole directory that names one of the profile's
-`standalone_directories` gives that folder (`launchers.standalone_root`): RetroPie
-links Flycast's `~/.local/share/flycast` to `BIOS/dc`, EmuDeck the Flatpak's data
-directory to `bios/flycast/bios`, and ROCKNIX's patched data directory is followed
-through the link its start script makes. Two records giving two folders leave the
-profile's layout.
+ones the platform launches as standalone apps: their files go to `standalone_path`
+(`path` for a profile with no libretro build), under the folder the platform hands
+the emulator when its `launchers:` say so. A `links` or `passes_path` record of a
+directory at or below one of the profile's `standalone_directories` binds that
+subfolder of the layout to a folder (`launchers.standalone_bindings`): RetroPie
+links Flycast's `~/.local/share/flycast` to `BIOS/dc`, EmuDeck yuzu's `keys` to
+`bios/yuzu/keys`, and ROCKNIX's patched data directory is followed through the link
+its start script makes. A launch script that enters a folder hands the `getcwd`
+directory: RetroPie starts UAE4All2 in `$md_inst`, whose `kickstarts` it links to
+`BIOS/amiga`. A profile declaring `executable directory` is bound where a record
+executes one of its files: Batocera runs `pico-8/pico8` from `bios`, ROCKNIX
+`pico8_64` from `/storage/roms/pico-8`, below the `roms_directory` its registry entry
+names, which the manifest writes as `root: roms`. RetroBat runs `pico8.exe` from an
+emulator folder its generators name by key: the registry's `emulators_directory`
+spells that key and lists the places the launcher searches, and the manifest writes
+`root: emulators`, which the installer places only beside RetroBat's own launcher
+config. Two records giving two folders
+leave the profile's layout. Once a platform binds part of a layout, an entry no
+binding covers is read in a folder outside the BIOS tree: it is never packed, and
+the manifest names it (`root: emulator`, `outside_bios_folder`).
 `dual_mode_cores` names those it launches both ways (RetroPie packages `lr-hatari`
 and `hatari`): both layouts are packed. A profile without a standalone build keeps
 its libretro layout whatever the platform calls it.
@@ -355,7 +372,7 @@ by the resolver and by the pack check, as
 describes.
 
 `firmware_folder_flat: true` is set where the frontend reads a system's firmware
-folder without descending into it (RomM 5.4.0,
+folder without descending into it (RomM 5.4.1,
 `backend/handler/filesystem/base_handler.py:1002`, `recursive=False`). On such a platform, a core file whose destination has a
 subfolder is left out of the pack (`nested` in `scripts/packextras.py`), since no
 core would receive it.
@@ -415,6 +432,7 @@ launchers:
 | `repo` | What the package fetches and builds, as the script writes it (`rp_module_repo`: method, URL, branch or commit) |
 | `systems` | Systems the package registers, under the platform's names (`addSystem`, `addPort` for ports) |
 | `slot` | The key the code files the list under: a region, a machine |
+| `machines` | On a record naming systems, the machines the platform offers the emulator under them (RetroBat's `xroar_machine` choices for coco) |
 | `names` | In the order the code tries or writes them, relative to `search_dir` |
 | `expands` | Values a `{X}` placeholder in `names` takes, in the order tried (Hatari tries each TOS in ten languages) |
 | `case_insensitive` | Whether the launcher matches names regardless of case |
@@ -491,7 +509,8 @@ the launcher's name, a file the core accepts: the file the collection knows
 under that name when the core takes its content, otherwise the copy held for
 the core entry read under that name. Records that only hand over a directory
 (`passes_path`, `scans_dir`, a `links` record with no names) or copy a file
-the platform already names (`copies`) place nothing, and a `search_dir` the
+the platform already names (`copies`, its `names` under the `search_dir` it
+copies from, the target in `passes_to`) place nothing, and a `search_dir` the
 code describes rather than names ("directory of the Chihiro BIOS found") is
 skipped. `$biosdir`, `${biosPath}` and `$bios_path` are the BIOS directory as
 RetroPie, EmuDeck and RetroDECK spell it, and a path from a root

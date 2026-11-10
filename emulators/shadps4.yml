@@ -17,6 +17,11 @@ cores:
 systems:
   - ps4
 mode: standalone
+standalone_directories:
+  - "getcwd/user"
+  - "PORTABLE_DIR"
+  - "$XDG_DATA_HOME/shadPS4"
+  - "$HOME/.local/share/shadPS4"
 analysis_date: "2026-08-10"
 analysis_commit: "891612c8"
 
@@ -34,7 +39,15 @@ notes: |
   priority over the global sys_modules/ directory.
 
   System fonts are mounted from fonts/font/ (/preinst/common/font on real
-  PS4) and fonts/font2/ (/system/common/font2 on real PS4). These are SST
+  PS4) and fonts/font2/ (/system/common/font2 on real PS4)
+  (src/emulator.cpp:639-661). The font library opens each by its dumped name
+  or its PS4 name in fonts/, then fonts/font/, then fonts/font2/
+  (src/core/libraries/font/font_internal.cpp:391-468), and falls back to the
+  Noto fonts it embeds (font_internal.cpp:119-127). Each entry sits in the
+  folder the console keeps it in: the two mounts serve them as is to games
+  and to the LLE libSceFont, and the library finds both. The font2 copies of
+  the SSTArabic family are a later revision than the font/ ones, which the
+  library reaches first. These are SST
   (Sony Standard Text) typeface files in OTF format. The emulator mounts
   the directories wholesale, and games load individual fonts by name. Without
   fonts, the emulator warns "No dumped system fonts, expect missing text
@@ -45,28 +58,31 @@ notes: |
   - font/ from /preinst/common/font/
   - font2/ from /system/common/font2/
 
-  Batocera configgen (shadps4Generator.py) configures display, input, and
-  saves but does not map BIOS/firmware paths. The emulator uses its own
-  user directory for sys_modules/ and fonts/.
+  The paths below are relative to the user folder: user/ in the working
+  directory when it exists, else $XDG_DATA_HOME/shadPS4 or
+  ~/.local/share/shadPS4 on Linux and %APPDATA%/shadPS4 on Windows
+  (src/common/path_util.cpp:88-110). sys_modules/ is below it
+  (path_util.cpp:124) unless sysModulesPath in the config names another
+  folder (src/core/emulator_settings.cpp:190-195, 535).
 
 files:
   - name: "libSceLibcInternal.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceLibcInternal.sprx"
+    path: "sys_modules/libSceLibcInternal.sprx"
     description: "PS4 C standard library"
     source_ref: "src/core/linker.cpp:80-91"
 
   - name: "libSceNgs2.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceNgs2.sprx"
+    path: "sys_modules/libSceNgs2.sprx"
     description: "PS4 next-generation audio system"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:217"
 
   - name: "libSceUlt.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceUlt.sprx"
+    path: "sys_modules/libSceUlt.sprx"
     description: "PS4 user-level threading library"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:218"
@@ -74,13 +90,13 @@ files:
   - name: "libSceRtc.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceRtc.sprx"
+    path: "sys_modules/libSceRtc.sprx"
     description: "PS4 real-time clock library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:221"
 
   - name: "libSceJpegDec.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceJpegDec.sprx"
+    path: "sys_modules/libSceJpegDec.sprx"
     description: "PS4 JPEG decoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:222"
@@ -88,83 +104,83 @@ files:
   - name: "libSceJpegEnc.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceJpegEnc.sprx"
+    path: "sys_modules/libSceJpegEnc.sprx"
     description: "PS4 JPEG encoder"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:223"
 
   - name: "libScePngEnc.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libScePngEnc.sprx"
+    path: "sys_modules/libScePngEnc.sprx"
     description: "PS4 PNG encoder"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:225"
 
   - name: "libSceJson.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceJson.sprx"
+    path: "sys_modules/libSceJson.sprx"
     description: "PS4 JSON parser"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:226"
 
   - name: "libSceJson2.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceJson2.sprx"
+    path: "sys_modules/libSceJson2.sprx"
     description: "PS4 JSON v2 parser"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:227"
 
   - name: "libSceCesCs.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceCesCs.sprx"
+    path: "sys_modules/libSceCesCs.sprx"
     description: "PS4 character encoding conversion"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:228"
 
   - name: "libSceAt9Enc.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceAt9Enc.sprx"
+    path: "sys_modules/libSceAt9Enc.sprx"
     description: "PS4 ATRAC9 encoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:229"
 
   - name: "libSceAudiodec.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceAudiodec.sprx"
+    path: "sys_modules/libSceAudiodec.sprx"
     description: "PS4 audio decoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:230"
 
   - name: "libSceAudiodecCpu.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceAudiodecCpu.sprx"
+    path: "sys_modules/libSceAudiodecCpu.sprx"
     description: "PS4 CPU audio decoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:231"
 
   - name: "libSceAudiodecCpuDdp.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceAudiodecCpuDdp.sprx"
+    path: "sys_modules/libSceAudiodecCpuDdp.sprx"
     description: "PS4 CPU Dolby Digital Plus decoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:232"
 
   - name: "libSceAudiodecCpuM4aac.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx"
+    path: "sys_modules/libSceAudiodecCpuM4aac.sprx"
     description: "PS4 CPU AAC decoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:233"
 
   - name: "libSceAudiodecCpuDtsHdLbr.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx"
+    path: "sys_modules/libSceAudiodecCpuDtsHdLbr.sprx"
     description: "PS4 CPU DTS-HD LBR decoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:234"
 
   - name: "libSceAudiodecCpuHevag.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceAudiodecCpuHevag.sprx"
+    path: "sys_modules/libSceAudiodecCpuHevag.sprx"
     description: "PS4 CPU HEVAG decoder"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:235"
@@ -172,34 +188,34 @@ files:
   - name: "libSceFont.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceFont.sprx"
+    path: "sys_modules/libSceFont.sprx"
     description: "PS4 font rendering library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:236"
 
   - name: "libSceFontFt.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceFontFt.sprx"
+    path: "sys_modules/libSceFontFt.sprx"
     description: "PS4 FreeType font library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:237"
 
   - name: "libSceFreeTypeOt.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceFreeTypeOt.sprx"
+    path: "sys_modules/libSceFreeTypeOt.sprx"
     description: "PS4 FreeType OpenType library"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:238"
 
   - name: "libSceFreeTypeOl.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceFreeTypeOl.sprx"
+    path: "sys_modules/libSceFreeTypeOl.sprx"
     description: "PS4 FreeType outline library"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:239"
 
   - name: "libSceFreeTypeOptOl.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceFreeTypeOptOl.sprx"
+    path: "sys_modules/libSceFreeTypeOptOl.sprx"
     description: "PS4 FreeType optimised outline library"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:240"
@@ -207,13 +223,13 @@ files:
   - name: "libSceRudp.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceRudp.sprx"
+    path: "sys_modules/libSceRudp.sprx"
     description: "PS4 reliable UDP library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:244"
 
   - name: "libSceWkFontConfig.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceWkFontConfig.sprx"
+    path: "sys_modules/libSceWkFontConfig.sprx"
     description: "PS4 WebKit font configuration"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:245"
@@ -221,13 +237,315 @@ files:
   - name: "libSceSystemGesture.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/libSceSystemGesture.sprx"
+    path: "sys_modules/libSceSystemGesture.sprx"
     description: "PS4 system gesture recognition"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:250"
 
   - name: "libSceXml.sprx"
     required: false
-    path: "shadps4/sys_modules/libSceXml.sprx"
+    path: "sys_modules/libSceXml.sprx"
     description: "PS4 XML parser"
     note: "No HLE implementation. The module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:251"
+
+  - name: "SST-Light.otf"
+    aliases: ["SST-EU-ROMAN-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:419, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SST-Roman.otf"
+    aliases: ["SST-EU-ROMAN.OTF", "SST-EU-ROMAN-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:420, 422, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SST-Medium.otf"
+    aliases: ["SST-EU-ROMAN-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:421, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SST-Italic.otf"
+    aliases: ["SST-EU-ROMAN-I.OTF", "SST-ITALIC-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Italic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:423, 427, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SST-Bold.otf"
+    aliases: ["SST-EU-ROMAN-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:424, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SST-BoldItalic.otf"
+    aliases: ["SST-EU-ROMAN-BI.OTF", "SST-ITALIC-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-BoldItalic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:425, 429, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SST-LightItalic.otf"
+    aliases: ["SST-ITALIC-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-LightItalic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:426, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SST-MediumItalic.otf"
+    aliases: ["SST-ITALIC-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SST-MediumItalic.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:428, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTTypewriter-Roman.otf"
+    aliases: ["SST-TYPEWRITER-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTTypewriter-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:430, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTTypewriter-Bd.otf"
+    aliases: ["SST-TYPEWRITER-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTTypewriter-Bd.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:431, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTJpPro-Regular.otf"
+    aliases: ["SST-JPPRO-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTJpPro-Regular.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:432, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTJpPro-Bold.otf"
+    aliases: ["SST-JPPRO-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTJpPro-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:433, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "DFHEI5-SONY.ttf"
+    aliases: ["SST-CNGB-HEI-R.TTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/DFHEI5-SONY.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:434, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTAribStdB24-Regular.ttf"
+    aliases: ["SST-ARIB-STD-B24-R.TTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTAribStdB24-Regular.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:435, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTArabic-Roman.otf"
+    aliases: ["SST-ARABIC-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:436, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTArabic-Light.otf"
+    aliases: ["SST-ARABIC-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:437, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTArabic-Medium.otf"
+    aliases: ["SST-ARABIC-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:438, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SSTArabic-Bold.otf"
+    aliases: ["SST-ARABIC-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SSTArabic-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:439, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SCEPS4Yoongd-Light.otf"
+    aliases: ["SCE-EXT-HANGUL-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCEPS4Yoongd-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:440, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SCEPS4Yoongd-Medium.otf"
+    aliases: ["SCE-EXT-HANGUL-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCEPS4Yoongd-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:441, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SCEPS4Yoongd-Bold.otf"
+    aliases: ["SCE-EXT-HANGUL-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/SCEPS4Yoongd-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:442, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "e046323ms.ttf"
+    aliases: ["SSTCC-SERIF-MONO.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/e046323ms.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:443, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "e046323ts.ttf"
+    aliases: ["SSTCC-SERIF.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/e046323ts.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:444, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "n023055ms.ttf"
+    aliases: ["SSTCC-SANSSERIF-MONO.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/n023055ms.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:445, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "n023055ts.ttf"
+    aliases: ["SSTCC-SANSSERIF.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/n023055ts.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:446, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "d013013ds.ttf"
+    aliases: ["SSTCC-CUSUAL.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/d013013ds.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:447, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "k006004ds.ttf"
+    aliases: ["SSTCC-CURSIVE.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/k006004ds.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:448, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "c041056ts.ttf"
+    aliases: ["SSTCC-SMALLCAPITAL.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font/c041056ts.ttf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:449, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640-653"
+  - name: "SCE-RDC-R-JPN.otf"
+    aliases: ["SCE-JP-CATTLEYA-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SCE-RDC-R-JPN.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:450, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SCE-RDC-B-JPN.otf"
+    aliases: ["SCE-JP-CATTLEYA-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SCE-RDC-B-JPN.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:451, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTThai-Light.otf"
+    aliases: ["SST-THAI-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTThai-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:452, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTThai-Roman.otf"
+    aliases: ["SST-THAI-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTThai-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:453, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTThai-Medium.otf"
+    aliases: ["SST-THAI-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTThai-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:454, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTThai-Bold.otf"
+    aliases: ["SST-THAI-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTThai-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:455, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTVietnamese-Light.otf"
+    aliases: ["SST-VIETNAMESE-L.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTVietnamese-Light.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:456, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTVietnamese-Roman.otf"
+    aliases: ["SST-VIETNAMESE-R.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTVietnamese-Roman.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:457, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTVietnamese-Medium.otf"
+    aliases: ["SST-VIETNAMESE-M.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTVietnamese-Medium.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:458, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTVietnamese-Bold.otf"
+    aliases: ["SST-VIETNAMESE-B.OTF"]
+    required: false
+    hle_fallback: true
+    path: "fonts/font2/SSTVietnamese-Bold.otf"
+    description: "PS4 system font"
+    source_ref: "src/core/libraries/font/font_internal.cpp:459, src/core/libraries/font/font_internal.cpp:391-415, src/emulator.cpp:640, 655-661"
+  - name: "SSTArabic-Roman.otf"
+    required: false
+    path: "fonts/font2/SSTArabic-Roman.otf"
+    description: "PS4 system font, font2 revision"
+    source_ref: "src/emulator.cpp:640, 655-661"
+  - name: "SSTArabic-Light.otf"
+    required: false
+    path: "fonts/font2/SSTArabic-Light.otf"
+    description: "PS4 system font, font2 revision"
+    source_ref: "src/emulator.cpp:640, 655-661"
+  - name: "SSTArabic-Medium.otf"
+    required: false
+    path: "fonts/font2/SSTArabic-Medium.otf"
+    description: "PS4 system font, font2 revision"
+    source_ref: "src/emulator.cpp:640, 655-661"
+  - name: "SSTArabic-Bold.otf"
+    required: false
+    path: "fonts/font2/SSTArabic-Bold.otf"
+    description: "PS4 system font, font2 revision"
+    source_ref: "src/emulator.cpp:640, 655-661"
+  - name: "DFHEI5-SONY2022.ttf"
+    required: false
+    path: "fonts/font2/DFHEI5-SONY2022.ttf"
+    description: "PS4 system font"
+    source_ref: "src/emulator.cpp:640, 655-661"
+  - name: "PS4Icon.ttf"
+    required: false
+    path: "fonts/font2/PS4Icon.ttf"
+    description: "PS4 button and icon glyphs"
+    source_ref: "src/emulator.cpp:640, 655-661"
+  - name: "SceWebKitSupplemental.otf"
+    required: false
+    path: "fonts/font2/SceWebKitSupplemental.otf"
+    description: "PS4 WebKit supplemental glyphs"
+    source_ref: "src/emulator.cpp:640, 655-661"

@@ -54,6 +54,14 @@
       "type": "array",
       "uniqueItems": true,
       "items": { "enum": ["systems", "cores", "regions"] }
+    },
+    "install_list": {
+      "description": "The install manifest built with the same choices as the pack, as install/<platform>.json holds it. With the pack alone, the installer narrows by system, core and region from it. validate_schemas.py checks it against install-manifest.schema.json.",
+      "type": "object"
+    },
+    "targets": {
+      "description": "The platform's cores per hardware target, as install/targets/<platform>.json publishes them. With the pack alone, the installer applies the card's board and accepts --target from it. validate_schemas.py checks it against target-manifest.schema.json.",
+      "type": "object"
     }
   }
 }

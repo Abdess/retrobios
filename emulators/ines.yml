@@ -134,7 +134,7 @@ files:
     sha1: 486eede1bb748d95efc8a2a3d46ef1a530100559
     crc32: "2e03cb7f"
     description: "sample ROM image started when no game is given"
-    note: "The only entry in assets/memfs.mp3, which MainActivity reads whole and jniStart mounts as an in-memory filesystem. A 16 byte header plus one 16 KB PRG bank and one 8 KB CHR bank. Application passes this name to StartNES when it is invoked without a ROM, so launching through ES-DE never reaches it."
+    note: "The only entry in assets/memfs.mp3, which MainActivity reads whole and jniStart mounts as an in-memory filesystem. A 16 byte header plus one 16 KB PRG bank and one 8 KB CHR bank. Application passes this name to StartNES only when it is invoked without a ROM."
     source_ref: "MainActivity.java:1092-1105, libmain.so jniStart 0x17684-0x176a2, libmain.so Application 0x38278-0x38286"
 
   - name: names.dat

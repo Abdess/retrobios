@@ -47,9 +47,9 @@ notes: |
     1. {system}/saturn_bios.bin
     2. {system}/sega_101.bin
     3. {system}/mpr-17933.bin
-  First file found wins. Real BIOS required for normal operation.
-  HLE available via yabasanshiro_force_hle_bios core option (deprecated,
-  debug only).
+  First file found wins. Without any of the three the core refuses the
+  game, even with the yabasanshiro_force_hle_bios core option set
+  (yabause/src/libretro/libretro.c:1064-1071).
 
   Addon cartridges: 1M/4M RAM expansion via core option (no files needed).
   ROM cartridge and MPEG card ROM loading disabled in libretro port
@@ -80,30 +80,31 @@ notes: |
   Both build the pi4-update tip and patch the home directory to
   /storage/.config/yabasanshiro.
 
+groups:
+  saturn-bios:
+    required: true
+
 files:
   - name: "saturn_bios.bin"
     system: sega-saturn
     mode: libretro
+    group: saturn-bios
     priority: 1
-    required: true
-    hle_fallback: true
     note: "Primary Saturn BIOS. Any region accepted."
     source_ref: "yabause/src/libretro/libretro.c:1048"
 
   - name: "sega_101.bin"
     system: sega-saturn
     mode: libretro
+    group: saturn-bios
     priority: 2
-    required: false
-    hle_fallback: true
     note: "Saturn BIOS v1.01 (Japan). Fallback if saturn_bios.bin missing."
     source_ref: "yabause/src/libretro/libretro.c:1052"
 
   - name: "mpr-17933.bin"
     system: sega-saturn
     mode: libretro
+    group: saturn-bios
     priority: 3
-    required: false
-    hle_fallback: true
     note: "Saturn BIOS v1.003 (NA/EU). Last fallback."
     source_ref: "yabause/src/libretro/libretro.c:1056"

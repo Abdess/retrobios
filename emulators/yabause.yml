@@ -47,11 +47,15 @@ notes: |
   BIOS loading: retro_load_game() at yabause/src/libretro/libretro.c:1035-1049.
   Core load: LoadBios() at yabause/src/memory.c:1260-1263, T123Load() at yabause/src/memory.h:196-265.
 
+groups:
+  saturn-bios:
+    required: true
+
 files:
   - name: "saturn_bios.bin"
     system: sega-saturn
+    group: saturn-bios
     priority: 1
-    required: true
     hle_fallback: true
     max_size: 524288
     validation: [max_size]
@@ -60,8 +64,8 @@ files:
 
   - name: "sega_101.bin"
     system: sega-saturn
+    group: saturn-bios
     priority: 2
-    required: false
     hle_fallback: true
     max_size: 524288
     validation: [max_size]
@@ -70,8 +74,8 @@ files:
 
   - name: "mpr-17933.bin"
     system: sega-saturn
+    group: saturn-bios
     priority: 3
-    required: false
     hle_fallback: true
     max_size: 524288
     validation: [max_size]

@@ -217,6 +217,9 @@ class Scraper(BaseScraper):
                 sys_name = sys_data.get("name", "") if isinstance(sys_data, dict) else ""
                 if sys_name:
                     native["native_name"] = sys_name
+                # One held file of a group is enough (Program.cs): verify reads it.
+                if bios.get("group"):
+                    native["group"] = str(bios["group"])
 
                 requirements.append(
                     BiosRequirement(
@@ -224,7 +227,7 @@ class Scraper(BaseScraper):
                         system=SYSTEM_SLUG_MAP.get(sys_key, sys_key),
                         md5=md5 or None,
                         destination=file_path,
-                        required=True,
+                        required=not bios.get("optional", False),
                         native_id=sys_key,
                         native_path=declared_path,
                         native=native,

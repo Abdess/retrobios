@@ -984,6 +984,14 @@ class InstallMatchesATargetManifest(unittest.TestCase):
         ("batocera", "bcm2711"),
         ("retropie", "rpi4"),
         ("emudeck", "steamos"),
+        # A core only Batocera's x86_64 downloader brings, a missing file two
+        # cores read, a file another emulator installs itself, and a name a
+        # launcher opens that another core's copy used to fill.
+        ("batocera", "jh7110"),
+        ("knulli", "h700"),
+        ("rocknix", "sdm845"),
+        ("retropie", "x86"),
+        ("retropie", "rpi1"),
     )
 
     @classmethod
@@ -1015,7 +1023,7 @@ class InstallMatchesATargetManifest(unittest.TestCase):
                 ))
                 full = self._manifest(platform)
                 built = self._manifest(platform, set(cores), target)
-                files, omitted = install.narrow_to_cores(full, cores)
+                files, omitted = install.narrow_to_cores(full, cores, target=target)
                 # A case-insensitive platform reads one file under both
                 # spellings (BlastEm's 32X_M_BIOS.bin, PicoDrive's .BIN).
                 from common import load_platform_config

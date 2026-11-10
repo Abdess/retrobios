@@ -192,7 +192,7 @@ def config_records(
     package: str,
     file: str,
     passes_to_suffix: str = "",
-    **fields: object,
+    depends_on_option: str | None = None,
 ) -> list[Launcher]:
     """fixed_name records for the bios paths of a config installed per device."""
     configs = device_configs(tree, package, file)
@@ -218,7 +218,7 @@ def config_records(
                     (described + passes_to_suffix) if value.names else f"{described} left empty"
                 ),
                 device=device,
-                **fields,
+                depends_on_option=depends_on_option,
             )
         )
     return records
@@ -308,10 +308,40 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
     if not links:
         raise mk.missing(f"ln -s of {BIOS_ROOT}")
     records.extend(link_record("amiberry", mk, link) for link in links)
+    # The script copies the installed folder, links included, to the one it
+    # enters before it runs amiberry: the kickstarts link is read there.
+    copy_line, copy = script.find(r"cp -rf? (\S+) \$\{?(\w+)\}?\s*$", "copy of the installed folder")
+    cd_line, cd = script.find(r"^\s*cd \$\{?(\w+)\}?\s*$", "working directory")
+    if cd.group(1) != copy.group(2):
+        raise LauncherPatternMissing(script.path, "cd into the copied folder")
+    entered: set[int] = {cd_line}
+    folder = script.expand("${" + cd.group(1) + "}", cd_line, entered)
+    records.append(Launcher(
+        emulator="amiberry", build="standalone", kind="passes_path", names=[],
+        source_ref=source_ref([(script.path, entered)]),
+        search_dir=folder, passes_to=f"working directory of {script.path.rsplit('/', 1)[-1]}",
+    ))
+    installed = copy.group(1).rstrip("/")
+    for link in links:
+        if not link.link.startswith(installed + "/"):
+            continue
+        copied = folder + link.link[len(installed):]
+        records.append(Launcher(
+            emulator="amiberry", build="standalone", kind="links", names=list(link.names),
+            source_ref=source_ref([(mk.path, link.lines), (script.path, {copy_line} | entered)]),
+            search_dir=link.bios_side,
+            passes_to=f"symlink {copied} -> {link.target}, copied with {installed}",
+        ))
     return records
 
 
-def link_record(emulator: str, script: Script, link: Link, **fields: object) -> Launcher:
+def link_record(
+    emulator: str,
+    script: Script,
+    link: Link,
+    case_insensitive: bool | None = None,
+    fails_when_missing: bool | str = False,
+) -> Launcher:
     return Launcher(
         emulator=emulator,
         build="standalone",
@@ -321,15 +351,22 @@ def link_record(emulator: str, script: Script, link: Link, **fields: object) -> 
         expands=link.expands or None,
         search_dir=link.bios_side,
         passes_to=f"symlink {link.link} -> {link.target}",
-        **fields,
+        case_insensitive=case_insensitive,
+        fails_when_missing=fails_when_missing,
     )
 
 
 def hatari(tree: RepoTree) -> list[Launcher]:
     package = f"{STANDALONE}/hatarisa"
-    script = Script(
-        f"{package}/scripts/start_hatari.sh", tree.read(f"{package}/scripts/start_hatari.sh")
+    # The script is named after the package's binary: start_hatari.sh became
+    # start_hatarisa.sh (2e7041d273), so it is found, not spelled.
+    starts = sorted(
+        name for name in tree.listdir(f"{package}/scripts")
+        if name.startswith("start_") and name.endswith(".sh")
     )
+    if len(starts) != 1:
+        raise LauncherPatternMissing(f"{package}/scripts", "one start script")
+    script = Script(f"{package}/scripts/{starts[0]}", tree.read(f"{package}/scripts/{starts[0]}"))
     copy_line, copy = script.find(r"cp \S+/([\w-]+\.cfg) ", "default config copy")
     run_line, _ = script.find(r"--configfile", "--configfile", copy_line)
     path = f"{package}/config/conf/{copy.group(1)}"
@@ -557,17 +594,6 @@ def duckstation(tree: RepoTree) -> list[Launcher]:
     )
 
 
-def aethersx2(tree: RepoTree) -> list[Launcher]:
-    return directory_records(
-        tree,
-        "aethersx2",
-        f"{STANDALONE}/aethersx2-sa",
-        "aethersx2/inis/PCSX2.ini",
-        ("Folders", "Bios"),
-        (("Filenames", "BIOS"),),
-    )
-
-
 def armsx2(tree: RepoTree) -> list[Launcher]:
     return directory_records(
         tree,
@@ -580,6 +606,47 @@ def armsx2(tree: RepoTree) -> list[Launcher]:
 
 
 # Start scripts whose ln -s commands put a BIOS path where the emulator reads.
+def pico8(tree: RepoTree) -> list[Launcher]:
+    """The PICO-8 binary start_pico8.sh executes, outside /storage/roms/bios.
+
+    The script picks the binary by HW_ARCH, pico8_64 on aarch64 and
+    pico8_dyn on any other, and runs it from GAME_DIR, or from
+    GAME_DIR/${HW_ARCH} when that folder exists.
+    """
+    path = f"{STANDALONE}/pico-8/scripts/start_pico8.sh"
+    script = Script(path, tree.read(path))
+    game_line, game = script.find(r'^\s*GAME_DIR="([^"$]+)"', "GAME_DIR assignment")
+    case_line, _ = script.find(r"^\s*case \$\{HW_ARCH\} in", "case on HW_ARCH")
+    arch_line, arch = script.find(r"^\s*(\w+)\)", "HW_ARCH branch", case_line + 1)
+    first_line, first = script.find(r'STATIC_BIN="([^"$]+)"', "binary of the first branch", arch_line)
+    other_line, _ = script.find(r"^\s*\*\)", "default HW_ARCH branch", first_line)
+    rest_line, rest = script.find(r'STATIC_BIN="([^"$]+)"', "binary of the default branch", other_line)
+    sub_line, _ = script.find(
+        r'if \[ -d "\$\{GAME_DIR\}/\$\{HW_ARCH\}" \]', "per-architecture launch folder"
+    )
+    end_line, _ = script.find(r"^\s*fi\b", "end of the launch folder test", sub_line)
+    run_line, _ = script.find(r"^\s*\$\{LAUNCH_DIR\}/\$\{STATIC_BIN\} ", "binary run")
+    return [
+        Launcher(
+            emulator="pico-8",
+            build="standalone",
+            kind="fixed_name",
+            names=[first.group(1), rest.group(1)],
+            source_ref=source_ref([(path, {
+                game_line, case_line, arch_line, first_line, other_line, rest_line,
+                *range(sub_line, end_line + 1), run_line,
+            })]),
+            search_dir=game.group(1).rstrip("/"),
+            passes_to="exec",
+            fails_when_missing=False,
+            depends_on_option=(
+                f"HW_ARCH {arch.group(1)} runs {first.group(1)}, any other {rest.group(1)}, "
+                f"from {game.group(1).rstrip('/')}/${{HW_ARCH}} when that folder exists"
+            ),
+        )
+    ]
+
+
 LINK_SCRIPTS = (
     ("drastic", f"{STANDALONE}/drastic-sa/scripts/start_drastic.sh"),
     ("dolphin", f"{STANDALONE}/dolphin-sa/scripts/start_dolphin_gc.sh"),
@@ -683,8 +750,8 @@ EXTRACTORS: tuple[Callable[[RepoTree], list[Launcher]], ...] = (
     mednafen,
     yabasanshiro,
     duckstation,
-    aethersx2,
     armsx2,
+    pico8,
     patched_directories,
     links,
 )

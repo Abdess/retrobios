@@ -1097,9 +1097,17 @@ def triage_state(report: ProfileReport) -> str:
 
 
 def select_repo(profile: dict) -> upstream.Repo | None:
-    """Repository the profile was read from: source first, then upstream."""
+    """Repository the profile was read from: source first, then upstream.
+
+    A source keyed by build mode with no upstream (uzdoom) names its
+    repositories only in the dict, which a plain string read never parses.
+    """
     for field in ("source", "upstream"):
         repo = upstream.parse_repo(str(profile.get(field) or ""))
+        if repo is not None:
+            return repo
+    for _, _, url in declared_repositories(profile):
+        repo = upstream.parse_repo(url)
         if repo is not None:
             return repo
     return None
@@ -1496,14 +1504,18 @@ def detect_pinned_tag(
 def tag_pinned_views(
     profile: dict, views: list[RepoView], cache_dir: str, offline: bool
 ) -> dict[tuple[str, str], str]:
-    """Views whose pin is the tag `core_version` names, keyed by repository."""
+    """Views whose pin is the tag `core_version` names, keyed by repository.
+
+    A core_version keyed by build mode names the tag of the view's own mode:
+    uzdoom's standalone sits on 5.0.3 while its libretro branch moves.
+    """
     tagged: dict[tuple[str, str], str] = {}
+    declared = profile.get("core_version")
     for view in views:
         if view.pin == view.head:
             continue
-        for tag in version_tag_candidates(
-            profile.get("core_version"), view.repo.name
-        ):
+        version = declared.get(view.mode) if isinstance(declared, dict) else declared
+        for tag in version_tag_candidates(version, view.repo.name):
             if upstream.tag_commit(view.repo, tag, cache_dir, offline) == view.pin:
                 tagged[(view.repo.host, view.repo.slug)] = tag
                 break
@@ -4441,7 +4453,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
             # alias and test profiles too, "lists all 553" pointed at 530 lines.
             listed = sorted(
                 name for name, profile in profiles.items()
-                if profile.get("type") not in ("alias", "test")
+                if profile.get("type") != "alias" and profile.get("role") != "test"
             )
             raise SystemExit(
                 f"ERROR: unknown profile {', '.join(unknown)}. "
@@ -4454,7 +4466,7 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
     wanted_system = _norm_system_id(args.system) if args.system else None
     selected = {}
     for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("alias", "test"):
+        if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         if wanted_system and wanted_system not in {
             _norm_system_id(str(s)) for s in profile.get("systems") or []

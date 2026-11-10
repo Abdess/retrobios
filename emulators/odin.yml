@@ -1,0 +1,216 @@
+emulator: "Odin"
+type: libretro
+core_classification: community_fork
+source: "https://git.libretro.com/libretro/odin-libretro"
+upstream: "https://github.com/Tovarichtch/Odin"
+source_branch: "libretro"
+profiled_date: "2026-11-09"
+source_commit: "7cc427e4cc048e86753275f664bf0e59bbd002bf"
+upstream_commit: "6ebf2b40ccbca9534d1a0e58b7602db11e4485d9"
+core_version: "v0.1.1-46-g7cc427e"
+version_basis:
+  kind: tag
+  tag: "v0.1.1"
+  distance: 46
+display_name: "Sega - Hikaru / Gaelco PowerVR (Odin)"
+cores:
+  - "odin"
+systems:
+  - sega-hikaru
+  - gaelco-powervr
+
+notes: |
+  Odin, a low-level emulator of the Sega Hikaru board and of Gaelco's PowerVR
+  boards (ATV Track, Smashing Drive, Gaelco Football), with a libretro frontend
+  by WizzardSK on top of Tovarichtch/Odin. The port's libretro branch holds the
+  upstream HEAD 6ebf2b40 as merge base. The ROM loader, the game list and the
+  board code are the upstream ones. The only difference in odin-games.json is
+  the direction of one Virtual-On lever.
+  retro_get_system_info reports library_version "libretro" unless the build
+  defines ODIN_LIBRETRO_VERSION, which the CMake files never do.
+  ref: src/odin/libretro/libretro_odin.cpp:1926-1936
+
+  The content is a MAME set, recognised by its stem in the game list. The
+  list is odin-games.json, embedded in the core and written to
+  <system>/odin/odin-games.json whenever the file there differs, then read back.
+  The mesh program lists under <system>/odin/shaders/ are written the same way,
+  and <system>/odin/cache/ is filled by the renderer. None of these is a file
+  the user supplies.
+  ref: src/odin/libretro/games_json.S:9, src/odin/libretro/libretro_odin.cpp:1019-1041,
+       src/odin/libretro/libretro_odin.cpp:1059-1090, src/odin/libretro/libretro_odin.cpp:1989-1993
+
+  Each file of a section is looked for in the content's folder (a folder
+  named after the game, then <game>.zip or .7z), then for the set the list
+  names (and for the parent set) as <set>.zip, <set>.7z and a <set>/ folder,
+  first in <system>/odin and then beside the content. Inside an archive a member
+  matches by size and the CRC32 of the list, the member name is not read. In a
+  folder the file matches by size and name, then by size and CRC32. A loose
+  file whose CRC32 differs is loaded with an error line in the log.
+  ref: src/odin/host/app/rom_files.cpp:296-314, src/odin/host/app/rom_files.cpp:316-347,
+       src/odin/host/app/rom_files.cpp:349-380, src/odin/host/app/rom_files.cpp:416-436,
+       src/odin/libretro/libretro_odin.cpp:2004-2006
+
+  A section of type alternative loads the first of its files found. A missing
+  section stops the load unless the list marks it optional, and the frontend is
+  told which sets miss files.
+  ref: src/odin/host/app/games.cpp:138-149, src/odin/host/app/games.cpp:1281-1316,
+       src/odin/libretro/libretro_odin.cpp:2007-2021
+
+  Every Hikaru game needs mie (315-6146) and the hikaru set: one of three boot
+  ROMs and the two EEPROM images 93c46.ic115 and x76f100.ic85. The I/O board
+  program (jvs13551 for 837-13551, 18wheelr for NASCAR Arcade's 837-13741) and
+  NASCAR Arcade's drive board program (srally2) are optional: without them
+  the board's imitation of that part runs.
+  ref: odin-games.json:56-93, odin-games.json:583-628,
+       src/odin/machine/boards/hikaru/hikaru.cpp:216-233,
+       src/odin/machine/boards/hikaru/mie_board.cpp:75-95,
+       src/odin/machine/boards/hikaru/hikaru.cpp:496-511
+
+  The Gaelco games read only their own sets, none shared.
+  ref: odin-games.json:853-1184
+
+archive_prefix: "odin"
+
+groups:
+  boot-rom:
+    required: true
+
+files:
+  - name: "hikaru.zip"
+    path: "odin/hikaru.zip"
+    system: sega-hikaru
+    required: true
+    category: bios_zip
+    note: "Hikaru BIOS set. Holds the boot ROM and the two EEPROM images every Hikaru game loads. Also read as hikaru.7z or a hikaru/ folder, in system/odin or beside the game."
+    source_ref: "odin-games.json:71-93, src/odin/host/app/rom_files.cpp:349-380"
+
+  - name: "epr-23400a.ic94"
+    archive: hikaru.zip
+    system: sega-hikaru
+    group: boot-rom
+    priority: 1
+    size: 2097152
+    crc32: "2aa906a7"
+    validation: [size, crc32]
+    note: "Boot ROM v0.96, tried first of the three. One of the three is required. The list names it hikaru_0.96.bin, the name a loose file in a hikaru/ folder is matched by."
+    source_ref: "odin-games.json:85-93, src/odin/host/app/games.cpp:138-149, src/odin/machine/boards/hikaru/hikaru.cpp:218-221"
+
+  - name: "epr-23400.ic94"
+    archive: hikaru.zip
+    system: sega-hikaru
+    group: boot-rom
+    priority: 2
+    size: 2097152
+    crc32: "3d557104"
+    validation: [size, crc32]
+    note: "Boot ROM v0.92, listed as hikaru_0.92.bin."
+    source_ref: "odin-games.json:85-93, src/odin/host/app/games.cpp:138-149"
+
+  - name: "epr-21904.ic94"
+    archive: hikaru.zip
+    system: sega-hikaru
+    group: boot-rom
+    priority: 3
+    size: 2097152
+    crc32: "d96298b6"
+    validation: [size, crc32]
+    note: "Boot ROM v0.84, listed as hikaru_0.84.bin."
+    source_ref: "odin-games.json:85-93, src/odin/host/app/games.cpp:138-149"
+
+  - name: "93c46.ic115"
+    archive: hikaru.zip
+    system: sega-hikaru
+    required: true
+    size: 128
+    crc32: "737dc714"
+    validation: [size, crc32]
+    note: "Main board 93C46 EEPROM image. Its section is not optional, so a set without it does not load."
+    source_ref: "odin-games.json:71-77, src/odin/host/app/games.cpp:1305-1312, src/odin/machine/boards/hikaru/hikaru.cpp:298-303"
+
+  - name: "x76f100.ic85"
+    archive: hikaru.zip
+    system: sega-hikaru
+    required: true
+    size: 132
+    crc32: "194c6c18"
+    validation: [size, crc32]
+    note: "ROM board X76F100 EEPROM image. Its section is not optional, so a set without it does not load."
+    source_ref: "odin-games.json:78-84, src/odin/host/app/games.cpp:1305-1312, src/odin/machine/boards/hikaru/hikaru.cpp:304-308"
+
+  - name: "mie.zip"
+    path: "odin/mie.zip"
+    system: sega-hikaru
+    required: true
+    category: bios_zip
+    note: "MIE MCU firmware set. Also read as mie.7z or a mie/ folder, in system/odin or beside the game."
+    source_ref: "odin-games.json:56-62, src/odin/host/app/rom_files.cpp:349-380"
+
+  - name: "315-6146.bin"
+    archive: mie.zip
+    system: sega-hikaru
+    required: true
+    size: 2048
+    crc32: "9b197e35"
+    validation: [size, crc32]
+    note: "MIE Z80 program. The board refuses an image that is not 2048 bytes."
+    source_ref: "odin-games.json:56-62, src/odin/machine/boards/hikaru/hikaru.cpp:230-234"
+
+  - name: "jvs13551.zip"
+    path: "odin/jvs13551.zip"
+    system: sega-hikaru
+    required: false
+    hle_fallback: true
+    category: bios_zip
+    note: "837-13551 JVS I/O board set, for every Hikaru game but NASCAR Arcade. Without it the I/O board is imitated."
+    source_ref: "odin-games.json:63-70, src/odin/machine/boards/hikaru/mie_board.cpp:75-95"
+
+  - name: "315-6215.bin"
+    archive: jvs13551.zip
+    system: sega-hikaru
+    required: false
+    hle_fallback: true
+    size: 16384
+    crc32: "98202738"
+    validation: [size, crc32]
+    note: "TMP90PH44 program of the 837-13551 I/O board, run when its size is the chip's ROM size."
+    source_ref: "odin-games.json:63-70, src/odin/machine/boards/hikaru/mie_board.cpp:83-85"
+
+  - name: "18wheelr.zip"
+    path: "odin/18wheelr.zip"
+    system: sega-hikaru
+    required: false
+    hle_fallback: true
+    category: bios_zip
+    note: "MAME set of 18 Wheeler, read for the program of the 837-13741 I/O board NASCAR Arcade uses. Without it that board is imitated."
+    source_ref: "odin-games.json:590-597, src/odin/machine/boards/hikaru/mie_board.cpp:75-95"
+
+  - name: "epr-21868.ic7"
+    archive: 18wheelr.zip
+    system: sega-hikaru
+    required: false
+    hle_fallback: true
+    size: 65536
+    crc32: "c306a51f"
+    validation: [size, crc32]
+    note: "837-13741 I/O board EPROM."
+    source_ref: "odin-games.json:590-597, src/odin/machine/boards/hikaru/mie_board.cpp:86-88"
+
+  - name: "srally2.zip"
+    path: "odin/srally2.zip"
+    system: sega-hikaru
+    required: false
+    hle_fallback: true
+    category: bios_zip
+    note: "MAME set of Sega Rally 2, read for the program of the 838-13366 drive board NASCAR Arcade's steering wheel uses. Without it the drive board is imitated."
+    source_ref: "odin-games.json:598-605, src/odin/machine/boards/hikaru/hikaru.cpp:496-511"
+
+  - name: "epr-20512.bin"
+    archive: srally2.zip
+    system: sega-hikaru
+    required: false
+    hle_fallback: true
+    size: 65536
+    crc32: "cf64350d"
+    validation: [size, crc32]
+    note: "838-13366 drive board program, run when its size is the board's ROM size."
+    source_ref: "odin-games.json:598-605, src/odin/machine/boards/hikaru/hikaru.cpp:500-502"

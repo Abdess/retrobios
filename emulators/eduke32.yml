@@ -1,19 +1,30 @@
 emulator: EDuke32
-type: standalone
+type: standalone + libretro
 core_classification: game_engine
-source: "https://voidpoint.io/terminx/eduke32"
+source:
+  standalone: "https://voidpoint.io/terminx/eduke32"
+  libretro: "https://git.libretro.com/libretro/eduke32-libretro"
 upstream: "https://voidpoint.io/terminx/eduke32"
 version_source:
   url: "https://dukeworld.com/eduke32/synthesis/latest/"
   pattern: 'eduke32_src_(\d{8}-\d+-[0-9a-f]+)\.tar'
-profiled_date: "2026-10-04"
-source_commit: "ec5824db81817866f70da326d3811bb0f52b3517"
-core_version: "20260807-10669-ec5824db8"
+profiled_date: "2026-11-09"
+source_commit:
+  standalone: "ec5824db81817866f70da326d3811bb0f52b3517"
+  libretro: "b5918d5cf3fc698700c86693fce3ce5200c28b96"
+core_version:
+  standalone: "20260807-10669-ec5824db8"
+  libretro: "1.0.0"
 version_basis:
-  kind: package
-  url: "https://dukeworld.com/eduke32/synthesis/20260807-10669-ec5824db8/eduke32_src_20260807-10669-ec5824db8.tar.xz"
-  pattern: 'eduke32_src_(\d{8}-\d+-[0-9a-f]+)\.tar'
-  artifact: "eduke32_src_20260807-10669-ec5824db8.tar.xz"
+  standalone:
+    kind: package
+    url: "https://dukeworld.com/eduke32/synthesis/20260807-10669-ec5824db8/eduke32_src_20260807-10669-ec5824db8.tar.xz"
+    pattern: 'eduke32_src_(\d{8}-\d+-[0-9a-f]+)\.tar'
+    artifact: "eduke32_src_20260807-10669-ec5824db8.tar.xz"
+  libretro:
+    kind: file
+    path: "platform/Libretro/core.cpp"
+    pattern: 'info->library_version\s*=\s*"([^"]+)"'
 display_name: "EDuke32"
 cores: [eduke32]
 systems: [duke3d, nam, napalm, ww2gi]
@@ -43,6 +54,20 @@ notes: |
   An addon whose dependency is not found is removed from the list
   (source/duke3d/src/grpscan.cpp:503-517).
 
+  The libretro build is the same tree at ec5824db with platform/Libretro/
+  added and the file access routed through the frontend VFS. The content
+  is a GRP, ZIP, PK3 or PK4 opened by full path
+  (platform/Libretro/core.cpp:615-623). It is mounted as the first group,
+  and the folder that holds it is the search path the core adds
+  (platform/Libretro/core.cpp:652-670). G_AddSearchPaths is never called.
+  The scan then runs over that folder and keeps the GRP named DUKE3D.GRP, else the first one it
+  recognises, which sets the game type and its CON, DEF and RTS names
+  (source/duke3d/src/common.cpp:339-358, 420-443). Every file below is
+  therefore read beside the content, never from the system directory.
+  Relative paths, the config and the GRP cache among them, resolve below
+  the save directory (platform/Libretro/core.cpp:486-489,
+  platform/Libretro/vfs_libretro.cpp:31-40).
+
 files:
   # ================================================================
   # Duke Nukem 3D (base game, GAMEFLAG_DUKE)
@@ -50,6 +75,8 @@ files:
 
   - name: "DUKE3D.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     installed_on: [retropie]
@@ -69,6 +96,8 @@ files:
 
   - name: "EDUKE.CON"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_DUKE)"
@@ -76,22 +105,28 @@ files:
 
   - name: "DUKE.RTS"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     installed_on: [retropie]
-    source_ref: "source/duke3d/src/grpscan.cpp:39-76 (rtsname field)"
-    note: "Remote Ridicule speech. Not loaded if absent. The RetroPie package extracts the shareware copy beside the shareware GRP."
+    source_ref: "source/duke3d/src/game.cpp:96 (defaultrtsfilename), source/duke3d/src/game.cpp:126-130 (G_DefaultRtsFile), source/duke3d/src/game.cpp:6873-6874 (RTS_Init), source/duke3d/src/rts.cpp:52-55, 62-68, 105-113"
+    note: "Remote Ridicule speech. RTS_Init returns without error when the file cannot be opened, and a file without the IWAD header is skipped with a warning. The RetroPie package extracts the shareware copy beside the shareware GRP."
 
   # ---- Duke 3D addons ----
 
   - name: "DUKEDC.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     source_ref: "source/duke3d/src/grpscan.cpp:56-59 (Duke it out in D.C., GAMEFLAG_ADDON)"
 
   - name: "VACATION.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     source_ref: "source/duke3d/src/grpscan.cpp:60-64 (Duke Caribbean: Life's a Beach, GAMEFLAG_ADDON)"
@@ -99,6 +134,8 @@ files:
   - name: "NWINTER.GRP"
     description: "Duke: Nuclear Winter"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     size: 16169365
@@ -109,6 +146,8 @@ files:
   - name: "NWINTER.GRP"
     description: "Duke: Nuclear Winter Demo"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     size: 10965909
@@ -119,6 +158,8 @@ files:
 
   - name: "DZ2.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     source_ref: "source/duke3d/src/grpscan.cpp:67-69 (Duke!ZONE II, GAMEFLAG_ADDON)"
@@ -126,6 +167,8 @@ files:
   - name: "penthous.zip"
     description: "Duke Nukem's Penthouse Paradise"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     size: 2112419
@@ -137,6 +180,8 @@ files:
   - name: "PENTP.GRP"
     description: "Duke Nukem's Penthouse Paradise"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: duke3d
     required: false
     size: 4247491
@@ -150,6 +195,8 @@ files:
 
   - name: "NAM.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: nam
     size: 43448927
     required: false
@@ -157,6 +204,8 @@ files:
 
   - name: "NAM.CON"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: nam
     required: false
     source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_NAM)"
@@ -167,6 +216,8 @@ files:
 
   - name: "NAPALM.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: napalm
     size: 44365728
     required: false
@@ -174,6 +225,8 @@ files:
 
   - name: "NAPALM.CON"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: napalm
     required: false
     source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_NAPALM)"
@@ -184,6 +237,8 @@ files:
 
   - name: "WW2GI.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: ww2gi
     size: 77939508
     required: false
@@ -191,12 +246,16 @@ files:
 
   - name: "WW2GI.CON"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: ww2gi
     required: false
     source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_WW2GI)"
 
   - name: "PLATOONL.GRP"
     category: game_data
+    load_from:
+      libretro: content_dir
     system: ww2gi
     size: 37852572
     required: false

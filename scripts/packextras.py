@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 from common import PROFILE_IDENTITY_FIELDS, _norm_system_id, entry_system_ids
+from alternatives import core_file_spares, required_only_spares, set_fields
 from common import archive_members, holds_required_members
 from common import declared_root, expand_platform_declared_names, platform_declarations
 from common import load_emulator_profiles
@@ -17,7 +18,7 @@ from common import resolve_local_file
 from common import resolve_platform_cores
 from common import core_system_dirs, platform_layouts, system_dir_path
 from common import standalone_set as platform_standalone_set
-from common import sanitize_pack_path
+from common import OUTER_ROOTS, outer_layout, sanitize_pack_path
 from common import size_fits
 from validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
@@ -43,9 +44,27 @@ def extra_full_destination(fe: dict, prefix: str) -> str:
     """
     if fe.get("root") == "save":
         return str(fe.get("pack_path") or "")
+    if fe.get("unprefixed"):
+        # A path of the install tree outside the BIOS folder (AmberELEC's
+        # pico-8/ beside bios/): no platform prefix in front.
+        return sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+    if fe.get("root") in OUTER_ROOTS:
+        return outer_destination(
+            fe["root"], sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+        )
     return prefixed_destination(
         sanitize_pack_path(fe.get("destination", fe.get("name", ""))), prefix
     )
+
+
+def outer_destination(root: str, dest: str) -> str:
+    """The key of a destination below the roms or an emulator folder.
+
+    Kept apart from the BIOS tree's paths and never written into a pack:
+    the pack is extracted into the BIOS folder, and the installer places
+    these files (``root: roms``, ``root: emulators``).
+    """
+    return f"{root}:{dest}"
 
 
 def prefixed_destination(dest: str, prefix: str) -> str:
@@ -309,9 +328,11 @@ class ExtraResolver:
                 return asset, "release_asset", ""
         if status in ("not_found", "external", "user_provided") or not local_path:
             return None, status, ""
+        # The cores reading a moved layout's file are found under the
+        # emulator's own path, not the folder the platform put it in.
         local_path, disagreement = validated_choice(
             fe, local_path, self.db, self.validation_index, self.bios_dir, None,
-            dest, self.validation_owners,
+            fe.get("layout_path") or dest, self.validation_owners,
         )
         # The platform never reads the bytes, the core does: a copy it turns
         # away by its own size check is not its file, on any platform.
@@ -388,11 +409,20 @@ def hidden_extras(
     )
     if system_ids:
         extras = extras_for_systems(extras, system_ids)
+    spares = core_file_spares(
+        extras,
+        lambda fe: extra_region_key(fe, region_prefix) in (region_drops or set()),
+    ) if required_only else set()
     for fe in extras:
-        if required_only and fe.get("required") is False:
+        if required_only and (fe.get("required") is False or id(fe) in spares):
             continue
         dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
         if not dest or (region_drops and extra_region_key(fe, region_prefix) in region_drops):
+            continue
+        if fe.get("root") in OUTER_ROOTS:
+            # As the builder does: the pack is extracted into the BIOS folder
+            # and cannot reach the roms, emulator or configs folder, the
+            # installer places these files.
             continue
         full = extra_full_destination(fe, prefix)
         if not full:
@@ -462,9 +492,10 @@ def unplaceable_extras(
     placement = ExtraPlacement(config, "", profiles)
     unplaced: dict[tuple[str, str, str], str] = {}
     for u in undeclared:
-        if not u.get("in_repo"):
+        if not u.get("in_repo") and not u.get("unplaced"):
             continue
-        if not placement.slug_based and u.get("root") != "save":
+        if (not placement.slug_based and u.get("root") not in ("save", *OUTER_ROOTS)
+                and not u.get("unplaced")):
             continue
         dest = _extra_dest(u)
         if not placement.places(u, dest):
@@ -550,7 +581,8 @@ def _agnostic_scan_extras(
                     continue
                 # The scan walks the BIOS tree: a file read below the save
                 # directory is placed by the gap report's pass.
-                if read_from_save_dir(f, standalone):
+                if (read_from_save_dir(f, standalone) or f.get("unplaced")
+                        or f.get("root") in OUTER_ROOTS or f.get("unprefixed")):
                     continue
                 # An agnostic BIOS mode says the BIOS filename is free, not that
                 # every file the emulator loads is.  A free filename still has a
@@ -640,7 +672,7 @@ def _agnostic_scan_extras(
                         "source_system": f.get("system"),
                         "source_systems": entry_system_ids(f, profile),
                         "region": f.get("region"),
-                        "variant_group": f.get("variant_group"),
+                        "selection_slot": f.get("selection_slot"),
                         "agnostic_scan": True,
                     }
                     extra["claim_order"] = (4, 0, emu_name)
@@ -796,7 +828,7 @@ def _companion_extras(
             "source_system": seed.get("system"),
             "source_systems": entry_system_ids(seed, profile),
             "region": seed.get("region"),
-            "variant_group": seed.get("variant_group"),
+            "selection_slot": seed.get("selection_slot"),
             "agnostic_scan": True,
         }
         extra["claim_order"] = (4, 0, emu_name)
@@ -970,7 +1002,7 @@ def _archive_prefix_copies(
             "source_system": archive_entry.get("system"),
             "source_systems": entry_system_ids(archive_entry, profile),
             "region": archive_entry.get("region"),
-            "variant_group": archive_entry.get("variant_group"),
+            "selection_slot": archive_entry.get("selection_slot"),
         }
         members = archive_members(archive_name, profile.get("files", []))
         if members:
@@ -1001,6 +1033,10 @@ class ExtraPlacement:
         self.native_systems = native_slug_systems(config)
         self.flat = bool(config.get("firmware_folder_flat"))
         self.save = save_layout(config)
+        # The roms root and emulator folders the platform's files describe,
+        # for a file a launcher runs from them (ROCKNIX's roms/pico-8,
+        # RetroBat's emulators/pico8).
+        self.outer = {root for root in OUTER_ROOTS if outer_layout(config, root)}
         self.config = config
         self.norm_map = (
             {_norm_system_id(sid): sid for sid in self.platform_systems}
@@ -1019,6 +1055,13 @@ class ExtraPlacement:
         directory and goes below the platform's save folder, which a
         platform keeping saves beside the content does not have.
         """
+        if entry.get("unplaced"):
+            return None
+        if entry.get("unprefixed"):
+            return dest, dest
+        if entry.get("root") in OUTER_ROOTS:
+            root = entry["root"]
+            return (dest, outer_destination(root, dest)) if root in self.outer else None
         if entry.get("root") == "save":
             placed = self.save_places(entry, dest)
             return placed[0] if placed else None
@@ -1039,6 +1082,8 @@ class ExtraPlacement:
         platform that hands each system a save folder of its own goes once
         below each system that runs the core.
         """
+        if entry.get("unplaced"):
+            return []
         if entry.get("root") == "save":
             return self.save_places(entry, dest)
         placed = self.place(entry, dest)
@@ -1075,6 +1120,10 @@ class ExtraPlacement:
 
     def unplaced_reason(self, entry: dict, dest: str) -> str:
         """Why ``place`` returned None for this entry."""
+        if entry.get("unplaced"):
+            return str(entry["unplaced"])
+        if entry.get("root") in OUTER_ROOTS:
+            return f"no_{entry['root']}_directory"
         if entry.get("root") == "save":
             if self.save is None:
                 return "no_save_directory"
@@ -1196,6 +1245,12 @@ def _collect_emulator_extras(
             # user's machine. The mode a file is bundled for was settled
             # upstream, an entry scoped to another build never gets here.
             continue
+        if u.get("unplaced"):
+            # Read in a folder outside the BIOS tree: named, held or not,
+            # never written where the emulator does not read it.
+            if unplaceable is not None:
+                unplaceable.append({**u, "unplaceable": u["unplaced"]})
+            continue
         if not u["in_repo"] and absent is None:
             continue
         # For archive entries, use the archive name for resolution
@@ -1208,11 +1263,14 @@ def _collect_emulator_extras(
         placements = placement.places(u, dest)
         save_root = u.get("root") == "save"
         if not u["in_repo"]:
+            # Each core reading it is named on the omission: a list built
+            # without the first reader still has to say the file is missing.
             for placed in placements:
-                missing = _report_extra(u, name, placed[0])
-                if save_root:
-                    _save_fields(missing, placed[1], placement)
-                absent.append(missing)
+                for claim in (u, *u.get("other_claims", [])):
+                    missing = _report_extra(claim, name, placed[0])
+                    if save_root:
+                        _save_fields(missing, placed[1], placement)
+                    absent.append(missing)
             continue
         if not placements:
             if unplaceable is not None:
@@ -1291,7 +1349,9 @@ def _collect_emulator_extras(
                 # Only duplicate files already covered at another destination.
                 # An unsourceable entry is a file no collection holds: the name
                 # covered elsewhere belongs to another program's file.
-                if fname not in covered_names or f.get("unsourceable"):
+                # Nor is one placed outside the BIOS tree by the layout.
+                if (fname not in covered_names or f.get("unsourceable") or f.get("unplaced")
+                        or f.get("root") in OUTER_ROOTS or f.get("unprefixed")):
                     continue
                 # Installed with the emulator or by the platform's package,
                 # as the first pass already decided for the same entry.
@@ -1354,7 +1414,8 @@ def _collect_emulator_extras(
                     "source_system": f.get("system"),
                     "source_systems": entry_system_ids(f, profile),
                     "region": f.get("region"),
-                    "variant_group": f.get("variant_group"),
+                    "selection_slot": f.get("selection_slot"),
+                    **set_fields(f, profile),
                 }
                 # The same identity the first pass carries: without it the copy
                 # resolves on its name alone and a same-named file of another
@@ -1522,7 +1583,8 @@ def _report_extra(u: dict, name: str, dest: str) -> dict:
         "source_system": u.get("system"),
         "source_systems": u.get("systems", []),
         "region": u.get("region"),
-        "variant_group": u.get("variant_group"),
+        "selection_slot": u.get("selection_slot"),
+        **{k: u[k] for k in ("required_groups", "set_declared") if k in u},
     }
     if u.get("members"):
         extra["members"] = u["members"]
@@ -1530,8 +1592,14 @@ def _report_extra(u: dict, name: str, dest: str) -> dict:
         extra["root"] = "save"
         if u.get("core_folder") is not None:
             extra["core_folder"] = u["core_folder"]
+    elif u.get("root") in OUTER_ROOTS:
+        extra["root"] = u["root"]
     if u.get("system_dir"):
         extra["system_dir"] = u["system_dir"]
+    if u.get("layout_path"):
+        extra["layout_path"] = u["layout_path"]
+    if u.get("unprefixed"):
+        extra["unprefixed"] = True
     # The archive layout the core opens ranks same-named copies by what
     # they hold. Without it the first copy indexed won.
     if u.get("contents"):
@@ -1795,9 +1863,9 @@ def extra_region_groups(
         return (spellings or {}).get(_norm_system_id(sys_id), sys_id)
 
     emulator = extra.get("source_emulator", "")
-    variant = extra.get("variant_group")
+    variant = extra.get("selection_slot")
     if variant:
-        # A variant group is one slot of one core, whatever system each
+        # A selection slot is one slot of one core, whatever system each
         # member is filed under: PicoDrive files its US Mega CD BIOS under
         # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
         # picks one of the twelve. Keyed as emulator mode keys it.
@@ -1826,7 +1894,7 @@ def emulator_region_drops(
 ) -> set[str]:
     """Destinations an emulator-mode `--region` withdraws.
 
-    One group per system (or explicit variant_group) inside each profile, so
+    One group per system (or explicit selection_slot) inside each profile, so
     a multi-system core such as O2EM keeps a fallback BIOS for every system
     instead of letting one matching system empty another. The emulator pack
     and `verify --emulator` both read this, keyed by pack destination.
@@ -1862,6 +1930,55 @@ def emulator_region_drops(
                 ):
                     held.add(dest)
     return region_mod.resolve_region_drops(region_groups, region_index, regions, held)
+
+
+def emulator_required_spares(
+    emu_name: str,
+    profile: dict,
+    files: list[dict],
+    standalone: bool,
+    region_drops: set[str],
+    db: dict,
+    validation_index: dict,
+    zip_contents: dict | None,
+    data_registry: dict | None,
+) -> set[str]:
+    """The destinations an emulator --required-only pack leaves out: of each
+    required set, one held member stays, the first the code loads among
+    those the pack still carries after the region filter. An archive unit
+    is a member like a loose file: Kronos reads kronos/stvbios.zip, else
+    stvbios.zip. The pack and verify --emulator both read this."""
+    from alternatives import groups_of, rank_in, required_groups
+    from common import archive_entry
+    from packpaths import _archive_destination, _resolve_destination
+
+    candidates: list[dict] = []
+    archives: list[str] = []
+    for fe in files:
+        archive = fe.get("archive")
+        if archive and archive not in archives:
+            archives.append(archive)
+            own = archive_entry(archive, files)
+            if groups_of(own):
+                candidates.append({"dest": _archive_destination(
+                    archive, profile.get("archive_prefix", ""),
+                    profile.get("pack_structure"), standalone,
+                ), "entry": own})
+    for fe in files:
+        if not fe.get("archive") and groups_of(fe):
+            candidates.append({"dest": _resolve_destination(fe, standalone), "entry": fe})
+    if not candidates:
+        return set()
+    spares = required_only_spares(
+        candidates,
+        owner=lambda _c: emu_name,
+        held=lambda c: _emulator_ships(
+            c["entry"], emu_name, profile, db, validation_index, zip_contents, data_registry,
+        ),
+        gone=lambda c: c["dest"] in region_drops,
+        sets=lambda c: {g: rank_in(c["entry"], g) for g in required_groups(c["entry"], profile)},
+    )
+    return {c["dest"] for c in candidates if id(c) in spares}
 
 
 def _emulator_ships(
@@ -1904,7 +2021,7 @@ def _emulator_region_group(
     Grouped together, geargrafx's LaserActive pac-n1.bin was dropped by
     --emulator --region us and kept by --platform --region us.
     """
-    variant = file_entry.get("variant_group")
+    variant = file_entry.get("selection_slot")
     if variant:
         return f"{emu_name}:variant:{variant}"
     system = file_entry.get("system")

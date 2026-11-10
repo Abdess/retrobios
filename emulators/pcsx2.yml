@@ -35,6 +35,20 @@ files:
     source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
     note: "Accepts any file 4-8 MB with valid romdir (RESET + ROMVER). Naming convention ps2-VVVVr-YYYYMMDD.bin (version, region, date)."
 
+  - name: ps3_ps2_emu_bios.bin
+    found_by: content
+    required: false
+    size: 4194304
+    sha1: "2dc921be6eb8d17e276cd4bbfde86343452073e0"
+    md5: "ca27dd917b4be56a229dd1fabb0c07da"
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
+    note: >
+      ROMVER 0220JD20121227, the PS2 BIOS the PS3's ps2_emu carries. Cut from
+      dev_flash/ps2emu/ps2_emu.self of PS3 system software 4.90, decrypted by
+      RPCS3, from 0x12F bytes before "compatible mode" to 0x262 bytes after
+      "Parity error" and padded to 4 MiB, as firmware_bios_claim release 2
+      does. Accepted like any image with a valid romdir.
+
   - name: ps2-0230a-20080220.rom1
     aliases: [SCPH-70004_BIOS_V12_EUR_200.ROM1]
     required: false

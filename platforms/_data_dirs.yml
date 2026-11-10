@@ -185,7 +185,9 @@ data_directories:
   dinothawr:
     source_url: "https://buildbot.libretro.com/assets/system/Dinothawr.zip"
     source_type: zip
-    for_platforms: [emudeck, emuelec, retroarch, rocknix]
+    # Batocera and KNULLI download the core with their RetroArch
+    # (installable_cores) and install no tree beside it.
+    for_platforms: [batocera, emudeck, emuelec, knulli, retroarch, rocknix]
     local_cache: data/dinothawr
     description: "Dinothawr game data"
 
@@ -319,6 +321,8 @@ data_directories:
   dirksimple:
     source_url: "https://buildbot.libretro.com/assets/system/DirkSimple.zip"
     source_type: zip
-    for_platforms: [emudeck, lakka, retroarch, rocknix]
+    # Batocera downloads the core with its RetroArch (installable_cores)
+    # and installs no tree beside it.
+    for_platforms: [batocera, emudeck, lakka, retroarch, rocknix]
     local_cache: data/dirksimple
     description: "DirkSimple Dragon's Lair engine data"

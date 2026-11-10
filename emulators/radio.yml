@@ -1,5 +1,6 @@
 emulator: "Radio"
-type: utility
+type: libretro
+role: utility
 core_classification: pure_libretro
 source: "https://git.libretro.com/libretro/libretro-radio"
 upstream: "https://github.com/fpscan/libretro-radio"

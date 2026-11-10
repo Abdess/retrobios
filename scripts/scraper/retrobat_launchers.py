@@ -25,12 +25,15 @@ SOURCE_FILES = (
     f"{GENERATORS}/Bizhawk.CoreOptions.cs",
     f"{GENERATORS}/Bizhawk.Generator.cs",
     f"{GENERATORS}/Blastem.Generator.cs",
+    f"{GENERATORS}/Citron.Generator.cs",
+    f"{GENERATORS}/Cxbx.Generator.cs",
     f"{GENERATORS}/Demul.Generator.cs",
     f"{GENERATORS}/Desmume.Generator.cs",
     f"{GENERATORS}/Dolphin.Generator.cs",
     f"{GENERATORS}/DosBoxPure.Generator.cs",
     f"{GENERATORS}/DosBoxStaging.Generator.cs",
     f"{GENERATORS}/Duckstation.Generator.cs",
+    f"{GENERATORS}/Eden.Generator.cs",
     f"{GENERATORS}/Eka2l1.Generator.cs",
     f"{GENERATORS}/Fbneo.Generator.cs",
     f"{GENERATORS}/Flycast.Generator.cs",
@@ -51,13 +54,17 @@ SOURCE_FILES = (
     f"{GENERATORS}/OpenMSX.Generator.cs",
     f"{GENERATORS}/PSXMame.Generator.cs",
     f"{GENERATORS}/Pcsx2.Generator.cs",
+    f"{GENERATORS}/Pico8.Generator.cs",
     f"{GENERATORS}/PortsLauncher.Configuration.cs",
     f"{GENERATORS}/Project64.Generator.cs",
     f"{GENERATORS}/Raine.Generator.cs",
     f"{GENERATORS}/Rpcs3.Generator.cs",
+    f"{GENERATORS}/Ryujinx.Generator.cs",
     f"{GENERATORS}/SSF.Generator.cs",
     f"{GENERATORS}/ScummVm.Generator.cs",
+    f"{GENERATORS}/ShadPS4.Generator.cs",
     f"{GENERATORS}/Snes9x.Generator.cs",
+    f"{GENERATORS}/Sudachi.Generator.cs",
     f"{GENERATORS}/Tsugaru.Generator.cs",
     f"{GENERATORS}/Uae.Generator.cs",
     f"{GENERATORS}/Xemu.Generator.cs",
@@ -65,6 +72,7 @@ SOURCE_FILES = (
     f"{GENERATORS}/Xroar.Generator.cs",
     f"{GENERATORS}/Yabasanshiro.Generator.cs",
     f"{GENERATORS}/Ymir.Generator.cs",
+    f"{GENERATORS}/Yuzu.Generator.cs",
     f"{GENERATORS}/mGBA.Generator.cs",
     FEATURES,
 )
@@ -147,12 +155,14 @@ class Source:
         return max(holding)
 
     def header(self, block: tuple[int, int]) -> str:
-        """The statement that owns a block's opening brace, comments removed."""
+        """The statement that owns a block's opening brace, comments and
+        preprocessor lines (#region, #if) removed."""
         if self._ends is None:
             self._ends = [o for o, c in _code_chars(self.text) if c in ";{}"]
         previous = bisect.bisect_left(self._ends, block[0]) - 1
         start = self._ends[previous] + 1 if previous >= 0 else 0
-        text = re.sub(r"//[^\n]*|/\*.*?\*/", "", self.text[start : block[0]], flags=re.S)
+        text = re.sub(r"//[^\n]*|/\*.*?\*/|^[ \t]*#[^\n]*", "", self.text[start : block[0]],
+                      flags=re.S | re.M)
         return " ".join(text.split())
 
     def statement_span(self, block: tuple[int, int]) -> tuple[int, int]:
@@ -287,6 +297,33 @@ def _throw_message(src: Source, start: int, end: int) -> tuple[str, int]:
     return f"ApplicationException '{message}'", src.line(found.start())
 
 
+def system_feature_choices(
+    src: Source, emulator: str, option: str, system: str
+) -> tuple[list[str], tuple[int, int]]:
+    """Values es_features.cfg offers for an option of an emulator under one system."""
+    text = src.text
+    for found in re.finditer(r'<emulator name="([^"]*)"', text):
+        if emulator in [name.strip() for name in found.group(1).split(",")]:
+            start, end = found.start(), text.find("</emulator>", found.start())
+            break
+    else:
+        raise LauncherPatternMissing(src.path, f"emulator {emulator}")
+    for block in re.finditer(r'<system name="([^"]*)">', text[start:end]):
+        if system not in [name.strip() for name in block.group(1).split(",")]:
+            continue
+        scope = start + block.start()
+        close = text.find("</system>", scope)
+        feature = src.find(
+            rf'<feature [^>]*value="{re.escape(option)}"', f"{option} of {system}", scope, close
+        )
+        stop = text.find("</feature>", feature.end())
+        values = re.findall(r'<choice [^>]*value="([^"]*)"', text[feature.end():stop])
+        if not values:
+            raise LauncherPatternMissing(src.path, f"choices of {option} for {system}")
+        return values, src.lines(feature.start(), stop + len("</feature>"))
+    raise LauncherPatternMissing(src.path, f"system {system} of {emulator}")
+
+
 def feature_choices(
     src: Source, emulator: str, option: str, core: str | None = None
 ) -> tuple[list[str], tuple[int, int]]:
@@ -316,6 +353,16 @@ def feature_choices(
     if not values:
         raise LauncherPatternMissing(src.path, f"choices of {option}")
     return values, src.lines(feature.start(), close + len("</feature>"))
+
+
+# A copy record reads `names` from `search_dir` and hands them to the path in
+# `passes_to`. When the copy is skipped is a condition of the record.
+TARGET_ABSENT = "the target does not exist"
+
+
+def _joined(*parts: str | None) -> str | None:
+    """Conditions of a record, joined, None when there are none."""
+    return ", ".join(part for part in parts if part) or None
 
 
 def _record(
@@ -381,34 +428,65 @@ def ares(sources: dict[str, Source]) -> list[Record]:
 
 
 def hatari(sources: dict[str, Source]) -> list[Record]:
+    """tos.img in bios, a TOS chosen in bios/hatari/tos, and EmuTOS from there
+    for a hard disk image, for a missing tos.img, or after a TOS too old for
+    autostart or GEMDOS."""
     src = sources[f"{GENERATORS}/Hatari.Generator.cs"]
     features = sources[FEATURES]
-    default = src.find(rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)"\);', "default TOS path")
+    folder = src.find(
+        rf'string (\w+) = Path\.Combine\({BIOS}, ((?:"[^"]+"(?:, )?)+)\);', "TOS folder"
+    )
+    tos_dir, folders = folder.group(1), _strings(folder.group(2))
+    default = src.find(
+        rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)"\);', "default TOS path", folder.end()
+    )
     var, name = default.group(1), default.group(2)
+    emutos = src.find(
+        rf'string (\w+) = Path\.Combine\({tos_dir}, "([^"]+)"\);', "EmuTOS path", default.end()
+    )
     override = src.find(
-        rf'isOptSet\("(\w+)"\)[^\n]*\n\s*{var} = Path\.Combine\({BIOS}, ((?:"[^"]+", )+)SystemConfig\["\1"\]\);',
+        rf'isOptSet\("(\w+)"\)[^\n]*\n\s*{var} = Path\.Combine\({tos_dir}, SystemConfig\["\1"\]\);',
         "TOS option override",
-        default.end(),
+        emutos.end(),
     )
-    option, folders = override.group(1), _strings(override.group(2))
+    option = override.group(1)
+    disk = src.find(
+        rf"else if \(media\.HasHardDiskImage && File\.Exists\({emutos.group(1)}\)\)",
+        "EmuTOS for a hard disk image",
+        override.end(),
+    )
+    absent = src.find(
+        rf"if \(!File\.Exists\({var}\) && File\.Exists\({emutos.group(1)}\)\)\s*{var} = {emutos.group(1)};",
+        "EmuTOS without tos.img",
+        disk.end(),
+    )
+    newer = src.find(
+        r"new string\[\] \{ ((?:\"[^\"]+\"(?:, )?)+) \}\s*"
+        rf"\.Select\(t => Path\.Combine\({tos_dir}, t\)\)\s*\.FirstOrDefault\(t => File\.Exists\(t\)\);",
+        "TOS for autostart and GEMDOS",
+        absent.end(),
+    )
     write = src.find(
-        rf'ini\.WriteValue\("(\w+)", "(\w+)", {var}\);', "TOS ini write", override.end()
+        rf'ini\.WriteValue\("(\w+)", "(\w+)", {var}\);', "TOS ini write", newer.end()
     )
-    message, _ = _throw_message(src, override.end(), write.start())
+    message, _ = _throw_message(src, newer.end(), write.start())
     passes = f"hatari.cfg [{write.group(1)}] {write.group(2)}"
+    tos_folder = "/".join(["bios", *folders])
     choices, choice_lines = feature_choices(features, "hatari", option)
+    head = src.lines(folder.start(), emutos.end())
+    tail = src.lines(write.start(), write.end())
     return [
         _record(
             "hatari",
             "standalone",
             "fixed_name",
             [name],
-            source_ref((src.path, [src.lines(default.start(), write.end())])),
+            source_ref((src.path, [head, src.lines(absent.start(), absent.end()), tail])),
             case_insensitive=True,
             search_dir="bios",
             passes_to=f"{passes}=<bios>/{name}",
-            fails_when_missing=message,
-            depends_on_option=f"{option} unset",
+            fails_when_missing=f"{tos_folder}/{emutos.group(2)} instead, else {message}",
+            depends_on_option=f"{option} unset, no hard disk image",
         ),
         _record(
             "hatari",
@@ -416,14 +494,38 @@ def hatari(sources: dict[str, Source]) -> list[Record]:
             "core_option",
             choices,
             source_ref(
-                (src.path, [src.lines(override.start(), write.end())]),
+                (src.path, [head, src.lines(override.start(), override.end()), tail]),
                 (features.path, [choice_lines]),
             ),
             case_insensitive=True,
-            search_dir="/".join(["bios", *folders]),
+            search_dir=tos_folder,
             passes_to=f"{passes}=<bios>/{'/'.join(folders)}/<value>",
             fails_when_missing=message,
             depends_on_option=option,
+        ),
+        _record(
+            "hatari",
+            "standalone",
+            "fixed_name",
+            [emutos.group(2)],
+            source_ref((src.path, [head, src.lines(disk.start(), absent.end()), tail])),
+            case_insensitive=True,
+            search_dir=tos_folder,
+            passes_to=f"{passes}=<bios>/{'/'.join(folders)}/{emutos.group(2)}",
+            fails_when_missing=f"{name} is used, as without a hard disk image",
+            depends_on_option=f"{option} unset, a hard disk image mounted or no {name}",
+        ),
+        _record(
+            "hatari",
+            "standalone",
+            "names_searched",
+            _strings(newer.group(1)),
+            source_ref((src.path, [head, src.lines(newer.start(), newer.end()), tail])),
+            case_insensitive=True,
+            search_dir=tos_folder,
+            passes_to=f"{passes}=<first found>",
+            fails_when_missing="the TOS older than 1.04 is kept",
+            depends_on_option=f"{option} unset, autostart or GEMDOS folder, TOS older than 1.04",
         ),
     ]
 
@@ -434,70 +536,100 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
     records = []
 
     tosimage = src.find(
-        r'if \(SystemConfig\.isOptSet\("(\w+)"\)[^\n]*\n\s*coreSettings\["(hatari_tosimage)"\] = SystemConfig\["\1"\];'
-        r'\s*else\s*coreSettings\["\2"\] = "(\w+)";',
+        r'string (\w+) = SystemConfig\["(\w+)"\];\s*'
+        rf'if \(!string\.IsNullOrEmpty\(\1\) && \1 != "(\w+)" && File\.Exists\(Path\.Combine\({BIOS}, '
+        r'((?:"[^"]+", )+)\1\)\)\)\s*coreSettings\["(hatari_tosimage)"\] = \1;'
+        r'\s*else\s*coreSettings\["\5"\] = "\3";',
         "hatari_tosimage",
     )
-    choices, choice_lines = feature_choices(features, "libretro", tosimage.group(1), core="hatari")
+    guard = src.find(r'if \(core != "(hatari2014)"\)', "hatari2014 guard")
+    folders = _strings(tosimage.group(4).rstrip(", "))
+    choices, choice_lines = feature_choices(
+        features, "libretro", tosimage.group(2), core=guard.group(1)
+    )
     records.append(
         _record(
-            "hatari",
+            guard.group(1),
             "libretro",
             "core_option",
             choices,
             source_ref(
-                (src.path, [src.lines(tosimage.start(), tosimage.end())]),
+                (src.path, [src.lines(guard.start(), tosimage.end())]),
                 (features.path, [choice_lines]),
             ),
-            search_dir="bios",
-            passes_to=f"{tosimage.group(2)} = <value> | {tosimage.group(3)}",
-            fails_when_missing="not checked by the launcher",
-            depends_on_option=tosimage.group(1),
+            search_dir="/".join(["bios", *folders]),
+            passes_to=f"{tosimage.group(5)} = <value>, if the file is there | {tosimage.group(3)}",
+            fails_when_missing=f"{tosimage.group(5)} = {tosimage.group(3)}",
+            depends_on_option=tosimage.group(2),
         )
     )
 
     guard = src.find(r'if \(core != "hatarib"\)', "hatarib guard")
     method = src.enclosing(guard.start())
-    found = src.find(
-        rf'else if \(File\.Exists\(Path\.Combine\({BIOS}, "([^"]+)"\)\)\)\s*'
-        r'coreSettings\["(hatarib_tos)"\] = "([^"]+)";\s*else\s*coreSettings\["hatarib_tos"\] = "([^"]+)";',
-        "hatarib tos.img fallback",
-        method[0],
+    tos_img = src.find(
+        rf'string (\w+) = Path\.Combine\((\w+), "([^"]+)"\);', "hatarib tos.img path",
+        method[0], method[1],
+    )
+    own = src.find(
+        rf'string (\w+) = Path\.Combine\({tos_img.group(2)}, "([^"]+)"\);', "hatarib folder",
+        tos_img.end(), method[1],
+    )
+    option = src.find(
+        r'string (\w+) = SystemConfig\["(hatarib_tos)"\];', "hatarib option", own.end(), method[1]
+    )
+    tos_var, key = option.group(1), option.group(2)
+    named = src.find(
+        rf'if \({tos_var} == "(\w+)"\)\s*\{{\s*if \(File\.Exists\({tos_img.group(1)}\)\)\s*'
+        r'(\w+) = "([^"]+)";',
+        "tos.img choice", option.end(), method[1],
+    )
+    builtin = src.find(
+        rf'else if \({tos_var}\.StartsWith\("(\w+)"\)\)', "EmuTOS choices", named.end(), method[1]
+    )
+    shared = src.find(
+        rf'string (\w+) = Path\.Combine\({own.group(1)}, {tos_var}\);\s*'
+        rf'string (\w+) = Path\.Combine\({tos_img.group(2)}, ((?:"[^"]+", )+){tos_var}\);',
+        "shared TOS folder", builtin.end(), method[1],
+    )
+    copy = src.find(
+        rf"if \(!File\.Exists\({shared.group(1)}\) && File\.Exists\({shared.group(2)}\)\)",
+        "copy from the shared folder", shared.end(), method[1],
+    )
+    chosen = src.find(
+        rf'if \(File\.Exists\({shared.group(1)}\)\)\s*{named.group(2)} = "([^"/]+)/" \+ {tos_var};',
+        "chosen TOS write", copy.end(), method[1],
+    )
+    fallback = src.find(
+        rf'if \({named.group(2)} == null\)\s*\{{\s*{named.group(2)} = "([^"]+)";\s*'
+        rf'if \(File\.Exists\({tos_img.group(1)}\)\)\s*\{{\s*{named.group(2)} = "([^"]+)";',
+        "default TOS", chosen.end(), method[1],
+    )
+    emutos = src.find(
+        rf'{named.group(2)} = "{re.escape(fallback.group(1))}";', "EmuTOS for a disk", fallback.end(),
         method[1],
     )
+    folders = _strings(shared.group(3).rstrip(", "))
+    choices, choice_lines = feature_choices(features, "libretro", key, core="hatarib")
+    files = [c for c in choices if c != named.group(1) and not c.startswith(builtin.group(1))]
+    head = src.lines(tos_img.start(), own.end())
     records.append(
         _record(
             "hatarib",
             "libretro",
             "fixed_name",
-            [found.group(1)],
-            source_ref((src.path, [src.lines(found.start(), found.end())])),
+            [tos_img.group(3)],
+            source_ref((src.path, [head, src.lines(named.start(), named.end()),
+                                   src.lines(fallback.start(), emutos.end())])),
             case_insensitive=True,
             search_dir="bios",
-            passes_to=f"{found.group(2)} = {found.group(3)}",
-            fails_when_missing=f"falls back to {found.group(2)} = {found.group(4)}",
-            depends_on_option=f"{found.group(2)} unset",
+            passes_to=f"{key} = {fallback.group(2)}",
+            fails_when_missing=f"falls back to {key} = {fallback.group(1)}",
+            depends_on_option=(
+                f"{key} unset or {named.group(1)}; {fallback.group(1)} instead for a hard disk image "
+                "under a TOS other than EmuTOS, or for autostart or GEMDOS under TOS older than 1.04"
+            ),
         )
     )
-
-    picked = src.find(
-        rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)", SystemConfig\["(hatarib_tos)"\]\);',
-        "hatarib option path",
-        method[0],
-        method[1],
-    )
-    write = src.find(
-        r'coreSettings\["hatarib_tos"\] = (\w+);', "hatarib option write", picked.end()
-    )
-    skipped = re.findall(
-        r'SystemConfig\["hatarib_tos"\] == "(\w+)"', src.text[method[0] : picked.start()]
-    )
-    prefixes = re.findall(
-        r'SystemConfig\["hatarib_tos"\]\.StartsWith\("(\w+)"\)',
-        src.text[method[0] : picked.start()],
-    )
-    choices, choice_lines = feature_choices(features, "libretro", picked.group(3), core="hatarib")
-    files = [c for c in choices if c not in skipped and not c.startswith(tuple(prefixes))]
     records.append(
         _record(
             "hatarib",
@@ -505,14 +637,28 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
             "core_option",
             files,
             source_ref(
-                (src.path, [src.lines(picked.start(), write.end())]),
+                (src.path, [head, src.lines(shared.start(), chosen.end())]),
                 (features.path, [choice_lines]),
             ),
             case_insensitive=True,
-            search_dir=f"bios/{picked.group(2)}",
-            passes_to=f"hatarib_tos = {picked.group(2)}/<value>",
-            fails_when_missing="option not written when the file is absent",
-            depends_on_option=picked.group(3),
+            search_dir=f"bios/{own.group(2)}",
+            passes_to=f"{key} = {chosen.group(1)}/<value>",
+            fails_when_missing=f"{key} = {fallback.group(1)}, or {fallback.group(2)} when bios holds it",
+            depends_on_option=key,
+        )
+    )
+    records.append(
+        _record(
+            "hatarib",
+            "libretro",
+            "copies",
+            files,
+            source_ref((src.path, [head, src.lines(shared.start(), copy.end())])),
+            case_insensitive=True,
+            search_dir="/".join(["bios", *folders]),
+            passes_to=f"bios/{own.group(2)}/<value>",
+            fails_when_missing=False,
+            depends_on_option=_joined(key, TARGET_ABSENT),
         )
     )
     return records
@@ -560,10 +706,9 @@ def mesen(sources: dict[str, Source]) -> list[Record]:
                 source_ref((src.path, [src.statement_span(block)])),
                 case_insensitive=True,
                 search_dir="bios",
-                passes_to="copied to <mesen>/Firmware/"
-                + ", ".join(destinations)
-                + ", only when the target does not exist",
+                passes_to=", ".join(f"<mesen>/Firmware/{d}" for d in destinations),
                 fails_when_missing=fails,
+                depends_on_option=TARGET_ABSENT,
             )
         )
     return records
@@ -603,7 +748,12 @@ def _kickstart_table(
     )
 
 
+AMIBERRY_KEY = "amiberry"
+
+
 def amiberry(sources: dict[str, Source]) -> list[Record]:
+    """Kickstarts searched in bios and copied into the folders the generator
+    writes to amiberry.conf, both below the amiberry emulator folder."""
     src = sources[f"{GENERATORS}/Amiberry.Generator.cs"]
     lists, search, method_span = _kickstart_table(
         src, "AmigaModel", r"private string FindBios\(string\[\] candidates\)"
@@ -638,6 +788,87 @@ def amiberry(sources: dict[str, Source]) -> list[Record]:
                 fails_when_missing=f"warning, {keys[field]} not written",
             )
         )
+    folder = src.find(
+        r'GetEmulatorPathAndExe\(emulator, out string path, out string exe(?:, "[^"]+")+\)',
+        "amiberry folder",
+    )
+    home = f'<AppConfig.GetFullPath("{AMIBERRY_KEY}")>'
+    roms = src.find(
+        r'(\w+) = Path\.Combine\(path, "(\w+)"\);\s*'
+        r'FileTools\.TryCreateDirectory\(\1\);\s*overrides\["rom_path"\] = \1;',
+        "rom_path folder",
+    )
+    whdboot = src.find(
+        r'overrides\["whdboot_path"\] = Path\.Combine\(path, "(\w+)"\);', "whdboot_path folder"
+    )
+    write = src.find(r"MergeConfLines\(confFile, overrides\);", "amiberry.conf write")
+    head = src.lines(folder.start(), folder.end())
+    written = src.lines(write.start(), write.end())
+    for directory, match, key in ((roms.group(2), roms, "rom_path"),
+                                  (whdboot.group(1), whdboot, "whdboot_path")):
+        records.append(
+            _record(
+                "amiberry",
+                "standalone",
+                "passes_path",
+                [],
+                source_ref((src.path, [head, src.lines(match.start(), match.end()), written])),
+                search_dir=f"{home}/{directory}",
+                passes_to=f"written: {key} in amiberry.conf",
+                fails_when_missing=False,
+            )
+        )
+    stage = src.find(r"private string StageKickstart\(string\[\] candidates\)", "StageKickstart")
+    stage_body = src.block_at(stage.end())
+    stage_text = src.text[stage_body[0]:stage_body[1]]
+    if not re.search(r"Path\.Combine\(_amiberryRomsPath, candidates\[0\]\)", stage_text) or not re.search(
+        r"!dst\.Exists \|\| dst\.Length != src\.Length \|\| dst\.LastWriteTimeUtc < src\.LastWriteTimeUtc",
+        stage_text,
+    ):
+        raise LauncherPatternMissing(src.path, "StageKickstart copy to candidates[0] when stale")
+    stage_span = (src.line(stage.start()), src.lines(*stage_body)[1])
+    for field, names, spans in lists:
+        call = src.find(rf"StageKickstart\(_model\.{field}\)", f"StageKickstart({field})")
+        records.append(
+            _record(
+                "amiberry",
+                "standalone",
+                "copies",
+                names,
+                source_ref((src.path, [*spans, head, src.lines(roms.start(), roms.end()),
+                                       src.lines(call.start(), call.end()),
+                                       stage_span, method_span])),
+                case_insensitive=True,
+                search_dir=search,
+                passes_to=f"{home}/{roms.group(2)}/{names[0]}",
+                fails_when_missing=False,
+                depends_on_option="first name found, the target is absent, smaller or older",
+            )
+        )
+    stage_key = src.find(r"private void StageRomKey\(\)", "StageRomKey")
+    key_body = src.block_at(stage_key.end())
+    key_text = src.text[key_body[0]:key_body[1]]
+    named = re.search(r'FindBios\(new\[\] \{ "([^"]+)" \}\)', key_text)
+    if not named or not re.search(
+        r"!File\.Exists\(dest\) \|\| new FileInfo\(dest\)\.Length != new FileInfo\(source\)\.Length",
+        key_text,
+    ):
+        raise LauncherPatternMissing(src.path, "StageRomKey copy when absent or resized")
+    records.append(
+        _record(
+            "amiberry",
+            "standalone",
+            "copies",
+            [named.group(1)],
+            source_ref((src.path, [head, src.lines(roms.start(), roms.end()),
+                                   (src.line(stage_key.start()), src.lines(*key_body)[1]), method_span])),
+            case_insensitive=True,
+            search_dir=search,
+            passes_to=f"{home}/{roms.group(2)}/{named.group(1)}",
+            fails_when_missing=False,
+            depends_on_option="the target is absent or its size differs",
+        )
+    )
     return records
 
 
@@ -703,11 +934,9 @@ def winuae(sources: dict[str, Source]) -> list[Record]:
             ),
             case_insensitive=True,
             search_dir=search,
-            passes_to=(
-                f"copied to <WHDBoot>/{'/'.join(_strings(folder.group(1)))}/<name>"
-                " from the system's Kickstart candidates"
-            ),
+            passes_to=f"<WHDBoot>/{'/'.join(_strings(folder.group(1)))}/<name>",
             fails_when_missing=False,
+            depends_on_option="the system's Kickstart candidates",
         )
     )
     return records
@@ -1130,6 +1359,287 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
     return records
 
 
+def xemu_saves(sources: dict[str, Source]) -> list[Record]:
+    """The files the xemu generator keeps below the saves folder.
+
+    An Xbox gets eeprom.bin and xbox_hdd.qcow2 in saves/<system>, written
+    from the launcher's own resources when absent, and their paths in
+    xemu.toml. A Chihiro keeps chihiro_eeprom.bin there, copied into the
+    emulator folder before the run and back after it, and its snapshot
+    store.
+    """
+    src = sources[f"{GENERATORS}/Xemu.Generator.cs"]
+    chihiro = src.find(r'(_chihiro) = \(emulator == "([\w-]+)" \|\| system == "(\w+)"\);', "Chihiro switch")
+    chihiro_when = f'emulator == "{chihiro.group(2)}" or system == "{chihiro.group(3)}"'
+    saves = src.find(
+        r'if \(!string\.IsNullOrEmpty\(AppConfig\["saves"\]\) && Directory\.Exists\(AppConfig\.GetFullPath\("saves"\)\)\)'
+        r'\s*\{\s*string savePath = Path\.Combine\(AppConfig\.GetFullPath\("saves"\), system\);',
+        "Xbox save folder",
+    )
+    eeprom = src.find(
+        r'if \(!File\.Exists\(Path\.Combine\(savePath, "([^"]+)"\)\)\)\s*\{[^{}]*?'
+        r'File\.WriteAllBytes\(Path\.Combine\(savePath, "\1"\), Properties\.Resources\.(\w+)\);\s*\}',
+        "EEPROM written from resources",
+        saves.end(),
+    )
+    hdd = src.find(
+        r'if \(!File\.Exists\(Path\.Combine\(savePath, "([^"]+)"\)\)\)\s*\{[^{}]*?'
+        r'File\.WriteAllBytes\(zipFile, Properties\.Resources\.(\w+)\);[^{}]*?Zip\.Extract\(zipFile, savePath\);[^{}]*?\}',
+        "hard disk image written from resources",
+        eeprom.end(),
+    )
+    eeprom_key = src.find(
+        r'ini\.WriteValue\("([\w.]+)", "(eeprom_path)", "\'" \+ eepromPath', "eeprom_path write"
+    )
+    hdd_key = src.find(r'ini\.WriteValue\("([\w.]+)", "(hdd_path)", "\'" \+ hddPath', "hdd_path write")
+    records = [
+        _record(
+            "xemu",
+            "standalone",
+            "fixed_name",
+            [eeprom.group(1), hdd.group(1)],
+            source_ref(
+                (
+                    src.path,
+                    [
+                        src.lines(chihiro.start(), chihiro.end()),
+                        src.lines(saves.start(), hdd.end()),
+                        src.lines(eeprom_key.start(), eeprom_key.end()),
+                        src.lines(hdd_key.start(), hdd_key.end()),
+                    ],
+                )
+            ),
+            case_insensitive=True,
+            search_dir="saves/<system>",
+            passes_to=(
+                f"xemu.toml [{eeprom_key.group(1)}] {eeprom_key.group(2)}, {hdd_key.group(2)};"
+                f" written from the launcher's {eeprom.group(2)} and {hdd.group(2)} resources"
+                " when absent, the disk image unzipped"
+            ),
+            fails_when_missing="never missing: the launcher writes both",
+            depends_on_option=_joined("the saves folder is set and exists", f"not ({chihiro_when})"),
+        )
+    ]
+
+    setup = src.find(r"private void SetupChihiroEeprom\(string path\)", "SetupChihiroEeprom")
+    body = src.block_at(setup.end())
+    folder = src.find(
+        r'string savePath = Path\.Combine\(AppConfig\.GetFullPath\("saves"\), "(\w+)"\);',
+        "Chihiro save folder",
+        body[0],
+        body[1],
+    )
+    pair = src.find(
+        r'_chihiroEeprom = Path\.Combine\(path, "([^"]+)"\);\s*'
+        r'_chihiroEepromSave = Path\.Combine\(savePath, "\1"\);',
+        "Chihiro EEPROM pair",
+        folder.end(),
+        body[1],
+    )
+    save = src.find(r"private void SaveChihiroEeprom\(\)", "SaveChihiroEeprom")
+    save_body = src.block_at(save.end())
+    records.append(
+        _record(
+            "xemu, xemu-chihiro",
+            "standalone",
+            "copies",
+            [pair.group(1)],
+            source_ref(
+                (
+                    src.path,
+                    [
+                        src.lines(chihiro.start(), chihiro.end()),
+                        src.statement_span(body),
+                        src.statement_span(save_body),
+                    ],
+                )
+            ),
+            case_insensitive=True,
+            search_dir=f"saves/{folder.group(1)}",
+            passes_to=(
+                f"<emulator>/{pair.group(1)}, restored when the saved copy is newer or the"
+                " emulator folder holds none, copied back after the run"
+            ),
+            fails_when_missing=False,
+            depends_on_option=chihiro_when,
+        )
+    )
+
+    store = src.find(
+        r'string savePath = Path\.Combine\(AppConfig\.GetFullPath\("saves"\), "(\w+)"\);\s*'
+        r'if \(!Directory\.Exists\(savePath\)\) try \{ Directory\.CreateDirectory\(savePath\); \} catch \{ \}\s*'
+        r'if \(Directory\.Exists\(savePath\)\)\s*'
+        r'ini\.WriteValue\("([\w.]+)", "(\w+)", "\'" \+ Path\.Combine\(savePath, "([^"]+)"\)',
+        "Chihiro snapshot store",
+    )
+    records.append(
+        _record(
+            "xemu, xemu-chihiro",
+            "standalone",
+            "fixed_name",
+            [store.group(4)],
+            source_ref((src.path, [src.lines(chihiro.start(), chihiro.end()),
+                                   src.lines(store.start(), store.end())])),
+            case_insensitive=True,
+            search_dir=f"saves/{store.group(1)}",
+            passes_to=f"xemu.toml [{store.group(2)}] {store.group(3)}, created by the emulator",
+            fails_when_missing=False,
+            depends_on_option=chihiro_when,
+        )
+    )
+    return records
+
+
+# What the Cxbx generator hands each build: the data folder is the one its
+# settings.ini sits in (Cxbx-Reloaded Settings::FindSettingsLocation), which
+# the launcher writes beside the binary.
+CXBX_DATA_FOLDER = "Settings::GetDataLocation"
+
+
+def cxbx(sources: dict[str, Source]) -> list[Record]:
+    """The folder each Cxbx build runs from, and the EEPROM written there.
+
+    The generator picks the emulator folder by core or emulator name, opens
+    settings.ini in it, and for an Xbox writes EEPROM.bin into the
+    cxbx-reloaded folder from its own resource when absent.
+    """
+    src = sources[f"{GENERATORS}/Cxbx.Generator.cs"]
+    named = src.find_all(
+        r'(?:else )?if \(\(core != null && core == "([\w-]+)"\) \|\| '
+        r'\(emulator != null && emulator == "\1"\)\)\s*\{\s*path = AppConfig\.GetFullPath\("([\w-]+)"\);',
+        "emulator folder by name",
+    )
+    fallbacks = src.find_all(
+        r'if \(string\.IsNullOrEmpty\(path\)\)\s*path = AppConfig\.GetFullPath\("([\w-]+)"\);',
+        "default emulator folder",
+    )
+    settings = src.find(
+        r'IniFile\.FromFile\(Path\.Combine\(path, "(settings\.ini)"\)', "settings.ini beside the binary"
+    )
+    settings_span = src.lines(settings.start(), settings.end())
+    passes_to = (
+        f"{CXBX_DATA_FOLDER}, the folder holding {settings.group(1)},"
+        " which the launcher writes beside the binary"
+    )
+    records = []
+    for match in named:
+        records.append(
+            _record(
+                match.group(1),
+                "standalone",
+                "passes_path",
+                [],
+                source_ref((src.path, [src.lines(match.start(), match.end()), settings_span])),
+                search_dir=f'<AppConfig.GetFullPath("{match.group(2)}")>',
+                passes_to=passes_to,
+                fails_when_missing=False,
+            )
+        )
+    first, *rest = fallbacks
+    others = "neither core nor emulator is " + " or ".join(f'"{m.group(1)}"' for m in named)
+    records.append(
+        _record(
+            first.group(1),
+            "standalone",
+            "passes_path",
+            [],
+            source_ref(
+                (
+                    src.path,
+                    [src.lines(first.start(), first.end()),
+                     *(src.lines(m.start(), m.end()) for m in rest), settings_span],
+                )
+            ),
+            search_dir=f'<AppConfig.GetFullPath("{first.group(1)}")>',
+            passes_to=passes_to,
+            fails_when_missing=False,
+            depends_on_option=_joined(
+                others,
+                *(f'<AppConfig.GetFullPath("{m.group(1)}")> when "{first.group(1)}" is not set'
+                  for m in rest),
+            ),
+        )
+    )
+    records.extend(_cxbx_mount(src, [*(m.group(1) for m in named), first.group(1)]))
+    eeprom = src.find(
+        r'if \(system == "(\w+)"\)\s*\{\s*string (\w+) = Path\.Combine\(AppConfig\.GetFullPath\("([\w-]+)"\), "([^"]+)"\);'
+        r'\s*if \(!File\.Exists\(\2\)\)\s*File\.WriteAllBytes\(\2, Properties\.Resources\.(\w+)\);'
+        r'\s*WriteXboxEEPROM\(\2\);\s*\}',
+        "EEPROM written from resources",
+    )
+    records.append(
+        _record(
+            eeprom.group(3),
+            "standalone",
+            "fixed_name",
+            [eeprom.group(4)],
+            source_ref((src.path, [src.lines(eeprom.start(), eeprom.end())])),
+            case_insensitive=True,
+            search_dir=f'<AppConfig.GetFullPath("{eeprom.group(3)}")>',
+            passes_to=(
+                f"written from the launcher's {eeprom.group(5)} resource when absent,"
+                " then its language set: the emulator reads it from its data folder"
+            ),
+            fails_when_missing="never missing: the launcher writes it",
+            depends_on_option=f'system == "{eeprom.group(1)}"',
+        )
+    )
+    return records
+
+
+def _cxbx_mount(src: Source, emulators: list[str]) -> list[Record]:
+    """What the generator needs to mount an .iso before Cxbx opens it: its
+    own xbox-iso-vfs.exe, run from the launcher's folder, and the Dokan 2
+    runtime installed on the system."""
+    iso = src.find(
+        r'if \(Path\.GetExtension\(rom\)\.ToLowerInvariant\(\) != "(\.\w+)"\)\s*return rom;',
+        "mount for disc images only",
+    )
+    vfs = src.find(
+        r'string (\w+) = Path\.Combine\(Path\.GetDirectoryName\(typeof\(\w+\)\.Assembly\.Location\), "([^"]+)"\);'
+        r'\s*if \(!File\.Exists\(\1\)\)\s*throw new ApplicationException\("([^"]+)"\);',
+        "mount tool beside the launcher",
+        iso.end(),
+    )
+    dokan = src.find(
+        r'string (\w+) = Environment\.GetEnvironmentVariable\("(\w+)"\);.*?'
+        r'\1 = Path\.Combine\(\1, "([^"]+)"\);\s*if \(!File\.Exists\(\1\)\)\s*\{[^{}]*?'
+        r'throw new ApplicationException\("([^"]+)"\);\s*\}',
+        "Dokan runtime check",
+        vfs.end(),
+        flags=re.S,
+    )
+    iso_span = src.lines(iso.start(), iso.end())
+    when = f'rom extension "{iso.group(1)}"'
+    emulator = ", ".join(emulators)
+    return [
+        _record(
+            emulator,
+            "standalone",
+            "fixed_name",
+            [vfs.group(2)],
+            source_ref((src.path, [iso_span, src.lines(vfs.start(), vfs.end())])),
+            case_insensitive=True,
+            search_dir="<emulatorLauncher folder>",
+            passes_to="exec",
+            fails_when_missing=vfs.group(3),
+            depends_on_option=when,
+        ),
+        _record(
+            emulator,
+            "standalone",
+            "fixed_name",
+            [dokan.group(3)],
+            source_ref((src.path, [iso_span, src.lines(dokan.start(), dokan.end())])),
+            case_insensitive=True,
+            search_dir=f"%{dokan.group(2)}%",
+            passes_to=f"nothing passed: checked before {vfs.group(2)} mounts the image",
+            fails_when_missing=dokan.group(4),
+            depends_on_option=when,
+        ),
+    ]
+
+
 def openmsx(sources: dict[str, Source]) -> list[Record]:
     src = sources[f"{GENERATORS}/OpenMSX.Generator.cs"]
     table = src.find(
@@ -1170,6 +1680,29 @@ def openmsx(sources: dict[str, Source]) -> list[Record]:
         )
     if not records:
         raise LauncherPatternMissing(src.path, "biosFiles entries")
+    # OPENMSX_HOME is the user directory: openMSX reads share/systemroms below it.
+    home = src.find(
+        rf'string (\w+) = Path\.Combine\({BIOS}, "([^"]+)"\);', "OPENMSX_HOME folder"
+    )
+    handed = src.find(
+        rf'ret\.EnvironmentVariables\["(OPENMSX_HOME)"\] = {home.group(1)};',
+        "OPENMSX_HOME environment", home.end(),
+    )
+    records.append(
+        _record(
+            "openmsx",
+            "standalone",
+            "passes_path",
+            [],
+            source_ref(
+                (src.path, [src.lines(home.start(), home.end()),
+                            src.lines(handed.start(), handed.end())])
+            ),
+            search_dir=f"bios/{home.group(2)}",
+            passes_to=f"environment {handed.group(1)}",
+            fails_when_missing=False,
+        )
+    )
     return records
 
 
@@ -2379,10 +2912,12 @@ def dolphin(sources: dict[str, Source]) -> list[Record]:
             ),
             case_insensitive=True,
             search_dir="bios",
-            passes_to=f"first found copied to {destination[0] if destination else target.group(1)},"
-            " skipped when the target is as large and not older",
+            passes_to=destination[0] if destination else target.group(1),
             fails_when_missing=f"warning '{_unescape(warning.group(1))}' when the target is absent too",
-            depends_on_option=", ".join(conditions) or None,
+            depends_on_option=_joined(
+                *conditions, "first name found",
+                "the target is absent, smaller or older",
+            ),
         )
     )
     return _covered(src, records, skip=(r"DolphinTool\.exe",))
@@ -2397,11 +2932,46 @@ def raine(sources: dict[str, Source]) -> list[Record]:
 
 
 def gsplus(sources: dict[str, Source]) -> list[Record]:
+    """The first of the names GSplus accepts that the bios folder holds, written
+    as its ROM path. Without one the key is left alone and GSplus searches
+    beside its executable."""
     src = sources[f"{GENERATORS}/GsPlus.Generator.cs"]
-    records = _value_writes(src, "gsplus", "standalone")
-    if not records:
-        raise LauncherPatternMissing(src.path, "ROM path write")
-    return _covered(src, records)
+    listed = src.find(
+        r"static readonly string\[\] (\w+) = new string\[\] \{ ((?:\"[^\"]+\"(?:, )?)+) \};",
+        "ROM names",
+    )
+    root = src.find(r"string (\w+) = AppConfig\.GetFullPath\(\"bios\"\);", "bios folder")
+    first = src.find(
+        rf"string (\w+) = {listed.group(1)}\s*\.Select\(n => Path\.Combine\({root.group(1)}, n\)\)"
+        r"\s*\.FirstOrDefault\(File\.Exists\);",
+        "first name present",
+    )
+    write = src.find(
+        rf'(\w+)\.WriteValue\(null, "(\w+)", {first.group(1)}\);', "ROM path write"
+    )
+    conditions, returns = _when(src, write.start())
+    # The test on the name found is the selection itself, not a condition.
+    conditions = [c for c in conditions if first.group(1) not in c]
+    target = f"{_config_label(src, write.start(), write.group(1))} {write.group(2)}"
+    record = _record(
+        "gsplus",
+        "standalone",
+        "names_searched",
+        _strings(listed.group(2)),
+        _path_parts(
+            src,
+            *returns,
+            src.lines(listed.start(), listed.end()),
+            src.lines(root.start(), root.end()),
+            src.lines(first.start(), write.end()),
+        ),
+        case_insensitive=True,
+        search_dir="bios",
+        passes_to=f"{target} = <first found>",
+        fails_when_missing=False,
+        depends_on_option=", ".join(conditions) or None,
+    )
+    return _covered(src, [record])
 
 
 def _copies_if_absent(
@@ -2442,9 +3012,9 @@ def _copies_if_absent(
                 _path_parts(src, *returns, *[s for c in copies for s in c[3]]),
                 case_insensitive=True,
                 search_dir=folders.pop(),
-                passes_to=f"copied to {destination}/<name>, only when the target does not exist",
+                passes_to=f"{destination}/<name>",
                 fails_when_missing=False,
-                depends_on_option=", ".join(conditions) or None,
+                depends_on_option=_joined(*conditions, TARGET_ABSENT),
             )
         )
     if not records:
@@ -2483,7 +3053,9 @@ def capsimg(sources: dict[str, Source]) -> list[Record]:
     record["source_ref"] = source_ref(
         (src.path, [(src.line(cores.start()), core_lines[1]), src.statement_span(block)])
     )
-    record["depends_on_option"] = f'core in {cores.group(1)}, rom extension "{gate.group(1)}"'
+    record["depends_on_option"] = _joined(
+        f'core in {cores.group(1)}, rom extension "{gate.group(1)}"', TARGET_ABSENT
+    )
     return [record]
 
 
@@ -2805,7 +3377,27 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
     found = _argument_paths(src, "xroar", "standalone")
     if not found:
         raise LauncherPatternMissing(src.path, "rompath argument")
-    records = [_with_conditions(record, conditions) for record, conditions in found]
+    records = [
+        split
+        for record, conditions in found
+        for split in _per_system(src, _with_conditions(record, conditions))
+    ]
+    # The machines ES offers under a system the folder is chosen for: XRoar
+    # runs a CoCo 3 for coco, so its ROMs are read from that system's folder.
+    features = sources[FEATURES]
+    for record in records:
+        systems = record.get("systems")
+        if not isinstance(systems, list) or not systems:
+            continue
+        machines: list[str] = []
+        lines = []
+        for system in systems:
+            choices, span = system_feature_choices(features, "xroar", "xroar_machine", system)
+            machines += [m for m in choices if m not in machines]
+            lines.append(span)
+        record["machines"] = machines
+        ref = record.pop("source_ref")
+        record["source_ref"] = f"{ref}, {source_ref((features.path, lines))}"
     line = src.find(r'string (\w+) = ("rompath (?:[^"\\\n]|\\.)*");', "config rompath line")
     written = _unescape(line.group(2)[1:-1])
     relative = re.fullmatch(r'rompath "(.*)"', written)
@@ -2830,6 +3422,140 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
         )
     )
     return _covered(src, records)
+
+
+_SYSTEM_BRANCH = re.compile(r'(\S+), or (\S+) when system == "([\w.-]+)"')
+
+
+def _per_system(src: Source, record: Record) -> list[Record]:
+    """A directory chosen by the system, one record per choice.
+
+    `romPath = <a>; if (system == "coco") romPath = <b>;` renders as "<a>, or
+    <b> when system == "coco"": <b> is passed for that system, <a> for every
+    other one.
+    """
+    rendered = str(record.get("search_dir", ""))
+    branch = _SYSTEM_BRANCH.fullmatch(rendered)
+    if branch is None:
+        if " or " in rendered:
+            raise LauncherPatternMissing(src.path, f"directory choice {rendered!r}")
+        return [record]
+    default, chosen, system = branch.groups()
+    flag = str(record["passes_to"]).removesuffix(rendered).strip()
+    names = record["names"]
+    if not isinstance(names, list):
+        raise LauncherPatternMissing(src.path, "names of a directory choice")
+    out = []
+    for directory, systems in ((default, None), (chosen, [system])):
+        split = {k: v for k, v in record.items() if k != "source_ref"}
+        split.update(
+            names=list(names), search_dir=directory, passes_to=f"{flag} {directory}"
+        )
+        if systems:
+            split["systems"] = systems
+        split["source_ref"] = record["source_ref"]
+        out.append(split)
+    return out
+
+
+# Generators that start an emulator with a portable data folder beside its
+# binary: (generator, emulator key, binary, the code's name for the folder).
+PORTABLE_USERS = (
+    ("Citron.Generator.cs", "citron", "citron.exe", "PORTABLE_DIR"),
+    ("Eden.Generator.cs", "eden", "eden.exe", "PORTABLE_DIR"),
+    ("Ryujinx.Generator.cs", "ryujinx", "Ryujinx.exe", "DefaultPortableDir"),
+    ("ShadPS4.Generator.cs", "shadps4", "shadPS4.exe", "PORTABLE_DIR"),
+    ("Sudachi.Generator.cs", "sudachi", "sudachi.exe", "PORTABLE_DIR"),
+    ("Yuzu.Generator.cs", "yuzu", "yuzu.exe", "PORTABLE_DIR"),
+)
+_EMULATOR_FOLDER = (
+    r"GetEmulatorPathAndExe\(emulator, out string path, out string exe, \"[^\"]+\"\)"
+    r"|string path = AppConfig\.GetFullPath\((?:emulator(?:\.Replace\(\"-\", \" \"\))?"
+    r"|\"\w+\")\);"
+)
+_PORTABLE_FOLDER = r'string (userFolder|setupPath) = Path\.Combine\(path, "(\w+)"\);'
+# Ryujinx's generator hands --root-data-dir saves/switch/ryujinx/portable
+# instead when that folder exists.
+_ALTERNATE_ROOT = (
+    r'string portablePath = Path\.Combine\(AppConfig\.GetFullPath\("saves"\), "switch", '
+    r'"ryujinx", "portable"\);'
+)
+
+
+def portable_users(sources: dict[str, Source]) -> list[Record]:
+    """The portable data folder a generator gives an emulator beside its binary.
+
+    The emulator folder comes from AppConfig.GetFullPath, and the generator
+    creates or configures <folder>/user (<folder>/portable for Ryujinx)
+    before launching: the emulator then keeps its data there (keys/,
+    sys_modules/, system/) in place of %APPDATA%.
+    """
+    records = []
+    for name, emulator, binary, handle in PORTABLE_USERS:
+        src = sources[f"{GENERATORS}/{name}"]
+        found = src.find(_EMULATOR_FOLDER, f"{emulator} folder")
+        folder = src.find(_PORTABLE_FOLDER, "portable folder")
+        spans = [src.lines(found.start(), found.end()), src.lines(folder.start(), folder.end())]
+        if folder.group(1) == "userFolder":
+            create = src.find(
+                r"Directory\.CreateDirectory\(userFolder\)", "user folder creation", folder.end()
+            )
+            spans[-1] = src.lines(folder.start(), create.end())
+        depends = None
+        alternate = re.search(_ALTERNATE_ROOT, src.text)
+        if alternate:
+            spans.append(src.lines(alternate.start(), alternate.end()))
+            depends = "unless saves/switch/ryujinx/portable exists, passed with -r"
+        records.append(_record(
+            emulator,
+            "standalone",
+            "passes_path",
+            [],
+            source_ref((src.path, spans)),
+            search_dir=f'<AppConfig.GetFullPath("{emulator}")>/{folder.group(2)}',
+            passes_to=f"{handle}, the portable folder beside {binary}",
+            fails_when_missing=False,
+            depends_on_option=depends,
+        ))
+    return records
+
+
+def pico8(sources: dict[str, Source]) -> list[Record]:
+    """The PICO-8 binary the generator runs, from an emulator folder.
+
+    AppConfig.GetFullPath names a folder of the RetroBat install
+    (emulatorLauncher.cfg, else emulators/<key>): the binary is never
+    looked up in the BIOS tree.
+    """
+    src = sources[f"{GENERATORS}/Pico8.Generator.cs"]
+    folder = src.find(r'string path = AppConfig\.GetFullPath\("(\w+)"\);', "pico8 folder")
+    exe = src.find(
+        r'string exe = Path\.Combine\(path, "([^"]+)"\);', "binary path", folder.end()
+    )
+    check = src.find(r"if \(!File\.Exists\(exe\)\)\s*return null;", "binary check", exe.end())
+    run = src.find(r"FileName = exe,\s*WorkingDirectory = path,", "binary run", check.end())
+    return [
+        _record(
+            "pico8",
+            "standalone",
+            "fixed_name",
+            [exe.group(1)],
+            source_ref(
+                (
+                    src.path,
+                    [
+                        src.lines(folder.start(), folder.end()),
+                        src.lines(exe.start(), check.end()),
+                        src.lines(run.start(), run.end()),
+                    ],
+                )
+            ),
+            case_insensitive=True,
+            search_dir=f"<AppConfig.GetFullPath(\"{folder.group(1)}\")>",
+            passes_to="exec",
+            fails_when_missing="returns no process when the binary is absent",
+        )
+    ]
 
 
 def snes9x(sources: dict[str, Source]) -> list[Record]:
@@ -2972,9 +3698,9 @@ def xm6pro(sources: dict[str, Source]) -> list[Record]:
         _path_parts(src, (src.line(table.start()), lines[1]), src.lines(method.start(), body[1])),
         case_insensitive=True,
         search_dir=folder[0],
-        passes_to="copied to <emulator>/<name>, only when the target does not exist",
+        passes_to="<emulator>/<name>",
         fails_when_missing=False,
-        depends_on_option=", ".join(conditions) or None,
+        depends_on_option=_joined(*conditions, TARGET_ABSENT),
     )
     return _covered(src, [record])
 
@@ -2994,15 +3720,25 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
         lookup_body[0],
         lookup_body[1],
     )
-    method = src.find(r"private string GetBiosPath\(string rom, string biosRoot\)", "GetBiosPath")
+    method = src.find(
+        r"private string GetBiosPath\(string rom, string biosRoot, bool isChd\)", "GetBiosPath"
+    )
     body = src.block_at(method.end())
     src.find(
-        r"var candidates = new List<string> \{ Path\.GetDirectoryName\(Path\.GetFullPath\(rom\)\) \};",
+        r"string romDir = Path\.GetDirectoryName\(Path\.GetFullPath\(rom\)\);\s*"
+        r"var candidates = new List<string> \{ romDir \};",
         "game folder first",
         body[0],
         body[1],
     )
-    src.find(r"candidates\.Add\(biosRoot\);", "bios folder second", body[0], body[1])
+    src.find(
+        r"if \(isChd && Directory\.GetParent\(romDir\) != null\)\s*"
+        r"candidates\.Add\(Directory\.GetParent\(romDir\)\.FullName\);",
+        "folder above a CHD-only set second",
+        body[0],
+        body[1],
+    )
+    src.find(r"candidates\.Add\(biosRoot\);", "bios folder last", body[0], body[1])
     message, _ = _throw_message(src, body[0], body[1])
     root = src.find(rf"string biosPath = {_BIOS_ROOT};", "bios root")
     write = src.find(r'ini\.WriteValue\("(\w+)", "(\w+)", biosPath\);', "SearchDirectory write")
@@ -3031,7 +3767,7 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
             [f"<bios archive of the game's system in {database_file}>"],
             ref,
             case_insensitive=False,
-            search_dir="<rom directory>, then bios",
+            search_dir="<rom directory>, then the folder above it for a CHD-only set, then bios",
             passes_to=f"{target} = <folder found>",
             fails_when_missing=message,
         ),
@@ -3043,7 +3779,7 @@ def arcadeduck(sources: dict[str, Source]) -> list[Record]:
             ref,
             slot=fixed.group(1),
             case_insensitive=False,
-            search_dir="<rom directory>, then bios",
+            search_dir="<rom directory>, then the folder above it for a CHD-only set, then bios",
             passes_to=f"{target} = <folder found>",
             fails_when_missing=message,
             depends_on_option=f"{database_file} names no archive for {fixed.group(1)}",
@@ -3071,6 +3807,7 @@ EXTRACTORS: tuple[Callable[[dict[str, Source]], list[Record]], ...] = (
     blastem,
     bsyndrome,
     capsimg,
+    cxbx,
     demul,
     desmume,
     dolphin,
@@ -3090,6 +3827,8 @@ EXTRACTORS: tuple[Callable[[dict[str, Source]], list[Record]], ...] = (
     option_paths,
     pcsx2,
     pcsx2_libretro,
+    pico8,
+    portable_users,
     psx_cascades,
     psxmame,
     raine,
@@ -3099,6 +3838,7 @@ EXTRACTORS: tuple[Callable[[dict[str, Source]], list[Record]], ...] = (
     value_folders,
     winuae,
     xemu,
+    xemu_saves,
     xm6pro,
     xroar,
 )

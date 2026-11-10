@@ -1,6 +1,6 @@
 platform: batocera
 source: https://github.com/batocera-linux/batocera.linux/tree/batocera-43.1
-scraped_at: '2026-11-06T02:18:59Z'
+scraped_at: '2026-11-09T20:38:15Z'
 targets:
   a3gen2:
     architecture: aarch64
@@ -203,6 +203,7 @@ targets:
     - dosbox_staging
     - dosboxx
     - duckstation
+    - dxx-rebirth
     - easyrpg
     - ecwolf
     - eduke32
@@ -300,7 +301,9 @@ targets:
     - snes9x_next
     - solarus
     - sonic-mania
+    - sonic2013
     - sonic3-air
+    - soniccd
     - stella
     - superbroswar
     - supermodel
@@ -342,6 +345,7 @@ targets:
     - xpet
     - xplus4
     - xrick
+    - xroar
     - xscpu64
     - xvic
     - yabasanshiro
@@ -786,6 +790,7 @@ targets:
     - xvic
     - yquake2
     - zc210
+    downloads: linux-armhf
   bcm2837:
     architecture: aarch64
     cores:
@@ -1071,6 +1076,7 @@ targets:
     - orangepi-one
     - orangepi-pc
     - orangepi-plus2e
+    downloads: linux-armhf
   h5:
     architecture: aarch64
     cores:
@@ -2177,6 +2183,7 @@ targets:
     - xvic
     - yquake2
     - zc210
+    downloads: linux-armhf
   qcs6490:
     architecture: aarch64
     cores:
@@ -2512,6 +2519,7 @@ targets:
     - powkiddy_a13
     - ps5000
     - ps7000
+    downloads: linux-armhf
   rk3288:
     architecture: arm
     cores:
@@ -2670,6 +2678,7 @@ targets:
     images:
     - miqi
     - tinkerboard
+    downloads: linux-armhf
   rk3326:
     architecture: aarch64
     cores:
@@ -3883,6 +3892,7 @@ targets:
     - xvic
     - yquake2
     - zc210
+    downloads: linux-armhf
   s905:
     architecture: aarch64
     cores:
@@ -5379,6 +5389,7 @@ targets:
     - model2emu
     - moonlight
     - mrboom
+    - mugen
     - mupen64plus
     - mupen64plus-next
     - neocd
@@ -5475,6 +5486,8 @@ targets:
     - vkquake3
     - vpinball
     - wasm4
+    - wine
+    - wine-tkg
     - x1
     - x128
     - x16emu
@@ -5494,6 +5507,7 @@ targets:
     - ymir
     - yquake2
     - zc210
+    downloads: linux-x86_64
   zen3:
     architecture: x86_64
     cores:
@@ -5605,6 +5619,7 @@ targets:
     - model2emu
     - moonlight
     - mrboom
+    - mugen
     - mupen64plus
     - mupen64plus-next
     - neocd
@@ -5701,6 +5716,8 @@ targets:
     - vkquake3
     - vpinball
     - wasm4
+    - wine
+    - wine-tkg
     - x1
     - x128
     - x16emu
@@ -5722,3 +5739,4 @@ targets:
     - zc210
     images:
     - x86-64-v3
+    downloads: linux-x86_64

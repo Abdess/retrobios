@@ -8,8 +8,8 @@ params:
 sources:
   os:
     repo: https://github.com/rommapp/romm
-    commit: 68f71259f7c6de39fbeedff9cc9ac114c18ee250
-    tag: 5.4.0
+    commit: 9c74d0143fbb876f2f62260b91c6fd0b3f590226
+    tag: 5.4.1
 roms_root:
   path: /romm/library/roms
   from_bios: ../roms

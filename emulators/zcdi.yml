@@ -1,0 +1,67 @@
+emulator: "zcdi"
+type: libretro
+core_classification: pure_libretro
+source: "https://github.com/pastisme/zcdi"
+profiled_date: "2026-11-09"
+source_commit: "b7481411e6939b2c1745067a646bfd43479e2a3c"
+core_version: "0.1.0"
+version_basis:
+  kind: file
+  path: "CMakeLists.txt"
+  pattern: 'project\(zcdi VERSION ([0-9.]+)'
+display_name: "Philips - CD-i (zcdi)"
+cores:
+  - "zcdi"
+systems:
+  - philips-cdi
+
+notes: |
+  A Philips CD-i Mono-I emulator written for libretro: SCC68070 CPU, MCD212
+  video, CDIC disc controller and the 22ER9141 Digital Video Cartridge, with
+  device code from MAME's cdi driver and CDi_MiSTer. It runs the original BIOS.
+  ref: src/libretro/libretro_core.cpp:113-120
+
+  The Video Standard core option (zcdi_preferred_bios, ntsc by default)
+  picks the BIOS: cdi200.rom for NTSC, cdi220b.rom for PAL. The file is read
+  from the system directory root, and retro_load_game fails when it is
+  absent, also when no disc is loaded. The dump is mapped as it is, with no
+  size or hash check.
+  ref: src/libretro/libretro_core.cpp:55-58, src/libretro/libretro_core.cpp:166-173,
+       src/libretro/core_options.cpp:110-112, src/libretro/helpers.cpp:70-83,
+       src/core/bus.cpp:72-77
+
+  With DVC Enabled on auto (the default), vmpega.rom is read from the system
+  directory, and at most 256 KB of it are mapped. Without it the player has
+  no Digital Video Cartridge.
+  ref: src/libretro/libretro_core.cpp:60, src/libretro/libretro_core.cpp:175-180,
+       src/core/bus.cpp:79-83
+
+  NVRAM is saved per disc by default. The global mode keeps one file,
+  zcdi_<bios stem>.nvram, in the save directory, which the core writes
+  itself.
+  ref: src/libretro/libretro_core.cpp:182-190, src/libretro/helpers.cpp:90-97
+
+files:
+  - name: "cdi200.rom"
+    path: "cdi200.rom"
+    system: philips-cdi
+    required: true
+    description: "CD-i Mono-I BIOS 2.00, NTSC"
+    note: "Read when Video Standard is NTSC, the default. The core does not start without it."
+    source_ref: "src/libretro/libretro_core.cpp:55-58, src/libretro/libretro_core.cpp:166-173, src/libretro/helpers.cpp:70-83"
+
+  - name: "cdi220b.rom"
+    path: "cdi220b.rom"
+    system: philips-cdi
+    required: false
+    description: "CD-i Mono-I BIOS 2.20b, PAL"
+    note: "Read in place of cdi200.rom when Video Standard is PAL, and the core does not start without it then."
+    source_ref: "src/libretro/libretro_core.cpp:55-58, src/libretro/libretro_core.cpp:166-173, src/libretro/core_options.cpp:110-112"
+
+  - name: "vmpega.rom"
+    path: "vmpega.rom"
+    system: philips-cdi
+    required: false
+    description: "Digital Video Cartridge ROM"
+    note: "Read when DVC Enabled is auto, the default. Bytes past 256 KB are dropped. Without it there is no Digital Video Cartridge and the Digital Video titles do not play."
+    source_ref: "src/libretro/libretro_core.cpp:60, src/libretro/libretro_core.cpp:175-180, src/core/bus.cpp:79-83"

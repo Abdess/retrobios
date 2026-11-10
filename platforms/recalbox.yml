@@ -4067,6 +4067,14 @@ launchers:
   depends_on_option: none of the listed kickstarts found
   source_ref: "projects/configgen/configgen/generators/amiberry/amiberryKickstarts.py:9-10,\
     \ 94-142, projects/configgen/configgen/generators/amiberry/amiberryConfig.py:337-345"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /recalbox/share/bios/amiga/bios
+  passes_to: "written: rom_path in amiberry.conf"
+  fails_when_missing: false
+  source_ref: "projects/configgen/configgen/generators/amiberry/amiberryGlobalConfig.py:42"
 - emulator: pcsx2
   build: standalone
   kind: names_searched
@@ -4171,6 +4179,14 @@ launchers:
   fails_when_missing: false
   depends_on_option: system 64dd
   source_ref: "projects/configgen/configgen/generators/mupen/mupenConfig.py:118-121"
+- emulator: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /recalbox/share/bios/<system>
+  passes_to: command line -rompath
+  fails_when_missing: false
+  source_ref: "projects/configgen/configgen/generators/xroar/xroarGenerator.py:25"
 - emulator: dolphin, dolphin-gui
   build: standalone
   kind: fixed_name

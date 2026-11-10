@@ -2,7 +2,7 @@ inherits: retroarch
 platform: RetroPie
 version: 4.8.12
 homepage: "https://retropie.org.uk"
-source: "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+source: "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/427e76216633591861791cfb28807ac1039c5ea8"
 base_destination: BIOS
 cores:
 - "81"
@@ -50,6 +50,7 @@ cores:
 - dxx-rebirth
 - eduke32
 - ep128emu
+- fake08
 - fbalpha2012
 - fbneo
 - fbzx
@@ -777,6 +778,15 @@ launchers:
   passes_to: $configdir/msx/openmsx/share/systemroms is a symlink to it
   fails_when_missing: false
   source_ref: "scriptmodules/emulators/openmsx.sh:77"
+- emulator: openmsx
+  package: openmsx
+  build: standalone
+  kind: links
+  names: []
+  search_dir: $configdir/msx/openmsx
+  passes_to: $home/.openMSX is a symlink to it
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/openmsx.sh:76"
 - emulator: oricutron
   package: oricutron
   repo: "git https://github.com/HerbFargus/oricutron.git extras"
@@ -997,7 +1007,7 @@ launchers:
   source_ref: "scriptmodules/emulators/rpix86.sh:12, 46"
 - emulator: scummvm-sdl1
   package: scummvm-sdl1
-  repo: "git https://github.com/scummvm/scummvm.git v2026.3.0"
+  repo: "git https://github.com/scummvm/scummvm.git v2026.4.0"
   systems:
   - scummvm
   build: standalone
@@ -1006,7 +1016,7 @@ launchers:
   source_ref: "scriptmodules/emulators/scummvm-sdl1.sh:12, 16, scriptmodules/emulators/scummvm.sh:98"
 - emulator: scummvm
   package: scummvm
-  repo: "git https://github.com/scummvm/scummvm.git v2026.3.0"
+  repo: "git https://github.com/scummvm/scummvm.git v2026.4.0"
   systems:
   - scummvm
   build: standalone
@@ -1180,6 +1190,15 @@ launchers:
   fails_when_missing: false
   depends_on_option: "[[ ! -f \"$biosdir/aros-amiga-m68k-ext.bin\" ]]"
   source_ref: "scriptmodules/emulators/uae4all.sh:85"
+- emulator: uae4all
+  package: uae4all
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $md_inst
+  passes_to: working directory of $romdir/amiga/+Start UAE4All.sh
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/uae4all.sh:90"
 - emulator: uae4arm
   package: uae4arm
   repo: "git https://github.com/Chips-fr/uae4arm-rpi.git master"
@@ -1259,6 +1278,15 @@ launchers:
   passes_to: $md_inst/share/xroar/roms is a symlink to it
   fails_when_missing: false
   source_ref: "scriptmodules/emulators/xroar.sh:52"
+- emulator: xroar
+  package: xroar
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: $md_inst
+  passes_to: "${prefix} of configure --prefix"
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/xroar.sh:37"
 - emulator: yabasanshiro
   package: yabasanshiro
   repo: "git https://github.com/retropie/yabause.git pi4-1-9-0"
@@ -1522,6 +1550,15 @@ launchers:
   kind: package
   names: []
   source_ref: "scriptmodules/libretrocores/lr-ep128emu.sh:12, 16, 38"
+- emulator: lr-fake08
+  package: lr-fake08
+  repo: "git https://github.com/jtothebell/fake-08.git master"
+  systems:
+  - pico8
+  build: libretro
+  kind: package
+  names: []
+  source_ref: "scriptmodules/libretrocores/lr-fake08.sh:12, 16, 42"
 - emulator: lr-fbalpha2012
   package: lr-fbalpha2012
   repo: "git https://github.com/libretro/fbalpha2012.git master"
@@ -1591,7 +1628,7 @@ launchers:
   source_ref: "scriptmodules/libretrocores/lr-flycast-dev.sh:12, 16, 63"
 - emulator: lr-flycast
   package: lr-flycast
-  repo: "git https://github.com/libretro/flycast.git master"
+  repo: "git https://github.com/libretro/flycast.git master 2ff1030"
   systems:
   - dreamcast
   - arcade

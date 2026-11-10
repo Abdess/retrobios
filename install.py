@@ -50,7 +50,7 @@ import weakref
 import xml.etree.ElementTree as ET
 import zipfile
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
-from pathlib import Path, PurePosixPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
 
 # Built as C extensions that a Python compiled without their libraries
@@ -141,6 +141,10 @@ OMISSION_REASONS = {
     "no_save_directory": "no save directory",
     "no_core_folder": "no core folder",
     "no_save_system": "no system runs the core",
+    "outside_bios_folder": "read outside the BIOS folder",
+    "no_roms_directory": "no roms folder",
+    "no_configs_directory": "no configs folder",
+    "no_emulators_directory": "no emulator folder",
 }
 # What a file is when it is not firmware, as the manifest's category field
 # says, and as the installer words it. Firmware carries no category.
@@ -721,6 +725,11 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # says it. A kind of its own: the full-screen interface always gives
     # --dest, and the board was never applied there.
     "board": ("platform", "board", "applied", "message"),
+    # --installed-cores, before choices, once per installed core the list
+    # has no profile for: info is whether its .info was found, dests the
+    # firmware paths it declares, kept whatever the narrowing drops. A
+    # core with no .info keeps nothing it alone reads, and message says so.
+    "unknown_core": ("platform", "core", "info", "dests", "message"),
     # Before the file events of a check: the systems the run's list lets
     # one choose among, --system aside, in id order (other for the files
     # no system names). What Choose systems lists, and what the plan counts
@@ -3243,6 +3252,67 @@ def installed_cores(dirs: list[Path]) -> list[str]:
     return sorted(names)
 
 
+def info_dirs(plat: str, bios_path: Path, searched: list[Path]) -> list[Path]:
+    """The directories RetroArch reads core .info files from.
+
+    libretro_info_path in retroarch.cfg, info/ beside RetroArch by default,
+    then the cores folders: Linux builds and Lakka keep each .info beside
+    its core.
+    """
+    found = _retroarch_config_for(bios_path)
+    if found is None and _is_file(bios_path.parent / "retroarch.cfg"):
+        found = (bios_path.parent / "retroarch.cfg", bios_path.parent)
+    dirs: list[Path] = []
+    if found is not None:
+        cfg, app_dir = found
+        dirs.append(_retroarch_cfg_dir(cfg, "libretro_info_path", app_dir, "info")
+                    or app_dir / "info")
+    dirs.extend(searched)
+    return list(dict.fromkeys(dirs))
+
+
+_INFO_FIRMWARE_RE = re.compile(r'^\s*firmware\d+_path\s*=\s*"?([^"\r\n]*?)"?\s*$')
+
+
+def info_firmware(dirs: list[Path], core: str) -> list[str] | None:
+    """The firmware paths a core's .info declares, None without a .info.
+
+    RetroArch reads firmware<N>_path, relative to the system directory
+    (core_info.c), and so does this.
+    """
+    for directory in dirs:
+        info = directory / f"{core}_libretro.info"
+        try:
+            text = info.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        paths = (m.group(1).strip().replace("\\", "/")
+                 for m in map(_INFO_FIRMWARE_RE.match, text.splitlines()) if m)
+        return list(dict.fromkeys(p for p in paths if p))
+    return None
+
+
+def known_core_names(manifest: dict) -> set[str]:
+    """Every core name a file list answers for: profiles and their other names."""
+    names: set[str] = set()
+    for profile, aliases in (manifest.get("core_names") or {}).items():
+        names.add(profile)
+        names.update(aliases)
+    for cores in (manifest.get("system_cores") or {}).values():
+        names.update(cores)
+    for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]:
+        names.update(entry.get("cores") or [])
+        for alternative in entry.get("alternatives", []):
+            names.update(alternative.get("cores") or [])
+    return names
+
+
+def unknown_cores(manifest: dict, names: list[str]) -> list[str]:
+    """The installed cores the file list has no profile for, in name order."""
+    known = known_core_names(manifest)
+    return sorted(name for name in names if name not in known)
+
+
 def display_name(plat: str, manifest: dict | None = None) -> str:
     """A platform's name as the frontend writes it, the manifest's when it has one."""
     named = (manifest or {}).get("display_name")
@@ -3472,8 +3542,19 @@ def _read_limited_json(
         raise ValueError(f"invalid {label}: {exc}") from exc
 
 
-def _safe_relative_path(value: object, field: str) -> PurePosixPath:
-    """Validate a manifest-controlled relative POSIX path."""
+def _path_characters(value: object, field: str, colons: bool = True) -> str:
+    """The character rules every manifest-controlled relative path meets.
+
+    No backslash, control character, empty segment, trailing slash or drive
+    prefix, and at most 1024 characters: on Windows a backslash or a C:
+    segment leaves the folder the path is joined to. A segment that Windows
+    reads as a drive (C:x, any segment of one letter and a colon in front)
+    or that ends with a colon is refused wherever it stands, since a later
+    segment is joined as a drive-relative path. ``colons`` keeps a colon
+    inside a name: RetroDECK's ares reads bios/snes:st018.data.rom on Linux.
+    A Windows host refuses it all the same, as an alternate data stream of
+    the file before the colon.
+    """
     if not isinstance(value, str) or not value or len(value) > 1024:
         raise ValueError(f"invalid {field}")
     if (
@@ -3487,10 +3568,83 @@ def _safe_relative_path(value: object, field: str) -> PurePosixPath:
         # x<ESC>]0;PWN<BEL>.bin set the window title in the progress line,
         # and the file was written under that name.
         raise ValueError(f"unsafe {field}: {value!r}")
-    path = PurePosixPath(value)
+    for part in value.split("/"):
+        if ":" not in part:
+            continue
+        if (
+            PureWindowsPath(part).drive or part.endswith(":")
+            or not colons or os.name == "nt"
+        ):
+            raise ValueError(f"unsafe {field}: {value!r}")
+    return value
+
+
+def _safe_relative_path(value: object, field: str, colons: bool = True) -> PurePosixPath:
+    """Validate a manifest-controlled relative POSIX path."""
+    path = PurePosixPath(_path_characters(value, field, colons))
     if path.is_absolute() or any(part in ("", ".", "..") for part in path.parts):
         raise ValueError(f"unsafe {field}: {value!r}")
     return path
+
+
+# The most folders a roms root climbs from the BIOS folder: two, as the rom
+# folders files of MinUI, NextUI, MyMinUI (../../Roms) and muOS (../../ROMS)
+# record it (platforms/romfolders/*.yml, roms_root.from_bios).
+MAX_ROMS_UPS = 2
+
+
+def _roms_relation(value: object, field: str) -> tuple[int, PurePosixPath]:
+    """A roms root relative to the BIOS folder: (folders up, names down).
+
+    "." is the BIOS folder itself. Any other value climbs one to
+    MAX_ROMS_UPS folders, then names plain folders: nothing climbs again
+    once it went down, and nothing goes down without climbing first.
+    """
+    if value == ".":
+        return 0, PurePosixPath()
+    path = PurePosixPath(_path_characters(value, field, colons=False))
+    parts = path.parts
+    ups = next((i for i, part in enumerate(parts) if part != ".."), len(parts))
+    names = parts[ups:]
+    if (
+        path.is_absolute() or not 1 <= ups <= MAX_ROMS_UPS
+        or any(part in ("", ".", "..") for part in names)
+    ):
+        raise ValueError(f"unsafe {field}: {value!r}")
+    return ups, PurePosixPath(*names)
+
+
+# The roots a list places files below by their place relative to the BIOS
+# folder: the roms root (ROCKNIX's /storage/roms) and the frontend's
+# configs folder (Batocera's /userdata/system/configs).
+RELATIVE_ROOTS = ("roms", "configs")
+
+
+def _relative_root(bios_path: Path, from_bios: str, root: str = "roms") -> Path | None:
+    """A relative root of a BIOS folder, on the host's own path type.
+
+    The BIOS folder's ancestor at the depth the relation climbs, then the
+    named folders below it. None when the joined and normalized path is
+    anything else.
+    """
+    ups, names = _roms_relation(from_bios, f"{root}_directory.from_bios")
+    if ups > len(bios_path.parents):
+        return None
+    ancestor = bios_path if not ups else bios_path.parents[ups - 1]
+    expected = ancestor.joinpath(*names.parts)
+    joined = Path(os.path.normpath(bios_path.joinpath(*PurePosixPath(from_bios).parts)))
+    if joined != Path(os.path.normpath(expected)) or not _lexically_under(joined, ancestor):
+        return None
+    return expected
+
+
+def _lexically_under(candidate: Path, root: Path) -> bool:
+    """Whether a path built from checked parts stays below *root*."""
+    try:
+        Path(os.path.normpath(candidate)).relative_to(Path(os.path.normpath(root)))
+    except ValueError:
+        return False
+    return True
 
 
 def _within(candidate: Path, root: Path) -> bool:
@@ -3609,6 +3763,12 @@ class SavePlace(NamedTuple):
 # BIOS folder -> where the files read below its frontend's save directory go,
 # set once the save directory is known (save_directory_for).
 _SAVE_DIRS: dict[Path, SavePlace] = {}
+# (BIOS folder, root) -> the platform's roms or configs folder, set by
+# place_relative_entries.
+_RELATIVE_DIRS: dict[tuple[Path, str], Path] = {}
+# (BIOS folder, emulator key) -> the emulator folder, set by
+# place_emulator_entries.
+_EMULATOR_DIRS: dict[tuple[Path, str], Path] = {}
 
 
 def _entry_place(root: Path, entry: dict) -> tuple[Path, object]:
@@ -3619,6 +3779,17 @@ def _entry_place(root: Path, entry: dict) -> tuple[Path, object]:
     core's own folder where the frontend sorts saves by core. Any other is
     relative to the BIOS folder.
     """
+    if entry.get("root") in RELATIVE_ROOTS:
+        folder = _RELATIVE_DIRS.get((root, entry["root"]))
+        if folder is None:
+            raise ValueError(f"no {entry['root']} folder known for {entry.get('dest')}")
+        return folder, entry.get("dest")
+    if entry.get("root") == "emulators":
+        key, _, rest = str(entry.get("dest")).partition("/")
+        folder = _EMULATOR_DIRS.get((root, key))
+        if folder is None:
+            raise ValueError(f"no emulator folder known for {entry.get('dest')}")
+        return folder, rest
     if entry.get("root") != "save":
         return root, entry.get("dest")
     place = _SAVE_DIRS.get(root)
@@ -3644,18 +3815,28 @@ def _entry_path(root: Path, entry: dict) -> Path:
 
 def _entry_key(entry: dict) -> str:
     """What tells one entry of the list from another: its dest, below the
-    BIOS folder or below the save directory. KNULLI lists its own
-    fbneo/hiscore.dat in the BIOS tree and FB Alpha 2012's below the save
-    directory, two files under one dest. NUL never appears in a dest."""
+    BIOS folder, below the save directory or in an emulator's own folder.
+    KNULLI lists its own fbneo/hiscore.dat in the BIOS tree and FB Alpha
+    2012's below the save directory, two files under one dest. NUL never
+    appears in a dest."""
     dest = str(entry.get("dest"))
-    return f"save\0{dest}" if entry.get("root") == "save" else dest
-
-
-def _check_root(entry: dict, dest: str) -> None:
-    """root is absent or save, and core_folder one folder name of a save entry."""
     root = entry.get("root")
-    if root is not None and root != "save":
+    if root == "emulator":
+        # A path in one emulator's own folder: two emulators read two files.
+        return f"emulator\0{','.join(entry.get('cores') or [])}\0{dest}"
+    return f"{root}\0{dest}" if root in ("save", "emulators", *RELATIVE_ROOTS) else dest
+
+
+def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
+    """root is absent or save, emulator only on a file left out (a path in
+    the emulator's own folder, outside the BIOS tree), and core_folder one
+    folder name of a save entry."""
+    root = entry.get("root")
+    if root not in (None, "save", "emulators", *RELATIVE_ROOTS) and not (
+            omitted and root == "emulator"):
         raise ValueError(f"invalid root for {dest}")
+    if root == "emulators" and len(PurePosixPath(dest).parts) < 2:
+        raise ValueError(f"an emulators entry names its folder first: {dest}")
     folder = entry.get("core_folder")
     if folder is None:
         return
@@ -3663,6 +3844,59 @@ def _check_root(entry: dict, dest: str) -> None:
         raise ValueError(f"core_folder outside root: save for {dest}")
     if len(_safe_relative_path(folder, f"core_folder of {dest}").parts) != 1:
         raise ValueError(f"core_folder must be one folder name for {dest}")
+
+
+def _check_relative_directories(data: dict) -> None:
+    """The manifest's roms_directory and configs_directory, which every
+    installable root: roms or root: configs entry needs."""
+    installable = [
+        entry for field in ("files", "case_variants")
+        for entry in data.get(field) or [] if isinstance(entry, dict)
+    ]
+    for root in RELATIVE_ROOTS:
+        field = f"{root}_directory"
+        layout = data.get(field)
+        if layout is None:
+            if any(entry.get("root") == root for entry in installable):
+                raise ValueError(f"entries below the {root} folder and no {field}")
+            continue
+        if (
+            not isinstance(layout, dict)
+            or set(layout) != {"bios_folder", "from_bios"}
+            or len(_safe_relative_path(layout["bios_folder"], f"{field}.bios_folder").parts) != 1
+        ):
+            raise ValueError(f"invalid {field}")
+        _roms_relation(layout["from_bios"], f"{field}.from_bios")
+
+
+def _check_emulators_directory(data: dict) -> None:
+    """The manifest's emulators_directory, which every installable root: emulators entry needs."""
+    layout = data.get("emulators_directory")
+    installable = [
+        entry for field in ("files", "case_variants")
+        for entry in data.get(field) or [] if isinstance(entry, dict)
+    ]
+    if layout is None:
+        if any(entry.get("root") == "emulators" for entry in installable):
+            raise ValueError("entries in emulator folders and no emulators_directory")
+        return
+    if not isinstance(layout, dict) or set(layout) != {"bios_folder", "searched", "default", "config"}:
+        raise ValueError("invalid emulators_directory")
+    searched = layout["searched"]
+    if (
+        not isinstance(searched, list) or not searched or layout["default"] not in searched
+        or len(_safe_relative_path(layout["bios_folder"], "emulators_directory.bios_folder").parts) != 1
+    ):
+        raise ValueError("invalid emulators_directory")
+    for template in searched:
+        if not isinstance(template, str) or template.count("{key}") != 1:
+            raise ValueError("invalid emulators_directory.searched")
+        _safe_relative_path(
+            template.replace("{key}", "key"), "emulators_directory.searched", colons=False
+        )
+    _safe_relative_path(layout["default"].replace("{key}", "key"), "emulators_directory.default",
+                        colons=False)
+    _safe_relative_path(layout["config"], "emulators_directory.config", colons=False)
 
 
 def _check_save_directory(data: dict) -> None:
@@ -3829,7 +4063,11 @@ def _check_entry(
     """Check one file entry, return its size and the largest copy it may fetch."""
     if not isinstance(entry, dict):
         raise ValueError(f"{where} must be an object")
-    dest = str(_safe_relative_path(entry.get("dest"), f"{where}.dest"))
+    # Below a roms or emulator folder a colon has no use: refused outright.
+    dest = str(_safe_relative_path(
+        entry.get("dest"), f"{where}.dest",
+        colons=entry.get("root") not in ("emulators", *RELATIVE_ROOTS),
+    ))
     key = _entry_key({**entry, "dest": dest})
     if key in seen_destinations:
         raise ValueError(f"duplicate manifest destination: {dest}")
@@ -3968,6 +4206,8 @@ def _validate_manifest(data: object, plat: str) -> dict:
     for index, entry in enumerate(data_dirs):
         _check_data_directory(entry, f"data_directories[{index}]")
     _check_save_directory(data)
+    _check_relative_directories(data)
+    _check_emulators_directory(data)
 
     declared_total_files = data.get("total_files")
     if declared_total_files is not None and declared_total_files != len(files):
@@ -3993,7 +4233,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
             raise ValueError(f"duplicate or conflicting omitted destination: {dest}")
         seen_omitted.add(key)
         _check_omission(entry, dest)
-        _check_root(entry, dest)
+        _check_root(entry, dest, omitted=True)
         claims = entry.get("alternatives", [])
         if not isinstance(claims, list) or len(claims) > MAX_SELECTION_TAGS:
             raise ValueError(f"invalid omitted alternatives for {dest}")
@@ -4016,7 +4256,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
     ):
         raise ValueError("manifest total_omitted does not match omitted_files")
 
-    for field in ("core_names", "system_cores", "system_names"):
+    for field in ("core_names", "downloaded_cores", "system_cores", "system_names"):
         mapping = data.get(field)
         if mapping is None:
             continue
@@ -4607,18 +4847,28 @@ def _filter_by_target(
     return result
 
 
-def designated_cores(manifest: dict, names: list[str]) -> set[str]:
+def designated_cores(
+    manifest: dict, names: list[str], target: str | None = None
+) -> set[str]:
     """The cores a list of names designates, the way the pack builder reads it.
 
     A target list, or a core found installed, names a core the buildbot's
     way (`mednafen_psx`), and a file names the profile that reads it
-    (`beetle_psx`). `core_names` gives each profile its other names.
+    (`beetle_psx`). `core_names` gives each profile its other names. A core
+    only the platform's RetroArch downloader brings runs on the boards
+    `downloaded_cores` gives it: Batocera's bcm2711 list names its own
+    amiberry, and the buildbot's amiberry core is no download there.
     """
     wanted = set(names)
     chosen = set(wanted)
     for profile, aliases in (manifest.get("core_names") or {}).items():
         if wanted.intersection(aliases):
             chosen.add(profile)
+    if target is not None:
+        chosen -= {
+            profile for profile, boards in (manifest.get("downloaded_cores") or {}).items()
+            if target not in boards
+        }
     return chosen
 
 
@@ -4627,6 +4877,8 @@ def narrow_to_cores(
     names: list[str],
     files: list[dict] | None = None,
     omitted: list[dict] | None = None,
+    declared_by_info: Collection[str] = (),
+    target: str | None = None,
 ) -> tuple[list[dict], list[dict]]:
     """Keep what the named cores read, as a pack built for them carries.
 
@@ -4636,9 +4888,13 @@ def narrow_to_cores(
     it does not list stays whatever is named. A dropped system's file gives
     way to the first named core claiming its destination. A manifest without
     the two maps keeps the platform's list whole and matches cores by name.
+    A destination in `declared_by_info`, what the .info of an installed core
+    no profile describes declares, stays whatever is named. `target` is the
+    board the names are the list of.
     """
-    cores = designated_cores(manifest, names)
+    cores = designated_cores(manifest, names, target)
     reach = manifest.get("system_cores") or {}
+    info_dests = {dest.casefold() for dest in declared_by_info}
 
     def kept_system(system: str) -> bool:
         return system not in reach or bool(cores.intersection(reach[system]))
@@ -4648,6 +4904,9 @@ def narrow_to_cores(
     def kept(entries: list[dict]) -> list[dict]:
         result: list[dict] = []
         for entry in entries:
+            if str(entry.get("dest", "")).casefold() in info_dests:
+                result.append(_for_cores(entry, cores) or _settle_slot(entry, cores))
+                continue
             if entry.get("cores") is not None:
                 copy = _for_cores(entry, cores)
                 if copy is not None:
@@ -5223,6 +5482,120 @@ def place_save_entries(
          **({"core_folder": entry["core_folder"]} if entry.get("core_folder") else {})}
         for entry in saved
     ]
+    return kept, unplaced
+
+
+def place_relative_entries(
+    files: list[dict], bios_path: Path, manifest: dict, display: str, say: bool = True,
+) -> tuple[list[dict], list[dict]]:
+    """Find the roms and configs folders for the entries read below them.
+
+    The list gives each root relative to the BIOS folder, as the OS's own
+    source places them (ROCKNIX's /storage/roms holds bios/, Batocera's
+    configs folder is ../system/configs): a BIOS folder of the platform's
+    name puts the root there. Any other is a folder this run cannot relate
+    to the root, and the entries are left out with the reason.
+    """
+    unplaced: list[dict] = []
+    for root in RELATIVE_ROOTS:
+        below = [entry for entry in files if entry.get("root") == root]
+        if not below:
+            continue
+        layout = manifest.get(f"{root}_directory") or {}
+        folder = (
+            _relative_root(bios_path, layout["from_bios"], root)
+            if layout and bios_path.name == layout.get("bios_folder") else None
+        )
+        if folder is not None:
+            _RELATIVE_DIRS[(bios_path, root)] = folder
+            continue
+        if say:
+            print(f"  {_plural(len(below), 'file')} read from {display}'s {root} folder left "
+                  f"out: {bios_path} is not its {layout.get('bios_folder') or 'BIOS'} folder.")
+        files = [entry for entry in files if entry.get("root") != root]
+        unplaced += [
+            {"dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
+             "system": "", "systems": list(entry.get("systems") or []), "required": False,
+             "reason": f"no_{root}_directory", "cores": entry.get("cores"), "root": root}
+            for entry in below
+        ]
+    return files, unplaced
+
+
+def _config_keys(path: Path) -> set[str]:
+    """The keys an emulatorLauncher-style key=value file sets, lowercased."""
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return set()
+    return {
+        line.split("=", 1)[0].strip().lower()
+        for line in text.splitlines() if "=" in line and line.split("=", 1)[1].strip()
+    }
+
+
+def place_emulator_entries(
+    files: list[dict], bios_path: Path, manifest: dict, display: str, say: bool = True,
+) -> tuple[list[dict], list[dict]]:
+    """Find the emulator folder each entry a launcher runs from one goes to.
+
+    The platform keeps its BIOS folder beside its own folder holding the
+    launcher config (RetroBat's bios beside emulationstation): a BIOS
+    folder of that name whose parent holds the config is the platform's.
+    A key the config sets moves the folder somewhere this run does not
+    follow, so its files are left out. Otherwise the folder is the first of
+    the searched places that exists, the default one when none does, as the
+    launcher searches them.
+    """
+    inside = [entry for entry in files if entry.get("root") == "emulators"]
+    if not inside:
+        return files, []
+    layout = manifest.get("emulators_directory") or {}
+    home = bios_path.parent
+    config = (
+        home.joinpath(*_safe_relative_path(
+            layout["config"], "emulators_directory.config", colons=False).parts)
+        if layout else None
+    )
+    if config is not None and bios_path.name == layout.get("bios_folder") and config.is_file():
+        moved = _config_keys(config)
+        matches = True
+    else:
+        moved, matches = set(), False
+    kept: list[dict] = []
+    unplaced: list[dict] = []
+    for entry in files:
+        if entry.get("root") != "emulators":
+            kept.append(entry)
+            continue
+        key = _safe_relative_path(str(entry["dest"]), "emulators dest", colons=False).parts[0]
+        places = [
+            home.joinpath(*_safe_relative_path(
+                t.replace("{key}", key), "emulators place", colons=False).parts)
+            for t in layout.get("searched") or []
+        ]
+        default = home.joinpath(
+            *_safe_relative_path(layout.get("default", "").replace("{key}", key),
+                                 "emulators default", colons=False).parts
+        ) if matches else None
+        if (matches and key.lower() not in moved and default is not None
+                and all(_lexically_under(place, home) for place in [*places, default])):
+            found = next((place for place in places if place.is_dir()), None)
+            _EMULATOR_DIRS[(bios_path, key)] = found or default
+            kept.append(entry)
+            continue
+        unplaced.append({
+            "dest": entry["dest"], "name": PurePosixPath(entry["dest"]).name,
+            "system": "", "systems": list(entry.get("systems") or []), "required": False,
+            "reason": "no_emulators_directory", "cores": entry.get("cores"),
+            "root": "emulators",
+        })
+    if unplaced and say:
+        why = (f"{config} sets their folder" if matches
+               else f"{bios_path} is not the {layout.get('bios_folder') or 'BIOS'} folder "
+                    f"beside {layout.get('config') or 'its config'}")
+        print(f"  {_plural(len(unplaced), 'file')} read from {display}'s emulator folders "
+              f"left out: {why}.")
     return kept, unplaced
 
 
@@ -14371,6 +14744,37 @@ def _check_cores_dir(folder: Path) -> None:
     sys.exit(1)
 
 
+def _unprofiled_cores_firmware(
+    plat: str, bios_path: Path, manifest: dict, found: list[str], searched: list[Path],
+) -> list[str]:
+    """What the installed cores the list has no profile for declare, each said.
+
+    Such a core reads systems the list cannot name, and narrowing to the
+    installed cores dropped its BIOS without a word (issue 87, parallel_dc
+    before its profile). Its .info is what RetroArch itself checks, so the
+    files it declares are kept. A core without one is named.
+    """
+    unknown = unknown_cores(manifest, found)
+    if not unknown:
+        return []
+    dirs = info_dirs(plat, bios_path, searched)
+    dests: list[str] = []
+    for core in unknown:
+        declared = info_firmware(dirs, core)
+        if declared is None:
+            message = (f"{core}: a core this list does not know, with no .info to read: "
+                       "its files may be missing. Run without --installed-cores "
+                       "to install every file.")
+        else:
+            message = (f"{core}: a core this list does not know, "
+                       f"{_plural(len(declared), 'file')} its .info declares kept")
+        print(f"  {message}")
+        EVENTS.emit("unknown_core", platform=plat, core=core,
+                    info=declared is not None, dests=declared or [], message=message)
+        dests.extend(declared or [])
+    return dests
+
+
 def _no_core_found(plat: str, bios_path: Path, searched: list[Path]) -> None:
     """Refuse --installed-cores with no core, and say how to point at them.
 
@@ -15719,12 +16123,14 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     # Every check --installed-cores makes before anything is written: a
     # refusal for the second platform must not follow an install of the first.
     cores_found: dict[tuple[str, Path], list[str]] = {}
+    cores_searched: dict[tuple[str, Path], list[Path]] = {}
     for plat_name, bios_path in platforms:
         if plat_name in CORE_PLATFORMS:
             if args.cores_dir:
                 _check_cores_dir(args.cores_dir)
             searched = [args.cores_dir] if args.cores_dir else core_dirs(plat_name, bios_path)
             cores_found[(plat_name, bios_path)] = installed_cores(searched)
+            cores_searched[(plat_name, bios_path)] = searched
         elif args.installed_cores:
             print(
                 f"Error: {plat_name} ships its cores with the system. "
@@ -15849,7 +16255,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             else:
                 before = len(files)
                 files, omitted_files = narrow_to_cores(
-                    manifest, target_info["cores"], files, omitted_files
+                    manifest, target_info["cores"], files, omitted_files,
+                    target=target,
                 )
                 detail(f"  Filtered {before} to {len(files)} files for target {target}")
 
@@ -15868,8 +16275,12 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 print(_older_list_advice(plat_name), file=sys.stderr)
                 sys.exit(1)
             before = len(files)
+            info_dests = _unprofiled_cores_firmware(
+                plat_name, bios_path, manifest, found_cores,
+                cores_searched.get((plat_name, bios_path), []),
+            )
             files, omitted_files = narrow_to_cores(
-                manifest, found_cores, files, omitted_files
+                manifest, found_cores, files, omitted_files, info_dests
             )
             detail(f"  Narrowed {before} to {len(files)} files to the installed cores")
 
@@ -15898,6 +16309,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         display = display_name(plat_name, manifest)
         files, unplaced = place_save_entries(
             files, bios_path, manifest, args.save_dir, display, say=False)
+        files, beyond = place_relative_entries(
+            files, bios_path, manifest, display, say=not listing)
+        files, elsewhere = place_emulator_entries(
+            files, bios_path, manifest, display, say=not listing)
+        unplaced = [*unplaced, *beyond, *elsewhere]
         if not manifest.get("save_directory"):
             # Its own list leaves these files out: naming the folder with
             # --save-dir installs none of them, and was advised in a loop.

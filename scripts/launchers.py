@@ -17,7 +17,7 @@ under the launcher's name, a file the core accepts by content.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
 from common import declared_root, name_match_size_ok, resolve_local_file, sanitize_pack_path
@@ -65,6 +65,7 @@ class LauncherPlace:
     anchored: bool
     conditional: bool
     source_ref: str
+    passes_to: str = ""
 
     def fold(self, name: str) -> str:
         return name.lower() if self.case_insensitive else name
@@ -85,6 +86,103 @@ class LauncherPlace:
             self.kind in ("names_searched", "fixed_name", "links")
             and not self.conditional
         )
+
+
+def setting_tokens(passes_to: str) -> set[str]:
+    """The words of a record's ``passes_to``, as an emulator setting is spelled.
+
+    "command line -romfile4p" hands the file to sdltrs's romfile4p option,
+    "settings.bml NeoGeoPocket/Firmware/BIOS.World" to an ares setting.
+    """
+    return {
+        word.strip("()\"',;").lstrip("-")
+        for word in passes_to.split()
+    } - {""}
+
+
+def suffixed_stem(name: str) -> str | None:
+    """The file name a launcher name carries before an extension it appended.
+
+    ROCKNIX's Amiberry config passes kick34005.A500.rom, the name Amiberry
+    gives Kickstart 1.3 (amiberry_whdbooter.cpp:370) followed by ".rom". A
+    stem that is no file name itself (scph1001 of scph1001.bin) is none.
+    """
+    base = name.rsplit("/", 1)[-1]
+    stem = base.rsplit(".", 1)[0]
+    return stem if "." in stem else None
+
+
+_MODEL = re.compile(r"\b([A-Z]{2,5})-?(\d{3,6}[A-Z]?)\b")
+
+
+def catalogued_model_files(name: str, db: dict) -> list[dict]:
+    """Held files a dump catalogue describes as the model a launcher name spells.
+
+    RetroDECK sets LRPS2's pcsx2_bios option to scph10000.bin, a name no code
+    hashes: the SCPH-10000 is the model whose BIOS it means. Redump and TOSEC
+    describe two revisions for it. Primaries come before .variants copies,
+    then the Redump name, which carries the version (ps2-0100j before
+    ps2-0101j), then the No-Intro and TOSEC names.
+    """
+    stem = name.rsplit("/", 1)[-1].rsplit(".", 1)[0].casefold()
+    if not re.fullmatch(r"[a-z]{2,5}\d{3,6}[a-z]?", stem):
+        return []
+    found = []
+    for record in db.get("files", {}).values():
+        catalogues = record.get("provenance") or {}
+        models = {
+            (a + b).casefold()
+            for entry in catalogues.values()
+            for a, b in _MODEL.findall(str(entry.get("description") or ""))
+        }
+        if stem in models:
+            names = [
+                str((catalogues.get(source) or {}).get("name") or "")
+                for source in ("redump", "no-intro", "tosec")
+            ]
+            found.append(("/.variants/" in str(record.get("path", "")), names, record))
+    # The core accepts every revision of the model, and neither priority nor
+    # region separates two primaries. The pick must still be the same on
+    # every run, so it goes to the original revision: the Redump name carries
+    # the version, and ps2-0100j sorts before ps2-0101j.
+    return [record for *_key, record in sorted(found, key=lambda f: (f[0], f[1]))]
+
+
+def name_settings(record: dict, names: list[str]) -> dict[str, str]:
+    """The setting each name of a record is written to.
+
+    A record naming several files of one config spells passes_to as
+    describe_keys does (shell_launchers.py), "atari800.cfg ROM_OS_A_PAL,
+    ROM_5200_A, ...", one key per name and in the order of the names. When
+    the counts differ, each name keeps the whole description.
+    """
+    passes_to = str(record.get("passes_to") or "")
+    head, _, rest = passes_to.partition(" ")
+    keys = [
+        key.strip()
+        for key in re.sub(r"\[[^\]]*\]", ",", rest).split(",")
+        if key.strip()
+    ]
+    if len(names) > 1 and len(keys) == len(names) and all(" " not in k for k in keys):
+        return {name: f"{head} {key}" for name, key in zip(names, keys)}
+    return {name: passes_to for name in names}
+
+
+def setting_readers(passes_to: str, profiles: dict, keys: Iterable[str]) -> list[str]:
+    """The profiles with an entry read from the setting a launcher writes."""
+    if not passes_to:
+        return []
+    return sorted(
+        key for key in keys
+        if (profile := profiles.get(key)) is not None
+        and any(set_by(entry, passes_to) for entry in profile.get("files") or [])
+    )
+
+
+def set_by(entry: dict, passes_to: str) -> bool:
+    """Whether a launcher hands its file to the setting a profile entry is read from."""
+    key = str(entry.get("config_key") or "")
+    return bool(key) and key in setting_tokens(passes_to)
 
 
 def _bios_relative(directory: str, base: str) -> str | None:
@@ -190,15 +288,21 @@ def launcher_places(config: dict) -> list[LauncherPlace]:
             "conditional": bool(record.get("depends_on_option")),
             "source_ref": str(record.get("source_ref", "")),
         }
+        settings = name_settings(record, names)
         if kind == "names_searched":
             # Each directory in turn, every name in it.
             depth = len(directories) if anchored else 1
             ordered = tuple(paths_of(name)[i] for i in range(depth) for name in names)
-            places.append(LauncherPlace(paths=ordered, **common))
+            places.append(LauncherPlace(
+                paths=ordered, passes_to=str(record.get("passes_to") or ""), **common
+            ))
             continue
         # A fixed name is the one file passed, and a core option offers
         # each value as the file the user picks: one place per name.
-        places.extend(LauncherPlace(paths=paths_of(name), **common) for name in names)
+        places.extend(
+            LauncherPlace(paths=paths_of(name), passes_to=settings[name], **common)
+            for name in names
+        )
     return places
 
 
@@ -210,6 +314,31 @@ BIOS_ROOT_VARIABLES = ("$biosdir", "$home/RetroPie/BIOS", "${biosPath}", "$bios_
 
 # The kinds that hand an emulator a whole directory.
 HANDED_KINDS = ("links", "passes_path")
+
+# How a launcher record says the platform starts the emulator in a directory
+# (retropie_launchers._working_directory), and the handle a profile gives
+# that directory in standalone_directories: the call its code reads it with.
+WORKING_DIRECTORY_PASSED = "working directory of "
+WORKING_DIRECTORY = "getcwd"
+# The handle a profile declares when its program reads its files beside its
+# own executable: a launcher record executing one of the profile's files
+# places the folder holding that file where the launcher runs it from.
+EXECUTABLE_DIRECTORY = "executable directory"
+
+# The trees a placed folder belongs to: the BIOS tree every destination is
+# relative to, and the roms directory of a platform whose registry names it.
+BIOS_TREE = ""
+ROMS_TREE = "roms"
+# The emulator folders of a platform whose registry describes them.
+EMULATORS_TREE = "emulators"
+# The frontend's configs folder of a platform whose file records it.
+CONFIGS_TREE = "configs"
+# The tree a platform's list installs into when it starts above the BIOS
+# folder: a plain dest, with no prefix.
+INSTALL_TREE = "install"
+# A folder of neither tree, which no pack and no installer can fill.
+OUTSIDE_TREE = "outside"
+Place = tuple[str, str]
 
 _HOME = re.compile(r"^(?:\$\{HOME\}|\$HOME|\$home|~)(?=/|$)")
 # Flatpak sets XDG_DATA_HOME to ~/.var/app/<id>/data inside the sandbox.
@@ -258,6 +387,55 @@ class HandedDirectory:
     directory: str
     handles: frozenset[str]
     source_ref: str
+    roms_place: Place | None = None
+    # The platform systems, by our ids, the record applies to. Empty when
+    # the launcher hands the directory whatever the system.
+    systems: frozenset[str] = frozenset()
+    # Whether the platform's own list declares files in the folder.
+    holds_declared: bool = False
+
+    def place(self) -> Place | None:
+        """The folder as a place, None when it lies outside both roots."""
+        if self.folder is not None:
+            return (BIOS_TREE, self.folder)
+        return self.roms_place
+
+
+# The placeholder a launcher record writes for the system it is launched
+# for, as Recalbox's extractor spells it: Recalbox passes XRoar `-rompath`
+# `os.path.join(BIOS, args.system)`.
+SYSTEM_PLACEHOLDER = "<system>"
+
+
+def native_systems(config: dict) -> dict[str, str]:
+    """The platform's own system names, each to our id for it.
+
+    A system states its name (native_id) or its files do (native_system).
+    Without either, our id is the platform's name.
+    """
+    found: dict[str, str] = {}
+    for slug, system in (config.get("systems") or {}).items():
+        names = {str(system["native_id"])} if system.get("native_id") else {
+            str(f["native_system"]) for f in system.get("files") or [] if f.get("native_system")
+        }
+        for name in names or {slug}:
+            found.setdefault(name, slug)
+    return found
+
+
+def _listed_directories(raw: str) -> list[str] | None:
+    """The directories of a colon-separated search path, None for one directory.
+
+    XRoar's rompath is such a list (RetroDECK writes four directories), each
+    entry a path or a variable spelling one. A Windows drive letter or a
+    backslash means a single path.
+    """
+    if ":" not in raw or "\\" in raw or re.match(r"^[A-Za-z]:", raw):
+        return None
+    parts = [p.strip() for p in raw.split(":")]
+    if all(p and p[0] in "/$~" and not re.search(r"[\s,;]", p) for p in parts):
+        return parts
+    return None
 
 
 def handed_directories(config: dict) -> list[HandedDirectory]:
@@ -265,9 +443,14 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
 
     A record naming files (gpsp's gba_bios.bin) or one slot of a directory
     (RetroDECK's GC/EUR) hands over no whole directory, and a search_dir
-    holding several directories names no single one.
+    describing several directories in prose names no single one. A search
+    path (XRoar's rompath) gives each of its directories, in order. A record
+    naming systems applies to those systems only, and one whose search_dir
+    holds <system> gives one directory per system the platform declares.
     """
     base = str(config.get("base_destination") or "bios")
+    natives = native_systems(config)
+    declared = {d.lower() for d in declared_destinations(config)}
     found: list[HandedDirectory] = []
     for record in config.get("launchers") or []:
         if record.get("build") != "standalone" or record.get("kind") not in HANDED_KINDS:
@@ -275,59 +458,386 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
         if record.get("names") or record.get("slot"):
             continue
         raw = str(record.get("search_dir") or "").strip()
-        if not raw or re.search(r"[\s,:;]", raw):
+        if not raw:
             continue
-        directory = normalize_handle(raw)
-        handles = frozenset(
-            handle
-            for token in str(record.get("passes_to") or "").split()
-            if (handle := normalize_handle(token)) and handle != directory
-        )
-        for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
-            found.append(HandedDirectory(
-                emulator=emulator,
-                folder=_folder_in_bios(raw, base),
-                directory=directory,
-                handles=handles,
-                source_ref=str(record.get("source_ref", "")),
-            ))
+        named = frozenset(natives.get(str(s), str(s)) for s in record.get("systems") or [])
+        if SYSTEM_PLACEHOLDER in raw:
+            variants = [
+                (raw.replace(SYSTEM_PLACEHOLDER, native), frozenset({slug}))
+                for native, slug in sorted(natives.items())
+                if not named or slug in named
+            ]
+        else:
+            variants = [(raw, named)]
+        passes_to = str(record.get("passes_to") or "")
+        for spelled, systems in variants:
+            parts = _listed_directories(spelled) or [spelled]
+            if any(re.search(r"[\s,:;]", part) for part in parts):
+                continue
+            for part in parts:
+                directory = normalize_handle(part)
+                if passes_to.startswith(WORKING_DIRECTORY_PASSED):
+                    # The program runs from the directory: what its code
+                    # reads through getcwd(), or relative to it, is below it.
+                    handles = frozenset({WORKING_DIRECTORY})
+                else:
+                    handles = frozenset(
+                        handle
+                        for token in passes_to.split()
+                        if (handle := normalize_handle(token)) and handle != directory
+                    )
+                folder = _folder_in_bios(part, base)
+                for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
+                    found.append(HandedDirectory(
+                        emulator=emulator,
+                        folder=folder,
+                        directory=directory,
+                        handles=handles,
+                        source_ref=str(record.get("source_ref", "")),
+                        roms_place=None if folder is not None else (
+                            _roms_place(config, folder_in_roms(part, config))
+                            or _configs_place(folder_in_configs(part, config))
+                            or _emulators_place(folder_in_emulators(part, config))
+                        ),
+                        systems=systems,
+                        holds_declared=bool(folder) and any(
+                            d.startswith(f"{(folder or '').lower()}/") for d in declared
+                        ),
+                    ))
     return found
 
 
-def standalone_root(
-    names: Iterable[str], declared: Iterable[str], handed: Iterable[HandedDirectory]
-) -> str | None:
-    """The folder of the BIOS tree a platform gives a standalone build's layout.
+def _configs_place(path: str | None) -> Place | None:
+    """A folder below the configs root, as a place of the configs tree."""
+    return None if path is None else (CONFIGS_TREE, path)
 
-    ``declared`` are the directories the build resolves ``standalone_path``
-    against, as its profile names them (``standalone_directories``). A
-    record handing a folder of the BIOS tree under one of them gives it
-    directly: RetroPie points Flycast's ~/.local/share/flycast at bios/dc. A
-    record handing a directory outside the tree under one of them is
-    followed through a link to the tree: ROCKNIX's patched Flycast uses
-    /storage/roms/dreamcast/data, which its start script links to bios/dc.
 
-    None when nothing gives a folder, or when two records give two: the
-    layout is then the profile's, relative to the BIOS root.
+def _emulators_place(path: str | None) -> Place | None:
+    """A folder an emulator key names, as a place of the emulators tree."""
+    return None if path is None else (EMULATORS_TREE, path)
+
+
+def _roms_place(config: dict, path: str | None) -> Place | None:
+    """A path below the roms root as a place: in the install tree when the
+    platform installs above its BIOS folder (AmberELEC), else the roms tree."""
+    if path is None:
+        return None
+    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+
+    layout = outer_layout(config, ROMS_ROOT) or {}
+    if "install_prefix" in layout:
+        prefix = layout["install_prefix"]
+        return (INSTALL_TREE, sanitize_pack_path(f"{prefix}/{path}" if prefix else path))
+    return (ROMS_TREE, path)
+
+
+def folder_in_configs(directory: str, config: dict) -> str | None:
+    """A directory relative to the frontend's configs folder, None outside it.
+
+    Only a platform whose file records its configs root has one
+    (``configs_root.path``): Batocera's /userdata/system/configs, where its
+    generators start shadPS4 from configs/shadps4.
+    """
+    from common import CONFIGS_ROOT  # noqa: PLC0415
+
+    return folder_in_root(directory, config, CONFIGS_ROOT)
+
+
+def folder_in_roms(directory: str, config: dict) -> str | None:
+    """A directory relative to the platform's roms directory, None outside it.
+
+    Only a platform whose rom folders file records its roms root has one
+    (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
+    folder and the folders its launchers run programs from.
+    """
+    from common import ROMS_ROOT  # noqa: PLC0415
+
+    return folder_in_root(directory, config, ROMS_ROOT)
+
+
+def folder_in_root(directory: str, config: dict, root: str) -> str | None:
+    """A directory relative to an outer root's path, None outside it."""
+    from common import outer_layout  # noqa: PLC0415
+
+    roms = str((outer_layout(config, root) or {}).get("path") or "").rstrip("/")
+    directory = directory.strip().rstrip("/")
+    if not roms or not directory.startswith(roms + "/"):
+        return None
+    rest = directory[len(roms) + 1:]
+    return None if re.search(r"[\s<>$:;]", rest) else rest
+
+
+def folder_in_emulators(directory: str, config: dict) -> str | None:
+    """The emulator folder a launcher names by its key, None for any other.
+
+    Only a platform whose registry describes its emulator folders has one
+    (``emulators_directory.launcher_spelling``): RetroBat's generators take
+    each from AppConfig.GetFullPath("<key>"), a folder of the RetroBat
+    install named after the key.
+    """
+    spelling = str((config.get("emulators_directory") or {}).get("launcher_spelling") or "")
+    if "{key}" not in spelling:
+        return None
+    # The key, then any folder below it: Citron's generator creates
+    # <folder>/user, its portable data folder.
+    pattern = re.escape(spelling).replace(re.escape("{key}"), r"([\w.-]+)") + r"((?:/[\w.-]+)*)"
+    found = re.fullmatch(pattern, directory.strip())
+    return found.group(1) + found.group(2) if found else None
+
+
+@dataclass(frozen=True)
+class ExecutedFile:
+    """A file a platform's launcher executes, and where it lies.
+
+    ``place`` is (root, path): the BIOS tree or the roms directory, None
+    when the file lies outside both (RetroBat's emulator folders).
+    """
+
+    emulator: str
+    name: str
+    place: Place | None
+    source_ref: str
+
+
+def executed_files(config: dict) -> list[ExecutedFile]:
+    """Every file a platform's launchers execute, from records passing it to exec."""
+    base = str(config.get("base_destination") or "bios")
+    found: list[ExecutedFile] = []
+    for record in config.get("launchers") or []:
+        if record.get("kind") not in ("fixed_name", "names_searched"):
+            continue
+        if str(record.get("passes_to") or "").strip() != "exec":
+            continue
+        raw = str(record.get("search_dir") or "").strip()
+        directories = _directories(record, base)
+        roms = folder_in_roms(raw, config) if raw and not directories else None
+        emulator_folder = folder_in_emulators(raw, config) if raw and not directories else None
+        # A program file needs no extension (pico8, vox): the names are
+        # taken as written, placeholders left out.
+        for name in (str(n).strip() for n in record.get("names") or []):
+            if not name or re.search(r"[<>{}]", name):
+                continue
+            if directories:
+                place: Place | None = (BIOS_TREE, sanitize_pack_path(
+                    f"{directories[0]}/{name}" if directories[0] else name
+                ))
+            elif roms is not None:
+                place = _roms_place(config, sanitize_pack_path(f"{roms}/{name}" if roms else name))
+            elif emulator_folder is not None:
+                place = (EMULATORS_TREE, sanitize_pack_path(f"{emulator_folder}/{name}"))
+            else:
+                place = None
+            for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
+                found.append(ExecutedFile(
+                    emulator, name.rsplit("/", 1)[-1], place, str(record.get("source_ref", ""))
+                ))
+    return found
+
+
+def _below(handle: str, directory: str) -> str | None:
+    """``handle`` relative to ``directory``, None when it is not inside it."""
+    if handle == directory:
+        return ""
+    if handle.startswith(directory + "/"):
+        return handle[len(directory) + 1:]
+    return None
+
+
+def _join(*parts: str) -> str:
+    return "/".join(p for p in parts if p)
+
+
+def _record_places(
+    record: HandedDirectory, inner: str, records: list[HandedDirectory]
+) -> list[tuple[str, Place]]:
+    """(subfolder, place) for the directory ``inner`` below what a record hands.
+
+    A record handing a folder of a tree gives it directly. One handing a
+    directory outside the trees is followed through the links that put a
+    folder at that directory, below it or above it.
+    """
+    if record.folder is not None:
+        return [("", (BIOS_TREE, _join(record.folder, inner)))]
+    base = _join(record.directory, inner)
+    found: list[tuple[str, Place]] = []
+    for link in records:
+        target = link.place()
+        if target is None:
+            continue
+        for handle in link.handles:
+            rest = _below(handle, base)
+            if rest is not None:
+                found.append((rest, target))
+                continue
+            up = _below(base, handle) if inner else None
+            if up:
+                found.append(("", (target[0], _join(target[1], up))))
+    if not found and record.roms_place is not None:
+        root, folder = record.roms_place
+        found.append(("", (root, _join(folder, inner))))
+    return found
+
+
+def _bind(
+    records: list[HandedDirectory],
+    links: list[HandedDirectory],
+    wanted: set[str],
+    named: Mapping[str, str],
+    pools: Mapping[str, str],
+) -> dict[str, set[Place]]:
+    """The places each subfolder of the layout is given by ``records``.
+
+    A record whose handle is a declared directory, or lies below one, gives
+    that subfolder, and a handle ``named`` gives the one folder it stands
+    for. One whose handle lies above a declared directory, or is the
+    environment variable the declared directory is spelled from
+    ($XDG_DATA_HOME/suyu), gives the declared directory where it lands:
+    RetroPie configures XRoar with --prefix=$md_inst, so
+    ${prefix}/share/xroar/roms is $md_inst/share/xroar/roms. When it lands
+    in no folder a pack fills, the layout is read outside the trees.
+    ``links`` are the records followed from a directory outside the trees.
+
+    A handle in ``pools`` names a list of directories the program searches
+    one after the other: openMSX's filepool, XRoar's rompath. A file in any
+    of them is read, so the pool gives one: the directory the platform's own
+    list already fills (Batocera's bios/openmsx beside bios/Machines), else
+    the first of the BIOS tree, else the first a pack can fill.
+    """
+    found: dict[str, set[Place]] = {}
+    pooled: dict[str, list[tuple[bool, Place]]] = {}
+    for record in records:
+        for handle in record.handles:
+            if handle in pools:
+                for rest, place in _record_places(record, "", links):
+                    pooled.setdefault(_join(pools[handle], rest), []).append(
+                        (record.holds_declared, place)
+                    )
+                continue
+            if handle in named:
+                for rest, place in _record_places(record, "", links):
+                    found.setdefault(_join(named[handle], rest), set()).add(place)
+            for directory in wanted:
+                sub = _below(handle, directory)
+                if sub is not None:
+                    for rest, place in _record_places(record, "", links):
+                        found.setdefault(_join(sub, rest), set()).add(place)
+                    continue
+                if handle == directory:
+                    continue
+                inner = next(
+                    (up for spelled in (f"${handle}", handle)
+                     if (up := _below(directory, spelled)) is not None),
+                    None,
+                )
+                if inner is None:
+                    continue
+                places = _record_places(record, inner, links)
+                for rest, place in places or [("", (OUTSIDE_TREE, ""))]:
+                    found.setdefault(rest, set()).add(place)
+    for sub, entries in pooled.items():
+        # The directory the platform's own list fills, else the first of the
+        # BIOS tree, else the first a pack fills.
+        filled = [p for held, p in entries if held]
+        in_bios = [p for _held, p in entries if p[0] == BIOS_TREE]
+        found.setdefault(sub, set()).add((filled or in_bios or [p for _h, p in entries])[0])
+    return found
+
+
+def standalone_bindings(
+    names: Iterable[str],
+    declared: Iterable[str],
+    handed: Iterable[HandedDirectory],
+    executed: Iterable[ExecutedFile] = (),
+    layout: Iterable[str] = (),
+    pools: Mapping[str, str] | None = None,
+    systems: Iterable[str] = (),
+) -> dict[str, Place]:
+    """The folders a platform gives a standalone build's layout.
+
+    ``declared`` are the directories the build resolves its paths against,
+    as its profile names them (``standalone_directories``), and ``pools``
+    the settings it reads as search lists, each to the subfolder of the
+    layout its directories stand for (``standalone_pools``). The result maps
+    a subfolder of that layout ("" for the whole of it) to the place, a
+    folder of the BIOS tree or of the roms directory, the emulator reads it
+    from.
+
+    A record handing a folder under a declared directory gives it directly:
+    RetroPie points Flycast's ~/.local/share/flycast at bios/dc. A record
+    handing a directory outside the trees is followed through the links that
+    put a folder at it or below it: ROCKNIX's patched Flycast uses
+    /storage/roms/dreamcast/data, which its start script links to bios/dc,
+    and RetroPie starts UAE4All2 in $md_inst, whose kickstarts folder it
+    links to bios/amiga.
+
+    ``systems`` are the platform systems, by our ids, an entry is launched
+    for. A record naming systems replaces, for those systems, what the
+    records naming none give: RetroBat passes XRoar `-rompath bios/coco` for
+    coco and bios/dragon for every other system.
+
+    A profile whose program reads its files beside its executable declares
+    EXECUTABLE_DIRECTORY, and ``layout`` holds its paths: a launcher that
+    executes one of them gives the folder holding it. Batocera runs
+    pico-8/pico8 from its BIOS folder, ROCKNIX pico8_64 from
+    /storage/roms/pico-8.
+
+    A subfolder two records give two places is left out.
     """
     names = set(names)
-    wanted = {normalize_handle(d) for d in declared}
-    if not wanted:
-        return None
+    pools = {normalize_handle(k): str(v).strip("/") for k, v in (pools or {}).items()}
+    # "<handle> = <subfolder>" names the code's handle for one folder of the
+    # layout: Citron's CitronPath::KeysDir is its keys/ folder, and a patch
+    # that rewrites the handle moves that folder alone.
+    named: dict[str, str] = {}
+    wanted: set[str] = set()
+    for raw in declared:
+        handle, sep, sub = str(raw).partition(" = ")
+        if sep:
+            named[normalize_handle(handle)] = sanitize_pack_path(sub.strip())
+        else:
+            wanted.add(normalize_handle(handle))
+    wanted -= set(pools)
+    if not wanted and not named and not pools:
+        return {}
+    systems = set(systems)
     records = [h for h in handed if h.emulator in names]
-    folders: set[str] = set()
-    for record in records:
-        if not record.handles & wanted:
+    generic = [h for h in records if not h.systems]
+    specific = [h for h in records if h.systems & systems]
+
+    found = _bind(generic, generic, wanted, named, pools)
+    # A link is followed whatever system it was written for.
+    found.update(_bind(specific, specific + generic, wanted, named, pools))
+    if EXECUTABLE_DIRECTORY in wanted:
+        paths = list(layout)
+        for run in executed:
+            if run.emulator not in names:
+                continue
+            # A program run from a folder outside both trees (RetroBat's
+            # emulators/pico8) binds its folder to no place a pack fills.
+            root, path = run.place or (OUTSIDE_TREE, run.name)
+            folder = path.rsplit("/", 1)[0] if "/" in path else ""
+            for entry_path in paths:
+                if entry_path.rsplit("/", 1)[-1] != run.name:
+                    continue
+                sub = entry_path.rsplit("/", 1)[0] if "/" in entry_path else ""
+                found.setdefault(sub, set()).add((root, folder))
+    return {sub: next(iter(places)) for sub, places in found.items() if len(places) == 1}
+
+
+def bound_path(path: str, bindings: dict[str, Place]) -> Place | None:
+    """Where a platform holds a layout path, None when no binding covers it.
+
+    The longest subfolder that contains the path wins: a link of
+    kickstarts/ places kickstarts/kick13.rom even when the whole layout is
+    bound elsewhere.
+    """
+    for sub in sorted(bindings, key=len, reverse=True):
+        if sub and not path.startswith(sub + "/"):
             continue
-        if record.folder is not None:
-            folders.add(record.folder)
-            continue
-        folders.update(
-            link.folder
-            for link in records
-            if link.folder is not None and record.directory in link.handles
-        )
-    return next(iter(folders)) if len(folders) == 1 else None
+        rest = path[len(sub) + 1:] if sub else path
+        root, folder = bindings[sub]
+        return (root, f"{folder}/{rest}" if folder else rest)
+    return None
 
 
 def held_record(report: dict, db: dict) -> dict | None:
@@ -390,6 +900,8 @@ class _Candidate:
     by_content: bool
     # Matched by the size the code checks, the entry naming no hash.
     by_shape: bool = False
+    # Matched through the setting the launcher writes or the name it extends.
+    by_setting_or_stem: bool = False
 
 
 class LauncherLayer:
@@ -419,12 +931,42 @@ class LauncherLayer:
             self._by_name_folded.setdefault(name.lower(), []).extend(sha1s)
         self._files = db.get("files", {})
         self._owners: dict[tuple[str, bool], list[LauncherPlace]] = {}
+        self._unoffered: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         relevant = set(relevant)
         for place in self.places:
             standalone = place.build == "standalone"
-            for emulator in (e.strip() for e in place.emulator.split(",")):
-                for key in self._profiles_named(emulator, profiles, relevant):
-                    self._owners.setdefault((key, standalone), []).append(place)
+            owners = {
+                key
+                for emulator in (e.strip() for e in place.emulator.split(","))
+                for key in self._profiles_named(emulator, profiles, relevant)
+            }
+            # RetroDECK names its frontend, retroarch, and the core option it
+            # writes, pcsx2_bios, names the core.
+            if not owners:
+                owners = set(setting_readers(place.passes_to, profiles, relevant))
+            for key in sorted(owners):
+                self._owners.setdefault((key, standalone), []).append(place)
+                # The report never offers a placeholder, which stands for every
+                # file a scan finds, nor an entry the platform's list settles
+                # (AmberELEC declares kick34005.A500): the launcher still reads
+                # its file under its own name.
+                self._unoffered.setdefault((key, standalone), [
+                    (entry, _placeholder_report(key, profiles[key], entry))
+                    for entry in profiles[key].get("files") or []
+                ])
+        self._db = db
+        self._declared_elsewhere: set[tuple[str, bool, str, str]] = set()
+
+    def declared_elsewhere(self, emulator: str, standalone: bool, entry: dict) -> None:
+        """Record a core entry the platform's list settles under another
+        name. A launcher opening the entry's own name finds nothing there:
+        RetroPie lists KS 1.3 as kick34005.A500, and its fs-uae launcher
+        passes $biosdir/kick13.rom. A name the list holds somewhere is
+        copied to the launcher's place from that declaration."""
+        name = str(entry.get("name", ""))
+        if name.rsplit("/", 1)[-1].lower() in self.declared_names_folded:
+            return
+        self._declared_elsewhere.add((emulator, standalone, name, str(entry.get("path") or "")))
 
     @staticmethod
     def _profiles_named(name: str, profiles: dict, relevant: set[str]) -> list[str]:
@@ -461,6 +1003,17 @@ class LauncherLayer:
         names = own & basenames
         if names:
             return _Candidate(entry, names, False)
+        # RetroPie runs sdl2trs with `-romfile4p $biosdir/level4p.rom`: the
+        # file under that name is the one the romfile4p slot reads.
+        if set_by(entry, place.passes_to):
+            return _Candidate(entry, basenames, False, by_setting_or_stem=True)
+        if place.kind == "fixed_name":
+            stems = {
+                base for base in basenames
+                if (stem := suffixed_stem(base)) is not None and place.fold(stem) in own
+            }
+            if stems:
+                return _Candidate(entry, stems, False, by_setting_or_stem=True)
         content = {
             place.fold(path.rsplit("/", 1)[-1])
             for path in place.paths
@@ -525,13 +1078,32 @@ class LauncherLayer:
         by_layout: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         for emulator, standalone, entry, report in candidates:
             by_layout.setdefault((emulator, standalone), []).append((entry, report))
+        offered = {id(entry) for _e, _s, entry, _r in candidates}
+        for layout, members in self._unoffered.items():
+            for entry, report in members:
+                if id(entry) in offered:
+                    continue
+                if "<" not in str(entry.get("name", "")):
+                    report["in_repo"] = resolve_held(report) is not None
+                report["unoffered"] = True
+                if (*layout, str(entry.get("name", "")),
+                        str(entry.get("path") or "")) in self._declared_elsewhere:
+                    report["declared_elsewhere"] = True
+                by_layout.setdefault(layout, []).append((entry, report))
         placed: set[str] = set()
         for (emulator, standalone), members in sorted(by_layout.items()):
             for place in self.places_for(emulator, standalone):
+                # An entry the report left out answers only through the
+                # setting or the extended name: by its own name it was left
+                # out for a reason (a region variant, a settled duplicate).
+                # One the platform settles under another name still answers
+                # by its own: the place reads a name the list does not hold.
                 matched = [
                     (candidate, report)
                     for entry, report in members
                     if (candidate := self.match(place, entry)) is not None
+                    and (candidate.by_setting_or_stem or not report.get("unoffered")
+                         or report.get("declared_elsewhere"))
                 ]
                 # A size names one entry only when no other of the core's
                 # entries takes that size too.
@@ -584,7 +1156,31 @@ class LauncherLayer:
             ):
                 return True
             if not place.anchored:
-                continue
+                # A setting holds a name the core resolves in the directory
+                # of the entry read from it: LRPS2 joins pcsx2_bios under
+                # pcsx2/bios.
+                setting = [
+                    (candidate, report) for candidate, report in matched
+                    if set_by(candidate.entry, place.passes_to)
+                ]
+                directory = next(
+                    (
+                        str(c.entry.get("path") or "").rpartition("/")[0]
+                        for c, _report in setting
+                        if "/" in str(c.entry.get("path") or "")
+                    ),
+                    None,
+                )
+                if directory is None:
+                    continue
+                path = f"{directory}/{name}"
+                if place.fold(path) in folded_reported:
+                    return True
+                source = self._content_for(place, name, key, setting, resolve_held)
+                if source is None or place.fold(path) in placed:
+                    continue
+                placed.add(place.fold(path))
+                return _launcher_entry(source[0], name, path, source[1], place)
             # The emulator as this platform installs it brings the file: the
             # place is filled, nothing is packed (ROCKNIX's xemu hdd image).
             if any(key in candidate.names and report.get("bundled")
@@ -633,7 +1229,34 @@ class LauncherLayer:
             record = resolve_held(report)
             if record is not None:
                 return report, record
+        for candidate, report in matched:
+            if key not in candidate.names or not set_by(candidate.entry, place.passes_to):
+                continue
+            for record in catalogued_model_files(name, self._db):
+                if name_match_size_ok(candidate.entry, record.get("size")):
+                    return report, record
         return None
+
+
+def _placeholder_report(key: str, profile: dict, entry: dict) -> dict:
+    """The report entry of an entry the gap report never builds."""
+    identity = {
+        field: entry[field]
+        for field in ("aliases", "md5", "sha1", "sha256", "crc32", "size", "min_size", "max_size")
+        if entry.get(field) is not None
+    }
+    return {
+        **identity,
+        "profile": key,
+        "emulator": profile.get("emulator", key),
+        "name": entry.get("name", ""),
+        "path": entry.get("path") or entry.get("name", ""),
+        "system": entry.get("system"),
+        "systems": profile.get("systems"),
+        "required": entry.get("required", False),
+        "category": entry.get("category"),
+        "in_repo": False,
+    }
 
 
 def _launcher_entry(
@@ -643,7 +1266,7 @@ def _launcher_entry(
     entry = {
         key: report.get(key)
         for key in (
-            "profile", "emulator", "systems", "system", "region", "variant_group",
+            "profile", "emulator", "systems", "system", "region", "selection_slot",
             "required", "hle_fallback", "category",
         )
     }

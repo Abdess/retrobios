@@ -15,7 +15,8 @@ launcher looks for nothing".
 from __future__ import annotations
 
 import ast
-from collections.abc import Callable
+import re
+from collections.abc import Callable, Iterable
 from typing import Any
 
 from .configgen_launchers import (
@@ -58,6 +59,29 @@ def _config_option(node: ast.AST) -> tuple[str, Any] | None:
     return node.args[0].value, default
 
 
+def _option_names(node: ast.AST) -> list[str]:
+    """Options a node reads: system.config.get*(o), system.config[o], system.isOptSet(o)."""
+    found: list[str] = []
+    for child in ast.walk(node):
+        option = _config_option(child)
+        if option is None and (
+            isinstance(child, ast.Subscript)
+            and ast.unparse(child.value) == "system.config"
+            and isinstance(child.slice, ast.Constant)
+        ):
+            option = (str(child.slice.value), None)
+        if option is None and (
+            isinstance(child, ast.Call)
+            and ast.unparse(child.func) == "system.isOptSet"
+            and child.args
+            and isinstance(child.args[0], ast.Constant)
+        ):
+            option = (str(child.args[0].value), None)
+        if option is not None and option[0] not in found:
+            found.append(option[0])
+    return found
+
+
 def path_constants(source: Source) -> dict[str, str]:
     """batoceraPaths' module constants that are plain paths."""
     constants: dict[str, str] = {}
@@ -73,6 +97,32 @@ def path_constants(source: Source) -> dict[str, str]:
     return constants
 
 
+def configs_root(cg: Configgen) -> dict[str, str]:
+    """Where configgen keeps the emulators' configs, relative to the BIOS folder.
+
+    batoceraPaths' CONFIGS (/userdata/system/configs), the folder a generator
+    starts an emulator from (shadPS4's configs/shadps4), with the lines that
+    build it and BIOS.
+    """
+    import posixpath  # noqa: PLC0415
+
+    src = cg.source(f"{cg.generators.rsplit('/', 1)[0]}/batoceraPaths.py")
+    if "CONFIGS" not in cg.paths:
+        src.fail("no CONFIGS path constant")
+    wanted: set[str] = {"CONFIGS", "BIOS"}
+    spans = []
+    for node in reversed(src.tree.body):
+        name = _assigned_name(node)
+        if name in wanted and isinstance(node, (ast.Assign, ast.AnnAssign)) and node.value:
+            spans.append((node.lineno, node.end_lineno or node.lineno))
+            wanted |= {n.id for n in ast.walk(node.value) if isinstance(n, ast.Name)}
+    return {
+        "path": cg.paths["CONFIGS"],
+        "from_bios": posixpath.relpath(cg.paths["CONFIGS"], cg.bios),
+        "source_ref": src.ref(spans),
+    }
+
+
 def _path_value(node: ast.AST | None, constants: dict[str, str]) -> str | None:
     if isinstance(node, ast.Name):
         return constants.get(node.id)
@@ -81,9 +131,10 @@ def _path_value(node: ast.AST | None, constants: dict[str, str]) -> str | None:
         and isinstance(node.func, ast.Name)
         and node.func.id == "Path"
         and len(node.args) == 1
-        and isinstance(node.args[0], ast.Constant)
     ):
-        return str(node.args[0].value)
+        if isinstance(node.args[0], ast.Constant):
+            return str(node.args[0].value)
+        return _path_value(node.args[0], constants)
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
         left = _path_value(node.left, constants)
         right = node.right.value if isinstance(node.right, ast.Constant) else None
@@ -92,12 +143,18 @@ def _path_value(node: ast.AST | None, constants: dict[str, str]) -> str | None:
     return None
 
 
-def generator_names(source: Source) -> dict[str, list[str]]:
-    """Generator module -> the emulator or core names configgen loads it for."""
+def generator_names(source: Source, legacy_map: bool = True) -> dict[str, list[str]]:
+    """Generator module -> the emulator or core names configgen loads it for.
+
+    legacy_map is false for a configgen written before _LEGACY_GENERATOR_MAP
+    (KNULLI's), whose importer has the plain map only.
+    """
     names: dict[str, list[str]] = {}
     plain = source.literal(source.assignment("_GENERATOR_MAP").value, "_GENERATOR_MAP")
     for emulator, (module, _cls) in plain.items():
         names.setdefault(module, []).append(emulator)
+    if not legacy_map:
+        return names
     legacy = source.literal(
         source.assignment("_LEGACY_GENERATOR_MAP").value, "_LEGACY_GENERATOR_MAP"
     )
@@ -108,14 +165,23 @@ def generator_names(source: Source) -> dict[str, list[str]]:
 
 
 class Configgen:
-    """The configgen tree at one revision, read through `read(path)`."""
+    """The configgen tree at one revision, read through `read(path)`.
 
-    def __init__(self, read: Callable[[str], str]) -> None:
+    root is the configgen package in the repository: Batocera's by default,
+    KNULLI keeps the same package under its own path.
+    """
+
+    def __init__(
+        self, read: Callable[[str], str], root: str = CONFIGGEN, legacy_map: bool = True
+    ) -> None:
         self._read = read
         self._sources: dict[str, Source] = {}
-        self.paths = path_constants(self.source(PATHS_MODULE))
+        self.generators = f"{root}/generators"
+        self.importer = f"{self.generators}/importer.py"
+        self.libretro_options = f"{self.generators}/libretro/libretroOptions.py"
+        self.paths = path_constants(self.source(f"{root}/batoceraPaths.py"))
         self.bios = self.paths["BIOS"]
-        self._generators = generator_names(self.source(IMPORTER))
+        self._generators = generator_names(self.source(self.importer), legacy_map)
 
     def source(self, path: str) -> Source:
         if path not in self._sources:
@@ -123,7 +189,7 @@ class Configgen:
         return self._sources[path]
 
     def generator(self, module: str) -> Source:
-        return self.source(f"{GENERATORS}/{module.replace('.', '/')}.py")
+        return self.source(f"{self.generators}/{module.replace('.', '/')}.py")
 
     def helper(self, module: str, helper: str) -> Source:
         """A module the generator imports with `from . import helper`."""
@@ -137,7 +203,7 @@ class Configgen:
         )
         if not imported:
             generator.fail(f"does not import {helper}")
-        return self.source(f"{GENERATORS}/{module.split('.')[0]}/{helper}.py")
+        return self.source(f"{self.generators}/{module.split('.')[0]}/{helper}.py")
 
     def emulator(self, module: str) -> str:
         """The name configgen loads `module` for (importer.get_generator)."""
@@ -146,7 +212,7 @@ class Configgen:
         package, _, leaf = module.partition(".")
         if leaf == f"{package}Generator":
             return package
-        raise LauncherShapeError(f"{IMPORTER}: no emulator loads {module}")
+        raise LauncherShapeError(f"{self.importer}: no emulator loads {module}")
 
     def bios_name(self, node: ast.AST) -> str | None:
         """The name under /userdata/bios that an expression spells, if any."""
@@ -386,15 +452,28 @@ def _loaded(stmt: ast.stmt) -> set[str]:
     return {n.id for n in ast.walk(value) if isinstance(n, ast.Name)} if value else set()
 
 
+def _branch_assigns(stmt: ast.stmt, needed: set[str]) -> bool:
+    """Whether an if statement assigns one of the names in any branch."""
+    return isinstance(stmt, ast.If) and any(
+        _assigned_name(node) in needed for node in ast.walk(stmt)
+    )
+
+
 def _trace(body: list[ast.stmt], index: int) -> list[ast.stmt]:
     """body[index], the assignments before it that bind what it reads, and
-    the command-line additions that read any of those names."""
+    the command-line additions that read any of those names.
+
+    An if statement that assigns a name read is kept with what its test
+    reads (KNULLI's `if system.isOptSet("model") ...: machine = ...`)."""
     kept = [body[index]]
     needed = _loaded(body[index])
     for stmt in reversed(body[:index]):
         if _assigned_name(stmt) in needed:
             kept.append(stmt)
             needed |= _loaded(stmt)
+        elif _branch_assigns(stmt, needed):
+            kept.append(stmt)
+            needed |= {n.id for n in ast.walk(stmt) if isinstance(n, ast.Name)}
     produced = {name for stmt in kept if (name := _assigned_name(stmt)) is not None}
     kept += [
         stmt for stmt in body
@@ -435,15 +514,23 @@ def hatari(cg: Configgen) -> list[Launcher]:
                 and isinstance(parts[1], ast.FormattedValue)
             ):
                 marker, prefix = node.test.left.value, parts[0].value
-    tos_path = src.assignment("tos_path", finder).value
-    if isinstance(tos_path, ast.BinOp) and isinstance(tos_path.right, ast.JoinedStr):
-        parts = tos_path.right.values
-        if (
-            len(parts) == 3
-            and all(isinstance(p, ast.FormattedValue) for p in parts[:2])
-            and isinstance(parts[2], ast.Constant)
-        ):
-            suffix = parts[2].value
+    # Batocera: tos_path = biosdir / f"{biosversion}{v_language}.img".
+    # KNULLI: filename = f"{biosversion}{v_language}.img".
+    names_built = []
+    for node in ast.walk(finder):
+        value = node.value if isinstance(node, ast.Assign) else None
+        if isinstance(value, ast.BinOp) and isinstance(value.op, ast.Div):
+            value = value.right
+        if isinstance(value, ast.JoinedStr):
+            parts = value.values
+            if (
+                len(parts) == 3
+                and all(isinstance(p, ast.FormattedValue) for p in parts[:2])
+                and isinstance(parts[2], ast.Constant)
+            ):
+                names_built.append(parts[2].value)
+    if len(names_built) == 1:
+        suffix = names_built[0]
     if marker is None or prefix is None or suffix is None:
         src.fail("findBestTos no longer builds <tos{version} or etos*><language>.img")
     raised = [node for node in ast.walk(finder) if isinstance(node, ast.Raise)]
@@ -466,10 +553,7 @@ def hatari(cg: Configgen) -> list[Launcher]:
         src.fail("findBestTos is not given a batoceraPaths directory")
     search_dir = cg.paths[call.args[0].id]
     kept = _trace(body, index)
-    options = [
-        option[0] for stmt in kept for node in ast.walk(stmt)
-        if (option := _config_option(node)) is not None
-    ]
+    options = list(dict.fromkeys(name for stmt in kept for name in _option_names(stmt)))
     spans = [src.span(stmt) for stmt in kept] + [(finder.lineno, finder.end_lineno)]
     args: list[str] = []
     second = call.args[1] if len(call.args) > 1 else None
@@ -483,6 +567,14 @@ def hatari(cg: Configgen) -> list[Launcher]:
                 elif isinstance(element, ast.Name) and element.id == machine_var:
                     args.append("{machine}")
                 elif isinstance(element, ast.Name) and element.id == tos_var:
+                    args.append("<file>")
+                elif (
+                    isinstance(element, ast.BinOp)
+                    and isinstance(element.right, ast.Name)
+                    and element.right.id == tos_var
+                    and _path_value(element.left, cg.paths) == search_dir
+                ):
+                    # KNULLI returns the bare name and joins it: BIOS / tos.
                     args.append("<file>")
     if "<file>" not in args:
         src.fail("the TOS findBestTos returns is not put on the command line")
@@ -563,7 +655,7 @@ def melonds(cg: Configgen) -> list[Launcher]:
         node for node in ast.walk(generate)
         if isinstance(node, ast.Assign)
         and ast.unparse(node.targets[0]).startswith("base_config['Emu']['ConsoleType']")
-        and _config_option(node.value) is not None
+        and _option_names(node.value)
     ]
     enabled = [
         (key, value) for key, value in zip(base.value.keys, base.value.values)
@@ -574,7 +666,7 @@ def melonds(cg: Configgen) -> list[Launcher]:
     ]
     if len(console) != 1 or len(enabled) != 1:
         src.fail("generate no longer sets Emu.ConsoleType from an option with external BIOS on")
-    option = _config_option(console[0].value)[0]  # type: ignore[index]
+    option = _option_names(console[0].value)[0]  # type: ignore[attr-defined]
     launchers = []
     for key, value in zip(base.value.keys, base.value.values):
         if not isinstance(value, ast.Dict) or not isinstance(key, ast.Constant):
@@ -647,6 +739,153 @@ def gsplus(cg: Configgen) -> list[Launcher]:
     )]
 
 
+def _system_branches(scope: ast.FunctionDef) -> list[tuple[str, ast.If]]:
+    """(system, branch) for each `if system.name == "<name>":` of an if/elif chain."""
+    branches: list[tuple[str, ast.If]] = []
+    for node in ast.walk(scope):
+        if not isinstance(node, ast.If):
+            continue
+        test = node.test
+        if (
+            isinstance(test, ast.Compare)
+            and ast.unparse(test.left) == "system.name"
+            and len(test.ops) == 1
+            and isinstance(test.ops[0], ast.Eq)
+            and isinstance(test.comparators[0], ast.Constant)
+        ):
+            branches.append((str(test.comparators[0].value), node))
+    return sorted(branches, key=lambda item: item[1].lineno)
+
+
+def _guard_message(
+    src: Source, scope: ast.FunctionDef, test: Callable[[ast.expr], bool], what: str
+) -> tuple[ast.If, ast.JoinedStr]:
+    """The `if not <test>: raise X(f"...")` statement and its message."""
+    found = [
+        node for node in ast.walk(scope)
+        if isinstance(node, ast.If)
+        and isinstance(node.test, ast.UnaryOp)
+        and isinstance(node.test.op, ast.Not)
+        and test(node.test.operand)
+        and isinstance(node.body[0], ast.Raise)
+        and isinstance(node.body[0].exc, ast.Call)
+        and node.body[0].exc.args
+        and isinstance(node.body[0].exc.args[0], ast.JoinedStr)
+    ]
+    if len(found) != 1:
+        src.fail(f"expected one `if not {what}: raise` with a message, found {len(found)}")
+    return found[0], found[0].body[0].exc.args[0]  # type: ignore[attr-defined, no-any-return]
+
+
+def _render(message: ast.JoinedStr, var: str, value: str) -> str:
+    parts = []
+    for part in message.values:
+        if isinstance(part, ast.Constant):
+            parts.append(str(part.value))
+        elif isinstance(part.value, ast.Name) and part.value.id == var:  # type: ignore[attr-defined]
+            parts.append(value)
+        else:
+            parts.append(f"{{{ast.unparse(part.value)}}}")  # type: ignore[attr-defined]
+    return "".join(parts)
+
+
+def lexaloffle(cg: Configgen) -> list[Launcher]:
+    """Per system, a binary under BIOS run as the command, its folder on LD_LIBRARY_PATH."""
+    module = "lexaloffle.lexaloffleGenerator"
+    src = cg.generator(module)
+    constants = dict(cg.paths)
+    defined: dict[str, ast.stmt] = {}
+    for node in src.tree.body:
+        name = _assigned_name(node)
+        value = _path_value(getattr(node, "value", None), constants)
+        if name is not None and value is not None:
+            constants[name] = value
+            defined[name] = node
+    generate = src.function("generate")
+
+    command = [
+        node for node in ast.walk(generate)
+        if _assigned_name(node) == "commandArray"
+        and isinstance(node.value, ast.List)  # type: ignore[attr-defined]
+        and node.value.elts  # type: ignore[attr-defined]
+        and isinstance(node.value.elts[0], ast.Name)  # type: ignore[attr-defined]
+    ]
+    if len(command) != 1:
+        src.fail("generate no longer starts commandArray with the binary it runs")
+    binary = command[0].value.elts[0].id  # type: ignore[attr-defined]
+
+    exists, missing = _guard_message(src, generate, lambda test: (
+        isinstance(test, ast.Call)
+        and isinstance(test.func, ast.Attribute)
+        and test.func.attr == "exists"
+        and ast.unparse(test.func.value) == binary
+    ), f"{binary}.exists()")
+    access, not_executable = _guard_message(src, generate, lambda test: (
+        isinstance(test, ast.Call)
+        and ast.unparse(test.func) == "os.access"
+        and [ast.unparse(a) for a in test.args] == [binary, "os.X_OK"]
+    ), f"os.access({binary}, os.X_OK)")
+
+    env = [
+        (key, value)
+        for call in _calls(generate, attr="Command")
+        for keyword in call.keywords
+        if keyword.arg == "env" and isinstance(keyword.value, ast.Dict)
+        for key, value in zip(keyword.value.keys, keyword.value.values)
+        if isinstance(key, ast.Constant) and key.value == "LD_LIBRARY_PATH"
+    ]
+    if len(env) != 1:
+        src.fail("the command environment no longer sets LD_LIBRARY_PATH once")
+    env_key, env_value = env[0]
+
+    prefix = cg.bios.rstrip("/") + "/"
+    launchers = []
+    for system, branch in _system_branches(generate):
+        bound = {
+            name: (stmt, _path_value(stmt.value, constants))  # type: ignore[attr-defined]
+            for stmt in branch.body if (name := _assigned_name(stmt)) is not None
+        }
+        if binary not in bound or not (bound[binary][1] or "").startswith(prefix):
+            src.fail(f"the {system} branch binds {binary} to no path under {cg.bios}")
+        library = [
+            name for name in bound
+            if name != binary and _mentions(env_value, set(), {name})
+        ]
+        if len(library) != 1 or not (bound[library[0]][1] or "").startswith(prefix):
+            src.fail(f"the {system} branch puts no /userdata/bios folder on LD_LIBRARY_PATH")
+        binary_stmt, path = bound[binary]
+        library_stmt, folder = bound[library[0]]
+        test_line = src.span(branch.test)
+        constant = next(
+            (defined[n.id] for n in ast.walk(binary_stmt.value)  # type: ignore[attr-defined]
+             if isinstance(n, ast.Name) and n.id in defined),
+            None,
+        )
+        spans = [test_line, src.span(binary_stmt), src.span(exists), src.span(access),
+                 src.span(command[0])]
+        if constant is not None:
+            spans.append(src.span(constant))
+        launchers.append(Launcher(
+            emulator=cg.emulator(module), build="standalone", kind="fixed_name",
+            slot=system, names=[path[len(prefix):]],  # type: ignore[index]
+            case_insensitive=False, search_dir=cg.bios, passes_to="exec",
+            fails_when_missing=", ".join(
+                _render(message, binary, path) for message in (missing, not_executable)  # type: ignore[arg-type]
+            ),
+            source_ref=src.ref(spans),
+        ))
+        launchers.append(Launcher(
+            emulator=cg.emulator(module), build="standalone", kind="passes_path",
+            slot=system, names=[], search_dir=folder,
+            passes_to="environment LD_LIBRARY_PATH",
+            source_ref=src.ref([test_line, src.span(library_stmt),
+                                (src.span(env_key)[0], src.span(env_value)[1])]),
+        ))
+    if not launchers:
+        src.fail("generate no longer branches on system.name")
+    return launchers
+
+
 # Generators that hand a directory of /userdata/bios to the emulator through
 # its environment, with the module holding their path constants.
 ENVIRONMENT_GENERATORS = (("flycast.flycastGenerator", "flycast/flycastPaths.py"),)
@@ -658,7 +897,7 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
     for module, paths_module in ENVIRONMENT_GENERATORS:
         src = cg.generator(module)
         constants = dict(cg.paths)
-        for node in cg.source(f"{GENERATORS}/{paths_module}").tree.body:
+        for node in cg.source(f"{cg.generators}/{paths_module}").tree.body:
             name = _assigned_name(node)
             value = _path_value(getattr(node, "value", None), constants)
             if name is not None and value is not None:
@@ -687,13 +926,106 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
     return launchers
 
 
+# Generators that hand the emulator a /userdata/bios directory through its
+# configuration: a line written to the file it reads (openMSX's script.tcl
+# filepool entries, xroar.conf rompath) or a key saved to it (amiberry.conf
+# rom_path).
+CONFIG_DIRECTORY_GENERATORS = (
+    "openmsx.openmsxGenerator",
+    "xroar.xroarGenerator",
+    "amiberry.amiberryGenerator",
+)
+
+
+def config_directories(
+    cg: Configgen, modules: Iterable[str] = CONFIG_DIRECTORY_GENERATORS
+) -> list[Launcher]:
+    """file.write("<line naming a BIOS directory>") and settings.save(key, <BIOS directory>)."""
+    prefix = cg.bios.rstrip("/")
+    inside = re.compile(rf"{re.escape(prefix)}(?:/[^\s\"';]*)?")
+    launchers: list[Launcher] = []
+    for module in modules:
+        src = cg.generator(module)
+        constants = dict(cg.paths)
+        for node in src.tree.body:
+            name = _assigned_name(node)
+            value = _path_value(getattr(node, "value", None), constants)
+            if name is not None and value is not None:
+                constants[name] = value
+        found: list[tuple[str, str, ast.Call]] = []
+        for call in _calls(src.tree, attr="write"):
+            text = call.args[0] if len(call.args) == 1 else None
+            if isinstance(text, ast.Constant) and isinstance(text.value, str):
+                line = text.value.strip()
+                named = inside.search(line)
+                if named:
+                    found.append((named.group(0), f"written: {line}", call))
+        for call in _calls(src.tree, attr="save"):
+            if len(call.args) != 2 or not isinstance(call.args[0], ast.Constant):
+                continue
+            value = _path_value(call.args[1], constants)
+            if value is None and isinstance(call.args[1], ast.Constant):
+                value = str(call.args[1].value)
+            if value is not None and (value.rstrip("/") == prefix or value.startswith(prefix + "/")):
+                found.append((value, str(call.args[0].value), call))
+        if not found:
+            src.fail("hands no /userdata/bios directory through its config")
+        launchers.extend(
+            Launcher(
+                emulator=cg.emulator(module), build="standalone", kind="passes_path",
+                names=[], search_dir=directory, passes_to=passes_to,
+                source_ref=src.ref([src.span(call)]),
+            )
+            for directory, passes_to, call in found
+        )
+    return launchers
+
+
+# Generators that start the emulator from a folder they enter with os.chdir.
+WORKING_DIRECTORY_GENERATORS = ("shadps4.shadps4Generator",)
+
+
+def working_directories(cg: Configgen) -> list[Launcher]:
+    """os.chdir(<folder>) in the generators above, before the command runs.
+
+    shadPS4 reads its user folder below the working directory first
+    (std::filesystem::current_path() / "user"): Batocera enters
+    /userdata/system/configs/shadps4.
+    """
+    launchers = []
+    for module in WORKING_DIRECTORY_GENERATORS:
+        src = cg.generator(module)
+        calls = _calls(src.tree, attr="chdir")
+        if len(calls) != 1 or len(calls[0].args) != 1:
+            src.fail("one os.chdir(folder) call")
+        call = calls[0]
+        argument = call.args[0]
+        constants = dict(cg.paths)
+        spans = [(call.lineno, call.end_lineno or call.lineno)]
+        if isinstance(argument, ast.Name):
+            scope = _innermost_function(src, call)
+            assigned = src.assignment(argument.id, scope)
+            spans.append((assigned.lineno, assigned.end_lineno or assigned.lineno))
+            folder = _path_value(assigned.value, constants)
+        else:
+            folder = _path_value(argument, constants)
+        if folder is None:
+            src.fail("os.chdir names no folder")
+        launchers.append(Launcher(
+            emulator=cg.emulator(module), build="standalone", kind="passes_path", names=[],
+            search_dir=folder, passes_to=f"working directory of {src.path.rsplit('/', 1)[-1]}",
+            source_ref=src.ref(spans),
+        ))
+    return launchers
+
+
 # libretro core options whose value names the BIOS file the core opens.
 FILE_OPTIONS = (("_o2em_options", "o2em_bios"), ("_neocd_options", "neocd_bios"))
 
 
 def core_file_options(cg: Configgen) -> list[Launcher]:
     """_set_from_system(settings, option, system, [name], default=...)."""
-    src = cg.source(LIBRETRO_OPTIONS)
+    src = cg.source(cg.libretro_options)
     table = src.assignment("_option_functions").value
     if not isinstance(table, ast.Dict):
         src.fail("_option_functions is not a dict display")
@@ -739,13 +1071,64 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
     return launchers
 
 
+# Batocera's patches to an emulator's own path code. Each rewrites one of
+# the folders the emulator derives (yuzu's family generates every user
+# folder through Generate<Name>Path) to a fixed folder of /userdata.
+PATH_PATCHES = ("package/batocera/emulators/citron/002-adjust-paths.patch",)
+_PATH_REMOVED = re.compile(r"^-\s*Generate\w+Path\((\w+Path::\w+),\s*(.+?)\);\s*$")
+_PATH_ADDED = re.compile(r'^\+\s*Generate\w+Path\((\w+Path::\w+),\s*"(/userdata/bios[^"]*)"\);\s*$')
+
+
+def patched_paths(read: Callable[[str], str], patches: tuple[str, ...] = PATH_PATCHES) -> list[Launcher]:
+    """The emulator folders a path patch points at the BIOS tree.
+
+    A patch line replacing `GenerateCitronPath(CitronPath::KeysDir,
+    citron_path / KEYS_DIR)` with a literal /userdata/bios folder hands
+    that folder to the emulator under the handle the code names it by.
+    The emulator is the package the patch belongs to.
+    """
+    launchers: list[Launcher] = []
+    for path in patches:
+        lines = read(path).splitlines()
+        target = ""
+        removed: dict[str, tuple[int, str]] = {}
+        found = 0
+        for number, line in enumerate(lines, 1):
+            if line.startswith("+++ b/"):
+                target = line[len("+++ b/"):]
+                continue
+            if (old := _PATH_REMOVED.match(line)):
+                removed[old.group(1)] = (number, old.group(2))
+                continue
+            if not (new := _PATH_ADDED.match(line)):
+                continue
+            handle, folder = new.groups()
+            if handle not in removed or not target:
+                raise LauncherShapeError(f"{path}:{number}: {handle} added with no line it replaces")
+            first, original = removed[handle]
+            found += 1
+            launchers.append(Launcher(
+                emulator=path.split("/")[-2], build="standalone", kind="passes_path", names=[],
+                search_dir=folder,
+                passes_to=f"{handle} in {target} returns it, in place of {original}",
+                fails_when_missing=False,
+                source_ref=f"{path}:{first}-{number}",
+            ))
+        if not found:
+            raise LauncherShapeError(f"{path}: no path rewritten to /userdata/bios")
+    return launchers
+
+
 EXTRACTORS: tuple[Callable[[Configgen], list[Launcher]], ...] = (
     duckstation, duckstation_legacy, hatari, xemu, melonds, mupen64plus,
-    x16emu, gsplus, environment_directories, core_file_options,
+    x16emu, gsplus, lexaloffle, environment_directories, config_directories,
+    core_file_options, working_directories,
 )
 
 
 def extract_launchers(read: Callable[[str], str]) -> list[dict[str, Any]]:
     """Every launcher record, read through `read(repo-relative path)`."""
     cg = Configgen(read)
-    return [launcher.entry() for extractor in EXTRACTORS for launcher in extractor(cg)]
+    launchers = [launcher for extractor in EXTRACTORS for launcher in extractor(cg)]
+    launchers += patched_paths(read)
+    return [launcher.entry() for launcher in launchers]

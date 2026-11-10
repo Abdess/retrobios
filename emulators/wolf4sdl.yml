@@ -42,20 +42,18 @@ notes: |
   version.h defines ARTSEXTERN and DEMOSEXTERN (wl_text.c:762-766,
   wl_game.c:1139-1146).
 
-  The only content check is the length of vgahead: it must hold
-  NUMCHUNKS + 1 three byte offsets or the engine quits with "Wolf4SDL was
-  not compiled for these data files" (id_ca.c:473-480). NUMCHUNKS is 156
-  for the shareware build, 161 for Apogee, 149 for GT (gfxv_wl6.h:187),
-  169 for Spear and 133 for the Spear demo, so each binary accepts only
-  the release it was built for.
+  The only content check is the length of vgahead: its size divided by
+  three must equal NUMCHUNKS + 1 or the engine quits with "Wolf4SDL was
+  not compiled for these data files" (id_ca.c:473-480), unless
+  --ignorenumchunks is given (wl_main.c:1754-1755). NUMCHUNKS is 156 for
+  the shareware build, 161 for Apogee, 149 for GT (gfxv_wl6.h:187), 169
+  for Spear and 133 for the Spear demo, so each binary accepts only the
+  release it was built for.
 
   Spear of Destiny mission 1 reads the original game under the sd1
   extension, hence the sd1 aliases on the sod set.
 
-  The shareware Wolfenstein 3D v1.4 and Spear of Destiny demo files carry
-  hashes of the archives RetroPie downloads. The retail files carry
-  none: the engine checks no hash, and the md5 table in RetroPie's
-  launcher script only picks which of its binaries to start.
+  The engine checks no hash on any data file.
 
   Written by the engine, not read as data: config.<ext> and savegames
   in ~/.wolf4sdl (wl_menu.c:3745-3760), and screenshots.
@@ -69,11 +67,7 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware page file: wall textures, sprites and digitized sounds"
     required: false
-    size: 742912
-    sha1: "63134a2e3165b5291ece7b8a4145d2bd67d4f787"
-    md5: "6efa079414b817c97db779cecfb081c9"
     source_ref: "id_pm.c:36-41, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgadict.wl1"
     installed_on: [retropie]
@@ -81,11 +75,7 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware Huffman dictionary of the graphics file"
     required: false
-    size: 1024
-    sha1: "10ae325f5ce124d2536a63805023c56a4e438ea1"
-    md5: "76a6128f3c0dd9b77939ce8313992746"
     source_ref: "id_ca.c:449-454, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgahead.wl1"
     installed_on: [retropie]
@@ -93,11 +83,10 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware graphics chunk offsets"
     required: false
-    size: 471
-    sha1: "a9ba5551f54f88d810b9aa82a15caae623509a4c"
-    md5: "61bf1616e78367853c91f2c04e2c1cb7"
+    min_size: 471
+    max_size: 473
+    validation: [size]
     source_ref: "id_ca.c:462-480, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgagraph.wl1"
     installed_on: [retropie]
@@ -105,11 +94,7 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware graphics chunks: pictures, fonts and text articles"
     required: false
-    size: 326568
-    sha1: "3ad077aca0e775bd6a241515c8b2874d4fa4099a"
-    md5: "74decb641b1a4faed173e10ab744bff0"
     source_ref: "id_ca.c:498-503, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "maphead.wl1"
     installed_on: [retropie]
@@ -117,11 +102,7 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware map offsets and tile info"
     required: false
-    size: 402
-    sha1: "b3942ddb4f6bb671b026a3f85611bf314acefce7"
-    md5: "7b6dd4e55c33c33a41d1600be5df3228"
     source_ref: "id_ca.c:541-546, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "gamemaps.wl1"
     installed_on: [retropie]
@@ -129,11 +110,7 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware level maps"
     required: false
-    size: 27425
-    sha1: "d49fc8a7887d7e73be7c813177307b68206f8147"
-    md5: "30fecd7cce6bc70402651ec922d2da3d"
     source_ref: "id_ca.c:81-82, 556-561, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiohed.wl1"
     installed_on: [retropie]
@@ -141,11 +118,7 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware audio chunk offsets"
     required: false
-    size: 1156
-    sha1: "732460795d77cab19c8018d879f5c27a3cbd5f84"
-    md5: "58aa1b9892d5adfa725fab343d9446f8"
     source_ref: "id_ca.c:606-608, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiot.wl1"
     installed_on: [retropie]
@@ -153,11 +126,7 @@ files:
     system: wolfenstein3d
     description: "Wolfenstein 3D shareware AdLib sound effects and music"
     required: false
-    size: 132613
-    sha1: "0254cc09b7a8ab0b884766b5dcd0e8555c424937"
-    md5: "4b6109e957b584e4ad7f376961f3887e"
     source_ref: "id_ca.c:613-618, wl_menu.c:3805-3809"
-    note: "Hashes of the v1.4 shareware file in wolf3d14.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   # Wolfenstein 3D, three episode release (.wl3)
   - name: "vswap.wl3"
@@ -296,6 +265,9 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny graphics chunk offsets"
     required: false
+    min_size: 510
+    max_size: 512
+    validation: [size]
     source_ref: "id_ca.c:462-480, wl_menu.c:3850-3863"
 
   - name: "vgagraph.sod"
@@ -358,6 +330,9 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny mission pack 2 graphics chunk offsets"
     required: false
+    min_size: 510
+    max_size: 512
+    validation: [size]
     source_ref: "id_ca.c:462-480, wl_menu.c:3864-3870"
 
   - name: "vgagraph.sd2"
@@ -415,6 +390,9 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny mission pack 3 graphics chunk offsets"
     required: false
+    min_size: 510
+    max_size: 512
+    validation: [size]
     source_ref: "id_ca.c:462-480, wl_menu.c:3871-3876"
 
   - name: "vgagraph.sd3"
@@ -459,11 +437,7 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo page file: wall textures, sprites and digitized sounds"
     required: false
-    size: 730624
-    sha1: "90158daca3d629b388b96f688e6084c11762f680"
-    md5: "35afda760bea840b547d686a930322dc"
     source_ref: "id_pm.c:36-41, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgadict.sdm"
     installed_on: [retropie]
@@ -471,11 +445,7 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo Huffman dictionary of the graphics file"
     required: false
-    size: 1024
-    sha1: "c28f04668180386f42009eb3a3910437c893c8c0"
-    md5: "2f85b6763a582df19e6a35dd9634c736"
     source_ref: "id_ca.c:449-454, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgahead.sdm"
     installed_on: [retropie]
@@ -483,11 +453,10 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo graphics chunk offsets"
     required: false
-    size: 402
-    sha1: "5765612af995804854d34696d152a7ee6f20dd18"
-    md5: "18c03cb401ed274bc0b659e951140e64"
+    min_size: 402
+    max_size: 404
+    validation: [size]
     source_ref: "id_ca.c:462-480, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "vgagraph.sdm"
     installed_on: [retropie]
@@ -495,11 +464,7 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo graphics chunks: pictures, fonts and text articles"
     required: false
-    size: 305891
-    sha1: "9da7d00d1d68c0b24bf120f9927df53ff663a64f"
-    md5: "1cc5ceb8e43c0c0030cf552fc8ae9d0d"
     source_ref: "id_ca.c:498-503, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "maphead.sdm"
     installed_on: [retropie]
@@ -507,11 +472,7 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo map offsets and tile info"
     required: false
-    size: 402
-    sha1: "f6271baf01c3fb88b4979fd0e124a8b2c66d4e34"
-    md5: "40fa03caf7a1a4dbd22da4321c6e10d4"
     source_ref: "id_ca.c:541-546, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "gamemaps.sdm"
     installed_on: [retropie]
@@ -519,11 +480,7 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo level maps"
     required: false
-    size: 5534
-    sha1: "66a3e2c12dfc374c414543885a213073c72772bb"
-    md5: "4eb2f538aab6e4061dadbc3b73837762"
     source_ref: "id_ca.c:81-82, 556-561, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiohed.sdm"
     installed_on: [retropie]
@@ -531,11 +488,7 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo audio chunk offsets"
     required: false
-    size: 1072
-    sha1: "a6519b58bcaac5e8a866cebaf268e74afe2f1778"
-    md5: "f0022742f86c214872bd72f03aaf1529"
     source_ref: "id_ca.c:606-608, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."
 
   - name: "audiot.sdm"
     installed_on: [retropie]
@@ -543,8 +496,4 @@ files:
     system: wolfenstein3d
     description: "Spear of Destiny demo AdLib sound effects and music"
     required: false
-    size: 93412
-    sha1: "0ce47169695698cd41580b4e3f9dfec393b4886b"
-    md5: "fcde1333c941229f4dd6ca099fcfe616"
     source_ref: "id_ca.c:613-618, wl_menu.c:3880-3885"
-    note: "Hashes of the file in soddemo.zip, the archive RetroPie downloads from maniacsvault.net. The engine checks no hash."

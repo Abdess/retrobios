@@ -5,13 +5,14 @@ source: "https://github.com/stenzek/duckstation"
 upstream: "https://github.com/stenzek/duckstation"
 logo: "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/images/duck.png"
 profiled_date: "2026-03-23"
-source_commit: "526b4a128827ecaef037134095cd95f431b52d06"
-core_version: "v0.1-12083-406-g526b4a1"
+source_commit: "c9dc225498e901908b2f3822a3875d1c508e2ccd"
+prose_written_at: "526b4a128827ecaef037134095cd95f431b52d06"
+core_version: "v0.1-12442-240-gc9dc225"
 version_basis:
   kind: tag
   match: "v*"
-  tag: "v0.1-12083"
-  distance: 406
+  tag: "v0.1-12442"
+  distance: 240
 display_name: "Sony - PlayStation (DuckStation)"
 cores: [duckstation, "Duckstation", "duckstation-sa"]
 found_by: content
@@ -21,20 +22,20 @@ verification: md5
 data_root:
   windows:
     path: "%LOCALAPPDATA%/DuckStation"
-    source_ref: "src/core/core.cpp:151-158, 160-196"
+    source_ref: "src/core/core.cpp:144-151, src/core/core.cpp:153-189"
     note: "Documents/DuckStation when that folder already exists. portable.txt or settings.ini beside the executable makes its folder the root"
   macos:
     path: "~/Library/Application Support/DuckStation"
-    source_ref: "src/core/core.cpp:151-158, 224-231"
+    source_ref: "src/core/core.cpp:144-151, src/core/core.cpp:217-224"
     note: "portable.txt or settings.ini beside the executable makes its folder the root"
   linux:
     path: "$XDG_CONFIG_HOME/duckstation, else ~/.local/share/duckstation"
-    source_ref: "src/core/core.cpp:144-158, 197-222"
+    source_ref: "src/core/core.cpp:137-151, src/core/core.cpp:190-215"
     note: "portable.txt or settings.ini beside the executable, or beside the AppImage, makes that folder the root"
 
 notes: |
   DuckStation auto-detects BIOS by MD5 hash from a flat scan of the BIOS directory.
-  ref: src/core/bios.cpp:460-482 (FindBIOSImagesInDirectory, scans all files by size)
+  ref: src/core/bios.cpp:458-479 (FindBIOSImagesInDirectory, scans all files by size)
   ref: src/core/bios.cpp:208 (MD5Digest::HashData identification)
 
   Accepts PS1 (512 KB), PS2 (4 MB), and PS3 (0x3E66F0) BIOS images.
@@ -47,19 +48,19 @@ notes: |
 
   The console region picks the image, Auto by default. NTSC-U answers the
   licence string `Sony Computer Entertainment Amer  ica` (two spaces, as
-  src/core/system.cpp:973 spells it), a SCUS or SLUS
+  src/core/system.cpp:1036 spells it), a SCUS or SLUS
   executable, and every disc whose region the detector cannot read
   (DiscRegion::Other, NonPS1), so a disc of any other market boots an NTSC-U image.
-  ref: src/core/system.cpp:664-676, 940-1009, 1739-1740, 1756
+  ref: src/core/system.cpp:706-718, 1003-1072, 1803-1804, 1820
   ref: src/core/bios.cpp:397-436 (FindBIOSImageInDirectory keeps a region match)
-  ref: src/core/settings.h:608 (DEFAULT_CONSOLE_REGION = Auto)
+  ref: src/core/settings.h:622 (DEFAULT_CONSOLE_REGION = Auto)
 
   ImageInfo gained a version and an expected_filename field after the previous
   profiling pass. Neither takes part in identification: expected_filename is read
   only by the two settings screens, which fall back to the real filename when it
   is null.
   ref: src/core/bios.h:41-43 (field declarations)
-  ref: src/duckstation-qt/biossettingswidget.cpp:153, src/core/fullscreenui_settings.cpp:3322
+  ref: src/duckstation-qt/biossettingswidget.cpp:158, src/core/fullscreenui_settings.cpp:3432
   Lower priority = preferred. PS2 deprioritized (>= 100) for dynamic fast boot.
   Late PAL deprioritized (>= 150) due to additional regional checks.
   OpenBIOS detected by signature at offset 0x78, not by hash.
@@ -68,10 +69,14 @@ notes: |
   Standalone: BIOS dir = EmuFolders::Bios, bios/ under the data root unless
   BIOS/SearchDirectory names another folder.
   ref: src/core/bios.cpp:378,383
-  ref: src/core/settings.cpp:2987,3020
+  ref: src/core/settings.cpp:3060,3093
   Libretro: BIOS dir = RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY (flat).
   The libretro core was removed by the author (license change to non-commercial).
   The .info file and buildbot builds still exist from community forks.
+
+groups:
+  ps-bios:
+    required: true
 
 files:
   # -- PS1 BIOS images (priority <= 20, preferred) --
@@ -80,7 +85,7 @@ files:
     standalone_path: "bios/scph1000.bin"
     description: "SCPH-1000, DTL-H1000 (v1.0)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "239665b1a3dade1b5a52c06338011044"
     region_check: true
     fast_boot: Type1
@@ -91,7 +96,7 @@ files:
     standalone_path: "bios/scph1001.bin"
     description: "SCPH-1001, 5003, DTL-H1201, H3001 (v2.2 12-04-95 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "924e392ed05558ffdb115408c263dccf"
     region_check: false
     fast_boot: Type1
@@ -102,7 +107,7 @@ files:
     standalone_path: "bios/scph1002a.bin"
     description: "SCPH-1002, DTL-H1002 (v2.0 05-10-95 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "54847e693405ffeb0359c6287434cbef"
     region_check: false
     fast_boot: Type1
@@ -113,7 +118,7 @@ files:
     standalone_path: "bios/scph1002b.bin"
     description: "SCPH-1002, DTL-H1102 (v2.1 07-17-95 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "417b34706319da7cf001e76e40136c23"
     region_check: false
     fast_boot: Type1
@@ -124,7 +129,7 @@ files:
     standalone_path: "bios/scph1002c.bin"
     description: "SCPH-1002, DTL-H1202, H3002 (v2.2 12-04-95 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "e2110b8a2b97a8e0b857a45d32f7e187"
     region_check: false
     fast_boot: Type1
@@ -135,7 +140,7 @@ files:
     standalone_path: "bios/dtlh1100.bin"
     description: "DTL-H1100 (v2.2 03-06-96 D)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "ca5cfc321f916756e3f0effbfaeba13b"
     region_check: true
     fast_boot: Type1
@@ -146,7 +151,7 @@ files:
     standalone_path: "bios/scph3000.bin"
     description: "SCPH-3000, DTL-H1000H (v1.1 01-22-95)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "849515939161e62f6b866f6853006780"
     region_check: true
     fast_boot: Type1
@@ -157,7 +162,7 @@ files:
     standalone_path: "bios/scph1001_v20.bin"
     description: "SCPH-1001, DTL-H1001 (v2.0 05-07-95 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "dc2b9bf8da62ec93e868cfd29f0d067d"
     region_check: false
     fast_boot: Type1
@@ -168,7 +173,7 @@ files:
     standalone_path: "bios/scph3500.bin"
     description: "SCPH-3500 (v2.1 07-17-95 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "cba733ceeff5aef5c32254f1d617fa62"
     region_check: true
     fast_boot: Type1
@@ -179,7 +184,7 @@ files:
     standalone_path: "bios/scph1001_v21.bin"
     description: "SCPH-1001, DTL-H1101 (v2.1 07-17-95 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "da27e8b6dab242d8f91a9b25d80c63b8"
     region_check: false
     fast_boot: Type1
@@ -190,7 +195,7 @@ files:
     standalone_path: "bios/scph5000.bin"
     description: "SCPH-5000, DTL-H1200, H3000 (v2.2 12-04-95 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "57a06303dfa9cf9351222dfcbb4a29d9"
     region_check: true
     fast_boot: Type1
@@ -201,7 +206,7 @@ files:
     standalone_path: "bios/scph5500.bin"
     description: "SCPH-5500 (v3.0 09-09-96 J)"
     region: [japan]
-    required: true
+    group: ps-bios
     md5: "8dd7d5296a650fac7319bce665a6a53c"
     region_check: true
     fast_boot: Type1
@@ -212,7 +217,7 @@ files:
     standalone_path: "bios/scph5501.bin"
     description: "SCPH-5501, 5503, 7003 (v3.0 11-18-96 A)"
     region: [north-america, latin-america]
-    required: true
+    group: ps-bios
     md5: "490f666e1afb15b7362b406ed1cea246"
     region_check: false
     fast_boot: Type1
@@ -223,7 +228,7 @@ files:
     standalone_path: "bios/scph5502.bin"
     description: "SCPH-5502, 5552 (v3.0 01-06-97 E)"
     region: [europe, oceania]
-    required: true
+    group: ps-bios
     md5: "32736f17079d0b2b7024407c39bd3050"
     region_check: false
     fast_boot: Type1
@@ -234,7 +239,7 @@ files:
     standalone_path: "bios/scph7000.bin"
     description: "SCPH-7000, 7500, 9000 (v4.0 08-18-97 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "8e4c14f567745eff2f0408c8129f72a6"
     region_check: true
     fast_boot: Type1
@@ -245,7 +250,7 @@ files:
     standalone_path: "bios/scph7000w.bin"
     description: "SCPH-7000W (v4.1 11-14-97 A)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "b84be139db3ee6cbd075630aa20a6553"
     region_check: false
     fast_boot: Type1
@@ -256,7 +261,7 @@ files:
     standalone_path: "bios/scph7001.bin"
     description: "SCPH-7001, 7501, 7503, 9001, 9003, 9903 (v4.1 12-16-97 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "1e68c231d0896b7eadcad1d7d8e76129"
     region_check: false
     fast_boot: Type1
@@ -267,7 +272,7 @@ files:
     standalone_path: "bios/scph7002.bin"
     description: "SCPH-7002, 7502, 9002 (v4.1 12-16-97 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "b9d9a0286c33dc6b7237bb13cd46fdee"
     region_check: false
     fast_boot: Type1
@@ -278,7 +283,7 @@ files:
     standalone_path: "bios/scph100.bin"
     description: "SCPH-100 (v4.3 03-11-00 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "8abc1b549a4a80954addc48ef02c4521"
     region_check: true
     fast_boot: Type1
@@ -289,7 +294,7 @@ files:
     standalone_path: "bios/scph101_v44.bin"
     description: "SCPH-101 (v4.4 03-24-00 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "9a09ab7e49b422c007e6d54d7c49b965"
     region_check: false
     fast_boot: Type1
@@ -300,7 +305,7 @@ files:
     standalone_path: "bios/scph101_v45.bin"
     description: "SCPH-101 (v4.5 05-25-00 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "6e3735ff4c7dc899ee98981385f6f3d0"
     region_check: false
     fast_boot: Type1
@@ -311,7 +316,7 @@ files:
     standalone_path: "bios/scph102_v44.bin"
     description: "SCPH-102 (v4.4 03-24-00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "b10f5e0e3d9eb60e5159690680b1e774"
     region_check: true
     fast_boot: Type1
@@ -322,7 +327,7 @@ files:
     standalone_path: "bios/scph102_v45.bin"
     description: "SCPH-102 (v4.5 05-25-00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "de93caec13d1a141a40a79f5c86168d6"
     region_check: true
     fast_boot: Type1
@@ -333,7 +338,7 @@ files:
     standalone_path: "bios/scph1000r.bin"
     description: "SCPH-1000R (v4.5 05-25-00 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "476d68a94ccec3b9c8303bbd1daf2810"
     region_check: true
     fast_boot: Type1
@@ -348,7 +353,7 @@ files:
     standalone_path: "bios/ps2_scph18000.bin"
     description: "PS2, SCPH-18000 (v5.0 10-27-00 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "d8f485717a5237285e4d7c5f881b7f32"
     region_check: true
     fast_boot: Type2
@@ -359,7 +364,7 @@ files:
     standalone_path: "bios/ps2_scph30003.bin"
     description: "PS2, SCPH-30003 (v5.0 09-02-00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "71f50ef4f4e17c163c78908e16244f7d"
     region_check: true
     fast_boot: Type2
@@ -370,7 +375,7 @@ files:
     standalone_path: "bios/ps2_dtlh10000_0117.bin"
     description: "PS2, DTL-H10000 (v5.0 01/17/00 T)"
     region: [world]
-    required: false
+    group: ps-bios
     md5: "32f2e4d5ff5ee11072a6bc45530f5765"
     region_check: true
     fast_boot: Type2
@@ -381,7 +386,7 @@ files:
     standalone_path: "bios/ps2_scph10000_0117.bin"
     description: "PS2, SCPH-10000 (v5.0 01/17/00 T)"
     region: [world]
-    required: false
+    group: ps-bios
     md5: "acf4730ceb38ac9d8c7d8e21f2614600"
     region_check: true
     fast_boot: Type2
@@ -392,7 +397,7 @@ files:
     standalone_path: "bios/ps2_dtlh10000_0217.bin"
     description: "PS2, DTL-H10000 (v5.0 02/17/00 T)"
     region: [world]
-    required: false
+    group: ps-bios
     md5: "acf9968c8f596d2b15f42272082513d1"
     region_check: true
     fast_boot: Type2
@@ -403,7 +408,7 @@ files:
     standalone_path: "bios/ps2_scph10000_15000.bin"
     description: "PS2, SCPH-10000/SCPH-15000 (v5.0 02/17/00 T)"
     region: [world]
-    required: false
+    group: ps-bios
     md5: "b1459d7446c69e3e97e6ace3ae23dd1c"
     region_check: true
     fast_boot: Type2
@@ -414,7 +419,7 @@ files:
     standalone_path: "bios/ps2_dtlh10000_0224.bin"
     description: "PS2, DTL-H10000 (v5.0 02/24/00 T)"
     region: [world]
-    required: false
+    group: ps-bios
     md5: "d3f1853a16c2ec18f3cd1ae655213308"
     region_check: true
     fast_boot: Type2
@@ -425,7 +430,7 @@ files:
     standalone_path: "bios/ps2_dtlh30001.bin"
     description: "PS2, DTL-H30001 (v5.0 07/27/00 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "63e6fd9b3c72e0d7b920e80cf76645cd"
     region_check: true
     fast_boot: Type2
@@ -436,7 +441,7 @@ files:
     standalone_path: "bios/ps2_scph30001_0727.bin"
     description: "PS2, SCPH-30001 (v5.0 07/27/00 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "a20c97c02210f16678ca3010127caf36"
     region_check: true
     fast_boot: Type2
@@ -447,7 +452,7 @@ files:
     standalone_path: "bios/ps2_scph30001_0902.bin"
     description: "PS2, SCPH-30001 (v5.0 09/02/00 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "8db2fbbac7413bf3e7154c1e0715e565"
     region_check: true
     fast_boot: Type2
@@ -458,7 +463,7 @@ files:
     standalone_path: "bios/ps2_dtlh30002.bin"
     description: "PS2, DTL-H30002 (v5.0 09/02/00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "91c87cb2f2eb6ce529a2360f80ce2457"
     region_check: true
     fast_boot: Type2
@@ -469,7 +474,7 @@ files:
     standalone_path: "bios/ps2_dtlh30102_0902.bin"
     description: "PS2, DTL-H30102 (v5.0 09/02/00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "3016b3dd42148a67e2c048595ca4d7ce"
     region_check: true
     fast_boot: Type2
@@ -480,7 +485,7 @@ files:
     standalone_path: "bios/ps2_scph30002_0902.bin"
     description: "PS2, SCPH-30002/SCPH-30003/SCPH-30004 (v5.0 09/02/00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "b7fa11e87d51752a98b38e3e691cbf17"
     region_check: true
     fast_boot: Type2
@@ -491,7 +496,7 @@ files:
     standalone_path: "bios/ps2_scph18000_gh003.bin"
     description: "PS2, SCPH-18000 (GH-003) (v5.0 10/27/00 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "f63bc530bd7ad7c026fcd6f7bd0d9525"
     region_check: true
     fast_boot: Type2
@@ -502,7 +507,7 @@ files:
     standalone_path: "bios/ps2_scph18000_gh008.bin"
     description: "PS2, SCPH-18000 (GH-008) (v5.0 10/27/00 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "cee06bd68c333fc5768244eae77e4495"
     region_check: true
     fast_boot: Type2
@@ -513,7 +518,7 @@ files:
     standalone_path: "bios/ps2_dtlh30101.bin"
     description: "PS2, DTL-H30101 (v5.0 12/28/00 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "0bf988e9c7aaa4c051805b0fa6eb3387"
     region_check: true
     fast_boot: Type2
@@ -524,7 +529,7 @@ files:
     standalone_path: "bios/ps2_scph30001_35001.bin"
     description: "PS2, SCPH-30001/SCPH-35001 (v5.0 12/28/00 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "8accc3c49ac45f5ae2c5db0adc854633"
     region_check: true
     fast_boot: Type2
@@ -535,7 +540,7 @@ files:
     standalone_path: "bios/ps2_dtlh30102_1228.bin"
     description: "PS2, DTL-H30102 (v5.0 12/28/00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "6f9a6feb749f0533aaae2cc45090b0ed"
     region_check: true
     fast_boot: Type2
@@ -546,7 +551,7 @@ files:
     standalone_path: "bios/ps2_scph30002_1228.bin"
     description: "PS2, SCPH-30002/SCPH-30003/SCPH-30004/SCHP-35002/SCPH-35003/SCPH-35004 (v5.0 12/28/00 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "838544f12de9b0abc90811279ee223c8"
     region_check: true
     fast_boot: Type2
@@ -557,7 +562,7 @@ files:
     standalone_path: "bios/ps2_dtlh30000.bin"
     description: "PS2, DTL-H30000 (v5.0 01/18/01 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "bb6bbc850458fff08af30e969ffd0175"
     region_check: true
     fast_boot: Type2
@@ -568,7 +573,7 @@ files:
     standalone_path: "bios/ps2_scph30000_35000.bin"
     description: "PS2, SCPH-30000/SCPH-35000 (v5.0 01/18/01 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "815ac991d8bc3b364696bead3457de7d"
     region_check: true
     fast_boot: Type2
@@ -579,7 +584,7 @@ files:
     standalone_path: "bios/ps2_scph30001r_0427.bin"
     description: "PS2, SCPH-30001R (v5.0 04/27/01 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "b107b5710042abe887c0f6175f6e94bb"
     region_check: true
     fast_boot: Type2
@@ -590,7 +595,7 @@ files:
     standalone_path: "bios/ps2_scph30000_0427.bin"
     description: "PS2, SCPH-30000 (v5.0 04/27/01 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "ab55cceea548303c22c72570cfd4dd71"
     region_check: true
     fast_boot: Type2
@@ -601,7 +606,7 @@ files:
     standalone_path: "bios/ps2_scph30001r_0704.bin"
     description: "PS2, SCPH-30001R (v5.0 07/04/01 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "18bcaadb9ff74ed3add26cdf709fff2e"
     region_check: true
     fast_boot: Type2
@@ -612,7 +617,7 @@ files:
     standalone_path: "bios/ps2_scph30002r_0704.bin"
     description: "PS2, SCPH-30002R/SCPH-30003R/SCPH-30004R (v5.0 07/04/01 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "491209dd815ceee9de02dbbc408c06d6"
     region_check: true
     fast_boot: Type2
@@ -623,7 +628,7 @@ files:
     standalone_path: "bios/ps2_scph30001r_1004.bin"
     description: "PS2, SCPH-30001R (v5.0 10/04/01 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "7200a03d51cacc4c14fcdfdbc4898431"
     region_check: true
     fast_boot: Type2
@@ -634,7 +639,7 @@ files:
     standalone_path: "bios/ps2_scph30002r_1004.bin"
     description: "PS2, SCPH-30002R/SCPH-30003R/SCPH-30004R (v5.0 10/04/01 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "8359638e857c8bc18c3c18ac17d9cc3c"
     region_check: true
     fast_boot: Type2
@@ -645,7 +650,7 @@ files:
     standalone_path: "bios/ps2_scph30005r.bin"
     description: "PS2, SCPH-30005R/SCPH-30006R/SCPH-30007R (v5.0 07/30/01 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "352d2ff9b3f68be7e6fa7e6dd8389346"
     region_check: true
     fast_boot: Type2
@@ -656,7 +661,7 @@ files:
     standalone_path: "bios/ps2_scph39001.bin"
     description: "PS2, SCPH-39001 (v5.0 02/07/02 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "d5ce2c7d119f563ce04bc04dbc3a323e"
     region_check: true
     fast_boot: Type2
@@ -667,7 +672,7 @@ files:
     standalone_path: "bios/ps2_scph39002.bin"
     description: "PS2, SCPH-39002/SCPH-39003/SCPH-39004 (v5.0 03/19/02 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "0d2228e6fd4fb639c9c39d077a9ec10c"
     region_check: true
     fast_boot: Type2
@@ -678,7 +683,7 @@ files:
     standalone_path: "bios/ps2_scph37000_39000.bin"
     description: "PS2, SCPH-37000/SCPH-39000 (v5.0 04/26/02 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "72da56fccb8fcd77bba16d1b6f479914"
     region_check: true
     fast_boot: Type2
@@ -689,7 +694,7 @@ files:
     standalone_path: "bios/ps2_scph39008.bin"
     description: "PS2, SCPH-39008 (v5.0 04/26/02 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "5b1f47fbeb277c6be2fccdd6344ff2fd"
     region_check: true
     fast_boot: Type2
@@ -700,7 +705,7 @@ files:
     standalone_path: "bios/ps2_scph39005.bin"
     description: "PS2, SCPH-39005/SCPH-39006/SCPH-39007 (v5.0 04/26/02 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "315a4003535dfda689752cb25f24785c"
     region_check: true
     fast_boot: Type2
@@ -711,7 +716,7 @@ files:
     standalone_path: "bios/ps2_dtlh50000.bin"
     description: "PS2, DTL-H50000 (v5.0 02/06/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "54ecde087258557e2ddb5c3ddb004028"
     region_check: true
     fast_boot: Type2
@@ -722,7 +727,7 @@ files:
     standalone_path: "bios/ps2_scph50000_55000.bin"
     description: "PS2, SCPH-50000/SCPH-55000 (v5.0 02/06/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "312ad4816c232a9606e56f946bc0678a"
     region_check: true
     fast_boot: Type2
@@ -733,7 +738,7 @@ files:
     standalone_path: "bios/ps2_dtlh50002.bin"
     description: "PS2, DTL-H50002 (v5.0 02/27/03 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "666018ffec65c5c7e04796081295c6c7"
     region_check: true
     fast_boot: Type2
@@ -744,7 +749,7 @@ files:
     standalone_path: "bios/ps2_scph50002_0227.bin"
     description: "PS2, SCPH-50002/SCPH-50003/SCPH-50004 (v5.0 02/27/03 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "6e69920fa6eef8522a1d688a11e41bc6"
     region_check: true
     fast_boot: Type2
@@ -755,7 +760,7 @@ files:
     standalone_path: "bios/ps2_dtlh50001_0325.bin"
     description: "PS2, DTL-H50001 (v5.0 03/25/03 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "eb960de68f0c0f7f9fa083e9f79d0360"
     region_check: true
     fast_boot: Type2
@@ -766,7 +771,7 @@ files:
     standalone_path: "bios/ps2_scph50001_0325.bin"
     description: "PS2, SCPH-50001 (v5.0 03/25/03 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "8aa12ce243210128c5074552d3b86251"
     region_check: true
     fast_boot: Type2
@@ -777,7 +782,7 @@ files:
     standalone_path: "bios/ps2_dtlh50009.bin"
     description: "PS2, DTL-H50009 (v5.0 02/24/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "240d4c5ddd4b54069bdc4a3cd2faf99d"
     region_check: true
     fast_boot: Type2
@@ -788,7 +793,7 @@ files:
     standalone_path: "bios/ps2_desr5000.bin"
     description: "PS2, DESR-5000/DESR-5100/DESR-7000/DESR-7100 (v5.0 10/28/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "1c6cd089e6c83da618fbf2a081eb4888"
     region_check: true
     fast_boot: Type2
@@ -799,7 +804,7 @@ files:
     standalone_path: "bios/ps2_scph55000_0623.bin"
     description: "PS2, SCPH-55000 (v5.0 06/23/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "463d87789c555a4a7604e97d7db545d1"
     region_check: true
     fast_boot: Type2
@@ -810,7 +815,7 @@ files:
     standalone_path: "bios/ps2_dtlh50001_0623.bin"
     description: "PS2, DTL-H50001 (v5.0 06/23/03 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "ab9d49ad40ae49f19856ad187777b1b3"
     region_check: true
     fast_boot: Type2
@@ -821,7 +826,7 @@ files:
     standalone_path: "bios/ps2_scph50001_0623.bin"
     description: "PS2, SCPH-50001/SCPH-50010 (v5.0 06/23/03 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "35461cecaa51712b300b2d6798825048"
     region_check: true
     fast_boot: Type2
@@ -832,7 +837,7 @@ files:
     standalone_path: "bios/ps2_scph50002_0623.bin"
     description: "PS2, SCPH-50002/SCPH-50003/SCPH-50004 (v5.0 06/23/03 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "bd6415094e1ce9e05daabe85de807666"
     region_check: true
     fast_boot: Type2
@@ -843,7 +848,7 @@ files:
     standalone_path: "bios/ps2_scph50006.bin"
     description: "PS2, SCPH-50006/SCPH-50007 (v5.0 06/23/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "2e70ad008d4ec8549aada8002fdf42fb"
     region_check: true
     fast_boot: Type2
@@ -854,7 +859,7 @@ files:
     standalone_path: "bios/ps2_scph50005.bin"
     description: "PS2, SCPH-50005 (v5.0 06/23/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "50d5b97b57d8c9b6534adcb46c2027d4"
     region_check: true
     fast_boot: Type2
@@ -865,7 +870,7 @@ files:
     standalone_path: "bios/ps2_scph50008.bin"
     description: "PS2, SCPH-50008 (v5.0 06/23/03 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "b53d51edc7fc086685e31b811dc32aad"
     region_check: true
     fast_boot: Type2
@@ -876,7 +881,7 @@ files:
     standalone_path: "bios/ps2_scph50009.bin"
     description: "PS2, SCPH-50009 (v5.0 06/23/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "1b6e631b536247756287b916f9396872"
     region_check: true
     fast_boot: Type2
@@ -887,7 +892,7 @@ files:
     standalone_path: "bios/ps2_scph50000_0822.bin"
     description: "PS2, SCPH-50000 (v5.0 08/22/03 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "00da1b177096cfd2532c8fa22b43e667"
     region_check: true
     fast_boot: Type2
@@ -898,7 +903,7 @@ files:
     standalone_path: "bios/ps2_scph50004_0822.bin"
     description: "PS2, SCPH-50004 (v5.0 08/22/03 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "afde410bd026c16be605a1ae4bd651fd"
     region_check: true
     fast_boot: Type2
@@ -909,7 +914,7 @@ files:
     standalone_path: "bios/ps2_scph50011.bin"
     description: "PS2, SCPH-50011 (v5.0 03/29/04 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "81f4336c1de607dd0865011c0447052e"
     region_check: true
     fast_boot: Type2
@@ -920,7 +925,7 @@ files:
     standalone_path: "bios/ps2_scph70000.bin"
     description: "PS2, SCPH-70000 (v5.0 06/14/04 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "0eee5d1c779aa50e94edd168b4ebf42e"
     region_check: true
     fast_boot: Type2
@@ -931,7 +936,7 @@ files:
     standalone_path: "bios/ps2_scph70001.bin"
     description: "PS2, SCPH-70001/SCPH-70011/SCPH-70012 (v5.0 06/14/04 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "d333558cc14561c1fdc334c75d5f37b7"
     region_check: true
     fast_boot: Type2
@@ -942,7 +947,7 @@ files:
     standalone_path: "bios/ps2_scph70002.bin"
     description: "PS2, SCPH-70002/SCPH-70003/SCPH-70004/SCPH-70008 (v5.0 06/14/04 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "dc752f160044f2ed5fc1f4964db2a095"
     region_check: true
     fast_boot: Type2
@@ -953,7 +958,7 @@ files:
     standalone_path: "bios/ps2_scph70002_alt.bin"
     description: "PS2, SCPH-70002 (v5.0 06/14/04 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "7ebb4fc5eab6f79a27d76ac9aad392b2"
     region_check: true
     fast_boot: Type2
@@ -964,7 +969,7 @@ files:
     standalone_path: "bios/ps2_dtlh70002.bin"
     description: "PS2, DTL-H70002 (v5.0 06/14/04 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "63ead1d74893bf7f36880af81f68a82d"
     region_check: true
     fast_boot: Type2
@@ -975,7 +980,7 @@ files:
     standalone_path: "bios/ps2_scph70005.bin"
     description: "PS2, SCPH-70005/SCPH-70006/SCPH-70007 (v5.0 06/14/04 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "3e3e030c0f600442fa05b94f87a1e238"
     region_check: true
     fast_boot: Type2
@@ -986,7 +991,7 @@ files:
     standalone_path: "bios/ps2_desr5500.bin"
     description: "PS2, DESR-5500/DESR-5700/DESR-7500/DESR-7700 (v5.0 09/17/04 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "1ad977bb539fc9448a08ab276a836bbc"
     region_check: true
     fast_boot: Type2
@@ -997,7 +1002,7 @@ files:
     standalone_path: "bios/ps2_dtlh75000.bin"
     description: "PS2, DTL-H75000 (v5.0 06/20/05 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "bf0078ba5e19d57eae18047407f3b6e5"
     region_check: true
     fast_boot: Type2
@@ -1008,7 +1013,7 @@ files:
     standalone_path: "bios/ps2_scph75000.bin"
     description: "PS2, SCPH-75000 (v5.0 06/20/05 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "eb4f40fcf4911ede39c1bbfe91e7a89a"
     region_check: true
     fast_boot: Type2
@@ -1019,7 +1024,7 @@ files:
     standalone_path: "bios/ps2_dtlh75000a.bin"
     description: "PS2, DTL-H75000A (v5.0 06/20/05 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "9959ad7a8685cad66206e7752ca23f8b"
     region_check: true
     fast_boot: Type2
@@ -1030,7 +1035,7 @@ files:
     standalone_path: "bios/ps2_scph75001.bin"
     description: "PS2, SCPH-75001/SCPH-75010 (v5.0 06/20/05 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "929a14baca1776b00869f983aa6e14d2"
     region_check: true
     fast_boot: Type2
@@ -1041,7 +1046,7 @@ files:
     standalone_path: "bios/ps2_scph75002.bin"
     description: "PS2, SCPH-75002/SCPH-75003/SCPH-75004/SCPH-75008 (v5.0 06/20/05 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "573f7d4a430c32b3cc0fd0c41e104bbd"
     region_check: true
     fast_boot: Type2
@@ -1052,7 +1057,7 @@ files:
     standalone_path: "bios/ps2_scph75006.bin"
     description: "PS2, SCPH-75006 (v5.0 06/20/05 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "df63a604e8bff5b0599bd1a6c2721bd0"
     region_check: true
     fast_boot: Type2
@@ -1063,7 +1068,7 @@ files:
     standalone_path: "bios/ps2_scph77000.bin"
     description: "PS2, SCPH-77000 (v5.0 02/10/06 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "5b1ba4bb914406fae75ab8e38901684d"
     region_check: true
     fast_boot: Type2
@@ -1074,7 +1079,7 @@ files:
     standalone_path: "bios/ps2_scph77001.bin"
     description: "PS2, SCPH-77001/SCPH-77010 (v5.0 02/10/06 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "cb801b7920a7d536ba07b6534d2433ca"
     region_check: true
     fast_boot: Type2
@@ -1085,7 +1090,7 @@ files:
     standalone_path: "bios/ps2_scph77002.bin"
     description: "PS2, SCPH-77002/SCPH-77003/SCPH-77004/SCPH-77008 (v5.0 02/10/06 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "af60e6d1a939019d55e5b330d24b1c25"
     region_check: true
     fast_boot: Type2
@@ -1096,7 +1101,7 @@ files:
     standalone_path: "bios/ps2_scph77006.bin"
     description: "PS2, SCPH-77006/SCPH-77007 (v5.0 02/10/06 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "549a66d0c698635ca9fa3ab012da7129"
     region_check: true
     fast_boot: Type2
@@ -1107,7 +1112,7 @@ files:
     standalone_path: "bios/ps2_dtlh90000_j.bin"
     description: "PS2, DTL-H90000 (v5.0 09/05/06 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "5e2014472c88f74f7547d8c2c60eca45"
     region_check: true
     fast_boot: Type2
@@ -1118,7 +1123,7 @@ files:
     standalone_path: "bios/ps2_scph79000_90000.bin"
     description: "PS2, SCPH-79000/SCPH-90000 (v5.0 09/05/06 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "5de9d0d730ff1e7ad122806335332524"
     region_check: true
     fast_boot: Type2
@@ -1129,7 +1134,7 @@ files:
     standalone_path: "bios/ps2_dtlh90000_a.bin"
     description: "PS2, DTL-H90000 (v5.0 09/05/06 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "21fe4cad111f7dc0f9af29477057f88d"
     region_check: true
     fast_boot: Type2
@@ -1140,7 +1145,7 @@ files:
     standalone_path: "bios/ps2_scph79001_90001.bin"
     description: "PS2, SCPH-79001/SCPH-79010/SCPH-90001 (v5.0 09/05/06 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "40c11c063b3b9409aa5e4058e984e30c"
     region_check: true
     fast_boot: Type2
@@ -1151,7 +1156,7 @@ files:
     standalone_path: "bios/ps2_scph79002_90002.bin"
     description: "PS2, SCPH-79002/SCPH-79003/SCPH-79004/SCPH-79008/SCPH-90002/SCPH-90003/SCPH-90004 (v5.0 09/05/06 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "80bbb237a6af9c611df43b16b930b683"
     region_check: true
     fast_boot: Type2
@@ -1162,7 +1167,7 @@ files:
     standalone_path: "bios/ps2_scph79006_90006.bin"
     description: "PS2, SCPH-79006/SCPH-79007/SCPH-90006/SCPH-90007 (v5.0 09/05/06 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "c37bce95d32b2be480f87dd32704e664"
     region_check: true
     fast_boot: Type2
@@ -1173,7 +1178,7 @@ files:
     standalone_path: "bios/ps2_scph90000_0220.bin"
     description: "PS2, SCPH-90000 (v5.0 02/20/08 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "80ac46fa7e77b8ab4366e86948e54f83"
     region_check: true
     fast_boot: Type2
@@ -1184,7 +1189,7 @@ files:
     standalone_path: "bios/ps2_scph90001_0220.bin"
     description: "PS2, SCPH-90001/SCPH-90010 (v5.0 02/20/08 A)"
     region: [north-america, latin-america]
-    required: false
+    group: ps-bios
     md5: "21038400dc633070a78ad53090c53017"
     region_check: true
     fast_boot: Type2
@@ -1195,7 +1200,7 @@ files:
     standalone_path: "bios/ps2_scph90002_0220.bin"
     description: "PS2, SCPH-90002/SCPH-90003/SCPH-90004/SCPH-90008 (v5.0 02/20/08 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "dc69f0643a3030aaa4797501b483d6c4"
     region_check: true
     fast_boot: Type2
@@ -1206,7 +1211,7 @@ files:
     standalone_path: "bios/ps2_scph90005_0220.bin"
     description: "PS2, SCPH-90005/SCPH-90006/SCPH-90007 (v5.0 02/20/08 J)"
     region: [japan]
-    required: false
+    group: ps-bios
     md5: "30d56e79d89fbddf10938fa67fe3f34e"
     region_check: true
     fast_boot: Type2
@@ -1217,7 +1222,7 @@ files:
     standalone_path: "bios/ps2_kdl22px300.bin"
     description: "PS2, KDL-22PX300 (v5.0 04/15/10 E)"
     region: [europe, oceania]
-    required: false
+    group: ps-bios
     md5: "93ea3bcee4252627919175ff1b16a1d9"
     region_check: true
     fast_boot: Type2
@@ -1231,7 +1236,7 @@ files:
     standalone_path: "bios/openbios.bin"
     description: "OpenBIOS"
     region: [world]
-    required: false
+    group: ps-bios
     md5: null
     region_check: false
     fast_boot: unsupported

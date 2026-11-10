@@ -4,7 +4,8 @@ core_classification: game_engine
 source: "https://github.com/lightspark/lightspark"
 upstream: "https://github.com/lightspark/lightspark"
 profiled_date: "2026-08-08"
-source_commit: "6f07fd65cb95b88ff73e905bf78a1a8b1ddf6049"
+source_commit: "c24accae28d677406bc5047ad7e0778a39bfd27b"
+prose_written_at: "c24accae28d677406bc5047ad7e0778a39bfd27b"
 core_version: "0.10.0"
 version_basis:
   kind: file
@@ -41,7 +42,7 @@ notes: |
   Fonts named by the content go through fontconfig, which answers with whatever
   face the host has installed: FcFontMatch then FcPatternGetString(FC_FILE) hands
   a path straight to nvgCreateFont (src/backends/cachedsurface.cpp:147-168). No
-  name, path, size or hash is fixed anywhere, README.md:27-30 marks fontconfig
+  name, path, size or hash is fixed anywhere, README.md:81-84 marks fontconfig
   itself optional, and an unmatched family leaves nanoVGFontID at -1 and falls
   back to the embedded face.
 

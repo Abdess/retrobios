@@ -16,36 +16,43 @@ systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "79dee42 (depth=1)"
 mode: standalone
+standalone_directories:
+  - "$XDG_DATA_HOME/citron"
+  - "$HOME/.local/share/citron"
+  - "PORTABLE_DIR"
+  - "CitronPath::KeysDir = keys"
 
 # Citron is a community fork of yuzu, continued by Zephyron after yuzu's takedown.
-# Key files loaded from <data_dir>/keys/ (fs_paths.h:18, path_util.cpp:124).
-# On Linux: $XDG_DATA_HOME/citron/keys/
-# On Batocera: XDG_DATA_HOME=/userdata/saves/switch -> /userdata/saves/switch/citron/keys/
+# Key files loaded from <data_dir>/keys/ (fs_paths.h:18, path_util.cpp:124),
+# the folder path_util.cpp generates as CitronPath::KeysDir. The paths below
+# are relative to the data folder: $XDG_DATA_HOME/citron on Linux, or the
+# user folder (PORTABLE_DIR) beside the executable when it exists.
+# On Batocera: 002-adjust-paths.patch sets KeysDir to /userdata/bios/switch.
 # Firmware NCAs are installed into NAND via UI (main.cpp:1808), not placed as files.
 # HLE fallbacks exist for fonts, timezone, system version, mii model, ng word lists.
 
 files:
   - name: "prod.keys"
     required: true
-    path: "switch/prod.keys"
+    path: "keys/prod.keys"
     note: "Production keys for NCA decryption (master, key area, header, titlekek)"
     source_ref: "src/core/crypto/key_manager.cpp:655-656"
 
   - name: "title.keys"
     required: false
-    path: "switch/title.keys"
+    path: "keys/title.keys"
     note: "Per-title encryption keys (rights_id to titlekey mappings)"
     source_ref: "src/core/crypto/key_manager.cpp:659-660"
 
   - name: "console.keys"
     required: false
-    path: "switch/console.keys"
+    path: "keys/console.keys"
     note: "Console-specific keys (BIS, SD seed)"
     source_ref: "src/core/crypto/key_manager.cpp:661-662"
 
   - name: "key_retail.bin"
     required: false
-    path: "switch/key_retail.bin"
+    path: "keys/key_retail.bin"
     size: 160
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:274-292"

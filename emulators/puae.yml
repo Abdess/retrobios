@@ -5,7 +5,7 @@ cores: [puae, uae]
 source: "https://github.com/libretro/libretro-uae"
 upstream: "https://github.com/GnoStiC/PUAE"
 profiled_date: "2026-03-24"
-source_commit: "7387937066b1b693816c3b4e2b7a0c601d41363d"
+source_commit: "d366f77c60e5a5f059f129cc3773d3048306083b"
 core_version: "5.3.1"
 version_basis:
   kind: file
@@ -64,18 +64,18 @@ notes: |
   other format works (sources/src/caps/caps.c:37-41, 71-96, 467-487).
 
   Data files are read from system/uae_data/, or system/uae/ when uae_data/
-  does not exist (libretro/libretro-core.c:746-751). The "Floppy Sound
+  does not exist (libretro/libretro-core.c:745-750). The "Floppy Sound
   Type" option picks the floppy drive samples embedded in the core
   (internal, the default) or the external A500 or LOUD set from that folder
-  (libretro/libretro-core.c:1871-1885, libretro/libretro-core.c:4174-4202).
+  (libretro/libretro-core.c:1875-1889, libretro/libretro-core.c:4182-4210).
   Each sample is drive_<click|spin|spinnd|startup|snatch>_<set>, with .wav
   appended when the bare name does not open. When none of the five opens,
   floppy sound is turned off for that drive (sources/src/driveclick.c:77-104,
   sources/src/driveclick.c:200-235). The same folder is scanned for files
   ending in rom, offered as cartridge images by the Cartridge option.
 
-  Source: libretro/libretro-core.h:140-245, libretro/libretro-core.c:5609-5777,
-  libretro/libretro-core.c:6044-6093
+  Source: libretro/libretro-core.h:142-247, libretro/libretro-core.c:5617-5784,
+  libretro/libretro-core.c:6043-6096
 
 files:
   # -------------------------------------------------------
@@ -90,7 +90,7 @@ files:
     aliases:
       - "amiga-os-110-ntsc.rom"
       - "Kickstart v1.1 rev 31.34 (1985)(Commodore)(A1000)(NTSC).rom"
-    source_ref: "libretro/libretro-core.h:170-174"
+    source_ref: "libretro/libretro-core.h:172-176"
 
   - name: "kick32034.A1000"
     system: commodore-amiga
@@ -101,7 +101,7 @@ files:
     aliases:
       - "amiga-os-110-pal.rom"
       - "Kickstart v1.1 rev 32.34 (1986)(Commodore)(A1000)(PAL).rom"
-    source_ref: "libretro/libretro-core.h:176-179"
+    source_ref: "libretro/libretro-core.h:178-181"
 
   # -------------------------------------------------------
   # Amiga 500 / 2000
@@ -116,18 +116,18 @@ files:
       - "amiga-os-120.rom"
       - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A2000)[!].rom"
       - "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A1000-A2000).rom"
-    source_ref: "libretro/libretro-core.h:182-185"
+    source_ref: "libretro/libretro-core.h:184-187"
 
   - name: "kick34005.A500"
     system: commodore-amiga
     required: true
     size: 262144  # 256 KB
-    note: "Kickstart 1.3 rev 34.5 (1987). Default for A500/A2000OG/CDTV models. Also used by WHDLoad."
+    note: "Kickstart 1.3 rev 34.5 (1987). Default for A500/A500OG/A500ECS/A2000OG/CDTV models. Also used by WHDLoad."
     aliases:
       - "amiga-os-130.rom"
       - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom"
       - "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV).rom"
-    source_ref: "libretro/libretro-core.h:187-190"
+    source_ref: "libretro/libretro-core.h:189-192"
 
   - name: "kick37175.A500"
     system: commodore-amiga
@@ -139,7 +139,7 @@ files:
       - "amiga-os-204.rom"
       - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+)[!].rom"
       - "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+).rom"
-    source_ref: "libretro/libretro-core.h:192-195"
+    source_ref: "libretro/libretro-core.h:194-197"
 
   # -------------------------------------------------------
   # Amiga 600
@@ -153,19 +153,19 @@ files:
     aliases:
       - "amiga-os-205-a600.rom"
       - "Kickstart v2.05 rev 37.350 (1992)(Commodore)(A600HD)[!].rom"
-    source_ref: "libretro/libretro-core.h:198-201"
+    source_ref: "libretro/libretro-core.h:200-203"
 
   - name: "kick40063.A600"
     system: commodore-amiga
     required: false
     hle_fallback: true
     size: 524288  # 512 KB
-    note: "Kickstart 3.1 rev 40.63 (1993). Default for A600/A2000 models. Also used by WHDLoad."
+    note: "Kickstart 3.1 rev 40.63 (1993). Default for A600/A600OG/A2000 models. Also used by WHDLoad."
     aliases:
       - "amiga-os-310-a600.rom"
       - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000)[!].rom"
       - "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000).rom"
-    source_ref: "libretro/libretro-core.h:203-206"
+    source_ref: "libretro/libretro-core.h:205-208"
 
   # -------------------------------------------------------
   # Amiga 1200
@@ -179,7 +179,7 @@ files:
     aliases:
       - "amiga-os-300-a1200.rom"
       - "Kickstart v3.0 rev 39.106 (1992)(Commodore)(A1200)[!].rom"
-    source_ref: "libretro/libretro-core.h:209-212"
+    source_ref: "libretro/libretro-core.h:211-214"
 
   - name: "kick40068.A1200"
     system: commodore-amiga
@@ -190,7 +190,7 @@ files:
       - "amiga-os-310-a1200.rom"
       - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200)[!].rom"
       - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200).rom"
-    source_ref: "libretro/libretro-core.h:214-217"
+    source_ref: "libretro/libretro-core.h:216-219"
 
   # -------------------------------------------------------
   # Amiga 4000
@@ -204,7 +204,7 @@ files:
     aliases:
       - "amiga-os-300-a4000.rom"
       - "Kickstart v3.0 rev 39.106 (1992)(Commodore)(A4000)[!].rom"
-    source_ref: "libretro/libretro-core.h:220-223"
+    source_ref: "libretro/libretro-core.h:222-225"
 
   - name: "kick40068.A4000"
     system: commodore-amiga
@@ -215,7 +215,7 @@ files:
     aliases:
       - "amiga-os-310-a4000.rom"
       - "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A4000).rom"
-    source_ref: "libretro/libretro-core.h:225-228"
+    source_ref: "libretro/libretro-core.h:227-230"
 
   # -------------------------------------------------------
   # Commodore CDTV
@@ -229,7 +229,7 @@ files:
       - "amiga-os-130-cdtv-ext.rom"
       - "CDTV Extended-ROM v1.0 (1991)(Commodore)(CDTV)[!].rom"
       - "CDTV Extended-ROM v1.0 (1992)(Commodore)(CDTV).rom"
-    source_ref: "libretro/libretro-core.h:231-234"
+    source_ref: "libretro/libretro-core.h:233-236"
 
   # -------------------------------------------------------
   # Amiga CD32
@@ -242,7 +242,7 @@ files:
     aliases:
       - "amiga-os-310-cd32.rom"
       - "Kickstart v3.1 rev 40.60 (1993)(Commodore)(CD32).rom"
-    source_ref: "libretro/libretro-core.h:236-239"
+    source_ref: "libretro/libretro-core.h:238-241"
 
   - name: "kick40060.CD32.ext"
     system: commodore-amiga-cd32
@@ -252,7 +252,7 @@ files:
     aliases:
       - "amiga-os-310-cd32-ext.rom"
       - "CD32 Extended-ROM rev 40.60 (1993)(Commodore)(CD32).rom"
-    source_ref: "libretro/libretro-core.h:241-244"
+    source_ref: "libretro/libretro-core.h:243-246"
 
   # -------------------------------------------------------
   # WHDLoad support files
@@ -261,20 +261,20 @@ files:
     system: commodore-amiga
     required: false
     note: "Amiga Forever ROM decryption key. Copied to saves/WHDLoad/Devs/Kickstarts/ for WHDLoad."
-    source_ref: "libretro/libretro-core.c:5963-5978"
+    source_ref: "libretro/libretro-core.c:5962-5977"
 
   - name: "WHDLoad.key"
     system: commodore-amiga
     required: false
     unsourceable: "per-user signed registration key, never distributed generically, WHDLoad free since v18.2"
     note: "WHDLoad license key. Copied to saves/WHDLoad/L/ for registered WHDLoad use."
-    source_ref: "libretro/libretro-core.c:5979-5994"
+    source_ref: "libretro/libretro-core.c:5978-5993"
 
   - name: "WHDLoad.prefs"
     system: commodore-amiga
     required: false
     note: "WHDLoad preferences. Copied to saves/WHDLoad/S/ when present."
-    source_ref: "libretro/libretro-core.c:5995-6018"
+    source_ref: "libretro/libretro-core.c:5994-6017"
 
   # -------------------------------------------------------
   # CAPS library for IPF floppy images
@@ -302,7 +302,7 @@ files:
     sha1: "34f05541606ee8acd033eadbda082b90051253cc"
     md5: "6c5b44c1a2bcee664129f850bfe4ed8a"
     crc32: "27324b7d"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "A500 set, head step. Hashes are those of sources/uae_data/drive_click_A500.wav in the core repository."
 
   - name: "drive_spin_A500.wav"
@@ -313,7 +313,7 @@ files:
     sha1: "a117647990e2e9debb7ac65a0db429a59bb630f0"
     md5: "7401f854a75f9ede18769168ab896a2a"
     crc32: "5f7cb73b"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "A500 set, motor with a disk. Hashes are those of sources/uae_data/drive_spin_A500.wav in the core repository."
 
   - name: "drive_spinnd_A500.wav"
@@ -324,7 +324,7 @@ files:
     sha1: "786cf1cbd8eabaeb150dabb6b8a1aeca0ed71634"
     md5: "f9d954879fee8e96baa93d6139077cdb"
     crc32: "2c673174"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "A500 set, motor without a disk. Hashes are those of sources/uae_data/drive_spinnd_A500.wav in the core repository."
 
   - name: "drive_startup_A500.wav"
@@ -335,7 +335,7 @@ files:
     sha1: "db8de831a59a44dc6070166e2005c330a793a48d"
     md5: "aebeacc7e7bc52ef890785c835bec3d0"
     crc32: "cb552e00"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "A500 set, motor start. Hashes are those of sources/uae_data/drive_startup_A500.wav in the core repository."
 
   - name: "drive_snatch_A500.wav"
@@ -346,7 +346,7 @@ files:
     sha1: "b8dd63077e12bdeacd3ad70ba41614dc52aa8023"
     md5: "1a4b2d6254918ff769f26beeede75655"
     crc32: "4ac3c05e"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "A500 set, disk insertion. Hashes are those of sources/uae_data/drive_snatch_A500.wav in the core repository."
 
   - name: "drive_click_LOUD.wav"
@@ -357,7 +357,7 @@ files:
     sha1: "fa5df7c9fe3ee70cafbe232ff4f453982c6d1ce2"
     md5: "b64bee23f356635f67fb08b543df9797"
     crc32: "59069982"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "LOUD set, head step. Hashes are those of sources/uae_data/drive_click_LOUD.wav in the core repository."
 
   - name: "drive_spin_LOUD.wav"
@@ -368,7 +368,7 @@ files:
     sha1: "5b1d8c880f8d8fcd9309a7889817611cc27e16e0"
     md5: "56d8e36a2f04b5e8c5a1f1530cfc886c"
     crc32: "1969eea0"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "LOUD set, motor with a disk. Hashes are those of sources/uae_data/drive_spin_LOUD.wav in the core repository."
 
   - name: "drive_spinnd_LOUD.wav"
@@ -379,7 +379,7 @@ files:
     sha1: "d1709931cfe05b3bd31b6ef3d9697a22c934549b"
     md5: "43ab05c6d969cb40805970a5b2352875"
     crc32: "49e72ce7"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "LOUD set, motor without a disk. Hashes are those of sources/uae_data/drive_spinnd_LOUD.wav in the core repository."
 
   - name: "drive_startup_LOUD.wav"
@@ -390,7 +390,7 @@ files:
     sha1: "38e63f700ee6a5be71ded6c057267562c00f3e31"
     md5: "743b4b9f0ca645c4c2a34953b5e01e45"
     crc32: "d746cc1e"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "LOUD set, motor start. Hashes are those of sources/uae_data/drive_startup_LOUD.wav in the core repository."
 
   - name: "drive_snatch_LOUD.wav"
@@ -401,7 +401,7 @@ files:
     sha1: "0417e6e7fee2aebae972ce4d00101a0ce363af32"
     md5: "40cdf89f35b68cfefd4df5fb0256e02f"
     crc32: "b015251a"
-    source_ref: "libretro/libretro-core.c:746-751, libretro/libretro-core.c:4174-4202, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
+    source_ref: "libretro/libretro-core.c:745-750, libretro/libretro-core.c:4182-4210, sources/src/driveclick.c:77-104, sources/src/driveclick.c:200-235"
     note: "LOUD set, disk insertion. Hashes are those of sources/uae_data/drive_snatch_LOUD.wav in the core repository."
 
 model_kickstart_map:
@@ -436,4 +436,4 @@ platform_details:
     amiga_forever: "amiga-os-{version}.rom"
     tosec: "Kickstart v{version} rev {rev} ({year})(Commodore)({model}).rom"
   scan_prefixes: ["kick", "amiga-os", "KS ROM"]
-  source_ref: "libretro/libretro-core.c:2650-2677"
+  source_ref: "libretro/libretro-core.c:2653-2682"

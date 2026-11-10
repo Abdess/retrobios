@@ -4,8 +4,9 @@ core_classification: other
 source: "https://github.com/gopher64/gopher64"
 upstream: "https://github.com/gopher64/gopher64"
 profiled_date: "2026-10-23"
-source_commit: "87385e77432cd278ac8588c7ed3d5014fc0d6bab"
-core_version: "1.1.42"
+source_commit: "c8078773eb468c38b60c5a9d17cf9baa617ee988"
+prose_written_at: "87385e77432cd278ac8588c7ed3d5014fc0d6bab"
+core_version: "1.2.0"
 version_basis:
   kind: file
   path: "Cargo.toml"
@@ -39,10 +40,11 @@ notes: |
 
   A Transfer Pak port reads two files whose paths come from the configuration,
   gb_rom_path and gb_ram_path, and attaches them when both are set
-  (src/lib.rs:194-200). The pair is a Game Boy cartridge and its save, supplied
-  by the player: the loader takes the ROM as is and only inspects the tail of
-  the RAM for MBC3 clock state (src/device/controller/gbcart.rs:37-75), then
-  writes the RAM back on shutdown (src/lib.rs:276-288). The code fixes no name,
+  (src/lib.rs:194-204). The pair is a Game Boy cartridge and its save, supplied
+  by the player: the loader takes the ROM as is, inspects the tail of the RAM
+  for MBC3 clock state and sizes the RAM to the size the ROM header declares
+  (src/device/controller/gbcart.rs:51-124), then
+  writes the RAM back on shutdown (src/lib.rs:280-292). The code fixes no name,
   size or hash for either, so neither carries a file entry here.
 
   The SC64 SD card image is created rather than obtained: an empty save is
@@ -52,10 +54,10 @@ notes: |
 
   Everything else under the configuration, data and cache directories is written
   by the emulator: config.json and cheats.json (src/ui/config.rs:99-111,134-146),
-  retroachievements.json (src/lib.rs:209, src/retroachievements.rs:37,61),
+  retroachievements.json (src/lib.rs:213, src/retroachievements.rs:37,61),
   ice_config.json from the netplay server response (src/ui/netplay.rs:715-718,
   src/netplay.rs:419), the eeprom, sram, flash, mempak, sdcard and romsave saves
-  and the savestates (src/ui/storage.rs:213-233, src/savestates.rs:201,260). For
+  and the savestates (src/ui/storage.rs:217-237, src/savestates.rs:201,260). For
   a netplay launch the GUI serialises the cheats to the cache directory, passes
   them to a re-exec of itself through the hidden --cheats flag and deletes the
   file afterwards (src/ui/gui.rs:590-600,607-622,637, src/lib.rs:141-147).
@@ -67,7 +69,7 @@ notes: |
   (src/ui/gui.rs:695-697), the RobotoMono face handed to SDL_ttf from memory
   (src/ui/video.rs:132, src/ui/input_profile.rs:99), the parallel-rdp SPIR-V
   modules (parallel-rdp/spirv.hpp and parallel-rdp/spirv_crt.hpp, used at
-  parallel-rdp/interface.cpp:4-5,638) and the Slint translations bundled at
+  parallel-rdp/interface.cpp:5-6,728) and the Slint translations bundled at
   build time (build.rs:11).
 
 files: []

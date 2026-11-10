@@ -34,7 +34,8 @@ notes: |
   and uses the first file found. If no BIOS is found, CD games fail to load with
   PM_BAD_CD_NO_BIOS. MSU-MD games can run without BIOS.
 
-  BIOS filename search order (platform/libretro/libretro.c:1272-1336):
+  BIOS filename search order (platform/libretro/libretro.c:1272-1336), each
+  stem tried as .bin then .zip:
     US: us_scd2_9306, SegaCDBIOS9303, us_scd1_9210, bios_CD_U
     EU: eu_mcd2_9306, eu_mcd2_9303, eu_mcd1_9210, bios_CD_E
     JP: jp_mcd2_921222, jp_mcd1_9112, jp_mcd1_9111, bios_CD_J
@@ -54,6 +55,14 @@ notes: |
   initializes VDP registers and RAM to simulate post-BIOS state
   (pico/sms.c:1080-1097).
 
+groups:
+  mega-cd-us:
+    required: true
+  mega-cd-eu:
+    required: true
+  mega-cd-jp:
+    required: true
+
 files:
   # -------------------------------------------------------
   # Cartridge hardware database
@@ -68,40 +77,67 @@ files:
   # -------------------------------------------------------
   - name: "us_scd2_9306.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [north-america, latin-america]
+    group: mega-cd-us
     priority: 1
-    required: true
     size: 131072  # 128 KB (0x20000)
     note: "US Sega CD Model 2 BIOS (September 1993). First in US search order. The US list serves every disc whose security byte is neither 0x64 nor 0xa1 (pico/cd/cd_image.c:190, 247-248)."
     source_ref: "source platform/libretro/libretro.c:1273"
 
+  - name: "us_scd2_9306.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [north-america, latin-america]
+    group: mega-cd-us
+    priority: 2
+    note: "A ZIP of the same stem, probed right after us_scd2_9306.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "SegaCDBIOS9303.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [north-america, latin-america]
-    priority: 2
-    required: false
+    group: mega-cd-us
+    priority: 3
     size: 131072
     note: "US Sega CD BIOS (March 1993). Second in US search order."
     source_ref: "source platform/libretro/libretro.c:1273"
 
+  - name: "SegaCDBIOS9303.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [north-america, latin-america]
+    group: mega-cd-us
+    priority: 4
+    note: "A ZIP of the same stem, probed right after SegaCDBIOS9303.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "us_scd1_9210.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [north-america, latin-america]
-    priority: 3
-    required: false
+    group: mega-cd-us
+    priority: 5
     size: 131072
     note: "US Sega CD Model 1 BIOS (October 1992). Third in US search order."
     source_ref: "source platform/libretro/libretro.c:1273"
 
+  - name: "us_scd1_9210.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [north-america, latin-america]
+    group: mega-cd-us
+    priority: 6
+    note: "A ZIP of the same stem, probed right after us_scd1_9210.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "bios_CD_U.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [north-america, latin-america]
-    priority: 4
-    required: false
+    group: mega-cd-us
+    priority: 7
     size: 131072
     note: "US Sega CD BIOS (generic name). Last in US search order."
     source_ref: "source platform/libretro/libretro.c:1273"
@@ -109,42 +145,78 @@ files:
   # -------------------------------------------------------
   # Mega CD / Sega CD - EU region
   # -------------------------------------------------------
+
+  - name: "bios_CD_U.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [north-america, latin-america]
+    group: mega-cd-us
+    priority: 8
+    note: "A ZIP of the same stem, probed right after bios_CD_U.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
   - name: "eu_mcd2_9306.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [europe, oceania]
+    group: mega-cd-eu
     priority: 1
-    required: true
     size: 131072
     note: "EU Mega CD Model 2 BIOS (June 1993). First in EU search order, used when security byte 0x20b is 0x64, the only PAL branch for Australian discs (pico/media.c:243-247, platform/libretro/libretro.c:1306-1308)."
     source_ref: "source platform/libretro/libretro.c:1276"
 
+  - name: "eu_mcd2_9306.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [europe, oceania]
+    group: mega-cd-eu
+    priority: 2
+    note: "A ZIP of the same stem, probed right after eu_mcd2_9306.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "eu_mcd2_9303.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [europe, oceania]
-    priority: 2
-    required: false
+    group: mega-cd-eu
+    priority: 3
     size: 131072
     note: "EU Mega CD Model 2 BIOS (March 1993). Second in EU search order."
     source_ref: "source platform/libretro/libretro.c:1276"
 
+  - name: "eu_mcd2_9303.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [europe, oceania]
+    group: mega-cd-eu
+    priority: 4
+    note: "A ZIP of the same stem, probed right after eu_mcd2_9303.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "eu_mcd1_9210.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [europe, oceania]
-    priority: 3
-    required: false
+    group: mega-cd-eu
+    priority: 5
     size: 131072
     note: "EU Mega CD Model 1 BIOS (October 1992). Third in EU search order."
     source_ref: "source platform/libretro/libretro.c:1276"
 
+  - name: "eu_mcd1_9210.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [europe, oceania]
+    group: mega-cd-eu
+    priority: 6
+    note: "A ZIP of the same stem, probed right after eu_mcd1_9210.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "bios_CD_E.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [europe, oceania]
-    priority: 4
-    required: false
+    group: mega-cd-eu
+    priority: 7
     size: 131072
     note: "EU Mega CD BIOS (generic name). Last in EU search order."
     source_ref: "source platform/libretro/libretro.c:1276"
@@ -152,42 +224,78 @@ files:
   # -------------------------------------------------------
   # Mega CD / Sega CD - JP region
   # -------------------------------------------------------
+
+  - name: "bios_CD_E.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [europe, oceania]
+    group: mega-cd-eu
+    priority: 8
+    note: "A ZIP of the same stem, probed right after bios_CD_E.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
   - name: "jp_mcd2_921222.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [japan]
+    group: mega-cd-jp
     priority: 1
-    required: true
     size: 131072
     note: "JP Mega CD Model 2 BIOS (December 1992). First in JP search order."
     source_ref: "source platform/libretro/libretro.c:1279"
 
+  - name: "jp_mcd2_921222.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [japan]
+    group: mega-cd-jp
+    priority: 2
+    note: "A ZIP of the same stem, probed right after jp_mcd2_921222.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "jp_mcd1_9112.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [japan]
-    priority: 2
-    required: false
+    group: mega-cd-jp
+    priority: 3
     size: 131072
     note: "JP Mega CD Model 1 BIOS (December 1991). Second in JP search order."
     source_ref: "source platform/libretro/libretro.c:1279"
 
+  - name: "jp_mcd1_9112.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [japan]
+    group: mega-cd-jp
+    priority: 4
+    note: "A ZIP of the same stem, probed right after jp_mcd1_9112.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "jp_mcd1_9111.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [japan]
-    priority: 3
-    required: false
+    group: mega-cd-jp
+    priority: 5
     size: 131072
     note: "JP Mega CD Model 1 BIOS (November 1991). Third in JP search order."
     source_ref: "source platform/libretro/libretro.c:1279"
 
+  - name: "jp_mcd1_9111.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [japan]
+    group: mega-cd-jp
+    priority: 6
+    note: "A ZIP of the same stem, probed right after jp_mcd1_9111.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
+
   - name: "bios_CD_J.bin"
     system: sega-megacd
-    variant_group: "mega-cd-bios"
+    selection_slot: "mega-cd-bios"
     region: [japan]
-    priority: 4
-    required: false
+    group: mega-cd-jp
+    priority: 7
     size: 131072
     note: "JP Mega CD BIOS (generic name). Last in JP search order."
     source_ref: "source platform/libretro/libretro.c:1279"
@@ -195,6 +303,15 @@ files:
   # -------------------------------------------------------
   # Sega 32X - HLE available, no frontend loads these
   # -------------------------------------------------------
+
+  - name: "bios_CD_J.zip"
+    system: sega-megacd
+    selection_slot: "mega-cd-bios"
+    region: [japan]
+    group: mega-cd-jp
+    priority: 8
+    note: "A ZIP of the same stem, probed right after bios_CD_J.bin. pm_open reads its first entry of at least 32 KB or with a ROM extension."
+    source_ref: "source platform/libretro/libretro.c:1323-1326, source pico/cart.c:122-158"
   - name: "32X_G_BIOS.BIN"
     system: sega-32x
     required: false

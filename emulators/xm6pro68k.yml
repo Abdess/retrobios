@@ -28,7 +28,9 @@ notes: |
   distributed only from mijet.eludevisibility.org as three 7-Zip packages: the
   program, a mandatory DLL Package and an optional Web Package that adds signed
   update downloads. Version.txt in the build analysed here reads 260920, and the
-  DLL Package it pairs with is version 260101. The first
+  DLL Package it pairs with is version 260101. Release 81 (261031) reads the
+  same system files, its executable naming only the .IPS patch extension in
+  addition. The first
   release, 120303, forked XM6 v2.05. XM6.exe is a 32-bit MFC application whose
   import directory names mfc90u.dll and MSVCR90.dll, so the Visual C++ 2008 runtime
   carried by the DLL Package, or the redistributable, must sit beside the executable
@@ -188,6 +190,7 @@ files:
   - name: CGROM.TMP
     system: sharp-x68000
     required: false
+    unsourceable: "synthesised from the fonts installed on the host, no canonical file"
     min_size: 786432
     validation: [size]
     description: "Synthesised font ROM, fallback when CGROM.DAT is absent"
@@ -253,7 +256,7 @@ files:
 
   - name: 7z.dll
     size: 1316352
-    sha1: 8337c8056455aa25a4c2f14e53ae7e5e704d4f16
+    sha1: 4bd854046c1bac850388ea29daece08cce46d332
     system: sharp-x68000
     required: false
     bundled: true
@@ -266,8 +269,8 @@ files:
       writing XZ-compressed state files.
 
   - name: zlib1.dll
-    size: 130831
-    sha1: 697f3d391f013adbb27dd767a6b956c3b32229b6
+    size: 59904
+    sha1: 6d957ba632df5b06d49a901f2772df4301610a2a
     system: sharp-x68000
     required: false
     bundled: true

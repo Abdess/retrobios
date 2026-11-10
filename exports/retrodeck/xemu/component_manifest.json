@@ -20,8 +20,7 @@
       {
         "filename": "Complex.bin",
         "system": "xbox",
-        "description": "XBOX Complex BIOS",
-        "required": "Required"
+        "description": "XBOX Complex BIOS"
       },
       {
         "filename": "Complex_4627v1.03.bin",
@@ -36,7 +35,8 @@
       {
         "filename": "xbox_eeprom.bin",
         "system": "xbox",
-        "description": "Xbox EEPROM image"
+        "description": "Xbox EEPROM image",
+        "paths": "$bios_path/xemu"
       }
     ]
   }

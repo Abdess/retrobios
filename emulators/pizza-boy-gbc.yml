@@ -6,7 +6,7 @@ upstream: closed-source
 version_source:
   url: "https://play.google.com/store/apps/details?id=it.dbtecno.pizzaboypro&hl=en"
   pattern: '\[\[\["([^"]+)"\]\],\[\[\[\d+'
-  no_genuine_copy: "7.4.17"
+  no_genuine_copy: "7.4.19"
 author: "Pizza Emulators"
 profiled_date: "2026-10-24"
 core_version: "6.0.6"
@@ -40,9 +40,9 @@ notes: |
   native reference first read on Basic 4.1.14 falls on the same lines and functions in
   4.1.15, and mmu_load_bios keeps the 0x10000 clear, the 0x2000 read and the 0x100 and
   0x900 gate. Java line numbers are those of Pro 6.0.6 unless a Basic 4.1.15 reference
-  is named. The Pro on the store is 7.4.17 and no genuine copy of it is reachable:
-  apkcombo no longer resolves, APKPure lists 7.4.17 as coming soon with no file,
-  APKMirror carries the Basic package alone, apkvision stops at Pro 5.2.2, and
+  is named. The Pro on the store is 7.4.19 and no genuine copy of it is reachable:
+  apkcombo no longer resolves, APKPure refuses the request, APKMirror carries
+  the Basic package alone and stops at 4.1.15, apkvision stops at Pro 5.2.2, and
   archive.org holds 6.0.6 alone. The Pro
   ships its core as a stripped armeabi-v7a build. It carries the same log strings and
   the same constants as the Basic core, the 64 KB clear, the 8192 byte read cap, the

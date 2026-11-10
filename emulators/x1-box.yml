@@ -5,12 +5,13 @@ source: "https://github.com/izzy2lost/xemu"
 upstream: "https://github.com/xemu-project/xemu"
 author: "izzy2lost"
 profiled_date: "2026-10-26"
-source_commit: "e092175b9196438ee2712bf6f45398fe2970b5fe"
+source_commit: "57bc6d6840daeb80e6454511aa097aa89760d49c"
+prose_written_at: "57bc6d6840daeb80e6454511aa097aa89760d49c"
 upstream_commit: "26fcbe54f17e496bdf530dad9f237e74e2f943fc"
-core_version: "1.3.2"
+core_version: "1.3.3"
 version_basis:
   kind: tag
-  tag: "1.3.2"
+  tag: "1.3.3"
   distance: 0
 display_name: "Microsoft - Xbox (X1 BOX)"
 cores:
@@ -35,7 +36,7 @@ notes: |
        android/app/build.gradle.kts:49-54, 98, 104, 117,
        android/app/src/main/AndroidManifest.xml:15-31,
        android/app/src/main/cpp/CMakeLists.txt:79-80, 902, 911-912,
-       android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:25-34,
+       android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:31-40,
        android/app/src/main/java/com/izzy2lost/x1box/LauncherActivity.kt:41,
        99-130
 
@@ -44,7 +45,7 @@ notes: |
   disk folder when none is there, and keeps saves in that folder when no disk
   image is set.
   ref: android/hakux/core/native/kernel/ex.c:172-225,
-       android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:36-41
+       android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:42-47
 
   The wizard walks four steps: the MCPX boot ROM, the flash ROM, the disk
   image and a games folder. With the xemu core chosen globally each Next stays
@@ -57,9 +58,9 @@ notes: |
   Those names, the eeprom the wizard never asks for and the disc are written
   to x1box/xemu.toml under sys.files. The disc is handed to QEMU as a file
   descriptor through -add-fd and only copied to x1box/dvd.iso when that fails.
-  ref: android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:66-147,
-       173-176, 281-303, 436-484,
-       android/app/src/main/cpp/xemu_android.cpp:866-870, 949-1082, 1660-1673
+  ref: android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:76-157,
+       183-186, 305-327, 460-508,
+       android/app/src/main/cpp/xemu_android.cpp:866-870, 951-1097, 1675-1688
 
   The launcher sends the user back through the wizard whenever the games
   folder stops resolving, and, when the global core is xemu, whenever the
@@ -72,20 +73,28 @@ notes: |
        129-168,
        system/vl.c:3074-3099, 3133-3149, 3160-3174
 
-  The xemu core also emulates the Sega Chihiro arcade board when Chihiro mode
-  is on, which forces 128 MiB of RAM and keeps the console EEPROM apart as
-  eeprom_chihiro.bin. The Chihiro BIOS then takes the flash slot, and the
-  MCPX ROM is not overlaid on it. The media board flash and the baseboard
-  EEPROMs are looked up by name beside that BIOS, since the Android build
-  leaves every chihiro.roms path empty. The network board firmware is read
-  only for a cabinet link, which this build never enables. A Chihiro game is a
-  netboot image or an extracted folder holding boot.id, both content.
-  ref: hw/xbox/chihiro/chihiro.c:58-61, hw/xbox/xbox.c:166-176,
+  The xemu core also emulates the Sega Chihiro arcade board. The machine
+  follows the game: a disc that is a folder holding boot.id runs as a Chihiro,
+  which forces 128 MiB of RAM and keeps the console EEPROM apart as
+  eeprom_chihiro.bin, and anything else as an Xbox. x1box/chihiro_bios.bin
+  then takes the flash slot, and the MCPX ROM is not overlaid on it. The media
+  board flash and the baseboard EEPROMs are looked up by name beside that
+  BIOS, since the Android build leaves every chihiro.roms path empty. The
+  network board firmware is read only for a cabinet link, which this build
+  never enables. A Chihiro game is a netboot image, unpacked by the library
+  into such a folder, or an extracted folder, both content. The hakuX core
+  runs Chihiro games too, with neither the BIOS nor the media board ROM: it
+  takes the baseboard EEPROMs from the folder of the flash ROM set for xemu,
+  else files/chihiro-roms, and its built-in House of the Dead 3 dumps
+  otherwise.
+  ref: android/app/src/main/cpp/xemu_android.cpp:978-981, 1009-1021, 1134,
+       android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:121-145,
+       hw/xbox/chihiro/chihiro.c:59-62, hw/xbox/xbox.c:166-176,
        hw/xbox/xbox.c:416-450, system/vl.c:2922-2944, system/vl.c:3152-3156,
-       hw/xbox/chihiro/chihiro.c:546-559,
+       hw/xbox/chihiro/chihiro.c:547-560,
        android/app/src/main/cpp/xemu_settings_android.cc:116-139,
        android/app/src/main/res/values/strings.xml:157,
-       android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:3063-3090
+       android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:3160-3187
 
   Settings imports a dashboard tree from a ZIP or a folder into the FATX
   partitions of the configured disk image, C at 0x8CA80000 and E at 0xABE80000,
@@ -100,7 +109,7 @@ notes: |
   ref: android/app/src/main/cpp/xemu_fatx_import.c:51-54, 1838-1853, 1897-1902,
        1919-1966,
        android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:10-53,
-       android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2608-2683
+       android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2756-2831
 
   Preparing Insignia turns the NAT backend on and writes the DNS 46.101.64.175
   into the config sector of the disk image and into the EEPROM at 0xAC.
@@ -114,12 +123,12 @@ notes: |
   settings both writes and reads back.
   ref: android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:7-8,
        62-77,
-       android/app/src/main/java/com/izzy2lost/x1box/XboxEepromEditor.kt:18,
-       164-218,
+       android/app/src/main/java/com/izzy2lost/x1box/XboxEepromEditor.kt:27,
+       176-230,
        android/app/src/main/java/com/izzy2lost/x1box/XboxHddFormatter.kt:7-16,
        46-50,
        android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:51-79,
-       1138-1194, 1670-1683
+       1220-1276, 1804-1817
 
 files:
   - name: mcpx_1.0.bin
@@ -142,9 +151,9 @@ files:
       is dropped. The loader then checks the size a second time and ends the
       process when it is not 512 bytes. The bytes are read over the last 512
       of the flash image and the region stays writable so early retail kernels
-      keep their cache quirk. In Chihiro mode the image is left as it is, the
+      keep their cache quirk. For a Chihiro game the image is left as it is, the
       Chihiro BIOS carrying its own boot code.
-    source_ref: "source android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:23-25, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:75-99, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:436-484, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:23, source android/app/src/main/res/values/strings.xml:21-23, source system/vl.c:3075-3099, source hw/xbox/xbox.c:151-193"
+    source_ref: "source android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:23-25, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:85-109, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:460-508, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:23, source android/app/src/main/res/values/strings.xml:22-24, source system/vl.c:3075-3099, source hw/xbox/xbox.c:151-193"
 
   - name: Complex_4627.bin
     required: false
@@ -163,7 +172,7 @@ files:
       the address space. A size that is zero or not a multiple of 64 KB, or a
       short read, falls back to 256 KB filled with 0xFF. A retail image cannot
       launch unsigned code, so a debug or modified image is what boots a title.
-    source_ref: "source system/vl.c:3134-3149, source hw/xbox/xbox.c:72-110, source android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:72, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:101-124, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:512-531"
+    source_ref: "source system/vl.c:3134-3149, source hw/xbox/xbox.c:72-110, source android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:82, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:111-134, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:536-555"
 
   - name: xbox_hdd.qcow2
     required: false
@@ -179,7 +188,7 @@ files:
       inside an image that already exists and needs at least 0x1DD156000 bytes
       for the retail layout. It never creates the image. Partitions C and E of
       this image are what the dashboard import writes into.
-    source_ref: "source system/vl.c:3160-3174, source android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:73, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:126-147, source android/app/src/main/java/com/izzy2lost/x1box/XboxHddFormatter.kt:7-16, 46-50, source android/app/src/main/cpp/xemu_android.cpp:1016-1037, source android/app/src/main/java/com/izzy2lost/x1box/LauncherActivity.kt:146-153"
+    source_ref: "source system/vl.c:3160-3174, source android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:83, android/app/src/main/java/com/izzy2lost/x1box/SetupWizardActivity.kt:136-157, source android/app/src/main/java/com/izzy2lost/x1box/XboxHddFormatter.kt:7-16, 46-50, source android/app/src/main/cpp/xemu_android.cpp:1031-1052, source android/app/src/main/java/com/izzy2lost/x1box/LauncherActivity.kt:146-153"
 
   - name: eeprom.bin
     required: false
@@ -198,11 +207,12 @@ files:
       device. A size other than 256 bytes,
       or a generation that fails, clears autostart. Preparing Insignia and the
       EEPROM editor write to it in place.
-    source_ref: "source system/vl.c:2946-3041, system/vl.c:3122-3132, source android/app/src/main/cpp/xemu_android.cpp:949-951, android/app/src/main/cpp/xemu_android.cpp:868, source android/app/src/main/cpp/xemu_settings_android.cc:274-313, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2986-2989"
+    source_ref: "source system/vl.c:2946-3041, system/vl.c:3122-3132, source android/app/src/main/cpp/xemu_android.cpp:951-953, android/app/src/main/cpp/xemu_android.cpp:868, source android/app/src/main/cpp/xemu_settings_android.cc:274-313, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:3134-3137"
 
   - name: eeprom_chihiro.bin
     system: sega-chihiro
     required: false
+    unsourceable: "generated by the emulator with the debug key, no canonical file"
     path: "x1box/eeprom_chihiro.bin"
     size: 256
     validation: [size]
@@ -218,18 +228,22 @@ files:
   - name: chihiro_xbox_bios.bin
     system: sega-chihiro
     required: false
-    path: "x1box/flash.bin"
+    path: "x1box/chihiro_bios.bin"
     config_key: "sys.files.flashrom_path"
-    size: 524288
+    size: [262144, 524288, 1048576]
+    size_note: "Settings installs a picked file only at one of these sizes. The loader takes it as any flash image."
+    validation: [size]
     sha1: "b700b0041af8f84835e45d1d1250247bf7077188"
     description: "Chihiro BIOS"
     note: >-
-      Takes the flash slot in Chihiro mode and is passed as -bios like a
-      retail image, through the same picker. chihiro_bios_known names this
-      512 KB image by its SHA-1, but nothing in this build calls it, so the
-      hash is not checked. The media board files are then looked up in the
-      folder of this file.
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2326-2338, source system/vl.c:3133-3149, source hw/xbox/xbox.c:166-176, source android/app/src/main/res/values/strings.xml:157"
+      Used by the xemu core only, for a Chihiro game: it then takes the flash
+      slot in place of flash.bin and is passed as -bios like a retail image.
+      Without it the game starts with no flash and an error is logged.
+      Settings copies a picked file into x1box under this name, refusing any
+      other size. chihiro_bios_known names the 512 KB image by its SHA-1, but
+      nothing in this build calls it, so the hash is not checked. The media
+      board files are then looked up in the folder of this file.
+    source_ref: "source android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt:18-21, source android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt:33-36, source android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt:48-49, source android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt:58-70, source android/app/src/main/cpp/xemu_android.cpp:1009-1017, source hw/xbox/chihiro/chihiro.c:2327-2339, source system/vl.c:3133-3149, source hw/xbox/xbox.c:166-176, source android/app/src/main/res/values/strings.xml:157"
 
   - name: fpr21042_m29w160et.bin
     system: sega-chihiro
@@ -241,11 +255,12 @@ files:
     note: >-
       The first of three names tried beside the BIOS, then in its parent
       folder. Read whole when it is not empty and at most 4 MB. Settings
-      installs a picked file into x1box under the matching name, or under this
-      one when the picked name matches none. Without it an error is logged and
+      installs a picked file of at most 4 MB into x1box under the matching
+      name, or under this one when the picked name matches none. Only the xemu
+      core reads it. Without it an error is logged and
       the media board IDE serves no SEGABOOT. The board serial comes from the
       MBDT header at 0xFFE00.
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2305-2324, source hw/xbox/chihiro/chihiro.c:2342-2380, source hw/xbox/chihiro/chihiro.c:537-541, source hw/xbox/xbox.c:423-429, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:3003-3056"
+    source_ref: "source hw/xbox/chihiro/chihiro.c:2306-2325, source hw/xbox/chihiro/chihiro.c:2343-2381, source hw/xbox/chihiro/chihiro.c:538-542, source hw/xbox/xbox.c:423-429, source android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt:24-31, source android/app/src/main/java/com/izzy2lost/x1box/ChihiroFiles.kt:52-56"
 
   - name: fpr-23887_29lv160te.ic4
     system: sega-chihiro
@@ -256,7 +271,7 @@ files:
     validation: [size]
     description: "Media board flash ROM, later revision"
     note: "Read in place of fpr21042_m29w160et.bin when that one is absent, under either name."
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2366-2380"
+    source_ref: "source hw/xbox/chihiro/chihiro.c:2367-2381"
 
   - name: ic10_g24lc64.bin
     system: sega-chihiro
@@ -266,8 +281,8 @@ files:
     size: 8192
     validation: [size]
     description: "Base board QC EEPROM"
-    note: "Read beside the BIOS only at exactly 8192 bytes. Otherwise the House of the Dead 3 dump compiled into chihiro-firmware.h stands in."
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2382-2451, source hw/xbox/xbox.c:433-438, source hw/xbox/chihiro/chihiro-firmware.h:24-25"
+    note: "Read beside the BIOS only at exactly 8192 bytes. Otherwise the House of the Dead 3 dump compiled into chihiro-firmware.h stands in. The hakuX core reads its first 8192 bytes, when it holds that many, from the folder of the flash ROM set for xemu, else files/chihiro-roms, whichever holds ic10_g24lc64.bin, and falls back to its own House of the Dead 3 copy."
+    source_ref: "source hw/xbox/chihiro/chihiro.c:2383-2452, source hw/xbox/xbox.c:433-438, source hw/xbox/chihiro/chihiro-firmware.h:24-25, source android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:140-145, source android/hakux/core/native/dev/chihiro.c:555-596"
 
   - name: pc20_g24lc64.bin
     system: sega-chihiro
@@ -277,8 +292,8 @@ files:
     size: 8192
     validation: [size]
     description: "Base board SC EEPROM"
-    note: "Read beside the BIOS only at exactly 8192 bytes. Otherwise the House of the Dead 3 dump compiled into chihiro-firmware.h stands in."
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2382-2451, source hw/xbox/xbox.c:439-444, source hw/xbox/chihiro/chihiro-firmware.h:540-541"
+    note: "Read beside the BIOS only at exactly 8192 bytes. Otherwise the House of the Dead 3 dump compiled into chihiro-firmware.h stands in. The hakuX core reads its first 8192 bytes, when it holds that many, from the folder of the flash ROM set for xemu, else files/chihiro-roms, whichever holds ic10_g24lc64.bin, and falls back to its own House of the Dead 3 copy."
+    source_ref: "source hw/xbox/chihiro/chihiro.c:2383-2452, source hw/xbox/xbox.c:439-444, source hw/xbox/chihiro/chihiro-firmware.h:540-541, source android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:140-145, source android/hakux/core/native/dev/chihiro.c:555-596"
 
   - name: ic11_24lc024.bin
     system: sega-chihiro
@@ -288,8 +303,8 @@ files:
     size: 128
     validation: [size]
     description: "Base board configuration EEPROM"
-    note: "Read beside the BIOS only at exactly 128 bytes. Otherwise the House of the Dead 3 dump compiled into chihiro-firmware.h stands in."
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2382-2451, source hw/xbox/xbox.c:445-450, source hw/xbox/chihiro/chihiro-firmware.h:1056-1057"
+    note: "Read beside the BIOS only at exactly 128 bytes. Otherwise the House of the Dead 3 dump compiled into chihiro-firmware.h stands in. The hakuX core reads up to 128 bytes of it from the folder it takes ic10_g24lc64.bin from, and falls back to its own House of the Dead 3 copy when the file is absent or empty."
+    source_ref: "source hw/xbox/chihiro/chihiro.c:2383-2452, source hw/xbox/xbox.c:445-450, source hw/xbox/chihiro/chihiro-firmware.h:1056-1057, source android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:140-145, source android/hakux/core/native/dev/chihiro.c:555-596"
 
   - name: xboxdash.xbe
     required: false
@@ -301,9 +316,11 @@ files:
       dashboard tree. The import treats this name as the boot entry: when it is
       absent the best scoring .xbe of the tree is copied to it, and the retail
       boot counts as ready only once the name exists. The start path of the
-      emulator never reads partition C, and preparing Insignia finishes with a
-      warning when the name is missing.
-    source_ref: "source android/app/src/main/cpp/xemu_fatx_import.c:1848-1849, android/app/src/main/cpp/xemu_fatx_import.c:1897-1898, android/app/src/main/cpp/xemu_fatx_import.c:1919-1966, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2608-2639, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2674-2683, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2756, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2774-2776"
+      xemu core never reads partition C, and preparing Insignia finishes with a
+      warning when the name is missing. With the hakuX core selected the import
+      copies the C tree into its disk folder hakux/hdd/Partition2 instead, and
+      the Dashboard button boots xboxdash.xbe from there.
+    source_ref: "source android/app/src/main/cpp/xemu_fatx_import.c:1848-1849, android/app/src/main/cpp/xemu_fatx_import.c:1897-1898, android/app/src/main/cpp/xemu_fatx_import.c:1919-1966, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2756-2787, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2822-2831, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2904, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2922-2924, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2534-2550, source android/app/src/main/java/com/izzy2lost/x1box/HakuxLaunch.kt:66-80"
 
   - name: msdash.xbe
     required: false
@@ -315,7 +332,7 @@ files:
       Its presence beside the boot XBE is one of the marks the status line
       reads to call a dashboard install complete, and it is one of the names
       that decide which directory of a picked tree is taken as the source root.
-    source_ref: "source android/app/src/main/cpp/xemu_fatx_import.c:1850-1851, android/app/src/main/cpp/xemu_fatx_import.c:1899-1900, source android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:13, 42-50, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2756, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2777-2779"
+    source_ref: "source android/app/src/main/cpp/xemu_fatx_import.c:1850-1851, android/app/src/main/cpp/xemu_fatx_import.c:1899-1900, source android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:13, 42-50, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2904, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2925-2927"
 
   - name: xbox.xtf
     required: false
@@ -326,7 +343,7 @@ files:
       Probed at the root of partition C and imported with the rest of the tree,
       alongside the xodash, audio, fonts and xboxdashdata.* directories the
       root scan looks for.
-    source_ref: "source android/app/src/main/cpp/xemu_fatx_import.c:1838-1846, android/app/src/main/cpp/xemu_fatx_import.c:1852-1853, android/app/src/main/cpp/xemu_fatx_import.c:1901-1902, source android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:12, 14-16, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2756, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2780-2781"
+    source_ref: "source android/app/src/main/cpp/xemu_fatx_import.c:1838-1846, android/app/src/main/cpp/xemu_fatx_import.c:1852-1853, android/app/src/main/cpp/xemu_fatx_import.c:1901-1902, source android/app/src/main/java/com/izzy2lost/x1box/XboxInsigniaHelper.kt:12, 14-16, source android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2904, android/app/src/main/java/com/izzy2lost/x1box/SettingsActivity.kt:2928-2929"
 
   - name: "<driver>.zip"
     required: false
@@ -356,7 +373,7 @@ files:
       mapping goes in through controller_map.txt instead. The revision shipped
       here is 589031 bytes and is not the one other releases carry under this
       name.
-    source_ref: "source android/app/src/main/cpp/xemu_android.cpp:252-253, android/app/src/main/cpp/xemu_android.cpp:283-322, android/app/src/main/cpp/xemu_android.cpp:1529-1534"
+    source_ref: "source android/app/src/main/cpp/xemu_android.cpp:252-253, android/app/src/main/cpp/xemu_android.cpp:283-322, android/app/src/main/cpp/xemu_android.cpp:1544-1549"
 
   - name: X1_Covers.txt
     required: false
@@ -366,7 +383,7 @@ files:
       Read from the assets and turned into a lookup from normalised game name
       to a URL under the X1_Covers repository, which the library fetches and
       caches per title. Only lines ending in .png are kept.
-    source_ref: "source android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:136, android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:1494-1540"
+    source_ref: "source android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:139, android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:1583-1629"
 
   - name: gamepad_map.txt
     required: false
@@ -388,7 +405,7 @@ exclusion_note: >
   the Android settings neither set the path nor enable the link.
   X1_Covers.xml ships in the assets and no code opens it, the library reading
   X1_Covers.txt instead.
-  ref: hw/xbox/chihiro/chihiro.c:546-559,
+  ref: hw/xbox/chihiro/chihiro.c:547-560,
        android/app/src/main/cpp/xemu_settings_android.cc:124-139,
        android/app/src/main/assets/X1_Covers.xml,
-       android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:1500
+       android/app/src/main/java/com/izzy2lost/x1box/GameLibraryActivity.kt:1589

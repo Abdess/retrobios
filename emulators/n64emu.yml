@@ -1,0 +1,46 @@
+emulator: "n64emu"
+type: libretro
+core_classification: enhanced_fork
+source: "https://git.libretro.com/libretro/n64emu"
+profiled_date: "2026-11-09"
+source_commit: "c9da0acadaebe9bbfa4cf2b5662f2af7252988a3"
+core_version: "0.01"
+version_basis:
+  kind: file
+  path: "src/libretro.c"
+  pattern: 'info->library_version\s*=\s*"([^"]+)"'
+display_name: "Nintendo - Nintendo 64 (n64emu)"
+cores:
+  - "n64emu"
+systems:
+  - nintendo-64
+  - nintendo-64dd
+
+notes: |
+  Started in 2022 by mudlord from a copy of parallel-n64, imported without its
+  git history, and rewritten since: cycle-based CPU and RSP JITs, RSP HLE per
+  task with LLE fallback, GL, D3D, SoftRDP and paraLLEl-RDP backends.
+  The PIF boot ROM is high-level emulated, so cartridges need no file
+  (src/device/pif.c:35).
+  The 64DD IPL is the only file read from the system directory. A disk loaded
+  through the "N64 Disk Drive" subsystem with no IPL as second content looks for
+  IPL.n64, then 64DD_IPL.bin, at the root of the system directory and rejects
+  the load when neither passes the check (src/libretro.c:309-343). A disk found
+  as a .ndd sidecar of a cartridge reads IPL.n64 only, and a missing or
+  unrecognised IPL disables the 64DD while the cartridge still runs
+  (src/main/main.c:303-372). The IPL is accepted in Z64, N64 and V64 byte order.
+  Transfer Pak Game Boy ROM and save come from subsystem content or from .gb and
+  .sav sidecars of the cartridge (src/libretro.c:633-636).
+
+files:
+  - name: "IPL.n64"
+    aliases: ["64DD_IPL.bin"]
+    path: "IPL.n64"
+    system: nintendo-64dd
+    required: true
+    min_size: 4096
+    max_size: 4194304
+    validation: [size]
+    description: "Nintendo 64DD IPL ROM"
+    note: "Size between 0x1000 and 0x400000 bytes, a multiple of 4, and a first word of 80270740 in one of the three byte orders. 64DD_IPL.bin is tried second by the subsystem path only."
+    source_ref: "src/libretro.c:259-271, 314-331"

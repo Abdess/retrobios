@@ -15,6 +15,9 @@ cores:
   - sdl2trs
   - sdltrs
   - "sdltrs-model1"
+  - "sdltrs-model3"
+  - "sdltrs-model4"
+  - "sdltrs-model4p"
 systems:
   - trs80
 mode: standalone
@@ -68,6 +71,7 @@ files:
     description: "TRS-80 Model I ROM"
     required: true
     max_size: 18432
+    config_key: "romfile1"
     source_ref: "src/trs_options.c:81 (romfile1), src/trs_options.c:867 (default name), src/trs_cmd_rom.c:871-884 (trs_model 1)"
     note: >
       Model I is the model a stock configuration selects (src/trs_options.c:900), so
@@ -80,6 +84,7 @@ files:
     description: "TRS-80 Model III and Model 4 ROM"
     required: true
     max_size: 18432
+    config_key: "romfile3"
     source_ref: "src/trs_options.c:82 (romfile3), src/trs_options.c:868 (default name), src/trs_cmd_rom.c:885-889 (trs_model 3 and 4)"
     note: >
       Serves Model III and Model 4 alike. The stub text spells out that Model 4
@@ -94,6 +99,7 @@ files:
     description: "TRS-80 Model 4P boot ROM"
     required: false
     max_size: 18432
+    config_key: "romfile4p"
     source_ref: "src/trs_options.c:83 (romfile4p), src/trs_options.c:869 (default name), src/trs_cmd_rom.c:890-893 (trs_model 5)"
     note: >
       Optional because the compiled-in replacement is a working boot ROM rather

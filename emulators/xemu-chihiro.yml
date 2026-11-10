@@ -65,18 +65,16 @@ notes: |
 
 files:
   - name: chihiro_xbox_bios.bin
-    path: "chihiro/chihiro_xbox_bios.bin"
     system: sega-chihiro
     required: true
     size: 524288
     sha1: "b700b0041af8f84835e45d1d1250247bf7077188"
     validation: [size, sha1]
     description: "Chihiro BIOS"
-    note: "RetroBat also looks for it at the root of the bios folder. The other Chihiro files are then read from the same folder."
-    source_ref: "source hw/xbox/chihiro/chihiro.c:2280-2292, source system/vl.c:3169-3190"
+    note: "Opened from chihiro.roms.bios_path, empty by default, and accepted under any name when it has this size and SHA-1. chihiro_xbox_bios.bin is the MAME name the code comment gives. The media board flash and the EEPROMs are then read from the folder that holds it. RetroBat sets the path to bios/chihiro/chihiro_xbox_bios.bin, else bios/chihiro_xbox_bios.bin."
+    source_ref: "source hw/xbox/chihiro/chihiro.c:2280-2292, source system/vl.c:3169-3190, source config_spec.yml:893-895"
 
   - name: fpr21042_m29w160et.bin
-    path: "chihiro/fpr21042_m29w160et.bin"
     system: sega-chihiro
     required: true
     max_size: 4194304
@@ -86,7 +84,6 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2259-2333, 485-489, source system/vl.c:3201-3214"
 
   - name: fpr-23887_29lv160te.ic4
-    path: "chihiro/fpr-23887_29lv160te.ic4"
     system: sega-chihiro
     required: false
     max_size: 4194304
@@ -97,7 +94,6 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2320-2332"
 
   - name: ic10_g24lc64.bin
-    path: "chihiro/ic10_g24lc64.bin"
     system: sega-chihiro
     required: true
     size: 8192
@@ -106,7 +102,6 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2336-2401, source system/vl.c:3215-3217"
 
   - name: pc20_g24lc64.bin
-    path: "chihiro/pc20_g24lc64.bin"
     system: sega-chihiro
     required: true
     size: 8192
@@ -115,13 +110,31 @@ files:
     source_ref: "source hw/xbox/chihiro/chihiro.c:2336-2401, source system/vl.c:3218-3220"
 
   - name: ic11_24lc024.bin
-    path: "chihiro/ic11_24lc024.bin"
     system: sega-chihiro
     required: true
     size: 128
     validation: [size]
     description: "Base board configuration EEPROM"
     source_ref: "source hw/xbox/chihiro/chihiro.c:2336-2401, source system/vl.c:3221-3223"
+
+  - name: chihiro_eeprom.bin
+    system: sega-chihiro
+    required: false
+    size: 256
+    validation: [size]
+    unsourceable: "generated with the debug key in the data directory when absent and written back by the machine"
+    description: "Chihiro EEPROM"
+    note: "A file carrying the retail key is renamed aside and a debug one generated in its place. Any other size than 256 bytes stops the machine with a message."
+    source_ref: "source system/vl.c:2978-3067"
+
+  - name: chihiro_snapshots.qcow2
+    system: sega-chihiro
+    required: false
+    config_key: chihiro.roms.snapshot_store_path
+    unsourceable: "created empty when missing, then holds the VM snapshots"
+    description: "Chihiro VM snapshot store"
+    note: "Defaults to the data directory. A store that exists and cannot be opened leaves snapshots unavailable."
+    source_ref: "source system/vl.c:2051-2110, source config_spec.yml:916-921"
 
   - name: ver1305.bin
     system: sega-chihiro

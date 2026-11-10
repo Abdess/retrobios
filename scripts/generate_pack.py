@@ -36,8 +36,11 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, os.path.dirname(__file__))
+from alternatives import core_file_spares, settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
+    OUTER_ROOTS,
+    outer_layout,
     installed_data_refs,
     platform_arg,
     require_directory,
@@ -83,6 +86,9 @@ from common import (
     ProfileSelectionError,
     core_system_dirs,
     declared_root,
+    downloadable_on,
+    downloaded_only_profiles,
+    list_available_targets,
     entry_serves_systems,
     entry_system_ids,
     platform_layouts,
@@ -1306,13 +1312,23 @@ def generate_pack(
           db, bios_dir, zip_contents, data_registry, validation_index,
           validation_owners, offline, profiles=emu_profiles,
       )
+      spares = core_file_spares(
+          core_files,
+          lambda fe: bool(region_drops)
+          and extra_region_key(fe, declared_root(config)) in region_drops,
+      ) if required_only else set()
       for fe in core_files:
-          if required_only and fe.get("required") is False:
+          if required_only and (fe.get("required") is False or id(fe) in spares):
               continue
           dest = sanitize_pack_path(fe.get("destination", fe["name"]))
           if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
               continue
           if not dest:
+              continue
+          if fe.get("root") in OUTER_ROOTS:
+              # Read below the roms directory or in an emulator folder: the
+              # pack is extracted into the BIOS folder and cannot reach
+              # them, the installer places these files.
               continue
           # Core extras: _collect_emulator_extras already adjusted
           # destinations for slug-based platforms.  Apply the effective
@@ -1445,8 +1461,13 @@ def generate_pack(
           if system_filter:
               unfolded = _extras_for_systems(unfolded, system_filter)
           prefix = _detect_extras_prefix(config, base_dest)
+          unfolded_spares = core_file_spares(
+              unfolded,
+              lambda fe: bool(region_drops)
+              and extra_region_key(fe, declared_root(config)) in region_drops,
+          ) if required_only else set()
           for fe in unfolded:
-              if required_only and fe.get("required") is False:
+              if required_only and (fe.get("required") is False or id(fe) in unfolded_spares):
                   continue
               if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
                   continue
@@ -1791,6 +1812,16 @@ def generate_emulator_pack(
                 if archive:
                     archives.add(archive)
 
+            # What each destination came to, settled by set once the
+            # profile is read: a member another member fills is not missing,
+            # and a set nobody holds is reported once (alternatives.py). An
+            # archive unit is a member like a loose file.
+            outcomes: list[tuple[list[dict], bool, Callable[[], None] | None]] = []
+            spares = emulator_required_spares(
+                emu_name, profile, files, standalone, region_drops, db,
+                validation_index, zip_contents, data_registry,
+            ) if required_only else set()
+
             # Pack archives as units
             archive_prefix = profile.get("archive_prefix", "")
             for archive_name in sorted(archives):
@@ -1800,6 +1831,8 @@ def generate_emulator_pack(
 
                 own_entry = archive_entry(archive_name, files)
                 if required_only and archive_is_optional(own_entry, archive_name, files):
+                    continue
+                if archive_dest in spares:
                     continue
                 local_path, status = resolve_file(
                     own_entry,
@@ -1819,7 +1852,11 @@ def generate_emulator_pack(
                     if not (taken and local_path and _same_bytes(
                         local_path, packed_at.get(archive_dest.lower())
                     )):
-                        report_missing(archive_name, archive_dest)
+                        outcomes.append(([own_entry], False, functools.partial(
+                            report_missing, archive_name, archive_dest
+                        )))
+                    else:
+                        outcomes.append(([own_entry], True, None))
                     continue
                 if local_path and status not in ("not_found",):
                     if local_path.endswith(".zip"):
@@ -1833,8 +1870,11 @@ def generate_emulator_pack(
                     total_files += 1
                     if record is not None:
                         record.files.append(archive_dest)
+                    outcomes.append(([own_entry], True, None))
                 else:
-                    report_missing(archive_name, archive_dest)
+                    outcomes.append(([own_entry], False, functools.partial(
+                        report_missing, archive_name, archive_dest
+                    )))
 
             # Pack individual files (skip archive members). The entries of one
             # profile on one destination are the releases the code accepts
@@ -1848,7 +1888,7 @@ def generate_emulator_pack(
                 if fe.get("archive"):
                     continue
                 dest = _resolve_destination(fe, standalone)
-                if not dest:
+                if not dest or dest in spares:
                     continue
                 if region_drops and dest in region_drops:
                     continue
@@ -1939,17 +1979,25 @@ def generate_emulator_pack(
                             held, packed_at.get(dest.lower())
                         ):
                             # The file already at this path, asked for twice.
+                            outcomes.append((alternatives, True, None))
                             continue
-                        report_missing(alternatives[0]["name"], dest)
+                        outcomes.append((alternatives, False, functools.partial(
+                            report_missing, alternatives[0]["name"], dest
+                        )))
                         continue
 
                 if chosen is None:
                     if refusal:
                         rejected_files.append(refusal)
+                        outcomes.append((alternatives, False, None))
                     elif all(fe.get("unsourceable") for fe in alternatives):
-                        unsourceable_files.append(alternatives[0]["name"])
+                        outcomes.append((alternatives, False, functools.partial(
+                            unsourceable_files.append, alternatives[0]["name"]
+                        )))
                     else:
-                        report_missing(alternatives[0]["name"], dest)
+                        outcomes.append((alternatives, False, functools.partial(
+                            report_missing, alternatives[0]["name"], dest
+                        )))
                     continue
 
                 fe, local_path, how = chosen
@@ -1970,8 +2018,11 @@ def generate_emulator_pack(
                             total_files += 1
                             if record is not None:
                                 record.files.append(dest)
+                            outcomes.append((alternatives, True, None))
                         else:
-                            missing_files.append(fe["name"])
+                            outcomes.append((alternatives, False, functools.partial(
+                                missing_files.append, fe["name"]
+                            )))
                     finally:
                         if os.path.exists(tmp_path):
                             os.unlink(tmp_path)
@@ -1985,6 +2036,7 @@ def generate_emulator_pack(
                 # (but allow same file to be packed under different destinations,
                 # e.g., IPL.bin in GC/USA/ and GC/EUR/ from same source)
                 dedup_key_hash = f"{os.path.realpath(local_path)}:{dest}"
+                outcomes.append((alternatives, True, None))
                 if dedup_key_hash in seen_hashes:
                     continue
                 seen_hashes.add(dedup_key_hash)
@@ -2000,6 +2052,14 @@ def generate_emulator_pack(
                 total_files += 1
                 if record is not None:
                     record.files.append(dest)
+
+            excused, _standing = settle_sets([
+                (slot_set_keys(emu_name, entries), entries[0], fills)
+                for entries, fills, _report in outcomes
+            ])
+            for position, (_entries, _fills, report) in enumerate(outcomes):
+                if report is not None and position not in excused:
+                    report()
 
             # The trees after the files, as in a platform pack: a dump the
             # profile declares wins over the copy a tree bundles at the same
@@ -4272,7 +4332,8 @@ def _attach_claims(
             })
             continue
         claim_path, _ = validated_choice(
-            claim, claim_path, db, validation_index or {}, bios_dir, None, dest, owners,
+            claim, claim_path, db, validation_index or {}, bios_dir, None,
+            claim.get("layout_path") or dest, owners,
         )
         copy, _size = _manifest_entry(
             claim_path, manifest_dest, [claim_emu], db, repo_root, {}
@@ -4389,8 +4450,13 @@ def _manifest_core_entries(
         db, bios_dir, zip_contents, data_registry, validation_index or {},
         owners, offline, profiles=profiles,
     )
+    spares = core_file_spares(
+        core_files,
+        lambda fe: bool(region_drops)
+        and extra_region_key(fe, declared_root(config)) in region_drops,
+    ) if required_only else set()
     for fe in core_files:
-        if required_only and fe.get("required") is False:
+        if required_only and (fe.get("required") is False or id(fe) in spares):
             continue
         dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
@@ -4449,11 +4515,7 @@ def _manifest_core_entries(
             ):
                 systems = _extra_system_ids(fe)
                 record_omission(
-                    full_dest,
-                    fe,
-                    systems[0] if systems else "",
-                    status,
-                    [source_emu] if source_emu else [],
+                    full_dest, fe, systems[0] if systems else "", status, _claim_cores(fe),
                 )
             continue
 
@@ -4463,9 +4525,14 @@ def _manifest_core_entries(
         # extras prefix when it is an internal layout dir (RetroDECK bios/).
         # A file read below the save directory is written relative to the
         # directory the core is handed, and says so (save_entry_fields).
-        manifest_dest = (
-            save_manifest_dest(fe) if save_root else _manifest_dest_of(full_dest, base_dest)
-        )
+        outer_root = fe.get("root") if fe.get("root") in OUTER_ROOTS else None
+        if save_root:
+            manifest_dest = save_manifest_dest(fe)
+        elif outer_root:
+            # Relative to the roms or emulators folder the entry names.
+            manifest_dest = dest
+        else:
+            manifest_dest = _manifest_dest_of(full_dest, base_dest)
 
         entry, file_size = _manifest_entry(
             local_path, manifest_dest, [source_emu] if source_emu else [],
@@ -4474,6 +4541,8 @@ def _manifest_core_entries(
         )
         if entry is not None and save_root:
             entry.update(save_entry_fields(fe))
+        elif entry is not None and outer_root:
+            entry["root"] = outer_root
         if entry is None:
             if not _claim_platform_omission(
                 omitted_by_destination.get(full_dest), source_emu
@@ -4481,7 +4550,7 @@ def _manifest_core_entries(
                 systems = _extra_system_ids(fe)
                 record_omission(
                     full_dest, fe, systems[0] if systems else "", "not_found",
-                    [source_emu] if source_emu else [],
+                    _claim_cores(fe),
                 )
             if file_size:
                 pack_only_sizes.append(file_size)
@@ -4595,6 +4664,17 @@ def _manifest_selection(
     ), held
 
 
+def _claim_cores(fe: dict) -> list[str]:
+    """The cores an extra and the claims folded onto it name: an omission
+    names every core reading the file, as a list built for one of them
+    would."""
+    names = {
+        claim.get("source_profile") or claim.get("source_emulator", "")
+        for claim in (fe, *fe.get("other_claims", []))
+    }
+    return sorted(name for name in names if name)
+
+
 def _record_absent(
     absent: list[dict],
     config: dict,
@@ -4621,11 +4701,18 @@ def _record_absent(
         ):
             continue
         full_dest = extra_full_destination(fe, extras_pfx)
-        if not full_dest:
-            continue
-        if full_dest in seen_destinations or full_dest in omitted_by_destination:
+        if not full_dest or full_dest in seen_destinations:
             continue
         source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
+        held = omitted_by_destination.get(full_dest)
+        if held is not None:
+            # Another core reads the same missing file there (Raze and
+            # EDuke32 both open NAPALM.GRP): one omission names them all.
+            claimed = held.get("cores")
+            if (held.get("reason") == "not_found" and claimed and source_emu
+                    and source_emu not in claimed):
+                held["cores"] = sorted([*claimed, source_emu])
+            continue
         systems = _extra_system_ids(fe)
         record_omission(
             full_dest, fe, systems[0] if systems else "", "not_found",
@@ -4633,22 +4720,62 @@ def _record_absent(
         )
 
 
-def _record_unplaceable(unplaceable: list[dict], record_omission: Callable[..., None]) -> None:
+# What a manifest's roms_directory and emulators_directory carry: the BIOS
+# folder's name, for the roms root its place relative to the BIOS folder
+# (romfolders roms_root.from_bios), and for emulator folders the places the
+# launcher searches, the one a missing folder is created at, and the config
+# file whose key moves a folder.
+MANIFEST_OUTER_FIELDS = ("bios_folder", "from_bios", "searched", "default", "config")
+
+
+def _record_unplaceable(
+    unplaceable: list[dict],
+    record_omission: Callable[..., None],
+    config: dict,
+    profiles: dict[str, dict],
+) -> None:
     """Held by the collection, nowhere to put it on this platform.
 
     Said in the manifest, where RomM's DOSBox Pure ROMs were simply absent.
+    One place read by several cores is one omission naming them all.
     """
+    # The emulator's own folder is the one the platform installs the name
+    # it lists into: RetroPie puts amiberry 5.7.2 and 6.3.3, one per board,
+    # both in $md_inst of its amiberry package.
+    platform_names = {
+        str(c) for key in ("cores", "standalone_cores")
+        if isinstance(config.get(key), list) for c in config[key]
+    }
+
+    def folder(profile: str) -> str:
+        names = {profile, *map(str, (profiles.get(profile) or {}).get("cores") or [])}
+        return min(names & platform_names, default=profile)
+
+    grouped: dict[str, tuple[dict, list[str]]] = {}
     for u in unplaceable:
         where = u.get("path") or u.get("name", "")
+        # The profile key, the name a target's core list and the
+        # installer's narrowing match: the display name matched none.
+        core = u.get("profile") or u.get("emulator", "")
+        if u.get("unplaced"):
+            key = f"emulator:{folder(core)}:{where}"
+        elif u.get("root") in OUTER_ROOTS:
+            key = f"{u['root']}:{where}"
+        elif u.get("root") == "save":
+            key = f"save:{save_manifest_dest(u)}"
+        else:
+            key = where
+        held, cores = grouped.setdefault(key, (u, []))
+        if core and core not in cores:
+            cores.append(core)
+        if u.get("required", True) and not held.get("required", True):
+            grouped[key] = ({**held, "required": True}, cores)
+    for key, (u, cores) in grouped.items():
         record_omission(
             # Keyed apart from the BIOS tree's paths, which a file read below
-            # the save directory can repeat.
-            f"save:{save_manifest_dest(u)}" if u.get("root") == "save" else where,
-            u, u.get("system") or "",
-            # The profile key, the name a target's core list and the
-            # installer's narrowing match: the display name matched none.
-            u.get("unplaceable", "no_platform_slug"),
-            [u.get("profile") or u.get("emulator", "")],
+            # the save directory or in the emulator's folder can repeat.
+            key, u, u.get("system") or "",
+            u.get("unplaceable", "no_platform_slug"), sorted(cores),
         )
 
 
@@ -4821,12 +4948,22 @@ def generate_manifest(
             if cores is None else extra_region_key(file_entry, declared_root(config))
         )
         save_root = file_entry.get("root") == "save"
+        # Read in the emulator's own folder, outside the BIOS tree: dest is
+        # the path the emulator reads, relative to that folder.
+        outside = bool(file_entry.get("unplaced"))
+        if outside:
+            dest_fields: dict = {"dest": sanitize_pack_path(file_entry.get("path") or ""),
+                                 "root": "emulator"}
+        elif file_entry.get("root") in OUTER_ROOTS:
+            dest_fields = {"dest": sanitize_pack_path(
+                file_entry.get("destination") or file_entry.get("path") or ""
+            ), "root": file_entry["root"]}
+        elif save_root:
+            dest_fields = {"dest": save_manifest_dest(file_entry), **save_entry_fields(file_entry)}
+        else:
+            dest_fields = {"dest": manifest_destination(full_destination)}
         omitted_by_destination[full_destination] = {
-            "dest": (
-                save_manifest_dest(file_entry) if save_root
-                else manifest_destination(full_destination)
-            ),
-            **(save_entry_fields(file_entry) if save_root else {}),
+            **dest_fields,
             "name": str(file_entry.get("name") or ""),
             "system": system_id,
             "required": bool(file_entry.get("required", True)),
@@ -5064,7 +5201,7 @@ def generate_manifest(
         )
     else:
         core_files = []
-    _record_unplaceable(unplaceable, record_omission)
+    _record_unplaceable(unplaceable, record_omission, config, emu_profiles)
     _record_absent(
         absent, config, base_dest, region_drops, required_only,
         seen_destinations, omitted_by_destination, record_omission,
@@ -5171,6 +5308,9 @@ def generate_manifest(
             omitted_by_destination.values(), key=lambda entry: entry["dest"]
         ),
         "core_names": core_names,
+        **({"downloaded_cores": downloaded} if (downloaded := _downloaded_cores(
+            config, emu_profiles, core_names, platforms_dir,
+        )) else {}),
         "system_cores": system_cores,
         # The names the platform itself gives its systems (Batocera's psx),
         # which --system accepts beside the ids.
@@ -5180,6 +5320,15 @@ def generate_manifest(
     }
     if data_directories:
         result["data_directories"] = data_directories
+    for root in OUTER_ROOTS:
+        layout = outer_layout(config, root) or {}
+        if layout and any(entry.get("root") == root
+                          for entry in [*manifest_files, *result["omitted_files"]]):
+            # Where the installer finds the folder: relative to the folder
+            # holding the BIOS folder, which the platform names bios_folder.
+            result[f"{root}_directory"] = {
+                key: layout[key] for key in MANIFEST_OUTER_FIELDS if key in layout
+            }
     saved = [entry for entry in manifest_files if entry.get("root") == "save"]
     if saved:
         layout = save_layout(config)
@@ -5316,6 +5465,39 @@ def _manifest_data_directories(
     return trees
 
 
+def _downloaded_cores(
+    config: dict,
+    profiles: dict[str, dict],
+    core_names: dict[str, list[str]],
+    platforms_dir: str,
+) -> dict[str, list[str]]:
+    """The cores only the platform's RetroArch downloader brings, each with
+    the boards, aliases included, whose downloader offers it.
+
+    A target list names the board's standalone amiberry and the buildbot's
+    amiberry core alike, so the installer cannot tell from the name whether
+    the board reaches the core. `resolve_platform_cores` decides it, and
+    `install.py --target` reads its answer here.
+    """
+    reached = {
+        profile: names
+        for profile, names in downloaded_only_profiles(config, profiles).items()
+        if profile in core_names
+    }
+    if not reached:
+        return {}
+    platform = str(config.get("_key") or "")
+    boards: dict[str, list[str]] = {profile: [] for profile in reached}
+    for target in list_available_targets(platform, platforms_dir):
+        cores = load_target_config(platform, target["name"], platforms_dir)
+        if cores is None:
+            continue
+        for profile, names in reached.items():
+            if downloadable_on(cores, names):
+                boards[profile] += [target["name"], *target.get("aliases", [])]
+    return {profile: sorted(names) for profile, names in sorted(boards.items())}
+
+
 def _manifest_core_index(
     config: dict,
     profiles: dict[str, dict],
@@ -5326,14 +5508,15 @@ def _manifest_core_index(
 
     A target list, or the cores found installed, names cores the way the
     buildbot does, and a file names the profile that reads it: `core_names`
-    gives each profile the other names it goes by. `system_cores` gives each
-    platform system the cores whose presence keeps it, as
+    gives each profile the other names it goes by, and names every core the
+    platform runs, one that reads no file included: a core found installed
+    that the list does not name is one it has no profile for. `system_cores`
+    gives each platform system the cores whose presence keeps it, as
     `filter_systems_by_target` decides. A system absent from it is kept
     whatever is available.
     """
-    reach = system_core_reach(
-        config.get("systems", {}), profiles, _platform_cores(config, profiles)
-    )
+    runs = _platform_cores(config, profiles)
+    reach = system_core_reach(config.get("systems", {}), profiles, runs)
     system_cores = {
         sys_id: sorted(cores) for sys_id, cores in sorted(reach.items())
         if cores is not None
@@ -5344,7 +5527,8 @@ def _manifest_core_index(
         for c in copy.get("cores") or []
     }
     named |= {c for cores in system_cores.values() for c in cores}
-    aliases: dict[str, set[str]] = {}
+    named |= set(runs)
+    aliases: dict[str, set[str]] = {profile: set() for profile in named & set(runs)}
     for name, claimants in upstream_profile_index(profiles, include_aliases=True).items():
         for profile in claimants & named:
             if name != profile:
@@ -5772,6 +5956,7 @@ from packextras import (  # noqa: E402,F401
     extras_for_systems as _extras_for_systems,
     platform_region_groups,
     emulator_region_drops,
+    emulator_required_spares,
     _emulator_region_group,
     expand_agnostic_entries,
     undeclared_report,

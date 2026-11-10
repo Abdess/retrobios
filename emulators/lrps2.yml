@@ -8,8 +8,9 @@ core_classification: community_fork
 bios_mode: agnostic
 source: "https://github.com/libretro/parallel-ps2"
 upstream: "https://github.com/PCSX2/pcsx2"
-profiled_date: "2026-10-21"
-source_commit: "8c2b679622d602fe656ceba646b2f1f3a981c717"
+profiled_date: "2026-11-09"
+source_commit: "87bcc96bbc3b4da7318fd1c2a7450f0c78bdc09e"
+prose_written_at: "87bcc96bbc3b4da7318fd1c2a7450f0c78bdc09e"
 upstream_commit: "f0523f8acb1d3a765ee73b74cffec63093569199"
 core_version: "v2.0.0"
 version_basis:
@@ -24,16 +25,35 @@ bios_directory: "pcsx2/bios/"
 resources_directory: "pcsx2/resources/"
 
 notes: |
-  pcsx2/resources/GameIndex.yaml, the per-game patch, settings override and
-  compatibility database, is the one the buildbot publishes in LRPS2.zip (the
-  lrps2 data directory). An OSD warning is shown if it is missing, and some games
-  do not boot without it.
-  Hard fork of PCSX2 (pre-Qt, 1.7-dev era) ported to libretro. x86_64 only.
-  BIOS detection is filename-agnostic: scans pcsx2/bios/ for any file between 4-8 MB
-  with a valid romdir structure (RESET + ROMVER entries). No hash validation.
-  Companion files (.rom1, .rom2, .nvm, .mec) derive paths from the selected BIOS.
-  DEV9 (network/HDD) and USB are stubbed in the libretro port.
+  Hard fork of PCSX2 (pre-Qt, 1.7-dev era) ported to libretro, x86_64 only,
+  with much of the emulator since rewritten in C89. The system directory of
+  the core is system/pcsx2 (libretro/main.cpp:2699-2708).
+
+  BIOS detection is filename-agnostic: pcsx2/bios/ is scanned for any file
+  between 4 and 8 MB with a valid romdir structure (RESET and ROMVER
+  entries). No hash is checked. The companion files (.rom1, .rom2, .nvm,
+  .mec, .flash) take their path from the selected BIOS, and the MagicGate key
+  files sit in the same directory.
+
+  A COH-H BIOS is the BIOS of an arcade board: the core boots it as that
+  board, and its mechacon answers with the arcade key set (pcsx2/ps2/BiosTools.cpp:384-386, pcsx2/CDVD/CDVD.c:861-871).
+  A Konami Python game boots the selected BIOS when it is a COH-H one, else
+  the first COH-H BIOS of pcsx2/bios/ by name
+  (libretro/main.cpp:2548-2561, pcsx2/ps2/BiosTools.cpp:292-337). A Python 2
+  game is a .py2 descriptor whose files, HDD image, identity files, dongles
+  and cards, sit beside it (pcsx2/USB/usb-python2/py2desc.h:1-4).
+
+  GameIndex.yaml, the per-game patch, settings override and compatibility
+  database, is compiled into the core. pcsx2/resources/GameIndex.yaml is read
+  only when the pcsx2_use_external_gameindex option is enabled, off by
+  default, and the built-in copy applies when the file is missing
+  (libretro/main.cpp:3694-3728, libretro/libretro_core_options.h:261-264).
+  The buildbot still publishes one in LRPS2.zip (the lrps2 data directory).
+
   Widescreen patches are largely compiled into the core (libretro/patches.cpp).
+  The DEV9 hard disk is DEV9hdd.chd or DEV9hdd.vhd when the user puts one in
+  system/pcsx2, otherwise a DEV9hdd.raw the core creates
+  (libretro/main.cpp:473-504): it is user storage, not a file to obtain.
   .info firmware_count=2 counts the bios folder and GameIndex.yaml.
   .info description mentions EROM.BIN but no EROM loading path exists in the code.
 
@@ -42,7 +62,7 @@ data_directories:
     installed_on: [batocera, lakka, recalbox, retrobat, retrodeck]
     unread_on: [romm]
     destination: ""
-    source_ref: "source pcsx2/GameDatabase.cpp:49, source pcsx2/GameDatabase.cpp:979"
+    source_ref: "source pcsx2/GameDatabase.cpp:40, source pcsx2/GameDatabase.cpp:1144, source libretro/main.cpp:3694-3728"
 
 files:
   - name: "<bios>.bin"
@@ -53,18 +73,21 @@ files:
     min_size: 4194304
     max_size: 8388608
     validation: [size]
-    source_ref: "source pcsx2/ps2/BiosTools.cpp:33-34, 63-180, 250-275, 287-349"
+    config_key: "pcsx2_bios"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:32-33, 64-187, 257-289, 349-415, source libretro/main.cpp:525-536"
     note: >
       Scans pcsx2/bios/ for any file between 4 MB and 8 MB. Validates via romdir
       structure parsing (RESET + ROMVER entries). User selects BIOS via core option
       pcsx2_bios. Falls back to first valid BIOS found if configured BIOS is missing.
+      A Konami Python game takes the first COH-H BIOS by name instead when the
+      selected one is not COH-H.
 
   - name: "<bios>.rom1"
     path: "pcsx2/bios/<bios>.rom1"
     required: false
     max_size: 4194304
     description: "DVD player ROM"
-    source_ref: "source pcsx2/ps2/BiosTools.cpp:189-230, 340"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:204-237, 406"
     note: >
       DVD player ROM. Tries <biospath>.rom1 (appended) then <biosbase>.rom1
       (extension replaced). Silently skipped if not found.
@@ -74,7 +97,7 @@ files:
     required: false
     max_size: 524288
     description: "Chinese ROM extension"
-    source_ref: "source pcsx2/ps2/BiosTools.cpp:189-230, 341"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:204-237, 407"
     note: >
       Chinese region ROM extension. Same naming convention as rom1.
       Only present on Chinese region consoles.
@@ -85,11 +108,12 @@ files:
     hle_fallback: true
     size: 1024
     description: "NVRAM / EEPROM data"
-    source_ref: "source pcsx2/CDVD/CDVD.cpp:194-226"
+    source_ref: "source pcsx2/CDVD/CDVD.c:59, source pcsx2/CDVD/CDVD.c:198-271"
     note: >
       Console EEPROM data (language, timezone, region, iLink ID, OSD settings).
       Path derived from BIOS path with extension replaced to .nvm.
       Auto-created with region-appropriate defaults if missing or invalid.
+      With a COH-H BIOS a file that reads whole is kept as it is.
 
   - name: "<bios>.mec"
     path: "pcsx2/bios/<bios>.mec"
@@ -97,16 +121,78 @@ files:
     hle_fallback: true
     size: 4
     description: "Mechacon version"
-    source_ref: "source pcsx2/CDVD/CDVD.cpp:228-243"
+    source_ref: "source pcsx2/CDVD/CDVD.c:64, source pcsx2/CDVD/CDVD.c:278-292"
     note: >
       Mechacon (disc drive controller) version as u32.
       Auto-created with default 0x00020603 if missing.
+
+  - name: "<bios>.flash"
+    path: "pcsx2/bios/<bios>.flash"
+    required: false
+    hle_fallback: true
+    size: 8650752
+    description: "DEV9 flash memory with ECC"
+    source_ref: "source pcsx2/DEV9/flash.cpp:26-33, source pcsx2/DEV9/flash.cpp:43-52, source pcsx2/DEV9/flash.cpp:110-146"
+    note: >
+      The 64 Mbit flash behind DEV9, 1024 blocks of 16 pages of 528 bytes.
+      Path derived from the BIOS path with the extension replaced. A bare
+      flash.dat in the working directory is read when it is absent, and the
+      flash is blank (0xFF) when neither exists. Written back only after the
+      emulated system programs it.
+
+  - name: "mg_keystore.bin"
+    path: "pcsx2/bios/mg_keystore.bin"
+    required: false
+    size: 1024
+    description: "Mechacon MagicGate key store, encrypted"
+    source_ref: "source pcsx2/CDVD/MechaMg.h:33-36, source pcsx2/CDVD/MechaMg.c:266-335, source pcsx2/CDVD/CDVD.c:861-871"
+    note: >
+      Read from the directory of the selected BIOS with mg_card_keystore.bin and
+      mg_keystore_key.bin. With all three at their exact sizes the MagicGate
+      commands 0x80 to 0x98 run for real: memory card handshake, KELF header
+      and bit table checks, content decryption. Without them the fixed replies
+      stand. The retail key set is used, or the arcade one with a COH-H BIOS.
+
+  - name: "mg_card_keystore.bin"
+    path: "pcsx2/bios/mg_card_keystore.bin"
+    required: false
+    size: 96
+    description: "Mechacon MagicGate card key store"
+    source_ref: "source pcsx2/CDVD/MechaMg.h:33-36, source pcsx2/CDVD/MechaMg.c:301-317"
+    note: "Second of the three key files, see mg_keystore.bin."
+
+  - name: "mg_keystore_key.bin"
+    path: "pcsx2/bios/mg_keystore_key.bin"
+    required: false
+    size: 16
+    description: "Key of the MagicGate key store"
+    source_ref: "source pcsx2/CDVD/MechaMg.h:33-36, source pcsx2/CDVD/MechaMg.c:301-317"
+    note: "Third of the three key files, see mg_keystore.bin."
+
+  - name: "mg_kelf07_kbit.bin"
+    path: "pcsx2/bios/mg_kelf07_kbit.bin"
+    required: false
+    size: 16
+    description: "Arcade MagicGate Kbit for KELF application type 0x07"
+    source_ref: "source pcsx2/CDVD/MechaMg.h:38-44, source pcsx2/CDVD/MechaMg.c:318-326, source pcsx2/CDVD/MechaMg.c:499-507"
+    note: >
+      Read with mg_kelf07_kc.bin, only with a COH-H BIOS and the three key
+      files loaded. A KELF of application type 0x07 takes its Kbit and Kc from
+      these two files, and is refused without them.
+
+  - name: "mg_kelf07_kc.bin"
+    path: "pcsx2/bios/mg_kelf07_kc.bin"
+    required: false
+    size: 16
+    description: "Arcade MagicGate Kc for KELF application type 0x07"
+    source_ref: "source pcsx2/CDVD/MechaMg.h:38-44, source pcsx2/CDVD/MechaMg.c:318-326"
+    note: "Pair of mg_kelf07_kbit.bin."
 
   - name: "cheats_ws.zip"
     path: "pcsx2/resources/cheats_ws.zip"
     required: false
     description: "widescreen patches archive"
-    source_ref: "source pcsx2/VMManager.cpp:382-395"
+    source_ref: "source pcsx2/VMManager.cpp:436-457"
     note: >
       ZIP archive of per-game widescreen (16:9) patches in pnach format.
       Only loaded when widescreen patches are enabled via core options.
@@ -116,7 +202,7 @@ files:
     path: "pcsx2/resources/cheats_ni.zip"
     required: false
     description: "no-interlacing patches archive"
-    source_ref: "source pcsx2/VMManager.cpp:417-430"
+    source_ref: "source pcsx2/VMManager.cpp:469-491"
     note: >
       ZIP archive of per-game no-interlacing patches in pnach format.
       Only loaded when no-interlacing patches are enabled via core options.

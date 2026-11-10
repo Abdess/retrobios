@@ -49,9 +49,18 @@ import validate_site  # noqa: E402
 EMPTY_DB = {"files": {}, "indexes": {"by_name": {}}}
 
 
+_LOADED: dict[str, dict] = {}
+
+
 def _profile(name: str) -> dict:
-    with open(REPO_ROOT / "emulators" / f"{name}.yml", encoding="utf-8") as handle:
-        return yaml.safe_load(handle)
+    """The profile as the site reads it: load_emulator_profiles derives each
+    member's required from its groups (DuckStation's ps-bios), which the raw
+    YAML no longer writes on the files."""
+    if not _LOADED:
+        from common import load_emulator_profiles  # noqa: PLC0415
+
+        _LOADED.update(load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False))
+    return _LOADED[name]
 
 
 def _page(name: str, profile: dict) -> str:
@@ -64,16 +73,26 @@ def _files(count: int, **fields: object) -> list[dict]:
 
 class TheIntroSaysWhatIsNeeded(unittest.TestCase):
     def test_one_bios_per_region(self):
+        # DuckStation's ps-bios set is required: one image of the game's
+        # region fills it, and every member is marked required by the loader.
         profile = _profile("duckstation")
+        members = [f for f in profile["files"] if f.get("group") == "ps-bios"]
         intro = gs._emulator_intro("DuckStation", profile)
         self.assertIn(
-            "It picks the BIOS for the game's region: scph5500.bin (Japan), "
-            "scph5501.bin (North America and Latin America) or scph5502.bin "
-            "(Europe and Oceania).", intro)
-        others = len(profile["files"]) - 3
-        self.assertIn(f"The {others} other files are optional.", intro)
-        self.assertNotIn("3 of them required", intro)
+            f"It needs one BIOS for the game's region, among the {len(members)} it accepts.",
+            intro)
+        self.assertNotIn(f"{len(members)} of them required", intro)
         self.assertIn("DuckStation emulates Sony PlayStation.", intro)
+
+    def test_three_required_bios_of_three_regions_read_as_one_choice(self):
+        intro = gs._emulator_intro("X", {"systems": ["sony-playstation"], "files": [
+            {"name": "j.bin", "required": True, "region": ["japan"]},
+            {"name": "u.bin", "required": True, "region": ["north-america"]},
+            {"name": "e.bin", "required": True, "region": ["europe"]},
+            {"name": "o.bin"}]})
+        self.assertIn("It picks the BIOS for the game's region: j.bin (Japan)", intro)
+        self.assertIn("The 1 other file is optional.", intro)
+        self.assertNotIn("3 of them required", intro)
 
     def test_required_files_without_regions_keep_the_count(self):
         intro = gs._emulator_intro("X", {"files": [
@@ -499,7 +518,7 @@ class TheTemplateIsNoEmulator(unittest.TestCase):
         self.assertNotIn("00_example", index)
         self.assertIn("melonds.md", index)
         # A test profile gets no page at all (generate_site's public_profiles).
-        self.assertEqual(_profile("00_example")["type"], "test")
+        self.assertEqual(_profile("00_example")["role"], "test")
 
 
 @unittest.skipUnless((DIST / "emulators" / "aethersx2" / "index.html").is_file(), "site not built")
@@ -511,12 +530,13 @@ class TheBuiltEmulatorPages(unittest.TestCase):
         page = self._html("emulators/aethersx2")
         self.assertRegex(page, r'Download <a href="[^"]*/systems/sony[^"]*#sha1-[0-9a-f]{12}"')
         # The command only where a setup launches AetherSX2 itself (KNULLI,
-        # ROCKNIX), never through RetroArch's folder, which the app never reads.
-        self.assertIn("With ROCKNIX or KNULLI:", page)
+        # ROCKNIX dropped the package in 20261101), never through RetroArch's
+        # folder, which the app never reads.
+        self.assertIn("With KNULLI:", page)
         self.assertNotIn("RetroArch", page.split("Install this emulator", 1)[1].split("</details>", 1)[0])
 
     def test_the_index_leaves_the_template_out(self):
-        # 00_example is `type: test`: no page, no index row.
+        # 00_example has `role: test`: no page, no index row.
         self.assertNotIn("00_example", self._html("emulators"))
         self.assertIn('data-pagefind-body', self._html("emulators/melonds"))
         self.assertFalse((DIST / "emulators" / "00_example").exists())
@@ -629,7 +649,7 @@ class DataFolderPrinted(unittest.TestCase):
         if not _generated():
             self.skipTest("site pages not generated")
         for name, profile in _profiles_with_data_root().items():
-            if profile.get("type") in ("alias", "test"):
+            if profile.get("type") == "alias" or profile.get("role") == "test":
                 continue
             page = _built_page(name)
             with self.subTest(profile=name):
@@ -751,9 +771,18 @@ class SmallFixes(unittest.TestCase):
         self.assertNotRegex(page, r"<details[^>]*open>\s*<summary>Firmware titles")
 
     def test_region_choice_summary(self) -> None:
-        lines = gs._emulator_file_summary(_profile("duckstation")["files"])
-        self.assertIn("One of 3 is required, for the games' region.", lines[0])
-        self.assertNotIn("3 required", lines[0])
+        profile = _profile("duckstation")
+        members = sum(1 for f in profile["files"] if f.get("group") == "ps-bios")
+        lines = gs._emulator_file_summary(profile["files"], profile.get("groups"))
+        self.assertIn(f"One of {members} is required, for the games' region.", lines[0])
+        self.assertNotIn(f"{members} required", lines[0])
+
+    def test_a_required_set_counts_once(self) -> None:
+        files = [{"name": "a.rom", "required": True, "group": "boot"},
+                 {"name": "b.rom", "required": True, "group": "boot"},
+                 {"name": "c.rom", "required": True}, {"name": "d.rom"}]
+        line = gs._emulator_file_summary(files, {"boot": {"required": True}})[0]
+        self.assertIn("2 required, 1 optional. Any one file of a required set fills it.", line)
 
     def test_no_emulator_part_says_where_it_sits(self) -> None:
         if not _generated():

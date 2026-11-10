@@ -16,11 +16,18 @@ systems: [nintendo-switch]
 analysis_date: "2026-03-26"
 analysis_commit: "c096d16 (Hengle/suyu-emu mirror, depth=1)"
 mode: standalone
+standalone_directories:
+  - "$XDG_DATA_HOME/suyu"
+  - "$HOME/.local/share/suyu"
+  - "PORTABLE_DIR"
+  - "SuyuPath::KeysDir = keys"
 
 # Suyu is a community fork of yuzu, started after yuzu's legal takedown.
-# Key files loaded from <data_dir>/keys/ (fs_paths.h:20, path_util.cpp:124).
-# On Linux: $XDG_DATA_HOME/suyu/keys/
-# On Windows: %APPDATA%/suyu/keys/
+# Key files loaded from <data_dir>/keys/ (fs_paths.h:20, path_util.cpp:124),
+# the folder path_util.cpp generates as SuyuPath::KeysDir. The paths below
+# are relative to the data folder: $XDG_DATA_HOME/suyu on Linux,
+# %APPDATA%/suyu on Windows, or the user folder (PORTABLE_DIR) beside the
+# executable when it exists.
 # Firmware NCAs are installed via UI, not placed as files.
 # HLE fallbacks exist for fonts, timezone, system version, mii model, ng word lists.
 # Original repos (GitHub + GitLab) are DMCA'd. Analysis from community mirror.
@@ -28,25 +35,25 @@ mode: standalone
 files:
   - name: "prod.keys"
     required: true
-    path: "switch/prod.keys"
+    path: "keys/prod.keys"
     note: "Production keys for NCA decryption (master, key area, header, titlekek)"
     source_ref: "src/core/crypto/key_manager.cpp:654"
 
   - name: "title.keys"
     required: false
-    path: "switch/title.keys"
+    path: "keys/title.keys"
     note: "Per-title encryption keys (rights_id to titlekey mappings)"
     source_ref: "src/core/crypto/key_manager.cpp:657"
 
   - name: "console.keys"
     required: false
-    path: "switch/console.keys"
+    path: "keys/console.keys"
     note: "Console-specific keys (BIS, SD seed)"
     source_ref: "src/core/crypto/key_manager.cpp:658"
 
   - name: "key_retail.bin"
     required: false
-    path: "switch/key_retail.bin"
+    path: "keys/key_retail.bin"
     size: 160
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:273-294"

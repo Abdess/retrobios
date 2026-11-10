@@ -1,0 +1,32 @@
+emulator: "AnyGM"
+type: libretro
+core_classification: game_engine
+source: "https://github.com/retrodiv/AnyGM-libretro"
+profiled_date: "2026-11-09"
+source_commit: "12c024740e2982db65e2dbe304dbb66744513572"
+core_version: "0.1.667"
+version_basis:
+  kind: file
+  path: "src/api/anygm.h"
+  pattern: '#define ANYGM_VERSION "([^"]+)"'
+display_name: "GameMaker (AnyGM)"
+cores:
+  - "anygm"
+systems:
+  - gamemaker
+
+notes: |
+  A runtime for GameMaker games written for libretro, with one engine for the
+  classic editor projects (Game Maker 5.3 to 8.1) and the Studio 1.x and 2.x
+  data containers. The content is the game itself, and no GameMaker runner
+  is read.
+  ref: src/adapters/libretro/libretro_entry.c:226-233
+
+  The only file read from the system directory is AnyGM.ini, an optional
+  configuration written by the user with content transforms and per-game
+  overrides. Absent, the defaults apply. When the frontend names no save
+  directory, the core writes its saves under <system>/AnyGM.
+  ref: src/adapters/libretro/libretro_entry.c:330-345, src/adapters/libretro/libretro_entry.c:418-421,
+       src/api/anygm.h:318-326, src/content/container/content_router.c:2027-2050
+
+files: []

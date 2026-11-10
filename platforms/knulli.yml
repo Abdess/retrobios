@@ -12,55 +12,36 @@ cores:
 - advanced_drastic
 - aethersx2
 - amiberry
-- applewin
 - arduous
 - atari800
 - azahar
 - beetle-saturn
 - bennugd
-- bigpemu
-- blastem
 - bluemsx
-- boom3
 - bsnes
-- bsnes_hd
 - bstone
 - cannonball
 - cap32
-- catacombgl
 - cdogs
 - cemu
 - cgenius
-- citra
-- citron
 - clk
 - corsixth
-- demul
-- desmume
 - devilutionx
 - dhewm3
-- dice
 - dolphin
-- dolphin_triforce
-- dosbox
 - dosbox-x
 - dosbox_pure
 - dosbox_staging
 - dosboxx
-- drastic
-- duckstation
-- duckstation-legacy
 - dxx-rebirth
 - easyrpg
-- ecwolf
 - eduke32
-- eka2l1
 - emuscv
 - etlegacy
 - fake08
 - fallout1-ce
 - fallout2-ce
-- fba2x
 - fbalpha
 - fbneo
 - fceumm
@@ -68,20 +49,15 @@ cores:
 - flycast-xtreme
 - flycastvl
 - fmsx
-- fpinball
 - freechaf
 - freeintv
-- freej2me
-- fsuae
 - fury
 - fuse
 - gambatte
 - gearsystem
 - genesisplusgx
-- genesisplusgx-expanded
 - genesisplusgx-wide
 - geolith
-- gong
 - gpsp
 - gsplus
 - gw
@@ -92,15 +68,9 @@ cores:
 - hcl
 - holani
 - hurrican
-- hypseus-singe
-- ikemen
-- imame4all
 - ioquake3
 - iortcw
-- jazz2-native
-- kronos
 - lightspark
-- lindbergh-loader
 - lowresnx
 - lutro
 - mame
@@ -117,7 +87,6 @@ cores:
 - mesen-s
 - mgba
 - minivmac
-- model2emu
 - moonlight
 - mpv
 - mrboom
@@ -134,21 +103,14 @@ cores:
 - openbor7142
 - openbor7530
 - openjazz
-- openjk
-- openjkdf2
-- openlara
-- openmohaa
-- openmsx
 - opera
 - parallel_n64
 - pce
 - pce_fast
 - pcfx
-- pcsx2
 - pcsx_rearmed
 - picodrive
 - play
-- pocketsnes
 - pokemini
 - potator
 - ppsspp
@@ -158,20 +120,15 @@ cores:
 - puae2021
 - px68k
 - pygame
-- pyxel
 - quasi88
 - raze
-- redream
 - reminiscence
 - rpcs3
-- ruffle
-- ryujinx
 - samcoupe
 - same_cdi
 - sameduck
 - scummvm
 - sdlpop
-- shadps4
 - smsplus
 - snes9x
 - snes9x_next
@@ -180,32 +137,21 @@ cores:
 - sonic2013
 - sonic3-air
 - soniccd
-- squirreljme
 - stella
-- stella2014
 - superbroswar
-- supermodel
-- supermodel-legacy
-- suyu
 - swanstation
 - taradino
 - tgbdual
-- theforceengine
 - theodore
 - thextech
 - tic80
-- tr1x
-- tr2x
-- tsugaru
 - tyrian
 - tyrquake
 - uae4arm
-- uqm
 - uzem
 - vb
 - vba-m
 - vecx
-- vemulator
 - vice
 - vice_x128
 - vice_x64
@@ -222,24 +168,18 @@ cores:
 - vkquake2
 - vkquake3
 - vox_official
-- vpinball
-- wasm4
 - x1
 - x128
 - x16emu
 - x64
 - x64dtv
-- xash3d_fwgs
 - xemu
-- xenia
-- xenia-canary
 - xpet
 - xplus4
 - xrick
 - xscpu64
 - xvic
 - yabasanshiro
-- ymir
 - zc210
 systems:
   atari-400-800:
@@ -4880,61 +4820,39 @@ standalone_cores:
 - advanced_drastic
 - aethersx2
 - amiberry
-- applewin
 - azahar
-- bigpemu
 - bstone
 - cannonball
-- catacombgl
 - cdogs
 - cemu
 - cgenius
-- citra
-- citron
 - clk
 - corsixth
-- demul
 - devilutionx
 - dhewm3
 - dolphin
-- dolphin_triforce
-- dosbox
 - dosbox-x
 - dosbox_staging
 - dosboxx
-- drastic
-- duckstation
-- duckstation-legacy
 - dxx-rebirth
 - easyrpg
-- ecwolf
 - eduke32
-- eka2l1
 - etlegacy
 - fallout1-ce
 - fallout2-ce
-- fba2x
 - flycast
-- fpinball
-- fsuae
 - fury
 - gsplus
 - gzdoom
 - hatari
 - hcl
 - hurrican
-- hypseus-singe
-- ikemen
 - ioquake3
 - iortcw
-- jazz2-native
-- kodi
 - lexaloffle
 - lightspark
-- lindbergh-loader
 - mame
 - melonds
-- model2emu
 - moonlight
 - mpv
 - mupen64plus
@@ -4944,77 +4862,103 @@ standalone_cores:
 - openbor7142
 - openbor7530
 - openjazz
-- openjk
-- openjkdf2
-- openmohaa
-- openmsx
-- pcsx2
 - play
 - ppsspp
 - pygame
-- pyxel
 - raze
-- redream
 - rpcs3
-- ruffle
-- ryujinx
 - samcoupe
 - scummvm
 - sdlpop
-- shadps4
 - solarus
 - sonic-mania
 - sonic2013
 - sonic3-air
 - soniccd
 - stella
-- supermodel
-- supermodel-legacy
-- suyu
 - taradino
-- theforceengine
 - thextech
-- tr1x
-- tr2x
-- tsugaru
 - tyrian
-- uqm
 - vice
 - vita3k
 - vkquake
 - vkquake2
 - vkquake3
 - vox_official
-- vpinball
 - x128
 - x16emu
 - x64
 - x64dtv
-- xash3d_fwgs
 - xemu
-- xenia
-- xenia-canary
 - xpet
 - xplus4
 - xscpu64
 - xvic
 - yabasanshiro
-- ymir
 dual_mode_cores:
-- applewin
-- citra
 - dolphin
 - easyrpg
 - flycast
 - hatari
 - mame
 - melonds
-- pcsx2
 - play
 - ppsspp
 - scummvm
 - stella
 - yabasanshiro
+installable_cores:
+- "2048"
+- bk
+- bsnes_cplusplus98
+- bsnes_mercury_accuracy
+- bsnes_mercury_balanced
+- bsnes_mercury_performance
+- cannonball
+- chailove
+- crocods
+- dinothawr
+- dosbox_core
+- dosbox_svn
+- dosbox_svn_ce
+- ecwolf
+- fbalpha2012
+- fbalpha2012_cps1
+- fbalpha2012_cps2
+- fbalpha2012_neogeo
+- gearboy
+- genesis_plus_gx
+- gme
+- higan_sfc
+- higan_sfc_balanced
+- mame2000
+- mame2003
+- mame2003_plus
+- mednafen_gba
+- mednafen_pce
+- mednafen_pce_fast
+- mednafen_snes
+- mednafen_vb
+- mu
+- nekop2
+- oberon
+- pocketcdg
+- quicknes
+- remotejoy
+- sameboy
+- snes9x2002
+- snes9x2005
+- snes9x2005_plus
+- snes9x2010
+- squirreljme
+- stella2014
+- test
+- thepowdertoy
+- vba_next
+- vbam
+- vemulator
+- vice_xcbm2
+- vice_xcbm5x0
 libretro_systems:
   "81":
   - zx81
@@ -5394,3 +5338,590 @@ libretro_systems:
   - saturn
   zc210:
   - zc210
+launchers:
+- emulator: hatari
+  build: standalone
+  kind: names_searched
+  slot: st
+  names:
+  - "etos256{L}.img"
+  - "tos104{L}.img"
+  - "tos102{L}.img"
+  - "tos100{L}.img"
+  expands:
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: --machine st --tos <file>
+  fails_when_missing: no bios found for machine st
+  depends_on_option: model, language
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/hatari/hatariGenerator.py:33-55,\
+    \ 67-78, 172-207"
+- emulator: hatari
+  build: standalone
+  kind: names_searched
+  slot: ste
+  names:
+  - "etos256{L}.img"
+  - "tos162{L}.img"
+  - "tos106{L}.img"
+  expands:
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: --machine ste --tos <file>
+  fails_when_missing: no bios found for machine ste
+  depends_on_option: model, language
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/hatari/hatariGenerator.py:33-55,\
+    \ 67-78, 172-207"
+- emulator: hatari
+  build: standalone
+  kind: names_searched
+  slot: megaste
+  names:
+  - "etos256{L}.img"
+  - "tos206{L}.img"
+  - "tos205{L}.img"
+  expands:
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: --machine megaste --tos <file>
+  fails_when_missing: no bios found for machine megaste
+  depends_on_option: model, language
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/hatari/hatariGenerator.py:33-55,\
+    \ 67-78, 172-207"
+- emulator: hatari
+  build: standalone
+  kind: names_searched
+  slot: tt
+  names:
+  - "etos512{L}.img"
+  - "tos306{L}.img"
+  expands:
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: --machine tt --tos <file>
+  fails_when_missing: no bios found for machine tt
+  depends_on_option: model, language
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/hatari/hatariGenerator.py:33-55,\
+    \ 67-78, 172-207"
+- emulator: hatari
+  build: standalone
+  kind: names_searched
+  slot: falcon
+  names:
+  - "etos512{L}.img"
+  - "tos404{L}.img"
+  - "tos402{L}.img"
+  - "tos400{L}.img"
+  expands:
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: --machine falcon --tos <file>
+  fails_when_missing: no bios found for machine falcon
+  depends_on_option: model, language
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/hatari/hatariGenerator.py:33-55,\
+    \ 67-78, 172-207"
+- emulator: xemu
+  build: standalone
+  kind: fixed_name
+  names:
+  - cerbios.bin
+  - Complex_4627.bin
+  - mcpx_1.0.bin
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: "[sys.files] flashrom_path, [sys.files] bootrom_path"
+  fails_when_missing: false
+  depends_on_option: system.name == 'chihiro'
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/xemu/xemuConfig.py:72-78"
+- emulator: melonds
+  build: standalone
+  kind: fixed_name
+  names:
+  - firmware.bin
+  - bios7.bin
+  - bios9.bin
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: DS.FirmwarePath, DS.BIOS7Path, DS.BIOS9Path
+  fails_when_missing: false
+  depends_on_option: melonds_console
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/melonds/melondsGenerator.py:52-56,\
+    \ 74-77, 173"
+- emulator: melonds
+  build: standalone
+  kind: fixed_name
+  names:
+  - dsi_firmware.bin
+  - bios9.bin
+  - bios7.bin
+  - dsi_nand.bin
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: DSi.FirmwarePath, DSi.BIOS9Path, DSi.BIOS7Path, DSi.NANDPath
+  fails_when_missing: false
+  depends_on_option: melonds_console
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/melonds/melondsGenerator.py:62-77,\
+    \ 173"
+- emulator: mupen64plus
+  build: standalone
+  kind: fixed_name
+  names:
+  - 64DD_IPL.bin
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: "[64DD] IPL-ROM"
+  fails_when_missing: false
+  depends_on_option: system.name == 'n64dd'
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mupen/mupenConfig.py:200-204"
+- emulator: x16emu
+  build: standalone
+  kind: fixed_name
+  names:
+  - commanderx16/rom.bin
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: command line -rom
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/x16emu/x16emuGenerator.py:31"
+- emulator: flycast
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/dc
+  passes_to: environment FLYCAST_BIOS_PATH
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/flycast/flycastGenerator.py:239"
+- emulator: amiberry
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/amiga/
+  passes_to: rom_path
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/amiberry/amiberryGenerator.py:40"
+- emulator: lexaloffle
+  build: standalone
+  kind: fixed_name
+  slot: pico8
+  names:
+  - pico-8/pico8
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: exec
+  fails_when_missing: Lexaloffle official binary not found at /userdata/bios/pico-8/pico8,
+    File /userdata/bios/pico-8/pico8 is not set as executable
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:20,\
+    \ 43-44, 54-59, 140-141"
+- emulator: lexaloffle
+  build: standalone
+  kind: fixed_name
+  slot: voxatron
+  names:
+  - voxatron/vox
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: exec
+  fails_when_missing: Lexaloffle official binary not found at /userdata/bios/voxatron/vox,
+    File /userdata/bios/voxatron/vox is not set as executable
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/lexaloffle/lexaloffleGenerator.py:27,\
+    \ 47-48, 54-59, 140-141"
+- emulator: o2em
+  build: libretro
+  kind: core_option
+  names:
+  - g7400.bin
+  - o2rom.bin
+  passes_to: core option o2em_bios
+  fails_when_missing: false
+  depends_on_option: "o2em_bios (default by system.name == 'videopacplus')"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroOptions.py:675-676,\
+    \ 680-685"
+- emulator: neocd
+  build: libretro
+  kind: core_option
+  names:
+  - "neocd_z.rom (CDZ)"
+  passes_to: core option neocd_bios
+  fails_when_missing: false
+  depends_on_option: neocd_bios
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroOptions.py:2558-2559,\
+    \ 2566-2569"
+- emulator: aethersx2
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/ps2
+  passes_to: "inis/PCSX2.ini [Folders] Bios = ../../../bios/ps2, relative to /userdata/system/.config/aethersx2"
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/aethersx2/aethersx2Generator.py:71,\
+    \ 182, 219"
+- emulator: lexaloffle
+  build: standalone
+  kind: moves
+  names:
+  - pico-8/pico8
+  - pico-8/pico8_dyn
+  - pico-8/pico8_gpio
+  - pico-8/pico8.dat
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: moved from /userdata/roms/pico8/pico-8*raspi*.zip into /userdata/bios/pico-8
+  fails_when_missing: Please add the Raspberry Pi version of Pico-8 to roms/pico8
+    and try again.
+  source_ref: "board/fsoverlay/usr/bin/knulli-install-pico8:3-11, 16-19, 66-69"
+- emulator: mame
+  build: standalone
+  kind: fixed_name
+  names:
+  - "{bootdisk}.img"
+  expands:
+    bootdisk:
+    - macos30
+    - macos608
+    - macos701
+    - macos75
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: command line -flop1
+  fails_when_missing: false
+  depends_on_option: "bootdisk (not (messSysName[messMode] == '' or messMode == -1)\
+    \ and softList == '' and system.name == 'macintosh' and system.isOptSet('bootdisk')\
+    \ and system.config['bootdisk'] in ['macos30', 'macos608', 'macos701', 'macos75'])"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:303-305,\
+    \ 375-379, 381, 385"
+- emulator: mame
+  build: standalone
+  kind: fixed_name
+  names:
+  - "{bootdisk}.chd"
+  expands:
+    bootdisk:
+    - macos3
+    - mac608
+    - mac701
+    - mac755
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: command line -hard
+  fails_when_missing: false
+  depends_on_option: "bootdisk (not (messSysName[messMode] == '' or messMode == -1)\
+    \ and softList == '' and system.name == 'macintosh' and system.isOptSet('bootdisk')\
+    \ and not (system.config['bootdisk'] in ['macos30', 'macos608', 'macos701', 'macos75']))"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:303-305,\
+    \ 375-379, 384-385, package/emulationstation/knulli-es-system/es_features.yml:11037-11043"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: fixed_name
+  names:
+  - "{bootdisk}.img"
+  expands:
+    bootdisk:
+    - macos30
+    - macos608
+    - macos701
+    - macos75
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: command line -flop1
+  fails_when_missing: false
+  depends_on_option: "bootdisk (not (system.name in ['mame', 'neogeo', 'lcdgames',\
+    \ 'plugnplay', 'vis']) and not (messSysName[messMode] == '') and not (softList\
+    \ != '') and system.name == 'macintosh' and system.isOptSet('bootdisk') and system.config['bootdisk']\
+    \ in ['macos30', 'macos608', 'macos701', 'macos75'])"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
+    \ 123, 197, 265-268, 270, 274"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: fixed_name
+  names:
+  - "{bootdisk}.chd"
+  expands:
+    bootdisk:
+    - macos3
+    - mac608
+    - mac701
+    - mac755
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: command line -hard
+  fails_when_missing: false
+  depends_on_option: "bootdisk (not (system.name in ['mame', 'neogeo', 'lcdgames',\
+    \ 'plugnplay', 'vis']) and not (messSysName[messMode] == '') and not (softList\
+    \ != '') and system.name == 'macintosh' and system.isOptSet('bootdisk') and not\
+    \ (system.config['bootdisk'] in ['macos30', 'macos608', 'macos701', 'macos75']))"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
+    \ 123, 197, 265-268, 273-274, package/emulationstation/knulli-es-system/es_features.yml:3727-3733"
+- emulator: dolphin
+  build: standalone
+  kind: fixed_name
+  names:
+  - "GC/{region}/IPL.bin"
+  expands:
+    region:
+    - USA
+    - EUR
+    - JAP
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: "presence sets [Core] SkipIPL = False"
+  fails_when_missing: false
+  depends_on_option: "system.isOptSet('dolphin_SkipIPL') and system.getOptBoolean('dolphin_SkipIPL')"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/dolphin/dolphinGenerator.py:192-193,\
+    \ 196-197"
+- emulator: yabasanshiro
+  build: standalone
+  kind: fixed_name
+  names:
+  - saturn_bios.bin
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: command line -b
+  fails_when_missing: false
+  depends_on_option: "not (system.isOptSet('yaba_bios_hle') and system.config['yaba_bios_hle']\
+    \ == '1')"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/yabasanshiro/yabasanshiroGenerator.py:309-311"
+- emulator: rpcs3
+  build: standalone
+  kind: fixed_name
+  names:
+  - PS3UPDAT.PUP
+  case_insensitive: false
+  search_dir: /userdata/bios
+  passes_to: command line --installfw
+  fails_when_missing: false
+  depends_on_option: "Rpcs3Generator.getFirmwareVersion() is None"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/rpcs3/rpcs3Generator.py:355-358"
+- emulator: aethersx2
+  build: standalone
+  kind: copies
+  names:
+  - patches.zip
+  case_insensitive: false
+  search_dir: /usr/share/knulli/datainit/bios/ps2
+  passes_to: /userdata/bios/ps2/patches.zip
+  fails_when_missing: false
+  depends_on_option: "not pcsx2Patches.exists()"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/aethersx2/aethersx2Generator.py:59,\
+    \ 93-94"
+- emulator: gsplus
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios
+  passes_to: g_cfg_rom_path
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/gsplus/gsplusGenerator.py:106"
+- emulator: scummvm
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/scummvm/extra
+  passes_to: command line --extrapath
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/scummvm/scummvmGenerator.py:117-123"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: <romDirname>;/userdata/bios/mame;/userdata/bios
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: messMode == -1
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:116-117"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: <romDirname>;/userdata/bios/mame;/userdata/bios;/userdata/roms/mame;<softDir>
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "not (messMode == -1) and softList in subdirSoftList"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:116,\
+    \ 119-120"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: <romDirname>;/userdata/bios/mame;/userdata/bios;/userdata/roms/mame
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "not (messMode == -1) and not (softList in subdirSoftList)"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:116,\
+    \ 119, 122"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/mame/samples
+  passes_to: command line -samplepath
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:129"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /var/run/mame_artwork/;/usr/bin/mame/artwork/;/userdata/bios/mame/artwork;/userdata/decorations
+  passes_to: command line -artpath
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:130"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/mame/artwork/crosshairs
+  passes_to: command line -crosshairpath
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:180"
+- emulator: retroarch
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/
+  passes_to: system_directory
+  fails_when_missing: false
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroRetroarchCustom.py:98"
+- emulator: puae, puae2021, uae4arm
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/amiga/
+  passes_to: system_directory
+  fails_when_missing: false
+  depends_on_option: "system.config['core'] == 'puae' or system.config['core'] ==\
+    \ 'puae2021' or system.config['core'] == 'uae4arm'"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroConfig.py:293-295"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: <rom.parent>;/userdata/bios/mame/;/userdata/bios/
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "system.name in ['mame', 'neogeo', 'lcdgames', 'plugnplay', 'vis']"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
+    \ 77"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: <rom.parent>;/userdata/bios/
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "not (system.name in ['mame', 'neogeo', 'lcdgames', 'plugnplay',\
+    \ 'vis']) and messSysName[messMode] == ''"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
+    \ 123, 132"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: <softDir>;/userdata/bios/
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "not (system.name in ['mame', 'neogeo', 'lcdgames', 'plugnplay',\
+    \ 'vis']) and not (messSysName[messMode] == '') and softList != ''"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
+    \ 123, 197, 204"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: <rom.parent>;/userdata/bios/
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "not (system.name in ['mame', 'neogeo', 'lcdgames', 'plugnplay',\
+    \ 'vis']) and not (messSysName[messMode] == '') and not (softList != '')"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
+    \ 123, 197, 263"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /var/run/mame_artwork/;/usr/bin/mame/artwork/;/userdata/bios/lr-mame/artwork;/userdata/bios/mame/artwork;/userdata/decorations
+  passes_to: command line -artpath
+  fails_when_missing: false
+  depends_on_option: "system.config['core'] != 'same_cdi' and not (system.isOptSet('sharemameart')\
+    \ and (not system.getOptBoolean('sharemameart'))) and not system.name == 'ti99'"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:412-416,\
+    \ 419-420"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /var/run/mame_artwork/;/usr/bin/mame/artwork/;/userdata/bios/lr-mame/artwork
+  passes_to: command line -artpath
+  fails_when_missing: false
+  depends_on_option: "system.config['core'] != 'same_cdi' and not (not (system.isOptSet('sharemameart')\
+    \ and (not system.getOptBoolean('sharemameart')))) and not system.name == 'ti99'"
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:412-415,\
+    \ 418-420"
+- emulator: mame, mess, mamevirtual, same_cdi
+  build: libretro
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/mame/samples
+  passes_to: command line -samplepath
+  fails_when_missing: false
+  depends_on_option: not system.name == 'ti99'
+  source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:431-432,\
+    \ 435"
+configs_root:
+  path: /userdata/system/configs
+  from_bios: ../system/configs
+  source_ref: "package/system/knulli-configgen/configgen/configgen/batoceraPaths.py:14,\
+    \ 19-20, 25"

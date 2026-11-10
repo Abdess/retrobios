@@ -1,98 +1,231 @@
 emulator: Lexaloffle
 type: standalone
+core_classification: other
 upstream: "https://www.lexaloffle.com/"
-profiled_date: "2026-03-26"
-core_version: null
+profiled_date: "2026-11-09"
+core_version: "0.2.7"
 version_basis:
-  kind: unverified
-  why: no_artifact
-display_name: "Lexaloffle - PICO-8 / Voxatron"
+  kind: package
+  url: "https://web.archive.org/web/20260105092803id_/https://www.lexaloffle.com/dl/7wdekp/pico-8_0.2.7_raspi.zip"
+  pattern: 'pico-8_([0-9.]+[a-z]?)_raspi\.zip'
+  artifact: "pico-8_0.2.7_raspi.zip and pico-8_0.2.7_amd64.zip, version string pico-8 0.2.7 in every binary"
+version_source:
+  url: "https://www.lexaloffle.com/dl/docs/pico-8_changelog.txt"
+  pattern: '^\s*v(0\.\d+\.\d+[a-z]?)\s*$'
+display_name: "Lexaloffle - PICO-8"
 cores:
   - lexaloffle
   - "pico-8"
-  - vox_official
   - "pico8"
   - "Pico-8"
   - "pico_standalone"
   - "float-scaled"
 systems:
   - pico8
-  - voxatron
+standalone_directories:
+  - "executable directory"
 
 notes: |
-  Commercial fantasy consoles by Lexaloffle Games LLP. Closed-source binaries
-  distributed as ZIP archives from lexaloffle.com (requires purchase).
+  Commercial fantasy console by Lexaloffle Games LLP, sold as ZIP archives
+  per platform. Nothing in the program checks a hash of its own files: the
+  hashes below are those of the files in the official 0.2.7 archives.
+  Voxatron, the same publisher's other program, is profiled apart
+  (voxatron.yml).
 
-  Batocera configgen (lexaloffleGenerator.py) handles both systems via a single
-  generator. PICO-8: binary at bios/pico-8/pico8. Voxatron: binary at
-  bios/voxatron/vox. Generator checks binary existence and executable permission,
-  raises BatoceraException if missing. LD_LIBRARY_PATH set to the BIOS directory
-  for shared library resolution.
+  The program finds its own folder through /proc/self/exe and reads its
+  .dat beside itself. The paths below are the layout of the archives, whose
+  top folder is pico-8/: a launcher that runs one of these files from a
+  folder places the program folder there.
 
-  Each distribution ships a statically linked binary (pico8/vox) and a dynamically
-  linked variant (pico8_dyn/vox_dyn). Batocera uses the static binary. The .dat
-  file is loaded at startup and contains boot sequence, themes, and internal data.
+  PICO-8 0.2.7 ships five archives. pico-8_0.2.7_amd64.zip holds pico8
+  (x86_64, SDL2 linked in) and pico8_dyn (x86_64, system libSDL2).
+  pico-8_0.2.7_raspi.zip holds pico8 (armhf, SDL2 linked in, needs the
+  Raspberry Pi libbcm_host.so), pico8_dyn (armhf, system libSDL2), pico8_gpio
+  (armhf, needs libbcm_host.so and libwiringPi.so) and pico8_64 (aarch64,
+  system libSDL2). pico-8_0.2.7_i386.zip holds pico8_32bit and
+  pico8_32bit_dyn, pico-8_0.2.7_windows.zip holds pico8.exe and
+  pico-8_0.2.7_osx.zip holds PICO-8.app. Each binary opens pico8.dat from its
+  own folder and quits when it is absent, and pico8.dat is the same file in
+  every archive of one version. The binaries name no other file of the
+  archive: which binary runs, and from which folder, is the launcher's choice.
+  The amd64 and raspi archives carry pico8.dat 10b39730, byte for byte.
 
-  PICO-8 supports x86_64 and ARM (Raspberry Pi). Voxatron x86_64 only.
-  Voxatron depends on libHoloPlayCore.so (Looking Glass SDK), compile-time linked.
+  Launchers by platform, each read at the revision the platform file pins:
+  - Batocera lexaloffleGenerator.py runs bios/pico-8/pico8 and raises when it
+    is missing or not executable, with LD_LIBRARY_PATH set to bios/pico-8.
+    The name is fixed for every board: an x86_64 board needs the amd64 pico8,
+    a Raspberry Pi 32-bit board the raspi pico8, an aarch64 board pico8_64
+    renamed.
+  - KNULLI knulli-install-pico8 unzips the raspi archive from roms/pico8,
+    stops when pico8_64, pico8_dyn, pico8_gpio or pico8.dat is missing, moves
+    pico8_64 to bios/pico-8/pico8 and the other three beside it. Its
+    lexaloffleGenerator.py runs bios/pico-8/pico8 with no LD_LIBRARY_PATH.
+    The RG35XX simplermenu launcher runs pico8_dyn.
+  - Recalbox pico8Generator.py moves bios/pico-8 to /overlay/emulator/pico-8
+    and renames pico8_64 to pico8 there, then runs it.
+  - ROCKNIX start_pico8.sh runs roms/pico-8/pico8_64 on aarch64 and
+    roms/pico-8/pico8_dyn on any other HW_ARCH, from roms/pico-8/<HW_ARCH>/
+    when that folder exists. ROCKNIX reads nothing from bios/.
+  - AmberELEC pico-8.sh runs roms/pico-8/pico8_64 and shows "Missing Pico-8
+    binaries!" when pico8_64 or pico8.dat is absent.
+  - EmuELEC pico8.sh copies roms/bios/pico-8/* to /emuelec/bin/pico-8 on the
+    next start and runs pico8_dyn from there, with no existence check.
+  - RetroDECK component_launcher.sh executes bios/pico-8/pico8, and its
+    component_manifest.json lists pico8, pico8.dat and pico8_dyn as required.
+  - RetroBat Pico8.Generator.cs runs pico8.exe from the folder its config
+    names pico8 and returns nothing when pico8.exe is absent. That folder is
+    an emulator install, outside the BIOS tree.
+  - ArkOS (dArkOS pico8/pico8.sh) prefers roms/pico-8/pico8_64, then
+    roms/pico-8/pico8_dyn, then extracts pico8_64 and pico8.dat from a
+    *raspi.zip in that folder, and starts Fake08 when the binary or
+    pico8.dat is still missing.
+  - ES-DE es_find_rules.xml looks for pico8_64 under ~/Applications/pico-8
+    and three other home folders on linuxarm, pico8 on linux and unix, and
+    pico8.exe on Windows.
 
 files:
   # -------------------------------------------------------
-  # PICO-8
+  # PICO-8 0.2.7
   # -------------------------------------------------------
   - name: pico8
     path: pico-8/pico8
     system: pico8
     required: true
-    description: "PICO-8 main executable (statically linked)"
-    source_ref: "lexaloffleGenerator.py:17,36,48-49"
-    note: "Configgen checks existence and executable permission"
+    unread_on: [amberelec, emuelec, knulli, recalbox, retrobat, rocknix]
+    size: 9425408
+    md5: 0d127838e79459da4ae36bb8b2e576ca
+    sha1: 1843e82abc1d068d7602d3ac135b6ad72aaf6c0a
+    description: "PICO-8 0.2.7 x86_64 executable, SDL2 linked in"
+    note: "The pico8 of pico-8_0.2.7_amd64.zip, an x86_64 ELF that loads no libSDL2. Batocera runs it on x86_64 boards and raises when it is missing or not executable. RetroDECK executes the same path."
+    source_ref: "batocera lexaloffleGenerator.py:17, 37, 48-52, 87-90, RetroDECK pico-8/component_launcher.sh:3, RetroDECK pico-8/component_manifest.json:12-17"
+
+  - name: pico8
+    path: pico-8/pico8
+    system: pico8
+    required: true
+    unread_on: [amberelec, emuelec, knulli, recalbox, retrobat, retrodeck, rocknix]
+    size: 7895320
+    md5: 21d4c4c6d9da8fc2c81aa7a844edee96
+    sha1: 946db0633966afecf81d2b33957c7db8fb3a2356
+    description: "PICO-8 0.2.7 armhf executable, SDL2 linked in"
+    note: "The pico8 of pico-8_0.2.7_raspi.zip, a 32-bit ARM ELF that needs libbcm_host.so, so it runs on Raspberry Pi firmware only. Batocera's fixed path is the one a 32-bit Raspberry Pi board (bcm2835, bcm2836) can run."
+    source_ref: "batocera lexaloffleGenerator.py:17, 48-52"
+
+  - name: pico8
+    path: pico-8/pico8
+    system: pico8
+    required: true
+    unread_on: [amberelec, emuelec, recalbox, retrobat, retrodeck, rocknix]
+    size: 1640888
+    md5: 70ab37eab4e7d162d36d9b2d91b84867
+    sha1: 4ed23b6578a2d93d67aa856791dc70e95d68a3f4
+    description: "PICO-8 0.2.7 aarch64 executable (pico8_64) under the name pico8"
+    note: "The pico8_64 of pico-8_0.2.7_raspi.zip, at the pico8 path. KNULLI's installer moves pico8_64 there and its generator runs it, with no check of the bytes. An aarch64 Batocera board needs the same file at the same path."
+    source_ref: "knulli board/fsoverlay/usr/bin/knulli-install-pico8:8, 33-36, 66, 73, knulli lexaloffleGenerator.py:20, 54-59, batocera lexaloffleGenerator.py:17"
+
+  - name: pico8_64
+    path: pico-8/pico8_64
+    system: pico8
+    required: true
+    unread_on: [batocera, emuelec, knulli, retrobat, retrodeck]
+    size: 1640888
+    md5: 70ab37eab4e7d162d36d9b2d91b84867
+    sha1: 4ed23b6578a2d93d67aa856791dc70e95d68a3f4
+    description: "PICO-8 0.2.7 aarch64 executable, system libSDL2"
+    note: "pico8_64 is only in pico-8_0.2.7_raspi.zip, the build for 64-bit Raspberry Pi OS, linked against the system SDL2. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
+    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
     system: pico8
     required: false
-    description: "PICO-8 dynamically linked executable"
-    source_ref: "lexaloffleGenerator.py:17,36"
-    note: "Alternative to pico8. Requires system SDL2. Some platforms prefer this variant."
+    unread_on: [amberelec, emuelec, knulli, recalbox, retrobat]
+    size: 1805928
+    md5: 724435a9e6f3ef8a55c648fc88651826
+    sha1: 9b2e573250c70382b4071709a85c8d56c0371d59
+    description: "PICO-8 0.2.7 x86_64 executable, system libSDL2"
+    note: "The pico8_dyn of pico-8_0.2.7_amd64.zip, the same program linked against the system SDL2. RetroDECK lists it as required in its manifest, but its launcher executes pico8 only. Batocera never runs it. ROCKNIX runs it from roms/pico-8/ on x86_64, its HW_ARCH other than aarch64."
+    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, NEEDED libSDL2-2.0.so.0, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:10-17, 48"
+
+  - name: pico8_dyn
+    path: pico-8/pico8_dyn
+    system: pico8
+    required: true
+    unread_on: [amberelec, batocera, recalbox, retrobat, retrodeck, rocknix]
+    size: 1452936
+    md5: 867701eff7e82a91985ae1fbe90dbc4a
+    sha1: 87ef68e70c53ba209e697bb51de45826e982d92d
+    description: "PICO-8 0.2.7 armhf executable, system libSDL2"
+    note: "The pico8_dyn of pico-8_0.2.7_raspi.zip, 32-bit, linked against the system SDL2. EmuELEC copies bios/pico-8 to /emuelec/bin/pico-8 and runs pico8_dyn with no existence check. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, and the RG35XX simplermenu launcher runs it. ROCKNIX runs a pico8_dyn from roms/pico-8/ on a HW_ARCH other than aarch64, and ArkOS falls back to it when pico8_64 is absent."
+    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, emuelec packages/sx05re/emuelec/bin/pico8.sh:9-14, 39-43, knulli board/fsoverlay/usr/bin/knulli-install-pico8:9, 38-41, 67, knulli board/actions/atm7039/rg35xx/fsoverlay/usr/share/knulli/datainit/system/configs/simplermenu_plus/launchers/pico8_sa:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:14-16, dArkOS pico8/pico8.sh:49-50"
+
+  - name: pico8_gpio
+    path: pico-8/pico8_gpio
+    system: pico8
+    required: false
+    unread_on: [amberelec, batocera, emuelec, recalbox, retrobat, retrodeck, rocknix]
+    size: 7898704
+    md5: 286ab30756dfc40749ecd72221f0d063
+    sha1: df77c64c95695710d23b451277325e0c37e7416e
+    description: "PICO-8 0.2.7 armhf executable with GPIO access (wiringPi)"
+    note: "Only in pico-8_0.2.7_raspi.zip. The 32-bit build that maps the GPIO pins to 0x5f80..0x5fff, linked against libbcm_host.so and libwiringPi.so. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, but no launcher runs it."
+    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, knulli board/fsoverlay/usr/bin/knulli-install-pico8:10, 43-46, 68"
 
   - name: pico8.dat
     path: pico-8/pico8.dat
     system: pico8
     required: true
-    description: "PICO-8 data file (boot sequence, themes, demo carts)"
-    note: "POD format. Loaded by pico8/pico8_dyn from same directory at startup."
+    size: 11243101
+    md5: 10b397305093c80109096319a538ba56
+    sha1: 0f92093752bddb12210c7db6d93af3ba2413cfce
+    description: "PICO-8 0.2.7 data file (boot sequence, themes, demo carts)"
+    note: "PICO-8 opens it from its own folder and quits with \"couldn't load <folder>/pico8.dat\" when it is absent (the amd64 pico8, run without it). Paired with the binary's own version, identical in pico-8_0.2.7_amd64.zip, pico-8_0.2.7_raspi.zip and pico-8_0.2.7_windows.zip. AmberELEC and ArkOS check for it before starting PICO-8, and KNULLI's installer stops when the archive lacks it."
+    source_ref: "pico-8 0.2.7 amd64 pico8, string pico8.dat at 0x231bc0, pico-8 0.2.7 raspi pico8_64, string pico8.dat at 0x110138, amberelec packages/amberelec/sources/pico-8.sh:51-52, dArkOS pico8/pico8.sh:136-142, knulli board/fsoverlay/usr/bin/knulli-install-pico8:11, 48-51, 69"
 
-  # -------------------------------------------------------
-  # Voxatron
-  # -------------------------------------------------------
-  - name: vox
-    path: voxatron/vox
-    system: voxatron
+  - name: pico8.exe
+    path: pico-8/pico8.exe
+    system: pico8
     required: true
-    description: "Voxatron main executable"
-    source_ref: "lexaloffleGenerator.py:20,42,48-49"
-    note: "Configgen checks existence and executable permission. x86_64 only."
+    unread_on: [amberelec, batocera, emuelec, knulli, recalbox, retrodeck, rocknix]
+    size: 2171788
+    md5: 55b1b9db521ffd0cea0995174bd12a2b
+    sha1: 1d1b504d3283d750869a93ed9befa1e49928d68e
+    description: "PICO-8 0.2.7 Windows executable"
+    note: "The pico8.exe of pico-8_0.2.7_windows.zip. RetroBat runs it from its pico8 emulator folder and starts nothing when it is absent."
+    source_ref: "retrobat emulatorLauncher/Generators/Pico8.Generator.cs:14-18, 56-57"
 
-  - name: vox_dyn
-    path: voxatron/vox_dyn
-    system: voxatron
+  - name: SDL2.dll
+    path: pico-8/SDL2.dll
+    system: pico8
+    required: true
+    unread_on: [amberelec, batocera, emuelec, knulli, recalbox, retrodeck, rocknix]
+    size: 1088000
+    md5: 098c661f98cd7fd85a82ebc34db5be15
+    sha1: 9174251921d675c204e683cdea65a8c906fcba28
+    description: "SDL2 library of the PICO-8 0.2.7 Windows build"
+    note: "pico8.exe imports SDL2.dll, which Windows loads from the executable's folder. Shipped beside it in pico-8_0.2.7_windows.zip."
+    source_ref: "pico-8 0.2.7 windows pico8.exe, import table"
+
+  - name: config.txt
+    unsourceable: "written by the emulator on exit, no canonical file"
+    system: pico8
     required: false
-    description: "Voxatron dynamically linked executable"
-    source_ref: "lexaloffleGenerator.py:20,42"
-    note: "Alternative to vox. Requires system SDL2."
+    description: "PICO-8 settings"
+    source_ref: "pico-8 0.2.7 amd64 pico8, string config.txt at 0x244739, pico-8 0.2.7 pico-8_manual.txt:250-259, 284"
+    note: "Read beside the binary, then from the -home folder (~/.lexaloffle/pico-8 on Linux), and written there on exit when absent."
 
-  - name: vox.dat
-    path: voxatron/vox.dat
-    system: voxatron
-    required: true
-    description: "Voxatron data file"
-    note: "Loaded by vox/vox_dyn from same directory at startup."
+  - name: sdl_controllers.txt
+    unsourceable: "user supplied, no canonical file"
+    system: pico8
+    required: false
+    description: "Custom SDL controller mappings, one per line"
+    source_ref: "pico-8 0.2.7 amd64 pico8, string sdl_controllers.txt at 0x24c896, pico-8 0.2.7 pico-8_manual.txt:301-302, 4053"
+    note: "Processed first when present beside the binary, then read from the -home folder, where PICO-8 writes it when absent."
 
-  - name: libHoloPlayCore.so
-    path: voxatron/libHoloPlayCore.so
-    system: voxatron
-    required: true
-    description: "Looking Glass holographic display support library"
-    source_ref: "lexaloffleGenerator.py:89"
-    note: "Compile-time linked dependency. LD_LIBRARY_PATH set to bios/voxatron/ by configgen."
+  - name: favourites.txt
+    unsourceable: "written by the emulator, no canonical file"
+    system: pico8
+    required: false
+    description: "SPLORE favourites list"
+    source_ref: "pico-8 0.2.7 amd64 pico8, string favourites.txt at 0x242346"
+    note: "Read from the -home folder. The bbs/<listing>.pip.png images beside it are downloaded from the BBS."

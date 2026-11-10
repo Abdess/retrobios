@@ -4,14 +4,6 @@ core_classification: game_engine
 source: "https://github.com/usineur/hode"
 profiled_date: "2026-10-22"
 source_commit: "59f3c466923c6b8d49e29176ff697a91165e7efc"
-pin_frozen: "EmuELEC, the only platform that ships it, builds this revision (EmuELEC packages/sx05re/emuelec-ports/hodesdl/package.mk:6 at v4.8). Later commits are not part of that build."
-pin_build:
-  - platform: emuelec
-    repo: "https://github.com/EmuELEC/EmuELEC"
-    revision: "v4.8"
-    path: "packages/sx05re/emuelec-ports/hodesdl/package.mk"
-    variable: PKG_VERSION
-    value: "59f3c466923c6b8d49e29176ff697a91165e7efc"
 core_version: "0.2.9f"
 version_basis:
   kind: file
@@ -25,9 +17,11 @@ systems: [heart-of-darkness]
 notes: |
   Gregory Montoir's reimplementation of the Heart of Darkness engine (Amazing
   Studio, 1998), in usineur's fork with the SDL2, PSP and Wii front ends. It
-  plays the Windows demo and CD data and the PlayStation data. EmuELEC builds
-  this revision and starts it with --datapath and --savepath both set to
-  /storage/roms/ports/hode/.
+  plays the Windows demo and CD data and the PlayStation data. EmuELEC's tree
+  builds revision 59f3c46 in its emuelec-ports package and starts it with
+  --datapath and --savepath both set to /storage/roms/ports/hode/. No
+  package, options file or Makefile of a v4.8 image pulls emuelec-ports in,
+  so no platform ships hode.
   ref: README.txt:9-23,
        EmuELEC packages/sx05re/emuelec-ports/hodesdl/package.mk:2-5,
        EmuELEC packages/sx05re/emuelec-ports/sources/ports.yaml:272-283

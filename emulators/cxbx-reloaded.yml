@@ -18,6 +18,8 @@ systems:
   - microsoft-xbox
   - sega-chihiro
 mode: standalone
+standalone_directories:
+  - "Settings::GetDataLocation"
 
 data_root:
   windows:
@@ -141,6 +143,7 @@ files:
     path: "EmuMediaBoard/Chihiro/backup_ram.bin"
     system: sega-chihiro
     required: false
+    unsourceable: "written by the emulator as 128 KB of zeros, no canonical file"
     has_builtin: true
     size_note: "Created as 128 KB of zeros when absent, then memory mapped"
     description: "Base board backup memory"
@@ -192,6 +195,7 @@ files:
     path: "EEPROM.bin"
     system: microsoft-xbox
     required: false
+    installed_on: [retrobat]
     has_builtin: true
     size: 256
     validation: [size]
@@ -336,6 +340,7 @@ files:
 
   - name: dokan2.dll
     required: false
+    unread_on: [retrobat]
     description: "Dokany user mode library"
     note: >-
       Loaded by name with every entry point resolved individually, and the

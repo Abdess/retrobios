@@ -4,12 +4,12 @@ core_classification: official_port
 source: "https://github.com/AloysHF/CoolbarEmu"
 upstream: "https://github.com/AloysHF/CoolbarEmu"
 profiled_date: "2026-10-17"
-source_commit: "88e90440daab0bdc7bc141728b51841e0c730528"
-core_version: "v0.2.0"
+source_commit: "aa6df0ec289ffc4f89f4c03f748d0b121fb4323f"
+core_version: "0.2.0"
 version_basis:
-  kind: tag
-  tag: "v0.2.0"
-  distance: 0
+  kind: file
+  path: "Cargo.toml"
+  pattern: '\[workspace\.package\][^\[]*?^version\s*=\s*"([^"]+)"'
 display_name: "Coolbar (CoolbarEmu)"
 cores:
   - "coolbaremu"
@@ -24,25 +24,31 @@ notes: |
   crate and the phone firmware services are reimplemented in
   crates/coolbaremu-core/src/machine/services. Text is drawn with the unifont
   crate compiled into the core (Cargo.toml:35,
-  crates/coolbaremu-core/src/machine/drawing.rs:1886).
+  crates/coolbaremu-core/src/machine/drawing.rs:2163).
 
   The content is read whole by CbeArchive::load()
   (crates/coolbaremu-core/src/cbe/archive.rs:68-73). Files next to the .cbe
   (pay kernels, records, update data) are indexed as the guest filesystem
-  (crates/coolbaremu-core/src/machine/mod.rs:1022-1024,
-  crates/coolbaremu-core/src/machine/virtual_fs.rs:58-103), and they belong to
-  the game.
+  (crates/coolbaremu-core/src/machine/mod.rs:1071-1073,
+  crates/coolbaremu-core/src/machine/virtual_fs.rs:62-117), and they belong to
+  the game. Guest writes and deletes stay in memory, the host files are
+  never modified.
 
-  The only system directory read is coolbaremu_orientation.csv, an optional
-  user list of CRC32, size and orientation for landscape titles missing from
-  the built-in table (crates/coolbaremu-libretro/src/libretro/api.rs:45,
-  crates/coolbaremu-libretro/src/libretro/api.rs:369-399,
-  crates/coolbaremu-core/src/orientation_profile.rs:31-54). A missing file is
-  logged and the built-in table applies. The standalone binary reads and
-  writes only the files named on its command line, --orientation-profile,
-  --screenshot, --save-state and --load-state
-  (crates/coolbaremu/src/main.rs:105-108, crates/coolbaremu/src/main.rs:153-167,
-  crates/coolbaremu/src/main.rs:186-187).
+  The only system directory file is coolbaremu/coolbaremu_orientation.csv,
+  an optional user list of CRC32, size and orientation for landscape titles
+  missing from the built-in table
+  (crates/coolbaremu-libretro/src/libretro/api.rs:43-46,
+  crates/coolbaremu-libretro/src/libretro/api.rs:414-468,
+  crates/coolbaremu-core/src/orientation_profile.rs:31-56). The core looks it
+  up before creating the machine, matching both names exactly, and a missing
+  or invalid file is logged and the built-in table applies. The standalone
+  binary reads the same path below --system-dir, "system" by default
+  (crates/coolbaremu/src/main.rs:25-26, crates/coolbaremu/src/main.rs:41-46,
+  crates/coolbaremu/src/main.rs:111-113), and stops on an invalid file
+  (crates/coolbaremu/src/main.rs:209-216). Otherwise it reads and writes only
+  the files named on its command line, --screenshot, --save-state and
+  --load-state (crates/coolbaremu/src/main.rs:176-178,
+  crates/coolbaremu/src/main.rs:184-190).
 
 files: []
 

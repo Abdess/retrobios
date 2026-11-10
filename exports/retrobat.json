@@ -1,16 +1,16 @@
 {
   "platform": "retrobat",
   "originals": {
-    "batocera-systems.json": "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/48cdc61623c5943bb17647b80a60d32d395c3725/batocera-systems/Resources/batocera-systems.json"
+    "batocera-systems.json": "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/ca486005f598551600d04a33b3156a5d764368d6/batocera-systems/Resources/batocera-systems.json"
   },
   "files": [
     "batocera-systems.json"
   ],
-  "summary": "360 kept, 75 files added, 2 hashes updated to the emulator source, 3 hashes added to an existing entry",
+  "summary": "362 kept, 52 files added, 1 hash updated to the emulator source, 4 hashes added to an existing entry",
   "counts": {
-    "kept": 360,
-    "added": 75,
-    "not_added": 1284,
+    "kept": 362,
+    "added": 52,
+    "not_added": 1895,
     "not_kept": 0
   },
   "changes": [
@@ -155,259 +155,6 @@
       "old": null,
       "new": {
         "md5": "4fe4f6800076ea3d897d4285653447bd"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "aros-ext.bin",
-      "destination": "aros-ext.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "945c364bb9b5f28a04e1003f8b7a469c"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "aros-rom.bin",
-      "destination": "aros-rom.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "69179a8479d1ba279c786094ce343386"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "WHDLoad",
-      "destination": "whdboot/WHDLoad",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "6670a9571f235ec31b8bbd48fc18f428"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "JST",
-      "destination": "whdboot/JST",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "2a3a61bbd7c351751506e22a4354b76a"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "AmiQuit",
-      "destination": "whdboot/AmiQuit",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "36ab26d3b855e634fdda062c052cd52b"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "boot-data.zip",
-      "destination": "whdboot/boot-data.zip",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "9e638f3d531eb7cd82594f49a4cf03b7"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "whdload_db.json",
-      "destination": "whdboot/game-data/whdload_db.json",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "51d44cd24e16fbb395b1bfefbaacd375"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "kick33180.A500.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick33180.A500.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "c993feb1eeddec1d2e687aa514231028"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "kick34005.A500.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick34005.A500.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "7eb13d974af0992d672b67c317a7e0a1"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "kick40063.A600.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick40063.A600.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "3f97c1963d82c808ef29e7c984c4c688"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "kick40068.A1200.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick40068.A1200.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "547b42b7b070c7f227ea45e0986d57a1"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "kick40068.A4000.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick40068.A4000.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "f89f19b858ea6b1a04327c6f71ee1600"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "kick31034.A1000.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick31034.A1000.RTB",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "c5ba6165df42fc69b32942b248fca725"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_click_A500.wav",
-      "destination": "uae_data/drive_click_A500.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "6c5b44c1a2bcee664129f850bfe4ed8a"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_spin_A500.wav",
-      "destination": "uae_data/drive_spin_A500.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "7401f854a75f9ede18769168ab896a2a"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_spinnd_A500.wav",
-      "destination": "uae_data/drive_spinnd_A500.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "f9d954879fee8e96baa93d6139077cdb"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_startup_A500.wav",
-      "destination": "uae_data/drive_startup_A500.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "aebeacc7e7bc52ef890785c835bec3d0"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_snatch_A500.wav",
-      "destination": "uae_data/drive_snatch_A500.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "1a4b2d6254918ff769f26beeede75655"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_click_LOUD.wav",
-      "destination": "uae_data/drive_click_LOUD.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "b64bee23f356635f67fb08b543df9797"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_spin_LOUD.wav",
-      "destination": "uae_data/drive_spin_LOUD.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "56d8e36a2f04b5e8c5a1f1530cfc886c"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_spinnd_LOUD.wav",
-      "destination": "uae_data/drive_spinnd_LOUD.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "43ab05c6d969cb40805970a5b2352875"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_startup_LOUD.wav",
-      "destination": "uae_data/drive_startup_LOUD.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "743b4b9f0ca645c4c2a34953b5e01e45"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga1200",
-      "name": "drive_snatch_LOUD.wav",
-      "destination": "uae_data/drive_snatch_LOUD.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "40cdf89f35b68cfefd4df5fb0256e02f"
       }
     },
     {
@@ -672,17 +419,6 @@
     },
     {
       "kind": "added",
-      "system": "dreamcast",
-      "name": "dc_bios.bin",
-      "destination": "dc/boot.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "e10c53c2f8b90bab96ead2d368858623"
-      }
-    },
-    {
-      "kind": "added",
       "system": "gba",
       "name": "BIOSGBA.ROM",
       "destination": "BIOSGBA.ROM",
@@ -766,12 +502,12 @@
       }
     },
     {
-      "kind": "hash_updated",
+      "kind": "hash_filled",
       "system": "neogeocd",
       "name": "neocdz.zip",
       "destination": "neocdz.zip",
       "field": "md5",
-      "old": "c733b4b7bd30fa849874d96c591c8639",
+      "old": null,
       "new": "b31a246b69493c35194fe0bac120dc37"
     },
     {
@@ -842,6 +578,17 @@
     },
     {
       "kind": "added",
+      "system": "scummvm",
+      "name": "MT32_CONTROL.ROM",
+      "destination": "system/MT32_CONTROL.ROM",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "c5233e4594f9b7bc4f773ae6ba5aa87d"
+      }
+    },
+    {
+      "kind": "added",
       "system": "triforce",
       "name": "IPL_TRI.bin",
       "destination": "GC/USA/IPL_TRI.bin",
@@ -886,20 +633,93 @@
     }
   ],
   "hashes_updated": [
-    "dragon32/d64_1.rom md5",
-    "neogeocd/neocdz.zip md5"
+    "dragon32/d64_1.rom md5"
   ],
   "hashes_filled": [
     "chihiro/chihiro_xbox_bios.bin md5",
     "nds/dsi_bios9.bin md5",
-    "nds/dsi_bios7.bin md5"
+    "nds/dsi_bios7.bin md5",
+    "neogeocd/neocdz.zip md5"
   ],
   "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 420,
+  "found_by_content": 684,
+  "unattributed": [
+    "commodore-amiga/kick13.rom",
+    "commodore-amiga/kick12.rom",
+    "commodore-amiga/kick20.rom",
+    "commodore-amiga/kick205.rom",
+    "commodore-amiga/kick31.rom",
+    "commodore-amiga/menu500.aca",
+    "commodore-amiga/aros-ext.bin",
+    "commodore-amiga/aros-rom.bin",
+    "commodore-amiga/rom.key",
+    "commodore-amiga/mt32-roms/mt32_control.rom",
+    "commodore-amiga/mt32-roms/pcm_mt32.rom",
+    "commodore-amiga/mt32-roms/cm32l_control.rom",
+    "commodore-amiga/mt32-roms/pcm_cm32l.rom",
+    "commodore-amiga/xpkmaster.library",
+    "commodore-amiga/Compressors/xpkCBR0.library",
+    "commodore-amiga/Compressors/xpkDLTA.library",
+    "commodore-amiga/Compressors/xpkDUKE.library",
+    "commodore-amiga/Compressors/xpkFAST.library",
+    "commodore-amiga/Compressors/xpkFRLE.library",
+    "commodore-amiga/Compressors/xpkHFMN.library",
+    "commodore-amiga/Compressors/xpkHUFF.library",
+    "commodore-amiga/Compressors/xpkIMPL.library",
+    "commodore-amiga/Compressors/xpkMASH.library",
+    "commodore-amiga/Compressors/xpkNONE.library",
+    "commodore-amiga/Compressors/xpkNUKE.library",
+    "commodore-amiga/Compressors/xpkRAKE.library",
+    "commodore-amiga/Compressors/xpkRLEN.library",
+    "commodore-amiga/Compressors/xpkSHRI.library",
+    "commodore-amiga/Compressors/xpkSMPL.library",
+    "commodore-amiga/Compressors/xpkSQSH.library",
+    "commodore-amiga/68040.library",
+    "commodore-amiga/mmu.library",
+    "commodore-amiga/680x0.library",
+    "commodore-amiga/explode.library",
+    "commodore-amiga/medplayer.library",
+    "commodore-amiga/WHDLoad",
+    "commodore-amiga/JST",
+    "commodore-amiga/host-quit",
+    "commodore-amiga/boot-data.zip",
+    "commodore-amiga/whdload_db.json",
+    "commodore-amiga/kick33180.A500.RTB",
+    "commodore-amiga/kick34005.A500.RTB",
+    "commodore-amiga/kick37175.A500.RTB",
+    "commodore-amiga/kick36143.A3000.RTB",
+    "commodore-amiga/kick39106.A1200.RTB",
+    "commodore-amiga/kick40063.A600.RTB",
+    "commodore-amiga/kick40068.A1200.RTB",
+    "commodore-amiga/kick40068.A4000.RTB",
+    "commodore-amiga/kick31034.A1000.RTB",
+    "commodore-amiga/cyberstormmk2.rom",
+    "commodore-amiga/cyberstormmk3.rom",
+    "commodore-amiga/cyberstormppc.rom",
+    "commodore-amiga/blizzardppc_040.rom",
+    "commodore-amiga/blizzardppc_060.rom",
+    "commodore-amiga/kick31034.A1000",
+    "commodore-amiga/kick32034.A1000",
+    "commodore-amiga/kick37350.A600",
+    "commodore-amiga/kick40063.A600",
+    "commodore-amiga/kick39106.A1200",
+    "commodore-amiga/kick39106.A4000",
+    "commodore-amiga/drive_click_A500.wav",
+    "commodore-amiga/drive_spin_A500.wav",
+    "commodore-amiga/drive_spinnd_A500.wav",
+    "commodore-amiga/drive_startup_A500.wav",
+    "commodore-amiga/drive_snatch_A500.wav",
+    "commodore-amiga/drive_click_LOUD.wav",
+    "commodore-amiga/drive_spin_LOUD.wav",
+    "commodore-amiga/drive_spinnd_LOUD.wav",
+    "commodore-amiga/drive_startup_LOUD.wav",
+    "commodore-amiga/drive_snatch_LOUD.wav",
+    "microsoft-msx/msx.zip"
+  ],
   "removal_candidates": [
     {
       "system": "apple2",
@@ -1143,54 +963,14 @@
     },
     {
       "system": "dreamcast",
-      "name": "dc.zip",
-      "destination": "dc/dc.zip",
+      "name": "dc_flash.bin",
+      "destination": "dc/dc_flash.bin",
       "verdict": "undetermined",
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "demul",
         "flycast",
         "redream"
-      ],
-      "unresolved_cores": [
-        "amigaforever",
-        "exodos",
-        "mugen",
-        "pinballfx",
-        "powerbomberman",
-        "quiverlauncher",
-        "windows",
-        "zaccariapinball"
-      ]
-    },
-    {
-      "system": "fmtowns",
-      "name": "fmtowns.zip",
-      "destination": "fmtowns.zip",
-      "verdict": "undetermined",
-      "reason": "a core the platform names has no profile yet",
-      "cores_examined": [
-        "tsugaru"
-      ],
-      "unresolved_cores": [
-        "amigaforever",
-        "exodos",
-        "mugen",
-        "pinballfx",
-        "powerbomberman",
-        "quiverlauncher",
-        "windows",
-        "zaccariapinball"
-      ]
-    },
-    {
-      "system": "fmtowns",
-      "name": "fmtownsux.zip",
-      "destination": "fmtownsux.zip",
-      "verdict": "undetermined",
-      "reason": "a core the platform names has no profile yet",
-      "cores_examined": [
-        "tsugaru"
       ],
       "unresolved_cores": [
         "amigaforever",
@@ -1385,7 +1165,9 @@
       "verdict": "undetermined",
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
+        "ares",
         "beetle_ngp",
+        "fbneo",
         "mednafen",
         "race"
       ],
@@ -1407,6 +1189,7 @@
       "verdict": "undetermined",
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
+        "ares",
         "beetle_ngp",
         "mednafen",
         "race"
@@ -1484,5 +1267,6 @@
       ]
     }
   ],
+  "doubled": [],
   "invalid": []
 }

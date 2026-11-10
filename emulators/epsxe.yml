@@ -133,13 +133,16 @@ notes: |
        ePSXe 2.0.18 Windows 0x4fb220-0x4fb263,
        DownloadShaderPluginTask.java:56-80
 
+groups:
+  ps-bios:
+    required: false
+
 files:
   - name: scph1000.bin
+    group: ps-bios
     path: bios/scph1000.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -149,11 +152,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172, ePSXe 2.0.18 Windows 0x5c10b4"
 
   - name: scph1001.bin
+    group: ps-bios
     path: bios/scph1001.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -163,11 +165,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.5 Linux x64 write_configfiledefault 0x42ae99, ePSXeReadPreferences.java:21, ePSXe 2.0.18 Windows 0x5c10d8"
 
   - name: scph1001_v20.bin
+    group: ps-bios
     path: bios/scph1001_v20.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -177,11 +178,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1120"
 
   - name: scph1002a.bin
+    group: ps-bios
     path: bios/scph1002a.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -191,11 +191,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c10fc"
 
   - name: scph3000.bin
+    group: ps-bios
     path: bios/scph3000.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -205,11 +204,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1144"
 
   - name: scph3500.bin
+    group: ps-bios
     path: bios/scph3500.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -219,11 +217,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1168"
 
   - name: dtlh1100.bin
+    group: ps-bios
     path: bios/dtlh1100.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "biosPref"
     size: 524288
     validation: [size, md5]
@@ -233,11 +230,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
 
   - name: scph1001_v21.bin
+    group: ps-bios
     path: bios/scph1001_v21.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "biosPref"
     size: 524288
     validation: [size, md5]
@@ -247,11 +243,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
 
   - name: scph1002b.bin
+    group: ps-bios
     path: bios/scph1002b.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "biosPref"
     size: 524288
     validation: [size, md5]
@@ -261,11 +256,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
 
   - name: scph5000.bin
+    group: ps-bios
     path: bios/scph5000.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "biosPref"
     size: 524288
     validation: [size, md5]
@@ -275,11 +269,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ScanBiosTask.java:162-172"
 
   - name: scph1002c.bin
+    group: ps-bios
     path: bios/scph1002c.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -289,11 +282,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1090"
 
   - name: scph5500.bin
+    group: ps-bios
     path: bios/scph5500.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -303,11 +295,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c11b0"
 
   - name: scph5501.bin
+    group: ps-bios
     path: bios/scph5501.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -317,11 +308,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1288"
 
   - name: scph5502.bin
+    group: ps-bios
     path: bios/scph5502.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -331,11 +321,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c11f8"
 
   - name: scph7000.bin
+    group: ps-bios
     path: bios/scph7000.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -345,11 +334,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c121c"
 
   - name: scph7001.bin
+    group: ps-bios
     path: bios/scph7001.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -359,11 +347,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1240"
 
   - name: scph7002.bin
+    group: ps-bios
     path: bios/scph7002.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -373,11 +360,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1264, ePSXe 2.0.18 Windows 0x5c12ac, ePSXe 2.0.18 Windows 0x5c12d0"
 
   - name: scph100.bin
+    group: ps-bios
     path: bios/scph100.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -387,11 +373,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c12f4"
 
   - name: scph102_v44.bin
+    group: ps-bios
     path: bios/scph102_v44.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -401,11 +386,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c133c"
 
   - name: scph101_v45.bin
+    group: ps-bios
     path: bios/scph101_v45.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -415,11 +399,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1318"
 
   - name: scph102_v45.bin
+    group: ps-bios
     path: bios/scph102_v45.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size, md5]
@@ -429,11 +412,10 @@ files:
     source_ref: "ScanBiosTask.java:28, ePSXe 2.0.18 Windows 0x5c1360"
 
   - name: scph5000_b.bin
+    group: ps-bios
     path: bios/scph5000_b.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size]
@@ -443,11 +425,10 @@ files:
     source_ref: "ePSXe 2.0.18 Windows 0x5c118c, ePSXe 2.0.18 Windows 0x42f525-0x42f568"
 
   - name: scph5502_b.bin
+    group: ps-bios
     path: bios/scph5502_b.bin
     system: sony-playstation
-    required: false
     hle_fallback: true
-    variant_group: "psx-bios"
     config_key: "BiosPath"
     size: 524288
     validation: [size]

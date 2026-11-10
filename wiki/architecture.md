@@ -275,7 +275,7 @@ own package list, standalone emulators included, and is case-sensitive too, so
 it gets a separate pack and a separate install manifest.
 With `--target`, the fingerprint includes target cores so platforms
 with different hardware filters get separate packs. Emulator and system packs
-also retain system identity, `variant_group` and requested region. Same-named
+also retain system identity, `selection_slot` and requested region. Same-named
 regional files are never collapsed merely because their display label matches.
 
 ## Pack reproducibility

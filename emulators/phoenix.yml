@@ -13,6 +13,7 @@ display_name: "3DO, Atari Jaguar (Phoenix)"
 mode: standalone
 cores:
   - phoenix
+found_by: content
 systems:
   - 3do
   - atari-jaguar
@@ -50,8 +51,8 @@ files:
     required: true
     description: "3DO BIOS"
     note: >-
-      Any BIOS dump is accepted, registered as the 3DO BIOS. The name is the
-      one RetroBat registers.
+      Read from the path registered as the 3DO BIOS in phoenix.config.xml,
+      under any name. The name is a label for the Panasonic FZ-10 dump.
 
   - name: panafz10e-anvil.bin
     system: 3do
@@ -72,4 +73,5 @@ files:
     required: true
     description: "Jaguar boot ROM"
     note: >-
-      Registered as the Jaguar BIOS. The name is the one RetroBat registers.
+      Read from the path registered as the Jaguar BIOS in phoenix.config.xml,
+      under any name. The name is a label for the No-Intro boot ROM dump.

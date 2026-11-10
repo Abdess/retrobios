@@ -18,6 +18,7 @@ from common import (
     resolve_platform_cores,
     standalone_set as platform_standalone_set,
 )
+from alternatives import groups_of
 from hashing import compute_hashes
 from validation import (
     filter_files_by_mode,
@@ -276,11 +277,15 @@ def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
         existing["_source_refs"] = existing.get("_source_refs", set()) | {sr_key}
     else:
         existing.setdefault("_source_refs", set())
-    if file_entry.get("required"):
+    if groups_of(file_entry):
+        _fold_set_member(existing, file_entry, emu_name)
+    elif file_entry.get("required"):
         existing["required"] = True
         # Which cores need it: `required` above is the union, true when
         # any core needs it, and a package of one core must not read it.
         existing["_required_by"] = existing.get("_required_by", set()) | {emu_name}
+    elif file_entry.get("required") is not None:
+        existing.setdefault("required", file_entry["required"])
     _merge_hashes(existing, file_entry, emu_name, revision)
     # Merge non-hash data fields if existing lacks them.
     # A core that creates an entry without size/path/validation may be
@@ -290,6 +295,21 @@ def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
             existing[field] = file_entry[field]
     _merge_priority(existing, file_entry.get("priority"))
     _merge_region(existing, file_entry.get("region"))
+
+
+def _fold_set_member(entry: dict, file_entry: dict, emu_name: str) -> None:
+    """A core that takes this file as one of a set needs the set, not it.
+
+    Yabause loads the first of saturn_bios.bin, sega_101.bin and
+    mpr-17933.bin it finds. None of the three is required on its own, so
+    the core stays out of `required` and `_required_by`, and `_one_of`
+    names it with `one_of_required` saying whether its set is required.
+    """
+    entry["_one_of"] = entry.get("_one_of", set()) | {emu_name}
+    if file_entry.get("required", True):
+        entry["one_of_required"] = True
+    else:
+        entry.setdefault("one_of_required", False)
 
 
 def _merge_region(existing: dict, theirs: str | list | None) -> None:
@@ -379,7 +399,8 @@ def _merge_priority(existing: dict, theirs: int | None) -> None:
 
 def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
     entry: dict = {"name": file_entry["name"]}
-    if file_entry.get("required") is not None:
+    grouped = bool(groups_of(file_entry))
+    if file_entry.get("required") is not None and not grouped:
         entry["required"] = file_entry["required"]
     for field in _COPIED_FIELDS:
         val = file_entry.get(field)
@@ -396,7 +417,9 @@ def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
     if not file_entry.get("region"):
         entry["_region_void"] = True
     entry["_cores"] = {emu_name}
-    entry["_required_by"] = {emu_name} if file_entry.get("required") else set()
+    entry["_required_by"] = {emu_name} if file_entry.get("required") and not grouped else set()
+    if grouped:
+        _fold_set_member(entry, file_entry, emu_name)
     entry["_named_by"] = {emu_name} if file_entry.get("_opens_by_name", True) else set()
     entry["_brought_by"] = _brought(file_entry, emu_name)
     sr = file_entry.get("source_ref")
@@ -427,13 +450,15 @@ def _has_exploitable_data(entry: dict) -> bool:
 
 
 def _system_dir_files(profile: dict, standalone: bool) -> list[dict]:
-    """Entries of the build the platform runs, read from the system directory."""
-    return list(
-        filter(
-            read_from_system_dir,
-            filter_files_by_mode(profile.get("files", []), standalone=standalone),
-        )
-    )
+    """Entries of the build the platform runs, read from the system directory.
+
+    An entry the platform's launchers leave outside the BIOS tree
+    (``unplaced``) is not: the platform has no file of its own there.
+    """
+    return [
+        f for f in filter_files_by_mode(profile.get("files", []), standalone=standalone)
+        if read_from_system_dir(f) and not f.get("unplaced")
+    ]
 
 
 def _archives_not_members(files: list[dict]) -> list[dict]:
@@ -848,6 +873,9 @@ def generate_platform_truth(
             fe.pop("_region_void", None)
             fe["_cores"] = sorted(fe.get("_cores", set()))
             fe["_required_by"] = sorted(fe.get("_required_by", set()))
+            one_of = fe.pop("_one_of", None)
+            if one_of:
+                fe["one_of"] = sorted(one_of)
             fe["_named_by"] = sorted(fe.get("_named_by", set()))
             fe["_brought_by"] = sorted(fe.get("_brought_by", set()))
             if not fe["_brought_by"]:
@@ -950,6 +978,9 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
             hash_mismatch.append(mismatch)
         t_req = t_entry.get("required")
         s_req = s_entry.get("required")
+        if t_entry.get("one_of_required") and not t_req:
+            # Needed as one of a set: no value of its own to compare.
+            t_req = None
         if t_req is not None and s_req is not None and t_req != s_req:
             required_mismatch.append(
                 {

@@ -19,6 +19,9 @@ cores:
 systems:
   - nintendo-3ds
 
+standalone_directories:
+  - "$XDG_DATA_HOME/azahar-emu"
+  - "$HOME/.local/share/azahar-emu"
 data_root:
   windows:
     path: "%APPDATA%/Azahar"

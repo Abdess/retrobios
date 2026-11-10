@@ -5,13 +5,13 @@ source: "https://github.com/libretro/dosbox-pure"
 upstream: "https://codeberg.org/schelling/dosbox-pure"
 logo: "https://raw.githubusercontent.com/schellingb/dosbox-pure/main/images/logo.png"
 profiled_date: "2026-03-23"
-source_commit: "cdaea10ce8cac231bc341ca05d4c5e4e5fe0fbd5"
-upstream_commit: "cdaea10ce8cac231bc341ca05d4c5e4e5fe0fbd5"
-core_version: "1.0-preview7"
+source_commit: "e39497e7c2a32c67c26e6598dd14f6d58c384bfd"
+upstream_commit: "519226d15dea41c146048ae43e40bac772b923c4"
+core_version: "1.0-preview8"
 version_basis:
   kind: tag
   repo: upstream
-  tag: "1.0-preview7"
+  tag: "1.0-preview8"
   distance: 0
 display_name: "DOS (DOSBox-Pure)"
 cores: [dosbox_pure]
@@ -23,7 +23,7 @@ notes: |
 
   ROM scanning (both modes):
     Recursive scan of system directory for *_CONTROL.ROM and *.SF2/*.SF3.
-    ref: dosbox_pure_libretro.cpp:1399-1410
+    ref: dosbox_pure_libretro.cpp:1387-1404
     MT-32 requires matched pair: *_CONTROL.ROM + *_PCM.ROM (PCM name derived
     from CONTROL name by replacing CONTROL with PCM, preserving case).
     ref: src/gui/midi_mt32.h:189-199
@@ -32,9 +32,10 @@ notes: |
     ref: src/gui/midi_mt32.h:160-166
     Files can also be on mounted C: drive (DOSBOX.SF2, MT32_CONTROL.ROM,
     ROM1.BIN).
-    ref: dosbox_pure_libretro.cpp:2806-2813
-    Cache file DOSBoxPureMidiCache.txt written when scan >2s.
-    ref: dosbox_pure_libretro.cpp:1449-1464
+    ref: dosbox_pure_libretro.cpp:2804-2811
+    Cache file DOSBoxPureMidiCache.txt written when scan >2s (libretro build
+    only).
+    ref: dosbox_pure_libretro.cpp:1417-1440,1445-1464
 
   Sound Canvas: the scan also lists every file whose name ends in ROM1.BIN,
   WAVEROM1.BIN excepted, as "Sound Canvas SC-55". Selected, the Nuked-SC55
@@ -44,7 +45,7 @@ notes: |
   of ROM1 selects the model, SC-55mkII/SC-55st, SC-55/SC-155, CM-300/SCC-1,
   JV-880 or SCB-55, and the sizes the other ROMs must have. The driver does
   not open without ROM1 and ROM2.
-  ref: dosbox_pure_libretro.cpp:1405, src/gui/midi_sc55.h:38-47,
+  ref: dosbox_pure_libretro.cpp:1399, src/gui/midi_sc55.h:38-47,
        src/gui/midi_sc55.h:71-95, src/gui/midi_sc55.h:97-134
 
   Bundled MUNT (header-only mt32emu.h) for MT-32 emulation.
@@ -54,8 +55,10 @@ notes: |
   TinySoundFont (tsf.h) for SF2/SF3 playback.
   No firmware entries in .info file, all MIDI files optional.
 
-  DBP_STANDALONE build mode exists (same MIDI logic, different I/O layer).
-  ref: dosbox_pure_libretro.cpp:81,1588,2302
+  DBP_STANDALONE build mode exists with the same scan and MIDI drivers. Its
+  MIDI option offers the system MIDI driver in place of the frontend one and
+  no scan cache.
+  ref: dosbox_pure_libretro.cpp:81,1587,2137-2145,2306
 
 files:
   # -- MT-32 Control ROMs (64 KB) --
@@ -211,7 +214,7 @@ files:
     aliases: ["GeneralUser-GS.sf2"]
     required: false
     hle_fallback: true
-    source_ref: "source dosbox_pure_libretro.cpp:1405 (scan classifies .SF* as a SoundFont), source dosbox_pure_libretro.cpp:2495-2499 (path taken from the system directory), source dosbox_pure_libretro.cpp:2806-2813 (auto-detected on the mounted C: drive)"
+    source_ref: "source dosbox_pure_libretro.cpp:1399 (scan classifies .SF* as a SoundFont), source dosbox_pure_libretro.cpp:2493-2497 (path taken from the system directory), source dosbox_pure_libretro.cpp:2804-2811 (auto-detected on the mounted C: drive)"
     note: >
       Any .SF2 or .SF3 file in the system directory works. The core lists all
       found SoundFonts in the MIDI config dropdown. DOSBOX.SF2 is the conventional
@@ -228,7 +231,7 @@ files:
     required: false
     size: 32768
     validation: [size]
-    source_ref: "source dosbox_pure_libretro.cpp:1405, source src/gui/midi_sc55.h:71-75, source src/gui/midi_sc55.h:97-101"
+    source_ref: "source dosbox_pure_libretro.cpp:1399, source src/gui/midi_sc55.h:71-75, source src/gui/midi_sc55.h:97-101"
     note: >-
       Any name ending in ROM1.BIN anywhere under the system directory is
       listed. Byte 67 selects the emulated model, 0x12 for SC-55mkII/SC-55st.
@@ -278,7 +281,7 @@ files:
     required: false
     size: 32768
     validation: [size]
-    source_ref: "source dosbox_pure_libretro.cpp:1405, source src/gui/midi_sc55.h:71-75, source src/gui/midi_sc55.h:97-101, source src/gui/midi_sc55.h:117-120"
+    source_ref: "source dosbox_pure_libretro.cpp:1399, source src/gui/midi_sc55.h:71-75, source src/gui/midi_sc55.h:97-101, source src/gui/midi_sc55.h:117-120"
     note: >-
       Byte 67 is 0x50, the SC-55/SC-155 branch. The driver builds each
       companion name from the ROM1.BIN name the user picks: the text before

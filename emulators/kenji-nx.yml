@@ -5,11 +5,12 @@ source: "https://git.ryujinx.app/projects/Kenji-NX"
 source_branch: libryujinx_bionic
 upstream: "https://git.ryujinx.app/projects/Ryubing"
 profiled_date: "2026-08-11"
-source_commit: "53d32a761e61dc8e9b5c0744199a890fc8d934d5"
+source_commit: "280c427c550c5fe3bcc46b378e06a9b90a7e6b09"
 core_version: "2.1.0-pr.2"
 version_basis:
-  kind: unverified
-  why: host_unreachable
+  kind: file
+  path: "src/KenjinxAndroid/app/build.gradle"
+  pattern: "versionName '([^']+)'"
 display_name: "Nintendo - Switch (Kenji-NX)"
 cores:
   - kenji-nx
@@ -65,9 +66,9 @@ notes: |
   of a path but reaches the same two methods. Nothing gates the launch on it:
   homebrew NRO goes through ProcessLoader without touching the key set, and the
   failure is deferred to the first service that needs a system archive.
-  ref: src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498,675-749,893-903,
+  ref: src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498,675-749,891-904,
        src/LibKenjinx/Android/JniExportedMethods.cs:462-498,
-       src/Ryujinx.HLE/Loaders/Processes/ProcessLoader.cs:189-205
+       src/Ryujinx.HLE/Loaders/Processes/ProcessLoader.cs:186-214
 
   Two read paths belong to the desktop build alone, because the Android build
   drops LibKenjinx.Native.cs and wires those subsystems differently.
@@ -80,10 +81,10 @@ notes: |
   KenjinxAmiiboShim and INfp reads the figure id straight out of offset 0x1DC.
   ref: src/LibKenjinx/LibKenjinx.csproj:11-13,
        src/LibKenjinx/Android/JniExportedMethods.cs:350-351,1049-1063,
-       src/LibKenjinx/LibKenjinx.Input.cs:28-39,
-       src/Ryujinx.HLE/Kenjinx/AmiiboBridge.cs:10-44,
+       src/LibKenjinx/LibKenjinx.Input.cs:31-42,
+       src/Ryujinx.HLE/Kenjinx/AmiiboBridge.cs:10-43,
        src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/KenjinxAmiiboShim.cs:15-41,
-       src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/INfp.cs:149-166,257-279
+       src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/INfp.cs:149-165,256-279
 
   Config.json, Profiles.json, updates.json, dlc.json, mods.json, metadata.json
   and system/amiibo/<amiibo id>.json are written by the emulator itself, and

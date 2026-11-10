@@ -16,7 +16,7 @@ Example, one entry of `emulators/duckstation.yml`:
 ```yaml
 - name: "scph5501.bin"
   region: [north-america, latin-america]
-  required: true
+  group: ps-bios
   md5: "490f666e1afb15b7362b406ed1cea246"
   priority: 5
   source_ref: "src/core/bios.cpp:47"
@@ -164,8 +164,8 @@ When a core has HLE (high-level emulation), code of its own that stands
 in for the file, mark the entry `hle_fallback: true`. The flag records the
 stand-in. It does not decide `required`, which still comes from what the
 code does without the file: most entries that carry the flag are optional,
-and a few are required, among them Yabause's `saturn_bios.bin`
-(`emulators/yabause.yml`). The file still ships in packs, and
+and a few are required, among them QUASI88's `n88.rom`
+(`emulators/quasi88.yml`). The file still ships in packs, and
 verification reports its absence at INFO whatever `required` says.
 
 MAME is read the same way. A missing ROM is fatal only when it is neither
@@ -365,9 +365,12 @@ A few field conventions that protect the toolchain:
 - `type:` is operational. `resolve_platform_cores()` uses it to filter
   which profiles apply to a platform. Valid values are `libretro`,
   `standalone + libretro`, `standalone`, `alias`, `launcher`, `game`,
-  `utility`, `test`. Putting a classification concept here (like
+  `utility`. Putting a classification concept here (like
   "bizhawk-native") breaks the filtering. A BizHawk core is
-  `type: standalone`.
+  `type: standalone`. A libretro core that emulates no machine stays
+  `type: libretro` and says what it is for in `role:` (`game`, `utility`
+  or `test`): typed by its role, 2048 fell out of every all_libretro
+  platform and RetroArch's manifest no longer named it.
 
 - `core_classification:` is descriptive. It documents the relationship
   between the core and the original emulator (pure_libretro,
@@ -513,7 +516,8 @@ reports the profile as uncheckable, and the CI job that runs
 | Field | Required | Description |
 |-------|----------|-------------|
 | `emulator` | yes | display name |
-| `type` | yes | `libretro`, `standalone`, `standalone + libretro`, `alias`, `launcher`, `game`, `utility`, `test` |
+| `type` | yes | `libretro`, `standalone`, `standalone + libretro`, `alias`, `launcher`, `game`, `utility` |
+| `role` | no | `game`, `utility`, `test`: what a libretro core that emulates no machine is for. The site and coverage leave `test` cores out |
 | `core_classification` | no | `pure_libretro`, `official_port`, `community_fork`, `frozen_snapshot`, `enhanced_fork`, `game_engine`, `embedded_hle`, `launcher`, `alias`, `other` |
 | `source` | no | libretro core repository URL. A dict when the core ships under several repos |
 | `upstream` | no | original emulator repository URL |
@@ -525,6 +529,7 @@ reports the profile as uncheckable, and the CI job that runs
 | `pin_frozen` | with `pin_build` | why `source_commit` is held on purpose rather than followed. The profile is then judged against its own revision, like one pinned to a superseded tag |
 | `pin_build` | no | the build file each platform shipping a `pin_frozen` build reads its revision from: a list of `platform` (registry slug), `repo` (the platform's own repository), `revision` (the tag or commit the file was read at), `path`, `variable` (`PKG_VERSION`, `<PKG>_VERSION`, `rp_module_repo`) and `value` (what it held there). `check_freshness.py` reads the file again where the platform's YAML now stands and reports the profile `STALE` when the platform builds another revision. A hold that no build file names (a release binary, an abandoned repository) carries `pin_frozen` alone |
 | `pin_follows` | no | why `source_commit` follows the branch tip when a single platform ships the profile: that platform builds the tip, cited by its build file. A bump refuses a profile one platform ships until it carries `pin_frozen` or `pin_follows` |
+| `groups` | no | the sets of entries the code takes one of, by name, each with its `required`. A member names its sets with `group` and writes no `required` of its own: it is required when one of its sets is |
 | `data_root` | no | per operating system (`android`, `ios`, `windows`, `macos`, `linux`), the folder the app reads its user data from, under which `standalone_path` destinations sit: `path` as the user finds it (`Android/data/<package>/files`, `%APPDATA%/...`), with the `source_ref` that builds it. Only the systems the app runs on are keyed |
 | `upstream_frozen` | no | why `upstream_commit` is held: the port vendors that upstream tree, synced to that release, or merged that commit. The upstream view is read at its own pin and a bump leaves it. Without it, a port that is a GitHub fork of its upstream follows the merge base of the two |
 | `prose_written_at` | no | the pin a reader confirmed the prose citations against. When the profile's history shows a text living under several pins, profile_sync takes this one as the revision the text describes, so a bump is no longer refused for a citation already reread. It never overrides a history with a single candidate |
@@ -538,6 +543,7 @@ reports the profile as uncheckable, and the CI job that runs
 | `bios_mode` | no | `agnostic` when the core takes any file of the right shape in its BIOS folder instead of a fixed name (PCSX2). Packs then carry every matching dump, and a `<bios>.bin` placeholder stands for them |
 | `bios_directory` | no | the folder an agnostic core scans, relative to the system directory (`pcsx2/bios/`). A scan never seeds from files outside it |
 | `standalone_directories` | no | what the standalone build resolves `standalone_path` against, as its code names it: a directory (`$XDG_DATA_HOME/flycast`), a setting (`Dreamcast.BiosPath`), an environment variable (`FLYCAST_BIOS_PATH`) or the function returning the directory (`find_user_data_dir`). A platform whose launcher links or passes a folder of its BIOS tree under one of them gets the standalone files in that folder |
+| `standalone_pools` | no | settings the standalone build reads as a list of directories it searches one after the other, each mapped to the subfolder of the layout (relative to `standalone_directories`, empty for the whole of it) its directories stand for: openMSX's filepool entries are searched like `share/systemroms`, XRoar's rompath entries hold the ROMs themselves. A file in any entry is read, so several platform records naming entries give the first one a pack can fill |
 | `display_name` | no | full display name (e.g. "Sega - Mega Drive (BlastEm)") |
 | `logo` | no | image URL used on the emulator page |
 | `systems` | no | list of system IDs this core handles |
@@ -603,7 +609,7 @@ look.
 | Field | Description |
 |-------|-------------|
 | `name` | filename as the core expects it |
-| `required` | true if the core needs this file to function |
+| `required` | true if the core needs this file to function. Not written on a member of a `group`: derived from the sets in `groups` |
 | `system` | system ID this file belongs to (for multi-system profiles) |
 | `systems` | the systems of the profile this file serves, when it serves several but not all (a MAME device set the machines of two systems load). Never written with `system` |
 | `archive` | ROM set the file lives inside, for arcade entries (e.g. `neogeo.zip`) |
@@ -621,7 +627,9 @@ look.
 | `region` | always a list of territory slugs from the schema enum (`[north-america]`, `[japan, asia-ntsc]`). The region the code selects the file **for**, never the region of the dump. See step 3b |
 | `region_check` | true if the core refuses to boot a game whose region does not match the BIOS |
 | `fast_boot` | BIOS generation label the core uses to decide whether fast boot is available |
-| `priority` | preference order when several BIOS satisfy the same slot, **lowest wins**. DuckStation's `FindBIOSImageInDirectory` keeps the image whose priority is lower, and its table de-prioritizes by raising the number: the buggy launch console sits at 50 and PS2 images at 100, while `scph5501` sits at 5. A core that walks an ordered search list, as PicoDrive does with `biosfiles_us/eu/jp`, maps onto the same field as 1, 2, 3. Only set it from the source. `--one-per-slot` reads it |
+| `priority` | preference order when several BIOS satisfy the same slot, **lowest wins**. DuckStation's `FindBIOSImageInDirectory` keeps the image whose priority is lower, and its table de-prioritizes by raising the number: the buggy launch console sits at 50 and PS2 images at 100, while `scph5501` sits at 5. A core that walks an ordered search list, as PicoDrive does with `biosfiles_us/eu/jp`, maps onto the same field as 1, 2, 3. Only set it from the source. `--one-per-slot` reads it, comparing the members of one `group` |
+| `group` | the sets of the profile's `groups:` map an entry belongs to. A set is one need: the code loads one member (the first it finds, as Yabause tries `saturn_bios.bin`, `sega_101.bin`, `mpr-17933.bin`) and holding any member fills it. Verify, the gap report and the packs report a set nobody holds as one gap under its first member, and no member of a held set as missing. A `--required-only` build keeps one member per required set, the first the code reads among those held. A list puts a file in several sets, a map from set to rank gives its place in each when it differs (pom2's `apple2.rom` is second for the ][ and third at boot). Where the code keeps a list per region, each list is its own set (PicoDrive's `mega-cd-us`, `mega-cd-eu`, `mega-cd-jp`). An archive's own entry joins a set like a loose file, its unit under `archive_prefix` ranking before the same name at the root (Kronos reads `kronos/stvbios.zip`, else `stvbios.zip`), and its members still settle it by their contents |
+| `groups` (profile) | the requirement of each set, `{name: {required: bool}}`. A member writes no `required`: it is required when one of its sets is, so a fallback shared by a required set and an optional one needs no value of its own |
 | `embedded` | true if the data is compiled into the binary and the external file is optional |
 | `bundled` | true if the emulator's own release installs the file where it reads it, for the build `mode` names (all builds when `mode` is absent). Packs and the installer leave it out: the user already has it. A file the standalone release ships but the libretro core does not (PPSSPP's assets, Dolphin's Sys) is bundled with `mode: standalone` only |
 | `not_bundled_on` | platforms (registry keys) whose package leaves out a file the release bundles: their packs bring it (Batocera installs hcl without its data) |
@@ -635,7 +643,7 @@ look.
 | `path` | destination path relative to the system directory, or to the save directory under `load_from: save_dir` |
 | `standalone_path` | where the standalone build reads the file, under its own data folder, when it differs from `path` (the libretro destination). Packs for a platform running the emulator standalone use it |
 | `on_mismatch` | what the code does when a declared check fails: `reject` (default) or `warn` and run with it, for every check or check by check (`{size: warn, md5: reject}`) |
-| `variant_group` | one slot of one core that several entries fill, whatever system each is filed under (PicoDrive's twelve Mega CD BIOS). Region selection keeps one per group |
+| `selection_slot` | files one core chooses between by a rule other than first found (the disc's territory, a core option, a feature probe), one slot of the core whatever system each is filed under: PicoDrive's twelve Mega CD BIOS, picked by disc region, O2EM's four BIOS, picked by a core option. Region selection compares them together and keeps one per slot. A member does not stand in for another: entries that do are a `group` |
 | `size_note` | how the code treats the file's size when no size field can say it (a read capped at 32 bytes, a file created empty when absent) |
 | `type` | `directory` when the code reads a whole tree (an RTP, a folder of speech samples). `path` is then the directory, written with its trailing slash, and the entry stands for every file the collection holds under it. A name ending in `/` requires it |
 | `description` | what this file is |

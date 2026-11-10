@@ -423,7 +423,7 @@ def _build_boards() -> None:
     ids_by_name: dict[str, set[str]] = {}
     for key in sorted(profiles):
         profile = profiles[key]
-        if profile.get("type") == "test":
+        if profile.get("role") == "test":
             continue
         systems = [str(sys_id) for sys_id in profile.get("systems") or []]
         for entry in profile.get("files") or []:
@@ -967,6 +967,7 @@ SYSTEM_NAMES: dict[str, str] = {
     "galaksija": "Galaksija computer",
     "game": "Picross puzzle (libretro sample)",
     "gamecom": "Tiger Game.com",
+    "gamemaker": "GameMaker games",
     "gameplan-mpu1": "Game Plan MPU-1",
     "gamepock": "Epoch Game Pocket Computer",
     "gametank": "GameTank console",
@@ -1124,7 +1125,7 @@ SYSTEM_NAMES: dict[str, str] = {
     "sega-isgsm": "Sega ISG Selection Master",
     "sega-megaplay": "Sega Mega Play",
     "sega-megatech": "Sega Mega-Tech",
-    "sega-model2": "Sega Model 2",
+    "sega-model1": "Sega Model 1",
     "sega-naomi": "Sega NAOMI",
     "sega-naomi2": "Sega NAOMI 2",
     "sega-naomigd": "Sega NAOMI GD-ROM",

@@ -568,6 +568,7 @@ files:
   - name: "System BIOS image"
     description: "PC/AT or PC-98 BIOS ROM image booted by BOOT -bios"
     required: false
+    unsourceable: "any BIOS image the user names with BOOT -bios, no canonical file"
     note: >
       loaded at the top of the first megabyte, rounded up to a paragraph and
       truncated to 128 KB, or to 96 KB on PC-98, and a larger image is clamped

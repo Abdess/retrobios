@@ -7,11 +7,11 @@
   "files": [
     "es_bios.xml"
   ],
-  "summary": "357 kept, 86 files added, 2 hashes updated to the emulator source, 128 required flags aligned with the code",
+  "summary": "357 kept, 90 files added, 2 hashes updated to the emulator source, 129 required flags aligned with the code, 1 md5 list written, any listed value passes",
   "counts": {
     "kept": 357,
-    "added": 86,
-    "not_added": 529,
+    "added": 90,
+    "not_added": 559,
     "not_kept": 0
   },
   "changes": [
@@ -36,60 +36,48 @@
     {
       "kind": "added",
       "system": "amiga600",
-      "name": "aros-ext.bin",
-      "destination": "aros-ext.bin",
+      "name": "kick13.rom",
+      "destination": "kick13.rom",
       "field": null,
       "old": null,
       "new": {
-        "md5": "945c364bb9b5f28a04e1003f8b7a469c",
+        "md5": "82a21c1890cae844b3df741f2762d48d",
+        "required": true
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga600",
+      "name": "kick12.rom",
+      "destination": "kick12.rom",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "85ad74194e87c08904327de1a9443b7a",
         "required": false
       }
     },
     {
       "kind": "added",
       "system": "amiga600",
-      "name": "aros-rom.bin",
-      "destination": "aros-rom.bin",
+      "name": "kick20.rom",
+      "destination": "kick20.rom",
       "field": null,
       "old": null,
       "new": {
-        "md5": "69179a8479d1ba279c786094ce343386",
+        "md5": "dc10d7bdd1b6f450773dfb558477c230",
         "required": false
       }
     },
     {
       "kind": "added",
       "system": "amiga600",
-      "name": "WHDLoad",
-      "destination": "whdboot/WHDLoad",
+      "name": "kick205.rom",
+      "destination": "kick205.rom",
       "field": null,
       "old": null,
       "new": {
-        "md5": "6670a9571f235ec31b8bbd48fc18f428",
-        "required": false
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga600",
-      "name": "JST",
-      "destination": "whdboot/JST",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "2a3a61bbd7c351751506e22a4354b76a",
-        "required": false
-      }
-    },
-    {
-      "kind": "added",
-      "system": "amiga600",
-      "name": "AmiQuit",
-      "destination": "whdboot/AmiQuit",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "36ab26d3b855e634fdda062c052cd52b",
+        "md5": "465646c9b6729f77eea5314d1f057951",
         "required": false
       }
     },
@@ -101,7 +89,7 @@
       "field": null,
       "old": null,
       "new": {
-        "md5": "51d44cd24e16fbb395b1bfefbaacd375",
+        "md5": "b6012c4c6a6c82bbcdd208e4ee47a143",
         "required": false
       }
     },
@@ -168,12 +156,60 @@
     {
       "kind": "added",
       "system": "amiga600",
-      "name": "kick31034.A1000.RTB",
-      "destination": "whdboot/save-data/Kickstarts/kick31034.A1000.RTB",
+      "name": "WHDLoad",
+      "destination": "whdboot/WHDLoad",
       "field": null,
       "old": null,
       "new": {
-        "md5": "c5ba6165df42fc69b32942b248fca725",
+        "md5": "6670a9571f235ec31b8bbd48fc18f428",
+        "required": false
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga600",
+      "name": "JST",
+      "destination": "whdboot/JST",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "2a3a61bbd7c351751506e22a4354b76a",
+        "required": false
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga600",
+      "name": "AmiQuit",
+      "destination": "whdboot/AmiQuit",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "36ab26d3b855e634fdda062c052cd52b",
+        "required": false
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga600",
+      "name": "aros-ext.bin",
+      "destination": "aros-ext.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "d2ce6748e8e42222662e14359f68dad5",
+        "required": false
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga600",
+      "name": "aros-rom.bin",
+      "destination": "aros-rom.bin",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "48d38fc3fcf2ad7bca5ec5191d02e451",
         "required": false
       }
     },
@@ -314,15 +350,6 @@
       "field": "required",
       "old": false,
       "new": true
-    },
-    {
-      "kind": "required_aligned",
-      "system": "macintosh",
-      "name": "MinivMacBootv2.dsk",
-      "destination": "macintosh/MinivMacBootv2.dsk",
-      "field": "required",
-      "old": true,
-      "new": false
     },
     {
       "kind": "required_aligned",
@@ -659,7 +686,12 @@
       "field": null,
       "old": null,
       "new": {
-        "md5": "a5c6a00818f97c5e3e91569ee22416dc,37c921eb47532cae8fb70e5d987ce91c,f2cd29d09f3e29984bcea22ab2e006fe,e10c53c2f8b90bab96ead2d368858623",
+        "md5": [
+          "a5c6a00818f97c5e3e91569ee22416dc",
+          "37c921eb47532cae8fb70e5d987ce91c",
+          "f2cd29d09f3e29984bcea22ab2e006fe",
+          "e10c53c2f8b90bab96ead2d368858623"
+        ],
         "required": false
       }
     },
@@ -713,6 +745,15 @@
       "system": "pc98",
       "name": "font.bmp",
       "destination": "np2kai/font.bmp",
+      "field": "required",
+      "old": true,
+      "new": false
+    },
+    {
+      "kind": "required_aligned",
+      "system": "pc98",
+      "name": "font.rom",
+      "destination": "np2kai/font.rom",
       "field": "required",
       "old": true,
       "new": false
@@ -1621,6 +1662,18 @@
       "new": false
     },
     {
+      "kind": "added",
+      "system": "oricatmos",
+      "name": "8dos.rom",
+      "destination": "8dos.rom",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "4a1ff5f8719d67dafcf85ac61959cdb6",
+        "required": false
+      }
+    },
+    {
       "kind": "required_aligned",
       "system": "gb,gbc",
       "name": "SGB1.sfc",
@@ -2194,6 +2247,15 @@
       }
     },
     {
+      "kind": "required_aligned",
+      "system": "xbox",
+      "name": "mcpx_1.0.bin",
+      "destination": "xbox/mcpx_1.0.bin",
+      "field": "required",
+      "old": true,
+      "new": false
+    },
+    {
       "kind": "added",
       "system": "scummvm",
       "name": "MT32_CONTROL.ROM",
@@ -2226,9 +2288,10 @@
   "sizes_updated": [],
   "sizes_removed": [],
   "hashes_cleared": [],
-  "required_aligned": 128,
+  "required_aligned": 129,
   "withheld": [],
-  "found_by_content": 103,
+  "found_by_content": 370,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "pc98",
@@ -2492,5 +2555,6 @@
       ]
     }
   ],
+  "doubled": [],
   "invalid": []
 }

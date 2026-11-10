@@ -21,10 +21,10 @@ from common import load_emulator_profiles  # noqa: E402
 STEM_NAMED = {
     # Template and test cores, no emulator page.
     "00_example": "template",
-    "test": "type test",
-    "testgl": "type test",
-    "testvulkan": "type test",
-    "vidtest": "type test",
+    "test": "role test",
+    "testgl": "role test",
+    "testvulkan": "role test",
+    "vidtest": "role test",
     # Aliases, no emulator page.
     "ep128emu": "alias",
     "mednafen_gba": "alias",
@@ -64,11 +64,13 @@ STEM_NAMED = {
     "ioquake3": "the project writes ioquake3",
     "izapple2": "README title izapple2",
     "jgenesis": "README title jgenesis",
+    "n64emu": "README title n64emu",
     "np2pi": "repository and binary np2pi, no title in the source",
     "rpix86": "the author writes rpix86",
     "simple64": "window title simple64",
     "sixtyforce": "site title sixtyforce",
     "veesem": "README title veesem",
+    "zcdi": "README title zcdi",
 }
 
 

@@ -85,12 +85,17 @@ notes: |
   box art, cheat, layout, sticker and per-ROM databases are created by their own
   CREATE TABLE.
 
+groups:
+  megacd-boot-rom:
+    required: true
+  mastersystem-boot-rom:
+    required: false
+
 files:
   - name: bios_CD_U.bin
     system: sega-megacd
-    required: true
+    group: megacd-boot-rom
     agnostic: true
-    variant_group: "megacd-boot-rom"
     size: 131072
     validation: [size]
     description: "Sega CD boot ROM"
@@ -114,9 +119,8 @@ files:
 
   - name: bios_CD_E.bin
     system: sega-megacd
-    required: true
+    group: megacd-boot-rom
     agnostic: true
-    variant_group: "megacd-boot-rom"
     size: 131072
     validation: [size]
     description: "Mega CD boot ROM"
@@ -127,9 +131,8 @@ files:
 
   - name: bios_CD_J.bin
     system: sega-megacd
-    required: true
+    group: megacd-boot-rom
     agnostic: true
-    variant_group: "megacd-boot-rom"
     size: 131072
     validation: [size]
     description: "Mega CD boot ROM (Japan)"
@@ -140,9 +143,8 @@ files:
 
   - name: bios_U.sms
     system: sega-mastersystem
-    required: false
+    group: mastersystem-boot-rom
     agnostic: true
-    variant_group: "mastersystem-boot-rom"
     description: "Master System boot ROM"
     note: >-
       Picked and stored like the Mega CD image and handed to the machine as a path.
@@ -155,9 +157,8 @@ files:
 
   - name: bios_E.sms
     system: sega-mastersystem
-    required: false
+    group: mastersystem-boot-rom
     agnostic: true
-    variant_group: "mastersystem-boot-rom"
     description: "Master System boot ROM (Europe)"
     note: "Same slot and same absence of tests as the other Master System boot ROMs."
     source_ref: "Pizza Boy SC Basic 1.2.14 libsc.so frontend/android/src/lib.rs:590,
@@ -165,9 +166,8 @@ files:
 
   - name: bios_J.sms
     system: sega-mastersystem
-    required: false
+    group: mastersystem-boot-rom
     agnostic: true
-    variant_group: "mastersystem-boot-rom"
     description: "Master System boot ROM (Japan)"
     note: "Same slot and same absence of tests as the other Master System boot ROMs."
     source_ref: "Pizza Boy SC Basic 1.2.14 libsc.so frontend/android/src/lib.rs:590,

@@ -3,19 +3,20 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Gearboy"
 upstream: "https://github.com/drhelius/Gearboy"
-profiled_date: "2026-03-23"
-source_commit: "b0a5fcaf68009c288d6b8016164a21af452d81b5"
-core_version: "3.8.19-10-gb0a5fca"
+profiled_date: "2026-11-09"
+source_commit: "c2beeea6e202a41f796c4026fa0caaee1b904662"
+core_version: "3.8.20-11-gc2beeea"
 version_basis:
   kind: tag
-  tag: "3.8.19"
-  distance: 10
-display_name: "Nintendo - Game Boy / Color (Gearboy)"
+  tag: "3.8.20"
+  distance: 11
+display_name: "Nintendo - Game Boy / Color / Super Game Boy (Gearboy)"
 cores:
   - gearboy
 systems:
   - nintendo-gb
   - nintendo-gbc
+  - nintendo-sgb
 
 notes: |
   Gearboy is a Game Boy / Game Boy Color emulator by drhelius (Ignacio Sanchez).
@@ -25,6 +26,14 @@ notes: |
   Bootrom loading is gated behind core options (disabled by default).
   Without bootroms, the core HLE-skips the boot animation.
 
+  Super Game Boy mode (core option gearboy_sgb, enabled by default, one
+  instance only) reads the SNES cartridge ROM of the Super Game Boy,
+  SGB1.sfc then SGB2.sfc in the system directory. Only its default border
+  and palettes are taken from it, and SGB games run without it on the
+  built-in defaults. The ROM is identified by CRC32 and size against four
+  known dumps, whichever of the two names it carries, and an unknown dump
+  is refused (src/SGB.cpp:38-44, 200-223, 1096-1105).
+
 files:
   - name: dmg_boot.bin
     description: Game Boy DMG bootrom
@@ -32,7 +41,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "platforms/libretro/libretro.cpp:1043, platforms/libretro/libretro.cpp:474, platforms/libretro/libretro.cpp:474"
+    source_ref: "platforms/libretro/libretro.cpp:1036-1045, platforms/libretro/libretro.cpp:474-479"
 
   - name: cgb_boot.bin
     description: Game Boy Color bootrom
@@ -40,4 +49,26 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "platforms/libretro/libretro.cpp:1044, platforms/libretro/libretro.cpp:475, platforms/libretro/libretro.cpp:475"
+    source_ref: "platforms/libretro/libretro.cpp:1047-1056, platforms/libretro/libretro.cpp:475-480"
+
+  - name: "SGB1.sfc"
+    system: nintendo-sgb
+    description: "Super Game Boy SNES cartridge ROM"
+    size: 262144
+    crc32: ["2e35edbb", "27a03c98", "8a4a174f"]
+    validation: [size, crc32]
+    required: false
+    hle_fallback: true
+    note: "Tried first. Any of the four known dumps loads under this name, the 512 KiB SGB2 one included. Read only with Super Game Boy mode on and a single instance."
+    source_ref: "platforms/libretro/libretro.cpp:447-467, platforms/libretro/libretro.cpp:879-885, src/SGB.cpp:38-44, src/SGB.cpp:200-223"
+
+  - name: "SGB2.sfc"
+    system: nintendo-sgb
+    description: "Super Game Boy 2 SNES cartridge ROM"
+    size: 524288
+    crc32: "cb176e45"
+    validation: [size, crc32]
+    required: false
+    hle_fallback: true
+    note: "Tried when SGB1.sfc is absent or refused. Any of the four known dumps loads under this name."
+    source_ref: "platforms/libretro/libretro.cpp:447-467, src/SGB.cpp:38-44, src/SGB.cpp:200-223"

@@ -1,5 +1,6 @@
 emulator: openMSX
 type: standalone
+core_classification: other
 source: "https://github.com/openMSX/openMSX"
 upstream: "https://github.com/openMSX/openMSX"
 profiled_date: "2026-03-26"
@@ -22,6 +23,11 @@ systems:
   - msxturbor
   - colecovision
   - spectravideo
+standalone_directories:
+  - "OPENMSX_HOME"
+  - "~/.openMSX"
+standalone_pools:
+  filepool: "share/systemroms"
 
 notes: |
   Standalone MSX emulator supporting MSX1 through turboR, ColecoVision,
@@ -35,13 +41,14 @@ notes: |
   looked up beside the machine's XML (src/memory/Rom.cc:121-170,
   src/config/HardwareConfig.cc:279-280, src/file/FileContext.cc:152-156).
   Files may be gzipped or individually zipped.
-  Each user data directory contributes share/systemroms, scanned
-  recursively (src/file/FilePool.cc:27, src/file/FilePoolCore.cc:369-385). RetroBat
-  sets OPENMSX_HOME to bios/openmsx and refuses to start a machine whose
-  ROMs are not in bios/openmsx/share/systemroms. RetroPie links
-  share/systemroms to BIOS/openmsx and Batocera adds bios/openmsx to the
-  pool, both scanned recursively, so openmsx/share/systemroms serves all
-  three.
+  The user directory is $OPENMSX_HOME, else ~/.openMSX, and its share/
+  subfolder is the user data directory unless $OPENMSX_USER_DATA names
+  another (src/file/FileOperations.cc:415-448). The pool starts with
+  systemroms below the user and the system data directories
+  (src/file/FilePool.cc:21-33), and each `filepool add -types system_rom`
+  entry is searched the same way, recursively, until a file of the SHA1 is
+  found (src/file/FilePool.cc:98-142, src/file/FilePoolCore.cc:244-264,
+  369-385).
 
   Batocera configgen (openmsxGenerator.py) configures filepool paths
   (/userdata/bios/Machines position 1, /userdata/bios/openmsx position 2)
@@ -67,7 +74,7 @@ files:
   # Based on Philips NMS 8245 with extra hardware
   # -------------------------------------------------------
   - name: NMS8245SystemROM1.08.bin
-    path: "openmsx/share/systemroms/NMS8245SystemROM1.08.bin"
+    path: "share/systemroms/NMS8245SystemROM1.08.bin"
     sha1: cc57c1dcd7249ea9f8e2547244592e7d97308ed0
     required: true
     size: 65536
@@ -76,7 +83,7 @@ files:
     source_ref: "share/machines/Boosted_MSX2_EN.xml:24,65,111"
 
   - name: fmpac.rom
-    path: "openmsx/share/systemroms/fmpac.rom"
+    path: "share/systemroms/fmpac.rom"
     sha1: fec451b9256570a0e4869355a40329c57f40705f
     required: true
     description: "Panasonic SW-M004 FMPAC (FM-PAC) sound cartridge ROM"
@@ -84,7 +91,7 @@ files:
     source_ref: "share/machines/Boosted_MSX2_EN.xml:83"
 
   - name: phc-70fd2_basickun.rom
-    path: "openmsx/share/systemroms/phc-70fd2_basickun.rom"
+    path: "share/systemroms/phc-70fd2_basickun.rom"
     sha1: 22b3191d865010264001b9d896186a9818478a6b
     required: true
     description: "Sanyo PHC-70FD2 MSX-BASIC Kun compiler ROM"
@@ -92,7 +99,7 @@ files:
     source_ref: "share/machines/Boosted_MSX2_EN.xml:89, share/machines/Boosted_MSX2+_JP.xml:167, share/machines/Boosted_MSXturboR_with_IDE.xml:79"
 
   - name: yrw801.rom
-    path: "openmsx/share/systemroms/yrw801.rom"
+    path: "share/systemroms/yrw801.rom"
     sha1: 32760893ce06dbe3930627755ba065cc3d8ec6ca
     required: true
     description: "Yamaha YRW801 MoonSound wavetable ROM"
@@ -104,7 +111,7 @@ files:
   # Based on Panasonic FS-A1WSX with extra hardware
   # -------------------------------------------------------
   - name: fs-a1wsx_basic-bios2p.rom
-    path: "openmsx/share/systemroms/fs-a1wsx_basic-bios2p.rom"
+    path: "share/systemroms/fs-a1wsx_basic-bios2p.rom"
     sha1: f4433752d3bf876bfefb363c749d4d2e08a218b6
     required: true
     description: "FS-A1WSX MSX2+ BIOS and BASIC ROM"
@@ -112,7 +119,7 @@ files:
     source_ref: "share/machines/Boosted_MSX2+_JP.xml:143"
 
   - name: fs-a1wsx_fmbasic.rom
-    path: "openmsx/share/systemroms/fs-a1wsx_fmbasic.rom"
+    path: "share/systemroms/fs-a1wsx_fmbasic.rom"
     sha1: aad42ba4289b33d8eed225d42cea930b7fc5c228
     required: true
     description: "FS-A1WSX MSX-MUSIC (OPLL) ROM"
@@ -121,7 +128,7 @@ files:
 
   - name: fs-a1wsx_msx2psub.rom
     installed_on: [retropie]
-    path: "openmsx/share/systemroms/fs-a1wsx_msx2psub.rom"
+    path: "share/systemroms/fs-a1wsx_msx2psub.rom"
     sha1: fe0254cbfc11405b79e7c86c7769bd6322b04995
     required: true
     description: "FS-A1WSX MSX2+ Sub ROM"
@@ -130,7 +137,7 @@ files:
     note: "RetroPie unpacks openmsxroms.tar.gz into the installed share/systemroms, which the file pool scans. This ROM is in it as MSX2PEXT.ROM and is found by its SHA1."
 
   - name: fs-a1wsx_kanjibasic.rom
-    path: "openmsx/share/systemroms/fs-a1wsx_kanjibasic.rom"
+    path: "share/systemroms/fs-a1wsx_kanjibasic.rom"
     sha1: dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06
     required: true
     description: "FS-A1WSX Kanji Driver with BASIC ROM"
@@ -138,7 +145,7 @@ files:
     source_ref: "share/machines/Boosted_MSX2+_JP.xml:225"
 
   - name: fs-a1wsx_disk.rom
-    path: "openmsx/share/systemroms/fs-a1wsx_disk.rom"
+    path: "share/systemroms/fs-a1wsx_disk.rom"
     sha1: 7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6
     required: true
     description: "FS-A1WSX FDC (TC8566AF) disk controller ROM"
@@ -146,7 +153,7 @@ files:
     source_ref: "share/machines/Boosted_MSX2+_JP.xml:237"
 
   - name: fs-a1wsx_firmware.rom
-    path: "openmsx/share/systemroms/fs-a1wsx_firmware.rom"
+    path: "share/systemroms/fs-a1wsx_firmware.rom"
     sha1: 3330d9b6b76e3c4ccb7cf252496ed15d08b95d3f
     required: true
     description: "FS-A1WSX Panasonic firmware ROM"
@@ -154,7 +161,7 @@ files:
     source_ref: "share/machines/Boosted_MSX2+_JP.xml:251"
 
   - name: fs-a1wsx_kanjifont.rom
-    path: "openmsx/share/systemroms/fs-a1wsx_kanjifont.rom"
+    path: "share/systemroms/fs-a1wsx_kanjifont.rom"
     sha1: 5aff2d9b6efc723bc395b0f96f0adfa83cc54a49
     aliases: [fs-a1gt_kanjifont.rom]
     required: true
@@ -168,7 +175,7 @@ files:
   # Based on Panasonic FS-A1GT with IDE interface
   # -------------------------------------------------------
   - name: fs-a1gt_firmware.rom
-    path: "openmsx/share/systemroms/fs-a1gt_firmware.rom"
+    path: "share/systemroms/fs-a1gt_firmware.rom"
     sha1:
       - e779c338eb91a7dea3ff75f3fde76b8af22c4a3a
       - 5fa3aa79aeba2c0441f349e78e9a16d9d64422ea
@@ -178,7 +185,7 @@ files:
     source_ref: "share/machines/Boosted_MSXturboR_with_IDE.xml:23"
 
   - name: ide250.dat
-    path: "openmsx/share/systemroms/ide250.dat"
+    path: "share/systemroms/ide250.dat"
     sha1: 93e41c7d479bc90c1d1f6d081af20fd9924b8ada
     required: true
     description: "Sunrise IDE 2.50 interface ROM"
@@ -186,7 +193,7 @@ files:
     source_ref: "share/machines/Boosted_MSXturboR_with_IDE.xml:49"
 
   - name: ide250.zip
-    path: "openmsx/share/systemroms/ide250.zip"
+    path: "share/systemroms/ide250.zip"
     required: false
     description: "Sunrise IDE 2.50 distribution archive (IDE250.DAT, IDE250.TXT, IDEFLOAD.COM, IDEFLOAD.TXT)"
     contents:
@@ -201,7 +208,7 @@ files:
   # ColecoVision with built-in Super Game Module
   # -------------------------------------------------------
   - name: COLECO.ROM
-    path: "openmsx/share/systemroms/COLECO.ROM"
+    path: "share/systemroms/COLECO.ROM"
     sha1: 45bedc4cbdeac66c7df59e9e599195c778d86a92
     required: true
     description: "ColecoVision system BIOS ROM"
@@ -212,7 +219,7 @@ files:
   # Spectravideo_SVI-328 (spectravideo)
   # -------------------------------------------------------
   - name: svi-3x8_v111.rom
-    path: "openmsx/share/systemroms/svi-3x8_v111.rom"
+    path: "share/systemroms/svi-3x8_v111.rom"
     sha1: 10349ce675f6d6d47f0976e39cb7188eba858d89
     required: true
     description: "SVI-328 BASIC v1.11 ROM"
@@ -224,7 +231,7 @@ files:
   # MSX1 with LaserDisc controller
   # -------------------------------------------------------
   - name: px-7_basic-bios1.rom
-    path: "openmsx/share/systemroms/px-7_basic-bios1.rom"
+    path: "share/systemroms/px-7_basic-bios1.rom"
     sha1: 302afb5d8be26c758309ca3df611ae69cced2821
     required: true
     description: "Pioneer PX-7 MSX1 BIOS and BASIC ROM"
@@ -232,7 +239,7 @@ files:
     source_ref: "share/machines/Pioneer_PX-7.xml:67"
 
   - name: px-7_pbasic.rom
-    path: "openmsx/share/systemroms/px-7_pbasic.rom"
+    path: "share/systemroms/px-7_pbasic.rom"
     sha1: 665d805f96616e1037f1823050657b7849899283
     required: true
     description: "Pioneer PX-7 LaserDisc PBASIC controller ROM"
@@ -248,7 +255,7 @@ files:
   # found does not start (src/memory/Rom.cc:173-184).
   # -------------------------------------------------------
   - name: cf-3300_basic-bios1.rom
-    path: "openmsx/share/systemroms/cf-3300_basic-bios1.rom"
+    path: "share/systemroms/cf-3300_basic-bios1.rom"
     sha1: c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c
     required: false
     size: 32768
@@ -257,7 +264,7 @@ files:
     source_ref: "share/machines/National_CF-3300.xml:51-52"
 
   - name: cf-3300_disk.rom
-    path: "openmsx/share/systemroms/cf-3300_disk.rom"
+    path: "share/systemroms/cf-3300_disk.rom"
     sha1: f1525de4e0b60a6687156c2a96f8a8b2044b6c56
     required: false
     size: 16384
@@ -266,7 +273,7 @@ files:
     source_ref: "share/machines/National_CF-3300.xml:75-76"
 
   - name: fs-5500_basic-bios2.rom
-    path: "openmsx/share/systemroms/fs-5500_basic-bios2.rom"
+    path: "share/systemroms/fs-5500_basic-bios2.rom"
     sha1: 44e0dd215b2a9f0770dd76fb49187c05b083eed9
     required: false
     size: 32768
@@ -275,7 +282,7 @@ files:
     source_ref: "share/machines/National_FS-5500F2.xml:76-77, share/machines/National_FS-5500F1.xml:78"
 
   - name: fs-5500_msx2sub.rom
-    path: "openmsx/share/systemroms/fs-5500_msx2sub.rom"
+    path: "share/systemroms/fs-5500_msx2sub.rom"
     sha1: 4be8371f3b03e70ddaca495958345f3c4f8e2d36
     required: false
     size: 16384
@@ -284,7 +291,7 @@ files:
     source_ref: "share/machines/National_FS-5500F2.xml:100-101, share/machines/National_FS-5500F1.xml:102"
 
   - name: fs-5500_kanjibasic.rom
-    path: "openmsx/share/systemroms/fs-5500_kanjibasic.rom"
+    path: "share/systemroms/fs-5500_kanjibasic.rom"
     sha1: 3a9a942ed888dd641cddf8deada1879c454df3c6
     required: false
     size: 32768
@@ -293,7 +300,7 @@ files:
     source_ref: "share/machines/National_FS-5500F2.xml:107-108, share/machines/National_FS-5500F1.xml:109"
 
   - name: fs-5500_kanjifont.rom
-    path: "openmsx/share/systemroms/fs-5500_kanjifont.rom"
+    path: "share/systemroms/fs-5500_kanjifont.rom"
     sha1: 9ed3ab6d893632b9246e91b412cd5db519e7586b
     required: false
     size: 131072
@@ -302,7 +309,7 @@ files:
     source_ref: "share/machines/National_FS-5500F2.xml:20-21, share/machines/National_FS-5500F1.xml:22"
 
   - name: fs-5500_superimp.rom
-    path: "openmsx/share/systemroms/fs-5500_superimp.rom"
+    path: "share/systemroms/fs-5500_superimp.rom"
     sha1: b677a861b67e8763a11d5dcf52416b42493ade57
     required: false
     size: 32768
@@ -311,7 +318,7 @@ files:
     source_ref: "share/machines/National_FS-5500F2.xml:117-118, share/machines/National_FS-5500F1.xml:119"
 
   - name: nms8245_msx2sub.rom
-    path: "openmsx/share/systemroms/nms8245_msx2sub.rom"
+    path: "share/systemroms/nms8245_msx2sub.rom"
     sha1:
       - 5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02
       - e7905d16d2ccd57a013c122dc432106cd59ef52c
@@ -322,10 +329,48 @@ files:
     source_ref: "share/machines/Philips_NMS_8245.xml:108-110"
 
   - name: vg8020_basic-bios1.rom
-    path: "openmsx/share/systemroms/vg8020_basic-bios1.rom"
+    path: "share/systemroms/vg8020_basic-bios1.rom"
     sha1: 829c00c3114f25b3dae5157c0a238b52a3ac37db
     required: false
     size: 32768
     description: "Philips VG 8020 MSX1 BIOS and BASIC ROM (also used by AVT DPC-200, Goldstar FC-200, Toshiba HX-20E, HX-22I, HX-51I)"
     validation: [sha1]
     source_ref: "share/machines/Philips_VG_8020.xml:53-54"
+
+  - name: svi-738_basic-bios1.rom
+    path: "share/systemroms/svi-738_basic-bios1.rom"
+    sha1: c53b3f2c00f31683914f7452f3f4d94ae2929c0d
+    required: false
+    size: 32768
+    description: "Spectravideo SVI-738 MSX1 BIOS and BASIC ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:53-54"
+
+  - name: svi-738_se_basic-bios1.rom
+    path: "share/systemroms/svi-738_se_basic-bios1.rom"
+    sha1: 87f4d0fa58cfe9cef818a3185df2735e6da6168c
+    required: false
+    size: 32768
+    description: "Spectravideo SVI-738 (Sweden) MSX1 BIOS and BASIC ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738_SE.xml:53-54"
+
+  - name: svi-738_rs232.rom
+    path: "share/systemroms/svi-738_rs232.rom"
+    sha1: 4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7
+    required: false
+    size: 8192
+    description: "Spectravideo SVI-738 RS-232 interface ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:76-77, share/machines/Spectravideo_SVI-738_SE.xml:76-77"
+
+  - name: svi-738_disk.rom
+    path: "share/systemroms/svi-738_disk.rom"
+    sha1:
+      - 99a40266bc296cef1d432cb0caa8df1a7e570be4
+      - 55d5d1fd57d35384b821af62083f2a23d85580e6
+      - 465fab904a22b3e29f0c00daaf326dc4a6862088
+    required: false
+    description: "Spectravideo SVI-738 disk controller ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Spectravideo_SVI-738.xml:90-93, share/machines/Spectravideo_SVI-738_SE.xml:90-93"

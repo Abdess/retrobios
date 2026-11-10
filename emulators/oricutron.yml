@@ -74,8 +74,8 @@ files:
       Atmos is the machine oricutron.cfg selects, so this is the ROM a stock
       configuration needs. Also named by twilbankrom06 in the Twilighte board
       config (plugins/twilighte_board/twilighte.cfg:3).
-      Shipped in roms/ of the 1.2 Windows and macOS archives and of
-      RetroBat's oricutron.7z.
+      Hashes of the copy in roms/ of the 1.2 Windows and macOS archives
+      from petergordon.org.uk, also shipped in RetroBat's oricutron.7z.
 
   - name: basic10.rom
     description: "Oric-1 BASIC 1.0 ROM"
@@ -87,7 +87,7 @@ files:
     sha1: "333116e6884d85aaa4dfc7578a91cceeea66d016"
     md5: "ebe418ec8a6c85d5ac32956c9a96c179"
     source_ref: "gui.c:2284 (default roms/basic10), main.c:554 (oric1rom), machine.c:1932-1933 (MACH_ORIC1_16K), machine.c:1969-1970 (MACH_ORIC1)"
-    note: "Serves both the 48K Oric-1 and the 16K Oric-1, selected with -m oric1 or -m o16k. Shipped in roms/ of the 1.2 Windows and macOS archives and of RetroBat's oricutron.7z."
+    note: "Serves both the 48K Oric-1 and the 16K Oric-1, selected with -m oric1 or -m o16k. Hashes of the copy in roms/ of the 1.2 Windows and macOS archives from petergordon.org.uk, also shipped in RetroBat's oricutron.7z."
 
   - name: pravetzt.rom
     description: "Pravetz 8D BASIC ROM"
@@ -95,8 +95,10 @@ files:
     max_size: 16384
     validation: [size]
     installed_on: [retropie, retrobat]
+    sha1: "7afc276cb118adff72e4f16698f94bf3b2c64146"
+    md5: "8712a22e7e078de3343667d9fc1f2390"
     source_ref: "gui.c:2288 (default roms/pravetzt), main.c:558 (pravetzrom), machine.c:2082-2083 (MACH_PRAVETZ)"
-    note: "Selected with -m pravetz. roms/pravetzt-1.0.pch and .sym ship for an earlier revision of this ROM. The 1.2 Windows archive ships it and the 1.2 macOS archive does not."
+    note: "Selected with -m pravetz. roms/pravetzt-1.0.pch and .sym ship for an earlier revision of this ROM. Hashes of the copy in roms/ of the 1.2 Windows archive from petergordon.org.uk. The 1.2 macOS archive does not ship it."
 
   - name: teleass.rom
     description: "Telestrat TELEASS ROM, bank 5"
@@ -108,7 +110,7 @@ files:
     sha1: "9e9af51dae3199cccf49ab3f0d47e2b9be4ba97d"
     md5: "2324c9cc227c1327a72a667c97ed2990"
     source_ref: "gui.c:2295 (default roms/teleass), main.c:588-589 (telebank5), machine.c:2029-2033 (MACH_TELESTRAT)"
-    note: "Shipped in roms/ of the 1.2 Windows and macOS archives and of RetroBat's oricutron.7z."
+    note: "Hashes of the copy in roms/ of the 1.2 Windows and macOS archives from petergordon.org.uk, also shipped in RetroBat's oricutron.7z."
 
   - name: hyperbas.rom
     description: "Telestrat HYPER BASIC ROM, bank 6"
@@ -120,7 +122,7 @@ files:
     sha1: "f5f70a0eb59f8cd6c261e179ae78ef906f68ed63"
     md5: "364bf095e0dc4222d75354d50b8cddfc"
     source_ref: "gui.c:2296 (default roms/hyperbas), main.c:588-589 (telebank6), machine.c:2029-2033 (MACH_TELESTRAT)"
-    note: "Shipped in roms/ of the 1.2 Windows and macOS archives and of RetroBat's oricutron.7z."
+    note: "Hashes of the copy in roms/ of the 1.2 Windows and macOS archives from petergordon.org.uk, also shipped in RetroBat's oricutron.7z."
 
   - name: telmon24.rom
     description: "Telestrat TELEMON 2.4 ROM, bank 7"
@@ -132,7 +134,7 @@ files:
     sha1: "86fc8dc0932f983efa199e31ae05a4424772f959"
     md5: "9a432244d9ee4a49e8ddcde64af94e05"
     source_ref: "gui.c:2297 (default roms/telmon24), main.c:588-589 (telebank7), machine.c:2029-2033 (MACH_TELESTRAT)"
-    note: "Bank 7 is the bank mapped at reset (machine.c:2041-2043). Shipped in roms/ of the 1.2 Windows and macOS archives and of RetroBat's oricutron.7z."
+    note: "Bank 7 is the bank mapped at reset (machine.c:2041-2043). Hashes of the copy in roms/ of the 1.2 Windows and macOS archives from petergordon.org.uk, also shipped in RetroBat's oricutron.7z."
 
   - name: microdis.rom
     description: "Microdisc disk controller ROM"
@@ -150,8 +152,10 @@ files:
       1488-1489). Loaded whatever the machine and not fatal, and
       setup_for_microdisc raises romdis, so an absent file leaves the $E000
       overlay reading zeroes.
-      Shipped in roms/ of the 1.2 Windows and macOS archives, there as
-      MICRODIS.ROM, and of RetroBat's oricutron.7z.
+      Hashes of the copy in roms/ of the 1.2 Windows and macOS archives
+      from petergordon.org.uk, there as MICRODIS.ROM, which a case
+      sensitive filesystem does not match. Also shipped in RetroBat's
+      oricutron.7z.
 
   - name: bd500.rom
     description: "ByteDrive BD-500 disk controller ROM"
@@ -180,8 +184,8 @@ files:
       Conditional: needed for the Jasmin controller, selected with -k jasmin or
       by autodetecting a Jasmin image (main.c:1468-1471). setup_for_jasmin
       leaves romdis clear, so the machine still boots from its BASIC ROM.
-      Shipped in roms/ of the 1.2 Windows and macOS archives and of
-      RetroBat's oricutron.7z.
+      Hashes of the copy in roms/ of the 1.2 Windows and macOS archives
+      from petergordon.org.uk, also shipped in RetroBat's oricutron.7z.
 
   - name: 8dos2.rom
     description: "Pravetz 8D floppy controller boot PROM"
@@ -195,6 +199,18 @@ files:
       load flag is read back, so the Pravetz machine boots without it and only
       the drive is lost. oricutron.cfg:44-45 gives roms/8dos as the other
       value for this key, and roms/8dos.sym ships for it.
+
+  - name: 8dos.rom
+    description: "Pravetz 8D floppy controller boot PROM, earlier 8-DOS revision"
+    required: false
+    min_size: 512
+    validation: [size]
+    sha1: 8aa28471c04d4e249c7da94ab6b54482d3fff2ed
+    md5: 4a1ff5f8719d67dafcf85ac61959cdb6
+    source_ref: "oricutron.cfg:44 (pravetz8drom = 'roms/8dos'), main.c:559 (pravetz8drom), machine.c:1254, machine.c:1092 (<path>.rom, 512 bytes read)"
+    note: >
+      Read in place of 8dos2.rom when pravetz8drom names roms/8dos. Hashes of
+      the copy in roms/ of the 1.2 Windows archive from petergordon.org.uk.
 
   - name: kernel.rom
     description: "Orix kernel, Twilighte board ROM bank 7"
@@ -324,7 +340,7 @@ analysis:
         - filename: pravetzt-1.0.sym
           implies: "Pravetz BASIC revision 1.0, as a pravetzrom value"
         - filename: 8dos.sym
-          implies: "the earlier Pravetz 8-DOS boot PROM, offered as pravetz8drom in oricutron.cfg:44"
+          implies: "8dos.rom, the earlier Pravetz 8-DOS boot PROM, offered as pravetz8drom in oricutron.cfg:44"
         - filename: cumana.sym
           implies: "a Cumana controller ROM, whose symbols run from $F800, the window jasminrom feeds"
         - filename: sedoric.sym

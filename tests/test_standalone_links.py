@@ -23,14 +23,21 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from common import (  # noqa: E402
+    entry_launch_systems,
     load_emulator_profiles,
     load_platform_config,
     platform_layouts,
+    standalone_bindings_for,
     standalone_destination,
-    standalone_root_for,
     standalone_set,
+    system_file_index,
 )
-from launchers import handed_directories, normalize_handle, standalone_root  # noqa: E402
+from launchers import (  # noqa: E402
+    bound_path,
+    handed_directories,
+    normalize_handle,
+    standalone_bindings,
+)
 
 
 def link(emulator: str, search_dir: str, passes_to: str, **fields: object) -> dict:
@@ -101,7 +108,11 @@ class HandedDirectories(unittest.TestCase):
 
 class Root(unittest.TestCase):
     def root(self, *launchers: dict, base: str = "bios") -> str | None:
-        return standalone_root(
+        found = self.bindings(*launchers, base=base).get("")
+        return found[1] if found else None
+
+    def bindings(self, *launchers: dict, base: str = "bios") -> dict[str, tuple[str, str]]:
+        return standalone_bindings(
             {"emu"}, PROFILE["standalone_directories"], handed_directories(config(*launchers, base=base))
         )
 
@@ -130,18 +141,194 @@ class Root(unittest.TestCase):
             "dc",
         )
 
-    def test_link_of_another_directory_gives_nothing(self) -> None:
+    def test_link_of_a_subfolder_binds_that_subfolder_only(self) -> None:
         # A subfolder of the emulator's tree (Dolphin's Triforce) is not the
-        # directory standalone_path is relative to.
-        self.assertIsNone(self.root(
+        # directory standalone_path is relative to, only the files below it move.
+        found = self.bindings(
             link("emu", "$bios_path/Triforce", "$XDG_DATA_HOME/emu/Triforce is a symlink to it"),
-        ))
+        )
+        self.assertEqual(found, {"Triforce": ("", "Triforce")})
+        self.assertEqual(bound_path("Triforce/segaboot.gcm", found), ("", "Triforce/segaboot.gcm"))
+        self.assertIsNone(bound_path("boot.bin", found))
 
     def test_two_folders_give_nothing(self) -> None:
         self.assertIsNone(self.root(
             link("emu", "$biosdir/dc", "$home/.local/share/emu is a symlink to it"),
             link("emu", "$biosdir/other", "$XDG_DATA_HOME/emu is a symlink to it"),
         ))
+
+
+def bind(cfg: dict, declared: list[str], pools: dict[str, str] | None = None,
+         systems: tuple[str, ...] = ()) -> dict[str, tuple[str, str]]:
+    return standalone_bindings(
+        {"emu"}, declared, handed_directories(cfg), pools=pools, systems=systems
+    )
+
+
+class SearchLists(unittest.TestCase):
+    """A setting read as a list of directories, every one searched."""
+
+    POOLS = {"filepool": "share/systemroms"}
+
+    def filepool(self, folder: str, position: int) -> dict:
+        return passes(
+            "emu", f"/userdata/bios/{folder}",
+            f"written: filepool add -path /userdata/bios/{folder} -types system_rom -position {position}",
+        )
+
+    def test_two_pool_entries_give_the_first_one(self) -> None:
+        # Batocera adds bios/Machines and bios/openmsx to openMSX's filepool.
+        cfg = config(self.filepool("Machines", 1), self.filepool("openmsx", 2))
+        self.assertEqual(
+            bind(cfg, ["~/.openMSX"], self.POOLS), {"share/systemroms": ("", "Machines")}
+        )
+
+    def test_the_entry_the_platform_list_fills_comes_first(self) -> None:
+        cfg = config(self.filepool("Machines", 1), self.filepool("openmsx", 2))
+        cfg["systems"] = {"msx": {"files": [{"name": "a.rom", "destination": "openmsx/a.rom"}]}}
+        self.assertEqual(
+            bind(cfg, ["~/.openMSX"], self.POOLS), {"share/systemroms": ("", "openmsx")}
+        )
+
+    def test_without_the_pool_two_folders_give_nothing(self) -> None:
+        cfg = config(self.filepool("Machines", 1), self.filepool("openmsx", 2))
+        self.assertEqual(bind(cfg, ["~/.openMSX", "filepool"]), {})
+
+    def test_a_colon_list_gives_each_directory_in_order(self) -> None:
+        # RetroDECK writes XRoar's rompath as four directories.
+        found = handed_directories(config(passes(
+            "emu", "$roms_path/coco:$roms_path/dragon32:$bios_path", "xroar.conf rompath",
+        )))
+        self.assertEqual(
+            [h.directory for h in found], ["$roms_path/coco", "$roms_path/dragon32", "$bios_path"]
+        )
+        self.assertEqual(
+            bind(config(passes("emu", "$roms_path/coco:$bios_path/xroar", "xroar.conf rompath")),
+                 [], {"rompath": ""}),
+            {"": ("", "xroar")},
+        )
+
+    def test_a_drive_letter_is_one_directory(self) -> None:
+        self.assertEqual(handed_directories(config(passes("emu", "C:/bios", "rompath"))), [])
+
+
+class AboveTheDeclaredDirectory(unittest.TestCase):
+    def test_a_prefix_lands_the_declared_directory_where_its_link_is(self) -> None:
+        # RetroPie builds XRoar with --prefix=$md_inst and links
+        # $md_inst/share/xroar/roms to $biosdir.
+        cfg = config(
+            passes("emu", "$md_inst", "${prefix} of configure --prefix"),
+            link("emu", "$biosdir", "$md_inst/share/xroar/roms is a symlink to it"),
+            base="BIOS",
+        )
+        self.assertEqual(bind(cfg, ["${prefix}/share/xroar/roms"]), {"": ("", "")})
+
+    def test_a_folder_of_the_tree_takes_the_rest_of_the_path(self) -> None:
+        cfg = config(passes("emu", "$biosdir/emu", "EMU_HOME"), base="BIOS")
+        self.assertEqual(bind(cfg, ["EMU_HOME/share/roms"]), {"": ("", "emu/share/roms")})
+
+
+class PerSystem(unittest.TestCase):
+    """A record written for some systems replaces, there, the others."""
+
+    CFG = {
+        **config(
+            passes("emu", "bios/dragon", "command line -rompath"),
+            {**passes("emu", "bios/coco", "command line -rompath"), "systems": ["coco"]},
+        ),
+        "systems": {"coco": {"files": [{"name": "x.zip", "native_system": "coco"}]}},
+    }
+    POOLS = {"-rompath": ""}
+
+    def test_the_system_record_wins_for_its_system(self) -> None:
+        self.assertEqual(bind(self.CFG, [], self.POOLS, ("coco",)), {"": ("", "coco")})
+
+    def test_another_system_keeps_the_generic_record(self) -> None:
+        self.assertEqual(bind(self.CFG, [], self.POOLS, ("dragon32",)), {"": ("", "dragon")})
+        self.assertEqual(bind(self.CFG, [], self.POOLS), {"": ("", "dragon")})
+
+    def test_native_names_are_read_as_our_ids(self) -> None:
+        cfg = {
+            **config({**passes("emu", "bios/trs80coco", "-rompath"), "systems": ["trs80coco"]}),
+            "systems": {"coco": {"native_id": "trs80coco", "files": []}},
+        }
+        self.assertEqual(
+            [sorted(h.systems) for h in handed_directories(cfg)], [["coco"]]
+        )
+
+    def test_a_system_placeholder_gives_one_directory_per_system(self) -> None:
+        # Recalbox passes `-rompath os.path.join(BIOS, args.system)`.
+        cfg = {
+            **config(passes("emu", "/recalbox/share/bios/<system>", "command line -rompath")),
+            "systems": {
+                "coco": {"native_id": "trs80coco", "files": []},
+                "dragon64": {"native_id": "dragon", "files": []},
+            },
+        }
+        self.assertEqual(
+            [(h.folder, sorted(h.systems)) for h in handed_directories(cfg)],
+            [("dragon", ["dragon64"]), ("trs80coco", ["coco"])],
+        )
+        self.assertEqual(bind(cfg, [], self.POOLS | {"-rompath": ""}, ("coco",)),
+                         {"": ("", "trs80coco")})
+        self.assertEqual(bind(cfg, [], {"-rompath": ""}, ("dragon32",)), {})
+
+    def test_an_entry_is_launched_for_the_system_that_declares_its_name(self) -> None:
+        cfg = {
+            **config({**passes("emu", "bios/coco", "-rompath"), "systems": ["coco"]}),
+            "systems": {"coco": {"files": [{"name": "coco3.rom", "native_system": "coco"}]}},
+        }
+        index = system_file_index(standalone_set(cfg))
+        self.assertEqual(
+            entry_launch_systems({"name": "COCO3.ROM", "system": "coco3"}, index),
+            frozenset({"coco3", "coco"}),
+        )
+
+
+class SystemFamily(unittest.TestCase):
+    def test_an_entry_follows_the_launch_its_system_is_listed_under(self) -> None:
+        # Recalbox lists mc10.rom under trs80coco: alice.rom, of the same
+        # profile system, is read there too.
+        profile = {
+            "emulator": "Emu", "type": "standalone", "standalone_pools": {"-rompath": ""},
+            "files": [
+                {"name": "mc10.rom", "path": "mc10.rom", "system": "mc10"},
+                {"name": "alice.rom", "path": "alice.rom", "system": "mc10"},
+            ],
+        }
+        cfg = {
+            **config(passes("emu", "/recalbox/share/bios/<system>", "-rompath")),
+            "systems": {"coco": {"native_id": "trs80coco",
+                                 "files": [{"name": "mc10.rom"}]}},
+        }
+        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg))
+        self.assertEqual(
+            [f.get("standalone_path") for f in view["files"]],
+            ["trs80coco/mc10.rom", "trs80coco/alice.rom"],
+        )
+
+
+class OfferedMachine(unittest.TestCase):
+    def test_an_entry_system_offered_as_a_machine_selects_that_launch(self) -> None:
+        profile = {
+            "emulator": "Emu", "type": "standalone", "standalone_pools": {"-rompath": ""},
+            "files": [
+                {"name": "coco3.rom", "path": "coco3.rom", "system": "coco3"},
+                {"name": "mc10.rom", "path": "mc10.rom", "system": "mc10"},
+            ],
+        }
+        cfg = {
+            **config(
+                passes("emu", "bios/dragon", "-rompath"),
+                {**passes("emu", "bios/coco", "-rompath"), "systems": ["coco"],
+                 "machines": ["coco", "coco3"]},
+            ),
+            "systems": {"coco": {"files": [{"name": "x.zip", "native_system": "coco"}]}},
+        }
+        ((view, _standalone),) = platform_layouts("emu", profile, standalone_set(cfg))
+        self.assertEqual(
+            [f.get("standalone_path") for f in view["files"]], ["coco/coco3.rom", "dragon/mc10.rom"]
+        )
 
 
 class Layout(unittest.TestCase):
@@ -186,13 +373,14 @@ class Layout(unittest.TestCase):
         union = standalone_set(config(self.LINKED, base="BIOS")) | standalone_set(config(
             link("emu", "${biosPath}/emu/bios", "symlink ${biosPath}/emu/bios -> ${HOME}/.local/share/emu"),
         ))
-        self.assertIsNone(standalone_root_for("emu", PROFILE, union))
+        self.assertEqual(standalone_bindings_for("emu", PROFILE, union), {})
 
     def test_destination_function(self) -> None:
         entry = PROFILE["files"][0]
-        self.assertEqual(standalone_destination(entry, "dc"), "dc/boot.bin")
-        self.assertEqual(standalone_destination(entry, None), "boot.bin")
-        self.assertEqual(standalone_destination(PROFILE["files"][2], "dc"), "dc/shared.bin")
+        self.assertEqual(standalone_destination(entry, PROFILE, {"": ("", "dc")}), ("", "dc/boot.bin"))
+        self.assertIsNone(standalone_destination(entry, PROFILE, {}))
+        # The entry both builds share keeps path in a dual-build profile.
+        self.assertIsNone(standalone_destination(PROFILE["files"][2], PROFILE, {"": ("", "dc")}))
 
 
 class FlycastOnEachPlatform(unittest.TestCase):
@@ -215,7 +403,8 @@ class FlycastOnEachPlatform(unittest.TestCase):
             with self.subTest(platform=platform):
                 cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 self.assertEqual(
-                    standalone_root_for("flycast", self.profile, standalone_set(cfg)), folder
+                    standalone_bindings_for("flycast", self.profile, standalone_set(cfg)),
+                    {"": ("", folder)},
                 )
 
     def test_no_standalone_file_lands_at_the_bios_root(self) -> None:
@@ -349,6 +538,239 @@ class Scrapers(unittest.TestCase):
         records = rl._value_writes(rl.Source(path, text), "flycast", "standalone")
         self.assertEqual([r["search_dir"] for r in records], ["bios/dc"])
         self.assertIn("Dreamcast.BiosPath", records[0]["passes_to"])
+
+
+class OpenmsxOnEachPlatform(unittest.TestCase):
+    """openMSX finds system ROMs by SHA1 in share/systemroms below its user
+    directory and in every filepool entry. RetroBat sets OPENMSX_HOME to
+    bios/openmsx, RetroPie links share/systemroms of its user directory to
+    BIOS/openmsx, Batocera adds bios/Machines and bios/openmsx to the
+    filepool and lists its own files in bios/openmsx. KNULLI's generator
+    does the same, but no KNULLI board builds openmsx."""
+
+    EXPECTED = {
+        "batocera": {"share/systemroms": ("", "openmsx")},
+        "retrobat": {"": ("", "openmsx")},
+        "retropie": {"share/systemroms": ("", "openmsx")},
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["openmsx"]
+
+    def test_each_platform_hands_openmsx_its_folder(self) -> None:
+        for platform, expected in self.EXPECTED.items():
+            with self.subTest(platform=platform):
+                cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+                self.assertEqual(
+                    standalone_bindings_for("openmsx", self.profile, standalone_set(cfg)),
+                    expected,
+                )
+
+    def test_every_system_rom_lands_in_bios_openmsx(self) -> None:
+        for platform in self.EXPECTED:
+            with self.subTest(platform=platform):
+                cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+                (view, _standalone), = platform_layouts(
+                    "openmsx", self.profile, standalone_set(cfg)
+                )
+                for entry in view["files"]:
+                    self.assertNotIn("unplaced", entry)
+                    self.assertTrue(
+                        entry["standalone_path"].startswith("openmsx/"), entry["standalone_path"]
+                    )
+
+
+class XroarOnEachPlatform(unittest.TestCase):
+    """XRoar reads each ROM from a directory of rompath. Batocera writes
+    rompath bios/xroar, RetroDECK lists $bios_path in it, RetroPie links
+    the build's ${prefix}/share/xroar/roms to $biosdir, RetroBat passes
+    -rompath bios/coco for coco and bios/dragon otherwise, Recalbox
+    -rompath bios/<system>."""
+
+    # Platform -> profile system -> folder, "" for the BIOS root.
+    EXPECTED = {
+        "batocera": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), "xroar"),
+        "retrodeck": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), ""),
+        "retropie": dict.fromkeys(("dragon32", "dragon64", "coco", "coco3", "mc10"), ""),
+        # RetroBat offers XRoar's CoCo 3 machines under coco and no MC-10.
+        "retrobat": {**dict.fromkeys(("dragon32", "dragon64", "mc10"), "dragon"),
+                     **dict.fromkeys(("coco", "coco3"), "coco")},
+        "recalbox": {**dict.fromkeys(("dragon32", "dragon64"), "dragon"),
+                     **dict.fromkeys(("coco", "coco3", "mc10"), "trs80coco")},
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["xroar"]
+
+    def test_each_rom_lands_where_its_launch_reads_it(self) -> None:
+        for platform, folders in self.EXPECTED.items():
+            cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+            (view, _standalone), = platform_layouts("xroar", self.profile, standalone_set(cfg))
+            for entry in view["files"]:
+                with self.subTest(platform=platform, name=entry["name"]):
+                    self.assertNotIn("unplaced", entry)
+                    folder = folders[entry["system"]]
+                    expected = f"{folder}/{entry['name']}" if folder else entry["name"]
+                    self.assertEqual(entry["standalone_path"], expected)
+
+
+class AmiberryOnEachPlatform(unittest.TestCase):
+    """The standalone Amiberry scans rom_path for its ROMs. Batocera and KNULLI
+    set it to bios/amiga, Recalbox to bios/amiga/bios."""
+
+    BOUND = {
+        "batocera": ("amiberry-7.1.1-332", "amiga"),
+        "knulli": ("amiberry-7.1.1", "amiga"),
+        "recalbox": ("amiberry-8.2.2", "amiga/bios"),
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+
+    def test_rom_path_is_the_platform_folder(self) -> None:
+        for platform, (name, folder) in self.BOUND.items():
+            with self.subTest(platform=platform):
+                cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+                self.assertEqual(
+                    standalone_bindings_for(name, self.profiles[name], standalone_set(cfg)),
+                    {"": ("", folder)},
+                )
+
+    def test_every_rom_path_entry_lands_in_that_folder(self) -> None:
+        for platform, (name, folder) in self.BOUND.items():
+            profile = self.profiles[name]
+            cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+            views = platform_layouts(name, profile, standalone_set(cfg))
+            ((view, _standalone),) = [(v, s) for v, s in views if s]
+            for own, entry in zip(profile["files"], view["files"]):
+                if own.get("mode") == "libretro":
+                    continue
+                layout = own.get("standalone_path") or own.get("path") or own["name"]
+                with self.subTest(platform=platform, name=entry["name"]):
+                    self.assertNotIn("unplaced", entry)
+                    self.assertEqual(entry["standalone_path"], f"{folder}/{layout}")
+
+    def test_retrobat_reads_its_folders_below_the_amiberry_emulator_folder(self) -> None:
+        # RetroBat writes rom_path and whdboot_path below the amiberry
+        # folder of its install and copies the kickstarts it finds in bios
+        # into that ROMs folder.
+        name = "amiberry-8.3.0"
+        profile = self.profiles[name]
+        cfg = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
+        self.assertEqual(
+            standalone_bindings_for(name, profile, standalone_set(cfg)),
+            {"": ("emulators", "amiberry/ROMs"), "WHDBoot": ("emulators", "amiberry/WHDBoot")},
+        )
+        ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg))
+        for own, entry in zip(profile["files"], view["files"]):
+            layout = own.get("standalone_path") or own.get("path") or own["name"]
+            folder = "amiberry" if layout.startswith("WHDBoot/") else "amiberry/ROMs"
+            with self.subTest(name=entry["name"]):
+                self.assertNotIn("unplaced", entry)
+                self.assertEqual(entry.get("root"), "emulators")
+                self.assertEqual(entry["standalone_path"], f"{folder}/{layout}")
+
+
+class AmiberryBuildEachPlatformShips(unittest.TestCase):
+    """Each platform resolves the name amiberry to the build its own package
+    compiles. RetroBat keeps the 8.5.0 libretro core beside its standalone,
+    and Batocera's x86_64 boards fetch it with RetroArch's core downloader
+    (installable_cores)."""
+
+    OWN = {
+        "rocknix": {"amiberry-5.6.5"},
+        "amberelec": {"amiberry-7.1.1"},
+        "emuelec": {"amiberry-8.0.0"},
+        "batocera": {"amiberry", "amiberry-7.1.1-332"},
+        "knulli": {"amiberry-7.1.1"},
+        "recalbox": {"amiberry-8.2.2"},
+        "retrobat": {"amiberry", "amiberry-8.3.0"},
+        "retropie": {"amiberry-5.7.2", "amiberry-6.3.3"},
+        "emudeck": {"amiberry"},
+        "retrodeck": {"amiberry"},
+    }
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+
+    def resolved(self, platform: str) -> set[str]:
+        from common import resolve_platform_cores
+
+        cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+        return {p for p in resolve_platform_cores(cfg, self.profiles) if p.startswith("amiberry")}
+
+    def test_each_platform_resolves_its_own_build(self) -> None:
+        for platform, own in self.OWN.items():
+            with self.subTest(platform=platform):
+                self.assertEqual(self.resolved(platform), own)
+
+    def test_no_standalone_amiberry_is_the_buildbot_revision(self) -> None:
+        from common import list_registered_platforms
+
+        for platform in list_registered_platforms(str(REPO_ROOT / "platforms")):
+            cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+            if "amiberry" not in self.resolved(platform):
+                continue
+            layouts = platform_layouts("amiberry", self.profiles["amiberry"], standalone_set(cfg))
+            with self.subTest(platform=platform):
+                self.assertEqual([standalone for _view, standalone in layouts], [False])
+
+    def test_the_buildbot_core_runs_where_retroarch_installs_it(self) -> None:
+        from common import load_target_config, resolve_platform_cores
+
+        for platform in ("retroarch", "lakka", "batocera"):
+            with self.subTest(platform=platform):
+                self.assertIn("amiberry", self.resolved(platform))
+        cfg = load_platform_config("batocera", str(REPO_ROOT / "platforms"))
+        # x86_64 boards download from linux-x86_64, which builds the core.
+        # linux-armhf does not, and aarch64 boards have no downloader.
+        for target, runs in (("x86_64", True), ("zen3", True), ("h3", False), ("bcm2711", False)):
+            cores = load_target_config("batocera", target, str(REPO_ROOT / "platforms"))
+            with self.subTest(target=target):
+                resolved = resolve_platform_cores(cfg, self.profiles, cores)
+                self.assertEqual("amiberry" in resolved, runs)
+                self.assertIn("amiberry-7.1.1-332", resolved)
+
+    def test_retropie_reads_kickstarts_below_its_start_folder(self) -> None:
+        # amiberry 5.7 and 6.3 read <start path>/kickstarts, which RetroPie
+        # links to bios/amiga. Its whdboot and roms folders stay below it.
+        cfg = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
+        for name in ("amiberry-5.7.2", "amiberry-6.3.3"):
+            profile = self.profiles[name]
+            self.assertEqual(
+                standalone_bindings_for(name, profile, standalone_set(cfg)),
+                {"kickstarts": ("", "amiga")},
+            )
+            ((view, _standalone),) = platform_layouts(name, profile, standalone_set(cfg))
+            for entry in view["files"]:
+                with self.subTest(name=name, file=entry["name"]):
+                    if entry["path"].startswith("kickstarts/"):
+                        self.assertEqual(entry["standalone_path"],
+                                         "amiga/" + entry["path"][len("kickstarts/"):])
+                    else:
+                        self.assertEqual(entry.get("unplaced"), "outside_bios_folder")
+
+    def test_rocknix_reads_kickstarts_through_the_copied_link(self) -> None:
+        # amiberry 5.6.5 reads <cwd>/kickstarts. ROCKNIX runs it in
+        # /storage/.config/amiberry, the copy of /usr/config/amiberry whose
+        # kickstarts link points at the BIOS root.
+        profile = self.profiles["amiberry-5.6.5"]
+        cfg = load_platform_config("rocknix", str(REPO_ROOT / "platforms"))
+        self.assertEqual(
+            standalone_bindings_for("amiberry-5.6.5", profile, standalone_set(cfg)),
+            {"kickstarts": ("", "")},
+        )
+        ((view, _standalone),) = platform_layouts("amiberry-5.6.5", profile, standalone_set(cfg))
+        for entry in view["files"]:
+            with self.subTest(name=entry["name"]):
+                if entry["path"].startswith("kickstarts/"):
+                    self.assertEqual(entry["standalone_path"], entry["path"][len("kickstarts/"):])
+                else:
+                    self.assertEqual(entry.get("unplaced"), "outside_bios_folder")
 
 
 if __name__ == "__main__":

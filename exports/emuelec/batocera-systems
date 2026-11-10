@@ -52,14 +52,6 @@ systems = {
                                                     { "md5": "646773759326fbac3b2311fd8c8793ee", "file": "bios/kick40068.A1200"                  },
                                                     { "md5": "9bdedde6a4f33555b4a270c8ca53297d", "file": "bios/kick40068.A4000"                  },
                                                     { "md5": "bb72565701b1b6faece07d68ea5da639", "file": "bios/CD32 Extended-ROM r40.60 (1993)(Commodore)(CD32).rom"         },
-                                                    { "md5": "c993feb1eeddec1d2e687aa514231028", "file": "whdboot/save-data/Kickstarts/kick33180.A500.RTB" },
-                                                    { "md5": "7eb13d974af0992d672b67c317a7e0a1", "file": "whdboot/save-data/Kickstarts/kick34005.A500.RTB" },
-                                                    { "md5": "e057054449b5e21591ce27d2eb9ac720", "file": "whdboot/save-data/Kickstarts/kick37175.A500.RTB" },
-                                                    { "md5": "2a2652daba6be3ef1d0bdf5ddd4347c6", "file": "whdboot/save-data/Kickstarts/kick36143.A3000.RTB" },
-                                                    { "md5": "af8b2e2227f01a142e20c8ab463f14ed", "file": "whdboot/save-data/Kickstarts/kick39106.A1200.RTB" },
-                                                    { "md5": "3f97c1963d82c808ef29e7c984c4c688", "file": "whdboot/save-data/Kickstarts/kick40063.A600.RTB" },
-                                                    { "md5": "547b42b7b070c7f227ea45e0986d57a1", "file": "whdboot/save-data/Kickstarts/kick40068.A1200.RTB" },
-                                                    { "md5": "f89f19b858ea6b1a04327c6f71ee1600", "file": "whdboot/save-data/Kickstarts/kick40068.A4000.RTB" },
                                                     { "md5": "6c5b44c1a2bcee664129f850bfe4ed8a", "file": "uae_data/drive_click_A500.wav" },
                                                     { "md5": "7401f854a75f9ede18769168ab896a2a", "file": "uae_data/drive_spin_A500.wav" },
                                                     { "md5": "f9d954879fee8e96baa93d6139077cdb", "file": "uae_data/drive_spinnd_A500.wav" },
@@ -676,7 +668,7 @@ systems = {
                                                        { "md5": "", "file": "ports/dinothawr/xbr-lv2-a.glslp" },
                                                        { "md5": "", "file": "ports/dinothawr/xbr-lv2-pass1.glsl" } ] },
 
-	"DOOM1": { "name": "DOOM1 (PrBoom)", "biosFiles": [ { "md5": "", "file": "ports/doom/doom1.wad" }, { "md5": "5772f907fdee4284f6332d89c0c5609c", "file": "gzdoom.pk3" }, { "md5": "094baa608b85fbe636933b4098e7e1f1", "file": "game_widescreen_gfx.pk3" } ] },
+	"DOOM1": { "name": "DOOM1 (PrBoom)", "biosFiles": [ { "md5": "", "file": "ports/doom/doom1.wad" } ] },
 
 	"DOOM2": { "name": "DOOM2 (PrBoom)", "biosFiles": [ { "md5": "", "file": "ports/doom2/doom2.wad" } ] },
 	
@@ -822,7 +814,7 @@ systems = {
 	
 	"VVVVVV": { "name": "VVVVVV", "biosFiles": [ { "md5": "", "file": "ports/VVVVVV/data.zip" } ] },
 	
-	"eduke32": { "name": "Duke Nukem 3D", "biosFiles": [ { "md5": "", "file": "ports/eduke/duke3d.grp" }, { "md5": "f8a7f96a84fc0f401abe2b1d617d1c76", "file": "penthous.zip" } ] },
+	"eduke32": { "name": "Duke Nukem 3D", "biosFiles": [ { "md5": "", "file": "ports/eduke/duke3d.grp" } ] },
     "sonic1": { "name": "Sonic 1", "biosFiles": [ { "md5": "", "file": "ports/sonic1/Data.rsdk" } ] },
     "sonic2": { "name": "Sonic 2", "biosFiles": [ { "md5": "", "file": "ports/sonic2/Data.rsdk" } ] },
     "soniccd": { "name": "Sonic CD", "biosFiles": [ { "md5": "", "file": "ports/soniccd/Data.rsdk" } ] },
