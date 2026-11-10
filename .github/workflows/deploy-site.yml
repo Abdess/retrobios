@@ -15,6 +15,7 @@ on:
       - "scripts/archive_build.py"
       - "scripts/artifacts.py"
       - "scripts/auto_fetch.py"
+      - "scripts/build_port.py"
       - "scripts/common.py"
       - "scripts/cross_reference.py"
       - "scripts/crypto_verify.py"
@@ -52,6 +53,7 @@ on:
       - "scripts/siteagents.py"
       - "scripts/site_markdown.py"
       - "scripts/sitebootstrap.py"
+      - "scripts/sitehandheld.py"
       - "scripts/sitecollection.py"
       - "scripts/sitediagrams.py"
       - "scripts/siteentries.py"
@@ -89,6 +91,9 @@ on:
       - "install.py"
       - "install.sh"
       - "install.ps1"
+      # The handheld launchers it serves are built from ports/ at the same
+      # commit (scripts/sitehandheld.py).
+      - "ports/**"
       - "database.json"
       - "release.json"
       - "derivable.json"

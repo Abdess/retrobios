@@ -1501,26 +1501,44 @@ Android as on other systems, carries the same empty `.nomedia` beside
 
 ## On a handheld { #on-a-handheld-the-retrobios-port }
 
-RetroBIOS also runs on the handheld itself, in the
-[full-screen interface](#the-full-screen-interface), with the controller.
-Copy the file for the system to the SD card, then start RetroBIOS from the
-menu.
+RetroBIOS also runs on the handheld, with the controller. Download the file
+for the system, copy it to the SD card, then start RetroBIOS from the menu.
 
-Download the file for your system from the
-[latest release](https://github.com/Abdess/retrobios/releases/latest).
+<!-- generated: handheld-downloads -->
+
+| System | Download | Steps |
+|--------|----------|-------|
+| muOS | [RetroBIOS.muxapp](../get/handheld/RetroBIOS.muxapp) | [muOS steps](../get/linux-handhelds.md#muos) |
+| ArkOS | [RetroBIOS-tools.zip](../get/handheld/RetroBIOS-tools.zip), [RetroBIOS.zip](../get/handheld/RetroBIOS.zip) (PortMaster) | [ArkOS steps](../get/linux-handhelds.md#arkos) |
+| dArkOS | [RetroBIOS-tools.zip](../get/handheld/RetroBIOS-tools.zip), [RetroBIOS.zip](../get/handheld/RetroBIOS.zip) (PortMaster) | [dArkOS steps](../get/linux-handhelds.md#darkos) |
+| ROCKNIX | [RetroBIOS-tools.zip](../get/handheld/RetroBIOS-tools.zip), [RetroBIOS.zip](../get/handheld/RetroBIOS.zip) (PortMaster) | [ROCKNIX steps](../get/rocknix.md#on-the-handheld) |
+| AmberELEC | [RetroBIOS-tools.zip](../get/handheld/RetroBIOS-tools.zip), [RetroBIOS.zip](../get/handheld/RetroBIOS.zip) (PortMaster) | [AmberELEC steps](../get/amberelec.md#on-the-handheld) |
+| JELOS | [RetroBIOS-tools.zip](../get/handheld/RetroBIOS-tools.zip), [RetroBIOS.zip](../get/handheld/RetroBIOS.zip) (PortMaster) | [JELOS steps](../get/linux-handhelds.md#jelos) |
+| KNULLI | [RetroBIOS-batocera.zip](../get/handheld/RetroBIOS-batocera.zip), [RetroBIOS.zip](../get/handheld/RetroBIOS.zip) (PortMaster) | [KNULLI steps](../get/knulli.md#on-the-handheld) |
+| Batocera | [RetroBIOS-batocera.zip](../get/handheld/RetroBIOS-batocera.zip) | [Batocera steps](../get/batocera.md#on-the-handheld) |
+<!-- /generated: handheld-downloads -->
+
+### Where each file goes { #where-each-file-goes }
+
+It runs in the [full-screen interface](#the-full-screen-interface).
+
+<!-- generated: handheld -->
 
 | System | File | Copy it to | Start it from |
 |--------|------|------------|---------------|
-| muOS | `RetroBIOS.muxapp` | `ARCHIVE` at the root of the card, then install it from the Archive Manager | Applications |
-| Any other system with [PortMaster](https://portmaster.games/): ArkOS, dArkOS, ROCKNIX, AmberELEC, JELOS, Knulli | `RetroBIOS.zip` | PortMaster's `autoinstall` folder: `/roms/ports/PortMaster/autoinstall/` on ROCKNIX and AmberELEC, `/roms/tools/PortMaster/autoinstall/` on ArkOS, `/userdata/system/.local/share/PortMaster/autoinstall/` on Knulli | Ports, after opening PortMaster once |
-| Batocera, Knulli | `RetroBIOS-batocera.zip`, extracted | `roms/ports` on the SHARE partition | Ports, after updating the game list |
-| ArkOS, dArkOS | `RetroBIOS-tools.zip`, extracted | `tools` on the EASYROMS partition | Options, then Tools |
-| ROCKNIX, JELOS | `RetroBIOS-tools.zip`, extracted | `/storage/.config/modules`, over the network share or SSH | Tools |
-| AmberELEC | `RetroBIOS-tools.zip`, extracted | `/storage/.config/distribution/modules` | Tools |
+| [muOS](../get/linux-handhelds.md) | `RetroBIOS.muxapp` | `ARCHIVE` at the root of the card, then install it from the Archive Manager | Applications |
+| Any other system with [PortMaster](https://portmaster.games/): [ArkOS](../get/linux-handhelds.md), [dArkOS](../get/linux-handhelds.md), [ROCKNIX](../get/rocknix.md), [AmberELEC](../get/amberelec.md), [JELOS](../get/linux-handhelds.md), [KNULLI](../get/knulli.md) | `RetroBIOS.zip` | PortMaster's `autoinstall` folder: `/roms/ports/PortMaster/autoinstall/` on ROCKNIX and AmberELEC, `/roms/tools/PortMaster/autoinstall/` on ArkOS, `/userdata/system/.local/share/PortMaster/autoinstall/` on KNULLI | Ports, after opening PortMaster once |
+| [Batocera](../get/batocera.md), [KNULLI](../get/knulli.md) | `RetroBIOS-batocera.zip`, extracted | `roms/ports` on the SHARE partition | Ports, after updating the game list |
+| [ArkOS](../get/linux-handhelds.md), [dArkOS](../get/linux-handhelds.md) | `RetroBIOS-tools.zip`, extracted | `tools` on the EASYROMS partition | Options, then Tools |
+| [ROCKNIX](../get/rocknix.md), [JELOS](../get/linux-handhelds.md) | `RetroBIOS-tools.zip`, extracted | `/storage/.config/modules`, over the network share or SSH | Tools |
+| [AmberELEC](../get/amberelec.md) | `RetroBIOS-tools.zip`, extracted | `/storage/.config/distribution/modules` | Tools |
+<!-- /generated: handheld -->
 
 `RetroBIOS.zip` also installs on muOS, from `MUOS/PortMaster/autoinstall/`
 on the first card (`/mnt/mmc` on the device). It then shows the interface in
 muxterm, as the muOS app does.
+
+### Buttons on a handheld { #buttons-on-a-handheld }
 
 | Button | Action |
 |--------|--------|
