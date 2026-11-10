@@ -3722,9 +3722,11 @@
   "src/burn/drv/dataeast/d_decocass.cpp",
   "src/burn/drv/gba/d_gba.cpp",
   "src/burn/drv/konami/d_nemesis.cpp",
+  "src/burn/drv/megadrive/d_megadrive.cpp",
   "src/burn/drv/msx/d_msx.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
   "src/burn/drv/nes/d_nes.cpp",
+  "src/burn/drv/pce/d_pce.cpp",
   "src/burn/drv/pgm/d_pgm.cpp",
   "src/burn/drv/pre90s/d_astrocde.cpp",
   "src/burn/drv/pre90s/d_mcr.cpp",
@@ -4478,9 +4480,11 @@
   "src/burn/drv/dataeast/d_decocass.cpp",
   "src/burn/drv/gba/d_gba.cpp",
   "src/burn/drv/konami/d_nemesis.cpp",
+  "src/burn/drv/megadrive/d_megadrive.cpp",
   "src/burn/drv/msx/d_msx.cpp",
   "src/burn/drv/neogeo/d_neogeo.cpp",
   "src/burn/drv/nes/d_nes.cpp",
+  "src/burn/drv/pce/d_pce.cpp",
   "src/burn/drv/pgm/d_pgm.cpp",
   "src/burn/drv/pre90s/d_astrocde.cpp",
   "src/burn/drv/pre90s/d_mcr.cpp",
@@ -9302,7 +9306,7 @@
   "rpi/bzip.cpp",
   "rpi/main.cpp"
  ],
- "github.com/retrodiv/AnyBOR-libretro@6ffe33bc980046e9c8422a54a3554479501f6e50": [
+ "github.com/retrodiv/AnyBOR-libretro@b3557f6fb2d4ff87133a2a4bea5fba4fc14d148a": [
   "src/glue/libretro.cpp",
   "src/glue/obor_engines.h",
   "src/glue/obor_packed_prepare.h",
