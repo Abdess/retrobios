@@ -4091,8 +4091,20 @@ def _data_root_target(system: str, text: str) -> str | None:
     return None
 
 
+def _one_content(held: list[str], entries: dict[str, dict], emulator: str) -> list[str]:
+    """The one dest a copy reads when every held dest carries the same bytes.
+
+    Unchanged when the contents differ: the name then designates nothing.
+    """
+    if len({entries[dest].get("sha1") for dest in held}) != 1:
+        return held
+    own = [dest for dest in held if emulator in (entries[dest].get("cores") or ())]
+    return [min(own or held, key=lambda dest: (dest.count("/"), len(dest), dest))]
+
+
 def _profile_copies(
     profiles: dict[str, dict], dests: list[str], declared: list[dict],
+    entries: dict[str, dict] | None = None,
 ) -> list[dict]:
     """The standalone copies the emulator profiles document: each file with
     a standalone_path, into the data_root of each system that names a place.
@@ -4105,6 +4117,10 @@ def _profile_copies(
     file found by content (found_by) sits wherever the folder the user set
     for the scan points: Amiberry reads its ROMs from rom_path, which
     amiberry.conf moves, so its name under data_root proves nothing.
+    ``entries`` maps each dest to its manifest entry: one file carried at
+    two paths with the same bytes is one source, the copy whose cores name
+    the emulator, else the shortest path. DuckStation's ps2_scph50006.bin
+    sits at the BIOS root and under pcsx2/bios/ for the libretro PS2 cores.
     """
     from fnmatch import fnmatch  # noqa: PLC0415
 
@@ -4143,6 +4159,8 @@ def _profile_copies(
                     or entry.get("type") == "directory" or entry.get("found_by") == "content"):
                 continue
             held = by_tail.get(entry.get("path") or entry["name"], [])
+            if len(held) > 1 and entries is not None:
+                held = _one_content(held, entries, profile_name)
             if len(held) != 1:
                 continue
             source = held[0]
@@ -4171,8 +4189,10 @@ def _standalone_copies(
     whose registry entry declares none gets none."""
     if not declared:
         return []
-    dests = [entry["dest"] for entry in manifest_files if entry.get("root") != "save"]
-    return _placed_copies(declared, dests) + _profile_copies(profiles, dests, declared)
+    kept = [entry for entry in manifest_files if entry.get("root") != "save"]
+    dests = [entry["dest"] for entry in kept]
+    entries = {entry["dest"]: entry for entry in kept}
+    return _placed_copies(declared, dests) + _profile_copies(profiles, dests, declared, entries)
 
 
 def _stable_hashes(local_path: str, db: dict) -> dict:

@@ -3308,6 +3308,11 @@ def _platform_profiles(
         }
         index = upstream_profile_index(profiles)
         platform = str(config.get("_key") or "")
+        dual_names = {str(c) for c in config.get("dual_mode_cores") or []}
+
+        def build_modes(p: dict) -> set[str]:
+            kind = str(p.get("type", ""))
+            return {mode for mode in ("standalone", "libretro") if mode in kind}
 
         def designated(name: str) -> set[str]:
             # A build the platform compiles itself (built_by) is what its
@@ -3319,10 +3324,21 @@ def _platform_profiles(
                 p for p in index.get(name, ())
                 if platform and platform in (profiles[p].get("built_by") or [])
             }
-            if own:
-                return own
             preferred = preferred_profile(index, name)
-            return {preferred} if preferred is not None else set()
+            if not own:
+                return {preferred} if preferred is not None else set()
+            # The own builds stand for the modes they are built in only.
+            # Batocera builds LRPS2 as pcsx2_libretro.so and launches
+            # standalone PCSX2 under the same name.
+            own_modes = set().union(*(build_modes(profiles[p]) for p in own))
+            if (
+                name in dual_names
+                and preferred is not None
+                and preferred not in own
+                and not build_modes(profiles[preferred]) & own_modes
+            ):
+                own.add(preferred)
+            return own
 
         result = {profile for c in core_set for profile in designated(c)}
         # A name the platform launches both ways designates its libretro

@@ -140,6 +140,15 @@ files:
       flash is blank (0xFF) when neither exists. Written back only after the
       emulated system programs it.
 
+  - name: "eeprom.dat"
+    load_from: working_directory
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    source_ref: "source pcsx2/DEV9/DEV9.cpp:111-123, source pcsx2/DEV9/DEV9.cpp:159-176"
+    note: "Opened from the working directory when DEV9 starts and mapped over 64 bytes. A compiled-in image stands in when the file is missing."
+
   - name: "mg_keystore.bin"
     path: "pcsx2/bios/mg_keystore.bin"
     required: false

@@ -513,6 +513,7 @@ def _agnostic_scan_extras(
     extras_prefix: str,
     standalone_set: set[str] | None = None,
     taken: dict[str, dict] | None = None,
+    all_profiles: dict | None = None,
 ) -> list[dict]:
     """Every interchangeable candidate a filename-agnostic core accepts.
 
@@ -521,6 +522,8 @@ def _agnostic_scan_extras(
     The directory is the delicate part: anchoring it on a single
     filename walked into another emulator's tree, so the profile's own
     files have to agree before the scan follows an ambiguous name.
+    ``all_profiles`` are the profiles a placeholder's directory is proven
+    from, ``profiles`` when not given.
     """
     extras: list[dict] = []
     files_db = db.get("files", {})
@@ -617,7 +620,21 @@ def _agnostic_scan_extras(
                     resolved_dirs.get(id(image), "") if image
                     else resolved_dirs.get(id(f), "")
                 )
-                if not path_prefix:
+                # A placeholder (<bios>.bin) resolves to nothing and anchors no
+                # directory. The folders where the system's other profiles
+                # resolve hashed files of that shape do, those folders only:
+                # LRPS2 and PCEE2 are made of placeholders, and on Batocera,
+                # where no other libretro PS2 core anchors pcsx2/bios/, the
+                # pack held nothing there. A companion (<bios>.nvm) looks
+                # where its image is proven: RetroBat's pcsx2/bios/ had
+                # scph39001.bin and its .nvm only at the BIOS root.
+                exact_dirs: frozenset[str] = frozenset()
+                anchor = image if image else f
+                if not path_prefix and "<" in str(anchor.get("name", "")):
+                    exact_dirs = placeholder_directories(
+                        anchor, emu_name, profile, db, all_profiles or profiles
+                    )
+                if not path_prefix and not exact_dirs:
                     continue
                 # A name matching one file identifies it. A name matching several
                 # identifies nothing on its own, so the profile's other files have
@@ -629,7 +646,11 @@ def _agnostic_scan_extras(
                 # Scan DB for all files under this prefix matching size
                 for sha1, entry in files_db.items():
                     path = entry.get("path", "")
-                    if not path.startswith(path_prefix):
+                    if exact_dirs:
+                        if ("/" not in path or path.rsplit("/", 1)[0] not in exact_dirs
+                                or "/.variants/" in path):
+                            continue
+                    elif not path.startswith(path_prefix):
                         continue
                     if not companion_ext and not size_fits(f, entry.get("size", 0)):
                         continue
@@ -676,14 +697,46 @@ def _agnostic_scan_extras(
                         "agnostic_scan": True,
                     }
                     extra["claim_order"] = (4, 0, emu_name)
-                    if not _take(extra, full_dest, seen_dests, taken):
-                        continue
-                    extras.append(extra)
+                    if _take(extra, full_dest, seen_dests, taken):
+                        extras.append(extra)
+                    else:
+                        # The image another core's scan placed is this core's
+                        # too, and so are the companions it reads beside it:
+                        # Recalbox's libretro PCSX2 opens <bios>.erom next to
+                        # the images LRPS2 placed, which LRPS2 never reads.
+                        held = taken.get(full_dest) if taken is not None else None
+                        if held is None or held.get("sha1") != sha1:
+                            continue
                     extras.extend(_companion_extras(
                         _companions(path, scan_name, _companion_extensions(profile, fname), files_db),
                         folder, extras_prefix, seen_dests, profile, emu_name, f, taken,
                     ))
     return extras
+
+
+def placeholder_directories(
+    seed: dict, emu_name: str, profile: dict, db: dict, all_profiles: dict,
+) -> frozenset[str]:
+    """The folders that hold the dumps a placeholder entry accepts.
+
+    Each folder where another profile of the same system resolves a hashed
+    file of the seed's shape by content: PCSX2 proves bios/Sony/PlayStation 2/.
+    Only that folder, not the ones below it (its DVD firmware).
+    """
+    systems = set(profile.get("systems", []))
+    directories: set[str] = set()
+    for other_name, other in all_profiles.items():
+        if other_name == emu_name or not systems & set(other.get("systems", [])):
+            continue
+        for f in other.get("files", []):
+            if not isinstance(f, dict) or not any(f.get(h) for h in ("sha1", "md5", "sha256", "crc32")):
+                continue
+            if f.get("size") and not size_fits(seed, f["size"]):
+                continue
+            local, status = resolve_local_file({**f, "source_profile": other_name}, db)
+            if local and "/" in local and resolution_is_hash_exact(status):
+                directories.add(local.rsplit("/", 1)[0])
+    return frozenset(directories)
 
 
 def _placeholder_scan(
@@ -699,7 +752,6 @@ def _placeholder_scan(
     (its DVD firmware). Nothing proven, nothing scanned.
     """
     files_db = db.get("files", {})
-    systems = set(profile.get("systems", []))
     extras: list[dict] = []
     for seed in files:
         name = str(seed.get("name", ""))
@@ -707,18 +759,10 @@ def _placeholder_scan(
             continue
         if not (seed.get("size") or seed.get("min_size") or seed.get("max_size")):
             continue
-        directories: set[str] = set()
-        for other_name, other in (all_profiles or load_emulator_profiles("emulators")).items():
-            if other_name == emu_name or not systems & set(other.get("systems", [])):
-                continue
-            for f in other.get("files", []):
-                if not any(f.get(h) for h in ("sha1", "md5", "sha256", "crc32")):
-                    continue
-                if f.get("size") and not size_fits(seed, f["size"]):
-                    continue
-                local, status = resolve_local_file({**f, "source_profile": other_name}, db)
-                if local and "/" in local and resolution_is_hash_exact(status):
-                    directories.add(local.rsplit("/", 1)[0])
+        directories = placeholder_directories(
+            seed, emu_name, profile, db,
+            all_profiles or load_emulator_profiles("emulators"),
+        )
         layout = (seed.get("standalone_path") if standalone else None) or seed.get("path") or ""
         folder = layout.rsplit("/", 1)[0] if "/" in layout else ""
         for sha1, entry in sorted(files_db.items(), key=lambda kv: kv[1].get("path", "")):

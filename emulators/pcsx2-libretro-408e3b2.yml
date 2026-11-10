@@ -1,0 +1,118 @@
+# libretro PCSX2 at 408e3b2 with Recalbox's BIOS path patch
+# Source: https://gitlab.com/recalbox/packages/libretro/libretro-pcsx2
+# Upstream: https://github.com/PCSX2/pcsx2
+
+emulator: "PCSX2 libretro (408e3b2, Recalbox)"
+type: libretro
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://gitlab.com/recalbox/packages/libretro/libretro-pcsx2"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-11-10"
+source_commit: "408e3b253847b25536ad77e4ab0c3aff6b8b896f"
+pin_frozen: "Recalbox, the only platform that ships it, builds this revision with package/libretro-pcsx2/0003-bios-path.patch (Recalbox package/libretro-pcsx2/libretro-pcsx2.mk:8 at tag 10.1.1). Later commits are not part of that build."
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/libretro-pcsx2/libretro-pcsx2.mk"
+    variable: LIBRETRO_PCSX2_VERSION
+    value: "408e3b253847b25536ad77e4ab0c3aff6b8b896f"
+core_version: "1.7.0"
+version_basis:
+  kind: file
+  path: "pcsx2/SysForwardDefs.h"
+  pattern: 'PCSX2_VersionHi\s*=\s*(\d+);\s*\n.*PCSX2_VersionMid\s*=\s*(\d+);\s*\n.*PCSX2_VersionLo\s*=\s*(\d+);'
+  format: "{1}.{2}.{3}"
+display_name: "Sony - PlayStation 2 (PCSX2 libretro 408e3b2 for Recalbox)"
+cores: [pcsx2]
+built_by: [recalbox]
+systems: [sony-playstation-2]
+
+bios_directory: "ps2/"
+
+notes: |
+  The wxWidgets-era libretro port of PCSX2 1.7.0. Recalbox builds it for
+  x86_64 only (Recalbox package/libretro-pcsx2/Config.in:3, Recalbox
+  configs/recalbox-x86_64_defconfig:352), installs it as pcsx2_libretro.so
+  (Recalbox package/libretro-pcsx2/libretro-pcsx2.mk:30-31) and lists it as
+  the libretro core pcsx2 of the ps2 system (Recalbox
+  package/recalbox-romfs2/systems/ps2/system.ini:54-58).
+  The library version is git describe of the build tree, empty when the tree
+  has no .git (cmake/Pcsx2Utils.cmake:38-52, 70-72, libretro/main.cpp:447-448).
+
+  Its patch moves the BIOS scan from pcsx2/bios to ps2 below the system
+  directory (libretro/main.cpp:264), /recalbox/share/bios/ps2 on Recalbox.
+
+  BIOS detection is filename-agnostic: every file in ps2/ whose romdir holds
+  a RESET and a ROMVER entry is listed, no size or hash is checked, and the
+  list fills the pcsx2_bios core option whose default is the first BIOS found
+  (libretro/main.cpp:262-303). Without one, retro_init returns before it
+  creates the emulator and no game starts (libretro/main.cpp:282-287,
+  325-328). The companion files take their path from the selected BIOS.
+
+  GameIndex.yaml and the widescreen, no-interlacing and 60 fps patch archives
+  are compiled in (pcsx2/CMakeLists.txt:338-367,
+  pcsx2/gui/AppGameDatabase.cpp:20-24, pcsx2/Patch.cpp:30-32). DEV9 is the
+  null device (pcsx2/DEV9/DEV9.cpp:59-64), so no hard disk, EEPROM or flash
+  file is read. Memory cards and pnach patches under system/pcsx2 are user
+  files.
+
+files:
+  - name: "<bios>.bin"
+    found_by: content
+    path: "ps2/<bios>.bin"
+    required: true
+    description: "PS2 BIOS binary"
+    min_size: 4194304
+    max_size: 8388608
+    config_key: "pcsx2_bios"
+    source_ref: "source libretro/main.cpp:262-303, source libretro/main.cpp:317-328, source libretro/main.cpp:653-654, source pcsx2/ps2/BiosTools.cpp:74-167, 261-319, 340-356, source pcsx2/MemoryTypes.h:21"
+    note: >
+      Any file in ps2/ whose romdir holds RESET and ROMVER, picked by the
+      pcsx2_bios core option. No size is checked: RESET is looked for in the
+      first 8 MB (pcsx2/ps2/BiosTools.cpp:79-84) and the first 4 MB are
+      mapped.
+
+  - name: "<bios>.rom1"
+    path: "ps2/<bios>.rom1"
+    required: false
+    description: "DVD player ROM"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:191-229, 294, source pcsx2/MemoryTypes.h:22"
+    note: "Tries <bios path>.rom1, then the BIOS path with its extension replaced by rom1. Skipped when neither exists. The first 256 KB are read."
+
+  - name: "<bios>.rom2"
+    path: "ps2/<bios>.rom2"
+    required: false
+    description: "Chinese ROM extension"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:191-229, 295, source pcsx2/MemoryTypes.h:23"
+    note: "Same naming as rom1. Present only on Chinese consoles. The first 512 KB are read."
+
+  - name: "<bios>.erom"
+    path: "ps2/<bios>.erom"
+    required: false
+    description: "DVD player extension ROM"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:191-229, 296, source pcsx2/MemoryTypes.h:24"
+    note: "Same naming as rom1. The first 0x1C0000 bytes are read."
+
+  - name: "<bios>.nvm"
+    path: "ps2/<bios>.nvm"
+    required: false
+    hle_fallback: true
+    size: 1024
+    description: "NVRAM / EEPROM data"
+    source_ref: "source pcsx2/CDVD/CDVD.cpp:142-187, source libretro/main.cpp:634-642, source libretro/language_injector.cpp:231-262"
+    note: >
+      Read at the BIOS path with the extension replaced by nvm. A file shorter
+      than 1024 bytes is replaced by a blank one with a dummy i.LINK ID.
+      Without it the fast boot option is ignored. When it exists and the BIOS
+      is in the language table, the system language option is written into it.
+
+  - name: "<bios>.mec"
+    path: "ps2/<bios>.mec"
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    source_ref: "source pcsx2/CDVD/CDVD.cpp:96-126"
+    note: "Read at the BIOS path with the extension replaced by mec. Written as bytes 03 06 02 00 when missing."
