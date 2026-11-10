@@ -21,41 +21,50 @@ notes: |
   Closed-source C++Builder VCL emulator for fruit machine and slot machine hardware,
   written by Chris Wren (Wizard) and distributed as a Windows installer. MFME.exe
   carries FileVersion 20.1.0.0, FileDescription "Multiple Fruit Machine Emulator" and
-  copyright "C.J.Wren 1997-2020", and the installer targets Windows 10, defaults to
-  C:\MFME\v20 (history.txt:323) and writes HKCU\Software\CJW\MFME. The binary is
-  ASPack compressed, imports dinput8, xaudio2_9, d2d1 and d3d11 for input, sound
-  and the hardware accelerated scaler added in v19.0 (history.txt:8-9), and holds
-  its layout engine in Delphi units around an EasyCompression Library core.
+  copyright "C.J.Wren 1997-2020". The installer's setup data enables Windows 10
+  only (OS.dat), sets InstallDir C:\MFME\v20 (SC.dat) and writes InstallPath and
+  Installed under HKCU\Software\CJW\MFME (Registry.dat). MFME.exe keeps its
+  settings in a TRegIniFile opened on SOFTWARE\CJW, under the current user root
+  (FUN_004e2920 0x4e2e1b-0x4e2e28, key name at 0xae0a2e), section MFME
+  (0xae0a24). The binary is ASPack compressed, imports dinput8, xaudio2_9, d2d1
+  and d3d11 for input, sound and the hardware accelerated scaler, and holds its
+  layout engine in Delphi units around an EasyCompression Library core.
   Addresses in the source_ref fields are virtual addresses of the image the ASPack
   stub unpacks (image base 0x400000, entry 0x402a88), read from MFME.exe sha256
   8b3c873078b4a9d6.
-  Development ended with the author's death, and Update.exe, reached from the File menu item
-  Check For Updates (history.txt:235), no longer finds a server. ES-DE calls
-  MFME.exe with a .gam path and the working directory set to the emulator
-  folder, through find rules MFME and MFME-WINDOWS, and runs
-  it under Wine or Proton on Linux. .gam is in the arcade and mame extension
+  The File menu item Check For Updates (form resource, OnClick
+  CheckForUpdates1Click at 0x5194f4) calls FUN_00515fec, which checks FileExists
+  on Update.exe in the MFME folder (0x516006-0x516042) and starts a thread that
+  fills a SHELLEXECUTEINFO with verb runas and that path (0x5195ca-0x519657) and
+  calls ShellExecuteExW (0x519945).
+  ES-DE calls MFME.exe with a .gam path and the working directory set to the
+  emulator folder, through find rules MFME and MFME-WINDOWS, and runs it under
+  Wine or Proton on Linux. .gam is in the arcade and mame extension
   lists.
 
   A machine is a folder holding a .gam file, the .fml layout it names and the ROM
   set. The .gam is plain text: a System line naming the tech, DIP switch, reel,
   stake, jackpot, percentage and meter state, a Layout line naming the .fml, a
-  Game line, and one ROM line per ROM file. Layouts before v5 used .dat and are
-  converted by loading them in v5 or v6 and saving, while v20 loads .fml only. The .fml
-  is an AACS container whose password is derived from a four byte seed at the end
+  Game line, and one ROM line per ROM file. The .fml is an AACS container whose password is derived from a four byte seed at the end
   of the file through a mixer, hashed with RIPEMD-128 into a Rijndael key, and
   each chunk is zlib compressed. It holds the Delphi layout stream with every
   bitmap embedded, carries no external file path, and text components name a font
-  family rather than a font file. MFME.exe is started with the .gam path as its
-  argument (history.txt:271).
+  family rather than a font file. FUN_00509a68 walks ParamStr 1 to ParamCount
+  (0x50a3c7-0x50aac8), takes the switches -g, -x, -y, -w, -h, -i, -mode,
+  -nohistory and -slave, and keeps any other argument that FileExists accepts,
+  expanded to a full path, as the file to open. Its extension sends a .gam to
+  FUN_004e85c0 (0x50ab40-0x50abb4) and a .fml to FUN_004f5a90 (0x50abc1-0x50ac2d).
 
   ROM sets are per machine and self contained. Barcrest S4 and S5 sets are .LO and
   .HI program files with a .BIN sound ROM, MPU5 sets are .p1 to .p4, and other
   techs use .hex or .rom members named by the .gam. Fruit machine hardware has no
   system BIOS, so nothing is shared between machines, and sound ROMs belong to the
-  machine as well: an S4 game whose sound ROMs are absent still runs and reports
-  Wrong Snd Err (history.txt:301). v20.0 added an automatic ROM download for DIF
-  legacy layouts (history.txt:293). Ctrl-K resets a game with its alternate ROM
-  set (tips.txt).
+  machine as well. FUN_00625c88 opens a file name starting with http through the
+  download path (0x625cc6-0x625d64), opens a local file when FileExists holds
+  (0x625d77-0x625d8a), and otherwise, unless the extension is .ram, .fml, .rtc,
+  .eep, .wsp or e2p (0x625dac-0x625f6e), prefixes it with
+  https://www.desertislandfruits.com/legacy/ (0xae531a, 0x625f7a) and fetches it
+  from there.
 
   Effect samples are the mechanical cabinet sounds MFME plays itself, distinct
   from the game audio the sound ROM produces. The effect table at 0xad7ac8 holds
@@ -74,16 +83,20 @@ notes: |
   PROCONN, SCORPION1, SCORPION2, SCORPION4, SCORPION5, SRU, SYS1, SYS5, SYS83,
   SYS85, SYSTEM80 and spACE, with cabinet subfolders Eclipse for ADDER5,
   SCORPION4 and SCORPION5, Elegance for EPOCH, and Genesis for MPU4 and MPU5.
-  DefaultSounds/Readme.txt:35-37 names the electronic token mech effects
-  CoinInToken, CoinInTokenSwitch and CoinInTokenRejected, while the table names
-  TokenIn, TokenInSwitch and TokenInRejected, the names the distribution ships.
-  The table also holds RelayOn.wav and RelayOff.wav, which the readme omits.
+  The table names the electronic token mech effects TokenIn.wav, TokenInSwitch.wav
+  and TokenInRejected.wav (0xadb143, 0xadb158, 0xadb17a), the names the
+  distribution ships, and holds RelayOn.wav and RelayOff.wav, which the
+  distribution does not ship.
 
   Three shipped directories are enumerated rather than looked up by name and
   therefore expect no particular filename. DefaultBackdrops and DefaultTiles hold
-  the images offered as a backdrop or tiled background in the full screen modes,
-  picked at random when the preference is set (history.txt:48, 55-56), and ship
-  one wallpaper and six tiles. DefaultSounds/MiscSounds holds alternate payout,
+  the images offered as a backdrop or tiled background in the full screen modes.
+  FUN_0051336c and FUN_005137dc walk <MFME folder>\DefaultTiles\* and
+  \DefaultBackdrops\* with FindFirst and FindNext (0x5133ea-0x51379a,
+  0x51385a-0x513c0a), keep .bmp, .jpg and .png names, and add each full path to
+  the lists at +0x1f78 and +0x1f7c. FUN_00513c4c and FUN_00513cf4 pick one entry
+  with System Random over the list count (0x513c90, 0x513d38). The distribution
+  ships one wallpaper and six tiles. DefaultSounds/MiscSounds holds alternate payout,
   coin and note recordings that a user copies over an effect name. Fonts is
   enumerated by FUN_00511f0c, which registers up to 100 font files of any name,
   so its contents grow with the layouts installed.
@@ -676,7 +689,6 @@ files:
     category: game_data
     description: "Prize dispensed"
     source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 38 at 0xad7c90 (\"PrizeVend.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
-    note: "Listed as Prizevend.wav in the readme, shipped as PrizeVend.wav."
 
   # -- Pull handle --
 
