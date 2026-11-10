@@ -6880,6 +6880,9 @@ def _report_outcome(
 
 
 NEXT_ON_CARD = "Next: put the card back in the device and start a game."
+# On the device detection found the installer running on (KNULLI, Batocera):
+# that system is already started.
+NEXT_ON_DEVICE = "Next: start a game."
 
 
 def next_step_words(platform_of: dict[Path, str], paths: list[Path]) -> str:
@@ -6888,8 +6891,9 @@ def next_step_words(platform_of: dict[Path, str], paths: list[Path]) -> str:
     setups = [(platform_of.get(path, ""), path) for path in paths]
     if setups and all(plat and on_its_card(plat, path) for plat, path in setups):
         return NEXT_ON_CARD
-    names = list(dict.fromkeys(detected_os(plat, path) or display_name(plat)
-                               for plat, path in setups if plat))
+    if setups and all(plat and detected_os(plat, path) for plat, path in setups):
+        return NEXT_ON_DEVICE
+    names = list(dict.fromkeys(display_name(plat) for plat, path in setups if plat))
     if len(names) == 1:
         return f"Next: start {names[0]} and play."
     return "Next: start your emulators and play."
@@ -23024,8 +23028,9 @@ def tui_next_words(state: TuiState) -> str:
     """The step after an install the result says went well."""
     if _on_its_card(state):
         return NEXT_ON_CARD
-    name = detected_os(state.platform, state.dest) if state.dest is not None else ""
-    return f"Next: start {name or display_name(state.platform, state.manifest)} and play."
+    if state.dest is not None and detected_os(state.platform, state.dest):
+        return NEXT_ON_DEVICE
+    return f"Next: start {display_name(state.platform, state.manifest)} and play."
 
 
 def _dest_error_outcome(state: TuiState, installed: int) -> tuple[str, list[str]]:

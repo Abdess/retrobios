@@ -7706,5 +7706,32 @@ class AnErrorIsOneShortSentence(unittest.TestCase):
         self.assertEqual(long, [])
 
 
+class TheNextStepFitsWhereTheInstallerRuns(unittest.TestCase):
+    """Run on a KNULLI device, the last line said "Next: start KNULLI and
+    play.": the system it runs on is already started."""
+
+    def test_on_the_device_detection_found(self):
+        folder = Path("/userdata/bios")
+        with unittest.mock.patch.dict(install._DETECTED_OS, {("knulli", folder): "KNULLI"},
+                                      clear=True), \
+                unittest.mock.patch.object(install, "_mounted_cards", return_value=[]):
+            self.assertEqual(install.next_step_words({folder: "knulli"}, [folder]),
+                             "Next: start a game.")
+
+    def test_on_a_computer(self):
+        folder = Path("/home/me/.config/retroarch/system")
+        with unittest.mock.patch.dict(install._DETECTED_OS, clear=True), \
+                unittest.mock.patch.object(install, "_mounted_cards", return_value=[]):
+            self.assertEqual(install.next_step_words({folder: "retroarch"}, [folder]),
+                             "Next: start RetroArch and play.")
+
+    def test_a_card_mounted_on_a_computer(self):
+        card = Path("/media/me/KNULLI")
+        with unittest.mock.patch.dict(install._DETECTED_OS, clear=True), \
+                unittest.mock.patch.object(install, "on_its_card", return_value=True):
+            self.assertEqual(install.next_step_words({card / "bios": "knulli"}, [card / "bios"]),
+                             install.NEXT_ON_CARD)
+
+
 if __name__ == "__main__":
     unittest.main()
