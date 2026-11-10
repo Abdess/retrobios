@@ -705,5 +705,21 @@ class AetherSX2OnKnulli(unittest.TestCase):
                 self.assertEqual(entry.get("unplaced"), "outside_bios_folder", path)
 
 
+class Quasi88OnRetroPie(unittest.TestCase):
+    """RetroPie writes -romdir $biosdir/pc88 into quasi88.ini (quasi88.sh:67)."""
+
+    def test_the_roms_land_in_pc88(self) -> None:
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["quasi88kai"]
+        config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
+        (view, standalone), = platform_layouts("quasi88kai", profile, standalone_set(config))
+        self.assertTrue(standalone)
+        paths = [e["path"] for e in view["files"]]
+        self.assertTrue(paths and all(p.startswith("rom/") for p in paths))
+        self.assertEqual(
+            [e["standalone_path"] for e in view["files"]],
+            ["pc88/" + p.removeprefix("rom/") for p in paths],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
