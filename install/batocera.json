@@ -1862,8 +1862,8 @@
   ],
   "total_files": 15366,
   "total_size": 10726877153,
-  "pack_files": 19076,
-  "pack_size": 10812712622,
+  "pack_files": 19125,
+  "pack_size": 10778998940,
   "total_omitted": 675,
   "omitted_files": [
     {
@@ -226941,6 +226941,514 @@
       "archive_size": 21360579,
       "cores": [
         "cemu"
+      ]
+    },
+    {
+      "ref": "dinothawr",
+      "dest": "",
+      "url": "https://buildbot.libretro.com/assets/system/Dinothawr.zip",
+      "type": "zip",
+      "systems": [],
+      "files": {
+        "dinothawr/level_7-1.tmx": {
+          "sha1": "4c1a17e027714cb686ed6a296aa4634dd3668da5",
+          "size": 18653
+        },
+        "dinothawr/level_2-5.tmx": {
+          "sha1": "09f05495dcf202ad25c670c2e223f37c4aac4676",
+          "size": 8029
+        },
+        "dinothawr/level_7-4.tmx": {
+          "sha1": "aba319e2c3cdb83fbcad0ce2220712931b64d340",
+          "size": 11215
+        },
+        "dinothawr/level_2-3.tmx": {
+          "sha1": "9e0019a6e362873614e229f45df22c401cef568e",
+          "size": 12686
+        },
+        "dinothawr/level_6-1.tmx": {
+          "sha1": "91e6127408bb205c022914a897dc3002f080efc3",
+          "size": 16557
+        },
+        "dinothawr/level_4-1.tmx": {
+          "sha1": "9cbc9faf734373864558916f7a2c9e937f4d1b48",
+          "size": 11112
+        },
+        "dinothawr/level_9-5.tmx": {
+          "sha1": "084d0a491567009143ba411d47982fb6500b7451",
+          "size": 15728
+        },
+        "dinothawr/level_10-5.tmx": {
+          "sha1": "7274ad8b3f8b668f9836c3c84fb5f420a28282c0",
+          "size": 12907
+        },
+        "dinothawr/level_9-4.tmx": {
+          "sha1": "8b00d59be2817eb7ec139e337a58ce1e83db425e",
+          "size": 11976
+        },
+        "dinothawr/xbr-lv2-a.glslp": {
+          "sha1": "cd81869438abcb4ddfe7159b2573203a99cbb9f6",
+          "size": 276
+        },
+        "dinothawr/scanline.glsl": {
+          "sha1": "460756a001e4c64911d609f371d40437f703c57b",
+          "size": 3201
+        },
+        "dinothawr/hq2x.glsl": {
+          "sha1": "926c8dbd9532ac3f6a225b7208515048d174ef23",
+          "size": 12171
+        },
+        "dinothawr/level_3-4.tmx": {
+          "sha1": "5909450f809bab9cc789e48684713f958d89c2a0",
+          "size": 7327
+        },
+        "dinothawr/level_10-4.tmx": {
+          "sha1": "1ba1c6797fcb79599c892e30a9beea6eb62709b0",
+          "size": 12154
+        },
+        "dinothawr/level_5-5.tmx": {
+          "sha1": "84a101c43d69823bd4cb90ac2c86d8c7ddabf00f",
+          "size": 9614
+        },
+        "dinothawr/level_4-3.tmx": {
+          "sha1": "179578000254822a11f79812e5f35804db1f8fbe",
+          "size": 9300
+        },
+        "dinothawr/level_1-5.tmx": {
+          "sha1": "edde8a79184bc03322952eb130b7ce931b5bad6d",
+          "size": 8138
+        },
+        "dinothawr/level_10-2.tmx": {
+          "sha1": "e3f6affad21e35674e79c8a3dc17a4870892ca6d",
+          "size": 16597
+        },
+        "dinothawr/level_9-2.tmx": {
+          "sha1": "111d8d28a02175c1093a9324734ad7e82f95793e",
+          "size": 13810
+        },
+        "dinothawr/level_1-2.tmx": {
+          "sha1": "9974166e8487562421793e0c41caf0b5815a24f2",
+          "size": 7525
+        },
+        "dinothawr/xbr-lv2-a-pass0.glsl": {
+          "sha1": "408c3a64442192e9f4a50b7576b40756e51e82e0",
+          "size": 11834
+        },
+        "dinothawr/level_2-2.tmx": {
+          "sha1": "d17877319c6cbe586181e1ac90661d38ed0f0586",
+          "size": 10117
+        },
+        "dinothawr/level_6-5.tmx": {
+          "sha1": "6dde4ea2fd3218a1044c8bb05de00e6d65b4c94d",
+          "size": 7298
+        },
+        "dinothawr/level_5-1.tmx": {
+          "sha1": "fc7e07ec47bc497ca67e3f9d684a45dcf6a9e03f",
+          "size": 14036
+        },
+        "dinothawr/level_8-4.tmx": {
+          "sha1": "a5aa78901e0514b2a28637c45ed849a5227e0db4",
+          "size": 12812
+        },
+        "dinothawr/level_1-4.tmx": {
+          "sha1": "8b6bfb8cb25a12ef0526f68d74d14876b401ac86",
+          "size": 10264
+        },
+        "dinothawr/level_2-1.tmx": {
+          "sha1": "1b72a77df36ee66833738b2eea038926ffc427b7",
+          "size": 5644
+        },
+        "dinothawr/level_10-3.tmx": {
+          "sha1": "d79e247bfcabaa3663d880dae42bb73068fdef47",
+          "size": 14598
+        },
+        "dinothawr/dino.font": {
+          "sha1": "039d3b39781aa3b5a44dab8390e0dc514a6ae415",
+          "size": 162
+        },
+        "dinothawr/level_2-4.tmx": {
+          "sha1": "9888af554276ed9b0a100f53372cae16e504a1e4",
+          "size": 12765
+        },
+        "dinothawr/level_8-2.tmx": {
+          "sha1": "1ae0fe154ab511c4f7e8a1d07545e554f01cbf0f",
+          "size": 11203
+        },
+        "dinothawr/overlay_big.cfg": {
+          "sha1": "3d5ee3d1f44092f989a4c0ce527315a6a108d03e",
+          "size": 385
+        },
+        "dinothawr/overlay_big.png": {
+          "sha1": "4ccf7ba9f9ad398ac976d1804c9937705f0e2754",
+          "size": 74543
+        },
+        "dinothawr/level_3-5.tmx": {
+          "sha1": "96fc7371710acd170454d39967127f2b213f0751",
+          "size": 10143
+        },
+        "dinothawr/level_6-3.tmx": {
+          "sha1": "de2071ec2fcc006c93ed35583b09a516a329648b",
+          "size": 10274
+        },
+        "dinothawr/level_5-3.tmx": {
+          "sha1": "ede7d334698af2ddc9f25db4ab49cbd310752ffc",
+          "size": 6762
+        },
+        "dinothawr/level_5-2.tmx": {
+          "sha1": "df993d6e88190d77e6150d6dcb98744828283b53",
+          "size": 11142
+        },
+        "dinothawr/level_4-4.tmx": {
+          "sha1": "e94fffb5068994af10d745970da00b1a0d568ccc",
+          "size": 8144
+        },
+        "dinothawr/stock.glsl": {
+          "sha1": "23e2797791404c808d667005c999ffc77313718d",
+          "size": 2527
+        },
+        "dinothawr/level_6-2.tmx": {
+          "sha1": "7e7b571be65364ec1d43ccfa68e1b17b56b19f59",
+          "size": 11173
+        },
+        "dinothawr/level_3-1.tmx": {
+          "sha1": "7df4d1dd1fc910074ff96f1f7d62568bbe021ec0",
+          "size": 7802
+        },
+        "dinothawr/level_7-5.tmx": {
+          "sha1": "82e8ba6f86664ba62eea57918ca5f150e1f3f735",
+          "size": 9539
+        },
+        "dinothawr/level_6-4.tmx": {
+          "sha1": "c8f024cefe3a873e40ca6dc82aaded42736b2e43",
+          "size": 8143
+        },
+        "dinothawr/level_7-2.tmx": {
+          "sha1": "e65f59bb9ef3e93ff62f255e5eca9bbbbf148d93",
+          "size": 14813
+        },
+        "dinothawr/level_4-2.tmx": {
+          "sha1": "8d9c9ba77f98fa50ad5c8cc7e5246acb7a761b8d",
+          "size": 9559
+        },
+        "dinothawr/level_7-3.tmx": {
+          "sha1": "4f433e347173dbd7158200d70ff06e21ddcc2afa",
+          "size": 13004
+        },
+        "dinothawr/LICENSE": {
+          "sha1": "a88869c3e118d04fee996b68818887596b73bcce",
+          "size": 2212
+        },
+        "dinothawr/level_8-1.tmx": {
+          "sha1": "3e2314360804afec91132b0bfd1bde737eb871f5",
+          "size": 11134
+        },
+        "dinothawr/level_8-5.tmx": {
+          "sha1": "46cdf76b0faf2e9d989ab652bc655adc621a8a9c",
+          "size": 12885
+        },
+        "dinothawr/level_9-1.tmx": {
+          "sha1": "f83b94ed57665fe2457cfeb9f4ba108c3fe0910d",
+          "size": 11967
+        },
+        "dinothawr/level_9-3.tmx": {
+          "sha1": "f8a8dfc7156df58b6a8dd28e89bfb3c950ed7bb7",
+          "size": 16591
+        },
+        "dinothawr/level_3-3.tmx": {
+          "sha1": "222a03d26be07b9ff784016fa9fabb805fb5eae5",
+          "size": 7329
+        },
+        "dinothawr/level_5-4.tmx": {
+          "sha1": "327f272f10751028f9076d553e13e13ef9b00e75",
+          "size": 19353
+        },
+        "dinothawr/level_3-2.tmx": {
+          "sha1": "dc8d614f29385921882142604db99983892250cd",
+          "size": 10273
+        },
+        "dinothawr/level_8-3.tmx": {
+          "sha1": "33441476fd449817d6d3460ccb6ad29b1ad43aa1",
+          "size": 9560
+        },
+        "dinothawr/xbr-lv2-pass1.glsl": {
+          "sha1": "5d00aa11e30c2f18c85faa50b8d457d92982fc34",
+          "size": 12578
+        },
+        "dinothawr/level_1-3.tmx": {
+          "sha1": "1d7f4063fdf8916a08c7f6a5a17743bc20f5314f",
+          "size": 8026
+        },
+        "dinothawr/overlay.cfg": {
+          "sha1": "bd33330e80eaa57394437184b33447b9221564ac",
+          "size": 392
+        },
+        "dinothawr/level_10-1.tmx": {
+          "sha1": "8576702c66b7e6b19cc6ce70baf1f7307f51fd5e",
+          "size": 12992
+        },
+        "dinothawr/level_1-1.tmx": {
+          "sha1": "411a5f25bc632d3fbc172a20897dc1c17414e716",
+          "size": 8069
+        },
+        "dinothawr/overlay.png": {
+          "sha1": "d430a3da1450b94941207d448e84cf8bd651102c",
+          "size": 39060
+        },
+        "dinothawr/level_4-5.tmx": {
+          "sha1": "2abf77e9275f1317505d92c7d6122c62035327fc",
+          "size": 15924
+        },
+        "dinothawr/hq2x.glslp": {
+          "sha1": "e3aa1e9b45df3caf3832d625fe6da6cb08d2e14a",
+          "size": 134
+        },
+        "dinothawr/assets/lock.png": {
+          "sha1": "595fd6c5eec7175db8b78f778bfdbb2cb98cf2b7",
+          "size": 593
+        },
+        "dinothawr/assets/finished.png": {
+          "sha1": "8bc0100786dcec6d70d4a8e1c15110776339f7f4",
+          "size": 571
+        },
+        "dinothawr/assets/tileset-pushblocks.apng": {
+          "sha1": "de042a6bb167540dd4a9c1c2da0214a6d232412d",
+          "size": 708
+        },
+        "dinothawr/assets/dino_down.apng": {
+          "sha1": "4ab8b4e79dc8d4af5d95ec1e84e09fe2b01e4122",
+          "size": 3569
+        },
+        "dinothawr/assets/dino_right.apng": {
+          "sha1": "3f87ae1209efda9fd90ae9e1f8f7c0f1a7677e7b",
+          "size": 3754
+        },
+        "dinothawr/assets/bg.apng": {
+          "sha1": "2ee072c775adf3bd0a369caa54484d051d4288ac",
+          "size": 23351
+        },
+        "dinothawr/assets/tileset-rocks.apng": {
+          "sha1": "7be09fe75ff92edd56a339731b47e621c32c60a6",
+          "size": 7556
+        },
+        "dinothawr/assets/font.png": {
+          "sha1": "9f065821996493020f115523e1fdedc70ec05178",
+          "size": 1274
+        },
+        "dinothawr/assets/dino.sprite": {
+          "sha1": "0d7f344fedaa78d5a9b9b15fe954f6c60225ef38",
+          "size": 1875
+        },
+        "dinothawr/assets/tileset-misc.apng": {
+          "sha1": "7fdbf645e128ed43f4fc192acbd631b56dd8380f",
+          "size": 813
+        },
+        "dinothawr/assets/dino_cheer.png": {
+          "sha1": "7a339cb23246505e09cd0ea0c41016c4478926f4",
+          "size": 540
+        },
+        "dinothawr/assets/dino_push.apng": {
+          "sha1": "b7cf29b37d67be894469c4d1d1476cad32e4b19a",
+          "size": 2225
+        },
+        "dinothawr/assets/dino_left.apng": {
+          "sha1": "c155ce64523d13150099747f55ca261414dd9a77",
+          "size": 3720
+        },
+        "dinothawr/assets/frozen_dino.apng": {
+          "sha1": "1e3362a364c3f17c09775861d7df961681ca972f",
+          "size": 2598
+        },
+        "dinothawr/assets/frozen.sprite": {
+          "sha1": "11a34e2f3babda3521ead2fcb6323e5a5e4b7941",
+          "size": 391
+        },
+        "dinothawr/assets/nav.sprite": {
+          "sha1": "980dcb9d9d443619a60a48a2db8f2a8a0b5a83f1",
+          "size": 211
+        },
+        "dinothawr/assets/dino_up.apng": {
+          "sha1": "507784b77bdfd202d3f8ef29afa16baa7aefb7c2",
+          "size": 2797
+        },
+        "dinothawr/assets/tileset-ground.apng": {
+          "sha1": "3c392dea8040b3e78001452dfb8abcc35d3d16c4",
+          "size": 650
+        },
+        "dinothawr/assets/tileset-slippery.apng": {
+          "sha1": "fb4e6e8eef0223c8d8fa12f1f8f3eacd0ab8ce7f",
+          "size": 12469
+        },
+        "dinothawr/assets/bg/bg8.ogg": {
+          "sha1": "0d8b076b2fb55a6e7606759c1ec1c4179af718cd",
+          "size": 1066836
+        },
+        "dinothawr/assets/bg/bg2.ogg": {
+          "sha1": "5bf6c302db56fb66858240ff28bd72be49d4c4fb",
+          "size": 743830
+        },
+        "dinothawr/assets/bg/bg4.ogg": {
+          "sha1": "b1f3603f0c668be8284f95a9a08005163404b8ea",
+          "size": 801533
+        },
+        "dinothawr/assets/bg/bg5.ogg": {
+          "sha1": "206776abf726138ba8b7c87da01727afd53b2798",
+          "size": 737750
+        },
+        "dinothawr/assets/bg/bg1.ogg": {
+          "sha1": "6f82a06f9431eb1a9c95be900a6b42757a4afdea",
+          "size": 768889
+        },
+        "dinothawr/assets/bg/bg3.ogg": {
+          "sha1": "405bcfb8587b34009ece3b9a0e115e06eda0aa1d",
+          "size": 816931
+        },
+        "dinothawr/assets/bg/theme.ogg": {
+          "sha1": "0138e2be80c75dda8fd7fd9a1cb89d0128d45ef3",
+          "size": 589303
+        },
+        "dinothawr/assets/sfx/ice_bump.wav": {
+          "sha1": "fe92ec0ac9e08b36578b09bebb7742ff69040905",
+          "size": 7184
+        },
+        "dinothawr/assets/sfx/dino_jump.wav": {
+          "sha1": "b9e6bd7c70bc9b1f7600e3ea563e24847671f546",
+          "size": 10592
+        },
+        "dinothawr/assets/sfx/dino_push.wav": {
+          "sha1": "8ae081033eede8736a3e11c107f3a2737aab4112",
+          "size": 5196
+        },
+        "dinothawr/assets/sfx/frozen_dino_melt.wav": {
+          "sha1": "c81067546d14184058717985d172429b12427990",
+          "size": 137864
+        },
+        "dinothawr/assets/sfx/chapter_locked.wav": {
+          "sha1": "3fb4302cccd358727275aba1f4bf3749dbd1d691",
+          "size": 7154
+        },
+        "dinothawr/assets/sfx/level_next.wav": {
+          "sha1": "a46cf83690dfd6302ab3706d790f9fce35068851",
+          "size": 116810
+        },
+        "dinothawr/assets/sfxr/frozen_dino_melt.sfs": {
+          "sha1": "d86d49616e46e16faf7ae6a9e0d71ece63c5c80f",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/slide_ice.sfs": {
+          "sha1": "5c5acf1b4a104ec3f0b387ee00447abd007d6eb2",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/level_failed.sfs": {
+          "sha1": "20c16a57da0c0e13f6aaff9d3412bfadddb40938",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/rock_bump.sfs": {
+          "sha1": "8814d9ea09f4ea3a4e2d79c21acc02d888065058",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/level_select.sfs": {
+          "sha1": "72d4770f1b4faa66a30432b55f63151fb881dc99",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/slide_snow.sfs": {
+          "sha1": "4b106e587c8e21200fc9eda926cfd846b08ed511",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/dino_jump.sfs": {
+          "sha1": "cc738ed840623cb1b26e2a4a35c81f4fb5291aca",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/dino_push.sfs": {
+          "sha1": "91253ebcb8cde2c19c514d536344e7ced54a67f8",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/ice_bump.sfs": {
+          "sha1": "b534472e8511c6cc4c72c4099d838235cf06dc39",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/block_slide.sfs": {
+          "sha1": "3e236aff101f299e510933fe90c28d6790d0c31e",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/dino_bump.sfs": {
+          "sha1": "c64bd2aec0152aac2f0b61d22214ac9620610fbe",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/level_next.sfs": {
+          "sha1": "c6821f3621319e26d04ce1a8c18da867289b77d9",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/chapter_locked.sfs": {
+          "sha1": "3b20311a3927c266eaad647ae22fc20e1a6850e1",
+          "size": 105
+        },
+        "dinothawr/assets/sfxr/level_complete.sfs": {
+          "sha1": "a6ce9ed6ee3d9486f371ad2c0040c2e16886a575",
+          "size": 105
+        }
+      },
+      "strip_components": 0,
+      "archive_size": 5752250,
+      "cores": [
+        "dinothawr"
+      ]
+    },
+    {
+      "ref": "dirksimple",
+      "dest": "",
+      "url": "https://buildbot.libretro.com/assets/system/DirkSimple.zip",
+      "type": "zip",
+      "systems": [],
+      "files": {
+        "DirkSimple/LICENSE.txt": {
+          "sha1": "212b5eb5026a76a73408fcf58df635fa4dbeabd1",
+          "size": 887
+        },
+        "DirkSimple/data/icon.png": {
+          "sha1": "0e40666851a1890aa891f98b0fa1f4c9bc4afb6b",
+          "size": 82005
+        },
+        "DirkSimple/data/games/cliff/logo.png": {
+          "sha1": "68f7f1c28bc3544a3f8a02d1d3f2268959e2cce7",
+          "size": 595
+        },
+        "DirkSimple/data/games/cliff/cliffglyphs.png": {
+          "sha1": "aecf6062c734429f60aba611d3bff87c250ce255",
+          "size": 621
+        },
+        "DirkSimple/data/games/cliff/game.lua": {
+          "sha1": "15c124cc43c2dcf390c2c6459fb61cfc650f6abd",
+          "size": 125540
+        },
+        "DirkSimple/data/games/cliff/icon.png": {
+          "sha1": "c9f44c900beb30bc5843042d0fbe987ac3c0c938",
+          "size": 18289
+        },
+        "DirkSimple/data/games/lair/hints.png": {
+          "sha1": "d41022a546dd0e287cd937f08faf2dfdc61b7eaa",
+          "size": 552
+        },
+        "DirkSimple/data/games/lair/coinslot.wav": {
+          "sha1": "c9cd40045b7a5fd15d6ea9a188ca79d289d87db5",
+          "size": 35696
+        },
+        "DirkSimple/data/games/lair/game.lua": {
+          "sha1": "d652a15437ca806ff3deb2d7e0bec5ab75bfcf11",
+          "size": 228209
+        },
+        "DirkSimple/data/games/lair/reject.wav": {
+          "sha1": "bf15f4d34ceefb09dec74510557c18a21c842cbc",
+          "size": 17792
+        },
+        "DirkSimple/data/games/lair/accept.wav": {
+          "sha1": "ddf9e4d35b150cbda073151115427a4e803eeede",
+          "size": 12988
+        }
+      },
+      "strip_components": 0,
+      "archive_size": 175384,
+      "cores": [
+        "dirksimple"
       ]
     },
     {

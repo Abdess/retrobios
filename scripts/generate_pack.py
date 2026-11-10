@@ -5269,6 +5269,9 @@ def generate_manifest(
         tree_readers(pack_systems, core_trees), pack_systems,
     )
 
+    # The pack is unzipped into the BIOS folder: an entry the installer puts
+    # in the roms, emulators or configs folder is in its list, not in the ZIP.
+    outer = [e for e in manifest_files if e.get("root") in OUTER_ROOTS]
     now = _build_timestamp(db)
     core_names, system_cores = _manifest_core_index(
         config, emu_profiles, manifest_files, omitted_by_destination.values()
@@ -5299,10 +5302,10 @@ def generate_manifest(
         "total_files": len(manifest_files),
         "total_size": total_size,
         "pack_files": (
-            len(manifest_files) + len(data_sizes) + len(PACK_DOCUMENTS)
+            len(manifest_files) - len(outer) + len(data_sizes) + len(PACK_DOCUMENTS)
             + len(rename_notes) + len(pack_markers(platform_name, target_name, platforms_dir))
         ),
-        "pack_size": total_size + sum(data_sizes),
+        "pack_size": total_size - sum(int(e.get("size") or 0) for e in outer) + sum(data_sizes),
         "total_omitted": len(omitted_by_destination),
         "omitted_files": sorted(
             omitted_by_destination.values(), key=lambda entry: entry["dest"]
