@@ -2905,6 +2905,32 @@ def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
     }
 
 
+def twin_build_names(config: dict) -> set[str]:
+    """The libretro core names of emulators a platform also runs standalone
+    under another name.
+
+    RetroBat's es_systems.cfg offers MAME as the libretro core mame and as
+    the standalone mame64, two names of one profile: the platform runs it
+    both ways, and each build reads its own layout.
+    """
+    standalone = {str(c) for c in config.get("standalone_cores") or []}
+    libretro = {str(c) for c in config.get("cores") or []} - standalone if isinstance(
+        config.get("cores"), list
+    ) else set()
+    if not standalone or not libretro:
+        return set()
+    profiles = load_emulator_profiles(str(Path(__file__).resolve().parent.parent / "emulators"))
+    found: set[str] = set()
+    for key, profile in profiles.items():
+        kind = str(profile.get("type", ""))
+        if "libretro" not in kind or "standalone" not in kind:
+            continue
+        names = {key, *(str(c) for c in profile.get("cores") or [])}
+        if names & standalone:
+            found |= names & libretro
+    return found
+
+
 def standalone_set(config: dict) -> set[str]:
     """The emulators a platform launches standalone, with its dual-mode ones.
 
@@ -2924,6 +2950,7 @@ def standalone_set(config: dict) -> set[str]:
         & set(map(str, config.get("standalone_cores") or []))
     }
     names |= own_build_tags(config, names)
+    names |= {DUAL_MODE_PREFIX + n for n in twin_build_names(config)}
     # The system directory each core is handed travels the same way, so
     # platform_layouts places a core's files below it for every reader.
     names |= {

@@ -104,6 +104,7 @@ notes: 'libretro/mame built at the 0.278 release. BIOS root sets read from mamed
   sets and their ROMs are that release''s, not the current one''s.'
 files:
 - name: 3dobios.zip
+  path: mame/bios/3dobios.zip
   required: true
   category: bios_zip
   system: panasonic-3do
@@ -130,6 +131,7 @@ files:
     sha1: b01c53da256dde43ffec4ad3fc3adfa8d635e943
     description: Sanyo TRY 3DO Interactive Multiplayer
 - name: airlbios.zip
+  path: mame/bios/airlbios.zip
   required: false
   category: bios_zip
   system: sega-naomi
@@ -152,6 +154,7 @@ files:
     crc32: 3ea24b6a
     sha1: 3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc
 - name: aleck64.zip
+  path: mame/bios/aleck64.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/nintendo/aleck64.cpp:1415"
@@ -169,6 +172,7 @@ files:
     crc32: 4f2ae525
     sha1: eab43f8cc52c8551d9cff6fced18ef80eaba6f05
 - name: alg3do.zip
+  path: mame/bios/alg3do.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/misc/3do.cpp:296"
@@ -178,6 +182,7 @@ files:
     crc32: b832da9a
     sha1: 520d3d1b5897800af47f92efd2444a26b7a7dead
 - name: alg_bios.zip
+  path: mame/bios/alg_bios.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/amiga/alg.cpp:925"
@@ -188,6 +193,7 @@ files:
     sha1: 891e9a547772fe0c6c19b610baf8bc4ea7fcb785
     description: Kickstart 1.3 (34.5)
 - name: allied.zip
+  path: mame/bios/allied.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/pinball/allied.cpp:775"
@@ -205,6 +211,7 @@ files:
     crc32: 13f42789
     sha1: baa0f73fda08a3c5d6f1423fb329e4febb07ef97
 - name: ar_bios.zip
+  path: mame/bios/ar_bios.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/amiga/arsystems.cpp:1013"
@@ -294,6 +301,7 @@ files:
     crc32: a5cc4515
     sha1: 80070521476e92323a6baa6e55928ca5b751a332
 - name: aristmk5.zip
+  path: mame/bios/aristmk5.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/acorn/aristmk5.cpp:9293"
@@ -392,6 +400,7 @@ files:
     crc32: 941d4cdb
     sha1: 1ca091fba69e92f262dbb3d40f515703c8981793
 - name: aristmk6.zip
+  path: mame/bios/aristmk6.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/aristocrat/aristmk6.cpp:6636"
@@ -789,6 +798,7 @@ files:
     crc32: 117b75f2
     sha1: 2129286853d3c50b8a943b71334d4ef6b98adc05
 - name: aristmk7.zip
+  path: mame/bios/aristmk7.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/aristocrat/aristmk7.cpp:233"
@@ -798,6 +808,7 @@ files:
     crc32: f2fea07e
     sha1: 285038473fbe3a5708045e2f8b14562f3c24b203
 - name: atarisy1.zip
+  path: mame/bios/atarisy1.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/atari/atarisy1.cpp:2553"
@@ -863,6 +874,7 @@ files:
     crc32: 92d6a0b4
     sha1: 0a42a4816c89447b16e1f3245409591efea98a4a
 - name: awbios.zip
+  path: mame/bios/awbios.zip
   required: true
   category: bios_zip
   system: sammy-atomiswave
@@ -881,6 +893,7 @@ files:
     crc32: 82a105f0
     sha1: 5128fe2ddcced77332bdcab691c09958051fa564
 - name: bubsys.zip
+  path: mame/bios/bubsys.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/konami/nemesis.cpp:3234"
@@ -902,6 +915,7 @@ files:
     crc32: 2f44f970
     sha1: 7ab46f9d5d587665782cefc623b8de0124a6d38a
 - name: cdibios.zip
+  path: mame/bios/cdibios.zip
   required: true
   category: bios_zip
   system: philips-cdi
@@ -923,6 +937,7 @@ files:
     sha1: 56d0acd7caad51c7de703247cd6d842b36173079
     bad_dump: true
 - name: cedmag.zip
+  path: mame/bios/cedmag.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/efo/cedar_magnet.cpp:1166"
@@ -932,6 +947,7 @@ files:
     crc32: 86c4a4f0
     sha1: 6db1a006b2e0b2a7cc9748ade881debb098b6757
 - name: chihiro.zip
+  path: mame/bios/chihiro.zip
   required: true
   category: bios_zip
   system: sega-chihiro
@@ -966,6 +982,7 @@ files:
     crc32: 7742ab62
     sha1: 82dad6e2a75bab4a4840dc6939462f1fb9b95101
 - name: coh1000a.zip
+  path: mame/bios/coh1000a.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/zn.cpp:6072"
@@ -979,6 +996,7 @@ files:
     crc32: c425eaf5
     sha1: decf77ab50f7f58c641c3214a11647924f3a8998
 - name: coh1000c.zip
+  path: mame/bios/coh1000c.zip
   required: true
   category: bios_zip
   system: capcom-zn1
@@ -999,6 +1017,7 @@ files:
     crc32: bb7ba033
     sha1: 966f3aee5d00e1312c455f855915d621e6cb0672
 - name: coh1000t.zip
+  path: mame/bios/coh1000t.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/zn.cpp:6046"
@@ -1012,6 +1031,7 @@ files:
     crc32: daac13e7
     sha1: 96d94f2b06fb7ecd91454969f4959a583ffb9d5a
 - name: coh1000w.zip
+  path: mame/bios/coh1000w.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/zn.cpp:6081"
@@ -1025,6 +1045,7 @@ files:
     crc32: 1cac067e
     sha1: 8e87941bfb374172628c8a37647e3a66b7166aa8
 - name: coh1001l.zip
+  path: mame/bios/coh1001l.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/zn.cpp:6085"
@@ -1038,6 +1059,7 @@ files:
     crc32: 181668b3
     sha1: 8d2fe1facb4473cc20b4b477aaf881f9280939cf
 - name: coh1002e.zip
+  path: mame/bios/coh1002e.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/zn.cpp:6095"
@@ -1051,6 +1073,7 @@ files:
     crc32: a7dd922e
     sha1: 1069c1d9015028a51a1b314cfacb014ea90aa425
 - name: coh1002m.zip
+  path: mame/bios/coh1002m.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/zn.cpp:6146"
@@ -1064,6 +1087,7 @@ files:
     crc32: 50dc8322
     sha1: cef4011c6c06d6fce546e1db5d9fbae155eabf57
 - name: coh1002t.zip
+  path: mame/bios/coh1002t.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/taitogn.cpp:1378"
@@ -1085,6 +1109,7 @@ files:
     crc32: 9100dbf2
     sha1: 9ce888bd2a7e575c8ca71d978cb85de22afb5660
 - name: coh1002v.zip
+  path: mame/bios/coh1002v.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/zn.cpp:6089"
@@ -1098,6 +1123,7 @@ files:
     crc32: 1ce271df
     sha1: b01479dc75a4a8a86bee7ac7cd10af2bda332544
 - name: coh3002c.zip
+  path: mame/bios/coh3002c.zip
   required: true
   category: bios_zip
   system: capcom-zn2
@@ -1112,6 +1138,7 @@ files:
     crc32: 7808fcef
     sha1: 3c3fb8227b05dace042dc1429b9f2355b1a15638
 - name: coh3002t.zip
+  path: mame/bios/coh3002t.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sony/taitogn.cpp:1377"
@@ -1153,6 +1180,7 @@ files:
     sha1: c6918dfbb6fcf686dde4b731e84f740177ab31f0
     description: MB2011
 - name: crysbios.zip
+  path: mame/bios/crysbios.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/misc/crystal.cpp:818"
@@ -1168,6 +1196,7 @@ files:
     sha1: f60c016be2ff11e47b2192acddb92676043af501
     description: AMG0110D PCB
 - name: cubo.zip
+  path: mame/bios/cubo.zip
   required: true
   category: bios_zip
   system: commodore-cubo
@@ -1178,6 +1207,7 @@ files:
     crc32: d3837ae4
     sha1: 06807db3181637455f4d46582d9972afec8956d9
 - name: decocass.zip
+  path: mame/bios/decocass.zip
   required: true
   category: bios_zip
   system: deco-cassette
@@ -1364,6 +1394,7 @@ files:
     crc32: a6df18fd
     sha1: 1f9ea47e372d31767c936c15852b43df2b0ee8ff
 - name: f355bios.zip
+  path: mame/bios/f355bios.zip
   required: false
   category: bios_zip
   system: sega-naomi
@@ -1390,6 +1421,7 @@ files:
     crc32: 3ea24b6a
     sha1: 3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc
 - name: f355dlx.zip
+  path: mame/bios/f355dlx.zip
   required: false
   category: bios_zip
   system: sega-naomi
@@ -1424,6 +1456,7 @@ files:
     crc32: 3ea24b6a
     sha1: 3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc
 - name: galgbios.zip
+  path: mame/bios/galgbios.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/ces/galgames.cpp:1288"
@@ -1445,6 +1478,7 @@ files:
     crc32: e3ae423c
     sha1: 66d1964845a99a5ed4b19b4135b55cde6b5fe295
 - name: gp_110.zip
+  path: mame/bios/gp_110.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/pinball/gp_1.cpp:577"
@@ -1458,6 +1492,7 @@ files:
     crc32: a223f2e8
     sha1: 767e15e19e11399935c890c1d1034dccf1ad7f92
 - name: gq863.zip
+  path: mame/bios/gq863.zip
   required: true
   category: bios_zip
   system: konami-twinkle
@@ -1472,6 +1507,7 @@ files:
     crc32: 6f42a09e
     sha1: cab5209f90f47b9ee6e721479913ad74e3ba84b1
 - name: gts1.zip
+  path: mame/bios/gts1.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/pinball/gts1.cpp:1074"
@@ -1485,6 +1521,7 @@ files:
     crc32: 4cd312dd
     sha1: 31245daa9972ef8652caee69986585bb8239e86e
 - name: hikaru.zip
+  path: mame/bios/hikaru.zip
   required: true
   category: bios_zip
   system: sega-hikaru
@@ -1516,6 +1553,7 @@ files:
     sha1: 6c2de7dae32bef855d9bc556568c3a170f54caa5
     bad_dump: true
 - name: hng64.zip
+  path: mame/bios/hng64.zip
   required: true
   category: bios_zip
   system: hyper-neogeo64
@@ -1562,6 +1600,7 @@ files:
     crc32: dabec5d2
     sha1: 19c5be89c57387d6ea563b3dc55674d0692af98e
 - name: hod2bios.zip
+  path: mame/bios/hod2bios.zip
   required: false
   category: bios_zip
   system: sega-naomi
@@ -1596,6 +1635,7 @@ files:
     crc32: 3ea24b6a
     sha1: 3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc
 - name: isgsm.zip
+  path: mame/bios/isgsm.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sega/segas16b_isgsm.cpp:608"
@@ -1605,6 +1645,7 @@ files:
     crc32: 2292585c
     sha1: 97ba0e0f0be832a5114d95151e519bc027f6675b
 - name: iteagle.zip
+  path: mame/bios/iteagle.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/itech/iteagle.cpp:715"
@@ -1685,6 +1726,7 @@ files:
     crc32: 4f1ff45a
     sha1: 213cbdd6cd37ad9b5bfc9545084892a68d29f5ff
 - name: konamigv.zip
+  path: mame/bios/konamigv.zip
   required: true
   category: bios_zip
   system: konami-gv
@@ -1695,6 +1737,7 @@ files:
     crc32: ad498d2d
     sha1: 02a82a2fe1fba0404517c3602324bfa64e23e478
 - name: konamigx.zip
+  path: mame/bios/konamigx.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/konami/konamigx.cpp:4196"
@@ -1704,6 +1747,7 @@ files:
     crc32: d5fa95f5
     sha1: c483aa98ff8ef40cdac359c19ad23fea5ecc1906
 - name: konendev.zip
+  path: mame/bios/konendev.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/konami/konendev.cpp:914"
@@ -1713,6 +1757,7 @@ files:
     crc32: 36122a98
     sha1: 3d2c40c9d504358d890364e26c9562e40314d8a4
 - name: kpython.zip
+  path: mame/bios/kpython.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/konami/kpython.cpp:376"
@@ -1722,6 +1767,7 @@ files:
     crc32: 98de405e
     sha1: 4bc268a996825c1bdf6ae277d331fe7bdc0cc00c
 - name: kpython2.zip
+  path: mame/bios/kpython2.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/konami/kpython2.cpp:1918"
@@ -1731,6 +1777,7 @@ files:
     crc32: 79d60546
     sha1: 0ea98a25a32145dda514de2f0d4bfbbd806bd00c
 - name: kviper.zip
+  path: mame/bios/kviper.zip
   required: true
   category: bios_zip
   system: konami-viper
@@ -1749,6 +1796,7 @@ files:
     crc32: f1511505
     sha1: ed7cd9b2763b3e377df9663943160f9871f65105
 - name: lindbios.zip
+  path: mame/bios/lindbios.zip
   required: true
   category: bios_zip
   system: sega-lindbergh
@@ -1778,11 +1826,13 @@ files:
     crc32: f78d14d7
     sha1: f129787e487984edd23bf344f2e9500c85052275
 - name: mac2bios.zip
+  path: mame/bios/mac2bios.zip
   required: false
   category: bios_zip
   source_ref: "upstream src/mame/seta/macs.cpp:791"
   contents: []
 - name: macsbios.zip
+  path: mame/bios/macsbios.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/seta/macs.cpp:790"
@@ -1800,6 +1850,7 @@ files:
     crc32: 669096c1
     sha1: 36f55a2e4865bdf0506746a4df51bfb1944f905e
 - name: maxaflex.zip
+  path: mame/bios/maxaflex.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/atari/maxaflex.cpp:450"
@@ -1817,6 +1868,7 @@ files:
     crc32: edf5c950
     sha1: 9ad046ea41a61585dd8d2f2d4167a3cc39d2928f
 - name: megaplay.zip
+  path: mame/bios/megaplay.zip
   required: true
   category: bios_zip
   system: sega-megaplay
@@ -1856,6 +1908,7 @@ files:
     sha1: ba79183e4b522d1b57a46a56fc7d9b85de24df36
     bad_dump: true
 - name: megatech.zip
+  path: mame/bios/megatech.zip
   required: true
   category: bios_zip
   system: sega-megatech
@@ -1882,6 +1935,7 @@ files:
     sha1: c9008c431a937c084fb475273093ca0b434b5f47
     description: Ver 0 Rev B (alt?)
 - name: miuchiz.zip
+  path: mame/bios/miuchiz.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/misc/miuchiz.cpp:227"
@@ -1891,6 +1945,7 @@ files:
     crc32: 2ff7ec96
     sha1: 633365fd19a3d0f2ce56cb499b2577a5fb53e466
 - name: naomi.zip
+  path: mame/bios/naomi.zip
   required: true
   category: bios_zip
   system: sega-naomi
@@ -2023,6 +2078,7 @@ files:
     crc32: 3ea24b6a
     sha1: 3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc
 - name: naomi2.zip
+  path: mame/bios/naomi2.zip
   required: true
   category: bios_zip
   system: sega-naomi2
@@ -2089,6 +2145,7 @@ files:
     crc32: 3ea24b6a
     sha1: 3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc
 - name: naomigd.zip
+  path: mame/bios/naomigd.zip
   required: true
   category: bios_zip
   system: sega-naomigd
@@ -2139,6 +2196,7 @@ files:
     crc32: 3ea24b6a
     sha1: 3a730ebcf56e0060fef6b1b02eb2eb7cfb7e61dc
 - name: neogeo.zip
+  path: mame/bios/neogeo.zip
   required: true
   category: bios_zip
   system: snk-neogeo-mvs
@@ -2285,6 +2343,7 @@ files:
     crc32: c2ea0cfd
     sha1: fd4a618cdcdbf849374f0a50dd8efe9dbab706c3
 - name: nichidvd.zip
+  path: mame/bios/nichidvd.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/nichibutsu/hrdvd.cpp:1010"
@@ -2302,6 +2361,7 @@ files:
     crc32: '36135792'
     sha1: 1b9c50bd02df8227b228b35cc485efd5a13ec639
 - name: nss.zip
+  path: mame/bios/nss.zip
   required: true
   category: bios_zip
   system: nintendo-nss
@@ -2323,6 +2383,7 @@ files:
     sha1: e3942f9d508c3c8074c3c3941376c37ca68b8e54
     description: Nintendo Super System (Single Cart BIOS v3, hack?)
 - name: pgm.zip
+  path: mame/bios/pgm.zip
   required: true
   category: bios_zip
   system: igs-pgm
@@ -2345,6 +2406,7 @@ files:
     crc32: 45ae7159
     sha1: d3ed3ff3464557fd0df6b069b2e431528b0ebfa8
 - name: playch10.zip
+  path: mame/bios/playch10.zip
   required: true
   category: bios_zip
   system: nintendo-playch10
@@ -2435,6 +2497,7 @@ files:
     crc32: 48de65dc
     sha1: d10acafc8da9ff479c270ec01180cca61efe62f5
 - name: pumpitup.zip
+  path: mame/bios/pumpitup.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/misc/xtom3d.cpp:993"
@@ -2458,6 +2521,7 @@ files:
     crc32: 9c436cfa
     sha1: 480ea52e74721d1963ced41be5c482b7b913ccd2
 - name: recel.zip
+  path: mame/bios/recel.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/pinball/recel.cpp:547"
@@ -2471,6 +2535,7 @@ files:
     crc32: 39a70611
     sha1: 8545e168a5f256150bcff12d1e6d8efffd08c3cd
 - name: sammymdl.zip
+  path: mame/bios/sammymdl.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sigma/sigmab98.cpp:2409"
@@ -2491,6 +2556,7 @@ files:
     sha1: c3ceea196e5c1c6a9e03cf3a22e9f25f0099a38e
     description: IPL Ver. 1.0
 - name: segasp.zip
+  path: mame/bios/segasp.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sega/segasp.cpp:1041"
@@ -2544,6 +2610,7 @@ files:
     crc32: 947ddfad
     sha1: 832a3db097af680d1d0eb9451b4650565f0cf8c7
 - name: sfcbox.zip
+  path: mame/bios/sfcbox.zip
   required: true
   category: bios_zip
   system: nintendo-sfcbox
@@ -2564,6 +2631,7 @@ files:
     crc32: ad3ec05c
     sha1: a3d336db585fe02a37c323422d9db6a33fd489a6
 - name: shtzone.zip
+  path: mame/bios/shtzone.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/sega/shtzone.cpp:378"
@@ -2573,6 +2641,7 @@ files:
     crc32: ea8901d9
     sha1: 43fd8bfc395e3b2e3fbe9645d692a5eb04783d9c
 - name: skns.zip
+  path: mame/bios/skns.zip
   required: true
   category: bios_zip
   system: super-kaneko-nova
@@ -2607,6 +2676,7 @@ files:
     crc32: 1d90517c
     sha1: 463962ffe19880135f0d95a7beda79e27448e872
 - name: stvbios.zip
+  path: mame/bios/stvbios.zip
   required: true
   category: bios_zip
   system: sega-stv
@@ -2673,6 +2743,7 @@ files:
     crc32: 15432ae2
     sha1: 7d9364d546f3d3f839ec36be148076f8d26a65a6
 - name: su2000.zip
+  path: mame/bios/su2000.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/misc/su2000.cpp:302"
@@ -2854,6 +2925,7 @@ files:
     crc32: d84b58c2
     sha1: 087b5a56ddb6bef6b1bc93b9a8e0d23de27aa399
 - name: sys246.zip
+  path: mame/bios/sys246.zip
   required: true
   category: bios_zip
   system: namco-system246
@@ -2864,6 +2936,7 @@ files:
     crc32: 2b2e41a2
     sha1: f0a74bbcaf801f3fd0b7002ebd0118564aae3528
 - name: sys256.zip
+  path: mame/bios/sys256.zip
   required: true
   category: bios_zip
   system: namco-system256
@@ -2874,6 +2947,7 @@ files:
     crc32: b2a8eeb6
     sha1: bc4fb4e1e53adbd92385f1726bd69663ff870f1e
 - name: sys573.zip
+  path: mame/bios/sys573.zip
   required: true
   category: bios_zip
   system: namco-system573
@@ -2910,6 +2984,7 @@ files:
     sha1: 779177e6312ef272483eeb64a5e84bbae6e301f2
     description: Found on Dancing Stage Euro Mix 2
 - name: taitotz.zip
+  path: mame/bios/taitotz.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/taito/taitotz.cpp:3014"
@@ -2923,6 +2998,7 @@ files:
     crc32: c7c2dc6b
     sha1: bf88c818166c285130c5c73d6982f009da26e143
 - name: tourvis.zip
+  path: mame/bios/tourvis.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/pce/tourvis.cpp:475"
@@ -2983,6 +3059,7 @@ files:
     sha1: 881ea7802b9e241473bc8ced0472e0f1851c9886
     description: VT-11
 - name: triforce.zip
+  path: mame/bios/triforce.zip
   required: true
   category: bios_zip
   system: sega-triforce
@@ -2993,6 +3070,7 @@ files:
     crc32: d1883221
     sha1: c3cb7227e4dbc2af861e76d00cb59726105a2e4c
 - name: v4bios.zip
+  path: mame/bios/v4bios.zip
   required: true
   category: bios_zip
   source_ref: "upstream src/mame/barcrest/mpu4vid.cpp:8696"

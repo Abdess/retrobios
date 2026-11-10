@@ -578,8 +578,10 @@ def _append_new_entries(text: str, files: list[dict], original: str) -> str:
         return text
 
     lines = []
+    profile_type = str(existing_data.get("type") or "")
     for fe in new_entries:
         lines.append(f"\n  - name: {_yaml_scalar(fe['name'])}")
+        lines.extend(set_path_lines(profile_type, fe["name"]))
         lines.append(f"    required: {str(fe['required']).lower()}")
         lines.append("    category: bios_zip")
         if fe.get("source_ref"):
@@ -715,10 +717,27 @@ def _rewrite_systems(section: str, systems: dict[str, list[str]]) -> str:
     return "\n".join(out)
 
 
-def _format_device_entry(name: str, device: dict, role: str) -> str:
+def set_path_lines(profile_type: str, name: str) -> list[str]:
+    """Where each build of a MAME profile reads a set it lists.
+
+    The libretro build searches the content folder, then <system>/mame/bios
+    and <system>/mame/roms (libretro-internal/retro_init.cpp,
+    Set_Path_Option), never the system folder itself. The standalone build
+    reads the top of its rompath.
+    """
+    if "libretro" not in profile_type:
+        return []
+    lines = [f'    path: "mame/bios/{name}"']
+    if "standalone" in profile_type:
+        lines.append(f'    standalone_path: "{name}"')
+    return lines
+
+
+def _format_device_entry(name: str, device: dict, role: str, profile_type: str = "") -> str:
     """One generated device entry, in the field order of the written ones."""
     lines = [
         f"  - name: {_zip_scalar(name)}",
+        *set_path_lines(profile_type, name),
         "    required: false",
         "    category: bios_zip",
         *_system_lines(device.get("systems") or []),
@@ -779,7 +798,9 @@ def merge_mame_devices(
         name = f"{set_name}.zip"
         existing = entries.get(name)
         if not existing:
-            new_blocks[name] = _format_device_entry(name, device, role)
+            new_blocks[name] = _format_device_entry(
+                name, device, role, str(profile.get("type") or "")
+            )
             report["added"].append(set_name)
             continue
         if any(e.get("category") != "bios_zip" for e in existing):

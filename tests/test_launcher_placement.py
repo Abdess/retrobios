@@ -859,6 +859,35 @@ class MameSearchPaths(unittest.TestCase):
             self.assertEqual(entry["standalone_path"], "psxmame/bios/" + entry["name"])
 
 
+class LibretroMameSetsInMameBios(unittest.TestCase):
+    """libretro/mame searches the content folder, then <system>/mame/bios and
+    <system>/mame/roms, never the system folder itself
+    (src/osd/libretro/libretro-internal/retro_init.cpp:580-597)."""
+
+    def test_every_libretro_mame_set_is_read_in_mame_bios(self) -> None:
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        for key in ("mame", "mame0258", "mame0278", "mamearcade", "mamemess"):
+            sets = [f for f in profiles[key]["files"] if f.get("category") == "bios_zip"
+                    and f.get("mode") != "standalone" and f["name"] != "bbc.zip"]
+            self.assertTrue(sets, key)
+            for entry in sets:
+                self.assertEqual(entry.get("path"), "mame/bios/" + entry["name"], key)
+
+    def test_the_standalone_build_keeps_its_rompath_layout(self) -> None:
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["mame"]
+        for entry in profile["files"]:
+            if str(entry.get("path", "")).startswith("mame/bios/"):
+                self.assertEqual(entry.get("standalone_path"), entry["name"])
+
+    def test_retrobat_lays_out_both_builds(self) -> None:
+        # es_systems.cfg offers the libretro core mame and the standalone
+        # mame64, two names of one profile.
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["mame"]
+        config = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))
+        builds = sorted(s for _v, s in platform_layouts("mame", profile, standalone_set(config)))
+        self.assertEqual(builds, [False, True])
+
+
 class GzdoomOnRetroDECK(unittest.TestCase):
     """RetroDECK writes RETRODECKROMSDIR/doom into [IWADSearch.Directories]
     (gzdoom.ini:9, component_prepare.sh:27)."""
