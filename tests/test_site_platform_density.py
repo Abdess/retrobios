@@ -266,8 +266,10 @@ BEFORE_WEIGHT = {
     # name since 2026-11-09: each file lists every core that reads it with
     # its citations (the Game Boy Advance went from 4 readers to 10), and
     # Elektronika BK, FM Towns and Nintendo DS moved to part pages. Built
-    # site of 27c33b966: 13 pages, 15,662 elements, 1,356,360 bytes.
-    "batocera": (13, 18_854, 1_356_360),
+    # site of 27c33b966: 13 pages, 15,662 elements, 1,356,360 bytes, and 40
+    # bytes more where its Amiberry build is named "Amiberry 8.0.0
+    # (facaaeb, Batocera)" (twice).
+    "batocera": (13, 18_854, 1_356_400),
     "amberelec": (1, 7_928, 473_388),
     "romm": (2, 9_561, 572_487),
     "retroarch": (14, 21_503, 1_430_802),
