@@ -460,10 +460,10 @@ an emulator needs that is not available is said too.
 <!-- generated: run-default -->
 
 ```
-Installing 19074 files (10.1 GB) for Batocera.
+Installing 19194 files (10.1 GB) for Batocera.
 BIOS folder: /userdata/bios
 
-Done. 19074 files installed.
+Done. 19194 files installed.
 79 files an emulator needs are not available here (--verbose names them).
 Next: start Batocera and play.
 ```
