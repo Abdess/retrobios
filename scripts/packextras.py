@@ -697,9 +697,16 @@ def _agnostic_scan_extras(
                         "agnostic_scan": True,
                     }
                     extra["claim_order"] = (4, 0, emu_name)
-                    if not _take(extra, full_dest, seen_dests, taken):
-                        continue
-                    extras.append(extra)
+                    if _take(extra, full_dest, seen_dests, taken):
+                        extras.append(extra)
+                    else:
+                        # The image another core's scan placed is this core's
+                        # too, and so are the companions it reads beside it:
+                        # Recalbox's libretro PCSX2 opens <bios>.erom next to
+                        # the images LRPS2 placed, which LRPS2 never reads.
+                        held = taken.get(full_dest) if taken is not None else None
+                        if held is None or held.get("sha1") != sha1:
+                            continue
                     extras.extend(_companion_extras(
                         _companions(path, scan_name, _companion_extensions(profile, fname), files_db),
                         folder, extras_prefix, seen_dests, profile, emu_name, f, taken,
