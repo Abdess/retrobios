@@ -24,6 +24,8 @@ systems:
 
 bios_directory: "bios/"
 resources_directory: "resources/"
+standalone_directories:
+  - "[Folders] Bios = bios"
 
 data_root:
   android:

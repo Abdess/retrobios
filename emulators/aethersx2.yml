@@ -22,6 +22,8 @@ systems:
 
 bios_directory: "bios/"
 resources_directory: "resources/"
+standalone_directories:
+  - "[Folders] Bios = bios"
 
 data_root:
   android:
@@ -53,7 +55,8 @@ notes: |
   A BIOS image is required and boot stops without one. It belongs in the bios
   folder of the data directory given in data_root, and the Folders section of
   PCSX2.ini names another path when set.
-  ref: AetherSX2-release MacOS/AetherSX2, aethersx2 archive/desktop/mac/README.md
+  ref: AetherSX2-release MacOS/AetherSX2, aethersx2 archive/desktop/mac/README.md,
+       aethersx2/pcsx2/Pcsx2Config.cpp:935-946
 
   Detection is by content. The scan lists the BIOS folder with a *.* mask, keeps
   files between 4 and 8 MB, and accepts an image whose romdir carries a RESET
