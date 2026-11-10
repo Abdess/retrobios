@@ -1506,9 +1506,8 @@ RetroBIOS also runs on the handheld itself, in the
 Copy the file for the system to the SD card, then start RetroBIOS from the
 menu.
 
-The files below ship with the next release. Until then, build them from a
-clone of the repository with `python scripts/build_port.py`, which writes all
-four into `dist/`, or use the computer route at the end of this section.
+Download the file for your system from the
+[latest release](https://github.com/Abdess/retrobios/releases/latest).
 
 | System | File | Copy it to | Start it from |
 |--------|------|------------|---------------|

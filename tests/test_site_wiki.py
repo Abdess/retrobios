@@ -48,7 +48,7 @@ sys.path.insert(0, str(REPO_ROOT))
 import sitediagrams  # noqa: E402
 from siteguides import INSTALL_SH  # noqa: E402
 from tests import sitepages  # noqa: E402
-from check_release import INSTALLER, SUMS, Asset, compare_release, installer_files  # noqa: E402
+from check_release import SUMS, Asset, compare_release  # noqa: E402
 
 
 WIKI = REPO_ROOT / "wiki"
@@ -858,49 +858,27 @@ def _sums_with(names: list[str]) -> dict[str, str]:
 
 
 class PinnedInstaller(unittest.TestCase):
-    """J9, D5: release tags are deleted and the release carried no installer."""
+    """The release page carries the packs a beginner picks from, and no
+    installer or file list: a package pins those from the tag (owner,
+    2026-11-10, "dans release on met le minimum sans bruit")."""
 
-    def test_the_list_holds_the_installer_and_every_file_list(self):
-        names = installer_files(REPO_ROOT / "install")
-        self.assertEqual(names[:3], list(INSTALLER))
-        self.assertIn("retroarch.json", names)
-        self.assertEqual(len(names), 3 + len(list((REPO_ROOT / "install").glob("*.json"))))
-
-    def test_a_release_without_the_installer_is_refused(self):
+    def test_an_installer_attached_to_the_release_is_refused(self):
         record = {"tag": "v1", "packs": {"P.zip": {"download_size": 5, "assets": ["P.zip"]}}}
-        files = ["install.py", "install.sh", "install.ps1", "retroarch.json"]
-        sums = _sums_with(["P.zip", *files])
+        sums = _sums_with(["P.zip", "install.py", "retroarch.json"])
         assets = {name: Asset(5, digest) for name, digest in sums.items()}
         assets[SUMS] = Asset(1, None)
-        self.assertEqual(compare_release(record, sums, assets, "v1", installer=files), [])
+        kinds = {(f.kind, f.name) for f in compare_release(record, sums, assets, "v1")}
+        self.assertEqual(kinds, {("unrecorded", "install.py"), ("unrecorded", "retroarch.json")})
 
-        del sums["install.py"]
-        del assets["install.py"]
-        kinds = {(f.kind, f.name) for f in compare_release(record, sums, assets, "v1",
-                                                            installer=files)}
-        self.assertEqual(kinds, {("no-installer", "install.py")})
-
-    def test_listed_but_not_uploaded_is_missing(self):
-        record = {"tag": "v1", "packs": {}}
-        sums = _sums_with(list(INSTALLER))
-        assets = {name: Asset(5, digest) for name, digest in sums.items() if name != "install.sh"}
-        assets[SUMS] = Asset(1, None)
-        kinds = {(f.kind, f.name) for f in compare_release(record, sums, assets, "v1",
-                                                            installer=list(INSTALLER))}
-        self.assertEqual(kinds, {("missing", "install.sh")})
-
-    def test_the_release_steps_ship_them(self):
+    def test_the_release_steps_ship_none(self):
         text = _wiki("release-process.md")
-        self.assertIn("cp install.py install.sh install.ps1 install/*.json dist/", text)
+        self.assertNotIn("cp install.py", text)
         sums = re.search(r"sha256sum [^>]+> SHA256SUMS.txt", text, re.S).group(0)
         upload = re.search(r"for f in dist/SHA256SUMS.txt.*?; do", text, re.S).group(0)
-        for name in (*INSTALLER, "*.json"):
+        for name in ("install.py", "install.sh", "install.ps1", ".json"):
             with self.subTest(name=name):
-                self.assertIn(name, sums)
-        for name in INSTALLER:
-            with self.subTest(upload=name):
-                self.assertIn(f"dist/{name}", upload)
-        self.assertIn("install/*.json", upload)
+                self.assertNotIn(name, sums)
+                self.assertNotIn(name, upload)
 
     def test_the_installer_page_pins_one_commit(self):
         # v2026.10.10 carries no install.py: until a release does, the

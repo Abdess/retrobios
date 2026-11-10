@@ -256,17 +256,17 @@ python scripts/split_pack.py dist/
 #     check_release.py compares each asset with its line there.
 python scripts/build_port.py
 
-# 2c. The installer and the file lists step 1 wrote, so a package can pin
-#     one release (installer page, "For packagers"). check_release.py
-#     refuses a release that lacks one of them.
-cp install.py install.sh install.ps1 install/*.json dist/
+# 2c. The release carries the packs, the handheld launchers and the signed
+#     checksum list, and nothing else: a beginner reads that page to pick one
+#     file. A package pins install.py and its file list from the tag
+#     (installer page, "For packagers"), and check_release.py refuses an
+#     installer or a file list attached to the release.
 
 # 3. Checksums of the files as published, then sign the list. The checksums
 #    answer corruption, and the signature answers a rewritten release, which is
 #    the one thing a checksum published beside its own artifacts cannot
 #    answer.
-(cd dist && sha256sum *.zip RetroBIOS.muxapp install.py install.sh install.ps1 \
-  $(cd ../install && ls *.json) > SHA256SUMS.txt)
+(cd dist && sha256sum *.zip RetroBIOS.muxapp > SHA256SUMS.txt)
 ssh-keygen -Y sign -f ~/.ssh/retrobios_signing -n file dist/SHA256SUMS.txt
 
 # 4. Record what each pack holds, read from the archives just checked:
@@ -291,8 +291,7 @@ python scripts/release_notes.py --whats-new tmp/whats-new.md --output tmp/notes.
 #    A public release with half its assets is a broken download for everyone
 #    during the whole upload.
 gh release create "v${DATE}" --draft --title "BIOS Pack v${DATE}" --notes-file tmp/notes.md
-for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*.zip dist/RetroBIOS.muxapp \
-         dist/install.py dist/install.sh dist/install.ps1 $(ls install/*.json | sed 's|^install/|dist/|'); do
+for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*.zip dist/RetroBIOS.muxapp; do
   [ -f "$f" ] && gh release upload "v${DATE}" "$f#$(basename "$f")" --clobber
 done
 #    A count does not see a failed upload beside a stray file, nor a part

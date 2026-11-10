@@ -322,12 +322,16 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
         self.assertIn("--dry-run", paragraph)
         self.assertLess(text.index(paragraph), text.index("### What changed"))
 
-    def test_the_rows_link_get_pages(self):
+    def test_the_rows_link_this_release_files(self):
+        """The files sit right below the notes: a row sends nobody to the
+        site to find them (owner, 2026-11-10)."""
         import release_notes
 
         text = release_notes.render(self.RECORD, PLATFORMS, "x")
-        self.assertIn(f"[Download]({SITE}get/romm/)", text)
-        self.assertNotIn("/releases/download/", text)
+        self.assertIn(
+            "[Download](https://github.com/Abdess/retrobios/releases/download/"
+            "v2026.10.24/RomM_5_BIOS_Pack.zip)", text)
+        self.assertNotIn(f"{SITE}get/", text)
 
 
 class EveryPlatformHasAPermanentPage(unittest.TestCase):

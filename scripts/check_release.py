@@ -7,9 +7,9 @@ SHA256SUMS.txt lists for it, as must each handheld launcher (RetroBIOS.zip
 and the others build_port.py writes) the list names, the parts of a pack must add up to the download
 size the README prints, and nothing else may be attached. The record holds
 one pack for each platform the registry marks release_pack, and no other
-pack. The installer (install.py, install.sh, install.ps1) and every file
-list of install/ are listed and attached too, so a package can pin one
-release. An upload that
+pack. The installer and the file lists are not release files: a package pins
+them from the tag, so a reader of the release page sees the packs and nothing
+to puzzle over. An upload that
 failed in the loop, or a part re-uploaded from an older build, otherwise
 publishes a release that `sha256sum --check` rejects for every user.
 
@@ -39,14 +39,6 @@ from release_record import RECORD, load_record
 
 SUMS = "SHA256SUMS.txt"
 SIGNATURE = SUMS + ".sig"
-INSTALLER = ("install.py", "install.sh", "install.ps1")
-
-
-def installer_files(install_dir: str | Path = "install") -> list[str]:
-    """The release files a package pins: the installer and each file list."""
-    return [*INSTALLER, *sorted(p.name for p in Path(install_dir).glob("*.json"))]
-
-
 @dataclass(frozen=True)
 class Asset:
     size: int
@@ -81,7 +73,6 @@ def compare_release(
     tag: str,
     local_files: dict[str, str] | None = None,
     released: set[str] | None = None,
-    installer: list[str] | None = None,
 ) -> list[Finding]:
     """Every way the release can differ from what was built.
 
@@ -89,7 +80,6 @@ def compare_release(
     signature) to its local sha256: the copy on the release must be that one.
     *released* names the platforms the registry marks release_pack: each one
     has a recorded pack, and no recorded pack serves only other platforms.
-    *installer* names the installer files each release lists and carries.
     """
     findings: list[Finding] = []
     if record.get("tag") != tag:
@@ -122,11 +112,9 @@ def compare_release(
         findings.append(Finding("extra", name, "attached but neither recorded nor listed"))
     for name in sorted(set(recorded) - set(sums)):
         findings.append(Finding("unlisted", name, f"absent from {SUMS}"))
-    for name in sorted(set(installer or ()) - set(sums)):
-        findings.append(Finding("no-installer", name, f"absent from {SUMS}"))
     # The handheld launchers are release files but no packs: release.json
     # records packs, and the checksum list alone vouches for the launchers.
-    for name in sorted(set(sums) - set(recorded) - set(ARCHIVES) - set(installer or ())):
+    for name in sorted(set(sums) - set(recorded) - set(ARCHIVES)):
         findings.append(Finding("unrecorded", name, f"listed in {SUMS}, absent from release.json"))
 
     wanted = {**sums, **(local_files or {})}
@@ -202,10 +190,6 @@ def main() -> int:
         "--platforms-dir", default="platforms",
         help="registry whose release_pack platforms each need a pack (default: %(default)s)",
     )
-    parser.add_argument(
-        "--install-dir", default="install",
-        help="file lists the release must carry beside the installer (default: %(default)s)",
-    )
     parser.add_argument("--json", action="store_true", help="JSON output")
     args = parser.parse_args()
     require_directory(args.platforms_dir, "--platforms-dir")
@@ -240,8 +224,7 @@ def main() -> int:
         return 2
 
     released = set(list_release_pack_platforms(args.platforms_dir))
-    findings = compare_release(record, sums, assets, tag, local_files, released,
-                               installer_files(args.install_dir))
+    findings = compare_release(record, sums, assets, tag, local_files, released)
     if args.json:
         print(json.dumps(
             {"tag": tag, "draft": draft, "assets": len(assets),

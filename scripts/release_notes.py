@@ -4,9 +4,10 @@
 The notes carried the pack table, typed by hand from figures release.json
 already held: a copied cell or an old collection total at the top is how
 issue 81 happened. Install commands, the parts sentence and the table come
-from the record and the registry. Each row links the platform's page under
-get/ on the site, which outlives the release, and the setups the registry
-does not mark release_pack are named with the command. The maintainer writes
+from the record and the registry. Each row links the files of this release,
+which sit right below the notes, and the setups the registry does not mark
+release_pack are named with the command. The text is a beginner's page: one
+idea per line, plain words (owner, 2026-11-10). The maintainer writes
 what changed, and that text is appended as given once it holds none of the
 REFUSED phrases.
 
@@ -84,9 +85,8 @@ def no_pack_paragraph(platforms_dir: str) -> list[str]:
         return []
     listed = ", ".join(names[:-1]) + f" and {names[-1]}" if len(names) > 1 else names[0]
     return [
-        (f"No ZIP for {listed}. ZIPs are made for the setups most people download."
-         " The command above installs every file for these setups and checks each one."
-         " Add `--dry-run` to see what it would install."),
+        (f"No ZIP for {listed}. The command above installs them."
+         " Add `--dry-run` to see what it would do."),
         "",
     ]
 
@@ -96,11 +96,13 @@ def _match_key(value: str) -> str:
     return re.sub(r"[^a-z0-9]", "", value.lower())
 
 
-def _link(name: str, pack: dict) -> str:
-    """The pack's permanent page, which lists the files of the current release."""
-    parts = len(pack["assets"])
-    label = "Download" if parts == 1 else f"Download, {parts} parts"
-    return f"[{label}]({release_record.get_page(_owner(name, pack), SITE)})"
+def _link(pack: dict, tag: str) -> str:
+    """The pack's files on this release, one link per part."""
+    base = f"https://github.com/{REPO}/releases/download/{tag}"
+    assets = pack["assets"]
+    if len(assets) == 1:
+        return f"[Download]({base}/{assets[0]})"
+    return ", ".join(f"[part {i}]({base}/{name})" for i, name in enumerate(assets, 1))
 
 
 # Words the published notes of v2026.10.10 carried by hand: "never from a
@@ -120,11 +122,11 @@ def refused_words(text: str) -> list[str]:
 def render(record: dict, platforms_dir: str, whats_new: str) -> str:
     packs = record.get("packs", {})
     folders = _extract_folders(record, platforms_dir)
+    tag = str(record.get("tag", ""))
     lines = [
         "### Install in one command",
         "",
-        ("The installer detects the platform and its BIOS folder, downloads only"
-         " what is missing and checks every file. Running it again is safe."),
+        "It finds your setup and its BIOS folder, then downloads only what is missing.",
         "",
         "**Linux, macOS, Steam Deck**",
         "```sh",
@@ -136,35 +138,39 @@ def render(record: dict, platforms_dir: str, whats_new: str) -> str:
         install_command("powershell"),
         "```",
         "",
-        "### Download a pack",
+        (f"**On a handheld**: copy the `RetroBIOS` file for your system to the card"
+         f" ([which one]({SITE}wiki/installer/#on-a-handheld-the-retrobios-port))."),
         "",
-        ("One complete pack for each platform below: the BIOS list the platform"
-         " publishes plus the files its emulators open. Files no pack carries yet"
-         f" are listed in the [gap analysis]({SITE}gaps/). Each link is a page"
-         " that keeps its address from one release to the next. Files is what the pack"
-         " holds once extracted, the count a file manager shows. Extracted size"
-         " is the space those files take, and the download is smaller."),
+        "### Or download a pack",
+        "",
+        "Extract it into your BIOS folder.",
         "",
     ]
     if any(len(pack["assets"]) > 1 for pack in packs.values()):
         lines += [
-            ("A pack over 2 GB comes as parts that are each an ordinary ZIP of whole"
-             " files (`Pack.part1of2.zip`, `Pack.part2of2.zip`). Download every part"
-             " and extract them all into the same folder. Nothing needs joining."),
+            ("A pack in parts: each part is an ordinary ZIP. Extract every part into"
+             " the same folder. Nothing needs joining."),
             "",
         ]
     lines += [
-        "| Platform | Download | Extracted size | Files | Extract to |",
-        "|----------|----------|---------------:|------:|-----------|",
+        "| Platform | Download | Size | Files | Extract to |",
+        "|----------|----------|-----:|------:|-----------|",
     ]
     for name, pack in sorted(packs.items(), key=lambda item: -item[1]["extracted_size"]):
         folder = folders.get(name)
         lines.append(
-            f"| {_display(name)} | {_link(name, pack)} |"
+            f"| {_display(name)} | {_link(pack, tag)} |"
             f" {_size(pack['extracted_size'])} | {pack['files']:,} |"
             f" {f'`{folder}`' if folder else '-'} |"
         )
-    lines += ["", *no_pack_paragraph(platforms_dir), whats_new.strip(), ""]
+    lines += [
+        "",
+        f"Files no pack holds yet: [gap analysis]({SITE}gaps/).",
+        "",
+        *no_pack_paragraph(platforms_dir),
+        whats_new.strip(),
+        "",
+    ]
     return "\n".join(lines)
 
 

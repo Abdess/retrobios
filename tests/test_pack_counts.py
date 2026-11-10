@@ -594,10 +594,12 @@ class TheReleaseNotesReadTheRecord(unittest.TestCase):
         text = self.render()
         row = next(line for line in text.splitlines() if line.startswith("| RetroArch"))
         self.assertIn("8,504", row)
-        self.assertIn("[Download, 2 parts](https://abdess.github.io/retrobios/get/retroarch/)", row)
-        self.assertNotIn("/releases/download/", row)
+        base = "https://github.com/Abdess/retrobios/releases/download/v2026.10.10/"
+        self.assertIn(f"[part 1]({base}RetroArch_Lakka_v1.22.2_BIOS_Pack.part1of2.zip)", row)
+        self.assertIn(f"[part 2]({base}RetroArch_Lakka_v1.22.2_BIOS_Pack.part2of2.zip)", row)
+        self.assertNotIn("retrobios/get/", row)
         self.assertIn("`system/`", row)
-        self.assertIn("| Platform | Download | Extracted size | Files |", text)
+        self.assertIn("| Platform | Download | Size | Files |", text)
 
     def test_the_parts_sentence_sits_above_the_table_only_when_needed(self):
         text = self.render()
