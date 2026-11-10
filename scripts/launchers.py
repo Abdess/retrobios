@@ -347,14 +347,19 @@ _HOME = re.compile(r"^(?:\$\{HOME\}|\$HOME|\$home|~)(?=/|$)")
 _FLATPAK_DATA = re.compile(r"^~/\.var/app/[^/]+/data(?=/|$)")
 
 
-def normalize_handle(token: str) -> str:
+def normalize_handle(token: str, home: str = "") -> str:
     """One spelling for a path, setting or function a launcher record names.
 
     ``$home``, ``$HOME``, ``${HOME}`` and ``~`` are one directory, and a
-    Flatpak's data directory is its ``$XDG_DATA_HOME``.
+    Flatpak's data directory is its ``$XDG_DATA_HOME``. ``home`` is the
+    platform's home directory spelled out (``home_directory``): EmuELEC
+    links /storage/.local/share/flycast, Flycast's ~/.local/share/flycast.
     """
     token = token.strip().strip("\"'").rstrip(",;").rstrip("/")
     token = token.removesuffix("()")
+    home = home.rstrip("/")
+    if home and _below(token, home) is not None:
+        token = "~" + token[len(home):]
     token = _HOME.sub("~", token)
     return _FLATPAK_DATA.sub("$XDG_DATA_HOME", token)
 
@@ -464,6 +469,7 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
     holds <system> gives one directory per system the platform declares.
     """
     base = str(config.get("base_destination") or "bios")
+    home = str(config.get("home_directory") or "")
     natives = native_systems(config)
     declared = {d.lower() for d in declared_destinations(config)}
     found: list[HandedDirectory] = []
@@ -490,7 +496,7 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
             if any(re.search(r"[\s,:;]", part) for part in parts):
                 continue
             for part in parts:
-                directory = normalize_handle(part)
+                directory = normalize_handle(part, home)
                 if passes_to.startswith(WORKING_DIRECTORY_PASSED):
                     # The program runs from the directory: what its code
                     # reads through getcwd(), or relative to it, is below it.
@@ -499,7 +505,7 @@ def handed_directories(config: dict) -> list[HandedDirectory]:
                     handles = frozenset(
                         handle
                         for token in passes_to.split()
-                        if (handle := normalize_handle(token)) and handle != directory
+                        if (handle := normalize_handle(token, home)) and handle != directory
                     ) | ini_keys(passes_to)
                 folder = _folder_in_bios(part, base)
                 for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):

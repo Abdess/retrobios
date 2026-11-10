@@ -721,5 +721,31 @@ class Quasi88OnRetroPie(unittest.TestCase):
         )
 
 
+class FlycastOnEmuELEC(unittest.TestCase):
+    """EmuELEC links /storage/.local/share/flycast to bios/dc (flycast.sh:11-14),
+    and root's home is /storage (busybox profile.d/98-busybox.conf:4)."""
+
+    def test_the_home_directory_is_spelled_as_home(self) -> None:
+        from launchers import normalize_handle
+
+        self.assertEqual(
+            normalize_handle("/storage/.local/share/flycast", "/storage"), "~/.local/share/flycast"
+        )
+        self.assertEqual(normalize_handle("/storage", "/storage/"), "~")
+        self.assertEqual(normalize_handle("/storagex/a", "/storage"), "/storagex/a")
+        self.assertEqual(
+            normalize_handle("/storage/.local/share/flycast"), "/storage/.local/share/flycast"
+        )
+
+    def test_the_bios_lands_in_dc(self) -> None:
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["flycast"]
+        config = load_platform_config("emuelec", str(REPO_ROOT / "platforms"))
+        layouts = platform_layouts("flycast", profile, standalone_set(config))
+        (view,) = [v for v, standalone in layouts if standalone]
+        self.assertTrue(view["files"])
+        for entry in view["files"]:
+            self.assertEqual(entry["standalone_path"], "dc/" + entry["layout_path"])
+
+
 if __name__ == "__main__":
     unittest.main()
