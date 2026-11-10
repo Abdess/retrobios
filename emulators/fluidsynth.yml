@@ -14,7 +14,7 @@ pin_build:
     path: "packages/sx05re/tools/sound/fluidsynth-git/package.mk"
     variable: PKG_VERSION
     value: "2.0.6"
-core_version: "2.0.6"
+core_version: "v2.0.6"
 version_basis:
   kind: tag
   tag: "v2.0.6"
