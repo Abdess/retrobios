@@ -414,3 +414,19 @@
 
 
  ^[[0;1;35mA^[[0m Back
+=== plan-record
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: RetroArch^[[0m
+
+^[[0;1m ^[[0;1;35m1^[[0;1m file to download, ^[[0;1;35m16.0 KB^[[0m
+ BIOS folder:
+   ^[[0;1m~/.config/retroarch/system^[[0m
+ For nintendo-gba.
+^[[0;7;35m > Install^[[0m
+   Same choice as on 3 Nov: yes
+   Choose systems
+   Copy from an old card or a folder
+   Change where
+   Details
+   Options
+   Quit
+ ^[[0;1;35mA^[[0m Install  ^[[0;2mB^[[0m Back  ^[[0;2mY^[[0m Options  ^[[0;2m?^[[0m Help

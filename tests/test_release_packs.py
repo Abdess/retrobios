@@ -347,7 +347,7 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
         # The installer's handheld section, which opens on every download.
         handheld = text.index(f"{SITE}wiki/installer/#on-a-handheld-the-retrobios-port")
         packs = text.index("### Full packs")
-        self.assertLess(text.index("### Get your BIOS"), command)
+        self.assertLess(text.index("### Get the BIOS files"), command)
         self.assertLess(command, handheld)
         self.assertLess(handheld, packs)
         self.assertLess(packs, text.index("| Platform"))

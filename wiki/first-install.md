@@ -68,7 +68,7 @@ On Batocera, Recalbox and similar setups, see
 
 ## 2. Check the setup it found
 
-It opens a menu:
+With one setup, it opens on **Install**. Otherwise:
 
 ```
  RetroBIOS: Where to install?
@@ -91,7 +91,7 @@ touch screen, tap a row twice to open it, once to tick a box.
 Press Enter on **Install**. **Choose systems** picks the consoles to
 keep.
 
-**Game data** (only a game reads it) has its own row.
+**Game data** has its own row.
 
 **Old card?** In a card reader, choose **Copy the BIOS files from an old
 card or a folder**, then the card.

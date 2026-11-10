@@ -238,9 +238,9 @@ def render(record: dict, platforms_dir: str, whats_new: str,
     folders = _extract_folders(record, platforms_dir)
     tag = str(record.get("tag", ""))
     lines = [
-        "### Get your BIOS",
+        "### Get the BIOS files",
         "",
-        "Paste this in a terminal. It finds your setup and installs the missing BIOS files.",
+        "Paste this in a terminal. It finds the setup and installs the missing BIOS files.",
         "",
         "**Linux, macOS, Steam Deck**",
         "```sh",
@@ -252,11 +252,11 @@ def render(record: dict, platforms_dir: str, whats_new: str,
         install_command("powershell"),
         "```",
         "",
-        f"**On a handheld**: [get the app for your system]({SITE}{HANDHELD_PAGE}).",
+        f"**On a handheld**: [get the app for the system]({SITE}{HANDHELD_PAGE}).",
         "",
         "### Full packs",
         "",
-        "Large downloads, for a device without internet. Extract into your BIOS folder.",
+        "Large downloads, for a device without internet. Extract into the BIOS folder.",
         "",
     ]
     if any(len(pack["assets"]) > 1 for pack in packs.values()):

@@ -6954,10 +6954,19 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
         # The last transfer: every byte came over the network.
         self.assertEqual([e for e in events if e["event"] == "transfer"][-1],
                          {"event": "transfer", "bytes_local": 0, "bytes_network": 245})
+        record = next(e for e in events if e["event"] == "record")
+        # What the run placed, and its choice, the whole list: written
+        # right before the summary.
+        self.assertEqual({key: record[key] for key in ("folder", "status", "choice", "files")},
+                         {"folder": str(self.bios), "status": "written",
+                          "choice": ["--all-files"], "files": 3})
+        self.assertEqual(record["path"], str(self.home / install.BACKUP_DIR
+                                             / f"{self.bios.name}.install.json"))
         self.assertEqual([e for e in events if e["event"] not in ("progress", "transfer")],
                          self._head("install", installer) + [
             {"event": "download", "platform": "retroarch", "files": 3, "bytes": 245},
             *done,
+            record,
             {"event": "summary", "mode": "install", "installed": 3, "up_to_date": 1,
              "pending": 0, "failed": [], "skipped": self.SKIPPED, "left_out": [],
              "kept": [{"folder": kept[0]["folder"], "files": 1, "bytes": 11}],
@@ -7565,7 +7574,11 @@ class KeptFilesEndToEnd(unittest.TestCase, _SyntheticTree):
                             "--no-input", "--jobs", "1", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertEqual((self.bios / "b.bin").read_bytes(), self.FILES["bios/A/b.bin"])
-        runs = list((self.home / install.BACKUP_DIR).iterdir())
+        # The install record sits beside the run folders, a file of its own.
+        held = list((self.home / install.BACKUP_DIR).iterdir())
+        runs = [path for path in held if path.is_dir()]
+        self.assertEqual(sorted(path.name for path in held if not path.is_dir()),
+                         [f"{self.bios.name}.install.json"])
         self.assertEqual(len(runs), 1)
         self.assertIn("Kept 1 file already there (11 B), which the collection's copies "
                       f"replaced, in {runs[0]}", proc.stdout)
@@ -7594,7 +7607,8 @@ class KeptFilesEndToEnd(unittest.TestCase, _SyntheticTree):
         again = _install_run(self.env, "--platform", "retroarch", "--dest", str(self.bios),
                              "--no-input", "--jobs", "1")
         self.assertEqual(again.returncode, 0, again.stderr)
-        self.assertEqual(len(list((self.home / install.BACKUP_DIR).iterdir())), 2)
+        self.assertEqual(len([path for path in (self.home / install.BACKUP_DIR).iterdir()
+                              if path.is_dir()]), 2)
 
 
 
