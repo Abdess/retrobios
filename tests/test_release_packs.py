@@ -319,7 +319,7 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
             self.assertIn(name, paragraph)
         for name in ("RetroArch", "Batocera", "RomM"):
             self.assertNotIn(f" {name},", paragraph)
-        self.assertIn("use the command above", paragraph)
+        self.assertTrue(paragraph.endswith("use the command above."))
         self.assertLess(text.index("| Platform"), text.index(paragraph))
         self.assertLess(text.index(paragraph), text.index("### What changed"))
 

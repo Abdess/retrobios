@@ -97,16 +97,14 @@ def without_pack(platforms_dir: str) -> list[str]:
 def no_pack_paragraph(platforms_dir: str) -> list[str]:
     """One paragraph naming the setups served by the command alone. The
     packs published are the most downloaded ones (wiki/release-process.md,
-    "Which platforms get a pack"). The command reads the install manifest,
-    which the pack builder writes from the same resolution as the pack."""
+    "Which platforms get a pack")."""
     names = without_pack(platforms_dir)
     if not names:
         return []
     listed = ", ".join(names[:-1]) + f" and {names[-1]}" if len(names) > 1 else names[0]
     return [
         ("Only the most used setups have a pack, to keep the release small."
-         f" For {listed}, use the command above. It reads the same file list a pack"
-         " is built from."),
+         f" For {listed}, use the command above."),
         "",
     ]
 
