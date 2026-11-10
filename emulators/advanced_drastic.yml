@@ -32,11 +32,14 @@ notes: |
   trngaje's package around the closed-source 64-bit Linux DraStic, whose
   screen output, input and settings menu it replaces through a hooked SDL2
   build (trngaje/SDL_drastic) and the drastic_layout library. The repository
-  carries the DraStic binary itself, md5 59a7711eff41c640b8861b4d869c747d,
-  which announces "Version r2.5.2.0", together with its system, config,
-  resources and microphone directories, game_database.xml and usrcheat.dat.
-  launch.sh changes to its own directory and runs ./drastic on the content.
-  ref: README.md:1-12, launch.sh:1-9, drastic r2.5.2.0 0x135990
+  carries the DraStic binary itself, md5 59a7711eff41c640b8861b4d869c747d
+  (sha256 6e11511907f21888), stripped, which draws "Version r2.5.2.0" in its
+  menu, together with its system, config, resources and microphone
+  directories, game_database.xml and usrcheat.dat. launch.sh changes to its
+  own directory and runs ./drastic on the content, so that directory is the
+  root every path below is joined to.
+  ref: README.md:1-12, launch.sh:1-9,
+       drastic r2.5.2.0 FUN_93140 0x931b4-0x931cc (draws the version string)
 
   KNULLI builds this revision, installs the whole tree under
   /usr/share/advanced_drastic, copies it to
@@ -55,11 +58,20 @@ notes: |
   system files." It carries neither the firmware editor's
   nds_firmware_modified.bin nor game_database_user.xml. The root also serves
   game_database.xml, usrcheat.dat, microphone/<game>.wav then
-  microphone/microphone.wav, drastic_dldi.img for homebrew and the
-  drastic_logo_<n>.raw splash.
-  ref: drastic r2.5.2.0 0x131018-0x1310f8, drastic r2.5.2.0 0x12fa18,
-       drastic r2.5.2.0 0x12fce0, drastic r2.5.2.0 0x132128-0x132260,
-       drastic r2.5.2.0 0x132a90-0x132aa8, drastic r2.5.2.0 0x1359b8
+  microphone/microphone.wav, scripts/<game>.lua then scripts/default.lua,
+  cheats/<game>.cht, slot2/<game>.gba, drastic_dldi.img for homebrew and the
+  drastic_logo_<n>.raw splash. The functions are unnamed and are matched to
+  their r2.5.2.2 names by the strings and calls they share: FUN_fbd0 is
+  load_system_file, FUN_1e7e0 initialize_memory, FUN_10920 initialize_system,
+  FUN_84640 initialize_gamecard, FUN_86cf0 initialize_game_database, FUN_94650
+  load_cheat_directory, FUN_81720 reset_spu, FUN_839d0 load_nds, FUN_951e0
+  load_custom_cheats, FUN_82c50 gamecard_load_gba, FUN_82480
+  gamecard_initialize_homebrew and FUN_93360 load_logo.
+  ref: drastic r2.5.2.0 FUN_fbd0 0xfc18-0xfd04, drastic r2.5.2.0 FUN_1e7e0 0x1ed78-0x1ef6c,
+       drastic r2.5.2.0 FUN_10920 0x10ab8-0x10b84, drastic r2.5.2.0 FUN_84640 0x84678-0x846d0,
+       drastic r2.5.2.0 FUN_81720 0x819c8-0x81a78, drastic r2.5.2.0 FUN_839d0 0x83c30-0x83cd0,
+       drastic r2.5.2.0 FUN_951e0 0x952a4-0x952c4, drastic r2.5.2.0 FUN_82c50 0x82c98-0x82cdc,
+       drastic r2.5.2.0 FUN_82480 0x824f4-0x825ac, drastic r2.5.2.0 FUN_93360 0x933b8-0x93400
 
 files:
   - name: nds_bios_arm9.bin
@@ -73,7 +85,7 @@ files:
     validation: [size]
     description: "Nintendo DS ARM9 BIOS"
     note: "First candidate for the ARM9 slot, before the free replacement. The hashes are those of the copy the repository ships."
-    source_ref: "drastic r2.5.2.0 0x131018, drastic r2.5.2.0 0x12fa18, drastic r2.5.2.0 0x135a5a"
+    source_ref: "drastic r2.5.2.0 FUN_1e7e0 0x1ed78-0x1ed94 (FUN_fbd0 of nds_bios_arm9.bin for 0x1000 bytes, failure branches to 0x1eea4), FUN_fbd0 0xfc18-0xfca4 (sprintf %s%csystem%c%s, fopen rb, fseek and ftell length compared to the requested size, fread), 0xfcec-0xfd04 (wrong size message, returns -1), FUN_10920 0x10ab8-0x10b84 (a negative return from FUN_1e7e0 draws the missing BIOS screen through FUN_93ae0, prints FATAL: Could not load system files. and quits)"
 
   - name: drastic_bios_arm9.bin
     sha1: 4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a
@@ -85,7 +97,7 @@ files:
     size: 4096
     validation: [size]
     description: "DraStic free ARM9 BIOS replacement"
-    source_ref: "drastic r2.5.2.0 0x131070"
+    source_ref: "drastic r2.5.2.0 FUN_1e7e0 0x1eea4-0x1eec8 (logs Can't find Nintendo ARM9 BIOS, then FUN_fbd0 of drastic_bios_arm9.bin for 0x1000 bytes), 0x1eecc-0x1eeec (sets the free ARM9 bit), 0x1f160 (failure returns -1)"
 
   - name: nds_bios_arm7.bin
     path: system/nds_bios_arm7.bin
@@ -98,7 +110,7 @@ files:
     validation: [size]
     description: "Nintendo DS ARM7 BIOS"
     note: "First candidate for the ARM7 slot. The hashes are those of the copy the repository ships."
-    source_ref: "drastic r2.5.2.0 0x131088, drastic r2.5.2.0 0x135a7b"
+    source_ref: "drastic r2.5.2.0 FUN_1e7e0 0x1ed9c-0x1edb8 (FUN_fbd0 of nds_bios_arm7.bin for 0x4000 bytes, failure branches to 0x1eefc), 0x1eed8-0x1eef8 (same load on the path that took the free ARM9 image)"
 
   - name: drastic_bios_arm7.bin
     sha1: 31ae916c85d012582c7cdf47de6943ac6778253b
@@ -110,7 +122,7 @@ files:
     size: 16384
     validation: [size]
     description: "DraStic free ARM7 BIOS replacement"
-    source_ref: "drastic r2.5.2.0 0x1310e0"
+    source_ref: "drastic r2.5.2.0 FUN_1e7e0 0x1eefc-0x1ef20 (logs the fallback message, then FUN_fbd0 of drastic_bios_arm7.bin for 0x4000 bytes), 0x1f160 (failure returns -1)"
 
   - name: nds_firmware.bin
     path: system/nds_firmware.bin
@@ -124,7 +136,7 @@ files:
     validation: [size]
     description: "Nintendo DS firmware"
     note: "The hashes are those of the copy the repository ships."
-    source_ref: "drastic r2.5.2.0 0x1310f8"
+    source_ref: "drastic r2.5.2.0 FUN_1e7e0 0x1edc0-0x1eddc, 0x1ef30-0x1ef50 (FUN_fbd0 of nds_firmware.bin for 0x40000 bytes), 0x1ef54-0x1ef6c (on failure the region is zeroed and FUN_1e250 writes the firmware header, then the boot carries on)"
 
   - name: game_database.xml
     path: game_database.xml
@@ -135,7 +147,7 @@ files:
     size: 1610336
     sha1: 7b84fef16d1d461a49c197709d174eb1ccd8f88d
     description: "save type database, one entry per title"
-    source_ref: "drastic r2.5.2.0 0x132a90, drastic r2.5.2.0 0x133468"
+    source_ref: "drastic r2.5.2.0 FUN_84640 0x84678-0x846a0 (sprintf %s%cgame_database.xml, then FUN_86cf0), FUN_86cf0 0x86d18-0x86d30 (fopen rb), 0x87684-0x8769c (a failed open logs Error: could not load game database file and returns)"
 
   - name: usrcheat.dat
     path: usrcheat.dat
@@ -146,7 +158,7 @@ files:
     size: 13739796
     sha1: 6dd1a5399403f39620061556d61f5c6f6c704219
     description: "Action Replay cheat library"
-    source_ref: "drastic r2.5.2.0 0x132aa8"
+    source_ref: "drastic r2.5.2.0 FUN_84640 0x846a8-0x846d0 (sprintf %s%cusrcheat.dat, then FUN_94650), FUN_94650 0x94680-0x9468c (fopen rb), 0x946cc-0x94704 (header read, Invalid cheat database header and close on a mismatch)"
 
   - name: microphone.wav
     path: microphone/microphone.wav
@@ -158,4 +170,79 @@ files:
     sha1: ea9281c65ea39c9d1061a05b8b15d9a44f92918e
     description: "default fake microphone input"
     note: "Played when the game asks for the microphone and no microphone/<game>.wav exists."
-    source_ref: "drastic r2.5.2.0 0x132128-0x132190"
+    source_ref: "drastic r2.5.2.0 FUN_81720 0x81a40-0x81a78 (sprintf %s%cmicrophone%cmicrophone.wav, FUN_7f220 loads it, Loaded default fake microphone audio file), FUN_7f220 0x7f250-0x7f28c (fopen rb, length by fseek and ftell)"
+
+  - name: "<game>.wav"
+    path: "microphone/<game>.wav"
+    system: nintendo-ds
+    required: false
+    category: game_data
+    description: "per-title fake microphone input"
+    note: "Tried before microphone.wav and named after the running title."
+    source_ref: "drastic r2.5.2.0 FUN_81720 0x819c8-0x81a0c (sprintf %s%cmicrophone%c%s.wav, FUN_7f220 loads it, Loaded game specific fake microphone audio file)"
+
+  - name: "<game>.lua"
+    path: "scripts/<game>.lua"
+    required: false
+    category: game_data
+    description: "per-title Lua script"
+    note: "Tried before default.lua and named after the running title."
+    source_ref: "drastic r2.5.2.0 FUN_839d0 0x83c30-0x83c8c (sprintf %s%c%s%c%s.%s with scripts and lua, Attempting to load lua script, FUN_99850), FUN_99850 0x99884 (luaL_loadfilex of the path), 0x998a4 (lua_pcallk)"
+
+  - name: default.lua
+    path: scripts/default.lua
+    required: false
+    category: game_data
+    unsourceable: "script the user writes against the built-in Lua 5.3 interpreter"
+    description: "fallback Lua script"
+    note: "Loaded when no per-title script answers."
+    source_ref: "drastic r2.5.2.0 FUN_839d0 0x83ca4-0x83cd8 (sprintf %s%c%s%cdefault.%s, then FUN_99850, which hands it to luaL_loadfilex at 0x99884)"
+
+  - name: "<game>.cht"
+    path: "cheats/<game>.cht"
+    system: nintendo-ds
+    required: false
+    category: game_data
+    description: "custom cheat file"
+    note: "Read on top of the entries usrcheat.dat holds and written back when a cheat is toggled. Absent, the message No custom cheat file is logged."
+    source_ref: "drastic r2.5.2.0 FUN_951e0 0x952a4-0x952e0 (sprintf %s%ccheats%c%s.cht, fopen rb, No custom cheat file at %s), FUN_957e0 0x95824-0x95850 (same path opened wb)"
+
+  - name: "<game>.gba"
+    path: "slot2/<game>.gba"
+    system: nintendo-ds
+    required: false
+    category: game_data
+    unsourceable: "Game Boy Advance cartridge the title reads for bonus content"
+    description: "slot 2 cartridge image"
+    note: "Loaded into the slot 2 cart window, with its save read from slot2/<game>.sav beside it."
+    source_ref: "drastic r2.5.2.0 FUN_82c50 0x82c98-0x82cdc (snprintf %s%cslot2%c%s.gba, fopen rb), 0x82d08-0x82d6c (length by fseek and ftell, read whole), 0x82dd0-0x82dec (slot2/<game>.sav opened rb)"
+
+  - name: drastic_dldi.img
+    path: drastic_dldi.img
+    system: nintendo-ds
+    required: false
+    category: game_data
+    unsourceable: "FAT image the user builds for the emulated flashcart"
+    description: "R4 flashcart disk image"
+    note: "Opened read-write when a homebrew title is recognised and mounted as the fat:/ device. Absent, the error is logged and the title runs without a card."
+    source_ref: "drastic r2.5.2.0 FUN_82480 0x824a4-0x824cc (Homebrew recognized), 0x824f4-0x82518 (sprintf %s%cdrastic_dldi.img, open O_RDWR), 0x825a4-0x825b0 (perror Couldn't load drastic_dldi.img, then carries on)"
+
+  - name: drastic_logo_0.raw
+    path: drastic_logo_0.raw
+    required: false
+    category: game_data
+    size: 120000
+    validation: [size]
+    description: "boot splash, first of two"
+    note: "Read from the root in one 120000 byte request, so a shorter file is rejected. The index is the low bit of the time and a missing file skips the splash. The repository ships neither."
+    source_ref: "drastic r2.5.2.0 FUN_93360 0x93398-0x933d8 (index time() & 1, sprintf %s%cdrastic_logo_%d.raw, fopen rb), 0x933e0-0x93410 (fread of 0x1d4c0 bytes as one item, buffer freed when the read falls short)"
+
+  - name: drastic_logo_1.raw
+    path: drastic_logo_1.raw
+    required: false
+    category: game_data
+    size: 120000
+    validation: [size]
+    description: "boot splash, second of two"
+    note: "Same read as index 0."
+    source_ref: "drastic r2.5.2.0 FUN_93360 0x93398-0x933d8, 0x933e0-0x93410"
