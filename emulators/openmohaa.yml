@@ -59,6 +59,75 @@ notes: |
 
 files:
   # ================================================================
+  # Allied Assault single-player demo 0.05 (December 2001), read from
+  # main/ like the full game with com_target_demo 1. Same names as the
+  # retail paks, other content: each is an alternative for its slot, listed
+  # first where the collection holds it and not the retail file.
+  # ================================================================
+
+  - name: "Pak0.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak0.pk3"
+    required: true
+    size: 16264817
+    sha1: "528eccd0f55a51030bfd2de856d53261574485d4"
+    md5: "4ce697656c5f1967764fb5a3c2f9b2ec"
+    source_ref: "code/qcommon/files.cpp:326 (fs_originalPaks_main[0]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/), code/qcommon/files.cpp:4108 (Couldn't load default.cfg)"
+    note: "Carries default.cfg."
+
+  - name: "Pak1.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak1.pk3"
+    required: false
+    size: 18798683
+    sha1: "56d659e387f279a98e617f497c2dd12b2bae4959"
+    md5: "cebf628aa0be4a0b96f04c4eba1f0422"
+    source_ref: "code/qcommon/files.cpp:327 (fs_originalPaks_main[1]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+
+  - name: "Pak2.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak2.pk3"
+    required: false
+    size: 31038822
+    sha1: "ed00c36523d934cc76b7ccecaa0dd8ebf4378b5d"
+    md5: "f4ccd60285289135e10e8e119b2b5cfb"
+    source_ref: "code/qcommon/files.cpp:328 (fs_originalPaks_main[2]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+
+  - name: "Pak3.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak3.pk3"
+    required: false
+    size: 34737631
+    sha1: "e6bae955ce243980964df649ec716baea2b8c97b"
+    md5: "b15e06909965e7946d235517cc57280d"
+    source_ref: "code/qcommon/files.cpp:329 (fs_originalPaks_main[3]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+
+  - name: "Pak4.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak4.pk3"
+    required: false
+    size: 9576
+    sha1: "7a610452d040402483f1b4c5334b1695b41375a3"
+    md5: "0d4c501f8d5c33d2a567a22fbc46d4c8"
+    source_ref: "code/qcommon/files.cpp:330 (fs_originalPaks_main[4]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+
+  - name: "Pak5.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak5.pk3"
+    required: false
+    size: 2739284
+    sha1: "e8a18e62ecafa7d9aee46ecbac95be03d9eecaa2"
+    md5: "a8a9113bf71c08f0460c9f4d6635baf5"
+    source_ref: "code/qcommon/files.cpp:331 (fs_originalPaks_main[5]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+    note: "Holds Mission 3 Level 3, the demo's one level."
+
+  # ================================================================
   # Medal of Honor: Allied Assault retail (BASEGAME = "main")
   # Reference list: fs_originalPaks_main[] at code/qcommon/files.cpp:324
   # ================================================================
@@ -70,7 +139,7 @@ files:
     required: true
     source_ref: "code/qcommon/files.cpp:326 (fs_originalPaks_main[0]), 4108 (Couldn't load default.cfg)"
     note: "Carries default.cfg. Without it FS_Startup aborts with ERR_FATAL."
-    unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
+    unsourceable: "retail release data the collection does not hold, and a same-named file of another game must not stand in"
 
   - name: "Pak1.pk3"
     category: game_data
@@ -78,7 +147,7 @@ files:
     path: "main/Pak1.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:327 (fs_originalPaks_main[1])"
-    unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
+    unsourceable: "retail release data the collection does not hold, and a same-named file of another game must not stand in"
 
   - name: "Pak2.pk3"
     category: game_data
@@ -86,7 +155,7 @@ files:
     path: "main/Pak2.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:328 (fs_originalPaks_main[2])"
-    unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
+    unsourceable: "retail release data the collection does not hold, and a same-named file of another game must not stand in"
 
   - name: "Pak3.pk3"
     category: game_data
@@ -94,7 +163,7 @@ files:
     path: "main/Pak3.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:329 (fs_originalPaks_main[3])"
-    unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
+    unsourceable: "retail release data the collection does not hold, and a same-named file of another game must not stand in"
 
   - name: "Pak4.pk3"
     category: game_data
@@ -102,7 +171,7 @@ files:
     path: "main/Pak4.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:330 (fs_originalPaks_main[4])"
-    unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
+    unsourceable: "retail release data the collection does not hold, and a same-named file of another game must not stand in"
 
   - name: "Pak5.pk3"
     category: game_data
@@ -110,7 +179,7 @@ files:
     path: "main/Pak5.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:331 (fs_originalPaks_main[5])"
-    unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
+    unsourceable: "retail release data the collection does not hold, and a same-named file of another game must not stand in"
 
   - name: "Pak6.pk3"
     category: game_data
@@ -119,6 +188,31 @@ files:
     required: false
     source_ref: "code/qcommon/files.cpp:332 (fs_originalPaks_main[6])"
     note: "Added by the 1.11 patch."
+
+  # The demo's own Pak6.pk3 and Pak7.pk3. The 1.11 Pak6.pk3 above takes
+  # the slot where the collection holds both.
+
+  - name: "Pak6.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak6.pk3"
+    required: false
+    size: 108
+    sha1: "492ab480a8dbefb888acbf6f3ee5bc1277945e28"
+    md5: "71f32f3ff6814b28531a70cf91689c8f"
+    source_ref: "code/qcommon/files.cpp:332 (fs_originalPaks_main[6]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+    note: "An empty placeholder holding one folder entry."
+
+  - name: "Pak7.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak7.pk3"
+    required: false
+    size: 108
+    sha1: "492ab480a8dbefb888acbf6f3ee5bc1277945e28"
+    md5: "71f32f3ff6814b28531a70cf91689c8f"
+    source_ref: "code/qcommon/files.cpp:3136 (every .pk3 of the folder), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+    note: "An empty placeholder holding one folder entry, mounted like any pak of the folder."
 
   # ================================================================
   # Spearhead expansion (fs_basegame = "mainta", TG_MOHTA)
