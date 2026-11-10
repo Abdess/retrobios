@@ -2989,9 +2989,6 @@
   "src/burn/stdfunc.h",
   "src/burner/libretro/libretro.cpp"
  ],
- "github.com/batocera-linux/batocera.linux@487014d91147610ebdd62f870009d4563ac61763": [
-  "package/batocera/emulators/amiberry/amiberry.mk"
- ],
  "github.com/bbbradsmith/hatariB@5f05733fc21903dce7d978bd0d7aae445ffe1185": [
   "DEVELOP.md",
   "README.md",
