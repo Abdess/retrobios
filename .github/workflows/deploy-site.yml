@@ -11,6 +11,7 @@ on:
       - "exports/**"
       # Every script the build runs or imports, and no other
       # (tests/test_workflow_paths.py).
+      - "scripts/alternatives.py"
       - "scripts/archive_build.py"
       - "scripts/artifacts.py"
       - "scripts/auto_fetch.py"
