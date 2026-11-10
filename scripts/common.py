@@ -1541,12 +1541,15 @@ def resolve_local_file(
     layout = file_entry.get("layout_path")
     if layout and layout != dest_hint:
         plain = {k: v for k, v in file_entry.items() if k != "layout_path"}
+        # A destination outside the BIOS tree says nothing of the collection:
+        # EmuELEC's roms/mame/konamigv.zip is not bios/Arcade/MAME's set.
+        outside = file_entry.get("unprefixed") or file_entry.get("root")
         answers = [
             resolve_local_file(
                 plain, db, zip_contents, dest_hint=hint, _depth=_depth,
                 data_dir_registry=data_dir_registry,
             )
-            for hint in (dest_hint, str(layout))
+            for hint in ((str(layout),) if outside else (dest_hint, str(layout)))
         ]
         for found in answers:
             if found[0] is not None and (

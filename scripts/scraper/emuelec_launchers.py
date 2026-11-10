@@ -38,6 +38,8 @@ EMULATORS = f"{SX05RE}/emulators"
 LIBRETRO = f"{SX05RE}/libretro"
 RETROARCH_MK = f"{SX05RE}/libretro_base/retroarch/package.mk"
 BIOS_ROOT = "/storage/roms/bios"
+# The roms root that holds it (packages/sx05re/libretro_base/retroarch/package.mk:112,117).
+ROMS_ROOT = "/storage/roms"
 
 _EMU_TEST = re.compile(r'\$\{?EMU\}?"?\s*==?\s*"([^"]+)"')
 _ARM = re.compile(r'^\s*((?:"[^"]+"\|?)+)\)\s*$')
@@ -487,8 +489,18 @@ def hatari(tree: RepoTree, runs: Runs) -> list[Launcher]:
     ]
 
 
+_ADVMAME_SYSTEM = re.compile(r'^\s*if \[\[ "\$\{1\}" = "([\w-]+)" \]\]; then$')
+_ADVMAME_SED = re.compile(r'^\s*sed -i "s\|([^|]+)\|([^|]+)\|g" \$\{CONFIG_DIR\}/advmame\.rc$')
+
+
 def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
-    """Folder keys of the advmame.rc package.mk installs, one per device branch."""
+    """Folder keys of the advmame.rc package.mk installs, one per device branch.
+
+    A key under the roms root is one too: dir_rom is /storage/roms/mame. The
+    start script rewrites the config for the system it is launched for
+    (advmame.sh:26-30): /roms/mame becomes /roms/arcade for arcade, so that
+    system reads its own record.
+    """
     package = f"{EMULATORS}/advancemame"
     mk = _read(tree, f"{package}/package.mk")
     installs = [
@@ -501,8 +513,8 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     by_value: dict[tuple[tuple[str, str], ...], list[tuple[str, set[int], int]]] = {}
     for mk_line, file in installs:
         path = f"{package}/config/{file}"
-        keys = [s for s in settings(tree.read(path), separator=" ") if _under(s.value)]
-        if not keys:
+        keys = [s for s in settings(tree.read(path), separator=" ") if _under(s.value, ROMS_ROOT)]
+        if not any(_under(s.value) for s in keys):
             raise LauncherPatternMissing(path, f"key naming a folder under {BIOS_ROOT}")
         value = tuple((s.key, s.value) for s in keys)
         by_value.setdefault(value, []).append((path, {s.line for s in keys}, mk_line))
@@ -511,25 +523,41 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     ((value, configs),) = by_value.items()
     script = _read(tree, f"{package}/bin/advmame.sh")
     run_line, _ = script.find(r"^\s*(?:\w+=\S+ )*advmame ", "advmame start")
+    test_line, test = script.find(_ADVMAME_SYSTEM.pattern, "system test", end=run_line)
+    sed_line, sed = script.find(_ADVMAME_SED.pattern, "system rewrite", test_line + 1, test_line + 1)
     name = posixpath.basename(script.path)
-    refs = [
-        runs.ref(name),
-        *((path, lines) for path, lines, _ in configs),
-        (mk.path, {mk_line for _, _, mk_line in configs}),
-        (script.path, {run_line}),
-    ]
-    return [
-        Launcher(
-            emulator=runs.emulator(name),
-            build="standalone",
-            kind="passes_path",
-            names=[],
-            source_ref=source_ref(refs),
-            search_dir=folder,
-            passes_to=f"advmame.rc {key}",
-        )
-        for key, folder in value
-    ]
+
+    def refs(*lines: int) -> str:
+        return source_ref([
+            runs.ref(name),
+            *((path, lines) for path, lines, _ in configs),
+            (mk.path, {mk_line for _, _, mk_line in configs}),
+            (script.path, {run_line, *lines}),
+        ])
+
+    found = []
+    for key, folder in value:
+        rewritten = folder.replace(sed.group(1), sed.group(2))
+        if rewritten != folder:
+            # Every system but the one the script rewrites the key for, and
+            # that system with the rewritten folder.
+            found.append(Launcher(
+                emulator=runs.emulator(name), build="standalone", kind="passes_path", names=[],
+                source_ref=refs(test_line, sed_line), search_dir=folder,
+                passes_to=f"advmame.rc {key}",
+                depends_on_option=f"system != {test.group(1)}",
+            ))
+            found.append(Launcher(
+                emulator=runs.emulator(name), build="standalone", kind="passes_path", names=[],
+                source_ref=refs(test_line, sed_line), search_dir=rewritten,
+                passes_to=f"advmame.rc {key}", systems=[test.group(1)],
+            ))
+            continue
+        found.append(Launcher(
+            emulator=runs.emulator(name), build="standalone", kind="passes_path", names=[],
+            source_ref=refs(), search_dir=folder, passes_to=f"advmame.rc {key}",
+        ))
+    return found
 
 
 def mame(tree: RepoTree, runs: Runs) -> list[Launcher]:

@@ -879,5 +879,32 @@ class GzdoomOnRetroDECK(unittest.TestCase):
         self.assertFalse(any(e.get("standalone_path") for e in view["files"]))
 
 
+class AdvanceMameOnEmuELEC(unittest.TestCase):
+    """advmame.rc sets dir_rom /storage/roms/mame, /storage/roms/arcade for
+    the arcade system (advmame.rc:11, advmame.sh:26-30)."""
+
+    def test_the_sets_land_in_roms_mame(self) -> None:
+        view = standalone_view("advancemame", "emuelec")
+        sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
+        self.assertEqual(len(sets), 29)
+        for entry in sets:
+            self.assertEqual(entry["standalone_path"], "mame/" + entry["name"])
+            self.assertTrue(entry.get("unprefixed"))
+
+    def test_the_roms_folder_is_no_proof_of_content(self) -> None:
+        # bios/Arcade/MAME/konamigv.zip is MAME 0.289's set, not AdvanceMAME's.
+        from common import load_database, resolve_local_file
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        view = standalone_view("advancemame", "emuelec")
+        (entry,) = [e for e in view["files"] if e["name"] == "konamigv.zip"]
+        moved, _status = resolve_local_file(entry, db, dest_hint=entry["standalone_path"])
+        plain = {k: v for k, v in entry.items()
+                 if k not in ("layout_path", "standalone_path", "unprefixed")}
+        root, _status = resolve_local_file(plain, db, dest_hint=entry["name"])
+        self.assertEqual(moved, root)
+        self.assertNotIn("/MAME/", moved)
+
+
 if __name__ == "__main__":
     unittest.main()
