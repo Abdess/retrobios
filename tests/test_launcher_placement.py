@@ -747,5 +747,26 @@ class FlycastOnEmuELEC(unittest.TestCase):
             self.assertEqual(entry["standalone_path"], "dc/" + entry["layout_path"])
 
 
+def standalone_view(emulator: str, platform: str) -> dict:
+    profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))[emulator]
+    config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config))
+               if standalone]
+    return view
+
+
+class Eka2l1OnRetroBat(unittest.TestCase):
+    """RetroBat writes data-storage = bios/eka2l1/data (Eka2l1.Generator.cs:153, 156)."""
+
+    def test_the_device_rom_lands_in_eka2l1_data(self) -> None:
+        view = standalone_view("eka2l1", "retrobat")
+        (rom,) = [e for e in view["files"] if e["name"] == "SYM.ROM"]
+        self.assertEqual(rom["standalone_path"], "eka2l1/data/roms/nem-4/SYM.ROM")
+        # Shipped beside the executable, in RetroBat's emulator folder.
+        for entry in view["files"]:
+            if entry.get("mode") == "standalone":
+                self.assertEqual(entry.get("unplaced"), "outside_bios_folder", entry["name"])
+
+
 if __name__ == "__main__":
     unittest.main()
