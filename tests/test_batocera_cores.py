@@ -195,14 +195,20 @@ class APatchedLibretroBuildTakesItsNameOnly(unittest.TestCase):
             }
 
         self.assertEqual(ps2_cores("batocera"), {"lrps2-416291a", "pcsx2", "pcee2"})
-        self.assertEqual(ps2_cores("recalbox"), {"lrps2-9485a53", "pcsx2"})
+        # Recalbox ships two libretro PS2 builds on x86_64: LRPS2 as ps2 and
+        # the wxWidgets-era libretro PCSX2 as pcsx2, beside standalone PCSX2.
+        self.assertEqual(
+            ps2_cores("recalbox"), {"lrps2-9485a53", "pcsx2-libretro-408e3b2", "pcsx2"}
+        )
+        own_builds = {"lrps2-416291a", "lrps2-9485a53", "pcsx2-libretro-408e3b2"}
         for platform in ("retroarch", "retrobat", "emudeck", "retrodeck"):
             with self.subTest(platform=platform):
                 cores = ps2_cores(platform)
                 self.assertIn("lrps2", cores)
-                self.assertFalse({"lrps2-416291a", "lrps2-9485a53"} & cores)
-        self.assertEqual(profiles["lrps2-416291a"]["files"][0]["path"], "ps2/<bios>.bin")
-        self.assertEqual(profiles["lrps2-9485a53"]["files"][0]["path"], "ps2/<bios>.bin")
+                self.assertFalse(own_builds & cores)
+        self.assertNotIn("pcsx2-libretro-408e3b2", ps2_cores("batocera"))
+        for name in sorted(own_builds):
+            self.assertEqual(profiles[name]["files"][0]["path"], "ps2/<bios>.bin")
 
 
 if __name__ == "__main__":
