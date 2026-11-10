@@ -195,12 +195,15 @@ resolved. Three strategies exist:
 
 - **Explicit list**: `cores: [beetle_psx, dolphin, ...]` - match by profile key name
   or by any name in a profile's `cores:`. When a profile's `built_by` names this
-  platform, that profile answers for the name. Used by Batocera, Recalbox, RetroBat,
-  RomM, KNULLI, AmberELEC, EmuELEC, MinUI, NextUI, MyMinUI, RetroPie, EmuDeck,
-  RetroDECK, ROCKNIX. A list that names `retroarch` (the last
-  four) also takes every libretro profile, as `all_libretro` does, plus the
-  libretro builds whose `built_by` names this platform (ROCKNIX's
-  `yabadabadoo`). An empty list
+  platform, that profile answers for the name (ROCKNIX's `yabadabadoo`). Used by
+  Batocera, Recalbox, RetroBat, RomM, KNULLI, AmberELEC, EmuELEC, MinUI, NextUI,
+  MyMinUI, ROCKNIX, RetroPie, EmuDeck, RetroDECK. A list that names `retroarch`
+  (the last three) also takes every libretro profile, as `all_libretro` does,
+  plus the libretro builds whose `built_by` names this platform. A name in `installable_cores`, a buildbot core the
+  platform's RetroArch downloads, designates libretro builds only. Under
+  `--target` such a core counts only on the boards whose downloader offers one
+  of its names (`downloadable_on`), and the install list gives those boards in
+  `downloaded_cores`. An empty list
   (BizHawk, MiSTer FPGA) resolves no profile, and the pack holds the platform's own
   files.
 - **all_libretro**: `cores: all_libretro` - every profile whose `type` contains

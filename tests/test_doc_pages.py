@@ -491,9 +491,13 @@ class CoreResolutionWrittenOnce(unittest.TestCase):
         import common
 
         self.assertNotIn("cores: [list]", _page("architecture.md"))
-        source = inspect.getsource(common.resolve_platform_cores)
+        # resolve_platform_cores narrows by target, _platform_profiles holds
+        # the strategies.
+        source = inspect.getsource(common._platform_profiles)
         self.assertIn('not p.get("built_by")', source)
         self.assertIn('"retroarch" in core_set', source)
+        self.assertIn('config.get("installable_cores")', source)
+        self.assertIn("downloadable_on", inspect.getsource(common.resolve_platform_cores))
         naming = set()
         for path in (ROOT / "platforms").glob("*.yml"):
             config = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
@@ -504,10 +508,14 @@ class CoreResolutionWrittenOnce(unittest.TestCase):
         bullet = next(p for p in section.split("\n- ") if p.startswith("**Explicit list**"))
         used_by = re.search(r"Used by ([^.]+)\.", bullet.replace("\n", " ")).group(1)
         names = [n.strip().lower() for n in used_by.split(",")]
-        self.assertIn("the last\n  four", bullet)
-        self.assertEqual(set(names[-4:]), naming)
+        words = {2: "two", 3: "three", 4: "four", 5: "five"}
+        counted = re.search(r"\(the last\s+(\w+)\)", bullet).group(1)
+        self.assertEqual(counted, words[len(naming)])
+        self.assertEqual(set(names[-len(naming):]), naming)
         libretro = next(p for p in section.split("\n- ") if p.startswith("**all_libretro**"))
         self.assertIn("built_by", libretro)
+        for name in ("installable_cores", "downloadable_on", "downloaded_cores"):
+            self.assertIn(f"`{name}`", bullet)
 
 
 class ExitStatusTable(unittest.TestCase):
