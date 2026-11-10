@@ -64,6 +64,13 @@ from verify import (
     verify_platform,
 )
 
+try:
+    import jsonschema  # noqa: F401
+except ImportError:
+    HAS_JSONSCHEMA = False
+else:
+    HAS_JSONSCHEMA = True
+
 
 def _h(data: bytes) -> dict:
     """Return sha1, md5, crc32 for test data."""
@@ -6995,6 +7002,7 @@ class OneOfASearchList(unittest.TestCase):
         self.assertTrue(holds_required_members(str(path), members))
         self.assertFalse(holds_required_members(str(path), members[:1] + members[2:]))
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validate_schemas needs jsonschema")
     def test_schema_refuses_a_set_split_on_required(self):
         from validate_schemas import _group_requirement_split, ROOT
 
