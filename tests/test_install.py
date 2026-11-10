@@ -7839,16 +7839,10 @@ class EachRunSaysErrorsFromItsOwnOptions(unittest.TestCase):
     in the same process ended its clock message with the raw SSL text."""
 
     def test_a_run_without_verbose_clears_it(self):
-        install._RAW_ERRORS.set()
         self.addCleanup(install._RAW_ERRORS.clear)
-        with unittest.mock.patch.object(sys, "argv",
-                                        ["install.py", "--list-platforms", "--offline"]), \
-                contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()):
-            try:
-                install.main()
-            except SystemExit:
-                pass
+        install.say_raw_errors(True)
+        self.assertTrue(install._RAW_ERRORS.is_set())
+        install.say_raw_errors(False)
         self.assertFalse(install._RAW_ERRORS.is_set())
 
 

@@ -14245,17 +14245,21 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def say_raw_errors(verbose: bool) -> None:
+    """Each run says errors from its own options: a run with --verbose before
+    it in the same process left every later message with its raw cause."""
+    if verbose:
+        _RAW_ERRORS.set()
+    else:
+        _RAW_ERRORS.clear()
+
+
 def main() -> None:
     """Entry point."""
     _INVOCATION.os_type = detect_os()
     parser = build_parser()
     args = parser.parse_args()
-    # Each run says it from its own options: a run with --verbose before it
-    # in the same process left every later message with its raw cause.
-    if args.verbose:
-        _RAW_ERRORS.set()
-    else:
-        _RAW_ERRORS.clear()
+    say_raw_errors(args.verbose)
     if args.cores_dir:
         args.installed_cores = True
     if args.yes:
