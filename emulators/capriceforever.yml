@@ -20,16 +20,28 @@ notes: |
   Closed source Amstrad CPC and PLUS emulator for Windows. The build read here
   is the one RetroBat installs, capriceforever.7z sha256
   54c9f7f3df96011bdbd09e72413fed798a395c241e8c2d05eb6af075a15b79b4, release
-  26.4 of 1 April 2026 (History.txt, version resource 26.4.0.0). Caprice.exe
+  26.4 (version resource 26.4.0.0). Caprice.exe
   md5 a33e841c80e9fd9067a1c373492cd53b is a 32-bit C++Builder (RAD Studio
   28.0) VCL program, cited by virtual address. Functions are named by their
   address, or by the published method table entry for form event handlers.
 
-  The machine ROMs are RT_RCDATA resources of the executable, byte for byte
-  equal to the usual dumps: ROMCPC464_UK, ROMCPC664_UK and ROMCPC6128_UK (OS
-  then BASIC, 32 KiB each), French and Spanish 464 and 6128 images,
-  ROMAmsdos, ROMSiliconDisk13, ROMDKSpeech, and ROMMultiface2 (the first 8 KiB
-  of MF2.rom). A slot left blank in a device file takes the built-in image,
+  The machine ROMs are RT_RCDATA resources of the executable. None of them
+  is read from disc, so none is a file entry below. Each resource, with the
+  sha1 of its bytes and the dump it equals:
+
+    ROMCPC464_UK      32 KiB  56d39c463da6  cpc464.rom, os464.rom + basic464.rom
+    ROMCPC664_UK      32 KiB  073a7665527b  cpc664.rom, os664.rom + basic664.rom
+    ROMCPC6128_UK     32 KiB  5977adbad3f7  cpc6128.rom, os6128.rom + basic6128.rom
+    ROMCPC464_FR      32 KiB  c68d84f37ab9  OS464_FR.rom of ACE-DL
+    ROMCPC6128_FR     32 KiB  200d59076dfe  OS6128_FR.rom of ACE-DL, CPC6128.ROM.FR of CPCemu
+    ROMCPC6128_SP     32 KiB  1acd01c2c034  OS6128_S.rom of ACE-DL, CPC6128.ROM.ES of CPCemu
+    ROMCPC464_SP      32 KiB  6291af67cb34  Spanish 464, same BASIC half as ROMCPC464_FR
+    ROMAmsdos         16 KiB  39102c8e9cb5  amsdos.rom
+    ROMMultiface2      8 KiB  1431ec628d38  multiface2.rom of ACE-DL and CPCemu
+    ROMDKSpeech       16 KiB  bf28e07d5fad  dkspeech.rom of MAME
+    ROMSiliconDisk13  16 KiB  932bc3bbe38a  no other profile lists it
+
+  A slot left blank in a device file takes the built-in image,
   and the names "Default OS", "Default BASIC", "Default AMSDOS", "Default
   Multiface Two", "Default Silicon Disc 1.3" and "Default DK'Tronics Speech"
   select them explicitly.
