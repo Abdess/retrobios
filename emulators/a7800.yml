@@ -100,7 +100,8 @@ files:
     note: >-
       Software list set for the High Score Cartridge configuration (CX78HSC,
       slot a78_hsc). Fatal when that configuration is selected and the set is
-      absent.
+      absent. The list is read from hash/a7800.xml, which the v5.2 release
+      archives for Linux, macOS and Windows carry beside the binary.
     contents:
       - name: highscre.bin
         description: High Score Cartridge ROM, read through the pass-through cart
@@ -117,7 +118,8 @@ files:
       Software list set for the XM Expansion Module configuration (slot
       a78_xm), which reuses the High Score Cartridge ROM alongside 128KB RAM,
       POKEY and YM2151. Fatal when that configuration is selected and the set
-      is absent.
+      is absent. The list is read from hash/a7800.xml, which the v5.2
+      release archives for Linux, macOS and Windows carry beside the binary.
     contents:
       - name: highscre.bin
         description: High Score Cartridge ROM, gated by XM control register bit 3
