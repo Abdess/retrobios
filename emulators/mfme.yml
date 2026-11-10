@@ -3,12 +3,12 @@ type: standalone
 core_classification: embedded_hle
 source: "https://www.desertislandfruits.com/"
 upstream: closed-source
-profiled_date: "2026-08-08"
+profiled_date: "2026-11-10"
 core_version: "20.1"
 version_basis:
   kind: package
-  url: "https://www.desertislandfruits.com/"
-  artifact: "MFME v20 Windows installer, MFME.exe FileVersion 20.1.0.0"
+  url: "https://archive.org/download/mfmev-20/MFMEv20.zip"
+  artifact: "MFMEv20.exe installer (zip md5 5f5faa0a99f993c27aa118ebb1a8e6b2), MFME.exe FileVersion 20.1.0.0, ProductVersion 20.0, sha256 8b3c873078b4a9d6edfcd24d18f8f6405253f8fcd8f3266bf944988b0fd4066a"
 display_name: "MFME (Fruit Machines)"
 cores:
   - mfme
@@ -18,7 +18,7 @@ systems:
 mode: standalone
 
 notes: |
-  Closed-source Delphi emulator for fruit machine and slot machine hardware,
+  Closed-source C++Builder VCL emulator for fruit machine and slot machine hardware,
   written by Chris Wren (Wizard) and distributed as a Windows installer. MFME.exe
   carries FileVersion 20.1.0.0, FileDescription "Multiple Fruit Machine Emulator" and
   copyright "C.J.Wren 1997-2020", and the installer targets Windows 10, defaults to
@@ -26,11 +26,14 @@ notes: |
   ASPack compressed, imports dinput8, xaudio2_9, d2d1 and d3d11 for input, sound
   and the hardware accelerated scaler added in v19.0 (history.txt:8-9), and holds
   its layout engine in Delphi units around an EasyCompression Library core.
-  Development ended with the author's death, and Update.exe, reached from File ->
+  Addresses in the source_ref fields are virtual addresses of the image the ASPack
+  stub unpacks (image base 0x400000, entry 0x402a88), read from MFME.exe sha256
+  8b3c873078b4a9d6.
+  Development ended with the author's death, and Update.exe, reached from the File menu item
   Check For Updates (history.txt:235), no longer finds a server. ES-DE calls
   MFME.exe with a .gam path and the working directory set to the emulator
   folder, through find rules MFME and MFME-WINDOWS, and runs
-  it under Wine or Proton on Linux; .gam is in the arcade and mame extension
+  it under Wine or Proton on Linux. .gam is in the arcade and mame extension
   lists.
 
   A machine is a folder holding a .gam file, the .fml layout it names and the ROM
@@ -55,22 +58,26 @@ notes: |
   set (tips.txt).
 
   Effect samples are the mechanical cabinet sounds MFME plays itself, distinct
-  from the game audio the sound ROM produces. Each effect has a fixed filename
-  resolved in the game folder first, then DefaultSounds\Custom\<tech>\<cabinet
-  style>, then DefaultSounds (DefaultSounds/Readme.txt:78-84), and files are
-  opened when required rather than at layout load (history.txt:210-211). A
-  preference forces the defaults over the ones a layout selects
-  (history.txt:219). The distribution ships Custom folders for 40 techs: ACEVIDEO,
+  from the game audio the sound ROM produces. The effect table at 0xad7ac8 holds
+  55 entries of 12 bytes (file name, label, flags). FUN_005fad6c loads every
+  entry through FUN_005faa24, and FUN_005fb284 reloads one entry with the path
+  FUN_005158fc builds: the game folder unless the force defaults flag at 0xb915cc
+  is set (0x515b61-0x515b9c), then DefaultSounds\Custom\<tech>\<cabinet style>\
+  with the style taken from the table at 0xa84cf4 (0x515a87-0x515afd, 0x515c38),
+  then DefaultSounds\. Each file goes through FUN_005f9584, which opens it with
+  mmio, expects a RIFF WAVE with a PCM fmt chunk and a data chunk, and returns
+  nothing otherwise, so a missing or unreadable sample leaves its effect silent.
+  The distribution ships Custom folders for 40 techs: ACEVIDEO,
   ADDER5, ASTRASYSA1, BLACKBOX, COINMASTER, ELECTROCOIN, EPOCH, IGTS+, IGTS2000,
   IMPACT, INDER, M1AB, M1VIDEO, MACH2000A, MACH2000E, MACH2000S, MMM, MPS2, MPU2,
   MPU3, MPU4, MPU4PLASMA, MPU4VIDEO, MPU5, PCLMAXI, PHOENIX, PHOENIX2, PLUTO5,
   PROCONN, SCORPION1, SCORPION2, SCORPION4, SCORPION5, SRU, SYS1, SYS5, SYS83,
   SYS85, SYSTEM80 and spACE, with cabinet subfolders Eclipse for ADDER5,
   SCORPION4 and SCORPION5, Elegance for EPOCH, and Genesis for MPU4 and MPU5.
-  DefaultSounds/Readme.txt:35-37 lists the electronic token mech effects as
-  CoinInToken, CoinInTokenSwitch and CoinInTokenRejected, but the files that ship and
-  the entry that introduced them name them TokenIn, TokenInSwitch and
-  TokenInRejected (history.txt:80).
+  DefaultSounds/Readme.txt:35-37 names the electronic token mech effects
+  CoinInToken, CoinInTokenSwitch and CoinInTokenRejected, while the table names
+  TokenIn, TokenInSwitch and TokenInRejected, the names the distribution ships.
+  The table also holds RelayOn.wav and RelayOff.wav, which the readme omits.
 
   Three shipped directories are enumerated rather than looked up by name and
   therefore expect no particular filename. DefaultBackdrops and DefaultTiles hold
@@ -78,8 +85,8 @@ notes: |
   picked at random when the preference is set (history.txt:48, 55-56), and ship
   one wallpaper and six tiles. DefaultSounds/MiscSounds holds alternate payout,
   coin and note recordings that a user copies over an effect name. Fonts is
-  scanned for the fonts a layout names, so its contents grow with the layouts
-  installed.
+  enumerated by FUN_00511f0c, which registers up to 100 font files of any name,
+  so its contents grow with the layouts installed.
 
 files:
   # -- Output hardware library --
@@ -91,13 +98,12 @@ files:
     required: true
     bundled: true
     description: "Ultimarc PacDrive, PacLed64 and UltimateIO output library"
-    source_ref: "MFME.exe import directory, history.txt:278-279"
+    source_ref: "MFME.exe 20.1.0.0 packed PE import descriptor 0xdba03c (pacdrive32.dll, ordinal 11 into IAT 0xdba2c0, loader-resolved), ASPack stub restores IAT 0xc692ac-0xc692d4 (ordinals 11, 12, 6, 27, 20, 25, 26, 23, 2, 5, 3), FUN_0050f998 0x50fa27 (PacInitialize through thunk 0xa42234), 0x50fa55-0x50fa82 (PacGetDeviceType, PacGetDevicePath, PacGetVersionNumber, PacGetProductName, PacGetSerialNumber), 0x50fe21 (PacShutdown)"
     note: >-
-      Listed in the MFME.exe import descriptors, so the Windows loader resolves it
-      at process start and MFME does not launch when it is absent from the
-      application directory. Drives real cabinet lamps, hoppers and meters through
-      Ultimarc boards. v20.0 updated the library and added PacLed64 and UltimateIO
-      support.
+      A static import of the packed executable, so the Windows loader maps it before
+      any MFME code runs and the process does not start without it. Drives cabinet
+      lamps, hoppers and meters through Ultimarc PacDrive, PacLed64 and UltimateIO
+      boards.
 
   # -- Fonts, scanned from the Fonts folder beside MFME.exe --
 
@@ -110,12 +116,12 @@ files:
     bundled: true
     category: game_data
     description: "Lithograph Bold, the font layouts name for machine text"
-    source_ref: "history.txt:38, 309"
+    source_ref: "MFME.exe 20.1.0.0 FUN_00511f0c 0x511f9e (exe folder + L\"Fonts\\*\"), 0x511fe0 (FindFirst), 0x512166-0x512306 (extension .ttf, .ttc, .fon, .otf, .pfb or .pfm), 0x5123d4 (L\"Fonts\\\" + name added to the list, at most 100), 0x51249f (AddFontResourceExW, FR_PRIVATE), called from 0x4e2920"
     note: >-
-      v19.0 moved font loading from installed system fonts to the Fonts folder
-      where MFME is located. Layouts store a font family name, not a file: the
-      decoded layout stream names Lithograph. A layout whose font is missing shows
-      the name in red in the properties screen and renders with a substitute.
+      Fonts is enumerated, not looked up by file name: every font file found is
+      registered for the process only. The family Lithograph is the Font.Name of
+      MFME's own forms (DFM at 0xce48d9) and is set on new text at 0x5ec418.
+      Layouts store a family name, so a missing font falls back to a substitute.
 
   - name: LITHOGRL.TTF
     size: 61484
@@ -126,8 +132,8 @@ files:
     bundled: true
     category: game_data
     description: "Lithograph Light, the font layouts name for machine text"
-    source_ref: "history.txt:38, 309"
-    note: "Same mechanism as LITHOGRB.TTF, the light weight of the same family."
+    source_ref: "MFME.exe 20.1.0.0 FUN_00511f0c 0x511f9e (exe folder + L\"Fonts\\*\"), 0x511fe0 (FindFirst), 0x512166-0x512306 (extension .ttf, .ttc, .fon, .otf, .pfb or .pfm), 0x5123d4 (L\"Fonts\\\" + name added to the list, at most 100), 0x51249f (AddFontResourceExW, FR_PRIVATE), called from 0x4e2920"
+    note: "Registered by the same Fonts enumeration as LITHOGRB.TTF, family LithographLight."
 
   - name: MFME.ttf
     size: 264428
@@ -137,9 +143,9 @@ files:
     required: false
     bundled: true
     category: game_data
-    description: "MFME segment and display font"
-    source_ref: "history.txt:38, 168"
-    note: "Shipped font used by MFME's own displays, updated in v19.5."
+    description: "MFME font, family MFME"
+    source_ref: "MFME.exe 20.1.0.0 FUN_00511f0c 0x511f9e (exe folder + L\"Fonts\\*\"), 0x511fe0 (FindFirst), 0x512166-0x512306 (extension .ttf, .ttc, .fon, .otf, .pfb or .pfm), 0x5123d4 (L\"Fonts\\\" + name added to the list, at most 100), 0x51249f (AddFontResourceExW, FR_PRIVATE), called from 0x4e2920"
+    note: "Registered by the same Fonts enumeration as LITHOGRB.TTF."
 
   # -- Reel masks, applied when the Default option is selected --
 
@@ -152,10 +158,10 @@ files:
     bundled: true
     category: game_data
     description: "Reel gradient mask applied to reel bands"
-    source_ref: "DefaultMasks/Readme.txt:1"
+    source_ref: "MFME.exe 20.1.0.0 FUN_005e67c6 0x5e67e7 (exe folder + \"\\DefaultMasks\"), 0x5e6a9c (+ \"\\ReelGradientMask.bmp\"), 0x5e6ae7 (FileExists, nothing loaded when absent), 0x5e6b40 (bitmap load from the same path)"
     note: >-
-      Used when the Default option is chosen for the mask in the reel properties
-      window. A custom mask stored in the layout replaces it.
+      Applied when the Default mask is chosen for a reel. A custom mask stored in
+      the layout replaces it.
 
   - name: ReelLampMask.bmp
     size: 108734
@@ -166,7 +172,7 @@ files:
     bundled: true
     category: game_data
     description: "Reel lamp mask applied to reel bands"
-    source_ref: "DefaultMasks/Readme.txt:1"
+    source_ref: "MFME.exe 20.1.0.0 FUN_005e67c6 0x5e67e7 (exe folder + \"\\DefaultMasks\"), 0x5e690c (+ \"\\ReelLampMask.bmp\"), 0x5e6957 (FileExists, nothing loaded when absent), 0x5e69af-0x5e69fa (bitmap created and loaded from the same path), FUN_0051bb70 0x51bb9b (exe folder + \"\\DefaultMasks\\ReelLampMask.bmp\"), 0x51bc33 (FileExists)"
     note: "Same mechanism as ReelGradientMask.bmp, for the reel lamp overlay."
 
   # -- Payout solenoid slides --
@@ -180,7 +186,7 @@ files:
     bundled: true
     category: game_data
     description: "2p payout solenoid"
-    source_ref: "DefaultSounds/Readme.txt:9, history.txt:44"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 39 at 0xad7c9c (\"2pSlide.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: 10pSlide.wav
     size: 60834
@@ -191,7 +197,7 @@ files:
     bundled: true
     category: game_data
     description: "10p payout solenoid"
-    source_ref: "DefaultSounds/Readme.txt:10"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 4 at 0xad7af8 (\"10pSlide.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: 20pSlide.wav
     size: 60834
@@ -202,7 +208,7 @@ files:
     bundled: true
     category: game_data
     description: "20p payout solenoid"
-    source_ref: "DefaultSounds/Readme.txt:11"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 17 at 0xad7b94 (\"20pSlide.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: 50pSlide.wav
     size: 60834
@@ -213,7 +219,7 @@ files:
     bundled: true
     category: game_data
     description: "50p payout solenoid"
-    source_ref: "DefaultSounds/Readme.txt:12"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 18 at 0xad7ba0 (\"50pSlide.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: PoundSlide.wav
     size: 60834
@@ -224,7 +230,7 @@ files:
     bundled: true
     category: game_data
     description: "One pound payout solenoid"
-    source_ref: "DefaultSounds/Readme.txt:13"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 31 at 0xad7c3c (\"PoundSlide.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: TokenSlide.wav
     size: 84928
@@ -235,7 +241,7 @@ files:
     bundled: true
     category: game_data
     description: "10p and 20p token payout solenoid"
-    source_ref: "DefaultSounds/Readme.txt:14"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 5 at 0xad7b04 (\"TokenSlide.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: MiscSlide.wav
     size: 63898
@@ -246,21 +252,39 @@ files:
     bundled: true
     category: game_data
     description: "Five by 50p slide"
-    source_ref: "DefaultSounds/Readme.txt:15"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 32 at 0xad7c48 (\"MiscSlide.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   # -- Meters and buttons --
 
-  - name: meter.wav
+  - name: Meter.wav
     size: 9260
     sha1: d4c70ecc12d3be10d5a07784b6d07e9e3880e39a
     system: fruitmachine
-    path: "DefaultSounds/meter.wav"
+    path: "DefaultSounds/Meter.wav"
     required: false
     bundled: true
     category: game_data
     description: "Electromechanical meter step"
-    source_ref: "DefaultSounds/Readme.txt:17"
-    note: "Listed as Meter.wav in the readme, shipped as meter.wav."
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 12 at 0xad7b58 (\"Meter.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
+    note: "The table names Meter.wav, the distribution ships it as meter.wav on a case insensitive file system."
+
+  - name: RelayOn.wav
+    system: fruitmachine
+    path: "DefaultSounds/RelayOn.wav"
+    required: false
+    category: game_data
+    description: "Relay switched on"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 13 at 0xad7b64 (\"RelayOn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
+    note: "Effect slot Relay On in the table, with no sample in the distribution."
+
+  - name: RelayOff.wav
+    system: fruitmachine
+    path: "DefaultSounds/RelayOff.wav"
+    required: false
+    category: game_data
+    description: "Relay switched off"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 14 at 0xad7b70 (\"RelayOff.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
+    note: "Effect slot Relay Off in the table, with no sample in the distribution."
 
   - name: ButtonDown.wav
     size: 3264
@@ -271,7 +295,7 @@ files:
     bundled: true
     category: game_data
     description: "Layout button pressed"
-    source_ref: "DefaultSounds/Readme.txt:19"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 9 at 0xad7b34 (\"ButtonDown.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: "PROCONN ships its own copy under DefaultSounds/Custom/PROCONN/."
 
   - name: ButtonUp.wav
@@ -283,7 +307,7 @@ files:
     bundled: true
     category: game_data
     description: "Layout button released"
-    source_ref: "DefaultSounds/Readme.txt:20"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 10 at 0xad7b40 (\"ButtonUp.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: "PROCONN ships its own copy under DefaultSounds/Custom/PROCONN/."
 
   # -- Hoppers --
@@ -297,7 +321,7 @@ files:
     bundled: true
     category: game_data
     description: "Hopper 1 motor running"
-    source_ref: "DefaultSounds/Readme.txt:22"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 20 at 0xad7bb8 (\"HopperMotor1.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: >-
       Cabinet specific copies ship under DefaultSounds/Custom/ for ADDER5/Eclipse,
       EPOCH/Elegance, MPU4/Genesis, MPU5/Genesis, SCORPION4/Eclipse and
@@ -312,7 +336,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin paid out from hopper 1"
-    source_ref: "DefaultSounds/Readme.txt:23"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 21 at 0xad7bc4 (\"HopperCoin1.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: "Same cabinet specific copies as HopperMotor1.wav."
 
   - name: HopperMotor2.wav
@@ -324,7 +348,7 @@ files:
     bundled: true
     category: game_data
     description: "Hopper 2 motor running"
-    source_ref: "DefaultSounds/Readme.txt:24"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 33 at 0xad7c54 (\"HopperMotor2.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: "Same cabinet specific copies as HopperMotor1.wav."
 
   - name: HopperCoin2.wav
@@ -336,7 +360,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin paid out from hopper 2"
-    source_ref: "DefaultSounds/Readme.txt:25"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 34 at 0xad7c60 (\"HopperCoin2.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: >-
       Same cabinet specific copies as HopperMotor1.wav, plus an alternate in
       DefaultSounds/MiscSounds/.
@@ -352,7 +376,7 @@ files:
     bundled: true
     category: game_data
     description: "Note inserted into the note acceptor"
-    source_ref: "DefaultSounds/Readme.txt:27"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 25 at 0xad7bf4 (\"NoteIn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: NoteInReject.wav
     size: 96688
@@ -363,7 +387,7 @@ files:
     bundled: true
     category: game_data
     description: "Note rejected by the note acceptor"
-    source_ref: "DefaultSounds/Readme.txt:28"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 30 at 0xad7c30 (\"NoteInReject.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: NoteInStack.wav
     size: 254880
@@ -374,7 +398,7 @@ files:
     bundled: true
     category: game_data
     description: "Note accepted and sent to the stacker"
-    source_ref: "DefaultSounds/Readme.txt:29"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 26 at 0xad7c00 (\"NoteInStack.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   # -- Roll down electronic coin mech --
 
@@ -387,7 +411,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin inserted into a roll down electronic mech"
-    source_ref: "DefaultSounds/Readme.txt:31"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 22 at 0xad7bd0 (\"CoinIn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInSwitch.wav
     size: 33008
@@ -398,7 +422,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin accepted by the mech"
-    source_ref: "DefaultSounds/Readme.txt:32"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 23 at 0xad7bdc (\"CoinInSwitch.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInRejected.wav
     size: 88144
@@ -409,7 +433,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin rejected by the mech into the payout tray"
-    source_ref: "DefaultSounds/Readme.txt:33"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 24 at 0xad7be8 (\"CoinInRejected.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: TokenIn.wav
     size: 60816
@@ -420,7 +444,7 @@ files:
     bundled: true
     category: game_data
     description: "Token inserted into an electronic token mech"
-    source_ref: "history.txt:80, DefaultSounds/Readme.txt:35"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 44 at 0xad7cd8 (\"TokenIn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: TokenInSwitch.wav
     size: 33008
@@ -431,7 +455,7 @@ files:
     bundled: true
     category: game_data
     description: "Token accepted by an electronic token mech"
-    source_ref: "history.txt:80, DefaultSounds/Readme.txt:36"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 45 at 0xad7ce4 (\"TokenInSwitch.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: TokenInRejected.wav
     size: 88144
@@ -442,7 +466,7 @@ files:
     bundled: true
     category: game_data
     description: "Token rejected by an electronic token mech"
-    source_ref: "history.txt:80, DefaultSounds/Readme.txt:37"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 46 at 0xad7cf0 (\"TokenInRejected.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   # -- S1 and S10 mechs --
 
@@ -455,7 +479,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin inserted in an S1 type mech"
-    source_ref: "history.txt:148"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 47 at 0xad7cfc (\"CoinInS1.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS1Switch.wav
     size: 33008
@@ -466,7 +490,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin accepted by an S1 type mech"
-    source_ref: "history.txt:148"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 49 at 0xad7d14 (\"CoinInS1Switch.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS1Token.wav
     size: 60816
@@ -477,7 +501,7 @@ files:
     bundled: true
     category: game_data
     description: "Token inserted in an S1 token type mech"
-    source_ref: "history.txt:148"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 48 at 0xad7d08 (\"CoinInS1Token.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS1TokenSwitch.wav
     size: 33008
@@ -488,7 +512,7 @@ files:
     bundled: true
     category: game_data
     description: "Token accepted by an S1 token type mech"
-    source_ref: "history.txt:148"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 50 at 0xad7d20 (\"CoinInS1TokenSwitch.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS10.wav
     size: 60816
@@ -499,7 +523,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin inserted in an S1 or S10 type mech"
-    source_ref: "DefaultSounds/Readme.txt:39"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 35 at 0xad7c6c (\"CoinInS10.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS10Rejected.wav
     size: 80834
@@ -510,7 +534,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin rejected from an S10 type mech"
-    source_ref: "DefaultSounds/Readme.txt:40, history.txt:47, 153"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 42 at 0xad7cc0 (\"CoinInS10Rejected.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS10Switch.wav
     size: 33008
@@ -521,7 +545,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin accepted by an S1 or S10 type mech"
-    source_ref: "DefaultSounds/Readme.txt:41, history.txt:47"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 40 at 0xad7ca8 (\"CoinInS10Switch.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS10Token.wav
     size: 60816
@@ -532,7 +556,7 @@ files:
     bundled: true
     category: game_data
     description: "Token inserted in an S10 token type mech"
-    source_ref: "DefaultSounds/Readme.txt:43"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 36 at 0xad7c78 (\"CoinInS10Token.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS10TokenRejected.wav
     size: 80834
@@ -543,7 +567,7 @@ files:
     bundled: true
     category: game_data
     description: "Token rejected from an S10 token type mech"
-    source_ref: "DefaultSounds/Readme.txt:44, history.txt:47, 153"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 43 at 0xad7ccc (\"CoinInS10TokenRejected.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinInS10TokenSwitch.wav
     size: 33008
@@ -554,7 +578,7 @@ files:
     bundled: true
     category: game_data
     description: "Token accepted by an S10 token type mech"
-    source_ref: "DefaultSounds/Readme.txt:45, history.txt:47"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 41 at 0xad7cb4 (\"CoinInS10TokenSwitch.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: S1Locked.wav
     size: 7596
@@ -565,7 +589,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin refused by a locked out S1 mech"
-    source_ref: "DefaultSounds/Readme.txt:50"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 27 at 0xad7c0c (\"S1Locked.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   # -- Comparator mech --
 
@@ -578,7 +602,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin inserted in a comparator style mech"
-    source_ref: "DefaultSounds/Readme.txt:47"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 28 at 0xad7c18 (\"CoinInDrop.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: CoinDropReject.wav
     size: 12018
@@ -589,7 +613,7 @@ files:
     bundled: true
     category: game_data
     description: "Coin rejected from a comparator style mech"
-    source_ref: "DefaultSounds/Readme.txt:48"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 29 at 0xad7c24 (\"CoinDropReject.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   # -- Lockout solenoid --
 
@@ -602,7 +626,7 @@ files:
     bundled: true
     category: game_data
     description: "Lockout solenoid activated"
-    source_ref: "DefaultSounds/Readme.txt:52"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 15 at 0xad7b7c (\"LockoutOn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: LockoutOff.wav
     size: 9204
@@ -613,7 +637,7 @@ files:
     bundled: true
     category: game_data
     description: "Lockout solenoid deactivated"
-    source_ref: "DefaultSounds/Readme.txt:53"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 16 at 0xad7b88 (\"LockoutOff.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   # -- Stepper reels --
 
@@ -623,11 +647,11 @@ files:
     required: false
     category: game_data
     description: "SRU, SYS80 and MPS2 200 step reel motor"
-    source_ref: "DefaultSounds/Readme.txt:55, history.txt:74"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 19 at 0xad7bac (\"Stepper.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: >-
       Shipped only as tech copies under DefaultSounds/Custom/ for ELECTROCOIN,
-      MPS2, SRU and SYSTEM80, and as stepper.wav for M1AB. Reel effects were
-      extended to Maygay M1a and made available to other techs in v20.0.
+      MPS2, SRU and SYSTEM80, and as stepper.wav for M1AB, which FUN_005158fc
+      finds before the DefaultSounds folder.
 
   # -- Prize vend --
 
@@ -640,7 +664,7 @@ files:
     bundled: true
     category: game_data
     description: "Prize vend motor started"
-    source_ref: "DefaultSounds/Readme.txt:57"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 37 at 0xad7c84 (\"PrizeMotor.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: PrizeVend.wav
     size: 62288
@@ -651,7 +675,7 @@ files:
     bundled: true
     category: game_data
     description: "Prize dispensed"
-    source_ref: "DefaultSounds/Readme.txt:58"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 38 at 0xad7c90 (\"PrizeVend.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
     note: "Listed as Prizevend.wav in the readme, shipped as PrizeVend.wav."
 
   # -- Pull handle --
@@ -665,7 +689,7 @@ files:
     bundled: true
     category: game_data
     description: "Pull handle drawn slowly"
-    source_ref: "DefaultSounds/Readme.txt:60, history.txt:207"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 51 at 0xad7d2c (\"PullHandleSlow.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: PullHandleNormal.wav
     size: 70700
@@ -676,7 +700,7 @@ files:
     bundled: true
     category: game_data
     description: "Pull handle drawn at normal speed"
-    source_ref: "DefaultSounds/Readme.txt:61, history.txt:207"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 52 at 0xad7d38 (\"PullHandleNormal.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: PullHandleFast.wav
     size: 30252
@@ -687,7 +711,7 @@ files:
     bundled: true
     category: game_data
     description: "Pull handle drawn quickly"
-    source_ref: "DefaultSounds/Readme.txt:62, history.txt:207"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 53 at 0xad7d44 (\"PullHandleFast.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: PullHandleRelease.wav
     size: 43372
@@ -698,7 +722,7 @@ files:
     bundled: true
     category: game_data
     description: "Pull handle released"
-    source_ref: "DefaultSounds/Readme.txt:63, history.txt:207"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 54 at 0xad7d50 (\"PullHandleRelease.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   # -- Electromechanical cabinets --
 
@@ -711,7 +735,7 @@ files:
     bundled: true
     category: game_data
     description: "Reel motor activated on an EM machine"
-    source_ref: "DefaultSounds/Readme.txt:68"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 0 at 0xad7ac8 (\"MotorOn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: Wiper.wav
     size: 117804
@@ -722,7 +746,7 @@ files:
     bundled: true
     category: game_data
     description: "Reel with studs spinning on an EM machine"
-    source_ref: "DefaultSounds/Readme.txt:69"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 3 at 0xad7aec (\"Wiper.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: SolenoidOn.wav
     size: 5450
@@ -733,7 +757,7 @@ files:
     bundled: true
     category: game_data
     description: "Reel solenoid activated on an EM machine"
-    source_ref: "DefaultSounds/Readme.txt:70"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 1 at 0xad7ad4 (\"SolenoidOn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: SolenoidOff.wav
     size: 17766
@@ -744,7 +768,7 @@ files:
     bundled: true
     category: game_data
     description: "Reel solenoid deactivated on an EM machine"
-    source_ref: "DefaultSounds/Readme.txt:71"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 2 at 0xad7ae0 (\"SolenoidOff.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: BellOn.wav
     size: 97512
@@ -755,7 +779,7 @@ files:
     bundled: true
     category: game_data
     description: "Bell switched on"
-    source_ref: "DefaultSounds/Readme.txt:72"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 7 at 0xad7b1c (\"BellOn.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: BellOff.wav
     size: 13702
@@ -766,7 +790,7 @@ files:
     bundled: true
     category: game_data
     description: "Bell switched off"
-    source_ref: "DefaultSounds/Readme.txt:73"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 8 at 0xad7b28 (\"BellOff.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: Buzzer.wav
     size: 9082
@@ -777,7 +801,7 @@ files:
     bundled: true
     category: game_data
     description: "Nudge buzzer activated"
-    source_ref: "DefaultSounds/Readme.txt:74"
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 6 at 0xad7b10 (\"Buzzer.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
 
   - name: Sounder.wav
     system: fruitmachine
@@ -785,5 +809,5 @@ files:
     required: false
     category: game_data
     description: "Feature sounder activated on an EM machine"
-    source_ref: "DefaultSounds/Readme.txt:75"
-    note: "Effect name documented by MFME with no sample in the distribution."
+    source_ref: "MFME.exe 20.1.0.0 effect table 0xad7ac8 entry 11 at 0xad7b4c (\"Sounder.wav\"), FUN_005fad6c 0x5fadca-0x5fae1c (loads entries 0 to 0x36), FUN_005faa24 0x5faac6-0x5fac04 (FileExists in game folder, Custom, DefaultSounds), 0x5fac35 (FUN_005f9584 mmio RIFF WAVE PCM read, null on failure), FUN_005fb284 0x5fb2c4-0x5fb487 (reload of one entry)"
+    note: "Effect slot Sounder in the table, with no sample in the distribution."
