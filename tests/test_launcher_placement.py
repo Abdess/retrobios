@@ -233,6 +233,35 @@ class UAE4AllOnRetroPie(unittest.TestCase):
 
 
 
+class FsUaeOnRetroPie(unittest.TestCase):
+    """RetroPie lists KS 1.3 as kick34005.A500, and its fs-uae launcher
+    passes $biosdir/kick13.rom (fs-uae.sh:23-26). The listed copy settles
+    fs-uae's entry by content, and the launcher's name was filled only as
+    a copy of UAE4All2's amiga/kick13.rom: a board without UAE4All2 lost it."""
+
+    def test_the_launcher_name_is_filled_without_another_core(self) -> None:
+        import json
+
+        from common import load_target_config
+
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("database.json is not built")
+        db = json.loads(db_path.read_text(encoding="utf-8"))
+        cores = load_target_config("retropie", "x86", str(REPO_ROOT / "platforms"))
+        self.assertNotIn("uae4all", cores)
+        with redirect_stdout(io.StringIO()):
+            manifest = generate_manifest(
+                "retropie", str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
+                str(REPO_ROOT / "platforms" / "_registry.yml"),
+                emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
+                target_cores=set(cores), target_name="x86",
+            )
+        held = [(f["dest"], f["cores"]) for f in manifest["files"]
+                if f["dest"].rsplit("/", 1)[-1] == "kick13.rom"]
+        self.assertEqual(held, [("kick13.rom", ["fs-uae"])])
+
+
 PROGRAM = b"PROGRAM BINARY"
 PROGRAM_DATA = b"PROGRAM DATA"
 

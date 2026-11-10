@@ -627,6 +627,9 @@ def find_undeclared_files(
                 )
                 if verdict == "settled":
                     seen_files.add(seen_key)
+                    if (launcher_layer and not f.get("unsourceable") and not save_root
+                            and f.get("root") not in OUTER_ROOTS and not f.get("unplaced")):
+                        launcher_layer.declared_elsewhere(emu_name, is_standalone, f)
                     # Answered by the platform's own declaration, which its
                     # report covers: the set it belongs to is spoken for.
                     set_records.append((set_keys((emu_name, is_standalone), f), f, True, None))

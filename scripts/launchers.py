@@ -955,6 +955,18 @@ class LauncherLayer:
                     for entry in profiles[key].get("files") or []
                 ])
         self._db = db
+        self._declared_elsewhere: set[tuple[str, bool, str, str]] = set()
+
+    def declared_elsewhere(self, emulator: str, standalone: bool, entry: dict) -> None:
+        """Record a core entry the platform's list settles under another
+        name. A launcher opening the entry's own name finds nothing there:
+        RetroPie lists KS 1.3 as kick34005.A500, and its fs-uae launcher
+        passes $biosdir/kick13.rom. A name the list holds somewhere is
+        copied to the launcher's place from that declaration."""
+        name = str(entry.get("name", ""))
+        if name.rsplit("/", 1)[-1].lower() in self.declared_names_folded:
+            return
+        self._declared_elsewhere.add((emulator, standalone, name, str(entry.get("path") or "")))
 
     @staticmethod
     def _profiles_named(name: str, profiles: dict, relevant: set[str]) -> list[str]:
@@ -1074,6 +1086,9 @@ class LauncherLayer:
                 if "<" not in str(entry.get("name", "")):
                     report["in_repo"] = resolve_held(report) is not None
                 report["unoffered"] = True
+                if (*layout, str(entry.get("name", "")),
+                        str(entry.get("path") or "")) in self._declared_elsewhere:
+                    report["declared_elsewhere"] = True
                 by_layout.setdefault(layout, []).append((entry, report))
         placed: set[str] = set()
         for (emulator, standalone), members in sorted(by_layout.items()):
@@ -1081,11 +1096,14 @@ class LauncherLayer:
                 # An entry the report left out answers only through the
                 # setting or the extended name: by its own name it was left
                 # out for a reason (a region variant, a settled duplicate).
+                # One the platform settles under another name still answers
+                # by its own: the place reads a name the list does not hold.
                 matched = [
                     (candidate, report)
                     for entry, report in members
                     if (candidate := self.match(place, entry)) is not None
-                    and (candidate.by_setting_or_stem or not report.get("unoffered"))
+                    and (candidate.by_setting_or_stem or not report.get("unoffered")
+                         or report.get("declared_elsewhere"))
                 ]
                 # A size names one entry only when no other of the core's
                 # entries takes that size too.
