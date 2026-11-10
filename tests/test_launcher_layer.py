@@ -253,7 +253,7 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertNotIn("core.bin", self._pack_names())
 
     def test_a_file_handed_to_an_entry_setting_takes_the_entry_content(self) -> None:
-        """RetroPie runs sdl2trs with -romfile4p $biosdir/level4p.rom and
+        """RetroPie runs sdl2trs with `-romfile4p $biosdir/level4p.rom` and
         EmuDeck writes a No-Intro name into ares's NeoGeoPocket firmware
         setting: neither name is the core's, and the held file of the entry
         that setting reads went in under no name at all."""

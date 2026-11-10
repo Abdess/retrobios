@@ -277,7 +277,7 @@ class OnlyWhatABoardBuildsIsRun(unittest.TestCase):
     def test_only_what_a_board_builds_or_the_user_supplies_is_run(self):
         from scraper import batocera_scraper as bs
 
-        # A board selects kodi's package and buildroot's mpv; citron is
+        # A board selects kodi's package and buildroot's mpv. Citron is
         # listed by es_systems, so the symbol of a folder of that name does
         # not count for it.
         built = bs.boards_build(

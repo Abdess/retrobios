@@ -543,7 +543,7 @@
       }
     },
     "roms_directory": {
-      "description": "Where the platform keeps its roms root, present when an entry carries root: roms. from_bios is that root relative to the BIOS folder (\".\" for the folder itself, else one or two \"..\" then plain names), as platforms/romfolders/<platform>.yml records it from the OS's own source (roms_root.from_bios). It is followed only from a BIOS folder named bios_folder (the platform's base_destination); any other leaves root: roms entries out (no_roms_directory).",
+      "description": "Where the platform keeps its roms root, present when an entry carries root: roms. from_bios is that root relative to the BIOS folder (\".\" for the folder itself, else one or two \"..\" then plain names), as platforms/romfolders/<platform>.yml records it from the OS's own source (roms_root.from_bios). It is followed only from a BIOS folder named bios_folder (the platform's base_destination). Any other leaves root: roms entries out (no_roms_directory).",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -577,7 +577,7 @@
       ],
       "properties": {
         "bios_folder": {
-          "description": "Name of the BIOS folder; the other paths are relative to the folder holding it.",
+          "description": "Name of the BIOS folder. The other paths are relative to the folder holding it.",
           "type": "string",
           "minLength": 1,
           "pattern": "^[^/\\\\]+$"
@@ -604,7 +604,7 @@
       }
     },
     "configs_directory": {
-      "description": "Where the frontend keeps its emulators' configs, present when an entry carries root: configs. from_bios is that folder relative to the BIOS folder, as the platform's own path code builds it (Batocera's batoceraPaths CONFIGS, ../system/configs), with the rules of roms_directory.from_bios. It is followed only from a BIOS folder named bios_folder; any other leaves root: configs entries out (no_configs_directory).",
+      "description": "Where the frontend keeps its emulators' configs, present when an entry carries root: configs. from_bios is that folder relative to the BIOS folder, as the platform's own path code builds it (Batocera's batoceraPaths CONFIGS, ../system/configs), with the rules of roms_directory.from_bios. It is followed only from a BIOS folder named bios_folder. Any other leaves root: configs entries out (no_configs_directory).",
       "type": "object",
       "additionalProperties": false,
       "required": [
