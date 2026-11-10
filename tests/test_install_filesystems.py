@@ -42,7 +42,7 @@ class AndroidMediaScanner(unittest.TestCase):
         return self.repo, proc
 
     def test_an_android_install_writes_one(self):
-        repo, proc = self._run("android")
+        repo, proc = self._run("android", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         marker = repo.dest / ".nomedia"
         self.assertTrue(marker.is_file())
@@ -106,7 +106,7 @@ class NamesAFatCardCannotHold(unittest.TestCase):
                                       "files": files}))
         out = io.StringIO()
         argv = ["install.py", "--platform", "retrodeck", "--dest", str(dest),
-                "--manifest", str(listed), "--from", str(old), "--no-input"]
+                "--manifest", str(listed), "--from", str(old), "--no-input", "--verbose"]
         with mock.patch.object(install, "holds_fat_refused_names", return_value=holds), \
                 mock.patch.object(install, "detect_os", return_value="linux"), \
                 mock.patch("sys.argv", argv), contextlib.redirect_stdout(out), \

@@ -219,8 +219,8 @@ class CopyFromAnOldCard(FromFolder):
     def test_check_names_what_the_folder_would_give_and_writes_nothing(self):
         self.keep("BIOS/SCPH5501.BIN", US)
         self.keep("gba_bios.bin", GBA)
-        proc = self.run_installer("--check", "--manifest", str(self.list), "--from",
-                                  str(self.old))
+        proc = self.run_installer("--check", "--verbose", "--manifest", str(self.list),
+                                  "--from", str(self.old))
         self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertIn(f"{self.old} holds 2 of these files: a run without --check "
                       "copies them.", proc.stdout)
@@ -376,7 +376,7 @@ class MisplacedInTheBiosFolder(Scratch):
     def test_a_nested_bios_folder_is_fixed_and_left_in_place(self):
         for name, data in PAYLOAD.items():
             self.place(f"system/{name}", data)
-        proc = self.install()
+        proc = self.install("--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         for name, data in PAYLOAD.items():
             self.assertEqual((self.dest / name).read_bytes(), data)
@@ -387,7 +387,7 @@ class MisplacedInTheBiosFolder(Scratch):
     def test_a_pack_extracted_into_a_folder_of_its_own_is_fixed(self):
         for name, data in PAYLOAD.items():
             self.place(f"RetroArch_BIOS_Pack/{name}", data)
-        proc = self.install()
+        proc = self.install("--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("one folder too deep: it is at RetroArch_BIOS_Pack/scph5501.bin",
                       proc.stdout)

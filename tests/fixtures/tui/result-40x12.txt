@@ -8,5 +8,5 @@
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
- 1-8 of 17
- A Exit  ^v Scroll
+ Log: /tmp/retrobios-x/install.log
+ A Exit  Y Details

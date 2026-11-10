@@ -407,10 +407,10 @@
  4 files to download, 1.0 MB
  BIOS folder:
    ~/.config/retroarch/system
- 1 wrong copy: backed up, replaced.
  > Install
    Choose systems
    Copy from an old card or a folder
+   Details
    Options
    Quit
  A Install  B Back  Y Options
@@ -420,30 +420,30 @@
  4 files to download, 1.0 MB
  BIOS folder:
    ~/.config/retroarch/system
- 1 wrong copy: backed up, replaced.
- 1 in place, 3 missing, 1 wrong copy
- Free space: 50.0 GB
 
  > Install
    Choose systems
    Copy from an old card or a folder
+   Details
    Options
    Quit
+
+
  A Install  B Back  Y Options
 === plan 80x24
  RetroBIOS: RetroArch
 
  4 files to download, 1.0 MB
  BIOS folder: ~/.config/retroarch/system
- 1 in place, 3 missing, 1 wrong copy
- The 1 wrong copy is replaced, the old one kept in a backup folder.
- Free space: 50.0 GB
 
  > Install
    Choose systems
    Copy the BIOS files from an old card or a folder
+   Details
    Options
    Quit
+
+
 
 
 
@@ -461,12 +461,12 @@
  Every file on the list is in place
  BIOS folder:
    ~/.config/retroarch/system
- 5 in place, 0 missing, 0 wrong copies
- 1 of the 0 wrong copies is replaced,
-   the old one kept in a backup folder.
- Free space: 50.0 GB
+
  > Close
+   Details
    Options
+
+
  A Close  B Back  Y Options
 === plan-in-place 40x15
  RetroBIOS: RetroArch
@@ -474,13 +474,13 @@
  Every file on the list is in place
  BIOS folder:
    ~/.config/retroarch/system
- 5 in place, 0 missing, 0 wrong copies
- 1 of the 0 wrong copies is replaced,
-   the old one kept in a backup folder.
- Free space: 50.0 GB
 
  > Close
+   Details
    Options
+
+
+
 
 
  A Close  B Back  Y Options
@@ -489,12 +489,12 @@
 
  Every file on the list is in place
  BIOS folder: ~/.config/retroarch/system
- 5 in place, 0 missing, 0 wrong copies
- 1 of the 0 wrong copies is replaced, the old one kept in a backup folder.
- Free space: 50.0 GB
 
  > Close
+   Details
    Options
+
+
 
 
 
@@ -779,27 +779,27 @@
  RetroBIOS: Confirm
 
  Counted again for these choices.
-   Nothing is written before Install.
  1 file to download, 16.0 KB
  BIOS folder: ~/.co.../retroarch/system
- 0 in place, 1 missing, 0 wrong copies
- Free space: 50.0 GB
 
  > Install
    Back
+
+
+
  A Install  B Back
 === confirm 40x15
  RetroBIOS: Confirm
 
  Counted again for these choices.
-   Nothing is written before Install.
  1 file to download, 16.0 KB
  BIOS folder: ~/.co.../retroarch/system
- 0 in place, 1 missing, 0 wrong copies
- Free space: 50.0 GB
 
  > Install
    Back
+
+
+
 
 
 
@@ -807,14 +807,14 @@
 === confirm 80x24
  RetroBIOS: Confirm
 
- Counted again for these choices. Nothing is written before Install.
+ Counted again for these choices.
  1 file to download, 16.0 KB
  BIOS folder: ~/.config/retroarch/system
- 0 in place, 1 missing, 0 wrong copies
- Free space: 50.0 GB
 
  > Install
    Back
+
+
 
 
 
@@ -840,7 +840,7 @@
    stays done.
 
  FAILED scph5500.bin (HTTP 404)
- ok     gba_bios.bin
+
  B Stop
 === installing 40x15
  RetroBIOS: Installing
@@ -853,7 +853,7 @@
    stays done.
 
  FAILED scph5500.bin (HTTP 404)
- ok     gba_bios.bin
+
 
 
 
@@ -868,7 +868,7 @@
  B or Select+Start stops. What is done stays done.
 
  FAILED scph5500.bin (HTTP 404)
- ok     gba_bios.bin
+
 
 
 
@@ -883,35 +883,6 @@
 
 
  B Stop
-=== result 40x12
- RetroBIOS: Finished with errors
-
- 3 installed, 1 failed.
- BIOS folder:
-   /home/user/.config/retroarch/system
-   failed: scph5500.bin (HTTP 404)
- Run it again to retry only those.
- The files it replaced are kept in
-   /home/user/.config/retroarch/
-   retrobios-backup/2026-10-23_1200
- Details: /tmp/retrobios-x/install.log
- A Exit
-=== result 40x15
- RetroBIOS: Finished with errors
-
- 3 installed, 1 failed.
- BIOS folder:
-   /home/user/.config/retroarch/system
-   failed: scph5500.bin (HTTP 404)
- Run it again to retry only those.
- The files it replaced are kept in
-   /home/user/.config/retroarch/
-   retrobios-backup/2026-10-23_1200
- Details: /tmp/retrobios-x/install.log
-
-
-
- A Exit
 === result 80x24
  RetroBIOS: Finished with errors
 
@@ -921,7 +892,7 @@
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
- Details: /tmp/retrobios-x/install.log
+ Log: /tmp/retrobios-x/install.log
 
 
 
@@ -936,7 +907,7 @@
 
 
 
- A Exit
+ A Exit  Y Details
 === error 40x12
  RetroBIOS: Something went wrong
 
@@ -1006,12 +977,12 @@
  D-pad, Up/Down      Move
  A, Start, Enter     Install
  Y, Tab, o           Options
+ d                   Details
  B, Select, Esc      Back
  q, Ctrl-C           Quit
  Select, then Start  Quit at once
 
- BIOS folder:
-   /home/user/.config/retroarch/system
+
  Any key closes this help
 === help 40x15
  RetroBIOS: Keys
@@ -1019,13 +990,13 @@
  D-pad, Up/Down      Move
  A, Start, Enter     Install
  Y, Tab, o           Options
+ d                   Details
  B, Select, Esc      Back
  q, Ctrl-C           Quit
  Select, then Start  Quit at once
 
  BIOS folder:
    /home/user/.config/retroarch/system
-
 
 
  Any key closes this help
@@ -1035,12 +1006,12 @@
  D-pad, Up/Down      Move
  A, Start, Enter     Install
  Y, Tab, o           Options
+ d                   Details
  B, Select, Esc      Back
  q, Ctrl-C           Quit
  Select, then Start  Quit at once
 
  BIOS folder: /home/user/.config/retroarch/system
-
 
 
 
@@ -1065,7 +1036,7 @@
    For the games on this card: yes  412
    Only what starts: no
    Show the games
- 1-4 of 8
+ 1-4 of 9
  A Install  B Back  Y Options
 === plan-games 40x15
  RetroBIOS: RetroArch
@@ -1073,13 +1044,13 @@
  4 files to download, 1.0 MB
  BIOS folder:
    ~/.config/retroarch/system
- For the 412 games on this card.
  > Install
    For the games on this card: yes  412
    Only what starts: no
    Show the games
    Choose systems
    Copy from an old card or a folder
+   Details
    Options
    Quit
  A Install  B Back  Y Options
@@ -1089,11 +1060,6 @@
  4 files to download, 1.0 MB
  BIOS folder: ~/.config/retroarch/system
  For the 412 games on this card.
- One region where the games prove it: nintendo-gba Europe.
- 2 games get every BIOS of their system: Show the games.
- 1 in place, 3 missing, 1 wrong copy
- The 1 wrong copy is replaced, the old one kept in a backup folder.
- Free space: 50.0 GB
 
  > Install
    For the games on this card: yes                                    412 games
@@ -1101,8 +1067,13 @@
    Show the games
    Choose systems
    Copy the BIOS files from an old card or a folder
+   Details
    Options
    Quit
+
+
+
+
 
 
 
@@ -1119,6 +1090,85 @@
  Every BIOS of their system kept, so that they start:
  GBA/demo.gba: not recognised
  GBA/hack.gba: not recognised
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Back
+=== plan-details 80x24
+ RetroBIOS: Details
+
+ 1 in place, 3 missing, 1 wrong copy
+ The 1 wrong copy is replaced, the old one kept in a backup folder.
+ Free space: 50.0 GB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Back
+=== result-details 40x12
+ RetroBIOS: Details
+
+ Nothing more to say here.
+
+
+
+
+
+
+
+
+ A Back
+=== result-details 40x15
+ RetroBIOS: Details
+
+ Nothing more to say here.
+
+
+
+
+
+
+
+
+
+
+
+ A Back
+=== result-details 80x24
+ RetroBIOS: Details
+
+ Nothing more to say here.
+
+
+
+
+
+
+
 
 
 

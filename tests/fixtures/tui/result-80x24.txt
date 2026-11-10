@@ -6,12 +6,7 @@
  Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
- To put them back: python3 install.py \
-   --restore /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
- Same choice without questions:
-   python3 install.py --platform retroarch \
-     --dest /home/user/.config/retroarch/system
- Details: /tmp/retrobios-x/install.log
+ Log: /tmp/retrobios-x/install.log
 
 
 
@@ -21,4 +16,9 @@
 
 
 
- A/Enter Exit
+
+
+
+
+
+ A/Enter Exit  Y/o Details

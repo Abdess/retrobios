@@ -308,6 +308,15 @@ class ProgressOutput(unittest.TestCase):
         return stream, term
 
     def test_a_log_gets_one_line_per_file_and_failures_say_why(self):
+        # A file that went well is a line of --verbose, a failure of every run.
+        install.OUTPUT.verbose = False
+        stream, term = self._term()
+        progress = install.Progress(2, 10, term)
+        progress.done("a.bin", True)
+        progress.done("b.bin", False, "HTTP 404")
+        self.assertEqual(stream.getvalue(), "  FAILED b.bin (HTTP 404)\n")
+        self.addCleanup(setattr, install.OUTPUT, "verbose", False)
+        install.OUTPUT.verbose = True
         stream, term = self._term()
         progress = install.Progress(2, 10, term)
         progress.done("a.bin", True)
@@ -329,6 +338,8 @@ class ProgressOutput(unittest.TestCase):
                          ["0:00", "0:42", "3:05", "1:02:09"])
 
     def test_the_summary_names_each_failure(self):
+        self.addCleanup(setattr, install.OUTPUT, "verbose", False)
+        install.OUTPUT.verbose = True
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf), self.assertRaises(SystemExit):
             install._report_outcome(
@@ -544,7 +555,7 @@ class AFolderThisUserCannotEnter(unittest.TestCase):
         with FakeRepository() as repo:
             locked = self._locked(repo)
             try:
-                proc = repo.run("--check")
+                proc = repo.run("--check", "--verbose")
             finally:
                 os.chmod(locked, 0o755)
         self.assertNotIn("Traceback", proc.stderr)
@@ -671,7 +682,7 @@ class AHomeThisUserCannotOpen(unittest.TestCase):
                                     ("detected", [])):
                     runs[name] = subprocess.run(
                         [sys.executable, str(REPO_ROOT / "install.py"), "--check",
-                         "--no-input", *extra],
+                         "--no-input", "--verbose", *extra],
                         env=env, capture_output=True, text=True, timeout=60,
                         stdin=subprocess.DEVNULL)
             finally:
@@ -864,7 +875,7 @@ class APartlyClosedHome(unittest.TestCase):
                                     ("events", ["--events"])):
                     runs[name] = subprocess.run(
                         [sys.executable, str(REPO_ROOT / "install.py"), "--check",
-                         "--no-input", *extra],
+                         "--no-input", "--verbose", *extra],
                         env=env, capture_output=True, text=True, timeout=60,
                         stdin=subprocess.DEVNULL)
             finally:

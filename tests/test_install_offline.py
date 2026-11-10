@@ -461,7 +461,7 @@ class ABoardWithoutTheNetwork(Scratch):
         (self.root / "targets" / "retroarch.json").write_text(json.dumps(BOARDS))
         self.complete()
         proc = self.run_installer("--offline", "--check", "--manifest", str(self.list),
-                                  "--target", "psx-board", "--no-input")
+                                  "--target", "psx-board", "--no-input", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("for target psx-board", proc.stdout)
 
@@ -500,7 +500,7 @@ class FromPackInstallsOffline(Scratch):
                 for p in self.dest.rglob("*") if p.is_file()}
 
     def test_the_pack_installs_with_no_network(self):
-        proc = self.run_installer("--from-pack", str(self.pack))
+        proc = self.run_installer("--from-pack", str(self.pack), "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertEqual(self.installed(), PAYLOAD)
         self.assertIn("Copying 4 files", proc.stdout)
@@ -571,7 +571,8 @@ class FromPackInstallsOffline(Scratch):
                       for rel, data in tree.items()},
         }]
         self.list.write_text(json.dumps(listed))
-        proc = self.run_installer("--from-pack", str(self.pack), "--manifest", str(self.list))
+        proc = self.run_installer("--from-pack", str(self.pack), "--manifest", str(self.list),
+                                  "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("dolphin-sys: 2 installed", proc.stdout)
         for rel, data in tree.items():
@@ -708,6 +709,8 @@ class TheSummaryNamesTheBulk(unittest.TestCase):
             files, {"system_cores": {"3do": ["mame", "opera"]}}, True, True), [])
 
     def test_the_end_summary_prints_the_line(self):
+        self.addCleanup(setattr, install.OUTPUT, "verbose", False)
+        install.OUTPUT.verbose = True
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             install._report_outcome([Path("/x")], 3, 0, 0, 0, False,
@@ -950,7 +953,8 @@ class OfflineLeavesFilesMissing(Scratch):
         }]
         self.list.write_text(json.dumps(listed))
         self.complete()
-        proc = self.run_installer("--offline", "--manifest", str(self.list), "--no-input")
+        proc = self.run_installer("--offline", "--manifest", str(self.list), "--no-input",
+                                  "--verbose")
         # Its files are missing, as the BIOS files --offline leaves out are,
         # with or without questions.
         self.assertIn("bluemsx: 0 already in place, 1 needs the internet (--offline)",

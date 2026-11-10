@@ -444,14 +444,14 @@ class Sandbox:
             with zipfile.ZipFile(system / "PSX BIOS.zip", "w") as archive:
                 archive.writestr("extra.bin", data["pcsx/extra.bin"])
             # A check that flags a file ends on 3, as documented.
-            return self.run("retroarch", "--check", "--manifest", str(listed), home=home,
-                            codes=(3,))
+            return self.run("retroarch", "--check", "--verbose", "--manifest", str(listed),
+                            home=home, codes=(3,))
         old = home / "old"
         old.mkdir()
         for dest in ("scph5500.bin", "scph5501.bin"):
             (old / dest).write_bytes(data[dest])
-        return self.run("retroarch", "--yes", "--manifest", str(listed), "--from", str(old),
-                        home=home, landed=True)
+        return self.run("retroarch", "--yes", "--verbose", "--manifest", str(listed),
+                        "--from", str(old), home=home, landed=True)
 
     def run(self, platform: str, *argv: str, landed: bool = False,
             held: bool = False, home: Path | None = None, codes: tuple = (0,)) -> str:
@@ -551,7 +551,7 @@ BULK_SYSTEM = "sony-playstation"
 
 
 def _bulk_line(box: Sandbox | _LazySandbox) -> str:
-    run = box.run("retroarch", "--dry-run", "--system", BULK_SYSTEM)
+    run = box.run("retroarch", "--dry-run", "--verbose", "--system", BULK_SYSTEM)
     found = [line for line in run.splitlines() if re.match(r"  \S+ pulls ", line)]
     if len(found) != 1:
         raise SampleFailed(f"a RetroArch run with --system {BULK_SYSTEM} names no core "
@@ -560,11 +560,17 @@ def _bulk_line(box: Sandbox | _LazySandbox) -> str:
 
 
 def sample_writers(box: Sandbox) -> dict[str, Callable[[str], str]]:
-    """The run samples, each from the run that prints it."""
-    install_run = lambda: box.run(WALKTHROUGH, "--yes", "--jobs", "1", landed=True)  # noqa: E731
-    check_run = lambda: box.run(WALKTHROUGH, "--check", held=True)  # noqa: E731
-    dry_run = lambda: box.run("retroarch", "--dry-run")  # noqa: E731
+    """The run samples, each from the run that prints it: the walk through a
+    run reads its --verbose lines, the default sample the lines it hides them
+    from."""
+    default_run = lambda: box.run(WALKTHROUGH, "--yes", "--jobs", "1", landed=True)  # noqa: E731
+    install_run = lambda: box.run(WALKTHROUGH, "--yes", "--jobs", "1", "--verbose",  # noqa: E731
+                                  landed=True)
+    check_run = lambda: box.run(WALKTHROUGH, "--check", "--verbose", held=True)  # noqa: E731
+    dry_run = lambda: box.run("retroarch", "--dry-run", "--verbose")  # noqa: E731
     return {
+        "run-default": lambda _body: _fenced(
+            _lines_from(default_run(), "Installing ", "Next: ")),
         "dry-run": lambda _body: (
             f"A RetroArch dry run into an empty folder, with the list of "
             f"{list_date('retroarch')}, printed this:\n\n"
@@ -598,7 +604,7 @@ def _refused_lines(text: str) -> list[str]:
     """The files a check flags, each with its reason and where its cores read it."""
     lines = text.splitlines()
     start = next((i for i, line in enumerate(lines)
-                  if re.fullmatch(r"  \d+ files? [a-z ]+:", line)), None)
+                  if re.fullmatch(r"  \d+ files? [a-z ]+\.", line)), None)
     if start is None:
         raise SampleFailed("the check printed no files not in place")
     end = max(i for i, line in enumerate(lines) if line.lstrip().startswith("read by "))

@@ -1,0 +1,15 @@
+ RetroBIOS: Details
+
+ To put them back: python3 install.py \
+   --restore .../2026-10-23_1200
+ Shortened to fit this window.
+ Same choice without questions:
+   python3 install.py \
+     --platform retroarch \
+     --dest .../retroarch/system
+ Shortened to fit this window.
+
+
+
+
+ A Back

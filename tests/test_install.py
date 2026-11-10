@@ -331,11 +331,16 @@ class TestRunOutcome(unittest.TestCase):
         return buf.getvalue(), code
 
     def test_success_names_the_location_and_the_way_to_check(self):
+        install.OUTPUT.verbose = install.OUTPUT.where_said = False
         out, code = self._report(downloaded=12, up_to_date=3)
         self.assertEqual(code, 0)
         self.assertIn("12 files installed", out)
         self.assertIn("/userdata/bios", out)
-        self.assertIn("--check", out)
+        self.assertIn("Next: ", out)
+        self.assertNotIn("--check", out)
+        self.addCleanup(setattr, install.OUTPUT, "verbose", False)
+        install.OUTPUT.verbose = True
+        self.assertIn("--check", self._report(downloaded=12, up_to_date=3)[0])
 
     def test_total_failure_does_not_say_done_and_exits_two(self):
         out, code = self._report(errors=7)
@@ -523,7 +528,12 @@ class AMissingDestIsSaid(unittest.TestCase):
 
     def test_one_missing_level_or_no_terminal_is_said_not_asked(self):
         root = Path(_tempdir(self))
-        # A "no" that was asked would stop the run with 2.
+        # A "no" that was asked would stop the run with 2. Said with
+        # --verbose: the folder is made, and the run names it.
+        install.OUTPUT.verbose = False
+        self.assertEqual(self._call(root / "bios", True, "n"), ("", None))
+        self.addCleanup(setattr, install.OUTPUT, "verbose", False)
+        install.OUTPUT.verbose = True
         out, code = self._call(root / "bios", True, "n")
         self.assertIsNone(code)
         self.assertIn("does not exist", out)
@@ -1512,7 +1522,7 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
             check=False,
         )
         self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
-        self.assertIn("to download:", proc.stdout)
+        self.assertIn("to download.", proc.stdout)
 
     def test_no_syntax_a_312_parser_lets_through(self):
         """Parenthesized context managers (3.9) and f-strings reusing their
@@ -2157,7 +2167,7 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
             proc = subprocess.run(
                 [
                     "pwsh", "-NoProfile", "-File",
-                    str(REPO_ROOT / "install.ps1"), "--standalone-copies",
+                    str(REPO_ROOT / "install.ps1"), "--standalone-copies", "--verbose",
                 ],
                 env=env,
                 capture_output=True,
@@ -4163,7 +4173,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
                 "files": {"Sys/big.bin": {"sha1": hashlib.sha1(member).hexdigest(),
                                           "size": len(member)}}}]
             (repo.root / "install" / "retroarch.json").write_text(json.dumps(listed))
-            proc = repo.run("--no-input")
+            proc = repo.run("--no-input", "--verbose")
             bios = sum(len(payload) for payload, *_ in FakeRepository.PAYLOADS.values())
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn(f"{install.format_size(bios + archive)} downloaded in", proc.stdout)
@@ -4447,7 +4457,7 @@ class ACheckNamesWhatTheCollectionLacks(unittest.TestCase):
         }
         proc = subprocess.run(
             [sys.executable, "-I", "install.py", "--platform", "recalbox",
-             "--no-input", "--dest", str(home / "bios"), "--check"],
+             "--no-input", "--dest", str(home / "bios"), "--check", "--verbose"],
             cwd=REPO_ROOT, env=env, capture_output=True, text=True, timeout=300,
             check=False,
         )
@@ -4969,6 +4979,8 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
         (dest / "lynxboot.img").write_bytes(b"corrupt")
         proc = self._run("--dest", str(dest), "--system", "atari-lynx", "--check")
         self.assertEqual(proc.returncode, 3)
+        # A wrong copy is named in every mode: it is what the user acts on.
+        self.assertIn("1 file to download.", proc.stdout)
         self.assertIn("wrong copy: lynxboot.img", proc.stdout)
         self.assertIn("without --check", proc.stdout)
 
@@ -4988,7 +5000,7 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
     def test_a_piped_log_keeps_its_order(self):
         proc = subprocess.run(
             [sys.executable, "install.py", "--platform", "retroarch", "--no-input",
-             "--target", "no-such-target", "--dest", str(self.home / "s")],
+             "--verbose", "--target", "no-such-target", "--dest", str(self.home / "s")],
             cwd=REPO_ROOT, env=self.env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
             text=True, timeout=300, check=False,
         )
@@ -5653,9 +5665,9 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         dest.mkdir()
         (dest / "scph5501.bin").write_bytes(b"junk")
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
-                            "--check", "--no-input")
+                            "--check", "--no-input", "--verbose")
         self.assertEqual(proc.returncode, 3, proc.stderr)
-        listing = proc.stdout.split("to download:\n", 1)[1].splitlines()
+        listing = proc.stdout.split("to download.\n", 1)[1].splitlines()
         self.assertEqual(listing[0].strip(), "wrong copy: scph5501.bin")
 
     def test_a_dry_run_counts_the_data_trees_and_ends_on_its_last_line(self):
@@ -5685,7 +5697,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
                           "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta"):
             shutil.copy(REPO_ROOT / repo_path, dest / "PPSSPP")
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(dest),
-                            "--system", "sony-psp", "--check", "--no-input")
+                            "--system", "sony-psp", "--check", "--no-input", "--verbose")
         self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         self.assertNotIn("Every file on the list is in place", proc.stdout)
         found = re.search(r"(\d+) in place, (\d+) missing", proc.stdout)
@@ -5699,10 +5711,11 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         dest.mkdir()
         proc = _install_run({**self.env, "RETROBIOS_INSTALL_OFFLINE": "1"}, "--platform",
                             "retroarch", "--dest", str(dest), "--check", "--no-input",
+                            "--verbose",
                             "--manifest", str(REPO_ROOT / "install" / "retroarch.json"))
         self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
         missing = re.search(r"0 in place, (\d+) missing", proc.stdout).group(1)
-        self.assertIn(f"\n  {missing} files not in place:\n", proc.stdout)
+        self.assertIn(f"\n  {missing} files not in place.\n", proc.stdout)
         self.assertIn(f"  {missing} files need the internet", proc.stdout)
 
     def test_a_cores_folder_can_be_named(self):
@@ -5711,7 +5724,7 @@ class RunsAgainstTheRealLists(unittest.TestCase, _LoopbackRun):
         (cores / "handy_libretro.so").write_bytes(b"")
         proc = _install_run(self.env, "--platform", "retroarch", "--dest",
                             str(self.home / "s"), "--cores-dir", str(cores),
-                            "--dry-run", "--no-input")
+                            "--dry-run", "--no-input", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("to the installed cores", proc.stdout)
 
@@ -5912,7 +5925,7 @@ class StandaloneFoldersAreNamedWhenThereAreAny(unittest.TestCase, _LoopbackRun):
     def _run(self) -> str:
         proc = _install_run(self.env, "--platform", "retroarch", "--dest",
                             str(self.home / "system"), "--system", "atari-lynx",
-                            "--no-input")
+                            "--no-input", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         return proc.stdout
 
@@ -6661,7 +6674,7 @@ class RomMFirmwareInstallsUnderItsTemplate(unittest.TestCase, _LoopbackRun):
             "    firmware: \"{platform}/bios\"\n")
         proc = _install_run(self.env, "--platform", "romm", "--dest",
                             str(base / "library" / "bios"), "--system", "atari-lynx",
-                            "--no-input")
+                            "--no-input", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertTrue((base / "library" / "lynx" / "bios" / "lynxboot.img").is_file())
         self.assertFalse((base / "library" / "bios").exists())
@@ -6810,7 +6823,7 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
     SKIPPED = [{"reason": "not_found", "label": "not found", "files": 1, "required": 1}]
 
     def test_a_check_run(self):
-        proc, events = self._run("--check")
+        proc, events = self._run("--check", "--verbose")
         self.assertEqual(proc.returncode, 3)
         installer = events[0]["installer"]
         self.assertEqual(events, self._head("check", installer) + [
@@ -7448,7 +7461,7 @@ class KeptFilesEndToEnd(unittest.TestCase, _SyntheticTree):
 
     def test_install_then_restore(self):
         proc = _install_run(self.env, "--platform", "retroarch", "--dest", str(self.bios),
-                            "--no-input", "--jobs", "1")
+                            "--no-input", "--jobs", "1", "--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertEqual((self.bios / "b.bin").read_bytes(), self.FILES["bios/A/b.bin"])
         runs = list((self.home / install.BACKUP_DIR).iterdir())
@@ -7614,7 +7627,7 @@ class TheListVersionIsSaidBeforeAndAfter(unittest.TestCase):
             "may show some files as not matching it.")
 
     def test_line_mode_says_it_before_the_install_and_with_the_result(self):
-        proc = self.run_installer()
+        proc = self.run_installer("--verbose")
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertEqual(proc.stdout.count(self.SAID), 2, proc.stdout)
         self.assertLess(proc.stdout.index(self.SAID), proc.stdout.index("Checking existing"))

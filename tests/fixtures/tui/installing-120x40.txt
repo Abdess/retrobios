@@ -7,7 +7,7 @@
  B, Ctrl-C or Select+Start stops. What is done stays done.
 
  FAILED scph5500.bin (HTTP 404)
- ok     gba_bios.bin
+
 
 
 

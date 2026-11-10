@@ -331,15 +331,15 @@
 
 ^[[0;1m ^[[0;1;35m4^[[0;1m files to download, ^[[0;1;35m1.0 MB^[[0m
  BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
- ^[[0;32m1 in place^[[0m, ^[[0;33m3 missing^[[0m, ^[[0;33m1 wrong copy^[[0m
- The ^[[0;33m1 wrong copy^[[0m is replaced, the old one kept in a backup folder.
- Free space: 50.0 GB
  
 ^[[0;7;35m > Install^[[0m
    Choose systems
    Copy the BIOS files from an old card or a folder
+   Details
    Options
    Quit
+ 
+ 
  
  
  
@@ -372,12 +372,12 @@
 
 ^[[0;1m ^[[0;1;32mEvery file on the list is in place^[[0m
  BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
- ^[[0;32m5 in place^[[0m, 0 missing, 0 wrong copies
- 1 of the 0 wrong copies is replaced, the old one kept in a backup folder.
- Free space: 50.0 GB
  
 ^[[0;7;35m > Close^[[0m
+   Details
    Options
+ 
+ 
  
  
  
@@ -657,14 +657,14 @@
 === confirm
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Confirm^[[0m
 
- Counted again for these choices. Nothing is written before Install.
+ Counted again for these choices.
 ^[[0;1m ^[[0;1;35m1^[[0;1m file to download, ^[[0;1;35m16.0 KB^[[0m
  BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
- 0 in place, 1 missing, 0 wrong copies
- Free space: 50.0 GB
  
 ^[[0;7;35m > Install^[[0m
    Back
+ 
+ 
  
  
  
@@ -705,7 +705,7 @@
  B, Ctrl-C or Select+Start stops. What is done stays done.
  
  ^[[0;1;31mFAILED^[[0m scph5500.bin (HTTP 404)
-^[[0;32m ok^[[0m     gba_bios.bin
+ 
  
  
  
@@ -744,11 +744,7 @@
    ^[[0;1;31mfailed:^[[0m scph5500.bin (HTTP 404)
  Run it again to retry only those.
  The files it replaced are kept in /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
- To put them back: python3 install.py \
-   --restore /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
- Same choice without questions:
-   python3 install.py --platform retroarch --dest /home/user/.config/retroarch/system
- Details: /tmp/retrobios-x/install.log
+ Log: /tmp/retrobios-x/install.log
 
 
 
@@ -776,7 +772,11 @@
 
 
 
- ^[[0;1;35mA/Enter^[[0m Exit
+
+
+
+
+ ^[[0;1;35mA/Enter^[[0m Exit  ^[[0;2mY/o^[[0m Details
 === error
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: ^[[0;1;31mSomething went wrong^[[0m
 
@@ -865,12 +865,12 @@
  Up/Down, k/j      Move
  A/Enter, Start    Install
  Y, o, Tab         Options
+ d                 Details
  B/Esc, Backspace  Back
  q, Ctrl-C         Quit
  ?, F1             This help
  
  BIOS folder: ^[[0;1m/home/user/.config/retroarch/system^[[0m
- 
  
  
  
@@ -906,11 +906,6 @@
 ^[[0;1m ^[[0;1;35m4^[[0;1m files to download, ^[[0;1;35m1.0 MB^[[0m
  BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
  For the 412 games on this card.
- One region where the games prove it: nintendo-gba Europe.
- 2 games get every BIOS of their system: Show the games.
- ^[[0;32m1 in place^[[0m, ^[[0;33m3 missing^[[0m, ^[[0;33m1 wrong copy^[[0m
- The ^[[0;33m1 wrong copy^[[0m is replaced, the old one kept in a backup folder.
- Free space: 50.0 GB
  
 ^[[0;7;35m > Install^[[0m
    For the games on this card: yes                                    412 games
@@ -918,8 +913,13 @@
    Show the games
    Choose systems
    Copy the BIOS files from an old card or a folder
+   Details
    Options
    Quit
+ 
+ 
+ 
+ 
  
  
  
@@ -952,6 +952,88 @@
  Every BIOS of their system kept, so that they start:
  GBA/demo.gba: not recognised
  GBA/hack.gba: not recognised
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ^[[0;1;35mA/Enter^[[0m Back
+=== plan-details
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Details^[[0m
+
+ ^[[0;32m1 in place^[[0m, ^[[0;33m3 missing^[[0m, ^[[0;33m1 wrong copy^[[0m
+ The ^[[0;33m1 wrong copy^[[0m is replaced, the old one kept in a backup folder.
+ Free space: 50.0 GB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ^[[0;1;35mA/Enter^[[0m Back
+=== result-details
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Details^[[0m
+
+ To put them back: python3 install.py \
+   --restore /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
+ Same choice without questions:
+   python3 install.py --platform retroarch --dest /home/user/.config/retroarch/system
+
+
+
+
 
 
 

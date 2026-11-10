@@ -187,7 +187,7 @@ class InstallerSamplesSayWhatTheCodePrints(unittest.TestCase):
 
         page = _page("installer.md")
         refused = _generated(page, "check-refused")
-        self.assertRegex(refused, r"\n  \d+ files? [a-z ]+:\n")
+        self.assertRegex(refused, r"\n  \d+ files? [a-z ]+\.\n")
         self.assertIn("read by beetle_psx, pcsx_rearmed at", refused)
         self.assertNotRegex(page, r"opened at /\S+ by ")
         self.assertIn('"read by ', inspect.getsource(install.opened_line))
@@ -201,7 +201,7 @@ class InstallerSamplesSayWhatTheCodePrints(unittest.TestCase):
         at = page.index("<!-- generated: run-download -->")
         before = page[page.rindex("\n\n", 0, at - 2):at]
         self.assertIn("At a terminal one progress line", before)
-        self.assertIn("A pipe or a log gets one line per file", before)
+        self.assertIn("a pipe or a log gets one\nline per file", before)
 
     def test_the_generator_pages_name_the_run_samples_and_step_7(self):
         tools = _page("tools.md")

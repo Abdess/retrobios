@@ -19,6 +19,7 @@ import hashlib
 import http.server
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -50,6 +51,46 @@ JOURNEY_KEYS = {
     "what_is_missing": (5, 6),
     "another_device": (19, 20),
 }
+
+# Words each journey's screens show by default, summed over the screens it
+# stops on, and the most one screen of the default path may show (owner,
+# 2026-11-09: a beginner lost the important line in text). A path is no
+# word: its length is the machine's. The counts from before the Details
+# screen took the plan's and the result's notes are in claudedocs/
+# user_research/installer_ux/phase1_measure.md. A change that adds words
+# raises a number here and says why.
+JOURNEY_WORDS = {
+    "first_install": 63,
+    "card_with_games": 106,
+    "update": 79,
+    "one_system": 193,
+    "one_system_again": 68,
+    "what_is_missing": 223,
+    "another_device": 230,
+}
+# Which setup? names every setup, Preview every file: lists, not prose.
+SCREEN_CEILING = 90
+# The same journeys in line mode, run without questions: (lines, words) of
+# what happens, where, the result and the next step.
+LINE_TEXT = {
+    "first_install": (4, 18),
+    "card_with_games": (4, 29),
+    "update": (5, 36),
+    "one_system": (4, 18),
+    "what_is_missing": (3, 15),
+    "another_device": (4, 18),
+}
+
+
+def words(text: str) -> int:
+    """Words a reader reads, a path left out."""
+    return sum(1 for token in text.split() if re.search(r"[A-Za-z0-9]", token)
+               and "/" not in token)
+
+
+def lines(text: str) -> int:
+    return sum(1 for line in text.splitlines() if line.strip())
+
 
 # Runs install.py with the mounted drives a reader would show, none or the
 # card named: the drives of the machine running the tests (WSL's /mnt/d)
@@ -139,6 +180,17 @@ class Journeys(unittest.TestCase):
         term = Pty(list(args), {**repo.env, **(env or {})}, 80, 24, program=program)
         self.addCleanup(lambda: term.status is None and os.kill(term.pid, 9))
         self.keys = 0
+        self.screens: list[str] = []
+        waiting = term.wait
+
+        def wait(needle: str, timeout: float = 20.0) -> str:
+            # Each screen the journey stops on, read once drawn whole.
+            waiting(needle, timeout)
+            screen = term.settle(0.3)
+            self.screens.append(screen)
+            return screen
+
+        term.wait = wait  # type: ignore[method-assign]
         return term
 
     def press(self, term: Pty, *keys: str) -> None:
@@ -156,6 +208,11 @@ class Journeys(unittest.TestCase):
         self.assertEqual((started, total), JOURNEY_KEYS[journey],
                          f"{journey} takes {(started, total)} keys now: longer is a step "
                          "back, shorter lowers JOURNEY_KEYS")
+        said = [words(screen) for screen in self.screens]
+        self.assertLessEqual(sum(said), JOURNEY_WORDS[journey],
+                             f"{journey} shows {said} words: more is a step back")
+        self.assertLessEqual(max(said), SCREEN_CEILING, said)
+        self.screens = []
 
     def finish(self, term: Pty) -> int:
         term.wait("A/Enter Exit", timeout=60)
@@ -300,6 +357,127 @@ class Journeys(unittest.TestCase):
         self.counted("another_device", started, self.keys)
         self.assertEqual(written(repo.home / "bios"),
                          sorted(e["dest"] for e in repo.listed["files"]))
+
+
+@unittest.skipUnless(pty, "the journeys need a pty")
+class LineModeJourneys(unittest.TestCase):
+    """The journeys in line mode without questions: what happens, where, the
+    result and the next step by default, every hidden line given back by
+    --verbose, and nothing waiting for an answer."""
+
+    def run_line(self, repo: Repository, *args: str, card: Path | None = None
+                 ) -> subprocess.CompletedProcess:
+        program = [sys.executable, "-c",
+                   _WITH_CARDS.format(script=str(REPO_ROOT / "install.py"))]
+        env = {**repo.env, **({"JOURNEY_CARD": str(card)} if card else {})}
+        return subprocess.run([*program, *args], env=env, capture_output=True, text=True,
+                              timeout=120, check=False, stdin=subprocess.DEVNULL)
+
+    def budget(self, journey: str, proc: subprocess.CompletedProcess) -> None:
+        text = proc.stdout + proc.stderr
+        most_lines, most_words = LINE_TEXT[journey]
+        self.assertLessEqual(lines(text), most_lines, text)
+        self.assertLessEqual(words(text), most_words, text)
+
+    def test_each_journey_says_what_where_result_and_next(self):
+        repo = Repository(self)
+        dest = repo.retroarch_here()
+        # No --yes and no terminal: nothing is asked, nothing waits.
+        proc = self.run_line(repo)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.budget("first_install", proc)
+        said = [line for line in proc.stdout.splitlines() if line.strip()]
+        self.assertEqual([line.split(" ", 1)[0] for line in said],
+                         ["Installing", "BIOS", "Done.", "Next:"])
+        changed = next(e for e in repo.listed["files"] if e["dest"] == "md_eu.bin")
+        changed["size"] += 1
+        repo.write_list()
+        proc = self.run_line(repo, "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.budget("update", proc)
+        shutil.rmtree(dest)
+        dest.mkdir()
+        proc = self.run_line(repo, "--system", "nintendo-gba", "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.budget("one_system", proc)
+        shutil.rmtree(dest)
+        dest.mkdir()
+        proc = self.run_line(repo, "--check")
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
+        self.budget("what_is_missing", proc)
+        proc = self.run_line(repo, "--platform", "batocera", "--dest", str(repo.home / "bios"),
+                             "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.budget("another_device", proc)
+
+    def test_a_card_with_games(self):
+        repo = Repository(self)
+        card = repo.root / "MUOS"
+        (card / "MUOS" / "bios").mkdir(parents=True)
+        (card / "ROMS" / "GBA").mkdir(parents=True)
+        (card / "ROMS" / "GBA" / "unknown.gba").write_bytes(b"not in any catalog")
+        proc = self.run_line(repo, "--yes", card=card)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.budget("card_with_games", proc)
+        self.assertIn("what the games need", proc.stdout)
+
+    def test_verbose_gives_back_every_line(self):
+        """Each line a run prints by default, --verbose prints too, with
+        more: the same runs into two folders, read as one."""
+        repo = Repository(self)
+        folders = {name: repo.root / name for name in ("default", "verbose")}
+        runs: dict[str, list] = {}
+        for name, folder in folders.items():
+            extra = ["--verbose"] if name == "verbose" else []
+            base = ["--platform", "retroarch", "--dest", str(folder)]
+            runs[name] = [self.run_line(repo, *base, "--yes", *extra)]
+            # A later run replaces a changed file and keeps the old one.
+            (folder / "md_eu.bin").write_bytes(b"changed")
+            runs[name].append(self.run_line(repo, *base, "--yes", *extra))
+            (folder / "md_eu.bin").write_bytes(b"changed")
+            runs[name].append(self.run_line(repo, *base, "--check", *extra))
+
+        def read(text: str, folder: Path) -> set:
+            # The backup folder is named for the second it was made in.
+            text = re.sub(r"retrobios-backup\S*", "retrobios-backup", text)
+            return {line.strip().replace(str(folder), "<folder>")
+                    for line in text.splitlines() if line.strip()}
+
+        for index in range(3):
+            with self.subTest(run=index):
+                quiet, full = runs["default"][index], runs["verbose"][index]
+                self.assertEqual(quiet.returncode, full.returncode, quiet.stdout + full.stdout)
+                shown = read(quiet.stdout + quiet.stderr, folders["default"])
+                said = read(full.stdout + full.stderr, folders["verbose"])
+                self.assertLessEqual(shown, said, sorted(shown - said))
+                self.assertGreater(len(said), len(shown))
+
+    def test_what_to_act_on_is_said_by_default(self):
+        """A file an emulator needs that the collection lacks, a wrong copy
+        and what becomes of it: said without --verbose (review of
+        2026-11-10). The plain missing files wait on --verbose."""
+        repo = Repository(self)
+        repo.listed["omitted_files"] = [{"dest": "lost.bin", "name": "lost.bin",
+                                         "system": "nintendo-gba", "systems": ["nintendo-gba"],
+                                         "required": True, "reason": "not_found"}]
+        repo.write_list()
+        folder = repo.root / "dest"
+        base = ["--platform", "retroarch", "--dest", str(folder)]
+        needs = "1 file an emulator needs is not available here (--verbose names it)."
+        proc = self.run_line(repo, *base, "--yes")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn(needs, proc.stdout)
+        (folder / "md_eu.bin").write_bytes(b"changed")
+        (folder / "gba_bios.bin").unlink()
+        proc = self.run_line(repo, *base, "--check")
+        self.assertEqual(proc.returncode, 3, proc.stdout + proc.stderr)
+        self.assertIn("wrong copy: md_eu.bin", proc.stdout)
+        self.assertIn("A wrong copy is replaced, and the one in place kept in "
+                      "retrobios-backup", proc.stdout)
+        self.assertIn(needs, proc.stdout)
+        self.assertNotIn("missing: gba_bios.bin", proc.stdout)
+        self.assertIn("missing: gba_bios.bin",
+                      self.run_line(repo, *base, "--check", "--verbose").stdout)
 
 
 if __name__ == "__main__":
