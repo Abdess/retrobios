@@ -9,14 +9,20 @@ A page asks for a diagram with an HTML comment on a line of its own::
 
     <!-- image: install-flow -->
 
-``resolve_images`` replaces the comment with the figure. The SVG is inline
-so its text takes the page font and its colours come from the theme
-variables in ``docs_assets/extra.css``: it follows the palette toggle, which
-an ``<img>`` cannot. Presentation attributes give the same drawing a
-readable default when the SVG is opened on its own.
+``resolve_images`` replaces the comment with the figure. Each drawing is
+an SVG file shown through ``<img>``, so the page text holds its words once:
+an inline SVG put every label of both layouts, its title and its desc into
+what a screen reader, a copy, a text dump or a crawler reads, next to the
+prose that already says them. A file reads no stylesheet of the page, so it
+is written once per theme with the colours retrobios.css gives the
+``rb-d-*`` classes (``THEMES``), and the stylesheet shows the one of the
+current theme. Presentation attributes give the same drawing a readable
+default when the SVG is opened on its own.
 
-Every figure carries two layouts, wide and narrow, and the stylesheet shows
-one: a 720-unit drawing scaled to a phone would print 9 px text.
+Every figure carries two layouts, wide and narrow, and ``<picture>`` picks
+one: a 720-unit drawing scaled to a phone would print 9 px text. The
+drawings are ``alt=""``: the figure says what they show once, in a
+screen-reader line, and the caption under them.
 """
 
 from __future__ import annotations
@@ -296,20 +302,110 @@ def grid(boxes: list[Box], per_row: int, total: float) -> tuple[float, float, li
     return total, y - gap_y + 1, out
 
 
-def svg(figure: Figure, layout: str, suffix: str) -> str:
-    """One layout of *figure* as a standalone, accessible SVG element."""
-    width, height, body = (figure.wide if layout == "wide" else figure.narrow)()
-    base = f"rb-fig-{figure.image_id}{suffix}-{layout}"
+def svg_document(width: float, height: float, title: str, desc: str, body: list[str],
+                 base: str) -> str:
+    """A drawing as a standalone, accessible SVG element."""
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_n(width)} {_n(height)}" '
         f'width="{_n(width)}" height="{_n(height)}" role="img" '
-        f'aria-labelledby="{base}-t {base}-d" font-family="{FONT}" '
-        f'class="rb-diagram rb-diagram-{layout}">'
-        f'<title id="{base}-t">{escape(figure.title)}</title>'
-        f'<desc id="{base}-d">{escape(figure.desc)}</desc>'
+        f'aria-labelledby="{base}-t {base}-d" font-family="{FONT}">'
+        f'<title id="{base}-t">{escape(title)}</title>'
+        f'<desc id="{base}-d">{escape(desc)}</desc>'
         + "".join(body)
         + "</svg>"
     )
+
+
+def svg(figure: Figure, layout: str, suffix: str = "") -> str:
+    """One layout of *figure* as a standalone, accessible SVG element."""
+    width, height, body = (figure.wide if layout == "wide" else figure.narrow)()
+    return svg_document(width, height, figure.title, figure.desc, body,
+                        f"rb-fig-{figure.image_id}{suffix}-{layout}")
+
+
+# The colours retrobios.css gives a diagram, per theme: --rb-diagram-* and
+# --rb-text-secondary, then the text and background Starlight resolves
+# --sl-color-text and --sl-color-bg to (props.css: gray-2 and black, whose
+# values swap with the theme). An SVG shown through <img> reads none of them.
+THEMES: dict[str, dict[str, str]] = {
+    "dark": {"text": "#c1c3c8", "bg": "#17181c", "fill": "#252838", "stroke": "#7c82a3",
+             "accent": "#aebcff", "muted": "#a6adc8"},
+    "light": {"text": "#353841", "bg": "#ffffff", "fill": "#f5f6fa", "stroke": "#8c92ac",
+              "accent": "#3b3f7a", "muted": "#546e7a"},
+}
+# Where the files are served, under the site's public folder.
+DIAGRAM_DIR = "assets/diagrams"
+# retrobios.css shows the narrow layout below this width.
+NARROW_MEDIA = "(max-width: 37.5em)"
+
+
+def themed(document: str, theme: str) -> str:
+    """*document* with the theme's colours, the rules retrobios.css gives
+    the .rb-diagram classes on the page."""
+    c = THEMES[theme]
+    style = (
+        f"<style>svg{{color:{c['text']}}}text{{font-family:{FONT};fill:currentColor}}"
+        f".rb-d-box{{fill:{c['fill']};stroke:{c['stroke']}}}.rb-d-accent{{stroke:{c['accent']}}}"
+        f".rb-d-line{{stroke:{c['stroke']}}}.rb-d-head{{fill:{c['stroke']}}}"
+        f".rb-d-num{{fill:{c['accent']}}}.rb-d-numtext{{fill:{c['bg']}}}"
+        f".rb-d-muted{{fill:{c['muted']}}}</style>"
+    )
+    head = document.index(">") + 1
+    return document[:head] + style + document[head:]
+
+
+def _size(document: str) -> tuple[str, str]:
+    match = re.match(r'<svg [^>]*?width="([\d.]+)" height="([\d.]+)"', document)
+    if not match:
+        raise ValueError("an SVG document without its size")
+    return match.group(1), match.group(2)
+
+
+def diagram_files(stem: str, layouts: dict[str, str]) -> dict[str, str]:
+    """The files of one drawing: *layouts* maps wide and narrow to its SVG,
+    each written once per theme."""
+    return {f"{stem}-{layout}-{theme}.svg": themed(document, theme) + "\n"
+            for layout, document in layouts.items() for theme in THEMES}
+
+
+def pictures(stem: str, layouts: dict[str, str]) -> str:
+    """The drawing on the page: one <picture> per theme, the narrow layout
+    under NARROW_MEDIA. Each image is alt="", the figure says the words."""
+    (wide_w, wide_h), (narrow_w, narrow_h) = _size(layouts["wide"]), _size(layouts["narrow"])
+    out = []
+    for theme in THEMES:
+        url = markup.site_href(f"{DIAGRAM_DIR}/{stem}")
+        out.append(
+            f'<picture class="rb-diagram rb-diagram-{theme}">'
+            f'<source media="{NARROW_MEDIA}" srcset="{url}-narrow-{theme}.svg" '
+            f'width="{narrow_w}" height="{narrow_h}" />'
+            f'<img src="{url}-wide-{theme}.svg" width="{wide_w}" height="{wide_h}" alt="" '
+            'loading="lazy" decoding="async" /></picture>'
+        )
+    return "".join(out)
+
+
+def _layouts(figure: Figure) -> dict[str, str]:
+    return {layout: svg(figure, layout) for layout in ("wide", "narrow")}
+
+
+def figure_files() -> dict[str, str]:
+    """Every figure's files, by name under DIAGRAM_DIR."""
+    return {name: text for image_id in IMAGE_IDS
+            for name, text in diagram_files(image_id, _layouts(figures()[image_id])).items()}
+
+
+def write_diagram_files(directory: Path, files: dict[str, str]) -> None:
+    """*files* under *directory*, and no other SVG: a drawing renamed or
+    dropped leaves no file behind."""
+    directory.mkdir(parents=True, exist_ok=True)
+    for stale in directory.glob("*.svg"):
+        if stale.name not in files:
+            stale.unlink()
+    for name, text in sorted(files.items()):
+        path = directory / name
+        if not path.is_file() or path.read_text(encoding="utf-8") != text:
+            path.write_text(text, encoding="utf-8")
 
 
 # Data
@@ -667,18 +763,20 @@ _INLINE_ESCAPES = str.maketrans({"_": "&#95;", "*": "&#42;", "`": "&#96;", "[": 
 def figure_html(image_id: str, occurrence: int = 1, inline: bool = False) -> str:
     figure = figures()[image_id]
     suffix = "" if occurrence == 1 else f"-{occurrence}"
-    drawings = svg(figure, "wide", suffix) + svg(figure, "narrow", suffix)
+    drawings = pictures(image_id, _layouts(figure))
+    said = f'<span class="sr-only">{escape(figure.desc)}</span>'
     caption = escape(figure.caption)
     anchor = f"rb-fig-{image_id}{suffix}"
     if inline:
         html = (
             f'<span class="rb-figure rb-figure-inline" id="{anchor}" {markup.search_exclude()}>'
-            f'{drawings}<span class="rb-figure-caption">{caption}</span></span>'
+            f'{drawings} {said} <span class="rb-figure-caption">{caption}</span></span>'
         )
         return html.translate(_INLINE_ESCAPES)
     return (
         f'<figure class="rb-figure" id="{anchor}" {markup.search_exclude()}>\n'
         f"{drawings}\n"
+        f"{said}\n"
         f"<figcaption>{caption}</figcaption>\n"
         "</figure>"
     )

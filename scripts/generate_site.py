@@ -95,6 +95,7 @@ import siteentries
 import siteinputs
 import retired_files
 import siteagents
+import sitediagrams
 import sitestarlight
 import sitesteps
 from siteexports import generate_exports_page, load_export_reports
@@ -12497,6 +12498,9 @@ def _generate(args: argparse.Namespace) -> None:
         source = Path("docs_assets") / folder
         if source.is_dir():
             shutil.copytree(source, public / "assets" / dest, dirs_exist_ok=True)
+    # The diagrams and the drawn install steps, one SVG per layout and theme.
+    sitediagrams.write_diagram_files(public / sitediagrams.DIAGRAM_DIR,
+                                     {**sitediagrams.figure_files(), **sitesteps.steps_files()})
     demo_dest = public / "assets" / "demo"
     demo_dest.mkdir(parents=True, exist_ok=True)
     for name in DEMO_ASSETS:

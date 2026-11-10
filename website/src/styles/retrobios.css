@@ -756,28 +756,22 @@ body:has(table.rb-entries) { --sl-content-width: var(--rb-grid-width); }
 /* Terminal output: what the screen shows, not something to type */
 .sl-markdown-content .rb-terminal .expressive-code pre { background: var(--rb-terminal-bg); color: var(--rb-terminal-fg); }
 
-/* Diagrams written by scripts/sitediagrams.py follow the theme */
+/* Diagrams written by scripts/sitediagrams.py follow the theme: each is an
+   image per theme (its colours written in the file, sitediagrams.THEMES),
+   and the one of the other theme is not shown, so not fetched either.
+   Starlight's dark theme is the one without data-theme='light'. */
 .sl-markdown-content .rb-figure { margin: 1.2rem 0 1.6rem; }
-.sl-markdown-content .rb-figure svg { display: block; width: 100%; height: auto; max-width: 52rem; color: var(--sl-color-text); }
+.sl-markdown-content .rb-figure .rb-diagram { display: block; max-width: 52rem; }
+.sl-markdown-content .rb-figure .rb-diagram img { display: block; width: 100%; height: auto; }
+.sl-markdown-content .rb-figure .rb-diagram-light { display: none; }
+:root[data-theme='light'] .sl-markdown-content .rb-figure .rb-diagram-light { display: block; }
+:root[data-theme='light'] .sl-markdown-content .rb-figure .rb-diagram-dark { display: none; }
 .sl-markdown-content .rb-figure :is(figcaption, .rb-figure-caption) {
 	display: block;
 	max-width: 44em;
 	margin-top: 0.4rem;
 	font-size: 0.8rem;
 	color: var(--rb-text-secondary);
-}
-.rb-diagram text { font-family: var(--sl-font); fill: currentColor; }
-.rb-diagram .rb-d-box { fill: var(--rb-diagram-fill); stroke: var(--rb-diagram-stroke); }
-.rb-diagram .rb-d-accent { stroke: var(--rb-diagram-accent); }
-.rb-diagram .rb-d-line { stroke: var(--rb-diagram-stroke); }
-.rb-diagram .rb-d-head { fill: var(--rb-diagram-stroke); }
-.rb-diagram .rb-d-num { fill: var(--rb-diagram-accent); }
-.rb-diagram .rb-d-numtext { fill: var(--sl-color-bg); }
-.rb-diagram .rb-d-muted { fill: var(--rb-text-secondary); }
-.rb-diagram-narrow { display: none !important; }
-@media (max-width: 37.5em) {
-	.rb-diagram-wide { display: none !important; }
-	.rb-diagram-narrow { display: block !important; }
 }
 
 /* Glossary terms */
