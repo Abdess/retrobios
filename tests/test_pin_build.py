@@ -86,6 +86,28 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
         self.assertEqual(found["mame0278 (recalbox)"].status, cf.STALE)
         self.assertIn("is gone", found["mame0278 (recalbox)"].detail)
 
+    def test_a_file_of_a_submodule_is_read_at_its_gitlink(self):
+        """KNULLI builds Batocera's amiberry package through its batocera
+        submodule: the file is not in knulli-linux's own tree."""
+        self._platform("10.2")
+        ref = {**self.REF, "path": "batocera/package/amiberry/amiberry.mk",
+               "variable": "AMIBERRY_VERSION", "value": "v7.1.0"}
+        modules = ['[submodule "batocera"]', "\tpath = batocera",
+                   "\turl = https://github.com/batocera-linux/batocera.linux.git"]
+
+        def fetch(repo, sha, path, *_args):
+            if path == ".gitmodules":
+                return modules
+            if repo.slug == "batocera-linux/batocera.linux" and sha == "c" * 40:
+                return ["AMIBERRY_VERSION = v7.1.0"]
+            return None
+
+        profiles = {"amiberry": {"pin_frozen": "x", "pin_build": [ref]}}
+        with mock.patch.object(cf.upstream, "fetch_file", side_effect=fetch), \
+                mock.patch.object(cf.upstream, "list_gitlinks", return_value={"batocera": "c" * 40}):
+            (row,) = cf.check_pin_builds(profiles, self.platforms, "cache", False)
+        self.assertEqual(row.status, cf.OK, row.detail)
+
     def test_offline_and_uncached_is_skipped(self):
         self._platform("10.2")
         profiles = {"mame0278": {"pin_frozen": "x", "pin_build": [self.REF]}}

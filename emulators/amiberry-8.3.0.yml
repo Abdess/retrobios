@@ -6,15 +6,9 @@ upstream: "https://github.com/tonioni/WinUAE"
 profiled_date: "2026-11-09"
 source_commit: "110ab1b08c010f8b1f873310add18cc66dae4f24"
 pin_frozen: "RetroBat, the only platform that ships it, installs the Windows build of the v8.3.0 tag\
-  \ (RetroBat emulators/versions.xml lists amiberry 8.3.0.0 on its stable channel, RetroBat emulatorLauncher/Installer.cs:26,\
-  \ 199-237 reads it). Later releases are not part of that install."
-pin_build:
-- platform: retrobat
-  repo: "https://www.retrobat.org/repo/win64"
-  revision: "stable"
-  path: "emulators/versions.xml"
-  variable: amiberry
-  value: "8.3.0.0"
+  \ (emulators/versions.xml on its download server lists amiberry 8.3.0.0 for the stable channel, which\
+  \ emulatorLauncher/Installer.cs:26, 199-237 reads). No repository holds that list. Later releases are not\
+  \ part of that install."
 core_version: "8.3.0"
 version_basis:
   kind: file

@@ -7,7 +7,7 @@ profiled_date: "2026-11-09"
 source_commit: "c53d6db770a5580732a7f2bb48abcbfcd95fd0f4"
 pin_frozen: "AmberELEC builds this revision (AmberELEC packages/games/emulators/amiberry/package.mk:6\
   \ at a21975b), KNULLI the v7.1.0 tag through its batocera submodule (batocera package/batocera/emulators/amiberry/amiberry.mk:7\
-  \ at 487014d). The two read the same files: equal ROM database, folders, scan and booter, the changes\
+  \ at 487014d, the commit knulli-linux 20260511 pins). The two read the same files: equal ROM database, folders, scan and booter, the changes\
   \ between them being hotkeys, the GUI font and the plugins folder."
 pin_build:
 - platform: amberelec
@@ -17,9 +17,9 @@ pin_build:
   variable: PKG_VERSION
   value: "c53d6db770a5580732a7f2bb48abcbfcd95fd0f4"
 - platform: knulli
-  repo: "https://github.com/batocera-linux/batocera.linux"
-  revision: "487014d91147610ebdd62f870009d4563ac61763"
-  path: "package/batocera/emulators/amiberry/amiberry.mk"
+  repo: "https://github.com/knulli-cfw/knulli-linux"
+  revision: "20260511"
+  path: "batocera/package/batocera/emulators/amiberry/amiberry.mk"
   variable: AMIBERRY_VERSION
   value: "v7.1.0"
 core_version: "7.1.1"
