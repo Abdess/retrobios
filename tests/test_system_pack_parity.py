@@ -51,7 +51,9 @@ class SystemPackMatchesVerify(unittest.TestCase):
                     "--output-dir", str(self.out / system),
                 )
                 report = json.loads(_run("scripts/verify.py", "--system", system, "--json"))
-                pack_missing = sorted(re.findall(r"^  MISSING: (\S+)", packed, re.M))
+                # The rest of the line is the name: openMSX's ROM names hold
+                # spaces ("Japanese MSX-Write (1986) (Ascii) (J).rom").
+                pack_missing = sorted(re.findall(r"^  MISSING: (.+)$", packed, re.M))
                 # One per destination, as the pack reports them. An entry the
                 # collection cannot hold is counted apart on both sides.
                 verify_missing = sorted({
