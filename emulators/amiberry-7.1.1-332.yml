@@ -1,4 +1,4 @@
-emulator: "Amiberry 8.0.0"
+emulator: "Amiberry 8.0.0 (facaaeb, Batocera)"
 type: standalone
 core_classification: frozen_snapshot
 source: "https://github.com/BlitterStudio/amiberry"
@@ -20,7 +20,7 @@ version_basis:
   kind: file
   path: "CMakeLists.txt"
   pattern: "project\\(amiberry\\s+VERSION\\s+([0-9][0-9.]*)"
-display_name: "Commodore - Amiga (Amiberry 8.0.0)"
+display_name: "Commodore - Amiga (Amiberry 8.0.0, facaaeb for Batocera)"
 cores:
 - "amiberry"
 - "AMIBERRY"
