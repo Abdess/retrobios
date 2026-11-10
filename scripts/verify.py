@@ -809,7 +809,10 @@ def find_undeclared_files(
                     # Read below the roms directory (ROCKNIX's roms/pico-8)
                     # or in an emulator folder (RetroBat's emulators/pico8).
                     entry["root"] = f["root"]
-                elif launcher_layer and not save_root:
+                if launcher_layer and not save_root and f.get("root") not in OUTER_ROOTS:
+                    # One read outside the BIOS tree is still served where a
+                    # launcher links that very file: RetroDECK links Cemu's
+                    # keys.txt to bios/cemu/keys.txt.
                     launcher_candidates.append((emu_name, is_standalone, f, entry))
                 keys = set_keys((emu_name, is_standalone), f)
                 if duplicate:

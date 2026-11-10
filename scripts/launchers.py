@@ -1093,7 +1093,9 @@ class LauncherLayer:
         # core asked for it: the pack puts a file there either way.
         reported_at: dict[str, dict] = {}
         for _emulator, _standalone, _entry, report in candidates:
-            if report.get("in_repo"):
+            # A file the layout reads outside the BIOS tree fills no
+            # destination of it.
+            if report.get("in_repo") and not report.get("unplaced"):
                 destination = sanitize_pack_path(report.get("path") or report.get("name", ""))
                 reported_at.setdefault(destination, report)
         by_layout: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
@@ -1137,6 +1139,9 @@ class LauncherLayer:
                     continue
                 if isinstance(filled, dict):
                     added.append(filled)
+                # The launcher hands the emulator that file from the BIOS
+                # tree: read outside it no more.
+                settled.update(id(report) for _c, report in matched if report.get("unplaced"))
                 if place.stands_for_default:
                     # The emulator opens the launcher's file instead of its
                     # own name, so a copy under that name is read by nobody:

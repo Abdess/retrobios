@@ -768,5 +768,21 @@ class Eka2l1OnRetroBat(unittest.TestCase):
                 self.assertEqual(entry.get("unplaced"), "outside_bios_folder", entry["name"])
 
 
+class CemuOnRetroDECK(unittest.TestCase):
+    """RetroDECK sets mlc_path to $bios_path/cemu (cemu/component_prepare.sh:14, 29)
+    and keeps Cemu's user data in its Flatpak's $XDG_DATA_HOME/Cemu."""
+
+    def test_the_mlc_lands_in_cemu(self) -> None:
+        view = standalone_view("cemu", "retrodeck")
+        mlc = [e for e in view["files"] if (e.get("layout_path") or "").startswith("mlc01/")]
+        self.assertTrue(mlc)
+        for entry in mlc:
+            self.assertEqual(
+                entry["standalone_path"], "cemu/" + entry["layout_path"].removeprefix("mlc01/")
+            )
+        (otp,) = [e for e in view["files"] if e["name"] == "otp.bin"]
+        self.assertEqual(otp.get("unplaced"), "outside_bios_folder")
+
+
 if __name__ == "__main__":
     unittest.main()

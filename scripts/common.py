@@ -3117,6 +3117,14 @@ def platform_layouts(
             tree, path = placed
             moved = {**f, "standalone_path": path,
                      "layout_path": standalone_layout_path(f, profile)}
+            if f.get("load_from"):
+                # The build's own root no longer applies: RetroDECK hands
+                # Cemu's MLC, read from its data directory, to bios/cemu.
+                load_from = f["load_from"]
+                moved["load_from"] = {
+                    **(load_from if isinstance(load_from, dict) else {"libretro": load_from}),
+                    "standalone": "system_dir",
+                }
             if tree == "install":
                 # Below the roms root inside the install tree (AmberELEC's
                 # /storage/roms): a plain dest the platform prefix skips.

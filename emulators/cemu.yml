@@ -20,6 +20,8 @@ cores:
   - cemu
   - "cemu-sa"
 systems: [nintendo-wiiu]
+standalone_directories:
+  - "mlc_path = mlc01"
 
 data_directories:
   - ref: cemu-gameprofiles
@@ -71,7 +73,7 @@ notes: |
   directory of that name (saves sorted per core). Standalone Cemu uses the
   portable directory next to the executable when it exists, otherwise the
   user data directory given per system in data_root, and the MLC defaults to
-  <user data>/mlc01. path: entries below are
+  <user data>/mlc01, which mlc_path in settings.xml replaces. path: entries below are
   the libretro destination under the system directory, or under the save
   directory for the MLC (load_from), and standalone_path: is relative to the
   Cemu user data directory, which holds the MLC by default (load_from
@@ -80,7 +82,7 @@ notes: |
   ref: src/libretro/CemuLibretro.cpp:2110-2170,
        src/libretro/CemuLibretro.cpp:4083-4091,
        src/gui/wxgui/CemuApp.cpp:89-124, src/gui/wxgui/CemuApp.cpp:126-172,
-       src/config/ActiveSettings.cpp:295-321
+       src/config/ActiveSettings.cpp:295-321, src/config/CemuConfig.cpp:25-26
 
   keys.txt is read once from the user data path. A missing file is created
   with a comment header and an example key. Each line is stripped of
