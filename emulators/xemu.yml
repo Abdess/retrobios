@@ -131,9 +131,10 @@ files:
   - name: Complex_4627.bin
     mode: standalone
     required: true
-    size: [262144, 524288, 1048576]
+    min_size: 65536
+    size_multiple: 65536
     validation: [size]
-    size_note: "Any size that is a positive multiple of 64 KiB is mapped, and the image is mirrored across the 16 MB flash window"
+    size_note: "Any size that is a positive multiple of 64 KiB is mapped (hw/xbox/xbox.c:75-81), and the image is mirrored across the 16 MB flash window"
     config_key: sys.files.flashrom_path
     found_by: content
     description: "Xbox flash ROM image"
@@ -150,9 +151,10 @@ files:
     path: "xemu/Complex_4627.bin"
     aliases: [Complex_4627v1.03.bin]
     required: true
-    size: [262144, 524288, 1048576]
+    min_size: 65536
+    size_multiple: 65536
     validation: [size]
-    size_note: "Any size that is a positive multiple of 64 KiB is mapped, and the image is mirrored across the 16 MB flash window"
+    size_note: "Any size that is a positive multiple of 64 KiB is mapped (hw/xbox/xbox.c:75-81), and the image is mirrored across the 16 MB flash window"
     description: "Xbox flash ROM image"
     note: >-
       The core tries Complex_4627v1.03.bin, then Complex_4627.bin, in
