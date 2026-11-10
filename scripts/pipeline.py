@@ -77,6 +77,7 @@ from common import (
     publish_hold,
 )
 from refresh_data_dirs import hold_data_dirs
+from packpaths import MEDIA_MARKER
 
 
 class StepResults(dict):
@@ -432,8 +433,12 @@ def parse_pack_paths(output: str) -> dict[str, str]:
     return paths
 
 
-# Members the builder writes for the reader rather than for a core.
-_PACK_NOTES = re.compile(r"(^README\.txt$|^manifest\.json$|(^|/)(INSTRUCTIONS|RENAMED)_[^/]*\.txt$)")
+# Members the builder writes for the reader or the device rather than for a
+# core: the documents, and the empty marker an Android pack carries.
+_PACK_NOTES = re.compile(
+    r"(^README\.txt$|^manifest\.json$|(^|/)(INSTRUCTIONS|RENAMED)_[^/]*\.txt$"
+    rf"|(^|/){re.escape(MEDIA_MARKER)}$)"
+)
 
 
 def _tree_members(

@@ -419,6 +419,11 @@ def hidden_extras(
         dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
         if not dest or (region_drops and extra_region_key(fe, region_prefix) in region_drops):
             continue
+        if fe.get("root") in OUTER_ROOTS:
+            # As the builder does: the pack is extracted into the BIOS folder
+            # and cannot reach the roms, emulator or configs folder, the
+            # installer places these files.
+            continue
         full = extra_full_destination(fe, prefix)
         if not full:
             continue
