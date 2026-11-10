@@ -885,6 +885,14 @@ class MameSearchPaths(unittest.TestCase):
                          ("mame/samples/floppy/", "roms"))
         self.assertNotIn("bundled", tree)
 
+    def test_batocera_keeps_the_sets_at_the_root_and_samples_in_bios_mame(self) -> None:
+        # -rompath <romDirname>;/userdata/bios/mame;/userdata/bios and
+        # -samplepath /userdata/bios/mame/samples (mameGenerator.py:129-142).
+        view = standalone_view("mame", "batocera")
+        self.assertTrue(all(e["standalone_path"] == e["name"] for e in self.sets(view)))
+        (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
+        self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
+
     def test_a_moved_tree_is_found_by_its_layout_path(self) -> None:
         from common import expand_directory_entries, load_database
 
