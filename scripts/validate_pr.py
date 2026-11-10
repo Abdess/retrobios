@@ -422,8 +422,7 @@ def validate_file(
     result.crc32 = hashes["crc32"]
 
     ext = os.path.splitext(filepath)[1].lower()
-    if ext in BLOCKED_EXTENSIONS:
-        result.add_check(False, f"Blocked file extension: {ext}")
+    blocked = ext in BLOCKED_EXTENSIONS
 
     too_large = result.size > MAX_FILE_SIZE
     if too_large:
@@ -494,6 +493,22 @@ def validate_file(
         or profile_hashes.get("crc32", {}).get((result.crc32, result.size))
         or profile_hashes.get("crc32", {}).get((result.crc32, None))
     )
+
+    if blocked:
+        # An executable is refused unless an emulator profile pins its exact
+        # bytes: PICO-8's pico8.exe and SDL2.dll are declared by sha1 from the
+        # official archive. A weak hash (md5, crc32) never vouches for code.
+        pinned = (
+            profile_hashes.get("sha1", {}).get(result.sha1)
+            or profile_hashes.get("sha256", {}).get(hashes.get("sha256", ""))
+        )
+        if pinned:
+            result.add_check(
+                True,
+                f"Executable whose bytes an emulator profile pins by sha1: {', '.join(sorted(pinned))}",
+            )
+        else:
+            result.add_check(False, f"Blocked file extension: {ext}")
 
     # The files of a ZIP no list declares whole, when the upload is one.
     members: list[str] | None = None
