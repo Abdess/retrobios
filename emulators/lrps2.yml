@@ -72,7 +72,14 @@ files:
     description: "PS2 BIOS binary"
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
     config_key: "pcsx2_bios"
     source_ref: "source pcsx2/ps2/BiosTools.cpp:32-33, 64-187, 257-289, 349-415, source libretro/main.cpp:525-536"
     note: >

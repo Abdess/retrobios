@@ -80,9 +80,18 @@ files:
     found_by: content
     system: sony-playstation-2
     required: true
+    validation: [romdir]
+    romdir:
+      reset_compare: 5
+      missing_reset: rejects
+      terminated_names: false
+      extinfo: false
+      unreadable_romver: rejects
+      truncated_walk: rejects
+      offset_width: 32
     description: "PS2 console BIOS"
-    note: "Any file in the BIOS folder whose romdir holds RESET and ROMVER is accepted, whatever its name or size. Naming convention ps2-VVVVr-YYYYMMDD.bin carries version, region and date."
-    source_ref: "pcsx2/ps2/BiosTools.cpp:261-323, pcsx2/ps2/BiosTools.cpp:74-167"
+    note: "Any file of the BIOS folder whose name holds a dot (the *.* mask of wxDir) and whose romdir holds RESET and ROMVER is listed, whatever its size. The table is read from the start of the file until a name starting with RESET, within 512 Ki entries, then walked to ROMVER, and any read past the end of the file throws EndOfStream. Naming convention ps2-VVVVr-YYYYMMDD.bin carries version, region and date."
+    source_ref: "pcsx2/gui/Panels/BiosSelectorPanel.cpp:151-177, pcsx2/ps2/BiosTools.cpp:325-341, pcsx2/ps2/BiosTools.cpp:74-167, pcsx2/ps2/BiosTools.cpp:261-323, common/src/Utilities/pxStreams.cpp:87-105, common/include/Utilities/Exceptions.h:360"
 
   - name: ps2-0230a-20080220.rom1
     system: sony-playstation-2

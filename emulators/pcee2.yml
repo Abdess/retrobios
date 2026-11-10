@@ -106,10 +106,15 @@ files:
     found_by: content
     path: "pcsx2/bios/<bios>.bin"
     description: "PS2 BIOS image"
-    min_size: 4194304
-    max_size: 8388608
     required: true
-    validation: [size]
+    validation: [romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
     source_ref: "source pcee2-libretro/Libretro.cpp:712-783, source pcsx2/ps2/BiosTools.cpp:16-17, source pcsx2/ps2/BiosTools.cpp:80-207, source pcsx2/ps2/BiosTools.cpp:268-304, source pcsx2/ps2/BiosTools.cpp:327-379"
     note: >
       Any file of pcsx2/bios whose romdir carries RESET and ROMVER. The 4 to
@@ -123,6 +128,15 @@ files:
     system: namco-system256
     agnostic: true
     required: false
+    validation: [romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+      zones: ["TZ"]
     description: "Namco System 256 board BIOS"
     source_ref: "source pcee2-libretro/Libretro.cpp:712-730, source pcee2-libretro/Libretro.cpp:2333, source pcsx2/ps2/BiosTools.cpp:149-153, source pcsx2/ps2/BiosTools.cpp:176-180"
     note: >
@@ -137,6 +151,15 @@ files:
     system: namco-system246
     agnostic: true
     required: false
+    validation: [romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+      zones: ["TZ"]
     description: "Namco System 246 Rack C board BIOS"
     source_ref: "source pcee2-libretro/Libretro.cpp:712-730, source pcee2-libretro/Libretro.cpp:2333, source pcsx2/ps2/BiosTools.cpp:149-153, source pcsx2/ps2/BiosTools.cpp:176-180"
     note: >
@@ -149,6 +172,15 @@ files:
     system: namco-system246
     agnostic: true
     required: false
+    validation: [romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+      zones: ["TZ"]
     description: "Sony COH-H A-000-010 board BIOS"
     source_ref: "source pcee2-libretro/Libretro.cpp:712-730, source pcee2-libretro/Libretro.cpp:2333, source pcsx2/ps2/BiosTools.cpp:149-153, source pcsx2/ps2/BiosTools.cpp:176-180"
     note: >

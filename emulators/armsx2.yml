@@ -179,7 +179,16 @@ files:
     required: true
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+      refused_serials: ["20111012-094243"]
+      refused_zones: ["TZ"]
     description: "PS2 BIOS image"
     note: >-
       Any image whose romdir holds RESET and ROMVER is accepted, whatever its
@@ -188,7 +197,7 @@ files:
       configuration skips that range. Read into the 4 MB ROM region and truncated
       to it. Shorter than 2465792 bytes disables the OSDSys parameter HLE. A
       COH-H image is passed over by the console scan.
-    source_ref: "source pcsx2/ps2/BiosTools.cpp:18-19, source pcsx2/ps2/BiosTools.cpp:101-240, source pcsx2/ps2/BiosTools.cpp:448-483, source pcsx2/ps2/BiosTools.cpp:571-662"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:18-19, source pcsx2/ps2/BiosTools.cpp:25-39, source pcsx2/ps2/BiosTools.cpp:101-240, source pcsx2/ps2/BiosTools.cpp:448-483, source pcsx2/ps2/BiosTools.cpp:571-662"
 
   - name: r27v1602f.8g
     found_by: content
@@ -198,7 +207,16 @@ files:
     required: false
     min_size: 2097152
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+      refused_serials: ["20111012-094243"]
+      zones: ["TZ"]
     config_key: "Filenames/ArcadeBIOS"
     description: "Namco System 256 board BIOS"
     note: >-
@@ -218,7 +236,16 @@ files:
     required: false
     min_size: 2097152
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+      refused_serials: ["20111012-094243"]
+      zones: ["TZ"]
     config_key: "Filenames/ArcadeBIOS"
     description: "Namco System 246 board BIOS"
     note: >-
@@ -235,7 +262,16 @@ files:
     required: false
     min_size: 2097152
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+      refused_serials: ["20111012-094243"]
+      zones: ["TZ"]
     config_key: "Filenames/ArcadeBIOS"
     description: "Sony COH-H A-000-010 board BIOS"
     note: >-

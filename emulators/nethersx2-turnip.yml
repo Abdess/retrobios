@@ -154,13 +154,20 @@ files:
     required: true
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
     description: "PS2 BIOS image"
     note: >-
       Any image whose romdir holds RESET and a readable ROMVER is accepted,
       whatever its name. The 4 to 8 MB range gates the folder scan, and an image
       named in the configuration skips both that range and the romdir test.
-    source_ref: "upstream aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, upstream aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, nethersx2-turnip v0.7 libemucore.so 0x828e20-0x828e44 (size window), nethersx2-turnip v0.7 libemucore.so 0x829244-0x829248 (device type result discarded)"
+    source_ref: "upstream aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, upstream aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, nethersx2-turnip v0.7 libemucore.so 0x828e20-0x828e44 (size window), nethersx2-turnip v0.7 libemucore.so 0x829020-0x8292bc (romdir walk), nethersx2-turnip v0.7 libemucore.so 0x829244-0x829248 (device type result discarded)"
 
   - name: ps2-0230a-20080220.rom1
     path: bios/ps2-0230a-20080220.rom1

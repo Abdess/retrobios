@@ -60,7 +60,7 @@ notes: |
 
   Detection is by content. The scan lists the BIOS folder with a *.* mask, keeps
   files between 4 and 8 MB, and accepts an image whose romdir carries a RESET
-  entry followed by a readable ROMVER, and the fifth ROMVER character gives the
+  entry followed by ROMVER, and the fifth ROMVER character gives the
   zone among T10K, Test, Japan, USA, Europe, HK, Free and China. An image named
   in the configuration is opened at its own path, without the size filter and
   without the romdir test. No name and no hash is matched anywhere. The image is
@@ -111,10 +111,17 @@ files:
     required: true
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 5
+      missing_reset: ends_walk
+      terminated_names: false
+      extinfo: false
+      unreadable_romver: ignored
+      truncated_walk: ends_walk
     description: "PS2 BIOS image"
-    note: "Any image whose romdir holds RESET and ROMVER is accepted, whatever its name. The 4 to 8 MB range gates the folder scan, while an image named in the configuration skips both that range and the romdir test."
-    source_ref: "source aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, source aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, source aethersx2/pcsx2/ps2/BiosTools.cpp:272-316, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45ffc"
+    note: "Any image whose romdir holds RESET and ROMVER is accepted, whatever its name. A name starting with RESET opens the table, and ROMVER bytes past the end of the file are zero-filled without turning the image away. The 4 to 8 MB range gates the folder scan, while an image named in the configuration skips both that range and the romdir test."
+    source_ref: "source aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, source aethersx2/pcsx2/ps2/BiosTools.cpp:62-175, source aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, source aethersx2/pcsx2/ps2/BiosTools.cpp:272-316, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45ffc"
 
   - name: ps2-0230a-20080220.rom1
     path: bios/ps2-0230a-20080220.rom1

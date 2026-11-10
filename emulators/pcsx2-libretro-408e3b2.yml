@@ -63,15 +63,26 @@ files:
     found_by: content
     path: "ps2/<bios>.bin"
     required: true
+    validation: [romdir]
+    romdir:
+      reset_compare: 5
+      missing_reset: rejects
+      terminated_names: false
+      extinfo: false
+      unreadable_romver: rejects
+      truncated_walk: rejects
+      offset_width: 32
     description: "PS2 BIOS binary"
-    min_size: 4194304
-    max_size: 8388608
     config_key: "pcsx2_bios"
-    source_ref: "source libretro/main.cpp:262-303, source libretro/main.cpp:317-328, source libretro/main.cpp:653-654, source pcsx2/ps2/BiosTools.cpp:74-167, 261-319, 340-356, source pcsx2/MemoryTypes.h:21"
+    source_ref: "source libretro/main.cpp:262-303, source libretro/main.cpp:317-328, source libretro/main.cpp:653-654, source pcsx2/ps2/BiosTools.cpp:74-167, 261-319, 340-356, source common/src/Utilities/pxStreams.cpp:74-93, source common/include/Utilities/Exceptions.h:346, source pcsx2/MemoryTypes.h:21"
     note: >
-      Any file in ps2/ whose romdir holds RESET and ROMVER, picked by the
-      pcsx2_bios core option. No size is checked: RESET is looked for in the
-      first 8 MB (pcsx2/ps2/BiosTools.cpp:79-84) and the first 4 MB are
+      Any file in ps2/ whose name holds a dot (the *.* mask of wxDir) and
+      whose romdir holds RESET and ROMVER, picked by the pcsx2_bios core
+      option. No size is checked. The table is read 16 bytes at a time from
+      the start of the file until a name starting with RESET, within 512 Ki
+      entries, then walked to an entry named ROMVER, whose 14 bytes are read
+      at the sum of the sizes before it. Every read past the end of the file
+      throws EndOfStream and the file is not listed. The first 4 MB are
       mapped.
 
   - name: "<bios>.rom1"
