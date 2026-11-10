@@ -1306,6 +1306,31 @@ const startDownloads = () => {
 	}
 };
 
+// The GitHub page of a repository path typed under this site, or null.
+// The address is split before it is decoded, so an encoded slash stays in
+// its segment, and a segment that decodes to nothing, '.', '..' or a slash
+// gives no link: /blob/..%2F..%2Fother/x led to another account's page.
+function githubPathHref(raw: string): string | null {
+	const match = raw.replace(/\/$/, '').match(/^(blob|tree|raw)\/(.+)$/);
+	if (!match) return null;
+	const kind = match[1] === 'raw' ? 'blob' : match[1];
+	const segments: string[] = [];
+	for (const piece of match[2].split('/')) {
+		let segment: string;
+		try {
+			segment = decodeURIComponent(piece);
+		} catch {
+			return null;
+		}
+		if (!segment || segment === '.' || segment === '..' || /[\\/]/.test(segment)) return null;
+		segments.push(encodeURIComponent(segment));
+	}
+	const prefix = `/Abdess/retrobios/${kind}/`;
+	const url = new URL(`https://github.com${prefix}${segments.join('/')}`);
+	return url.origin === 'https://github.com' && url.pathname.startsWith(prefix) ? url.href : null;
+}
+// End of the GitHub path rule.
+
 // The 404 page: a search button, and what the address it was asked for
 // looks like. The addresses readers reached (counted, wiki/privacy.md): a
 // command pasted as a link (/i.ps1%20%7C%20iex), a file name under files/,
@@ -1343,7 +1368,8 @@ const notFound = () => {
 	const hint = document.getElementById('rb-notfound-hint');
 	if (!hint) return;
 	const base = siteRoot().pathname;
-	let rest = location.pathname.startsWith(base) ? location.pathname.slice(base.length) : location.pathname;
+	const raw = location.pathname.startsWith(base) ? location.pathname.slice(base.length) : location.pathname;
+	let rest = raw;
 	try {
 		rest = decodeURIComponent(rest);
 	} catch {
@@ -1368,10 +1394,10 @@ const notFound = () => {
 		return;
 	}
 	// A GitHub path: the files are browsed on the repository.
-	const github = rest.match(/^(blob|tree|raw)\/(.+)$/);
-	if (github) {
+	const href = githubPathHref(raw);
+	if (href) {
 		const link = document.createElement('a');
-		link.href = `https://github.com/Abdess/retrobios/${github[1] === 'raw' ? 'blob' : github[1]}/${github[2]}`;
+		link.href = href;
 		link.textContent = 'the same path on GitHub';
 		show(hintLine('This is a path of the GitHub repository. Open ', link, '.'));
 		return;

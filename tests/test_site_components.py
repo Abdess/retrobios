@@ -700,6 +700,40 @@ def _short_unmarked(html: str) -> list[str]:
     return found
 
 
+class AGithubPathStaysInTheRepository(unittest.TestCase):
+    """The 404 hint linked a GitHub path typed under this site: an encoded
+    /blob/..%2F..%2Fother/x resolved to another account's page."""
+
+    def _hrefs(self, paths: list[str]) -> list:
+        source = _read(SITE_TS)
+        rule = source[source.index("function githubPathHref"):source.index("// End of the GitHub path rule.")]
+        out = _node_typescript(rule + f"console.log(JSON.stringify({json.dumps(paths)}.map(githubPathHref)));")
+        return json.loads(out)
+
+    def test_a_path_of_the_repository_is_linked(self):
+        self.assertEqual(self._hrefs([
+            "blob/main/bios/Sony/PlayStation/scph5501.bin",
+            "tree/main/bios/",
+            "raw/main/bios/3D%20Realms/x.zip",
+        ]), [
+            "https://github.com/Abdess/retrobios/blob/main/bios/Sony/PlayStation/scph5501.bin",
+            "https://github.com/Abdess/retrobios/tree/main/bios",
+            "https://github.com/Abdess/retrobios/blob/main/bios/3D%20Realms/x.zip",
+        ])
+
+    def test_a_path_leaving_the_repository_gets_no_link(self):
+        self.assertEqual(self._hrefs([
+            "blob/..%2F..%2F..%2Fother/x",
+            "blob/../../../other/x",
+            "blob/main/%2E%2E/%2E%2E/%2E%2E/other",
+            "blob/main/a%2Fb",
+            "blob/main/a%5Cb",
+            "blob/main//x",
+            "blob/main/%E0%A4%A",
+            "issues/1",
+        ]), [None] * 8)
+
+
 class OneVerdictWhateverHash(unittest.TestCase):
     """2.1: the SHA1 of scph5501.bin found 4 setups, its MD5 12, its SHA256
     none (V1, J4). A setup's list writes one hash of a file."""
