@@ -246,144 +246,190 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:420, 437, 659, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:420, 437, 659, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:420, 437, 659, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
     note: "The Ultimate DOOM and DOOM Registered both use this name and are told apart by their lumps."
 
   - name: "doom2.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:640, 653, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:640, 653, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:640, 653, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doom2f.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:625, 657, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:625, 657, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:625, 657, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doombfg.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:332, 666, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:332, 666, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:332, 666, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doom2bfg.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:560, 667, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:560, 667, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:560, 667, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doomunity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:369, 661, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:369, 661, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:369, 661, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doom2unity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:592, 655, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:592, 655, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:592, 655, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doomkex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:350, 662, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:350, 662, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:350, 662, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doom2kex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:576, 656, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:576, 656, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:576, 656, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doomxbox.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:403, 660, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:403, 660, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:403, 660, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doom2xbox.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:608, 654, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:608, 654, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:608, 654, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "doom_complete.pk3"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:389, 652, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:389, 652, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:389, 652, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "plutonia.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:545, 670, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:545, 670, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:545, 668, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "plutoniaunity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:514, 671, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:514, 671, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:514, 669, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "plutoniakex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:529, 672, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:529, 672, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:529, 670, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "tnt.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:499, 673, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:499, 673, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:499, 671, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "tntunity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:468, 674, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:468, 674, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:468, 672, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "tntkex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:483, 675, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:483, 675, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:483, 673, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "nerve.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:565, 614, src/d_iwad.cpp:924-950"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:565, 614, src/d_iwad.cpp:924-950"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:565, 614, src/d_iwad.cpp:948-974"
     note: "No Rest for the Living. Autoloaded by Doom 2 BFG and Xbox editions."
 
   - name: "nerveunity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:598, src/d_iwad.cpp:924-950"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:598, src/d_iwad.cpp:924-950"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:598, src/d_iwad.cpp:948-974"
     note: "Loaded from the IWAD directory by DOOM 2: Unity Edition."
 
   - name: "extras.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:357, 376, 488, 534, 582, 598, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:214-221, 326-352, 924-947"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:357, 376, 488, 534, 582, 598, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:214-221, 326-352, 924-947"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:357, 376, 488, 534, 582, 598, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:221-228, 333-359, 948-971, src/common/platform/libretro/retro_core.cpp:61"
     note: "Loaded from the IWAD directory by the KEX and Unity editions."
 
   - name: "soundtrack"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:376, 598, src/d_iwad.cpp:924-950"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:376, 598, src/d_iwad.cpp:924-950"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:376, 598, src/d_iwad.cpp:948-974"
     note: "Loaded from the IWAD directory by the DOOM and DOOM 2 Unity editions."
 
   - name: "id24res.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:341, 360, 379, src/d_iwad.cpp:896-912"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:341, 360, 379, src/d_iwad.cpp:896-912"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:341, 360, 379, src/d_iwad.cpp:920-936"
     note: "id24 resource WAD. SupportWAD of every id IWAD block, loaded when found and i_loadsupportwad is set."
 
   # ---- Freedoom (free) ----
@@ -392,19 +438,25 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:307, 676, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:307, 676, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:307, 674, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "freedoom2.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:294, 677, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:294, 677, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:294, 675, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "freedm.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:281, 680, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:281, 680, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:281, 678, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   # ---- Heretic ----
 
@@ -412,7 +464,9 @@ files:
     category: game_data
     system: heretic
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:241, 244, 254, 257, 681, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:241, 244, 254, 257, 681, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:241, 244, 254, 257, 679, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
     note: "Both Heretic and Shadow of the Serpent Riders use this name and are told apart by the EXTENDED lump."
 
   - name: "blasphem.wad"
@@ -420,7 +474,9 @@ files:
     category: game_data
     system: heretic
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:228, 692-693, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:228, 692-693, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:228, 690-691, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   # ---- Hexen ----
 
@@ -428,13 +484,17 @@ files:
     category: game_data
     system: hexen
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:188, 684, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:188, 684, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:188, 682, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "hexdd.wad"
     category: game_data
     system: hexen
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:196-207, 685, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:196-207, 685, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:196-207, 683, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
     note: "Deathkings expansion. Requires hexen.wad (Required = Hexen: Beyond Heretic)."
 
   # ---- Strife ----
@@ -443,20 +503,26 @@ files:
     category: game_data
     system: strife
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:151, 688, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:151, 688, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:151, 686, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "sve.wad"
     category: game_data
     system: strife
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:136, 140, 689, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:136, 140, 689, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:136, 140, 687, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
     note: "Veteran Edition. Required = Strife: Quest for the Sigil (loads voices.wad)."
 
   - name: "voices.wad"
     category: game_data
     system: strife
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:142, 155, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:214-221, 326-352, 924-947"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:142, 155, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:214-221, 326-352, 924-947"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:142, 155, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:221-228, 333-359, 948-971, src/common/platform/libretro/retro_core.cpp:61"
 
   # ---- Chex Quest ----
 
@@ -464,13 +530,17 @@ files:
     category: game_data
     system: chex
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:123, 694, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:123, 694, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:123, 692, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "chex3.wad"
     category: game_data
     system: chex
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:109, 695, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:109, 695, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:109, 693, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   # ---- Standalone commercial / community IWADs ----
 
@@ -478,48 +548,64 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:83, 698, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:83, 698, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:83, 696, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "hacx2.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:65-75, 699, src/d_iwad.cpp:362-407, src/common/filesystem/source/resourcefile.cpp:150-165"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:65-75, 699, src/d_iwad.cpp:362-407, src/common/filesystem/source/resourcefile.cpp:150-165"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:65-75, 697, src/d_iwad.cpp:369-414, src/common/filesystem/source/resourcefile.cpp:150-165"
     note: "Identified by the MAP01 map and the HACX-E lump, whatever the container: every candidate is opened by its magic, so a zip under this name is read as a pk3. The Hacx 2.0 repository builds that zip from src/, where hacx-e.txt is the HACX-E lump and maps/MAP01.wad the first map."
 
   - name: "action2.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:97, 696, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:97, 696, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:97, 694, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "harm1.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:57, 697, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:57, 697, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:57, 695, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "square.pk3"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:33, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:326-352, 362-407, 643-692"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:33, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:326-352, 362-407, 643-692"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:33, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:333-359, 369-414, 663-716, src/common/platform/libretro/retro_core.cpp:61"
     note: "Absent from the Names block: picked up only when named with -iwad."
 
   - name: "square1.pk3"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:45, 700, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:45, 700, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:45, 698, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "delaweare.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:22, 701, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:22, 701, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:22, 699, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
 
   - name: "rotwb.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:9, 702, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+    source_ref:
+      standalone: "wadsrc_extra/static/iwadinfo.txt:9, 702, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
+      libretro: "wadsrc_extra/static/iwadinfo.txt:9, 700, wadsrc_extra/CMakeLists.txt:1, src/common/platform/libretro/embedded_pk3.S.in:26-31, src/common/platform/libretro/retro_resources.h:18-19, src/d_main.cpp:4243, src/d_iwad.cpp:299-309, 333-359, 369-414, 537-566, src/common/platform/libretro/retro_core.cpp:61"
