@@ -47,12 +47,21 @@ def filter_placeholder(labels: list[str]) -> str:
 
 
 def filter_box(ident: str, heading: str, labels: list[str], rows: int, noun: str = "rows") -> str:
-    """The filter box rehype-stack-tables.mjs writes above a long table."""
+    """The filter box rehype-stack-tables.mjs writes above a long table.
+
+    It is `hidden` until site.ts wires it: without the script it filters
+    nothing, so a reader with no JavaScript, a text dump and the search
+    skip it while the rows stay. retrobios.css keeps its room meanwhile,
+    so the table does not move when it shows. The count is the input's
+    description, and spaces keep label, field and count apart in any text
+    read from the HTML."""
     return (
-        f'<div class="rb-table-filter"><label for="{ident}">Filter {html.escape(heading)}</label>'
+        f'<div class="rb-table-filter" hidden {markup.search_exclude()}>'
+        f'<label for="{ident}">Filter {html.escape(heading)}</label> '
         f'<input id="{ident}" type="search" autocomplete="off" '
-        f'placeholder="{html.escape(filter_placeholder(labels))}">'
-        f'<span class="rb-table-filter-count" aria-live="polite">{rows:,} {noun}</span></div>'
+        f'placeholder="{html.escape(filter_placeholder(labels))}" aria-describedby="{ident}-count"> '
+        f'<span id="{ident}-count" class="rb-table-filter-count" aria-live="polite">'
+        f"{rows:,} {noun}</span></div>"
     )
 
 

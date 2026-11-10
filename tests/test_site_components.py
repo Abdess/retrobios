@@ -409,7 +409,7 @@ class WideTablesStackAndFiltersAreBuilt(unittest.TestCase):
 
     def test_the_filter_box_is_in_the_html(self):
         html = _built("gaps-files-to-source")
-        boxes = re.findall(r'<div class="rb-table-filter">(.*?)</div>\s*<table', html, re.S)
+        boxes = re.findall(r'<div class="rb-table-filter"[^>]*>(.*?)</div>\s*<table', html, re.S)
         self.assertTrue(boxes)
         for box in boxes:
             self.assertRegex(box, r'<label for="rb-table-filter-\d+">Filter [^<]+</label>')

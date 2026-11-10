@@ -865,6 +865,10 @@ abbr.rb-term[data-open]::after {
 	align-items: end;
 	margin: 1rem 0 0.45rem;
 }
+/* Written `hidden` (siteentries.filter_box, rehype-stack-tables.mjs) and
+   shown by site.ts: until then it keeps its room, so the table below never
+   moves, and nothing reads it. */
+.rb-table-filter[hidden] { visibility: hidden; }
 .sl-markdown-content .rb-table-filter > * { margin: 0; }
 .rb-table-filter label { grid-column: 1 / -1; color: var(--rb-text-secondary); font-size: 0.78rem; font-weight: 700; }
 .rb-table-filter input {

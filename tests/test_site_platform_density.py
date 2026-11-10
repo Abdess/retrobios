@@ -153,7 +153,8 @@ class ARowPerFile(unittest.TestCase):
     def test_a_long_list_gets_a_filter(self):
         rows = ["<details></details>"] * generate_site.FILTER_ROWS
         block = generate_site._platform_file_list(rows, False, "arcade")
-        self.assertTrue(block[0].startswith('<div class="rb-table-filter"><label for="rb-files-filter-arcade">'))
+        self.assertTrue(block[0].startswith('<div class="rb-table-filter" hidden data-pagefind-ignore>'
+                                        '<label for="rb-files-filter-arcade">Filter files</label>'))
         self.assertNotIn("rb-table-filter", "".join(
             generate_site._platform_file_list(rows[1:], False, "arcade")))
 

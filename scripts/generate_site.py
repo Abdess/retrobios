@@ -3818,14 +3818,8 @@ def _platform_file_list(rows: list[str], has_path: bool, anchor: str) -> list[st
     """
     lines: list[str] = []
     if len(rows) >= FILTER_ROWS:
-        field = f"rb-files-filter-{anchor}"
-        lines += [
-            '<div class="rb-table-filter">'
-            f'<label for="{field}">Filter files</label>'
-            f'<input id="{field}" type="search" autocomplete="off" placeholder="File, path, status, hash...">'
-            f'<span class="rb-table-filter-count" aria-live="polite">{len(rows):,} rows</span></div>',
-            "",
-        ]
+        lines += [siteentries.filter_box(f"rb-files-filter-{anchor}", "files",
+                                         ["File", "path", "status", "hash"], len(rows)), ""]
     kind = "rb-files rb-files-path" if has_path else "rb-files"
     return [*lines, f'<div class="{kind}">', *rows, "</div>"]
 

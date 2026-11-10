@@ -123,7 +123,10 @@ class _Converter(HTMLParser):
                 self._emit(f"**{' '.join(name.split())}:**")
                 self._block()
             return
-        if self.skip or tag in SKIPPED or attr.get("aria-hidden") == "true" \
+        # A `hidden` element is chrome the page's script shows (a filter
+        # box, the file picker, a setup's install chooser): a tab panel,
+        # hidden too, was read above.
+        if self.skip or tag in SKIPPED or attr.get("aria-hidden") == "true" or "hidden" in attr \
                 or classes & {"sr-only", "sl-anchor-link", "copy", "rb-anchor"}:
             if tag not in ("br", "img", "hr", "input", "wbr"):
                 self.skip += 1
