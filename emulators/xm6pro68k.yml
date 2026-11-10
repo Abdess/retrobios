@@ -261,7 +261,7 @@ files:
     required: false
     bundled: true
     description: "zlib, used for PNG output and deflate archives"
-    source_ref: "XM6.exe 260920 delay-load import zlib1.dll (crc32, inflate, inflateEnd, inflateInit2_, deflateEnd, deflateInit2_, deflateReset, deflate), 0x40cf85 0x40cf8e-0x40cf98 (ZLIB1.DLL through the loader 0x40ce48, handle cached at 0x59e66c), callers 0x414487, 0x4280bc and 0x489151-0x48915d (absent: 0x412122 index 1 names 7z.dll or zlib1.dll in the Optional DLL Not Present dialog)"
+    source_ref: "XM6.exe 260920 delay-load descriptor 0x5761ec for zlib1.dll, IAT 0x585a68 (crc32, inflate, inflateEnd, inflateInit2_, deflateEnd, deflateInit2_, deflateReset, deflate), 0x40cf85 0x40cf8e-0x40cf98 (ZLIB1.DLL through the loader 0x40ce48, handle cached at 0x59e66c), callers 0x414487, 0x4280bc and 0x489151-0x48915d (absent: 0x412122 index 1 names 7z.dll or zlib1.dll in the Optional DLL Not Present dialog)"
     note: >-
       Delay-loaded, so the process starts without it, and every caller first
       loads it by name and skips its zlib path when that fails. XM6.exe resolves
