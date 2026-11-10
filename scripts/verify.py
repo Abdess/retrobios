@@ -824,7 +824,36 @@ def find_undeclared_files(
     for entry in sorted(archive_entries.values(), key=lambda e: e["name"]):
         undeclared.append(entry)
 
-    return _settle_core_sets(undeclared, set_records, settled, profiles)
+    return _split_bundled_claims(
+        _settle_core_sets(undeclared, set_records, settled, profiles)
+    )
+
+
+def _split_bundled_claims(undeclared: list[dict]) -> list[dict]:
+    """A file one emulator installs itself, another reads from the pack.
+
+    The first profile reading a requirement hosts the claims of the others,
+    and a host installed with its emulator is left out of the pack with all
+    of them: DraStic brings its own usrcheat.dat, and ROCKNIX's DSPerate,
+    which reads the same file, lost it wherever DraStic runs too. Built for
+    a board without DraStic, the pack carried it.
+    """
+    out: list[dict] = []
+    for entry in undeclared:
+        claims = entry.get("other_claims") or []
+        rest = [c for c in claims if not c.get("bundled")]
+        if not entry.get("bundled") or not rest:
+            out.append(entry)
+            continue
+        own = [c for c in claims if c.get("bundled")]
+        kept = {k: v for k, v in entry.items() if k != "other_claims"}
+        if own:
+            kept["other_claims"] = own
+        promoted = dict(rest[0])
+        if rest[1:]:
+            promoted["other_claims"] = rest[1:]
+        out += [kept, promoted]
+    return out
 
 
 def _settle_core_sets(

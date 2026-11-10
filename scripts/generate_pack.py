@@ -4694,11 +4694,18 @@ def _record_absent(
         ):
             continue
         full_dest = extra_full_destination(fe, extras_pfx)
-        if not full_dest:
-            continue
-        if full_dest in seen_destinations or full_dest in omitted_by_destination:
+        if not full_dest or full_dest in seen_destinations:
             continue
         source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
+        held = omitted_by_destination.get(full_dest)
+        if held is not None:
+            # Another core reads the same missing file there (Raze and
+            # EDuke32 both open NAPALM.GRP): one omission names them all.
+            claimed = held.get("cores")
+            if (held.get("reason") == "not_found" and claimed and source_emu
+                    and source_emu not in claimed):
+                held["cores"] = sorted([*claimed, source_emu])
+            continue
         systems = _extra_system_ids(fe)
         record_omission(
             full_dest, fe, systems[0] if systems else "", "not_found",

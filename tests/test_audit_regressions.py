@@ -7805,5 +7805,47 @@ class AutoFetchIssueBodyReadsAsWritten(unittest.TestCase):
         self.assertIn("posts nothing", auto_fetch.__doc__)
 
 
+
+class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
+    """A requirement two cores read is reported once, the first profile
+    hosting the others' claims. Whatever drops the host must not drop the
+    claims with it."""
+
+    def test_a_host_its_emulator_installs_leaves_the_others_in_the_pack(self):
+        from verify import _split_bundled_claims
+
+        dsperate = {"profile": "dsperate", "name": "usrcheat.dat", "in_repo": True}
+        drastic = {"profile": "drastic", "name": "usrcheat.dat", "bundled": True,
+                   "in_repo": True, "other_claims": [dsperate]}
+        out = _split_bundled_claims([drastic])
+        self.assertEqual([(u["profile"], u.get("other_claims")) for u in out],
+                         [("drastic", None), ("dsperate", None)])
+        alone = {"profile": "drastic", "bundled": True, "other_claims": [
+            {"profile": "drastic-legacy", "bundled": True}]}
+        self.assertEqual(_split_bundled_claims([alone]), [alone])
+
+    def test_a_missing_file_names_every_core_reading_it(self):
+        from generate_pack import _record_absent
+
+        omitted: dict[str, dict] = {}
+
+        def record(full_dest, entry, system, reason, cores):
+            omitted[full_dest] = {"dest": full_dest, "reason": reason, "cores": cores}
+
+        absent = [
+            {"name": "NAPALM.GRP", "destination": "NAPALM.GRP", "source_profile": profile,
+             "source_system": system}
+            for profile, system in (("raze", "nam"), ("eduke32", "napalm"))
+        ]
+        platform = {"dest": "SHARED.BIN", "reason": "not_found", "cores": None}
+        omitted["SHARED.BIN"] = platform
+        absent.append({"name": "SHARED.BIN", "destination": "SHARED.BIN",
+                       "source_profile": "raze"})
+        _record_absent(absent, {}, "", set(), False, set(), omitted, record)
+        self.assertEqual(omitted["NAPALM.GRP"]["cores"], ["eduke32", "raze"])
+        # A platform's own omission stays the platform's.
+        self.assertIsNone(omitted["SHARED.BIN"]["cores"])
+
+
 if __name__ == "__main__":
     unittest.main()

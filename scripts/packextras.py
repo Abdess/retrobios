@@ -1263,11 +1263,14 @@ def _collect_emulator_extras(
         placements = placement.places(u, dest)
         save_root = u.get("root") == "save"
         if not u["in_repo"]:
+            # Each core reading it is named on the omission: a list built
+            # without the first reader still has to say the file is missing.
             for placed in placements:
-                missing = _report_extra(u, name, placed[0])
-                if save_root:
-                    _save_fields(missing, placed[1], placement)
-                absent.append(missing)
+                for claim in (u, *u.get("other_claims", [])):
+                    missing = _report_extra(claim, name, placed[0])
+                    if save_root:
+                        _save_fields(missing, placed[1], placement)
+                    absent.append(missing)
             continue
         if not placements:
             if unplaceable is not None:
