@@ -7,7 +7,7 @@ version_source:
   url: "https://mijet.eludevisibility.org/XM6%20Pro-68k/Version.txt"
   pattern: '^(\d+)'
 based_on: "XM6 v2.06 by PI."
-profiled_date: "2026-10-20"
+profiled_date: "2026-11-10"
 core_version: "260920"
 version_basis:
   kind: package
@@ -24,72 +24,63 @@ systems:
   - sharp-x68000
 
 notes: |
-  Closed-source Windows fork of PI's XM6 v2.06 (README.txt:6) by M.I.J.E.T.,
-  distributed only from mijet.eludevisibility.org as three 7-Zip packages: the
-  program, a mandatory DLL Package and an optional Web Package that adds signed
-  update downloads. Version.txt in the build analysed here reads 260920, and the
-  DLL Package it pairs with is version 260101. Release 81 (261031) reads the
-  same system files, its executable naming only the .IPS patch extension in
-  addition. The first
-  release, 120303, forked XM6 v2.05. XM6.exe is a 32-bit MFC application whose
-  import directory names mfc90u.dll and MSVCR90.dll, so the Visual C++ 2008 runtime
-  carried by the DLL Package, or the redistributable, must sit beside the executable
-  for the process to start. A second non-Unicode build lives in MBCS/ and needs the
-  same files duplicated there. ES-DE launches it through the XM6PRO68K and
-  XM6PRO68K-WINDOWS find rules with the working directory set to the emulator
-  folder, on Linux under Wine or Proton. RetroBat registers it as xm6pro
-  (Program.cs:189, Installer.cs:151), runs XM6.exe from its own directory and
-  rewrites XM6.ini before launch (Xm6pro.Generator.cs:22-79).
+  Closed-source Windows fork of PI's XM6 by M.I.J.E.T., distributed from
+  mijet.eludevisibility.org as three 7-Zip packages: the program, a mandatory DLL
+  Package and an optional Web Package. The build analysed here is the one RetroBat
+  serves as xm6pro.7z (sha256 2b44820429989fa2...), Version.txt 260920, with
+  XM6.exe sha256 df1ed921f5f00cfb54950f1672f659e3ceecc756016d0a76f3ccb5c1354a76ed
+  and MBCS/XM6.exe sha256 a4ac21e5fe15c865b931921068b03f5c8238dd992727ddc95b5f434f74a9a453.
+  Every address below is a virtual address in that Unicode XM6.exe. Release 81
+  (261031, XM6.exe sha256 4eb66f0229ca992c...) names the same system files, its only
+  new file name being the .IPS disk delta extension. XM6.exe is a 32-bit MFC
+  application whose import directory names mfc90u.dll and MSVCR90.dll, both
+  loader-resolved, so the Visual C++ 2008 runtime carried by the DLL Package, or the
+  redistributable, must sit beside the executable for the process to start. A
+  second non-Unicode build lives in MBCS/ and needs the same files duplicated there.
+  ES-DE launches it through the XM6PRO68K and XM6PRO68K-WINDOWS find rules with the
+  working directory set to the emulator folder, on Linux under Wine or Proton.
+  RetroBat registers it as xm6pro (Program.cs:189, Installer.cs:151), runs XM6.exe
+  from its own directory and rewrites XM6.ini before launch
+  (Xm6pro.Generator.cs:22-79).
 
-  System files are resolved beside XM6.exe. XM6 v2.06 declares them in
-  Filepath::SystemFile[] (vm/filepath.cpp:394-405) and Filepath::SysFile
-  (vm/filepath.cpp:121-137) builds each path from SystemDir when one is set and from
-  the executable's own directory otherwise. XM6 Pro-68k references all ten names,
-  nine of them in one contiguous string block mirroring that table in reverse, and
-  exposes no ROM directory setting, while README.txt:71-73 requires the DLL Package
-  files to be extracted next to the executable rather than into a subdirectory.
-  Loading goes through Fileio::Load and
-  Fileio::Read (vm/fileio.cpp:35-51, 175-192), which succeed only when the file
-  holds at least the requested byte count, so every size below is a floor: a longer
-  file loads and its tail is ignored. The XM6 v2.06 sources cited throughout are
-  readable in mixerjdp/XM6_Libretro, which preserves the vm/ layer.
+  System files sit in a ten-entry pointer table at 0x57a898 (IPLROM.DAT,
+  IPLROMXV.DAT, IPLROMCO.DAT, IPLROM30.DAT, ROM30.DAT, CGROM.DAT, CGROM.TMP,
+  SCSIINROM.DAT, SCSIEXROM.DAT, SRAM.DAT). Filepath::SysFile at 0x48b054 copies the
+  entry and calls 0x48ac18, which takes drive and directory from the executable
+  path that 0x48ab44 caches from GetModuleFileNameW (0x48aac0), so every system
+  file is read beside XM6.exe and no directory setting takes part.
+  Fileio::Load (0x489a75) opens the file and Fileio::Read (0x489d8b) succeeds only
+  when _read returns the full count, so the IPL and CG sizes below are floors. The
+  SCSI ROM loader compares _filelengthi64 (0x489e54) with the expected size and
+  rejects any other length.
 
-  Machine selection follows ROM presence. Memory::Init (vm/memory.cpp:171-196)
-  loads the base SASI machine, then probes XVI, Compact and X68030 in that order and
-  keeps the first that succeeds. Memory::LoadROM (vm/memory.cpp:236-372) pairs each
-  machine with its ROMs: XVI and Compact need their IPL plus SCSIINROM.DAT, X68030
-  needs IPLROM30.DAT plus ROM30.DAT read at 0x20000 bytes instead of 0x2000, and the
-  base machine needs no SCSI ROM. Internal SCSI is the interface built into the
-  X68000 SUPER and later models, external SCSI is the CZ-6BS1 add-on board
-  (Reference Manual.txt:1529-1536).
-
-  Two files diverge from XM6 v2.06. The base IPL ROM is compiled into the
-  executable: "The program now includes an internal copy of the basic IPL ROM. It
-  will still try to load IPL ROMs externally first" (Change Log.txt:124-125), and
-  README.txt:23-25 tells users to leave IPLROM.DAT out because loading it only costs
-  startup time. The hard CG ROM requirement was dropped (Change Log.txt:128), so a
-  missing font ROM yields garbage glyphs instead of failing initialisation
-  (README.txt:278-281).
+  Memory::LoadROM (0x4903d7) takes the memory type stored by Memory::ApplyCfg
+  (0x4908af, 0x4908cb) from the saved configuration: 1 to 3 are the base X68000 with
+  no SCSI, internal SCSI or external SCSI, 4 XVI, 5 Compact and 6 X68030. It loads
+  the IPL ROM, the CG ROM (0x48e737, called at 0x490560) and the SCSI ROM (0x49016a,
+  called at 0x490570). Memory::Init loads type 1 at 0x4909f7 and fails only when that
+  load fails, which cannot happen since the base IPL is built in and neither the CG
+  ROM nor the SCSI slot is mandatory for type 1. A requested type that fails to
+  load falls back to type 1 (0x49063b, 0x490658-0x49066a).
 
   Two menu tools synthesise replacements. Synthesize replacement CG-ROM builds
-  CGROM.TMP from the installed MS Gothic and MS Mincho fonts and aborts when either
-  is absent, and README.txt:295-299 warns that different machines produce different
-  files. Synthesize replacement SCSI ROMs asks for a Human68k version 3.02 disk
-  image, dialog default HUMAN302.XDF with filter *HUMAN*3*02*.???, extracts
-  /BIN/FORMAT.X and writes SCSIINROM.DAT and SCSIEXROM.DAT.
+  CGROM.TMP from the installed MS Gothic and MS Mincho fonts, resolving CGROM.TMP at
+  0x45f8eb-0x45f8f4 and CGROM.DAT at 0x45fa47-0x45fa50. Synthesize replacement
+  SCSI ROMs asks for a Human68k version 3.02 disk image, dialog default
+  HUMAN302.XDF (0x45fd6a) with filter *HUMAN*3*02*.??? (0x45fced), extracts
+  /BIN/FORMAT.X and writes SCSIINROM.DAT and SCSIEXROM.DAT, whose paths it resolves
+  at 0x45fc7a-0x45fc9e.
 
-  The ROM Warning section of the Advanced options holds three checks, all enabled
-  by default and individually suppressible: an IPLROM.DAT version check naming
-  version 1.0 (05/07/1987) as recommended, a CGROM.DAT contents check and a
-  SCSIEXROM.DAT / SCSIINROM.DAT contents check. Since release 78 the SCSI ROMs are
-  read at startup only when the saved configuration needs them, and their check
-  otherwise runs from the SCSI page of the options (Change Log.txt:3093-3096).
-  Each check raises a dialog, but none rejects the file, so no hash below is
+  The ROM Warning options hold three checks, each suppressible. The IPL check
+  (0x48ee5c) accepts the base IPL when the IOCS date bytes at 0x1000a, 0x1000c and
+  0x1000d spell 87/05/07, and LoadROM identifies the IPL revision from the dword at
+  0x1000a against a table at 0x572458 (0x490519-0x490552). The CG check (0x48eea3)
+  sums and XORs 0x1000 bytes at 0x3a800 of the font and wants 0xec and 0x84. The
+  SCSI check (0x48eedc) reads 0x2000 bytes of SCSIINROM.DAT and SCSIEXROM.DAT and
+  flags a file holding "XM6 " at 0x1ff8, the stamp of synthesised replacements
+  (0x48ef82, 0x48efc6). Each check only raises a dialog, so no hash below is
   enforced by the program.
 
-  Reference Manual.txt ships with the program and Software Notes.txt is fetched by
-  the Web Package through Scripts\Update Notes.bat. Both are prose documents that
-  the Help menu and Help > Peruse Notes hand to a text editor, not data XM6 parses.
   XM6.ini and XM6U.ini are written by the program.
 
 files:
@@ -104,17 +95,15 @@ files:
     md5: 7fd4caabac1d9169e289f0f7bbf71d8e
     sha1: 0ed038ed2133b9f78c6e37256807424e0d927560
     description: "X68000 boot ROM, base SASI model"
-    source_ref: "Change Log.txt:124-125, README.txt:23-25, XM6 2.06 vm/memory.cpp:256-276"
+    source_ref: "XM6.exe 260920 Memory::LoadROM 0x4903d7: 0x490461-0x490478 (types 1 to 3 give table entry 0, Filepath::SysFile 0x48b054), 0x490496 (Fileio::Load 0x20000), 0x49049f-0x4904bf (types 1 to 3 on failure copy the built-in 0x20000 bytes from 0x552458 and skip the swap), 0x4904f8 (16-bit swap 0x407710), IPL check 0x48ee5c"
     note: >-
       XM6.exe carries this ROM internally and only reads the file when it is
-      present, so the emulator boots without it. The embedded copy sits at file
-      offset 1382488 in .rdata of the Unicode build and 1332664 in the MBCS build,
-      stored in the 16-bit pairwise swapped form the loader produces at
-      vm/memory.cpp:278-285. Unswapped it is the 131072-byte dump hashed here,
+      present, so the emulator boots without it. The embedded copy sits at
+      0x552458, file offset 1382488, in .rdata of the Unicode build and at file
+      offset 1332664 in the MBCS build, stored in the 16-bit pairwise swapped form
+      the loader produces. Unswapped it is the 131072-byte dump hashed here,
       catalogued by TOSEC as Sharp X68000 Boot ROM (1987)(Sharp), and it is the
-      version 1.0 (05/07/1987) the startup warning recommends. README.txt:23-25
-      advises against installing the file at all because reading and swapping it
-      only lengthens startup.
+      version 1.0 (05/07/1987) the IPL check accepts.
 
   - name: IPLROMXV.DAT
     system: sharp-x68000
@@ -122,11 +111,11 @@ files:
     min_size: 131072
     validation: [size]
     description: "X68000 XVI boot ROM"
-    source_ref: "XM6 2.06 vm/memory.cpp:178-180, 261-263"
+    source_ref: "XM6.exe 260920 Memory::LoadROM 0x4903d7: 0x49041e-0x49045f (type 4 gives table entry 1), 0x490478 (Filepath::SysFile 0x48b054), 0x490496 (Fileio::Load 0x20000), 0x4904c1-0x4904eb (failure logs Missing or invalid ROM file and returns 0), 0x49063b 0x490658-0x49066a (fallback to type 1)"
     note: >-
-      Probed after the base machine loads. Its presence, together with
-      SCSIINROM.DAT, is what makes the XVI machine available. Absent, the base
-      X68000 still runs. No internal copy is compiled into XM6.exe.
+      Read when the configuration selects the XVI. Absent or short, LoadROM
+      fails and the base X68000 runs instead. No internal copy is compiled into
+      XM6.exe.
 
   - name: IPLROMCO.DAT
     system: sharp-x68000
@@ -134,10 +123,10 @@ files:
     min_size: 131072
     validation: [size]
     description: "X68000 Compact boot ROM"
-    source_ref: "XM6 2.06 vm/memory.cpp:181-185, 264-266"
+    source_ref: "XM6.exe 260920 Memory::LoadROM 0x4903d7: 0x490423-0x49045a (type 5 gives table entry 2), 0x490478 (Filepath::SysFile 0x48b054), 0x490496 (Fileio::Load 0x20000), 0x4904c1-0x4904eb (failure returns 0), 0x49063b 0x490658-0x49066a (fallback to type 1)"
     note: >-
-      Probed after XVI. Selects the Compact machine when found, and that machine
-      also needs SCSIINROM.DAT. No internal copy is compiled into XM6.exe.
+      Read when the configuration selects the Compact, under the same rules as
+      IPLROMXV.DAT. No internal copy is compiled into XM6.exe.
 
   - name: IPLROM30.DAT
     system: sharp-x68000
@@ -145,25 +134,25 @@ files:
     min_size: 131072
     validation: [size]
     description: "X68030 boot ROM"
-    source_ref: "XM6 2.06 vm/memory.cpp:186-190, 267-269"
+    source_ref: "XM6.exe 260920 Memory::LoadROM 0x4903d7: 0x490428-0x49042b and 0x490417 (type 6 gives table entry 3), 0x490478 (Filepath::SysFile 0x48b054), 0x490496 (Fileio::Load 0x20000), 0x4904c1-0x4904eb (failure returns 0), 0x49063b 0x490658-0x49066a (fallback to type 1)"
     note: >-
-      Probed last. Selects the X68030 machine, which also needs ROM30.DAT. No
-      internal copy is compiled into XM6.exe.
+      Read when the configuration selects the X68030, which also reads
+      ROM30.DAT. No internal copy is compiled into XM6.exe.
 
-  # -- X68030 SCSI ROM, the one SCSI ROM read at 0x20000 bytes --
+  # -- X68030 SCSI ROM, the one SCSI-slot ROM read at 0x20000 bytes --
 
   - name: ROM30.DAT
     system: sharp-x68000
     required: false
-    min_size: 131072
+    size: 131072
     validation: [size]
     description: "X68030 SCSI ROM"
-    source_ref: "README.txt:25, XM6 2.06 vm/memory.cpp:316-319, 334-337"
+    source_ref: "XM6.exe 260920 LoadSCSIROM 0x49016a: 0x4901cc-0x4901ea (type 6 gives table entry 4 and size 0x20000), 0x49025e (open, failure logs Unable to open ROM file), 0x4902a3-0x4902b9 (_filelengthi64 must equal 0x20000, else Wrong size for ROM file), 0x4902e5 (read), 0x49034f (16-bit swap), Memory::LoadROM 0x4903d7 0x4905aa-0x490613 (absent: stub slot with the SCSIIN signature)"
     note: >-
-      The SCSI half of the X68030 machine, and the only SCSI ROM read at 0x20000
-      bytes rather than 0x2000. Without it LoadROM(X68030) fails and the X68030
-      machine is not offered. README.txt:25 calls it non-critical and notes that
-      installing it can cost performance.
+      The SCSI half of the X68030 machine, and the only SCSI-slot ROM read at
+      0x20000 bytes, at exactly that length. When it is missing or of another
+      size LoadROM fills the slot with 0xff, writes a stub header carrying the
+      SCSIIN signature at offset 0x24, and the X68030 still starts.
       The copy here is the X68000 Firmware set's ROM30.DAT (SCSIIN, ROM Human 2.x, ROM FLOAT and the SCSI-IOCS binary), read out of an X68030 by the XM6 2.06 utility, which stamps its name at the tail of the image.
 
   # -- Font ROM, read at 0xc0000 bytes, CGROM.DAT first then CGROM.TMP --
@@ -177,15 +166,14 @@ files:
     md5: cb0a5cfcf7247a7eab74bb2716260269
     sha1: 8d72c5b4d63bb14c5dbdac495244d659aa1498b6
     description: "X68000 character generator ROM"
-    source_ref: "README.txt:278-281, Change Log.txt:128, XM6 2.06 vm/memory.cpp:287-295"
+    source_ref: "XM6.exe 260920 0x48e737: 0x48e783-0x48e78c (table entry 5), 0x48e7a3 (Fileio::Load 0xc0000), 0x48e7ac-0x48e7cb (CGROM.TMP tried next), 0x48e7cd-0x48e7ef (both absent: logs Unable to load CGROM.DAT or CGROM.TMP and fills the font with 0x55 at 0x42245f), 0x48e7fe (16-bit swap), CG check 0x48eea3"
     note: >-
-      Supplies the glyphs for text the X68000 renders. Stock XM6 v2.06 fails
-      initialisation when neither font file loads, but XM6 Pro-68k dropped that
-      requirement, so a missing font ROM shows garbage glyphs and the emulator
-      keeps running, and what remains is the suppressible contents warning.
-      The mandatory DLL Package ships this exact 786432-byte file, catalogued by
-      TOSEC as Sharp X68000 CG ROM (1987)(Sharp). The hash identifies that copy and
-      is not verified by the program.
+      Supplies the glyphs for text the X68000 renders. When neither font file
+      loads, the font area is filled with 0x55, text shows as garbage and the
+      emulator keeps running. The mandatory DLL Package ships this exact
+      786432-byte file, catalogued by TOSEC as Sharp X68000 CG ROM
+      (1987)(Sharp), and it passes the CG check. The hash identifies that copy
+      and is not verified by the program.
 
   - name: CGROM.TMP
     system: sharp-x68000
@@ -194,63 +182,61 @@ files:
     min_size: 786432
     validation: [size]
     description: "Synthesised font ROM, fallback when CGROM.DAT is absent"
-    source_ref: "README.txt:295-299, XM6 2.06 vm/memory.cpp:290-294"
+    source_ref: "XM6.exe 260920 0x48e737: 0x48e7ac-0x48e7b2 (table entry 6, reached only after CGROM.DAT fails), 0x48e7c4 (Fileio::Load 0xc0000), 0x48e7fe (16-bit swap)"
     note: >-
-      Read only when CGROM.DAT is missing, at the same size. Tools > Synthesize
-      replacement CG-ROM writes it from the installed MS Gothic and MS Mincho fonts
-      and fails when either is absent. No hash is declared because the output
-      depends on the fonts of the machine that generated it. XM6 refuses to use it
-      while CGROM.DAT is present.
+      Read only when CGROM.DAT is missing or short, at the same size. Tools >
+      Synthesize replacement CG-ROM writes it from the installed MS Gothic and MS
+      Mincho fonts. No hash is declared because the output depends on the fonts
+      of the machine that generated it.
 
-  # -- SCSI ROMs, read at 0x2000 bytes, required by the interface they drive --
+  # -- SCSI ROMs, exact 0x2000 bytes, required by the interface they drive --
 
   - name: SCSIINROM.DAT
     system: sharp-x68000
     required: false
     bundled: true
-    min_size: 8192
+    size: 8192
     validation: [size]
     md5: aeb4607a14612606c833227437aaa16a
     sha1: 15a17798839a3f7f361119205aebc301c2df5967
     description: "Internal SCSI interface ROM, X68000 SUPER and later"
-    source_ref: "Reference Manual.txt:1529-1536, XM6 2.06 vm/memory.cpp:309-315"
+    source_ref: "XM6.exe 260920 LoadSCSIROM 0x49016a: 0x4901b7-0x4901ea (types 2, 4 and 5 give table entry 7, size 0x2000), 0x4901fc-0x490219 (deferred while the flag read by 0x40b726 is set), 0x49025e (open), 0x4902a3-0x4902b5 (_filelengthi64 must equal 0x2000), 0x4902e5 (read), 0x49034f (swap), Memory::LoadROM 0x4903d7 0x49057d-0x4905ad (types 4 and 5 continue with the slot at 0xff, types 2 and 3 fail), SCSI check 0x48eedc 0x48ef1f-0x48ef82"
     note: >-
-      Needed to use internal SCSI drives, and also loaded as part of the XVI and
-      Compact machines, so those two models are unavailable without it whatever
-      their IPL. The mandatory DLL Package ships this exact 8192-byte file and the
-      hash identifies that copy, while the startup contents check only warns.
+      Needed for the internal SCSI option on the base X68000, which otherwise
+      falls back to the plain base machine. The XVI and Compact start without it
+      with the SCSI slot left at 0xff. The mandatory DLL Package ships this exact
+      8192-byte file and the hash identifies that copy, while the startup SCSI
+      check only warns.
 
   - name: SCSIEXROM.DAT
     system: sharp-x68000
     required: false
     bundled: true
-    min_size: 8160
+    size: [8160, 8192]
     validation: [size]
     md5: 237be014374b74d327f15f250d4d62bf
     sha1: 49616c09a8986ffe6a12ad600febe512f7ba8ae4
     description: "External SCSI interface ROM, CZ-6BS1 board"
-    source_ref: "Reference Manual.txt:1529-1536, XM6 2.06 vm/memory.cpp:320-324, 346-357"
+    source_ref: "XM6.exe 260920 LoadSCSIROM 0x49016a: 0x4901bc-0x4901ea (type 3 gives table entry 8, size 0x2000), 0x4902a3-0x4902d4 (_filelengthi64 must be 0x2000, or 0x1fe0 loaded at offset 0x20 behind 0x20 bytes of 0xff), 0x4902e5 (read), 0x490315-0x490346 (an 8192-byte image whose first dword is neither 0 nor 0xffffffff is moved up 0x20 bytes), 0x49034f (swap), SCSI check 0x48eedc 0x48ef8f-0x48efc6"
     note: >-
-      Needed to use the external SCSI interface, which is the only SCSI variant
-      that can coexist with SASI. The loader first reads 0x2000 bytes and, on
-      failure, retries with the 0x1fe0-byte WinX68k layout loaded at buffer offset
-      0x20, so 8160 is the real floor. The mandatory DLL Package ships the
-      8192-byte form hashed here.
+      Needed for the external SCSI option on the base X68000, which otherwise
+      falls back to the plain base machine. Two lengths are accepted: 8192 bytes,
+      and the 8160-byte WinX68k layout. An 8192-byte image that starts with
+      data rather than the blank register window is shifted to the same layout.
+      The mandatory DLL Package ships the 8192-byte form hashed here.
 
   # -- Battery-backed NVRAM --
 
   - name: SRAM.DAT
     system: sharp-x68000
     required: false
-    size: 16384
+    size: [16384, 65536]
     description: "X68000 SRAM image, boot device and memory switch settings"
-    source_ref: "Reference Manual.txt:1366-1368, 2648-2651, XM6 2.06 vm/filepath.cpp:404"
+    source_ref: "XM6.exe 260920 SRAM init 0x4abb9d: 0x4abb9f (fills 0x10000 bytes with 0xff at 0x4ab4d8), 0x4abba4-0x4abbaa (table entry 9), 0x4abbc1 (Fileio::Load 0x10000, result ignored), 0x4abc15 (swap), 0x4ab50f 0x4ab517-0x4ab52c (save writes the configured size in KB, 16 by default at 0x4abb11)"
     note: >-
-      Read at startup and rewritten on exit when the contents changed, so XM6
-      creates it on first run and a supplied image only preloads the settings. The
-      Tools > SRAM menu reloads, duplicates and write-protects it, and the boot
-      counter option updates it on exit. Size is the X68000 SRAM size and is not
-      checked by the program.
+      Read at startup and rewritten on exit, so XM6 creates it on first run and
+      a supplied image only preloads the settings. Up to 64 KB is read with no
+      size check. The program writes 16 KB, or 64 KB with the SRAM64K option.
 
   # -- Optional libraries loaded by name at runtime, shipped in the DLL Package --
 
@@ -261,12 +247,12 @@ files:
     required: false
     bundled: true
     description: "7-Zip library for .7z, .zip and .xz support"
-    source_ref: "README.txt:166-170, XM6.exe strings 7z.dll, Optional DLL Not Present"
+    source_ref: "XM6.exe 260920 0x401ce4: 0x401cfd-0x401d02 (7Z.DLL through the loader 0x40ce48: LoadLibraryW beside XM6.exe at 0x40ce90, then the system directory at 0x40cf01, then the Windows directory at 0x40cf67), 0x401d1c-0x401d22 (GetProcAddress CreateObject), 0x4505f0-0x4505fb (absent: 0x412122 index 0 shows Optional DLL Not Present at 0x412109)"
     note: >-
-      Absent from the import directory and looked up by name at runtime, so XM6
+      Absent from the import directory and loaded on first archive use, so XM6
       starts without it and reports Optional DLL Not Present, Archive support is
-      not available. Enables loading disk images and state files from archives and
-      writing XZ-compressed state files.
+      not available. Enables loading disk images and state files from archives
+      and writing XZ-compressed state files.
 
   - name: zlib1.dll
     size: 59904
@@ -275,9 +261,9 @@ files:
     required: false
     bundled: true
     description: "zlib, used for PNG output and deflate archives"
-    source_ref: "XM6.exe strings 7z.dll or zlib1.dll, ZLIB1.DLL, deflateInit2_, deflate, deflateReset, deflateEnd"
+    source_ref: "XM6.exe 260920 delay-load import zlib1.dll (crc32, inflate, inflateEnd, inflateInit2_, deflateEnd, deflateInit2_, deflateReset, deflate), 0x40cf85 0x40cf8e-0x40cf98 (ZLIB1.DLL through the loader 0x40ce48, handle cached at 0x59e66c), callers 0x414487, 0x4280bc and 0x489151-0x48915d (absent: 0x412122 index 1 names 7z.dll or zlib1.dll in the Optional DLL Not Present dialog)"
     note: >-
-      Looked up by name at runtime alongside 7z.dll and named in the same Optional
-      DLL Not Present dialog. XM6.exe resolves deflateInit2_, deflate,
-      deflateReset and deflateEnd from it, and the display capture commands
-      write PNG files.
+      Delay-loaded, so the process starts without it, and every caller first
+      loads it by name and skips its zlib path when that fails. XM6.exe resolves
+      inflate, deflate and crc32 from it for deflate archives and PNG display
+      captures.
