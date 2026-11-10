@@ -193,7 +193,22 @@ class ProfileContradictionsAreKnown(unittest.TestCase):
         self.assertEqual(sorted(unsatisfied), KNOWN_UNSATISFIED)
 
 
-KNOWN_UNSATISFIED: list[str] = []
+KNOWN_UNSATISFIED: list[str] = [
+    # Amiberry's ROM table identifies the A2000 keyboard MCU by crc32
+    # c23d280e and sha1 b5c4b8c3 (rommgr.cpp:141-142). The held
+    # D8039HLC.rom is another dump (crc32 fb92a773), so the ROM to acquire
+    # is still missing for every amiberry build.
+    "amiberry-7.1.1-332/D8039HLC.rom",
+    "amiberry-7.1.1/D8039HLC.rom",
+    "amiberry-8.0.0/D8039HLC.rom",
+    "amiberry-8.2.2/D8039HLC.rom",
+    "amiberry-8.3.0/D8039HLC.rom",
+    "amiberry/D8039HLC.rom",
+    # openMSX accepts nms8245_disk.rom with sha1 58ba1887 or 6acd4261
+    # (share/machines/Philips_NMS_8245.xml:149-153). The held copy, the one
+    # RetroBat pins by md5, is c3f3ca45: neither dump is held.
+    "openmsx-libretro/nms8245_disk.rom",
+]
 
 
 class ArchiveNamesDesignateArchives(unittest.TestCase):
