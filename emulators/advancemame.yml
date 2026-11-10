@@ -162,7 +162,9 @@ files:
     path: "neogeo.zip"
     required: true
     category: bios_zip
-    system: snk-neogeo-mvs
+    systems:
+      - snk-neogeo-mvs
+      - arcade
     source_ref: "src/drivers/neogeo.c:7941-7955,8555"
     note: >-
       Eight MVS BIOS variants selected with misc_bios (euro, euro-s1, us,
@@ -230,7 +232,9 @@ files:
     path: "pgm.zip"
     required: true
     category: bios_zip
-    system: igs-pgm
+    systems:
+      - igs-pgm
+      - arcade
     source_ref: "src/drivers/pgm.c:4415-4426, src/drivers/pgm.c:6904"
     contents:
       - name: pgm_p01s.rom
@@ -254,7 +258,9 @@ files:
     path: "stvbios.zip"
     required: true
     category: bios_zip
-    system: sega-stv
+    systems:
+      - sega-stv
+      - arcade
     source_ref: "src/drivers/stv.c:3251-3253,4281"
     note: >-
       Nine BIOS variants selected with misc_bios (japan, japana, us, japanb,
@@ -311,7 +317,9 @@ files:
     path: "megaplay.zip"
     required: true
     category: bios_zip
-    system: sega-megaplay
+    systems:
+      - sega-megaplay
+      - arcade
     source_ref: "src/drivers/megaplay.c:793-796,991"
     note: >-
       Two BIOS variants selected with misc_bios (ver1, ver2), ver1 by
@@ -333,7 +341,9 @@ files:
     path: "megatech.zip"
     required: true
     category: bios_zip
-    system: sega-megatech
+    systems:
+      - sega-megatech
+      - arcade
     source_ref: "src/drivers/megatech.c:456-459,868"
     contents:
       - name: epr12664.20
@@ -346,7 +356,9 @@ files:
     path: "decocass.zip"
     required: true
     category: bios_zip
-    system: deco-cassette
+    systems:
+      - deco-cassette
+      - arcade
     source_ref: "src/drivers/decocass.c:729-732,1215"
     note: >-
       Two main CPU BIOS variants selected with misc_bios (bios0, bios1),
@@ -399,7 +411,9 @@ files:
     path: "playch10.zip"
     required: true
     category: bios_zip
-    system: nintendo-playch10
+    systems:
+      - nintendo-playch10
+      - arcade
     source_ref: "src/drivers/playch10.c:1650-1653,1661"
     note: >-
       Two BIOS variants selected with misc_bios (dual, single), dual by
@@ -451,7 +465,9 @@ files:
     path: "nss.zip"
     required: true
     category: bios_zip
-    system: nintendo-nss
+    systems:
+      - nintendo-nss
+      - arcade
     source_ref: "src/drivers/nss.c:526-528,659"
     contents:
       - name: spc700.rom
@@ -480,7 +496,9 @@ files:
     path: "skns.zip"
     required: true
     category: bios_zip
-    system: super-kaneko-nova
+    systems:
+      - super-kaneko-nova
+      - arcade
     source_ref: "src/drivers/suprnova.c:1272-1279,1767"
     note: >-
       Five region BIOS ROMs, all loaded into the same region.
@@ -516,7 +534,9 @@ files:
     path: "konamigx.zip"
     required: true
     category: bios_zip
-    system: konami-gx
+    systems:
+      - konami-gx
+      - arcade
     source_ref: "src/drivers/konamigx.c:2180-2183,3521"
     contents:
       - name: 300a01.34k
@@ -529,7 +549,9 @@ files:
     path: "konamigv.zip"
     required: true
     category: bios_zip
-    system: konami-gv
+    systems:
+      - konami-gv
+      - arcade
     source_ref: "src/drivers/konamigv.c:974-978,1060"
     contents:
       - name: 999a01.7e
@@ -542,7 +564,9 @@ files:
     path: "cvs.zip"
     required: true
     category: bios_zip
-    system: century-cvs
+    systems:
+      - century-cvs
+      - arcade
     source_ref: "src/drivers/cvs.c:422-432,1403"
     contents:
       - name: 5b.bin
@@ -566,7 +590,9 @@ files:
     path: "cpzn1.zip"
     required: true
     category: bios_zip
-    system: capcom-zn1
+    systems:
+      - capcom-zn1
+      - arcade
     source_ref: "src/drivers/zn.c:3188-3190, src/drivers/zn.c:4635"
     contents:
       - name: coh-1000c.353
@@ -579,7 +605,9 @@ files:
     path: "cpzn2.zip"
     required: true
     category: bios_zip
-    system: capcom-zn2
+    systems:
+      - capcom-zn2
+      - arcade
     source_ref: "src/drivers/zn.c:3423-3425, src/drivers/zn.c:4653"
     contents:
       - name: coh-3002c.353
@@ -592,7 +620,9 @@ files:
     path: "tps.zip"
     required: true
     category: bios_zip
-    system: tecmo-tps
+    systems:
+      - tecmo-tps
+      - arcade
     source_ref: "src/drivers/zn.c:3866-3868, src/drivers/zn.c:4700"
     contents:
       - name: coh-1002m.353
@@ -605,7 +635,9 @@ files:
     path: "taitofx1.zip"
     required: true
     category: bios_zip
-    system: taito-fx1
+    systems:
+      - taito-fx1
+      - arcade
     source_ref: "src/drivers/zn.c:4162-4164, src/drivers/zn.c:4733"
     contents:
       - name: coh-1000t.353
@@ -618,7 +650,9 @@ files:
     path: "psarc95.zip"
     required: true
     category: bios_zip
-    system: eighting-zn1
+    systems:
+      - eighting-zn1
+      - arcade
     source_ref: "src/drivers/zn.c:4434-4436, src/drivers/zn.c:4760"
     contents:
       - name: coh-1002e.353
@@ -631,7 +665,9 @@ files:
     path: "atluspsx.zip"
     required: true
     category: bios_zip
-    system: atlus-zn1
+    systems:
+      - atlus-zn1
+      - arcade
     source_ref: "src/drivers/zn.c:4605-4607, src/drivers/zn.c:4772"
     contents:
       - name: coh-1001l.353
@@ -644,7 +680,9 @@ files:
     path: "atpsx.zip"
     required: true
     category: bios_zip
-    system: atari-zn1
+    systems:
+      - atari-zn1
+      - arcade
     source_ref: "src/drivers/zn.c:4520-4522, src/drivers/zn.c:4680"
     contents:
       - name: coh-1000w.353
@@ -657,7 +695,9 @@ files:
     path: "acpsx.zip"
     required: true
     category: bios_zip
-    system: acclaim-zn1
+    systems:
+      - acclaim-zn1
+      - arcade
     source_ref: "src/drivers/zn.c:4543-4545, src/drivers/zn.c:4689"
     contents:
       - name: coh-1000a.353
@@ -670,7 +710,9 @@ files:
     path: "coh1002v.zip"
     required: true
     category: bios_zip
-    system: videosystem-zn1
+    systems:
+      - videosystem-zn1
+      - arcade
     source_ref: "src/drivers/zn.c:4090-4096, src/drivers/zn.c:4722"
     contents:
       - name: coh-1002v.ic353
@@ -683,7 +725,9 @@ files:
     path: "aleck64.zip"
     required: true
     category: bios_zip
-    system: nintendo-aleck64
+    systems:
+      - nintendo-aleck64
+      - arcade
     source_ref: "src/drivers/aleck64.c:697-699,778"
     contents:
       - name: pifdata.bin
@@ -696,7 +740,9 @@ files:
     path: "atarisy1.zip"
     required: true
     category: bios_zip
-    system: atari-system1
+    systems:
+      - atari-system1
+      - arcade
     source_ref: "src/drivers/atarisy1.c:837-850, src/drivers/atarisy1.c:2299"
     contents:
       - name: "136032.114.j11"
@@ -720,7 +766,9 @@ files:
     path: "cedmag.zip"
     required: true
     category: bios_zip
-    system: efo-cedar-magnet
+    systems:
+      - efo-cedar-magnet
+      - arcade
     source_ref: "src/drivers/cedar_magnet.c:881-890, src/drivers/cedar_magnet.c:948"
     contents:
       - name: "magnet-master-vid-e03.bin"
@@ -733,7 +781,9 @@ files:
     path: "ar_bios.zip"
     required: true
     category: bios_zip
-    system: arcadia-systems
+    systems:
+      - arcadia-systems
+      - arcade
     source_ref: "src/drivers/arsystems.c:356-377,823"
     note: >-
       Three BIOS variants selected with misc_bios (onep300, onep211,
@@ -801,7 +851,9 @@ files:
     path: "maxaflex.zip"
     required: true
     category: bios_zip
-    system: exidy-maxaflex
+    systems:
+      - exidy-maxaflex
+      - arcade
     source_ref: "src/drivers/maxaflex.c:520-529,585"
     contents:
       - name: atarixl.rom
@@ -825,7 +877,9 @@ files:
     path: "crysbios.zip"
     required: true
     category: bios_zip
-    system: brezzasoft-crystal
+    systems:
+      - brezzasoft-crystal
+      - arcade
     source_ref: "src/drivers/crystal.c:924-929,1032"
     contents:
       - name: mx27l1000.u14
@@ -838,7 +892,9 @@ files:
     path: "macsbios.zip"
     required: true
     category: bios_zip
-    system: imax-macs
+    systems:
+      - imax-macs
+      - arcade
     source_ref: "src/drivers/macs.c:396-404,614"
     contents:
       - name: macsos_l.u43
@@ -857,7 +913,9 @@ files:
     path: "bctvidbs.zip"
     required: true
     category: bios_zip
-    system: barcrest-mpu4
+    systems:
+      - barcrest-mpu4
+      - arcade
     source_ref: "src/drivers/mpu4.c:2016-2019,2177"
     contents:
       - name: vid.p1

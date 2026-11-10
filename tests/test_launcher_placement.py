@@ -912,13 +912,38 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
     """advmame.rc sets dir_rom /storage/roms/mame, /storage/roms/arcade for
     the arcade system (advmame.rc:11, advmame.sh:26-30)."""
 
-    def test_the_sets_land_in_roms_mame(self) -> None:
+    def test_the_sets_land_in_roms_mame_and_roms_arcade(self) -> None:
+        # Started for arcade it reads roms/arcade, for mame and cps1-3
+        # roms/mame (es_systems.json, advmame.sh:26-30): an arcade set is
+        # read in both.
         view = standalone_view("advancemame", "emuelec")
         sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
-        self.assertEqual(len(sets), 29)
+        self.assertEqual(len(sets), 58)
+        places: dict[str, set[str]] = {}
         for entry in sets:
-            self.assertEqual(entry["standalone_path"], "mame/" + entry["name"])
             self.assertTrue(entry.get("unprefixed"))
+            places.setdefault(entry["name"], set()).add(entry["standalone_path"])
+        self.assertEqual(len(places), 29)
+        for name, paths in places.items():
+            self.assertEqual(paths, {"mame/" + name, "arcade/" + name})
+
+    def test_both_copies_are_one_file(self) -> None:
+        # Outside the BIOS tree the folder is no proof of content: each copy
+        # resolves by its layout path, so both folders hold the same file.
+        from common import load_database
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        with redirect_stdout(io.StringIO()):
+            manifest = generate_manifest(
+                "emuelec", str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
+                str(REPO_ROOT / "platforms" / "_registry.yml"),
+                emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
+            )
+        by_dest = {f["dest"]: f["sha1"] for f in manifest["files"]}
+        sets = [d.removeprefix("arcade/") for d in by_dest if d.startswith("arcade/")]
+        self.assertEqual(len(sets), 29)
+        for name in sets:
+            self.assertEqual(by_dest["arcade/" + name], by_dest["mame/" + name], name)
 
     def test_the_roms_folder_is_no_proof_of_content(self) -> None:
         # bios/Arcade/MAME/konamigv.zip is MAME 0.289's set, not AdvanceMAME's.
@@ -926,7 +951,8 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
 
         db = load_database(str(REPO_ROOT / "database.json"))
         view = standalone_view("advancemame", "emuelec")
-        (entry,) = [e for e in view["files"] if e["name"] == "konamigv.zip"]
+        entry = next(e for e in view["files"]
+                     if e["name"] == "konamigv.zip" and e["standalone_path"].startswith("mame/"))
         moved, _status = resolve_local_file(entry, db, dest_hint=entry["standalone_path"])
         plain = {k: v for k, v in entry.items()
                  if k not in ("layout_path", "standalone_path", "unprefixed")}
