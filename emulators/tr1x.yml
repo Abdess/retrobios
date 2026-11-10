@@ -54,19 +54,19 @@ files:
     unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:39"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:39, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:123-131, src/trx/game/level/format/pipeline.c:96"
 
   - name: "gym.phd"
     path: "games/tr1/levels/gym.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:61"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:61, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:123-131, src/trx/game/level/format/pipeline.c:96"
 
   - name: "level1.phd"
     path: "games/tr1/levels/level1.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:99"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:99, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Caves"
 
   - name: "level2.phd"
@@ -74,126 +74,126 @@ files:
     unsourceable: "retail data the collection does not hold, and a same-named file of another game must not stand in"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:120"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:120, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "City of Vilcabamba"
 
   - name: "level3a.phd"
     path: "games/tr1/levels/level3a.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:139"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:139, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Lost Valley"
 
   - name: "level3b.phd"
     path: "games/tr1/levels/level3b.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:159"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:159, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Tomb of Qualopec"
 
   - name: "level4.phd"
     path: "games/tr1/levels/level4.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:180"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:180, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "St. Francis' Folly"
 
   - name: "level5.phd"
     path: "games/tr1/levels/level5.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:202"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:202, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Colosseum"
 
   - name: "level6.phd"
     path: "games/tr1/levels/level6.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:223"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:223, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Palace Midas"
 
   - name: "level7a.phd"
     path: "games/tr1/levels/level7a.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:242"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:242, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "The Cistern"
 
   - name: "level7b.phd"
     path: "games/tr1/levels/level7b.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:263"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:263, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Tomb of Tihocan"
 
   - name: "level8a.phd"
     path: "games/tr1/levels/level8a.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:290"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:290, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "City of Khamoon"
 
   - name: "level8b.phd"
     path: "games/tr1/levels/level8b.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:313"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:313, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Obelisk of Khamoon"
 
   - name: "level8c.phd"
     path: "games/tr1/levels/level8c.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:335"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:335, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Sanctuary of the Scion"
 
   - name: "level10a.phd"
     path: "games/tr1/levels/level10a.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:358"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:358, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Natla's Mines"
 
   - name: "level10b.phd"
     path: "games/tr1/levels/level10b.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:392"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:392, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Atlantis"
 
   - name: "level10c.phd"
     path: "games/tr1/levels/level10c.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:418"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:418, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "The Great Pyramid"
 
   - name: "cut1.phd"
     path: "games/tr1/levels/cut1.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:508"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:508, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Cutscene level 1 (after Qualopec)"
 
   - name: "cut2.phd"
     path: "games/tr1/levels/cut2.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:531"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:531, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Cutscene level 2 (after Tihocan)"
 
   - name: "cut3.phd"
     path: "games/tr1/levels/cut3.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:552"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:552, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Cutscene level 3 (Khamoon ambush)"
 
   - name: "cut4.phd"
     path: "games/tr1/levels/cut4.phd"
     required: true
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:575"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:575, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 900-910, src/trx/game/paths.c:111-121, src/trx/game/level/format/pipeline.c:96"
     note: "Cutscene level 4 (Natla's mines)"
 
   # FMV cutscenes
@@ -205,7 +205,7 @@ files:
     path: "games/tr1/fmv/core.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:601"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:601, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
     note: "Core Design legal screen."
 
   - name: "escape.avi"
@@ -213,7 +213,7 @@ files:
     path: "games/tr1/fmv/escape.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:602"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:602, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
     note: "Eidos legal screen."
 
   - name: "cafe.avi"
@@ -221,7 +221,7 @@ files:
     path: "games/tr1/fmv/cafe.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:603"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:603, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
     note: "Intro cutscene."
 
   - name: "mansion.avi"
@@ -229,56 +229,56 @@ files:
     path: "games/tr1/fmv/mansion.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:604"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:604, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   - name: "snow.avi"
     aliases: [snow.rpl]
     path: "games/tr1/fmv/snow.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:605"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:605, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   - name: "lift.avi"
     aliases: [lift.rpl]
     path: "games/tr1/fmv/lift.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:606"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:606, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   - name: "vision.avi"
     aliases: [vision.rpl]
     path: "games/tr1/fmv/vision.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:607"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:607, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   - name: "canyon.avi"
     aliases: [canyon.rpl]
     path: "games/tr1/fmv/canyon.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:608"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:608, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   - name: "pyramid.avi"
     aliases: [pyramid.rpl]
     path: "games/tr1/fmv/pyramid.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:609"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:609, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   - name: "prison.avi"
     aliases: [prison.rpl]
     path: "games/tr1/fmv/prison.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:610"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:610, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   - name: "end.avi"
     aliases: [end.rpl]
     path: "games/tr1/fmv/end.rpl"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1/gameflow.json5:611"
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:611, tools/shared/docker/game_entrypoint.py:50-53, 196-206, src/trx/game/shell/flow.c:383-385, src/trx/game/shell/mod.c:540-543, src/trx/game/paths.c:104-110, src/trx/game/game_flow/reader.c:1214-1217, 1100-1130, src/trx/game/paths.c:192-202"
 
   # Music tracks (retail CD audio, ripped as trackNN.<ext>).
   # Enumerated by the ship tree in docs/trx/INSTALLING.md.

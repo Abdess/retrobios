@@ -228,7 +228,7 @@ files:
 
   # ================================================================
   # IWADs (user-supplied). At least one is needed to launch a game.
-  # All source refs point to wadsrc_extra/static/iwadinfo.txt entries.
+  # Each ref gives the iwadinfo.txt entry, then the code that reads it.
   # ================================================================
 
   # ---- Doom ----
@@ -246,110 +246,110 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:420, 437, 659"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:420, 437, 659, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
     note: "The Ultimate DOOM and DOOM Registered both use this name and are told apart by their lumps."
 
   - name: "doom2.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:640, 653"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:640, 653, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doom2f.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:625, 657"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:625, 657, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doombfg.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:332, 666"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:332, 666, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doom2bfg.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:560, 667"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:560, 667, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doomunity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:369, 661"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:369, 661, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doom2unity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:592, 655"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:592, 655, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doomkex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:350, 662"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:350, 662, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doom2kex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:576, 656"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:576, 656, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doomxbox.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:403, 660"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:403, 660, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doom2xbox.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:608, 654"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:608, 654, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "doom_complete.pk3"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:389, 652"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:389, 652, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "plutonia.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:545, 670"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:545, 670, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "plutoniaunity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:514, 671"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:514, 671, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "plutoniakex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:529, 672"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:529, 672, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "tnt.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:499, 673"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:499, 673, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "tntunity.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:468, 674"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:468, 674, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "tntkex.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:483, 675"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:483, 675, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "nerve.wad"
     category: game_data
@@ -369,7 +369,7 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:357, 376, 488, 534, 582, 598"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:357, 376, 488, 534, 582, 598, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:214-221, 326-352, 924-947"
     note: "Loaded from the IWAD directory by the KEX and Unity editions."
 
   - name: "soundtrack"
@@ -392,19 +392,19 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:307, 676"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:307, 676, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "freedoom2.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:294, 677"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:294, 677, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "freedm.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:281, 680"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:281, 680, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   # ---- Heretic ----
 
@@ -412,7 +412,7 @@ files:
     category: game_data
     system: heretic
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:241, 244, 254, 257, 681"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:241, 244, 254, 257, 681, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
     note: "Both Heretic and Shadow of the Serpent Riders use this name and are told apart by the EXTENDED lump."
 
   - name: "blasphem.wad"
@@ -420,7 +420,7 @@ files:
     category: game_data
     system: heretic
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:228, 692-693"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:228, 692-693, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   # ---- Hexen ----
 
@@ -428,13 +428,13 @@ files:
     category: game_data
     system: hexen
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:188, 684"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:188, 684, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "hexdd.wad"
     category: game_data
     system: hexen
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:196-207, 685"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:196-207, 685, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
     note: "Deathkings expansion. Requires hexen.wad (Required = Hexen: Beyond Heretic)."
 
   # ---- Strife ----
@@ -443,20 +443,20 @@ files:
     category: game_data
     system: strife
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:151, 688"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:151, 688, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "sve.wad"
     category: game_data
     system: strife
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:136, 140, 689"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:136, 140, 689, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
     note: "Veteran Edition. Required = Strife: Quest for the Sigil (loads voices.wad)."
 
   - name: "voices.wad"
     category: game_data
     system: strife
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:142, 155"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:142, 155, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:214-221, 326-352, 924-947"
 
   # ---- Chex Quest ----
 
@@ -464,13 +464,13 @@ files:
     category: game_data
     system: chex
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:123, 694"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:123, 694, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "chex3.wad"
     category: game_data
     system: chex
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:109, 695"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:109, 695, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   # ---- Standalone commercial / community IWADs ----
 
@@ -478,7 +478,7 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:83, 698"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:83, 698, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "hacx2.wad"
     category: game_data
@@ -491,35 +491,35 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:97, 696"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:97, 696, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "harm1.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:57, 697"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:57, 697, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "square.pk3"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:33"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:33, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:326-352, 362-407, 643-692"
     note: "Absent from the Names block: picked up only when named with -iwad."
 
   - name: "square1.pk3"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:45, 700"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:45, 700, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "delaweare.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:22, 701"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:22, 701, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"
 
   - name: "rotwb.wad"
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:9, 702"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:9, 702, wadsrc_extra/CMakeLists.txt:1, src/d_main.cpp:4207, src/d_iwad.cpp:292-302, 326-352, 362-407, 518-547"

@@ -96,7 +96,7 @@ files:
     required: false
     category: bios_zip
     system: atari-7800
-    source_ref: "source hash/a7800.xml:8-21"
+    source_ref: "source hash/a7800.xml:8-21, source src/mame/drivers/a7800.cpp:1577, source src/emu/emuopts.cpp:40, source src/emu/softlist_dev.cpp:87, 309, source src/emu/romload.cpp:575-651, 1298-1302"
     note: >-
       Software list set for the High Score Cartridge configuration (CX78HSC,
       slot a78_hsc). Fatal when that configuration is selected and the set is
@@ -112,7 +112,7 @@ files:
     required: false
     category: bios_zip
     system: atari-7800
-    source_ref: "source hash/a7800.xml:24-38"
+    source_ref: "source hash/a7800.xml:24-38, source src/mame/drivers/a7800.cpp:1577, source src/emu/emuopts.cpp:40, source src/emu/softlist_dev.cpp:87, 309, source src/emu/romload.cpp:575-651, 1298-1302"
     note: >-
       Software list set for the XM Expansion Module configuration (slot
       a78_xm), which reuses the High Score Cartridge ROM alongside 128KB RAM,
