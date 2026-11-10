@@ -1119,5 +1119,20 @@ class EmptyScrapeWritesNothing(unittest.TestCase):
             scraper.module_ids(archive)
 
 
+class PlatformFileHasNoAnchors(unittest.TestCase):
+    def test_a_shared_list_is_written_twice(self):
+        """RetroBat's amiberry search and copy records share one name list:
+        the platform file read back the same, but held &id001 and *id001."""
+        import yaml
+
+        from scraper.base_scraper import _PlatformDumper
+
+        names = ["kick34005.A500", "amiga-os-130.rom"]
+        text = yaml.dump([{"names": names}, {"names": names}], Dumper=_PlatformDumper)
+        self.assertNotIn("&id", text)
+        self.assertNotIn("*id", text)
+        self.assertEqual(yaml.safe_load(text), [{"names": names}, {"names": names}])
+
+
 if __name__ == "__main__":
     unittest.main()

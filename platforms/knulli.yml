@@ -5349,7 +5349,7 @@ launchers:
   - "tos102{L}.img"
   - "tos100{L}.img"
   expands:
-    L: &id001
+    L:
     - us
     - uk
     - de
@@ -5376,7 +5376,17 @@ launchers:
   - "tos162{L}.img"
   - "tos106{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine ste --tos <file>
@@ -5393,7 +5403,17 @@ launchers:
   - "tos206{L}.img"
   - "tos205{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine megaste --tos <file>
@@ -5409,7 +5429,17 @@ launchers:
   - "etos512{L}.img"
   - "tos306{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine tt --tos <file>
@@ -5427,7 +5457,17 @@ launchers:
   - "tos402{L}.img"
   - "tos400{L}.img"
   expands:
-    L: *id001
+    L:
+    - us
+    - uk
+    - de
+    - es
+    - fr
+    - it
+    - nl
+    - ru
+    - se
+    - ''
   case_insensitive: false
   search_dir: /userdata/bios
   passes_to: --machine falcon --tos <file>

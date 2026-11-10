@@ -4594,7 +4594,7 @@ launchers:
 - emulator: hatarib
   build: libretro
   kind: core_option
-  names: &id001
+  names:
   - tos206.img
   - tos106.img
   - tos104.img
@@ -4609,7 +4609,11 @@ launchers:
 - emulator: hatarib
   build: libretro
   kind: copies
-  names: *id001
+  names:
+  - tos206.img
+  - tos106.img
+  - tos104.img
+  - tos102.img
   case_insensitive: true
   search_dir: bios/hatari/tos
   passes_to: bios/hatarib/<value>
