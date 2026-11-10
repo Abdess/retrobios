@@ -161,34 +161,46 @@ _CODE_SUFFIXES = frozenset(
     "go rs lua pas pp asm s sh bash zsh ps1 bat cmd vbs swift d zig nim qml qc rb pl php "
     "scala ml hs dart vue ino z80 smali".split()
 )
-_CODE_FILE = re.compile(r"[\w+.-]\.([A-Za-z0-9+]+)\b")
-_BINARY_EVIDENCE = re.compile(
-    r"\b0x[0-9a-fA-F]+\b|\bFUN_[0-9a-fA-F]+\b|\.(?:so|dll|exe|dylib|dex|apk|jar|elf|nro|xex)\b",
+_CODE_FILE = re.compile(r"(?<=[\w+-])\.([A-Za-z0-9+]+)\b")
+# A compiled image: a part that names one has to say where in it the file
+# is read, an address, a decompiled function or an IL method.
+# A name under a directory is a file of the tree it sits in, and a further
+# extension (.dll.map) makes it another file.
+_BINARY_FILE = re.compile(
+    r"(?<![\w/+.-])[\w+.-]+\.(?:so|dll|exe|dylib|dex|elf|nro|xex)(?:\.\d+)*(?![\w.-]*\w)",
     re.IGNORECASE,
+)
+_BINARY_EVIDENCE = re.compile(
+    r"\b0x[0-9a-fA-F]+\b"
+    r"|\b(?:FUN|sub|thunk|LAB)_[0-9a-fA-F]+\b"
+    r"|\bIL_[0-9a-fA-F]{4}\b"
+    r"|::|\.\.c?ctor\b"
+    r"|\b[A-Za-z_][\w.$]*\("
 )
 
 # Profiles whose files cite no published code. Each reason says why the
 # check cannot apply yet.
-DATA_ONLY_REF_EXCEPTIONS: dict[str, str] = {
-    "ace-dl": "closed source: the refs describe what the shipped binary opens",
-    "cpcemu": "closed source: the refs describe what the shipped binary opens",
-    "drastic": "closed source: the shader format files are read by the shipped binary",
-    "lexaloffle": "closed source: PICO-8 reads pico8_gpio, the refs are its readme and the KNULLI install script",
-    "mfme": "closed source: the refs are the release notes of the shipped binary",
-}
+DATA_ONLY_REF_EXCEPTIONS: dict[str, str] = {}
 
 
 def _ref_cites_code(ref: str) -> bool:
-    """A source_ref part names a source file, or a binary with an address."""
+    """A source_ref cites a source file or a place in a compiled image.
+
+    A part naming a binary without an address, a decompiled function or an
+    IL method says only that the binary exists: "import directory",
+    "string table" and "readelf -d" are not the code that reads a file.
+    """
     from sourceref import split_source_ref
 
-    if _BINARY_EVIDENCE.search(ref):
-        return True
+    cited = False
     for part in split_source_ref(ref):
-        for suffix in _CODE_FILE.findall(part.raw):
-            if suffix.lower() in _CODE_SUFFIXES:
-                return True
-    return False
+        located = bool(_BINARY_EVIDENCE.search(part.raw)) or any(
+            suffix.lower() in _CODE_SUFFIXES for suffix in _CODE_FILE.findall(part.raw)
+        )
+        if _BINARY_FILE.search(part.raw) and not located:
+            return False
+        cited = cited or located
+    return cited
 
 
 def _data_only_source_refs(path: Path, document: object) -> list[str]:
