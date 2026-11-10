@@ -13,7 +13,7 @@ version_basis:
   pattern: 'info->library_version\s+=\s+"([^"]+)'
 display_name: "QEMU"
 cores: [qemu]
-systems: [ibm-pc, x86, x86-64, ppc, ppc64, sparc, sparc64, arm, aarch64, mips, mips64, riscv32, riscv64, s390x, m68k, alpha, hppa]
+systems: [ibm-pc, x86, x86-64, ppc, ppc64, sparc, sparc64, arm, aarch64, mips, mips64, riscv32, riscv64, s390x, m68k, alpha]
 
 # QEMU (Quick Emulator) libretro core, based on QEMU 9.0.50.
 # Builds 17 targets: aarch64, alpha, arm, i386, m68k, mips(el), mips64(el),
@@ -612,27 +612,6 @@ files:
     source_ref: "source hw/s390x/ipl.c:497"
 
   # ========================================================
-  # HP-PA FIRMWARE
-  # ========================================================
-  - name: "HP-PA firmware (32-bit)"
-    installed_on: [retrodeck]
-    path: "qemu/hppa-firmware.img"
-    sha1: "605c36ede6c120c6cc7efe147a75a3dc4b7e4fb0"
-    size: 167820
-    required: false
-    note: "SeaBIOS-hppa firmware for 32-bit HP-PARISC emulation."
-    source_ref: "source hw/hppa/machine.c:424"
-
-  - name: "HP-PA firmware (64-bit)"
-    installed_on: [retrodeck]
-    path: "qemu/hppa-firmware64.img"
-    sha1: "b42f6d4ca74073de6c038579b4a9323ad0a6b398"
-    size: 206024
-    required: false
-    note: "SeaBIOS-hppa firmware for 64-bit HP-PARISC emulation."
-    source_ref: "source hw/hppa/machine.c:424"
-
-  # ========================================================
   # MIPS FIRMWARE (not shipped, user-supplied)
   # ========================================================
   - name: "MIPS BIOS (big-endian)"
@@ -712,24 +691,6 @@ files:
     required: false
     note: "Device tree blob for PowerPC Canyonlands (460EX) / Sam460ex board."
     source_ref: "source hw/ppc/sam460ex.c:45"
-
-  - name: "Petalogix ML605 DTB (MicroBlaze)"
-    installed_on: [retrodeck]
-    path: "qemu/petalogix-ml605.dtb"
-    sha1: "892d265838866869b8a8ef104252ff5b2fda156f"
-    size: 9882
-    required: false
-    note: "Device tree blob for Xilinx Petalogix ML605 MicroBlaze board. MicroBlaze target not built in libretro core."
-    source_ref: "source pc-bios/meson.build:91, source hw/microblaze/petalogix_ml605_mmu.c:49, 209, source hw/microblaze/boot.c:133"
-
-  - name: "Petalogix S3ADSP1800 DTB (MicroBlaze)"
-    installed_on: [retrodeck]
-    path: "qemu/petalogix-s3adsp1800.dtb"
-    sha1: "976600e3f89ecc1f3564b7077f53c58e0b565280"
-    size: 8161
-    required: false
-    note: "Device tree blob for Xilinx Petalogix S3ADSP1800 MicroBlaze board. MicroBlaze target not built in libretro core."
-    source_ref: "source pc-bios/meson.build:90, source hw/microblaze/petalogix_s3adsp1800_mmu.c:44, 129, source hw/microblaze/boot.c:133"
 
   - name: "Virtex ML507 DTB (PPC)"
     path: "qemu/virtex-ml507.dtb"
