@@ -814,6 +814,15 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # when all were in place), kept the backup folders as in summary.
     # ok false with reason when it was refused or failed.
     "app": ("system", "folder", "ok", "reason", "dests", "written", "kept"),
+    # The install record of the BIOS folder (path, beside it in
+    # retrobios-backup). status: applied (before choices, its choice taken
+    # as the run's because nothing on the command line chose), written
+    # (before the summary, once the install placed files), unreadable (said
+    # once and ignored) or not_written (the install itself unharmed). choice is
+    # the recorded options as words, date when it was written, files the
+    # files it holds for the platform. A kind of its own, since schema 1
+    # never adds a key to an existing kind.
+    "record": ("platform", "folder", "path", "status", "choice", "date", "files", "message"),
     "end": ("code",),
 }
 # Seconds between two progress events while bytes arrive.
@@ -6099,6 +6108,270 @@ def _kept_lines() -> list[str]:
     return lines
 
 
+# The install record: what the runs placed in a BIOS folder, each file with
+# its hash, and the choice they made, which the next run's plan takes. It
+# lives in the backup holder beside the folder, never loose in it, for the
+# reason the backups do. On a card it travels with the card.
+RECORD_SCHEMA = 1
+RECORD_SUFFIX = ".install.json"
+# The options a record keeps as the choice: what the list was narrowed to.
+RECORD_CHOICE = ("--system", "--core", "--emulator", "--region", "--for-games",
+                 "--required-only", "--all-files", "--target", "--every-board",
+                 "--no-game-data", "--installed-cores", "--declared-only")
+# The record's choice options that narrow the list, --all-files aside.
+RECORD_NARROWING = tuple(flag for flag in RECORD_CHOICE if flag != "--all-files")
+_MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
+           "Dec")
+# The records already said unreadable in this run, said once each.
+_RECORD_SAID: set[str] = set()
+# Per platform, the record whose choice this run took (apply_record).
+_RECORD_TAKEN: dict[str, dict] = {}
+
+
+def record_paths(folder: Path) -> list[Path]:
+    """Where the record of folder is looked for, in order: the holder beside
+    it, then the one inside it that a folder with no writable parent gets."""
+    folder = Path(os.path.abspath(folder))
+    name = f"{folder.name or 'folder'}{RECORD_SUFFIX}"
+    return [holder / name for holder, _prefix in KeptFiles._holders(folder)]
+
+
+def _valid_setup(setup: object) -> bool:
+    if not isinstance(setup, dict):
+        return False
+    choice, files = setup.get("choice"), setup.get("files")
+    return (isinstance(setup.get("written"), str) and isinstance(choice, list)
+            and all(isinstance(word, str) for word in choice) and isinstance(files, list)
+            and all(isinstance(item, dict) and isinstance(item.get("dest"), str)
+                    and isinstance(item.get("sha1"), str) and isinstance(item.get("size"), int)
+                    for item in files))
+
+
+def read_record(folder: Path) -> tuple[dict | None, Path | None, str]:
+    """(the record of folder, where it is, why it cannot be used). Neither a
+    record nor a reason where there is none."""
+    for path in record_paths(folder):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (FileNotFoundError, NotADirectoryError):
+            continue
+        except (OSError, UnicodeDecodeError) as exc:
+            reason = getattr(exc, "strerror", None) or str(exc)
+            return None, path, f"The install record {path} cannot be read ({reason})"
+        try:
+            data = json.loads(text)
+        except ValueError:
+            return None, path, f"The install record {path} is damaged"
+        if not isinstance(data, dict) or not isinstance(data.get("setups"), dict):
+            return None, path, f"The install record {path} is damaged"
+        if data.get("schema") != RECORD_SCHEMA:
+            return None, path, (f"The install record {path} was written by another "
+                                "version of the installer")
+        if not all(_valid_setup(setup) for setup in data["setups"].values()):
+            return None, path, f"The install record {path} is damaged"
+        return data, path, ""
+    return None, None, ""
+
+
+def setup_record(plat: str, folder: Path) -> tuple[dict | None, Path | None, str]:
+    """The record of plat in folder, where it is, and why it cannot be used.
+    A record written for a folder of another name (copied, or renamed with
+    it) is not this folder's."""
+    data, path, problem = read_record(folder)
+    if data is None:
+        return None, path, problem
+    written_for = str(data.get("folder") or "")
+    if Path(written_for).name != Path(os.path.abspath(folder)).name:
+        return None, path, ""
+    return data["setups"].get(plat), path, ""
+
+
+def record_day(setup: dict) -> str:
+    """The day a record was written, as the plan says it: 3 Nov."""
+    try:
+        when = datetime.datetime.fromisoformat(setup["written"].replace("Z", "+00:00"))
+    except (KeyError, ValueError):
+        return ""
+    local = when.astimezone()
+    day = f"{local.day} {_MONTHS[local.month - 1]}"
+    return day if local.year == datetime.datetime.now().year else f"{day} {local.year}"
+
+
+def record_options(argv: list[str]) -> list[tuple[str, str | None]]:
+    """A record's choice as (option, value) pairs."""
+    options: list[tuple[str, str | None]] = []
+    words = list(argv)
+    while words:
+        flag = words.pop(0)
+        valued = flag in _VALUED_OPTIONS or (
+            flag == "--for-games" and words and not words[0].startswith("--"))
+        options.append((flag, words.pop(0) if valued and words else None))
+    return options
+
+
+def record_argv(options: Iterable[tuple[str, str | None]]) -> list[str]:
+    """The choice options a record keeps, as words, in the command's order."""
+    kept = sorted((option for option in options if option[0] in RECORD_CHOICE),
+                  key=_command_rank)
+    if not any(flag in RECORD_NARROWING for flag, _value in kept):
+        # The whole list, chosen as such: a card that holds games later
+        # still gets what was installed before.
+        kept = [("--all-files", None)]
+    return [word for flag, value in kept for word in ([flag] if value is None else [flag, value])]
+
+
+def record_says(setup: dict, manifest: dict | None = None) -> str:
+    """The recorded choice in words: Game Boy Advance, the games, the
+    options chosen, every file."""
+    options = record_options(setup.get("choice") or [])
+    systems = [system_title(value, manifest) for flag, value in options
+               if flag == "--system" and value]
+    if systems:
+        shown = ", ".join(systems[:3])
+        return shown + (f" and {len(systems) - 3} more" if len(systems) > 3 else "")
+    if any(flag == "--for-games" for flag, _value in options):
+        return "the games"
+    if any(flag in RECORD_NARROWING for flag, _value in options):
+        return "the options chosen"
+    return "every file"
+
+
+def record_changes(setup: dict, entries: Iterable[dict]) -> tuple[int, int]:
+    """Of the files a choice keeps now, those the list changed since the
+    record and those it did not hold then: (updated, new)."""
+    recorded = {(str(item.get("root") or ""), item["dest"]): item["sha1"]
+                for item in setup.get("files") or []}
+    updated = new = 0
+    for entry in entries:
+        sha1 = recorded.get((str(entry.get("root") or ""), str(entry.get("dest"))))
+        if sha1 is None:
+            new += 1
+        elif entry.get("sha1") and sha1 != entry.get("sha1"):
+            updated += 1
+    return updated, new
+
+
+def record_file(entry: dict, origin: str, root: str = "") -> dict:
+    """One file a run wrote, as the record keeps it."""
+    return {"dest": str(entry["dest"]), "root": root or str(entry.get("root") or ""),
+            "sha1": str(entry.get("sha1") or ""), "size": int(entry.get("size") or 0),
+            "from": origin}
+
+
+def write_record(
+    folder: Path, plat: str, manifest: dict, choice: list[str], files: list[dict],
+) -> tuple[Path | None, dict, str]:
+    """Write what this run placed in folder for plat, merged with what
+    earlier runs placed: (where, the record of plat, why it was not
+    written). A record that cannot be read is replaced."""
+    folder = Path(os.path.abspath(folder))
+    data, found, _problem = read_record(folder)
+    if data is None:
+        data = {"setups": {}}
+    previous = data["setups"].get(plat) or {}
+    merged = {(str(item.get("root") or ""), item["dest"]): item
+              for item in previous.get("files") or []}
+    for item in files:
+        merged[(item["root"], item["dest"])] = item
+    setup = {
+        "written": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "list": {"version": manifest.get("version"), "generated": manifest.get("generated")},
+        "choice": choice,
+        "files": [merged[key] for key in sorted(merged)],
+    }
+    data = {"schema": RECORD_SCHEMA, "installer": installer_id(), "folder": str(folder),
+            "setups": {**data["setups"], plat: setup}}
+    text = json.dumps(data, separators=(",", ":"), sort_keys=True) + "\n"
+    places = record_paths(folder)
+    if found is not None and found in places:
+        # Rewritten where it was read: never a second record of one folder.
+        places = [found] + [place for place in places if place != found]
+    failure = "nothing could be written beside the folder"
+    for path in places:
+        scratch: Path | None = None
+        try:
+            path.parent.mkdir(exist_ok=True)
+            _check_holder(path.parent)
+            with tempfile.NamedTemporaryFile(
+                    "w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.",
+                    suffix=".part", delete=False) as handle:
+                scratch = Path(handle.name)
+                handle.write(text)
+            os.replace(scratch, path)
+        except OSError as exc:
+            failure = exc.strerror or str(exc)
+            if scratch is not None and os.path.lexists(scratch):
+                try:
+                    scratch.unlink()
+                except OSError as left:
+                    failure += f", and {scratch} stays ({left.strerror or left})"
+            continue
+        return path, setup, ""
+    return None, setup, f"The install record could not be written ({failure})"
+
+
+def record_menu_words(setup: dict | None) -> str:
+    """What line mode's menu says of a recorded choice it opens on."""
+    if setup is None:
+        return ""
+    day = record_day(setup)
+    return f"Same choice as on {day}." if day else "Same choice as last time."
+
+
+def choice_given(args: argparse.Namespace) -> bool:
+    """Whether the command line chose what to install, which a record then
+    never replaces: an option of the choice, or a file list of its own."""
+    # A namespace built by a caller that predates an option lacks it.
+    return (getattr(args, "for_games", None) is not None or LOCAL.manifest is not None
+            or any(getattr(args, flag[2:].replace("-", "_"), None)
+                   for flag in RECORD_CHOICE if flag != "--for-games"))
+
+
+def say_record_problem(plat: str, folder: Path, path: Path | None, problem: str) -> None:
+    """A record that cannot be used, said once and ignored."""
+    key = str(path)
+    if not problem or key in _RECORD_SAID:
+        return
+    _RECORD_SAID.add(key)
+    message = f"{problem}, so it is ignored."
+    print(f"  {message}")
+    EVENTS.emit("record", platform=plat, folder=str(folder), path=key, status="unreadable",
+                choice=[], date="", files=0, message=message)
+
+
+def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | None:
+    """Take the choice recorded for plat in folder as the run's, as if its
+    options had been typed: the plan's first choice. Returns the record,
+    None where none is taken."""
+    setup, path, problem = setup_record(plat, folder)
+    say_record_problem(plat, folder, path, problem)
+    if setup is None:
+        return None
+    try:
+        parsed = build_parser().parse_args(setup["choice"])
+    except SystemExit:
+        say_record_problem(plat, folder, path,
+                           f"The install record {path} names options this installer lacks")
+        return None
+    for flag in RECORD_CHOICE:
+        name = flag[2:].replace("-", "_")
+        setattr(args, name, getattr(parsed, name))
+    if args.for_games is not None:
+        args.all_files = False
+    args.from_record = True
+    options = record_options(setup["choice"])
+    if any(flag in RECORD_NARROWING for flag, _value in options):
+        # Said where it narrows the list: the whole list again is the run
+        # a person expects, and said nothing new.
+        _RECORD_TAKEN[plat] = setup
+    _INVOCATION.chosen[plat] = [option for option in options if option[0] != "--all-files"]
+    message = record_menu_words(setup)
+    EVENTS.emit("record", platform=plat, folder=str(folder), path=str(path), status="applied",
+                choice=list(setup["choice"]), date=setup["written"],
+                files=len(setup["files"]), message=message)
+    return setup
+
+
 def restore_kept(run: Path, dry_run: bool = False) -> int:
     """Put every file of a backup run folder back where it was.
 
@@ -6769,6 +7042,14 @@ class Invocation:
             words += ["--dest", self.word(str(dest.absolute()))]
         elif dest:
             words += ["--dest", dest]
+        for flag, value in self.flags(plat):
+            if flag in without:
+                continue
+            words += [flag] if value is None else [flag, self.word(value)]
+        return " ".join(words)
+
+    def flags(self, plat: str) -> list[tuple[str, str | None]]:
+        """The options of the run for plat, in the command's order."""
         options = self.options
         if plat in self.chosen:
             # A choice made at the questions replaces the narrowing the
@@ -6776,11 +7057,7 @@ class Invocation:
             # the systems of the first run and of the second.
             replaced = {*_CHOICE_OPTIONS, *(flag for flag, _value in self.chosen[plat])}
             options = [option for option in options if option[0] not in replaced]
-        for flag, value in sorted([*options, *self.chosen.get(plat, [])], key=_command_rank):
-            if flag in without:
-                continue
-            words += [flag] if value is None else [flag, self.word(value)]
-        return " ".join(words)
+        return sorted([*options, *self.chosen.get(plat, [])], key=_command_rank)
 
 
 _INVOCATION = Invocation()
@@ -7956,13 +8233,15 @@ def install_data_directory(entry: dict, bios_path: Path,
 
     Returns counts: present, installed, changed (the source no longer holds
     the recorded bytes), absent (not in the archive), error, the reason
-    the archive could not be read, and not_kept, the (path, reason) of each
-    file in place that differs and could not be moved aside, left as it is.
+    the archive could not be read, not_kept, the (path, reason) of each
+    file in place that differs and could not be moved aside, left as it is,
+    and written, each file written (dest below the BIOS folder, sha1, size).
     """
     root, needed, present = state or data_directory_state(entry, bios_path)
     needed = dict(needed)
+    written: list[dict] = []
     counts = {"present": present, "installed": 0, "changed": 0, "absent": 0, "error": "",
-              "not_kept": []}
+              "not_kept": [], "written": written}
     if not needed:
         return counts
     _writing.set()
@@ -7999,12 +8278,13 @@ def install_data_directory(entry: dict, bios_path: Path,
                     continue
                 target = _destination_path(root, rel)
                 target.parent.mkdir(parents=True, exist_ok=True)
+                slot = f"{entry['dest']}/{rel}" if entry.get("dest") else rel
                 outcome = _install_data_member(
-                    opener, meta, target, bios_path,
-                    f"{entry['dest']}/{rel}" if entry.get("dest") else rel,
-                    rel, counts["not_kept"])
+                    opener, meta, target, bios_path, slot, rel, counts["not_kept"])
                 if outcome:
                     counts[outcome] += 1
+                if outcome == "installed":
+                    written.append({"dest": slot, "sha1": meta["sha1"], "size": meta["size"]})
     except _Offline as exc:
         # Kept apart, so the advice is the offline one, not the network's.
         counts["error"] = OfflineReason(str(exc))
@@ -9595,6 +9875,11 @@ def _prompt_custom_selection(
         elif playing and played is not None:
             kept_games = menu_choice(files, omitted, installed, GamesChoice(played), cutting)[0]
             print(f"  h) only for the games {played.where()}: {_sized(kept_games)}")
+        # The screen's "Same choice as last time: no": the whole list.
+        widen = (plat in _RECORD_TAKEN and current is not None
+                 and not (playing and isinstance(current, GamesChoice)))
+        if widen:
+            print(f"  e) everything: {_sized(shown)}")
         if installed is not None and current != INSTALLED_ONLY:
             print(f"  i) only what the installed cores read: {_sized(installed[0])}")
         # What c asks, named: "systems, cores and regions" was offered with
@@ -9614,6 +9899,7 @@ def _prompt_custom_selection(
         print("  q) quit")
         keys = [*([] if emptied else [""]), "q", *(["c"] if choosable else []),
                 *((["r", "e"] if isinstance(current, GamesChoice) else ["h"]) if playing else []),
+                *(["e"] if widen else []),
                 *(["i"] if installed is not None and current != INSTALLED_ONLY else []),
                 *(["f"] if copying else []), *(["g"] if games.games else [])]
         others = [key for key in keys if key not in ("", "q")]
@@ -9668,10 +9954,12 @@ def _print_menu_head(
     if current == INSTALLED_ONLY:
         named = ", only what the installed cores read"
     elif isinstance(current, GamesChoice):
-        named = f", {current.words()}" + (" (--for-games)" if current is given else "")
+        named = f", {current.words()}" + (" (--for-games)" if current is given
+                                          and plat not in _RECORD_TAKEN else "")
     elif isinstance(current, tuple):
         systems, cores, regions = current
-        flag = current is given
+        # A recorded choice was typed by nobody: no option is named.
+        flag = current is given and plat not in _RECORD_TAKEN
         listed = choosable_systems(files, omitted, cores, regions)
         total = len(listed)
         # The systems chosen that still hold a file: Sega Dreamcast holding
@@ -10206,6 +10494,20 @@ def _narrow_to_emulators(
     return files, omitted
 
 
+def _known_names(values: list[str] | None, known: list[str], label: str,
+                 aliases: dict[str, str] | None = None) -> list[str]:
+    """The names of values that resolve against known, the others left out."""
+    kept = []
+    for value in values or []:
+        try:
+            resolve_choices([value], known, label, aliases)
+        except ValueError:
+            detail(f"  {value} is no longer on the list: left out of the recorded choice")
+            continue
+        kept.append(value)
+    return kept
+
+
 def _requested_narrowing(
     args: argparse.Namespace, plat: str, files: list[dict], omitted: list[dict],
     manifest: dict | None = None,
@@ -10234,6 +10536,14 @@ def _requested_narrowing(
         print(_narrowing_advice(plat, axis, flag, recorded, pack_alone), file=sys.stderr)
         sys.exit(1)
     choices = available_choices(files, omitted)
+    if getattr(args, "from_record", False):
+        # A name the list no longer holds is dropped from a recorded choice,
+        # never refused: nobody typed it.
+        args.system = _known_names(args.system, choices["systems"], "system",
+                                   system_aliases(manifest)) or None
+        args.core = _known_names(args.core, choices["cores"], "core") or None
+        if not (args.system or args.core or args.region):
+            return None
     try:
         systems = resolve_choices(
             args.system or [], choices["systems"], "system", system_aliases(manifest),
@@ -16101,6 +16411,42 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     # The BIOS folders read for misplaced files, one per platform.
     bios_indexes: list[FolderIndex] = []
 
+    # The choice the folder's record keeps is the plan's first choice, taken
+    # as its options would be: before the checks of --target and
+    # --installed-cores, which it may hold. Never where the command line
+    # chose, nor for a run over several setups.
+    _RECORD_TAKEN.clear()
+
+    def remember(plat: str, folder: Path, manifest: dict, written: list[dict],
+                 games: bool) -> None:
+        """Record what this install placed in folder and the choice it made,
+        games being the card's games applied with no --for-games."""
+        if not written and setup_record(plat, folder)[0] is None:
+            # Nothing of ours is there to record, and no choice to keep.
+            return
+        options = _INVOCATION.flags(plat)
+        if games:
+            options += [("--for-games", None),
+                        *([("--required-only", None)] if args.required_only else [])]
+        choice = record_argv(options)
+        path, setup, problem = write_record(folder, plat, manifest, choice, written)
+        if problem:
+            detail(f"  {problem}.")
+        count = len(setup["files"])
+        EVENTS.emit("record", platform=plat, folder=str(folder),
+                    path=str(path or record_paths(folder)[0]),
+                    status="not_written" if problem else "written", choice=choice,
+                    date=setup["written"], files=count,
+                    message=f"{problem}." if problem else
+                    f"Recorded {_plural(count, 'file')} and this choice in {path}.")
+
+    if len(platforms) == 1 and not listing and not choice_given(args):
+        if apply_record(args, *platforms[0]) is not None and args.target:
+            known = fetch_targets(platforms[0][0])
+            if known is not None and args.target not in known:
+                # A board the list no longer names: every board's files.
+                args.target = None
+
     # --target is checked for every platform before anything is written, as
     # --installed-cores is below: EmuDeck installed 3.2 GB and only then was
     # steamos refused for RetroArch, with no summary of what had landed.
@@ -16409,6 +16755,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     + ([("--no-game-data", None)] if cut and cut[0] else []))
                 return _INVOCATION.command(plat, folder)
 
+            # The record's options, which the menu's commands overwrite.
+            recorded = _INVOCATION.chosen.get(plat_name)
             selection = _prompt_custom_selection(
                 plat_name, bare, bare_omitted + unplaced, installed,
                 detected_os(plat_name, bios_path) or display,
@@ -16417,14 +16765,18 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 bool(target or args.installed_cores or args.declared_only
                      or len(files) + game_data_cut + len(unplaced) != listed),
                 command_for, cut,
-                game_data_only_words([system_title(system, manifest) for system in
-                                      game_data_only(given[0] if isinstance(given, tuple)
-                                                     else [], files)])
-                if args.no_game_data else "",
+                " ".join(filter(None, [
+                    record_menu_words(_RECORD_TAKEN.get(plat_name)),
+                    game_data_only_words([system_title(system, manifest) for system in
+                                          game_data_only(given[0] if isinstance(given, tuple)
+                                                         else [], files)])
+                    if args.no_game_data else ""])),
                 None if games_applied else games_plan,
             )
             # Its head named the BIOS folder: the result does not again.
             OUTPUT.where_said = True
+            kept_record = plat_name in _RECORD_TAKEN and selection is not None and (
+                selection is given or selection == given)
             if selection is None and LOCAL.pack is not None:
                 smaller = "  Nothing copied."
             elif selection is None:
@@ -16456,6 +16808,12 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 _INVOCATION.chosen[plat_name] = []
             else:
                 _INVOCATION.chosen.pop(plat_name, None)
+            if kept_record and recorded is not None:
+                # Enter on the recorded choice: still the record's options.
+                _INVOCATION.chosen[plat_name] = recorded
+            elif selection is None and plat_name in _RECORD_TAKEN and not games_applied:
+                # e: every file, the recorded narrowing given up.
+                args.system = args.core = args.region = None
         if selection is not None:
             before = len(files)
             files, omitted_files = narrow(files, omitted_files, *selection)
@@ -16567,6 +16925,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     bios_path = library
 
         detail("\nChecking existing files...")
+        record_files: list[dict] = []
         to_download, up_to_date, mismatched = check_local(
             files, bios_path, jobs=args.jobs, term=term
         )
@@ -16672,6 +17031,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             else:
                 print(f"\n  {EVERYTHING_IN_PLACE}")
                 print(f"  BIOS folder: {shown_path(bios_path)}")
+            if plat_name in _RECORD_TAKEN:
+                # The files counted are the recorded choice's, not the list's.
+                print(f"  {record_menu_words(_RECORD_TAKEN[plat_name])} "
+                      "--all-files checks every file.")
             absent = _absent_required(omitted_files, bios_path)
             # The collection cannot supply these, so they leave the exit
             # code alone, but a user asking why a game will not start needs
@@ -16710,6 +17073,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                         trees, kept, copy_plan_lines(to_download, copies, bios_index,
                                                      bios_path, files, args.verbose, True),
                         verbose=args.verbose, manifest=manifest)
+            if plat_name in _RECORD_TAKEN:
+                print(f"  {record_menu_words(_RECORD_TAKEN[plat_name])} "
+                      "--all-files lists every file.")
             for line in unreadable_lines(unread, args.verbose):
                 print(line)
             for line in hint:
@@ -16784,9 +17150,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 coming = len(to_download) - len(lacking) + trees_missing
                 weight = dl_size + sum(data_fetch_bytes(entry, state[1])
                                        for entry, state in data_states)
+                taken = _RECORD_TAKEN.get(plat_name)
                 print(f"\nInstalling {_plural(coming, 'file')} ({format_size(weight)}) for "
                       f"{detected_os(plat_name, bios_path) or display}"
-                      + (", what the games need" if games_applied else "") + ".")
+                      + (", what the games need" if games_applied else "")
+                      + (f", same choice as on {record_day(taken)}" if taken else "") + ".")
                 print(f"BIOS folder: {shown_path(bios_path)}")
                 OUTPUT.where_said = True
             if unread:
@@ -16878,6 +17246,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             # counted them, over the files that landed: matched by the end
             # of a failed path, a.bin was dropped when x/a.bin failed.
             landed.extend(progress.landed)
+            record_files += [record_file(entry, "copy" if id(entry) in copies
+                                         else "pack" if LOCAL.pack is not None else "download")
+                             for entry in progress.landed]
             files_pending += len(to_download) - progress.installed if interrupted \
                 else len(failed)
             total_errors += len(failed)
@@ -16886,6 +17257,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             total_seconds += progress.elapsed()
             if interrupted:
                 total_interrupted = True
+                remember(plat_name, bios_path, manifest, record_files,
+                         games_applied and args.for_games is None)
                 break
         elif len(platforms) > 1:
             # One setup's run ends on "Done. Everything is in place.": said
@@ -16931,6 +17304,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                         total_seconds += progress.elapsed()
                 total_downloaded += counts["installed"]
                 data_landed += counts["installed"]
+                record_files += [record_file(item, "pack" if LOCAL.pack is not None
+                                             else "download", "data")
+                                 for item in counts.get("written", [])]
                 total_up_to_date += counts["present"]
                 if isinstance(counts["error"], OfflineReason):
                     # Left out as the BIOS files above are: counted missing,
@@ -16970,6 +17346,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     where = f"{entry['dest']}/{rel}" if entry.get("dest") else rel
                     failures.append((where, f"{NOT_KEPT} ({reason})"))
                     total_errors += 1
+
+        remember(plat_name, bios_path, manifest, record_files,
+                 games_applied and args.for_games is None)
 
         if os_type == "android" and not args.check and hide_from_media_scanner(bios_path):
             detail(f"  Added {NOMEDIA} to {shown_path(bios_path)}: the gallery and music "
@@ -18019,6 +18398,16 @@ class TuiState:
         self.games: dict | None = None
         self.games_reading: tuple | None = None
         self.games_unavailable: dict | None = None
+        # The install record of the setup and folder chosen (read for
+        # record_for), whose choice the plan opens on when the command line
+        # chose nothing (cli_choice), and the options of it no row shows.
+        self.record: dict | None = None
+        self.record_for: tuple | None = None
+        self.record_flags: list = []
+        self.cli_choice: bool = False
+        # Opened on the plan of the one setup found: its Change where row
+        # goes back to the setups.
+        self.opened_on_plan: bool = False
 
     @property
     def screen(self) -> str:
@@ -18475,6 +18864,12 @@ def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
         flags.append(("--installed-cores", None))
     if state.jobs != 8:
         flags.append(("--jobs", str(state.jobs)))
+    flags += state.record_flags
+    if (state.record is not None and not state.for_games
+            and not any(flag in RECORD_NARROWING for flag, _value in flags)):
+        # The whole list, chosen over a recorded narrower one: said so to
+        # the runs, whose own reading of the record would narrow it again.
+        flags.append(("--all-files", None))
     flags += [("--from", str(folder)) for folder in state.from_folders]
     if (os.environ.get(OFFLINE_VARIABLE) == OFFLINE_FLAG_VALUE
             and not any(flag == "--offline" for flag, _v in flags)):
@@ -18960,14 +19355,12 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         return rows + ([game_data] if game_data is not None else []) + [
             *_details_row(state), TuiRow("options", "Options"), TuiRow("quit", "Quit")]
     if not (_needed(check) if check else 0) and not check.get("data_missing"):
-        return [TuiRow("close", "Close"), *_games_rows(state), *_details_row(state),
-                TuiRow("options", "Options")]
-    # The size the pack can give: "Install 6.6 GB" from a pack holding
-    # none of the files.
-    lacking = set(_tui_pack_lacks(state, [event["dest"] for event in state.files]))
-    size = (_ticked_estimate(state)[1] if _tui_estimating(state)
-            else check.get("bytes_needed", 0) - sum(event["size"] for event in state.files
-                                                    if event["dest"] in lacking))
+        return [TuiRow("close", "Close"), *_games_rows(state), *_record_rows(state),
+                *_where_rows(state), *_details_row(state), TuiRow("options", "Options")]
+    # The size the headline says: "Install 6.6 GB" stood under "14930 files
+    # to download, 6.8 GB", the copies counted in one and the data files in
+    # the other.
+    size = _ticked_estimate(state)[1] if _tui_estimating(state) else _plan_fetch(state, check)[1]
     label = (f"{TUI_INSTALL_ROW} {format_size(size)}" if size >= CONFIRM_FROM_BYTES
              else TUI_INSTALL_ROW)
     rows = [TuiRow("install", label)]
@@ -19006,6 +19399,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     # Right under Install: the choice the plan opened on, the whole list one
     # press away.
     rows += _games_rows(state)
+    rows += _record_rows(state)
     if "systems" in recorded_axes((state.manifest or {}).get("files", [])) and (
             len(state.systems) > 1 or state.cli_systems):
         rows.append(TuiRow("systems", TUI_SYSTEMS_ROW))
@@ -19018,7 +19412,27 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         rows.append(TuiRow("misplaced", "Show the files in the wrong place"))
     if state.unreadable:
         rows.append(TuiRow("unreadable", "Show the files that could not be read"))
-    return rows + [*_details_row(state), TuiRow("options", "Options"), TuiRow("quit", "Quit")]
+    return rows + [*_where_rows(state), *_details_row(state), TuiRow("options", "Options"),
+                   TuiRow("quit", "Quit")]
+
+
+# The plan's row for the record's choice, and the one back to the setups.
+TUI_RECORD_ROW = "Same choice as last time"
+TUI_WHERE_ROW = TuiRow("where", "Change where")
+
+
+def _record_rows(state: TuiState) -> list[TuiRow]:
+    """Same choice as last time: yes or no, where the folder has a record."""
+    if state.record is None or state.cli_choice:
+        return []
+    day = record_day(state.record)
+    label = f"Same choice as on {day}" if day else TUI_RECORD_ROW
+    return [TuiRow("record", f"{label}: {_yes(tui_record_kept(state))}")]
+
+
+def _where_rows(state: TuiState) -> list[TuiRow]:
+    """Change where, on a plan opened straight on the one setup found."""
+    return [TUI_WHERE_ROW] if state.opened_on_plan and state.stack[:1] == ["setup"] else []
 
 
 # The plan's explanations, counts and reasons, one press away: a pad has
@@ -19503,9 +19917,88 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
     return [("run", run)]
 
 
+def _record_key(options: Iterable[tuple[str, str | None]]) -> list:
+    """A choice in a form two spellings of it share: one name per --system
+    and --core, in any order."""
+    pairs = record_options(record_argv(options))
+    return sorted((flag, name.strip()) for flag, value in pairs
+                  for name in ((value or "").split(",") if flag in ("--system", "--core")
+                               else [value or ""]) if name.strip() or value is None)
+
+
+def tui_record_kept(state: TuiState) -> bool:
+    """Whether the plan's choice is the one the record keeps."""
+    if state.record is None:
+        return False
+    return _record_key(tui_flags(state)) == _record_key(
+        record_options(state.record["choice"]))
+
+
+def _tui_record_take(state: TuiState) -> None:
+    """The recorded choice made the screen's, as its options would make it."""
+    setup = state.record or {}
+    try:
+        parsed = build_parser().parse_args(setup.get("choice") or [])
+    except SystemExit:
+        state.status = "The install record names options this installer lacks, so it is ignored."
+        state.record = None
+        return
+    state.cli_systems = list(parsed.system or [])
+    state.cores = [token.strip() for value in parsed.core or [] for token in value.split(",")
+                   if token.strip()]
+    try:
+        state.regions = resolve_regions(parsed.region) if parsed.region else []
+    except ValueError:
+        state.regions = []
+    state.no_game_data = bool(parsed.no_game_data)
+    state.installed_only = bool(parsed.installed_cores)
+    state.for_games = parsed.for_games is not None
+    state.games_folder = parsed.for_games if isinstance(parsed.for_games, Path) else None
+    state.required_only = bool(parsed.required_only) and state.for_games
+    state.games_choice = "record"
+    state.record_flags = [(flag, value) for flag, value in record_options(setup["choice"])
+                          if flag in ("--target", "--emulator", "--every-board",
+                                      "--declared-only")]
+
+
+def _tui_record_drop(state: TuiState) -> None:
+    """The recorded choice given up: the choice nothing narrows."""
+    state.cli_systems, state.cores, state.regions, state.record_flags = [], [], [], []
+    state.no_game_data = state.installed_only = state.required_only = False
+    state.for_games, state.games_folder, state.games_choice = None, None, ""
+    # The systems of the recorded check go, and with them its ticks.
+    state.systems, state.ticked, state.keep_ticked, state.widened_from = [], set(), None, None
+
+
+def _tui_record_load(state: TuiState) -> None:
+    """Read the record of the setup and folder chosen, once for each, and
+    take its choice where nothing chose: the command line, or the screen
+    for an earlier folder."""
+    key = (state.platform, state.dest)
+    if state.dest is None or state.record_for == key:
+        return
+    taken = tui_record_kept(state)
+    state.record_for = key
+    setup, path, problem = setup_record(state.platform, state.dest)
+    if problem and str(path) not in _RECORD_SAID:
+        _RECORD_SAID.add(str(path))
+        state.status = f"{problem}, so it is ignored."
+    if taken:
+        _tui_record_drop(state)
+    # Games read on a card are what the plan found, not a choice.
+    found = ("--for-games", "--required-only") if state.games_choice in ("", "probe") else ()
+    state.record = None
+    untouched = not any(flag in RECORD_NARROWING and flag not in found
+                        for flag, _value in tui_flags(state))
+    state.record = setup
+    if setup is not None and not state.cli_choice and untouched:
+        _tui_record_take(state)
+
+
 def _start_check(state: TuiState) -> list[tuple]:
     """Check the chosen folder, after fetching the file list once, the
     systems ticked kept (_keep_choice)."""
+    _tui_record_load(state)
     _keep_choice(state)
     _games_look(state)
     state.refocus = ""
@@ -19528,7 +20021,7 @@ def _games_look(state: TuiState) -> None:
     looked at too, from what this run already read (no network): its games
     make "For the games on this card" the choice, unless the user or the
     command line decided."""
-    if (state.games_choice in ("user", "cli") or state.games_probed is None
+    if (state.games_choice in ("user", "cli", "record") or state.games_probed is None
             or state.dest is None or state.games_probed == (state.platform, state.dest)):
         return
     count = games_probe(state.platform, state.dest, network=False, os_type=state.os_type)
@@ -20130,6 +20623,28 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
             return _push(state, action)
         if action == "recheck":
             return _start_check(state)
+        if action == "where":
+            effects = [("kill",)] if state.running else []
+            state.running, state.run_id = False, state.run_id + 1
+            del state.stack[1:]
+            return effects
+        if action == "record":
+            # No: the choice nothing narrows, the card's games when it holds
+            # some. Yes: the recorded choice again. Counted again either way.
+            if tui_record_kept(state):
+                _tui_record_drop(state)
+                if state.dest is not None:
+                    count = games_probe(state.platform, state.dest, network=False,
+                                        os_type=state.os_type)
+                    state.games_probed = (state.platform, state.dest)
+                    state.games_here = count or 0
+                    state.for_games, state.games_choice = bool(count), "probe"
+            else:
+                _tui_record_drop(state)
+                _tui_record_take(state)
+            effects = _start_check(state)
+            state.refocus = "record"
+            return effects
         if action in ("games", "startonly"):
             # One press, then counted again: the games decide the systems,
             # so the ticks start again from every system they need.
@@ -21485,7 +22000,7 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
         _kind, plat, dest, count = message
         if plat == state.platform and dest == state.dest:
             state.games_probed = (plat, dest)
-            if state.games_choice not in ("user", "cli"):
+            if state.games_choice not in ("user", "cli", "record"):
                 state.games_here = count or 0
                 state.for_games, state.games_choice = bool(count), "probe"
         return []
@@ -21985,25 +22500,36 @@ def _last_name(folder: str) -> str:
     return Path(folder).name or folder
 
 
-def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
-    need = _needed(check)
-    data = check.get("data_missing", 0)
-    # A file found on this machine is copied, not downloaded: the count and
-    # the size to download leave it out, from the check's own events. On
-    # Confirm the dry run's files are matched the same way: it called the
-    # files a --from folder holds downloads, and sent an offline user for
-    # a pack.
+def _plan_fetch(state: TuiState, check: dict) -> tuple[int, int, list, list, dict]:
+    """(files to fetch, bytes the install fetches with the data files',
+    dests copied from this machine, dests the pack lacks, the size of each
+    file): the one size the plan's headline and its Install row say.
+
+    A file found on this machine is copied, not downloaded: the count and
+    the size to download leave it out, from the check's own events. On
+    Confirm the dry run's files are matched the same way: it called the
+    files a --from folder holds downloads, and sent an offline user for a
+    pack. The files the pack does not hold are left out too: the plan
+    offered "Install 6.6 GB" from a pack that held none of them.
+    """
     dry = check is state.dry and check is not state.check
     sizes = {event["dest"]: event["size"]
              for event in (state.dry_files if dry else state.files)}
     copied = _plan_copies(state, check) if dry or check is state.check else []
-    # The files the pack does not hold are said before a size is promised,
-    # and left out of it: the plan offered "Install 6.6 GB" from a pack that
-    # held none of them.
     lacking = _tui_pack_lacks(state, [dest_ for dest_ in sizes if dest_ not in copied])
-    fetch = max(0, need - len(copied) - len(lacking))
-    fetch_bytes = max(0, check["bytes_needed"] - sum(sizes[dest_] for dest_ in copied)
+    fetch = max(0, _needed(check) - len(copied) - len(lacking))
+    fetch_bytes = max(0, check.get("bytes_needed", 0) - sum(sizes[dest_] for dest_ in copied)
                       - sum(sizes[dest_] for dest_ in lacking))
+    data_bytes = check.get("data_bytes", 0) if check.get("data_missing", 0) else 0
+    return fetch, fetch_bytes + data_bytes, copied, lacking, sizes
+
+
+def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
+    need = _needed(check)
+    data = check.get("data_missing", 0)
+    dry = check is state.dry and check is not state.check
+    fetch, fetched, copied, lacking, sizes = _plan_fetch(state, check)
+    fetch_bytes = fetched - (check.get("data_bytes", 0) if data else 0)
     elsewhere = (_tui_found_elsewhere(state, set(copied) if dry else None)
                  if check is state.check or dry else {})
     offline = _offline_only()
@@ -22603,6 +23129,23 @@ def _plan_text(state: TuiState) -> list:
     said = ", ".join(named)
     if said and not said.startswith("for "):
         said = f"for this choice: {said}"
+    since: list = []
+    if tui_record_kept(state) and not state.cli_choice and state.record is not None:
+        # The record's systems by name, its row saying whose choice it is:
+        # nobody typed --system. The games and the other options are said
+        # as the plan says them.
+        what = record_says(state.record, state.manifest)
+        if what == "every file":
+            said = ""
+        elif what not in ("the games", "the options chosen"):
+            said = f"for {what}"
+        updated, new = record_changes(state.record, [
+            entry for entry in (state.manifest or {}).get("files") or []
+            if entry.get("dest") in state.checked_dests])
+        changes = [*([f"{_plural(updated, 'file')} updated in the list"] if updated else []),
+                   *([f"{new} new"] if new else [])]
+        if changes:
+            since = [_detail(f"Since then: {', '.join(changes)}.")]
     # A system --system named that --no-game-data left empty, in line mode's
     # words.
     listed = {row["system"] for row in state.systems}
@@ -22641,7 +23184,7 @@ def _plan_text(state: TuiState) -> list:
                  f"{parts}")
     lines[at:at] = [*([_detail(state.card_note)] if state.card_note
                       and state.card_note != state.status else []),
-                    *([f"{said[0].upper()}{said[1:]}."] if said else []),
+                    *([f"{said[0].upper()}{said[1:]}."] if said else []), *since,
                     *([emptied_named] if emptied_named else []), *choice,
                     *([_detail(parts)] if parts else []), *games_plan_words(state)]
     if state.version:
@@ -24065,6 +24608,7 @@ def tui_start(
     if args.manifest is not None:
         state.manifest_path = Path(args.manifest).absolute()
         state.manifest_given = True
+    state.cli_choice = choice_given(args) or state.manifest_given
     plat = normalize_platform(args.platform, say=False) if args.platform else ""
     if detect:
         captured = io.StringIO()
@@ -24137,6 +24681,14 @@ def tui_start(
     if state.dest_given is None and not args.platform:
         state.doubts = [(plat, mount) for mount in _mounted_cards()
                         for plat in share_doubt(mount)[0]]
+    if (state.dest_given is None and not state.doubts and not state.refused
+            and len(state.setups) == 1):
+        # One setup found and no card in doubt: its plan, Change where (or
+        # Back) one press away. A folder detection could not look in may
+        # hold another setup: the setups are listed then, with it.
+        found, folder, _label = state.setups[0]
+        state.opened_on_plan = True
+        return state, _choose(state, found, folder, proposed=True)
     if state.dest_given is not None or not (state.setups or state.doubts):
         state.stack = ["platforms"]
         state.focus["platforms"] = _platform_focus(state, dest_default(state.setups))
@@ -24732,7 +25284,7 @@ def run_tui(args: argparse.Namespace) -> int:
             if kind == "fetch":
                 threading.Thread(target=_tui_fetch_games,
                                  args=(effect[1], inbox, buffer, state.dest,
-                                       state.games_choice not in ("user", "cli")),
+                                       state.games_choice not in ("user", "cli", "record")),
                                  daemon=True).start()
             elif kind == "run":
                 for run in current:

@@ -1348,3 +1348,57 @@
 
 
  Enter Back
+=== plan-record 40x12
+ RetroBIOS: RetroArch
+
+ 1 file to download, 16.0 KB
+ BIOS folder:
+   ~/.config/retroarch/system
+
+ > Install
+   Same choice as on 3 Nov: yes
+   Choose systems
+   Copy from an old card or a folder
+ 1-4 of 8
+ Enter Install  Esc Back  o Options
+=== plan-record 40x15
+ RetroBIOS: RetroArch
+
+ 1 file to download, 16.0 KB
+ BIOS folder:
+   ~/.config/retroarch/system
+ For nintendo-gba.
+ > Install
+   Same choice as on 3 Nov: yes
+   Choose systems
+   Copy from an old card or a folder
+   Change where
+   Details
+   Options
+   Quit
+ Enter Install  Esc Back  o Options
+=== plan-record 80x24
+ RetroBIOS: RetroArch
+
+ 1 file to download, 16.0 KB
+ BIOS folder: ~/.config/retroarch/system
+ For nintendo-gba.
+
+ > Install
+   Same choice as on 3 Nov: yes
+   Choose systems
+   Copy the BIOS files from an old card or a folder
+   Change where
+   Details
+   Options
+   Quit
+
+
+
+
+
+
+
+
+
+ Enter Install  Esc Back  o Options  ? Help

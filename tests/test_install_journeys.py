@@ -41,15 +41,17 @@ ESC = "\x1b"
 
 # (keys to start the install or reach the answer, keys in all). One system
 # is reached through None and the filter, the other device's folder typed
-# as ~/bios.
+# as ~/bios. With one setup found the screen opens on its plan: one key
+# fewer, and one more for another device, whose Esc goes back to the
+# setups. The second run of one system takes its install record's choice.
 JOURNEY_KEYS = {
-    "first_install": (2, 3),
-    "card_with_games": (2, 3),
-    "update": (2, 3),
-    "one_system": (14, 15),
-    "one_system_again": (2, 3),
-    "what_is_missing": (5, 6),
-    "another_device": (19, 20),
+    "first_install": (1, 2),
+    "card_with_games": (1, 2),
+    "update": (1, 2),
+    "one_system": (13, 14),
+    "one_system_again": (1, 2),
+    "what_is_missing": (4, 5),
+    "another_device": (20, 21),
 }
 
 # Words each journey's screens show by default, summed over the screens it
@@ -58,13 +60,15 @@ JOURNEY_KEYS = {
 # word: its length is the machine's. A change that adds words raises a
 # number here and says why.
 JOURNEY_WORDS = {
-    "first_install": 63,
-    "card_with_games": 106,
-    "update": 79,
-    "one_system": 193,
-    "one_system_again": 68,
-    "what_is_missing": 223,
-    "another_device": 230,
+    "first_install": 47,
+    "card_with_games": 87,
+    "update": 70,
+    "one_system": 179,
+    "one_system_again": 67,
+    "what_is_missing": 207,
+    # The plan of the setup found comes first now (33 words), the setups
+    # one Esc away, and the last plan names Change where (2 words).
+    "another_device": 265,
 }
 # Which setup? names every setup, Preview every file: lists, not prose.
 SCREEN_CEILING = 90
@@ -75,7 +79,9 @@ LINE_TEXT = {
     "card_with_games": (4, 29),
     "update": (5, 36),
     "one_system": (4, 18),
-    "what_is_missing": (3, 15),
+    # After one system installed, the check counts the install record's
+    # choice: one line says so, and how to count every file.
+    "what_is_missing": (4, 25),
     "another_device": (4, 18),
 }
 
@@ -221,10 +227,9 @@ class Journeys(unittest.TestCase):
         repo = Repository(self)
         dest = repo.retroarch_here()
         term = self.start(repo)
-        screen = term.wait("Where to install?", timeout=40)
-        self.assertIn("> RetroArch", screen)
-        self.press(term, "\r")
-        term.wait("files to download", timeout=40)
+        # The one setup found: its plan first.
+        screen = term.wait("files to download", timeout=40)
+        self.assertIn("Change where", screen)
         self.press(term, "\r")
         started = self.keys
         self.assertEqual(self.finish(term), 0)
@@ -241,8 +246,6 @@ class Journeys(unittest.TestCase):
         (card / "ROMS" / "GBA").mkdir(parents=True)
         (card / "ROMS" / "GBA" / "unknown.gba").write_bytes(b"not in any catalog")
         term = self.start(repo, env={"JOURNEY_CARD": str(card)})
-        term.wait("Where to install?", timeout=40)
-        self.press(term, "\r")
         screen = term.wait("For the games on this card: yes", timeout=60)
         self.assertIn("For the 1 game on this card.", screen)
         self.press(term, "\r")
@@ -265,8 +268,6 @@ class Journeys(unittest.TestCase):
         changed["size"] += 1
         repo.write_list()
         term = self.start(repo)
-        term.wait("Where to install?", timeout=40)
-        self.press(term, "\r")
         term.wait("1 file to download", timeout=40)
         self.press(term, "\r")
         started = self.keys
@@ -278,8 +279,6 @@ class Journeys(unittest.TestCase):
         repo = Repository(self)
         dest = repo.retroarch_here()
         term = self.start(repo)
-        term.wait("Where to install?", timeout=40)
-        self.press(term, "\r")
         term.wait("files to download", timeout=40)
         for _step in range(12):
             if "> Choose systems" in term.settle():
@@ -298,24 +297,25 @@ class Journeys(unittest.TestCase):
         self.assertEqual(self.finish(term), 0)
         self.counted("one_system", started, self.keys)
         self.assertEqual(written(dest), ["gba_bios.bin"])
-        # The next release: the earlier choice is not kept, and two keys
-        # install the whole list.
+        # The next release changes its file: the plan opens on the same
+        # choice, read from the install record, and one key installs it.
+        changed = next(e for e in repo.listed["files"] if e["dest"] == "gba_bios.bin")
+        changed["size"] += 1
+        repo.write_list()
         term = self.start(repo)
-        term.wait("Where to install?", timeout=40)
-        self.press(term, "\r")
-        term.wait("files to download", timeout=40)
+        screen = term.wait("1 file to download", timeout=40)
+        self.assertRegex(screen, r"Same choice as on \d+ [A-Z][a-z]{2}: yes")
         self.press(term, "\r")
         started = self.keys
         self.assertEqual(self.finish(term), 0)
         self.counted("one_system_again", started, self.keys)
-        self.assertEqual(written(dest), sorted(e["dest"] for e in repo.listed["files"]))
+        self.assertEqual(written(dest), ["gba_bios.bin"])
+        self.assertEqual((dest / "gba_bios.bin").stat().st_size, changed["size"])
 
     def test_what_is_missing(self):
         repo = Repository(self)
         repo.retroarch_here()
         term = self.start(repo)
-        term.wait("Where to install?", timeout=40)
-        self.press(term, "\r")
         term.wait("files to download", timeout=40)
         self.press(term, "o")
         term.wait("Each row is an option")
@@ -332,6 +332,9 @@ class Journeys(unittest.TestCase):
         repo = Repository(self)
         repo.retroarch_here()
         term = self.start(repo)
+        # The plan of the one setup found first: Esc goes back to the setups.
+        term.wait("files to download", timeout=40)
+        self.press(term, ESC)
         term.wait("Where to install?", timeout=40)
         for _step in range(12):
             if "> Another setup or folder" in term.settle():
@@ -476,6 +479,144 @@ class LineModeJourneys(unittest.TestCase):
         self.assertNotIn("missing: gba_bios.bin", proc.stdout)
         self.assertIn("missing: gba_bios.bin",
                       self.run_line(repo, *base, "--check", "--verbose").stdout)
+
+
+def events(proc: subprocess.CompletedProcess, kind: str | None = None) -> list[dict]:
+    said = [json.loads(line) for line in proc.stdout.splitlines() if line.startswith("{")]
+    return [event for event in said if kind is None or event["event"] == kind]
+
+
+class InstallRecord(unittest.TestCase):
+    """What an install placed, recorded beside the BIOS folder, and its
+    choice taken by the next run when nothing on the command line chose."""
+
+    def setUp(self):
+        self.repo = Repository(self)
+        self.dest = self.repo.root / "retroarch" / "system"
+        self.record = self.dest.parent / install.BACKUP_DIR / "system.install.json"
+
+    def run_line(self, *args: str, dest: Path | None = None) -> subprocess.CompletedProcess:
+        return subprocess.run(
+            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
+             "--dest", str(dest or self.dest), *args],
+            env=self.repo.env, capture_output=True, text=True, timeout=120, check=False,
+            stdin=subprocess.DEVNULL)
+
+    def dests(self, proc: subprocess.CompletedProcess) -> list[str]:
+        return sorted(event["dest"] for event in events(proc, "file"))
+
+    def everything(self) -> list[str]:
+        return sorted(entry["dest"] for entry in self.repo.listed["files"])
+
+    def test_the_record_holds_each_file_written_and_its_hash(self):
+        proc = self.run_line("--system", "nintendo-gba", "--yes", "--events")
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        said = events(proc, "record")
+        self.assertEqual([event["status"] for event in said], ["written"])
+        self.assertEqual(said[0]["choice"], ["--system", "nintendo-gba"])
+        self.assertEqual((said[0]["path"], said[0]["files"]), (str(self.record), 1))
+        # Before the summary, its keys those of EVENT_KEYS.
+        kinds = [event["event"] for event in events(proc)]
+        self.assertEqual(kinds.index("record") + 1, kinds.index("summary"))
+        self.assertEqual(list(said[0])[1:], list(install.EVENT_KEYS["record"]))
+        kept = json.loads(self.record.read_text(encoding="utf-8"))
+        files = kept["setups"]["retroarch"]["files"]
+        self.assertEqual([item["dest"] for item in files], ["gba_bios.bin"])
+        self.assertEqual(files[0]["sha1"], hashlib.sha1(
+            (self.dest / "gba_bios.bin").read_bytes()).hexdigest())
+        self.assertEqual((files[0]["from"], files[0]["root"]), ("download", ""))
+        self.assertEqual(kept["folder"], str(self.dest))
+        # Nothing of it in the BIOS folder, which some cores read whole.
+        self.assertEqual(written(self.dest), ["gba_bios.bin"])
+
+    def test_the_next_run_takes_the_recorded_choice(self):
+        self.run_line("--system", "nintendo-gba", "--yes")
+        (self.dest / "gba_bios.bin").unlink()
+        proc = self.run_line("--yes", "--events")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        kinds = [event["event"] for event in events(proc)]
+        self.assertLess(kinds.index("record"), kinds.index("choices"))
+        applied = events(proc, "record")[0]
+        self.assertEqual((applied["status"], applied["choice"]),
+                         ("applied", ["--system", "nintendo-gba"]))
+        self.assertEqual(self.dests(proc), ["gba_bios.bin"])
+        self.assertEqual(written(self.dest), ["gba_bios.bin"])
+        (self.dest / "gba_bios.bin").unlink()
+        proc = self.run_line("--yes")
+        self.assertRegex(proc.stdout, r"Installing 1 file \(.*\) for RetroArch, same choice "
+                                      r"as on \d+ [A-Z][a-z]{2}\.")
+
+    def test_the_command_line_replaces_the_record(self):
+        self.run_line("--system", "nintendo-gba", "--yes")
+        self.assertEqual(self.dests(self.run_line("--system", "sega-megadrive", "--check",
+                                                  "--events")),
+                         sorted(e["dest"] for e in self.repo.listed["files"]
+                                if "sega-megadrive" in e.get("systems", [])))
+        whole = self.run_line("--all-files", "--check", "--events")
+        self.assertEqual(self.dests(whole), self.everything())
+        self.assertEqual(events(whole, "record"), [])
+
+    def test_a_record_that_cannot_be_read_is_said_once_and_ignored(self):
+        self.dest.mkdir(parents=True)
+        self.record.parent.mkdir()
+        self.record.write_text("{not json", encoding="utf-8")
+        proc = self.run_line("--yes", "--events")
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        said = events(proc, "record")
+        self.assertEqual([event["status"] for event in said], ["unreadable", "written"])
+        self.assertIn("is damaged, so it is ignored.", said[0]["message"])
+        # Said once to a person (standard error under --events), once as an event.
+        self.assertEqual(proc.stderr.count("so it is ignored"), 1)
+        self.assertEqual(self.dests(proc), self.everything())
+        # Replaced by a record that reads.
+        self.assertEqual(json.loads(self.record.read_text())["schema"], install.RECORD_SCHEMA)
+        for text in ('{"schema": 99, "setups": {}}', '{"schema": 1, "setups": {"retroarch": 3}}',
+                     "\xff\xfe"):
+            with self.subTest(record=text):
+                self.record.write_bytes(text.encode("latin-1"))
+                proc = self.run_line("--check", "--events")
+                self.assertEqual(events(proc, "record")[0]["status"], "unreadable")
+                self.assertEqual(self.dests(proc), self.everything())
+
+    def test_a_record_for_another_folder_is_not_applied(self):
+        self.run_line("--system", "nintendo-gba", "--yes")
+        # A sibling folder shares the holder, never the record.
+        other = self.dest.parent / "bios"
+        proc = self.run_line("--check", "--events", dest=other)
+        self.assertEqual(events(proc, "record"), [])
+        self.assertEqual(self.dests(proc), self.everything())
+        # The record copied under the sibling's name still names the first.
+        shutil.copy(self.record, self.record.with_name("bios.install.json"))
+        proc = self.run_line("--check", "--events", dest=other)
+        self.assertEqual(events(proc, "record"), [])
+        self.assertEqual(self.dests(proc), self.everything())
+        # The record of another setup in the same folder is not this one's.
+        proc = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "batocera",
+             "--dest", str(self.dest), "--check", "--events"],
+            env=self.repo.env, capture_output=True, text=True, timeout=120, check=False,
+            stdin=subprocess.DEVNULL)
+        self.assertEqual(events(proc, "record"), [])
+        self.assertEqual(self.dests(proc), self.everything())
+
+    def test_line_mode_chooses_what_the_screen_chooses(self):
+        """The plan's choice from the record is the same set of files on the
+        screen and in line mode: the screen's options, given to a run, and a
+        run given none."""
+        self.run_line("--system", "nintendo-gba", "--yes")
+        (self.dest / "gba_bios.bin").unlink()
+        state = install.TuiState()
+        state.platform, state.dest = "retroarch", self.dest
+        install._tui_record_load(state)
+        self.assertTrue(install.tui_record_kept(state))
+        flags = [flag if value is None else f"{flag}={value}"
+                 for flag, value in install.tui_flags(state)]
+        screen = self.run_line(*flags, "--dry-run", "--events")
+        line = self.run_line("--dry-run", "--events")
+        self.assertEqual(self.dests(screen), ["gba_bios.bin"])
+        self.assertEqual(self.dests(line), self.dests(screen))
+        self.assertEqual(events(line, "check")[0]["bytes_needed"],
+                         events(screen, "check")[0]["bytes_needed"])
 
 
 if __name__ == "__main__":

@@ -38,6 +38,7 @@
         "downloaded",
         "summary",
         "app",
+        "record",
         "end"
       ]
     }
@@ -126,6 +127,9 @@
     },
     {
       "$ref": "#/$defs/app"
+    },
+    {
+      "$ref": "#/$defs/record"
     },
     {
       "$ref": "#/$defs/end"
@@ -1088,6 +1092,59 @@
           "items": {
             "type": "object"
           }
+        }
+      }
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "folder",
+        "path",
+        "status",
+        "choice",
+        "date",
+        "files",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "record"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "applied",
+            "written",
+            "unreadable",
+            "not_written"
+          ]
+        },
+        "choice": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "date": {
+          "type": "string"
+        },
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "message": {
+          "type": "string"
         }
       }
     },

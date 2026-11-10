@@ -169,8 +169,13 @@ Enter checks the BIOS folder when nothing can be copied.
 ## The full-screen interface { #the-full-screen-interface }
 
 Run at a terminal, the installer opens a full screen that a keyboard or a
-controller drives. Three presses of A or Enter install everything the setup
-reads: the setup found here, the plan, then the result. The plan screen says
+controller drives. With one setup found here, it opens on that setup's plan,
+and two presses of A or Enter install everything it reads: the plan, then the
+result. **Change where** (or B) goes back to the setups, which open first when
+none or several are found. After an install, the plan of the same folder opens
+on the same choice (**Same choice as on 10 Nov: yes**, the
+[install record](#the-install-record)), and **no** takes the whole list, or the
+games of the card when it holds some. The plan screen says
 what it installs, its size and where, before anything is written. **Details**
 (`d`) adds the rest: how many files are in place, the free space, the files
 left out and why.
@@ -371,6 +376,8 @@ file list is downloaded once and handed to each run.
    that archive in use and downloads its own copy. A file already there with other contents
    is moved aside first, see [Files already in the folder](#files-you-already-had).
 8. Copies into standalone emulator directories, only with `--standalone-copies`.
+9. Writes the [install record](#the-install-record): each file it placed, with
+   its SHA-1, and the choice it made.
 
 The file list names the version of the platform it was built for (Batocera
 43.1, RetroBat 8.3.1). Where the system writes its own version in a file, the
@@ -443,6 +450,50 @@ says how many and why. `--check` and the closing report also name the required
 ones, grouped by system with the emulators that read them, and point at the
 emulator pages. They do not change the exit code of `--check`, since no run of
 the installer can fetch them.
+
+## The install record { #the-install-record }
+
+An install that places files writes what it placed in a record beside the BIOS
+folder: `retrobios-backup/<folder name>.install.json`, in the same holder as
+the [backups](#files-you-already-had). A folder with nothing writable beside it
+(a drive's root) keeps it in `retrobios-backup` inside the folder. It is never
+loose in the BIOS folder, which DuckStation, SwanStation and Rustation read
+whole. On a card it travels with the card.
+
+The record is JSON, one entry per setup:
+
+```json
+{"schema": 1, "installer": "48e57b2f26e2",
+ "folder": "/home/me/.config/retroarch/system",
+ "setups": {"retroarch": {
+   "written": "2026-11-10T09:48:36Z",
+   "list": {"version": "v1.22.2", "generated": "2026-11-10T01:52:59Z"},
+   "choice": ["--system", "nintendo-gba"],
+   "files": [{"dest": "gba_bios.bin", "root": "", "sha1": "4176d5fc...",
+              "size": 16384, "from": "download"}]}}}
+```
+
+`files` holds each file this run and the earlier ones wrote, with the SHA-1
+checked before it was moved into place: `root` is empty for the BIOS folder,
+`save` for the save directory and `data` for a data tree's member, and `from`
+says `download`, `copy` (this machine, `--from`) or `pack`. A file that was
+already in place is not added: the record names only what the installer wrote.
+`choice` is the options of the run that decided what to install, `--all-files`
+for the whole list.
+
+The next run for the same setup and folder takes that choice when nothing on
+the command line chose: line mode installs the same systems
+(`Installing 1 file (16.0 KB) for RetroArch, same choice as on 10 Nov.`), and
+the full screen opens on it (**Same choice as on 10 Nov: yes**). Any option of
+the choice (`--system`, `--core`, `--region`, `--for-games`, `--no-game-data`,
+`--target`, `--every-board`, `--emulator`, `--installed-cores`, `--declared-only`)
+replaces it, `--all-files` installs the whole list, and a run over several
+setups or from a file list (`--manifest`) never reads it. `--check` and
+`--dry-run` read it too, and say so. To forget it, delete the file. A record
+that cannot be read, or that another version wrote, is said once and ignored,
+and the next install writes a new one. A record kept for a folder of another
+name (copied or renamed with it) is not applied. With `--events` the record
+gives a `record` event, see [Machine-readable events](#machine-readable-events).
 
 ## Reading a run { #reading-a-run }
 
@@ -1885,11 +1936,12 @@ other schemas under `api/v1/schemas/`.
 | `downloaded` | `dest`, `ok`, `reason`, `size`, `files_done`, `files_total`, `bytes_done`, `bytes_total` | Each finished file, downloaded or copied from where a `found` event named it. `reason` says why one failed, and is empty otherwise |
 | `summary` | `mode`, `installed`, `up_to_date`, `pending`, `failed`, `skipped`, `left_out`, `kept`, `interrupted` | The outcome. `pending` counts what a next run would still fetch, `failed` lists `{dest, reason}`, `skipped` lists `{reason, label, files, required}` for the files the collection cannot supply, `left_out` lists `{category, label, files, dests}` for what `--no-game-data` left out, and is empty without it. `kept` lists `{folder, files, bytes}`, one per backup folder, for the files in place the run moved aside before replacing them (with `--dry-run`, would move), and is empty when none. Not written for a listing |
 | `app` | `system`, `folder`, `ok`, `reason`, `dests`, `written`, `kept` | After `summary`, with `--add-app` or a yes to its question: the RetroBIOS app on the card of `system` whose root is `folder`. `dests` lists the app's files below that root, `written` the ones this run wrote (empty when each was in place), `kept` the backup folders as in `summary`. `ok` is false, with `reason`, when the card takes no app (before anything is written, code 2), when the install did not finish, or when a file could not be fetched, verified or written (code 1) |
+| `record` | `platform`, `folder`, `path`, `status`, `choice`, `date`, `files`, `message` | The [install record](#the-install-record) of `folder`, kept at `path`. `status` is `applied` before `choices` when the run took its choice, nothing on the command line having chosen, `written` before `summary` once an install placed files, `unreadable` when it cannot be read (said once, ignored), or `not_written` when it could not be saved, the install itself unharmed. `choice` is the recorded options as words, `date` when it was written (UTC), `files` how many files it holds for the platform |
 | `end` | `code` | Last line, with the exit status the process returns (see [Exit status](#exit-status)) |
 
 <!-- /generated: events -->
 
-Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `version` with the list's version), never a key of an
+Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `version` with the list's version, `record` with the install record), never a key of an
 existing kind: a reader skips a kind it does not know. An option refused
 before the run starts (`install.py: error:`, code 2) writes
 no event at all. A program reads a missing `end` as that case, or as a
