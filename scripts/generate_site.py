@@ -417,8 +417,8 @@ def _date_line() -> str:
 def _stat(value: str, label: str) -> list[str]:
     return [
         markup.block_open("div", 'class="rb-stat"'),
-        f'<span class="rb-stat-value">{value}</span>',
-        f'<span class="rb-stat-label">{label}</span>',
+        # One line, a space between: the page text read "168/168Coverage".
+        f'<span class="rb-stat-value">{value}</span> <span class="rb-stat-label">{label}</span>',
         "</div>",
         "",
     ]
@@ -3803,8 +3803,10 @@ def _platform_file_row(f: dict, cfg_entry: dict, hash_type: str = "",
         facts.append(_inline_html(_category_evidence_md(f["category_evidence"], launched)))
 
     path = _row_path(fname, cfg_entry)
-    summary = (_text_html(fname) + (f"<code>{_text_html(path)}</code>" if path else "")
-               + _status_chip(f))
+    # Spaces between name, path and status: the summary lays them out as
+    # columns, and the page text read "SVI603.ROMbios/Machines/...OK".
+    summary = " ".join([_text_html(fname), *([f"<code>{_text_html(path)}</code>"] if path else []),
+                        _status_chip(f)])
     copy = _copy_hash(shown, hashes[shown]) if shown else ""
     return (f'<details class="rb-file"><summary>{summary}</summary>'
             f'{"<br>".join(facts)}</details>{copy}')

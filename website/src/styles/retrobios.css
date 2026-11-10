@@ -277,6 +277,18 @@
 	vertical-align: middle;
 }
 
+/* A setup with no logo: its initials, drawn by the stylesheet so the page
+   text holds its name once (sitemarkup._tile_mark). */
+.sl-markdown-content .rb-card-initials {
+	display: inline-grid;
+	place-items: center;
+	color: #2b2e5c;
+	font-size: 10.5px;
+	font-weight: 700;
+	line-height: 1;
+}
+.sl-markdown-content .rb-card-initials::before { content: attr(data-initials); }
+
 /* Device tiles: the whole tile is the link. Logo on the left, name over
    what it runs on, so a phone shows a short row per setup. */
 .sl-markdown-content .rb-tiles { grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.6rem; }

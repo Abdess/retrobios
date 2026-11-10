@@ -160,7 +160,7 @@ class SetupTiles(unittest.TestCase):
     def test_a_setup_without_a_logo_shows_its_initials(self):
         self.assertEqual(sitemarkup.initials("MyMinUI"), "MM")
         tile = "".join(sitemarkup.platform_tiles([("MyMinUI", "x.md", "", "Handhelds")]))
-        self.assertIn(">MM</text>", tile)
+        self.assertIn('data-initials="MM"', tile)
         tile = "".join(sitemarkup.platform_tiles([("RomM", "x.md", "logo.png", "A server")]))
         self.assertIn('<img class="rb-card-logo" src="logo.png"', tile)
 

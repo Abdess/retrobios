@@ -328,7 +328,7 @@ class TitleLogoOnAPlate(unittest.TestCase):
         # written, the tile's and the title's.
         import sitemarkup  # noqa: PLC0415
 
-        self.assertRegex(sitemarkup._tile_mark("MyMinUI", ""), r"<svg[^>]*>.*>MM</text></svg>")
+        self.assertIn('data-initials="MM" aria-hidden="true"></span>', sitemarkup._tile_mark("MyMinUI", ""))
         component = _read(REPO_ROOT / "website" / "src" / "components" / "PageTitle.astro")
         self.assertIn("{initials(setup.name)}", component)
 
