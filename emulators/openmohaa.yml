@@ -62,7 +62,7 @@ files:
   # Allied Assault single-player demo 0.05 (December 2001), read from
   # main/ like the full game with com_target_demo 1. Same names as the
   # retail paks, other content: each is an alternative for its slot, listed
-  # first where the collection holds it and not the retail file.
+  # first so the pack ships the set the demo disc installs.
   # ================================================================
 
   - name: "Pak0.pk3"
@@ -127,6 +127,17 @@ files:
     source_ref: "code/qcommon/files.cpp:331 (fs_originalPaks_main[5]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
     note: "Holds Mission 3 Level 3, the demo's one level."
 
+  - name: "Pak6.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak6.pk3"
+    required: false
+    size: 108
+    sha1: "492ab480a8dbefb888acbf6f3ee5bc1277945e28"
+    md5: "71f32f3ff6814b28531a70cf91689c8f"
+    source_ref: "code/qcommon/files.cpp:332 (fs_originalPaks_main[6]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
+    note: "An empty placeholder holding one folder entry."
+
   # ================================================================
   # Medal of Honor: Allied Assault retail (BASEGAME = "main")
   # Reference list: fs_originalPaks_main[] at code/qcommon/files.cpp:324
@@ -187,21 +198,9 @@ files:
     path: "main/Pak6.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:332 (fs_originalPaks_main[6])"
-    note: "Added by the 1.11 patch."
+    note: "Added by the 1.11 patch. The demo placeholder takes the slot: the retail Pak0-Pak5 are not held, and no release ships the demo with this patch."
 
-  # The demo's own Pak6.pk3 and Pak7.pk3. The 1.11 Pak6.pk3 above takes
-  # the slot where the collection holds both.
-
-  - name: "Pak6.pk3"
-    category: game_data
-    system: mohaa
-    path: "main/Pak6.pk3"
-    required: false
-    size: 108
-    sha1: "492ab480a8dbefb888acbf6f3ee5bc1277945e28"
-    md5: "71f32f3ff6814b28531a70cf91689c8f"
-    source_ref: "code/qcommon/files.cpp:332 (fs_originalPaks_main[6]), code/qcommon/common.c:3168-3182 (TG_MOH demo reads main/)"
-    note: "An empty placeholder holding one folder entry."
+  # The demo's Pak7.pk3, a second empty placeholder.
 
   - name: "Pak7.pk3"
     category: game_data
