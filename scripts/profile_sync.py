@@ -3745,7 +3745,7 @@ def bump_commit(
     expected = dict(document)
     expected["source_commit"] = report.head
     new_text = _set_pin(text, document, "source_commit", report.head, "profiled_date")
-    if document.get("pin_follows"):
+    if document.get("pin_follows") and report.head:
         new_text, expected = _follow_config_reads(new_text, expected, document, report.head)
     if upstream_moves:
         expected["upstream_commit"] = report.upstream_head

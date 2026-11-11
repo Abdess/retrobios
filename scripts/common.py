@@ -3472,10 +3472,10 @@ def offer_boards(config: dict) -> dict[tuple[str, str], frozenset[str] | None]:
             choices.append((row, every))
         for key, spec in (row.get("board_defaults") or {}).items():
             branch = str(key).replace("=", " ", 1)
-            choices.append((spec, admitted(lambda b, branch=branch: _branch_holds(branch, b))))
+            choices.append((spec, admitted(functools.partial(_branch_holds, branch))))
         for offer in offers:
             when = str(offer.get("when") or "")
-            choices.append((offer, admitted(lambda b, when=when: when_admits(when, b))
+            choices.append((offer, admitted(functools.partial(when_admits, when))
                             if when else every))
         for choice, boards in choices:
             if choice.get("core") and choice.get("emulator") in LIBRETRO_RUNNERS:
@@ -3549,7 +3549,7 @@ def content_folder_tags(config: dict) -> set[str]:
     tags |= {
         CONTENT_FOLDER_PREFIX + json.dumps([
             c, f, place(f),
-            None if target or boards.get((c, f)) is None else sorted(boards[(c, f)]),
+            None if target or (offered_on := boards.get((c, f))) is None else sorted(offered_on),
         ])
         for c, f in pairs if f in folders
     }
@@ -3754,7 +3754,7 @@ def content_layout(
         if f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
             # A set a launcher record placed stays there: EmuDeck's
             # mame.ini rompath is read when Steam ROM Manager starts MAME
-            # with no -rompath (tools/launchers/mame.sh), and ES-DE's
+            # with no `-rompath` (tools/launchers/mame.sh), and ES-DE's
             # commands read the folders they pass.
             out.append(f)
             held = {(f.get("root") or "", f.get("standalone_path") or "")}

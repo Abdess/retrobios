@@ -1210,7 +1210,7 @@ class EveryCoreAFolderOffers(unittest.TestCase):
 
 
 class CloneReadsItsParent(unittest.TestCase):
-    """ES-DE starts odyssey2 with -rompath on roms/odyssey2 alone, and MAME
+    """ES-DE starts odyssey2 with `-rompath` on roms/odyssey2 alone, and MAME
     finds o2bios.rom in the parent's videopac.zip (src/emu/driver.cpp:31-38)."""
 
     def test_the_parent_set_goes_to_the_clone_folder(self) -> None:
