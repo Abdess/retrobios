@@ -1146,6 +1146,8 @@ SYSTEM_NAMES: dict[str, str] = {
     "smbx": "Super Mario Bros. X",
     "snk-neogeo-aes": "SNK Neo Geo AES",
     "snk-neogeo-mvs": "SNK Neo Geo MVS",
+    "snk-neogeo": "SNK Neo Geo",
+    "neogeo": "SNK Neo Geo",
     "snk-ngpc": "SNK Neo Geo Pocket Color",
     "soh": "The Legend of Zelda: Ocarina of Time",
     "sonic-1-2013": "Sonic the Hedgehog (2013)",
@@ -1268,6 +1270,9 @@ SYSTEM_PARENTS: dict[str, tuple[str, str]] = {
     "snk-ngpc": ("SNK", "Neo Geo Pocket"),
     "snk-neogeo-aes": ("SNK", "Neo Geo"),
     "snk-neogeo-mvs": ("SNK", "Neo Geo"),
+    # The platforms' one Neo Geo system, as Batocera and RetroDECK spell it.
+    "snk-neogeo": ("SNK", "Neo Geo"),
+    "neogeo": ("SNK", "Neo Geo"),
     # Sega. The VMU is the Dreamcast's memory card, its images sit there.
     # Sega's arcade section holds the OutRun board ROMs Cannonball reads.
     "sega-genesis": ("Sega", "Mega Drive"),

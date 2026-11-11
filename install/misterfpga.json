@@ -6,7 +6,7 @@
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
   "version": "2026-11-04",
-  "generated": "2026-11-09T11:29:16Z",
+  "generated": "2026-11-11T14:23:39Z",
   "base_destination": "games",
   "detect": [
     {
@@ -126,7 +126,6 @@
     "sega-mega-cd": "Sega Mega CD",
     "sega-saturn": "Sega Saturn",
     "sharp-x1": "Sharp X1",
-    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
     "studio-ii": "RCA Studio II",

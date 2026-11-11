@@ -2850,6 +2850,9 @@
     "fba2x": [
       "pifba"
     ],
+    "fbalpha2012": [
+      "fbalpha"
+    ],
     "fbneo": [
       "FBNEOSA",
       "fbneo_32b",
@@ -3089,6 +3092,10 @@
     ],
     "nekop2": [
       "meowpc98"
+    ],
+    "neo-emu": [
+      "NEO-EMU",
+      "NEO.emu"
     ],
     "neocd": [],
     "nes-emu": [
@@ -3929,6 +3936,40 @@
       "speccy",
       "zesarux"
     ],
+    "snk-neogeo": [
+      "advancemame",
+      "advmame",
+      "advmame-0.94",
+      "advmame-1.4",
+      "ares",
+      "fba2x",
+      "fbalpha2012",
+      "fbalpha2012_neogeo",
+      "fbalpha2019",
+      "fbneo",
+      "fbneo_neogeo",
+      "geolith",
+      "gngeopi",
+      "groovymame",
+      "mame",
+      "mame0258",
+      "mame0278",
+      "mame2000",
+      "mame2003",
+      "mame2003_plus",
+      "mame2009",
+      "mame2010",
+      "mame2014",
+      "mame2015",
+      "mame2016",
+      "mame4all",
+      "mame4droid",
+      "mame4droid-2024",
+      "mamearcade",
+      "neo-emu",
+      "raine",
+      "ume2015"
+    ],
     "snk-neogeo-cd": [
       "fbalpha2019",
       "fbneo",
@@ -4193,7 +4234,6 @@
     "sega-saturn": "Sega Saturn",
     "sharp-x68000": "Sharp X68000",
     "sinclair-zx-spectrum": "Sinclair ZX Spectrum",
-    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
     "sony-playstation-2": "Sony PlayStation 2",
@@ -33892,6 +33932,9 @@
       "repo_path": "bios/SNK/Neo Geo/irrmaze.zip",
       "cores": [
         "geolith"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -43317,6 +43360,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43340,6 +43384,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43363,6 +43408,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43386,6 +43432,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43409,6 +43456,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43432,6 +43480,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43455,6 +43504,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43478,6 +43528,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43501,6 +43552,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43524,6 +43576,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43558,6 +43611,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43592,6 +43646,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43615,6 +43670,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43638,6 +43694,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43661,6 +43718,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43684,6 +43742,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43707,6 +43766,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43740,6 +43800,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ],
@@ -43774,6 +43835,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43841,6 +43903,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43864,6 +43927,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43897,6 +43961,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ],
@@ -43963,6 +44028,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -43986,6 +44052,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44020,6 +44087,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44043,6 +44111,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44066,6 +44135,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44089,6 +44159,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44134,6 +44205,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44156,6 +44228,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ],
@@ -44190,6 +44263,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44235,6 +44309,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44291,6 +44366,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44314,6 +44390,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44336,6 +44413,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ],
@@ -44370,6 +44448,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44404,6 +44483,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44438,6 +44518,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44494,6 +44575,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44517,6 +44599,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44551,6 +44634,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44573,6 +44657,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44595,6 +44680,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44617,6 +44703,7 @@
         "elektronika-bk",
         "naomi2",
         "scv",
+        "snk-neogeo",
         "stv",
         "ti994a"
       ]
@@ -44640,6 +44727,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.0c69efec",
       "cores": [
         "mame2000"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "root": "roms",
       "alternatives": [
@@ -44689,6 +44779,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.0c69efec",
       "cores": [
         "mame2000"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "root": "roms",
       "alternatives": [
@@ -45140,6 +45233,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -45251,6 +45345,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -45284,6 +45379,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -45339,6 +45435,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46119,6 +46216,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46150,6 +46248,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46206,6 +46305,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46237,6 +46337,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46268,6 +46369,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46299,6 +46401,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46330,6 +46433,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46361,6 +46465,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46392,6 +46497,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46423,6 +46529,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46454,6 +46561,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46485,6 +46593,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46516,6 +46625,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46547,6 +46657,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46578,6 +46689,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46634,6 +46746,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46665,6 +46778,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46716,6 +46830,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46849,6 +46964,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46878,6 +46994,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46929,6 +47046,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46958,6 +47076,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -46987,6 +47106,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47016,6 +47136,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47045,6 +47166,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47074,6 +47196,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47103,6 +47226,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47132,6 +47256,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47161,6 +47286,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47190,6 +47316,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47219,6 +47346,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47248,6 +47376,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47277,6 +47406,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -47294,6 +47424,7 @@
         "3do",
         "cdi",
         "naomi2",
+        "snk-neogeo",
         "stv"
       ],
       "root": "roms"
@@ -50480,6 +50611,9 @@
       "cores": [
         "mame0258",
         "mame0278"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -51711,6 +51845,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.9d7bbba3",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
