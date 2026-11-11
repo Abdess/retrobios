@@ -714,7 +714,13 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
     destinations = [(entry.get("root"), entry.get("dest")) for entry in files]
     if len(destinations) != len(set(destinations)):
         out.append(f"{path.relative_to(ROOT)}: duplicate destinations")
-    omitted_destinations = [(entry.get("root"), entry.get("dest")) for entry in omitted]
+    # root: emulator is each core's own folder: mame2015 and mame2016 read
+    # 3dobios.zip in two places, one omission each, named by its cores.
+    omitted_destinations = [
+        (entry.get("root"), entry.get("dest"),
+         tuple(entry.get("cores") or ()) if entry.get("root") == "emulator" else ())
+        for entry in omitted
+    ]
     if len(omitted_destinations) != len(set(omitted_destinations)):
         out.append(f"{path.relative_to(ROOT)}: duplicate omitted destinations")
     overlap = set(destinations) & set(omitted_destinations)
