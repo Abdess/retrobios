@@ -226,7 +226,7 @@ class EsdeFormat(unittest.TestCase):
         self.assertTrue(standalone["any_machine"])
         self.assertNotIn("machines", standalone)
         self.assertNotIn("searched_by", self.rows["psx"])
-        # The libretro core reads the -rompath of the command line it is
+        # The libretro core reads the `-rompath` of the command line it is
         # handed as content (retro_init.cpp execute_game_cmd).
         self.assertEqual((libretro["emulator"], libretro["core"]), ("retroarch", "mame"))
         self.assertEqual(libretro["reads"], ["arcade"])

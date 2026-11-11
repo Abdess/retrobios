@@ -1120,7 +1120,7 @@ def patched_paths(read: Callable[[str], str], patches: tuple[str, ...] = PATH_PA
 
 
 # Generators whose command line hands the emulator /userdata/bios folders as
-# search paths: MAME's -rompath and -samplepath (mame/mameGenerator.py).
+# search paths: MAME's `-rompath` and `-samplepath` (mame/mameGenerator.py).
 SEARCH_PATH_GENERATORS = ("mame/mameGenerator.py",)
 
 

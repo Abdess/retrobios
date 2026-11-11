@@ -1075,7 +1075,7 @@ def _bind(
     list already fills (Batocera's bios/openmsx beside bios/Machines), else
     the first of the BIOS tree, else the first a pack can fill. A list that
     already holds the folder the layout's files take without the launcher
-    keeps them there: KNULLI starts MAME with -rompath
+    keeps them there: KNULLI starts MAME with `-rompath`
     <romDirname>;/userdata/bios/mame;/userdata/bios, and the sets at the BIOS
     root stay. A pool standing for the whole layout holds its files
     directly, not its folders (SEARCHED_FILES): MAME reads hash/ and

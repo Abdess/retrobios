@@ -3390,7 +3390,7 @@ def _build_layouts(
             if f.get("bundled") and passed_setting(f):
                 # The copy installed with the emulator sits where the setting
                 # pointed before the launcher moved it: RetroBat passes MAME
-                # -hash bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
+                # `-hash` bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
                 # the hash/ beside mame.exe is no longer read.
                 moved = {k: v for k, v in f.items() if k != "bundled"}
             files.extend(_placed_entry(moved, profile, placed) for placed in places)
@@ -3607,7 +3607,7 @@ def content_layout(
                 for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
             ) if core in names and where
         })
-        # The folders a passed -rompath replaces the build's own search
+        # The folders a passed `-rompath` replaces the build's own search
         # path with stand for these: libretro MAME hands MAME
         # <system>/mame/bios unless the content's command line names
         # another (retro_init.cpp Set_Path_Option, execute_game_cmd).
@@ -3649,7 +3649,7 @@ def content_layout(
         if f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
             # A set a launcher record placed stays there: EmuDeck's
             # mame.ini rompath is read when Steam ROM Manager starts MAME
-            # with no -rompath (tools/launchers/mame.sh), and ES-DE's
+            # with no `-rompath` (tools/launchers/mame.sh), and ES-DE's
             # commands read the folders they pass.
             out.append(f)
             held = {(f.get("root") or "", f.get("standalone_path") or "")}

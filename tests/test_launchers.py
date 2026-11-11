@@ -545,7 +545,7 @@ MAME_BOOT = """        if boot_disk:
 
 
 class MameSearchPaths(unittest.TestCase):
-    """mameGenerator.py:129-142 at batocera-43.1: -rompath and -samplepath."""
+    """mameGenerator.py:129-142 at batocera-43.1: `-rompath` and `-samplepath`."""
 
     def test_the_command_line_search_paths_are_recorded(self):
         from scraper.batocera_launchers import search_paths

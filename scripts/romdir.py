@@ -21,7 +21,7 @@ from dataclasses import dataclass
 
 ENTRY_SIZE = 16
 NAME_SIZE = 10
-# for (i = 0; i < 512 * 1024; i++) in every LoadBiosVersion.
+# `for (i = 0; i < 512 * 1024; i++)` in every LoadBiosVersion.
 SEARCH_ENTRIES = 512 * 1024
 ROMVER_SIZE = 14
 EXTINFO_SIZE = 15

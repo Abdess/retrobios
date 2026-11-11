@@ -58,7 +58,7 @@ class AgnosticScan(unittest.TestCase):
     def test_a_placeholder_scans_the_folder_another_profile_proves(self):
         """LRPS2 and PCEE2 name their BIOS <bios>.bin, which resolves nowhere.
 
-        On RetroArch yaps2 anchored pcsx2/bios/ for them; on Batocera no
+        On RetroArch yaps2 anchored pcsx2/bios/ for them. On Batocera no
         other libretro PS2 core runs, and the pack held nothing there. The
         folder where another profile of the system resolves a hashed dump of
         that shape is the evidence, that folder only.

@@ -706,7 +706,7 @@ class AetherSX2OnKnulli(unittest.TestCase):
 
 
 class Quasi88OnRetroPie(unittest.TestCase):
-    """RetroPie writes -romdir $biosdir/pc88 into quasi88.ini (quasi88.sh:67)."""
+    """RetroPie writes `-romdir` $biosdir/pc88 into quasi88.ini (quasi88.sh:67)."""
 
     def test_the_roms_land_in_pc88(self) -> None:
         profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["quasi88kai"]
@@ -823,12 +823,12 @@ class MameSearchPaths(unittest.TestCase):
             self.assertEqual(entry["standalone_path"], entry["name"])
             self.assertNotIn("unplaced", entry)
         (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
-        # -sp bios/mame/samples, hbmame's folder being another record
+        # `-sp` bios/mame/samples, hbmame's folder being another record
         # (Mame64.Generator.cs:30, 101, 106-107).
         self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
 
     def test_knulli_keeps_the_root_listed_after_bios_mame(self) -> None:
-        # -rompath <romDirname>;/userdata/bios/mame;/userdata/bios (mameGenerator.py:116-122).
+        # `-rompath` <romDirname>;/userdata/bios/mame;/userdata/bios (mameGenerator.py:116-122).
         view = standalone_view("mame", "knulli")
         self.assertTrue(all(e["standalone_path"] == e["name"] for e in self.sets(view)))
         (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
@@ -846,7 +846,7 @@ class MameSearchPaths(unittest.TestCase):
         view = standalone_view("mame", "retrodeck")
         (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
         self.assertEqual(bbc["standalone_path"], "mame-sa/samples/bbc.zip")
-        # ES-DE hands -rompath %GAMEDIR%;%ROMPATH%/<system>: no BIOS folder.
+        # ES-DE hands `-rompath` %GAMEDIR%;%ROMPATH%/<system>: no BIOS folder.
         self.assertTrue(all(
             e.get("unplaced") == "outside_bios_folder"
             or str(e.get("standalone_path")).startswith("roms/")
@@ -854,7 +854,7 @@ class MameSearchPaths(unittest.TestCase):
         ))
 
     def test_a_passed_search_setting_leaves_the_bundled_tree_unread(self) -> None:
-        # RetroBat passes -hash bios/mame/hash and -sp bios/mame/samples
+        # RetroBat passes `-hash` bios/mame/hash and `-sp` bios/mame/samples
         # (Mame64.Generator.cs:30, 101, 106-107, 172, 177-178), RetroDECK
         # writes samplepath $bios_path/mame-sa/samples (component_prepare.sh:94):
         # the trees beside the executable are not read, the pack brings them.
@@ -888,8 +888,8 @@ class MameSearchPaths(unittest.TestCase):
         self.assertNotIn("bundled", tree)
 
     def test_batocera_keeps_the_sets_at_the_root_and_samples_in_bios_mame(self) -> None:
-        # -rompath <romDirname>;/userdata/bios/mame;/userdata/bios and
-        # -samplepath /userdata/bios/mame/samples (mameGenerator.py:129-142).
+        # `-rompath` <romDirname>;/userdata/bios/mame;/userdata/bios and
+        # `-samplepath` /userdata/bios/mame/samples (mameGenerator.py:129-142).
         view = standalone_view("mame", "batocera")
         self.assertTrue(all(e["standalone_path"] == e["name"] for e in self.sets(view)))
         (bbc,) = [e for e in view["files"] if e["name"] == "bbc.zip"]
@@ -908,7 +908,7 @@ class MameSearchPaths(unittest.TestCase):
             self.assertTrue(member["path"].startswith("mame-sa/samples/floppy/"))
 
     def test_psxmame_reads_bios_psxmame_bios(self) -> None:
-        # -rompath bios/psxmame/bios;<rom directory> (PSXMame.Generator.cs:38-48).
+        # `-rompath` bios/psxmame/bios;<rom directory> (PSXMame.Generator.cs:38-48).
         view = standalone_view("psxmame", "retrobat")
         self.assertTrue(view["files"])
         for entry in view["files"]:
@@ -1113,7 +1113,7 @@ class SetsReadBesideTheGame(unittest.TestCase):
 
 
 class MameOnRetroDeckRomPaths(unittest.TestCase):
-    """ES-DE starts standalone MAME with -rompath %GAMEDIR%;%ROMPATH%/<system>
+    """ES-DE starts standalone MAME with `-rompath` %GAMEDIR%;%ROMPATH%/<system>
     (resources/systems/linux/es_systems.xml), which outranks mame.ini."""
 
     def test_the_rom_folders_file_records_each_search_path(self) -> None:
@@ -1150,7 +1150,7 @@ class MameOnRetroDeckRomPaths(unittest.TestCase):
 
 class LibretroMameOnEsdeRomPaths(unittest.TestCase):
     """ES-DE hands the libretro MAME core a command line as its content,
-    with -rompath "%GAMEDIRRAW%;%ROMPATH%/<system>" after the machine. The
+    with `-rompath` "%GAMEDIRRAW%;%ROMPATH%/<system>" after the machine. The
     core passes it to MAME after its own <system>/mame/bios, and the later
     value wins (retro_init.cpp:580-597, 902-940, options.cpp:260-276)."""
 
@@ -1177,7 +1177,7 @@ class LibretroMameOnEsdeRomPaths(unittest.TestCase):
 class StandaloneMameOnEmuDeck(unittest.TestCase):
     """EmuDeck writes mame.ini rompath roms/arcade;bios;bios/mame
     (emuDeckMAME.sh:66-68), read when Steam ROM Manager starts MAME with no
-    -rompath (tools/launchers/mame.sh). ES-DE's commands pass their own."""
+    `-rompath` (tools/launchers/mame.sh). ES-DE's commands pass their own."""
 
     def test_a_set_keeps_its_ini_place_and_gains_the_command_folder(self) -> None:
         view = standalone_view("mame", "emudeck")
