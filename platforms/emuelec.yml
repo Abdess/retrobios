@@ -4295,8 +4295,8 @@ launchers:
     \ PathPAL unset"
   fails_when_missing: false
   installs:
-    path: /emuelec/configs/duckstation/settings.ini
-    source_ref: "packages/sx05re/emulators/duckstation/scripts/duckstation.sh:15"
+    path: /storage/.config/emuelec/configs/duckstation/settings.ini
+    source_ref: "packages/sx05re/emulators/duckstation/package.mk:56, packages/sysutils/systemd/scripts/userconfig-setup:12"
   kept_if_present: true
   overrides: []
   source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:207-209, packages/sx05re/emulators/duckstation/config/settings.ini:6-9,\
@@ -4372,7 +4372,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4391,7 +4392,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4409,7 +4411,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4428,7 +4431,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4446,7 +4450,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4465,7 +4470,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4483,7 +4489,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4502,7 +4509,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4520,7 +4528,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4539,7 +4548,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4557,7 +4567,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4576,7 +4587,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4594,7 +4606,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4613,7 +4626,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4631,7 +4645,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4650,7 +4665,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4667,7 +4683,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4684,7 +4701,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4703,7 +4721,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4721,7 +4740,8 @@ launchers:
   depends_on_option: system != arcade
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
@@ -4740,7 +4760,8 @@ launchers:
   fails_when_missing: false
   installs:
     path: /emuelec/configs/advmame/advmame.rc
-    source_ref: "packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
   kept_if_present: false
   overrides:
   - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"

@@ -483,6 +483,15 @@ def _guarded(script: Script, number: int, target: str) -> bool:
     return False
 
 
+def _quoted_glob(command: str) -> bool:
+    """Whether the source of a copy holds a "*" only inside quotes."""
+    found = [w for w in words(command)[1:] if not w.raw.startswith("-")]
+    if len(found) < 2:
+        return False
+    raw = found[0].raw
+    return "*" in raw and "*" not in re.sub(r'"[^"]*"|\'[^\']*\'', "", raw)
+
+
 def config_placement(
     script: Script,
     target: str,
@@ -511,11 +520,15 @@ def config_placement(
                 args = []
                 for word in words(line[copy.start(1):])[1:]:
                     # The command ends at a separator or a redirection.
-                    if word.raw in {";", "&&", "||", "|"} or re.match(r"\d*>", word.raw):
+                    if word.raw in {";", "&&", "||", "|"} or re.match(r"\d*>|&>", word.raw):
                         break
                     args.append(word.text)
                 operands = [a for a in args if not a.startswith("-")]
                 if not operands:
+                    continue
+                # A quoted "*" is a file named *, which no package installs:
+                # the copy does nothing (EmuELEC's duckstation.sh).
+                if _quoted_glob(line[copy.start(1):]):
                     continue
                 destination = script.expand(operands[-1], number, set()).rstrip("/")
                 source = script.expand(operands[0], number, set()).rstrip("/")
@@ -536,7 +549,11 @@ def config_placement(
                     continue
                 if sources and not source.startswith(sources):
                     continue
-                skip = "-n" in args or "--ignore-existing" in args
+                # cp -i fed by false answers no to every overwrite.
+                prompted = any(
+                    a.startswith("-") and not a.startswith("--") and "i" in a[1:] for a in args
+                ) and re.search(r"\bfalse\s*\|\s*$", line[:copy.start(1)])
+                skip = "-n" in args or "--ignore-existing" in args or bool(prompted)
             else:
                 skip = False
             install.add(number)

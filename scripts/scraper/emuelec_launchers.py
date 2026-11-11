@@ -40,6 +40,10 @@ EMULATORS = f"{SX05RE}/emulators"
 LIBRETRO = f"{SX05RE}/libretro"
 RETROARCH_MK = f"{SX05RE}/libretro_base/retroarch/package.mk"
 BIOS_ROOT = "/storage/roms/bios"
+EMUELEC_MK = f"{SX05RE}/emuelec/package.mk"
+# The copy of every package's /usr/config into /storage/.config at each boot,
+# an existing file kept (cp -i answered by false).
+USERCONFIG = "packages/sysutils/systemd/scripts/userconfig-setup"
 # The roms root that holds it (packages/sx05re/libretro_base/retroarch/package.mk:112,117).
 ROMS_ROOT = "/storage/roms"
 
@@ -106,6 +110,19 @@ class Runs:
         return (RUN_EMU, set(self.of(name).lines))
 
 
+def _storage_path(tree: RepoTree, target: str) -> str:
+    """target with the /emuelec link resolved to the folder it points at.
+
+    The emuelec package links /emuelec to /storage/.config/emuelec, where
+    the first-boot copy of /usr/config lands.
+    """
+    mk = _read(tree, EMUELEC_MK)
+    _line, link = mk.find(r"ln -sf (/storage/\S+) \$\{INSTALL\}(/emuelec)$", "/emuelec link")
+    if target == link.group(2) or target.startswith(link.group(2) + "/"):
+        return link.group(1) + target[len(link.group(2)):]
+    return target
+
+
 def _evidence(
     record: Launcher,
     script: Script,
@@ -113,15 +130,28 @@ def _evidence(
     keys: list[str],
     source_name: str = "",
     rewrites: Iterable[int] = (),
+    tree: RepoTree | None = None,
+    installed: Iterable[tuple[str, Iterable[int]]] = (),
 ) -> Launcher:
-    """A config record with the start script lines that put its file in place.
+    """A config record with the lines that put its file in place: the
+    first-boot copy of /usr/config when ``tree`` is given, then the start
+    script's own. ``installed`` are the package.mk lines putting the file
+    in /usr/config.
 
     ``rewrites`` are lines the extractor read as rewriting the record's
     values without naming their keys (advmame.sh's sed of /roms/mame).
     """
-    placement = config_placement(script, target, keys, source_name=source_name)
+    placements = []
+    if tree is not None:
+        setup = _read(tree, USERCONFIG)
+        placements.append(config_placement(
+            setup, _storage_path(tree, target), required=False, sources=("/usr/config/",)
+        ))
+    placement = config_placement(script, target, keys, source_name=source_name,
+                                 required=not placements or not placements[0].install)
     placement.overrides |= set(rewrites)
-    fields = evidence_fields([placement])
+    placements.append(placement)
+    fields = evidence_fields(placements, installed)
     record.installs = fields["installs"]
     record.kept_if_present = fields["kept_if_present"]
     record.overrides = fields["overrides"]
@@ -356,6 +386,8 @@ def duckstation(tree: RepoTree, runs: Runs) -> list[Launcher]:
         script,
         script.expand("${CONFIG_DIR}/settings.ini", run_line, set()),
         [f"[{s}] {k}" for s, k in (folder_key, *file_keys)],
+        tree=tree,
+        installed=[(mk.path, {mk_line})],
     )]
 
 
@@ -569,7 +601,8 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     target = script.expand("${CONFIG_DIR}/advmame.rc", run_line, set())
 
     def proved(record: Launcher, key: str) -> Launcher:
-        return _evidence(record, script, target, [key], rewrites={sed_line})
+        return _evidence(record, script, target, [key], rewrites={sed_line}, tree=tree,
+                         installed=[(mk.path, {mk_line for _, _, mk_line in configs})])
 
     records = []
     for key, folder in value:
