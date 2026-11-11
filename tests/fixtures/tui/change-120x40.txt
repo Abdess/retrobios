@@ -1,0 +1,40 @@
+ RetroBIOS: Change
+
+ What to install
+ > Preferred regions: North America, Japan                             --region
+   Cores: all                                                            --core
+   Emulators: all                                                    --emulator
+   Game data: kept                                               --no-game-data
+ Where
+   BIOS folder: ~/.config/retroarch/system                               --dest
+   Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+ For which device
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+ How
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+ See
+   Preview the file list                                              --dry-run
+   Show the command line
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Open  B/Esc Back  Left/Right Set  ? Help

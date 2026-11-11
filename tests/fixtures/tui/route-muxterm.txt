@@ -440,7 +440,7 @@
    Choose systems
    Copy from an old card or a folder
    Details
-   Options
+   Change
    Quit
  Start Install  B Back
 === plan 40x15
@@ -454,7 +454,7 @@
    Choose systems
    Copy from an old card or a folder
    Details
-   Options
+   Change
    Quit
 
 
@@ -469,7 +469,7 @@
    Choose systems
    Copy the BIOS files from an old card or a folder
    Details
-   Options
+   Change
    Quit
 
 
@@ -493,7 +493,7 @@
 
  > Close
    Details
-   Options
+   Change
 
 
  Start Close  B Back
@@ -506,7 +506,7 @@
 
  > Close
    Details
-   Options
+   Change
 
 
 
@@ -521,7 +521,7 @@
 
  > Close
    Details
-   Options
+   Change
 
 
 
@@ -592,60 +592,168 @@
 
  2 of 3 systems: 4 files, 1.0 MB
  Start Tick  B Done
-=== options 40x12
- RetroBIOS: Options
+=== change 40x12
+ RetroBIOS: Change
 
+ What to install
  > Preferred regions: North America, Ja
-   Game data: kept
-   Installed cores only: no (1 found)
    Cores: all
-   Parallel downloads: 8
+   Emulators: all
+   Game data: kept
+ Where
    BIOS folder: ~/.config...ch/system
    Copy from: none
-   Preview the file list
-   Show the command line
+ 1-8 of 18
  Start Open  B Back  <> Set
-=== options 40x15
- RetroBIOS: Options
+=== change 40x15
+ RetroBIOS: Change
 
+ What to install
  > Preferred regions: North America, Ja
-   Game data: kept
-   Installed cores only: no (1 found)
    Cores: all
-   Parallel downloads: 8
+   Emulators: all
+   Game data: kept
+ Where
    BIOS folder: ~/.config...ch/system
    Copy from: none
-   Preview the file list
-   Show the command line
-
- Sets --region
-
+   From a pack: none
+ For which device
+   Device: every board
+ 1-11 of 18
  Start Open  B Back  <> Set
-=== options 80x24
- RetroBIOS: Options
+=== change 80x24
+ RetroBIOS: Change
 
- Each row is an option of the command line, named on the right.
-
+ What to install
  > Preferred regions: North America, Japan                             --region
-   Game data: kept                                               --no-game-data
-   Installed cores only: no (1 found)                         --installed-cores
    Cores: all                                                            --core
-   Parallel downloads: 8                                                 --jobs
+   Emulators: all                                                    --emulator
+   Game data: kept                                               --no-game-data
+ Where
    BIOS folder: ~/.config/retroarch/system                               --dest
    Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+ For which device
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+ How
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+ See
    Preview the file list                                              --dry-run
    Show the command line
 
 
 
-
-
-
-
-
-
-
  Start Open  B Back  Left/Right Set
+=== device 40x12
+ RetroBIOS: Device
+
+ Choose the board, the chip of the
+   device the games run on. Every board
+   fits any device.
+
+ > (x) h700           named by the card
+   ( ) bcm2711                     rpi4
+   ( ) x86_64
+   ( ) Every board
+
+ Start Choose  B Back
+=== device 40x15
+ RetroBIOS: Device
+
+ Choose the board, the chip of the
+   device the games run on. Every board
+   fits any device.
+
+ > (x) h700           named by the card
+   ( ) bcm2711                     rpi4
+   ( ) x86_64
+   ( ) Every board
+
+
+
+
+ Start Choose  B Back
+=== device 80x24
+ RetroBIOS: Device
+
+ Choose the board, the chip of the device the games run on. Every board fits
+   any device.
+
+ > (x) h700                                                   named by the card
+   ( ) bcm2711                                                             rpi4
+   ( ) x86_64
+   ( ) Every board
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Start Choose  B Back
+=== emulators 40x12
+ RetroBIOS: Emulators
+
+ Tick the emulators to install for.
+   With none ticked, every emulator's
+   files are installed.
+
+   Filter (Select shows a keyboard)
+   [ ] mesen
+ > [x] pcsx_rearmed
+   None
+   Done
+ Start Tick  B Done
+=== emulators 40x15
+ RetroBIOS: Emulators
+
+ Tick the emulators to install for.
+   With none ticked, every emulator's
+   files are installed.
+
+   Filter (Select shows a keyboard)
+   [ ] mesen
+ > [x] pcsx_rearmed
+   None
+   Done
+
+
+
+ Start Tick  B Done
+=== emulators 80x24
+ RetroBIOS: Emulators
+
+ Tick the emulators to install for. With none ticked, every emulator's files
+   are installed.
+
+   Filter (Select shows a keyboard)
+   [ ] mesen
+ > [x] pcsx_rearmed
+   None
+   Done
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Start Tick  B Done
 === regions 40x12
  RetroBIOS: Preferred regions
 
@@ -1137,7 +1245,7 @@
 
  D-pad, Up/Down     Move
  Start, Enter       Install
- o, Tab             Options
+ o, Tab             Change
  d                  Details
  B, Esc, Backspace  Back
  q, Ctrl-C          Quit
@@ -1150,7 +1258,7 @@
 
  D-pad, Up/Down     Move
  Start, Enter       Install
- o, Tab             Options
+ o, Tab             Change
  d                  Details
  B, Esc, Backspace  Back
  q, Ctrl-C          Quit
@@ -1166,7 +1274,7 @@
 
  D-pad, Up/Down     Move
  Start, Enter       Install
- o, Tab             Options
+ o, Tab             Change
  d                  Details
  B, Esc, Backspace  Back
  q, Ctrl-C          Quit
@@ -1212,7 +1320,7 @@
    Choose systems
    Copy from an old card or a folder
    Details
-   Options
+   Change
    Quit
  Start Install  B Back
 === plan-games 80x24
@@ -1229,7 +1337,7 @@
    Choose systems
    Copy the BIOS files from an old card or a folder
    Details
-   Options
+   Change
    Quit
 
 
@@ -1428,7 +1536,7 @@
    Copy from an old card or a folder
    Change where
    Details
-   Options
+   Change
    Quit
  Start Install  B Back
 === plan-record 80x24
@@ -1444,7 +1552,7 @@
    Copy the BIOS files from an old card or a folder
    Change where
    Details
-   Options
+   Change
    Quit
 
 
