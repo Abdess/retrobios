@@ -15511,13 +15511,17 @@ class DeviceAndEmulatorScreens(unittest.TestCase):
                          [("--every-board", None)])
         self.assertIn("Device: every board", self.text(state))
 
-    def test_with_no_board_read_every_board_is_the_choice_and_no_flag(self):
+    def test_with_no_board_read_every_board_is_the_choice(self):
         state = device_state(board="")
         self.assertEqual(install.tui_rows(state)[-1].label, "(x) Every board")
         self.assertEqual(state.focus["device"], 3)
-        press(state, "enter")
         self.assertEqual([flag for flag in install.tui_flags(state)
                           if flag[0] in ("--target", "--every-board")], [])
+        # Chosen, it is said: a card put in the reader later names none.
+        press(state, "enter")
+        self.assertEqual([flag for flag in install.tui_flags(state)
+                          if flag[0] in ("--target", "--every-board")],
+                         [("--every-board", None)])
 
     def test_a_board_list_that_cannot_be_read_is_said(self):
         state = checked_state()
@@ -15596,11 +15600,12 @@ class DeviceAndEmulatorScreens(unittest.TestCase):
         self.assertIn("A/Enter Use this pack", self.text(state))
         self.assertEqual(press(state, "enter"), [("pack", pack)])
         # Refused: said, the browser stays.
-        install.tui_receive(state, ("pack_opened", pack, "Not a pack."))
+        install.tui_receive(state, ("pack_opened", pack, None, "Not a pack."))
         self.assertEqual(state.screen, "browse")
         self.assertIn("Not a pack.", self.text(state))
-        effects = install.tui_receive(state, ("pack_opened", pack, ""))
-        self.assertEqual(effects, [("fetch", "retroarch")])
+        opened = mock.Mock()
+        effects = install.tui_receive(state, ("pack_opened", pack, opened, ""))
+        self.assertEqual(effects, [("use_pack", opened), ("fetch", "retroarch")])
         self.assertEqual(state.packs, [pack])
         self.assertIn(("--from-pack", str(pack)), install.tui_flags(state))
 
@@ -15612,9 +15617,9 @@ class DeviceAndEmulatorScreens(unittest.TestCase):
             archive.writestr("manifest.json", json.dumps({"platform": "batocera",
                                                           "files": []}))
         previous = install.LOCAL.pack
-        self.addCleanup(setattr, install.LOCAL, "pack", previous)
-        problem = install.open_tui_pack(pack, "retroarch")
+        opened, problem = install.open_tui_pack(pack, "retroarch")
         self.assertIs(install.LOCAL.pack, previous)
+        self.assertIsNone(opened)
         self.assertTrue(problem)
 
 
@@ -15827,6 +15832,156 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
                 for dest in set(installed) - set(packed):
                     entry = next(entry for entry in files if entry["dest"] == dest)
                     self.assertIsNone(entry.get("cores"), dest)
+
+
+class DeviceAndEmulatorReview(unittest.TestCase):
+    """The review of 2026-11-11: each finding, held."""
+
+    def setUp(self):
+        patcher = mock.patch.object(install, "_mounted_cards", return_value=[])
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    @staticmethod
+    def focus(state: install.TuiState, action: str, value: object = None) -> None:
+        rows = install.tui_rows(state)
+        state.focus[state.screen] = next(
+            index for index, row in enumerate(rows)
+            if row.action == action and (value is None or row.value == value))
+
+    def text(self, state: install.TuiState) -> str:
+        return "\n".join(str(line) for line in install.tui_view(state, 80, 24))
+
+    def test_every_board_is_said_whatever_the_run_started_with(self):
+        for start in ({"target": "bcm2711"}, {"every_board": True}, {}):
+            with self.subTest(start=start):
+                state = device_state(board="")
+                state.target = start.get("target", "")
+                state.every_board = start.get("every_board", False)
+                self.focus(state, "board", "")
+                press(state, "enter")
+                self.assertEqual([flag for flag in install.tui_flags(state)
+                                  if flag[0] in ("--target", "--every-board")],
+                                 [("--every-board", None)])
+        # The board the run reads itself clears both.
+        state = device_state()
+        state.every_board = True
+        self.focus(state, "board", "h700")
+        press(state, "enter")
+        self.assertEqual((state.target, state.every_board), ("", False))
+
+    def test_a_board_list_that_failed_is_fetched_again(self):
+        state = checked_state()
+        state.stack.append("options")
+        self.focus(state, "device")
+        self.assertEqual(press(state, "enter"), [("targets", "retroarch")])
+        install.tui_receive(state, ("targets", "retroarch", None,
+                                    "The board list could not be read."))
+        self.assertIn("The board list could not be read.", self.text(state))
+        press(state, "esc")
+        self.assertEqual(press(state, "enter"), [("targets", "retroarch")])
+        self.assertIn("Reading the board list...", self.text(state))
+
+    def test_a_pack_is_read_only_once_the_screen_takes_it(self):
+        state = checked_state()
+        state.stack += ["options", "browse"]
+        state.browse_for = "pack"
+        pack = mock.Mock()
+        effects = install.tui_receive(state, ("pack_opened", Path("p.zip"), pack, ""))
+        self.assertEqual(effects[0], ("use_pack", pack))
+        # Left before it opened: closed, never read.
+        state = checked_state()
+        effects = install.tui_receive(state, ("pack_opened", Path("p.zip"), pack, ""))
+        self.assertEqual(effects, [("close_pack", pack)])
+        self.assertEqual(state.packs, [])
+
+    def test_open_tui_pack_leaves_the_run_s_pack_alone(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        pack = root / "RetroArch_BIOS_Pack.zip"
+        with zipfile.ZipFile(pack, "w") as archive:
+            archive.writestr("manifest.json", json.dumps({
+                "platform": "retroarch", "files": [
+                    {"dest": "a.bin", "path": "a.bin", "sha1": "0" * 40, "size": 1}]}))
+            archive.writestr("a.bin", b"a")
+        previous = install.LOCAL.pack
+        opened, problem = install.open_tui_pack(pack, "retroarch")
+        self.addCleanup(lambda: opened is not None and opened.close())
+        self.assertEqual(problem, "", problem)
+        self.assertIsNotNone(opened)
+        self.assertIs(install.LOCAL.pack, previous)
+
+    def test_a_zip_that_is_no_pack_is_closed(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        notpack = root / "photos.zip"
+        with zipfile.ZipFile(notpack, "w") as archive:
+            archive.writestr("a.jpg", b"x")
+        opened = []
+        real = zipfile.ZipFile
+
+        def tracked(*args, **kwargs):
+            archive = real(*args, **kwargs)
+            opened.append(archive)
+            return archive
+
+        with mock.patch.object(install.zipfile, "ZipFile", side_effect=tracked):
+            with self.assertRaises(ValueError):
+                install.PackSource([notpack])
+        self.assertTrue(opened)
+        self.assertTrue(all(archive.fp is None for archive in opened))
+
+    def test_another_setup_drops_the_board_and_emulators(self):
+        state = checked_state()
+        state.target, state.every_board, state.emulators = "bcm2711", False, ["mesen"]
+        install._set_platform(state, "batocera")
+        self.assertEqual((state.target, state.every_board, state.emulators),
+                         ("", False, []))
+        state = checked_state()
+        state.target, state.emulators = "bcm2711", ["mesen"]
+        install._set_platform(state, "retroarch")
+        self.assertEqual((state.target, state.emulators), ("bcm2711", ["mesen"]))
+
+    def test_names_the_new_list_lacks_are_left_out_and_said(self):
+        state = checked_state()
+        state.emulators, state.target = ["mesen", "gone_core"], "nowhere"
+        state.targets, state.targets_for = dict(TARGETS), "retroarch"
+        install._known_choice(state, "retroarch", MANIFEST)
+        self.assertEqual((state.emulators, state.target), (["mesen"], ""))
+        self.assertEqual(state.status, "Left out, not in this list: --emulator gone_core, "
+                                       "--target nowhere.")
+
+    def test_page_up_and_home_never_rest_on_a_heading(self):
+        state = checked_state()
+        press(state, "o")
+        rows = install.tui_rows(state)
+        for start in (1, 6, len(rows) - 1):
+            for key in ("pgup", "home"):
+                with self.subTest(start=start, key=key):
+                    state.focus["options"] = start
+                    press(state, key)
+                    self.assertEqual(state.focus["options"], 1)
+
+    def test_offline_is_refused_for_a_target_with_no_board_list_held(self):
+        state = checked_state()
+        state.target = "bcm2711"
+        state.stack.append("options")
+        self.focus(state, "offline")
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop(install.OFFLINE_VARIABLE, None)
+            self.assertEqual(press(state, "enter"), [])
+            self.assertIn("Open Device once first", self.text(state))
+            state.targets, state.targets_for = dict(TARGETS), "retroarch"
+            self.assertEqual(press(state, "enter"), [("offline", True)])
+
+    def test_the_board_list_is_fetched_once_with_the_list_s_timeout(self):
+        inbox: queue.Queue = queue.Queue()
+        with mock.patch.object(install, "_fetch_json", return_value={}) as fetched, \
+                mock.patch.object(install, "local_targets", return_value=None):
+            install._tui_fetch_targets("retroarch", inbox, io.StringIO())
+        self.assertEqual(fetched.call_args.kwargs["attempts"], 1)
+        self.assertEqual(fetched.call_args.kwargs["timeout"], install.TUI_FETCH_TIMEOUT)
+        self.assertEqual(inbox.get_nowait(), ("targets", "retroarch", {}, ""))
 
 if __name__ == "__main__":
     unittest.main()

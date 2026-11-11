@@ -4734,7 +4734,8 @@ def local_targets(plat: str) -> "dict | None":
         sys.exit(1)
 
 
-def fetch_targets(plat: str) -> "dict | None":
+def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
+                  timeout: float | None = None) -> "dict | None":
     """The target core list: the one this run has at hand, else downloaded.
 
     Empty on 404, where the platform publishes no targets. None when the list
@@ -4757,7 +4758,8 @@ def fetch_targets(plat: str) -> "dict | None":
         sys.exit(2)
     url = TARGETS_URL.format(platform=plat)
     try:
-        return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list"))
+        return _validate_targets(_fetch_json(url, MAX_TARGETS_BYTES, "target list",
+                                             attempts=attempts, timeout=timeout))
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
             return {}
@@ -12443,7 +12445,12 @@ class PackSource:
             self.close()
             raise ValueError(f"{path.name} cannot be read as a ZIP ({exc}). A download "
                              "cut short gives this: download it again.") from exc
-        self.listed = self._pack_list()
+        try:
+            self.listed = self._pack_list()
+        except ValueError:
+            # A ZIP that is no pack: its archives closed, not left open.
+            self.close()
+            raise
         self.by_sha1 = {f["sha1"]: f["path"] for f in self.listed}
 
     @staticmethod
@@ -20117,11 +20124,13 @@ def _device_rows(state: TuiState) -> list[TuiRow]:
 
 def _choose_board(state: TuiState, name: str) -> list[tuple]:
     """A board chosen on Device, back on Change. The board the run reads
-    itself is no option: the command stays the one with nothing chosen."""
+    itself is no option: the command stays the one with nothing chosen.
+    Every board is always said, the run otherwise reading a board itself
+    (one started with --target or --every-board read none)."""
     seen = _board_seen(state)
     read = seen[0] if seen is not None and seen[1] else ""
-    state.target = "" if name == read else name
-    state.every_board = not name and bool(read)
+    state.every_board = not name
+    state.target = "" if not name or name == read else name
     return _back(state)
 
 
@@ -20412,6 +20421,37 @@ def _closed_status(state: TuiState, closed: tuple[Path, str]) -> TuiLine:
                    "or give this user access to it.", "refusal")
 
 
+def _set_platform(state: TuiState, plat: str) -> None:
+    """Another setup chosen: its list names other boards and emulators, so
+    the ones chosen for the setup before are not carried over."""
+    if state.platform and plat != state.platform:
+        state.target, state.every_board, state.emulators = "", False, []
+        state.targets, state.targets_for, state.targets_problem = None, "", ""
+    state.platform = plat
+
+
+def _known_choice(state: TuiState, plat: str, manifest: dict) -> None:
+    """The emulators and the board chosen, kept to those the list now read
+    names, the others left out and said in one line: a pack's list can
+    lack what the network's held, and the check then failed."""
+    names = emulator_names(manifest, manifest.get("files") or [],
+                           manifest.get("omitted_files") or [])
+    gone = [f"--emulator {name}" for name in state.emulators if name not in names]
+    state.emulators = [name for name in state.emulators if name in names]
+    boards = state.targets if state.targets_for == plat else None
+    if LOCAL.manifest is not None or LOCAL.pack is not None:
+        try:
+            boards = local_targets(plat)
+        except SystemExit:
+            # A board list beside the list that is no list: the check says so.
+            boards = None
+    if state.target and boards is not None and state.target not in boards:
+        gone.append(f"--target {state.target}")
+        state.target = ""
+    if gone:
+        state.status = f"Left out, not in this list: {', '.join(gone)}."
+
+
 def _choose(state: TuiState, plat: str, dest: Path, proposed: bool = False) -> list[tuple]:
     """dest taken for plat. proposed is a folder the installer offered (its
     usual or detected folder, a share drive's bios): created without the
@@ -20422,7 +20462,8 @@ def _choose(state: TuiState, plat: str, dest: Path, proposed: bool = False) -> l
     if closed is not None:
         # Nothing can be checked or written there: the folder is asked
         # again, on the screen that chose it when it can say why.
-        state.platform, state.status = plat, _closed_status(state, closed)
+        _set_platform(state, plat)
+        state.status = _closed_status(state, closed)
         if state.stack and state.screen in ("folder", "browse", "path"):
             return []
         # The folder found here is the one the frontend reads: the built-in
@@ -20434,7 +20475,8 @@ def _choose(state: TuiState, plat: str, dest: Path, proposed: bool = False) -> l
     if card and card[0] == plat and card[1] != dest:
         # A muOS or KNULLI card's root: that system reads a folder below it.
         dest = card[1]
-    state.platform, state.dest = plat, dest
+    _set_platform(state, plat)
+    state.dest = dest
     if plat in CARD_PLATFORMS and card_platform(dest) is None:
         # The engine refuses a folder inside the card, the list writing
         # Bios/<TAG>/ below the root: the root is offered instead.
@@ -20871,7 +20913,7 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
             # Taken as the system chosen, as --platform with --dest takes it.
             plat, mount = row.value
             state.card_bound = card_bound(plat, plat)
-            state.platform = plat
+            _set_platform(state, plat)
             choice = card_choice(plat, plat, mount)
             if choice.refused:
                 _card_status(state, choice)
@@ -20884,7 +20926,7 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
         return _choose(state, plat, path, proposed=True)
     if screen == "platforms":
         plat, system = row.value if action == "cardsystem" else (row.value, row.value)
-        state.platform = plat
+        _set_platform(state, plat)
         state.card_bound = card_bound(system, plat)
         if state.dest_given is not None:
             # Read as --platform with --dest reads it, for the same folder:
@@ -21599,9 +21641,18 @@ def _option(state: TuiState, action: str, step: int) -> list[tuple]:
     elif action == "addapp":
         state.add_app = step > 0 if step else not state.add_app
     elif action == "offline" and LOCAL.pack is None:
+        on = step > 0 if step else not offline_requested()
+        if (on and state.target and not state.manifest_given and not state.packs
+                and not (state.targets_for == state.platform and state.targets)):
+            # The run reads the board list beside the file list it is
+            # given, written only once Device has read it: refused before
+            # a check that would stop on it.
+            state.status = _styled("Open Device once first: without the internet the "
+                                   "board list has to be read already.", "refusal")
+            return []
         # Set in this process by the effect, as --offline sets it: the
         # runs started next inherit it, and their command names it.
-        return [("offline", step > 0 if step else not offline_requested())]
+        return [("offline", on)]
     elif action == "device":
         _push(state, "device")
         state.focus["device"] = _device_focus(state)
@@ -21664,23 +21715,28 @@ def _open_pack_browser(state: TuiState) -> list[tuple]:
     return []
 
 
-def open_tui_pack(path: Path, plat: str) -> str:
-    """The pack the screen chose, opened in this process in place of the
-    network as --from-pack opens it: "" once it is, else why not."""
+def open_tui_pack(path: Path, plat: str) -> tuple[PackSource | None, str]:
+    """The pack the screen chose, opened as --from-pack opens it, and why
+    it is refused, "" when it is not. The run reads it only once the screen
+    takes it (use_tui_pack): a Back before then leaves the run as it was."""
     try:
         pack = PackSource([path])
     except ValueError as exc:
-        return str(exc)
+        return None, str(exc)
     spelled = pack.platforms()
     if spelled and plat not in spelled:
         pack.close()
-        return (f"{pack.name} is a pack for "
-                f"{' and '.join(display_name(name) for name in spelled)}, "
-                f"not {display_name(plat)}.")
-    if LOCAL.pack is not None:
+        return None, (f"{pack.name} is a pack for "
+                      f"{' and '.join(display_name(name) for name in spelled)}, "
+                      f"not {display_name(plat)}.")
+    return pack, ""
+
+
+def use_tui_pack(pack: PackSource) -> None:
+    """The pack the screen took, read by this run in place of the network."""
+    if LOCAL.pack is not None and LOCAL.pack is not pack:
         LOCAL.pack.close()
     LOCAL.pack = pack
-    return ""
 
 
 def set_offline(on: bool) -> None:
@@ -22066,8 +22122,12 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
         # A heading names the rows under it and is never in focus: the
         # move goes on to the next row its way, else stays where it was.
         step = -1 if name in ("up", "pgup", "end") or char in ("k", "G") else 1
+        moved = name in ("up", "down") or char in ("k", "j")
+        if not moved and focus in (0, last):
+            # A page or Home clamped to an end: the first row from that end.
+            step = 1 if focus == 0 else -1
         order = list(range(focus, -1, -1) if step < 0 else range(focus, len(rows)))
-        if wrap:
+        if wrap and moved:
             order += range(last, focus, -1) if step < 0 else range(0, focus)
         focus = next((index for index in order if rows[index].action != "heading"),
                      max(0, min(state.focus.get(screen, 0), last)))
@@ -22490,20 +22550,25 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
         if plat != state.platform or state.screen != "checking":
             return []
         state.manifest, state.manifest_for = manifest, plat
+        _known_choice(state, plat, manifest)
         if state.games_probed is None:
             state.games_probed = (plat, state.dest)
         return _start_run(state, "check")
     if kind == "targets":
         _kind, plat, targets, problem = message
         if plat == state.platform:
-            state.targets, state.targets_for, state.targets_problem = targets, plat, problem
+            # Held only once read: a list that could not be read is fetched
+            # again the next time Device opens.
+            state.targets, state.targets_problem = targets, problem
+            state.targets_for = plat if targets is not None else ""
             if state.screen == "device":
                 state.focus["device"] = _device_focus(state)
         return []
     if kind == "pack_opened":
-        _kind, path, problem = message
+        _kind, path, pack, problem = message
         if state.screen != "browse" or state.browse_for != "pack":
-            return []
+            # Left before it opened: never read, closed.
+            return [("close_pack", pack)] if pack is not None else []
         if problem:
             state.status = _styled(problem, "refusal")
             return []
@@ -22515,7 +22580,7 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
         if not state.manifest_given:
             state.manifest_path = None
         state.targets_for = ""
-        return _start_check(state)
+        return [("use_pack", pack), *_start_check(state)]
     if kind == "app":
         # Put from the result screen, in this process.
         state.app, state.app_running = message[1], False
@@ -23975,9 +24040,9 @@ def _view_options(state: TuiState, width: int, height: int) -> tuple:
     # A folder is cut in its middle, its last levels being what tells it apart.
     room = width - 4 - (0 if width < 60 else 2 + max(cell_width(r.right) for r in rows))
     rows = [_middle_label(row, room) if row.style == "path" else row for row in rows]
-    if state.status:
-        after.append(state.status)
-    return ("Change", _compose(state, width, height, [], rows, after),
+    # In the lines the rows leave: below them it went once they filled
+    # the screen.
+    return ("Change", _compose(state, width, height, [], rows, after, _status_footer(state)),
             ("A/Enter Change", "B/Esc Back", "Left/Right Set", "? Help"))
 
 
@@ -23986,11 +24051,13 @@ def _view_device(state: TuiState, width: int, height: int) -> tuple:
     pinned = ["Choose the board, the chip of the device the games run on. "
               "Every board fits any device."]
     rows = tui_rows(state)
-    if state.targets_for != state.platform:
+    if state.targets_problem:
+        after = [state.targets_problem]
+    elif state.targets_for != state.platform:
         after = ["Reading the board list..."]
     elif not rows:
-        after = [state.targets_problem or f"{display_name(state.platform)} publishes "
-                 "no board list: every board's files are installed."]
+        after = [f"{display_name(state.platform)} publishes no board list: every "
+                 "board's files are installed."]
     else:
         after = []
     return ("Device", _compose(state, width, height, [], rows, after,
@@ -25421,7 +25488,9 @@ def _tui_fetch_targets(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
     the network's. None and why when it cannot be read."""
     mark = len(log.getvalue())
     try:
-        targets = fetch_targets(plat)
+        # One attempt and the list's own timeout, as the file list is
+        # fetched here: Device says Reading while it waits.
+        targets = fetch_targets(plat, attempts=1, timeout=TUI_FETCH_TIMEOUT)
     except SystemExit:
         targets = None
     said = [line.strip() for line in log.getvalue()[mark:].splitlines() if line.strip()]
@@ -25900,7 +25969,12 @@ def run_tui(args: argparse.Namespace) -> int:
                 threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox, buffer),
                                  daemon=True).start()
             elif kind == "pack":
-                inbox.put(("pack_opened", effect[1], open_tui_pack(effect[1], state.platform)))
+                inbox.put(("pack_opened", effect[1],
+                           *open_tui_pack(effect[1], state.platform)))
+            elif kind == "use_pack":
+                use_tui_pack(effect[1])
+            elif kind == "close_pack":
+                effect[1].close()
             elif kind == "offline":
                 set_offline(effect[1])
 
