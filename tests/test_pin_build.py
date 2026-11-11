@@ -126,8 +126,10 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
 
 class EveryBuildReferenceNamesThePin(unittest.TestCase):
     """Reads the repository: a pin_build value is what the platform builds,
-    so it is the profile's source_commit or names its core_version, and the
-    platform's own YAML was scraped from that repository."""
+    so on a pin_frozen profile it is the profile's source_commit or names
+    its core_version, and the platform's own YAML was scraped from that
+    repository. A pin_build standing for config_reads names the build those
+    reads are made at, a revision of its own (ROCKNIX's DuckStation)."""
 
     def test_the_values_agree(self):
         from common import load_emulator_profiles
@@ -149,7 +151,7 @@ class EveryBuildReferenceNamesThePin(unittest.TestCase):
                 token = value.split()[-1].rsplit("/", 1)[-1].removesuffix(".tar.gz")
                 return value in pins or any(token in v or v in value for v in versions)
 
-            if not any(names_it(str(r["value"])) for r in references):
+            if profile.get("pin_frozen") and not any(names_it(str(r["value"])) for r in references):
                 disagree.append(name)
             for reference in references:
                 if not cf.pin_build_revision(reference, REPO_ROOT / "platforms"):
