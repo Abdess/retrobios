@@ -237,8 +237,11 @@ class NothingIsLost(unittest.TestCase):
 # 1,607, RetroArch 2,207, the largest main page 2,459, the largest part
 # 19,127: RetroDECK's arcade list). AmberELEC rose to 1,304 on 2026-11-11:
 # MAME is named beside ProSystem, O2EM and FreeIntv, the cores its rom
-# folders offer, and the MSX section shows its file count.
-PAGE_CEILINGS = {"batocera": 2433, "amberelec": 1304, "romm": 1607, "retroarch": 2192}
+# folders offer, and the MSX section shows its file count. 1,311 once
+# its Neo Geo row names the emulators that read the set (AdvanceMAME,
+# FinalBurn Neo, Geolith, MAME) beside FB Alpha 2012, the only one it named
+# while the platforms' snk-neogeo met no profile id.
+PAGE_CEILINGS = {"batocera": 2433, "amberelec": 1311, "romm": 1607, "retroarch": 2192}
 MAIN_PAGE_CEILING = 2459
 PART_PAGE_CEILING = 2219
 
@@ -281,13 +284,16 @@ BEFORE_WEIGHT = {
     # 1,394,379 bytes on the built site of 7c5ad8366. MAME is named among
     # the readers of seven systems its rom folders offer it for, and the
     # LRPS2 that Batocera builds reads "LRPS2 (416291a, Batocera)" since
-    # 2026-11-11: 1,396,309 bytes on the built site of 964875572.
-    "batocera": (13, 18_854, 1_396_309),
+    # 2026-11-11: 1,396,309 bytes on the built site of 964875572. Its Neo
+    # Geo system names every Neo Geo core since the platforms' snk-neogeo
+    # met one: 1,396,380 bytes on the built site of 2026-11-11.
+    "batocera": (13, 18_854, 1_396_380),
     # AmberELEC's MSX files cite the fMSX ROM loader since 2026-11-11 (fMSX
     # named 82 times instead of 28, the same 295 files): the section moved
     # to a part page of its own, 2 pages, 7,160 elements and 545,681 bytes
-    # on the built site of 964875572.
-    "amberelec": (2, 7_928, 545_681),
+    # on the built site of 964875572. Its Neo Geo row names the emulators
+    # that read the set (546,385 bytes on the built site of 2026-11-11).
+    "amberelec": (2, 7_928, 546_385),
     "romm": (2, 9_561, 572_487),
     # RetroArch's MSX files cite the fMSX ROM loader and its ScummVM files
     # the readers of each data file since 2026-11-11 (46,737 and 9,275 bytes
