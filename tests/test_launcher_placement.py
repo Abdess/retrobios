@@ -13,6 +13,7 @@ import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
 import hashlib
 import io
+import json
 import shutil
 import sys
 import tempfile
@@ -985,12 +986,12 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
         # read in both.
         view = standalone_view("advancemame", "emuelec")
         sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
-        self.assertEqual(len(sets), 58)
+        self.assertEqual(len(sets), 52)
         places: dict[str, set[str]] = {}
         for entry in sets:
             self.assertTrue(entry.get("unprefixed"))
             places.setdefault(entry["name"], set()).add(entry["standalone_path"])
-        self.assertEqual(len(places), 29)
+        self.assertEqual(len(places), 26)
         for name, paths in places.items():
             self.assertEqual(paths, {"mame/" + name, "arcade/" + name})
 
@@ -1017,7 +1018,7 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
         by_dest = {f["dest"]: advancemame_copy(f) for f in manifest["files"]}
         sets = [d.removeprefix("arcade/") for d, sha1 in by_dest.items()
                 if d.startswith("arcade/") and sha1]
-        self.assertEqual(len(sets), 29)
+        self.assertEqual(len(sets), 26)
         for name in sets:
             self.assertEqual(by_dest["arcade/" + name], by_dest["mame/" + name], name)
 
@@ -1206,6 +1207,94 @@ class EveryCoreAFolderOffers(unittest.TestCase):
             folders = {e["path"].split("/")[0] for e in view["files"]
                        if e.get("category") == "bios_zip" and e.get("layout_path")}
             self.assertIn("arcade", folders, platform)
+
+
+class CloneReadsItsParent(unittest.TestCase):
+    """ES-DE starts odyssey2 with -rompath on roms/odyssey2 alone, and MAME
+    finds o2bios.rom in the parent's videopac.zip (src/emu/driver.cpp:31-38)."""
+
+    def test_the_parent_set_goes_to_the_clone_folder(self) -> None:
+        from common import rom_search_sets
+
+        self.assertIn("videopac", rom_search_sets("mame", "odyssey2", ["odyssey2"], False))
+        for platform, dest in (("emudeck", "odyssey2/videopac.zip"),
+                               ("retrodeck", "roms/odyssey2/videopac.zip")):
+            with self.subTest(platform=platform):
+                dests = {f["dest"] for f in platform_manifest(platform)["files"]}
+                self.assertIn(dest, dests)
+
+
+class AdvanceMameOnRetroPie(unittest.TestCase):
+    """RetroPie writes dir_rom $romdir/mame-advmame:$romdir/arcade into each
+    AdvanceMAME build's rc (advmame.sh:100), the list the code splits on ':'
+    (advance/linux/file.c:138-141)."""
+
+    def test_the_sets_go_to_the_first_folder_searched(self) -> None:
+        config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        tags = standalone_set(config)
+        for emu in ("advmame", "advmame-1.4", "advmame-0.94"):
+            with self.subTest(emu=emu):
+                placed = [
+                    (f.get("root"), f.get("standalone_path"))
+                    for view, standalone in platform_layouts(emu, profiles[emu], tags)
+                    if standalone
+                    for f in view["files"] if isinstance(f, dict) and f["name"] == "neogeo.zip"
+                ]
+                self.assertEqual(placed, [("roms", "mame-advmame/neogeo.zip")])
+
+
+class CoreOfferedOnSomeBoards(unittest.TestCase):
+    """ROCKNIX writes some add_emu_core calls under a `case "${DEVICE}"`
+    branch (emulators/package.mk:188 offers uae4arm for amiga on the devices
+    it builds it for). A board's pack places such a core in that folder only
+    when the branch names the board, and a manifest for every board says
+    where it does."""
+
+    ROW = {
+        "folder": "amiga", "core": "puae", "emulator": "retroarch",
+        "offers": [
+            {"emulator": "retroarch", "core": "puae"},
+            {"emulator": "retroarch", "core": "uae4arm", "when": "DEVICE H700|RK3326"},
+            {"emulator": "retroarch", "core": "puae2021",
+             "when": 'if [ "${PREFER_GLES}" = "yes" ]; then'},
+        ],
+    }
+
+    def config(self, **extra) -> dict:
+        base = load_platform_config("rocknix", str(REPO_ROOT / "platforms"))
+        return {**base, "_rom_folders": [self.ROW], **extra}
+
+    def test_a_branch_names_the_boards(self) -> None:
+        from common import when_admits
+
+        self.assertTrue(when_admits("DEVICE H700|RK3326", "rk3326"))
+        self.assertFalse(when_admits("DEVICE H700|RK3326", "s922x"))
+        self.assertTrue(when_admits("DEVICE AMD64; DEVICE RK3588*", "rk3588"))
+        self.assertTrue(when_admits('if [ "${PREFER_GLES}" = "yes" ]; then', "h700"))
+
+    def test_an_offer_carries_the_boards_its_branch_names(self) -> None:
+        from common import offer_boards
+
+        boards = offer_boards(self.config())
+        self.assertEqual(boards[("uae4arm", "amiga")], frozenset({"h700", "rk3326"}))
+        self.assertIsNone(boards[("puae", "amiga")])
+        self.assertIsNone(boards[("puae2021", "amiga")])
+
+    def test_a_board_pack_places_the_core_where_the_board_offers_it(self) -> None:
+        from common import CONTENT_FOLDER_PREFIX, TARGET_KEY, content_folder_tags
+
+        def placed(config: dict) -> dict:
+            rows = [json.loads(t[len(CONTENT_FOLDER_PREFIX):]) for t in content_folder_tags(config)
+                    if t.startswith(CONTENT_FOLDER_PREFIX)]
+            return {core: on for core, _folder, _where, on in rows}
+
+        every = placed(self.config())
+        self.assertEqual(every["uae4arm"], ["h700", "rk3326"])
+        self.assertIsNone(every["puae"])
+        self.assertIn("uae4arm", placed(self.config(**{TARGET_KEY: "rk3326"})))
+        self.assertNotIn("uae4arm", placed(self.config(**{TARGET_KEY: "s922x"})))
+        self.assertIn("puae", placed(self.config(**{TARGET_KEY: "s922x"})))
 
 
 def platform_manifest(platform: str) -> dict:

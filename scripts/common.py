@@ -3390,7 +3390,7 @@ def _build_layouts(
             if f.get("bundled") and passed_setting(f):
                 # The copy installed with the emulator sits where the setting
                 # pointed before the launcher moved it: RetroBat passes MAME
-                # `-hash` bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
+                # -hash bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
                 # the hash/ beside mame.exe is no longer read.
                 moved = {k: v for k, v in f.items() if k != "bundled"}
             files.extend(_placed_entry(moved, profile, placed) for placed in places)
@@ -3410,6 +3410,107 @@ LIBRETRO_RUNNERS = frozenset({"libretro", "retroarch", "retroarch32", "retrorun"
 def _core_key(name: str) -> str:
     """A core name as two platforms spell it alike: mame2003-plus, mame2003_plus."""
     return str(name).lower().replace("-", "_")
+
+
+# Set on a platform config built for one board (generate_pack, verify
+# --target): a core a roms folder offers on other boards only is not placed
+# there.
+TARGET_KEY = "_target"
+
+
+def _branch_holds(branch: str, board: str) -> bool:
+    """Whether one `VARIABLE PATTERN` branch of a device case admits a board.
+
+    ROCKNIX files a board under the DEVICE value its target scraper reads,
+    lowercased. A branch on any other variable (PREFER_GLES) is no board
+    condition, and admits every board.
+    """
+    variable, _, pattern = branch.strip().partition(" ")
+    if variable != "DEVICE" or not pattern.strip():
+        return True
+    import fnmatch  # noqa: PLC0415
+
+    return any(
+        fnmatch.fnmatchcase(board.upper(), p.strip().upper()) for p in pattern.split("|")
+    )
+
+
+def when_admits(when: str, board: str) -> bool:
+    """Whether an offer's `when` holds on a board: alternatives joined by
+    "; ", each the branches it is nested under joined by ", "."""
+    return any(
+        all(_branch_holds(branch, board) for branch in alternative.split(", "))
+        for alternative in when.split("; ")
+    )
+
+
+def offer_boards(config: dict) -> dict[tuple[str, str], frozenset[str] | None]:
+    """The boards on which each roms folder offers each core, by
+    (core key, folder), None where every board does.
+
+    ROCKNIX writes a core under a `case "${DEVICE}"` branch for the devices
+    it builds (`when`), and a default for a named device in board_defaults
+    (DEVICE=RK3326). Boards are the platform's targets, aliases included.
+    """
+    platform = str(config.get("_key") or "")
+    targets = list_available_targets(
+        platform, str(Path(__file__).resolve().parent.parent / "platforms")
+    ) if platform else []
+    names = {t["name"]: [t["name"], *t.get("aliases", [])] for t in targets}
+
+    def admitted(test: Callable[[str], bool]) -> set[str]:
+        return {n for board, spelled in names.items() if test(board) for n in spelled}
+
+    every = admitted(lambda _board: True)
+    found: dict[tuple[str, str], set[str]] = {}
+    for row in config.get("_rom_folders") or []:
+        folder = str(row.get("folder") or "")
+        offers = row.get("offers") or []
+        offered = {(o.get("emulator"), _core_key(o.get("core") or "")) for o in offers}
+        choices: list[tuple[dict, set[str]]] = []
+        if row.get("core") and (row.get("emulator"), _core_key(row["core"])) not in offered:
+            choices.append((row, every))
+        for key, spec in (row.get("board_defaults") or {}).items():
+            branch = str(key).replace("=", " ", 1)
+            choices.append((spec, admitted(lambda b, branch=branch: _branch_holds(branch, b))))
+        for offer in offers:
+            when = str(offer.get("when") or "")
+            choices.append((offer, admitted(lambda b, when=when: when_admits(when, b))
+                            if when else every))
+        for choice, boards in choices:
+            if choice.get("core") and choice.get("emulator") in LIBRETRO_RUNNERS:
+                found.setdefault((_core_key(choice["core"]), folder), set()).update(boards)
+    return {
+        pair: None if not names or boards >= every else frozenset(boards)
+        for pair, boards in found.items()
+    }
+
+
+def content_folder_boards(config: dict) -> dict[tuple[str, str], frozenset[str] | None]:
+    """Each (core key, roms folder) a platform launches a libretro core for,
+    with the boards it does so on, None for every board."""
+    pairs: set[tuple[str, str]] = set()
+    for core, systems in (config.get("libretro_systems") or {}).items():
+        pairs |= {(_core_key(core), str(s)) for s in systems or []}
+    for system in (config.get("systems") or {}).values():
+        if isinstance(system, dict) and system.get("native_id"):
+            pairs |= {(_core_key(c), str(system["native_id"])) for c in system.get("cores") or []}
+    for record in config.get("launchers") or []:
+        if record.get("kind") == "package" and record.get("build") == "libretro":
+            package = str(record.get("emulator", ""))
+            if package.startswith("lr-mess"):
+                # Built with SUBTARGET=mess (lr-mess2016.sh:31): the MESS
+                # drivers alone, none of the arcade sets of the core it
+                # shares a repository with.
+                continue
+            core = _core_key(package.removeprefix("lr-"))
+            pairs |= {(core, str(s)) for s in record.get("systems") or []}
+    # Pairs from the platform's own lists hold on every board, an offer on
+    # the boards its frontend writes it for.
+    return {
+        **{pair: on for pair, on in offer_boards(config).items() if pair not in pairs},
+        **{pair: None for pair in pairs},
+    }
 
 
 def content_folder_tags(config: dict) -> set[str]:
@@ -3435,34 +3536,22 @@ def content_folder_tags(config: dict) -> set[str]:
         return tags
     rows = config.get("_rom_folders") or []
     folders = {str(r.get("folder")) for r in rows if r.get("folder")}
-    pairs: set[tuple[str, str]] = set()
-    for core, systems in (config.get("libretro_systems") or {}).items():
-        pairs |= {(_core_key(core), str(s)) for s in systems or []}
-    for row in rows:
-        choices = [row, *(row.get("board_defaults") or {}).values(), *(row.get("offers") or [])]
-        for choice in choices:
-            if choice.get("core") and choice.get("emulator") in LIBRETRO_RUNNERS:
-                pairs.add((_core_key(choice["core"]), str(row["folder"])))
-    for system in (config.get("systems") or {}).values():
-        if isinstance(system, dict) and system.get("native_id"):
-            pairs |= {(_core_key(c), str(system["native_id"])) for c in system.get("cores") or []}
-    for record in config.get("launchers") or []:
-        if record.get("kind") == "package" and record.get("build") == "libretro":
-            package = str(record.get("emulator", ""))
-            if package.startswith("lr-mess"):
-                # Built with SUBTARGET=mess (lr-mess2016.sh:31): the MESS
-                # drivers alone, none of the arcade sets of the core it
-                # shares a repository with.
-                continue
-            core = _core_key(package.removeprefix("lr-"))
-            pairs |= {(core, str(s)) for s in record.get("systems") or []}
+    boards = content_folder_boards(config)
+    target = config.get(TARGET_KEY)
+    pairs = {pair for pair, on in boards.items() if not target or on is None or target in on}
     from launchers import _roms_place  # noqa: PLC0415
 
     def place(folder: str) -> list:
         return list(_roms_place(config, folder) or ())
 
+    # Without a board, a core a folder offers on some boards only carries
+    # them, for a manifest the installer narrows to one.
     tags |= {
-        CONTENT_FOLDER_PREFIX + json.dumps([c, f, place(f)]) for c, f in pairs if f in folders
+        CONTENT_FOLDER_PREFIX + json.dumps([
+            c, f, place(f),
+            None if target or boards.get((c, f)) is None else sorted(boards[(c, f)]),
+        ])
+        for c, f in pairs if f in folders
     }
     for row in rows:
         for search in row.get("searched_by") or []:
@@ -3529,6 +3618,10 @@ def _rom_search_sets(
     if relation is None:
         return frozenset()
     bios, devices = relation.get("bios") or {}, relation.get("devices") or {}
+    # A clone reads the ROMs it shares with its parent from the parent's
+    # archive: the search path is the set and every ancestor
+    # (src/emu/driver.cpp:31-38, src/emu/romload.cpp:67-84 at mame0289).
+    parents = relation.get("parents") or {}
     sources = relation.get("sources") or {}
     members: set[str] = set(machines)
     kind, keys = ANY_MACHINE_POPULATIONS.get(system, ("all", ())) if any_machine else ("", ())
@@ -3544,6 +3637,7 @@ def _rom_search_sets(
         return kind == "all" or not members.isdisjoint(users)
 
     found = {b for b, users in bios.items() if used(users)}
+    found |= {p for p, users in parents.items() if used(users)}
     found |= {d for d, users in devices.items() if used(users)}
     return frozenset(found | members)
 
@@ -3601,12 +3695,19 @@ def content_layout(
         return {**entry, **where, "path": f"{folder}/{rel}", "layout_path": rel}
 
     if not standalone:
-        folders = sorted({
-            tuple(where) for core, _folder, where in (
-                json.loads(t[len(CONTENT_FOLDER_PREFIX):])
-                for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
-            ) if core in names and where
-        })
+        # A place keeps the boards its core is offered on there, every board
+        # when one folder offers it everywhere.
+        on_boards: dict[tuple, set[str] | None] = {}
+        for core, _folder, where, on in (
+            json.loads(t[len(CONTENT_FOLDER_PREFIX):])
+            for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
+        ):
+            if core not in names or not where:
+                continue
+            place = tuple(where)
+            known = on_boards.get(place, set())
+            on_boards[place] = None if on is None or known is None else known | set(on)
+        folders = sorted(on_boards)
         # The folders a passed `-rompath` replaces the build's own search
         # path with stand for these: libretro MAME hands MAME
         # <system>/mame/bios unless the content's command line names
@@ -3633,7 +3734,11 @@ def content_layout(
                 out.append({**plain, "unplaced": OUTSIDE_BIOS_FOLDER})
                 continue
             rel = str(f.get("path") or f.get("name") or "")
-            out.extend(roms_entry(plain, tree, folder, rel) for tree, folder in folders)
+            out.extend(
+                {**roms_entry(plain, tree, folder, rel),
+                 **({"boards": sorted(on)} if (on := on_boards[(tree, folder)]) is not None else {})}
+                for tree, folder in folders
+            )
         return {**view, "files": out} if changed else view
     pools = {str(v).strip("/") for v in (view.get("standalone_pools") or {}).values()}
     if not searches or "" not in pools:
@@ -3649,7 +3754,7 @@ def content_layout(
         if f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
             # A set a launcher record placed stays there: EmuDeck's
             # mame.ini rompath is read when Steam ROM Manager starts MAME
-            # with no `-rompath` (tools/launchers/mame.sh), and ES-DE's
+            # with no -rompath (tools/launchers/mame.sh), and ES-DE's
             # commands read the folders they pass.
             out.append(f)
             held = {(f.get("root") or "", f.get("standalone_path") or "")}

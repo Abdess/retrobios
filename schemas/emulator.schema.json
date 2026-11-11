@@ -11,7 +11,7 @@
   ],
   "allOf": [
     {
-      "comment": "A build reference documents why a pin is held, or the build config_reads are read at: it never stands without the pin_frozen or the config_reads that say so.",
+      "comment": "A build reference documents why a pin is held or follows the branch tip, or the build config_reads are read at: it never stands without the pin_frozen, pin_follows or config_reads that say so.",
       "if": {
         "required": [
           "pin_build"
@@ -20,6 +20,7 @@
       "then": {
         "anyOf": [
           {"required": ["pin_frozen"]},
+          {"required": ["pin_follows"]},
           {"required": ["config_reads"]}
         ]
       }
@@ -1142,7 +1143,7 @@
     "pin_build": {
       "type": "array",
       "minItems": 1,
-      "description": "The build file each platform that ships a pin_frozen build, or the build a config_reads entry is read at, reads its revision from, so check_freshness can read it again where the platform's YAML now stands and say when the platform builds another revision.",
+      "description": "The build file each platform that ships a pin_frozen or pin_follows build, or the build a config_reads entry is read at, reads its revision from, so check_freshness can read it again where the platform's YAML now stands and say when the platform builds another revision.",
       "items": {
         "type": "object",
         "additionalProperties": false,

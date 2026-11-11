@@ -39,6 +39,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 from alternatives import core_file_spares, settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
+    ROMS_ROOT,
+    TARGET_KEY,
+    _core_key,
+    content_folder_boards,
     OUTER_ROOTS,
     outer_layout,
     installed_data_refs,
@@ -895,6 +899,8 @@ def generate_pack(
     Returns the path to the generated ZIP, or None on failure.
     """
     config = load_platform_config(platform_name, platforms_dir)
+    if target_name:
+        config = {**config, TARGET_KEY: target_name}
     if zip_contents is None:
         zip_contents = {}
     if emu_profiles is None:
@@ -4861,6 +4867,8 @@ def generate_manifest(
     config = load_platform_config(platform_name, platforms_dir)
     if fold_case is not None:
         config = {**config, "case_insensitive_fs": fold_case}
+    if target_name:
+        config = {**config, TARGET_KEY: target_name}
     if zip_contents is None:
         zip_contents = {}
     if emu_profiles is None:
@@ -5334,6 +5342,10 @@ def generate_manifest(
         **({"downloaded_cores": downloaded} if (downloaded := _downloaded_cores(
             config, emu_profiles, core_names, platforms_dir,
         )) else {}),
+        **({"offered_boards": offered} if (offered := _offered_boards(
+            config, emu_profiles, core_names,
+            [*manifest_files, *omitted_by_destination.values()],
+        )) else {}),
         "system_cores": system_cores,
         # The names the platform itself gives its systems (Batocera's psx),
         # which --system accepts beside the ids.
@@ -5486,6 +5498,65 @@ def _manifest_data_directories(
             group["cores"] = readers[group["ref"]]
         trees.append(group)
     return trees
+
+
+def _offered_boards(
+    config: dict,
+    profiles: dict[str, dict],
+    core_names: dict[str, list[str]],
+    entries: list[dict],
+) -> dict[str, list[dict]]:
+    """The roms folders each profile is offered for on some boards only,
+    each with those boards, aliases included, where the manifest places a
+    file of that profile.
+
+    ROCKNIX writes uae4arm for roms/amiga under the devices it builds it for
+    (emulators/package.mk:188), and a board's core list names uae4arm when
+    another folder offers it there. The pack builder reads the board from
+    the config (TARGET_KEY) and `install.py --target` reads its answer here.
+    A manifest built for one board needs none.
+    """
+    if config.get(TARGET_KEY):
+        return {}
+    pairs = content_folder_boards(config)
+    if all(on is None for on in pairs.values()):
+        return {}
+    from launchers import _roms_place  # noqa: PLC0415
+
+    by_key: dict[str, set[str]] = {}
+    for name, claimants in upstream_profile_index(profiles).items():
+        by_key.setdefault(_core_key(name), set()).update(claimants)
+    free = {
+        (profile, folder) for (core, folder), on in pairs.items() if on is None
+        for profile in by_key.get(core, ())
+    }
+    found: dict[tuple[str, str, str], set[str]] = {}
+    for (core, folder), on in pairs.items():
+        where = _roms_place(config, folder) if on is not None else None
+        if where is None:
+            continue
+        for profile in by_key.get(core, ()):
+            if profile in core_names and (profile, folder) not in free:
+                found.setdefault((profile, where[0], where[1]), set()).update(on)
+    # An entry below the roms root names it, one in the install tree none.
+    trees = {ROMS_ROOT: ROMS_ROOT, None: "install"}
+    placed = {
+        (profile, trees[entry.get("root")], str(entry.get("dest", "")).rpartition("/")[0])
+        for entry in entries if entry.get("root") in trees
+        for copy in [entry, *entry.get("alternatives", [])]
+        for profile in copy.get("cores") or []
+    }
+    result: dict[str, list[dict]] = {}
+    for (profile, tree, folder), boards in sorted(found.items()):
+        if not any(
+            p == profile and t == tree and (d == folder or d.startswith(f"{folder}/"))
+            for p, t, d in placed
+        ):
+            continue
+        result.setdefault(profile, []).append(
+            {"root": tree, "folder": folder, "boards": sorted(boards)}
+        )
+    return result
 
 
 def _downloaded_cores(

@@ -473,15 +473,26 @@ class Scripts:
         return results
 
 
-def _search_list_in_roms(event: "Event") -> bool:
+# The character each program splits a search list on, read in its code.
+# AdvanceMAME strtoks dir_rom on file_dir_separator(), ':' on Linux, in all
+# three builds RetroPie ships (advance/linux/file.c:138-141 and
+# advance/osd/fileio.c:696-699 at 96237a5, 685-688 at advancemame-1.4,
+# 640-643 in advancemame-0.94.0.tar.gz). MAME's path_iterator splits on ';'
+# whatever the system (src/emu/fileio.cpp:56, 64, 112 at mame0289).
+LIST_SEPARATORS = {"advmame": ":", "advmame-0.94": ":", "advmame-1.4": ":"}
+DEFAULT_LIST_SEPARATOR = ";"
+
+
+def _search_list_in_roms(event: "Event", separator: str = DEFAULT_LIST_SEPARATOR) -> bool:
     """An iniSet whose value is a list of folders below the roms root.
 
     One folder alone is where a program writes (cfg_directory, nvram_directory
-    and the others MAME's mame.ini sets): a list is where it searches.
+    and the others MAME's mame.ini sets): a list is where it searches, split
+    on the separator the program reads it with.
     """
     if len(event.words) < 3 or len(event.words[2]) != 1:
         return False
-    parts = [p for p in event.words[2][0].split(";") if p]
+    parts = [p for p in event.words[2][0].split(separator) if p]
     return len(parts) > 1 and all(
         p.startswith(ROMDIR + "/") or p.startswith("${romdir}/") for p in parts
     )
@@ -567,7 +578,9 @@ class PackageReader:
         if command == "iniSet" and not _mentions_bios(event.raw):
             # A search path below the roms root: MAME reads its samples from
             # samplepath $romdir/mame/samples;$romdir/arcade/samples.
-            if _search_list_in_roms(event):
+            if _search_list_in_roms(
+                event, LIST_SEPARATORS.get(self.package.id, DEFAULT_LIST_SEPARATOR)
+            ):
                 self._ini_set(event)
             return
         if not _mentions_bios(event.raw):

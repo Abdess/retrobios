@@ -21,6 +21,15 @@ version_basis:
   distance: 0
 mame_version: "0.106"
 display_name: "Arcade (AdvanceMAME 1.4)"
+config_reads:
+  - file: "advmame-1.4.rc"
+    platforms: [retropie]
+    revision: "237ca5c898e51e1b7a70ce52bccf008aa722e924"
+    revision_from: "advancemame-1.4.tar.gz, which RetroPie scriptmodules/emulators/advmame-1.4.sh:16 installs at 427e762, holds the src/ and advance/ trees of the tag advancemame-1.4"
+    source_ref: "advance/osd/emu.c:710-714, 738-751"
+    keys:
+      - key: "dir_rom"
+        source_ref: "advance/osd/fileio.c:72-86, 676-701, 791-831"
 mode: standalone
 
 cores:
@@ -54,6 +63,9 @@ systems:
   - imax-macs
   - arcade
   - barcrest-mpu4
+
+standalone_pools:
+  dir_rom: ""
 
 notes: |
   AdvanceMAME 1.4, the MAME 0.106 core (src/version.c:12) under the Advance
@@ -161,6 +173,7 @@ files:
 
   # SNK Neo Geo MVS
   - name: neogeo.zip
+    path: "neogeo.zip"
     required: true
     category: bios_zip
     system: snk-neogeo-mvs
@@ -228,6 +241,7 @@ files:
 
   # IGS PGM
   - name: pgm.zip
+    path: "pgm.zip"
     required: true
     category: bios_zip
     system: igs-pgm
@@ -251,6 +265,7 @@ files:
 
   # Sega ST-V
   - name: stvbios.zip
+    path: "stvbios.zip"
     required: true
     category: bios_zip
     system: sega-stv
@@ -307,6 +322,7 @@ files:
 
   # Sega Mega Play
   - name: megaplay.zip
+    path: "megaplay.zip"
     required: true
     category: bios_zip
     system: sega-megaplay
@@ -328,6 +344,7 @@ files:
 
   # Sega Mega-Tech
   - name: megatech.zip
+    path: "megatech.zip"
     required: true
     category: bios_zip
     system: sega-megatech
@@ -341,6 +358,7 @@ files:
 
   # DECO Cassette System
   - name: decocass.zip
+    path: "decocass.zip"
     required: true
     category: bios_zip
     system: deco-cassette
@@ -393,6 +411,7 @@ files:
 
   # Nintendo PlayChoice-10
   - name: playch10.zip
+    path: "playch10.zip"
     required: true
     category: bios_zip
     system: nintendo-playch10
@@ -444,6 +463,7 @@ files:
 
   # Nintendo Super System
   - name: nss.zip
+    path: "nss.zip"
     required: true
     category: bios_zip
     system: nintendo-nss
@@ -472,6 +492,7 @@ files:
 
   # Super Kaneko Nova System
   - name: skns.zip
+    path: "skns.zip"
     required: true
     category: bios_zip
     system: super-kaneko-nova
@@ -507,6 +528,7 @@ files:
 
   # Konami System GX
   - name: konamigx.zip
+    path: "konamigx.zip"
     required: true
     category: bios_zip
     system: konami-gx
@@ -520,6 +542,7 @@ files:
 
   # Konami Baby Phoenix/GV System
   - name: konamigv.zip
+    path: "konamigv.zip"
     required: true
     category: bios_zip
     system: konami-gv
@@ -533,6 +556,7 @@ files:
 
   # Century Electronics CVS
   - name: cvs.zip
+    path: "cvs.zip"
     required: true
     category: bios_zip
     system: century-cvs
@@ -556,6 +580,7 @@ files:
 
   # Capcom ZN1
   - name: cpzn1.zip
+    path: "cpzn1.zip"
     required: true
     category: bios_zip
     system: capcom-zn1
@@ -568,6 +593,7 @@ files:
 
   # Capcom ZN2
   - name: cpzn2.zip
+    path: "cpzn2.zip"
     required: true
     category: bios_zip
     system: capcom-zn2
@@ -580,6 +606,7 @@ files:
 
   # Tecmo TPS
   - name: tps.zip
+    path: "tps.zip"
     required: true
     category: bios_zip
     system: tecmo-tps
@@ -592,6 +619,7 @@ files:
 
   # Taito FX1
   - name: taitofx1.zip
+    path: "taitofx1.zip"
     required: true
     category: bios_zip
     system: taito-fx1
@@ -604,6 +632,7 @@ files:
 
   # Eighting/Raizing PS Arcade 95
   - name: psarc95.zip
+    path: "psarc95.zip"
     required: true
     category: bios_zip
     system: eighting-zn1
@@ -616,6 +645,7 @@ files:
 
   # Atlus PSX
   - name: atluspsx.zip
+    path: "atluspsx.zip"
     required: true
     category: bios_zip
     system: atlus-zn1
@@ -628,6 +658,7 @@ files:
 
   # Atari PSX
   - name: atpsx.zip
+    path: "atpsx.zip"
     required: true
     category: bios_zip
     system: atari-zn1
@@ -640,6 +671,7 @@ files:
 
   # Acclaim PSX
   - name: acpsx.zip
+    path: "acpsx.zip"
     required: true
     category: bios_zip
     system: acclaim-zn1
@@ -652,6 +684,7 @@ files:
 
   # SNK Hyper Neo Geo 64
   - name: hng64.zip
+    path: "hng64.zip"
     required: true
     category: bios_zip
     system: hyper-neogeo64
@@ -675,6 +708,7 @@ files:
 
   # Arcadia Systems
   - name: ar_bios.zip
+    path: "ar_bios.zip"
     required: true
     category: bios_zip
     system: arcadia-systems
@@ -742,6 +776,7 @@ files:
 
   # Exidy Max-A-Flex
   - name: maxaflex.zip
+    path: "maxaflex.zip"
     required: true
     category: bios_zip
     system: exidy-maxaflex
@@ -765,6 +800,7 @@ files:
 
   # Brezzasoft Crystal System
   - name: crysbios.zip
+    path: "crysbios.zip"
     required: true
     category: bios_zip
     system: brezzasoft-crystal
@@ -777,6 +813,7 @@ files:
 
   # I'Max Multi Amenity Cassette System
   - name: macsbios.zip
+    path: "macsbios.zip"
     required: true
     category: bios_zip
     system: imax-macs
@@ -795,6 +832,7 @@ files:
 
   # Barcrest MPU4 Video
   - name: bctvidbs.zip
+    path: "bctvidbs.zip"
     required: true
     category: bios_zip
     system: barcrest-mpu4

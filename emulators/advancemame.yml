@@ -4,16 +4,16 @@ core_classification: enhanced_fork
 source: "https://github.com/amadvance/advancemame"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-11-09"
-source_commit: "799060ba176e4aee5959087b08fc28904e842885"
-core_version: "v5.0-453-g799060b"
+source_commit: "0f6a7677ad42b4dfdfa36b046f74bef5238d5837"
+core_version: "v5.0-99-g0f6a7677"
 version_basis:
   kind: tag
   match: "v*"
   tag: "v5.0"
-  distance: 453
+  distance: 99
 mame_version: "0.106"
 display_name: "Arcade (AdvanceMAME)"
-pin_frozen: "Held before e1a9aad5, from which the Sony ZN BIOS archives take their MAME names (cpzn1 becomes coh1000c) and firmware loads through BIOS_LOAD. EmuELEC, AmberELEC and Recalbox build earlier revisions, which read the names below. RetroPie builds the branch tip (RetroPie scriptmodules/emulators/advmame.sh:16, 39-41)."
+pin_frozen: "Held at 0f6a767, the revision AmberELEC builds and the newest of the three builds the platforms ship: Recalbox 5f301c8 and EmuELEC 6a34ec0 are its ancestors and read the same BIOS sets. The commit is no longer on the branch, which has since been rewritten and from e1a9aad5 takes the MAME names of the Sony ZN archives. RetroPie builds the branch tip (RetroPie scriptmodules/emulators/advmame.sh:16, 39-41)."
 pin_build:
   - platform: emuelec
     repo: "https://github.com/EmuELEC/EmuELEC"
@@ -44,7 +44,6 @@ mode: standalone
 
 cores:
   - advancemame
-  - advmame
   - "AdvanceMame"
 
 systems:
@@ -69,7 +68,6 @@ systems:
   - atari-zn1
   - acclaim-zn1
   - videosystem-zn1
-  - nintendo-aleck64
   - arcadia-systems
   - exidy-maxaflex
   - brezzasoft-crystal
@@ -77,62 +75,60 @@ systems:
   - arcade
   - barcrest-mpu4
   - atari-system1
-  - efo-cedar-magnet
+  - hyper-neogeo64
 
 standalone_pools:
   dir_rom: ""
 
 notes: |
-  MAME 0.106 core (src/version.c:11) carrying its own video layer and driver
-  backports from later MAME releases. Twenty-nine BIOS root sets, each a
-  NOT_A_DRIVER entry (src/driver.h:179) registered in src/mamedriv.c, release
-  5.0 having all but coh1002v, which came with the Video System PSX driver,
-  aleck64, which came with the Aleck64 games, atarisy1, which came with the
-  Atari System 1 driver, and cedmag, which came with the Cedar Magnet System
-  driver. src/drivers/macs.c:615 declares a thirtieth, macs2bios, that
-  src/mamedriv.c never registers, so no build reaches it and the five MACS
-  games all parent to macsbios.
+  MAME 0.106 core (src/version.c:12) carrying its own video layer and driver
+  backports from later MAME releases. Twenty-six BIOS root sets, each a
+  NOT_A_DRIVER entry (src/driver.h:180) registered in src/mamedriv.c, the
+  same in the three builds the platforms ship. src/drivers/macs.c:613
+  declares a twenty-seventh, macs2bios, that src/mamedriv.c never registers,
+  so no build reaches it and the five MACS games all parent to macsbios.
 
   ROM archives are searched under dir_rom, defaulting to $home/rom:$data/rom
   on Linux and Mac OS X and to rom on DOS and Windows, in the forms
   DIR/GAME/ROM.EXT, DIR/GAME.zip/ROM.EXT and DIR/GAME/ROM.zip/ROM
   (advance/osd/fileio.c:74, doc/advmame.d:680,699-701). $home is $ADVANCE, or
-  $HOME/.advance when that variable is unset (doc/advmame.d:503-509). Each ROM
-  is looked up along the parent chain (src/romload.c:527-529), so a child game
+  $HOME/.advance when that variable is unset (advance/linux/file.c:87-99). Each ROM
+  is looked up along the parent chain (src/romload.c:481-483), so a child game
   reads its BIOS from the root set's own archive, which has to sit beside the
   game archive. Inside an archive a member is matched by name, then by its
-  printable CRC32 (src/fileio.c:1191-1201).
+  printable CRC32 (src/fileio.c:1213-1223).
 
   No BIOS ROM carries ROM_OPTIONAL or a no-good-dump marker, so a missing one
   counts as an error rather than a warning and aborts with "required files are
-  missing, the game cannot be run" (src/romload.c:294-314,431-434). Loaded
+  missing, the game cannot be run" (src/romload.c:248-268,385-388). Loaded
   ROMs are checked for exact length and against the declared CRC32 and SHA1,
-  both mismatches being warnings (src/romload.c:373-409).
+  both mismatches being warnings (src/romload.c:327-363).
 
   Where a system offers several BIOS revisions, SYSTEM_BIOS_ADD names them and
-  misc_bios selects one, entry 0 being the default (doc/advmame.d:2142-2150).
+  misc_bios selects one, "default" picking entry 0
+  (advance/osd/glue.c:3295, 3348, src/romload.c:167-204).
   Only the selected revision is read, and the others share the archive as
   alternatives. Neo Geo lists MVS revisions alone, the AES, Universe and debug
-  entries being commented out (src/drivers/neogeo.c:1422-1425,1441-1444).
+  entries being commented out (src/drivers/neogeo.c:1420-1423,1439-1442).
 
   The support files sit directly in $home or $data
   (advance/osd/fileio.c:81,88-90, advance/linux/file.c:249-256). A language
   file is read too, under whatever name misc_languagefile carries
-  (advance/osd/glue.c:865-866). The project ships none, English being built
-  into the binary (src/ui_text.c:262-264). Samples and
+  (advance/osd/glue.c:715-716). The project ships none, English being built
+  into the binary (src/ui_text.c:263-265). Samples and
   artwork are per-game, under dir_sample and dir_artwork. Samples are ZIP
   archives named after the driver with WAV members
-  (src/sound/samples.c:228-230). Artwork is a folder or ZIP archive named
-  after the driver or one of its parents, holding default.lay and the PNG or
-  JPEG images it names (src/artwork_package.c:43-81,
-  src/artwork_lay.c:1615-1625).
+  (src/sound/samples.c:198-200). Artwork is a folder or ZIP archive named
+  after the driver or one of its parents, holding a <driver>.art file and
+  the PNG images it names (src/artwork.c:2108-2124, 2218-2226).
 
   misc_historyfile and misc_infofile were retired and are discarded when found
-  in a configuration file (advance/osd/emu.c:515-516), leaving history.dat and
+  in a configuration file (advance/osd/emu.c:517-518), leaving history.dat and
   mameinfo.dat unread. options.controller is pinned to zero
-  (advance/osd/glue.c:858), so no controller file is read either. blitmax.dat,
+  (advance/osd/glue.c:708), so no controller file is read either. blitmax.dat,
   startup.dat and help.dat are compiled into the binary
-  (advance/osd/video.c:1794,1802, advance/osd/ui.c:1575).
+  (advance/osd/video.c:1787,1795, advance/osd/ui.c:1575). Recalbox's 5f301c8
+  compiles the first two from blitmax.h and startup.h instead.
 
 files:
   # Support files ($home or $data)
@@ -144,12 +140,12 @@ files:
     sha1: "23e0dec66680aa4545eafe436c23d2bf5622e32e"
     md5: "2490bad5079ec0991c23c579092cca19"
     size: 176851
-    source_ref: "src/hiscore.c:27,132-146,312, src/mame.c:1104-1105"
+    source_ref: "src/hiscore.c:28,133-147,313, src/mame.c:1105-1106"
     note: >-
       High score definitions, selected by misc_hiscorefile
-      (advance/osd/glue.c:950,3484). Absent, hiscore_open matches no entry and
+      (advance/osd/glue.c:800,3293). Absent, hiscore_open matches no entry and
       no high score is restored or saved. support/hiscore.dat, installed by
-      MAME_INSTALL_DATAFILES (advance/advance.mak:30-32). is_mem_range reads
+      MAME_INSTALL_DATAFILES (advance/advance.mak:29-31). is_mem_range reads
       only "cpu:addr:len:start:end" lines under a "gamename:" header.
 
   - name: cheat.dat
@@ -160,12 +156,12 @@ files:
     sha1: "4978ecafc4634cf20b639d8801c044dc156ab162"
     md5: "69c6bbe7194e4bc62d53764dd6c6d890"
     size: 13923773
-    source_ref: "src/cheat.c:8681,8750"
+    source_ref: "src/cheat.c:8682,8751"
     note: >-
       Cheat definitions, selected by misc_cheatfile
-      (advance/osd/glue.c:949,3482) and read only when misc_cheat is on, which
+      (advance/osd/glue.c:799,3291) and read only when misc_cheat is on, which
       it is not by default. Absent, the cheat menu reads "cheat database not
-      found" (src/cheat.c:2535). Installed beside hiscore.dat by
+      found" (src/cheat.c:2536). Installed beside hiscore.dat by
       MAME_INSTALL_DATAFILES, and shipped in the 5.0 Windows zip and .deb.
 
   - name: event.dat
@@ -184,7 +180,7 @@ files:
       state. The hash is support/event.dat as make install copies it. The
       Windows zip carries the same file with CRLF line endings.
 
-  # SNK Neo Geo MVS
+  # Neo-Geo
   - name: neogeo.zip
     path: "neogeo.zip"
     required: true
@@ -192,7 +188,7 @@ files:
     systems:
       - snk-neogeo-mvs
       - arcade
-    source_ref: "src/drivers/neogeo.c:7941-7955,8555"
+    source_ref: "src/drivers/neogeo.c:1429-1438,7939-7953,8553"
     note: >-
       Eight MVS BIOS variants selected with misc_bios (euro, euro-s1, us,
       us-e, asia, japan, japan-s2, japan-s1), euro by default. sm1.sm1,
@@ -254,7 +250,7 @@ files:
         crc32: "354029fc"
         sha1: "4ae4bf23b4c2acff875775d4cbff5583893ce2a1"
 
-  # IGS PGM
+  # PGM (Polygame Master) System BIOS
   - name: pgm.zip
     path: "pgm.zip"
     required: true
@@ -262,7 +258,7 @@ files:
     systems:
       - igs-pgm
       - arcade
-    source_ref: "src/drivers/pgm.c:4415-4426, src/drivers/pgm.c:6904"
+    source_ref: "src/drivers/pgm.c:3708-3719,5487"
     contents:
       - name: pgm_p01s.rom
         description: 68000 BIOS
@@ -280,7 +276,7 @@ files:
         crc32: "45ae7159"
         sha1: "d3ed3ff3464557fd0df6b069b2e431528b0ebfa8"
 
-  # Sega ST-V
+  # ST-V Bios
   - name: stvbios.zip
     path: "stvbios.zip"
     required: true
@@ -288,7 +284,7 @@ files:
     systems:
       - sega-stv
       - arcade
-    source_ref: "src/drivers/stv.c:3251-3253,4281"
+    source_ref: "src/drivers/stv.c:3077-3091,3092-3094,4026"
     note: >-
       Nine BIOS variants selected with misc_bios (japan, japana, us, japanb,
       taiwan, europe, unknown, dev1061, japanc), japan by default.
@@ -339,7 +335,7 @@ files:
         crc32: "5c5aa63d"
         sha1: "06860d96923b81afbc21e0ad32ee19487d8ff6e7"
 
-  # Sega Mega Play
+  # Mega Play BIOS
   - name: megaplay.zip
     path: "megaplay.zip"
     required: true
@@ -347,10 +343,9 @@ files:
     systems:
       - sega-megaplay
       - arcade
-    source_ref: "src/drivers/megaplay.c:793-796,991"
+    source_ref: "src/drivers/megaplay.c:731-734,735-738,933"
     note: >-
-      Two BIOS variants selected with misc_bios (ver1, ver2), ver1 by
-      default.
+      Two BIOS variants selected with misc_bios (ver1, ver2), ver1 by default.
     contents:
       - name: ep15294.ic2
         description: Mega Play BIOS (Ver. 1)
@@ -363,7 +358,7 @@ files:
         crc32: "f97c68aa"
         sha1: "bcabc879950bca1ced11c550a484e697ec5706b2"
 
-  # Sega Mega-Tech
+  # Mega-Tech BIOS
   - name: megatech.zip
     path: "megatech.zip"
     required: true
@@ -371,14 +366,14 @@ files:
     systems:
       - sega-megatech
       - arcade
-    source_ref: "src/drivers/megatech.c:456-459,868"
+    source_ref: "src/drivers/megatech.c:454-457,866"
     contents:
       - name: epr12664.20
         size: 32768
         crc32: "f71e9526"
         sha1: "1c7887541d02c41426992d17f8e3db9e03975953"
 
-  # DECO Cassette System
+  # Cassette System
   - name: decocass.zip
     path: "decocass.zip"
     required: true
@@ -386,11 +381,11 @@ files:
     systems:
       - deco-cassette
       - arcade
-    source_ref: "src/drivers/decocass.c:729-732,1215"
+    source_ref: "src/drivers/decocass.c:707-720,727-730,1213"
     note: >-
-      Two main CPU BIOS variants selected with misc_bios (bios0, bios1),
-      bios0 by default. The audio CPU, MCU and PROMs are loaded whichever
-      variant is selected.
+      Two main CPU BIOS variants selected with misc_bios (bios0, bios1), bios0
+      by default. The audio CPU, MCU and PROMs are loaded whichever variant is
+      selected.
     contents:
       - name: rms8.cpu
         description: main CPU BIOS (bios0)
@@ -433,7 +428,7 @@ files:
         crc32: "51eef657"
         sha1: "eaedce5caf55624ad6ae706aedf82c5717c60f1f"
 
-  # Nintendo PlayChoice-10
+  # PlayChoice-10 BIOS
   - name: playch10.zip
     path: "playch10.zip"
     required: true
@@ -441,7 +436,7 @@ files:
     systems:
       - nintendo-playch10
       - arcade
-    source_ref: "src/drivers/playch10.c:1650-1653,1661"
+    source_ref: "src/drivers/playch10.c:791-795,796-804,1648-1651,1659"
     note: >-
       Two BIOS variants selected with misc_bios (dual, single), dual by
       default. Tiles and PROMs are loaded whichever variant is selected.
@@ -487,7 +482,7 @@ files:
         crc32: "1213ebd4"
         sha1: "0ad386fc3eab5e53c0288ad1de33639a9e461b7c"
 
-  # Nintendo Super System
+  # Nintendo Super System BIOS
   - name: nss.zip
     path: "nss.zip"
     required: true
@@ -495,7 +490,7 @@ files:
     systems:
       - nintendo-nss
       - arcade
-    source_ref: "src/drivers/nss.c:526-528,659"
+    source_ref: "src/drivers/nss.c:515-523,524-526,657"
     contents:
       - name: spc700.rom
         description: SPC700 IPL ROM
@@ -518,7 +513,7 @@ files:
         crc32: "e06cb58f"
         sha1: "62f507e91a2797919a78d627af53f029c7d81477"
 
-  # Super Kaneko Nova System
+  # Super Kaneko Nova System BIOS
   - name: skns.zip
     path: "skns.zip"
     required: true
@@ -526,7 +521,7 @@ files:
     systems:
       - super-kaneko-nova
       - arcade
-    source_ref: "src/drivers/suprnova.c:1272-1279,1767"
+    source_ref: "src/drivers/suprnova.c:1269-1276,1744"
     note: >-
       Five region BIOS ROMs, all loaded into the same region.
     contents:
@@ -556,7 +551,7 @@ files:
         crc32: "ff1c9f79"
         sha1: "a51e598d43e76d37da69b1f094c111273bdfc94a"
 
-  # Konami System GX
+  # System GX
   - name: konamigx.zip
     path: "konamigx.zip"
     required: true
@@ -564,14 +559,14 @@ files:
     systems:
       - konami-gx
       - arcade
-    source_ref: "src/drivers/konamigx.c:2180-2183,3521"
+    source_ref: "src/drivers/konamigx.c:2136,2138-2141,3485"
     contents:
       - name: 300a01.34k
         size: 131072
         crc32: "d5fa95f5"
         sha1: "c483aa98ff8ef40cdac359c19ad23fea5ecc1906"
 
-  # Konami Baby Phoenix/GV System
+  # Baby Phoenix/GV System
   - name: konamigv.zip
     path: "konamigv.zip"
     required: true
@@ -579,14 +574,14 @@ files:
     systems:
       - konami-gv
       - arcade
-    source_ref: "src/drivers/konamigv.c:974-978,1060"
+    source_ref: "src/drivers/konamigv.c:968-970,972-976,1058"
     contents:
       - name: 999a01.7e
         size: 524288
         crc32: "ad498d2d"
         sha1: "02a82a2fe1fba0404517c3602324bfa64e23e478"
 
-  # Century Electronics CVS
+  # CVS Bios
   - name: cvs.zip
     path: "cvs.zip"
     required: true
@@ -594,7 +589,7 @@ files:
     systems:
       - century-cvs
       - arcade
-    source_ref: "src/drivers/cvs.c:422-432,1403"
+    source_ref: "src/drivers/cvs.c:420-430,1401"
     contents:
       - name: 5b.bin
         description: sound CPU
@@ -612,7 +607,7 @@ files:
         crc32: "b5221cec"
         sha1: "71d9830b33b1a8140b0fe1a2ba8024ba8e6e48e0"
 
-  # Capcom ZN1
+  # ZN1
   - name: cpzn1.zip
     path: "cpzn1.zip"
     required: true
@@ -620,14 +615,14 @@ files:
     systems:
       - capcom-zn1
       - arcade
-    source_ref: "src/drivers/zn.c:3188-3190, src/drivers/zn.c:4635"
+    source_ref: "src/drivers/zn.c:3123-3125,3127-3129,4513"
     contents:
       - name: coh-1000c.353
         size: 524288
         crc32: "50033af6"
         sha1: "486d92ff6c7f1e54f8e0ef41cd9116eca0e10e1a"
 
-  # Capcom ZN2
+  # ZN2
   - name: cpzn2.zip
     path: "cpzn2.zip"
     required: true
@@ -635,14 +630,14 @@ files:
     systems:
       - capcom-zn2
       - arcade
-    source_ref: "src/drivers/zn.c:3423-3425, src/drivers/zn.c:4653"
+    source_ref: "src/drivers/zn.c:3358-3360,3362-3364,4531"
     contents:
       - name: coh-3002c.353
         size: 524288
         crc32: "e860ea8b"
         sha1: "66e7e1d4e426466b8f48a2ba055a91b475569504"
 
-  # Tecmo TPS
+  # TPS
   - name: tps.zip
     path: "tps.zip"
     required: true
@@ -650,7 +645,7 @@ files:
     systems:
       - tecmo-tps
       - arcade
-    source_ref: "src/drivers/zn.c:3866-3868, src/drivers/zn.c:4700"
+    source_ref: "src/drivers/zn.c:3801-3803,3805-3807,4578"
     contents:
       - name: coh-1002m.353
         size: 524288
@@ -665,14 +660,14 @@ files:
     systems:
       - taito-fx1
       - arcade
-    source_ref: "src/drivers/zn.c:4162-4164, src/drivers/zn.c:4733"
+    source_ref: "src/drivers/zn.c:4036-4038,4040-4042,4603"
     contents:
       - name: coh-1000t.353
         size: 524288
         crc32: "e3f23b6e"
         sha1: "e18907cf8c6ba54d96edba0a9a00487a90219e0d"
 
-  # Eighting/Raizing PS Arcade 95
+  # PS Arcade 95
   - name: psarc95.zip
     path: "psarc95.zip"
     required: true
@@ -680,7 +675,7 @@ files:
     systems:
       - eighting-zn1
       - arcade
-    source_ref: "src/drivers/zn.c:4434-4436, src/drivers/zn.c:4760"
+    source_ref: "src/drivers/zn.c:4308-4310,4312-4314,4630"
     contents:
       - name: coh-1002e.353
         size: 524288
@@ -695,7 +690,7 @@ files:
     systems:
       - atlus-zn1
       - arcade
-    source_ref: "src/drivers/zn.c:4605-4607, src/drivers/zn.c:4772"
+    source_ref: "src/drivers/zn.c:4479-4481,4483-4485,4642"
     contents:
       - name: coh-1001l.353
         size: 524288
@@ -710,7 +705,7 @@ files:
     systems:
       - atari-zn1
       - arcade
-    source_ref: "src/drivers/zn.c:4520-4522, src/drivers/zn.c:4680"
+    source_ref: "src/drivers/zn.c:4394-4396,4398-4400,4558"
     contents:
       - name: coh-1000w.353
         size: 524288
@@ -725,85 +720,14 @@ files:
     systems:
       - acclaim-zn1
       - arcade
-    source_ref: "src/drivers/zn.c:4543-4545, src/drivers/zn.c:4689"
+    source_ref: "src/drivers/zn.c:4417-4419,4421-4423,4567"
     contents:
       - name: coh-1000a.353
         size: 524288
         crc32: "8d8d0764"
         sha1: "7ee83d317190bb1cef2f8f01c81eaaae47150ebb"
 
-  # Video System PSX
-  - name: coh1002v.zip
-    path: "coh1002v.zip"
-    required: true
-    category: bios_zip
-    systems:
-      - videosystem-zn1
-      - arcade
-    source_ref: "src/drivers/zn.c:4090-4096, src/drivers/zn.c:4722"
-    contents:
-      - name: coh-1002v.ic353
-        size: 524288
-        crc32: "5ff165f3"
-        sha1: "8f59314c1093446b9bcb06d232244da6df78e206"
-
-  # Seta Aleck64
-  - name: aleck64.zip
-    path: "aleck64.zip"
-    required: true
-    category: bios_zip
-    systems:
-      - nintendo-aleck64
-      - arcade
-    source_ref: "src/drivers/aleck64.c:697-699,778"
-    contents:
-      - name: pifdata.bin
-        size: 2048
-        crc32: "5ec82be9"
-        sha1: "9174eadc0f0ea2654c95fd941406ab46b9dc9bdd"
-
-  # Atari System 1
-  - name: atarisy1.zip
-    path: "atarisy1.zip"
-    required: true
-    category: bios_zip
-    systems:
-      - atari-system1
-      - arcade
-    source_ref: "src/drivers/atarisy1.c:837-850, src/drivers/atarisy1.c:2299"
-    contents:
-      - name: "136032.114.j11"
-        description: LSI BIOS, even bytes
-        size: 16384
-        crc32: "195c54ad"
-        sha1: "d7cda3cd3db4c6f77074ca05e96ae11b62e048b7"
-      - name: "136032.115.j10"
-        description: LSI BIOS, odd bytes
-        size: 16384
-        crc32: "7275b4dc"
-        sha1: "0896ab37ea832a1335046353612c1b4c86d8d040"
-      - name: "136032.107.b2"
-        description: alphanumerics
-        size: 8192
-        crc32: "7a29dc07"
-        sha1: "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
-
-  # EFO Cedar Magnet System
-  - name: cedmag.zip
-    path: "cedmag.zip"
-    required: true
-    category: bios_zip
-    systems:
-      - efo-cedar-magnet
-      - arcade
-    source_ref: "src/drivers/cedar_magnet.c:881-890, src/drivers/cedar_magnet.c:948"
-    contents:
-      - name: "magnet-master-vid-e03.bin"
-        size: 8192
-        crc32: "86c4a4f0"
-        sha1: "6db1a006b2e0b2a7cc9748ade881debb098b6757"
-
-  # Arcadia Systems
+  # Arcadia System BIOS
   - name: ar_bios.zip
     path: "ar_bios.zip"
     required: true
@@ -811,11 +735,10 @@ files:
     systems:
       - arcadia-systems
       - arcade
-    source_ref: "src/drivers/arsystems.c:356-377,823"
+    source_ref: "src/drivers/arcadia.c:333-348,352-354,717"
     note: >-
-      Three BIOS variants selected with misc_bios (onep300, onep211,
-      tenp211), onep300 by default. kick12.rom is loaded whichever variant
-      is selected.
+      Three BIOS variants selected with misc_bios (onep300, onep211, tenp211),
+      onep300 by default. kick12.rom is loaded whichever variant is selected.
     contents:
       - name: kick12.rom
         description: Amiga Kickstart 1.2
@@ -873,7 +796,7 @@ files:
         crc32: "87229e0d"
         sha1: "0b18544801e529f954b9e03226bd2e5475f36351"
 
-  # Exidy Max-A-Flex
+  # Max-A-Flex
   - name: maxaflex.zip
     path: "maxaflex.zip"
     required: true
@@ -881,7 +804,7 @@ files:
     systems:
       - exidy-maxaflex
       - arcade
-    source_ref: "src/drivers/maxaflex.c:520-529,585"
+    source_ref: "src/drivers/maxaflex.c:518-527,583"
     contents:
       - name: atarixl.rom
         description: main CPU ROM
@@ -899,7 +822,7 @@ files:
         crc32: "edf5c950"
         sha1: "9ad046ea41a61585dd8d2f2d4167a3cc39d2928f"
 
-  # Brezzasoft Crystal System
+  # Crystal System BIOS
   - name: crysbios.zip
     path: "crysbios.zip"
     required: true
@@ -907,14 +830,14 @@ files:
     systems:
       - brezzasoft-crystal
       - arcade
-    source_ref: "src/drivers/crystal.c:924-929,1032"
+    source_ref: "src/drivers/crystal.c:854-857,923"
     contents:
       - name: mx27l1000.u14
         size: 131072
         crc32: "beff39a9"
         sha1: "b6f6dda58d9c82273f9422c1bd623411e58982cb"
 
-  # I'Max Multi Amenity Cassette System
+  # Multi Amenity Cassette System BIOS
   - name: macsbios.zip
     path: "macsbios.zip"
     required: true
@@ -922,7 +845,7 @@ files:
     systems:
       - imax-macs
       - arcade
-    source_ref: "src/drivers/macs.c:396-404,614"
+    source_ref: "src/drivers/macs.c:384-388,394-402,612"
     contents:
       - name: macsos_l.u43
         description: BIOS low byte
@@ -935,7 +858,7 @@ files:
         crc32: "538b68e4"
         sha1: "a0534147791e94e726f49451d0e95671ae0a87d5"
 
-  # Barcrest MPU4 Video
+  # MPU4 Video Firmware
   - name: bctvidbs.zip
     path: "bctvidbs.zip"
     required: true
@@ -943,9 +866,35 @@ files:
     systems:
       - barcrest-mpu4
       - arcade
-    source_ref: "src/drivers/mpu4.c:2016-2019,2177"
+    source_ref: "src/drivers/mpu4.c:2011-2012,2014-2017,2175"
     contents:
       - name: vid.p1
         size: 65536
         crc32: "e996bc18"
         sha1: "49798165640627eb31024319353da04380787b10"
+
+  # Hyper NeoGeo 64 Bios
+  - name: hng64.zip
+    path: "hng64.zip"
+    required: true
+    category: bios_zip
+    systems:
+      - hyper-neogeo64
+      - arcade
+    source_ref: "src/drivers/hng64.c:1425-1431,1718"
+    contents:
+      - name: brom1.bin
+        description: R4300 BIOS
+        size: 524288
+        crc32: "a30dd3de"
+        sha1: "3e2fd0a56214e6f5dcb93687e409af13d065ea30"
+      - name: from1.bin
+        description: unused BIOS ROM
+        size: 524288
+        crc32: "6b933005"
+        sha1: "e992747f46c48b66e5509fe0adf19c91250b00c7"
+      - name: rom1.bin
+        description: unused BIOS ROM
+        size: 130866
+        crc32: "4a6832dc"
+        sha1: "ae504f7733c2f40450157cd1d3b85bc83fac8569"

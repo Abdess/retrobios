@@ -158,6 +158,16 @@ systems:
   - videosystem-zn1
   - virtuality-su2000
   - arcade
+  - apple-ii
+  - atari-7800
+  - fairchild-channelf
+  - fmtowns
+  - intellivision
+  - videopac
+  - odyssey2
+  - emerson-arcadia-2001
+  - mega-duck
+  - watara-supervision
 
 standalone_pools:
   rompath: ""
@@ -251,6 +261,12 @@ notes: |
   qsound.zip (QSound DSP program), ym2413.zip (OPLL instrument table),
   ym2608.zip (OPNA ADPCM rhythm samples). Shared across all drivers
   using these chips, not specific to vgmplay.
+
+  arcadia, megaduck, pv1000 and svision declare no ROM, in their own
+  ROM_START blocks or in a device they instantiate
+  (src/mame/arcadia/arcadia.cpp:510-513, src/mame/nintendo/gb.cpp:1246-1247,
+  src/mame/casio/pv1000.cpp:583-586, src/mame/svision/svision.cpp:769-771):
+  they run from the cartridge alone.
 
 files:
   # Support trees under system_dir/mame/, the paths Set_Path_Option passes
@@ -4242,6 +4258,165 @@ files:
         description: "IIgs ROM03 FE-FF main CPU"
         size: 131072
         crc32: "18190283"
+
+  # Apple IIe
+  - name: apple2e.zip
+    path: "mame/bios/apple2e.zip"
+    standalone_path: "apple2e.zip"
+    required: true
+    category: bios_zip
+    system: apple-ii
+    source_ref: "upstream src/mame/apple/apple2e.cpp:5602-5613, upstream src/mame/apple/apple2e.cpp:6364"
+    note: >-
+      The machine also loads the a2diskiing and d2fdc sets of its default
+      Disk II card and the votrsc01a set.
+    contents:
+      - name: "342-0133-a.chr"
+        description: "Character generator ROM"
+        size: 4096
+        crc32: "b081df66"
+        sha1: "7060de104046736529c1e8a687a0dd7b84f8c51b"
+      - name: "342-0135-b.64"
+        description: "Main CPU ROM, first half"
+        size: 8192
+        crc32: "e248835e"
+        sha1: "523838c19c79f481fa02df56856da1ec3816d16e"
+      - name: "342-0134-a.64"
+        description: "Main CPU ROM, second half"
+        size: 8192
+        crc32: "fc3d59d8"
+        sha1: "8895a4b703f2184b673078f411f4089889b61c54"
+      - name: "342-0132-c.e12"
+        description: "Keyboard ROM (US-Dvorak)"
+        size: 2048
+        crc32: "e47045f4"
+        sha1: "12a2e718f5f4acd69b6c33a45a4a940b1440a481"
+
+  # Atari 7800
+  - name: a7800.zip
+    path: "mame/bios/a7800.zip"
+    standalone_path: "a7800.zip"
+    required: true
+    category: bios_zip
+    system: atari-7800
+    source_ref: "upstream src/mame/atari/a7800.cpp:1465-1472, upstream src/mame/atari/a7800.cpp:1509"
+    note: >-
+      Two BIOS variants selected with -bios (a7800, a7800pr), a7800 by
+      default.
+    contents:
+      - name: "7800.u7"
+        description: "Atari 7800 BIOS"
+        size: 4096
+        crc32: "5d13730c"
+        sha1: "d9d134bb6b36907c615a594cc7688f7bfcef5b43"
+      - name: "c300558-001a.u7"
+        description: "Atari 7800 BIOS (prototype with Asteroids)"
+        size: 16384
+        crc32: "a0e10edf"
+        sha1: "14584b1eafe9721804782d4b1ac3a4a7313e455f"
+
+  # Fairchild Channel F
+  - name: channelf.zip
+    path: "mame/bios/channelf.zip"
+    standalone_path: "channelf.zip"
+    required: true
+    category: bios_zip
+    system: fairchild-channelf
+    source_ref: "upstream src/mame/fairchild/channelf.cpp:300-308, upstream src/mame/fairchild/channelf.cpp:326"
+    note: >-
+      Two BIOS variants selected with -bios (sl90025, sl31253), sl90025 by
+      default. sl31254.rom is loaded whichever variant is selected.
+    contents:
+      - name: "sl90025.rom"
+        description: "Luxor Video Entertainment System BIOS"
+        size: 1024
+        crc32: "015c1e38"
+        sha1: "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2"
+      - name: "sl31253.rom"
+        description: "Channel F BIOS"
+        size: 1024
+        crc32: "04694ed9"
+        sha1: "81193965a374d77b99b4743d317824b53c3e3c78"
+      - name: "sl31254.rom"
+        description: "BIOS, second half"
+        size: 1024
+        crc32: "9c047ba3"
+        sha1: "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
+
+  # Fujitsu FM Towns II HR
+  - name: fmtownshr.zip
+    path: "mame/bios/fmtownshr.zip"
+    standalone_path: "fmtownshr.zip"
+    required: false
+    category: bios_zip
+    system: fmtowns
+    source_ref: "upstream src/mame/fujitsu/fmtowns.cpp:2924-2934, upstream src/mame/fujitsu/fmtowns.cpp:3017"
+    note: >-
+      Clone of fmtowns. fmt_dos.rom is the parent's and is also looked up in
+      fmtowns.zip.
+    contents:
+      - name: "fmt_dos.rom"
+        description: "DOS ROM"
+        size: 524288
+        crc32: "112872ee"
+        sha1: "57fd146478226f7f215caf63154c763a6d52165e"
+      - name: "fmt_dic.rom"
+        description: "Dictionary ROM"
+        size: 524288
+        crc32: "82d1daa2"
+        sha1: "7564020dba71deee27184824b84dbbbb7c72aa4e"
+      - name: "fmt_fnt.rom"
+        description: "Font ROM"
+        size: 262144
+        crc32: "dd6fd544"
+        sha1: "a216482ea3162f348fcf77fea78e0b2e4288091a"
+      - name: "fmthr_sys.rom"
+        description: "System ROM"
+        size: 262144
+        crc32: "8aeff982"
+        sha1: "a4ebf2e247a8e15a5f1ff003b657bbe3a67203d8"
+      - name: "mytownshr.rom"
+        description: "Serial number ROM"
+        size: 32
+        crc32: "c52f0e89"
+        sha1: "634d3965606b18a99507f0a520553005661c41ff"
+
+  # Mattel Intellivision
+  - name: intv.zip
+    path: "mame/bios/intv.zip"
+    standalone_path: "intv.zip"
+    required: true
+    category: bios_zip
+    system: intellivision
+    source_ref: "upstream src/mame/mattel/intv.cpp:549-552, upstream src/mame/mattel/intv.cpp:644"
+    note: >-
+      The machine also loads the stic set.
+    contents:
+      - name: "exec.bin"
+        description: "Executive ROM"
+        size: 8192
+        crc32: "cbce86f7"
+        sha1: "5a65b922b562cb1f57dab51b73151283f0e20c7a"
+
+  # Philips Videopac G7000 / Magnavox Odyssey 2
+  - name: videopac.zip
+    path: "mame/bios/videopac.zip"
+    standalone_path: "videopac.zip"
+    required: true
+    category: bios_zip
+    system: videopac
+    source_ref: "upstream src/mame/philips/odyssey2.cpp:902-905, upstream src/mame/philips/odyssey2.cpp:942"
+    note: >-
+      The machine also loads the i8245 set. Its clone odyssey2 (Magnavox
+      Odyssey 2, src/mame/philips/odyssey2.cpp:907-910, 944) declares the
+      same o2bios.rom, which a ROM search along the parent chain finds in
+      this archive, and loads the i8244 set.
+    contents:
+      - name: "o2bios.rom"
+        description: "BIOS"
+        size: 1024
+        crc32: "8016a315"
+        sha1: "b2e1955d957a475de2411770452eff4ea19f4cee"
 
   # Apple Macintosh, machines and the devices they instantiate
   - name: mac128k.zip
