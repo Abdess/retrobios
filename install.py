@@ -6548,6 +6548,39 @@ def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | No
     return setup
 
 
+# Windows marks a directory junction, and any other reparse point, with this
+# attribute. Before Python 3.12 lstat does not report a junction as a link,
+# and os.walk(followlinks=False) descends into it.
+_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+
+
+def _is_link(info: os.stat_result) -> bool:
+    """Whether what lstat read is a link: a symbolic link, or on Windows a
+    junction or any other reparse point."""
+    return stat.S_ISLNK(info.st_mode) or bool(
+        getattr(info, "st_file_attributes", 0) & _REPARSE_POINT)
+
+
+def _tree(top: Path) -> list[tuple[Path, os.stat_result]]:
+    """Every entry below top with what lstat read of it, children before
+    their folder. A link (a junction too) is listed, never entered."""
+    found: list[tuple[Path, os.stat_result]] = []
+    try:
+        names = sorted(os.listdir(top))
+    except OSError:
+        return found
+    for name in names:
+        path = top / name
+        try:
+            info = os.lstat(path)
+        except OSError:
+            continue
+        if stat.S_ISDIR(info.st_mode) and not _is_link(info):
+            found += _tree(path)
+        found.append((path, info))
+    return found
+
+
 def _is_backup_run(run: Path) -> bool:
     """Whether run is a dated folder a run of the installer made: a real
     folder holding the marker, inside a retrobios-backup holder that is no
@@ -6558,20 +6591,18 @@ def _is_backup_run(run: Path) -> bool:
     except OSError:
         return False
     return (stat.S_ISDIR(info.st_mode) and stat.S_ISDIR(holder.st_mode)
+            and not _is_link(info) and not _is_link(holder)
             and run.parent.name == BACKUP_DIR and stat.S_ISREG(marker.st_mode))
 
 
 def _backup_files(run: Path) -> list[Path]:
     """The files a backup run folder holds, its marker and note aside. Links
-    inside it are never followed: os.walk does not descend into a linked
-    folder, and a linked file is skipped."""
+    inside it, junctions included, are never followed nor put back."""
     return sorted(
-        Path(base) / name
-        for base, _dirs, names in os.walk(run, followlinks=False)
-        for name in names
-        if not (Path(base) / name).is_symlink()
-        and not (name.startswith(".") and name.endswith(".part"))
-        and not (Path(base) == run and name in (BACKUP_MARKER, REMOVED_NOTE))
+        path for path, info in _tree(run)
+        if stat.S_ISREG(info.st_mode) and not _is_link(info)
+        and not (path.name.startswith(".") and path.name.endswith(".part"))
+        and not (path.parent == run and path.name in (BACKUP_MARKER, REMOVED_NOTE))
     )
 
 
@@ -6617,6 +6648,10 @@ def _record_after_restore(run: Path, put_back: list[Path]) -> str:
             path = _below(folder, item["dest"])[0]
             if path is not None and not _check_ours(path, item)[0]:
                 back.append(item)
+        if not back and put_back:
+            # The files went back, but not where the record's folder is: the
+            # folder moved or was renamed since the removal.
+            return f"it is for {folder}, which does not hold the files put back"
         if not back:
             return ""
         return _update_record(folder, note["platform"],
@@ -6635,6 +6670,33 @@ def _record_after_restore(run: Path, put_back: list[Path]) -> str:
                                    if str(item.get("root") or "") not in ("", "data")
                                    or item["dest"].casefold() not in gone]}))
     return next((problem for problem in problems if problem), "")
+
+
+def _recorded_copy(run: Path, dest: Path) -> bool:
+    """Whether the file at dest is the installer's own copy, as the record
+    of its folder names it: the collection gives it again, so a restore
+    replaces it without keeping it."""
+    found = _record_folder(run, dest)
+    if found is None:
+        return False
+    try:
+        info = os.lstat(dest)
+    except OSError:
+        return False
+    if not stat.S_ISREG(info.st_mode) or _is_link(info):
+        return False
+    folder, rel = found
+    items = [item for setup in ((load_record(folder).data or {}).get("setups") or {}).values()
+             for item in setup.get("files") or []
+             if str(item.get("root") or "") in ("", "data")
+             and item["dest"].casefold() == rel.casefold() and item["size"] == info.st_size]
+    if not items:
+        return False
+    try:
+        sha1 = _digest_file(dest, ("sha1",))["sha1"]
+    except OSError:
+        return False
+    return any(item["sha1"] == sha1 for item in items)
 
 
 def _record_merge(setup: dict | None, files: list[dict], choice: list[str]) -> dict:
@@ -6688,8 +6750,9 @@ def restore_kept(run: Path, dry_run: bool = False) -> int:
 
     run is a <holder>/<date-time> folder a run wrote, its holder named
     retrobios-backup. Each file goes to the same path below the holder's
-    parent, replacing what is there, and the install record of its folder
-    is made to say so. The backup is left in place. Returns the exit code:
+    parent. A file there with other contents is moved into a new dated
+    backup first, never lost. The install record of its folder is made to
+    say so. The backup is left in place. Returns the exit code:
     0 when every file went back, 1 when one failed, 2 when the folder is no
     backup.
     """
@@ -6706,8 +6769,10 @@ def restore_kept(run: Path, dry_run: bool = False) -> int:
         return 0
     restored = size = failed = 0
     put_back: list[Path] = []
+    KEPT.reset()
     for src in files:
-        dest = root / src.relative_to(run)
+        rel = PurePosixPath(*src.relative_to(run).parts)
+        dest = root / Path(*rel.parts)
         length = src.stat().st_size
         if dry_run:
             print(f"  would put back {dest}")
@@ -6715,11 +6780,20 @@ def restore_kept(run: Path, dry_run: bool = False) -> int:
             size += length
             continue
         try:
+            sha1 = _digest_file(src, ("sha1",))["sha1"]
             dest.parent.mkdir(parents=True, exist_ok=True)
+            # A file at the place that is not the backup's copy (a newer one,
+            # one the user put there) is moved aside first, into a new dated
+            # backup, as an install keeps what it replaces. Its first level
+            # is the folder the backup's holder sits in.
+            holder = (root / rel.parts[0], PurePosixPath(*rel.parts[1:])) \
+                if len(rel.parts) > 1 else (root, rel)
+            if not _recorded_copy(run, dest):
+                KEPT.keep(*holder, dest, {"sha1": sha1})
             _clear_read_only(dest)
             _replace_with_copy(src, dest)
-        except OSError as exc:
-            reason = exc.strerror or str(exc)
+        except (OSError, _NotKept) as exc:
+            reason = getattr(exc, "strerror", None) or str(exc)
             print(f"  failed: {dest} ({reason})", file=sys.stderr)
             EVENTS.emit("restored", folder=str(run), path=str(dest), size=length, ok=False,
                         reason=reason)
@@ -6736,6 +6810,10 @@ def restore_kept(run: Path, dry_run: bool = False) -> int:
         return 0
     problem = _record_after_restore(run, put_back)
     print(f"\nPut back {_plural(restored, 'file')} ({format_size(size)}) under {root}.")
+    for item in KEPT.summary():
+        # The files that sat at those places, never lost.
+        print(f"Kept {_plural(item['files'], 'file')} that were in their place "
+              f"({format_size(item['bytes'])}) in {item['folder']}")
     if failed:
         print(f"{_plural(failed, 'file')} could not be put back.", file=sys.stderr)
     if problem:
@@ -6759,6 +6837,8 @@ REMOVAL_REASONS = {
     "unreadable": "could not be read",
     "not_recorded": "not installed by RetroBIOS",
 }
+# Why a planned file stays when it changed between the plan and its removal.
+CHANGED_SINCE_PLAN = "changed since the plan"
 # Written into a backup that a removal made: the setup, its folder, its
 # choice before and the record's entries, so --restore gives them back.
 REMOVED_NOTE = ".retrobios-removed.json"
@@ -6797,22 +6877,24 @@ def _entry_readers(entry: dict) -> set[str] | None:
 
 def _served(manifest: dict, fold: bool) -> dict[tuple[str, str], tuple]:
     """What the list serves, by (root, dest): (the sha1s it serves there,
-    its systems, its readers). A data tree's member counts under root data,
-    as the record keeps it."""
+    its systems, the cores that read it, whether the platform's own list
+    names it). A place listed twice keeps both: a core's copy beside the
+    platform's own never makes the file a core's alone. A data tree's member
+    counts under root data, as the record keeps it."""
     served: dict[tuple[str, str], tuple] = {}
     for entry in [*(manifest.get("files") or []), *(manifest.get("case_variants") or [])]:
         dest = str(entry.get("dest"))
         place = (str(entry.get("root") or ""), dest.casefold() if fold else dest)
-        sha1s, systems, readers = served.get(place, (set(), [], None))
+        sha1s, systems, readers, own = served.get(place, (set(), [], set(), False))
         mine = _entry_readers(entry)
         served[place] = (sha1s | _entry_sha1s(entry),
                          sorted(set(systems) | set(entry_systems(entry))),
-                         mine if readers is None else readers | (mine or set()))
+                         readers | (mine or set()), own or mine is None)
     for tree in manifest.get("data_directories") or []:
         for rel, meta in (tree.get("files") or {}).items():
             dest = f"{tree['dest']}/{rel}" if tree.get("dest") else rel
             served[("data", dest.casefold() if fold else dest)] = (
-                {str(meta.get("sha1"))}, list(tree.get("systems") or []), None)
+                {str(meta.get("sha1"))}, list(tree.get("systems") or []), set(), True)
     return served
 
 
@@ -6833,7 +6915,7 @@ def _below(folder: Path, dest: str) -> tuple[Path | None, str]:
             return None, "gone"
         except OSError:
             return None, "unreadable"
-        if stat.S_ISLNK(info.st_mode):
+        if _is_link(info):
             return None, "link"
         if not stat.S_ISDIR(info.st_mode):
             return None, "not_a_file"
@@ -6849,7 +6931,7 @@ def _check_ours(path: Path, item: dict) -> tuple[str, os.stat_result | None]:
         return "gone", None
     except OSError:
         return "unreadable", None
-    if stat.S_ISLNK(info.st_mode):
+    if _is_link(info):
         return "link", info
     if not stat.S_ISREG(info.st_mode):
         return "not_a_file", info
@@ -6925,16 +7007,23 @@ def plan_removal(
                      else set(known["cores"]) | set(manifest.get("core_names") or {})
                      ) - chosen_cores
     remove, kept, gone, picked = [], [], [], set()
+    planned: set[tuple[str, str]] = set()
     for item in setup.get("files") or []:
         root, dest = str(item.get("root") or ""), str(item["dest"])
-        sha1s, item_systems, readers = served.get((root, norm(dest)), (set(), [], None))
+        sha1s, item_systems, readers, own = served.get(
+            (root, norm(dest)), (set(), [], set(), False))
         if chosen_systems and not (chosen_systems & set(item_systems) or (
                 not item_systems and OTHER_SYSTEMS in chosen_systems)):
             continue
-        if chosen_cores and not (readers and readers & chosen_cores):
+        # The platform's own list keeps its files whatever core is removed.
+        if chosen_cores and (own or not readers & chosen_cores):
             continue
         if files and norm(dest) not in wanted:
             continue
+        if (root, norm(dest)) in planned:
+            # Two entries the drive opens as one file: planned once.
+            continue
+        planned.add((root, norm(dest)))
         picked.add(norm(dest))
         entry = {"dest": dest, "root": root, "sha1": item["sha1"], "size": item["size"],
                  "systems": item_systems}
@@ -6961,7 +7050,7 @@ def plan_removal(
         if why or path is None or info is None:
             kept.append({**entry, "reason": why or "unreadable", "what": what})
             continue
-        remove.append({**entry, "path": path, "inode": (info.st_dev, info.st_ino)})
+        remove.append({**entry, "path": path, "inode": _stamp(info)})
     kept += [{"dest": dest, "root": "", "sha1": "", "size": 0, "systems": [],
               "reason": "not_recorded", "what": ""}
              for dest in files if norm(dest) not in picked]
@@ -7019,12 +7108,22 @@ def kept_line(item: dict) -> str:
     return f"{item['dest']}: {why}"
 
 
+def _stamp(info: os.stat_result) -> tuple[int, int, int, int]:
+    """What tells a file from itself edited: device, inode, size, mtime."""
+    return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns
+
+
+class _ChangedSincePlan(OSError):
+    """The file is not the one the plan read: it stays."""
+
+
 def remove_files(removal: Removal, setup: dict, backup: bool
                  ) -> tuple[list[dict], list[dict], Path | None]:
     """Delete each file of the plan, or with backup move it into a new
-    backup folder: (removed, failed {dest, reason}, the backup folder). Each
-    file is read again just before: one that changed kind or inode since
-    the plan stays."""
+    backup folder: (removed, failed {dest, reason, changed}, the backup
+    folder). Each file is read again just before, and hashed again: one
+    edited in place during the question, swapped, or turned into a link
+    stays, as changed since the plan."""
     removed, failed = [], []
     run: Path | None = None
     under: Path | None = None
@@ -7033,9 +7132,10 @@ def remove_files(removal: Removal, setup: dict, backup: bool
         kept: Path | None = None
         try:
             info = os.lstat(path)
-            if (not stat.S_ISREG(info.st_mode)
-                    or (info.st_dev, info.st_ino) != entry["inode"]):
-                raise OSError(errno.ESTALE, "changed since it was read")
+            if (not stat.S_ISREG(info.st_mode) or _is_link(info)
+                    or _stamp(info) != entry["inode"]
+                    or _digest_file(path, ("sha1",))["sha1"] != entry["sha1"]):
+                raise _ChangedSincePlan(errno.ESTALE, CHANGED_SINCE_PLAN)
             if backup:
                 if run is None or under is None:
                     run, under = KEPT.place(removal.folder, create=True)
@@ -7048,7 +7148,8 @@ def remove_files(removal: Removal, setup: dict, backup: bool
                 path.unlink()
         except OSError as exc:
             reason = exc.strerror or str(exc)
-            failed.append({"dest": entry["dest"], "reason": reason})
+            failed.append({"dest": entry["dest"], "reason": reason,
+                           "changed": isinstance(exc, _ChangedSincePlan)})
             EVENTS.emit("removed", platform=removal.plat, dest=entry["dest"],
                         size=entry["size"], ok=False, reason=reason, moved_to="")
             continue
@@ -7071,7 +7172,7 @@ def _write_removed_note(run: Path, removal: Removal, setup: dict) -> None:
 
 def _record_after_removal(removal: Removal, removed: list[dict]) -> str:
     """The setup's record without the files removed and those gone, with the
-    choice left: the setup goes once nothing of it is chosen or held."""
+    choice left: the setup goes once it holds no file."""
     taken = {(entry["root"], entry["dest"]) for entry in removed} | {
         (str(item.get("root") or ""), item["dest"]) for item in removal.gone}
 
@@ -7080,9 +7181,13 @@ def _record_after_removal(removal: Removal, removed: list[dict]) -> str:
             return None
         files = [item for item in setup.get("files") or []
                  if (str(item.get("root") or ""), item["dest"]) not in taken]
-        if removal.choice is None or not files:
+        if not files:
             return None
-        return {**setup, "written": _record_now(), "choice": list(removal.choice),
+        # A file that stayed (it failed, changed, or something still needs
+        # it) keeps its entry. With nothing left chosen, the choice stays the
+        # one recorded: no choice would read as the whole list.
+        choice = setup.get("choice") if removal.choice is None else removal.choice
+        return {**setup, "written": _record_now(), "choice": list(choice or []),
                 "files": files}
 
     return _update_record(removal.folder, removal.plat, change)
@@ -7114,6 +7219,15 @@ def run_removal(args: argparse.Namespace) -> int:
     moved with --backup), and the record made to say so. 0 done, 1 a file
     or the record failed, 2 nothing done."""
     plat, folder = _action_setup(args)
+    if not os.path.isdir(folder):
+        # An unmounted card looks like every file gone: nothing is touched.
+        message = (f"Nothing was removed: {shown_path(folder)} is not there (a card "
+                   "not mounted?).")
+        print(message, file=sys.stderr)
+        EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
+                    systems=[], dests=[], kept=[], gone=0, backup=bool(args.backup),
+                    message=message)
+        return 2
     read = load_record(folder)
     setup, _path, problem = setup_record(plat, folder)
     if setup is None or read.data is None:
@@ -7181,8 +7295,7 @@ def run_removal(args: argparse.Namespace) -> int:
             for rel in by_hand:
                 print(f"  {rel}")
     if not removal.remove:
-        if removal.gone and not args.dry_run:
-            _record_after_removal(removal, [])
+        # The record keeps what it says until a removal is confirmed.
         return 2
     if args.dry_run:
         print("Nothing was removed (--dry-run).")
@@ -7211,6 +7324,13 @@ def run_removal(args: argparse.Namespace) -> int:
                     message=f"Moved {_plural(len(removed), 'file')} here.")
     elif removed:
         print(f"Removed {_plural(len(removed), 'file')}, {format_size(freed)} freed.")
+    changed = [item for item in failed if item["changed"]]
+    if changed:
+        print(f"{agree(len(changed), 'file stays', 'files stay')}: "
+              f"{len(changed)} {CHANGED_SINCE_PLAN}.")
+        for item in changed:
+            print(f"  {item['dest']}: {CHANGED_SINCE_PLAN}")
+    failed = [item for item in failed if not item["changed"]]
     for item in failed:
         print(f"  failed: {item['dest']} ({item['reason']})", file=sys.stderr)
     if problem:
@@ -7316,19 +7436,18 @@ def run_delete_backup(args: argparse.Namespace) -> int:
             print("Nothing was deleted.")
             return QUIT_CODE
     failed = 0
-    # Bottom up, never through a link: a link goes, not what it names.
-    for base, dirs, names in os.walk(run, topdown=False, followlinks=False):
-        for name in [*names, *dirs]:
-            path = Path(base) / name
-            try:
-                if stat.S_ISDIR(os.lstat(path).st_mode):
-                    path.rmdir()
-                else:
-                    _clear_read_only(path)
-                    path.unlink()
-            except OSError as exc:
-                failed += 1
-                print(f"  failed: {path} ({exc.strerror or exc})", file=sys.stderr)
+    # Bottom up, never through a link: a link goes, not what it names. A
+    # junction is removed as a folder, which leaves its target alone.
+    for path, info in _tree(run):
+        try:
+            if stat.S_ISDIR(info.st_mode):
+                path.rmdir()
+            else:
+                _clear_read_only(path)
+                path.unlink()
+        except OSError as exc:
+            failed += 1
+            print(f"  failed: {path} ({exc.strerror or exc})", file=sys.stderr)
     try:
         run.rmdir()
     except OSError as exc:
@@ -25754,7 +25873,7 @@ def tui_removal_systems(state: TuiState) -> list[tuple[str, int, int]]:
     held: dict[str, list[int]] = {}
     for item in state.record.get("files") or []:
         systems = served.get((str(item.get("root") or ""), str(item["dest"])),
-                             (set(), [], None))[1]
+                             (set(), [], set(), False))[1]
         for system in systems or [OTHER_SYSTEMS]:
             tally = held.setdefault(system, [0, 0])
             tally[0] += 1

@@ -20,6 +20,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -193,6 +194,9 @@ class NeverTouched(unittest.TestCase):
             self.assertIn("1 file stays: 1 changed since it was installed.", proc.stdout)
             self.assertIn("scph5501.bin: changed since it was installed", proc.stdout)
             self.assertIn("1 other file stays, not installed by RetroBIOS.", proc.stdout)
+            # The file that stayed keeps its entry: the setup is not dropped.
+            self.assertEqual([item["dest"] for item in repo.setup()["files"]],
+                             ["scph5501.bin"])
 
     def test_a_link_in_place_of_a_file_stays_and_its_target_too(self):
         with SharedRepository() as repo:
@@ -464,6 +468,180 @@ class RestoreAnInstallBackup(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertEqual((repo.dest / "gba_bios.bin").read_bytes(), b"the user's own")
             self.assertNotIn("gba_bios.bin", [item["dest"] for item in repo.setup()["files"]])
+
+
+class ReviewOfTheRemoval(unittest.TestCase):
+    """What a review of the first version found, each held by a test."""
+
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        self.folder = self.root / "bios"
+        self.folder.mkdir()
+
+    def test_restore_keeps_the_file_in_place_aside(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            proc = repo.run("--remove", "--system", "nintendo-gba", "--backup", "--yes")
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            [backup] = install.list_backups(repo.dest)
+            (repo.dest / "gba_bios.bin").write_bytes(b"a newer one the user put")
+            proc = repo.run("--restore", str(backup["folder"]))
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertEqual((repo.dest / "gba_bios.bin").read_bytes(), b"gba bios")
+            self.assertIn("Kept 1 file that were in their place", proc.stdout)
+            kept = [item for item in install.list_backups(repo.dest)
+                    if item["folder"] != backup["folder"]]
+            self.assertEqual([item["files"] for item in kept], [1])
+            [saved] = [path for path in kept[0]["folder"].rglob("gba_bios.bin")]
+            self.assertEqual(saved.read_bytes(), b"a newer one the user put")
+            # The same bytes in place: nothing more is kept.
+            again = repo.run("--restore", str(backup["folder"]))
+            self.assertEqual(again.returncode, 0, again.stdout + again.stderr)
+            self.assertNotIn("Kept", again.stdout)
+
+    def _plan(self, payload: bytes, manifest: dict | None = None) -> tuple:
+        (self.folder / "a.bin").write_bytes(payload)
+        record = _record(self.folder, [_item("a.bin", payload)])
+        return record, install.plan_removal(
+            "retroarch", self.folder, record, manifest or _served(("a.bin", payload)))
+
+    def test_a_file_edited_in_place_after_the_plan_stays(self):
+        record, removal = self._plan(b"ours")
+        path = self.folder / "a.bin"
+        before = os.stat(path)
+        with open(path, "r+b") as handle:
+            handle.write(b"user")
+        # The same inode, size and even time: only its bytes tell.
+        os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+        removed, failed, _run = install.remove_files(removal, record["setups"]["retroarch"],
+                                                     False)
+        self.assertEqual(removed, [])
+        self.assertEqual([(item["reason"], item["changed"]) for item in failed],
+                         [(install.CHANGED_SINCE_PLAN, True)])
+        self.assertEqual(path.read_bytes(), b"user")
+
+    def test_a_file_that_failed_keeps_its_entry(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            if hasattr(os, "geteuid") and os.geteuid() == 0:
+                self.skipTest("root deletes anywhere")
+            (repo.dest / "pcsx").chmod(0o555)
+            try:
+                proc = repo.run("--remove", "--yes")
+            finally:
+                (repo.dest / "pcsx").chmod(0o755)
+            self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+            self.assertEqual([item["dest"] for item in repo.setup()["files"]],
+                             ["pcsx/extra.bin"])
+
+    def test_an_unmounted_folder_or_a_refusal_leaves_the_record(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            record = repo.record.read_bytes()
+            for path in repo.dest.rglob("*"):
+                if path.is_file():
+                    path.unlink()
+            asked = repo.run("--remove")
+            self.assertEqual(asked.returncode, 2)
+            self.assertEqual(repo.record.read_bytes(), record)
+            nothing = repo.run("--remove", "--system", "nintendo-gba", "--yes")
+            self.assertEqual(nothing.returncode, 2)
+            self.assertEqual(repo.record.read_bytes(), record)
+            shutil.rmtree(repo.dest)
+            gone = repo.run("--remove", "--yes")
+            self.assertEqual(gone.returncode, 2)
+            self.assertEqual(gone.stderr.strip().count("\n"), 0, gone.stderr)
+            self.assertIn("is not there", gone.stderr)
+            self.assertEqual(repo.record.read_bytes(), record)
+
+    def junction(self, path: Path):
+        """lstat as Windows reads a directory junction at path, which Python
+        before 3.12 does not report as a link."""
+        real = os.lstat
+
+        def lstat(target, *args, **kwargs):
+            info = real(target, *args, **kwargs)
+            if Path(target) != path:
+                return info
+            return types.SimpleNamespace(**{name: getattr(info, name) for name in (
+                "st_mode", "st_ino", "st_dev", "st_size", "st_mtime_ns", "st_uid")},
+                st_file_attributes=0x400)
+
+        return mock.patch.object(install.os, "lstat", side_effect=lstat)
+
+    def test_a_junction_is_a_link(self):
+        (self.folder / "linked").mkdir()
+        payload = b"elsewhere"
+        (self.folder / "linked" / "deep.bin").write_bytes(payload)
+        record = _record(self.folder, [_item("linked/deep.bin", payload)])
+        with self.junction(self.folder / "linked"):
+            removal = install.plan_removal("retroarch", self.folder, record,
+                                           _served(("linked/deep.bin", payload)))
+        self.assertEqual([item["reason"] for item in removal.kept], ["link"])
+
+    def test_a_backup_holding_a_junction_is_never_entered(self):
+        holder = self.root / install.BACKUP_DIR
+        run = holder / "20261103-120000"
+        (run / "bios").mkdir(parents=True)
+        (run / install.BACKUP_MARKER).write_text("marker")
+        (run / "bios" / "x.bin").write_bytes(b"kept")
+        junction = run / "bios" / "elsewhere"
+        junction.mkdir()
+        (junction / "precious.bin").write_bytes(b"not the backup's")
+        with self.junction(junction):
+            self.assertEqual(install._backup_files(run), [run / "bios" / "x.bin"])
+            args = types.SimpleNamespace(delete_backup=run, dry_run=False, yes=True,
+                                         no_input=True)
+            with contextlib.redirect_stdout(io.StringIO()), \
+                    contextlib.redirect_stderr(io.StringIO()):
+                install.run_delete_backup(args)
+        self.assertEqual((junction / "precious.bin").read_bytes(), b"not the backup's")
+        self.assertFalse((run / "bios" / "x.bin").exists())
+
+    def test_a_core_never_takes_a_file_the_platform_lists_too(self):
+        payload = b"bios"
+        manifest = {"files": [
+            {"dest": "a.bin", "sha1": hashlib.sha1(payload).hexdigest(), "size": 4,
+             "cores": ["mgba"], "systems": ["nintendo-gba"]},
+            {"dest": "a.bin", "sha1": hashlib.sha1(payload).hexdigest(), "size": 4,
+             "cores": None, "systems": ["nintendo-gba"]}]}
+        (self.folder / "a.bin").write_bytes(payload)
+        record = _record(self.folder, [_item("a.bin", payload)])
+        removal = install.plan_removal("retroarch", self.folder, record, manifest,
+                                       cores=["mgba"])
+        self.assertEqual(removal.remove, [])
+        self.assertTrue((self.folder / "a.bin").exists())
+
+    def test_two_names_one_file_are_planned_once(self):
+        payload = b"bios"
+        (self.folder / "A.BIN").write_bytes(payload)
+        record = _record(self.folder, [_item("A.BIN", payload), _item("a.bin", payload)])
+        # The drive opens a.bin as A.BIN, as FAT does.
+        found = ("", os.lstat(self.folder / "A.BIN"))
+        with mock.patch.object(install, "keeps_case", return_value=False), \
+                mock.patch.object(install, "_check_ours", return_value=found):
+            removal = install.plan_removal("retroarch", self.folder, record,
+                                           _served(("a.bin", payload)))
+        self.assertEqual([entry["dest"] for entry in removal.remove], ["A.BIN"])
+
+    def test_a_restore_into_a_moved_folder_says_the_record_was_not_updated(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            repo.run("--remove", "--system", "nintendo-gba", "--backup", "--yes")
+            [backup] = install.list_backups(repo.dest)
+            moved = repo.root.with_name(repo.root.name + "-moved")
+            repo.root.rename(moved)
+            try:
+                run = moved / install.BACKUP_DIR / backup["folder"].name
+                with contextlib.redirect_stdout(io.StringIO()), \
+                        contextlib.redirect_stderr(io.StringIO()) as err:
+                    code = install.restore_kept(run)
+                self.assertEqual(code, 1)
+                self.assertIn("The install record could not be updated", err.getvalue())
+                self.assertTrue((moved / "dest" / "gba_bios.bin").is_file())
+            finally:
+                moved.rename(repo.root)
 
 
 if __name__ == "__main__":

@@ -771,7 +771,12 @@ Kept 1 file already there (512.0 KB), which the collection's copies replaced, in
 ```
 
 `--restore FOLDER` copies every file of that folder back to its place and
-leaves the folder as it is, to delete once the emulators start as before.
+leaves the folder as it is, to delete once the emulators start as before. A
+file at that place with other contents (a newer one, one put there by hand) is
+first moved into a new dated backup, as an install keeps what it replaces, and
+the end of the run names that folder. The installer's own copy, as the
+install record names it, is replaced without one: the collection gives it
+again.
 Copying the contents of the dated folder into the folder that holds
 `retrobios-backup` does the same by hand. `--dry-run --restore FOLDER` lists
 what would go back. `--dry-run` alone counts the files an install would keep.
@@ -838,20 +843,26 @@ release), and a file still needed by what stays. A file two systems share
 stays while one of them is still chosen, and a file another setup of the same
 folder recorded stays too. Removing everything also counts the files the
 record never names, added by hand or by another program, and leaves them.
-A record that cannot be read is said in one line, and nothing is removed.
+A record that cannot be read is said in one line, and nothing is removed. So
+is a BIOS folder that is not there (a card not mounted), with code 2. Each
+file is read and hashed again just before it goes: one edited during the
+question stays, as changed since the plan.
 On FAT and exFAT cards, which open a name whatever its case, names are
 compared without case.
 
-The record is updated after the run: the files removed leave it, the systems
-or cores removed leave its choice, and a setup with nothing left goes from
-it. `--restore` on a removal's backup gives the files back to the record with
-the choice they had. On a backup of files an install replaced, the record lets
+The record is updated only after the yes, and only for what was done: the
+files removed leave it, the systems or cores removed leave its choice, a file
+that stayed (changed, failed, still needed) keeps its entry, and a setup with
+no file left goes from it. `--restore` on a removal's backup gives the files back to the record with
+the choice they had. A folder moved since the removal is said, the record
+left as it is. On a backup of files an install replaced, the record lets
 go of each file put back: it is the user's again.
 
 `--backups` lists the backups of the BIOS folder, newest first, and
 `--delete-backup FOLDER` deletes one after a question naming its date and
 size. Only a dated folder holding `.retrobios-backup`, inside
-`retrobios-backup`, is ever deleted, and no link inside it is followed. On the
+`retrobios-backup`, is ever deleted, and no link inside it is followed, a
+Windows junction included. On the
 full screen, **More** on the plan, shown once the folder has a record or a
 backup, holds **Remove files**, **Backups**, **Put back a backup** and
 **Delete a backup**. Remove files lists every recorded file or one system,
