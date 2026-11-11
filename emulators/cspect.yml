@@ -11,7 +11,7 @@ core_version: "3.3.1.0"
 version_basis:
   kind: package
   url: "https://mdf200.itch.io/cspect"
-  artifact: "CSpect zip from itch.io, CSpect.exe and ReadMe.txt"
+  artifact: "CSpect3_3_1_0.zip from itch.io, CSpect.exe AssemblyFileVersion 3.3.1.0"
 display_name: "Sinclair - ZX Spectrum Next (#CSpect)"
 verification: existence
 cores: [cspect]
@@ -21,13 +21,18 @@ systems:
   - sinclair-zx-spectrum
 
 notes: |
-  ZX Spectrum Next emulator, assembler and debugger for Windows, macOS and
-  Linux, written in C# against .NET Framework 4.8 and run under Mono elsewhere.
-  It is closed source and shipped as a zip from its itch.io page, so every
-  reference below names a method and an IL offset in the CSpect.exe of 3.3.1.0.
-  Type and member names in that build are obfuscated and the string literals sit
-  XOR encoded in one 18146 byte blob, decoded at class load by b[i] ^ i ^ 0xAA.
-  ref: CSpect.exe 3.3.1.0, ReadMe.txt:9-11
+  ZX Spectrum Next emulator, assembler and debugger written in C# against .NET
+  Framework 4.8. One assembly serves Windows, macOS and Linux and picks its host
+  from Environment.OSVersion at startup. It is closed source and shipped as
+  CSpect3_3_1_0.zip from its itch.io page (sha256 f6935abe6ed49b1e), so every
+  reference below names a method and an IL offset in its CSpect.exe, assembly
+  and file version 3.3.1.0. Type and member names in that build are obfuscated
+  and the string literals sit XOR encoded in one 18146 byte blob, decoded at
+  class load by b[i] ^ i ^ 0xAA.
+  ref: CSpect.exe 3.3.1.0 TargetFramework(".NETFramework,Version=v4.8"),
+       AssemblyFileVersion("3.3.1.0"), A.h::a(string[]) IL_0000-IL_0030,
+       <PrivateImplementationDetails>.DB247AA5-38E0-44EF-99A2-2061F389A03D::.cctor
+       IL_000f-IL_0052
 
   The machine carries no built-in ROM. A cold reset either loads the Next ROMs
   or allocates them zero filled, 65536 bytes for the ROM banks and 8192 each for
