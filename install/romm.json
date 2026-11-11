@@ -6,7 +6,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.1",
-  "generated": "2026-11-10T01:52:59Z",
+  "generated": "2026-11-11T12:03:42Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -8529,6 +8529,12 @@
       "pcsx2",
       "ps2"
     ],
+    "lrps2-416291a": [
+      "pcsx2"
+    ],
+    "lrps2-9485a53": [
+      "ps2"
+    ],
     "lynx-emu": [
       "LYNX-EMU",
       "Lynx.emu"
@@ -8707,6 +8713,9 @@
     "pcsx2-legacy": [
       "PCSX2-LEGACY",
       "pcsx2-16"
+    ],
+    "pcsx2-libretro-408e3b2": [
+      "pcsx2"
     ],
     "pcsx_rearmed": [
       "pcsx_rearmed32",
@@ -9515,12 +9524,15 @@
       "armsx2",
       "emucorex",
       "lrps2",
+      "lrps2-416291a",
+      "lrps2-9485a53",
       "nethersx2",
       "nethersx2-turnip",
       "nethersx2-turnip-classic",
       "pcee2",
       "pcsx2",
       "pcsx2-legacy",
+      "pcsx2-libretro-408e3b2",
       "play",
       "yaps2"
     ],

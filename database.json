@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T01:52:59Z",
+  "generated_at": "2026-11-11T12:03:42Z",
   "total_files": 21936,
   "total_size": 17343466067,
   "bios_dir": "bios",
@@ -307354,6 +307354,9 @@
       "OS6128_UK.rom": [
         "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
       ],
+      "OS6128_UK": [
+        "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
+      ],
       "CPC6128.ROM": [
         "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
       ],
@@ -307363,10 +307366,16 @@
       "OS464_UK.rom": [
         "56d39c463da60968d93e58b4ba0e675829412a20"
       ],
+      "OS464_UK": [
+        "56d39c463da60968d93e58b4ba0e675829412a20"
+      ],
       "CPC464.ROM": [
         "56d39c463da60968d93e58b4ba0e675829412a20"
       ],
       "OS664_UK.rom": [
+        "073a7665527b5bd8a148747a3947dbd3328682c8"
+      ],
+      "OS664_UK": [
         "073a7665527b5bd8a148747a3947dbd3328682c8"
       ],
       "CPC664.ROM": [
@@ -308044,35 +308053,11 @@
       "EFI vmxnet3": [
         "6557242402387a6319a0db6abb916ada48e1391c"
       ],
-      "EDK2 x86_64 UEFI": [
-        "eac1a94b8e0d7c53fd5df001c36794ec34c7c724"
-      ],
-      "EDK2 x86_64 Secure Boot UEFI": [
-        "617abe2746696bb4a309d72cecb446dc76a2a61e"
-      ],
-      "EDK2 i386 UEFI": [
-        "45b8faebdfaaf19d16e3a7c5f60d69214685071c"
-      ],
-      "EDK2 i386 Secure Boot UEFI": [
-        "6982abec8ef2ed7c8293163d5a0bd69a01a2126f"
-      ],
-      "EDK2 i386 UEFI vars template": [
-        "b62e676c9317a32aaa9ee1d76268d8c55663bd6e"
-      ],
       "EDK2 AArch64 UEFI": [
         "514edbce58bfa877170673c1799351a7dab3b6df"
       ],
       "EDK2 ARM UEFI": [
         "c20f01c28b59b388abb9d0febeec45d801a632f0"
-      ],
-      "EDK2 ARM UEFI vars template": [
-        "b051167e0e57bd13d77ed92ef7b474872f44ec6d"
-      ],
-      "EDK2 RISC-V UEFI": [
-        "2c8633d881ece0c4794d740138a318f7e9af480c"
-      ],
-      "EDK2 RISC-V UEFI vars template": [
-        "c4e6cce4247ba8f32f528c1c69f49228f616677f"
       ],
       "OpenBIOS PowerPC": [
         "0ef5051dcb318c0bc45d1908f8318d6eece8686a"
@@ -308085,9 +308070,6 @@
       ],
       "VOF (Virtual Open Firmware)": [
         "fc737b34a390f5752cb7e35b33d71f4f438ab607"
-      ],
-      "VOF NVRAM": [
-        "5d1184609b87f78635f0575467a1c3f440900ff0"
       ],
       "U-Boot e500": [
         "9ea03f249f856cdcb4399cc1f5a5031729379911"
@@ -308125,12 +308107,6 @@
       "S390 network boot": [
         "f6cec671408117bd9a31e982682662f27ef4fb2c"
       ],
-      "HP-PA firmware (32-bit)": [
-        "605c36ede6c120c6cc7efe147a75a3dc4b7e4fb0"
-      ],
-      "HP-PA firmware (64-bit)": [
-        "b42f6d4ca74073de6c038579b4a9323ad0a6b398"
-      ],
       "NPCM7xx boot ROM": [
         "22a75d26a0591d2c7763765b6381fa2f73de43e1"
       ],
@@ -308139,12 +308115,6 @@
       ],
       "Canyonlands DTB (PPC)": [
         "8a2fda0b4f23a92eb44776b5d7ffe951987062da"
-      ],
-      "Petalogix ML605 DTB (MicroBlaze)": [
-        "892d265838866869b8a8ef104252ff5b2fda156f"
-      ],
-      "Petalogix S3ADSP1800 DTB (MicroBlaze)": [
-        "976600e3f89ecc1f3564b7077f53c58e0b565280"
       ],
       "N88_1.ROM": [
         "4ae4d37409ff99411a623da9f6a44192170a854e",
