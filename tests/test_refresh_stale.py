@@ -17,6 +17,8 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
+import yaml
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -54,6 +56,15 @@ class Planning(unittest.TestCase):
              ["scripts/export_native.py", "--platform", "retrobat"],
              ["scripts/verify.py", "--platform", "retrobat"]],
         )
+
+    def test_a_scraper_reading_its_pin_is_moved_by_rescrape_args(self):
+        registry = dict(REGISTRY, retrobat={"scraper": "retrobat",
+                                            "rescrape_args": ["--revision", "master"]})
+        jobs, _, _ = rs.plan_jobs([finding("platforms", "retrobat")], registry, {})
+        self.assertEqual(jobs[0].command[-2:], ["--revision", "master"])
+        with (REPO_ROOT / "platforms" / "_registry.yml").open(encoding="utf-8") as fh:
+            real = yaml.safe_load(fh)["platforms"]["retrobat"]
+        self.assertEqual(real["rescrape_args"], ["--revision", "master"])
 
     def test_a_child_waits_for_its_rescraped_parent(self):
         """retropie inherits retroarch: run beside the parent's rescrape, its

@@ -380,6 +380,7 @@ def _command_for(
             f"scripts.scraper.{scraper}_scraper",
             "-o",
             f"platforms/{subject}.yml",
+            *(str(a) for a in entry.get("rescrape_args") or ()),
         ]
 
     if area == "targets":
