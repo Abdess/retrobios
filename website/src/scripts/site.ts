@@ -158,6 +158,14 @@ const labelCells = (table: HTMLTableElement) => {
 	}
 };
 
+// Every filter box is written `hidden` (siteentries.filter_box,
+// rehype-stack-tables.mjs): it filters only once this script runs, so a
+// reader without it never meets a field that does nothing. The box keeps
+// its room while hidden (retrobios.css), so showing it moves nothing.
+const showFilters = () => {
+	for (const box of document.querySelectorAll<HTMLElement>('.rb-table-filter[hidden]')) box.hidden = false;
+};
+
 const enhanceTables = () => {
 	const tables = [...document.querySelectorAll<HTMLTableElement>('.sl-markdown-content table')];
 	const enhance = (table: HTMLTableElement) => {
@@ -1450,6 +1458,7 @@ resolveFileAddress();
 followMovedCard();
 openTargetBlock();
 addEventListener('hashchange', openTargetBlock);
+showFilters();
 enhanceTables();
 breakPaths();
 hashSearch();

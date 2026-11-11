@@ -81,7 +81,10 @@ def _validate_yaml_directory(
             continue
         out.extend(_errors(validator, data, str(path.relative_to(ROOT))))
         out.extend(_unreachable_citations(path, data))
+        if schema_name == "platform.schema.json":
+            out.extend(_config_records_without_evidence(path, data))
         if schema_name == "emulator.schema.json":
+            out.extend(_config_reads_without_build(path, data))
             out.extend(_checks_without_values(path, data))
             out.extend(_save_dir_without_library_name(path, data))
             out.extend(_systems_outside_profile(path, data))
@@ -100,6 +103,59 @@ _CHECK_FIELDS = {
     "romdir": ("romdir",),
     "masked_sha1": ("masked_sha1",),
 }
+
+
+def _config_records_without_evidence(path: Path, document: object) -> list[str]:
+    """A launcher record citing a config without the links its extractor reads.
+
+    A config file is proof only when the code installing it and the code
+    reading it are shown (launchers.config_evidence). The platform's half
+    is the extractor's to write: a record citing a shipped config carries
+    installs and overrides, and a feature or option file is never a
+    record's source, only its choices_from.
+    """
+    if not isinstance(document, dict):
+        return []
+    from scraper.shell_launchers import config_ref, is_feature_ref  # noqa: PLC0415
+
+    out: list[str] = []
+    for index, record in enumerate(document.get("launchers") or []):
+        if not isinstance(record, dict):
+            continue
+        cited = config_ref(str(record.get("source_ref") or ""))
+        where = f"{path.relative_to(ROOT)}: launchers[{index}] ({record.get('emulator')})"
+        features = [part for part in cited if is_feature_ref(part)]
+        if features:
+            out.append(f"{where} cites {features[0]} as source, choices_from holds it")
+        if [part for part in cited if not is_feature_ref(part)] and not (
+            record.get("installs") and "overrides" in record
+        ):
+            out.append(f"{where} cites a config without installs and overrides")
+    return out
+
+
+def _config_reads_without_build(path: Path, document: object) -> list[str]:
+    """A config_reads entry naming a platform the profile gives no pin_build.
+
+    Such an entry is read at the build that platform ships, and pin_build is
+    where that build is named.
+    """
+    if not isinstance(document, dict):
+        return []
+    builds = {str(b.get("platform")) for b in document.get("pin_build") or []}
+    out: list[str] = []
+    for index, read in enumerate(document.get("config_reads") or []):
+        if not isinstance(read, dict):
+            continue
+        if read.get("revision"):
+            continue
+        for platform in read.get("platforms") or []:
+            if str(platform) not in builds:
+                out.append(
+                    f"{path.relative_to(ROOT)}: config_reads[{index}] ({read.get('file')}) "
+                    f"names {platform}, which has no pin_build"
+                )
+    return out
 
 
 def _systems_outside_profile(path: Path, document: object) -> list[str]:
@@ -161,34 +217,46 @@ _CODE_SUFFIXES = frozenset(
     "go rs lua pas pp asm s sh bash zsh ps1 bat cmd vbs swift d zig nim qml qc rb pl php "
     "scala ml hs dart vue ino z80 smali".split()
 )
-_CODE_FILE = re.compile(r"[\w+.-]\.([A-Za-z0-9+]+)\b")
-_BINARY_EVIDENCE = re.compile(
-    r"\b0x[0-9a-fA-F]+\b|\bFUN_[0-9a-fA-F]+\b|\.(?:so|dll|exe|dylib|dex|apk|jar|elf|nro|xex)\b",
+_CODE_FILE = re.compile(r"(?<=[\w+-])\.([A-Za-z0-9+]+)\b")
+# A compiled image: a part that names one has to say where in it the file
+# is read, an address, a decompiled function or an IL method.
+# A name under a directory is a file of the tree it sits in, and a further
+# extension (.dll.map) makes it another file.
+_BINARY_FILE = re.compile(
+    r"(?<![\w/+.-])[\w+.-]+\.(?:so|dll|exe|dylib|dex|elf|nro|xex)(?:\.\d+)*(?![\w.-]*\w)",
     re.IGNORECASE,
+)
+_BINARY_EVIDENCE = re.compile(
+    r"\b0x[0-9a-fA-F]+\b"
+    r"|\b(?:FUN|sub|thunk|LAB)_[0-9a-fA-F]+\b"
+    r"|\bIL_[0-9a-fA-F]{4}\b"
+    r"|::|\.\.c?ctor\b"
+    r"|\b[A-Za-z_][\w.$]*\("
 )
 
 # Profiles whose files cite no published code. Each reason says why the
 # check cannot apply yet.
-DATA_ONLY_REF_EXCEPTIONS: dict[str, str] = {
-    "ace-dl": "closed source: the refs describe what the shipped binary opens",
-    "cpcemu": "closed source: the refs describe what the shipped binary opens",
-    "drastic": "closed source: the shader format files are read by the shipped binary",
-    "lexaloffle": "closed source: PICO-8 reads pico8_gpio, the refs are its readme and the KNULLI install script",
-    "mfme": "closed source: the refs are the release notes of the shipped binary",
-}
+DATA_ONLY_REF_EXCEPTIONS: dict[str, str] = {}
 
 
 def _ref_cites_code(ref: str) -> bool:
-    """A source_ref part names a source file, or a binary with an address."""
+    """A source_ref cites a source file or a place in a compiled image.
+
+    A part naming a binary without an address, a decompiled function or an
+    IL method says only that the binary exists: "import directory",
+    "string table" and "readelf -d" are not the code that reads a file.
+    """
     from sourceref import split_source_ref
 
-    if _BINARY_EVIDENCE.search(ref):
-        return True
+    cited = False
     for part in split_source_ref(ref):
-        for suffix in _CODE_FILE.findall(part.raw):
-            if suffix.lower() in _CODE_SUFFIXES:
-                return True
-    return False
+        located = bool(_BINARY_EVIDENCE.search(part.raw)) or any(
+            suffix.lower() in _CODE_SUFFIXES for suffix in _CODE_FILE.findall(part.raw)
+        )
+        if _BINARY_FILE.search(part.raw) and not located:
+            return False
+        cited = cited or located
+    return cited
 
 
 def _data_only_source_refs(path: Path, document: object) -> list[str]:

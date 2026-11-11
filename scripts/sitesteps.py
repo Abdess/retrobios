@@ -3,12 +3,14 @@
 Two things per tab, both drawn from data:
 
 - The steps that differ by system, opening a terminal and pasting the line,
-  as an inline SVG: one card per step, a pictogram and a short caption,
-  drawn with sitediagrams' primitives so it takes the theme's colours in
-  light and dark. The text steps above it (platforms/_guides.yml,
-  terminals) stay the accessible source. The SVG says the same in its title
-  and desc. The pictograms are generic shapes (a menu, a search field, a
-  window, keys, a mouse, the power symbol), no vendor's interface or logo.
+  as a drawing: one card per step, a pictogram and a short caption, drawn
+  with sitediagrams' primitives and shown as its SVG files, one per layout
+  and theme (sitediagrams.pictures). The text steps above it
+  (platforms/_guides.yml, terminals) are the one text source: the images
+  are alt="", so the page reads the steps once. The files say the same in
+  their title and desc, for one opened on its own. The pictograms are
+  generic shapes (a menu, a search field, a window, keys, a mouse, the
+  power symbol), no vendor's interface or logo.
 - The installer demo recorded for that place (scripts/make_demo.py): the
   full-screen interface on a handheld under "On the device", the terminal
   recording under the others but Windows. No Windows recording is
@@ -23,7 +25,6 @@ from xml.sax.saxutils import escape
 
 import sitemarkup as markup
 from sitediagrams import (
-    FONT,
     MONO_STYLE,
     NARROW,
     STROKE,
@@ -35,6 +36,9 @@ from sitediagrams import (
     _n,
     _rect,
     _text,
+    diagram_files,
+    pictures,
+    svg_document,
     wrap,
 )
 
@@ -92,7 +96,7 @@ def demo_variant(tab: str) -> str:
 
 
 def description(tab: str) -> str:
-    """The steps in words: the SVG's desc."""
+    """The steps in words: the desc of the SVG files."""
     return " ".join(f"{index}. {step.caption}." for index, step in
                     enumerate(STEPS[tab][1], start=1))
 
@@ -234,25 +238,29 @@ def _narrow(steps: tuple[Step, ...]) -> tuple[float, float, list[str]]:
 def _svg(tab: str, layout: str) -> str:
     title, steps = STEPS[tab]
     width, height, body = (_wide if layout == "wide" else _narrow)(steps)
-    base = f"rb-steps-{tab}-{layout}"
-    return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_n(width)} {_n(height)}" '
-        f'width="{_n(width)}" height="{_n(height)}" role="img" '
-        f'aria-labelledby="{base}-t {base}-d" font-family="{FONT}" '
-        f'class="rb-diagram rb-diagram-{layout}">'
-        f'<title id="{base}-t">{escape(title)}</title>'
-        f'<desc id="{base}-d">{escape(description(tab))}</desc>'
-        + "".join(body) + "</svg>"
-    )
+    return svg_document(width, height, title, description(tab), body, f"rb-steps-{tab}-{layout}")
+
+
+def _layouts(tab: str) -> dict[str, str]:
+    return {layout: _svg(tab, layout) for layout in ("wide", "narrow")}
+
+
+def stem(tab: str) -> str:
+    return f"steps-{tab}"
+
+
+def steps_files() -> dict[str, str]:
+    """Every tab's drawing files, by name under sitediagrams.DIAGRAM_DIR."""
+    return {name: text for tab in STEPS for name, text in diagram_files(stem(tab), _layouts(tab)).items()}
 
 
 def steps_figure(tab: str) -> list[str]:
-    """The figure of a tab's steps, both layouts, or nothing for a tab with
-    no drawing."""
+    """The figure of a tab's steps, both layouts in both themes, or nothing
+    for a tab with no drawing. The steps above it say its words."""
     if tab not in STEPS:
         return []
     return [f'<figure class="rb-figure rb-steps" {markup.search_exclude()}>',
-            _svg(tab, "wide") + _svg(tab, "narrow"), "</figure>", ""]
+            pictures(stem(tab), _layouts(tab)), "</figure>", ""]
 
 
 def tab_demo(tab: str) -> list[str]:

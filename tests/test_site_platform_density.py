@@ -97,7 +97,7 @@ class ARowPerFile(unittest.TestCase):
                         {"name": "bios_a.bin", "md5": md5, "sha1": sha1, "crc32": "0badf00d",
                          "destination": "bios/bios_a.bin"})
         # The summary is the row: the name, its folder, the status.
-        self.assertIn('<details class="rb-file"><summary>bios&#95;a.bin<code>bios/</code>'
+        self.assertIn('<details class="rb-file"><summary>bios&#95;a.bin <code>bios/</code> '
                       '<span class="rb-badge rb-badge-success">OK</span></summary>', row)
         # The hash the platform checks, short, on one button beside the
         # summary (a summary is a control: no button inside it).
@@ -113,7 +113,7 @@ class ARowPerFile(unittest.TestCase):
     def test_a_file_at_the_root_prints_no_path(self):
         for destination in ("", "x.bin"):
             row = self._row({"name": "x.bin", "status": "ok"}, {"destination": destination})
-            self.assertIn("<summary>x.bin<span", row)
+            self.assertIn("<summary>x.bin <span", row)
 
     def test_a_list_drops_the_path_column_when_no_row_has_one(self):
         files = [{"name": "a.bin", "status": "ok"}, {"name": "b.bin", "status": "ok"}]
@@ -153,7 +153,8 @@ class ARowPerFile(unittest.TestCase):
     def test_a_long_list_gets_a_filter(self):
         rows = ["<details></details>"] * generate_site.FILTER_ROWS
         block = generate_site._platform_file_list(rows, False, "arcade")
-        self.assertTrue(block[0].startswith('<div class="rb-table-filter"><label for="rb-files-filter-arcade">'))
+        self.assertTrue(block[0].startswith('<div class="rb-table-filter" hidden data-pagefind-ignore>'
+                                        '<label for="rb-files-filter-arcade">Filter files</label>'))
         self.assertNotIn("rb-table-filter", "".join(
             generate_site._platform_file_list(rows[1:], False, "arcade")))
 

@@ -314,9 +314,9 @@ class LauncherLayerTest(unittest.TestCase):
         config = {"base_destination": "bios", "launchers": [{
             "emulator": "e", "build": "libretro", "kind": "fixed_name",
             "names": ["a.rom", "b.rom"], "search_dir": "/storage/roms/bios",
-            "passes_to": "e.cfg ROM_A, ROM_B", "source_ref": "e.cfg:1",
+            "passes_to": "e.cfg ROM_A, ROM_B", "source_ref": "launch.sh:1",
         }]}
-        places = {p.paths[0]: p.passes_to for p in launcher_places(config)}
+        places = {p.paths[0]: p.passes_to for p in launcher_places(config, {})}
         self.assertEqual(places, {"a.rom": "e.cfg ROM_A", "b.rom": "e.cfg ROM_B"})
 
     def test_a_core_option_names_the_dump_of_a_model(self) -> None:
@@ -341,12 +341,16 @@ class LauncherLayerTest(unittest.TestCase):
             "files": [{"name": "<bios>.bin", "path": "ps2/bios/<bios>.bin", "required": True,
                        "min_size": 32, "max_size": 64, "validation": ["size"],
                        "config_key": "emu_bios"}],
+            "config_reads": [{"file": "core options", "source_ref": "core.c:1",
+                              "keys": [{"key": "emu_bios", "source_ref": "core.c:2"}]}],
         }
         with open(os.path.join(self.emulators_dir, "optemu.yml"), "w") as fh:
             yaml.dump(profile, fh)
         self.config["launchers"].append({
             "emulator": "retroarch", "build": "libretro", "kind": "core_option",
             "names": ["scph10000.bin"], "passes_to": "core option emu_bios",
+            "installs": {"path": "retroarch-core-options.cfg", "source_ref": "prepare.sh:24"},
+            "overrides": [],
             "source_ref": "core-options.cfg:515",
         })
         _emulator_profiles_cache.clear()

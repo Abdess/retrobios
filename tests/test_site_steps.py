@@ -1,9 +1,10 @@
 """The drawn steps of the install box (scripts/sitesteps.py).
 
-Each drawing says in words what it shows, to a screen reader and to a
-reader whose images do not load: a title and a desc the SVG names. It tells
-the same steps as the text above it, the keys included, so the picture and
-the words never disagree. And it draws in the theme's colours.
+Each drawing file says in words what it shows, for one opened on its own:
+a title and a desc the SVG names. On the page the images are alt="" and the
+text above them is the one reading (tests/test_site_page_text.py). The
+drawing tells the same steps as that text, the keys included, so the picture
+and the words never disagree. And it draws in the theme's colours.
 """
 
 from __future__ import annotations
@@ -19,6 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import sitediagrams  # noqa: E402
 import sitesteps  # noqa: E402
 from siteguides import TERMINALS  # noqa: E402
 
@@ -84,10 +86,12 @@ class TheBuiltPageHoldsThem(unittest.TestCase):
             self.skipTest("no built site")
         html = page.read_text(encoding="utf-8")
         for tab in sitesteps.STEPS:
-            with self.subTest(tab=tab):
-                self.assertIn(f'aria-labelledby="rb-steps-{tab}-wide-t rb-steps-{tab}-wide-d"',
-                              html)
-                self.assertIn(f'<desc id="rb-steps-{tab}-narrow-d">', html)
+            for layout in ("wide", "narrow"):
+                for theme in sitediagrams.THEMES:
+                    name = f"{sitesteps.stem(tab)}-{layout}-{theme}.svg"
+                    with self.subTest(file=name):
+                        self.assertIn(f"/retrobios/{sitediagrams.DIAGRAM_DIR}/{name}", html)
+                        self.assertTrue((DIST / sitediagrams.DIAGRAM_DIR / name).is_file())
 
 
 if __name__ == "__main__":

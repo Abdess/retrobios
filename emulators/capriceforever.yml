@@ -20,20 +20,40 @@ notes: |
   Closed source Amstrad CPC and PLUS emulator for Windows. The build read here
   is the one RetroBat installs, capriceforever.7z sha256
   54c9f7f3df96011bdbd09e72413fed798a395c241e8c2d05eb6af075a15b79b4, release
-  26.4 of 1 April 2026 (History.txt, version resource 26.4.0.0). Caprice.exe
-  md5 a33e841c80e9fd9067a1c373492cd53b is a 32-bit Delphi program, cited by
-  file offset.
+  26.4 (version resource 26.4.0.0). Caprice.exe
+  md5 a33e841c80e9fd9067a1c373492cd53b is a 32-bit C++Builder (RAD Studio
+  28.0) VCL program, cited by virtual address. Functions are named by their
+  address, or by the published method table entry for form event handlers.
 
-  The machine ROMs are compiled into the executable as named defaults. The
-  464, 664 and 6128 OS and BASIC, AMSDOS and the Multiface Two ROM sit in the
-  data section byte for byte equal to the usual dumps (os464.rom at 0x7f5348,
-  basic464.rom at 0x7f9348, os6128.rom at 0x80d348, basic6128.rom at 0x811348,
-  os664.rom at 0x815348, basic664.rom at 0x819348, amsdos.rom at 0x7e1348,
-  the first 8 KiB of MF2.rom at 0x821348). A slot left blank in a device file
-  takes the built-in image, and the names "Default OS", "Default BASIC",
-  "Default AMSDOS", "Default Multiface Two", "Default Silicon Disc 1.3" and
-  "Default DK'Tronics Speech" select them explicitly.
-  ref: Caprice.exe 0x75d82c, 0x7314ad, 0x75d864, 0x75d884, 0x75d8a0
+  The machine ROMs are RT_RCDATA resources of the executable. None of them
+  is read from disc, so none is a file entry below. Each resource, with the
+  sha1 of its bytes and the dump it equals:
+
+    ROMCPC464_UK      32 KiB  56d39c463da6  cpc464.rom, os464.rom + basic464.rom
+    ROMCPC664_UK      32 KiB  073a7665527b  cpc664.rom, os664.rom + basic664.rom
+    ROMCPC6128_UK     32 KiB  5977adbad3f7  cpc6128.rom, os6128.rom + basic6128.rom
+    ROMCPC464_FR      32 KiB  c68d84f37ab9  OS464_FR.rom of ACE-DL
+    ROMCPC6128_FR     32 KiB  200d59076dfe  OS6128_FR.rom of ACE-DL, CPC6128.ROM.FR of CPCemu
+    ROMCPC6128_SP     32 KiB  1acd01c2c034  OS6128_S.rom of ACE-DL, CPC6128.ROM.ES of CPCemu
+    ROMCPC464_SP      32 KiB  6291af67cb34  Spanish 464, same BASIC half as ROMCPC464_FR
+    ROMAmsdos         16 KiB  39102c8e9cb5  amsdos.rom
+    ROMMultiface2      8 KiB  1431ec628d38  multiface2.rom of ACE-DL and CPCemu
+    ROMDKSpeech       16 KiB  bf28e07d5fad  dkspeech.rom of MAME
+    ROMSiliconDisk13  16 KiB  932bc3bbe38a  no other profile lists it
+
+  A slot left blank in a device file takes the built-in image,
+  and the names "Default OS", "Default BASIC", "Default AMSDOS", "Default
+  Multiface Two", "Default Silicon Disc 1.3" and "Default DK'Tronics Speech"
+  select them explicitly.
+  ref: Caprice.exe 26.4.0.0 FUN_006fa870 0x6faff6-0x6fb036 (TResourceStream
+       of ROMCPC464_UK, type 0xa), 0x6fba6e-0x6fbaa9 (ROMAmsdos),
+       0x6fc0fc-0x6fc109 (ROMSiliconDisk13), 0x6fc168-0x6fc18f (ROMDKSpeech),
+       FUN_006fd4c0 0x6feae9-0x6feb6a (LowerROM compared to Default OS),
+       0x6fde23-0x6fde70 (Default Silicon Disc, DK'Tronics, Empty and
+       AMSDOS names taken for the upper slot loop), 0x6fe839-0x6fe8b7 and 0x6fef2f-0x6fef65
+       (Default Multiface Two, TResourceStream of ROMMultiface2),
+       FUN_0074ebe4 0x74f95c-0x74fab5 (Default OS, BASIC and AMSDOS as the
+       initial slot values)
 
   RetroBat writes Device.ini on every launch: CPC_6128_UK, or PLUS_6128_UK for
   the gx4000 system, LowerROM and UpperROM0 blank, UpperROM7 "Default
@@ -42,13 +62,24 @@ notes: |
   nothing outside the program is read for a RetroBat launch.
   ref: emulatorLauncher Generators/CapriceForever.Generator.cs:277-405
 
-  Files in Roms\ (16512 bytes, a 128 byte AMSDOS header then the 16 KiB
-  image) are offered by name for the lower and upper ROM slots, and .cpr
-  files in Cartridges\ for the cartridge port. The package ships four ROMs
+  Files of 1 to 16512 bytes in RomsDirectory (Roms\ by default) are offered
+  by name for the lower and upper ROM slots. A slot file whose first 128
+  bytes are an AMSDOS header with a valid checksum is read from offset 128
+  for its declared length, at most 16 KiB, and any other file is used as is.
+  A missing file is skipped and nothing is copied into the slot. The cartridge is
+  chosen through an open dialog filtered on *.cpr, and a CartridgeFilename
+  without a directory is looked up in CartridgesDirectory (Cartridges\ by
+  default). A RIFF AMS! file is split by its cb chunks into 16 KiB banks,
+  any other file into consecutive 16 KiB banks. The package ships four ROMs
   and three PLUS system cartridges there. Only the bundled device template
   "PLUS 6128 UK.ini" names one of them (the UK cartridge), and RetroBat
   replaces that choice with the launched game.
-  ref: Caprice.exe 0x72fb01, 0x7332cb, 0x726d86
+  ref: Caprice.exe 26.4.0.0 FUN_0074ebe4 0x74f621 (Roms\ default),
+       FUN_0072483c 0x740f0f-0x740f35 (Roms\ when the configured folder is
+       missing), 0x73e0b5 (RomsDirectory key), 0x73e481 (CartridgesDirectory
+       key), FUN_0059fc34 0x5a0e55-0x5a0ef5 (size filter),
+       FUN_007000f8 0x7001e6-0x700274 (AMSDOS header),
+       FUN_0071c58c 0x71ca9d-0x71cb48 (cartridge parsing)
 
 files:
   - name: "Burnin' Rubber + BASIC (UK).cpr"
@@ -60,7 +91,7 @@ files:
     sha1: "405e341437fab8db477606238af0c20eca2e39ee"
     md5: "39b565e648172980aa552293e667070f"
     description: "Amstrad PLUS system cartridge, English"
-    source_ref: "Caprice.exe 0x7332cb, 0x726d86"
+    source_ref: "Caprice.exe 26.4.0.0 settings loader FUN_0072483c 0x73e829-0x73e858 (Roms section, CartridgeFilename key), FUN_006fd1a8 0x6fd1f1-0x6fd361 (a name without directory is prefixed with CartridgesDirectory), 0x6fd394 (cartridge loader called), FUN_0071c58c 0x71c956-0x71c9d0 (FileOpen, whole file read), 0x71ca9d-0x71cac5 (RIFF and AMS! test), 0x71cb85-0x71cc46 (cb chunks copied to 16 KiB banks), 0x71cacb-0x71cb48 (any other file split into 16 KiB banks), TFormEmulatorSettings.PanelButtonCartridgeFileClick 0x5aa26a-0x5aa2d1 (open dialog filtered on *.cpr)"
     note: "Named by the bundled Settings/PLUS 6128 UK.ini template."
 
   - name: "Burnin' Rubber + BASIC (FR).cpr"
@@ -72,7 +103,7 @@ files:
     sha1: "958437ad6292ecd368e8c6c963cb3ae7d48b9406"
     md5: "2adf22a2046a18bd39de90ad01c15998"
     description: "Amstrad PLUS system cartridge, French"
-    source_ref: "Caprice.exe 0x7332cb, 0x726d86"
+    source_ref: "Caprice.exe 26.4.0.0 settings loader FUN_0072483c 0x73e829-0x73e858 (Roms section, CartridgeFilename key), FUN_006fd1a8 0x6fd1f1-0x6fd361 (a name without directory is prefixed with CartridgesDirectory), 0x6fd394 (cartridge loader called), FUN_0071c58c 0x71c956-0x71c9d0 (FileOpen, whole file read), 0x71ca9d-0x71cac5 (RIFF and AMS! test), 0x71cb85-0x71cc46 (cb chunks copied to 16 KiB banks), 0x71cacb-0x71cb48 (any other file split into 16 KiB banks), TFormEmulatorSettings.PanelButtonCartridgeFileClick 0x5aa26a-0x5aa2d1 (open dialog filtered on *.cpr)"
 
   - name: "Burnin' Rubber + BASIC (SP).cpr"
     path: "Cartridges/Burnin' Rubber + BASIC (SP).cpr"
@@ -83,7 +114,7 @@ files:
     sha1: "076939a2cd7593b5e56c775d7a4752f2d138ff6c"
     md5: "75632137fcbe51eaec1f47a22e55d6a3"
     description: "Amstrad PLUS system cartridge, Spanish"
-    source_ref: "Caprice.exe 0x7332cb, 0x726d86"
+    source_ref: "Caprice.exe 26.4.0.0 settings loader FUN_0072483c 0x73e829-0x73e858 (Roms section, CartridgeFilename key), FUN_006fd1a8 0x6fd1f1-0x6fd361 (a name without directory is prefixed with CartridgesDirectory), 0x6fd394 (cartridge loader called), FUN_0071c58c 0x71c956-0x71c9d0 (FileOpen, whole file read), 0x71ca9d-0x71cac5 (RIFF and AMS! test), 0x71cb85-0x71cc46 (cb chunks copied to 16 KiB banks), 0x71cacb-0x71cb48 (any other file split into 16 KiB banks), TFormEmulatorSettings.PanelButtonCartridgeFileClick 0x5aa26a-0x5aa2d1 (open dialog filtered on *.cpr)"
 
   - name: "albireo.rom"
     path: "Roms/albireo.rom"
@@ -94,7 +125,7 @@ files:
     sha1: "9dd652574638682876a55febe3dca7b5bb3ad222"
     md5: "9afe71e4c38040864576358a71474ab6"
     description: "Albireo ROM (AMSDOS header, title ALBIREO ROM)"
-    source_ref: "Caprice.exe 0x72fb01, 0x720ff1"
+    source_ref: "Caprice.exe 26.4.0.0 TFormEmulatorSettings.StringGridROMMappingSelectCell 0x5a386b (list builder FUN_0059fc34 called), FUN_0059fc34 0x5a08ab-0x5a0916 (FindFirst of RomsDirectory plus *.*), 0x5a0e55-0x5a0ef5 (FileOpen, FileSeek to the end, files of 1 to 16512 bytes added to ComboBoxAvailableROM), FUN_006fd4c0 0x6feae9-0x6febfa (LowerROM other than Default OS prefixed with RomsDirectory and loaded), 0x6fe3a7-0x6fe47b (UpperROM name prefixed with RomsDirectory, loaded, 0x4000 bytes copied to the bank), FUN_007000f8 0x700140-0x7001de (FileExists, FileOpen, whole file read), 0x7001e6-0x700274 (AMSDOS header: sum of bytes 0 to 0x42 against the word at 0x43, length at 0x40 capped at 0x4000, image taken from offset 0x80, any other file used as is)"
 
   - name: "unidos.rom"
     path: "Roms/unidos.rom"
@@ -105,7 +136,7 @@ files:
     sha1: "e78a94ab8de917270179b80b071d3e90d98ea5dc"
     md5: "a9d1b46e49701c85d9a3a66ff725c6e6"
     description: "UniDOS ROM"
-    source_ref: "Caprice.exe 0x72fb01, 0x720ff1"
+    source_ref: "Caprice.exe 26.4.0.0 TFormEmulatorSettings.StringGridROMMappingSelectCell 0x5a386b (list builder FUN_0059fc34 called), FUN_0059fc34 0x5a08ab-0x5a0916 (FindFirst of RomsDirectory plus *.*), 0x5a0e55-0x5a0ef5 (FileOpen, FileSeek to the end, files of 1 to 16512 bytes added to ComboBoxAvailableROM), FUN_006fd4c0 0x6feae9-0x6febfa (LowerROM other than Default OS prefixed with RomsDirectory and loaded), 0x6fe3a7-0x6fe47b (UpperROM name prefixed with RomsDirectory, loaded, 0x4000 bytes copied to the bank), FUN_007000f8 0x700140-0x7001de (FileExists, FileOpen, whole file read), 0x7001e6-0x700274 (AMSDOS header: sum of bytes 0 to 0x42 against the word at 0x43, length at 0x40 capped at 0x4000, image taken from offset 0x80, any other file used as is)"
 
   - name: "unitools.rom"
     path: "Roms/unitools.rom"
@@ -116,7 +147,7 @@ files:
     sha1: "982e523b2d5b5c9873526a7363fcac4cbc1b6dfd"
     md5: "83c6ecbf655b8f3c65e46a46c6bc7161"
     description: "UniTools ROM for UniDOS"
-    source_ref: "Caprice.exe 0x72fb01, 0x720ff1"
+    source_ref: "Caprice.exe 26.4.0.0 TFormEmulatorSettings.StringGridROMMappingSelectCell 0x5a386b (list builder FUN_0059fc34 called), FUN_0059fc34 0x5a08ab-0x5a0916 (FindFirst of RomsDirectory plus *.*), 0x5a0e55-0x5a0ef5 (FileOpen, FileSeek to the end, files of 1 to 16512 bytes added to ComboBoxAvailableROM), FUN_006fd4c0 0x6feae9-0x6febfa (LowerROM other than Default OS prefixed with RomsDirectory and loaded), 0x6fe3a7-0x6fe47b (UpperROM name prefixed with RomsDirectory, loaded, 0x4000 bytes copied to the bank), FUN_007000f8 0x700140-0x7001de (FileExists, FileOpen, whole file read), 0x7001e6-0x700274 (AMSDOS header: sum of bytes 0 to 0x42 against the word at 0x43, length at 0x40 capped at 0x4000, image taken from offset 0x80, any other file used as is)"
 
   - name: "fw-v3-u5.rom"
     path: "Roms/fw-v3-u5.rom"
@@ -127,4 +158,4 @@ files:
     sha1: "bb9b4c487fa6e338d6b8f78b6fc10a3912263e22"
     md5: "96c5c16e8db2f5c7d6c3c160d686725a"
     description: "Firmware V3-U5 ROM (AMSDOS header title V3-U5 ROM)"
-    source_ref: "Caprice.exe 0x72fb01, 0x720fd8"
+    source_ref: "Caprice.exe 26.4.0.0 TFormEmulatorSettings.StringGridROMMappingSelectCell 0x5a386b (list builder FUN_0059fc34 called), FUN_0059fc34 0x5a08ab-0x5a0916 (FindFirst of RomsDirectory plus *.*), 0x5a0e55-0x5a0ef5 (FileOpen, FileSeek to the end, files of 1 to 16512 bytes added to ComboBoxAvailableROM), FUN_006fd4c0 0x6feae9-0x6febfa (LowerROM other than Default OS prefixed with RomsDirectory and loaded), 0x6fe3a7-0x6fe47b (UpperROM name prefixed with RomsDirectory, loaded, 0x4000 bytes copied to the bank), FUN_007000f8 0x700140-0x7001de (FileExists, FileOpen, whole file read), 0x7001e6-0x700274 (AMSDOS header: sum of bytes 0 to 0x42 against the word at 0x43, length at 0x40 capped at 0x4000, image taken from offset 0x80, any other file used as is)"

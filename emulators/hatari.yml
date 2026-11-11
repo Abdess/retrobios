@@ -38,6 +38,45 @@ data_root:
     source_ref: "upstream src/paths.c:24-29, upstream src/paths.c:201-274"
     note: "~/.hatari is used instead when it exists and ~/.config/hatari does not. Holds hatari.cfg, hatari.nvram and auto.sav. The default tos.img is read from ../share/hatari beside the bin directory."
 
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emulators/hatarisa/package.mk"
+    variable: PKG_VERSION
+    value: "fda67f05188a925535fefc1b0ef24eb044a029d2"
+  - platform: amberelec
+    repo: "https://github.com/AmberELEC/AmberELEC"
+    revision: "a21975bfb1a3af68f66e07a931b994b523e1e6e2"
+    path: "packages/games/emulators/hatarisa/package.mk"
+    variable: PKG_VERSION
+    value: "d876db9c4b6911c059b1d9318f779f90c1c6f2d7"
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/standalone/hatarisa/package.mk"
+    variable: PKG_VERSION
+    value: "6da06056d89bb39777063388d82d065d9e2e31fd"
+config_reads:
+  - file: "*.cfg"
+    platforms: [emuelec]
+    source_ref: "upstream src/options.c:1187-1193, upstream src/configuration.c:1088, 1149"
+    keys:
+      - key: "[ROM] szTosImageFileName"
+        source_ref: "upstream src/configuration.c:481, upstream src/tos.c:975-986"
+  - file: "*.cfg"
+    platforms: [amberelec]
+    source_ref: "upstream src/options.c:1283-1288, upstream src/configuration.c:1061, 1123"
+    keys:
+      - key: "[ROM] szTosImageFileName"
+        source_ref: "upstream src/configuration.c:489, upstream src/tos.c:976-987"
+  - file: "*.cfg"
+    platforms: [rocknix]
+    source_ref: "upstream src/options.c:1194-1199, upstream src/configuration.c:1050, 1111"
+    keys:
+      - key: "[ROM] szTosImageFileName"
+        source_ref: "upstream src/configuration.c:480, upstream src/tos.c:975-986"
+
 notes: |
   The main branch of libretro/hatari is the upstream Hatari tree at
   c453b85f, whose libretro target in src/retro carries the VFS, disk

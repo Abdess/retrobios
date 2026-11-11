@@ -108,10 +108,16 @@ const headingBefore = (ctx, table, title) => {
 // The label a stacked cell shows: the header's title, else its text.
 export const stackedLabel = (title, text) => String(title ?? '').trim() || text;
 
-const filterBox = ({ id, heading, labels, rows }) => ({
+// The same box as siteentries.filter_box: `hidden` until site.ts wires it,
+// so a reader without the script, a text dump and the search skip a field
+// that would filter nothing. The count describes the input, and the spaces
+// keep label, field and count apart in any text read from the HTML.
+const space = () => ({ type: 'text', value: ' ' });
+
+export const filterBox = ({ id, heading, labels, rows }) => ({
 	type: 'element',
 	tagName: 'div',
-	properties: { className: ['rb-table-filter'] },
+	properties: { className: ['rb-table-filter'], hidden: true, dataPagefindIgnore: true },
 	children: [
 		{
 			type: 'element',
@@ -119,16 +125,24 @@ const filterBox = ({ id, heading, labels, rows }) => ({
 			properties: { htmlFor: id },
 			children: [{ type: 'text', value: `Filter ${heading}` }],
 		},
+		space(),
 		{
 			type: 'element',
 			tagName: 'input',
-			properties: { id, type: 'search', autoComplete: 'off', placeholder: filterPlaceholder(labels) },
+			properties: {
+				id,
+				type: 'search',
+				autoComplete: 'off',
+				placeholder: filterPlaceholder(labels),
+				ariaDescribedBy: `${id}-count`,
+			},
 			children: [],
 		},
+		space(),
 		{
 			type: 'element',
 			tagName: 'span',
-			properties: { className: ['rb-table-filter-count'], ariaLive: 'polite' },
+			properties: { id: `${id}-count`, className: ['rb-table-filter-count'], ariaLive: 'polite' },
 			children: [{ type: 'text', value: `${rows.toLocaleString('en')} rows` }],
 		},
 	],

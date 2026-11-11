@@ -396,7 +396,7 @@ class _Page(HTMLParser):
     def handle_endtag(self, tag: str) -> None:
         if tag == "nav" and self._crumbs:
             self._crumbs = 0
-        if tag == "div" and self._pagination and not self.pagination:
+        if tag == "nav" and self._pagination and not self.pagination:
             self._pagination = False
         if self._text is not None and tag in ("a", "summary"):
             self.sidebar.append(" ".join("".join(self._text).split()))
@@ -621,7 +621,7 @@ def _html(url: str) -> str:
 
 
 def _pagination(text: str) -> tuple[str | None, str | None]:
-    start = text.find('<div class="pagination-links')
+    start = text.find('<nav class="pagination-links')
     if start == -1:
         return None, None
     links = text[start:text.find("</footer>", start)]

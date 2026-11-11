@@ -56,6 +56,49 @@ systems:
   - zx-spectrum
   - zx-spectrum-128
 
+config_reads:
+  - file: "settings.bml"
+    source_ref: "desktop-ui/desktop-ui.cpp:9-35, 100-103, 114, desktop-ui/settings/settings.cpp:31-42, 263-286, nall/nall/path.cpp:123-142"
+    keys:
+      - key: "ColecoVision/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/colecovision.cpp:10-12, 42-50, mia/system/colecovision.cpp:7-9"
+      - key: "MSX/Firmware/BIOS.Japan"
+        source_ref: "desktop-ui/emulator/msx.cpp:16-19, 44-53"
+      - key: "FamicomDiskSystem/Firmware/BIOS.Japan"
+        source_ref: "desktop-ui/emulator/famicom-disk-system.cpp:17-19, 89-97"
+      - key:
+          - "Nintendo64DD/Firmware/BIOS.Japan"
+          - "Nintendo64DD/Firmware/BIOS.US"
+          - "Nintendo64DD/Firmware/BIOS.DEV"
+        source_ref: "desktop-ui/emulator/nintendo-64dd.cpp:15-19, 59-73"
+        condition: "the game's region"
+      - key: "GameBoyAdvance/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/game-boy-advance.cpp:12-14, 55-63"
+      - key:
+          - "MasterSystem/Firmware/BIOS.US"
+          - "MasterSystem/Firmware/BIOS.Japan"
+          - "MasterSystem/Firmware/BIOS.Europe"
+        source_ref: "desktop-ui/emulator/master-system.cpp:12-16, 93-107"
+        condition: "the game's region"
+      - key: "GameGear/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/game-gear.cpp:10-12, 30-40"
+      - key:
+          - "MegaCD/Firmware/BIOS.US"
+          - "MegaCD/Firmware/BIOS.Japan"
+          - "MegaCD/Firmware/BIOS.Europe"
+        source_ref: "desktop-ui/emulator/mega-cd.cpp:15-19, 63-77"
+        condition: "the disc's region"
+      - key: "NeoGeoPocket/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/neo-geo-pocket.cpp:10-12, 32-40"
+      - key: "NeoGeoPocketColor/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/neo-geo-pocket-color.cpp:10-12, 32-40"
+      - key:
+          - "PlayStation/Firmware/BIOS.US"
+          - "PlayStation/Firmware/BIOS.Japan"
+          - "PlayStation/Firmware/BIOS.Europe"
+        source_ref: "desktop-ui/emulator/playstation.cpp:19-23, 87-101"
+        condition: "the disc's region"
+
 notes: |
   Multi-system emulator by Near (byuu), successor to higan/bsnes. Focuses on
   accuracy and preservation. 40 emulators registered at this pin

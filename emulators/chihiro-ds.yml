@@ -29,7 +29,10 @@ notes: |
   binaries carry "Chihiro-DS 1.0 (Mar 14 2025)". cxbxr-ldr.exe md5
   d3675f7bb270072f33d9106497dd9bbc is the print DemulShooter lists for
   "Chihiro-DS 1.0". cxbxr-emu.dll (md5 62f492f14b2af4bef7329ef269355a78) is
-  cited by virtual address.
+  cited by virtual address. The package ships its cxbxr-emu.pdb (GUID
+  7511A6DE-EA63-4F50-9FB8-AC9B37A49568, age 2, the values the DLL's debug
+  directory names), which gives the function names below. cxbx.exe is md5
+  7f59a0156a426fd4dfec6ee4e556648c with its matching cxbx.pdb.
   ref: emulatorLauncher Generators/Cxbx.Generator.cs:104-110, 202-214,
        emulatorLauncher Installer.cs:46
 
@@ -46,17 +49,26 @@ notes: |
   EmuDisk\Chihiro (this build predates the EmuMediaBoard folder).
   ref: CI-6f32d89 src/common/Settings.cpp:880-915,
        CI-6f32d89 src/common/FilePaths.cpp:82-109,
-       cxbxr-emu.dll 0x1061c648
+       cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxrInitFilePaths 0x100cde5d-0x100cdf57 (data path
+       plus EmuDisk, filesystem::exists, created when absent),
+       JVS_Init 0x102c128a (data path plus EmuDisk Chihiro folder)
 
   A title is Chihiro when its XBE type says so or a boot.id sits beside it.
-  Launched directly, such a title needs the media board ROM: a missing file,
-  an unreadable one or one that is not 2 MB ends the run. When either SEGABOOT
+  Launched directly with a boot.id beside its XBE, a title needs the media
+  board ROM: a missing file, an unreadable one or one that is not 2 MB ends
+  the run. When either SEGABOOT
   file is missing both are rewritten from the two 1 MB halves of the ROM, then
   SEGABOOT_MBROM1.XBE is launched and boots the title. boot.id is read again by
   the media board for the region flags, and its absence ends the run.
   ref: CI-6f32d89 src/core/kernel/init/CxbxKrnl.cpp:517-586,
        CI-6f32d89 src/devices/chihiro/MediaBoard.cpp:46-57,
-       cxbxr-emu.dll 0x10623190, 0x1062b60c, 0x1062b618
+       cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxrKrnlXbeSystemSelector 0x103e0fe9-0x103e105b (boot
+       flags zero and boot.id beside the XBE), 0x103e178f-0x103e1855 (XbeType
+       gives system 2, 4 or 8, filesystem::exists of xbeDirectory / boot.id
+       sets 8), 0x103e14c6-0x103e14cc
+       (CxbxLaunchNewXbe of SEGABOOT_MBROM1.XBE), MediaBoard::SetMountPath
+       0x1041a468-0x1041a490 (fopen of the title path plus /boot.id),
+       0x1041a56d (CxbxrAbortEx Could not open Chihiro boot.id)
 
   The four JVS base board images are memory mapped read/write when the
   system is Chihiro. Byte 0x1F00 of the QC firmware holds the board region and
@@ -64,7 +76,11 @@ notes: |
   copy the package ships differs from the dump by that byte.
   ref: CI-6f32d89 src/core/hle/JVS/JVS.cpp:127-142,
        CI-6f32d89 src/core/hle/JVS/JVS.cpp:169-210,
-       CI-6f32d89 src/core/hle/JVS/JVS.cpp:246-262
+       CI-6f32d89 src/core/hle/JVS/JVS.cpp:246-262,
+       cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxrKrnlInit 0x103e44cf-0x103e44d8 (JVS_Init called
+       when g_bIsChihiro is set), JVS_Init 0x102c2049-0x102c2081 (byte
+       0x1F00 of the QC firmware tested against the boot.id region flags,
+       set to 2, 3 or 1)
 
   The package ships every file below except xboxdash.xbe and keys.bin. It
   also carries chihiro_xbox_bios.bin, ver1305.bin, 315-6215.bin,
@@ -88,7 +104,7 @@ files:
       started, each failure ending the run. Read to write out the two SEGABOOT
       files when either is missing, and launched when a Chihiro title reboots
       with an empty launch path.
-    source_ref: "cxbxr-emu.dll 0x10624bb4, 0x10623190"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxrKrnlXbeSystemSelector 0x103e10bb-0x103e1139 (data path plus EmuDisk and MediaBoardRomFile, filesystem::exists), 0x103e1168-0x103e116f (CxbxrAbortEx could not be found), 0x103e1174-0x103e119e (fopen rb, abort on failure), 0x103e11ab-0x103e11da (fseek and ftell, abort unless 0x200000), HalReturnToFirmware 0x1030f09d-0x1030f0d7 (empty launch path with g_bIsChihiro set: Device prefix plus MediaBoardRomFile), 0x1030f15b (CxbxLaunchNewXbe)"
 
   - name: SEGABOOT_MBROM0.XBE
     path: "EmuDisk/Chihiro/SEGABOOT_MBROM0.XBE"
@@ -103,7 +119,7 @@ files:
       Mounted as the mbrom0 device. Written from the first megabyte of the media
       board ROM when either SEGABOOT file is missing. The copy the package ships
       is that first megabyte.
-    source_ref: "cxbxr-emu.dll 0x10624b98"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) dynamic initializer for MediaBoardSegaBoot0 0x100c2457-0x100c246a, CxbxrKrnlXbeSystemSelector 0x103e11f0-0x103e122f (data path plus EmuDisk), 0x103e12ab-0x103e12cd (filesystem::exists, a miss starts the rewrite), 0x103e1363-0x103e137d (fopen wb), 0x103e13d8-0x103e13ff (fread then fwrite of the first 0x100000 bytes of the ROM), CxbxConvertFilePath 0x10408bdc-0x10408be1 (mbrom0 device mapped to this file)"
 
   - name: SEGABOOT_MBROM1.XBE
     path: "EmuDisk/Chihiro/SEGABOOT_MBROM1.XBE"
@@ -120,7 +136,7 @@ files:
       SEGABOOT file is missing. The copy the package ships is not that half: it
       differs in 661005 bytes from the second megabyte of the ROM beside it.
       Hashes are those of the shipped copy.
-    source_ref: "cxbxr-emu.dll 0x10624b7c"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) dynamic initializer for MediaBoardSegaBoot1 0x100c24b7-0x100c24ca, CxbxrKrnlXbeSystemSelector 0x103e1246-0x103e1285 (data path plus EmuDisk), 0x103e12de-0x103e12f9 (filesystem::exists), 0x103e1380-0x103e139a (fopen wb), 0x103e1408-0x103e142f (fread then fwrite of the second 0x100000 bytes), 0x103e14c6-0x103e14cc (CxbxLaunchNewXbe), CxbxConvertFilePath 0x10408cc7-0x10408ccc (mbrom1 device mapped to this file)"
 
   - name: ic10_g24lc64.bin
     path: "EmuDisk/Chihiro/ic10_g24lc64.bin"
@@ -136,7 +152,7 @@ files:
       opened. Byte 0x1F00 is dereferenced right after and rewritten to USA,
       export or Japan when the title's boot.id rejects the stored region.
       Hashes are those of the copy the package ships.
-    source_ref: "cxbxr-emu.dll 0x1061c648, 0x1061c620"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) JVS_Init 0x102c135d (name), 0x102c1576 (JVS_LoadFile), 0x102c15fa-0x102c15fe and 0x102c22a4-0x102c22b7 (CxbxrAbortEx Failed to load base board firmware), 0x102c2049-0x102c2081 (byte 0x1F00 read and rewritten), JVS_LoadFile 0x102c0ddd-0x102c0de7 (fopen rb), 0x102c0e14 (mio::make_mmap_sink, read/write mapping)"
 
   - name: pc20_g24lc64.bin
     path: "EmuDisk/Chihiro/pc20_g24lc64.bin"
@@ -147,7 +163,7 @@ files:
     md5: "bf1cf24f8549137c0b1ad0fa61473c7e"
     description: "Base board SC microcontroller firmware"
     note: "Memory mapped read/write at JVS setup, the run ends when it cannot be opened."
-    source_ref: "cxbxr-emu.dll 0x1061c648, 0x1061c634"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) JVS_Init 0x102c13ae (name), 0x102c1706 (JVS_LoadFile), 0x102c178a-0x102c178e and 0x102c22c1-0x102c22d4 (CxbxrAbortEx Failed to load base board qc firmware), JVS_LoadFile 0x102c0ddd-0x102c0de7 (fopen rb), 0x102c0e14 (mio::make_mmap_sink, read/write mapping)"
 
   - name: ic11_24lc024.bin
     path: "EmuDisk/Chihiro/ic11_24lc024.bin"
@@ -160,7 +176,7 @@ files:
     note: >-
       Memory mapped read/write at JVS setup, the run ends when it cannot be
       opened. Writes from JvsEEPROM_Write are synced to disk at once.
-    source_ref: "cxbxr-emu.dll 0x1061c648, 0x1061c688"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) JVS_Init 0x102c13ff (name), 0x102c189b (JVS_LoadFile), 0x102c191f-0x102c1923 and 0x102c22de-0x102c22f1 (CxbxrAbortEx Failed to load base board EEPROM), JVS_LoadFile 0x102c0ddd-0x102c0de7 (fopen rb), 0x102c0e14 (mio::make_mmap_sink, read/write mapping), EmuPatch_JvsEEPROM_Write 0x102c6275-0x102c629d (FlushViewOfFile and FlushFileBuffers after each write)"
 
   - name: backup_ram.bin
     path: "EmuDisk/Chihiro/backup_ram.bin"
@@ -172,7 +188,7 @@ files:
     has_builtin: true
     size_note: "Created as 128 KB of zeros when absent, then memory mapped"
     description: "Base board backup memory"
-    source_ref: "cxbxr-emu.dll 0x1061c648, 0x1061c69c"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) JVS_Init 0x102c1439 (name), 0x102c1a1b (filesystem::exists), 0x102c1bee (fopen w when absent), 0x102c1ca4-0x102c1cbc (fseek 0x1ffff, fputc 0, fclose: a 128 KB file), 0x102c2300-0x102c2310 (CxbxrAbortEx Could not create Backup File), 0x102c1dba (JVS_LoadFile), 0x102c1e3e-0x102c1e42 and 0x102c231a-0x102c232a (CxbxrAbortEx Failed to load base board BACKUP RAM)"
 
   - name: xboxdash.xbe
     path: "EmuDisk/Partition2/xboxdash.xbe"
@@ -183,7 +199,7 @@ files:
       Launched when an Xbox title reboots with an empty launch path and by the
       Open Dashboard menu entry. When it is missing the console's unrecoverable
       error screen is shown.
-    source_ref: "cxbxr-emu.dll 0x105f8c60"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) HalReturnToFirmware 0x1030f091-0x1030f103 (empty launch path with g_bIsChihiro clear: partition 2 path plus xboxdash.xbe), 0x1030f15b (CxbxLaunchNewXbe), Xbe::Xbe 0x1014d48a-0x1014d492 (fopen rb), 0x1014d5b4-0x1014d641 (on failure the file name is compared to xboxdash.xbe), 0x1014d6f2 (CxbxKrnlPrintUEM), and cxbx.exe Chihiro-DS 1.0 WndMain::OpenDashboard 0x4300fc (data location plus EmuDisk Partition2 xboxdash.xbe)"
 
   - name: EEPROM.bin
     path: "EEPROM.bin"
@@ -194,14 +210,14 @@ files:
     md5: "6d497abbfb773a2e07f8ab71f2a2999d"
     has_builtin: true
     size: 256
-    validation: [size]
     description: "Xbox EEPROM image"
     note: >-
       Opened at startup and mapped read/write, created with defaults when
-      absent, and a file that is not 256 bytes ends the run. Hashes are those of
-      the copy the package ships. RetroBat writes the language into it only for
-      the xbox system.
-    source_ref: "cxbxr-emu.dll 0x105f6084, 0x105f5d84"
+      absent. The file is cut or extended to 256 bytes before its size is read,
+      so the 256 byte check ends the run only when that resize fails. Hashes
+      are those of the copy the package ships. RetroBat writes the language
+      into it only for the xbox system.
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxrInitFilePaths 0x100ce4c4-0x100ce4f2 (snprintf of the data path and EEPROM.bin), CxbxKrnlEmulate 0x103e2b7c-0x103e2b81 (CxbxRestoreEEPROM), CxbxRestoreEEPROM 0x100c565b-0x100c5695 (CreateFileA OPEN_EXISTING, then OPEN_ALWAYS when absent), 0x100c56bb-0x100c56cc (SetFilePointer 0x100 and SetEndOfFile), 0x100c5704-0x100c5718 and 0x100c586f-0x100c587b (GetFileSizeEx, CxbxrAbortEx unless 0x100), 0x100c572a (MapViewOfFile read/write), 0x100c576e-0x100c5777 (EmuEEPROMReset for a new file), 0x100c5821 (checksum mismatch warning)"
 
   - name: keys.bin
     path: "keys.bin"
@@ -211,7 +227,7 @@ files:
     validation: [size]
     description: "Xbox EEPROM and certificate keys"
     note: "Two 16 byte keys, the EEPROM key then the certificate key. Any other length is refused with a warning."
-    source_ref: "cxbxr-emu.dll 0x105f6094, 0x105f60a4"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxKrnlEmulate 0x103e2b77 (LoadXboxKeys), LoadXboxKeys 0x100ce5a7-0x100ce5d2 (data path plus keys.bin, fopen rb), 0x100ce5e7-0x100ce600 (fseek, ftell, size compared to 0x20), 0x100ce60f (fread of the two keys), 0x100ce63c-0x100ce645 (warning on any other size), 0x100ce659-0x100ce662 (warning when absent)"
 
   - name: wm2_loader.dll
     path: "wm2_loader.dll"
@@ -224,7 +240,7 @@ files:
       Loaded with LoadLibraryW("./wm2_loader.dll") just before the XBE entry
       point is called, on every launch. A failure logs a warning and the title
       starts anyway.
-    source_ref: "cxbxr-emu.dll 0x103e0260, 0x10622b38"
+    source_ref: "cxbxr-emu.dll Chihiro-DS 1.0 (Mar 14 2025) CxbxLaunchXbe 0x103e0272-0x103e0277 (LoadLibraryW of ./wm2_loader.dll), 0x103e027d-0x103e0288 (warning on failure), 0x103e029c (XBE entry point called)"
 
 exclusion_note: >
   ntdll.dll and the XInput libraries tried in turn (xinput1_4, xinput1_3,

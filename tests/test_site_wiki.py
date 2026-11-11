@@ -352,7 +352,7 @@ class DiagramText(unittest.TestCase):
                                              sitediagrams.MAX_BOX_LINES)
 
     def test_a_path_is_mono_on_its_own_line(self):
-        html = sitediagrams.figure_html("bios-chain")
+        html = sitediagrams.svg(sitediagrams.figures()["bios-chain"], "wide")
         self.assertRegex(html, r'<text [^>]*style="font-family: var\(--sl-font-mono[^>]*>/userdata/bios/</text>')
 
     def test_boxes_of_a_row_share_one_height(self):

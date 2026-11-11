@@ -100,7 +100,7 @@ from common import (
 
 yaml = require_yaml()
 from exporter.candidates import BIOS, EntryCategories
-from launchers import LauncherLayer, declared_destinations, held_record
+from launchers import LauncherLayer, declared_destinations, held_record, launcher_unproven
 from cross_reference import launcher_reads_not_held
 from nativemode import (
     SIZE_AND_ANY_HASH,
@@ -1764,6 +1764,8 @@ def verify_platform(
         "launcher_reads_not_held": launcher_reads_not_held(
             {config.get("_key", platform): config}, db, profiles, data_dir_registry
         ),
+        # Records a config file does not prove: listed, never consumed.
+        "launcher_unproven": launcher_unproven({config.get("_key", platform): config}, profiles),
         "exclusion_notes": exclusions,
         "region_fallbacks": sorted(region_fallbacks),
         **({"left_out": left_out} if no_game_data else {}),
@@ -2130,6 +2132,21 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
             )
 
 
+def _print_launcher_unproven(result: dict, verbose: bool) -> None:
+    """Launcher records resting on a config file the code does not prove."""
+    rows = result.get("launcher_unproven") or []
+    if not rows:
+        return
+    listed = "" if verbose else " (--verbose lists them)"
+    print(f"  Launcher records unproven: {len(rows)}{listed}")
+    if not verbose:
+        return
+    for row in rows:
+        print(f"    [{row['index']}] {row['emulator']} {row['kind']}: {row['passes_to']}")
+        for link in row["missing"]:
+            print(f"      missing {link}")
+
+
 def _print_launcher_reads(result: dict, verbose: bool) -> None:
     """Names the platform's launch code reads that the collection lacks."""
     every = result.get("launcher_reads_not_held") or []
@@ -2220,6 +2237,7 @@ def print_platform_result(
     _print_detail_entries(result["details"], seen_details, verbose)
     _print_undeclared_section(result, verbose)
     _print_launcher_reads(result, verbose)
+    _print_launcher_unproven(result, verbose)
 
     # The same notes come back for every platform running these cores and
     # filled 985 of the 1114 lines of verify --all: counted, listed on ask.

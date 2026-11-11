@@ -17,6 +17,17 @@ standalone_pools:
   "[IWADSearch.Directories] Path": ""
   "[IWADSearch.Directories] RecursivePath": ""
 
+config_reads:
+  - file: "gzdoom.ini"
+    source_ref: "src/gameconfigfile.cpp:95-107, 942-951, src/common/platform/posix/unix/i_specialpaths.cpp:168-171"
+    keys:
+      - key: "[IWADSearch.Directories] Path"
+        source_ref: "src/d_iwad.cpp:456-470"
+      - key: "[FileSearch.Directories] Path"
+        source_ref: "src/common/utility/findfile.cpp:224-260"
+      - key: "[SoundfontSearch.Directories] Path"
+        source_ref: "src/common/audio/music/i_soundfont.cpp:393-410"
+
 notes: |
   Doom-engine source port by Christoph Oelckers. Supports Doom, Heretic,
   Hexen, Strife, Chex Quest and derived games through a unified IWAD

@@ -95,7 +95,7 @@ notes: |
   ref: Main.java:29686-29698, Main.java:20405-20406, Main.java:11010,
        Main.java:3417-3423, Main.java:1120-1137,
        FPse 0.11.190 Main.java:24126-24207, FPse 0.11.190 Main.java:860-871,
-       FPse 12.1 libfpse.so readelf -d,
+       FPse 12.1 libfpse.so .dynamic DT_NEEDED 0x37652c-0x376593,
        fpse.net/plugins605v7.zip md5 ae5dbdc27452092af3e712448f427fd3
 
   Resources unpack through two helpers that differ in one respect. b2 writes only
@@ -181,7 +181,7 @@ files:
     category: game_data
     description: "SDL 1.2 audio backend"
     note: "Named by System.loadLibrary(\"sdl\") and listed in DT_NEEDED."
-    source_ref: "Main.java:20405, FPse 12.1 libfpse.so readelf -d"
+    source_ref: "Main.java:20405, FPse 12.1 libfpse.so DT_NEEDED libsdl.so at 0x37654c (loader-resolved)"
 
   - name: libneon.so
     size: 5308
@@ -191,7 +191,7 @@ files:
     category: game_data
     description: "NEON colour conversion routines"
     note: "Named by System.loadLibrary(\"neon\") and listed in DT_NEEDED, which resolves bgr555rgb565neon for the core."
-    source_ref: "Main.java:20406, FPse 12.1 libfpse.so readelf -d"
+    source_ref: "Main.java:20406, FPse 12.1 libfpse.so DT_NEEDED libneon.so at 0x376544 (loader-resolved)"
 
   - name: libuncompress.so
     size: 1138680

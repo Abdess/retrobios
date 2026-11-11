@@ -20,7 +20,10 @@ const packs = Object.fromEntries(
 );
 ---
 
-<div class="rb-picker" data-base={base} data-release={JSON.stringify({ tag: release.tag ?? '', packs })}>
+{/* hidden until the script fills the setup list: without it the box is an
+    empty "Choose a setup", which a text dump and a reader without the
+    script would read. It keeps its room meanwhile, so nothing moves. */}
+<div class="rb-picker" hidden data-base={base} data-release={JSON.stringify({ tag: release.tag ?? '', packs })}>
 	<fieldset>
 		<label for="rb-pick-platform">Setup</label>
 		<select id="rb-pick-platform" name="platform">
@@ -29,8 +32,8 @@ const packs = Object.fromEntries(
 	</fieldset>
 	<div class="rb-pick-systems" hidden>
 		<p class="rb-pick-systems-head">
-			<strong>Systems</strong>
-			<button type="button" class="rb-text-button" data-all>All</button>
+			<strong>Systems</strong>{' '}
+			<button type="button" class="rb-text-button" data-all>All</button>{' '}
 			<button type="button" class="rb-text-button" data-none>None</button>
 		</p>
 		<input type="search" class="rb-pick-filter" placeholder="Type a console" aria-label="Type a console" />
@@ -114,6 +117,7 @@ const packs = Object.fromEntries(
 		const params = new URLSearchParams(location.search);
 		const index: { platform: string; name: string }[] = await fetch(`${base}data/picker/index.json`).then((r) => r.json());
 		for (const entry of index) select.add(new Option(entry.name, entry.platform));
+		root.hidden = false;
 
 		const chosen = () => [...list.querySelectorAll<HTMLInputElement>('input:checked')].map((box) => box.value);
 
@@ -227,6 +231,7 @@ const packs = Object.fromEntries(
 
 <!-- Global: the checkboxes are created by the script, outside Astro's scoped styles. -->
 <style is:global>
+	.rb-picker[hidden] { display: block; visibility: hidden; }
 	.rb-picker .rb-pick-list {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));

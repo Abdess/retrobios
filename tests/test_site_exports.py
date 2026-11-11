@@ -344,7 +344,7 @@ class APlatformPageSaysWhereEachFileGoes(unittest.TestCase):
             {"nintendo-gamecube": files}, {("nintendo-gamecube", "IPL.bin"): declared}, {})
         for region in regions:
             # The folder: the name is before it in the row.
-            self.assertIn(f"<summary>IPL.bin<code>dolphin-emu/Sys/GC/{region}/</code>"
+            self.assertIn(f"<summary>IPL.bin <code>dolphin-emu/Sys/GC/{region}/</code> "
                           '<span class="rb-badge rb-badge-success">OK</span></summary>',
                           "\n".join(lines))
 

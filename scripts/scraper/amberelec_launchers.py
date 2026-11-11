@@ -7,7 +7,7 @@ runs the script its standalone_emulators table names (/usr/bin/<name>.sh,
 installed from the package). Those scripts, and the configs their packages
 install, say which file under /storage/roms/bios is opened: yabasanshiro.sh
 tests saturn_bios.bin and passes it with -b, Hatari's default config names
-tos.img, the atari800 core is built to read a config naming its OS ROMs.
+tos.img.
 
 runemu.py is read with ast, the scripts with shell_launchers' readers. An
 extractor whose construct is gone raises instead of returning nothing.
@@ -26,7 +26,9 @@ try:
     from .shell_launchers import (
         LauncherPatternMissing,
         Script,
+        config_placement,
         describe_keys,
+        evidence_fields,
         settings,
         source_ref,
     )
@@ -35,7 +37,9 @@ except ImportError:
     from shell_launchers import (  # type: ignore[no-redef]
         LauncherPatternMissing,
         Script,
+        config_placement,
         describe_keys,
+        evidence_fields,
         settings,
         source_ref,
     )
@@ -45,8 +49,8 @@ RUNEMU = "packages/amberelec/sources/scripts/runemu.py"
 RETROARCH_CFG = "packages/games/tools/retroarch/sources/retroarch.cfg"
 RETRORUN = "packages/games/tools/retrorun/retrorun.sh"
 HATARI_CONFIG = "packages/games/emulators/hatarisa/config/conf/Atari-ST-default.cfg"
-ATARI800_CONFIG = "packages/amberelec/config/distribution/configs/atari800.cfg"
-ATARI800_PATCH = "packages/games/libretro/atari800/patches/atari800-01-add-emuelec-platform.patch"
+# The first-boot copy of every package's /usr/config into /storage/.config.
+USERCONFIG = "packages/sysutils/systemd/scripts/userconfig-setup"
 AMIBERRY_PACKAGE = "packages/games/emulators/amiberry/package.mk"
 AMIBERRY_CONFIGS = "packages/games/emulators/amiberry/config/conf"
 FREEJ2ME = (
@@ -103,16 +107,35 @@ class Runemu:
         return path, line
 
 
+def _evidence(
+    read: Read, record: Launcher, target: str, keys: list[str],
+    start: Script | None = None, source_name: str = "",
+) -> Launcher:
+    """A config record with the steps that put its file at ``target``: the
+    first-boot copy of /usr/config, then the start script's own copy."""
+    setup = Script(USERCONFIG, read(USERCONFIG))
+    placements = [config_placement(setup, target, required=False, sources=("/usr/config/",))]
+    if start is not None:
+        placements.append(
+            config_placement(start, target, keys, source_name=source_name, required=False)
+        )
+    fields = evidence_fields(placements)
+    record.installs = fields["installs"]
+    record.kept_if_present = fields["kept_if_present"]
+    record.overrides = fields["overrides"]
+    return record
+
+
 def retroarch(read: Read) -> list[Launcher]:
     """system_directory of the retroarch.cfg the retroarch package installs."""
     found = [s for s in settings(read(RETROARCH_CFG)) if s.key == "system_directory"]
     if len(found) != 1:
         raise LauncherPatternMissing(RETROARCH_CFG, "one system_directory")
-    return [Launcher(
+    return [_evidence(read, Launcher(
         emulator="retroarch", build="libretro", kind="passes_path", names=[],
         search_dir=found[0].value, passes_to="retroarch.cfg system_directory",
         fails_when_missing=False, source_ref=source_ref([(RETROARCH_CFG, [found[0].line])]),
-    )]
+    ), "/storage/.config/retroarch/retroarch.cfg", ["system_directory"])]
 
 
 def retrorun(read: Read) -> list[Launcher]:
@@ -170,10 +193,12 @@ def hatari(read: Read, runemu: Runemu) -> list[Launcher]:
     path, table_line = runemu.script("HATARISA")
     script = Script(path, read(path))
     name = posixpath.basename(HATARI_CONFIG)
-    copied, _ = script.find(rf"^\s*cp\s+\S*/{re.escape(name)}\s", f"cp of {name}")
+    copied, copy = script.find(
+        rf"^\s*cp\s+\S*/{re.escape(name)}\s+\"?(\$\{{?\w+\}}?)", f"cp of {name}"
+    )
     passed, _ = script.find(r"\shatari\s+--configfile\s", "hatari --configfile")
     files, lines = _bios_files(HATARI_CONFIG, read(HATARI_CONFIG))
-    return [Launcher(
+    return [_evidence(read, Launcher(
         emulator="HATARISA", build="standalone", kind="fixed_name",
         names=[n for _k, n in files], case_insensitive=False, search_dir=BIOS,
         passes_to=describe_keys(name, tuple(k for k, _n in files)),
@@ -181,24 +206,8 @@ def hatari(read: Read, runemu: Runemu) -> list[Launcher]:
         source_ref=source_ref([
             (RUNEMU, [table_line]), (path, [copied, passed]), (HATARI_CONFIG, lines),
         ]),
-    )]
-
-
-def atari800(read: Read) -> list[Launcher]:
-    """The ROM keys of the config the atari800 core is built to read."""
-    patch = Script(ATARI800_PATCH, read(ATARI800_PATCH))
-    line, found = patch.find(r'DEFAULT_CFG_NAME="\\"([^"\\]+)\\""', "DEFAULT_CFG_NAME")
-    built = found.group(1)
-    if not built.endswith("/" + ATARI800_CONFIG.split("/config/", 1)[1]):
-        raise LauncherPatternMissing(ATARI800_PATCH, f"DEFAULT_CFG_NAME naming {ATARI800_CONFIG}")
-    files, lines = _bios_files(ATARI800_CONFIG, read(ATARI800_CONFIG))
-    return [Launcher(
-        emulator="atari800", build="libretro", kind="fixed_name",
-        names=[n for _k, n in files], case_insensitive=False, search_dir=BIOS,
-        passes_to=describe_keys(posixpath.basename(ATARI800_CONFIG), tuple(k for k, _n in files)),
-        fails_when_missing=False,
-        source_ref=source_ref([(ATARI800_PATCH, [line]), (ATARI800_CONFIG, lines)]),
-    )]
+    ), script.expand(copy.group(1), copied, set()),
+        [f"[{s}] {k}" if s else k for (s, k), _n in files], script, name)]
 
 
 def yabasanshiro(read: Read, runemu: Runemu) -> list[Launcher]:
@@ -279,6 +288,15 @@ def amiberry(read: Read, runemu: Runemu) -> list[Launcher]:
     installed = re.sub(r"^\$\{INSTALL\}", "", link.link)
     path, table_line = runemu.script("AMIBERRY")
     script = Script(path, read(path))
+    # A WHDLoad archive is booted by --autoload, which builds its own setup
+    # over the config: the kickstart records hold for the other content.
+    autoload = [n for n, text in script.code() if re.search(r"amiberry .*--autoload", text)]
+    if not autoload:
+        raise script.missing("WHDLoad boot with --autoload")
+    content = (
+        "content not booted with --autoload, a WHDLoad .lha or .zip "
+        f"({posixpath.basename(path)}:{', '.join(map(str, autoload))})"
+    )
     launchers = [Launcher(
         emulator="AMIBERRY", build="standalone", kind="links", names=[],
         case_insensitive=False, search_dir=BIOS,
@@ -314,19 +332,23 @@ def amiberry(read: Read, runemu: Runemu) -> list[Launcher]:
         else:
             test = _shell_test(script, condition_line)
             condition = test
-        launchers.append(Launcher(
+        target = re.search(r'"?(\$\{?\w+\}?)"?\s*$', line)
+        if target is None:
+            raise script.missing(f"destination of the copy at line {number}")
+        launchers.append(_evidence(read, Launcher(
             emulator="AMIBERRY", build="standalone", kind="fixed_name",
             slot=copied.group(1).removesuffix("-default.uae").removeprefix("Amiga"),
             names=[found[0].value.removeprefix("$(FILE_PATH)/")], case_insensitive=False,
             search_dir=BIOS,
             passes_to=f"{copied.group(1)} kickstart_rom_file, $(FILE_PATH) = {rom_path[0].value}",
             fails_when_missing=False,
-            depends_on_option=condition,
+            depends_on_option=f"{condition}, {content}",
             source_ref=source_ref([
                 (RUNEMU, [table_line]), (path, [condition_line, number]),
                 (config, [rom_path[0].line, found[0].line]),
             ]),
-        ))
+        ), script.expand(target.group(1), number, set()), ["kickstart_rom_file"],
+            script, copied.group(1)))
     if len(launchers) == 1:
         raise script.missing("cp of a default .uae config")
     return launchers
@@ -420,9 +442,13 @@ def easyrpg(read: Read) -> list[Launcher]:
 def extract_launchers(read: Read) -> list[dict[str, Any]]:
     """Every launcher record, read through `read(repo-relative path)`."""
     runemu = Runemu(read)
+    # The atari800.cfg AmberELEC ships names the OS ROMs, but the core opens
+    # it only under its atari800_cfg option, off by default, and finds the
+    # ROMs by a scan of the content folder (libretro-atari800 atari.c:512-516,
+    # 537, libretro_core_options.h:1203): no record reads it.
     launchers = [
         *retroarch(read), *retrorun(read), *mame(runemu),
-        *atari800(read), *scummvm(read), *freej2me(read), *easyrpg(read),
+        *scummvm(read), *freej2me(read), *easyrpg(read),
         *amiberry(read, runemu), *hatari(read, runemu), *pico8(read, runemu),
         *piemu(read, runemu), *yabasanshiro(read, runemu),
     ]

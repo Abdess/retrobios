@@ -7,7 +7,7 @@ version_source:
   url: "http://retropc.net/pi/xm6/index.html"
   pattern: '\(version [0-9.]+ \S+ version ([0-9.]+)\)'
 based_on: "XM6 v2.06 by PI."
-profiled_date: "2026-08-10"
+profiled_date: "2026-11-10"
 core_version: "3.38"
 version_basis:
   kind: package
@@ -25,69 +25,101 @@ systems:
   - sharp-x68000
 
 notes: |
-  Closed-source Windows fork of XM6 v2.06, extended by GIMONS from 2010 and
-  maintained again by PI. since version 3.34 (xm6g.pdf p.1, p.3). Distributed from
-  PI's XM6 page as a single archive, xm6_typeg_338_20260223.zip, holding an x64
-  xm6g.exe, the Visual C++ 2015-2019 runtime it imports (mfc140u.dll,
-  msvcp140.dll, vcruntime140.dll, vcruntime140_1.dll) and the 32-page manual
-  xm6g.pdf. No source is published. The analysis below reads xm6g.exe, and the
-  XM6 v2.06 sources cited alongside are PI's own release, xm6_206s.zip from the
-  same page. ES-DE launches it through the XM6TYPEG and XM6TYPEG-WINDOWS find
-  rules with the working directory set to the emulator folder, on Linux under
-  Wine or Proton. The archive alone does not run: the manual opens with that
-  warning (xm6g.pdf p.5).
+  Closed-source Windows fork of XM6 v2.06 by GIMONS, maintained again by PI.
+  Distributed from PI's XM6 page as one archive, xm6_typeg_338_20260223.zip
+  (sha256 71c2b3429163128f...), holding an x64 xm6g.exe (sha256
+  3d50aab23ce6c8ae1677b1ca8adaa8b0c6c9dabb1c06b98d0f2ea10fe44ac5de), the Visual
+  C++ 2015-2019 runtime it imports (mfc140u.dll, msvcp140.dll, vcruntime140.dll,
+  vcruntime140_1.dll, loader-resolved) and xm6g.pdf. No source is published.
+  Every address below is a virtual address in that xm6g.exe, function bounds taken
+  from its .pdata. ES-DE launches it through the XM6TYPEG and XM6TYPEG-WINDOWS find
+  rules with the working directory set to the emulator folder, on Linux under Wine
+  or Proton.
 
-  Machines emulated are X68000, XVI, Compact, X68030 and the 040turbo and
-  060turbo accelerator configurations (xm6g.pdf p.3). System files are resolved
-  beside xm6g.exe. A twenty-entry name table at xm6g.exe:0x140592350 holds them,
-  against ten in Filepath::SystemFile[] (XM6 2.06 vm/filepath.cpp:472-483), and
-  each path is built by copying the name, splitting it, and refilling drive and
-  directory from GetModuleFileNameW, the sequence XM6 2.06 spells out in
-  Filepath::SysFile and Filepath::SetBaseDir (vm/filepath.cpp:88-105, 172-186).
-  The path is rebuilt from the module path on every load, with no configured
-  directory taking part. Loading reads a fixed byte count and compares it
-  against the count returned, so every min_size below is a floor: a longer file
-  loads and its tail is ignored.
+  System files sit in a twenty-entry pointer table at 0x140592350 (IPLROM.DAT
+  first, STATE.XM6 last). Filepath::SysFile at 0x1404e76d0 indexes it, copies the
+  name, splits it and jumps to 0x1404e7950, which refills drive and directory from
+  GetModuleFileNameW, so every system file is read beside xm6g.exe and no
+  configured directory takes part. LoadROM inlines the same sequence for index 0
+  (0x1404fca8d-0x1404fcb52). Fileio::Open is 0x1404e7390 (CreateFileW) and
+  Fileio::Load 0x1404e7200 (ReadFile, success only when the full count is read).
 
-  Two files are mandatory. LoadROM (xm6g.exe:0x1404fc9a5) leaves through its
-  failure exit when the IPL read fails, and the CG read falls back to CGROM.TMP
-  before failing the same way, which is the string "XM6 requires two ROM files,
-  IPLROM.DAT file and CGROM.DAT(or CGROM.TMP) file." Nothing in the executable
-  substitutes for either. The system options page probes IPLROM.DAT,
-  IPLROMXV.DAT, IPLROMCO.DAT and IPLROM30.DAT with GetFileSizeEx and accepts a
-  file only at exactly 131072 bytes (xm6g.exe:0x140428f80, size test at
-  0x14042920a).
+  LoadROM (0x1404fc990) takes a memory type set by Memory::ApplyCfg
+  (0x1404fe390): types 1 to 3 are the base X68000 with no SCSI, internal SCSI or
+  external SCSI, 4 is XVI, 5 Compact, 6 X68030 and 7 X68030 with the expansion ROM
+  option on. It reads the IPL ROM, then the CG ROM, then the SCSI ROM, and a short
+  ReadFile count fails the load, so every min_size below is a floor and a longer
+  file loads with its tail ignored.
+
+  The startup path to LoadROM(1). The CRT calls wWinMain at 0x1405767ad, a thunk
+  at 0x1405776fc to AfxWinMain (mfc140u.dll 14.42.34433.0 ordinal 2370), which
+  calls InitInstance through vtable offset 0xb0 (0x1802b2ba7-0x1802b2bae in that
+  DLL). The application object at 0x14084db20 is built by the static initializer
+  0x140425b90 (initializer table entry 0x14057e990) with vtable 0x14057ec20, whose
+  slot 22 (+0xb0) is InitInstance 0x140425e30. InitInstance allocates the frame
+  window (0x140425fb0), sets its vtable 0x1405aed50 (0x140425fd4) and creates it
+  through slot 91 (+0x2d8, 0x14042614d-0x140426186). WM_CREATE reaches OnCreate
+  0x140470ef0 through the frame message map 0x1405acf78 (GetMessageMap slot 12,
+  0x140470eb0, entry 0x1405acf90). OnCreate allocates the 0x208c0-byte VM
+  (0x140471135), stores it at 0x140822790 (0x14047120e) and calls VM::Init
+  0x140565f60 at 0x140471218. VM::Init constructs the memory device at
+  0x140566443 (constructor 0x1404fc3d0 sets vtable 0x1405c0830 at 0x1404fc3f9, and
+  the device constructor 0x1404c1270 appends it to the device list at VM+0x20040),
+  then walks that list calling vtable slot 1 (+0x8) at 0x14056762a. Slot 1 of the
+  memory vtable (0x1405c0838) is Memory::Init 0x1404fc5d0, which calls LoadROM(1)
+  at 0x1404fc669 and returns 0 on failure (0x1404fc97f). A zero clears the result
+  at 0x140567631, VM::Init returns it at 0x140567640, and OnCreate sets error state
+  1 at 0x140471221 and posts message 0x8000 at 0x14047123b. Message map entry
+  0x1405ad110 routes 0x8000 to 0x1404737a0, which for state 1 (0x1404737d6) loads
+  string 47002 or 42002, "XM6 requires two ROM files, IPLROM.DAT file and
+  CGROM.DAT(or CGROM.TMP) file", shows it with MB_ICONSTOP (0x14047383e) and posts
+  WM_CLOSE (0x140473853).
+
+  Memory::Reset (0x1404fd610)
+  loads any other type on demand: type 7 falls back to 6 (0x1404fd682), and any
+  failure falls back to type 1 (0x1404fd6bc), so a missing model ROM only loses
+  that machine.
+
+  SRAM::Reset picks its file from the machine index at VM+0x2002c (0x1405565f7).
+  The index is the [Basic] ModelType setting of xm6g.ini, 0 to 3 for the base
+  machine, XVI, Compact and X68030: INI table entry 0x140581240 binds that key to
+  configuration offset 0x2bfc (0x14082539c), read by the INI loader 0x1404270a0
+  (0x1404270fe), the field Memory::ApplyCfg reads at 0x1404fe3b8. The configuration apply at 0x140473630 copies it to VM+0x20028
+  (0x14047367f), and VM::Reset 0x140567660 copies VM+0x20028 to VM+0x2002c at
+  0x14056768e. OnCreate runs the two at 0x14047148e and 0x14047149a. When
+  Memory::Reset falls back to the base machine, VM::Reset finds the loaded type at
+  Memory+0xcbc outside the model (0x1405676b2-0x1405676e8) and zeroes the index at
+  0x1405676f3 before the devices reset, so SRAM.DAT is read. A saved state
+  restores the index (0x140567c11).
+
+  The options page (0x140428f80) offers XVI, Compact and X68030 only when
+  IPLROMXV.DAT, IPLROMCO.DAT and IPLROM30.DAT have GetFileSizeEx exactly 0x20000.
+  Three startup checks run from 0x1404738b5 through 0x140472860, each skippable by
+  its option. The IPL check (0x140472a99) reads the IOCS date bytes at 0x1000a,
+  0x1000c and 0x1000d of the base IPL and warns unless they spell 87/05/07. The CG
+  check (0x14047296e) sums and XORs 0x1000 bytes at 0x3a800 of the font and warns
+  unless they give 0xec and 0x84. The SCSI check (0x140501290) reads 0x2000 bytes of
+  SCSIINROM.DAT (0x14050142d) and SCSIEXROM.DAT (0x140501599) and warns when
+  0x1ff8 holds "XM6 ", the stamp of the XM6 Utility replacements (0x14050147c,
+  0x1405015da). Each warning dialog (0x140487730) continues on OK and closes XM6 on
+  Cancel. No genuine ROM is hashed anywhere in the executable.
 
   XM6 Utility, published separately at the same address, synthesises CGROM.TMP
   from the installed Windows fonts and SCSIINROM.DAT or SCSIEXROM.DAT from the
   Human68k version 3.02 disk image HUMAN302.XDF, which it requires at 0x134000
-  bytes (XM6Util scsirom.cpp:86-90). It stamps the SCSI ROMs with "XM6 " at
-  offset 0x1ff8 and a version at 0x1ffc (XM6Util scsirom.cpp:243-245), and
-  xm6g.exe reads both files back and tests that signature
-  (xm6g.exe:0x14050147c, 0x1405015e0) to raise the startup warning that names
-  these files as substitutes and discourages them. Nothing rejects the file, and
-  no genuine ROM is hashed anywhere in the executable.
+  bytes (XM6Util scsirom.cpp:86-90), and stamps "XM6 " at offset 0x1ff8 and a
+  version at 0x1ffc (XM6Util scsirom.cpp:243-245).
 
-  SCSI ROM requirements follow the machine (xm6g.pdf p.17). SCSIINROM.DAT is
-  needed by SUPER, XVI and Compact and by any machine set to the internal SCSI
-  interface. SCSIEXROM.DAT drives the CZ-6BS1 external board, which is the only
-  SCSI variant the SASI models can take. X68030 needs neither, its SCSI ROM
-  being part of IPLROM30.DAT or IPLROM30S.DAT. IPLROM30S.DAT and ROM30S.DAT are
-  a pair used only when Expansion ROM is enabled on the X68030 options tab, for
-  ROMs patched for 060turbo (xm6g.pdf p.17).
+  The Mercury Unit OPN (YMF288) samples its rhythm section from files. The fmgen
+  and X68Sound engines read six WAV files named from a table at 0x1405c0090
+  (0x1404ed610), and the ymfm engine reads ym2608_adpcm_rom.bin instead
+  (0x140574eb0).
 
-  The Mercury Unit carries an OPN (YMF288) whose rhythm section is sampled from
-  external files. The fmgen and X68Sound engines read six WAV files named from a
-  table at xm6g.exe:0x1405c0090 (0x1404ed610, CreateFileW at 0x1404ed8bf), and the
-  ymfm engine reads ym2608_adpcm_rom.bin instead (0x140574fec, ReadFile at
-  0x140575095), which is why the rhythm level control is documented as inert for
-  ymfm.
-
-  xm6g.ini and the state file STATE.XM6, the twentieth table entry, are written
-  by the program and are not listed below. RTC.DAT and the SRAM files are listed
+  xm6g.ini and the state file STATE.XM6, the twentieth table entry, are written by
+  the program and are not listed below. RTC.DAT and the SRAM files are listed
   because they are battery-backed images with hardware counterparts that preload
-  settings when supplied, even though XM6 TypeG creates them on exit when they
-  are absent (xm6g.pdf p.18).
+  settings when supplied. XM6 TypeG writes them back on exit (SRAM 0x140556498,
+  RTC 0x1405321a9), so it creates them when they are absent.
 
 files:
   # -- IPL ROMs, one per emulated model, read at 0x20000 bytes and byte-swapped --
@@ -98,13 +130,13 @@ files:
     size: 131072
     validation: [size]
     description: "X68000 boot ROM version 1.0, base models"
-    source_ref: "xm6g.pdf p.16, xm6g.exe:0x1404fc9a5 (read at 0x1404fcbb7), xm6g.exe:0x14042920a, XM6 2.06 vm/memory.cpp:249-270"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fca8d-0x1404fcb52 (table entry 0 joined to the module directory), 0x1404fcb90 (Fileio::Open), 0x1404fcbb7-0x1404fcbc4 (ReadFile 0x20000, short count exits through 0x1404fd159), 0x1404fcc00 (16-bit swap), Memory::Init 0x1404fc5d0 (memory vtable 0x1405c0830 slot 1) 0x1404fc669 (LoadROM(1), failure returns 0 at 0x1404fc97f), VM::Init 0x140565f60 0x14056762a (device Init through vtable slot 1), 0x140567631 (failure kept), OnCreate 0x140470ef0 0x140471218 (VM::Init call), 0x140471221 (error state 1), 0x14047123b (posts 0x8000), handler 0x1404737a0 0x1404737d6, 0x14047383e (MB_ICONSTOP message 47002 or 42002), 0x140473853 (WM_CLOSE), options page 0x140428f80 0x14042920a (GetFileSizeEx == 0x20000)"
     note: >-
-      Covers the first model, ACE, EXPERT, PRO and SUPER. LoadROM reads 0x20000
-      bytes and fails when fewer are returned, and the failure aborts
-      initialisation. The startup warning naming version 1.00 (05/07/1987) as
-      recommended only advises: it does not reject the file. The recommended
-      source is the free X68BIOSE.LZH package (xm6g.pdf p.6).
+      Memory types 1 to 3, the first model, ACE, EXPERT, PRO and SUPER. Memory::Init
+      loads it first and the program closes when it fails. The IPL check at
+      0x140472a99 warns when the IOCS date is not 87/05/07 and does not reject the
+      file. The options page requires exactly 131072 bytes, while the loader only
+      needs at least that many.
 
   - name: IPLROMXV.DAT
     system: sharp-x68000
@@ -112,10 +144,11 @@ files:
     size: 131072
     validation: [size]
     description: "X68000 XVI boot ROM version 1.1"
-    source_ref: "xm6g.pdf p.16, xm6g.exe:0x14042927c, XM6 2.06 vm/memory.cpp:256-258"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: jump table 0x1404fd4f4 case 4, 0x1404fcb5a (index 1), 0x1404fcb77 (Filepath::SysFile 0x1404e76d0), 0x1404fcbb7 (ReadFile 0x20000), options page 0x140428f80 0x140429279 (table entry 1), 0x1404293de (GetFileSizeEx == 0x20000)"
     note: >-
-      Selects the XVI machine, which also needs SCSIINROM.DAT. The options page
-      offers the machine only when this file is exactly 131072 bytes.
+      Memory type 4. The options page offers the XVI machine only when this file
+      is exactly 131072 bytes, and Memory::Reset falls back to the base machine
+      when it fails to load.
 
   - name: IPLROMCO.DAT
     system: sharp-x68000
@@ -123,10 +156,9 @@ files:
     size: 131072
     validation: [size]
     description: "X68000 Compact boot ROM version 1.2"
-    source_ref: "xm6g.pdf p.16, xm6g.exe:0x14042946b, XM6 2.06 vm/memory.cpp:259-261"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: jump table 0x1404fd4f4 case 5, 0x1404fcb5f (index 2), 0x1404fcb77 (Filepath::SysFile 0x1404e76d0), 0x1404fcbb7 (ReadFile 0x20000), options page 0x140428f80 0x140429468 (table entry 2), 0x1404295cd (GetFileSizeEx == 0x20000)"
     note: >-
-      Selects the Compact machine, which also needs SCSIINROM.DAT. Same exact
-      size test as the other IPL ROMs.
+      Memory type 5, offered and loaded under the same rules as IPLROMXV.DAT.
 
   - name: IPLROM30.DAT
     system: sharp-x68000
@@ -134,11 +166,11 @@ files:
     size: 131072
     validation: [size]
     description: "X68030 boot ROM version 1.3, $FE0000-$FFFFFF half"
-    source_ref: "xm6g.pdf p.16, xm6g.exe:0x14042965a, XM6 2.06 vm/memory.cpp:262-264"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: jump table 0x1404fd4f4 case 6, 0x1404fcb66 (index 3), 0x1404fcb77 (Filepath::SysFile 0x1404e76d0), 0x1404fcbb7 (ReadFile 0x20000), options page 0x140428f80 0x140429657 (table entry 3), 0x1404297bc (GetFileSizeEx == 0x20000)"
     note: >-
-      Upper half of the X68030 and X68030 Compact boot ROM, paired with
-      ROM30.DAT. It carries the SCSI ROM for those machines, so neither
-      SCSIINROM.DAT nor SCSIEXROM.DAT applies to them.
+      Memory type 6, the X68030, paired with ROM30.DAT. Its SCSI ROM is
+      ROM30.DAT, so SCSIINROM.DAT and SCSIEXROM.DAT are not read for this
+      machine.
 
   - name: ROM30.DAT
     system: sharp-x68000
@@ -146,11 +178,11 @@ files:
     min_size: 131072
     validation: [size]
     description: "X68030 boot ROM version 1.3, $FC0000-$FDFFFF half"
-    source_ref: "xm6g.pdf p.16, xm6g.exe:0x1404fd1f8, XM6 2.06 vm/memory.cpp:311-313, 328-335"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: jump table 0x1404fd510 case 6, 0x1404fd1f5 (table entry 12), 0x1404fd304 (Fileio::Open), 0x1404fd327-0x1404fd334 (ReadFile 0x20000), 0x1404fd354-0x1404fd35b (types 6 and 7 fail on a short read)"
     note: >-
-      Lower half of the X68030 boot ROM, loaded through the SCSI ROM slot and
-      the only one of those read at 0x20000 bytes rather than 0x2000. Without it
-      the X68030 machine does not load.
+      Loaded into the SCSI ROM slot and the only file of that slot that must
+      deliver the full 0x20000 bytes. Without it LoadROM(6) fails and
+      Memory::Reset falls back to the base machine.
       The copy here is the X68000 Firmware set's ROM30.DAT (SCSIIN, ROM Human 2.x, ROM FLOAT and the SCSI-IOCS binary), read out of an X68030 by the XM6 2.06 utility, which stamps its name at the tail of the image.
 
   - name: IPLROM30S.DAT
@@ -159,11 +191,11 @@ files:
     min_size: 131072
     validation: [size]
     description: "Expansion boot ROM, $FE0000-$FEFFFF"
-    source_ref: "xm6g.pdf p.16-17, xm6g.exe:0x140592350 index 4"
+    source_ref: "xm6g.exe 3.38 Memory::ApplyCfg 0x1404fe390 0x1404fe3d1-0x1404fe3ff (X68030 with the expansion ROM flag gives type 7), LoadROM 0x1404fc990: jump table 0x1404fd4f4 case 7, 0x1404fcb6d (index 4), 0x1404fcb77 (Filepath::SysFile 0x1404e76d0, table entry 4 at 0x140592370), 0x1404fcbb7 (ReadFile 0x20000), Memory::Reset 0x1404fd610 0x1404fd672-0x1404fd694 (type 7 failure retries type 6)"
     note: >-
-      Read in place of IPLROM30.DAT when Expansion ROM is checked on the X68030
-      options tab, the setting stored as EXTROM. Paired with ROM30S.DAT and
-      intended for ROMs patched for 060turbo.
+      Read in place of IPLROM30.DAT when the X68030 expansion ROM option is on,
+      the setting stored as EXTROM. Paired with ROM30S.DAT. When either fails,
+      Memory::Reset loads the plain X68030 instead.
       The copy here is XEIJIPLROM30.DAT written by XEiJ 0.26.08.08 with -model=X68030 -iplrom16=on -memory=12 -cgrom=CGROM30.DAT: IPLROM 1.6 of 2025-08-03, the patched IPL its documentation names for the 060turbo, since no dump of the Mankai replacement ROM circulates.
 
   - name: ROM30S.DAT
@@ -172,10 +204,10 @@ files:
     min_size: 131072
     validation: [size]
     description: "Expansion boot ROM, lower half"
-    source_ref: "xm6g.pdf p.16, xm6g.exe:0x1404fd201"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: jump table 0x1404fd510 case 7, 0x1404fd1fe (table entry 13), 0x1404fd304 (Fileio::Open), 0x1404fd327-0x1404fd334 (ReadFile 0x20000), 0x1404fd354-0x1404fd35b (short read fails type 7)"
     note: >-
-      The other half of the expansion pair, loaded through the same SCSI ROM
-      slot as ROM30.DAT and read at the same size.
+      The other half of the expansion pair, loaded into the SCSI ROM slot and
+      read at the same size as ROM30.DAT.
       The copy here is XEIJROM30.DAT from the same XEiJ run: SCSIINROM 16, ROM Human 2.60, ROM FLOAT 2.03 and ROM Debugger 3.60.
 
   # -- CG ROMs, read at 0xc0000 bytes, model specific first then CGROM.DAT then CGROM.TMP --
@@ -186,11 +218,12 @@ files:
     min_size: 786432
     validation: [size]
     description: "X68000 character generator ROM"
-    source_ref: "xm6g.pdf p.17-18, xm6g.exe:0x1404fcf11 (read at 0x1404fd013), XM6 2.06 vm/memory.cpp:283-289"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fcf0e (table entry 5), 0x1404fcfed (Fileio::Open), 0x1404fd013-0x1404fd023 (ReadFile 0xc0000), 0x1404fd03e (falls back to CGROM.TMP), 0x1404fd1a0 (16-bit swap), Memory::Init 0x1404fc5d0 (memory vtable 0x1405c0830 slot 1) 0x1404fc669 (LoadROM(1), failure returns 0 at 0x1404fc97f), VM::Init 0x140565f60 0x14056762a (device Init through vtable slot 1), 0x140567631 (failure kept), OnCreate 0x140470ef0 0x140471218 (VM::Init call), 0x140471221 (error state 1), 0x14047123b (posts 0x8000), handler 0x1404737a0 0x1404737d6, 0x14047383e (MB_ICONSTOP message 47002 or 42002), 0x140473853 (WM_CLOSE), CG check 0x14047296e"
     note: >-
       Supplies the glyphs the X68000 renders, mapped at $F00000-$FBFFFF. Used by
       the base models and as the fallback for every machine whose own CG ROM is
-      absent. Initialisation fails when neither this file nor CGROM.TMP loads.
+      absent. LoadROM(1) fails when neither this file nor CGROM.TMP loads, and
+      the program closes. The startup CG check only warns.
 
   - name: CGROMXV.DAT
     system: sharp-x68000
@@ -200,10 +233,10 @@ files:
     min_size: 786432
     validation: [size]
     description: "X68000 XVI character generator ROM"
-    source_ref: "xm6g.pdf p.17-18, xm6g.exe:0x1404fcd99"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fcd90-0x1404fcd96 (type 4, table entry 6), 0x1404fce88 (Fileio::Open), 0x1404fceb8-0x1404fcec8 (ReadFile 0xc0000, a short read continues at CGROM.DAT 0x1404fcf0e)"
     note: >-
       Preferred when the XVI machine is selected. CGROM.DAT is used when it is
-      missing.
+      missing or short.
 
   - name: CGROMCO.DAT
     system: sharp-x68000
@@ -213,7 +246,7 @@ files:
     min_size: 786432
     validation: [size]
     description: "X68000 Compact character generator ROM"
-    source_ref: "xm6g.pdf p.17-18, xm6g.exe:0x1404fcdac"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fcd9f-0x1404fcda9 (type 5, table entry 7), 0x1404fce88 (Fileio::Open), 0x1404fceb8-0x1404fcec8 (ReadFile 0xc0000, fallback to CGROM.DAT 0x1404fcf0e)"
     note: >-
       Preferred when the Compact machine is selected, with the same fallback to
       CGROM.DAT.
@@ -224,9 +257,9 @@ files:
     min_size: 786432
     validation: [size]
     description: "X68030 character generator ROM"
-    source_ref: "xm6g.pdf p.17-18, xm6g.exe:0x1404fcc36 (read at 0x1404fcd42)"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fcc23-0x1404fcc33 (types 6 and 7, table entry 8), 0x1404fcd12 (Fileio::Open), 0x1404fcd42-0x1404fcd52 (ReadFile 0xc0000, fallback through 0x1404fcd90 to CGROM.DAT)"
     note: >-
-      Preferred when X68030 or X68030 Compact is selected, with the same
+      Preferred for the X68030 with or without the expansion ROM, with the same
       fallback to CGROM.DAT.
 
   - name: CGROM.TMP
@@ -236,12 +269,12 @@ files:
     min_size: 786432
     validation: [size]
     description: "Synthesised font ROM, fallback when no CG ROM is present"
-    source_ref: "xm6g.pdf p.18, p.6, xm6g.exe:0x1404fd041, XM6 2.06 vm/memory.cpp:286-289"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: 0x1404fd03e (table entry 9, reached only after CGROM.DAT fails), 0x1404fd11d (Fileio::Open, failure exits LoadROM), 0x1404fd147-0x1404fd157 (ReadFile 0xc0000, short read exits LoadROM)"
     note: >-
       Read at the same size, only after CGROM.DAT fails. XM6 Utility builds it
       from the fonts installed on the machine that generated it, so no hash is
-      declared. XM6 TypeG treats it as non-recommended and raises a suppressible
-      startup warning whenever it is in use.
+      declared. A synthesised font fails the CG sum and XOR check at
+      0x14047296e, which raises the startup warning.
 
   # -- SCSI ROMs, tried at 0x20000 then 0x2000, external also at 0x1fe0 --
 
@@ -251,13 +284,14 @@ files:
     min_size: 8192
     validation: [size]
     description: "Internal SCSI interface ROM, SUPER and later"
-    source_ref: "xm6g.pdf p.17, xm6g.exe:0x1404fd1ef (reads at 0x1404fd327, 0x1404fd3dd), XM6 2.06 vm/memory.cpp:305-310, 328-345"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: jump table 0x1404fd510 cases 2, 4 and 5, 0x1404fd1ec (table entry 10), 0x1404fd327 (ReadFile 0x20000), 0x1404fd361-0x1404fd391 and 0x1404fd442-0x1404fd44f (type 2 reopens and must read 0x2000), 0x1404fd39a (types 4 and 5 continue without the file), SCSI check 0x140501290 0x14050131e, 0x14050142d, 0x14050147c"
     note: >-
-      Required by SUPER, XVI and Compact, and by any machine whose SCSI
-      interface option is set to internal, that option defaulting to none. The
-      loader tries 0x20000 bytes first and falls back to 0x2000. A copy carrying
-      "XM6 " at offset 0x1ff8 was synthesised by XM6 Utility and raises the
-      startup warning.
+      Read for the internal SCSI option on the base machine (memory type 2),
+      where a missing file or a read under 0x2000 bytes fails the load and
+      Memory::Reset falls back to the plain base machine. XVI and Compact read it
+      with one 0x20000-byte ReadFile whose count is not checked, so a shorter
+      file still fills the slot, and without the file those machines start with
+      the slot left at 0xff.
 
   - name: SCSIEXROM.DAT
     system: sharp-x68000
@@ -265,13 +299,12 @@ files:
     min_size: 8160
     validation: [size]
     description: "External SCSI interface ROM, CZ-6BS1 board"
-    source_ref: "xm6g.pdf p.17, xm6g.exe:0x1404fd20a (retry at 0x1404fd419), XM6 2.06 vm/memory.cpp:316-318, 341-352"
+    source_ref: "xm6g.exe 3.38 LoadROM 0x1404fc990: jump table 0x1404fd510 case 3, 0x1404fd207 (table entry 11), 0x1404fd327 (ReadFile 0x20000), 0x1404fd3a0-0x1404fd3ea (ReadFile 0x2000), 0x1404fd401-0x1404fd44f (retry 0x1fe0 bytes at buffer offset 0x20, a short read fails the load), SCSI check 0x140501290 0x14050148a, 0x140501599, 0x1405015da"
     note: >-
-      Drives the CZ-6BS1 board, the only SCSI variant the first model, ACE,
-      EXPERT and PRO can take, and mutually exclusive with the internal
-      interface everywhere else. After 0x20000 and 0x2000 the loader retries at
-      0x1fe0 bytes into buffer offset 0x20, the WinX68k high-speed layout, so
-      8160 is the real floor.
+      Read only for the external SCSI option on the base machine (memory type
+      3). After 0x20000 and 0x2000 the loader retries at 0x1fe0 bytes into buffer
+      offset 0x20, the WinX68k layout, so 8160 is the real floor. Missing, the
+      load fails and Memory::Reset falls back to the plain base machine.
 
   # -- Battery-backed images, read at startup, written on exit when changed --
 
@@ -281,12 +314,12 @@ files:
     required: false
     size: [16384, 65536]
     description: "SRAM image for EXPERT and the other base models"
-    source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 14, XM6 2.06 vm/sram.cpp:70-81, 112"
+    source_ref: "xm6g.exe 3.38 SRAM::Init 0x140556320: 0x140556373-0x14055637c (Filepath::SysFile index 14), 0x140556397 (Fileio::Load 0x10000, result ignored), SRAM::Reset 0x140556510 (SRAM vtable 0x1405c2728 slot 3) 0x1405565f7 (machine index VM+0x2002c, ModelType copied at 0x14056768e), 0x14055662a (index 0), 0x140556667 (ReadFile 0x10000, count not checked), SRAM cleanup 0x140556420 0x140556498 (writes the configured size in KB)"
     note: >-
-      Holds the boot device and memory switch settings for the first model, ACE,
-      EXPERT, PRO and SUPER. A supplied image preloads those settings. The
-      standard capacity is the 16 KB X68000 SRAM, and the SRAM64K modification the
-      emulator reproduces raises it to 64 KB. No size is enforced.
+      Holds the boot device and memory switch settings for the base models. The
+      buffer is filled with 0xff first and up to 64 KB is read with no size
+      check. The program writes the configured SRAM size back, 16 KB as standard
+      and 64 KB with the 62C256 SRAM option.
 
   - name: SRAMXVI.DAT
     system: sharp-x68000
@@ -294,7 +327,7 @@ files:
     unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for XVI"
-    source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 15"
+    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x1405565f3-0x140556623 (machine index VM+0x2002c, ModelType 1, gives Filepath::SysFile index 15), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
     note: >-
       Per-model SRAM introduced by XM6 TypeG, which keeps one image per machine
       instead of the single SRAM.DAT of XM6 v2.06.
@@ -305,7 +338,7 @@ files:
     unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
     description: "SRAM image for Compact"
-    source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 16"
+    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x1405565f7 (machine index VM+0x2002c), 0x14055661c (ModelType 2 gives Filepath::SysFile index 16), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
     note: >-
       Read when the Compact machine is selected.
 
@@ -314,69 +347,70 @@ files:
     required: false
     unsourceable: "written by the emulator on exit, no canonical file"
     size: [16384, 65536]
-    description: "SRAM image for X68030, 040turbo and 060turbo"
-    source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 17"
+    description: "SRAM image for X68030"
+    source_ref: "xm6g.exe 3.38 SRAM::Reset 0x140556510: 0x1405565f7 (machine index VM+0x2002c), 0x140556615 (ModelType 3 gives Filepath::SysFile index 17), 0x140556632 (Filepath::SysFile 0x1404e76d0), 0x140556643 (Fileio::Open), 0x140556667 (ReadFile 0x10000)"
     note: >-
-      Shared by X68030, X68030 Compact and the 040turbo and 060turbo
-      configurations.
+      Read when the X68030 machine class is selected, with or without the
+      expansion ROM.
 
   - name: RTC.DAT
     system: sharp-x68000
     required: false
     unsourceable: "written by the emulator on exit, no canonical file"
+    size: 120
     description: "RTC alarm settings for timer start"
-    source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 18"
+    source_ref: "xm6g.exe 3.38 RTC::Init 0x140531ee0: 0x14053210b-0x140532117 (Filepath::SysFile index 18), 0x140532132 (Fileio::Load 0x78 bytes, result ignored), RTC cleanup 0x140532170 0x1405321a9 (writes 0x78 bytes)"
     note: >-
-      Alarm registers of the battery-backed clock, used by the timer start
-      feature and applying to every machine. XM6 TypeG creates it on exit when
-      it is absent.
+      Alarm registers of the battery-backed clock, applying to every machine.
+      The program reads and writes 120 bytes and runs with defaults when the file
+      is absent.
 
   # -- Mercury Unit rhythm samples, read by the OPN (YMF288) section --
 
   - name: ym2608_adpcm_rom.bin
     system: sharp-x68000
     required: false
+    size: 8192
     description: "YM2608 ADPCM-A rhythm ROM, ymfm engine"
-    source_ref: "xm6g.exe:0x140574eb0 (name at 0x140574fec, read at 0x140575095)"
+    source_ref: "xm6g.exe 3.38 0x140574eb0: 0x140574fac-0x140574fbe (clears the 0x2000-byte buffer), 0x140574fdb-0x140574fec (wcscat_s of the name onto the directory argument), 0x14057506e (Fileio::Open, failure skips the read), 0x140575095 (ReadFile 0x2000, count not checked)"
     note: >-
-      Rhythm source for the Mercury Unit OPN when the FM engine is set to ymfm.
-      The name is appended to a directory and the file is read whole. When it is
-      absent the rhythm section stays silent and the emulator runs.
+      Rhythm source for the Mercury Unit OPN when the FM engine is ymfm. When it
+      is absent the buffer stays zeroed, the rhythm section is silent and the
+      emulator runs.
 
   - name: 2608_BD.WAV
     system: sharp-x68000
     required: false
     description: "Mercury Unit rhythm sample, bass drum"
-    source_ref: "xm6g.exe:0x1404ed610, name table 0x1405c0090, CreateFileW at 0x1404ed8bf"
+    source_ref: "xm6g.exe 3.38 0x1404ed610: 0x1404ed677 (name table 0x1405c0090 entry 0), 0x1404ed6fa-0x1404ed76d (directory + 2608_ + name + .WAV), 0x1404ed7af (CreateFileW), 0x1404ed7cf-0x1404ed7d8 (ERROR_FILE_NOT_FOUND handled), 0x1404ed950 (ReadFile)"
     note: >-
       One of the six rhythm samples the fmgen and X68Sound engines read for the
-      Mercury Unit OPN. The name is built as 2608_ plus the table entry plus
-      .WAV. A missing file is handled through ERROR_FILE_NOT_FOUND and leaves
-      that instrument silent.
+      Mercury Unit OPN. A missing file is handled through ERROR_FILE_NOT_FOUND
+      and leaves that instrument silent.
 
   - name: 2608_SD.WAV
     system: sharp-x68000
     required: false
     description: "Mercury Unit rhythm sample, snare drum"
-    source_ref: "xm6g.exe:0x1404ed610, name table 0x1405c0090"
+    source_ref: "xm6g.exe 3.38 0x1404ed610: name table 0x1405c0090 entry 1, 0x1404ed6fa-0x1404ed76d (name built), 0x1404ed7af (CreateFileW)"
 
   - name: 2608_TOP.WAV
     system: sharp-x68000
     required: false
     description: "Mercury Unit rhythm sample, top cymbal"
-    source_ref: "xm6g.exe:0x1404ed610, name table 0x1405c0090"
+    source_ref: "xm6g.exe 3.38 0x1404ed610: name table 0x1405c0090 entry 2, 0x1404ed6fa-0x1404ed76d (name built), 0x1404ed7af (CreateFileW)"
 
   - name: 2608_HH.WAV
     system: sharp-x68000
     required: false
     description: "Mercury Unit rhythm sample, hi-hat"
-    source_ref: "xm6g.exe:0x1404ed610, name table 0x1405c0090"
+    source_ref: "xm6g.exe 3.38 0x1404ed610: name table 0x1405c0090 entry 3, 0x1404ed6fa-0x1404ed76d (name built), 0x1404ed7af (CreateFileW)"
 
   - name: 2608_TOM.WAV
     system: sharp-x68000
     required: false
     description: "Mercury Unit rhythm sample, tom-tom"
-    source_ref: "xm6g.exe:0x1404ed610, name table 0x1405c0090"
+    source_ref: "xm6g.exe 3.38 0x1404ed610: name table 0x1405c0090 entry 4, 0x1404ed6fa-0x1404ed76d (name built), 0x1404ed7af (CreateFileW)"
 
   - name: 2608_RIM.WAV
     system: sharp-x68000
@@ -384,10 +418,10 @@ files:
       - 2608_RYM.WAV
     required: false
     description: "Mercury Unit rhythm sample, rim shot"
-    source_ref: "xm6g.exe:0x1404ed610, name table 0x1405c0090, 0x1404ed808-0x1404ed841"
+    source_ref: "xm6g.exe 3.38 0x1404ed610: name table 0x1405c0090 entry 5, 0x1404ed7af (CreateFileW of 2608_RIM.WAV), 0x1404ed808 (entry 5 not found), 0x1404ed841-0x1404ed8bf (CreateFileW of 2608_RYM.WAV)"
     note: >-
       Last of the six. This entry alone has a second accepted name,
-      2608_RYM.WAV, the spelling carried by widely circulated sample sets.
+      2608_RYM.WAV, opened when 2608_RIM.WAV is not found.
 
   # -- Libraries looked up by name at runtime, absent from the import directory --
 
@@ -395,39 +429,39 @@ files:
     system: sharp-x68000
     required: false
     description: "FM synthesis engine by m_puusan"
-    source_ref: "xm6g.pdf p.29, p.31, xm6g.exe:LoadLibraryW at 0x140488dfb"
+    source_ref: "xm6g.exe 3.38 0x140488a50: 0x140488df4-0x140488dfb (LoadLibraryW), 0x140488e0d-0x140488e65 (absent: stub entry points), 0x140488e6a-0x140488e74 (GetProcAddress X68Sound_Reset and the rest)"
     note: >-
-      One of the three FM engines the sound options offer, alongside the
-      built-in fmgen and ymfm. Not shipped in the archive, and without it that
-      engine cannot be selected.
+      One of the three FM engines, alongside the built-in fmgen and ymfm. Not
+      shipped in the archive. Without it the engine object is wired to internal
+      stubs and the emulator continues.
 
   - name: c86ctl.dll
     system: sharp-x68000
     required: false
     description: "Control library for external OPM hardware"
-    source_ref: "xm6g.exe:0x1404b2da6, version query at 0x1404b2daa"
+    source_ref: "xm6g.exe 3.38 0x1404b2d60: 0x1404b2da3-0x1404b2daa (GetFileVersionInfoSizeW, absent exits at 0x1404b3057), 0x1404b2e62-0x1404b2e69 (LoadLibraryW), 0x1404b2e89 (GetProcAddress CreateInstance)"
     note: >-
       Loaded by name to drive a real YM2151 through a C86BOX class device
       instead of software synthesis. The executable reads its file version
-      before use.
+      before loading it.
 
   - name: pcidebug.dll
     system: sharp-x68000
     required: false
     description: "PCI bus bridge library, used to reach a ROMEO sound board"
-    source_ref: "xm6g.exe:LoadLibraryW at 0x1404fa344, FreeLibrary at 0x1404fa2f5"
+    source_ref: "xm6g.exe 3.38 0x1404fa2e0: 0x1404fa2f5 (FreeLibrary of the previous handle), 0x1404fa31a-0x1404fa344 (LoadLibraryW), 0x1404fa354 (absent skips the setup)"
     note: >-
-      Loaded on demand and freed again. Absent, the feature that needs it is
-      unavailable and the emulator continues.
+      Loaded on demand and freed again. Absent, the ROMEO output is unavailable
+      and the emulator continues.
 
   - name: SOUND Canvas VA.dll
     system: sharp-x68000
     required: false
     path: "%ProgramFiles%/Roland/Sound Canvas VA/SOUND Canvas VA.dll"
     description: "Roland Sound Canvas VA plugin used as MIDI output"
-    source_ref: "xm6g.exe:0x14048418a, INI key VstSCVA"
+    source_ref: "xm6g.exe 3.38 0x140484170: 0x140484181-0x14048418e (empty VstSCVA setting gives the default path), 0x14048421e (ExpandEnvironmentStringsW), 0x1404823d0 0x14048249e (PathFileExistsW), 0x14048258a and 0x140482891 (VST host 0x1404aea40), 0x1404afd30 0x1404afd6c (LoadLibraryW)"
     note: >-
       Hosted as the MIDI output device when the VSTi option is selected. The
-      path is fixed to the Roland installation directory and the setting is
+      path defaults to the Roland installation directory and the setting is
       stored as VstSCVA.
       The plugin does not synthesise on its own: the Roland installer places SCCore.dll and eleven data files (GM, GM2 and SC-VSC .drk, .tnf and .drf sets, parameter1.dat to parameter3.dat) beside it, and the DLL loads them from its own directory.

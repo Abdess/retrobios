@@ -54,6 +54,21 @@ def write_decorated(path: str | Path, content: str) -> bool:
     _record(path)
     return _write_artifact(str(path), content)
 
+# A page body is written as .md and the decoration pass, which runs after
+# the sweep, gives it its final extension: .mdx when it holds components,
+# the other file removed. The .mdx a previous run left is that same page.
+_PAGE_SUFFIXES = (".md", ".mdx")
+
+
+def _was_produced(path: Path) -> bool:
+    """Whether this run produced *path*, a page under either extension."""
+    if os.path.realpath(str(path)) in _produced:
+        return True
+    return path.suffix in _PAGE_SUFFIXES and any(
+        os.path.realpath(str(path.with_suffix(suffix))) in _produced
+        for suffix in _PAGE_SUFFIXES if suffix != path.suffix)
+
+
 def _sweep_generated(docs: Path, directories: list[str]) -> int:
     """Delete files in the generated tree that this run did not produce."""
     removed = 0
@@ -62,7 +77,7 @@ def _sweep_generated(docs: Path, directories: list[str]) -> int:
         if not root.is_dir():
             continue
         for path in sorted(root.rglob("*")):
-            if path.is_file() and os.path.realpath(str(path)) not in _produced:
+            if path.is_file() and not _was_produced(path):
                 path.unlink()
                 removed += 1
         for path in sorted(root.rglob("*"), reverse=True):
@@ -81,8 +96,7 @@ def _sweep_top_pages(docs: Path) -> int:
     """
     removed = 0
     for path in sorted(docs.glob("*.md*")):
-        if (path.is_file() and path.suffix in (".md", ".mdx")
-                and os.path.realpath(str(path)) not in _produced):
+        if path.is_file() and path.suffix in _PAGE_SUFFIXES and not _was_produced(path):
             path.unlink()
             removed += 1
     return removed

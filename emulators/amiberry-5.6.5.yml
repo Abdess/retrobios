@@ -32,6 +32,13 @@ systems:
 standalone_directories:
 - "getcwd"
 - "rom_path = kickstarts"
+config_reads:
+  - file: "*.uae"
+    source_ref: "src/main.cpp:926-934"
+    keys:
+      - key: "kickstart_rom_file"
+        source_ref: "src/cfgfile.cpp:6050, src/memory.cpp:1907-1916"
+
 notes: |
   Amiberry 5.6.5 (src/osdep/target.h:27). Every folder it reads is below
   its start path: $EXTERNAL_FILES_DIR or $XDG_DATA_HOME when either holds a

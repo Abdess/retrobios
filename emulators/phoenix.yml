@@ -21,8 +21,9 @@ systems:
 notes: |
   Closed-source 3DO and Atari Jaguar emulator by Altmer (Arts-Union), the
   author of FreeDO. This profile reads the build RetroBat installs,
-  PhoenixEmuProject.exe 2.8.JAG (x86-64, dated 2023-01-05), with objdump and
-  the strings it carries.
+  PhoenixEmuProject.exe 2.8.JAG (x86-64, dated 2023-01-05, sha256
+  82298a9db3e0e53ad5ca2c659adecc86c0715d2864012bb84c50e02aecf5db67 inside
+  phoenix.7z sha256 8290e1463f94c456...afc7b6), disassembled.
 
   Phoenix names no BIOS file. Every dump is registered in phoenix.config.xml
   under a platform and a dump type: BIOS, CD-ROM, FMV-ROM, FONT-ROM and NVRAM
@@ -31,19 +32,29 @@ notes: |
   3DO or "[BIOS] Atari Jaguar (World).j64" for Jaguar from the RetroBat bios
   folder (emulatorLauncher Generators/Phoenix.Generator.cs:23-95).
 
-  The 3DO machine is emulated at hardware level (MADAM, CLIO, the CEL engine
-  and the ARM CPU) and starts from the BIOS dump. Its md5 is compared with
-  two values, the PAL Anvil BIOS a48e6746 and the same image with RSA
-  disabled cf11bbb5 (function at 0x4a10d0, strings at 0xb03a38 and
-  0xb03a60), which the 2.8.J changelog lists as PAL BIOS support. FMV-ROM is
-  the video module ROM, which the 1.2 changelog describes as viewable only,
-  and FONT-ROM the kanji font of Japanese consoles. Two further md5 values
-  (0xb03bd0, 0xb03bf8) are compared against the CD-ROM dump and set per game
-  video parameters.
+  Each machine declares its dump slots with a flag word. A slot whose flag
+  has bit 0 clear is mandatory: with no dump registered there, the launch
+  stops on "You must select %1.". 3DO declares CD-ROM 3, BIOS 0, FONT-ROM 1, FMV-ROM 1 and
+  NVRAM 1, Jaguar CARTRIDGE 2 and BIOS 1. QFrontend reads a slot by seeking
+  its dump to 0 and reading at most the size the machine asks for, and
+  returns -1 when the slot is empty.
 
-  Jaguar cartridges run through the boot ROM, and the File menu offers to add
-  a header, or a generic header, to a headerless cartridge
-  dump so that the boot ROM accepts it.
+  The 3DO machine is emulated at hardware level (MADAM, CLIO, the CEL engine
+  and the ARM CPU) and starts from the BIOS dump, read into the first
+  megabyte of a 2 MB ROM area, the FONT-ROM dump into the second, the whole
+  area then byte swapped by 32-bit words. The md5 of the BIOS dump is
+  compared with two values, the PAL Anvil BIOS a48e6746 and the same image
+  with RSA disabled cf11bbb5, and a match is passed to the CLIO setup as the
+  PAL flag. The FMV-ROM slot is declared but the machine setup never reads
+  it. NVRAM starts from a built-in 0xac-byte image and is then overlaid with
+  the NVRAM slot. Two further md5 values (0xb03bd0, 0xb03bf8) are compared
+  against the CD-ROM dump and set per game video parameters.
+
+  Jaguar cartridges run through the boot ROM when one is registered. Without
+  one, or for a cartridge with a JAGR header, the machine writes the reset
+  vectors itself and starts at the entry address the cartridge holds at
+  offset 0x404 (or the JAGR load address). The File menu offers to add a
+  header, or a generic header, to a headerless cartridge dump.
 
 files:
   - name: panafz10.bin
@@ -52,26 +63,44 @@ files:
     description: "3DO BIOS"
     note: >-
       Read from the path registered as the 3DO BIOS in phoenix.config.xml,
-      under any name. The name is a label for the Panasonic FZ-10 dump.
+      under any name. The name is a label for the Panasonic FZ-10 dump. The
+      slot is mandatory and the read is capped at 1 MB.
+    source_ref: "PhoenixEmuProject.exe 2.8.JAG (sha256 82298a9db3e0e53a) FUN_004a3980 0x4a3a74-0x4a3aa9 (3DO slot BIOS declared with flag 0), FUN_004fd550 0x4ff197-0x4ff220 (empty slot with flag bit 0 clear) and 0x4ff22d-0x4ff409 (QMessageBox You must select %1, returns false at 0x4fdae6), FUN_004a7f60 0x4a8ad0-0x4a8b3b (QFrontend read of slot BIOS, at most 0x100000 bytes, into this+0x1097558), 0x4a8be2-0x4a8c02 (byte swap of the 2 MB ROM area), FUN_004b1460 0x4b1489-0x4b14c4 (slot lookup, seek 0, read, -1 when empty)"
 
   - name: panafz10e-anvil.bin
     system: 3do
     required: false
     md5: "a48e6746bd7edec0f40cff078f0bb19f"
     description: "PAL Anvil BIOS"
-    note: "Recognized by md5 for PAL operation (0xb03a38, compared at 0x4a1144)."
+    note: "A BIOS slot dump with this md5 turns on PAL timing."
+    source_ref: "PhoenixEmuProject.exe 2.8.JAG (sha256 82298a9db3e0e53a) FUN_004a10d0 0x4a1144-0x4a11e4 (md5 of the BIOS slot dump through QFrontend FUN_004b12b0, compared with a48e6746...), called from FUN_004a7f60 0x4a81c1, result passed to the CLIO setup FUN_00491a70 at 0x4a8247-0x4a827b"
 
   - name: panafz10e-anvil-norsa.bin
     system: 3do
     required: false
     md5: "cf11bbb5a16d7af9875cca9de9a15e09"
     description: "PAL Anvil BIOS, RSA check disabled"
-    note: "Recognized by md5 for PAL operation (0xb03a60, compared at 0x4a120d)."
+    note: "A BIOS slot dump with this md5 turns on PAL timing."
+    source_ref: "PhoenixEmuProject.exe 2.8.JAG (sha256 82298a9db3e0e53a) FUN_004a10d0 0x4a120d-0x4a128d (md5 of the BIOS slot dump compared with cf11bbb5... when the first value differs), called from FUN_004a7f60 0x4a81c1, result passed to the CLIO setup FUN_00491a70 at 0x4a8247-0x4a827b"
+
+  - name: panafz1j-kanji.bin
+    system: 3do
+    required: false
+    description: "3DO kanji font ROM"
+    note: >-
+      Read from the path registered as the 3DO FONT-ROM in phoenix.config.xml,
+      under any name, into the second megabyte of the ROM area. The name is a
+      label for the Panasonic FZ-1 kanji font dump. The slot is optional.
+    source_ref: "PhoenixEmuProject.exe 2.8.JAG (sha256 82298a9db3e0e53a) FUN_004a3980 0x4a3aae-0x4a3ae3 (3DO slot FONT-ROM declared with flag 1, optional), FUN_004a7f60 0x4a8b48-0x4a8bd5 (QFrontend read of slot FONT-ROM, at most 0x100000 bytes, into this+0x1197558), 0x4a8be2-0x4a8c02 (byte swap of the 2 MB ROM area)"
 
   - name: "[BIOS] Atari Jaguar (World).j64"
     system: atari-jaguar
-    required: true
+    required: false
+    hle_fallback: true
     description: "Jaguar boot ROM"
     note: >-
       Read from the path registered as the Jaguar BIOS in phoenix.config.xml,
-      under any name. The name is a label for the No-Intro boot ROM dump.
+      under any name. The name is a label for the No-Intro boot ROM dump. The
+      slot is optional: without it the cartridge is started directly from
+      its entry address.
+    source_ref: "PhoenixEmuProject.exe 2.8.JAG (sha256 82298a9db3e0e53a) FUN_0089e230 0x89e40c-0x89e432 (Jaguar slot BIOS declared with flag 1, optional), FUN_008a0aa0 0x8a1498-0x8a14c4 (QFrontend read of slot 1, at most 0x100000 bytes, into this+0x5bab8), 0x8a14c6-0x8a14e8 (16-bit byte swap), 0x8a14ea-0x8a1514 (reset vectors taken from the boot ROM when the read returned data), 0x8a2279-0x8a22b8 and 0x8a2360-0x8a2371 (no boot ROM: reset vectors written directly, PC from the cartridge at offset 0x404 or the JAGR header)"
