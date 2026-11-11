@@ -105,6 +105,7 @@ export default defineConfig({
 				PageTitle: './src/components/PageTitle.astro',
 				MarkdownContent: './src/components/MarkdownContent.astro',
 				Footer: './src/components/Footer.astro',
+				Pagination: './src/components/Pagination.astro',
 				Header: './src/components/Header.astro',
 				Search: './src/components/Search.astro',
 			},

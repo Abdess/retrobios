@@ -44,13 +44,17 @@ PAGES = ("which-pack", "wiki/first-install", "wiki/architecture", "wiki/what-are
          "wiki/installer", "platforms/retrodeck", "provenance-no-intro", "explore", "index")
 
 BLOCKS = frozenset(
-    "address article aside blockquote br caption dd details dialog div dl dt fieldset figcaption "
+    "address article aside blockquote caption dd details dialog div dl dt fieldset figcaption "
     "figure footer form h1 h2 h3 h4 h5 h6 header hr li main nav ol option p pre section select "
     "summary table tbody td tfoot th thead tr ul".split())
 VOID = frozenset("area base br col embed hr img input link meta source track wbr".split())
 # What the stylesheet lays out as its own box beside the text before it:
 # the markup has to space it, a reader without the stylesheet sees no box.
-OWN_BOX = ("rb-tile-name", "rb-tile-runs", "rb-stat-label", "rb-badge", "rb-table-filter-count")
+# A <br> breaks a line on screen only: a copy and textContent join across
+# it, so it separates nothing here. link-title is the page name of
+# Starlight's previous and next links.
+OWN_BOX = ("rb-tile-name", "rb-tile-runs", "rb-stat-label", "rb-badge", "rb-table-filter-count",
+           "link-title")
 
 
 class PageText(HTMLParser):
@@ -270,6 +274,35 @@ class TheTwoFilterBoxesAreOne(unittest.TestCase):
                       source)
         css = (WEBSITE / "src" / "styles" / "retrobios.css").read_text(encoding="utf-8")
         self.assertIn(".rb-table-filter[hidden] { visibility: hidden; }", css)
+
+
+class PreviousAndNextAreSpaced(unittest.TestCase):
+    """Starlight's previous and next links read "PreviousWhat the packs do
+    not hold": the word and the title were split by a <br> only. The
+    override (src/components/Pagination.astro) spaces them and names each
+    link by its direction and its page."""
+
+    def test_the_override_is_registered(self):
+        config = (WEBSITE / "astro.config.mjs").read_text(encoding="utf-8")
+        self.assertIn("Pagination: './src/components/Pagination.astro',", config)
+
+    def test_word_and_title_are_spaced_and_named(self):
+        source = (WEBSITE / "src" / "components" / "Pagination.astro").read_text(encoding="utf-8")
+        for word, rel, page in (("previousWord", "prev", "prev"), ("nextWord", "next", "next")):
+            with self.subTest(rel=rel):
+                self.assertIn(f"{{{word}}}{{' '}}\n\t\t\t\t\t<br />", source)
+                self.assertIn(f'rel="{rel}" aria-label={{`${{{word}}}: ${{{page}.label}}`}}', source)
+        self.assertRegex(source, r'<nav class="pagination-links[^"]*" dir=\{dir\} aria-label=')
+
+    def test_a_rendered_pair_reads_spaced(self):
+        html = ('<div class="sl-markdown-content"></div><nav class="pagination-links">'
+                '<a href="/a/" rel="prev"><span>Previous <br><span class="link-title">A</span>'
+                '</span></a> <a href="/b/" rel="next"><span>Next <br>'
+                '<span class="link-title">B</span></span></a></nav>')
+        page = read(html, article_only=True)
+        self.assertEqual(page.glued, [])
+        self.assertEqual(page.text, "Previous A Next B")
+        self.assertTrue(read(html.replace("Previous <br>", "Previous<br>"), article_only=True).glued)
 
 
 class ThePickerWaitsForItsScript(unittest.TestCase):
