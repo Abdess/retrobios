@@ -11,15 +11,16 @@
   ],
   "allOf": [
     {
-      "comment": "A build reference documents why a pin is held: it never stands without the pin_frozen that says so.",
+      "comment": "A build reference documents why a pin is held, or the build config_reads are read at: it never stands without the pin_frozen or the config_reads that say so.",
       "if": {
         "required": [
           "pin_build"
         ]
       },
       "then": {
-        "required": [
-          "pin_frozen"
+        "anyOf": [
+          {"required": ["pin_frozen"]},
+          {"required": ["config_reads"]}
         ]
       }
     },
@@ -1078,14 +1079,36 @@
     "standalone_directories": {
       "type": "array",
       "items": {
-        "type": "string"
+        "oneOf": [
+          {"type": "string"},
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["handle", "source_ref"],
+            "properties": {
+              "handle": {"type": "string", "minLength": 1},
+              "source_ref": {"type": "string", "minLength": 1, "description": "Where the build reads the handle and resolves its files against it"}
+            }
+          }
+        ]
       },
       "description": "What the standalone build resolves standalone_path against, as its code names it: a directory ($XDG_DATA_HOME/flycast), a setting (Dreamcast.BiosPath), an environment variable or the function returning the directory. A platform launcher record that links or passes a folder of its BIOS tree under one of these puts the standalone files in that folder."
     },
     "standalone_pools": {
       "type": "object",
       "additionalProperties": {
-        "type": "string"
+        "oneOf": [
+          {"type": "string"},
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["folder", "source_ref"],
+            "properties": {
+              "folder": {"type": "string"},
+              "source_ref": {"type": "string", "minLength": 1, "description": "Where the build reads the setting as a search list"}
+            }
+          }
+        ]
       },
       "description": "Settings the standalone build reads as a list of directories it searches one after the other, each mapped to the subfolder of the layout (relative to standalone_directories, empty for the whole of it) its directories stand for: openMSX's filepool entries are searched like share/systemroms, XRoar's rompath entries hold the ROMs themselves. A file in any entry is read, so several platform records naming entries give the first one a pack can fill."
     },
@@ -1101,7 +1124,7 @@
     "pin_build": {
       "type": "array",
       "minItems": 1,
-      "description": "The build file each platform that ships a pin_frozen build reads its revision from, so check_freshness can read it again where the platform's YAML now stands and say when the platform builds another revision.",
+      "description": "The build file each platform that ships a pin_frozen build, or the build a config_reads entry is read at, reads its revision from, so check_freshness can read it again where the platform's YAML now stands and say when the platform builds another revision.",
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -1131,6 +1154,37 @@
           "value": {
             "type": "string",
             "description": "What the variable held at revision, quotes and trailing comment removed."
+          }
+        }
+      }
+    },
+    "config_reads": {
+      "type": "array",
+      "description": "The configs the build loads and the keys it opens a file from, as a platform launcher record citing a config needs them: link (c) is where the file is found and loaded, link (d) where each key is read and its value opened. An entry naming platforms is read at their pin_build revision, one naming none at source_commit.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "source_ref", "keys"],
+        "dependentRequired": {"revision": ["platforms", "revision_from"]},
+        "properties": {
+          "file": {"type": "string", "minLength": 1, "description": "The config as the code finds it: a name, a glob for any file a flag passes (*.uae), a path, the flag itself, \"command line\" or \"core options\""},
+          "platforms": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true, "description": "Registry slugs of the platforms shipping the build these refs are read at, each with a pin_build entry unless revision names the build"},
+          "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$", "description": "The commit these refs are read at, for platforms installing a package no build file of theirs pins (RetroBat's stable archives, a Flathub app)"},
+          "revision_from": {"type": "string", "minLength": 1, "description": "Where revision was read: the version string of the shipped binary, the Flathub manifest commit"},
+          "source_ref": {"type": "string", "minLength": 1},
+          "keys": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["key", "source_ref"],
+              "properties": {
+                "key": {"oneOf": [{"type": "string", "minLength": 1}, {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1}], "description": "Spelled as a launcher record's passes_to spells it: [Section] Key, or Key"},
+                "source_ref": {"type": "string", "minLength": 1},
+                "condition": {"type": "string", "description": "What else the read depends on"}
+              }
+            }
           }
         }
       }

@@ -962,6 +962,17 @@ class GzdoomOnRetroDECK(unittest.TestCase):
         self.assertFalse(any(e.get("standalone_path") for e in view["files"]))
 
 
+def _reads_configs(profile: str) -> bool:
+    """Whether a repository profile carries config_reads."""
+    path = REPO_ROOT / "emulators" / f"{profile}.yml"
+    return bool((yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("config_reads"))
+
+
+# EmuELEC hands AdvanceMAME its folders through advmame.rc: the chain binds
+# once the profile says where the build reads them (config_reads).
+@unittest.skipUnless(
+    _reads_configs("advancemame"), "advancemame.yml carries no config_reads, dir_rom is unproven"
+)
 class AdvanceMameOnEmuELEC(unittest.TestCase):
     """advmame.rc sets dir_rom /storage/roms/mame, /storage/roms/arcade for
     the arcade system (advmame.rc:11, advmame.sh:26-30)."""

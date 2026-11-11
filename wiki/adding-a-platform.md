@@ -445,6 +445,10 @@ launchers:
 | `fails_scope` | `emulator` when the failure needs every record of the emulator to come up empty |
 | `depends_on_option` | Options or conditions that decide whether the record applies |
 | `device` | Devices whose shipped config the record reads, set only where a package ships configs that differ between devices |
+| `installs` | For a record citing a config: `path` where the platform's code puts it and the `source_ref` of that code |
+| `kept_if_present` | Whether that install leaves a file already there (a copy only if absent, rsync `--ignore-existing`) |
+| `overrides` | Launch code rewriting the record's keys or replacing the config, empty when none does |
+| `choices_from` | The feature or option file listing the values the option takes (es_features, a core `.opt`), never the record's evidence |
 | `source_ref` | `path:lines` in the repository and at the revision `source` pins, which the site links |
 
 Batocera's generators are read with `ast`, RetroBat's C# generators as text.
@@ -453,17 +457,23 @@ package, so `scripts/scraper/shell_launchers.py` reads assignments, `for`
 loops, `ln -s` commands and `key = value` lines. A ROCKNIX package can ship
 one config per device: the configs are grouped by the value read, and
 `device` appears only when there is more than one group. melonDS writes its
-seven BIOS paths on every device but AMD64, where the keys are left empty:
+BIOS paths on every device but AMD64, where the keys are left empty:
 
 ```yaml
 - emulator: melonds
   build: standalone
   kind: fixed_name
   names: []
-  passes_to: melonDS.ini BIOS9Path, BIOS7Path, FirmwarePath, DSiBIOS9Path,
-    DSiBIOS7Path, DSiFirmwarePath, DSiNANDPath left empty
+  passes_to: melonDS.ini BIOS9Path, BIOS7Path, FirmwarePath, DSiNANDPath left empty
   device: AMD64
 ```
+
+A config file is proof only when the code installing it and the code reading
+it are shown. A record citing a config carries `installs` and `overrides`, and
+the emulator's profile says, in `config_reads`, where the build it ships loads
+that file and reads each key. A record whose chain does not hold is listed as
+unproven by `verify.py` and `cross_reference.py`, and no pack or manifest
+places a file from it.
 
 An extractor that no longer recognises the shape of the code raises: an
 empty list would read as a launcher that looks for nothing.

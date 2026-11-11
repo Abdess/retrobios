@@ -33,6 +33,7 @@ import verify  # noqa: E402
 from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config  # noqa: E402
 from cross_reference import (  # noqa: E402
     LAUNCHER_READS_KEY,
+    LAUNCHER_UNPROVEN_KEY,
     launcher_file_names,
     launcher_reads_not_held,
     print_launcher_reads,
@@ -278,7 +279,11 @@ class LauncherGapTest(unittest.TestCase):
         names = {r["name"] for r in report[LAUNCHER_READS_KEY]}
         self.assertEqual(names, {"absent.bin", "mixed.rom", "labelled.rom", "user.sf2"})
         # The emulator rows keep their own shape and counts.
-        self.assertEqual(set(report) - {LAUNCHER_READS_KEY}, {"aliasemu", "missemu", "setemu"})
+        self.assertEqual(
+            set(report) - {LAUNCHER_READS_KEY, LAUNCHER_UNPROVEN_KEY},
+            {"aliasemu", "missemu", "setemu"},
+        )
+        self.assertEqual(report[LAUNCHER_UNPROVEN_KEY], [])
 
     def test_verify_counts_and_exit_code_are_unchanged(self) -> None:
         """A launcher name is reported, not judged: nothing else moves."""
