@@ -283,9 +283,16 @@ BEFORE_WEIGHT = {
     # LRPS2 that Batocera builds reads "LRPS2 (416291a, Batocera)" since
     # 2026-11-11: 1,396,309 bytes on the built site of 964875572.
     "batocera": (13, 18_854, 1_396_309),
-    "amberelec": (1, 7_928, 473_388),
+    # AmberELEC's MSX files cite the fMSX ROM loader since 2026-11-11 (fMSX
+    # named 82 times instead of 28, the same 295 files): the section moved
+    # to a part page of its own, 2 pages, 7,160 elements and 545,681 bytes
+    # on the built site of 964875572.
+    "amberelec": (2, 7_928, 545_681),
     "romm": (2, 9_561, 572_487),
-    "retroarch": (14, 21_503, 1_430_802),
+    # RetroArch's MSX files cite the fMSX ROM loader and its ScummVM files
+    # the readers of each data file since 2026-11-11 (46,737 and 9,275 bytes
+    # more): 1,433,702 bytes on the built site of 964875572.
+    "retroarch": (14, 21_503, 1_433_702),
 }
 
 
