@@ -21,6 +21,17 @@ systems:
   - sega-stv
 mode: standalone
 
+config_reads:
+  - file: "SSF.ini"
+    platforms: [retrobat]
+    binary_sha256: "00f43e448592e5e8359eba7da4de5b3a16e6840ad8faf9cf182f738c4e25293a"
+    revision_from: "SSF PreviewVer R28 (string at 0x1a46634): the 32-bit SSF.exe of RetroBat's stable ssf.7z (2026-04-04), byte-identical to the one in SSF_PreviewVer_R28.zip of release tag PreviewVer"
+    source_ref: "SSF.exe 0x5b0b41-0x5b0b81, SSF.exe 0x5b9785, SSF.exe 0x5ac8cc-0x5ac8e2, SSF.exe 0x5ac94c, SSF.exe 0x5953d0, SSF.exe 0x5954c3-0x5954db, SSF.exe 0xb35e20"
+    keys:
+      - key: "[Peripheral] SaturnBIOS"
+        source_ref: "SSF.exe 0x52bc85-0x52bcd8, SSF.exe 0x5ac9e4, SSF.exe 0x5aab87-0x5aab93, SSF.exe 0x5b2905-0x5b2936, SSF.exe 0xb36022-0xb360cf"
+        condition: "[Program4] NoBIOS off (0 in the embedded template) and Ctrl not held at launch, in Saturn mode (no left Shift, no zip); an empty path or a read short of 0x80000 bytes boots without BIOS"
+
 notes: |
   Sega Saturn and ST-V emulator by Shima, closed source and distributed as a
   binary. Two artifacts are read here and they describe the same emulator: the

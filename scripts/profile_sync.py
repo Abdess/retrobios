@@ -1652,7 +1652,10 @@ def _check_build_refs(
     results: list[dict] = []
     for citation, read in deferred:
         for platform in read.get("platforms") or []:
-            revision = str(read.get("revision") or "") or build_revision(profile, str(platform))
+            # A closed build is named by its binary: an address ref is
+            # skipped below, a source path cannot exist at a sha256.
+            revision = (str(read.get("revision") or read.get("binary_sha256") or "")
+                        or build_revision(profile, str(platform)))
             row = {"platform": str(platform), "revision": revision or "",
                    "ref": citation.ref, "field": citation.field}
             if revision is None:

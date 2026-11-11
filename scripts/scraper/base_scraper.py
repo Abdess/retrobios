@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import json
 import re
 import sys
@@ -391,10 +392,16 @@ def scraper_cli(
     parser.add_argument("--dry-run", action="store_true", help="Show scraped data")
     parser.add_argument("--output", "-o", help="Output YAML file")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
+    takes_revision = "revision" in inspect.signature(scraper_class).parameters
+    if takes_revision:
+        parser.add_argument(
+            "--revision",
+            help="Read this branch head or commit instead of the revision the platform file pins",
+        )
     args = parser.parse_args()
 
     try:
-        scraper = scraper_class()
+        scraper = scraper_class(revision=args.revision) if takes_revision else scraper_class()
         reqs = scraper.fetch_requirements()
     except (OSError, ValueError, RuntimeError) as e:
         _exit_on_scrape_error(e)

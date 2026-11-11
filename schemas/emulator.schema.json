@@ -1165,12 +1165,14 @@
         "type": "object",
         "additionalProperties": false,
         "required": ["file", "source_ref", "keys"],
-        "dependentRequired": {"revision": ["platforms", "revision_from"]},
+        "dependentRequired": {"revision": ["platforms", "revision_from"], "binary_sha256": ["platforms", "revision_from"]},
+        "not": {"required": ["revision", "binary_sha256"]},
         "properties": {
           "file": {"type": "string", "minLength": 1, "description": "The config as the code finds it: a name, a glob for any file a flag passes (*.uae), a path, the flag itself, \"command line\" or \"core options\""},
           "platforms": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true, "description": "Registry slugs of the platforms shipping the build these refs are read at, each with a pin_build entry unless revision names the build"},
           "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$", "description": "The commit these refs are read at, for platforms installing a package no build file of theirs pins (RetroBat's stable archives, a Flathub app)"},
-          "revision_from": {"type": "string", "minLength": 1, "description": "Where revision was read: the version string of the shipped binary, the Flathub manifest commit"},
+          "binary_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$", "description": "The shipped binary these refs are read in, for a build whose source is not public (SSF, YabaSanshiro 1.20): its refs are virtual addresses of that file"},
+          "revision_from": {"type": "string", "minLength": 1, "description": "Where revision or binary_sha256 was read: the version string of the shipped binary, the Flathub manifest commit, the archive the binary comes from"},
           "source_ref": {"type": "string", "minLength": 1},
           "keys": {
             "type": "array",

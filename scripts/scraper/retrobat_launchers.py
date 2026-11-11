@@ -1868,13 +1868,27 @@ def _root_writes(src: Source, emulator: str) -> list[Record]:
         if root_reach is None:
             continue
         method = root_reach[0]
+        # A folder below the root, `string x = Path.Combine(root, "cdb")`
+        # that the method creates or tests as a directory. A file below it
+        # is a guarded write's, read by _guarded_write.
+        folders = {root.group(1): ("bios", root)}
+        for sub in re.compile(
+            rf"string (\w+) = Path\.Combine\({root.group(1)}, ((?:{STRING}, )*{STRING})\);"
+        ).finditer(src.text, root.end(), method[1]):
+            if re.search(
+                rf"\b(?:\w*CreateDirectory|Directory\.Exists)\({sub.group(1)}\)",
+                src.text[sub.end() : method[1]],
+            ):
+                folders[sub.group(1)] = ("/".join(["bios", *_strings(sub.group(2))]), sub)
+        names = "|".join(map(re.escape, folders))
         for write in re.compile(
-            rf'(\w+)\.WriteValue\("([^"]*)", "([^"]+)", (?:"\'" \+ )?{root.group(1)}(?: \+ "\'")?\);'
+            rf'(\w+)\.WriteValue\("([^"]*)", "([^"]+)", (?:"\'" \+ )?({names})(?: \+ "\'")?\);'
         ).finditer(src.text, root.end(), method[1]):
             reached = _conditions(src, write.start())
             if reached is None:
                 continue
-            writer, section, key = write.groups()
+            writer, section, key, held = write.groups()
+            folder, declared = folders[held]
             target = f"[{section}] {key}" if section else key
             records.append(
                 _record(
@@ -1888,12 +1902,14 @@ def _root_writes(src: Source, emulator: str) -> list[Record]:
                             [
                                 *reached[2],
                                 src.lines(root.start(), root.end()),
+                                *([src.lines(declared.start(), declared.end())]
+                                  if declared is not root else []),
                                 src.lines(write.start(), write.end()),
                             ],
                         )
                     ),
-                    search_dir="bios",
-                    passes_to=f"{_config_name(src, method, writer)} {target} = bios",
+                    search_dir=folder,
+                    passes_to=f"{_config_name(src, method, writer)} {target} = {folder}",
                     fails_when_missing=False,
                     depends_on_option=", ".join(reached[1]) or None,
                 )
@@ -2376,11 +2392,7 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     gate = src.find(
         rf'if \(SystemConfig\.isOptSet\("{option}"\)', f"{option} gate", method[0], override.start()
     )
-    gate_block = src.block_at(gate.end())
-    if not gate_block[0] < override.start() < gate_block[1]:
-        raise LauncherPatternMissing(
-            src.path, f"{option} block around line {src.line(override.start())}"
-        )
+    gate_block = _gate_span(src, gate, override)
     write = re.compile(
         rf'(\w+)\.WriteValue\("([^"]*)", "([^"]+)", ([^;\n]*\b{var}\b[^;\n]*)\);'
     ).search(code, override.end(), method[1])
@@ -2390,6 +2402,8 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     guarded = re.compile(rf"if \(File\.Exists\({var}\)[^\n]*\)\s*$").search(
         code, method[0], write.start()
     )
+    flag = None if guarded else _flag_guard(code, var, method[0], write.start())
+    guarded = guarded or flag
     skipped = re.findall(
         rf'SystemConfig\["{option}"\] != "(\w+)"', code[gate.start() : write.end()]
     )
@@ -2397,8 +2411,13 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     target = f"{config} [{section}] {key}" if section else f"{config} {key}"
     suffix = ", only if the file exists" if guarded else ", written without an existence check"
     fails = f"{key} not written" if guarded else "path written without an existence check"
-    write_span = src.lines(_statement_start(src, write.start()), write.end())
+    write_span = src.lines(
+        flag.start() if flag else _statement_start(src, write.start()), write.end()
+    )
     choices, choice_lines = feature_choices(features, emulator, option)
+    fallback = _fallback_names(src, var, gate_block[1], write.start())
+    if fallback is not None:
+        fails = f"{', then '.join(fallback[0])}, instead, else {fails}"
     records = []
     default = list(
         re.compile(rf'string {var} = Path\.Combine\({_BIOS_ROOT}, "([^"]+)"\);').finditer(
@@ -2437,7 +2456,69 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
             depends_on_option=option,
         )
     )
+    if fallback is not None:
+        names, span = fallback
+        unset = f"{default[-1].group(1)} absent with {option} unset" if default else None
+        chosen = f"the {option} file absent" + (
+            f", {option} not {' or '.join(skipped)}" if skipped else ""
+        )
+        records.append(
+            _record(
+                emulator,
+                "standalone",
+                "names_searched",
+                names,
+                _path_parts(src, span, write_span),
+                case_insensitive=True,
+                search_dir="bios",
+                passes_to=f"{target} = <first found>{suffix}",
+                fails_when_missing=f"{key} not written" if guarded else fails,
+                depends_on_option=" or ".join(c for c in (unset, chosen) if c),
+            )
+        )
     return records + _root_writes(src, emulator)
+
+
+def _gate_span(src: Source, gate: re.Match[str], override: re.Match[str]) -> tuple[int, int]:
+    """The span an option gate governs: its block, or the one statement a
+    braceless if runs, which must be the override."""
+    paren = gate.start() + len("if ")
+    after = paren + len(_call_args(src, paren)) + 2
+    if re.match(r"\s*\{", src.text[after:]):
+        block = src.block_at(after)
+    else:
+        block = (after, _statement_end(src, after))
+    if not block[0] < override.start() < block[1]:
+        raise LauncherPatternMissing(
+            src.path, f"option block around line {src.line(override.start())}"
+        )
+    return block
+
+
+def _flag_guard(code: str, var: str, start: int, end: int) -> re.Match[str] | None:
+    """A write under `if (flag)` where flag holds File.Exists of the path."""
+    flag = re.compile(rf"bool (\w+) = [^;\n]*\bFile\.Exists\({var}\)[^;\n]*;").search(
+        code, start, end
+    )
+    if flag is None or not re.compile(rf"if \({flag.group(1)}\)\s*$", re.M).search(
+        code, flag.end(), end
+    ):
+        return None
+    return flag
+
+
+def _fallback_names(
+    src: Source, var: str, start: int, end: int
+) -> tuple[list[str], tuple[int, int]] | None:
+    """Names tried in bios, first existing one kept, when the chosen file is absent."""
+    found = re.compile(
+        rf"if \(([^\n]*!File\.Exists\({var}\)[^\n]*)\)\s*"
+        rf"{var} = new\[\] \{{ (?P<names>(?:{STRING}(?:, )?)+) \}}\.Select\((?P<arg>\w+) => "
+        rf"Path\.Combine\({_BIOS_ROOT}, (?P=arg)\)\)\.FirstOrDefault\(File\.Exists\) \?\? {var};"
+    ).search(_code(src), start, end)
+    if found is None:
+        return None
+    return _strings(found.group("names")), src.lines(found.start(), found.end())
 
 
 OPTION_PATHS = {

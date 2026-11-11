@@ -42,6 +42,22 @@ data_root:
     source_ref: "apps/ymir-sdl3/src/app/profile.cpp:29-34, apps/ymir-sdl3/src/app/app.cpp:342-437, apps/ymir-sdl3/CMakeLists.txt:647-648"
     note: "Portable profile: the current directory, then the folder of the executable, when it holds Ymir.toml. The first launch asks between the two. -p names a folder, -u forces this one. Always this folder under Flatpak"
 
+config_reads:
+  - file: "Ymir.toml"
+    platforms: [retrobat]
+    revision: "54fead6a0001d3e4b6741a8d095ee8342266c3dc"
+    revision_from: "version 0.3.3 of ymir-sdl3.exe in RetroBat's stable ymir.7z (2026-08-08), byte-identical to the v0.3.3 windows-x86_64-AVX2 release asset"
+    source_ref: "apps/ymir-sdl3/src/app/settings.hpp:40, apps/ymir-sdl3/src/app/app.cpp:340-359, 412, apps/ymir-sdl3/src/app/profile.cpp:36-62"
+    keys:
+      - key:
+          - "[System.IPL] Override"
+          - "[System.IPL] Path"
+        source_ref: "apps/ymir-sdl3/src/app/settings.cpp:1236-1240, 2805-2813, apps/ymir-sdl3/src/app/services/rom_service.cpp:109-114, apps/ymir-sdl3/src/util/rom_loader.cpp:9-22, apps/ymir-sdl3/src/app/app.cpp:451-462"
+        condition: "Override true and Path not empty: the path is opened without an existence check and must be 512 KiB"
+      - key: "[General.PathOverrides] IPLROMImages"
+        source_ref: "apps/ymir-sdl3/src/app/settings.cpp:1190-1197, apps/ymir-sdl3/src/app/profile.cpp:94-104, apps/ymir-sdl3/src/app/services/rom_service.cpp:67-73, 116-175, apps/ymir-sdl3/src/app/rom_manager.cpp:14-45"
+        condition: "Override false or Path empty: the folder is scanned recursively for 512 KiB files known by XXH128"
+
 notes: |
   Ymir is a Sega Saturn emulator by StrikerX3. The libretro port by
   warmenhoven wraps the shared ymir-core library on the libretro branch of

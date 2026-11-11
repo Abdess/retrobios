@@ -30,6 +30,15 @@ config_reads:
     keys:
       - key: "pcsx2_bios"
         source_ref: "libretro/main.cpp:525-536, 2552-2560"
+  - file: "core options"
+    platforms: [retrodeck]
+    revision: "14d19f8339e3646b645c1c33e612b1888e632145"
+    revision_from: "library_version 14d19f8 of pcsx2_libretro.so in the buildbot's stable 1.22.2 RetroArch_cores.7z (2025-11-20), which RetroDECK's retroarch component installs (retroarch/component_recipe.json at fcd0d729)"
+    source_ref: "libretro/main.cpp:341, 1915-1926, 2013"
+    keys:
+      - key: "pcsx2_bios"
+        source_ref: "libretro/main.cpp:360-365, 1801-1830, pcsx2/VMManager.cpp:247-256, 1076-1092, 601, pcsx2/Pcsx2Config.cpp:887-891, 995-1000, pcsx2/ps2/BiosTools.cpp:267-281"
+        condition: "the value is a file of system/pcsx2/bios; without the option the core scans that folder for a 4 to 8 MiB BIOS"
 
 notes: |
   Hard fork of PCSX2 (pre-Qt, 1.7-dev era) ported to libretro, x86_64 only,

@@ -261,6 +261,53 @@ class Invariants(unittest.TestCase):
         ), [])
         pinned = [{**reads[0], "revision": "c" * 40, "revision_from": "the exe"}]
         self.assertEqual(_config_reads_without_build(path, {"config_reads": pinned}), [])
+        closed = [{**reads[0], "binary_sha256": "d" * 64, "revision_from": "the archive"}]
+        self.assertEqual(_config_reads_without_build(path, {"config_reads": closed}), [])
+
+
+class ShippedBuild(unittest.TestCase):
+    def test_a_platform_an_entry_names_is_read_there_only(self) -> None:
+        """RetroDECK ships GZDoom 4.14.2: the entry read at the pin does not
+        also stand for it, so a key only the pin reads proves nothing there."""
+        duck = profile(config_reads=[
+            {"file": "settings.ini", "source_ref": "src/core.cpp:10",
+             "keys": [{"key": "[BIOS] SearchDirectory", "source_ref": "src/settings.cpp:20"},
+                      {"key": ["[BIOS] PathPAL", "[BIOS] PathNTSCU"], "source_ref": "src/bios.cpp:30"}]},
+            {"file": "settings.ini", "platforms": ["rocknix"], "revision": "a" * 40,
+             "revision_from": "the AppImage", "source_ref": "src/core.cpp:12",
+             "keys": [{"key": "[BIOS] SearchDirectory", "source_ref": "src/settings.cpp:22"}]},
+        ])
+        evidence = config_evidence(record(), {"duck": duck}, "rocknix")
+        self.assertEqual(evidence.missing, ("config_reads: no read of [BIOS] PathPAL",))
+        self.assertTrue(config_evidence(record(), {"duck": duck}, "emuelec").proven)
+
+
+class CoreOptions(unittest.TestCase):
+    def test_a_core_option_is_read_by_the_core_not_the_frontend(self) -> None:
+        """RetroDECK's retroarch component writes pcsx2_bios: the frontend
+        names the record, the core RetroArch runs reads the option."""
+        profiles = {
+            "retroarch": {"emulator": "RetroArch", "type": "utility", "cores": ["retroarch"],
+                          "config_reads": [{"file": "retroarch.cfg", "source_ref": "a.c:1",
+                                            "keys": [{"key": "system_directory",
+                                                      "source_ref": "a.c:2"}]}]},
+            "lrps2": {"emulator": "LRPS2", "type": "libretro", "cores": ["lrps2"],
+                      "config_reads": [{"file": "core options", "source_ref": "main.cpp:1",
+                                        "keys": [{"key": "pcsx2_bios",
+                                                  "source_ref": "main.cpp:2"}]}]},
+        }
+        option = {
+            "emulator": "retroarch", "build": "libretro", "kind": "core_option",
+            "names": ["scph10000.bin"], "passes_to": "core option pcsx2_bios",
+            "installs": {"path": "$core_options", "source_ref": "prepare.sh:24"},
+            "overrides": [], "source_ref": "rd_config/retroarch-core-options.cfg:515",
+        }
+        evidence = config_evidence(option, profiles, "retrodeck")
+        self.assertTrue(evidence.proven, evidence.missing)
+        self.assertEqual(evidence.readers, ("lrps2",))
+        system = {**option, "kind": "passes_path", "passes_to": "retroarch.cfg system_directory",
+                  "source_ref": "rd_config/retroarch.cfg:44"}
+        self.assertEqual(config_evidence(system, profiles, "retrodeck").readers, ("retroarch",))
 
 
 class BuildRefs(unittest.TestCase):
@@ -297,6 +344,37 @@ class BuildRefs(unittest.TestCase):
         self.assertEqual([r["status"] for r in rows], ["BUILD_OK", "BUILD_GONE"])
         self.assertTrue(all(revision == "b" * 40 for revision, _ in asked))
         self.assertNotIn(("b" * 40, "ROCKNIX x.patch"), asked)
+
+
+    def test_a_closed_build_is_read_in_its_binary(self) -> None:
+        """An address ref is read in the binary binary_sha256 names, never
+        fetched; a source path cannot exist at a closed build."""
+        read = {
+            "file": "SSF.ini", "platforms": ["retrobat"], "binary_sha256": "e" * 64,
+            "revision_from": "the archive", "source_ref": "SSF.exe 0x10-0x20", "keys": [],
+        }
+
+        class View:
+            repo, field = "repo", "source"
+
+        class Citation:
+            def __init__(self, ref: str) -> None:
+                self.ref, self.field = ref, "c"
+
+        asked: list[str] = []
+
+        def fetch(_repo: str, _revision: str, path: str) -> list[str] | None:
+            asked.append(path)
+            return None
+
+        rows = _check_build_refs(
+            {"config_reads": [read]},
+            [(Citation("SSF.exe 0x10-0x20"), read), (Citation("src/a.c:3"), read)],
+            [View()], fetch,
+        )
+        self.assertEqual([r["status"] for r in rows], ["BUILD_OK", "BUILD_GONE"])
+        self.assertEqual({r["revision"] for r in rows}, {"e" * 64})
+        self.assertEqual(asked, ["src/a.c"])
 
 
 class RepositoryRecords(unittest.TestCase):

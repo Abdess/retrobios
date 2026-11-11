@@ -650,6 +650,15 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
     # Read at a release tag: the pin is the tag, not a branch commit.
     TAG_PINNED = {"amberelec", "batocera", "bizhawk", "emuelec", "knulli", "recalbox",
                   "rocknix", "romm"}
+    # Reread the commit the platform file pins, moved by the revision the
+    # registry's rescrape_args names: checked with that revision.
+    FILE_PINNED = {"retrobat"}
+
+    @classmethod
+    def _construct(cls, module: object, scraper: str) -> object:
+        if scraper in cls.FILE_PINNED:
+            return module.Scraper(revision="master")
+        return module.Scraper()
 
     @staticmethod
     def _registry_scrapers() -> list[str]:
@@ -671,7 +680,17 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
             with self.subTest(scraper=name), mock.patch(
                 "urllib.request.urlopen", self._refuse
             ), self.assertRaises(RuntimeError):
-                module.Scraper()
+                self._construct(module, scraper)
+
+    def test_a_file_pinned_scraper_reads_its_pin_offline(self):
+        for scraper in sorted(self.FILE_PINNED):
+            module = importlib.import_module(f"scraper.{scraper}_scraper")
+            with self.subTest(scraper=scraper), mock.patch(
+                "urllib.request.urlopen", self._refuse
+            ):
+                self.assertEqual(
+                    module.launcher_revision(module.Scraper().url), module.pinned_revision()
+                )
 
     def test_a_branch_read_records_its_commit(self):
         """System.dat, batocera-systems.json, checkBIOS.sh, the BiosDB and the
@@ -695,7 +714,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
             name = f"scraper.{scraper}_scraper"
             module = importlib.import_module(name)
             with self.subTest(scraper=name), mock.patch("urllib.request.urlopen", answer):
-                instance = module.Scraper()
+                instance = self._construct(module, scraper)
                 # RetroDECK reads a tree of manifests and keeps the commit apart.
                 recorded = getattr(instance, "revision", "") or instance.url
                 self.assertRegex(recorded, f"(^|/){sha}(/|$)")

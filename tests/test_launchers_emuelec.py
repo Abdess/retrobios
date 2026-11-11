@@ -229,8 +229,22 @@ DUCKSTATION_SH = text(
     CONFIG_DIR="/emuelec/configs/duckstation"
         duckstation-nogui -fullscreen -settings "${CONFIG_DIR}/settings.ini" -- "${1}"
     if [ ! -d "${CONFIG_DIR}" ]; then
-        cp -rf /usr/config/emuelec/configs/duckstation/* "${CONFIG_DIR}"
+        cp -rf "/usr/config/emuelec/configs/duckstation/*" "${CONFIG_DIR}"
     fi
+"""
+)
+
+# packages/sysutils/systemd/scripts/userconfig-setup:11-12 at v4.8.
+USERCONFIG = text(
+    """
+    # Copy config files, but don't overwrite - this should replace our sample files
+    false | cp -iRp /usr/config/* /storage/.config/ &>/dev/null
+"""
+)
+
+EMUELEC_MK = text(
+    """
+      ln -sf /storage/.config/emuelec ${INSTALL}/emuelec
 """
 )
 
@@ -400,6 +414,8 @@ FILES = {
     f"{EMU}/duckstation/config/settings.ini": DUCKSTATION_INI,
     f"{EMU}/duckstation/package.mk": DUCKSTATION_MK,
     f"{EMU}/duckstation/scripts/duckstation.sh": DUCKSTATION_SH,
+    el.USERCONFIG: USERCONFIG,
+    el.EMUELEC_MK: EMUELEC_MK,
     el.YABASANSHIRO_SCRIPTS[0]: yabasanshiro_sh("yabasanshiro"),
     el.YABASANSHIRO_SCRIPTS[1]: yabasanshiro_sh("yabasanshiro1_5"),
     f"{EMU}/jzintv/scripts/jzintv.sh": JZINTV_SH,
@@ -540,11 +556,36 @@ class StandaloneRecords(unittest.TestCase):
         (record,) = records(el.duckstation)
         self.assertEqual((record["kind"], record["search_dir"]), ("scans_dir", "/storage/roms/bios"))
 
-    def test_duckstation_config_is_kept_when_present(self):
+    def test_duckstation_config_comes_from_the_boot_copy(self):
+        """duckstation.sh quotes its glob: its copy names a file called *, so
+        the settings.ini in place is the one userconfig-setup copies from
+        /usr/config, an existing file kept (false | cp -i)."""
         (record,) = records(el.duckstation)
-        self.assertEqual(record["installs"]["path"], "/emuelec/configs/duckstation/settings.ini")
+        self.assertEqual(
+            record["installs"],
+            {"path": "/storage/.config/emuelec/configs/duckstation/settings.ini",
+             "source_ref": f"{EMU}/duckstation/package.mk:1, {el.USERCONFIG}:2"},
+        )
         self.assertIs(record["kept_if_present"], True)
         self.assertEqual(record["overrides"], [])
+
+    def test_an_unquoted_glob_in_the_start_script_installs_too(self):
+        unquoted = DUCKSTATION_SH.replace(
+            '"/usr/config/emuelec/configs/duckstation/*"', "/usr/config/emuelec/configs/duckstation/*"
+        )
+        (record,) = records(el.duckstation, **{f"{EMU}/duckstation/scripts/duckstation.sh": unquoted})
+        self.assertEqual(record["installs"]["path"], "/emuelec/configs/duckstation/settings.ini")
+        self.assertIs(record["kept_if_present"], True)
+
+    def test_without_a_boot_copy_the_quoted_glob_installs_nothing(self):
+        with self.assertRaises(LauncherPatternMissing):
+            records(el.duckstation, **{el.USERCONFIG: "#!/bin/sh\n"})
+
+    def test_an_overwriting_boot_copy_does_not_keep_the_file(self):
+        (record,) = records(el.duckstation, **{
+            el.USERCONFIG: "cp -Rp /usr/config/* /storage/.config/ &>/dev/null\n",
+        })
+        self.assertIs(record["kept_if_present"], False)
 
     def test_duckstation_with_a_fixed_bios_path_raises(self):
         changed = DUCKSTATION_INI.replace("PathPAL =", "PathPAL = /storage/roms/bios/scph5502.bin")
